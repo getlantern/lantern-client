@@ -7,7 +7,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/getlantern/flashlight/common"
 	"github.com/getlantern/flashlight/config"
+	"github.com/getlantern/flashlight/geolookup"
+	"github.com/getlantern/flashlight/ops"
 	"github.com/getlantern/flashlight/proxied"
 	replicaServer "github.com/getlantern/replica/server"
 	replicaService "github.com/getlantern/replica/service"
@@ -72,17 +75,26 @@ func newReplicaHttpHandler(
 	// the dht node passive
 	input.ReadOnlyNode = true
 	input.RootUploadsDir = configDir
-
 	// XXX <16-12-21, soltzen> Those three flags make sure that uploads are not
 	// saved to the torrent client, saved locally, or have any metadata
 	// generated for them. This decision is only for android-lantern to protect
 	// the privacy of uploaders
 	input.AddUploadsToTorrentClient = false
 	input.StoreUploadsLocally = false
-	// input.StoreMetainfoFileAndTokenLocally = false
-
+	input.StoreMetainfoFileAndTokenLocally = false
 	input.CacheDir = configDir
-	input.UserConfig = userConfig
+	input.AddCommonHeaders = func(r *http.Request) {
+		common.AddCommonHeaders(userConfig, r)
+	}
+	input.GlobalConfig = func() replicaServer.ReplicaOptions {
+		return optsFunc()
+	}
+	input.ProxiedRoundTripper = proxied.ParallelForIdempotent()
+	input.ProcessCORSHeaders = common.ProcessCORS
+	input.InstrumentResponseWriter = func(w http.ResponseWriter,
+		label string) replicaServer.InstrumentedResponseWriter {
+		return ops.InitInstrumentedResponseWriter(w, label)
+	}
 	input.HttpClient = &http.Client{
 		Transport: proxied.AsRoundTripper(
 			func(req *http.Request) (*http.Response, error) {
@@ -94,18 +106,45 @@ func newReplicaHttpHandler(
 			},
 		),
 	}
+
 	input.ReplicaServiceClient = replicaService.ServiceClient{
 		HttpClient: input.HttpClient,
 		ReplicaServiceEndpoint: func() *url.URL {
-			// TODO <08-10-21, soltzen> Maybe make this modifiable like lantern-desktop?
-			// Ref: https://github.com/getlantern/lantern-desktop/blob/778f6e600433d0cf6349c04e9738c0673758d76e/desktop/app.go#L587
-			return &url.URL{
-				Scheme: "https",
-				Host:   "replica-search.lantern.io",
+			// Fetch options
+			opts := optsFunc()
+			if opts == nil {
+				log.Errorf("ReplicaOptions is not ready yet: triggering geolookup.Refresh() and using default endpoint: %v",
+					replicaService.GlobalChinaDefaultServiceUrl)
+				geolookup.Refresh()
+				return replicaService.GlobalChinaDefaultServiceUrl
 			}
+
+			// Fetch country: if country wasn't fetch-able, use the default endpoint
+			raw := opts.ReplicaRustDefaultEndpoint
+			country := userConfig.session.GetCountryCode()
+			if country == "" {
+				log.Errorf("Failed to fetch country while configuring new replica-rust endpoint: re-running geolookup and defaulting to %q", opts.ReplicaRustDefaultEndpoint)
+				geolookup.Refresh()
+			}
+			if countryRaw := opts.ReplicaRustEndpoints[country]; countryRaw != "" {
+				raw = countryRaw
+			} else {
+				log.Debugf("No custom replica endpoint for %v. Using default one: %v", country, raw)
+			}
+
+			// Parse endpoint
+			url, err := url.Parse(raw)
+			if err != nil {
+				log.Errorf("Could not parse replica rust URL %v", err)
+				return replicaService.GlobalChinaDefaultServiceUrl
+			}
+			log.Debugf("parsed new endpoint for country %s successfully: %v", country, url.String())
+			return url
 		},
 	}
-	input.GlobalConfig = optsFunc
+	input.GlobalConfig = func() replicaServer.ReplicaOptions {
+		return optsFunc()
+	}
 	replicaHandler, err := replicaServer.NewHTTPHandler(input)
 	if err != nil {
 		return nil, log.Errorf("creating replica http server: %v", err)

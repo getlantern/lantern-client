@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:lantern/common/common.dart';
-import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:lantern/replica/ui/common.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -17,6 +17,9 @@ class ReplicaHomeScreen extends StatefulWidget {
 class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   final _textEditingController = TextEditingController();
 
+  // Two ways to navigate to seach screen:
+  // - Click the magnifier icon next to the search bar
+  // - Or, just click enter in the search bar
   Future<void> _navigateToSearchScreen(String query) async {
     await context.pushRoute(ReplicaSearchScreen(searchQuery: query));
   }
@@ -29,8 +32,9 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: BaseScreen(
+            actionButton: renderFap(context),
             centerTitle: true,
-            title: 'Discover'.i18n,
+            title: 'discover'.i18n,
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -41,10 +45,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   Widget renderDescription() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 10.0),
-      child: CText(
-          'Search user-uploaded content on the Lantern Network, or upload your own for others to discover.'
-              .i18n,
-          style: tsBody1),
+      child: CText('replica_search_intro'.i18n, style: tsBody1),
     );
   }
 
@@ -58,7 +59,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
           await _navigateToSearchScreen(query);
         },
         decoration: InputDecoration(
-          labelText: 'Search',
+          labelText: 'search'.i18n,
           suffixIcon: Material(
             color: blue4,
             child: IconButton(
@@ -68,7 +69,8 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
                 icon: const Icon(Icons.search),
                 color: white),
           ),
-          contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          contentPadding:
+              const EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 20.0, 10.0),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: grey3,
@@ -83,6 +85,51 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  FloatingActionButton renderFap(BuildContext context) {
+    return FloatingActionButton(
+      backgroundColor: black,
+      child: const CAssetImage(
+        path: ImagePaths.file_upload,
+      ),
+      onPressed: () async {
+        // Upload journey goes like this:
+        // - Prompt user to pick a file
+        // - Show them the disclaimer
+        //   - Or not, if they asked not to be shown again (through a checkbox)
+        // - Start the upload
+        //   - Notify them through a notification
+        // - Track the upload's progress through a notification
+        // - When the upload is done, send another notification saying it's done
+        //   - If the user clicks on this notification, they would be prompted
+        //     with a Share dialog to share the Replica link
+        var result = await FilePicker.platform.pickFiles();
+        if (result == null) {
+          // If user didn't pick a file, do nothing
+          return;
+        }
+        var file = File(result.files.single.path);
+        logger.v('Picked a file $file');
+
+        // If the checkbox value is false, show it
+        // If true, don't
+        if (!await getReplicaUploadDisclaimerCheckboxValue().timeout(
+          const Duration(seconds: 2),
+          onTimeout: () => false,
+        )) {
+          showConfirmationDialog(
+            context: context,
+            title: 'replica_upload_confirmation_title'.i18n,
+            explanation: 'replica_upload_confirmation_body'.i18n,
+            agreeText: 'replica_upload_confirmation_agree'.i18n,
+            agreeAction: () => context.pushRoute(ReplicaUploadFileScreen(
+              fileToUpload: file,
+            )),
+          );
+        }
+      },
     );
   }
 }

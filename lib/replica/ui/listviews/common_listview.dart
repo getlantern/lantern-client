@@ -4,6 +4,7 @@ import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
+import 'package:lantern/replica/ui/listitems/document_listitem.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -72,7 +73,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
         pagingController.appendPage(ret, nextPageKey);
       }
     } catch (err) {
-      logger.v('fetchPage err: $err');
+      logger.w('fetchPage err: $err');
       if (mounted) {
         pagingController.error = 'fetching search result with $err';
       }
@@ -94,8 +95,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
           ),
           Flexible(
               child: CText(
-            'Encountered an error while fetching results. Please try again later'
-                .i18n,
+            'search_result_error'.i18n,
             style: tsBody1.copiedWith(color: indicatorRed),
           ))
         ])));
@@ -106,6 +106,21 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
       return list.length * 20;
     }
     return 600;
+  }
+
+  Widget renderNoItemsFoundWidget() {
+    return Column(
+      children: [
+        const CAssetImage(
+          path: ImagePaths.unknown,
+          size: 168,
+        ),
+        CText(
+          'no_search_result_found'.i18n,
+          style: tsBody1,
+        ),
+      ],
+    );
   }
 
   /// prebuild runs a few checks before build() is called.  If it returns a
@@ -127,5 +142,27 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
       return showError(pagingController.error);
     }
     return null;
+  }
+
+  Widget renderPaginatedListView(
+      ItemWidgetBuilder<ReplicaSearchItem> itemBuilder) {
+    var w = prebuild(context);
+    if (w != null) {
+      return w;
+    }
+
+    return PagedListView<int, ReplicaSearchItem>.separated(
+      cacheExtent: getCommonCacheExtent(pagingController.value.itemList),
+      scrollDirection: Axis.vertical,
+      pagingController: pagingController,
+      builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
+        animateTransitions: true,
+        noItemsFoundIndicatorBuilder: (context) {
+          return renderNoItemsFoundWidget();
+        },
+        itemBuilder: itemBuilder,
+      ),
+      separatorBuilder: (context, index) => const SizedBox.shrink(),
+    );
   }
 }

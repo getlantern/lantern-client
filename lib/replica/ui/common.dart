@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/common/ui/base_screen.dart';
+import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/custom/asset_image.dart';
 import 'package:lantern/common/ui/custom/list_item_factory.dart';
 import 'package:lantern/common/ui/custom/text.dart';
@@ -11,11 +12,14 @@ import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
 );
 
+// renderReplicaLongPressMenuItem is used for rendering list/grid items located
+// in the ./ui/replica/listitems directory
 SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
   return SizedBox(
     height: 96,
@@ -28,15 +32,15 @@ SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
         children: [
           ListItemFactory.focusMenuItem(
               icon: ImagePaths.file_download,
-              content: 'Download'.i18n,
+              content: 'download'.i18n,
               onTap: () async {
                 await api.download(link);
               }),
           ListItemFactory.focusMenuItem(
               icon: ImagePaths.share,
-              content: 'Share'.i18n,
+              content: 'share'.i18n,
               onTap: () async {
-                await Share.share(link.toMagnetLink());
+                await Share.share('replica://${link.toMagnetLink()}');
               }),
         ],
       ),
@@ -44,34 +48,38 @@ SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
   );
 }
 
-Widget renderReplicaMediaScreen({
+// renderReplicaMediaViewScreen is used as the root widget for all Replica media
+// views (located in ./ui/replica/media_views directory)
+Widget renderReplicaMediaViewScreen({
   required BuildContext context,
   required ReplicaApi api,
   required ReplicaLink link,
   required SearchCategory category,
   required Widget body,
   required Color backgroundColor,
+  Color? foregroundColor,
   String? mimeType,
 }) {
   return BaseScreen(
       showAppBar: true,
+      foregroundColor: foregroundColor,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           CText(
-            link.displayName ?? 'Untitled',
-            style: tsHeading3,
+            link.displayName ?? 'untitled'.i18n,
+            style: tsHeading3.copiedWith(color: foregroundColor),
           ),
           if (mimeType != null)
             CText(
               mimeType,
-              style: tsOverline,
+              style: tsOverline.copiedWith(color: foregroundColor),
             )
           else
             CText(
               category.toShortString(),
-              style: tsOverline,
+              style: tsOverline.copiedWith(color: foregroundColor),
             )
         ],
       ),
@@ -81,18 +89,34 @@ Widget renderReplicaMediaScreen({
             onPressed: () async {
               await Share.share(link.toMagnetLink());
             },
-            icon: const CAssetImage(
+            icon: CAssetImage(
               size: 20,
               path: ImagePaths.share,
+              color: foregroundColor,
             )),
         IconButton(
             onPressed: () async {
               await api.download(link);
             },
-            icon: const CAssetImage(
+            icon: CAssetImage(
               size: 20,
               path: ImagePaths.file_download,
+              color: foregroundColor,
             )),
       ],
       body: body);
+}
+
+final String replica_upload_disclaimer_value_shared_prefs_name =
+    'replica_upload_disclaimer_checkbox_value';
+
+Future<bool> getReplicaUploadDisclaimerCheckboxValue() async {
+  var prefs = await SharedPreferences.getInstance();
+  return prefs.getBool(replica_upload_disclaimer_value_shared_prefs_name) ??
+      false;
+}
+
+Future<void> setReplicaUploadDisclaimerCheckboxValue(bool b) async {
+  var prefs = await SharedPreferences.getInstance();
+  await prefs.setBool(replica_upload_disclaimer_value_shared_prefs_name, b);
 }

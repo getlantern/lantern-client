@@ -28,32 +28,17 @@ class ReplicaDocumentListView extends ReplicaCommonListView {
 class _ReplicaDocumentListViewState extends ReplicaCommonListViewState {
   @override
   Widget build(BuildContext context) {
-    logger.v('renderListView: query: ${super.lastSearchQuery}');
-    var w = super.prebuild(context);
-    if (w != null) {
-      return w;
-    }
-    return PagedListView<int, ReplicaSearchItem>.separated(
-      cacheExtent:
-          super.getCommonCacheExtent(super.pagingController.value.itemList),
-      scrollDirection: Axis.vertical,
-      pagingController: super.pagingController,
-      builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
-        animateTransitions: true,
-        itemBuilder: (context, item, index) {
-          return ReplicaDocumentListItem(
-            item: item,
-            replicaApi: replicaApi,
-            onTap: () {
-              context.pushRoute(ReplicaUnknownItemScreen(
-                replicaLink: item.replicaLink,
-                category: SearchCategory.Document,
-              ));
-            },
-          );
+    return renderPaginatedListView((context, item, index) {
+      return ReplicaDocumentListItem(
+        item: item,
+        replicaApi: replicaApi,
+        onTap: () {
+          context.pushRoute(ReplicaUnknownItemScreen(
+            replicaLink: item.replicaLink,
+            category: SearchCategory.Document,
+          ));
         },
-      ),
-      separatorBuilder: (context, index) => const SizedBox.shrink(),
-    );
+      );
+    });
   }
 }

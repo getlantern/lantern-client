@@ -12,6 +12,8 @@ var logger = Logger(
 );
 
 /// ReplicaImagePreviewScreen renders a Replica image in the middle of its view
+///
+/// This screen supports landscape and portrait orientations
 class ReplicaImagePreviewScreen extends StatefulWidget {
   ReplicaImagePreviewScreen({Key? key, required this.replicaLink});
   final ReplicaLink replicaLink;
@@ -43,7 +45,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaScreen(
+    return renderReplicaMediaViewScreen(
         context: context,
         api: replicaApi,
         link: widget.replicaLink,
@@ -51,7 +53,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
         category: SearchCategory.Image,
         body: Center(
             child: CachedNetworkImage(
-                imageUrl: replicaApi.getThumbnailAddr(widget.replicaLink),
+                imageUrl: replicaApi.getDownloadAddr(widget.replicaLink),
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     CircularProgressIndicator(value: downloadProgress.progress),
                 errorWidget: (context, url, error) {
@@ -68,7 +70,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
                         const Padding(
                             padding: EdgeInsets.symmetric(vertical: 6.0)),
                         CText(
-                          'No preview for this type of file'.i18n,
+                          'no_preview_for_this_type_of_file'.i18n,
                           style: tsBody1,
                         ),
                       ]);

@@ -25,43 +25,14 @@ class ReplicaVideoListView extends ReplicaCommonListView {
 class _ReplicaVideoListViewState extends ReplicaCommonListViewState {
   @override
   Widget build(BuildContext context) {
-    var w = super.prebuild(context);
-    if (w != null) {
-      return w;
-    }
-    return PagedListView<int, ReplicaSearchItem>.separated(
-      cacheExtent:
-          super.getCommonCacheExtent(super.pagingController.value.itemList),
-      scrollDirection: Axis.vertical,
-      pagingController: super.pagingController,
-      builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
-        animateTransitions: true,
-        noItemsFoundIndicatorBuilder: (context) {
-          return Column(
-            children: [
-              const CAssetImage(
-                path: ImagePaths.unknown,
-                size: 168,
-              ),
-              CText(
-                'Sorry, we couldn’t find anything matching that search'.i18n,
-                style: tsBody1,
-              ),
-            ],
-          );
-        },
-        itemBuilder: (context, item, index) {
-          return ReplicaVideoListItem(
-              item: item,
-              replicaApi: super.replicaApi,
-              onTap: () {
-                context.pushRoute(ReplicaVideoPlayerScreen(
-                    replicaLink: item.replicaLink,
-                    mimeType: item.primaryMimeType));
-              });
-        },
-      ),
-      separatorBuilder: (context, index) => const SizedBox.shrink(),
-    );
+    return renderPaginatedListView((context, item, index) {
+      return ReplicaVideoListItem(
+          item: item,
+          replicaApi: super.replicaApi,
+          onTap: () {
+            context.pushRoute(ReplicaVideoPlayerScreen(
+                replicaLink: item.replicaLink, mimeType: item.primaryMimeType));
+          });
+    });
   }
 }
