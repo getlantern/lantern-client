@@ -1,7 +1,6 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/common.dart';
 import 'package:logger/logger.dart';
@@ -26,6 +25,7 @@ class ReplicaUnknownItemScreen extends StatefulWidget {
       required this.replicaLink,
       required this.category,
       this.mimeType});
+
   final ReplicaLink replicaLink;
   final SearchCategory category;
   final String? mimeType;
@@ -36,45 +36,49 @@ class ReplicaUnknownItemScreen extends StatefulWidget {
 }
 
 class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
-  final ReplicaApi replicaApi =
-      ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
-
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaViewScreen(
-        context: context,
-        api: replicaApi,
-        link: widget.replicaLink,
-        backgroundColor: white,
-        category: widget.category,
-        mimeType: widget.mimeType,
-        body: Center(
+    return replicaModel.withReplicaApi(
+      (context, replicaApi, child) {
+        return renderReplicaMediaViewScreen(
+          context: context,
+          api: replicaApi,
+          link: widget.replicaLink,
+          backgroundColor: white,
+          category: widget.category,
+          mimeType: widget.mimeType,
+          body: Center(
             child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const CAssetImage(
-                  path: ImagePaths.spreadsheet,
-                  size: 128,
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 6.0)),
-                CText(
-                  'no_preview_for_this_type_of_file'.i18n,
-                  style: tsBody1,
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 8.0)),
-                TextButton(
-                  onPressed: () async {
-                    await replicaApi.download(widget.replicaLink);
-                  },
-                  child: CText(
-                    'download'.i18n,
-                    style: tsButton.copiedWith(color: indicatorRed),
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const CAssetImage(
+                    path: ImagePaths.spreadsheet,
+                    size: 128,
                   ),
-                ),
-              ]),
-        )));
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 6.0)),
+                  CText(
+                    'no_preview_for_this_type_of_file'.i18n,
+                    style: tsBody1,
+                  ),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 8.0)),
+                  TextButton(
+                    onPressed: () async {
+                      await replicaApi.download(widget.replicaLink);
+                    },
+                    child: CText(
+                      'download'.i18n,
+                      style: tsButton.copiedWith(color: indicatorRed),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

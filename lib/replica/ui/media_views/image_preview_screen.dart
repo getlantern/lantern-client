@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/common.dart';
 import 'package:logger/logger.dart';
@@ -16,6 +15,7 @@ var logger = Logger(
 /// This screen supports landscape and portrait orientations
 class ReplicaImagePreviewScreen extends StatefulWidget {
   ReplicaImagePreviewScreen({Key? key, required this.replicaLink});
+
   final ReplicaLink replicaLink;
 
   @override
@@ -24,9 +24,6 @@ class ReplicaImagePreviewScreen extends StatefulWidget {
 }
 
 class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
-  final ReplicaApi replicaApi =
-      ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
-
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
@@ -45,35 +42,42 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaViewScreen(
-        context: context,
-        api: replicaApi,
-        link: widget.replicaLink,
-        backgroundColor: white,
-        category: SearchCategory.Image,
-        body: Center(
+    return replicaModel.withReplicaApi(
+      (context, replicaApi, child) {
+        return renderReplicaMediaViewScreen(
+          context: context,
+          api: replicaApi,
+          link: widget.replicaLink,
+          backgroundColor: white,
+          category: SearchCategory.Image,
+          body: Center(
             child: CachedNetworkImage(
-                imageUrl: replicaApi.getDownloadAddr(widget.replicaLink),
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
-                errorWidget: (context, url, error) {
-                  // Just show an error thumbnail and a descriptive constant
-                  // error text
-                  return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const CAssetImage(
-                          path: ImagePaths.spreadsheet,
-                          size: 128,
-                        ),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 6.0)),
-                        CText(
-                          'no_preview_for_this_type_of_file'.i18n,
-                          style: tsBody1,
-                        ),
-                      ]);
-                })));
+              imageUrl: replicaApi.getDownloadAddr(widget.replicaLink),
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(value: downloadProgress.progress),
+              errorWidget: (context, url, error) {
+                // Just show an error thumbnail and a descriptive constant
+                // error text
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const CAssetImage(
+                      path: ImagePaths.spreadsheet,
+                      size: 128,
+                    ),
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 6.0)),
+                    CText(
+                      'no_preview_for_this_type_of_file'.i18n,
+                      style: tsBody1,
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }

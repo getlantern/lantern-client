@@ -24,7 +24,7 @@ public class EmbeddedLantern extends Lantern {
 
     try {
       internalsdk.StartResult result = internalsdk.Internalsdk.start(configDir, locale, settings, session);
-      return new StartResult(result.getHTTPAddr(), result.getSOCKS5Addr(), result.getDNSGrabAddr(), result.getReplicaAddr());
+      return new StartResult(result.getHTTPAddr(), result.getSOCKS5Addr(), result.getDNSGrabAddr());
     } catch (Exception e) {
       throw new LanternNotRunningException("Unable to start EmbeddedLantern: " + e.getMessage(), e);
     }

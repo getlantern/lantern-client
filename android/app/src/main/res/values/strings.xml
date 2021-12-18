@@ -496,4 +496,5 @@
     <string name="message_notifications_channel">Messages</string>
     <string name="call_notifications_channel">Calls</string>
     <string name="lantern_service">Lantern Service</string>
+    <string name="replica_download">Replica Download</string>
 </resources>

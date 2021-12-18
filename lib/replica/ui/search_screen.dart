@@ -1,9 +1,10 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/ui/listviews/app_listview.dart';
 import 'package:lantern/replica/ui/listviews/audio_listview.dart';
 import 'package:lantern/replica/ui/listviews/document_listview.dart';
-import 'package:lantern/replica/ui/listviews/video_listview.dart';
 import 'package:lantern/replica/ui/listviews/image_listview.dart';
+import 'package:lantern/replica/ui/listviews/video_listview.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -16,6 +17,7 @@ var logger = Logger(
 // Looks like this: docs/replica_search_tabs.png
 class ReplicaSearchScreen extends StatefulWidget {
   ReplicaSearchScreen({Key? key, required this.searchQuery});
+
   final String searchQuery;
 
   @override
@@ -39,9 +41,10 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-        centerTitle: true,
-        title: 'discover'.i18n,
-        body: Column(
+      centerTitle: true,
+      title: 'discover'.i18n,
+      body: replicaModel.withReplicaApi((context, replicaApi, child) {
+        return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -117,18 +120,26 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                 valueListenable: _searchQueryListener,
                 builder: (BuildContext context, String value, Widget? child) {
                   return Expanded(
-                      child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      ReplicaVideoListView(searchQuery: value),
-                      ReplicaImageListView(searchQuery: value),
-                      ReplicaAudioListView(searchQuery: value),
-                      ReplicaDocumentListView(searchQuery: value),
-                      ReplicaAppListView(searchQuery: value),
-                    ],
-                  ));
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        ReplicaVideoListView(
+                            replicaApi: replicaApi, searchQuery: value),
+                        ReplicaImageListView(
+                            replicaApi: replicaApi, searchQuery: value),
+                        ReplicaAudioListView(
+                            replicaApi: replicaApi, searchQuery: value),
+                        ReplicaDocumentListView(
+                            replicaApi: replicaApi, searchQuery: value),
+                        ReplicaAppListView(
+                            replicaApi: replicaApi, searchQuery: value),
+                      ],
+                    ),
+                  );
                 }),
           ],
-        ));
+        );
+      }),
+    );
   }
 }

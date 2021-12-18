@@ -1,7 +1,6 @@
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/notifications.dart';
-import 'package:lantern/replica/logic/common.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -42,8 +41,9 @@ class ReplicaUploader {
   }
 
   Future<void> uploadFile(File file, String displayName) async {
+    final replicaAddr = await sessionModel.getReplicaAddr();
     var uploadUrl =
-        'http://${ReplicaCommon.getReplicaServerAddr()!}/replica/upload?name=${Uri.encodeComponent(displayName)}';
+        'http://$replicaAddr/replica/upload?name=${Uri.encodeComponent(displayName)}';
     logger.v('uploadUrl: $uploadUrl');
     await inst.uploader!.enqueue(RawUpload(
       url: uploadUrl,
@@ -58,8 +58,12 @@ void ReplicaUploaderBackgroundHandler() {
   var isolateUploader = FlutterUploader();
 
   // Listen to progress and show a single notification showing the progress
-  isolateUploader.progress.listen((progress) {
-    notifications.flutterLocalNotificationsPlugin
+  isolateUploader.progress.listen((progress) async {
+    // This code runs in a different Flutter engine than the usual UI code, so
+    // we have to make sure localizations are initialized here before
+    // continuing.
+    await Localization.ensureInitialized();
+    await notifications.flutterLocalNotificationsPlugin
         .show(
             progress.taskId.hashCode,
             'uploader'.i18n,

@@ -2,8 +2,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/notifications.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/common.dart';
 import 'package:lantern/replica/ui/media_views/playback_button.dart';
@@ -28,8 +28,6 @@ class ReplicaAudioPlayerScreen extends StatefulWidget {
 }
 
 class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
-  final ReplicaApi _replicaApi =
-      ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
   final mode = PlayerMode.MEDIA_PLAYER;
   final _defaultSeekDurationInSeconds = 3;
   late AudioPlayer _audioPlayer;
@@ -42,6 +40,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
   StreamSubscription? _playerErrorSubscription;
   StreamSubscription? _playerStateSubscription;
   StreamSubscription<PlayerControlCommand>? _playerControlCommandSubscription;
+
   bool get _isPlaying => _playerState == PlayerState.PLAYING;
 
   @override
@@ -64,29 +63,31 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaViewScreen(
-        context: context,
-        api: _replicaApi,
-        link: widget.replicaLink,
-        category: SearchCategory.Audio,
-        mimeType: widget.mimeType,
-        backgroundColor: grey2,
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                renderPlaybackSliderAndDuration(),
-                renderPlaybackButtons(),
-              ],
+    return replicaModel.withReplicaApi((context, replicaApi, child) {
+      return renderReplicaMediaViewScreen(
+          context: context,
+          api: replicaApi,
+          link: widget.replicaLink,
+          category: SearchCategory.Audio,
+          mimeType: widget.mimeType,
+          backgroundColor: grey2,
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  renderPlaybackSliderAndDuration(),
+                  renderPlaybackButtons(replicaApi),
+                ],
+              ),
             ),
-          ),
-        ));
+          ));
+    });
   }
 
-  Widget renderPlaybackButtons() {
+  Widget renderPlaybackButtons(ReplicaApi replicaApi) {
     return Padding(
       padding: const EdgeInsets.all(18.0),
       child: Row(
@@ -112,7 +113,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
           // Play button
           PlaybackButton(
             onTap: () async {
-              _isPlaying ? await _pause() : await _play();
+              _isPlaying ? await _pause() : await _play(replicaApi);
             },
             path: _isPlaying ? ImagePaths.pause : ImagePaths.play,
             size: 60,
@@ -231,7 +232,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
         _audioPlayer.notificationService.onPlayerCommand.listen((command) {});
   }
 
-  Future<int> _play() async {
+  Future<int> _play(ReplicaApi replicaApi) async {
     final playPosition = (_position != null &&
             _totalDuration != null &&
             _position!.inMilliseconds > 0 &&
@@ -239,7 +240,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
         ? _position
         : null;
     final result = await _audioPlayer.play(
-        _replicaApi.getDownloadAddr(widget.replicaLink),
+        replicaApi.getDownloadAddr(widget.replicaLink),
         position: playPosition);
     if (result == 1) {
       setState(() => _playerState = PlayerState.PLAYING);

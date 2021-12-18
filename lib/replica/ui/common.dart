@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/common/ui/base_screen.dart';
-import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/custom/asset_image.dart';
 import 'package:lantern/common/ui/custom/list_item_factory.dart';
 import 'package:lantern/common/ui/custom/text.dart';

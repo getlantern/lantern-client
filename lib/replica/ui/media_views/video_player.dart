@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/common.dart';
 import 'package:lantern/replica/ui/media_views/playback_button.dart';
@@ -20,8 +20,13 @@ var logger = Logger(
 /// The playback controls container are shown/hidden by tapping away from the
 /// playback controls
 class ReplicaVideoPlayerScreen extends StatefulWidget {
-  ReplicaVideoPlayerScreen({Key? key, required this.replicaLink, this.mimeType})
+  ReplicaVideoPlayerScreen(
+      {Key? key,
+      required this.replicaApi,
+      required this.replicaLink,
+      this.mimeType})
       : super(key: key);
+  final ReplicaApi replicaApi;
   final ReplicaLink replicaLink;
   final String? mimeType;
 
@@ -34,8 +39,6 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
   bool _isPlaying = false;
   Duration _totalDuration = const Duration(seconds: 0);
   Duration _position = const Duration(seconds: 0);
-  final ReplicaApi _replicaApi =
-      ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
   final _defaultSeekDurationInSeconds = 3;
   late VideoPlayerController _videoController;
   late Future<void> _initializeVideoPlayerFuture;
@@ -52,7 +55,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
     // future returned in the 'build()' function (see
     // _videoController.value.hasError usage in FutureBuilder)
     _videoController = VideoPlayerController.network(
-        _replicaApi.getViewAddr(widget.replicaLink));
+        widget.replicaApi.getViewAddr(widget.replicaLink));
     _initializeVideoPlayerFuture = _videoController.initialize();
 
     // Add a listener for video playback changes
@@ -81,70 +84,72 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaViewScreen(
-        context: context,
-        api: _replicaApi,
-        link: widget.replicaLink,
-        category: SearchCategory.Video,
-        backgroundColor: black,
-        foregroundColor: white,
-        mimeType: widget.mimeType,
-        body: Padding(
-          padding: const EdgeInsetsDirectional.only(top: 8.0),
-          child: FutureBuilder(
-            future: _initializeVideoPlayerFuture,
-            builder: (context, snapshot) {
-              // If not done, show progress indicator
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
+    return replicaModel.withReplicaApi((context, replicaApi, child) {
+      return renderReplicaMediaViewScreen(
+          context: context,
+          api: replicaApi,
+          link: widget.replicaLink,
+          category: SearchCategory.Video,
+          backgroundColor: black,
+          foregroundColor: white,
+          mimeType: widget.mimeType,
+          body: Padding(
+            padding: const EdgeInsetsDirectional.only(top: 8.0),
+            child: FutureBuilder(
+              future: _initializeVideoPlayerFuture,
+              builder: (context, snapshot) {
+                // If not done, show progress indicator
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-              // If error, show error with text
-              if (_videoController.value.hasError || snapshot.hasError) {
-                logger.e(
-                    'Received a playback error: ${_videoController.value.errorDescription ?? snapshot.error}');
+                // If error, show error with text
+                if (_videoController.value.hasError || snapshot.hasError) {
+                  logger.e(
+                      'Received a playback error: ${_videoController.value.errorDescription ?? snapshot.error}');
+                  return Center(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                        const Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 60,
+                        ),
+                        Flexible(
+                            child: CText(
+                          'video_stream_error'.i18n,
+                          style: CTextStyle(
+                              fontSize: 16, color: white, lineHeight: 19),
+                        ))
+                      ]));
+                }
+
+                // Else, render video
                 return Center(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                      const Icon(
-                        Icons.error_outline,
-                        color: Colors.red,
-                        size: 60,
-                      ),
-                      Flexible(
-                          child: CText(
-                        'video_stream_error'.i18n,
-                        style: CTextStyle(
-                            fontSize: 16, color: white, lineHeight: 19),
-                      ))
-                    ]));
-              }
-
-              // Else, render video
-              return Center(
-                child: AspectRatio(
-                  aspectRatio: _videoController.value.aspectRatio,
-                  child: Stack(children: [
-                    GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _playbackControlsVisible =
-                                !_playbackControlsVisible;
-                          });
-                        },
-                        child: VideoPlayer(_videoController)),
-                    // Only render controls if the playback controls are
-                    // visible. Just hiding the opacity of the playback
-                    // controls is not sufficient since the tap gestures will be
-                    // absorbed by the playback controls
-                    if (_playbackControlsVisible)
-                      Align(
-                          alignment: FractionalOffset.bottomCenter,
-                          child: Padding(
+                  child: AspectRatio(
+                    aspectRatio: _videoController.value.aspectRatio,
+                    child: Stack(
+                      children: [
+                        GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _playbackControlsVisible =
+                                    !_playbackControlsVisible;
+                              });
+                            },
+                            child: VideoPlayer(_videoController)),
+                        // Only render controls if the playback controls are
+                        // visible. Just hiding the opacity of the playback
+                        // controls is not sufficient since the tap gestures will be
+                        // absorbed by the playback controls
+                        if (_playbackControlsVisible)
+                          Align(
+                            alignment: FractionalOffset.bottomCenter,
+                            child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
                                 decoration: BoxDecoration(
@@ -162,13 +167,17 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
                                     renderPlaybackButtons()
                                   ],
                                 ),
-                              )))
-                  ]),
-                ),
-              );
-            },
-          ),
-        ));
+                              ),
+                            ),
+                          )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ));
+    });
   }
 
   Widget renderPlaybackButtons() {
