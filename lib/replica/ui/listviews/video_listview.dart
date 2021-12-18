@@ -1,9 +1,8 @@
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/models/search_item.dart';
-import 'package:lantern/replica/ui/listviews/common_listview.dart';
+import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/listitems/video_listitem.dart';
+import 'package:lantern/replica/ui/listviews/common_listview.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -13,11 +12,14 @@ var logger = Logger(
 /// ReplicaVideoListView renders a list of ReplicaVideoListItem.
 /// Looks like this docs/replica_search_tabs.png
 class ReplicaVideoListView extends ReplicaCommonListView {
-  ReplicaVideoListView({Key? key, required String searchQuery})
+  ReplicaVideoListView(
+      {Key? key, required ReplicaApi replicaApi, required String searchQuery})
       : super(
             key: key,
+            replicaApi: replicaApi,
             searchQuery: searchQuery,
             searchCategory: SearchCategory.Video);
+
   @override
   State<StatefulWidget> createState() => _ReplicaVideoListViewState();
 }
@@ -28,10 +30,12 @@ class _ReplicaVideoListViewState extends ReplicaCommonListViewState {
     return renderPaginatedListView((context, item, index) {
       return ReplicaVideoListItem(
           item: item,
-          replicaApi: super.replicaApi,
+          replicaApi: widget.replicaApi,
           onTap: () {
             context.pushRoute(ReplicaVideoPlayerScreen(
-                replicaLink: item.replicaLink, mimeType: item.primaryMimeType));
+                replicaApi: widget.replicaApi,
+                replicaLink: item.replicaLink,
+                mimeType: item.primaryMimeType));
           });
     });
   }

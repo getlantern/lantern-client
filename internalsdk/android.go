@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -52,13 +51,11 @@ var (
 
 	clEventual               = eventual.NewValue()
 	dnsGrabAddrEventual      = eventual.NewValue()
-	replicaAddrEventual      = eventual.NewValue()
 	errNoAdProviderAvailable = errors.New("no ad provider available")
 )
 
 type Settings interface {
 	StickyConfig() bool
-	ShouldRunReplica() bool
 	GetHttpProxyHost() string
 	GetHttpProxyPort() int
 	TimeoutMillis() int
@@ -92,6 +89,8 @@ type Session interface {
 	Currency() (string, error)
 	DeviceOS() (string, error)
 	IsProUser() (bool, error)
+	SetReplicaAddr(string)
+	ForceReplica() bool
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -126,6 +125,8 @@ type panickingSession interface {
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() string
+
+	Wrapped() Session
 }
 
 func panicIfNecessary(err error) {
@@ -137,6 +138,10 @@ func panicIfNecessary(err error) {
 // panickingSessionImpl implements panickingSession
 type panickingSessionImpl struct {
 	wrapped Session
+}
+
+func (s *panickingSessionImpl) Wrapped() Session {
+	return s.wrapped
 }
 
 func (s *panickingSessionImpl) GetAppName() string {
@@ -366,8 +371,6 @@ type StartResult struct {
 	HTTPAddr    string
 	SOCKS5Addr  string
 	DNSGrabAddr string
-	// If this value is empty, Replica failed to start
-	ReplicaAddr string
 }
 
 // AdSettings is an interface for retrieving mobile ad settings from the
@@ -442,23 +445,8 @@ func Start(configDir string,
 		log.Error(err.Error())
 		return nil, err
 	}
-	replicaAddr := ""
-	// XXX <16-12-21, soltzen> From the run() call above, we should by now have
-	// an address for Replica in replicaAddrEventual. If we don't, we failed to
-	// initialize Replica and have to move on without it
-	if settings.ShouldRunReplica() {
-		v, ok := replicaAddrEventual.Get(startTimeout - elapsed())
-		if ok {
-			replicaAddr = v.(string)
-			log.Debugf("Started Replica at %s", replicaAddr)
-		} else {
-			replicaAddr = ""
-			log.Debugf("Failed to run Replica: will continue without it")
-		}
-	}
-
 	return &StartResult{addr.(string), socksAddr.(string),
-		da.(string), replicaAddr}, nil
+		da.(string)}, nil
 }
 
 // EnableLogging enables logging.
@@ -528,6 +516,8 @@ func run(configDir, locale string,
 	}
 
 	userConfig := newUserConfig(session)
+	globalConfigChanged := make(chan interface{})
+	geoRefreshed := geolookup.OnRefresh()
 
 	runner, err := flashlight.New(
 		common.DefaultAppName,
@@ -544,6 +534,12 @@ func run(configDir, locale string,
 		func(cfg *config.Global, src config.Source) {
 			session.UpdateAdSettings(&adSettings{cfg.AdSettings})
 			email.SetDefaultRecipient(cfg.ReportIssueEmail)
+			select {
+			case globalConfigChanged <- nil:
+				// okay
+			default:
+				// don't block
+			}
 		}, // onConfigUpdate
 		nil, // onProxiesUpdate
 		userConfig,
@@ -577,26 +573,31 @@ func run(configDir, locale string,
 		log.Fatalf("Failed to start flashlight: %v", err)
 	}
 
-	if settings.ShouldRunReplica() {
-		func() {
-			h, err := newReplicaHttpHandler(configDir,
-				userConfig, runner.FeatureOptions)
-			if err != nil {
-				log.Debugf(
-					"Failed to start replica server. Will continue without it. Err: %v", err)
-				return
-			}
-			l, srv, err := NewReplicaServer(h)
-			if err != nil {
-				log.Debugf(
-					"Failed to start replica server. Will continue without it. Err: %v", err)
-				return
-			}
-			replicaAddrEventual.Set("localhost:" +
-				strconv.Itoa(l.Addr().(*net.TCPAddr).Port))
-			go srv.Serve(l)
-		}()
+	replicaServer := &ReplicaServer{
+		ConfigDir:  configDir,
+		Flashlight: runner,
+		Session:    session.Wrapped(),
+		UserConfig: userConfig,
 	}
+
+	// Check whether Replica should be enabled anytime that the global config changes or our geolocation info changed,
+	// and also check right at start.
+	//
+	// TODO: should also check if our user info changes. Right now we don't segment Replica on users so it's not urgent.
+	// TODO: a lot of this feature enabled stuff, including checking whether enabled features have changed and permanently
+	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
+	session.Wrapped().SetReplicaAddr("") // start off with no Replica address
+	go func() {
+		for {
+			select {
+			case <-globalConfigChanged:
+				replicaServer.CheckEnabled()
+			case <-geoRefreshed:
+				replicaServer.CheckEnabled()
+			}
+		}
+	}()
+	replicaServer.CheckEnabled()
 
 	go runner.Run(
 		httpProxyAddr, // listen for HTTP on provided address

@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'common.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -30,6 +31,10 @@ class ReplicaApi {
   late Dio dio;
   final String replicaHostAddr;
   final _defaultTimeoutDuration = const Duration(seconds: 7);
+
+  bool get available {
+    return replicaHostAddr != '';
+  }
 
   Future<List<ReplicaSearchItem>> search(
       String query, SearchCategory category, int page, String lang) async {

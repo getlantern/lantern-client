@@ -65,8 +65,7 @@ public class LanternServiceManager extends Lantern {
                     result.set(new StartResult(
                             intent.getStringExtra(HTTP_ADDR),
                             intent.getStringExtra(SOCKS5_ADDR),
-                            intent.getStringExtra(DNSGRAB_ADDR),
-                            intent.getStringExtra(REPLICA_ADDR)
+                            intent.getStringExtra(DNSGRAB_ADDR)
                     ));
                 } else {
                     Logger.i(TAG, "Notified of failed start");

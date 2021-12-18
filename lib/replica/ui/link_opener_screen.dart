@@ -1,6 +1,5 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
@@ -27,8 +26,10 @@ var logger = Logger(
 /// In other words, we will never reach any Replica screen (other than this) if
 /// Replica is not initialized.
 class ReplicaLinkOpenerScreen extends StatefulWidget {
-  ReplicaLinkOpenerScreen({Key? key, required this.replicaLink})
+  ReplicaLinkOpenerScreen(
+      {Key? key, required this.replicaApi, required this.replicaLink})
       : super(key: key);
+  final ReplicaApi replicaApi;
   final ReplicaLink replicaLink;
 
   @override
@@ -36,65 +37,34 @@ class ReplicaLinkOpenerScreen extends StatefulWidget {
 }
 
 class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
-  bool _didFailToInitReplica = false;
-  final ReplicaApi _replicaApi =
-      ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
-
   @override
   void initState() {
-    ReplicaCommon.init().then((_) {
-      if (!ReplicaCommon.isReplicaRunning()) {
-        if (mounted) {
-          setState(() {
-            logger.e(
-                'initState(): ReplicaCommon.init() failed. We will not continue');
-            _didFailToInitReplica = true;
-          });
-        }
-        return;
+    widget.replicaApi
+        .fetchCategoryFromReplicaLink(widget.replicaLink)
+        .then((cat) {
+      logger.v('category is ${cat.toString()}');
+      switch (cat) {
+        case SearchCategory.Video:
+          return context.replaceRoute(ReplicaVideoPlayerScreen(
+              replicaApi: widget.replicaApi, replicaLink: widget.replicaLink));
+        case SearchCategory.Image:
+          return context.replaceRoute(
+              ReplicaImagePreviewScreen(replicaLink: widget.replicaLink));
+        case SearchCategory.Audio:
+          return context.replaceRoute(
+              ReplicaAudioPlayerScreen(replicaLink: widget.replicaLink));
+        case SearchCategory.Document:
+        case SearchCategory.App:
+        case SearchCategory.Unknown:
+          return context.replaceRoute(ReplicaUnknownItemScreen(
+              category: cat, replicaLink: widget.replicaLink));
       }
-
-      _replicaApi.fetchCategoryFromReplicaLink(widget.replicaLink).then((cat) {
-        logger.v('category is ${cat.toString()}');
-        switch (cat) {
-          case SearchCategory.Video:
-            return context.replaceRoute(
-                ReplicaVideoPlayerScreen(replicaLink: widget.replicaLink));
-          case SearchCategory.Image:
-            return context.replaceRoute(
-                ReplicaImagePreviewScreen(replicaLink: widget.replicaLink));
-          case SearchCategory.Audio:
-            return context.replaceRoute(
-                ReplicaAudioPlayerScreen(replicaLink: widget.replicaLink));
-          case SearchCategory.Document:
-          case SearchCategory.App:
-          case SearchCategory.Unknown:
-            return context.replaceRoute(ReplicaUnknownItemScreen(
-                category: cat, replicaLink: widget.replicaLink));
-        }
-      });
     });
+
     super.initState();
   }
 
   Widget renderBody() {
-    if (_didFailToInitReplica) {
-      return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 60,
-            ),
-            Flexible(
-                child: Text(
-              'failed_to_init_replica'.i18n,
-            ))
-          ]);
-    }
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
