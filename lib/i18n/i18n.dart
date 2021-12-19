@@ -3,14 +3,24 @@ import 'package:i18n_extension/io/import.dart';
 import 'package:lantern/common/common.dart';
 
 extension Localization on String {
-  static String locale = 'en';
+  static String defaultLocale = 'en';
+  static String locale = defaultLocale;
 
-  static TranslationsByLocale translations = Translations.byLocale(locale);
+  static TranslationsByLocale translations =
+      Translations.byLocale(defaultLocale);
 
-  static Future<TranslationsByLocale> loadTranslations() {
-    return GettextImporter().fromAssetDirectory('assets/locales').then((value) {
-      translations += value;
-      return translations;
+  static Future<TranslationsByLocale> Function(
+          Future<TranslationsByLocale> Function()) loadTranslationsOnce =
+      once<Future<TranslationsByLocale>>();
+
+  static Future<TranslationsByLocale> ensureInitialized() async {
+    return loadTranslationsOnce(() {
+      return GettextImporter()
+          .fromAssetDirectory('assets/locales')
+          .then((value) {
+        translations += value;
+        return translations;
+      });
     });
   }
 
