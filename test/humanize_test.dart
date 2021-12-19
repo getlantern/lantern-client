@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
-    await Localization.loadTranslations();
+    await Localization.ensureInitialized();
   });
 
   group('Tests for humanizeSeconds()', () {
