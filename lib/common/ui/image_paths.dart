@@ -74,6 +74,14 @@ class ImagePaths {
   static const fast_rewind = 'assets/images/fast_rewind.svg';
   static const unknown = 'assets/images/unknown_black.svg';
   static const file_upload = 'assets/images/file_upload.svg';
+  static const search_empty = 'assets/images/search_empty.svg';
+  static const trailing_icon = 'assets/images/trailing_icon.svg';
+  static const audio_black = 'assets/images/audio_black.svg';
+  static const doc_black = 'assets/images/doc_black.svg';
+  static const unknown_black = 'assets/images/unknown_black.svg';
+  static const video_black = 'assets/images/video_black.svg';
+  static const zip_black = 'assets/images/zip_black.svg';
+  static const mode_edit = 'assets/images/mode_edit.svg';
 
   // Commonly used
   static const arrow_down = 'assets/images/arrow_down.svg';
@@ -93,6 +101,7 @@ class ImagePaths {
   static const verification_alert = 'assets/images/verification_alert.svg';
   static const verified_user = 'assets/images/verified_user.svg';
   static const user = 'assets/images/user.svg';
+  static const image_inactive = 'assets/images/image_inactive.svg';
 
   // illustrations
   static const welcome_illustration = 'assets/images/welcome_illustration.svg';

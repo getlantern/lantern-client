@@ -30,15 +30,11 @@ class ReplicaVideoPlayerScreen extends StatefulWidget {
 }
 
 class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
-  bool _playbackControlsVisible = true;
-  bool _isPlaying = false;
-  Duration _totalDuration = const Duration(seconds: 0);
-  Duration _position = const Duration(seconds: 0);
   final ReplicaApi _replicaApi =
       ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
-  final _defaultSeekDurationInSeconds = 3;
   late VideoPlayerController _videoController;
   late Future<void> _initializeVideoPlayerFuture;
+  bool _isPlaying = false;
 
   @override
   void initState() {
@@ -53,19 +49,14 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
     // _videoController.value.hasError usage in FutureBuilder)
     _videoController = VideoPlayerController.network(
         _replicaApi.getViewAddr(widget.replicaLink));
-    _initializeVideoPlayerFuture = _videoController.initialize();
+    _initializeVideoPlayerFuture =
+        _videoController.initialize().then((_) => _videoController.play());
 
     // Add a listener for video playback changes
     _videoController.addListener(() {
-      if (!_videoController.value.isPlaying) {
-        return;
-      }
-      if (mounted) {
+      if (_videoController.value.isPlaying != _isPlaying) {
         setState(() {
-          _position = _videoController.value.position;
-          if (_videoController.value.duration != _totalDuration) {
-            _totalDuration = _videoController.value.duration;
-          }
+          _isPlaying = !_isPlaying;
         });
       }
     });
@@ -125,142 +116,40 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
               }
 
               // Else, render video
-              return Center(
-                child: AspectRatio(
-                  aspectRatio: _videoController.value.aspectRatio,
-                  child: Stack(children: [
-                    GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _playbackControlsVisible =
-                                !_playbackControlsVisible;
-                          });
-                        },
-                        child: VideoPlayer(_videoController)),
-                    // Only render controls if the playback controls are
-                    // visible. Just hiding the opacity of the playback
-                    // controls is not sufficient since the tap gestures will be
-                    // absorbed by the playback controls
-                    if (_playbackControlsVisible)
-                      Align(
-                          alignment: FractionalOffset.bottomCenter,
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: white,
-                                    ),
-                                    color: white.withOpacity(0.5),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20))),
-                                height: 120.0,
-                                width: double.infinity,
-                                child: Column(
-                                  children: [
-                                    renderPlaybackSlider(),
-                                    renderPlaybackButtons()
-                                  ],
-                                ),
-                              )))
-                  ]),
-                ),
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  Stack(
+                    fit: StackFit.passthrough,
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      AspectRatio(
+                        aspectRatio: _videoController.value.aspectRatio,
+                        child: VideoPlayer(_videoController),
+                      ),
+                      mirrorLTR(
+                          context: context,
+                          child: VideoProgressIndicator(_videoController,
+                              allowScrubbing: true)),
+                    ],
+                  ),
+                  // button goes in main stack
+                  PlayButton(
+                    size: 48,
+                    custom: true,
+                    playing: _isPlaying,
+                    onPressed: () {
+                      if (_isPlaying) {
+                        _videoController.pause();
+                      } else {
+                        _videoController.play();
+                      }
+                    },
+                  ),
+                ],
               );
             },
           ),
         ));
-  }
-
-  Widget renderPlaybackButtons() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Fast-rewind button
-        PlaybackButton(
-          onTap: () async {
-            setState(() {
-              _position = Duration(
-                  seconds: max(0,
-                          _position.inSeconds - _defaultSeekDurationInSeconds)
-                      .round());
-            });
-            await _videoController.seekTo(_position);
-          },
-          path: ImagePaths.fast_rewind,
-          size: 40,
-        ),
-
-        const SizedBox(width: 20),
-
-        // Play button
-        PlaybackButton(
-          onTap: () async {
-            setState(() {
-              _isPlaying = !_isPlaying;
-            });
-            _isPlaying
-                ? await _videoController.play()
-                : await _videoController.pause();
-          },
-          path: _isPlaying ? ImagePaths.pause : ImagePaths.play,
-          size: 60,
-        ),
-
-        const SizedBox(width: 20),
-
-        // Fast forward button
-        PlaybackButton(
-          onTap: () async {
-            setState(() {
-              _position = Duration(
-                  seconds: min(_totalDuration.inSeconds,
-                          _position.inSeconds + _defaultSeekDurationInSeconds)
-                      .round());
-            });
-            await _videoController.seekTo(_position);
-          },
-          path: ImagePaths.fast_forward,
-          size: 40,
-        ),
-      ],
-    );
-  }
-
-  // XXX <17-12-2021> soltzen: those controls are the same as the audio playback
-  // controls.
-  Widget renderPlaybackSlider() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Slider(
-          onChanged: (v) {
-            _position = Duration(
-                milliseconds: (v * _totalDuration.inMilliseconds).round());
-            _videoController.seekTo(_position);
-          },
-          value: (_position.inMilliseconds > 0 &&
-                  _position.inMilliseconds < _totalDuration.inMilliseconds)
-              ? _position.inMilliseconds / _totalDuration.inMilliseconds
-              : 0.0,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CText(
-                _position.toString().split('.').first,
-                style: CTextStyle(fontSize: 12.0, lineHeight: 4.0),
-              ),
-              CText(
-                _totalDuration.toString().split('.').first,
-                style: CTextStyle(fontSize: 12.0, lineHeight: 4.0),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 }

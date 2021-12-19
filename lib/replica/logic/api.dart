@@ -81,7 +81,7 @@ class ReplicaApi {
       if (resp.statusCode != 200) {
         throw Exception('fetching category from $u');
       }
-      return SearchCategoryFromContentType(resp.headers.value('content-type'));
+      return SearchCategoryFromMimeType(resp.headers.value('content-type'));
     } on TimeoutException catch (_) {
       // On a timeout, just return an unknown category
       return SearchCategory.Unknown;

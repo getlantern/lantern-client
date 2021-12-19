@@ -38,9 +38,10 @@ class ReplicaSearchItem {
         // primaryMimeType is optional
         String? primaryMimeType;
         if (result.containsKey('mimeTypes') &&
-            result['mimeTypes'] is List<String> &&
-            (result['mimeTypes'] as List<String>).isNotEmpty) {
-          primaryMimeType = result['mimeTypes'][0] as String;
+            result['mimeTypes'] is List<dynamic> &&
+            (result['mimeTypes'] as List<dynamic>)[0] is String &&
+            ((result['mimeTypes'] as List<dynamic>)[0] as String).isNotEmpty) {
+          primaryMimeType = (result['mimeTypes'] as List<dynamic>)[0] as String;
         }
 
         // displayName, lastModified and fileSize are always there
