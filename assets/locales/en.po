@@ -809,16 +809,16 @@ msgid "audio"
 msgstr "Audio"
 
 msgid "image"
-msgstr "Image"
+msgstr "Images"
 
 msgid "video"
-msgstr "Video"
+msgstr "Videos"
 
 msgid "app"
-msgstr "App"
+msgstr "Apps"
 
 msgid "document"
-msgstr "Document"
+msgstr "Documents"
 
 msgid "search_chars_min"
 msgstr "Type at least three characters"
@@ -955,8 +955,8 @@ msgstr "Upload Complete"
 msgid "upload_failed"
 msgstr "Upload Failed"
 
-msgid "upload_canceled"
-msgstr "Upload Canceled"
+msgid "upload_cancelled"
+msgstr "Upload Cancelled"
 
 msgid "replica_link_fetcher"
 msgstr "Replica Link Fetcher"
