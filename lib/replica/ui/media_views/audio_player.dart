@@ -93,46 +93,67 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Fast rewind button
-          PlaybackButton(
-            onTap: () async {
-              if (_position == null) {
-                return;
-              }
-              _position = Duration(
-                  seconds: max(0,
-                          _position!.inSeconds - _defaultSeekDurationInSeconds)
-                      .round());
-              await _audioPlayer.seek(_position!);
-            },
-            path: ImagePaths.fast_rewind,
-            size: 40,
+          SizedBox(
+            width: 32,
+            height: 32,
+            child: FloatingActionButton(
+                child: const CAssetImage(
+                  path: ImagePaths.fast_rewind,
+                  size: 16,
+                ),
+                onPressed: () async {
+                  if (_position == null) {
+                    return;
+                  }
+                  _position = Duration(
+                      seconds: max(
+                              0,
+                              _position!.inSeconds -
+                                  _defaultSeekDurationInSeconds)
+                          .round());
+                  await _audioPlayer.seek(_position!);
+                }),
           ),
           const SizedBox(width: 20),
 
           // Play button
-          PlaybackButton(
-            onTap: () async {
-              _isPlaying ? await _pause() : await _play();
-            },
-            path: _isPlaying ? ImagePaths.pause : ImagePaths.play,
-            size: 60,
+          SizedBox(
+            width: 56,
+            height: 56,
+            child: FloatingActionButton(
+              onPressed: () async {
+                _isPlaying ? await _pause() : await _play();
+              },
+              child: CAssetImage(
+                path: _isPlaying ? ImagePaths.pause : ImagePaths.play,
+                size: 24,
+              ),
+            ),
           ),
           const SizedBox(width: 20),
 
           // Fast forward button
-          PlaybackButton(
-            onTap: () async {
-              if (_position == null || _totalDuration == null) {
-                return;
-              }
-              _position = Duration(
-                  seconds: min(_totalDuration!.inSeconds,
-                          _position!.inSeconds + _defaultSeekDurationInSeconds)
-                      .round());
-              await _audioPlayer.seek(_position!);
-            },
-            path: ImagePaths.fast_forward,
-            size: 40,
+          SizedBox(
+            width: 32,
+            height: 32,
+            child: FloatingActionButton(
+              onPressed: () async {
+                if (_position == null || _totalDuration == null) {
+                  return;
+                }
+                _position = Duration(
+                    seconds: min(
+                            _totalDuration!.inSeconds,
+                            _position!.inSeconds +
+                                _defaultSeekDurationInSeconds)
+                        .round());
+                await _audioPlayer.seek(_position!);
+              },
+              child: const CAssetImage(
+                path: ImagePaths.fast_forward,
+                size: 16,
+              ),
+            ),
           ),
         ],
       ),
@@ -229,6 +250,10 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
 
     _playerControlCommandSubscription =
         _audioPlayer.notificationService.onPlayerCommand.listen((command) {});
+
+    _play().then((_) {
+      setState(() {});
+    });
   }
 
   Future<int> _play() async {

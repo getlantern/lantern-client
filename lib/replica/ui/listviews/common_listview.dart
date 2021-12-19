@@ -4,7 +4,6 @@ import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/replica/ui/listitems/document_listitem.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -112,7 +111,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
     return Column(
       children: [
         const CAssetImage(
-          path: ImagePaths.unknown,
+          path: ImagePaths.search_empty,
           size: 168,
         ),
         CText(

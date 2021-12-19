@@ -1,6 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lantern/common/ui/colors.dart';
+import 'package:lantern/common/ui/custom/asset_image.dart';
+import 'package:lantern/common/ui/custom/text.dart';
 import 'package:lantern/common/ui/focused_menu.dart';
+import 'package:lantern/common/ui/image_paths.dart';
+import 'package:lantern/common/ui/text_styles.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:lantern/replica/ui/common.dart';
@@ -23,36 +28,34 @@ class ReplicaImageListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        elevation: 0.0,
         child: GestureDetector(
-      onTap: onTap,
-      child: FocusedMenuHolder(
-        menu: renderReplicaLongPressMenuItem(replicaApi, item.replicaLink),
-        menuWidth: MediaQuery.of(context).size.width * 0.8,
-        builder: (_) {
-          return GridTile(
-              child: Column(
-            children: [
-              renderThumbnail(),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
-              renderDescription(),
-            ],
-          ));
-        },
-      ),
-    ));
+          onTap: onTap,
+          child: FocusedMenuHolder(
+            menu: renderReplicaLongPressMenuItem(replicaApi, item.replicaLink),
+            menuWidth: MediaQuery.of(context).size.width * 0.8,
+            builder: (_) {
+              return GridTile(
+                  child: Column(
+                children: [
+                  renderThumbnail(),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
+                  renderDescription(),
+                ],
+              ));
+            },
+          ),
+        ));
   }
 
   Widget renderDescription() {
     return Padding(
       padding: const EdgeInsets.all(6.0),
-      child: Text(
+      child: CText(
         item.displayName,
         maxLines: 3,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 12.0,
-        ),
+        style: tsBody2,
       ),
     );
   }
@@ -67,8 +70,13 @@ class ReplicaImageListItem extends StatelessWidget {
               imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
               progressIndicatorBuilder: (context, url, downloadProgress) =>
                   CircularProgressIndicator(value: downloadProgress.progress),
-              errorWidget: (context, url, error) =>
-                  Container(color: Colors.black)),
+              errorWidget: (context, url, error) => Stack(children: [
+                    Container(color: grey4),
+                    const Center(
+                        child: CAssetImage(
+                      path: ImagePaths.image_inactive,
+                    )),
+                  ])),
         ),
       ),
     );

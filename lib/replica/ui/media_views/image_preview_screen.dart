@@ -63,8 +63,8 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const CAssetImage(
-                          path: ImagePaths.spreadsheet,
+                        CAssetImage(
+                          path: SearchCategory.Image.getRelevantImagePath(),
                           size: 128,
                         ),
                         const Padding(

@@ -60,10 +60,6 @@ class _ReplicaAudioListItem extends State<ReplicaAudioListItem> {
         FutureBuilder(
           future: _fetchDurationFuture,
           builder: (BuildContext context, AsyncSnapshot<double?> snapshot) {
-            // if we got an error,
-            // or, didn't receive data,
-            // or, got null data,
-            // display ??:??
             if (snapshot.hasError ||
                 !snapshot.hasData ||
                 snapshot.data == null) {
@@ -71,7 +67,7 @@ class _ReplicaAudioListItem extends State<ReplicaAudioListItem> {
             }
             return CText(
               snapshot.data!.toMinutesAndSeconds(),
-              style: tsBody1,
+              style: tsBody1.copiedWith(color: grey5),
             );
           },
         ),

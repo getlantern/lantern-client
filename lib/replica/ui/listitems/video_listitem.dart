@@ -73,24 +73,52 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
         );
       },
       imageUrl: widget.replicaApi.getThumbnailAddr(widget.item.replicaLink),
-      progressIndicatorBuilder: (context, url, downloadProgress) =>
-          CircularProgressIndicator(value: downloadProgress.progress),
+      progressIndicatorBuilder: (context, url, downloadProgress) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          clipBehavior: Clip.hardEdge,
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width * .45,
+              height: 100,
+              child: Container(
+                color: grey4,
+                child: Center(
+                  child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(color: white)),
+                ),
+              )),
+        );
+      },
       errorWidget: (context, url, error) {
         // XXX <02-12-2021> soltzen: if an error occurs, show a black box.
         // This is common in Replica since we just recently deployed a
         // metadata materialization service
         // (https://github.com/getlantern/replica-infrastructure/pull/30) and
         // metadata is not fully available.
-        return Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(5.0),
-              child: Container(color: Colors.black),
-            ),
-            renderDurationTextbox(),
-            const Center(
-                child: CAssetImage(path: ImagePaths.play_circle_filled)),
-          ],
+        return Padding(
+          padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                clipBehavior: Clip.hardEdge,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * .45,
+                  height: 100,
+                  child: Container(color: grey4),
+                ),
+              ),
+              Positioned(
+                left: 8,
+                bottom: 4,
+                child: renderDurationTextbox(),
+              ),
+              PlayButton(custom: true),
+            ],
+          ),
         );
       },
     );
@@ -100,12 +128,11 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
     return FutureBuilder(
       future: _fetchDurationFuture,
       builder: (BuildContext context, AsyncSnapshot<double?> snapshot) {
-        // if we got an error,
-        // or, didn't receive data,
-        // or, got null data,
-        // display render nothing
+        String duration;
         if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
-          return const SizedBox.shrink();
+          duration = '??:??';
+        } else {
+          duration = snapshot.data!.toMinutesAndSeconds();
         }
 
         return ClipRRect(
@@ -118,7 +145,7 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
             ),
             decoration: BoxDecoration(color: black),
             child: CText(
-              snapshot.data!.toMinutesAndSeconds(),
+              duration,
               style: tsOverline.copiedWith(color: white),
             ),
           ),

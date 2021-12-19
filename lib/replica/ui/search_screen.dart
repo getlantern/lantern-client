@@ -1,4 +1,5 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/replica/ui/common.dart';
 import 'package:lantern/replica/ui/listviews/app_listview.dart';
 import 'package:lantern/replica/ui/listviews/audio_listview.dart';
 import 'package:lantern/replica/ui/listviews/document_listview.dart';
@@ -41,57 +42,39 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
     return BaseScreen(
         centerTitle: true,
         title: 'discover'.i18n,
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await onUploadButtonPressed(context);
+              },
+              icon: CAssetImage(
+                size: 20,
+                path: ImagePaths.file_upload,
+                color: black,
+              )),
+        ],
         body: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             const SizedBox(height: 30),
-            // TODO duplicate of the other textfieldform. Do something about this
-            TextFormField(
-              controller: _textEditingController,
-              textInputAction: TextInputAction.search,
-              onFieldSubmitted: (query) {
-                setState(() {
-                  _searchQueryListener.value = query;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'search'.i18n,
-                suffixIcon: Material(
-                  color: blue4,
-                  child: IconButton(
-                      onPressed: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        setState(() {
-                          _searchQueryListener.value =
-                              _textEditingController.text;
-                        });
-                      },
-                      icon: const Icon(Icons.search),
-                      color: white),
-                ),
-                contentPadding: const EdgeInsetsDirectional.fromSTEB(
-                    20.0, 10.0, 20.0, 10.0),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: blue4,
-                    width: 2.0,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: blue4,
-                    width: 2.0,
-                  ),
-                ),
-              ),
-            ),
+            renderReplicaSearchTextField(
+                onPressed: (query) async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  setState(() {
+                    _searchQueryListener.value = _textEditingController.text;
+                  });
+                },
+                textEditingController: _textEditingController),
             const SizedBox(height: 10),
             TabBar(
               controller: _tabController,
+              unselectedLabelStyle: tsBody1,
+              unselectedLabelColor: grey5,
               indicatorColor: indicatorRed,
               isScrollable: true,
-              labelStyle: const TextStyle(fontSize: 12.0),
+              labelStyle: tsSubtitle2,
+              labelColor: pink4,
               tabs: <Widget>[
                 Tab(
                   text: 'video'.i18n,
