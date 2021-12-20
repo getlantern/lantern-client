@@ -21,6 +21,7 @@ class ServerLocationWidget extends StatelessWidget {
               des: 'Server Location Info'.i18n,
               assetPath: ImagePaths.location_on,
               confirmButtonText: 'OK'.i18n,
+              confirmButtonAction: () async => await context.router.pop(),
             ),
             child: Icon(
               Icons.info_outline_rounded,

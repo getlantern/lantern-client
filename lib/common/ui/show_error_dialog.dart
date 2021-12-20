@@ -16,5 +16,6 @@ void showErrorDialog(
     des: des,
     assetPath: ImagePaths.alert,
     confirmButtonText: 'OK'.i18n,
+    confirmButtonAction: () async => await context.router.pop(),
   );
 }
