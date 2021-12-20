@@ -13,6 +13,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Settings;
 import org.getlantern.mobilesdk.StartResult;
 import org.getlantern.mobilesdk.embedded.EmbeddedLantern;
+import org.getlantern.mobilesdk.model.SessionManager;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,16 +39,21 @@ public class ReplicaTest extends BaseTest {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Settings settings = Settings.init(InstrumentationRegistry.getInstrumentation().getTargetContext());
         settings.shouldRunReplica = true;
+        SessionManager session = LanternApp.getSession();
+        session.setReplicaAddr("");
         StartResult result = new EmbeddedLantern().start(
                 Paths.get(context.getFilesDir().getAbsolutePath(), ".lantern").toString(),
-                "en_US", settings, LanternApp.getSession());
-        Log.d("PINEAPPLE", "testReplicaIsInitialized: " + result.getReplicaAddr());
-        Assert.assertNotEquals("", result.getReplicaAddr());
+                "en_US", settings, session);
+
+        // Wait for replica to start
+        Thread.sleep(5000);
+        Log.d("PINEAPPLE", "testReplicaIsInitialized: " + session.getReplicaAddr());
+        Assert.assertNotEquals("", session.getReplicaAddr());
 
         // Assert that /replica routes yield a 200
         for (Map.Entry<String, String> entry : new HashMap<String, String>() {{
-            put("replica/heartbeat", "http://" + result.getReplicaAddr() + "/replica/heartbeat");
-            put("replica/search", "http://" + result.getReplicaAddr() + "/replica/search?s=hello&page=1&orderBy=relevance&type=web");
+            put("replica/heartbeat", "http://" + session.getReplicaAddr() + "/replica/heartbeat");
+            put("replica/search", "http://" + session.getReplicaAddr() + "/replica/search?s=hello&page=1&orderBy=relevance&type=web");
         }}.entrySet()) {
             OkHttpClient client = new OkHttpClient();
             Request req = new Request.Builder()
