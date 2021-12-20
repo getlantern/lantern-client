@@ -3,8 +3,8 @@ import 'package:lantern/replica/ui/common.dart';
 import 'package:lantern/replica/ui/listviews/app_listview.dart';
 import 'package:lantern/replica/ui/listviews/audio_listview.dart';
 import 'package:lantern/replica/ui/listviews/document_listview.dart';
-import 'package:lantern/replica/ui/listviews/video_listview.dart';
 import 'package:lantern/replica/ui/listviews/image_listview.dart';
+import 'package:lantern/replica/ui/listviews/video_listview.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -17,6 +17,7 @@ var logger = Logger(
 // Looks like this: docs/replica_search_tabs.png
 class ReplicaSearchScreen extends StatefulWidget {
   ReplicaSearchScreen({Key? key, required this.searchQuery});
+
   final String searchQuery;
 
   @override
@@ -30,10 +31,12 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
   late final TabController _tabController =
       // Video + Image + Audio + Document + App = 5 categories
       TabController(length: 5, vsync: this);
-  late final TextEditingController _textEditingController;
+  final _formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
+  late final CustomTextEditingController _textEditingController;
 
   _ReplicaSearchScreenState(String searchQuery) {
-    _textEditingController = TextEditingController(text: searchQuery);
+    _textEditingController =
+        CustomTextEditingController(formKey: _formKey, text: searchQuery);
     _searchQueryListener = ValueNotifier<String>(searchQuery);
   }
 
@@ -58,14 +61,15 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             const SizedBox(height: 30),
-            renderReplicaSearchTextField(
-                onPressed: (query) async {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  setState(() {
-                    _searchQueryListener.value = _textEditingController.text;
-                  });
-                },
-                textEditingController: _textEditingController),
+            SearchField(
+              controller: _textEditingController,
+              search: (query) async {
+                FocusScope.of(context).requestFocus(FocusNode());
+                setState(() {
+                  _searchQueryListener.value = _textEditingController.text;
+                });
+              },
+            ),
             const SizedBox(height: 10),
             TabBar(
               controller: _tabController,

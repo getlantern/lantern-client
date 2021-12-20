@@ -74,6 +74,7 @@ export 'ui/pinned_button_layout.dart';
 export 'ui/play_button.dart';
 export 'ui/pulse_animation.dart';
 export 'ui/round_button.dart';
+export 'ui/search_field.dart';
 export 'ui/show_bottom_modal.dart';
 export 'ui/show_bottom_modal.dart';
 // UI functions
