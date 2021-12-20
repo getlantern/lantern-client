@@ -3,7 +3,6 @@ import 'package:lantern/common/common.dart';
 void showInfoDialog(
   BuildContext parentContext, {
   Key? dialogKey,
-  bool barrierDismissible = false,
   dynamic title,
   required dynamic des,
   String? assetPath,
@@ -12,11 +11,11 @@ void showInfoDialog(
   String confirmButtonText = 'OK',
   Function? confirmButtonAction,
   String? checkboxText,
-  Function? checkboxOnChanged,
+  Function? confirmCheckboxAction,
 }) {
   showDialog(
     context: parentContext,
-    barrierDismissible: barrierDismissible,
+    barrierDismissible: false,
     builder: (BuildContext childContext) {
       var checkboxChecked = false;
       return StatefulBuilder(
@@ -117,16 +116,13 @@ void showInfoDialog(
                             child: InkWell(
                               focusColor: grey3,
                               onTap: () {
-                                childContext.router.pop();
                                 if (popParentContext) {
                                   parentContext.router.pop();
                                 }
                                 if (confirmButtonAction != null) {
                                   confirmButtonAction();
-                                  if (checkboxChecked && checkboxText != null) {
-                                    checkboxOnChanged!();
-                                  }
                                 }
+                                if (checkboxChecked) confirmCheckboxAction!();
                               },
                               child: Container(
                                 padding: const EdgeInsetsDirectional.all(8),

@@ -446,6 +446,7 @@ class MessageBubble extends StatelessWidget {
       assetPath: ImagePaths.delete,
       title: 'delete_for_me'.i18n,
       des: 'delete_for_me_explanation'.i18n,
+      cancelButtonText: 'cancel'.i18n,
       confirmButtonText: 'delete'.i18n,
       confirmButtonAction: () async {
         await model.deleteLocally(message);
@@ -461,6 +462,7 @@ class MessageBubble extends StatelessWidget {
       assetPath: ImagePaths.delete,
       title: 'delete_for_everyone'.i18n,
       des: 'delete_for_everyone_explanation'.i18n,
+      cancelButtonText: 'cancel'.i18n,
       confirmButtonText: 'delete'.i18n,
       confirmButtonAction: () async {
         await model.deleteGlobally(message);

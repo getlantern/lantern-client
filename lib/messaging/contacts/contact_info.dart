@@ -211,7 +211,7 @@ class _ContactInfoState extends State<ContactInfo> {
                           checkboxText: contact.blocked
                               ? 'unblock_info_checkbox'.i18n
                               : 'block_info_checkbox'.i18n,
-                          checkboxOnChanged: () async {
+                          confirmCheckboxAction: () async {
                             contact.blocked
                                 ? await messagingModel
                                     .unblockDirectContact(contact.contactId.id)
