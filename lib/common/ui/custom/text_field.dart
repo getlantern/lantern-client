@@ -20,24 +20,25 @@ class CTextField extends StatefulWidget {
   late final List<TextInputFormatter>? inputFormatters;
   late final TextInputAction? textInputAction;
   late final void Function(String value)? onFieldSubmitted;
+  late final String? actionIconPath;
 
-  CTextField({
-    required this.controller,
-    this.initialValue,
-    required this.label,
-    this.helperText,
-    this.hintText,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.keyboardType,
-    this.enabled,
-    this.minLines,
-    this.maxLines,
-    this.autovalidateMode,
-    this.inputFormatters,
-    this.textInputAction,
-    this.onFieldSubmitted,
-  }) {
+  CTextField(
+      {required this.controller,
+      this.initialValue,
+      required this.label,
+      this.helperText,
+      this.hintText,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.keyboardType,
+      this.enabled,
+      this.minLines,
+      this.maxLines,
+      this.autovalidateMode,
+      this.inputFormatters,
+      this.textInputAction,
+      this.onFieldSubmitted,
+      this.actionIconPath}) {
     if (initialValue != null) {
       controller.text = initialValue!;
     }
@@ -124,7 +125,7 @@ class _CTextFieldState extends State<CTextField> {
                   widget.prefixIcon != null
                       ? Transform.scale(scale: 0.5, child: widget.prefixIcon)
                       : null,
-              suffixIcon: renderSuffix(),
+              suffixIcon: renderSuffixRow(),
             ),
           ),
         ),
@@ -150,10 +151,26 @@ class _CTextFieldState extends State<CTextField> {
     );
   }
 
+  Widget? renderSuffixRow() {
+    final suffix = renderSuffix();
+    final actionButton = renderActionButton();
+
+    if (suffix == null) {
+      return actionButton;
+    } else if (actionButton == null) {
+      return suffix;
+    } else {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [suffix, actionButton],
+      );
+    }
+  }
+
   Widget? renderSuffix() {
     final hasError = fieldKey.currentState?.mounted == true &&
         fieldKey.currentState?.hasError == true;
-
     final isEmpty = fieldKey.currentState?.mounted == true &&
         fieldKey.currentState?.value == '';
     if (isEmpty) return null;
@@ -164,6 +181,33 @@ class _CTextFieldState extends State<CTextField> {
         : widget.suffixIcon != null
             ? Transform.scale(scale: 0.5, child: widget.suffixIcon)
             : null;
+  }
+
+  Widget? renderActionButton() {
+    if (widget.actionIconPath == null) {
+      return null;
+    }
+
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(blue4),
+        fixedSize: MaterialStateProperty.all(const Size(56, 56)),
+        shape: MaterialStateProperty.all(
+          const RoundedRectangleBorder(
+            borderRadius: BorderRadiusDirectional.only(
+              topEnd: Radius.circular(4),
+              bottomEnd: Radius.circular(4),
+            ),
+          ),
+        ),
+      ),
+      onPressed: () {
+        if (widget.onFieldSubmitted != null) {
+          widget.onFieldSubmitted!(widget.controller.text);
+        }
+      },
+      child: CAssetImage(path: widget.actionIconPath!, color: white),
+    );
   }
 }
 

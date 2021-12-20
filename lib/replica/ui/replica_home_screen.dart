@@ -14,7 +14,9 @@ class ReplicaHomeScreen extends StatefulWidget {
 }
 
 class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
-  final _textEditingController = TextEditingController();
+  final _formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
+  late final _textEditingController =
+      CustomTextEditingController(formKey: _formKey);
 
   // Two ways to navigate to seach screen:
   // - Click the magnifier icon next to the search bar
@@ -40,9 +42,9 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: renderReplicaSearchTextField(
-                      textEditingController: _textEditingController,
-                      onPressed: (query) async {
+                  child: SearchField(
+                      controller: _textEditingController,
+                      search: (query) async {
                         await _navigateToSearchScreen(query);
                       }),
                 ),
