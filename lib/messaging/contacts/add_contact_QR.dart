@@ -224,20 +224,23 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                           start: 4.0),
                                       child: GestureDetector(
                                         behavior: HitTestBehavior.translucent,
-                                        onTap: () => showInfoDialog(context,
-                                            title: widget.isVerificationMode
-                                                ? 'qr_info_verification_title'
-                                                    .i18n
-                                                : 'qr_info_f2f_title'.i18n,
-                                            des: widget.isVerificationMode
-                                                ? 'qr_info_verification_des'
-                                                    .i18n
-                                                : 'qr_info_f2f_des'.i18n,
-                                            assetPath: ImagePaths.qr_code,
-                                            confirmButtonText:
-                                                'info_dialog_confirm'
-                                                    .i18n
-                                                    .toUpperCase()),
+                                        onTap: () => showInfoDialog(
+                                          context,
+                                          title: widget.isVerificationMode
+                                              ? 'qr_info_verification_title'
+                                                  .i18n
+                                              : 'qr_info_f2f_title'.i18n,
+                                          des: widget.isVerificationMode
+                                              ? 'qr_info_verification_des'.i18n
+                                              : 'qr_info_f2f_des'.i18n,
+                                          assetPath: ImagePaths.qr_code,
+                                          confirmButtonText:
+                                              'info_dialog_confirm'
+                                                  .i18n
+                                                  .toUpperCase(),
+                                          confirmButtonAction: () async =>
+                                              await context.router.pop(),
+                                        ),
                                         child: Icon(
                                           Icons.info,
                                           size: 14,

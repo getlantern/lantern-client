@@ -127,16 +127,20 @@ class Introductions extends StatelessWidget {
                                                                             .id);
                                                                   } catch (e) {
                                                                     showInfoDialog(
-                                                                        context,
-                                                                        title: 'error'
-                                                                            .i18n,
-                                                                        des: 'introductions_error_description'
-                                                                            .i18n,
-                                                                        assetPath:
-                                                                            ImagePaths
-                                                                                .alert,
-                                                                        confirmButtonText:
-                                                                            'OK'.i18n);
+                                                                      context,
+                                                                      title: 'error'
+                                                                          .i18n,
+                                                                      des: 'introductions_error_description'
+                                                                          .i18n,
+                                                                      assetPath:
+                                                                          ImagePaths
+                                                                              .alert,
+                                                                      confirmButtonText:
+                                                                          'OK'.i18n,
+                                                                      confirmButtonAction: () async => await context
+                                                                          .router
+                                                                          .pop(),
+                                                                    );
                                                                   }
                                                                 }),
                                                                 child: CText(
@@ -162,16 +166,20 @@ class Introductions extends StatelessWidget {
                                                                             .id);
                                                                   } catch (e) {
                                                                     showInfoDialog(
-                                                                        context,
-                                                                        title: 'error'
-                                                                            .i18n,
-                                                                        des: 'introductions_error_description_accepting'
-                                                                            .i18n,
-                                                                        assetPath:
-                                                                            ImagePaths
-                                                                                .alert,
-                                                                        confirmButtonText:
-                                                                            'OK'.i18n);
+                                                                      context,
+                                                                      title: 'error'
+                                                                          .i18n,
+                                                                      des: 'introductions_error_description_accepting'
+                                                                          .i18n,
+                                                                      assetPath:
+                                                                          ImagePaths
+                                                                              .alert,
+                                                                      confirmButtonText:
+                                                                          'OK'.i18n,
+                                                                      confirmButtonAction: () async => await context
+                                                                          .router
+                                                                          .pop(),
+                                                                    );
                                                                   } finally {
                                                                     showSnackbar(
                                                                         context:

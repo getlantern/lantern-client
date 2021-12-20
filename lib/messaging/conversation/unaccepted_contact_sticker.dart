@@ -81,6 +81,24 @@ class UnacceptedContactSticker extends StatelessWidget {
                   checkboxText: contact.blocked
                       ? 'unblock_info_checkbox'.i18n
                       : 'block_info_checkbox'.i18n,
+                  confirmCheckboxAction: () async {
+                    context.loaderOverlay.show(widget: spinner);
+                    try {
+                      await messagingModel
+                          .deleteDirectContact(contact.contactId.id);
+                    } catch (e, s) {
+                      showErrorDialog(context,
+                          e: e, s: s, des: 'error_delete_contact'.i18n);
+                    } finally {
+                      showSnackbar(
+                          context: context,
+                          content: 'contact_was_deleted'
+                              .i18n
+                              .fill([contact.displayNameOrFallback]));
+                      context.loaderOverlay.hide();
+                      context.router.popUntilRoot();
+                    }
+                  },
                 ),
                 child: CText(
                   'Block'.i18n.toUpperCase(),
@@ -97,9 +115,13 @@ class UnacceptedContactSticker extends StatelessWidget {
                         contactId: _contact.contactId,
                         showContactEditingDialog: true));
                   } catch (e) {
-                    showInfoDialog(context,
-                        des: 'Something went wrong while adding this contact'
-                            .i18n);
+                    showInfoDialog(
+                      context,
+                      des:
+                          'Something went wrong while adding this contact'.i18n,
+                      confirmButtonAction: () async =>
+                          await context.router.pop(),
+                    );
                   }
                 },
                 child: CText(

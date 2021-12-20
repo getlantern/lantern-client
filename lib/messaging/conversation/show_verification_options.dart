@@ -78,6 +78,8 @@ void showVerificationOptions({
                 assetPath: ImagePaths.verified_user,
                 des: 'contact_verification_description'.i18n,
                 confirmButtonText: 'info_dialog_confirm'.i18n,
+                confirmButtonAction: () async =>
+                    await bottomModalContext.router.pop(),
               );
             },
           ),

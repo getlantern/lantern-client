@@ -15,6 +15,7 @@ class Settings extends StatelessWidget {
       des: 'description_proxy_all_dialog'.i18n,
       assetPath: ImagePaths.key,
       confirmButtonText: 'OK'.i18n,
+      confirmButtonAction: () async => await context.router.pop(),
     );
   }
 
