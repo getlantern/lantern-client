@@ -27,9 +27,49 @@ class BlockedUsers extends StatelessWidget {
                             ),
                             trailingArray: [
                               TextButton(
-                                onPressed: () async => showBlockContactDialog(
+                                onPressed: () async => showInfoDialog(
                                   context,
-                                  blockedContact.value,
+                                  assetPath: ImagePaths.block,
+                                  title: blockedContact.value.blocked
+                                      ? '${'unblock'.i18n} ${blockedContact.value.displayNameOrFallback}?'
+                                      : '${'block'.i18n} ${blockedContact.value.displayNameOrFallback}?',
+                                  des: blockedContact.value.blocked
+                                      ? 'unblock_info_description'.i18n.fill([
+                                          blockedContact
+                                              .value.displayNameOrFallback
+                                        ])
+                                      : 'block_info_description'.i18n,
+                                  checkboxText: blockedContact.value.blocked
+                                      ? 'unblock_info_checkbox'.i18n
+                                      : 'block_info_checkbox'.i18n,
+                                  checkboxOnChanged: () async {
+                                    blockedContact.value.blocked
+                                        ? await messagingModel
+                                            .unblockDirectContact(blockedContact
+                                                .value.contactId.id)
+                                        : await messagingModel
+                                            .blockDirectContact(blockedContact
+                                                .value.contactId.id);
+                                    context.router.popUntilRoot();
+                                    showSnackbar(
+                                        context: context,
+                                        content: blockedContact.value.blocked
+                                            ? 'contact_was_unblocked'
+                                                .i18n
+                                                .fill([
+                                                blockedContact
+                                                    .value.displayNameOrFallback
+                                              ])
+                                            : 'contact_was_blocked'.i18n.fill([
+                                                blockedContact
+                                                    .value.displayNameOrFallback
+                                              ]));
+                                  },
+                                  cancelButtonText: 'cancel'.i18n,
+                                  confirmButtonText:
+                                      blockedContact.value.blocked
+                                          ? 'unblock'.i18n.toUpperCase()
+                                          : 'block'.i18n.toUpperCase(),
                                 ),
                                 child: CText(
                                   'unblock'.i18n.toUpperCase(),

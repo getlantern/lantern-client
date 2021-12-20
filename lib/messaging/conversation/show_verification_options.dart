@@ -77,7 +77,7 @@ void showVerificationOptions({
                 title: 'contact_verification'.i18n,
                 assetPath: ImagePaths.verified_user,
                 des: 'contact_verification_description'.i18n,
-                buttonText: 'info_dialog_confirm'.i18n,
+                confirmButtonText: 'info_dialog_confirm'.i18n,
               );
             },
           ),
