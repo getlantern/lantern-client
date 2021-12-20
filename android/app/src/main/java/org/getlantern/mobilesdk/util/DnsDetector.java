@@ -44,6 +44,8 @@ public class DnsDetector {
     private final ConnectivityManager connectivityManager;
     private final Map<Network, Object> allNetworks = new ConcurrentHashMap<>();
 
+    private Event connectivityError = Event.All;
+
     /**
      * Constructor
      */
@@ -71,9 +73,9 @@ public class DnsDetector {
         );
     }
 
-    public Event onConnectivityChange() {
-        // TODO: define
-        return Event.ServerError;
+    public Event checkConnectivity() {
+        doGetDnsServer();
+        return connectivityError;
     }
 
     public String getDnsServer() {
@@ -85,6 +87,7 @@ public class DnsDetector {
     private String doGetDnsServer() {
         Network network = findActiveNetwork();
         if (network == null) {
+            connectivityError = Event.NetworkError;
             return DEFAULT_DNS_SERVER;
         }
 

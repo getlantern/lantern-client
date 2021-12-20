@@ -84,7 +84,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                 if (LanternApp.getSession().lanternDidStart()) {
                     // TODO: receive stream from DnsDetector
                     connectivityEventManager.onNewEvent(
-                        dnsDetector.onConnectivityChange(),
+                        dnsDetector.checkConnectivity(),
                         hashMapOf("ts" to System.currentTimeMillis())
                     )
                 }
