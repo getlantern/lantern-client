@@ -9,11 +9,13 @@ class Settings extends StatelessWidget {
   final packageInfo = PackageInfo.fromPlatform();
 
   void openInfoProxyAll(BuildContext context) {
-    showInfoDialog(context,
-        title: 'proxy_all'.i18n,
-        des: 'description_proxy_all_dialog'.i18n,
-        assetPath: ImagePaths.key,
-        buttonText: 'OK'.i18n);
+    showInfoDialog(
+      context,
+      title: 'proxy_all'.i18n,
+      des: 'description_proxy_all_dialog'.i18n,
+      assetPath: ImagePaths.key,
+      confirmButtonText: 'OK'.i18n,
+    );
   }
 
   void changeLanguage(BuildContext context) => context.pushRoute(Language());

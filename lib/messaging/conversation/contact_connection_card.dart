@@ -143,26 +143,25 @@ class ContactConnectionCard extends StatelessWidget {
           ListItemFactory.bottomItem(
             icon: ImagePaths.cancel,
             content: 'reject'.i18n,
-            onTap: () => showConfirmationDialog(
-                context: context,
+            onTap: () => showInfoDialog(context,
                 title: 'introductions_reject_title'.i18n,
-                explanation: 'introductions_reject_content'.i18n,
-                dismissText: 'cancel'.i18n,
-                agreeText: 'reject'.i18n,
-                agreeAction: () async {
-                  try {
-                    // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
-                    await model.rejectIntroduction(
-                        contact.contactId.id, introduction.to.id);
-                  } catch (e, s) {
-                    showErrorDialog(context,
-                        e: e,
-                        s: s,
-                        des: 'introductions_error_description_rejecting'.i18n);
-                  } finally {
-                    await context.router.pop();
-                  }
-                }),
+                des: 'introductions_reject_content'.i18n,
+                cancelButtonText: 'cancel'.i18n,
+                confirmButtonText: 'reject'.i18n,
+                confirmButtonAction: () async {
+              try {
+                // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
+                await model.rejectIntroduction(
+                    contact.contactId.id, introduction.to.id);
+              } catch (e, s) {
+                showErrorDialog(context,
+                    e: e,
+                    s: s,
+                    des: 'introductions_error_description_rejecting'.i18n);
+              } finally {
+                await context.router.pop();
+              }
+            }),
             trailingArray: [],
           ),
         ]);

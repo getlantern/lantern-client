@@ -187,12 +187,14 @@ class ConnectivityWarning extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: serverError
-          ? () => showInfoDialog(context,
-              title: 'connection_error'.i18n,
-              des: 'connection_error_des'.i18n,
-              buttonText: 'connection_error_button'.i18n,
-              showCancel: true,
-              buttonAction: () => context.router.push(Settings()))
+          ? () => showInfoDialog(
+                context,
+                title: 'connection_error'.i18n,
+                des: 'connection_error_des'.i18n,
+                cancelButtonText: 'cancel'.i18n,
+                confirmButtonText: 'connection_error_button'.i18n,
+                confirmButtonAction: () => context.router.push(Settings()),
+              )
           : null,
       child: Container(
         width: MediaQuery.of(context).size.width,

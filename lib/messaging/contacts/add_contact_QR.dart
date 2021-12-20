@@ -234,9 +234,10 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                                     .i18n
                                                 : 'qr_info_f2f_des'.i18n,
                                             assetPath: ImagePaths.qr_code,
-                                            buttonText: 'info_dialog_confirm'
-                                                .i18n
-                                                .toUpperCase()),
+                                            confirmButtonText:
+                                                'info_dialog_confirm'
+                                                    .i18n
+                                                    .toUpperCase()),
                                         child: Icon(
                                           Icons.info,
                                           size: 14,

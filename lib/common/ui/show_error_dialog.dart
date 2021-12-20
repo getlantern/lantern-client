@@ -10,9 +10,11 @@ void showErrorDialog(
   required String des,
 }) {
   developer.log(des, error: e, stackTrace: s);
-  showInfoDialog(context,
-      title: 'Error'.i18n,
-      des: des,
-      assetPath: ImagePaths.alert,
-      buttonText: 'OK'.i18n);
+  showInfoDialog(
+    context,
+    title: 'Error'.i18n,
+    des: des,
+    assetPath: ImagePaths.alert,
+    confirmButtonText: 'OK'.i18n,
+  );
 }
