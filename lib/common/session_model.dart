@@ -126,4 +126,17 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<int>('/tabIndex',
         defaultValue: 0, builder: builder);
   }
+
+  Widget replicaAddr(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('replicaAddr',
+        defaultValue: '', builder: builder);
+  }
+
+  Future<String> getReplicaAddr() async {
+    final replicaAddr = await methodChannel.invokeMethod('get', 'replicaAddr');
+    if (replicaAddr == null || replicaAddr == '') {
+      throw Exception('Replica not enabled');
+    }
+    return replicaAddr;
+  }
 }

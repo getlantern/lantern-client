@@ -1,8 +1,9 @@
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/search_item.dart';
-import 'package:lantern/replica/ui/listviews/common_listview.dart';
-import 'package:lantern/replica/ui/listitems/image_listitem.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
+import 'package:lantern/replica/ui/listitems/image_listitem.dart';
+import 'package:lantern/replica/ui/listviews/common_listview.dart';
 import 'package:lantern/vpn/vpn.dart';
 import 'package:logger/logger.dart';
 
@@ -13,9 +14,11 @@ var logger = Logger(
 /// ReplicaImageListView renders a list of ReplicaImageListItem.
 /// Looks like this docs/replica_image_listview.png
 class ReplicaImageListView extends ReplicaCommonListView {
-  ReplicaImageListView({Key? key, required String searchQuery})
+  ReplicaImageListView(
+      {Key? key, required ReplicaApi replicaApi, required String searchQuery})
       : super(
             key: key,
+            replicaApi: replicaApi,
             searchQuery: searchQuery,
             searchCategory: SearchCategory.Image);
 
@@ -48,7 +51,7 @@ class _ReplicaImageListViewState extends ReplicaCommonListViewState {
         itemBuilder: (context, item, index) {
           return ReplicaImageListItem(
             item: item,
-            replicaApi: super.replicaApi,
+            replicaApi: widget.replicaApi,
             onTap: () async {
               await context.pushRoute(
                   ReplicaImagePreviewScreen(replicaLink: item.replicaLink));

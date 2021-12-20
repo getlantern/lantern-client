@@ -75,10 +75,6 @@ abstract class SessionManager(application: Application) : Session {
         get() = if (startResult == null) {
             ""
         } else startResult!!.dnsGrabAddr
-    val replicaAddr: String
-        get() = if (startResult == null) {
-            ""
-        } else startResult!!.replicaAddr
 
     /**
      * isFrom checks if a user is from a particular country or region
@@ -199,6 +195,19 @@ abstract class SessionManager(application: Application) : Session {
 
     fun setForceCountry(countryCode: String) {
         prefs.edit().putString(FORCE_COUNTRY, countryCode).apply()
+    }
+
+    override fun forceReplica(): Boolean {
+        // TODO: make this configurable at build time
+        return true;
+    }
+
+    val replicaAddr: String
+        get() = prefs.getString(REPLICA_ADDR, "")!!
+
+    override fun setReplicaAddr(replicaAddr: String?) {
+        Logger.d(TAG, "Setting $REPLICA_ADDR to $replicaAddr")
+        prefs.edit().putString(REPLICA_ADDR, replicaAddr ?: "").apply()
     }
 
     override fun appVersion(): String {
@@ -431,6 +440,8 @@ abstract class SessionManager(application: Application) : Session {
         protected const val FORCE_COUNTRY = "forceCountry"
         @JvmStatic
         val PLAY_VERSION = "playVersion"
+
+        private const val REPLICA_ADDR = "replicaAddr"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),

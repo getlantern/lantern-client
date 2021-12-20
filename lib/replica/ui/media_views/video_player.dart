@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/common.dart';
 import 'package:logger/logger.dart';
@@ -19,8 +19,13 @@ var logger = Logger(
 /// The playback controls container are shown/hidden by tapping away from the
 /// playback controls
 class ReplicaVideoPlayerScreen extends StatefulWidget {
-  ReplicaVideoPlayerScreen({Key? key, required this.replicaLink, this.mimeType})
+  ReplicaVideoPlayerScreen(
+      {Key? key,
+      required this.replicaApi,
+      required this.replicaLink,
+      this.mimeType})
       : super(key: key);
+  final ReplicaApi replicaApi;
   final ReplicaLink replicaLink;
   final String? mimeType;
 
@@ -29,8 +34,6 @@ class ReplicaVideoPlayerScreen extends StatefulWidget {
 }
 
 class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
-  final ReplicaApi _replicaApi =
-      ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
   late VideoPlayerController _videoController;
   late Future<void> _initializeVideoPlayerFuture;
   bool _isPlaying = false;
@@ -47,7 +50,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
     // future returned in the 'build()' function (see
     // _videoController.value.hasError usage in FutureBuilder)
     _videoController = VideoPlayerController.network(
-        _replicaApi.getViewAddr(widget.replicaLink));
+        widget.replicaApi.getViewAddr(widget.replicaLink));
     _initializeVideoPlayerFuture =
         _videoController.initialize().then((_) => _videoController.play());
 
@@ -71,9 +74,10 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaViewScreen(
+    return replicaModel.withReplicaApi((context, replicaApi, child) {
+      return renderReplicaMediaViewScreen(
         context: context,
-        api: _replicaApi,
+        api: replicaApi,
         link: widget.replicaLink,
         category: SearchCategory.Video,
         backgroundColor: black,
@@ -149,6 +153,8 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
               );
             },
           ),
-        ));
+        ),
+      );
+    });
   }
 }
