@@ -16,6 +16,7 @@ import 'package:lantern/i18n/i18n.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
+import 'package:lantern/vpn/vpn.dart';
 import 'package:logger/logger.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -180,8 +181,11 @@ Widget renderReplicaSearchTextField(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(blue4),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4.0),
+                const RoundedRectangleBorder(
+              borderRadius: BorderRadiusDirectional.only(
+                topEnd: Radius.circular(4),
+                bottomEnd: Radius.circular(4),
+              ),
             ))),
         onPressed: () async {
           await onPressed(textEditingController.text);

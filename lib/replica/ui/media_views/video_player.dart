@@ -4,7 +4,6 @@ import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/common.dart';
-import 'package:lantern/replica/ui/media_views/playback_button.dart';
 import 'package:logger/logger.dart';
 import 'package:video_player/video_player.dart';
 
