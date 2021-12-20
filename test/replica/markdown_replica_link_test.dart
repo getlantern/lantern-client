@@ -74,7 +74,7 @@ void main() {
         MarkdownBody(
           data: data,
           builders: {
-            'replica': ReplicaLinkMarkdownElementBuilder((link) {
+            'replica': ReplicaLinkMarkdownElementBuilder((replicaApi, link) {
               actualInfohashes.add(link.infohash);
             }),
           },

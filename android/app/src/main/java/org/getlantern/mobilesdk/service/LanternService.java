@@ -36,7 +36,6 @@ public class LanternService extends IntentService {
             resultIntent.putExtra(LanternServiceManager.HTTP_ADDR, result.getHttpAddr());
             resultIntent.putExtra(LanternServiceManager.SOCKS5_ADDR, result.getSocks5Addr());
             resultIntent.putExtra(LanternServiceManager.DNSGRAB_ADDR, result.getDnsGrabAddr());
-            resultIntent.putExtra(LanternServiceManager.REPLICA_ADDR, result.getReplicaAddr());
             Logger.i(TAG, "Notifying of successful start");
             sendBroadcast(resultIntent);
         } catch (LanternNotRunningException lnre) {

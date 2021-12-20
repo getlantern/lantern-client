@@ -1,7 +1,6 @@
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
@@ -12,8 +11,12 @@ var logger = Logger(
 
 abstract class ReplicaCommonListView extends StatefulWidget {
   ReplicaCommonListView(
-      {Key? key, required this.searchQuery, required this.searchCategory});
+      {Key? key,
+      required this.replicaApi,
+      required this.searchQuery,
+      required this.searchCategory});
 
+  final ReplicaApi replicaApi;
   final String searchQuery;
   final SearchCategory searchCategory;
 }
@@ -21,8 +24,6 @@ abstract class ReplicaCommonListView extends StatefulWidget {
 abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
   final PagingController<int, ReplicaSearchItem> pagingController =
       PagingController(firstPageKey: 0);
-  final ReplicaApi replicaApi =
-      ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
   String lastSearchQuery = '';
 
   @override
@@ -56,7 +57,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
   Future<void> fetchPage(int page) async {
     logger.v('fetchPage($page)');
     try {
-      final ret = await replicaApi.search(
+      final ret = await widget.replicaApi.search(
         lastSearchQuery,
         widget.searchCategory,
         page,

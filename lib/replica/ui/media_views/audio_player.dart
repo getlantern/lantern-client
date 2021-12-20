@@ -2,7 +2,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/notifications.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/logic/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/common.dart';
@@ -17,8 +16,13 @@ var logger = log.Logger(
 ///
 /// This screen supports landscape and portrait orientations
 class ReplicaAudioPlayerScreen extends StatefulWidget {
-  ReplicaAudioPlayerScreen({Key? key, required this.replicaLink, this.mimeType})
+  ReplicaAudioPlayerScreen(
+      {Key? key,
+      required this.replicaApi,
+      required this.replicaLink,
+      this.mimeType})
       : super(key: key);
+  final ReplicaApi replicaApi;
   final ReplicaLink replicaLink;
   final String? mimeType;
 
@@ -27,8 +31,6 @@ class ReplicaAudioPlayerScreen extends StatefulWidget {
 }
 
 class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
-  final ReplicaApi _replicaApi =
-      ReplicaApi(ReplicaCommon.getReplicaServerAddr()!);
   final mode = PlayerMode.MEDIA_PLAYER;
   final _defaultSeekDurationInSeconds = 3;
   late AudioPlayer _audioPlayer;
@@ -41,6 +43,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
   StreamSubscription? _playerErrorSubscription;
   StreamSubscription? _playerStateSubscription;
   StreamSubscription<PlayerControlCommand>? _playerControlCommandSubscription;
+
   bool get _isPlaying => _playerState == PlayerState.PLAYING;
 
   @override
@@ -65,7 +68,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
   Widget build(BuildContext context) {
     return renderReplicaMediaViewScreen(
         context: context,
-        api: _replicaApi,
+        api: widget.replicaApi,
         link: widget.replicaLink,
         category: SearchCategory.Audio,
         mimeType: widget.mimeType,
@@ -263,7 +266,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
         ? _position
         : null;
     final result = await _audioPlayer.play(
-        _replicaApi.getDownloadAddr(widget.replicaLink),
+        widget.replicaApi.getDownloadAddr(widget.replicaLink),
         position: playPosition);
     if (result == 1) {
       setState(() => _playerState = PlayerState.PLAYING);
