@@ -1,18 +1,4 @@
-import 'dart:io';
-
-import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:lantern/common/ui/base_screen.dart';
-import 'package:lantern/common/ui/colors.dart';
-import 'package:lantern/common/ui/custom/asset_image.dart';
-import 'package:lantern/common/ui/custom/list_item_factory.dart';
-import 'package:lantern/common/ui/custom/text.dart';
-import 'package:lantern/common/ui/image_paths.dart';
-import 'package:lantern/common/ui/show_confirmation_dialog.dart';
-import 'package:lantern/common/ui/text_styles.dart';
-import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/i18n/i18n.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';

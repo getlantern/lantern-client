@@ -109,14 +109,18 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
 
   Widget renderNoItemsFoundWidget() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const CAssetImage(
           path: ImagePaths.search_empty,
           size: 168,
         ),
-        CText(
-          'no_search_result_found'.i18n,
-          style: tsBody1,
+        Padding(
+          padding: const EdgeInsetsDirectional.only(top: 16),
+          child: CText(
+            'no_search_result_found'.i18n,
+            style: tsBody1,
+          ),
         ),
       ],
     );
