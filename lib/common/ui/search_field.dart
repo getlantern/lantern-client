@@ -23,7 +23,7 @@ class SearchField extends CTextField {
                           color: black,
                         ),
                         onTap: () {
-                          controller.text = '';
+                          controller.clear();
                         },
                       ),
           ),
