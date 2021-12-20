@@ -23,6 +23,7 @@ import 'package:lantern/account/language.dart' as _i15;
 import 'package:lantern/account/recovery_key.dart' as _i22;
 import 'package:lantern/account/secure_chat_number_account.dart' as _i23;
 import 'package:lantern/account/settings.dart' as _i13;
+import 'package:lantern/common/common.dart' as _i30;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i8;
@@ -31,13 +32,14 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i7;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i9;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i10;
-import 'package:lantern/messaging/messaging.dart' as _i30;
+import 'package:lantern/messaging/messaging.dart' as _i31;
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart'
     as _i3;
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
     as _i2;
-import 'package:lantern/replica/models/replica_link.dart' as _i31;
-import 'package:lantern/replica/models/searchcategory.dart' as _i32;
+import 'package:lantern/replica/logic/api.dart' as _i32;
+import 'package:lantern/replica/models/replica_link.dart' as _i33;
+import 'package:lantern/replica/models/searchcategory.dart' as _i34;
 import 'package:lantern/replica/ui/link_opener_screen.dart' as _i12;
 import 'package:lantern/replica/ui/media_views/audio_player.dart' as _i16;
 import 'package:lantern/replica/ui/media_views/image_preview_screen.dart'
@@ -169,12 +171,14 @@ class AppRouter extends _i28.RootStackRouter {
           opaque: true,
           barrierDismissible: false);
     },
-    LinkOpenerScreen.name: (routeData) {
-      final args = routeData.argsAs<LinkOpenerScreenArgs>();
+    ReplicaLinkOpenerScreen.name: (routeData) {
+      final args = routeData.argsAs<ReplicaLinkOpenerScreenArgs>();
       return _i28.CustomPage<void>(
           routeData: routeData,
           child: _i12.ReplicaLinkOpenerScreen(
-              key: args.key, replicaLink: args.replicaLink),
+              key: args.key,
+              replicaApi: args.replicaApi,
+              replicaLink: args.replicaLink),
           transitionsBuilder: _i28.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -199,6 +203,7 @@ class AppRouter extends _i28.RootStackRouter {
           routeData: routeData,
           child: _i14.ReplicaVideoPlayerScreen(
               key: args.key,
+              replicaApi: args.replicaApi,
               replicaLink: args.replicaLink,
               mimeType: args.mimeType),
           transitionsBuilder: _i28.TransitionsBuilders.fadeIn,
@@ -384,7 +389,8 @@ class AppRouter extends _i28.RootStackRouter {
         _i28.RouteConfig(Introduce.name, path: 'introduce'),
         _i28.RouteConfig(Introductions.name, path: 'introductions'),
         _i28.RouteConfig(AccountManagement.name, path: 'accountManagement'),
-        _i28.RouteConfig(LinkOpenerScreen.name, path: 'linkOpenerScreen'),
+        _i28.RouteConfig(ReplicaLinkOpenerScreen.name,
+            path: 'replicaLinkOpenerScreen'),
         _i28.RouteConfig(Settings.name, path: 'settings'),
         _i28.RouteConfig(ReplicaVideoPlayerScreen.name,
             path: 'replicaVideoPlayerScreen'),
@@ -478,7 +484,7 @@ class FullScreenDialogPageArgs {
 /// [_i5.Conversation]
 class Conversation extends _i28.PageRouteInfo<ConversationArgs> {
   Conversation(
-      {required _i30.ContactId contactId,
+      {required _i31.ContactId contactId,
       int? initialScrollIndex,
       bool? showContactEditingDialog})
       : super(Conversation.name,
@@ -497,7 +503,7 @@ class ConversationArgs {
       this.initialScrollIndex,
       this.showContactEditingDialog});
 
-  final _i30.ContactId contactId;
+  final _i31.ContactId contactId;
 
   final int? initialScrollIndex;
 
@@ -512,7 +518,7 @@ class ConversationArgs {
 /// generated route for
 /// [_i6.ContactInfo]
 class ContactInfo extends _i28.PageRouteInfo<ContactInfoArgs> {
-  ContactInfo({required _i30.Contact contact})
+  ContactInfo({required _i31.Contact contact})
       : super(ContactInfo.name,
             path: 'contactInfo', args: ContactInfoArgs(contact: contact));
 
@@ -522,7 +528,7 @@ class ContactInfo extends _i28.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.contact});
 
-  final _i30.Contact contact;
+  final _i31.Contact contact;
 
   @override
   String toString() {
@@ -550,7 +556,7 @@ class AddViaChatNumber extends _i28.PageRouteInfo<void> {
 /// generated route for
 /// [_i9.Introduce]
 class Introduce extends _i28.PageRouteInfo<IntroduceArgs> {
-  Introduce({required bool singleIntro, _i30.Contact? contactToIntro})
+  Introduce({required bool singleIntro, _i31.Contact? contactToIntro})
       : super(Introduce.name,
             path: 'introduce',
             args: IntroduceArgs(
@@ -564,7 +570,7 @@ class IntroduceArgs {
 
   final bool singleIntro;
 
-  final _i30.Contact? contactToIntro;
+  final _i31.Contact? contactToIntro;
 
   @override
   String toString() {
@@ -606,25 +612,33 @@ class AccountManagementArgs {
 
 /// generated route for
 /// [_i12.ReplicaLinkOpenerScreen]
-class LinkOpenerScreen extends _i28.PageRouteInfo<LinkOpenerScreenArgs> {
-  LinkOpenerScreen({_i30.Key? key, required _i31.ReplicaLink replicaLink})
-      : super(LinkOpenerScreen.name,
-            path: 'linkOpenerScreen',
-            args: LinkOpenerScreenArgs(key: key, replicaLink: replicaLink));
+class ReplicaLinkOpenerScreen
+    extends _i28.PageRouteInfo<ReplicaLinkOpenerScreenArgs> {
+  ReplicaLinkOpenerScreen(
+      {_i30.Key? key,
+      required _i32.ReplicaApi replicaApi,
+      required _i33.ReplicaLink replicaLink})
+      : super(ReplicaLinkOpenerScreen.name,
+            path: 'replicaLinkOpenerScreen',
+            args: ReplicaLinkOpenerScreenArgs(
+                key: key, replicaApi: replicaApi, replicaLink: replicaLink));
 
-  static const String name = 'LinkOpenerScreen';
+  static const String name = 'ReplicaLinkOpenerScreen';
 }
 
-class LinkOpenerScreenArgs {
-  const LinkOpenerScreenArgs({this.key, required this.replicaLink});
+class ReplicaLinkOpenerScreenArgs {
+  const ReplicaLinkOpenerScreenArgs(
+      {this.key, required this.replicaApi, required this.replicaLink});
 
   final _i30.Key? key;
 
-  final _i31.ReplicaLink replicaLink;
+  final _i32.ReplicaApi replicaApi;
+
+  final _i33.ReplicaLink replicaLink;
 
   @override
   String toString() {
-    return 'LinkOpenerScreenArgs{key: $key, replicaLink: $replicaLink}';
+    return 'ReplicaLinkOpenerScreenArgs{key: $key, replicaApi: $replicaApi, replicaLink: $replicaLink}';
   }
 }
 
@@ -653,28 +667,39 @@ class SettingsArgs {
 class ReplicaVideoPlayerScreen
     extends _i28.PageRouteInfo<ReplicaVideoPlayerScreenArgs> {
   ReplicaVideoPlayerScreen(
-      {_i30.Key? key, required _i31.ReplicaLink replicaLink, String? mimeType})
+      {_i30.Key? key,
+      required _i32.ReplicaApi replicaApi,
+      required _i33.ReplicaLink replicaLink,
+      String? mimeType})
       : super(ReplicaVideoPlayerScreen.name,
             path: 'replicaVideoPlayerScreen',
             args: ReplicaVideoPlayerScreenArgs(
-                key: key, replicaLink: replicaLink, mimeType: mimeType));
+                key: key,
+                replicaApi: replicaApi,
+                replicaLink: replicaLink,
+                mimeType: mimeType));
 
   static const String name = 'ReplicaVideoPlayerScreen';
 }
 
 class ReplicaVideoPlayerScreenArgs {
   const ReplicaVideoPlayerScreenArgs(
-      {this.key, required this.replicaLink, this.mimeType});
+      {this.key,
+      required this.replicaApi,
+      required this.replicaLink,
+      this.mimeType});
 
   final _i30.Key? key;
 
-  final _i31.ReplicaLink replicaLink;
+  final _i32.ReplicaApi replicaApi;
+
+  final _i33.ReplicaLink replicaLink;
 
   final String? mimeType;
 
   @override
   String toString() {
-    return 'ReplicaVideoPlayerScreenArgs{key: $key, replicaLink: $replicaLink, mimeType: $mimeType}';
+    return 'ReplicaVideoPlayerScreenArgs{key: $key, replicaApi: $replicaApi, replicaLink: $replicaLink, mimeType: $mimeType}';
   }
 }
 
@@ -703,7 +728,7 @@ class LanguageArgs {
 class ReplicaAudioPlayerScreen
     extends _i28.PageRouteInfo<ReplicaAudioPlayerScreenArgs> {
   ReplicaAudioPlayerScreen(
-      {_i30.Key? key, required _i31.ReplicaLink replicaLink, String? mimeType})
+      {_i30.Key? key, required _i33.ReplicaLink replicaLink, String? mimeType})
       : super(ReplicaAudioPlayerScreen.name,
             path: 'replicaAudioPlayerScreen',
             args: ReplicaAudioPlayerScreenArgs(
@@ -718,7 +743,7 @@ class ReplicaAudioPlayerScreenArgs {
 
   final _i30.Key? key;
 
-  final _i31.ReplicaLink replicaLink;
+  final _i33.ReplicaLink replicaLink;
 
   final String? mimeType;
 
@@ -754,7 +779,7 @@ class AuthorizeProArgs {
 class ReplicaImagePreviewScreen
     extends _i28.PageRouteInfo<ReplicaImagePreviewScreenArgs> {
   ReplicaImagePreviewScreen(
-      {_i30.Key? key, required _i31.ReplicaLink replicaLink})
+      {_i30.Key? key, required _i33.ReplicaLink replicaLink})
       : super(ReplicaImagePreviewScreen.name,
             path: 'replicaImagePreviewScreen',
             args: ReplicaImagePreviewScreenArgs(
@@ -768,7 +793,7 @@ class ReplicaImagePreviewScreenArgs {
 
   final _i30.Key? key;
 
-  final _i31.ReplicaLink replicaLink;
+  final _i33.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -900,8 +925,8 @@ class ReplicaUnknownItemScreen
     extends _i28.PageRouteInfo<ReplicaUnknownItemScreenArgs> {
   ReplicaUnknownItemScreen(
       {_i30.Key? key,
-      required _i31.ReplicaLink replicaLink,
-      required _i32.SearchCategory category,
+      required _i33.ReplicaLink replicaLink,
+      required _i34.SearchCategory category,
       String? mimeType})
       : super(ReplicaUnknownItemScreen.name,
             path: 'replicaUnknownItemScreen',
@@ -923,9 +948,9 @@ class ReplicaUnknownItemScreenArgs {
 
   final _i30.Key? key;
 
-  final _i31.ReplicaLink replicaLink;
+  final _i33.ReplicaLink replicaLink;
 
-  final _i32.SearchCategory category;
+  final _i34.SearchCategory category;
 
   final String? mimeType;
 

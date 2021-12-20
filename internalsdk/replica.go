@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"sync"
 	"time"
 
+	"github.com/getlantern/flashlight"
 	"github.com/getlantern/flashlight/common"
 	"github.com/getlantern/flashlight/config"
 	"github.com/getlantern/flashlight/geolookup"
@@ -16,6 +18,50 @@ import (
 	replicaService "github.com/getlantern/replica/service"
 	"github.com/gorilla/mux"
 )
+
+// Replica HTTP Server that handles Replica API requests on 127.0.0.1 at a random port.
+type ReplicaServer struct {
+	ConfigDir  string
+	Flashlight *flashlight.Flashlight
+	Session    Session
+	UserConfig common.UserConfig
+
+	startOnce sync.Once
+}
+
+// Checks whether Replica should be enabled and lazily starts the server if necessary.
+//
+// If enabled, the server is started lazily and the server's random address is reported to Session.SetReplicaAddr.
+// If disabled after having been enabled, the server keeps running and ReplicaAddr remains set to its old value.
+func (s *ReplicaServer) CheckEnabled() {
+	if !s.Session.ForceReplica() && !s.Flashlight.FeatureEnabled(config.FeatureReplica) {
+		// Replica is not enabled
+		log.Debug("Replica not enabled")
+		return
+	}
+
+	log.Debug("Replica enabled")
+	s.startOnce.Do(func() {
+		log.Debug("Starting Replica server")
+		h, err := s.newHandler()
+		if err != nil {
+			log.Errorf(
+				"Failed to start replica server. Will continue without it. Err: %v", err)
+			return
+		}
+
+		l, srv, err := NewReplicaServer(h)
+		if err != nil {
+			log.Errorf(
+				"Failed to start replica server. Will continue without it. Err: %v", err)
+			return
+		}
+		go srv.Serve(l)
+		addr := l.Addr().String()
+		log.Debugf("Replica started at address: %v", addr)
+		s.Session.SetReplicaAddr(addr)
+	})
+}
 
 // NewReplicaServer uses 'handler' to setup a new net.Listener for Replica
 // on localhost over the next available TCP port.
@@ -29,7 +75,7 @@ func NewReplicaServer(handler *replicaServer.HttpHandler) (net.Listener, *http.S
 	})
 	r.Handle("/", r)
 	// Listen on a random TCP port
-	l, err := net.Listen("tcp", ":0")
+	l, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		return nil, nil, log.Errorf("replica net.Listen: %v")
 	}
@@ -43,27 +89,24 @@ func NewReplicaServer(handler *replicaServer.HttpHandler) (net.Listener, *http.S
 	return l, srv, nil
 }
 
-// newReplicaHttpHandler constructs a replicaServer.HttpHandler.
-// This function will lazily fetch information from the global yaml config
-// using 'fetchFeatureOptionsFunc' function.
-func newReplicaHttpHandler(
-	configDir string,
-	userConfig *userConfig,
-	// function to lazily fetch config.FeatureOptions for Replica from Flashlight
-	fetchFeatureOptionsFunc func(string, config.FeatureOptions) error,
-) (*replicaServer.HttpHandler, error) {
-	if userConfig == nil {
-		panic(log.Errorf("userConfig is nil"))
+// newHandler constructs a replicaServer.HttpHandler.
+func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
+	if s.Flashlight == nil {
+		return nil, log.Errorf("Flashlight is nil")
 	}
-	if fetchFeatureOptionsFunc == nil {
-		panic(log.Errorf("featureOptionsFunc is nil"))
+	if s.Session == nil {
+		return nil, log.Errorf("Session is nil")
+	}
+	if s.UserConfig == nil {
+		return nil, log.Errorf("UserConfig is nil")
 	}
 
-	log.Debugf("Starting replica with configDir [%v] and userConfig [%+v]\n", configDir, userConfig)
+	log.Debugf("Starting replica with configDir [%v] and userConfig [%+v]\n", s.ConfigDir, s.UserConfig)
 	optsFunc := func() *config.ReplicaOptions {
 		var opts config.ReplicaOptions
-		if err := fetchFeatureOptionsFunc(config.FeatureReplica, &opts); err != nil {
-			log.Errorf("Could not fetch replica feature options: %v", err)
+		err := s.Flashlight.FeatureOptions(config.FeatureReplica, &opts)
+		if err != nil {
+			log.Errorf("Error on getting feature options, this should never happen in practice: %v", err)
 			return nil
 		}
 		return &opts
@@ -74,7 +117,7 @@ func newReplicaHttpHandler(
 	// XXX <30-11-21, soltzen> Since this is mobile, disable seeding and makes
 	// the dht node passive
 	input.ReadOnlyNode = true
-	input.RootUploadsDir = configDir
+	input.RootUploadsDir = s.ConfigDir
 	// XXX <16-12-21, soltzen> Those three flags make sure that uploads are not
 	// saved to the torrent client, saved locally, or have any metadata
 	// generated for them. This decision is only for android-lantern to protect
@@ -82,9 +125,10 @@ func newReplicaHttpHandler(
 	input.AddUploadsToTorrentClient = false
 	input.StoreUploadsLocally = false
 	input.StoreMetainfoFileAndTokenLocally = false
-	input.CacheDir = configDir
+	// TODO: should probably use Android's cache dir here since this stuff presumably is okay to delete
+	input.CacheDir = s.ConfigDir
 	input.AddCommonHeaders = func(r *http.Request) {
-		common.AddCommonHeaders(userConfig, r)
+		common.AddCommonHeaders(s.UserConfig, r)
 	}
 	input.GlobalConfig = func() replicaServer.ReplicaOptions {
 		return optsFunc()
@@ -121,9 +165,9 @@ func newReplicaHttpHandler(
 
 			// Fetch country: if country wasn't fetch-able, use the default endpoint
 			raw := opts.ReplicaRustDefaultEndpoint
-			country := userConfig.session.GetCountryCode()
-			if country == "" {
-				log.Errorf("Failed to fetch country while configuring new replica-rust endpoint: re-running geolookup and defaulting to %q", opts.ReplicaRustDefaultEndpoint)
+			country, err := s.Session.GetCountryCode()
+			if err != nil {
+				log.Errorf("Failed to fetch country while configuring new replica-rust endpoint: re-running geolookup and defaulting to %q: %v", opts.ReplicaRustDefaultEndpoint, err)
 				geolookup.Refresh()
 			}
 			if countryRaw := opts.ReplicaRustEndpoints[country]; countryRaw != "" {

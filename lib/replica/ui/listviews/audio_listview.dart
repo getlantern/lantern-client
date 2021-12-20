@@ -1,6 +1,5 @@
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/models/search_item.dart';
+import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/listitems/audio_listitem.dart';
 import 'package:lantern/replica/ui/listviews/common_listview.dart';
@@ -13,11 +12,14 @@ var logger = Logger(
 /// ReplicaAppListView renders a list of ReplicaAudioListItem
 /// Looks like this docs/replica_audio_listview.png
 class ReplicaAudioListView extends ReplicaCommonListView {
-  ReplicaAudioListView({Key? key, required String searchQuery})
+  ReplicaAudioListView(
+      {Key? key, required ReplicaApi replicaApi, required String searchQuery})
       : super(
             key: key,
+            replicaApi: replicaApi,
             searchQuery: searchQuery,
             searchCategory: SearchCategory.Audio);
+
   @override
   State<StatefulWidget> createState() => _ReplicaAudioListViewState();
 }
@@ -32,7 +34,7 @@ class _ReplicaAudioListViewState extends ReplicaCommonListViewState {
           context.pushRoute(ReplicaAudioPlayerScreen(
               replicaLink: item.replicaLink, mimeType: item.primaryMimeType));
         },
-        replicaApi: super.replicaApi,
+        replicaApi: widget.replicaApi,
       );
     });
   }

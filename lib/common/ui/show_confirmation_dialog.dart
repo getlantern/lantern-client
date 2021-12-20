@@ -7,7 +7,7 @@ void Function() showConfirmationDialog({
   required String title,
   required dynamic explanation,
   required String agreeText,
-  String dismissText = 'Cancel',
+  String dismissText = 'cancel',
   required void Function() agreeAction,
   void Function()? dismissAction,
   bool barrierDismissible = true,

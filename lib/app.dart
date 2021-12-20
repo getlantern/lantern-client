@@ -8,7 +8,7 @@ final globalRouter = AppRouter(navigatorKey);
 class LanternApp extends StatelessWidget {
   LanternApp({Key? key}) : super(key: key);
 
-  final translations = Localization.loadTranslations();
+  final translations = Localization.ensureInitialized();
 
   @override
   Widget build(BuildContext context) {

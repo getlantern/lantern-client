@@ -5,10 +5,10 @@ go 1.16
 require (
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
 	github.com/getlantern/autoupdate v0.0.0-20180719190525-a22eab7ded99
-	github.com/getlantern/dnsgrab v0.0.0-20210830103124-84f280b82954
+	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.1
 	github.com/getlantern/eventual v1.0.0
-	github.com/getlantern/flashlight v0.0.0-20211214181315-f9593b6c01f8
+	github.com/getlantern/flashlight v0.0.0-20211219185319-556cecd31106
 	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
 	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
