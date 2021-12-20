@@ -53,14 +53,15 @@ class ReplicaUploader {
 }
 
 void ReplicaUploaderBackgroundHandler() async {
-  // This code runs in a different Flutter engine than the usual UI code, so
-  // we have to make sure localizations are initialized here before
-  // continuing.
   WidgetsFlutterBinding.ensureInitialized();
   var isolateUploader = FlutterUploader();
 
   // Listen to progress and show a single notification showing the progress
   isolateUploader.progress.listen((progress) async {
+    // This code runs in a different Flutter engine than the usual UI code, so
+    // we have to make sure localizations are initialized here before
+    // continuing.
+    await Localization.ensureInitialized();
     await notifications.flutterLocalNotificationsPlugin
         .show(
             progress.taskId.hashCode,
