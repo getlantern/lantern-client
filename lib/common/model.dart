@@ -8,6 +8,7 @@ abstract class Model {
   final Map<String, SubscribedSingleValueNotifier> _singleValueNotifierCache =
       HashMap();
   final Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
+  Event? event;
 
   Model(String name) {
     methodChannel = MethodChannel('${name}_method_channel');
@@ -107,10 +108,8 @@ abstract class Model {
 
   ValueNotifier<Event?> connectivityNotifier<T>() {
     final connectivityManager = EventManager('connectivity_event_channel');
-    Event? event;
     connectivityManager.subscribe(Event.All, (eventName, params) {
       event = EventParsing.fromValue(eventName);
-      print('event $event');
     });
     return ValueNotifier(event);
   }

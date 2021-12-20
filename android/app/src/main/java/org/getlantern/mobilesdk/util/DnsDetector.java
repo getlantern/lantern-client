@@ -74,6 +74,7 @@ public class DnsDetector {
     }
 
     public Event checkConnectivity() {
+        // TODO: add server error detection
         doGetDnsServer();
         return connectivityError;
     }
@@ -89,6 +90,10 @@ public class DnsDetector {
         if (network == null) {
             connectivityError = Event.NetworkError;
             return DEFAULT_DNS_SERVER;
+        }
+        else {
+            // reset connectivityError when network returns
+            connectivityError = Event.All;
         }
 
         LinkProperties linkProperties = connectivityManager.getLinkProperties(network);
