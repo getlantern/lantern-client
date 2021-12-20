@@ -69,7 +69,6 @@ class UnacceptedContactSticker extends StatelessWidget {
               TextButton(
                 onPressed: () async => showInfoDialog(
                   context,
-                  barrierDismissible: true,
                   assetPath: ImagePaths.block,
                   title: contact.blocked
                       ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
