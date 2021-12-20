@@ -110,6 +110,7 @@ abstract class Model {
     Event? event;
     connectivityManager.subscribe(Event.All, (eventName, params) {
       event = EventParsing.fromValue(eventName);
+      print('event $event');
     });
     return ValueNotifier(event);
   }

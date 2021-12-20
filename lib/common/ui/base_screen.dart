@@ -54,6 +54,7 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     var eventType = sessionModel.connectivityNotifier().value;
+    print('eventType $eventType');
     // * Connectivity event stream
     switch (eventType) {
       case Event.NetworkError:
