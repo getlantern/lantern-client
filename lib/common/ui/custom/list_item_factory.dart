@@ -40,7 +40,7 @@ class ListItemFactory extends StatelessWidget {
           return FocusedMenuHolder(
             menu: renderReplicaLongPressMenuItem(api, link),
             menuWidth: MediaQuery.of(context).size.width * 0.8,
-            builder: (_) {
+            builder: (menuOpen) {
               return Container(
                   decoration: BoxDecoration(
                     color: white,
@@ -53,7 +53,7 @@ class ListItemFactory extends StatelessWidget {
                     content: content,
                     onTap: onTap,
                     height: height,
-                    showDivider: true,
+                    showDivider: !menuOpen,
                   ));
             },
           );
