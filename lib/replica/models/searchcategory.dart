@@ -1,3 +1,5 @@
+import 'package:lantern/common/ui/image_paths.dart';
+
 enum SearchCategory { Image, Video, Audio, Document, App, Unknown }
 
 // Taken mostly from here
@@ -6,6 +8,7 @@ enum SearchCategory { Image, Video, Audio, Document, App, Unknown }
 // share/download the file, not view it.
 final Map<String, SearchCategory> mimeToCategory = {
 // Image
+  'image/jpg': SearchCategory.Image,
   'image/jpeg': SearchCategory.Image,
   'image/png': SearchCategory.Image,
   'image/gif': SearchCategory.Image,
@@ -37,6 +40,25 @@ extension ToShortString on SearchCategory {
   }
 }
 
+extension GetRelevantImagePath on SearchCategory {
+  String getRelevantImagePath() {
+    switch (this) {
+      case SearchCategory.Image:
+        return ImagePaths.image_inactive;
+      case SearchCategory.Video:
+        return ImagePaths.video_black;
+      case SearchCategory.Audio:
+        return ImagePaths.audio_black;
+      case SearchCategory.Document:
+        return ImagePaths.doc_black;
+      case SearchCategory.App:
+        return ImagePaths.zip_black;
+      case SearchCategory.Unknown:
+        return ImagePaths.unknown_black;
+    }
+  }
+}
+
 // Taken verbatim from
 // https://github.com/getlantern/lantern-desktop/blob/cb5be6f661567ab53287e15b042a30e82c68aaa4/ui/src/models/replica.ts#L132
 // XXX <21-12-2021> soltzen: there's no differentiation in lantern-desktop
@@ -62,7 +84,7 @@ extension MimeTypes on SearchCategory {
   }
 }
 
-SearchCategory SearchCategoryFromContentType(String? contentType) {
+SearchCategory SearchCategoryFromMimeType(String? contentType) {
   if (contentType == null || contentType.isEmpty) {
     return SearchCategory.Unknown;
   }

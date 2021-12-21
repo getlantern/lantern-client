@@ -51,8 +51,8 @@ class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
           return context.replaceRoute(
               ReplicaImagePreviewScreen(replicaLink: widget.replicaLink));
         case SearchCategory.Audio:
-          return context.replaceRoute(
-              ReplicaAudioPlayerScreen(replicaLink: widget.replicaLink));
+          return context.replaceRoute(ReplicaAudioPlayerScreen(
+              replicaApi: widget.replicaApi, replicaLink: widget.replicaLink));
         case SearchCategory.Document:
         case SearchCategory.App:
         case SearchCategory.Unknown:

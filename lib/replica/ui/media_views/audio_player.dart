@@ -3,10 +3,8 @@ import 'package:audioplayers/notifications.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/common.dart';
-import 'package:lantern/replica/ui/media_views/playback_button.dart';
 import 'package:logger/logger.dart' as log;
 
 var logger = log.Logger(
@@ -18,8 +16,13 @@ var logger = log.Logger(
 ///
 /// This screen supports landscape and portrait orientations
 class ReplicaAudioPlayerScreen extends StatefulWidget {
-  ReplicaAudioPlayerScreen({Key? key, required this.replicaLink, this.mimeType})
+  ReplicaAudioPlayerScreen(
+      {Key? key,
+      required this.replicaApi,
+      required this.replicaLink,
+      this.mimeType})
       : super(key: key);
+  final ReplicaApi replicaApi;
   final ReplicaLink replicaLink;
   final String? mimeType;
 
@@ -63,77 +66,96 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return replicaModel.withReplicaApi((context, replicaApi, child) {
-      return renderReplicaMediaViewScreen(
-          context: context,
-          api: replicaApi,
-          link: widget.replicaLink,
-          category: SearchCategory.Audio,
-          mimeType: widget.mimeType,
-          backgroundColor: grey2,
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  renderPlaybackSliderAndDuration(),
-                  renderPlaybackButtons(replicaApi),
-                ],
-              ),
+    return renderReplicaMediaViewScreen(
+        context: context,
+        api: widget.replicaApi,
+        link: widget.replicaLink,
+        category: SearchCategory.Audio,
+        mimeType: widget.mimeType,
+        backgroundColor: grey2,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                renderPlaybackSliderAndDuration(),
+                renderPlaybackButtons(),
+              ],
             ),
-          ));
-    });
+          ),
+        ));
   }
 
-  Widget renderPlaybackButtons(ReplicaApi replicaApi) {
+  Widget renderPlaybackButtons() {
     return Padding(
       padding: const EdgeInsets.all(18.0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           // Fast rewind button
-          PlaybackButton(
-            onTap: () async {
-              if (_position == null) {
-                return;
-              }
-              _position = Duration(
-                  seconds: max(0,
-                          _position!.inSeconds - _defaultSeekDurationInSeconds)
-                      .round());
-              await _audioPlayer.seek(_position!);
-            },
-            path: ImagePaths.fast_rewind,
-            size: 40,
+          SizedBox(
+            width: 32,
+            height: 32,
+            child: FloatingActionButton(
+                child: const CAssetImage(
+                  path: ImagePaths.fast_rewind,
+                  size: 16,
+                ),
+                onPressed: () async {
+                  if (_position == null) {
+                    return;
+                  }
+                  _position = Duration(
+                      seconds: max(
+                              0,
+                              _position!.inSeconds -
+                                  _defaultSeekDurationInSeconds)
+                          .round());
+                  await _audioPlayer.seek(_position!);
+                }),
           ),
           const SizedBox(width: 20),
 
           // Play button
-          PlaybackButton(
-            onTap: () async {
-              _isPlaying ? await _pause() : await _play(replicaApi);
-            },
-            path: _isPlaying ? ImagePaths.pause : ImagePaths.play,
-            size: 60,
+          SizedBox(
+            width: 56,
+            height: 56,
+            child: FloatingActionButton(
+              onPressed: () async {
+                _isPlaying ? await _pause() : await _play();
+              },
+              child: CAssetImage(
+                path: _isPlaying ? ImagePaths.pause : ImagePaths.play,
+                size: 24,
+              ),
+            ),
           ),
           const SizedBox(width: 20),
 
           // Fast forward button
-          PlaybackButton(
-            onTap: () async {
-              if (_position == null || _totalDuration == null) {
-                return;
-              }
-              _position = Duration(
-                  seconds: min(_totalDuration!.inSeconds,
-                          _position!.inSeconds + _defaultSeekDurationInSeconds)
-                      .round());
-              await _audioPlayer.seek(_position!);
-            },
-            path: ImagePaths.fast_forward,
-            size: 40,
+          SizedBox(
+            width: 32,
+            height: 32,
+            child: FloatingActionButton(
+              onPressed: () async {
+                if (_position == null || _totalDuration == null) {
+                  return;
+                }
+                _position = Duration(
+                    seconds: min(
+                            _totalDuration!.inSeconds,
+                            _position!.inSeconds +
+                                _defaultSeekDurationInSeconds)
+                        .round());
+                await _audioPlayer.seek(_position!);
+              },
+              child: const CAssetImage(
+                path: ImagePaths.fast_forward,
+                size: 16,
+              ),
+            ),
           ),
         ],
       ),
@@ -230,9 +252,13 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
 
     _playerControlCommandSubscription =
         _audioPlayer.notificationService.onPlayerCommand.listen((command) {});
+
+    _play().then((_) {
+      setState(() {});
+    });
   }
 
-  Future<int> _play(ReplicaApi replicaApi) async {
+  Future<int> _play() async {
     final playPosition = (_position != null &&
             _totalDuration != null &&
             _position!.inMilliseconds > 0 &&
@@ -240,7 +266,7 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
         ? _position
         : null;
     final result = await _audioPlayer.play(
-        replicaApi.getDownloadAddr(widget.replicaLink),
+        widget.replicaApi.getDownloadAddr(widget.replicaLink),
         position: playPosition);
     if (result == 1) {
       setState(() => _playerState = PlayerState.PLAYING);

@@ -143,6 +143,10 @@ dependencies:
 
   flutter_uploader: ^3.0.0-beta.3
 
+  mime: ^1.0.1
+
+  video_thumbnail: ^0.4.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

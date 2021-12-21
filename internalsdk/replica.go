@@ -1,6 +1,7 @@
 package internalsdk
 
 import (
+	"fmt"
 	"net"
 	"net/http"
 	"net/url"
@@ -19,7 +20,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Replica HTTP Server that handles Replica API requests on 127.0.0.1 at a random port.
+// Replica HTTP Server that handles Replica API requests on localhost at a random port.
 type ReplicaServer struct {
 	ConfigDir  string
 	Flashlight *flashlight.Flashlight
@@ -59,7 +60,18 @@ func (s *ReplicaServer) CheckEnabled() {
 		go srv.Serve(l)
 		addr := l.Addr().String()
 		log.Debugf("Replica started at address: %v", addr)
-		s.Session.SetReplicaAddr(addr)
+
+		// We need to use localhost instead of 127.0.0.1 as the address. If we don't, ExoPlayer on
+		// newer versions of Android (9.0 or newer) will fail to load media with the below error:
+		//
+		// "Cleartext HTTP traffic to 127.0.0.1 not permitted"
+		//
+		// The ExoPlayer documentation points to some Android network security configuration specifics,
+		// see https://exoplayer.dev/troubleshooting.html#fixing-cleartext-http-traffic-not-permitted-errors.
+		//
+		// However, if we use "localhost" instead of an IP address, the problem goes away.
+		_, port, _ := net.SplitHostPort(addr)
+		s.Session.SetReplicaAddr(fmt.Sprintf("localhost:%s", port))
 	})
 }
 
@@ -75,7 +87,7 @@ func NewReplicaServer(handler *replicaServer.HttpHandler) (net.Listener, *http.S
 	})
 	r.Handle("/", r)
 	// Listen on a random TCP port
-	l, err := net.Listen("tcp", "127.0.0.1:0")
+	l, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
 		return nil, nil, log.Errorf("replica net.Listen: %v")
 	}

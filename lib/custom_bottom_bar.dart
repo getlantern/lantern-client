@@ -130,18 +130,26 @@ class CustomBottomBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: sessionModel.replicaAddr((context, replicaAddr, child) {
             final replicaEnabled = replicaAddr != '';
-            // TODO: add disabled styling
             return CustomBottomBarItem(
               currentIndex: index,
               position: 3,
               total: isDevelop ? 4 : 3,
-              label: CText('discover'.i18n,
-                  style: tsFloatingLabel.copiedWith(
-                      color: index == 3 ? black : grey5)),
+              label: CText(
+                'discover'.i18n,
+                style: tsFloatingLabel.copiedWith(
+                    color: !replicaEnabled
+                        ? grey4
+                        : index == 3
+                            ? black
+                            : grey5),
+              ),
               icon: CAssetImage(
                 path: ImagePaths.discover,
-                color:
-                    index == 3 ? selectedTabIconColor : unselectedTabIconColor,
+                color: !replicaEnabled
+                    ? grey4
+                    : index == 3
+                        ? selectedTabIconColor
+                        : unselectedTabIconColor,
               ),
               onTap: () {
                 if (replicaEnabled) {

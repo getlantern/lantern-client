@@ -34,7 +34,6 @@ class ReplicaUploader {
       // Already initialized
       return;
     }
-    logger.v('Initialized ReplicaUploader');
     inst.uploader = FlutterUploader();
     ReplicaUploader.inst.uploader!
         .setBackgroundHandler(ReplicaUploaderBackgroundHandler);
@@ -53,7 +52,7 @@ class ReplicaUploader {
   }
 }
 
-void ReplicaUploaderBackgroundHandler() {
+void ReplicaUploaderBackgroundHandler() async {
   WidgetsFlutterBinding.ensureInitialized();
   var isolateUploader = FlutterUploader();
 
@@ -74,7 +73,8 @@ void ReplicaUploaderBackgroundHandler() {
     });
   });
 
-  isolateUploader.result.listen((result) {
+  isolateUploader.result.listen((result) async {
+    await Localization.ensureInitialized();
     // logger.v(
     //     'result callback for ${result.taskId}: ${result.status?.description}');
 
@@ -86,6 +86,7 @@ void ReplicaUploaderBackgroundHandler() {
     }
 
     // Delete the progress notification
+    // ignore: unawaited_futures
     notifications.flutterLocalNotificationsPlugin
         .cancel(result.taskId.hashCode);
 
@@ -94,8 +95,9 @@ void ReplicaUploaderBackgroundHandler() {
     if (result.status == UploadTaskStatus.failed) {
       title = 'upload_failed'.i18n;
     } else if (result.status == UploadTaskStatus.canceled) {
-      title = 'upload_canceled'.i18n;
+      title = 'upload_cancelled'.i18n;
     }
+    // ignore: unawaited_futures
     notifications.flutterLocalNotificationsPlugin
         .show(result.taskId.hashCode, 'uploader'.i18n, title,
             notifications.getUploadCompleteChannel(result),
@@ -106,6 +108,7 @@ void ReplicaUploaderBackgroundHandler() {
     });
 
     // Clear all uploads in the uploader's record
+    // ignore: unawaited_futures
     isolateUploader.clearUploads();
   });
 }

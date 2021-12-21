@@ -54,8 +54,8 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const CAssetImage(
-                    path: ImagePaths.spreadsheet,
+                  CAssetImage(
+                    path: widget.category.getRelevantImagePath(),
                     size: 128,
                   ),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 6.0)),

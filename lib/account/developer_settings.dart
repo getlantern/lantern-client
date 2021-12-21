@@ -173,6 +173,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                 secondary: true,
                 onPressed: () async => await context.pushRoute(
                     ReplicaAudioPlayerScreen(
+                        replicaApi: replicaApi,
                         replicaLink: ReplicaLink.New(
                             'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0')!)),
               ),
