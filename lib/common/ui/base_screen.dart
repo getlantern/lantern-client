@@ -44,18 +44,20 @@ class BaseScreen extends StatefulWidget {
 class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
   late final AnimationController controller;
   late final Animation<double> animation;
-  final hasSeenAnimation = true;
+  final hasSeenAnimation = true; // TODO: determine from timestamps
 
-  var dy = defaultWarningBarHeight;
+  var dy =
+      defaultWarningBarHeight; // initializing this to 30.0 for now, will be fine-tuned in next lines
   var serverError = false;
   var networkError = false;
 
   @override
   void initState() {
     super.initState();
+
+    // * Connectivity event stream
     var eventType = sessionModel.connectivityNotifier().value;
     print('eventType $eventType');
-    // * Connectivity event stream
     switch (eventType) {
       case Event.NetworkError:
         setState(() {
@@ -70,19 +72,18 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
       default:
         break;
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    var screenInfo = MediaQuery.of(context);
+    setState(() {
+      dy = screenInfo.viewInsets.top + screenInfo.padding.top;
+    });
 
     // * Animation
-    var dy =
-        defaultWarningBarHeight; // initializing this to 30.0 for now, will be fine-tuned in next lines
-
-    // * Animation // initializing this to 30.0 for now, will be fine-tuned in next lines
-    WidgetsBinding.instance?.addPostFrameCallback((_) => () {
-          var screenInfo = MediaQuery.of(context);
-          setState(() {
-            dy = screenInfo.viewInsets.top + screenInfo.padding.top;
-          });
-        });
-
     controller =
         AnimationController(duration: shortAnimationDuration, vsync: this)
           ..addListener(() => setState(() {}));
