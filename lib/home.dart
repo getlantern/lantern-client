@@ -44,13 +44,11 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    final eventManager = EventManager('lantern_event_channel');
     navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
     // Let back-end know that we're ready to handle navigation
     navigationChannel.invokeListMethod('ready');
     _cancelEventSubscription =
-        eventManager.subscribe(Event.All, (eventName, params) {
-      final event = EventParsing.fromValue(eventName);
+        sessionModel.eventManager.subscribe(Event.All, (event, params) {
       switch (event) {
         case Event.SurveyAvailable:
           final message = params['message'] as String;

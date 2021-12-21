@@ -1,4 +1,3 @@
-import 'package:lantern/messaging/contacts/show_block_contact_dialog.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class BlockedUsers extends StatelessWidget {

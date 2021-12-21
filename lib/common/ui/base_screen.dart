@@ -1,8 +1,9 @@
+import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
 
 var forceRTL = false; // set to true to force RTL for testing
 
-class BaseScreen extends StatefulWidget {
+class BaseScreen extends StatelessWidget {
   final dynamic title;
   final List<Widget>? actions;
   final Widget body;
@@ -38,76 +39,26 @@ class BaseScreen extends StatefulWidget {
   }
 
   @override
-  State<BaseScreen> createState() => _BaseScreenState();
-}
-
-class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
-  late final AnimationController controller;
-  late final Animation<double> animation;
-  final hasSeenAnimation = true; // TODO: determine from timestamps
-
-  var dy =
-      defaultWarningBarHeight; // initializing this to 30.0 for now, will be fine-tuned in next lines
-  var serverError = false;
-  var networkError = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // * Connectivity event stream
-    var eventType = sessionModel.connectivityNotifier().value;
-    print('eventType $eventType');
-    switch (eventType) {
-      case Event.NetworkError:
-        setState(() {
-          networkError = true;
-        });
-        break;
-      case Event.ServerError:
-        setState(() {
-          serverError = true;
-        });
-        break;
-      default:
-        break;
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    var screenInfo = MediaQuery.of(context);
-    setState(() {
-      dy = screenInfo.viewInsets.top + screenInfo.padding.top;
-    });
-
-    // * Animation
-    controller =
-        AnimationController(duration: shortAnimationDuration, vsync: this)
-          ..addListener(() => setState(() {}));
-    animation =
-        Tween(begin: hasSeenAnimation ? dy : 0.0, end: dy).animate(controller);
-    if (!hasSeenAnimation) controller.forward();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: networkWarningBarHeightRatio,
+      builder: (BuildContext context, double networkWarningBarHeightRatio,
+              Widget? child) =>
+          doBuild(context, networkWarningBarHeightRatio),
+    );
+  }
+
+  Widget doBuild(BuildContext context, double networkWarningBarHeightRatio) {
+    final screenInfo = MediaQuery.of(context);
     var verticalCorrection =
-        serverError || networkError ? animation.value : 0.0;
+        (screenInfo.viewInsets.top + screenInfo.padding.top) *
+            networkWarningBarHeightRatio;
 
     return testRTL(
       Scaffold(
-        backgroundColor: widget.backgroundColor,
-        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-        appBar: !widget.showAppBar
+        backgroundColor: backgroundColor,
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+        appBar: !showAppBar
             ? null
             : PreferredSize(
                 preferredSize: Size.fromHeight(appBarHeight),
@@ -118,29 +69,26 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
                     alignment: AlignmentDirectional.topCenter,
                     children: [
                       AppBar(
-                        automaticallyImplyLeading:
-                            widget.automaticallyImplyLeading,
-                        title: widget.title is String
+                        automaticallyImplyLeading: automaticallyImplyLeading,
+                        title: title is String
                             ? CText(
-                                widget.title,
+                                title,
                                 style: tsHeading3
-                                    .copiedWith(color: widget.foregroundColor)
+                                    .copiedWith(color: foregroundColor)
                                     .short,
                               )
-                            : widget.title,
+                            : title,
                         elevation: 1,
                         shadowColor: grey3,
-                        foregroundColor: widget.foregroundColor,
-                        backgroundColor: widget.backgroundColor,
-                        iconTheme: IconThemeData(color: widget.foregroundColor),
-                        centerTitle: widget.centerTitle,
+                        foregroundColor: foregroundColor,
+                        backgroundColor: backgroundColor,
+                        iconTheme: IconThemeData(color: foregroundColor),
+                        centerTitle: centerTitle,
                         titleSpacing: 0,
-                        actions: widget.actions,
+                        actions: actions,
                       ),
                       ConnectivityWarning(
                         dy: verticalCorrection,
-                        networkError: networkError,
-                        serverError: serverError,
                       ),
                     ],
                   ),
@@ -148,17 +96,15 @@ class _BaseScreenState extends State<BaseScreen> with TickerProviderStateMixin {
               ),
         body: Padding(
           padding: EdgeInsetsDirectional.only(
-            start: widget.padHorizontal ? 16 : 0,
-            end: widget.padHorizontal ? 16 : 0,
-            top: widget.padVertical
-                ? 16 + verticalCorrection
-                : verticalCorrection,
-            bottom: widget.padVertical ? 16 : 0,
+            start: padHorizontal ? 16 : 0,
+            end: padHorizontal ? 16 : 0,
+            top: padVertical ? 16 + verticalCorrection : verticalCorrection,
+            bottom: padVertical ? 16 : 0,
           ),
-          child: widget.body,
+          child: body,
         ),
-        floatingActionButton: widget.actionButton,
-        floatingActionButtonLocation: widget.floatingActionButtonLocation,
+        floatingActionButton: actionButton,
+        floatingActionButtonLocation: floatingActionButtonLocation,
       ),
     );
   }
@@ -177,18 +123,14 @@ class ConnectivityWarning extends StatelessWidget {
   const ConnectivityWarning({
     Key? key,
     required this.dy,
-    required this.networkError,
-    required this.serverError,
   }) : super(key: key);
 
   final double dy;
-  final bool networkError;
-  final bool serverError;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: serverError
+      onTap: !sessionModel.proxyAvailable.value
           ? () => showInfoDialog(
                 context,
                 title: 'connection_error'.i18n,
@@ -207,7 +149,9 @@ class ConnectivityWarning extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CText(
-              (serverError ? 'connection_error' : 'no_network_connection')
+              (!sessionModel.proxyAvailable.value
+                      ? 'connection_error'
+                      : 'no_network_connection')
                   .i18n
                   .toUpperCase(),
               style: tsBody2.copiedWith(
@@ -215,7 +159,7 @@ class ConnectivityWarning extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            if (serverError)
+            if (!sessionModel.proxyAvailable.value)
               Padding(
                 padding: const EdgeInsetsDirectional.only(start: 4.0, top: 3.0),
                 child: CAssetImage(

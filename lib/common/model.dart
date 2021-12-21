@@ -105,14 +105,6 @@ abstract class Model {
     return ListChildBuilder(
         listChildValueNotifier(context, path, defaultValue), builder);
   }
-
-  ValueNotifier<Event?> connectivityNotifier<T>() {
-    final connectivityManager = EventManager('connectivity_event_channel');
-    connectivityManager.subscribe(Event.All, (eventName, params) {
-      event = EventParsing.fromValue(eventName);
-    });
-    return ValueNotifier(event);
-  }
 }
 
 abstract class SubscribedNotifier<T> extends ValueNotifier<T> {
