@@ -10,8 +10,9 @@ import android.net.NetworkRequest;
 
 import androidx.annotation.NonNull;
 
-import org.getlantern.lantern.event.Event;
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.model.Event;
+import org.greenrobot.eventbus.EventBus;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -44,8 +45,6 @@ public class DnsDetector {
     private final ConnectivityManager connectivityManager;
     private final Map<Network, Object> allNetworks = new ConcurrentHashMap<>();
 
-    private Event connectivityError = Event.All;
-
     /**
      * Constructor
      */
@@ -62,21 +61,17 @@ public class DnsDetector {
                     public void onAvailable(@NonNull Network network) {
                         Logger.debug(TAG, "Adding available network");
                         allNetworks.put(network, "");
+                        EventBus.getDefault().postSticky(Event.NetworkAvailable);
                     }
 
                     @Override
                     public void onLost(@NonNull Network network) {
                         Logger.debug(TAG, "Removing lost network");
                         allNetworks.remove(network);
+                        publishNetworkAvailability();
                     }
                 }
         );
-    }
-
-    public Event checkConnectivity() {
-        // TODO: add server error detection
-        doGetDnsServer();
-        return connectivityError;
     }
 
     public String getDnsServer() {
@@ -88,12 +83,7 @@ public class DnsDetector {
     private String doGetDnsServer() {
         Network network = findActiveNetwork();
         if (network == null) {
-            connectivityError = Event.NetworkError;
             return DEFAULT_DNS_SERVER;
-        }
-        else {
-            // reset connectivityError when network returns
-            connectivityError = Event.All;
         }
 
         LinkProperties linkProperties = connectivityManager.getLinkProperties(network);
@@ -124,8 +114,15 @@ public class DnsDetector {
         return DEFAULT_DNS_SERVER;
     }
 
+    public void publishNetworkAvailability() {
+        if (findActiveNetwork() == null) {
+            Logger.debug(TAG, "No network available");
+            EventBus.getDefault().postSticky(Event.NoNetworkAvailable);
+        }
+    }
+
     private Network findActiveNetwork() {
-        List<Network> networks = new ArrayList(allNetworks.keySet());
+        List<Network> networks = new ArrayList<>(allNetworks.keySet());
         List<NetworkInfo> networkInfos = new ArrayList<>();
         for (Network network : networks) {
             networkInfos.add(connectivityManager.getNetworkInfo(network));

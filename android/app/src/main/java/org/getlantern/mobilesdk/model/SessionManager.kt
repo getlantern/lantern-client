@@ -46,7 +46,7 @@ abstract class SessionManager(application: Application) : Session {
     private val appVersion: String
     private var startResult: StartResult? = null
     private var locale: Locale? = null
-    private val dnsDetector = DnsDetector(application, fakeDnsIP)
+    public val dnsDetector = DnsDetector(application, fakeDnsIP)
 
     fun setStartResult(result: StartResult?) {
         startResult = result

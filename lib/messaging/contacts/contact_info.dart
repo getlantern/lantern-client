@@ -1,8 +1,6 @@
 import 'package:lantern/messaging/conversation/call_action.dart';
 
 import '../messaging.dart';
-import 'show_block_contact_dialog.dart';
-import 'show_delete_contact_dialog.dart';
 
 class ContactInfo extends StatefulWidget {
   final Contact contact;

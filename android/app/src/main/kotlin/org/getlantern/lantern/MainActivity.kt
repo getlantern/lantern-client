@@ -7,7 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.VpnService
-import android.os.*
+import android.os.AsyncTask
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -29,24 +32,29 @@ import io.lantern.messaging.WebRTCSignal
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.UpdateActivity_
-import org.getlantern.lantern.event.Event
 import org.getlantern.lantern.event.EventManager
-import org.getlantern.lantern.model.*
+import org.getlantern.lantern.model.AccountInitializationStatus
+import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
+import org.getlantern.lantern.model.LanternStatus
+import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProUser
+import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
+import org.getlantern.mobilesdk.model.Event
 import org.getlantern.mobilesdk.model.LoConf
 import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
 import org.getlantern.mobilesdk.model.PopUpAd
 import org.getlantern.mobilesdk.model.Survey
-import org.getlantern.mobilesdk.util.DnsDetector
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.*
+import java.util.Locale
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
@@ -55,9 +63,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private lateinit var sessionModel: SessionModel
     private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
-    private lateinit var connectivityEventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
-    private lateinit var flutterSignaling: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
 
     private val lanternClient = LanternApp.getLanternHttpClient()
@@ -76,18 +82,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     fetchLoConf()
                     Logger.debug(TAG, "fetchLoConf() finished at ${System.currentTimeMillis() - start}")
                 }
-            }
-        }
-        connectivityEventManager = object : EventManager("connectivity_event_channel", flutterEngine) {
-            val dnsDetector = DnsDetector(application, "8.8.8.8")
-            override fun onListen(event: Event) {
-                if (LanternApp.getSession().lanternDidStart()) {
-                    // TODO: receive stream from DnsDetector
-                    connectivityEventManager.onNewEvent(
-                        dnsDetector.checkConnectivity(),
-                        hashMapOf("ts" to System.currentTimeMillis())
-                    )
-                }
+                LanternApp.getSession().dnsDetector.publishNetworkAvailability();
             }
         }
 
@@ -262,6 +257,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    fun onEvent(event: Event) {
+        eventManager.onNewEvent(event = event)
     }
 
     private fun updateUserData() {
