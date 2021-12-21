@@ -36,6 +36,7 @@ class VideoViewer extends ViewerWidget {
 class VideoViewerState extends ViewerState<VideoViewer> {
   VideoPlayerController? controller;
   var playing = false;
+  var _showPlayButton = false;
 
   @override
   void initState() {
@@ -49,10 +50,7 @@ class VideoViewerState extends ViewerState<VideoViewer> {
         controller = VideoPlayerController.file(File(videoFilename))
           ..initialize().then((_) {
             setState(() {
-              controller?.play().then((_) {
-                // update UI after playing stops
-                setState(() {});
-              });
+              controller?.play();
             });
           });
         controller?.addListener(() {
@@ -98,31 +96,46 @@ class VideoViewerState extends ViewerState<VideoViewer> {
                 alignment: Alignment.bottomCenter,
                 children: <Widget>[
                   // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                  AspectRatio(
-                    aspectRatio: controller!.value.aspectRatio,
-                    child: VideoPlayer(controller!),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() => _showPlayButton = !_showPlayButton);
+                    },
+                    child: AspectRatio(
+                      aspectRatio: controller!.value.aspectRatio,
+                      child: VideoPlayer(controller!),
+                    ),
                   ),
                   mirrorLTR(
-                      context: context,
-                      child: VideoProgressIndicator(controller!,
-                          allowScrubbing: true)),
+                    context: context,
+                    child: VideoProgressIndicator(
+                      controller!,
+                      allowScrubbing: true,
+                    ),
+                  ),
                 ],
               );
             },
           ),
           // button goes in main stack
-          PlayButton(
-            size: 48,
-            custom: true,
-            playing: controller!.value.isPlaying,
-            onPressed: () {
-              if (controller!.value.isPlaying) {
-                controller!.pause();
-              } else {
-                controller!.play();
-              }
-            },
-          ),
+          if (_showPlayButton)
+            PlayButton(
+              size: 48,
+              custom: true,
+              playing: controller!.value.isPlaying,
+              onPressed: () {
+                if (controller!.value.isPlaying) {
+                  setState(() {
+                    controller!.pause();
+                    _showPlayButton = true;
+                  });
+                } else {
+                  setState(() {
+                    controller!.play();
+                    _showPlayButton = false;
+                  });
+                }
+              },
+            ),
         ],
       );
     });
