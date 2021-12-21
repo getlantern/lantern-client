@@ -33,10 +33,12 @@ class ReplicaVideoPlayerScreen extends StatefulWidget {
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
 }
 
+// TODO: a lot of this code is duplicated with video.dart, should consolidate
 class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
   late VideoPlayerController _videoController;
   late Future<void> _initializeVideoPlayerFuture;
-  bool _isPlaying = false;
+  var _isPlaying = false;
+  var _showPlayButton = false;
 
   @override
   void initState() {
@@ -100,10 +102,10 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
                 logger.e(
                     'Received a playback error: ${_videoController.value.errorDescription ?? snapshot.error}');
                 return Center(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
                       const Icon(
                         Icons.error_outline,
                         color: Colors.red,
@@ -115,7 +117,9 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
                         style: CTextStyle(
                             fontSize: 16, color: white, lineHeight: 19),
                       ))
-                    ]));
+                    ],
+                  ),
+                );
               }
 
               // Else, render video
@@ -126,29 +130,44 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
                     fit: StackFit.passthrough,
                     alignment: Alignment.bottomCenter,
                     children: <Widget>[
-                      AspectRatio(
-                        aspectRatio: _videoController.value.aspectRatio,
-                        child: VideoPlayer(_videoController),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() => _showPlayButton = !_showPlayButton);
+                        },
+                        child: AspectRatio(
+                          aspectRatio: _videoController.value.aspectRatio,
+                          child: VideoPlayer(_videoController),
+                        ),
                       ),
                       mirrorLTR(
-                          context: context,
-                          child: VideoProgressIndicator(_videoController,
-                              allowScrubbing: true)),
+                        context: context,
+                        child: VideoProgressIndicator(
+                          _videoController,
+                          allowScrubbing: true,
+                        ),
+                      ),
                     ],
                   ),
                   // button goes in main stack
-                  PlayButton(
-                    size: 48,
-                    custom: true,
-                    playing: _isPlaying,
-                    onPressed: () {
-                      if (_isPlaying) {
-                        _videoController.pause();
-                      } else {
-                        _videoController.play();
-                      }
-                    },
-                  ),
+                  if (_showPlayButton)
+                    PlayButton(
+                      size: 48,
+                      custom: true,
+                      playing: _isPlaying,
+                      onPressed: () {
+                        if (_isPlaying) {
+                          setState(() {
+                            _videoController.pause();
+                            _showPlayButton = true;
+                          });
+                        } else {
+                          setState(() {
+                            _videoController.play();
+                            _showPlayButton = false;
+                          });
+                        }
+                      },
+                    ),
                 ],
               );
             },
