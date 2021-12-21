@@ -64,6 +64,11 @@ extension GetRelevantImagePath on SearchCategory {
 // XXX <21-12-2021> soltzen: there's no differentiation in lantern-desktop
 // between different 'subtypes' of a category (i.e., picking only 'mp4' files,
 // not all video filetypes). This might be a cool feature later.
+//
+// For App searches, we are more restrictive than desktop, limiting results to
+// 'application/zip' or 'application/octet-stream' or
+// 'application/vnd.android.package-archive' rather than all subtypes of
+// 'application'.
 extension MimeTypes on SearchCategory {
   String mimeTypes() {
     switch (this) {
@@ -76,7 +81,7 @@ extension MimeTypes on SearchCategory {
       case SearchCategory.Document:
         return 'text+epub+application/pdf+rtf+word+spreadsheet+excel+xml';
       case SearchCategory.App:
-        return 'message+www+chemical+model+paleovu+x-world+xgl+multipart+application';
+        return 'message+www+chemical+model+paleovu+x-world+xgl+multipart+application/zip+application/octet-stream+application/vnd.android.package-archive';
       case SearchCategory.Unknown:
         // Web and Unknown don't use mime types
         return '';
