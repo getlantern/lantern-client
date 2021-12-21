@@ -4,7 +4,6 @@ import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/replica/ui/common.dart';
-import 'package:lantern/replica/ui/media_views/playback_button.dart';
 import 'package:logger/logger.dart';
 import 'package:video_player/video_player.dart';
 
@@ -34,14 +33,12 @@ class ReplicaVideoPlayerScreen extends StatefulWidget {
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
 }
 
+// TODO: a lot of this code is duplicated with video.dart, should consolidate
 class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
-  bool _playbackControlsVisible = true;
-  bool _isPlaying = false;
-  Duration _totalDuration = const Duration(seconds: 0);
-  Duration _position = const Duration(seconds: 0);
-  final _defaultSeekDurationInSeconds = 3;
   late VideoPlayerController _videoController;
   late Future<void> _initializeVideoPlayerFuture;
+  var _isPlaying = false;
+  var _showPlayButton = false;
 
   @override
   void initState() {
@@ -56,19 +53,14 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
     // _videoController.value.hasError usage in FutureBuilder)
     _videoController = VideoPlayerController.network(
         widget.replicaApi.getViewAddr(widget.replicaLink));
-    _initializeVideoPlayerFuture = _videoController.initialize();
+    _initializeVideoPlayerFuture =
+        _videoController.initialize().then((_) => _videoController.play());
 
     // Add a listener for video playback changes
     _videoController.addListener(() {
-      if (!_videoController.value.isPlaying) {
-        return;
-      }
-      if (mounted) {
+      if (_videoController.value.isPlaying != _isPlaying) {
         setState(() {
-          _position = _videoController.value.position;
-          if (_videoController.value.duration != _totalDuration) {
-            _totalDuration = _videoController.value.duration;
-          }
+          _isPlaying = !_isPlaying;
         });
       }
     });
@@ -86,190 +78,102 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
   Widget build(BuildContext context) {
     return replicaModel.withReplicaApi((context, replicaApi, child) {
       return renderReplicaMediaViewScreen(
-          context: context,
-          api: replicaApi,
-          link: widget.replicaLink,
-          category: SearchCategory.Video,
-          backgroundColor: black,
-          foregroundColor: white,
-          mimeType: widget.mimeType,
-          body: Padding(
-            padding: const EdgeInsetsDirectional.only(top: 8.0),
-            child: FutureBuilder(
-              future: _initializeVideoPlayerFuture,
-              builder: (context, snapshot) {
-                // If not done, show progress indicator
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+        context: context,
+        api: replicaApi,
+        link: widget.replicaLink,
+        category: SearchCategory.Video,
+        backgroundColor: black,
+        foregroundColor: white,
+        mimeType: widget.mimeType,
+        body: Padding(
+          padding: const EdgeInsetsDirectional.only(top: 8.0),
+          child: FutureBuilder(
+            future: _initializeVideoPlayerFuture,
+            builder: (context, snapshot) {
+              // If not done, show progress indicator
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-                // If error, show error with text
-                if (_videoController.value.hasError || snapshot.hasError) {
-                  logger.e(
-                      'Received a playback error: ${_videoController.value.errorDescription ?? snapshot.error}');
-                  return Center(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                        const Icon(
-                          Icons.error_outline,
-                          color: Colors.red,
-                          size: 60,
-                        ),
-                        Flexible(
-                            child: CText(
-                          'video_stream_error'.i18n,
-                          style: CTextStyle(
-                              fontSize: 16, color: white, lineHeight: 19),
-                        ))
-                      ]));
-                }
-
-                // Else, render video
+              // If error, show error with text
+              if (_videoController.value.hasError || snapshot.hasError) {
+                logger.e(
+                    'Received a playback error: ${_videoController.value.errorDescription ?? snapshot.error}');
                 return Center(
-                  child: AspectRatio(
-                    aspectRatio: _videoController.value.aspectRatio,
-                    child: Stack(
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _playbackControlsVisible =
-                                    !_playbackControlsVisible;
-                              });
-                            },
-                            child: VideoPlayer(_videoController)),
-                        // Only render controls if the playback controls are
-                        // visible. Just hiding the opacity of the playback
-                        // controls is not sufficient since the tap gestures will be
-                        // absorbed by the playback controls
-                        if (_playbackControlsVisible)
-                          Align(
-                            alignment: FractionalOffset.bottomCenter,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: white,
-                                    ),
-                                    color: white.withOpacity(0.5),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20))),
-                                height: 120.0,
-                                width: double.infinity,
-                                child: Column(
-                                  children: [
-                                    renderPlaybackSlider(),
-                                    renderPlaybackButtons()
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                      ],
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 60,
+                      ),
+                      Flexible(
+                          child: CText(
+                        'video_stream_error'.i18n,
+                        style: CTextStyle(
+                            fontSize: 16, color: white, lineHeight: 19),
+                      ))
+                    ],
                   ),
                 );
-              },
-            ),
-          ));
-    });
-  }
+              }
 
-  Widget renderPlaybackButtons() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Fast-rewind button
-        PlaybackButton(
-          onTap: () async {
-            setState(() {
-              _position = Duration(
-                  seconds: max(0,
-                          _position.inSeconds - _defaultSeekDurationInSeconds)
-                      .round());
-            });
-            await _videoController.seekTo(_position);
-          },
-          path: ImagePaths.fast_rewind,
-          size: 40,
-        ),
-
-        const SizedBox(width: 20),
-
-        // Play button
-        PlaybackButton(
-          onTap: () async {
-            setState(() {
-              _isPlaying = !_isPlaying;
-            });
-            _isPlaying
-                ? await _videoController.play()
-                : await _videoController.pause();
-          },
-          path: _isPlaying ? ImagePaths.pause : ImagePaths.play,
-          size: 60,
-        ),
-
-        const SizedBox(width: 20),
-
-        // Fast forward button
-        PlaybackButton(
-          onTap: () async {
-            setState(() {
-              _position = Duration(
-                  seconds: min(_totalDuration.inSeconds,
-                          _position.inSeconds + _defaultSeekDurationInSeconds)
-                      .round());
-            });
-            await _videoController.seekTo(_position);
-          },
-          path: ImagePaths.fast_forward,
-          size: 40,
-        ),
-      ],
-    );
-  }
-
-  // XXX <17-12-2021> soltzen: those controls are the same as the audio playback
-  // controls.
-  Widget renderPlaybackSlider() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Slider(
-          onChanged: (v) {
-            _position = Duration(
-                milliseconds: (v * _totalDuration.inMilliseconds).round());
-            _videoController.seekTo(_position);
-          },
-          value: (_position.inMilliseconds > 0 &&
-                  _position.inMilliseconds < _totalDuration.inMilliseconds)
-              ? _position.inMilliseconds / _totalDuration.inMilliseconds
-              : 0.0,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CText(
-                _position.toString().split('.').first,
-                style: CTextStyle(fontSize: 12.0, lineHeight: 4.0),
-              ),
-              CText(
-                _totalDuration.toString().split('.').first,
-                style: CTextStyle(fontSize: 12.0, lineHeight: 4.0),
-              ),
-            ],
+              // Else, render video
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  Stack(
+                    fit: StackFit.passthrough,
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() => _showPlayButton = !_showPlayButton);
+                        },
+                        child: AspectRatio(
+                          aspectRatio: _videoController.value.aspectRatio,
+                          child: VideoPlayer(_videoController),
+                        ),
+                      ),
+                      mirrorLTR(
+                        context: context,
+                        child: VideoProgressIndicator(
+                          _videoController,
+                          allowScrubbing: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // button goes in main stack
+                  if (_showPlayButton)
+                    PlayButton(
+                      size: 48,
+                      custom: true,
+                      playing: _isPlaying,
+                      onPressed: () {
+                        if (_isPlaying) {
+                          setState(() {
+                            _videoController.pause();
+                            _showPlayButton = true;
+                          });
+                        } else {
+                          setState(() {
+                            _videoController.play();
+                            _showPlayButton = false;
+                          });
+                        }
+                      },
+                    ),
+                ],
+              );
+            },
           ),
         ),
-      ],
-    );
+      );
+    });
   }
 }

@@ -1,16 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:lantern/common/ui/base_screen.dart';
-import 'package:lantern/common/ui/custom/asset_image.dart';
-import 'package:lantern/common/ui/custom/list_item_factory.dart';
-import 'package:lantern/common/ui/custom/text.dart';
-import 'package:lantern/common/ui/image_paths.dart';
-import 'package:lantern/common/ui/text_styles.dart';
-import 'package:lantern/i18n/i18n.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
+import 'package:lantern/vpn/vpn.dart';
 import 'package:logger/logger.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var logger = Logger(
@@ -21,26 +14,21 @@ var logger = Logger(
 // in the ./ui/replica/listitems directory
 SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
   return SizedBox(
-    height: 96,
+    height: 48,
     child: Padding(
       padding: const EdgeInsetsDirectional.only(start: 4),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ListItemFactory.focusMenuItem(
-              icon: ImagePaths.file_download,
-              content: 'download'.i18n,
-              onTap: () async {
-                await api.download(link);
-              }),
-          ListItemFactory.focusMenuItem(
-              icon: ImagePaths.share,
-              content: 'share'.i18n,
-              onTap: () async {
-                await Share.share('replica://${link.toMagnetLink()}');
-              }),
+            icon: ImagePaths.file_download,
+            content: 'download'.i18n,
+            onTap: () async {
+              await api.download(link);
+            },
+          ),
         ],
       ),
     ),
@@ -85,23 +73,15 @@ Widget renderReplicaMediaViewScreen({
       backgroundColor: backgroundColor,
       actions: [
         IconButton(
-            onPressed: () async {
-              await Share.share(link.toMagnetLink());
-            },
-            icon: CAssetImage(
-              size: 20,
-              path: ImagePaths.share,
-              color: foregroundColor,
-            )),
-        IconButton(
-            onPressed: () async {
-              await api.download(link);
-            },
-            icon: CAssetImage(
-              size: 20,
-              path: ImagePaths.file_download,
-              color: foregroundColor,
-            )),
+          onPressed: () async {
+            await api.download(link);
+          },
+          icon: CAssetImage(
+            size: 20,
+            path: ImagePaths.file_download,
+            color: foregroundColor,
+          ),
+        ),
       ],
       body: body);
 }
@@ -118,4 +98,41 @@ Future<bool> getReplicaUploadDisclaimerCheckboxValue() async {
 Future<void> setReplicaUploadDisclaimerCheckboxValue(bool b) async {
   var prefs = await SharedPreferences.getInstance();
   await prefs.setBool(replica_upload_disclaimer_value_shared_prefs_name, b);
+}
+
+// Upload journey goes like this:
+// - Prompt user to pick a file
+// - Show them the disclaimer
+//   - Or not, if they asked not to be shown again (through a checkbox)
+// - Start the upload
+//   - Notify them through a notification
+// - Track the upload's progress through a notification
+// - When the upload is done, send another notification saying it's done
+//   - If the user clicks on this notification, they would be prompted
+//     with a Share dialog to share the Replica link
+Future<void> onUploadButtonPressed(BuildContext context) async {
+  var result = await FilePicker.platform.pickFiles();
+  if (result == null) {
+    // If user didn't pick a file, do nothing
+    return;
+  }
+  var file = File(result.files.single.path);
+  logger.v('Picked a file $file');
+
+  // If the checkbox value is false, show it
+  // If true, don't
+  if (!await getReplicaUploadDisclaimerCheckboxValue().timeout(
+    const Duration(seconds: 2),
+    onTimeout: () => false,
+  )) {
+    showConfirmationDialog(
+      context: context,
+      title: 'replica_upload_confirmation_title'.i18n,
+      explanation: 'replica_upload_confirmation_body'.i18n,
+      agreeText: 'replica_upload_confirmation_agree'.i18n,
+      agreeAction: () => context.pushRoute(ReplicaUploadFileScreen(
+        fileToUpload: file,
+      )),
+    );
+  }
 }

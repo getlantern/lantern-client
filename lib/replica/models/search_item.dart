@@ -29,7 +29,7 @@ class ReplicaSearchItem {
     for (var result in results) {
       try {
         // Can't continue if replicaLink is not there
-        var link = ReplicaLink.New(result['replicaLink'] as String);
+        final link = ReplicaLink.New(result['replicaLink'] as String);
         if (link == null) {
           logger.w('Bad replicaLink: ${result['replicaLink'] as String}');
           continue;
@@ -38,18 +38,19 @@ class ReplicaSearchItem {
         // primaryMimeType is optional
         String? primaryMimeType;
         if (result.containsKey('mimeTypes') &&
-            result['mimeTypes'] is List<String> &&
-            (result['mimeTypes'] as List<String>).isNotEmpty) {
-          primaryMimeType = result['mimeTypes'][0] as String;
+            result['mimeTypes'] is List<dynamic> &&
+            (result['mimeTypes'] as List<dynamic>)[0] is String &&
+            ((result['mimeTypes'] as List<dynamic>)[0] as String).isNotEmpty) {
+          primaryMimeType = (result['mimeTypes'] as List<dynamic>)[0] as String;
         }
 
         // displayName, lastModified and fileSize are always there
-        var humanizedLastModified = DateTime.now()
+        final humanizedLastModified = DateTime.now()
             .difference(DateTime.parse(result['lastModified'] as String))
             .inSeconds
             .humanizeSeconds();
-        var humanizedFileSize = filesize(result['fileSize'] as int);
-        String displayName = result['displayName'];
+        final humanizedFileSize = filesize(result['fileSize'] as int);
+        final displayName = link.displayName ?? result['displayName'];
 
         items.add(ReplicaSearchItem(displayName, primaryMimeType,
             humanizedLastModified, humanizedFileSize, link));

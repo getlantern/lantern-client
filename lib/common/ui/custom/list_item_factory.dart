@@ -9,7 +9,10 @@ class ListItemFactory extends StatelessWidget {
   ListItemFactory(this.builder);
 
   ListItemFactory.uploadEditItem(
-      {Widget? leading, required Widget content, double height = 90.0})
+      {Widget? leading,
+      required Widget content,
+      List<Widget>? trailingArray,
+      double height = 90.0})
       : this((BuildContext context, ListItemFactory factory) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -18,6 +21,7 @@ class ListItemFactory extends StatelessWidget {
               factory.buildBase(
                 leading: leading,
                 content: content,
+                trailingArray: trailingArray,
                 showDivider: true,
                 height: height,
               ),
@@ -36,14 +40,21 @@ class ListItemFactory extends StatelessWidget {
           return FocusedMenuHolder(
             menu: renderReplicaLongPressMenuItem(api, link),
             menuWidth: MediaQuery.of(context).size.width * 0.8,
-            builder: (_) {
-              return factory.buildBase(
-                leading: leading,
-                content: content,
-                onTap: onTap,
-                height: height,
-                showDivider: true,
-              );
+            builder: (menuOpen) {
+              return Container(
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
+                  child: factory.buildBase(
+                    leading: leading,
+                    content: content,
+                    onTap: onTap,
+                    height: height,
+                    showDivider: !menuOpen,
+                  ));
             },
           );
         });
