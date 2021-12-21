@@ -95,64 +95,79 @@ class DeveloperSettingsTab extends StatelessWidget {
                 })
               ],
             ),
+            // * RESET ALL TIMESTAMPS
             ListItemFactory.settingsItem(
               content: 'Reset all timestamps',
               trailingArray: [
                 TextButton(
-                    onPressed: () async {
-                      await messagingModel.resetTimestamps();
-                    },
-                    child: CText('Reset'.toUpperCase(),
-                        style: tsButton.copiedWith(
-                            color: Colors.deepPurpleAccent)))
+                  onPressed: () async {
+                    await messagingModel.resetTimestamps();
+                  },
+                  child: CText(
+                    'Reset'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
               ],
             ),
+            // * RESET ONBOARDING + RECOVERY KEY FLAGS
             ListItemFactory.settingsItem(
               content: 'Reset onboarding and recovery key flags',
               trailingArray: [
                 TextButton(
-                    onPressed: () async {
-                      await messagingModel.resetFlags();
-                    },
-                    child: CText('Reset'.toUpperCase(),
-                        style: tsButton.copiedWith(
-                            color: Colors.deepPurpleAccent)))
+                  onPressed: () async {
+                    await messagingModel.resetFlags();
+                  },
+                  child: CText(
+                    'Reset'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
               ],
             ),
+            // * START MESSAGING
             ListItemFactory.settingsItem(
               content: 'Start messaging',
               trailingArray: [
                 TextButton(
-                    onPressed: () async {
-                      await messagingModel.start();
-                    },
-                    child: CText('start'.toUpperCase(),
-                        style: tsButton.copiedWith(
-                            color: Colors.deepPurpleAccent)))
+                  onPressed: () async {
+                    await messagingModel.start();
+                  },
+                  child: CText(
+                    'start'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
               ],
             ),
+            // * KILL MESSAGING
             ListItemFactory.settingsItem(
               content: 'Kill messaging',
               trailingArray: [
                 TextButton(
-                    onPressed: () async {
-                      await messagingModel.kill();
-                    },
-                    child: CText('kill'.toUpperCase(),
-                        style: tsButton.copiedWith(
-                            color: Colors.deepPurpleAccent)))
+                  onPressed: () async {
+                    await messagingModel.kill();
+                  },
+                  child: CText(
+                    'kill'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
               ],
             ),
+            // * WIPE DATA
             ListItemFactory.settingsItem(
               content: 'Wipe data and restart',
               trailingArray: [
                 TextButton(
-                    onPressed: () async {
-                      await messagingModel.wipeData();
-                    },
-                    child: CText('Wipe'.toUpperCase(),
-                        style: tsButton.copiedWith(
-                            color: Colors.deepPurpleAccent)))
+                  onPressed: () async {
+                    await messagingModel.wipeData();
+                  },
+                  child: CText(
+                    'Wipe'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
               ],
             ),
             if (replicaApi.available)
