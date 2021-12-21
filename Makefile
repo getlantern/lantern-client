@@ -64,7 +64,13 @@ BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
 BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 
 UPDATE_SERVER_URL ?=
-LDFLAGS := -s -extldflags '-Wl,--build-id=$(BUILD_ID)' -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
+LDFLAGS := -extldflags '-Wl,--build-id=$(BUILD_ID)' -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
+# Ref https://pkg.go.dev/cmd/link
+# -w omits the DWARF table
+# -s omits the symbol table and debug info
+LD_STRIP_FLAGS := -s -w
+DISABLE_OPTIMIZATION_FLAGS := -gcflags="all=-N -l"
+GOMOBILE_EXTRA_BUILD_FLAGS :=
 
 BINARIES_PATH ?= ../lantern-binaries
 BRANCH ?= master
@@ -140,7 +146,7 @@ BUILD_TAGS += ' lantern'
 GO_SOURCES := go.mod go.sum $(shell find . -type f -name "*.go")
 MOBILE_SOURCES := $(shell find $(BASE_MOBILE_DIR) -type f -not -path "*/build/*" -not -path "*/.gradle/*" -not -path "*/.idea/*" -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname ".*" -not -iname "*.apk")
 
-.PHONY: dumpvars packages android-lib android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
+.PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
 # dumpvars prints out all variables defined in the Makefile, useful for debugging environment
 dumpvars:
@@ -348,19 +354,35 @@ release-autoupdate: require-version
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
 $(ANDROID_LIB): $(GO_SOURCES)
-	$(call check-go-version) && \
-	$(call build-tags) && \
-	echo "Running gomobile with `which gomobile` ..." && \
-	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) -tags='headless lantern' -o=$(ANDROID_LIB) -ldflags="$(LDFLAGS) $$EXTRA_LDFLAGS" $(ANDROID_LIB_PKG)
+	@$(call check-go-version)
+	$(call build-tags)
+	go env -w 'GOPRIVATE=github.com/getlantern/*'
+	@# XXX <01-11-21, soltzen> Always include 'go mod download' since 'go mod tidy'
+	@# removes it
+	go mod download golang.org/x/mobile
+	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) \
+		-tags='headless lantern' -o=$(ANDROID_LIB) \
+		-ldflags="$(LDFLAGS) $$EXTRA_LDFLAGS" \
+		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+		$(ANDROID_LIB_PKG)
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && \
 	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
-android-lib: $(MOBILE_ANDROID_LIB)
+.PHONY: android-lib-debug
+android-lib-debug: export GOMOBILE_EXTRA_BUILD_FLAGS += $(DISABLE_OPTIMIZATION_FLAGS)
+android-lib-debug: $(MOBILE_ANDROID_LIB)
+
+.PHONY: android-lib-prod
+android-lib-prod: export LDFLAGS += $(LD_STRIP_FLAGS)
+android-lib-prod: $(MOBILE_ANDROID_LIB)
 
 $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
-	@$(GRADLE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -b $(MOBILE_DIR)/app/build.gradle :app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
+	@$(GRADLE) -PandroidArch=$(ANDROID_ARCH) \
+		-PandroidArchJava="$(ANDROID_ARCH_JAVA)" \
+		-b $(MOBILE_DIR)/app/build.gradle \
+		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \

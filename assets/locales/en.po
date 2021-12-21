@@ -38,6 +38,18 @@ msgstr "Disconnecting..."
 msgid "Connecting"
 msgstr "Connecting..."
 
+msgid "no_network_connection"
+msgstr "No network connection"
+
+msgid "connection_error"
+msgstr "Connection Error"
+
+msgid "connection_error_des"
+msgstr "Lantern is having issues connecting to our servers.  Please restart the app. If this issue persists, please contact support."
+
+msgid "connection_error_button"
+msgstr "Contact support"
+
 msgid "Calling"
 msgstr "Calling..."
 
@@ -50,8 +62,8 @@ msgstr "Unlock faster speeds, and unlimited data!"
 msgid "Server Location"
 msgstr "Server Location"
 
-msgid "Server Location Infoo"
-msgstr "Server Location Info"
+msgid "Server Location Info"
+msgstr "Lantern uses smart server selection to automatically connect you to our best data centers."
 
 msgid "OK"
 msgstr "OK"
@@ -809,10 +821,16 @@ msgid "audio"
 msgstr "Audio"
 
 msgid "image"
-msgstr "Image"
+msgstr "Images"
 
 msgid "video"
-msgstr "Video"
+msgstr "Videos"
+
+msgid "app"
+msgstr "Apps"
+
+msgid "document"
+msgstr "Documents"
 
 msgid "search_chars_min"
 msgstr "Type at least three characters"
@@ -924,3 +942,81 @@ msgstr "Verification success! Your messages with %s are secure."
 
 msgid "verification_panel_pending"
 msgstr "This is your verification number. Check that your number matches %s's exactly before marking them verified."
+
+msgid "replica_upload_confirmation_title"
+msgstr "Important!"
+
+msgid "replica_upload_confirmation_body"
+msgstr "Files uploaded to the Lantern Network are publicly accessible. They are decentralized and cannot be deleted from the network by anyone.\n\nAvoid personally identifying information in the file content and filename when uploading sensitive content."
+
+msgid "replica_upload_confirmation_agree"
+msgstr "Resume Upload"
+
+msgid "download"
+msgstr "Download"
+
+msgid "uploader"
+msgstr "Uploader"
+
+msgid "upload_in_progress"
+msgstr "Upload in Progress"
+
+msgid "upload_complete"
+msgstr "Upload Complete"
+
+msgid "upload_failed"
+msgstr "Upload Failed"
+
+msgid "upload_cancelled"
+msgstr "Upload Cancelled"
+
+msgid "replica_link_fetcher"
+msgstr "Replica Link Fetcher"
+
+msgid "no_preview_for_this_type_of_file"
+msgstr "No preview for this type of file"
+
+msgid "app_unknown"
+msgstr "app/unknown"
+
+msgid "audio_unknown"
+msgstr "audio/unknown"
+
+msgid "document_unknown"
+msgstr "document/unknown"
+
+msgid "no_search_result_found"
+msgstr "Sorry, we couldn’t find anything matching that search"
+
+msgid "search_result_error"
+msgstr "Encountered an error while fetching results. Please try again later"
+
+msgid "video_stream_error"
+msgstr "Encountered an error rendering the video. Please try again later"
+
+msgid "untitled"
+msgstr "Untitled"
+
+msgid "failed_to_init_replica"
+msgstr "Error: Failed to initialize Replica"
+
+msgid "awaiting_result"
+msgstr "Awaiting result..."
+
+msgid "discover"
+msgstr "Discover"
+
+msgid "replica_search_intro"
+msgstr "Search user-uploaded content on the Lantern Network, or upload your own for others to discover."
+
+msgid "share"
+msgstr "Share"
+
+msgid "upload_file_screen"
+msgstr "Upload File"
+
+msgid "name_your_file"
+msgstr "Name Your File"
+
+msgid "upload"
+msgstr "Upload"

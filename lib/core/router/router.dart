@@ -20,6 +20,13 @@ import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
+import 'package:lantern/replica/ui/link_opener_screen.dart';
+import 'package:lantern/replica/ui/media_views/audio_player.dart';
+import 'package:lantern/replica/ui/media_views/image_preview_screen.dart';
+import 'package:lantern/replica/ui/media_views/unknown_item_screen.dart';
+import 'package:lantern/replica/ui/media_views/video_player.dart';
+import 'package:lantern/replica/ui/search_screen.dart';
+import 'package:lantern/replica/ui/upload_file.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -101,9 +108,23 @@ import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
+        page: ReplicaLinkOpenerScreen,
+        name: 'ReplicaLinkOpenerScreen',
+        path: 'replicaLinkOpenerScreen',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
         page: Settings,
         name: 'Settings',
         path: 'settings',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ReplicaVideoPlayerScreen,
+        name: 'ReplicaVideoPlayerScreen',
+        path: 'replicaVideoPlayerScreen',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
@@ -115,9 +136,23 @@ import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute<void>(
+        page: ReplicaAudioPlayerScreen,
+        name: 'ReplicaAudioPlayerScreen',
+        path: 'replicaAudioPlayerScreen',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
         page: AuthorizeDeviceForPro,
         name: 'AuthorizePro',
         path: 'authorizePro',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ReplicaImagePreviewScreen,
+        name: 'ReplicaImagePreviewScreen',
+        path: 'replicaImagePreviewScreen',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
@@ -160,6 +195,27 @@ import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
         page: BlockedUsers,
         name: 'BlockedUsers',
         path: 'blockedUsers',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ReplicaUnknownItemScreen,
+        name: 'ReplicaUnknownItemScreen',
+        path: 'replicaUnknownItemScreen',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ReplicaSearchScreen,
+        name: 'ReplicaSearchScreen',
+        path: 'replicaSearchScreen',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute<void>(
+        page: ReplicaUploadFileScreen,
+        name: 'ReplicaUploadFileScreen',
+        path: 'replicaUploadFileScreen',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

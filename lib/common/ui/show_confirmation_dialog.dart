@@ -5,9 +5,9 @@ void Function() showConfirmationDialog({
   Key? key,
   String? iconPath,
   required String title,
-  required String explanation,
+  required dynamic explanation,
   required String agreeText,
-  String dismissText = 'Cancel',
+  String dismissText = 'cancel',
   required void Function() agreeAction,
   void Function()? dismissAction,
   bool barrierDismissible = true,
@@ -47,7 +47,9 @@ void Function() showConfirmationDialog({
           ],
         ),
         content: SingleChildScrollView(
-          child: CText(explanation, style: tsBody1),
+          child: explanation is Widget
+              ? explanation
+              : CText(explanation as String, style: tsBody1),
         ),
         actions: [
           // DISMISS

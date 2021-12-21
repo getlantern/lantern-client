@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/common/common.dart';
 import 'package:intl/intl.dart';
+import 'package:lantern/common/common.dart';
 
 void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
-    await Localization.loadTranslations();
+    await Localization.ensureInitialized();
   });
 
   group('Tests for humanizeSeconds()', () {

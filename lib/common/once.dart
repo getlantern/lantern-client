@@ -1,4 +1,4 @@
-/// Returns a function that its operand but only runs once.
+/// Returns a function that calls its operand function only once
 T Function(T Function()) once<T>() {
   var didIt = false;
   late T result;
