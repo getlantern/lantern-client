@@ -66,7 +66,7 @@ abstract class EventManager(
         onListen(event)
     }
 
-    open fun onListen(event: Event) {}
+    abstract fun onListen(event: Event)
 
     override fun onCancel(arguments: Any?) {
         if (arguments == null) {
