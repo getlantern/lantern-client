@@ -6,13 +6,13 @@ import 'event_extension.dart';
 
 class EventManager extends EventChannel {
   var nextSubscriberID = 0;
-  final subscribers = <int, Function>{};
+  final subscribers = <int, void Function(Event, Map)>{};
   final subscriptions = <int, StreamSubscription>{};
 
   EventManager(String name) : super(name);
 
   void Function() subscribe(
-      Event event, void Function(String newEvent, Map map) onNewEvent) {
+      Event event, void Function(Event event, Map map) onNewEvent) {
     var subscriberID = nextSubscriberID++;
     var arguments = {
       'subscriberID': subscriberID,
@@ -40,7 +40,7 @@ class EventManager extends EventChannel {
       var eventName = updateMap['eventName'];
       var subscriber = subscribers[subscriberID];
       if (subscriber != null) {
-        subscriber(eventName, updateMap);
+        subscriber(EventParsing.fromValue(eventName)!, updateMap);
       }
     });
   }
