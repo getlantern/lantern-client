@@ -1,7 +1,7 @@
 #1 Disable implicit rules
 .SUFFIXES:
 
-.PHONY: codegen protos routes test integration-test
+.PHONY: codegen protos routes test integration-test sourcedump
 
 codegen: protos routes
 
@@ -139,7 +139,6 @@ MOBILE_DEBUG_APK := $(INSTALLER_NAME)-$(ANDROID_ARCH)-debug.apk
 MOBILE_BUNDLE := lantern-$(ANDROID_ARCH).aab
 MOBILE_TEST_APK := $(BASE_MOBILE_DIR)/build/app/outputs/apk/androidTest/autoTest/debug/app-autoTest-debug-androidTest.apk
 MOBILE_TESTS_APK := $(BASE_MOBILE_DIR)/build/app/outputs/apk/autoTest/debug/app-autoTest-debug.apk
-ANDROID_KEYSTORE := $(MOBILE_DIR)/app/keystore.release.jks
 
 BUILD_TAGS ?=
 BUILD_TAGS += ' lantern'
@@ -213,10 +212,6 @@ require-secrets-dir: guard-SECRETS_DIR
 
 .PHONY: require-release-track
 require-release-track: guard-APK_RELEASE_TRACK
-
-.PHONY: require-android-keystore
-require-android-keystore:
-	@ if [ ! -f '${ANDROID_KEYSTORE}' ]; then echo 'Android keystore not found' && exit 1; fi
 
 .PHONY: require-lantern-binaries
 require-lantern-binaries:
@@ -450,7 +445,7 @@ android-debug-install: $(MOBILE_DEBUG_APK)
 android-release-install: $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
 
-package-android: require-version require-android-keystore
+package-android: require-version
 	@make pubget android-release && \
 	ANDROID_ARCH=all make android-bundle && \
 	echo "-> $(MOBILE_RELEASE_APK)"
@@ -468,6 +463,24 @@ changelog: require-version require-changelog require-app
 	fi && \
 	cd  && \
 	$(call changelog,flashlight)
+
+# Creates a dump of the source code lantern-android-sources-<version>.tar.gz
+sourcedump: require-version
+	here=`pwd` && \
+	rm -Rf /tmp/android-lantern ; \
+	mkdir -p /tmp/android-lantern && \
+	cp -R LICENSE LICENSING.md android internalsdk lib protos* go.mod go.sum /tmp/android-lantern && \
+	cd /tmp/android-lantern && \
+	find . -name "*_test.go" -exec rm {} \; && \
+	find . -name "*.jks" -exec rm {} \; && \
+	rm -Rf android/.idea android/sentry.properties android/.settings android/local.properties android/app/.classpath android/app/.project android/app/.settings android/app/src/androidTest android/app/src/test android/app/src/main/res android/app/libs android/.gradle android/alipaySdk-15.6.5-20190718211148/ android/app/bin android/app/.cxx android/app/google-services.json && \
+	go mod tidy && \
+	go mod vendor && \
+	find . -name "CHANGELOG*" -exec rm {} \; && \
+	rm -Rf vendor/github.com/getlantern/flashlight/config/generated/embedded-global.yaml && \
+	find vendor/github.com/getlantern -name "*.go" -exec perl -pi -e 's/"https?\:\/\/[^"]+/"URL_HIDDEN/g' {} \; && \
+	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
+	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
 clean:
 	rm -f liblantern*.aar && \

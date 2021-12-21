@@ -240,12 +240,13 @@ The Android app is distributed in two ways, as an APK for side-loaded installati
 for distribution on the Google Play Store. The APKs are architecture specific whereas the app bundle contains
 all 4 architectures (arm and x86 in 32-bit and 64-bit variants).
 
-To create a release build, add the following to your
+To create a release build, put the keystore.release.jks in your home folder (or some other location outside of this
+project) and add the following to your
 `~/.gradle/gradle.properties` file:
 
 ```
 KEYSTORE_PWD=$KEYSTORE_PASSWORD
-KEYSTORE_FILE=keystore.release.jks
+KEYSTORE_FILE=/path/to/your/keystore.release.jks
 KEY_PWD=$KEY_PASSWORD
 ```
 
@@ -318,6 +319,27 @@ ANDROID_ARCH=386 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make 
 ```sh
 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-bundle
 ```
+
+##### Source Dump
+Lantern Android source code is made available via source dump tarballs. To create one, run:
+
+```
+VERSION=2.0.0 make sourcedump
+```
+
+This will create a file `lantern-android-sources-2.0.0.tar.gz`.
+
+This tarball deliberately excludes UI resources like images and localized strings. It also deliberately excludes 3rd party Java libraries from the libs folder.
+
+The tarball does include vendored Go libraries, including all of the getlantern.org Go libraries. In this tarball, these are all licensed under the GPL
+as explained in [LICENSING.md](LICENSING.md).
+
+All embedded URL literals in the getlantern.org Go code are elided to make it harder for clones to build a working version of Lantern.
+
+TODO: once we're confident these are working well, we should automate the upload of these to S3 and GitHub along with the upload of releases.
+
+## Testing Google Play Payments
+---
 
 ## Code Generation
 
