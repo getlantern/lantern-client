@@ -67,3 +67,5 @@ gradle.properties
 *.bz2
 *.sha256
 version-qa*.txt
+lantern-android-sources*.tar.gz
+web*.pem
