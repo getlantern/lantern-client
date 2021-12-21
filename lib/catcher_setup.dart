@@ -24,9 +24,12 @@ final releaseOption = CatcherOptions(
       enableStackTrace: true,
     ),
     SentryHandler(
-      SentryClient(SentryOptions(
+      SentryClient(
+        SentryOptions(
           dsn:
-              'https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353')),
+              'https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353',
+        ),
+      ),
       printLogs: true,
     ),
   ],

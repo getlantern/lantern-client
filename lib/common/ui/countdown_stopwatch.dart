@@ -8,12 +8,12 @@ class CountdownStopwatch extends StatelessWidget {
   final Color color;
   final double size;
 
-  CountdownStopwatch(
-      {required this.startMillis,
-      required this.endMillis,
-      required this.color,
-      this.size = 14})
-      : durationMillis = endMillis - startMillis;
+  CountdownStopwatch({
+    required this.startMillis,
+    required this.endMillis,
+    required this.color,
+    this.size = 14,
+  }) : durationMillis = endMillis - startMillis;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +23,15 @@ class CountdownStopwatch extends StatelessWidget {
     }
 
     return NowBuilder<int>(
-      calculate: (now) => max(0.0,
-              12.0 * (endMillis - now.millisecondsSinceEpoch) / durationMillis)
-          .round(),
+      calculate: (now) => max(
+        0.0,
+        12.0 * (endMillis - now.millisecondsSinceEpoch) / durationMillis,
+      ).round(),
       builder: (context, value) => CAssetImage(
-          path: ImagePaths.countdownPath(value), color: color, size: size),
+        path: ImagePaths.countdownPath(value),
+        color: color,
+        size: size,
+      ),
     );
   }
 }

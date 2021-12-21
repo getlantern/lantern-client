@@ -7,9 +7,12 @@ class PlaybackButton extends StatelessWidget {
   final String path;
   final double size;
 
-  PlaybackButton(
-      {Key? key, required this.onTap, required this.path, required this.size})
-      : super(key: key);
+  PlaybackButton({
+    Key? key,
+    required this.onTap,
+    required this.path,
+    required this.size,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

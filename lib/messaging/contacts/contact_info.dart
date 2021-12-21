@@ -64,10 +64,11 @@ class _ContactInfoState extends State<ContactInfo> {
         Container(
           padding: const EdgeInsetsDirectional.only(end: 16),
           child: IconButton(
-              visualDensity: VisualDensity.compact,
-              icon: const CAssetImage(path: ImagePaths.messages),
-              onPressed: () async => await context
-                  .pushRoute(Conversation(contactId: contact.contactId))),
+            visualDensity: VisualDensity.compact,
+            icon: const CAssetImage(path: ImagePaths.messages),
+            onPressed: () async => await context
+                .pushRoute(Conversation(contactId: contact.contactId)),
+          ),
         )
       ],
       body: ListView(
@@ -110,11 +111,12 @@ class _ContactInfoState extends State<ContactInfo> {
                           style: tsBody1,
                           focusNode: displayNameController.focusNode,
                           decoration: InputDecoration(
-                              filled: isEditing,
-                              fillColor: isEditing ? grey1 : transparent,
-                              border: const OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                              )),
+                            filled: isEditing,
+                            fillColor: isEditing ? grey1 : transparent,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
                           keyboardType: TextInputType.text,
                         ),
                   trailingArray: [
@@ -129,14 +131,21 @@ class _ContactInfoState extends State<ContactInfo> {
                         if (notifyModel) {
                           try {
                             await messagingModel.addOrUpdateDirectContact(
-                                unsafeId: contact.contactId.id,
-                                displayName: displayNameController.text);
+                              unsafeId: contact.contactId.id,
+                              displayName: displayNameController.text,
+                            );
                           } catch (e, s) {
-                            showErrorDialog(context,
-                                e: e, s: s, des: 'save_error'.i18n);
+                            showErrorDialog(
+                              context,
+                              e: e,
+                              s: s,
+                              des: 'save_error'.i18n,
+                            );
                           } finally {
                             showSnackbar(
-                                context: context, content: 'Saved'.i18n);
+                              context: context,
+                              content: 'Saved'.i18n,
+                            );
                           }
                         }
                       },
@@ -160,7 +169,9 @@ class _ContactInfoState extends State<ContactInfo> {
                         ? Padding(
                             padding: const EdgeInsetsDirectional.only(top: 6.0),
                             child: FullChatNumberWidget(
-                                context, contact.chatNumber),
+                              context,
+                              contact.chatNumber,
+                            ),
                           )
                         : CText(
                             contact.chatNumber.shortNumber.formattedChatNumber,
@@ -188,55 +199,57 @@ class _ContactInfoState extends State<ContactInfo> {
                 */
               if (!contact.isMe)
                 ListItemFactory.settingsItem(
-                    header: 'more_options'.i18n,
-                    content: CText(
-                      'block_user'.i18n,
-                      style: tsSubtitle1Short,
-                    ),
-                    trailingArray: [
-                      TextButton(
-                        onPressed: () async => showInfoDialog(
-                          context,
-                          assetPath: ImagePaths.block,
-                          title: contact.blocked
-                              ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
-                              : '${'block'.i18n} ${contact.displayNameOrFallback}?',
-                          des: contact.blocked
-                              ? 'unblock_info_description'
-                                  .i18n
-                                  .fill([contact.displayNameOrFallback])
-                              : 'block_info_description'.i18n,
-                          checkboxText: contact.blocked
-                              ? 'unblock_info_checkbox'.i18n
-                              : 'block_info_checkbox'.i18n,
-                          confirmCheckboxAction: () async {
-                            contact.blocked
-                                ? await messagingModel
-                                    .unblockDirectContact(contact.contactId.id)
-                                : await messagingModel
-                                    .blockDirectContact(contact.contactId.id);
-                            context.router.popUntilRoot();
-                            showSnackbar(
-                                context: context,
-                                content: contact.blocked
-                                    ? 'contact_was_unblocked'
-                                        .i18n
-                                        .fill([contact.displayNameOrFallback])
-                                    : 'contact_was_blocked'
-                                        .i18n
-                                        .fill([contact.displayNameOrFallback]));
-                          },
-                          cancelButtonText: 'cancel'.i18n,
-                          confirmButtonText: contact.blocked
-                              ? 'unblock'.i18n.toUpperCase()
-                              : 'block'.i18n.toUpperCase(),
-                        ),
-                        child: CText(
-                          'block'.i18n.toUpperCase(),
-                          style: tsButtonPink,
-                        ),
-                      )
-                    ]),
+                  header: 'more_options'.i18n,
+                  content: CText(
+                    'block_user'.i18n,
+                    style: tsSubtitle1Short,
+                  ),
+                  trailingArray: [
+                    TextButton(
+                      onPressed: () async => showInfoDialog(
+                        context,
+                        assetPath: ImagePaths.block,
+                        title: contact.blocked
+                            ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
+                            : '${'block'.i18n} ${contact.displayNameOrFallback}?',
+                        des: contact.blocked
+                            ? 'unblock_info_description'
+                                .i18n
+                                .fill([contact.displayNameOrFallback])
+                            : 'block_info_description'.i18n,
+                        checkboxText: contact.blocked
+                            ? 'unblock_info_checkbox'.i18n
+                            : 'block_info_checkbox'.i18n,
+                        confirmCheckboxAction: () async {
+                          contact.blocked
+                              ? await messagingModel
+                                  .unblockDirectContact(contact.contactId.id)
+                              : await messagingModel
+                                  .blockDirectContact(contact.contactId.id);
+                          context.router.popUntilRoot();
+                          showSnackbar(
+                            context: context,
+                            content: contact.blocked
+                                ? 'contact_was_unblocked'
+                                    .i18n
+                                    .fill([contact.displayNameOrFallback])
+                                : 'contact_was_blocked'
+                                    .i18n
+                                    .fill([contact.displayNameOrFallback]),
+                          );
+                        },
+                        cancelButtonText: 'cancel'.i18n,
+                        confirmButtonText: contact.blocked
+                            ? 'unblock'.i18n.toUpperCase()
+                            : 'block'.i18n.toUpperCase(),
+                      ),
+                      child: CText(
+                        'block'.i18n.toUpperCase(),
+                        style: tsButtonPink,
+                      ),
+                    )
+                  ],
+                ),
               if (!contact.isMe)
                 ListItemFactory.settingsItem(
                   content: CText(
@@ -258,14 +271,19 @@ class _ContactInfoState extends State<ContactInfo> {
                             await messagingModel
                                 .deleteDirectContact(contact.contactId.id);
                           } catch (e, s) {
-                            showErrorDialog(context,
-                                e: e, s: s, des: 'error_delete_contact'.i18n);
+                            showErrorDialog(
+                              context,
+                              e: e,
+                              s: s,
+                              des: 'error_delete_contact'.i18n,
+                            );
                           } finally {
                             showSnackbar(
-                                context: context,
-                                content: 'contact_was_deleted'
-                                    .i18n
-                                    .fill([contact.displayNameOrFallback]));
+                              context: context,
+                              content: 'contact_was_deleted'
+                                  .i18n
+                                  .fill([contact.displayNameOrFallback]),
+                            );
                             context.loaderOverlay.hide();
                             context.router.popUntilRoot();
                           }
@@ -286,10 +304,15 @@ class _ContactInfoState extends State<ContactInfo> {
   }
 
   void doCopyText(
-      BuildContext context, String copyThis, Function setState) async {
+    BuildContext context,
+    String copyThis,
+    Function setState,
+  ) async {
     copyText(context, copyThis);
     setState(() => textCopied = true);
     await Future.delayed(
-        longAnimationDuration, () => setState(() => textCopied = false));
+      longAnimationDuration,
+      () => setState(() => textCopied = false),
+    );
   }
 }

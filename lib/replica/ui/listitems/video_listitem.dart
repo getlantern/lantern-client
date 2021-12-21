@@ -9,8 +9,11 @@ var logger = Logger(
 );
 
 class ReplicaVideoListItem extends StatefulWidget {
-  ReplicaVideoListItem(
-      {required this.item, required this.onTap, required this.replicaApi});
+  ReplicaVideoListItem({
+    required this.item,
+    required this.onTap,
+    required this.replicaApi,
+  });
 
   final ReplicaSearchItem item;
   final Function() onTap;
@@ -78,17 +81,19 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
           borderRadius: BorderRadius.circular(8.0),
           clipBehavior: Clip.hardEdge,
           child: SizedBox(
-              width: MediaQuery.of(context).size.width * .45,
-              height: 100,
-              child: Container(
-                color: grey4,
-                child: Center(
-                  child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(color: white)),
+            width: MediaQuery.of(context).size.width * .45,
+            height: 100,
+            child: Container(
+              color: grey4,
+              child: Center(
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(color: white),
                 ),
-              )),
+              ),
+            ),
+          ),
         );
       },
       errorWidget: (context, url, error) {

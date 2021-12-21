@@ -25,11 +25,11 @@ class Conversation extends StatefulWidget {
   final int? initialScrollIndex;
   final bool? showContactEditingDialog;
 
-  Conversation(
-      {required this.contactId,
-      this.initialScrollIndex,
-      this.showContactEditingDialog})
-      : super();
+  Conversation({
+    required this.contactId,
+    this.initialScrollIndex,
+    this.showContactEditingDialog,
+  }) : super();
 
   @override
   ConversationState createState() => ConversationState();
@@ -92,10 +92,12 @@ class ConversationState extends State<Conversation>
     }
 
     var currentKeyboardHeight = max(
-        EdgeInsets.fromWindowPadding(WidgetsBinding.instance!.window.viewInsets,
-                WidgetsBinding.instance!.window.devicePixelRatio)
-            .bottom,
-        MediaQuery.of(context).viewInsets.bottom);
+      EdgeInsets.fromWindowPadding(
+        WidgetsBinding.instance!.window.viewInsets,
+        WidgetsBinding.instance!.window.devicePixelRatio,
+      ).bottom,
+      MediaQuery.of(context).viewInsets.bottom,
+    );
     if (currentKeyboardHeight > 0) {
       setState(() {
         latestKeyboardHeight = currentKeyboardHeight;
@@ -196,11 +198,12 @@ class ConversationState extends State<Conversation>
         // reason).
         await Future.delayed(const Duration(milliseconds: 250));
         await showDialog(
+          context: context,
+          builder: (childContext) => ContactNameDialog(
             context: context,
-            builder: (childContext) => ContactNameDialog(
-                  context: context,
-                  contact: contact,
-                ));
+            contact: contact,
+          ),
+        );
       });
     }
   }
@@ -273,11 +276,15 @@ class ConversationState extends State<Conversation>
           'fileExtension': fileExtension,
         };
         final attachment = await messagingModel.filePickerLoadAttachment(
-            el.path.toString(), metadata);
-        await sendMessage(newMessage.value.text,
-            attachments: [attachment],
-            replyToSenderId: quotedMessage?.senderId,
-            replyToId: quotedMessage?.id);
+          el.path.toString(),
+          metadata,
+        );
+        await sendMessage(
+          newMessage.value.text,
+          attachments: [attachment],
+          replyToSenderId: quotedMessage?.senderId,
+          replyToId: quotedMessage?.id,
+        );
       }
       setState(() => quotedMessage = null);
     } catch (e, s) {
@@ -293,8 +300,11 @@ class ConversationState extends State<Conversation>
         isSendIconVisible = false;
       });
     }
-    await sendMessage(newMessage.value.text,
-        replyToSenderId: quotedMessage?.senderId, replyToId: quotedMessage?.id);
+    await sendMessage(
+      newMessage.value.text,
+      replyToSenderId: quotedMessage?.senderId,
+      replyToId: quotedMessage?.id,
+    );
   }
 
   // handles backend send message logic
@@ -323,9 +333,10 @@ class ConversationState extends State<Conversation>
       });
       if (messageCount > 0) {
         await scrollController.scrollTo(
-            index: 0,
-            duration: const Duration(seconds: 1),
-            curve: defaultCurves);
+          index: 0,
+          duration: const Duration(seconds: 1),
+          curve: defaultCurves,
+        );
       }
     } catch (e, s) {
       showErrorDialog(context, e: e, s: s, des: 'send_error'.i18n);
@@ -339,11 +350,13 @@ class ConversationState extends State<Conversation>
     if (newMessage.value.text.trim().isEmpty && recording == null) {
       return;
     }
-    await sendMessage(newMessage.value.text,
-        attachments:
-            recording != null && recording!.isNotEmpty ? [recording!] : [],
-        replyToSenderId: quotedMessage?.senderId,
-        replyToId: quotedMessage?.id);
+    await sendMessage(
+      newMessage.value.text,
+      attachments:
+          recording != null && recording!.isNotEmpty ? [recording!] : [],
+      replyToSenderId: quotedMessage?.senderId,
+      replyToId: quotedMessage?.id,
+    );
     if (mounted) {
       setState(() {
         quotedMessage = null;
@@ -364,7 +377,8 @@ class ConversationState extends State<Conversation>
 
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(
-            messagingModel.setCurrentConversationContact(widget.contactId.id))
+            messagingModel.setCurrentConversationContact(widget.contactId.id),
+          )
         : unawaited(messagingModel.clearCurrentConversationContact());
     return messagingModel.singleContactById(widget.contactId,
         (context, contact, child) {
@@ -396,34 +410,36 @@ class ConversationState extends State<Conversation>
             children: [
               // * show Verification alert badge, resurface every 2 weeks
               NowBuilder(
-                  calculate: (now) =>
-                      now.millisecondsSinceEpoch -
-                          verificationReminderLastDismissed >=
-                      twoWeeksInMillis,
-                  builder: (BuildContext context, bool value) {
-                    if (!contact.isMe && contact.isUnverified() && value) {
-                      return IconButton(
-                        visualDensity: VisualDensity.compact,
-                        onPressed: () async {
-                          showVerificationOptions(
-                            contact: contact,
-                            bottomModalContext: context,
-                            showDismissNotification:
-                                shouldShowVerificationAlert,
-                            topBarAnimationCallback: () async {
-                              setState(() => verifiedColor = indicatorGreen);
-                              await Future.delayed(longAnimationDuration,
-                                  () => setState(() => verifiedColor = black));
-                            },
-                          );
-                        },
-                        icon: const CAssetImage(
-                          path: ImagePaths.verification_alert,
-                        ),
-                      );
-                    }
-                    return Container();
-                  }),
+                calculate: (now) =>
+                    now.millisecondsSinceEpoch -
+                        verificationReminderLastDismissed >=
+                    twoWeeksInMillis,
+                builder: (BuildContext context, bool value) {
+                  if (!contact.isMe && contact.isUnverified() && value) {
+                    return IconButton(
+                      visualDensity: VisualDensity.compact,
+                      onPressed: () async {
+                        showVerificationOptions(
+                          contact: contact,
+                          bottomModalContext: context,
+                          showDismissNotification: shouldShowVerificationAlert,
+                          topBarAnimationCallback: () async {
+                            setState(() => verifiedColor = indicatorGreen);
+                            await Future.delayed(
+                              longAnimationDuration,
+                              () => setState(() => verifiedColor = black),
+                            );
+                          },
+                        );
+                      },
+                      icon: const CAssetImage(
+                        path: ImagePaths.verification_alert,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
               if (!contact.isMe) CallAction(contact),
               IconButton(
                 visualDensity: VisualDensity.compact,
@@ -433,8 +449,10 @@ class ConversationState extends State<Conversation>
                   contact: contact,
                   topBarAnimationCallback: () async {
                     setState(() => verifiedColor = indicatorGreen);
-                    await Future.delayed(longAnimationDuration,
-                        () => setState(() => verifiedColor = black));
+                    await Future.delayed(
+                      longAnimationDuration,
+                      () => setState(() => verifiedColor = black),
+                    );
                   },
                 ),
               )
@@ -444,13 +462,15 @@ class ConversationState extends State<Conversation>
         // * Conversation body
         body: Padding(
           padding: EdgeInsetsDirectional.only(
-              bottom:
-                  keyboardMode == KeyboardMode.native ? keyboardHeight : 0.0),
+            bottom: keyboardMode == KeyboardMode.native ? keyboardHeight : 0.0,
+          ),
           child: Column(
             children: [
               if (contact.isUnaccepted())
                 UnacceptedContactSticker(
-                    messageCount: messageCount, contact: contact),
+                  messageCount: messageCount,
+                  contact: contact,
+                ),
               Flexible(
                 child: dismissKeyboardsOnTap(
                   Padding(
@@ -489,12 +509,15 @@ class ConversationState extends State<Conversation>
                     newMessage
                       ..text = newMessage.text.characters.skipLast(1).toString()
                       ..selection = TextSelection.fromPosition(
-                          TextPosition(offset: newMessage.text.length));
+                        TextPosition(offset: newMessage.text.length),
+                      );
                   },
                   onEmojiSelected: (category, emoji) async {
                     if (mounted && reactingWithEmoji && storedMessage != null) {
                       await messagingModel.react(
-                          storedMessage!.value, emoji.emoji);
+                        storedMessage!.value,
+                        emoji.emoji,
+                      );
                       reactingWithEmoji = false;
                       storedMessage = null;
                       dismissAllKeyboards();
@@ -503,7 +526,8 @@ class ConversationState extends State<Conversation>
                       newMessage
                         ..text += emoji.emoji
                         ..selection = TextSelection.fromPosition(
-                            TextPosition(offset: newMessage.text.length));
+                          TextPosition(offset: newMessage.text.length),
+                        );
                     }
                   },
                 ),
@@ -516,61 +540,76 @@ class ConversationState extends State<Conversation>
   }
 
   Widget buildList(Contact contact) {
-    return messagingModel.contactMessages(contact, builder: (context,
+    return messagingModel.contactMessages(
+      contact,
+      builder: (
+        context,
         Iterable<PathAndValue<StoredMessage>> originalMessageRecords,
-        Widget? child) {
-      // Build list that includes original message records as well as date
-      // separators.
-      var listItems = <Object>[];
-      String? priorDate;
-      originalMessageRecords.forEach((messageRecord) {
-        final date = dayFormat.format(DateTime.fromMillisecondsSinceEpoch(
-            messageRecord.value.ts.toInt()));
-        if (priorDate != null && date != priorDate) {
-          listItems.add(date);
+        Widget? child,
+      ) {
+        // Build list that includes original message records as well as date
+        // separators.
+        var listItems = <Object>[];
+        String? priorDate;
+        originalMessageRecords.forEach((messageRecord) {
+          final date = dayFormat.format(
+            DateTime.fromMillisecondsSinceEpoch(
+              messageRecord.value.ts.toInt(),
+            ),
+          );
+          if (priorDate != null && date != priorDate) {
+            listItems.add(date);
+          }
+          priorDate = date;
+          listItems.add(messageRecord);
+        });
+
+        // render list
+        messageCount = listItems.length;
+
+        // show sticker when we have no messages
+        if (listItems.isEmpty) {
+          return ConversationSticker(contact, messageCount);
         }
-        priorDate = date;
-        listItems.add(messageRecord);
-      });
 
-      // render list
-      messageCount = listItems.length;
+        // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
+        return ScrollablePositionedList.builder(
+          itemScrollController: scrollController,
+          initialScrollIndex: widget.initialScrollIndex ?? 0,
+          reverse: true,
+          physics: defaultScrollPhysics,
+          itemCount: messageCount + 1,
+          itemBuilder: (context, index) {
+            if (index == messageCount) {
+              // show sticker as first item
+              return ConversationSticker(contact, messageCount);
+            }
 
-      // show sticker when we have no messages
-      if (listItems.isEmpty) {
-        return ConversationSticker(contact, messageCount);
-      }
-
-      // interesting discussion on ScrollablePositionedList over ListView https://stackoverflow.com/a/58924218
-      return ScrollablePositionedList.builder(
-        itemScrollController: scrollController,
-        initialScrollIndex: widget.initialScrollIndex ?? 0,
-        reverse: true,
-        physics: defaultScrollPhysics,
-        itemCount: messageCount + 1,
-        itemBuilder: (context, index) {
-          if (index == messageCount) {
-            // show sticker as first item
-            return ConversationSticker(contact, messageCount);
-          }
-
-          final item = listItems[index];
-          if (item is PathAndValue<StoredMessage>) {
-            return buildMessageBubble(context, contact, listItems, item, index);
-          } else {
-            return DateMarker(item as String);
-          }
-        },
-      );
-    });
+            final item = listItems[index];
+            if (item is PathAndValue<StoredMessage>) {
+              return buildMessageBubble(
+                context,
+                contact,
+                listItems,
+                item,
+                index,
+              );
+            } else {
+              return DateMarker(item as String);
+            }
+          },
+        );
+      },
+    );
   }
 
   Widget buildMessageBubble(
-      BuildContext context,
-      Contact contact,
-      List<Object> listItems,
-      PathAndValue<StoredMessage> messageAndPath,
-      int index) {
+    BuildContext context,
+    Contact contact,
+    List<Object> listItems,
+    PathAndValue<StoredMessage> messageAndPath,
+    int index,
+  ) {
     return messagingModel.message(context, messageAndPath,
         (BuildContext context, StoredMessage message, Widget? child) {
       return MessageBubble(
@@ -593,14 +632,17 @@ class ConversationState extends State<Conversation>
           });
         },
         onTapReply: () {
-          final scrollToIndex = listItems.toList().indexWhere((element) =>
-              element is PathAndValue<StoredMessage> &&
-              element.value.id == message.replyToId);
+          final scrollToIndex = listItems.toList().indexWhere(
+                (element) =>
+                    element is PathAndValue<StoredMessage> &&
+                    element.value.id == message.replyToId,
+              );
           if (scrollToIndex != -1 && scrollController.isAttached) {
             scrollController.scrollTo(
-                index: scrollToIndex,
-                duration: const Duration(seconds: 1),
-                curve: defaultCurves);
+              index: scrollToIndex,
+              duration: const Duration(seconds: 1),
+              curve: defaultCurves,
+            );
           }
         },
       );
@@ -733,7 +775,9 @@ class ConversationState extends State<Conversation>
                 border: const OutlineInputBorder(),
               ),
               style: tsSubtitle1.copiedWith(
-                  color: isSendIconVisible ? black : grey5, lineHeight: 18),
+                color: isSendIconVisible ? black : grey5,
+                lineHeight: 18,
+              ),
             ),
           ),
         // hide TextFormField while recording by painting over it. this allows
@@ -784,29 +828,31 @@ class ConversationState extends State<Conversation>
       alignment: isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,
       children: [
         ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: messageBarHeight),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // * Leading
-                leading,
-                // * Content
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Container(
-                    constraints:
-                        const BoxConstraints(maxHeight: messageBarHeight * 2),
-                    child: content,
-                  ),
+          constraints: const BoxConstraints(minHeight: messageBarHeight),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // * Leading
+              leading,
+              // * Content
+              Flexible(
+                fit: FlexFit.tight,
+                child: Container(
+                  constraints:
+                      const BoxConstraints(maxHeight: messageBarHeight * 2),
+                  child: content,
                 ),
-                // * Trailing
-                Padding(
-                  padding: EdgeInsetsDirectional.only(
-                      end: isSendIconVisible ? 0 : 48),
-                  child: trailing,
+              ),
+              // * Trailing
+              Padding(
+                padding: EdgeInsetsDirectional.only(
+                  end: isSendIconVisible ? 0 : 48,
                 ),
-              ],
-            )),
+                child: trailing,
+              ),
+            ],
+          ),
+        ),
         if (!isSendIconVisible)
           VoiceRecorder(
             isRecording: isRecording,

@@ -72,7 +72,8 @@ class StatusRow extends StatelessWidget {
                                       size: 10,
                                       color: color,
                                     )
-                                  : null),
+                                  : null,
+                    ),
             ),
             if (msgSelfDeletes)
               Container(

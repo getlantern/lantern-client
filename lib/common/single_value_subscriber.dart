@@ -3,10 +3,14 @@ import 'common.dart';
 /// A ValueNotifier that updates a single value based on subscribing to a path
 /// in the database.
 class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T?> {
-  SubscribedSingleValueNotifier(path, T? defaultValue,
-      ModelEventChannel channel, void Function() removeFromCache,
-      {bool details = false, T Function(Uint8List serialized)? deserialize})
-      : super(defaultValue, removeFromCache) {
+  SubscribedSingleValueNotifier(
+    path,
+    T? defaultValue,
+    ModelEventChannel channel,
+    void Function() removeFromCache, {
+    bool details = false,
+    T Function(Uint8List serialized)? deserialize,
+  }) : super(defaultValue, removeFromCache) {
     void onChanges(Map<String, T> updates, Iterable<String> deletions) {
       if (deletions.isNotEmpty) {
         value = null;
@@ -15,8 +19,12 @@ class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T?> {
       }
     }
 
-    cancel = channel.subscribe(path,
-        details: details, onChanges: onChanges, deserialize: deserialize);
+    cancel = channel.subscribe(
+      path,
+      details: details,
+      onChanges: onChanges,
+      deserialize: deserialize,
+    );
   }
 }
 
@@ -24,13 +32,14 @@ class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T?> {
 /// path in the database.
 class SubscribedSingleValueBuilder<T> extends ValueListenableBuilder<T?> {
   SubscribedSingleValueBuilder(
-      String path, ValueNotifier<T?> notifier, ValueWidgetBuilder<T> builder)
-      : super(
-            valueListenable: notifier,
-            builder: (BuildContext context, T? value, Widget? child) =>
-                value == null
-                    ? const SizedBox()
-                    : builder(context, value, child));
+    String path,
+    ValueNotifier<T?> notifier,
+    ValueWidgetBuilder<T> builder,
+  ) : super(
+          valueListenable: notifier,
+          builder: (BuildContext context, T? value, Widget? child) =>
+              value == null ? const SizedBox() : builder(context, value, child),
+        );
 
   @override
   _SubscribedSingleValueBuilderState createState() =>

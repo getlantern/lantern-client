@@ -20,19 +20,22 @@ void main() {
     'Widget startup',
     () {
       Future<void> _buildHomeScreen(WidgetTester tester) async {
-        await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider(create: (context) => MessagingModel()),
-            Provider(create: (context) => VpnModel()),
-            Provider(create: (context) => AudioPlayer()),
-            Provider(create: (context) => SessionModel()),
-            Provider(
-                create: (context) => EventManager('lantern_event_channel')),
-            Provider(
+        await tester.pumpWidget(
+          MultiProvider(
+            providers: [
+              Provider(create: (context) => MessagingModel()),
+              Provider(create: (context) => VpnModel()),
+              Provider(create: (context) => AudioPlayer()),
+              Provider(create: (context) => SessionModel()),
+              Provider(
+                create: (context) => EventManager('lantern_event_channel'),
+              ),
+              Provider(
                 create: (context) =>
-                    const MethodChannel('lantern_method_channel')),
-          ],
-          child: FutureBuilder(
+                    const MethodChannel('lantern_method_channel'),
+              ),
+            ],
+            child: FutureBuilder(
               future: Localization.ensureInitialized(),
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 return GlobalLoaderOverlay(
@@ -72,8 +75,10 @@ void main() {
                     ),
                   ),
                 );
-              }),
-        ));
+              },
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
         expect(find.byType(HomePage), findsOneWidget);
       }

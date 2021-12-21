@@ -7,8 +7,12 @@ import 'image.dart';
 import 'video.dart';
 
 /// Factory for attachment widgets that can render the given attachment.
-Widget attachmentWidget(Contact contact, StoredMessage message,
-    StoredAttachment attachment, bool inbound) {
+Widget attachmentWidget(
+  Contact contact,
+  StoredMessage message,
+  StoredAttachment attachment,
+  bool inbound,
+) {
   final attachmentTitle = attachment.attachment.metadata['title'];
   final fileExtension = attachment.attachment.metadata['fileExtension'];
   final mimeType = mimeTypeOf(attachment.attachment.mimeType);
@@ -71,8 +75,11 @@ class AttachmentBuilder extends StatelessWidget {
         // successful download/upload, on to decrypting
         return ValueListenableBuilder(
           valueListenable: messagingModel.thumbnail(attachment),
-          builder: (BuildContext context,
-              CachedValue<Uint8List> cachedThumbnail, Widget? child) {
+          builder: (
+            BuildContext context,
+            CachedValue<Uint8List> cachedThumbnail,
+            Widget? child,
+          ) {
             if (cachedThumbnail.loading) {
               return progressIndicator();
             } else if (cachedThumbnail.error != null) {
@@ -88,8 +95,9 @@ class AttachmentBuilder extends StatelessWidget {
               return result;
             } else {
               return CAssetImage(
-                  path: defaultIconPath ?? ImagePaths.error_outline,
-                  color: inbound ? inboundMsgColor : outboundMsgColor);
+                path: defaultIconPath ?? ImagePaths.error_outline,
+                color: inbound ? inboundMsgColor : outboundMsgColor,
+              );
             }
           },
         );
@@ -130,7 +138,11 @@ class AttachmentBuilder extends StatelessWidget {
   Widget errorIndicator() {
     return Padding(
       padding: const EdgeInsetsDirectional.only(
-          start: 16, end: 16, top: 16, bottom: 24),
+        start: 16,
+        end: 16,
+        top: 16,
+        bottom: 24,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -139,9 +151,10 @@ class AttachmentBuilder extends StatelessWidget {
           Padding(
             padding: const EdgeInsetsDirectional.only(end: 16),
             child: CAssetImage(
-                size: 20,
-                path: ImagePaths.error_outline,
-                color: inbound ? inboundMsgColor : outboundMsgColor),
+              size: 20,
+              path: ImagePaths.error_outline,
+              color: inbound ? inboundMsgColor : outboundMsgColor,
+            ),
           ),
           CText(
             'error_rendering_message'.i18n,
@@ -149,33 +162,43 @@ class AttachmentBuilder extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             softWrap: false,
             style: tsBody3.copiedWith(
-                color: inbound ? inboundMsgColor : outboundMsgColor,
-                fontStyle: FontStyle.italic),
+              color: inbound ? inboundMsgColor : outboundMsgColor,
+              fontStyle: FontStyle.italic,
+            ),
           )
         ],
       ),
     );
   }
 
-  Widget buildVisualThumbnail(BuildContext context, Uint8List thumbnail,
-      BoxConstraints constraints, Widget Function(Widget) wrap) {
+  Widget buildVisualThumbnail(
+    BuildContext context,
+    Uint8List thumbnail,
+    BoxConstraints constraints,
+    Widget Function(Widget) wrap,
+  ) {
     return ConstrainedBox(
       // this box keeps the image from being too tall
       constraints: BoxConstraints(
-          maxHeight: constraints.maxWidth, minWidth: constraints.maxWidth),
-      child: wrap(FittedBox(
-        child: BasicMemoryImage(
-          thumbnail,
-          width: 2000,
-          height: 2000,
-          fit: BoxFit.cover,
-          errorBuilder:
-              (BuildContext context, Object error, StackTrace? stackTrace) =>
-                  CAssetImage(
-                      path: ImagePaths.error_outline,
-                      color: inbound ? inboundMsgColor : outboundMsgColor),
+        maxHeight: constraints.maxWidth,
+        minWidth: constraints.maxWidth,
+      ),
+      child: wrap(
+        FittedBox(
+          child: BasicMemoryImage(
+            thumbnail,
+            width: 2000,
+            height: 2000,
+            fit: BoxFit.cover,
+            errorBuilder:
+                (BuildContext context, Object error, StackTrace? stackTrace) =>
+                    CAssetImage(
+              path: ImagePaths.error_outline,
+              color: inbound ? inboundMsgColor : outboundMsgColor,
+            ),
+          ),
         ),
-      )),
+      ),
     );
   }
 }
@@ -191,8 +214,8 @@ abstract class VisualAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      return AttachmentBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return AttachmentBuilder(
           attachment: attachment,
           inbound: inbound,
           defaultIconPath: ImagePaths.insert_drive_file,
@@ -206,23 +229,33 @@ abstract class VisualAttachment extends StatelessWidget {
             return ConstrainedBox(
               // this box keeps the thumbnail from being too tall
               constraints: BoxConstraints(
-                  maxHeight: constraints.maxWidth,
-                  minWidth: constraints.maxWidth),
-              child: wrapThumbnail(FittedBox(
-                child: BasicMemoryImage(
-                  thumbnail,
-                  width: 2000,
-                  height: 2000,
-                  fit: BoxFit.cover,
-                  errorBuilder: (BuildContext context, Object error,
-                          StackTrace? stackTrace) =>
-                      Icon(Icons.error_outlined,
-                          color: inbound ? inboundMsgColor : outboundMsgColor),
+                maxHeight: constraints.maxWidth,
+                minWidth: constraints.maxWidth,
+              ),
+              child: wrapThumbnail(
+                FittedBox(
+                  child: BasicMemoryImage(
+                    thumbnail,
+                    width: 2000,
+                    height: 2000,
+                    fit: BoxFit.cover,
+                    errorBuilder: (
+                      BuildContext context,
+                      Object error,
+                      StackTrace? stackTrace,
+                    ) =>
+                        Icon(
+                      Icons.error_outlined,
+                      color: inbound ? inboundMsgColor : outboundMsgColor,
+                    ),
+                  ),
                 ),
-              )),
+              ),
             );
-          });
-    });
+          },
+        );
+      },
+    );
   }
 
   Widget buildViewer();

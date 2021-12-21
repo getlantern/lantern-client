@@ -2,12 +2,13 @@ import 'package:lantern/messaging/messaging.dart';
 
 Widget FullChatNumberWidget(BuildContext context, ChatNumber chatNumber) {
   return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-    return CustomPaint(
-      size: Size(constraints.maxWidth, constraints.maxHeight),
-      foregroundPainter: _FullChatNumberPainter(context, chatNumber),
-    );
-  });
+    builder: (BuildContext context, BoxConstraints constraints) {
+      return CustomPaint(
+        size: Size(constraints.maxWidth, constraints.maxHeight),
+        foregroundPainter: _FullChatNumberPainter(context, chatNumber),
+      );
+    },
+  );
 }
 
 class _FullChatNumberPainter extends CustomPainter {
@@ -55,7 +56,9 @@ class _FullChatNumberPainter extends CustomPainter {
 
     // paint the start of the remainder on the first line
     remainderPainter.text = TextSpan(
-        text: remainder.substring(0, charactersOnFirstLine), style: tsBody2);
+      text: remainder.substring(0, charactersOnFirstLine),
+      style: tsBody2,
+    );
     remainderPainter.layout(
       minWidth: 0,
       maxWidth: size.width,
@@ -69,9 +72,12 @@ class _FullChatNumberPainter extends CustomPainter {
     for (var line = 0; line < lines; line++) {
       final i = charactersOnFirstLine + line * charactersPerLine;
       remainderPainter.text = TextSpan(
-          text: remainder.substring(
-              i, min(remainder.length, i + charactersPerLine)),
-          style: tsBody2);
+        text: remainder.substring(
+          i,
+          min(remainder.length, i + charactersPerLine),
+        ),
+        style: tsBody2,
+      );
       remainderPainter.layout(
         minWidth: 0,
         maxWidth: size.width,

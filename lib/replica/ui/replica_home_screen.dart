@@ -28,29 +28,32 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          // Dismiss keyboard when clicking anywhere
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: BaseScreen(
-            actionButton: renderFap(context),
-            centerTitle: true,
-            title: 'discover'.i18n,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: SearchField(
-                      controller: _textEditingController,
-                      search: (query) async {
-                        await _navigateToSearchScreen(query);
-                      }),
-                ),
-                renderDescription()
-              ],
-            )));
+      onTap: () {
+        // Dismiss keyboard when clicking anywhere
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: BaseScreen(
+        actionButton: renderFap(context),
+        centerTitle: true,
+        title: 'discover'.i18n,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: SearchField(
+                controller: _textEditingController,
+                search: (query) async {
+                  await _navigateToSearchScreen(query);
+                },
+              ),
+            ),
+            renderDescription()
+          ],
+        ),
+      ),
+    );
   }
 
   Widget renderDescription() {

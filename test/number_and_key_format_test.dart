@@ -20,7 +20,9 @@ void main() {
   group('RecoveryKey', () {
     test('standard recovery key', () {
       expect(
-          'abcd1234efgh7890ij'.formattedRecoveryKey, 'abcd 1234 efgh 7890 ij');
+        'abcd1234efgh7890ij'.formattedRecoveryKey,
+        'abcd 1234 efgh 7890 ij',
+      );
     });
     test('malformed recovery key', () {
       expect('34.435345'.formattedRecoveryKey, '34.435345');

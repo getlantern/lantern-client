@@ -4,11 +4,12 @@ class ReplicaLink {
   int? fileIndex;
   late String infohash;
 
-  ReplicaLink(
-      {required this.infohash,
-      this.displayName,
-      this.fileIndex,
-      this.exactSource});
+  ReplicaLink({
+    required this.infohash,
+    this.displayName,
+    this.fileIndex,
+    this.exactSource,
+  });
 
   // Only this link type is accepted:
   // - Prefixed with 'magnet:xt=urn:btih:<40-HEX-CHAR>'
@@ -37,10 +38,11 @@ class ReplicaLink {
           return null;
         }
         return ReplicaLink(
-            infohash: infohash,
-            displayName: u.queryParameters['dn'],
-            exactSource: u.queryParameters['xs'],
-            fileIndex: so);
+          infohash: infohash,
+          displayName: u.queryParameters['dn'],
+          exactSource: u.queryParameters['xs'],
+          fileIndex: so,
+        );
       }
       return null;
     };

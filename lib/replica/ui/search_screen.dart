@@ -48,14 +48,15 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
       title: 'discover'.i18n,
       actions: [
         IconButton(
-            onPressed: () async {
-              await onUploadButtonPressed(context);
-            },
-            icon: CAssetImage(
-              size: 20,
-              path: ImagePaths.file_upload,
-              color: black,
-            )),
+          onPressed: () async {
+            await onUploadButtonPressed(context);
+          },
+          icon: CAssetImage(
+            size: 20,
+            path: ImagePaths.file_upload,
+            color: black,
+          ),
+        ),
       ],
       body: replicaModel.withReplicaApi((context, replicaApi, child) {
         return Column(
@@ -103,26 +104,37 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
             // TODO <17-12-2021> soltzen: ValueListenableBuilder may not be
             // necessary: try without it (just with setState and see)
             ValueListenableBuilder<String>(
-                valueListenable: _searchQueryListener,
-                builder: (BuildContext context, String value, Widget? child) {
-                  return Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        ReplicaVideoListView(
-                            replicaApi: replicaApi, searchQuery: value),
-                        ReplicaImageListView(
-                            replicaApi: replicaApi, searchQuery: value),
-                        ReplicaAudioListView(
-                            replicaApi: replicaApi, searchQuery: value),
-                        ReplicaDocumentListView(
-                            replicaApi: replicaApi, searchQuery: value),
-                        ReplicaAppListView(
-                            replicaApi: replicaApi, searchQuery: value),
-                      ],
-                    ),
-                  );
-                }),
+              valueListenable: _searchQueryListener,
+              builder: (BuildContext context, String value, Widget? child) {
+                return Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      ReplicaVideoListView(
+                        replicaApi: replicaApi,
+                        searchQuery: value,
+                      ),
+                      ReplicaImageListView(
+                        replicaApi: replicaApi,
+                        searchQuery: value,
+                      ),
+                      ReplicaAudioListView(
+                        replicaApi: replicaApi,
+                        searchQuery: value,
+                      ),
+                      ReplicaDocumentListView(
+                        replicaApi: replicaApi,
+                        searchQuery: value,
+                      ),
+                      ReplicaAppListView(
+                        replicaApi: replicaApi,
+                        searchQuery: value,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ],
         );
       }),

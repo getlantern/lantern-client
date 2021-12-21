@@ -9,13 +9,18 @@ class ListSectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(children: [
-          Container(
-            margin:
-                const EdgeInsetsDirectional.only(start: 6, top: 21, bottom: 3),
-            child: CText(text.toUpperCase(), maxLines: 1, style: tsOverline),
-          ),
-        ]),
+        Row(
+          children: [
+            Container(
+              margin: const EdgeInsetsDirectional.only(
+                start: 6,
+                top: 21,
+                bottom: 3,
+              ),
+              child: CText(text.toUpperCase(), maxLines: 1, style: tsOverline),
+            ),
+          ],
+        ),
         const CDivider(),
       ],
     );

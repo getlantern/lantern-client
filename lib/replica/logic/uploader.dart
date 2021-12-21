@@ -44,11 +44,13 @@ class ReplicaUploader {
     var uploadUrl =
         'http://$replicaAddr/replica/upload?name=${Uri.encodeComponent(displayName)}';
     logger.v('uploadUrl: $uploadUrl');
-    await inst.uploader!.enqueue(RawUpload(
-      url: uploadUrl,
-      path: file.path,
-      method: UploadMethod.POST,
-    ));
+    await inst.uploader!.enqueue(
+      RawUpload(
+        url: uploadUrl,
+        path: file.path,
+        method: UploadMethod.POST,
+      ),
+    );
   }
 }
 
@@ -64,10 +66,11 @@ void ReplicaUploaderBackgroundHandler() async {
     await Localization.ensureInitialized();
     await notifications.flutterLocalNotificationsPlugin
         .show(
-            progress.taskId.hashCode,
-            'uploader'.i18n,
-            'upload_in_progress'.i18n,
-            notifications.getUploadProgressChannel(progress.progress ?? 0))
+      progress.taskId.hashCode,
+      'uploader'.i18n,
+      'upload_in_progress'.i18n,
+      notifications.getUploadProgressChannel(progress.progress ?? 0),
+    )
         .catchError((e, stack) {
       logger.e('Error while showing notification: $e, $stack');
     });
@@ -99,10 +102,14 @@ void ReplicaUploaderBackgroundHandler() async {
     }
     // ignore: unawaited_futures
     notifications.flutterLocalNotificationsPlugin
-        .show(result.taskId.hashCode, 'uploader'.i18n, title,
-            notifications.getUploadCompleteChannel(result),
-            payload: Payload(type: PayloadType.Upload, data: result.response)
-                .toJson())
+        .show(
+      result.taskId.hashCode,
+      'uploader'.i18n,
+      title,
+      notifications.getUploadCompleteChannel(result),
+      payload:
+          Payload(type: PayloadType.Upload, data: result.response).toJson(),
+    )
         .catchError((e, stack) {
       logger.e('Error while showing notification: $e, $stack');
     });

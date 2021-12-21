@@ -9,9 +9,12 @@ class VPNBandwidth extends StatelessWidget {
           ? Column(
               children: [
                 Container(
-                    margin: const EdgeInsetsDirectional.only(
-                        top: 4.0, bottom: 16.0),
-                    child: const CDivider(height: 16)),
+                  margin: const EdgeInsetsDirectional.only(
+                    top: 4.0,
+                    bottom: 16.0,
+                  ),
+                  child: const CDivider(height: 16),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

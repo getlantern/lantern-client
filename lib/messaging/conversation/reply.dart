@@ -118,7 +118,10 @@ class Reply extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: EdgeInsetsDirectional.only(
-                  end: 16, top: isPreview ? 12 : 4, bottom: 8),
+                end: 16,
+                top: isPreview ? 12 : 4,
+                bottom: 8,
+              ),
               child: Column(
                 mainAxisSize: isPreview ? MainAxisSize.min : MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,10 +141,11 @@ class Reply extends StatelessWidget {
                             : message.text,
                     maxLines: 1,
                     style: tsSubtitle1.short.copiedWith(
-                        color: foregroundColor,
-                        fontStyle: isAttachment || wasRemotelyDeleted
-                            ? FontStyle.italic
-                            : null),
+                      color: foregroundColor,
+                      fontStyle: isAttachment || wasRemotelyDeleted
+                          ? FontStyle.italic
+                          : null,
+                    ),
                   ),
                 ],
               ),
@@ -204,14 +208,22 @@ class Reply extends StatelessWidget {
 
   Widget thumbnail(StoredAttachment attachment) {
     return ValueListenableBuilder(
-        valueListenable: messagingModel.thumbnail(attachment),
-        builder: (BuildContext context, CachedValue<Uint8List> cachedThumbnail,
-            Widget? child) {
-          if (cachedThumbnail.value == null) {
-            return const SizedBox();
-          }
-          return BasicMemoryImage(cachedThumbnail.value!,
-              width: 56, height: 56, fit: BoxFit.cover);
-        });
+      valueListenable: messagingModel.thumbnail(attachment),
+      builder: (
+        BuildContext context,
+        CachedValue<Uint8List> cachedThumbnail,
+        Widget? child,
+      ) {
+        if (cachedThumbnail.value == null) {
+          return const SizedBox();
+        }
+        return BasicMemoryImage(
+          cachedThumbnail.value!,
+          width: 56,
+          height: 56,
+          fit: BoxFit.cover,
+        );
+      },
+    );
   }
 }

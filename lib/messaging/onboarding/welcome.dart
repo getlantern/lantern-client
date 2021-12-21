@@ -19,8 +19,9 @@ class Welcome extends StatelessWidget {
             child: Container(
               padding: const EdgeInsetsDirectional.only(top: 16.0),
               child: CAssetImage(
-                  path: ImagePaths.welcome_illustration,
-                  size: MediaQuery.of(context).size.height),
+                path: ImagePaths.welcome_illustration,
+                size: MediaQuery.of(context).size.height,
+              ),
             ),
           ),
           Flexible(
@@ -30,12 +31,19 @@ class Welcome extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
-                      bottom: 16.0, start: 24.0, end: 24.0),
+                    bottom: 16.0,
+                    start: 24.0,
+                    end: 24.0,
+                  ),
                   child: CText('welcome_title'.i18n, style: tsSubtitle1),
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
-                      top: 16.0, bottom: 16.0, start: 24.0, end: 24.0),
+                    top: 16.0,
+                    bottom: 16.0,
+                    start: 24.0,
+                    end: 24.0,
+                  ),
                   child: CText(
                     'welcome_text'.i18n,
                     style: tsBody1.copiedWith(color: grey5),
@@ -43,12 +51,13 @@ class Welcome extends StatelessWidget {
                   ),
                 ),
                 Button(
-                    text: 'get_started'.i18n,
-                    onPressed: () async {
-                      await messagingModel.start();
-                      await context.router
-                          .push(const SecureChatNumberMessaging());
-                    }),
+                  text: 'get_started'.i18n,
+                  onPressed: () async {
+                    await messagingModel.start();
+                    await context.router
+                        .push(const SecureChatNumberMessaging());
+                  },
+                ),
                 Padding(
                   padding: const EdgeInsetsDirectional.only(bottom: 16.0),
                   child: Row(
@@ -59,13 +68,17 @@ class Welcome extends StatelessWidget {
                         child: CText('want_to_recover'.i18n, style: tsBody2),
                       ),
                       TextButton(
-                          onPressed: () =>
-                              context.router.push(const SecureNumberRecovery()),
-                          child: CText('recover'.i18n.toUpperCase(),
-                              style: tsBody2.copiedWith(
-                                  fontSize: 14,
-                                  color: pink4,
-                                  fontWeight: FontWeight.w500)))
+                        onPressed: () =>
+                            context.router.push(const SecureNumberRecovery()),
+                        child: CText(
+                          'recover'.i18n.toUpperCase(),
+                          style: tsBody2.copiedWith(
+                            fontSize: 14,
+                            color: pink4,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),

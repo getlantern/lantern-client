@@ -12,13 +12,16 @@ var logger = Logger(
 /// ReplicaVideoListView renders a list of ReplicaVideoListItem.
 /// Looks like this docs/replica_search_tabs.png
 class ReplicaVideoListView extends ReplicaCommonListView {
-  ReplicaVideoListView(
-      {Key? key, required ReplicaApi replicaApi, required String searchQuery})
-      : super(
-            key: key,
-            replicaApi: replicaApi,
-            searchQuery: searchQuery,
-            searchCategory: SearchCategory.Video);
+  ReplicaVideoListView({
+    Key? key,
+    required ReplicaApi replicaApi,
+    required String searchQuery,
+  }) : super(
+          key: key,
+          replicaApi: replicaApi,
+          searchQuery: searchQuery,
+          searchCategory: SearchCategory.Video,
+        );
 
   @override
   State<StatefulWidget> createState() => _ReplicaVideoListViewState();
@@ -29,14 +32,18 @@ class _ReplicaVideoListViewState extends ReplicaCommonListViewState {
   Widget build(BuildContext context) {
     return renderPaginatedListView((context, item, index) {
       return ReplicaVideoListItem(
-          item: item,
-          replicaApi: widget.replicaApi,
-          onTap: () {
-            context.pushRoute(ReplicaVideoPlayerScreen(
-                replicaApi: widget.replicaApi,
-                replicaLink: item.replicaLink,
-                mimeType: item.primaryMimeType));
-          });
+        item: item,
+        replicaApi: widget.replicaApi,
+        onTap: () {
+          context.pushRoute(
+            ReplicaVideoPlayerScreen(
+              replicaApi: widget.replicaApi,
+              replicaLink: item.replicaLink,
+              mimeType: item.primaryMimeType,
+            ),
+          );
+        },
+      );
     });
   }
 }

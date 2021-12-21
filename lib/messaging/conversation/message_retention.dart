@@ -16,22 +16,30 @@ class MessageRetention extends StatelessWidget {
         fit: BoxFit.none,
         child: Container(
           decoration: BoxDecoration(
-              color: white,
-              border: Border.all(color: grey3),
-              borderRadius:
-                  const BorderRadius.all(Radius.circular(borderRadius))),
+            color: white,
+            border: Border.all(color: grey3),
+            borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
+          ),
           child: Container(
             padding: const EdgeInsetsDirectional.only(
-                start: 16, end: 16.0, top: 8.0, bottom: 8.0),
+              start: 16,
+              end: 16.0,
+              top: 8.0,
+              bottom: 8.0,
+            ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 contact.messagesDisappearAfterSeconds > 0
                     ? const CAssetImage(
-                        path: ImagePaths.timer, color: Colors.black)
+                        path: ImagePaths.timer,
+                        color: Colors.black,
+                      )
                     : const CAssetImage(
-                        path: ImagePaths.lock_clock, color: Colors.black),
+                        path: ImagePaths.lock_clock,
+                        color: Colors.black,
+                      ),
                 Padding(
                   padding: const EdgeInsetsDirectional.only(start: 4.0),
                   child: contact.messagesDisappearAfterSeconds > 0
@@ -40,9 +48,12 @@ class MessageRetention extends StatelessWidget {
                             contact.messagesDisappearAfterSeconds
                                 .humanizeSeconds(longForm: true)
                           ]),
-                          style: tsBody2.copiedWith(color: grey5))
-                      : CText('banner_messages_persist'.i18n,
-                          style: tsBody2.copiedWith(color: grey5)),
+                          style: tsBody2.copiedWith(color: grey5),
+                        )
+                      : CText(
+                          'banner_messages_persist'.i18n,
+                          style: tsBody2.copiedWith(color: grey5),
+                        ),
                 ),
               ],
             ),

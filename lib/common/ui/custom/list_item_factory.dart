@@ -8,12 +8,12 @@ class ListItemFactory extends StatelessWidget {
 
   ListItemFactory(this.builder);
 
-  ListItemFactory.uploadEditItem(
-      {Widget? leading,
-      required Widget content,
-      List<Widget>? trailingArray,
-      double height = 90.0})
-      : this((BuildContext context, ListItemFactory factory) {
+  ListItemFactory.uploadEditItem({
+    Widget? leading,
+    required Widget content,
+    List<Widget>? trailingArray,
+    double height = 90.0,
+  }) : this((BuildContext context, ListItemFactory factory) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,32 +29,33 @@ class ListItemFactory extends StatelessWidget {
           );
         });
 
-  ListItemFactory.replicaItem(
-      {Widget? leading,
-      required Widget content,
-      required void Function() onTap,
-      required ReplicaApi api,
-      required ReplicaLink link,
-      double height = 90.0})
-      : this((BuildContext context, ListItemFactory factory) {
+  ListItemFactory.replicaItem({
+    Widget? leading,
+    required Widget content,
+    required void Function() onTap,
+    required ReplicaApi api,
+    required ReplicaLink link,
+    double height = 90.0,
+  }) : this((BuildContext context, ListItemFactory factory) {
           return FocusedMenuHolder(
             menu: renderReplicaLongPressMenuItem(api, link),
             menuWidth: MediaQuery.of(context).size.width * 0.8,
             builder: (menuOpen) {
               return Container(
-                  decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(8.0),
-                    ),
+                decoration: BoxDecoration(
+                  color: white,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(8.0),
                   ),
-                  child: factory.buildBase(
-                    leading: leading,
-                    content: content,
-                    onTap: onTap,
-                    height: height,
-                    showDivider: !menuOpen,
-                  ));
+                ),
+                child: factory.buildBase(
+                  leading: leading,
+                  content: content,
+                  onTap: onTap,
+                  height: height,
+                  showDivider: !menuOpen,
+                ),
+              );
             },
           );
         });
@@ -194,46 +195,49 @@ class ListItemFactory extends StatelessWidget {
     String? subtitle,
   }) =>
       Material(
-          color: transparent,
-          child: CInkWell(
-            disableSplash: disableSplash ?? false,
-            onTap: onTap ?? () {},
-            child: Container(
-              height: height ?? 72,
-              decoration: showDivider
-                  ? BoxDecoration(
-                      border:
-                          Border(bottom: BorderSide(width: 1, color: grey3)),
-                    )
-                  : null,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (leading != null)
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                          start: 4.0, end: 16.0),
-                      child: buildLeading(leading),
+        color: transparent,
+        child: CInkWell(
+          disableSplash: disableSplash ?? false,
+          onTap: onTap ?? () {},
+          child: Container(
+            height: height ?? 72,
+            decoration: showDivider
+                ? BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 1, color: grey3)),
+                  )
+                : null,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (leading != null)
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 4.0,
+                      end: 16.0,
                     ),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Container(
-                      child: buildContent(
-                          content: content,
-                          subtitle: subtitle,
-                          enableHighlighting: enableHighlighting),
+                    child: buildLeading(leading),
+                  ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Container(
+                    child: buildContent(
+                      content: content,
+                      subtitle: subtitle,
+                      enableHighlighting: enableHighlighting,
                     ),
                   ),
-                  if (trailingArray != null && trailingArray.isNotEmpty)
-                    buildTrailing(
-                      trailingArray: trailingArray,
-                      endPadding: endPadding,
-                    ),
-                ],
-              ),
+                ),
+                if (trailingArray != null && trailingArray.isNotEmpty)
+                  buildTrailing(
+                    trailingArray: trailingArray,
+                    endPadding: endPadding,
+                  ),
+              ],
             ),
-          ));
+          ),
+        ),
+      );
 
   Widget? buildLeading(dynamic leading) {
     if (leading == null) {

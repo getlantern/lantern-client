@@ -48,7 +48,10 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   }
 
   Future<void> _addProvisionalContact(
-      MessagingModel model, String unsafeId, String source) async {
+    MessagingModel model,
+    String unsafeId,
+    String source,
+  ) async {
     if (provisionalContactId != null) {
       // we've already added a provisional contact
       return;
@@ -101,11 +104,13 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       countdownController.duration = Duration(milliseconds: timeoutMillis);
     });
 
-    unawaited(countdownController.forward().then((value) {
-      // we ran out of time before completing handshake, go back without adding
-      closeOnce(() => Navigator.pop(context, null));
-      countdownController.stop(canceled: true);
-    }));
+    unawaited(
+      countdownController.forward().then((value) {
+        // we ran out of time before completing handshake, go back without adding
+        closeOnce(() => Navigator.pop(context, null));
+        countdownController.stop(canceled: true);
+      }),
+    );
   }
 
   void _onQRViewCreated(QRViewController controller, MessagingModel model) {
@@ -155,190 +160,205 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          children: [
-            Container(
-              color: grey5,
-              height: 100,
-              child: Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsetsDirectional.only(top: 25),
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      icon: mirrorLTR(
-                          context: context,
-                          child: CAssetImage(
-                            path: ImagePaths.arrow_back,
-                            color: white,
-                          )),
-                      onPressed: () => Navigator.pop(context, null),
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        children: [
+          Container(
+            color: grey5,
+            height: 100,
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                Container(
+                  padding: const EdgeInsetsDirectional.only(top: 25),
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    icon: mirrorLTR(
+                      context: context,
+                      child: CAssetImage(
+                        path: ImagePaths.arrow_back,
+                        color: white,
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context, null),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsetsDirectional.only(top: 25),
+                  alignment: Alignment.center,
+                  child: Center(
+                    child: CText(
+                      widget.isVerificationMode
+                          ? 'contact_verification'.i18n
+                          : 'banner_source_qr'.i18n,
+                      style: tsHeading3.copiedWith(color: white),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsetsDirectional.only(top: 25),
-                    alignment: Alignment.center,
-                    child: Center(
-                      child: CText(
-                          widget.isVerificationMode
-                              ? 'contact_verification'.i18n
-                              : 'banner_source_qr'.i18n,
-                          style: tsHeading3.copiedWith(color: white)),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Expanded(
-                child: Container(
+          ),
+          Expanded(
+            child: Container(
               color: grey5,
               padding: const EdgeInsetsDirectional.only(bottom: 20),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ((provisionalContactId != null && scanning))
-                              ? PulseAnimation(
-                                  CText(
-                                    'qr_info_waiting_qr'.i18n,
-                                    style: tsBody1Color(white),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              : Row(
-                                  children: [
-                                    CText(
-                                      widget.isVerificationMode
-                                          ? 'qr_info_verification_scan'.i18n
-                                          : 'qr_info_f2f_scan'.i18n,
-                                      style: tsBody1Color(white),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          start: 4.0),
-                                      child: GestureDetector(
-                                        behavior: HitTestBehavior.translucent,
-                                        onTap: () => showInfoDialog(
-                                          context,
-                                          title: widget.isVerificationMode
-                                              ? 'qr_info_verification_title'
-                                                  .i18n
-                                              : 'qr_info_f2f_title'.i18n,
-                                          des: widget.isVerificationMode
-                                              ? 'qr_info_verification_des'.i18n
-                                              : 'qr_info_f2f_des'.i18n,
-                                          assetPath: ImagePaths.qr_code,
-                                          confirmButtonText:
-                                              'info_dialog_confirm'
-                                                  .i18n
-                                                  .toUpperCase(),
-                                          confirmButtonAction: () async =>
-                                              await context.router.pop(),
-                                        ),
-                                        child: Icon(
-                                          Icons.info,
-                                          size: 14,
-                                          color: white,
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ((provisionalContactId != null && scanning))
+                            ? PulseAnimation(
+                                CText(
+                                  'qr_info_waiting_qr'.i18n,
+                                  style: tsBody1Color(white),
+                                  textAlign: TextAlign.center,
                                 ),
-                        ],
-                      ),
+                              )
+                            : Row(
+                                children: [
+                                  CText(
+                                    widget.isVerificationMode
+                                        ? 'qr_info_verification_scan'.i18n
+                                        : 'qr_info_f2f_scan'.i18n,
+                                    style: tsBody1Color(white),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                      start: 4.0,
+                                    ),
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () => showInfoDialog(
+                                        context,
+                                        title: widget.isVerificationMode
+                                            ? 'qr_info_verification_title'.i18n
+                                            : 'qr_info_f2f_title'.i18n,
+                                        des: widget.isVerificationMode
+                                            ? 'qr_info_verification_des'.i18n
+                                            : 'qr_info_f2f_des'.i18n,
+                                        assetPath: ImagePaths.qr_code,
+                                        confirmButtonText: 'info_dialog_confirm'
+                                            .i18n
+                                            .toUpperCase(),
+                                        confirmButtonAction: () async =>
+                                            await context.router.pop(),
+                                      ),
+                                      child: Icon(
+                                        Icons.info,
+                                        size: 14,
+                                        color: white,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                      ],
                     ),
-                    /*
+                  ),
+                  /*
               * QR SCANNER
               */
-                    Flexible(
-                      child: Container(
-                        padding: const EdgeInsetsDirectional.only(
-                            top: 20.0, start: 70, end: 70, bottom: 20.0),
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              CustomPaint(
-                                painter: QRScannerBorderPainter(),
-                                child: Container(
-                                  padding: const EdgeInsetsDirectional.all(6.0),
-                                  child: Opacity(
-                                    opacity: (provisionalContactId != null &&
-                                            scanning)
-                                        ? 0.5
-                                        : 1,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: QRView(
-                                        key: _qrKey,
-                                        onQRViewCreated: (controller) =>
-                                            _onQRViewCreated(
-                                                controller, messagingModel),
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsetsDirectional.only(
+                        top: 20.0,
+                        start: 70,
+                        end: 70,
+                        bottom: 20.0,
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            CustomPaint(
+                              painter: QRScannerBorderPainter(),
+                              child: Container(
+                                padding: const EdgeInsetsDirectional.all(6.0),
+                                child: Opacity(
+                                  opacity:
+                                      (provisionalContactId != null && scanning)
+                                          ? 0.5
+                                          : 1,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: QRView(
+                                      key: _qrKey,
+                                      onQRViewCreated: (controller) =>
+                                          _onQRViewCreated(
+                                        controller,
+                                        messagingModel,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                              if ((provisionalContactId != null && scanning) ||
-                                  proceedWithoutProvisionals)
-                                _renderWaitingUI(
-                                    proceedWithoutProvisionals:
-                                        proceedWithoutProvisionals,
-                                    countdownController: countdownController,
-                                    timeoutMillis: timeoutMillis,
-                                    fontColor: white,
-                                    infoText: ''),
-                            ],
-                          ),
+                            ),
+                            if ((provisionalContactId != null && scanning) ||
+                                proceedWithoutProvisionals)
+                              _renderWaitingUI(
+                                proceedWithoutProvisionals:
+                                    proceedWithoutProvisionals,
+                                countdownController: countdownController,
+                                timeoutMillis: timeoutMillis,
+                                fontColor: white,
+                                infoText: '',
+                              ),
+                          ],
                         ),
                       ),
                     ),
-                    /*
+                  ),
+                  /*
               * YOUR QR CODE
               */
-                    CText(
-                      'qr_for_your_contact'.i18n,
-                      style: tsBody1Color(white),
-                    ),
-                    Flexible(
-                      child: Container(
-                        padding: const EdgeInsetsDirectional.only(
-                            top: 20.0, start: 70, end: 70, bottom: 20.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: QrImage(
-                            data: widget.me.contactId.id,
-                            padding: const EdgeInsets.all(16),
-                            backgroundColor: white,
-                            foregroundColor: black,
-                            errorCorrectionLevel: QrErrorCorrectLevel.H,
-                          ),
+                  CText(
+                    'qr_for_your_contact'.i18n,
+                    style: tsBody1Color(white),
+                  ),
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsetsDirectional.only(
+                        top: 20.0,
+                        start: 70,
+                        end: 70,
+                        bottom: 20.0,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: QrImage(
+                          data: widget.me.contactId.id,
+                          padding: const EdgeInsets.all(16),
+                          backgroundColor: white,
+                          foregroundColor: black,
+                          errorCorrectionLevel: QrErrorCorrectLevel.H,
                         ),
                       ),
                     ),
-                  ]),
-            ))
-          ],
-        ));
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
 
 class _renderWaitingUI extends StatelessWidget {
-  const _renderWaitingUI(
-      {Key? key,
-      required this.proceedWithoutProvisionals,
-      this.countdownController,
-      this.timeoutMillis,
-      required this.fontColor,
-      required this.infoText})
-      : super(key: key);
+  const _renderWaitingUI({
+    Key? key,
+    required this.proceedWithoutProvisionals,
+    this.countdownController,
+    this.timeoutMillis,
+    required this.fontColor,
+    required this.infoText,
+  }) : super(key: key);
 
   final bool proceedWithoutProvisionals;
   final AnimationController? countdownController;
@@ -359,7 +379,10 @@ class _renderWaitingUI extends StatelessWidget {
         if (!proceedWithoutProvisionals)
           Padding(
             padding: const EdgeInsetsDirectional.only(
-                start: 8.0, end: 8.0, top: 8.0),
+              start: 8.0,
+              end: 8.0,
+              top: 8.0,
+            ),
             child: CText(
               'scan_complete'.i18n,
               style: tsBody1Color(fontColor),
@@ -380,7 +403,11 @@ class _renderWaitingUI extends StatelessWidget {
               flex: 1,
               child: Padding(
                 padding: const EdgeInsetsDirectional.only(
-                    start: 20.0, top: 16.0, bottom: 16.0, end: 20.0),
+                  start: 20.0,
+                  top: 16.0,
+                  bottom: 16.0,
+                  end: 20.0,
+                ),
                 child: CText(
                   infoText,
                   style: tsBody1Color(fontColor),

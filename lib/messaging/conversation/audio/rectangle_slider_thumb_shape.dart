@@ -36,21 +36,25 @@ class RectangleSliderThumbShapes extends SliderComponentShape {
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
     return Size.fromRadius(
-        isEnabled == true ? enabledThumbRadius : _disabledThumbRadius);
+      isEnabled == true ? enabledThumbRadius : _disabledThumbRadius,
+    );
   }
 
   @override
-  void paint(PaintingContext context, Offset center,
-      {required Animation<double> activationAnimation,
-      required Animation<double> enableAnimation,
-      required bool isDiscrete,
-      required TextPainter labelPainter,
-      required RenderBox parentBox,
-      required SliderThemeData sliderTheme,
-      required TextDirection textDirection,
-      required double value,
-      required double textScaleFactor,
-      required Size sizeWithOverflow}) {
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
     final canvas = context.canvas;
 
     final paintBorder = Paint()
@@ -59,10 +63,12 @@ class RectangleSliderThumbShapes extends SliderComponentShape {
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
     canvas.drawRect(
-        Rect.fromCenter(
-            center: center,
-            width: isPlaying ? 2 : 0,
-            height: isPlaying ? height : 0),
-        paintBorder);
+      Rect.fromCenter(
+        center: center,
+        width: isPlaying ? 2 : 0,
+        height: isPlaying ? height : 0,
+      ),
+      paintBorder,
+    );
   }
 }

@@ -12,13 +12,16 @@ var logger = Logger(
 /// ReplicaAppListView renders a list of ReplicaAudioListItem
 /// Looks like this docs/replica_audio_listview.png
 class ReplicaAudioListView extends ReplicaCommonListView {
-  ReplicaAudioListView(
-      {Key? key, required ReplicaApi replicaApi, required String searchQuery})
-      : super(
-            key: key,
-            replicaApi: replicaApi,
-            searchQuery: searchQuery,
-            searchCategory: SearchCategory.Audio);
+  ReplicaAudioListView({
+    Key? key,
+    required ReplicaApi replicaApi,
+    required String searchQuery,
+  }) : super(
+          key: key,
+          replicaApi: replicaApi,
+          searchQuery: searchQuery,
+          searchCategory: SearchCategory.Audio,
+        );
 
   @override
   State<StatefulWidget> createState() => _ReplicaAudioListViewState();
@@ -31,10 +34,13 @@ class _ReplicaAudioListViewState extends ReplicaCommonListViewState {
       return ReplicaAudioListItem(
         item: item,
         onTap: () {
-          context.pushRoute(ReplicaAudioPlayerScreen(
+          context.pushRoute(
+            ReplicaAudioPlayerScreen(
               replicaApi: widget.replicaApi,
               replicaLink: item.replicaLink,
-              mimeType: item.primaryMimeType));
+              mimeType: item.primaryMimeType,
+            ),
+          );
         },
         replicaApi: widget.replicaApi,
       );

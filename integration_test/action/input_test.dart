@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/messaging/conversation/message_bubble.dart';
-import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
 import 'package:lantern/messaging/conversation/audio/waveform.dart';
+import 'package:lantern/messaging/conversation/message_bubble.dart';
+import 'package:lantern/messaging/conversation/status_row.dart';
 
 import '../enums/disappearing_test.dart';
 import '../helpers/clipboard_test.dart';
 import '../helpers/waiter_test.dart';
 
 class Input {
-  static Future<void> setTextMessage(WidgetTester tester, CommonFinders find,
-      {String text = '',
-      String? emojiSelection,
-      bool visualize = false,
-      int seconds = 0}) async {
+  static Future<void> setTextMessage(
+    WidgetTester tester,
+    CommonFinders find, {
+    String text = '',
+    String? emojiSelection,
+    bool visualize = false,
+    int seconds = 0,
+  }) async {
     var textformfield =
         tester.widget<TextFormField>(find.byType(TextFormField));
     if (emojiSelection == null) {
@@ -34,18 +37,23 @@ class Input {
   }
 
   static Future<void> checkRemovedTextMessageWithDelay(
-      WidgetTester tester, CommonFinders find,
-      {String text = '', Duration delay = Duration.zero}) async {
+    WidgetTester tester,
+    CommonFinders find, {
+    String text = '',
+    Duration delay = Duration.zero,
+  }) async {
     await Future.delayed(delay);
     await awaitFor(tester, duration: const Duration(seconds: 1));
     expect(find.widgetWithText(MessageBubble, text), findsNothing);
   }
 
   static Future<void> setDisappearingMessage(
-      WidgetTester tester, CommonFinders find,
-      {String key = '',
-      DISAPPEARING disappearing = DISAPPEARING.SECONDS_5,
-      bool checkDurationStatus = false}) async {
+    WidgetTester tester,
+    CommonFinders find, {
+    String key = '',
+    DISAPPEARING disappearing = DISAPPEARING.SECONDS_5,
+    bool checkDurationStatus = false,
+  }) async {
     await tester.tap(find.byKey(Key(key)));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester
@@ -56,8 +64,13 @@ class Input {
     }
   }
 
-  static Future<void> sendMessage(WidgetTester tester, CommonFinders find,
-      {bool checkForBubble = false, isAudio = false, String? text}) async {
+  static Future<void> sendMessage(
+    WidgetTester tester,
+    CommonFinders find, {
+    bool checkForBubble = false,
+    isAudio = false,
+    String? text,
+  }) async {
     if (isAudio) {
       await tester.tap(find.widgetWithIcon(GestureDetector, Icons.send));
     } else {
@@ -81,11 +94,13 @@ class Input {
   }
 
   static Future<void> removeMessageForMe(
-      WidgetTester tester, CommonFinders find,
-      {String text = '',
-      optionTitle = '',
-      removeBtnTitle = '',
-      bool checkDialog = false}) async {
+    WidgetTester tester,
+    CommonFinders find, {
+    String text = '',
+    optionTitle = '',
+    removeBtnTitle = '',
+    bool checkDialog = false,
+  }) async {
     await tester.longPress(find.widgetWithText(MessageBubble, text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.text(optionTitle));
@@ -98,16 +113,25 @@ class Input {
     expect(find.widgetWithText(MessageBubble, text), findsNothing);
   }
 
-  static Future<void> copyTextMessage(WidgetTester tester, CommonFinders find,
-      {String text = '', optionTitle = ''}) async {
+  static Future<void> copyTextMessage(
+    WidgetTester tester,
+    CommonFinders find, {
+    String text = '',
+    optionTitle = '',
+  }) async {
     await tester.longPress(find.widgetWithText(MessageBubble, text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.text(optionTitle));
     await tester.pump();
   }
 
-  static Future<void> setReply(WidgetTester tester, CommonFinders find,
-      {String text = '', optionTitle = '', bool checkReply = false}) async {
+  static Future<void> setReply(
+    WidgetTester tester,
+    CommonFinders find, {
+    String text = '',
+    optionTitle = '',
+    bool checkReply = false,
+  }) async {
     await tester.longPress(find.widgetWithText(MessageBubble, text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.text(optionTitle));
@@ -117,18 +141,24 @@ class Input {
     }
   }
 
-  static Future<void> closeReply(WidgetTester tester, CommonFinders find,
-      {String key = ''}) async {
+  static Future<void> closeReply(
+    WidgetTester tester,
+    CommonFinders find, {
+    String key = '',
+  }) async {
     await tester.tap(find.byKey(Key(key)));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     expect(find.widgetWithText(Row, 'Replying to me'), findsNothing);
   }
 
-  static Future<void> setReaction(WidgetTester tester, CommonFinders find,
-      {String text = '',
-      reaction = '',
-      customReaction,
-      bool isCustomReaction = false}) async {
+  static Future<void> setReaction(
+    WidgetTester tester,
+    CommonFinders find, {
+    String text = '',
+    reaction = '',
+    customReaction,
+    bool isCustomReaction = false,
+  }) async {
     await tester.longPress(find.widgetWithText(MessageBubble, text));
     await awaitFor(tester, duration: const Duration(seconds: 1));
     await tester.tap(find.byKey(Key(reaction)));
@@ -137,33 +167,44 @@ class Input {
       await tester.tap(find.text(customReaction));
       await awaitFor(tester, duration: const Duration(seconds: 1));
     }
-    expect(find.widgetWithText(StatusRow, customReaction ?? reaction),
-        findsOneWidget);
+    expect(
+      find.widgetWithText(StatusRow, customReaction ?? reaction),
+      findsOneWidget,
+    );
   }
 
-  static Future<void> startRecording(WidgetTester tester, CommonFinders find,
-      {String key = '',
-      Duration recordFor = Duration.zero,
-      bool checkAudioPreviewComponents = false}) async {
+  static Future<void> startRecording(
+    WidgetTester tester,
+    CommonFinders find, {
+    String key = '',
+    Duration recordFor = Duration.zero,
+    bool checkAudioPreviewComponents = false,
+  }) async {
     await tester.timedDrag(
-        find.byKey(
-          Key(key),
-        ),
-        tester.getCenter(find.byKey(Key(key))),
-        recordFor);
+      find.byKey(
+        Key(key),
+      ),
+      tester.getCenter(find.byKey(Key(key))),
+      recordFor,
+    );
     await tester.pumpAndSettle();
     if (checkAudioPreviewComponents) {
       expect(
-          find.widgetWithIcon(GestureDetector, Icons.delete), findsOneWidget);
+        find.widgetWithIcon(GestureDetector, Icons.delete),
+        findsOneWidget,
+      );
       expect(find.widgetWithIcon(GestureDetector, Icons.send), findsOneWidget);
       expect(find.byType(AudioWidget), findsOneWidget);
     }
   }
 
-  static Future<void> playAudioPreview(WidgetTester tester, CommonFinders find,
-      {Duration playFor = Duration.zero,
-      bool checkAudioPreviewComponents = false,
-      int expectedAudioCompletion = 0}) async {
+  static Future<void> playAudioPreview(
+    WidgetTester tester,
+    CommonFinders find, {
+    Duration playFor = Duration.zero,
+    bool checkAudioPreviewComponents = false,
+    int expectedAudioCompletion = 0,
+  }) async {
     await tester.tap(find.widgetWithIcon(TextButton, Icons.play_arrow));
     await tester.pump(playFor);
     await tester.tap(find.widgetWithIcon(TextButton, Icons.pause));
@@ -178,8 +219,10 @@ class Input {
   }
 
   static Future<void> deleteAudioPreview(
-      WidgetTester tester, CommonFinders find,
-      {bool checkAudioPreviewComponents = false}) async {
+    WidgetTester tester,
+    CommonFinders find, {
+    bool checkAudioPreviewComponents = false,
+  }) async {
     await tester.tap(find.widgetWithIcon(GestureDetector, Icons.delete));
     await tester.pumpAndSettle();
     if (checkAudioPreviewComponents) {
@@ -189,8 +232,11 @@ class Input {
   }
 
   static Future<void> checkClipboard(
-      WidgetTester tester, CommonFinders find, ClipboardMock clipboard,
-      {String text = ''}) async {
+    WidgetTester tester,
+    CommonFinders find,
+    ClipboardMock clipboard, {
+    String text = '',
+  }) async {
     expect(
       clipboard.clipboardData,
       equals(

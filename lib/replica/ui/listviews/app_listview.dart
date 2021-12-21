@@ -12,13 +12,16 @@ var logger = Logger(
 /// ReplicaAppListView renders 'App' Replica items
 /// Looks quite similar to ReplicaDocumentListView: docs/replica_app_listview.png
 class ReplicaAppListView extends ReplicaCommonListView {
-  ReplicaAppListView(
-      {Key? key, required ReplicaApi replicaApi, required String searchQuery})
-      : super(
-            key: key,
-            replicaApi: replicaApi,
-            searchQuery: searchQuery,
-            searchCategory: SearchCategory.App);
+  ReplicaAppListView({
+    Key? key,
+    required ReplicaApi replicaApi,
+    required String searchQuery,
+  }) : super(
+          key: key,
+          replicaApi: replicaApi,
+          searchQuery: searchQuery,
+          searchCategory: SearchCategory.App,
+        );
 
   @override
   State<StatefulWidget> createState() => _ReplicaAppListViewState();
@@ -32,8 +35,12 @@ class _ReplicaAppListViewState extends ReplicaCommonListViewState {
         item: item,
         replicaApi: widget.replicaApi,
         onTap: () async {
-          await context.pushRoute(ReplicaUnknownItemScreen(
-              replicaLink: item.replicaLink, category: SearchCategory.App));
+          await context.pushRoute(
+            ReplicaUnknownItemScreen(
+              replicaLink: item.replicaLink,
+              category: SearchCategory.App,
+            ),
+          );
         },
       );
     });

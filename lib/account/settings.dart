@@ -44,7 +44,8 @@ class Settings extends StatelessWidget {
                 child: sessionModel.language(
                   (BuildContext context, String lang, Widget? child) => CText(
                     toBeginningOfSentenceCase(
-                        lang.displayLanguage(context, lang).toUpperCase())!,
+                      lang.displayLanguage(context, lang).toUpperCase(),
+                    )!,
                     style: tsSubtitle2.copiedWith(color: pink4),
                   ),
                 ),
@@ -63,60 +64,65 @@ class Settings extends StatelessWidget {
           ),
           //* Blocked
           messagingModel.getOnBoardingStatus(
-              (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
-                  ? ListItemFactory.settingsItem(
-                      header: 'chat'.i18n,
-                      icon: ImagePaths.block,
-                      content: 'blocked_users'.i18n,
-                      trailingArray: [
-                        mirrorLTR(
-                            context: context, child: const ContinueArrow())
-                      ],
-                      onTap: () => context.pushRoute(BlockedUsers()),
-                    )
-                  : const SizedBox()),
+            (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
+                ? ListItemFactory.settingsItem(
+                    header: 'chat'.i18n,
+                    icon: ImagePaths.block,
+                    content: 'blocked_users'.i18n,
+                    trailingArray: [
+                      mirrorLTR(
+                        context: context,
+                        child: const ContinueArrow(),
+                      )
+                    ],
+                    onTap: () => context.pushRoute(BlockedUsers()),
+                  )
+                : const SizedBox(),
+          ),
           //* Proxy
           sessionModel.proxyAll(
-              (BuildContext context, bool proxyAll, Widget? child) =>
-                  ListItemFactory.settingsItem(
-                    header: 'VPN'.i18n,
-                    icon: ImagePaths.key,
-                    content: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CText(
-                            'proxy_everything_is'
-                                .i18n
-                                .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
-                            style: tsSubtitle1),
-                        GestureDetector(
-                          onTap: () => openInfoProxyAll(context),
-                          child: const Padding(
-                            padding: EdgeInsetsDirectional.only(start: 4.0),
-                            child: CAssetImage(
-                              path: ImagePaths.info,
-                              size: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailingArray: [
-                      FlutterSwitch(
-                        width: 44.0,
-                        height: 24.0,
-                        valueFontSize: 12.0,
-                        padding: 2,
-                        toggleSize: 18.0,
-                        value: proxyAll,
-                        activeColor: indicatorGreen,
-                        inactiveColor: offSwitchColor,
-                        onToggle: (bool newValue) {
-                          sessionModel.setProxyAll(newValue);
-                        },
+            (BuildContext context, bool proxyAll, Widget? child) =>
+                ListItemFactory.settingsItem(
+              header: 'VPN'.i18n,
+              icon: ImagePaths.key,
+              content: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CText(
+                    'proxy_everything_is'
+                        .i18n
+                        .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
+                    style: tsSubtitle1,
+                  ),
+                  GestureDetector(
+                    onTap: () => openInfoProxyAll(context),
+                    child: const Padding(
+                      padding: EdgeInsetsDirectional.only(start: 4.0),
+                      child: CAssetImage(
+                        path: ImagePaths.info,
+                        size: 12,
                       ),
-                    ],
-                  )),
+                    ),
+                  ),
+                ],
+              ),
+              trailingArray: [
+                FlutterSwitch(
+                  width: 44.0,
+                  height: 24.0,
+                  valueFontSize: 12.0,
+                  padding: 2,
+                  toggleSize: 18.0,
+                  value: proxyAll,
+                  activeColor: indicatorGreen,
+                  inactiveColor: offSwitchColor,
+                  onToggle: (bool newValue) {
+                    sessionModel.setProxyAll(newValue);
+                  },
+                ),
+              ],
+            ),
+          ),
           //* Build version
           FutureBuilder<PackageInfo>(
             future: packageInfo,
@@ -131,21 +137,27 @@ class Settings extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsetsDirectional.only(
-                          bottom: 8.0, end: 8.0),
+                        bottom: 8.0,
+                        end: 8.0,
+                      ),
                       child: CText(
-                          'version_number'
-                              .i18n
-                              .fill([snapshot.data?.version ?? '']),
-                          style: tsOverline.copiedWith(color: pink4)),
+                        'version_number'
+                            .i18n
+                            .fill([snapshot.data?.version ?? '']),
+                        style: tsOverline.copiedWith(color: pink4),
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsetsDirectional.only(
-                          bottom: 8.0, end: 8.0),
+                        bottom: 8.0,
+                        end: 8.0,
+                      ),
                       child: CText(
-                          'build_number'
-                              .i18n
-                              .fill([snapshot.data?.buildNumber ?? '']),
-                          style: tsOverline.copiedWith(color: pink4)),
+                        'build_number'
+                            .i18n
+                            .fill([snapshot.data?.buildNumber ?? '']),
+                        style: tsOverline.copiedWith(color: pink4),
+                      ),
                     ),
                   ],
                 ),

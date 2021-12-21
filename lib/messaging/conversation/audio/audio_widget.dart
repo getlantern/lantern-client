@@ -32,9 +32,11 @@ class AudioController extends ValueNotifier<AudioValue> {
   final BuildContext context;
   final StoredAttachment attachment;
 
-  AudioController(
-      {required this.context, required this.attachment, Uint8List? thumbnail})
-      : super(AudioValue()) {
+  AudioController({
+    required this.context,
+    required this.attachment,
+    Uint8List? thumbnail,
+  }) : super(AudioValue()) {
     var durationString = attachment.attachment.metadata['duration'];
     if (durationString != null) {
       var milliseconds = (double.tryParse(durationString)! * 1000).toInt();
@@ -196,7 +198,11 @@ class AudioWidget extends StatelessWidget {
                 children: [
                   value.bars.isNotEmpty
                       ? _getWaveform(
-                          context, value, value.bars, constraints.maxWidth - 36)
+                          context,
+                          value,
+                          value.bars,
+                          constraints.maxWidth - 36,
+                        )
                       : const SizedBox(),
                   _getSliderOverlay(context, value),
                 ],
@@ -230,17 +236,18 @@ class AudioWidget extends StatelessWidget {
         context: context,
         child: SliderTheme(
           data: SliderThemeData(
-              trackHeight: 0,
-              activeTrackColor:
-                  value.bars.isNotEmpty ? transparent : Colors.grey,
-              inactiveTrackColor:
-                  value.bars.isNotEmpty ? transparent : Colors.blue,
-              valueIndicatorColor: Colors.grey.shade200,
-              trackShape: CustomTrackShape(),
-              thumbShape: RectangleSliderThumbShapes(
-                  height: height,
-                  isPlaying: value.playerState == PlayerState.playing ||
-                      value.playerState == PlayerState.paused)),
+            trackHeight: 0,
+            activeTrackColor: value.bars.isNotEmpty ? transparent : Colors.grey,
+            inactiveTrackColor:
+                value.bars.isNotEmpty ? transparent : Colors.blue,
+            valueIndicatorColor: Colors.grey.shade200,
+            trackShape: CustomTrackShape(),
+            thumbShape: RectangleSliderThumbShapes(
+              height: height,
+              isPlaying: value.playerState == PlayerState.playing ||
+                  value.playerState == PlayerState.paused,
+            ),
+          ),
           child: Slider(
             onChanged: (v) {
               if (value.playerState == PlayerState.stopped) {
@@ -264,7 +271,11 @@ class AudioWidget extends StatelessWidget {
   }
 
   Widget _getWaveform(
-      BuildContext context, AudioValue value, List<int> bars, double width) {
+    BuildContext context,
+    AudioValue value,
+    List<int> bars,
+    double width,
+  ) {
     var _progress = _updateProgress(value);
     return Waveform(
       progressPercentage: _progress,

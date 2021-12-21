@@ -8,7 +8,9 @@ class SecureNumberRecovery extends StatefulWidget {
 class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'recoveryInput');
   late final controller = CustomTextEditingController(
-      formKey: _formKey, validator: (value) => null);
+    formKey: _formKey,
+    validator: (value) => null,
+  );
   var shouldSubmit = false;
 
   @override
@@ -34,9 +36,10 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
           await model.markCopiedRecoveryKey();
           context.router.popUntilRoot();
           showSnackbar(
-              context: context,
-              content: 'recovery_success'.i18n,
-              duration: longAnimationDuration);
+            context: context,
+            content: 'recovery_success'.i18n,
+            duration: longAnimationDuration,
+          );
         } catch (e) {
           setState(() => controller.error = 'recovery_error'.i18n);
         } finally {
@@ -51,48 +54,57 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-        title: 'secure_chat_number_recovery'.i18n,
-        body: PinnedButtonLayout(
-            content: [
-              Form(
-                onChanged: () => setState(() => shouldSubmit =
-                    controller.text.withoutWhitespace.length == 52),
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.only(top: 16.0),
-                  child: CTextField(
-                    controller: controller,
-                    autovalidateMode: AutovalidateMode.disabled,
-                    label: 'recovery_label'.i18n,
-                    prefixIcon: null,
-                    suffixIcon: null,
-                    minLines: 2,
-                    maxLines: null,
-                    inputFormatters: [
-                      TextInputFormatter.withFunction((oldValue, newValue) {
-                        final original = newValue.text;
-                        final formatted = original.formattedRecoveryKey;
-                        var selection = newValue.selection;
-                        if (formatted != original) {
-                          final offset = formatted.characters.length;
-                          selection = selection.copyWith(
-                              baseOffset: offset, extentOffset: offset);
-                        }
-                        return newValue.copyWith(
-                            text: formatted, selection: selection);
-                      }),
-                    ],
-                  ),
-                ),
+      title: 'secure_chat_number_recovery'.i18n,
+      body: PinnedButtonLayout(
+        content: [
+          Form(
+            onChanged: () => setState(
+              () =>
+                  shouldSubmit = controller.text.withoutWhitespace.length == 52,
+            ),
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(top: 16.0),
+              child: CTextField(
+                controller: controller,
+                autovalidateMode: AutovalidateMode.disabled,
+                label: 'recovery_label'.i18n,
+                prefixIcon: null,
+                suffixIcon: null,
+                minLines: 2,
+                maxLines: null,
+                inputFormatters: [
+                  TextInputFormatter.withFunction((oldValue, newValue) {
+                    final original = newValue.text;
+                    final formatted = original.formattedRecoveryKey;
+                    var selection = newValue.selection;
+                    if (formatted != original) {
+                      final offset = formatted.characters.length;
+                      selection = selection.copyWith(
+                        baseOffset: offset,
+                        extentOffset: offset,
+                      );
+                    }
+                    return newValue.copyWith(
+                      text: formatted,
+                      selection: selection,
+                    );
+                  }),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(top: 8.0),
-                child: CText('recovery_button'.i18n, style: tsBody1),
-              ),
-            ],
-            button: Button(
-                text: 'Submit'.i18n,
-                onPressed: () => handleButtonPress(messagingModel),
-                disabled: !shouldSubmit)));
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(top: 8.0),
+            child: CText('recovery_button'.i18n, style: tsBody1),
+          ),
+        ],
+        button: Button(
+          text: 'Submit'.i18n,
+          onPressed: () => handleButtonPress(messagingModel),
+          disabled: !shouldSubmit,
+        ),
+      ),
+    );
   }
 }

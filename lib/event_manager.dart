@@ -12,7 +12,9 @@ class EventManager extends EventChannel {
   EventManager(String name) : super(name);
 
   void Function() subscribe(
-      Event event, void Function(Event event, Map map) onNewEvent) {
+    Event event,
+    void Function(Event event, Map map) onNewEvent,
+  ) {
     var subscriberID = nextSubscriberID++;
     var arguments = {
       'subscriberID': subscriberID,

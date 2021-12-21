@@ -10,11 +10,13 @@ import 'common.dart';
 class SubscribedListNotifier<T>
     extends SubscribedNotifier<ChangeTrackingList<T>> {
   SubscribedListNotifier(
-      path, ModelEventChannel channel, void Function() removeFromCache,
-      {bool details = false,
-      int Function(String key1, String key2)? compare,
-      T Function(Uint8List serialized)? deserialize})
-      : super(ChangeTrackingList(compare ?? sortNormally), removeFromCache) {
+    path,
+    ModelEventChannel channel,
+    void Function() removeFromCache, {
+    bool details = false,
+    int Function(String key1, String key2)? compare,
+    T Function(Uint8List serialized)? deserialize,
+  }) : super(ChangeTrackingList(compare ?? sortNormally), removeFromCache) {
     void onChanges(Map<String, T> updates, Iterable<String> deletions) {
       value.clearPaths();
       updates.forEach((path, v) {
@@ -32,8 +34,12 @@ class SubscribedListNotifier<T>
       notifyListeners();
     }
 
-    cancel = channel.subscribe<T>(path,
-        details: details, onChanges: onChanges, deserialize: deserialize);
+    cancel = channel.subscribe<T>(
+      path,
+      details: details,
+      onChanges: onChanges,
+      deserialize: deserialize,
+    );
   }
 }
 
@@ -60,10 +66,10 @@ class ChangeTrackingList<T> {
 class SubscribedListBuilder<T>
     extends ValueListenableBuilder<ChangeTrackingList<T>> {
   SubscribedListBuilder(
-      String path,
-      ValueNotifier<ChangeTrackingList<T>> notifier,
-      ValueWidgetBuilder<ChangeTrackingList<T>> builder)
-      : super(valueListenable: notifier, builder: builder);
+    String path,
+    ValueNotifier<ChangeTrackingList<T>> notifier,
+    ValueWidgetBuilder<ChangeTrackingList<T>> builder,
+  ) : super(valueListenable: notifier, builder: builder);
 
   @override
   _SubscribedListBuilderState createState() => _SubscribedListBuilderState<T>();
@@ -83,7 +89,8 @@ class _SubscribedListBuilderState<T>
 
   @override
   void didUpdateWidget(
-      ValueListenableBuilder<ChangeTrackingList<T>> oldWidget) {
+    ValueListenableBuilder<ChangeTrackingList<T>> oldWidget,
+  ) {
     if (oldWidget.valueListenable != widget.valueListenable) {
       oldWidget.valueListenable.removeListener(_valueChanged);
       value = widget.valueListenable.value;
@@ -135,7 +142,10 @@ class _SubscribedListBuilderState<T>
 }
 
 ValueNotifier<T> listChildValueNotifier<T>(
-    BuildContext context, String path, T defaultValue) {
+  BuildContext context,
+  String path,
+  T defaultValue,
+) {
   var notifiers = context
       .findAncestorStateOfType<_SubscribedListBuilderState>()!
       ._childNotifiers;

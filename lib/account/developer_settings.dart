@@ -176,10 +176,13 @@ class DeveloperSettingsTab extends StatelessWidget {
                 text: 'Play random video',
                 secondary: true,
                 onPressed: () async => await context.pushRoute(
-                    ReplicaVideoPlayerScreen(
-                        replicaApi: replicaApi,
-                        replicaLink: ReplicaLink.New(
-                            'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0')!)),
+                  ReplicaVideoPlayerScreen(
+                    replicaApi: replicaApi,
+                    replicaLink: ReplicaLink.New(
+                      'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0',
+                    )!,
+                  ),
+                ),
               ),
             if (replicaApi.available)
               Button(
@@ -187,10 +190,13 @@ class DeveloperSettingsTab extends StatelessWidget {
                 text: 'Play random audio',
                 secondary: true,
                 onPressed: () async => await context.pushRoute(
-                    ReplicaAudioPlayerScreen(
-                        replicaApi: replicaApi,
-                        replicaLink: ReplicaLink.New(
-                            'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0')!)),
+                  ReplicaAudioPlayerScreen(
+                    replicaApi: replicaApi,
+                    replicaLink: ReplicaLink.New(
+                      'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0',
+                    )!,
+                  ),
+                ),
               ),
             MarkdownBody(
               data:
@@ -222,8 +228,12 @@ class DeveloperSettingsTab extends StatelessWidget {
               builders: {
                 'replica': ReplicaLinkMarkdownElementBuilder(
                     (replicaApi, replicaLink) {
-                  context.pushRoute(ReplicaLinkOpenerScreen(
-                      replicaApi: replicaApi, replicaLink: replicaLink));
+                  context.pushRoute(
+                    ReplicaLinkOpenerScreen(
+                      replicaApi: replicaApi,
+                      replicaLink: replicaLink,
+                    ),
+                  );
                 }),
               },
               extensionSet: md.ExtensionSet.gitHubFlavored,

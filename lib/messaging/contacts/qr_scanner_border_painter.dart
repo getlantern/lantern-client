@@ -22,7 +22,9 @@ class QRScannerBorderPainter extends CustomPainter {
 
     // draw a indicatorGreen rectangle with rounded corners
     canvas.drawRRect(
-        RRect.fromLTRBR(0, 0, w, h, Radius.circular(r)), greenPaint);
+      RRect.fromLTRBR(0, 0, w, h, Radius.circular(r)),
+      greenPaint,
+    );
 
     // break the lines of the rectangle on the left, right, top and bottom sides
     canvas.drawLine(Offset(0, cw), Offset(0, h - cw), greyPaint);

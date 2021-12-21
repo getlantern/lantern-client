@@ -7,10 +7,11 @@ class MessageBarPreviewRecording extends StatelessWidget {
   final VoidCallback onCancelRecording;
   final VoidCallback? onSend;
 
-  const MessageBarPreviewRecording(
-      {required this.audioController,
-      required this.onCancelRecording,
-      required this.onSend});
+  const MessageBarPreviewRecording({
+    required this.audioController,
+    required this.onCancelRecording,
+    required this.onSend,
+  });
 
   @override
   Widget build(BuildContext context) {

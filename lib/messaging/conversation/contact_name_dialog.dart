@@ -35,7 +35,9 @@ class _ContactNameDialogState extends State<ContactNameDialog> {
   void submit(BuildContext context, String value) async {
     if (shouldSubmit) {
       await messagingModel.addOrUpdateDirectContact(
-          unsafeId: widget.contact.contactId.id, displayName: value);
+        unsafeId: widget.contact.contactId.id,
+        displayName: value,
+      );
       await context.router.pop();
     }
   }
@@ -62,34 +64,39 @@ class _ContactNameDialogState extends State<ContactNameDialog> {
             Align(
               alignment: Alignment.centerLeft,
               child: Form(
-                  key: _key,
-                  onChanged: () =>
-                      setState(() => shouldSubmit = controller.text.isNotEmpty),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.only(
-                              start: 0, top: 16.0, end: 0, bottom: 16.0),
-                          child: Wrap(
-                            children: [
-                              CTextField(
-                                controller: controller,
-                                autovalidateMode: AutovalidateMode.disabled,
-                                label: 'display_name'.i18n,
-                                prefixIcon:
-                                    const CAssetImage(path: ImagePaths.user),
-                                helperText: 'letter_and_numbers_only'.i18n,
-                                keyboardType: TextInputType.text,
-                                maxLines: null,
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (value) =>
-                                    submit(context, value),
-                              ),
-                            ],
+                key: _key,
+                onChanged: () =>
+                    setState(() => shouldSubmit = controller.text.isNotEmpty),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        start: 0,
+                        top: 16.0,
+                        end: 0,
+                        bottom: 16.0,
+                      ),
+                      child: Wrap(
+                        children: [
+                          CTextField(
+                            controller: controller,
+                            autovalidateMode: AutovalidateMode.disabled,
+                            label: 'display_name'.i18n,
+                            prefixIcon:
+                                const CAssetImage(path: ImagePaths.user),
+                            helperText: 'letter_and_numbers_only'.i18n,
+                            keyboardType: TextInputType.text,
+                            maxLines: null,
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (value) => submit(context, value),
                           ),
-                        )
-                      ])),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
             Align(
               alignment: Alignment.centerRight,

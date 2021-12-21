@@ -20,11 +20,12 @@ var logger = Logger(
 /// timeout, not a faulty link. This should be fixed to address faulty links as
 /// opposed to timeouts
 class ReplicaUnknownItemScreen extends StatefulWidget {
-  ReplicaUnknownItemScreen(
-      {Key? key,
-      required this.replicaLink,
-      required this.category,
-      this.mimeType});
+  ReplicaUnknownItemScreen({
+    Key? key,
+    required this.replicaLink,
+    required this.category,
+    this.mimeType,
+  });
 
   final ReplicaLink replicaLink;
   final SearchCategory category;

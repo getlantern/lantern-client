@@ -9,13 +9,14 @@ class RoundButton extends StatelessWidget {
   final Color splashColor;
   final void Function() onPressed;
 
-  RoundButton(
-      {required this.icon,
-      this.diameter = 56,
-      this.padding = 2,
-      required this.backgroundColor,
-      this.splashColor = Colors.white,
-      required this.onPressed});
+  RoundButton({
+    required this.icon,
+    this.diameter = 56,
+    this.padding = 2,
+    required this.backgroundColor,
+    this.splashColor = Colors.white,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +44,11 @@ class RoundButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-            padding:
-                MaterialStateProperty.all(EdgeInsetsDirectional.all(padding)),
-            backgroundColor: MaterialStateProperty.all(backgroundColor),
-            shape: MaterialStateProperty.all(const CircleBorder())),
+          padding:
+              MaterialStateProperty.all(EdgeInsetsDirectional.all(padding)),
+          backgroundColor: MaterialStateProperty.all(backgroundColor),
+          shape: MaterialStateProperty.all(const CircleBorder()),
+        ),
         child: icon,
       ),
     );

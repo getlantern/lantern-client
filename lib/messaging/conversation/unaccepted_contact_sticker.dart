@@ -25,10 +25,11 @@ class UnacceptedContactSticker extends StatelessWidget {
               top: 24.0,
             ),
             child: CText(
-                'banner_unaccepted'
-                    .i18n
-                    .fill([contact.chatNumber.shortNumber.formattedChatNumber]),
-                style: tsBody1.copiedWith(color: grey5)),
+              'banner_unaccepted'
+                  .i18n
+                  .fill([contact.chatNumber.shortNumber.formattedChatNumber]),
+              style: tsBody1.copiedWith(color: grey5),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -47,14 +48,19 @@ class UnacceptedContactSticker extends StatelessWidget {
                       await messagingModel
                           .deleteDirectContact(contact.contactId.id);
                     } catch (e, s) {
-                      showErrorDialog(context,
-                          e: e, s: s, des: 'error_delete_contact'.i18n);
+                      showErrorDialog(
+                        context,
+                        e: e,
+                        s: s,
+                        des: 'error_delete_contact'.i18n,
+                      );
                     } finally {
                       showSnackbar(
-                          context: context,
-                          content: 'contact_was_deleted'
-                              .i18n
-                              .fill([contact.displayNameOrFallback]));
+                        context: context,
+                        content: 'contact_was_deleted'
+                            .i18n
+                            .fill([contact.displayNameOrFallback]),
+                      );
                       context.loaderOverlay.hide();
                       context.router.popUntilRoot();
                     }
@@ -86,14 +92,19 @@ class UnacceptedContactSticker extends StatelessWidget {
                       await messagingModel
                           .deleteDirectContact(contact.contactId.id);
                     } catch (e, s) {
-                      showErrorDialog(context,
-                          e: e, s: s, des: 'error_delete_contact'.i18n);
+                      showErrorDialog(
+                        context,
+                        e: e,
+                        s: s,
+                        des: 'error_delete_contact'.i18n,
+                      );
                     } finally {
                       showSnackbar(
-                          context: context,
-                          content: 'contact_was_deleted'
-                              .i18n
-                              .fill([contact.displayNameOrFallback]));
+                        context: context,
+                        content: 'contact_was_deleted'
+                            .i18n
+                            .fill([contact.displayNameOrFallback]),
+                      );
                       context.loaderOverlay.hide();
                       context.router.popUntilRoot();
                     }
@@ -109,10 +120,14 @@ class UnacceptedContactSticker extends StatelessWidget {
                   try {
                     final _contact =
                         await messagingModel.addOrUpdateDirectContact(
-                            chatNumber: contact.chatNumber);
-                    await context.router.popAndPush(Conversation(
+                      chatNumber: contact.chatNumber,
+                    );
+                    await context.router.popAndPush(
+                      Conversation(
                         contactId: _contact.contactId,
-                        showContactEditingDialog: true));
+                        showContactEditingDialog: true,
+                      ),
+                    );
                   } catch (e) {
                     showInfoDialog(
                       context,

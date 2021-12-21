@@ -1,20 +1,21 @@
 import 'dart:io';
-import 'package:lantern/common/ui/button.dart';
-import 'package:lantern/common/ui/custom/text_field.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:mime/mime.dart';
-import 'package:path/path.dart' as path;
+
 import 'package:flutter/material.dart';
 import 'package:lantern/common/ui/base_screen.dart';
+import 'package:lantern/common/ui/button.dart';
 import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/custom/asset_image.dart';
 import 'package:lantern/common/ui/custom/list_item_factory.dart';
 import 'package:lantern/common/ui/custom/text.dart';
+import 'package:lantern/common/ui/custom/text_field.dart';
 import 'package:lantern/common/ui/image_paths.dart';
 import 'package:lantern/common/ui/text_styles.dart';
 import 'package:lantern/i18n/i18n.dart';
 import 'package:lantern/replica/logic/uploader.dart';
+import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
+import 'package:mime/mime.dart';
+import 'package:path/path.dart' as path;
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
@@ -93,12 +94,13 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
           return CAssetImage(path: cat.getRelevantImagePath());
         }
         var b = await VideoThumbnail.thumbnailData(
-            video: file.path,
-            imageFormat: ImageFormat.JPEG,
-            maxWidth: 24,
-            maxHeight: 24,
-            quality: 25,
-            timeMs: duration ~/ 2);
+          video: file.path,
+          imageFormat: ImageFormat.JPEG,
+          maxWidth: 24,
+          maxHeight: 24,
+          quality: 25,
+          timeMs: duration ~/ 2,
+        );
         if (b == null) {
           // If we failed to fetch the thumbnail, just return the default SVG
           return CAssetImage(path: cat.getRelevantImagePath());
@@ -120,80 +122,84 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
       child: ListView.separated(
-          scrollDirection: Axis.vertical,
-          // Shrinkwrap is true for convenience since this will always be a
-          // single element list
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            // First element should be a divider
-            if (index == 0) {
-              return const Divider(height: 1, thickness: 1);
-            }
-            return ListItemFactory.uploadEditItem(
-                trailingArray: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: const CAssetImage(path: ImagePaths.trailing_icon))
-                ],
-                leading: FutureBuilder(
-                    future: _getThumbnailWidgetFromFileFuture,
-                    builder:
-                        (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-                      if (snapshot.connectionState != ConnectionState.done) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.hasError ||
-                          !snapshot.hasData ||
-                          snapshot.data == null) {
-                        return CAssetImage(
-                            path: SearchCategoryFromMimeType(
-                                    lookupMimeType(widget.fileToUpload.path) ??
-                                        '')
-                                .getRelevantImagePath());
-                      }
+        scrollDirection: Axis.vertical,
+        // Shrinkwrap is true for convenience since this will always be a
+        // single element list
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          // First element should be a divider
+          if (index == 0) {
+            return const Divider(height: 1, thickness: 1);
+          }
+          return ListItemFactory.uploadEditItem(
+            trailingArray: [
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const CAssetImage(path: ImagePaths.trailing_icon),
+              )
+            ],
+            leading: FutureBuilder(
+              future: _getThumbnailWidgetFromFileFuture,
+              builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.hasError ||
+                    !snapshot.hasData ||
+                    snapshot.data == null) {
+                  return CAssetImage(
+                    path: SearchCategoryFromMimeType(
+                      lookupMimeType(widget.fileToUpload.path) ?? '',
+                    ).getRelevantImagePath(),
+                  );
+                }
 
-                      return snapshot.data!;
-                    }),
-                // leading: const CAssetImage(path: ImagePaths.spreadsheet),
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  verticalDirection: VerticalDirection.down,
+                return snapshot.data!;
+              },
+            ),
+            // leading: const CAssetImage(path: ImagePaths.spreadsheet),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              verticalDirection: VerticalDirection.down,
+              children: [
+                CText(
+                  _displayName,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: tsSubtitle1Short,
+                ),
+                // Render mime type
+                // If mimetype is nil, just render 'app/unknown'
+                Row(
                   children: [
-                    CText(
-                      _displayName,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: tsSubtitle1Short,
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 2.0),
                     ),
-                    // Render mime type
-                    // If mimetype is nil, just render 'app/unknown'
-                    Row(
-                      children: [
-                        const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 2.0)),
-                        if (path.extension(widget.fileToUpload.path).isNotEmpty)
-                          CText(
-                            path
-                                .extension(widget.fileToUpload.path)
-                                .toUpperCase()
-                                .replaceAll('.', ''),
-                            style: tsBody1.copiedWith(color: pink4),
-                          )
-                        else
-                          CText(
-                            'image_unknown'.i18n,
-                            style: tsBody1.copiedWith(color: pink4),
-                          ),
-                      ],
-                    )
+                    if (path.extension(widget.fileToUpload.path).isNotEmpty)
+                      CText(
+                        path
+                            .extension(widget.fileToUpload.path)
+                            .toUpperCase()
+                            .replaceAll('.', ''),
+                        style: tsBody1.copiedWith(color: pink4),
+                      )
+                    else
+                      CText(
+                        'image_unknown'.i18n,
+                        style: tsBody1.copiedWith(color: pink4),
+                      ),
                   ],
-                ));
-          },
-          separatorBuilder: (context, index) => const SizedBox.shrink(),
-          itemCount: 2),
+                )
+              ],
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox.shrink(),
+        itemCount: 2,
+      ),
     );
   }
 
@@ -201,42 +207,46 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 30.0),
       child: Align(
-          alignment: FractionalOffset.bottomCenter,
-          child: Button(
-            width: 200,
-            text: 'upload'.i18n,
-            onPressed: () async {
-              await ReplicaUploader.inst.uploadFile(
-                  widget.fileToUpload,
-                  // Add the display name with the extension
-                  '$_displayName${path.extension(widget.fileToUpload.path)}');
-              Navigator.of(context).pop();
-            },
-          )),
+        alignment: FractionalOffset.bottomCenter,
+        child: Button(
+          width: 200,
+          text: 'upload'.i18n,
+          onPressed: () async {
+            await ReplicaUploader.inst.uploadFile(
+              widget.fileToUpload,
+              // Add the display name with the extension
+              '$_displayName${path.extension(widget.fileToUpload.path)}',
+            );
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          // Dismiss keyboard when clicking anywhere
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: BaseScreen(
-            showAppBar: true,
-            title: 'upload_file_screen'.i18n,
-            body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  renderSearchBar(),
-                  renderUploadList(),
-                  renderUploadButton()
-                ],
-              ),
-            )));
+      onTap: () {
+        // Dismiss keyboard when clicking anywhere
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: BaseScreen(
+        showAppBar: true,
+        title: 'upload_file_screen'.i18n,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              renderSearchBar(),
+              renderUploadList(),
+              renderUploadButton()
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   // agreeAction: () => ,

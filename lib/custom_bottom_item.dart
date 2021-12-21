@@ -91,13 +91,14 @@ class CustomBottomBarItem extends StatelessWidget {
                   children: [
                     Flexible(child: icon),
                     Flexible(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        label,
-                        iconWidget ?? const SizedBox(),
-                      ],
-                    )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          label,
+                          iconWidget ?? const SizedBox(),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

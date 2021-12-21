@@ -5,7 +5,8 @@ class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
 
   void upgradeToLanternPro() => LanternNavigator.startScreen(
-      LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO);
+        LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO,
+      );
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());
@@ -21,22 +22,29 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
-      messagingModel.getOnBoardingStatus((context, hasBeenOnboarded, child) =>
-          hasBeenOnboarded == true
-              ? messagingModel.getCopiedRecoveryStatus((BuildContext context,
-                      bool hasCopiedRecoveryKey, Widget? child) =>
-                  ListItemFactory.settingsItem(
-                      icon: ImagePaths.account,
-                      content: 'Account Management'.i18n,
-                      onTap: () async => await context
-                          .pushRoute(AccountManagement(isPro: false)),
-                      trailingArray: [
-                        if (!hasCopiedRecoveryKey)
-                          const CAssetImage(
-                            path: ImagePaths.badge,
-                          ),
-                      ]))
-              : const SizedBox()),
+      messagingModel.getOnBoardingStatus(
+        (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
+            ? messagingModel.getCopiedRecoveryStatus(
+                (
+                  BuildContext context,
+                  bool hasCopiedRecoveryKey,
+                  Widget? child,
+                ) =>
+                    ListItemFactory.settingsItem(
+                  icon: ImagePaths.account,
+                  content: 'Account Management'.i18n,
+                  onTap: () async =>
+                      await context.pushRoute(AccountManagement(isPro: false)),
+                  trailingArray: [
+                    if (!hasCopiedRecoveryKey)
+                      const CAssetImage(
+                        path: ImagePaths.badge,
+                      ),
+                  ],
+                ),
+              )
+            : const SizedBox(),
+      ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.pro_icon_black,
         content: 'Upgrade to Lantern Pro'.i18n,
@@ -71,20 +79,24 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> proItems(BuildContext context) {
     return [
-      messagingModel.getOnBoardingStatus((context, hasBeenOnboarded, child) =>
-          messagingModel.getCopiedRecoveryStatus((BuildContext context,
-                  bool hasCopiedRecoveryKey, Widget? child) =>
+      messagingModel.getOnBoardingStatus(
+        (context, hasBeenOnboarded, child) =>
+            messagingModel.getCopiedRecoveryStatus(
+          (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
               ListItemFactory.settingsItem(
-                  icon: ImagePaths.account,
-                  content: 'Account Management'.i18n,
-                  onTap: () async =>
-                      await context.pushRoute(AccountManagement(isPro: true)),
-                  trailingArray: [
-                    if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
-                      const CAssetImage(
-                        path: ImagePaths.badge,
-                      ),
-                  ]))),
+            icon: ImagePaths.account,
+            content: 'Account Management'.i18n,
+            onTap: () async =>
+                await context.pushRoute(AccountManagement(isPro: true)),
+            trailingArray: [
+              if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
+                const CAssetImage(
+                  path: ImagePaths.badge,
+                ),
+            ],
+          ),
+        ),
+      ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.devices,
         content: 'Link Device'.i18n,

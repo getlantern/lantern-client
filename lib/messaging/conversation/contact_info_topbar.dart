@@ -19,9 +19,10 @@ class ContactInfoTopBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsetsDirectional.only(end: 16),
           child: CustomAvatar(
-              customColor: contact.isUnaccepted() ? grey5 : null,
-              messengerId: contact.contactId.id,
-              displayName: contact.displayName),
+            customColor: contact.isUnaccepted() ? grey5 : null,
+            messengerId: contact.contactId.id,
+            displayName: contact.displayName,
+          ),
         ),
         Expanded(
           child: Column(
@@ -39,7 +40,9 @@ class ContactInfoTopBar extends StatelessWidget {
                   if (contact.isVerified())
                     Padding(
                       padding: const EdgeInsetsDirectional.only(
-                          start: 8.0, end: 2.0),
+                        start: 8.0,
+                        end: 2.0,
+                      ),
                       child: CAssetImage(
                         path: ImagePaths.verified_user,
                         size: 12.0,
@@ -47,9 +50,13 @@ class ContactInfoTopBar extends StatelessWidget {
                       ),
                     ),
                   if (contact.isVerified())
-                    CText('verified'.i18n.toUpperCase(),
-                        style: tsOverline.copiedWith(
-                            lineHeight: 14, color: verifiedColor)),
+                    CText(
+                      'verified'.i18n.toUpperCase(),
+                      style: tsOverline.copiedWith(
+                        lineHeight: 14,
+                        color: verifiedColor,
+                      ),
+                    ),
                 ],
               ),
             ],

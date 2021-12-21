@@ -14,13 +14,16 @@ var logger = Logger(
 /// ReplicaImageListView renders a list of ReplicaImageListItem.
 /// Looks like this docs/replica_image_listview.png
 class ReplicaImageListView extends ReplicaCommonListView {
-  ReplicaImageListView(
-      {Key? key, required ReplicaApi replicaApi, required String searchQuery})
-      : super(
-            key: key,
-            replicaApi: replicaApi,
-            searchQuery: searchQuery,
-            searchCategory: SearchCategory.Image);
+  ReplicaImageListView({
+    Key? key,
+    required ReplicaApi replicaApi,
+    required String searchQuery,
+  }) : super(
+          key: key,
+          replicaApi: replicaApi,
+          searchQuery: searchQuery,
+          searchCategory: SearchCategory.Image,
+        );
 
   @override
   State<StatefulWidget> createState() => _ReplicaImageListViewState();
@@ -54,7 +57,8 @@ class _ReplicaImageListViewState extends ReplicaCommonListViewState {
             replicaApi: widget.replicaApi,
             onTap: () async {
               await context.pushRoute(
-                  ReplicaImagePreviewScreen(replicaLink: item.replicaLink));
+                ReplicaImagePreviewScreen(replicaLink: item.replicaLink),
+              );
             },
           );
         },

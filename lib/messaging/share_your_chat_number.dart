@@ -22,8 +22,10 @@ class ShareYourChatNumber {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CText('share_your_chat_number'.i18n, style: tsSubtitle1Short),
-          CText(me.chatNumber.shortNumber.formattedChatNumber,
-              style: tsBody1.copiedWith(color: grey5))
+          CText(
+            me.chatNumber.shortNumber.formattedChatNumber,
+            style: tsBody1.copiedWith(color: grey5),
+          )
         ],
       );
 

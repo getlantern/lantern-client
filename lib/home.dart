@@ -59,7 +59,8 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.black,
             duration: const Duration(days: 99999),
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8))),
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
             behavior: SnackBarBehavior.floating,
             margin:
                 const EdgeInsetsDirectional.only(start: 8, end: 8, bottom: 16),

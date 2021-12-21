@@ -38,58 +38,71 @@ class _AccountManagementState extends State<AccountManagement>
           .deviceId((BuildContext context, String myDeviceId, Widget? child) {
         var freeItems = [
           // * SECURE CHAT NUMBER
-          messagingModel.me((BuildContext context, Contact me, Widget? child) =>
-              StatefulBuilder(
-                  builder: (context, setState) => ListItemFactory.settingsItem(
-                        header: 'your_secure_chat_number'.i18n,
-                        icon: ImagePaths.chatNumber,
-                        content: me.chatNumber.shortNumber.formattedChatNumber,
-                        trailingArray: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.only(
-                                start: 16.0, end: 16.0),
-                            child: CInkWell(
-                              onTap: () async {
-                                copyText(
-                                    context,
-                                    me.chatNumber.shortNumber
-                                        .formattedChatNumber);
-                                setState(() => textCopied = true);
-                                await Future.delayed(defaultAnimationDuration,
-                                    () => setState(() => textCopied = false));
-                              },
-                              child: CAssetImage(
-                                path: textCopied
-                                    ? ImagePaths.check_green
-                                    : ImagePaths.content_copy,
-                              ),
-                            ),
-                          ),
-                          mirrorLTR(
-                              context: context, child: const ContinueArrow()),
-                        ],
-                        onTap: () => context.router
-                            .push(const SecureChatNumberAccount()),
-                      ))),
-          // * RECOVERY KEY
-          messagingModel.getCopiedRecoveryStatus((BuildContext context,
-                  bool hasCopiedRecoveryKey, Widget? child) =>
-              ListItemFactory.settingsItem(
-                icon: ImagePaths.lock_outline,
-                content: 'backup_recovery_key'.i18n,
+          messagingModel.me(
+            (BuildContext context, Contact me, Widget? child) =>
+                StatefulBuilder(
+              builder: (context, setState) => ListItemFactory.settingsItem(
+                header: 'your_secure_chat_number'.i18n,
+                icon: ImagePaths.chatNumber,
+                content: me.chatNumber.shortNumber.formattedChatNumber,
                 trailingArray: [
-                  if (!hasCopiedRecoveryKey)
-                    const Padding(
-                      padding:
-                          EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 16.0,
+                      end: 16.0,
+                    ),
+                    child: CInkWell(
+                      onTap: () async {
+                        copyText(
+                          context,
+                          me.chatNumber.shortNumber.formattedChatNumber,
+                        );
+                        setState(() => textCopied = true);
+                        await Future.delayed(
+                          defaultAnimationDuration,
+                          () => setState(() => textCopied = false),
+                        );
+                      },
                       child: CAssetImage(
-                        path: ImagePaths.badge,
+                        path: textCopied
+                            ? ImagePaths.check_green
+                            : ImagePaths.content_copy,
                       ),
                     ),
-                  mirrorLTR(context: context, child: const ContinueArrow())
+                  ),
+                  mirrorLTR(
+                    context: context,
+                    child: const ContinueArrow(),
+                  ),
                 ],
-                onTap: () => context.router.push(RecoveryKey()),
-              )),
+                onTap: () =>
+                    context.router.push(const SecureChatNumberAccount()),
+              ),
+            ),
+          ),
+          // * RECOVERY KEY
+          messagingModel.getCopiedRecoveryStatus(
+            (
+              BuildContext context,
+              bool hasCopiedRecoveryKey,
+              Widget? child,
+            ) =>
+                ListItemFactory.settingsItem(
+              icon: ImagePaths.lock_outline,
+              content: 'backup_recovery_key'.i18n,
+              trailingArray: [
+                if (!hasCopiedRecoveryKey)
+                  const Padding(
+                    padding: EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
+                    child: CAssetImage(
+                      path: ImagePaths.badge,
+                    ),
+                  ),
+                mirrorLTR(context: context, child: const ContinueArrow())
+              ],
+              onTap: () => context.router.push(RecoveryKey()),
+            ),
+          ),
           // * Delete all Chat data
           ListItemFactory.settingsItem(
             icon: ImagePaths.account_remove,
@@ -119,7 +132,8 @@ class _AccountManagementState extends State<AccountManagement>
                   end: 16,
                   bottom: 8,
                 ),
-                children: freeItems)
+                children: freeItems,
+              )
             :
             // * PRO - check onboarding status
             messagingModel
@@ -127,8 +141,11 @@ class _AccountManagementState extends State<AccountManagement>
                 return sessionModel.devices(
                     (BuildContext context, Devices devices, Widget? child) {
                   var proItems = [
-                    sessionModel.emailAddress((BuildContext context,
-                        String emailAddress, Widget? child) {
+                    sessionModel.emailAddress((
+                      BuildContext context,
+                      String emailAddress,
+                      Widget? child,
+                    ) {
                       return ListItemFactory.settingsItem(
                         header: 'lantern_pro_email'.i18n,
                         icon: ImagePaths.email,
@@ -136,15 +153,19 @@ class _AccountManagementState extends State<AccountManagement>
                         trailingArray: [],
                       );
                     }),
-                    sessionModel.expiryDate((BuildContext context,
-                        String expirationDate, Widget? child) {
+                    sessionModel.expiryDate((
+                      BuildContext context,
+                      String expirationDate,
+                      Widget? child,
+                    ) {
                       return ListItemFactory.settingsItem(
                         header: 'Pro Account Expiration'.i18n,
                         icon: ImagePaths.clock,
                         content: expirationDate,
                         onTap: () {
                           LanternNavigator.startScreen(
-                              LanternNavigator.SCREEN_PLANS);
+                            LanternNavigator.SCREEN_PLANS,
+                          );
                         },
                         trailingArray: [
                           CText('Renew'.i18n.toUpperCase(), style: tsButtonPink)
@@ -153,144 +174,160 @@ class _AccountManagementState extends State<AccountManagement>
                     }),
                   ];
 
-                  proItems.addAll(devices.devices.map((device) {
-                    var isMyDevice = device.id == myDeviceId;
-                    var allowRemoval =
-                        devices.devices.length > 1 || !isMyDevice;
-                    var index = devices.devices.indexWhere((d) => d == device);
+                  proItems.addAll(
+                    devices.devices.map((device) {
+                      var isMyDevice = device.id == myDeviceId;
+                      var allowRemoval =
+                          devices.devices.length > 1 || !isMyDevice;
+                      var index =
+                          devices.devices.indexWhere((d) => d == device);
 
-                    return Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 4),
-                      child: ListItemFactory.settingsItem(
-                        header: index == 0 ? 'pro_devices_header'.i18n : null,
-                        content: device.name,
-                        onTap: !allowRemoval
-                            ? null
-                            : () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      content: CText(
+                      return Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 4),
+                        child: ListItemFactory.settingsItem(
+                          header: index == 0 ? 'pro_devices_header'.i18n : null,
+                          content: device.name,
+                          onTap: !allowRemoval
+                              ? null
+                              : () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: CText(
                                           'confirm_remove_device'.i18n,
-                                          style: tsBody1),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: CText(
-                                            'No'.i18n,
-                                            style: tsButtonGrey,
-                                          ),
+                                          style: tsBody1,
                                         ),
-                                        TextButton(
-                                          onPressed: () {
-                                            context.loaderOverlay
-                                                .show(widget: spinner);
-                                            sessionModel
-                                                .removeDevice(device.id)
-                                                .then((value) {
-                                              context.loaderOverlay.hide();
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
                                               Navigator.pop(context);
-                                            }).onError((error, stackTrace) {
-                                              context.loaderOverlay.hide();
-                                            });
-                                          },
-                                          child: CText(
-                                            'Yes'.i18n,
-                                            style: tsButtonPink,
+                                            },
+                                            child: CText(
+                                              'No'.i18n,
+                                              style: tsButtonGrey,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                        trailingArray: !allowRemoval
-                            ? []
-                            : [
-                                CText(
+                                          TextButton(
+                                            onPressed: () {
+                                              context.loaderOverlay
+                                                  .show(widget: spinner);
+                                              sessionModel
+                                                  .removeDevice(device.id)
+                                                  .then((value) {
+                                                context.loaderOverlay.hide();
+                                                Navigator.pop(context);
+                                              }).onError((error, stackTrace) {
+                                                context.loaderOverlay.hide();
+                                              });
+                                            },
+                                            child: CText(
+                                              'Yes'.i18n,
+                                              style: tsButtonPink,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                          trailingArray: !allowRemoval
+                              ? []
+                              : [
+                                  CText(
                                     (isMyDevice ? 'Log Out' : 'Remove')
                                         .i18n
                                         .toUpperCase(),
-                                    style: tsButtonPink)
-                              ],
-                      ),
-                    );
-                  }));
+                                    style: tsButtonPink,
+                                  )
+                                ],
+                        ),
+                      );
+                    }),
+                  );
 
                   if (devices.devices.length < 3) {
-                    proItems.add(ListItemFactory.settingsItem(
-                      content: '',
-                      onTap: () async =>
-                          await context.pushRoute(ApproveDevice()),
-                      trailingArray: [
-                        CText('Link Device'.i18n.toUpperCase(),
-                            style: tsButtonPink)
-                      ],
-                    ));
+                    proItems.add(
+                      ListItemFactory.settingsItem(
+                        content: '',
+                        onTap: () async =>
+                            await context.pushRoute(ApproveDevice()),
+                        trailingArray: [
+                          CText(
+                            'Link Device'.i18n.toUpperCase(),
+                            style: tsButtonPink,
+                          )
+                        ],
+                      ),
+                    );
                   }
                   return hasBeenOnboarded == true
                       // * has been onboarded
-                      ? Column(children: [
-                          TabBar(
-                            controller: tabController,
-                            indicator: BoxDecoration(
-                              border: Border(
+                      ? Column(
+                          children: [
+                            TabBar(
+                              controller: tabController,
+                              indicator: BoxDecoration(
+                                border: Border(
                                   top: BorderSide.none,
                                   left: BorderSide.none,
                                   right: BorderSide.none,
-                                  bottom: BorderSide(width: 3.0, color: pink4)),
+                                  bottom: BorderSide(width: 3.0, color: pink4),
+                                ),
+                              ),
+                              labelStyle: tsSubtitle2,
+                              labelColor: pink4,
+                              unselectedLabelStyle: tsBody1,
+                              unselectedLabelColor: grey5,
+                              tabs: [
+                                Tab(
+                                  text: 'Lantern Pro'.i18n.toUpperCase(),
+                                ),
+                                Tab(
+                                  text: 'secure_chat'.i18n.toUpperCase(),
+                                ),
+                              ],
                             ),
-                            labelStyle: tsSubtitle2,
-                            labelColor: pink4,
-                            unselectedLabelStyle: tsBody1,
-                            unselectedLabelColor: grey5,
-                            tabs: [
-                              Tab(
-                                text: 'Lantern Pro'.i18n.toUpperCase(),
-                              ),
-                              Tab(
-                                text: 'secure_chat'.i18n.toUpperCase(),
-                              ),
-                            ],
-                          ),
-                          const CDivider(),
-                          Expanded(
+                            const CDivider(),
+                            Expanded(
                               child: TabBarView(
-                            controller: tabController,
-                            children: [
-                              // * PRO TAB
-                              ListView(
-                                  padding: const EdgeInsetsDirectional.only(
-                                    start: 16,
-                                    end: 16,
-                                    bottom: 8,
+                                controller: tabController,
+                                children: [
+                                  // * PRO TAB
+                                  ListView(
+                                    padding: const EdgeInsetsDirectional.only(
+                                      start: 16,
+                                      end: 16,
+                                      bottom: 8,
+                                    ),
+                                    children: proItems,
                                   ),
-                                  children: proItems),
-                              // * SECURE CHAT TAB
-                              ListView(
-                                  padding: const EdgeInsetsDirectional.only(
-                                    start: 16,
-                                    end: 16,
-                                    bottom: 8,
+                                  // * SECURE CHAT TAB
+                                  ListView(
+                                    padding: const EdgeInsetsDirectional.only(
+                                      start: 16,
+                                      end: 16,
+                                      bottom: 8,
+                                    ),
+                                    children: freeItems,
                                   ),
-                                  children: freeItems),
-                            ],
-                          ))
-                        ])
+                                ],
+                              ),
+                            )
+                          ],
+                        )
                       // * has not been onboarded
                       : Column(
                           children: [
                             Expanded(
                               child: ListView(
-                                  padding: const EdgeInsetsDirectional.only(
-                                    start: 16,
-                                    end: 16,
-                                    bottom: 8,
-                                  ),
-                                  children: proItems),
+                                padding: const EdgeInsetsDirectional.only(
+                                  start: 16,
+                                  end: 16,
+                                  bottom: 8,
+                                ),
+                                children: proItems,
+                              ),
                             ),
                           ],
                         );
@@ -332,17 +369,27 @@ void showDeleteDataDialog(
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
-                      top: 16, bottom: 8, start: 24, end: 24),
+                    top: 16,
+                    bottom: 8,
+                    start: 24,
+                    end: 24,
+                  ),
                   child: Align(
-                      alignment: Alignment.center,
-                      child:
-                          CText('delete_chat_data'.i18n, style: tsSubtitle1)),
+                    alignment: Alignment.center,
+                    child: CText('delete_chat_data'.i18n, style: tsSubtitle1),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
-                      top: 8, bottom: 16, start: 24, end: 24),
-                  child: CText('delete_chat_data_description'.i18n,
-                      style: tsBody1.copiedWith(color: grey5)),
+                    top: 8,
+                    bottom: 16,
+                    start: 24,
+                    end: 24,
+                  ),
+                  child: CText(
+                    'delete_chat_data_description'.i18n,
+                    style: tsBody1.copiedWith(color: grey5),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.only(start: 12, end: 24),
@@ -350,18 +397,20 @@ void showDeleteDataDialog(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Checkbox(
-                          visualDensity: VisualDensity.compact,
-                          shape: const RoundedRectangleBorder(
-                              side: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(2.0))),
-                          checkColor: Colors.white,
-                          fillColor: MaterialStateProperty.resolveWith(
-                              (states) => getCheckboxFillColor(black, states)),
-                          value: confirmDelete,
-                          onChanged: (bool? value) {
-                            setState(() => confirmDelete = value!);
-                          }),
+                        visualDensity: VisualDensity.compact,
+                        shape: const RoundedRectangleBorder(
+                          side: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                        ),
+                        checkColor: Colors.white,
+                        fillColor: MaterialStateProperty.resolveWith(
+                          (states) => getCheckboxFillColor(black, states),
+                        ),
+                        value: confirmDelete,
+                        onChanged: (bool? value) {
+                          setState(() => confirmDelete = value!);
+                        },
+                      ),
                       Expanded(
                         child: CText(
                           'delete_chat_data_confirmation'.i18n,
@@ -395,8 +444,10 @@ void showDeleteDataDialog(
                       await model.wipeData();
                       await context.router.pop();
                     },
-                    child: CText('Delete'.i18n.toUpperCase(),
-                        style: confirmDelete ? tsButtonPink : tsButtonGrey),
+                    child: CText(
+                      'Delete'.i18n.toUpperCase(),
+                      style: confirmDelete ? tsButtonPink : tsButtonGrey,
+                    ),
                   ),
                 )
               ],

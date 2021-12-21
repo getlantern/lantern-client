@@ -10,11 +10,12 @@ var logger = Logger(
 );
 
 abstract class ReplicaCommonListView extends StatefulWidget {
-  ReplicaCommonListView(
-      {Key? key,
-      required this.replicaApi,
-      required this.searchQuery,
-      required this.searchCategory});
+  ReplicaCommonListView({
+    Key? key,
+    required this.replicaApi,
+    required this.searchQuery,
+    required this.searchCategory,
+  });
 
   final ReplicaApi replicaApi;
   final String searchQuery;
@@ -69,7 +70,8 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
       } else {
         final nextPageKey = page + ret.length;
         logger.v(
-            'Successfully fetched ${ret.length} items. Next key is $nextPageKey');
+          'Successfully fetched ${ret.length} items. Next key is $nextPageKey',
+        );
         pagingController.appendPage(ret, nextPageKey);
       }
     } catch (err) {
@@ -83,22 +85,26 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
   Widget showError(String err) {
     logger.e('Error while fetching search results: $err');
     return Expanded(
-        child: Center(
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-          const Icon(
-            Icons.error_outline,
-            color: Colors.red,
-            size: 60,
-          ),
-          Flexible(
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 60,
+            ),
+            Flexible(
               child: CText(
-            'search_result_error'.i18n,
-            style: tsBody1.copiedWith(color: indicatorRed),
-          ))
-        ])));
+                'search_result_error'.i18n,
+                style: tsBody1.copiedWith(color: indicatorRed),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   double getCommonCacheExtent(List<dynamic>? list) {
@@ -149,7 +155,8 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
   }
 
   Widget renderPaginatedListView(
-      ItemWidgetBuilder<ReplicaSearchItem> itemBuilder) {
+    ItemWidgetBuilder<ReplicaSearchItem> itemBuilder,
+  ) {
     var w = prebuild(context);
     if (w != null) {
       return w;

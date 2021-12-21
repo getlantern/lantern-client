@@ -12,12 +12,14 @@ class ModelEventChannel extends EventChannel {
 
   ModelEventChannel(String name) : super(name);
 
-  void Function() subscribe<T>(String path,
-      {bool details = false,
-      int count = 2 << 31,
-      required void Function(Map<String, T> updates, Iterable<String> deletions)
-          onChanges,
-      T Function(Uint8List serialized)? deserialize}) {
+  void Function() subscribe<T>(
+    String path, {
+    bool details = false,
+    int count = 2 << 31,
+    required void Function(Map<String, T> updates, Iterable<String> deletions)
+        onChanges,
+    T Function(Uint8List serialized)? deserialize,
+  }) {
     var subscriberID = uuid.v4();
     var arguments = {
       'subscriberID': subscriberID,
@@ -67,8 +69,10 @@ class Subscriber<T> {
     var deletions = _deletions.map((path) => path as String);
     Map<String, T> updates;
     if (deserialize != null) {
-      updates = _updates.map((key, value) =>
-          MapEntry(key as String, deserialize!(value as Uint8List)));
+      updates = _updates.map(
+        (key, value) =>
+            MapEntry(key as String, deserialize!(value as Uint8List)),
+      );
     } else {
       updates =
           _updates.map((key, value) => MapEntry(key as String, value as T));

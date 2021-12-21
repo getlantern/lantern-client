@@ -14,14 +14,18 @@ Widget boilerplate(Widget child) {
   // flutter_markdown package testing:
   // https://github.com/flutter/packages/blob/2cbc815b90aedd274a2d39563a40152d8593dd06/packages/flutter_markdown/test/scrollable_test.dart#L22
   return MediaQuery(
-      data: const MediaQueryData(),
-      child: MaterialApp(
-          home: Directionality(
-              textDirection: TextDirection.ltr,
-              child: SingleChildScrollView(
-                  child: Column(
-                children: [child],
-              )))));
+    data: const MediaQueryData(),
+    child: MaterialApp(
+      home: Directionality(
+        textDirection: TextDirection.ltr,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [child],
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 void main() {

@@ -18,10 +18,13 @@ class HumanizedDate extends StatelessWidget {
 
   /// Convenience constructor to construct a HumanizedDate from milliseconds
   /// since epoch.
-  HumanizedDate.fromMillis(int millisSinceEpoch,
-      {required NowBuild<String> builder})
-      : this(DateTime.fromMillisecondsSinceEpoch(millisSinceEpoch),
-            builder: builder);
+  HumanizedDate.fromMillis(
+    int millisSinceEpoch, {
+    required NowBuild<String> builder,
+  }) : this(
+          DateTime.fromMillisecondsSinceEpoch(millisSinceEpoch),
+          builder: builder,
+        );
 
   @override
   Widget build(BuildContext context) {

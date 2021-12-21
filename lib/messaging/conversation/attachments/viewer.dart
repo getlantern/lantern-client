@@ -74,11 +74,12 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
                 children: [
                   Expanded(child: !ready() ? Container() : body(context)),
                   Padding(
-                      padding:
-                          const EdgeInsetsDirectional.only(start: 8, top: 8),
-                      child: StatusRow(
-                          widget.message.direction == MessageDirection.OUT,
-                          widget.message)),
+                    padding: const EdgeInsetsDirectional.only(start: 8, top: 8),
+                    child: StatusRow(
+                      widget.message.direction == MessageDirection.OUT,
+                      widget.message,
+                    ),
+                  ),
                 ],
               ),
       ),

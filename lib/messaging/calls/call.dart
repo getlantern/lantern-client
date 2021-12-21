@@ -30,8 +30,11 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
 
     // initialize fragment - status map after breaking down numericFingerprint in groups of 5
     humanizeVerificationNum(widget.contact.numericFingerprint).asMap().forEach(
-        (key, value) =>
-            fragmentStatusMap[key] = {'fragment': value, 'isConfirmed': false});
+          (key, value) => fragmentStatusMap[key] = {
+            'fragment': value,
+            'isConfirmed': false
+          },
+        );
 
     if (widget.initialSession != null) {
       incoming = true;
@@ -155,7 +158,8 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
       // mark all fragments
       setState(() {
         fragmentStatusMap.updateAll(
-            (key, el) => {'fragment': el['fragment'], 'isConfirmed': value});
+          (key, el) => {'fragment': el['fragment'], 'isConfirmed': value},
+        );
       });
     }
   }
@@ -166,305 +170,314 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
       return Container();
     }
     return LayoutBuilder(
-        builder: (context, constraints) => ValueListenableBuilder(
-            valueListenable: session!,
-            builder: (BuildContext context, SignalingState signalingState,
-                Widget? child) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: black,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    //* Avatar, title and call status
-                    isPanelShowing
-                        ? Container(
-                            padding: const EdgeInsetsDirectional.only(
-                                start: 16.0, top: 40.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsetsDirectional.all(8.0),
-                                  child: CustomAvatar(
-                                    messengerId: widget.contact.contactId.id,
-                                    displayName: widget.contact.displayName,
-                                  ),
-                                ),
-                                renderTitle(constraints)
-                              ],
+      builder: (context, constraints) => ValueListenableBuilder(
+        valueListenable: session!,
+        builder: (
+          BuildContext context,
+          SignalingState signalingState,
+          Widget? child,
+        ) {
+          return Container(
+            decoration: BoxDecoration(
+              color: black,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                //* Avatar, title and call status
+                isPanelShowing
+                    ? Container(
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 16.0,
+                          top: 40.0,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsetsDirectional.all(8.0),
+                              child: CustomAvatar(
+                                messengerId: widget.contact.contactId.id,
+                                displayName: widget.contact.displayName,
+                              ),
                             ),
-                          )
-                        : Expanded(
-                            flex: 1,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsetsDirectional.all(8.0),
-                                  child: CustomAvatar(
-                                    messengerId: widget.contact.contactId.id,
-                                    displayName: widget.contact.displayName,
-                                    radius: 64,
-                                    textStyle: tsDisplayBlack,
-                                  ),
-                                ),
-                                renderTitle(constraints)
-                              ],
-                            ),
-                          ),
-                    //* Verification panel
-                    if (isPanelShowing)
-                      Expanded(
+                            renderTitle(constraints)
+                          ],
+                        ),
+                      )
+                    : Expanded(
                         flex: 1,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                                margin:
-                                    const EdgeInsetsDirectional.only(top: 8.0),
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: grey5,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8.0),
-                                  ),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    //* Text and icon
-                                    Stack(
-                                      alignment: AlignmentDirectional.topEnd,
-                                      children: [
-                                        IconButton(
-                                          icon: Icon(
-                                            Icons.close_rounded,
-                                            color: white,
-                                          ),
-                                          onPressed: () {
-                                            setState(
-                                                () => isPanelShowing = false);
-                                            if (!fragmentsAreVerified() ||
-                                                !isVerified) {
-                                              markFragments(false,
-                                                  null); // mark all fragments as unverified since we closed the modal before finishing verification
-                                            }
-                                          },
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.only(
-                                                  start: 24,
-                                                  end: 24,
-                                                  top: 32,
-                                                  bottom: 24),
-                                          child: CText(
-                                              isVerified
-                                                  ? 'verification_panel_success'
-                                                      .i18n
-                                                      .fill([
-                                                      widget.contact
-                                                          .displayNameOrFallback
-                                                    ])
-                                                  : 'verification_panel_pending'
-                                                      .i18n
-                                                      .fill([
-                                                      widget.contact
-                                                          .displayNameOrFallback
-                                                    ]),
-                                              style: tsBody1.copiedWith(
-                                                  color: grey3)),
-                                        ),
-                                      ],
-                                    ),
-                                    //* Verification number
-                                    Wrap(
-                                      children: [
-                                        ...fragmentStatusMap.entries
-                                            .map((entry) => GestureDetector(
-                                                  key: ValueKey(entry.key),
-                                                  onTap: () =>
-                                                      handleTapping(entry.key),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsetsDirectional
-                                                                .only(
-                                                            start: 5.0,
-                                                            end: 5.0,
-                                                            top: 5.0,
-                                                            bottom: 5.0),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        CText(
-                                                            (entry.key + 1)
-                                                                .toString(),
-                                                            style: entry.value[
-                                                                    'isConfirmed']
-                                                                ? tsOverlineShort
-                                                                    .copiedWith(
-                                                                        color:
-                                                                            grey4)
-                                                                : tsOverlineShort
-                                                                    .copiedWith(
-                                                                        color:
-                                                                            white)),
-                                                        CText(
-                                                            entry.value[
-                                                                    'fragment']
-                                                                .toString(),
-                                                            style: entry.value[
-                                                                    'isConfirmed']
-                                                                ? tsHeading3.copiedWith(
-                                                                    decoration:
-                                                                        TextDecoration
-                                                                            .lineThrough,
-                                                                    color:
-                                                                        grey4)
-                                                                : tsHeading3
-                                                                    .copiedWith(
-                                                                        color:
-                                                                            white))
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ))
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          top: 24.0, bottom: 24.0),
-                                      child: Button(
-                                        tertiary: true,
-                                        iconPath: isVerified
-                                            ? null
-                                            : ImagePaths.verified_user,
-                                        text: isVerified
-                                            ? 'undo_verification'.i18n
-                                            : 'mark_as_verified'.i18n,
-                                        onPressed: () =>
-                                            handleVerifyButtonPress(),
-                                      ),
-                                    )
-                                  ],
-                                )),
+                              padding: const EdgeInsetsDirectional.all(8.0),
+                              child: CustomAvatar(
+                                messengerId: widget.contact.contactId.id,
+                                displayName: widget.contact.displayName,
+                                radius: 64,
+                                textStyle: tsDisplayBlack,
+                              ),
+                            ),
+                            renderTitle(constraints)
                           ],
                         ),
                       ),
-                    //* Verify button
-                    if (!isPanelShowing && widget.contact.isUnverified())
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsetsDirectional.all(24.0),
-                            child: Stack(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              children: [
-                                RoundButton(
-                                  icon: CAssetImage(
-                                      path: ImagePaths.verified_user,
-                                      color: white),
-                                  backgroundColor: grey5,
-                                  onPressed: () =>
-                                      setState(() => isPanelShowing = true),
-                                ),
-                                Transform.translate(
-                                  offset: const Offset(0.0, 30.0),
-                                  child: CText('verification'.i18n,
-                                      style: tsBody1.copiedWith(color: white)),
-                                ),
-                              ],
+                //* Verification panel
+                if (isPanelShowing)
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: const EdgeInsetsDirectional.only(top: 8.0),
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.9,
+                          ),
+                          decoration: BoxDecoration(
+                            color: grey5,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8.0),
                             ),
                           ),
-                        ],
-                      ),
-                    //* Controls
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                        top: 24,
-                        start: 24,
-                        end: 24,
-                      ),
-                      child: Table(
-                        children: [
-                          TableRow(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              RoundButton(
-                                icon: CAssetImage(
-                                    path: ImagePaths.speaker,
-                                    color: signalingState.speakerphoneOn
-                                        ? grey5
-                                        : white),
-                                backgroundColor: signalingState.speakerphoneOn
-                                    ? white
-                                    : grey5,
-                                onPressed: () {
-                                  session!.toggleSpeakerphone();
-                                },
+                              //* Text and icon
+                              Stack(
+                                alignment: AlignmentDirectional.topEnd,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.close_rounded,
+                                      color: white,
+                                    ),
+                                    onPressed: () {
+                                      setState(
+                                        () => isPanelShowing = false,
+                                      );
+                                      if (!fragmentsAreVerified() ||
+                                          !isVerified) {
+                                        markFragments(
+                                          false,
+                                          null,
+                                        ); // mark all fragments as unverified since we closed the modal before finishing verification
+                                      }
+                                    },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                      start: 24,
+                                      end: 24,
+                                      top: 32,
+                                      bottom: 24,
+                                    ),
+                                    child: CText(
+                                      isVerified
+                                          ? 'verification_panel_success'
+                                              .i18n
+                                              .fill([
+                                              widget
+                                                  .contact.displayNameOrFallback
+                                            ])
+                                          : 'verification_panel_pending'
+                                              .i18n
+                                              .fill([
+                                              widget
+                                                  .contact.displayNameOrFallback
+                                            ]),
+                                      style: tsBody1.copiedWith(
+                                        color: grey3,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              RoundButton(
-                                icon: CAssetImage(
-                                    path: ImagePaths.mute,
-                                    color:
-                                        signalingState.muted ? grey5 : white),
-                                backgroundColor:
-                                    signalingState.muted ? white : grey5,
-                                onPressed: () {
-                                  session!.toggleMute();
-                                },
+                              //* Verification number
+                              Wrap(
+                                children: [
+                                  ...fragmentStatusMap.entries.map(
+                                    (entry) => GestureDetector(
+                                      key: ValueKey(entry.key),
+                                      onTap: () => handleTapping(entry.key),
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                          start: 5.0,
+                                          end: 5.0,
+                                          top: 5.0,
+                                          bottom: 5.0,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            CText(
+                                              (entry.key + 1).toString(),
+                                              style: entry.value['isConfirmed']
+                                                  ? tsOverlineShort.copiedWith(
+                                                      color: grey4,
+                                                    )
+                                                  : tsOverlineShort.copiedWith(
+                                                      color: white,
+                                                    ),
+                                            ),
+                                            CText(
+                                              entry.value['fragment']
+                                                  .toString(),
+                                              style: entry.value['isConfirmed']
+                                                  ? tsHeading3.copiedWith(
+                                                      decoration: TextDecoration
+                                                          .lineThrough,
+                                                      color: grey4,
+                                                    )
+                                                  : tsHeading3.copiedWith(
+                                                      color: white,
+                                                    ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                              RoundButton(
-                                icon:
-                                    const CAssetImage(path: ImagePaths.hangup),
-                                backgroundColor: indicatorRed,
-                                onPressed: () async {
-                                  await signaling.bye(session!);
-                                },
-                              ),
+                              Padding(
+                                padding: const EdgeInsetsDirectional.only(
+                                  top: 24.0,
+                                  bottom: 24.0,
+                                ),
+                                child: Button(
+                                  tertiary: true,
+                                  iconPath: isVerified
+                                      ? null
+                                      : ImagePaths.verified_user,
+                                  text: isVerified
+                                      ? 'undo_verification'.i18n
+                                      : 'mark_as_verified'.i18n,
+                                  onPressed: () => handleVerifyButtonPress(),
+                                ),
+                              )
                             ],
                           ),
-                          TableRow(
-                            children: [
-                              CText(
-                                  signalingState.speakerphoneOn
-                                      ? 'speaker_on'.i18n
-                                      : 'speaker'.i18n,
-                                  textAlign: TextAlign.center,
-                                  style: tsBody1.copiedWith(color: white)),
-                              CText(
-                                  signalingState.muted
-                                      ? 'muted'.i18n
-                                      : 'mute'.i18n,
-                                  textAlign: TextAlign.center,
-                                  style: tsBody1.copiedWith(color: white)),
-                              CText('end_call'.i18n,
-                                  textAlign: TextAlign.center,
-                                  style: tsBody1.copiedWith(color: white)),
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    const Padding(
-                        padding: EdgeInsetsDirectional.only(bottom: 40)),
-                  ],
+                  ),
+                //* Verify button
+                if (!isPanelShowing && widget.contact.isUnverified())
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsetsDirectional.all(24.0),
+                        child: Stack(
+                          alignment: AlignmentDirectional.bottomCenter,
+                          children: [
+                            RoundButton(
+                              icon: CAssetImage(
+                                path: ImagePaths.verified_user,
+                                color: white,
+                              ),
+                              backgroundColor: grey5,
+                              onPressed: () =>
+                                  setState(() => isPanelShowing = true),
+                            ),
+                            Transform.translate(
+                              offset: const Offset(0.0, 30.0),
+                              child: CText(
+                                'verification'.i18n,
+                                style: tsBody1.copiedWith(color: white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                //* Controls
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 24,
+                    start: 24,
+                    end: 24,
+                  ),
+                  child: Table(
+                    children: [
+                      TableRow(
+                        children: [
+                          RoundButton(
+                            icon: CAssetImage(
+                              path: ImagePaths.speaker,
+                              color:
+                                  signalingState.speakerphoneOn ? grey5 : white,
+                            ),
+                            backgroundColor:
+                                signalingState.speakerphoneOn ? white : grey5,
+                            onPressed: () {
+                              session!.toggleSpeakerphone();
+                            },
+                          ),
+                          RoundButton(
+                            icon: CAssetImage(
+                              path: ImagePaths.mute,
+                              color: signalingState.muted ? grey5 : white,
+                            ),
+                            backgroundColor:
+                                signalingState.muted ? white : grey5,
+                            onPressed: () {
+                              session!.toggleMute();
+                            },
+                          ),
+                          RoundButton(
+                            icon: const CAssetImage(path: ImagePaths.hangup),
+                            backgroundColor: indicatorRed,
+                            onPressed: () async {
+                              await signaling.bye(session!);
+                            },
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          CText(
+                            signalingState.speakerphoneOn
+                                ? 'speaker_on'.i18n
+                                : 'speaker'.i18n,
+                            textAlign: TextAlign.center,
+                            style: tsBody1.copiedWith(color: white),
+                          ),
+                          CText(
+                            signalingState.muted ? 'muted'.i18n : 'mute'.i18n,
+                            textAlign: TextAlign.center,
+                            style: tsBody1.copiedWith(color: white),
+                          ),
+                          CText(
+                            'end_call'.i18n,
+                            textAlign: TextAlign.center,
+                            style: tsBody1.copiedWith(color: white),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              );
-            }));
+                const Padding(
+                  padding: EdgeInsetsDirectional.only(bottom: 40),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   // breaks the numericalFingerpint String into groups of 5
@@ -476,10 +489,11 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     for (var i = 0; i < verificationNumList.length; i += 5) {
       final fragment = verificationNumList
           .sublist(
-              i,
-              i + 5 > verificationNumList.length
-                  ? verificationNumList.length
-                  : i + 5)
+            i,
+            i + 5 > verificationNumList.length
+                ? verificationNumList.length
+                : i + 5,
+          )
           .join();
       verificationFragments.add(fragment);
     }
@@ -487,28 +501,28 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   }
 
   Column renderTitle(BoxConstraints constraints) => Column(
-          mainAxisAlignment: isPanelShowing
-              ? MainAxisAlignment.start
-              : MainAxisAlignment.center,
-          crossAxisAlignment: isPanelShowing
-              ? CrossAxisAlignment.start
-              : CrossAxisAlignment.center,
-          children: [
-            Container(
-              constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.7),
-              child: CText(
-                widget.contact.displayNameOrFallback.isNotEmpty
-                    ? widget.contact.displayNameOrFallback
-                    : widget.contact.contactId.id,
-                style: tsHeading1.copiedWith(color: white).short,
-                maxLines: 1,
-              ),
+        mainAxisAlignment:
+            isPanelShowing ? MainAxisAlignment.start : MainAxisAlignment.center,
+        crossAxisAlignment: isPanelShowing
+            ? CrossAxisAlignment.start
+            : CrossAxisAlignment.center,
+        children: [
+          Container(
+            constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.7),
+            child: CText(
+              widget.contact.displayNameOrFallback.isNotEmpty
+                  ? widget.contact.displayNameOrFallback
+                  : widget.contact.contactId.id,
+              style: tsHeading1.copiedWith(color: white).short,
+              maxLines: 1,
             ),
-            Container(
-              child: CText(
-                getCallStatus(session!.value.callState),
-                style: tsBody2.copiedWith(color: white),
-              ),
+          ),
+          Container(
+            child: CText(
+              getCallStatus(session!.value.callState),
+              style: tsBody2.copiedWith(color: white),
             ),
-          ]);
+          ),
+        ],
+      );
 }

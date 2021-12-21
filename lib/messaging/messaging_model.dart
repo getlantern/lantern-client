@@ -9,14 +9,14 @@ class MessagingModel extends Model {
 
   MessagingModel() : super('messaging') {
     _thumbnailCache = LRUCache<StoredAttachment, Uint8List>(
-        100,
-        (attachment) =>
-            methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
-              'attachment': (attachment.hasThumbnail()
-                      ? attachment.thumbnail
-                      : attachment)
-                  .writeToBuffer(),
-            }).then((value) => value as Uint8List));
+      100,
+      (attachment) =>
+          methodChannel.invokeMethod('decryptAttachment', <String, dynamic>{
+        'attachment':
+            (attachment.hasThumbnail() ? attachment.thumbnail : attachment)
+                .writeToBuffer(),
+      }).then((value) => value as Uint8List),
+    );
 
     signaling = Signaling(methodChannel);
 
@@ -25,7 +25,10 @@ class MessagingModel extends Model {
         case 'onSignal':
           var args = call.arguments as Map;
           signaling.onMessage(
-              args['senderId'], args['content'], args['acceptedCall']);
+            args['senderId'],
+            args['content'],
+            args['acceptedCall'],
+          );
           break;
         default:
           break;
@@ -71,8 +74,10 @@ class MessagingModel extends Model {
   }
 
   Future<void> deleteProvisionalContact(String contactId) {
-    return methodChannel.invokeMethod('deleteProvisionalContact',
-        <String, dynamic>{'unsafeContactId': contactId});
+    return methodChannel.invokeMethod(
+      'deleteProvisionalContact',
+      <String, dynamic>{'unsafeContactId': contactId},
+    );
   }
 
   Future<Contact> addOrUpdateDirectContact({
@@ -92,28 +97,39 @@ class MessagingModel extends Model {
 
   Future<void> acceptDirectContact(String unsafeId) {
     return methodChannel.invokeMethod(
-        'acceptDirectContact', <String, dynamic>{'unsafeId': unsafeId});
+      'acceptDirectContact',
+      <String, dynamic>{'unsafeId': unsafeId},
+    );
   }
 
   Future<void> markDirectContactVerified(String unsafeId) {
     return methodChannel.invokeMethod(
-        'markDirectContactVerified', <String, dynamic>{'unsafeId': unsafeId});
+      'markDirectContactVerified',
+      <String, dynamic>{'unsafeId': unsafeId},
+    );
   }
 
   Future<void> blockDirectContact(String unsafeId) {
     return methodChannel.invokeMethod(
-        'blockDirectContact', <String, dynamic>{'unsafeId': unsafeId});
+      'blockDirectContact',
+      <String, dynamic>{'unsafeId': unsafeId},
+    );
   }
 
   Future<void> unblockDirectContact(String unsafeId) {
     return methodChannel.invokeMethod(
-        'unblockDirectContact', <String, dynamic>{'unsafeId': unsafeId});
+      'unblockDirectContact',
+      <String, dynamic>{'unsafeId': unsafeId},
+    );
   }
 
   Future<void> setCurrentConversationContact(
-          String currentConversationContact) async =>
+    String currentConversationContact,
+  ) async =>
       methodChannel.invokeMethod(
-          'setCurrentConversationContact', currentConversationContact);
+        'setCurrentConversationContact',
+        currentConversationContact,
+      );
 
   Future<void> clearCurrentConversationContact() async =>
       methodChannel.invokeMethod(
@@ -121,8 +137,10 @@ class MessagingModel extends Model {
       );
 
   Future<Contact?> getContact(String contactPath) async {
-    return get<Uint8List?>(contactPath).then((serialized) =>
-        serialized == null ? null : Contact.fromBuffer(serialized));
+    return get<Uint8List?>(contactPath).then(
+      (serialized) =>
+          serialized == null ? null : Contact.fromBuffer(serialized),
+    );
   }
 
   Future<void> deleteDirectContact(String id) async =>
@@ -148,74 +166,106 @@ class MessagingModel extends Model {
       });
 
   /// Returns the best introductions to each contact.
-  Widget bestIntroductions(
-      {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
-          builder}) {
-    return subscribedListBuilder<StoredMessage>('/intro/best/',
-        details: true, builder: builder, deserialize: (Uint8List serialized) {
-      return StoredMessage.fromBuffer(serialized);
-    });
+  Widget bestIntroductions({
+    required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>> builder,
+  }) {
+    return subscribedListBuilder<StoredMessage>(
+      '/intro/best/',
+      details: true,
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return StoredMessage.fromBuffer(serialized);
+      },
+    );
   }
 
-  Widget contactsByActivity(
-      {required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
-    return subscribedListBuilder<Contact>('/cba/',
-        details: true, builder: builder, deserialize: (Uint8List serialized) {
-      return Contact.fromBuffer(serialized);
-    });
+  Widget contactsByActivity({
+    required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder,
+  }) {
+    return subscribedListBuilder<Contact>(
+      '/cba/',
+      details: true,
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return Contact.fromBuffer(serialized);
+      },
+    );
   }
 
-  Widget contacts(
-      {required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder}) {
-    return subscribedListBuilder<Contact>('/contacts/', builder: builder,
-        deserialize: (Uint8List serialized) {
-      return Contact.fromBuffer(serialized);
-    });
+  Widget contacts({
+    required ValueWidgetBuilder<Iterable<PathAndValue<Contact>>> builder,
+  }) {
+    return subscribedListBuilder<Contact>(
+      '/contacts/',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return Contact.fromBuffer(serialized);
+      },
+    );
   }
 
-  Widget contact(BuildContext context, PathAndValue<Contact> contact,
-      ValueWidgetBuilder<Contact> builder) {
-    return listChildBuilder(context, contact.path,
-        defaultValue: contact.value, builder: builder);
+  Widget contact(
+    BuildContext context,
+    PathAndValue<Contact> contact,
+    ValueWidgetBuilder<Contact> builder,
+  ) {
+    return listChildBuilder(
+      context,
+      contact.path,
+      defaultValue: contact.value,
+      builder: builder,
+    );
   }
 
   Widget singleContact(Contact contact, ValueWidgetBuilder<Contact> builder) {
     return subscribedSingleValueBuilder(
-        '/contacts/${_contactPathSegment(contact.contactId)}',
-        builder: builder, deserialize: (Uint8List serialized) {
-      return Contact.fromBuffer(serialized);
-    });
+      '/contacts/${_contactPathSegment(contact.contactId)}',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return Contact.fromBuffer(serialized);
+      },
+    );
   }
 
   /*
   Matches a ContactId to a direct or group Contact
   */
   Widget singleContactById(
-      ContactId contactId, ValueWidgetBuilder<Contact> builder) {
+    ContactId contactId,
+    ValueWidgetBuilder<Contact> builder,
+  ) {
     return subscribedSingleValueBuilder(
-        '/contacts/${_contactPathSegment(contactId)}',
-        builder: builder, deserialize: (Uint8List serialized) {
-      return Contact.fromBuffer(serialized);
-    });
+      '/contacts/${_contactPathSegment(contactId)}',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return Contact.fromBuffer(serialized);
+      },
+    );
   }
 
   ValueNotifier<Contact?> contactNotifier(String contactId) {
-    return singleValueNotifier(_directContactPath(contactId), null,
-        deserialize: (Uint8List serialized) {
-      return Contact.fromBuffer(serialized);
-    });
+    return singleValueNotifier(
+      _directContactPath(contactId),
+      null,
+      deserialize: (Uint8List serialized) {
+        return Contact.fromBuffer(serialized);
+      },
+    );
   }
 
-  Widget contactMessages(Contact contact,
-      {required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>>
-          builder}) {
+  Widget contactMessages(
+    Contact contact, {
+    required ValueWidgetBuilder<Iterable<PathAndValue<StoredMessage>>> builder,
+  }) {
     return subscribedListBuilder<StoredMessage>(
-        '/cm/${_contactPathSegment(contact.contactId)}',
-        details: true,
-        compare: sortReversed,
-        builder: builder, deserialize: (Uint8List serialized) {
-      return StoredMessage.fromBuffer(serialized);
-    });
+      '/cm/${_contactPathSegment(contact.contactId)}',
+      details: true,
+      compare: sortReversed,
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return StoredMessage.fromBuffer(serialized);
+      },
+    );
   }
 
   Future<Contact> getDirectContact(String contactId) {
@@ -224,26 +274,41 @@ class MessagingModel extends Model {
         .then((value) => Contact.fromBuffer(value as Uint8List));
   }
 
-  Widget message(BuildContext context, PathAndValue<StoredMessage> message,
-      ValueWidgetBuilder<StoredMessage> builder) {
-    return listChildBuilder(context, message.path,
-        defaultValue: message.value, builder: builder);
+  Widget message(
+    BuildContext context,
+    PathAndValue<StoredMessage> message,
+    ValueWidgetBuilder<StoredMessage> builder,
+  ) {
+    return listChildBuilder(
+      context,
+      message.path,
+      defaultValue: message.value,
+      builder: builder,
+    );
   }
 
-  Widget singleMessage(String senderId, String messageId,
-      ValueWidgetBuilder<StoredMessage> builder) {
+  Widget singleMessage(
+    String senderId,
+    String messageId,
+    ValueWidgetBuilder<StoredMessage> builder,
+  ) {
     return subscribedSingleValueBuilder<StoredMessage>(
-        '/m/$senderId/$messageId',
-        builder: builder, deserialize: (Uint8List serialized) {
-      return StoredMessage.fromBuffer(serialized);
-    });
+      '/m/$senderId/$messageId',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return StoredMessage.fromBuffer(serialized);
+      },
+    );
   }
 
   Widget me(ValueWidgetBuilder<Contact> builder) {
-    return subscribedSingleValueBuilder<Contact>('/me', builder: builder,
-        deserialize: (Uint8List serialized) {
-      return Contact.fromBuffer(serialized);
-    });
+    return subscribedSingleValueBuilder<Contact>(
+      '/me',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return Contact.fromBuffer(serialized);
+      },
+    );
   }
 
   Future<void> recover(String recoveryCode) async => methodChannel
@@ -290,17 +355,23 @@ class MessagingModel extends Model {
 
   Future<void> markViewed(StoredMessage message) {
     return methodChannel.invokeMethod(
-        'markViewed', <String, dynamic>{'msg': message.writeToBuffer()});
+      'markViewed',
+      <String, dynamic>{'msg': message.writeToBuffer()},
+    );
   }
 
   Future<void> deleteLocally(StoredMessage message) {
     return methodChannel.invokeMethod(
-        'deleteLocally', <String, dynamic>{'msg': message.writeToBuffer()});
+      'deleteLocally',
+      <String, dynamic>{'msg': message.writeToBuffer()},
+    );
   }
 
   Future<void> deleteGlobally(StoredMessage message) {
     return methodChannel.invokeMethod(
-        'deleteGlobally', <String, dynamic>{'msg': message.writeToBuffer()});
+      'deleteGlobally',
+      <String, dynamic>{'msg': message.writeToBuffer()},
+    );
   }
 
   Future<void> setDisappearSettings(Contact contact, int seconds) {
@@ -327,7 +398,9 @@ class MessagingModel extends Model {
   }
 
   Future<Uint8List> filePickerLoadAttachment(
-      String filePath, Map<String, String> metadata) async {
+    String filePath,
+    Map<String, String> metadata,
+  ) async {
     return methodChannel
         .invokeMethod('filePickerLoadAttachment', <String, dynamic>{
       'filePath': filePath,
@@ -338,7 +411,8 @@ class MessagingModel extends Model {
   }
 
   ValueListenable<CachedValue<Uint8List>> thumbnail(
-      StoredAttachment attachment) {
+    StoredAttachment attachment,
+  ) {
     return _thumbnailCache.get(attachment);
   }
 
@@ -374,30 +448,40 @@ class MessagingModel extends Model {
   */
 
   Future<List<SearchResult<Contact>>> searchContacts(
-          String query, int? numTokens) async =>
+    String query,
+    int? numTokens,
+  ) async =>
       methodChannel.invokeMethod('searchContacts', <String, dynamic>{
         'query': sanitizeQuery(query),
         'numTokens': numTokens,
       }).then((value) {
         final results = <SearchResult<Contact>>[];
         value.forEach((element) {
-          final result = SearchResult<Contact>(element['path'],
-              Contact.fromBuffer(element['contact']), element['snippet']);
+          final result = SearchResult<Contact>(
+            element['path'],
+            Contact.fromBuffer(element['contact']),
+            element['snippet'],
+          );
           results.add(result);
         });
         return Future.value(results);
       });
 
   Future<List<SearchResult<StoredMessage>>> searchMessages(
-          String query, int? numTokens) async =>
+    String query,
+    int? numTokens,
+  ) async =>
       methodChannel.invokeMethod('searchMessages', <String, dynamic>{
         'query': sanitizeQuery(query),
         'numTokens': numTokens,
       }).then((value) {
         final results = <SearchResult<StoredMessage>>[];
         value.forEach((element) {
-          final result = SearchResult<StoredMessage>(element['path'],
-              StoredMessage.fromBuffer(element['message']), element['snippet']);
+          final result = SearchResult<StoredMessage>(
+            element['path'],
+            StoredMessage.fromBuffer(element['message']),
+            element['snippet'],
+          );
           results.add(result);
         });
         return Future.value(results);
@@ -426,8 +510,11 @@ class MessagingModel extends Model {
   Widget getOnBoardingStatus(ValueWidgetBuilder<bool?> builder) {
     // Note - we use null as a placeholder for "unknown" to indicate when we
     // haven't yet read the actual onboarding status from the back-end
-    return subscribedSingleValueBuilder<bool?>('/onBoardingStatus',
-        defaultValue: null, builder: builder);
+    return subscribedSingleValueBuilder<bool?>(
+      '/onBoardingStatus',
+      defaultValue: null,
+      builder: builder,
+    );
   }
 
   Future<void> markCopiedRecoveryKey<T>() async {
@@ -435,8 +522,11 @@ class MessagingModel extends Model {
   }
 
   Widget getCopiedRecoveryStatus(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/copiedRecoveryStatus',
-        defaultValue: false, builder: builder);
+    return subscribedSingleValueBuilder<bool>(
+      '/copiedRecoveryStatus',
+      defaultValue: false,
+      builder: builder,
+    );
   }
 
   Future<void> saveNotificationsTS<T>() async {
@@ -445,9 +535,10 @@ class MessagingModel extends Model {
 
   Widget getLastDismissedNotificationTS(ValueWidgetBuilder<int> builder) {
     return subscribedSingleValueBuilder<int>(
-        '/requestNotificationLastDismissedTS',
-        defaultValue: 0,
-        builder: builder);
+      '/requestNotificationLastDismissedTS',
+      defaultValue: 0,
+      builder: builder,
+    );
   }
 
   Future<String> getDefaultRingtoneUri() {
@@ -467,8 +558,11 @@ class MessagingModel extends Model {
   }
 
   Widget getFirstShownTryLanternChatModalTS(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('/firstShownTryLanternChatModalTS',
-        defaultValue: 0, builder: builder);
+    return subscribedSingleValueBuilder<int>(
+      '/firstShownTryLanternChatModalTS',
+      defaultValue: 0,
+      builder: builder,
+    );
   }
 
   // * DEV PURPOSES
