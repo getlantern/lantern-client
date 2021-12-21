@@ -99,36 +99,50 @@ class Introductions extends StatelessWidget {
                                                             trailingArray: [
                                                               //* REJECT INTRO
                                                               TextButton(
-                                                                onPressed: () =>
-                                                                    showConfirmationDialog(
-                                                                        context:
-                                                                            context,
-                                                                        title: 'introductions_reject_title'
+                                                                onPressed: () => showInfoDialog(
+                                                                    context,
+                                                                    title:
+                                                                        'introductions_reject_title'
                                                                             .i18n,
-                                                                        explanation:
-                                                                            'introductions_reject_content'
-                                                                                .i18n,
-                                                                        // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
-                                                                        dismissText:
-                                                                            'cancel'
-                                                                                .i18n,
-                                                                        agreeText:
-                                                                            'reject'
-                                                                                .i18n,
-                                                                        agreeAction:
-                                                                            () async {
-                                                                          try {
-                                                                            // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
-                                                                            await messagingModel.rejectIntroduction(introductor.contactId.id,
-                                                                                value.introduction.to.id);
-                                                                          } catch (e) {
-                                                                            showInfoDialog(context,
-                                                                                title: 'error'.i18n,
-                                                                                des: 'introductions_error_description'.i18n,
-                                                                                assetPath: ImagePaths.alert,
-                                                                                buttonText: 'OK'.i18n);
-                                                                          }
-                                                                        }),
+                                                                    des: 'introductions_reject_content'
+                                                                        .i18n,
+                                                                    // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
+                                                                    cancelButtonText:
+                                                                        'cancel'
+                                                                            .i18n,
+                                                                    confirmButtonText:
+                                                                        'reject'
+                                                                            .i18n,
+                                                                    confirmButtonAction:
+                                                                        () async {
+                                                                  try {
+                                                                    // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
+                                                                    await messagingModel.rejectIntroduction(
+                                                                        introductor
+                                                                            .contactId
+                                                                            .id,
+                                                                        value
+                                                                            .introduction
+                                                                            .to
+                                                                            .id);
+                                                                  } catch (e) {
+                                                                    showInfoDialog(
+                                                                      context,
+                                                                      title: 'error'
+                                                                          .i18n,
+                                                                      des: 'introductions_error_description'
+                                                                          .i18n,
+                                                                      assetPath:
+                                                                          ImagePaths
+                                                                              .alert,
+                                                                      confirmButtonText:
+                                                                          'OK'.i18n,
+                                                                      confirmButtonAction: () async => await context
+                                                                          .router
+                                                                          .pop(),
+                                                                    );
+                                                                  }
+                                                                }),
                                                                 child: CText(
                                                                     'reject'
                                                                         .i18n
@@ -152,16 +166,20 @@ class Introductions extends StatelessWidget {
                                                                             .id);
                                                                   } catch (e) {
                                                                     showInfoDialog(
-                                                                        context,
-                                                                        title: 'error'
-                                                                            .i18n,
-                                                                        des: 'introductions_error_description_accepting'
-                                                                            .i18n,
-                                                                        assetPath:
-                                                                            ImagePaths
-                                                                                .alert,
-                                                                        buttonText:
-                                                                            'OK'.i18n);
+                                                                      context,
+                                                                      title: 'error'
+                                                                          .i18n,
+                                                                      des: 'introductions_error_description_accepting'
+                                                                          .i18n,
+                                                                      assetPath:
+                                                                          ImagePaths
+                                                                              .alert,
+                                                                      confirmButtonText:
+                                                                          'OK'.i18n,
+                                                                      confirmButtonAction: () async => await context
+                                                                          .router
+                                                                          .pop(),
+                                                                    );
                                                                   } finally {
                                                                     showSnackbar(
                                                                         context:

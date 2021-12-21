@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
+import org.getlantern.mobilesdk.model.Event
 import java.util.EnumMap
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
@@ -29,7 +30,7 @@ abstract class EventManager(
         }
     }
 
-    fun onNewEvent(event: Event, params: HashMap<String, Any?>) {
+    fun onNewEvent(event: Event, params: MutableMap<String, Any?> = mutableMapOf()) {
         handler.post {
             synchronized(this@EventManager) {
                 params["eventName"] = event.name
