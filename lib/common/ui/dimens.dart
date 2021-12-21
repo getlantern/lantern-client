@@ -12,9 +12,10 @@ bool isLTR(BuildContext context) =>
 
 Widget mirrorLTR({required BuildContext context, required Widget child}) =>
     Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.rotationY(isLTR(context) ? 0 : pi),
-        child: child);
+      alignment: Alignment.center,
+      transform: Matrix4.rotationY(isLTR(context) ? 0 : pi),
+      child: child,
+    );
 
 bool shouldScroll({
   required BuildContext context,
@@ -37,8 +38,10 @@ double calculateStickerHeight(BuildContext context, int messageCount) {
   final messageHeight =
       60.0; // rough approximation of how much space a message takes up, including paddings
   final minStickerHeight = 353.0;
-  return max(minStickerHeight,
-      conversationInnerHeight - ((messageCount - 1) * messageHeight));
+  return max(
+    minStickerHeight,
+    conversationInnerHeight - ((messageCount - 1) * messageHeight),
+  );
 }
 
 double appBarHeight = 56.0;

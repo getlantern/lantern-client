@@ -16,7 +16,7 @@ class SessionModel extends Model {
           networkAvailable.value = true;
           break;
 
-          default:
+        default:
           break;
       }
     });
@@ -34,13 +34,17 @@ class SessionModel extends Model {
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('developmentMode',
-        builder: builder);
+    return subscribedSingleValueBuilder<bool>(
+      'developmentMode',
+      builder: builder,
+    );
   }
 
   Widget paymentTestMode(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('paymentTestMode',
-        builder: builder);
+    return subscribedSingleValueBuilder<bool>(
+      'paymentTestMode',
+      builder: builder,
+    );
   }
 
   Future<void> setPaymentTestMode(bool on) {
@@ -50,8 +54,10 @@ class SessionModel extends Model {
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>('forceCountry',
-        builder: builder);
+    return subscribedSingleValueBuilder<String>(
+      'forceCountry',
+      builder: builder,
+    );
   }
 
   Future<void> setForceCountry(String? countryCode) {
@@ -75,13 +81,17 @@ class SessionModel extends Model {
   }
 
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>('emailAddress',
-        builder: builder);
+    return subscribedSingleValueBuilder<String>(
+      'emailAddress',
+      builder: builder,
+    );
   }
 
   Widget expiryDate(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>('expirydatestr',
-        builder: builder);
+    return subscribedSingleValueBuilder<String>(
+      'expirydatestr',
+      builder: builder,
+    );
   }
 
   Widget deviceId(ValueWidgetBuilder<String> builder) {
@@ -89,16 +99,21 @@ class SessionModel extends Model {
   }
 
   Widget devices(ValueWidgetBuilder<Devices> builder) {
-    return subscribedSingleValueBuilder<Devices>('devices', builder: builder,
-        deserialize: (Uint8List serialized) {
-      return Devices.fromBuffer(serialized);
-    });
+    return subscribedSingleValueBuilder<Devices>(
+      'devices',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return Devices.fromBuffer(serialized);
+      },
+    );
   }
 
   Future<void> setProxyAll<T>(bool on) async {
-    unawaited(methodChannel.invokeMethod('setProxyAll', <String, dynamic>{
-      'on': on,
-    }));
+    unawaited(
+      methodChannel.invokeMethod('setProxyAll', <String, dynamic>{
+        'on': on,
+      }),
+    );
   }
 
   Future<void> setLanguage(String lang) {
@@ -143,13 +158,19 @@ class SessionModel extends Model {
   }
 
   Widget tabIndex(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('/tabIndex',
-        defaultValue: 0, builder: builder);
+    return subscribedSingleValueBuilder<int>(
+      '/tabIndex',
+      defaultValue: 0,
+      builder: builder,
+    );
   }
 
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>('replicaAddr',
-        defaultValue: '', builder: builder);
+    return subscribedSingleValueBuilder<String>(
+      'replicaAddr',
+      defaultValue: '',
+      builder: builder,
+    );
   }
 
   Future<String> getReplicaAddr() async {

@@ -3,8 +3,11 @@ import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/search_item.dart';
 
 class ReplicaAudioListItem extends StatefulWidget {
-  ReplicaAudioListItem(
-      {required this.item, required this.onTap, required this.replicaApi});
+  ReplicaAudioListItem({
+    required this.item,
+    required this.onTap,
+    required this.replicaApi,
+  });
 
   final ReplicaSearchItem item;
   final Function() onTap;
@@ -27,20 +30,21 @@ class _ReplicaAudioListItem extends State<ReplicaAudioListItem> {
   @override
   Widget build(BuildContext context) {
     return ListItemFactory.replicaItem(
-        link: widget.item.replicaLink,
-        api: widget.replicaApi,
-        leading: const CAssetImage(path: ImagePaths.audio),
-        onTap: widget.onTap,
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          verticalDirection: VerticalDirection.down,
-          children: [
-            // Render audio file name
-            renderAudioFilename(),
-            renderDurationAndMimetype()
-          ],
-        ));
+      link: widget.item.replicaLink,
+      api: widget.replicaApi,
+      leading: const CAssetImage(path: ImagePaths.audio),
+      onTap: widget.onTap,
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        verticalDirection: VerticalDirection.down,
+        children: [
+          // Render audio file name
+          renderAudioFilename(),
+          renderDurationAndMimetype()
+        ],
+      ),
+    );
   }
 
   Widget renderAudioFilename() {

@@ -14,12 +14,14 @@ void main() {
           print('Declare a variable of type [GlobalLoaderOverlay]');
           var globalLoaderOverlay = find.byType(GlobalLoaderOverlay);
           print(
-              'If the root was loaded successfully it should find [GlobalLoaderOverlay]');
+            'If the root was loaded successfully it should find [GlobalLoaderOverlay]',
+          );
           expect(globalLoaderOverlay, findsOneWidget);
           print('Declare a variable of type [MaterialApp.router]');
           var appRouter = find.byType(MaterialApp);
           print(
-              'If the root was loaded successfully it should find [MaterialApp.router]');
+            'If the root was loaded successfully it should find [MaterialApp.router]',
+          );
           expect(appRouter, findsOneWidget);
         },
       );

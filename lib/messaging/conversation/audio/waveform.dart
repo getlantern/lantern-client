@@ -27,11 +27,12 @@ class Waveform extends StatelessWidget {
       width: width,
       child: CustomPaint(
         painter: _BarsPainter(
-            bars: bars,
-            height: height,
-            progressedTo: width * progressPercentage / 100,
-            initialColor: initialColor,
-            progressColor: progressColor),
+          bars: bars,
+          height: height,
+          progressedTo: width * progressPercentage / 100,
+          initialColor: initialColor,
+          progressColor: progressColor,
+        ),
       ),
     );
   }
@@ -42,7 +43,10 @@ class Waveform extends StatelessWidget {
   /// widget's width by bucketing the samples and taking the max amplitude from
   /// each bucket. It also scales the values to the height of the widget.
   static List<double> _reducedAndNormalized(
-      List<int> bars, double width, double height) {
+    List<int> bars,
+    double width,
+    double height,
+  ) {
     final numberOfBars = (width + barWidth) ~/ barPlusSpaceWidth;
     var output = <double>[];
     var groupSize = (bars.length / numberOfBars).round();

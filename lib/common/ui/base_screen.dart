@@ -18,22 +18,22 @@ class BaseScreen extends StatelessWidget {
   late final Color backgroundColor;
   final bool automaticallyImplyLeading;
 
-  BaseScreen(
-      {this.title,
-      this.actions,
-      required this.body,
-      this.actionButton,
-      this.floatingActionButtonLocation,
-      this.centerTitle = true,
-      this.resizeToAvoidBottomInset = true,
-      this.padHorizontal = true,
-      this.padVertical = false,
-      Color? foregroundColor,
-      Color? backgroundColor,
-      this.showAppBar = true,
-      this.automaticallyImplyLeading = true,
-      Key? key})
-      : super(key: key) {
+  BaseScreen({
+    this.title,
+    this.actions,
+    required this.body,
+    this.actionButton,
+    this.floatingActionButtonLocation,
+    this.centerTitle = true,
+    this.resizeToAvoidBottomInset = true,
+    this.padHorizontal = true,
+    this.padVertical = false,
+    Color? foregroundColor,
+    Color? backgroundColor,
+    this.showAppBar = true,
+    this.automaticallyImplyLeading = true,
+    Key? key,
+  }) : super(key: key) {
     this.foregroundColor = foregroundColor ?? black;
     this.backgroundColor = backgroundColor ?? white;
   }
@@ -42,8 +42,11 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: networkWarningBarHeightRatio,
-      builder: (BuildContext context, double networkWarningBarHeightRatio,
-              Widget? child) =>
+      builder: (
+        BuildContext context,
+        double networkWarningBarHeightRatio,
+        Widget? child,
+      ) =>
           doBuild(context, networkWarningBarHeightRatio),
     );
   }

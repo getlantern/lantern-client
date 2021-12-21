@@ -4,9 +4,12 @@ import 'package:lantern/messaging/messaging.dart';
 import 'viewer.dart';
 
 class ImageAttachment extends VisualAttachment {
-  ImageAttachment(Contact contact, StoredMessage message,
-      StoredAttachment attachment, bool inbound)
-      : super(contact, message, attachment, inbound);
+  ImageAttachment(
+    Contact contact,
+    StoredMessage message,
+    StoredAttachment attachment,
+    bool inbound,
+  ) : super(contact, message, attachment, inbound);
 
   @override
   Widget buildViewer() => ImageViewer(contact, message, attachment);

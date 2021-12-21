@@ -48,42 +48,43 @@ Widget renderReplicaMediaViewScreen({
   String? mimeType,
 }) {
   return BaseScreen(
-      showAppBar: true,
-      foregroundColor: foregroundColor,
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          CText(
-            link.displayName ?? 'untitled'.i18n,
-            style: tsHeading3.copiedWith(color: foregroundColor),
-          ),
-          if (mimeType != null)
-            CText(
-              mimeType,
-              style: tsOverline.copiedWith(color: foregroundColor),
-            )
-          else
-            CText(
-              category.toShortString(),
-              style: tsOverline.copiedWith(color: foregroundColor),
-            )
-        ],
-      ),
-      backgroundColor: backgroundColor,
-      actions: [
-        IconButton(
-          onPressed: () async {
-            await api.download(link);
-          },
-          icon: CAssetImage(
-            size: 20,
-            path: ImagePaths.file_download,
-            color: foregroundColor,
-          ),
+    showAppBar: true,
+    foregroundColor: foregroundColor,
+    title: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        CText(
+          link.displayName ?? 'untitled'.i18n,
+          style: tsHeading3.copiedWith(color: foregroundColor),
         ),
+        if (mimeType != null)
+          CText(
+            mimeType,
+            style: tsOverline.copiedWith(color: foregroundColor),
+          )
+        else
+          CText(
+            category.toShortString(),
+            style: tsOverline.copiedWith(color: foregroundColor),
+          )
       ],
-      body: body);
+    ),
+    backgroundColor: backgroundColor,
+    actions: [
+      IconButton(
+        onPressed: () async {
+          await api.download(link);
+        },
+        icon: CAssetImage(
+          size: 20,
+          path: ImagePaths.file_download,
+          color: foregroundColor,
+        ),
+      ),
+    ],
+    body: body,
+  );
 }
 
 final String replica_upload_disclaimer_value_shared_prefs_name =
@@ -130,9 +131,11 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
       title: 'replica_upload_confirmation_title'.i18n,
       explanation: 'replica_upload_confirmation_body'.i18n,
       agreeText: 'replica_upload_confirmation_agree'.i18n,
-      agreeAction: () => context.pushRoute(ReplicaUploadFileScreen(
-        fileToUpload: file,
-      )),
+      agreeAction: () => context.pushRoute(
+        ReplicaUploadFileScreen(
+          fileToUpload: file,
+        ),
+      ),
     );
   }
 }

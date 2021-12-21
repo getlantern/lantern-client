@@ -23,8 +23,10 @@ class DateMarker extends StatelessWidget {
                 color: black,
                 borderRadius: const BorderRadius.all(Radius.circular(100)),
               ),
-              child: CText(isDateMarker!.i18n.toUpperCase(),
-                  style: tsOverline.copiedWith(color: white).short),
+              child: CText(
+                isDateMarker!.i18n.toUpperCase(),
+                style: tsOverline.copiedWith(color: white).short,
+              ),
             ),
           ),
         ],

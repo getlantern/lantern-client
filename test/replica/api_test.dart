@@ -1,22 +1,27 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:logger/logger.dart';
 
 Future<String> runDummyServer(String ip, String port) async {
   var result = await Process.run('which', ['json-server']);
-  expect(result.exitCode, isZero,
-      reason:
-          'json-server not installed. See here https://github.com/typicode/json-server#getting-started');
+  expect(
+    result.exitCode,
+    isZero,
+    reason:
+        'json-server not installed. See here https://github.com/typicode/json-server#getting-started',
+  );
   final proc = await Process.run(
-      'bash',
-      [
-        './test_assets/run.sh',
-        port,
-      ],
-      runInShell: true);
+    'bash',
+    [
+      './test_assets/run.sh',
+      port,
+    ],
+    runInShell: true,
+  );
   sleep(const Duration(seconds: 2));
   // Check if the service is running: /heartbeat should always return 200 OK
   final resp = await http.get(Uri.parse('http://$ip:$port/heartbeat'));

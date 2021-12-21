@@ -9,16 +9,17 @@ class Countdown extends AnimatedWidget {
     this.textStyle = textStyle ?? tsDisplayBlack;
   }
 
-  Countdown.build(
-      {required AnimationController controller,
-      required int durationSeconds,
-      CTextStyle? textStyle})
-      : this(
-            animation: StepTween(
-              begin: durationSeconds,
-              end: 0,
-            ).animate(controller),
-            textStyle: textStyle);
+  Countdown.build({
+    required AnimationController controller,
+    required int durationSeconds,
+    CTextStyle? textStyle,
+  }) : this(
+          animation: StepTween(
+            begin: durationSeconds,
+            end: 0,
+          ).animate(controller),
+          textStyle: textStyle,
+        );
 
   @override
   Widget build(BuildContext context) {

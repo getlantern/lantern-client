@@ -36,9 +36,13 @@ class _IntroduceState extends State<Introduce> {
           ])
         : 'introduce_contacts_select'.i18n;
     return BaseScreen(
-        title: title,
-        body: messagingModel.contacts(builder: (context,
-            Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
+      title: title,
+      body: messagingModel.contacts(
+        builder: (
+          context,
+          Iterable<PathAndValue<Contact>> _contacts,
+          Widget? child,
+        ) {
           Iterable<PathAndValue<Contact>> _sortedContacts = [];
 
           //* remove the contact that is currently being introduced to other contacts
@@ -49,10 +53,12 @@ class _IntroduceState extends State<Introduce> {
 
           //* remove unaccepted, blocked and Me contacts, sort alphabetically
           var sortedContacts = _sortedContacts
-              .where((element) =>
-                  element.value.isAccepted() &&
-                  !element.value.isMe &&
-                  element.value.isNotBlocked())
+              .where(
+                (element) =>
+                    element.value.isAccepted() &&
+                    !element.value.isMe &&
+                    element.value.isNotBlocked(),
+              )
               .toList()
               .sortedAlphabetically();
 
@@ -61,114 +67,123 @@ class _IntroduceState extends State<Introduce> {
               .groupBy((el) => el.value.displayNameOrFallback[0].toLowerCase());
 
           return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                    child: (sortedContacts.length <= 1)
-                        ? const NotEnoughContacts()
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: groupedContactListGenerator(
-                                      headItems: sortedContacts.isEmpty
-                                          ? null
-                                          : [
-                                              Container(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                            .only(
-                                                        start: 4.0,
-                                                        end: 4.0,
-                                                        top: 16.0,
-                                                        bottom: 16.0),
-                                                child:
-                                                    CText(text, style: tsBody1),
-                                              )
-                                            ],
-                                      groupedSortedList: groupedSortedContacts,
-                                      leadingCallback: (Contact contact) =>
-                                          CustomAvatar(
-                                              messengerId: contact.contactId.id,
-                                              displayName: contact.displayName),
-                                      disableSplash: !widget.singleIntro,
-                                      trailingCallback: (int index,
-                                              Contact contact) =>
-                                          widget.singleIntro &&
-                                                  widget.contactToIntro != null
-                                              //* single contact intro
-                                              ? const ContinueArrow()
-                                              //* multiple contact intro
-                                              : Checkbox(
-                                                  checkColor: Colors.white,
-                                                  fillColor: MaterialStateProperty
-                                                      .resolveWith((states) =>
-                                                          getCheckboxFillColor(
-                                                              black, states)),
-                                                  value: selectedContactIds
-                                                      .contains(
-                                                          contact.contactId.id),
-                                                  shape: const CircleBorder(
-                                                      side: BorderSide.none),
-                                                  onChanged: (bool? value) =>
-                                                      setState(() {
-                                                    value!
-                                                        ? selectedContactIds
-                                                            .add(contact
-                                                                .contactId.id)
-                                                        : selectedContactIds
-                                                            .remove(contact
-                                                                .contactId.id);
-                                                  }),
-                                                ),
-                                      onTapCallback: (Contact contact) async {
-                                        if (widget.singleIntro) {
-                                          await messagingModel.introduce([
-                                            widget.contactToIntro!.contactId.id,
-                                            contact.contactId.id
-                                          ]);
-                                          showSnackbar(
-                                            context: context,
-                                            content: 'introductions_sent'.i18n,
-                                          );
-                                          await context.router.pop();
-                                        }
-                                      }),
-                                ),
-                                //* BUTTON
-                                if (!widget.singleIntro)
-                                  Container(
-                                    color: white,
-                                    padding:
-                                        const EdgeInsetsDirectional.all(20.0),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Button(
-                                            text: 'send_introductions'
-                                                .i18n
-                                                .toUpperCase(),
-                                            disabled:
-                                                selectedContactIds.length < 2,
-                                            onPressed: () async {
-                                              await messagingModel.introduce(
-                                                  selectedContactIds);
-                                              showSnackbar(
-                                                context: context,
-                                                content:
-                                                    'introductions_sent'.i18n,
-                                              );
-                                              await context.router.pop();
-                                            },
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: (sortedContacts.length <= 1)
+                    ? const NotEnoughContacts()
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: groupedContactListGenerator(
+                              headItems: sortedContacts.isEmpty
+                                  ? null
+                                  : [
+                                      Container(
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                          start: 4.0,
+                                          end: 4.0,
+                                          top: 16.0,
+                                          bottom: 16.0,
+                                        ),
+                                        child: CText(text, style: tsBody1),
+                                      )
+                                    ],
+                              groupedSortedList: groupedSortedContacts,
+                              leadingCallback: (Contact contact) =>
+                                  CustomAvatar(
+                                messengerId: contact.contactId.id,
+                                displayName: contact.displayName,
+                              ),
+                              disableSplash: !widget.singleIntro,
+                              trailingCallback: (
+                                int index,
+                                Contact contact,
+                              ) =>
+                                  widget.singleIntro &&
+                                          widget.contactToIntro != null
+                                      //* single contact intro
+                                      ? const ContinueArrow()
+                                      //* multiple contact intro
+                                      : Checkbox(
+                                          checkColor: Colors.white,
+                                          fillColor:
+                                              MaterialStateProperty.resolveWith(
+                                            (states) => getCheckboxFillColor(
+                                              black,
+                                              states,
+                                            ),
                                           ),
-                                        ]),
-                                  )
-                              ]))
-              ]);
-        }));
+                                          value: selectedContactIds.contains(
+                                            contact.contactId.id,
+                                          ),
+                                          shape: const CircleBorder(
+                                            side: BorderSide.none,
+                                          ),
+                                          onChanged: (bool? value) =>
+                                              setState(() {
+                                            value!
+                                                ? selectedContactIds.add(
+                                                    contact.contactId.id,
+                                                  )
+                                                : selectedContactIds.remove(
+                                                    contact.contactId.id,
+                                                  );
+                                          }),
+                                        ),
+                              onTapCallback: (Contact contact) async {
+                                if (widget.singleIntro) {
+                                  await messagingModel.introduce([
+                                    widget.contactToIntro!.contactId.id,
+                                    contact.contactId.id
+                                  ]);
+                                  showSnackbar(
+                                    context: context,
+                                    content: 'introductions_sent'.i18n,
+                                  );
+                                  await context.router.pop();
+                                }
+                              },
+                            ),
+                          ),
+                          //* BUTTON
+                          if (!widget.singleIntro)
+                            Container(
+                              color: white,
+                              padding: const EdgeInsetsDirectional.all(20.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Button(
+                                    text:
+                                        'send_introductions'.i18n.toUpperCase(),
+                                    disabled: selectedContactIds.length < 2,
+                                    onPressed: () async {
+                                      await messagingModel.introduce(
+                                        selectedContactIds,
+                                      );
+                                      showSnackbar(
+                                        context: context,
+                                        content: 'introductions_sent'.i18n,
+                                      );
+                                      await context.router.pop();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
+                        ],
+                      ),
+              )
+            ],
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -180,10 +195,14 @@ class NotEnoughContacts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Padding(
-      padding: const EdgeInsetsDirectional.all(24.0),
-      child: CText('need_two_contacts_to_introduce'.i18n,
-          style: tsSubtitle1, textAlign: TextAlign.center),
-    ));
+      child: Padding(
+        padding: const EdgeInsetsDirectional.all(24.0),
+        child: CText(
+          'need_two_contacts_to_introduce'.i18n,
+          style: tsSubtitle1,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
 }

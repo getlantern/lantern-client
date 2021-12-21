@@ -16,9 +16,10 @@ class CDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Divider(
-      color: color ?? grey3,
-      thickness: thickness,
-      indent: margin,
-      endIndent: margin,
-      height: height);
+        color: color ?? grey3,
+        thickness: thickness,
+        indent: margin,
+        endIndent: margin,
+        height: height,
+      );
 }

@@ -68,12 +68,14 @@ class ApproveDevice extends StatelessWidget {
               Container(
                 margin: const EdgeInsetsDirectional.only(bottom: 16),
                 child: explanationStep(
-                    icon: ImagePaths.number_1,
-                    text: 'approve_device_step_1'.i18n),
+                  icon: ImagePaths.number_1,
+                  text: 'approve_device_step_1'.i18n,
+                ),
               ),
               explanationStep(
-                  icon: ImagePaths.number_2,
-                  text: 'approve_device_step_2'.i18n),
+                icon: ImagePaths.number_2,
+                text: 'approve_device_step_2'.i18n,
+              ),
               const Spacer(),
             ],
           ),

@@ -19,18 +19,19 @@ class ConversationSticker extends StatelessWidget {
           // ** Illustration ** //
           if (contact.isAccepted())
             Container(
-                padding: const EdgeInsetsDirectional.only(top: 20, bottom: 8),
-                child: Stack(
-                  children: [
-                    SvgPicture.asset(
-                      ImagePaths.sticker_figure_background,
-                    ),
-                    SvgPicture.asset(
-                      ImagePaths.sticker_figure_foreground,
-                      color: getIllustrationColor(contact),
-                    ),
-                  ],
-                )),
+              padding: const EdgeInsetsDirectional.only(top: 20, bottom: 8),
+              child: Stack(
+                children: [
+                  SvgPicture.asset(
+                    ImagePaths.sticker_figure_background,
+                  ),
+                  SvgPicture.asset(
+                    ImagePaths.sticker_figure_foreground,
+                    color: getIllustrationColor(contact),
+                  ),
+                ],
+              ),
+            ),
           if (contact.isAccepted())
             Padding(
               padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),

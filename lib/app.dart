@@ -26,7 +26,9 @@ class LanternApp extends StatelessWidget {
     sessionModel.proxyAvailable
         .addListener(toggleConnectivityWarningIfNecessary);
     networkWarningAnimationController = AnimationController(
-        duration: shortAnimationDuration, vsync: _TickerProviderImpl());
+      duration: shortAnimationDuration,
+      vsync: _TickerProviderImpl(),
+    );
     networkWarningAnimation = Tween(begin: 0.0, end: 1.0)
         .animate(networkWarningAnimationController)
       ..addListener(networkWarningAnimationChanged);
@@ -58,57 +60,59 @@ class LanternApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: translations,
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          if (!snapshot.hasData) {
-            return Container();
-          }
-          return GlobalLoaderOverlay(
-            overlayColor: Colors.black,
-            overlayOpacity: 0.6,
-            child: I18n(
-              initialLocale: const Locale('en', 'US'),
-              child: MaterialApp.router(
-                debugShowCheckedModeBanner: false,
-                theme: ThemeData(
-                  brightness: Brightness.light,
-                  primarySwatch: Colors.grey,
-                  appBarTheme: const AppBarTheme(
-                      systemOverlayStyle: SystemUiOverlayStyle.light),
-                  accentColor: Colors.black,
+      future: translations,
+      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+        return GlobalLoaderOverlay(
+          overlayColor: Colors.black,
+          overlayOpacity: 0.6,
+          child: I18n(
+            initialLocale: const Locale('en', 'US'),
+            child: MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                brightness: Brightness.light,
+                primarySwatch: Colors.grey,
+                appBarTheme: const AppBarTheme(
+                  systemOverlayStyle: SystemUiOverlayStyle.light,
                 ),
-                title: 'app_name'.i18n,
-                localizationsDelegates: [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                routeInformationParser: globalRouter.defaultRouteParser(),
-                routerDelegate: globalRouter.delegate(
-                  navigatorObservers: () => [
-                    BotToastNavigatorObserver(),
-                  ],
-                ),
-                builder: BotToastInit(),
-                supportedLocales: [
-                  const Locale('ar', 'EG'),
-                  const Locale('fr', 'FR'),
-                  const Locale('en', 'US'),
-                  const Locale('fa', 'IR'),
-                  const Locale('th', 'TH'),
-                  const Locale('ms', 'MY'),
-                  const Locale('ru', 'RU'),
-                  const Locale('ur', 'IN'),
-                  const Locale('zh', 'CN'),
-                  const Locale('zh', 'HK'),
-                  const Locale('es', 'ES'),
-                  const Locale('tr', 'TR'),
-                  const Locale('vi', 'VN'),
-                  const Locale('my', 'MM'),
+                accentColor: Colors.black,
+              ),
+              title: 'app_name'.i18n,
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              routeInformationParser: globalRouter.defaultRouteParser(),
+              routerDelegate: globalRouter.delegate(
+                navigatorObservers: () => [
+                  BotToastNavigatorObserver(),
                 ],
               ),
+              builder: BotToastInit(),
+              supportedLocales: [
+                const Locale('ar', 'EG'),
+                const Locale('fr', 'FR'),
+                const Locale('en', 'US'),
+                const Locale('fa', 'IR'),
+                const Locale('th', 'TH'),
+                const Locale('ms', 'MY'),
+                const Locale('ru', 'RU'),
+                const Locale('ur', 'IN'),
+                const Locale('zh', 'CN'),
+                const Locale('zh', 'HK'),
+                const Locale('es', 'ES'),
+                const Locale('tr', 'TR'),
+                const Locale('vi', 'VN'),
+                const Locale('my', 'MM'),
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

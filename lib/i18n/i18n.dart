@@ -10,8 +10,8 @@ extension Localization on String {
       Translations.byLocale(defaultLocale);
 
   static Future<TranslationsByLocale> Function(
-          Future<TranslationsByLocale> Function()) loadTranslationsOnce =
-      once<Future<TranslationsByLocale>>();
+    Future<TranslationsByLocale> Function(),
+  ) loadTranslationsOnce = once<Future<TranslationsByLocale>>();
 
   static Future<TranslationsByLocale> ensureInitialized() async {
     return loadTranslationsOnce(() {

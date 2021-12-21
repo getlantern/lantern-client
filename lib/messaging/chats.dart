@@ -33,7 +33,9 @@ class _ChatsState extends State<Chats> {
     //* temporary background color change
     setState(() => customBg = blue1);
     Future.delayed(
-        shortAnimationDuration, () => setState(() => customBg = null));
+      shortAnimationDuration,
+      () => setState(() => customBg = null),
+    );
 
     //* Scroll to first unaccepted message
     if (scrollListController.isAttached &&
@@ -58,11 +60,15 @@ class _ChatsState extends State<Chats> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-        title: 'chats'.i18n,
-        actions: [
-          // * Notifications icon
-          messagingModel.contactsByActivity(builder: (context,
-              Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
+      title: 'chats'.i18n,
+      actions: [
+        // * Notifications icon
+        messagingModel.contactsByActivity(
+          builder: (
+            context,
+            Iterable<PathAndValue<Contact>> _contacts,
+            Widget? child,
+          ) {
             final requests = _contacts
                 .where((element) => element.value.isUnaccepted())
                 .toList();
@@ -80,34 +86,38 @@ class _ChatsState extends State<Chats> {
                 .toInt();
 
             return messagingModel.getLastDismissedNotificationTS(
-                (context, mostRecentNotifTS, child) => requests.isNotEmpty &&
-                        (mostRecentUnacceptedTS > mostRecentNotifTS)
-                    ? RoundButton(
-                        onPressed: () => handleReminder(_contacts),
-                        backgroundColor: transparent,
-                        icon: CBadge(
-                          count: requests.length,
-                          showBadge: requests.isNotEmpty,
-                          child:
-                              const CAssetImage(path: ImagePaths.notifications),
-                        ),
-                      )
-                    : const SizedBox());
-          }),
-          // * Search
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            onPressed: () async => await showSearch(
-              context: context,
-              query: '',
-              delegate: CustomSearchDelegate(searchMessages: true),
-            ),
-            icon: const CAssetImage(path: ImagePaths.search),
+              (context, mostRecentNotifTS, child) => requests.isNotEmpty &&
+                      (mostRecentUnacceptedTS > mostRecentNotifTS)
+                  ? RoundButton(
+                      onPressed: () => handleReminder(_contacts),
+                      backgroundColor: transparent,
+                      icon: CBadge(
+                        count: requests.length,
+                        showBadge: requests.isNotEmpty,
+                        child:
+                            const CAssetImage(path: ImagePaths.notifications),
+                      ),
+                    )
+                  : const SizedBox(),
+            );
+          },
+        ),
+        // * Search
+        IconButton(
+          visualDensity: VisualDensity.compact,
+          onPressed: () async => await showSearch(
+            context: context,
+            query: '',
+            delegate: CustomSearchDelegate(searchMessages: true),
           ),
-          // * Bottom modal
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            onPressed: () async => showBottomModal(context: context, children: [
+          icon: const CAssetImage(path: ImagePaths.search),
+        ),
+        // * Bottom modal
+        IconButton(
+          visualDensity: VisualDensity.compact,
+          onPressed: () async => showBottomModal(
+            context: context,
+            children: [
               messagingModel
                   .me((_, me, __) => ShareYourChatNumber(me).bottomItem),
               sessionModel.proUser(
@@ -128,42 +138,52 @@ class _ChatsState extends State<Chats> {
                   await context.router.push(Introduce(singleIntro: false));
                 },
               ),
-            ]),
-            icon: const CAssetImage(path: ImagePaths.more_vert),
+            ],
           ),
-        ],
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /*
+          icon: const CAssetImage(path: ImagePaths.more_vert),
+        ),
+      ],
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /*
             * Introductions
             */
-            messagingModel.bestIntroductions(
-                builder: (context,
-                        Iterable<PathAndValue<StoredMessage>> introductions,
-                        Widget? child) =>
-                    (introductions.getPending().isNotEmpty)
-                        ? ListItemFactory.messagingItem(
-                            leading: CBadge(
-                              count: introductions.getPending().length,
-                              showBadge: true,
-                              child: const Icon(
-                                Icons.people,
-                                color: Colors.black,
-                              ),
-                            ),
-                            content: CText('introductions'.i18n,
-                                style: tsSubtitle1Short),
-                            trailingArray: [const ContinueArrow()],
-                            onTap: () async =>
-                                await context.pushRoute(const Introductions()),
-                          )
-                        : const SizedBox()),
-            /*
+          messagingModel.bestIntroductions(
+            builder: (
+              context,
+              Iterable<PathAndValue<StoredMessage>> introductions,
+              Widget? child,
+            ) =>
+                (introductions.getPending().isNotEmpty)
+                    ? ListItemFactory.messagingItem(
+                        leading: CBadge(
+                          count: introductions.getPending().length,
+                          showBadge: true,
+                          child: const Icon(
+                            Icons.people,
+                            color: Colors.black,
+                          ),
+                        ),
+                        content: CText(
+                          'introductions'.i18n,
+                          style: tsSubtitle1Short,
+                        ),
+                        trailingArray: [const ContinueArrow()],
+                        onTap: () async =>
+                            await context.pushRoute(const Introductions()),
+                      )
+                    : const SizedBox(),
+          ),
+          /*
             * Messages
             */
-            messagingModel.contactsByActivity(builder: (context,
-                Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
+          messagingModel.contactsByActivity(
+            builder: (
+              context,
+              Iterable<PathAndValue<Contact>> _contacts,
+              Widget? child,
+            ) {
               // * NO CONTACTS
               if (_contacts.isEmpty) {
                 return const Expanded(child: EmptyChats());
@@ -192,28 +212,35 @@ class _ChatsState extends State<Chats> {
                               : null,
                           focusedMenu: !isUnaccepted
                               ? renderLongTapMenu(
-                                  contact: contact, context: context)
+                                  contact: contact,
+                                  context: context,
+                                )
                               : null,
                           leading: CustomAvatar(
-                              customColor: isUnaccepted ? grey5 : null,
-                              messengerId: contact.contactId.id,
-                              displayName: contact.displayName),
+                            customColor: isUnaccepted ? grey5 : null,
+                            messengerId: contact.contactId.id,
+                            displayName: contact.displayName,
+                          ),
                           content: contact.displayNameOrFallback,
                           subtitle:
                               '${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'}'
                                   .i18n,
                           onTap: () async => await context.pushRoute(
-                              Conversation(contactId: contact.contactId)),
+                            Conversation(contactId: contact.contactId),
+                          ),
                           trailingArray: [
                             HumanizedDate.fromMillis(
                               contact.mostRecentMessageTs.toInt(),
-                              builder: (context, date) => CText(date,
-                                  style: tsBody2.copiedWith(color: grey5)),
+                              builder: (context, date) => CText(
+                                date,
+                                style: tsBody2.copiedWith(color: grey5),
+                              ),
                             ),
                             if (contact.numUnviewedMessages > 0)
                               Padding(
                                 padding: const EdgeInsetsDirectional.only(
-                                    start: 8.0),
+                                  start: 8.0,
+                                ),
                                 child: CircleAvatar(
                                   maxRadius: activeIconSize - 4,
                                   backgroundColor: pink4,
@@ -226,23 +253,29 @@ class _ChatsState extends State<Chats> {
                   },
                 ),
               );
-            }),
-          ],
-        ),
-        actionButton: FloatingActionButton(
-          backgroundColor: blue4,
-          onPressed: () async => await context.pushRoute(const NewChat()),
-          child: CAssetImage(path: ImagePaths.add, color: white),
-        ));
+            },
+          ),
+        ],
+      ),
+      actionButton: FloatingActionButton(
+        backgroundColor: blue4,
+        onPressed: () async => await context.pushRoute(const NewChat()),
+        child: CAssetImage(path: ImagePaths.add, color: white),
+      ),
+    );
   }
 }
 
 List<PathAndValue<Contact>> reshapeContactList(
-    Iterable<PathAndValue<Contact>> contacts) {
+  Iterable<PathAndValue<Contact>> contacts,
+) {
   // Contacts with message timestamps which are not blocked
   var _activeConversations = contacts
-      .where((contact) =>
-          contact.value.mostRecentMessageTs > 0 && contact.value.isNotBlocked())
+      .where(
+        (contact) =>
+            contact.value.mostRecentMessageTs > 0 &&
+            contact.value.isNotBlocked(),
+      )
       .toList();
   // Newest -> older
   _activeConversations.sort((a, b) {
@@ -251,7 +284,8 @@ List<PathAndValue<Contact>> reshapeContactList(
 
   // Either verified or unverified
   var _acceptedContacts = _activeConversations.where(
-      (element) => element.value.isVerified() || element.value.isUnverified());
+    (element) => element.value.isVerified() || element.value.isUnverified(),
+  );
 
   // Unaccepted AKA message requests
   var _unacceptedContacts =
@@ -277,10 +311,11 @@ class EmptyChats extends StatelessWidget {
         Container(
           width: MediaQuery.of(context).size.width,
           child: CAssetImage(
-              path: Directionality.of(context) == TextDirection.ltr
-                  ? ImagePaths.empty_chats
-                  : ImagePaths.empty_chats_rtl,
-              size: 250),
+            path: Directionality.of(context) == TextDirection.ltr
+                ? ImagePaths.empty_chats
+                : ImagePaths.empty_chats_rtl,
+            size: 250,
+          ),
         ),
         CText('empty_chats_text'.i18n, style: tsBody1Color(grey5)),
       ],

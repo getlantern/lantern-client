@@ -23,10 +23,12 @@ class Metadata {
 
 class ReplicaApi {
   ReplicaApi(this.replicaHostAddr) {
-    dio = Dio(BaseOptions(
-      baseUrl: 'http://$replicaHostAddr/replica/',
-      connectTimeout: 10000, // 10s
-    ));
+    dio = Dio(
+      BaseOptions(
+        baseUrl: 'http://$replicaHostAddr/replica/',
+        connectTimeout: 10000, // 10s
+      ),
+    );
   }
   late Dio dio;
   final String replicaHostAddr;
@@ -37,7 +39,11 @@ class ReplicaApi {
   }
 
   Future<List<ReplicaSearchItem>> search(
-      String query, SearchCategory category, int page, String lang) async {
+    String query,
+    SearchCategory category,
+    int page,
+    String lang,
+  ) async {
     logger.v('ReplicaApi.search()');
     var s = '';
     switch (category) {
@@ -60,7 +66,8 @@ class ReplicaApi {
       return ReplicaSearchItem.fromJson(category, resp.data);
     } else {
       throw Exception(
-          'Failed to fetch search query: ${resp.statusCode} -> ${resp.data.toString()}');
+        'Failed to fetch search query: ${resp.statusCode} -> ${resp.data.toString()}',
+      );
     }
   }
 
@@ -77,7 +84,8 @@ class ReplicaApi {
   }
 
   Future<SearchCategory> fetchCategoryFromReplicaLink(
-      ReplicaLink replicaLink) async {
+    ReplicaLink replicaLink,
+  ) async {
     var u = 'download?link=${replicaLink.toMagnetLink()}';
     logger.v('fetchCategoryFromReplicaLink: $u');
 
@@ -104,7 +112,8 @@ class ReplicaApi {
       final durationResp = await dio.get(s);
       if (durationResp.statusCode != 200) {
         throw Exception(
-            'fetch duration: ${durationResp.statusCode} -> ${durationResp.data.toString()}');
+          'fetch duration: ${durationResp.statusCode} -> ${durationResp.data.toString()}',
+        );
       }
       // logger.v('Duration request success: $duration');
       duration = double.parse(durationResp.data.toString());

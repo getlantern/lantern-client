@@ -47,36 +47,40 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        key: containerKey,
-        onLongPress: () async {
-          widget.onOpen?.call();
-          await openMenu(context);
-        },
-        child: widget.builder(false));
+      key: containerKey,
+      onLongPress: () async {
+        widget.onOpen?.call();
+        await openMenu(context);
+      },
+      child: widget.builder(false),
+    );
   }
 
   Future openMenu(BuildContext context) async {
     updateChildMetrics();
     await Navigator.push(
-        context,
-        PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) {
-              animation = Tween(begin: 0.0, end: 1.0).animate(animation);
-              return FadeTransition(
-                  opacity: animation,
-                  child: FocusedMenuDetails(
-                    childOffset: childOffset,
-                    childSize: childSize,
-                    menuWidth: widget.menuWidth,
-                    menuOffset: widget.menuOffset,
-                    paddingTop: widget.paddingTop,
-                    paddingBottom: widget.paddingBottom,
-                    menu: widget.menu,
-                    child: widget.builder(true),
-                  ));
-            },
-            fullscreenDialog: true,
-            opaque: false));
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          animation = Tween(begin: 0.0, end: 1.0).animate(animation);
+          return FadeTransition(
+            opacity: animation,
+            child: FocusedMenuDetails(
+              childOffset: childOffset,
+              childSize: childSize,
+              menuWidth: widget.menuWidth,
+              menuOffset: widget.menuOffset,
+              paddingTop: widget.paddingTop,
+              paddingBottom: widget.paddingBottom,
+              menu: widget.menu,
+              child: widget.builder(true),
+            ),
+          );
+        },
+        fullscreenDialog: true,
+        opaque: false,
+      ),
+    );
   }
 }
 
@@ -90,17 +94,17 @@ class FocusedMenuDetails extends StatelessWidget {
   final double paddingTop;
   final double paddingBottom;
 
-  const FocusedMenuDetails(
-      {Key? key,
-      required this.child,
-      required this.menu,
-      required this.childOffset,
-      required this.childSize,
-      required this.menuWidth,
-      required this.menuOffset,
-      required this.paddingTop,
-      required this.paddingBottom})
-      : super(key: key);
+  const FocusedMenuDetails({
+    Key? key,
+    required this.child,
+    required this.menu,
+    required this.childOffset,
+    required this.childSize,
+    required this.menuWidth,
+    required this.menuOffset,
+    required this.paddingTop,
+    required this.paddingBottom,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -118,8 +122,10 @@ class FocusedMenuDetails extends StatelessWidget {
     final menuHeight = min(maxMenuHeight, menu.height ?? 0);
 
     // always position menu so that we can fit all of it on the screen
-    var menuY = max(paddingTop + mediaQuery.viewPadding.top,
-        size.height - paddingBottom - menuHeight);
+    var menuY = max(
+      paddingTop + mediaQuery.viewPadding.top,
+      size.height - paddingBottom - menuHeight,
+    );
     // position child above menu, allowing it to overflow off top of screen if
     // necessary
     var childY = menuY - childSize!.height - menuOffset;
@@ -168,14 +174,17 @@ class FocusedMenuDetails extends StatelessWidget {
               ),
             ),
             Positioned(
-                top: childY,
-                left: childOffset.dx,
-                child: AbsorbPointer(
-                    absorbing: true,
-                    child: Container(
-                        width: childSize!.width,
-                        height: childSize!.height,
-                        child: child))),
+              top: childY,
+              left: childOffset.dx,
+              child: AbsorbPointer(
+                absorbing: true,
+                child: Container(
+                  width: childSize!.width,
+                  height: childSize!.height,
+                  child: child,
+                ),
+              ),
+            ),
           ],
         ),
       ),

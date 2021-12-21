@@ -16,12 +16,12 @@ var logger = log.Logger(
 ///
 /// This screen supports landscape and portrait orientations
 class ReplicaAudioPlayerScreen extends StatefulWidget {
-  ReplicaAudioPlayerScreen(
-      {Key? key,
-      required this.replicaApi,
-      required this.replicaLink,
-      this.mimeType})
-      : super(key: key);
+  ReplicaAudioPlayerScreen({
+    Key? key,
+    required this.replicaApi,
+    required this.replicaLink,
+    this.mimeType,
+  }) : super(key: key);
   final ReplicaApi replicaApi;
   final ReplicaLink replicaLink;
   final String? mimeType;
@@ -67,25 +67,26 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return renderReplicaMediaViewScreen(
-        context: context,
-        api: widget.replicaApi,
-        link: widget.replicaLink,
-        category: SearchCategory.Audio,
-        mimeType: widget.mimeType,
-        backgroundColor: grey2,
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                renderPlaybackSliderAndDuration(),
-                renderPlaybackButtons(),
-              ],
-            ),
+      context: context,
+      api: widget.replicaApi,
+      link: widget.replicaLink,
+      category: SearchCategory.Audio,
+      mimeType: widget.mimeType,
+      backgroundColor: grey2,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              renderPlaybackSliderAndDuration(),
+              renderPlaybackButtons(),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget renderPlaybackButtons() {
@@ -99,22 +100,23 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
             width: 32,
             height: 32,
             child: FloatingActionButton(
-                child: const CAssetImage(
-                  path: ImagePaths.fast_rewind,
-                  size: 16,
-                ),
-                onPressed: () async {
-                  if (_position == null) {
-                    return;
-                  }
-                  _position = Duration(
-                      seconds: max(
-                              0,
-                              _position!.inSeconds -
-                                  _defaultSeekDurationInSeconds)
-                          .round());
-                  await _audioPlayer.seek(_position!);
-                }),
+              child: const CAssetImage(
+                path: ImagePaths.fast_rewind,
+                size: 16,
+              ),
+              onPressed: () async {
+                if (_position == null) {
+                  return;
+                }
+                _position = Duration(
+                  seconds: max(
+                    0,
+                    _position!.inSeconds - _defaultSeekDurationInSeconds,
+                  ).round(),
+                );
+                await _audioPlayer.seek(_position!);
+              },
+            ),
           ),
           const SizedBox(width: 20),
 
@@ -144,11 +146,11 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
                   return;
                 }
                 _position = Duration(
-                    seconds: min(
-                            _totalDuration!.inSeconds,
-                            _position!.inSeconds +
-                                _defaultSeekDurationInSeconds)
-                        .round());
+                  seconds: min(
+                    _totalDuration!.inSeconds,
+                    _position!.inSeconds + _defaultSeekDurationInSeconds,
+                  ).round(),
+                );
                 await _audioPlayer.seek(_position!);
               },
               child: const CAssetImage(
@@ -165,11 +167,12 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
   Widget renderPlaybackSliderAndDuration() {
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(
-            color: white,
-          ),
+        border: Border.all(
           color: white,
-          borderRadius: const BorderRadius.all(Radius.circular(20))),
+        ),
+        color: white,
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+      ),
       height: 80.0,
       child: Center(
         child: Column(
@@ -228,10 +231,11 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
       setState(() => _totalDuration = duration);
     });
 
-    _positionSubscription =
-        _audioPlayer.onAudioPositionChanged.listen((p) => setState(() {
-              _position = p;
-            }));
+    _positionSubscription = _audioPlayer.onAudioPositionChanged.listen(
+      (p) => setState(() {
+        _position = p;
+      }),
+    );
 
     _playerCompleteSubscription =
         _audioPlayer.onPlayerCompletion.listen((event) {
@@ -266,8 +270,9 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
         ? _position
         : null;
     final result = await _audioPlayer.play(
-        widget.replicaApi.getDownloadAddr(widget.replicaLink),
-        position: playPosition);
+      widget.replicaApi.getDownloadAddr(widget.replicaLink),
+      position: playPosition,
+    );
     if (result == 1) {
       setState(() => _playerState = PlayerState.PLAYING);
     }

@@ -1,3 +1,5 @@
+// ignore_for_file: type=lint
+
 ///
 //  Generated code. Do not modify.
 //  source: protos_shared/vpn.proto

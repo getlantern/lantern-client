@@ -18,89 +18,102 @@ class Notifications {
 
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final inCallChannel = NotificationDetails(
-    android: AndroidNotificationDetails('10003', 'in_call'.i18n,
-        channelDescription: '_call_des'.i18n,
-        importance: Importance.max,
-        priority: Priority.high,
-        showWhen: false),
+    android: AndroidNotificationDetails(
+      '10003',
+      'in_call'.i18n,
+      channelDescription: '_call_des'.i18n,
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+    ),
   );
 
   NotificationDetails getUploadCompleteChannel(UploadTaskResponse resp) {
     return NotificationDetails(
-      android: AndroidNotificationDetails('10004', 'upload'.i18n,
-          channelDescription: 'upload_des'.i18n,
-          importance: Importance.high,
-          icon: 'ic_upload',
-          priority: Priority.high,
-          showWhen: false),
+      android: AndroidNotificationDetails(
+        '10004',
+        'upload'.i18n,
+        channelDescription: 'upload_des'.i18n,
+        importance: Importance.high,
+        icon: 'ic_upload',
+        priority: Priority.high,
+        showWhen: false,
+      ),
     );
   }
 
   NotificationDetails getUploadProgressChannel(int progress) {
     return NotificationDetails(
-      android: AndroidNotificationDetails('10004', 'upload'.i18n,
-          channelDescription: 'upload_des'.i18n,
-          importance: Importance.max,
-          progress: progress,
-          showProgress: true,
-          maxProgress: 100,
-          onlyAlertOnce: true,
-          icon: 'ic_upload',
-          priority: Priority.high,
-          showWhen: false),
+      android: AndroidNotificationDetails(
+        '10004',
+        'upload'.i18n,
+        channelDescription: 'upload_des'.i18n,
+        importance: Importance.max,
+        progress: progress,
+        showProgress: true,
+        maxProgress: 100,
+        onlyAlertOnce: true,
+        icon: 'ic_upload',
+        priority: Priority.high,
+        showWhen: false,
+      ),
     );
   }
 
   Notifications() {
     flutterLocalNotificationsPlugin.initialize(
-        const InitializationSettings(
-            android: AndroidInitializationSettings('app_icon')),
-        onSelectNotification: (payloadString) async {
-      if (payloadString?.isNotEmpty == true) {
-        var payload = Payload.fromJson(payloadString!);
-        switch (payload.type) {
-          case PayloadType.Ringing:
-            Map<String, dynamic> data = payload.data;
-            messagingModel.signaling
-                .onMessage(data['peerId'], data['messageJson'], false);
-            break;
-          // TODO <16-12-2021> soltzen: This code does not work as of today: the
-          // notification click events are not being processed. This'll be
-          // addressed here: https://github.com/getlantern/lantern-internal/issues/5133
-          case PayloadType.Upload:
-            // The payload here is a possible JSON response body
-            // See ReplicaUploader for more info on this payload type
-            try {
-              Map<String, dynamic> resp = jsonDecode(payload.data);
-              if (!resp.containsKey('replicaLink')) {
-                return;
+      const InitializationSettings(
+        android: AndroidInitializationSettings('app_icon'),
+      ),
+      onSelectNotification: (payloadString) async {
+        if (payloadString?.isNotEmpty == true) {
+          var payload = Payload.fromJson(payloadString!);
+          switch (payload.type) {
+            case PayloadType.Ringing:
+              Map<String, dynamic> data = payload.data;
+              messagingModel.signaling
+                  .onMessage(data['peerId'], data['messageJson'], false);
+              break;
+            // TODO <16-12-2021> soltzen: This code does not work as of today: the
+            // notification click events are not being processed. This'll be
+            // addressed here: https://github.com/getlantern/lantern-internal/issues/5133
+            case PayloadType.Upload:
+              // The payload here is a possible JSON response body
+              // See ReplicaUploader for more info on this payload type
+              try {
+                Map<String, dynamic> resp = jsonDecode(payload.data);
+                if (!resp.containsKey('replicaLink')) {
+                  return;
+                }
+                // XXX <16-12-2021> soltzen: we don't care much for the other
+                // parameters, but they are here for reference:
+                // https://github.com/getlantern/replica/blob/c61b1855475391c715a1e8e370da87b31848d514/server/object.go#L12
+                var link = ReplicaLink.New(resp['replicaLink']);
+                if (link == null) {
+                  throw Exception('Replicalink.New() failed');
+                }
+                // Prompt the user a Share dialog
+                await Share.share('replica://${link.toMagnetLink()}');
+              } catch (ex) {
+                logger.w(
+                  'Failed to decode upload json resp: ${payload.data}. Will not process upload notification clicks. Err: $ex',
+                );
               }
-              // XXX <16-12-2021> soltzen: we don't care much for the other
-              // parameters, but they are here for reference:
-              // https://github.com/getlantern/replica/blob/c61b1855475391c715a1e8e370da87b31848d514/server/object.go#L12
-              var link = ReplicaLink.New(resp['replicaLink']);
-              if (link == null) {
-                throw Exception('Replicalink.New() failed');
-              }
-              // Prompt the user a Share dialog
-              await Share.share('replica://${link.toMagnetLink()}');
-            } catch (ex) {
-              logger.w(
-                  'Failed to decode upload json resp: ${payload.data}. Will not process upload notification clicks. Err: $ex');
-            }
-            break;
+              break;
+          }
         }
-      }
-      return;
-    });
+        return;
+      },
+    );
   }
 
   Future<void> showInCallNotification(Contact contact) {
     return flutterLocalNotificationsPlugin.show(
-        inCallNotificationId,
-        'in_call_with'.i18n.fill([contact.displayName]),
-        'touch_here_to_open_call'.i18n,
-        inCallChannel);
+      inCallNotificationId,
+      'in_call_with'.i18n.fill([contact.displayName]),
+      'touch_here_to_open_call'.i18n,
+      inCallChannel,
+    );
   }
 
   Future<void> dismissInCallNotification() {

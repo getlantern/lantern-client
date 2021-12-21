@@ -41,18 +41,21 @@ class GenericAttachment extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
                     style: tsBody3.copiedWith(
-                        color: inbound ? inboundMsgColor : outboundMsgColor),
+                      color: inbound ? inboundMsgColor : outboundMsgColor,
+                    ),
                   )
                 ],
               ),
               const Divider(height: 2.0),
-              CText(fileType.toUpperCase(),
-                  style: CTextStyle(
-                    color: inbound ? inboundMsgColor : outboundMsgColor,
-                    fontSize: 12,
-                    lineHeight: 16,
-                    fontWeight: FontWeight.w500,
-                  ))
+              CText(
+                fileType.toUpperCase(),
+                style: CTextStyle(
+                  color: inbound ? inboundMsgColor : outboundMsgColor,
+                  fontSize: 12,
+                  lineHeight: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              )
             ],
           )
         ],

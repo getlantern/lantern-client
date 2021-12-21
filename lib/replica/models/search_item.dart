@@ -9,8 +9,14 @@ var logger = Logger(
 );
 
 class ReplicaSearchItem {
-  ReplicaSearchItem(this.displayName, this.primaryMimeType,
-      this.humanizedLastModified, this.humanizedFileSize, this.replicaLink);
+  ReplicaSearchItem(
+    this.displayName,
+    this.primaryMimeType,
+    this.humanizedLastModified,
+    this.humanizedFileSize,
+    this.replicaLink,
+  );
+
   String? primaryMimeType;
   String humanizedLastModified;
   String humanizedFileSize;
@@ -18,7 +24,9 @@ class ReplicaSearchItem {
   late String displayName;
 
   static List<ReplicaSearchItem> fromJson(
-      SearchCategory category, Map<String, dynamic> body) {
+    SearchCategory category,
+    Map<String, dynamic> body,
+  ) {
     var serverError = body['error'];
     if (serverError != null) {
       throw Exception(serverError);
@@ -52,11 +60,19 @@ class ReplicaSearchItem {
         final humanizedFileSize = filesize(result['fileSize'] as int);
         final displayName = link.displayName ?? result['displayName'];
 
-        items.add(ReplicaSearchItem(displayName, primaryMimeType,
-            humanizedLastModified, humanizedFileSize, link));
+        items.add(
+          ReplicaSearchItem(
+            displayName,
+            primaryMimeType,
+            humanizedLastModified,
+            humanizedFileSize,
+            link,
+          ),
+        );
       } catch (err) {
         logger.w(
-            'Error parsing item ${result['replicaLink'] ??= '[invalid link]'}. Will ignore link');
+          'Error parsing item ${result['replicaLink'] ??= '[invalid link]'}. Will ignore link',
+        );
         continue;
       }
     }

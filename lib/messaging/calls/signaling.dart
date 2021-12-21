@@ -20,16 +20,18 @@ final remoteTCPCandidateRegExp = RegExp(r'.+tcp [0-9]+ (ws[^\s]+).+');
  * callbacks for Signaling API.
  */
 typedef StreamStateCallback = void Function(
-    Session? session, MediaStream stream);
+  Session? session,
+  MediaStream stream,
+);
 typedef OtherEventCallback = void Function(dynamic event);
 
 class Session extends ValueNotifier<SignalingState> {
-  Session(
-      {required this.signaling,
-      required this.isInitiator,
-      required this.sid,
-      required this.pid})
-      : super(SignalingState());
+  Session({
+    required this.signaling,
+    required this.isInitiator,
+    required this.sid,
+    required this.pid,
+  }) : super(SignalingState());
 
   Signaling signaling;
   bool isInitiator;
@@ -155,10 +157,11 @@ class Signaling {
     }
   }
 
-  Future<Session> call(
-      {required String peerId,
-      required String media,
-      required Function() onError}) async {
+  Future<Session> call({
+    required String peerId,
+    required String media,
+    required Function() onError,
+  }) async {
     // The first time we start ringing, the audio cache will not yet be initialized
     // so we wait to call audioPlayerOnSpeaker.
     final disableSpeakerImmediately = audioCache.fixedPlayer != null;
@@ -174,7 +177,11 @@ class Signaling {
     var sessionId =
         peerId; // TODO: do we need to be able to have multiple sessions with the same peer?
     var session = await _createSession(
-        isInitiator: true, peerId: peerId, sessionId: sessionId, media: media);
+      isInitiator: true,
+      peerId: peerId,
+      sessionId: sessionId,
+      media: media,
+    );
     _sessions[peerId] = session;
     await _createOffer(session, media);
     setSpeakerphoneOn(false);
@@ -243,14 +250,16 @@ class Signaling {
 
             // create new session for incoming call
             var newSession = await _createSession(
-                isInitiator: false,
-                session: _sessions[peerId],
-                peerId: peerId,
-                sessionId: sessionId,
-                media: media);
+              isInitiator: false,
+              session: _sessions[peerId],
+              peerId: peerId,
+              sessionId: sessionId,
+              media: media,
+            );
             _sessions[peerId] = newSession;
             await newSession.pc!.setRemoteDescription(
-                RTCSessionDescription(description['sdp'], description['type']));
+              RTCSessionDescription(description['sdp'], description['type']),
+            );
             await _createAnswer(newSession, media);
             if (newSession.remoteCandidates.isNotEmpty) {
               newSession.remoteCandidates.forEach((candidate) async {
@@ -264,10 +273,11 @@ class Signaling {
             var contact = await messagingModel.getDirectContact(peerId);
             await navigatorKey.currentContext?.pushRoute(
               FullScreenDialogPage(
-                  widget: Call(
-                contact: contact,
-                initialSession: newSession,
-              )),
+                widget: Call(
+                  contact: contact,
+                  initialSession: newSession,
+                ),
+              ),
             );
           }
         }
@@ -278,7 +288,8 @@ class Signaling {
           var session = _sessions[peerId];
           session?.setCallState(CallState.Connected);
           await session?.pc?.setRemoteDescription(
-              RTCSessionDescription(description['sdp'], description['type']));
+            RTCSessionDescription(description['sdp'], description['type']),
+          );
         }
         break;
       case 'candidate':
@@ -287,8 +298,11 @@ class Signaling {
           var candidateString = candidateMap['candidate'] as String;
           var sessionId = data['session_id'];
           var session = _sessions[peerId];
-          var candidate = RTCIceCandidate(candidateString,
-              candidateMap['sdpMid'], candidateMap['sdpMLineIndex']);
+          var candidate = RTCIceCandidate(
+            candidateString,
+            candidateMap['sdpMid'],
+            candidateMap['sdpMLineIndex'],
+          );
 
           if (session != null) {
             if (session.pc != null) {
@@ -298,11 +312,11 @@ class Signaling {
             }
           } else {
             _sessions[peerId] = Session(
-                signaling: this,
-                isInitiator: false,
-                pid: peerId,
-                sid: sessionId)
-              ..remoteCandidates.add(candidate);
+              signaling: this,
+              isInitiator: false,
+              pid: peerId,
+              sid: sessionId,
+            )..remoteCandidates.add(candidate);
           }
         }
         break;
@@ -331,27 +345,32 @@ class Signaling {
     }
   }
 
-  Future<Session> _createSession(
-      {required bool isInitiator,
-      Session? session,
-      required String peerId,
-      required String sessionId,
-      required String media}) async {
+  Future<Session> _createSession({
+    required bool isInitiator,
+    Session? session,
+    required String peerId,
+    required String sessionId,
+    required String media,
+  }) async {
     var newSession = session ??
         Session(
-            signaling: this,
-            isInitiator: isInitiator,
-            sid: sessionId,
-            pid: peerId);
+          signaling: this,
+          isInitiator: isInitiator,
+          sid: sessionId,
+          pid: peerId,
+        );
     _localStream = await createStream();
 
-    var pc = await createPeerConnection({
-      ..._iceServers,
-      ...{
-        'sdpSemantics': sdpSemantics,
-        // 'iceTransportPolicy': 'relay',
-      }
-    }, _config);
+    var pc = await createPeerConnection(
+      {
+        ..._iceServers,
+        ...{
+          'sdpSemantics': sdpSemantics,
+          // 'iceTransportPolicy': 'relay',
+        }
+      },
+      _config,
+    );
 
     switch (sdpSemantics) {
       case 'plan-b':
@@ -412,7 +431,9 @@ class Signaling {
   }
 
   Future<void> _addRemoteCandidate(
-      Session session, RTCIceCandidate candidate) async {
+    Session session,
+    RTCIceCandidate candidate,
+  ) async {
     if (!session.isInitiator && candidate.candidate != null) {
       var match = remoteTCPCandidateRegExp.firstMatch(candidate.candidate!);
       if (match != null) {
@@ -525,7 +546,9 @@ String? tuneOpus(String? sdp, {required bool force}) {
   if (force) {
     // use only opus
     sdp = sdp.replaceFirst(
-        audioRegex, 'm=audio $audioPort $audioProtocol $opusId');
+      audioRegex,
+      'm=audio $audioPort $audioProtocol $opusId',
+    );
   }
 
   // Use simple nack feedback/congestion control since we're always running over
@@ -538,8 +561,10 @@ String? tuneOpus(String? sdp, {required bool force}) {
   // set up custom opus parameters (8 KHz sampling, 20 kbps bitrate, mono, no
   // FEC, no DTX, small audio packet size.
   // Note - I couldn't get the maxptime parameter to work, it caused crashes.
-  return sdp.replaceFirst(RegExp('a=fmtp:$opusId.+'),
-      'a=fmtp:$opusId maxplaybackrate=8000; sprop-maxcapturerate=8000; maxaveragebitrate=20000; stereo=0; sprop-stereo=0; useinbandfec=0; usedtx=0;\na=ptime:3');
+  return sdp.replaceFirst(
+    RegExp('a=fmtp:$opusId.+'),
+    'a=fmtp:$opusId maxplaybackrate=8000; sprop-maxcapturerate=8000; maxaveragebitrate=20000; stereo=0; sprop-stereo=0; useinbandfec=0; usedtx=0;\na=ptime:3',
+  );
 }
 
 /// This just removes the a=fmtp line for Opus, used on the receiving end.

@@ -11,8 +11,11 @@ class BasicMemoryImage extends Image {
     ImageErrorWidgetBuilder? errorBuilder,
   }) : super(
           image: MemoryImage(bytes, scale: scale),
-          loadingBuilder: (BuildContext context, Widget child,
-              ImageChunkEvent? loadingProgress) {
+          loadingBuilder: (
+            BuildContext context,
+            Widget child,
+            ImageChunkEvent? loadingProgress,
+          ) {
             if ((child as RawImage).image == null) {
               // the first time an image is rendered, the RawImage will be null
               // because Flutter hasn't decoded the in-memory image yet. To

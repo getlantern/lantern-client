@@ -7,14 +7,14 @@ class CAssetImage extends StatelessWidget {
   final double? height;
   final Color? color;
 
-  const CAssetImage(
-      {required this.path,
-      this.size = iconSize,
-      this.width,
-      this.height,
-      this.color,
-      Key? key})
-      : super(key: key);
+  const CAssetImage({
+    required this.path,
+    this.size = iconSize,
+    this.width,
+    this.height,
+    this.color,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

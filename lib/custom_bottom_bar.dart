@@ -6,12 +6,12 @@ class CustomBottomBar extends StatelessWidget {
   final Function(int)? onTap;
   final bool isDevelop;
 
-  const CustomBottomBar(
-      {required this.index,
-      required this.isDevelop,
-      required this.onTap,
-      Key? key})
-      : super(key: key);
+  const CustomBottomBar({
+    required this.index,
+    required this.isDevelop,
+    required this.onTap,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,43 +27,54 @@ class CustomBottomBar extends StatelessWidget {
         items: [
           BottomNavigationBarItem(
             icon: messagingModel.getFirstShownTryLanternChatModalTS(
-                (context, ts, child) => NowBuilder(
-                    calculate: (now) =>
-                        hasBeenOnboarded != true &&
-                        (now.millisecondsSinceEpoch - ts) < oneWeekInMillis,
-                    builder: (BuildContext context, bool badgeShowing) =>
-                        CustomBottomBarItem(
-                          currentIndex: index,
-                          position: 0,
-                          total: isDevelop ? 4 : 3,
-                          label: CText('secure_chat'.i18n,
-                              style: tsFloatingLabel.copiedWith(
-                                  color: index == 0 ? black : grey5)),
-                          icon: CBadge(
-                            showBadge: badgeShowing,
-                            end: -20,
-                            top: -10,
-                            customBadge: Container(
-                              padding: const EdgeInsetsDirectional.only(
-                                  top: 2.0, bottom: 2.0, start: 5.0, end: 5.0),
-                              decoration: BoxDecoration(
-                                color: blue3,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(80.0),
-                                ),
-                              ),
-                              child: Text('new'.i18n.toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: white,
-                                  )),
-                            ),
-                            child: NumUnviewedWrapper(index: index),
-                          ),
-                          onTap: () async {
-                            onTap!(0);
-                          },
-                        ))),
+              (context, ts, child) => NowBuilder(
+                calculate: (now) =>
+                    hasBeenOnboarded != true &&
+                    (now.millisecondsSinceEpoch - ts) < oneWeekInMillis,
+                builder: (BuildContext context, bool badgeShowing) =>
+                    CustomBottomBarItem(
+                  currentIndex: index,
+                  position: 0,
+                  total: isDevelop ? 4 : 3,
+                  label: CText(
+                    'secure_chat'.i18n,
+                    style: tsFloatingLabel.copiedWith(
+                      color: index == 0 ? black : grey5,
+                    ),
+                  ),
+                  icon: CBadge(
+                    showBadge: badgeShowing,
+                    end: -20,
+                    top: -10,
+                    customBadge: Container(
+                      padding: const EdgeInsetsDirectional.only(
+                        top: 2.0,
+                        bottom: 2.0,
+                        start: 5.0,
+                        end: 5.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: blue3,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(80.0),
+                        ),
+                      ),
+                      child: Text(
+                        'new'.i18n.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: white,
+                        ),
+                      ),
+                    ),
+                    child: NumUnviewedWrapper(index: index),
+                  ),
+                  onTap: () async {
+                    onTap!(0);
+                  },
+                ),
+              ),
+            ),
             label: '',
             tooltip: 'chats'.i18n,
           ),
@@ -72,9 +83,12 @@ class CustomBottomBar extends StatelessWidget {
               currentIndex: index,
               position: 1,
               total: isDevelop ? 4 : 3,
-              label: CText('VPN'.i18n,
-                  style: tsFloatingLabel.copiedWith(
-                      color: index == 1 ? black : grey5)),
+              label: CText(
+                'VPN'.i18n,
+                style: tsFloatingLabel.copiedWith(
+                  color: index == 1 ? black : grey5,
+                ),
+              ),
               icon: CAssetImage(
                 path: ImagePaths.key,
                 color:
@@ -103,9 +117,12 @@ class CustomBottomBar extends StatelessWidget {
               currentIndex: index,
               position: 2,
               total: isDevelop ? 4 : 3,
-              label: CText('Account'.i18n,
-                  style: tsFloatingLabel.copiedWith(
-                      color: index == 2 ? black : grey5)),
+              label: CText(
+                'Account'.i18n,
+                style: tsFloatingLabel.copiedWith(
+                  color: index == 2 ? black : grey5,
+                ),
+              ),
               onTap: () => onTap!(2),
               icon: hasBeenOnboarded == true
                   ? messagingModel.getCopiedRecoveryStatus(
@@ -140,11 +157,12 @@ class CustomBottomBar extends StatelessWidget {
                 label: CText(
                   'discover'.i18n,
                   style: tsFloatingLabel.copiedWith(
-                      color: !replicaEnabled
-                          ? grey4
-                          : index == 3
-                              ? black
-                              : grey5),
+                    color: !replicaEnabled
+                        ? grey4
+                        : index == 3
+                            ? black
+                            : grey5,
+                  ),
                 ),
                 icon: CAssetImage(
                   path: ImagePaths.discover,
@@ -170,9 +188,12 @@ class CustomBottomBar extends StatelessWidget {
                 currentIndex: index,
                 position: 4,
                 total: isDevelop ? 4 : 3,
-                label: CText('Developer'.i18n,
-                    style: tsFloatingLabel.copiedWith(
-                        color: index == 4 ? black : grey5)),
+                label: CText(
+                  'Developer'.i18n,
+                  style: tsFloatingLabel.copiedWith(
+                    color: index == 4 ? black : grey5,
+                  ),
+                ),
                 icon: CAssetImage(
                   path: ImagePaths.devices,
                   color: index == 4
@@ -201,22 +222,25 @@ class NumUnviewedWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // iterate over contacts by activity (most recent conversations)
-    return messagingModel.contactsByActivity(builder:
-        (context, Iterable<PathAndValue<Contact>> contacts, Widget? child) {
-      final totalUnviewed = contacts.isNotEmpty
-          ? contacts
-              .map(
-                  (e) => e.value.isAccepted() ? e.value.numUnviewedMessages : 0)
-              .reduce((value, element) => value + element)
-          : 0;
-      return CBadge(
-        showBadge: totalUnviewed > 0,
-        count: totalUnviewed,
-        child: CAssetImage(
-          path: ImagePaths.messages,
-          color: index == 0 ? selectedTabIconColor : unselectedTabIconColor,
-        ),
-      );
-    });
+    return messagingModel.contactsByActivity(
+      builder:
+          (context, Iterable<PathAndValue<Contact>> contacts, Widget? child) {
+        final totalUnviewed = contacts.isNotEmpty
+            ? contacts
+                .map(
+                  (e) => e.value.isAccepted() ? e.value.numUnviewedMessages : 0,
+                )
+                .reduce((value, element) => value + element)
+            : 0;
+        return CBadge(
+          showBadge: totalUnviewed > 0,
+          count: totalUnviewed,
+          child: CAssetImage(
+            path: ImagePaths.messages,
+            color: index == 0 ? selectedTabIconColor : unselectedTabIconColor,
+          ),
+        );
+      },
+    );
   }
 }

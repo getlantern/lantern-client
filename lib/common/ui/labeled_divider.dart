@@ -6,9 +6,13 @@ class LabeledDivider extends StatelessWidget {
   late final EdgeInsetsGeometry? padding;
   late final double height;
 
-  LabeledDivider(
-      {Key? key, this.label, this.labelStyle, this.padding, this.height = 20})
-      : super(key: key);
+  LabeledDivider({
+    Key? key,
+    this.label,
+    this.labelStyle,
+    this.padding,
+    this.height = 20,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,10 @@ class LabeledDivider extends StatelessWidget {
                   label!,
                   style: labelStyle ??
                       CTextStyle(
-                          color: Colors.black, fontSize: 12, lineHeight: 12),
+                        color: Colors.black,
+                        fontSize: 12,
+                        lineHeight: 12,
+                      ),
                 ),
               ),
             ),

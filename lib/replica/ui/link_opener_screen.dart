@@ -26,9 +26,11 @@ var logger = Logger(
 /// In other words, we will never reach any Replica screen (other than this) if
 /// Replica is not initialized.
 class ReplicaLinkOpenerScreen extends StatefulWidget {
-  ReplicaLinkOpenerScreen(
-      {Key? key, required this.replicaApi, required this.replicaLink})
-      : super(key: key);
+  ReplicaLinkOpenerScreen({
+    Key? key,
+    required this.replicaApi,
+    required this.replicaLink,
+  }) : super(key: key);
   final ReplicaApi replicaApi;
   final ReplicaLink replicaLink;
 
@@ -45,19 +47,32 @@ class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
       logger.v('category is ${cat.toString()}');
       switch (cat) {
         case SearchCategory.Video:
-          return context.replaceRoute(ReplicaVideoPlayerScreen(
-              replicaApi: widget.replicaApi, replicaLink: widget.replicaLink));
+          return context.replaceRoute(
+            ReplicaVideoPlayerScreen(
+              replicaApi: widget.replicaApi,
+              replicaLink: widget.replicaLink,
+            ),
+          );
         case SearchCategory.Image:
           return context.replaceRoute(
-              ReplicaImagePreviewScreen(replicaLink: widget.replicaLink));
+            ReplicaImagePreviewScreen(replicaLink: widget.replicaLink),
+          );
         case SearchCategory.Audio:
-          return context.replaceRoute(ReplicaAudioPlayerScreen(
-              replicaApi: widget.replicaApi, replicaLink: widget.replicaLink));
+          return context.replaceRoute(
+            ReplicaAudioPlayerScreen(
+              replicaApi: widget.replicaApi,
+              replicaLink: widget.replicaLink,
+            ),
+          );
         case SearchCategory.Document:
         case SearchCategory.App:
         case SearchCategory.Unknown:
-          return context.replaceRoute(ReplicaUnknownItemScreen(
-              category: cat, replicaLink: widget.replicaLink));
+          return context.replaceRoute(
+            ReplicaUnknownItemScreen(
+              category: cat,
+              replicaLink: widget.replicaLink,
+            ),
+          );
       }
     });
 
@@ -85,8 +100,9 @@ class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-        showAppBar: true,
-        title: 'replica_link_fetcher'.i18n,
-        body: Center(child: renderBody()));
+      showAppBar: true,
+      title: 'replica_link_fetcher'.i18n,
+      body: Center(child: renderBody()),
+    );
   }
 }

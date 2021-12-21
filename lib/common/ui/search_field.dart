@@ -1,10 +1,10 @@
 import 'package:lantern/common/common.dart';
 
 class SearchField extends CTextField {
-  SearchField(
-      {required CustomTextEditingController controller,
-      required Future<void> Function(String query) search})
-      : super(
+  SearchField({
+    required CustomTextEditingController controller,
+    required Future<void> Function(String query) search,
+  }) : super(
           controller: controller,
           onFieldSubmitted: (query) async {
             await search(query);

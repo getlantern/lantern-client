@@ -39,9 +39,11 @@ class Language extends StatelessWidget {
               tileColor: lang == currentLang ? grey2 : transparent,
               dense: true,
               title: CText(
-                  toBeginningOfSentenceCase(
-                      lang.displayLanguage(context, lang))!,
-                  style: tsBody1),
+                toBeginningOfSentenceCase(
+                  lang.displayLanguage(context, lang),
+                )!,
+                style: tsBody1,
+              ),
               value: lang,
               groupValue: currentLang,
               onChanged: (String? value) async {

@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:lantern/common/common.dart';
 
 class CText extends StatelessWidget {
@@ -17,12 +18,14 @@ class CText extends StatelessWidget {
   /// minFontSize in addition to a fontSize.
   ///
   /// To get smart ellipses, make sure to specify maxLines = 1.
-  CText(String text,
-      {required this.style,
-      this.textAlign,
-      TextOverflow? overflow,
-      this.maxLines,
-      this.softWrap}) {
+  CText(
+    String text, {
+    required this.style,
+    this.textAlign,
+    TextOverflow? overflow,
+    this.maxLines,
+    this.softWrap,
+  }) {
     // Workaround for https://github.com/flutter/flutter/issues/18761
     this.text =
         maxLines == 1 ? Characters(text).toList().join('\u{200B}') : text;
@@ -34,34 +37,40 @@ class CText extends StatelessWidget {
   Widget build(BuildContext context) {
     if (style.minFontSize == null) {
       // Can't do special auto-scaling, just return regular Text
-      return Text(text,
-          style: style,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          softWrap: softWrap);
+      return Text(
+        text,
+        style: style,
+        textAlign: textAlign,
+        overflow: overflow,
+        maxLines: maxLines,
+        softWrap: softWrap,
+      );
     }
 
     return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      final fontSize = _fontSizeFor(context, constraints.maxWidth);
-      // scale height to keep line height the same even though font size changed
-      return Text(text,
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final fontSize = _fontSizeFor(context, constraints.maxWidth);
+        // scale height to keep line height the same even though font size changed
+        return Text(
+          text,
           style: style.copiedWith(fontSize: fontSize, minFontSize: 0),
           textAlign: textAlign,
           overflow: overflow,
           maxLines: maxLines,
-          softWrap: softWrap);
-    });
+          softWrap: softWrap,
+        );
+      },
+    );
   }
 
   double _fontSizeFor(BuildContext context, double maxWidth) {
     final maxFontSize = style.fontSize!;
 
     var textPainter = TextPainter(
-        maxLines: 1,
-        text: TextSpan(text: text, style: style),
-        textDirection: Directionality.of(context));
+      maxLines: 1,
+      text: TextSpan(text: text, style: style),
+      textDirection: Directionality.of(context),
+    );
     textPainter.layout();
     final widthRatio = maxWidth / textPainter.width;
     if (widthRatio >= 1) {
@@ -85,33 +94,33 @@ class CTextStyle extends TextStyle {
   final double? minFontSize;
   final double lineHeight;
 
-  CTextStyle(
-      {bool inherit = true,
-      Color? color,
-      Color? backgroundColor,
-      required double fontSize,
-      required this.lineHeight,
-      this.minFontSize,
-      FontWeight fontWeight = FontWeight.w400,
-      FontStyle? fontStyle,
-      double? letterSpacing,
-      double? wordSpacing,
-      TextBaseline? textBaseline,
-      TextLeadingDistribution? leadingDistribution,
-      Locale? locale,
-      Paint? foreground,
-      Paint? background,
-      List<Shadow>? shadows,
-      List<FontFeature>? fontFeatures,
-      TextDecoration? decoration,
-      Color? decorationColor,
-      TextDecorationStyle? decorationStyle,
-      double? decorationThickness,
-      String? debugLabel,
-      String? fontFamily,
-      List<String>? fontFamilyFallback,
-      String? package})
-      : super(
+  CTextStyle({
+    bool inherit = true,
+    Color? color,
+    Color? backgroundColor,
+    required double fontSize,
+    required this.lineHeight,
+    this.minFontSize,
+    FontWeight fontWeight = FontWeight.w400,
+    FontStyle? fontStyle,
+    double? letterSpacing,
+    double? wordSpacing,
+    TextBaseline? textBaseline,
+    TextLeadingDistribution? leadingDistribution,
+    Locale? locale,
+    Paint? foreground,
+    Paint? background,
+    List<Shadow>? shadows,
+    List<FontFeature>? fontFeatures,
+    TextDecoration? decoration,
+    Color? decorationColor,
+    TextDecorationStyle? decorationStyle,
+    double? decorationThickness,
+    String? debugLabel,
+    String? fontFamily,
+    List<String>? fontFamilyFallback,
+    String? package,
+  }) : super(
           inherit: inherit,
           color: color ?? black,
           backgroundColor: backgroundColor,
@@ -135,46 +144,51 @@ class CTextStyle extends TextStyle {
           debugLabel: debugLabel,
           fontFamily: fontFamily,
         ) {
-    assert((minFontSize ?? 0) < fontSize,
-        'fontSize $fontSize, minFontSize is $minFontSize, please set minFontSize to something less than fontSize');
+    assert(
+      (minFontSize ?? 0) < fontSize,
+      'fontSize $fontSize, minFontSize is $minFontSize, please set minFontSize to something less than fontSize',
+    );
   }
 
   CTextStyle get short => copiedWith(lineHeight: fontSize);
 
   CTextStyle get italic => copiedWith(fontStyle: FontStyle.italic);
 
-  CTextStyle copiedWith(
-      {bool? inherit,
-      Color? color,
-      Color? backgroundColor,
-      String? fontFamily,
-      List<String>? fontFamilyFallback,
-      double? fontSize,
-      double? lineHeight,
-      double? minFontSize,
-      FontWeight? fontWeight,
-      FontStyle? fontStyle,
-      double? letterSpacing,
-      double? wordSpacing,
-      TextBaseline? textBaseline,
-      TextLeadingDistribution? leadingDistribution,
-      Locale? locale,
-      Paint? foreground,
-      Paint? background,
-      List<Shadow>? shadows,
-      List<FontFeature>? fontFeatures,
-      TextDecoration? decoration,
-      Color? decorationColor,
-      TextDecorationStyle? decorationStyle,
-      double? decorationThickness,
-      String? debugLabel}) {
+  CTextStyle copiedWith({
+    bool? inherit,
+    Color? color,
+    Color? backgroundColor,
+    String? fontFamily,
+    List<String>? fontFamilyFallback,
+    double? fontSize,
+    double? lineHeight,
+    double? minFontSize,
+    FontWeight? fontWeight,
+    FontStyle? fontStyle,
+    double? letterSpacing,
+    double? wordSpacing,
+    TextBaseline? textBaseline,
+    TextLeadingDistribution? leadingDistribution,
+    Locale? locale,
+    Paint? foreground,
+    Paint? background,
+    List<Shadow>? shadows,
+    List<FontFeature>? fontFeatures,
+    TextDecoration? decoration,
+    Color? decorationColor,
+    TextDecorationStyle? decorationStyle,
+    double? decorationThickness,
+    String? debugLabel,
+  }) {
     String? newDebugLabel;
-    assert(() {
-      if (this.debugLabel != null) {
-        newDebugLabel = debugLabel ?? '(${this.debugLabel}).copyWith';
-      }
-      return true;
-    }());
+    assert(
+      () {
+        if (this.debugLabel != null) {
+          newDebugLabel = debugLabel ?? '(${this.debugLabel}).copyWith';
+        }
+        return true;
+      }(),
+    );
     return CTextStyle(
       inherit: inherit ?? this.inherit,
       color: this.foreground == null && foreground == null

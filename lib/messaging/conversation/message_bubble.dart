@@ -74,8 +74,9 @@ class MessageBubble extends StatelessWidget {
         Flexible(
           child: Padding(
             padding: EdgeInsetsDirectional.only(
-                top: isStartOfBlock || hasReactions ? 8 : 2,
-                bottom: isNewestMessage ? 8 : 0),
+              top: isStartOfBlock || hasReactions ? 8 : 2,
+              bottom: isNewestMessage ? 8 : 0,
+            ),
             child: overlayReactions(context, bubble(context, messagingModel)),
           ),
         ),
@@ -139,7 +140,9 @@ class MessageBubble extends StatelessWidget {
         ),
         alignment: Alignment.center,
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.center, children: children),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: children,
+        ),
       ),
     );
     return Stack(
@@ -153,9 +156,10 @@ class MessageBubble extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsetsDirectional.only(
-              top: 12,
-              start: isOutbound ? padding : 0,
-              end: isInbound ? padding : 0),
+            top: 12,
+            start: isOutbound ? padding : 0,
+            end: isInbound ? padding : 0,
+          ),
           child: child,
         ),
         reactionsWidget,
@@ -167,16 +171,23 @@ class MessageBubble extends StatelessWidget {
   // Handles URLs on tap.
   // Adds status row.
   Widget content(BuildContext context, MessagingModel model) {
-    assert(message.attachments.values.length <= 1,
-        'display of messages with multiple attachments is unsupported');
+    assert(
+      message.attachments.values.length <= 1,
+      'display of messages with multiple attachments is unsupported',
+    );
 
     final attachment = message.attachments.isEmpty
         ? null
         : attachmentWidget(
-            contact, message, message.attachments.values.first, isInbound);
+            contact,
+            message,
+            message.attachments.values.first,
+            isInbound,
+          );
 
     final isAudio = message.attachments.values.any(
-        (attachment) => audioMimes.contains(attachment.attachment.mimeType));
+      (attachment) => audioMimes.contains(attachment.attachment.mimeType),
+    );
     final isContactConnectionCard = message.hasIntroduction();
 
     return LayoutBuilder(
@@ -188,50 +199,62 @@ class MessageBubble extends StatelessWidget {
               ? ContactConnectionCard(contact, isInbound, isOutbound, message)
               : wrapIntrinsicWidthIfNecessary(
                   Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (message.replyToId.isNotEmpty)
-                          model.singleMessage(
-                              message.replyToSenderId, message.replyToId,
-                              (context, replyToMessage, child) {
-                            return GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () => onTapReply(),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.only(
-                                    start: 8,
-                                    end: 8,
-                                    top: 8,
-                                    bottom: rendersAsText ? 0 : 8),
-                                child: SizedBox(
-                                  child: Reply(
-                                    contact: contact,
-                                    message: replyToMessage,
-                                    isOutbound: isOutbound,
-                                  ),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (message.replyToId.isNotEmpty)
+                        model.singleMessage(
+                            message.replyToSenderId, message.replyToId,
+                            (context, replyToMessage, child) {
+                          return GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () => onTapReply(),
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.only(
+                                start: 8,
+                                end: 8,
+                                top: 8,
+                                bottom: rendersAsText ? 0 : 8,
+                              ),
+                              child: SizedBox(
+                                child: Reply(
+                                  contact: contact,
+                                  message: replyToMessage,
+                                  isOutbound: isOutbound,
                                 ),
                               ),
-                            );
-                          }),
-                        if (rendersAsText)
-                          Padding(
-                            padding: const EdgeInsetsDirectional.only(
-                                start: 8, end: 8, top: 4),
-                            child:
-                                Row(mainAxisSize: MainAxisSize.min, children: [
+                            ),
+                          );
+                        }),
+                      if (rendersAsText)
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                            start: 8,
+                            end: 8,
+                            top: 4,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
                               Flexible(
                                 fit: FlexFit.loose,
                                 child: Container(
                                   padding: const EdgeInsetsDirectional.only(
-                                      start: 8, end: 8, bottom: 4),
+                                    start: 8,
+                                    end: 8,
+                                    bottom: 4,
+                                  ),
                                   child: MarkdownBody(
                                     data: wasRemotelyDeleted
                                         ? 'message_deleted'.i18n.fill(
-                                            [contact.displayNameOrFallback])
+                                            [contact.displayNameOrFallback],
+                                          )
                                         : message.text,
-                                    onTapLink: (String text, String? href,
-                                        String title) async {
+                                    onTapLink: (
+                                      String text,
+                                      String? href,
+                                      String title,
+                                    ) async {
                                       if (href != null &&
                                           await canLaunch(href)) {
                                         showInfoDialog(
@@ -277,32 +300,37 @@ class MessageBubble extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            ]),
+                            ],
                           ),
-                        Stack(
-                          alignment: isOutbound
-                              ? AlignmentDirectional.bottomEnd
-                              : AlignmentDirectional.bottomStart,
-                          children: [
-                            if (attachment != null) attachment,
-                            FittedBox(
-                              fit: BoxFit.contain,
-                              child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: isOutbound
-                                      ? MainAxisAlignment.end
-                                      : MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          start: 8, end: 8),
-                                      child: StatusRow(isOutbound, message),
-                                    ),
-                                  ]),
+                        ),
+                      Stack(
+                        alignment: isOutbound
+                            ? AlignmentDirectional.bottomEnd
+                            : AlignmentDirectional.bottomStart,
+                        children: [
+                          if (attachment != null) attachment,
+                          FittedBox(
+                            fit: BoxFit.contain,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: isOutbound
+                                  ? MainAxisAlignment.end
+                                  : MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                    start: 8,
+                                    end: 8,
+                                  ),
+                                  child: StatusRow(isOutbound, message),
+                                ),
+                              ],
                             ),
-                          ],
-                        )
-                      ]),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
         );
       },
@@ -361,7 +389,10 @@ class MessageBubble extends StatelessWidget {
 
     return Container(
       constraints: BoxConstraints(
-          minWidth: 1, maxWidth: maxBubbleWidth(context), minHeight: 1),
+        minWidth: 1,
+        maxWidth: maxBubbleWidth(context),
+        minHeight: 1,
+      ),
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: backgroundColor,
@@ -418,8 +449,10 @@ class MessageBubble extends StatelessWidget {
                     setState(() {
                       textCopied = true;
                     });
-                    Future.delayed(longAnimationDuration,
-                        () => setState(() => textCopied = false));
+                    Future.delayed(
+                      longAnimationDuration,
+                      () => setState(() => textCopied = false),
+                    );
                   },
                 ),
               ),
@@ -445,7 +478,9 @@ class MessageBubble extends StatelessWidget {
                       'message_will_disappear_at'.i18n.fill([date]),
                       // TODO: use long form humanization like "today at 11:56"
                       style: tsBody2.copiedWith(
-                          color: grey5, lineHeight: tsBody2.fontSize),
+                        color: grey5,
+                        lineHeight: tsBody2.fontSize,
+                      ),
                     ),
                   ),
                 ),

@@ -22,23 +22,24 @@ class CTextField extends StatefulWidget {
   late final void Function(String value)? onFieldSubmitted;
   late final String? actionIconPath;
 
-  CTextField(
-      {required this.controller,
-      this.initialValue,
-      required this.label,
-      this.helperText,
-      this.hintText,
-      this.prefixIcon,
-      this.suffixIcon,
-      this.keyboardType,
-      this.enabled,
-      this.minLines,
-      this.maxLines,
-      this.autovalidateMode,
-      this.inputFormatters,
-      this.textInputAction,
-      this.onFieldSubmitted,
-      this.actionIconPath}) {
+  CTextField({
+    required this.controller,
+    this.initialValue,
+    required this.label,
+    this.helperText,
+    this.hintText,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.keyboardType,
+    this.enabled,
+    this.minLines,
+    this.maxLines,
+    this.autovalidateMode,
+    this.inputFormatters,
+    this.textInputAction,
+    this.onFieldSubmitted,
+    this.actionIconPath,
+  }) {
     if (initialValue != null) {
       controller.text = initialValue!;
     }
@@ -132,19 +133,22 @@ class _CTextFieldState extends State<CTextField> {
         Container(
           margin: const EdgeInsetsDirectional.only(start: 11),
           padding: EdgeInsetsDirectional.only(
-              start: hasFocus ? 2 : 0, end: hasFocus ? 2 : 0),
+            start: hasFocus ? 2 : 0,
+            end: hasFocus ? 2 : 0,
+          ),
           color: white,
           child: !hasFocus && widget.controller.value.text.isEmpty
               ? Container()
               : CText(
                   widget.label,
                   style: CTextStyle(
-                      fontSize: 12,
-                      lineHeight: 12,
-                      color: fieldKey.currentState?.mounted == true &&
-                              fieldKey.currentState?.hasError == true
-                          ? indicatorRed
-                          : blue4),
+                    fontSize: 12,
+                    lineHeight: 12,
+                    color: fieldKey.currentState?.mounted == true &&
+                            fieldKey.currentState?.hasError == true
+                        ? indicatorRed
+                        : blue4,
+                  ),
                 ),
         ),
       ],
@@ -177,7 +181,11 @@ class _CTextFieldState extends State<CTextField> {
     return hasError
         ? Transform.scale(
             scale: 0.5,
-            child: CAssetImage(path: ImagePaths.error, color: indicatorRed))
+            child: CAssetImage(
+              path: ImagePaths.error,
+              color: indicatorRed,
+            ),
+          )
         : widget.suffixIcon != null
             ? Transform.scale(scale: 0.5, child: widget.suffixIcon)
             : null;
@@ -219,9 +227,11 @@ class CustomTextEditingController extends TextEditingController {
   final FormFieldValidator<String>? validator;
   String? _error;
 
-  CustomTextEditingController(
-      {String? text, required this.formKey, this.validator})
-      : super(text: text);
+  CustomTextEditingController({
+    String? text,
+    required this.formKey,
+    this.validator,
+  }) : super(text: text);
 
   String? validate(String? value) {
     if (_error != null) {

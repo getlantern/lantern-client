@@ -29,19 +29,21 @@ class _NewChatState extends State<NewChat> {
         _updatedContact = contact;
       });
       showSnackbar(
-          context: context,
-          content: 'qr_success_snackbar'
-              .i18n
-              .fill([_updatedContact!.displayNameOrFallback]),
-          duration: const Duration(milliseconds: 4000),
-          action: SnackBarAction(
-            textColor: pink3,
-            label: 'start_chat'.i18n.toUpperCase(),
-            onPressed: () async {
-              await context.pushRoute(
-                  Conversation(contactId: _updatedContact!.contactId));
-            },
-          ));
+        context: context,
+        content: 'qr_success_snackbar'
+            .i18n
+            .fill([_updatedContact!.displayNameOrFallback]),
+        duration: const Duration(milliseconds: 4000),
+        action: SnackBarAction(
+          textColor: pink3,
+          label: 'start_chat'.i18n.toUpperCase(),
+          onPressed: () async {
+            await context.pushRoute(
+              Conversation(contactId: _updatedContact!.contactId),
+            );
+          },
+        ),
+      );
     }
   }
 
@@ -62,52 +64,73 @@ class _NewChatState extends State<NewChat> {
       ],
       body: messagingModel.me(
         (BuildContext context, Contact me, Widget? child) {
-          return messagingModel.contacts(builder: (context,
-              Iterable<PathAndValue<Contact>> _contacts, Widget? child) {
-            var contacts = _contacts
-                .where((element) =>
-                    element.value.isAccepted() && element.value.isNotBlocked())
-                .toList();
+          return messagingModel.contacts(
+            builder: (
+              context,
+              Iterable<PathAndValue<Contact>> _contacts,
+              Widget? child,
+            ) {
+              var contacts = _contacts
+                  .where(
+                    (element) =>
+                        element.value.isAccepted() &&
+                        element.value.isNotBlocked(),
+                  )
+                  .toList();
 
-            // related https://github.com/getlantern/android-lantern/issues/299
-            var sortedContacts = contacts.sortedAlphabetically();
+              // related https://github.com/getlantern/android-lantern/issues/299
+              var sortedContacts = contacts.sortedAlphabetically();
 
-            var groupedSortedContacts = sortedContacts.groupBy(
-                (el) => el.value.displayNameOrFallback[0].toLowerCase());
+              var groupedSortedContacts = sortedContacts.groupBy(
+                (el) => el.value.displayNameOrFallback[0].toLowerCase(),
+              );
 
-            // scroll to index of the contact we just added, if there is one
-            // otherwise start from top (index = 0)
-            var scrollIndex = _updatedContact != null
-                ? sortedContacts.indexWhere((element) =>
-                    element.value.contactId.id == _updatedContact!.contactId.id)
-                : 0;
-            if (scrollListController.isAttached) {
-              scrollListController.scrollTo(
+              // scroll to index of the contact we just added, if there is one
+              // otherwise start from top (index = 0)
+              var scrollIndex = _updatedContact != null
+                  ? sortedContacts.indexWhere(
+                      (element) =>
+                          element.value.contactId.id ==
+                          _updatedContact!.contactId.id,
+                    )
+                  : 0;
+              if (scrollListController.isAttached) {
+                scrollListController.scrollTo(
                   index: scrollIndex != -1 ? scrollIndex : 0,
                   //if recent contact can not be found in our list for some reason
-                  duration: const Duration(milliseconds: 300));
-            }
+                  duration: const Duration(milliseconds: 300),
+                );
+              }
 
-            return groupedSortedContacts.isNotEmpty
-                ? groupedContactListGenerator(
-                    headItems: buildNewChatItems(me),
-                    groupedSortedList: groupedSortedContacts,
-                    scrollListController: scrollListController,
-                    leadingCallback: (Contact contact) => CustomAvatar(
+              return groupedSortedContacts.isNotEmpty
+                  ? groupedContactListGenerator(
+                      headItems: buildNewChatItems(me),
+                      groupedSortedList: groupedSortedContacts,
+                      scrollListController: scrollListController,
+                      leadingCallback: (Contact contact) => CustomAvatar(
                         messengerId: contact.contactId.id,
-                        displayName: contact.displayName),
-                    onTapCallback: (Contact contact) async => await context
-                        .pushRoute(Conversation(contactId: contact.contactId)),
-                    focusMenuCallback: (Contact contact) =>
-                        renderLongTapMenu(contact: contact, context: context))
-                : Container(
-                    alignment: AlignmentDirectional.center,
-                    padding: const EdgeInsetsDirectional.all(16.0),
-                    child: CText('no_contacts_yet'.i18n,
+                        displayName: contact.displayName,
+                      ),
+                      onTapCallback: (Contact contact) async =>
+                          await context.pushRoute(
+                        Conversation(
+                          contactId: contact.contactId,
+                        ),
+                      ),
+                      focusMenuCallback: (Contact contact) =>
+                          renderLongTapMenu(contact: contact, context: context),
+                    )
+                  : Container(
+                      alignment: AlignmentDirectional.center,
+                      padding: const EdgeInsetsDirectional.all(16.0),
+                      child: CText(
+                        'no_contacts_yet'.i18n,
                         textAlign: TextAlign.center,
-                        style:
-                            tsSubtitle1Short)); // rendering this instead of SizedBox() to avoid null dimension errors
-          });
+                        style: tsSubtitle1Short,
+                      ),
+                    ); // rendering this instead of SizedBox() to avoid null dimension errors
+            },
+          );
         },
       ),
     );
@@ -146,18 +169,21 @@ class _NewChatState extends State<NewChat> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CText('scan_qr_code'.i18n, style: tsSubtitle1Short),
-          CText('add_contact_in_person'.i18n,
-              style: tsBody1.copiedWith(color: grey5))
+          CText(
+            'add_contact_in_person'.i18n,
+            style: tsBody1.copiedWith(color: grey5),
+          )
         ],
       ),
       trailingArray: [const ContinueArrow()],
       onTap: () async => await context
           .pushRoute(
             FullScreenDialogPage(
-                widget: AddViaQR(
-              me: me,
-              isVerificationMode: false,
-            )),
+              widget: AddViaQR(
+                me: me,
+                isVerificationMode: false,
+              ),
+            ),
           )
           .then(onContactAdded),
     );

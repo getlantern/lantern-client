@@ -6,18 +6,23 @@ void main() {
     test('opus available, force', () {
       final expected = sdp
           .replaceFirst(
-              'm=audio 9 UDP/TLS/RTP/SAVPF 111 103 104 9 102 0 8 106 105 13 110 112 113 126',
-              'm=audio 9 UDP/TLS/RTP/SAVPF 111')
+            'm=audio 9 UDP/TLS/RTP/SAVPF 111 103 104 9 102 0 8 106 105 13 110 112 113 126',
+            'm=audio 9 UDP/TLS/RTP/SAVPF 111',
+          )
           .replaceFirst('a=rtcp-fb:111 transport-cc', 'a=rtcp-fb:111 nack')
-          .replaceFirst('a=fmtp:111 minptime=10;useinbandfec=1',
-              'a=fmtp:111 maxplaybackrate=8000; sprop-maxcapturerate=8000; maxaveragebitrate=20000; stereo=0; sprop-stereo=0; useinbandfec=0; usedtx=0;\na=ptime:3');
+          .replaceFirst(
+            'a=fmtp:111 minptime=10;useinbandfec=1',
+            'a=fmtp:111 maxplaybackrate=8000; sprop-maxcapturerate=8000; maxaveragebitrate=20000; stereo=0; sprop-stereo=0; useinbandfec=0; usedtx=0;\na=ptime:3',
+          );
       expect(tuneOpus(sdp, force: true), expected);
     });
     test('opus available, no force', () {
       final expected = sdp
           .replaceFirst('a=rtcp-fb:111 transport-cc', 'a=rtcp-fb:111 nack')
-          .replaceFirst('a=fmtp:111 minptime=10;useinbandfec=1',
-              'a=fmtp:111 maxplaybackrate=8000; sprop-maxcapturerate=8000; maxaveragebitrate=20000; stereo=0; sprop-stereo=0; useinbandfec=0; usedtx=0;\na=ptime:3');
+          .replaceFirst(
+            'a=fmtp:111 minptime=10;useinbandfec=1',
+            'a=fmtp:111 maxplaybackrate=8000; sprop-maxcapturerate=8000; maxaveragebitrate=20000; stereo=0; sprop-stereo=0; useinbandfec=0; usedtx=0;\na=ptime:3',
+          );
       expect(tuneOpus(sdp, force: false), expected);
     });
     test('opus not available', () {
@@ -26,8 +31,9 @@ void main() {
     });
     test('no audio', () {
       final sdpWithoutAudio = sdp.replaceFirst(
-          'm=audio 9 UDP/TLS/RTP/SAVPF 111 103 104 9 102 0 8 106 105 13 110 112 113 126',
-          '');
+        'm=audio 9 UDP/TLS/RTP/SAVPF 111 103 104 9 102 0 8 106 105 13 110 112 113 126',
+        '',
+      );
       expect(tuneOpus(sdpWithoutAudio, force: true), sdpWithoutAudio);
     });
   });

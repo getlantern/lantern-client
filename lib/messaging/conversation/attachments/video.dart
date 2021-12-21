@@ -5,9 +5,12 @@ import 'package:video_player/video_player.dart';
 import 'viewer.dart';
 
 class VideoAttachment extends VisualAttachment {
-  VideoAttachment(Contact contact, StoredMessage message,
-      StoredAttachment attachment, bool inbound)
-      : super(contact, message, attachment, inbound);
+  VideoAttachment(
+    Contact contact,
+    StoredMessage message,
+    StoredAttachment attachment,
+    bool inbound,
+  ) : super(contact, message, attachment, inbound);
 
   @override
   Widget buildViewer() => VideoViewer(contact, message, attachment);
@@ -86,70 +89,76 @@ class VideoViewerState extends ViewerState<VideoViewer> {
   @override
   Widget body(BuildContext context) {
     return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      if (controller == null) {
-        return Container();
-      }
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          ValueListenableBuilder(
-            valueListenable: controller!,
-            builder:
-                (BuildContext context, VideoPlayerValue value, Widget? child) {
-              if (!value.isInitialized) {
-                return const SizedBox();
-              }
-              return Stack(
-                fit: StackFit.passthrough,
-                alignment: Alignment.bottomCenter,
-                children: <Widget>[
-                  // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                  GestureDetector(
-                    onTap: () {
-                      setState(() => _showPlayButton = !_showPlayButton);
-                    },
-                    child: AspectRatio(
-                      aspectRatio: controller!.value.aspectRatio,
-                      child: fixRotation
-                          ? Transform.rotate(
-                              angle: pi, child: VideoPlayer(controller!))
-                          : VideoPlayer(controller!),
-                    ),
-                  ),
-                  mirrorLTR(
-                    context: context,
-                    child: VideoProgressIndicator(
-                      controller!,
-                      allowScrubbing: true,
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-          // button goes in main stack
-          if (_showPlayButton)
-            PlayButton(
-              size: 48,
-              custom: true,
-              playing: controller!.value.isPlaying,
-              onPressed: () {
-                if (controller!.value.isPlaying) {
-                  setState(() {
-                    controller!.pause();
-                    _showPlayButton = true;
-                  });
-                } else {
-                  setState(() {
-                    controller!.play();
-                    _showPlayButton = false;
-                  });
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (controller == null) {
+          return Container();
+        }
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            ValueListenableBuilder(
+              valueListenable: controller!,
+              builder: (
+                BuildContext context,
+                VideoPlayerValue value,
+                Widget? child,
+              ) {
+                if (!value.isInitialized) {
+                  return const SizedBox();
                 }
+                return Stack(
+                  fit: StackFit.passthrough,
+                  alignment: Alignment.bottomCenter,
+                  children: <Widget>[
+                    // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
+                    GestureDetector(
+                      onTap: () {
+                        setState(() => _showPlayButton = !_showPlayButton);
+                      },
+                      child: AspectRatio(
+                        aspectRatio: controller!.value.aspectRatio,
+                        child: fixRotation
+                            ? Transform.rotate(
+                                angle: pi,
+                                child: VideoPlayer(controller!),
+                              )
+                            : VideoPlayer(controller!),
+                      ),
+                    ),
+                    mirrorLTR(
+                      context: context,
+                      child: VideoProgressIndicator(
+                        controller!,
+                        allowScrubbing: true,
+                      ),
+                    ),
+                  ],
+                );
               },
             ),
-        ],
-      );
-    });
+            // button goes in main stack
+            if (_showPlayButton)
+              PlayButton(
+                size: 48,
+                custom: true,
+                playing: controller!.value.isPlaying,
+                onPressed: () {
+                  if (controller!.value.isPlaying) {
+                    setState(() {
+                      controller!.pause();
+                      _showPlayButton = true;
+                    });
+                  } else {
+                    setState(() {
+                      controller!.play();
+                      _showPlayButton = false;
+                    });
+                  }
+                },
+              ),
+          ],
+        );
+      },
+    );
   }
 }

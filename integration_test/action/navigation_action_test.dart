@@ -22,7 +22,8 @@ class GoTo {
         print('This pump and settle is used for 2 reasons');
         print('1. The settle happens after the main has been completed');
         print(
-            '2. Autoroute is still building so the second settle is just to await for that process to be completed');
+          '2. Autoroute is still building so the second settle is just to await for that process to be completed',
+        );
         await tester.pumpAndSettle();
         break;
       case SCREENS.CONTACTS:

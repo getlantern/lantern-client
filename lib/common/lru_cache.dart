@@ -74,6 +74,10 @@ class CachedValue<V> {
   /// will contain the error if loading failed
   final Object? error;
 
-  CachedValue(
-      {required this.future, this.loading = true, this.value, this.error});
+  CachedValue({
+    required this.future,
+    this.loading = true,
+    this.value,
+    this.error,
+  });
 }

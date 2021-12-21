@@ -15,18 +15,22 @@ class AudioAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AttachmentBuilder(
-        attachment: attachment,
-        inbound: inbound,
-        defaultIconPath: ImagePaths.speaker,
-        builder: (BuildContext context, Uint8List thumbnail) {
-          return AudioWidget(
-            controller: AudioController(
-                context: context, attachment: attachment, thumbnail: thumbnail),
-            initialColor: inbound ? Colors.black : Colors.white,
-            progressColor: inbound ? outboundMsgColor : inboundMsgColor,
-            timeRemainingAlignment:
-                inbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          );
-        });
+      attachment: attachment,
+      inbound: inbound,
+      defaultIconPath: ImagePaths.speaker,
+      builder: (BuildContext context, Uint8List thumbnail) {
+        return AudioWidget(
+          controller: AudioController(
+            context: context,
+            attachment: attachment,
+            thumbnail: thumbnail,
+          ),
+          initialColor: inbound ? Colors.black : Colors.white,
+          progressColor: inbound ? outboundMsgColor : inboundMsgColor,
+          timeRemainingAlignment:
+              inbound ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        );
+      },
+    );
   }
 }

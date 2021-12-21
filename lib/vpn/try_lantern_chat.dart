@@ -29,7 +29,8 @@ class TryLanternChat extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsetsDirectional.only(
-                    top: 40), // 24 + 16 from designs
+                  top: 40,
+                ), // 24 + 16 from designs
                 alignment: Alignment.centerRight,
                 child: IconButton(
                   padding: const EdgeInsetsDirectional.all(0),
@@ -52,7 +53,10 @@ class TryLanternChat extends StatelessWidget {
                 flex: 1,
                 child: Container(
                   padding: const EdgeInsetsDirectional.only(
-                      start: 40, end: 40, bottom: 32),
+                    start: 40,
+                    end: 40,
+                    bottom: 32,
+                  ),
                   color: white,
                   child: LayoutBuilder(
                     builder: (_, constraints) {
@@ -117,14 +121,20 @@ class TryLanternChat extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsetsDirectional.only(
-                            top: 32.0, bottom: 16.0),
-                        child: CText('introducing'.i18n,
-                            style: tsDisplayItalic,
-                            textAlign: TextAlign.center),
+                          top: 32.0,
+                          bottom: 16.0,
+                        ),
+                        child: CText(
+                          'introducing'.i18n,
+                          style: tsDisplayItalic,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsetsDirectional.only(
-                            start: 40.0, end: 40.0),
+                          start: 40.0,
+                          end: 40.0,
+                        ),
                         child: CText(
                           'introducing_des'.i18n,
                           style: tsBody1.copiedWith(color: white),
@@ -133,34 +143,38 @@ class TryLanternChat extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsetsDirectional.only(
-                            start: 40, end: 40, top: 36.0),
+                          start: 40,
+                          end: 40,
+                          top: 36.0,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TextButton(
-                                onPressed: () async {
-                                  await context.router.pop();
-                                },
-                                child: CText(
-                                  'maybe_later'.i18n.toUpperCase(),
-                                  style:
-                                      tsCustomButton.copiedWith(color: white),
-                                )),
+                              onPressed: () async {
+                                await context.router.pop();
+                              },
+                              child: CText(
+                                'maybe_later'.i18n.toUpperCase(),
+                                style: tsCustomButton.copiedWith(color: white),
+                              ),
+                            ),
                             TextButton(
-                                onPressed: () async {
-                                  // Switch to Chat tab
-                                  await sessionModel
-                                      .setTabIndex(lookupTabIndex('Chat'));
-                                  // Start onboarding
-                                  await messagingModel.start();
-                                  await context.router
-                                      .push(const SecureChatNumberMessaging());
-                                },
-                                child: CText(
-                                  'try'.i18n.toUpperCase(),
-                                  style:
-                                      tsCustomButton.copiedWith(color: yellow3),
-                                )),
+                              onPressed: () async {
+                                // Switch to Chat tab
+                                await sessionModel
+                                    .setTabIndex(lookupTabIndex('Chat'));
+                                // Start onboarding
+                                await messagingModel.start();
+                                await context.router
+                                    .push(const SecureChatNumberMessaging());
+                              },
+                              child: CText(
+                                'try'.i18n.toUpperCase(),
+                                style:
+                                    tsCustomButton.copiedWith(color: yellow3),
+                              ),
+                            ),
                           ],
                         ),
                       )

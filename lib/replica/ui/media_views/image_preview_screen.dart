@@ -58,19 +58,20 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
               // Just show an error thumbnail and a descriptive constant
               // error text
               return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CAssetImage(
-                      path: SearchCategory.Image.getRelevantImagePath(),
-                      size: 128,
-                    ),
-                    const Padding(padding: EdgeInsets.symmetric(vertical: 6.0)),
-                    CText(
-                      'no_preview_for_this_type_of_file'.i18n,
-                      style: tsBody1,
-                    ),
-                  ]);
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CAssetImage(
+                    path: SearchCategory.Image.getRelevantImagePath(),
+                    size: 128,
+                  ),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 6.0)),
+                  CText(
+                    'no_preview_for_this_type_of_file'.i18n,
+                    style: tsBody1,
+                  ),
+                ],
+              );
             },
           ),
         ),

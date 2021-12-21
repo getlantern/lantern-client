@@ -28,24 +28,26 @@ class ReplicaImageListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        elevation: 0.0,
-        child: GestureDetector(
-          onTap: onTap,
-          child: FocusedMenuHolder(
-            menu: renderReplicaLongPressMenuItem(replicaApi, item.replicaLink),
-            menuWidth: MediaQuery.of(context).size.width * 0.8,
-            builder: (_) {
-              return GridTile(
-                  child: Column(
+      elevation: 0.0,
+      child: GestureDetector(
+        onTap: onTap,
+        child: FocusedMenuHolder(
+          menu: renderReplicaLongPressMenuItem(replicaApi, item.replicaLink),
+          menuWidth: MediaQuery.of(context).size.width * 0.8,
+          builder: (_) {
+            return GridTile(
+              child: Column(
                 children: [
                   renderThumbnail(),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
                   renderDescription(),
                 ],
-              ));
-            },
-          ),
-        ));
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 
   Widget renderDescription() {
@@ -67,16 +69,20 @@ class ReplicaImageListItem extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5.0),
           child: CachedNetworkImage(
-              imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(value: downloadProgress.progress),
-              errorWidget: (context, url, error) => Stack(children: [
-                    Container(color: grey4),
-                    const Center(
-                        child: CAssetImage(
-                      path: ImagePaths.image_inactive,
-                    )),
-                  ])),
+            imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                CircularProgressIndicator(value: downloadProgress.progress),
+            errorWidget: (context, url, error) => Stack(
+              children: [
+                Container(color: grey4),
+                const Center(
+                  child: CAssetImage(
+                    path: ImagePaths.image_inactive,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

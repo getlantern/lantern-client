@@ -19,12 +19,12 @@ var logger = Logger(
 /// The playback controls container are shown/hidden by tapping away from the
 /// playback controls
 class ReplicaVideoPlayerScreen extends StatefulWidget {
-  ReplicaVideoPlayerScreen(
-      {Key? key,
-      required this.replicaApi,
-      required this.replicaLink,
-      this.mimeType})
-      : super(key: key);
+  ReplicaVideoPlayerScreen({
+    Key? key,
+    required this.replicaApi,
+    required this.replicaLink,
+    this.mimeType,
+  }) : super(key: key);
   final ReplicaApi replicaApi;
   final ReplicaLink replicaLink;
   final String? mimeType;
@@ -52,7 +52,8 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
     // future returned in the 'build()' function (see
     // _videoController.value.hasError usage in FutureBuilder)
     _videoController = VideoPlayerController.network(
-        widget.replicaApi.getViewAddr(widget.replicaLink));
+      widget.replicaApi.getViewAddr(widget.replicaLink),
+    );
     _initializeVideoPlayerFuture =
         _videoController.initialize().then((_) => _videoController.play());
 
@@ -100,7 +101,8 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
               // If error, show error with text
               if (_videoController.value.hasError || snapshot.hasError) {
                 logger.e(
-                    'Received a playback error: ${_videoController.value.errorDescription ?? snapshot.error}');
+                  'Received a playback error: ${_videoController.value.errorDescription ?? snapshot.error}',
+                );
                 return Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -112,11 +114,15 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
                         size: 60,
                       ),
                       Flexible(
-                          child: CText(
-                        'video_stream_error'.i18n,
-                        style: CTextStyle(
-                            fontSize: 16, color: white, lineHeight: 19),
-                      ))
+                        child: CText(
+                          'video_stream_error'.i18n,
+                          style: CTextStyle(
+                            fontSize: 16,
+                            color: white,
+                            lineHeight: 19,
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 );

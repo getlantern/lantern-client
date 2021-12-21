@@ -44,20 +44,27 @@ void showDeleteContactDialog(
                     await messagingModel
                         .deleteDirectContact(contact.contactId.id);
                   } catch (e, s) {
-                    showErrorDialog(context,
-                        e: e, s: s, des: 'error_delete_contact'.i18n);
+                    showErrorDialog(
+                      context,
+                      e: e,
+                      s: s,
+                      des: 'error_delete_contact'.i18n,
+                    );
                   } finally {
                     showSnackbar(
-                        context: context,
-                        content: 'contact_was_deleted'
-                            .i18n
-                            .fill([contact.displayNameOrFallback]));
+                      context: context,
+                      content: 'contact_was_deleted'
+                          .i18n
+                          .fill([contact.displayNameOrFallback]),
+                    );
                     context.loaderOverlay.hide();
                     context.router.popUntilRoot();
                   }
                 },
-                child: CText('delete_contact'.i18n.toUpperCase(),
-                    style: tsButtonPink),
+                child: CText(
+                  'delete_contact'.i18n.toUpperCase(),
+                  style: tsButtonPink,
+                ),
               )
             ],
           )
