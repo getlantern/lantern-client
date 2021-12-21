@@ -263,8 +263,6 @@ class MessageBubble extends StatelessWidget {
                                       'replica':
                                           ReplicaLinkMarkdownElementBuilder(
                                               (replicaApi, replicaLink) {
-                                        print(
-                                            'Clicked on replica link: $replicaLink');
                                         // TODO <10-11-21, soltzen> Determine MIME type first
                                         // context.pushRoute(
                                         //     ReplicaVideoPlayerScreen(
