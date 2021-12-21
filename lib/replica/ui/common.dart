@@ -4,7 +4,6 @@ import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/vpn/vpn.dart';
 import 'package:logger/logger.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var logger = Logger(
@@ -15,26 +14,21 @@ var logger = Logger(
 // in the ./ui/replica/listitems directory
 SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
   return SizedBox(
-    height: 96,
+    height: 48,
     child: Padding(
       padding: const EdgeInsetsDirectional.only(start: 4),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ListItemFactory.focusMenuItem(
-              icon: ImagePaths.file_download,
-              content: 'download'.i18n,
-              onTap: () async {
-                await api.download(link);
-              }),
-          ListItemFactory.focusMenuItem(
-              icon: ImagePaths.share,
-              content: 'share'.i18n,
-              onTap: () async {
-                await Share.share('replica://${link.toMagnetLink()}');
-              }),
+            icon: ImagePaths.file_download,
+            content: 'download'.i18n,
+            onTap: () async {
+              await api.download(link);
+            },
+          ),
         ],
       ),
     ),
@@ -79,23 +73,15 @@ Widget renderReplicaMediaViewScreen({
       backgroundColor: backgroundColor,
       actions: [
         IconButton(
-            onPressed: () async {
-              await Share.share(link.toMagnetLink());
-            },
-            icon: CAssetImage(
-              size: 20,
-              path: ImagePaths.share,
-              color: foregroundColor,
-            )),
-        IconButton(
-            onPressed: () async {
-              await api.download(link);
-            },
-            icon: CAssetImage(
-              size: 20,
-              path: ImagePaths.file_download,
-              color: foregroundColor,
-            )),
+          onPressed: () async {
+            await api.download(link);
+          },
+          icon: CAssetImage(
+            size: 20,
+            path: ImagePaths.file_download,
+            color: foregroundColor,
+          ),
+        ),
       ],
       body: body);
 }

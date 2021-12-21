@@ -3,3 +3,4 @@ include: package:pedantic/analysis_options.yaml
 linter:
   rules:
     - prefer_const_constructors
+    - require_trailing_commas
