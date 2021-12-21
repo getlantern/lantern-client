@@ -129,7 +129,7 @@ public class LanternService extends Service implements Runnable {
             EventBus.getDefault().post(new CheckUpdate(false));
         }
 
-        EventBus.getDefault().post(new LanternStatus(Status.ON));
+        EventBus.getDefault().postSticky(new LanternStatus(Status.ON));
 
         // fetch latest loconf
         LoConf.Companion.fetch(new LoConfCallback() {
@@ -192,7 +192,7 @@ public class LanternService extends Service implements Runnable {
             if (!TextUtils.isEmpty(referral)) {
                 LanternApp.getSession().setCode(referral);
             }
-            EventBus.getDefault().post(new LanternStatus(Status.ON));
+            EventBus.getDefault().postSticky(new LanternStatus(Status.ON));
             EventBus.getDefault().postSticky(new AccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS));
         }
     }

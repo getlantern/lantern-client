@@ -300,7 +300,7 @@ class MessagingHolder {
         contact: Model.Contact,
         acceptPendingIntent: PendingIntent,
         declinePendingIntent: PendingIntent
-        ): Notification {
+    ): Notification {
         val builder = NotificationCompat.Builder(
             context,
             defaultNotificationChannelId
@@ -406,11 +406,10 @@ class MessagingHolder {
         if (contact.displayName.length >= 2) {
             initials = contact.displayName.take(2) // take first two initials since there are more than 2
             initialsX = 95.toFloat() // update X position for two characters
-        }
-        else if (contact.displayName.length == 1) {
+        } else if (contact.displayName.length == 1) {
             initials = contact.displayName // display name is one char long
         }
-        canvas.drawText(initials.toUpperCase(),  initialsX, 250.toFloat(), paintAv)
+        canvas.drawText(initials.toUpperCase(), initialsX, 250.toFloat(), paintAv)
         // update customNotification
         customNotification.setImageViewBitmap(R.id.avatar, bitmap)
     }

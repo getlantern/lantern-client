@@ -11,6 +11,7 @@ Color blue5 = HexColor('#006163');
 
 Color yellow3 = HexColor('#FFE600');
 Color yellow4 = HexColor('#FFC107');
+Color yellow6 = HexColor('#957000');
 
 Color pink3 = HexColor('#FF4081');
 Color pink4 = HexColor('#DB0A5B');

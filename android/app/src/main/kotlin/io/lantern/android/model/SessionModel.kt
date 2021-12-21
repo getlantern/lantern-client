@@ -1,7 +1,6 @@
 package io.lantern.android.model
 
 import android.app.Activity
-import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import io.flutter.embedding.engine.FlutterEngine
@@ -10,12 +9,15 @@ import io.flutter.plugin.common.MethodChannel
 import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
-import org.getlantern.lantern.*
+import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.R
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
+import org.getlantern.lantern.openHome
+import org.getlantern.lantern.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger

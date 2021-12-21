@@ -38,6 +38,18 @@ msgstr "Disconnecting..."
 msgid "Connecting"
 msgstr "Connecting..."
 
+msgid "no_network_connection"
+msgstr "No network connection"
+
+msgid "connection_error"
+msgstr "Connection Error"
+
+msgid "connection_error_des"
+msgstr "Lantern is having issues connecting to our servers.  Please restart the app. If this issue persists, please contact support."
+
+msgid "connection_error_button"
+msgstr "Contact support"
+
 msgid "Calling"
 msgstr "Calling..."
 
@@ -50,8 +62,8 @@ msgstr "Unlock faster speeds, and unlimited data!"
 msgid "Server Location"
 msgstr "Server Location"
 
-msgid "Server Location Infoo"
-msgstr "Server Location Info"
+msgid "Server Location Info"
+msgstr "Lantern uses smart server selection to automatically connect you to our best data centers."
 
 msgid "OK"
 msgstr "OK"
