@@ -3,7 +3,27 @@ import 'common.dart';
 final sessionModel = SessionModel();
 
 class SessionModel extends Model {
-  SessionModel() : super('session');
+  late final EventManager eventManager;
+
+  SessionModel() : super('session') {
+    eventManager = EventManager('lantern_event_channel');
+    eventManager.subscribe(Event.All, (eventType, map) {
+      switch (eventType) {
+        case Event.NoNetworkAvailable:
+          networkAvailable.value = false;
+          break;
+        case Event.NetworkAvailable:
+          networkAvailable.value = true;
+          break;
+
+          default:
+          break;
+      }
+    });
+  }
+
+  ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  ValueNotifier<bool> proxyAvailable = ValueNotifier(true);
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -125,5 +145,18 @@ class SessionModel extends Model {
   Widget tabIndex(ValueWidgetBuilder<int> builder) {
     return subscribedSingleValueBuilder<int>('/tabIndex',
         defaultValue: 0, builder: builder);
+  }
+
+  Widget replicaAddr(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('replicaAddr',
+        defaultValue: '', builder: builder);
+  }
+
+  Future<String> getReplicaAddr() async {
+    final replicaAddr = await methodChannel.invokeMethod('get', 'replicaAddr');
+    if (replicaAddr == null || replicaAddr == '') {
+      throw Exception('Replica not enabled');
+    }
+    return replicaAddr;
   }
 }

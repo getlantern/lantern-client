@@ -1,0 +1,222 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="741px" height="811px" viewBox="-0.5 -0.5 741 811" content="&lt;mxfile&gt;&lt;diagram id=&quot;tb8H2MvZ3lUxXs8tajMu&quot; name=&quot;Page-1&quot;&gt;zZlfk5MwEMA/Taf64A1/296j9tRzRkfHnvro5GCFTEOCIVxbP70bCKUQqjdzFXwpsNkEdvPbzSad+ets/1aSPP0gYmAzz4n3M/9m5nlusLzGi5YcjMTxw1qSSBobWSvY0F/QKBppSWMoOopKCKZo3hVGgnOIVEdGpBS7rtoPwbpvzUkClmATEWZLv9FYpbV0FTqt/BZokjZvdh3TkpFG2QiKlMRidyLyX8/8tRRC1XfZfg1Me6/xS93vzZnW44dJ4OoxHTwzFQ+ElcY482Hq0FgLMRpvHrngeHmVqozhk4u3tbrWOfsJRlSIUkZGy1uaaSMyAaPmrY4OQHRAZKDkAXUkMKLoQ3d8YqYwOeq1VuKNMfSM0UvL6M/AY5Ao+ww5oxG5xVE3kQTgtjsYQ860F3YpVbDJSWXUDlkf8swDSAX7P/vGttl0WBpMTKAszOOuhc5tSEpPgFs5T3eS705Exsomw3eGvXR5MlaW0V+KiosCiIxSTDqeUxaUJ/oLU9C/sFc6h1DAJDIlK31Ylo+EZXEJWPxpYPGdAVi8kWBpFq3/wuhgLKOdv+bOTRUqTfZcawRTGqX1eqwI5TqIslIv1wzabnjHaKFj6YHCTuvgqHgb6+iSIsPLWmSZ4Eb/PSp/RU2UP4vhB8EB9XcW7YhfsUoQjdrzSYMz6AVnYAenPxScx4h90pxNtMj73gCoYy3yzcvtVK5IriERXL+BH1ruEIJsUkr86y4lx2g7zeHLAUyWl6DErorGoSQYoGQxFiXBOUqY4MmLXEJRVIs++Y8wWYR9TEIbk2BoqQ+f7rEgGIeKhU1FMNrKvjhHRYTrylbzML8RO84EiefTorDoouCvvKsBGP5V3RdMtEnwBzYJwVibBN/eJPRLIF1wfGLkAPK0DDKNL8uYCrtVnPT/wrcc+XqHmaZRce5JUdVC1bpV7z3qTOSoQw6TUtjPR84QhEfguvXNJVLSRLuPYKAQHy1HBXYh3s9RNSSxSVS6b1TBQ1uCSJ7fEzkpPMfk1KSw6xE3roGd6cdBZ6A0DsKx0LFL45sWEgk/S6gKnURUpY8S+POKRFtMcnj3bCsUo/y5Jk1kOTqEq4onKcpE7/LmJolVB79XWzWv6ux66Krhe1a1xESqScnze+SFrk2eN1RHuRdBzz4+eMljKWg8115vZuQD4SSp4hqnpYShuJ7ShWHYceHSe+SOxXUv4MLQzoF3aXUCoAjbHtmt/dUeMwxjS3RWvL27+3QaAz3XFinJ6zSgHuHfe4yZBIfn8cdShwwYOYK//Yi9qNJec66c8EKZtH8COLR9DC90yoCP7d8UVdvJvz3+698=&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <path d="M 140 60 L 213.63 60" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 218.88 60 L 211.88 63.5 L 213.63 60 L 211.88 56.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="80" cy="60" rx="60" ry="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 60px; margin-left: 21px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Render ReplicaHomeScreen
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="80" y="64" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Render ReplicaHomeSc...
+                </text>
+            </switch>
+        </g>
+        <path d="M 340 60 L 413.63 60" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 418.88 60 L 411.88 63.5 L 413.63 60 L 411.88 56.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="280" cy="60" rx="60" ry="30" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 60px; margin-left: 221px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                User searches using the text field
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="280" y="64" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    User searches using...
+                </text>
+            </switch>
+        </g>
+        <path d="M 526.84 116.59 L 460.02 187.72" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 456.43 191.54 L 458.67 184.04 L 460.02 187.72 L 463.77 188.84 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 611.8 118.8 L 650.01 190.35" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 652.48 194.99 L 646.1 190.46 L 650.01 190.35 L 652.27 187.16 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="580" cy="60" rx="160" ry="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 318px; height: 1px; padding-top: 60px; margin-left: 421px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Render ReplicaSearchScreen, which contains multiple Replica list views dervied from CommonReplicaListView (default is ReplicaVideoListView)
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="580" y="64" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Render ReplicaSearchScreen, which contains multiple R...
+                </text>
+            </switch>
+        </g>
+        <path d="M 340 225 L 266.37 225" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 261.12 225 L 268.12 221.5 L 266.37 225 L 268.12 228.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="425" cy="225" rx="85" ry="35" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 168px; height: 1px; padding-top: 225px; margin-left: 341px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                User taps on any list item
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="425" y="229" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    User taps on any list item
+                </text>
+            </switch>
+        </g>
+        <path d="M 670 260 L 670 336.13" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 670 341.38 L 666.5 334.38 L 670 336.13 L 673.5 334.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="670" cy="227.5" rx="70" ry="32.5" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 138px; height: 1px; padding-top: 228px; margin-left: 601px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                User long-presses a list item
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="670" y="231" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    User long-presses a lis...
+                </text>
+            </switch>
+        </g>
+        <path d="M 632.9 396.08 L 482.45 491.54" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.02 494.36 L 482.06 487.65 L 482.45 491.54 L 485.81 493.56 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="670" cy="372.5" rx="60" ry="30" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 373px; margin-left: 611px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                User clicks 'Download'
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="670" y="376" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    User clicks 'Downloa...
+                </text>
+            </switch>
+        </g>
+        <path d="M 130 287.5 L 130 343.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 130 348.88 L 126.5 341.88 L 130 343.63 L 133.5 341.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="130" cy="225" rx="130" ry="62.5" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 258px; height: 1px; padding-top: 225px; margin-left: 1px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Render ReplicaViewPlayerScreen, ReplicaAudioPlayerScreen, or ReplicaUnknownItemScreen based on the item type
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="130" y="229" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Render ReplicaViewPlayerScreen, ReplicaAudi...
+                </text>
+            </switch>
+        </g>
+        <path d="M 166.6 403.77 L 299 490.49" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 303.39 493.37 L 295.62 492.46 L 299 490.49 L 299.45 486.61 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="130" cy="380" rx="60" ry="30" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 380px; margin-left: 71px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                User clicks the download icon in the appbar
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="130" y="384" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    User clicks the down...
+                </text>
+            </switch>
+        </g>
+        <path d="M 390 630 L 390 673.63" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 390 678.88 L 386.5 671.88 L 390 673.63 L 393.5 671.88 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="390" cy="550" rx="120" ry="80" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 238px; height: 1px; padding-top: 550px; margin-left: 271px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Download request goes to Backend (kotlin) component through 'ReplicaModel.kt' and replica_model.dart
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="390" y="554" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Download request goes to Backend (kotlin...
+                </text>
+            </switch>
+        </g>
+        <ellipse cx="390" cy="735" rx="85" ry="55" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 168px; height: 1px; padding-top: 735px; margin-left: 306px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Android's DownloadManager queues the download
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="390" y="739" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Android's DownloadManager qu...
+                </text>
+            </switch>
+        </g>
+        <path d="M 120 690 L 240 690 L 270 720 L 270 810 L 120 810 L 120 690 Z" fill="#ffffff" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 240 690 L 240 720 L 270 720 Z" fill-opacity="0.05" fill="#000000" stroke="none" pointer-events="all"/>
+        <path d="M 240 690 L 240 720 L 270 720" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 148px; height: 1px; padding-top: 750px; margin-left: 121px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                This talks to the Replica component through an HTTP request
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="195" y="754" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    This talks to the Replica...
+                </text>
+            </switch>
+        </g>
+    </g>
+    <switch>
+        <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
+        <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
+            <text text-anchor="middle" font-size="10px" x="50%" y="100%">
+                Viewer does not support full SVG 1.1
+            </text>
+        </a>
+    </switch>
+</svg>

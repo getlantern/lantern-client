@@ -1,8 +1,6 @@
 import 'package:lantern/messaging/conversation/call_action.dart';
 
 import '../messaging.dart';
-import 'show_block_contact_dialog.dart';
-import 'show_delete_contact_dialog.dart';
 
 class ContactInfo extends StatefulWidget {
   final Contact contact;
@@ -197,9 +195,41 @@ class _ContactInfoState extends State<ContactInfo> {
                     ),
                     trailingArray: [
                       TextButton(
-                        onPressed: () async => showBlockContactDialog(
+                        onPressed: () async => showInfoDialog(
                           context,
-                          contact,
+                          assetPath: ImagePaths.block,
+                          title: contact.blocked
+                              ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
+                              : '${'block'.i18n} ${contact.displayNameOrFallback}?',
+                          des: contact.blocked
+                              ? 'unblock_info_description'
+                                  .i18n
+                                  .fill([contact.displayNameOrFallback])
+                              : 'block_info_description'.i18n,
+                          checkboxText: contact.blocked
+                              ? 'unblock_info_checkbox'.i18n
+                              : 'block_info_checkbox'.i18n,
+                          confirmCheckboxAction: () async {
+                            contact.blocked
+                                ? await messagingModel
+                                    .unblockDirectContact(contact.contactId.id)
+                                : await messagingModel
+                                    .blockDirectContact(contact.contactId.id);
+                            context.router.popUntilRoot();
+                            showSnackbar(
+                                context: context,
+                                content: contact.blocked
+                                    ? 'contact_was_unblocked'
+                                        .i18n
+                                        .fill([contact.displayNameOrFallback])
+                                    : 'contact_was_blocked'
+                                        .i18n
+                                        .fill([contact.displayNameOrFallback]));
+                          },
+                          cancelButtonText: 'cancel'.i18n,
+                          confirmButtonText: contact.blocked
+                              ? 'unblock'.i18n.toUpperCase()
+                              : 'block'.i18n.toUpperCase(),
                         ),
                         child: CText(
                           'block'.i18n.toUpperCase(),
@@ -215,9 +245,31 @@ class _ContactInfoState extends State<ContactInfo> {
                   ),
                   trailingArray: [
                     TextButton(
-                      onPressed: () async => showDeleteContactDialog(
+                      onPressed: () async => showInfoDialog(
                         context,
-                        contact,
+                        title: '${'delete_contact'.i18n}?',
+                        des: 'delete_info_description'.i18n,
+                        assetPath: ImagePaths.delete,
+                        cancelButtonText: 'cancel'.i18n,
+                        confirmButtonText: 'delete_contact'.i18n,
+                        confirmButtonAction: () async {
+                          context.loaderOverlay.show(widget: spinner);
+                          try {
+                            await messagingModel
+                                .deleteDirectContact(contact.contactId.id);
+                          } catch (e, s) {
+                            showErrorDialog(context,
+                                e: e, s: s, des: 'error_delete_contact'.i18n);
+                          } finally {
+                            showSnackbar(
+                                context: context,
+                                content: 'contact_was_deleted'
+                                    .i18n
+                                    .fill([contact.displayNameOrFallback]));
+                            context.loaderOverlay.hide();
+                            context.router.popUntilRoot();
+                          }
+                        },
                       ),
                       child: CText(
                         'delete_contact'.i18n.toUpperCase(),

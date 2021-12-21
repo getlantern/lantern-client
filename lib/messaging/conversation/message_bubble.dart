@@ -2,6 +2,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/replica/logic/markdown_link_builder.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:url_launcher/url_launcher.dart';
 
 import 'mime_type.dart';
@@ -232,17 +234,17 @@ class MessageBubble extends StatelessWidget {
                                         String title) async {
                                       if (href != null &&
                                           await canLaunch(href)) {
-                                        showConfirmationDialog(
-                                            context: context,
-                                            title: 'open_url'.i18n,
-                                            explanation:
-                                                'are_you_sure_you_want_to_open'
-                                                    .fill([href]),
-                                            dismissText: 'cancel'.i18n,
-                                            agreeText: 'continue'.i18n,
-                                            agreeAction: () async {
-                                              await launch(href);
-                                            });
+                                        showInfoDialog(
+                                          context,
+                                          title: 'open_url'.i18n,
+                                          des: 'are_you_sure_you_want_to_open'
+                                              .fill([href]),
+                                          cancelButtonText: 'cancel'.i18n,
+                                          confirmButtonText: 'continue'.i18n,
+                                          confirmButtonAction: () async {
+                                            await launch(href);
+                                          },
+                                        );
                                       }
                                     },
                                     styleSheet: MarkdownStyleSheet(
@@ -257,6 +259,21 @@ class MessageBubble extends StatelessWidget {
                                             : null,
                                       ),
                                     ),
+                                    builders: {
+                                      'replica':
+                                          ReplicaLinkMarkdownElementBuilder(
+                                              (replicaApi, replicaLink) {
+                                        // TODO <10-11-21, soltzen> Determine MIME type first
+                                        // context.pushRoute(
+                                        //     ReplicaVideoPlayerScreen(
+                                        //         replicaLink: replicaLink));
+                                      }),
+                                    },
+                                    inlineSyntaxes: <md.InlineSyntax>[
+                                      ReplicaLinkSyntax()
+                                    ],
+                                    extensionSet:
+                                        md.ExtensionSet.gitHubFlavored,
                                   ),
                                 ),
                               ),
@@ -440,14 +457,15 @@ class MessageBubble extends StatelessWidget {
   }
 
   void deleteForMe(BuildContext context, MessagingModel model) {
-    showConfirmationDialog(
-      context: context,
-      key: const ValueKey('deleteForMeDialog'),
-      iconPath: ImagePaths.delete,
+    showInfoDialog(
+      context,
+      dialogKey: const ValueKey('deleteForMeDialog'),
+      assetPath: ImagePaths.delete,
       title: 'delete_for_me'.i18n,
-      explanation: 'delete_for_me_explanation'.i18n,
-      agreeText: 'delete'.i18n,
-      agreeAction: () async {
+      des: 'delete_for_me_explanation'.i18n,
+      cancelButtonText: 'cancel'.i18n,
+      confirmButtonText: 'delete'.i18n,
+      confirmButtonAction: () async {
         await model.deleteLocally(message);
         Navigator.pop(context);
       },
@@ -455,14 +473,15 @@ class MessageBubble extends StatelessWidget {
   }
 
   void deleteForEveryone(BuildContext context, MessagingModel model) {
-    showConfirmationDialog(
-      context: context,
-      key: const ValueKey('deleteForEveryoneDialog'),
-      iconPath: ImagePaths.delete,
+    showInfoDialog(
+      context,
+      dialogKey: const ValueKey('deleteForEveryoneDialog'),
+      assetPath: ImagePaths.delete,
       title: 'delete_for_everyone'.i18n,
-      explanation: 'delete_for_everyone_explanation'.i18n,
-      agreeText: 'delete'.i18n,
-      agreeAction: () async {
+      des: 'delete_for_everyone_explanation'.i18n,
+      cancelButtonText: 'cancel'.i18n,
+      confirmButtonText: 'delete'.i18n,
+      confirmButtonAction: () async {
         await model.deleteGlobally(message);
         Navigator.pop(context);
       },

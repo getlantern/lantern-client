@@ -1,3 +1,4 @@
+android/app/.cxx
 libflashlight.aar
 liblantern-*.aar
 liblantern-*-sources.jar
@@ -67,3 +68,4 @@ gradle.properties
 *.sha256
 version-qa*.txt
 lantern-android-sources*.tar.gz
+web*.pem

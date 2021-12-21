@@ -11,6 +11,8 @@ import android.net.NetworkRequest;
 import androidx.annotation.NonNull;
 
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.model.Event;
+import org.greenrobot.eventbus.EventBus;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -59,12 +61,14 @@ public class DnsDetector {
                     public void onAvailable(@NonNull Network network) {
                         Logger.debug(TAG, "Adding available network");
                         allNetworks.put(network, "");
+                        EventBus.getDefault().postSticky(Event.NetworkAvailable);
                     }
 
                     @Override
                     public void onLost(@NonNull Network network) {
                         Logger.debug(TAG, "Removing lost network");
                         allNetworks.remove(network);
+                        publishNetworkAvailability();
                     }
                 }
         );
@@ -110,8 +114,15 @@ public class DnsDetector {
         return DEFAULT_DNS_SERVER;
     }
 
+    public void publishNetworkAvailability() {
+        if (findActiveNetwork() == null) {
+            Logger.debug(TAG, "No network available");
+            EventBus.getDefault().postSticky(Event.NoNetworkAvailable);
+        }
+    }
+
     private Network findActiveNetwork() {
-        List<Network> networks = new ArrayList(allNetworks.keySet());
+        List<Network> networks = new ArrayList<>(allNetworks.keySet());
         List<NetworkInfo> networkInfos = new ArrayList<>();
         for (Network network : networks) {
             networkInfos.add(connectivityManager.getNetworkInfo(network));

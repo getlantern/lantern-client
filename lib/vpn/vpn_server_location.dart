@@ -1,26 +1,13 @@
 import 'package:lantern/vpn/vpn.dart';
 
-class ServerLocationWidget extends StatefulWidget {
-  final ValueChanged<BuildContext> openInfoServerLocation;
-
-  ServerLocationWidget(this.openInfoServerLocation) : super();
-
-  @override
-  _ServerLocationWidgetState createState() => _ServerLocationWidgetState();
-}
-
-class _ServerLocationWidgetState extends State<ServerLocationWidget> {
-  void _onTap() {
-    widget.openInfoServerLocation(context);
-  }
-
+class ServerLocationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CText(
-          'Server Location'.i18n + ': ',
+          'Server Location'.i18n,
           style: tsBody1.copiedWith(
             color: unselectedTabIconColor,
           ),
@@ -28,7 +15,14 @@ class _ServerLocationWidgetState extends State<ServerLocationWidget> {
         Container(
           transform: Matrix4.translationValues(0.0, 2.0, 0.0),
           child: CInkWell(
-            onTap: _onTap,
+            onTap: () => showInfoDialog(
+              context,
+              title: 'Server Location'.i18n,
+              des: 'Server Location Info'.i18n,
+              assetPath: ImagePaths.location_on,
+              confirmButtonText: 'OK'.i18n,
+              confirmButtonAction: () async => await context.router.pop(),
+            ),
             child: Icon(
               Icons.info_outline_rounded,
               color: unselectedTabIconColor,

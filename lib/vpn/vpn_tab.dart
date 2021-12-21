@@ -10,14 +10,6 @@ import 'vpn_switch.dart';
 class VPNTab extends StatelessWidget {
   VPNTab({Key? key}) : super(key: key);
 
-  void _openInfoServerLocation(BuildContext context) {
-    showInfoDialog(context,
-        title: 'Server Location'.i18n,
-        des: 'Server Location Info'.i18n,
-        assetPath: ImagePaths.location_on,
-        buttonText: 'OK'.i18n);
-  }
-
   @override
   Widget build(BuildContext context) {
     return sessionModel
@@ -51,7 +43,7 @@ class VPNTab extends StatelessWidget {
                   Container(
                     child: const CDivider(height: 32.0),
                   ),
-                  ServerLocationWidget(_openInfoServerLocation),
+                  ServerLocationWidget(),
                   VPNBandwidth(),
                 ],
               ),
