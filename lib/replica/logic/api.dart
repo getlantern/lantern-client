@@ -1,7 +1,5 @@
-import 'dart:async';
-import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/search_item.dart';
@@ -17,6 +15,7 @@ var logger = Logger(
 // request succeeds, but not a duration request, and vice versa
 class Metadata {
   Metadata(this.duration, this.thumbnail);
+
   double? duration;
   Uint8List? thumbnail;
 }
@@ -29,10 +28,13 @@ class ReplicaApi {
         connectTimeout: 10000, // 10s
       ),
     );
+    _durationCache = LRUCache<ReplicaLink, double?>(1000, doFetchDuration);
   }
+
   late Dio dio;
   final String replicaHostAddr;
   final _defaultTimeoutDuration = const Duration(seconds: 7);
+  late final LRUCache<ReplicaLink, double?> _durationCache;
 
   bool get available {
     return replicaHostAddr != '';
@@ -103,7 +105,11 @@ class ReplicaApi {
 
   /// fetchDuration fetches the duration of 'replicaLink' through Replica's backend.
   /// If it can't find it (or failed to find it), return a null
-  Future<double?> fetchDuration(ReplicaLink replicaLink) async {
+  ValueListenable<CachedValue<double?>> getDuration(ReplicaLink replicaLink) {
+    return _durationCache.get(replicaLink);
+  }
+
+  Future<double?> doFetchDuration(ReplicaLink replicaLink) async {
     var s = 'duration?replicaLink=${replicaLink.toMagnetLink()}';
     // logger.v('Duration request uri: $s');
     double? duration;
