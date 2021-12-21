@@ -38,6 +38,7 @@ class VideoViewer extends ViewerWidget {
 class VideoViewerState extends ViewerState<VideoViewer> {
   VideoPlayerController? controller;
   var playing = false;
+  var _showPlayButton = false;
   var fixRotation = false;
 
   @override
@@ -53,6 +54,7 @@ class VideoViewerState extends ViewerState<VideoViewer> {
         controller = VideoPlayerController.file(File(videoFilename))
           ..initialize().then((_) {
             setState(() {
+              controller?.play();
               fixRotation = rotation == '180';
               controller?.play().then((_) async {
                 // update UI after playing stops
@@ -103,34 +105,49 @@ class VideoViewerState extends ViewerState<VideoViewer> {
                 alignment: Alignment.bottomCenter,
                 children: <Widget>[
                   // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                  AspectRatio(
-                    aspectRatio: controller!.value.aspectRatio,
-                    child: fixRotation
-                        ? Transform.rotate(
-                            angle: pi, child: VideoPlayer(controller!))
-                        : VideoPlayer(controller!),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() => _showPlayButton = !_showPlayButton);
+                    },
+                    child: AspectRatio(
+                      aspectRatio: controller!.value.aspectRatio,
+                      child: fixRotation
+                          ? Transform.rotate(
+                              angle: pi, child: VideoPlayer(controller!))
+                          : VideoPlayer(controller!),
+                    ),
                   ),
                   mirrorLTR(
-                      context: context,
-                      child: VideoProgressIndicator(controller!,
-                          allowScrubbing: true)),
+                    context: context,
+                    child: VideoProgressIndicator(
+                      controller!,
+                      allowScrubbing: true,
+                    ),
+                  ),
                 ],
               );
             },
           ),
           // button goes in main stack
-          PlayButton(
-            size: 48,
-            custom: true,
-            playing: controller!.value.isPlaying,
-            onPressed: () {
-              if (controller!.value.isPlaying) {
-                controller!.pause();
-              } else {
-                controller!.play();
-              }
-            },
-          ),
+          if (_showPlayButton)
+            PlayButton(
+              size: 48,
+              custom: true,
+              playing: controller!.value.isPlaying,
+              onPressed: () {
+                if (controller!.value.isPlaying) {
+                  setState(() {
+                    controller!.pause();
+                    _showPlayButton = true;
+                  });
+                } else {
+                  setState(() {
+                    controller!.play();
+                    _showPlayButton = false;
+                  });
+                }
+              },
+            ),
         ],
       );
     });

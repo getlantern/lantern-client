@@ -53,11 +53,11 @@ class ApproveDevice extends StatelessWidget {
                 onDone: (code) {
                   context.loaderOverlay.show(widget: spinner);
                   sessionModel.approveDevice(code).then((value) {
-                    pinCodeController.text = '';
+                    pinCodeController.clear();
                     context.loaderOverlay.hide();
                     Navigator.pop(context);
                   }).onError((error, stackTrace) {
-                    pinCodeController.text = '';
+                    pinCodeController.clear();
                     context.loaderOverlay.hide();
                   });
                 },

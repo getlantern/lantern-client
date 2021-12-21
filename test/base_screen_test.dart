@@ -33,7 +33,7 @@ void main() {
                     const MethodChannel('lantern_method_channel')),
           ],
           child: FutureBuilder(
-              future: Localization.loadTranslations(),
+              future: Localization.ensureInitialized(),
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 return GlobalLoaderOverlay(
                   child: I18n(

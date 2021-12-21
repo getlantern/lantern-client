@@ -2,6 +2,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/conversation/contact_connection_card.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/replica/logic/markdown_link_builder.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:url_launcher/url_launcher.dart';
 
 import 'mime_type.dart';
@@ -257,6 +259,21 @@ class MessageBubble extends StatelessWidget {
                                             : null,
                                       ),
                                     ),
+                                    builders: {
+                                      'replica':
+                                          ReplicaLinkMarkdownElementBuilder(
+                                              (replicaApi, replicaLink) {
+                                        // TODO <10-11-21, soltzen> Determine MIME type first
+                                        // context.pushRoute(
+                                        //     ReplicaVideoPlayerScreen(
+                                        //         replicaLink: replicaLink));
+                                      }),
+                                    },
+                                    inlineSyntaxes: <md.InlineSyntax>[
+                                      ReplicaLinkSyntax()
+                                    ],
+                                    extensionSet:
+                                        md.ExtensionSet.gitHubFlavored,
                                   ),
                                 ),
                               ),

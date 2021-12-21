@@ -27,7 +27,6 @@ export 'package:lantern/vpn/vpn_model.dart';
 export 'package:loader_overlay/loader_overlay.dart';
 export 'package:provider/provider.dart';
 export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-export 'package:share/share.dart';
 export 'package:stop_watch_timer/stop_watch_timer.dart';
 
 export 'disable_back_button.dart';
@@ -64,6 +63,7 @@ export 'ui/full_screen_dialog.dart';
 export 'ui/humanize_past_future.dart';
 export 'ui/humanize_seconds.dart';
 export 'ui/humanized_date.dart';
+export 'ui/humanize_duration.dart';
 export 'ui/image_paths.dart';
 export 'ui/labeled_divider.dart';
 export 'ui/list_section_header.dart';
@@ -74,6 +74,7 @@ export 'ui/pinned_button_layout.dart';
 export 'ui/play_button.dart';
 export 'ui/pulse_animation.dart';
 export 'ui/round_button.dart';
+export 'ui/search_field.dart';
 export 'ui/show_bottom_modal.dart';
 export 'ui/show_bottom_modal.dart';
 // UI functions

@@ -1,0 +1,125 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="721px" height="451px" viewBox="-0.5 -0.5 721 451" content="&lt;mxfile&gt;&lt;diagram id=&quot;tb8H2MvZ3lUxXs8tajMu&quot; name=&quot;Page-1&quot;&gt;xVfbUtswEP2aDO1Lx7EJSR/blAIz7cAQoI8dYS22JrLkynKc9Ou7kiVfcGDS4eKXRD67kvZydteeRMtse6ZInv6UFPgkDOh2En2bhOE0mgf4Z5BdjSyiaQ0kilGn1AIr9hcc6PYlJaNQ9BS1lFyzvA/GUgiIdQ8jSsmqr/Ygef/WnCQwAFYx4UP0F6M6dV7MghY/B5ak/uZp4CQZ8coOKFJCZdWBotNJtFRS6nqVbZfATfB8XOp935+QNoYpEPqQDeHneseG8NI55wzTO+8tUHTePQop8O9rqjOOT1NcDm90RhSyVLE7Ipy7LBGVgFMLFzVmju9sdHaegcxAqx0qKOBEs00/9sSlMGn0Wi9x4Rx9wun5wOlrEBQUYteQcxaTczx1FSsAMQwH58gzE4UqZRpWObFeVkj1AyOzAaVh+6zPTuoLxdXJiXusWtJNPZPSDuEWwcuD5EvyrZmxGDIjCkZjxmLg9G1heVEAUXGKTScMyoKJxJicgvmFrTY9hAE2kTG58pgs8wPJcvIaZInehSyeGD2yhGORxVvzTBtZWdb4RrI02UhZnNajSRMmDJ+y0kwuDu02XHFWGFptGFRGB0/FJTVEUzLDv6XMMimc/g9UvkNNxD9QeCB4oLGzaE+8w4EpvdrHUXl6/Iinx0OeRvt42pD3RTl7n3nnSdkj6mjzzlsz7Gqa5IYkUpgbxK7lHZIgG5Ul0ec+S5pq67az+R6azF+DJcMx8LiyTR1dcbID1a1uJ/xSUiaflF5k+H54pcDUthcHsnP2rVgLWYkLzEEjvyeFLX+bqnry1DkK9C6HUVM1XfRTFe15TWmmTL+iZy/P1WzYhW9SVs9pO66BYbhMdI82pgn+zm1ejnzMj4hJVg0WBs15mdSNWUs72JUJ9vnNzZWtzT8lFLqRasLXzTrtt/BYZjm2D2FfD+xdhVZAsu7bgzVpkD38Ksjr7qMPSOE9ideJkqWgl6XmzDQsi1Oi1pe4i2mTmOBTMHubBr4338G+fEf/X5v42H4NWVnnmzI6/Qc=&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <path d="M 120 60 L 193.63 60" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 198.88 60 L 191.88 63.5 L 193.63 60 L 191.88 56.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="60" cy="60" rx="60" ry="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 60px; margin-left: 1px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Render ReplicaHomeScreen
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="60" y="64" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Render ReplicaHomeSc...
+                </text>
+            </switch>
+        </g>
+        <path d="M 320 60 L 393.63 60" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 398.88 60 L 391.88 63.5 L 393.63 60 L 391.88 56.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="260" cy="60" rx="60" ry="30" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 60px; margin-left: 201px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                User searches using the text field
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="260" y="64" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    User searches using...
+                </text>
+            </switch>
+        </g>
+        <path d="M 506.84 116.59 L 440.02 187.72" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 436.43 191.54 L 438.67 184.04 L 440.02 187.72 L 443.77 188.84 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="560" cy="60" rx="160" ry="60" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 318px; height: 1px; padding-top: 60px; margin-left: 401px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Render ReplicaSearchScreen, which contains multiple Replica list views dervied from CommonReplicaListView (default is ReplicaVideoListView)
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="560" y="64" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Render ReplicaSearchScreen, which contains multiple R...
+                </text>
+            </switch>
+        </g>
+        <path d="M 371.28 257.13 L 303.23 322.31" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 299.43 325.94 L 302.07 318.57 L 303.23 322.31 L 306.91 323.63 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <ellipse cx="405" cy="225" rx="85" ry="35" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 168px; height: 1px; padding-top: 225px; margin-left: 321px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                User taps on any list item
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="405" y="229" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    User taps on any list item
+                </text>
+            </switch>
+        </g>
+        <ellipse cx="240" cy="382.5" rx="130" ry="62.5" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 258px; height: 1px; padding-top: 383px; margin-left: 111px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Render ReplicaViewPlayerScreen, ReplicaAudioPlayerScreen, ReplicaImagePreviewScreen or ReplicaUnknownItemScreen based on the item type
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="240" y="386" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Render ReplicaViewPlayerScreen, ReplicaAudi...
+                </text>
+            </switch>
+        </g>
+        <path d="M 400 320 L 570 320 L 600 350 L 600 450 L 400 450 L 400 320 Z" fill="#ffffff" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 570 320 L 570 350 L 600 350 Z" fill-opacity="0.05" fill="#000000" stroke="none" pointer-events="all"/>
+        <path d="M 570 320 L 570 350 L 600 350" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 198px; height: 1px; padding-top: 385px; margin-left: 401px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                This uses either 'video_player' or 'audioplayers' plugins to fire HTTP requests to talk to the Replica component for streaming the video
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="500" y="389" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    This uses either 'video_player' o...
+                </text>
+            </switch>
+        </g>
+    </g>
+    <switch>
+        <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
+        <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
+            <text text-anchor="middle" font-size="10px" x="50%" y="100%">
+                Viewer does not support full SVG 1.1
+            </text>
+        </a>
+    </switch>
+</svg>

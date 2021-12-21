@@ -1,9 +1,63 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/replica/logic/api.dart';
+import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/ui/common.dart';
 
 class ListItemFactory extends StatelessWidget {
   final Widget Function(BuildContext, ListItemFactory) builder;
 
   ListItemFactory(this.builder);
+
+  ListItemFactory.uploadEditItem(
+      {Widget? leading,
+      required Widget content,
+      List<Widget>? trailingArray,
+      double height = 90.0})
+      : this((BuildContext context, ListItemFactory factory) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              factory.buildBase(
+                leading: leading,
+                content: content,
+                trailingArray: trailingArray,
+                showDivider: true,
+                height: height,
+              ),
+            ],
+          );
+        });
+
+  ListItemFactory.replicaItem(
+      {Widget? leading,
+      required Widget content,
+      required void Function() onTap,
+      required ReplicaApi api,
+      required ReplicaLink link,
+      double height = 90.0})
+      : this((BuildContext context, ListItemFactory factory) {
+          return FocusedMenuHolder(
+            menu: renderReplicaLongPressMenuItem(api, link),
+            menuWidth: MediaQuery.of(context).size.width * 0.8,
+            builder: (menuOpen) {
+              return Container(
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
+                  child: factory.buildBase(
+                    leading: leading,
+                    content: content,
+                    onTap: onTap,
+                    height: height,
+                    showDivider: !menuOpen,
+                  ));
+            },
+          );
+        });
 
   ListItemFactory.settingsItem({
     String? header,

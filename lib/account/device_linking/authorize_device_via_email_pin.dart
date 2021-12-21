@@ -45,10 +45,10 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
                 onDone: (code) {
                   context.loaderOverlay.show(widget: spinner);
                   sessionModel.validateRecoveryCode(code).then((value) {
-                    pinCodeController.text = '';
+                    pinCodeController.clear();
                     context.loaderOverlay.hide();
                   }).onError((error, stackTrace) {
-                    pinCodeController.text = '';
+                    pinCodeController.clear();
                     context.loaderOverlay.hide();
                   });
                 },

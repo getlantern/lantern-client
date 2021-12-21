@@ -33,7 +33,7 @@ class LanternApp extends StatelessWidget {
     toggleConnectivityWarningIfNecessary();
   }
 
-  final translations = Localization.loadTranslations();
+  final translations = Localization.ensureInitialized();
   late final AnimationController networkWarningAnimationController;
   late final Animation networkWarningAnimation;
 

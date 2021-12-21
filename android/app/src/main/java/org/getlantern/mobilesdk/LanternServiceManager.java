@@ -30,6 +30,7 @@ public class LanternServiceManager extends Lantern {
     public static final String HTTP_ADDR = "HTTP_ADDR";
     public static final String SOCKS5_ADDR = "SOCKS5_ADDR";
     public static final String DNSGRAB_ADDR = "DNSGRAB_ADDR";
+    public static final String REPLICA_ADDR = "REPLICA_ADDR";
     public static final String ERROR = "error";
 
     // HandlerThread used to handle broadcasts from service
