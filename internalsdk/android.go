@@ -3,7 +3,6 @@ package internalsdk
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -17,6 +16,7 @@ import (
 	"github.com/getlantern/autoupdate"
 	"github.com/getlantern/dnsgrab"
 	"github.com/getlantern/dnsgrab/persistentcache"
+	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight"
 	"github.com/getlantern/flashlight/balancer"
@@ -49,9 +49,8 @@ var (
 
 	startOnce sync.Once
 
-	cl          = eventual.NewValue()
-	dnsGrabAddr = eventual.NewValue()
-
+	clEventual               = eventual.NewValue()
+	dnsGrabAddrEventual      = eventual.NewValue()
 	errNoAdProviderAvailable = errors.New("no ad provider available")
 )
 
@@ -90,6 +89,8 @@ type Session interface {
 	Currency() (string, error)
 	DeviceOS() (string, error)
 	IsProUser() (bool, error)
+	SetReplicaAddr(string)
+	ForceReplica() bool
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -124,6 +125,8 @@ type panickingSession interface {
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() string
+
+	Wrapped() Session
 }
 
 func panicIfNecessary(err error) {
@@ -135,6 +138,10 @@ func panicIfNecessary(err error) {
 // panickingSessionImpl implements panickingSession
 type panickingSessionImpl struct {
 	wrapped Session
+}
+
+func (s *panickingSessionImpl) Wrapped() Session {
+	return s.wrapped
 }
 
 func (s *panickingSessionImpl) GetAppName() string {
@@ -341,7 +348,7 @@ func RemoveOverrides() {
 }
 
 func getBalancer(timeout time.Duration) *balancer.Balancer {
-	_cl, ok := cl.Get(timeout)
+	_cl, ok := clEventual.Get(timeout)
 	if !ok {
 		return nil
 	}
@@ -420,13 +427,11 @@ func Start(configDir string,
 	})
 
 	startTimeout := time.Duration(settings.TimeoutMillis()) * time.Millisecond
-
 	elapsed := mtime.Stopwatch()
 	addr, ok := client.Addr(startTimeout)
 	if !ok {
 		return nil, fmt.Errorf("HTTP Proxy didn't start within %v timeout", startTimeout)
 	}
-
 	socksAddr, ok := client.Socks5Addr(startTimeout - elapsed())
 	if !ok {
 		err := fmt.Errorf("SOCKS5 Proxy didn't start within %v timeout", startTimeout)
@@ -434,15 +439,14 @@ func Start(configDir string,
 		return nil, err
 	}
 	log.Debugf("Started socks proxy at %s", socksAddr)
-
-	dnsGrabberAddr, ok := dnsGrabAddr.Get(startTimeout - elapsed())
+	da, ok := dnsGrabAddrEventual.Get(startTimeout - elapsed())
 	if !ok {
 		err := fmt.Errorf("dnsgrab didn't start within %v timeout", startTimeout)
 		log.Error(err.Error())
 		return nil, err
 	}
-
-	return &StartResult{addr.(string), socksAddr.(string), dnsGrabberAddr.(string)}, nil
+	return &StartResult{addr.(string), socksAddr.(string),
+		da.(string)}, nil
 }
 
 // EnableLogging enables logging.
@@ -494,7 +498,7 @@ func run(configDir, locale string,
 		log.Errorf("Unable to start dnsgrab: %v", err)
 		return
 	}
-	dnsGrabAddr.Set(grabber.LocalAddr().String())
+	dnsGrabAddrEventual.Set(grabber.LocalAddr().String())
 	go func() {
 		serveErr := grabber.Serve()
 		if serveErr != nil {
@@ -511,6 +515,10 @@ func run(configDir, locale string,
 		config.ForceCountry(forcedCountryCode)
 	}
 
+	userConfig := newUserConfig(session)
+	globalConfigChanged := make(chan interface{})
+	geoRefreshed := geolookup.OnRefresh()
+
 	runner, err := flashlight.New(
 		common.DefaultAppName,
 		configDir,                    // place to store lantern configuration
@@ -526,9 +534,15 @@ func run(configDir, locale string,
 		func(cfg *config.Global, src config.Source) {
 			session.UpdateAdSettings(&adSettings{cfg.AdSettings})
 			email.SetDefaultRecipient(cfg.ReportIssueEmail)
+			select {
+			case globalConfigChanged <- nil:
+				// okay
+			default:
+				// don't block
+			}
 		}, // onConfigUpdate
 		nil, // onProxiesUpdate
-		newUserConfig(session),
+		userConfig,
 		NewStatsTracker(session),
 		session.IsProUser,
 		func() string { return "" }, // only used for desktop
@@ -559,11 +573,37 @@ func run(configDir, locale string,
 		log.Fatalf("Failed to start flashlight: %v", err)
 	}
 
+	replicaServer := &ReplicaServer{
+		ConfigDir:  configDir,
+		Flashlight: runner,
+		Session:    session.Wrapped(),
+		UserConfig: userConfig,
+	}
+
+	// Check whether Replica should be enabled anytime that the global config changes or our geolocation info changed,
+	// and also check right at start.
+	//
+	// TODO: should also check if our user info changes. Right now we don't segment Replica on users so it's not urgent.
+	// TODO: a lot of this feature enabled stuff, including checking whether enabled features have changed and permanently
+	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
+	session.Wrapped().SetReplicaAddr("") // start off with no Replica address
+	go func() {
+		for {
+			select {
+			case <-globalConfigChanged:
+				replicaServer.CheckEnabled()
+			case <-geoRefreshed:
+				replicaServer.CheckEnabled()
+			}
+		}
+	}()
+	replicaServer.CheckEnabled()
+
 	go runner.Run(
 		httpProxyAddr, // listen for HTTP on provided address
 		"127.0.0.1:0", // listen for SOCKS on random address
 		func(c *client.Client) {
-			cl.Set(c)
+			clEventual.Set(c)
 			afterStart(session)
 		},
 		nil, // onError

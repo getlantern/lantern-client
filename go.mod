@@ -1,15 +1,14 @@
 module github.com/getlantern/android-lantern
 
-go 1.15
+go 1.16
 
 require (
-	github.com/cloudfoundry/jibber_jabber v0.0.0-20151120183258-bcc4c8345a21 // indirect
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
 	github.com/getlantern/autoupdate v0.0.0-20180719190525-a22eab7ded99
-	github.com/getlantern/dnsgrab v0.0.0-20210830103124-84f280b82954
+	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.1
 	github.com/getlantern/eventual v1.0.0
-	github.com/getlantern/flashlight v0.0.0-20211214181315-f9593b6c01f8
+	github.com/getlantern/flashlight v0.0.0-20211219185319-556cecd31106
 	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
 	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
@@ -19,7 +18,8 @@ require (
 	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360
 	github.com/getlantern/protected v0.0.0-20210826185807-3b63e18e28bb
-	github.com/go-stack/stack v1.8.1 // indirect
+	github.com/getlantern/replica v0.6.1-0.20211217073553-d4cae9582574
+	github.com/gorilla/mux v1.8.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/stretchr/testify v1.7.0
@@ -49,8 +49,11 @@ replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-2021
 
 //replace github.com/getlantern/lantern-server => ../lantern-server
 
-// For https://github.com/crawshaw/sqlite/pull/112 and https://github.com/crawshaw/sqlite/pull/103.
-replace crawshaw.io/sqlite => github.com/getlantern/sqlite v0.3.3-0.20210215090556-4f83cf7731f0
+// XXX <15-10-21, soltzen> Using our own crawshaw.io/sqlite fork mainly for:
+// - https://github.com/crawshaw/sqlite/pull/112
+// - https://github.com/crawshaw/sqlite/pull/103
+// - https://github.com/getlantern/sqlite/pull/4
+replace crawshaw.io/sqlite => github.com/getlantern/sqlite v0.3.3-0.20211018070028-9eeb5042b175
 
 replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93
 

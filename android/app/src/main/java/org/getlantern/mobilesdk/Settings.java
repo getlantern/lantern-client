@@ -25,8 +25,13 @@ public class Settings implements internalsdk.Settings {
     @SerializedName("startTimeoutMillis")
     private long startTimeoutMillis;
 
-    public static Settings init(final Context context) {
+    // Declare as transient so that Gson ignores this
+    // TODO <13-10-21, soltzen> We'll set this to true always in the future,
+    // when Replica is ready on mobile. For now, just keep it public and easy
+    // to work with
+    public transient boolean shouldRunReplica = true;
 
+    public static Settings init(final Context context) {
         try {
             InputStream in = context.getAssets().open(configFileName);
             byte[] data = new byte[in.available()];
@@ -55,5 +60,9 @@ public class Settings implements internalsdk.Settings {
 
     public long getHttpProxyPort() {
         return httpProxyPort;
+    }
+
+    public boolean shouldRunReplica() {
+        return shouldRunReplica;
     }
 }

@@ -110,15 +110,16 @@ class CustomBottomBar extends StatelessWidget {
               icon: hasBeenOnboarded == true
                   ? messagingModel.getCopiedRecoveryStatus(
                       (context, hasCopiedRecoveryKey, child) => CBadge(
-                            count: 1,
-                            showBadge: !hasCopiedRecoveryKey,
-                            child: CAssetImage(
-                              path: ImagePaths.account,
-                              color: index == 2
-                                  ? selectedTabIconColor
-                                  : unselectedTabIconColor,
-                            ),
-                          ))
+                        count: 1,
+                        showBadge: !hasCopiedRecoveryKey,
+                        child: CAssetImage(
+                          path: ImagePaths.account,
+                          color: index == 2
+                              ? selectedTabIconColor
+                              : unselectedTabIconColor,
+                        ),
+                      ),
+                    )
                   : CAssetImage(
                       path: ImagePaths.account,
                       color: index == 2
@@ -129,22 +130,56 @@ class CustomBottomBar extends StatelessWidget {
             label: '',
             tooltip: 'Account'.i18n,
           ),
+          BottomNavigationBarItem(
+            icon: sessionModel.replicaAddr((context, replicaAddr, child) {
+              final replicaEnabled = replicaAddr != '';
+              return CustomBottomBarItem(
+                currentIndex: index,
+                position: 3,
+                total: isDevelop ? 4 : 3,
+                label: CText(
+                  'discover'.i18n,
+                  style: tsFloatingLabel.copiedWith(
+                      color: !replicaEnabled
+                          ? grey4
+                          : index == 3
+                              ? black
+                              : grey5),
+                ),
+                icon: CAssetImage(
+                  path: ImagePaths.discover,
+                  color: !replicaEnabled
+                      ? grey4
+                      : index == 3
+                          ? selectedTabIconColor
+                          : unselectedTabIconColor,
+                ),
+                onTap: () {
+                  if (replicaEnabled) {
+                    onTap!(3);
+                  }
+                },
+              );
+            }),
+            label: '',
+            tooltip: 'discover'.i18n,
+          ),
           if (isDevelop)
             BottomNavigationBarItem(
               icon: CustomBottomBarItem(
                 currentIndex: index,
-                position: 3,
+                position: 4,
                 total: isDevelop ? 4 : 3,
                 label: CText('Developer'.i18n,
                     style: tsFloatingLabel.copiedWith(
-                        color: index == 3 ? black : grey5)),
+                        color: index == 4 ? black : grey5)),
                 icon: CAssetImage(
                   path: ImagePaths.devices,
-                  color: index == 3
+                  color: index == 4
                       ? selectedTabIconColor
                       : unselectedTabIconColor,
                 ),
-                onTap: () => onTap!(3),
+                onTap: () => onTap!(4),
               ),
               label: '',
               tooltip: 'Developer'.i18n,

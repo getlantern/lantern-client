@@ -26,6 +26,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.android.model.MessagingModel
+import io.lantern.android.model.ReplicaModel
 import io.lantern.android.model.SessionModel
 import io.lantern.android.model.VpnModel
 import io.lantern.messaging.WebRTCSignal
@@ -61,6 +62,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
+    private lateinit var replicaModel: ReplicaModel
     private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
@@ -75,6 +77,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
+        replicaModel = ReplicaModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
