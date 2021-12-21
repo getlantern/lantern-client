@@ -8,7 +8,7 @@ var logger = Logger(
   printer: PrettyPrinter(),
 );
 
-class ReplicaVideoListItem extends StatefulWidget {
+class ReplicaVideoListItem extends StatelessWidget {
   ReplicaVideoListItem({
     required this.item,
     required this.onTap,
@@ -18,27 +18,6 @@ class ReplicaVideoListItem extends StatefulWidget {
   final ReplicaSearchItem item;
   final Function() onTap;
   final ReplicaApi replicaApi;
-
-  @override
-  State<StatefulWidget> createState() => _ReplicaVideoListItem();
-}
-
-// XXX <30-11-2021> soltzen: Fetching metadata for this list item goes like this:
-// - The video duration is fetched in initState(): if it works, setState is
-//   called for a rebuild
-// - The thumbnail is fetched with CachedNetworkVideo in build():
-//   - During the fetch, a progress indicator is shown
-//   - After a successful fetch, the thumbnail is rendered
-//   - After a failed fetch, a black box is rendered
-class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
-  late Future<double?> _fetchDurationFuture;
-
-  @override
-  void initState() {
-    _fetchDurationFuture =
-        widget.replicaApi.fetchDuration(widget.item.replicaLink);
-    super.initState();
-  }
 
   // renderMetadata() fetches a thumbnail from Replica and renders it.
   // CachedNetworkVideo takes care of the caching for list items in a sensible way.
@@ -75,7 +54,7 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
           ),
         );
       },
-      imageUrl: widget.replicaApi.getThumbnailAddr(widget.item.replicaLink),
+      imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
       progressIndicatorBuilder: (context, url, downloadProgress) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
@@ -130,14 +109,15 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
   }
 
   Widget renderDurationTextbox() {
-    return FutureBuilder(
-      future: _fetchDurationFuture,
-      builder: (BuildContext context, AsyncSnapshot<double?> snapshot) {
-        String duration;
-        if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
-          duration = '??:??';
-        } else {
-          duration = snapshot.data!.toMinutesAndSeconds();
+    return ValueListenableBuilder(
+      valueListenable: replicaApi.getDuration(item.replicaLink),
+      builder: (
+        BuildContext context,
+        CachedValue<double?> cached,
+        Widget? child,
+      ) {
+        if (cached.value == null) {
+          return Container();
         }
 
         return ClipRRect(
@@ -150,7 +130,7 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
             ),
             decoration: BoxDecoration(color: black),
             child: CText(
-              duration,
+              cached.value!.toMinutesAndSeconds(),
               style: tsOverline.copiedWith(color: white),
             ),
           ),
@@ -159,13 +139,20 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
     );
   }
 
+  // XXX <30-11-2021> soltzen: Fetching metadata for this list item goes like this:
+  // - The video duration is fetched in initState(): if it works, setState is
+  //   called for a rebuild
+  // - The thumbnail is fetched with CachedNetworkVideo in build():
+  //   - During the fetch, a progress indicator is shown
+  //   - After a successful fetch, the thumbnail is rendered
+  //   - After a failed fetch, a black box is rendered
   @override
   Widget build(BuildContext context) {
     return ListItemFactory.replicaItem(
       height: 116,
-      link: widget.item.replicaLink,
-      api: widget.replicaApi,
-      onTap: widget.onTap,
+      link: item.replicaLink,
+      api: replicaApi,
+      onTap: onTap,
       content: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -174,7 +161,7 @@ class _ReplicaVideoListItem extends State<ReplicaVideoListItem> {
             child: Padding(
               padding: const EdgeInsetsDirectional.all(8.0),
               child: CText(
-                widget.item.displayName,
+                item.displayName,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: tsBody1Short.copiedWith(color: blue4),
