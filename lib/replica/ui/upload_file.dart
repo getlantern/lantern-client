@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:lantern/common/ui/base_screen.dart';
 import 'package:lantern/common/ui/button.dart';
@@ -27,6 +28,7 @@ var logger = Logger(
 // 'fileToUpload', allowing the user to change the display name of the upload.
 class ReplicaUploadFileScreen extends StatefulWidget {
   final File fileToUpload;
+
   ReplicaUploadFileScreen({Key? key, required this.fileToUpload});
 
   @override
@@ -217,6 +219,7 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
               // Add the display name with the extension
               '$_displayName${path.extension(widget.fileToUpload.path)}',
             );
+            BotToast.showText(text: 'upload_started'.i18n);
             Navigator.of(context).pop();
           },
         ),
@@ -249,5 +252,5 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
     );
   }
 
-  // agreeAction: () => ,
+// agreeAction: () => ,
 }

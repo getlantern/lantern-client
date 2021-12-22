@@ -32,7 +32,7 @@ class ReplicaImageListItem extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: FocusedMenuHolder(
-          menu: renderReplicaLongPressMenuItem(replicaApi, item.replicaLink),
+          menu: renderReplicaLongPressMenuItem(context, replicaApi, item.replicaLink),
           menuWidth: MediaQuery.of(context).size.width * 0.8,
           builder: (_) {
             return GridTile(

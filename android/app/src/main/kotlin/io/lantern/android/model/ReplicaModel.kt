@@ -22,11 +22,11 @@ class ReplicaModel(
         private const val TAG = "ReplicaModel"
     }
 
-    override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        Log.w(TAG, "doOnMethodCall: doOnMethodCall()")
-        when (call.method) {
+    override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
+        return when (call.method) {
             "downloadFile" -> downloadFile(call)
-            else -> super.doOnMethodCall(call, result)
+            "setSuppressUploadWarning" -> setSuppressUploadWarning(call)
+            else -> super.doMethodCall(call, notImplemented)
         }
     }
 
@@ -46,6 +46,13 @@ class ReplicaModel(
         )
         activity.getSystemService(Context.DOWNLOAD_SERVICE)?.let { manager ->
             (manager as DownloadManager).enqueue(request)
+        }
+    }
+
+    private fun setSuppressUploadWarning(call: MethodCall) {
+        val suppress = call.argument<Boolean>("suppress")
+        db.mutate { tx ->
+            tx.put("suppressUploadWarning", suppress)
         }
     }
 }

@@ -72,7 +72,7 @@ public class LanternService extends Service implements Runnable {
         Logger.debug(TAG, "Called onStartCommand, autoBooted?: " + autoBooted);
         if (autoBooted) {
             boolean hasOnboarded = new Boolean(true)
-                    .equals(LanternApp.messaging.messaging.getDb().get("/onBoardingStatus"));
+                    .equals(LanternApp.messaging.messaging.getDb().get("onBoardingStatus"));
             if (!hasOnboarded) {
                 Logger.debug(TAG, "Attempted to auto boot but user has not onboarded to messaging, stop service");
                 stopSelf();

@@ -6,10 +6,12 @@ void Function() showConfirmationDialog({
   String? iconPath,
   required String title,
   required dynamic explanation,
+  String? checkboxLabel,
+  bool checkboxChecked = false,
   required String agreeText,
   String dismissText = 'cancel',
-  required void Function() agreeAction,
-  void Function()? dismissAction,
+  required Future<void> Function(bool?) agreeAction,
+  Future<void> Function()? dismissAction,
   bool barrierDismissible = true,
   Duration? autoDismissAfter,
 }) {
@@ -34,47 +36,98 @@ void Function() showConfirmationDialog({
     context: context,
     barrierDismissible: barrierDismissible,
     builder: (context) {
-      return AlertDialog(
-        key: key,
-        title: Column(
-          children: [
-            if (iconPath != null)
-              Padding(
-                padding: const EdgeInsetsDirectional.only(bottom: 16),
-                child: CAssetImage(path: iconPath, size: 24),
+      return StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          key: key,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: iconPath != null
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
+            children: [
+              if (iconPath != null)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(bottom: 16),
+                  child: CAssetImage(path: iconPath, size: 24),
+                ),
+              CText(
+                title,
+                style: tsSubtitle1,
               ),
-            CText(title, style: tsSubtitle1),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(top: 16),
+                  child: SingleChildScrollView(
+                    child: explanation is Widget
+                        ? explanation
+                        : CText(
+                            explanation as String,
+                            style: tsBody1.copiedWith(
+                              color: grey5,
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+              if (checkboxLabel != null)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(top: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                        visualDensity: VisualDensity.compact,
+                        shape: const RoundedRectangleBorder(
+                          side: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                        ),
+                        checkColor: Colors.white,
+                        fillColor: MaterialStateProperty.resolveWith(
+                          (states) => getCheckboxFillColor(black, states),
+                        ),
+                        value: checkboxChecked,
+                        onChanged: (bool? value) {
+                          setState(() => checkboxChecked = value!);
+                        },
+                      ),
+                      Expanded(
+                        child: CText(
+                          checkboxLabel,
+                          style: tsBody1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+          actions: [
+            // DISMISS
+            TextButton(
+              onPressed: () async {
+                if (dismissAction != null) {
+                  await dismissAction();
+                }
+                close();
+              },
+              child: CText(
+                dismissText.i18n.toUpperCase(),
+                style: tsButtonGrey,
+              ),
+            ),
+            // AGREE
+            TextButton(
+              onPressed: () async {
+                await agreeAction(checkboxChecked);
+                close();
+              },
+              child: CText(
+                agreeText.i18n.toUpperCase(),
+                style: tsButtonPink,
+              ),
+            ),
           ],
         ),
-        content: SingleChildScrollView(
-          child: explanation is Widget
-              ? explanation
-              : CText(explanation as String, style: tsBody1),
-        ),
-        actions: [
-          // DISMISS
-          TextButton(
-            onPressed: () {
-              if (dismissAction != null) dismissAction();
-              close();
-            },
-            child: CText(
-              dismissText.i18n.toUpperCase(),
-              style: tsButtonGrey,
-            ),
-          ),
-          // AGREE
-          TextButton(
-            onPressed: () {
-              agreeAction();
-              close();
-            },
-            child: CText(
-              agreeText.i18n.toUpperCase(),
-              style: tsButtonPink,
-            ),
-          ),
-        ],
       );
     },
   );

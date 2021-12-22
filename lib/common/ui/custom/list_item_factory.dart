@@ -38,7 +38,7 @@ class ListItemFactory extends StatelessWidget {
     double height = 90.0,
   }) : this((BuildContext context, ListItemFactory factory) {
           return FocusedMenuHolder(
-            menu: renderReplicaLongPressMenuItem(api, link),
+            menu: renderReplicaLongPressMenuItem(context, api, link),
             menuWidth: MediaQuery.of(context).size.width * 0.8,
             builder: (menuOpen) {
               return Container(
