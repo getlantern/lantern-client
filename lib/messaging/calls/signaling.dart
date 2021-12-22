@@ -76,7 +76,6 @@ class Signaling {
       AudioCache(prefix: 'assets/sounds/', fixedPlayer: AudioPlayer());
   bool audioPlayerOnSpeaker = true;
   bool audioPlayerInitialized = false;
-  final defaultAudioPlayerToEarPieceOnce = once();
   final JsonEncoder _encoder = const JsonEncoder();
   final JsonDecoder _decoder = const JsonDecoder();
   final MethodChannel mc;

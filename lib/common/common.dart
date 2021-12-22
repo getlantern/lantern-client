@@ -39,7 +39,6 @@ export 'model_event_channel.dart';
 export 'once.dart';
 export 'session_model.dart';
 export 'single_value_subscriber.dart';
-// UI elements
 export 'ui/audio.dart';
 export 'ui/base_screen.dart';
 export 'ui/basic_memory_image.dart';
@@ -49,9 +48,9 @@ export 'ui/continue_arrow.dart';
 export 'ui/copy_text.dart';
 export 'ui/countdown_min_sec.dart';
 export 'ui/countdown_stopwatch.dart';
-// custom UI elements
 export 'ui/custom/asset_image.dart';
 export 'ui/custom/badge.dart';
+export 'ui/custom/dialog.dart';
 export 'ui/custom/divider.dart';
 export 'ui/custom/ink_well.dart';
 export 'ui/custom/list_item_factory.dart';
@@ -78,12 +77,9 @@ export 'ui/round_button.dart';
 export 'ui/search_field.dart';
 export 'ui/show_bottom_modal.dart';
 export 'ui/show_bottom_modal.dart';
-// UI functions
-export 'ui/show_confirmation_dialog.dart';
 export 'ui/show_error_dialog.dart';
 export 'ui/show_info_dialog.dart';
 export 'ui/show_snackbar.dart';
 export 'ui/text_highlighter.dart';
-// Constants
 export 'ui/text_styles.dart';
 export 'ui/transitions.dart';
