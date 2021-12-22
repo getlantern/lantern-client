@@ -53,8 +53,8 @@ class MessagingModel constructor(
 
         // default onboarding status to false if it hasn't been set yet
         db.mutate { tx ->
-            if (!db.contains("/onBoardingStatus")) {
-                tx.put("/onBoardingStatus", false)
+            if (!db.contains("onBoardingStatus")) {
+                tx.put("onBoardingStatus", false)
             }
         }
 
@@ -326,18 +326,18 @@ class MessagingModel constructor(
             }
             "markIsOnboarded" -> {
                 db.mutate { tx ->
-                    tx.put("/onBoardingStatus", true)
+                    tx.put("onBoardingStatus", true)
                 }
             }
             "markCopiedRecoveryKey" -> {
                 db.mutate { tx ->
-                    tx.put("/copiedRecoveryStatus", true)
+                    tx.put("copiedRecoveryStatus", true)
                 }
             }
             "saveNotificationsTS" -> {
                 val ts = System.currentTimeMillis()
                 db.mutate { tx ->
-                    tx.put("/requestNotificationLastDismissedTS", ts)
+                    tx.put("requestNotificationLastDismissedTS", ts)
                 }
             }
             "shouldShowTryLanternChatModal" -> {
@@ -351,33 +351,33 @@ class MessagingModel constructor(
                     return false
                 }
 
-                val path = "/hasShownTryLanternChatModal"
+                val path = "hasShownTryLanternChatModal"
                 return db.mutate { tx ->
                     val hasShownModal = tx.get(path) ?: false
                     if (!hasShownModal) {
                         tx.put(path, true)
-                        tx.put("/firstShownTryLanternChatModalTS", System.currentTimeMillis())
+                        tx.put("firstShownTryLanternChatModalTS", System.currentTimeMillis())
                     }
 
-                    val hasOnboarded = tx.get("/onBoardingStatus") ?: false
+                    val hasOnboarded = tx.get("onBoardingStatus") ?: false
                     !hasShownModal && !hasOnboarded
                 }
             }
             "dismissTryLanternChatBadge" -> {
-                db.mutate { tx -> tx.put("/firstShownTryLanternChatModalTS", 0) }
+                db.mutate { tx -> tx.put("firstShownTryLanternChatModalTS", 0) }
             }
             // DEV PURPOSES
             "resetTimestamps" -> {
                 db.mutate { tx ->
-                    tx.put("/firstShownTryLanternChatModalTS", 0)
-                    tx.put("/requestNotificationLastDismissedTS", 0)
+                    tx.put("firstShownTryLanternChatModalTS", 0)
+                    tx.put("requestNotificationLastDismissedTS", 0)
                 }
             }
             "resetFlags" -> {
                 db.mutate { tx ->
-                    tx.put("/hasShownTryLanternChatModal", false)
-                    tx.put("/onBoardingStatus", false)
-                    tx.put("/copiedRecoveryStatus", false)
+                    tx.put("hasShownTryLanternChatModal", false)
+                    tx.put("onBoardingStatus", false)
+                    tx.put("copiedRecoveryStatus", false)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)

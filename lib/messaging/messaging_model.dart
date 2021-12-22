@@ -511,7 +511,7 @@ class MessagingModel extends Model {
     // Note - we use null as a placeholder for "unknown" to indicate when we
     // haven't yet read the actual onboarding status from the back-end
     return subscribedSingleValueBuilder<bool?>(
-      '/onBoardingStatus',
+      'onBoardingStatus',
       defaultValue: null,
       builder: builder,
     );
@@ -523,7 +523,7 @@ class MessagingModel extends Model {
 
   Widget getCopiedRecoveryStatus(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>(
-      '/copiedRecoveryStatus',
+      'copiedRecoveryStatus',
       defaultValue: false,
       builder: builder,
     );
@@ -535,7 +535,7 @@ class MessagingModel extends Model {
 
   Widget getLastDismissedNotificationTS(ValueWidgetBuilder<int> builder) {
     return subscribedSingleValueBuilder<int>(
-      '/requestNotificationLastDismissedTS',
+      'requestNotificationLastDismissedTS',
       defaultValue: 0,
       builder: builder,
     );
@@ -559,7 +559,7 @@ class MessagingModel extends Model {
 
   Widget getFirstShownTryLanternChatModalTS(ValueWidgetBuilder<int> builder) {
     return subscribedSingleValueBuilder<int>(
-      '/firstShownTryLanternChatModalTS',
+      'firstShownTryLanternChatModalTS',
       defaultValue: 0,
       builder: builder,
     );

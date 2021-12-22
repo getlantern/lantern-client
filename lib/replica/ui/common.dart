@@ -1,10 +1,11 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/vpn/vpn.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -12,7 +13,8 @@ var logger = Logger(
 
 // renderReplicaLongPressMenuItem is used for rendering list/grid items located
 // in the ./ui/replica/listitems directory
-SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
+SizedBox renderReplicaLongPressMenuItem(
+    BuildContext context, ReplicaApi api, ReplicaLink link) {
   return SizedBox(
     height: 48,
     child: Padding(
@@ -25,8 +27,10 @@ SizedBox renderReplicaLongPressMenuItem(ReplicaApi api, ReplicaLink link) {
           ListItemFactory.focusMenuItem(
             icon: ImagePaths.file_download,
             content: 'download'.i18n,
-            onTap: () async {
-              await api.download(link);
+            onTap: () {
+              api.download(link);
+              BotToast.showText(text: 'download_started'.i18n);
+              Navigator.of(context).pop();
             },
           ),
         ],
@@ -87,20 +91,6 @@ Widget renderReplicaMediaViewScreen({
   );
 }
 
-final String replica_upload_disclaimer_value_shared_prefs_name =
-    'replica_upload_disclaimer_checkbox_value';
-
-Future<bool> getReplicaUploadDisclaimerCheckboxValue() async {
-  var prefs = await SharedPreferences.getInstance();
-  return prefs.getBool(replica_upload_disclaimer_value_shared_prefs_name) ??
-      false;
-}
-
-Future<void> setReplicaUploadDisclaimerCheckboxValue(bool b) async {
-  var prefs = await SharedPreferences.getInstance();
-  await prefs.setBool(replica_upload_disclaimer_value_shared_prefs_name, b);
-}
-
 // Upload journey goes like this:
 // - Prompt user to pick a file
 // - Show them the disclaimer
@@ -120,22 +110,32 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
   var file = File(result.files.single.path);
   logger.v('Picked a file $file');
 
-  // If the checkbox value is false, show it
-  // If true, don't
-  if (!await getReplicaUploadDisclaimerCheckboxValue().timeout(
-    const Duration(seconds: 2),
-    onTimeout: () => false,
-  )) {
+  final suppressUploadWarning = await replicaModel.getSuppressUploadWarning();
+  if (suppressUploadWarning == true) {
+    // Immediately proceed to upload screen
+    await context.pushRoute(
+      ReplicaUploadFileScreen(
+        fileToUpload: file,
+      ),
+    );
+  } else {
+    // Warn user about dangers of uploading first, then proceed to upload screen
     showConfirmationDialog(
       context: context,
       title: 'replica_upload_confirmation_title'.i18n,
       explanation: 'replica_upload_confirmation_body'.i18n,
+      checkboxLabel: 'dont_show_me_this_again'.i18n,
       agreeText: 'replica_upload_confirmation_agree'.i18n,
-      agreeAction: () => context.pushRoute(
-        ReplicaUploadFileScreen(
-          fileToUpload: file,
-        ),
-      ),
+      agreeAction: (dontShowAgain) async {
+        if (dontShowAgain == true) {
+          await replicaModel.setSuppressUploadWarning(true);
+        }
+        await context.pushRoute(
+          ReplicaUploadFileScreen(
+            fileToUpload: file,
+          ),
+        );
+      },
     );
   }
 }

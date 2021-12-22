@@ -952,11 +952,20 @@ msgstr "Files uploaded to the Lantern Network are publicly accessible. They are 
 msgid "replica_upload_confirmation_agree"
 msgstr "Resume Upload"
 
+msgid "dont_show_me_this_again"
+msgstr "Don't show me this again"
+
 msgid "download"
 msgstr "Download"
 
+msgid "download_started"
+msgstr "Download Started"
+
 msgid "uploader"
 msgstr "Uploader"
+
+msgid "upload_started"
+msgstr "Upload Started"
 
 msgid "upload_in_progress"
 msgstr "Upload in Progress"
