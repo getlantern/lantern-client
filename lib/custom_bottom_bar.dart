@@ -28,61 +28,9 @@ class CustomBottomBar extends StatelessWidget {
         onTap: onTap,
         items: [
           BottomNavigationBarItem(
-            icon: messagingModel.getFirstShownTryLanternChatModalTS(
-              (context, ts, child) => NowBuilder(
-                calculate: (now) =>
-                    hasBeenOnboarded != true &&
-                    (now.millisecondsSinceEpoch - ts) < oneWeekInMillis,
-                builder: (BuildContext context, bool badgeShowing) =>
-                    CustomBottomBarItem(
-                  currentTabIndex: index,
-                  tabIndex: 0,
-                  total: totalTabs,
-                  label: 'secure_chat'.i18n,
-                  icon: ImagePaths.messages,
-                  addBadge: (child) {
-                    if (!badgeShowing) {
-                      return child;
-                    }
-
-                    return CBadge(
-                      end: -20,
-                      top: -10,
-                      customBadge: Container(
-                        padding: const EdgeInsetsDirectional.only(
-                          top: 2.0,
-                          bottom: 2.0,
-                          start: 5.0,
-                          end: 5.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: blue3,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(80.0),
-                          ),
-                        ),
-                        child: Text(
-                          'new'.i18n.toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: white,
-                          ),
-                        ),
-                      ),
-                      child: NumUnviewedWrapper(child),
-                    );
-                  },
-                  onTap: onTap,
-                ),
-              ),
-            ),
-            label: '',
-            tooltip: 'chats'.i18n,
-          ),
-          BottomNavigationBarItem(
             icon: CustomBottomBarItem(
               currentTabIndex: index,
-              tabIndex: 1,
+              tabIndex: 0,
               total: totalTabs,
               label: 'VPN'.i18n,
               icon: ImagePaths.key,
@@ -109,7 +57,7 @@ class CustomBottomBar extends StatelessWidget {
               final replicaEnabled = replicaAddr != '';
               return CustomBottomBarItem(
                 currentTabIndex: index,
-                tabIndex: 2,
+                tabIndex: 1,
                 total: totalTabs,
                 label: 'discover'.i18n,
                 icon: ImagePaths.discover,
@@ -126,7 +74,7 @@ class CustomBottomBar extends StatelessWidget {
           BottomNavigationBarItem(
             icon: CustomBottomBarItem(
               currentTabIndex: index,
-              tabIndex: 3,
+              tabIndex: 2,
               total: totalTabs,
               label: 'Account'.i18n,
               onTap: onTap,
@@ -152,7 +100,7 @@ class CustomBottomBar extends StatelessWidget {
             BottomNavigationBarItem(
               icon: CustomBottomBarItem(
                 currentTabIndex: index,
-                tabIndex: 4,
+                tabIndex: 3,
                 total: totalTabs,
                 label: 'Developer'.i18n,
                 icon: ImagePaths.devices,

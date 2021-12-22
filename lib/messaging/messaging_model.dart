@@ -548,9 +548,10 @@ class MessagingModel extends Model {
   }
 
   Future<bool> shouldShowTryLanternChatModal<T>() async {
-    return methodChannel
-        .invokeMethod('shouldShowTryLanternChatModal')
-        .then((value) => value as bool);
+    return Future.value(false);
+    // return methodChannel
+    //     .invokeMethod('shouldShowTryLanternChatModal')
+    //     .then((value) => value as bool);
   }
 
   Future<void> dismissTryLanternChatBadge<T>() async {

@@ -56,7 +56,7 @@ public class LanternService extends Service implements Runnable {
     // initial number of ms to wait until we try creating a new Pro user
     private final int baseWaitMs = 3000;
 
-    private final ServiceHelper helper = new ServiceHelper(this, R.drawable.app_icon, R.drawable.status_on, R.string.receiving_messages);
+    private final ServiceHelper helper = new ServiceHelper(this, R.drawable.app_icon, R.drawable.status_on, R.string.ready_to_connect);
 
     private AtomicBoolean started = new AtomicBoolean();
 
