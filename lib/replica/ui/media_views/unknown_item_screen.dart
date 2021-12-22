@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/replica_model.dart';
@@ -68,6 +69,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
                   TextButton(
                     onPressed: () async {
                       await replicaApi.download(widget.replicaLink);
+                      BotToast.showText(text: 'download_started'.i18n);
                     },
                     child: CText(
                       'download'.i18n,
