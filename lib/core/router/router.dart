@@ -23,6 +23,7 @@ import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
 import 'package:lantern/replica/ui/link_opener_screen.dart';
 import 'package:lantern/replica/ui/media_views/audio_player.dart';
 import 'package:lantern/replica/ui/media_views/image_preview_screen.dart';
+import 'package:lantern/replica/ui/media_views/pdf_screen.dart';
 import 'package:lantern/replica/ui/media_views/unknown_item_screen.dart';
 import 'package:lantern/replica/ui/media_views/video_player.dart';
 import 'package:lantern/replica/ui/search_screen.dart';
@@ -217,6 +218,14 @@ import 'package:lantern/replica/ui/upload_file.dart';
       page: BlockedUsers,
       name: 'BlockedUsers',
       path: 'blockedUsers',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: ReplicaPDFScreen,
+      name: 'ReplicaPDFScreen',
+      path: 'replicaPDFScreen',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

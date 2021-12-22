@@ -147,6 +147,8 @@ dependencies:
 
   video_thumbnail: ^0.4.3
 
+  flutter_pdfview: ^1.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

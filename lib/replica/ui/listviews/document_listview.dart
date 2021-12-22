@@ -38,12 +38,22 @@ class _ReplicaDocumentListViewState extends ReplicaCommonListViewState {
         item: item,
         replicaApi: widget.replicaApi,
         onTap: () {
-          context.pushRoute(
-            ReplicaUnknownItemScreen(
-              replicaLink: item.replicaLink,
-              category: SearchCategory.Document,
-            ),
-          );
+          if (item.primaryMimeType == 'application/pdf') {
+            context.pushRoute(
+              ReplicaPDFScreen(
+                replicaApi: widget.replicaApi,
+                replicaLink: item.replicaLink,
+                category: SearchCategory.Document,
+              ),
+            );
+          } else {
+            context.pushRoute(
+              ReplicaUnknownItemScreen(
+                replicaLink: item.replicaLink,
+                category: SearchCategory.Document,
+              ),
+            );
+          }
         },
       );
     });

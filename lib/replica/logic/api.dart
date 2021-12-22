@@ -148,4 +148,13 @@ class ReplicaApi {
     final displayName = link.displayName ?? link.infohash;
     await replicaModel.downloadFile(u, displayName);
   }
+
+  Future<void> fetch(ReplicaLink link, String localFilePath) async {
+    final resp = await dio.download(getViewAddr(link), localFilePath);
+    if (resp.statusCode != 200) {
+      throw Exception(
+        'Failed to fetch: ${resp.statusCode} -> ${resp.data.toString()}',
+      );
+    }
+  }
 }
