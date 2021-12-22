@@ -154,9 +154,9 @@ class _HomePageState extends State<HomePage> {
       case 1:
         return VPNTab();
       case 2:
-        return AccountTab();
-      case 3:
         return ReplicaTab();
+      case 3:
+        return AccountTab();
       case 4:
         return DeveloperSettingsTab();
       default:
