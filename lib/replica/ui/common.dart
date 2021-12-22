@@ -1,4 +1,3 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
@@ -111,7 +110,7 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
     // If user didn't pick a file, do nothing
     return;
   }
-  var file = File(result.files.single.path);
+  var file = File(result.files.single.path!);
   logger.v('Picked a file $file');
 
   final suppressUploadWarning = await replicaModel.getSuppressUploadWarning();

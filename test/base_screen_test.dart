@@ -1,5 +1,4 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
