@@ -113,53 +113,18 @@ class CustomBottomBar extends StatelessWidget {
             tooltip: 'VPN'.i18n,
           ),
           BottomNavigationBarItem(
-            icon: CustomBottomBarItem(
-              currentIndex: index,
-              position: 2,
-              total: isDevelop ? 4 : 3,
-              label: CText(
-                'Account'.i18n,
-                style: tsFloatingLabel.copiedWith(
-                  color: index == 2 ? black : grey5,
-                ),
-              ),
-              onTap: () => onTap!(2),
-              icon: hasBeenOnboarded == true
-                  ? messagingModel.getCopiedRecoveryStatus(
-                      (context, hasCopiedRecoveryKey, child) => CBadge(
-                        count: 1,
-                        showBadge: !hasCopiedRecoveryKey,
-                        child: CAssetImage(
-                          path: ImagePaths.account,
-                          color: index == 2
-                              ? selectedTabIconColor
-                              : unselectedTabIconColor,
-                        ),
-                      ),
-                    )
-                  : CAssetImage(
-                      path: ImagePaths.account,
-                      color: index == 2
-                          ? selectedTabIconColor
-                          : unselectedTabIconColor,
-                    ),
-            ),
-            label: '',
-            tooltip: 'Account'.i18n,
-          ),
-          BottomNavigationBarItem(
             icon: sessionModel.replicaAddr((context, replicaAddr, child) {
               final replicaEnabled = replicaAddr != '';
               return CustomBottomBarItem(
                 currentIndex: index,
-                position: 3,
+                position: 2,
                 total: isDevelop ? 4 : 3,
                 label: CText(
                   'discover'.i18n,
                   style: tsFloatingLabel.copiedWith(
                     color: !replicaEnabled
                         ? grey4
-                        : index == 3
+                        : index == 2
                             ? black
                             : grey5,
                   ),
@@ -168,19 +133,54 @@ class CustomBottomBar extends StatelessWidget {
                   path: ImagePaths.discover,
                   color: !replicaEnabled
                       ? grey4
-                      : index == 3
+                      : index == 2
                           ? selectedTabIconColor
                           : unselectedTabIconColor,
                 ),
                 onTap: () {
                   if (replicaEnabled) {
-                    onTap!(3);
+                    onTap!(2);
                   }
                 },
               );
             }),
             label: '',
             tooltip: 'discover'.i18n,
+          ),
+          BottomNavigationBarItem(
+            icon: CustomBottomBarItem(
+              currentIndex: index,
+              position: 3,
+              total: isDevelop ? 4 : 3,
+              label: CText(
+                'Account'.i18n,
+                style: tsFloatingLabel.copiedWith(
+                  color: index == 3 ? black : grey5,
+                ),
+              ),
+              onTap: () => onTap!(3),
+              icon: hasBeenOnboarded == true
+                  ? messagingModel.getCopiedRecoveryStatus(
+                      (context, hasCopiedRecoveryKey, child) => CBadge(
+                        count: 1,
+                        showBadge: !hasCopiedRecoveryKey,
+                        child: CAssetImage(
+                          path: ImagePaths.account,
+                          color: index == 3
+                              ? selectedTabIconColor
+                              : unselectedTabIconColor,
+                        ),
+                      ),
+                    )
+                  : CAssetImage(
+                      path: ImagePaths.account,
+                      color: index == 3
+                          ? selectedTabIconColor
+                          : unselectedTabIconColor,
+                    ),
+            ),
+            label: '',
+            tooltip: 'Account'.i18n,
           ),
           if (isDevelop)
             BottomNavigationBarItem(
