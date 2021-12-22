@@ -1,24 +1,30 @@
 import 'package:lantern/common/common.dart';
 
 class CustomBottomBarItem extends StatelessWidget {
-  final int currentIndex;
-  final int position;
-  final int total;
-  final CText label;
-  final Widget? iconWidget;
-  final Widget icon;
-  final VoidCallback onTap;
-
   const CustomBottomBarItem({
-    required this.currentIndex,
     required this.total,
+    required this.currentTabIndex,
+    required this.tabIndex,
     required this.icon,
-    required this.position,
-    this.iconWidget,
     required this.label,
+    this.labelWidget,
+    this.addBadge = defaultAddBadge,
     required this.onTap,
     Key? key,
   }) : super(key: key);
+
+  final int total;
+  final int currentTabIndex;
+  final int tabIndex;
+  final String label;
+  final String icon;
+  final Widget? labelWidget;
+  final Widget Function(Widget) addBadge;
+  final void Function(int) onTap;
+
+  bool get active => currentTabIndex == tabIndex;
+
+  static Widget defaultAddBadge(Widget child) => child;
 
   @override
   Widget build(BuildContext context) {
@@ -35,53 +41,53 @@ class CustomBottomBarItem extends StatelessWidget {
               customBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadiusDirectional.only(
                   topStart: Radius.circular(
-                    currentIndex != 0 ? borderRadius : 0,
+                    currentTabIndex != 0 ? borderRadius : 0,
                   ),
-                  topEnd:
-                      Radius.circular(currentIndex != total ? borderRadius : 0),
+                  topEnd: Radius.circular(
+                      currentTabIndex != total ? borderRadius : 0),
                 ),
               ),
-              onTap: onTap,
+              onTap: (() => onTap(tabIndex)),
               child: Container(
                 decoration: ShapeDecoration(
-                  color: position == currentIndex
+                  color: tabIndex == currentTabIndex
                       ? selectedTabColor
                       : unselectedTabColor,
                   shape: CRoundedRectangleBorder(
-                    topSide: position == currentIndex
+                    topSide: tabIndex == currentTabIndex
                         ? null
                         : BorderSide(
                             color: borderColor,
                             width: 1,
                           ),
-                    endSide: currentIndex == position + 1
+                    endSide: currentTabIndex == tabIndex + 1
                         ? BorderSide(
                             color: borderColor,
                             width: 1,
                           )
                         : null,
-                    startSide: currentIndex == position - 1
+                    startSide: currentTabIndex == tabIndex - 1
                         ? BorderSide(
                             color: borderColor,
                             width: 1,
                           )
                         : null,
                     topStartCornerSide: BorderSide(
-                      color: currentIndex == position - 1
+                      color: currentTabIndex == tabIndex - 1
                           ? borderColor
                           : Colors.white,
                     ),
                     topEndCornerSide: BorderSide(
-                      color: currentIndex == position + 1
+                      color: currentTabIndex == tabIndex + 1
                           ? borderColor
                           : Colors.white,
                     ),
                     borderRadius: BorderRadiusDirectional.only(
                       topStart: Radius.circular(
-                        currentIndex == position - 1 ? borderRadius : 0,
+                        currentTabIndex == tabIndex - 1 ? borderRadius : 0,
                       ),
                       topEnd: Radius.circular(
-                        currentIndex == position + 1 ? borderRadius : 0,
+                        currentTabIndex == tabIndex + 1 ? borderRadius : 0,
                       ),
                     ),
                   ),
@@ -89,13 +95,27 @@ class CustomBottomBarItem extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Flexible(child: icon),
+                    Flexible(
+                      child: addBadge(
+                        CAssetImage(
+                          path: icon,
+                          color: active
+                              ? selectedTabIconColor
+                              : unselectedTabIconColor,
+                        ),
+                      ),
+                    ),
                     Flexible(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          label,
-                          iconWidget ?? const SizedBox(),
+                          CText(
+                            label,
+                            style: tsFloatingLabel.copiedWith(
+                              color: active ? black : grey5,
+                            ),
+                          ),
+                          labelWidget ?? const SizedBox(),
                         ],
                       ),
                     ),

@@ -3,7 +3,7 @@ import 'package:lantern/messaging/messaging.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int index;
-  final Function(int)? onTap;
+  final Function(int) onTap;
   final bool isDevelop;
 
   const CustomBottomBar({
@@ -15,6 +15,8 @@ class CustomBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final totalTabs = isDevelop ? 4 : 3;
+
     return messagingModel.getOnBoardingStatus(
       (context, hasBeenOnboarded, child) => BottomNavigationBar(
         currentIndex: index,
@@ -33,45 +35,44 @@ class CustomBottomBar extends StatelessWidget {
                     (now.millisecondsSinceEpoch - ts) < oneWeekInMillis,
                 builder: (BuildContext context, bool badgeShowing) =>
                     CustomBottomBarItem(
-                  currentIndex: index,
-                  position: 0,
-                  total: isDevelop ? 4 : 3,
-                  label: CText(
-                    'secure_chat'.i18n,
-                    style: tsFloatingLabel.copiedWith(
-                      color: index == 0 ? black : grey5,
-                    ),
-                  ),
-                  icon: CBadge(
-                    showBadge: badgeShowing,
-                    end: -20,
-                    top: -10,
-                    customBadge: Container(
-                      padding: const EdgeInsetsDirectional.only(
-                        top: 2.0,
-                        bottom: 2.0,
-                        start: 5.0,
-                        end: 5.0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: blue3,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(80.0),
+                  currentTabIndex: index,
+                  tabIndex: 0,
+                  total: totalTabs,
+                  label: 'secure_chat'.i18n,
+                  icon: ImagePaths.messages,
+                  addBadge: (child) {
+                    if (!badgeShowing) {
+                      return child;
+                    }
+
+                    return CBadge(
+                      end: -20,
+                      top: -10,
+                      customBadge: Container(
+                        padding: const EdgeInsetsDirectional.only(
+                          top: 2.0,
+                          bottom: 2.0,
+                          start: 5.0,
+                          end: 5.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: blue3,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(80.0),
+                          ),
+                        ),
+                        child: Text(
+                          'new'.i18n.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: white,
+                          ),
                         ),
                       ),
-                      child: Text(
-                        'new'.i18n.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: white,
-                        ),
-                      ),
-                    ),
-                    child: NumUnviewedWrapper(index: index),
-                  ),
-                  onTap: () async {
-                    onTap!(0);
+                      child: NumUnviewedWrapper(child),
+                    );
                   },
+                  onTap: onTap,
                 ),
               ),
             ),
@@ -80,22 +81,13 @@ class CustomBottomBar extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: CustomBottomBarItem(
-              currentIndex: index,
-              position: 1,
-              total: isDevelop ? 4 : 3,
-              label: CText(
-                'VPN'.i18n,
-                style: tsFloatingLabel.copiedWith(
-                  color: index == 1 ? black : grey5,
-                ),
-              ),
-              icon: CAssetImage(
-                path: ImagePaths.key,
-                color:
-                    index == 1 ? selectedTabIconColor : unselectedTabIconColor,
-              ),
-              onTap: () => onTap!(1),
-              iconWidget: vpnModel.vpnStatus(
+              currentTabIndex: index,
+              tabIndex: 1,
+              total: totalTabs,
+              label: 'VPN'.i18n,
+              icon: ImagePaths.key,
+              onTap: onTap,
+              labelWidget: vpnModel.vpnStatus(
                 (context, value, child) => Padding(
                   padding: const EdgeInsetsDirectional.only(start: 4.0),
                   child: CircleAvatar(
@@ -116,30 +108,14 @@ class CustomBottomBar extends StatelessWidget {
             icon: sessionModel.replicaAddr((context, replicaAddr, child) {
               final replicaEnabled = replicaAddr != '';
               return CustomBottomBarItem(
-                currentIndex: index,
-                position: 2,
-                total: isDevelop ? 4 : 3,
-                label: CText(
-                  'discover'.i18n,
-                  style: tsFloatingLabel.copiedWith(
-                    color: !replicaEnabled
-                        ? grey4
-                        : index == 2
-                            ? black
-                            : grey5,
-                  ),
-                ),
-                icon: CAssetImage(
-                  path: ImagePaths.discover,
-                  color: !replicaEnabled
-                      ? grey4
-                      : index == 2
-                          ? selectedTabIconColor
-                          : unselectedTabIconColor,
-                ),
-                onTap: () {
+                currentTabIndex: index,
+                tabIndex: 2,
+                total: totalTabs,
+                label: 'discover'.i18n,
+                icon: ImagePaths.discover,
+                onTap: (idx) {
                   if (replicaEnabled) {
-                    onTap!(2);
+                    onTap(idx);
                   }
                 },
               );
@@ -149,35 +125,25 @@ class CustomBottomBar extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: CustomBottomBarItem(
-              currentIndex: index,
-              position: 3,
-              total: isDevelop ? 4 : 3,
-              label: CText(
-                'Account'.i18n,
-                style: tsFloatingLabel.copiedWith(
-                  color: index == 3 ? black : grey5,
-                ),
-              ),
-              onTap: () => onTap!(3),
-              icon: hasBeenOnboarded == true
-                  ? messagingModel.getCopiedRecoveryStatus(
-                      (context, hasCopiedRecoveryKey, child) => CBadge(
-                        count: 1,
-                        showBadge: !hasCopiedRecoveryKey,
-                        child: CAssetImage(
-                          path: ImagePaths.account,
-                          color: index == 3
-                              ? selectedTabIconColor
-                              : unselectedTabIconColor,
-                        ),
-                      ),
-                    )
-                  : CAssetImage(
-                      path: ImagePaths.account,
-                      color: index == 3
-                          ? selectedTabIconColor
-                          : unselectedTabIconColor,
-                    ),
+              currentTabIndex: index,
+              tabIndex: 3,
+              total: totalTabs,
+              label: 'Account'.i18n,
+              onTap: onTap,
+              icon: ImagePaths.account,
+              addBadge: ((child) {
+                if (hasBeenOnboarded != true) {
+                  return child;
+                }
+
+                return messagingModel.getCopiedRecoveryStatus(
+                  (context, hasCopiedRecoveryKey, _) => CBadge(
+                    count: 1,
+                    showBadge: !hasCopiedRecoveryKey,
+                    child: child,
+                  ),
+                );
+              }),
             ),
             label: '',
             tooltip: 'Account'.i18n,
@@ -185,22 +151,12 @@ class CustomBottomBar extends StatelessWidget {
           if (isDevelop)
             BottomNavigationBarItem(
               icon: CustomBottomBarItem(
-                currentIndex: index,
-                position: 4,
-                total: isDevelop ? 4 : 3,
-                label: CText(
-                  'Developer'.i18n,
-                  style: tsFloatingLabel.copiedWith(
-                    color: index == 4 ? black : grey5,
-                  ),
-                ),
-                icon: CAssetImage(
-                  path: ImagePaths.devices,
-                  color: index == 4
-                      ? selectedTabIconColor
-                      : unselectedTabIconColor,
-                ),
-                onTap: () => onTap!(4),
+                currentTabIndex: index,
+                tabIndex: 4,
+                total: totalTabs,
+                label: 'Developer'.i18n,
+                icon: ImagePaths.devices,
+                onTap: onTap,
               ),
               label: '',
               tooltip: 'Developer'.i18n,
@@ -212,12 +168,9 @@ class CustomBottomBar extends StatelessWidget {
 }
 
 class NumUnviewedWrapper extends StatelessWidget {
-  const NumUnviewedWrapper({
-    Key? key,
-    required this.index,
-  }) : super(key: key);
+  const NumUnviewedWrapper(this.child) : super();
 
-  final int index;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -235,10 +188,7 @@ class NumUnviewedWrapper extends StatelessWidget {
         return CBadge(
           showBadge: totalUnviewed > 0,
           count: totalUnviewed,
-          child: CAssetImage(
-            path: ImagePaths.messages,
-            color: index == 0 ? selectedTabIconColor : unselectedTabIconColor,
-          ),
+          child: child,
         );
       },
     );
