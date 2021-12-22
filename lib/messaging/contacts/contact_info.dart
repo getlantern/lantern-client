@@ -209,8 +209,7 @@ class _ContactInfoState extends State<ContactInfo> {
                   ),
                   trailingArray: [
                     TextButton(
-                      onPressed: () async => showConfirmationDialog(
-                        context: context,
+                      onPressed: () async => CDialog(
                         iconPath: ImagePaths.block,
                         title: contact.blocked
                             ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
@@ -249,7 +248,7 @@ class _ContactInfoState extends State<ContactInfo> {
                           );
                           return true;
                         },
-                      ),
+                      ).show(context),
                       child: CText(
                         'block'.i18n.toUpperCase(),
                         style: tsButtonPink,

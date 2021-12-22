@@ -115,7 +115,7 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
   logger.v('Picked a file $file');
 
   final suppressUploadWarning = await replicaModel.getSuppressUploadWarning();
-  if (suppressUploadWarning == true) {
+  if (suppressUploadWarning == true && false) {
     // Immediately proceed to upload screen
     await context.pushRoute(
       ReplicaUploadFileScreen(
@@ -124,8 +124,7 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
     );
   } else {
     // Warn user about dangers of uploading first, then proceed to upload screen
-    showConfirmationDialog(
-      context: context,
+    CDialog(
       title: 'replica_upload_confirmation_title'.i18n,
       explanation: 'replica_upload_confirmation_body'.i18n,
       checkboxLabel: 'dont_show_me_this_again'.i18n,
@@ -141,6 +140,6 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
         );
         return true;
       },
-    );
+    ).show(context);
   }
 }
