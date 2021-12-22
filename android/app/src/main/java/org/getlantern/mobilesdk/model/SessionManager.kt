@@ -198,8 +198,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun forceReplica(): Boolean {
-        // TODO: make this configurable at build time
-        return true;
+        return false;
     }
 
     val replicaAddr: String
