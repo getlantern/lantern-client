@@ -9,8 +9,8 @@ void Function() showConfirmationDialog({
   String? checkboxLabel,
   bool checkboxChecked = false,
   required String agreeText,
-  String dismissText = 'cancel',
-  required Future<void> Function(bool?) agreeAction,
+  String? dismissText,
+  required Future<bool> Function(bool?) agreeAction,
   Future<void> Function()? dismissAction,
   bool barrierDismissible = true,
   Duration? autoDismissAfter,
@@ -111,18 +111,19 @@ void Function() showConfirmationDialog({
                 close();
               },
               child: CText(
-                dismissText.i18n.toUpperCase(),
+                (dismissText ?? 'cancel'.i18n).toUpperCase(),
                 style: tsButtonGrey,
               ),
             ),
             // AGREE
             TextButton(
               onPressed: () async {
-                await agreeAction(checkboxChecked);
-                close();
+                if (await agreeAction(checkboxChecked)) {
+                  close();
+                }
               },
               child: CText(
-                agreeText.i18n.toUpperCase(),
+                agreeText.toUpperCase(),
                 style: tsButtonPink,
               ),
             ),

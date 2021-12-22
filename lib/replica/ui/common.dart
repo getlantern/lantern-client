@@ -14,7 +14,10 @@ var logger = Logger(
 // renderReplicaLongPressMenuItem is used for rendering list/grid items located
 // in the ./ui/replica/listitems directory
 SizedBox renderReplicaLongPressMenuItem(
-    BuildContext context, ReplicaApi api, ReplicaLink link) {
+  BuildContext context,
+  ReplicaApi api,
+  ReplicaLink link,
+) {
   return SizedBox(
     height: 48,
     child: Padding(
@@ -111,7 +114,7 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
   logger.v('Picked a file $file');
 
   final suppressUploadWarning = await replicaModel.getSuppressUploadWarning();
-  if (suppressUploadWarning == true) {
+  if (suppressUploadWarning == true && false) {
     // Immediately proceed to upload screen
     await context.pushRoute(
       ReplicaUploadFileScreen(
@@ -135,6 +138,7 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
             fileToUpload: file,
           ),
         );
+        return true;
       },
     );
   }

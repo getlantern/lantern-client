@@ -104,7 +104,10 @@ class _ContactInfoState extends State<ContactInfo> {
                   header: 'display_name'.i18n,
                   icon: ImagePaths.user,
                   content: !isEditing
-                      ? CText(displayNameController.value.text, style: tsBody1)
+                      ? CText(
+                          displayNameController.value.text,
+                          style: tsBody1.short,
+                        )
                       : TextField(
                           // we don't exactly need the UI and the functionality of CTextField but can change
                           controller: displayNameController,
@@ -202,25 +205,32 @@ class _ContactInfoState extends State<ContactInfo> {
                   header: 'more_options'.i18n,
                   content: CText(
                     'block_user'.i18n,
-                    style: tsSubtitle1Short,
+                    style: tsSubtitle1.short,
                   ),
                   trailingArray: [
                     TextButton(
-                      onPressed: () async => showInfoDialog(
-                        context,
-                        assetPath: ImagePaths.block,
+                      onPressed: () async => showConfirmationDialog(
+                        context: context,
+                        iconPath: ImagePaths.block,
                         title: contact.blocked
                             ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
                             : '${'block'.i18n} ${contact.displayNameOrFallback}?',
-                        des: contact.blocked
+                        explanation: contact.blocked
                             ? 'unblock_info_description'
                                 .i18n
                                 .fill([contact.displayNameOrFallback])
                             : 'block_info_description'.i18n,
-                        checkboxText: contact.blocked
+                        checkboxLabel: contact.blocked
                             ? 'unblock_info_checkbox'.i18n
                             : 'block_info_checkbox'.i18n,
-                        confirmCheckboxAction: () async {
+                        agreeText: contact.blocked
+                            ? 'unblock'.i18n.toUpperCase()
+                            : 'block'.i18n.toUpperCase(),
+                        agreeAction: (confirmedBlocked) async {
+                          if (confirmedBlocked != true) {
+                            return false;
+                          }
+
                           contact.blocked
                               ? await messagingModel
                                   .unblockDirectContact(contact.contactId.id)
@@ -237,11 +247,8 @@ class _ContactInfoState extends State<ContactInfo> {
                                     .i18n
                                     .fill([contact.displayNameOrFallback]),
                           );
+                          return true;
                         },
-                        cancelButtonText: 'cancel'.i18n,
-                        confirmButtonText: contact.blocked
-                            ? 'unblock'.i18n.toUpperCase()
-                            : 'block'.i18n.toUpperCase(),
                       ),
                       child: CText(
                         'block'.i18n.toUpperCase(),
@@ -254,7 +261,7 @@ class _ContactInfoState extends State<ContactInfo> {
                 ListItemFactory.settingsItem(
                   content: CText(
                     'delete_permanently'.i18n,
-                    style: tsSubtitle1Short,
+                    style: tsSubtitle1.short,
                   ),
                   trailingArray: [
                     TextButton(
