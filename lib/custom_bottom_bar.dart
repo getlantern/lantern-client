@@ -61,11 +61,8 @@ class CustomBottomBar extends StatelessWidget {
                 total: totalTabs,
                 label: 'discover'.i18n,
                 icon: ImagePaths.discover,
-                onTap: (idx) {
-                  if (replicaEnabled) {
-                    onTap(idx);
-                  }
-                },
+                disabled: !replicaEnabled,
+                onTap: onTap,
               );
             }),
             label: '',

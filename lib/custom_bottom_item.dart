@@ -7,6 +7,7 @@ class CustomBottomBarItem extends StatelessWidget {
     required this.tabIndex,
     required this.icon,
     required this.label,
+    this.disabled = false,
     this.labelWidget,
     this.addBadge = defaultAddBadge,
     required this.onTap,
@@ -17,6 +18,7 @@ class CustomBottomBarItem extends StatelessWidget {
   final int currentTabIndex;
   final int tabIndex;
   final String label;
+  final bool disabled;
   final String icon;
   final Widget? labelWidget;
   final Widget Function(Widget) addBadge;
@@ -44,10 +46,16 @@ class CustomBottomBarItem extends StatelessWidget {
                     currentTabIndex != 0 ? borderRadius : 0,
                   ),
                   topEnd: Radius.circular(
-                      currentTabIndex != total ? borderRadius : 0),
+                    currentTabIndex != total ? borderRadius : 0,
+                  ),
                 ),
               ),
-              onTap: (() => onTap(tabIndex)),
+              onTap: (() {
+                if (disabled) {
+                  return;
+                }
+                onTap(tabIndex);
+              }),
               child: Container(
                 decoration: ShapeDecoration(
                   color: tabIndex == currentTabIndex
@@ -99,9 +107,11 @@ class CustomBottomBarItem extends StatelessWidget {
                       child: addBadge(
                         CAssetImage(
                           path: icon,
-                          color: active
-                              ? selectedTabIconColor
-                              : unselectedTabIconColor,
+                          color: disabled
+                              ? grey4
+                              : active
+                                  ? selectedTabIconColor
+                                  : unselectedTabIconColor,
                         ),
                       ),
                     ),
@@ -112,7 +122,11 @@ class CustomBottomBarItem extends StatelessWidget {
                           CText(
                             label,
                             style: tsFloatingLabel.copiedWith(
-                              color: active ? black : grey5,
+                              color: disabled
+                                  ? grey4
+                                  : active
+                                      ? black
+                                      : grey5,
                             ),
                           ),
                           labelWidget ?? const SizedBox(),
