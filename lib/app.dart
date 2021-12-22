@@ -1,4 +1,3 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging.dart';

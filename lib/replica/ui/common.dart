@@ -30,8 +30,8 @@ SizedBox renderReplicaLongPressMenuItem(
           ListItemFactory.focusMenuItem(
             icon: ImagePaths.file_download,
             content: 'download'.i18n,
-            onTap: () {
-              api.download(link);
+            onTap: () async {
+              await api.download(link);
               BotToast.showText(text: 'download_started'.i18n);
               Navigator.of(context).pop();
             },
@@ -82,6 +82,7 @@ Widget renderReplicaMediaViewScreen({
       IconButton(
         onPressed: () async {
           await api.download(link);
+          BotToast.showText(text: 'download_started'.i18n);
         },
         icon: CAssetImage(
           size: 20,
@@ -114,7 +115,7 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
   logger.v('Picked a file $file');
 
   final suppressUploadWarning = await replicaModel.getSuppressUploadWarning();
-  if (suppressUploadWarning == true && false) {
+  if (suppressUploadWarning == true) {
     // Immediately proceed to upload screen
     await context.pushRoute(
       ReplicaUploadFileScreen(
