@@ -264,26 +264,17 @@ class _ContactInfoState extends State<ContactInfo> {
                   ),
                   trailingArray: [
                     TextButton(
-                      onPressed: () async => showInfoDialog(
-                        context,
+                      onPressed: () async => CDialog(
                         title: '${'delete_contact'.i18n}?',
-                        des: 'delete_info_description'.i18n,
-                        assetPath: ImagePaths.delete,
-                        cancelButtonText: 'cancel'.i18n,
-                        confirmButtonText: 'delete_contact'.i18n,
-                        confirmButtonAction: () async {
+                        explanation: 'delete_info_description'.i18n,
+                        iconPath: ImagePaths.delete,
+                        dismissText: 'cancel'.i18n,
+                        agreeText: 'delete_contact'.i18n,
+                        agreeAction: (_) async {
                           context.loaderOverlay.show(widget: spinner);
                           try {
                             await messagingModel
                                 .deleteDirectContact(contact.contactId.id);
-                          } catch (e, s) {
-                            showErrorDialog(
-                              context,
-                              e: e,
-                              s: s,
-                              des: 'error_delete_contact'.i18n,
-                            );
-                          } finally {
                             showSnackbar(
                               context: context,
                               content: 'contact_was_deleted'
@@ -292,9 +283,21 @@ class _ContactInfoState extends State<ContactInfo> {
                             );
                             context.loaderOverlay.hide();
                             context.router.popUntilRoot();
+                          } catch (e, s) {
+                            showErrorDialog(
+                              context,
+                              e: e,
+                              s: s,
+                              des: 'error_delete_contact'.i18n,
+                            );
+                          } finally {
+                            context.loaderOverlay.hide();
+                            // Always return false so that dialog doesn't close
+                            // itself.
+                            return false;
                           }
                         },
-                      ),
+                      ).show(context),
                       child: CText(
                         'delete_contact'.i18n.toUpperCase(),
                         style: tsButtonPink,

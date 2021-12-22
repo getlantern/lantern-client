@@ -115,7 +115,7 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
   logger.v('Picked a file $file');
 
   final suppressUploadWarning = await replicaModel.getSuppressUploadWarning();
-  if (suppressUploadWarning == true && false) {
+  if (suppressUploadWarning == true) {
     // Immediately proceed to upload screen
     await context.pushRoute(
       ReplicaUploadFileScreen(
