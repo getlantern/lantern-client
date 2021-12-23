@@ -394,7 +394,7 @@ do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		assembleProdDebug
 
 pubget:
-	@cd $(BASE_MOBILE_DIR) && flutter pub get
+	@flutter pub get
 
 $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	@$(call check-go-version) && \
