@@ -34,66 +34,70 @@ class CustomBottomBar extends StatelessWidget {
                     hasBeenOnboarded != true &&
                     (now.millisecondsSinceEpoch - ts) < oneWeekInMillis,
                 builder: (BuildContext context, bool showNewBadge) =>
-                    CustomBottomBarItem(
-                  currentTabIndex: index,
-                  tabIndex: 0,
-                  total: totalTabs,
-                  label: 'chats'.i18n,
-                  icon: ImagePaths.messages,
-                  onTap: onTap,
-                  addBadge: (child) {
-                    if (!showNewBadge) {
-                      return messagingModel.contactsByActivity(
-                        builder: (
-                          context,
-                          Iterable<PathAndValue<Contact>> contacts,
-                          Widget? _,
-                        ) {
-                          final totalUnviewed = contacts.isNotEmpty
-                              ? contacts
-                                  .map(
-                                    (e) => e.value.isAccepted()
-                                        ? e.value.numUnviewedMessages
-                                        : 0,
-                                  )
-                                  .reduce((value, element) => value + element)
-                              : 0;
-                          return CBadge(
-                            showBadge: totalUnviewed > 0,
-                            count: totalUnviewed,
-                            child: child,
-                          );
-                        },
-                      );
-                    }
+                    sessionModel.chatEnabled(
+                  (context, chatEnabled, _) => CustomBottomBarItem(
+                    currentTabIndex: index,
+                    tabIndex: 0,
+                    total: totalTabs,
+                    label: 'chats'.i18n,
+                    icon: ImagePaths.messages,
+                    onTap: onTap,
+                    disabled: !chatEnabled,
+                    addBadge: (child) {
+                      if (!chatEnabled || !showNewBadge) {
+                        return messagingModel.contactsByActivity(
+                          builder: (
+                            context,
+                            Iterable<PathAndValue<Contact>> contacts,
+                            Widget? _,
+                          ) {
+                            final totalUnviewed = contacts.isNotEmpty
+                                ? contacts
+                                    .map(
+                                      (e) => e.value.isAccepted()
+                                          ? e.value.numUnviewedMessages
+                                          : 0,
+                                    )
+                                    .reduce((value, element) => value + element)
+                                : 0;
+                            return CBadge(
+                              showBadge: totalUnviewed > 0,
+                              count: totalUnviewed,
+                              child: child,
+                            );
+                          },
+                        );
+                      }
 
-                    return CBadge(
-                      end: -15,
-                      showBadge: true,
-                      customBadge: Container(
-                        padding: const EdgeInsetsDirectional.only(
-                          top: 2.0,
-                          bottom: 2.0,
-                          start: 5.0,
-                          end: 5.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: blue3,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(80.0),
+                      return CBadge(
+                        end: -20,
+                        top: -10,
+                        showBadge: true,
+                        customBadge: Container(
+                          padding: const EdgeInsetsDirectional.only(
+                            top: 2.0,
+                            bottom: 2.0,
+                            start: 5.0,
+                            end: 5.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: blue3,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(80.0),
+                            ),
+                          ),
+                          child: Text(
+                            'new'.i18n.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: white,
+                            ),
                           ),
                         ),
-                        child: Text(
-                          'new'.i18n.toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: white,
-                          ),
-                        ),
-                      ),
-                      child: child,
-                    );
-                  },
+                        child: child,
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
