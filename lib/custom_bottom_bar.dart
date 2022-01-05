@@ -68,8 +68,7 @@ class CustomBottomBar extends StatelessWidget {
                     }
 
                     return CBadge(
-                      end: -20,
-                      top: -10,
+                      end: -15,
                       showBadge: true,
                       customBadge: Container(
                         padding: const EdgeInsetsDirectional.only(
