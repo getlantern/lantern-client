@@ -100,23 +100,27 @@ class CustomBottomBarItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: addBadge(
-                        CAssetImage(
-                          path: icon,
-                          color: disabled
-                              ? grey4
-                              : active
-                                  ? selectedTabIconColor
-                                  : unselectedTabIconColor,
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 12,
+                    bottom: 12,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: addBadge(
+                          CAssetImage(
+                            path: icon,
+                            color: disabled
+                                ? grey4
+                                : active
+                                    ? selectedTabIconColor
+                                    : unselectedTabIconColor,
+                          ),
                         ),
                       ),
-                    ),
-                    Flexible(
-                      child: Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CText(
@@ -132,8 +136,8 @@ class CustomBottomBarItem extends StatelessWidget {
                           labelWidget ?? const SizedBox(),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -28,9 +28,83 @@ class CustomBottomBar extends StatelessWidget {
         onTap: onTap,
         items: [
           BottomNavigationBarItem(
+            icon: messagingModel.getFirstShownTryLanternChatModalTS(
+              (context, ts, _) => NowBuilder(
+                calculate: (now) =>
+                    hasBeenOnboarded != true &&
+                    (now.millisecondsSinceEpoch - ts) < oneWeekInMillis,
+                builder: (BuildContext context, bool showNewBadge) =>
+                    CustomBottomBarItem(
+                  currentTabIndex: index,
+                  tabIndex: 0,
+                  total: totalTabs,
+                  label: 'chats'.i18n,
+                  icon: ImagePaths.messages,
+                  onTap: onTap,
+                  addBadge: (child) {
+                    if (!showNewBadge) {
+                      return messagingModel.contactsByActivity(
+                        builder: (
+                          context,
+                          Iterable<PathAndValue<Contact>> contacts,
+                          Widget? _,
+                        ) {
+                          final totalUnviewed = contacts.isNotEmpty
+                              ? contacts
+                                  .map(
+                                    (e) => e.value.isAccepted()
+                                        ? e.value.numUnviewedMessages
+                                        : 0,
+                                  )
+                                  .reduce((value, element) => value + element)
+                              : 0;
+                          return CBadge(
+                            showBadge: totalUnviewed > 0,
+                            count: totalUnviewed,
+                            child: child,
+                          );
+                        },
+                      );
+                    }
+
+                    return CBadge(
+                      end: -20,
+                      top: -10,
+                      showBadge: true,
+                      customBadge: Container(
+                        padding: const EdgeInsetsDirectional.only(
+                          top: 2.0,
+                          bottom: 2.0,
+                          start: 5.0,
+                          end: 5.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: blue3,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(80.0),
+                          ),
+                        ),
+                        child: Text(
+                          'new'.i18n.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: white,
+                          ),
+                        ),
+                      ),
+                      child: child,
+                    );
+                  },
+                ),
+              ),
+            ),
+            label: '',
+            tooltip: 'chats'.i18n,
+          ),
+          BottomNavigationBarItem(
             icon: CustomBottomBarItem(
               currentTabIndex: index,
-              tabIndex: 0,
+              tabIndex: 1,
               total: totalTabs,
               label: 'VPN'.i18n,
               icon: ImagePaths.key,
@@ -57,7 +131,7 @@ class CustomBottomBar extends StatelessWidget {
               final replicaEnabled = replicaAddr != '';
               return CustomBottomBarItem(
                 currentTabIndex: index,
-                tabIndex: 1,
+                tabIndex: 2,
                 total: totalTabs,
                 label: 'discover'.i18n,
                 icon: ImagePaths.discover,
@@ -71,12 +145,12 @@ class CustomBottomBar extends StatelessWidget {
           BottomNavigationBarItem(
             icon: CustomBottomBarItem(
               currentTabIndex: index,
-              tabIndex: 2,
+              tabIndex: 3,
               total: totalTabs,
               label: 'Account'.i18n,
               onTap: onTap,
               icon: ImagePaths.account,
-              addBadge: ((child) {
+              addBadge: (child) {
                 if (hasBeenOnboarded != true) {
                   return child;
                 }
@@ -88,7 +162,7 @@ class CustomBottomBar extends StatelessWidget {
                     child: child,
                   ),
                 );
-              }),
+              },
             ),
             label: '',
             tooltip: 'Account'.i18n,
@@ -97,7 +171,7 @@ class CustomBottomBar extends StatelessWidget {
             BottomNavigationBarItem(
               icon: CustomBottomBarItem(
                 currentTabIndex: index,
-                tabIndex: 3,
+                tabIndex: 4,
                 total: totalTabs,
                 label: 'Developer'.i18n,
                 icon: ImagePaths.devices,
@@ -108,34 +182,6 @@ class CustomBottomBar extends StatelessWidget {
             ),
         ],
       ),
-    );
-  }
-}
-
-class NumUnviewedWrapper extends StatelessWidget {
-  const NumUnviewedWrapper(this.child) : super();
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    // iterate over contacts by activity (most recent conversations)
-    return messagingModel.contactsByActivity(
-      builder:
-          (context, Iterable<PathAndValue<Contact>> contacts, Widget? child) {
-        final totalUnviewed = contacts.isNotEmpty
-            ? contacts
-                .map(
-                  (e) => e.value.isAccepted() ? e.value.numUnviewedMessages : 0,
-                )
-                .reduce((value, element) => value + element)
-            : 0;
-        return CBadge(
-          showBadge: totalUnviewed > 0,
-          count: totalUnviewed,
-          child: child,
-        );
-      },
     );
   }
 }

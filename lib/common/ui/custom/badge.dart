@@ -3,7 +3,7 @@ import 'package:lantern/common/common.dart';
 
 class CBadge extends StatelessWidget {
   final int count;
-  final Widget? child;
+  final Widget child;
   final double fontSize;
   final bool showBadge;
   final double? end;
@@ -13,7 +13,7 @@ class CBadge extends StatelessWidget {
 
   CBadge({
     this.count = 0,
-    this.child,
+    required this.child,
     this.fontSize = 10.0,
     this.showBadge = false,
     this.end = -5,
@@ -25,6 +25,10 @@ class CBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!showBadge) {
+      return child;
+    }
+
     return Badge(
       padding: (customPadding != null)
           ? customPadding!
@@ -40,7 +44,6 @@ class CBadge extends StatelessWidget {
         end: end,
         top: top,
       ),
-      showBadge: showBadge,
       animationType: BadgeAnimationType.fade,
       elevation: 0,
       // no drop-shadow

@@ -3,6 +3,8 @@ import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router_helpers.dart';
 import 'package:lantern/custom_bottom_bar.dart';
+import 'package:lantern/messaging/chats.dart';
+import 'package:lantern/messaging/onboarding/welcome.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/replica/ui/replica_tab.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
@@ -138,12 +140,24 @@ class _HomePageState extends State<HomePage> {
   Widget buildBody(int tabIndex, bool? isOnboarded) {
     switch (tabIndex) {
       case 0:
-        return VPNTab();
+        return isOnboarded == null
+            // While onboarding status is not yet know, show a white container
+            // that matches the background of our usual pages.
+            ? Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(color: white),
+              )
+            : isOnboarded
+                ? Chats()
+                : Welcome();
       case 1:
-        return ReplicaTab();
+        return VPNTab();
       case 2:
-        return AccountTab();
+        return ReplicaTab();
       case 3:
+        return AccountTab();
+      case 4:
         return DeveloperSettingsTab();
       default:
         assert(false, 'unrecognized tab index $tabIndex');
