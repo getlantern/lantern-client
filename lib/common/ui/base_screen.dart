@@ -134,14 +134,17 @@ class ConnectivityWarning extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: !sessionModel.proxyAvailable.value
-          ? () => showInfoDialog(
-                context,
+          ? () => CDialog(
                 title: 'connection_error'.i18n,
-                des: 'connection_error_des'.i18n,
-                cancelButtonText: 'cancel'.i18n,
-                confirmButtonText: 'connection_error_button'.i18n,
-                confirmButtonAction: () => context.router.push(Settings()),
-              )
+                description: 'connection_error_des'.i18n,
+                agreeText: 'connection_error_button'.i18n,
+                agreeAction: () async {
+                  LanternNavigator.startScreen(
+                    LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE,
+                  );
+                  return true;
+                },
+              ).show(context)
           : null,
       child: Container(
         width: MediaQuery.of(context).size.width,

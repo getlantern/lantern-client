@@ -1,7 +1,11 @@
 package org.getlantern.lantern
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.os.Process
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -73,9 +77,16 @@ fun Activity.openHome() {
 
 fun Activity.restartApp() {
     val mStartActivity = Intent(this, MainActivity::class.java)
-    val mainIntent = Intent.makeRestartActivityTask(mStartActivity.component)
-    startActivity(mainIntent)
-    Runtime.getRuntime().exit(0) // see https://stackoverflow.com/a/46848226
+    val mPendingIntentId = 123456
+    val mPendingIntent: PendingIntent = PendingIntent.getActivity(
+        this,
+        mPendingIntentId,
+        mStartActivity,
+        PendingIntent.FLAG_CANCEL_CURRENT
+    )
+    val mgr: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    mgr.set(AlarmManager.RTC, java.lang.System.currentTimeMillis() + 100, mPendingIntent)
+    Process.killProcess(Process.myPid());
 }
 
 fun Activity.openCheckOutReseller() {

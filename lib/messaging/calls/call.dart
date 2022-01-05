@@ -45,17 +45,6 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
           .call(
         peerId: widget.contact.contactId.id,
         media: 'audio',
-        onError: () {
-          showInfoDialog(
-            context,
-            title: 'unable_to_complete_call'.i18n,
-            des: 'please_try_again'.i18n,
-            confirmButtonText: 'close'.i18n,
-            confirmButtonAction: () async {
-              await signaling.bye(session!);
-            },
-          );
-        },
       )
           .then((value) {
         setState(() => session = value);

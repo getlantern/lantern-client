@@ -77,8 +77,6 @@ export 'ui/round_button.dart';
 export 'ui/search_field.dart';
 export 'ui/show_bottom_modal.dart';
 export 'ui/show_bottom_modal.dart';
-export 'ui/show_error_dialog.dart';
-export 'ui/show_info_dialog.dart';
 export 'ui/show_snackbar.dart';
 export 'ui/text_highlighter.dart';
 export 'ui/text_styles.dart';

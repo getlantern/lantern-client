@@ -147,11 +147,11 @@ class ContactConnectionCard extends StatelessWidget {
                 introduction.to.id,
               );
             } catch (e, s) {
-              showErrorDialog(
+              CDialog.showError(
                 context,
-                e: e,
-                s: s,
-                des: 'introductions_error_description_accepting'.i18n,
+                error: e,
+                stackTrace: s,
+                description: 'introductions_error_description_accepting'.i18n,
               );
             } finally {
               await context.router.pop();
@@ -163,31 +163,30 @@ class ContactConnectionCard extends StatelessWidget {
         ListItemFactory.bottomItem(
           icon: ImagePaths.cancel,
           content: 'reject'.i18n,
-          onTap: () => showInfoDialog(
-            context,
-            title: 'introductions_reject_title'.i18n,
-            des: 'introductions_reject_content'.i18n,
-            cancelButtonText: 'cancel'.i18n,
-            confirmButtonText: 'reject'.i18n,
-            confirmButtonAction: () async {
+          onTap: () => CDialog(
+            title: 'introduction_reject_title'.i18n,
+            description: 'introduction_reject_content'.i18n,
+            agreeText: 'reject'.i18n,
+            agreeAction: () async {
               try {
                 // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
                 await model.rejectIntroduction(
                   contact.contactId.id,
                   introduction.to.id,
                 );
-              } catch (e, s) {
-                showErrorDialog(
-                  context,
-                  e: e,
-                  s: s,
-                  des: 'introductions_error_description_rejecting'.i18n,
-                );
-              } finally {
                 await context.router.pop();
+                return true;
+              } catch (e, s) {
+                CDialog.showError(
+                  context,
+                  error: e,
+                  stackTrace: s,
+                  description: 'introductions_error_description_rejecting'.i18n,
+                );
+                return false;
               }
             },
-          ),
+          ).show(context),
           trailingArray: [],
         ),
       ],
