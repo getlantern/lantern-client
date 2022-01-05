@@ -103,21 +103,16 @@ class Introductions extends StatelessWidget {
                                             trailingArray: [
                                               //* REJECT INTRO
                                               TextButton(
-                                                onPressed: () => showInfoDialog(
-                                                  context,
+                                                onPressed: () => CDialog(
                                                   title:
-                                                      'introductions_reject_title'
+                                                      'introduction_reject_title'
                                                           .i18n,
-                                                  des:
-                                                      'introductions_reject_content'
+                                                  description:
+                                                      'introduction_reject_content'
                                                           .i18n,
                                                   // variable names are a bit confusing here: we are using the AlertDialog which by default has a [Reject vs Accept] field, but in this case these correspond to [Cancel vs Reject]
-                                                  cancelButtonText:
-                                                      'cancel'.i18n,
-                                                  confirmButtonText:
-                                                      'reject'.i18n,
-                                                  confirmButtonAction:
-                                                      () async {
+                                                  agreeText: 'reject'.i18n,
+                                                  agreeAction: () async {
                                                     try {
                                                       // model.rejectIntroduction(from the person who is making the intro, to the person who they want to connect us to)
                                                       await messagingModel
@@ -127,26 +122,20 @@ class Introductions extends StatelessWidget {
                                                         value
                                                             .introduction.to.id,
                                                       );
-                                                    } catch (e) {
-                                                      showInfoDialog(
+                                                      return true;
+                                                    } catch (e, s) {
+                                                      CDialog.showError(
                                                         context,
-                                                        title: 'error'.i18n,
-                                                        des:
-                                                            'introductions_error_description'
+                                                        error: e,
+                                                        stackTrace: s,
+                                                        description:
+                                                            'introductions_error_description_rejecting'
                                                                 .i18n,
-                                                        assetPath:
-                                                            ImagePaths.alert,
-                                                        confirmButtonText:
-                                                            'OK'.i18n,
-                                                        confirmButtonAction:
-                                                            () async =>
-                                                                await context
-                                                                    .router
-                                                                    .pop(),
                                                       );
+                                                      return false;
                                                     }
                                                   },
-                                                ),
+                                                ).show(context),
                                                 child: CText(
                                                   'reject'.i18n.toUpperCase(),
                                                   style: tsButtonGrey,
@@ -162,22 +151,14 @@ class Introductions extends StatelessWidget {
                                                       introductor.contactId.id,
                                                       value.introduction.to.id,
                                                     );
-                                                  } catch (e) {
-                                                    showInfoDialog(
+                                                  } catch (e, s) {
+                                                    CDialog.showError(
                                                       context,
-                                                      title: 'error'.i18n,
-                                                      des:
+                                                      error: e,
+                                                      stackTrace: s,
+                                                      description:
                                                           'introductions_error_description_accepting'
                                                               .i18n,
-                                                      assetPath:
-                                                          ImagePaths.alert,
-                                                      confirmButtonText:
-                                                          'OK'.i18n,
-                                                      confirmButtonAction:
-                                                          () async =>
-                                                              await context
-                                                                  .router
-                                                                  .pop(),
                                                     );
                                                   } finally {
                                                     showSnackbar(

@@ -265,9 +265,6 @@ msgstr "Cancel"
 msgid "reject"
 msgstr "Reject"
 
-msgid "info_dialog_confirm"
-msgstr "OK"
-
 msgid "copied"
 msgstr "Copied!"
 
@@ -508,10 +505,10 @@ msgstr "Accept Introduction to %s"
 msgid "introductions_info"
 msgstr "Both parties must accept the introduction to chat with each other. Introductions disappear after 7 days if no action is taken."
 
-msgid "introductions_reject_title"
-msgstr "Reject Introductions"
+msgid "introduction_reject_title"
+msgstr "Reject Introduction"
 
-msgid "introductions_reject_content"
+msgid "introduction_reject_content"
 msgstr "You will not be able to message this contact if you reject the introduction."
 
 msgid "introductions_error_description_rejecting"
@@ -651,9 +648,6 @@ msgstr "%s has been blocked."
 
 msgid "contact_was_unblocked"
 msgstr "%s has been unblocked."
-
-msgid "close"
-msgstr "Close"
 
 msgid "dismiss"
 msgstr "Dismiss"
@@ -924,9 +918,6 @@ msgstr "Touch here to open call"
 
 msgid "in_call_with"
 msgstr "In call with %s"
-
-msgid "unable_to_complete_call"
-msgstr "Unable to complete call"
 
 msgid "undo_verification"
 msgstr "Undo verification"

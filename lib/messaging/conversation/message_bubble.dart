@@ -257,17 +257,18 @@ class MessageBubble extends StatelessWidget {
                                     ) async {
                                       if (href != null &&
                                           await canLaunch(href)) {
-                                        showInfoDialog(
-                                          context,
+                                        CDialog(
                                           title: 'open_url'.i18n,
-                                          des: 'are_you_sure_you_want_to_open'
-                                              .fill([href]),
-                                          cancelButtonText: 'cancel'.i18n,
-                                          confirmButtonText: 'continue'.i18n,
-                                          confirmButtonAction: () async {
+                                          description:
+                                              'are_you_sure_you_want_to_open'
+                                                  .i18n
+                                                  .fill([href]),
+                                          agreeText: 'continue'.i18n,
+                                          agreeAction: () async {
                                             await launch(href);
+                                            return true;
                                           },
-                                        );
+                                        ).show(context);
                                       }
                                     },
                                     styleSheet: MarkdownStyleSheet(
@@ -492,35 +493,31 @@ class MessageBubble extends StatelessWidget {
   }
 
   void deleteForMe(BuildContext context, MessagingModel model) {
-    showInfoDialog(
-      context,
-      dialogKey: const ValueKey('deleteForMeDialog'),
-      assetPath: ImagePaths.delete,
+    CDialog(
+      iconPath: ImagePaths.delete,
       title: 'delete_for_me'.i18n,
-      des: 'delete_for_me_explanation'.i18n,
-      cancelButtonText: 'cancel'.i18n,
-      confirmButtonText: 'delete'.i18n,
-      confirmButtonAction: () async {
+      description: 'delete_for_me_explanation'.i18n,
+      agreeText: 'delete'.i18n,
+      agreeAction: () async {
         await model.deleteLocally(message);
         Navigator.pop(context);
+        return true;
       },
-    );
+    ).show(context);
   }
 
   void deleteForEveryone(BuildContext context, MessagingModel model) {
-    showInfoDialog(
-      context,
-      dialogKey: const ValueKey('deleteForEveryoneDialog'),
-      assetPath: ImagePaths.delete,
+    CDialog(
+      iconPath: ImagePaths.delete,
       title: 'delete_for_everyone'.i18n,
-      des: 'delete_for_everyone_explanation'.i18n,
-      cancelButtonText: 'cancel'.i18n,
-      confirmButtonText: 'delete'.i18n,
-      confirmButtonAction: () async {
+      description: 'delete_for_everyone_explanation'.i18n,
+      agreeText: 'delete'.i18n,
+      agreeAction: () async {
         await model.deleteGlobally(message);
         Navigator.pop(context);
+        return true;
       },
-    );
+    ).show(context);
   }
 
   double maxBubbleWidth(BuildContext context) =>

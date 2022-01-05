@@ -125,11 +125,11 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
     // Warn user about dangers of uploading first, then proceed to upload screen
     CDialog(
       title: 'replica_upload_confirmation_title'.i18n,
-      explanation: 'replica_upload_confirmation_body'.i18n,
+      description: 'replica_upload_confirmation_body'.i18n,
       checkboxLabel: 'dont_show_me_this_again'.i18n,
       agreeText: 'replica_upload_confirmation_agree'.i18n,
-      agreeAction: (dontShowAgain) async {
-        if (dontShowAgain == true) {
+      maybeAgreeAction: (doNotShowAgain) async {
+        if (doNotShowAgain == true) {
           await replicaModel.setSuppressUploadWarning(true);
         }
         await context.pushRoute(

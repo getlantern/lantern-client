@@ -77,15 +77,11 @@ void showVerificationOptions({
             await messagingModel
                 .dismissVerificationReminder(contact.contactId.id);
             await bottomModalContext.router.pop();
-            showInfoDialog(
-              bottomModalContext,
+            CDialog(
               title: 'contact_verification'.i18n,
-              assetPath: ImagePaths.verified_user,
-              des: 'contact_verification_description'.i18n,
-              confirmButtonText: 'info_dialog_confirm'.i18n,
-              confirmButtonAction: () async =>
-                  await bottomModalContext.router.pop(),
-            );
+              iconPath: ImagePaths.verified_user,
+              description: 'contact_verification_description'.i18n,
+            ).show(bottomModalContext);
           },
         ),
     ],
