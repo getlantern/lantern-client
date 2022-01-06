@@ -9,13 +9,11 @@ class Settings extends StatelessWidget {
   final packageInfo = PackageInfo.fromPlatform();
 
   void openInfoProxyAll(BuildContext context) {
-    showInfoDialog(
+    CDialog.showInfo(
       context,
       title: 'proxy_all'.i18n,
-      des: 'description_proxy_all_dialog'.i18n,
-      assetPath: ImagePaths.key,
-      confirmButtonText: 'OK'.i18n,
-      confirmButtonAction: () async => await context.router.pop(),
+      description: 'description_proxy_all_dialog'.i18n,
+      iconPath: ImagePaths.key,
     );
   }
 
@@ -85,26 +83,26 @@ class Settings extends StatelessWidget {
                 ListItemFactory.settingsItem(
               header: 'VPN'.i18n,
               icon: ImagePaths.key,
-              content: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CText(
-                    'proxy_everything_is'
-                        .i18n
-                        .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
-                    style: tsSubtitle1,
-                  ),
-                  GestureDetector(
-                    onTap: () => openInfoProxyAll(context),
-                    child: const Padding(
+              content: CInkWell(
+                onTap: () => openInfoProxyAll(context),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CText(
+                      'proxy_everything_is'
+                          .i18n
+                          .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
+                      style: tsSubtitle1,
+                    ),
+                    const Padding(
                       padding: EdgeInsetsDirectional.only(start: 4.0),
                       child: CAssetImage(
                         path: ImagePaths.info,
                         size: 12,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               trailingArray: [
                 FlutterSwitch(
