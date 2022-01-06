@@ -34,15 +34,19 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     // Figure out where to start with our navigation
-    messagingModel
-        .shouldShowTryLanternChatModal()
-        .then((shouldShowModal) async {
-      if (shouldShowModal) {
-        // open VPN tab
-        await sessionModel.setTabIndex(lookupTabIndex('VPN'));
-        // show Try Lantern Chat dialog
-        await context.router
-            .push(FullScreenDialogPage(widget: TryLanternChat()));
+    sessionModel.getChatEnabled().then((chatEnabled) {
+      if (chatEnabled) {
+        messagingModel
+            .shouldShowTryLanternChatModal()
+            .then((shouldShowModal) async {
+          if (shouldShowModal) {
+            // open VPN tab
+            await sessionModel.setTabIndex(lookupTabIndex('VPN'));
+            // show Try Lantern Chat dialog
+            await context.router
+                .push(FullScreenDialogPage(widget: TryLanternChat()));
+          }
+        });
       }
     });
 

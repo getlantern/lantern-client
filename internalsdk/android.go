@@ -91,6 +91,7 @@ type Session interface {
 	IsProUser() (bool, error)
 	SetReplicaAddr(string)
 	ForceReplica() bool
+	SetChatEnabled(bool)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -120,6 +121,7 @@ type panickingSession interface {
 	Currency() string
 	DeviceOS() string
 	IsProUser() bool
+	SetChatEnabled(bool)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -268,6 +270,10 @@ func (s *panickingSessionImpl) IsProUser() bool {
 	result, err := s.wrapped.IsProUser()
 	panicIfNecessary(err)
 	return result
+}
+
+func (s *panickingSessionImpl) SetChatEnabled(enabled bool) {
+	s.wrapped.SetChatEnabled(enabled)
 }
 
 func (s *panickingSessionImpl) SerializedInternalHeaders() string {
@@ -580,20 +586,26 @@ func run(configDir, locale string,
 		UserConfig: userConfig,
 	}
 
-	// Check whether Replica should be enabled anytime that the global config changes or our geolocation info changed,
+	// Check whether features should be enabled anytime that the global config changes or our geolocation info changed,
 	// and also check right at start.
 	//
-	// TODO: should also check if our user info changes. Right now we don't segment Replica on users so it's not urgent.
+	// TODO: should also check if our user info changes. Right now we don't segment on users so it's not urgent.
 	// TODO: a lot of this feature enabled stuff, including checking whether enabled features have changed and permanently
 	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
+	checkFeatures := func() {
+		replicaServer.CheckEnabled()
+		chatEnabled := runner.FeatureEnabled("chat")
+		log.Debugf("Chat enabled? %v", chatEnabled)
+		session.SetChatEnabled(chatEnabled)
+	}
 	session.Wrapped().SetReplicaAddr("") // start off with no Replica address
 	go func() {
 		for {
 			select {
 			case <-globalConfigChanged:
-				replicaServer.CheckEnabled()
+				checkFeatures()
 			case <-geoRefreshed:
-				replicaServer.CheckEnabled()
+				checkFeatures()
 			}
 		}
 	}()
