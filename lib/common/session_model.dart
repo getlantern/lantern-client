@@ -180,4 +180,18 @@ class SessionModel extends Model {
     }
     return replicaAddr;
   }
+
+  Widget chatEnabled(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>(
+      'chatEnabled',
+      defaultValue: false,
+      builder: builder,
+    );
+  }
+
+  Future<bool> getChatEnabled() async {
+    return methodChannel
+        .invokeMethod('get', 'chatEnabled')
+        .then((enabled) => enabled == true);
+  }
 }

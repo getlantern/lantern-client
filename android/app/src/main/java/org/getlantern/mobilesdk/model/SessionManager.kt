@@ -209,6 +209,11 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putString(REPLICA_ADDR, replicaAddr ?: "").apply()
     }
 
+    override fun setChatEnabled(enabled: Boolean) {
+        Logger.d(TAG, "Setting $CHAT_ENABLED to $enabled")
+        prefs.edit().putBoolean(CHAT_ENABLED, enabled).apply()
+    }
+
     override fun appVersion(): String {
         return appVersion
     }
@@ -441,6 +446,7 @@ abstract class SessionManager(application: Application) : Session {
         val PLAY_VERSION = "playVersion"
 
         private const val REPLICA_ADDR = "replicaAddr"
+        private const val CHAT_ENABLED = "chatEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),

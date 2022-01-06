@@ -59,209 +59,223 @@ class _ChatsState extends State<Chats> {
 
   @override
   Widget build(BuildContext context) {
+    return sessionModel.chatEnabled(
+        (context, chatEnabled, _) => doBuild(context, !chatEnabled));
+  }
+
+  Widget doBuild(BuildContext context, bool chatDisabled) {
     return BaseScreen(
       title: 'chats'.i18n,
-      actions: [
-        // * Notifications icon
-        messagingModel.contactsByActivity(
-          builder: (
-            context,
-            Iterable<PathAndValue<Contact>> _contacts,
-            Widget? child,
-          ) {
-            final requests = _contacts
-                .where((element) => element.value.isUnaccepted())
-                .toList();
+      actions: chatDisabled
+          ? []
+          : [
+              // * Notifications icon
+              messagingModel.contactsByActivity(
+                builder: (
+                  context,
+                  Iterable<PathAndValue<Contact>> _contacts,
+                  Widget? child,
+                ) {
+                  final requests = _contacts
+                      .where((element) => element.value.isUnaccepted())
+                      .toList();
 
-            if (requests.isEmpty) {
-              return const SizedBox();
-            }
+                  if (requests.isEmpty) {
+                    return const SizedBox();
+                  }
 
-            // 1. get most recent unaccepted contact
-            // 2. get most recent message TS from that contact
-            final mostRecentUnacceptedTS = requests
-                .firstWhere((element) => element.value.isUnaccepted())
-                .value
-                .mostRecentMessageTs
-                .toInt();
+                  // 1. get most recent unaccepted contact
+                  // 2. get most recent message TS from that contact
+                  final mostRecentUnacceptedTS = requests
+                      .firstWhere((element) => element.value.isUnaccepted())
+                      .value
+                      .mostRecentMessageTs
+                      .toInt();
 
-            return messagingModel.getLastDismissedNotificationTS(
-              (context, mostRecentNotifTS, child) => requests.isNotEmpty &&
-                      (mostRecentUnacceptedTS > mostRecentNotifTS)
-                  ? RoundButton(
-                      onPressed: () => handleReminder(_contacts),
-                      backgroundColor: transparent,
-                      icon: CBadge(
-                        count: requests.length,
-                        showBadge: requests.isNotEmpty,
-                        child:
-                            const CAssetImage(path: ImagePaths.notifications),
-                      ),
-                    )
-                  : const SizedBox(),
-            );
-          },
-        ),
-        // * Search
-        IconButton(
-          visualDensity: VisualDensity.compact,
-          onPressed: () async => await showSearch(
-            context: context,
-            query: '',
-            delegate: CustomSearchDelegate(searchMessages: true),
-          ),
-          icon: const CAssetImage(path: ImagePaths.search),
-        ),
-        // * Bottom modal
-        IconButton(
-          visualDensity: VisualDensity.compact,
-          onPressed: () async => showBottomModal(
-            context: context,
-            children: [
-              messagingModel
-                  .me((_, me, __) => ShareYourChatNumber(me).bottomItem),
-              sessionModel.proUser(
-                (_, isPro, child) => ListItemFactory.bottomItem(
-                  icon: ImagePaths.account,
-                  content: 'account_management'.i18n,
-                  onTap: () async {
-                    await context.router.pop();
-                    await context.router.push(AccountManagement(isPro: isPro));
-                  },
-                ),
-              ),
-              ListItemFactory.bottomItem(
-                icon: ImagePaths.people,
-                content: 'introduce_contacts'.i18n,
-                onTap: () async {
-                  await context.router.pop();
-                  await context.router.push(Introduce(singleIntro: false));
+                  return messagingModel.getLastDismissedNotificationTS(
+                    (context, mostRecentNotifTS, child) =>
+                        requests.isNotEmpty &&
+                                (mostRecentUnacceptedTS > mostRecentNotifTS)
+                            ? RoundButton(
+                                onPressed: () => handleReminder(_contacts),
+                                backgroundColor: transparent,
+                                icon: CBadge(
+                                  count: requests.length,
+                                  showBadge: requests.isNotEmpty,
+                                  child: const CAssetImage(
+                                      path: ImagePaths.notifications),
+                                ),
+                              )
+                            : const SizedBox(),
+                  );
                 },
               ),
+              // * Search
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                onPressed: () async => await showSearch(
+                  context: context,
+                  query: '',
+                  delegate: CustomSearchDelegate(searchMessages: true),
+                ),
+                icon: const CAssetImage(path: ImagePaths.search),
+              ),
+              // * Bottom modal
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                onPressed: () async => showBottomModal(
+                  context: context,
+                  children: [
+                    messagingModel
+                        .me((_, me, __) => ShareYourChatNumber(me).bottomItem),
+                    sessionModel.proUser(
+                      (_, isPro, child) => ListItemFactory.bottomItem(
+                        icon: ImagePaths.account,
+                        content: 'account_management'.i18n,
+                        onTap: () async {
+                          await context.router.pop();
+                          await context.router
+                              .push(AccountManagement(isPro: isPro));
+                        },
+                      ),
+                    ),
+                    ListItemFactory.bottomItem(
+                      icon: ImagePaths.people,
+                      content: 'introduce_contacts'.i18n,
+                      onTap: () async {
+                        await context.router.pop();
+                        await context.router
+                            .push(Introduce(singleIntro: false));
+                      },
+                    ),
+                  ],
+                ),
+                icon: const CAssetImage(path: ImagePaths.more_vert),
+              ),
             ],
-          ),
-          icon: const CAssetImage(path: ImagePaths.more_vert),
-        ),
-      ],
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /*
+      body: chatDisabled
+          ? const SizedBox()
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /*
             * Introductions
             */
-          messagingModel.bestIntroductions(
-            builder: (
-              context,
-              Iterable<PathAndValue<StoredMessage>> introductions,
-              Widget? child,
-            ) =>
-                (introductions.getPending().isNotEmpty)
-                    ? ListItemFactory.messagingItem(
-                        leading: CBadge(
-                          count: introductions.getPending().length,
-                          showBadge: true,
-                          child: const Icon(
-                            Icons.people,
-                            color: Colors.black,
-                          ),
-                        ),
-                        content: CText(
-                          'introductions'.i18n,
-                          style: tsSubtitle1Short,
-                        ),
-                        trailingArray: [const ContinueArrow()],
-                        onTap: () async =>
-                            await context.pushRoute(const Introductions()),
-                      )
-                    : const SizedBox(),
-          ),
-          /*
+                messagingModel.bestIntroductions(
+                  builder: (
+                    context,
+                    Iterable<PathAndValue<StoredMessage>> introductions,
+                    Widget? child,
+                  ) =>
+                      (introductions.getPending().isNotEmpty)
+                          ? ListItemFactory.messagingItem(
+                              leading: CBadge(
+                                count: introductions.getPending().length,
+                                showBadge: true,
+                                child: const Icon(
+                                  Icons.people,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              content: CText(
+                                'introductions'.i18n,
+                                style: tsSubtitle1Short,
+                              ),
+                              trailingArray: [const ContinueArrow()],
+                              onTap: () async => await context
+                                  .pushRoute(const Introductions()),
+                            )
+                          : const SizedBox(),
+                ),
+                /*
             * Messages
             */
-          messagingModel.contactsByActivity(
-            builder: (
-              context,
-              Iterable<PathAndValue<Contact>> _contacts,
-              Widget? child,
-            ) {
-              // * NO CONTACTS
-              if (_contacts.isEmpty) {
-                return const Expanded(child: EmptyChats());
-              }
+                messagingModel.contactsByActivity(
+                  builder: (
+                    context,
+                    Iterable<PathAndValue<Contact>> _contacts,
+                    Widget? child,
+                  ) {
+                    // * NO CONTACTS
+                    if (_contacts.isEmpty) {
+                      return const Expanded(child: EmptyChats());
+                    }
 
-              final reshapedContactList = reshapeContactList(_contacts);
-              final unacceptedStartIndex = reshapedContactList
-                  .indexWhere((element) => element.value.isUnaccepted());
+                    final reshapedContactList = reshapeContactList(_contacts);
+                    final unacceptedStartIndex = reshapedContactList
+                        .indexWhere((element) => element.value.isUnaccepted());
 
-              return Expanded(
-                child: ScrollablePositionedList.builder(
-                  itemScrollController: scrollListController,
-                  itemCount: reshapedContactList.length,
-                  physics: defaultScrollPhysics,
-                  itemBuilder: (context, index) {
-                    var contact = reshapedContactList[index].value;
-                    var isUnaccepted = contact.isUnaccepted();
-                    return Column(
-                      children: [
-                        ListItemFactory.messagingItem(
-                          customBg: isUnaccepted ? customBg : null,
-                          header: unacceptedStartIndex == index
-                              ? 'new_requests'.i18n.fill([
-                                  '(${reshapedContactList.length - unacceptedStartIndex})'
-                                ])
-                              : null,
-                          focusedMenu: !isUnaccepted
-                              ? renderLongTapMenu(
-                                  contact: contact,
-                                  context: context,
-                                )
-                              : null,
-                          leading: CustomAvatar(
-                            customColor: isUnaccepted ? grey5 : null,
-                            messengerId: contact.contactId.id,
-                            displayName: contact.displayName,
-                          ),
-                          content: contact.displayNameOrFallback,
-                          subtitle:
-                              '${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'}'
-                                  .i18n,
-                          onTap: () async => await context.pushRoute(
-                            Conversation(contactId: contact.contactId),
-                          ),
-                          trailingArray: [
-                            HumanizedDate.fromMillis(
-                              contact.mostRecentMessageTs.toInt(),
-                              builder: (context, date) => CText(
-                                date,
-                                style: tsBody2.copiedWith(color: grey5),
-                              ),
-                            ),
-                            if (contact.numUnviewedMessages > 0)
-                              Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                  start: 8.0,
+                    return Expanded(
+                      child: ScrollablePositionedList.builder(
+                        itemScrollController: scrollListController,
+                        itemCount: reshapedContactList.length,
+                        physics: defaultScrollPhysics,
+                        itemBuilder: (context, index) {
+                          var contact = reshapedContactList[index].value;
+                          var isUnaccepted = contact.isUnaccepted();
+                          return Column(
+                            children: [
+                              ListItemFactory.messagingItem(
+                                customBg: isUnaccepted ? customBg : null,
+                                header: unacceptedStartIndex == index
+                                    ? 'new_requests'.i18n.fill([
+                                        '(${reshapedContactList.length - unacceptedStartIndex})'
+                                      ])
+                                    : null,
+                                focusedMenu: !isUnaccepted
+                                    ? renderLongTapMenu(
+                                        contact: contact,
+                                        context: context,
+                                      )
+                                    : null,
+                                leading: CustomAvatar(
+                                  customColor: isUnaccepted ? grey5 : null,
+                                  messengerId: contact.contactId.id,
+                                  displayName: contact.displayName,
                                 ),
-                                child: CircleAvatar(
-                                  maxRadius: activeIconSize - 4,
-                                  backgroundColor: pink4,
+                                content: contact.displayNameOrFallback,
+                                subtitle:
+                                    '${contact.mostRecentMessageText.isNotEmpty ? contact.mostRecentMessageText : 'attachment'}'
+                                        .i18n,
+                                onTap: () async => await context.pushRoute(
+                                  Conversation(contactId: contact.contactId),
                                 ),
+                                trailingArray: [
+                                  HumanizedDate.fromMillis(
+                                    contact.mostRecentMessageTs.toInt(),
+                                    builder: (context, date) => CText(
+                                      date,
+                                      style: tsBody2.copiedWith(color: grey5),
+                                    ),
+                                  ),
+                                  if (contact.numUnviewedMessages > 0)
+                                    Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                        start: 8.0,
+                                      ),
+                                      child: CircleAvatar(
+                                        maxRadius: activeIconSize - 4,
+                                        backgroundColor: pink4,
+                                      ),
+                                    ),
+                                ],
                               ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          );
+                        },
+                      ),
                     );
                   },
                 ),
-              );
-            },
-          ),
-        ],
-      ),
-      actionButton: FloatingActionButton(
-        backgroundColor: blue4,
-        onPressed: () async => await context.pushRoute(const NewChat()),
-        child: CAssetImage(path: ImagePaths.add, color: white),
-      ),
+              ],
+            ),
+      actionButton: chatDisabled
+          ? null
+          : FloatingActionButton(
+              backgroundColor: blue4,
+              onPressed: () async => await context.pushRoute(const NewChat()),
+              child: CAssetImage(path: ImagePaths.add, color: white),
+            ),
     );
   }
 }
