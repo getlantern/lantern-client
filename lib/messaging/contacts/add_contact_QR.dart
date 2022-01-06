@@ -128,7 +128,12 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
         setState(() {
           scanning = false;
         });
-        showErrorDialog(context, e: e, s: s, des: 'qr_error_description'.i18n);
+        CDialog.showError(
+          context,
+          error: e,
+          stackTrace: s,
+          description: 'qr_error_description'.i18n,
+        );
       } finally {
         await qrController?.pauseCamera();
       }
@@ -232,21 +237,15 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                     ),
                                     child: GestureDetector(
                                       behavior: HitTestBehavior.translucent,
-                                      onTap: () => showInfoDialog(
-                                        context,
+                                      onTap: () => CDialog(
                                         title: widget.isVerificationMode
                                             ? 'qr_info_verification_title'.i18n
                                             : 'qr_info_f2f_title'.i18n,
-                                        des: widget.isVerificationMode
+                                        description: widget.isVerificationMode
                                             ? 'qr_info_verification_des'.i18n
                                             : 'qr_info_f2f_des'.i18n,
-                                        assetPath: ImagePaths.qr_code,
-                                        confirmButtonText: 'info_dialog_confirm'
-                                            .i18n
-                                            .toUpperCase(),
-                                        confirmButtonAction: () async =>
-                                            await context.router.pop(),
-                                      ),
+                                        iconPath: ImagePaths.qr_code,
+                                      ).show(context),
                                       child: Icon(
                                         Icons.info,
                                         size: 14,

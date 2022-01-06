@@ -138,11 +138,11 @@ class _ContactInfoState extends State<ContactInfo> {
                               displayName: displayNameController.text,
                             );
                           } catch (e, s) {
-                            showErrorDialog(
+                            CDialog.showError(
                               context,
-                              e: e,
-                              s: s,
-                              des: 'save_error'.i18n,
+                              error: e,
+                              stackTrace: s,
+                              description: 'save_error'.i18n,
                             );
                           } finally {
                             showSnackbar(
@@ -214,7 +214,7 @@ class _ContactInfoState extends State<ContactInfo> {
                         title: contact.blocked
                             ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
                             : '${'block'.i18n} ${contact.displayNameOrFallback}?',
-                        explanation: contact.blocked
+                        description: contact.blocked
                             ? 'unblock_info_description'
                                 .i18n
                                 .fill([contact.displayNameOrFallback])
@@ -225,17 +225,12 @@ class _ContactInfoState extends State<ContactInfo> {
                         agreeText: contact.blocked
                             ? 'unblock'.i18n.toUpperCase()
                             : 'block'.i18n.toUpperCase(),
-                        agreeAction: (confirmedBlocked) async {
-                          if (confirmedBlocked != true) {
-                            return false;
-                          }
-
+                        agreeAction: () async {
                           contact.blocked
                               ? await messagingModel
                                   .unblockDirectContact(contact.contactId.id)
                               : await messagingModel
                                   .blockDirectContact(contact.contactId.id);
-                          context.router.popUntilRoot();
                           showSnackbar(
                             context: context,
                             content: contact.blocked
@@ -250,7 +245,9 @@ class _ContactInfoState extends State<ContactInfo> {
                         },
                       ).show(context),
                       child: CText(
-                        'block'.i18n.toUpperCase(),
+                        (contact.blocked ? 'unblock' : 'block')
+                            .i18n
+                            .toUpperCase(),
                         style: tsButtonPink,
                       ),
                     )
@@ -266,11 +263,10 @@ class _ContactInfoState extends State<ContactInfo> {
                     TextButton(
                       onPressed: () async => CDialog(
                         title: '${'delete_contact'.i18n}?',
-                        explanation: 'delete_info_description'.i18n,
+                        description: 'delete_info_description'.i18n,
                         iconPath: ImagePaths.delete,
-                        dismissText: 'cancel'.i18n,
                         agreeText: 'delete_contact'.i18n,
-                        agreeAction: (_) async {
+                        agreeAction: () async {
                           context.loaderOverlay.show(widget: spinner);
                           try {
                             await messagingModel
@@ -284,11 +280,11 @@ class _ContactInfoState extends State<ContactInfo> {
                             context.loaderOverlay.hide();
                             context.router.popUntilRoot();
                           } catch (e, s) {
-                            showErrorDialog(
+                            CDialog.showError(
                               context,
-                              e: e,
-                              s: s,
-                              des: 'error_delete_contact'.i18n,
+                              error: e,
+                              stackTrace: s,
+                              description: 'error_delete_contact'.i18n,
                             );
                           } finally {
                             context.loaderOverlay.hide();

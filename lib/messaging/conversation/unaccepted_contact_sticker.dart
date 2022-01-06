@@ -35,24 +35,22 @@ class UnacceptedContactSticker extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
-                onPressed: () async => showInfoDialog(
-                  context,
-                  title: '${'delete_contact'.i18n}?',
-                  des: 'delete_info_description'.i18n,
-                  assetPath: ImagePaths.delete,
-                  cancelButtonText: 'cancel'.i18n,
-                  confirmButtonText: 'delete_contact'.i18n,
-                  confirmButtonAction: () async {
+                onPressed: () async => CDialog(
+                  title: 'delete_contact'.i18n,
+                  description: 'delete_info_description'.i18n,
+                  iconPath: ImagePaths.delete,
+                  agreeText: 'delete_contact'.i18n,
+                  agreeAction: () async {
                     context.loaderOverlay.show(widget: spinner);
                     try {
                       await messagingModel
                           .deleteDirectContact(contact.contactId.id);
                     } catch (e, s) {
-                      showErrorDialog(
+                      CDialog.showError(
                         context,
-                        e: e,
-                        s: s,
-                        des: 'error_delete_contact'.i18n,
+                        error: e,
+                        stackTrace: s,
+                        description: 'error_delete_contact'.i18n,
                       );
                     } finally {
                       showSnackbar(
@@ -63,40 +61,33 @@ class UnacceptedContactSticker extends StatelessWidget {
                       );
                       context.loaderOverlay.hide();
                       context.router.popUntilRoot();
+                      return false;
                     }
                   },
-                ),
+                ).show(context),
                 child: CText(
                   'Delete'.i18n.toUpperCase(),
                   style: tsButton,
                 ),
               ),
               TextButton(
-                onPressed: () async => showInfoDialog(
-                  context,
-                  assetPath: ImagePaths.block,
-                  title: contact.blocked
-                      ? '${'unblock'.i18n} ${contact.displayNameOrFallback}?'
-                      : '${'block'.i18n} ${contact.displayNameOrFallback}?',
-                  des: contact.blocked
-                      ? 'unblock_info_description'
-                          .i18n
-                          .fill([contact.displayNameOrFallback])
-                      : 'block_info_description'.i18n,
-                  checkboxText: contact.blocked
-                      ? 'unblock_info_checkbox'.i18n
-                      : 'block_info_checkbox'.i18n,
-                  confirmCheckboxAction: () async {
+                onPressed: () async => CDialog(
+                  iconPath: ImagePaths.block,
+                  title: '${'block'.i18n} ${contact.displayNameOrFallback}?',
+                  description: 'block_info_description'.i18n,
+                  checkboxLabel: 'block_info_checkbox'.i18n,
+                  agreeText: 'block'.i18n.toUpperCase(),
+                  agreeAction: () async {
                     context.loaderOverlay.show(widget: spinner);
                     try {
                       await messagingModel
-                          .deleteDirectContact(contact.contactId.id);
+                          .blockDirectContact(contact.contactId.id);
                     } catch (e, s) {
-                      showErrorDialog(
+                      CDialog.showError(
                         context,
-                        e: e,
-                        s: s,
-                        des: 'error_delete_contact'.i18n,
+                        error: e,
+                        stackTrace: s,
+                        description: 'error_delete_contact'.i18n,
                       );
                     } finally {
                       showSnackbar(
@@ -107,9 +98,10 @@ class UnacceptedContactSticker extends StatelessWidget {
                       );
                       context.loaderOverlay.hide();
                       context.router.popUntilRoot();
+                      return false;
                     }
                   },
-                ),
+                ).show(context),
                 child: CText(
                   'Block'.i18n.toUpperCase(),
                   style: tsButton,
@@ -129,12 +121,10 @@ class UnacceptedContactSticker extends StatelessWidget {
                       ),
                     );
                   } catch (e) {
-                    showInfoDialog(
+                    CDialog.showError(
                       context,
-                      des:
+                      description:
                           'Something went wrong while adding this contact'.i18n,
-                      confirmButtonAction: () async =>
-                          await context.router.pop(),
                     );
                   }
                 },

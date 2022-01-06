@@ -159,7 +159,6 @@ class Signaling {
   Future<Session> call({
     required String peerId,
     required String media,
-    required Function() onError,
   }) async {
     // The first time we start ringing, the audio cache will not yet be initialized
     // so we wait to call audioPlayerOnSpeaker.
