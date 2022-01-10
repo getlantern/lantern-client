@@ -457,10 +457,12 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight v0.0.0-20211222191004-15304a50b0ba h1:zJe1lIdxhPYrTW6M/mPFPAWIe9wgHg95Yw7yPbAn1Jg=
-github.com/getlantern/flashlight v0.0.0-20211222191004-15304a50b0ba/go.mod h1:QoiIvbohHMwmQKP6QNk5ceBU3fy9qu4RlJDOIai5558=
-github.com/getlantern/flashlight v0.0.0-20220105215924-bfc3898f6bc7 h1:VRaVfGtoGHveNcYS5YgyM/8uc+WtI71itQoPUmKBaYQ=
-github.com/getlantern/flashlight v0.0.0-20220105215924-bfc3898f6bc7/go.mod h1:QoiIvbohHMwmQKP6QNk5ceBU3fy9qu4RlJDOIai5558=
+github.com/getlantern/flashlight v0.0.0-20211219185319-556cecd31106 h1:Yn5AnU2FOB8EUsfiwQ4vyOGHPCVxHI6a2jXvzszeLb4=
+github.com/getlantern/flashlight v0.0.0-20211219185319-556cecd31106/go.mod h1:QoiIvbohHMwmQKP6QNk5ceBU3fy9qu4RlJDOIai5558=
+github.com/getlantern/flashlight v0.0.0-20220104152255-f515a9e0089b h1:DC565ZHtco3TgQDJpFEamKBqSXsD617NYiUvnllm+Nk=
+github.com/getlantern/flashlight v0.0.0-20220104152255-f515a9e0089b/go.mod h1:QoiIvbohHMwmQKP6QNk5ceBU3fy9qu4RlJDOIai5558=
+github.com/getlantern/flashlight v0.0.0-20220110120704-f29edb0ef463 h1:CaU3aEEO77H6crPaRAamwo7cINiFBOZE3TeYCh8T/Fc=
+github.com/getlantern/flashlight v0.0.0-20220110120704-f29edb0ef463/go.mod h1:DdfeirLOTRyDVtZtNTx5vBkKZyxsQzrzIZCovZfl+wo=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20210806163345-971f7e536246 h1:tRWQABDpTE7tr2P48SjqsVF35uzJzLERwmt+TV0YR/U=
@@ -540,6 +542,7 @@ github.com/getlantern/lampshade v0.0.0-20201109225444-b06082e15f3a h1:z7G1v79GB1
 github.com/getlantern/lampshade v0.0.0-20201109225444-b06082e15f3a/go.mod h1:cGOfTjvllC9bcwS7cVW6tGT6fXc8Dki384uFjm7XBnw=
 github.com/getlantern/lantern-shadowsocks v1.3.6-0.20210601195915-e04471aa4920 h1:VHBRvnYWECSPUMEIvpn24q3kMgpSR6zLgDMIMthWNFQ=
 github.com/getlantern/lantern-shadowsocks v1.3.6-0.20210601195915-e04471aa4920/go.mod h1:JludU10BDqs/5iHmTlQF4+ToAouyyIK868mA6Okrqco=
+github.com/getlantern/lantern_aws/salt/update_masquerades v0.0.0-20211130095655-b01287455a3f/go.mod h1:CImhEVaNdogycXYzGZm7Wvs1HpdlSwUtOgnEUcb+evQ=
 github.com/getlantern/mandrill v0.0.0-20191024010305-7094d8b40358 h1:ZPe/LMCpCEuHtfBp2NP3/A9KRXQJbTxeSOVWmcBzXIc=
 github.com/getlantern/mandrill v0.0.0-20191024010305-7094d8b40358/go.mod h1:koTn6wUik25tksKttA96OEY4cU+qJnBAMKKPYBddkT8=
 github.com/getlantern/measured v0.0.0-20170302221919-0582bf799783/go.mod h1:5OW2WJitCKExpSw2bploW2fM7PjOd6QnLqyp+IqToqU=
@@ -1069,6 +1072,8 @@ github.com/mitchellh/iochan v1.0.0/go.mod h1:JwYml1nuB7xOzsp52dPpHFffvOCDupsG0Qu
 github.com/mitchellh/mapstructure v0.0.0-20160808181253-ca63d7c062ee/go.mod h1:FVVH3fgwuzCH5S8UJGiWEs2h04kUh9fWfEaFds41c1Y=
 github.com/mitchellh/mapstructure v1.1.2 h1:fmNYVwqnSfB9mZU6OS2O6GsXM+wcskZDuKQzvN1EDeE=
 github.com/mitchellh/mapstructure v1.1.2/go.mod h1:FVVH3fgwuzCH5S8UJGiWEs2h04kUh9fWfEaFds41c1Y=
+github.com/mitchellh/mapstructure v1.4.2 h1:6h7AQ0yhTcIsmFmnAwQls75jp2Gzs4iB8W7pjMO+rqo=
+github.com/mitchellh/mapstructure v1.4.2/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/mitchellh/panicwrap v1.0.0/go.mod h1:pKvZHwWrZowLUzftuFq7coarnxbBXU4aQh3N0BJOeeA=
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd h1:TRLaZ9cD/w8PVh93nsPXa1VrQ6jlwL5oN8l14QlcNfg=

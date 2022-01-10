@@ -525,7 +525,8 @@ func run(configDir, locale string,
 	globalConfigChanged := make(chan interface{})
 	geoRefreshed := geolookup.OnRefresh()
 
-	runner, err := flashlight.New(
+	var runner *flashlight.Flashlight
+	runner, err = flashlight.New(
 		common.DefaultAppName,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
@@ -539,6 +540,9 @@ func run(configDir, locale string,
 		flags,
 		func(cfg *config.Global, src config.Source) {
 			session.UpdateAdSettings(&adSettings{cfg.AdSettings})
+			if session.IsPlayVersion() {
+				runner.EnableNamedDomainRules("google_play") // for google play build we want to make sure that Google Play domains are not being proxied
+			}
 			email.SetDefaultRecipient(cfg.ReportIssueEmail)
 			select {
 			case globalConfigChanged <- nil:
