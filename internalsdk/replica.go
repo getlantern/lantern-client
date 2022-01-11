@@ -114,8 +114,8 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	}
 
 	log.Debugf("Starting replica with configDir [%v] and userConfig [%+v]\n", s.ConfigDir, s.UserConfig)
-	optsFunc := func() *config.ReplicaOptions {
-		var opts config.ReplicaOptions
+	optsFunc := func() *config.ReplicaOptionsRoot {
+		var opts config.ReplicaOptionsRoot
 		err := s.Flashlight.FeatureOptions(config.FeatureReplica, &opts)
 		if err != nil {
 			log.Errorf("Error on getting feature options, this should never happen in practice: %v", err)
