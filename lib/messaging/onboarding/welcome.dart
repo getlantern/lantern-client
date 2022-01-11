@@ -8,7 +8,7 @@ class Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'lantern_secure_chat'.i18n,
+      title: 'lantern_chat'.i18n,
       automaticallyImplyLeading: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
