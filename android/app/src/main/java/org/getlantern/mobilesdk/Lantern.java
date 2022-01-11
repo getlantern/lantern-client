@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -160,12 +158,14 @@ public abstract class Lantern {
      * Sends a custom firebase analytics event.
      * Note: there is limit of 500 event types (names) per application.
      *
+     * TODO: this has been disabled and will need to be migrated to Matomo.
+     *
      * @param context application context
      * @param name the event type
      * @param params event fields (limit of 25)
      */
     public static void sendEvent(final Context context, final String name, Bundle params) {
-        FirebaseAnalytics.getInstance(context).logEvent(name, params);
+//        FirebaseAnalytics.getInstance(context).logEvent(name, params);
     }
 
     /**
