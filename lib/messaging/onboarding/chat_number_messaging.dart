@@ -1,7 +1,7 @@
 import 'package:lantern/messaging/messaging.dart';
 
-class SecureChatNumberMessaging extends StatelessWidget {
-  SecureChatNumberMessaging() : super() {
+class ChatNumberMessaging extends StatelessWidget {
+  ChatNumberMessaging() : super() {
     messagingModel.dismissTryLanternChatBadge();
   }
 
@@ -10,7 +10,7 @@ class SecureChatNumberMessaging extends StatelessWidget {
     var textCopied = false;
     return messagingModel.me(
       (BuildContext context, Contact me, Widget? child) => BaseScreen(
-        title: 'secure_chat_number'.i18n,
+        title: 'chat_number'.i18n,
         body: PinnedButtonLayout(
           content: [
             Column(
@@ -23,13 +23,13 @@ class SecureChatNumberMessaging extends StatelessWidget {
                     bottom: 3,
                   ),
                   child: CText(
-                    'your_secure_chat_number'.i18n.toUpperCase(),
+                    'your_chat_number'.i18n.toUpperCase(),
                     maxLines: 1,
                     style: tsOverline,
                   ),
                 ),
                 const CDivider(),
-                //* Your Secure Chat Number
+                //* Your Lantern Chat Number
                 StatefulBuilder(
                   builder: (context, setState) => ListItemFactory.settingsItem(
                     onTap: () async {
@@ -82,7 +82,10 @@ class SecureChatNumberMessaging extends StatelessWidget {
                 top: 16.0,
                 bottom: 16.0,
               ),
-              child: CText('secure_text_explanation'.i18n, style: tsBody1),
+              child: CText(
+                'secure_text_explanation'.i18n,
+                style: tsBody1,
+              ),
             ),
           ],
           button: Button(

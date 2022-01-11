@@ -288,8 +288,12 @@ class ConversationState extends State<Conversation>
       }
       setState(() => quotedMessage = null);
     } catch (e, s) {
-      CDialog.showError(context,
-          error: e, stackTrace: s, description: 'share_media_error'.i18n);
+      CDialog.showError(
+        context,
+        error: e,
+        stackTrace: s,
+        description: 'share_media_error'.i18n,
+      );
     } finally {
       context.loaderOverlay.hide();
     }
@@ -340,8 +344,12 @@ class ConversationState extends State<Conversation>
         );
       }
     } catch (e, s) {
-      CDialog.showError(context,
-          error: e, stackTrace: s, description: 'send_error'.i18n);
+      CDialog.showError(
+        context,
+        error: e,
+        stackTrace: s,
+        description: 'send_error'.i18n,
+      );
     } finally {
       if (attachments?.isNotEmpty == true) context.loaderOverlay.hide();
     }

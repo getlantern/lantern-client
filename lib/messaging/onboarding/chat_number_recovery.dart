@@ -1,11 +1,11 @@
 import '../messaging.dart';
 
-class SecureNumberRecovery extends StatefulWidget {
+class ChatNumberRecovery extends StatefulWidget {
   @override
-  State<SecureNumberRecovery> createState() => _SecureNumberRecoveryState();
+  State<ChatNumberRecovery> createState() => _ChatNumberRecoveryState();
 }
 
-class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
+class _ChatNumberRecoveryState extends State<ChatNumberRecovery> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'recoveryInput');
   late final controller = CustomTextEditingController(
     formKey: _formKey,
@@ -54,7 +54,7 @@ class _SecureNumberRecoveryState extends State<SecureNumberRecovery> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'secure_chat_number_recovery'.i18n,
+      title: 'chat_number_recovery'.i18n,
       body: PinnedButtonLayout(
         content: [
           Form(

@@ -164,7 +164,7 @@ class _ContactInfoState extends State<ContactInfo> {
               StatefulBuilder(
                 builder: (context, setState) {
                   return ListItemFactory.settingsItem(
-                    header: 'secure_chat_number'.i18n,
+                    header: 'chat_number'.i18n,
                     // onTap: () async =>
                     //     doCopyText(context, contact.chatNumber.number, setState),
                     icon: ImagePaths.chatNumber,

@@ -1,17 +1,17 @@
 import 'package:lantern/messaging/messaging.dart';
 
-class SecureChatNumberAccount extends StatelessWidget {
+class ChatNumberAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textCopied = false;
     return messagingModel.me(
       (BuildContext context, Contact me, Widget? child) => BaseScreen(
-        title: 'secure_chat_number'.i18n,
+        title: 'chat_number'.i18n,
         body: Column(
           children: [
             StatefulBuilder(
               builder: (context, setState) => ListItemFactory.settingsItem(
-                header: 'your_secure_chat_number'.i18n.toUpperCase(),
+                header: 'your_chat_number'.i18n.toUpperCase(),
                 onTap: () async {
                   copyText(
                     context,

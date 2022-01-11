@@ -167,7 +167,7 @@ class TryLanternChat extends StatelessWidget {
                                 // Start onboarding
                                 await messagingModel.start();
                                 await context.router
-                                    .push(const SecureChatNumberMessaging());
+                                    .push(const ChatNumberMessaging());
                               },
                               child: CText(
                                 'try'.i18n.toUpperCase(),

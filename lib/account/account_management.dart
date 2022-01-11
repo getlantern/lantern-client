@@ -37,12 +37,12 @@ class _AccountManagementState extends State<AccountManagement>
       body: sessionModel
           .deviceId((BuildContext context, String myDeviceId, Widget? child) {
         var freeItems = [
-          // * SECURE CHAT NUMBER
+          // * Lantern Chat Number
           messagingModel.me(
             (BuildContext context, Contact me, Widget? child) =>
                 StatefulBuilder(
               builder: (context, setState) => ListItemFactory.settingsItem(
-                header: 'your_secure_chat_number'.i18n,
+                header: 'your_chat_number'.i18n,
                 icon: ImagePaths.chatNumber,
                 content: me.chatNumber.shortNumber.formattedChatNumber,
                 trailingArray: [
@@ -75,8 +75,7 @@ class _AccountManagementState extends State<AccountManagement>
                     child: const ContinueArrow(),
                   ),
                 ],
-                onTap: () =>
-                    context.router.push(const SecureChatNumberAccount()),
+                onTap: () => context.router.push(const ChatNumberAccount()),
               ),
             ),
           ),

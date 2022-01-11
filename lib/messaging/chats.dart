@@ -60,7 +60,8 @@ class _ChatsState extends State<Chats> {
   @override
   Widget build(BuildContext context) {
     return sessionModel.chatEnabled(
-        (context, chatEnabled, _) => doBuild(context, !chatEnabled));
+      (context, chatEnabled, _) => doBuild(context, !chatEnabled),
+    );
   }
 
   Widget doBuild(BuildContext context, bool chatDisabled) {
@@ -103,7 +104,8 @@ class _ChatsState extends State<Chats> {
                                   count: requests.length,
                                   showBadge: requests.isNotEmpty,
                                   child: const CAssetImage(
-                                      path: ImagePaths.notifications),
+                                    path: ImagePaths.notifications,
+                                  ),
                                 ),
                               )
                             : const SizedBox(),
@@ -331,7 +333,14 @@ class EmptyChats extends StatelessWidget {
             size: 250,
           ),
         ),
-        CText('empty_chats_text'.i18n, style: tsBody1Color(grey5)),
+        Padding(
+          padding: const EdgeInsetsDirectional.only(top: 17),
+          child: CText(
+            'empty_chats_text'.i18n,
+            style: tsBody1Color(grey5),
+            textAlign: TextAlign.center,
+          ),
+        ),
       ],
     );
   }
