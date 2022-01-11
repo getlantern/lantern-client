@@ -81,7 +81,7 @@ msgid "delete_chat_data"
 msgstr "Delete all Chat Data"
 
 msgid "delete_chat_data_description"
-msgstr "This will delete your Secure chat number, contacts, and messages from this device Without your Backup Recovery Key, you will lose access to your Secure Chat Number."
+msgstr "This will delete your Chat Number, contacts, and messages from this device Without your Backup Recovery Key, you will lose access to your Chat Number."
 
 msgid "delete_chat_data_confirmation"
 msgstr "I confirm that I want to delete my chat data"
@@ -470,7 +470,7 @@ msgid "unable_to_add_contact"
 msgstr "Contact not found, check the number and try again"
 
 msgid "self_adding"
-msgstr "The chat number you entered belongs to you"
+msgstr "The Chat Number you entered belongs to you"
 
 msgid "chat_number_type"
 msgstr "Type a Chat Number"
@@ -683,28 +683,25 @@ msgid "get_started"
 msgstr "Get started"
 
 msgid "want_to_recover"
-msgstr "Have a Secure Chat Number?"
+msgstr "Have a Chat Number?"
 
 msgid "recover"
 msgstr "Recover"
 
-msgid "secure_chat_number"
-msgstr "Secure Chat Number"
+msgid "chat_number"
+msgstr "Chat Number"
 
-msgid "your_secure_chat_number"
-msgstr "Your Secure Chat Number"
+msgid "your_chat_number"
+msgstr "Your Chat Number"
 
-msgid "secure_chat_number_descriptionr"
-msgstr "This is the full version of your Secure Chat Number.\n\nLantern provides the shortened Secure Chat Number to make sharing contacts easier.When you share the full version of the number Lantern’s servers are not required for look up."
-
-msgid "secure_chat_number_recovery"
-msgstr "Secure Chat Number Recovery"
+msgid "chat_number_recovery"
+msgstr "Chat Number Recovery"
 
 msgid "recovery_helper_text"
 msgstr "Please enter a valid Recovery Key"
 
 msgid "recovery_button"
-msgstr "Enter your  Recovery Key to restore your Lantern Secure Chat Number."
+msgstr "Enter your  Recovery Key to restore your Chat Number."
 
 msgid "recovery_label"
 msgstr "Enter your Recovery Key"
@@ -713,13 +710,13 @@ msgid "recovery_key"
 msgstr "Recovery Key"
 
 msgid "secure_text_explanation"
-msgstr "Your Secure Chat Number works like a phone number that your friends can use to contact you on Lantern."
+msgstr "Your Chat Number works like a phone number that your friends can use to contact you on Lantern."
 
 msgid "secure_text_explanation_account"
-msgstr "This is the full version of your Secure Chat Number; sharing this longer number may be more secure, especially if you have another end-to-end encrypted channel on which to share it.\n\nLantern provides the shortened Secure Chat Number to make sharing contact information more convenient. "
+msgstr "This is the full version of your Chat Number; sharing this longer number may be more secure, especially if you have another end-to-end encrypted channel on which to share it.\n\nLantern provides a shortened Chat Number to make sharing contact information more convenient. "
 
 msgid "recovery_key_account_explanation"
-msgstr "Store this key in a safe place, and do not share it with anyone. It is the only way to recover your Secure Chat Number if you lose your phone, switch devices, or reset the operating system."
+msgstr "Store this key in a safe place, and do not share it with anyone. It is the only way to recover your Chat Number if you lose your phone, switch devices, or reset the operating system."
 
 msgid "recovery_error"
 msgstr "Unable to recover your account."
@@ -731,10 +728,10 @@ msgid "recovery_retrieval_error"
 msgstr "Something went wrong while retrieving your recovery key"
 
 msgid "recovery_success"
-msgstr "You have successfully recovered your Secure Chat Number"
+msgstr "You have successfully recovered your Chat Number"
 
 msgid "empty_chats_text"
-msgstr "Share your chat number or add a contact here!"
+msgstr "Share your Chat Number or add a contact here!"
 
 msgid "next"
 msgstr "Next"

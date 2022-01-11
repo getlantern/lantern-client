@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/account/account_management.dart';
 import 'package:lantern/account/blocked_users.dart';
+import 'package:lantern/account/chat_number_account.dart';
 import 'package:lantern/account/device_linking/approve_device.dart';
 import 'package:lantern/account/device_linking/authorize_device_for_pro.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart';
 import 'package:lantern/account/language.dart';
 import 'package:lantern/account/recovery_key.dart';
-import 'package:lantern/account/secure_chat_number_account.dart';
 import 'package:lantern/account/settings.dart';
 import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/common/ui/transitions.dart';
@@ -18,8 +18,8 @@ import 'package:lantern/messaging/contacts/new_chat.dart';
 import 'package:lantern/messaging/conversation/conversation.dart';
 import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
-import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart';
-import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart';
+import 'package:lantern/messaging/onboarding/chat_number_messaging.dart';
+import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
 import 'package:lantern/replica/ui/link_opener_screen.dart';
 import 'package:lantern/replica/ui/media_views/audio_player.dart';
 import 'package:lantern/replica/ui/media_views/image_preview_screen.dart';
@@ -39,17 +39,17 @@ import 'package:lantern/replica/ui/upload_file.dart';
       path: '/',
     ),
     CustomRoute<void>(
-      page: SecureNumberRecovery,
-      name: 'SecureNumberRecovery',
-      path: 'secureNumberRecovery',
+      page: ChatNumberRecovery,
+      name: 'ChatNumberRecovery',
+      path: 'chatNumberRecovery',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: SecureChatNumberMessaging,
-      name: 'SecureChatNumberMessaging',
-      path: 'secureChatNumberMessaging',
+      page: ChatNumberMessaging,
+      name: 'ChatNumberMessaging',
+      path: 'chatNumberMessaging',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
@@ -207,9 +207,9 @@ import 'package:lantern/replica/ui/upload_file.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: SecureChatNumberAccount,
-      name: 'SecureChatNumberAccount',
-      path: 'secureChatNumberAccount',
+      page: ChatNumberAccount,
+      name: 'ChatNumberAccount',
+      path: 'chatNumberAccount',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

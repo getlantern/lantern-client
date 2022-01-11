@@ -54,8 +54,7 @@ class Welcome extends StatelessWidget {
                   text: 'get_started'.i18n,
                   onPressed: () async {
                     await messagingModel.start();
-                    await context.router
-                        .push(const SecureChatNumberMessaging());
+                    await context.router.push(const ChatNumberMessaging());
                   },
                 ),
                 Padding(
@@ -69,7 +68,7 @@ class Welcome extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () =>
-                            context.router.push(const SecureNumberRecovery()),
+                            context.router.push(const ChatNumberRecovery()),
                         child: CText(
                           'recover'.i18n.toUpperCase(),
                           style: tsBody2.copiedWith(

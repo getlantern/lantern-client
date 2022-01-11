@@ -14,6 +14,7 @@ import 'package:auto_route/auto_route.dart' as _i29;
 import 'package:flutter/material.dart' as _i30;
 import 'package:lantern/account/account_management.dart' as _i11;
 import 'package:lantern/account/blocked_users.dart' as _i24;
+import 'package:lantern/account/chat_number_account.dart' as _i23;
 import 'package:lantern/account/device_linking/approve_device.dart' as _i21;
 import 'package:lantern/account/device_linking/authorize_device_for_pro.dart'
     as _i17;
@@ -23,9 +24,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
     as _i20;
 import 'package:lantern/account/language.dart' as _i15;
 import 'package:lantern/account/recovery_key.dart' as _i22;
-import 'package:lantern/account/secure_chat_number_account.dart' as _i23;
 import 'package:lantern/account/settings.dart' as _i13;
-import 'package:lantern/common/common.dart' as _i31;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i8;
@@ -34,14 +33,12 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i7;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i9;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i10;
-import 'package:lantern/messaging/messaging.dart' as _i32;
-import 'package:lantern/messaging/onboarding/secure_chat_number_messaging.dart'
-    as _i3;
-import 'package:lantern/messaging/onboarding/secure_chat_number_recovery.dart'
-    as _i2;
-import 'package:lantern/replica/logic/api.dart' as _i33;
-import 'package:lantern/replica/models/replica_link.dart' as _i34;
-import 'package:lantern/replica/models/searchcategory.dart' as _i35;
+import 'package:lantern/messaging/messaging.dart' as _i31;
+import 'package:lantern/messaging/onboarding/chat_number_messaging.dart' as _i3;
+import 'package:lantern/messaging/onboarding/chat_number_recovery.dart' as _i2;
+import 'package:lantern/replica/logic/api.dart' as _i32;
+import 'package:lantern/replica/models/replica_link.dart' as _i33;
+import 'package:lantern/replica/models/searchcategory.dart' as _i34;
 import 'package:lantern/replica/ui/link_opener_screen.dart' as _i12;
 import 'package:lantern/replica/ui/media_views/audio_player.dart' as _i16;
 import 'package:lantern/replica/ui/media_views/image_preview_screen.dart'
@@ -62,400 +59,344 @@ class AppRouter extends _i29.RootStackRouter {
     Home.name: (routeData) {
       final args = routeData.argsAs<HomeArgs>(orElse: () => const HomeArgs());
       return _i29.AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: _i1.HomePage(key: args.key),
-      );
+          routeData: routeData, child: _i1.HomePage(key: args.key));
     },
-    SecureNumberRecovery.name: (routeData) {
+    ChatNumberRecovery.name: (routeData) {
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i2.SecureNumberRecovery(),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i2.ChatNumberRecovery(),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
-    SecureChatNumberMessaging.name: (routeData) {
+    ChatNumberMessaging.name: (routeData) {
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i3.SecureChatNumberMessaging(),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i3.ChatNumberMessaging(),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     FullScreenDialogPage.name: (routeData) {
       final args = routeData.argsAs<FullScreenDialogPageArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i4.FullScreenDialog(widget: args.widget, key: args.key),
-        transitionsBuilder: _i29.TransitionsBuilders.slideBottom,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i4.FullScreenDialog(widget: args.widget, key: args.key),
+          transitionsBuilder: _i29.TransitionsBuilders.slideBottom,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     Conversation.name: (routeData) {
       final args = routeData.argsAs<ConversationArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i5.Conversation(
-          contactId: args.contactId,
-          initialScrollIndex: args.initialScrollIndex,
-          showContactEditingDialog: args.showContactEditingDialog,
-        ),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i5.Conversation(
+              contactId: args.contactId,
+              initialScrollIndex: args.initialScrollIndex,
+              showContactEditingDialog: args.showContactEditingDialog),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     ContactInfo.name: (routeData) {
       final args = routeData.argsAs<ContactInfoArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i6.ContactInfo(contact: args.contact),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i6.ContactInfo(contact: args.contact),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     NewChat.name: (routeData) {
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i7.NewChat(),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i7.NewChat(),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     AddViaChatNumber.name: (routeData) {
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i8.AddViaChatNumber(),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i8.AddViaChatNumber(),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     Introduce.name: (routeData) {
       final args = routeData.argsAs<IntroduceArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i9.Introduce(
-          singleIntro: args.singleIntro,
-          contactToIntro: args.contactToIntro,
-        ),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i9.Introduce(
+              singleIntro: args.singleIntro,
+              contactToIntro: args.contactToIntro),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     Introductions.name: (routeData) {
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i10.Introductions(),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i10.Introductions(),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     AccountManagement.name: (routeData) {
       final args = routeData.argsAs<AccountManagementArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i11.AccountManagement(key: args.key, isPro: args.isPro),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i11.AccountManagement(key: args.key, isPro: args.isPro),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     ReplicaLinkOpenerScreen.name: (routeData) {
       final args = routeData.argsAs<ReplicaLinkOpenerScreenArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i12.ReplicaLinkOpenerScreen(
-          key: args.key,
-          replicaApi: args.replicaApi,
-          replicaLink: args.replicaLink,
-        ),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i12.ReplicaLinkOpenerScreen(
+              key: args.key,
+              replicaApi: args.replicaApi,
+              replicaLink: args.replicaLink),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     Settings.name: (routeData) {
       final args =
           routeData.argsAs<SettingsArgs>(orElse: () => const SettingsArgs());
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i13.Settings(key: args.key),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i13.Settings(key: args.key),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     ReplicaVideoPlayerScreen.name: (routeData) {
       final args = routeData.argsAs<ReplicaVideoPlayerScreenArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i14.ReplicaVideoPlayerScreen(
-          key: args.key,
-          replicaApi: args.replicaApi,
-          replicaLink: args.replicaLink,
-          mimeType: args.mimeType,
-        ),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i14.ReplicaVideoPlayerScreen(
+              key: args.key,
+              replicaApi: args.replicaApi,
+              replicaLink: args.replicaLink,
+              mimeType: args.mimeType),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     Language.name: (routeData) {
       final args =
           routeData.argsAs<LanguageArgs>(orElse: () => const LanguageArgs());
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i15.Language(key: args.key),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i15.Language(key: args.key),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     ReplicaAudioPlayerScreen.name: (routeData) {
       final args = routeData.argsAs<ReplicaAudioPlayerScreenArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i16.ReplicaAudioPlayerScreen(
-          key: args.key,
-          replicaApi: args.replicaApi,
-          replicaLink: args.replicaLink,
-          mimeType: args.mimeType,
-        ),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i16.ReplicaAudioPlayerScreen(
+              key: args.key,
+              replicaApi: args.replicaApi,
+              replicaLink: args.replicaLink,
+              mimeType: args.mimeType),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     AuthorizePro.name: (routeData) {
       final args = routeData.argsAs<AuthorizeProArgs>(
-        orElse: () => const AuthorizeProArgs(),
-      );
+          orElse: () => const AuthorizeProArgs());
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i17.AuthorizeDeviceForPro(key: args.key),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i17.AuthorizeDeviceForPro(key: args.key),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     ReplicaImagePreviewScreen.name: (routeData) {
       final args = routeData.argsAs<ReplicaImagePreviewScreenArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i18.ReplicaImagePreviewScreen(
-          key: args.key,
-          replicaLink: args.replicaLink,
-        ),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i18.ReplicaImagePreviewScreen(
+              key: args.key, replicaLink: args.replicaLink),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     AuthorizeDeviceEmail.name: (routeData) {
       final args = routeData.argsAs<AuthorizeDeviceEmailArgs>(
-        orElse: () => const AuthorizeDeviceEmailArgs(),
-      );
+          orElse: () => const AuthorizeDeviceEmailArgs());
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i19.AuthorizeDeviceViaEmail(key: args.key),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i19.AuthorizeDeviceViaEmail(key: args.key),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     AuthorizeDeviceEmailPin.name: (routeData) {
       final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>(
-        orElse: () => const AuthorizeDeviceEmailPinArgs(),
-      );
+          orElse: () => const AuthorizeDeviceEmailPinArgs());
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i20.AuthorizeDeviceViaEmailPin(key: args.key),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i20.AuthorizeDeviceViaEmailPin(key: args.key),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     ApproveDevice.name: (routeData) {
       final args = routeData.argsAs<ApproveDeviceArgs>(
-        orElse: () => const ApproveDeviceArgs(),
-      );
+          orElse: () => const ApproveDeviceArgs());
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i21.ApproveDevice(key: args.key),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i21.ApproveDevice(key: args.key),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     RecoveryKey.name: (routeData) {
       final args = routeData.argsAs<RecoveryKeyArgs>(
-        orElse: () => const RecoveryKeyArgs(),
-      );
+          orElse: () => const RecoveryKeyArgs());
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i22.RecoveryKey(key: args.key),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i22.RecoveryKey(key: args.key),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
-    SecureChatNumberAccount.name: (routeData) {
+    ChatNumberAccount.name: (routeData) {
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i23.SecureChatNumberAccount(),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i23.ChatNumberAccount(),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     BlockedUsers.name: (routeData) {
       final args = routeData.argsAs<BlockedUsersArgs>(
-        orElse: () => const BlockedUsersArgs(),
-      );
+          orElse: () => const BlockedUsersArgs());
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i24.BlockedUsers(key: args.key),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i24.BlockedUsers(key: args.key),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     ReplicaPDFScreen.name: (routeData) {
       final args = routeData.argsAs<ReplicaPDFScreenArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i25.ReplicaPDFScreen(
-          key: args.key,
-          replicaApi: args.replicaApi,
-          replicaLink: args.replicaLink,
-          category: args.category,
-          mimeType: args.mimeType,
-        ),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i25.ReplicaPDFScreen(
+              key: args.key,
+              replicaApi: args.replicaApi,
+              replicaLink: args.replicaLink,
+              category: args.category,
+              mimeType: args.mimeType),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     ReplicaUnknownItemScreen.name: (routeData) {
       final args = routeData.argsAs<ReplicaUnknownItemScreenArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i26.ReplicaUnknownItemScreen(
-          key: args.key,
-          replicaLink: args.replicaLink,
-          category: args.category,
-          mimeType: args.mimeType,
-        ),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i26.ReplicaUnknownItemScreen(
+              key: args.key,
+              replicaLink: args.replicaLink,
+              category: args.category,
+              mimeType: args.mimeType),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     ReplicaSearchScreen.name: (routeData) {
       final args = routeData.argsAs<ReplicaSearchScreenArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i27.ReplicaSearchScreen(
-          key: args.key,
-          searchQuery: args.searchQuery,
-        ),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i27.ReplicaSearchScreen(
+              key: args.key, searchQuery: args.searchQuery),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     },
     ReplicaUploadFileScreen.name: (routeData) {
       final args = routeData.argsAs<ReplicaUploadFileScreenArgs>();
       return _i29.CustomPage<void>(
-        routeData: routeData,
-        child: _i28.ReplicaUploadFileScreen(
-          key: args.key,
-          fileToUpload: args.fileToUpload,
-        ),
-        transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
-        reverseDurationInMilliseconds: 200,
-        opaque: true,
-        barrierDismissible: false,
-      );
+          routeData: routeData,
+          child: _i28.ReplicaUploadFileScreen(
+              key: args.key, fileToUpload: args.fileToUpload),
+          transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
+          durationInMilliseconds: 200,
+          reverseDurationInMilliseconds: 200,
+          opaque: true,
+          barrierDismissible: false);
     }
   };
 
   @override
   List<_i29.RouteConfig> get routes => [
         _i29.RouteConfig(Home.name, path: '/'),
-        _i29.RouteConfig(
-          SecureNumberRecovery.name,
-          path: 'secureNumberRecovery',
-        ),
-        _i29.RouteConfig(
-          SecureChatNumberMessaging.name,
-          path: 'secureChatNumberMessaging',
-        ),
-        _i29.RouteConfig(
-          FullScreenDialogPage.name,
-          path: 'fullScreenDialogPage',
-        ),
+        _i29.RouteConfig(ChatNumberRecovery.name, path: 'chatNumberRecovery'),
+        _i29.RouteConfig(ChatNumberMessaging.name, path: 'chatNumberMessaging'),
+        _i29.RouteConfig(FullScreenDialogPage.name,
+            path: 'fullScreenDialogPage'),
         _i29.RouteConfig(Conversation.name, path: 'conversation'),
         _i29.RouteConfig(ContactInfo.name, path: 'contactInfo'),
         _i29.RouteConfig(NewChat.name, path: 'newChat'),
@@ -463,50 +404,31 @@ class AppRouter extends _i29.RootStackRouter {
         _i29.RouteConfig(Introduce.name, path: 'introduce'),
         _i29.RouteConfig(Introductions.name, path: 'introductions'),
         _i29.RouteConfig(AccountManagement.name, path: 'accountManagement'),
-        _i29.RouteConfig(
-          ReplicaLinkOpenerScreen.name,
-          path: 'replicaLinkOpenerScreen',
-        ),
+        _i29.RouteConfig(ReplicaLinkOpenerScreen.name,
+            path: 'replicaLinkOpenerScreen'),
         _i29.RouteConfig(Settings.name, path: 'settings'),
-        _i29.RouteConfig(
-          ReplicaVideoPlayerScreen.name,
-          path: 'replicaVideoPlayerScreen',
-        ),
+        _i29.RouteConfig(ReplicaVideoPlayerScreen.name,
+            path: 'replicaVideoPlayerScreen'),
         _i29.RouteConfig(Language.name, path: 'language'),
-        _i29.RouteConfig(
-          ReplicaAudioPlayerScreen.name,
-          path: 'replicaAudioPlayerScreen',
-        ),
+        _i29.RouteConfig(ReplicaAudioPlayerScreen.name,
+            path: 'replicaAudioPlayerScreen'),
         _i29.RouteConfig(AuthorizePro.name, path: 'authorizePro'),
-        _i29.RouteConfig(
-          ReplicaImagePreviewScreen.name,
-          path: 'replicaImagePreviewScreen',
-        ),
-        _i29.RouteConfig(
-          AuthorizeDeviceEmail.name,
-          path: 'authorizeDeviceEmail',
-        ),
-        _i29.RouteConfig(
-          AuthorizeDeviceEmailPin.name,
-          path: 'authorizeDeviceEmailPin',
-        ),
+        _i29.RouteConfig(ReplicaImagePreviewScreen.name,
+            path: 'replicaImagePreviewScreen'),
+        _i29.RouteConfig(AuthorizeDeviceEmail.name,
+            path: 'authorizeDeviceEmail'),
+        _i29.RouteConfig(AuthorizeDeviceEmailPin.name,
+            path: 'authorizeDeviceEmailPin'),
         _i29.RouteConfig(ApproveDevice.name, path: 'approveDevice'),
         _i29.RouteConfig(RecoveryKey.name, path: 'recoveryKey'),
-        _i29.RouteConfig(
-          SecureChatNumberAccount.name,
-          path: 'secureChatNumberAccount',
-        ),
+        _i29.RouteConfig(ChatNumberAccount.name, path: 'chatNumberAccount'),
         _i29.RouteConfig(BlockedUsers.name, path: 'blockedUsers'),
         _i29.RouteConfig(ReplicaPDFScreen.name, path: 'replicaPDFScreen'),
-        _i29.RouteConfig(
-          ReplicaUnknownItemScreen.name,
-          path: 'replicaUnknownItemScreen',
-        ),
+        _i29.RouteConfig(ReplicaUnknownItemScreen.name,
+            path: 'replicaUnknownItemScreen'),
         _i29.RouteConfig(ReplicaSearchScreen.name, path: 'replicaSearchScreen'),
-        _i29.RouteConfig(
-          ReplicaUploadFileScreen.name,
-          path: 'replicaUploadFileScreen',
-        )
+        _i29.RouteConfig(ReplicaUploadFileScreen.name,
+            path: 'replicaUploadFileScreen')
       ];
 }
 
@@ -530,24 +452,21 @@ class HomeArgs {
 }
 
 /// generated route for
-/// [_i2.SecureNumberRecovery]
-class SecureNumberRecovery extends _i29.PageRouteInfo<void> {
-  const SecureNumberRecovery()
-      : super(SecureNumberRecovery.name, path: 'secureNumberRecovery');
+/// [_i2.ChatNumberRecovery]
+class ChatNumberRecovery extends _i29.PageRouteInfo<void> {
+  const ChatNumberRecovery()
+      : super(ChatNumberRecovery.name, path: 'chatNumberRecovery');
 
-  static const String name = 'SecureNumberRecovery';
+  static const String name = 'ChatNumberRecovery';
 }
 
 /// generated route for
-/// [_i3.SecureChatNumberMessaging]
-class SecureChatNumberMessaging extends _i29.PageRouteInfo<void> {
-  const SecureChatNumberMessaging()
-      : super(
-          SecureChatNumberMessaging.name,
-          path: 'secureChatNumberMessaging',
-        );
+/// [_i3.ChatNumberMessaging]
+class ChatNumberMessaging extends _i29.PageRouteInfo<void> {
+  const ChatNumberMessaging()
+      : super(ChatNumberMessaging.name, path: 'chatNumberMessaging');
 
-  static const String name = 'SecureChatNumberMessaging';
+  static const String name = 'ChatNumberMessaging';
 }
 
 /// generated route for
@@ -555,11 +474,9 @@ class SecureChatNumberMessaging extends _i29.PageRouteInfo<void> {
 class FullScreenDialogPage
     extends _i29.PageRouteInfo<FullScreenDialogPageArgs> {
   FullScreenDialogPage({required _i31.Widget widget, _i31.Key? key})
-      : super(
-          FullScreenDialogPage.name,
-          path: 'fullScreenDialogPage',
-          args: FullScreenDialogPageArgs(widget: widget, key: key),
-        );
+      : super(FullScreenDialogPage.name,
+            path: 'fullScreenDialogPage',
+            args: FullScreenDialogPageArgs(widget: widget, key: key));
 
   static const String name = 'FullScreenDialogPage';
 }
@@ -581,18 +498,15 @@ class FullScreenDialogPageArgs {
 /// [_i5.Conversation]
 class Conversation extends _i29.PageRouteInfo<ConversationArgs> {
   Conversation(
-      {required _i32.ContactId contactId,
+      {required _i31.ContactId contactId,
       int? initialScrollIndex,
       bool? showContactEditingDialog})
-      : super(
-          Conversation.name,
-          path: 'conversation',
-          args: ConversationArgs(
-            contactId: contactId,
-            initialScrollIndex: initialScrollIndex,
-            showContactEditingDialog: showContactEditingDialog,
-          ),
-        );
+      : super(Conversation.name,
+            path: 'conversation',
+            args: ConversationArgs(
+                contactId: contactId,
+                initialScrollIndex: initialScrollIndex,
+                showContactEditingDialog: showContactEditingDialog));
 
   static const String name = 'Conversation';
 }
@@ -603,7 +517,7 @@ class ConversationArgs {
       this.initialScrollIndex,
       this.showContactEditingDialog});
 
-  final _i32.ContactId contactId;
+  final _i31.ContactId contactId;
 
   final int? initialScrollIndex;
 
@@ -618,12 +532,9 @@ class ConversationArgs {
 /// generated route for
 /// [_i6.ContactInfo]
 class ContactInfo extends _i29.PageRouteInfo<ContactInfoArgs> {
-  ContactInfo({required _i32.Contact contact})
-      : super(
-          ContactInfo.name,
-          path: 'contactInfo',
-          args: ContactInfoArgs(contact: contact),
-        );
+  ContactInfo({required _i31.Contact contact})
+      : super(ContactInfo.name,
+            path: 'contactInfo', args: ContactInfoArgs(contact: contact));
 
   static const String name = 'ContactInfo';
 }
@@ -631,7 +542,7 @@ class ContactInfo extends _i29.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.contact});
 
-  final _i32.Contact contact;
+  final _i31.Contact contact;
 
   @override
   String toString() {
@@ -659,15 +570,11 @@ class AddViaChatNumber extends _i29.PageRouteInfo<void> {
 /// generated route for
 /// [_i9.Introduce]
 class Introduce extends _i29.PageRouteInfo<IntroduceArgs> {
-  Introduce({required bool singleIntro, _i32.Contact? contactToIntro})
-      : super(
-          Introduce.name,
-          path: 'introduce',
-          args: IntroduceArgs(
-            singleIntro: singleIntro,
-            contactToIntro: contactToIntro,
-          ),
-        );
+  Introduce({required bool singleIntro, _i31.Contact? contactToIntro})
+      : super(Introduce.name,
+            path: 'introduce',
+            args: IntroduceArgs(
+                singleIntro: singleIntro, contactToIntro: contactToIntro));
 
   static const String name = 'Introduce';
 }
@@ -677,7 +584,7 @@ class IntroduceArgs {
 
   final bool singleIntro;
 
-  final _i32.Contact? contactToIntro;
+  final _i31.Contact? contactToIntro;
 
   @override
   String toString() {
@@ -697,11 +604,9 @@ class Introductions extends _i29.PageRouteInfo<void> {
 /// [_i11.AccountManagement]
 class AccountManagement extends _i29.PageRouteInfo<AccountManagementArgs> {
   AccountManagement({_i31.Key? key, required bool isPro})
-      : super(
-          AccountManagement.name,
-          path: 'accountManagement',
-          args: AccountManagementArgs(key: key, isPro: isPro),
-        );
+      : super(AccountManagement.name,
+            path: 'accountManagement',
+            args: AccountManagementArgs(key: key, isPro: isPro));
 
   static const String name = 'AccountManagement';
 }
@@ -725,17 +630,12 @@ class ReplicaLinkOpenerScreen
     extends _i29.PageRouteInfo<ReplicaLinkOpenerScreenArgs> {
   ReplicaLinkOpenerScreen(
       {_i31.Key? key,
-      required _i33.ReplicaApi replicaApi,
-      required _i34.ReplicaLink replicaLink})
-      : super(
-          ReplicaLinkOpenerScreen.name,
-          path: 'replicaLinkOpenerScreen',
-          args: ReplicaLinkOpenerScreenArgs(
-            key: key,
-            replicaApi: replicaApi,
-            replicaLink: replicaLink,
-          ),
-        );
+      required _i32.ReplicaApi replicaApi,
+      required _i33.ReplicaLink replicaLink})
+      : super(ReplicaLinkOpenerScreen.name,
+            path: 'replicaLinkOpenerScreen',
+            args: ReplicaLinkOpenerScreenArgs(
+                key: key, replicaApi: replicaApi, replicaLink: replicaLink));
 
   static const String name = 'ReplicaLinkOpenerScreen';
 }
@@ -746,9 +646,9 @@ class ReplicaLinkOpenerScreenArgs {
 
   final _i31.Key? key;
 
-  final _i33.ReplicaApi replicaApi;
+  final _i32.ReplicaApi replicaApi;
 
-  final _i34.ReplicaLink replicaLink;
+  final _i33.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -782,19 +682,16 @@ class ReplicaVideoPlayerScreen
     extends _i29.PageRouteInfo<ReplicaVideoPlayerScreenArgs> {
   ReplicaVideoPlayerScreen(
       {_i31.Key? key,
-      required _i33.ReplicaApi replicaApi,
-      required _i34.ReplicaLink replicaLink,
+      required _i32.ReplicaApi replicaApi,
+      required _i33.ReplicaLink replicaLink,
       String? mimeType})
-      : super(
-          ReplicaVideoPlayerScreen.name,
-          path: 'replicaVideoPlayerScreen',
-          args: ReplicaVideoPlayerScreenArgs(
-            key: key,
-            replicaApi: replicaApi,
-            replicaLink: replicaLink,
-            mimeType: mimeType,
-          ),
-        );
+      : super(ReplicaVideoPlayerScreen.name,
+            path: 'replicaVideoPlayerScreen',
+            args: ReplicaVideoPlayerScreenArgs(
+                key: key,
+                replicaApi: replicaApi,
+                replicaLink: replicaLink,
+                mimeType: mimeType));
 
   static const String name = 'ReplicaVideoPlayerScreen';
 }
@@ -808,9 +705,9 @@ class ReplicaVideoPlayerScreenArgs {
 
   final _i31.Key? key;
 
-  final _i33.ReplicaApi replicaApi;
+  final _i32.ReplicaApi replicaApi;
 
-  final _i34.ReplicaLink replicaLink;
+  final _i33.ReplicaLink replicaLink;
 
   final String? mimeType;
 
@@ -846,19 +743,16 @@ class ReplicaAudioPlayerScreen
     extends _i29.PageRouteInfo<ReplicaAudioPlayerScreenArgs> {
   ReplicaAudioPlayerScreen(
       {_i31.Key? key,
-      required _i33.ReplicaApi replicaApi,
-      required _i34.ReplicaLink replicaLink,
+      required _i32.ReplicaApi replicaApi,
+      required _i33.ReplicaLink replicaLink,
       String? mimeType})
-      : super(
-          ReplicaAudioPlayerScreen.name,
-          path: 'replicaAudioPlayerScreen',
-          args: ReplicaAudioPlayerScreenArgs(
-            key: key,
-            replicaApi: replicaApi,
-            replicaLink: replicaLink,
-            mimeType: mimeType,
-          ),
-        );
+      : super(ReplicaAudioPlayerScreen.name,
+            path: 'replicaAudioPlayerScreen',
+            args: ReplicaAudioPlayerScreenArgs(
+                key: key,
+                replicaApi: replicaApi,
+                replicaLink: replicaLink,
+                mimeType: mimeType));
 
   static const String name = 'ReplicaAudioPlayerScreen';
 }
@@ -872,9 +766,9 @@ class ReplicaAudioPlayerScreenArgs {
 
   final _i31.Key? key;
 
-  final _i33.ReplicaApi replicaApi;
+  final _i32.ReplicaApi replicaApi;
 
-  final _i34.ReplicaLink replicaLink;
+  final _i33.ReplicaLink replicaLink;
 
   final String? mimeType;
 
@@ -888,11 +782,8 @@ class ReplicaAudioPlayerScreenArgs {
 /// [_i17.AuthorizeDeviceForPro]
 class AuthorizePro extends _i29.PageRouteInfo<AuthorizeProArgs> {
   AuthorizePro({_i31.Key? key})
-      : super(
-          AuthorizePro.name,
-          path: 'authorizePro',
-          args: AuthorizeProArgs(key: key),
-        );
+      : super(AuthorizePro.name,
+            path: 'authorizePro', args: AuthorizeProArgs(key: key));
 
   static const String name = 'AuthorizePro';
 }
@@ -913,15 +804,11 @@ class AuthorizeProArgs {
 class ReplicaImagePreviewScreen
     extends _i29.PageRouteInfo<ReplicaImagePreviewScreenArgs> {
   ReplicaImagePreviewScreen(
-      {_i31.Key? key, required _i34.ReplicaLink replicaLink})
-      : super(
-          ReplicaImagePreviewScreen.name,
-          path: 'replicaImagePreviewScreen',
-          args: ReplicaImagePreviewScreenArgs(
-            key: key,
-            replicaLink: replicaLink,
-          ),
-        );
+      {_i31.Key? key, required _i33.ReplicaLink replicaLink})
+      : super(ReplicaImagePreviewScreen.name,
+            path: 'replicaImagePreviewScreen',
+            args: ReplicaImagePreviewScreenArgs(
+                key: key, replicaLink: replicaLink));
 
   static const String name = 'ReplicaImagePreviewScreen';
 }
@@ -931,7 +818,7 @@ class ReplicaImagePreviewScreenArgs {
 
   final _i31.Key? key;
 
-  final _i34.ReplicaLink replicaLink;
+  final _i33.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -944,11 +831,9 @@ class ReplicaImagePreviewScreenArgs {
 class AuthorizeDeviceEmail
     extends _i29.PageRouteInfo<AuthorizeDeviceEmailArgs> {
   AuthorizeDeviceEmail({_i31.Key? key})
-      : super(
-          AuthorizeDeviceEmail.name,
-          path: 'authorizeDeviceEmail',
-          args: AuthorizeDeviceEmailArgs(key: key),
-        );
+      : super(AuthorizeDeviceEmail.name,
+            path: 'authorizeDeviceEmail',
+            args: AuthorizeDeviceEmailArgs(key: key));
 
   static const String name = 'AuthorizeDeviceEmail';
 }
@@ -969,11 +854,9 @@ class AuthorizeDeviceEmailArgs {
 class AuthorizeDeviceEmailPin
     extends _i29.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
   AuthorizeDeviceEmailPin({_i31.Key? key})
-      : super(
-          AuthorizeDeviceEmailPin.name,
-          path: 'authorizeDeviceEmailPin',
-          args: AuthorizeDeviceEmailPinArgs(key: key),
-        );
+      : super(AuthorizeDeviceEmailPin.name,
+            path: 'authorizeDeviceEmailPin',
+            args: AuthorizeDeviceEmailPinArgs(key: key));
 
   static const String name = 'AuthorizeDeviceEmailPin';
 }
@@ -993,11 +876,8 @@ class AuthorizeDeviceEmailPinArgs {
 /// [_i21.ApproveDevice]
 class ApproveDevice extends _i29.PageRouteInfo<ApproveDeviceArgs> {
   ApproveDevice({_i31.Key? key})
-      : super(
-          ApproveDevice.name,
-          path: 'approveDevice',
-          args: ApproveDeviceArgs(key: key),
-        );
+      : super(ApproveDevice.name,
+            path: 'approveDevice', args: ApproveDeviceArgs(key: key));
 
   static const String name = 'ApproveDevice';
 }
@@ -1017,11 +897,8 @@ class ApproveDeviceArgs {
 /// [_i22.RecoveryKey]
 class RecoveryKey extends _i29.PageRouteInfo<RecoveryKeyArgs> {
   RecoveryKey({_i31.Key? key})
-      : super(
-          RecoveryKey.name,
-          path: 'recoveryKey',
-          args: RecoveryKeyArgs(key: key),
-        );
+      : super(RecoveryKey.name,
+            path: 'recoveryKey', args: RecoveryKeyArgs(key: key));
 
   static const String name = 'RecoveryKey';
 }
@@ -1038,23 +915,20 @@ class RecoveryKeyArgs {
 }
 
 /// generated route for
-/// [_i23.SecureChatNumberAccount]
-class SecureChatNumberAccount extends _i29.PageRouteInfo<void> {
-  const SecureChatNumberAccount()
-      : super(SecureChatNumberAccount.name, path: 'secureChatNumberAccount');
+/// [_i23.ChatNumberAccount]
+class ChatNumberAccount extends _i29.PageRouteInfo<void> {
+  const ChatNumberAccount()
+      : super(ChatNumberAccount.name, path: 'chatNumberAccount');
 
-  static const String name = 'SecureChatNumberAccount';
+  static const String name = 'ChatNumberAccount';
 }
 
 /// generated route for
 /// [_i24.BlockedUsers]
 class BlockedUsers extends _i29.PageRouteInfo<BlockedUsersArgs> {
   BlockedUsers({_i31.Key? key})
-      : super(
-          BlockedUsers.name,
-          path: 'blockedUsers',
-          args: BlockedUsersArgs(key: key),
-        );
+      : super(BlockedUsers.name,
+            path: 'blockedUsers', args: BlockedUsersArgs(key: key));
 
   static const String name = 'BlockedUsers';
 }
@@ -1075,21 +949,18 @@ class BlockedUsersArgs {
 class ReplicaPDFScreen extends _i29.PageRouteInfo<ReplicaPDFScreenArgs> {
   ReplicaPDFScreen(
       {_i31.Key? key,
-      required _i33.ReplicaApi replicaApi,
-      required _i34.ReplicaLink replicaLink,
-      required _i35.SearchCategory category,
+      required _i32.ReplicaApi replicaApi,
+      required _i33.ReplicaLink replicaLink,
+      required _i34.SearchCategory category,
       String? mimeType})
-      : super(
-          ReplicaPDFScreen.name,
-          path: 'replicaPDFScreen',
-          args: ReplicaPDFScreenArgs(
-            key: key,
-            replicaApi: replicaApi,
-            replicaLink: replicaLink,
-            category: category,
-            mimeType: mimeType,
-          ),
-        );
+      : super(ReplicaPDFScreen.name,
+            path: 'replicaPDFScreen',
+            args: ReplicaPDFScreenArgs(
+                key: key,
+                replicaApi: replicaApi,
+                replicaLink: replicaLink,
+                category: category,
+                mimeType: mimeType));
 
   static const String name = 'ReplicaPDFScreen';
 }
@@ -1104,11 +975,11 @@ class ReplicaPDFScreenArgs {
 
   final _i31.Key? key;
 
-  final _i33.ReplicaApi replicaApi;
+  final _i32.ReplicaApi replicaApi;
 
-  final _i34.ReplicaLink replicaLink;
+  final _i33.ReplicaLink replicaLink;
 
-  final _i35.SearchCategory category;
+  final _i34.SearchCategory category;
 
   final String? mimeType;
 
@@ -1124,19 +995,16 @@ class ReplicaUnknownItemScreen
     extends _i29.PageRouteInfo<ReplicaUnknownItemScreenArgs> {
   ReplicaUnknownItemScreen(
       {_i31.Key? key,
-      required _i34.ReplicaLink replicaLink,
-      required _i35.SearchCategory category,
+      required _i33.ReplicaLink replicaLink,
+      required _i34.SearchCategory category,
       String? mimeType})
-      : super(
-          ReplicaUnknownItemScreen.name,
-          path: 'replicaUnknownItemScreen',
-          args: ReplicaUnknownItemScreenArgs(
-            key: key,
-            replicaLink: replicaLink,
-            category: category,
-            mimeType: mimeType,
-          ),
-        );
+      : super(ReplicaUnknownItemScreen.name,
+            path: 'replicaUnknownItemScreen',
+            args: ReplicaUnknownItemScreenArgs(
+                key: key,
+                replicaLink: replicaLink,
+                category: category,
+                mimeType: mimeType));
 
   static const String name = 'ReplicaUnknownItemScreen';
 }
@@ -1150,9 +1018,9 @@ class ReplicaUnknownItemScreenArgs {
 
   final _i31.Key? key;
 
-  final _i34.ReplicaLink replicaLink;
+  final _i33.ReplicaLink replicaLink;
 
-  final _i35.SearchCategory category;
+  final _i34.SearchCategory category;
 
   final String? mimeType;
 
@@ -1166,11 +1034,9 @@ class ReplicaUnknownItemScreenArgs {
 /// [_i27.ReplicaSearchScreen]
 class ReplicaSearchScreen extends _i29.PageRouteInfo<ReplicaSearchScreenArgs> {
   ReplicaSearchScreen({_i31.Key? key, required String searchQuery})
-      : super(
-          ReplicaSearchScreen.name,
-          path: 'replicaSearchScreen',
-          args: ReplicaSearchScreenArgs(key: key, searchQuery: searchQuery),
-        );
+      : super(ReplicaSearchScreen.name,
+            path: 'replicaSearchScreen',
+            args: ReplicaSearchScreenArgs(key: key, searchQuery: searchQuery));
 
   static const String name = 'ReplicaSearchScreen';
 }
@@ -1193,14 +1059,10 @@ class ReplicaSearchScreenArgs {
 class ReplicaUploadFileScreen
     extends _i29.PageRouteInfo<ReplicaUploadFileScreenArgs> {
   ReplicaUploadFileScreen({_i31.Key? key, required _i31.File fileToUpload})
-      : super(
-          ReplicaUploadFileScreen.name,
-          path: 'replicaUploadFileScreen',
-          args: ReplicaUploadFileScreenArgs(
-            key: key,
-            fileToUpload: fileToUpload,
-          ),
-        );
+      : super(ReplicaUploadFileScreen.name,
+            path: 'replicaUploadFileScreen',
+            args: ReplicaUploadFileScreenArgs(
+                key: key, fileToUpload: fileToUpload));
 
   static const String name = 'ReplicaUploadFileScreen';
 }
