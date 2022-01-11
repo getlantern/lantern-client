@@ -293,7 +293,7 @@ class _AccountManagementState extends State<AccountManagement>
                                   text: 'Lantern Pro'.i18n.toUpperCase(),
                                 ),
                                 Tab(
-                                  text: 'secure_chat'.i18n.toUpperCase(),
+                                  text: 'chat'.i18n.toUpperCase(),
                                 ),
                               ],
                             ),

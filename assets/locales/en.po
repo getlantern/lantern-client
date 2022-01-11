@@ -6,7 +6,7 @@ msgid "app_name"
 msgstr "Lantern"
 
 msgid "introducing"
-msgstr "Introducing Secure Chat"
+msgstr "Introducing Chat"
 
 msgid "introducing_des"
 msgstr "Chat securely with friends using our new blocking resistant & encrypted chat built directly into Lantern!"
@@ -667,17 +667,17 @@ msgstr "Chats"
 msgid "new_requests"
 msgstr "New Requests %s"
 
-msgid "secure_chat"
-msgstr "Secure Chat"
+msgid "chat"
+msgstr "Chat"
 
-msgid "lantern_secure_chat"
-msgstr "Lantern Secure Chat"
+msgid "lantern_chat"
+msgstr "Lantern Chat"
 
 msgid "welcome_title"
-msgstr "Welcome to Lantern Secure Chat!"
+msgstr "Welcome to Lantern Chat!"
 
 msgid "welcome_text"
-msgstr "An encrypted secure chat to protect your privacy paired with best-in-class blocking resistant technology."
+msgstr "An encrypted chat to protect your privacy paired with best-in-class blocking resistant technology."
 
 msgid "get_started"
 msgstr "Get started"
