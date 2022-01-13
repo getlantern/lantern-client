@@ -66,11 +66,12 @@ class _IntroduceState extends State<Introduce> {
           var groupedSortedContacts = sortedContacts
               .groupBy((el) => el.value.displayNameOrFallback[0].toLowerCase());
 
+          final contactsThreshold = widget.singleIntro ? 1 : 2;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: (sortedContacts.length <= 1)
+                child: (sortedContacts.length < contactsThreshold)
                     ? const NotEnoughContacts()
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.start,
