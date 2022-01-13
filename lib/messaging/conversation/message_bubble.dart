@@ -408,7 +408,7 @@ class MessageBubble extends StatelessWidget {
   SizedBox messageMenu(BuildContext context, MessagingModel model) {
     var textCopied = false;
     var isConnectionCard = message.hasIntroduction();
-    var height = isConnectionCard ? 123.0 : 219.0;
+    var height = isConnectionCard ? 171.0 : 219.0;
     if (isOutbound) height += 48;
     if (!isAttachment && !wasRemotelyDeleted) height += 48;
     return SizedBox(
