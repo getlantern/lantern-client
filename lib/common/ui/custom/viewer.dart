@@ -9,7 +9,11 @@ abstract class ViewerWidget extends StatefulWidget {
   final List<Widget>? actions;
 
   ViewerWidget(
-      this.replicaProps, this.messagingProps, this.title, this.actions);
+    this.replicaProps,
+    this.messagingProps,
+    this.title,
+    this.actions,
+  );
 }
 
 /// Base class for state associated with ViewerWidgets.
@@ -75,11 +79,13 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
                   Expanded(child: !ready() ? Container() : body(context)),
                   Padding(
                     padding: const EdgeInsetsDirectional.only(start: 8, top: 8),
-                    child: StatusRow(
-                      widget.messagingProps!.message.direction ==
-                          MessageDirection.OUT,
-                      widget.messagingProps!.message,
-                    ),
+                    child: widget.messagingProps != null
+                        ? StatusRow(
+                            widget.messagingProps!.message.direction ==
+                                MessageDirection.OUT,
+                            widget.messagingProps!.message,
+                          )
+                        : null,
                   ),
                 ],
               ),
