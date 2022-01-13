@@ -23,23 +23,4 @@ public class ProdLogger extends Logger {
     protected void logError(String tag, String msg, Throwable t) {
         Internalsdk.error(tag, msg);
     }
-
-    private static String levelToString(int level) {
-        switch (level) {
-            case Log.ASSERT:
-                return "A";
-            case Log.DEBUG:
-                return "D";
-            case Log.ERROR:
-                return "E";
-            case Log.INFO:
-                return "I";
-            case Log.VERBOSE:
-                return "V";
-            case Log.WARN:
-                return "W";
-        }
-
-        return "";
-    }
 }
