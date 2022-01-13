@@ -63,6 +63,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
       await signaling.bye(session!);
     }
     unawaited(notifications.dismissInCallNotification());
+    await Wakelock.disable();
   }
 
   void onSignalingStateChange() async {
@@ -158,6 +159,9 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
     if (session == null) {
       return Container();
     }
+    Wakelock.toggle(
+      enable: isPanelShowing,
+    ); // keep screen awake when panel is showing
     return LayoutBuilder(
       builder: (context, constraints) => ValueListenableBuilder(
         valueListenable: session!,
