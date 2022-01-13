@@ -71,9 +71,6 @@ msgstr "OK"
 msgid "Done"
 msgstr "Done"
 
-msgid "recovery_key"
-msgstr "Recovery Key"
-
 msgid "backup_recovery_key"
 msgstr "Backup Recovery Key"
 
@@ -325,9 +322,6 @@ msgstr "I confirm I want to unblock this contact."
 msgid "delete_permanently"
 msgstr "Delete user permanently"
 
-msgid "delete_contact"
-msgstr "Delete contact"
-
 msgid "delete_info_description"
 msgstr "Once deleted, you will need to add their contact information if you want to chat with them again."
 
@@ -480,9 +474,6 @@ msgstr "Letters and numbers only"
 
 msgid "name_your_contact"
 msgstr "Name your contact"
-
-msgid "chat_number"
-msgstr "Chat Number"
 
 msgid "messenger_id_invalid"
 msgstr "Invalid Messenger ID"
@@ -754,9 +745,6 @@ msgstr "Search"
 msgid "account_management"
 msgstr "Account Management"
 
-msgid "introductions"
-msgstr "Introductions"
-
 msgid "add_via_username"
 msgstr "Add via username"
 
@@ -865,9 +853,6 @@ msgstr "Muted"
 msgid "end_call"
 msgstr "End Call"
 
-msgid "unnamed_contact"
-msgstr "Unnamed Contact"
-
 msgid "verify_contact"
 msgstr "Verify %s"
 
@@ -915,9 +900,6 @@ msgstr "Touch here to open call"
 
 msgid "in_call_with"
 msgstr "In call with %s"
-
-msgid "undo_verification"
-msgstr "Undo verification"
 
 msgid "undo_verification"
 msgstr "Undo verification"
