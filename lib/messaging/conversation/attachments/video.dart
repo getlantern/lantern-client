@@ -1,7 +1,6 @@
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
-import 'package:wakelock/wakelock.dart';
 
 import 'viewer.dart';
 
