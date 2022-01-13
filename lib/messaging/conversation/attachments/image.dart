@@ -23,7 +23,15 @@ class ImageViewer extends ViewerWidget {
   final MessagingViewerProps? messagingProps;
 
   ImageViewer(this.replicaProps, this.messagingProps)
-      : super(replicaProps, messagingProps, null, null);
+      : super(
+          replicaProps,
+          messagingProps,
+          CText(
+            messagingProps!.contact.displayNameOrFallback,
+            style: tsHeading3.copiedWith(color: white),
+          ),
+          null,
+        );
 
   @override
   State<StatefulWidget> createState() => ImageViewerState();

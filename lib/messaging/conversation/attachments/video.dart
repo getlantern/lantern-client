@@ -14,7 +14,10 @@ class VideoAttachment extends VisualAttachment {
   Widget buildViewer() => CVideoViewer(
         null,
         MessagingViewerProps(contact, message, attachment),
-        null,
+        CText(
+          contact.displayNameOrFallback,
+          style: tsHeading3.copiedWith(color: white),
+        ),
         null,
       );
 
