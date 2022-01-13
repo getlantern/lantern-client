@@ -1,6 +1,7 @@
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'viewer.dart';
 
@@ -80,6 +81,7 @@ class VideoViewerState extends ViewerState<VideoViewer> {
   void dispose() {
     controller?.dispose();
     controller = null;
+    Wakelock.disable();
     super.dispose();
   }
 
@@ -88,6 +90,7 @@ class VideoViewerState extends ViewerState<VideoViewer> {
 
   @override
   Widget body(BuildContext context) {
+    Wakelock.toggle(enable: controller!.value.isPlaying);
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         if (controller == null) {
@@ -114,6 +117,10 @@ class VideoViewerState extends ViewerState<VideoViewer> {
                     GestureDetector(
                       onTap: () {
                         setState(() => _showPlayButton = !_showPlayButton);
+                        Future.delayed(
+                          defaultTransitionDuration,
+                          () => handleButtonTap(),
+                        );
                       },
                       child: AspectRatio(
                         aspectRatio: controller!.value.aspectRatio,
@@ -142,23 +149,26 @@ class VideoViewerState extends ViewerState<VideoViewer> {
                 size: 48,
                 custom: true,
                 playing: controller!.value.isPlaying,
-                onPressed: () {
-                  if (controller!.value.isPlaying) {
-                    setState(() {
-                      controller!.pause();
-                      _showPlayButton = true;
-                    });
-                  } else {
-                    setState(() {
-                      controller!.play();
-                      _showPlayButton = false;
-                    });
-                  }
-                },
+                onPressed: () => handleButtonTap(),
               ),
           ],
         );
       },
     );
+  }
+
+  void handleButtonTap() {
+    Wakelock.toggle(enable: controller!.value.isPlaying);
+    if (controller!.value.isPlaying) {
+      setState(() {
+        controller!.pause();
+        _showPlayButton = true;
+      });
+    } else {
+      setState(() {
+        controller!.play();
+        _showPlayButton = false;
+      });
+    }
   }
 }
