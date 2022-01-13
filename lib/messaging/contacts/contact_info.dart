@@ -234,10 +234,10 @@ class _ContactInfoState extends State<ContactInfo> {
                           showSnackbar(
                             context: context,
                             content: contact.blocked
-                                ? 'contact_was_unblocked'
+                                ? 'contact_was_blocked'
                                     .i18n
                                     .fill([contact.displayNameOrFallback])
-                                : 'contact_was_blocked'
+                                : 'contact_was_unblocked'
                                     .i18n
                                     .fill([contact.displayNameOrFallback]),
                           );
