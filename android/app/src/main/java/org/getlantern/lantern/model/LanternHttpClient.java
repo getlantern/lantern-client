@@ -212,7 +212,6 @@ public class LanternHttpClient extends HttpClient {
                 .add("deviceName", LanternApp.getSession().deviceName())
                 .build();
 
-        Logger.debug(TAG, "Sending link request...");
         post(url, formBody,
                 new LanternHttpClient.ProCallback() {
                     @Override
@@ -282,19 +281,6 @@ public class LanternHttpClient extends HttpClient {
         return RequestBody.create(JSON, json.toString());
     }
 
-    private static void logRequest(final Request request) {
-        try {
-            final Request copy = request.newBuilder().build();
-            final Buffer buffer = new Buffer();
-            if (copy != null && copy.body() != null) {
-                copy.body().writeTo(buffer);
-                Logger.debug(TAG, "New request: " + buffer.readUtf8());
-            }
-        } catch (final Exception e) {
-            Logger.error(TAG, "Unable to log request " + e.getMessage());
-        }
-    }
-
     public void request(@NonNull final String method, @NonNull final HttpUrl url,
                         final Map<String, String> headers,
                         RequestBody body, final HttpCallback cb) {
@@ -312,15 +298,6 @@ public class LanternHttpClient extends HttpClient {
             builder = builder.post(body);
         }
         final Request request = builder.build();
-        if (headers != null) {
-            Logger.debug(TAG, String.format("Sending a %s request to %s (Headers: %s)",
-                    method, url, request.headers()));
-        } else {
-            Logger.debug(TAG, String.format("Sending a %s request to %s", method, url));
-        }
-
-        logRequest(request);
-
         httpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -371,13 +348,6 @@ public class LanternHttpClient extends HttpClient {
             builder = builder.post(body);
         }
         final Request request = builder.build();
-        if (headers != null) {
-            Logger.debug(TAG, String.format("Sending a %s request to %s (Headers: %s)",
-                    method, url, request.headers()));
-        } else {
-            Logger.debug(TAG, String.format("Sending a %s request to %s", method, url));
-        }
-        logRequest(request);
         httpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
