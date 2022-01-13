@@ -30,20 +30,22 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
             mimeType,
           ),
           null,
+          // * title
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CText(
                 replicaLink.displayName ?? 'untitled'.i18n,
-                style: tsHeading3.copiedWith(color: foregroundColor),
+                style: tsHeading3.copiedWith(color: foregroundColor ?? white),
               ),
               CText(
                 mimeType ?? '',
-                style: tsOverline.copiedWith(color: foregroundColor),
+                style: tsOverline.copiedWith(color: foregroundColor ?? white),
               )
             ],
           ),
+          // * actions
           [
             IconButton(
               onPressed: () async {

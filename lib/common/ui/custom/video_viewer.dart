@@ -54,7 +54,7 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
       setState(() {
         controller = VideoPlayerController.file(File(videoFilename))
           ..initialize().then((_) {
-            initController(rotation);
+            updateController(rotation);
           });
         handleListener();
       });
@@ -63,17 +63,20 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
 
   void initReplicaVideoPlayer() {
     logger.v('replicaProps ${widget.replicaProps}');
-    controller = VideoPlayerController.network(
-      widget.replicaProps!.replicaApi
-          .getViewAddr(widget.replicaProps!.replicaLink),
-    );
-    initController(null);
+    context.loaderOverlay.hide();
+    setState(() {
+      controller = VideoPlayerController.network(
+        widget.replicaProps!.replicaApi
+            .getViewAddr(widget.replicaProps!.replicaLink),
+      )..initialize().then((_) {
+          updateController(null);
+        });
+    });
     handleListener();
   }
 
-  void initController(String? rotation) {
+  void updateController(String? rotation) {
     setState(() {
-      controller?.play();
       fixRotation = rotation == '180';
       controller?.play().then((_) async {
         // update UI after playing stops
