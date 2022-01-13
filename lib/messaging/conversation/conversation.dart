@@ -23,7 +23,7 @@ import 'stopwatch_timer.dart';
 class Conversation extends StatefulWidget {
   final ContactId contactId;
   final int? initialScrollIndex;
-  final bool? showContactEditingDialog;
+  bool? showContactEditingDialog;
 
   Conversation({
     required this.contactId,
@@ -187,25 +187,6 @@ class ConversationState extends State<Conversation>
     WidgetsBinding.instance!.addObserver(this);
     BackButtonInterceptor.add(interceptBackButton);
     subscribeToKeyboardChanges();
-
-    // * we came here after adding a contact via chat number, show contact name dialog
-    if (widget.showContactEditingDialog ?? false) {
-      messagingModel
-          .getDirectContact(widget.contactId.id)
-          .then((contact) async {
-        // We use Future.delayed instead of addPostFrameCallback because
-        // addPostFrameCallback doesn't work all the time (for some unknown
-        // reason).
-        await Future.delayed(const Duration(milliseconds: 250));
-        await showDialog(
-          context: context,
-          builder: (childContext) => ContactNameDialog(
-            context: context,
-            contact: contact,
-          ),
-        );
-      });
-    }
   }
 
   @override
@@ -392,6 +373,27 @@ class ConversationState extends State<Conversation>
         : unawaited(messagingModel.clearCurrentConversationContact());
     return messagingModel.singleContactById(widget.contactId,
         (context, contact, child) {
+      // * we came here after adding a contact via chat number, show contact name dialog
+      if (widget.showContactEditingDialog == true &&
+          contact.displayName.isEmpty) {
+        widget.showContactEditingDialog = false;
+        messagingModel
+            .getDirectContact(widget.contactId.id)
+            .then((contact) async {
+          // We use Future.delayed instead of addPostFrameCallback because
+          // addPostFrameCallback doesn't work all the time (for some unknown
+          // reason).
+          await Future.delayed(const Duration(milliseconds: 250));
+          await showDialog(
+            context: context,
+            builder: (childContext) => ContactNameDialog(
+              context: context,
+              contact: contact,
+            ),
+          );
+        });
+      }
+
       // determine if we will show the verification warning badge
       var verificationReminderLastDismissed = contact
               .applicationData['verificationReminderLastDismissed']?.int_3
