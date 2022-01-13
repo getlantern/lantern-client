@@ -72,6 +72,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
   void dispose() {
     _videoController.dispose();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    Wakelock.disable();
     super.dispose();
   }
 
@@ -129,6 +130,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
               }
 
               // Else, render video
+              Wakelock.toggle(enable: _videoController.value.isPlaying);
               return Stack(
                 alignment: Alignment.center,
                 children: [
@@ -139,6 +141,10 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
                       GestureDetector(
                         onTap: () {
                           setState(() => _showPlayButton = !_showPlayButton);
+                          Future.delayed(
+                            defaultTransitionDuration,
+                            () => handleButtonTap(),
+                          );
                         },
                         child: AspectRatio(
                           aspectRatio: _videoController.value.aspectRatio,
@@ -160,19 +166,7 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
                       size: 48,
                       custom: true,
                       playing: _isPlaying,
-                      onPressed: () {
-                        if (_isPlaying) {
-                          setState(() {
-                            _videoController.pause();
-                            _showPlayButton = true;
-                          });
-                        } else {
-                          setState(() {
-                            _videoController.play();
-                            _showPlayButton = false;
-                          });
-                        }
-                      },
+                      onPressed: () => handleButtonTap(),
                     ),
                 ],
               );
@@ -181,5 +175,19 @@ class _VideoPlayerScreenState extends State<ReplicaVideoPlayerScreen> {
         ),
       );
     });
+  }
+
+  void handleButtonTap() {
+    if (_isPlaying) {
+      setState(() {
+        _videoController.pause();
+        _showPlayButton = true;
+      });
+    } else {
+      setState(() {
+        _videoController.play();
+        _showPlayButton = false;
+      });
+    }
   }
 }
