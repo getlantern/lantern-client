@@ -98,9 +98,9 @@ class SessionModel(
                 LanternApp.getSession().setForceCountry(call.argument("countryCode") ?: "")
                 activity.restartApp()
             }
-            "setTabIndex" -> {
+            "setSelectedTab" -> {
                 db.mutate { tx ->
-                    tx.put("/tabIndex", call.argument<Int>("tabIndex")!!)
+                    tx.put("/selectedTab", call.argument<String>("tab")!!)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)

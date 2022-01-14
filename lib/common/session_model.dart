@@ -2,6 +2,12 @@ import 'common.dart';
 
 final sessionModel = SessionModel();
 
+const TAB_CHATS = 'chats';
+const TAB_VPN = 'vpn';
+const TAB_REPLICA = 'discover';
+const TAB_ACCOUNT = 'account';
+const TAB_DEVELOPER = 'developer';
+
 class SessionModel extends Model {
   late final EventManager eventManager;
 
@@ -151,16 +157,16 @@ class SessionModel extends Model {
         .invokeMethod('resendRecoveryCode', <String, dynamic>{});
   }
 
-  Future<void> setTabIndex<T>(int tabIndex) async {
-    return methodChannel.invokeMethod('setTabIndex', <String, dynamic>{
-      'tabIndex': tabIndex,
+  Future<void> setSelectedTab<T>(String tab) async {
+    return methodChannel.invokeMethod('setSelectedTab', <String, dynamic>{
+      'tab': tab,
     });
   }
 
-  Widget tabIndex(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>(
-      '/tabIndex',
-      defaultValue: 0,
+  Widget selectedTab(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      '/selectedTab',
+      defaultValue: TAB_VPN,
       builder: builder,
     );
   }

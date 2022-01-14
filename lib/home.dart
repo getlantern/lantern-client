@@ -1,7 +1,6 @@
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/core/router/router_helpers.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/chats.dart';
 import 'package:lantern/messaging/onboarding/welcome.dart';
@@ -41,7 +40,7 @@ class _HomePageState extends State<HomePage> {
             .then((shouldShowModal) async {
           if (shouldShowModal) {
             // open VPN tab
-            await sessionModel.setTabIndex(lookupTabIndex('VPN'));
+            await sessionModel.setSelectedTab(TAB_VPN);
             // show Try Lantern Chat dialog
             await context.router
                 .push(FullScreenDialogPage(widget: TryLanternChat()));
@@ -120,16 +119,13 @@ class _HomePageState extends State<HomePage> {
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
-            return sessionModel.tabIndex(
-              (context, tabIndex, child) =>
+            return sessionModel.selectedTab(
+              (context, selectedTab, child) =>
                   messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
                 return Scaffold(
-                  body: buildBody(tabIndex, isOnboarded),
+                  body: buildBody(selectedTab, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
-                    onTap: (val) async {
-                      await sessionModel.setTabIndex(val);
-                    },
-                    index: tabIndex,
+                    selectedTab: selectedTab,
                     isDevelop: developmentMode,
                   ),
                 );
@@ -141,9 +137,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildBody(int tabIndex, bool? isOnboarded) {
-    switch (tabIndex) {
-      case 0:
+  Widget buildBody(String selectedTab, bool? isOnboarded) {
+    switch (selectedTab) {
+      case TAB_CHATS:
         return isOnboarded == null
             // While onboarding status is not yet know, show a white container
             // that matches the background of our usual pages.
@@ -155,16 +151,16 @@ class _HomePageState extends State<HomePage> {
             : isOnboarded
                 ? Chats()
                 : Welcome();
-      case 1:
+      case TAB_VPN:
         return VPNTab();
-      case 2:
+      case TAB_REPLICA:
         return ReplicaTab();
-      case 3:
+      case TAB_ACCOUNT:
         return AccountTab();
-      case 4:
+      case TAB_DEVELOPER:
         return DeveloperSettingsTab();
       default:
-        assert(false, 'unrecognized tab index $tabIndex');
+        assert(false, 'unrecognized tab $selectedTab');
         return Container();
     }
   }
