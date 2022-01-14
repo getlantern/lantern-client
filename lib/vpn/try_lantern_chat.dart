@@ -1,4 +1,3 @@
-import 'package:lantern/core/router/router_helpers.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class TryLanternChat extends StatelessWidget {
@@ -161,9 +160,8 @@ class TryLanternChat extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () async {
-                                // Switch to Chat tab
-                                await sessionModel
-                                    .setTabIndex(lookupTabIndex('Chat'));
+                                // Switch to Chats tab
+                                await sessionModel.setSelectedTab(TAB_CHATS);
                                 // Start onboarding
                                 await messagingModel.start();
                                 await context.router
