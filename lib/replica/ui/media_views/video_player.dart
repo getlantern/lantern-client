@@ -39,10 +39,11 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
                 replicaLink.displayName ?? 'untitled'.i18n,
                 style: tsHeading3.copiedWith(color: foregroundColor ?? white),
               ),
-              CText(
-                mimeType ?? '',
-                style: tsOverline.copiedWith(color: foregroundColor ?? white),
-              )
+              if (mimeType != null)
+                CText(
+                  mimeType!,
+                  style: tsOverline.copiedWith(color: foregroundColor ?? white),
+                )
             ],
           ),
           // * actions
@@ -55,7 +56,7 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
               icon: CAssetImage(
                 size: 20,
                 path: ImagePaths.file_download,
-                color: foregroundColor,
+                color: foregroundColor ?? white,
               ),
             ),
           ]);
