@@ -1,7 +1,7 @@
 buildscript {
-    ext.kotlin_version = '1.4.32'
+    ext.kotlin_version = '1.6.10'
     ext.signal_version = '2.8.1'
-    ext.protobufVersion = '0.8.10'
+    ext.protoc_version = '3.19.3'
 
     repositories {
         google()
@@ -16,7 +16,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.android.tools.build:gradle:4.2.1'
-        classpath "com.google.protobuf:protobuf-gradle-plugin:$protobufVersion"
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.10"
         classpath 'com.google.gms:google-services:4.3.4'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath("org.jlleitschuh.gradle:ktlint-gradle:10.0.0")
@@ -29,7 +29,7 @@ ext {
 
     enableTestCodeCoverage = true
 
-    compileSdkVersion = 30
+    compileSdkVersion = 31
     targetSdkVersion = 30
     minSdkVersion = 21
     androidAnnotationsVersion = '4.7.0'
