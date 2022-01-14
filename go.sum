@@ -464,6 +464,8 @@ github.com/getlantern/flashlight v0.0.0-20220111212300-9f21f4126279 h1:wo5gslG78
 github.com/getlantern/flashlight v0.0.0-20220111212300-9f21f4126279/go.mod h1:DdfeirLOTRyDVtZtNTx5vBkKZyxsQzrzIZCovZfl+wo=
 github.com/getlantern/flashlight v0.0.0-20220112145947-dc0fc0f399f7 h1:/jCQVqxFfGRpGjDoAWvdeX/Jl+ng18/UsvBiYRNWVik=
 github.com/getlantern/flashlight v0.0.0-20220112145947-dc0fc0f399f7/go.mod h1:DdfeirLOTRyDVtZtNTx5vBkKZyxsQzrzIZCovZfl+wo=
+github.com/getlantern/flashlight v0.0.0-20220114120637-3e45d37a47a2 h1:q4hPnhq0jjr5UWysGX+x6oy6ofOi9tpnMLWMLADc6gU=
+github.com/getlantern/flashlight v0.0.0-20220114120637-3e45d37a47a2/go.mod h1:IXzq+ChEcRsRnmG0UFRK3Zc4qR9nX1IqpXpVGULjA6E=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20210806163345-971f7e536246 h1:tRWQABDpTE7tr2P48SjqsVF35uzJzLERwmt+TV0YR/U=
@@ -545,6 +547,7 @@ github.com/getlantern/lantern-shadowsocks v1.3.6-0.20210601195915-e04471aa4920 h
 github.com/getlantern/lantern-shadowsocks v1.3.6-0.20210601195915-e04471aa4920/go.mod h1:JludU10BDqs/5iHmTlQF4+ToAouyyIK868mA6Okrqco=
 github.com/getlantern/lantern_aws/salt/update_masquerades v0.0.0-20211130095655-b01287455a3f h1:BOzcpGAU1JMD7zeZtKpjMuSeWtTI92h2EeYOR0BDEHA=
 github.com/getlantern/lantern_aws/salt/update_masquerades v0.0.0-20211130095655-b01287455a3f/go.mod h1:CImhEVaNdogycXYzGZm7Wvs1HpdlSwUtOgnEUcb+evQ=
+github.com/getlantern/lantern_aws/salt/update_masquerades v0.0.0-20220112233123-ca9f7472f93e/go.mod h1:CImhEVaNdogycXYzGZm7Wvs1HpdlSwUtOgnEUcb+evQ=
 github.com/getlantern/mandrill v0.0.0-20191024010305-7094d8b40358 h1:ZPe/LMCpCEuHtfBp2NP3/A9KRXQJbTxeSOVWmcBzXIc=
 github.com/getlantern/mandrill v0.0.0-20191024010305-7094d8b40358/go.mod h1:koTn6wUik25tksKttA96OEY4cU+qJnBAMKKPYBddkT8=
 github.com/getlantern/measured v0.0.0-20170302221919-0582bf799783/go.mod h1:5OW2WJitCKExpSw2bploW2fM7PjOd6QnLqyp+IqToqU=
@@ -1838,6 +1841,7 @@ golang.org/x/sys v0.0.0-20210608053332-aa57babbf139/go.mod h1:oPkhp1MJrh7nUepCBc
 golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.0.0-20211007075335-d3039528d8ac/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20211019181941-9d821ace8654/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e h1:fLOSk5Q00efkSvAm+4xcoXD+RRmLmmulPn5I3Y9F2EM=
 golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
