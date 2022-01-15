@@ -589,6 +589,7 @@ func run(configDir, locale string,
 		Session:    session.Wrapped(),
 		UserConfig: userConfig,
 	}
+	session.Wrapped().SetReplicaAddr("") // start off with no Replica address
 
 	// Check whether features should be enabled anytime that the global config changes or our geolocation info changed,
 	// and also check right at start.
@@ -602,15 +603,16 @@ func run(configDir, locale string,
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
 	}
-	session.Wrapped().SetReplicaAddr("") // start off with no Replica address
+
+	// When features are enabled/disabled, the UI changes. To minimize this, we only check features once on startup, preferring
+	// to do it based on geography but not waiting too long for that
 	go func() {
-		for {
-			select {
-			case <-globalConfigChanged:
-				checkFeatures()
-			case <-geoRefreshed:
-				checkFeatures()
-			}
+		select {
+		case <-geoRefreshed:
+			checkFeatures()
+		case <-time.After(5 * time.Second):
+			<-globalConfigChanged
+			checkFeatures()
 		}
 	}()
 	replicaServer.CheckEnabled()
