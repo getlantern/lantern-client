@@ -82,7 +82,7 @@ All those dependencies must be in your PATH
 * [Android Studio](https://developer.android.com/studio)
 * [Git](https://git-scm.com/downloads)
 * [Android NDK](#steps-to-run-the-project)
-  * Android SDK from 25 up to the latest.
+  * NDK should be version 24.x, for example 24.0.7956693
 * [Git LFS](https://git-lfs.github.com)
   - more information in [Usage](#usage)
 * [Flutter (latest version)](https://flutter.dev)
@@ -105,7 +105,7 @@ Do this the first time your run the project:
 * Check the SDK from android 5.0(LOLLIPOP) up to the Latest Version at the moment.
 * Go to **SDK Tools** and check the option **Show Package Details**
 * On the Android SDK Build-Tools, check from: SDK 30 up to the latest at the moment. (is optional if you wish to add more SDK alternatives such as 27.0, 28 or 29).
-* On the NDK(Side by side) check from 20.1 up to the latest at the moment.
+* On the NDK(Side by side) check the latest version of 22.x (not anything newer)
 * Make sure that you have the latest **Android SDK Command-line Tools**
 * Finally select the following:
    - Android Emulator
