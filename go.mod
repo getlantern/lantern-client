@@ -3,14 +3,12 @@ module github.com/getlantern/android-lantern
 go 1.16
 
 require (
-	github.com/cloudfoundry/jibber_jabber v0.0.0-20151120183258-bcc4c8345a21 // indirect
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
-	github.com/getlantern/autoupdate v0.0.0-20180719190525-a22eab7ded99
+	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.1
 	github.com/getlantern/eventual v1.0.0
-	github.com/getlantern/flashlight v0.0.0-20220114120637-3e45d37a47a2
-	github.com/getlantern/go-update v0.0.0-20190510022740-79c495ab728c // indirect
+	github.com/getlantern/flashlight v0.0.0-20220116131723-2da614cde26e
 	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
@@ -19,17 +17,18 @@ require (
 	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360
 	github.com/getlantern/protected v0.0.0-20210826185807-3b63e18e28bb
-	github.com/getlantern/proxy v0.0.0-20210806161026-8f52aabf6214 // indirect
 	github.com/getlantern/replica v0.7.1-0.20220111005757-1b4cc00cbce0
 	github.com/gorilla/mux v1.8.0
-	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
-	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/stretchr/testify v1.7.0
-	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
+	golang.org/x/mobile v0.0.0-20210831151748-9cba7bc03c0f
 	golang.org/x/net v0.0.0-20211111160137-58aab5ef257a
+	nhooyr.io/websocket v1.8.7
+)
+
+require (
+	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
 	golang.org/x/tools v0.1.8 // indirect
-	nhooyr.io/websocket v1.8.7
 )
 
 replace github.com/lucas-clemente/quic-go => github.com/getlantern/quic-go v0.0.0-20211103152344-c9ce5bfd4854
@@ -61,3 +60,7 @@ replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks
 
 // v0.5.6 has a security issue and using require leaves a reference to it in go.sum
 replace github.com/ulikunitz/xz => github.com/ulikunitz/xz v0.5.8
+
+// We use a fork of gomobile that allows reusing the cache directory for faster builds, based
+// on this unmerged PR against gomobile - https://github.com/golang/mobile/pull/58.
+replace golang.org/x/mobile => github.com/oxtoacart/mobile v0.0.0-20220116191336-0bdf708b6d0f
