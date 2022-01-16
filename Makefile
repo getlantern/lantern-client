@@ -143,7 +143,7 @@ MOBILE_TESTS_APK := $(BASE_MOBILE_DIR)/build/app/outputs/apk/autoTest/debug/app-
 BUILD_TAGS ?=
 BUILD_TAGS += ' lantern'
 
-GO_SOURCES := go.mod go.sum $(shell find . -type f -name "*.go")
+GO_SOURCES := go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find $(BASE_MOBILE_DIR) -type f -not -path "*/build/*" -not -path "*/.gradle/*" -not -path "*/.idea/*" -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname ".*" -not -iname "*.apk" -not -iname "router.gr.dart")
 
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
@@ -359,7 +359,8 @@ $(ANDROID_LIB): $(GO_SOURCES)
 	go env -w 'GOPRIVATE=github.com/getlantern/*'
 	go install golang.org/x/mobile/cmd/gomobile
 	gomobile init
-	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) \
+	gomobile bind -cache `pwd`/.gomobilecache \
+	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-ldflags="$(LDFLAGS) $$EXTRA_LDFLAGS" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \

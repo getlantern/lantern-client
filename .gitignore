@@ -69,3 +69,4 @@ gradle.properties
 version-qa*.txt
 lantern-android-sources*.tar.gz
 web*.pem
+.gomobilecache
