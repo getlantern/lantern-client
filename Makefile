@@ -357,9 +357,8 @@ $(ANDROID_LIB): $(GO_SOURCES)
 	@$(call check-go-version)
 	$(call build-tags)
 	go env -w 'GOPRIVATE=github.com/getlantern/*'
-	@# XXX <01-11-21, soltzen> Always include 'go mod download' since 'go mod tidy'
-	@# removes it
-	go mod download golang.org/x/mobile
+	go install golang.org/x/mobile/cmd/gomobile
+	gomobile init
 	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-ldflags="$(LDFLAGS) $$EXTRA_LDFLAGS" \
