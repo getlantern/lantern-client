@@ -33,6 +33,9 @@ import (
 	"github.com/getlantern/mtime"
 	"github.com/getlantern/netx"
 	"github.com/getlantern/protected"
+
+	// import gomobile just to make sure it stays in go.mod
+	_ "golang.org/x/mobile/bind/java"
 )
 
 const (
