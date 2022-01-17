@@ -2,28 +2,28 @@ import 'package:lantern/common/common.dart';
 
 class CustomBottomBarItem extends StatelessWidget {
   const CustomBottomBarItem({
-    required this.total,
+    required this.name,
     required this.currentTabIndex,
-    required this.tabIndex,
+    required this.indexToTab,
+    required this.tabToIndex,
     required this.icon,
     required this.label,
-    this.disabled = false,
     this.labelWidget,
     this.addBadge = defaultAddBadge,
-    required this.onTap,
     Key? key,
   }) : super(key: key);
 
-  final int total;
+  final String name;
   final int currentTabIndex;
-  final int tabIndex;
+  final Map<int, String> indexToTab;
+  final Map<String, int> tabToIndex;
   final String label;
-  final bool disabled;
   final String icon;
   final Widget? labelWidget;
   final Widget Function(Widget) addBadge;
-  final void Function(int) onTap;
 
+  int get totalTabs => tabToIndex.length;
+  int get tabIndex => tabToIndex[name]!;
   bool get active => currentTabIndex == tabIndex;
 
   static Widget defaultAddBadge(Widget child) => child;
@@ -46,15 +46,12 @@ class CustomBottomBarItem extends StatelessWidget {
                     currentTabIndex != 0 ? borderRadius : 0,
                   ),
                   topEnd: Radius.circular(
-                    currentTabIndex != total ? borderRadius : 0,
+                    currentTabIndex != totalTabs ? borderRadius : 0,
                   ),
                 ),
               ),
               onTap: (() {
-                if (disabled) {
-                  return;
-                }
-                onTap(tabIndex);
+                sessionModel.setSelectedTab(name);
               }),
               child: Container(
                 decoration: ShapeDecoration(
@@ -112,11 +109,9 @@ class CustomBottomBarItem extends StatelessWidget {
                         child: addBadge(
                           CAssetImage(
                             path: icon,
-                            color: disabled
-                                ? grey4
-                                : active
-                                    ? selectedTabIconColor
-                                    : unselectedTabIconColor,
+                            color: active
+                                ? selectedTabIconColor
+                                : unselectedTabIconColor,
                           ),
                         ),
                       ),
@@ -126,11 +121,7 @@ class CustomBottomBarItem extends StatelessWidget {
                           CText(
                             label,
                             style: tsFloatingLabel.copiedWith(
-                              color: disabled
-                                  ? grey4
-                                  : active
-                                      ? black
-                                      : grey5,
+                              color: active ? black : grey5,
                             ),
                           ),
                           labelWidget ?? const SizedBox(),
