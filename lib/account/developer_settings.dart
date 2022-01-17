@@ -227,14 +227,15 @@ class DeveloperSettingsTab extends StatelessWidget {
     This link does not count''',
               builders: {
                 'replica': ReplicaLinkMarkdownElementBuilder(
-                    (replicaApi, replicaLink) {
-                  context.pushRoute(
-                    ReplicaLinkOpenerScreen(
-                      replicaApi: replicaApi,
-                      replicaLink: replicaLink,
-                    ),
-                  );
-                }),
+                  openLink: (replicaApi, replicaLink) {
+                    context.pushRoute(
+                      ReplicaLinkOpenerScreen(
+                        replicaApi: replicaApi,
+                        replicaLink: replicaLink,
+                      ),
+                    );
+                  },
+                ),
               },
               extensionSet: md.ExtensionSet.gitHubFlavored,
               inlineSyntaxes: <md.InlineSyntax>[ReplicaLinkSyntax()],

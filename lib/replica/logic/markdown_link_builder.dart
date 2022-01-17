@@ -11,39 +11,53 @@ import 'api.dart';
 /// starting with the keyword 'replica://' and converts them to clickable links
 /// (i.e., SelectableText) that runs 'runReplicaLink' when tapped
 class ReplicaLinkMarkdownElementBuilder extends MarkdownElementBuilder {
-  ReplicaLinkMarkdownElementBuilder(this.openLink) : super();
+  ReplicaLinkMarkdownElementBuilder({
+    required this.openLink,
+    this.replicaApi,
+  }) : super();
 
   final void Function(ReplicaApi, ReplicaLink) openLink;
+  final ReplicaApi? replicaApi;
 
   @override
   Widget visitElementAfter(md.Element element, TextStyle? preferredStyle) {
-    return replicaModel.withReplicaApi(
-      (context, replicaApi, child) {
-        // print('Found potential replica link: ${element.textContent}');
-        var text = element.textContent;
-        if (!replicaApi.available) {
-          // Replica not available, just display a regular text widget
-          return plain(text);
-        }
+    if (replicaApi != null) {
+      return doVisitElementAfter(element, preferredStyle, replicaApi!);
+    }
+    return (replicaModel.withReplicaApi).call(
+      (context, replicaApi, child) =>
+          doVisitElementAfter(element, preferredStyle, replicaApi),
+    );
+  }
 
-        var link = ReplicaLink.New('replica://$text');
-        if (link == null) {
-          // Failed to parse replica link: just display a regular text widget
-          return plain(text);
-        }
+  Widget doVisitElementAfter(
+    md.Element element,
+    TextStyle? preferredStyle,
+    ReplicaApi replicaApi,
+  ) {
+    // print('Found potential replica link: ${element.textContent}');
+    var text = element.textContent;
+    if (!replicaApi.available) {
+      // Replica not available, just display a regular text widget
+      return plain(text);
+    }
 
-        // print('Found replica link: ${element.textContent}');
-        return SelectableText.rich(
-          TextSpan(
-            // replica:// is stripped during the parsing. Put it back
-            text: 'replica://${link.infohash}',
-            recognizer: TapGestureRecognizer()
-              ..onTap = () => openLink(replicaApi, link),
-            style: const TextStyle(color: Colors.blue),
-          ),
-          textDirection: TextDirection.ltr,
-        );
-      },
+    var link = ReplicaLink.New('replica://$text');
+    if (link == null) {
+      // Failed to parse replica link: just display a regular text widget
+      return plain(text);
+    }
+
+    // print('Found replica link: ${element.textContent}');
+    return SelectableText.rich(
+      TextSpan(
+        // replica:// is stripped during the parsing. Put it back
+        text: 'replica://${link.infohash}',
+        recognizer: TapGestureRecognizer()
+          ..onTap = () => openLink(replicaApi, link),
+        style: const TextStyle(color: Colors.blue),
+      ),
+      textDirection: TextDirection.ltr,
     );
   }
 

@@ -23,22 +23,27 @@ import 'stopwatch_timer.dart';
 class Conversation extends StatefulWidget {
   final ContactId contactId;
   final int? initialScrollIndex;
-  bool? showContactEditingDialog;
+  final bool showContactEditingDialog;
 
   Conversation({
     required this.contactId,
     this.initialScrollIndex,
-    this.showContactEditingDialog,
+    this.showContactEditingDialog = false,
   }) : super();
 
   @override
-  ConversationState createState() => ConversationState();
+  ConversationState createState() => ConversationState(
+        showContactEditingDialog: showContactEditingDialog,
+      );
 }
 
 class ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
   static final dayFormat = intl.DateFormat.yMMMMd();
 
+  ConversationState({required this.showContactEditingDialog});
+
+  bool showContactEditingDialog;
   bool reactingWithEmoji = false;
   bool hasPermission = false;
 
@@ -374,9 +379,8 @@ class ConversationState extends State<Conversation>
     return messagingModel.singleContactById(widget.contactId,
         (context, contact, child) {
       // * we came here after adding a contact via chat number, show contact name dialog
-      if (widget.showContactEditingDialog == true &&
-          contact.displayName.isEmpty) {
-        widget.showContactEditingDialog = false;
+      if (showContactEditingDialog == true && contact.displayName.isEmpty) {
+        showContactEditingDialog = false;
         messagingModel
             .getDirectContact(widget.contactId.id)
             .then((contact) async {
@@ -767,8 +771,8 @@ class ConversationState extends State<Conversation>
               maxLines: null,
               autofocus: false,
               textInputAction: TextInputAction.send,
-              onEditingComplete:
-                  () {}, // prevents keyboard from closing on send
+              onEditingComplete: () {},
+              // prevents keyboard from closing on send
               controller: newMessage,
               onChanged: (value) {
                 final newIsSendIconVisible = value.isNotEmpty;
