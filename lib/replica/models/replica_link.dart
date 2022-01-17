@@ -1,4 +1,6 @@
 class ReplicaLink {
+  static final regexp = RegExp(r'^magnet:\?xt=urn:btih:([0-9a-fA-F]{40}).*');
+
   String? displayName;
   String? exactSource;
   int? fileIndex;
@@ -22,7 +24,6 @@ class ReplicaLink {
   // https://github.com/getlantern/replica-docs/blob/d1c5c3757180eab42d76a7798914bf6049cee4d3/LINKS.md
   static ReplicaLink? New(String s) {
     var parseLink = () {
-      var regexp = RegExp(r'^magnet:\?xt=urn:btih:([0-9a-fA-F]{40}).*');
       if (regexp.hasMatch(s)) {
         var u = Uri.parse(s);
         var so = 0;

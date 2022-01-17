@@ -286,12 +286,13 @@ class MessageBubble extends StatelessWidget {
                                     builders: {
                                       'replica':
                                           ReplicaLinkMarkdownElementBuilder(
-                                              (replicaApi, replicaLink) {
-                                        // TODO <10-11-21, soltzen> Determine MIME type first
-                                        // context.pushRoute(
-                                        //     ReplicaVideoPlayerScreen(
-                                        //         replicaLink: replicaLink));
-                                      }),
+                                        openLink: (replicaApi, replicaLink) {
+                                          // TODO <10-11-21, soltzen> Determine MIME type first
+                                          // context.pushRoute(
+                                          //     ReplicaVideoPlayerScreen(
+                                          //         replicaLink: replicaLink));
+                                        },
+                                      ),
                                     },
                                     inlineSyntaxes: <md.InlineSyntax>[
                                       ReplicaLinkSyntax()
