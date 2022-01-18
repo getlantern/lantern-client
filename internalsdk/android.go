@@ -605,6 +605,7 @@ func run(configDir, locale string,
 		chatEnabled := runner.FeatureEnabled("chat")
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
+		session.forceReplica()
 	}
 
 	// When features are enabled/disabled, the UI changes. To minimize this, we only check features once on startup, preferring
