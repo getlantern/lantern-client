@@ -43,6 +43,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
   @override
   Widget build(BuildContext context) {
     return replicaModel.withReplicaApi((context, replicaApi, child) {
+      // TODO: use CImageViewer
       return renderReplicaMediaViewScreen(
         context: context,
         api: replicaApi,

@@ -1,24 +1,23 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
-import 'viewer.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
 
 class CVideoViewer extends ViewerWidget {
-  @override
-  final ReplicaViewerProps? replicaProps;
-  @override
-  final MessagingViewerProps? messagingProps;
+  final Function loadVideoFile;
+  final Future decryptVideoFile;
   @override
   final Widget? title;
   @override
   final List<Widget>? actions;
+  @override
+  final Map<String, dynamic>? metadata;
 
-  CVideoViewer(this.replicaProps, this.messagingProps, this.title, this.actions)
-      : super(replicaProps, messagingProps, title, actions);
+  CVideoViewer({
+    required this.loadVideoFile,
+    required this.decryptVideoFile,
+    this.title,
+    this.actions,
+    this.metadata,
+  }) : super();
 
   @override
   State<StatefulWidget> createState() => CVideoViewerState();
@@ -34,45 +33,16 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
   void initState() {
     super.initState();
     context.loaderOverlay.show(widget: spinner);
-
-    // * Playing video in Chat
-    if (widget.messagingProps != null) initMessagingVideoPlayer();
-
-    // * Playing video in Replica
-    if (widget.replicaProps != null) initReplicaVideoPlayer();
-  }
-
-  void initMessagingVideoPlayer() {
-    messagingModel
-        .decryptVideoForPlayback(widget.messagingProps!.attachment)
-        .catchError((e) {
-      context.loaderOverlay.hide();
-    }).then((videoFilename) {
-      context.loaderOverlay.hide();
-      final rotation =
-          widget.messagingProps!.attachment.attachment.metadata['rotation'];
-      setState(() {
-        controller = VideoPlayerController.file(File(videoFilename))
+    widget.decryptVideoFile.then(
+      (value) => setState(() {
+        controller = widget.loadVideoFile(value)
           ..initialize().then((_) {
-            updateController(rotation);
+            updateController(widget.metadata?['rotation']);
           });
+        context.loaderOverlay.hide();
         handleListener();
-      });
-    });
-  }
-
-  void initReplicaVideoPlayer() {
-    logger.v('replicaProps ${widget.replicaProps}');
-    context.loaderOverlay.hide();
-    setState(() {
-      controller = VideoPlayerController.network(
-        widget.replicaProps!.replicaApi
-            .getViewAddr(widget.replicaProps!.replicaLink),
-      )..initialize().then((_) {
-          updateController(null);
-        });
-    });
-    handleListener();
+      }),
+    );
   }
 
   void updateController(String? rotation) {

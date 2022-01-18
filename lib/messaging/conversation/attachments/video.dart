@@ -1,6 +1,7 @@
-import 'package:lantern/common/ui/custom/video_viewer.dart';
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/messaging/conversation/status_row.dart';
+import 'package:video_player/video_player.dart';
 
 class VideoAttachment extends VisualAttachment {
   VideoAttachment(
@@ -12,13 +13,24 @@ class VideoAttachment extends VisualAttachment {
 
   @override
   Widget buildViewer() => CVideoViewer(
-        null,
-        MessagingViewerProps(contact, message, attachment),
-        CText(
+        decryptVideoFile: messagingModel
+            .decryptVideoForPlayback(attachment)
+            .catchError((e) {}),
+        loadVideoFile: (_) => VideoPlayerController.file(File(_)),
+        title: CText(
           contact.displayNameOrFallback,
           style: tsHeading3.copiedWith(color: white),
         ),
-        null,
+        metadata: {
+          'rotation': attachment.attachment.metadata['rotation'],
+          'ts': Padding(
+            padding: const EdgeInsetsDirectional.only(start: 8, top: 8),
+            child: StatusRow(
+              message.direction == MessageDirection.OUT,
+              message,
+            ),
+          )
+        },
       );
 
   @override
