@@ -1,7 +1,7 @@
 import 'package:lantern/messaging/messaging.dart';
 
 class CImageViewer extends ViewerWidget {
-  final Function initCImageViewer;
+  final Function loadImageFile;
   @override
   final Widget? title;
   @override
@@ -10,7 +10,7 @@ class CImageViewer extends ViewerWidget {
   final Map<String, dynamic>? metadata;
 
   CImageViewer({
-    required this.initCImageViewer,
+    required this.loadImageFile,
     this.title,
     this.actions,
     this.metadata,
@@ -26,7 +26,7 @@ class CImageViewerState extends ViewerState<CImageViewer> {
   @override
   void initState() {
     super.initState();
-    widget.initCImageViewer().then((bytes) {
+    widget.loadImageFile().then((bytes) {
       BasicMemoryImage? newImage = BasicMemoryImage(bytes);
       setState(() => image = newImage);
     });
