@@ -60,6 +60,8 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return buildViewer();
+    return FullScreenDialog(
+      widget: buildViewer(),
+    );
   }
 }
