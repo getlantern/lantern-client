@@ -194,19 +194,3 @@ class SearchResult<T> {
 
   const SearchResult(this.path, this.value, this.snippet);
 }
-
-class MessagingViewerProps<T> {
-  final Contact contact;
-  final StoredMessage message;
-  final StoredAttachment attachment;
-
-  const MessagingViewerProps(this.contact, this.message, this.attachment);
-}
-
-class ReplicaViewerProps<T> {
-  final ReplicaApi replicaApi;
-  final ReplicaLink replicaLink;
-  final String? mimeType;
-
-  const ReplicaViewerProps(this.replicaApi, this.replicaLink, this.mimeType);
-}

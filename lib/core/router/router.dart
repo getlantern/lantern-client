@@ -21,11 +21,11 @@ import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
 import 'package:lantern/replica/ui/link_opener_screen.dart';
-import 'package:lantern/replica/ui/media_views/audio_player.dart';
+import 'package:lantern/replica/ui/media_views/audio_player_screen.dart';
 import 'package:lantern/replica/ui/media_views/image_preview_screen.dart';
 import 'package:lantern/replica/ui/media_views/pdf_screen.dart';
 import 'package:lantern/replica/ui/media_views/unknown_item_screen.dart';
-import 'package:lantern/replica/ui/media_views/video_player.dart';
+import 'package:lantern/replica/ui/media_views/video_player_screen.dart';
 import 'package:lantern/replica/ui/search_screen.dart';
 import 'package:lantern/replica/ui/upload_file.dart';
 

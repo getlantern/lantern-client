@@ -41,13 +41,15 @@ import 'package:lantern/replica/logic/api.dart' as _i33;
 import 'package:lantern/replica/models/replica_link.dart' as _i34;
 import 'package:lantern/replica/models/searchcategory.dart' as _i35;
 import 'package:lantern/replica/ui/link_opener_screen.dart' as _i12;
-import 'package:lantern/replica/ui/media_views/audio_player.dart' as _i16;
+import 'package:lantern/replica/ui/media_views/audio_player_screen.dart'
+    as _i16;
 import 'package:lantern/replica/ui/media_views/image_preview_screen.dart'
     as _i18;
 import 'package:lantern/replica/ui/media_views/pdf_screen.dart' as _i25;
 import 'package:lantern/replica/ui/media_views/unknown_item_screen.dart'
     as _i26;
-import 'package:lantern/replica/ui/media_views/video_player.dart' as _i14;
+import 'package:lantern/replica/ui/media_views/video_player_screen.dart'
+    as _i14;
 import 'package:lantern/replica/ui/search_screen.dart' as _i27;
 import 'package:lantern/replica/ui/upload_file.dart' as _i28;
 
