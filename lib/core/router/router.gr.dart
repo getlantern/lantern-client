@@ -206,7 +206,8 @@ class AppRouter extends _i29.RootStackRouter {
               key: args.key,
               replicaApi: args.replicaApi,
               replicaLink: args.replicaLink,
-              mimeType: args.mimeType),
+              mimeType: args.mimeType,
+              foregroundColor: args.foregroundColor),
           transitionsBuilder: _i29.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -685,14 +686,16 @@ class ReplicaVideoPlayerScreen
       {_i31.Key? key,
       required _i33.ReplicaApi replicaApi,
       required _i34.ReplicaLink replicaLink,
-      String? mimeType})
+      String? mimeType,
+      _i31.Color? foregroundColor})
       : super(ReplicaVideoPlayerScreen.name,
             path: 'replicaVideoPlayerScreen',
             args: ReplicaVideoPlayerScreenArgs(
                 key: key,
                 replicaApi: replicaApi,
                 replicaLink: replicaLink,
-                mimeType: mimeType));
+                mimeType: mimeType,
+                foregroundColor: foregroundColor));
 
   static const String name = 'ReplicaVideoPlayerScreen';
 }
@@ -702,7 +705,8 @@ class ReplicaVideoPlayerScreenArgs {
       {this.key,
       required this.replicaApi,
       required this.replicaLink,
-      this.mimeType});
+      this.mimeType,
+      this.foregroundColor});
 
   final _i31.Key? key;
 
@@ -712,9 +716,11 @@ class ReplicaVideoPlayerScreenArgs {
 
   final String? mimeType;
 
+  final _i31.Color? foregroundColor;
+
   @override
   String toString() {
-    return 'ReplicaVideoPlayerScreenArgs{key: $key, replicaApi: $replicaApi, replicaLink: $replicaLink, mimeType: $mimeType}';
+    return 'ReplicaVideoPlayerScreenArgs{key: $key, replicaApi: $replicaApi, replicaLink: $replicaLink, mimeType: $mimeType, foregroundColor: $foregroundColor}';
   }
 }
 

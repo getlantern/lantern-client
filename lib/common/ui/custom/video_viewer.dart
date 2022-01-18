@@ -1,11 +1,11 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
 import 'viewer.dart';
-// import 'package:logger/logger.dart';
+import 'package:logger/logger.dart';
 
-// var logger = Logger(
-//   printer: PrettyPrinter(),
-// );
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
 
 class CVideoViewer extends ViewerWidget {
   @override
@@ -62,13 +62,12 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
   }
 
   void initReplicaVideoPlayer() {
-    // XXX <10-11-21, soltzen> Failures for this call are handled after the
-    // future returned in the 'build()' function (see
+    logger.v('replicaProps ${widget.replicaProps}');
     controller = VideoPlayerController.network(
       widget.replicaProps!.replicaApi
           .getViewAddr(widget.replicaProps!.replicaLink),
     );
-    initController('');
+    initController(null);
     handleListener();
   }
 
