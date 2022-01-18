@@ -1,7 +1,7 @@
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
 import 'package:lantern/messaging/messaging.dart';
 
-import 'viewer.dart';
+import '../../../common/ui/custom/viewer.dart';
 
 class ImageAttachment extends VisualAttachment {
   ImageAttachment(
@@ -12,14 +12,18 @@ class ImageAttachment extends VisualAttachment {
   ) : super(contact, message, attachment, inbound);
 
   @override
-  Widget buildViewer() => ImageViewer(contact, message, attachment);
+  Widget buildViewer() =>
+      ImageViewer(null, MessagingViewerProps(contact, message, attachment));
 }
 
 class ImageViewer extends ViewerWidget {
-  final StoredAttachment attachment;
+  @override
+  final ReplicaViewerProps? replicaProps;
+  @override
+  final MessagingViewerProps? messagingProps;
 
-  ImageViewer(Contact contact, StoredMessage message, this.attachment)
-      : super(contact, message);
+  ImageViewer(this.replicaProps, this.messagingProps)
+      : super(replicaProps, messagingProps, null, null);
 
   @override
   State<StatefulWidget> createState() => ImageViewerState();
@@ -31,7 +35,9 @@ class ImageViewerState extends ViewerState<ImageViewer> {
   @override
   void initState() {
     super.initState();
-    messagingModel.decryptAttachment(widget.attachment).then((bytes) {
+    messagingModel
+        .decryptAttachment(widget.messagingProps!.attachment)
+        .then((bytes) {
       BasicMemoryImage? newImage = BasicMemoryImage(bytes);
       setState(() => image = newImage);
     });
