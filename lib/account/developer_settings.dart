@@ -170,20 +170,29 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
+            // * REPLICA RANDOM VIDEO
             if (replicaApi.available)
-              Button(
-                width: 200,
-                text: 'Play random video',
-                secondary: true,
-                onPressed: () async => await context.pushRoute(
-                  ReplicaVideoPlayerScreen(
-                    replicaApi: replicaApi,
-                    replicaLink: ReplicaLink.New(
-                      'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0',
-                    )!,
-                  ),
-                ),
+              ListItemFactory.settingsItem(
+                content: 'Replica - Random video',
+                trailingArray: [
+                  TextButton(
+                    child: CText(
+                      'Play'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepOrangeAccent),
+                    ),
+                    onPressed: () async => await context.pushRoute(
+                      ReplicaVideoPlayerScreen(
+                        replicaApi: replicaApi,
+                        replicaLink: ReplicaLink.New(
+                          'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0',
+                        )!,
+                      ),
+                    ),
+                  )
+                ],
               ),
+            // * REPLICA RANDOM AUDIO
             if (replicaApi.available)
               Button(
                 width: 200,
