@@ -1,6 +1,8 @@
 import 'dart:collection';
 
-import 'common.dart';
+import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/replica/logic/api.dart';
+import 'package:lantern/replica/models/replica_link.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;
@@ -191,4 +193,20 @@ class SearchResult<T> {
   final String snippet;
 
   const SearchResult(this.path, this.value, this.snippet);
+}
+
+class MessagingViewerProps<T> {
+  final Contact contact;
+  final StoredMessage message;
+  final StoredAttachment attachment;
+
+  const MessagingViewerProps(this.contact, this.message, this.attachment);
+}
+
+class ReplicaViewerProps<T> {
+  final ReplicaApi replicaApi;
+  final ReplicaLink replicaLink;
+  final String? mimeType;
+
+  const ReplicaViewerProps(this.replicaApi, this.replicaLink, this.mimeType);
 }

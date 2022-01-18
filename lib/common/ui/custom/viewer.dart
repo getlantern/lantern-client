@@ -3,10 +3,13 @@ import 'package:lantern/messaging/messaging.dart';
 
 /// Base class for widgets that allow viewing attachments like images and videos.
 abstract class ViewerWidget extends StatefulWidget {
-  final Contact contact;
-  final StoredMessage message;
+  final ReplicaViewerProps? replicaProps;
+  final MessagingViewerProps? messagingProps;
+  final Widget? title;
+  final List<Widget>? actions;
 
-  ViewerWidget(this.contact, this.message);
+  ViewerWidget(
+      this.replicaProps, this.messagingProps, this.title, this.actions);
 }
 
 /// Base class for state associated with ViewerWidgets.
@@ -56,11 +59,8 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: CText(
-        widget.contact.displayNameOrFallback,
-        maxLines: 1,
-        style: tsHeading3.copiedWith(color: white),
-      ),
+      title: widget.title,
+      actions: widget.actions,
       padHorizontal: false,
       foregroundColor: white,
       backgroundColor: black,
@@ -76,8 +76,9 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
                   Padding(
                     padding: const EdgeInsetsDirectional.only(start: 8, top: 8),
                     child: StatusRow(
-                      widget.message.direction == MessageDirection.OUT,
-                      widget.message,
+                      widget.messagingProps!.message.direction ==
+                          MessageDirection.OUT,
+                      widget.messagingProps!.message,
                     ),
                   ),
                 ],
