@@ -13,9 +13,7 @@ class VideoAttachment extends VisualAttachment {
 
   @override
   Widget buildViewer() => CVideoViewer(
-        decryptVideoFile: messagingModel
-            .decryptVideoForPlayback(attachment)
-            .catchError((e) {}),
+        decryptVideoFile: messagingModel.decryptVideoForPlayback(attachment),
         loadVideoFile: (_) => VideoPlayerController.file(File(_)),
         title: CText(
           contact.displayNameOrFallback,

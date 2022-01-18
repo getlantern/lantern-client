@@ -29,7 +29,7 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
     return FullScreenDialog(
       widget: CVideoViewer(
         decryptVideoFile: Future(() {}),
-        loadVideoFile: () => VideoPlayerController.network(
+        loadVideoFile: (replicaLink) => VideoPlayerController.network(
           replicaApi.getViewAddr(replicaLink),
         ),
         title: Column(
