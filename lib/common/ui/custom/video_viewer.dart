@@ -33,13 +33,15 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
   void initState() {
     super.initState();
     context.loaderOverlay.show(widget: spinner);
-    widget.decryptVideoFile.then(
+    widget.decryptVideoFile.catchError((e, stack) {
+      logger.e('Error while showing notification: $e, $stack');
+    }).then(
       (value) => setState(() {
+        context.loaderOverlay.hide();
         controller = widget.loadVideoFile(value)
           ..initialize().then((_) {
             updateController(widget.metadata?['rotation']);
           });
-        context.loaderOverlay.hide();
         handleListener();
       }),
     );
