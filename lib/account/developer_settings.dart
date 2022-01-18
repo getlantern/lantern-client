@@ -194,18 +194,25 @@ class DeveloperSettingsTab extends StatelessWidget {
               ),
             // * REPLICA RANDOM AUDIO
             if (replicaApi.available)
-              Button(
-                width: 200,
-                text: 'Play random audio',
-                secondary: true,
-                onPressed: () async => await context.pushRoute(
-                  ReplicaAudioPlayerScreen(
-                    replicaApi: replicaApi,
-                    replicaLink: ReplicaLink.New(
-                      'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0',
-                    )!,
-                  ),
-                ),
+              ListItemFactory.settingsItem(
+                content: 'Replica - Random audio',
+                trailingArray: [
+                  TextButton(
+                    child: CText(
+                      'Play'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepOrangeAccent),
+                    ),
+                    onPressed: () async => await context.pushRoute(
+                      ReplicaAudioPlayerScreen(
+                        replicaApi: replicaApi,
+                        replicaLink: ReplicaLink.New(
+                          'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0',
+                        )!,
+                      ),
+                    ),
+                  )
+                ],
               ),
             if (replicaApi.available)
               MarkdownBody(
