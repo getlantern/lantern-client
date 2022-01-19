@@ -39,7 +39,7 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
       (value) => setState(() {
         context.loaderOverlay.hide();
         controller = widget.loadVideoFile(value)
-          ..initialize().then((_) {
+          ..initialize().then((__) {
             updateController(widget.metadata?['rotation']);
           });
         handleListener();
