@@ -171,53 +171,66 @@ class DeveloperSettingsTab extends StatelessWidget {
               ],
             ),
             // * REPLICA RANDOM VIDEO
-            if (replicaApi.available)
-              ListItemFactory.settingsItem(
-                content: 'Replica - Random video',
-                trailingArray: [
-                  TextButton(
-                    child: CText(
-                      'Play'.toUpperCase(),
-                      style:
-                          tsButton.copiedWith(color: Colors.deepOrangeAccent),
+            ListItemFactory.settingsItem(
+              content: 'Replica - Random video',
+              trailingArray: [
+                TextButton(
+                  child: CText(
+                    'Play'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
+                  ),
+                  onPressed: () async => await context.pushRoute(
+                    ReplicaVideoPlayerScreen(
+                      replicaApi: replicaApi,
+                      replicaLink: ReplicaLink.New(
+                        'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0',
+                      )!,
                     ),
-                    onPressed: () async => await context.pushRoute(
-                      ReplicaVideoPlayerScreen(
-                        replicaApi: replicaApi,
-                        replicaLink: ReplicaLink.New(
-                          'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0',
-                        )!,
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
+            ),
             // * REPLICA RANDOM AUDIO
-            if (replicaApi.available)
-              ListItemFactory.settingsItem(
-                content: 'Replica - Random audio',
-                trailingArray: [
-                  TextButton(
-                    child: CText(
-                      'Play'.toUpperCase(),
-                      style:
-                          tsButton.copiedWith(color: Colors.deepOrangeAccent),
+            ListItemFactory.settingsItem(
+              content: 'Replica - Random audio',
+              trailingArray: [
+                TextButton(
+                  child: CText(
+                    'Play'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
+                  ),
+                  onPressed: () async => await context.pushRoute(
+                    ReplicaAudioPlayerScreen(
+                      replicaApi: replicaApi,
+                      replicaLink: ReplicaLink.New(
+                        'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0',
+                      )!,
                     ),
-                    onPressed: () async => await context.pushRoute(
-                      ReplicaAudioPlayerScreen(
-                        replicaApi: replicaApi,
-                        replicaLink: ReplicaLink.New(
-                          'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0',
-                        )!,
-                      ),
+                  ),
+                )
+              ],
+            ),
+            ListItemFactory.settingsItem(
+              content: 'Replica - Random image',
+              trailingArray: [
+                TextButton(
+                  child: CText(
+                    'Show'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
+                  ),
+                  onPressed: () async => await context.pushRoute(
+                    ReplicaImagePreviewScreen(
+                      replicaLink: ReplicaLink.New(
+                        'magnet%3A%3Fxt%3Durn%3Abtih%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26xs%3Dreplica%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26dn%3D1N_%40X%5B%604Z%5BF2K%40L%25J%402OYA2.png%26so%3D0',
+                      )!,
                     ),
-                  )
-                ],
-              ),
-            if (replicaApi.available)
-              MarkdownBody(
-                data:
-                    '''This is a markdown text blob. Only the links starting with replica:// count.
+                  ),
+                )
+              ],
+            ),
+            MarkdownBody(
+              data:
+                  '''This is a markdown text blob. Only the links starting with replica:// count.
                     replica://
                       Nothing happens here: the link is empty
 
@@ -241,21 +254,21 @@ class DeveloperSettingsTab extends StatelessWidget {
 
                     http://www.google.com
                       This link does not count''',
-                builders: {
-                  'replica': ReplicaLinkMarkdownElementBuilder(
-                    openLink: (replicaApi, replicaLink) {
-                      context.pushRoute(
-                        ReplicaLinkOpenerScreen(
-                          replicaApi: replicaApi,
-                          replicaLink: replicaLink,
-                        ),
-                      );
-                    },
-                  ),
-                },
-                extensionSet: md.ExtensionSet.gitHubFlavored,
-                inlineSyntaxes: <md.InlineSyntax>[ReplicaLinkSyntax()],
-              ),
+              builders: {
+                'replica': ReplicaLinkMarkdownElementBuilder(
+                  openLink: (replicaApi, replicaLink) {
+                    context.pushRoute(
+                      ReplicaLinkOpenerScreen(
+                        replicaApi: replicaApi,
+                        replicaLink: replicaLink,
+                      ),
+                    );
+                  },
+                ),
+              },
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              inlineSyntaxes: <md.InlineSyntax>[ReplicaLinkSyntax()],
+            ),
           ],
         ),
       );
