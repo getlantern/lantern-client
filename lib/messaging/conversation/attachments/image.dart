@@ -12,7 +12,7 @@ class ImageAttachment extends VisualAttachment {
 
   @override
   Widget buildViewer() => CImageViewer(
-        loadImageFile: () => messagingModel.decryptAttachment(attachment),
+        loadImageFile: messagingModel.decryptAttachment(attachment),
         title: CText(
           contact.displayNameOrFallback,
           style: tsHeading3.copiedWith(color: white),

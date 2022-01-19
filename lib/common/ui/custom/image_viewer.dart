@@ -1,7 +1,7 @@
 import 'package:lantern/messaging/messaging.dart';
 
 class CImageViewer extends ViewerWidget {
-  final Function loadImageFile;
+  final Future<Uint8List> loadImageFile;
   @override
   final Widget? title;
   @override
@@ -26,7 +26,11 @@ class CImageViewerState extends ViewerState<CImageViewer> {
   @override
   void initState() {
     super.initState();
-    widget.loadImageFile().then((bytes) {
+    context.loaderOverlay.show(widget: spinner);
+    widget.loadImageFile.catchError((e, stack) {
+      logger.e('Error while loading image file: $e, $stack');
+    }).then((bytes) {
+      context.loaderOverlay.hide();
       BasicMemoryImage? newImage = BasicMemoryImage(bytes);
       setState(() => image = newImage);
     });
