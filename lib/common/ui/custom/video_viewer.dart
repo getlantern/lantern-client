@@ -101,6 +101,8 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
   Widget body(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
+        // * Error handling
+        // TODO: style
         if (controller == null) {
           return Center(
             child: Row(
@@ -131,6 +133,7 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
           enable: controller!.value.isPlaying,
         );
 
+        // * Display video and play button
         return Stack(
           alignment: Alignment.center,
           children: [

@@ -1,6 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:video_player/video_player.dart';
 
 /// ReplicaVideoPlayerScreen takes a 'replicaLink' of a video and attempts to stream it. CVideoViewer handles orientation and errors.
@@ -11,12 +12,10 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
     required this.replicaApi,
     required this.replicaLink,
     this.mimeType,
-    this.foregroundColor,
   }) : super(key: key);
   final ReplicaApi replicaApi;
   final ReplicaLink replicaLink;
   final String? mimeType;
-  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +33,17 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
           children: [
             CText(
               replicaLink.displayName ?? 'untitled'.i18n,
-              style: tsHeading3.copiedWith(color: foregroundColor ?? white),
+              style: tsHeading3.copiedWith(color: white),
             ),
             if (mimeType != null)
               CText(
                 mimeType!,
-                style: tsOverline.copiedWith(color: foregroundColor ?? white),
+                style: tsOverline.copiedWith(color: white),
+              )
+            else
+              CText(
+                SearchCategory.Video.toShortString(),
+                style: tsOverline.copiedWith(color: white),
               )
           ],
         ),
@@ -52,7 +56,7 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
             icon: CAssetImage(
               size: 20,
               path: ImagePaths.file_download,
-              color: foregroundColor ?? white,
+              color: white,
             ),
           ),
         ],
