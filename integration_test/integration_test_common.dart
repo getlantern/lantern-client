@@ -12,11 +12,14 @@ extension DriverExtension on FlutterDriver {
   static const defaultWaitTimeout = Duration(seconds: 5);
   static const defaultTapTimeout = Duration(seconds: 1);
 
-  Future<void> saveScreenshot(String name) async {
-    final png = await screenshot();
+  Future<void> initScreenshotsDirectory() async {
     final directory = Directory('screenshots');
     await directory.delete(recursive: true);
     await directory.create();
+  }
+
+  Future<void> saveScreenshot(String name) async {
+    final png = await screenshot();
     final file = File(
       join(
         'screenshots',
