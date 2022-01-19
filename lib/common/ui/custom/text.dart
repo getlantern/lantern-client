@@ -27,8 +27,7 @@ class CText extends StatelessWidget {
     this.softWrap,
   }) {
     // Workaround for https://github.com/flutter/flutter/issues/18761
-    this.text =
-        maxLines == 1 ? Characters(text).toList().join('\u{200B}') : text;
+    this.text = maxLines == 1 ? addNonBreakingSpaces(text) : text;
     this.overflow =
         overflow ?? (maxLines != null ? TextOverflow.ellipsis : null);
   }

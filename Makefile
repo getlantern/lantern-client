@@ -1,7 +1,7 @@
 #1 Disable implicit rules
 .SUFFIXES:
 
-.PHONY: codegen protos routes test integration-test sourcedump
+.PHONY: codegen protos routes mocks test integration-test sourcedump
 
 codegen: protos routes
 
@@ -25,8 +25,8 @@ test:
 
 TEST ?= *_test
 
-integration-test:
-	@flutter drive --driver test_driver/integration_driver.dart --flavor prod --target `ls integration_test/$(TEST).dart`
+# integration-test:
+# 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
 GO_VERSION := 1.16
 

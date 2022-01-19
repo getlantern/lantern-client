@@ -229,6 +229,7 @@ class SuggestionBuilder extends StatelessWidget {
               Conversation(contactId: suggestion.value.contactId),
             ),
             showDivider: false,
+            enableHighlighting: true,
           );
         }
         if (suggestion is SearchResult<StoredMessage>) {
@@ -258,6 +259,7 @@ class SuggestionBuilder extends StatelessWidget {
                     ),
                   ),
                   showDivider: false,
+                  enableHighlighting: true,
                 );
               },
             );
