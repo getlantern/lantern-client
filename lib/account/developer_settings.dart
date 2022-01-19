@@ -170,9 +170,9 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
-            // * REPLICA RANDOM VIDEO
+            // * REPLICA TEST VIDEO
             ListItemFactory.settingsItem(
-              content: 'Replica - Random video',
+              content: 'Replica - test video',
               trailingArray: [
                 TextButton(
                   child: CText(
@@ -190,9 +190,9 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
-            // * REPLICA RANDOM AUDIO
+            // * REPLICA TEST AUDIO
             ListItemFactory.settingsItem(
-              content: 'Replica - Random audio',
+              content: 'Replica - test audio',
               trailingArray: [
                 TextButton(
                   child: CText(
@@ -210,8 +210,9 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
+            // * REPLICA TEST IMAGE
             ListItemFactory.settingsItem(
-              content: 'Replica - Random image',
+              content: 'Replica - test image',
               trailingArray: [
                 TextButton(
                   child: CText(

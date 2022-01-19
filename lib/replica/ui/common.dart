@@ -4,11 +4,6 @@ import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:lantern/vpn/vpn.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
 
 // renderReplicaLongPressMenuItem is used for rendering list/grid items located
 // in the ./ui/replica/listitems directory
@@ -141,4 +136,23 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
       },
     ).show(context);
   }
+}
+
+/// Renders an error message when necessary
+Widget renderReplicaErrorUI({required String text, Color? color}) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      CAssetImage(path: ImagePaths.error, size: 72, color: color ?? black),
+      Padding(
+        padding: const EdgeInsetsDirectional.all(24.0),
+        child: CText(
+          text,
+          style: tsBody1.copiedWith(color: color ?? black),
+          textAlign: TextAlign.center,
+        ),
+      )
+    ],
+  );
 }
