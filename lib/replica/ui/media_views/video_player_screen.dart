@@ -3,13 +3,7 @@ import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:video_player/video_player.dart';
 
-/// ReplicaVideoPlayerScreen takes a 'replicaLink' of a video and attempts to
-/// stream it. If it can't stream the link, it'll show an error screen.
-///
-/// This screen supports landscape and portrait orientations
-///
-/// The playback controls container are shown/hidden by tapping away from the
-/// playback controls
+/// ReplicaVideoPlayerScreen takes a 'replicaLink' of a video and attempts to stream it. CVideoViewer handles orientation and errors.
 
 class ReplicaVideoPlayerScreen extends StatelessWidget {
   ReplicaVideoPlayerScreen({
@@ -28,7 +22,8 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FullScreenDialog(
       widget: CVideoViewer(
-        decryptVideoFile: Future.value(replicaLink), // TOOD: feels hacky
+        decryptVideoFile: Future.value(
+            replicaLink), // TODO: feels hacky... explanation: we don't need to decrypt videos for Replica,so we create a "fake" future that returns replicaLink when resolved (replicaLink is needed by loadVideoFile below)
         loadVideoFile: (ReplicaLink replicaLink) =>
             VideoPlayerController.network(
           replicaApi.getViewAddr(replicaLink),

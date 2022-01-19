@@ -63,6 +63,7 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
       title: widget.title,
       actions: widget.actions,
       padHorizontal: false,
+      // we can keep this as is since the designs between Chat and Replica have been consolidated to have black background and white font color
       foregroundColor: white,
       backgroundColor: black,
       showAppBar: showInfo,

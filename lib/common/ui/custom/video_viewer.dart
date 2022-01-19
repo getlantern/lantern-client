@@ -1,6 +1,8 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
 
+/// CVideoViewer extends Viewer and also receives decryption and loading functions from Chat and Replica components. It has no awareness of the video file (Chat or Replica) it displays.
+/// It handles tapping/pausing/playing, as well as disabling the screensaver when a video is playing. It also handles video file decryption and loading errors.
 class CVideoViewer extends ViewerWidget {
   final Function loadVideoFile;
   final Future decryptVideoFile;
@@ -33,9 +35,11 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
   void initState() {
     super.initState();
     context.loaderOverlay.show(widget: spinner);
+    // first decrypt the video file - only really needed by Chat videos for the moment
     widget.decryptVideoFile.catchError((e, stack) {
       logger.e('Error while decrypting video file: $e, $stack');
     }).then(
+      // upon successful decryption, the value (either the String path in case of Chat, or the Replicalink replicaLink in case of Replica) is loaded by the respective loadVideoFile() arguments
       (value) => setState(() {
         context.loaderOverlay.hide();
         controller = widget.loadVideoFile(value)
