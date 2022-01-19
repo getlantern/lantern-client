@@ -32,7 +32,7 @@ All those dependencies must be in your PATH
 * [Android Studio](https://developer.android.com/studio)
 * [Git](https://git-scm.com/downloads)
 * [Android NDK](#steps-to-run-the-project)
-  * NDK should be version 24.x, for example 24.0.7956693
+  * NDK should be version 22.x, for example 22.1.7171670. Newer versions of the NDK don't work with the current release of gomobile.
 * [Git LFS](https://git-lfs.github.com)
   - more information in [Usage](#usage)
 * [Flutter (latest version)](https://flutter.dev)
