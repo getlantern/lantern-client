@@ -41,10 +41,11 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
       logger.e('Error while decrypting video file: $e, $stack');
     }).then(
       // upon successful decryption, the value (either the String path in case of Chat, or the Replicalink replicaLink in case of Replica) is loaded by the respective loadVideoFile() arguments
+      // TODO: try using a FutureBuilder
       (value) => setState(() {
-        context.loaderOverlay.hide();
         controller = widget.loadVideoFile(value)
           ..initialize().then((__) {
+            context.loaderOverlay.hide();
             updateController(widget.metadata?['rotation']);
           });
         handleListener();
@@ -105,7 +106,9 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
         // * Error handling
         if (controller == null) {
           return renderReplicaErrorUI(
-              text: 'video_stream_error'.i18n, color: white);
+            text: 'video_stream_error'.i18n,
+            color: white,
+          );
         }
 
         Wakelock.toggle(
