@@ -3,6 +3,7 @@ import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:video_player/video_player.dart';
 
+/// Base class for displaying a video attachment in Chat (conversation view as well as rendering the Video Viewer when that attachment is tapped). It extends VisualAttachment and overrides its buildViewer() and wrapThumbnail() functions.
 class VideoAttachment extends VisualAttachment {
   VideoAttachment(
     Contact contact,
@@ -14,7 +15,9 @@ class VideoAttachment extends VisualAttachment {
   @override
   Widget buildViewer() => CVideoViewer(
         decryptVideoFile: messagingModel.decryptVideoForPlayback(attachment),
-        loadVideoFile: (String path) => VideoPlayerController.file(File(path)),
+        loadVideoFile: (String path) => VideoPlayerController.file(
+          File(path),
+        ),
         title: CText(
           contact.displayNameOrFallback,
           style: tsHeading3.copiedWith(color: white),
