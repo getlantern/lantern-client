@@ -6,6 +6,7 @@ Future<void> main() async {
   setUpAll(() async {
     // Connect to a running Flutter application instance.
     driver = await FlutterDriver.connect(timeout: const Duration(seconds: 15));
+    await driver.initScreenshotsDirectory();
   });
 
   tearDownAll(() async {
