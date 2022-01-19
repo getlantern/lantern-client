@@ -28,7 +28,7 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FullScreenDialog(
       widget: CVideoViewer(
-        decryptVideoFile: Future(() {}),
+        decryptVideoFile: Future(() {}), // TODO: feels hacky
         loadVideoFile: (replicaLink) => VideoPlayerController.network(
           replicaApi.getViewAddr(replicaLink),
         ),

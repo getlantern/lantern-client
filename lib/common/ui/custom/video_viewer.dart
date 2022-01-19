@@ -34,7 +34,7 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
     super.initState();
     context.loaderOverlay.show(widget: spinner);
     widget.decryptVideoFile.catchError((e, stack) {
-      logger.e('Error while showing notification: $e, $stack');
+      logger.e('Error while decrypting video file: $e, $stack');
     }).then(
       (value) => setState(() {
         context.loaderOverlay.hide();
