@@ -32,6 +32,7 @@ class _ReplicaVideoListViewState extends ReplicaCommonListViewState {
   Widget build(BuildContext context) {
     return renderPaginatedListView((context, item, index) {
       return ReplicaVideoListItem(
+        key: Key(item.replicaLink.infohash),
         item: item,
         replicaApi: widget.replicaApi,
         onTap: () {

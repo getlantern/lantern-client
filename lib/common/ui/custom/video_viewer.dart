@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/replica/ui/common.dart';
 import 'package:video_player/video_player.dart';
 
 /// CVideoViewer extends Viewer and also receives decryption and loading functions from Chat and Replica components. It has no awareness of the video file (Chat or Replica) it displays.
@@ -102,31 +103,9 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         // * Error handling
-        // TODO: style
         if (controller == null) {
-          return Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.error_outline,
-                  color: Colors.red,
-                  size: 60,
-                ),
-                Flexible(
-                  child: CText(
-                    'video_stream_error'.i18n,
-                    style: CTextStyle(
-                      fontSize: 16,
-                      color: white,
-                      lineHeight: 19,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
+          return renderReplicaErrorUI(
+              text: 'video_stream_error'.i18n, color: white);
         }
 
         Wakelock.toggle(

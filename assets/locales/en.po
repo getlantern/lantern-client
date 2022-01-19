@@ -968,10 +968,10 @@ msgid "no_search_result_found"
 msgstr "Sorry, we couldn’t find anything matching that search"
 
 msgid "search_result_error"
-msgstr "Encountered an error while fetching results. Please try again later"
+msgstr "Error fetching results, please try again later"
 
 msgid "video_stream_error"
-msgstr "Encountered an error rendering the video. Please try again later"
+msgstr "Error rendering video, please try again later"
 
 msgid "untitled"
 msgstr "Untitled"
