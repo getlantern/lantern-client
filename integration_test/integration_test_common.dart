@@ -14,7 +14,7 @@ extension DriverExtension on FlutterDriver {
 
   Future<void> initScreenshotsDirectory() async {
     final directory = Directory('screenshots');
-    await directory.delete(recursive: true);
+    if (await directory.exists()) await directory.delete(recursive: true);
     await directory.create();
   }
 
