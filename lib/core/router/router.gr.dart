@@ -8,8 +8,6 @@
 // AutoRouteGenerator
 // **************************************************************************
 
-import 'dart:io' as _i35;
-
 import 'package:auto_route/auto_route.dart' as _i29;
 import 'package:flutter/material.dart' as _i30;
 import 'package:lantern/account/account_management.dart' as _i11;
@@ -25,6 +23,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
 import 'package:lantern/account/language.dart' as _i15;
 import 'package:lantern/account/recovery_key.dart' as _i22;
 import 'package:lantern/account/settings.dart' as _i13;
+import 'package:lantern/common/common.dart' as _i31;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i8;
@@ -33,12 +32,12 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i7;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i9;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i10;
-import 'package:lantern/messaging/messaging.dart' as _i31;
+import 'package:lantern/messaging/messaging.dart' as _i32;
 import 'package:lantern/messaging/onboarding/chat_number_messaging.dart' as _i3;
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart' as _i2;
-import 'package:lantern/replica/logic/api.dart' as _i32;
-import 'package:lantern/replica/models/replica_link.dart' as _i33;
-import 'package:lantern/replica/models/searchcategory.dart' as _i34;
+import 'package:lantern/replica/logic/api.dart' as _i33;
+import 'package:lantern/replica/models/replica_link.dart' as _i34;
+import 'package:lantern/replica/models/searchcategory.dart' as _i35;
 import 'package:lantern/replica/ui/link_opener_screen.dart' as _i12;
 import 'package:lantern/replica/ui/media_views/audio_player_screen.dart'
     as _i16;
@@ -437,7 +436,7 @@ class AppRouter extends _i29.RootStackRouter {
 /// generated route for
 /// [_i1.HomePage]
 class Home extends _i29.PageRouteInfo<HomeArgs> {
-  Home({_i30.Key? key}) : super(Home.name, path: '/', args: HomeArgs(key: key));
+  Home({_i31.Key? key}) : super(Home.name, path: '/', args: HomeArgs(key: key));
 
   static const String name = 'Home';
 }
@@ -445,7 +444,7 @@ class Home extends _i29.PageRouteInfo<HomeArgs> {
 class HomeArgs {
   const HomeArgs({this.key});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   @override
   String toString() {
@@ -475,7 +474,7 @@ class ChatNumberMessaging extends _i29.PageRouteInfo<void> {
 /// [_i4.FullScreenDialog]
 class FullScreenDialogPage
     extends _i29.PageRouteInfo<FullScreenDialogPageArgs> {
-  FullScreenDialogPage({required _i30.Widget widget, _i30.Key? key})
+  FullScreenDialogPage({required _i31.Widget widget, _i31.Key? key})
       : super(FullScreenDialogPage.name,
             path: 'fullScreenDialogPage',
             args: FullScreenDialogPageArgs(widget: widget, key: key));
@@ -486,9 +485,9 @@ class FullScreenDialogPage
 class FullScreenDialogPageArgs {
   const FullScreenDialogPageArgs({required this.widget, this.key});
 
-  final _i30.Widget widget;
+  final _i31.Widget widget;
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   @override
   String toString() {
@@ -500,7 +499,7 @@ class FullScreenDialogPageArgs {
 /// [_i5.Conversation]
 class Conversation extends _i29.PageRouteInfo<ConversationArgs> {
   Conversation(
-      {required _i31.ContactId contactId,
+      {required _i32.ContactId contactId,
       int? initialScrollIndex,
       bool showContactEditingDialog = false})
       : super(Conversation.name,
@@ -519,7 +518,7 @@ class ConversationArgs {
       this.initialScrollIndex,
       this.showContactEditingDialog = false});
 
-  final _i31.ContactId contactId;
+  final _i32.ContactId contactId;
 
   final int? initialScrollIndex;
 
@@ -534,7 +533,7 @@ class ConversationArgs {
 /// generated route for
 /// [_i6.ContactInfo]
 class ContactInfo extends _i29.PageRouteInfo<ContactInfoArgs> {
-  ContactInfo({required _i31.Contact contact})
+  ContactInfo({required _i32.Contact contact})
       : super(ContactInfo.name,
             path: 'contactInfo', args: ContactInfoArgs(contact: contact));
 
@@ -544,7 +543,7 @@ class ContactInfo extends _i29.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.contact});
 
-  final _i31.Contact contact;
+  final _i32.Contact contact;
 
   @override
   String toString() {
@@ -572,7 +571,7 @@ class AddViaChatNumber extends _i29.PageRouteInfo<void> {
 /// generated route for
 /// [_i9.Introduce]
 class Introduce extends _i29.PageRouteInfo<IntroduceArgs> {
-  Introduce({required bool singleIntro, _i31.Contact? contactToIntro})
+  Introduce({required bool singleIntro, _i32.Contact? contactToIntro})
       : super(Introduce.name,
             path: 'introduce',
             args: IntroduceArgs(
@@ -586,7 +585,7 @@ class IntroduceArgs {
 
   final bool singleIntro;
 
-  final _i31.Contact? contactToIntro;
+  final _i32.Contact? contactToIntro;
 
   @override
   String toString() {
@@ -605,7 +604,7 @@ class Introductions extends _i29.PageRouteInfo<void> {
 /// generated route for
 /// [_i11.AccountManagement]
 class AccountManagement extends _i29.PageRouteInfo<AccountManagementArgs> {
-  AccountManagement({_i30.Key? key, required bool isPro})
+  AccountManagement({_i31.Key? key, required bool isPro})
       : super(AccountManagement.name,
             path: 'accountManagement',
             args: AccountManagementArgs(key: key, isPro: isPro));
@@ -616,7 +615,7 @@ class AccountManagement extends _i29.PageRouteInfo<AccountManagementArgs> {
 class AccountManagementArgs {
   const AccountManagementArgs({this.key, required this.isPro});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   final bool isPro;
 
@@ -631,9 +630,9 @@ class AccountManagementArgs {
 class ReplicaLinkOpenerScreen
     extends _i29.PageRouteInfo<ReplicaLinkOpenerScreenArgs> {
   ReplicaLinkOpenerScreen(
-      {_i30.Key? key,
-      required _i32.ReplicaApi replicaApi,
-      required _i33.ReplicaLink replicaLink})
+      {_i31.Key? key,
+      required _i33.ReplicaApi replicaApi,
+      required _i34.ReplicaLink replicaLink})
       : super(ReplicaLinkOpenerScreen.name,
             path: 'replicaLinkOpenerScreen',
             args: ReplicaLinkOpenerScreenArgs(
@@ -646,11 +645,11 @@ class ReplicaLinkOpenerScreenArgs {
   const ReplicaLinkOpenerScreenArgs(
       {this.key, required this.replicaApi, required this.replicaLink});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
-  final _i32.ReplicaApi replicaApi;
+  final _i33.ReplicaApi replicaApi;
 
-  final _i33.ReplicaLink replicaLink;
+  final _i34.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -661,7 +660,7 @@ class ReplicaLinkOpenerScreenArgs {
 /// generated route for
 /// [_i13.Settings]
 class Settings extends _i29.PageRouteInfo<SettingsArgs> {
-  Settings({_i30.Key? key})
+  Settings({_i31.Key? key})
       : super(Settings.name, path: 'settings', args: SettingsArgs(key: key));
 
   static const String name = 'Settings';
@@ -670,7 +669,7 @@ class Settings extends _i29.PageRouteInfo<SettingsArgs> {
 class SettingsArgs {
   const SettingsArgs({this.key});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   @override
   String toString() {
@@ -683,9 +682,9 @@ class SettingsArgs {
 class ReplicaVideoPlayerScreen
     extends _i29.PageRouteInfo<ReplicaVideoPlayerScreenArgs> {
   ReplicaVideoPlayerScreen(
-      {_i30.Key? key,
-      required _i32.ReplicaApi replicaApi,
-      required _i33.ReplicaLink replicaLink,
+      {_i31.Key? key,
+      required _i33.ReplicaApi replicaApi,
+      required _i34.ReplicaLink replicaLink,
       String? mimeType})
       : super(ReplicaVideoPlayerScreen.name,
             path: 'replicaVideoPlayerScreen',
@@ -705,11 +704,11 @@ class ReplicaVideoPlayerScreenArgs {
       required this.replicaLink,
       this.mimeType});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
-  final _i32.ReplicaApi replicaApi;
+  final _i33.ReplicaApi replicaApi;
 
-  final _i33.ReplicaLink replicaLink;
+  final _i34.ReplicaLink replicaLink;
 
   final String? mimeType;
 
@@ -722,7 +721,7 @@ class ReplicaVideoPlayerScreenArgs {
 /// generated route for
 /// [_i15.Language]
 class Language extends _i29.PageRouteInfo<LanguageArgs> {
-  Language({_i30.Key? key})
+  Language({_i31.Key? key})
       : super(Language.name, path: 'language', args: LanguageArgs(key: key));
 
   static const String name = 'Language';
@@ -731,7 +730,7 @@ class Language extends _i29.PageRouteInfo<LanguageArgs> {
 class LanguageArgs {
   const LanguageArgs({this.key});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   @override
   String toString() {
@@ -744,9 +743,9 @@ class LanguageArgs {
 class ReplicaAudioPlayerScreen
     extends _i29.PageRouteInfo<ReplicaAudioPlayerScreenArgs> {
   ReplicaAudioPlayerScreen(
-      {_i30.Key? key,
-      required _i32.ReplicaApi replicaApi,
-      required _i33.ReplicaLink replicaLink,
+      {_i31.Key? key,
+      required _i33.ReplicaApi replicaApi,
+      required _i34.ReplicaLink replicaLink,
       String? mimeType})
       : super(ReplicaAudioPlayerScreen.name,
             path: 'replicaAudioPlayerScreen',
@@ -766,11 +765,11 @@ class ReplicaAudioPlayerScreenArgs {
       required this.replicaLink,
       this.mimeType});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
-  final _i32.ReplicaApi replicaApi;
+  final _i33.ReplicaApi replicaApi;
 
-  final _i33.ReplicaLink replicaLink;
+  final _i34.ReplicaLink replicaLink;
 
   final String? mimeType;
 
@@ -783,7 +782,7 @@ class ReplicaAudioPlayerScreenArgs {
 /// generated route for
 /// [_i17.AuthorizeDeviceForPro]
 class AuthorizePro extends _i29.PageRouteInfo<AuthorizeProArgs> {
-  AuthorizePro({_i30.Key? key})
+  AuthorizePro({_i31.Key? key})
       : super(AuthorizePro.name,
             path: 'authorizePro', args: AuthorizeProArgs(key: key));
 
@@ -793,7 +792,7 @@ class AuthorizePro extends _i29.PageRouteInfo<AuthorizeProArgs> {
 class AuthorizeProArgs {
   const AuthorizeProArgs({this.key});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   @override
   String toString() {
@@ -806,7 +805,7 @@ class AuthorizeProArgs {
 class ReplicaImagePreviewScreen
     extends _i29.PageRouteInfo<ReplicaImagePreviewScreenArgs> {
   ReplicaImagePreviewScreen(
-      {_i30.Key? key, required _i33.ReplicaLink replicaLink})
+      {_i31.Key? key, required _i34.ReplicaLink replicaLink})
       : super(ReplicaImagePreviewScreen.name,
             path: 'replicaImagePreviewScreen',
             args: ReplicaImagePreviewScreenArgs(
@@ -818,9 +817,9 @@ class ReplicaImagePreviewScreen
 class ReplicaImagePreviewScreenArgs {
   const ReplicaImagePreviewScreenArgs({this.key, required this.replicaLink});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
-  final _i33.ReplicaLink replicaLink;
+  final _i34.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -832,7 +831,7 @@ class ReplicaImagePreviewScreenArgs {
 /// [_i19.AuthorizeDeviceViaEmail]
 class AuthorizeDeviceEmail
     extends _i29.PageRouteInfo<AuthorizeDeviceEmailArgs> {
-  AuthorizeDeviceEmail({_i30.Key? key})
+  AuthorizeDeviceEmail({_i31.Key? key})
       : super(AuthorizeDeviceEmail.name,
             path: 'authorizeDeviceEmail',
             args: AuthorizeDeviceEmailArgs(key: key));
@@ -843,7 +842,7 @@ class AuthorizeDeviceEmail
 class AuthorizeDeviceEmailArgs {
   const AuthorizeDeviceEmailArgs({this.key});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   @override
   String toString() {
@@ -855,7 +854,7 @@ class AuthorizeDeviceEmailArgs {
 /// [_i20.AuthorizeDeviceViaEmailPin]
 class AuthorizeDeviceEmailPin
     extends _i29.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
-  AuthorizeDeviceEmailPin({_i30.Key? key})
+  AuthorizeDeviceEmailPin({_i31.Key? key})
       : super(AuthorizeDeviceEmailPin.name,
             path: 'authorizeDeviceEmailPin',
             args: AuthorizeDeviceEmailPinArgs(key: key));
@@ -866,7 +865,7 @@ class AuthorizeDeviceEmailPin
 class AuthorizeDeviceEmailPinArgs {
   const AuthorizeDeviceEmailPinArgs({this.key});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   @override
   String toString() {
@@ -877,7 +876,7 @@ class AuthorizeDeviceEmailPinArgs {
 /// generated route for
 /// [_i21.ApproveDevice]
 class ApproveDevice extends _i29.PageRouteInfo<ApproveDeviceArgs> {
-  ApproveDevice({_i30.Key? key})
+  ApproveDevice({_i31.Key? key})
       : super(ApproveDevice.name,
             path: 'approveDevice', args: ApproveDeviceArgs(key: key));
 
@@ -887,7 +886,7 @@ class ApproveDevice extends _i29.PageRouteInfo<ApproveDeviceArgs> {
 class ApproveDeviceArgs {
   const ApproveDeviceArgs({this.key});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   @override
   String toString() {
@@ -898,7 +897,7 @@ class ApproveDeviceArgs {
 /// generated route for
 /// [_i22.RecoveryKey]
 class RecoveryKey extends _i29.PageRouteInfo<RecoveryKeyArgs> {
-  RecoveryKey({_i30.Key? key})
+  RecoveryKey({_i31.Key? key})
       : super(RecoveryKey.name,
             path: 'recoveryKey', args: RecoveryKeyArgs(key: key));
 
@@ -908,7 +907,7 @@ class RecoveryKey extends _i29.PageRouteInfo<RecoveryKeyArgs> {
 class RecoveryKeyArgs {
   const RecoveryKeyArgs({this.key});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   @override
   String toString() {
@@ -928,7 +927,7 @@ class ChatNumberAccount extends _i29.PageRouteInfo<void> {
 /// generated route for
 /// [_i24.BlockedUsers]
 class BlockedUsers extends _i29.PageRouteInfo<BlockedUsersArgs> {
-  BlockedUsers({_i30.Key? key})
+  BlockedUsers({_i31.Key? key})
       : super(BlockedUsers.name,
             path: 'blockedUsers', args: BlockedUsersArgs(key: key));
 
@@ -938,7 +937,7 @@ class BlockedUsers extends _i29.PageRouteInfo<BlockedUsersArgs> {
 class BlockedUsersArgs {
   const BlockedUsersArgs({this.key});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   @override
   String toString() {
@@ -950,10 +949,10 @@ class BlockedUsersArgs {
 /// [_i25.ReplicaPDFScreen]
 class ReplicaPDFScreen extends _i29.PageRouteInfo<ReplicaPDFScreenArgs> {
   ReplicaPDFScreen(
-      {_i30.Key? key,
-      required _i32.ReplicaApi replicaApi,
-      required _i33.ReplicaLink replicaLink,
-      required _i34.SearchCategory category,
+      {_i31.Key? key,
+      required _i33.ReplicaApi replicaApi,
+      required _i34.ReplicaLink replicaLink,
+      required _i35.SearchCategory category,
       String? mimeType})
       : super(ReplicaPDFScreen.name,
             path: 'replicaPDFScreen',
@@ -975,13 +974,13 @@ class ReplicaPDFScreenArgs {
       required this.category,
       this.mimeType});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
-  final _i32.ReplicaApi replicaApi;
+  final _i33.ReplicaApi replicaApi;
 
-  final _i33.ReplicaLink replicaLink;
+  final _i34.ReplicaLink replicaLink;
 
-  final _i34.SearchCategory category;
+  final _i35.SearchCategory category;
 
   final String? mimeType;
 
@@ -996,9 +995,9 @@ class ReplicaPDFScreenArgs {
 class ReplicaUnknownItemScreen
     extends _i29.PageRouteInfo<ReplicaUnknownItemScreenArgs> {
   ReplicaUnknownItemScreen(
-      {_i30.Key? key,
-      required _i33.ReplicaLink replicaLink,
-      required _i34.SearchCategory category,
+      {_i31.Key? key,
+      required _i34.ReplicaLink replicaLink,
+      required _i35.SearchCategory category,
       String? mimeType})
       : super(ReplicaUnknownItemScreen.name,
             path: 'replicaUnknownItemScreen',
@@ -1018,11 +1017,11 @@ class ReplicaUnknownItemScreenArgs {
       required this.category,
       this.mimeType});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
-  final _i33.ReplicaLink replicaLink;
+  final _i34.ReplicaLink replicaLink;
 
-  final _i34.SearchCategory category;
+  final _i35.SearchCategory category;
 
   final String? mimeType;
 
@@ -1035,7 +1034,7 @@ class ReplicaUnknownItemScreenArgs {
 /// generated route for
 /// [_i27.ReplicaSearchScreen]
 class ReplicaSearchScreen extends _i29.PageRouteInfo<ReplicaSearchScreenArgs> {
-  ReplicaSearchScreen({_i30.Key? key, required String searchQuery})
+  ReplicaSearchScreen({_i31.Key? key, required String searchQuery})
       : super(ReplicaSearchScreen.name,
             path: 'replicaSearchScreen',
             args: ReplicaSearchScreenArgs(key: key, searchQuery: searchQuery));
@@ -1046,7 +1045,7 @@ class ReplicaSearchScreen extends _i29.PageRouteInfo<ReplicaSearchScreenArgs> {
 class ReplicaSearchScreenArgs {
   const ReplicaSearchScreenArgs({this.key, required this.searchQuery});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
   final String searchQuery;
 
@@ -1060,7 +1059,7 @@ class ReplicaSearchScreenArgs {
 /// [_i28.ReplicaUploadFileScreen]
 class ReplicaUploadFileScreen
     extends _i29.PageRouteInfo<ReplicaUploadFileScreenArgs> {
-  ReplicaUploadFileScreen({_i30.Key? key, required _i35.File fileToUpload})
+  ReplicaUploadFileScreen({_i31.Key? key, required _i31.File fileToUpload})
       : super(ReplicaUploadFileScreen.name,
             path: 'replicaUploadFileScreen',
             args: ReplicaUploadFileScreenArgs(
@@ -1072,9 +1071,9 @@ class ReplicaUploadFileScreen
 class ReplicaUploadFileScreenArgs {
   const ReplicaUploadFileScreenArgs({this.key, required this.fileToUpload});
 
-  final _i30.Key? key;
+  final _i31.Key? key;
 
-  final _i35.File fileToUpload;
+  final _i31.File fileToUpload;
 
   @override
   String toString() {
