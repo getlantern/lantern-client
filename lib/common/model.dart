@@ -1,8 +1,6 @@
 import 'dart:collection';
 
 import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/replica_link.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;
