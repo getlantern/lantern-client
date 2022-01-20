@@ -1,10 +1,9 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/home.dart';
 import 'package:lantern/messaging/chats.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 import 'action/navigation_action_test.dart';
 import 'enums/screens_test.dart';
@@ -78,12 +77,11 @@ void main() {
         reason: 'Check if the CustomBottomBar is displayed',
       );
       var cb = tester.widget<CustomBottomBar>(find.byType(CustomBottomBar));
-      // TODO: fix
-      // expect(
-      //   cb.index,
-      //   0,
-      //   reason: 'Check if the current page is 0, which correspond to Messaging',
-      // );
+      expect(
+        cb.selectedTab,
+        TAB_CHATS,
+        reason: 'Check if the current page is 0, which correspond to Messaging',
+      );
     });
   });
 }

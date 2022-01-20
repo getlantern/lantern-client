@@ -104,7 +104,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                     await messagingModel.resetTimestamps();
                   },
                   child: CText(
-                    'Reset'.toUpperCase(),
+                    'Reset Timestamps'.toUpperCase(),
                     style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
                   ),
                 )
@@ -112,14 +112,14 @@ class DeveloperSettingsTab extends StatelessWidget {
             ),
             // * RESET ONBOARDING + RECOVERY KEY FLAGS
             ListItemFactory.settingsItem(
-              content: 'Reset onboarding and recovery key flags',
+              content: 'Reset chat flags',
               trailingArray: [
                 TextButton(
                   onPressed: () async {
                     await messagingModel.resetFlags();
                   },
                   child: CText(
-                    'Reset'.toUpperCase(),
+                    'Reset Flags'.toUpperCase(),
                     style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
                   ),
                 )
