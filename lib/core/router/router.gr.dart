@@ -8,6 +8,8 @@
 // AutoRouteGenerator
 // **************************************************************************
 
+// ignore_for_file: require_trailing_commas
+
 import 'package:auto_route/auto_route.dart' as _i29;
 import 'package:flutter/material.dart' as _i30;
 import 'package:lantern/account/account_management.dart' as _i11;

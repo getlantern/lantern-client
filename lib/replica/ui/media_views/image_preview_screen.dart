@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/replica_model.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/replica/ui/common.dart';
 
 /// ReplicaImagePreviewScreen renders a Replica image in the middle of its view
 ///
