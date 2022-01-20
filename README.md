@@ -106,7 +106,9 @@ You can run integration tests from the integration_test directory against a live
 
 This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
 
-NOTE - when running with flutter driver enabled, the on-screen keyboard does not work.
+WARNING - when running with flutter driver enabled, the on-screen keyboard does not work.
+
+WARNING - if you try to run an instance of the app using `--observatory-port` and you already have another instance running with that same observatory-port, the 2nd instance will hang on launch because flutter cannot bind to that port.
 
 TODO: we need to automate the running of integration tests in a CI environment using Flutter driver.
 
