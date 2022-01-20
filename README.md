@@ -101,10 +101,12 @@ Package the AAR with `make android-lib-debug ANDROID_ARCH=all` (use `android-lib
 ##### Integration Testing
 You can run integration tests from the integration_test directory against a live app using the following steps:
 
-1. Run the app in debug mode and specify the additional run arguments `--observatory-port 8888 --disable-service-auth-codes`
+1. Run the app with these additional run arguments `--dart-define=driver=true --observatory-port 8888 --disable-service-auth-codes`
 2. Run the integration test as a dart application and specify the environment variable `VM_SERVICE_URL=http://127.0.0.1:8888`
 
 This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
+
+NOTE - when running with flutter driver enabled, the on-screen keyboard does not work.
 
 TODO: we need to automate the running of integration tests in a CI environment using Flutter driver.
 
