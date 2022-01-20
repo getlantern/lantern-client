@@ -143,6 +143,7 @@ class ListItemFactory extends StatelessWidget {
     bool? hasCopiedRecoveryKey,
     Color? customBg,
     bool? disableSplash = false,
+    bool enableHighlighting = false,
   }) : this((BuildContext context, ListItemFactory factory) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -167,7 +168,7 @@ class ListItemFactory extends StatelessWidget {
                     trailingArray: trailingArray,
                     showDivider: showDivider && !menuOpen,
                     onTap: onTap,
-                    enableHighlighting: true,
+                    enableHighlighting: enableHighlighting,
                     subtitle: subtitle,
                     disableSplash: disableSplash,
                   ),

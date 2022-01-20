@@ -134,7 +134,7 @@ msgid "Account"
 msgstr "Account"
 
 msgid "VPN Status"
-msgstr "VPN Status "
+msgstr "VPN Status"
 
 msgid "VPN"
 msgstr "VPN"

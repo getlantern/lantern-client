@@ -32,7 +32,7 @@ All those dependencies must be in your PATH
 * [Android Studio](https://developer.android.com/studio)
 * [Git](https://git-scm.com/downloads)
 * [Android NDK](#steps-to-run-the-project)
-  * NDK should be version 24.x, for example 24.0.7956693
+  * NDK should be version 22.x, for example 22.1.7171670. Newer versions of the NDK don't work with the current release of gomobile.
 * [Git LFS](https://git-lfs.github.com)
   - more information in [Usage](#usage)
 * [Flutter (latest version)](https://flutter.dev)
@@ -93,12 +93,20 @@ Package the AAR with `make android-lib-debug ANDROID_ARCH=all` (use `android-lib
 
 #### Flutter
 
+##### Unit Testing
 * Run running Flutter unit tests run `make test`
-* Run running Flutter integration tests with `make integration-test`. This will run all files in `integration_test` that end in `_test.dart`.
-  * To run a specific integration test, run `TEST=name make integration-test` where name is the name of the integration test file without the `.dart` suffix. For example `TEST=conversation_page_test make integration-test`
-  * **BE CAREFUL RUNNING WHICH DEVICE YOU CHOOSE!!!** When you run the integration tests, you'll need to select a device. If you select a device that already has Lantern installed, that Lantern will be replaced with a new build for the integration test. Consider using an emulator to avoid wiping your data
 * To run independent Flutter tests, go to the root of the project and type: `flutter test test/my_folder_test.dart`
   * in case that you need the code coverage just add the following argument: `flutter test --coverage test/my_folder_test.dart`
+
+##### Integration Testing
+You can run integration tests from the integration_test directory against a live app using the following steps:
+
+1. Run the app in debug mode and specify the additional run arguments `--observatory-port 8888 --disable-service-auth-codes`
+2. Run the integration test as a dart application and specify the environment variable `VM_SERVICE_URL=http://127.0.0.1:8888`
+
+This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
+
+TODO: we need to automate the running of integration tests in a CI environment using Flutter driver.
 
 ##### Testing Replica
 A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.
@@ -144,17 +152,6 @@ If you wanna visualize the current percentage of code coverage you need to do th
 1. On your `terminal` check if you have installed: `lcov` if not then install.
 2. Go to on your terminal `android-lantern/coverage` and type: `genhtml coverage/lcov.info -o coverage/html` that will generate a nice html file with the code coverage of all your files.
 
-#### Flutter Test Drive
-
-This test is to ensure the correct functionality of the Flutter application. In case that you need to test the functionality of the Flutter application, you need to do the following steps.
-
-1. On your `terminal` go to the root of the project and type: `flutter drive --driver test_driver/integration_driver.dart --flavor prod --target integration_test/my_file_test.dart`
-2. This will start doing a simulated build of the project and run the tests.
-
-If you modify the code and you want to test the changes, you need to do the following steps.
-1. If the file has their own test, you will need to adjust the test to the new code.
-2. Finally run all the integration tests to ensure that the new code is working properly with the rest of the code.
-
 ### Making debug builds
 
 To create a debug build of the full lantern mobile app:
@@ -184,7 +181,6 @@ STAGING=true make android-debug android-install
 ```
 
 ### Making release builds
-
 
 The Android app is distributed in two ways, as an APK for side-loaded installation and as an app bundle (aab)
 for distribution on the Google Play Store. The APKs are architecture specific whereas the app bundle contains
