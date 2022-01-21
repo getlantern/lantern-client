@@ -41,7 +41,6 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
       logger.e('Error while decrypting video file: $e, $stack');
     }).then(
       // upon successful decryption, the value (either the String path in case of Chat, or the Replicalink replicaLink in case of Replica) is loaded by the respective loadVideoFile() arguments
-      // TODO: try using a FutureBuilder
       (value) => setState(() {
         controller = widget.loadVideoFile(value)
           ..initialize().then((__) {
@@ -97,7 +96,12 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
   }
 
   @override
-  bool ready() => controller != null;
+  bool ready() {
+    Wakelock.toggle(
+      enable: controller?.value.isPlaying ?? false,
+    );
+    return controller != null;
+  }
 
   @override
   Widget body(BuildContext context) {
@@ -110,10 +114,6 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
             color: white,
           );
         }
-
-        Wakelock.toggle(
-          enable: controller!.value.isPlaying,
-        );
 
         // * Display video and play button
         return Stack(
