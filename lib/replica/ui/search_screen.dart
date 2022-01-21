@@ -108,6 +108,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               builder: (BuildContext context, String value, Widget? child) {
                 return Expanded(
                   child: TabBarView(
+                    key: const Key('replica_tabs'),
                     controller: _tabController,
                     children: [
                       ReplicaVideoListView(

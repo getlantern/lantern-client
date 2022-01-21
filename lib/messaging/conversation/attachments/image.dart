@@ -1,7 +1,6 @@
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
+import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/messaging.dart';
-
-import 'viewer.dart';
 
 class ImageAttachment extends VisualAttachment {
   ImageAttachment(
@@ -12,39 +11,20 @@ class ImageAttachment extends VisualAttachment {
   ) : super(contact, message, attachment, inbound);
 
   @override
-  Widget buildViewer() => ImageViewer(contact, message, attachment);
-}
-
-class ImageViewer extends ViewerWidget {
-  final StoredAttachment attachment;
-
-  ImageViewer(Contact contact, StoredMessage message, this.attachment)
-      : super(contact, message);
-
-  @override
-  State<StatefulWidget> createState() => ImageViewerState();
-}
-
-class ImageViewerState extends ViewerState<ImageViewer> {
-  BasicMemoryImage? image;
-
-  @override
-  void initState() {
-    super.initState();
-    messagingModel.decryptAttachment(widget.attachment).then((bytes) {
-      BasicMemoryImage? newImage = BasicMemoryImage(bytes);
-      setState(() => image = newImage);
-    });
-  }
-
-  @override
-  bool ready() => image != null;
-
-  @override
-  Widget body(BuildContext context) => Align(
-        alignment: Alignment.center,
-        child: InteractiveViewer(
-          child: image!,
+  Widget buildViewer() => CImageViewer(
+        loadImageFile: messagingModel.decryptAttachment(attachment),
+        title: CText(
+          contact.displayNameOrFallback,
+          style: tsHeading3.copiedWith(color: white),
         ),
+        metadata: {
+          'ts': Padding(
+            padding: const EdgeInsetsDirectional.only(start: 8, top: 8),
+            child: StatusRow(
+              message.direction == MessageDirection.OUT,
+              message,
+            ),
+          )
+        },
       );
 }

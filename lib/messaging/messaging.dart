@@ -8,6 +8,5 @@ export 'display_name.dart';
 export 'full_chat_number_painter.dart';
 export 'messaging_model.dart';
 export 'notifications.dart';
-export 'notifications.dart';
 export 'number_and_key_format.dart';
 export 'share_your_chat_number.dart';

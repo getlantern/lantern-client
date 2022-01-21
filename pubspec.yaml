@@ -147,6 +147,8 @@ dependencies:
 
   flutter_pdfview: ^1.2.1
 
+  wakelock: ^0.6.0+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

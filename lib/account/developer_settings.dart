@@ -170,61 +170,91 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
-            if (replicaApi.available)
-              Button(
-                width: 200,
-                text: 'Play random video',
-                secondary: true,
-                onPressed: () async => await context.pushRoute(
-                  ReplicaVideoPlayerScreen(
-                    replicaApi: replicaApi,
-                    replicaLink: ReplicaLink.New(
-                      'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0',
-                    )!,
+            // * REPLICA TEST VIDEO
+            ListItemFactory.settingsItem(
+              content: 'Replica - test video',
+              trailingArray: [
+                TextButton(
+                  child: CText(
+                    'Play'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
                   ),
-                ),
-              ),
-            if (replicaApi.available)
-              Button(
-                width: 200,
-                text: 'Play random audio',
-                secondary: true,
-                onPressed: () async => await context.pushRoute(
-                  ReplicaAudioPlayerScreen(
-                    replicaApi: replicaApi,
-                    replicaLink: ReplicaLink.New(
-                      'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0',
-                    )!,
+                  onPressed: () async => await context.pushRoute(
+                    ReplicaVideoPlayerScreen(
+                      replicaApi: replicaApi,
+                      replicaLink: ReplicaLink.New(
+                        'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0',
+                      )!,
+                    ),
                   ),
-                ),
-              ),
+                )
+              ],
+            ),
+            // * REPLICA TEST AUDIO
+            ListItemFactory.settingsItem(
+              content: 'Replica - test audio',
+              trailingArray: [
+                TextButton(
+                  child: CText(
+                    'Play'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
+                  ),
+                  onPressed: () async => await context.pushRoute(
+                    ReplicaAudioPlayerScreen(
+                      replicaApi: replicaApi,
+                      replicaLink: ReplicaLink.New(
+                        'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0',
+                      )!,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            // * REPLICA TEST IMAGE
+            ListItemFactory.settingsItem(
+              content: 'Replica - test image',
+              trailingArray: [
+                TextButton(
+                  child: CText(
+                    'Show'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
+                  ),
+                  onPressed: () async => await context.pushRoute(
+                    ReplicaImagePreviewScreen(
+                      replicaLink: ReplicaLink.New(
+                        'magnet%3A%3Fxt%3Durn%3Abtih%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26xs%3Dreplica%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26dn%3D1N_%40X%5B%604Z%5BF2K%40L%25J%402OYA2.png%26so%3D0',
+                      )!,
+                    ),
+                  ),
+                )
+              ],
+            ),
             MarkdownBody(
               data:
                   '''This is a markdown text blob. Only the links starting with replica:// count.
+                    replica://
+                      Nothing happens here: the link is empty
 
-  replica://
-    Nothing happens here: the link is empty
+                    hello world!
+                      Nothing happens here
 
-  hello world!
-    Nothing happens here
+                    bunnyfoofooreplica://
+                      Nothing happens here
 
-  bunnyfoofooreplica://
-    Nothing happens here
+                    replica://bunnyfoofoo
+                      This link counts
 
-  replica://bunnyfoofoo
-    This link counts
+                    replica://magnet:?xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d&dn=sintel.mp4
+                      This link counts
 
-  replica://magnet:?xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d&dn=sintel.mp4
-    This link counts
+                    replica://xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d&dn=sintel.mp4
+                      This link does not count since it has no leading 'magnet:?'
 
-  replica://xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d&dn=sintel.mp4
-    This link does not count since it has no leading 'magnet:?'
+                    magnet://xt=urn:btih:32729D0D089180D1095279069148DDC27323188B&dn=The%20Suicide%20Squad%20(2021)%20%5B1080p%5D%20%5BWEBRip%5D%20%5B5.1%5D%20&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&so=0
+                      This link does not count because it has the wrong prefix
 
-  magnet://xt=urn:btih:32729D0D089180D1095279069148DDC27323188B&dn=The%20Suicide%20Squad%20(2021)%20%5B1080p%5D%20%5BWEBRip%5D%20%5B5.1%5D%20&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&so=0
-    This link does not count because it has the wrong prefix
-
-  http://www.google.com
-    This link does not count''',
+                    http://www.google.com
+                      This link does not count''',
               builders: {
                 'replica': ReplicaLinkMarkdownElementBuilder(
                   openLink: (replicaApi, replicaLink) {

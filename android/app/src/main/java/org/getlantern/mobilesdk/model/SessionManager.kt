@@ -198,7 +198,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun forceReplica(): Boolean {
-        return false;
+        return prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE);
     }
 
     val replicaAddr: String
@@ -210,8 +210,9 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun setChatEnabled(enabled: Boolean) {
-        Logger.d(TAG, "Setting $CHAT_ENABLED to $enabled")
-        prefs.edit().putBoolean(CHAT_ENABLED, enabled).apply()
+        val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
+        Logger.d(TAG, "Setting $CHAT_ENABLED to ${isDevMode ?: enabled}")
+        prefs.edit().putBoolean(CHAT_ENABLED, isDevMode ?: enabled).apply()
     }
 
     override fun appVersion(): String {
