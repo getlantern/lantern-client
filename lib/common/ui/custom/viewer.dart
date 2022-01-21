@@ -55,10 +55,17 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
 
   bool ready();
 
+  void handleLoader() {
+    !ready()
+        ? context.loaderOverlay.show(widget: spinner)
+        : context.loaderOverlay.hide();
+  }
+
   Widget body(BuildContext context);
 
   @override
   Widget build(BuildContext context) {
+    handleLoader();
     return BaseScreen(
       title: widget.title,
       actions: widget.actions,
