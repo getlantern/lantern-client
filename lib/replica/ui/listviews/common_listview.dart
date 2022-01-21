@@ -3,6 +3,7 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/search_item.dart';
 import 'package:lantern/replica/models/searchcategory.dart';
+import 'package:lantern/replica/ui/common.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger(
@@ -84,27 +85,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
 
   Widget showError(String err) {
     logger.e('Error while fetching search results: $err');
-    return Expanded(
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 60,
-            ),
-            Flexible(
-              child: CText(
-                'search_result_error'.i18n,
-                style: tsBody1.copiedWith(color: indicatorRed),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+    return renderReplicaErrorUI(text: 'search_result_error'.i18n);
   }
 
   double getCommonCacheExtent(List<dynamic>? list) {

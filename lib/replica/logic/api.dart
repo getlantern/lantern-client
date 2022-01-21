@@ -81,6 +81,12 @@ class ReplicaApi {
     return 'http://$replicaHostAddr/replica/download?link=${replicaLink.toMagnetLink()}';
   }
 
+  Future<Uint8List> getImageBytesFromURL(String imageURL) async {
+    return (await NetworkAssetBundle(Uri.parse(imageURL)).load(imageURL))
+        .buffer
+        .asUint8List();
+  }
+
   String getViewAddr(ReplicaLink replicaLink) {
     return 'http://$replicaHostAddr/replica/view?link=${replicaLink.toMagnetLink()}';
   }

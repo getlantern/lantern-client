@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'common.dart';
+import 'package:lantern/messaging/messaging.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;
