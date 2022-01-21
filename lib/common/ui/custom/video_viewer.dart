@@ -125,7 +125,7 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
                 Widget? child,
               ) {
                 if (!value.isInitialized) {
-                  return const SizedBox();
+                  return spinner;
                 }
                 return Stack(
                   fit: StackFit.passthrough,
