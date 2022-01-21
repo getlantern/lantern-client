@@ -55,17 +55,10 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
 
   bool ready();
 
-  void handleLoader() {
-    !ready()
-        ? context.loaderOverlay.show(widget: spinner)
-        : context.loaderOverlay.hide();
-  }
-
   Widget body(BuildContext context);
 
   @override
   Widget build(BuildContext context) {
-    handleLoader();
     return BaseScreen(
       title: widget.title,
       actions: widget.actions,
@@ -81,7 +74,7 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: !ready() ? Container() : body(context)),
+                  Expanded(child: !ready() ? spinner : body(context)),
                   widget.metadata?['ts'] ?? Container(),
                 ],
               ),
