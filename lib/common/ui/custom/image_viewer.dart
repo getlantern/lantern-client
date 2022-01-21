@@ -26,11 +26,9 @@ class CImageViewerState extends ViewerState<CImageViewer> {
   @override
   void initState() {
     super.initState();
-    context.loaderOverlay.show(widget: spinner);
     widget.loadImageFile.catchError((e, stack) {
       logger.e('Error while loading image file: $e, $stack');
     }).then((bytes) {
-      context.loaderOverlay.hide();
       BasicMemoryImage? newImage = BasicMemoryImage(bytes);
       setState(() => image = newImage);
     });

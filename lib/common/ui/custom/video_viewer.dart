@@ -35,7 +35,6 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
   @override
   void initState() {
     super.initState();
-    context.loaderOverlay.show(widget: spinner);
     // first decrypt the video file - only really needed by Chat videos for the moment
     widget.decryptVideoFile.catchError((e, stack) {
       logger.e('Error while decrypting video file: $e, $stack');
@@ -44,7 +43,6 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
       (value) => setState(() {
         controller = widget.loadVideoFile(value)
           ..initialize().then((__) {
-            context.loaderOverlay.hide();
             updateController(widget.metadata?['rotation']);
           });
         handleListener();
