@@ -556,6 +556,7 @@ class ConversationState extends State<Conversation>
   }
 
   Widget buildList(Contact contact) {
+    // remember messagingModel.contactMessages() returns data in reversed format so newest will be first
     return messagingModel.contactMessages(
       contact,
       builder: (
@@ -563,28 +564,39 @@ class ConversationState extends State<Conversation>
         Iterable<PathAndValue<StoredMessage>> originalMessageRecords,
         Widget? child,
       ) {
-        // Build list that includes original message records as well as date
-        // separators.
-        var listItems = <Object>[];
+        // initialize priorDate to now
         String? priorDate;
+        // Build list that includes original <PathAndValue<StoredMessage>> message records as well as date <String> separators.
+        var listItems = <Object>[];
+
+        // iterate over record list in order to construct array of messages interspersed with date markers and earmarked by ConversationSticker
         originalMessageRecords.forEach((messageRecord) {
-          final date = dayFormat.format(
+          final currentDate = dayFormat.format(
             DateTime.fromMillisecondsSinceEpoch(
               messageRecord.value.ts.toInt(),
             ),
           );
-          if (priorDate != null && date != priorDate) {
-            listItems.add(date);
+          // when someone reads a conversation, they expect that the messages below a certain date marker, occurred during the date displayed by the marker.
+          // <january 5 marker>
+          // messages ← reader assumes these messages were sent on Jan 5
+          // <january 6 marker>
+          // messages ← reader assumes these messages were sent on Jan 6
+          if (priorDate != null && currentDate != priorDate) {
+            listItems.add(priorDate.toString());
           }
-          priorDate = date;
+          priorDate = currentDate;
           listItems.add(messageRecord);
         });
+
+        // add Sticker
+        listItems.add(ConversationSticker(contact, messageCount));
 
         // render list
         messageCount = listItems.length;
 
-        // show sticker when we have no messages
-        if (listItems.isEmpty) {
+        // show sticker when listItems does not contain any PathAndValue<StoredMessage> items
+        if (!listItems
+            .any((element) => element is PathAndValue<StoredMessage>)) {
           return ConversationSticker(contact, messageCount);
         }
 
@@ -592,15 +604,11 @@ class ConversationState extends State<Conversation>
         return ScrollablePositionedList.builder(
           itemScrollController: scrollController,
           initialScrollIndex: widget.initialScrollIndex ?? 0,
-          reverse: true,
+          reverse:
+              true, // we need to keep this to true to leverage scrolling dynamics
           physics: defaultScrollPhysics,
-          itemCount: messageCount + 1,
+          itemCount: messageCount,
           itemBuilder: (context, index) {
-            if (index == messageCount) {
-              // show sticker as first item
-              return ConversationSticker(contact, messageCount);
-            }
-
             final item = listItems[index];
             if (item is PathAndValue<StoredMessage>) {
               return buildMessageBubble(
@@ -610,8 +618,13 @@ class ConversationState extends State<Conversation>
                 item,
                 index,
               );
+            } else if (item is String) {
+              return DateMarker(item);
+            } else if (item is ConversationSticker) {
+              return item;
             } else {
-              return DateMarker(item as String);
+              logger.e('Error while rendering message list');
+              return Container();
             }
           },
         );
