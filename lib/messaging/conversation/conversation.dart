@@ -564,7 +564,6 @@ class ConversationState extends State<Conversation>
         Iterable<PathAndValue<StoredMessage>> originalMessageRecords,
         Widget? child,
       ) {
-        // initialize priorDate to now
         String? priorDate;
         // Build list that includes original <PathAndValue<StoredMessage>> message records as well as date <String> separators.
         var listItems = <Object>[];
