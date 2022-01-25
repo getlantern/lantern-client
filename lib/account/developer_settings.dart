@@ -170,6 +170,35 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
+            // * ADD DUMMY CONTACTS
+            ListItemFactory.settingsItem(
+              content: 'Add dummy contacts',
+              trailingArray: [
+                TextButton(
+                  onPressed: () => messagingModel.addDummyContacts(),
+                  child: CText(
+                    'Add'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
+              ],
+            ),
+            // * COPY MY CONTACTID
+            messagingModel.me(
+              (context, me, child) => ListItemFactory.settingsItem(
+                content: 'Copy my contact ID',
+                trailingArray: [
+                  TextButton(
+                    onPressed: () => copyText(context, me.contactId.id),
+                    child: CText(
+                      'Copy'.toUpperCase(),
+                      style:
+                          tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                    ),
+                  )
+                ],
+              ),
+            ),
             // * REPLICA TEST VIDEO
             ListItemFactory.settingsItem(
               content: 'Replica - test video',

@@ -573,4 +573,16 @@ class MessagingModel extends Model {
   Future<void> resetFlags() {
     return methodChannel.invokeMethod('resetFlags');
   }
+
+  void addDummyContacts() {
+    final contactIds = [
+      'nw257m38dzgt51tb5af95pepc5nt8zzsbn6bhsqhmpb1s86h83ro',
+      'cjynhrycfaqqwkfejo94u7rkbq67dq6eum5fr5k9r2nabbo2n3ty',
+      'd816joqyxufd67pctyfffuszpuaf19ct1r1gcngr8mtzmzkxxpxy',
+    ];
+    return contactIds.forEach((element) => methodChannel
+            .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
+          'unsafeId': element,
+        }));
+  }
 }
