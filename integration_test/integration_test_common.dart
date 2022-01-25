@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:lantern/common/add_nonbreaking_spaces.dart';
 import 'package:path/path.dart';
@@ -11,18 +10,22 @@ extension DriverExtension on FlutterDriver {
   static var screenshotSequence = 0;
   static const defaultWaitTimeout = Duration(seconds: 5);
   static const defaultTapTimeout = Duration(seconds: 1);
+  static var dirPath = '';
 
-  Future<void> initScreenshotsDirectory() async {
-    final directory = Directory('screenshots');
+  Future<void> initScreenshotsDirectory(testName) async {
+    dirPath = 'screenshots/$testName';
+    final directory = Directory(dirPath);
     if (await directory.exists()) await directory.delete(recursive: true);
     await directory.create();
   }
 
-  Future<void> saveScreenshot(String name) async {
+  Future<void> saveScreenshot(String name, {bool? skipScreenshot}) async {
+    if (skipScreenshot == true) return;
+
     final png = await screenshot();
     final file = File(
       join(
-        'screenshots',
+        dirPath,
         '${++screenshotSequence}_$name.png',
       ),
     );
@@ -55,11 +58,13 @@ extension DriverExtension on FlutterDriver {
   Future<void> tapText(
     String tapText, {
     String? waitText,
+    bool? skipScreenshot,
   }) async {
     try {
       await tapFinder(
         find.text(tapText),
         waitText: waitText,
+        skipScreenshot: skipScreenshot,
       );
     } catch (_) {
       // try it with non-breaking spaces like those added by CText
@@ -70,21 +75,45 @@ extension DriverExtension on FlutterDriver {
     }
   }
 
-  Future<void> tapFAB({String? waitText}) async {
-    await tapType('FloatingActionButton', waitText: waitText);
+  Future<void> tapFAB({
+    String? waitText,
+    bool? skipScreenshot,
+  }) async {
+    await tapType(
+      'FloatingActionButton',
+      waitText: waitText,
+      skipScreenshot: skipScreenshot,
+    );
   }
 
-  Future<void> tapType(String type, {String? waitText}) async {
-    await tapFinder(find.byType(type), waitText: waitText);
+  Future<void> tapType(
+    String type, {
+    String? waitText,
+    bool? skipScreenshot,
+  }) async {
+    await tapFinder(
+      find.byType(type),
+      waitText: waitText,
+      skipScreenshot: skipScreenshot,
+    );
   }
 
-  Future<void> tapKey(String key, {String? waitText}) async {
-    await tapFinder(find.byValueKey(key), waitText: waitText);
+  Future<void> tapKey(
+    String key, {
+    String? waitText,
+    bool? skipScreenshot,
+  }) async {
+    await tapFinder(
+      find.byValueKey(key),
+      waitText: waitText,
+      skipScreenshot: skipScreenshot,
+    );
   }
 
   Future<void> tapFinder(
     SerializableFinder finder, {
     String? waitText,
+    bool? skipScreenshot,
   }) async {
     try {
       await tap(
@@ -95,7 +124,10 @@ extension DriverExtension on FlutterDriver {
         await doWaitForText(waitText);
       }
     } finally {
-      await saveScreenshot('tap $finder wait for $waitText');
+      await saveScreenshot(
+        'tap $finder wait for $waitText',
+        skipScreenshot: skipScreenshot,
+      );
     }
   }
 
@@ -119,5 +151,9 @@ extension DriverExtension on FlutterDriver {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> waitForTwoSeconds() async {
+    await Future.delayed(const Duration(seconds: 2));
   }
 }
