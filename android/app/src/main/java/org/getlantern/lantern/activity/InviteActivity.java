@@ -24,7 +24,7 @@ import org.getlantern.lantern.util.IntentUtil;
 import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.invite_friends)
-public class InviteActivity extends FragmentActivity {
+public class InviteActivity extends BaseFragmentActivity {
 
     private static final String TAG = InviteActivity.class.getName();
 

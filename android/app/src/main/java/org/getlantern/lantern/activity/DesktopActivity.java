@@ -8,7 +8,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.util.IntentUtil;
 
 @EActivity(R.layout.desktop_option)
-public class DesktopActivity extends FragmentActivity {
+public class DesktopActivity extends BaseFragmentActivity {
     @Click
     void btnShare() {
         IntentUtil.INSTANCE.sharePlainText(

@@ -14,6 +14,7 @@ import android.os.Looper
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
@@ -115,6 +116,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
+
+        // prevent screenshots of this activity by other apps
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
 
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
