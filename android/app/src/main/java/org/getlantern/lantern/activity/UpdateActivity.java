@@ -9,10 +9,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -50,6 +53,13 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
 
     @ViewById
     TextView updateAvailable;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // prevent screenshots of this activity by other apps
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+    }
 
     @AfterViews
     void afterViews() {

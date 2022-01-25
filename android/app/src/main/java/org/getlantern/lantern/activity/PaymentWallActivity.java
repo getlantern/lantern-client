@@ -33,7 +33,7 @@ import java.util.UUID;
 import okhttp3.Response;
 
 @EActivity(R.layout.paymentwall_layout)
-public class PaymentWallActivity extends FragmentActivity {
+public class PaymentWallActivity extends BaseFragmentActivity {
 
     private static final String TAG = PaymentWallActivity.class.getName();
     private static final String PROVIDER = "PW";

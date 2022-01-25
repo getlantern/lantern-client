@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @EActivity(R.layout.activity_plan)
-public class PlansActivity extends FragmentActivity {
+public class PlansActivity extends BaseFragmentActivity {
 
     private static final String TAG = PlansActivity.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
