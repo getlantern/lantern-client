@@ -874,6 +874,7 @@ class ConversationState extends State<Conversation>
         ),
         if (!isSendIconVisible)
           VoiceRecorder(
+            key: const ValueKey('recorder_button'),
             isRecording: isRecording,
             onRecording: () async => await startRecording(),
             onStopRecording: () async =>
