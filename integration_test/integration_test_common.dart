@@ -10,6 +10,7 @@ extension DriverExtension on FlutterDriver {
   static var screenshotSequence = 0;
   static const defaultWaitTimeout = Duration(seconds: 5);
   static const longWaitTimeout = Duration(seconds: 20);
+  static const veryLongWaitTimeout = Duration(seconds: 30);
   static const defaultTapTimeout = Duration(seconds: 1);
   static var dirPath = '';
 
@@ -125,8 +126,17 @@ extension DriverExtension on FlutterDriver {
   }
 
   Future<void> fakeLongPressAtKey(String key) async {
-    await scroll(find.byValueKey(key), 0, 0, defaultWaitTimeout,
-        timeout: longWaitTimeout);
+    final finder = find.byValueKey(key);
+    await scroll(
+      finder,
+      0,
+      0,
+      longWaitTimeout,
+      timeout: veryLongWaitTimeout,
+    );
+    await saveScreenshot(
+      'recording',
+    );
   }
 
   /// receives a SerializableFinder finder and taps at the center of the widget located by it. It handles text wrapping in case the finder can't locate the target.
