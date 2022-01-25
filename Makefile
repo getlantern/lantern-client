@@ -477,7 +477,7 @@ sourcedump: require-version
 	go mod tidy && \
 	go mod vendor && \
 	find . -name "CHANGELOG*" -exec rm {} \; && \
-	rm -Rf vendor/github.com/getlantern/flashlight/config/generated/embedded-global.yaml && \
+	rm -Rf vendor/github.com/getlantern/flashlight/embeddedconfig vendor/github.com/getlantern/flashlight/genconfig && \
 	find vendor/github.com/getlantern -name "*.go" -exec perl -pi -e 's/"https?\:\/\/[^"]+/"URL_HIDDEN/g' {} \; && \
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .

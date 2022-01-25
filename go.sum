@@ -458,8 +458,8 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight v0.0.0-20220116131723-2da614cde26e h1:6SttTmiQYwqIx3KA0UK5lW5BQFZEs9AT5QqJwHcbNJM=
-github.com/getlantern/flashlight v0.0.0-20220116131723-2da614cde26e/go.mod h1:c8WaRVObjInSHkFgLnH/5dZsH5j8Z2urf58ilaWLbjI=
+github.com/getlantern/flashlight v0.0.0-20220124135153-50d19168a687 h1:v3C9OCVZr8xjIVT4q58Shi/q+bjPks9OUNP1PGFOZ/0=
+github.com/getlantern/flashlight v0.0.0-20220124135153-50d19168a687/go.mod h1:w+7BXoTsKsMs2jeONVTX3Cqca9Ircj5hTVXTAYdExlI=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20210806163345-971f7e536246 h1:tRWQABDpTE7tr2P48SjqsVF35uzJzLERwmt+TV0YR/U=
@@ -561,8 +561,9 @@ github.com/getlantern/mtime v0.0.0-20170117193331-ba114e4a82b0/go.mod h1:u537FS7
 github.com/getlantern/mtime v0.0.0-20200228202836-084e1d8282b0/go.mod h1:GfzwugvtH7YcmNIrHHizeyImsgEdyL88YkdnK28B14c=
 github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7 h1:03J6Cb42EG06lHgpOFGm5BOax4qFqlSbSeKO2RGrj2g=
 github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7/go.mod h1:GfzwugvtH7YcmNIrHHizeyImsgEdyL88YkdnK28B14c=
-github.com/getlantern/multipath v0.0.0-20211105161347-48cd80ec7050 h1:IFYwB2k4C/lDEkoG748UB/CmRfmuxlgxwhj2gwcDBLQ=
 github.com/getlantern/multipath v0.0.0-20211105161347-48cd80ec7050/go.mod h1:H/0vJMf1amR3WEUVuoDctZ0ymrMXK8nvxCmeNB+0Pn4=
+github.com/getlantern/multipath v0.0.0-20220119171839-238498e77dc4 h1:3f732d8qrALnsRdqIxVkak6/bNPAO+4QRWssd7EzDJ4=
+github.com/getlantern/multipath v0.0.0-20220119171839-238498e77dc4/go.mod h1:H/0vJMf1amR3WEUVuoDctZ0ymrMXK8nvxCmeNB+0Pn4=
 github.com/getlantern/netstack v0.0.0-20210430190606-84f1a4e5b695 h1:d99tbncfOTh+VzJKN8e1fI1EjhKIwTXaumVOXUAeNfY=
 github.com/getlantern/netstack v0.0.0-20210430190606-84f1a4e5b695/go.mod h1:Cqo5uZK3k9SmJcFVvRlBKQPY/2NB2NkdBPP9sn3qnHI=
 github.com/getlantern/nettest v1.0.0 h1:xg8vq9JrGzrFGFkFGwZwIJ5+kwtvyqNDIADwrANvhQg=
