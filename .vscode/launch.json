@@ -5,26 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug",
-            "program": "lib/main.dart",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "debug",
-            "args": [
-                "--no-sound-null-safety",        
-                "--flavor",
-                "prod",
-            ]
-          },
-          {
-            "name": "Widget Test",
-            "program": "test/",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "debug",
-            "args": [
-              "--coverage"
-            ]
-          }
+          "name": "Debug",
+          "program": "lib/main.dart",
+          "request": "launch",
+          "type": "dart",
+          "flutterMode": "debug",
+          "args": [
+              "--no-sound-null-safety",        
+              "--flavor",
+              "prod",
+          ]
+        }
     ]
 }
