@@ -32,7 +32,7 @@ Future<void> main() async {
         );
         await driver.scrollTextUntilVisible('Français');
         await driver.tapText('Français');
-        await driver.waitForTwoSeconds();
+        await driver.waitForSeconds(2);
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
