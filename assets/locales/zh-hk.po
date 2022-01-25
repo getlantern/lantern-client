@@ -1,13 +1,13 @@
 # 
 # Translators:
 # e2f_tw r5 <tx_e2f_tw_r5@ate2f.com>, 2021
-# e2f <projects@e2f.com>, 2021
-# e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2021
-# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2021
+# e2f <projects@e2f.com>, 2022
+# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2022
+# e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: TW C2 <tx_e2f_tw_c2@ate2f.com>, 2021\n"
+"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2022\n"
 "Language-Team: Chinese Traditional (https://www.transifex.com/lantern-1/teams/94371/zh-Hant/)\n"
 "Language: zh-Hant\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -15,8 +15,23 @@ msgstr ""
 msgid "app_name"
 msgstr "Lantern"
 
+msgid "introducing"
+msgstr "交談功能簡介"
+
+msgid "introducing_des"
+msgstr "透過 Lantern 內建的全新抗封鎖和加密交談功能，和好友安全地在線上交談！"
+
+msgid "maybe_later"
+msgstr "以後再說"
+
+msgid "try"
+msgstr "試試吧"
+
+msgid "new"
+msgstr "全新"
+
 msgid "Daily Data Usage"
-msgstr "每日網路數據用量"
+msgstr "每日數據使用量"
 
 msgid "is"
 msgstr "連線狀態："
@@ -24,7 +39,7 @@ msgstr "連線狀態："
 msgid "connected"
 msgstr "已連線"
 
-msgid "disconnected"
+msgid "Disconnected"
 msgstr "已中斷連線"
 
 msgid "Disconnecting"
@@ -33,14 +48,26 @@ msgstr "斷線中..."
 msgid "Connecting"
 msgstr "連線中..."
 
+msgid "no_network_connection"
+msgstr "無網路連線"
+
+msgid "connection_error"
+msgstr "連接錯誤"
+
+msgid "connection_error_des"
+msgstr "Lantern 與我們的伺服器連線時發生錯誤，請重新啟動應用程式。如果問題仍未解決，請聯絡支援人員。"
+
+msgid "connection_error_button"
+msgstr "聯絡支援人員"
+
+msgid "Calling"
+msgstr "正在撥打電話..."
+
 msgid "Go Pro Title"
 msgstr "升級至 Pro 版！"
 
 msgid "Go Pro Description"
 msgstr "速度更快，網路數據用量無上限！"
-
-msgid "Go Pro Description With Yinbi"
-msgstr "網路數據用量無上限 + 免費獲得加密隱幣！"
 
 msgid "Server Location"
 msgstr "伺服器位置"
@@ -51,35 +78,53 @@ msgstr "Lantern 採取智慧型伺服器選取機制，將您自動連線至最�
 msgid "OK"
 msgstr "確定"
 
-msgid "pro_account_management"
-msgstr "Pro 帳號管理"
+msgid "Done"
+msgstr "完成"
 
-msgid "add_device"
-msgstr "新增裝置"
+msgid "backup_recovery_key"
+msgstr "備份復原金鑰"
 
-msgid "upgrade_to_lantern_pro"
+msgid "delete_chat_data"
+msgstr "刪除所有交談資料"
+
+msgid "delete_chat_data_description"
+msgstr "這麼做會從這部裝置上刪除您的交談號碼、聯絡人和訊息。沒有備份復原金鑰的話，您將無法存取交談號碼。"
+
+msgid "delete_chat_data_confirmation"
+msgstr "我確認要刪除交談資料"
+
+msgid "Pro Account Management"
+msgstr "專業帳戶管理"
+
+msgid "Link Device"
+msgstr "連結裝置"
+
+msgid "Upgrade to Lantern Pro"
 msgstr "升級到 Lantern Pro"
 
-msgid "authorize_device_for_pro"
-msgstr "Pro 版授權裝置"
-
-msgid "invite_friends"
+msgid "Invite Friends"
 msgstr "邀請好友"
 
 msgid "desktop_version"
-msgstr "桌面版"
-
-msgid "free_yinbi_crypto"
-msgstr "免費加密隱幣"
-
-msgid "yinbi_redemption"
-msgstr "隱幣兌換"
+msgstr "桌面版本"
 
 msgid "settings"
 msgstr "設定"
 
+msgid "general"
+msgstr "常規"
+
 msgid "proxy_all"
 msgstr "全流量 Proxy 開啟"
+
+msgid "proxy_everything_is"
+msgstr "全流量 Proxy 已%s"
+
+msgid "version_number"
+msgstr "第 %s 版"
+
+msgid "build_number"
+msgstr "組建 %s"
 
 msgid "language"
 msgstr "語言"
@@ -87,53 +132,14 @@ msgstr "語言"
 msgid "report_issue"
 msgstr "回報問題"
 
+msgid "blocked_users"
+msgstr "封鎖的使用者"
+
 msgid "description_proxy_all_dialog"
 msgstr "啟用後，所有流量都將透過 Lantern 傳輸 (更安全)。一旦停用，只有遭封鎖的流量會透過 Lantern 傳輸 (速度更快)。"
 
-msgid "Exchange"
-msgstr "交易平台"
-
 msgid "Account"
 msgstr "帳號"
-
-msgid "In partnership with"
-msgstr "合作夥伴："
-
-msgid "Buy"
-msgstr "購買"
-
-msgid "Bitcoin"
-msgstr "比特幣"
-
-msgid "Tether"
-msgstr "泰達幣"
-
-msgid "With"
-msgstr "付款方式："
-
-msgid "Online Wallets"
-msgstr "線上錢包"
-
-msgid "Bank Transfers"
-msgstr "銀行轉帳"
-
-msgid "Gift Cards"
-msgstr "禮品卡"
-
-msgid "Game Cards"
-msgstr "遊戲點數卡"
-
-msgid "Cash Payment"
-msgstr "現金付款"
-
-msgid "Digital Currencies"
-msgstr "數位貨幣"
-
-msgid "Payment Method"
-msgstr "付款方式"
-
-msgid "SHOW BEST DEALS"
-msgstr "顯示最划算的方案"
 
 msgid "VPN Status"
 msgstr "VPN 狀態"
@@ -159,17 +165,26 @@ msgstr "或"
 msgid "Authorize Device via Email"
 msgstr "透過電子郵件授權裝置"
 
+msgid "auth_email_helper_text"
+msgstr "請輸入與您專業版帳戶相關聯的電子郵件"
+
 msgid "Requires access to the email you used to buy Lantern Pro"
 msgstr "需要存取您用來購買 Lantern Pro 版的電子郵件"
 
 msgid "Link via Email"
 msgstr "透過電子郵件來連結"
 
+msgid "lantern_pro_email"
+msgstr "Lantern 專業版電子郵件"
+
 msgid "Email"
 msgstr "電子郵件"
 
 msgid "Submit"
 msgstr "提交"
+
+msgid "save"
+msgstr "儲存"
 
 msgid "Please enter a valid email address"
 msgstr "請輸入有效的電子郵件地址"
@@ -196,7 +211,7 @@ msgid "Add Device"
 msgstr "新增裝置"
 
 msgid "approve_device_step_1"
-msgstr "使用您希望連結的裝置，從帳號選單中開啟「授權裝置使用 Pro」，接著選取「使用連結碼來連結」"
+msgstr "使用您要連結的裝置，從帳戶選單中開啟「授權裝置使用專業版」，接著選取「使用連結碼來連結」。"
 
 msgid "approve_device_step_2"
 msgstr "請輸入您在步驟 1 取得的連結碼 "
@@ -220,19 +235,795 @@ msgid "confirm_remove_device"
 msgstr "是否確定要將此裝置從群組中移除？"
 
 msgid "n/a"
-msgstr ""
+msgstr "n/a"
 
 msgid "Developer Settings"
-msgstr ""
+msgstr "開發人員設定"
 
 msgid "Developer"
+msgstr "開發人員"
+
+msgid "dev_settings"
+msgstr "這些設定僅供開發用途使用，變更任何設定會自動停止並重新啟動應用程式。"
+
+msgid "dev_payment_mode"
 msgstr ""
+"「付款測試模式」啟用期間，應用程式會使用硬式編碼的單一使用者。您可以使用號碼 4242 4242 4242 4242，並搭配未來的到期日期和任何 CVV"
+" 來購買 Stripe。"
 
 msgid "Payment Test Mode"
-msgstr ""
+msgstr "付款測試模式"
 
 msgid "Play Version"
-msgstr ""
+msgstr "Play 版本"
 
-msgid "Yinbi Enabled"
+msgid "Force Country"
+msgstr "模擬特定國家/地區"
+
+msgid "Error"
+msgstr "錯誤"
+
+msgid "accept"
+msgstr "接受"
+
+msgid "cancel"
+msgstr "取消"
+
+msgid "reject"
+msgstr "拒絕"
+
+msgid "copied"
+msgstr "已複製！"
+
+msgid "saved"
+msgstr "已儲存！"
+
+msgid "new_chat"
+msgstr "新交談"
+
+msgid "your_contact_info"
+msgstr "您的聯絡資訊"
+
+msgid "display_name"
+msgstr "顯示名稱"
+
+msgid "edit"
+msgstr "編輯"
+
+msgid "save_error"
+msgstr "儲存時發生了點問題。"
+
+msgid "more_options"
+msgstr "更多選項"
+
+msgid "block_user"
+msgstr "封鎖使用者"
+
+msgid "unblock_user"
+msgstr "將使用者解除封鎖"
+
+msgid "block"
+msgstr "封鎖"
+
+msgid "unblock"
+msgstr "解除封鎖"
+
+msgid "block_info_title"
+msgstr "要封鎖 %s？"
+
+msgid "no_blocked_users"
+msgstr "未封鎖任何使用者。"
+
+msgid "unblock_info_title"
+msgstr "要將 %s 解除封鎖？"
+
+msgid "block_info_description"
+msgstr "如果您封鎖這名使用者，系統會刪除交談記錄，並禁止對方日後與您聯絡。如要將使用者解除封鎖，請前往設定選單。"
+
+msgid "unblock_info_description"
+msgstr "%s 現在已可傳送訊息給您。系統不會通知對方您已將其解除封鎖。"
+
+msgid "block_info_checkbox"
+msgstr "我瞭解這麼做會刪除所有交談記錄。"
+
+msgid "unblock_info_checkbox"
+msgstr "我確定要將這個聯絡人解除封鎖。"
+
+msgid "delete_permanently"
+msgstr "永久刪除使用者"
+
+msgid "delete_info_description"
+msgstr "一旦刪除，日後想再與對方交談時，便需重新新增對方的聯絡資訊。"
+
+msgid "add_new_contact"
+msgstr "新增聯絡人"
+
+msgid "add_contact"
+msgstr "新增聯絡人"
+
+msgid "share_your_chat_number"
+msgstr "分享交談號碼"
+
+msgid "scan_qr_code"
+msgstr "掃描 QR 碼"
+
+msgid "add_contact_in_person"
+msgstr "當面新增聯絡人"
+
+msgid "start_chat"
+msgstr "開始交談"
+
+msgid "message_disappearing"
+msgstr "您和 %s 之間傳送的所有訊息都不會消失。"
+
+msgid "message_disappearing_description"
+msgstr "%s後，您和 %s 之間傳送的所有訊息就會消失。"
+
+msgid "delete"
+msgstr "刪除"
+
+msgid "view_contact_info"
+msgstr "查看聯絡資訊"
+
+msgid "off"
+msgstr "關閉"
+
+msgid "continue"
+msgstr "繼續"
+
+msgid "are_you_sure_you_want_to_open"
+msgstr "確定要開啟 %s 嗎？"
+
+msgid "set"
+msgstr "設定"
+
+msgid "menu"
+msgstr "選單"
+
+msgid "send_error"
+msgstr "傳送訊息時發生了點問題。"
+
+msgid "share_media_error"
+msgstr "分享媒體檔案時發生了點問題。"
+
+msgid "no_recents"
+msgstr "無近期活動"
+
+msgid "set_display_name"
+msgstr "設定顯示名稱"
+
+msgid "introduce_contact"
+msgstr "介紹聯絡人"
+
+msgid "introduce_contacts"
+msgstr "介紹聯絡人"
+
+msgid "introduce_contacts_with_count"
+msgstr "介紹聯絡人 (%s)"
+
+msgid "need_two_contacts_to_introduce"
+msgstr "只要擁有兩位以上聯絡人，您就能介紹他們彼此認識。"
+
+msgid "introduce_contacts_select"
+msgstr "選取兩位以上聯絡人即可加以介紹。系統會將介紹函傳送給他們，接著他們就能開始與對方傳送訊息。"
+
+msgid "introduce_single_contact"
+msgstr "選取您要介紹給 %s 的聯絡人。一旦雙方核准，他們就能傳送訊息給對方。"
+
+msgid "send_introductions"
+msgstr "傳送介紹函"
+
+msgid "introductions_sent"
+msgstr "介紹函已送出！"
+
+msgid "no_contacts_yet"
+msgstr "尚無任何聯絡人"
+
+msgid "contact_verification"
+msgstr "聯絡人驗證"
+
+msgid "verification"
+msgstr "驗證"
+
+msgid "contact_verification_description"
+msgstr "您隨時可以前往右上角的訊息選單，執行聯絡人驗證作業。"
+
+msgid "qr_error_description"
+msgstr "掃描這個 QR 碼時發生了點問題。"
+
+msgid "qr_info_verification_title"
+msgstr "當面驗證聯絡人"
+
+msgid "qr_info_f2f_title"
+msgstr "QR 碼掃描"
+
+msgid "qr_info_verification_des"
 msgstr ""
+"如要驗證聯絡人，請掃描對方的 QR 碼。\n"
+"\n"
+"此程序能保障隱私，確保對話內容確實完成端對端加密。"
+
+msgid "qr_info_f2f_des"
+msgstr ""
+"若要將好友新增為聯絡人，請掃描對方的 QR 碼。\n"
+"\n"
+"此程序能保障隱私，確保對話內容確實完成端對端加密。"
+
+msgid "qr_info_verification_scan"
+msgstr "掃描對方的 QR 碼即可驗證。"
+
+msgid "qr_info_f2f_scan"
+msgstr "掃描對方的 QR 碼即可新增聯絡人。"
+
+msgid "qr_success_snackbar"
+msgstr "%s 是聯絡人"
+
+msgid "qr_info_waiting_qr"
+msgstr "正在等待好友掃描您的 QR 碼..."
+
+msgid "scan_complete"
+msgstr "掃描完成"
+
+msgid "qr_for_your_contact"
+msgstr "您的 QR 碼"
+
+msgid "add_via_chat_number"
+msgstr "透過交談號碼新增"
+
+msgid "qr_info_waiting_id"
+msgstr "正在等候好友輸入您的通訊 ID 或掃描您的 QR 碼..."
+
+msgid "chat_number_not_found"
+msgstr "找不到交談號碼，請檢查號碼並再試一次"
+
+msgid "unable_to_add_contact"
+msgstr "找不到聯絡人，請檢查號碼並再試一次"
+
+msgid "self_adding"
+msgstr "您輸入的是您的交談號碼"
+
+msgid "chat_number_type"
+msgstr "輸入交談號碼"
+
+msgid "letter_and_numbers_only"
+msgstr "僅限輸入英文字母和數字"
+
+msgid "name_your_contact"
+msgstr "為聯絡人命名"
+
+msgid "messenger_id_invalid"
+msgstr "通訊 ID 無效"
+
+msgid "username_not_found"
+msgstr "找不到使用者名稱"
+
+msgid "contact_id_your_id"
+msgstr "您的通訊 ID"
+
+msgid "introductions"
+msgstr "介紹"
+
+msgid "introduced"
+msgstr "介紹人：%s"
+
+msgid "introductions_title"
+msgstr "接受 %s 的介紹函"
+
+msgid "introductions_info"
+msgstr "雙方都必須接受對方的介紹函，才能開始交談。如果未採取任何動作，介紹函會在 7 天後消失。"
+
+msgid "introduction_reject_title"
+msgstr "拒絕介紹函"
+
+msgid "introduction_reject_content"
+msgstr "如果您拒絕介紹函，您將無法傳送訊息給這名聯絡人。"
+
+msgid "introductions_error_description_rejecting"
+msgstr "拒絕這個聯繫請求時發生了點問題。"
+
+msgid "introductions_error_description_accepting"
+msgstr "接受這個聯繫請求時發生了點問題。"
+
+msgid "no_introductions"
+msgstr "沒有任何介紹函需要處理。"
+
+msgid "introduction_approved"
+msgstr "%s 的介紹函已獲核准！"
+
+msgid "delete_contact_name"
+msgstr "刪除 %s"
+
+msgid "delete_contact"
+msgstr "刪除聯絡人"
+
+msgid "error"
+msgstr "錯誤"
+
+msgid "error_delete_contact"
+msgstr "刪除這名聯絡人時發生了點問題。"
+
+msgid "unnamed_contact"
+msgstr "未命名聯絡人"
+
+msgid "me"
+msgstr "我"
+
+msgid "disappearing_messages"
+msgstr "消失的訊息"
+
+msgid "start_of_your_history"
+msgstr "您與 %s 的交談和語音通話皆經過端對端加密"
+
+msgid "banner_unaccepted"
+msgstr "%s 不在您的聯絡人清單上，您要接受交談請求嗎？"
+
+msgid "banner_messages_persist"
+msgstr "新訊息不會消失。"
+
+msgid "banner_message_retention"
+msgstr "訊息保留期限已設為 %s"
+
+msgid "longform_seconds"
+msgstr "%s 秒"
+
+msgid "shortform_seconds"
+msgstr "%s 秒"
+
+msgid "longform_minute"
+msgstr "%s 分鐘"
+
+msgid "shortform_minutes"
+msgstr "%s 分鐘"
+
+msgid "longform_minutes"
+msgstr "%s 分鐘"
+
+msgid "longform_hour"
+msgstr "%s 小時"
+
+msgid "shortform_hours"
+msgstr "%s 小時"
+
+msgid "longform_hours"
+msgstr "%s 小時"
+
+msgid "longform_day"
+msgstr "%s 天"
+
+msgid "shortform_days"
+msgstr "%s 天"
+
+msgid "longform_days"
+msgstr "%s 天"
+
+msgid "longform_week"
+msgstr "%s 週"
+
+msgid "shortform_weeks"
+msgstr "%s 週"
+
+msgid "longform_weeks"
+msgstr "%s 週"
+
+msgid "banner_source_unknown"
+msgstr "未知"
+
+msgid "banner_source_qr"
+msgstr "QR 碼"
+
+msgid "banner_source_id"
+msgstr "通訊 ID"
+
+msgid "banner_source_intro"
+msgstr "介紹"
+
+msgid "message_will_disappear_at"
+msgstr "消失 (%s)"
+
+msgid "change_display_name"
+msgstr "變更顯示名稱"
+
+msgid "yesterday"
+msgstr "昨天"
+
+msgid "tomorrow"
+msgstr "明天"
+
+msgid "just_now"
+msgstr "剛剛"
+
+msgid "within_one_minute"
+msgstr "一分鐘內"
+
+msgid "on_date"
+msgstr "於 %s"
+
+msgid "at_date"
+msgstr "於 %s"
+
+msgid "error_fetching_message_preview"
+msgstr "擷取訊息預覽時發生錯誤"
+
+msgid "message_was_deleted"
+msgstr "訊息已刪除"
+
+msgid "contact_was_deleted"
+msgstr "%s 已從您的聯絡人中刪除。"
+
+msgid "contact_was_blocked"
+msgstr "您已將 %s 封鎖。"
+
+msgid "contact_was_unblocked"
+msgstr "您已將 %s 解除封鎖。 "
+
+msgid "dismiss"
+msgstr "關閉"
+
+msgid "copy_text"
+msgstr "複製文字"
+
+msgid "message"
+msgstr "訊息"
+
+msgid "messages"
+msgstr "訊息"
+
+msgid "chats"
+msgstr "交談"
+
+msgid "new_requests"
+msgstr "新請求 %s"
+
+msgid "chat"
+msgstr "交談"
+
+msgid "lantern_chat"
+msgstr "Lantern 交談"
+
+msgid "welcome_title"
+msgstr "歡迎使用 Lantern 交談功能！"
+
+msgid "welcome_text"
+msgstr "將交談內容加密，以保護您的隱私，並搭配採用同級最佳的抗封鎖技術。"
+
+msgid "get_started"
+msgstr "開始使用"
+
+msgid "want_to_recover"
+msgstr "有交談號碼嗎？"
+
+msgid "recover"
+msgstr "復原"
+
+msgid "chat_number"
+msgstr "交談號碼"
+
+msgid "your_chat_number"
+msgstr "您的交談號碼"
+
+msgid "chat_number_recovery"
+msgstr "交談號碼復原"
+
+msgid "recovery_helper_text"
+msgstr "請輸入有效的復原金鑰"
+
+msgid "recovery_button"
+msgstr "輸入復原金鑰即可還原交談號碼。"
+
+msgid "recovery_label"
+msgstr "輸入您的復原金鑰"
+
+msgid "recovery_key"
+msgstr "復原金鑰"
+
+msgid "secure_text_explanation"
+msgstr "交談號碼就像電話號碼一樣，您的好友可以利用這組號碼在 Lantern 上與您聯絡。"
+
+msgid "secure_text_explanation_account"
+msgstr ""
+"這是交談號碼的完整版本，分享這組較長的號碼會比較安全，尤其如果能透過其他端對端加密的管道分享，會更理想。\n"
+"\n"
+"Lantern 提供精簡版的交談號碼，能您能更方便地分享聯絡資訊。"
+
+msgid "recovery_key_account_explanation"
+msgstr "請妥善保管此金鑰，並千萬別與他人分享。如果您遺失手機、換新裝置或重設作業系統，這是復原交談號碼的唯一方法。"
+
+msgid "recovery_error"
+msgstr "無法復原您的帳戶。"
+
+msgid "recovery_input_error"
+msgstr "請務必輸入有效的復原金鑰。"
+
+msgid "recovery_retrieval_error"
+msgstr "擷取復原金鑰時發生了點問題。"
+
+msgid "recovery_success"
+msgstr "您已成功復原交談號碼。"
+
+msgid "empty_chats_text"
+msgstr "您可在此分享交談號碼或新增聯絡人！"
+
+msgid "next"
+msgstr "繼續"
+
+msgid "automated_backup"
+msgstr "自動化備份"
+
+msgid "backup_explanation"
+msgstr ""
+"Lantern 提供將聯絡人資料加密並備份到安全伺服器的選項。如果您未確實備份，您將無法使用復原金鑰復原聯絡人資料。\n"
+"\n"
+"當您選擇備份聯絡人清單，Lantern 便無法讀取清單內容。"
+
+msgid "backup_contacts"
+msgstr "備份聯絡人"
+
+msgid "copy_recovery_key"
+msgstr "複製復原金鑰"
+
+msgid "search"
+msgstr "搜尋"
+
+msgid "account_management"
+msgstr "帳戶管理"
+
+msgid "add_via_username"
+msgstr "透過使用者名稱新增"
+
+msgid "username"
+msgstr "使用者名稱"
+
+msgid "enter_a_username_to_start_a_conversation"
+msgstr "輸入使用者名稱即可透過訊息展開對話"
+
+msgid "start_message"
+msgstr "開始傳送訊息"
+
+msgid "please_enter_a_valid_username"
+msgstr "請輸入有效的使用者名稱"
+
+msgid "open_url"
+msgstr "開啟 URL"
+
+msgid "message_deleted"
+msgstr "%s 已刪除這則訊息"
+
+msgid "never"
+msgstr "永遠不要"
+
+msgid "delete_for_me"
+msgstr "幫我刪除"
+
+msgid "delete_for_me_explanation"
+msgstr "這只會單方面為您刪除，其他人還是可以看見訊息。"
+
+msgid "delete_for_everyone"
+msgstr "幫所有人刪除"
+
+msgid "delete_for_everyone_explanation"
+msgstr "這會為所有人刪除訊息。"
+
+msgid "reply"
+msgstr "回覆"
+
+msgid "replying_to"
+msgstr "回覆 %s"
+
+msgid "attachment"
+msgstr "附件"
+
+msgid "error_rendering_message"
+msgstr "顯示訊息時發生錯誤"
+
+msgid "error_fetching_preview"
+msgstr "擷取訊息預覽時發生錯誤"
+
+msgid "audio"
+msgstr "音訊"
+
+msgid "image"
+msgstr "圖像"
+
+msgid "video"
+msgstr "視訊"
+
+msgid "app"
+msgstr "應用程式"
+
+msgid "document"
+msgstr "文件"
+
+msgid "search_chars_min"
+msgstr "請輸入至少三個字元"
+
+msgid "search_no_results"
+msgstr "很抱歉，找不到符合此搜尋條件的任何結果。"
+
+msgid "search_error"
+msgstr "很抱歉，擷取搜尋結果時發生錯誤。"
+
+msgid "search_contacts"
+msgstr "聯絡人 (%s)"
+
+msgid "search_chats"
+msgstr "交談 (%s)"
+
+msgid "search_in_contacts"
+msgstr "在聯絡人中搜尋"
+
+msgid "search_in_chats"
+msgstr "在交談和聯絡人中搜尋"
+
+msgid "could_not_render_title"
+msgstr "無法顯示檔案標題"
+
+msgid "could_not_render_type"
+msgstr "無法顯示檔案類型"
+
+msgid "speaker"
+msgstr "喇叭"
+
+msgid "speaker_on"
+msgstr "喇叭已開啟"
+
+msgid "mute"
+msgstr "靜音"
+
+msgid "muted"
+msgstr "靜音中"
+
+msgid "end_call"
+msgstr "結束通話"
+
+msgid "verify_contact"
+msgstr "驗證 %s"
+
+msgid "verified"
+msgstr "已驗證"
+
+msgid "pending_verification"
+msgstr "待驗證"
+
+msgid "verify_description"
+msgstr ""
+"基於安全考量，建議您最好檢查 %s 的驗證編號是否與您相符。\n"
+"\n"
+"您要當面驗證，還是透過電話驗證？"
+
+msgid "verify_in_person"
+msgstr "當面驗證"
+
+msgid "verify_via_call"
+msgstr "透過語音通話驗證"
+
+msgid "dismiss_notification"
+msgstr "關閉通知"
+
+msgid "call_contact"
+msgstr "要打電話給 %s？"
+
+msgid "call"
+msgstr "通話"
+
+msgid "incoming_call"
+msgstr "來電"
+
+msgid "call_from"
+msgstr "%s 來電"
+
+msgid "in_call"
+msgstr "進行中通話"
+
+msgid "in_call_des"
+msgstr "進行中通話通知"
+
+msgid "incoming_call_from"
+msgstr "%s 的來電"
+
+msgid "touch_here_to_open_call"
+msgstr "輕觸這裡即可接聽通話"
+
+msgid "in_call_with"
+msgstr "正在與 %s 通話"
+
+msgid "undo_verification"
+msgstr "恢復成未驗證狀態"
+
+msgid "mark_as_verified"
+msgstr "標示為已驗證"
+
+msgid "verification_panel_success"
+msgstr "驗證成功！您與 %s 傳送的訊息安全無虞。"
+
+msgid "verification_panel_pending"
+msgstr "這是您的驗證編號。請確認這組編號與 %s 的編號完全相符，再將對方標示為已驗證。"
+
+msgid "replica_upload_confirmation_title"
+msgstr "重要！"
+
+msgid "replica_upload_confirmation_body"
+msgstr ""
+"上傳至 Lantern 網路的檔案會開放給所有人存取。這些檔案採取去中心化的處理方式，任何人都無法從網路中刪除。\n"
+"\n"
+"上傳敏感內容時，請注意檔案內容和檔案名稱應避免出現個人識別資訊。"
+
+msgid "replica_upload_confirmation_agree"
+msgstr "恢復上傳"
+
+msgid "dont_show_me_this_again"
+msgstr "別再顯示"
+
+msgid "download"
+msgstr "下載"
+
+msgid "download_started"
+msgstr "已開始下載"
+
+msgid "uploader"
+msgstr "上傳工具"
+
+msgid "upload_started"
+msgstr "已開始上傳"
+
+msgid "upload_in_progress"
+msgstr "上傳中"
+
+msgid "upload_complete"
+msgstr "上傳完成"
+
+msgid "upload_failed"
+msgstr "上傳失敗"
+
+msgid "upload_cancelled"
+msgstr "已取消上傳"
+
+msgid "replica_link_fetcher"
+msgstr "複本連結擷取工具"
+
+msgid "no_preview_for_this_type_of_file"
+msgstr "這種檔案類型無法預覽"
+
+msgid "app_unknown"
+msgstr "應用程式/不明"
+
+msgid "audio_unknown"
+msgstr "音訊/不明"
+
+msgid "document_unknown"
+msgstr "文件/不明"
+
+msgid "no_search_result_found"
+msgstr "很抱歉，找不到任何符合該搜尋條件的結果"
+
+msgid "search_result_error"
+msgstr "擷取結果時發生錯誤，請稍後再試"
+
+msgid "video_stream_error"
+msgstr "顯示影片時發生錯誤，請稍後再試"
+
+msgid "untitled"
+msgstr "無標題"
+
+msgid "failed_to_init_replica"
+msgstr "錯誤：無法初始化複本"
+
+msgid "awaiting_result"
+msgstr "等候結果中..."
+
+msgid "discover"
+msgstr "發現"
+
+msgid "replica_search_intro"
+msgstr "您可在 Lantern 網路中搜尋使用者上傳的內容，或者也能自行上傳內容，供其他人探索。"
+
+msgid "share"
+msgstr "分享"
+
+msgid "upload_file_screen"
+msgstr "上傳檔案"
+
+msgid "name_your_file"
+msgstr "命名您的檔案"
+
+msgid "upload"
+msgstr "上傳"
