@@ -9,6 +9,7 @@ export 'package:test/test.dart';
 extension DriverExtension on FlutterDriver {
   static var screenshotSequence = 0;
   static const defaultWaitTimeout = Duration(seconds: 5);
+  static const longWaitTimeout = Duration(seconds: 20);
   static const defaultTapTimeout = Duration(seconds: 1);
   static var dirPath = '';
 
@@ -72,6 +73,7 @@ extension DriverExtension on FlutterDriver {
       await tapFinder(
         find.text(addNonBreakingSpaces(tapText)),
         waitText: waitText,
+        skipScreenshot: skipScreenshot,
       );
     }
   }
@@ -110,11 +112,21 @@ extension DriverExtension on FlutterDriver {
     String? waitText,
     bool? skipScreenshot,
   }) async {
-    await tapFinder(
-      find.byValueKey(key),
-      waitText: waitText,
-      skipScreenshot: skipScreenshot,
-    );
+    try {
+      print('key $key');
+      await tapFinder(
+        find.byValueKey(key),
+        waitText: waitText,
+        skipScreenshot: skipScreenshot,
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fakeLongPressAtKey(String key) async {
+    await scroll(find.byValueKey(key), 0, 0, defaultWaitTimeout,
+        timeout: longWaitTimeout);
   }
 
   /// receives a SerializableFinder finder and taps at the center of the widget located by it. It handles text wrapping in case the finder can't locate the target.
