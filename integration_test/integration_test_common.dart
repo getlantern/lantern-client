@@ -19,9 +19,7 @@ extension DriverExtension on FlutterDriver {
     await directory.create();
   }
 
-  Future<void> saveScreenshot(String name, {bool? skipScreenshot}) async {
-    if (skipScreenshot == true) return;
-
+  Future<void> saveScreenshot(String name) async {
     final png = await screenshot();
     final file = File(
       join(
@@ -32,14 +30,15 @@ extension DriverExtension on FlutterDriver {
     await file.writeAsBytes(png);
   }
 
-  Future<void> waitForText(String waitText) async {
-    try {
-      await doWaitForText(waitText);
-    } finally {
-      await saveScreenshot('wait for $waitText');
-    }
-  }
+  // Future<void> waitForText(String waitText) async {
+  //   try {
+  //     await doWaitForText(waitText);
+  //   } finally {
+  //     await saveScreenshot('wait for $waitText');
+  //   }
+  // }
 
+  /// handles non-breaking text wrapping
   Future<void> doWaitForText(String waitText) async {
     try {
       await waitFor(
@@ -55,6 +54,8 @@ extension DriverExtension on FlutterDriver {
     }
   }
 
+  /// invokes find.text(tapText)
+  /// optional waitText and skipScreenshot
   Future<void> tapText(
     String tapText, {
     String? waitText,
@@ -75,6 +76,8 @@ extension DriverExtension on FlutterDriver {
     }
   }
 
+  /// taps on Floating Action Button in Chats
+  /// optional waitText and skipScreenshot
   Future<void> tapFAB({
     String? waitText,
     bool? skipScreenshot,
@@ -86,6 +89,8 @@ extension DriverExtension on FlutterDriver {
     );
   }
 
+  /// invokes find.byType(type)
+  /// optional waitText and skipScreenshot
   Future<void> tapType(
     String type, {
     String? waitText,
@@ -98,6 +103,8 @@ extension DriverExtension on FlutterDriver {
     );
   }
 
+  /// invokes find.byValueKey(key)
+  /// optional waitText and skipScreenshot
   Future<void> tapKey(
     String key, {
     String? waitText,
@@ -110,6 +117,8 @@ extension DriverExtension on FlutterDriver {
     );
   }
 
+  /// receives a SerializableFinder finder and taps at the center of the widget located by it. It handles text wrapping in case the finder can't locate the target.
+  /// It saves a screenshot of the viewport unless skipScreenshot = true
   Future<void> tapFinder(
     SerializableFinder finder, {
     String? waitText,
@@ -124,9 +133,9 @@ extension DriverExtension on FlutterDriver {
         await doWaitForText(waitText);
       }
     } finally {
+      if (skipScreenshot == true) return;
       await saveScreenshot(
         'tap $finder wait for $waitText',
-        skipScreenshot: skipScreenshot,
       );
     }
   }
@@ -153,7 +162,47 @@ extension DriverExtension on FlutterDriver {
     }
   }
 
-  Future<void> waitForTwoSeconds() async {
-    await Future.delayed(const Duration(seconds: 2));
+  Future<void> waitForSeconds(int seconds) async {
+    await Future.delayed(Duration(seconds: seconds));
+  }
+
+  /// Developer → RESET FLAGS → Chats → GET STARTED → NEXT
+  Future<void> resetFlagsAndEnrollAgain({bool? skipScreenshot}) async {
+    await tapText(
+      'Developer',
+      waitText: 'Developer Settings',
+      skipScreenshot: true,
+    );
+    await scrollTextUntilVisible('RESET FLAGS');
+    await tapText(
+      'RESET FLAGS',
+      skipScreenshot: true,
+    );
+    await tapText(
+      'Chats',
+      waitText: 'Welcome to Lantern Chat!',
+      skipScreenshot: skipScreenshot,
+    );
+    await tapText(
+      'GET STARTED',
+      waitText: 'Chat Number',
+      skipScreenshot: skipScreenshot,
+    );
+    await tapText(
+      'NEXT',
+      waitText: 'Chats',
+      skipScreenshot: skipScreenshot,
+    );
+  }
+
+  /// Locates message bar, types a message and sends it
+  Future<void> typeAndSend(String messageContent) async {
+    await tapType('TextFormField');
+    await enterText(
+      messageContent,
+      timeout: const Duration(seconds: 1),
+    );
+    await tapKey('send_message');
+    await waitForSeconds(1);
   }
 }
