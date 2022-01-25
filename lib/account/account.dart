@@ -32,7 +32,7 @@ class AccountMenu extends StatelessWidget {
                 ) =>
                     ListItemFactory.settingsItem(
                   icon: ImagePaths.account,
-                  content: 'Account Management'.i18n,
+                  content: 'account_management'.i18n,
                   onTap: () async =>
                       await context.pushRoute(AccountManagement(isPro: false)),
                   trailingArray: [
@@ -85,7 +85,7 @@ class AccountMenu extends StatelessWidget {
           (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
               ListItemFactory.settingsItem(
             icon: ImagePaths.account,
-            content: 'Account Management'.i18n,
+            content: 'account_management'.i18n,
             onTap: () async =>
                 await context.pushRoute(AccountManagement(isPro: true)),
             trailingArray: [

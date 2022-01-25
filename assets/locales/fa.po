@@ -1,23 +1,25 @@
 # 
 # Translators:
-# Lantern, 2021
 # Derek F <derek@getlantern.org>, 2021
-# Amir Moezzi <amirreza.mz@yahoo.com>, 2021
-# b0b47d46632b78a09a40de799fda9a65, 2021
-# NoProfile, 2021
-# Evan <alireza.firoozi68@gmail.com>, 2021
-# Mokah <unfilternet@getlantern.org>, 2021
 # Sina <sina@asl19.org>, 2021
 # Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2021
-# Vaseto Nora <n.nouri67@gmail.com>, 2021
-# Mary Sol <salar.adlparvar@gmail.com>, 2021
 # Pedram Azizallahi <pedram672004@yahoo.com>, 2021
-# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2021
 # ali jafarizadeh <ebrahimigv@gmail.com>, 2021
+# Vaseto Nora <n.nouri67@gmail.com>, 2022
+# b0b47d46632b78a09a40de799fda9a65, 2022
+# Evan <alireza.firoozi68@gmail.com>, 2022
+# Lantern, 2022
+# NoProfile, 2022
+# Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2022
+# Mary Sol <salar.adlparvar@gmail.com>, 2022
+# Amir Moezzi <amirreza.mz@yahoo.com>, 2022
+# Mokah <unfilternet@getlantern.org>, 2022
+# Chip Stehr <chip@getlantern.org>, 2022
+# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: ali jafarizadeh <ebrahimigv@gmail.com>, 2021\n"
+"Last-Translator: e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2022\n"
 "Language-Team: Persian (Iran) (https://www.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -25,8 +27,25 @@ msgstr ""
 msgid "app_name"
 msgstr "لنترن"
 
+msgid "introducing"
+msgstr "معرفی گپ"
+
+msgid "introducing_des"
+msgstr ""
+"با استفاده از گپ جدید رمزگذاری‌شده و مقاوم در برابر مسدود شدن ما که مستقیماً"
+" در Lantern تعبیه شده است، با دوستان خود گپ امنی داشته باشید!"
+
+msgid "maybe_later"
+msgstr "شاید در فرصتی دیگر"
+
+msgid "try"
+msgstr "اکنون امتحان کنید"
+
+msgid "new"
+msgstr "جدید"
+
 msgid "Daily Data Usage"
-msgstr "مصرف داده روزانه"
+msgstr "میزان مصرف داده روزانه"
 
 msgid "is"
 msgstr "وضعیت:"
@@ -34,7 +53,7 @@ msgstr "وضعیت:"
 msgid "connected"
 msgstr "متصل شد"
 
-msgid "disconnected"
+msgid "Disconnected"
 msgstr "قطع شده است"
 
 msgid "Disconnecting"
@@ -43,14 +62,28 @@ msgstr "در حال قطع اتصال…"
 msgid "Connecting"
 msgstr "درحال اتصال..."
 
+msgid "no_network_connection"
+msgstr "بدون اتصال به شبکه"
+
+msgid "connection_error"
+msgstr "خطای اتصال"
+
+msgid "connection_error_des"
+msgstr ""
+"Lantern در اتصال به سرورهای ما مشکل دارد. لطفاً برنامه را مجدداً راه‌اندازی "
+"کنید. اگر این مشکل ادامه داشت، لطفاً با پشتیبانی تماس بگیرید."
+
+msgid "connection_error_button"
+msgstr "تماس با پشتیبانی"
+
+msgid "Calling"
+msgstr "در حال تماس..."
+
 msgid "Go Pro Title"
 msgstr "به نسخه حرفه‌ای بروید!"
 
 msgid "Go Pro Description"
 msgstr "به سرعت‌های بالاتر و داده‌های نامحدود دسترسی پیدا کنید!"
-
-msgid "Go Pro Description With Yinbi"
-msgstr "داده‌های نامحدود + رمزارز Yinbi رایگان!"
 
 msgid "Server Location"
 msgstr "موقعیت سرور"
@@ -63,35 +96,55 @@ msgstr ""
 msgid "OK"
 msgstr "بسیار خوب"
 
-msgid "pro_account_management"
+msgid "Done"
+msgstr "انجام شد"
+
+msgid "backup_recovery_key"
+msgstr "کلید بازیابی نسخه پشتیبان"
+
+msgid "delete_chat_data"
+msgstr "حذف همه داده‌های گپ"
+
+msgid "delete_chat_data_description"
+msgstr ""
+"با این کار، شماره گپ، مخاطبین و پیام‌های شما از این دستگاه حذف می‌شود، بدون "
+"«کلید بازیابی نسخه پشتیبان»، دسترسی به شماره گپ خود را از دست خواهید داد."
+
+msgid "delete_chat_data_confirmation"
+msgstr "تأیید می‌کنم که می‌خواهم داده‌های گپ خود را حذف کنم"
+
+msgid "Pro Account Management"
 msgstr "مدیریت حساب نسخه حرفه‌ای"
 
-msgid "add_device"
-msgstr "افزودن دستگاه جدید"
+msgid "Link Device"
+msgstr "پیوند دادن دستگاه"
 
-msgid "upgrade_to_lantern_pro"
+msgid "Upgrade to Lantern Pro"
 msgstr "رتقاء به نسخه Pro  فانوس"
 
-msgid "authorize_device_for_pro"
-msgstr "تایید دستگاه برای نسخه حرفه ای"
-
-msgid "invite_friends"
+msgid "Invite Friends"
 msgstr "دعوت از دوستان"
 
 msgid "desktop_version"
-msgstr "نسخه دسک‌تاپ"
-
-msgid "free_yinbi_crypto"
-msgstr "ارز رمزنگاری‌شده رایگان Yinbi"
-
-msgid "yinbi_redemption"
-msgstr "بازخرید Yinbi"
+msgstr "نسخه ویندوز"
 
 msgid "settings"
 msgstr "تنظیمات"
 
+msgid "general"
+msgstr "عمومی"
+
 msgid "proxy_all"
 msgstr "پراکسی کردن همه چیز"
+
+msgid "proxy_everything_is"
+msgstr "استفاده از پروکسی برای همه چیز %s است"
+
+msgid "version_number"
+msgstr "نسخه %s"
+
+msgid "build_number"
+msgstr "ساخت %s"
 
 msgid "language"
 msgstr "زبان"
@@ -99,56 +152,17 @@ msgstr "زبان"
 msgid "report_issue"
 msgstr "گزارش مشکل"
 
+msgid "blocked_users"
+msgstr "کاربران مسدود"
+
 msgid "description_proxy_all_dialog"
 msgstr ""
 "اگر این گزینه فعال باشد همه ترافیک از طریق Lantern (امن‌تر) ارسال خواهد شد. "
 "اگر این گزینه فعال نباشد، فقط ترافیک مسدودشده از طریق Lantern (سریع‌تر) "
 "ارسال خواهد شد."
 
-msgid "Exchange"
-msgstr "تبدیل ارز"
-
 msgid "Account"
 msgstr "حساب کاربری"
-
-msgid "In partnership with"
-msgstr "با شراکت:"
-
-msgid "Buy"
-msgstr "خرید"
-
-msgid "Bitcoin"
-msgstr "بیت‌کوین"
-
-msgid "Tether"
-msgstr "تتر"
-
-msgid "With"
-msgstr "با"
-
-msgid "Online Wallets"
-msgstr "کیف‌های پول آنلاین"
-
-msgid "Bank Transfers"
-msgstr "انتقالات بانکی"
-
-msgid "Gift Cards"
-msgstr "کارت‌های هدیه"
-
-msgid "Game Cards"
-msgstr "کارت‌های بازی"
-
-msgid "Cash Payment"
-msgstr "پرداخت نقدی"
-
-msgid "Digital Currencies"
-msgstr "ارزهای دیجیتالی"
-
-msgid "Payment Method"
-msgstr "روش پرداخت"
-
-msgid "SHOW BEST DEALS"
-msgstr "نمایش بهترین قیمت‌ها"
 
 msgid "VPN Status"
 msgstr "وضعیت VPN"
@@ -174,6 +188,9 @@ msgstr "یا"
 msgid "Authorize Device via Email"
 msgstr "تأیید دستگاه از طریق ایمیل"
 
+msgid "auth_email_helper_text"
+msgstr "ایمیل مرتبط با حساب Pro خود را وارد کنید"
+
 msgid "Requires access to the email you used to buy Lantern Pro"
 msgstr ""
 "نیاز به دسترسی به ایمیلی که برای خرید Lantern Pro از آن استفاده کردید "
@@ -181,11 +198,17 @@ msgstr ""
 msgid "Link via Email"
 msgstr "پیوند از طریق ایمیل"
 
+msgid "lantern_pro_email"
+msgstr "ایمیل Lantern Pro"
+
 msgid "Email"
 msgstr "ایمیل"
 
 msgid "Submit"
 msgstr "ثبت اطلاعات"
+
+msgid "save"
+msgstr "ذخیره"
 
 msgid "Please enter a valid email address"
 msgstr "لطفاً آدرس ایمیل معتبری وارد کنید"
@@ -215,8 +238,8 @@ msgstr "افزودن دستگاه جدید"
 
 msgid "approve_device_step_1"
 msgstr ""
-"\"مجاز کردن دستگاه برای Pro\" را از فهرست حساب دستگاهی که می خواهید پیوند "
-"دهید باز کنید، سپس \"پیوند با پین\" را انتخاب کنید"
+"«مجاز کردن دستگاه برای Pro» را از فهرست حساب دستگاهی که می‌خواهید پیوند دهید"
+" باز کنید، سپس «پیوند با پین» را انتخاب کنید."
 
 msgid "approve_device_step_2"
 msgstr "کد پیوند دهنده دریافت شده در مرحله ۱ را وارد کنید"
@@ -241,19 +264,824 @@ msgstr ""
 "آیا مطمئن هستید که میخواهید این دستگاه را از حساب Pro خود قطع اتصال کنید؟ "
 
 msgid "n/a"
-msgstr ""
+msgstr "در دسترس نیست"
 
 msgid "Developer Settings"
-msgstr ""
+msgstr "تنظیمات توسعه‌دهنده"
 
 msgid "Developer"
+msgstr "توسعه‌دهنده"
+
+msgid "dev_settings"
 msgstr ""
+"این تنظیمات فقط برای استفاده توسعه‌ای هستند. با تغییر هر یک از تنظیمات، "
+"برنامه به‌طور خودکار متوقف و مجدداً راه‌اندازی می‌شود."
+
+msgid "dev_payment_mode"
+msgstr ""
+"وقتی «حالت تست پرداخت» فعال است، برنامه از یک کاربر با کد اختصاصی استفاده "
+"می‌کند. می‌توانید با استفاده از شماره 4242 4242 4242 4242، تاریخ انقضا در "
+"آینده و هر CVV، خریدهای Stripe را انجام دهید."
 
 msgid "Payment Test Mode"
-msgstr ""
+msgstr "حالت تست پرداخت"
 
 msgid "Play Version"
-msgstr ""
+msgstr "نسخه برنامه"
 
-msgid "Yinbi Enabled"
+msgid "Force Country"
+msgstr "ظرفیت کشور"
+
+msgid "Error"
+msgstr "خطا"
+
+msgid "accept"
+msgstr "قبول کردن"
+
+msgid "cancel"
+msgstr "انصراف"
+
+msgid "reject"
+msgstr "رد کردن"
+
+msgid "copied"
+msgstr "کپی شد!"
+
+msgid "saved"
+msgstr "ذخیره شد!"
+
+msgid "new_chat"
+msgstr "گپ جدید"
+
+msgid "your_contact_info"
+msgstr "اطلاعات مخاطب شما"
+
+msgid "display_name"
+msgstr "نام نمایشی"
+
+msgid "edit"
+msgstr "ویرایش"
+
+msgid "save_error"
+msgstr "در حین ذخیره کردن، خطایی رخ داده است"
+
+msgid "more_options"
+msgstr "سایر گزینه‌ها"
+
+msgid "block_user"
+msgstr "مسدود کردن کاربر"
+
+msgid "unblock_user"
+msgstr "لغو مسدودی کاربر"
+
+msgid "block"
+msgstr "بلاک کن"
+
+msgid "unblock"
+msgstr "از بلاک خارج کن"
+
+msgid "block_info_title"
+msgstr "%s مسدود شود؟"
+
+msgid "no_blocked_users"
+msgstr "هیچ کاربر مسدودی وجود ندارد."
+
+msgid "unblock_info_title"
+msgstr "مسدود بودن %s لغو شود؟"
+
+msgid "block_info_description"
 msgstr ""
+"با مسدود کردن این کاربر، تاریخچه گپ حذف می‌شود و از تماس او با شما در آینده "
+"جلوگیری می‌کند. می‌توانید مسدود بودن کاربران را از منوی تنظیمات لغو کنید."
+
+msgid "unblock_info_description"
+msgstr ""
+"%s اکنون می‌تواند به شما پیام دهد. آنها از لغو مسدودی توسط شما مطلع "
+"نمی‌شوند."
+
+msgid "block_info_checkbox"
+msgstr "می‌دانم که با این کار تمام تاریخچه گپ حذف می‌شود."
+
+msgid "unblock_info_checkbox"
+msgstr "تأیید می‌کنم که می‌خواهم مسدود بودن این مخاطب را لغو کنم."
+
+msgid "delete_permanently"
+msgstr "حذف دائمی کاربر"
+
+msgid "delete_info_description"
+msgstr ""
+"پس از حذف، اگر می‌خواهید دوباره با آنها گپ بزنید، باید اطلاعات تماس آنها را "
+"اضافه کنید."
+
+msgid "add_new_contact"
+msgstr "افزودن مخاطب جدید"
+
+msgid "add_contact"
+msgstr "افزودن مخاطب"
+
+msgid "share_your_chat_number"
+msgstr "اشتراک‌گذاری شماره گپ خود"
+
+msgid "scan_qr_code"
+msgstr "اسکن کد QR"
+
+msgid "add_contact_in_person"
+msgstr "افزودن مخاطبین حاضر"
+
+msgid "start_chat"
+msgstr "شروع گپ"
+
+msgid "message_disappearing"
+msgstr "همه پیام‌ها برای شما و %s ناپدید نمی‌شوند."
+
+msgid "message_disappearing_description"
+msgstr "همه پیام‌ها برای شما و %s پس از %s ناپدید می‌شوند."
+
+msgid "delete"
+msgstr "حذف"
+
+msgid "view_contact_info"
+msgstr "مشاهده اطلاعات مخاطب"
+
+msgid "off"
+msgstr "خاموش"
+
+msgid "continue"
+msgstr "ادامه"
+
+msgid "are_you_sure_you_want_to_open"
+msgstr "مطمئنید که می‌خواهید %s را باز کنید؟"
+
+msgid "set"
+msgstr "تنظیم"
+
+msgid "menu"
+msgstr "منو"
+
+msgid "send_error"
+msgstr "در حین ارسال پیامتان، خطایی رخ داد"
+
+msgid "share_media_error"
+msgstr "در حین اشتراک‌گذاری فایل رسانه‌ای، خطایی رخ داد"
+
+msgid "no_recents"
+msgstr "مورد جدیدی وجود ندارد"
+
+msgid "set_display_name"
+msgstr "تنظیم نام نمایشی"
+
+msgid "introduce_contact"
+msgstr "معرفی مخاطب"
+
+msgid "introduce_contacts"
+msgstr "معرفی مخاطبین"
+
+msgid "introduce_contacts_with_count"
+msgstr "معرفی مخاطبین (%s)"
+
+msgid "need_two_contacts_to_introduce"
+msgstr "هنگامی که دو یا چند مخاطب دارید، می‌توانید معرفی‌ها را ایجاد کنید."
+
+msgid "introduce_contacts_select"
+msgstr ""
+"دو یا چند مخاطب را برای معرفی انتخاب کنید. برای شروع گپ، معرفی‌ها برای آنها "
+"ارسال می‌‌شود."
+
+msgid "introduce_single_contact"
+msgstr ""
+"مخاطبی را برای معرفی به %s انتخاب کنید. پس از تأیید معرفی توسط آنها، "
+"می‌توانند با هم گپ بزنند."
+
+msgid "send_introductions"
+msgstr "ارسال معرفی‌ها"
+
+msgid "introductions_sent"
+msgstr "معرفی‌ها ارسال شد!"
+
+msgid "no_contacts_yet"
+msgstr "هنوز هیچ مخاطبی وجود ندارد"
+
+msgid "contact_verification"
+msgstr "تأیید مخاطب"
+
+msgid "verification"
+msgstr "تأیید"
+
+msgid "contact_verification_description"
+msgstr "تأییدیه تماس همیشه از منوی پیام در قسمت بالا سمت راست در دسترس است."
+
+msgid "qr_error_description"
+msgstr "در حین اسکن این کد QR، خطایی رخ داد."
+
+msgid "qr_info_verification_title"
+msgstr "تأیید مخاطب به‌صورت حضوری"
+
+msgid "qr_info_f2f_title"
+msgstr "در حال اسکن کد QR"
+
+msgid "qr_info_verification_des"
+msgstr ""
+"برای تأیید مخاطب خود، کدهای QR یکدیگر را اسکن کنید.\n"
+"\n"
+"این فرآیند حفظ حریم خصوصی و رمزگذاری سرتاسری مکالمات شما را تضمین می‌کند."
+
+msgid "qr_info_f2f_des"
+msgstr ""
+"برای افزودن دوست خود به‌عنوان مخاطب، کدهای QR یکدیگر را اسکن کنید.\n"
+"\n"
+"این فرآیند حفظ حریم خصوصی و رمزگذاری سرتاسری مکالمات شما را تضمین می‌کند."
+
+msgid "qr_info_verification_scan"
+msgstr "برای تأیید، کدهای QR یکدیگر را اسکن کنید."
+
+msgid "qr_info_f2f_scan"
+msgstr "برای افزودن یک مخاطب، کدهای QR یکدیگر را اسکن کنید."
+
+msgid "qr_success_snackbar"
+msgstr "%s یک مخاطب است"
+
+msgid "qr_info_waiting_qr"
+msgstr "در انتظار دوست شما برای اسکن کد QR شما..."
+
+msgid "scan_complete"
+msgstr "اسکن انجام شد"
+
+msgid "qr_for_your_contact"
+msgstr "کد QR شما"
+
+msgid "add_via_chat_number"
+msgstr "افزودن از طریق شماره چت"
+
+msgid "qr_info_waiting_id"
+msgstr ""
+"در انتظار دوست شما برای وارد کردن شناسه پیام‌رسان‌تان یا اسکن کد QR شما..."
+
+msgid "chat_number_not_found"
+msgstr "شماره گپ پیدا نشد، لطفاً پس از بررسی شماره، دوباره امتحان کنید"
+
+msgid "unable_to_add_contact"
+msgstr "مخاطب پیدا نشد، پس از بررسی شماره، دوباره امتحان کنید"
+
+msgid "self_adding"
+msgstr "شماره گپی که وارد کردید متعلق به شما است"
+
+msgid "chat_number_type"
+msgstr "شماره گپ را بنویسید"
+
+msgid "letter_and_numbers_only"
+msgstr "فقط حروف و عدد"
+
+msgid "name_your_contact"
+msgstr "مخاطب خود را نامگذاری کنید"
+
+msgid "messenger_id_invalid"
+msgstr "شناسه پیام‌رسان نامعتبر است"
+
+msgid "username_not_found"
+msgstr "نام کاربری یافت نشد"
+
+msgid "contact_id_your_id"
+msgstr "شناسه پیام‌رسان شما"
+
+msgid "introductions"
+msgstr "معرفی‌ها"
+
+msgid "introduced"
+msgstr "معرفی‌شده توسط %s"
+
+msgid "introductions_title"
+msgstr "پذیرش معرفی به %s"
+
+msgid "introductions_info"
+msgstr ""
+"هر دو طرف برای گپ زدن با یکدیگر باید معرفی را بپذیرند. اگر اقدامی انجام "
+"نشود، معرفی‌ها پس از ۷ روز ناپدید می‌شوند."
+
+msgid "introduction_reject_title"
+msgstr "رد کردن معرفی"
+
+msgid "introduction_reject_content"
+msgstr "اگر معرفی را رد کنید، نمی‌توانید به این مخاطب پیام دهید."
+
+msgid "introductions_error_description_rejecting"
+msgstr "در حین رد درخواست اتصال، مشکلی پیش آمد."
+
+msgid "introductions_error_description_accepting"
+msgstr "هنگام پذیرش درخواست اتصال، مشکلی پیش آمد."
+
+msgid "no_introductions"
+msgstr "هیچ معرفی‌ای در دست بررسی نیست."
+
+msgid "introduction_approved"
+msgstr "معرفی به %s تأیید شد!"
+
+msgid "delete_contact_name"
+msgstr "حذف %s"
+
+msgid "delete_contact"
+msgstr "حذف مخاطب"
+
+msgid "error"
+msgstr "خطا"
+
+msgid "error_delete_contact"
+msgstr "در حین حذف این مخاطب، مشکلی پیش آمد."
+
+msgid "unnamed_contact"
+msgstr "مخاطب بدون نام"
+
+msgid "me"
+msgstr "من"
+
+msgid "disappearing_messages"
+msgstr "پیام‌های ناپدیدشونده"
+
+msgid "start_of_your_history"
+msgstr "گپ‌ها و تماس‌های صوتی شما با %s رمزگذاری سرتاسری شده‌اند"
+
+msgid "banner_unaccepted"
+msgstr "%s در فهرست مخاطبین شما نیست. مایلید درخواست گپ را بپذیرید؟"
+
+msgid "banner_messages_persist"
+msgstr "پیام‌های جدید ناپدید نمی‌شوند."
+
+msgid "banner_message_retention"
+msgstr "نگهداری پیام روی %s تنظیم شده است"
+
+msgid "longform_seconds"
+msgstr "%s ثانیه"
+
+msgid "shortform_seconds"
+msgstr "%s ثانیه"
+
+msgid "longform_minute"
+msgstr "%s دقیقه"
+
+msgid "shortform_minutes"
+msgstr "%s دقیقه"
+
+msgid "longform_minutes"
+msgstr "%s دقیقه"
+
+msgid "longform_hour"
+msgstr "%s ساعت"
+
+msgid "shortform_hours"
+msgstr "%s ساعت"
+
+msgid "longform_hours"
+msgstr "%s ساعت"
+
+msgid "longform_day"
+msgstr "%s روز"
+
+msgid "shortform_days"
+msgstr "%s روز"
+
+msgid "longform_days"
+msgstr "%s روز"
+
+msgid "longform_week"
+msgstr "%s هفته"
+
+msgid "shortform_weeks"
+msgstr "%s هفته"
+
+msgid "longform_weeks"
+msgstr "%s هفته"
+
+msgid "banner_source_unknown"
+msgstr "ناشناخته"
+
+msgid "banner_source_qr"
+msgstr "کد QR"
+
+msgid "banner_source_id"
+msgstr "شناسه پیام‌رسان"
+
+msgid "banner_source_intro"
+msgstr "معرفی"
+
+msgid "message_will_disappear_at"
+msgstr "%s ناپدید می‌شود"
+
+msgid "change_display_name"
+msgstr "تغییر نام نمایشی"
+
+msgid "yesterday"
+msgstr "دیروز"
+
+msgid "tomorrow"
+msgstr "فردا"
+
+msgid "just_now"
+msgstr "همین الآن"
+
+msgid "within_one_minute"
+msgstr "ظرف مدت یک دقیقه"
+
+msgid "on_date"
+msgstr "روز %s"
+
+msgid "at_date"
+msgstr "ساعت %s"
+
+msgid "error_fetching_message_preview"
+msgstr "در پیش‌نمایش دریافت پیام خطایی رخ داد"
+
+msgid "message_was_deleted"
+msgstr "پیام حذف شده است"
+
+msgid "contact_was_deleted"
+msgstr "%s از مخاطبین شما حذف شده است."
+
+msgid "contact_was_blocked"
+msgstr "%s مسدود شده است."
+
+msgid "contact_was_unblocked"
+msgstr "مسدود بودن %s لغو شده است."
+
+msgid "dismiss"
+msgstr "مرخص کن"
+
+msgid "copy_text"
+msgstr "کپی کردن متن"
+
+msgid "message"
+msgstr "پیام"
+
+msgid "messages"
+msgstr "پیغام ها"
+
+msgid "chats"
+msgstr "گپ‌ها"
+
+msgid "new_requests"
+msgstr "درخواست‌های جدید %s"
+
+msgid "chat"
+msgstr "گپ"
+
+msgid "lantern_chat"
+msgstr "گپ Lantern"
+
+msgid "welcome_title"
+msgstr "به گپ Lantern خوش آمدید!"
+
+msgid "welcome_text"
+msgstr ""
+"گپی رمزگذاری‌شده برای محافظت از حریم خصوصی شما با بهترین فناوری جلوگیری از "
+"مسدود شدن در نوع خود."
+
+msgid "get_started"
+msgstr "شروع به کار"
+
+msgid "want_to_recover"
+msgstr "شماره گپ دارید؟"
+
+msgid "recover"
+msgstr "بازیابی"
+
+msgid "chat_number"
+msgstr "شماره گپ"
+
+msgid "your_chat_number"
+msgstr "شماره گپ شما"
+
+msgid "chat_number_recovery"
+msgstr "بازیابی شماره گپ"
+
+msgid "recovery_helper_text"
+msgstr "لطفاً یک کلید بازیابی وارد کنید"
+
+msgid "recovery_button"
+msgstr "برای بازنشانی شماره گپ، کلید بازیابی خود را وارد کنید."
+
+msgid "recovery_label"
+msgstr "کلید بازیابی خود را وارد کنید"
+
+msgid "recovery_key"
+msgstr "کلید بازیابی"
+
+msgid "secure_text_explanation"
+msgstr ""
+"شماره گپ شما مثل شماره تلفنی است که دوستانتان برای تماس با شما در Lantern، "
+"می‌توانند از آن استفاده کنند."
+
+msgid "secure_text_explanation_account"
+msgstr ""
+"این نسخه کامل «شماره گپ» شما است؛ اشتراک‌گذاری این شماره طولانی‌تر ممکن است ایمن‌تر باشد، به‌ویژه اگر کانال رمزگذاری‌شده سرتاسری دیگری داشته باشید که این شماره را در آن به اشتراک بگذارید.\n"
+"\n"
+"Lantern یک «شماره گپ» کوتاه‌شده برای اشتراک‌گذاری راحت‌تر اطلاعات تماس ارائه می‌دهد. "
+
+msgid "recovery_key_account_explanation"
+msgstr ""
+"این کلید را در مکانی ایمن نگهداری کنید و آن را با کسی به اشتراک نگذارید. این"
+" تنها راه برای بازیابی «شماره گپ» در صورت گم کردن تلفن، تعویض دستگاه یا "
+"بازنشانی سیستم عامل است."
+
+msgid "recovery_error"
+msgstr "امکان بازیابی حساب شما وجود ندارد."
+
+msgid "recovery_input_error"
+msgstr "لطفاً مطمئن شوید که کلید بازیابی معتبری وارد کرده‌اید"
+
+msgid "recovery_retrieval_error"
+msgstr "هنگام بازیابی کلید بازیابی مشکلی پیش آمد"
+
+msgid "recovery_success"
+msgstr "شماره گپ خود را با موفقیت بازیابی کردید"
+
+msgid "empty_chats_text"
+msgstr "شماره گپ خود را به اشتراک بگذارید یا مخاطبی را اینجا اضافه کنید!"
+
+msgid "next"
+msgstr "بعدی"
+
+msgid "automated_backup"
+msgstr "پشتیبان‌گیری خودکار"
+
+msgid "backup_explanation"
+msgstr ""
+"Lantern گزینه‌ای برای رمزگذاری و پشتیبان‌گیری از مخاطبین شما در سرورهای امن ما ارائه می‌دهد. اگر از پشتیبان‌گیری صرف نظر کنید، نمی‌توانید با استفاده از کلید بازیابی، مخاطبینتان را بازیابی کنید.\n"
+"\n"
+" وقتی می‌خواهید از فهرست‌های مخاطبین نسخه پشتیبان تهیه کنید، Lantern نمی‌تواند آنها را بخواند."
+
+msgid "backup_contacts"
+msgstr "پشتیبان‌گیری از مخاطبین"
+
+msgid "copy_recovery_key"
+msgstr "کپی کردن کلید بازیابی"
+
+msgid "search"
+msgstr "جستجو"
+
+msgid "account_management"
+msgstr "مدیریت حساب"
+
+msgid "add_via_username"
+msgstr "افزودن از طریق نام کاربری"
+
+msgid "username"
+msgstr " نام کاربر"
+
+msgid "enter_a_username_to_start_a_conversation"
+msgstr "برای شروع مکالمه از طریق پیام، یک نام کاربری وارد کنید"
+
+msgid "start_message"
+msgstr "شروع پیام"
+
+msgid "please_enter_a_valid_username"
+msgstr "لطفاً نام کاربری معتبری وارد کنید"
+
+msgid "open_url"
+msgstr "آدرس اینترنتی را باز کنید"
+
+msgid "message_deleted"
+msgstr "%s این پیام را حذف کرده است"
+
+msgid "never"
+msgstr "هرگز"
+
+msgid "delete_for_me"
+msgstr "برای من حذف شود"
+
+msgid "delete_for_me_explanation"
+msgstr ""
+"با این کار پیام فقط برای شما حذف می‌شود. همه افراد دیگر همچنان می‌توانند آن "
+"را ببینند."
+
+msgid "delete_for_everyone"
+msgstr "برای همه حذف شود"
+
+msgid "delete_for_everyone_explanation"
+msgstr "پیام را برای همه حذف می‌کند."
+
+msgid "reply"
+msgstr "پاسخ"
+
+msgid "replying_to"
+msgstr "پاسخ به %s"
+
+msgid "attachment"
+msgstr "پیوست"
+
+msgid "error_rendering_message"
+msgstr "هنگام رندر کردن پیام خطایی رخ داد "
+
+msgid "error_fetching_preview"
+msgstr "هنگام دریافت پیش‌نمایش پیام خطایی رخ داد"
+
+msgid "audio"
+msgstr "صدا"
+
+msgid "image"
+msgstr "تصاویر"
+
+msgid "video"
+msgstr "ویدیوها"
+
+msgid "app"
+msgstr "برنامه‌ها"
+
+msgid "document"
+msgstr "اسناد"
+
+msgid "search_chars_min"
+msgstr "حداقل سه نویسه تایپ کنید"
+
+msgid "search_no_results"
+msgstr "متأسفانه، نتوانستیم چیزی مطابق با این جستجو پیدا کنیم."
+
+msgid "search_error"
+msgstr "متأسفانه، در بازیابی نتایج جستجو خطایی رخ داد."
+
+msgid "search_contacts"
+msgstr "مخاطبین (%s)"
+
+msgid "search_chats"
+msgstr "گپ‌ها (%s)"
+
+msgid "search_in_contacts"
+msgstr "جستجو در مخاطبین"
+
+msgid "search_in_chats"
+msgstr "جستجو در گپ‌ها و مخاطبین"
+
+msgid "could_not_render_title"
+msgstr "رندر کردن عنوان فایل ممکن نیست"
+
+msgid "could_not_render_type"
+msgstr "رندر کردن نوع فایل ممکن نیست"
+
+msgid "speaker"
+msgstr "بلندگو"
+
+msgid "speaker_on"
+msgstr "بلندگو روشن است"
+
+msgid "mute"
+msgstr "صدا را ساکت کن"
+
+msgid "muted"
+msgstr "بی‌صدا شد"
+
+msgid "end_call"
+msgstr "پایان تماس"
+
+msgid "verify_contact"
+msgstr "تأیید %s"
+
+msgid "verified"
+msgstr "تایید شده"
+
+msgid "pending_verification"
+msgstr "تأیید در حال بررسی"
+
+msgid "verify_description"
+msgstr ""
+"به‌عنوان بهترین روش امنیتی، توصیه می‌کنیم بررسی کنید که شماره تأییدیه %s با شماره شما مطابقت داشته باشد.\n"
+"\n"
+"آیا می‌خواهید تأیید، به‌صورت حضوری یا از طریق تماس تلفنی باشد؟"
+
+msgid "verify_in_person"
+msgstr "تأیید به‌صورت حضوری"
+
+msgid "verify_via_call"
+msgstr "تأیید از طریق تماس صوتی"
+
+msgid "dismiss_notification"
+msgstr "بستن اعلان"
+
+msgid "call_contact"
+msgstr "با %s تماس گرفته شود؟"
+
+msgid "call"
+msgstr "تماس"
+
+msgid "incoming_call"
+msgstr "تماس ورودی"
+
+msgid "call_from"
+msgstr "از %s"
+
+msgid "in_call"
+msgstr "تماس‌های در حال انجام"
+
+msgid "in_call_des"
+msgstr "اعلان تماس در حال انجام"
+
+msgid "incoming_call_from"
+msgstr "تماس ورودی از %s"
+
+msgid "touch_here_to_open_call"
+msgstr "برای برقراری تماس اینجا را لمس کنید"
+
+msgid "in_call_with"
+msgstr "در تماس با %s"
+
+msgid "undo_verification"
+msgstr "لغو تأیید"
+
+msgid "mark_as_verified"
+msgstr "علامت‌گذاری‌شده به‌عنوان تأییدشده"
+
+msgid "verification_panel_success"
+msgstr "تأیید با موفقیت انجام شد! پیام شما با %s امن است."
+
+msgid "verification_panel_pending"
+msgstr ""
+"این شماره تأییدیه شما است. قبل از علامت‌گذاری آنها به‌عنوان تأییدشده، بررسی "
+"کنید که شماره شما دقیقاً با %s مطابقت داشته باشد."
+
+msgid "replica_upload_confirmation_title"
+msgstr "مهم!"
+
+msgid "replica_upload_confirmation_body"
+msgstr ""
+"فایل‌های آپلودشده در شبکه Lantern برای عموم قابل دسترس هستند. آنها غیرمتمرکز هستند و هیچکس نمی‌تواند آنها را از شبکه حذف کند.\n"
+"\n"
+" هنگام آپلود محتوای حساس، از ارسال اطلاعات شخصی هویتی موجود در محتوای فایل و نام فایل خودداری کنید."
+
+msgid "replica_upload_confirmation_agree"
+msgstr "ازسرگیری آپلود"
+
+msgid "dont_show_me_this_again"
+msgstr "دوباره به من نشان داده نشود"
+
+msgid "download"
+msgstr "دانلود"
+
+msgid "download_started"
+msgstr "دانلود شروع شد"
+
+msgid "uploader"
+msgstr "آپلودکننده"
+
+msgid "upload_started"
+msgstr "آپلود شروع شد"
+
+msgid "upload_in_progress"
+msgstr "آپلود در حال انجام است"
+
+msgid "upload_complete"
+msgstr "آپلود انجام شد"
+
+msgid "upload_failed"
+msgstr "آپلود انجام نشد"
+
+msgid "upload_cancelled"
+msgstr "آپلود لغو شد"
+
+msgid "replica_link_fetcher"
+msgstr "دریافت‌کننده پیوند روگرفت"
+
+msgid "no_preview_for_this_type_of_file"
+msgstr "پیش‌نمایشی برای این نوع فایل وجود ندارد"
+
+msgid "app_unknown"
+msgstr "برنامه/ناشناس"
+
+msgid "audio_unknown"
+msgstr "صدا/ناشناس"
+
+msgid "document_unknown"
+msgstr "سند/ناشناس"
+
+msgid "no_search_result_found"
+msgstr "متأسفانه، نتوانستیم مورد منطبقی با این جستجو پیدا کنیم"
+
+msgid "search_result_error"
+msgstr "هنگام دریافت نتایج با خطا مواجه شد. لطفاً بعداً دوباره امتحان کنید"
+
+msgid "video_stream_error"
+msgstr "رندر کردن ویدیو با خطا مواجه شد. لطفاً بعداً دوباره امتحان کنید"
+
+msgid "untitled"
+msgstr "بدون عنوان"
+
+msgid "failed_to_init_replica"
+msgstr "خطا: راه‌اندازی «روگرفت» ناموفق بود"
+
+msgid "awaiting_result"
+msgstr "در انتظار نتیجه..."
+
+msgid "discover"
+msgstr "یافتن"
+
+msgid "replica_search_intro"
+msgstr ""
+"محتوای آپلودشده توسط کاربر را در شبکه Lantern جستجو کنید یا محتوای خود را "
+"برای استفاده دیگران آپلود کنید."
+
+msgid "share"
+msgstr "اشتراك گذاري"
+
+msgid "upload_file_screen"
+msgstr "بارگذاری فایل"
+
+msgid "name_your_file"
+msgstr "نامی برای فایل انتخاب کنید"
+
+msgid "upload"
+msgstr "آپلود"
