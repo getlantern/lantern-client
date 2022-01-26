@@ -403,6 +403,8 @@ dependencies {
 
     implementation 'io.sentry:sentry-android:5.1.2'
 
+    implementation 'com.github.matomo-org:matomo-sdk-android:4.1.4'
+
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
