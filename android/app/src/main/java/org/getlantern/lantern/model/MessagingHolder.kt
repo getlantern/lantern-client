@@ -165,7 +165,7 @@ class MessagingHolder {
                     displayName(application, contact)
                 )
                 builder.setContentText(contentString)
-                builder.setSmallIcon(R.drawable.status_on)
+                builder.setSmallIcon(R.drawable.status_chat)
                 builder.setAutoCancel(true)
                 builder.setOnlyAlertOnce(true)
                 builder.setContentIntent(openMainActivity)
@@ -308,7 +308,7 @@ class MessagingHolder {
 
         builder.setContentTitle(context.getString(R.string.incoming_call))
         builder.setContentText(displayName(context, contact))
-        builder.setSmallIcon(R.drawable.status_on)
+        builder.setSmallIcon(R.drawable.status_chat)
         builder.priority = NotificationCompat.PRIORITY_MAX
         builder.setCategory(NotificationCompat.CATEGORY_CALL)
         builder.setAutoCancel(false)
