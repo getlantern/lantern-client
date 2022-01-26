@@ -15,7 +15,7 @@ import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import java.util.concurrent.LinkedBlockingDeque
 
-class ServiceHelper(private val service: Service, private val largeIcon: Int, private val smallIcon: Int, private val content: Int) {
+class ServiceHelper(private val service: Service, private val smallIcon: Int, private val content: Int) {
     fun makeForeground() {
         val doIt = {
             var channelId: String? = null
@@ -32,8 +32,6 @@ class ServiceHelper(private val service: Service, private val largeIcon: Int, pr
             val notificationBuilder = channelId?.let { NotificationCompat.Builder(service, it) }
                 ?: NotificationCompat.Builder(service)
             notificationBuilder.setSmallIcon(smallIcon)
-            val largeIcon = (service.getResources().getDrawable(largeIcon) as BitmapDrawable).bitmap
-            notificationBuilder.setLargeIcon(largeIcon)
             val appName = service.getText(R.string.app_name)
             notificationBuilder.setContentTitle(appName)
             val content = service.getText(content)

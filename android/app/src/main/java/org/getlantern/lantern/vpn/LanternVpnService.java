@@ -36,7 +36,7 @@ public class LanternVpnService extends VpnService implements Runnable {
 
     private PendingIntent mConfigureIntent;
 
-    private ServiceHelper helper = new ServiceHelper(this, R.drawable.app_icon, R.drawable.status_on, R.string.service_connected);
+    private ServiceHelper helper = new ServiceHelper(this, R.drawable.status_connected, R.string.service_connected);
 
     private final ServiceConnection lanternServiceConnection = new ServiceConnection() {
         @Override

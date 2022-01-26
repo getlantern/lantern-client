@@ -215,6 +215,8 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(CHAT_ENABLED, isDevMode ?: enabled).apply()
     }
 
+    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false);
+
     override fun setMatomoEnabled(enabled: Boolean) {
         val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
         Logger.d(TAG, "Setting $MATOMO_ENABLED to ${isDevMode ?: enabled}")
