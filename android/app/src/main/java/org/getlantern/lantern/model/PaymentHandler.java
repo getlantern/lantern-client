@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.WelcomeActivity_;
 import org.getlantern.lantern.service.BackgroundChecker_;
 import org.getlantern.lantern.util.ActivityExtKt;
-import org.getlantern.mobilesdk.Lantern;
+import org.getlantern.lantern.util.Analytics;
 import org.getlantern.mobilesdk.Logger;
 
 import okhttp3.FormBody;
@@ -164,35 +163,14 @@ public class PaymentHandler {
             return;
         }
 
-        final Bundle params = new Bundle();
-        // the currency and value fields are firebase specific.
-        // they are always logged using the USD price because firebase
-        // does not support all currencies in use (ie no Iranian Rial)
-        params.putString("currency", "USD");
-        Long usdPrice = plan.getUSDEquivalentPrice();
-        if (usdPrice != null) {
-            params.putFloat("value", (float) (usdPrice / 100.0));
+        if (error != null) {
+            Logger.error(TAG, "Encountered error, not logging purchase event", error);
+            return;
         }
-        else {
-            Logger.error(TAG, "Missing USD equivalent price for plan " + plan.getId());
-            params.putFloat("value", (float) 0.0);
-        }
-
-        // original_currency/value indicate the true amount paid by the user
-        params.putFloat("original_value", (float) (LanternApp.getSession().getSelectedPlanCost() / 100.0));
-        params.putString("original_currency", LanternApp.getSession().getSelectedPlanCurrency());
-        params.putString("plan", plan.getId());
-        params.putString("provider", provider);
-        params.putString("country", LanternApp.getSession().getCountryCode());
-
-        if (error == null) {
-            // The 'ecommerce_purchase' event type is a specific event type
-            // understood by firebase.
-            Lantern.sendEvent(context, "ecommerce_purchase", params);
-        } else {
-            params.putString("error", error);
-            Lantern.sendEvent(context, "purchase_error", params);
-        }
+        Analytics.purchase(
+                context,
+                provider,
+                plan);
     }
 
 }

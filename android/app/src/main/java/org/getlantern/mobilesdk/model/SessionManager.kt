@@ -215,6 +215,14 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(CHAT_ENABLED, isDevMode ?: enabled).apply()
     }
 
+    override fun setMatomoEnabled(enabled: Boolean) {
+        val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
+        Logger.d(TAG, "Setting $MATOMO_ENABLED to ${isDevMode ?: enabled}")
+        prefs.edit().putBoolean(MATOMO_ENABLED, isDevMode ?: enabled).apply()
+    }
+
+    fun matomoEnabled(): Boolean = prefs.getBoolean(MATOMO_ENABLED, false);
+
     override fun appVersion(): String {
         return appVersion
     }
@@ -448,6 +456,7 @@ abstract class SessionManager(application: Application) : Session {
 
         private const val REPLICA_ADDR = "replicaAddr"
         private const val CHAT_ENABLED = "chatEnabled"
+        private const val MATOMO_ENABLED = "matomoEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),
