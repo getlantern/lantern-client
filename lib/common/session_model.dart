@@ -200,4 +200,8 @@ class SessionModel extends Model {
         .invokeMethod('get', 'chatEnabled')
         .then((enabled) => enabled == true);
   }
+
+  Future<void> trackScreenView(String path) async {
+    return methodChannel.invokeMethod('trackScreenView', path);
+  }
 }
