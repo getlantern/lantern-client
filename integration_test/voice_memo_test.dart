@@ -34,11 +34,11 @@ Future<void> main() async {
 
         print('tapping on start record button');
         await driver.waitForSeconds(5);
-        await driver.longPressFinder(finder: recorderButtonFinder);
+        await driver.longPress(target: recorderButtonFinder);
 
         print('tapping on stop record button');
         await driver.waitForSeconds(5);
-        await driver.longPressFinder(finder: recorderButtonFinder);
+        await driver.longPress(target: recorderButtonFinder);
 
         print('tapping on send');
         await driver.tapKey('send_message');
