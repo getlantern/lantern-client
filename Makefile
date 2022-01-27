@@ -64,7 +64,9 @@ BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
 BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 
 UPDATE_SERVER_URL ?=
-LDFLAGS := -extldflags '-Wl,--build-id=$(BUILD_ID)' -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
+VERSION ?= $$VERSION
+LDFLAGS := -s -w -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION)
+
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
 # -s omits the symbol table and debug info
@@ -153,31 +155,6 @@ dumpvars:
 	$(foreach v,                                        \
 		$(filter-out $(VARS_OLD) VARS_OLD,$(.VARIABLES)), \
 		$(info $(v) = $($(v))))
-
-define build-tags
-	BUILD_TAGS="$(BUILD_TAGS)" && \
-	EXTRA_LDFLAGS="" && \
-	if [[ ! -z "$$VERSION" ]]; then \
-		EXTRA_LDFLAGS="-X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$$VERSION"; \
-	else \
-		echo "** VERSION was not set, using default version. This is OK while in development."; \
-	fi && \
-	if [[ ! -z "$$HEADLESS" ]]; then \
-		BUILD_TAGS="$$BUILD_TAGS headless"; \
-	fi && \
-	if [[ ! -z "$$STAGING" ]]; then \
-		BUILD_TAGS="$$BUILD_TAGS staging"; \
-		EXTRA_LDFLAGS="$$EXTRA_LDFLAGS -X github.com/getlantern/flashlight/common.StagingMode=$$STAGING"; \
-	fi && \
-	if [[ ! -z "$$REPLICA" ]]; then \
-		EXTRA_LDFLAGS="$$EXTRA_LDFLAGS -X github.com/getlantern/flashlight/config.EnableReplicaFeatures=true"; \
-		EXTRA_LDFLAGS="$$EXTRA_LDFLAGS -X github.com/getlantern/flashlight/common.GlobalURL=https://globalconfig.flashlightproxy.com/global-replica.yaml.gz"; \
-	else \
-		echo "**  Not forcing replica build"; \
-	fi && \
-	BUILD_TAGS=$$(echo $$BUILD_TAGS | xargs) && echo "Build tags: $$BUILD_TAGS" && \
-	EXTRA_LDFLAGS=$$(echo $$EXTRA_LDFLAGS | xargs) && echo "Extra ldflags: $$EXTRA_LDFLAGS"
-endef
 
 .PHONY: tag
 tag: require-version
@@ -354,15 +331,14 @@ release-autoupdate: require-version
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
 $(ANDROID_LIB): $(GO_SOURCES)
-	@$(call check-go-version)
-	$(call build-tags)
-	go env -w 'GOPRIVATE=github.com/getlantern/*'
-	go install golang.org/x/mobile/cmd/gomobile
-	gomobile init
+	@$(call check-go-version) && \
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	go install golang.org/x/mobile/cmd/gomobile && \
+	gomobile init && \
 	gomobile bind -cache `pwd`/.gomobilecache \
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
-		-ldflags="$(LDFLAGS) $$EXTRA_LDFLAGS" \
+		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		$(ANDROID_LIB_PKG)
 
