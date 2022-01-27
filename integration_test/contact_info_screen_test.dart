@@ -1,8 +1,10 @@
+import 'package:lantern/common/add_nonbreaking_spaces.dart';
+
 import 'integration_test_common.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'voice_memo';
+  final testName = 'contact_info_screen';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -16,7 +18,7 @@ Future<void> main() async {
 
   group(testName, () {
     test(
-      'Record a voice memo',
+      'Access a contact info screen via long tap',
       () async {
         // do the whole reset -> enroll thing
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
@@ -24,24 +26,12 @@ Future<void> main() async {
           waitText: 'New Chat',
           skipScreenshot: true,
         );
-        await driver.tapText(
-          'Me',
-          waitText:
-              'Your chats and voice calls with Me are end-to-end encrypted',
+
+        // for some reason finding things via key and long pressing them does not want to work
+        await driver.waitForSeconds(5);
+        await driver.longPressFinder(
+          finder: find.text('Add via Chat Number'),
         );
-
-        final recorderButtonFinder = find.byValueKey('recorder_button');
-
-        print('tapping on start record button');
-        await driver.waitForSeconds(5);
-        await driver.longPressFinder(finder: recorderButtonFinder);
-
-        print('tapping on stop record button');
-        await driver.waitForSeconds(5);
-        await driver.longPressFinder(finder: recorderButtonFinder);
-
-        print('tapping on send');
-        await driver.tapKey('send_message');
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

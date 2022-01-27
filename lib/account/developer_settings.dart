@@ -175,7 +175,10 @@ class DeveloperSettingsTab extends StatelessWidget {
               content: 'Add dummy contacts',
               trailingArray: [
                 TextButton(
-                  onPressed: () => messagingModel.addDummyContacts(),
+                  onPressed: () {
+                    messagingModel.addDummyContacts();
+                    showSnackbar(context: context, content: 'Added 👍');
+                  },
                   child: CText(
                     'Add'.toUpperCase(),
                     style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
