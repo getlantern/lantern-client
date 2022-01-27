@@ -26,6 +26,7 @@ import org.getlantern.mobilesdk.util.DnsDetector
 import org.greenrobot.eventbus.EventBus
 import java.text.DateFormat
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.HashMap
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -349,6 +350,8 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putString(GEO_COUNTRY_CODE, country).apply()
     }
 
+    private val hasUpdatedStats = AtomicBoolean()
+
     override fun updateStats(
         city: String,
         country: String,
@@ -357,6 +360,12 @@ abstract class SessionManager(application: Application) : Session {
         adsBlocked: Long,
         hasSucceedingProxy: Boolean
     ) {
+        if (hasUpdatedStats.compareAndSet(false, true)) {
+            // The first time that we get the stats, hasSucceedingProxy is always false because we
+            // haven't hit any proxies yet. So, we just ignore the stats.
+            return
+        }
+
         val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked, hasSucceedingProxy)
         EventBus.getDefault().postSticky(st)
 
