@@ -140,14 +140,17 @@ extension DriverExtension on FlutterDriver {
   /// Simulates a long press is simulated, and screenshots labeled as 'long_press' are saved.
   /// It receives either a SerializableFinder or a text to look for using find.text()
   Future<void> longPress({required dynamic target}) async {
-    print(
-      'simulating long press at ${target.serialize()}, times out after $veryLongWaitTimeout',
-    );
     SerializableFinder finder;
     if (target is SerializableFinder) {
       finder = target;
+      print(
+        'simulating long press at ${target.serialize()}, times out after $veryLongWaitTimeout',
+      );
     } else if (target is String) {
       // we have a String text we will use to find the widget with - take into consideration we have to handle the breaking spaces case
+      print(
+        'simulating long press at text $target, times out after $veryLongWaitTimeout',
+      );
       try {
         finder = find.text(target);
       } catch (_) {
@@ -230,12 +233,12 @@ extension DriverExtension on FlutterDriver {
     await tapText(
       'Developer',
       waitText: 'Developer Settings',
-      skipScreenshot: true,
+      skipScreenshot: skipScreenshot,
     );
     await scrollTextUntilVisible('RESET FLAGS');
     await tapText(
       'RESET FLAGS',
-      skipScreenshot: true,
+      skipScreenshot: skipScreenshot,
     );
     await tapText(
       'Chats',
@@ -250,23 +253,32 @@ extension DriverExtension on FlutterDriver {
     await tapText(
       'NEXT',
       waitText: 'Chats',
-      skipScreenshot: skipScreenshot,
+      skipScreenshot: false,
     );
   }
 
   /// Locates message bar, types a message and sends it, also saves screenshot with title "sending_message"
-  Future<void> typeAndSend(String messageContent) async {
-    await tapType('TextFormField');
+  Future<void> typeAndSend(
+    String messageContent, {
+    Duration? overwriteTimeout,
+  }) async {
+    await waitForSeconds(2);
+    await tapType(
+      'TextFormField',
+      overwriteTimeout: overwriteTimeout,
+    );
     // running this as chained futures in order to be able to capture a screenshot of the state before the first future completes
     await captureScreenshotDuringFuture(
       futureToScreenshot: enterText(
         messageContent,
-        timeout: const Duration(seconds: 1),
+        timeout: overwriteTimeout ?? const Duration(seconds: 1),
       ),
       screenshotTitle: 'sending_message',
     );
-    await tapKey('sending_message');
-    await waitForSeconds(1);
+    await tapKey(
+      'send_message',
+      overwriteTimeout: overwriteTimeout,
+    );
   }
 
   Future<void> captureScreenshotDuringFuture({
