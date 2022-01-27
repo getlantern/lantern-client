@@ -75,7 +75,7 @@ type Session interface {
 	GetToken() (string, error)
 	SetCountry(string) error
 	UpdateAdSettings(AdSettings) error
-	UpdateStats(string, string, string, int, int) error
+	UpdateStats(string, string, string, int, int, bool) error
 	SetStaging(bool) error
 	ProxyAll() (bool, error)
 	BandwidthUpdate(int, int, int, int) error
@@ -108,7 +108,7 @@ type panickingSession interface {
 	common.AuthConfig
 	SetCountry(string)
 	UpdateAdSettings(AdSettings)
-	UpdateStats(string, string, string, int, int)
+	UpdateStats(string, string, string, int, int, bool)
 	SetStaging(bool)
 	ProxyAll() bool
 	BandwidthUpdate(int, int, int, int)
@@ -181,8 +181,8 @@ func (s *panickingSessionImpl) UpdateAdSettings(settings AdSettings) {
 	panicIfNecessary(s.wrapped.UpdateAdSettings(settings))
 }
 
-func (s *panickingSessionImpl) UpdateStats(city, country, countryCode string, httpsUpgrades, adsBlocked int) {
-	panicIfNecessary(s.wrapped.UpdateStats(city, country, countryCode, httpsUpgrades, adsBlocked))
+func (s *panickingSessionImpl) UpdateStats(city, country, countryCode string, httpsUpgrades, adsBlocked int, hasSucceedingProxy bool) {
+	panicIfNecessary(s.wrapped.UpdateStats(city, country, countryCode, httpsUpgrades, adsBlocked, hasSucceedingProxy))
 }
 
 func (s *panickingSessionImpl) SetStaging(staging bool) {

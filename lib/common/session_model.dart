@@ -26,10 +26,14 @@ class SessionModel extends Model {
           break;
       }
     });
+    proxyAvailable = singleValueNotifier(
+      'hasSucceedingProxy',
+      true,
+    );
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  ValueNotifier<bool> proxyAvailable = ValueNotifier(true);
+  late ValueNotifier<bool?> proxyAvailable;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);

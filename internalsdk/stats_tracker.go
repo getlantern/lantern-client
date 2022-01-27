@@ -15,8 +15,13 @@ func NewStatsTracker(session panickingSession) *statsTracker {
 		session: session,
 	}
 	s.Tracker.AddListener(func(st stats.Stats) {
-		s.session.UpdateStats(st.City, st.Country,
-			st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked)
+		s.session.UpdateStats(
+			st.City,
+			st.Country,
+			st.CountryCode,
+			st.HTTPSUpgrades,
+			st.AdsBlocked,
+			st.HasSucceedingProxy)
 	})
 	return s
 }

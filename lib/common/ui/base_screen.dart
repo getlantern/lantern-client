@@ -133,7 +133,7 @@ class ConnectivityWarning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: !sessionModel.proxyAvailable.value
+      onTap: sessionModel.proxyAvailable.value != true
           ? () => CDialog(
                 title: 'connection_error'.i18n,
                 description: 'connection_error_des'.i18n,
@@ -155,7 +155,7 @@ class ConnectivityWarning extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CText(
-              (!sessionModel.proxyAvailable.value
+              (sessionModel.proxyAvailable.value != true
                       ? 'connection_error'
                       : 'no_network_connection')
                   .i18n
@@ -165,7 +165,7 @@ class ConnectivityWarning extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            if (!sessionModel.proxyAvailable.value)
+            if (sessionModel.proxyAvailable.value != true)
               Padding(
                 padding: const EdgeInsetsDirectional.only(start: 4.0, top: 3.0),
                 child: CAssetImage(

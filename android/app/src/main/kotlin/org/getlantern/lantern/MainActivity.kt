@@ -86,7 +86,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     fetchLoConf()
                     Logger.debug(TAG, "fetchLoConf() finished at ${System.currentTimeMillis() - start}")
                 }
-                LanternApp.getSession().dnsDetector.publishNetworkAvailability();
+                LanternApp.getSession().dnsDetector.publishNetworkAvailability()
             }
         }
 

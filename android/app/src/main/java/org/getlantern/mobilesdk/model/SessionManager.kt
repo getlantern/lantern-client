@@ -198,7 +198,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun forceReplica(): Boolean {
-        return prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE);
+        return prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
     }
 
     val replicaAddr: String
@@ -215,7 +215,7 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(CHAT_ENABLED, isDevMode ?: enabled).apply()
     }
 
-    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false);
+    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
 
     override fun setMatomoEnabled(enabled: Boolean) {
         val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
@@ -223,7 +223,7 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(MATOMO_ENABLED, isDevMode ?: enabled).apply()
     }
 
-    fun matomoEnabled(): Boolean = prefs.getBoolean(MATOMO_ENABLED, false);
+    fun matomoEnabled(): Boolean = prefs.getBoolean(MATOMO_ENABLED, false)
 
     override fun appVersion(): String {
         return appVersion
@@ -355,14 +355,16 @@ abstract class SessionManager(application: Application) : Session {
         countryCode: String,
         httpsUpgrades: Long,
         adsBlocked: Long,
+        hasSucceedingProxy: Boolean
     ) {
-        val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked)
-        EventBus.getDefault().post(st)
+        val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked, hasSucceedingProxy)
+        EventBus.getDefault().postSticky(st)
 
         // save last location received
         prefs.edit().putString(SERVER_COUNTRY, country)
             .putString(SERVER_CITY, city)
-            .putString(SERVER_COUNTRY_CODE, countryCode).apply()
+            .putString(SERVER_COUNTRY_CODE, countryCode)
+            .putBoolean(HAS_SUCCEEDING_PROXY, hasSucceedingProxy).apply()
         vpnModel.saveServerInfo(
             Vpn.ServerInfo.newBuilder()
                 .setCity(city)
@@ -427,6 +429,7 @@ abstract class SessionManager(application: Application) : Session {
         protected const val SERVER_COUNTRY = "server_country"
         protected const val SERVER_COUNTRY_CODE = "server_country_code"
         protected const val SERVER_CITY = "server_city"
+        protected const val HAS_SUCCEEDING_PROXY = "hasSucceedingProxy"
         protected const val DEVICE_ID = "deviceid"
 
         @JvmStatic
