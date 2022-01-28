@@ -28,11 +28,11 @@ const (
 // Since WebRTC does support TCP for local connections, what we do is use the TCP ICE candidate
 // at 127.0.0.1 and relay traffic to that using our custom relay mechanism. It works like this.
 
-// 1. When call initiater gets a local TCP ICE candidate at 127.0.0.1, it calls AllocateRelayAddress
+// 1. When call initiator gets a local TCP ICE candidate at 127.0.0.1, it calls AllocateRelayAddress
 //    with that local address.
 // 2. AllocateRelayAddress opens a websocket to relay.lantern.io to request an allocation,
 //    receiving an address like `wss://relay.lantern.io/relay?id=<allocation id>`.
-// 3. The call initiater modifies its local ICE candidate, replacing 127.0.0.1 with the relay address
+// 3. The call initiator modifies its local ICE candidate, replacing 127.0.0.1 with the relay address
 //    and sends the ICE candidate to the peer via signaling
 // 4. Upon receiving this ICE candidate, the peer calls RelayTo with the relay address
 // 5. RelayTo opens a TCP listener on 127.0.0.1 which accepts one connection and starts relaying via
