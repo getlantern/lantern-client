@@ -2,7 +2,7 @@ import 'integration_test_common.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'send_first_message';
+  final testName = 'react_to_message';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -16,7 +16,7 @@ Future<void> main() async {
 
   group(testName, () {
     test(
-      'Send first message',
+      'React to message',
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
@@ -24,6 +24,15 @@ Future<void> main() async {
         await driver.tapType(
           'ListItemFactory',
         );
+
+        print('long press text to reveal menu');
+        await driver.longPress(target: 'yesterday');
+
+        print('copy text');
+        await driver.tapText('Copy Text');
+
+        print('reply');
+        await driver.tapText('Reply');
 
         print('typing text');
         await driver.typeAndSend(

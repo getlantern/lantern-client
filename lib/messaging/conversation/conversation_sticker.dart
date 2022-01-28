@@ -40,6 +40,7 @@ class ConversationSticker extends StatelessWidget {
                     .i18n
                     .fill([contact.displayNameOrFallback]),
                 style: tsBody2.copiedWith(color: grey5),
+                textAlign: TextAlign.center,
               ),
             ),
           // ** Message Retention ** //
