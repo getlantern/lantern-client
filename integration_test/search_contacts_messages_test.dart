@@ -33,7 +33,7 @@ Future<void> main() async {
             'Lorem ipsum',
             timeout: longWaitTimeout,
           ),
-          screenshotTitle: 'searching_messages_contacts',
+          screenshotTitle: testName,
         );
       },
       timeout: const Timeout(Duration(minutes: 5)),
