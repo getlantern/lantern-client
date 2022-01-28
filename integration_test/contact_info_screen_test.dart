@@ -21,13 +21,11 @@ Future<void> main() async {
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
-        print(
-            'for some reason finding things via key and long pressing them does not want to work');
+        // TODO: This only works if we have a single message in Chats view - needs fixing
         await driver.longPress(
           target: find.byType('ListItemFactory'),
         );
 
-        print('tap on Contact Info from contextual menu');
         await driver.tapText(
           'View Contact Info',
           overwriteTimeout: defaultWaitTimeout,
@@ -52,7 +50,6 @@ Future<void> main() async {
           overwriteTimeout: defaultWaitTimeout,
         );
 
-        print('tap on View Contact Info');
         await driver.tapText(
           'View Contact Info',
           overwriteTimeout: defaultWaitTimeout,

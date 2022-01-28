@@ -29,7 +29,6 @@ Future<void> main() async {
         print('long press text to reveal menu');
         await driver.longPress(target: '3:16 PM');
 
-        print('delete for everyone');
         await driver.tapText('Delete for everyone');
       },
       timeout: const Timeout(Duration(minutes: 5)),

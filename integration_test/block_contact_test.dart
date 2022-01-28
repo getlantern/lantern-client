@@ -21,28 +21,23 @@ Future<void> main() async {
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
-        print('tap to enter conversation');
         await driver.tapType(
           'ListItemFactory',
           overwriteTimeout: defaultWaitTimeout,
         );
 
-        print('tap on top right menu bar');
         await driver.tapKey(
           'topbar_more_menu',
           overwriteTimeout: defaultWaitTimeout,
         );
 
-        print('tap on View Contact Info');
         await driver.tapText(
           'View Contact Info',
           overwriteTimeout: defaultWaitTimeout,
         );
 
-        print('click on BLOCK');
         await driver.tapText('BLOCK');
 
-        print('click on Checkbox');
         await driver.tapType('Checkbox');
       },
       timeout: const Timeout(Duration(minutes: 5)),
