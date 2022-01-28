@@ -21,6 +21,7 @@ Future<void> main() async {
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
+        // TODO: ONLY WORKS WITH A SINGLE MESSAGE IN CHATS
         await driver.tapType(
           'ListItemFactory',
           overwriteTimeout: defaultWaitTimeout,

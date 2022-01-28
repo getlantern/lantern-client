@@ -21,7 +21,7 @@ Future<void> main() async {
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
-        // TODO: This only works if we have a single message in Chats view - needs fixing
+        // TODO: ONLY WORKS WITH A SINGLE MESSAGE IN CHATS
         await driver.longPress(
           target: find.byType('ListItemFactory'),
         );
@@ -38,6 +38,7 @@ Future<void> main() async {
       () async {
         await driver.goBack();
 
+        // TODO: ONLY WORKS WITH A SINGLE MESSAGE IN CHATS
         print('tap to enter conversation');
         await driver.tapType(
           'ListItemFactory',
