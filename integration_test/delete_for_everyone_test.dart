@@ -2,7 +2,7 @@ import 'integration_test_common.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'react_to_message';
+  final testName = 'delete_for_everyone';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -16,7 +16,7 @@ Future<void> main() async {
 
   group(testName, () {
     test(
-      'React to message',
+      'Delete for everyone',
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
@@ -27,18 +27,10 @@ Future<void> main() async {
 
         // TODO: generalize
         print('long press text to reveal menu');
-        await driver.longPress(target: 'yesterday');
+        await driver.longPress(target: '3:16 PM');
 
-        print('copy text');
-        await driver.tapText('Copy Text');
-
-        print('reply');
-        await driver.tapText('Reply');
-
-        print('typing text');
-        await driver.typeAndSend(
-          'Hi how are you?',
-        );
+        print('delete for everyone');
+        await driver.tapText('Delete for everyone');
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

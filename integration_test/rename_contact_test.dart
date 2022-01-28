@@ -3,7 +3,7 @@ import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'contact_info_screen';
+  final testName = 'rename_contact';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -17,28 +17,9 @@ Future<void> main() async {
 
   group(testName, () {
     test(
-      '1/3 Access a contact info screen via long tap',
+      'Rename a contact',
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
-
-        print(
-            'for some reason finding things via key and long pressing them does not want to work');
-        await driver.longPress(
-          target: find.byType('ListItemFactory'),
-        );
-
-        print('tap on Contact Info from contextual menu');
-        await driver.tapText(
-          'View Contact Info',
-          overwriteTimeout: defaultWaitTimeout,
-        );
-      },
-      timeout: const Timeout(Duration(minutes: 5)),
-    );
-    test(
-      '2/3 Access a contact info screen via top right menu',
-      () async {
-        await driver.goBack();
 
         print('tap to enter conversation');
         await driver.tapType(
@@ -56,6 +37,23 @@ Future<void> main() async {
         await driver.tapText(
           'View Contact Info',
           overwriteTimeout: defaultWaitTimeout,
+        );
+
+        print('click on EDIT');
+        await driver.tapText('EDIT');
+
+        print('enter new contact name');
+        await driver.enterText(
+          'Layla B.',
+          timeout: longWaitTimeout,
+        );
+
+        await driver.waitForSeconds(2);
+
+        print('tap SAVE');
+        await driver.tapText(
+          'SAVE',
+          overwriteTimeout: longWaitTimeout,
         );
       },
       timeout: const Timeout(Duration(minutes: 5)),

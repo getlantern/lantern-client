@@ -125,7 +125,6 @@ extension DriverExtension on FlutterDriver {
     Duration? overwriteTimeout,
   }) async {
     try {
-      print(key);
       await tapFinder(
         find.byValueKey(key),
         waitText: waitText,
@@ -230,6 +229,7 @@ extension DriverExtension on FlutterDriver {
 
   /// Automates the Developer → RESET FLAGS → Chats → GET STARTED → NEXT flow
   Future<void> resetFlagsAndEnrollAgain({bool? skipScreenshot}) async {
+    print('do the whole reset -> enroll thing');
     await tapText(
       'Developer',
       waitText: 'Developer Settings',
