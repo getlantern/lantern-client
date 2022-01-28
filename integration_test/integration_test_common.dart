@@ -72,6 +72,7 @@ extension DriverExtension on FlutterDriver {
     bool? skipScreenshot,
     Duration? overwriteTimeout,
   }) async {
+    print('tapping on text: $tapText');
     try {
       await tapFinder(
         find.text(tapText),
@@ -95,6 +96,7 @@ extension DriverExtension on FlutterDriver {
     String? waitText,
     bool? skipScreenshot,
   }) async {
+    print('tapping on FAB');
     await tapType(
       'FloatingActionButton',
       waitText: waitText,
@@ -109,6 +111,7 @@ extension DriverExtension on FlutterDriver {
     bool? skipScreenshot,
     Duration? overwriteTimeout,
   }) async {
+    print('tapping on type: $tapType');
     await tapFinder(
       find.byType(type),
       waitText: waitText,
@@ -124,6 +127,7 @@ extension DriverExtension on FlutterDriver {
     bool? skipScreenshot,
     Duration? overwriteTimeout,
   }) async {
+    print('tapping on key: $tapKey');
     try {
       await tapFinder(
         find.byValueKey(key),
@@ -202,6 +206,7 @@ extension DriverExtension on FlutterDriver {
   Future<void> scrollTextUntilVisible(
     String text,
   ) async {
+    print('scrolling until $text is visible');
     try {
       final scrollable = find.byType('ListView');
       await waitFor(
@@ -253,7 +258,7 @@ extension DriverExtension on FlutterDriver {
     await tapText(
       'NEXT',
       waitText: 'Chats',
-      skipScreenshot: false,
+      skipScreenshot: skipScreenshot,
     );
   }
 
@@ -285,6 +290,7 @@ extension DriverExtension on FlutterDriver {
     required Future<void> futureToScreenshot,
     required String screenshotTitle,
   }) async {
+    print('making sure we screenshot the future that is currently running');
     await Future.wait([
       futureToScreenshot,
       saveScreenshot(

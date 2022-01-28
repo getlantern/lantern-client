@@ -3,7 +3,7 @@ import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'copy_recovery_key';
+  final testName = 'recovery_flow_test';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -17,28 +17,33 @@ Future<void> main() async {
 
   group(testName, () {
     test(
-      'Copy Recovery Key',
+      'Recovery_flow_test',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
-
         await driver.tapText(
-          'Account',
+          'Developer',
+          waitText: 'Developer Settings',
+          skipScreenshot: true,
+        );
+        await driver.scrollTextUntilVisible('RESET FLAGS');
+        await driver.tapText(
+          'RESET FLAGS',
+          skipScreenshot: true,
+        );
+        await driver.tapText(
+          'Chats',
+          waitText: 'Welcome to Lantern Chat!',
         );
 
-        await driver.tapText(
-          'Account Management',
-        );
+        await driver.tapText('RECOVER', overwriteTimeout: defaultWaitTimeout);
 
-        await driver.tapText(
-          'Backup Recovery Key',
-        );
-
+        print('entering recovery key');
         await driver.captureScreenshotDuringFuture(
-          futureToScreenshot: driver.tapText(
-            'COPY RECOVERY KEY',
-          ),
+          futureToScreenshot: driver.enterText(
+              '8k171bwe866wd4apxyxtu9e2r92tmcdbgar35ymjx6b4ymhymugy'),
           screenshotTitle: testName,
         );
+
+        await driver.tapText('SUBMIT', overwriteTimeout: defaultWaitTimeout);
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
