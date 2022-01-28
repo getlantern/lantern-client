@@ -114,6 +114,7 @@ class _ChatsState extends State<Chats> {
               ),
               // * Search
               IconButton(
+                key: const ValueKey('search_icon'),
                 visualDensity: VisualDensity.compact,
                 onPressed: () async => await showSearch(
                   context: context,
