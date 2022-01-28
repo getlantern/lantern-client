@@ -579,7 +579,10 @@ class ConversationState extends State<Conversation>
           priorDate = date;
           listItems.add(messageRecord);
         });
-        listItems.add(priorDate.toString());
+        if (listItems.isNotEmpty) {
+          // add leading date indicator
+          listItems.add(priorDate.toString());
+        }
 
         // render list
         messageCount = listItems.length;
