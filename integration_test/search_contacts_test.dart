@@ -32,6 +32,7 @@ Future<void> main() async {
         );
 
         print('enter search term');
+        // * This assumes we have a *Layl* contact somewhere
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.enterText(
             'Layl',

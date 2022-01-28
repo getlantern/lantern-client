@@ -22,6 +22,7 @@ Future<void> main() async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
         print('tap to enter conversation');
+        // TODO: ONLY WORKS WITH A SINGLE MESSAGE IN CHATS
         await driver.tapType(
           'ListItemFactory',
           overwriteTimeout: defaultWaitTimeout,
@@ -38,8 +39,10 @@ Future<void> main() async {
         await driver.goBack();
 
         print('tap on video attachment');
-        await driver.tapType('VideoAttachment',
-            overwriteTimeout: longWaitTimeout);
+        await driver.tapType(
+          'VideoAttachment',
+          overwriteTimeout: longWaitTimeout,
+        );
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

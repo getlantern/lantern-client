@@ -28,6 +28,7 @@ Future<void> main() async {
         );
 
         print('enter search term');
+        // * This assumes we have a Lorem Ipsum message somewhere
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.enterText(
             'Lorem ipsum',

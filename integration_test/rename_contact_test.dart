@@ -22,6 +22,7 @@ Future<void> main() async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
         print('tap to enter conversation');
+        // TODO: ONLY WORKS WITH A SINGLE MESSAGE IN CHATS
         await driver.tapType(
           'ListItemFactory',
           overwriteTimeout: defaultWaitTimeout,
