@@ -156,7 +156,7 @@ msgid "Account"
 msgstr "अकाउंट"
 
 msgid "VPN Status"
-msgstr "VPN स्टेट्स"
+msgstr "VPN स्थिति"
 
 msgid "VPN"
 msgstr "VPN"
@@ -1043,10 +1043,10 @@ msgid "no_search_result_found"
 msgstr "माफ़ करें, हमें इस सर्च से मेल खाने वाली कोई चीज़ नहीं मिली"
 
 msgid "search_result_error"
-msgstr "रिज़ल्ट पाने में गड़बड़ी हुई. बाद में दोबारा कोशिश करें"
+msgstr ""
 
 msgid "video_stream_error"
-msgstr "वीडियो रेंडर करने में गड़बड़ी हुई. बाद में दोबारा कोशिश करें"
+msgstr ""
 
 msgid "untitled"
 msgstr "बिना किसी टाइटल"

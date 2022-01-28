@@ -5,12 +5,12 @@
 # Alyssa Chung <lisiachung7@gmail.com>, 2022
 # e2f <projects@e2f.com>, 2022
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2022
-# e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2022
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
+# e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022\n"
+"Last-Translator: e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2022\n"
 "Language-Team: Malay (https://www.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1062,10 +1062,10 @@ msgstr ""
 "Maaf, kami tidak dapat menemukan apa-apa yang sepadan dengan carian tersebut"
 
 msgid "search_result_error"
-msgstr "Ralat ditemukan semasa mengambil hasil. Sila cuba lagi kemudian"
+msgstr ""
 
 msgid "video_stream_error"
-msgstr "Ralat ditemukan semasa memaparkan video. Sila cuba lagi kemudian"
+msgstr ""
 
 msgid "untitled"
 msgstr "Tidak bertajuk"

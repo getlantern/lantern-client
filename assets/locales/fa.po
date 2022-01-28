@@ -1052,10 +1052,10 @@ msgid "no_search_result_found"
 msgstr "متأسفانه، نتوانستیم مورد منطبقی با این جستجو پیدا کنیم"
 
 msgid "search_result_error"
-msgstr "هنگام دریافت نتایج با خطا مواجه شد. لطفاً بعداً دوباره امتحان کنید"
+msgstr ""
 
 msgid "video_stream_error"
-msgstr "رندر کردن ویدیو با خطا مواجه شد. لطفاً بعداً دوباره امتحان کنید"
+msgstr ""
 
 msgid "untitled"
 msgstr "بدون عنوان"

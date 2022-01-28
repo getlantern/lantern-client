@@ -9,13 +9,13 @@
 # Helen R <helen.russel88@gmail.com>, 2022
 # Helen Russel <coo@workogram.com>, 2022
 # tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2022
-# Derek F <derek@getlantern.org>, 2022
 # Anna Evdokimova <anna.evdokimova@yahoo.com>, 2022
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2022
+# Derek F <derek@getlantern.org>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2022\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2022\n"
 "Language-Team: Russian (Russia) (https://www.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -135,7 +135,7 @@ msgid "proxy_all"
 msgstr "Проксировать весь трафик"
 
 msgid "proxy_everything_is"
-msgstr "Использование прокси везде: %s"
+msgstr "Использование прокси везде %s"
 
 msgid "version_number"
 msgstr "Версия: %s"
@@ -1056,10 +1056,10 @@ msgid "no_search_result_found"
 msgstr "Мы ничего не нашли"
 
 msgid "search_result_error"
-msgstr "Не удалось предоставить результаты. Повторите попытку."
+msgstr ""
 
 msgid "video_stream_error"
-msgstr "Не удалось отобразить видео. Повторите попытку."
+msgstr ""
 
 msgid "untitled"
 msgstr "Без названия"

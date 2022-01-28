@@ -24,7 +24,6 @@
   <string name="your_referral_code">Referans Kodunuz</string>
   <string name="report_an_issue">Hata Bildir</string>
   <string name="select_issue">Bir konu seçiniz</string>
-  <string name="select_issue_desc">Lütfen hatayı kısaca tanımlayın,\nsize en kısa sürede cevap vereceğiz.</string>
   <string name="submit">Gönder</string>
   <string name="submit_issue">Sorun Gönder</string>
   <string name="no_issue_selected">Lütfen hatayı göndermeden önce bir konu seçiniz</string>
@@ -47,6 +46,7 @@
   <string name="on_desc">Şimdi engelli\r\nsitelere ve hizmetlere ulaşabilirsiniz.</string>
   <string name="off_desc">Engelli sitelere ve hizmetlere ulaşmak için düğmeye basınız</string>
   <string name="service_connected">VPN\'e bağlı</string>
+  <string name="ready_to_connect">Bağlanmaya Hazır</string>
   <string name="desktop_option">Masaüstü Versiyonu</string>
   <string name="contact_option">İletişim</string>
   <string name="check_for_update">Güncelle</string>
@@ -100,6 +100,7 @@
   <string name="not_now">Şimdi Değil</string>
   <string name="install_update">Güncelle</string>
   <string name="error_update">Güncelleme İndirilirken Hata Oluştu</string>
+  <string name="error_install_update">Güncelleme Kurulurken Hata Oluştu</string>
   <string name="loading">Yükleniyor..</string>
   <string name="manual_update">Son sürümü &lt;a href=\"https://lantern-android.io\"&gt;buradan1&lt;/a&gt; elle kurmayı deneyin.</string>
   <string name="pro_welcome_text">Lantern Pro\'ya Hoş Geldiniz!</string>
@@ -186,11 +187,6 @@
   <string name="too_many_devices">Pro hesabınıza baglanabilecek maksimum cihaz sayısına ulaşıldı.</string>
   <string name="check_spam_folder">* E-postayı almadıysanız lütfen gereksiz (spam) klasörüne bakın</string>
   <string name="by_referral">Bir Arkadaşa Referans Olunarak Pro Edinildi</string>
-  <string-array name="payment_method_list">
-    <item>Alipay</item>
-    <item>Kredi Kartı</item>
-    <item>Bir Arkadaşa Referans Olunarak Pro Edinildi</item>
-  </string-array>
   <string name="payment_method">Ödeme metodu</string>
   <string name="payment_account">Ödeme hesabı</string>
   <string name="oops_having_trouble">Olamaz! Bu e-posta adresini bulmakta sorun yaşıyoruz. Lütfen hesabınızı konumlandırabilmek için aşağıdaki bilgiyi girin.</string>
@@ -224,12 +220,6 @@
     <item>Daha Güvenilir</item>
     <item>3 Cihaza Kadar Kaydetme</item>
     <item>Limitsiz Veri</item>
-    <item>Satın Almayla Birlikte Ücretsiz Yinbi!</item>
-  </string-array>
-  <string-array name="yinbi_renew_features">
-    <item>Ücretsiz Yinbi Kripto Para</item>
-    <item>Ücretsiz Aylar</item>
-    <item>Teklif Süresi Sınırlıdır, Hemen Harekete Geçin!</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>Limitsiz yüksek hız</item>
@@ -296,7 +286,6 @@
   <string name="upgrade_to_lantern_pro">Lantern Pro\'ya Yükseltin</string>
   <string name="pro_available_for">Windows, Android, Mac ve Ubuntu için. iOS pek yakında.</string>
   <string name="upgrade_to_pro">Sınırsız veri, daha yüksek hız ve engellemeye karşı daha fazla dayanıklılık için Pro\'ya yükseltin!</string>
-  <string name="upgrade_to_pro_yinbi">Sınırsız veri, daha yüksek hız, engellemeye karşı daha fazla\ndayanıklılık ve ücretsiz Yinbi kripto para için Pro\'ya yükseltin!</string>
   <string name="data_remaining">Aylık ücretsiz yüksek hızlı trafiğinizin %1$s%%\'lik kısmı kaldı.</string>
   <string name="data_used">%1$s MB Ücretsiz Veri Kaldı.\nSıfırlama: %2$s</string>
   <string name="upgrade">Yükselt</string>
@@ -396,16 +385,12 @@
   <string name="processing_payment">Ödeme Gerçekleştiriliyor</string>
   <string name="now_converting_to_pro">Şimdi sizi Pro sürümüne dönüştürüyoruz.. Lütfen bekleyin...</string>
   <string name="have_an_activation_code">Aktivasyon Kodunuz var mı? Buraya Tıklayın</string>
-  <string name="yinbi_greeting">隐币-无封锁的加密货币即将到来。\n点击此处了解如何免费获得。</string>
   <string name="test_payment_page">Test Ödeme Sayfası</string>
   <string name="pay_now">Hemen Öde</string>
   <string name="error_bulk_codes">Toplu Pro hesap kodu gönderiminde hata oluştu</string>
   <string name="invalid_bulk_codes">Girmiş olduğunuz Pro hesap kodları geçersiz</string>
   <string name="renew_today">BUGÜN YENİLEYİN!</string>
-  <string name="receive_free_yinbi">Ücretsiz Yinbi Kripto Para Kazanın!</string>
   <string name="purchased_pro_activation_codes">Çevrimiçi Lantern Pro aktivasyon kodları mı satın aldınız?</string>
-  <string name="renew_grab_free_yinbi"><u>Ücretsiz Yinbi kazanmak için Pro aktivasyon kodlarınızı kullanarak yenileyin</u></string>
-  <string name="upgrade_now_get_free_yinbi"><u>Ücretsiz Yinbi kazanmak için Pro aktivasyon kodlarınızı kullanarak yükseltin</u></string>
   <string name="renew">YENİLEYİN!</string>
   <string name="terms_of_service_text">Ödemeye Devam Et\'e tıklayarak Hizmet Şartlarımızı kabul etmiş olursunuz</string>
   <string name="terms_of_service_text_complete_purchase">Satın Almayı Tamamla\'ya tıklayarak Hizmet Şartlarımızı kabul etmiş olursunuz</string>
@@ -415,60 +400,16 @@
   <string name="enter_lantern_pro_codes">Lantern Pro Kodlarını Gir</string>
   <string name="renewal_success">Yenileme Başarılı!</string>
   <string name="thank_you_for_renewing">Lantern Pro hesabınızı yenilediğiniz için\nteşekkürler</string>
-  <string name="yinbi">Yinbi</string>
-  <string name="visit_yinbi_website">Web sitesini ziyaret et</string>
-  <string name="yinbi_redemption">Yinbi Kullanımı</string>
-  <string name="yinbi_account_info">Yinbi Hesap Bilgisi</string>
-  <string name="lantern_partnered_yinbi_free">Lantern, Yinbi ortaklığıyla Lantern Pro satın alan\nherkese YNB veriyor! Bugünün\nödülüne erişmek için hemen satın alın!\nYinbi hakkında daha fazla bilgi için\nresmi siteyi ziyaret edin: Yin.bi</string>
-  <string name="lantern_partnered_yinbi_pro">Lantern, Yinbi ortaklığıyla Lantern Pro\'yu\nyenileyen herkese YNB veriyor!\nBugünün ödülüne erişmek için hemen yenileyin!\nYinbi hakkında daha fazla bilgi için\nresmi siteyi ziyaret edin: Yin.bi</string>
-  <string name="enter_bulk_pro_codes">Lantern Pro Kodlarını Gir</string>
-  <string name="renew_pro_get_yinbi">Pro\'yu Yenileyin Yinbi Kazanın</string>
-  <string name="you_have">Şuna sahipsiniz:</string>
-  <string name="yinbi_code">YNB</string>
-  <string name="unable_to_get_yinbi_account_info">Yinbi hesap bilgisi alınamıyor</string>
-  <string name="redeem_bulk_codes">Toplu Kodları Kullan</string>
-  <string name="paste_pro_account_codes">Toplu pro hesap kodlarınızı aşağıya yapıştırarak\nLantern Pro\'ya sahip olun veya Lantern Pro\nhesabınızın süresini uzatın.</string>
-  <string name="special_offer">ÖZEL KAMPANYA!</string>
-  <string name="cryptocurrency_giveaway">Kripto Para Ödülü!</string>
-  <string name="lantern_partnered_renew_now">Lantern, Yinbi (YNB) ortaklığıyla Lantern Pro\'yu\nyenileyen herkese YNB veriyor! Bugünün\nödülüne erişmek için hemen\nyenileyin!</string>
-  <string name="what_is_yinbi">Yinbi nedir?</string>
-  <string name="renew_now_get_yinbi">Hemen Yenileyin Yinbi Kazanın</string>
   <string name="purchase">Satın Al</string>
-  <string name="one_year_yinbi">1 Yıllık + Ücretsiz Yinbi:</string>
-  <string name="yinbi_cost">%1$s%2$s (%3$s)</string>
-  <string name="two_years_yinbi">2 Yıllık + 2x Ücretsiz Yinbi:</string>
   <string name="thank_you_purchasing_pro">Lantern Pro satın aldığınız için teşekkürler!</string>
-  <string name="you_will_receive_yinbi">Satın alma işleminiz için ücretsiz Yinbi\'yi (YNB)\nbugünün ödül kampanyası\nsona erdiğinde alacaksınız. Daha fazla\nbilgi için Yinbi Kullanım kodu düğmesine tıklayın.</string>
-  <string name="yinbi_menu">Yinbi Menüsü</string>
-  <string name="yinbi_redemption_code">Yinbi Kullanım Kodu</string>
   <string name="continue_to_lantern_pro">Lantern Pro\'ya devam et</string>
-  <string name="yinbi_website">Yin.bi</string>
   <string name="date">Tarih</string>
-  <string name="redemption_code">Kullanım Kodu</string>
   <string name="status">Durum</string>
   <string name="copy_all_codes">Tüm Kodları Kopyala</string>
-  <string name="visit_yinbi">YNB\'nizi kullanmak ve hesap bakiyenizi kontrol etmek\niçin Yin.bi\'yi ziyaret edin. Yinbi Kullanım Kodlarının\nsüresi, satın alma işleminin ardından 30 gün içinde sona erer.</string>
-  <string name="successfully_copied_codes">Kullanım kodları başarıyla kopyalandı!</string>
-  <string name="no_active_codes">Aktif kullanım kodu yok. Daha sonra tekrar deneyin!</string>
-  <string name="thanks_purchase_yinbi">Lantern Pro satın aldığınız için teşekkürler!\nYinbi kullanım kodunuz bugünün\nödül kampanyası tamamlandığında bu ekranda\ngörünecektir. Zamanlayıcı tamamlandığında\ntekrar kontrol edin</string>
-  <string name="yinbi_details">Yakında çıkacak olan Yinbi (YNB);\nhızlı, güvenilir, kullanımı kolay ve düşük maliyetli\nmobil işlemlere imkan veren yeni bir\nengellenemez kripto paradır. Lantern kullanıcıları,\nbu yeni kripto paraya ilk erken erişime sahip.</string>
-  <string name="find_out_more">Daha fazla bilgi için: Yin.bi</string>
   <string name="best_deal">En İyi Fiyat</string>
-  <string name="launches_soon">Yinbi (YNB) yakında çıkıyor ve Lantern\nkullanıcıları bu yeni kripto paraya ilk erken erişime\nsahip! YNB her günün sonunda, yükseltme\nyapan insan sayısına ve satın aldığınız\nyıl veya hesap sayısına göre\ndağıtılacak</string>
-  <string name="how_yinbis_distributed">YNB her günün sonunda, o gün çıkarılan\nYinbi miktarına, yükseltme yapan\ninsan sayısına ve satın aldığınız yıl veya hesap\nsayısına göre dağıtılacak. Yinbi kullanım\nkodunuz, bugünün ödül kampanyası\ntamamlandığında bu ekranda\nçıkacak. Zamanlayıcı sona erdiğinde\ntekrar kontrol edin.</string>
-  <string name="get_bulk_yinbi"><u>Toplu pro hesabı satın alın, toplu Yinbi kazanın!</u></string>
-  <string name="loading_yinbi_account_info">Yinbi hesap bilgileri yükleniyor</string>
-  <string name="free_yinbi_with_purchase">Satın alma işleminizle ücretsiz Yinbi!</string>
   <string name="renew_now_get_more">Hemen yenileyin ve daha fazlasına sahip olun!</string>
-  <string name="buy_pro_get_yinbi">Pro Alın Yinbi Kazanın</string>
   <string name="renewal_note">NOT: Yeni satın aldığınız plan zamanı, geçerli plan zamanınıza\neklenecektir.</string>
   <string name="bulk_codes_error">Hata! Lütfen vurgulu kodları kontrol edin.</string>
-  <string name="loading_yinbi">Yinbi Kullanım Kodları yükleniyor</string>
-  <string name="lantern_partnered_yinbi">Lantern, Yinbi ortaklığıyla Lantern Pro\'yu\nyenileyen herkese YNB veriyor!\nBugünün ödülüne erişmek için hemen yenileyin!\nYinbi hakkında daha fazla bilgi için\nresmi siteyi ziyaret edin: Yin.bi</string>
-  <string name="time_left_giveaway">Bugünün Yinbi ödülü için kalan süre!</string>
-  <string name="yinbi_released_today">%d YNB bugün çıkıyor!</string>
-  <string name="yinbi_distribution_details">YNB her günün sonunda, o gün çıkarılan Yinbi miktarına, yükseltme/yenileme yapan insan sayısına ve satın aldığınız yıl veya hesap sayısına göre dağıtılacak.</string>
-  <string name="total_yinbi_released">Piyasaya sürülen toplam YNB her gün azalıyor ve her yıl yarıya inecek. Sizinkine hemen sahip olun!</string>
   <string name="please_allow_lantern_to">Lütfen Lantern\'in şunu yapmasına izin verin ...</string>
   <string name="permission_for">etkinleştirmek</string>
   <string name="android.permission.INTERNET">Lantern sunucularına bağlanıyor</string>
@@ -485,11 +426,6 @@
   <string name="lantern_desktop_share_description">Masaüstü ve diğer tüm platformlar için en son Lantern uygulamaları yukarıdaki bağlantıda bulunabilir.</string>
   <string name="share_link">Bağlantı paylaş</string>
   <string name="lantern_desktop_link_share_title">Lantern indirme bağlantısı paylaş</string>
-  <string name="upgrade_to_pro_get_yinbi">Pro\'ya yükselterek yinbi kazanın</string>
-  <string name="yinbi_description_free">Lantern, Yinbi ortaklığıyla Lantern Pro satın alan herkese YNB veriyor! Bugünün ödülüne erişmek için hemen yükseltin! Yinbi hakkında daha fazla bilgi için resmi siteyi ziyaret edin: Yin.bi</string>
-  <string name="yinbi_description_pro">Lantern, Yinbi ortaklığıyla Lantern Pro\'yu yenileyen herkese YNB veriyor! Bugünün ödülüne erişmek için hemen yenileyin! Yinbi hakkında daha fazla bilgi için resmi siteyi ziyaret edin: Yin.bi</string>
-  <string name="yinbi_title_free">Ücretsiz Yinbi Kripto Para</string>
-  <string name="yinbi_title_pro">Yinbi Kullanımı</string>
   <string name="redeem_lantern_pro_codes">Lantern Pro Kodlarını Kullan</string>
   <string name="redeem_code_description_first_part">Toplu Lantern Pro kodları şuradan alınabilir:</string>
   <string name="redeem_code_description_second_part">reseller.lantern.io</string>
@@ -502,9 +438,6 @@
   <string name="faster_data_centers">Daha hızlı veri merkezleri</string>
   <string name="no_logs">Günlük yok</string>
   <string name="connect_up_to_3_devices">3 cihaza kadar bağlayın</string>
-  <string name="free_yinbi_cryptocurrency">Ücretsiz Yinbi kripto para!</string>
-  <string name="yinbi_cryptocurrency">Yinbi Kripto Para</string>
-  <string name="the_yinbi_foundation_description">Yinbi vakfı, yalnızca Lantern üzerinden 888 milyar YNB kripto parayı Lantern Pro alıcılarına dağıtıyor. YNB her günün sonunda, o gün piyasaya sürülen Yinbi miktarına, yükseltme/yenileme yapan kişi sayısına ve satın aldığınız yıl veya hesap sayısına bağlı olarak dağıtılacaktır. Satın aldıktan sonra YNB\'nizi nasıl alacağınızın ayrıntılarını Yinbi Kullanımı ekranında bulabilirsiniz.</string>
   <string name="plan_duration">%d yıllık plan</string>
   <string name="total_cost">tek seferlik %s faturalama</string>
   <string name="discount">%s%% tasarruf edin</string>
@@ -513,7 +446,6 @@
   <string name="membership_end_soon">Üyeliğiniz yakında sona eriyor. Şimdi yenileyin ve %s kadar ücretsiz tadını çıkarın!</string>
   <string name="membership_ends_today">Üyeliğiniz bugün sona eriyor. Şimdi yenileyin ve %s kadar ücretsiz tadını çıkarın!</string>
   <string name="membership_has_expired">Üyeliğiniz sona erdi! Şimdi yenileyin ve %s kadar ücretsiz tadını çıkarın!</string>
-  <string name="free_extra_yinbi">2x Yinbi!</string>
   <string name="step_2">Adım 2</string>
   <string name="enter_email_short">E-posta Gir</string>
   <string name="mm_yy">AA/YY</string>
@@ -536,13 +468,7 @@
   <string name="send_report">Rapor gönder</string>
   <string name="email_optional">E-posta (İsteğe Bağlı)</string>
   <string name="device_added">Cihaz Eklendi</string>
-  <string name="device_authorized_pro">Bu cihaz artık Lantern Pro hesabınızı kullanmak üzere yetkilendirildi.</string>
   <string name="report_sent">Rapor Gönderildi</string>
-  <string name="thank_you_for_reporting_your_issue">Sorununuzu bildirdiğiniz için teşekkür ederiz. E-postanızı belirttiyseniz mümkün olan en kısa sürede size geri dönüş yapacağız.</string>
-  <string name="visit_yin_bi_to_redeem_your_ynb">YNB\'nizi kullanmak ve hesap bakiyenizi kontrol etmek için Yin.bi\'yi ziyaret edin. Yinbi Kullanım Kodlarının süresi, satın alma işleminin ardından 30 gün içinde sona erer.</string>
-  <string name="ynb"># YNB</string>
-  <string name="ynb_distributed">YNB her günün sonunda, o gün piyasaya sürülen Yinbi miktarına, yükseltme yapan kişi sayısına ve satın aldığınız yıl veya hesap sayısına bağlı olarak dağıtılacaktır. Yinbi kullanım kodunuz, bugünün ödül kampanyası tamamlandığında bu ekranda çıkacaktır. Zamanlayıcı sona erdiğinde tekrar kontrol edin.</string>
-  <string name="until_code_and_ynb_will_be_shown">Kod ve # YNB gösterilene kadar</string>
   <string name="have_a_lantern_pro_activation_code_click_here">Lantern Pro aktivasyon kodunuz mu var? Buraya tıklayın</string>
   <string name="enter_email_and_activation_code">E-posta ve Aktivasyon Kodu Gir</string>
   <string name="activation_code">Aktivasyon Kodu</string>
@@ -555,4 +481,18 @@
   <string name="pro_account_expiration">Pro hesabı süre dolumu:</string>
   <string name="lantern_pro_devices_up_to_3">Lantern pro cihazları (en fazla 3)</string>
   <string name="renew_short">Yenile</string>
+  <string name="connection_error">Bağlantı Hatası</string>
+  <string name="reopen_to_try">Tekrar denemek için lütfen %1$s öğesini yeniden açın.</string>
+  <string name="init_account">%1$s hesabınızı başlatıyor, bu biraz zaman alabilir.</string>
+  <string name="tampered_apk">İndirilen apk risk altında, lütfen resmi sürümü indirin</string>
+  <string name="incoming_call">Gelen Arama</string>
+  <string name="accept">Kabul Et</string>
+  <string name="decline">Reddet</string>
+  <string name="new_message">Yeni Mesaj</string>
+  <string name="from_sender">Kaynak: %1$s</string>
+  <string name="unnamed_contact">Adsız Kişi</string>
+  <string name="message_notifications_channel">Mesajlar</string>
+  <string name="call_notifications_channel">Aramalar</string>
+  <string name="lantern_service">Lantern Hizmeti</string>
+  <string name="replica_download">Çoğaltma İndirme</string>
 </resources>

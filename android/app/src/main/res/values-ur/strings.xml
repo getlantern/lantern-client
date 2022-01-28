@@ -24,7 +24,6 @@
   <string name="your_referral_code">آپ کا ریفرل کوڈ</string>
   <string name="report_an_issue">مسئلہ رپورٹ کیجئے</string>
   <string name="select_issue">برائے مہربانی ایک مسئلے کا انتخاب کیجئے</string>
-  <string name="select_issue_desc">برائے مہربانی ہمیں یہاں اپنے مسئلے کی مختصر تفصیل دیجئے n\اور ہم جلد سے جلد آپ سے رابطہ کریں گے۔.</string>
   <string name="submit">جمع کرائیے</string>
   <string name="submit_issue">مسئلہ جمع کرائیے</string>
   <string name="no_issue_selected">برائے مہربانی رپورٹ جمع کرانے سے پہلے  کسی ایک مسئلے کا انتخاب کیجئے۔ </string>
@@ -112,7 +111,7 @@
   <string name="welcome_to_lantern">نئے اور بہتر لینٹرن میں خوش آمدید</string>
   <string name="to_get_unlimited">لامحدو ڈیٹا، تیز ترین رفتار اور  مضبوط بلاکنک رززسٹینس کے لئے\nپرو پر اَپ گریڈ کیجئے!</string>
   <string name="renew_pro_account">پرو اکاؤنٹ کی تجدید کیجئے</string>
-  <string name="logout">لاگ آؤٹ</string>
+  <string name="logout">لاگ آؤٹ کریں</string>
   <string name="change_phone_number">فون نمبر تبدیل کیجئے</string>
   <string name="change_email_address">ای میل ایڈریس تبدیل کیجئے</string>
   <string name="pro_account_expires">آپ کے پرو اکاؤنٹ کی معیاد %1$sکو ختم ہو رہی ہے</string>
@@ -146,7 +145,6 @@
   <string name="get_code">کوڈ حاصل کیجئے</string>
   <string name="get_code_text">اپنے دوستوں سے شیئر کرنے کا کوڈ حاصل کرنے کے لئے اپنے ای میل کا اندراج کیجئے۔ ان کے سائن اَپ کرنے پر پرو کا ایک ماہ مفت حاصل کیجئے!</string>
   <string name="enter_your_email">ریفرل کوڈ حاصل کرنے کے لئے اپنے ای میل کا اندراج کیجئے</string>
-  <string name="referral_copied_to_clipboard">ریفرل کوڈ کلپ بورڈ پر کاپی کر دیا گیاہے!</string>
   <string name="fastworldpay_text">جب آپ خریداری کے لئے جاری رکھیں پر کلک کریں گے تو آپ\nکو ادائیگی مکمل کرنے اور اپنے ایکٹیویشن کوڈ پانے  کے لیے ایک بیرونی سائٹ پر بھیجا جائے گا۔</string>
   <string name="share_referral_text">خریداری کے بعد 3 اضافی مفت ماہ حاصل کرنے کے لئے میرے کوڈ کا استعمال کیجئے۔ %1$s لینٹرن ڈاؤن لوڈ کیجئے https://bit.ly/lanternapk</string>
   <string name="previous_code">اگر آپ پہلے ریفرل کوڈ حاصل کر چکے ہیں \r\nتو برائے اس ای میل ایڈریس کا استعما ل کرنے کی یقین دہانی کیجئے ۔</string>
@@ -159,7 +157,7 @@
   <string name="card_expiration">MM / YY</string>
   <string name="invalid_card">غلط کارڈ نمبر</string>
   <string name="invalid_expiration">غلط اختتامی میعاد</string>
-  <string name="invalid_cvc">غلط سی وی سی</string>
+  <string name="invalid_cvc">غلط cvc</string>
   <string name="validation_errors">تصدیق میں دشواری</string>
   <string name="ok">اوکے</string>
   <string name="progressMessage">درخواست پر عمل جاری ہے</string>
@@ -187,11 +185,6 @@
   <string name="too_many_devices">آپ کے پرو اکاؤنٹ سے منسلک کی جانے والی ڈیوائسز کی حد ختم ہو چکی ہے۔ </string>
   <string name="check_spam_folder">٭اگر آپ کو ای میل موصول نہیں ہوئی تو برائے مہربانی اپنا سپیم فولڈر چیک کیجئے</string>
   <string name="by_referral">دوست کو ریفر کرتے ہوئے پرو حاصل کیا</string>
-  <string-array name="payment_method_list">
-    <item>ایلی پے</item>
-    <item>کریڈٹ کارڈ</item>
-    <item>دوست کو ریفر کرنے پر پرو حاصل کیا</item>
-  </string-array>
   <string name="payment_method">رقم ادائیگی کا طریقہ</string>
   <string name="payment_account">رقم ادائیگی اکاؤنٹ</string>
   <string name="oops_having_trouble">اوہ! ہمیں ای میل ایڈریس تلاش کرنے میں دشواری پیش آ رہی ہے۔ برائے مہربانی ہمیں آپ کا اکاؤنٹ ڈھونڈنے کے لئے نیچے دی گئی  مطلوبہ معلومات فراہم کیجئے ۔ </string>
@@ -218,19 +211,6 @@
     <item>بلاکنک رززسٹنس</item>
     <item>تین ڈیوائسز</item>
     <item>کوئی اشتہار نہیں</item>
-  </string-array>
-  <string-array name="pro_features_new">
-    <item>تیز رفتار</item>
-    <item> مزاحم کو مسدود کرنا</item>
-    <item> زیادہ قابل اعتماد</item>
-    <item> 3 تک آلات کو رجسٹر کریں</item>
-    <item> لامحدود ڈیٹا</item>
-    <item> خریداری کے ساتھ مفت Yinbi!</item>
-  </string-array>
-  <string-array name="yinbi_renew_features">
-    <item>مفت Yinbi کرپٹو کرنسی</item>
-    <item>مفت مہینے</item>
-    <item>محدود وقت کی پیشکش، ابھی عمل کریں!</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>لامحدود تیز رفتار ڈیٹا</item>
@@ -292,12 +272,11 @@
   <string name="cancel_pro_account">پرو اکاؤنٹ منسوخ کر دیجئے</string>
   <string name="account_verification">اکاؤنٹ کی تصدیق</string>
   <string name="enter_verification_code">تصدیقی کوڈ کا اندارج کیجئے</string>
-  <string name="referral_code">ریفرل کوڈ</string>
+  <string name="referral_code">حوالہ کوڈ</string>
   <string name="get_lantern_pro">لینٹرن پرو حاصل کیجئے</string>
   <string name="upgrade_to_lantern_pro">لینٹرن پرو پر اَپ گریڈ کیجئے</string>
   <string name="pro_available_for">ونڈوز، اینڈروائڈ، میک اور اَن بنٹو کے لئے۔ آئی او ایس جلد آ رہا ہے</string>
   <string name="upgrade_to_pro">لامحدود ڈیٹا، تیز رفتار، اور مسدود کیےجانے سے متعلق زیادہ مزاحمت کیلئے پرو میں اپ گریڈ کریں!</string>
-  <string name="upgrade_to_pro_yinbi">لامحدود ڈیٹا، تیز رفتاری، اور مسدود کیےجانے سے متعلق\n زیادہ مزاحمت اور مفت Yinbi کرپٹو کرنسی کیلئے پرو میں اپ گریڈ کریں!</string>
   <string name="data_remaining">آپ کے ماہانہ تیز رفتار ڈیٹا %1$sکا %% رہ گیا ہے</string>
   <string name="data_used">%1$s MB کا مفت ڈیٹا باقی ہے۔\n %2$s پر ری سیٹ کریں</string>
   <string name="upgrade">اَپ گریڈ</string>
@@ -397,16 +376,12 @@
   <string name="processing_payment">ادائیگی پر کارروائی</string>
   <string name="now_converting_to_pro">اب آپ کو پرو میں تبدیل کر رہا ہے .. براہ کرم انتظار کریں ...</string>
   <string name="have_an_activation_code">ایکٹیویشن کوڈ ہے؟ یہاں کلک کریں</string>
-  <string name="yinbi_greeting">Yinbi۔ ایک غیر مسدود کرپٹوکرنسی جلد آرہی ہے۔\nاسے مفت میں حاصل کرنے کا طریقہ سیکھنے کے لئے یہاں کلک کریں۔</string>
   <string name="test_payment_page">آزمائشی ادائیگی کا صفحہ</string>
   <string name="pay_now">اب ادائیگی کریں</string>
   <string name="error_bulk_codes">اجتماعی پرو اکاؤنٹ کوڈز جمع کروانے میں خرابی</string>
   <string name="invalid_bulk_codes">آپ نے جو پرو اکاؤنٹ کوڈز درج کیے ہیں وہ غلط ہیں</string>
   <string name="renew_today">آج ہی تجدید کریں!</string>
-  <string name="receive_free_yinbi">مفت Yinbi کرپٹوکرنسی حاصل کریں!</string>
   <string name="purchased_pro_activation_codes">لینٹرن پرو ایکٹیویشن کوڈز آن لائن خریدیں؟</string>
-  <string name="renew_grab_free_yinbi"><u>مفت Yinbi پانے کے لیے اپنے پرو ایکٹیویشن کوڈز کا استعمال کرتے ہوئے تجدید کریں</u></string>
-  <string name="upgrade_now_get_free_yinbi"><u>مفت Yinbi پانے کے لیے اپنے پرو ایکٹیویشن کوڈز کا استعمال کرتے ہوئے اپ گریڈ کریں</u></string>
   <string name="renew">تجدید کریں!</string>
   <string name="terms_of_service_text">ادائیگی کے لئے جاری رکھیں پر کلک کرکے ، آپ ہماری خدمت کی شرائط سے اتفاق کرتے ہیں</string>
   <string name="terms_of_service_text_complete_purchase">مکمل خریداری پر کلک کرکے ، آپ ہماری خدمت کی شرائط سے اتفاق کرتے ہیں</string>
@@ -416,60 +391,16 @@
   <string name="enter_lantern_pro_codes">لینٹرن پرو کوڈز درج کریں</string>
   <string name="renewal_success">تجدید کامیاب رہی!</string>
   <string name="thank_you_for_renewing">اپنے لینٹرن پرو اکاؤنٹ کی تجدید کے لئے آپ کا شکریہ</string>
-  <string name="yinbi">Yinbi</string>
-  <string name="visit_yinbi_website">ویب سائٹ ملاحظہ کریں</string>
-  <string name="yinbi_redemption">Yinbi بھنائیں</string>
-  <string name="yinbi_account_info">Yinbi اکاؤنٹ کی معلومات</string>
-  <string name="lantern_partnered_yinbi_free">لینٹرن نے ہر اس شخص کو YNB دینے\n کے لیے Yinbi کے ساتھ شراکت کی ہے جو لینٹرن پرو خریدتا ہے\n! ابھی خریدیں اور آج کے تحفے \nتک رسائی پائیں! Yinbi کے بارے میں مزید معلومات کے لیے باضابطہ سائٹ Yin.bi پر جائیں۔</string>
-  <string name="lantern_partnered_yinbi_pro">لینٹرن نے ہر اس شخص کو YNB دینے\n کے لیے Yinbi کے ساتھ شراکت کی ہے جو لینٹرن پرو کی تجدید کرواتا ہے\n! آج کے تحفے تک رسائی کے لیے \nابھی خریدیں! Yinbi کے بارے میں مزید معلومات کے لیے باضابطہ سائٹ Yin.bi پر جائیں۔</string>
-  <string name="enter_bulk_pro_codes">لینٹرن پرو کوڈز درج کریں</string>
-  <string name="renew_pro_get_yinbi">پرو کی تجدید کریں Yinbi پائیں</string>
-  <string name="you_have">آپ کے پاس</string>
-  <string name="yinbi_code">YNB ہے</string>
-  <string name="unable_to_get_yinbi_account_info">Yinbi اکاؤنٹ کی معلومات حاصل کرنے سے قاصر ہے</string>
-  <string name="redeem_bulk_codes">بلک کوڈز بھنائیں</string>
-  <string name="paste_pro_account_codes">اپنے اجتماعی پرو اکاؤنٹ کوڈز کو ذیل میں پیسٹ کریں اور لینٹرن پرو پائیں یا اپنے لینٹرن پرو اکاؤنٹ کے وقت میں اضافہ کریں۔</string>
-  <string name="special_offer">خصوصی پیشکش!</string>
-  <string name="cryptocurrency_giveaway">کرپٹو کرنسی کا تحفہ!</string>
-  <string name="lantern_partnered_renew_now">لینٹرن نے ہر اس شخص کو YNB دینے\n کے لیے Yinbi کے ساتھ شراکت کی ہے جو لینٹرن پرو کی تجدید کرواتا\n ہے! آج کے تحفے تک رسائی کے یلے ابھی تجدید کریں!</string>
-  <string name="what_is_yinbi">Yinbi کیا ہے؟</string>
-  <string name="renew_now_get_yinbi">ابھی تجدید کریں Yinbi پائیں</string>
   <string name="purchase">خریداری</string>
-  <string name="one_year_yinbi">1 سال + مفت Yinbi:</string>
-  <string name="yinbi_cost">%1$s%2$s (%3$s)</string>
-  <string name="two_years_yinbi">2 سال + 2x مفت Yinbi:</string>
   <string name="thank_you_purchasing_pro">لینٹرن پرو خریدنے کے لئے آپ کا شکریہ!</string>
-  <string name="you_will_receive_yinbi">آپ کا تحفہ ختم ہونے تک آپ اپنی خریداری کے لیے\nمفتYinbi (YNB) ملے گا\nمزید تفصیلات کے لیے Yinbi بھنانے کا کوڈ بٹن\nدبائیں۔</string>
-  <string name="yinbi_menu">Yinbi مینو</string>
-  <string name="yinbi_redemption_code">Yinbi بھنانے کا کوڈ</string>
   <string name="continue_to_lantern_pro">لینٹرن پرو جاری رکھیں</string>
-  <string name="yinbi_website">Yin.bi</string>
   <string name="date">تاریخ</string>
-  <string name="redemption_code">بھنانے کا کوڈ</string>
   <string name="status">صورتحال</string>
   <string name="copy_all_codes">تمام کوڈز کاپی کریں</string>
-  <string name="visit_yinbi">اپنے YNB کو بھنانے کے لیےYin.bi پر جائیں اور اپنا اکاؤنٹ بیلنس چیک کریں۔\n Yinbi بھنانے کا کوڈ کی میعاد خریداری کےe\n30 دنوں بعد ختم ہو جائے گی۔</string>
-  <string name="successfully_copied_codes">بھنانے کے کوڈز کامیابی کے ساتھ کاپی ہوگئے!</string>
-  <string name="no_active_codes">کوئی فعال بھنانے کے کوڈز نہیں ہیں۔ بعد میں دوبارہ کوشش کریں!</string>
-  <string name="thanks_purchase_yinbi">لینٹرنPro خریدنے کے لیے آپ کا شکریہ!\nآپ کا Yinbi بھنانے کا کوڈ اس اسکرین پر\nظاہر ہوگا جب آج کا تحفہ مکمل ہو\nہو جائے گا۔ جب ٹائمر مکمل ہو جائے تو\nواپس چیک کریں۔</string>
-  <string name="yinbi_details">Yinbi (YNB) ایک نئی ناقابل مسدود\nکرپٹو کرنسی ہے جو جلد ہی پیش کی جانے والی ہے، جو \nتیز رفتار، معتبر، اور استعمال میں آسان، اور کم لاگت والی\nموبائل ٹرانزیکشن ہے۔لینٹرن کے صارفین کو\nسب سے پہلے اس نئی کرپٹو کرنسی تک\nرسائی حاصل ہوگی!</string>
-  <string name="find_out_more">مزید معلومات یہاں پائیں: Yin.bi</string>
   <string name="best_deal">بہترین سودا</string>
-  <string name="launches_soon">Yinbi (YNB) اسے جلد ہی شروع کر رہا ہے اور لینٹرن\nکے صارفین ہی پہلے لوگ ہوں گے جنہیں اس\nنئی کرپٹو کرنسی تک رسائی حاصل ہوگی! YNB  کی تقسیم\nہر دن کے آخر میں، ان\nلوگوں کی تعداد کی بنیاد پر ہوگی جو اپ گریڈ کرتے ہیں،\nسالوں کی تعداد یا اکاؤنٹس پر جو آپ\nخریدتے ہیں</string>
-  <string name="how_yinbis_distributed">YNB ہر دن کے آخر میں تقسیم کیا جائے گا، \nاس دن جاری کردہ Yinbi کی مقدار، اپ گریڈ کرنے والے \nافراد کی تعداد، اور آپ کی خریداری کے سال یا \nاکاؤنٹ کی تعداد کے حساب سے ہوگی۔ \nجب آپ کی آج کی فراہمی مکمل ہوجائے گی \nتب آپ کا Yinbi بھنانے کا کوڈ اس اسکرین پر ظاہر ہوگا۔ \nٹائمر مکمل ہونے پر واپس چیک کریں۔</string>
-  <string name="get_bulk_yinbi"><u>تھوک میں پرو اکاؤنٹس خریدیں ، تھوک میں Yinbi حاصل کریں!</u></string>
-  <string name="loading_yinbi_account_info">Yinbi اکاؤنٹ کی معلومات لوڈ ہو رہی ہے</string>
-  <string name="free_yinbi_with_purchase">خریداری کے ساتھ مفت Yinbi!</string>
   <string name="renew_now_get_more">ابھی تجدید کریں اور مزید حاصل کریں!</string>
-  <string name="buy_pro_get_yinbi">پرو خریدیں Yinbi پائیں</string>
   <string name="renewal_note">نوٹ: آپ کا نیا خریدا ہوا پلان ٹائم آپ کے \ n موجودہ پلان ٹائم میں شامل کیا جائے گا۔</string>
   <string name="bulk_codes_error">غلطی! براہ کرم نمایاں کردہ کوڈز کی جانچ کریں۔</string>
-  <string name="loading_yinbi">Yinbi بھنانے والے کوڈز لوڈ ہو رہے ہیں</string>
-  <string name="lantern_partnered_yinbi">لینٹرن نے ہر اس شخص کو YNB دینے\n کے لیے Yinbi کے ساتھ شراکت کی ہے جو لینٹرن پرو کی تجدید کرواتا ہے\n! آج کے تحفے تک رسائی کے لیے \nابھی خریدیں! Yinbi کے بارے میں مزید معلومات کے لیے باضابطہ سائٹ Yin.bi پر جائیں۔</string>
-  <string name="time_left_giveaway">آج کے Yinbi کی فراہمی میں کچھ وقت باقی ہے!</string>
-  <string name="yinbi_released_today"> %d YNB آج جاری کیا جارہا ہے!</string>
-  <string name="yinbi_distribution_details">YNB ہر دن کے آخر میں تقسیم کیا جائے گا، جو اس دن جاری کردہ Yinbi کی مقدار، اپ گریڈ/تجدید کرنے والے افراد کی تعداد، اور آپ کی خریداری کے سال یا اکاؤنٹ کی تعداد کے حساب سے ہوگا۔ </string>
-  <string name="total_yinbi_released">جاری کردہ کل YNB ہر روز کم ہوتا ہے اور ہر سال آدھا ہوجائے گا۔ آج ہی اپنا حاصل کریں!</string>
   <string name="please_allow_lantern_to">براہ کرم لینٹرن کو  اجازت دیں ...</string>
   <string name="permission_for">چالو کرنے کے لئے</string>
   <string name="android.permission.INTERNET">لینٹرن سرورز سے جڑ رہا ہے</string>
@@ -486,11 +417,6 @@
   <string name="lantern_desktop_share_description">ڈیسک ٹاپ اور دیگر تمام پلیٹ فارمز کے لیے حالیہ ترین لینٹرن ایپس اوپر کے لنک پر مل سکتی ہیں۔</string>
   <string name="share_link">لنک شیئر کریں</string>
   <string name="lantern_desktop_link_share_title">لینٹرن ڈاؤن لوڈ کا لنک شیئر کریں</string>
-  <string name="upgrade_to_pro_get_yinbi">پرو میں اپ گریڈ کریں اور yinbi پائیں</string>
-  <string name="yinbi_description_free">لینٹرن  نے لینٹرن پرو خریدنے والے ہر ایک کو YNB دینے کے لئے Yinbi کے ساتھ شراکت کی ہے! آج کے تحفے تک رسائی حاصل کرنے کے لئے ابھی اپ گریڈ کریں! Yinbi کے بارے میں مزید معلومات کے لئے باضابطہ ویب سائٹ ملاحظہ کریں: Yin.bi</string>
-  <string name="yinbi_description_pro">لینٹرن نے لینٹرن پرو کی تجدید کروانے والے ہر ایک کو YNB دینے کے لئے Yinbi کے ساتھ شراکت کی ہے!\n! آج کے تحفے تک رسائی کے لیے ابھی تجدید کریں! Yinbi کے بارے میں مزید معلومات کے لیے باضابطہ سائٹ Yin.bi پر جائیں۔</string>
-  <string name="yinbi_title_free">مفت Yinbi کرپٹوکرنسی</string>
-  <string name="yinbi_title_pro">Yinbi بھنائیں</string>
   <string name="redeem_lantern_pro_codes">لینٹرن پرو کوڈز بھنائیں</string>
   <string name="redeem_code_description_first_part">یہاں سے تھوک میں لالٹین پرو کوڈز حاصل کیے جاسکتے ہیں</string>
   <string name="redeem_code_description_second_part">reseller.lantern.io</string>
@@ -503,9 +429,6 @@
   <string name="faster_data_centers">تیز تر ڈیٹا سینٹرز</string>
   <string name="no_logs">کوئی لاگز نہیں</string>
   <string name="connect_up_to_3_devices">3 تک آلات کو جوڑیں</string>
-  <string name="free_yinbi_cryptocurrency">مفت Yinbi کرپٹو کرنسی</string>
-  <string name="yinbi_cryptocurrency">Yinbi کرپٹو کرنسی</string>
-  <string name="the_yinbi_foundation_description">Yinbi فاؤنڈیشن خصوصی طور پر لینٹرن پرو کے خریداروں کو لینٹرن کے ذریعہ 888 بلین YNB کرپٹو کرنسی دے رہی ہے۔ YNB ہر دن کے آخر میں، اس دن جاری کردہ Yinbi کی مقدار، اپ گریڈ / تجدید کرنے والے افراد کی تعداد، اور آپ کی خریداری کے سال یا اکاؤنٹ کی تعداد کی بنیاد پر تقسیم کی جائے گی۔ خریداری کے بعد آپ اپنا YNB حاصل کرنے کے بارے میں تفصیلات Yinbi بھنانے والی اسکرین پر دیکھ سکتے ہیں۔</string>
   <string name="plan_duration">%d سالہ منصوبہ</string>
   <string name="total_cost">%s  نے ایک بار بل دیا</string>
   <string name="discount">%s %% کو محفوظ کریں</string>
@@ -514,11 +437,10 @@
   <string name="membership_end_soon">آپ کی رکنیت جلد ختم ہورہی ہے۔ ابھی تجدید کریں اور%s تک مفت کا لطف اٹھائیں!</string>
   <string name="membership_ends_today">آج آپ کی رکنیت ختم ہوگی۔ ابھی تجدید کریں اور %s تک مفت کا لطف اٹھائیں!</string>
   <string name="membership_has_expired">آپ کی رکنیت ختم ہوگئی! ابھی تجدید کریں اور %s تک مفت کا لطف اٹھائیں!</string>
-  <string name="free_extra_yinbi">2x Yinbi!</string>
   <string name="step_2">مرحلہ 2</string>
   <string name="enter_email_short">ای میل درج کریں</string>
   <string name="mm_yy">MM / YY</string>
-  <string name="referral_code_optional">ریفرل کوڈ (اختیاری)</string>
+  <string name="referral_code_optional">حوالہ کوڈ (اختیاری)</string>
   <string name="enter_payment_details">ادائیگی کی تفصیلات درج کریں</string>
   <string name="email">ای میل</string>
   <string name="authorize_with_device_linking_pin">ڈیوائس لنکنگ پن کے ذریعہ اجازت دیں</string>
@@ -532,28 +454,29 @@
   <string name="enter_the_device_linking_pin_and_submit">آلہ لنک کرنے والا پن درج کریں ، اور جمع کروائیں۔</string>
   <string name="ensure_both_devices_are_running_the_most_recent_version_of_lantern">* یقینی بنائیں کہ دونوں آلات پر لینٹرن کے حالیہ ورژن چل رہے ہیں۔</string>
   <string name="your_device_linking_pin_has_been_sent">آپ کا آلہ مربوط کرنے والا پن%s پر بھیج دیا گیا ہے۔ ای میل آنے میں کئی گھنٹے لگ سکتے ہیں۔ اگر آپ کو یہ نہیں ملتا ہے تو سپام فولڈر میں چیک کریں۔</string>
-  <string name="enter_or_paste_device_linking_pin">آلہ جوڑنے والا پن داخل یا پیسٹ کریں</string>
+  <string name="enter_or_paste_device_linking_pin">ڈیوائس کو جوڑنے والا پن درج کریں یا چسپاں کریں</string>
   <string name="describe_your_issue">مسئلہ کی تفصیل</string>
   <string name="send_report">رپورٹ بھیجیں</string>
   <string name="email_optional">ای میل (اختیاری)</string>
   <string name="device_added">آلہ جوڑا گیا</string>
-  <string name="device_authorized_pro">اب یہ آلہ آپ کے لینٹرن پرو اکاؤنٹ کو استعمال کرنے کا مجاز ہے۔</string>
   <string name="report_sent">رپورٹ بھیج دی گئی</string>
-  <string name="thank_you_for_reporting_your_issue">اپنے مسئلے کی اطلاع دینے کے لئے آپ کا شکریہ۔ اگر آپ نے اپنا ای میل فراہم کیا ہے تو جتنی جلدی ممکن ہوا ہم  آپ سے واپس رابطہ کریں گے۔</string>
-  <string name="visit_yin_bi_to_redeem_your_ynb">اپنے YNB کو بھنانے کے لئے Yin.bi پر جائیں، اور اپنے اکاؤنٹ کا بیلنس چیک کریں۔ Yinbi بھنانے والے کوڈز کی میعاد خریداری کے 30 دن بعد ختم ہوجاتی ہے۔</string>
-  <string name="ynb"># YNB</string>
-  <string name="ynb_distributed">YNB ہر دن کے آخر میں تقسیم کیا جائے گا، اس دن جاری کردہ Yinbi کی مقدار، اپ گریڈ کرنے والے افراد کی تعداد، اور آپ کی خریداری کے سال یا اکاؤنٹ کی تعداد کے حساب سے ہوگی۔  جب آپ کی آج کی فراہمی مکمل ہوجائے گی \nتب آپ کا Yinbi بھنانے کا کوڈ اس اسکرین پر ظاہر ہوگا۔  ٹائمر مکمل ہونے پر واپس چیک کریں۔</string>
-  <string name="until_code_and_ynb_will_be_shown">جب تک کوڈ اور # YNB دکھایا جائے گا</string>
   <string name="have_a_lantern_pro_activation_code_click_here">ایک لینٹرن پرو ایکٹیویشن کوڈ موجود ہے؟ یہاں کلک کریں</string>
   <string name="enter_email_and_activation_code">ای میل اور ایکٹیویشن کوڈ درج کریں</string>
   <string name="activation_code">ایکٹیویشن کوڈ</string>
   <string name="by_clicking_register_for_pro_you_agree_to_our_terms_of_service">رجسٹر فار پرو پر کلک کرکے آپ ہماری سروس کی شرائط سے اتفاق کرتے ہیں</string>
-  <string name="register_for_pro">پرو کے لئے رجسٹر کریں</string>
+  <string name="register_for_pro">پرو کے لیے رجسٹر کریں</string>
   <string name="enter_your_device_linking_pin">اپنے آلے کو لنک کرنے والا پن درج کریں</string>
   <string name="enter_the_linking_code_obtained">مرحلہ 1 سے حاصل کردہ لنکنگ کوڈ درج کریں ، اور جمع کروائیں۔</string>
   <string name="open_authorize_device_for_pro_from_the_menu">آپ جس آلہ سے منسلک ہونا چاہتے ہیں اس کے مینو سے \'پرو کے لیے آلہ کو اجازت دیں\' کھولیں۔</string>
   <string name="email_with_colon">ای میل:</string>
   <string name="pro_account_expiration">پرو اکاؤنٹ کی میعاد کا اختتام:</string>
-  <string name="lantern_pro_devices_up_to_3">لینٹرن پرو آلات (3 تک)</string>
+  <string name="lantern_pro_devices_up_to_3">لینٹرن پرو ڈیوائسز (3 تک)</string>
   <string name="renew_short">تجدید</string>
+  <string name="connection_error">کنکشن کی خرابی</string>
+  <string name="reopen_to_try">براہ کرم دوبارہ کوشش کرنے کے لیے %1$s کو دوبارہ کھولیں۔</string>
+  <string name="init_account">%1$s آپ کا اکاؤنٹ شروع کر رہا ہے، اس میں ایک لمحہ لگ سکتا ہے۔</string>
+  <string name="incoming_call">آنے والی کال</string>
+  <string name="accept">قبول کریں</string>
+  <string name="unnamed_contact">رابطے کو بے نام کیا گیا</string>
+  <string name="message_notifications_channel">پیغامات</string>
 </resources>

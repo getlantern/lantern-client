@@ -1046,10 +1046,10 @@ msgid "no_search_result_found"
 msgstr "عذرًا، تعذر العثور على أي شيء يطابق البحث"
 
 msgid "search_result_error"
-msgstr "حدث خطأ أثناء إحضار النتائج. يُرجى المحاولة مرة أخرى لاحقًا"
+msgstr ""
 
 msgid "video_stream_error"
-msgstr "حدث خطأ أثناء عرض الفيديو. يُرجى المحاولة مرة أخرى لاحقًا"
+msgstr ""
 
 msgid "untitled"
 msgstr "بدون عنوان"

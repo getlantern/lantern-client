@@ -155,7 +155,7 @@ msgid "Account"
 msgstr "اکاؤنٹ"
 
 msgid "VPN Status"
-msgstr "VPN اسٹیٹس "
+msgstr "VPN کی حالت"
 
 msgid "VPN"
 msgstr "VPN"
@@ -1055,10 +1055,9 @@ msgstr "معذرت خواہ ہیں، ہم اس تلاش سے متعلق کوئی
 
 msgid "search_result_error"
 msgstr ""
-"نتائج ڈھونڈنے کے دوران نقص پیش آ گیا۔ براہ کرم بعد میں دوبارہ کوشش کریں"
 
 msgid "video_stream_error"
-msgstr "ویڈیو کی رینڈرنگ میں نقص پیش آ گیا۔ براہ کرم بعد میں دوبارہ کوشش کریں"
+msgstr ""
 
 msgid "untitled"
 msgstr "بلاعنوان"

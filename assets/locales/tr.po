@@ -1054,12 +1054,9 @@ msgstr "Üzgünüz, bu aramayla eşleşen hiçbir şey bulamadık"
 
 msgid "search_result_error"
 msgstr ""
-"Sonuçlar getirilirken bir hatayla karşılaşıldı. Lütfen daha sonra tekrar "
-"deneyin"
 
 msgid "video_stream_error"
 msgstr ""
-"Video işlenirken bir hatayla karşılaşıldı. Lütfen daha sonra tekrar deneyin"
 
 msgid "untitled"
 msgstr "Başlıksız"
