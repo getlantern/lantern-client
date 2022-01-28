@@ -18,7 +18,6 @@ Future<void> main() async {
     test(
       'Record a voice memo',
       () async {
-        // do the whole reset -> enroll thing
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
         await driver.tapFAB(
           waitText: 'New Chat',
@@ -33,11 +32,9 @@ Future<void> main() async {
         final recorderButtonFinder = find.byValueKey('recorder_button');
 
         print('tapping on start record button');
-        await driver.waitForSeconds(5);
         await driver.longPress(target: recorderButtonFinder);
 
         print('tapping on stop record button');
-        await driver.waitForSeconds(5);
         await driver.longPress(target: recorderButtonFinder);
 
         print('tapping on send');
