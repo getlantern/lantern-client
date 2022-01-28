@@ -996,10 +996,10 @@ msgid "no_search_result_found"
 msgstr "很抱歉，找不到任何符合該搜尋條件的結果"
 
 msgid "search_result_error"
-msgstr "擷取結果時發生錯誤，請稍後再試"
+msgstr ""
 
 msgid "video_stream_error"
-msgstr "顯示影片時發生錯誤，請稍後再試"
+msgstr ""
 
 msgid "untitled"
 msgstr "無標題"

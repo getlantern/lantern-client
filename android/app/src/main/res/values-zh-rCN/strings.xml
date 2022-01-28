@@ -24,7 +24,6 @@
   <string name="your_referral_code">您的推荐码</string>
   <string name="report_an_issue">报告问题</string>
   <string name="select_issue">请选择一个问题</string>
-  <string name="select_issue_desc">请在这里给我们留下您的问题的简要描述，我们会尽快给您回复。</string>
   <string name="submit">提交</string>
   <string name="submit_issue">提交问题</string>
   <string name="no_issue_selected">请在提交报告前选择一个问题</string>
@@ -47,6 +46,7 @@
   <string name="on_desc">您现在可以访问被封锁的网站和服务了</string>
   <string name="off_desc">点击按钮访问被封锁的网站和服务。</string>
   <string name="service_connected">连接到 VPN</string>
+  <string name="ready_to_connect">准备就绪，随时可以连接</string>
   <string name="desktop_option">桌面版</string>
   <string name="contact_option">联系我们</string>
   <string name="check_for_update">检查更新</string>
@@ -100,6 +100,7 @@
   <string name="not_now">不是现在</string>
   <string name="install_update">更新</string>
   <string name="error_update">下载更新时出错</string>
+  <string name="error_install_update">安装更新时出错</string>
   <string name="loading">正在加载...</string>
   <string name="manual_update">请尝试从以下网站手动安装最新版本：&lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">欢迎使用“蓝灯专业版”！</string>
@@ -186,11 +187,6 @@
   <string name="too_many_devices">已达到可链接到您的专业版帐户的设备的上限。</string>
   <string name="check_spam_folder">* 如果您没有收到此邮件，请查看您的垃圾邮件文件夹。</string>
   <string name="by_referral">通过介绍朋友获得的专业版</string>
-  <string-array name="payment_method_list">
-    <item>支付宝</item>
-    <item>信用卡</item>
-    <item>通过介绍朋友获得的专业版</item>
-  </string-array>
   <string name="payment_method">付款方式</string>
   <string name="payment_account">支付账户</string>
   <string name="oops_having_trouble">糟糕！我们无法找到该电子邮件地址。请提供以下信息帮助我们找到您的帐户。</string>
@@ -220,16 +216,10 @@
   </string-array>
   <string-array name="pro_features_new">
     <item>速度更快</item>
-    <item>抗阻塞能力</item>
-    <item>更安全可靠</item>
-    <item>最多可注册 3 个设备</item>
+    <item>抗阻塞能力强</item>
+    <item>更稳定可靠</item>
+    <item>可注册 3 个设备</item>
     <item>数据无限量</item>
-    <item>买东西送隐币！</item>
-  </string-array>
-  <string-array name="yinbi_renew_features">
-    <item>免费隐币</item>
-    <item>免费使用月份</item>
-    <item>限时优惠，马上行动！</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>无限量高速数据</item>
@@ -296,7 +286,6 @@
   <string name="upgrade_to_lantern_pro">升级到蓝灯专业版</string>
   <string name="pro_available_for">适用于 Windows、Android、Mac 和 Ubuntu。即将推出 iOS 。</string>
   <string name="upgrade_to_pro">升级到专业版、数据不受限制、速度更快、抗堵能力更强！</string>
-  <string name="upgrade_to_pro_yinbi">升级到专业版，可以获得无限的数据、更快的速度、更强的抗阻能力和免费的加密货币隐币 (Yinbi) ！</string>
   <string name="data_remaining">您的免费月度高速数据还剩余 %1$s%%。</string>
   <string name="data_used">还剩 %1$s MB 的免费数据。\n重置于 %2$s。</string>
   <string name="upgrade">升级</string>
@@ -396,16 +385,12 @@
   <string name="processing_payment">处理付款</string>
   <string name="now_converting_to_pro">现在将您转换为专业版...请稍候...</string>
   <string name="have_an_activation_code">有激活码？点击这里</string>
-  <string name="yinbi_greeting">隐币 — 无封锁的加密货币即将到来。\n点击此处了解如何免费获得。</string>
   <string name="test_payment_page">测试支付页面</string>
   <string name="pay_now">立即付款</string>
   <string name="error_bulk_codes">提交批量专业版帐户代码出错</string>
   <string name="invalid_bulk_codes">您输入的专业版帐户代码无效</string>
   <string name="renew_today">今天就续订吧！</string>
-  <string name="receive_free_yinbi">快来免费领取加密货币隐币吧！</string>
   <string name="purchased_pro_activation_codes">已在线购买了蓝灯专业版的激活码？</string>
-  <string name="renew_grab_free_yinbi"><u>使用您的专业版激活码续费，抢免费的隐币。</u></string>
-  <string name="upgrade_now_get_free_yinbi"><u>升级您的专业版激活码续费，抢免费的隐币。</u></string>
   <string name="renew">更新！</string>
   <string name="terms_of_service_text">点击继续付款，即表示您同意我们的服务条款。</string>
   <string name="terms_of_service_text_complete_purchase">点击完成购买，即表示您同意我们的服务条款。</string>
@@ -415,60 +400,16 @@
   <string name="enter_lantern_pro_codes">输入蓝灯专业版代码</string>
   <string name="renewal_success">更新成功！</string>
   <string name="thank_you_for_renewing">谢谢您为您的蓝灯帐户续费。</string>
-  <string name="yinbi">隐币</string>
-  <string name="visit_yinbi_website">访问网站</string>
-  <string name="yinbi_redemption">隐币兑换</string>
-  <string name="yinbi_account_info">隐币账户信息</string>
-  <string name="lantern_partnered_yinbi_free">蓝灯已与 Yinbi 合作，凡是购买蓝灯专业版的用户都可以获得隐币赠品！赶快购买获取今天的赠品吧！如需了解更多关于隐币 \n 的信息，请访问官网：Yin.bi</string>
-  <string name="lantern_partnered_yinbi_pro">蓝灯已与 Yinbi 合作，凡是续费蓝灯专业版的用户都可以获得隐币赠品！赶快续费就获得今天的赠品吧！如需了解更多关于隐币 \n 的信息，请访问官网：Yin.bi</string>
-  <string name="enter_bulk_pro_codes">输入蓝灯专业版代码</string>
-  <string name="renew_pro_get_yinbi">续订专业版帐户获取隐币</string>
-  <string name="you_have">您有</string>
-  <string name="yinbi_code">隐币</string>
-  <string name="unable_to_get_yinbi_account_info">无法获取隐币账户信息</string>
-  <string name="redeem_bulk_codes">兑换批量代码</string>
-  <string name="paste_pro_account_codes">粘贴以下您的大宗交易帐户代码，以获得蓝灯专业版或延长您的蓝灯专业版\n帐户时间。</string>
-  <string name="special_offer">特别优惠!</string>
-  <string name="cryptocurrency_giveaway">加密货币赠品！</string>
-  <string name="lantern_partnered_renew_now">蓝灯已与 Yinbi (YNB) 合作，凡是购买蓝灯专业版/n专业版 的用户都可以获得隐币赠品！赶快续费获取今天的赠品吧！</string>
-  <string name="what_is_yinbi">什么是隐币？</string>
-  <string name="renew_now_get_yinbi">立即续费获取隐币</string>
   <string name="purchase">购买</string>
-  <string name="one_year_yinbi">1 年 + 免费隐币：</string>
-  <string name="yinbi_cost">%1$s%2$s（%3$s）</string>
-  <string name="two_years_yinbi">2 年 + 2 次免费隐币。</string>
   <string name="thank_you_purchasing_pro">感谢您购买蓝灯专业版！</string>
-  <string name="you_will_receive_yinbi">当今天的赠品活动结束后，您将会收到免费的隐币（YNB），点击隐币兑换码按钮了解更多详情。</string>
-  <string name="yinbi_menu">隐币菜单</string>
-  <string name="yinbi_redemption_code">隐币兑换码</string>
   <string name="continue_to_lantern_pro">继续到蓝灯专业版</string>
-  <string name="yinbi_website">Yin.bi</string>
   <string name="date">日期</string>
-  <string name="redemption_code">兑换码</string>
   <string name="status">状况</string>
   <string name="copy_all_codes">复制所有代码</string>
-  <string name="visit_yinbi">访问 Yin.bi 兑换您的隐币并查看您的账户余额。隐币兑换码在购买后 30天后失效。</string>
-  <string name="successfully_copied_codes">成功复制兑换码！</string>
-  <string name="no_active_codes">没有有效的兑换码。请稍后再试!</string>
-  <string name="thanks_purchase_yinbi">感谢您购买蓝灯专业版！当今天的赠品活动结束后，您的隐币兑换码就会显示在这个屏幕上。请在计时结束后\n再回来查看。</string>
-  <string name="yinbi_details">隐币 (YNB)是一种即将推出的、新的不可阻挡的加密货币。它允许\n进行快速、可靠、易用、低成本的移动交易。蓝灯用户将是第一批提前使用这种新型加密货币的用户。</string>
-  <string name="find_out_more">要了解更多信息，请查看这里：Yin.bi</string>
   <string name="best_deal">最佳交易</string>
-  <string name="launches_soon">隐币（YNB）即将推出，蓝灯\n用户将成为第一批提前使用这种新货币的用户。在每天结束时，我们会根据升级人数和购买年限或账户数量对隐币进行分配。</string>
-  <string name="how_yinbis_distributed">在每天结束时，我们会根据当天发放的隐币的数量、升级人数以及购买年限或账户数量来发放隐币。当今天的赠送活动结束后，您的隐币兑换码就会显示在这个屏幕上。请在计时结束后\n再回来查看。</string>
-  <string name="get_bulk_yinbi"><u>购买批量专业版帐户，获得批量隐币！</u></string>
-  <string name="loading_yinbi_account_info">加载隐币账户信息</string>
-  <string name="free_yinbi_with_purchase">买东西送隐币！</string>
   <string name="renew_now_get_more">立即续费，获得更多优惠!</string>
-  <string name="buy_pro_get_yinbi">买专业版，赚隐币</string>
   <string name="renewal_note">注意：您新购买的计划时间将被添加到\n您当前的计划时间中。</string>
   <string name="bulk_codes_error">错误！请检查高亮显示的代码。</string>
-  <string name="loading_yinbi">载入隐藏兑换码</string>
-  <string name="lantern_partnered_yinbi">蓝灯已与 Yinbi 合作，凡是续订蓝灯专业版的用户都可以获得隐币赠品！赶快续费就获得今天的赠品吧！如需了解更多关于隐币 \n 的信息，请访问官网：Yin.bi</string>
-  <string name="time_left_giveaway">要获取今天的隐币赠品还有时间！</string>
-  <string name="yinbi_released_today">今日即将发放 %d 个隐币！</string>
-  <string name="yinbi_distribution_details">在每天结束时，我们会根据当天发放的隐币数量、升级/续费人数、购买年限或账户数量来发放隐币。</string>
-  <string name="total_yinbi_released">每天发放的隐币总量都在减少，而且每年都会减少一半。今天就去买吧！</string>
   <string name="please_allow_lantern_to">请允许蓝灯...</string>
   <string name="permission_for">以开启</string>
   <string name="android.permission.INTERNET">连接到蓝灯服务器</string>
@@ -485,11 +426,6 @@
   <string name="lantern_desktop_share_description">最新的桌面和所有其他平台的蓝灯应用程序可以在上面的链接中找到。</string>
   <string name="share_link">分享链接</string>
   <string name="lantern_desktop_link_share_title">分享蓝灯下载链接</string>
-  <string name="upgrade_to_pro_get_yinbi">升级为专业版获得隐币</string>
-  <string name="yinbi_description_free">蓝灯已与 Yinbi 合作。凡是购买蓝灯专业版的用户都可以获得隐币赠品！现在升级即可获得今日赠品！如需了解更多关于隐币 \n 的信息，请访问官网：Yin.bi</string>
-  <string name="yinbi_description_pro">蓝灯已与 Yinbi 合作。凡是购买蓝灯专业版的用户都可以获得隐币赠品！现在续费即可获得今日赠品！如需了解更多关于隐币 \n 的信息，请访问官网：Yin.bi</string>
-  <string name="yinbi_title_free">免费加密货币隐币</string>
-  <string name="yinbi_title_pro">隐币兑换</string>
   <string name="redeem_lantern_pro_codes">兑换蓝灯专业版代码</string>
   <string name="redeem_code_description_first_part">批量蓝灯专业版代码可从以下网站获取：</string>
   <string name="redeem_code_description_second_part">reseller.lantern.io</string>
@@ -502,9 +438,6 @@
   <string name="faster_data_centers">更快的数据中心</string>
   <string name="no_logs">无日志</string>
   <string name="connect_up_to_3_devices">最多可连接 3 台设备</string>
-  <string name="free_yinbi_cryptocurrency">加密货币隐币免费啦！</string>
-  <string name="yinbi_cryptocurrency">加密货币隐币</string>
-  <string name="the_yinbi_foundation_description">隐币基金会将通过蓝灯向购买蓝灯专业版的用户独家赠送 8880 亿个隐币。在每天结束时，基金会会根据当天发布的隐币数量、升级/续费人数以及购买年限或账户数量来发放隐币。购买后，您可以在隐币兑换界面找到领取隐币的详细信息。</string>
   <string name="plan_duration">%d 年计划</string>
   <string name="total_cost">%s （一次性计费）</string>
   <string name="discount">节省%s%%</string>
@@ -513,7 +446,6 @@
   <string name="membership_end_soon">您的会员资格即将结束。赶快续费享受高达 %s 的免费优惠吧！ </string>
   <string name="membership_ends_today">您的会员资格今日即将结束。赶快续费享受高达 %s 的免费优惠吧！ </string>
   <string name="membership_has_expired">您的会员资格已经过期。赶快续费享受高达 %s 的免费优惠吧！</string>
-  <string name="free_extra_yinbi">2 倍的隐币！</string>
   <string name="step_2">第二步</string>
   <string name="enter_email_short">输入电子邮件</string>
   <string name="mm_yy">MM/YY</string>
@@ -536,13 +468,7 @@
   <string name="send_report">发送报告</string>
   <string name="email_optional">电子邮件（可选）</string>
   <string name="device_added">新增设备</string>
-  <string name="device_authorized_pro">该设备现在已被授权使用您的蓝灯专业版帐户。</string>
   <string name="report_sent">报告已发送</string>
-  <string name="thank_you_for_reporting_your_issue">谢谢您报告您的问题。如果您提供了您的电子邮件，我们会尽快给您回复。</string>
-  <string name="visit_yin_bi_to_redeem_your_ynb">访问 Yin.bi 兑换您的隐币，并查看您的账户余额。隐币兑换码在购买后 30 天后失效。</string>
-  <string name="ynb"># YNB</string>
-  <string name="ynb_distributed">在每天结束时，基金会会根据当天发布的隐币数量、升级人数以及购买年限或账号数量来发放隐币。当今天的赠送活动结束后，您的隐币兑换码即会显示在这个屏幕上。请在计时结束后再回来查看。</string>
-  <string name="until_code_and_ynb_will_be_shown">直到系统显示代码和# YNB</string>
   <string name="have_a_lantern_pro_activation_code_click_here">有蓝灯专业版激活码？点击这里</string>
   <string name="enter_email_and_activation_code">输入电子邮件和激活码</string>
   <string name="activation_code">激活码</string>
@@ -555,4 +481,18 @@
   <string name="pro_account_expiration">专业版帐户到期日期：</string>
   <string name="lantern_pro_devices_up_to_3">蓝灯专业版设备（最多 3 个）</string>
   <string name="renew_short">续费</string>
+  <string name="connection_error">连接错误</string>
+  <string name="reopen_to_try">请重新打开%1$s再试一次。</string>
+  <string name="init_account">%1$s正在初始化您的账户，这可能需要一些时间。</string>
+  <string name="tampered_apk">下载的应用程序包已被破解，请下载官方版</string>
+  <string name="incoming_call">来电</string>
+  <string name="accept">接受</string>
+  <string name="decline">拒绝</string>
+  <string name="new_message">新消息</string>
+  <string name="from_sender">发件人：%1$s</string>
+  <string name="unnamed_contact">未命名的联系人</string>
+  <string name="message_notifications_channel">消息</string>
+  <string name="call_notifications_channel">来电</string>
+  <string name="lantern_service">Lantern 服务</string>
+  <string name="replica_download">Replica 下载</string>
 </resources>

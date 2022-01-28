@@ -1070,13 +1070,9 @@ msgstr ""
 
 msgid "search_result_error"
 msgstr ""
-"Se ha producido un error al tratar de obtener resultados. Vuelve a "
-"intentarlo en otro momento."
 
 msgid "video_stream_error"
 msgstr ""
-"Se ha producido un error al tratar de renderizar el vídeo. Vuelve a "
-"intentarlo en otro momento."
 
 msgid "untitled"
 msgstr "Sin título"

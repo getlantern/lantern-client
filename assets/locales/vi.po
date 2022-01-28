@@ -1047,10 +1047,10 @@ msgstr ""
 "Rất tiếc, chúng tôi không thể tìm thấy bất cứ điều gì phù hợp với tìm kiếm"
 
 msgid "search_result_error"
-msgstr "Đã gặp lỗi khi tìm nạp kết quả. Vui lòng thử lại sau"
+msgstr ""
 
 msgid "video_stream_error"
-msgstr "Đã gặp lỗi khi hiển thị video. Vui lòng thử lại sau"
+msgstr ""
 
 msgid "untitled"
 msgstr "Không có tiêu đề"
