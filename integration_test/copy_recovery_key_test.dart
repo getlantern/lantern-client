@@ -3,7 +3,7 @@ import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'search_contacts';
+  final testName = 'copy_recovery_key';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -17,25 +17,29 @@ Future<void> main() async {
 
   group(testName, () {
     test(
-      'Search in Contacts',
+      'Copy Recovery Key',
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
-        await driver.tapFAB(
-          waitText: 'New Chat',
+        print('tapping Account');
+        await driver.tapText(
+          'Account',
         );
 
-        print('tap search icon');
-        await driver.tapType(
-          'RoundButton',
-          overwriteTimeout: defaultWaitTimeout,
+        print('tapping Account Management');
+        await driver.tapText(
+          'Account Management',
         );
 
-        print('enter search term');
+        print('tapping Backup Recovery Key');
+        await driver.tapText(
+          'Backup Recovery Key',
+        );
+
+        print('tapping COPY RECOVERY KEY');
         await driver.captureScreenshotDuringFuture(
-          futureToScreenshot: driver.enterText(
-            'Layl',
-            timeout: longWaitTimeout,
+          futureToScreenshot: driver.tapText(
+            'COPY RECOVERY KEY',
           ),
           screenshotTitle: testName,
         );
