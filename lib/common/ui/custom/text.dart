@@ -50,9 +50,17 @@ class CText extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints constraints) {
         final fontSize = _fontSizeFor(context, constraints.maxWidth);
         // scale height to keep line height the same even though font size changed
+        var newLineHeight = style.lineHeight;
+        if (style.fontSize != null) {
+          newLineHeight = style.lineHeight * fontSize / style.fontSize!;
+        }
         return Text(
           text,
-          style: style.copiedWith(fontSize: fontSize, minFontSize: 0),
+          style: style.copiedWith(
+            fontSize: fontSize,
+            minFontSize: 0,
+            lineHeight: newLineHeight,
+          ),
           textAlign: textAlign,
           overflow: overflow,
           maxLines: maxLines,
@@ -144,8 +152,8 @@ class CTextStyle extends TextStyle {
           fontFamily: fontFamily,
         ) {
     assert(
-      (minFontSize ?? 0) < fontSize,
-      'fontSize $fontSize, minFontSize is $minFontSize, please set minFontSize to something less than fontSize',
+      (minFontSize ?? 0) <= fontSize,
+      'fontSize $fontSize, minFontSize is $minFontSize, please set minFontSize to something less than or equal to fontSize',
     );
   }
 
