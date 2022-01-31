@@ -15,6 +15,9 @@ Future<void> main() async {
     await driver.close();
   });
 
+  // Test requirements
+  // * Chats view needs to only display a single conversation
+  // * Requires an image and video attachment to be shared in the conversation
   group(testName, () {
     test(
       'View an image',
@@ -22,7 +25,6 @@ Future<void> main() async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
         print('tap to enter conversation');
-        // TODO: ONLY WORKS WITH A SINGLE MESSAGE IN CHATS
         await driver.tapType(
           'ListItemFactory',
           overwriteTimeout: defaultWaitTimeout,

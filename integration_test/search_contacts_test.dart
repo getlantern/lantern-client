@@ -15,6 +15,8 @@ Future<void> main() async {
     await driver.close();
   });
 
+  // Test requirements
+  // * This test assumes we have a *Layl* contact somewhere
   group(testName, () {
     test(
       'Search in Contacts',
@@ -32,7 +34,6 @@ Future<void> main() async {
         );
 
         print('enter search term');
-        // * This assumes we have a *Layl* contact somewhere
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.enterText(
             'Layl',

@@ -370,6 +370,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
+                        key: const ValueKey('call_verify_button'),
                         padding: const EdgeInsetsDirectional.all(24.0),
                         child: Stack(
                           alignment: AlignmentDirectional.bottomCenter,

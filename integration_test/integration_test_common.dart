@@ -238,12 +238,12 @@ extension DriverExtension on FlutterDriver {
     await tapText(
       'Developer',
       waitText: 'Developer Settings',
-      skipScreenshot: skipScreenshot,
+      skipScreenshot: true,
     );
     await scrollTextUntilVisible('RESET FLAGS');
     await tapText(
       'RESET FLAGS',
-      skipScreenshot: skipScreenshot,
+      skipScreenshot: true,
     );
     await tapText(
       'Chats',

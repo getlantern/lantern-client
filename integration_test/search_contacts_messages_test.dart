@@ -15,6 +15,8 @@ Future<void> main() async {
     await driver.close();
   });
 
+  // Test requirements
+  // * This test assumes there is a message with "Lorem Ipsum" content shared in a conversation
   group(testName, () {
     test(
       'Search in Messages and Contacts',
@@ -28,7 +30,6 @@ Future<void> main() async {
         );
 
         print('enter search term');
-        // * This assumes we have a Lorem Ipsum message somewhere
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.enterText(
             'Lorem ipsum',
