@@ -193,6 +193,7 @@ extension DriverExtension on FlutterDriver {
         timeout: overwriteTimeout ?? defaultTapTimeout,
       );
       if (waitText != null) {
+        // TODO: add timeout here
         await doWaitForText(waitText);
       }
     } finally {

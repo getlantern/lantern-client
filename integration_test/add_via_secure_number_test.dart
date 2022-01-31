@@ -1,8 +1,9 @@
 import 'integration_test_common.dart';
+import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'enroll_leave_Me_note';
+  final testName = 'add_via_secure_number';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -16,18 +17,34 @@ Future<void> main() async {
 
   group(testName, () {
     test(
-      'Enroll and send message to myself',
+      'Send a message to another secure number',
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+
         await driver.tapFAB(
           waitText: 'New Chat',
         );
+
         await driver.tapText(
-          'Me',
-          waitText:
-              'Your chats and voice calls with Me are end-to-end encrypted',
+          'Add via Chat Number',
+          overwriteTimeout: longWaitTimeout,
         );
-        await driver.typeAndSend('I want to eat some 🍕😊');
+
+        await driver.waitForSeconds(2);
+
+        print('entering secure chat number');
+        await driver.captureScreenshotDuringFuture(
+          futureToScreenshot: driver.enterText(
+            textThisNumber,
+            timeout: longWaitTimeout,
+          ),
+          screenshotTitle: 'entering_secure_number',
+        );
+
+        await driver.tapText(
+          'START CHAT',
+          overwriteTimeout: longWaitTimeout,
+        );
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
