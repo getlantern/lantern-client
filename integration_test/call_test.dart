@@ -1,8 +1,9 @@
 import 'integration_test_common.dart';
+import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'enroll_leave_Me_note';
+  final testName = 'call';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -14,20 +15,31 @@ Future<void> main() async {
     await driver.close();
   });
 
+  // Test requirements
+  // * Chats view needs to only display a single conversation, with an unverified contact
   group(testName, () {
     test(
-      'Enroll and send message to myself',
+      'Call a contact',
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
-        await driver.tapFAB(
-          waitText: 'New Chat',
+
+        print('tap to enter conversation');
+        await driver.tapType(
+          'ListItemFactory',
+          overwriteTimeout: defaultWaitTimeout,
         );
+
+        await driver.tapType(
+          'CallAction',
+          overwriteTimeout: defaultWaitTimeout,
+        );
+
         await driver.tapText(
-          'Me',
-          waitText:
-              'Your chats and voice calls with Me are end-to-end encrypted',
+          'Call',
+          overwriteTimeout: defaultWaitTimeout,
         );
-        await driver.typeAndSend('I want to eat some 🍕😊');
+
+        await driver.waitForSeconds(2);
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
