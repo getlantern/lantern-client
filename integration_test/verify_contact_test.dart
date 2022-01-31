@@ -3,11 +3,11 @@ import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'rename_contact';
+  final testName = 'verify_contact';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
-    driver = await FlutterDriver.connect(timeout: const Duration(seconds: 30));
+    driver = await FlutterDriver.connect(timeout: const Duration(seconds: 15));
     await driver.initScreenshotsDirectory(testName);
   });
 
@@ -16,10 +16,10 @@ Future<void> main() async {
   });
 
   // Test requirements
-  // * Chats view needs to only display a single conversation
+  // * Chats view needs to only display a single conversation, with an unverified contact
   group(testName, () {
     test(
-      'Rename a contact',
+      'Verify a contact via voice call',
       () async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
@@ -29,32 +29,23 @@ Future<void> main() async {
           overwriteTimeout: defaultWaitTimeout,
         );
 
-        print('tap on top right menu bar');
         await driver.tapKey(
-          'topbar_more_menu',
+          'verification_badge',
           overwriteTimeout: defaultWaitTimeout,
         );
 
-        print('tap on View Contact Info');
         await driver.tapText(
-          'View Contact Info',
+          'Verify via voice call',
           overwriteTimeout: defaultWaitTimeout,
         );
 
-        print('click on EDIT');
-        await driver.tapText('EDIT');
-
-        print('enter new contact name');
-        await driver.enterText(
-          'Layla B.',
-          timeout: longWaitTimeout,
+        await driver.tapKey(
+          'call_verify_button',
+          overwriteTimeout: longWaitTimeout,
         );
 
-        await driver.waitForSeconds(2);
-
-        print('tap SAVE');
         await driver.tapText(
-          'SAVE',
+          'MARK AS VERIFIED',
           overwriteTimeout: longWaitTimeout,
         );
       },

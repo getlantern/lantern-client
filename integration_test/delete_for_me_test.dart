@@ -14,6 +14,9 @@ Future<void> main() async {
     await driver.close();
   });
 
+  // Test requirements
+  // * Chats view needs to only display a single conversation
+  // * Hardcoded timestamp
   group(testName, () {
     test(
       'Delete for me',
@@ -21,7 +24,6 @@ Future<void> main() async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
         print('accessing conversation');
-        // TODO: ONLY WORKS WITH A SINGLE MESSAGE IN CHATS
         await driver.tapType(
           'ListItemFactory',
         );

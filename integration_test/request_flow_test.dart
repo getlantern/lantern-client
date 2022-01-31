@@ -1,8 +1,9 @@
 import 'integration_test_common.dart';
+import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'send_first_message';
+  final testName = 'request_flow';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -15,21 +16,27 @@ Future<void> main() async {
   });
 
   // Test requirements
-  // * Chats view needs to only display a single conversation
+  // * Chats view needs to only display a single message request
   group(testName, () {
     test(
-      'Send first message',
+      'Accept via message request',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.captureScreenshotDuringFuture(
+          futureToScreenshot: driver.waitForSeconds(2),
+          screenshotTitle: 'Chats',
+        );
 
-        print('accessing conversation');
+        print('open message request');
         await driver.tapType(
           'ListItemFactory',
         );
 
-        print('typing text');
-        await driver.typeAndSend(
-          'Hi how are you?',
+        await driver.captureScreenshotDuringFuture(
+          futureToScreenshot: driver.tapText(
+          'ACCEPT',
+          overwriteTimeout: longWaitTimeout,
+        ),
+          screenshotTitle: 'naming new contact',
         );
       },
       timeout: const Timeout(Duration(minutes: 5)),

@@ -433,6 +433,7 @@ class ConversationState extends State<Conversation>
                 builder: (BuildContext context, bool value) {
                   if (!contact.isMe && contact.isUnverified() && value) {
                     return IconButton(
+                      key: const ValueKey('verification_badge'),
                       visualDensity: VisualDensity.compact,
                       onPressed: () async {
                         showVerificationOptions(
