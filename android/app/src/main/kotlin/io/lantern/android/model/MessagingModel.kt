@@ -1,10 +1,14 @@
 package io.lantern.android.model
 
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
 import android.os.Build
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
+import com.bumptech.glide.Glide
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -19,9 +23,9 @@ import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.restartApp
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileInputStream
+import java.io.*
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(
@@ -380,8 +384,27 @@ class MessagingModel constructor(
                     tx.put("copiedRecoveryStatus", false)
                 }
             }
+            "sendDummyFile" -> {
+                val fileURL = call.argument<String>("fileURL")!!
+                downloadAndSaveImage(fileURL)
+                val file = File(activity.cacheDir, "image.jpg")
+                val metadata = call.argument<Map<String, String>?>("metadata")
+                return messaging.createAttachment(file, "", metadata).toByteArray()
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
+    }
+
+    private fun downloadAndSaveImage(path: String) {
+        val url = URL(path)
+        val con: HttpURLConnection = url.openConnection() as HttpURLConnection
+        con.doInput = true
+        con.connect()
+        con.inputStream.close()
+        val file = File(activity.cacheDir, "image.jpg")
+        val out = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, out)
+        out.close()
     }
 
     private fun startRecordingVoiceMemo(): Boolean {

@@ -838,6 +838,7 @@ class ConversationState extends State<Conversation>
               isRecording
                   ? const SizedBox()
                   : IconButton(
+                      key: const ValueKey('filepicker_icon'),
                       onPressed: () async => await selectFilesToShare(),
                       icon: const CAssetImage(path: ImagePaths.add_circle),
                     ),
