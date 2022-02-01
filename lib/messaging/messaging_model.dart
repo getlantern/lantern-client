@@ -565,7 +565,13 @@ class MessagingModel extends Model {
     );
   }
 
-  // * DEV PURPOSES
+  // * DEV AND TESTING PURPOSES
+  static const dummyContactIds = [
+    'nw257m38dzgt51tb5af95pepc5nt8zzsbn6bhsqhmpb1s86h83ro',
+    'cjynhrycfaqqwkfejo94u7rkbq67dq6eum5fr5k9r2nabbo2n3ty',
+    'd816joqyxufd67pctyfffuszpuaf19ct1r1gcngr8mtzmzkxxpxy',
+  ];
+
   Future<void> resetTimestamps() {
     return methodChannel.invokeMethod('resetTimestamps');
   }
@@ -575,14 +581,36 @@ class MessagingModel extends Model {
   }
 
   void addDummyContacts() {
-    final contactIds = [
-      'nw257m38dzgt51tb5af95pepc5nt8zzsbn6bhsqhmpb1s86h83ro',
-      'cjynhrycfaqqwkfejo94u7rkbq67dq6eum5fr5k9r2nabbo2n3ty',
-      'd816joqyxufd67pctyfffuszpuaf19ct1r1gcngr8mtzmzkxxpxy',
-    ];
-    return contactIds.forEach((element) => methodChannel
-            .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
-          'unsafeId': element,
-        }));
+    return dummyContactIds.forEach(
+      (element) => methodChannel
+          .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
+        'unsafeId': element,
+      }),
+    );
+  }
+
+  final identityKey = dummyContactIds.last;
+
+  Future<void> sendDummyFile(
+    String fileURL,
+    Map<String, String> metadata,
+  ) async {
+    try {
+      final file =
+          await methodChannel.invokeMethod('sendDummyFile', <String, dynamic>{
+        'fileURL': fileURL,
+        'metadata': metadata,
+      }).then((value) {
+        return value as Uint8List;
+      });
+
+      return methodChannel
+          .invokeMethod('sendToDirectContact', <String, dynamic>{
+        'identityKey': identityKey,
+        'attachments': [file],
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }

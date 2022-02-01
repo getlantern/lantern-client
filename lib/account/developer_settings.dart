@@ -186,6 +186,45 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
+            // * SEND DUMMY IMAGE
+            ListItemFactory.settingsItem(
+              content: 'Add dummy files',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async {
+                    await messagingModel.sendDummyFile(
+                        'https://d2w9rnfcy7mm78.cloudfront.net/1071899/original_6f46cf68dbdec64a3715e98a9ab3cb8c.jpg',
+                        // 'https://d2w9rnfcy7mm78.cloudfront.net/6346277/original_86be625822d43edcdbe2bc17eead8a3c.jpg',
+                        {
+                          'title': 'image',
+                          'fileExtension': 'jpg',
+                        });
+                    showSnackbar(context: context, content: 'Image sent 👍');
+                  },
+                  child: CText(
+                    'Send image'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
+              ],
+            ),
+            // * SEND DUMMY VIDEO
+            ListItemFactory.settingsItem(
+              content: 'Add dummy files',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async =>
+                      await messagingModel.sendDummyFile('', {
+                    'title': 'video',
+                    'fileExtension': 'mov',
+                  }),
+                  child: CText(
+                    'Send video'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
+              ],
+            ),
             // * COPY MY CONTACTID
             messagingModel.me(
               (context, me, child) => ListItemFactory.settingsItem(
