@@ -15,18 +15,14 @@ Future<void> main() async {
   });
 
   // Test requirements
-  // * Chats view needs to only display a single conversation
-  // * Hardcoded timestamp
+  // TODO: fix hardcoded timestamp
   group(testName, () {
     test(
       'Delete for everyone',
       () async {
         await driver.screenshotChatsView();
 
-        print('accessing conversation');
-        await driver.tapType(
-          'ListItemFactory',
-        );
+        await driver.tapFirstMessage();
 
         // TODO: generalize
         print('long press text to reveal menu');

@@ -15,32 +15,33 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // Test requirements
-  // * Chats view needs to only display a single conversation
   group(testName, () {
     test(
       'Block a contact',
       () async {
         await driver.screenshotChatsView();
 
-        await driver.tapType(
-          'ListItemFactory',
-          overwriteTimeout: defaultWaitTimeout,
-        );
+        await driver.tapFirstMessage();
 
         await driver.tapKey(
           'topbar_more_menu',
-          overwriteTimeout: defaultWaitTimeout,
+          overwriteTimeout: longWaitTimeout,
         );
 
         await driver.tapText(
           'View Contact Info',
-          overwriteTimeout: defaultWaitTimeout,
+          overwriteTimeout: longWaitTimeout,
         );
 
-        await driver.tapText('BLOCK');
+        await driver.tapText(
+          'BLOCK',
+          overwriteTimeout: longWaitTimeout,
+        );
 
-        await driver.tapType('Checkbox');
+        await driver.tapType(
+          'Checkbox',
+          overwriteTimeout: longWaitTimeout,
+        );
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

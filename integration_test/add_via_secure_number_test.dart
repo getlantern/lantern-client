@@ -45,6 +45,12 @@ Future<void> main() async {
           'START CHAT',
           overwriteTimeout: longWaitTimeout,
         );
+
+        await driver.enterText(contactNewName);
+
+        await driver.waitForSeconds(2);
+
+        await driver.tapText('DONE');
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

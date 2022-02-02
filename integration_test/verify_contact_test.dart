@@ -16,18 +16,14 @@ Future<void> main() async {
   });
 
   // Test requirements
-  // * Chats view needs to only display a single conversation, with an unverified contact
+  // * First message needs to be an unverified contact
   group(testName, () {
     test(
       'Verify a contact via voice call',
       () async {
         await driver.screenshotChatsView();
 
-        print('tap to enter conversation');
-        await driver.tapType(
-          'ListItemFactory',
-          overwriteTimeout: defaultWaitTimeout,
-        );
+        await driver.tapFirstMessage();
 
         await driver.tapKey(
           'verification_badge',

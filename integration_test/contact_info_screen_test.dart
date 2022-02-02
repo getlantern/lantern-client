@@ -15,17 +15,13 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // Test requirements
-  // * Chats view needs to only display a single conversation
   group(testName, () {
     test(
       '1/3 Access a contact info screen via long tap',
       () async {
         await driver.screenshotChatsView();
 
-        await driver.longPress(
-          target: find.byType('ListItemFactory'),
-        );
+        await driver.longPressFirstMessage();
 
         await driver.tapText(
           'View Contact Info',
@@ -39,11 +35,7 @@ Future<void> main() async {
       () async {
         await driver.goBack();
 
-        print('tap to enter conversation');
-        await driver.tapType(
-          'ListItemFactory',
-          overwriteTimeout: defaultWaitTimeout,
-        );
+        await driver.tapFirstMessage();
 
         print('tap on top right menu bar');
         await driver.tapKey(

@@ -131,7 +131,7 @@ extension DriverExtension on FlutterDriver {
     bool? skipScreenshot,
     Duration? overwriteTimeout,
   }) async {
-    print('tapping on key: $tapKey');
+    print('tapping on key: $key');
     try {
       await tapFinder(
         find.byValueKey(key),
@@ -310,5 +310,27 @@ extension DriverExtension on FlutterDriver {
       futureToScreenshot: waitForSeconds(1),
       screenshotTitle: 'init_test',
     );
+  }
+
+  Future<SerializableFinder> firstMessageFinder() async {
+    final chats_messages_list = find.byValueKey('chats_messages_list');
+    final first_message = find.descendant(
+      of: chats_messages_list,
+      matching: find.byType('ListItemFactory'),
+      firstMatchOnly: true,
+    );
+    return first_message;
+  }
+
+  Future<void> tapFirstMessage() async {
+    print('access first message of list');
+    await tapFinder(
+      await firstMessageFinder(),
+      overwriteTimeout: defaultWaitTimeout,
+    );
+  }
+
+  Future<void> longPressFirstMessage() async {
+    await longPress(target: await firstMessageFinder());
   }
 }

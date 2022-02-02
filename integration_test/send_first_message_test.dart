@@ -14,18 +14,13 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // Test requirements
-  // * Chats view needs to only display a single conversation
   group(testName, () {
     test(
       'Send first message',
       () async {
         await driver.screenshotChatsView();
 
-        print('accessing conversation');
-        await driver.tapType(
-          'ListItemFactory',
-        );
+        await driver.tapFirstMessage();
 
         print('typing text');
         await driver.typeAndSend(

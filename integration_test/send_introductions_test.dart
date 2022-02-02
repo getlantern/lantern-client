@@ -16,7 +16,7 @@ Future<void> main() async {
   });
 
   // Test requirements
-  // * Chats view needs to only display a single conversation
+  // TODO: finish introductions
   group(testName, () {
     test(
       'Send introduction to a single contact',
@@ -39,9 +39,7 @@ Future<void> main() async {
           skipScreenshot: false,
         );
 
-        await driver.longPress(
-          target: find.byType('ListItemFactory'),
-        );
+        await driver.longPressFirstMessage();
 
         await driver.tapText('Introduce Contact');
 
