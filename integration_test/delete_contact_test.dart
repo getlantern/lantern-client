@@ -15,19 +15,13 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // Test requirements
-  // * Chats view needs to only display a single conversation
   group(testName, () {
     test(
       'Delete a contact',
       () async {
         await driver.screenshotChatsView();
 
-        print('tap to enter conversation');
-        await driver.tapType(
-          'ListItemFactory',
-          overwriteTimeout: defaultWaitTimeout,
-        );
+        await driver.tapFirstMessage();
 
         print('tap on top right menu bar');
         await driver.tapKey(

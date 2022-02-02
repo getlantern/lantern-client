@@ -217,6 +217,7 @@ class _ChatsState extends State<Chats> {
                           var contact = reshapedContactList[index].value;
                           var isUnaccepted = contact.isUnaccepted();
                           return Column(
+                            key: const ValueKey('chats_messages_list'),
                             children: [
                               ListItemFactory.messagingItem(
                                 customBg: isUnaccepted ? customBg : null,

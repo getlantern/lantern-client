@@ -16,7 +16,7 @@ Future<void> main() async {
   });
 
   // Test requirements
-  // * Chats view needs to only display a single message request
+  // TODO: create and tap message request
   group(testName, () {
     test(
       'Accept via message request',

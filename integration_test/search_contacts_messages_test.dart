@@ -15,7 +15,6 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // Test requirements
   group(testName, () {
     test(
       'Search in Messages and Contacts',

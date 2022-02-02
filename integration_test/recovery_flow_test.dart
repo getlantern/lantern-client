@@ -15,8 +15,6 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // test requirements
-  // * This test requires having a recovery key
   group(testName, () {
     test(
       'Recovery_flow_test',

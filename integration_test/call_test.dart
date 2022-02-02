@@ -15,19 +15,13 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // Test requirements
-  // * Chats view needs to only display a single conversation, with an unverified contact
   group(testName, () {
     test(
       'Call a contact',
       () async {
         await driver.screenshotChatsView();
 
-        print('tap to enter conversation');
-        await driver.tapType(
-          'ListItemFactory',
-          overwriteTimeout: defaultWaitTimeout,
-        );
+        await driver.tapFirstMessage();
 
         await driver.tapType(
           'CallAction',
