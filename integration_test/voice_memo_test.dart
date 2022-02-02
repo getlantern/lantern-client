@@ -18,11 +18,12 @@ Future<void> main() async {
     test(
       'Record a voice memo',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
+
         await driver.tapFAB(
           waitText: 'New Chat',
-          skipScreenshot: true,
         );
+
         await driver.tapText(
           'Me',
           waitText:

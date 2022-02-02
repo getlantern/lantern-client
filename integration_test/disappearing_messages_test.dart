@@ -18,7 +18,6 @@ Future<void> main() async {
     test(
       'Test disappearing messages settings',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
         await driver.tapFAB(
           waitText: 'New Chat',
         );
@@ -52,7 +51,7 @@ Future<void> main() async {
         );
 
         await driver
-            .typeAndSend('Now this message should disappear very soon!.');
+            .typeAndSend('Now this message should disappear very soon!');
 
         await driver.waitForSeconds(5);
         await driver.saveScreenshot('final');

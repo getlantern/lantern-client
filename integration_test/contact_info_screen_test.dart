@@ -21,7 +21,7 @@ Future<void> main() async {
     test(
       '1/3 Access a contact info screen via long tap',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
 
         await driver.longPress(
           target: find.byType('ListItemFactory'),

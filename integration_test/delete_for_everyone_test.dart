@@ -21,7 +21,7 @@ Future<void> main() async {
     test(
       'Delete for everyone',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
 
         print('accessing conversation');
         await driver.tapType(

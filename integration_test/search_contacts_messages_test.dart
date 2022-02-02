@@ -16,12 +16,11 @@ Future<void> main() async {
   });
 
   // Test requirements
-  // * This test assumes there is a message with "Lorem Ipsum" content shared in a conversation
   group(testName, () {
     test(
       'Search in Messages and Contacts',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
 
         print('tap search icon');
         await driver.tapKey(
@@ -32,7 +31,7 @@ Future<void> main() async {
         print('enter search term');
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.enterText(
-            'Lorem ipsum',
+            dummyText.split(' ')[1],
             timeout: longWaitTimeout,
           ),
           screenshotTitle: testName,

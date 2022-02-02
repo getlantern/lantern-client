@@ -21,13 +21,17 @@ extension DriverExtension on FlutterDriver {
   }
 
   Future<void> saveScreenshot(String name) async {
-    final png = await screenshot();
-    final screenshotName = join(
-      dirPath,
-      '${++screenshotSequence}_$name.png',
-    );
-    final file = File(screenshotName);
-    await file.writeAsBytes(png);
+    try {
+      final png = await screenshot();
+      final screenshotName = join(
+        dirPath,
+        '${++screenshotSequence}_$name.png',
+      );
+      final file = File(screenshotName);
+      await file.writeAsBytes(png);
+    } catch (e) {
+      print(e);
+    }
   }
 
   /// finds and clicks the top left back button
@@ -298,5 +302,13 @@ extension DriverExtension on FlutterDriver {
         screenshotTitle,
       )
     ]);
+  }
+
+  Future<void> screenshotChatsView() async {
+    print('screenshotting Chats view');
+    await captureScreenshotDuringFuture(
+      futureToScreenshot: waitForSeconds(1),
+      screenshotTitle: 'init_test',
+    );
   }
 }

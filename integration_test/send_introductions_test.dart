@@ -29,6 +29,7 @@ Future<void> main() async {
 
         await driver.scrollTextUntilVisible('ADD');
 
+        // add dummy contacts
         await driver.tapText(
           'ADD',
           skipScreenshot: true,

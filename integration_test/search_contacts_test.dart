@@ -15,13 +15,11 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // Test requirements
-  // * This test assumes we have a *Layl* contact somewhere
   group(testName, () {
     test(
       'Search in Contacts',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
 
         await driver.tapFAB(
           waitText: 'New Chat',
@@ -36,7 +34,7 @@ Future<void> main() async {
         print('enter search term');
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.enterText(
-            'Layl',
+            contactNewName.split(' ')[0],
             timeout: longWaitTimeout,
           ),
           screenshotTitle: testName,

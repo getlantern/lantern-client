@@ -1,4 +1,5 @@
 import 'integration_test_common.dart';
+import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
@@ -18,7 +19,7 @@ Future<void> main() async {
     test(
       'Enroll and send message to myself',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.resetFlagsAndEnrollAgain();
         await driver.tapFAB(
           waitText: 'New Chat',
         );
@@ -27,7 +28,7 @@ Future<void> main() async {
           waitText:
               'Your chats and voice calls with Me are end-to-end encrypted',
         );
-        await driver.typeAndSend('I want to eat some 🍕😊');
+        await driver.typeAndSend(dummyText);
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

@@ -21,7 +21,7 @@ Future<void> main() async {
     test(
       'Call a contact',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
 
         print('tap to enter conversation');
         await driver.tapType(
