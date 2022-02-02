@@ -49,9 +49,9 @@ Future<void> main() async {
         );
 
         print('go back to Chats');
-        await driver.goBack();
-
-        await driver.screenshotChatsView();
+        await driver.tapText(
+          'Chats',
+        );
 
         print('tap to enter conversation');
         await driver.tapType(
@@ -61,13 +61,16 @@ Future<void> main() async {
 
         print('tap on image attachment');
         await driver.tapType('ImageAttachment');
+
+        await driver.waitForSeconds(2);
+
+        await driver.goBack();
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
     test(
       'View a video',
       () async {
-        await driver.goBack();
         print('tap on video attachment');
         await driver.tapType(
           'VideoAttachment',
