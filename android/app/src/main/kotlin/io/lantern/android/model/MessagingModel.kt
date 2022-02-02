@@ -1,14 +1,14 @@
 package io.lantern.android.model
 
+import android.app.DownloadManager
+import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
+import android.net.Uri
 import android.os.Build
-import android.widget.ImageView
+import android.os.Environment
 import androidx.core.app.ActivityCompat
-import com.bumptech.glide.Glide
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -20,12 +20,11 @@ import io.lantern.messaging.dbPath
 import io.lantern.messaging.directContactPath
 import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
+import org.getlantern.lantern.R
 import org.getlantern.lantern.restartApp
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
 import java.io.*
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(
@@ -384,27 +383,24 @@ class MessagingModel constructor(
                     tx.put("copiedRecoveryStatus", false)
                 }
             }
-            "sendDummyFile" -> {
-                val fileURL = call.argument<String>("fileURL")!!
-                downloadAndSaveImage(fileURL)
-                val file = File(activity.cacheDir, "image.jpg")
+            "saveDummyAttachment" -> {
+                val url = call.argument<String>("url")!!
+                val displayName = call.argument<String>("displayName")!!
+                val request: DownloadManager.Request = DownloadManager.Request(Uri.parse(url))
+                request.setDestinationInExternalFilesDir(activity.context, "testing", displayName)
+                activity.getSystemService(Context.DOWNLOAD_SERVICE)?.let { manager ->
+                    (manager as DownloadManager).enqueue(request)
+                }
+            }
+            "sendDummyAttachment" -> {
+                val fileName = call.argument<String>("fileName")
+                val downloadFolderPath = activity.getExternalFilesDirs("testing")!!
+                val file = File(downloadFolderPath[0], fileName)
                 val metadata = call.argument<Map<String, String>?>("metadata")
                 return messaging.createAttachment(file, "", metadata).toByteArray()
             }
             else -> super.doMethodCall(call, notImplemented)
         }
-    }
-
-    private fun downloadAndSaveImage(path: String) {
-        val url = URL(path)
-        val con: HttpURLConnection = url.openConnection() as HttpURLConnection
-        con.doInput = true
-        con.connect()
-        con.inputStream.close()
-        val file = File(activity.cacheDir, "image.jpg")
-        val out = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, out)
-        out.close()
     }
 
     private fun startRecordingVoiceMemo(): Boolean {

@@ -19,7 +19,7 @@ Future<void> main() async {
     test(
       'Send a message to another secure number',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
 
         await driver.tapFAB(
           waitText: 'New Chat',

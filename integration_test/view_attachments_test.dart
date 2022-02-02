@@ -22,7 +22,36 @@ Future<void> main() async {
     test(
       'View an image',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.tapText(
+          'Developer',
+          waitText: 'Developer Settings',
+          skipScreenshot: true,
+        );
+        print('adding dummy contacts');
+        await driver.scrollTextUntilVisible('ADD');
+        await driver.tapText(
+          'ADD',
+          skipScreenshot: true,
+        );
+
+        print('downloading dummy files');
+        await driver.scrollTextUntilVisible('DOWNLOAD');
+        await driver.tapText(
+          'DOWNLOAD',
+          skipScreenshot: true,
+        );
+
+        print('sharing dummy attachments to conversation ');
+        await driver.scrollTextUntilVisible('SEND FILES');
+        await driver.tapText(
+          'SEND FILES',
+          skipScreenshot: true,
+        );
+
+        print('go back to Chats');
+        await driver.goBack();
+
+        await driver.screenshotChatsView();
 
         print('tap to enter conversation');
         await driver.tapType(
@@ -39,7 +68,6 @@ Future<void> main() async {
       'View a video',
       () async {
         await driver.goBack();
-
         print('tap on video attachment');
         await driver.tapType(
           'VideoAttachment',

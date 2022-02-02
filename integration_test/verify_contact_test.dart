@@ -21,7 +21,7 @@ Future<void> main() async {
     test(
       'Verify a contact via voice call',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
 
         print('tap to enter conversation');
         await driver.tapType(

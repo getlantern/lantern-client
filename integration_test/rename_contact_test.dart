@@ -21,7 +21,7 @@ Future<void> main() async {
     test(
       'Rename a contact',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
 
         print('tap to enter conversation');
         await driver.tapType(
@@ -46,7 +46,7 @@ Future<void> main() async {
 
         print('enter new contact name');
         await driver.enterText(
-          'Layla B.',
+          contactNewName,
           timeout: longWaitTimeout,
         );
 

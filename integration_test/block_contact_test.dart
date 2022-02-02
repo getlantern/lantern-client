@@ -21,7 +21,7 @@ Future<void> main() async {
     test(
       'Block a contact',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
 
         await driver.tapType(
           'ListItemFactory',

@@ -186,40 +186,62 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
-            // * SEND DUMMY IMAGE
+            // * DOWNLOAD DUMMY FILES
             ListItemFactory.settingsItem(
-              content: 'Add dummy files',
+              content: 'Download dummy files',
               trailingArray: [
                 TextButton(
                   onPressed: () async {
-                    await messagingModel.sendDummyFile(
-                        'https://d2w9rnfcy7mm78.cloudfront.net/1071899/original_6f46cf68dbdec64a3715e98a9ab3cb8c.jpg',
-                        // 'https://d2w9rnfcy7mm78.cloudfront.net/6346277/original_86be625822d43edcdbe2bc17eead8a3c.jpg',
-                        {
-                          'title': 'image',
-                          'fileExtension': 'jpg',
-                        });
-                    showSnackbar(context: context, content: 'Image sent 👍');
+                    // download image from URL and save to storage
+                    // file:///storage/emulated/0/Android/data/org.getlantern.lantern/files/testing/test_image.jpg
+                    await messagingModel.saveDummyAttachment(
+                      'https://d2w9rnfcy7mm78.cloudfront.net/1071899/original_6f46cf68dbdec64a3715e98a9ab3cb8c.jpg',
+                      'test_image.jpg',
+                    );
+
+                    // download video from URL and save to storage
+                    // file:///storage/emulated/0/Android/data/org.getlantern.lantern/files/testing/test_video.mov
+                    await messagingModel.saveDummyAttachment(
+                      'https://filesamples.com/samples/video/mov/sample_640x360.mov',
+                      'test_video.mov',
+                    );
+
+                    showSnackbar(
+                      context: context,
+                      content: 'Dummy files downloaded 👍',
+                    );
                   },
                   child: CText(
-                    'Send image'.toUpperCase(),
+                    'Download'.toUpperCase(),
                     style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
                   ),
                 )
               ],
             ),
-            // * SEND DUMMY VIDEO
+            // * SEND DUMMY FILES
             ListItemFactory.settingsItem(
-              content: 'Add dummy files',
+              content: 'Send dummy files',
               trailingArray: [
                 TextButton(
-                  onPressed: () async =>
-                      await messagingModel.sendDummyFile('', {
-                    'title': 'video',
-                    'fileExtension': 'mov',
-                  }),
+                  onPressed: () async {
+                    // create attachment in messaging and send to direct contact
+                    await messagingModel.sendDummyAttachment('test_image.jpg', {
+                      'fileName': 'test_image.jpg',
+                      'fileExtension': 'jpg',
+                    });
+
+                    // create attachment in messaging and send to direct contact
+                    await messagingModel.sendDummyAttachment('test_video.mov', {
+                      'fileName': 'test_video.mov',
+                      'fileExtension': 'mov',
+                    });
+                    showSnackbar(
+                      context: context,
+                      content: 'Dummy attachments shared 👍',
+                    );
+                  },
                   child: CText(
-                    'Send video'.toUpperCase(),
+                    'Send files'.toUpperCase(),
                     style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
                   ),
                 )

@@ -21,8 +21,6 @@ Future<void> main() async {
     test(
       'Delete for me',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
-
         print('accessing conversation');
         await driver.tapType(
           'ListItemFactory',

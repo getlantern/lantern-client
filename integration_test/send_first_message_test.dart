@@ -20,7 +20,7 @@ Future<void> main() async {
     test(
       'Send first message',
       () async {
-        await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
+        await driver.screenshotChatsView();
 
         print('accessing conversation');
         await driver.tapType(

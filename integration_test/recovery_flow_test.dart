@@ -41,7 +41,8 @@ Future<void> main() async {
         print('entering recovery key');
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.enterText(
-              '8k171bwe866wd4apxyxtu9e2r92tmcdbgar35ymjx6b4ymhymugy'),
+            recoveryKey,
+          ),
           screenshotTitle: testName,
         );
 

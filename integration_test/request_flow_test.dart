@@ -21,10 +21,7 @@ Future<void> main() async {
     test(
       'Accept via message request',
       () async {
-        await driver.captureScreenshotDuringFuture(
-          futureToScreenshot: driver.waitForSeconds(2),
-          screenshotTitle: 'Chats',
-        );
+        await driver.screenshotChatsView();
 
         print('open message request');
         await driver.tapType(
@@ -33,9 +30,9 @@ Future<void> main() async {
 
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.tapText(
-          'ACCEPT',
-          overwriteTimeout: longWaitTimeout,
-        ),
+            'ACCEPT',
+            overwriteTimeout: longWaitTimeout,
+          ),
           screenshotTitle: 'naming new contact',
         );
       },

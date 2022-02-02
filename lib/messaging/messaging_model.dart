@@ -1,3 +1,5 @@
+import 'package:file_picker/file_picker.dart';
+
 import 'calls/signaling.dart';
 import 'messaging.dart';
 
@@ -591,23 +593,35 @@ class MessagingModel extends Model {
 
   final identityKey = dummyContactIds.last;
 
-  Future<void> sendDummyFile(
-    String fileURL,
+  Future<void> saveDummyAttachment(
+    String url,
+    String displayName,
+  ) async {
+    return methodChannel.invokeMethod('saveDummyAttachment', {
+      'url': url,
+      'displayName': displayName,
+    });
+  }
+
+  Future<void> sendDummyAttachment(
+    String fileName,
     Map<String, String> metadata,
   ) async {
     try {
-      final file =
-          await methodChannel.invokeMethod('sendDummyFile', <String, dynamic>{
-        'fileURL': fileURL,
+      // create attachment in messaging
+      final attachment = await methodChannel
+          .invokeMethod('sendDummyAttachment', <String, dynamic>{
+        'fileName': fileName,
         'metadata': metadata,
       }).then((value) {
         return value as Uint8List;
       });
 
+      // send to direct contact
       return methodChannel
           .invokeMethod('sendToDirectContact', <String, dynamic>{
         'identityKey': identityKey,
-        'attachments': [file],
+        'attachments': [attachment],
       });
     } catch (e) {
       print(e);

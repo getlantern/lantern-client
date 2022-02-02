@@ -7,8 +7,6 @@ import android.os.Environment
 import android.util.Log
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 
