@@ -59,7 +59,7 @@ app.*.symbols
 app.*.map.json
 
 # vscode
-.vscode
+.vscode/launch.json
 
 gradle.properties.user
 gradle.properties
