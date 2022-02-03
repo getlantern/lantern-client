@@ -23,10 +23,10 @@ Future<void> main() async {
       () async {
         await driver.screenshotCurrentView();
 
-        // TODO: identify where the message request is
+        // TODO: cheating here
         print('open message request');
-        await driver.tapType(
-          'ListItemFactory',
+        await driver.tapText(
+          'just now',
         );
 
         await driver.captureScreenshotDuringFuture(

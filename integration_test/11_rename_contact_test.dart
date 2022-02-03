@@ -40,7 +40,7 @@ Future<void> main() async {
 
         print('enter new contact name');
         await driver.enterText(
-          contactNewName,
+          renameContact,
           timeout: longWaitTimeout,
         );
 

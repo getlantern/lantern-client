@@ -177,7 +177,7 @@ class _IntroduceState extends State<Introduce> {
                                 ],
                               ),
                             ),
-                          // HACK
+                          // HACK - create transparent tiny text to be picked up by testing and select all checkboxes
                           GestureDetector(
                             key: const ValueKey('select_all_intros'),
                             onTap: () => sortedContacts.forEach((e) {
@@ -185,9 +185,10 @@ class _IntroduceState extends State<Introduce> {
                                 selectedContactIds.add(e.value.contactId.id);
                               });
                             }),
-                            child: CText('hack',
-                                style:
-                                    tsOverline.copiedWith(color: transparent)),
+                            child: CText(
+                              'hack',
+                              style: tsOverline.copiedWith(color: transparent),
+                            ),
                           ),
                         ],
                       ),

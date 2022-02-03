@@ -3,7 +3,7 @@ import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'react_to_message';
+  final testName = 'delete_for_me';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -15,28 +15,23 @@ Future<void> main() async {
     await driver.close();
   });
 
-// * Test requirements
-// * This test identifies a message by the "just now" timestamp, so make sure there is not a very recently shared message in any conversation (to avoid having multiple "just now" matches)
   group(testName, () {
     test(
-      'React to message',
+      'Delete for me',
       () async {
-        await driver.screenshotCurrentView();
+        print(
+          'this test relies on only one message having the _just now_ timestamp, so lets wait a bit in case other conversations were active recently',
+        );
+        await driver.waitForSeconds(60);
 
         await driver.tapFirstItemInList('chats_messages_list');
 
         await driver.typeAndSend(dummyText);
-
         print('long press message we just shared');
         await driver.longPress(target: find.text('just now'));
 
-        await driver.tapText('Copy Text');
-
-        await driver.tapText('Reply');
-
-        await driver.typeAndSend(
-          dummyReply,
-        );
+        print('delete for me');
+        await driver.tapText('Delete for me');
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
