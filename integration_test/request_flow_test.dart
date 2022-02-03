@@ -16,13 +16,14 @@ Future<void> main() async {
   });
 
   // Test requirements
-  // TODO: create and tap message request
+  // * Needs to have received a message request from another user
   group(testName, () {
     test(
       'Accept via message request',
       () async {
         await driver.screenshotCurrentView();
 
+        // TODO: identify where the message request is
         print('open message request');
         await driver.tapType(
           'ListItemFactory',

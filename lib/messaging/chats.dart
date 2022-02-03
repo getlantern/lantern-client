@@ -285,6 +285,7 @@ class _ChatsState extends State<Chats> {
   }
 }
 
+/// Sorts message list from newest to oldest, from verified to unverified, and from accepted to unaccepted
 List<PathAndValue<Contact>> reshapeContactList(
   Iterable<PathAndValue<Contact>> contacts,
 ) {

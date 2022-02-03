@@ -1,5 +1,4 @@
 import 'integration_test_common.dart';
-import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
@@ -16,7 +15,7 @@ Future<void> main() async {
   });
 
   // Test requirements
-  // TODO: needs another phone to scan the QR code with
+  // * Needs another phone to scan the QR code with
   group(testName, () {
     test(
       'Scan QR code',

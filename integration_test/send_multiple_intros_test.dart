@@ -15,7 +15,6 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // TODO: finish
   group(testName, () {
     test(
       'Send introductions to multiple contacts',

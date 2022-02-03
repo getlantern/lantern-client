@@ -15,6 +15,8 @@ Future<void> main() async {
     await driver.close();
   });
 
+  // * Test requirements
+  // * Data needs to be wiped first (since we are enrolling for first time)
   group(testName, () {
     test(
       'Enroll and send message to myself',
