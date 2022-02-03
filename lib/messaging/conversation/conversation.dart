@@ -459,7 +459,7 @@ class ConversationState extends State<Conversation>
               ),
               if (!contact.isMe) CallAction(contact),
               IconButton(
-                key: const ValueKey('topbar_more_menu'),
+                key: const ValueKey('conversation_topbar_more_menu'),
                 visualDensity: VisualDensity.compact,
                 icon: const CAssetImage(path: ImagePaths.more_vert),
                 onPressed: () => showConversationOptions(

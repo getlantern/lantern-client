@@ -21,9 +21,9 @@ Future<void> main() async {
     test(
       'Verify a contact via voice call',
       () async {
-        await driver.screenshotChatsView();
+        await driver.screenshotCurrentView();
 
-        await driver.tapFirstMessage();
+        await driver.tapFirstItemInList('chats_messages_list');
 
         await driver.tapKey(
           'verification_badge',

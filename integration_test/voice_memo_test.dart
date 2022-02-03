@@ -18,7 +18,7 @@ Future<void> main() async {
     test(
       'Record a voice memo',
       () async {
-        await driver.screenshotChatsView();
+        await driver.screenshotCurrentView();
 
         await driver.tapFAB(
           waitText: 'New Chat',

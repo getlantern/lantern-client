@@ -18,9 +18,9 @@ Future<void> main() async {
     test(
       'Send first message',
       () async {
-        await driver.screenshotChatsView();
+        await driver.screenshotCurrentView();
 
-        await driver.tapFirstMessage();
+        await driver.tapFirstItemInList('chats_messages_list');
 
         print('typing text');
         await driver.typeAndSend(

@@ -19,12 +19,12 @@ Future<void> main() async {
     test(
       'Block a contact',
       () async {
-        await driver.screenshotChatsView();
+        await driver.screenshotCurrentView();
 
-        await driver.tapFirstMessage();
+        await driver.tapFirstItemInList('chats_messages_list');
 
         await driver.tapKey(
-          'topbar_more_menu',
+          'conversation_topbar_more_menu',
           overwriteTimeout: longWaitTimeout,
         );
 

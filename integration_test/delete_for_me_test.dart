@@ -20,7 +20,7 @@ Future<void> main() async {
     test(
       'Delete for me',
       () async {
-        await driver.tapFirstMessage();
+        await driver.tapFirstItemInList('chats_messages_list');
 
         print('long press text to reveal menu');
         await driver.longPress(target: 'yesterday');

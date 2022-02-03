@@ -50,7 +50,7 @@ Future<void> main() async {
           'Chats',
         );
 
-        await driver.tapFirstMessage();
+        await driver.tapFirstItemInList('chats_messages_list');
 
         print('tap on image attachment');
         await driver.tapType('ImageAttachment');

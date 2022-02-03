@@ -20,9 +20,9 @@ Future<void> main() async {
     test(
       'React to message',
       () async {
-        await driver.screenshotChatsView();
+        await driver.screenshotCurrentView();
 
-        await driver.tapFirstMessage();
+        await driver.tapFirstItemInList('chats_messages_list');
 
         print('long press text to reveal menu');
         await driver.longPress(target: 'yesterday');

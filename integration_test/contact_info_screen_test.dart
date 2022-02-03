@@ -19,9 +19,9 @@ Future<void> main() async {
     test(
       '1/3 Access a contact info screen via long tap',
       () async {
-        await driver.screenshotChatsView();
+        await driver.screenshotCurrentView();
 
-        await driver.longPressFirstMessage();
+        await driver.longPressFirstItemInList('chats_messages_list');
 
         await driver.tapText(
           'View Contact Info',
@@ -35,11 +35,11 @@ Future<void> main() async {
       () async {
         await driver.goBack();
 
-        await driver.tapFirstMessage();
+        await driver.tapFirstItemInList('chats_messages_list');
 
         print('tap on top right menu bar');
         await driver.tapKey(
-          'topbar_more_menu',
+          'conversation_topbar_more_menu',
           overwriteTimeout: defaultWaitTimeout,
         );
 

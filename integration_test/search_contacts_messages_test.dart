@@ -19,7 +19,7 @@ Future<void> main() async {
     test(
       'Search in Messages and Contacts',
       () async {
-        await driver.screenshotChatsView();
+        await driver.screenshotCurrentView();
 
         print('tap search icon');
         await driver.tapKey(

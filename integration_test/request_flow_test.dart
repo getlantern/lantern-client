@@ -21,7 +21,7 @@ Future<void> main() async {
     test(
       'Accept via message request',
       () async {
-        await driver.screenshotChatsView();
+        await driver.screenshotCurrentView();
 
         print('open message request');
         await driver.tapType(
