@@ -1,5 +1,3 @@
-import 'package:file_picker/file_picker.dart';
-
 import 'calls/signaling.dart';
 import 'messaging.dart';
 
@@ -591,7 +589,8 @@ class MessagingModel extends Model {
     );
   }
 
-  final identityKey = dummyContactIds.last;
+  // pick the last of dummy contacts
+  final dummyIdentityKey = dummyContactIds.last;
 
   Future<void> saveDummyAttachment(
     String url,
@@ -620,7 +619,7 @@ class MessagingModel extends Model {
       // send to direct contact
       return methodChannel
           .invokeMethod('sendToDirectContact', <String, dynamic>{
-        'identityKey': identityKey,
+        'identityKey': dummyIdentityKey,
         'attachments': [attachment],
       });
     } catch (e) {

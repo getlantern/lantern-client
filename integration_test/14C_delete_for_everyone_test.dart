@@ -15,12 +15,14 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // * Test requirements
-  // * This test identifies a message by the "just now" timestamp, so make sure there is not a very recently shared message in any conversation (to avoid having multiple "just now" matches)
   group(testName, () {
     test(
       'Delete for everyone',
       () async {
+        print(
+          'this test relies on only one message having the _just now_ timestamp, so lets wait a bit in case other conversations were active recently',
+        );
+        await driver.waitForSeconds(60);
         await driver.screenshotCurrentView();
 
         await driver.tapFirstItemInList('chats_messages_list');

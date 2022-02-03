@@ -3,7 +3,7 @@ import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'enroll_leave_Me_note';
+  final testName = 'send_first_message';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -15,22 +15,20 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // * Test requirements
-  // * Data needs to be wiped first (since we are enrolling for first time)
   group(testName, () {
     test(
-      'Enroll and send message to myself',
+      'Send first message',
       () async {
-        await driver.resetFlagsAndEnrollAgain();
-        await driver.tapFAB(
-          waitText: 'New Chat',
+        await driver.screenshotCurrentView();
+
+        await driver.tapFAB();
+
+        await driver.tapFirstItemInList('grouped_contact_list');
+
+        print('typing text');
+        await driver.typeAndSend(
+          dummyHello,
         );
-        await driver.tapText(
-          'Me',
-          waitText:
-              'Your chats and voice calls with Me are end-to-end encrypted',
-        );
-        await driver.typeAndSend(dummyText);
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

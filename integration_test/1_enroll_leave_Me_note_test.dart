@@ -3,7 +3,7 @@ import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'delete_for_me';
+  final testName = 'enroll_leave_Me_note';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -16,19 +16,21 @@ Future<void> main() async {
   });
 
   // * Test requirements
-  // * This test identifies a message by the "just now" timestamp, so make sure there is not a very recently shared message in any conversation (to avoid having multiple "just now" matches)
+  // * Run this test first
   group(testName, () {
     test(
-      'Delete for me',
+      'Enroll and send message to myself',
       () async {
-        await driver.tapFirstItemInList('chats_messages_list');
-
+        await driver.resetFlagsAndEnrollAgain();
+        await driver.tapFAB(
+          waitText: 'New Chat',
+        );
+        await driver.tapText(
+          'Me',
+          waitText:
+              'Your chats and voice calls with Me are end-to-end encrypted',
+        );
         await driver.typeAndSend(dummyText);
-        print('long press message we just shared');
-        await driver.longPress(target: find.text('just now'));
-
-        print('delete for me');
-        await driver.tapText('Delete for me');
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
