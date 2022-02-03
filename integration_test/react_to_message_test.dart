@@ -1,4 +1,5 @@
 import 'integration_test_common.dart';
+import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
@@ -14,8 +15,8 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // Test requirements
-  // TODO: fix hardcoded timestamp
+// * Test requirements
+// * This test identifies a message by the "just now" timestamp, so make sure there is not a very recently shared message in any conversation (to avoid having multiple "just now" matches)
   group(testName, () {
     test(
       'React to message',
@@ -24,18 +25,17 @@ Future<void> main() async {
 
         await driver.tapFirstItemInList('chats_messages_list');
 
-        print('long press text to reveal menu');
-        await driver.longPress(target: 'yesterday');
+        await driver.typeAndSend(dummyText);
 
-        print('copy text');
+        print('long press message we just shared');
+        await driver.longPress(target: find.text('just now'));
+
         await driver.tapText('Copy Text');
 
-        print('reply');
         await driver.tapText('Reply');
 
-        print('typing text');
         await driver.typeAndSend(
-          'Hi how are you?',
+          dummyReply,
         );
       },
       timeout: const Timeout(Duration(minutes: 5)),

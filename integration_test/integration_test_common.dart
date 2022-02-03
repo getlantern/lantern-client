@@ -62,10 +62,14 @@ extension DriverExtension on FlutterDriver {
       );
     } catch (_) {
       // try it with non-breaking spaces like those added by CText
-      await waitFor(
-        find.text(addNonBreakingSpaces(waitText)),
-        timeout: defaultWaitTimeout,
-      );
+      try {
+        await waitFor(
+          find.text(addNonBreakingSpaces(waitText)),
+          timeout: defaultWaitTimeout,
+        );
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
@@ -197,7 +201,6 @@ extension DriverExtension on FlutterDriver {
         timeout: overwriteTimeout ?? defaultTapTimeout,
       );
       if (waitText != null) {
-        // TODO: add timeout here
         await doWaitForText(waitText);
       }
     } finally {
