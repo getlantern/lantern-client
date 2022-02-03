@@ -115,7 +115,7 @@ extension DriverExtension on FlutterDriver {
     bool? skipScreenshot,
     Duration? overwriteTimeout,
   }) async {
-    print('tapping on type: $tapType');
+    print('tapping on type: $type');
     await tapFinder(
       find.byType(type),
       waitText: waitText,
@@ -151,12 +151,12 @@ extension DriverExtension on FlutterDriver {
     if (target is SerializableFinder) {
       finder = target;
       print(
-        'simulating long press at ${target.serialize()}, times out after $veryLongWaitTimeout',
+        'simulating long press at ${target.serialize()}, times out after $longWaitTimeout',
       );
     } else if (target is String) {
       // we have a String text we will use to find the widget with - take into consideration we have to handle the breaking spaces case
       print(
-        'simulating long press at text $target, times out after $veryLongWaitTimeout',
+        'simulating long press at text $target, times out after $longWaitTimeout',
       );
       try {
         finder = find.text(target);
@@ -174,7 +174,7 @@ extension DriverExtension on FlutterDriver {
           0,
           0,
           longWaitTimeout,
-          timeout: veryLongWaitTimeout,
+          timeout: longWaitTimeout,
         ),
         screenshotTitle: 'long_press',
       );
@@ -304,16 +304,16 @@ extension DriverExtension on FlutterDriver {
     ]);
   }
 
-  Future<void> screenshotChatsView() async {
-    print('screenshotting Chats view');
+  Future<void> screenshotCurrentView() async {
+    print('screenshotting current view');
     await captureScreenshotDuringFuture(
       futureToScreenshot: waitForSeconds(1),
-      screenshotTitle: 'init_test',
+      screenshotTitle: 'current_screen',
     );
   }
 
-  Future<SerializableFinder> firstMessageFinder() async {
-    final chats_messages_list = find.byValueKey('chats_messages_list');
+  Future<SerializableFinder> fistItemFinder(String list_key) async {
+    final chats_messages_list = find.byValueKey(list_key);
     final first_message = find.descendant(
       of: chats_messages_list,
       matching: find.byType('ListItemFactory'),
@@ -322,15 +322,15 @@ extension DriverExtension on FlutterDriver {
     return first_message;
   }
 
-  Future<void> tapFirstMessage() async {
-    print('access first message of list');
+  Future<void> tapFirstItemInList(String list_key) async {
+    print('access first message of list with $list_key key');
     await tapFinder(
-      await firstMessageFinder(),
+      await fistItemFinder(list_key),
       overwriteTimeout: defaultWaitTimeout,
     );
   }
 
-  Future<void> longPressFirstMessage() async {
-    await longPress(target: await firstMessageFinder());
+  Future<void> longPressFirstItemInList(String list_key) async {
+    await longPress(target: await fistItemFinder(list_key));
   }
 }

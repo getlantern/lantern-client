@@ -176,7 +176,19 @@ class _IntroduceState extends State<Introduce> {
                                   ),
                                 ],
                               ),
-                            )
+                            ),
+                          // HACK
+                          GestureDetector(
+                            key: const ValueKey('select_all_intros'),
+                            onTap: () => sortedContacts.forEach((e) {
+                              setState(() {
+                                selectedContactIds.add(e.value.contactId.id);
+                              });
+                            }),
+                            child: CText('hack',
+                                style:
+                                    tsOverline.copiedWith(color: transparent)),
+                          ),
                         ],
                       ),
               )

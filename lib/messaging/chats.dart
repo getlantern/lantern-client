@@ -125,6 +125,7 @@ class _ChatsState extends State<Chats> {
               ),
               // * Bottom modal
               IconButton(
+                key: const ValueKey('chats_topbar_more_menu'),
                 visualDensity: VisualDensity.compact,
                 onPressed: () async => showBottomModal(
                   context: context,

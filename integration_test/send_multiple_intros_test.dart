@@ -3,7 +3,7 @@ import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'send_introductions';
+  final testName = 'send_multiple_intros';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -15,12 +15,12 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // Test requirements
-  // TODO: finish introductions
+  // TODO: finish
   group(testName, () {
     test(
-      'Send introduction to a single contact',
+      'Send introductions to multiple contacts',
       () async {
+        print('making sure we have enough contacts');
         await driver.tapText(
           'Developer',
           waitText: 'Developer Settings',
@@ -29,7 +29,7 @@ Future<void> main() async {
 
         await driver.scrollTextUntilVisible('ADD');
 
-        // add dummy contacts
+        print('adding dummy contacts');
         await driver.tapText(
           'ADD',
           skipScreenshot: true,
@@ -39,30 +39,25 @@ Future<void> main() async {
           skipScreenshot: false,
         );
 
-        await driver.longPressFirstMessage();
-
-        await driver.tapText('Introduce Contact');
-
-        // TODO: click on (hardcoded) number from list
-
-        await driver.waitForSeconds(2);
-      },
-      timeout: const Timeout(Duration(minutes: 5)),
-    );
-    test(
-      'Send introduction to a single contact',
-      () async {
-        // go back
-
-        // click on top right menu
+        await driver.tapKey(
+          'chats_topbar_more_menu',
+        );
 
         // click on Introduce contacts
+        await driver.tapText(
+          'Introduce Contacts',
+        );
 
-        // select one hard coded number
+        print('tap secret select all intros key');
+        await driver.tapKey(
+          'select_all_intros',
+          overwriteTimeout: longWaitTimeout,
+        );
 
-        // select second hard coded number
+        await driver.tapText('SEND INTRODUCTIONS');
 
-        // captureScreenshotDuringFuture on SEND INVITATION click
+        // we are now back in Chats, go to first message to see our sent invitation
+        await driver.tapFirstItemInList('chats_messages_list');
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

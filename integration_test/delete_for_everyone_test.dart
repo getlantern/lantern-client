@@ -20,11 +20,10 @@ Future<void> main() async {
     test(
       'Delete for everyone',
       () async {
-        await driver.screenshotChatsView();
+        await driver.screenshotCurrentView();
 
-        await driver.tapFirstMessage();
+        await driver.tapFirstItemInList('chats_messages_list');
 
-        // TODO: generalize
         print('long press text to reveal menu');
         await driver.longPress(target: '3:16 PM');
 

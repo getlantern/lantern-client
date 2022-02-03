@@ -33,7 +33,7 @@ Future<void> main() async {
         await driver.typeAndSend('But we can change that.');
 
         print('tap on topBar menu icon');
-        await driver.tapKey('topbar_more_menu');
+        await driver.tapKey('conversation_topbar_more_menu');
 
         print('tap on Disappearing Messages');
         await driver.tapText(
