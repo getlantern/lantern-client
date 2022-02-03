@@ -1,0 +1,44 @@
+import 'integration_test_common.dart';
+import 'integration_test_constants.dart';
+
+Future<void> main() async {
+  late FlutterDriver driver;
+  final testName = 'scan_QR_code';
+
+  setUpAll(() async {
+    // Connect to a running Flutter application instance.
+    driver = await FlutterDriver.connect(timeout: const Duration(seconds: 15));
+    await driver.initScreenshotsDirectory(testName);
+  });
+
+  tearDownAll(() async {
+    await driver.close();
+  });
+
+  // Test requirements
+  // TODO: needs another phone to scan the QR code with
+  group(testName, () {
+    test(
+      'Scan QR code',
+      () async {
+        await driver.tapFAB();
+
+        // click on Scan QR Code
+        await driver.tapText('Scan QR Code');
+
+        // screenshot and wait
+        await driver.screenshotCurrentView();
+        await driver.waitForSeconds(1);
+
+        // screenshot and wait
+        await driver.screenshotCurrentView();
+        await driver.waitForSeconds(1);
+
+        // screenshot and wait
+        await driver.screenshotCurrentView();
+        await driver.waitForSeconds(1);
+      },
+      timeout: const Timeout(Duration(minutes: 5)),
+    );
+  });
+}
