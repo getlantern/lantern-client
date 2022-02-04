@@ -103,6 +103,12 @@ You can run integration tests from the integration_test directory against a live
 
 1. Run the app with these additional run arguments `--dart-define=driver=true --observatory-port 8888 --disable-service-auth-codes`
 2. Run the integration test as a dart application and specify the environment variable `VM_SERVICE_URL=http://127.0.0.1:8888`
+3. Start by running `1_enroll_leave_me_note_test.dart`  
+4. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
+   1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
+   2. `6B_request_flow_test` requires a message request to have just been received 
+   3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
+   4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
 
 This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
 
