@@ -16,7 +16,7 @@ Future<void> main() async {
   });
 
   // Test requirements
-  // * Needs to have received a message request from another user
+  // * Needs to have _just_ received a message request from another user
   group(testName, () {
     test(
       'Accept via message request',

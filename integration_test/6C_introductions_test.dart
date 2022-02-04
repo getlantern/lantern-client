@@ -15,7 +15,7 @@ Future<void> main() async {
   });
 
 // * Test requirements
-// * Needs to have received an introduction from another user
+// * Needs to have received a _single_ introduction from another user
   group(testName, () {
     test(
       'Accept an introduction',

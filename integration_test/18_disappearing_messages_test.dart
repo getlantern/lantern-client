@@ -1,4 +1,5 @@
 import 'integration_test_common.dart';
+import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
@@ -18,34 +19,28 @@ Future<void> main() async {
     test(
       'Test disappearing messages settings',
       () async {
-        await driver.tapFAB(
-          waitText: 'New Chat',
-        );
-        await driver.tapText(
-          'Me',
-          waitText:
-              'Your chats and voice calls with Me are end-to-end encrypted',
+        await driver.tapFirstItemInList('chats_messages_list');
+
+        await driver.typeAndSend(
+          'Initially all messages disappear after 24 hours.',
+          overwriteTimeout: veryLongWaitTimeout,
         );
 
-        print('write and send message');
-        await driver
-            .typeAndSend('Initially all messages disappear after 24 hours.');
-        await driver.typeAndSend('But we can change that.');
+        await driver.tapKey(
+          'conversation_topbar_more_menu',
+          overwriteTimeout: veryLongWaitTimeout,
+        );
 
-        print('tap on topBar menu icon');
-        await driver.tapKey('conversation_topbar_more_menu');
-
-        print('tap on Disappearing Messages');
         await driver.tapText(
           'Disappearing Messages',
+          overwriteTimeout: veryLongWaitTimeout,
         );
 
-        print('tap on 5 seconds');
         await driver.tapText(
           '5 seconds',
+          overwriteTimeout: veryLongWaitTimeout,
         );
 
-        print('tap on SET');
         await driver.tapText(
           'SET',
         );
