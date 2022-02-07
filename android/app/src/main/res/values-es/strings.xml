@@ -24,7 +24,6 @@
   <string name="your_referral_code">Su código de referencia</string>
   <string name="report_an_issue">Informar de un problema</string>
   <string name="select_issue">Por favor, seleccione un problema</string>
-  <string name="select_issue_desc">Por favor, déjenos aquí una breve descripción de su problema,\ny estaremos con usted tan pronto como sea posible.</string>
   <string name="submit">Enviar</string>
   <string name="submit_issue">Enviar problema</string>
   <string name="no_issue_selected">Por favor, seleccione un problema antes de enviar un informe</string>
@@ -47,6 +46,7 @@
   <string name="on_desc">Ahora puede acceder a\r\nsitios bloqueados y servicios</string>
   <string name="off_desc">Haga clic en el botón para acceder a sitios bloqueados y servicios</string>
   <string name="service_connected">Conectado a la VPN</string>
+  <string name="ready_to_connect">Listo para conectarse</string>
   <string name="desktop_option">Versión de escritorio</string>
   <string name="contact_option">Contacto</string>
   <string name="check_for_update">Buscar actualización</string>
@@ -100,6 +100,7 @@
   <string name="not_now">Ahora no</string>
   <string name="install_update">Actualizar</string>
   <string name="error_update">Error al descargar actualización</string>
+  <string name="error_install_update">Error al instalar la actualización</string>
   <string name="loading">Cargando...</string>
   <string name="manual_update">Trate de instalar manualmente la última versión desde &lt;a href=\"https://lantern-android.io\"&gt;aquí1&lt;/a&gt;</string>
   <string name="pro_welcome_text">¡Bienvenido a Lantern Pro!</string>
@@ -186,11 +187,6 @@
   <string name="too_many_devices">Se ha alcanzado el límite de dispositivos que se pueden vincular a su cuenta Pro.</string>
   <string name="check_spam_folder">* Por favor, revise su carpeta de spam si no recibió el correo</string>
   <string name="by_referral">Recibí Pro por referir a un amigo</string>
-  <string-array name="payment_method_list">
-    <item>Alipay</item>
-    <item>Tarjeta de crédito</item>
-    <item>Recibí Pro por referir a un amigo</item>
-  </string-array>
   <string name="payment_method">Método de pago</string>
   <string name="payment_account">Cuenta de pago</string>
   <string name="oops_having_trouble">¡Uups! Estamos teniendo problemas para encontrar esa dirección de correo electrónico. Por favor, proporcione la información de debajo para ayudarnos a encontrar su cuenta.</string>
@@ -224,12 +220,6 @@
     <item>Mayor fiabilidad</item>
     <item>Registro de hasta 3 dispositivos</item>
     <item>Datos ilimitados</item>
-    <item>¡Yinbi gratis con la compra!</item>
-  </string-array>
-  <string-array name="yinbi_renew_features">
-    <item>Criptomonedas Yinbi gratis</item>
-    <item>Meses gratis</item>
-    <item>¡Deprisa, la oferta es de duración limitada!</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>Datos de alta-velocidad ilimitados</item>
@@ -297,7 +287,6 @@
   <string name="pro_available_for">Para Windows, Android, Mac y Ubuntu. Próximamente para 
 iOS.</string>
   <string name="upgrade_to_pro">Pásese a Pro para disfrutar de datos ilimitados, de más velocidad y de mayor resistencia a bloqueos.</string>
-  <string name="upgrade_to_pro_yinbi">Pásese a Pro para disfrutar de datos ilimitados, de más velocidad,\nde mayor resistencia a bloqueos y de criptomonedas Yinbi gratis.</string>
   <string name="data_remaining">%1$s%% restantes de sus datos de alta velocidad gratuitos mensuales</string>
   <string name="data_used">%1$s MB de datos gratuitos restantes.\nSe restablecen a las %2$s</string>
   <string name="upgrade">Actualizar</string>
@@ -397,16 +386,12 @@ iOS.</string>
   <string name="processing_payment">Procesando el pago</string>
   <string name="now_converting_to_pro">Actualizando a Pro… Por favor, espere un momento.</string>
   <string name="have_an_activation_code">¿Tiene un código de activación? Haga clic aquí</string>
-  <string name="yinbi_greeting">隐币-无封锁的加密货币即将到来。\n点击此处了解如何免费获得。</string>
   <string name="test_payment_page">Página de pago de la prueba</string>
   <string name="pay_now">Pagar ahora</string>
   <string name="error_bulk_codes">Error al enviar en masa los códigos de la cuenta Pro</string>
   <string name="invalid_bulk_codes">Los códigos de la cuenta Pro que ha introducido no son válidos</string>
   <string name="renew_today">¡RENUEVE SU CUENTA HOY!</string>
-  <string name="receive_free_yinbi">¡Reciba gratis criptomonedas Yinbi!</string>
   <string name="purchased_pro_activation_codes">¿Ha comprado los códigos de activación de Lantern Pro por Internet?</string>
-  <string name="renew_grab_free_yinbi"><u>Renueve su cuenta usando sus códigos de activación Pro para conseguir Yinbi gratis</u></string>
-  <string name="upgrade_now_get_free_yinbi"><u>Actualice su aplicación usando sus códigos de activación Pro para conseguir Yinbi gratis</u></string>
   <string name="renew">¡RENUEVE SU CUENTA!</string>
   <string name="terms_of_service_text">Al hacer clic en Continuar hacia el pago, acepta nuestras condiciones del servicio</string>
   <string name="terms_of_service_text_complete_purchase">Al hacer clic en Finalizar la compra, acepta nuestras condiciones del servicio</string>
@@ -416,60 +401,16 @@ iOS.</string>
   <string name="enter_lantern_pro_codes">Introduzca los códigos de Lantern Pro</string>
   <string name="renewal_success">Renovación completada</string>
   <string name="thank_you_for_renewing">Gracias por renovar su cuenta\nLantern Pro</string>
-  <string name="yinbi">Yinbi</string>
-  <string name="visit_yinbi_website">Visite el sitio web</string>
-  <string name="yinbi_redemption">Redención Yinbi</string>
-  <string name="yinbi_account_info">Información de la cuenta de Yinbi</string>
-  <string name="lantern_partnered_yinbi_free">Lantern se ha asociado con Yinbi para regalar\nYNB a todas las personas que adquieran\nuna cuenta Lantern Pro. ¡Compre ya la suya para entrar\nen el sorteo de hoy! Para más información\nsobre Yinbi, visite el sitio oficial: Yin.bi</string>
-  <string name="lantern_partnered_yinbi_pro">Lantern se ha asociado con Yinbi para regalar\nYNB a todas las personas que renueven\nsu cuenta Lantern Pro. ¡Renueve ya la suya para entrar\nen el sorteo de hoy! Para más información\nsobre Yinbi, visite el sitio oficial: Yin.bi</string>
-  <string name="enter_bulk_pro_codes">Introduzca los códigos de Lantern Pro</string>
-  <string name="renew_pro_get_yinbi">Renueve su cuenta Pro y consiga Yinbi</string>
-  <string name="you_have">Tiene</string>
-  <string name="yinbi_code">YNB</string>
-  <string name="unable_to_get_yinbi_account_info">No se ha podido recuperar la información de la cuenta de Yinbi</string>
-  <string name="redeem_bulk_codes">Canjear códigos en masa</string>
-  <string name="paste_pro_account_codes">Pegue en masa sus códigos de cuenta Pro\na continuación para obtener Lantern Pro\no ampliar la duración de su cuenta Lantern Pro.</string>
-  <string name="special_offer">¡OFERTA ESPECIAL!</string>
-  <string name="cryptocurrency_giveaway">¡Sorteo de criptomonedas!</string>
-  <string name="lantern_partnered_renew_now">Lantern se ha asociado con Yinbi (YNB)\npara regalar YNB a todas las personas\nque renueven su cuenta Lantern Pro. ¡Renueve ya la suya para\nentrar en el sorteo de hoy!</string>
-  <string name="what_is_yinbi">¿Qué es Yinbi?</string>
-  <string name="renew_now_get_yinbi">Renueve su cuenta ahora y consiga Yinbi</string>
   <string name="purchase">Comprar</string>
-  <string name="one_year_yinbi">1 año + Yinbi gratis:</string>
-  <string name="yinbi_cost">%1$s%2$s (%3$s)</string>
-  <string name="two_years_yinbi">2 años + el doble de Yinbi gratis:</string>
   <string name="thank_you_purchasing_pro">¡Gracias por comprar Lantern Pro!</string>
-  <string name="you_will_receive_yinbi">Recibirá Yinbi (YNB) gratis por su compra\ncuando termine el sorteo de hoy.\nHaga clic en el botón del código de canje de Yinbi\npara obtener más detalles.</string>
-  <string name="yinbi_menu">Menú de Yinbi</string>
-  <string name="yinbi_redemption_code">Código de canje de Yinbi</string>
   <string name="continue_to_lantern_pro">Continuar con Lantern Pro</string>
-  <string name="yinbi_website">Yin.bi</string>
   <string name="date">Fecha</string>
-  <string name="redemption_code">Código de canje</string>
   <string name="status">Estado</string>
   <string name="copy_all_codes">Copiar todos los códigos</string>
-  <string name="visit_yinbi">Visite Yin.bi para canjear sus YNB y comprobar el saldo\nde su cuenta. Los códigos de canje de Yinbi caducan\n30 días después de la compra.</string>
-  <string name="successfully_copied_codes">¡Códigos de canje copiados!</string>
-  <string name="no_active_codes">No hay códigos de canje activos. ¡Inténtelo de nuevo más tarde!</string>
-  <string name="thanks_purchase_yinbi">¡Gracias por comprar Lantern Pro!\nSu código de canje de Yinbi aparecerá en\nesta página cuando el sorteo de hoy haya finalizado.\nVuelva a visitarnos cuando\ntermine el plazo.</string>
-  <string name="yinbi_details">Yinbi (YNB) es una nueva criptomoneda\ndesbloqueable que pronto estará disponible y que permitirá\nrealizar transacciones rápidas, fiables, sencillas y\nde bajo coste desde dispositivos móviles. Los usuarios de\nLantern serán los primeros en tener acceso\nanticipado a esta nueva criptomoneda.</string>
-  <string name="find_out_more">Obtenga más información aquí: Yin.bi</string>
   <string name="best_deal">La mejor oferta</string>
-  <string name="launches_soon">El Yinbi (YNB) pronto estará disponible, y\nlos usuarios de Lantern serán los primeros en\ntener acceso anticipado a esta nueva criptomoneda.\nEl YNB se distribuirá al final de cada día\nen función del número de personas\nque mejoran su versión y del número de años\no cuentas que se adquieren.</string>
-  <string name="how_yinbis_distributed">Los YNB se distribuirán al final de cada día,\nen función de la cantidad de Yinbi emitidos ese\ndía, el número de personas que mejoran su versión\ny el número de años o\ncuentas que se adquieren. Su código de canje de Yinbi aparecerá en\nesta página cuando el sorteo de hoy\nhaya finalizado. Vuelva a visitarnos cuando\ntermine el plazo.</string>
-  <string name="get_bulk_yinbi"><u>Compre cuentas Pro en masa, ¡consiga Yinbi en masa!</u></string>
-  <string name="loading_yinbi_account_info">Cargando la información de la cuenta de Yinbi</string>
-  <string name="free_yinbi_with_purchase">¡Yinbi gratis con la compra!</string>
   <string name="renew_now_get_more">¡Renueve ya su cuenta para ganar más!</string>
-  <string name="buy_pro_get_yinbi">Compre una cuenta Pro y consiga Yinbi</string>
   <string name="renewal_note">NOTA: La duración de su recientemente adquirida tarifa se añadirá\nal tiempo restante de su tarifa actual.</string>
   <string name="bulk_codes_error">¡Error! Compruebe los códigos resaltados.</string>
-  <string name="loading_yinbi">Cargando los códigos de canje de Yinbi</string>
-  <string name="lantern_partnered_yinbi">Lantern se ha asociado con Yinbi para regalar\nYNB a todas las personas que renueven\nsu cuenta Lantern Pro. ¡Renueve ya la suya para entrar\nen el sorteo de hoy! Para más información\nsobre Yinbi, visite el sitio oficial: Yin.bi</string>
-  <string name="time_left_giveaway">¡Tiempo restante para el sorteo de Yinbi de hoy!</string>
-  <string name="yinbi_released_today">¡%d YNB emitidos hoy!</string>
-  <string name="yinbi_distribution_details">Los YNB se distribuirán al final de cada día, en función de la cantidad de Yinbi emitidos ese día, el número de personas que mejoran su versión o la renuevan, y el número de años o cuentas que se adquieren.</string>
-  <string name="total_yinbi_released">El total de YNB emitidos disminuye cada día y se reducirá a la mitad cada año. ¡Consiga su parte hoy mismo!</string>
   <string name="please_allow_lantern_to">Permita que Lantern…</string>
   <string name="permission_for">para activar</string>
   <string name="android.permission.INTERNET">conectarse a los servidores de Lantern</string>
@@ -486,11 +427,6 @@ iOS.</string>
   <string name="lantern_desktop_share_description">Puede encontrar las aplicaciones más recientes de Lantern para escritorio y el resto de plataformas en el enlace anterior.</string>
   <string name="share_link">Compartir enlace</string>
   <string name="lantern_desktop_link_share_title">Comparta el enlace de descarga de Lantern</string>
-  <string name="upgrade_to_pro_get_yinbi">Pásese a Pro y consiga Yinbi</string>
-  <string name="yinbi_description_free">Lantern se ha asociado con Yinbi para regalar YNB a todas las personas que adquieran una cuenta Lantern Pro. ¡Compre ya la suya para entrar en el sorteo de hoy! Para más información sobre Yinbi, visite el sitio oficial: Yin.bi</string>
-  <string name="yinbi_description_pro">Lantern se ha asociado con Yinbi para regalar YNB a todas las personas que renueven su cuenta Lantern Pro. ¡Renueve ya la suya para entrar en el sorteo de hoy! Para más información sobre Yinbi, visite el sitio oficial: Yin.bi</string>
-  <string name="yinbi_title_free">Criptomonedas Yinbi gratis</string>
-  <string name="yinbi_title_pro">Canje de Yinbi</string>
   <string name="redeem_lantern_pro_codes">Canjear los códigos de Lantern Pro</string>
   <string name="redeem_code_description_first_part">Los códigos de Lantern Pro pueden obtenerse en masa en</string>
   <string name="redeem_code_description_second_part">reseller.lantern.io</string>
@@ -503,9 +439,6 @@ iOS.</string>
   <string name="faster_data_centers">Centros de datos más rápidos</string>
   <string name="no_logs">No hay registros</string>
   <string name="connect_up_to_3_devices">Conecte hasta 3 dispositivos</string>
-  <string name="free_yinbi_cryptocurrency">¡Criptomonedas Yinbi gratis!</string>
-  <string name="yinbi_cryptocurrency">Criptomonedas Yinbi</string>
-  <string name="the_yinbi_foundation_description">La fundación Yinbi va a regalar 888 000 millones de criptomonedas YNB exclusivamente a través de Lantern a todas aquellas personas que adquieran Lantern Pro. Los YNB se distribuirán al final de cada día, en función de la cantidad de Yinbi emitidos ese día, el número de personas que mejoran su versión o la renuevan, y el número de años o cuentas que se adquieren. Una vez que haya hecho su compra, podrá informarse sobre la recepción de sus YNB en la página de canje de Yinbi.</string>
   <string name="plan_duration">Tarifa de %d año(s)</string>
   <string name="total_cost">Una sola factura de %s</string>
   <string name="discount">Ahorre un %s %%</string>
@@ -514,7 +447,6 @@ iOS.</string>
   <string name="membership_end_soon">Su suscripción finalizará pronto. ¡Renuévela ahora y disfrute de hasta %s gratis!</string>
   <string name="membership_ends_today">Su suscripción finaliza hoy. ¡Renuévela ahora y disfrute de hasta %s gratis!</string>
   <string name="membership_has_expired">Su suscripción ha caducado. ¡Renuévela ahora y disfrute de hasta %s gratis!</string>
-  <string name="free_extra_yinbi">¡El doble de Yinbi!</string>
   <string name="step_2">Paso 2</string>
   <string name="enter_email_short">Introducir correo electrónico</string>
   <string name="mm_yy">MM/AA</string>
@@ -537,13 +469,7 @@ iOS.</string>
   <string name="send_report">Enviar informe</string>
   <string name="email_optional">Correo electrónico (opcional)</string>
   <string name="device_added">Dispositivo añadido</string>
-  <string name="device_authorized_pro">Este dispositivo ahora está autorizado para usar su cuenta Lantern Pro.</string>
   <string name="report_sent">Informe enviado</string>
-  <string name="thank_you_for_reporting_your_issue">Gracias por informarnos sobre su problema. Si ha proporcionado su correo electrónico, nos pondremos en contacto con usted en cuanto podamos.</string>
-  <string name="visit_yin_bi_to_redeem_your_ynb">Visite Yin.bi para canjear sus YNB y comprobar el saldo de su cuenta. Los códigos de canje de Yinbi caducan 30 días después de la compra.</string>
-  <string name="ynb">N.º de YNB</string>
-  <string name="ynb_distributed">Los YNB se distribuirán al final de cada día, en función de la cantidad de Yinbi emitidos ese día, el número de personas que mejoran su versión y el número de años o cuentas que se adquieren. Su código de canje de Yinbi aparecerá en esta página cuando el sorteo de hoy haya finalizado. Vuelva a visitarnos cuando termine el plazo.</string>
-  <string name="until_code_and_ynb_will_be_shown">Hasta que se muestre el código y el n.º de YNB</string>
   <string name="have_a_lantern_pro_activation_code_click_here">¿Tiene un código de activación de Lantern Pro? Haga clic aquí</string>
   <string name="enter_email_and_activation_code">Introduzca el correo electrónico y el código de activación</string>
   <string name="activation_code">Código de Activación </string>
@@ -556,4 +482,18 @@ iOS.</string>
   <string name="pro_account_expiration">Caducidad de la cuenta Pro:</string>
   <string name="lantern_pro_devices_up_to_3">Dispositivos con Lantern Pro (hasta 3)</string>
   <string name="renew_short">Renovar</string>
+  <string name="connection_error">Error de conexión</string>
+  <string name="reopen_to_try">Vuelva a abrir %1$s para intentarlo de nuevo.</string>
+  <string name="init_account">%1$s está iniciando su cuenta. Esto puede tardar un poco.</string>
+  <string name="tampered_apk">El APK descargado se ha visto afectado. Descargue la versión oficial.</string>
+  <string name="incoming_call">Llamada entrante</string>
+  <string name="accept">Aceptar</string>
+  <string name="decline">Declinar</string>
+  <string name="new_message">Nuevo mensaje</string>
+  <string name="from_sender">De %1$s</string>
+  <string name="unnamed_contact">Contacto sin nombre</string>
+  <string name="message_notifications_channel">Mensajes</string>
+  <string name="call_notifications_channel">Llamadas</string>
+  <string name="lantern_service">Servicio de Lantern</string>
+  <string name="replica_download">Descarga de la réplica</string>
 </resources>

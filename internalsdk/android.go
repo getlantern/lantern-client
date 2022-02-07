@@ -75,7 +75,7 @@ type Session interface {
 	GetToken() (string, error)
 	SetCountry(string) error
 	UpdateAdSettings(AdSettings) error
-	UpdateStats(string, string, string, int, int) error
+	UpdateStats(string, string, string, int, int, bool) error
 	SetStaging(bool) error
 	ProxyAll() (bool, error)
 	BandwidthUpdate(int, int, int, int) error
@@ -95,6 +95,7 @@ type Session interface {
 	SetReplicaAddr(string)
 	ForceReplica() bool
 	SetChatEnabled(bool)
+	SetMatomoEnabled(bool)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -107,7 +108,7 @@ type panickingSession interface {
 	common.AuthConfig
 	SetCountry(string)
 	UpdateAdSettings(AdSettings)
-	UpdateStats(string, string, string, int, int)
+	UpdateStats(string, string, string, int, int, bool)
 	SetStaging(bool)
 	ProxyAll() bool
 	BandwidthUpdate(int, int, int, int)
@@ -125,6 +126,7 @@ type panickingSession interface {
 	DeviceOS() string
 	IsProUser() bool
 	SetChatEnabled(bool)
+	SetMatomoEnabled(bool)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -179,8 +181,8 @@ func (s *panickingSessionImpl) UpdateAdSettings(settings AdSettings) {
 	panicIfNecessary(s.wrapped.UpdateAdSettings(settings))
 }
 
-func (s *panickingSessionImpl) UpdateStats(city, country, countryCode string, httpsUpgrades, adsBlocked int) {
-	panicIfNecessary(s.wrapped.UpdateStats(city, country, countryCode, httpsUpgrades, adsBlocked))
+func (s *panickingSessionImpl) UpdateStats(city, country, countryCode string, httpsUpgrades, adsBlocked int, hasSucceedingProxy bool) {
+	panicIfNecessary(s.wrapped.UpdateStats(city, country, countryCode, httpsUpgrades, adsBlocked, hasSucceedingProxy))
 }
 
 func (s *panickingSessionImpl) SetStaging(staging bool) {
@@ -277,6 +279,10 @@ func (s *panickingSessionImpl) IsProUser() bool {
 
 func (s *panickingSessionImpl) SetChatEnabled(enabled bool) {
 	s.wrapped.SetChatEnabled(enabled)
+}
+
+func (s *panickingSessionImpl) SetMatomoEnabled(enabled bool) {
+	s.wrapped.SetMatomoEnabled(enabled)
 }
 
 func (s *panickingSessionImpl) SerializedInternalHeaders() string {
@@ -605,6 +611,10 @@ func run(configDir, locale string,
 		chatEnabled := runner.FeatureEnabled("chat")
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
+
+		matomoEnabled := runner.FeatureEnabled(config.FeatureMatomo)
+		log.Debugf("Matomo enabled? %v", matomoEnabled)
+		session.SetMatomoEnabled(matomoEnabled)
 	}
 
 	// When features are enabled/disabled, the UI changes. To minimize this, we only check features once on startup, preferring

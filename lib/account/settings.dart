@@ -86,13 +86,17 @@ class Settings extends StatelessWidget {
               content: CInkWell(
                 onTap: () => openInfoProxyAll(context),
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CText(
-                      'proxy_everything_is'
-                          .i18n
-                          .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
-                      style: tsSubtitle1,
+                    Flexible(
+                      child: CText(
+                        'proxy_everything_is'
+                            .i18n
+                            .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
+                        softWrap: false,
+                        style: tsSubtitle1.short,
+                      ),
                     ),
                     const Padding(
                       padding: EdgeInsetsDirectional.only(start: 4.0),

@@ -24,8 +24,6 @@
   <string name="your_referral_code">کد ارجاع شما</string>
   <string name="report_an_issue">گزارش یک مشکل</string>
   <string name="select_issue">لطفا یک موضوع را انتخاب کنید</string>
-  <string name="select_issue_desc">لطفاً شرح مختصری از مشکل خود را برای مان در اینجا بگذارید،
-و ما در اولین فرصت ممکنه به شما پاسخ خواهیم داد.</string>
   <string name="submit">ثبت اطلاعات</string>
   <string name="submit_issue">ارسال موضوع</string>
   <string name="no_issue_selected">لطفاً یک مشکل را پیش از ارسال گزارش انتخاب کنید</string>
@@ -48,6 +46,7 @@
   <string name="on_desc">اکنون شما می توانید/n/r به سایت ها و خدمات بسته شده دسترسی پیدا کنید</string>
   <string name="off_desc">دکمه را کلیک نموده تا به سایت ها و خدمات بسته شده دسترسی یابید</string>
   <string name="service_connected">متصل به VPN</string>
+  <string name="ready_to_connect">آماده اتصال</string>
   <string name="desktop_option">نسخه ویندوز</string>
   <string name="contact_option">‫تماس‬</string>
   <string name="check_for_update">چک کردن برای به روز رسانی</string>
@@ -101,6 +100,7 @@
   <string name="not_now">الان نه</string>
   <string name="install_update">به روز رسانی</string>
   <string name="error_update">ایراد در دانلود به روز رسانی</string>
+  <string name="error_install_update">خطا در نصب نسخه به‌روز</string>
   <string name="loading">در حال بارگذاری...</string>
   <string name="manual_update">به صورت دستی آخرین نسخه را از  &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt; دانلود کنید</string>
   <string name="pro_welcome_text">به  فانوس Pro خوش آمدید!</string>
@@ -187,11 +187,6 @@
   <string name="too_many_devices">تعداد دستگاه هایی که می توانند با حساب کاربری Pro شما مرتبط شوند  به حداکثر لیمیت رسیده است.</string>
   <string name="check_spam_folder">اگر ایمیل را دریافت نکنید، لطفا پوشه اسپم  خود را بررسی کنید</string>
   <string name="by_referral">دریافت حساب کاربری Pro با ارجاع یک دوست</string>
-  <string-array name="payment_method_list">
-    <item>Alipay  </item>
-    <item> کارت اعتباری </item>
-    <item>دریافت حساب کاربری Pro با ارجاع یک دوست </item>
-  </string-array>
   <string name="payment_method">روش پرداخت</string>
   <string name="payment_account">حساب پرداخت</string>
   <string name="oops_having_trouble">اوه! ما در پیدا کردن آدرس ایمیل مشکل داریم. لطفا اطلاعات زیر را برای کمک به ما در پیدا کردن حساب کاربری خود ارائه دهید.</string>
@@ -223,16 +218,10 @@
   </string-array>
   <string-array name="pro_features_new">
     <item>سرعت بالاتر</item>
-    <item>مقاومت در برابر فیلترینگ</item>
+    <item>مقاومت در برابر مسدود شدن</item>
     <item>قابل اعتمادتر</item>
-    <item>قابل نصب تا 3 دستگاه</item>
+    <item>امکان ثبت تا 3 دستگاه</item>
     <item>داده نامحدود</item>
-    <item>Yinbi رایگان در صورت خرید!</item>
-  </string-array>
-  <string-array name="yinbi_renew_features">
-    <item>رمزارز Yinbi رایگان</item>
-    <item>ماه‌های رایگان</item>
-    <item>موقعیت محدود، الآن اقدام کنید!</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>  دیتای نامحدود با سرعت بالا </item>
@@ -295,7 +284,6 @@
   <string name="upgrade_to_lantern_pro">رتقاء به نسخه Pro  فانوس</string>
   <string name="pro_available_for">برای ویندوز، اندروید، مک و اوبونتو. iOS به زودی</string>
   <string name="upgrade_to_pro">برای مصرف نامحدود اینترنت، سرعت بیشتر و مقاومت بیشتر  در برابر مسدود کردن، به نسخه Pro ارتقا دهید!</string>
-  <string name="upgrade_to_pro_yinbi">برای بهره‌مندی از داده نامحدود، سرعت و مقاومت بیشتر در برابر سانسور و رمزارز Yinbi به نسخه حرفه‌ای ارتقا دهید!</string>
   <string name="data_remaining">%1$s %% از دیتای با سرعت بالای شما باقی مانذه است</string>
   <string name="data_used">%1$s مگابایت از حجم اینترنت رایگان باقی مانده است.\nدر %2$s بازنشانی می‌شود</string>
   <string name="upgrade">ارتقا‌‌ء </string>
@@ -398,16 +386,12 @@ https://bit.ly/lanternapk</string>
   <string name="processing_payment">پردازش پرداخت</string>
   <string name="now_converting_to_pro">در حال حاضر انتقال  شما به Pro هستیم.. لطفا صبر کنید ...</string>
   <string name="have_an_activation_code">آیا کد فعالسازی دارید؟ اینجا کلیک کنید</string>
-  <string name="yinbi_greeting">رمزارز به زودی افزوده خواهد شد. برای اطلاعات بیشتر در خصوص نحوه‌ی دریافت آن به صورت رایگان، اینجا کلیک کنید.</string>
   <string name="test_payment_page">صفحه پرداخت تست</string>
   <string name="pay_now">الآن پرداخت کنید</string>
   <string name="error_bulk_codes">خطا در ارسال مجموعه کدهای حساب حرفه‌ای</string>
   <string name="invalid_bulk_codes">کدهای حساب حرفه‌ای وارد شده معتبر نیستند.</string>
   <string name="renew_today">امروز تمدید کنید!</string>
-  <string name="receive_free_yinbi">رمزارز رایگان Yinbi دریافت کنید!</string>
   <string name="purchased_pro_activation_codes">کدهای فعالسازی فانوس حرفه‌ای را به صورت آنلاین خریداری کرده‌اید؟</string>
-  <string name="renew_grab_free_yinbi"><u>از کدهای فعالسازی حرفه‌ای استفاده کنید تا Yinbi رایگان دریافت کنید</u></string>
-  <string name="upgrade_now_get_free_yinbi"><u>با کدهای فعالسازی حرفه‌ای ارتقا دهید تا Yinbi رایگان دریافت کنید</u></string>
   <string name="renew">تمدید!</string>
   <string name="terms_of_service_text">با کلیک کردن روی \"ادامه برای پرداخت\"، شما با شرایط خدمات ما موافقت می‌کنید</string>
   <string name="terms_of_service_text_complete_purchase">با کلیک کردن روی \"نهایی کردن خرید\"، شما با شرایط خدمات ما موافقت می‌کنید</string>
@@ -417,60 +401,16 @@ https://bit.ly/lanternapk</string>
   <string name="enter_lantern_pro_codes">کدهای فانوس حرفه‌ای را وارد کنید</string>
   <string name="renewal_success">تمدید با موفقیت انجام شد!</string>
   <string name="thank_you_for_renewing">از اینکه حساب حرفه‌ای فانوس را تمدید کردید، متشکریم</string>
-  <string name="yinbi">Yinbi</string>
-  <string name="visit_yinbi_website">مشاهده وبسایت</string>
-  <string name="yinbi_redemption">بازخرید Yinbi</string>
-  <string name="yinbi_account_info">اطلاعات حساب Yinbi</string>
-  <string name="lantern_partnered_yinbi_free">فانوس با Yinbi برای ارائه‌ی YNB به تمام کسانی که فانوس حرفه‌ای را خریداری می‌کنند، همکاری دارد! هم‌اکنون خریداری کنید تا دسترسی پیدا کنید! برای اطلاعات بیشتر درباره‌ی Yinbi به سایت رسمی آن مراجعه کنید: Yin.bi</string>
-  <string name="lantern_partnered_yinbi_pro">فانوس با Yinbi برای ارائه‌ی YNB به تمام کسانی که فانوس حرفه‌ای را تمدید می‌کنند، همکاری دارد! هم‌اکنون تمدید کنید تا دسترسی پیدا کنید! برای اطلاعات بیشتر درباره‌ی Yinbi به سایت رسمی آن مراجعه کنید: Yin.bi</string>
-  <string name="enter_bulk_pro_codes">کدهای فانوس حرفه‌ای را وارد کنید</string>
-  <string name="renew_pro_get_yinbi">حساب حرفه‌ای را تمدید کنید تا Yinbi دریافت کنید</string>
-  <string name="you_have">شما</string>
-  <string name="yinbi_code">YNB</string>
-  <string name="unable_to_get_yinbi_account_info">مشکل در دریافت اطلاعات حساب Yinbi</string>
-  <string name="redeem_bulk_codes">دریافت مجموعه کدها</string>
-  <string name="paste_pro_account_codes">مجموعه کدهای حساب حرفه‌ای را اینجا پیست کنید تا حساب حرفه‌ای فانوس دریافت کنید و یا به زمان حساب حرفه‌ای فانوس شما افزوده شود.</string>
-  <string name="special_offer">پیشنهاد ویژه!</string>
-  <string name="cryptocurrency_giveaway">هدیه رمزارز!</string>
-  <string name="lantern_partnered_renew_now">فانوس با Yinbi (YNB) برای ارائه‌ی YNB به تمام کسانی که فانوس حرفه‌ای را تمدید می‌کنند، همکاری دارد! هم‌اکنون تمدید کنید تا دسترسی پیدا کنید!</string>
-  <string name="what_is_yinbi">Yinbi چیست؟</string>
-  <string name="renew_now_get_yinbi">هم‌اکنون تمدید کنید تا Yinbi دریافت کنید</string>
   <string name="purchase">خرید</string>
-  <string name="one_year_yinbi">1 سال + Yinbi رایگان:</string>
-  <string name="yinbi_cost">%1$s%2$s (%3$s)</string>
-  <string name="two_years_yinbi">2 سال + 2 برابر Yinbi رایگان:</string>
   <string name="thank_you_purchasing_pro">برای خریداری فانوس حرفه‌ای از شما تشکر می‌کنیم!</string>
-  <string name="you_will_receive_yinbi">وقتی که مهلت هدیه امروز تمام شود، n\ شما رمز ارز Yinbi)YNB) خود را دریافت خواهیدکرد n\</string>
-  <string name="yinbi_menu">منوی Yinbi</string>
-  <string name="yinbi_redemption_code">کد هدیه Yinbi</string>
   <string name="continue_to_lantern_pro">ادامه به فانوس حرفه‌ای</string>
-  <string name="yinbi_website">Yin.bi</string>
   <string name="date">تاریخ</string>
-  <string name="redemption_code">کد هدیه</string>
   <string name="status">وضعیت</string>
   <string name="copy_all_codes">کپی همه‌ی کدها</string>
-  <string name="visit_yinbi">از سایت Yin.bi بازدید کنید و هدیه YNB خود را دریافت کنید و حساب خود را نیز کنترل نمایید. کد‌های هدیه YNB سی روز بعد از خرید باطل خواهند‌شد.</string>
-  <string name="successfully_copied_codes">کدهای هدیه با موفقیت کپی شدند</string>
-  <string name="no_active_codes">کد هدیه فعالی ندارید. بعدا دوباره امتحان کنید</string>
-  <string name="thanks_purchase_yinbi">از این‌ که طرح لنترن را خریداری کرده‌اید سپاسگزاریم. کد هدیه Yinbi شما وقتی که هدیهٔ امروز فعال کامل شود روی این صفحه نشان داده‌خواهد شد. وقتی که تایمر کامل‌شد لطفا دوباره وارد شوید.</string>
-  <string name="yinbi_details">رمز ارز Yinbi با YNB یک رمز ارز غیرقابل بلوک جدید است که به زودی راه اندازی می‌شود و تراکنش‌های سریع، ایمن، آسان و کم هزینه را از طریق موبایل امکان پذیر می‌سازد. کاربران لنترن اولین کسانی هستند که دسترسی زودهنگام به این ارزرمز خواهند داشت.</string>
-  <string name="find_out_more">بیشتر بخوانید در: Yin.bi</string>
   <string name="best_deal">بهترین معامله</string>
-  <string name="launches_soon">Yinbi یا کد YNB به زودی راه اندازی خواهد‌شد و کاربران لنترن اولین گروهی خواهند‌بود که به این ارز رمز جدید دسترسی دارند. YNB در پایان هر روز با توجه به تعداد کسانی که عضویت خود را ارتقاء داده اند یا تعداد سالهای عضویت یا حساب‌های عضویت توزیع می‌شود.</string>
-  <string name="how_yinbis_distributed">Yinbi در پایان هر روز با توجه به تعداد Yinbi آزاد شده در همان روز، تعداد کسانی که عضویت خود را ارتقاء می‌دهند، تعداد سال‌های عضویت و یا حساب‌هایی که شما خریداری می‌کنید توزیع می‌شود. کد هدیه Yinbi شما وقتی کن مهلت هدیه امروز تمام شود روی این صفحه ظاهر خواهد شد. وقتی که زمان تایمر تمام شد دو باره این صفحه را کنترل کنید.</string>
-  <string name="get_bulk_yinbi"><u>مجموعه حساب‌های حرفه‌ای را خریداری کنید تا مجموعه‌ای از Yinbi دریافت کنید!</u></string>
-  <string name="loading_yinbi_account_info">در حال بارگذاری اطلاعات حساب Yinbi</string>
-  <string name="free_yinbi_with_purchase">Yinbi رایگان در ازای خرید</string>
   <string name="renew_now_get_more">تمدید کنید و بیشتر دریافت کنید!</string>
-  <string name="buy_pro_get_yinbi">حساب حرفه‌ای بخرید و Yinbi دریافت کنید</string>
   <string name="renewal_note">توجه: زمان طرح جدیدی که خریده‌اید به زمان طرح فعلی شما اضافه خواهد شد.</string>
   <string name="bulk_codes_error">خطا! لطفا کدهای نشانه‌گذاری شده را بررسی کنید.</string>
-  <string name="loading_yinbi">در حال بارگذاری کدهای هدیه</string>
-  <string name="lantern_partnered_yinbi">فانوس با Yinbi برای ارائه‌ی YNB به تمام کسانی که فانوس حرفه‌ای را تمدید می‌کنند، همکاری دارد! هم‌اکنون تمدید کنید تا دسترسی پیدا کنید! برای اطلاعات بیشتر درباره‌ی Yinbi به سایت رسمی آن مراجعه کنید: Yin.bi</string>
-  <string name="time_left_giveaway">زمان باقی‌مانده هدیه Yinbi امروز</string>
-  <string name="yinbi_released_today">امروز %d آزاد می‌شود</string>
-  <string name="yinbi_distribution_details">YNB در پایان هر روز بر اساس تعداد Yinbi آزاد شده در همان روز وتعداد کسانی که عضویت خود را ارتقاء می‌دهند یا تمدید می‌کنند و تعداد سال‌های عضویت و تعداد حساب‌های شما توزیع می‌شود.</string>
-  <string name="total_yinbi_released">مجموع YNB های آزاد شده هر روز کمتر می‌شود و هر سال هم نصف خواهد شد. بشتابید!</string>
   <string name="please_allow_lantern_to">لطفاً به Lantern اجازه بدهید تا...</string>
   <string name="permission_for">برای فعال‌سازی</string>
   <string name="android.permission.INTERNET">در حال اتصال به سرورهای Lantern</string>
@@ -487,11 +427,6 @@ https://bit.ly/lanternapk</string>
   <string name="lantern_desktop_share_description">جدیدترین برنامه‌های Lantern برای رایانه رومیزی و سایر پلتفورم‌ها را می‌توانید در لینک بالا پیدا کنید.</string>
   <string name="share_link">لینک را به اشتراک بگذارید</string>
   <string name="lantern_desktop_link_share_title">لینک دانلود Lantern را به اشتراک بگذارید</string>
-  <string name="upgrade_to_pro_get_yinbi">برای دریافت Yinbi، به نسخه Pro ارتقا دهید</string>
-  <string name="yinbi_description_free">Lantern با Yinbi برای ارائه YNB به تمام کسانی که Lantern Pro را خریداری می‌کنند، همکاری دارد! برای دسترسی به هدیه امروز، هم‌اکنون ارتقا دهید! برای اطلاعات بیشتر درباره Yinbi به سایت رسمی آن مراجعه کنید: Yin.bi</string>
-  <string name="yinbi_description_pro">Lantern با Yinbi برای ارائه YNB به تمام کسانی که Lantern Pro را تمدید می‌کنند، همکاری دارد! برای دسترسی به هدیه امروز، هم‌اکنون تمدید کنید! برای اطلاعات بیشتر درباره Yinbi به سایت رسمی آن مراجعه کنید: Yin.bi</string>
-  <string name="yinbi_title_free">ارز رمزنگاری‌شده رایگان Yinbi</string>
-  <string name="yinbi_title_pro">بازخرید Yinbi</string>
   <string name="redeem_lantern_pro_codes">استفاده از کدهای Lantern Pro</string>
   <string name="redeem_code_description_first_part">کدهای Bulk Lantern Pro را می‌توانید از اینجا دریافت کنید</string>
   <string name="redeem_code_description_second_part">reseller.lantern.io</string>
@@ -504,9 +439,6 @@ https://bit.ly/lanternapk</string>
   <string name="faster_data_centers">مراکز داده سریع‌تر</string>
   <string name="no_logs">هیچ گزارشی وجود ندارد</string>
   <string name="connect_up_to_3_devices">اتصال تا حداکثر 3 دستگاه</string>
-  <string name="free_yinbi_cryptocurrency">ارز رمزنگاری‌شده رایگان Yinbi!</string>
-  <string name="yinbi_cryptocurrency">ارز رمزنگاری‌شده Yinbi</string>
-  <string name="the_yinbi_foundation_description">بنیاد Yinbi 888 میلیارد ارز رمزنگاری‌شده YNB را منحصراً از طریق Lantern به خریداران Lantern Pro اعطا می‌کند. YNB در پایان هر روز، بر اساس مقدار Yinbi آزادشده در آن روز، تعداد افرادی که نسخه خود را به‌روزرسانی/تمدید می‌کنند، و تعداد سال‌ها یا حساب‌هایی که شما خریداری می‌کنید توزیع می‌شود. پس از خرید، می‌توانید جزئیات مربوط به جمع‌آوری YNB خود را در صفحه هدیه Yinbi پیدا کنید.</string>
   <string name="plan_duration">برنامه %d ساله</string>
   <string name="total_cost">هربار صورتحساب %s صادر می‌شود</string>
   <string name="discount">ذخیره %s%%</string>
@@ -515,7 +447,6 @@ https://bit.ly/lanternapk</string>
   <string name="membership_end_soon">عضویت شما به زودی پایان می‌یابد. هم‌اکنون تمدید کنید و تا %s به‌صورت رایگان از آن لذت ببرید!</string>
   <string name="membership_ends_today">عضویت شما امروز به پایان می‌رسد. هم‌اکنون تمدید کنید و تا %s به‌صورت رایگان از آن لذت ببرید!</string>
   <string name="membership_has_expired">عضویت شما به پایان رسیده است! هم‌اکنون تمدید کنید و تا %s به‌صورت رایگان از آن لذت ببرید!</string>
-  <string name="free_extra_yinbi">2 برابر Yinbi!</string>
   <string name="step_2">مرحله 2</string>
   <string name="enter_email_short">وارد کردن ایمیل</string>
   <string name="mm_yy">سال/ماه</string>
@@ -538,13 +469,7 @@ https://bit.ly/lanternapk</string>
   <string name="send_report">ارسال گزارش </string>
   <string name="email_optional">ایمیل (اختیاری)</string>
   <string name="device_added">دستگاه اضافه شد</string>
-  <string name="device_authorized_pro">این دستگاه اکنون مجاز است از حساب Lantern Pro شما استفاده کند.</string>
   <string name="report_sent">گزارش فرستاده‌شد.</string>
-  <string name="thank_you_for_reporting_your_issue">سپاسگزاریم که مشکل‌تان را گزارش دادید. اگر ایمیل خود را ارائه دهید، به محض این که بتوانیم، به شما پاسخ خواهیم داد.</string>
-  <string name="visit_yin_bi_to_redeem_your_ynb">برای دریافت YNB خود، از سایت Yin.bi بازدید و موجودی حساب خود را کنترل کنید. 30 روز پس از خرید، کدهای هدیه Yinbi منقضی می‌شوند.</string>
-  <string name="ynb"># YNB</string>
-  <string name="ynb_distributed">YNB در پایان هر روز با توجه به تعداد Yinbi آزاد شده در همان روز، تعداد کسانی که عضویت خود را ارتقا می‌دهند، تعداد سال‌های عضویت و یا حساب‌هایی که شما خریداری می‌کنید توزیع می‌شود. کد هدیه Yinbi شما وقتی که مهلت هدیه امروز تمام شود روی این صفحه ظاهر خواهد شد. وقتی زمان تایمر تمام شد دوباره این صفحه را کنترل کنید.</string>
-  <string name="until_code_and_ynb_will_be_shown">تا زمانی که کد و # YNB نشان داده شود</string>
   <string name="have_a_lantern_pro_activation_code_click_here">کد فعال‌سازی Lantern Pro دارید؟ اینجا کلیک کنید</string>
   <string name="enter_email_and_activation_code">ایمیل و کد فعال‌سازی را وارد کنید</string>
   <string name="activation_code">کد فعالسازی</string>
@@ -557,4 +482,18 @@ https://bit.ly/lanternapk</string>
   <string name="pro_account_expiration">انقضای حساب نسخه Pro:</string>
   <string name="lantern_pro_devices_up_to_3">دستگاه‌های Lantern pro (حداکثر 3 دستگاه)</string>
   <string name="renew_short">تمدید مجدد</string>
+  <string name="connection_error">خطای اتصال</string>
+  <string name="reopen_to_try">برای امتحان مجدد، لطفاً %1$s این را دوباره باز کنید.</string>
+  <string name="init_account">%1$s درحال مقداردهی اولیه حسابتان است، ممکن است کمی طول بکشد.</string>
+  <string name="tampered_apk">apk دانلودشده به خطر افتاده است، لطفاً نسخه رسمی را دانلود کنید</string>
+  <string name="incoming_call">تماس ورودی</string>
+  <string name="accept">قبول کردن</string>
+  <string name="decline">نپذیرفتن</string>
+  <string name="new_message">پیام جدید</string>
+  <string name="from_sender">از %1$s</string>
+  <string name="unnamed_contact">مخاطب بی‌نام</string>
+  <string name="message_notifications_channel">پیغام ها</string>
+  <string name="call_notifications_channel">تماس‌ها</string>
+  <string name="lantern_service">سرویس</string>
+  <string name="replica_download">دانلود Replica</string>
 </resources>

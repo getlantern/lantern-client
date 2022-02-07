@@ -1,21 +1,38 @@
 # 
 # Translators:
-# e2f <projects@e2f.com>, 2021
-# Anh Phan <vietnamesel10n@gmail.com>, 2021
-# Nathan Tran, 2021
-# Yen Le Van <yenlevanbk@gmail.com>, 2021
-# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2021
-# Lantern, 2021
+# Anh Phan <vietnamesel10n@gmail.com>, 2022
+# Lantern, 2022
+# Yen Le Van <yenlevanbk@gmail.com>, 2022
+# e2f <projects@e2f.com>, 2022
+# Nathan Tran, 2022
+# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2021\n"
+"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2022\n"
 "Language-Team: Vietnamese (https://www.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "app_name"
 msgstr "Lantern"
+
+msgid "introducing"
+msgstr "Giới thiệu Trò chuyện"
+
+msgid "introducing_des"
+msgstr ""
+"Trò chuyện an toàn với bạn bè bằng cách sử dụng trò chuyện mã hóa & chống "
+"chặn mới được tích hợp trực tiếp vào Lantern!"
+
+msgid "maybe_later"
+msgstr "Có lẽ để sau"
+
+msgid "try"
+msgstr "Dùng thử"
+
+msgid "new"
+msgstr "Mới"
 
 msgid "Daily Data Usage"
 msgstr "Sử dụng dữ liệu hàng ngày"
@@ -26,7 +43,7 @@ msgstr "là"
 msgid "connected"
 msgstr "Đã kết nối"
 
-msgid "disconnected"
+msgid "Disconnected"
 msgstr "Đã ngắt kết nối"
 
 msgid "Disconnecting"
@@ -35,14 +52,29 @@ msgstr "Đang ngắt kết nối..."
 msgid "Connecting"
 msgstr "Đang kết nối..."
 
+msgid "no_network_connection"
+msgstr "Không có kết nối mạng"
+
+msgid "connection_error"
+msgstr "Lỗi kết nối"
+
+msgid "connection_error_des"
+msgstr ""
+"Lantern đang gặp sự cố khi kết nối với máy chủ của chúng tôi. Vui lòng khởi "
+"động lại ứng dụng. Nếu sự cố này vẫn tiếp diễn, vui lòng liên hệ với bộ phận"
+" hỗ trợ."
+
+msgid "connection_error_button"
+msgstr "Liên hệ hỗ trợ"
+
+msgid "Calling"
+msgstr "Đang gọi..."
+
 msgid "Go Pro Title"
 msgstr "Lên Pro!"
 
 msgid "Go Pro Description"
 msgstr "Mở khóa tốc độ nhanh hơn và dữ liệu không giới hạn!"
-
-msgid "Go Pro Description With Yinbi"
-msgstr "Dữ liệu không giới hạn + tiền điện tử Yinbi miễn phí!"
 
 msgid "Server Location"
 msgstr "Địa chỉ Server"
@@ -55,35 +87,56 @@ msgstr ""
 msgid "OK"
 msgstr "ĐỒNG Ý"
 
-msgid "pro_account_management"
+msgid "Done"
+msgstr "Xong"
+
+msgid "backup_recovery_key"
+msgstr "Khóa khôi phục sao lưu"
+
+msgid "delete_chat_data"
+msgstr "Xóa tất cả dữ liệu trò chuyện"
+
+msgid "delete_chat_data_description"
+msgstr ""
+"Thao tác này sẽ xóa Số trò chuyện, danh bạ và tin nhắn của bạn khỏi thiết bị"
+" này nhưng không xóa Khóa khôi phục sao lưu, bạn sẽ mất quyền truy cập vào "
+"Số trò chuyện của mình."
+
+msgid "delete_chat_data_confirmation"
+msgstr "Tôi xác nhận rằng tôi muốn xóa dữ liệu trò chuyện của mình"
+
+msgid "Pro Account Management"
 msgstr "Quản Trị Tài Khoản Pro"
 
-msgid "add_device"
-msgstr "Thêm Máy"
+msgid "Link Device"
+msgstr "Liên kết thiết bị"
 
-msgid "upgrade_to_lantern_pro"
+msgid "Upgrade to Lantern Pro"
 msgstr "Nâng Cấp lên Lantern Pro"
 
-msgid "authorize_device_for_pro"
-msgstr "Cho Phép Máy dùng bản Pro"
-
-msgid "invite_friends"
+msgid "Invite Friends"
 msgstr "Mời Bạn Bè"
 
 msgid "desktop_version"
 msgstr "Phiên bản Để Bàn"
 
-msgid "free_yinbi_crypto"
-msgstr "Tiền điện tử Yinbi miễn phí"
-
-msgid "yinbi_redemption"
-msgstr "Đổi thưởng Yinbi"
-
 msgid "settings"
 msgstr "Cài đặt"
 
+msgid "general"
+msgstr "Chung"
+
 msgid "proxy_all"
 msgstr "Proxy tất cả"
+
+msgid "proxy_everything_is"
+msgstr "Proxy tất cả là  %s"
+
+msgid "version_number"
+msgstr "Phiên bản %s"
+
+msgid "build_number"
+msgstr "Xây dựng %s"
 
 msgid "language"
 msgstr "Ngôn ngữ"
@@ -91,55 +144,16 @@ msgstr "Ngôn ngữ"
 msgid "report_issue"
 msgstr "Báo cáo lỗi"
 
+msgid "blocked_users"
+msgstr "Người dùng bị chặn"
+
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Nếu được bật, tất cả lưu lượng sẽ được gửi qua Lantern (an toàn hơn). Nếu bị"
 " tắt, chỉ lưu lượng bị chặn mới được gửi qua Lantern (nhanh hơn)."
 
-msgid "Exchange"
-msgstr "Giao dịch"
-
 msgid "Account"
 msgstr "Tài khoản"
-
-msgid "In partnership with"
-msgstr "Hợp tác với"
-
-msgid "Buy"
-msgstr "Mua"
-
-msgid "Bitcoin"
-msgstr "Bitcoin"
-
-msgid "Tether"
-msgstr "Tether"
-
-msgid "With"
-msgstr "Với"
-
-msgid "Online Wallets"
-msgstr "Các ví trực tuyến"
-
-msgid "Bank Transfers"
-msgstr "Chuyển khoản ngân hàng"
-
-msgid "Gift Cards"
-msgstr "Thẻ quà tặng"
-
-msgid "Game Cards"
-msgstr "Thẻ Game"
-
-msgid "Cash Payment"
-msgstr "Thanh toán tiền mặt"
-
-msgid "Digital Currencies"
-msgstr "Tiền kỹ thuật số"
-
-msgid "Payment Method"
-msgstr "Phương thức Trả tiền"
-
-msgid "SHOW BEST DEALS"
-msgstr "HIỂN THỊ CÁC ĐỀ XUẤT TỐT NHẤT"
 
 msgid "VPN Status"
 msgstr "Trạng thái VPN"
@@ -165,17 +179,26 @@ msgstr "HOẶC"
 msgid "Authorize Device via Email"
 msgstr "Cấp phép thiết bị qua email"
 
+msgid "auth_email_helper_text"
+msgstr "Nhập email được liên kết với tài khoản Pro của bạn"
+
 msgid "Requires access to the email you used to buy Lantern Pro"
 msgstr "Yêu cầu quyền truy cập vào email bạn đã sử dụng để mua Lantern Pro"
 
 msgid "Link via Email"
 msgstr "Liên kết qua Email"
 
+msgid "lantern_pro_email"
+msgstr "Lantern Pro Email"
+
 msgid "Email"
 msgstr "Email"
 
 msgid "Submit"
 msgstr "Nộp"
+
+msgid "save"
+msgstr "Lưu"
 
 msgid "Please enter a valid email address"
 msgstr "Vui lòng nhập địa chỉ email hợp lệ"
@@ -206,7 +229,7 @@ msgstr "Thêm Máy"
 msgid "approve_device_step_1"
 msgstr ""
 "Mở 'Cho phép thiết bị dùng bản Pro' từ menu tài khoản trên thiết bị bạn muốn"
-" liên kết, sau đó chọn 'Liên kết bằng mã PIN'"
+" liên kết, sau đó chọn 'Liên kết bằng mã PIN'."
 
 msgid "approve_device_step_2"
 msgstr "Nhập mã liên kết có được từ bước 1"
@@ -230,19 +253,830 @@ msgid "confirm_remove_device"
 msgstr "Bạn có chắc là muốn gỡ kết nối máy này ra khỏi tài khoản Pro?"
 
 msgid "n/a"
-msgstr ""
+msgstr "không có"
 
 msgid "Developer Settings"
-msgstr ""
+msgstr "Thiết lập nhà phát triển"
 
 msgid "Developer"
+msgstr "Nhà phát triển"
+
+msgid "dev_settings"
 msgstr ""
+"Các cài đặt này chỉ dành cho mục đích phát triển. Thay đổi bất kỳ cài đặt "
+"nào sẽ tự động dừng và khởi động lại ứng dụng."
+
+msgid "dev_payment_mode"
+msgstr ""
+"Khi Chế độ kiểm tra thanh toán được bật, ứng dụng sử dụng một người dùng "
+"được mã cứng. Bạn có thể mua Stripe bằng số 4242 4242 4242 4242, ngày hết "
+"hạn trong tương lai và bất kỳ CVV nào."
 
 msgid "Payment Test Mode"
-msgstr ""
+msgstr "Chế độ kiểm tra thanh toán"
 
 msgid "Play Version"
+msgstr "Phiên bản Play"
+
+msgid "Force Country"
+msgstr "Lực lượng quốc gia"
+
+msgid "Error"
+msgstr "Lỗi"
+
+msgid "accept"
+msgstr "Đồng ý"
+
+msgid "cancel"
+msgstr "Hủy bỏ"
+
+msgid "reject"
+msgstr "Từ chối"
+
+msgid "copied"
+msgstr "Đã sao chép!"
+
+msgid "saved"
+msgstr "Đã lưu!"
+
+msgid "new_chat"
+msgstr "Trò chuyện mới"
+
+msgid "your_contact_info"
+msgstr "Thông tin liên lạc của bạn"
+
+msgid "display_name"
+msgstr "Tên hiển thị"
+
+msgid "edit"
+msgstr "Chỉnh sửa"
+
+msgid "save_error"
+msgstr "Đã xảy ra lỗi khi lưu."
+
+msgid "more_options"
+msgstr "Tùy chọn khác"
+
+msgid "block_user"
+msgstr "Chặn người dùng"
+
+msgid "unblock_user"
+msgstr "Bỏ chặn người dùng"
+
+msgid "block"
+msgstr "Chặn"
+
+msgid "unblock"
+msgstr "Bỏ chặn"
+
+msgid "block_info_title"
+msgstr "Chặn %s ?"
+
+msgid "no_blocked_users"
+msgstr "Không có người dùng bị chặn."
+
+msgid "unblock_info_title"
+msgstr "Bỏ chặn %s ?"
+
+msgid "block_info_description"
+msgstr ""
+"Việc chặn người dùng này sẽ xóa lịch sử trò chuyện và ngăn họ liên hệ với "
+"bạn trong tương lai. Bạn có thể bỏ chặn người dùng từ menu cài đặt."
+
+msgid "unblock_info_description"
+msgstr ""
+"%s bây giờ sẽ có thể nhắn tin cho bạn. Họ sẽ không được thông báo rằng bạn "
+"đã bỏ chặn họ. "
+
+msgid "block_info_checkbox"
+msgstr "Tôi hiểu rằng điều này sẽ xóa tất cả lịch sử trò chuyện."
+
+msgid "unblock_info_checkbox"
+msgstr "Tôi xác nhận rằng tôi muốn bỏ chặn liên hệ này."
+
+msgid "delete_permanently"
+msgstr "Xóa người dùng vĩnh viễn"
+
+msgid "delete_info_description"
+msgstr ""
+"Sau khi xóa, bạn sẽ cần thêm thông tin liên hệ của họ nếu muốn trò chuyện "
+"lại với họ."
+
+msgid "add_new_contact"
+msgstr "Thêm liên hệ mới"
+
+msgid "add_contact"
+msgstr "Thêm liên hệ"
+
+msgid "share_your_chat_number"
+msgstr "Chia sẻ Số trò chuyện của bạn"
+
+msgid "scan_qr_code"
+msgstr "Quét mã QR"
+
+msgid "add_contact_in_person"
+msgstr "Thêm liên hệ trực tiếp"
+
+msgid "start_chat"
+msgstr "Bắt đầu trò chuyện"
+
+msgid "message_disappearing"
+msgstr "Tất cả tin nhắn sẽ không biến mất đối với bạn và %s."
+
+msgid "message_disappearing_description"
+msgstr "Tất cả tin nhắn sẽ biến mất sau %s đối với bạn và %s."
+
+msgid "delete"
+msgstr "Xóa"
+
+msgid "view_contact_info"
+msgstr "Xem thông tin liên hệ"
+
+msgid "off"
+msgstr "Tắt"
+
+msgid "continue"
+msgstr "Tiếp tục"
+
+msgid "are_you_sure_you_want_to_open"
+msgstr "Bạn có chắc chắn muốn mở %s không?"
+
+msgid "set"
+msgstr "Đặt"
+
+msgid "menu"
+msgstr "Menu"
+
+msgid "send_error"
+msgstr "Đã xảy ra lỗi khi gửi tin nhắn của bạn"
+
+msgid "share_media_error"
+msgstr "Đã xảy ra lỗi khi chia sẻ tệp phương tiện"
+
+msgid "no_recents"
+msgstr "Không có Gần đây"
+
+msgid "set_display_name"
+msgstr "Đặt tên hiển thị"
+
+msgid "introduce_contact"
+msgstr "Giới thiệu Liên hệ"
+
+msgid "introduce_contacts"
+msgstr "Giới thiệu Liên hệ"
+
+msgid "introduce_contacts_with_count"
+msgstr "Giới thiệu Liên hệ (%s)"
+
+msgid "need_two_contacts_to_introduce"
+msgstr "Khi bạn có từ hai liên hệ trở lên, bạn sẽ có thể tạo giới thiệu."
+
+msgid "introduce_contacts_select"
+msgstr ""
+"Chọn hai hoặc nhiều liên hệ để giới thiệu. Họ sẽ được gửi lời giới thiệu để "
+"bắt đầu nhắn tin cho nhau."
+
+msgid "introduce_single_contact"
+msgstr ""
+"Chọn một liên hệ để giới thiệu với %s. Sau khi chấp thuận lời giới thiệu, họ"
+" sẽ có thể nhắn tin cho nhau."
+
+msgid "send_introductions"
+msgstr "Gửi giới thiệu"
+
+msgid "introductions_sent"
+msgstr "Đã gửi giới thiệu!"
+
+msgid "no_contacts_yet"
+msgstr "Chưa có liên hệ"
+
+msgid "contact_verification"
+msgstr "Xác minh liên hệ"
+
+msgid "verification"
+msgstr "Xác minh"
+
+msgid "contact_verification_description"
+msgstr "Xác minh liên hệ luôn có sẵn từ menu tin nhắn ở trên cùng bên phải."
+
+msgid "qr_error_description"
+msgstr "Đã xảy ra lỗi khi quét mã QR này."
+
+msgid "qr_info_verification_title"
+msgstr "Xác minh liên hệ trực tiếp"
+
+msgid "qr_info_f2f_title"
+msgstr "Đang quét mã QR"
+
+msgid "qr_info_verification_des"
+msgstr ""
+"Để xác minh liên hệ của bạn, hãy quét mã QR của nhau.\n"
+"\n"
+"Quá trình này đảm bảo tính riêng tư và mã hóa đầu cuối cho các cuộc trò chuyện của bạn."
+
+msgid "qr_info_f2f_des"
+msgstr ""
+"Để thêm bạn bè của bạn thành liên hệ, hãy quét mã QR của nhau.\n"
+"\n"
+"Quá trình này đảm bảo tính riêng tư và mã hóa đầu cuối cho các cuộc trò chuyện của bạn."
+
+msgid "qr_info_verification_scan"
+msgstr "Quét mã QR của nhau để xác minh."
+
+msgid "qr_info_f2f_scan"
+msgstr "Quét mã QR của nhau để thêm liên hệ."
+
+msgid "qr_success_snackbar"
+msgstr "%s là Liên hệ"
+
+msgid "qr_info_waiting_qr"
+msgstr "Đang đợi bạn bè quét mã QR của bạn..."
+
+msgid "scan_complete"
+msgstr "Quét hoàn tất"
+
+msgid "qr_for_your_contact"
+msgstr "Mã QR của bạn"
+
+msgid "add_via_chat_number"
+msgstr "Thêm qua Số trò chuyện"
+
+msgid "qr_info_waiting_id"
+msgstr "Đang đợi bạn bè của bạn nhập mã Messenger hoặc quét mã QR của bạn..."
+
+msgid "chat_number_not_found"
+msgstr "Không thể tìm thấy số trò chuyện, vui lòng kiểm tra số và thử lại"
+
+msgid "unable_to_add_contact"
+msgstr "Không tìm thấy liên hệ, hãy kiểm tra số và thử lại"
+
+msgid "self_adding"
+msgstr "Số trò chuyện bạn đã nhập thuộc về bạn"
+
+msgid "chat_number_type"
+msgstr "Nhập Số trò chuyện"
+
+msgid "letter_and_numbers_only"
+msgstr "Chỉ chữ và số"
+
+msgid "name_your_contact"
+msgstr "Đặt tên liên hệ của bạn"
+
+msgid "messenger_id_invalid"
+msgstr "Mã Messenger không hợp lệ"
+
+msgid "username_not_found"
+msgstr "Không tìm thấy tên người dùng"
+
+msgid "contact_id_your_id"
+msgstr "Mã Messenger của bạn"
+
+msgid "introductions"
+msgstr "Giới thiệu"
+
+msgid "introduced"
+msgstr "Được giới thiệu bởi %s"
+
+msgid "introductions_title"
+msgstr "Chấp nhận Giới thiệu với %s"
+
+msgid "introductions_info"
+msgstr ""
+"Cả hai bên phải chấp nhận giới thiệu mới có thể trò chuyện với nhau. Giới "
+"thiệu sẽ biến mất sau 7 ngày nếu không có hành động nào được thực hiện."
+
+msgid "introduction_reject_title"
+msgstr "Từ chối Giới thiệu"
+
+msgid "introduction_reject_content"
+msgstr ""
+"Bạn sẽ không thể nhắn tin cho liên hệ này nếu bạn từ chối lời giới thiệu."
+
+msgid "introductions_error_description_rejecting"
+msgstr "Đã xảy ra lỗi khi từ chối yêu cầu kết nối này."
+
+msgid "introductions_error_description_accepting"
+msgstr "Đã xảy ra lỗi khi chấp nhận yêu cầu kết nối này."
+
+msgid "no_introductions"
+msgstr "Không có giới thiệu đang chờ xử lý."
+
+msgid "introduction_approved"
+msgstr "Giới thiệu với %s đã được duyệt!"
+
+msgid "delete_contact_name"
+msgstr "Xóa %s"
+
+msgid "delete_contact"
+msgstr "Xóa liên hệ"
+
+msgid "error"
+msgstr "Lỗi"
+
+msgid "error_delete_contact"
+msgstr "Đã xảy ra lỗi khi xóa liên hệ này."
+
+msgid "unnamed_contact"
+msgstr "Liên hệ không tên"
+
+msgid "me"
+msgstr "Tôi"
+
+msgid "disappearing_messages"
+msgstr "Tin nhắn biến mất"
+
+msgid "start_of_your_history"
+msgstr ""
+"Các cuộc trò chuyện và cuộc gọi thoại của bạn với %s đã được mã hóa đầu cuối"
+
+msgid "banner_unaccepted"
+msgstr ""
+"%s không có trong danh sách liên hệ của bạn. Bạn có muốn chấp nhận yêu cầu "
+"trò chuyện không?"
+
+msgid "banner_messages_persist"
+msgstr "Các tin nhắn mới không biến mất."
+
+msgid "banner_message_retention"
+msgstr "Lưu giữ tin nhắn được đặt thành %s"
+
+msgid "longform_seconds"
+msgstr "%s giây"
+
+msgid "shortform_seconds"
+msgstr "%ss"
+
+msgid "longform_minute"
+msgstr "%s phút"
+
+msgid "shortform_minutes"
+msgstr "%sp"
+
+msgid "longform_minutes"
+msgstr "%s phút"
+
+msgid "longform_hour"
+msgstr "%s giờ"
+
+msgid "shortform_hours"
+msgstr "%sh"
+
+msgid "longform_hours"
+msgstr "%s giờ"
+
+msgid "longform_day"
+msgstr "%s ngày"
+
+msgid "shortform_days"
+msgstr "%sn"
+
+msgid "longform_days"
+msgstr "%s ngày"
+
+msgid "longform_week"
+msgstr "%s tuần"
+
+msgid "shortform_weeks"
+msgstr "%st"
+
+msgid "longform_weeks"
+msgstr "%s tuần"
+
+msgid "banner_source_unknown"
+msgstr "Không rõ"
+
+msgid "banner_source_qr"
+msgstr "Mã QR"
+
+msgid "banner_source_id"
+msgstr "Mã Messenger"
+
+msgid "banner_source_intro"
+msgstr "Giới thiệu"
+
+msgid "message_will_disappear_at"
+msgstr "Biến mất %s"
+
+msgid "change_display_name"
+msgstr "Thay đổi tên hiển thị"
+
+msgid "yesterday"
+msgstr "hôm qua"
+
+msgid "tomorrow"
+msgstr "ngày mai"
+
+msgid "just_now"
+msgstr "bây giờ"
+
+msgid "within_one_minute"
+msgstr "trong một phút"
+
+msgid "on_date"
+msgstr "vào %s"
+
+msgid "at_date"
+msgstr "lúc %s"
+
+msgid "error_fetching_message_preview"
+msgstr "Lỗi khi tìm nạp Xem trước tin nhắn"
+
+msgid "message_was_deleted"
+msgstr "Tin nhắn đã bị xóa"
+
+msgid "contact_was_deleted"
+msgstr "%s đã bị xóa khỏi liên hệ của bạn."
+
+msgid "contact_was_blocked"
+msgstr "%s đã bị chặn. "
+
+msgid "contact_was_unblocked"
+msgstr "%s đã được bỏ chặn. "
+
+msgid "dismiss"
+msgstr "Dismiss"
+
+msgid "copy_text"
+msgstr "Sao chép văn bản"
+
+msgid "message"
+msgstr "Tin nhắn"
+
+msgid "messages"
+msgstr "Tin nhắn"
+
+msgid "chats"
+msgstr "Trò chuyện"
+
+msgid "new_requests"
+msgstr "Yêu cầu mới %s"
+
+msgid "chat"
+msgstr "Trò chuyện"
+
+msgid "lantern_chat"
+msgstr "Trò chuyện Lantern"
+
+msgid "welcome_title"
+msgstr "Chào mừng đến với Trò chuyện Lantern!"
+
+msgid "welcome_text"
+msgstr ""
+"Cuộc trò chuyện được mã hóa để bảo vệ quyền riêng tư của bạn được kết hợp "
+"với công nghệ chống chặn tốt nhất."
+
+msgid "get_started"
+msgstr "Bắt đầu"
+
+msgid "want_to_recover"
+msgstr "Có Số trò chuyện?"
+
+msgid "recover"
+msgstr "Khôi phục"
+
+msgid "chat_number"
+msgstr "Số trò chuyện"
+
+msgid "your_chat_number"
+msgstr "Số trò chuyện của bạn"
+
+msgid "chat_number_recovery"
+msgstr "Khôi phục Số trò chuyện"
+
+msgid "recovery_helper_text"
+msgstr "Vui lòng nhập Khóa khôi phục hợp lệ"
+
+msgid "recovery_button"
+msgstr "Nhập Khóa khôi phục để khôi phục Số trò chuyện của bạn."
+
+msgid "recovery_label"
+msgstr "Nhập khóa khôi phục của bạn"
+
+msgid "recovery_key"
+msgstr "Khóa khôi phục"
+
+msgid "secure_text_explanation"
+msgstr ""
+"Số trò chuyện của bạn hoạt động giống như một số điện thoại mà bạn bè của "
+"bạn có thể sử dụng để liên hệ với bạn trên Lantern."
+
+msgid "secure_text_explanation_account"
+msgstr ""
+"Đây là phiên bản đầy đủ của Số trò chuyện của bạn; chia sẻ số dài hơn này có thể an toàn hơn, đặc biệt nếu bạn có một kênh được mã hóa đầu cuối khác để chia sẻ.\n"
+"\n"
+"Lantern cung cấp Số trò chuyện rút gọn để giúp việc chia sẻ thông tin liên hệ trở nên thuận tiện hơn."
+
+msgid "recovery_key_account_explanation"
+msgstr ""
+"Cất giữ khóa này ở nơi an toàn và không chia sẻ với bất kỳ ai. Đây là cách "
+"duy nhất để khôi phục Số trò chuyện của bạn nếu bạn bị mất điện thoại, "
+"chuyển đổi thiết bị hoặc đặt lại hệ điều hành."
+
+msgid "recovery_error"
+msgstr "Không thể khôi phục tài khoản của bạn."
+
+msgid "recovery_input_error"
+msgstr "Hãy đảm bảo rằng bạn đang nhập khóa khôi phục hợp lệ"
+
+msgid "recovery_retrieval_error"
+msgstr "Đã xảy ra lỗi khi truy xuất khóa khôi phục của bạn"
+
+msgid "recovery_success"
+msgstr "Bạn đã khôi phục thành công Số trò chuyện của mình"
+
+msgid "empty_chats_text"
+msgstr "Chia sẻ Số trò chuyện của bạn hoặc thêm liên hệ tại đây!"
+
+msgid "next"
+msgstr "Tiếp theo"
+
+msgid "automated_backup"
+msgstr "Sao lưu tự động"
+
+msgid "backup_explanation"
+msgstr ""
+"Lantern cung cấp tùy chọn mã hóa và sao lưu danh bạ của bạn vào các máy chủ an toàn của chúng tôi. Nếu bạn bỏ qua bản sao lưu, bạn sẽ không thể khôi phục danh bạ của mình bằng khóa khôi phục.\n"
+"\n"
+"Lantern không thể đọc danh sách liên hệ của bạn khi bạn chọn sao lưu chúng."
+
+msgid "backup_contacts"
+msgstr "Sao lưu liên hệ"
+
+msgid "copy_recovery_key"
+msgstr "Sao chép Khóa khôi phục"
+
+msgid "search"
+msgstr "Tìm kiếm"
+
+msgid "account_management"
+msgstr "Quản Trị Tài Khoản"
+
+msgid "add_via_username"
+msgstr "Thêm qua tên người dùng"
+
+msgid "username"
+msgstr "Tên người dùng"
+
+msgid "enter_a_username_to_start_a_conversation"
+msgstr "Nhập tên người dùng để bắt đầu cuộc trò chuyện bằng tin nhắn"
+
+msgid "start_message"
+msgstr "Bắt đầu nhắn tin"
+
+msgid "please_enter_a_valid_username"
+msgstr "Vui lòng nhập tên người dùng hợp lệ"
+
+msgid "open_url"
+msgstr "Mở URL"
+
+msgid "message_deleted"
+msgstr "%s đã xóa tin nhắn này "
+
+msgid "never"
+msgstr "Không bao giờ"
+
+msgid "delete_for_me"
+msgstr "Xóa cho tôi"
+
+msgid "delete_for_me_explanation"
+msgstr ""
+"Thao tác này sẽ xóa tin nhắn chỉ dành cho bạn. Những người khác sẽ vẫn có "
+"thể xem nó."
+
+msgid "delete_for_everyone"
+msgstr "Xóa cho mọi người"
+
+msgid "delete_for_everyone_explanation"
+msgstr "Thao tác này sẽ xóa tin nhắn cho tất cả mọi người."
+
+msgid "reply"
+msgstr "Trả lời"
+
+msgid "replying_to"
+msgstr "Đang trả lời %s"
+
+msgid "attachment"
+msgstr "Tệp đính kèm"
+
+msgid "error_rendering_message"
+msgstr "Lỗi hiển thị thông báo"
+
+msgid "error_fetching_preview"
+msgstr "Lỗi khi tìm nạp xem trước tin nhắn"
+
+msgid "audio"
+msgstr "Âm thanh"
+
+msgid "image"
+msgstr "Hình ảnh"
+
+msgid "video"
+msgstr "Video"
+
+msgid "app"
+msgstr "Ứng dụng"
+
+msgid "document"
+msgstr "Tài liệu"
+
+msgid "search_chars_min"
+msgstr "Nhập ít nhất ba ký tự"
+
+msgid "search_no_results"
+msgstr ""
+"Rất tiếc, chúng tôi không thể tìm thấy bất kỳ điều gì phù hợp với tìm kiếm "
+"này."
+
+msgid "search_error"
+msgstr "Rất tiếc, đã xảy ra lỗi khi truy xuất kết quả tìm kiếm."
+
+msgid "search_contacts"
+msgstr "Liên hệ (%s)"
+
+msgid "search_chats"
+msgstr "Trò chuyện (%s)"
+
+msgid "search_in_contacts"
+msgstr "Tìm kiếm trong Liên hệ"
+
+msgid "search_in_chats"
+msgstr "Tìm kiếm trong Trò chuyện và Liên hệ"
+
+msgid "could_not_render_title"
+msgstr "Không thể kết xuất tiêu đề tệp"
+
+msgid "could_not_render_type"
+msgstr "Không thể kết xuất loại tệp"
+
+msgid "speaker"
+msgstr "Loa"
+
+msgid "speaker_on"
+msgstr "Bật loa"
+
+msgid "mute"
+msgstr "Tắt tiếng"
+
+msgid "muted"
+msgstr "Đã tắt tiếng"
+
+msgid "end_call"
+msgstr "Kết thúc cuộc gọi"
+
+msgid "verify_contact"
+msgstr "Xác minh %s"
+
+msgid "verified"
+msgstr "Đã xác minh"
+
+msgid "pending_verification"
+msgstr "Đang chờ xác minh"
+
+msgid "verify_description"
+msgstr ""
+"Như một phương pháp bảo mật tốt nhất, chúng tôi khuyên bạn nên kiểm tra xem số xác minh của %s có khớp với số của bạn hay không.\n"
+"\n"
+"Bạn muốn xác minh trực tiếp hay qua cuộc gọi điện thoại?"
+
+msgid "verify_in_person"
+msgstr "Xác minh trực tiếp"
+
+msgid "verify_via_call"
+msgstr "Xác minh qua cuộc gọi thoại"
+
+msgid "dismiss_notification"
+msgstr "Loại bỏ thông báo"
+
+msgid "call_contact"
+msgstr "Gọi %s ?"
+
+msgid "call"
+msgstr "Gọi"
+
+msgid "incoming_call"
+msgstr "Cuộc gọi đến"
+
+msgid "call_from"
+msgstr "Từ %s"
+
+msgid "in_call"
+msgstr "Cuộc gọi đang diễn ra"
+
+msgid "in_call_des"
+msgstr "Thông báo cuộc gọi đang diễn ra"
+
+msgid "incoming_call_from"
+msgstr "Cuộc gọi đến từ %s"
+
+msgid "touch_here_to_open_call"
+msgstr "Chạm vào đây để mở cuộc gọi"
+
+msgid "in_call_with"
+msgstr "Trong cuộc gọi với %s"
+
+msgid "undo_verification"
+msgstr "Hoàn tác xác minh"
+
+msgid "mark_as_verified"
+msgstr "Đánh dấu là đã xác minh"
+
+msgid "verification_panel_success"
+msgstr "Xác minh thành công! Tin nhắn của bạn với %s được bảo mật."
+
+msgid "verification_panel_pending"
+msgstr ""
+"Đây là số xác minh của bạn. Kiểm tra xem số của bạn có khớp chính xác với số"
+" của %s không trước khi đánh dấu chúng đã được xác minh."
+
+msgid "replica_upload_confirmation_title"
+msgstr "Quan trọng!"
+
+msgid "replica_upload_confirmation_body"
+msgstr ""
+"Các tệp được tải lên Mạng Lantern có thể truy cập công khai. Chúng được tản quyền và không thể bị xóa khỏi mạng bởi bất kỳ ai.\n"
+"\n"
+"Tránh thông tin nhận dạng cá nhân trong nội dung tệp và tên tệp khi tải lên nội dung nhạy cảm."
+
+msgid "replica_upload_confirmation_agree"
+msgstr "Tiếp tục Tải lên"
+
+msgid "dont_show_me_this_again"
+msgstr "Không hiển thị lại cho tôi nữa"
+
+msgid "download"
+msgstr "Tải xuống"
+
+msgid "download_started"
+msgstr "Đã bắt đầu tải xuống"
+
+msgid "uploader"
+msgstr "Công cụ tải lên"
+
+msgid "upload_started"
+msgstr "Đã bắt đầu tải lên"
+
+msgid "upload_in_progress"
+msgstr "Đang tải lên"
+
+msgid "upload_complete"
+msgstr "Tải lên hoàn tất"
+
+msgid "upload_failed"
+msgstr "Tải lên thất bại"
+
+msgid "upload_cancelled"
+msgstr "Tải lên bị hủy"
+
+msgid "replica_link_fetcher"
+msgstr "Trình tìm nạp liên kết bản sao"
+
+msgid "no_preview_for_this_type_of_file"
+msgstr "Không có bản xem trước cho loại tệp này"
+
+msgid "app_unknown"
+msgstr "ứng dụng/không xác định"
+
+msgid "audio_unknown"
+msgstr "âm thanh/không xác định"
+
+msgid "document_unknown"
+msgstr "tài liệu/không xác định"
+
+msgid "no_search_result_found"
+msgstr ""
+"Rất tiếc, chúng tôi không thể tìm thấy bất cứ điều gì phù hợp với tìm kiếm"
+
+msgid "search_result_error"
 msgstr ""
 
-msgid "Yinbi Enabled"
+msgid "video_stream_error"
 msgstr ""
+
+msgid "untitled"
+msgstr "Không có tiêu đề"
+
+msgid "failed_to_init_replica"
+msgstr "Lỗi: Không thể khởi tạo Bản sao"
+
+msgid "awaiting_result"
+msgstr "Đang chờ kết quả..."
+
+msgid "discover"
+msgstr "Khám phá"
+
+msgid "replica_search_intro"
+msgstr ""
+"Tìm kiếm nội dung do người dùng tải lên trên Mạng Lantern hoặc tải lên nội "
+"dung của riêng bạn để người khác khám phá."
+
+msgid "share"
+msgstr "Chia sẻ"
+
+msgid "upload_file_screen"
+msgstr "Tải tệp lên"
+
+msgid "name_your_file"
+msgstr "Đặt tên tệp của bạn"
+
+msgid "upload"
+msgstr "Tải lên"

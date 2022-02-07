@@ -23,7 +23,7 @@ import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.activity_check_out_reseller)
-public class RegisterProActivity extends FragmentActivity {
+public class RegisterProActivity extends BaseFragmentActivity {
 
     private static final String TAG = RegisterProActivity.class.getName();
     private static final int RESELLER_CODE_LEN = 29;

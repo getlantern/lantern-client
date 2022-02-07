@@ -86,7 +86,7 @@ fun Activity.restartApp() {
     )
     val mgr: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     mgr.set(AlarmManager.RTC, java.lang.System.currentTimeMillis() + 100, mPendingIntent)
-    Process.killProcess(Process.myPid());
+    Process.killProcess(Process.myPid())
 }
 
 fun Activity.openCheckOutReseller() {

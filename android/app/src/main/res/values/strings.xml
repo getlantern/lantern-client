@@ -45,6 +45,7 @@
     <string name="on_desc">You can now access\r\nblocked sites and services</string>
     <string name="off_desc">Click the button to access blocked sites and services</string>
     <string name="service_connected">"Connected to VPN"</string>
+    <string name="service_issue">Unable to connect to VPN</string>
     <string name="ready_to_connect">Ready to Connect</string>
     <string name="desktop_option">Desktop Version</string>
     <string name="contact_option">Contact</string>

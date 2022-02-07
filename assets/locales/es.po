@@ -1,21 +1,39 @@
 # 
 # Translators:
 # Giorgio Maone <giorgio@maone.net>, 2021
-# e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2021
-# e2f <projects@e2f.com>, 2021
-# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2021
-# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2021
-# strel, 2021
+# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2022
+# e2f <projects@e2f.com>, 2022
+# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2022
+# tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2022
+# strel, 2022
+# e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: strel, 2021\n"
+"Last-Translator: e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022\n"
 "Language-Team: Spanish (https://www.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "app_name"
 msgstr "Lantern"
+
+msgid "introducing"
+msgstr "Presentamos nuestro chat"
+
+msgid "introducing_des"
+msgstr ""
+"¡Use nuestro nuevo chat cifrado e integrado en Lantern para charlar con sus "
+"amigos/as de forma segura y sin bloqueos!"
+
+msgid "maybe_later"
+msgstr "Mejor en otro momento"
+
+msgid "try"
+msgstr "Probar"
+
+msgid "new"
+msgstr "Novedad"
 
 msgid "Daily Data Usage"
 msgstr "Uso de datos diario"
@@ -26,7 +44,7 @@ msgstr "está"
 msgid "connected"
 msgstr "Conectado"
 
-msgid "disconnected"
+msgid "Disconnected"
 msgstr "Desconectado"
 
 msgid "Disconnecting"
@@ -35,14 +53,29 @@ msgstr "Desconectando..."
 msgid "Connecting"
 msgstr "Conectando..."
 
+msgid "no_network_connection"
+msgstr "No hay conexión a Internet"
+
+msgid "connection_error"
+msgstr "Error de conexión"
+
+msgid "connection_error_des"
+msgstr ""
+"Lantern tiene dificultades para establecer conexión con nuestros servidores."
+" Reinicie la aplicación, por favor. Si el problema persiste, póngase en "
+"contacto con nuestro equipo de asistencia."
+
+msgid "connection_error_button"
+msgstr "Contactar con asistencia"
+
+msgid "Calling"
+msgstr "Llamando..."
+
 msgid "Go Pro Title"
 msgstr "¡Hágase Pro!"
 
 msgid "Go Pro Description"
 msgstr "¡Navegue a más velocidad y con datos ilimitados!"
-
-msgid "Go Pro Description With Yinbi"
-msgstr "¡Datos ilimitadps + criptomonedas Yinbi gratis!"
 
 msgid "Server Location"
 msgstr "Ubicación del servidor"
@@ -55,35 +88,56 @@ msgstr ""
 msgid "OK"
 msgstr "Aceptar"
 
-msgid "pro_account_management"
+msgid "Done"
+msgstr "Listo"
+
+msgid "backup_recovery_key"
+msgstr "Clave de recuperación de copia de seguridad"
+
+msgid "delete_chat_data"
+msgstr "Eliminar todos los datos del chat"
+
+msgid "delete_chat_data_description"
+msgstr ""
+"Si toma esta decisión, eliminaremos su Número de chat y todos los contactos "
+"y mensajes de este dispositivo. Si no dispone de clave de recuperación de "
+"copia de seguridad, perderá el acceso a su Número de chat."
+
+msgid "delete_chat_data_confirmation"
+msgstr "Confirmo que deseo eliminar mis datos de chat"
+
+msgid "Pro Account Management"
 msgstr "Gestión de cuenta Pro"
 
-msgid "add_device"
-msgstr "Añadir dispositivo"
+msgid "Link Device"
+msgstr "Vincular dispositivo"
 
-msgid "upgrade_to_lantern_pro"
+msgid "Upgrade to Lantern Pro"
 msgstr "Actualizar a Lantern Pro"
 
-msgid "authorize_device_for_pro"
-msgstr "Autorizar dispositivo para Pro"
-
-msgid "invite_friends"
+msgid "Invite Friends"
 msgstr "Invitar amigos"
 
 msgid "desktop_version"
 msgstr "Versión de escritorio"
 
-msgid "free_yinbi_crypto"
-msgstr "Criptomonedas Yinbi gratis"
-
-msgid "yinbi_redemption"
-msgstr "Canje de Yinbi"
-
 msgid "settings"
 msgstr "Configuración"
 
+msgid "general"
+msgstr "General"
+
 msgid "proxy_all"
 msgstr "Proxyficar todo"
+
+msgid "proxy_everything_is"
+msgstr "Proxificar todo está %s"
+
+msgid "version_number"
+msgstr "Versión %s"
+
+msgid "build_number"
+msgstr "Compilación %s"
 
 msgid "language"
 msgstr "Idioma"
@@ -91,56 +145,17 @@ msgstr "Idioma"
 msgid "report_issue"
 msgstr "Informar de un problema"
 
+msgid "blocked_users"
+msgstr "Usuarios bloqueados"
+
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Si está habilitado, todo el trafico se enviará a través de Lantern (más "
 "seguro). Si está deshabilitado, solo el tráfico bloqueado se enviará a "
 "través de Lantern (más rápido)."
 
-msgid "Exchange"
-msgstr "Cambiar"
-
 msgid "Account"
 msgstr "Cuenta"
-
-msgid "In partnership with"
-msgstr "En asociación con"
-
-msgid "Buy"
-msgstr "Comprar"
-
-msgid "Bitcoin"
-msgstr "Bitcoin"
-
-msgid "Tether"
-msgstr "Tether"
-
-msgid "With"
-msgstr "Con"
-
-msgid "Online Wallets"
-msgstr "Carteras en línea"
-
-msgid "Bank Transfers"
-msgstr "Transferencias bancaria"
-
-msgid "Gift Cards"
-msgstr "Tarjetas regalo"
-
-msgid "Game Cards"
-msgstr "Tarjetas de juego"
-
-msgid "Cash Payment"
-msgstr "Pago en efectivo"
-
-msgid "Digital Currencies"
-msgstr "Divisas digitales"
-
-msgid "Payment Method"
-msgstr "Método de pago"
-
-msgid "SHOW BEST DEALS"
-msgstr "VER MEJORES OFERTAS"
 
 msgid "VPN Status"
 msgstr "Estado de la VPN"
@@ -166,6 +181,9 @@ msgstr "O"
 msgid "Authorize Device via Email"
 msgstr "Autorizar el dispositivo por correo electrónico"
 
+msgid "auth_email_helper_text"
+msgstr "Introduzca el correo electrónico vinculado a su cuenta Pro"
+
 msgid "Requires access to the email you used to buy Lantern Pro"
 msgstr ""
 "Requiere tener acceso al correo electrónico que utilizó para adquirir "
@@ -174,11 +192,17 @@ msgstr ""
 msgid "Link via Email"
 msgstr "Vincular con correo electrónico"
 
+msgid "lantern_pro_email"
+msgstr "Correo electrónico de Lantern Pro"
+
 msgid "Email"
 msgstr "Correo electrónico"
 
 msgid "Submit"
 msgstr "Enviar"
+
+msgid "save"
+msgstr "Guardar"
 
 msgid "Please enter a valid email address"
 msgstr "Introduzca una dirección de correo electrónico válida"
@@ -210,7 +234,7 @@ msgstr "Añadir dispositivo"
 msgid "approve_device_step_1"
 msgstr ""
 "Abra \"Autorizar dispositivo para Pro\" en el menú de cuenta del otro "
-"dispositivo que desea vincular y seleccione \"Vincular con PIN\""
+"dispositivo que desea vincular y seleccione \"Vincular con PIN\"."
 
 msgid "approve_device_step_2"
 msgstr "Introduzca el código de vinculación obtenido en el paso 1"
@@ -235,19 +259,846 @@ msgstr ""
 "¿Está seguro de que quiere desvincular este dispositivo de su cuenta Pro?"
 
 msgid "n/a"
-msgstr ""
+msgstr "n/d"
 
 msgid "Developer Settings"
-msgstr ""
+msgstr "Ajustes de desarrollador"
 
 msgid "Developer"
+msgstr "Desarrollador"
+
+msgid "dev_settings"
 msgstr ""
+"Estos ajustes son solo para fines de desarrollo. Los cambios realizados "
+"podrían provocar el cierre y reinicio de la aplicación."
+
+msgid "dev_payment_mode"
+msgstr ""
+"Al habilitar el modo Prueba de pago, la aplicación emplea un único usuario "
+"absoluto. Dispone de la posibilidad de hacer compras con Stripe utilizando "
+"el número 4242 4242 4242 4242, una fecha de caducidad futura y un CVV "
+"cualquiera."
 
 msgid "Payment Test Mode"
-msgstr ""
+msgstr "Modo Prueba de pago"
 
 msgid "Play Version"
+msgstr "Versión de Google Play"
+
+msgid "Force Country"
+msgstr "Forzar país"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "accept"
+msgstr "Aceptar"
+
+msgid "cancel"
+msgstr "Cancelar"
+
+msgid "reject"
+msgstr "Rechazar"
+
+msgid "copied"
+msgstr "¡Copiado!"
+
+msgid "saved"
+msgstr "¡Guardado!"
+
+msgid "new_chat"
+msgstr "Nuevo chat"
+
+msgid "your_contact_info"
+msgstr "Su información de contacto"
+
+msgid "display_name"
+msgstr "Nombre en pantalla"
+
+msgid "edit"
+msgstr "Editar"
+
+msgid "save_error"
+msgstr "Algo ha fallado durante el proceso de guardado."
+
+msgid "more_options"
+msgstr "Más opciones"
+
+msgid "block_user"
+msgstr "Bloquear usuario"
+
+msgid "unblock_user"
+msgstr "Desbloquear usuario"
+
+msgid "block"
+msgstr "Bloquear"
+
+msgid "unblock"
+msgstr "Desbloquear"
+
+msgid "block_info_title"
+msgstr "¿Bloquear a %s ?"
+
+msgid "no_blocked_users"
+msgstr "No hay ningún usuario bloqueado."
+
+msgid "unblock_info_title"
+msgstr "¿Desbloquear a %s ?"
+
+msgid "block_info_description"
+msgstr ""
+"Si bloquea a este usuario, se eliminará el historial de chat e impedirá que "
+"pueda ponerse en contacto con usted en el futuro. Puede desbloquear a los "
+"usuarios bloqueados en el menú de configuración."
+
+msgid "unblock_info_description"
+msgstr ""
+"%s puede ahora enviarle mensajes. No obstante, no se le informará de que le "
+"ha desbloqueado."
+
+msgid "block_info_checkbox"
+msgstr "Soy consciente de que se eliminará todo el historial de chat."
+
+msgid "unblock_info_checkbox"
+msgstr "Confirmo que deseo desbloquear a este contacto."
+
+msgid "delete_permanently"
+msgstr "Eliminar usuario de forma permanente"
+
+msgid "delete_info_description"
+msgstr ""
+"Si una vez eliminado desea volver a chatear con él/ella, deberá introducir "
+"su información de contacto."
+
+msgid "add_new_contact"
+msgstr "Añadir nuevo contacto"
+
+msgid "add_contact"
+msgstr "Añadir contacto"
+
+msgid "share_your_chat_number"
+msgstr "Compartir su Número de chat"
+
+msgid "scan_qr_code"
+msgstr "Escanear código QR"
+
+msgid "add_contact_in_person"
+msgstr "Añadir contactos en persona"
+
+msgid "start_chat"
+msgstr "Iniciar chat"
+
+msgid "message_disappearing"
+msgstr "No desaparecerán todos los mensajes entre usted y %s."
+
+msgid "message_disappearing_description"
+msgstr "Todos los mensajes entre usted y %s desaparecerán al cabo de %s."
+
+msgid "delete"
+msgstr "Borrar"
+
+msgid "view_contact_info"
+msgstr "Ver información de contacto"
+
+msgid "off"
+msgstr "Desconectado"
+
+msgid "continue"
+msgstr "Continuar"
+
+msgid "are_you_sure_you_want_to_open"
+msgstr "¿Seguro que desea abrir %s?"
+
+msgid "set"
+msgstr "Establecer"
+
+msgid "menu"
+msgstr "Menú"
+
+msgid "send_error"
+msgstr "Algo ha fallado durante el envío de su mensaje"
+
+msgid "share_media_error"
+msgstr "Algo ha fallado al compartir un archivo audiovisual"
+
+msgid "no_recents"
+msgstr "No hay recientes"
+
+msgid "set_display_name"
+msgstr "Establecer nombre en pantalla"
+
+msgid "introduce_contact"
+msgstr "Presentar contacto"
+
+msgid "introduce_contacts"
+msgstr "Presentar contactos"
+
+msgid "introduce_contacts_with_count"
+msgstr "Presentar contactos (%s)"
+
+msgid "need_two_contacts_to_introduce"
+msgstr "Podrá crear presentaciones en cuanto tenga dos o más contactos."
+
+msgid "introduce_contacts_select"
+msgstr ""
+"Seleccione a dos o más contactos para presentarlos. Se les enviarán "
+"presentaciones para que puedan mensajearse entre ellos."
+
+msgid "introduce_single_contact"
+msgstr ""
+"Seleccione a un contacto para presentárselo a %s.  En cuanto apruebe la "
+"presentación, podrán mensajearse entre ellos."
+
+msgid "send_introductions"
+msgstr "Enviar presentaciones"
+
+msgid "introductions_sent"
+msgstr "¡Presentaciones enviadas!"
+
+msgid "no_contacts_yet"
+msgstr "No hay ningún contacto aún"
+
+msgid "contact_verification"
+msgstr "Verificación de contactos"
+
+msgid "verification"
+msgstr "Verificación"
+
+msgid "contact_verification_description"
+msgstr ""
+"La opción \"Verificación de contactos\" se encuentra en todo momento "
+"disponible en la parte superior derecha del menú de mensajes."
+
+msgid "qr_error_description"
+msgstr "Algo ha fallado durante el proceso de escaneo de este código QR."
+
+msgid "qr_info_verification_title"
+msgstr "Verificación de contactos en persona"
+
+msgid "qr_info_f2f_title"
+msgstr "Escaneo de códigos QR"
+
+msgid "qr_info_verification_des"
+msgstr ""
+"Escaneen mutuamente sus respectivos códigos QR para verificar cada uno su contacto.\n"
+"\n"
+"Este proceso garantiza la privacidad y el cifrado extremo a extremo de sus conversaciones."
+
+msgid "qr_info_f2f_des"
+msgstr ""
+"Escaneen mutuamente sus respectivos códigos QR para añadir cada uno a su amigo como contacto.\n"
+"\n"
+"Este proceso garantiza la privacidad y el cifrado extremo a extremo de sus conversaciones."
+
+msgid "qr_info_verification_scan"
+msgstr ""
+"Escaneen mutuamente sus respectivos códigos QR para llevar a cabo la "
+"verificación."
+
+msgid "qr_info_f2f_scan"
+msgstr ""
+"Escaneen mutuamente sus respectivos códigos QR para añadir cada uno a la "
+"otra persona como contacto."
+
+msgid "qr_success_snackbar"
+msgstr "%s es un contacto"
+
+msgid "qr_info_waiting_qr"
+msgstr "Esperando a que su amigo/a escanee su código QR..."
+
+msgid "scan_complete"
+msgstr "Escaneo completado"
+
+msgid "qr_for_your_contact"
+msgstr "Su código QR"
+
+msgid "add_via_chat_number"
+msgstr "Añadir por medio de Número de chat"
+
+msgid "qr_info_waiting_id"
+msgstr ""
+"Esperando a que su amigo/a introduzca su ID de mensajería o escanee su "
+"código QR..."
+
+msgid "chat_number_not_found"
+msgstr ""
+"No se ha podido encontrar el Número de chat. Compruebe que es correcto y "
+"vuelva a intentarlo."
+
+msgid "unable_to_add_contact"
+msgstr "Contacto no encontrado. Compruebe el número y vuelva a intentarlo."
+
+msgid "self_adding"
+msgstr "El Número de chat que ha introducido es el de usted."
+
+msgid "chat_number_type"
+msgstr "Introduzca un Número de chat"
+
+msgid "letter_and_numbers_only"
+msgstr "Solo letras y números"
+
+msgid "name_your_contact"
+msgstr "Ponga nombre a su contacto"
+
+msgid "messenger_id_invalid"
+msgstr "ID de mensajería no válido"
+
+msgid "username_not_found"
+msgstr "Nombre de usuario no encontrado"
+
+msgid "contact_id_your_id"
+msgstr "Su ID de mensajería"
+
+msgid "introductions"
+msgstr "Presentaciones"
+
+msgid "introduced"
+msgstr "Presentado por %s"
+
+msgid "introductions_title"
+msgstr "Aceptar la presentación de %s"
+
+msgid "introductions_info"
+msgstr ""
+"Ambas partes deben aceptar la presentación de la otra persona para poder "
+"mensajearse. Las presentaciones desaparecerán al cabo de 7 días si no se "
+"lleva a cabo ninguna acción al respecto."
+
+msgid "introduction_reject_title"
+msgstr "Rechazar presentación"
+
+msgid "introduction_reject_content"
+msgstr "No podrá mensajearse con este contacto si rechaza la presentación."
+
+msgid "introductions_error_description_rejecting"
+msgstr "Algo ha fallado al rechazar esta solicitud de vinculación mutua."
+
+msgid "introductions_error_description_accepting"
+msgstr "Algo ha fallado al aceptar esta solicitud de vinculación mutua."
+
+msgid "no_introductions"
+msgstr "No hay ninguna presentación pendiente."
+
+msgid "introduction_approved"
+msgstr "¡Presentación a %s aprobada!"
+
+msgid "delete_contact_name"
+msgstr "Eliminar %s"
+
+msgid "delete_contact"
+msgstr "Eliminar contacto"
+
+msgid "error"
+msgstr "Error"
+
+msgid "error_delete_contact"
+msgstr "Algo ha fallado al eliminar este contacto."
+
+msgid "unnamed_contact"
+msgstr "Contacto sin nombre"
+
+msgid "me"
+msgstr "Yo"
+
+msgid "disappearing_messages"
+msgstr "Mensajes que desaparecen"
+
+msgid "start_of_your_history"
+msgstr ""
+"Sus chats y llamadas de voz con %s están cifradas de extremo a extremo"
+
+msgid "banner_unaccepted"
+msgstr ""
+"%s no se encuentra en su lista de contactos. ¿Desea aceptar la solicitud de "
+"chat?"
+
+msgid "banner_messages_persist"
+msgstr "Los mensajes nuevos no desaparecen."
+
+msgid "banner_message_retention"
+msgstr "La retención de mensajes está fijada en %s"
+
+msgid "longform_seconds"
+msgstr "%s segundos"
+
+msgid "shortform_seconds"
+msgstr "%s s"
+
+msgid "longform_minute"
+msgstr "%s minuto"
+
+msgid "shortform_minutes"
+msgstr "%s min"
+
+msgid "longform_minutes"
+msgstr "%s minutos"
+
+msgid "longform_hour"
+msgstr "%s hora"
+
+msgid "shortform_hours"
+msgstr "%s h"
+
+msgid "longform_hours"
+msgstr "%s horas"
+
+msgid "longform_day"
+msgstr "%s día"
+
+msgid "shortform_days"
+msgstr "%s d"
+
+msgid "longform_days"
+msgstr "%s días"
+
+msgid "longform_week"
+msgstr "%s semana"
+
+msgid "shortform_weeks"
+msgstr "%s sem"
+
+msgid "longform_weeks"
+msgstr "%s semanas"
+
+msgid "banner_source_unknown"
+msgstr "Desconocido"
+
+msgid "banner_source_qr"
+msgstr "Código QR"
+
+msgid "banner_source_id"
+msgstr "ID de mensajería"
+
+msgid "banner_source_intro"
+msgstr "Introducción"
+
+msgid "message_will_disappear_at"
+msgstr "Desaparece: %s"
+
+msgid "change_display_name"
+msgstr "Cambiar nombre en pantalla"
+
+msgid "yesterday"
+msgstr "ayer"
+
+msgid "tomorrow"
+msgstr "mañana"
+
+msgid "just_now"
+msgstr "ahora mismo"
+
+msgid "within_one_minute"
+msgstr "en un minuto"
+
+msgid "on_date"
+msgstr "el %s"
+
+msgid "at_date"
+msgstr "a las %s"
+
+msgid "error_fetching_message_preview"
+msgstr "Error al obtener la vista previa del mensaje"
+
+msgid "message_was_deleted"
+msgstr "Se ha eliminado el mensaje"
+
+msgid "contact_was_deleted"
+msgstr "Se ha eliminado a %s de sus contactos."
+
+msgid "contact_was_blocked"
+msgstr "Se ha bloqueado a %s. "
+
+msgid "contact_was_unblocked"
+msgstr "Se ha desbloqueado a %s."
+
+msgid "dismiss"
+msgstr "Descartar"
+
+msgid "copy_text"
+msgstr "Copiar texto"
+
+msgid "message"
+msgstr "Mensaje"
+
+msgid "messages"
+msgstr "Mensajes"
+
+msgid "chats"
+msgstr "Chats"
+
+msgid "new_requests"
+msgstr "Nuevas solicitudes %s"
+
+msgid "chat"
+msgstr "Chat"
+
+msgid "lantern_chat"
+msgstr "Chat de Lantern"
+
+msgid "welcome_title"
+msgstr "¡Te damos la bienvenida al chat de Lantern!"
+
+msgid "welcome_text"
+msgstr ""
+"Se trata de un chat cifrado que protege su privacidad y que cuenta con la "
+"tecnología antibloqueos más puntera."
+
+msgid "get_started"
+msgstr "Empezar a usar"
+
+msgid "want_to_recover"
+msgstr "¿Dispone de Número de chat?"
+
+msgid "recover"
+msgstr "Recuperar"
+
+msgid "chat_number"
+msgstr "Número de chat"
+
+msgid "your_chat_number"
+msgstr "Su Número de chat"
+
+msgid "chat_number_recovery"
+msgstr "Recuperación del Número de chat"
+
+msgid "recovery_helper_text"
+msgstr "Introduzca una clave de recuperación válida"
+
+msgid "recovery_button"
+msgstr "Introduzca su clave de recuperación para obtener su Número de chat."
+
+msgid "recovery_label"
+msgstr "Introduzca su clave de recuperación"
+
+msgid "recovery_key"
+msgstr "Clave de recuperación"
+
+msgid "secure_text_explanation"
+msgstr ""
+"Su Número de chat funciona de igual modo que un número de teléfono, y sus "
+"amigos/as pueden utilizarlo para contactar con usted en Lantern."
+
+msgid "secure_text_explanation_account"
+msgstr ""
+"Esta es la versión íntegra de su Número de chat. Le recomendamos que opte por compartir esta cifra más extensa para mayor seguridad, especialmente si lo hace a través de un canal cifrado también de extremo a extremo.\n"
+"\n"
+"En cualquier caso, Lantern pone también a su disposición un Número de chat abreviado para hacer más cómodo el proceso de recordar y compartir la información de contacto."
+
+msgid "recovery_key_account_explanation"
+msgstr ""
+"Guarde esta clave en un lugar seguro y no la comparta con otras personas. Es"
+" la única vía para recuperar su Número de chat si pierde, cambia o "
+"restablece de fábrica su dispositivo."
+
+msgid "recovery_error"
+msgstr "No ha sido posible recuperar su cuenta."
+
+msgid "recovery_input_error"
+msgstr "Asegúrese de introducir un número de recuperación válido"
+
+msgid "recovery_retrieval_error"
+msgstr "Algo ha fallado al tratar de obtener su clave de recuperación"
+
+msgid "recovery_success"
+msgstr "Ha recuperado correctamente su Número de chat"
+
+msgid "empty_chats_text"
+msgstr "¡Aquí puede compartir su Número de chat o añadir un contacto!"
+
+msgid "next"
+msgstr "Siguiente"
+
+msgid "automated_backup"
+msgstr "Copia de seguridad automática"
+
+msgid "backup_explanation"
+msgstr ""
+"Lantern le permite cifrar y crear una copia de seguridad de sus contactos en nuestros servidores seguros. Si olvida hacer una copia de seguridad, no podrá recuperar sus contactos por medio de su clave de recuperación.\n"
+"\n"
+"Lantern no puede acceder a su lista de contactos al crear una copia de seguridad de los mismos."
+
+msgid "backup_contacts"
+msgstr "Crear copia de seguridad de los contactos"
+
+msgid "copy_recovery_key"
+msgstr "Copiar clave de recuperación"
+
+msgid "search"
+msgstr "Buscar"
+
+msgid "account_management"
+msgstr "Administración de cuenta"
+
+msgid "add_via_username"
+msgstr "Añadir por medio de nombre de usuario"
+
+msgid "username"
+msgstr "Nombre de usuario"
+
+msgid "enter_a_username_to_start_a_conversation"
+msgstr ""
+"Introduzca un nombre de usuario para iniciar una conversación a través de "
+"mensajes"
+
+msgid "start_message"
+msgstr "Iniciar mensaje"
+
+msgid "please_enter_a_valid_username"
+msgstr "Introduzca un nombre de usuario válido"
+
+msgid "open_url"
+msgstr "Abrir URL"
+
+msgid "message_deleted"
+msgstr "%s ha eliminado este mensaje"
+
+msgid "never"
+msgstr "Nunca"
+
+msgid "delete_for_me"
+msgstr "Eliminar para mí"
+
+msgid "delete_for_me_explanation"
+msgstr ""
+"El mensaje se eliminará solo para usted. Los demás podrán seguir viéndolo."
+
+msgid "delete_for_everyone"
+msgstr "Eliminar para todos"
+
+msgid "delete_for_everyone_explanation"
+msgstr "El mensaje se eliminará de modo que nadie podrá verlo."
+
+msgid "reply"
+msgstr "Responder"
+
+msgid "replying_to"
+msgstr "Contestando a %s"
+
+msgid "attachment"
+msgstr "Archivo adjunto"
+
+msgid "error_rendering_message"
+msgstr "Error al renderizar el mensaje"
+
+msgid "error_fetching_preview"
+msgstr "Error al obtener la vista previa del mensaje"
+
+msgid "audio"
+msgstr "Audio"
+
+msgid "image"
+msgstr "Imágenes"
+
+msgid "video"
+msgstr "Vídeos"
+
+msgid "app"
+msgstr "Aplicaciones"
+
+msgid "document"
+msgstr "Documentos"
+
+msgid "search_chars_min"
+msgstr "Introduzca al menos tres caracteres"
+
+msgid "search_no_results"
+msgstr ""
+"Lo sentimos, no hemos encontrado resultados relacionados con esta búsqueda."
+
+msgid "search_error"
+msgstr ""
+"Lo sentimos, se ha producido un error al tratar de recuperar los resultados "
+"de la búsqueda."
+
+msgid "search_contacts"
+msgstr "Contactos (%s)"
+
+msgid "search_chats"
+msgstr "Chats (%s)"
+
+msgid "search_in_contacts"
+msgstr "Buscar en contactos"
+
+msgid "search_in_chats"
+msgstr "Buscar en chats y contactos"
+
+msgid "could_not_render_title"
+msgstr "No se ha podido renderizar el título del archivo"
+
+msgid "could_not_render_type"
+msgstr "No se ha podido renderizar el tipo de archivo"
+
+msgid "speaker"
+msgstr "Altavoz"
+
+msgid "speaker_on"
+msgstr "Altavoz activado"
+
+msgid "mute"
+msgstr "Silenciar"
+
+msgid "muted"
+msgstr "En silencio"
+
+msgid "end_call"
+msgstr "Finalizar llamada"
+
+msgid "verify_contact"
+msgstr "Verificar %s"
+
+msgid "verified"
+msgstr "Verificado"
+
+msgid "pending_verification"
+msgstr "Verificación pendiente"
+
+msgid "verify_description"
+msgstr ""
+"Como recomendación de seguridad, le instamos a que compruebe que el número de verificación de %s coincide con el suyo.\n"
+"\n"
+"¿Le gustaría hacerlo en persona o mediante una llamada de teléfono?"
+
+msgid "verify_in_person"
+msgstr "Verificar en persona"
+
+msgid "verify_via_call"
+msgstr "Verifica mediante llamada de teléfono"
+
+msgid "dismiss_notification"
+msgstr "Descartar notificación"
+
+msgid "call_contact"
+msgstr "¿Llamar a %s?"
+
+msgid "call"
+msgstr "Llamar"
+
+msgid "incoming_call"
+msgstr "Llamada entrante"
+
+msgid "call_from"
+msgstr "De %s"
+
+msgid "in_call"
+msgstr "Llamadas en curso"
+
+msgid "in_call_des"
+msgstr "Notificación de llamada en curso"
+
+msgid "incoming_call_from"
+msgstr "Llamada en curso de %s"
+
+msgid "touch_here_to_open_call"
+msgstr "Pulse aquí para abrir la llamada"
+
+msgid "in_call_with"
+msgstr "En una llamada con %s"
+
+msgid "undo_verification"
+msgstr "Deshacer verificación"
+
+msgid "mark_as_verified"
+msgstr "Marcar como verificado"
+
+msgid "verification_panel_success"
+msgstr ""
+"¡La verificación se ha realizado correctamente! Sus mensajes con %s son "
+"ahora seguros."
+
+msgid "verification_panel_pending"
+msgstr ""
+"Este es su número de verificación. Compruebe que su número coincide con el "
+"de %s justo antes de marcarlo como verificado."
+
+msgid "replica_upload_confirmation_title"
+msgstr "¡Importante!"
+
+msgid "replica_upload_confirmation_body"
+msgstr ""
+"Los archivos subidos a la red de Lantern son de acceso público. Además, no están centralizados y nadie puede eliminarlos de la red.\n"
+"\n"
+"Evite añadir datos personales e identificativos al archivo y tampoco los refleje en el nombre del mismo al subir contenido sensible."
+
+msgid "replica_upload_confirmation_agree"
+msgstr "Reanudar subida"
+
+msgid "dont_show_me_this_again"
+msgstr "No volver a mostrar"
+
+msgid "download"
+msgstr "Descargar"
+
+msgid "download_started"
+msgstr "Descarga iniciada"
+
+msgid "uploader"
+msgstr "Herramienta"
+
+msgid "upload_started"
+msgstr "Subida iniciada"
+
+msgid "upload_in_progress"
+msgstr "Subida en curso"
+
+msgid "upload_complete"
+msgstr "Subida completada"
+
+msgid "upload_failed"
+msgstr "Subida fallida"
+
+msgid "upload_cancelled"
+msgstr "Subida cancelada"
+
+msgid "replica_link_fetcher"
+msgstr "Obtención de enlaces de réplica"
+
+msgid "no_preview_for_this_type_of_file"
+msgstr "No es posible mostrar la vista previa de este tipo de archivo"
+
+msgid "app_unknown"
+msgstr "aplicación/desconocido"
+
+msgid "audio_unknown"
+msgstr "audio/desconocido"
+
+msgid "document_unknown"
+msgstr "documento/desconocido"
+
+msgid "no_search_result_found"
+msgstr ""
+"Lo sentimos, no hemos encontrado resultados relacionados con esa búsqueda"
+
+msgid "search_result_error"
 msgstr ""
 
-msgid "Yinbi Enabled"
+msgid "video_stream_error"
 msgstr ""
+
+msgid "untitled"
+msgstr "Sin título"
+
+msgid "failed_to_init_replica"
+msgstr "Error: No se ha podido inicializar la réplica"
+
+msgid "awaiting_result"
+msgstr "Esperando resultados..."
+
+msgid "discover"
+msgstr "Descubrir"
+
+msgid "replica_search_intro"
+msgstr ""
+"Busque contenido subido por usuarios en la red de Lantern o suba su propio "
+"contenido para que otros usuarios lo descubran."
+
+msgid "share"
+msgstr "Compartir"
+
+msgid "upload_file_screen"
+msgstr "Subir archivo"
+
+msgid "name_your_file"
+msgstr "Póngale un nombre a su archivo"
+
+msgid "upload"
+msgstr "Subir"

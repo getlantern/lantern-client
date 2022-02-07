@@ -16,6 +16,7 @@ import org.androidannotations.annotations.ViewById;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.activity.BaseFragmentActivity;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.util.ActivityExtKt;
@@ -28,7 +29,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 @EActivity(R.layout.activity_link_device)
-public class LinkDeviceActivity extends FragmentActivity {
+public class LinkDeviceActivity extends BaseFragmentActivity {
 
     private static final String TAG = LinkDeviceActivity.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();

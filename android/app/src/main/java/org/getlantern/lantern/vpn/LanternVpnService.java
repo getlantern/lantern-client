@@ -19,11 +19,14 @@ import android.os.IBinder;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
+import org.getlantern.lantern.model.Stats;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.lantern.service.ServiceHelper;
 import org.getlantern.mobilesdk.Logger;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LanternVpnService extends VpnService implements Runnable {
@@ -36,7 +39,10 @@ public class LanternVpnService extends VpnService implements Runnable {
 
     private PendingIntent mConfigureIntent;
 
-    private ServiceHelper helper = new ServiceHelper(this, R.drawable.app_icon, R.drawable.status_on, R.string.service_connected);
+    private ServiceHelper helper = new ServiceHelper(
+            this,
+            R.drawable.status_connected,
+            R.string.service_connected);
 
     private final ServiceConnection lanternServiceConnection = new ServiceConnection() {
         @Override
@@ -66,6 +72,7 @@ public class LanternVpnService extends VpnService implements Runnable {
         mConfigureIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class),
                 PendingIntent.FLAG_UPDATE_CURRENT);
         bindService(new Intent(this, LanternService_.class), lanternServiceConnection, Context.BIND_AUTO_CREATE);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -75,6 +82,7 @@ public class LanternVpnService extends VpnService implements Runnable {
         super.onDestroy();
         unbindService(lanternServiceConnection);
         helper.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -100,6 +108,15 @@ public class LanternVpnService extends VpnService implements Runnable {
         Logger.d(TAG, "connect");
         helper.makeForeground();
         new Thread(this, "VpnService").start();
+    }
+
+    @Subscribe(sticky = true)
+    public void onStats(Stats stats) {
+        helper.updateNotification(
+                stats.isHasSucceedingProxy() ?
+                        R.drawable.status_connected : R.drawable.status_issue,
+                stats.isHasSucceedingProxy() ?
+                        R.string.service_connected : R.string.service_issue);
     }
 
     @Override

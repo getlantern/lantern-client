@@ -23,6 +23,9 @@ import org.getlantern.mobilesdk.util.HttpClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.matomo.sdk.Matomo;
+import org.matomo.sdk.Tracker;
+import org.matomo.sdk.TrackerBuilder;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

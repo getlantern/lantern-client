@@ -10,7 +10,6 @@ import io.flutter.plugin.common.MethodCall
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 
-
 class ReplicaModel(
     private val activity: MainActivity,
     flutterEngine: FlutterEngine? = null,
@@ -54,4 +53,3 @@ class ReplicaModel(
         }
     }
 }
-

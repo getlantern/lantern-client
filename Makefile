@@ -64,7 +64,9 @@ BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
 BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 
 UPDATE_SERVER_URL ?=
-LDFLAGS := -extldflags '-Wl,--build-id=$(BUILD_ID)' -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/config.UpdateServerURL=$(UPDATE_SERVER_URL)
+VERSION ?= $$VERSION
+LDFLAGS := -s -w -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION)
+
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
 # -s omits the symbol table and debug info
@@ -144,7 +146,7 @@ BUILD_TAGS ?=
 BUILD_TAGS += ' lantern'
 
 GO_SOURCES := go.mod go.sum $(shell find internalsdk -type f -name "*.go")
-MOBILE_SOURCES := $(shell find $(BASE_MOBILE_DIR) -type f -not -path "*/build/*" -not -path "*/.gradle/*" -not -path "*/.idea/*" -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname ".*" -not -iname "*.apk" -not -iname "router.gr.dart")
+MOBILE_SOURCES := $(shell find $(BASE_MOBILE_DIR) -type f -not -path screenshots/* -not -path "*/build/*" -not -path "*/.gradle/*" -not -path "*/.idea/*" -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname ".*" -not -iname "*.apk" -not -iname "router.gr.dart")
 
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
@@ -153,31 +155,6 @@ dumpvars:
 	$(foreach v,                                        \
 		$(filter-out $(VARS_OLD) VARS_OLD,$(.VARIABLES)), \
 		$(info $(v) = $($(v))))
-
-define build-tags
-	BUILD_TAGS="$(BUILD_TAGS)" && \
-	EXTRA_LDFLAGS="" && \
-	if [[ ! -z "$$VERSION" ]]; then \
-		EXTRA_LDFLAGS="-X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$$VERSION"; \
-	else \
-		echo "** VERSION was not set, using default version. This is OK while in development."; \
-	fi && \
-	if [[ ! -z "$$HEADLESS" ]]; then \
-		BUILD_TAGS="$$BUILD_TAGS headless"; \
-	fi && \
-	if [[ ! -z "$$STAGING" ]]; then \
-		BUILD_TAGS="$$BUILD_TAGS staging"; \
-		EXTRA_LDFLAGS="$$EXTRA_LDFLAGS -X github.com/getlantern/flashlight/common.StagingMode=$$STAGING"; \
-	fi && \
-	if [[ ! -z "$$REPLICA" ]]; then \
-		EXTRA_LDFLAGS="$$EXTRA_LDFLAGS -X github.com/getlantern/flashlight/config.EnableReplicaFeatures=true"; \
-		EXTRA_LDFLAGS="$$EXTRA_LDFLAGS -X github.com/getlantern/flashlight/common.GlobalURL=https://globalconfig.flashlightproxy.com/global-replica.yaml.gz"; \
-	else \
-		echo "**  Not forcing replica build"; \
-	fi && \
-	BUILD_TAGS=$$(echo $$BUILD_TAGS | xargs) && echo "Build tags: $$BUILD_TAGS" && \
-	EXTRA_LDFLAGS=$$(echo $$EXTRA_LDFLAGS | xargs) && echo "Extra ldflags: $$EXTRA_LDFLAGS"
-endef
 
 .PHONY: tag
 tag: require-version
@@ -354,15 +331,14 @@ release-autoupdate: require-version
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
 $(ANDROID_LIB): $(GO_SOURCES)
-	@$(call check-go-version)
-	$(call build-tags)
-	go env -w 'GOPRIVATE=github.com/getlantern/*'
-	go install golang.org/x/mobile/cmd/gomobile
-	gomobile init
+	@$(call check-go-version) && \
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	go install golang.org/x/mobile/cmd/gomobile && \
+	gomobile init && \
 	gomobile bind -cache `pwd`/.gomobilecache \
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
-		-ldflags="$(LDFLAGS) $$EXTRA_LDFLAGS" \
+		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		$(ANDROID_LIB_PKG)
 
@@ -477,7 +453,7 @@ sourcedump: require-version
 	go mod tidy && \
 	go mod vendor && \
 	find . -name "CHANGELOG*" -exec rm {} \; && \
-	rm -Rf vendor/github.com/getlantern/flashlight/config/generated/embedded-global.yaml && \
+	rm -Rf vendor/github.com/getlantern/flashlight/embeddedconfig vendor/github.com/getlantern/flashlight/genconfig && \
 	find vendor/github.com/getlantern -name "*.go" -exec perl -pi -e 's/"https?\:\/\/[^"]+/"URL_HIDDEN/g' {} \; && \
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .

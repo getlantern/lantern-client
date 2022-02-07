@@ -1,13 +1,13 @@
 # 
 # Translators:
-# Derek F <derek@getlantern.org>, 2021
-# e2f_fr r9 <tx_e2f_fr_r9@ate2f.com>, 2021
-# e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2021
-# AO <ao@localizationlab.org>, 2021
+# Derek F <derek@getlantern.org>, 2022
+# e2f_fr r9 <tx_e2f_fr_r9@ate2f.com>, 2022
+# e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2022
+# AO <ao@localizationlab.org>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: AO <ao@localizationlab.org>, 2021\n"
+"Last-Translator: AO <ao@localizationlab.org>, 2022\n"
 "Language-Team: French (https://www.transifex.com/lantern-1/teams/94371/fr/)\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -15,8 +15,26 @@ msgstr ""
 msgid "app_name"
 msgstr "Lantern"
 
+msgid "introducing"
+msgstr "Présentation de la conversation instantanée"
+
+msgid "introducing_des"
+msgstr ""
+"Discutez avec vos amis en toute sécurité grâce à notre tout nouvel outil de "
+"conversation instantanée chiffrée et résistante aux blocages intégré à "
+"Lantern !"
+
+msgid "maybe_later"
+msgstr "Peut-être plus tard"
+
+msgid "try"
+msgstr "Essayez-la"
+
+msgid "new"
+msgstr "Nouveau"
+
 msgid "Daily Data Usage"
-msgstr "Données quotidiennes utilisées"
+msgstr "Données quotidiennes utilisées "
 
 msgid "is"
 msgstr "est"
@@ -24,7 +42,7 @@ msgstr "est"
 msgid "connected"
 msgstr "Connectée"
 
-msgid "disconnected"
+msgid "Disconnected"
 msgstr "Déconnecté"
 
 msgid "Disconnecting"
@@ -33,14 +51,29 @@ msgstr "Déconnexion en cours…"
 msgid "Connecting"
 msgstr "Connexion…"
 
+msgid "no_network_connection"
+msgstr "Aucune connexion réseau"
+
+msgid "connection_error"
+msgstr "Erreur de connexion"
+
+msgid "connection_error_des"
+msgstr ""
+"Lantern rencontre des problèmes pour se connecter à nos serveurs. Veuillez "
+"redémarrer l'application. Si ce problème persiste, veuillez contacter "
+"l'assistance."
+
+msgid "connection_error_button"
+msgstr "Contacter l'assistance"
+
+msgid "Calling"
+msgstr "Appel en cours…"
+
 msgid "Go Pro Title"
 msgstr "Passez à la version Pro !"
 
 msgid "Go Pro Description"
 msgstr "Profitez de vitesses plus rapides et de données illimitées !"
-
-msgid "Go Pro Description With Yinbi"
-msgstr "Données illimitées + Cryptomonnaie Yinbi gratuite !"
 
 msgid "Server Location"
 msgstr "Emplacement du serveur"
@@ -54,35 +87,59 @@ msgstr ""
 msgid "OK"
 msgstr "Valider"
 
-msgid "pro_account_management"
-msgstr "Gestion du compte Pro"
+msgid "Done"
+msgstr "Terminé"
 
-msgid "add_device"
-msgstr "Ajouter un appareil"
+msgid "backup_recovery_key"
+msgstr "Clé de récupération de sauvegarde"
 
-msgid "upgrade_to_lantern_pro"
+msgid "delete_chat_data"
+msgstr "Supprimer toutes les données de la conversation instantanée"
+
+msgid "delete_chat_data_description"
+msgstr ""
+"Cette action supprimera votre numéro de conversation instantanée, vos "
+"contacts ainsi que vos messages de cet appareil. Sans votre clé de "
+"récupération de sauvegarde, vous ne pourrez plus accéder à votre numéro de "
+"conversation instantanée."
+
+msgid "delete_chat_data_confirmation"
+msgstr ""
+"Je confirme que je souhaite supprimer les données de ma conversation "
+"instantanée"
+
+msgid "Pro Account Management"
+msgstr "Gestion du compte Pro"
+
+msgid "Link Device"
+msgstr "Relier un appareil"
+
+msgid "Upgrade to Lantern Pro"
 msgstr "Passez à Lantern Pro"
 
-msgid "authorize_device_for_pro"
-msgstr "Autoriser l’appareil à la version Pro"
-
-msgid "invite_friends"
+msgid "Invite Friends"
 msgstr "Inviter des amis"
 
 msgid "desktop_version"
 msgstr "Version pour ordinateur"
 
-msgid "free_yinbi_crypto"
-msgstr "Cryptomonnaie Yinbi gratuite"
-
-msgid "yinbi_redemption"
-msgstr "Encaissement de yinbis"
-
 msgid "settings"
 msgstr "Paramètres"
 
+msgid "general"
+msgstr "Général"
+
 msgid "proxy_all"
 msgstr "Tout relayer par le mandataire"
+
+msgid "proxy_everything_is"
+msgstr "Tout relayer est %s"
+
+msgid "version_number"
+msgstr "Version %s"
+
+msgid "build_number"
+msgstr "Build %s"
 
 msgid "language"
 msgstr "Langue"
@@ -90,56 +147,17 @@ msgstr "Langue"
 msgid "report_issue"
 msgstr "Signaler un problème"
 
+msgid "blocked_users"
+msgstr "Utilisateurs bloqués"
+
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Si cette option est activée, tout le trafic transitera par Lantern (option "
 "la plus sécurisée). Si elle est désactivée, seul le trafic bloqué transitera"
 " par Lantern (option la plus rapide)."
 
-msgid "Exchange"
-msgstr "Échanger"
-
 msgid "Account"
 msgstr "Compte"
-
-msgid "In partnership with"
-msgstr "En partenariat avec"
-
-msgid "Buy"
-msgstr "Acheter"
-
-msgid "Bitcoin"
-msgstr "Bitcoin"
-
-msgid "Tether"
-msgstr "Tether"
-
-msgid "With"
-msgstr "Avec"
-
-msgid "Online Wallets"
-msgstr "Porte-monnaie en ligne"
-
-msgid "Bank Transfers"
-msgstr "Virements bancaires"
-
-msgid "Gift Cards"
-msgstr "Cartes-cadeaux"
-
-msgid "Game Cards"
-msgstr "Cartes pour joueurs"
-
-msgid "Cash Payment"
-msgstr "Paiement comptant"
-
-msgid "Digital Currencies"
-msgstr "Monnaies électroniques"
-
-msgid "Payment Method"
-msgstr "Mode de paiement"
-
-msgid "SHOW BEST DEALS"
-msgstr "AFFICHER LES MEILLEURES OFFRES"
 
 msgid "VPN Status"
 msgstr "État du VPN"
@@ -165,6 +183,9 @@ msgstr "OU"
 msgid "Authorize Device via Email"
 msgstr "Autoriser l’appareil par courriel"
 
+msgid "auth_email_helper_text"
+msgstr "Saisissez l'adresse courriel associée à votre compte Pro"
+
 msgid "Requires access to the email you used to buy Lantern Pro"
 msgstr ""
 "Nécessite un accès à l’adresse courriel utilisée pour acheter Lantern Pro"
@@ -172,11 +193,17 @@ msgstr ""
 msgid "Link via Email"
 msgstr "Relier par courriel"
 
+msgid "lantern_pro_email"
+msgstr "Adresse courriel de Lantern Pro"
+
 msgid "Email"
 msgstr "Adresse courriel"
 
 msgid "Submit"
 msgstr "Envoyer"
+
+msgid "save"
+msgstr "Enregistrer"
 
 msgid "Please enter a valid email address"
 msgstr "Veuillez saisir une adresse courriel valide"
@@ -215,7 +242,7 @@ msgid "approve_device_step_2"
 msgstr "Saisissez le code de liaison obtenu à l’étape 1"
 
 msgid "Pro Account Expiration"
-msgstr "Expiration du compte Pro"
+msgstr "Expiration du compte Pro"
 
 msgid "Renew"
 msgstr "Renouveller"
@@ -230,7 +257,7 @@ msgid "Log Out"
 msgstr "Déconnexion"
 
 msgid "confirm_remove_device"
-msgstr "Voulez-vous vraiment dissocier cet appareil de votre compte Pro ?"
+msgstr "Voulez-vous vraiment dissocier cet appareil de votre compte Pro ?"
 
 msgid "n/a"
 msgstr "s/o"
@@ -241,11 +268,855 @@ msgstr "Paramètres pour les développeurs"
 msgid "Developer"
 msgstr "Développeur"
 
+msgid "dev_settings"
+msgstr ""
+"Ces paramètres sont destinés uniquement au développement. La modification "
+"d'un paramètre entraînera l'arrêt et le redémarrage automatiques de "
+"l'application."
+
+msgid "dev_payment_mode"
+msgstr ""
+"Lorsque « Mode de test de paiement » est activé, l'application utilise un "
+"seul utilisateur codé en dur. Vous pouvez effectuer des achats avec Stripe "
+"en utilisant le numéro 4242 4242 4242 4242, une date d'expiration dans le "
+"futur et n'importe quel code CVV."
+
 msgid "Payment Test Mode"
 msgstr "Mode de test de paiement"
 
 msgid "Play Version"
 msgstr "Version de Google Play"
 
-msgid "Yinbi Enabled"
-msgstr "Yinbi est activé"
+msgid "Force Country"
+msgstr "Simuler dans un pays"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "accept"
+msgstr "Accepter"
+
+msgid "cancel"
+msgstr "Annuler"
+
+msgid "reject"
+msgstr "Refuser"
+
+msgid "copied"
+msgstr "Copié !"
+
+msgid "saved"
+msgstr "Enregistré !"
+
+msgid "new_chat"
+msgstr "Nouvelle conversation instantanée"
+
+msgid "your_contact_info"
+msgstr "Vos coordonnées"
+
+msgid "display_name"
+msgstr "Nom d'affichage"
+
+msgid "edit"
+msgstr "Modifier"
+
+msgid "save_error"
+msgstr "Une erreur est survenue pendant l'enregistrement."
+
+msgid "more_options"
+msgstr "Plus d'options"
+
+msgid "block_user"
+msgstr "Bloquer l'utilisateur"
+
+msgid "unblock_user"
+msgstr "Débloquer l'utilisateur"
+
+msgid "block"
+msgstr "Bloquer"
+
+msgid "unblock"
+msgstr "Débloquer"
+
+msgid "block_info_title"
+msgstr "Bloquer %s ?"
+
+msgid "no_blocked_users"
+msgstr "Aucun utilisateur n'est bloqué."
+
+msgid "unblock_info_title"
+msgstr "Débloquer %s ?"
+
+msgid "block_info_description"
+msgstr ""
+"Bloquer cet utilisateur supprimera l'historique de la conversation "
+"instantanée et empêchera celui-ci de vous contacter par la suite. Vous "
+"pouvez débloquer des utilisateurs dans le menu des paramètres."
+
+msgid "unblock_info_description"
+msgstr ""
+"%s peut désormais vous envoyer des messages et ne saura pas que vous l'avez "
+"débloqué."
+
+msgid "block_info_checkbox"
+msgstr ""
+"Je comprends que cette action entraînera la suppression de tout l'historique"
+" de la conversation instantanée."
+
+msgid "unblock_info_checkbox"
+msgstr "Je confirme que je souhaite débloquer ce contact."
+
+msgid "delete_permanently"
+msgstr "Supprimer définitivement l'utilisateur"
+
+msgid "delete_info_description"
+msgstr ""
+"Une fois l'utilisateur supprimé, vous devrez ajouter ses coordonnées si vous"
+" souhaitez à nouveau discuter avec lui."
+
+msgid "add_new_contact"
+msgstr "Ajouter un nouveau contact"
+
+msgid "add_contact"
+msgstr "Ajouter un contact"
+
+msgid "share_your_chat_number"
+msgstr "Partager votre numéro de conversation instantanée"
+
+msgid "scan_qr_code"
+msgstr "Scanner le code QR"
+
+msgid "add_contact_in_person"
+msgstr "Ajouter des contacts en face à face"
+
+msgid "start_chat"
+msgstr "Démarrer une conversation instantanée"
+
+msgid "message_disappearing"
+msgstr "Certains messages resteront visibles pour vous et %s."
+
+msgid "message_disappearing_description"
+msgstr "Tous les messages disparaîtront après %s pour vous et %s."
+
+msgid "delete"
+msgstr "Supprimer"
+
+msgid "view_contact_info"
+msgstr "Afficher les coordonnées"
+
+msgid "off"
+msgstr "désactivé"
+
+msgid "continue"
+msgstr "Poursuivre"
+
+msgid "are_you_sure_you_want_to_open"
+msgstr "Voulez-vous vraiment ouvrir %s ?"
+
+msgid "set"
+msgstr "Définir"
+
+msgid "menu"
+msgstr "Menu"
+
+msgid "send_error"
+msgstr "Une erreur est survenue pendant l'envoi de votre message"
+
+msgid "share_media_error"
+msgstr "Une erreur est survenue pendant le partage d'un fichier multimédia"
+
+msgid "no_recents"
+msgstr "Aucun récent"
+
+msgid "set_display_name"
+msgstr "Définir le nom d'affichage"
+
+msgid "introduce_contact"
+msgstr "Présenter un contact"
+
+msgid "introduce_contacts"
+msgstr "Présenter des contacts"
+
+msgid "introduce_contacts_with_count"
+msgstr "Présenter des contacts (%s)"
+
+msgid "need_two_contacts_to_introduce"
+msgstr ""
+"Une fois que vous aurez au moins deux contacts, vous pourrez créer des "
+"présentations."
+
+msgid "introduce_contacts_select"
+msgstr ""
+"Sélectionnez au moins deux contacts à présenter mutuellement. Ils recevront "
+"des présentations afin qu'ils puissent commencer à s'envoyer des messages."
+
+msgid "introduce_single_contact"
+msgstr ""
+"Sélectionnez un contact à présenter à %s. Une fois qu'ils approuvent la "
+"présentation, ils pourront s'envoyer des messages."
+
+msgid "send_introductions"
+msgstr "Envoyer des présentations"
+
+msgid "introductions_sent"
+msgstr "Présentations envoyées !"
+
+msgid "no_contacts_yet"
+msgstr "Aucun contact pour le moment"
+
+msgid "contact_verification"
+msgstr "Vérification du contact"
+
+msgid "verification"
+msgstr "Vérification"
+
+msgid "contact_verification_description"
+msgstr ""
+"La vérification de contact est accessible depuis le menu des messages dans "
+"le coin supérieur droit."
+
+msgid "qr_error_description"
+msgstr "Une erreur est survenue pendant le scan de ce code QR."
+
+msgid "qr_info_verification_title"
+msgstr "Vérification de contact en face à face"
+
+msgid "qr_info_f2f_title"
+msgstr "Scan du code QR"
+
+msgid "qr_info_verification_des"
+msgstr ""
+"Pour vérifier votre contact, scannez chacun le code QR de l'autre.\n"
+"\n"
+"Ce processus vise à garantir la confidentialité et le chiffrement de bout en bout de vos conversations."
+
+msgid "qr_info_f2f_des"
+msgstr ""
+"Pour ajouter votre ami en tant que contact, scannez chacun le code QR de l'autre.\n"
+"\n"
+"Ce processus vise à garantir la confidentialité et le chiffrement de bout en bout de vos conversations."
+
+msgid "qr_info_verification_scan"
+msgstr "Scannez chacun le code QR de l'autre pour procéder à la vérification."
+
+msgid "qr_info_f2f_scan"
+msgstr "Scannez chacun le code QR de l'autre pour ajouter un contact."
+
+msgid "qr_success_snackbar"
+msgstr "%s est un contact"
+
+msgid "qr_info_waiting_qr"
+msgstr "En attente du scan de votre code QR par votre ami…"
+
+msgid "scan_complete"
+msgstr "Scan terminé"
+
+msgid "qr_for_your_contact"
+msgstr "Votre code QR"
+
+msgid "add_via_chat_number"
+msgstr "Ajouter via le numéro de conversation instantanée"
+
+msgid "qr_info_waiting_id"
+msgstr ""
+"En attente de la saisie de votre identifiant Messenger ou du scan de votre "
+"code QR par votre ami…"
+
+msgid "chat_number_not_found"
+msgstr ""
+"Impossible de trouver le numéro de conversation instantanée ; veuillez "
+"vérifier le numéro et réessayer"
+
+msgid "unable_to_add_contact"
+msgstr "Contact introuvable, vérifiez le numéro et réessayez"
+
+msgid "self_adding"
+msgstr ""
+"Le numéro de conversation instantanée que vous avez saisi est le vôtre"
+
+msgid "chat_number_type"
+msgstr "Saisir un numéro de conversation instantanée"
+
+msgid "letter_and_numbers_only"
+msgstr "Lettres et chiffres uniquement"
+
+msgid "name_your_contact"
+msgstr "Attribuez un nom à votre contact"
+
+msgid "messenger_id_invalid"
+msgstr "Identifiant Messenger non valide"
+
+msgid "username_not_found"
+msgstr "Nom d'utilisateur introuvable"
+
+msgid "contact_id_your_id"
+msgstr "Votre identifiant Messenger"
+
+msgid "introductions"
+msgstr "Présentations"
+
+msgid "introduced"
+msgstr "Présenté par %s"
+
+msgid "introductions_title"
+msgstr "Accepter la présentation à %s"
+
+msgid "introductions_info"
+msgstr ""
+"Les deux parties doivent accepter la présentation pour entamer une "
+"conversation. Les présentations disparaissent après sept jours si aucune "
+"action n'a été entreprise."
+
+msgid "introduction_reject_title"
+msgstr "Refuser la présentation"
+
+msgid "introduction_reject_content"
+msgstr ""
+"Vous ne pourrez pas envoyer de messages à ce contact si vous refusez la "
+"présentation."
+
+msgid "introductions_error_description_rejecting"
+msgstr ""
+"Une erreur est survenue pendant le refus de cette demande de mise en "
+"relation."
+
+msgid "introductions_error_description_accepting"
+msgstr ""
+"Une erreur est survenue pendant l'acceptation de cette demande de mise en "
+"relation."
+
+msgid "no_introductions"
+msgstr "Il n'y a aucune présentation en attente."
+
+msgid "introduction_approved"
+msgstr "La présentation à %s a été approuvée."
+
+msgid "delete_contact_name"
+msgstr "Supprimer %s"
+
+msgid "delete_contact"
+msgstr "Supprimer le contact"
+
+msgid "error"
+msgstr "Erreur"
+
+msgid "error_delete_contact"
+msgstr "Une erreur est survenue pendant la suppression de ce contact."
+
+msgid "unnamed_contact"
+msgstr "Contact sans nom"
+
+msgid "me"
+msgstr "Moi"
+
+msgid "disappearing_messages"
+msgstr "Messages qui disparaissent"
+
+msgid "start_of_your_history"
+msgstr ""
+"Vos conversations instantanées et appels vocaux avec %s sont chiffrés de "
+"bout en bout"
+
+msgid "banner_unaccepted"
+msgstr ""
+"%s ne fait pas partie de votre liste de contacts. Souhaitez-vous accepter la"
+" demande de conversation instantanée ?"
+
+msgid "banner_messages_persist"
+msgstr "Les nouveaux messages ne disparaissent pas."
+
+msgid "banner_message_retention"
+msgstr "La rétention des messages est définie sur %s"
+
+msgid "longform_seconds"
+msgstr "%s secondes"
+
+msgid "shortform_seconds"
+msgstr "%s s"
+
+msgid "longform_minute"
+msgstr "%s minute"
+
+msgid "shortform_minutes"
+msgstr "%s min"
+
+msgid "longform_minutes"
+msgstr "%s minutes"
+
+msgid "longform_hour"
+msgstr "%s heure"
+
+msgid "shortform_hours"
+msgstr "%s h"
+
+msgid "longform_hours"
+msgstr "%s heures"
+
+msgid "longform_day"
+msgstr "%s jour"
+
+msgid "shortform_days"
+msgstr "%s j"
+
+msgid "longform_days"
+msgstr "%s jours"
+
+msgid "longform_week"
+msgstr "%s semaine"
+
+msgid "shortform_weeks"
+msgstr "%s sem."
+
+msgid "longform_weeks"
+msgstr "%s semaines"
+
+msgid "banner_source_unknown"
+msgstr "Inconnu"
+
+msgid "banner_source_qr"
+msgstr "Code QR"
+
+msgid "banner_source_id"
+msgstr "Identifiant Messenger"
+
+msgid "banner_source_intro"
+msgstr "Introduction"
+
+msgid "message_will_disappear_at"
+msgstr "Disparaît dans %s"
+
+msgid "change_display_name"
+msgstr "Modifier le nom d'affichage"
+
+msgid "yesterday"
+msgstr "hier"
+
+msgid "tomorrow"
+msgstr "demain"
+
+msgid "just_now"
+msgstr "à l'instant"
+
+msgid "within_one_minute"
+msgstr "dans une minute"
+
+msgid "on_date"
+msgstr "le %s"
+
+msgid "at_date"
+msgstr "à %s"
+
+msgid "error_fetching_message_preview"
+msgstr "Erreur lors de la récupération de l'aperçu du message"
+
+msgid "message_was_deleted"
+msgstr "Le message a été supprimé"
+
+msgid "contact_was_deleted"
+msgstr "%s a été supprimé de vos contacts."
+
+msgid "contact_was_blocked"
+msgstr "%s a été bloqué."
+
+msgid "contact_was_unblocked"
+msgstr "%s a été débloqué."
+
+msgid "dismiss"
+msgstr "Rejeter"
+
+msgid "copy_text"
+msgstr "Copier le texte"
+
+msgid "message"
+msgstr "Message"
+
+msgid "messages"
+msgstr "Messages"
+
+msgid "chats"
+msgstr "Conversations instantanées"
+
+msgid "new_requests"
+msgstr "Nouvelles demandes (%s)"
+
+msgid "chat"
+msgstr "Dialogue en ligne"
+
+msgid "lantern_chat"
+msgstr "Dialogue en ligne Lantern"
+
+msgid "welcome_title"
+msgstr "Bienvenue dans le dialogue en ligne Lantern."
+
+msgid "welcome_text"
+msgstr ""
+"Un outil de conversation instantanée chiffrée pour protéger votre vie privée"
+" et intégrant une technologie de résistance aux blocages de premier ordre."
+
+msgid "get_started"
+msgstr "Démarrer"
+
+msgid "want_to_recover"
+msgstr "Vous possédez un numéro de conversation instantanée ?"
+
+msgid "recover"
+msgstr "Récupérer"
+
+msgid "chat_number"
+msgstr "Numéro de conversation instantanée"
+
+msgid "your_chat_number"
+msgstr "Votre numéro de conversation instantanée"
+
+msgid "chat_number_recovery"
+msgstr "Récupération du numéro de conversation instantanée"
+
+msgid "recovery_helper_text"
+msgstr "Veuillez saisir une clé de récupération valide"
+
+msgid "recovery_button"
+msgstr ""
+"Saisissez votre clé de récupération pour récupérer votre numéro de "
+"conversation instantanée."
+
+msgid "recovery_label"
+msgstr "Saisissez votre clé de récupération"
+
+msgid "recovery_key"
+msgstr "Clé de récupération"
+
+msgid "secure_text_explanation"
+msgstr ""
+"Votre numéro de conversation instantanée s'apparente à un numéro de "
+"téléphone que vos amis peuvent utiliser pour vous contacter sur Lantern."
+
+msgid "secure_text_explanation_account"
+msgstr ""
+"Il s'agit de la version complète de votre numéro de conversation instantanée ; partager ce numéro plus long garantit une sécurité accrue, en particulier si vous disposez d'un autre canal chiffré de bout en bout sur lequel le partager.\n"
+"\n"
+"Lantern fournit une version plus courte du numéro de conversation instantanée pour faciliter le partage de coordonnées."
+
+msgid "recovery_key_account_explanation"
+msgstr ""
+"Conservez cette clé en lieu sûr et ne la partagez avec personne. Elle "
+"constitue la seule façon de récupérer votre numéro de conversation "
+"instantanée si vous perdez votre téléphone, changez d'appareil ou "
+"réinitialisez le système d'exploitation."
+
+msgid "recovery_error"
+msgstr "Impossible de récupérer votre compte."
+
+msgid "recovery_input_error"
+msgstr "Assurez-vous de saisir une clé de récupération valide"
+
+msgid "recovery_retrieval_error"
+msgstr ""
+"Une erreur est survenue pendant la récupération de votre clé de récupération"
+
+msgid "recovery_success"
+msgstr "Vous avez récupéré votre numéro de conversation instantanée"
+
+msgid "empty_chats_text"
+msgstr ""
+"Partagez votre numéro de conversation instantanée ou ajoutez un contact "
+"ici !"
+
+msgid "next"
+msgstr "Suivante"
+
+msgid "automated_backup"
+msgstr "Sauvegarde automatisée"
+
+msgid "backup_explanation"
+msgstr ""
+"Lantern offre la possibilité de chiffrer et de sauvegarder vos contacts sur ses serveurs sécurisés. Si vous renoncez à l'option de sauvegarde, vous ne serez pas en mesure de récupérer vos contacts à l'aide de votre clé de récupération.\n"
+"\n"
+"Lantern n'est pas en mesure de lire vos listes de contacts lorsque vous choisissez de les sauvegarder."
+
+msgid "backup_contacts"
+msgstr "Sauvegarder les contacts"
+
+msgid "copy_recovery_key"
+msgstr "Copier la clé de récupération"
+
+msgid "search"
+msgstr "Recherche"
+
+msgid "account_management"
+msgstr "Gestion du compte"
+
+msgid "add_via_username"
+msgstr "Ajouter via le nom d'utilisateur"
+
+msgid "username"
+msgstr "Nom d’utilisateur"
+
+msgid "enter_a_username_to_start_a_conversation"
+msgstr ""
+"Saisissez un nom d'utilisateur pour entamer une conversation par message"
+
+msgid "start_message"
+msgstr "Commencer un message"
+
+msgid "please_enter_a_valid_username"
+msgstr "Veuillez saisir un nom d'utilisateur valide"
+
+msgid "open_url"
+msgstr "Ouvrir l'URL"
+
+msgid "message_deleted"
+msgstr "%s a supprimé ce message"
+
+msgid "never"
+msgstr "Jamais"
+
+msgid "delete_for_me"
+msgstr "Supprimer pour moi"
+
+msgid "delete_for_me_explanation"
+msgstr ""
+"Cette action supprimera le message uniquement pour vous. Les autres "
+"utilisateurs pourront toujours le voir."
+
+msgid "delete_for_everyone"
+msgstr "Supprimer pour tout le monde"
+
+msgid "delete_for_everyone_explanation"
+msgstr "Cette action supprimera le message pour tout le monde."
+
+msgid "reply"
+msgstr "Répondre"
+
+msgid "replying_to"
+msgstr "Réponse à %s"
+
+msgid "attachment"
+msgstr "Pièce jointe"
+
+msgid "error_rendering_message"
+msgstr "Erreur d'affichage du message"
+
+msgid "error_fetching_preview"
+msgstr "Erreur lors de la récupération de l'aperçu du message"
+
+msgid "audio"
+msgstr "Son"
+
+msgid "image"
+msgstr "Images"
+
+msgid "video"
+msgstr "Vidéos"
+
+msgid "app"
+msgstr "Applis"
+
+msgid "document"
+msgstr "Documents"
+
+msgid "search_chars_min"
+msgstr "Saisissez au moins trois caractères"
+
+msgid "search_no_results"
+msgstr ""
+"Désolés, nous n'avons trouvé aucun résultat correspondant à cette recherche."
+
+msgid "search_error"
+msgstr ""
+"Désolés, une erreur est survenue lors de la récupération des résultats de la"
+" recherche."
+
+msgid "search_contacts"
+msgstr "Contacts (%s)"
+
+msgid "search_chats"
+msgstr "Conversations instantanées (%s)"
+
+msgid "search_in_contacts"
+msgstr "Rechercher dans Contacts"
+
+msgid "search_in_chats"
+msgstr "Rechercher dans Conversations instantanées et Contacts"
+
+msgid "could_not_render_title"
+msgstr "Impossible d'afficher le titre du fichier"
+
+msgid "could_not_render_type"
+msgstr "Impossible d'afficher le type de fichier"
+
+msgid "speaker"
+msgstr "Haut-parleur"
+
+msgid "speaker_on"
+msgstr "Le haut-parleur est activé"
+
+msgid "mute"
+msgstr "Désactiver le micro"
+
+msgid "muted"
+msgstr "Le micro est désactivé"
+
+msgid "end_call"
+msgstr "Terminer l'appel"
+
+msgid "verify_contact"
+msgstr "Vérifier %s"
+
+msgid "verified"
+msgstr "Confirmé"
+
+msgid "pending_verification"
+msgstr "Vérification en attente"
+
+msgid "verify_description"
+msgstr ""
+"À des fins de sécurité, nous vous conseillons de vérifier que le numéro de vérification de %s correspond au vôtre.\n"
+"\n"
+"Souhaitez-vous effectuer la vérification en personne ou par téléphone ?"
+
+msgid "verify_in_person"
+msgstr "Vérifier en personne"
+
+msgid "verify_via_call"
+msgstr "Vérifier via un appel vocal"
+
+msgid "dismiss_notification"
+msgstr "Ignorer la notification"
+
+msgid "call_contact"
+msgstr "Appeler %s ?"
+
+msgid "call"
+msgstr "Appeler"
+
+msgid "incoming_call"
+msgstr "Appel entrant"
+
+msgid "call_from"
+msgstr "De %s"
+
+msgid "in_call"
+msgstr "Appels en cours"
+
+msgid "in_call_des"
+msgstr "Notification d'appel en cours"
+
+msgid "incoming_call_from"
+msgstr "Appel entrant de %s"
+
+msgid "touch_here_to_open_call"
+msgstr "Toucher ici pour ouvrir l’appel"
+
+msgid "in_call_with"
+msgstr "En ligne avec %s"
+
+msgid "undo_verification"
+msgstr "Annuler la vérification"
+
+msgid "mark_as_verified"
+msgstr "Marquer comme vérifié"
+
+msgid "verification_panel_success"
+msgstr "Vérification terminée ! Vos messages avec %s sont sécurisés."
+
+msgid "verification_panel_pending"
+msgstr ""
+"Voici votre numéro de vérification. Vérifiez qu'il correspond à celui de %s "
+"avant de marquer votre contact comme vérifié."
+
+msgid "replica_upload_confirmation_title"
+msgstr "Important !"
+
+msgid "replica_upload_confirmation_body"
+msgstr ""
+"Les fichiers chargés sur le réseau Lantern sont accessibles publiquement. Ils sont décentralisés et personne ne peut les supprimer du réseau.\n"
+"\n"
+"Évitez de mentionner des informations d’identification personnelle dans le contenu et le nom du fichier lorsque vous chargez du contenu sensible."
+
+msgid "replica_upload_confirmation_agree"
+msgstr "Reprendre le téléversement"
+
+msgid "dont_show_me_this_again"
+msgstr "Ne plus afficher ce message"
+
+msgid "download"
+msgstr "Télécharger"
+
+msgid "download_started"
+msgstr "Téléchargement démarré"
+
+msgid "uploader"
+msgstr "Téléchargeur"
+
+msgid "upload_started"
+msgstr "Chargement démarré"
+
+msgid "upload_in_progress"
+msgstr "Chargement en cours"
+
+msgid "upload_complete"
+msgstr "Chargement terminé"
+
+msgid "upload_failed"
+msgstr "Échec du chargement"
+
+msgid "upload_cancelled"
+msgstr "Chargement annulé"
+
+msgid "replica_link_fetcher"
+msgstr "Outil de récupération du lien de réplique"
+
+msgid "no_preview_for_this_type_of_file"
+msgstr "Aucun aperçu pour ce type de fichier"
+
+msgid "app_unknown"
+msgstr "appli/inconnue"
+
+msgid "audio_unknown"
+msgstr "son/inconnu"
+
+msgid "document_unknown"
+msgstr "document/inconnu"
+
+msgid "no_search_result_found"
+msgstr ""
+"Désolés, nous n'avons trouvé aucun résultat correspondant à cette recherche"
+
+msgid "search_result_error"
+msgstr ""
+"Erreur lors de la récupération des résultats, veuillez réessayer "
+"ultérieurement"
+
+msgid "video_stream_error"
+msgstr ""
+"Erreur lors de l'affichage de la vidéo, veuillez réessayer ultérieurement"
+
+msgid "untitled"
+msgstr "Sans titre"
+
+msgid "failed_to_init_replica"
+msgstr "Erreur : échec de l'initialisation de la réplique"
+
+msgid "awaiting_result"
+msgstr "En attente du résultat…"
+
+msgid "discover"
+msgstr "Découvrir"
+
+msgid "replica_search_intro"
+msgstr ""
+"Recherchez le contenu chargé par un utilisateur sur le réseau Lantern ou "
+"chargez votre propre contenu de manière à ce que d'autres utilisateurs "
+"puissent le découvrir."
+
+msgid "share"
+msgstr "Partager"
+
+msgid "upload_file_screen"
+msgstr "Téléverser un fichier"
+
+msgid "name_your_file"
+msgstr "Nommez votre fichier"
+
+msgid "upload"
+msgstr "Téléverser"
