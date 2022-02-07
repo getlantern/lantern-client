@@ -24,7 +24,6 @@
   <string name="your_referral_code">รหัสแนะนำของคุณ</string>
   <string name="report_an_issue">รายงานปัญหา</string>
   <string name="select_issue">โปรดเลือกปัญหา</string>
-  <string name="select_issue_desc">กรุณาอธิบายรายละเอียดโดยย่อเกี่ยวกับปัญหาของคุณที่นี่ และเราจะติดต่อกลับโดยเร็วที่สุด</string>
   <string name="submit">ส่ง</string>
   <string name="submit_issue">ส่งปัญหา</string>
   <string name="no_issue_selected">โปรดเลือกปัญหาก่อนที่จะส่งรายงาน</string>
@@ -186,11 +185,6 @@
   <string name="too_many_devices">ครบจำนวนสูงสุดของอุปกรณ์ที่สามารถเชื่อมโยงบัญชี Pro ของคุณแล้ว</string>
   <string name="check_spam_folder">* โปรดตรวจสอบโฟลเดอร์จดหมายขยะของคุณหากคุณไม่ได้รับอีเมล</string>
   <string name="by_referral">รับ Pro โดยการแนะนำเพื่อน</string>
-  <string-array name="payment_method_list">
-    <item>Alipay</item>
-    <item>บัตรเครดิต</item>
-    <item>รับ Pro โดยการแนะนำเพื่อน</item>
-  </string-array>
   <string name="payment_method">วิธีการชำระเงิน</string>
   <string name="payment_account">บัญชีการชำระเงิน</string>
   <string name="oops_having_trouble">โอ๊ะ! เราพบปัญหาในการค้นหาที่อยู่อีเมลดังกล่าว โปรดให้ข้อมูลเพิ่มเติมด้านล่างเพื่อช่วยเราค้นหาบัญชีของคุณ </string>
@@ -217,19 +211,6 @@
     <item>ความต้านทานการบล็อก</item>
     <item>ใช้ได้ถึงสามอุปกรณ์</item>
     <item>ไม่มีโฆษณา</item>
-  </string-array>
-  <string-array name="pro_features_new">
-    <item>ความเร็วเพิ่มขึ้น</item>
-    <item>ต้านทานต่อการปิดกั้น</item>
-    <item>ไว้ใจได้มากกว่า</item>
-    <item>ลงทะเบียนอุปกรณ์ได้สูงสุด 3 เครื่อง</item>
-    <item>ข้อมูลไม่จำกัด</item>
-    <item>ฟรี Yinbi เมื่อซื้อ!</item>
-  </string-array>
-  <string-array name="yinbi_renew_features">
-    <item>รับฟรีเงินดิจิทัล Yinbi</item>
-    <item>รับเดือนเพิ่มฟรี</item>
-    <item>ข้อเสนอในระยะเวลาจำกัด ต่ออายุเลย!</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>ข้อมูลความเร็วสูงไม่จำกัด</item>
@@ -292,8 +273,6 @@
   <string name="get_lantern_pro">รับ Lantern Pro</string>
   <string name="upgrade_to_lantern_pro">อัปเกรดเป็น Lantern Pro</string>
   <string name="pro_available_for">สำหรับ Windows Android Mac Ubuntu ส่วน iOS จะมาในเร็ว ๆ นี้</string>
-  <string name="upgrade_to_pro">อัปเกรดเป็น Pro เพื่อใช้ข้อมูลความเร็วสูงกว่าเดิมแบบไม่จำกัด\nและต้านทานต่อการปิดกั้นได้ดียิ่งขึ้น!</string>
-  <string name="upgrade_to_pro_yinbi">อัปเกรดเป็น Pro เพื่อใช้ข้อมูลความเร็วสูงกว่าเดิมแบบไม่จำกัด\nต้านทานต่อการปิดกั้นได้ดียิ่งขึ้น และรับเงินดิจิทัล Yinbi ฟรี!</string>
   <string name="data_remaining">การใช้งานข้อมูลความเร็วสูงรายเดือนฟรีของคุณเหลืออยู่ %1$s %%</string>
   <string name="upgrade">อัปเกรด</string>
   <string name="upgrade_pro">อัปเกรดเป็น Pro</string>
@@ -392,16 +371,12 @@
   <string name="processing_payment">กำลังดำเนินการชำระเงิน</string>
   <string name="now_converting_to_pro">กำลังแปลงให้เป็น Pro... โปรดรอสักครู่...</string>
   <string name="have_an_activation_code">มีรหัสเปิดใช้งานหรือไม่? คลิกที่นี่</string>
-  <string name="yinbi_greeting">พบกับเงินดิจิทัล Yinbi แบบไม่สามารถปิดกั้นได้เร็วๆ นี้\nคลิกที่นี่เพื่อเรียนรู้วิธีการรับฟรี</string>
   <string name="test_payment_page">ทดสอบหน้าการชำระเงิน</string>
   <string name="pay_now">ชำระเงินตอนนี้เลย</string>
   <string name="error_bulk_codes">เกิดข้อผิดพลาดในการส่งรหัสบัญชี Pro จำนวนมาก</string>
   <string name="invalid_bulk_codes">รหัสบัญชี Pro ที่คุณป้อนไม่ถูกต้อง</string>
   <string name="renew_today">ต่ออายุวันนี้!</string>
-  <string name="receive_free_yinbi">รับเงินดิจิทัล Yinbi ฟรี!</string>
   <string name="purchased_pro_activation_codes">ซื้อรหัสเปิดใช้งาน Lantern Pro ทางออนไลน์หรือไม่?</string>
-  <string name="renew_grab_free_yinbi"><u>ต่ออายุโดยใช้รหัสเปิดใช้งาน Pro ของคุณเพื่อรับ Yinbi ฟรี</u></string>
-  <string name="upgrade_now_get_free_yinbi"><u>อัปเกรดโดยใช้รหัสเปิดใช้งาน Pro ของคุณเพื่อรับ Yinbi ฟรี</u></string>
   <string name="renew">ต่ออายุ!</string>
   <string name="terms_of_service_text">การคลิกดำเนินการต่อเพื่อชำระเงินแสดงว่าคุณยอมรับข้อกำหนดในการให้บริการของเรา</string>
   <string name="terms_of_service_text_complete_purchase">การคลิกดำเนินการซื้อให้สมบูรณ์แสดงว่าคุณยอมรับข้อกำหนดในการให้บริการของเรา</string>
@@ -411,60 +386,16 @@
   <string name="enter_lantern_pro_codes">ป้อนรหัส Lantern Pro</string>
   <string name="renewal_success">ต่ออายุสำเร็จ!</string>
   <string name="thank_you_for_renewing">ขอบคุณสำหรับการต่ออายุบัญชี\nLantern Pro</string>
-  <string name="yinbi">Yinbi</string>
-  <string name="visit_yinbi_website">ไปที่เว็บไซต์</string>
-  <string name="yinbi_redemption">แลกรับ Yinbi</string>
-  <string name="yinbi_account_info">ข้อมูลบัญชี Yinbi</string>
-  <string name="lantern_partnered_yinbi_free">Lantern ร่วมมือกับ Yinbi เพื่อมอบ\nYNB ให้กับทุกคนที่ซื้อ Lantern Pro!\nซื้อตอนนี้เลยเพื่อรับของแถมประจำวันนี้! เพื่อดูข้อมูลเพิ่มเติมเกี่ยวกับ Yinbi\nโปรดไปที่เว็บไซต์อย่างเป็นทางการ Yin.bi</string>
-  <string name="lantern_partnered_yinbi_pro">Lantern ร่วมมือกับ Yinbi เพื่อมอบ\nYNB ให้กับทุกคนที่ต่ออายุ Lantern Pro!\nต่ออายุตอนนี้เลยเพื่อรับของแถมประจำวันนี้! เพื่อดูข้อมูลเพิ่มเติมเกี่ยวกับ Yinbi\nโปรดไปที่เว็บไซต์อย่างเป็นทางการ Yin.bi</string>
-  <string name="enter_bulk_pro_codes">ป้อนรหัส Lantern Pro</string>
-  <string name="renew_pro_get_yinbi">ต่ออายุ Pro เพื่อรับ Yinbi</string>
-  <string name="you_have">คุณมี</string>
-  <string name="yinbi_code">YNB</string>
-  <string name="unable_to_get_yinbi_account_info">ไม่สามารถดึงข้อมูลบัญชี Yinbi</string>
-  <string name="redeem_bulk_codes">แลกรหัสจำนวนมาก</string>
-  <string name="paste_pro_account_codes">วางรหัสบัญชี Pro จำนวนมากของคุณที่ด้านล่างนี้เพื่อรับ\nLantern Pro หรือขยายเวลาสำหรับบัญชี Lantern Pro\nของคุณ</string>
-  <string name="special_offer">ข้อเสนอพิเศษ!</string>
-  <string name="cryptocurrency_giveaway">แจกเงินดิจิทัล!</string>
-  <string name="lantern_partnered_renew_now">Lantern ร่วมมือกับ Yinbi (YNB)  เพื่อมอบ\nYNB ให้กับทุกคนที่ต่ออายุ Lantern Pro!\nต่ออายุตอนนี้เลยเพื่อรับของแถมประจำวันนี้!</string>
-  <string name="what_is_yinbi">Yinbi คืออะไร?</string>
-  <string name="renew_now_get_yinbi">ต่ออายุตอนนี้เพื่อรับ Yinbi</string>
   <string name="purchase">ซื้อ</string>
-  <string name="one_year_yinbi">1 ปี + Yinbi ฟรี:</string>
-  <string name="yinbi_cost">%1$s %2$s (%3$s)</string>
-  <string name="two_years_yinbi">2 ปี + ฟรี 2x Yinbi:</string>
   <string name="thank_you_purchasing_pro">ขอบคุณที่ซื้อ Lantern Pro!</string>
-  <string name="you_will_receive_yinbi">คุณจะได้รับ Yinbi (YNB) ฟรีสำหรับการซื้อ\nหลังจากที่การแจกของแถมประจำวันนี้สิ้นสุดลง\nคลิกปุ่มรหัสแลกรับ Yinbi เพื่อดู\nรายละเอียดเพิ่มเติม</string>
-  <string name="yinbi_menu">เมนู Yinbi</string>
-  <string name="yinbi_redemption_code">รหัสแลกรับ Yinbi</string>
   <string name="continue_to_lantern_pro">ดำเนินการต่อไปยัง Lantern Pro</string>
-  <string name="yinbi_website">Yin.bi</string>
   <string name="date">วันที่</string>
-  <string name="redemption_code">รหัสแลกรับ</string>
   <string name="status">สถานะ</string>
   <string name="copy_all_codes">คัดลอกรหัสทั้งหมด</string>
-  <string name="visit_yinbi">ไปที่ Yin.bi เพื่อแลกรับ YNB และตรวจสอบ\nยอดคงเหลือในบัญชีของคุณ รหัสแลกรับ Yinbi จะหมดอายุ\nใน 30 วันหลังจากการซื้อ</string>
-  <string name="successfully_copied_codes">คัดลอกรหัสแลกรับเรียบร้อยแล้ว!</string>
-  <string name="no_active_codes">ไม่มีรหัสแลกรับที่ใช้งานอยู่ โปรดลองใหม่อีกครั้งภายหลัง!</string>
-  <string name="thanks_purchase_yinbi">ขอบคุณที่ซื้อ Lantern Pro!\nรหัสแลกรับ Yinbi ของคุณจะปรากฏ\nบนหน้าจอนี้หลังจากที่การแจกของแถมประจำวันนี้สิ้นสุดลง\nโปรดกลับมาตรวจสอบอีกครั้งเมื่อ\nครบกำหนดเวลา</string>
-  <string name="yinbi_details">Yinbi (YNB) เป็นเงินดิจิทัล\nแบบไม่สามารถปิดกั้นได้รูปแบบใหม่ซึ่งกำลังจะเปิดตัวเร็วๆ นี้\nโดยจะช่วยให้การทำธุรกรรมบนโทรศัพท์มือถือเป็นไปอย่างรวดเร็ว เชื่อถือได้ ใช้งานสะดวก และค่าใช้จ่ายไม่สูง ซึ่งผู้ใช้ Lantern จะเป็นผู้ที่สามารถเข้าถึง\nเงินดิจิทัลแบบใหม่นี้ได้ก่อนใคร!</string>
-  <string name="find_out_more">ดูข้อมูลเพิ่มเติมได้ที่นี่: Yin.bi</string>
   <string name="best_deal">ข้อเสนอที่ดีที่สุด</string>
-  <string name="launches_soon">Yinbi (YNB) กำลังจะเปิดตัวในเร็วๆ นี้ และผู้ใช้ Lantern\nจะเป็นผู้ที่สามารถเข้าถึง\nเงินดิจิทัลแบบใหม่นี้ได้ก่อนใคร! จะมีการแจก YNB\nทุกวันเมื่อสิ้นสุดวันตามจำนวน\nผู้ใช้ที่ทำการอัปเกรด\nและตามจำนวนปีหรือบัญชี\nที่คุณซื้อ</string>
-  <string name="how_yinbis_distributed">จะมีการแจก YNB ทุกวันเมื่อสิ้นสุดวัน\nตามจำนวน Yinbi ที่ปล่อยออกมาในวันนั้น ตามจำนวนผู้ใช้\nที่ทำการอัปเกรด และตามจำนวนปีหรือบัญชีที่คุณซื้อ รหัสแลกรับ Yinbi\nของคุณจะปรากฏบนหน้าจอนี้\nหลังจากที่การแจกของแถมประจำวันนี้สิ้นสุดลง\nโปรดกลับมาตรวจสอบอีกครั้งเมื่อครบ\nกำหนดเวลา</string>
-  <string name="get_bulk_yinbi"><u>ซื้อบัญชี Pro จำนวนมาก ก็รับ Yinbi จำนวนมากด้วย!</u></string>
-  <string name="loading_yinbi_account_info">กำลังโหลดข้อมูลบัญชี Yinbi</string>
-  <string name="free_yinbi_with_purchase">รับ Yinbi ฟรีเมื่อซื้อ!</string>
   <string name="renew_now_get_more">ต่ออายุตอนนี้และรับเพิ่มอีก!</string>
-  <string name="buy_pro_get_yinbi">ซื้อ Pro เพื่อรับ Yinbi</string>
   <string name="renewal_note">หมายเหตุ: เวลาสำหรับแผนที่คุณเพิ่งซื้อใหม่นี้จะถูกเพิ่มลงใน\nเวลาสำหรับแผนที่ใช้อยู่ปัจจุบันของคุณ</string>
   <string name="bulk_codes_error">เกิดข้อผิดพลาด! โปรดตรวจสอบรหัสที่ไฮไลต์</string>
-  <string name="loading_yinbi">กำลังโหลดรหัสแลกรับ Yinbi</string>
-  <string name="lantern_partnered_yinbi">Lantern ร่วมมือกับ Yinbi เพื่อมอบ\nYNB ให้กับทุกคนที่ต่ออายุ Lantern Pro!\nต่ออายุตอนนี้เลยเพื่อรับของแถมประจำวันนี้! เพื่อดูข้อมูลเพิ่มเติมเกี่ยวกับ Yinbi\nโปรดไปที่เว็บไซต์อย่างเป็นทางการ Yin.bi</string>
-  <string name="time_left_giveaway">เวลาที่เหลือสำหรับการแจก Yinbi ประจำวันนี้!</string>
-  <string name="yinbi_released_today">วันนี้ปล่อย %d YNB!</string>
-  <string name="yinbi_distribution_details">จะมีการแจก YNB ทุกวันเมื่อสิ้นสุดวันตามจำนวน Yinbi ที่ปล่อยออกมาในวันนั้น ตามจำนวนผู้ใช้ที่ทำการอัปเกรด/ต่ออายุ และตามจำนวนปีหรือบัญชีที่คุณซื้อ</string>
-  <string name="total_yinbi_released">จำนวน YNB รวมทั้งหมดที่ปล่อยออกมาจะลดลงทุกวัน และจะลดลงครึ่งหนึ่งทุกปี รับ YNB ของคุณวันนี้เลย!</string>
   <string name="please_allow_lantern_to">โปรดอนุญาตให้ Lantern...</string>
   <string name="permission_for">เพื่อเปิดใช้งาน</string>
   <string name="android.permission.INTERNET">กำลังเชื่อมต่อกับเซิร์ฟเวอร์ Lantern</string>
@@ -473,4 +404,23 @@
   <string name="privacy_disclosure_title">การเปิดเผยความเป็นส่วนตัวของ Lantern</string>
   <string name="privacy_disclosure_accept">ฉันยอมรับ</string>
   <string name="privacy_disclosure_body">Lantern มุ่งมั่นที่จะปกป้องความเป็นส่วนตัวของคุณ เราต้องการให้คุณเข้าใจว่ามีข้อมูลใดบ้างที่เรารวบรวมและไม่ได้รวบรวม รวมถึงวิธีการที่เรารวบรวม ใช้ และจัดเก็บข้อมูล เราแยกข้อมูลการชำระเงินออกจากบัญชี Lantern Pro ของคุณ เราไม่มีการเก็บรวบรวมบันทึกกิจกรรม ซึ่งรวมถึงการบันทึกประวัติการเข้าชม ปลายทางในการรับส่งข้อมูล เนื้อหาข้อมูล หรือ DNS query นอกจากนี้ เราไม่มีการจัดเก็บบันทึกการเชื่อมต่อ จึงเท่ากับว่าไม่มีบันทึกที่อยู่ IP, ที่อยู่ IP ของเซิร์ฟเวอร์ Lantern ขาออกที่เชื่อมโยงกับการประทับตราเวลาการเชื่อมต่อ หรือระยะเวลาเซสชัน โดยหลักการแล้ว Lantern ไม่สามารถเชื่อมโยงบัญชี Lantern กับตัวตนที่แท้จริงของผู้ใช้ได้จากบัญชี Lantern Pro บัญชีใดบัญชีหนึ่งโดยเฉพาะ และแม้จะมีข้อมูลที่อยู่ IP ของ Lantern และการประทับตราเวลาโดยละเอียด แต่ตามหลักการแล้ว Lantern ก็ไม่อาจระบุได้ว่าที่อยู่ IP นี้เป็นของผู้ใช้ Lantern หรือที่อยู่ IP ของผู้ใช้ Lantern รายใด</string>
+  <string name="terms_of_service_complete_purchase">การคลิกดำเนินการซื้อให้สมบูรณ์แสดงว่าคุณยอมรับข้อกำหนดในการให้บริการของเรา</string>
+  <string name="step_1">ขั้นตอนที่ 1</string>
+  <string name="choose_plan">เลือกแผน</string>
+  <string name="unlimited_data">ข้อมูลไม่จำกัด</string>
+  <string name="faster_data_centers">ศูนย์ข้อมูลที่เร็วขึ้น</string>
+  <string name="connect_up_to_3_devices">เชื่อมต่ออุปกรณ์ได้สูงสุด 3 เครื่อง</string>
+  <string name="total_cost">เรียกเก็บเงิน %s ครั้งเดียว</string>
+  <string name="most_popular">เป็นที่นิยมมากที่สุด!</string>
+  <string name="step_2">ขั้นตอนที่ 2</string>
+  <string name="enter_email_short">ป้อนอีเมล</string>
+  <string name="mm_yy">ดด/ปป</string>
+  <string name="email">อีเมล</string>
+  <string name="describe_your_issue">คำอธิบายปัญหา</string>
+  <string name="report_sent">ส่งรายงานแล้ว</string>
+  <string name="have_a_lantern_pro_activation_code_click_here">มีรหัสเปิดใช้งาน Lantern Pro หรือไม่? คลิกที่นี่</string>
+  <string name="activation_code">รหัสเปิดใช้งาน</string>
+  <string name="email_with_colon">อีเมล:</string>
+  <string name="renew_short">ต่ออายุ</string>
+  <string name="decline">Decline</string>
 </resources>

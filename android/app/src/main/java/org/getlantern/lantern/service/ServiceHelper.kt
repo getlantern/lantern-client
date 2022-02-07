@@ -1,49 +1,29 @@
 package org.getlantern.lantern.service
 
 import android.annotation.TargetApi
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import java.util.concurrent.LinkedBlockingDeque
 
-class ServiceHelper(private val service: Service, private val largeIcon: Int, private val smallIcon: Int, private val content: Int) {
+class ServiceHelper(
+    private val service: Service,
+    private val defaultIcon: Int,
+    private val defaultText: Int
+) {
     fun makeForeground() {
         val doIt = {
-            var channelId: String? = null
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                channelId = createNotificationChannel()
-            } else {
-                // If earlier version channel ID is not used
-                // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
-            }
-            val openMainActivity = PendingIntent.getActivity(
-                service, 0, Intent(service, MainActivity::class.java),
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            val notificationBuilder = channelId?.let { NotificationCompat.Builder(service, it) }
-                ?: NotificationCompat.Builder(service)
-            notificationBuilder.setSmallIcon(smallIcon)
-            val largeIcon = (service.getResources().getDrawable(largeIcon) as BitmapDrawable).bitmap
-            notificationBuilder.setLargeIcon(largeIcon)
-            val appName = service.getText(R.string.app_name)
-            notificationBuilder.setContentTitle(appName)
-            val content = service.getText(content)
-            notificationBuilder.setContentText(content)
-            notificationBuilder.setContentIntent(openMainActivity)
-            notificationBuilder.setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
-            notificationBuilder.setNumber(0)
-            notificationBuilder.setOngoing(true)
-            val notification = notificationBuilder.build()
-            service.startForeground(1, notification)
+            service.startForeground(notificationId, buildNotification(defaultIcon, defaultText))
         }
         serviceDeque.push(doIt)
         doIt()
@@ -53,6 +33,38 @@ class ServiceHelper(private val service: Service, private val largeIcon: Int, pr
         serviceDeque.pop()
         // Put the prior service that was in the foreground back into the foreground
         serviceDeque.peekLast()?.let { it() }
+    }
+
+    fun updateNotification(icon: Int, text: Int) {
+        with(NotificationManagerCompat.from(service)) {
+            notify(notificationId, buildNotification(icon, text))
+        }
+    }
+
+    private fun buildNotification(icon: Int, text: Int): Notification {
+        var channelId: String? = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            channelId = createNotificationChannel()
+        } else {
+            // If earlier version channel ID is not used
+            // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
+        }
+        val openMainActivity = PendingIntent.getActivity(
+            service, 0, Intent(service, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val notificationBuilder = channelId?.let { NotificationCompat.Builder(service, it) }
+            ?: NotificationCompat.Builder(service)
+        notificationBuilder.setSmallIcon(icon)
+        val appName = service.getText(R.string.app_name)
+        notificationBuilder.setContentTitle(appName)
+        val content = service.getText(text)
+        notificationBuilder.setContentText(content)
+        notificationBuilder.setContentIntent(openMainActivity)
+        notificationBuilder.setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
+        notificationBuilder.setNumber(0)
+        notificationBuilder.setOngoing(true)
+        return notificationBuilder.build()
     }
 
     @TargetApi(Build.VERSION_CODES.O)
@@ -67,6 +79,7 @@ class ServiceHelper(private val service: Service, private val largeIcon: Int, pr
     }
 
     companion object ServiceHelper {
+        private const val notificationId = 1
         private val serviceDeque = LinkedBlockingDeque<() -> Unit>()
     }
 }

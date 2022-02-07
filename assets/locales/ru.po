@@ -1,27 +1,44 @@
 # 
 # Translators:
-# Lowrider <pams@imail.ru>, 2021
-# Helen Russel <coo@workogram.com>, 2021
-# e2f_ru r1 <tx_e2f_ru_r1@ate2f.com>, 2021
-# Vitaliy Grishenko, 2021
-# Derek F <derek@getlantern.org>, 2021
-# IvanLykov <chabib@list.ru>, 2021
-# Николай Кочкин <urfiner@gmail.com>, 2021
-# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2021
-# Helen R <helen.russel88@gmail.com>, 2021
-# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2021
-# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2021
-# sayanvd <sayanvd@yandex.ru>, 2021
+# Vitaliy Grishenko, 2022
+# e2f <projects@e2f.com>, 2022
+# IvanLykov <chabib@list.ru>, 2022
+# Lowrider <pams@imail.ru>, 2022
+# sayanvd <sayanvd@yandex.ru>, 2022
+# Николай Кочкин <urfiner@gmail.com>, 2022
+# Helen R <helen.russel88@gmail.com>, 2022
+# Helen Russel <coo@workogram.com>, 2022
+# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2022
+# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2022
+# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2022
+# Derek F <derek@getlantern.org>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: sayanvd <sayanvd@yandex.ru>, 2021\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2022\n"
 "Language-Team: Russian (Russia) (https://www.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 msgid "app_name"
 msgstr "Lantern"
+
+msgid "introducing"
+msgstr "Представляем чат"
+
+msgid "introducing_des"
+msgstr ""
+"Теперь в Lantern есть встроенный чат, в котором можно безопасно общаться с "
+"друзьями благодаря шифрованию и защите от блокировки!"
+
+msgid "maybe_later"
+msgstr "Позже"
+
+msgid "try"
+msgstr "Попробовать"
+
+msgid "new"
+msgstr "Создать"
 
 msgid "Daily Data Usage"
 msgstr "Ежедневное использование данных"
@@ -32,7 +49,7 @@ msgstr "это"
 msgid "connected"
 msgstr "Подключён"
 
-msgid "disconnected"
+msgid "Disconnected"
 msgstr "Отключен"
 
 msgid "Disconnecting"
@@ -41,15 +58,29 @@ msgstr "Отключение…"
 msgid "Connecting"
 msgstr "Подключение..."
 
+msgid "no_network_connection"
+msgstr "Нет подключения к Интернету"
+
+msgid "connection_error"
+msgstr "Ошибка подключения"
+
+msgid "connection_error_des"
+msgstr ""
+"Lantern не удается подключиться к серверам. Перезагрузите приложение. Если "
+"проблема не исчезнет, свяжитесь со службой поддержки."
+
+msgid "connection_error_button"
+msgstr "Получить помощь"
+
+msgid "Calling"
+msgstr "Вызов…"
+
 msgid "Go Pro Title"
 msgstr "Перейдите на версию Pro!"
 
 msgid "Go Pro Description"
 msgstr ""
 "Наслаждайтесь более высокой скоростью и неограниченным объемом данных!"
-
-msgid "Go Pro Description With Yinbi"
-msgstr "Неограниченный объем данных + бесплатная криптовалюта Yinbi!"
 
 msgid "Server Location"
 msgstr "Местоположение сервера"
@@ -62,35 +93,55 @@ msgstr ""
 msgid "OK"
 msgstr "Ок"
 
-msgid "pro_account_management"
+msgid "Done"
+msgstr "Готово"
+
+msgid "backup_recovery_key"
+msgstr "Ключ резервного восстановления"
+
+msgid "delete_chat_data"
+msgstr "Удалить все данные чата"
+
+msgid "delete_chat_data_description"
+msgstr ""
+"Мы удалим номер чата, контакты и сообщения с этого устройства. Без кода "
+"резервного восстановления вы не сможете получить доступ к номеру чата."
+
+msgid "delete_chat_data_confirmation"
+msgstr "Я хочу удалить данные чата"
+
+msgid "Pro Account Management"
 msgstr "Управление аккаунтом Pro"
 
-msgid "add_device"
-msgstr "Добавить устройство"
+msgid "Link Device"
+msgstr "Привязать устройство"
 
-msgid "upgrade_to_lantern_pro"
+msgid "Upgrade to Lantern Pro"
 msgstr "Обновление до Lantern Pro"
 
-msgid "authorize_device_for_pro"
-msgstr "Авторизовать устр. для Pro"
-
-msgid "invite_friends"
+msgid "Invite Friends"
 msgstr "Пригласи друзей "
 
 msgid "desktop_version"
-msgstr "Версия для компьютера"
-
-msgid "free_yinbi_crypto"
-msgstr "Бесплатная криптовалюта Yinbi"
-
-msgid "yinbi_redemption"
-msgstr "Получение Yinbi"
+msgstr "Версия для ПК"
 
 msgid "settings"
 msgstr "Настройки"
 
+msgid "general"
+msgstr "Основное"
+
 msgid "proxy_all"
 msgstr "Проксировать весь трафик"
+
+msgid "proxy_everything_is"
+msgstr "Использование прокси везде %s"
+
+msgid "version_number"
+msgstr "Версия: %s"
+
+msgid "build_number"
+msgstr "Сборка: %s"
 
 msgid "language"
 msgstr "Язык"
@@ -98,56 +149,17 @@ msgstr "Язык"
 msgid "report_issue"
 msgstr "Сообщить о проблеме"
 
+msgid "blocked_users"
+msgstr "Заблокированные пользователи"
+
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Если этот параметр включен, весь трафик будет отправляться через Lantern "
 "(более безопасный вариант). Если этот параметр отключен, через Lantern будет"
 " отправляться только заблокированный трафик (более быстрый вариант)."
 
-msgid "Exchange"
-msgstr "Биржа"
-
 msgid "Account"
 msgstr "Аккаунт"
-
-msgid "In partnership with"
-msgstr "Совместно с"
-
-msgid "Buy"
-msgstr "Купить"
-
-msgid "Bitcoin"
-msgstr "Bitcoin"
-
-msgid "Tether"
-msgstr "Tether"
-
-msgid "With"
-msgstr "С"
-
-msgid "Online Wallets"
-msgstr "Онлайн-кошельки"
-
-msgid "Bank Transfers"
-msgstr "Банковские переводы"
-
-msgid "Gift Cards"
-msgstr "Подарочные карты"
-
-msgid "Game Cards"
-msgstr "Игровые карточки"
-
-msgid "Cash Payment"
-msgstr "Платеж наличными"
-
-msgid "Digital Currencies"
-msgstr "Криптовалюты"
-
-msgid "Payment Method"
-msgstr "Способ оплаты"
-
-msgid "SHOW BEST DEALS"
-msgstr "ПОКАЗАТЬ ЛУЧШИЕ ПРЕДЛОЖЕНИЯ"
 
 msgid "VPN Status"
 msgstr "Статус VPN"
@@ -173,6 +185,9 @@ msgstr "ИЛИ"
 msgid "Authorize Device via Email"
 msgstr "Авторизация с помощью электронной почты"
 
+msgid "auth_email_helper_text"
+msgstr "Введите адрес электронной почты, связанный с вашим аккаунтом Pro."
+
 msgid "Requires access to the email you used to buy Lantern Pro"
 msgstr ""
 "Необходим доступ к адресу электронной почты, который использовался для "
@@ -181,11 +196,17 @@ msgstr ""
 msgid "Link via Email"
 msgstr "Ссылка по электронной почте"
 
+msgid "lantern_pro_email"
+msgstr "Адрес эл. почты аккаунта Lantern Pro"
+
 msgid "Email"
 msgstr "Электронная почта"
 
 msgid "Submit"
 msgstr "Отправить"
+
+msgid "save"
+msgstr "Сохранить"
 
 msgid "Please enter a valid email address"
 msgstr "Введите действительный адрес электронной почты"
@@ -216,7 +237,7 @@ msgstr "Добавить устройство"
 msgid "approve_device_step_1"
 msgstr ""
 "На устройстве, с которым вы хотите установить связь, откройте меню "
-"«Авторизация для Lantern Pro»."
+"«Авторизовать устр. для Pro» и нажмите «Привязать с помощью ПИН-кода»."
 
 msgid "approve_device_step_2"
 msgstr "Введите код привязки, полученный на шаге 1"
@@ -240,19 +261,831 @@ msgid "confirm_remove_device"
 msgstr "Вы уверены, что хотите отвязать это устройство от аккаунта Pro?"
 
 msgid "n/a"
-msgstr ""
+msgstr "Не применимо"
 
 msgid "Developer Settings"
-msgstr ""
+msgstr "Настройки разработчика"
 
 msgid "Developer"
+msgstr "Разработчик"
+
+msgid "dev_settings"
 msgstr ""
+"Эти настройки применяются для разработки. Если вы измените их, приложение "
+"остановит работу и будет перезапущено."
+
+msgid "dev_payment_mode"
+msgstr ""
+"Когда режим тестирования оплаты включен, приложение работает от имени "
+"прописанного в коде пользователя. Вы можете совершать покупки через Stripe, "
+"указывая номер карты 4242 4242 4242 4242, любую дату в будущем и любой CVV-"
+"код."
 
 msgid "Payment Test Mode"
-msgstr ""
+msgstr "Режим тестирования оплаты"
 
 msgid "Play Version"
+msgstr "Версия для Google Play"
+
+msgid "Force Country"
+msgstr "Принудительно указать страну"
+
+msgid "Error"
+msgstr "Ошибка"
+
+msgid "accept"
+msgstr "Да"
+
+msgid "cancel"
+msgstr "Отмена"
+
+msgid "reject"
+msgstr "Отклонить"
+
+msgid "copied"
+msgstr "Скопировано!"
+
+msgid "saved"
+msgstr "Сохранено!"
+
+msgid "new_chat"
+msgstr "Создать чат"
+
+msgid "your_contact_info"
+msgstr "Ваши контактные данные"
+
+msgid "display_name"
+msgstr "Отображаемое имя"
+
+msgid "edit"
+msgstr "Редактировать"
+
+msgid "save_error"
+msgstr "Ошибка сохранения."
+
+msgid "more_options"
+msgstr "Еще"
+
+msgid "block_user"
+msgstr "Заблокировать пользователя"
+
+msgid "unblock_user"
+msgstr "Разблокировать пользователя"
+
+msgid "block"
+msgstr "Заблокировать "
+
+msgid "unblock"
+msgstr "Разблокировать "
+
+msgid "block_info_title"
+msgstr "Заблокировать пользователя %s?"
+
+msgid "no_blocked_users"
+msgstr "Нет заблокированных пользователей."
+
+msgid "unblock_info_title"
+msgstr "Разблокировать пользователя %s?"
+
+msgid "block_info_description"
+msgstr ""
+"Если вы заблокируете этого пользователя, он больше не сможет связаться с "
+"вами, а история чата будет удалена. Разблокировать его можно в настройках."
+
+msgid "unblock_info_description"
+msgstr ""
+"Теперь %s может вам писать. Этот пользователь не получит уведомление о том, "
+"что вы его разблокировали."
+
+msgid "block_info_checkbox"
+msgstr "Я понимаю, что история чата будет удалена"
+
+msgid "unblock_info_checkbox"
+msgstr "Я хочу разблокировать этого пользователя"
+
+msgid "delete_permanently"
+msgstr "Удалить пользователя навсегда"
+
+msgid "delete_info_description"
+msgstr ""
+"Если вы захотите снова написать этому пользователю, нужно будет добавить его"
+" контактную информацию."
+
+msgid "add_new_contact"
+msgstr "Добавить новый контакт"
+
+msgid "add_contact"
+msgstr "Добавить контакт"
+
+msgid "share_your_chat_number"
+msgstr "Поделитесь номером чата"
+
+msgid "scan_qr_code"
+msgstr "Отсканировать QR-код"
+
+msgid "add_contact_in_person"
+msgstr "Добавить контакты лично"
+
+msgid "start_chat"
+msgstr "Начать чат"
+
+msgid "message_disappearing"
+msgstr "Для вас и пользователя %s сообщения не будут пропадать."
+
+msgid "message_disappearing_description"
+msgstr "Для вас и пользователя %s все сообщения будут пропадать через %s."
+
+msgid "delete"
+msgstr "Удалить"
+
+msgid "view_contact_info"
+msgstr "Посмотреть контактную информацию"
+
+msgid "off"
+msgstr "Выкл."
+
+msgid "continue"
+msgstr "Продолжить"
+
+msgid "are_you_sure_you_want_to_open"
+msgstr "Открыть %s?"
+
+msgid "set"
+msgstr "Настроить"
+
+msgid "menu"
+msgstr "Меню"
+
+msgid "send_error"
+msgstr "Ошибка отправки сообщения"
+
+msgid "share_media_error"
+msgstr "Ошибка отправки медиафайла"
+
+msgid "no_recents"
+msgstr "Нет недавних"
+
+msgid "set_display_name"
+msgstr "Установить отображаемое имя"
+
+msgid "introduce_contact"
+msgstr "Познакомить с контактом"
+
+msgid "introduce_contacts"
+msgstr "Познакомить контакты"
+
+msgid "introduce_contacts_with_count"
+msgstr "Познакомить контакты (%s)"
+
+msgid "need_two_contacts_to_introduce"
+msgstr ""
+"Если у вас есть хотя бы два контакта, вы можете познакомить их друг с "
+"другом."
+
+msgid "introduce_contacts_select"
+msgstr ""
+"Выберите хотя бы два контакта, которых хотите познакомить. Они смогут начать"
+" общение, когда подтвердят запрос на знакомство."
+
+msgid "introduce_single_contact"
+msgstr ""
+"Выберите контакт, который хотите познакомить с пользователем %s. Они смогут "
+"начать общаться, как только подтвердят знакомство."
+
+msgid "send_introductions"
+msgstr "Познакомить"
+
+msgid "introductions_sent"
+msgstr "Вы отправили запрос на знакомство!"
+
+msgid "no_contacts_yet"
+msgstr "Контактов нет"
+
+msgid "contact_verification"
+msgstr "Подтверждение контакта"
+
+msgid "verification"
+msgstr "Подтверждение"
+
+msgid "contact_verification_description"
+msgstr ""
+"Кнопка подтверждения контакта расположена справа вверху в меню сообщений."
+
+msgid "qr_error_description"
+msgstr "Ошибка сканирования QR-кода."
+
+msgid "qr_info_verification_title"
+msgstr "Личное подтверждение контакта"
+
+msgid "qr_info_f2f_title"
+msgstr "Сканирование QR-кода"
+
+msgid "qr_info_verification_des"
+msgstr ""
+"Чтобы подтвердить контакт, отсканируйте QR-коды друг друга.\n"
+"\n"
+"Так мы сможем применять сквозное шифрование и защищать вашу конфиденциальность."
+
+msgid "qr_info_f2f_des"
+msgstr ""
+"Чтобы добавить пользователя в контакты, отсканируйте QR-коды друг друга.\n"
+"\n"
+"Так мы сможем применять сквозное шифрование и защищать вашу конфиденциальность."
+
+msgid "qr_info_verification_scan"
+msgstr "Чтобы подтвердить, отсканируйте QR-коды друг друга."
+
+msgid "qr_info_f2f_scan"
+msgstr "Чтобы добавить контакт, отсканируйте QR-коды друг друга."
+
+msgid "qr_success_snackbar"
+msgstr "%s у вас в контактах"
+
+msgid "qr_info_waiting_qr"
+msgstr "Подождите, когда друг отсканирует ваш QR-код…"
+
+msgid "scan_complete"
+msgstr "Отсканировано"
+
+msgid "qr_for_your_contact"
+msgstr "Ваш QR-код"
+
+msgid "add_via_chat_number"
+msgstr "Добавить с помощью номера чата"
+
+msgid "qr_info_waiting_id"
+msgstr ""
+"Подождите, когда друг введет идентификатор мессенджера или отсканирует QR-"
+"код…"
+
+msgid "chat_number_not_found"
+msgstr "Номер чата не найден. Проверьте его и повторите попытку."
+
+msgid "unable_to_add_contact"
+msgstr "Контакт не найден. Проверьте номер и повторите попытку."
+
+msgid "self_adding"
+msgstr "Введенный номер чата принадлежит вам"
+
+msgid "chat_number_type"
+msgstr "Введите номер чата"
+
+msgid "letter_and_numbers_only"
+msgstr "Только буквы и цифры"
+
+msgid "name_your_contact"
+msgstr "Назовите контакт"
+
+msgid "messenger_id_invalid"
+msgstr "Недействительный идентификатор мессенджера"
+
+msgid "username_not_found"
+msgstr "Имя пользователя не найдено"
+
+msgid "contact_id_your_id"
+msgstr "Ваш идентификатор мессенджера"
+
+msgid "introductions"
+msgstr "Знакомства"
+
+msgid "introduced"
+msgstr "Кто познакомил: %s"
+
+msgid "introductions_title"
+msgstr "Подтвердите знакомство с пользователем %s"
+
+msgid "introductions_info"
+msgstr ""
+"Чтобы начать общение, обе стороны должны подтвердить знакомство. Запросы "
+"удаляются через семь дней после отправки."
+
+msgid "introduction_reject_title"
+msgstr "Отклонить знакомство"
+
+msgid "introduction_reject_content"
+msgstr ""
+"Если вы отклоните знакомство, то не сможете общаться с этим контактом."
+
+msgid "introductions_error_description_rejecting"
+msgstr "Не удалось отклонить запрос."
+
+msgid "introductions_error_description_accepting"
+msgstr "Не удалось принять запрос."
+
+msgid "no_introductions"
+msgstr "Запросов на знакомство нет."
+
+msgid "introduction_approved"
+msgstr "Знакомство с пользователем %s подтверждено!"
+
+msgid "delete_contact_name"
+msgstr "Удалить контакт %s"
+
+msgid "delete_contact"
+msgstr "Удалить контакт"
+
+msgid "error"
+msgstr "Ошибка"
+
+msgid "error_delete_contact"
+msgstr "Не удалось удалить контакт."
+
+msgid "unnamed_contact"
+msgstr "Безымянный контакт"
+
+msgid "me"
+msgstr "Вы"
+
+msgid "disappearing_messages"
+msgstr "Исчезающие сообщения"
+
+msgid "start_of_your_history"
+msgstr ""
+"Сообщения и звонки между вами и контактом %s защищены сквозным шифрованием."
+
+msgid "banner_unaccepted"
+msgstr "Пользователя %s нет в вашем списке контактов. Принять запрос на чат?"
+
+msgid "banner_messages_persist"
+msgstr "Новые сообщения не пропадают."
+
+msgid "banner_message_retention"
+msgstr "Срок демонстрации сообщений: %s"
+
+msgid "longform_seconds"
+msgstr "%s сек."
+
+msgid "shortform_seconds"
+msgstr "%s сек."
+
+msgid "longform_minute"
+msgstr "%s мин."
+
+msgid "shortform_minutes"
+msgstr "%s мин."
+
+msgid "longform_minutes"
+msgstr "%s мин."
+
+msgid "longform_hour"
+msgstr "%s ч."
+
+msgid "shortform_hours"
+msgstr "%s ч."
+
+msgid "longform_hours"
+msgstr "%s ч."
+
+msgid "longform_day"
+msgstr "%s дн."
+
+msgid "shortform_days"
+msgstr "%s​ дн."
+
+msgid "longform_days"
+msgstr "%s дн."
+
+msgid "longform_week"
+msgstr "%s нед."
+
+msgid "shortform_weeks"
+msgstr "%s нед."
+
+msgid "longform_weeks"
+msgstr "%s нед."
+
+msgid "banner_source_unknown"
+msgstr "Неизвестно"
+
+msgid "banner_source_qr"
+msgstr "QR-код"
+
+msgid "banner_source_id"
+msgstr "Идентификатор мессенджера"
+
+msgid "banner_source_intro"
+msgstr "Введение"
+
+msgid "message_will_disappear_at"
+msgstr "Исчезнет %s"
+
+msgid "change_display_name"
+msgstr "Изменить отображаемое имя"
+
+msgid "yesterday"
+msgstr "вчера"
+
+msgid "tomorrow"
+msgstr "завтра"
+
+msgid "just_now"
+msgstr "только что"
+
+msgid "within_one_minute"
+msgstr "в течение минуты"
+
+msgid "on_date"
+msgstr "%s"
+
+msgid "at_date"
+msgstr "%s"
+
+msgid "error_fetching_message_preview"
+msgstr "Не удалось выполнить предпросмотр сообщения"
+
+msgid "message_was_deleted"
+msgstr "Сообщение удалено"
+
+msgid "contact_was_deleted"
+msgstr "Пользователь %s удален из ваших контактов."
+
+msgid "contact_was_blocked"
+msgstr "Контакт %s заблокирован."
+
+msgid "contact_was_unblocked"
+msgstr "Контакт %s разблокирован."
+
+msgid "dismiss"
+msgstr "Отключить"
+
+msgid "copy_text"
+msgstr "Скопировать текст"
+
+msgid "message"
+msgstr "Сообщение"
+
+msgid "messages"
+msgstr "Сообщения"
+
+msgid "chats"
+msgstr "Чаты"
+
+msgid "new_requests"
+msgstr "Новых запросов: %s"
+
+msgid "chat"
+msgstr "Чат"
+
+msgid "lantern_chat"
+msgstr "Чат Lantern"
+
+msgid "welcome_title"
+msgstr "Добро пожаловать в чат Lantern!"
+
+msgid "welcome_text"
+msgstr ""
+"Мы обеспечиваем вашу конфиденциальность благодаря шифрованию и лучшей в "
+"своем классе технологии защиты от блокировки."
+
+msgid "get_started"
+msgstr "Начать"
+
+msgid "want_to_recover"
+msgstr "У вас есть номер чата?"
+
+msgid "recover"
+msgstr "Восстановить"
+
+msgid "chat_number"
+msgstr "Номер чата"
+
+msgid "your_chat_number"
+msgstr "Ваш номер чата"
+
+msgid "chat_number_recovery"
+msgstr "Восстановление номера чата"
+
+msgid "recovery_helper_text"
+msgstr "Введите действительный ключ восстановления"
+
+msgid "recovery_button"
+msgstr "Чтобы восстановить номер чата, введите действительный ключ."
+
+msgid "recovery_label"
+msgstr "Введите ключ восстановления"
+
+msgid "recovery_key"
+msgstr "Ключ восстановления"
+
+msgid "secure_text_explanation"
+msgstr ""
+"Номер чата — это своего рода номер телефона, по которому друзья могут "
+"связываться с вами в Lantern."
+
+msgid "secure_text_explanation_account"
+msgstr ""
+"Это полная версия вашего номера чата. Безопаснее делиться с пользователями именно ей. Лучше всего делать это через другой канал со сквозным шифрованием.\n"
+"\n"
+"Lantern предлагает укороченную версию номера чата, которой проще обмениваться."
+
+msgid "recovery_key_account_explanation"
+msgstr ""
+"Никому не сообщайте этот ключ и храните его в безопасном месте. Если вы "
+"потеряете телефон, смените устройство или сбросите настройки операционной "
+"системы, то сможете восстановить номер чата только с помощью этого ключа."
+
+msgid "recovery_error"
+msgstr "Не удалось восстановить аккаунт."
+
+msgid "recovery_input_error"
+msgstr "Проверьте, правильный ли ключ восстановления вы вводите"
+
+msgid "recovery_retrieval_error"
+msgstr "Не удалось получить код восстановления"
+
+msgid "recovery_success"
+msgstr "Вы восстановили номер чата"
+
+msgid "empty_chats_text"
+msgstr "Поделитесь своим номером чата с другими и добавьте контакты!"
+
+msgid "next"
+msgstr "Далее"
+
+msgid "automated_backup"
+msgstr "Автоматическое резервное копирование"
+
+msgid "backup_explanation"
+msgstr ""
+"Lantern может выполнять резервное копирование ваших контактов и хранить их в зашифрованном виде на защищенных серверах. Без этой функции вы не сможете восстановить контакты с помощью ключа.\n"
+"\n"
+"Если вы включите функцию резервного копирования, Lantern не получит информацию о ваших контактах."
+
+msgid "backup_contacts"
+msgstr "Резервное копирование контактов"
+
+msgid "copy_recovery_key"
+msgstr "Скопировать ключ восстановления"
+
+msgid "search"
+msgstr "Поиск"
+
+msgid "account_management"
+msgstr "Управление аккаунтом"
+
+msgid "add_via_username"
+msgstr "Добавить с помощью имени пользователя"
+
+msgid "username"
+msgstr "Имя пользователя"
+
+msgid "enter_a_username_to_start_a_conversation"
+msgstr "Чтобы начать общение, введите имя пользователя"
+
+msgid "start_message"
+msgstr "Написать сообщение"
+
+msgid "please_enter_a_valid_username"
+msgstr "Введите действительное имя пользователя"
+
+msgid "open_url"
+msgstr "Открыть URL"
+
+msgid "message_deleted"
+msgstr "Пользователь %s удалил сообщение"
+
+msgid "never"
+msgstr "Никогда"
+
+msgid "delete_for_me"
+msgstr "Удалить у меня"
+
+msgid "delete_for_me_explanation"
+msgstr ""
+"Сообщение будет удалено только у вас. Остальные будут его по-прежнему "
+"видеть."
+
+msgid "delete_for_everyone"
+msgstr "Удалить у всех"
+
+msgid "delete_for_everyone_explanation"
+msgstr "Сообщение будет удалено у всех."
+
+msgid "reply"
+msgstr "Ответить"
+
+msgid "replying_to"
+msgstr "Ответ пользователю %s"
+
+msgid "attachment"
+msgstr "Вложение"
+
+msgid "error_rendering_message"
+msgstr "Не удалось отобразить сообщение"
+
+msgid "error_fetching_preview"
+msgstr "Не удалось выполнить предпросмотр сообщения"
+
+msgid "audio"
+msgstr "Аудио"
+
+msgid "image"
+msgstr "Изображения"
+
+msgid "video"
+msgstr "Видео"
+
+msgid "app"
+msgstr "Приложения"
+
+msgid "document"
+msgstr "Документы"
+
+msgid "search_chars_min"
+msgstr "Введите не менее трех символов"
+
+msgid "search_no_results"
+msgstr "Нет результатов, соответствующих этому запросу."
+
+msgid "search_error"
+msgstr "Не удалось получить результаты поиска."
+
+msgid "search_contacts"
+msgstr "Контакты (%s)"
+
+msgid "search_chats"
+msgstr "Чаты (%s)"
+
+msgid "search_in_contacts"
+msgstr "Поиск в контактах"
+
+msgid "search_in_chats"
+msgstr "Поиск в чатах и контактах"
+
+msgid "could_not_render_title"
+msgstr "Не удалось отобразить название файла"
+
+msgid "could_not_render_type"
+msgstr "Не удалось отобразить тип файла"
+
+msgid "speaker"
+msgstr "Динамик"
+
+msgid "speaker_on"
+msgstr "Динамик включен"
+
+msgid "mute"
+msgstr "Игнорировать"
+
+msgid "muted"
+msgstr "Звук выключен"
+
+msgid "end_call"
+msgstr "Завершить звонок"
+
+msgid "verify_contact"
+msgstr "Подтвердить контакт %s"
+
+msgid "verified"
+msgstr "Verified"
+
+msgid "pending_verification"
+msgstr "Ожидает подтверждения"
+
+msgid "verify_description"
+msgstr ""
+"В целях безопасности рекомендуем проверить, соответствует ли номер подтверждения контакта %s вашему.\n"
+"\n"
+"Подтвердить лично или по звонку?"
+
+msgid "verify_in_person"
+msgstr "Подтвердить лично"
+
+msgid "verify_via_call"
+msgstr "Подтвердить по звонку"
+
+msgid "dismiss_notification"
+msgstr "Убрать уведомление"
+
+msgid "call_contact"
+msgstr "Позвонить контакту %s?"
+
+msgid "call"
+msgstr "Позвонить"
+
+msgid "incoming_call"
+msgstr "Входящий звонок"
+
+msgid "call_from"
+msgstr "От кого: %s"
+
+msgid "in_call"
+msgstr "Текущие звонки"
+
+msgid "in_call_des"
+msgstr "Уведомление о текущем звонке"
+
+msgid "incoming_call_from"
+msgstr "Входящий звонок от контакта %s"
+
+msgid "touch_here_to_open_call"
+msgstr "Коснитесь, чтобы ответить на звонок"
+
+msgid "in_call_with"
+msgstr "Звонок с контактом %s…"
+
+msgid "undo_verification"
+msgstr "Отменить подтверждение"
+
+msgid "mark_as_verified"
+msgstr "Отметить как подтвержденный"
+
+msgid "verification_panel_success"
+msgstr "Подтверждение выполнено! Теперь ваше общение с контактом %s защищено."
+
+msgid "verification_panel_pending"
+msgstr ""
+"Это ваш номер подтверждения. Прежде чем подтвердить контакт %s, проверьте, "
+"совпадают ли ваши номера."
+
+msgid "replica_upload_confirmation_title"
+msgstr "Важно!"
+
+msgid "replica_upload_confirmation_body"
+msgstr ""
+"Файлы, загруженные в децентрализованную сеть Lantern, становятся общедоступными. Их никто не сможет удалить.\n"
+"\n"
+"Во время загрузки конфиденциальных материалов проверяйте, чтобы в их содержимом и названии файлов не было идентификационной информации."
+
+msgid "replica_upload_confirmation_agree"
+msgstr "Возобновить отправку"
+
+msgid "dont_show_me_this_again"
+msgstr "Не показывать"
+
+msgid "download"
+msgstr "Скачать"
+
+msgid "download_started"
+msgstr "Скачивание началось"
+
+msgid "uploader"
+msgstr "Загрузчик"
+
+msgid "upload_started"
+msgstr "Загрузка началась"
+
+msgid "upload_in_progress"
+msgstr "Загрузка…"
+
+msgid "upload_complete"
+msgstr "Загрузка выполнена"
+
+msgid "upload_failed"
+msgstr "Ошибка загрузки"
+
+msgid "upload_cancelled"
+msgstr "Загрузка отменена"
+
+msgid "replica_link_fetcher"
+msgstr "Поставщик ссылок на копии"
+
+msgid "no_preview_for_this_type_of_file"
+msgstr "Для этого типа файлов предпросмотр недоступен"
+
+msgid "app_unknown"
+msgstr "Неизвестное приложение"
+
+msgid "audio_unknown"
+msgstr "Неизвестное аудио"
+
+msgid "document_unknown"
+msgstr "Неизвестный документ"
+
+msgid "no_search_result_found"
+msgstr "Мы ничего не нашли"
+
+msgid "search_result_error"
 msgstr ""
 
-msgid "Yinbi Enabled"
+msgid "video_stream_error"
 msgstr ""
+
+msgid "untitled"
+msgstr "Без названия"
+
+msgid "failed_to_init_replica"
+msgstr "Ошибка. Не удалось выполнить инициализацию реплики."
+
+msgid "awaiting_result"
+msgstr "Ожидание результата…"
+
+msgid "discover"
+msgstr "Обзор"
+
+msgid "replica_search_intro"
+msgstr ""
+"Находите загруженные пользователями материалы в сети Lantern и загружайте "
+"свои файлы для других."
+
+msgid "share"
+msgstr "Поделиться"
+
+msgid "upload_file_screen"
+msgstr "Отправить файл"
+
+msgid "name_your_file"
+msgstr "Присвойте файлу имя"
+
+msgid "upload"
+msgstr "Отправить"

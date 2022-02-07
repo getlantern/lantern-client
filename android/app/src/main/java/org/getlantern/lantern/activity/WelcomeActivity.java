@@ -20,7 +20,7 @@ import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.R;
 
 @EActivity(R.layout.pro_welcome)
-public class WelcomeActivity extends FragmentActivity {
+public class WelcomeActivity extends BaseFragmentActivity {
 
     private static final String TAG = WelcomeActivity.class.getName();
 

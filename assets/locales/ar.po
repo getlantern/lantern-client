@@ -1,23 +1,44 @@
 # 
 # Translators:
-# Derek F <derek@getlantern.org>, 2021
-# e2f_ar c2 <tx_e2f_ar_c2@ate2f.com>, 2021
-# lamine Kacimi <k_lamine27@yahoo.fr>, 2021
-# محيي الدين <tx99h4@hotmail.com>, 2021
-# Rima Sghaier, 2021
-# Amin Jobran, 2021
-# e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2021
-# Abed Abedd <abderrahman.younis@gmail.com>, 2021
+# Amin Jobran, 2022
+# lamine Kacimi <k_lamine27@yahoo.fr>, 2022
+# e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2022
+# Abdelaziz Houcini <azhouhou@gmail.com>, 2022
+# e2f_ar c2 <tx_e2f_ar_c2@ate2f.com>, 2022
+# محيي الدين <tx99h4@hotmail.com>, 2022
+# Layla Taha <layla@asl19.org>, 2022
+# Rima Sghaier, 2022
+# e2f <projects@e2f.com>, 2022
+# Abed Abedd <abderrahman.younis@gmail.com>, 2022
+# Derek F <derek@getlantern.org>, 2022
+# e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Abed Abedd <abderrahman.younis@gmail.com>, 2021\n"
+"Last-Translator: e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2022\n"
 "Language-Team: Arabic (https://www.transifex.com/lantern-1/teams/94371/ar/)\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 msgid "app_name"
-msgstr "لانترن"
+msgstr "Lantern"
+
+msgid "introducing"
+msgstr "تقديم الدردشة"
+
+msgid "introducing_des"
+msgstr ""
+"يمكنك إجراء الدردشة بشكل آمن مع الأصدقاء باستخدام الدردشة الجديدة المشفرة "
+"المقاومة للحظر والمدمجة مباشرة في تطبيق Lantern!"
+
+msgid "maybe_later"
+msgstr "ربما لاحقًا"
+
+msgid "try"
+msgstr "جربه"
+
+msgid "new"
+msgstr "جديد"
 
 msgid "Daily Data Usage"
 msgstr "الاستخدام اليومي للبيانات"
@@ -28,7 +49,7 @@ msgstr "يتم الآن"
 msgid "connected"
 msgstr "موصول"
 
-msgid "disconnected"
+msgid "Disconnected"
 msgstr "مفصول"
 
 msgid "Disconnecting"
@@ -37,14 +58,28 @@ msgstr "قطع الاتصال"
 msgid "Connecting"
 msgstr "ربط ..."
 
+msgid "no_network_connection"
+msgstr "لا يوجد اتصال بالشبكة"
+
+msgid "connection_error"
+msgstr "خطأ في الإتصال"
+
+msgid "connection_error_des"
+msgstr ""
+"يواجه تطبيق Lantern مشكلات في الاتصال بخوادمنا. يُرجى إعادة تشغيل التطبيق. "
+"أما إذا استمرت هذه المشكلة، فيُرجى الاتصال بالدعم."
+
+msgid "connection_error_button"
+msgstr "الاتصال بالدعم"
+
+msgid "Calling"
+msgstr "جارٍ الاتصال..."
+
 msgid "Go Pro Title"
 msgstr "الترقية إلى النسخة الاحترافية!"
 
 msgid "Go Pro Description"
 msgstr "احصل على سرعات فائقة وبيانات غير محدودة!"
-
-msgid "Go Pro Description With Yinbi"
-msgstr "بيانات غير محدودة + عملة Yinbi المشفرة المجانية."
 
 msgid "Server Location"
 msgstr "موقع الخادم"
@@ -56,35 +91,56 @@ msgstr ""
 msgid "OK"
 msgstr "حسناً"
 
-msgid "pro_account_management"
+msgid "Done"
+msgstr "تم"
+
+msgid "backup_recovery_key"
+msgstr "مفتاح استرداد النسخة الاحتياطية"
+
+msgid "delete_chat_data"
+msgstr "حذف جميع بيانات الدردشة"
+
+msgid "delete_chat_data_description"
+msgstr ""
+"سيؤدي هذا الأمر إلى حذف رقم الدردشة وجهات الاتصال والرسائل من هذا الجهاز. "
+"بدون مفتاح استرداد النسخة الاحتياطية، ستفقد إمكانية الوصول إلى رقم الدردشة "
+"الخاص بك."
+
+msgid "delete_chat_data_confirmation"
+msgstr "أؤكد رغبتي في حذف بيانات الدردشة"
+
+msgid "Pro Account Management"
 msgstr "إدارة حساب برو"
 
-msgid "add_device"
-msgstr "أضف جهاز"
+msgid "Link Device"
+msgstr "ربط  الجهاز"
 
-msgid "upgrade_to_lantern_pro"
+msgid "Upgrade to Lantern Pro"
 msgstr "الترقية الى لاتيرن برو"
 
-msgid "authorize_device_for_pro"
-msgstr "منح إذن للجهاز لحساب برو"
-
-msgid "invite_friends"
+msgid "Invite Friends"
 msgstr "ادعو أصدقائك"
 
 msgid "desktop_version"
-msgstr "إصدار سطح المكتب"
-
-msgid "free_yinbi_crypto"
-msgstr "عملة Yinbi المشفرة المجانية"
-
-msgid "yinbi_redemption"
-msgstr "استرداد Yinbi"
+msgstr "نسخة سطح المكتب"
 
 msgid "settings"
 msgstr "الاعدادات"
 
+msgid "general"
+msgstr "عام"
+
 msgid "proxy_all"
 msgstr "كل شيء على البروكسي"
+
+msgid "proxy_everything_is"
+msgstr "كل شيء على الوكيل هو %s"
+
+msgid "version_number"
+msgstr "الإصدار %s"
+
+msgid "build_number"
+msgstr "البنية %s"
 
 msgid "language"
 msgstr "لغة"
@@ -92,56 +148,17 @@ msgstr "لغة"
 msgid "report_issue"
 msgstr "الإبلاغ عن مشكلة"
 
+msgid "blocked_users"
+msgstr "المستخدمون المحظورون"
+
 msgid "description_proxy_all_dialog"
 msgstr ""
 "في حال التمكين، يُجرى إرسال نسبة استخدام الشبكة من قبل Lantern (أكثر "
 "أمانًا). في حال عدم التمكين، يُجرى إرسال نسبة استخدام الشبكة المحظورة من قبل"
 " Lantern (أسرع)."
 
-msgid "Exchange"
-msgstr "التبادل"
-
 msgid "Account"
 msgstr "حساب"
-
-msgid "In partnership with"
-msgstr "بالشراكة مع"
-
-msgid "Buy"
-msgstr "الشراء"
-
-msgid "Bitcoin"
-msgstr "بيتكوين"
-
-msgid "Tether"
-msgstr "تيزر"
-
-msgid "With"
-msgstr "من خلال"
-
-msgid "Online Wallets"
-msgstr "المَحافظ الإلكترونية"
-
-msgid "Bank Transfers"
-msgstr " التحويلات البنكية"
-
-msgid "Gift Cards"
-msgstr "بطاقات الهدايا"
-
-msgid "Game Cards"
-msgstr "بطاقات الألعاب"
-
-msgid "Cash Payment"
-msgstr "الدفع النقدي"
-
-msgid "Digital Currencies"
-msgstr "العملات الرقمية"
-
-msgid "Payment Method"
-msgstr "وسيلة الدفع"
-
-msgid "SHOW BEST DEALS"
-msgstr "إظهار أفضل المعاملات"
 
 msgid "VPN Status"
 msgstr "حالة VPN"
@@ -167,17 +184,26 @@ msgstr "أو"
 msgid "Authorize Device via Email"
 msgstr "مصادقة الجهاز عبر البريد الإلكتروني"
 
+msgid "auth_email_helper_text"
+msgstr "أدخل البريد الإلكتروني المرتبط بحساب Pro الخاص بك"
+
 msgid "Requires access to the email you used to buy Lantern Pro"
 msgstr "يحتاج إلى الوصول إلى البريد الإلكتروني الذي تستخدمه لشراء لانترن برو"
 
 msgid "Link via Email"
 msgstr "ربط عبر البريد الإلكتروني"
 
+msgid "lantern_pro_email"
+msgstr "البريد الإلكتروني الخاص بـ Lantern Pro"
+
 msgid "Email"
 msgstr "البريد الاكتروني"
 
 msgid "Submit"
 msgstr "ارسال"
+
+msgid "save"
+msgstr "حفظ"
 
 msgid "Please enter a valid email address"
 msgstr "يرجى إدخال عنوان بريد إلكتروني صالح"
@@ -208,8 +234,8 @@ msgstr "أضف جهاز"
 
 msgid "approve_device_step_1"
 msgstr ""
-"افتح \"تخويل الجهاز لـ Pro\" من قائمة الحساب على الجهاز الذي ترغب في ربطه، "
-"ثم حدد \"ربط مع PIN\""
+"افتح \"مصادقة الجهاز لحساب Pro\" من قائمة الحساب الموجودة على الجهاز الذي "
+"ترغب في ربطه، ثم حدد \"ربط برقم التعريف الشخصي PIN\"."
 
 msgid "approve_device_step_2"
 msgstr "أدخل رمز الربط الذي تم الحصول عليه من الخطوة 1"
@@ -233,19 +259,823 @@ msgid "confirm_remove_device"
 msgstr "هل أنت متأكد من أنك تريد فك ربط هذا الجهاز مع حساب برو؟"
 
 msgid "n/a"
-msgstr ""
+msgstr "لا ينطبق"
 
 msgid "Developer Settings"
-msgstr ""
+msgstr "إعدادات المطور"
 
 msgid "Developer"
+msgstr "المطور"
+
+msgid "dev_settings"
 msgstr ""
+"هذه الإعدادات مُخصصة للاستخدام في التطوير فقط. سيؤدي تغيير أي إعدادات إلى "
+"إيقاف التطبيق وإعادة تشغيله تلقائيًا."
+
+msgid "dev_payment_mode"
+msgstr ""
+"عند تمكين \"وضع اختبار الدفع\"، عندئِذٍ يستخدم التطبيق مستخدمًا واحدًا "
+"مضمّنًا. يمكنك إجراء عمليات شراء Stripe باستخدام الرقم 4242 4242 4242 4242، "
+"وتاريخ انتهاء صلاحية مستقبلي، وأي CVV."
 
 msgid "Payment Test Mode"
-msgstr ""
+msgstr "وضع اختبار الدفع"
 
 msgid "Play Version"
+msgstr "تشغيل الإصدار"
+
+msgid "Force Country"
+msgstr "فرض البلد"
+
+msgid "Error"
+msgstr "خطأ"
+
+msgid "accept"
+msgstr "موافق"
+
+msgid "cancel"
+msgstr "إلغاء "
+
+msgid "reject"
+msgstr "رفض"
+
+msgid "copied"
+msgstr "تم النسخ!"
+
+msgid "saved"
+msgstr "تم الحفظ!"
+
+msgid "new_chat"
+msgstr "دردشة جديدة"
+
+msgid "your_contact_info"
+msgstr "معلومات الاتصال بك"
+
+msgid "display_name"
+msgstr "الاسم المعروض"
+
+msgid "edit"
+msgstr "تعديل"
+
+msgid "save_error"
+msgstr "حدث خطأ ما أثناء الحفظ."
+
+msgid "more_options"
+msgstr "خيارات إضافية"
+
+msgid "block_user"
+msgstr "حظر المستخدم"
+
+msgid "unblock_user"
+msgstr "إلغاء حظر المستخدم"
+
+msgid "block"
+msgstr "حجب"
+
+msgid "unblock"
+msgstr "رفع الحجب"
+
+msgid "block_info_title"
+msgstr "هل تريد حظر %s؟"
+
+msgid "no_blocked_users"
+msgstr "لا يوجد مستخدمون محظورون."
+
+msgid "unblock_info_title"
+msgstr "هل تريد إلغاء حظر %s؟"
+
+msgid "block_info_description"
+msgstr ""
+"سيؤدي حظر هذا المستخدم إلى حذف محفوظات الدردشة، ومنعه من الاتصال بك في "
+"المستقبل. يمكنك إلغاء حظر المستخدمين من قائمة الإعدادات."
+
+msgid "unblock_info_description"
+msgstr "سيتمكن %s الآن من مراسلتك. لن يتم إخطاره بأنك ألغيت حظره."
+
+msgid "block_info_checkbox"
+msgstr "أفهم أن هذا سيؤدي إلى حذف جميع محفوظات الدردشة."
+
+msgid "unblock_info_checkbox"
+msgstr "أؤكد أنني أريد إلغاء حظر جهة الاتصال هذه."
+
+msgid "delete_permanently"
+msgstr "حذف المستخدم نهائيًا"
+
+msgid "delete_info_description"
+msgstr ""
+"بمجرد حذف المستخدم، سيتعين عليك إضافة معلومات الاتصال به إذا رغبت في الدردشة"
+" معه مرة أخرى."
+
+msgid "add_new_contact"
+msgstr "إضافة جهة اتصال جديدة"
+
+msgid "add_contact"
+msgstr "إضافة جهة اتصال"
+
+msgid "share_your_chat_number"
+msgstr "مشاركة رقم الدردشة الخاص بك"
+
+msgid "scan_qr_code"
+msgstr "مسح رمز الاستجابة السريعة"
+
+msgid "add_contact_in_person"
+msgstr "إضافة جهات اتصال شخصيًا"
+
+msgid "start_chat"
+msgstr "بدء الدردشة"
+
+msgid "message_disappearing"
+msgstr "لن تختفي جميع الرسائل بالنسبة لك و%s."
+
+msgid "message_disappearing_description"
+msgstr "ستختفي جميع الرسائل بعد مرور  %s  بالنسبة لك و%s."
+
+msgid "delete"
+msgstr "حذف"
+
+msgid "view_contact_info"
+msgstr "عرض معلومات جهة الاتصال"
+
+msgid "off"
+msgstr "إيقاف التشغيل"
+
+msgid "continue"
+msgstr "واصل"
+
+msgid "are_you_sure_you_want_to_open"
+msgstr "هل تريد بالتأكيد فتح %s؟"
+
+msgid "set"
+msgstr "تعيين"
+
+msgid "menu"
+msgstr "القائمة"
+
+msgid "send_error"
+msgstr "حدث خطأ ما أثناء إرسال رسالتك"
+
+msgid "share_media_error"
+msgstr "حدث خطأ ما أثناء مشاركة أحد ملفات الوسائط"
+
+msgid "no_recents"
+msgstr "لا توجد عناصر حديثة"
+
+msgid "set_display_name"
+msgstr "تعيين الاسم المعروض"
+
+msgid "introduce_contact"
+msgstr "تقديم جهة الاتصال"
+
+msgid "introduce_contacts"
+msgstr "تقديم جهات الاتصال"
+
+msgid "introduce_contacts_with_count"
+msgstr "تقديم جهات الاتصال (%s)"
+
+msgid "need_two_contacts_to_introduce"
+msgstr "بمجرد إضافة جهتي اتصال أو أكثر، ستتمكن من إنشاء تقديمات."
+
+msgid "introduce_contacts_select"
+msgstr ""
+"حدد جهتي اتصال أو أكثر للتقديم. ستُرسل تقديمات لهم لبدء مراسلة بعضهم البعض."
+
+msgid "introduce_single_contact"
+msgstr ""
+"حدد إحدى جهات الاتصال لتقديمها إلى%s. وبمجرد الموافقة على التقديم، سيتمكنان "
+"من مراسلة بعضهما البعض."
+
+msgid "send_introductions"
+msgstr "إرسال تقديمات"
+
+msgid "introductions_sent"
+msgstr "تم إرسال التقديمات!"
+
+msgid "no_contacts_yet"
+msgstr "لا توجد أي جهات اتصال حتى الآن"
+
+msgid "contact_verification"
+msgstr "التحقق من جهة الاتصال"
+
+msgid "verification"
+msgstr "التحقق"
+
+msgid "contact_verification_description"
+msgstr ""
+"التحقق من جهة الاتصال متاح دائمًا من قائمة الرسائل الوجودة أعلى اليمين."
+
+msgid "qr_error_description"
+msgstr "حدث خطأ ما أثناء مسح رمز الاستجابة السريعة هذا."
+
+msgid "qr_info_verification_title"
+msgstr "التحقق من الاتصال شخصيًا"
+
+msgid "qr_info_f2f_title"
+msgstr "مسح رمز الاستجابة السريعة"
+
+msgid "qr_info_verification_des"
+msgstr ""
+"للتحقق من جهات الاتصال، امسحا رمزي الاستجابة السريعة لبعضكما البعض.\n"
+"\n"
+"تضمن هذه العملية الخصوصية والتشفير الشامل لمحادثاتكما."
+
+msgid "qr_info_f2f_des"
+msgstr ""
+"لإضافة صديقك كجهة اتصال، امسحا رمزي الاستجابة السريعة لبعضكما البعض.\n"
+"\n"
+"تضمن هذه العملية الخصوصية والتشفير الشامل لمحادثاتكما."
+
+msgid "qr_info_verification_scan"
+msgstr "امسحا رمزي الاستجابة السريعة لبعضكما البعض للتحقق."
+
+msgid "qr_info_f2f_scan"
+msgstr "امسحا رمزي الاستجابة السريعة لبعضكما البعض لإضافة جهة اتصال."
+
+msgid "qr_success_snackbar"
+msgstr "لقد أصبح %s من جهات اتصالك"
+
+msgid "qr_info_waiting_qr"
+msgstr "في انتظار قيام صديقك بمسح رمز الاستجابة السريعة الخاص بك..."
+
+msgid "scan_complete"
+msgstr "اكتمل المسح"
+
+msgid "qr_for_your_contact"
+msgstr "رمز الاستجابة السريعة الخاص بك"
+
+msgid "add_via_chat_number"
+msgstr "إضافة عبر رقم الدردشة"
+
+msgid "qr_info_waiting_id"
+msgstr ""
+"في انتظار قيام صديقك بإدخال معرف المرسل الخاص بك أو مسح رمز الاستجابة "
+"السريعة الخاص بك..."
+
+msgid "chat_number_not_found"
+msgstr ""
+"تعذّر العثور على رقم الدردشة، يُرجى التحقق من الرقم والمحاولة مرة أخرى"
+
+msgid "unable_to_add_contact"
+msgstr "لم يتم العثور على جهة الاتصال، تحقق من الرقم وحاول مرة أخرى"
+
+msgid "self_adding"
+msgstr "رقم الدردشة الذي أدخلته يخصك"
+
+msgid "chat_number_type"
+msgstr "اكتب رقم دردشة"
+
+msgid "letter_and_numbers_only"
+msgstr "استخدم الحروف والأرقام فقط"
+
+msgid "name_your_contact"
+msgstr "تسمية جهة الاتصال"
+
+msgid "messenger_id_invalid"
+msgstr "معرّف المرسل غير صالح"
+
+msgid "username_not_found"
+msgstr "لم يتم العثور على اسم المستخدم"
+
+msgid "contact_id_your_id"
+msgstr "معرف المرسل الخاص بك"
+
+msgid "introductions"
+msgstr "التقديمات"
+
+msgid "introduced"
+msgstr "مُقدَّم من %s"
+
+msgid "introductions_title"
+msgstr "قبول التقديم لـ %s"
+
+msgid "introductions_info"
+msgstr ""
+"يجب أن يقبل كلا الطرفين التقديم للدردشة مع بعضهما البعض. تختفي التقديمات بعد"
+" 7 أيام إذا لم يُتخذ أي إجراء."
+
+msgid "introduction_reject_title"
+msgstr "رفض التقديم"
+
+msgid "introduction_reject_content"
+msgstr "لن تتمكن من إرسال رسالة إلى جهة الاتصال هذه إذا رفضت التقديم."
+
+msgid "introductions_error_description_rejecting"
+msgstr "حدث خطأ ما أثناء رفض طلب جهة الاتصال هذه."
+
+msgid "introductions_error_description_accepting"
+msgstr "حدث خطأ ما أثناء قبول طلب جهة الاتصال هذه."
+
+msgid "no_introductions"
+msgstr "لا توجد مقدمات معلقة."
+
+msgid "introduction_approved"
+msgstr "تمت الموافقة على التقديم لـ %s!"
+
+msgid "delete_contact_name"
+msgstr "حذف %s"
+
+msgid "delete_contact"
+msgstr "حذف جهة الاتصال"
+
+msgid "error"
+msgstr "خطأ"
+
+msgid "error_delete_contact"
+msgstr "حدث خطأ ما أثناء حذف جهة الاتصال هذه."
+
+msgid "unnamed_contact"
+msgstr "جهة اتصال بدون اسم"
+
+msgid "me"
+msgstr "أنا"
+
+msgid "disappearing_messages"
+msgstr "الرسائل المُختفية"
+
+msgid "start_of_your_history"
+msgstr "محادثاتك ومكالماتك الصوتية مع %s مُشفرة بشكل شامل"
+
+msgid "banner_unaccepted"
+msgstr "%s  غير موجود في قائمة جهات الاتصال لديك. هل تود قبول طلب الدردشة؟"
+
+msgid "banner_messages_persist"
+msgstr "لا تختفي الرسائل الجديدة."
+
+msgid "banner_message_retention"
+msgstr "تم تعيين استبقاء الرسائل على %s"
+
+msgid "longform_seconds"
+msgstr "%s ثوانٍ"
+
+msgid "shortform_seconds"
+msgstr "%s ث"
+
+msgid "longform_minute"
+msgstr "%s دقيقة"
+
+msgid "shortform_minutes"
+msgstr "%s د"
+
+msgid "longform_minutes"
+msgstr "%s دقائق"
+
+msgid "longform_hour"
+msgstr "%s ساعة"
+
+msgid "shortform_hours"
+msgstr "%s س"
+
+msgid "longform_hours"
+msgstr "%s ساعات"
+
+msgid "longform_day"
+msgstr "%s يوم"
+
+msgid "shortform_days"
+msgstr "%s يوم"
+
+msgid "longform_days"
+msgstr "%s أيام"
+
+msgid "longform_week"
+msgstr "%s أسبوع"
+
+msgid "shortform_weeks"
+msgstr "%s أسبوع"
+
+msgid "longform_weeks"
+msgstr "%s أسابيع"
+
+msgid "banner_source_unknown"
+msgstr "غير معروف"
+
+msgid "banner_source_qr"
+msgstr "رمز الاستجابة السريعة"
+
+msgid "banner_source_id"
+msgstr "معرّف المرسل"
+
+msgid "banner_source_intro"
+msgstr "المقدمة"
+
+msgid "message_will_disappear_at"
+msgstr "يختفي %s"
+
+msgid "change_display_name"
+msgstr "تغيير الاسم المعروض"
+
+msgid "yesterday"
+msgstr "أمس"
+
+msgid "tomorrow"
+msgstr "غدًا"
+
+msgid "just_now"
+msgstr "حالاً"
+
+msgid "within_one_minute"
+msgstr "خلال دقيقة واحدة"
+
+msgid "on_date"
+msgstr "في %s"
+
+msgid "at_date"
+msgstr "عند %s"
+
+msgid "error_fetching_message_preview"
+msgstr "خطأ في إحضار معاينة الرسالة"
+
+msgid "message_was_deleted"
+msgstr "تم حذف الرسالة"
+
+msgid "contact_was_deleted"
+msgstr "تم حذف %s من جهات الاتصال لديك"
+
+msgid "contact_was_blocked"
+msgstr "تم حظر %s."
+
+msgid "contact_was_unblocked"
+msgstr "تم إلغاء حظر %s."
+
+msgid "dismiss"
+msgstr "أَبعدْ"
+
+msgid "copy_text"
+msgstr "نسخ النص"
+
+msgid "message"
+msgstr "رسالة"
+
+msgid "messages"
+msgstr "الرسائل"
+
+msgid "chats"
+msgstr "دردشات"
+
+msgid "new_requests"
+msgstr "طلبات جديدة %s"
+
+msgid "chat"
+msgstr "دردشة"
+
+msgid "lantern_chat"
+msgstr "Lantern Chat"
+
+msgid "welcome_title"
+msgstr "مرحبًا بك في Lantern Chat"
+
+msgid "welcome_text"
+msgstr ""
+"دردشة مشفرة لحماية خصوصيتك مقترنة بأفضل تكنولوجيا مقاومة للحظر في فئتها."
+
+msgid "get_started"
+msgstr "بدء الاستخدام"
+
+msgid "want_to_recover"
+msgstr "هل لديك رقم دردشة؟"
+
+msgid "recover"
+msgstr "استرداد"
+
+msgid "chat_number"
+msgstr "رقم الدردشة"
+
+msgid "your_chat_number"
+msgstr "رقم الدردشة الخاص بك"
+
+msgid "chat_number_recovery"
+msgstr "استرداد رقم الدردشة"
+
+msgid "recovery_helper_text"
+msgstr "يُرجى إدخال مفتاح استرداد صالح"
+
+msgid "recovery_button"
+msgstr "أدخل مفتاح الاسترداد الخاص بك لاستعادة رقم الدردشة الخاص بك."
+
+msgid "recovery_label"
+msgstr "أدخل مفتاح الاسترداد الخاص بك"
+
+msgid "recovery_key"
+msgstr "مفتاح الاسترداد"
+
+msgid "secure_text_explanation"
+msgstr ""
+"يُستخدم \"رقم الدردشة\" الخاص بك كرقم هاتف يمكن لأصدقائك استخدامه للاتصال بك"
+" على Lantern."
+
+msgid "secure_text_explanation_account"
+msgstr ""
+"هذا هو الإصدار الكامل من \"رقم الدردشة\" الخاص بك؛ قد تكون مشاركة هذا الرقم الطويل أكثر أمانًا، خاصةً إذا كان لديك قناة أخرى مشفرة بشكل شامل يمكنك مشاركته عليها.\n"
+"\n"
+"كما يوفر Lantern \"رقم دردشة\" مختصرًا لجعل مشاركة معلومات الاتصال أكثر ملاءمة."
+
+msgid "recovery_key_account_explanation"
+msgstr ""
+"خزّن هذا المفتاح في مكان آمن، ولا تشاركه مع أي شخص. وهذه هي الطريقة الوحيدة "
+"لاستراداد \"رقم الدردشة\" الخاص بك إذا فقدت هاتفك أو قمت بتبديل الأجهزة أو "
+"إعادة تعيين نظام التشغيل."
+
+msgid "recovery_error"
+msgstr "يتعذّر استرداد حسابك."
+
+msgid "recovery_input_error"
+msgstr "يُرجى التأكد من إدخال مفتاح استرداد صالح"
+
+msgid "recovery_retrieval_error"
+msgstr "حدث خطأ ما أثناء استرداد مفتاح الاسترداد"
+
+msgid "recovery_success"
+msgstr "لقد نجحت في استرداد \"رقم الدردشة\" الخاص بك"
+
+msgid "empty_chats_text"
+msgstr "شارك \"رقم الدردشة\" أو أضف جهة اتصال هنا!"
+
+msgid "next"
+msgstr "التالب"
+
+msgid "automated_backup"
+msgstr "نسخ احتياطي تلقائي"
+
+msgid "backup_explanation"
+msgstr ""
+"يوفر تطبيق Lantern خيار تشفير جهات الاتصال الخاصة بك ونسخها احتياطيًا على خوادمنا الآمنة. إذا نسيت النسخ الاحتياطي، فلن تتمكن من استرداد جهات الاتصال الخاصة بك باستخدام مفتاح الاسترداد.\n"
+"\n"
+"لن يتمكن Lantern من قراءة قوائم جهات الاتصال الخاصة بك عندما تختار نسخها احتياطيًا."
+
+msgid "backup_contacts"
+msgstr "نسخ جهات الاتصال احتياطيًا"
+
+msgid "copy_recovery_key"
+msgstr "نسخ مفتاح الاسترداد"
+
+msgid "search"
+msgstr "Search"
+
+msgid "account_management"
+msgstr "ادارة الحساب"
+
+msgid "add_via_username"
+msgstr "إضافة عبر اسم المستخدم"
+
+msgid "username"
+msgstr "إسم المستخدم"
+
+msgid "enter_a_username_to_start_a_conversation"
+msgstr "أدخل اسم مستخدم لبدء محادثة عبر الرسائل"
+
+msgid "start_message"
+msgstr "بدء الرسالة"
+
+msgid "please_enter_a_valid_username"
+msgstr "يُرجى إدخال اسم مستخدم صالح"
+
+msgid "open_url"
+msgstr "فتح عنوان URL"
+
+msgid "message_deleted"
+msgstr "حذف %s هذه الرسالة"
+
+msgid "never"
+msgstr "أبدًا"
+
+msgid "delete_for_me"
+msgstr "حذف بالنسبة لي"
+
+msgid "delete_for_me_explanation"
+msgstr ""
+"سيؤدي هذا الأمر إلى حذف الرسالة بالنسبة لك فقط. سيظل بإمكان أي شخص آخر "
+"رؤيتها."
+
+msgid "delete_for_everyone"
+msgstr "الحذف بالنسبة للجميع"
+
+msgid "delete_for_everyone_explanation"
+msgstr "سيؤدي هذا إلى حذف الرسالة للجميع."
+
+msgid "reply"
+msgstr "رد"
+
+msgid "replying_to"
+msgstr "الرد على %s"
+
+msgid "attachment"
+msgstr "مرفق"
+
+msgid "error_rendering_message"
+msgstr "خطأ في عرض الرسالة"
+
+msgid "error_fetching_preview"
+msgstr "خطأ في إحضار معاينة الرسالة"
+
+msgid "audio"
+msgstr "صوتي"
+
+msgid "image"
+msgstr "الصور"
+
+msgid "video"
+msgstr "مقاطع فيديو"
+
+msgid "app"
+msgstr "تطبيقات"
+
+msgid "document"
+msgstr "الوثائق"
+
+msgid "search_chars_min"
+msgstr "اكتب ثلاثة أحرف على الأقل"
+
+msgid "search_no_results"
+msgstr "عذرًا، لم نتمكن من العثور على أي شيء يطابق هذا البحث."
+
+msgid "search_error"
+msgstr "عذرًا، حدث خطأ في استرداد نتائج البحث."
+
+msgid "search_contacts"
+msgstr "جهات الاتصال (%s)"
+
+msgid "search_chats"
+msgstr "دردشات (%s)"
+
+msgid "search_in_contacts"
+msgstr "البحث في جهات الاتصال"
+
+msgid "search_in_chats"
+msgstr "البحث في جهات الاتصال والدردشات"
+
+msgid "could_not_render_title"
+msgstr "تعذّر عرض عنوان الملف"
+
+msgid "could_not_render_type"
+msgstr "تعذّر عرض نوع الملف"
+
+msgid "speaker"
+msgstr "مكبر الصوت"
+
+msgid "speaker_on"
+msgstr "مكبر الصوت قيد التشغيل"
+
+msgid "mute"
+msgstr "Mute"
+
+msgid "muted"
+msgstr "تم كتم الصوت"
+
+msgid "end_call"
+msgstr "إنهاء المكالمة"
+
+msgid "verify_contact"
+msgstr "التحقق من %s"
+
+msgid "verified"
+msgstr "Verified"
+
+msgid "pending_verification"
+msgstr "في انتظار التحقق"
+
+msgid "verify_description"
+msgstr ""
+"لتحقيق أفضل درجات الأمان، نوصي بالتأكد من أن رقم تحقق %s يطابق رقمك.\n"
+"\n"
+"هل ترغب في التحقق شخصيًا أو عبر مكالمة هاتفية؟"
+
+msgid "verify_in_person"
+msgstr "التحقق شخصيًا"
+
+msgid "verify_via_call"
+msgstr "التحقق عبر الهاتف"
+
+msgid "dismiss_notification"
+msgstr "تجاهل الإشعار"
+
+msgid "call_contact"
+msgstr "هل تريد الاتصال بـ %s؟"
+
+msgid "call"
+msgstr "مكالمة"
+
+msgid "incoming_call"
+msgstr "مكالمة واردة"
+
+msgid "call_from"
+msgstr "من %s"
+
+msgid "in_call"
+msgstr "المكالمات الجارية"
+
+msgid "in_call_des"
+msgstr "إشعار مكالمة جارية"
+
+msgid "incoming_call_from"
+msgstr "مكالمة واردة من %s"
+
+msgid "touch_here_to_open_call"
+msgstr "المس هنا لفتح المكالمة"
+
+msgid "in_call_with"
+msgstr "في مكالمة مع %s"
+
+msgid "undo_verification"
+msgstr "التراجع عن التحقق"
+
+msgid "mark_as_verified"
+msgstr "تحديد كمُتحقق منه"
+
+msgid "verification_panel_success"
+msgstr "تم التحقق بنجاح! رسائلك مع %s آمنة."
+
+msgid "verification_panel_pending"
+msgstr ""
+"هذا هو رقم التحقق الخاص بك. تحقق من أن رقمك يطابق %s تمامًا قبل التحديد "
+"كمُتحقق منه."
+
+msgid "replica_upload_confirmation_title"
+msgstr "مهم!"
+
+msgid "replica_upload_confirmation_body"
+msgstr ""
+"يمكن الوصول إلى الملفات التي تم تحميلها على Lantern Network علانيةً. إنها ملفات لا مركزية ولا يمكن لأي شخص حذفها من الشبكة.\n"
+"\n"
+"تجنب إضافة معلومات التعريف الشخصية إلى محتويات الملفات وأسمائها عند تحميل محتوى حساس."
+
+msgid "replica_upload_confirmation_agree"
+msgstr "استئناف التحميل"
+
+msgid "dont_show_me_this_again"
+msgstr "عدم إظهار هذا مرة أخرى"
+
+msgid "download"
+msgstr "تحميل"
+
+msgid "download_started"
+msgstr "بدأ التنزيل"
+
+msgid "uploader"
+msgstr "أداة التحميل"
+
+msgid "upload_started"
+msgstr "بدأ التحميل"
+
+msgid "upload_in_progress"
+msgstr "جارٍ التحميل"
+
+msgid "upload_complete"
+msgstr "اكتمل التحميل"
+
+msgid "upload_failed"
+msgstr "فشل التحميل"
+
+msgid "upload_cancelled"
+msgstr "تم إلغاء التحميل"
+
+msgid "replica_link_fetcher"
+msgstr "أداة إحضار رابط النسخة المتماثلة"
+
+msgid "no_preview_for_this_type_of_file"
+msgstr "لا توجد معاينة لهذا النوع من الملفات"
+
+msgid "app_unknown"
+msgstr "التطبيق/غير معروف"
+
+msgid "audio_unknown"
+msgstr "الصوت/غير معروف"
+
+msgid "document_unknown"
+msgstr "المستند/غير معروف"
+
+msgid "no_search_result_found"
+msgstr "عذرًا، تعذر العثور على أي شيء يطابق البحث"
+
+msgid "search_result_error"
 msgstr ""
 
-msgid "Yinbi Enabled"
+msgid "video_stream_error"
 msgstr ""
+
+msgid "untitled"
+msgstr "بدون عنوان"
+
+msgid "failed_to_init_replica"
+msgstr "خطأ: فشلت تهيئة النسخة المتماثلة"
+
+msgid "awaiting_result"
+msgstr "في انتظار النتيجة..."
+
+msgid "discover"
+msgstr "اكتشف"
+
+msgid "replica_search_intro"
+msgstr ""
+"ابحث في المحتوى الذي تم تحميله من خلال المستخدم على Lantern Network ، أو "
+"حمّل محتواك الخاص ليكتشفه الآخرون."
+
+msgid "share"
+msgstr "مشاركة"
+
+msgid "upload_file_screen"
+msgstr "تحميل ملف"
+
+msgid "name_your_file"
+msgstr "قم بتسمية الملف الخاص بك"
+
+msgid "upload"
+msgstr "تحميل"

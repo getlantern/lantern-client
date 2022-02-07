@@ -24,7 +24,6 @@
   <string name="your_referral_code">Ваш код рефералов</string>
   <string name="report_an_issue">Сообщить о проблеме</string>
   <string name="select_issue">Выберите проблему</string>
-  <string name="select_issue_desc">Пожалуйста, оставьте нам краткое описание вашей проблемы здесь,\nи мы свяжемся с вами как можно скорее.</string>
   <string name="submit">Отправить</string>
   <string name="submit_issue">Подтвердить проблему</string>
   <string name="no_issue_selected">Пожалуйста выберите проблему перед отправкой</string>
@@ -47,6 +46,7 @@
   <string name="on_desc">Теперь вы можете получить доступ\r\nк заблокированным сайтам и сервисам</string>
   <string name="off_desc">Нажмите кнопку для получения доступа к заблокированным сайтам и сервисам</string>
   <string name="service_connected">Подключено к VPN</string>
+  <string name="ready_to_connect">Готово к подключению</string>
   <string name="desktop_option">Версия для ПК</string>
   <string name="contact_option">Контактная информация</string>
   <string name="check_for_update">Проверить обновления</string>
@@ -100,6 +100,7 @@
   <string name="not_now">Не сейчас</string>
   <string name="install_update">Обновить</string>
   <string name="error_update">Ошибка в скачивании обновления</string>
+  <string name="error_install_update">Ошибка при установке обновления</string>
   <string name="loading">Загрузка..</string>
   <string name="manual_update">Попробуйте вручную установить последнюю версию из &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">Добро пожаловать в Lantern Pro!</string>
@@ -145,8 +146,7 @@
   <string name="share_your_referral_code">Поделитесь своим кодом рефералов</string>
   <string name="get_code">Получить код</string>
   <string name="get_code_text">Введите адрес электронной почты для получения кода, чтобы поделиться с друзьями, получите бесплатный месяц PRO, когда они подписываются!</string>
-  <string name="enter_your_email">Введите адрес email, чтобы получить код рефералов</string>
-  <string name="referral_copied_to_clipboard">Код рефералов скопирован в буфер обмена!</string>
+  <string name="enter_your_email">Введите адрес email, чтобы получить реферальный код</string>
   <string name="fastworldpay_text">Нажав «Продолжить платеж», вы будете\nперенаправлены на внешний сайт, где совершите\nплатеж и получите код активации.</string>
   <string name="share_referral_text">Используйте мой код %1$s чтобы получить до 3 дополнительных месяцев бесплатно после покупки. Скачать Lantern https://bit.ly/lanternapk</string>
   <string name="previous_code">Если ранее вы получили код рефералов\r\nпожалуйста, удостоверьтесь, чтобы использовать один и тот же адрес электронной почты.</string>
@@ -187,11 +187,6 @@
   <string name="too_many_devices">На вашей учетной записи достигнут лимит подключенных устройств.</string>
   <string name="check_spam_folder">* Пожалуйста, проверьте папку со спамом, если вы не получаете email</string>
   <string name="by_referral">Полученное Pro по ссылке друга</string>
-  <string-array name="payment_method_list">
-    <item>Alipay</item>
-    <item>Кредитная карта</item>
-    <item>Полученное Pro по ссылке друга</item>
-  </string-array>
   <string name="payment_method">Способ оплаты</string>
   <string name="payment_account">Аккаунт оплаты</string>
   <string name="oops_having_trouble">К сожалению! Возникла проблема с поиском этого адреса email. Просьба представить информацию ниже, чтобы помочь нам найти ваш аккаунт.</string>
@@ -220,17 +215,11 @@
     <item>Без рекламы</item>
   </string-array>
   <string-array name="pro_features_new">
-    <item>Более высокая скорость</item>
-    <item>Обход блокировок</item>
-    <item>Повышенная надежность</item>
-    <item>Регистрация 3 устройств</item>
+    <item>Еще быстрее</item>
+    <item>Еще надежнее</item>
     <item>Неограниченный трафик</item>
-    <item>Криптовалюта Yinbi в подарок</item>
-  </string-array>
-  <string-array name="yinbi_renew_features">
-    <item>Криптовалюта Yinbi в подарок</item>
-    <item>Бесплатные месяцы</item>
-    <item>Ограничено по времени — не пропустите!</item>
+    <item>Обход блокировок</item>
+    <item>Регистрация 3 устройств</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>Безлимитно с максимальной скоростью</item>
@@ -297,7 +286,6 @@
   <string name="upgrade_to_lantern_pro">Обновление до Lantern Pro</string>
   <string name="pro_available_for">Для Windows, Android, Mac и Ubuntu. iOS появится скоро</string>
   <string name="upgrade_to_pro">Lantern Pro — это неограниченный трафик, более высокая скорость и улучшенный обход блокировок. Оформите подписку уже сейчас!</string>
-  <string name="upgrade_to_pro_yinbi">Lantern Pro — это неограниченный трафик, более\nвысокая скорость, улучшенный обход блокировок\nи криптовалюта Yinbi в подарок!</string>
   <string name="data_remaining">%1$s%% осталось бесплатных ежемесячных высокоскоростных данных</string>
   <string name="data_used">Осталось %1$s МБ бесплатного трафика.\nЛимит будет сброшен %2$s</string>
   <string name="upgrade">Обновить</string>
@@ -397,16 +385,12 @@
   <string name="processing_payment">Обработка платежа</string>
   <string name="now_converting_to_pro">Теперь переводим вас в Pro .. Пожалуйста, подождите ...</string>
   <string name="have_an_activation_code">Есть код активации? Нажмите здесь.</string>
-  <string name="yinbi_greeting">隐币-无封锁的加密货币即将到来。\n点击此处了解如何免费获得。</string>
   <string name="test_payment_page">Test Payment Page</string>
   <string name="pay_now">Оплатить сейчас</string>
   <string name="error_bulk_codes">Не удалось отправить коды активации для аккаунтов Pro</string>
   <string name="invalid_bulk_codes">Недействительные коды активации для аккаунтов Pro</string>
   <string name="renew_today">ПРОДЛИТЕ ПОДПИСКУ СЕГОДНЯ!</string>
-  <string name="receive_free_yinbi">Получите криптовалюту Yinbi в подарок!</string>
   <string name="purchased_pro_activation_codes">Купили коды активации Lantern Pro в Интернете?</string>
-  <string name="renew_grab_free_yinbi">&lt;/u&gt;Продлите подписку, используя коды активации Pro, и получите Yinbi в подарок&lt;/u&gt;</string>
-  <string name="upgrade_now_get_free_yinbi"><u>Перейдите на новую версию, используя коды активации Pro, и получите Yinbi в подарок</u></string>
   <string name="renew">ПРОДЛИТЕ ПОДПИСКУ</string>
   <string name="terms_of_service_text">Нажимая «Продолжить платеж», вы принимаете наши Условия использования</string>
   <string name="terms_of_service_text_complete_purchase">Нажимая «Завершить покупку», вы принимаете наши Условия использования</string>
@@ -416,60 +400,16 @@
   <string name="enter_lantern_pro_codes">Введите коды Lantern Pro</string>
   <string name="renewal_success">Подписка продлена</string>
   <string name="thank_you_for_renewing">Спасибо, что продлили подписку\nна Lantern Pro!</string>
-  <string name="yinbi">Yinbi</string>
-  <string name="visit_yinbi_website">Перейти на сайт</string>
-  <string name="yinbi_redemption">Получение Yinbi</string>
-  <string name="yinbi_account_info">Данные счета Yinbi</string>
-  <string name="lantern_partnered_yinbi_free">Акция от Lantern и Yinbi: при покупке Lantern Pro\nкриптовалюта YNB в подарок! Чтобы воспользоваться\nпредложением, совершите покупку\nпрямо сейчас! Подробнее о Yinbi —\nна официальном сайте Yin.bi.</string>
-  <string name="lantern_partnered_yinbi_pro">Акция от Lantern и Yinbi: при продлении Lantern Pro\nкриптовалюта YNB в подарок! Чтобы воспользоваться\nпредложением, обновите подписку\nпрямо сейчас! Подробнее о Yinbi —\nна официальном сайте: Yin.bi.</string>
-  <string name="enter_bulk_pro_codes">Введите коды Lantern Pro</string>
-  <string name="renew_pro_get_yinbi">Продлите Pro и получите Yinbi</string>
-  <string name="you_have">У вас есть</string>
-  <string name="yinbi_code">YNB</string>
-  <string name="unable_to_get_yinbi_account_info">Не удалось загрузить данные счета Yinbi</string>
-  <string name="redeem_bulk_codes">Активировать пакет кодов</string>
-  <string name="paste_pro_account_codes">Чтобы оформить или продлить\nподписку Lantern Pro,\nвставьте коды в поле ниже.</string>
-  <string name="special_offer">СПЕЦИАЛЬНОЕ ПРЕДЛОЖЕНИЕ!</string>
-  <string name="cryptocurrency_giveaway">Бесплатная криптовалюта!</string>
-  <string name="lantern_partnered_renew_now">Акция от Lantern и Yinbi: при продлении\nподписки Lantern Pro криптовалюта YNB\nв подарок! Чтобы воспользоваться предложением,\nпродлите подписку прямо сейчас!</string>
-  <string name="what_is_yinbi">Что такое Yinbi?</string>
-  <string name="renew_now_get_yinbi">Продлите подписку сейчас и получите Yinbi</string>
   <string name="purchase">Купить</string>
-  <string name="one_year_yinbi">1 год + Yinbi бесплатно:</string>
-  <string name="yinbi_cost">%1$s%2$s (%3$s)</string>
-  <string name="two_years_yinbi">2 года + в 2 раза больше Yinbi бесплатно:</string>
   <string name="thank_you_purchasing_pro">Благодарим за покупку Lantern Pro!</string>
-  <string name="you_will_receive_yinbi">Совершив покупку, вы получите бесплатную\nкриптовалюту Yinbi (YNB) после окончания\nсегодняшней акции. Чтобы узнать подробности,\nнажмите кнопку с кодом получения Yinbi.</string>
-  <string name="yinbi_menu">Меню Yinbi</string>
-  <string name="yinbi_redemption_code">Код получения Yinbi</string>
   <string name="continue_to_lantern_pro">Перейти на Lantern Pro</string>
-  <string name="yinbi_website">Yin.bi</string>
   <string name="date">Дата</string>
-  <string name="redemption_code">Код получения</string>
   <string name="status">Статус</string>
   <string name="copy_all_codes">Копировать все коды</string>
-  <string name="visit_yinbi">Перейдите на сайт Yin.bi, чтобы получить YNB\nи проверить баланс. Коды получения Yinbi\nдействуют в течение 30 дней после покупки.</string>
-  <string name="successfully_copied_codes">Коды получения скопированы</string>
-  <string name="no_active_codes">Нет активных кодов получения. Повторите попытку позже.</string>
-  <string name="thanks_purchase_yinbi">Благодарим за покупку Lantern Pro!\nКод получения Yinbi появится\nна этом экране после завершения\nсегодняшней акции.</string>
-  <string name="yinbi_details">Yinbi (YNB) — новая неблокируемая криптовалюта,\nобеспечивающая быстрые, надежные, удобные\nи недорогие мобильные транзакции.\nЕе запуск намечен на ближайшее время,\nи пользователи Lantern первыми\nполучат к ней доступ.</string>
-  <string name="find_out_more">Подробнее — на сайте Yin.bi.</string>
   <string name="best_deal">Лучшее предложение</string>
-  <string name="launches_soon">Скоро будет запущена новая криптовалюта Yinbi (YNB),\nи пользователи Lantern получат ранний доступ!\nYNB будут раздаваться в конце каждого дня.\nСумма будет зависеть от числа пользователей,\nкупивших подписку, а также от оформленного вами срока подписки\nили количества аккаунтов.</string>
-  <string name="how_yinbis_distributed">YNB будут раздаваться в конце каждого дня.\nCуммы будут зависеть от общего\nколичества криптовалюты, выпущенной\nза конкретный день, числа пользователей,\nкупивших подписку, а также от\nоформленного вами срока подписки или количества\nаккаунтов. Код получения Yinbi появится\nна этом экране после завершения\nсегодняшней акции.</string>
-  <string name="get_bulk_yinbi"><u>Чем больше у вас аккаунтов Pro — тем больше Yinbi!</u></string>
-  <string name="loading_yinbi_account_info">Загрузка данных о счете Yinbi</string>
-  <string name="free_yinbi_with_purchase">При покупке Yinbi в подарок!</string>
   <string name="renew_now_get_more">Продлите подписку сейчас и получите бонусы!</string>
-  <string name="buy_pro_get_yinbi">Купите Pro и получите Yinbi</string>
   <string name="renewal_note">ПРИМЕЧАНИЕ. Срок, который вы оформите, будет добавлен\nк вашему текущему сроку подписки.</string>
   <string name="bulk_codes_error">Ошибка. Проверьте выделенные коды.</string>
-  <string name="loading_yinbi">Загрузка кодов получения Yinbi</string>
-  <string name="lantern_partnered_yinbi">Акция от Lantern и Yinbi: при продлении подписки\nLantern Pro криптовалюта YNB в подарок!\nЧтобы воспользоваться предложением,\nпродлите подписку прямо сейчас!\nПодробнее о Yinbi — на официальном сайте Yin.bi.</string>
-  <string name="time_left_giveaway">Еще есть время получить Yinbi!</string>
-  <string name="yinbi_released_today">Сегодня выпущено %d YNB!</string>
-  <string name="yinbi_distribution_details">YNB будут раздаваться в конце каждого дня. Сумма будет зависеть от количества криптовалюты, выпущенной за день, числа пользователей, продливших или купивших подписку, а также от оформленного вами срока подписки и количества аккаунтов.</string>
-  <string name="total_yinbi_released">Общее количество выпускаемых YNB уменьшается каждый день и будет уменьшаться в два раза каждый год. Получите свою долю сегодня!</string>
   <string name="please_allow_lantern_to">Разрешите Lantern…</string>
   <string name="permission_for">активировать</string>
   <string name="android.permission.INTERNET">подключение к серверам Lantern</string>
@@ -486,11 +426,6 @@
   <string name="lantern_desktop_share_description">По ссылке выше доступны актуальные версии приложений Lantern для ПК и других платформ.</string>
   <string name="share_link">Поделиться ссылкой</string>
   <string name="lantern_desktop_link_share_title">Поделитесь ссылкой на скачивание Lantern</string>
-  <string name="upgrade_to_pro_get_yinbi">Перейдите на версию Pro и получите криптовалюту Yinbi</string>
-  <string name="yinbi_description_free">Акция от Lantern и Yinbi: при покупке Lantern Pro криптовалюта YNB в подарок! Чтобы воспользоваться предложением, совершите покупку прямо сейчас! Подробнее о Yinbi — на официальном сайте Yin.bi.</string>
-  <string name="yinbi_description_pro">Акция от Lantern и Yinbi: при продлении подписки Lantern Pro криптовалюта YNB в подарок! Чтобы воспользоваться предложением, продлите подписку прямо сейчас! Подробнее о Yinbi — на официальном сайте Yin.bi.</string>
-  <string name="yinbi_title_free">Бесплатная криптовалюта Yinbi</string>
-  <string name="yinbi_title_pro">Получение Yinbi</string>
   <string name="redeem_lantern_pro_codes">Использовать коды Lantern Pro</string>
   <string name="redeem_code_description_first_part">Коды Lantern Pro доступны на сайте </string>
   <string name="redeem_code_description_second_part">reseller.lantern.io</string>
@@ -503,9 +438,6 @@
   <string name="faster_data_centers">Более быстрые центры обработки данных</string>
   <string name="no_logs">Нет журналов</string>
   <string name="connect_up_to_3_devices">Подключение до трех устройств</string>
-  <string name="free_yinbi_cryptocurrency">Бесплатная криптовалюта Yinbi!</string>
-  <string name="yinbi_cryptocurrency">Криптовалюта Yinbi</string>
-  <string name="the_yinbi_foundation_description">Фонд Yinbi Foundation раздает 888 миллиардов монет YNB обладателям подписки Lantern Pro. YNB будут раздаваться в конце каждого дня. Сумма будет зависеть от количества криптовалюты, выпущенной за день, числа пользователей, продливших или купивших подписку, а также от оформленного вами срока подписки и количества аккаунтов. Информация о том, как получить криптовалюту, появится на экране после покупки.</string>
   <string name="plan_duration">%d-летний план</string>
   <string name="total_cost">Оплата: %s за раз</string>
   <string name="discount">Сэкономьте %s%%</string>
@@ -514,7 +446,6 @@
   <string name="membership_end_soon">Ваше членство скоро заканчивается. Продлите подписку прямо сейчас и пользуйтесь сервисом бесплатно %s!</string>
   <string name="membership_ends_today">Ваше членство заканчивается сегодня. Продлите подписку прямо сейчас и пользуйтесь сервисом бесплатно %s!</string>
   <string name="membership_has_expired">Ваше членство истекло. Продлите подписку прямо сейчас и пользуйтесь сервисом бесплатно %s!</string>
-  <string name="free_extra_yinbi">В 2 раза больше Yinbi!</string>
   <string name="step_2">Шаг 2</string>
   <string name="enter_email_short">Введите электронную почту</string>
   <string name="mm_yy">ММ/ГГ</string>
@@ -537,13 +468,8 @@
   <string name="send_report">Отправить отчет</string>
   <string name="email_optional">Адрес электронной почты (необязательно)</string>
   <string name="device_added">Устройство добавлено</string>
-  <string name="device_authorized_pro">Теперь на этом устройстве можно использовать ваш аккаунт Lantern Pro.</string>
   <string name="report_sent">Отчет отправлен</string>
-  <string name="thank_you_for_reporting_your_issue">Спасибо, что сообщили о проблеме! Если вы оставили адрес электронной почты, мы свяжемся с вами в ближайшее время.</string>
-  <string name="visit_yin_bi_to_redeem_your_ynb">Перейдите на сайт Yin.bi, чтобы получить YNB и проверить баланс. Коды получения Yinbi действуют в течение 30 дней после покупки.</string>
-  <string name="ynb"># YNB</string>
-  <string name="ynb_distributed">YNB будут раздаваться в конце каждого дня. Сумма будет зависеть от количества криптовалюты, выпущенной за день, числа пользователей, продливших подписку, а также от оформленного вами срока подписки и количества аккаунтов. Код получения Yinbi появится на экране в конце дня. Откройте эту страницу после отключения таймера.</string>
-  <string name="until_code_and_ynb_will_be_shown">До появления кода и количества монет YNB</string>
+  <string name="thank_you_for_reporting_your_issue">Спасибо, что сообщили о своей проблеме. Из-за большого потока обращений мы не можем отвечать на большинство из них, однако будьте уверены, мы прилагаем все усилия, чтобы совершенствовать Lantern на основании ваших отзывов.</string>
   <string name="have_a_lantern_pro_activation_code_click_here">У вас есть код активации Lantern Pro? Нажмите сюда</string>
   <string name="enter_email_and_activation_code">Введите адрес электронной почты и код активации</string>
   <string name="activation_code">Код активации</string>
@@ -556,4 +482,18 @@
   <string name="pro_account_expiration">Срок действия аккаунта Pro истек:</string>
   <string name="lantern_pro_devices_up_to_3">Устройства с Lantern Pro (до 3 шт.)</string>
   <string name="renew_short">Возобновить</string>
+  <string name="connection_error">Ошибка подключения</string>
+  <string name="reopen_to_try">Еще раз откройте %1$s и повторите попытку.</string>
+  <string name="init_account">%1$s инициализирует ваш аккаунт. Это может занять какое-то время.</string>
+  <string name="tampered_apk">В полученном файле APK обнаружена угроза. Скачайте официальную версию.</string>
+  <string name="incoming_call">Входящий звонок</string>
+  <string name="accept">Да</string>
+  <string name="decline">Отклонить</string>
+  <string name="new_message">Новое сообщение</string>
+  <string name="from_sender">От: %1$s</string>
+  <string name="unnamed_contact">Безымянный контакт</string>
+  <string name="message_notifications_channel">Сообщения</string>
+  <string name="call_notifications_channel">Звонки</string>
+  <string name="lantern_service">Сервис Lantern</string>
+  <string name="replica_download">Скачать копию</string>
 </resources>

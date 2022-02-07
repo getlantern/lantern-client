@@ -1,14 +1,13 @@
 package org.getlantern.lantern.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
+
 import com.google.gson.JsonObject;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
@@ -22,7 +21,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.*;
 import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.lantern.util.DateUtil;
-import org.getlantern.mobilesdk.Lantern;
+import org.getlantern.lantern.util.Analytics;
 import org.getlantern.mobilesdk.Logger;
 import org.joda.time.LocalDateTime;
 
@@ -31,7 +30,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @EActivity(R.layout.activity_plan)
-public class PlansActivity extends FragmentActivity {
+public class PlansActivity extends BaseFragmentActivity {
 
     private static final String TAG = PlansActivity.class.getName();
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
@@ -98,7 +97,7 @@ public class PlansActivity extends FragmentActivity {
     }
 
     private void sendScreenViewEvent() {
-        Lantern.sendEvent(this, "plans_view");
+        Analytics.event(this, Analytics.CATEGORY_PURCHASING, "plans_view");
     }
 
     protected void setPaymentGateway() {
@@ -220,10 +219,13 @@ public class PlansActivity extends FragmentActivity {
         final String planId = (String) view.getTag();
         Logger.debug(TAG, "Plan selected: " + planId);
 
-        final Bundle params = new Bundle();
-        params.putString("plan_id", planId);
-        params.putString("app_version", Utils.appVersion(this));
-        Lantern.sendEvent(this, "plan_selected", params);
+        final Map<Integer, String> params = new HashMap<>();
+        params.put(Analytics.DIMENSION_PLAN_ID, planId);
+        Analytics.event(
+                this,
+                Analytics.CATEGORY_PURCHASING,
+                "plan_selected",
+                params);
 
         LanternApp.getSession().setProPlan(plans.get(planId));
         startActivity(new Intent(this, CheckoutActivity_.class));

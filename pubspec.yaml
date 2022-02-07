@@ -27,7 +27,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  i18n_extension: ^4.1.2
+  i18n_extension: ^4.2.0
 
   provider: ^5.0.0
 

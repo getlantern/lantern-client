@@ -24,7 +24,6 @@
   <string name="your_referral_code">您的推薦代碼</string>
   <string name="report_an_issue">回報問題</string>
   <string name="select_issue">請選擇問題</string>
-  <string name="select_issue_desc">請在此針對您的問題留下簡要說明，\n我們會盡快回覆。</string>
   <string name="submit">提交</string>
   <string name="submit_issue">提交問題</string>
   <string name="no_issue_selected">請在提交報告之前選擇問題</string>
@@ -47,6 +46,7 @@
   <string name="on_desc">您現在可以存取\r\n封鎖的網站和服務</string>
   <string name="off_desc">按下按鈕以存取封鎖的網站及服務</string>
   <string name="service_connected">連接至 VPN</string>
+  <string name="ready_to_connect">準備連線</string>
   <string name="desktop_option">桌面版本</string>
   <string name="contact_option">聯絡方式</string>
   <string name="check_for_update">檢查更新</string>
@@ -100,6 +100,7 @@
   <string name="not_now">暫時不要</string>
   <string name="install_update">更新</string>
   <string name="error_update">下載更新錯誤</string>
+  <string name="error_install_update">安裝更新時發生錯誤</string>
   <string name="loading">正在載入…</string>
   <string name="manual_update">嘗試手動安裝最新版本，網址為 &amp;lt;a href="https://lantern-android.io"&amp;gt;here1&amp;lt;/a&amp;gt；</string>
   <string name="pro_welcome_text">歡迎加入 Lantern Pro！</string>
@@ -186,11 +187,6 @@
   <string name="too_many_devices">已達到可連結至 Pro 帳號的裝置限制。</string>
   <string name="check_spam_folder">* 如果您沒有收到電子郵件，請檢查您的垃圾郵件資料夾</string>
   <string name="by_referral">推薦朋友以獲得 Pro 服務</string>
-  <string-array name="payment_method_list">
-    <item>支付寶</item>
-    <item>信用卡</item>
-    <item>推薦朋友獲得 Pro 版</item>
-  </string-array>
   <string name="payment_method">付款方式</string>
   <string name="payment_account">付款帳號</string>
   <string name="oops_having_trouble">糟糕！我們無法找到該電子郵件地址。請提供以下資訊，協助我們找到您的帳號。</string>
@@ -220,16 +216,10 @@
   </string-array>
   <string-array name="pro_features_new">
     <item>速度更快</item>
-    <item>抗封鎖</item>
-    <item>更可靠</item>
-    <item>最多可註冊 3 台裝置</item>
-    <item>無限資料</item>
-    <item>購買即可獲得免費隱幣！</item>
-  </string-array>
-  <string-array name="yinbi_renew_features">
-    <item>免費加密隱蔽</item>
-    <item>免費月份</item>
-    <item>限時優惠，立即行動！</item>
+    <item>有效對抗封鎖環境</item>
+    <item>更穩定可靠</item>
+    <item>最多可註冊 3 部裝置</item>
+    <item>數據用量不設限</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>無限高速資料</item>
@@ -296,7 +286,6 @@
   <string name="upgrade_to_lantern_pro">升級到 Lantern Pro</string>
   <string name="pro_available_for">適用於 Windows、Android、Mac 和 Ubuntu。iOS 版本即將推出</string>
   <string name="upgrade_to_pro">升級到 Pro 版，獲得無限資料、更快的速度和更強的抗封鎖能力！</string>
-  <string name="upgrade_to_pro_yinbi">升級到 Pro，獲得無限資料、更快的速度、更強的抗封鎖能力\n以及免費加密隱幣！</string>
   <string name="data_remaining">剩下 %1$s%% 的每月免費高速資料</string>
   <string name="data_used">剩下 %1$s MB 免費資料量。\n重設為 %2$s</string>
   <string name="upgrade">升級</string>
@@ -396,16 +385,12 @@
   <string name="processing_payment">正在處理付款</string>
   <string name="now_converting_to_pro">現在正在轉換為 Pro 版本…請稍候…</string>
   <string name="have_an_activation_code">是否有啟用代碼？按一下這裡</string>
-  <string name="yinbi_greeting">隱幣－抗封鎖的加密貨幣即將發行。\n按一下此處了解如何免費獲得。</string>
   <string name="test_payment_page">測試付款頁</string>
   <string name="pay_now">立即付款</string>
   <string name="error_bulk_codes">提交批量 Pro 帳號代碼時發生錯誤</string>
   <string name="invalid_bulk_codes">您輸入的 Pro 帳號無效</string>
   <string name="renew_today">立即續訂！</string>
-  <string name="receive_free_yinbi">獲得免費加密隱幣！</string>
   <string name="purchased_pro_activation_codes">是否在線上購買 Lantern Pro 啟用代碼？</string>
-  <string name="renew_grab_free_yinbi"><u>透過您的 Pro 啟用代碼續訂以獲得免費隱幣</u></string>
-  <string name="upgrade_now_get_free_yinbi"><u>透過您的 Pro 啟用代碼升級以獲得免費隱幣</u></string>
   <string name="renew">續訂！</string>
   <string name="terms_of_service_text">按一下「繼續付款」即表示您同意我們的服務條款</string>
   <string name="terms_of_service_text_complete_purchase">按一下「完成購買」即表示您同意我們的服務條款</string>
@@ -415,60 +400,16 @@
   <string name="enter_lantern_pro_codes">輸入 Lantern Pro 代碼</string>
   <string name="renewal_success">續訂成功！</string>
   <string name="thank_you_for_renewing">感謝您續訂 Lantern Pro\n帳號</string>
-  <string name="yinbi">隱幣</string>
-  <string name="visit_yinbi_website">造訪網站</string>
-  <string name="yinbi_redemption">隱幣兌換</string>
-  <string name="yinbi_account_info">隱幣帳號資訊</string>
-  <string name="lantern_partnered_yinbi_free">Lantern 與 Yinbi 合作，向購買 Lanternon\nPro 的所有人\n贈送 YNB ！立即購買以獲得\n今天的贈品！如需更多關於隱幣的資訊，\n請造訪官方網站：Yin.bi</string>
-  <string name="lantern_partnered_yinbi_pro">Lantern 與 Yinbi 合作，向續訂 Lanternon\nPro 的所有人\n贈送 YNB ！立即續訂以獲得\n今天的贈品！如需更多關於隱幣的資訊，\n請造訪官方網站：Yin.bi</string>
-  <string name="enter_bulk_pro_codes">輸入 Lantern Pro 代碼</string>
-  <string name="renew_pro_get_yinbi">續訂 Pro 獲得隱幣</string>
-  <string name="you_have">您已</string>
-  <string name="yinbi_code">YNB</string>
-  <string name="unable_to_get_yinbi_account_info">無法擷取隱幣帳號資訊</string>
-  <string name="redeem_bulk_codes">兌換大批代碼</string>
-  <string name="paste_pro_account_codes">將您的大批 Pro 帳號代碼粘貼到下面以\n獲得 Lantern Pro 或延長您的 Lantern Pro\n帳號時間。</string>
-  <string name="special_offer">特別優惠！</string>
-  <string name="cryptocurrency_giveaway">加密貨幣贈品！</string>
-  <string name="lantern_partnered_renew_now">Lantern 已與隱幣 (YNB) 合作，\n向續訂 Lantern 的所有人\n贈送 YNB！立即續訂以獲得今天\n的贈品！</string>
-  <string name="what_is_yinbi">甚麼是隱幣？</string>
-  <string name="renew_now_get_yinbi">立即續訂獲得隱幣</string>
   <string name="purchase">購買</string>
-  <string name="one_year_yinbi">1 年 + 免費隱幣：</string>
-  <string name="yinbi_cost">%1$s%2$s (%3$s)</string>
-  <string name="two_years_yinbi">2 年 + 2 倍免費隱幣：</string>
   <string name="thank_you_purchasing_pro">感謝您購買 Lantern Pro！</string>
-  <string name="you_will_receive_yinbi">當今天的贈品活動結束時，您的購買將獲得免費隱幣 (YNB)\n。\n按一下隱幣兌換代碼按鈕以瞭解更多詳細資訊。</string>
-  <string name="yinbi_menu">隱幣功能表</string>
-  <string name="yinbi_redemption_code">隱幣兌換代碼</string>
   <string name="continue_to_lantern_pro">繼續前往 Lantern Pro</string>
-  <string name="yinbi_website">Yin.bi</string>
   <string name="date">日期</string>
-  <string name="redemption_code">兌換代碼</string>
   <string name="status">狀態</string>
   <string name="copy_all_codes">複製所有代碼</string>
-  <string name="visit_yinbi">請造訪 Yin.bi 兌換您的 YNB 並檢查您的\n帳號餘額。隱幣兌換代碼在購買後\n30 天到期。</string>
-  <string name="successfully_copied_codes">已成功複製兌換代碼！</string>
-  <string name="no_active_codes">無有效的兌換代碼。請稍後再試！</string>
-  <string name="thanks_purchase_yinbi">感謝您購買 Lantern Pro！\n當今天的贈品活動結束後，\n您的隱幣兌換代碼\n將出現在此畫面。當計時器結束後，\n請重新登入。</string>
-  <string name="yinbi_details">隱幣 (YNB) 是一種全新無法封鎖\n加密貨幣，\n可以讓您\n進行快速、可靠、易用和低成本的行動交易。Lantern 使用者是\n第一個能夠提前存取此一全新\n加密貨幣的使用者！</string>
-  <string name="find_out_more">詳情請瀏覽：Yin.bi</string>
   <string name="best_deal">最佳優惠</string>
-  <string name="launches_soon">即將啟用隱幣 (YNB)，而 Lantern \n使用者將首先能夠提早存取\n此一全新加密貨幣！YNB 將在每日結束時\n根據升級\n人數以及您\n購買的年份或帳號\n分發</string>
-  <string name="how_yinbis_distributed">YNB 將於每日\n結束時分發，根據當天\n發行的隱幣數量、升級\n人數以及您購買的\n年份。當今天的贈品活動結束時，\n您的隱幣\n兌換代碼將顯示在此畫面。當計時器結束時\n請重新登入。</string>
-  <string name="get_bulk_yinbi"><u>購買大批 Pro 帳號，獲得隱幣！</u></string>
-  <string name="loading_yinbi_account_info">正在載入隱幣帳號資訊</string>
-  <string name="free_yinbi_with_purchase">購買免費隱幣！</string>
   <string name="renew_now_get_more">立即續訂，獲得更多！</string>
-  <string name="buy_pro_get_yinbi">購買 Pro 獲得隱幣</string>
   <string name="renewal_note">注意：您新購買的計畫時間將加入\n目前的計畫時間。</string>
   <string name="bulk_codes_error">錯誤！請檢查突出顯示的代碼。</string>
-  <string name="loading_yinbi">正在載入隱幣兌換代碼</string>
-  <string name="lantern_partnered_yinbi">Lantern 與 Yinbi 合作，向續訂 Lanternon\nPro 的所有人\n贈送 YNB ！立即續訂以獲得\n今天的贈品！如需更多關於隱幣的資訊，\n請造訪官方網站：Yin.bi</string>
-  <string name="time_left_giveaway">本日隱幣贈品的剩餘時間！</string>
-  <string name="yinbi_released_today">本日發行 %d YNB！</string>
-  <string name="yinbi_distribution_details">YNB 將根據當天發行的隱幣數量、升級／續訂數以及您購買的年份或帳號數，在每天結束時分發。</string>
-  <string name="total_yinbi_released">發行的 YNB 總數每天減少，每年減少一半。立即取得您的隱幣！</string>
   <string name="please_allow_lantern_to">請允許 Lantern…</string>
   <string name="permission_for">啟用</string>
   <string name="android.permission.INTERNET">連線 Lantern 伺服器</string>
@@ -485,11 +426,6 @@
   <string name="lantern_desktop_share_description">可以在上面的連結中找到最新桌面及所有其他平台的 Lantern 應用程式。</string>
   <string name="share_link">分享連結：</string>
   <string name="lantern_desktop_link_share_title">分享 Lantern 下載連結</string>
-  <string name="upgrade_to_pro_get_yinbi">升級到 Pro 版並獲得隱幣</string>
-  <string name="yinbi_description_free">Lantern 與 Yinbi 合作，向購買 Lanternon Pro 的所有人贈送 YNB ！立即升級以獲得今天的贈品！如需更多關於隱幣的資訊，請造訪官方網站：Yin.bi</string>
-  <string name="yinbi_description_pro">Lantern 與 Yinbi 合作，向續訂 Lanternon Pro 的所有人 贈送 YNB ！立即續訂以獲得 今天的贈品！如需更多關於隱幣的資訊，請造訪官方網站：Yin.bi</string>
-  <string name="yinbi_title_free">免費加密隱幣</string>
-  <string name="yinbi_title_pro">隱幣兌換</string>
   <string name="redeem_lantern_pro_codes">兌換 Lantern Pro 代碼</string>
   <string name="redeem_code_description_first_part">取得大批 Lantern Pro 代碼的管道如下</string>
   <string name="redeem_code_description_second_part">reseller.lantern.io</string>
@@ -502,9 +438,6 @@
   <string name="faster_data_centers">更快的資料中心</string>
   <string name="no_logs">沒有記錄</string>
   <string name="connect_up_to_3_devices">可連接最多 3 個裝置</string>
-  <string name="free_yinbi_cryptocurrency">免費加密隱幣！</string>
-  <string name="yinbi_cryptocurrency">加密隱幣</string>
-  <string name="the_yinbi_foundation_description">隱幣基金會將 888 億元的 YNB 加密貨幣獨家透過 Lantern 贈送給 Lantern Pro 的購買者。YNB 將根據當天發行的隱幣數量、升級／續訂數以及您購買的年份或帳號數，在每天結束時分發。購買後，您可以在隱幣兌換畫面找到有關取得 YNB 的詳細資訊。</string>
   <string name="plan_duration">%d 年份方案</string>
   <string name="total_cost">%s 已收費一次</string>
   <string name="discount">節省 %s%%</string>
@@ -513,7 +446,6 @@
   <string name="membership_end_soon">您的會員資格即將到期。立即續訂，享受最多 %s 免費！</string>
   <string name="membership_ends_today">您的會員資格今天到期。立即續訂，享受最多 %s 免費！</string>
   <string name="membership_has_expired">您的會員資格已過期！立即續訂，享受最多 f%s 免費！</string>
-  <string name="free_extra_yinbi">2 份隱幣！</string>
   <string name="step_2">步驟 2</string>
   <string name="enter_email_short">輸入電子郵件</string>
   <string name="mm_yy">月月／年年</string>
@@ -536,13 +468,7 @@
   <string name="send_report">傳送報告</string>
   <string name="email_optional">電子郵件（選填）</string>
   <string name="device_added">已新增裝置</string>
-  <string name="device_authorized_pro">此裝置現已獲得授權可使用您的 Lantern Pro 帳號。</string>
   <string name="report_sent">報告已傳送</string>
-  <string name="thank_you_for_reporting_your_issue">感謝您回報的問題。如果您提供了電子郵件，我們會盡快回覆。</string>
-  <string name="visit_yin_bi_to_redeem_your_ynb">請造訪 Yin.bi 兌換您的 YNB 並檢查您的帳號餘額。隱幣兌換代碼在購買後 30 天到期。</string>
-  <string name="ynb"># YNB</string>
-  <string name="ynb_distributed">YNB 將於每日結束時分發，根據當天發行的隱幣數量、升級人數以及您購買的年份。當今天的贈品活動結束時，您的隱幣兌換代碼將顯示在此畫面。當計時器結束時請重新登入。</string>
-  <string name="until_code_and_ynb_will_be_shown">直到顯示代碼和 # YNB</string>
   <string name="have_a_lantern_pro_activation_code_click_here">是否具有 Lantern Pro 啟用代碼？按一下這裡</string>
   <string name="enter_email_and_activation_code">輸入電子郵件和啟動代碼</string>
   <string name="activation_code">啟用代碼</string>
@@ -555,4 +481,18 @@
   <string name="pro_account_expiration">Pro 帳號到期日：</string>
   <string name="lantern_pro_devices_up_to_3">Lantern Pro 裝置（最多 3 個）</string>
   <string name="renew_short">續訂</string>
+  <string name="connection_error">連接錯誤</string>
+  <string name="reopen_to_try">請重新打開%1$s再試一次。</string>
+  <string name="init_account">%1$s正在初始化您的帳戶，這可能需要一些時間。</string>
+  <string name="tampered_apk">下載的 APK 檔案已遭損毀，請下載官方版本</string>
+  <string name="incoming_call">來電</string>
+  <string name="accept">接受</string>
+  <string name="decline">拒絕</string>
+  <string name="new_message">新訊息</string>
+  <string name="from_sender">來自 %1$s</string>
+  <string name="unnamed_contact">未命名聯絡人</string>
+  <string name="message_notifications_channel">訊息</string>
+  <string name="call_notifications_channel">通話</string>
+  <string name="lantern_service">Lantern 服務</string>
+  <string name="replica_download">複本下載</string>
 </resources>

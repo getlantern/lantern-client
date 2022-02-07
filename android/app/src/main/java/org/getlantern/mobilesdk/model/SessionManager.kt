@@ -26,6 +26,7 @@ import org.getlantern.mobilesdk.util.DnsDetector
 import org.greenrobot.eventbus.EventBus
 import java.text.DateFormat
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.HashMap
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -198,7 +199,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun forceReplica(): Boolean {
-        return prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE);
+        return prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
     }
 
     val replicaAddr: String
@@ -214,6 +215,16 @@ abstract class SessionManager(application: Application) : Session {
         Logger.d(TAG, "Setting $CHAT_ENABLED to ${isDevMode ?: enabled}")
         prefs.edit().putBoolean(CHAT_ENABLED, isDevMode ?: enabled).apply()
     }
+
+    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
+
+    override fun setMatomoEnabled(enabled: Boolean) {
+        val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
+        Logger.d(TAG, "Setting $MATOMO_ENABLED to ${isDevMode ?: enabled}")
+        prefs.edit().putBoolean(MATOMO_ENABLED, isDevMode ?: enabled).apply()
+    }
+
+    fun matomoEnabled(): Boolean = prefs.getBoolean(MATOMO_ENABLED, false)
 
     override fun appVersion(): String {
         return appVersion
@@ -339,20 +350,30 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putString(GEO_COUNTRY_CODE, country).apply()
     }
 
+    private val hasUpdatedStats = AtomicBoolean()
+
     override fun updateStats(
         city: String,
         country: String,
         countryCode: String,
         httpsUpgrades: Long,
         adsBlocked: Long,
+        hasSucceedingProxy: Boolean
     ) {
-        val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked)
-        EventBus.getDefault().post(st)
+        if (hasUpdatedStats.compareAndSet(false, true)) {
+            // The first time that we get the stats, hasSucceedingProxy is always false because we
+            // haven't hit any proxies yet. So, we just ignore the stats.
+            return
+        }
+
+        val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked, hasSucceedingProxy)
+        EventBus.getDefault().postSticky(st)
 
         // save last location received
         prefs.edit().putString(SERVER_COUNTRY, country)
             .putString(SERVER_CITY, city)
-            .putString(SERVER_COUNTRY_CODE, countryCode).apply()
+            .putString(SERVER_COUNTRY_CODE, countryCode)
+            .putBoolean(HAS_SUCCEEDING_PROXY, hasSucceedingProxy).apply()
         vpnModel.saveServerInfo(
             Vpn.ServerInfo.newBuilder()
                 .setCity(city)
@@ -417,6 +438,7 @@ abstract class SessionManager(application: Application) : Session {
         protected const val SERVER_COUNTRY = "server_country"
         protected const val SERVER_COUNTRY_CODE = "server_country_code"
         protected const val SERVER_CITY = "server_city"
+        protected const val HAS_SUCCEEDING_PROXY = "hasSucceedingProxy"
         protected const val DEVICE_ID = "deviceid"
 
         @JvmStatic
@@ -448,6 +470,7 @@ abstract class SessionManager(application: Application) : Session {
 
         private const val REPLICA_ADDR = "replicaAddr"
         private const val CHAT_ENABLED = "chatEnabled"
+        private const val MATOMO_ENABLED = "matomoEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),

@@ -403,6 +403,8 @@ dependencies {
 
     implementation 'io.sentry:sentry-android:5.1.2'
 
+    implementation 'com.github.matomo-org:matomo-sdk-android:4.1.4'
+
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
@@ -428,7 +430,7 @@ dependencies {
     // from https://github.com/getlantern/opus_android
     implementation(name:'opuslib-release', ext: 'aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
-    implementation 'com.github.getlantern:messaging-android:d5c03a6d2f'
+    implementation 'com.github.getlantern:messaging-android:97084a2064'
 }
 
 apply plugin: 'com.google.gms.google-services'

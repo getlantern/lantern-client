@@ -1,23 +1,42 @@
 # 
 # Translators:
-# Alexander B. <road2monstercat@gmail.com>, 2021
-# Zeynel Cebeci <cebeciz@gmail.com>, 2021
-# Volkan Gezer <volkangezer@gmail.com>, 2021
-# Derek F <derek@getlantern.org>, 2021
-# efe kerem sözeri <eksozeri@hotmail.com>, 2021
-# Teo Westbrook, 2021
-# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2021
-# Aşkın Yollu <askin@askin.ws>, 2021
+# Volkan Gezer <volkangezer@gmail.com>, 2022
+# Kudret <kudretemre@hotmail.com.tr>, 2022
+# Zeynel Cebeci <cebeciz@gmail.com>, 2022
+# Aşkın Yollu <askin@askin.ws>, 2022
+# efe kerem sözeri <eksozeri@hotmail.com>, 2022
+# Teo Westbrook, 2022
+# e2f <projects@e2f.com>, 2022
+# Derek F <derek@getlantern.org>, 2022
+# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Aşkın Yollu <askin@askin.ws>, 2021\n"
+"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2022\n"
 "Language-Team: Turkish (https://www.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "app_name"
 msgstr "Lantern"
+
+msgid "introducing"
+msgstr "Sohbet ile Tanışın"
+
+msgid "introducing_des"
+msgstr ""
+"Doğrudan Lantern içerisinde oluşturulmuş yeni, engellemeye karşı dirençli ve"
+" şifrelenmiş sohbet özelliğimizi kullanarak arkadaşlarınızla güvenli bir "
+"şekilde sohbet edin!"
+
+msgid "maybe_later"
+msgstr "Belki Daha Sonra"
+
+msgid "try"
+msgstr "Bunu deneyin"
+
+msgid "new"
+msgstr "Yeni"
 
 msgid "Daily Data Usage"
 msgstr "Günlük Veri Kullanımı"
@@ -28,7 +47,7 @@ msgstr ":"
 msgid "connected"
 msgstr "Bağlandı"
 
-msgid "disconnected"
+msgid "Disconnected"
 msgstr "Bağlantıyı kes"
 
 msgid "Disconnecting"
@@ -37,14 +56,28 @@ msgstr "Bağlantı kesiliyor..."
 msgid "Connecting"
 msgstr "Bağlanılıyor..."
 
+msgid "no_network_connection"
+msgstr "Ağ bağlantısı yok"
+
+msgid "connection_error"
+msgstr "Bağlantı Hatası"
+
+msgid "connection_error_des"
+msgstr ""
+"Lantern sunucularımıza bağlanmakta sorun yaşıyor. Lütfen uygulamayı yeniden "
+"başlatın. Bu sorun devam ederse lütfen destek birimiyle iletişime geçin."
+
+msgid "connection_error_button"
+msgstr "Destek birimine ulaşın"
+
+msgid "Calling"
+msgstr "Aranıyor..."
+
 msgid "Go Pro Title"
 msgstr "Pro'ya Yükseltin!"
 
 msgid "Go Pro Description"
 msgstr "Daha yüksek hızlara ve sınırsız veriye ulaşın!"
-
-msgid "Go Pro Description With Yinbi"
-msgstr "Sınırsız veri + ücretsiz Yinbi kripto para!"
 
 msgid "Server Location"
 msgstr "Sunucu Konumu"
@@ -57,35 +90,56 @@ msgstr ""
 msgid "OK"
 msgstr "TAMAM"
 
-msgid "pro_account_management"
+msgid "Done"
+msgstr "Bitti"
+
+msgid "backup_recovery_key"
+msgstr "Yedek Kurtarma Anahtarı"
+
+msgid "delete_chat_data"
+msgstr "Tüm Sohbet Verilerini sil"
+
+msgid "delete_chat_data_description"
+msgstr ""
+"Bu işlem Sohbet Numaranızı, kişilerinizi ve mesajlarınızı bu cihazdan siler."
+" Yedek Kurtarma Anahtarınız olmadığında Sohbet Numaranıza erişimi "
+"kaybedersiniz."
+
+msgid "delete_chat_data_confirmation"
+msgstr "Sohbet verilerimi silmek istediğimi onaylıyorum"
+
+msgid "Pro Account Management"
 msgstr "Pro Hesap Yönetimi"
 
-msgid "add_device"
-msgstr "Hesap Ekle"
+msgid "Link Device"
+msgstr "Cihaz Bağla"
 
-msgid "upgrade_to_lantern_pro"
+msgid "Upgrade to Lantern Pro"
 msgstr "Lantern Pro'ya Yükseltin"
 
-msgid "authorize_device_for_pro"
-msgstr "Cihazı Pro Hesabına Dahil Et"
-
-msgid "invite_friends"
+msgid "Invite Friends"
 msgstr "Arkadaşlarını Davet Et"
 
 msgid "desktop_version"
-msgstr "Masaüstü sürümü"
-
-msgid "free_yinbi_crypto"
-msgstr "Ücretsiz Yinbi Kripto Para"
-
-msgid "yinbi_redemption"
-msgstr "Yinbi Kullanımı"
+msgstr "Masaüstü Versiyonu"
 
 msgid "settings"
 msgstr "Ayarlar"
 
+msgid "general"
+msgstr "Genel"
+
 msgid "proxy_all"
 msgstr "Her şeyi proxy'le"
+
+msgid "proxy_everything_is"
+msgstr "Her şeyi proxy'leme %s"
+
+msgid "version_number"
+msgstr "Sürüm %s"
+
+msgid "build_number"
+msgstr "%s adet oluştur"
 
 msgid "language"
 msgstr "Dil"
@@ -93,56 +147,17 @@ msgstr "Dil"
 msgid "report_issue"
 msgstr "Sorun bildir"
 
+msgid "blocked_users"
+msgstr "Engellenmiş Kullanıcılar"
+
 msgid "description_proxy_all_dialog"
 msgstr ""
 "Etkinleştirilirse, bütün trafik Lantern üzerinden gönderilecektir (daha "
 "güvenli). Devre dışı bırakılırsa, yalnızca engellenen trafik Lantern "
 "üzerinden gönderilecektir (daha hızlı)."
 
-msgid "Exchange"
-msgstr "Borsa"
-
 msgid "Account"
 msgstr "Hesap"
-
-msgid "In partnership with"
-msgstr "Ortaklığıyla: "
-
-msgid "Buy"
-msgstr "Satın Al"
-
-msgid "Bitcoin"
-msgstr "Bitcoin"
-
-msgid "Tether"
-msgstr "Tether"
-
-msgid "With"
-msgstr "İle"
-
-msgid "Online Wallets"
-msgstr "Çevrimiçi Cüzdanlar"
-
-msgid "Bank Transfers"
-msgstr "Banka Havaleleri"
-
-msgid "Gift Cards"
-msgstr "Hediye Kartları"
-
-msgid "Game Cards"
-msgstr "Oyun Kartları"
-
-msgid "Cash Payment"
-msgstr "Nakit Ödeme"
-
-msgid "Digital Currencies"
-msgstr "Dijital Para Birimleri"
-
-msgid "Payment Method"
-msgstr "Ödeme Yöntemi"
-
-msgid "SHOW BEST DEALS"
-msgstr "EN İYİ FIRSATLARI GÖSTER"
 
 msgid "VPN Status"
 msgstr "VPN Durumu"
@@ -168,6 +183,9 @@ msgstr "VEYA"
 msgid "Authorize Device via Email"
 msgstr "Cihazı E-Posta Üzerinden Yetkilendir"
 
+msgid "auth_email_helper_text"
+msgstr "Pro hesabınızla ilişkili e-posta adresini girin"
+
 msgid "Requires access to the email you used to buy Lantern Pro"
 msgstr ""
 "Lantern Pro satın almak için kullandığınız e-postaya erişim gereklidir"
@@ -175,11 +193,17 @@ msgstr ""
 msgid "Link via Email"
 msgstr "E-Posta Aracılığıyla Bağla"
 
+msgid "lantern_pro_email"
+msgstr "Lantern Pro E-Postası"
+
 msgid "Email"
 msgstr "E-posta"
 
 msgid "Submit"
 msgstr "Gönder"
+
+msgid "save"
+msgstr "Kaydet"
 
 msgid "Please enter a valid email address"
 msgstr "Lütfen geçerli bir e-posta adresi girin"
@@ -210,7 +234,7 @@ msgstr "Hesap Ekle"
 msgid "approve_device_step_1"
 msgstr ""
 "Bağlamak istediğiniz cihazda hesap menüsünden \"Cihazı Pro İçin "
-"Yetkilendir\"i açın ve ardından \"PIN ile Bağla\" seçeneğini belirleyin"
+"Yetkilendir\"i açın ve ardından \"PIN ile Bağla\" seçeneğini belirleyin."
 
 msgid "approve_device_step_2"
 msgstr "1. adımdan elde edilen bağlama kodunu girin"
@@ -234,19 +258,831 @@ msgid "confirm_remove_device"
 msgstr "Bu cihazı Pro hesabınızdan çıkartmak istediğinize emin misiniz?"
 
 msgid "n/a"
-msgstr ""
+msgstr "uygulanamaz"
 
 msgid "Developer Settings"
-msgstr ""
+msgstr "Geliştirici Ayarları"
 
 msgid "Developer"
+msgstr "Geliştirici"
+
+msgid "dev_settings"
 msgstr ""
+"Bu testler yalnızca geliştirme kullanımı içindir. Herhangi bir ayarı "
+"değiştirmek uygulamayı otomatik olarak durdurur ve yeniden başlatır."
+
+msgid "dev_payment_mode"
+msgstr ""
+"Ödeme Test Modu etkinleştirildiğinde uygulama tek bir sabit kodlanmış "
+"kullanıcıdan yararlanır. 4242 4242 4242 4242 numarasını, gelecekteki bir son"
+" kullanma tarihini ve herhangi bir CVV'yi kullanarak Stripe satın alma "
+"işlemleri gerçekleştirebilirsiniz."
 
 msgid "Payment Test Mode"
-msgstr ""
+msgstr "Ödeme Test Modu"
 
 msgid "Play Version"
+msgstr "Play Sürümü"
+
+msgid "Force Country"
+msgstr "Ülkeyi Zorunlu Tut"
+
+msgid "Error"
+msgstr "Hata"
+
+msgid "accept"
+msgstr "Kabul Et"
+
+msgid "cancel"
+msgstr "İptal"
+
+msgid "reject"
+msgstr "Reddet"
+
+msgid "copied"
+msgstr "Kopyalandı!"
+
+msgid "saved"
+msgstr "Kaydedildi!"
+
+msgid "new_chat"
+msgstr "Yeni Sohbet"
+
+msgid "your_contact_info"
+msgstr "İletişim Bilgileriniz"
+
+msgid "display_name"
+msgstr "Görünen Ad"
+
+msgid "edit"
+msgstr "Düzenle"
+
+msgid "save_error"
+msgstr "Kaydetme esnasında bir sorun oluştu."
+
+msgid "more_options"
+msgstr "Daha fazla seçenek"
+
+msgid "block_user"
+msgstr "Kullanıcı engelle"
+
+msgid "unblock_user"
+msgstr "Kullanıcının engelini kaldır"
+
+msgid "block"
+msgstr "Engelle"
+
+msgid "unblock"
+msgstr "Engeli kaldır"
+
+msgid "block_info_title"
+msgstr "%s engellensin mi?"
+
+msgid "no_blocked_users"
+msgstr "Engellenmiş kullanıcı yok."
+
+msgid "unblock_info_title"
+msgstr "%s kişisinin engeli kaldırılsın mı?"
+
+msgid "block_info_description"
+msgstr ""
+"Bu kullanıcıyı engellemek sohbet geçmişini siler ve kullanıcının gelecekte "
+"sizinle iletişime geçmesini önler. Kullanıcıların engelini ayarlar "
+"menüsünden kaldırabilirsiniz."
+
+msgid "unblock_info_description"
+msgstr ""
+"%s artık size mesaj gönderebilecektir. Bu kişiye engelini kaldırdığınıza "
+"dair bir bildirim gönderilmeyecektir."
+
+msgid "block_info_checkbox"
+msgstr "Bunun tüm sohbet geçmişini sileceğini anlıyorum."
+
+msgid "unblock_info_checkbox"
+msgstr "Bu kişinin engelini kaldırmak istediğimi onaylıyorum."
+
+msgid "delete_permanently"
+msgstr "Kullanıcıyı kalıcı olarak sil"
+
+msgid "delete_info_description"
+msgstr ""
+"Bir kez silindikten sonra bu kişiyle tekrar sohbet etmek istemeniz durumunda"
+" kendisinin iletişim bilgilerini eklemeniz gerekecektir."
+
+msgid "add_new_contact"
+msgstr "Yeni kişi ekle"
+
+msgid "add_contact"
+msgstr "Kişi Ekle"
+
+msgid "share_your_chat_number"
+msgstr "Sohbet Numaranızı paylaşı"
+
+msgid "scan_qr_code"
+msgstr "QR Kodunu Tara"
+
+msgid "add_contact_in_person"
+msgstr "Şahsen kişi ekle"
+
+msgid "start_chat"
+msgstr "Sohbet başlat"
+
+msgid "message_disappearing"
+msgstr "Siz ve %s için tüm mesajlar kaybolmayacaktır."
+
+msgid "message_disappearing_description"
+msgstr "%s sonrasında siz ve %s için tüm mesajlar kaybolacaktır."
+
+msgid "delete"
+msgstr "Sil"
+
+msgid "view_contact_info"
+msgstr "İletişim Bilgilerini Görüntüle"
+
+msgid "off"
+msgstr "Kapalı"
+
+msgid "continue"
+msgstr "Devam et"
+
+msgid "are_you_sure_you_want_to_open"
+msgstr "%s öğesini açmak istediğinizden emin misiniz?"
+
+msgid "set"
+msgstr "Ayarla"
+
+msgid "menu"
+msgstr "Menü"
+
+msgid "send_error"
+msgstr "Mesajınız gönderilirken bir sorun oluştu"
+
+msgid "share_media_error"
+msgstr "Bir medya dosyası paylaşılırken bir sorun oluştu"
+
+msgid "no_recents"
+msgstr "Yakın Dönemde Yok"
+
+msgid "set_display_name"
+msgstr "Görünen Adı Ayarla"
+
+msgid "introduce_contact"
+msgstr "Kişiyi Tanıt"
+
+msgid "introduce_contacts"
+msgstr "Kişileri Tanıt"
+
+msgid "introduce_contacts_with_count"
+msgstr "Kişileri Tanıt (%s)"
+
+msgid "need_two_contacts_to_introduce"
+msgstr ""
+"İki veya daha fazla kişiniz olduğunda tanıtımlar oluşturabileceksiniz."
+
+msgid "introduce_contacts_select"
+msgstr ""
+"Tanıtmak için iki veya daha fazla kişi seçin. Bu kişilere birbirleriyle "
+"mesajlaşmaya başlamaları için tanıtımlar gönderilecektir."
+
+msgid "introduce_single_contact"
+msgstr ""
+"%s kişisine tanıtılacak bir kişi seçin. Bu kişiler tanıtımı onayladıktan "
+"sonra birbirleriyle mesajlaşabilecektir."
+
+msgid "send_introductions"
+msgstr "Tanıtımlar Gönder"
+
+msgid "introductions_sent"
+msgstr "Tanıtımlar Gönderildi!"
+
+msgid "no_contacts_yet"
+msgstr "Henüz kişi yok"
+
+msgid "contact_verification"
+msgstr "Kişi Doğrulaması"
+
+msgid "verification"
+msgstr "Doğrulama"
+
+msgid "contact_verification_description"
+msgstr "Kişi doğrulaması daima üst sağ kısımdaki mesaj menüsünde mevcut olur."
+
+msgid "qr_error_description"
+msgstr "Bu QR kodu taranırken bir sorun oluştu."
+
+msgid "qr_info_verification_title"
+msgstr "Şahsen Kişi Doğrulaması"
+
+msgid "qr_info_f2f_title"
+msgstr "QR Kod Taraması"
+
+msgid "qr_info_verification_des"
+msgstr ""
+"Kişinizi doğrulamak için birbirinizin QR kodlarını tarayın.\n"
+"\n"
+"Bu işlem görüşmelerinizin gizliliğini ve uçtan uca şifrelenmesini sağlar."
+
+msgid "qr_info_f2f_des"
+msgstr ""
+"Arkadaşınızı bir kişi olarak eklemek için birbirinizin QR kodlarını tarayın.\n"
+"\n"
+"Bu işlem görüşmelerinizin gizliliğini ve uçtan uca şifrelenmesini sağlar."
+
+msgid "qr_info_verification_scan"
+msgstr "Doğrulamak için birbirinizin QR kodlarını tarayın."
+
+msgid "qr_info_f2f_scan"
+msgstr "Bir kişi eklemek için birbirinizin QR kodlarını tarayın."
+
+msgid "qr_success_snackbar"
+msgstr "%s bir Kişi"
+
+msgid "qr_info_waiting_qr"
+msgstr "Arkadaşınızın QR kodunuzu taraması bekleniyor..."
+
+msgid "scan_complete"
+msgstr "Tarama tamamlandı"
+
+msgid "qr_for_your_contact"
+msgstr "QR Kodunuz"
+
+msgid "add_via_chat_number"
+msgstr "Sohbet Numarası Aracılığıyla Ekle"
+
+msgid "qr_info_waiting_id"
+msgstr ""
+"Arkadaşınızın messenger kimliğinizi girmesi veya QR kodunuzu taraması "
+"bekleniyor..."
+
+msgid "chat_number_not_found"
+msgstr ""
+"Sohbet numarası bulunamıyor, lütfen numarayı kontrol edin ve tekrar deneyin"
+
+msgid "unable_to_add_contact"
+msgstr "Kişi bulunamadı, numarayı kontrol edin ve tekrar deneyin"
+
+msgid "self_adding"
+msgstr "Girdiğiniz Sohbet Numarası size ait"
+
+msgid "chat_number_type"
+msgstr "Bir Sohbet Numarası yazın"
+
+msgid "letter_and_numbers_only"
+msgstr "Yalnızca harf ve rakam"
+
+msgid "name_your_contact"
+msgstr "Kişinizi adlandırın"
+
+msgid "messenger_id_invalid"
+msgstr "Geçersiz Messenger Kimliği"
+
+msgid "username_not_found"
+msgstr "Kullanıcı adı bulunamadı"
+
+msgid "contact_id_your_id"
+msgstr "Messenger Kimliğiniz"
+
+msgid "introductions"
+msgstr "Tanıtımlar"
+
+msgid "introduced"
+msgstr "%s tarafından tanıtıldı"
+
+msgid "introductions_title"
+msgstr "%s Kişisine Tanıtımı Kabul Et"
+
+msgid "introductions_info"
+msgstr ""
+"Birbirleriyle sohbet edebilmeleri için her iki tarafın da tanıtımı kabul "
+"etmesi gerekir. Hiçbir eylemde bulunulmaması durumunda tanıtımlar 7 gün "
+"sonra kaybolur."
+
+msgid "introduction_reject_title"
+msgstr "Tanıtımı Reddet"
+
+msgid "introduction_reject_content"
+msgstr "Tanıtımı reddederseniz bu kişiye mesaj gönderemeyeceksiniz."
+
+msgid "introductions_error_description_rejecting"
+msgstr "Bu bağlantı isteği reddedilirken bir sorun oluştu."
+
+msgid "introductions_error_description_accepting"
+msgstr "Bu bağlantı isteği kabul edilirken bir sorun oluştu."
+
+msgid "no_introductions"
+msgstr "Bekleyen tanıtım yok."
+
+msgid "introduction_approved"
+msgstr "%s kişisine tanıtım onaylandı!"
+
+msgid "delete_contact_name"
+msgstr "%s Kişisini Sil"
+
+msgid "delete_contact"
+msgstr "Kişiyi Sil"
+
+msgid "error"
+msgstr "Hata"
+
+msgid "error_delete_contact"
+msgstr "Bu kişi silinirken bir sorun oluştu."
+
+msgid "unnamed_contact"
+msgstr "Adsız Kişi"
+
+msgid "me"
+msgstr "Ben"
+
+msgid "disappearing_messages"
+msgstr "Kaybolan Mesajlar"
+
+msgid "start_of_your_history"
+msgstr "%s ile sohbetleriniz ve sesli aramalarınız uçtan uca şifrelidir"
+
+msgid "banner_unaccepted"
+msgstr ""
+"%s kişiler listenizde bulunmuyor. Sohbet isteğini kabul etmek ister misiniz?"
+
+msgid "banner_messages_persist"
+msgstr "Yeni mesajlar kaybolmaz."
+
+msgid "banner_message_retention"
+msgstr "Mesaj saklama %s olarak ayarlandı"
+
+msgid "longform_seconds"
+msgstr "%s saniye"
+
+msgid "shortform_seconds"
+msgstr "%s sn"
+
+msgid "longform_minute"
+msgstr "%s dakika"
+
+msgid "shortform_minutes"
+msgstr "%s dk"
+
+msgid "longform_minutes"
+msgstr "%s dakika"
+
+msgid "longform_hour"
+msgstr "%s saat"
+
+msgid "shortform_hours"
+msgstr "%s sa"
+
+msgid "longform_hours"
+msgstr "%s saat"
+
+msgid "longform_day"
+msgstr "%s gün"
+
+msgid "shortform_days"
+msgstr "%s g"
+
+msgid "longform_days"
+msgstr "%s gün"
+
+msgid "longform_week"
+msgstr "%s hafta"
+
+msgid "shortform_weeks"
+msgstr "%s h"
+
+msgid "longform_weeks"
+msgstr "%s hafta"
+
+msgid "banner_source_unknown"
+msgstr "Bilinmeyen"
+
+msgid "banner_source_qr"
+msgstr "QR Kodu"
+
+msgid "banner_source_id"
+msgstr "Messenger Kimliği"
+
+msgid "banner_source_intro"
+msgstr "Giriş"
+
+msgid "message_will_disappear_at"
+msgstr "Kaybolma zamanı: %s"
+
+msgid "change_display_name"
+msgstr "Görünen Adı Değiştir"
+
+msgid "yesterday"
+msgstr "dün"
+
+msgid "tomorrow"
+msgstr "yarın"
+
+msgid "just_now"
+msgstr "biraz önce"
+
+msgid "within_one_minute"
+msgstr "bir dakika içinde"
+
+msgid "on_date"
+msgstr "%s tarihinde"
+
+msgid "at_date"
+msgstr "şu saatte: %s"
+
+msgid "error_fetching_message_preview"
+msgstr "Mesaj Önizlemesi getirilirken hata"
+
+msgid "message_was_deleted"
+msgstr "Mesaj silindi"
+
+msgid "contact_was_deleted"
+msgstr "%s kişileriniz arasından silindi."
+
+msgid "contact_was_blocked"
+msgstr "%s engellendi."
+
+msgid "contact_was_unblocked"
+msgstr "%s kişisinin engeli kaldırıldı."
+
+msgid "dismiss"
+msgstr "Bırak"
+
+msgid "copy_text"
+msgstr "Metni Kopyala"
+
+msgid "message"
+msgstr "Mesaj"
+
+msgid "messages"
+msgstr "Mesajlar"
+
+msgid "chats"
+msgstr "Sohbetler"
+
+msgid "new_requests"
+msgstr "Yeni İstekler: %s"
+
+msgid "chat"
+msgstr "Sohbet"
+
+msgid "lantern_chat"
+msgstr "Lantern Sohbet"
+
+msgid "welcome_title"
+msgstr "Lantern Sohbet'e hoş geldiniz!"
+
+msgid "welcome_text"
+msgstr ""
+"Sınıfının en iyisi engellemeye karşı direnç teknolojisi ile birlikte "
+"gizliliğinizi korumak için şifrelenmiş bir sohbet."
+
+msgid "get_started"
+msgstr "Başlayın"
+
+msgid "want_to_recover"
+msgstr "Bir Sohbet Numaranız var mı?"
+
+msgid "recover"
+msgstr "Kurtar"
+
+msgid "chat_number"
+msgstr "Sohbet Numarası"
+
+msgid "your_chat_number"
+msgstr "Sohbet Numaranız"
+
+msgid "chat_number_recovery"
+msgstr "Sohbet Numarası Kurtarma"
+
+msgid "recovery_helper_text"
+msgstr "Lütfen geçerli bir Kurtarma Anahtarı girin"
+
+msgid "recovery_button"
+msgstr "Sohbet Numaranızı geri yüklemek için Kurtarma Anahtarınızı girin."
+
+msgid "recovery_label"
+msgstr "Kurtarma Anahtarınızı girin"
+
+msgid "recovery_key"
+msgstr "Kurtarma Anahtarı"
+
+msgid "secure_text_explanation"
+msgstr ""
+"Sohbet Numaranız Lantern üzerinde arkadaşlarınızın sizinle iletişime geçmek "
+"için kullanabileceği bir telefon numarası gibi işler."
+
+msgid "secure_text_explanation_account"
+msgstr ""
+"Bu, Sohbet Numaranızın tam versiyonudur; bu uzun numarayı paylaşmak özellikle de bunu paylaşabileceğiniz başka bir uçtan uca şifreli kanalınız olması durumunda daha güvenli olabilir.\n"
+"\n"
+"Lantern iletişim bilgisi paylaşımını kolaylaştırmak için kısaltılmış bir Sohbet Numarası sunar."
+
+msgid "recovery_key_account_explanation"
+msgstr ""
+"Bu anahtarı güvenli bir yerde saklayın ve kimseyle paylaşmayın. Bu anahtar "
+"telefonunuzu kaybetmeniz, cihaz değiştirmeniz veya işletim sistemini "
+"sıfırlamanız durumunda Sohbet Numaranızı kurtarmanın tek yoludur."
+
+msgid "recovery_error"
+msgstr "Hesabınız kurtarılamıyor."
+
+msgid "recovery_input_error"
+msgstr "Lütfen geçerli bir kurtarma anahtarı girdiğinizden emin olun."
+
+msgid "recovery_retrieval_error"
+msgstr "Kurtarma anahtarınız getirilirken bir sorun oluştu"
+
+msgid "recovery_success"
+msgstr "Sohbet Numaranızı başarıyla kurtardınız"
+
+msgid "empty_chats_text"
+msgstr "Sohbet Numaranızı paylaşın veya buraya bir kişi ekleyin!"
+
+msgid "next"
+msgstr "İleri"
+
+msgid "automated_backup"
+msgstr "Otomatik Yedekleme"
+
+msgid "backup_explanation"
+msgstr ""
+"Lantern kişilerinizi şifreleme ve güvenli sunucularımıza yedekleme seçeneği sunar. Yedeklemeden  vazgeçerseniz kurtarma anahtarınızı kullanarak kişilerinizi kurtaramayacaksınız.\n"
+"\n"
+"Lantern yedeklemeyi seçtiğinizde kişi listelerinizi okuyamaz."
+
+msgid "backup_contacts"
+msgstr "Kişileri yedekle"
+
+msgid "copy_recovery_key"
+msgstr "Kurtarma Anahtarını Kopyala"
+
+msgid "search"
+msgstr "Ara"
+
+msgid "account_management"
+msgstr "Hesap Yönetimi"
+
+msgid "add_via_username"
+msgstr "Kullanıcı adı aracılığıyla ekle"
+
+msgid "username"
+msgstr "Kullanıcı adı"
+
+msgid "enter_a_username_to_start_a_conversation"
+msgstr "Bir mesaj görüşmesi başlatmak için bir kullanıcı adı girin"
+
+msgid "start_message"
+msgstr "Mesaj Başlat"
+
+msgid "please_enter_a_valid_username"
+msgstr "Lütfen geçerli bir kullanıcı adı girin\""
+
+msgid "open_url"
+msgstr "URL'yi aç"
+
+msgid "message_deleted"
+msgstr "%s bu mesajı sildi"
+
+msgid "never"
+msgstr "Hiçbir Zaman"
+
+msgid "delete_for_me"
+msgstr "Benim için sil"
+
+msgid "delete_for_me_explanation"
+msgstr ""
+"Bu işlem mesajı yalnızca sizin için siler. Diğer herkes yine bunu "
+"görebilecektir."
+
+msgid "delete_for_everyone"
+msgstr "Herkes için sil"
+
+msgid "delete_for_everyone_explanation"
+msgstr "Bu işlem mesajı herkes için siler"
+
+msgid "reply"
+msgstr "Cevapla"
+
+msgid "replying_to"
+msgstr "%s kişisine yanıt veriliyor"
+
+msgid "attachment"
+msgstr "Ek"
+
+msgid "error_rendering_message"
+msgstr "Mesaj işlenirken hata"
+
+msgid "error_fetching_preview"
+msgstr "Mesaj önizlemesi getirilirken hata"
+
+msgid "audio"
+msgstr "Ses"
+
+msgid "image"
+msgstr "Görüntüler"
+
+msgid "video"
+msgstr "Videolar"
+
+msgid "app"
+msgstr "Uygulamalar"
+
+msgid "document"
+msgstr "Belgeler"
+
+msgid "search_chars_min"
+msgstr "En az üç karakter yazın"
+
+msgid "search_no_results"
+msgstr "Üzgünüz, bu aramayla eşleşen hiçbir şey bulamadık."
+
+msgid "search_error"
+msgstr "Üzgünüz, arama sonuçları getirilirken bir hata oluştu."
+
+msgid "search_contacts"
+msgstr "Kişiler (%s)"
+
+msgid "search_chats"
+msgstr "Sohbetler (%s)"
+
+msgid "search_in_contacts"
+msgstr "Kişilerde Ara"
+
+msgid "search_in_chats"
+msgstr "Sohbetlerde ve Kişilerde Ara"
+
+msgid "could_not_render_title"
+msgstr "Dosya başlığı işlenemedi"
+
+msgid "could_not_render_type"
+msgstr "Dosya türü işlenemedi"
+
+msgid "speaker"
+msgstr "Hoparlör"
+
+msgid "speaker_on"
+msgstr "Hoparlör Açık"
+
+msgid "mute"
+msgstr "Sessize al"
+
+msgid "muted"
+msgstr "Ses Kısıldı"
+
+msgid "end_call"
+msgstr "Aramayı Sonlandır"
+
+msgid "verify_contact"
+msgstr "%s öğesini doğrula"
+
+msgid "verified"
+msgstr "Doğrulanmış"
+
+msgid "pending_verification"
+msgstr "Doğrulama bekleniyor"
+
+msgid "verify_description"
+msgstr ""
+"En iyi güvenlik uygulamalarından biri olarak %s doğrulama numarasının sizinkiyle eşleşip eşleşmediğini kontrol etmenizi öneririz.\n"
+"\n"
+"Şahsen veya bir telefon araması vasıtasıyla doğrulamak ister misiniz?"
+
+msgid "verify_in_person"
+msgstr "Şahsen doğrula"
+
+msgid "verify_via_call"
+msgstr "Sesli aramayla doğrula"
+
+msgid "dismiss_notification"
+msgstr "Bildirimi Kapat"
+
+msgid "call_contact"
+msgstr "%s aransın mı?"
+
+msgid "call"
+msgstr "Arama"
+
+msgid "incoming_call"
+msgstr "Gelen Arama"
+
+msgid "call_from"
+msgstr "Kaynak: %s"
+
+msgid "in_call"
+msgstr "Devam Eden Aramalar"
+
+msgid "in_call_des"
+msgstr "Devam eden arama bildirimi"
+
+msgid "incoming_call_from"
+msgstr "Gelen arama kaynağı: %s"
+
+msgid "touch_here_to_open_call"
+msgstr "Aramayı açmak için buraya dokunun"
+
+msgid "in_call_with"
+msgstr "%s ile aramada"
+
+msgid "undo_verification"
+msgstr "Doğrulamayı geri al"
+
+msgid "mark_as_verified"
+msgstr "Doğrulanmış olarak işaretle"
+
+msgid "verification_panel_success"
+msgstr "Doğrulama başarılı! %s ile mesajlarınız güvende."
+
+msgid "verification_panel_pending"
+msgstr ""
+"Bu, doğrulama numaranızdır. Doğrulanmış olarak işaretlemeden önce "
+"numaranızın %s numarasıyla eşleşip eşleşmediğini kontrol edin."
+
+msgid "replica_upload_confirmation_title"
+msgstr "Önemli!"
+
+msgid "replica_upload_confirmation_body"
+msgstr ""
+"Lantern Ağı'na yüklenen dosyalar herkes tarafından erişilebilir olur. Bunlar merkezi olmayan hale getirilir ve hiç kimse tarafından ağdan silinemez.\n"
+"\n"
+"Hassas içerikler yüklerken dosya içeriğinde ve dosya adında kişisel kimlik tanımlayıcı bilgilerden kaçının."
+
+msgid "replica_upload_confirmation_agree"
+msgstr "Yüklemeye Devam Et"
+
+msgid "dont_show_me_this_again"
+msgstr "Bunu bana tekrar gösterme"
+
+msgid "download"
+msgstr "İndir"
+
+msgid "download_started"
+msgstr "İndirme Başlatıldı"
+
+msgid "uploader"
+msgstr "Yükleyici"
+
+msgid "upload_started"
+msgstr "Yükleme Başlatıldı"
+
+msgid "upload_in_progress"
+msgstr "Yükleme Devam Ediyor"
+
+msgid "upload_complete"
+msgstr "Yükleme Tamamlandı"
+
+msgid "upload_failed"
+msgstr "Yükleme Başarısız Oldu"
+
+msgid "upload_cancelled"
+msgstr "Yükleme İptal Edildi"
+
+msgid "replica_link_fetcher"
+msgstr "Çoğaltma Bağlantısı Getirici"
+
+msgid "no_preview_for_this_type_of_file"
+msgstr "Bu dosya türü için önizleme yok"
+
+msgid "app_unknown"
+msgstr "uygulama/bilinmiyor"
+
+msgid "audio_unknown"
+msgstr "ses/bilinmiyor"
+
+msgid "document_unknown"
+msgstr "belge/bilinmiyor"
+
+msgid "no_search_result_found"
+msgstr "Üzgünüz, bu aramayla eşleşen hiçbir şey bulamadık"
+
+msgid "search_result_error"
 msgstr ""
 
-msgid "Yinbi Enabled"
+msgid "video_stream_error"
 msgstr ""
+
+msgid "untitled"
+msgstr "Başlıksız"
+
+msgid "failed_to_init_replica"
+msgstr "Hata: Çoğaltma başlatılamadı"
+
+msgid "awaiting_result"
+msgstr "Sonuç bekleniyor..."
+
+msgid "discover"
+msgstr "Keşfet"
+
+msgid "replica_search_intro"
+msgstr ""
+"Lantern Ağı'nda kullanıcılar tarafından yüklenmiş içerikler arayın veya "
+"başkalarının keşfetmesi için kendi içeriklerinizi yükleyin."
+
+msgid "share"
+msgstr "Paylaş"
+
+msgid "upload_file_screen"
+msgstr "Dosya Yükle"
+
+msgid "name_your_file"
+msgstr "Dosyanızı Adlandırın"
+
+msgid "upload"
+msgstr "Yükle"

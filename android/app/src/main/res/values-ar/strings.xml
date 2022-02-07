@@ -24,7 +24,6 @@
   <string name="your_referral_code">رمز الإحالة الخاص بك</string>
   <string name="report_an_issue">بلغ عن خطأ</string>
   <string name="select_issue">يرجى تحديد الموضوع</string>
-  <string name="select_issue_desc">الرجاء ترك وصف موجز لمشكلتك هنا,\n وسنجاوبكم  في أسرع وقت ممكن.</string>
   <string name="submit">أرسل</string>
   <string name="submit_issue">أرسل الخطأ</string>
   <string name="no_issue_selected">الرجاء تحديد المشكلة قبل ارسال البلاغ</string>
@@ -47,6 +46,7 @@
   <string name="on_desc">يمكنك الآن الوصول\r\nالمواقع و الخدمات المحجوبة</string>
   <string name="off_desc">اضغط الزر للوصول الى المواقع و الخدمات المحجوبة</string>
   <string name="service_connected">متصل بشبكة VPN</string>
+  <string name="ready_to_connect">جاهز للاتصال</string>
   <string name="desktop_option">نسخة سطح المكتب</string>
   <string name="contact_option">إتصال</string>
   <string name="check_for_update">تحقق من وجود تحديثات</string>
@@ -100,6 +100,7 @@
   <string name="not_now">ليس الآن</string>
   <string name="install_update">تحديث</string>
   <string name="error_update">خطأ في تنزيل التحديث</string>
+  <string name="error_install_update">خطأ في تثبيت التحديث</string>
   <string name="loading">جاري التحميل..</string>
   <string name="manual_update">جرب تثبيت أحدث نسخة من لانترن هنا &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">مرحبا بك في لانترن برو!</string>
@@ -111,8 +112,8 @@
   <string name="lantern_free_radio">لانترن الأساسي - 500 ميجابيت بيانات</string>
   <string name="welcome_to_lantern">مرحبا بك في لانترن الجديد و المحسّن!</string>
   <string name="to_get_unlimited">للحصول على كمية داتا لامحدودة عند إستعمالك لانترن، سرعة عالية جدا وقدرة أعلى على مقاومة الحجب \nإشترك في برو!</string>
-  <string name="renew_pro_account">جدد إشتراك برو </string>
-  <string name="logout">خروج</string>
+  <string name="renew_pro_account">تجديد حساب Pro</string>
+  <string name="logout">تسجيل الخروج</string>
   <string name="change_phone_number">تغيير رقم الهاتف</string>
   <string name="change_email_address">تغيير البريد الالكتروني </string>
   <string name="pro_account_expires">إشتراكك في برو ينتهي في  %1$s</string>
@@ -177,7 +178,7 @@
   <string name="link_this_device">ربط هذا الجهاز</string>
   <string name="or">أو</string>
   <string name="need_to_recover">أحتاج استرداد حساب لانترن برو الخاص بي</string>
-  <string name="start_recovery">بداية الاسترداد</string>
+  <string name="start_recovery">بدء الاسترداد</string>
   <string name="account_recovery">استرداد الحساب</string>
   <string name="account_recovery_code">رمز استرداد الحساب</string>
   <string name="email_recovery_code">تم إرسال رسالة إلكترونية تحوي رمز استعادة إلى %1$s في حال كان هذا الحساب موجودًا. أدخل الرمز الوارد في الرسالة الإلكترونية أعلاه. قد يستغرق وصول هذه الرسالة الإلكترونية بضع ساعات.</string>
@@ -186,18 +187,13 @@
   <string name="too_many_devices">تم الوصول إلى الحد الأقصى من الأجهزة التي يمكن ربطها بحسابك البرو.</string>
   <string name="check_spam_folder">* يرجى مراجعة مجلد الرسائل غير المرغوب فيها إذا لم تتلقى البريد الإلكتروني</string>
   <string name="by_referral">استلام برو بفضل احالة صديق</string>
-  <string-array name="payment_method_list">
-    <item>Alipay</item>
-    <item>بطاقة الائتمان</item>
-    <item>الحصول على البرو بفضل احالة صديق</item>
-  </string-array>
   <string name="payment_method">طريقة الدفع </string>
   <string name="payment_account">حساب الدفع</string>
   <string name="oops_having_trouble">عفوا! نحن نواجه مشكلة في العثور على عنوان البريد الإلكتروني. يرجى تقديم المعلومات التالية لمساعدتنا في العثور على حسابك.</string>
   <string name="locate_account">يرجى كتابة أي معلومات أخرى يمكن أن تساعدنا على تحديد موقع حسابك.</string>
   <string name="resend_email">إعادة إرسال البريد الإلكتروني</string>
   <string name="dont_remember">لا تتذكر البريد الإلكتروني الخاص بك؟</string>
-  <string name="device_code">كود ربط الجهاز</string>
+  <string name="device_code">رمز ربط الجهاز</string>
   <string name="device_now_linked">تم ربط جهازك بنجاح!\n</string>
   <string name="device_linked_success">نجحت العملية! سيتم ربط الجهاز الجديد قريبا.\n</string>
   <string name="link_this_device_0">لربط هذا الجهاز مع حساب البرو:</string>
@@ -217,6 +213,13 @@
     <item>مقاوم للحظر</item>
     <item>ثلاثة أجهزة</item>
     <item>بدون اعلانات</item>
+  </string-array>
+  <string-array name="pro_features_new">
+    <item>سرعة أعلي</item>
+    <item>مقاوم للحجب</item>
+    <item>أكثر ثقة</item>
+    <item>يمكنك تسجيل ما يصل إلى 3 أجهزة</item>
+    <item>بيانات غير محدودة</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>بيانات فائقة السرعة لا محدودة</item>
@@ -283,7 +286,6 @@
   <string name="upgrade_to_lantern_pro">حدث إلى لانترن برو</string>
   <string name="pro_available_for">لأنظمة ويندوز، أندرويد، أوبونتو. نظام أي أو أس قادم قريبا.</string>
   <string name="upgrade_to_pro">قم بالترقية إلى إصدار برو للحصول على بيانات غير محدودةـ وسرعة أكبر، ومقاومة أكبر للحظر!</string>
-  <string name="upgrade_to_pro_yinbi">بادر بالترقية إلى برو للحصول على بيانات غير محدودة، وسرعة أكبر، ومقاومة\n حجب أكبر وعملة Yinbi المشفرة بالمجان!</string>
   <string name="data_remaining">%1$s%%متبقي من بيانات السرعة العالية الشهرية المجانية الخاصة بك</string>
   <string name="data_used">%1$s ميجابايت من البيانات المجانية متبقية.\nيتم إعادة التعيين في %2$s</string>
   <string name="upgrade">إشترك</string>
@@ -383,16 +385,12 @@
   <string name="processing_payment">جارٍ معالجة الدفع</string>
   <string name="now_converting_to_pro">جار التحويل الى يرو الآن... يرجى الانتظار...</string>
   <string name="have_an_activation_code">ألديك رمز تنشيط؟ اضغط هنا</string>
-  <string name="yinbi_greeting">隐币-无封锁的加密货币即将到来。\n点击此处了解如何免费获得。</string>
   <string name="test_payment_page">اختبار صفحة الدفع</string>
   <string name="pay_now">بادر بالدفع الآن</string>
   <string name="error_bulk_codes">حدث خطأ في إرسال رموز حساب برو المجمعة</string>
   <string name="invalid_bulk_codes">رموز حساب برو التي أدخلتها غير صالحة</string>
   <string name="renew_today">بادر بالتجديد اليوم!</string>
-  <string name="receive_free_yinbi">احصل على عملة Yinbi المشفرة بالمجان!</string>
   <string name="purchased_pro_activation_codes">هل اشتريت رموز تنشيط لانترن برو على الإنترنت؟</string>
-  <string name="renew_grab_free_yinbi">بادر بالتجديد باستخدام رموز تنشيط برو للحصول على Yinbi مجانية&lt;/u&gt;</string>
-  <string name="upgrade_now_get_free_yinbi">بادر بالترقية باستخدام رموز تنشيط برو الخاصة بك واحصل على Yinbi مجانية&lt;/u&gt;</string>
   <string name="renew">بادر بالتجديد!</string>
   <string name="terms_of_service_text">بالضغط على \"متابعة للدفع\"، فأنت توافق  شروط الخدمة لدينا </string>
   <string name="terms_of_service_text_complete_purchase">يعني النقر على \"إكمال الشراء\" أنك توافق على \"بنود الخدمة\"</string>
@@ -402,60 +400,16 @@
   <string name="enter_lantern_pro_codes">أدخل رموز لانترن برو</string>
   <string name="renewal_success">نجح التجديد!</string>
   <string name="thank_you_for_renewing">نشكرك على تجديد حساب لانترن برو\nالخاص بك</string>
-  <string name="yinbi">Yinbi</string>
-  <string name="visit_yinbi_website">زُر الموقع</string>
-  <string name="yinbi_redemption">استرداد Yinbi</string>
-  <string name="yinbi_account_info">معلومات حساب Yinbi</string>
-  <string name="lantern_partnered_yinbi_free">كوّنت لانترن شراكة مع Yinbi لتقديم \nYNB لكل من يشتري لانترن\n برو! بادر بالشراء الآن لتتمكن من الحصول على\n هدية اليوم! لمزيد من المعلومات بخصوص\n Yinbi تفضل بزيارة الموقع الرسمي: Yin.bi</string>
-  <string name="lantern_partnered_yinbi_pro">كوّنت لانترن شراكة مع Yinbi لتقديم \nYNB لكل من يبادر بتجديد لانترن برو!\n بادر بالتجديد الآن لتتمكن من الحصول على\n هدية اليوم! لمزيد من المعلومات بخصوص\n Yinbi تفضل بزيارة\n الموقع الرسمي: Yin.bi</string>
-  <string name="enter_bulk_pro_codes">أدخل رموز لانترن برو</string>
-  <string name="renew_pro_get_yinbi">بادر بتجديد برو لتحصل على Yinbi</string>
-  <string name="you_have">لديك</string>
-  <string name="yinbi_code">YNB</string>
-  <string name="unable_to_get_yinbi_account_info">تعذّر استدعاء معلومات حساب Yinbi</string>
-  <string name="redeem_bulk_codes">استرداد الرموز المجمعة</string>
-  <string name="paste_pro_account_codes">انسخ رموز حساب برو المجمعة الخاصة بك أدناه\n لتحصل على لانترن برو أو لتمديد وقتك مع حساب\n لانترن برو.</string>
-  <string name="special_offer">عرض مميز!</string>
-  <string name="cryptocurrency_giveaway">هدية عملة مشفرة!</string>
-  <string name="lantern_partnered_renew_now">كوّنت لانترن شراكة مع Yinbi (YNB) لتقديم \n YNB لكل من يجدد لانترن\n برو! بادر بالتجديد الآن لتتمكن من الحصول على\n هدية اليوم!</string>
-  <string name="what_is_yinbi">ما Yinbi؟</string>
-  <string name="renew_now_get_yinbi">بادر بالتجديد الآن لتحصل على Yinbi</string>
   <string name="purchase">شراء</string>
-  <string name="one_year_yinbi">عام واحد + Yinbi مجانية:</string>
-  <string name="yinbi_cost">%1$s%2$s (%3$s)</string>
-  <string name="two_years_yinbi">عامان + عملتا Yinbi مجانيتان:</string>
   <string name="thank_you_purchasing_pro">نشكرك على شراء لانترن برو!</string>
-  <string name="you_will_receive_yinbi">ستتلقى Yinbi (YNB) مجانية مقابل مشترياتك\n حين ينتهي تقديم هدايا اليوم.\n اضغط على زر رمز استرداد Yinbi للمزيد\n من التفاصيل.</string>
-  <string name="yinbi_menu">قائمة Yinbi</string>
-  <string name="yinbi_redemption_code">رمز استرداد Yinbi</string>
   <string name="continue_to_lantern_pro">متابعة إلى لانترن برو</string>
-  <string name="yinbi_website">Yin.bi</string>
   <string name="date">التاريخ</string>
-  <string name="redemption_code">رمز الاسترداد</string>
   <string name="status">الحالة</string>
   <string name="copy_all_codes">نسخ كل الرموز</string>
-  <string name="visit_yinbi">زُر Yin.bi لاسترداد YNB الخاص بك وتحقق من رصيد\n حسابك. تنتهي صلاحية رموز استرداد Yinbi\n خلال 30 يومًا بعد الشراء.</string>
-  <string name="successfully_copied_codes">نجح نسخ رموز الاسترداد!</string>
-  <string name="no_active_codes">لا توجد أي رموز استرداد نشطة. أعد المحاولة لاحقًا!</string>
-  <string name="thanks_purchase_yinbi">نشكرك على شرائك لانترن برو!\n سيظهر رمز استرداد Yinbi الخاص بك\n على هذه الشاشة حين يكتمل تقديم هدية\n اليوم. تحقق مجددًا حين يكتمل\n المؤقت</string>
-  <string name="yinbi_details">Yinbi (YNB) هي عملة مشفرة جديدة\n غير قابلة للحجب تصدر قريبًا تتيح\n إجراء معاملات سريعة، وموثوقة، وسهلة الاستخدام، ومنخفضة التكلفة على\n الجوال. مستخدمو لانترن هم \nأول من يملك حق الوصول المبكر لهذه العملة المشفرة\n الجديدة!</string>
-  <string name="find_out_more">اكتشف المزيد هنا: Yin.bi</string>
   <string name="best_deal">أفضل صفقة</string>
-  <string name="launches_soon">ستصدر Yinbi (YNB) قريبًا، ومستخدمو لانترن\n هم أول من يملك حق الوصول المبكر إلى\n هذه العملة المشفرة الجديدة! ستُوزّع YNB\n في نهاية كل يوم، بناءً على\n عدد الأشخاص الذين بادروا بترقية حساباتهم، وعلى\n عدد السنوات أو الحسابات\n التي تشتريها</string>
-  <string name="how_yinbis_distributed">ستُوزّع YNB في نهاية\n كل يوم، بناءً على كمية Yinbi\n التي أُصدرت ذلك اليوم، وعلى عدد الأشخاص\n الذين بادروا بترقية حساباتهم، وعدد السنوات\n أو الحسابات التي تشتريها. سيظهر رمز استرداد Yinbi\n الخاص بك على هذه الشاشة\n حين يكتمل تقديم هدية اليوم. تحقق مجددًا حين يكتمل\n المؤقت.</string>
-  <string name="get_bulk_yinbi"><u>بادر بشراء حسابات برو مجمعة، واحصل على Yinbi مجمعة!</u></string>
-  <string name="loading_yinbi_account_info">جارٍ تحميل معلومات حساب Yinbi</string>
-  <string name="free_yinbi_with_purchase">Yinbi مجانية مع الشراء!</string>
   <string name="renew_now_get_more">جدد الآن واحصل على المزيد!</string>
-  <string name="buy_pro_get_yinbi">عند شراء برو، تحصل على Yinbi</string>
   <string name="renewal_note">ملاحظة: سيُضاف وقت الخطة التي اشتريتها حديثًا الى وقت خطتك \n الحالية.</string>
   <string name="bulk_codes_error">خطأ! يُرجى التحقق من الرموز المميزة.</string>
-  <string name="loading_yinbi">جار تحميل رموز استرداد Yinbi</string>
-  <string name="lantern_partnered_yinbi">كوّنت لانترن شراكة مع Yinbi لتقديم \nYNB لكل من يبادر بتجديد لانترن برو!\n بادر بالتجديد الآن لتتمكن من الحصول على\n هدية اليوم! لمزيد من المعلومات بخصوص\n Yinbi تفضل بزيارة\n الموقع الرسمي: Yin.bi</string>
-  <string name="time_left_giveaway">الوقت المتبقي في هدية Yinbi اليوم!</string>
-  <string name="yinbi_released_today">%d YNB ستصدر اليوم!</string>
-  <string name="yinbi_distribution_details">ستُوزّع YNB في نهاية كل يوم، بناءً على كمية Yinbi التي أُصدرت ذلك اليوم، وعلى عدد الأشخاص الذين بادروا بترقية/تجديد حساباتهم، وعدد السنوات أو الحسابات التي تشتريها.</string>
-  <string name="total_yinbi_released">يتناقص إجمالي YNB الصادرة كل يوم وستقل إلى النصف كل عام. احصل على عملاتك اليوم!</string>
   <string name="please_allow_lantern_to">الرجاء السماح لـ لانترن بـ ...</string>
   <string name="permission_for">لتمكين</string>
   <string name="android.permission.INTERNET">الاتصال بخوادم لانترن</string>
@@ -472,11 +426,6 @@
   <string name="lantern_desktop_share_description">يمكن العثور على أحدث تطبيقات لانترن لسطح المكتب وجميع المنصات الأخرى على الرابط أعلاه.</string>
   <string name="share_link">مشاركة الرابط</string>
   <string name="lantern_desktop_link_share_title">مشاركة رابط تنزيل لانترن</string>
-  <string name="upgrade_to_pro_get_yinbi">الترقية إلى برو للحصول على yinbi</string>
-  <string name="yinbi_description_free">كوّنت لانترن شراكة مع Yinbi لتقديم YNB إلى كل من يشتري لانترن برو! قم بالترقية الآن لتتمكن من الوصول إلى هدية اليوم! للحصول على مزيد من المعلومات حول Yinbi، تفضل بزيارة الموقع الرسمي: Yin.bi</string>
-  <string name="yinbi_description_pro">كوّنت لانترن شراكة مع Yinbi لتقديم YNB لكل من يبادر بتجديد لانترن برو! بادر بالتجديد الآن لتتمكن من الحصول على هدية اليوم! للحصول على مزيد من المعلومات حول Yinbi، تفضل بزيارة الموقع الرسمي: Yin.bi</string>
-  <string name="yinbi_title_free">عملة Yinbi المشفرة المجانية</string>
-  <string name="yinbi_title_pro">استرداد Yinbi</string>
   <string name="redeem_lantern_pro_codes">استرداد رموز لانترن برو</string>
   <string name="redeem_code_description_first_part">يمكن الحصول على رموز لانترن برو المجمعة من </string>
   <string name="redeem_code_description_second_part">reseller.lantern.io</string>
@@ -486,12 +435,9 @@
   <string name="step_1">الخطوة 1</string>
   <string name="choose_plan">اختر الخطة</string>
   <string name="unlimited_data">بيانات غير محدودة</string>
-  <string name="faster_data_centers">مراكز بيانات أسرع</string>
+  <string name="faster_data_centers">مراكز بيانات أكثر سرعة</string>
   <string name="no_logs">لا توجد سجلات</string>
   <string name="connect_up_to_3_devices">توصيل ما يصل إلى 3 أجهزة</string>
-  <string name="free_yinbi_cryptocurrency">عملة Yinbi المشفرة المجانية!</string>
-  <string name="yinbi_cryptocurrency">عملة Yinbi المشفرة</string>
-  <string name="the_yinbi_foundation_description">تقدم مؤسسة Yinbi 888 مليار من عملات YNB المشفرة حصريًا عبر لانترن إلى مشتري لانترن برو. سيتم توزيع YNB في نهاية كل يوم، بناءً على كمية Yinbi التي تم إصدارها في ذلك اليوم، وعدد الأشخاص الذين قاموا بالترقية/التجديد، وعدد السنوات أو الحسابات التي تشتريها. بعد الشراء، يمكنك العثور على تفاصيل حول جمع YNB الخاصة بك على شاشة استرداد Yinbi.</string>
   <string name="plan_duration">خطة لمدة %d من السنوات</string>
   <string name="total_cost">%s تمت الفوترة مرة واحدة</string>
   <string name="discount">وفّر %s%%</string>
@@ -500,7 +446,6 @@
   <string name="membership_end_soon">ينتهي اشتراكك قريبًا. قم بالتجديد الآن واستمتع بما يصل إلى %s مجانًا!</string>
   <string name="membership_ends_today">ينتهي اشتراكك اليوم. قم بالتجديد الآن واستمتع بما يصل إلى %s مجانًا!</string>
   <string name="membership_has_expired">لقد انتهت مدة اشتراكك! قم بالتجديد الآن واستمتع بما يصل إلى %s مجانًا!</string>
-  <string name="free_extra_yinbi">عملتا Yinbi!</string>
   <string name="step_2">الخطوة 2</string>
   <string name="enter_email_short">أدخل البريد الإلكتروني</string>
   <string name="mm_yy">شهر/سنة</string>
@@ -516,30 +461,38 @@
   <string name="device_linking_pin">رقم التعريف الشخصي لربط الجهاز</string>
   <string name="open_the_add_device_menu_item_on_your_pro_device">افتح عنصر قائمة \"إضافة جهاز\" على جهاز برو الخاص بك.</string>
   <string name="enter_the_device_linking_pin_and_submit">أدخل رقم التعريف الشخصي لربط الجهاز، وقم بالإرسال.</string>
-  <string name="ensure_both_devices_are_running_the_most_recent_version_of_lantern">*تأكد من تشغيل أحدث إصدار من لانترن على كلا الجهازين.</string>
+  <string name="ensure_both_devices_are_running_the_most_recent_version_of_lantern">* تأكد من أن كلا الجهازين يعملان بأحدث إصدار من Lantern</string>
   <string name="your_device_linking_pin_has_been_sent">تم إرسال رقم التعريف الشخصي (PIN) لربط الجهاز الخاص بك إلى %s. قد يستغرق البريد الإلكتروني عدة ساعات للوصول. يُرجى التحقق من مجلد البريد العشوائي إذا لم تعثر عليه.</string>
-  <string name="enter_or_paste_device_linking_pin">أدخل رقم التعريف الشخصي لربط الجهاز أو قم بلصقه</string>
+  <string name="enter_or_paste_device_linking_pin">أدخل أو ألصق رمز ربط الجهاز</string>
   <string name="describe_your_issue">وصف المشكلة</string>
   <string name="send_report">إرسال التقرير</string>
   <string name="email_optional">البريد الإلكتروني (اختياري)</string>
   <string name="device_added">تمت إضافة الجهاز</string>
-  <string name="device_authorized_pro">يُعد هذا الجهاز مصدقًا الآن لاستخدام حسابك على لانترن برو.</string>
   <string name="report_sent">تم إرسال التقرير</string>
-  <string name="thank_you_for_reporting_your_issue">شكرًا لك على الإبلاغ عن مشكلتك. إذا قمت بتقديم بريدك الإلكتروني، سنقوم بالرد عليك في أقرب وقت ممكن.</string>
-  <string name="visit_yin_bi_to_redeem_your_ynb">يمكنك زيارة Yin.bi لاسترداد YNB الخاصة بك، والتحقق من رصيد حسابك. تنتهي صلاحية رموز استرداد Yinbi بعد 30 يوم من الشراء.</string>
-  <string name="ynb"># YNB</string>
-  <string name="ynb_distributed">سيتم توزيع YNB في نهاية كل يوم، بناءً على كمية Yinbi التي تم إصدارها في ذلك اليوم، وعدد الأشخاص الذين قاموا بالترقية، وعدد السنوات أو الحسابات التي تشتريها. سيظهر رمز استرداد Yinbi الخاص بك على هذه الشاشة حين يكتمل تقديم هدية اليوم. تحقق مرة أخرى عندما ينتهي المؤقت.</string>
-  <string name="until_code_and_ynb_will_be_shown">حتى يتم عرض الرمز و# YNB</string>
   <string name="have_a_lantern_pro_activation_code_click_here">هل لديك رمز تنشيط Lantern Pro؟ انقر هنا</string>
   <string name="enter_email_and_activation_code">أدخل البريد الإلكتروني ورمز التفعيل</string>
   <string name="activation_code">رمز التنشيط</string>
   <string name="by_clicking_register_for_pro_you_agree_to_our_terms_of_service">عند النقر فوق تسجيل في إصدار برو، فأنت توافق على شروط الخدمة لدينا</string>
-  <string name="register_for_pro">سجّل للحصول على برو</string>
+  <string name="register_for_pro">التسجيل لـ Pro</string>
   <string name="enter_your_device_linking_pin">أدخل رقم التعريف الشخصي لربط الجهاز</string>
   <string name="enter_the_linking_code_obtained">أدخل رمز الربط الذي تم الحصول عليه من الخطوة رقم 1، وقم بالإرسال.</string>
   <string name="open_authorize_device_for_pro_from_the_menu">افتح \"مصادقة الجهاز للحصول على برو\" من القائمة الموجودة بالجهاز الذي تريد الربط به.</string>
   <string name="email_with_colon">البريد الإلكتروني:</string>
   <string name="pro_account_expiration">صلاحية حساب برو:</string>
-  <string name="lantern_pro_devices_up_to_3">أجهزة لانترن برو (تصل إلى 3)</string>
+  <string name="lantern_pro_devices_up_to_3">أجهزة Lantern Pro (تصل إلى 3)</string>
   <string name="renew_short">اعادة التجديد</string>
+  <string name="connection_error">خطأ في الإتصال</string>
+  <string name="reopen_to_try">يرجى إعادة الفتح للمحاولة مرة أخرى.%1$s</string>
+  <string name="init_account">%1$sيقوم بتهيئة حسابك، قد يستغرق هذا دقيقة.</string>
+  <string name="tampered_apk">تم اختراق ملف apk الذي تم تنزيله، و يرجى تنزيل الإصدار الرسمي</string>
+  <string name="incoming_call">مكالمة واردة</string>
+  <string name="accept">موافق</string>
+  <string name="decline">رفض</string>
+  <string name="new_message">رسالة جديدة</string>
+  <string name="from_sender">من %1$s</string>
+  <string name="unnamed_contact">اتصال غير معرف</string>
+  <string name="message_notifications_channel">الرسائل</string>
+  <string name="call_notifications_channel">مكالمات</string>
+  <string name="lantern_service">خدمة</string>
+  <string name="replica_download">تنزيل النسخة المتماثلة</string>
 </resources>

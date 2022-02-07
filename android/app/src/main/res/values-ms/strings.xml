@@ -24,7 +24,6 @@
   <string name="your_referral_code">Kod Rujukan Anda</string>
   <string name="report_an_issue">Melapor suatu Isu</string>
   <string name="select_issue">Sila memilih satu isu</string>
-  <string name="select_issue_desc">Sila berikan penerangan ringkas mengenai isu anda di sini, dan kami akan kembali kepada anda secepat mungkin.</string>
   <string name="submit">Hantar</string>
   <string name="submit_issue">Hantar Isu</string>
   <string name="no_issue_selected">Sila pilih satu isu sebelum menghantar satu laporan</string>
@@ -180,7 +179,6 @@
   <string name="too_many_devices">Had peranti yang boleh dipautkan ke akaun Pro anda telah dicapai.</string>
   <string name="check_spam_folder">*Sila semak folder spam anda jika anda tidak menerima emel</string>
   <string name="by_referral">Terima Pro kerana Merujuk seorang Rakan.</string>
-  <string-array name="payment_method_list"/>
   <string name="payment_method">Kaedah pembayaran</string>
   <string name="payment_account">Akaun pembayaran</string>
   <string name="oops_having_trouble">Oops!  Kami mempunyai masalah mencari alamat emel anda.  Sila berikan maklumat di bawah untuk membantu kami mencari akaun anda.</string>
@@ -207,19 +205,6 @@
     <item>Rintangan Disekat</item>
     <item>Tiga Peranti</item>
     <item>Tiada Iklan</item>
-  </string-array>
-  <string-array name="pro_features_new">
-    <item>Kelajuan Lebih Pantas</item>
-    <item>Tahan Sekatan</item>
-    <item>Lebih Dipercayai</item>
-    <item>Daftar sehingga 3 Peranti</item>
-    <item>Data Tanpa Had</item>
-    <item>Yinbi Percuma dengan Pembelian!</item>
-  </string-array>
-  <string-array name="yinbi_renew_features">
-    <item>Mata Wang Kripto Yinbi Percuma</item>
-    <item>Bulan Percuma</item>
-    <item>Tawaran Masa Terhad, Bertindak Sekarang!</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>Data berkelajuan tinggi tdak terbatas</item>
@@ -286,7 +271,6 @@
   <string name="upgrade_to_lantern_pro">Upgrade ke Lantern Pro</string>
   <string name="pro_available_for">Akan datang bagi Windows, Android, Mac dan Ubuntu. iOS</string>
   <string name="upgrade_to_pro">Naik taraf kepada Pro untuk data tanpa had, kelajuan lebih pantas dan tahan sekatan yang lebih hebat!</string>
-  <string name="upgrade_to_pro_yinbi">Naik taraf kepada Pro untuk data tanpa had, kelajuan lebih pantas, tahan sekatan yang lebih hebat dan mata wang kripto Yinbi percuma!</string>
   <string name="data_remaining">%1$s%% tinggal lagi bagi data kelajuan tinggi bulanan percuma anda</string>
   <string name="data_used">%1$s MB Baki Data Percuma.\nTetapkan Semula Pada %2$s</string>
   <string name="upgrade">Upgrade</string>
@@ -386,16 +370,12 @@
   <string name="processing_payment">Memproses Pembayaran</string>
   <string name="now_converting_to_pro">Sedang menukarkan anda kepada Pro.. Sila tunggu...</string>
   <string name="have_an_activation_code">Ada Kod Pengaktifan? Tekan di Sini</string>
-  <string name="yinbi_greeting">隐币-无封锁的加密货币即将到来。\n点击此处了解如何免费获得。</string>
   <string name="test_payment_page">Halaman Pembayaran Ujian</string>
   <string name="pay_now">Bayar sekarang</string>
   <string name="error_bulk_codes">Ralat semasa menyerahkan kod akaun Pro pukal</string>
   <string name="invalid_bulk_codes">Kod akaun Pro yang anda masukkan tidak sah</string>
   <string name="renew_today">PERBAHARUI HARI INI!</string>
-  <string name="receive_free_yinbi">Terima Mata Wang Kripto Yinbi Percuma!</string>
   <string name="purchased_pro_activation_codes">Telah membeli kod pengaktifan Lantern Pro secara dalam talian?</string>
-  <string name="renew_grab_free_yinbi"><u>Perbaharui menggunakan kod pengaktifan Pro anda untuk merebut Yinbi percuma</u></string>
-  <string name="upgrade_now_get_free_yinbi"><u>Naik taraf menggunakan kod pengaktifan Pro anda untuk merebut Yinbi percuma</u></string>
   <string name="renew">PERBAHARUI!</string>
   <string name="terms_of_service_text">Dengan mengklik Teruskan dengan Pembayaran, anda bersetuju dengan Syarat Perkhidmatan kami</string>
   <string name="terms_of_service_text_complete_purchase">Dengan mengklik Selesaikan Pembelian, anda bersetuju dengan Syarat Perkhidmatan kami</string>
@@ -405,60 +385,16 @@
   <string name="enter_lantern_pro_codes">Masukkan Kod Lantern Pro</string>
   <string name="renewal_success">Pembaharuan Berjaya!</string>
   <string name="thank_you_for_renewing">Terima kasih kerana memperbaharui akaun\nLantern Pro anda</string>
-  <string name="yinbi">Yinbi</string>
-  <string name="visit_yinbi_website">Lawat laman web</string>
-  <string name="yinbi_redemption">Penebusan Yinbi</string>
-  <string name="yinbi_account_info">Maklumat Akaun Yinbi</string>
-  <string name="lantern_partnered_yinbi_free">Lantern telah bekerjasama dengan Yinbi untuk memberikan\nYNB kepada semua orang yang membeli Lantern\nPro! Beli sekarang untuk mendapatkan akses kepada\nhadiah percuma hari ini! Untuk maklumat lanjut mengenai\nYinbi, lawati laman web rasmi: Yin.bi</string>
-  <string name="lantern_partnered_yinbi_pro">Lantern telah bekerjasama dengan Yinbi untuk memberikan\nYNB kepada semua orang yang memperbaharui Lantern Pro!\nPerbaharui sekarang untuk mendapatkan akses kepada\nhadiah percuma hari ini! Untuk maklumat lanjut mengenai\nYinbi, lawati laman web rasmi: Yin.bi</string>
-  <string name="enter_bulk_pro_codes">Masukkan Kod Lantern Pro</string>
-  <string name="renew_pro_get_yinbi">Perbaharui Pro, Dapatkan Yinbi</string>
-  <string name="you_have">Anda mempunyai</string>
-  <string name="yinbi_code">YNB</string>
-  <string name="unable_to_get_yinbi_account_info">Tidak dapat mengambil maklumat akaun Yinbi</string>
-  <string name="redeem_bulk_codes">Tebus Kod Pukal</string>
-  <string name="paste_pro_account_codes">Tampal kod akaun pro pukal anda di bawah untuk\nmendapatkan Lantern Pro atau melanjutkan masa akaun\nLantern Pro anda.</string>
-  <string name="special_offer">TAWARAN ISTIMEWA!</string>
-  <string name="cryptocurrency_giveaway">Hadiah Mata Wang Kripto!</string>
-  <string name="lantern_partnered_renew_now">Lantern telah bekerjasama dengan Yinbi (YNB) untuk memberikan\nYNB kepada semua orang yang memperbaharui Lantern\nPro! Perbaharui sekarang untuk mendapatkan akses kepada\nhadiah percuma hari ini!</string>
-  <string name="what_is_yinbi">Apa itu Yinbi?</string>
-  <string name="renew_now_get_yinbi">Perbaharui Sekarang, Dapatkan Yinbi</string>
   <string name="purchase">Pembelian</string>
-  <string name="one_year_yinbi">1 Tahun + Yinbi Percuma:</string>
-  <string name="yinbi_cost">%1$s%2$s (%3$s)</string>
-  <string name="two_years_yinbi">2 Tahun + 2x Yinbi Percuma:</string>
   <string name="thank_you_purchasing_pro">Terima kasih kerana membeli Lantern Pro!</string>
-  <string name="you_will_receive_yinbi">Anda akan menerima Yinbi (YNB) percuma untuk\npembelian anda apabila hadiah percuma hari ini berakhir.\nKlik butang kod Penebusan Yinbi untuk\nbutiran lanjut.</string>
-  <string name="yinbi_menu">Menu Yinbi</string>
-  <string name="yinbi_redemption_code">Kod Penebusan Yinbi</string>
   <string name="continue_to_lantern_pro">Terus ke Lantern Pro</string>
-  <string name="yinbi_website">Yin.bi</string>
   <string name="date">Tarikh</string>
-  <string name="redemption_code">Kod Penebusan</string>
   <string name="status">Status</string>
   <string name="copy_all_codes">Salin Semua Kod</string>
-  <string name="visit_yinbi">Lawati Yin.bi untuk menebus YNB anda dan periksa\nbaki akaun anda. Kod Penebusan Yinbi tamat\n30 hari selepas pembelian.</string>
-  <string name="successfully_copied_codes">Berjaya menyalin kod penebusan!</string>
-  <string name="no_active_codes">Tiada kod penebusan aktif. Cuba lagi kemudian!</string>
-  <string name="thanks_purchase_yinbi">Terima kasih atas pembelian Lantern Pro!\nKod penebusan Yinbi anda akan muncul\npada skrin ini apabila hadiah percuma hari ini\nselesai. Periksa semula apabila pemasa\nselesai</string>
-  <string name="yinbi_details">Yinbi (YNB) ialah pelancaran\nmata wang kripto baharu yang tidak dapat disekat yang membolehkan\ntransaksi yang pantas, boleh dipercayai, mudah digunakan dan berkos rendah\n. Pengguna Lantern adalah\nyang pertama mendapat akses awal kepada\nmata wang kripto baharu ini!</string>
-  <string name="find_out_more">Dapatkan maklumat lanjut di sini: Yin.bi</string>
   <string name="best_deal">Tawaran Terbaik</string>
-  <string name="launches_soon">Yinbi (YNB) akan dilancarkan tidak lama lagi dan pengguna Lantern\nadalah yang pertama mendapat akses awal kepada\nmata wang kripto baharu ini! YNB akan\ndiedarkan pada penghujung setiap hari, berdasarkan\nbilangan orang yang melakukan naik taraf\ndan jumlah tahun atau akaun yang anda\nbeli</string>
-  <string name="how_yinbis_distributed">YNB akan diedarkan pada penghujung\nsetiap hari, berdasarkan kuantiti Yinbi\nyang dikeluarkan pada hari itu, jumlah orang\nyang melakukan naik taraf dan bilangan tahun\natau akaun yang anda beli. Kod pengecualian Yinbi anda akan muncul pada skrin\nini apabila hadiah percuma hari ini\nselesai. Semak semula apabila\npemasa selesai.</string>
-  <string name="get_bulk_yinbi"><u>Beli akaun pro pukal, dapatkan Yinbi pukal!</u></string>
-  <string name="loading_yinbi_account_info">Memuatkan maklumat akaun Yinbi</string>
-  <string name="free_yinbi_with_purchase">Yinbi percuma dengan Pembelian!</string>
   <string name="renew_now_get_more">Perbaharui sekarang dan dapatkan lebih banyak!</string>
-  <string name="buy_pro_get_yinbi">Beli Pro, Dapatkan Yinbi</string>
   <string name="renewal_note">CATATAN: Waktu pelan anda yang baru dibeli akan ditambahkan pada\nwaktu pelan semasa anda.</string>
   <string name="bulk_codes_error">Ralat! Sila periksa kod yang diserlahkan.</string>
-  <string name="loading_yinbi">Memuatkan Kod Penebusan Yinbi</string>
-  <string name="lantern_partnered_yinbi">Lantern telah bekerjasama dengan Yinbi untuk memberikan\nYNB kepada semua orang yang memperbaharui Lantern Pro!\nPerbaharui sekarang untuk mendapatkan akses kepada\nhadiah percuma hari ini! Untuk maklumat lanjut mengenai Yinbi, lawati\nlaman web rasmi: Yin.bi</string>
-  <string name="time_left_giveaway">Baki masa untuk hadiah percuma Yinbi hari ini!</string>
-  <string name="yinbi_released_today">%d YNB dikeluarkan hari ini!</string>
-  <string name="yinbi_distribution_details">YNB akan diedarkan pada penghujung setiap hari, berdasarkan kuantiti Yinbi yang dikeluarkan pada hari itu, jumlah orang yang membuat naik taraf / pembaharuan dan jumlah tahun atau akaun yang anda beli.</string>
-  <string name="total_yinbi_released">Jumlah YNB yang dikeluarkan berkurang setiap hari dan akan menjadi separuh setiap tahun. Dapatkan milik anda hari ini!</string>
   <string name="please_allow_lantern_to">Sila benarkan Lantern untuk ...</string>
   <string name="permission_for">untuk mendayakan</string>
   <string name="android.permission.INTERNET">menyambung kepada pelayan Lantern</string>
@@ -475,11 +411,6 @@
   <string name="lantern_desktop_share_description">Aplikasi Lantern terbaru untuk desktop dan semua platform lain boleh didapati di pautan di atas.</string>
   <string name="share_link">Kongsikan pautan</string>
   <string name="lantern_desktop_link_share_title">Kongsikan pautan muat turun Lantern</string>
-  <string name="upgrade_to_pro_get_yinbi">Naik taraf kepada pro, dapatkan yinbi</string>
-  <string name="yinbi_description_free">Lantern telah bekerjasama dengan Yinbi untuk memberikan YNB kepada semua orang yang membeli Lantern Pro! Naik taraf sekarang untuk mendapatkan akses kepada hadiah percuma hari ini! Untuk maklumat lanjut mengenai Yinbi, lawati laman web rasmi: Yin.bi</string>
-  <string name="yinbi_description_pro">Lantern telah bekerjasama dengan Yinbi untuk memberikan YNB kepada semua orang yang memperbaharui Lantern Pro! Perbaharui sekarang untuk mendapatkan akses kepada hadiah percuma hari ini! Untuk maklumat lanjut mengenai Yinbi, lawati laman web rasmi: Yin.bi</string>
-  <string name="yinbi_title_free">Mata Wang Kripto Yinbi Percuma</string>
-  <string name="yinbi_title_pro">Penebusan Yinbi</string>
   <string name="redeem_lantern_pro_codes">Tebus Kod Lantern Pro</string>
   <string name="redeem_code_description_first_part">Kod pukal Lantern Pro boleh didapati daripada</string>
   <string name="redeem_code_description_second_part">reseller.lantern.io</string>
@@ -492,9 +423,6 @@
   <string name="faster_data_centers">Pusat data lebih pantas</string>
   <string name="no_logs">Tiada log</string>
   <string name="connect_up_to_3_devices">Sambungkan sehingga 3 peranti</string>
-  <string name="free_yinbi_cryptocurrency">Mata wang kripto Yinbi percuma!</string>
-  <string name="yinbi_cryptocurrency">Mata Wang Kripto Yinbi</string>
-  <string name="the_yinbi_foundation_description">Yayasan Yinbi memberikan 888 bilion mata wang kripto YNB secara eksklusif melalui Lantern kepada pembeli Lantern Pro. YNB akan diedarkan pada penghujung setiap hari, berdasarkan kuantiti Yinbi yang dikeluarkan pada hari itu, jumlah orang yang membuat naik taraf / pembaharuan dan jumlah tahun atau akaun yang anda beli. Selepas pembelian, anda boleh mendapatkan maklumat mengenai pengumpulan YNB anda pada skrin Penebusan Yinbi.</string>
   <string name="plan_duration">Pelan %d tahun</string>
   <string name="total_cost">%s dibilkan satu kali</string>
   <string name="discount">Jimat %s%%</string>
@@ -503,7 +431,6 @@
   <string name="membership_end_soon">Keahlian anda akan berakhir tidak lama lagi. Perbaharui sekarang dan nikmati sehingga %s percuma!</string>
   <string name="membership_ends_today">Keahlian anda berakhir hari ini. Perbaharui sekarang dan nikmati sehingga %s percuma!</string>
   <string name="membership_has_expired">Keahlian anda telah tamat! Perbaharui sekarang dan nikmati sehingga %s percuma!</string>
-  <string name="free_extra_yinbi">2x Yinbi!</string>
   <string name="step_2">Langkah 2</string>
   <string name="enter_email_short">Masukkan E-mel</string>
   <string name="mm_yy">BB/TT</string>
@@ -526,13 +453,7 @@
   <string name="send_report">Hantar laporan</string>
   <string name="email_optional">E-mel (Pilihan)</string>
   <string name="device_added">Peranti Ditambah</string>
-  <string name="device_authorized_pro">Peranti ini kini dibenarkan untuk menggunakan akaun Lantern Pro anda.</string>
   <string name="report_sent">Laporan Dihantar</string>
-  <string name="thank_you_for_reporting_your_issue">Terima kasih kerana melaporkan masalah anda. Sekiranya anda memberikan e-mel anda, kami akan menghubungi anda secepat mungkin.</string>
-  <string name="visit_yin_bi_to_redeem_your_ynb">Lawati Yin.bi untuk menebus YNB anda, dan periksa baki akaun anda. Kod Penebusan Yinbi tamat 30 hari selepas pembelian.</string>
-  <string name="ynb"># YNB</string>
-  <string name="ynb_distributed">YNB akan diedarkan pada penghujung setiap hari, berdasarkan kuantiti Yinbi yang dikeluarkan pada hari itu, jumlah orang yang melakukan naik taraf dan jumlah tahun atau akaun yang anda beli. Kod penebusan Yinbi anda akan muncul pada skrin ini apabila hadiah percuma hari ini selesai. Semak semula apabila pemasa selesai.</string>
-  <string name="until_code_and_ynb_will_be_shown">Sehingga kod dan # YNB ditunjukkan</string>
   <string name="have_a_lantern_pro_activation_code_click_here">Mempunyai kod pengaktifan Lantern Pro? Tekan di sini</string>
   <string name="enter_email_and_activation_code">Masukkan E-mel dan Kod Pengaktifan</string>
   <string name="activation_code">Kod Pengaktifan</string>
@@ -545,4 +466,12 @@
   <string name="pro_account_expiration">Tamat tempoh akaun Pro:</string>
   <string name="lantern_pro_devices_up_to_3">Peranti Lantern Pro (sehingga 3)</string>
   <string name="renew_short">Memperbaharui</string>
+  <string name="connection_error">Ralat Sambungan</string>
+  <string name="reopen_to_try">Sila buka semula%1$suntuk mencuba lagi.</string>
+  <string name="init_account">%1$ssedang memulakan akaun anda, ini mungkin memerlukan sedikit masa.</string>
+  <string name="incoming_call">Panggilan Masuk</string>
+  <string name="accept">Terima</string>
+  <string name="decline">Decline</string>
+  <string name="unnamed_contact">Kenalan Tidak Dinamakan</string>
+  <string name="message_notifications_channel">Mesej</string>
 </resources>

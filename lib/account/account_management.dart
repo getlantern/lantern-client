@@ -28,7 +28,7 @@ class _AccountManagementState extends State<AccountManagement>
   Widget build(BuildContext context) {
     var title = widget.isPro
         ? 'Pro Account Management'.i18n
-        : 'Account Management'.i18n;
+        : 'account_management'.i18n;
     var textCopied = false;
 
     return BaseScreen(

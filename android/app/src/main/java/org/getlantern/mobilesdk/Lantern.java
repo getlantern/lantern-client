@@ -2,7 +2,8 @@ package org.getlantern.mobilesdk;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.os.Bundle;
+
+import org.getlantern.lantern.util.Analytics;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -141,44 +142,11 @@ public abstract class Lantern {
     }
 
     private static void trackStartSession(final Context context) {
-        sendSessionEvent(context, "Start");
+        Analytics.event(
+                context,
+                Analytics.CATEGORY_SESSION,
+                "start");
     }
-
-    private static void sendSessionEvent(
-            final Context context,
-            final String action) {
-        Bundle params = new Bundle();
-        params.putString("category", "Session");
-        params.putString("label", "android");
-        params.putString("action", action);
-        sendEvent(context, "proxy_session", params);
-    }
-
-    /**
-     * Sends a custom firebase analytics event.
-     * Note: there is limit of 500 event types (names) per application.
-     *
-     * TODO: this has been disabled and will need to be migrated to Matomo.
-     *
-     * @param context application context
-     * @param name the event type
-     * @param params event fields (limit of 25)
-     */
-    public static void sendEvent(final Context context, final String name, Bundle params) {
-//        FirebaseAnalytics.getInstance(context).logEvent(name, params);
-    }
-
-    /**
-     * Sends a custom firebase analytics event.
-     * Note: there is limit of 500 event types (names) per application.
-     *
-     * @param context application context
-     * @param name the event type
-     */
-    public static void sendEvent(final Context context, final String name) {
-        sendEvent(context, name, null);
-    }
-
 
     /**
      * Prints the contents of file to logcat.

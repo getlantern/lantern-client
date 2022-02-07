@@ -19,7 +19,7 @@ import org.getlantern.lantern.model.ProxySettings;
 import org.getlantern.mobilesdk.Logger;
 
 @EActivity(R.layout.webview)
-public class WebViewActivity extends FragmentActivity {
+public class WebViewActivity extends BaseFragmentActivity {
 
     private static final String TAG = WebViewActivity.class.getName();
 

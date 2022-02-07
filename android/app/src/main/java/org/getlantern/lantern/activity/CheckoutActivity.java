@@ -59,7 +59,7 @@ import okhttp3.FormBody;
 import okhttp3.Response;
 
 @EActivity(R.layout.checkout)
-public class CheckoutActivity extends FragmentActivity implements PurchasesUpdatedListener {
+public class CheckoutActivity extends BaseFragmentActivity implements PurchasesUpdatedListener {
 
     private static final String TAG = CheckoutActivity.class.getName();
     private static final String STRIPE_TAG = TAG + ".stripe";
