@@ -999,3 +999,12 @@ msgstr "Name Your File"
 
 msgid "upload"
 msgstr "Upload"
+
+msgid "dummyText"
+msgstr "I want to eat some pizza 🍕 😊"
+
+msgid "dummyHello"
+msgstr "Hi how are you?" 
+
+msgid "dummyReply"
+msgstr "Actually no, I think I am in the mood for sushi today!"
