@@ -26,11 +26,10 @@ Future<void> main() async {
           waitText: 'New Chat',
         );
         await driver.tapText(
-          'Me',
-          waitText:
-              'Your chats and voice calls with Me are end-to-end encrypted',
+          'me',
+          overwriteTimeout: longWaitTimeout,
         );
-        await driver.typeAndSend(dummyText);
+        await driver.typeAndSend('dummyText');
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

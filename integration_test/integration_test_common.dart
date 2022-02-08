@@ -12,7 +12,7 @@ extension DriverExtension on FlutterDriver {
   static var screenshotSequence = 0;
   static var dirPath = '';
 
-  Future<void> initScreenshotsDirectory(testName) async {
+  Future<void> initScreenshotsDirectory(String testName) async {
     await clearTimeline();
     dirPath = 'screenshots/$testName';
     final directory = Directory(dirPath);
@@ -57,14 +57,14 @@ extension DriverExtension on FlutterDriver {
   Future<void> doWaitForText(String waitText) async {
     try {
       await waitFor(
-        find.text(waitText),
+        find.text(await requestData(waitText)),
         timeout: defaultWaitTimeout,
       );
     } catch (_) {
       // try it with non-breaking spaces like those added by CText
       try {
         await waitFor(
-          find.text(addNonBreakingSpaces(waitText)),
+          find.text(addNonBreakingSpaces(await requestData(waitText))),
           timeout: defaultWaitTimeout,
         );
       } catch (e) {
@@ -83,16 +83,16 @@ extension DriverExtension on FlutterDriver {
     print('tapping on text: $tapText');
     try {
       await tapFinder(
-        find.text(tapText),
-        waitText: waitText,
+        find.text(await requestData(tapText)),
+        waitText: await requestData(waitText),
         skipScreenshot: skipScreenshot,
         overwriteTimeout: overwriteTimeout,
       );
     } catch (_) {
       // try it with non-breaking spaces like those added by CText
       await tapFinder(
-        find.text(addNonBreakingSpaces(tapText)),
-        waitText: waitText,
+        find.text(addNonBreakingSpaces(await requestData(tapText))),
+        waitText: await requestData(waitText),
         skipScreenshot: skipScreenshot,
         overwriteTimeout: overwriteTimeout,
       );
@@ -107,7 +107,7 @@ extension DriverExtension on FlutterDriver {
     print('tapping on FAB');
     await tapType(
       'FloatingActionButton',
-      waitText: waitText,
+      waitText: await requestData(waitText),
       skipScreenshot: skipScreenshot,
     );
   }
@@ -245,7 +245,6 @@ extension DriverExtension on FlutterDriver {
     print('do the whole reset -> enroll thing');
     await tapText(
       'Developer',
-      waitText: 'Developer Settings',
       skipScreenshot: true,
     );
     await scrollTextUntilVisible('RESET FLAGS');
@@ -255,17 +254,14 @@ extension DriverExtension on FlutterDriver {
     );
     await tapText(
       'Chats',
-      waitText: 'Welcome to Lantern Chat!',
       skipScreenshot: skipScreenshot,
     );
     await tapText(
       'GET STARTED',
-      waitText: 'Chat Number',
       skipScreenshot: skipScreenshot,
     );
     await tapText(
       'NEXT',
-      waitText: 'Chats',
       skipScreenshot: skipScreenshot,
     );
   }
@@ -283,7 +279,7 @@ extension DriverExtension on FlutterDriver {
     // running this as chained futures in order to be able to capture a screenshot of the state before the first future completes
     await captureScreenshotDuringFuture(
       futureToScreenshot: enterText(
-        messageContent,
+        await requestData(messageContent),
         timeout: overwriteTimeout ?? const Duration(seconds: 1),
       ),
       screenshotTitle: 'sending_message',
@@ -335,5 +331,23 @@ extension DriverExtension on FlutterDriver {
 
   Future<void> longPressFirstItemInList(String list_key) async {
     await longPress(target: await fistItemFinder(list_key));
+  }
+
+  Future<void> setUIlanguage(String lang) async {
+    await tapText(
+      'Account',
+      waitText: 'Account',
+    );
+    await tapText(
+      'Settings',
+      waitText: 'Settings',
+    );
+    await tapText(
+      'Language',
+      waitText: 'Language',
+    );
+    await scrollTextUntilVisible(lang);
+    await tapText(lang);
+    await waitForSeconds(2);
   }
 }

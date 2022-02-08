@@ -30,7 +30,7 @@ Future<void> main() async {
         print('enter search term');
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.enterText(
-            dummyText.split(' ')[1],
+            'dummyText'.split(' ')[1],
             timeout: longWaitTimeout,
           ),
           screenshotTitle: testName,

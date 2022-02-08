@@ -26,7 +26,7 @@ Future<void> main() async {
 
         await driver.tapFirstItemInList('chats_messages_list');
 
-        await driver.typeAndSend(dummyText);
+        await driver.typeAndSend('dummyText');
         print('long press message we just shared');
         await driver.longPress(target: find.text('just now'));
 
