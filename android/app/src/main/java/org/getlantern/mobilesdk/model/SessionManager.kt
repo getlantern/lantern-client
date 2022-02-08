@@ -212,16 +212,18 @@ abstract class SessionManager(application: Application) : Session {
 
     override fun setChatEnabled(enabled: Boolean) {
         val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
-        Logger.d(TAG, "Setting $CHAT_ENABLED to ${isDevMode ?: enabled}")
-        prefs.edit().putBoolean(CHAT_ENABLED, isDevMode ?: enabled).apply()
+        val actuallyEnabled = enabled || isDevMode
+        Logger.d(TAG, "Setting $CHAT_ENABLED to $actuallyEnabled")
+        prefs.edit().putBoolean(CHAT_ENABLED, actuallyEnabled).apply()
     }
 
     fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
 
     override fun setMatomoEnabled(enabled: Boolean) {
         val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
-        Logger.d(TAG, "Setting $MATOMO_ENABLED to ${isDevMode ?: enabled}")
-        prefs.edit().putBoolean(MATOMO_ENABLED, isDevMode ?: enabled).apply()
+        val actuallyEnabled = enabled || isDevMode
+        Logger.d(TAG, "Setting $MATOMO_ENABLED to $actuallyEnabled")
+        prefs.edit().putBoolean(MATOMO_ENABLED, actuallyEnabled).apply()
     }
 
     fun matomoEnabled(): Boolean = prefs.getBoolean(MATOMO_ENABLED, false)
