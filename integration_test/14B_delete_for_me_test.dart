@@ -1,5 +1,4 @@
 import 'integration_test_common.dart';
-import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
@@ -26,12 +25,12 @@ Future<void> main() async {
 
         await driver.tapFirstItemInList('chats_messages_list');
 
-        await driver.typeAndSend('dummyText');
+        await driver.typeAndSend(await driver.requestData('dummyText'));
         print('long press message we just shared');
         await driver.longPress(target: find.text('just now'));
 
         print('delete for me');
-        await driver.tapText('Delete for me');
+        await driver.tapText(await driver.requestData('delete_for_me'));
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

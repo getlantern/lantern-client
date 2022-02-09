@@ -21,20 +21,20 @@ Future<void> main() async {
         await driver.resetFlagsAndEnrollAgain(skipScreenshot: true);
 
         await driver.tapText(
-          'Account',
+          await driver.requestData('Account'),
         );
 
         await driver.tapText(
-          'Account Management',
+          await driver.requestData('account_management'),
         );
 
         await driver.tapText(
-          'Backup Recovery Key',
+          await driver.requestData('backup_recovery_key'),
         );
 
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.tapText(
-            'COPY RECOVERY KEY',
+            (await driver.requestData('copy_recovery_key')).toUpperCase(),
           ),
           screenshotTitle: testName,
         );

@@ -21,9 +21,7 @@ Future<void> main() async {
       () async {
         await driver.screenshotCurrentView();
 
-        await driver.tapFAB(
-          waitText: 'New Chat',
-        );
+        await driver.tapFAB();
 
         print('tap search icon');
         await driver.tapType(

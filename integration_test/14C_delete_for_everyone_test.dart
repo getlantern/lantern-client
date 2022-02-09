@@ -27,11 +27,11 @@ Future<void> main() async {
 
         await driver.tapFirstItemInList('chats_messages_list');
 
-        await driver.typeAndSend('dummyText');
+        await driver.typeAndSend(await driver.requestData('dummyText'));
         print('long press message we just shared');
         await driver.longPress(target: find.text('just now'));
 
-        await driver.tapText('Delete for everyone');
+        await driver.tapText(await driver.requestData('delete_for_everyone'));
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

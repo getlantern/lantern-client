@@ -22,11 +22,11 @@ Future<void> main() async {
         await driver.screenshotCurrentView();
 
         await driver.tapFAB(
-          waitText: 'New Chat',
+          waitText: await driver.requestData('new_chat'),
         );
 
         await driver.tapText(
-          'Add via Chat Number',
+          await driver.requestData('add_via_chat_number'),
           overwriteTimeout: longWaitTimeout,
         );
 
@@ -42,7 +42,7 @@ Future<void> main() async {
         );
 
         await driver.tapText(
-          'START CHAT',
+          (await driver.requestData('start_chat')).toUpperCase(),
           overwriteTimeout: longWaitTimeout,
         );
 
@@ -50,7 +50,7 @@ Future<void> main() async {
 
         await driver.waitForSeconds(2);
 
-        await driver.tapText('DONE');
+        await driver.tapText((await driver.requestData('Done')).toUpperCase());
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

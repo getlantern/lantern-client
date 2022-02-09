@@ -20,8 +20,8 @@ Future<void> main() async {
       'View an image',
       () async {
         await driver.tapText(
-          'Developer',
-          waitText: 'Developer Settings',
+          await driver.requestData('Developer'),
+          waitText: await driver.requestData('Developer Settings'),
           skipScreenshot: true,
         );
         print('adding dummy contacts');
@@ -47,13 +47,16 @@ Future<void> main() async {
 
         print('go back to Chats');
         await driver.tapText(
-          'Chats',
+          await driver.requestData('chats'),
         );
 
         await driver.tapFirstItemInList('chats_messages_list');
 
         print('tap on image attachment');
-        await driver.tapType('ImageAttachment');
+        await driver.tapType(
+          'ImageAttachment',
+          overwriteTimeout: defaultWaitTimeout,
+        );
 
         await driver.waitForSeconds(2);
 

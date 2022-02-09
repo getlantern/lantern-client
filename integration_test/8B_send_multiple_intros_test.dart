@@ -21,8 +21,7 @@ Future<void> main() async {
       () async {
         print('making sure we have enough contacts');
         await driver.tapText(
-          'Developer',
-          waitText: 'Developer Settings',
+          await driver.requestData('developer'),
           skipScreenshot: true,
         );
 
@@ -34,7 +33,7 @@ Future<void> main() async {
           skipScreenshot: true,
         );
         await driver.tapText(
-          'Chats',
+          await driver.requestData('chats'),
           skipScreenshot: false,
         );
 
@@ -44,9 +43,10 @@ Future<void> main() async {
 
         // click on Introduce contacts
         await driver.tapText(
-          'Introduce Contacts',
+          await driver.requestData('introduce_contacts'),
         );
 
+        // HACK
         print('tap secret select all intros key');
         await driver.tapKey(
           'select_all_intros',

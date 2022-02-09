@@ -20,13 +20,16 @@ Future<void> main() async {
     test(
       'Accept an introduction',
       () async {
-        await driver.tapText('Introductions');
+        await driver.tapText(await driver.requestData('Introductions'));
 
-        await driver.tapText('REJECT');
+        await driver
+            .tapText((await driver.requestData('reject')).toUpperCase());
 
-        await driver.tapText('CANCEL');
+        await driver
+            .tapText((await driver.requestData('cancel')).toUpperCase());
 
-        await driver.tapText('ACCEPT');
+        await driver
+            .tapText((await driver.requestData('accept')).toUpperCase());
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

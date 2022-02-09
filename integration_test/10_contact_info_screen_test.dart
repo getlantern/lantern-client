@@ -24,7 +24,7 @@ Future<void> main() async {
         await driver.longPressFirstItemInList('chats_messages_list');
 
         await driver.tapText(
-          'View Contact Info',
+          await driver.requestData('view_contact_info'),
           overwriteTimeout: defaultWaitTimeout,
         );
       },
@@ -44,7 +44,7 @@ Future<void> main() async {
         );
 
         await driver.tapText(
-          'View Contact Info',
+          await driver.requestData('view_contact_info'),
           overwriteTimeout: defaultWaitTimeout,
         );
       },

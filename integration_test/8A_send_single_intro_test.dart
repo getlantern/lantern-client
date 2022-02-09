@@ -20,8 +20,7 @@ Future<void> main() async {
       () async {
         print('making sure we have enough contacts');
         await driver.tapText(
-          'Developer',
-          waitText: 'Developer Settings',
+          await driver.requestData('Developer'),
           skipScreenshot: true,
         );
 
@@ -33,7 +32,7 @@ Future<void> main() async {
           skipScreenshot: true,
         );
         await driver.tapText(
-          'Chats',
+          await driver.requestData('chats'),
           skipScreenshot: false,
         );
 
@@ -43,7 +42,7 @@ Future<void> main() async {
         print('long pressing first contact in list');
         await driver.longPressFirstItemInList('grouped_contact_list');
 
-        await driver.tapText('Introduce Contact');
+        await driver.tapText(await driver.requestData('introduce_contact'));
 
         print('select first contact from Introduce list');
         await driver.captureScreenshotDuringFuture(
