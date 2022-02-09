@@ -20,14 +20,10 @@ Future<void> main() async {
       () async {
         await driver.screenshotCurrentView();
 
-        await driver.tapFAB(
-          waitText: 'New Chat',
-        );
+        await driver.tapFAB();
 
         await driver.tapText(
-          'Me',
-          waitText:
-              'Your chats and voice calls with Me are end-to-end encrypted',
+          await driver.requestData('me'),
         );
 
         final recorderButtonFinder = find.byValueKey('recorder_button');

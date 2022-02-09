@@ -13,8 +13,7 @@ extension DriverExtension on FlutterDriver {
   static var dirPath = '';
 
   Future<void> initScreenshotsDirectory(String testName) async {
-    await clearTimeline();
-    dirPath = 'screenshots/$testName';
+    dirPath = 'screenshots/$currentLocale/$testName';
     final directory = Directory(dirPath);
     if (await directory.exists()) await directory.delete(recursive: true);
     await directory.create();
@@ -45,6 +44,7 @@ extension DriverExtension on FlutterDriver {
     }
   }
 
+  // commenting out since not used
   // Future<void> waitForText(String waitText) async {
   //   try {
   //     await doWaitForText(waitText);
@@ -55,16 +55,17 @@ extension DriverExtension on FlutterDriver {
 
   /// Handles non-breaking text wrapping
   Future<void> doWaitForText(String waitText) async {
+    final localizedWaitText = waitText;
     try {
       await waitFor(
-        find.text(await requestData(waitText)),
+        find.text(localizedWaitText),
         timeout: defaultWaitTimeout,
       );
     } catch (_) {
       // try it with non-breaking spaces like those added by CText
       try {
         await waitFor(
-          find.text(addNonBreakingSpaces(await requestData(waitText))),
+          find.text(addNonBreakingSpaces(localizedWaitText)),
           timeout: defaultWaitTimeout,
         );
       } catch (e) {
@@ -83,16 +84,16 @@ extension DriverExtension on FlutterDriver {
     print('tapping on text: $tapText');
     try {
       await tapFinder(
-        find.text(await requestData(tapText)),
-        waitText: await requestData(waitText),
+        find.text(tapText),
+        waitText: waitText,
         skipScreenshot: skipScreenshot,
         overwriteTimeout: overwriteTimeout,
       );
     } catch (_) {
       // try it with non-breaking spaces like those added by CText
       await tapFinder(
-        find.text(addNonBreakingSpaces(await requestData(tapText))),
-        waitText: await requestData(waitText),
+        find.text(addNonBreakingSpaces(tapText)),
+        waitText: waitText,
         skipScreenshot: skipScreenshot,
         overwriteTimeout: overwriteTimeout,
       );
@@ -107,7 +108,7 @@ extension DriverExtension on FlutterDriver {
     print('tapping on FAB');
     await tapType(
       'FloatingActionButton',
-      waitText: await requestData(waitText),
+      waitText: waitText,
       skipScreenshot: skipScreenshot,
     );
   }
@@ -244,7 +245,7 @@ extension DriverExtension on FlutterDriver {
   Future<void> resetFlagsAndEnrollAgain({bool? skipScreenshot}) async {
     print('do the whole reset -> enroll thing');
     await tapText(
-      'Developer',
+      await requestData('Developer'),
       skipScreenshot: true,
     );
     await scrollTextUntilVisible('RESET FLAGS');
@@ -253,15 +254,15 @@ extension DriverExtension on FlutterDriver {
       skipScreenshot: true,
     );
     await tapText(
-      'Chats',
+      await requestData('chats'),
       skipScreenshot: skipScreenshot,
     );
     await tapText(
-      'GET STARTED',
+      (await requestData('get_started')).toUpperCase(),
       skipScreenshot: skipScreenshot,
     );
     await tapText(
-      'NEXT',
+      (await requestData('next')).toUpperCase(),
       skipScreenshot: skipScreenshot,
     );
   }
@@ -279,7 +280,7 @@ extension DriverExtension on FlutterDriver {
     // running this as chained futures in order to be able to capture a screenshot of the state before the first future completes
     await captureScreenshotDuringFuture(
       futureToScreenshot: enterText(
-        await requestData(messageContent),
+        messageContent,
         timeout: overwriteTimeout ?? const Duration(seconds: 1),
       ),
       screenshotTitle: 'sending_message',
@@ -290,6 +291,7 @@ extension DriverExtension on FlutterDriver {
     );
   }
 
+  /// creates an array for Futures, one of which is what we want to save a screenshot of, and the other is the saveScreenshot() function
   Future<void> captureScreenshotDuringFuture({
     required Future<void> futureToScreenshot,
     required String screenshotTitle,
@@ -303,6 +305,7 @@ extension DriverExtension on FlutterDriver {
     ]);
   }
 
+  /// saves a screenshot of the current view and labels it "current_screen"
   Future<void> screenshotCurrentView() async {
     print('screenshotting current view');
     await captureScreenshotDuringFuture(
@@ -311,6 +314,7 @@ extension DriverExtension on FlutterDriver {
     );
   }
 
+  /// finds first item of descendants in list with given list_key
   Future<SerializableFinder> fistItemFinder(String list_key) async {
     final chats_messages_list = find.byValueKey(list_key);
     final first_message = find.descendant(
@@ -321,6 +325,7 @@ extension DriverExtension on FlutterDriver {
     return first_message;
   }
 
+  /// taps first item of descendants in list with given list_key
   Future<void> tapFirstItemInList(String list_key) async {
     print('access first message of list with $list_key key');
     await tapFinder(
@@ -329,10 +334,12 @@ extension DriverExtension on FlutterDriver {
     );
   }
 
+  /// long presses first item of descendants in list with given list_key
   Future<void> longPressFirstItemInList(String list_key) async {
     await longPress(target: await fistItemFinder(list_key));
   }
 
+  /// sets the UI to the specified language lang
   Future<void> setUIlanguage(String lang) async {
     await tapText(
       'Account',

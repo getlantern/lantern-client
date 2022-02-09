@@ -29,12 +29,12 @@ Future<void> main() async {
         );
 
         await driver.tapText(
-          'View Contact Info',
+          await driver.requestData('view_contact_info'),
           overwriteTimeout: longWaitTimeout,
         );
 
         await driver.tapText(
-          'BLOCK',
+          (await driver.requestData('block')).toUpperCase(),
           overwriteTimeout: longWaitTimeout,
         );
 

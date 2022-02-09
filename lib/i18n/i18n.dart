@@ -58,10 +58,10 @@ extension Localization on String {
   }
 }
 
-//// locale names by locale, in the locale's language
-//// taken from https://pub.dev/packages/flutter_localized_locales but excluding
-//// language names in other languages in order to keep installed size much
-//// smaller.
+// locale names by locale, in the locale's language
+// taken from https://pub.dev/packages/flutter_localized_locales but excluding
+// language names in other languages in order to keep installed size much
+// smaller.
 var _localizedLocaleNames = {
   'id_ID': 'Bahasa Indonesia (Indonesia)',
   'hy': 'հայերեն',

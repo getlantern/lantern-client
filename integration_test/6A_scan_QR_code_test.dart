@@ -23,7 +23,7 @@ Future<void> main() async {
         await driver.tapFAB();
 
         // click on Scan QR Code
-        await driver.tapText('Scan QR Code');
+        await driver.tapText(await driver.requestData('scan_qr_code'));
 
         // screenshot and wait
         await driver.screenshotCurrentView();

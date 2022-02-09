@@ -22,14 +22,12 @@ Future<void> main() async {
       'Enroll and send message to myself',
       () async {
         await driver.resetFlagsAndEnrollAgain();
-        await driver.tapFAB(
-          waitText: 'New Chat',
-        );
+        await driver.tapFAB();
         await driver.tapText(
-          'me',
+          await driver.requestData('me'),
           overwriteTimeout: longWaitTimeout,
         );
-        await driver.typeAndSend('dummyText');
+        await driver.typeAndSend(await driver.requestData('dummyText'));
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

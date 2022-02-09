@@ -1,5 +1,4 @@
 import 'integration_test_common.dart';
-import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
@@ -27,7 +26,7 @@ Future<void> main() async {
 
         print('typing text');
         await driver.typeAndSend(
-          'dummyHello',
+          await driver.requestData('dummyHello'),
         );
       },
       timeout: const Timeout(Duration(minutes: 5)),

@@ -30,11 +30,13 @@ Future<void> main() async {
         );
 
         await driver.tapText(
-          'View Contact Info',
+          await driver.requestData('view_contact_info'),
           overwriteTimeout: defaultWaitTimeout,
         );
 
-        await driver.tapText('DELETE CONTACT');
+        await driver.tapText(
+          (await driver.requestData('delete_contact')).toUpperCase(),
+        );
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

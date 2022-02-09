@@ -10,7 +10,10 @@ Future<void> main() async {
         defaultValue: 'false',
       ).toLowerCase() ==
       'true') {
-    enableFlutterDriverExtension();
+    // https://github.com/flutter/flutter/pull/12909/commits/e6ce75425fd7284a5568188429d5e6533ae6388e and https://github.com/flutter/flutter/issues/15415
+    enableFlutterDriverExtension(
+      handler: (message) async => (message ?? '').i18n,
+    );
   }
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

@@ -20,8 +20,7 @@ Future<void> main() async {
       'Recovery_flow_test',
       () async {
         await driver.tapText(
-          'Developer',
-          waitText: 'Developer Settings',
+          await driver.requestData('Developer'),
           skipScreenshot: true,
         );
         await driver.scrollTextUntilVisible('RESET FLAGS');
@@ -30,11 +29,13 @@ Future<void> main() async {
           skipScreenshot: true,
         );
         await driver.tapText(
-          'Chats',
-          waitText: 'Welcome to Lantern Chat!',
+          await driver.requestData('chats'),
+          waitText: await driver.requestData('welcome_title'),
         );
 
-        await driver.tapText('RECOVER', overwriteTimeout: defaultWaitTimeout);
+        await driver.tapText(
+            (await driver.requestData('recover')).toUpperCase(),
+            overwriteTimeout: defaultWaitTimeout);
 
         print('entering recovery key');
         await driver.captureScreenshotDuringFuture(
@@ -44,7 +45,8 @@ Future<void> main() async {
           screenshotTitle: testName,
         );
 
-        await driver.tapText('SUBMIT', overwriteTimeout: defaultWaitTimeout);
+        await driver.tapText((await driver.requestData('Submit')).toUpperCase(),
+            overwriteTimeout: defaultWaitTimeout);
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
