@@ -10,8 +10,6 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/flashlight v0.0.0-20220208164606-ee6a817784a9
 	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
-	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
-	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd
@@ -26,6 +24,7 @@ require (
 )
 
 require (
+	github.com/eycorsican/go-tun2socks v1.16.12-0.20201107203946-301549c435ff
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
 	golang.org/x/tools v0.1.8 // indirect
