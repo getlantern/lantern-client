@@ -53,6 +53,7 @@ var (
 	startOnce sync.Once
 
 	clEventual               = eventual.NewValue()
+	dnsGrabEventual          = eventual.NewValue()
 	dnsGrabAddrEventual      = eventual.NewValue()
 	errNoAdProviderAvailable = errors.New("no ad provider available")
 )
@@ -513,6 +514,7 @@ func run(configDir, locale string,
 		log.Errorf("Unable to start dnsgrab: %v", err)
 		return
 	}
+	dnsGrabEventual.Set(grabber)
 	dnsGrabAddrEventual.Set(grabber.LocalAddr().String())
 	go func() {
 		serveErr := grabber.Serve()
