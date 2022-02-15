@@ -131,7 +131,6 @@ class CDialogState extends State<CDialog> {
             child: Text(
               widget.title,
               style: tsSubtitle1Short,
-              textAlign: TextAlign.center,
             ),
           ),
           Flexible(
