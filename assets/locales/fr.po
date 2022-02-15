@@ -1120,13 +1120,3 @@ msgstr "Nommez votre fichier"
 
 msgid "upload"
 msgstr "Téléverser"
-
-
-msgid "dummyText"
-msgstr "Je veux bouffer une 🍕 😊"
-
-msgid "dummyHello"
-msgstr "Coucou ça va bien?" 
-
-msgid "dummyReply"
-msgstr "En fait non, un bon ramen ça me dit plus!"
