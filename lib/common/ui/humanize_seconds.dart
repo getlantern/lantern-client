@@ -2,6 +2,7 @@ import 'package:lantern/messaging/messaging.dart';
 
 /// Based on https://www.flutterclutter.dev/flutter/tutorials/date-format-dynamic-string-depending-on-how-long-ago/2020/229/
 extension Humanize on int {
+  // TODO: do we need to humanize numbers as well?
   String humanizeSeconds({bool longForm = false}) {
     var result;
     // seconds
