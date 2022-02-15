@@ -109,10 +109,7 @@ You can run integration tests from the integration_test directory against a live
    1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
    2. `6B_request_flow_test` requires a message request to have just been received 
    3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
-   4. `14A_react_to_message_test` requires a recent message to have been shared
-   5. `14B` requires a recent message to have been shared
-   6. `14C` requires a recent message to have been shared
-   7. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
+   4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
 
 This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
 

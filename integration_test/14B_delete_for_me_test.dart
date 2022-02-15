@@ -14,22 +14,24 @@ Future<void> main() async {
     await driver.close();
   });
 
-  // Test requirements
-  // * Needs only one message having the _just now_ timestamp
   group(testName, () {
     test(
       'Delete for me',
       () async {
         print(
-          'this test relies on only one message having the _just now_ timestamp, so lets wait a bit in case other conversations were active recently',
+          'HACK: this test relies on only one message having the _just now_ timestamp, so lets wait a bit in case other conversations were active recently',
         );
-        await driver.waitForSeconds(60);
+        // await driver.waitForSeconds(60);
 
-        await driver.tapFirstItemInList('chats_messages_list');
+        await driver.tapFAB();
+
+        await driver.tapFirstItemInList('grouped_contact_list');
 
         await driver.typeAndSend(await driver.requestData('test_text'));
         print('long press message we just shared');
-        await driver.longPress(target: find.text('just now'));
+        await driver.longPress(
+          target: find.text(await driver.requestData('just_now')),
+        );
 
         print('delete for me');
         await driver.tapText(await driver.requestData('delete_for_me'));
