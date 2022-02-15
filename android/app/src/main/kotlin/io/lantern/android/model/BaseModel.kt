@@ -90,16 +90,16 @@ abstract class BaseModel(
                 masterDB.withSchema(SessionManager.PREFERENCES_SCHEMA).mutate { tx ->
                     insecureDB
                         .withSchema(SessionManager.PREFERENCES_SCHEMA)
-                        .list<Any>("%").forEach {
-                            tx.put(it.path, it.value)
+                        .listRaw<Any>("%").forEach {
+                            tx.putRaw(it.path, it.value)
                             keysMigrated++
                         }
                 }
                 masterDB.withSchema(VpnModel.VPN_SCHEMA).mutate { tx ->
                     insecureDB
                         .withSchema(VpnModel.VPN_SCHEMA)
-                        .list<Any>("%").forEach {
-                            tx.put(it.path, it.value)
+                        .listRaw<Any>("%").forEach {
+                            tx.putRaw(it.path, it.value)
                             keysMigrated++
                         }
                 }
