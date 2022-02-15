@@ -7,7 +7,7 @@ import 'integration_test_constants.dart';
 Future<void> main() async {
   late FlutterDriver driver;
   final testName = 'change_language_test';
-  final lang = toBeginningOfSentenceCase(displayLanguage(currentLocale))!;
+  final lang = toBeginningOfSentenceCase(displayLanguage(simulatedLocale))!;
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.

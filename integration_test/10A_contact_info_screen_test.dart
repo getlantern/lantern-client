@@ -3,7 +3,7 @@ import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'contact_info_screen';
+  final testName = 'contact_info_screen_1';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -17,7 +17,7 @@ Future<void> main() async {
 
   group(testName, () {
     test(
-      '1/2 Access a contact info screen via long tap',
+      'Access a contact info screen via long tap',
       () async {
         await driver.screenshotCurrentView();
 
@@ -31,26 +31,6 @@ Future<void> main() async {
         );
 
         await driver.waitForSeconds(5);
-      },
-      timeout: const Timeout(Duration(minutes: 5)),
-    );
-    test(
-      '2/2 Access a contact info screen via top right menu',
-      () async {
-        await driver.goBack();
-
-        await driver.tapFirstItemInList('chats_messages_list');
-
-        print('tap on top right menu bar');
-        await driver.tapKey(
-          'conversation_topbar_more_menu',
-          overwriteTimeout: longWaitTimeout,
-        );
-
-        await driver.tapText(
-          await driver.requestData('view_contact_info'),
-          overwriteTimeout: longWaitTimeout,
-        );
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
