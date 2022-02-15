@@ -75,7 +75,7 @@ DISABLE_OPTIMIZATION_FLAGS := -gcflags="all=-N -l"
 GOMOBILE_EXTRA_BUILD_FLAGS :=
 
 BINARIES_PATH ?= ../lantern-binaries
-BRANCH ?= master
+BINARIES_BRANCH ?= main
 
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
@@ -146,7 +146,7 @@ BUILD_TAGS ?=
 BUILD_TAGS += ' lantern'
 
 GO_SOURCES := go.mod go.sum $(shell find internalsdk -type f -name "*.go")
-MOBILE_SOURCES := $(shell find $(BASE_MOBILE_DIR) -type f -not -path screenshots/* -not -path "*/build/*" -not -path "*/.gradle/*" -not -path "*/.idea/*" -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname ".*" -not -iname "*.apk" -not -iname "router.gr.dart")
+MOBILE_SOURCES := $(shell find $(BASE_MOBILE_DIR) -type f -not -path screenshots/* -not -path "*/build/*" -not -path "*/.gradle/*" -not -path "*/.idea/*" -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -path "*/.gomobilecache/*" -not -iname ".*" -not -iname "*.apk" -not -iname "router.gr.dart")
 
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
@@ -280,7 +280,7 @@ release-beta: require-s3cmd
 	echo "$$VERSION_FILE_NAME is now set to $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" && \
 	cd $(BINARIES_PATH) && \
 	git add $(BETA_BASE_NAME)* && \
-	(git commit -am "Latest lantern android beta binaries released from QA." && git push origin $(BRANCH)) || true
+	(git commit -am "Latest lantern android beta binaries released from QA." && git push origin $(BINARIES_BRANCH)) || true
 
 release-prod: require-version require-s3cmd require-wget require-lantern-binaries require-magick
 	@TAG_COMMIT=$$(git rev-list --abbrev-commit -1 $(TAG)) && \
@@ -306,14 +306,14 @@ release-prod: require-version require-s3cmd require-wget require-lantern-binarie
 	echo "$$VERSION_FILE_NAME is now set to $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" && \
 	echo "Uploading released binaries to $(BINARIES_PATH)"
 	@cd $(BINARIES_PATH) && \
-	git checkout $(BRANCH) && \
+	git checkout $(BINARIES_BRANCH) && \
 	git pull && \
 	git add $(PROD_BASE_NAME)* && \
 	echo -n $$VERSION | $(MAGICK) -font Helvetica -pointsize 30 -size 68x24  label:@- -transparent white version.png && \
 	(COMMIT_MESSAGE="Latest binaries for Lantern $$VERSION ($$TAG_COMMIT)." && \
 	git add . && \
 	git commit -m "$$COMMIT_MESSAGE" && \
-	git push origin $(BRANCH) \
+	git push origin $(BINARIES_BRANCH) \
 	) || true
 	
 release-autoupdate: require-version

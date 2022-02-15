@@ -39,8 +39,6 @@ class Conversation extends StatefulWidget {
 
 class ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
-  static final dayFormat = intl.DateFormat.yMMMMd();
-
   ConversationState({required this.showContactEditingDialog});
 
   bool showContactEditingDialog;
@@ -570,11 +568,12 @@ class ConversationState extends State<Conversation>
         var listItems = <Object>[];
         String? priorDate;
         originalMessageRecords.forEach((messageRecord) {
-          final date = dayFormat.format(
-            DateTime.fromMillisecondsSinceEpoch(
-              messageRecord.value.ts.toInt(),
-            ),
+          final locale = Localization.locale;
+          final ts = DateTime.fromMillisecondsSinceEpoch(
+            messageRecord.value.ts.toInt(),
           );
+          final date = intl.DateFormat.yMMMMd(locale).format(ts);
+
           if (priorDate != null && date != priorDate) {
             listItems.add(priorDate.toString());
           }
