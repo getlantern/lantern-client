@@ -73,20 +73,21 @@ public class LanternService extends Service implements Runnable {
     public int onStartCommand(Intent intent, int flags, int startId) {
         boolean autoBooted = intent != null && intent.getBooleanExtra(AUTO_BOOTED, false);
         Logger.debug(TAG, "Called onStartCommand, autoBooted?: " + autoBooted);
+
+        Logger.debug(TAG, "Starting LanternService in foreground so that message processing continues even when UI is closed");
+        helper.makeForeground();
+
         if (autoBooted) {
             boolean hasOnboarded = new Boolean(true)
                     .equals(LanternApp.messaging.messaging.getDb().get("onBoardingStatus"));
             if (!hasOnboarded) {
-                Logger.debug(TAG, "Attempted to auto boot but user has not onboarded to messaging, stop service");
+                Logger.debug(TAG, "Attempted to auto boot but user has not onboarded to messaging, stop LanternService");
                 stopSelf();
                 return START_NOT_STICKY;
             }
         }
 
         if (started.compareAndSet(false, true)) {
-            Logger.debug(TAG, "Starting Lantern service in foreground so that message processing continues even when UI is closed");
-            helper.makeForeground();
-
             Logger.d(TAG, "Starting Lantern service thread");
             thread = new Thread(this, "LanternService");
             thread.start();
