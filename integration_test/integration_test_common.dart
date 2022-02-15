@@ -13,7 +13,7 @@ extension DriverExtension on FlutterDriver {
   static var dirPath = '';
 
   Future<void> initScreenshotsDirectory(String testName) async {
-    dirPath = 'screenshots/$currentLocale/$testName';
+    dirPath = 'screenshots/$simulatedLocale/$testName';
     final directory = Directory(dirPath);
     if (await directory.exists()) await directory.delete(recursive: true);
     await directory.create();
