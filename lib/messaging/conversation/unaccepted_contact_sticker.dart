@@ -66,7 +66,7 @@ class UnacceptedContactSticker extends StatelessWidget {
                   },
                 ).show(context),
                 child: CText(
-                  'Delete'.i18n.toUpperCase(),
+                  'delete'.i18n.toUpperCase(),
                   style: tsButton,
                 ),
               ),
@@ -103,7 +103,7 @@ class UnacceptedContactSticker extends StatelessWidget {
                   },
                 ).show(context),
                 child: CText(
-                  'Block'.i18n.toUpperCase(),
+                  'block'.i18n.toUpperCase(),
                   style: tsButton,
                 ),
               ),
@@ -129,7 +129,7 @@ class UnacceptedContactSticker extends StatelessWidget {
                   }
                 },
                 child: CText(
-                  'Accept'.i18n.toUpperCase(),
+                  'accept'.i18n.toUpperCase(),
                   style: tsButtonBlue,
                 ),
               ),

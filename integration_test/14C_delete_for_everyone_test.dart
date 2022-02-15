@@ -15,6 +15,8 @@ Future<void> main() async {
     await driver.close();
   });
 
+  // Test requirements
+  // * Needs only one message having the _just now_ timestamp
   group(testName, () {
     test(
       'Delete for everyone',

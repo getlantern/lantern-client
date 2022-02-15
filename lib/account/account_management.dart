@@ -115,7 +115,7 @@ class _AccountManagementState extends State<AccountManagement>
                     title: 'delete_chat_data'.i18n,
                     description: 'delete_chat_data_description'.i18n,
                     checkboxLabel: 'delete_chat_data_confirmation'.i18n,
-                    agreeText: 'Delete'.i18n,
+                    agreeText: 'delete'.i18n,
                     agreeAction: () async {
                       await messagingModel.wipeData();
                       await context.router.pop();
@@ -123,7 +123,7 @@ class _AccountManagementState extends State<AccountManagement>
                     },
                   ).show(context),
                   child: CText(
-                    'Delete'.i18n.toUpperCase(),
+                    'delete'.i18n.toUpperCase(),
                     style: tsButtonPink,
                   ),
                 ),
