@@ -19,34 +19,40 @@ Future<void> main() async {
     test(
       'Test disappearing messages settings',
       () async {
-        await driver.tapFirstItemInList('chats_messages_list');
+        await driver.tapFAB();
+
+        await driver.tapFirstItemInList('grouped_contact_list');
 
         await driver.typeAndSend(
-          'Initially all messages disappear after 24 hours.',
-          overwriteTimeout: veryLongWaitTimeout,
+          await driver.requestData('test_disappearing_messages_1'),
+          overwriteTimeout: longWaitTimeout,
         );
 
         await driver.tapKey(
           'conversation_topbar_more_menu',
-          overwriteTimeout: veryLongWaitTimeout,
+          overwriteTimeout: longWaitTimeout,
         );
 
         await driver.tapText(
-          'Disappearing Messages',
-          overwriteTimeout: veryLongWaitTimeout,
+          await driver.requestData('disappearing_messages'),
+          overwriteTimeout: longWaitTimeout,
+        );
+
+        // TODO: hack
+        final five = await driver.requestData('5');
+        final seconds =
+            (await driver.requestData('longform_seconds')).split(' ')[1];
+        await driver.tapText(
+          '$five $seconds',
+          overwriteTimeout: longWaitTimeout,
         );
 
         await driver.tapText(
-          '5 seconds',
-          overwriteTimeout: veryLongWaitTimeout,
+          (await driver.requestData('set')).toUpperCase(),
         );
 
-        await driver.tapText(
-          'SET',
-        );
-
-        await driver
-            .typeAndSend('Now this message should disappear very soon!');
+        await driver.typeAndSend(
+            await driver.requestData('test_disappearing_messages_2'));
 
         await driver.waitForSeconds(5);
         await driver.saveScreenshot('final');

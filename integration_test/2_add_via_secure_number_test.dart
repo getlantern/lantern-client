@@ -21,9 +21,7 @@ Future<void> main() async {
       () async {
         await driver.screenshotCurrentView();
 
-        await driver.tapFAB(
-          waitText: await driver.requestData('new_chat'),
-        );
+        await driver.tapFAB();
 
         await driver.tapText(
           await driver.requestData('add_via_chat_number'),

@@ -1000,11 +1000,17 @@ msgstr "Name Your File"
 msgid "upload"
 msgstr "Upload"
 
-msgid "dummyText"
+msgid "test_text"
 msgstr "I want to eat some pizza 🍕 😊"
 
-msgid "dummyHello"
+msgid "test_hello"
 msgstr "Hi how are you?" 
 
-msgid "dummyReply"
+msgid "test_reply"
 msgstr "Actually no, I think I am in the mood for sushi today!"
+
+msgid "test_disappearing_messages_1"
+msgstr "Initially all messages disappear after 24 hours."
+
+msgid "test_disappearing_messages_2"
+msgstr "Now this message should disappear very soon!"

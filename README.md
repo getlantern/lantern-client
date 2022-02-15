@@ -103,8 +103,9 @@ You can run integration tests from the integration_test directory against a live
 
 1. Run the app with these additional run arguments `--dart-define=driver=true --observatory-port 8888 --disable-service-auth-codes`
 2. Run the integration test as a dart application and specify the environment variable `VM_SERVICE_URL=http://127.0.0.1:8888`
-3. Start by running `1_enroll_leave_me_note_test.dart`  
-4. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
+3. When running tests in different locales, change `const currentLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale, and then run `change_language_test.dart`.
+4. Start by running `1_enroll_leave_me_note_test.dart`  
+5. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
    1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
    2. `6B_request_flow_test` requires a message request to have just been received 
    3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
@@ -128,32 +129,6 @@ The tests should transparently setup and teardown the dummy server but you need 
 * For testing all `android/app/src/androidTest` tests, run `./gradlew :app:connectedAndroidTest`
 * For testing a specific an `androidTest` test, easiest is to open that file in Android Studio and clicking on the green play button next to the test
 * For testing the internalsdk package, run `cd ./internalsdk && go test ./...`
-
-#### Testing with VSCode
-
-To run the unit test you need to input the following setup.
-- Create a folder on the root of your project named: `.vscode`
-- Inside .vscode create a file named: `launch.json`
-- Add the following inside `launch.json`
-- The segment named `program` is to specificy if you wish to run all the U.T or a specific one.
-
-```json
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Widget Test",
-            "program": "test/",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "debug",
-            "args": [
-              "--coverage"
-            ]
-          }
-    ]
-}
-```
 
 #### Unit Test Graph
 
@@ -364,28 +339,9 @@ If you like that VSCode start running the project without the need of be constan
 
 ```json
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Debug",
-            "program": "lib/main.dart",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "debug",
-            "args": ["--no-sound-null-safety"]
-        }
-    ]
-}
-```
-
-## Debugging with VSCode
-
-Create this `.vscode/launch.json` file: 
-
-```
-{
+  "version": "0.2.0",
   "configurations": [
-    {
+      {
       "name": "Debug",
       "program": "lib/main.dart",
       "request": "launch",

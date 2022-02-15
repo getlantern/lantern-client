@@ -23,19 +23,16 @@ Future<void> main() async {
       () async {
         await driver.tapText(
           await driver.requestData('Account'),
-          waitText: await driver.requestData('Account'),
           overwriteTimeout: defaultWaitTimeout,
           skipScreenshot: true,
         );
         await driver.tapText(
           await driver.requestData('settings'),
-          waitText: await driver.requestData('settings'),
           overwriteTimeout: defaultWaitTimeout,
           skipScreenshot: true,
         );
         await driver.tapText(
           await driver.requestData('language'),
-          waitText: await driver.requestData('language'),
           overwriteTimeout: defaultWaitTimeout,
           skipScreenshot: true,
         );

@@ -20,7 +20,7 @@ Future<void> main() async {
     test(
       'Accept an introduction',
       () async {
-        await driver.tapText(await driver.requestData('Introductions'));
+        await driver.tapText(await driver.requestData('introductions'));
 
         await driver
             .tapText((await driver.requestData('reject')).toUpperCase());

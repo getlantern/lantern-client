@@ -26,7 +26,7 @@ Future<void> main() async {
 
         print('typing text');
         await driver.typeAndSend(
-          await driver.requestData('dummyHello'),
+          await driver.requestData('test_hello'),
         );
       },
       timeout: const Timeout(Duration(minutes: 5)),

@@ -42,7 +42,7 @@ Future<void> main() async {
 
         await driver.tapKey(
           'verification_badge',
-          overwriteTimeout: defaultWaitTimeout,
+          overwriteTimeout: longWaitTimeout,
         );
 
         await driver.tapText(

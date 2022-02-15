@@ -1,5 +1,4 @@
 import 'integration_test_common.dart';
-import 'integration_test_constants.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
@@ -23,11 +22,8 @@ Future<void> main() async {
       () async {
         await driver.resetFlagsAndEnrollAgain();
         await driver.tapFAB();
-        await driver.tapText(
-          await driver.requestData('me'),
-          overwriteTimeout: longWaitTimeout,
-        );
-        await driver.typeAndSend(await driver.requestData('dummyText'));
+        await driver.tapFirstItemInList('grouped_contact_list');
+        await driver.typeAndSend(await driver.requestData('test_text'));
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
