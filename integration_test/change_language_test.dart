@@ -1,6 +1,8 @@
+import 'package:lantern/i18n/localization_constants.dart';
+import 'package:intl/intl.dart';
+
 import 'integration_test_common.dart';
 import 'integration_test_constants.dart';
-import 'package:intl/intl.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
