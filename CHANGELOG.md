@@ -1,15 +1,4 @@
 
-<a name="6.9.9"></a>
-## [6.9.9](https://github.com/getlantern/android-lantern/compare/6.9.8...6.9.9)
-
-> 2022-02-15
-
-### Pull Requests
-
-* Merge pull request [#710](https://github.com/getlantern/android-lantern/issues/710) from getlantern/kr/dialogBugPlusDateMarkers
-* Merge pull request [#709](https://github.com/getlantern/android-lantern/issues/709) from getlantern/ox/issue707
-
-
 <a name="6.9.8"></a>
 ## [6.9.8](https://github.com/getlantern/android-lantern/compare/6.9.7...6.9.8)
 
