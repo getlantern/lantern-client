@@ -10,9 +10,9 @@ class VoiceRecorder extends StatefulWidget {
   }) : super(key: key);
 
   final bool isRecording;
-  final VoidCallback onRecording;
-  final VoidCallback onStopRecording;
-  final Function onTapUpListener;
+  final Future<void> Function() onRecording;
+  final Future<void> Function() onStopRecording;
+  final Future<void> Function() onTapUpListener;
 
   @override
   _VoiceRecorderState createState() => _VoiceRecorderState();
@@ -65,12 +65,19 @@ class _VoiceRecorderState extends State<VoiceRecorder>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onPanDown: (details) {
-        animationController.forward(from: startingScale);
-        _onTapDown(details);
+      onPanDown: (details) async {
+        unawaited(animationController.forward(from: startingScale));
+        await widget.onRecording();
       },
-      onPanEnd: (details) {
-        _onTapEnd(details);
+      onPanEnd: (details) async {
+        await widget.onStopRecording();
+        setState(() {
+          scale = 1;
+        });
+      },
+      onTapUp: (details) async {
+        animationController.stop(canceled: true);
+        await widget.onTapUpListener();
         setState(() {
           scale = 1;
         });
@@ -103,8 +110,4 @@ class _VoiceRecorderState extends State<VoiceRecorder>
       ),
     );
   }
-
-  void _onTapEnd(DragEndDetails details) => widget.onStopRecording();
-
-  void _onTapDown(DragDownDetails details) => widget.onRecording();
 }
