@@ -568,11 +568,14 @@ class ConversationState extends State<Conversation>
         var listItems = <Object>[];
         String? priorDate;
         originalMessageRecords.forEach((messageRecord) {
-          final date = dayFormat.format(
-            DateTime.fromMillisecondsSinceEpoch(
-              messageRecord.value.ts.toInt(),
-            ),
+          final locale = Localization.locale;
+          final ts = DateTime.fromMillisecondsSinceEpoch(
+            messageRecord.value.ts.toInt(),
           );
+          final day_month = intl.DateFormat.MMMMd(locale).format(ts);
+          final year = intl.DateFormat.y(locale).format(ts);
+          final date = '$day_month $year';
+
           if (priorDate != null && date != priorDate) {
             listItems.add(priorDate.toString());
           }
