@@ -7,8 +7,8 @@ const contactNewName = 'Layla B';
 const renameContact = 'Benjamin D';
 const recoveryKey = '8k171bwe866wd4apxyxtu9e2r92tmcdbgar35ymjx6b4ymhymugy';
 
-// LOCALE RELATED
-const currentLocale = 'ar_EG';
+// * SET LOCALE WE WANT TO TEST HERE
+const currentLocale = 'fa_IR';
 
 // TODO: DRY this is just copied from i18n.dart
 const languages = [

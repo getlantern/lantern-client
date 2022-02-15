@@ -567,9 +567,9 @@ class MessagingModel extends Model {
 
   // * DEV AND TESTING PURPOSES
   static const dummyContactIds = [
-    'nw257m38dzgt51tb5af95pepc5nt8zzsbn6bhsqhmpb1s86h83ro',
-    'cjynhrycfaqqwkfejo94u7rkbq67dq6eum5fr5k9r2nabbo2n3ty',
-    'd816joqyxufd67pctyfffuszpuaf19ct1r1gcngr8mtzmzkxxpxy',
+    'f46zym45eke4yrcgj7yz9q9oa5kjtghrddn4ekrnf69333jjxbmy',
+    'a77ngft83zg3cg1b2hrr6yng31wn9xamu26spze5ojnot2bwmtto',
+    'gsg2wytn11sztcaomzbgse3focrdbtuthydr2pudbtmzngsn5tso',
   ];
 
   Future<void> resetTimestamps() {
@@ -588,9 +588,6 @@ class MessagingModel extends Model {
       }),
     );
   }
-
-  // pick the last of dummy contacts
-  final dummyIdentityKey = dummyContactIds.last;
 
   Future<void> saveDummyAttachment(
     String url,
@@ -616,10 +613,10 @@ class MessagingModel extends Model {
         return value as Uint8List;
       });
 
-      // send to direct contact
+      // send to the first of the 3 dummy direct contact
       return methodChannel
           .invokeMethod('sendToDirectContact', <String, dynamic>{
-        'identityKey': dummyIdentityKey,
+        'identityKey': dummyContactIds.first,
         'attachments': [attachment],
       });
     } catch (e) {

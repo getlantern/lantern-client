@@ -21,16 +21,18 @@ Future<void> main() async {
       () async {
         await driver.screenshotCurrentView();
 
-        await driver.tapFirstItemInList('chats_messages_list');
+        await driver.tapFAB();
+
+        await driver.tapFirstItemInList('grouped_contact_list');
 
         await driver.tapType(
           'CallAction',
-          overwriteTimeout: defaultWaitTimeout,
+          overwriteTimeout: longWaitTimeout,
         );
 
         await driver.tapText(
           await driver.requestData('call'),
-          overwriteTimeout: defaultWaitTimeout,
+          overwriteTimeout: longWaitTimeout,
         );
 
         await driver.waitForSeconds(2);

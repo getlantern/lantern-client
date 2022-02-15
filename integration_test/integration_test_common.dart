@@ -212,11 +212,9 @@ extension DriverExtension on FlutterDriver {
     }
   }
 
-  Future<void> scrollTextUntilVisible(
-    String text,
-  ) async {
-    print('scrolling until $text is visible');
+  Future<void> scrollTextUntilVisible(String text) async {
     try {
+      print('scrolling until $text is visible');
       final scrollable = find.byType('ListView');
       await waitFor(
         scrollable,
@@ -224,8 +222,8 @@ extension DriverExtension on FlutterDriver {
       );
       await scrollUntilVisible(
         scrollable,
-        find.text(text),
-        dyScroll: -1000,
+        find.text(await requestData(text)),
+        dyScroll: -500,
         timeout: const Duration(
           seconds: 600,
         ),

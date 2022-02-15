@@ -21,7 +21,7 @@ Future<void> main() async {
       () async {
         print('making sure we have enough contacts');
         await driver.tapText(
-          await driver.requestData('developer'),
+          await driver.requestData('Developer'),
           skipScreenshot: true,
         );
 
@@ -53,7 +53,8 @@ Future<void> main() async {
           overwriteTimeout: longWaitTimeout,
         );
 
-        await driver.tapText('SEND INTRODUCTIONS');
+        await driver.tapText(
+            (await driver.requestData('send_introductions')).toUpperCase());
 
         // we are now back in Chats, go to first message to see our sent invitation
         await driver.tapFirstItemInList('chats_messages_list');

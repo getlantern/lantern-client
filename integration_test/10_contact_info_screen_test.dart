@@ -17,21 +17,25 @@ Future<void> main() async {
 
   group(testName, () {
     test(
-      '1/3 Access a contact info screen via long tap',
+      '1/2 Access a contact info screen via long tap',
       () async {
         await driver.screenshotCurrentView();
 
-        await driver.longPressFirstItemInList('chats_messages_list');
+        await driver.longPressFirstItemInList(
+          'chats_messages_list',
+        );
 
         await driver.tapText(
           await driver.requestData('view_contact_info'),
-          overwriteTimeout: defaultWaitTimeout,
+          overwriteTimeout: longWaitTimeout,
         );
+
+        await driver.waitForSeconds(5);
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
     test(
-      '2/3 Access a contact info screen via top right menu',
+      '2/2 Access a contact info screen via top right menu',
       () async {
         await driver.goBack();
 
@@ -40,12 +44,12 @@ Future<void> main() async {
         print('tap on top right menu bar');
         await driver.tapKey(
           'conversation_topbar_more_menu',
-          overwriteTimeout: defaultWaitTimeout,
+          overwriteTimeout: longWaitTimeout,
         );
 
         await driver.tapText(
           await driver.requestData('view_contact_info'),
-          overwriteTimeout: defaultWaitTimeout,
+          overwriteTimeout: longWaitTimeout,
         );
       },
       timeout: const Timeout(Duration(minutes: 5)),
