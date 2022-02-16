@@ -336,23 +336,4 @@ extension DriverExtension on FlutterDriver {
   Future<void> longPressFirstItemInList(String list_key) async {
     await longPress(target: await fistItemFinder(list_key));
   }
-
-  /// sets the UI to the specified language lang
-  Future<void> setUIlanguage(String lang) async {
-    await tapText(
-      'Account',
-      waitText: 'Account',
-    );
-    await tapText(
-      'Settings',
-      waitText: 'Settings',
-    );
-    await tapText(
-      'Language',
-      waitText: 'Language',
-    );
-    await scrollTextUntilVisible(lang);
-    await tapText(lang);
-    await waitForSeconds(2);
-  }
 }
