@@ -314,13 +314,13 @@ extension DriverExtension on FlutterDriver {
 
   /// finds first item of descendants in list with given list_key
   Future<SerializableFinder> fistItemFinder(String list_key) async {
-    final chats_messages_list = find.byValueKey(list_key);
-    final first_message = find.descendant(
-      of: chats_messages_list,
+    final list = find.byValueKey(list_key);
+    final firstItem = find.descendant(
+      of: list,
       matching: find.byType('ListItemFactory'),
       firstMatchOnly: true,
     );
-    return first_message;
+    return firstItem;
   }
 
   /// taps first item of descendants in list with given list_key

@@ -8,4 +8,4 @@ const renameContact = 'Benjamin D';
 const recoveryKey = '8k171bwe866wd4apxyxtu9e2r92tmcdbgar35ymjx6b4ymhymugy';
 
 // * SET LOCALE WE WANT TO TEST HERE
-const simulatedLocale = 'fa_IR';
+const simulatedLocale = 'en_US';
