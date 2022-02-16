@@ -458,10 +458,16 @@ msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
 msgid "chat_number_not_found"
-msgstr "Unable to find chat number, please check the number and try again"
+msgstr ""
+"Chat Number not found."
+"\n"
+"Please check the number you entered and try again."
 
 msgid "unable_to_add_contact"
-msgstr "Contact not found, check the number and try again"
+msgstr ""
+"Contact not found."
+"\n"
+"Check the number you entered and try again."
 
 msgid "self_adding"
 msgstr "The Chat Number you entered belongs to you"
