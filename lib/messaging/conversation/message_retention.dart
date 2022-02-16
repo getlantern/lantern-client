@@ -11,7 +11,7 @@ class MessageRetention extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsetsDirectional.only(top: 8, bottom: 20),
+      padding: const EdgeInsetsDirectional.only(top: 8, bottom: 10),
       child: FittedBox(
         fit: BoxFit.none,
         child: Container(
