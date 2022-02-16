@@ -48,8 +48,6 @@ var (
 	// XXX mobile does not respect the autoupdate global config
 	updateClient = &http.Client{Transport: proxied.ChainedThenFrontedWith("")}
 
-	defaultLocale = `en-US`
-
 	startOnce sync.Once
 
 	clEventual               = eventual.NewValue()

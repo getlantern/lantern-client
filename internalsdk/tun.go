@@ -1,6 +1,7 @@
 package internalsdk
 
 import (
+	"io"
 	"os"
 	"runtime"
 	"sync"
@@ -21,7 +22,7 @@ var (
 // Tun2Socks wraps the TUN device identified by fd with tun2socks proxy that
 // does the following:
 //
-// 1. dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
+// 1. captured dns packets (any UDP packets to capturedDNSAddr) are routed to dnsGrabAddr
 // 2. All other udp packets are routed directly to their destination
 // 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
 //
@@ -49,18 +50,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int) error {
 	currentIPStack = ipStack
 	currentIPStackMx.Unlock()
 
-	b := make([]byte, mtu)
-	for {
-		n, err := dev.Read(b)
-		if err != nil {
-			return err
-		}
-		if p, err := parseIPPacket(b[:n]); err != nil {
-			log.Errorf("Error parsing packet: %v", err)
-		} else {
-			log.Debugf("received packet  %d   %v -> %v", p.ipProto, p.srcAddr, p.dstAddr)
-		}
-	}
+	_, err = io.CopyBuffer(ipStack, dev, make([]byte, mtu))
 	return err
 }
 
