@@ -806,9 +806,15 @@ msgid "audio"
 msgstr "Audio"
 
 msgid "image"
+msgstr "Image"
+
+msgid "images"
 msgstr "Images"
 
 msgid "video"
+msgstr "Video"
+
+msgid "videos"
 msgstr "Videos"
 
 msgid "app"
