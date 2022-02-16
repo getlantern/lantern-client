@@ -719,10 +719,10 @@ msgid "recovery_error"
 msgstr "Unable to recover your account."
 
 msgid "recovery_input_error"
-msgstr " Please make sure you are entering a valid recovery key"
+msgstr "Make sure you entered a valid recovery key"
 
 msgid "recovery_retrieval_error"
-msgstr "Something went wrong while retrieving your recovery key"
+msgstr "Something went wrong while recovering your account"
 
 msgid "recovery_success"
 msgstr "You have successfully recovered your Chat Number"
