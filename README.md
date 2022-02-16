@@ -103,9 +103,10 @@ You can run integration tests from the integration_test directory against a live
 
 1. Run the app with these additional run arguments `--dart-define=driver=true --observatory-port 8888 --disable-service-auth-codes`
 2. Run the integration test as a dart application and specify the environment variable `VM_SERVICE_URL=http://127.0.0.1:8888`
-3. When running tests in different locales, change `const currentLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale, and then run `change_language_test.dart`.
-4. Start by running `1_enroll_leave_me_note_test.dart`  
-5. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
+3. When running tests in different locales, change `const simulatedLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale. 
+4. Go to SETTINGS view and then run `change_language_test.dart`.
+5. Start by running `1_enroll_leave_me_note_test.dart`  
+6. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
    1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
    2. `6B_request_flow_test` requires a message request to have just been received 
    3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
@@ -118,6 +119,8 @@ WARNING - when running with flutter driver enabled, the on-screen keyboard does 
 WARNING - if you try to run an instance of the app using `--observatory-port` and you already have another instance running with that same observatory-port, the 2nd instance will hang on launch because flutter cannot bind to that port.
 
 TODO: we need to automate the running of integration tests in a CI environment using Flutter driver.
+
+NOTE ⚠ : Flutter driver is borderline maintained and clearly the expectation is to move to using `integration_test`. [Here](https://github.com/flutter/flutter/issues/12810) is a good depiction of related conversations. 
 
 ##### Testing Replica
 A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.

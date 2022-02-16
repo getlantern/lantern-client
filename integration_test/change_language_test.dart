@@ -19,22 +19,13 @@ Future<void> main() async {
     await driver.close();
   });
 
+  // * You need to be on Settings Screen to run this test
   group(testName, () {
     test(
       'Set language to $lang',
       () async {
         await driver.tapText(
-          await driver.requestData('Account'),
-          overwriteTimeout: defaultWaitTimeout,
-          skipScreenshot: true,
-        );
-        await driver.tapText(
-          await driver.requestData('settings'),
-          overwriteTimeout: defaultWaitTimeout,
-          skipScreenshot: true,
-        );
-        await driver.tapText(
-          await driver.requestData('language'),
+          lang.toUpperCase(),
           overwriteTimeout: defaultWaitTimeout,
           skipScreenshot: true,
         );
