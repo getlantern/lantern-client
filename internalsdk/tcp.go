@@ -1,7 +1,6 @@
 package internalsdk
 
 import (
-	"context"
 	"io"
 	"net"
 	"sync"
@@ -9,7 +8,6 @@ import (
 	"golang.org/x/net/proxy"
 
 	"github.com/eycorsican/go-tun2socks/core"
-	"github.com/getlantern/netx"
 )
 
 // Copied and lightly modified from https://github.com/eycorsican/go-tun2socks/blob/master/proxy/socks/udp.go
@@ -86,18 +84,7 @@ func (h *socksTCPHandler) relay(lhs, rhs net.Conn) {
 	<-upCh // Wait for uplink done.
 }
 
-type netxDialer struct{}
-
-func (d *netxDialer) Dial(network, addr string) (net.Conn, error) {
-	return netx.Dial(network, addr)
-}
-
-func (d *netxDialer) DialContext(ctx context.Context, network, addr string) (net.Conn, error) {
-	return netx.DialContext(ctx, network, addr)
-}
-
 func (h *socksTCPHandler) Handle(conn net.Conn, target *net.TCPAddr) error {
-	log.Debugf("Using SOCKS proxy at %v to dial %v", h.proxyAddr, target)
 	dialer, err := proxy.SOCKS5("tcp", h.proxyAddr, nil, nil)
 	if err != nil {
 		return err
@@ -109,8 +96,6 @@ func (h *socksTCPHandler) Handle(conn net.Conn, target *net.TCPAddr) error {
 	}
 
 	go h.relay(conn, c)
-
-	log.Debugf("new proxy connection to %v", target)
 
 	return nil
 }
