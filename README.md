@@ -111,7 +111,8 @@ You can run integration tests from the integration_test directory against a live
    2. `6B_request_flow_test` requires a message request to have just been received 
    3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
    4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
-
+7. We will have some duplicate screenshots in there - run `python3 scripts/find_dups.py [your android-lantern-path]/screenshots/` to deduplicate.
+  
 This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
 
 WARNING - when running with flutter driver enabled, the on-screen keyboard does not work.
