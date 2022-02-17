@@ -9,12 +9,12 @@ paths_hashes = []
 
 # create list of file paths and their hashes
 for subdir, dirs, files in os.walk(rootdir):
-    for file in files:
-        filePath = os.path.join(subdir, file)
-        if (filePath.endswith(".DS_Store")) | (filePath.endswith(".py")): 
-          break
-        fileHash = imagehash.average_hash(Image.open(filePath))
-        paths_hashes.append([filePath, str(fileHash)])
+  for file in files:
+    filePath = os.path.join(subdir, file)
+    if (filePath.endswith(".DS_Store")): 
+      break
+    fileHash = imagehash.average_hash(Image.open(filePath))
+    paths_hashes.append([filePath, str(fileHash)])
 
 # find and delete duplicates
 prevHash = ""
