@@ -12,7 +12,7 @@ Future<void> main() async {
   setUpAll(() async {
     // Connect to a running Flutter application instance.
     driver = await FlutterDriver.connect(timeout: const Duration(seconds: 15));
-    await driver.initScreenshotsDirectory(testName);
+    await driver.initLocaleFolders();
   });
 
   tearDownAll(() async {
@@ -24,17 +24,11 @@ Future<void> main() async {
     test(
       'Set language to $lang',
       () async {
-        await driver.tapText(
-          lang.toUpperCase(),
-          overwriteTimeout: defaultWaitTimeout,
-          skipScreenshot: true,
-        );
+        // we are not using the common driver methods since we don't want to save screenshots
+        final languageFinder = await driver.fistItemFinder('settings_list');
+        await driver.tap(languageFinder);
         await driver.scrollTextUntilVisible(lang);
-        await driver.tapText(
-          lang,
-          overwriteTimeout: defaultWaitTimeout,
-          skipScreenshot: true,
-        );
+        await driver.tap(find.text(lang));
         await driver.waitForSeconds(2);
       },
       timeout: const Timeout(Duration(minutes: 5)),

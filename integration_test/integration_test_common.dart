@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:lantern/common/add_nonbreaking_spaces.dart';
+import 'package:lantern/i18n/localization_constants.dart';
 import 'package:path/path.dart';
 
 import 'integration_test_constants.dart';
@@ -10,20 +11,32 @@ export 'package:test/test.dart';
 
 extension DriverExtension on FlutterDriver {
   static var screenshotSequence = 0;
-  static var dirPath = '';
+  // screenshots for a given test are saved here
+  static var currentTestDirPath = '';
 
+  /// iterates through our array of available locales and creates a folder for each locale
+  Future<void> initLocaleFolders() async {
+    languages.forEach((lang) async {
+      final directory = Directory('screenshots/$lang');
+      if (await directory.exists()) return;
+      await directory.create();
+    });
+  }
+
+  /// deletes and re-creates currentTestDirPath each time the test is run
   Future<void> initScreenshotsDirectory(String testName) async {
-    dirPath = 'screenshots/$simulatedLocale/$testName';
-    final directory = Directory(dirPath);
+    currentTestDirPath = 'screenshots/$simulatedLocale/$testName';
+    final directory = Directory(currentTestDirPath);
     if (await directory.exists()) await directory.delete(recursive: true);
     await directory.create();
   }
 
+  /// saves screenshots to currentTestDirPath directory
   Future<void> saveScreenshot(String name) async {
     try {
       final png = await screenshot();
       final screenshotName = join(
-        dirPath,
+        currentTestDirPath,
         '${++screenshotSequence}_$name.png',
       );
       final file = File(screenshotName);
