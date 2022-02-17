@@ -220,7 +220,7 @@ extension DriverExtension on FlutterDriver {
     } finally {
       if (skipScreenshot == true) return;
       await saveScreenshot(
-        'tap $finder wait for $waitText',
+        'tap_${finder}_wait_for_$waitText',
       );
     }
   }
