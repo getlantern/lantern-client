@@ -28,7 +28,7 @@ Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`
 
 All those dependencies must be in your PATH
 
-* Java 11 or greater
+* Java 8 or greater (for Android to work)
 * [Android Studio](https://developer.android.com/studio)
 * [Git](https://git-scm.com/downloads)
 * [Android NDK](#steps-to-run-the-project)
@@ -43,11 +43,10 @@ All those dependencies must be in your PATH
 
 In the welcome screen choose the "Open an existing Android Studio" option and select the `android` folder.
 
-You'll need the liblantern-all.aar containing the Go back-end code in order for the project to compile. That file is built automatically.
-
 Do this the first time your run the project:
 
 * Install all prerequisites
+* You'll need the liblantern-all.aar containing the Go backend code in order for the project to compile. Build it with `make android-lib-debug ANDROID_ARCH=all` (see "Building the InternalSdk" section below for more info)
 * Run `git submodule update --init --recursive`
 * Run `git lfs install && git pull`
 * Go to the **SDK MANAGER**
@@ -73,6 +72,9 @@ Do this the first time your run the project:
 * `flutter run --flavor prod`
 
 Or, run it from Android Studio if you're using that.
+
+You can build an emulator with `./scripts/run_avd.rb`. Here's an example run: `./scripts/run_avd.rb --level=30 --abi=x86 --use_google_apis --window`.
+You'll need Ruby >= 2.3 installed and `colorize` gem (i.e., `gem install colorize`).
 
 #### Flutter Logging
 
