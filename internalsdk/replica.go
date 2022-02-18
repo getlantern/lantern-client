@@ -85,7 +85,6 @@ func NewReplicaServer(handler *replicaServer.HttpHandler) (net.Listener, *http.S
 	r.PathPrefix("/replica").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.StripPrefix("/replica", handler).ServeHTTP(w, r)
 	})
-	r.Handle("/", r)
 	// Listen on a random TCP port
 	l, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
