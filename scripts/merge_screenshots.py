@@ -2,6 +2,16 @@ import sys
 from PIL import Image
 import os
 
+padding = 100
+
+def add_margin(pil_img, top, right, bottom, left, color):
+    width, height = pil_img.size
+    new_width = width + right + left
+    new_height = height + top + bottom
+    result = Image.new(pil_img.mode, (new_width, new_height), color)
+    result.paste(pil_img, (left, top))
+    return result
+
 def merge_images_from_dir(dirPath):
   for subsubdir, _, files in os.walk(dirPath):
     filePaths = []
@@ -15,7 +25,6 @@ def merge_images_from_dir(dirPath):
 
     if (len(filePaths) > 0):
       img = Image.open(filePaths[0])
-      padding = 100
       (imgWidth, imgHeight) = img.size
       # calculate width
       stitched_gallery_width = (len(filePaths) - 1) * imgWidth + padding * (len(filePaths) - 1)
@@ -34,12 +43,25 @@ def merge_images_from_dir(dirPath):
         index +=1
       return stitched_gallery
 
-# "/Users/kallirroiretzepi/Documents/code/android-lantern/screenshots/en_US"
+# example path: /Users/kallirroiretzepi/Documents/code/android-lantern/screenshots/en_US
 dirPath = sys.argv[1]
+# create /stitched/ directory
+stichedDirPath = dirPath + "/stitched"
+try: 
+  os.mkdir(stichedDirPath)
+except: 
+  print(stichedDirPath, "folder exists")
+
 for subdir, dirs, files in os.walk(dirPath):
-  result = merge_images_from_dir(subdir) 
-  if result is not None:
-    try:
-      result.save(subdir  + "_stitched.png") 
-    except:
-      print("something went wrong")
+  for directory in dirs:
+    if (directory == "stitched"): 
+      break
+    result = merge_images_from_dir(dirPath + "/" + directory) 
+    if result is not None:
+      try:
+        stitchedLocale = stichedDirPath + "/" + directory.split("/")[-1]
+        print("saving", stitchedLocale)
+        padded_result = add_margin(result, padding, 0, padding, padding, (0,0,0))
+        padded_result.save(stitchedLocale+"_stitched.png") 
+      except:
+        print("something went wrong with", stitchedLocale)
