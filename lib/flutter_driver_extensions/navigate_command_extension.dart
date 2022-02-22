@@ -21,7 +21,7 @@ class NavigateCommandExtension extends CommandExtension {
 
     switch (navigateCommand.path) {
       case NavigateCommand.home:
-        unawaited(navigatorKey.currentContext?.pushRoute(Home()));
+        navigatorKey.currentContext?.router?.popUntilRoot();
         return const NavigateCommandResult(true);
     }
 

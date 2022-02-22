@@ -25,13 +25,12 @@ Future<void> main() async {
 
         // TODO: cheating here
         print('open message request');
-        await driver.tapText(
-          await driver.requestData('just_now'),
-        );
+        await driver.tapText('just_now');
 
         await driver.captureScreenshotDuringFuture(
           futureToScreenshot: driver.tapText(
-            (await driver.requestData('accept')).toUpperCase(),
+            'accept',
+            capitalize: true,
             overwriteTimeout: longWaitTimeout,
           ),
           screenshotTitle: 'naming new contact',

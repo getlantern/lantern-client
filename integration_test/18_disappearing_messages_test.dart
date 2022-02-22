@@ -24,7 +24,7 @@ Future<void> main() async {
         await driver.tapFirstItemInList('grouped_contact_list');
 
         await driver.typeAndSend(
-          await driver.requestData('test_disappearing_messages_1'),
+          'test_disappearing_messages_1',
           overwriteTimeout: longWaitTimeout,
         );
 
@@ -34,7 +34,7 @@ Future<void> main() async {
         );
 
         await driver.tapText(
-          await driver.requestData('disappearing_messages'),
+          'disappearing_messages',
           overwriteTimeout: longWaitTimeout,
         );
 
@@ -47,12 +47,9 @@ Future<void> main() async {
           overwriteTimeout: longWaitTimeout,
         );
 
-        await driver.tapText(
-          (await driver.requestData('set')).toUpperCase(),
-        );
+        await driver.tapText('set', capitalize: true);
 
-        await driver.typeAndSend(
-            await driver.requestData('test_disappearing_messages_2'));
+        await driver.typeAndSend('test_disappearing_messages_2');
 
         await driver.waitForSeconds(5);
         await driver.saveScreenshot('final');

@@ -1,35 +1,16 @@
 import 'integration_test_common.dart';
 
 Future<void> main() async {
-  late FlutterDriver driver;
-  final testName = 'send_first_message';
+  await runTest(
+    (driver) async {
+      await driver.openTab('chats', homeFirst: true);
 
-  setUpAll(() async {
-    // Connect to a running Flutter application instance.
-    driver = await connect();
-    await driver.initScreenshotsDirectory(testName);
-  });
+      await driver.tapFAB();
 
-  tearDownAll(() async {
-    await driver.close();
-  });
+      await driver.tapFirstItemInList('grouped_contact_list');
 
-  group(testName, () {
-    test(
-      'Send first message',
-      () async {
-        await driver.screenshotCurrentView();
-
-        await driver.tapFAB();
-
-        await driver.tapFirstItemInList('grouped_contact_list');
-
-        print('typing text');
-        await driver.typeAndSend(
-          await driver.requestData('test_hello'),
-        );
-      },
-      timeout: const Timeout(Duration(minutes: 5)),
-    );
-  });
+      print('typing text');
+      await driver.typeAndSend('test_hello');
+    },
+  );
 }

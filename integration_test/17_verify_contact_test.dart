@@ -22,7 +22,7 @@ Future<void> main() async {
       'Verify a contact via voice call',
       () async {
         await driver.tapText(
-          await driver.requestData('Developer'),
+          'Developer',
           skipScreenshot: true,
         );
 
@@ -34,7 +34,7 @@ Future<void> main() async {
         );
 
         print('go back to Chats');
-        await driver.tapText(await driver.requestData('chats'));
+        await driver.tapText('chats');
 
         await driver.tapFAB();
 
@@ -46,7 +46,7 @@ Future<void> main() async {
         );
 
         await driver.tapText(
-          await driver.requestData('verify_via_call'),
+          'verify_via_call',
           overwriteTimeout: defaultWaitTimeout,
         );
 
@@ -56,7 +56,8 @@ Future<void> main() async {
         );
 
         await driver.tapText(
-          (await driver.requestData('mark_as_verified')).toUpperCase(),
+          'mark_as_verified',
+          capitalize: true,
           overwriteTimeout: longWaitTimeout,
         );
       },
