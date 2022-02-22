@@ -20,6 +20,7 @@ Future<void> main() async {
     test(
       testName,
       () async {
+        await driver.home();
         await driver.resetFlagsAndEnrollAgain();
         await driver.tapText(
           await driver.requestData('Account'),
