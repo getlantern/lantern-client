@@ -29,7 +29,7 @@ def merge_images_from_dir(dirPath):
       # calculate width
       stitched_gallery_width = (len(filePaths)) * imgWidth + padding * (len(filePaths))
       # create Image instance
-      stitched_gallery = Image.new('RGB', (stitched_gallery_width, imgHeight))
+      stitched_gallery = Image.new('RGB', (stitched_gallery_width, imgHeight), (235, 235, 235))
       index = 0
 
       # sort list alphabetically since sometimes the paths aren't parsed in order
@@ -60,7 +60,7 @@ for subdir, dirs, files in os.walk(dirPath):
         try:
           stitchedLocale = stichedDirPath + "/" + directory.split("/")[-1]
           print("saving", stitchedLocale)
-          padded_result = add_margin(result, padding, 0, padding, padding, (0,0,0))
+          padded_result = add_margin(result, padding, 0, padding, padding, (235, 235, 235))
           padded_result.save(stitchedLocale+"_stitched.png") 
         except:
           print("something went wrong with", stitchedLocale)
