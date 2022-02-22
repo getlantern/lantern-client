@@ -21,7 +21,7 @@ Future<void> main() async {
       () async {
         print('making sure we have enough contacts');
         await driver.tapText(
-          await driver.requestData('Developer'),
+          'Developer',
           skipScreenshot: true,
         );
 
@@ -33,7 +33,7 @@ Future<void> main() async {
           skipScreenshot: true,
         );
         await driver.tapText(
-          await driver.requestData('chats'),
+          'chats',
           skipScreenshot: false,
         );
 
@@ -42,9 +42,7 @@ Future<void> main() async {
         );
 
         // click on Introduce contacts
-        await driver.tapText(
-          await driver.requestData('introduce_contacts'),
-        );
+        await driver.tapText('introduce_contacts');
 
         // HACK
         print('tap secret select all intros key');
@@ -53,8 +51,7 @@ Future<void> main() async {
           overwriteTimeout: longWaitTimeout,
         );
 
-        await driver.tapText(
-            (await driver.requestData('send_introductions')).toUpperCase());
+        await driver.tapText('send_introductions', capitalize: true);
 
         // we are now back in Chats, go to first message to see our sent invitation
         await driver.tapFirstItemInList('chats_messages_list');
