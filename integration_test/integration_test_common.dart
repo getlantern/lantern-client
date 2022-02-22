@@ -10,6 +10,13 @@ import 'integration_test_constants.dart';
 export 'package:flutter_driver/flutter_driver.dart';
 export 'package:test/test.dart';
 
+Future<FlutterDriver> connect({int port = 8888}) async {
+  return await FlutterDriver.connect(
+    dartVmServiceUrl: 'http://127.0.0.1:$port',
+    timeout: const Duration(seconds: 15),
+  );
+}
+
 extension DriverExtension on FlutterDriver {
   static var screenshotSequence = 0;
   // screenshots for a given test are saved here

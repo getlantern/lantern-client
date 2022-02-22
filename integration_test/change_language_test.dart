@@ -1,5 +1,5 @@
-import 'package:lantern/i18n/localization_constants.dart';
 import 'package:intl/intl.dart';
+import 'package:lantern/i18n/localization_constants.dart';
 
 import 'integration_test_common.dart';
 import 'integration_test_constants.dart';
@@ -11,7 +11,7 @@ Future<void> main() async {
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
-    driver = await FlutterDriver.connect(timeout: const Duration(seconds: 15));
+    driver = await connect();
     await driver.initLocaleFolders();
   });
 
