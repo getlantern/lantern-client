@@ -102,7 +102,7 @@ Package the AAR with `make android-lib-debug ANDROID_ARCH=all` (use `android-lib
 You can run integration tests from the integration_test directory against a live app using the following steps:
 
 1. Run the app with these additional run arguments `--dart-define=driver=true --observatory-port 8888 --disable-service-auth-codes`
-2. Run the integration test as a dart application and specify the environment variable `VM_SERVICE_URL=http://127.0.0.1:8888`
+2. Run the integration test as a dart application
 3. When running tests in different locales, change `const simulatedLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale. 
 4. Go to SETTINGS view and then run `change_language_test.dart`.
 5. All tests should start with testing device showing Chats tab.
