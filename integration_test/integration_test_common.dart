@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:lantern/common/add_nonbreaking_spaces.dart';
+import 'package:lantern/flutter_driver_extensions/navigate_command.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:path/path.dart';
 
@@ -19,8 +20,13 @@ Future<FlutterDriver> connect({int port = 8888}) async {
 
 extension DriverExtension on FlutterDriver {
   static var screenshotSequence = 0;
+
   // screenshots for a given test are saved here
   static var currentTestDirPath = '';
+
+  Future<void> home() async {
+    await sendCommand(NavigateCommand(NavigateCommand.home));
+  }
 
   /// iterates through our array of available locales and creates a folder for each locale
   Future<void> initLocaleFolders() async {
