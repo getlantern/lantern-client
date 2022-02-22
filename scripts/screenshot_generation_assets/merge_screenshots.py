@@ -45,7 +45,7 @@ def merge_images_from_dir(dirPath):
 
 # example path: /Users/kallirroiretzepi/Documents/code/android-lantern/screenshots/en_US
 dirPath = sys.argv[1]
-# create /stitched/ directory
+# create stitched/ directory
 stichedDirPath = dirPath + "/stitched"
 try: 
   os.mkdir(stichedDirPath)
