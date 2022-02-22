@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:lantern/common/add_nonbreaking_spaces.dart';
 import 'package:lantern/i18n/localization_constants.dart';
@@ -28,7 +29,7 @@ extension DriverExtension on FlutterDriver {
     currentTestDirPath = 'screenshots/$simulatedLocale/$testName';
     final directory = Directory(currentTestDirPath);
     if (await directory.exists()) await directory.delete(recursive: true);
-    await directory.create();
+    await directory.create(recursive: true);
   }
 
   /// saves screenshots to currentTestDirPath directory
