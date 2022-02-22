@@ -2,7 +2,7 @@ import 'integration_test_common.dart';
 
 Future<void> main() async {
   late FlutterDriver driver;
-  final testName = 'enroll_leave_Me_note';
+  final testName = 'chat_number_formats';
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
@@ -18,12 +18,18 @@ Future<void> main() async {
   // * Run this test first
   group(testName, () {
     test(
-      'Enroll and send message to myself',
+      testName,
       () async {
         await driver.resetFlagsAndEnrollAgain();
-        await driver.tapFAB();
-        await driver.tapFirstItemInList('grouped_contact_list');
-        await driver.typeAndSend(await driver.requestData('test_text'));
+        await driver.tapText(
+          await driver.requestData('Account'),
+        );
+
+        await driver.tapText(
+          await driver.requestData('account_management'),
+        );
+
+        await driver.tapFirstItemInList('account_management_free_list');
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

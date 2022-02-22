@@ -27,7 +27,7 @@ def merge_images_from_dir(dirPath):
       img = Image.open(filePaths[0])
       (imgWidth, imgHeight) = img.size
       # calculate width
-      stitched_gallery_width = (len(filePaths) - 1) * imgWidth + padding * (len(filePaths) - 1)
+      stitched_gallery_width = (len(filePaths)) * imgWidth + padding * (len(filePaths))
       # create Image instance
       stitched_gallery = Image.new('RGB', (stitched_gallery_width, imgHeight))
       index = 0
@@ -54,14 +54,13 @@ except:
 
 for subdir, dirs, files in os.walk(dirPath):
   for directory in dirs:
-    if (directory == "stitched"): 
-      break
-    result = merge_images_from_dir(dirPath + "/" + directory) 
-    if result is not None:
-      try:
-        stitchedLocale = stichedDirPath + "/" + directory.split("/")[-1]
-        print("saving", stitchedLocale)
-        padded_result = add_margin(result, padding, 0, padding, padding, (0,0,0))
-        padded_result.save(stitchedLocale+"_stitched.png") 
-      except:
-        print("something went wrong with", stitchedLocale)
+    if (directory != "stitched"): 
+      result = merge_images_from_dir(dirPath + "/" + directory) 
+      if result is not None:
+        try:
+          stitchedLocale = stichedDirPath + "/" + directory.split("/")[-1]
+          print("saving", stitchedLocale)
+          padded_result = add_margin(result, padding, 0, padding, padding, (0,0,0))
+          padded_result.save(stitchedLocale+"_stitched.png") 
+        except:
+          print("something went wrong with", stitchedLocale)
