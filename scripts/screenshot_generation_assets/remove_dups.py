@@ -1,4 +1,3 @@
-from ast import If
 import imagehash
 from PIL import Image
 import os
