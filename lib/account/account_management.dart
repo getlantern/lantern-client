@@ -136,6 +136,7 @@ class _AccountManagementState extends State<AccountManagement>
             ?
             // * FREE
             ListView(
+                key: const ValueKey('account_management_free_list'),
                 padding: const EdgeInsetsDirectional.only(
                   start: 16,
                   end: 16,

@@ -105,14 +105,15 @@ You can run integration tests from the integration_test directory against a live
 2. Run the integration test as a dart application and specify the environment variable `VM_SERVICE_URL=http://127.0.0.1:8888`
 3. When running tests in different locales, change `const simulatedLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale. 
 4. Go to SETTINGS view and then run `change_language_test.dart`.
-5. Start by running `1_enroll_leave_me_note_test.dart`  
-6. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
+5. All tests should start with testing device showing Chats tab.
+6. Start by running test `1A`.
+7. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
    1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
    2. `6B_request_flow_test` requires a message request to have just been received 
    3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
    4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
-7. We will have some duplicate screenshots in there - run `python3 scripts/remove_dups.py [your android-lantern-path]/screenshots/` to deduplicate.
-8. To generate stitched landscape images for all screenshots in a given test folder, run `python3 scripts/merge_screenshots.py [your android-lantern-path]/screenshots/[a locale e.g. en_US]`
+8. We will have some duplicate screenshots in there - run `python3 scripts/remove_dups.py [your android-lantern-path]/screenshots/` to deduplicate.
+9. To generate stitched landscape images for all screenshots in a given test folder, run `python3 scripts/merge_screenshots.py [your android-lantern-path]/screenshots/[a locale e.g. en_US]`
   
 This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
 
