@@ -67,6 +67,7 @@ extension DriverExtension on FlutterDriver {
     bool skipScreenshot = false,
   }) async {
     if (homeFirst) {
+      print('navigating to home');
       await home();
     }
     await tapText(

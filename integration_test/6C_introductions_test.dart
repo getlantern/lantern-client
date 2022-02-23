@@ -20,6 +20,7 @@ Future<void> main() async {
     test(
       'Accept an introduction',
       () async {
+        await driver.openTab('chats', homeFirst: true);
         await driver.tapText('introductions');
         await driver.tapText('reject', capitalize: true);
         await driver.tapText('cancel', capitalize: true);

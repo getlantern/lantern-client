@@ -19,6 +19,8 @@ Future<void> main() async {
     test(
       'Test disappearing messages settings',
       () async {
+        await driver.openTab('chats', homeFirst: true);
+
         await driver.tapFAB();
 
         await driver.tapFirstItemInList('grouped_contact_list');

@@ -20,6 +20,7 @@ Future<void> main() async {
     test(
       'Scan QR code',
       () async {
+        await driver.openTab('chats', homeFirst: true);
         await driver.tapFAB();
 
         // click on Scan QR Code

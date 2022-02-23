@@ -19,8 +19,9 @@ Future<void> main() async {
     test(
       'Access a contact info screen via top right menu',
       () async {
+        await driver.openTab('chats', homeFirst: true);
         await driver.screenshotCurrentView();
-        
+
         await driver.tapFirstItemInList('chats_messages_list');
 
         print('tap on top right menu bar');
