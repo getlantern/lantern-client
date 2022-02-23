@@ -19,23 +19,11 @@ Future<void> main() async {
     test(
       'Send introductions to multiple contacts',
       () async {
-        print('making sure we have enough contacts');
-        await driver.tapText(
-          'Developer',
-          skipScreenshot: true,
-        );
-
-        await driver.scrollTextUntilVisible('ADD');
-
-        print('adding dummy contacts');
-        await driver.tapText(
-          'ADD',
-          skipScreenshot: true,
-        );
-        await driver.tapText(
+        await driver.openTab(
           'chats',
-          skipScreenshot: false,
+          homeFirst: true,
         );
+        await driver.addDummyContacts();
 
         await driver.tapKey(
           'chats_topbar_more_menu',

@@ -19,23 +19,8 @@ Future<void> main() async {
       'Send introduction to a single contact',
       () async {
         await driver.openTab('chats', homeFirst: true);
-        print('making sure we have enough contacts');
-        await driver.tapText(
-          'Developer',
-          skipScreenshot: true,
-        );
 
-        await driver.scrollTextUntilVisible('ADD');
-
-        print('adding dummy contacts');
-        await driver.tapText(
-          'ADD',
-          skipScreenshot: true,
-        );
-        await driver.tapText(
-          'chats',
-          skipScreenshot: false,
-        );
+        await driver.addDummyContacts();
 
         print('navigating to New Chat');
         await driver.tapFAB();

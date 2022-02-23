@@ -1,14 +1,13 @@
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lantern/messaging/messaging_model.dart';
 
-import '../app.dart';
-import '../common/common.dart';
-import 'navigate_command.dart';
+import 'add_dummy_contacts_command.dart';
 
-class NavigateCommandExtension extends CommandExtension {
+class AddDummyContactsCommandExtension extends CommandExtension {
   @override
-  String get commandKind => 'NavigateCommand';
+  String get commandKind => 'AddDummyContactsCommand';
 
   @override
   Future<Result> call(
@@ -17,15 +16,13 @@ class NavigateCommandExtension extends CommandExtension {
     CreateFinderFactory finderFactory,
     CommandHandlerFactory handlerFactory,
   ) async {
-    final navigateCommand = command as NavigateCommand;
-
-    switch (navigateCommand.path) {
-      case NavigateCommand.home:
-        navigatorKey.currentContext?.router.popUntilRoot();
-        return const NavigateCommandResult(true);
+    try {
+      messagingModel.addDummyContacts();
+      return const AddDummyContactsCommandResult(true);
+    } catch (e) {
+      print('something went wrong while adding dummy contacts');
+      return const AddDummyContactsCommandResult(false);
     }
-
-    return const NavigateCommandResult(false);
   }
 
   @override
@@ -33,6 +30,6 @@ class NavigateCommandExtension extends CommandExtension {
       Map<String, String> params,
       DeserializeFinderFactory finderFactory,
       DeserializeCommandFactory commandFactory) {
-    return NavigateCommand.deserialize(params);
+    return AddDummyContactsCommand.deserialize(params);
   }
 }

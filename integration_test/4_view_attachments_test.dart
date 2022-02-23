@@ -4,42 +4,26 @@ import 'integration_test_constants.dart';
 Future<void> main() async {
   await runTest(
     (driver) async {
-      await driver.openTab('Developer', homeFirst: true);
-      print('adding dummy contacts');
-      await driver.scrollTextUntilVisible('ADD');
-      await driver.tapText(
-        'ADD',
-        skipScreenshot: true,
-      );
+      await driver.openTab('chats', homeFirst: true);
 
-      print('downloading dummy files');
-      await driver.scrollTextUntilVisible('DOWNLOAD');
-      await driver.tapText(
-        'DOWNLOAD',
-        skipScreenshot: true,
-      );
+      await driver.addDummyContacts();
 
-      print('sharing dummy attachments to conversation ');
-      await driver.scrollTextUntilVisible('SEND FILES');
-      await driver.tapText(
-        'SEND FILES',
-        skipScreenshot: true,
-      );
-
-      print('go back to Chats');
-      await driver.tapText('chats');
+      await driver.sendDummyFiles();
 
       await driver.tapFirstItemInList('chats_messages_list');
 
-      print('tap on image attachment');
+      print('tapping on image attachment');
       await driver.tapType(
         'ImageAttachment',
-        overwriteTimeout: defaultWaitTimeout,
+        overwriteTimeout: longWaitTimeout,
       );
 
-      await driver.waitForSeconds(2);
-
       await driver.goBack();
+
+      await driver.tapType(
+        'VideoAttachment',
+        overwriteTimeout: longWaitTimeout,
+      );
     },
   );
 }
