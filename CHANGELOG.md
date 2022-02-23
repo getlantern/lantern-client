@@ -1,4 +1,10 @@
 
+<a name="6.9.10"></a>
+## [6.9.10](https://github.com/getlantern/android-lantern/compare/6.9.9...6.9.10)
+
+> 2022-02-17
+
+
 <a name="6.9.9"></a>
 ## [6.9.9](https://github.com/getlantern/android-lantern/compare/6.9.8...6.9.9)
 

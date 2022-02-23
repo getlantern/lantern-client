@@ -15,24 +15,31 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import java.util.concurrent.LinkedBlockingDeque
+import java.util.concurrent.atomic.AtomicBoolean
 
 class ServiceHelper(
     private val service: Service,
     private val defaultIcon: Int,
     private val defaultText: Int
 ) {
+    private val foregrounded = AtomicBoolean(false)
+
     fun makeForeground() {
-        val doIt = {
-            service.startForeground(notificationId, buildNotification(defaultIcon, defaultText))
+        if (foregrounded.compareAndSet(false, true)) {
+            val doIt = {
+                service.startForeground(notificationId, buildNotification(defaultIcon, defaultText))
+            }
+            serviceDeque.push(doIt)
+            doIt()
         }
-        serviceDeque.push(doIt)
-        doIt()
     }
 
     fun onDestroy() {
-        serviceDeque.pop()
-        // Put the prior service that was in the foreground back into the foreground
-        serviceDeque.peekLast()?.let { it() }
+        if (foregrounded.compareAndSet(true, false)) {
+            serviceDeque.pop()
+            // Put the prior service that was in the foreground back into the foreground
+            serviceDeque.peekLast()?.let { it() }
+        }
     }
 
     fun updateNotification(icon: Int, text: Int) {
