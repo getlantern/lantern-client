@@ -22,10 +22,12 @@ var (
 // Tun2Socks wraps the TUN device identified by fd with tun2socks proxy that
 // does the following:
 //
-// 1. captured dns packets (any UDP packets to capturedDNSAddr) are routed to dnsGrabAddr
+// 1. captured dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
 // 2. All other udp packets are routed directly to their destination
 // 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
 //
+// This function blocks until StopTun2Socks() is called. It also locks itself to the current OS
+// thread so that the thread stays alive as long as Tun2Socks is running.
 func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int) error {
 	runtime.LockOSThread()
 
@@ -43,10 +45,16 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int) error {
 		return err
 	}
 	tun2socks.RegisterOutputFn(dev.Write)
-	tun2socks.RegisterTCPConnHandler(newSOCKSTCPHandler(socksAddr))
+	tun2socks.RegisterTCPConnHandler(newSOCKSTCPHandler(socksAddr, mtu))
 	tun2socks.RegisterUDPConnHandler(udpHandler)
 
 	currentIPStackMx.Lock()
+	if currentIPStack != nil {
+		log.Debug("Found existing ip stack, closing it first")
+		if err := currentIPStack.Close(); err != nil {
+			log.Errorf("Encountered error closing old ip stack: %v", err)
+		}
+	}
 	currentIPStack = ipStack
 	currentIPStackMx.Unlock()
 
