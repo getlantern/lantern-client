@@ -28,7 +28,7 @@ type directUDPHandler struct {
 func newDirectUDPHandler(grabber dnsgrab.Server, dnsGrabAddr string, timeout time.Duration) (core.UDPConnHandler, error) {
 	dnsGrabUDPAddr, err := netx.ResolveUDPAddr("udp", dnsGrabAddr)
 	if err != nil {
-		return nil, log.Errorf("Unable to resolve dnsGrabAddr")
+		return nil, log.Errorf("unable to resolve dnsGrabAddr")
 	}
 
 	return &directUDPHandler{
@@ -77,11 +77,11 @@ func (h *directUDPHandler) Connect(conn core.UDPConn, target *net.UDPAddr) error
 
 	host, found := h.grabber.ReverseLookup(target.IP)
 	if !found {
-		return log.Errorf("Unknown IP %v, not connecting", target.IP)
+		return log.Errorf("unknown IP %v, not connecting", target.IP)
 	}
 	resolvedAddr, err := netx.ResolveUDPAddr(target.Network(), fmt.Sprintf("%v:%d", host, target.Port))
 	if err != nil {
-		return log.Errorf("Unable to resolve address for %v, not connecting: %v", host, err)
+		return log.Errorf("unable to resolve address for %v, not connecting: %v", host, err)
 	}
 	target = resolvedAddr
 

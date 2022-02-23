@@ -486,7 +486,7 @@ func run(configDir, locale string,
 
 	err := os.MkdirAll(configDir, 0755)
 	if os.IsExist(err) {
-		log.Errorf("Unable to create configDir at %v: %v", configDir, err)
+		log.Errorf("unable to create configDir at %v: %v", configDir, err)
 		return
 	}
 
@@ -499,7 +499,7 @@ func run(configDir, locale string,
 
 	cache, err := persistentcache.New(filepath.Join(configDir, "dnsgrab.cache"), maxDNSGrabAge)
 	if err != nil {
-		log.Errorf("Unable to open dnsgrab cache: %v", err)
+		log.Errorf("unable to open dnsgrab cache: %v", err)
 		return
 	}
 
@@ -509,7 +509,7 @@ func run(configDir, locale string,
 		cache,
 	)
 	if err != nil {
-		log.Errorf("Unable to start dnsgrab: %v", err)
+		log.Errorf("unable to start dnsgrab: %v", err)
 		return
 	}
 	dnsGrabEventual.Set(grabber)
@@ -517,7 +517,7 @@ func run(configDir, locale string,
 	go func() {
 		serveErr := grabber.Serve()
 		if serveErr != nil {
-			log.Errorf("Error serving dns: %v", serveErr)
+			log.Errorf("error serving dns: %v", serveErr)
 		}
 	}()
 
@@ -578,7 +578,7 @@ func run(configDir, locale string,
 			}
 			updatedHost, ok := grabber.ReverseLookup(ip)
 			if !ok {
-				return "", errors.New("Invalid IP address")
+				return "", errors.New("invalid IP address")
 			}
 			if splitErr != nil {
 				return updatedHost, nil
@@ -589,7 +589,7 @@ func run(configDir, locale string,
 		func(category, action, label string) {},
 	)
 	if err != nil {
-		log.Fatalf("Failed to start flashlight: %v", err)
+		log.Fatalf("failed to start flashlight: %v", err)
 	}
 
 	replicaServer := &ReplicaServer{

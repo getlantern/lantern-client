@@ -159,7 +159,7 @@ func testProxiedRequest(helper *integrationtest.Helper, proxyAddr string, dnsGra
 	fmt.Printf(string(buf) + "\n")
 
 	if string(buf) != integrationtest.Content {
-		return errors.New("Expecting another response.")
+		return errors.New("expecting another response.")
 	}
 
 	return nil
