@@ -28,7 +28,7 @@ Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`
 
 All those dependencies must be in your PATH
 
-* Java 8 or greater (for Android to work)
+* Java 11 or greater
 * [Android Studio](https://developer.android.com/studio)
 * [Git](https://git-scm.com/downloads)
 * [Android NDK](#steps-to-run-the-project)
