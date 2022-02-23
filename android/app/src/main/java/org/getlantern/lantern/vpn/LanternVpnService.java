@@ -3,11 +3,7 @@
  */
 package org.getlantern.lantern.vpn;
 
-import internalsdk.Internalsdk;
-import internalsdk.SocketProtector;
-
 import android.annotation.TargetApi;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +13,6 @@ import android.os.Build;
 import android.os.IBinder;
 
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Stats;
 import org.getlantern.lantern.model.VpnState;
@@ -26,7 +21,9 @@ import org.getlantern.lantern.service.ServiceHelper;
 import org.getlantern.mobilesdk.Logger;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+
+import internalsdk.Internalsdk;
+import internalsdk.SocketProtector;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LanternVpnService extends VpnService implements Runnable {
@@ -37,9 +34,7 @@ public class LanternVpnService extends VpnService implements Runnable {
 
     private Provider mProvider = null;
 
-    private PendingIntent mConfigureIntent;
-
-    private ServiceHelper helper = new ServiceHelper(
+    final private ServiceHelper helper = new ServiceHelper(
             this,
             R.drawable.status_connected,
             R.string.service_connected);
@@ -69,8 +64,6 @@ public class LanternVpnService extends VpnService implements Runnable {
     public void onCreate() {
         super.onCreate();
         Logger.d(TAG, "VpnService created");
-        mConfigureIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class),
-                PendingIntent.FLAG_UPDATE_CURRENT);
         bindService(new Intent(this, LanternService_.class), lanternServiceConnection, Context.BIND_AUTO_CREATE);
         EventBus.getDefault().register(this);
     }
