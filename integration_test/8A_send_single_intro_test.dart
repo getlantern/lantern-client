@@ -18,6 +18,7 @@ Future<void> main() async {
     test(
       'Send introduction to a single contact',
       () async {
+        await driver.openTab('chats', homeFirst: true);
         print('making sure we have enough contacts');
         await driver.tapText(
           'Developer',

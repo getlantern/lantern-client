@@ -21,6 +21,7 @@ Future<void> main() async {
     test(
       'Accept via message request',
       () async {
+        await driver.openTab('chats', homeFirst: true);
         await driver.screenshotCurrentView();
 
         // TODO: cheating here

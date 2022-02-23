@@ -23,6 +23,8 @@ Future<void> main() async {
         );
         await driver.waitForSeconds(60);
 
+        await driver.openTab('chats', homeFirst: true);
+
         await driver.screenshotCurrentView();
 
         await driver.tapFAB();

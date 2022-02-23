@@ -19,6 +19,7 @@ Future<void> main() async {
     test(
       'Access a contact info screen via long tap',
       () async {
+        await driver.openTab('chats', homeFirst: true);
         await driver.screenshotCurrentView();
 
         await driver.longPressFirstItemInList(

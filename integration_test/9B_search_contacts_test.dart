@@ -19,6 +19,7 @@ Future<void> main() async {
     test(
       'Search in Contacts',
       () async {
+        await driver.openTab('chats', homeFirst: true);
         await driver.screenshotCurrentView();
 
         await driver.tapFAB();
