@@ -38,7 +38,6 @@ Future<void> main() async {
           overwriteTimeout: longWaitTimeout,
         );
 
-        // TODO: hack
         final five = await driver.requestData('5');
         final seconds =
             (await driver.requestData('longform_seconds')).split(' ')[1];
