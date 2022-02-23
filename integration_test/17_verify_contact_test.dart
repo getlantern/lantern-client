@@ -21,16 +21,9 @@ Future<void> main() async {
     test(
       'Verify a contact via voice call',
       () async {
-        await driver.openTab('Developer');
-        print('adding dummy contacts');
-        await driver.scrollTextUntilVisible('ADD');
-        await driver.tapText(
-          'ADD',
-          skipScreenshot: true,
-        );
+        await driver.openTab('chats', homeFirst: true);
 
-        print('go back to Chats');
-        await driver.tapText('chats');
+        await driver.addDummyContacts();
 
         await driver.tapFAB();
 

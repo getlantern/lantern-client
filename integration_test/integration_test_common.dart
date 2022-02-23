@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:lantern/common/add_nonbreaking_spaces.dart';
+import 'package:lantern/flutter_driver_extensions/add_dummy_contacts_command.dart';
 import 'package:lantern/flutter_driver_extensions/navigate_command.dart';
+import 'package:lantern/flutter_driver_extensions/send_dummy_files_command.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:path/path.dart';
 import 'package:test/test.dart';
@@ -55,9 +57,21 @@ extension DriverExtension on FlutterDriver {
   // screenshots for a given test are saved here
   static var currentTestDirPath = '';
 
-  /// Custom flutter driver command for naviginating to Home
+  /// Custom flutter driver command for navigating to Home
   Future<void> home() async {
     await sendCommand(NavigateCommand(NavigateCommand.home));
+  }
+
+  /// Custom flutter driver command for adding dummy contacts
+  Future<void> addDummyContacts() async {
+    print('adding dummy contacts');
+    await sendCommand(AddDummyContactsCommand());
+  }
+
+  /// Custom flutter driver command for downloading and sharing an image and a video file in a conversation with one of the dummy contacts
+  Future<void> sendDummyFiles() async {
+    print('downloading and sharing dummy files');
+    await sendCommand(SendDummyFilesCommand());
   }
 
   /// Opens specified tab
