@@ -19,7 +19,7 @@ Future<void> main() async {
       'Delete for me',
       () async {
         print(
-          'HACK: this test relies on only one message having the _just now_ timestamp, so lets wait a bit in case other conversations were active recently',
+          'This test relies on only one message having the _just now_ timestamp, so lets wait a bit in case other conversations were active recently',
         );
         await driver.waitForSeconds(60);
 

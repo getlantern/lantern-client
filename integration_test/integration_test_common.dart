@@ -19,6 +19,7 @@ Future<FlutterDriver> connect({int port = 8888}) async {
   );
 }
 
+/// Scaffolds the test workflow
 Future<void> runTest(
   Future<void> Function(FlutterDriver driver) doTest, {
   Timeout timeout = const Timeout(Duration(minutes: 5)),
@@ -54,12 +55,17 @@ extension DriverExtension on FlutterDriver {
   // screenshots for a given test are saved here
   static var currentTestDirPath = '';
 
+  /// Custom flutter driver command for naviginating to Home
   Future<void> home() async {
     await sendCommand(NavigateCommand(NavigateCommand.home));
   }
 
-  Future<void> openTab(String label,
-      {bool homeFirst = false, bool skipScreenshot = false}) async {
+  /// Opens specified tab
+  Future<void> openTab(
+    String label, {
+    bool homeFirst = false,
+    bool skipScreenshot = false,
+  }) async {
     if (homeFirst) {
       await home();
     }
@@ -112,15 +118,6 @@ extension DriverExtension on FlutterDriver {
       print('Hit home, will wait');
     }
   }
-
-  // commenting out since not used
-  // Future<void> waitForText(String waitText) async {
-  //   try {
-  //     await doWaitForText(waitText);
-  //   } finally {
-  //     await saveScreenshot('wait for $waitText');
-  //   }
-  // }
 
   /// Handles non-breaking text wrapping
   Future<void> doWaitForText(String waitText) async {
@@ -227,6 +224,7 @@ extension DriverExtension on FlutterDriver {
     }
   }
 
+  /// Finds and longpresses a specific string
   Future<void> longPressText(String text) async {
     await longPress(target: find.text(await requestData(text)));
   }
@@ -301,6 +299,7 @@ extension DriverExtension on FlutterDriver {
     }
   }
 
+  /// Controls scrolling inside a ListView widget
   Future<void> scrollTextUntilVisible(String text) async {
     try {
       print('scrolling until $text is visible');
