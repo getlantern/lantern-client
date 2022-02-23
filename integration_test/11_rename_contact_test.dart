@@ -31,12 +31,12 @@ Future<void> main() async {
 
         print('tap on View Contact Info');
         await driver.tapText(
-          await driver.requestData('view_contact_info'),
+          'view_contact_info',
           overwriteTimeout: defaultWaitTimeout,
         );
 
         print('click on EDIT');
-        await driver.tapText((await driver.requestData('edit')).toUpperCase());
+        await driver.tapText('edit', capitalize: true);
 
         print('enter new contact name');
         await driver.enterText(
@@ -48,7 +48,8 @@ Future<void> main() async {
 
         print('tap SAVE');
         await driver.tapText(
-          (await driver.requestData('save')).toUpperCase(),
+          'save',
+          capitalize: true,
           overwriteTimeout: longWaitTimeout,
         );
       },

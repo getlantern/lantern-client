@@ -30,7 +30,7 @@ Future<void> main() async {
         );
 
         await driver.tapText(
-          await driver.requestData('view_contact_info'),
+          'view_contact_info',
           overwriteTimeout: longWaitTimeout,
         );
       },
