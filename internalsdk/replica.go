@@ -47,14 +47,14 @@ func (s *ReplicaServer) CheckEnabled() {
 		h, err := s.newHandler()
 		if err != nil {
 			log.Errorf(
-				"Failed to start replica server. Will continue without it. Err: %v", err)
+				"failed to start replica server. Will continue without it. Err: %v", err)
 			return
 		}
 
 		l, srv, err := NewReplicaServer(h)
 		if err != nil {
 			log.Errorf(
-				"Failed to start replica server. Will continue without it. Err: %v", err)
+				"failed to start replica server. Will continue without it. Err: %v", err)
 			return
 		}
 		go srv.Serve(l)
@@ -179,7 +179,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 			raw := opts.ReplicaRustDefaultEndpoint
 			country, err := s.Session.GetCountryCode()
 			if err != nil {
-				log.Errorf("Failed to fetch country while configuring new replica-rust endpoint: re-running geolookup and defaulting to %q: %v", opts.ReplicaRustDefaultEndpoint, err)
+				log.Errorf("failed to fetch country while configuring new replica-rust endpoint: re-running geolookup and defaulting to %q: %v", opts.ReplicaRustDefaultEndpoint, err)
 				geolookup.Refresh()
 			}
 			if countryRaw := opts.ReplicaRustEndpoints[country]; countryRaw != "" {
@@ -191,7 +191,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 			// Parse endpoint
 			url, err := url.Parse(raw)
 			if err != nil {
-				log.Errorf("Could not parse replica rust URL %v", err)
+				log.Errorf("could not parse replica rust URL %v", err)
 				return replicaService.GlobalChinaDefaultServiceUrl
 			}
 			log.Debugf("parsed new endpoint for country %s successfully: %v", country, url.String())

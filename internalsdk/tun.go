@@ -33,7 +33,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int) error {
 
 	grabber, found := dnsGrabEventual.Get(1 * time.Minute)
 	if !found {
-		return errors.New("Unable to find dns grabber")
+		return errors.New("unable to find dns grabber")
 	}
 	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
 	dev := os.NewFile(uintptr(fd), "tun")
@@ -52,7 +52,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int) error {
 	if currentIPStack != nil {
 		log.Debug("Found existing ip stack, closing it first")
 		if err := currentIPStack.Close(); err != nil {
-			log.Errorf("Encountered error closing old ip stack: %v", err)
+			log.Errorf("encountered error closing old ip stack: %v", err)
 		}
 	}
 	currentIPStack = ipStack
@@ -67,7 +67,7 @@ func StopTun2Socks() {
 	defer func() {
 		p := recover()
 		if p != nil {
-			log.Errorf("Panic while stopping: %v", p)
+			log.Errorf("panic while stopping: %v", p)
 		}
 	}()
 
@@ -79,7 +79,7 @@ func StopTun2Socks() {
 		go func() {
 			log.Debug("Closing ipStack")
 			if err := ipStack.Close(); err != nil {
-				log.Errorf("Error closing ipStack: %v", err)
+				log.Errorf("error closing ipStack: %v", err)
 			}
 			log.Debug("Closed ipStack")
 		}()
