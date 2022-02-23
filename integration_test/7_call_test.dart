@@ -31,7 +31,7 @@ Future<void> main() async {
         );
 
         await driver.tapText(
-          await driver.requestData('call'),
+          'call',
           overwriteTimeout: longWaitTimeout,
         );
 

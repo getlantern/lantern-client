@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:lantern/common/add_nonbreaking_spaces.dart';
+import 'package:lantern/flutter_driver_extensions/navigate_command.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:path/path.dart';
+import 'package:test/test.dart';
 
 import 'integration_test_constants.dart';
 
@@ -17,10 +19,56 @@ Future<FlutterDriver> connect({int port = 8888}) async {
   );
 }
 
+Future<void> runTest(
+  Future<void> Function(FlutterDriver driver) doTest, {
+  Timeout timeout = const Timeout(Duration(minutes: 5)),
+}) async {
+  final name = Platform.script.pathSegments.last.replaceAll('_test.dart', '');
+
+  late FlutterDriver driver;
+
+  setUpAll(() async {
+    // Connect to a running Flutter application instance.
+    driver = await connect();
+    await driver.initScreenshotsDirectory(name);
+  });
+
+  tearDownAll(() async {
+    await driver.close();
+  });
+
+  group(name, () {
+    test(
+      name,
+      () async {
+        await doTest(driver);
+      },
+      timeout: timeout,
+    );
+  });
+}
+
 extension DriverExtension on FlutterDriver {
   static var screenshotSequence = 0;
+
   // screenshots for a given test are saved here
   static var currentTestDirPath = '';
+
+  Future<void> home() async {
+    await sendCommand(NavigateCommand(NavigateCommand.home));
+  }
+
+  Future<void> openTab(String label,
+      {bool homeFirst = false, bool skipScreenshot = false}) async {
+    if (homeFirst) {
+      await home();
+    }
+    await tapText(
+      label,
+      skipScreenshot: skipScreenshot,
+      parent: find.byType('CustomBottomBarItem'),
+    );
+  }
 
   /// iterates through our array of available locales and creates a folder for each locale
   Future<void> initLocaleFolders() async {
@@ -101,7 +149,14 @@ extension DriverExtension on FlutterDriver {
     String? waitText,
     bool? skipScreenshot,
     Duration? overwriteTimeout,
+    SerializableFinder? parent,
+    bool capitalize = false,
   }) async {
+    tapText = await requestData(tapText);
+    if (capitalize) {
+      tapText = tapText.toUpperCase();
+    }
+    waitText = waitText == null ? null : await requestData(waitText);
     print('tapping on text: $tapText');
     try {
       await tapFinder(
@@ -109,6 +164,7 @@ extension DriverExtension on FlutterDriver {
         waitText: waitText,
         skipScreenshot: skipScreenshot,
         overwriteTimeout: overwriteTimeout,
+        parent: parent,
       );
     } catch (_) {
       // try it with non-breaking spaces like those added by CText
@@ -117,6 +173,7 @@ extension DriverExtension on FlutterDriver {
         waitText: waitText,
         skipScreenshot: skipScreenshot,
         overwriteTimeout: overwriteTimeout,
+        parent: parent,
       );
     }
   }
@@ -170,6 +227,10 @@ extension DriverExtension on FlutterDriver {
     }
   }
 
+  Future<void> longPressText(String text) async {
+    await longPress(target: find.text(await requestData(text)));
+  }
+
   /// Simulates a long press is simulated, and screenshots labeled as 'long_press' are saved.
   /// It receives either a SerializableFinder or a text to look for using find.text()
   Future<void> longPress({required dynamic target}) async {
@@ -216,7 +277,11 @@ extension DriverExtension on FlutterDriver {
     String? waitText,
     bool? skipScreenshot,
     Duration? overwriteTimeout,
+    SerializableFinder? parent,
   }) async {
+    if (parent != null) {
+      finder = find.descendant(of: parent, matching: finder);
+    }
     try {
       await tap(
         finder,
@@ -225,6 +290,9 @@ extension DriverExtension on FlutterDriver {
       if (waitText != null) {
         await doWaitForText(waitText);
       }
+    } catch (e) {
+      print(e);
+      rethrow;
     } finally {
       if (skipScreenshot == true) return;
       await saveScreenshot(
@@ -263,10 +331,7 @@ extension DriverExtension on FlutterDriver {
   /// Automates the Developer → RESET FLAGS → Chats → GET STARTED → NEXT flow
   Future<void> resetFlagsAndEnrollAgain({bool? skipScreenshot}) async {
     print('do the whole reset -> enroll thing');
-    await tapText(
-      await requestData('Developer'),
-      skipScreenshot: true,
-    );
+    await openTab('Developer', homeFirst: true, skipScreenshot: true);
     await scrollTextUntilVisible('RESET FLAGS');
     await tapText(
       'RESET FLAGS',
@@ -281,7 +346,8 @@ extension DriverExtension on FlutterDriver {
       skipScreenshot: skipScreenshot,
     );
     await tapText(
-      (await requestData('next')).toUpperCase(),
+      'next',
+      capitalize: true,
       skipScreenshot: skipScreenshot,
     );
   }
@@ -291,6 +357,7 @@ extension DriverExtension on FlutterDriver {
     String messageContent, {
     Duration? overwriteTimeout,
   }) async {
+    messageContent = await requestData(messageContent);
     await waitForSeconds(2);
     await tapType(
       'TextFormField',

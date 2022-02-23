@@ -29,13 +29,11 @@ Future<void> main() async {
 
         await driver.tapFirstItemInList('grouped_contact_list');
 
-        await driver.typeAndSend(await driver.requestData('test_text'));
+        await driver.typeAndSend('test_text');
         print('long press message we just shared');
-        await driver.longPress(
-          target: find.text(await driver.requestData('just_now')),
-        );
+        await driver.longPressText('just_now');
 
-        await driver.tapText(await driver.requestData('delete_for_everyone'));
+        await driver.tapText('delete_for_everyone');
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );

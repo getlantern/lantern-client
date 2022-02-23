@@ -29,20 +29,16 @@ Future<void> main() async {
 
         await driver.tapFirstItemInList('grouped_contact_list');
 
-        await driver.typeAndSend(await driver.requestData('test_text'));
+        await driver.typeAndSend('test_text');
 
         print('long press message we just shared');
-        await driver.longPress(
-          target: find.text(await driver.requestData('just_now')),
-        );
+        await driver.longPressText('just_now');
 
-        await driver.tapText(await driver.requestData('copy_text'));
+        await driver.tapText('copy_text');
 
-        await driver.tapText(await driver.requestData('reply'));
+        await driver.tapText('reply');
 
-        await driver.typeAndSend(
-          await driver.requestData('test_reply'),
-        );
+        await driver.typeAndSend('test_reply');
       },
       timeout: const Timeout(Duration(minutes: 5)),
     );
