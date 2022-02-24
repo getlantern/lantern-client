@@ -146,7 +146,7 @@ BUILD_TAGS ?=
 BUILD_TAGS += ' lantern'
 
 GO_SOURCES := go.mod go.sum $(shell find internalsdk -type f -name "*.go")
-MOBILE_SOURCES := $(shell find $(BASE_MOBILE_DIR) -type f -not -path screenshots/* -not -path "*/build/*" -not -path "*/.gradle/*" -not -path "*/.idea/*" -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -path "*/.gomobilecache/*" -not -iname ".*" -not -iname "*.apk" -not -iname "router.gr.dart")
+MOBILE_SOURCES := $(shell find $(BASE_MOBILE_DIR) -type f -not -path screenshots/* -not -path "*/build/*" -not -path "*/.dart_tool/*" -not -path "*/.gradle/*" -not -path "*/.idea/*" -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -path "*/.gomobilecache/*" -not -iname ".*" -not -iname "*.apk" -not -iname "router.gr.dart")
 
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
