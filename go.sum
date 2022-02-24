@@ -463,6 +463,8 @@ github.com/getlantern/flashlight v0.0.0-20220224112916-0d0acaee55fc h1:QKB2KVmmz
 github.com/getlantern/flashlight v0.0.0-20220224112916-0d0acaee55fc/go.mod h1:MV2fvuQ5Z4PBIXKn2wyAqhhqdEVDigpimcMQY7UewHk=
 github.com/getlantern/flashlight v0.0.0-20220224140222-466811b9e598 h1:HXHYYyEz6kUDfk/VoHg3w6aHBWu5gC7feQlAgh6oW9g=
 github.com/getlantern/flashlight v0.0.0-20220224140222-466811b9e598/go.mod h1:MV2fvuQ5Z4PBIXKn2wyAqhhqdEVDigpimcMQY7UewHk=
+github.com/getlantern/flashlight v0.0.0-20220224201733-8d80930eaab7 h1:IYU0R/PN53kAv1Mbuio6uvl3nCh2LX8HnR5KDDtKok0=
+github.com/getlantern/flashlight v0.0.0-20220224201733-8d80930eaab7/go.mod h1:MV2fvuQ5Z4PBIXKn2wyAqhhqdEVDigpimcMQY7UewHk=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20210806163345-971f7e536246 h1:tRWQABDpTE7tr2P48SjqsVF35uzJzLERwmt+TV0YR/U=
