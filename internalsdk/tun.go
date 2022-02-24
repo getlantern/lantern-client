@@ -1,13 +1,13 @@
 package internalsdk
 
 import (
+	"context"
 	"io"
 	"os"
 	"runtime"
 	"sync"
 	"time"
 
-	"github.com/getlantern/dnsgrab"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/chained"
 
@@ -19,45 +19,59 @@ var (
 	currentIPStack   tun2socks.LWIPStack
 )
 
-// Tun2Socks wraps the TUN device identified by fd with tun2socks proxy that
-// does the following:
+// Tun2Socks wraps the TUN device identified by fd and does the following:
 //
 // 1. captured dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
 // 2. All other udp packets are routed directly to their destination
-// 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
+// 3. All TCP traffic is routed tgit sthrough Lantern.
 //
-// This function blocks until StopTun2Socks() is called. It also locks itself to the current OS
-// thread so that the thread stays alive as long as Tun2Socks is running.
-func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int) error {
+// Despite the name, this doesn't use Lantern's SOCKS proxy, traffic enters the proxying
+// layer directly.
+//
+// This function blocks until StopTun2Socks() is called. It also locks itself to
+// the current OS thread so that the thread stays alive as long as Tun2Socks is running.
+func Tun2Socks(fd int, dnsGrabAddr string, mtu int) error {
 	runtime.LockOSThread()
 
-	grabber, found := dnsGrabEventual.Get(1 * time.Minute)
-	if !found {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
+	defer cancel()
+	dg := getDNSGrab(ctx)
+	if dg == nil {
 		return errors.New("unable to find dns grabber")
 	}
-	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
+	log.Debugf("Directing TUN traffic to Lantern with mtu %d", mtu)
 	dev := os.NewFile(uintptr(fd), "tun")
 	defer dev.Close()
 
 	ipStack := tun2socks.NewLWIPStack()
-	udpHandler, err := newDirectUDPHandler(grabber.(dnsgrab.Server), dnsGrabAddr, chained.IdleTimeout)
+	udpHandler, err := newDirectUDPHandler(dg, dnsGrabAddr, chained.IdleTimeout)
 	if err != nil {
 		return err
 	}
-	tun2socks.RegisterOutputFn(dev.Write)
-	tun2socks.RegisterTCPConnHandler(newSOCKSTCPHandler(socksAddr, mtu))
+	var writeMx sync.Mutex
+	tun2socks.RegisterOutputFn(func(b []byte) (int, error) {
+		// It's unclear why it's necessary to single-thread writes to the TUN device, but without this,
+		// user agents will periodically hang.
+		writeMx.Lock()
+		defer writeMx.Unlock()
+		return dev.Write(b)
+	})
+	tun2socks.RegisterTCPConnHandler(newDirectTCPHandler(mtu))
 	tun2socks.RegisterUDPConnHandler(udpHandler)
 
 	currentIPStackMx.Lock()
-	if currentIPStack != nil {
-		log.Debug("Found existing ip stack, closing it first")
-		if err := currentIPStack.Close(); err != nil {
-			log.Errorf("encountered error closing old ip stack: %v", err)
-		}
-	}
+	danglingIPStack := currentIPStack
 	currentIPStack = ipStack
 	currentIPStackMx.Unlock()
 
+	if danglingIPStack != nil {
+		go func() {
+			log.Debug("Closing dangling ip stack")
+			if err := danglingIPStack.Close(); err != nil {
+				log.Errorf("error closing dangling ip stack: %v", err)
+			}
+		}()
+	}
 	_, err = io.CopyBuffer(ipStack, dev, make([]byte, mtu))
 	return err
 }
