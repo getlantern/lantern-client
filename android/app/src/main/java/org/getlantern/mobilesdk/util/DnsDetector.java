@@ -102,9 +102,6 @@ public class DnsDetector {
                             NetworkInterface intf = NetworkInterface.getByInetAddress(
                                     linkProperties.getLinkAddresses().get(0).getAddress());
                             ip = ip.split("%")[0] + "%" + intf.getIndex();
-                            if (!ip.startsWith("[")) {
-                                ip = "[" + ip + "]";
-                            }
                         }
                     }
                     return ip;

@@ -22,8 +22,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type testProtector struct{}
-
 type testSession struct {
 	serializedInternalHeaders string
 }
@@ -155,6 +153,9 @@ func testProxiedRequest(helper *integrationtest.Helper, proxyAddr string, dnsGra
 	var buf []byte
 
 	buf, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
 
 	fmt.Printf(string(buf) + "\n")
 

@@ -1,47 +1,65 @@
 package internalsdk
 
 import (
+	"bufio"
+	"context"
+	"fmt"
 	"net"
 	"sync"
-
-	"golang.org/x/net/proxy"
+	"time"
 
 	"github.com/eycorsican/go-tun2socks/core"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/netx"
 )
 
-// Loosely based on https://github.com/eycorsican/go-tun2socks/blob/master/proxy/socks/udp.go
-type socksTCPHandler struct {
+type directTCPHandler struct {
 	sync.Mutex
 
-	proxyAddr string
-	mtu       int
+	mtu int
 }
 
-func newSOCKSTCPHandler(proxyAddr string, mtu int) core.TCPConnHandler {
-	log.Debugf("Creating new Socks TCP Handler using proxy at %v", proxyAddr)
-	return &socksTCPHandler{
-		proxyAddr: proxyAddr,
-		mtu:       mtu,
+func newDirectTCPHandler(mtu int) core.TCPConnHandler {
+	return &directTCPHandler{
+		mtu: mtu,
 	}
 }
 
-func (h *socksTCPHandler) Handle(downstream net.Conn, target *net.TCPAddr) error {
-	dialer, err := proxy.SOCKS5("tcp", h.proxyAddr, nil, nil)
-	if err != nil {
-		return errors.New("unable to connect to SOCKS proxy at %v: %v", h.proxyAddr, err)
+func (h *directTCPHandler) Handle(downstream net.Conn, target *net.TCPAddr) error {
+	log.Tracef("New connection to %v", target)
+	if target.Port == 853 {
+		// This is usually DNS over TLS, we blackhole this to force DNS through dnsgrab.
+		return errors.New("blackholing DNS over TLS traffic to %v", target)
 	}
 
-	upstream, err := dialer.Dial(target.Network(), target.String())
-	if err != nil {
-		return errors.New("unable to dial upstream %v via SOCKS proxy at %v: %v", target, h.proxyAddr, err)
+	deadline := time.Now().Add(60 * time.Second)
+	ctx, cancel := context.WithDeadline(context.Background(), deadline)
+	defer cancel()
+	cl := getClient(ctx)
+	if cl == nil {
+		return log.Error("unable to obtain client by deadline")
+	}
+	dg := getDNSGrab(ctx)
+	if dg == nil {
+		return log.Error("unable to obtain dnsgrab server by deadline")
 	}
 
-	bufOut := make([]byte, h.mtu)
-	bufIn := make([]byte, h.mtu)
+	origin := target.String()
+	originHost, found := dg.ReverseLookup(target.IP)
+	if found {
+		log.Tracef("Reverse resolved %v -> %v", target.IP, originHost)
+		origin = fmt.Sprintf("%v:%d", originHost, target.Port)
+	}
 
-	go netx.BidiCopy(upstream, downstream, bufOut, bufIn)
+	go func() {
+		dialCtx, cancelDialCtx := context.WithDeadline(context.Background(), deadline)
+		defer cancelDialCtx()
+
+		log.Tracef("Connecting to %v", origin)
+		err := cl.Connect(dialCtx, bufio.NewReader(downstream), downstream, origin)
+		if err != nil {
+			log.Errorf("error processing traffic to %v: %v", origin, err)
+		}
+	}()
 
 	return nil
 }
