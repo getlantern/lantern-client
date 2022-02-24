@@ -127,8 +127,7 @@ class CDialogState extends State<CDialog> {
             ),
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 24, end: 24),
-            // HACK: Switching this to Text() instead of CText() - see https://github.com/getlantern/android-lantern/issues/705
-            child: Text(
+            child: CText(
               widget.title,
               style: tsSubtitle1Short,
             ),

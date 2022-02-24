@@ -94,10 +94,9 @@ class _NewChatState extends State<NewChat> {
                           _updatedContact!.contactId.id,
                     )
                   : 0;
-              if (scrollListController.isAttached) {
+              if (scrollListController.isAttached && scrollIndex != -1) {
                 scrollListController.scrollTo(
-                  index: scrollIndex != -1 ? scrollIndex : 0,
-                  //if recent contact can not be found in our list for some reason
+                  index: scrollIndex,
                   duration: const Duration(milliseconds: 300),
                 );
               }
