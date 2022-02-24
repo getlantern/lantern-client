@@ -8,12 +8,12 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.1
 	github.com/getlantern/eventual v1.0.0
-	github.com/getlantern/flashlight v0.0.0-20220216120631-64f7321589fc
+	github.com/getlantern/flashlight v0.0.0-20220224140222-466811b9e598
 	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd
-	github.com/getlantern/protected v0.0.0-20210826185807-3b63e18e28bb
+	github.com/getlantern/protected v0.0.0-20220224141403-67d8ee971ae8
 	github.com/getlantern/replica v0.7.1-0.20220111005757-1b4cc00cbce0
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.7.0
@@ -24,6 +24,7 @@ require (
 
 require (
 	github.com/eycorsican/go-tun2socks v1.16.12-0.20201107203946-301549c435ff
+	github.com/getlantern/eventual/v2 v2.0.2 // indirect
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
 	golang.org/x/tools v0.1.8 // indirect
