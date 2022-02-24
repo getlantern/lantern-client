@@ -458,10 +458,16 @@ msgid "qr_info_waiting_id"
 msgstr "Waiting for your friend to enter your messenger ID or scan your QR code..."
 
 msgid "chat_number_not_found"
-msgstr "Unable to find chat number, please check the number and try again"
+msgstr ""
+"Chat Number not found."
+"\n"
+"Please check the number you entered and try again."
 
 msgid "unable_to_add_contact"
-msgstr "Contact not found, check the number and try again"
+msgstr ""
+"Contact not found."
+"\n"
+"Check the number you entered and try again."
 
 msgid "self_adding"
 msgstr "The Chat Number you entered belongs to you"
@@ -713,10 +719,10 @@ msgid "recovery_error"
 msgstr "Unable to recover your account."
 
 msgid "recovery_input_error"
-msgstr " Please make sure you are entering a valid recovery key"
+msgstr "Make sure you entered a valid recovery key"
 
 msgid "recovery_retrieval_error"
-msgstr "Something went wrong while retrieving your recovery key"
+msgstr "Something went wrong while recovering your account"
 
 msgid "recovery_success"
 msgstr "You have successfully recovered your Chat Number"
@@ -800,9 +806,15 @@ msgid "audio"
 msgstr "Audio"
 
 msgid "image"
+msgstr "Image"
+
+msgid "images"
 msgstr "Images"
 
 msgid "video"
+msgstr "Video"
+
+msgid "videos"
 msgstr "Videos"
 
 msgid "app"
