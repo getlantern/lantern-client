@@ -17,6 +17,7 @@ Future<void> main() async {
 
   // Test requirements
   // * Needs to have _just_ received a message request from another user
+  // TODO (not immediate): we can set up a second test driver so that one message requests the other
   group(testName, () {
     test(
       'Accept via message request',
@@ -24,7 +25,6 @@ Future<void> main() async {
         await driver.openTab('chats', homeFirst: true);
         await driver.screenshotCurrentView();
 
-        // TODO: cheating here
         print('open message request');
         await driver.tapText('just_now');
 

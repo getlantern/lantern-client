@@ -16,6 +16,7 @@ Future<void> main() async {
 
 // * Test requirements
 // * Needs to have received a _single_ introduction from another user
+  // TODO (not immediate): we can set up a second test driver so that one sends an intro to the other
   group(testName, () {
     test(
       'Accept an introduction',
