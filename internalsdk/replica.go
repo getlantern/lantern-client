@@ -1,6 +1,7 @@
 package internalsdk
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"github.com/getlantern/flashlight"
+	"github.com/getlantern/flashlight/client"
 	"github.com/getlantern/flashlight/common"
 	"github.com/getlantern/flashlight/config"
 	"github.com/getlantern/flashlight/geolookup"
@@ -17,6 +19,9 @@ import (
 	"github.com/getlantern/flashlight/proxied"
 	replicaServer "github.com/getlantern/replica/server"
 	replicaService "github.com/getlantern/replica/service"
+
+	"github.com/getlantern/android-lantern/internalsdk/doh"
+
 	"github.com/gorilla/mux"
 )
 
@@ -153,6 +158,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	input.HttpClient = &http.Client{
 		Transport: proxied.AsRoundTripper(
 			func(req *http.Request) (*http.Response, error) {
+				log.Debugf("Replica HTTP client processing request to: %v (%v)", req.Host, req.URL.Host)
 				chained, err := proxied.ChainedNonPersistent("")
 				if err != nil {
 					return nil, log.Errorf("connecting to proxy: %w", err)
@@ -160,6 +166,55 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 				return chained.RoundTrip(req)
 			},
 		),
+	}
+	input.TorrentClientHTTPProxy = func(*http.Request) (*url.URL, error) {
+		proxyAddr, ok := client.Addr(40 * time.Second)
+		if !ok {
+			return nil, log.Error("HTTP Proxy didn't start in time")
+		}
+		proxyAddrAsStr := proxyAddr.(string)
+		proxyURL, err := url.Parse("http://" + proxyAddrAsStr)
+		if err != nil {
+			return nil, log.Errorf("error parsing local proxy address: %w", err)
+		}
+		return proxyURL, nil
+	}
+	input.TorrentClientLookupTrackerIp = func(u *url.URL) ([]net.IP, error) {
+		// TODO: this, and the doh implementation, are copied from lantern-desktop, might be good to keep
+		// it in a single place (like flashlight).
+		//
+		// runDoh runs a Dns-over-https request (proxied with
+		// httpClient's Transport) and returns the DNS responses (based
+		// on 'typ')
+		runDoh := func(typ doh.DnsType) ([]net.IP, error) {
+			ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancelFunc()
+			resp, err := doh.MakeDohRequest(ctx, input.HttpClient, doh.DnsDomain(u.Hostname()), typ)
+			if err != nil {
+				return nil, err
+			}
+			ips := []net.IP{}
+			for _, ans := range resp.Answer {
+				ips = append(ips, net.ParseIP(ans.Data))
+			}
+			return ips, nil
+		}
+
+		allIps := []net.IP{}
+		ips, err := runDoh(doh.TypeA)
+		if err != nil {
+			return nil, log.Errorf("doh request A for [%s] %v", u.Hostname(), err)
+		}
+		allIps = append(allIps, ips...)
+
+		ips, err = runDoh(doh.TypeAAAA)
+		if err != nil {
+			return nil, log.Errorf("doh request AAAA for [%s] %v", u.Hostname(), err)
+		}
+		allIps = append(allIps, ips...)
+
+		// fmt.Printf("dohResp for [%s] = %+v\n", u, allIps)
+		return allIps, nil
 	}
 
 	input.ReplicaServiceClient = replicaService.ServiceClient{
