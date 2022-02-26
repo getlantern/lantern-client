@@ -167,7 +167,8 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 			},
 		),
 	}
-	input.TorrentClientHTTPProxy = func(*http.Request) (*url.URL, error) {
+	input.TorrentClientHTTPProxy = func(req *http.Request) (*url.URL, error) {
+		log.Debugf("Proxying Replica request [%v] through Flashlight...", req.URL.String())
 		proxyAddr, ok := client.Addr(40 * time.Second)
 		if !ok {
 			return nil, log.Error("HTTP Proxy didn't start in time")
@@ -186,6 +187,8 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 		// runDoh runs a Dns-over-https request (proxied with
 		// httpClient's Transport) and returns the DNS responses (based
 		// on 'typ')
+		log.Debugf("Running DOH for %v", u.Hostname())
+
 		runDoh := func(typ doh.DnsType) ([]net.IP, error) {
 			ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancelFunc()
