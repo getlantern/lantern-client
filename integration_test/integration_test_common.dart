@@ -58,6 +58,7 @@ extension DriverExtension on FlutterDriver {
   static var currentTestDirPath = '';
 
   /// Custom flutter driver command for navigating to Home
+  /// pops router all the way behind the scenes navigatorKey.currentContext?.router.popUntilRoot()
   Future<void> home() async {
     await sendCommand(NavigateCommand(NavigateCommand.home));
   }
