@@ -38,7 +38,9 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
   _ReplicaSearchScreenState(String searchQuery) {
     _textEditingController =
         CustomTextEditingController(formKey: _formKey, text: searchQuery);
-    _searchQueryListener = ValueNotifier<String>(searchQuery);
+    if (searchQuery != '') {
+      _searchQueryListener = ValueNotifier<String>(searchQuery);
+    }
   }
 
   @override
@@ -68,9 +70,11 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               controller: _textEditingController,
               search: (query) async {
                 FocusScope.of(context).requestFocus(FocusNode());
-                setState(() {
-                  _searchQueryListener.value = _textEditingController.text;
-                });
+                if (_textEditingController.text != '') {
+                  setState(() {
+                    _searchQueryListener.value = _textEditingController.text;
+                  });
+                }
               },
             ),
             const SizedBox(height: 10),

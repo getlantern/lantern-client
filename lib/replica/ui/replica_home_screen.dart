@@ -45,7 +45,9 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
               child: SearchField(
                 controller: _textEditingController,
                 search: (query) async {
-                  await _navigateToSearchScreen(query);
+                  if (query != '') {
+                    await _navigateToSearchScreen(query);
+                  }
                 },
               ),
             ),
