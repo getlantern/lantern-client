@@ -103,6 +103,7 @@ class Settings extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsetsDirectional.only(start: 4.0),
                       child: CAssetImage(
+                        key: ValueKey('proxy_all_icon'),
                         path: ImagePaths.info,
                         size: 12,
                       ),
