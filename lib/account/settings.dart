@@ -28,7 +28,6 @@ class Settings extends StatelessWidget {
     return BaseScreen(
       title: 'settings'.i18n,
       body: Column(
-        key: const ValueKey('settings_list'),
         children: [
           //* Language
           ListItemFactory.settingsItem(

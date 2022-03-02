@@ -44,6 +44,7 @@ def merge_images_from_dir(dirPath):
       return stitched_gallery
 
 # example path: /Users/kallirroiretzepi/Documents/code/android-lantern/screenshots/en_US
+# dirPath needs to be the locale folder
 dirPath = sys.argv[1]
 # create stitched/ directory
 stichedDirPath = dirPath + "/stitched"
