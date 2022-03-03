@@ -22,8 +22,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type testProtector struct{}
-
 type testSession struct {
 	serializedInternalHeaders string
 }
@@ -57,7 +55,7 @@ func (c testSession) IsProUser() (bool, error)                 { return true, ni
 func (c testSession) ForceReplica() bool                       { return true }
 func (c testSession) SetReplicaAddr(replicaAddr string)        {}
 
-func (c testSession) UpdateStats(string, string, string, int, int) error { return nil }
+func (c testSession) UpdateStats(string, string, string, int, int, bool) error { return nil }
 
 func (c testSession) UpdateAdSettings(AdSettings) error { return nil }
 
@@ -71,6 +69,7 @@ func (c testSession) GetCountryCode() (string, error) { return "us", nil }
 func (c testSession) IsPlayVersion() (bool, error)    { return false, nil }
 func (c testSession) Provider() (string, error)       { return "stripe", nil }
 func (c testSession) SetChatEnabled(enabled bool)     {}
+func (c testSession) SetMatomoEnabled(bool)           {}
 
 func (c testSession) SerializedInternalHeaders() (string, error) {
 	return c.serializedInternalHeaders, nil
@@ -154,11 +153,14 @@ func testProxiedRequest(helper *integrationtest.Helper, proxyAddr string, dnsGra
 	var buf []byte
 
 	buf, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
 
 	fmt.Printf(string(buf) + "\n")
 
 	if string(buf) != integrationtest.Content {
-		return errors.New("Expecting another response.")
+		return errors.New("expecting another response.")
 	}
 
 	return nil

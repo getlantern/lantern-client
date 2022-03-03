@@ -1,4 +1,4 @@
-# Lantern Android
+# Lantern Android [![Go Actions Status](https://github.com/getlantern/android-lantern/actions/workflows/go.yml/badge.svg)](https://github.com/getlantern/android-lantern/actions) [![Coverage Status](https://coveralls.io/repos/github/getlantern/android-lantern/badge.svg?t=C4SaZX)](https://coveralls.io/github/getlantern/android-lantern)
 
 Lantern Android is an app that uses the [VpnService](https://developer.android.com/reference/android/net/VpnService) API to intercept and reroute all device traffic to the Lantern circumvention tool.
 
@@ -43,11 +43,10 @@ All those dependencies must be in your PATH
 
 In the welcome screen choose the "Open an existing Android Studio" option and select the `android` folder.
 
-You'll need the liblantern-all.aar containing the Go back-end code in order for the project to compile. That file is built automatically.
-
 Do this the first time your run the project:
 
 * Install all prerequisites
+* You'll need the liblantern-all.aar containing the Go backend code in order for the project to compile. Build it with `make android-lib-debug ANDROID_ARCH=all` (see "Building the InternalSdk" section below for more info)
 * Run `git submodule update --init --recursive`
 * Run `git lfs install && git pull`
 * Go to the **SDK MANAGER**
@@ -73,6 +72,9 @@ Do this the first time your run the project:
 * `flutter run --flavor prod`
 
 Or, run it from Android Studio if you're using that.
+
+You can build an emulator with `./scripts/run_avd.rb`. Here's an example run: `./scripts/run_avd.rb --level=30 --abi=x86 --use_google_apis --window`.
+You'll need Ruby >= 2.3 installed and `colorize` gem (i.e., `gem install colorize`).
 
 #### Flutter Logging
 

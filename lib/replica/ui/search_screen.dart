@@ -88,10 +88,10 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               labelColor: pink4,
               tabs: <Widget>[
                 Tab(
-                  text: 'video'.i18n,
+                  text: 'videos'.i18n,
                 ),
                 Tab(
-                  text: 'image'.i18n,
+                  text: 'images'.i18n,
                 ),
                 Tab(
                   text: 'audio'.i18n,
