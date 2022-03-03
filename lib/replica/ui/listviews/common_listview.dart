@@ -63,7 +63,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
         lastSearchQuery,
         widget.searchCategory,
         page,
-        'en', // TODO <07-12-2021> soltzen: support more than one locale
+        Localization.localeShort,
       );
       if (ret.isEmpty) {
         logger.v('Successfully fetched the last page [${ret.length} items]');
