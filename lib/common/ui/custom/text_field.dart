@@ -214,7 +214,10 @@ class _CTextFieldState extends State<CTextField> {
           widget.onFieldSubmitted!(widget.controller.text);
         }
       },
-      child: CAssetImage(path: widget.actionIconPath!, color: white),
+      child: CAssetImage(
+          key: const ValueKey('submit_text_field'),
+          path: widget.actionIconPath!,
+          color: white),
     );
   }
 }

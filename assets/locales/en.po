@@ -1014,3 +1014,6 @@ msgstr "Initially all messages disappear after 24 hours."
 
 msgid "test_disappearing_messages_2"
 msgstr "Now this message should disappear very soon!"
+
+msgid "test_replica_search"
+msgstr "science"
