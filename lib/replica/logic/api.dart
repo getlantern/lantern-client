@@ -130,7 +130,9 @@ class ReplicaApi {
       // logger.v('Duration request success: $duration');
       duration = double.parse(durationResp.data.toString());
     } catch (err) {
-      logger.w('failed to fetch duration. Will default to ??:??. Error: $err');
+      final dioErr = err as DioError;
+      logger.w(
+          'failed to fetch duration. Will default to ??:??. Error: ${dioErr.error}');
     }
     return duration;
   }

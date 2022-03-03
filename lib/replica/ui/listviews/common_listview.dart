@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
@@ -76,16 +77,16 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
         pagingController.appendPage(ret, nextPageKey);
       }
     } catch (err) {
-      logger.w('fetchPage err: $err');
+      if (err is DioError) {
+        logger.e('fetchPage err: ${err.error}');
+      } else {
+        logger.e('fetchPage err: $err');
+      }
+
       if (mounted) {
         pagingController.error = 'fetching search result with $err';
       }
     }
-  }
-
-  Widget showError(String err) {
-    logger.e('Error while fetching search results: $err');
-    return renderReplicaErrorUI(text: 'search_result_error'.i18n);
   }
 
   double getCommonCacheExtent(List<dynamic>? list) {
@@ -130,7 +131,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
       pagingController.refresh();
     }
     if (pagingController.error != null) {
-      return showError(pagingController.error);
+      return renderReplicaErrorUI(text: 'search_result_error'.i18n);
     }
     return null;
   }
