@@ -28,7 +28,7 @@ TEST ?= *_test
 # integration-test:
 # 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
-GO_VERSION := 1.16
+GO_VERSION := 1.17
 
 TAG ?= $$VERSION
 INSTALLER_NAME ?= lantern-installer
@@ -146,7 +146,7 @@ BUILD_TAGS ?=
 BUILD_TAGS += ' lantern'
 
 GO_SOURCES := go.mod go.sum $(shell find internalsdk -type f -name "*.go")
-MOBILE_SOURCES := $(shell find $(BASE_MOBILE_DIR) -type f -not -path screenshots/* -not -path "*/build/*" -not -path "*/.gradle/*" -not -path "*/.idea/*" -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -path "*/.gomobilecache/*" -not -iname ".*" -not -iname "*.apk" -not -iname "router.gr.dart")
+MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
 
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
@@ -170,7 +170,7 @@ tag: require-version
 	git push
 
 define check-go-version
-    if [ -z '${IGNORE_GO_VERSION}' ] && go version | grep -q -v $(GO_VERSION); then \
+    if [ -z '${IGNORE_GO_VERSION}' ] && $(GO) version | grep -q -v $(GO_VERSION); then \
 		echo "go $(GO_VERSION) is required." && exit 1; \
 	fi
 endef
@@ -332,8 +332,8 @@ release: require-version require-s3cmd require-wget require-lantern-binaries req
 
 $(ANDROID_LIB): $(GO_SOURCES)
 	@$(call check-go-version) && \
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	go install golang.org/x/mobile/cmd/gomobile && \
+	$(GO) env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	$(GO) install golang.org/x/mobile/cmd/gomobile && \
 	gomobile init && \
 	gomobile bind -cache `pwd`/.gomobilecache \
 	    -target=$(ANDROID_ARCH_GOMOBILE) \

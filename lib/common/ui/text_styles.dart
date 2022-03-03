@@ -25,14 +25,17 @@ CTextStyle tsHeading3 = CTextStyle(
   fontWeight: FontWeight.w500,
 );
 
-CTextStyle tsSubtitle1 =
-    CTextStyle(fontSize: 16, minFontSize: 12, lineHeight: 26);
+CTextStyle tsSubtitle1 = CTextStyle(
+  fontSize: 16,
+  // minFontSize: 12, // removing this solves the IntrinsicWidth vs LayoutBuilder issues we are experiencing, look into custom/text.dart for more
+  lineHeight: 26,
+);
 
 CTextStyle tsSubtitle1Short = tsSubtitle1.copiedWith(lineHeight: 21);
 
 CTextStyle tsSubtitle2 = CTextStyle(
   fontSize: 14,
-  minFontSize: 12,
+  // minFontSize: 12, // removing this solves the IntrinsicWidth vs LayoutBuilder issues we are experiencing, look into custom/text.dart for more
   lineHeight: 23,
   fontWeight: FontWeight.w500,
 );

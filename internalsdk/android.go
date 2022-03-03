@@ -2,6 +2,7 @@
 package internalsdk
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net"
@@ -17,7 +18,7 @@ import (
 	"github.com/getlantern/dnsgrab"
 	"github.com/getlantern/dnsgrab/persistentcache"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/eventual"
+	"github.com/getlantern/eventual/v2"
 	"github.com/getlantern/flashlight"
 	"github.com/getlantern/flashlight/balancer"
 	"github.com/getlantern/flashlight/bandwidth"
@@ -48,11 +49,10 @@ var (
 	// XXX mobile does not respect the autoupdate global config
 	updateClient = &http.Client{Transport: proxied.ChainedThenFrontedWith("")}
 
-	defaultLocale = `en-US`
-
 	startOnce sync.Once
 
 	clEventual               = eventual.NewValue()
+	dnsGrabEventual          = eventual.NewValue()
 	dnsGrabAddrEventual      = eventual.NewValue()
 	errNoAdProviderAvailable = errors.New("no ad provider available")
 )
@@ -363,12 +363,30 @@ func RemoveOverrides() {
 }
 
 func getBalancer(timeout time.Duration) *balancer.Balancer {
-	_cl, ok := clEventual.Get(timeout)
-	if !ok {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	cl := getClient(ctx)
+	if cl == nil {
 		return nil
 	}
-	c := _cl.(*client.Client)
-	return c.GetBalancer()
+	return cl.GetBalancer()
+}
+
+func getClient(ctx context.Context) *client.Client {
+	_cl, _ := clEventual.Get(ctx)
+	if _cl == nil {
+		return nil
+	}
+	return _cl.(*client.Client)
+}
+
+func getDNSGrab(ctx context.Context) dnsgrab.Server {
+	_dg, _ := dnsGrabEventual.Get(ctx)
+	if _dg == nil {
+		return nil
+	}
+	return _dg.(dnsgrab.Server)
 }
 
 type SurveyInfo struct {
@@ -454,8 +472,10 @@ func Start(configDir string,
 		return nil, err
 	}
 	log.Debugf("Started socks proxy at %s", socksAddr)
-	da, ok := dnsGrabAddrEventual.Get(startTimeout - elapsed())
-	if !ok {
+	ctx, cancel := context.WithTimeout(context.Background(), startTimeout-elapsed())
+	defer cancel()
+	da, _ := dnsGrabAddrEventual.Get(ctx)
+	if da == nil {
 		err := fmt.Errorf("dnsgrab didn't start within %v timeout", startTimeout)
 		log.Error(err.Error())
 		return nil, err
@@ -487,7 +507,7 @@ func run(configDir, locale string,
 
 	err := os.MkdirAll(configDir, 0755)
 	if os.IsExist(err) {
-		log.Errorf("Unable to create configDir at %v: %v", configDir, err)
+		log.Errorf("unable to create configDir at %v: %v", configDir, err)
 		return
 	}
 
@@ -500,24 +520,32 @@ func run(configDir, locale string,
 
 	cache, err := persistentcache.New(filepath.Join(configDir, "dnsgrab.cache"), maxDNSGrabAge)
 	if err != nil {
-		log.Errorf("Unable to open dnsgrab cache: %v", err)
+		log.Errorf("unable to open dnsgrab cache: %v", err)
 		return
 	}
 
 	grabber, err := dnsgrab.ListenWithCache(
 		"127.0.0.1:0",
-		session.GetDNSServer,
+		func() string {
+			server := session.GetDNSServer()
+			if strings.Contains(server, ":") {
+				// this is an IPv6 IP, go ahead and add brackets
+				server = "[" + server + "]"
+			}
+			return server
+		},
 		cache,
 	)
 	if err != nil {
-		log.Errorf("Unable to start dnsgrab: %v", err)
+		log.Errorf("unable to start dnsgrab: %v", err)
 		return
 	}
+	dnsGrabEventual.Set(grabber)
 	dnsGrabAddrEventual.Set(grabber.LocalAddr().String())
 	go func() {
 		serveErr := grabber.Serve()
 		if serveErr != nil {
-			log.Errorf("Error serving dns: %v", serveErr)
+			log.Errorf("error serving dns: %v", serveErr)
 		}
 	}()
 
@@ -578,18 +606,18 @@ func run(configDir, locale string,
 			}
 			updatedHost, ok := grabber.ReverseLookup(ip)
 			if !ok {
-				return "", errors.New("Invalid IP address")
+				return "", errors.New("invalid IP address")
 			}
 			if splitErr != nil {
 				return updatedHost, nil
 			}
 			return fmt.Sprintf("%v:%v", updatedHost, port), nil
 		},
-		func() string { return "" },
+		func(opts *config.GoogleSearchAdsOptions, query string) string { return "" },
 		func(category, action, label string) {},
 	)
 	if err != nil {
-		log.Fatalf("Failed to start flashlight: %v", err)
+		log.Fatalf("failed to start flashlight: %v", err)
 	}
 
 	replicaServer := &ReplicaServer{
@@ -658,7 +686,7 @@ func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	}
 
 	allowed := quota.MiBAllowed
-	if allowed < 0 || allowed > 50000000 {
+	if allowed > 50000000 {
 		return 0, 0, 0
 	}
 
@@ -672,14 +700,6 @@ func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	return percent, remaining, int(quota.MiBAllowed)
 }
 
-func setBandwidth(session panickingSession) {
-	quota, _ := bandwidth.GetQuota()
-	percent, remaining, allowed := getBandwidth(quota)
-	if percent != 0 && remaining != 0 {
-		session.BandwidthUpdate(percent, remaining, allowed, int(quota.TTLSeconds))
-	}
-}
-
 func afterStart(session panickingSession) {
 	bandwidthUpdates(session)
 
@@ -690,11 +710,6 @@ func afterStart(session panickingSession) {
 			session.SetCountry(country)
 		}
 	}()
-}
-
-// handleError logs the given error message
-func handleError(err error) {
-	log.Error(err)
 }
 
 // CheckForUpdates checks to see if a new version of Lantern is available

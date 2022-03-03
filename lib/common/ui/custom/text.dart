@@ -46,6 +46,9 @@ class CText extends StatelessWidget {
       );
     }
 
+    // autoscale
+    // NOTE: this can clash with IntrinsicWidth - see more here https://github.com/leisim/auto_size_text/issues/77
+    // Slack discussion https://wdynhnkxvsdx.slack.com/archives/C01K9DJ1ES2/p1643380315934109?thread_ts=1643317647.162100&cid=C01K9DJ1ES2
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         final fontSize = _fontSizeFor(context, constraints.maxWidth);

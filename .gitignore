@@ -72,3 +72,4 @@ lantern-android-sources*.tar.gz
 web*.pem
 .gomobilecache
 screenshots
+profile.cov

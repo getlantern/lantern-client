@@ -1,6 +1,7 @@
 package internalsdk
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"github.com/getlantern/flashlight"
+	"github.com/getlantern/flashlight/client"
 	"github.com/getlantern/flashlight/common"
 	"github.com/getlantern/flashlight/config"
 	"github.com/getlantern/flashlight/geolookup"
@@ -17,6 +19,9 @@ import (
 	"github.com/getlantern/flashlight/proxied"
 	replicaServer "github.com/getlantern/replica/server"
 	replicaService "github.com/getlantern/replica/service"
+
+	"github.com/getlantern/android-lantern/internalsdk/doh"
+
 	"github.com/gorilla/mux"
 )
 
@@ -47,14 +52,14 @@ func (s *ReplicaServer) CheckEnabled() {
 		h, err := s.newHandler()
 		if err != nil {
 			log.Errorf(
-				"Failed to start replica server. Will continue without it. Err: %v", err)
+				"failed to start replica server. Will continue without it. Err: %v", err)
 			return
 		}
 
 		l, srv, err := NewReplicaServer(h)
 		if err != nil {
 			log.Errorf(
-				"Failed to start replica server. Will continue without it. Err: %v", err)
+				"failed to start replica server. Will continue without it. Err: %v", err)
 			return
 		}
 		go srv.Serve(l)
@@ -85,7 +90,6 @@ func NewReplicaServer(handler *replicaServer.HttpHandler) (net.Listener, *http.S
 	r.PathPrefix("/replica").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.StripPrefix("/replica", handler).ServeHTTP(w, r)
 	})
-	r.Handle("/", r)
 	// Listen on a random TCP port
 	l, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
@@ -154,6 +158,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	input.HttpClient = &http.Client{
 		Transport: proxied.AsRoundTripper(
 			func(req *http.Request) (*http.Response, error) {
+				log.Debugf("Replica HTTP client processing request to: %v (%v)", req.Host, req.URL.Host)
 				chained, err := proxied.ChainedNonPersistent("")
 				if err != nil {
 					return nil, log.Errorf("connecting to proxy: %w", err)
@@ -161,6 +166,58 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 				return chained.RoundTrip(req)
 			},
 		),
+	}
+	input.TorrentClientHTTPProxy = func(req *http.Request) (*url.URL, error) {
+		log.Debugf("Proxying Replica request [%v] through Flashlight...", req.URL.String())
+		proxyAddr, ok := client.Addr(40 * time.Second)
+		if !ok {
+			return nil, log.Error("HTTP Proxy didn't start in time")
+		}
+		proxyAddrAsStr := proxyAddr.(string)
+		proxyURL, err := url.Parse("http://" + proxyAddrAsStr)
+		if err != nil {
+			return nil, log.Errorf("error parsing local proxy address: %w", err)
+		}
+		return proxyURL, nil
+	}
+	input.TorrentClientLookupTrackerIp = func(u *url.URL) ([]net.IP, error) {
+		// TODO: this, and the doh implementation, are copied from lantern-desktop, might be good to keep
+		// it in a single place (like flashlight).
+		//
+		// runDoh runs a Dns-over-https request (proxied with
+		// httpClient's Transport) and returns the DNS responses (based
+		// on 'typ')
+		log.Debugf("Running DOH for %v", u.Hostname())
+
+		runDoh := func(typ doh.DnsType) ([]net.IP, error) {
+			ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancelFunc()
+			resp, err := doh.MakeDohRequest(ctx, input.HttpClient, doh.DnsDomain(u.Hostname()), typ)
+			if err != nil {
+				return nil, err
+			}
+			ips := []net.IP{}
+			for _, ans := range resp.Answer {
+				ips = append(ips, net.ParseIP(ans.Data))
+			}
+			return ips, nil
+		}
+
+		allIps := []net.IP{}
+		ips, err := runDoh(doh.TypeA)
+		if err != nil {
+			return nil, log.Errorf("doh request A for [%s] %v", u.Hostname(), err)
+		}
+		allIps = append(allIps, ips...)
+
+		ips, err = runDoh(doh.TypeAAAA)
+		if err != nil {
+			return nil, log.Errorf("doh request AAAA for [%s] %v", u.Hostname(), err)
+		}
+		allIps = append(allIps, ips...)
+
+		// fmt.Printf("dohResp for [%s] = %+v\n", u, allIps)
+		return allIps, nil
 	}
 
 	input.ReplicaServiceClient = replicaService.ServiceClient{
@@ -179,7 +236,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 			raw := opts.ReplicaRustDefaultEndpoint
 			country, err := s.Session.GetCountryCode()
 			if err != nil {
-				log.Errorf("Failed to fetch country while configuring new replica-rust endpoint: re-running geolookup and defaulting to %q: %v", opts.ReplicaRustDefaultEndpoint, err)
+				log.Errorf("failed to fetch country while configuring new replica-rust endpoint: re-running geolookup and defaulting to %q: %v", opts.ReplicaRustDefaultEndpoint, err)
 				geolookup.Refresh()
 			}
 			if countryRaw := opts.ReplicaRustEndpoints[country]; countryRaw != "" {
@@ -191,7 +248,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 			// Parse endpoint
 			url, err := url.Parse(raw)
 			if err != nil {
-				log.Errorf("Could not parse replica rust URL %v", err)
+				log.Errorf("could not parse replica rust URL %v", err)
 				return replicaService.GlobalChinaDefaultServiceUrl
 			}
 			log.Debugf("parsed new endpoint for country %s successfully: %v", country, url.String())
