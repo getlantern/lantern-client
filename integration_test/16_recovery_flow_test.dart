@@ -19,12 +19,7 @@ Future<void> main() async {
     test(
       'Recovery_flow_test',
       () async {
-        await driver.openTab('Developer');
-        await driver.scrollTextUntilVisible('RESET FLAGS');
-        await driver.tapText(
-          'RESET FLAGS',
-          skipScreenshot: true,
-        );
+        await driver.resetFlags();
         await driver.tapText(
           'chats',
           waitText: 'welcome_title',

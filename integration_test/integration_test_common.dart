@@ -4,6 +4,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:lantern/common/add_nonbreaking_spaces.dart';
 import 'package:lantern/flutter_driver_extensions/add_dummy_contacts_command.dart';
 import 'package:lantern/flutter_driver_extensions/navigate_command.dart';
+import 'package:lantern/flutter_driver_extensions/reset_flags_command.dart';
 import 'package:lantern/flutter_driver_extensions/send_dummy_files_command.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:path/path.dart';
@@ -73,6 +74,12 @@ extension DriverExtension on FlutterDriver {
   Future<void> sendDummyFiles() async {
     print('downloading and sharing dummy files');
     await sendCommand(SendDummyFilesCommand());
+  }
+
+  /// Custom flutter driver command that resets Chat flags and timestamps
+  Future<void> resetFlags() async {
+    print('resetting flags and timestamps');
+    await sendCommand(ResetFlagsCommand());
   }
 
   /// Opens specified tab
