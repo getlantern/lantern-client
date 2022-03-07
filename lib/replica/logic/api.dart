@@ -25,7 +25,7 @@ class ReplicaApi {
     dio = Dio(
       BaseOptions(
         baseUrl: 'http://$replicaHostAddr/replica/',
-        connectTimeout: 10000, // 10s
+        connectTimeout: 30000, // 30s
       ),
     );
     _durationCache = LRUCache<ReplicaLink, double?>(1000, doFetchDuration);
@@ -130,7 +130,9 @@ class ReplicaApi {
       // logger.v('Duration request success: $duration');
       duration = double.parse(durationResp.data.toString());
     } catch (err) {
-      logger.w('failed to fetch duration. Will default to ??:??. Error: $err');
+      final dioErr = err as DioError;
+      logger.w(
+          'failed to fetch duration. Will default to ??:??. Error: ${dioErr.error}');
     }
     return duration;
   }

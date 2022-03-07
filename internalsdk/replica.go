@@ -158,7 +158,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	input.HttpClient = &http.Client{
 		Transport: proxied.AsRoundTripper(
 			func(req *http.Request) (*http.Response, error) {
-				log.Debugf("Replica HTTP client processing request to: %v (%v)", req.Host, req.URL.Host)
+				log.Tracef("Replica HTTP client processing request to: %v (%v)", req.Host, req.URL.Host)
 				chained, err := proxied.ChainedNonPersistent("")
 				if err != nil {
 					return nil, log.Errorf("connecting to proxy: %w", err)
@@ -168,7 +168,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 		),
 	}
 	input.TorrentClientHTTPProxy = func(req *http.Request) (*url.URL, error) {
-		log.Debugf("Proxying Replica request [%v] through Flashlight...", req.URL.String())
+		log.Tracef("Proxying Replica request [%v] through Flashlight...", req.URL.String())
 		proxyAddr, ok := client.Addr(40 * time.Second)
 		if !ok {
 			return nil, log.Error("HTTP Proxy didn't start in time")
@@ -187,7 +187,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 		// runDoh runs a Dns-over-https request (proxied with
 		// httpClient's Transport) and returns the DNS responses (based
 		// on 'typ')
-		log.Debugf("Running DOH for %v", u.Hostname())
+		log.Tracef("Running DOH for %v", u.Hostname())
 
 		runDoh := func(typ doh.DnsType) ([]net.IP, error) {
 			ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
@@ -242,7 +242,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 			if countryRaw := opts.ReplicaRustEndpoints[country]; countryRaw != "" {
 				raw = countryRaw
 			} else {
-				log.Debugf("No custom replica endpoint for %v. Using default one: %v", country, raw)
+				log.Tracef("No custom replica endpoint for %v. Using default one: %v", country, raw)
 			}
 
 			// Parse endpoint
@@ -251,7 +251,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 				log.Errorf("could not parse replica rust URL %v", err)
 				return replicaService.GlobalChinaDefaultServiceUrl
 			}
-			log.Debugf("parsed new endpoint for country %s successfully: %v", country, url.String())
+			log.Tracef("parsed new endpoint for country %s successfully: %v", country, url.String())
 			return url
 		},
 	}
