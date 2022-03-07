@@ -4,10 +4,12 @@ import 'package:lantern/messaging/messaging.dart';
 class CustomBottomBar extends StatelessWidget {
   final String selectedTab;
   final bool isDevelop;
+  final bool isTesting;
 
   const CustomBottomBar({
     required this.selectedTab,
     required this.isDevelop,
+    this.isTesting = false,
     Key? key,
   }) : super(key: key);
 
@@ -35,7 +37,7 @@ class CustomBottomBar extends StatelessWidget {
           }
           indexToTab[nextIndex] = TAB_ACCOUNT;
           tabToIndex[TAB_ACCOUNT] = nextIndex++;
-          if (isDevelop) {
+          if (isDevelop && !isTesting) {
             indexToTab[nextIndex] = TAB_DEVELOPER;
             tabToIndex[TAB_DEVELOPER] = nextIndex++;
           }
@@ -56,6 +58,7 @@ class CustomBottomBar extends StatelessWidget {
               replicaEnabled,
               hasBeenOnboarded!,
               isDevelop,
+              isTesting,
               replicaAddr,
             ),
           );
@@ -72,6 +75,7 @@ class CustomBottomBar extends StatelessWidget {
     bool replicaEnabled,
     bool hasBeenOnboarded,
     bool isDevelop,
+    bool isTesting,
     String replicaAddr,
   ) {
     final items = <BottomNavigationBarItem>[];
@@ -227,7 +231,7 @@ class CustomBottomBar extends StatelessWidget {
       ),
     );
 
-    if (isDevelop) {
+    if (isDevelop && !isTesting) {
       items.add(
         BottomNavigationBarItem(
           icon: CustomBottomBarItem(
