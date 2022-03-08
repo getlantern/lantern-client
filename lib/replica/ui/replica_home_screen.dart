@@ -62,7 +62,9 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
       child: Column(
         children: [
           CText('replica_search_intro'.i18n, style: tsBody1),
-          const Divider(),
+          const SizedBox(
+            height: 8,
+          ),
           CText('discover_disclaimer'.i18n, style: tsBody1),
         ],
       ),
