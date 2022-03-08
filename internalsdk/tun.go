@@ -3,77 +3,95 @@ package internalsdk
 import (
 	"context"
 	"io"
+	"net"
 	"os"
 	"runtime"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/chained"
+	"github.com/getlantern/idletiming"
+	"github.com/getlantern/ipproxy"
+	"github.com/getlantern/netx"
 
-	tun2socks "github.com/eycorsican/go-tun2socks/core"
+	"golang.org/x/net/proxy"
 )
 
 var (
-	currentIPStackMx sync.Mutex
-	currentIPStack   tun2socks.LWIPStack
+	currentDeviceMx sync.Mutex
+	currentDevice   io.ReadWriteCloser
+	currentIPP      ipproxy.Proxy
 )
 
-// Tun2Socks wraps the TUN device identified by fd and does the following:
+// Tun2Socks wraps the TUN device identified by fd with an ipproxy server that
+// does the following:
 //
-// 1. captured dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
+// 1. dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
 // 2. All other udp packets are routed directly to their destination
-// 3. All TCP traffic is routed tgit sthrough Lantern.
+// 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
 //
-// Despite the name, this doesn't use Lantern's SOCKS proxy, traffic enters the proxying
-// layer directly.
-//
-// This function blocks until StopTun2Socks() is called. It also locks itself to
-// the current OS thread so that the thread stays alive as long as Tun2Socks is running.
-func Tun2Socks(fd int, dnsGrabAddr string, mtu int) error {
+func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int) error {
 	runtime.LockOSThread()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
-	defer cancel()
-	dg := getDNSGrab(ctx)
-	if dg == nil {
-		return errors.New("unable to find dns grabber")
-	}
-	log.Debugf("Directing TUN traffic to Lantern with mtu %d", mtu)
+	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
 	dev := os.NewFile(uintptr(fd), "tun")
 	defer dev.Close()
 
-	ipStack := tun2socks.NewLWIPStack()
-	udpHandler, err := newDirectUDPHandler(dg, dnsGrabAddr, chained.IdleTimeout)
+	socksDialer, err := proxy.SOCKS5("tcp", socksAddr, nil, nil)
 	if err != nil {
-		return err
+		return errors.New("Unable to get SOCKS5 dialer: %v", err)
 	}
-	var writeMx sync.Mutex
-	tun2socks.RegisterOutputFn(func(b []byte) (int, error) {
-		// It's unclear why it's necessary to single-thread writes to the TUN device, but without this,
-		// user agents will periodically hang.
-		writeMx.Lock()
-		defer writeMx.Unlock()
-		return dev.Write(b)
-	})
-	tun2socks.RegisterTCPConnHandler(newDirectTCPHandler(mtu))
-	tun2socks.RegisterUDPConnHandler(udpHandler)
 
-	currentIPStackMx.Lock()
-	danglingIPStack := currentIPStack
-	currentIPStack = ipStack
-	currentIPStackMx.Unlock()
-
-	if danglingIPStack != nil {
-		go func() {
-			log.Debug("Closing dangling ip stack")
-			if err := danglingIPStack.Close(); err != nil {
-				log.Errorf("error closing dangling ip stack: %v", err)
+	ipp, err := ipproxy.New(dev, &ipproxy.Opts{
+		IdleTimeout:         70 * time.Second,
+		StatsInterval:       15 * time.Second,
+		MTU:                 mtu,
+		OutboundBufferDepth: 10000,
+		TCPConnectBacklog:   100,
+		DialTCP: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			if strings.HasSuffix(addr, ":853") {
+				// This is usually DNS over TLS, we blackhole this to force DNS through dnsgrab.
+				return nil, errors.New("blackholing DNS over TLS traffic to %v", addr)
 			}
-		}()
+			return socksDialer.Dial(network, addr)
+		},
+		DialUDP: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			_, port, _ := net.SplitHostPort(addr)
+			isDNS := port == "53"
+			if isDNS {
+				// reroute DNS requests to dnsgrab
+				addr = dnsGrabAddr
+			} else if port == "853" {
+				// This is usually DNS over DTLS, we blackhole this to force DNS through dnsgrab.
+				return nil, errors.New("blackholing DNS over TLS traffic to %v", addr)
+			} else if port == "443" {
+				// This is likely QUIC traffic. This should really be proxied, but since we don't proxy UDP,
+				// we blackhole this traffic.
+				return nil, errors.New("blackholing QUIC UDP traffic to %v", addr)
+			}
+			conn, err := netx.DialContext(ctx, network, addr)
+			if isDNS && err == nil {
+				// wrap our DNS requests in a connection that closes immediately to avoid piling up file descriptors for DNS requests
+				conn = idletiming.Conn(conn, 10*time.Second, nil)
+			}
+			return conn, err
+		},
+	})
+	if err != nil {
+		return errors.New("Unable to create ipproxy: %v", err)
 	}
-	_, err = io.CopyBuffer(ipStack, dev, make([]byte, mtu))
-	return err
+
+	currentDeviceMx.Lock()
+	currentDevice = dev
+	currentIPP = ipp
+	currentDeviceMx.Unlock()
+
+	err = ipp.Serve()
+	if err != io.EOF {
+		return log.Errorf("unexpected error serving TUN traffic: %v", err)
+	}
+	return nil
 }
 
 // StopTun2Socks stops the current tun device.
@@ -81,21 +99,22 @@ func StopTun2Socks() {
 	defer func() {
 		p := recover()
 		if p != nil {
-			log.Errorf("panic while stopping: %v", p)
+			log.Errorf("Panic while stopping: %v", p)
 		}
 	}()
 
-	currentIPStackMx.Lock()
-	ipStack := currentIPStack
-	currentIPStack = nil
-	currentIPStackMx.Unlock()
-	if ipStack != nil {
+	currentDeviceMx.Lock()
+	ipp := currentIPP
+	currentDevice = nil
+	currentIPP = nil
+	currentDeviceMx.Unlock()
+	if ipp != nil {
 		go func() {
-			log.Debug("Closing ipStack")
-			if err := ipStack.Close(); err != nil {
-				log.Errorf("error closing ipStack: %v", err)
+			log.Debug("Closing ipproxy")
+			if err := ipp.Close(); err != nil {
+				log.Errorf("Error closing ipproxy: %v", err)
 			}
-			log.Debug("Closed ipStack")
+			log.Debug("Closed ipproxy")
 		}()
 	}
 }
