@@ -1089,3 +1089,6 @@ msgstr "Присвойте файлу имя"
 
 msgid "upload"
 msgstr "Отправить"
+
+msgid "discover_disclaimer"
+msgstr "Lantern анонимизирует ваши поисковые запросы и защищает их от третьих лиц"

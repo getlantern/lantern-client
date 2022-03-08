@@ -1011,3 +1011,6 @@ msgstr "Name Your File"
 
 msgid "upload"
 msgstr "Upload"
+
+msgid "discover_disclaimer"
+msgstr "Lantern anonymizes your searches and protects them from third parties."
