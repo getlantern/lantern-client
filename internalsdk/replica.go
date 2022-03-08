@@ -144,7 +144,11 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	// TODO: should probably use Android's cache dir here since this stuff presumably is okay to delete
 	input.CacheDir = s.ConfigDir
 	input.AddCommonHeaders = func(r *http.Request) {
-		common.AddCommonHeaders(s.UserConfig, r)
+		// This is passed along with Replica searches and used for server-side statistics gathering.
+		// These statistics don't need the full set of common headers, just Platform and Version.
+		// We intentionally omit userid for privacy.
+		r.Header.Set(common.PlatformHeader, common.Platform)
+		r.Header.Set(common.VersionHeader, common.Version)
 	}
 	input.GlobalConfig = func() replicaServer.ReplicaOptions {
 		return optsFunc()
