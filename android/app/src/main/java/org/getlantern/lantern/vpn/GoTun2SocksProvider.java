@@ -67,7 +67,7 @@ public class GoTun2SocksProvider implements Provider {
       Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks");
       ParcelFileDescriptor intf = createBuilder(vpnService, builder);
       Logger.debug(TAG, "Running tun2socks");
-      Internalsdk.tun2Socks(intf.getFd(), dnsGrabAddr, VPN_MTU);
+      Internalsdk.tun2Socks(intf.getFd(), socksAddr, dnsGrabAddr, VPN_MTU);
     } catch (Throwable t) {
       Logger.e(TAG, "Exception while handling TUN device", t);
     } finally {
