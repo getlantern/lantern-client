@@ -32,6 +32,7 @@ import io.lantern.android.model.SessionModel
 import io.lantern.android.model.VpnModel
 import io.lantern.messaging.WebRTCSignal
 import okhttp3.Response
+import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.event.EventManager
@@ -117,8 +118,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
 
-        // prevent screenshots of this activity by other apps
-        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        // if not in dev mode, prevent screenshots of this activity by other apps
+        if (!BuildConfig.DEVELOPMENT_MODE) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
 
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
