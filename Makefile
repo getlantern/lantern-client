@@ -28,7 +28,7 @@ TEST ?= *_test
 # integration-test:
 # 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
-GO_VERSION := 1.17
+GO_VERSION := 1.16
 
 TAG ?= $$VERSION
 INSTALLER_NAME ?= lantern-installer
@@ -347,7 +347,7 @@ $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
 .PHONY: android-lib
-android-lib: $(ANDROID_LIB)
+android-lib: $(MOBILE_ANDROID_LIB)
 
 # TODO: The below don't work when doing full builds, but we should indeed make debug builds unstripped and unoptimized.
 # .PHONY: android-lib-debug
