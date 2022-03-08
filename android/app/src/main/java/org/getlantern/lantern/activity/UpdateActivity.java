@@ -57,8 +57,10 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // prevent screenshots of this activity by other apps
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        // if not in dev mode, prevent screenshots of this activity by other apps
+        if (!BuildConfig.DEVELOPMENT_MODE) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        }
     }
 
     @AfterViews
