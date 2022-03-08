@@ -38,7 +38,7 @@ replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110
 
 replace github.com/keighl/mandrill => github.com/getlantern/mandrill v0.0.0-20191024010305-7094d8b40358
 
-replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-20210430190606-84f1a4e5b695
+replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-20220308135715-cadbd6cba709
 
 //replace github.com/getlantern/yinbi-server => ../yinbi-server
 

@@ -28,7 +28,7 @@ TEST ?= *_test
 # integration-test:
 # 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
-GO_VERSION := 1.16
+GO_VERSION := 1.17
 
 TAG ?= $$VERSION
 INSTALLER_NAME ?= lantern-installer
