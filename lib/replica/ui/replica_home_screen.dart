@@ -59,7 +59,13 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   Widget renderDescription() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 10.0),
-      child: CText('replica_search_intro'.i18n, style: tsBody1),
+      child: Column(
+        children: [
+          CText('replica_search_intro'.i18n, style: tsBody1),
+          const Divider(),
+          CText('discover_disclaimer'.i18n, style: tsBody1),
+        ],
+      ),
     );
   }
 
