@@ -181,6 +181,7 @@ class AudioWidget extends StatelessWidget {
               color: initialColor,
               playing: value.isPlaying,
               onPressed: () async {
+                await HapticFeedback.lightImpact();
                 if (value.isPlaying) {
                   await controller.pause();
                 } else {
