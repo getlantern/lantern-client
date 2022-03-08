@@ -49,6 +49,7 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
     return GestureDetector(
       key: containerKey,
       onLongPress: () async {
+        await HapticFeedback.vibrate();
         widget.onOpen?.call();
         await openMenu(context);
       },

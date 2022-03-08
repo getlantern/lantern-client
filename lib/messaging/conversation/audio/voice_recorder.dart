@@ -69,6 +69,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
       onPanDown: (details) async {
         unawaited(animationController.forward(from: startingScale));
         await widget.onRecording();
+        await HapticFeedback.lightImpact();
       },
       onPanEnd: (details) async {
         await widget.onStopRecording();
@@ -82,6 +83,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
         setState(() {
           scale = 1;
         });
+        await HapticFeedback.lightImpact();
       },
       child: Transform.scale(
         alignment:
