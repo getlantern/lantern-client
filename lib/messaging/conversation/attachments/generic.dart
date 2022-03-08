@@ -17,7 +17,12 @@ class GenericAttachment extends StatelessWidget {
     final title = attachmentTitle ?? 'could_not_render_title'.i18n;
     final fileType = fileExtension ?? '';
     return Padding(
-      padding: const EdgeInsetsDirectional.all(16),
+      padding: const EdgeInsetsDirectional.only(
+        start: 16,
+        end: 16,
+        top: 8,
+        bottom: 16,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -46,16 +51,18 @@ class GenericAttachment extends StatelessWidget {
                   )
                 ],
               ),
-              const Divider(height: 2.0),
-              CText(
-                fileType.toUpperCase(),
-                style: CTextStyle(
-                  color: inbound ? inboundMsgColor : outboundMsgColor,
-                  fontSize: 12,
-                  lineHeight: 16,
-                  fontWeight: FontWeight.w500,
+              Padding(
+                padding: const EdgeInsetsDirectional.only(bottom: 8),
+                child: CText(
+                  fileType.toUpperCase(),
+                  style: CTextStyle(
+                    color: inbound ? inboundMsgColor : outboundMsgColor,
+                    fontSize: 12,
+                    lineHeight: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              )
+              ),
             ],
           )
         ],
