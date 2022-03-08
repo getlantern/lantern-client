@@ -67,9 +67,9 @@ class _VoiceRecorderState extends State<VoiceRecorder>
     return GestureDetector(
       key: const ValueKey('btnRecord'),
       onPanDown: (details) async {
+        await HapticFeedback.lightImpact();
         unawaited(animationController.forward(from: startingScale));
         await widget.onRecording();
-        await HapticFeedback.lightImpact();
       },
       onPanEnd: (details) async {
         await widget.onStopRecording();
@@ -79,11 +79,11 @@ class _VoiceRecorderState extends State<VoiceRecorder>
       },
       onTapUp: (details) async {
         animationController.stop(canceled: true);
+        await HapticFeedback.lightImpact();
         await widget.onTapUpListener();
         setState(() {
           scale = 1;
         });
-        await HapticFeedback.lightImpact();
       },
       child: Transform.scale(
         alignment:

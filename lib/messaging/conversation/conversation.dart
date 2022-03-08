@@ -700,13 +700,17 @@ class ConversationState extends State<Conversation>
               ? const SizedBox()
               : MessageBarPreviewRecording(
                   audioController: audioPreviewController!,
-                  onCancelRecording: () async => setState(() {
-                    isRecording = false;
-                    finishedRecording = false;
-                    recording = null;
-                    audioPreviewController = null;
-                  }),
+                  onCancelRecording: () async {
+                    await HapticFeedback.lightImpact();
+                    setState(() {
+                      isRecording = false;
+                      finishedRecording = false;
+                      recording = null;
+                      audioPreviewController = null;
+                    });
+                  },
                   onSend: () {
+                    unawaited(HapticFeedback.lightImpact());
                     audio.stop();
                     send();
                   },
