@@ -46,7 +46,7 @@ In the welcome screen choose the "Open an existing Android Studio" option and se
 Do this the first time your run the project:
 
 * Install all prerequisites
-* You'll need the liblantern-all.aar containing the Go backend code in order for the project to compile. Build it with `make android-lib-debug ANDROID_ARCH=all` (see "Building the InternalSdk" section below for more info)
+* You'll need the liblantern-all.aar containing the Go backend code in order for the project to compile. Build it with `make android-lib ANDROID_ARCH=all` (see "Building the InternalSdk" section below for more info)
 * Run `git submodule update --init --recursive`
 * Run `git lfs install && git pull`
 * Go to the **SDK MANAGER**

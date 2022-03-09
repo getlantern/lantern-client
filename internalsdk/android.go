@@ -526,14 +526,7 @@ func run(configDir, locale string,
 
 	grabber, err := dnsgrab.ListenWithCache(
 		"127.0.0.1:0",
-		func() string {
-			server := session.GetDNSServer()
-			if strings.Contains(server, ":") {
-				// this is an IPv6 IP, go ahead and add brackets
-				server = "[" + server + "]"
-			}
-			return server
-		},
+		session.GetDNSServer,
 		cache,
 	)
 	if err != nil {

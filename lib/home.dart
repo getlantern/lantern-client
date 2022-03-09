@@ -68,8 +68,14 @@ class _HomePageState extends State<HomePage> {
             margin:
                 const EdgeInsetsDirectional.only(start: 8, end: 8, bottom: 16),
             // simple way to show indefinitely
-            content:
-                CText(message, style: CTextStyle(fontSize: 14, lineHeight: 21)),
+            content: CText(
+              message,
+              style: CTextStyle(
+                fontSize: 14,
+                lineHeight: 21,
+                color: white,
+              ),
+            ),
             action: SnackBarAction(
               textColor: pink3,
               label: buttonText.toUpperCase(),
