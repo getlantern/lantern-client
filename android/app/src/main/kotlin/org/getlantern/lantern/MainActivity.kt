@@ -375,13 +375,17 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             return
         }
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
+
+        // For some reason, telegram.me links create infinite redirects. To solve this, we disable
+        // JavaScript when opening such links.
+        val javaScriptEnabled = !survey.url!!.contains("t.me") && !survey.url!!.contains("telegram.me")
         FinestWebView.Builder(this@MainActivity)
             .webViewLoadWithProxy(LanternApp.getSession().hTTPAddr)
             .webViewSupportMultipleWindows(true)
-            .webViewJavaScriptEnabled(true)
+            .webViewJavaScriptEnabled(javaScriptEnabled)
+            .webViewJavaScriptCanOpenWindowsAutomatically(javaScriptEnabled)
             .swipeRefreshColorRes(R.color.black)
             .webViewAllowFileAccessFromFileURLs(true)
-            .webViewJavaScriptCanOpenWindowsAutomatically(true)
             .show(survey.url!!)
     }
 
