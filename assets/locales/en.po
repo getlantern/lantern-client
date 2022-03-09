@@ -1029,3 +1029,6 @@ msgstr "Now this message should disappear very soon!"
 
 msgid "test_replica_search"
 msgstr "cat"
+
+msgid "discover_disclaimer"
+msgstr "Lantern anonymizes your searches and protects them from third parties."

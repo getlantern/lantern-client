@@ -24,6 +24,8 @@ extension Localization on String {
     });
   }
 
+  static String get localeShort => locale.split('_')[0];
+
   String get i18n =>
       localize(this, translations, locale: locale.replaceAll('_', '-'));
 

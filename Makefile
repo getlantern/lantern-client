@@ -28,7 +28,7 @@ TEST ?= *_test
 # integration-test:
 # 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
-GO_VERSION := 1.17
+GO_VERSION := 1.16
 
 TAG ?= $$VERSION
 INSTALLER_NAME ?= lantern-installer
@@ -70,8 +70,8 @@ LDFLAGS := -s -w -X github.com/getlantern/flashlight/common.RevisionDate=$(REVIS
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
 # -s omits the symbol table and debug info
-LD_STRIP_FLAGS := -s -w
-DISABLE_OPTIMIZATION_FLAGS := -gcflags="all=-N -l"
+# LD_STRIP_FLAGS := -s -w
+# DISABLE_OPTIMIZATION_FLAGS := -gcflags="all=-N -l"
 GOMOBILE_EXTRA_BUILD_FLAGS :=
 
 BINARIES_PATH ?= ../lantern-binaries
@@ -346,13 +346,17 @@ $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && \
 	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
-.PHONY: android-lib-debug
-android-lib-debug: export GOMOBILE_EXTRA_BUILD_FLAGS += $(DISABLE_OPTIMIZATION_FLAGS)
-android-lib-debug: $(MOBILE_ANDROID_LIB)
+.PHONY: android-lib
+android-lib: $(MOBILE_ANDROID_LIB)
 
-.PHONY: android-lib-prod
-android-lib-prod: export LDFLAGS += $(LD_STRIP_FLAGS)
-android-lib-prod: $(MOBILE_ANDROID_LIB)
+# TODO: The below don't work when doing full builds, but we should indeed make debug builds unstripped and unoptimized.
+# .PHONY: android-lib-debug
+# android-lib-debug: export GOMOBILE_EXTRA_BUILD_FLAGS += $(DISABLE_OPTIMIZATION_FLAGS)
+# android-lib-debug: $(MOBILE_ANDROID_LIB)
+
+# .PHONY: android-lib-prod
+# android-lib-prod: export LDFLAGS += $(LD_STRIP_FLAGS)
+# android-lib-prod: $(MOBILE_ANDROID_LIB)
 
 $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@$(GRADLE) -PandroidArch=$(ANDROID_ARCH) \
