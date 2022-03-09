@@ -28,6 +28,7 @@ ScrollablePositionedList groupedContactListGenerator({
       var key = groupedSortedList.keys.elementAt(index);
       var itemsPerKey = groupedSortedList.values.elementAt(index);
       return ListBody(
+        key: const ValueKey('grouped_contact_list'),
         children: [
           if (itemsPerKey.isNotEmpty)
             ...itemsPerKey.map(

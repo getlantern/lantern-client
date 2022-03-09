@@ -1,9 +1,13 @@
 package io.lantern.android.model
 
+import android.app.DownloadManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -16,12 +20,11 @@ import io.lantern.messaging.dbPath
 import io.lantern.messaging.directContactPath
 import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
+import org.getlantern.lantern.R
 import org.getlantern.lantern.restartApp
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileInputStream
+import java.io.*
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(
@@ -379,6 +382,22 @@ class MessagingModel constructor(
                     tx.put("onBoardingStatus", false)
                     tx.put("copiedRecoveryStatus", false)
                 }
+            }
+            "saveDummyAttachment" -> {
+                val url = call.argument<String>("url")!!
+                val displayName = call.argument<String>("displayName")!!
+                val request: DownloadManager.Request = DownloadManager.Request(Uri.parse(url))
+                request.setDestinationInExternalFilesDir(activity.context, "testing", displayName)
+                activity.getSystemService(Context.DOWNLOAD_SERVICE)?.let { manager ->
+                    (manager as DownloadManager).enqueue(request)
+                }
+            }
+            "sendDummyAttachment" -> {
+                val fileName = call.argument<String>("fileName")
+                val downloadFolderPath = activity.getExternalFilesDirs("testing")!!
+                val file = File(downloadFolderPath[0], fileName)
+                val metadata = call.argument<Map<String, String>?>("metadata")
+                return messaging.createAttachment(file, "", metadata).toByteArray()
             }
             else -> super.doMethodCall(call, notImplemented)
         }

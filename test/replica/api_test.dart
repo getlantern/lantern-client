@@ -17,7 +17,7 @@ Future<String> runDummyServer(String ip, String port) async {
   final proc = await Process.run(
     'bash',
     [
-      './test_assets/run.sh',
+      './scripts/replica_test_assets/run.sh',
       port,
     ],
     runInShell: true,

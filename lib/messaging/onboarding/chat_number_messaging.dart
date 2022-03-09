@@ -89,7 +89,7 @@ class ChatNumberMessaging extends StatelessWidget {
             ),
           ],
           button: Button(
-            text: 'Next'.i18n,
+            text: 'next'.i18n,
             onPressed: () async {
               await messagingModel.markIsOnboarded();
               context.router.popUntilRoot();

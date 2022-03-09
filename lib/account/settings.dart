@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:lantern/i18n/localization_constants.dart';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
@@ -42,7 +43,7 @@ class Settings extends StatelessWidget {
                 child: sessionModel.language(
                   (BuildContext context, String lang, Widget? child) => CText(
                     toBeginningOfSentenceCase(
-                      lang.displayLanguage(context, lang).toUpperCase(),
+                      displayLanguage(lang).toUpperCase(),
                     )!,
                     style: tsSubtitle2.copiedWith(color: pink4),
                   ),
@@ -101,6 +102,7 @@ class Settings extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsetsDirectional.only(start: 4.0),
                       child: CAssetImage(
+                        key: ValueKey('proxy_all_icon'),
                         path: ImagePaths.info,
                         size: 12,
                       ),

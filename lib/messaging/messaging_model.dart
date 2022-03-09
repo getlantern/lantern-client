@@ -565,12 +565,62 @@ class MessagingModel extends Model {
     );
   }
 
-  // * DEV PURPOSES
+  // * DEV AND TESTING PURPOSES
+  static const dummyContactIds = [
+    'f46zym45eke4yrcgj7yz9q9oa5kjtghrddn4ekrnf69333jjxbmy',
+    'a77ngft83zg3cg1b2hrr6yng31wn9xamu26spze5ojnot2bwmtto',
+    'gsg2wytn11sztcaomzbgse3focrdbtuthydr2pudbtmzngsn5tso',
+  ];
+
   Future<void> resetTimestamps() {
     return methodChannel.invokeMethod('resetTimestamps');
   }
 
   Future<void> resetFlags() {
     return methodChannel.invokeMethod('resetFlags');
+  }
+
+  void addDummyContacts() {
+    return dummyContactIds.forEach(
+      (element) => methodChannel
+          .invokeMethod('addOrUpdateDirectContact', <String, dynamic>{
+        'unsafeId': element,
+      }),
+    );
+  }
+
+  Future<void> saveDummyAttachment(
+    String url,
+    String displayName,
+  ) async {
+    return methodChannel.invokeMethod('saveDummyAttachment', {
+      'url': url,
+      'displayName': displayName,
+    });
+  }
+
+  Future<void> sendDummyAttachment(
+    String fileName,
+    Map<String, String> metadata,
+  ) async {
+    try {
+      // create attachment in messaging
+      final attachment = await methodChannel
+          .invokeMethod('sendDummyAttachment', <String, dynamic>{
+        'fileName': fileName,
+        'metadata': metadata,
+      }).then((value) {
+        return value as Uint8List;
+      });
+
+      // send to the first of the 3 dummy direct contact
+      return methodChannel
+          .invokeMethod('sendToDirectContact', <String, dynamic>{
+        'identityKey': dummyContactIds.first,
+        'attachments': [attachment],
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }

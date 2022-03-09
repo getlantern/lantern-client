@@ -104,8 +104,19 @@ Package the AAR with `make android-lib-debug ANDROID_ARCH=all` (use `android-lib
 You can run integration tests from the integration_test directory against a live app using the following steps:
 
 1. Run the app with these additional run arguments `--dart-define=driver=true --observatory-port 8888 --disable-service-auth-codes`
-2. Run the integration test as a dart application and specify the environment variable `VM_SERVICE_URL=http://127.0.0.1:8888`
-
+2. Run the integration test as a dart application
+3. When running tests in different locales, change `const simulatedLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale. 
+4. Go to SETTINGS view and then run `change_language_test.dart`.
+5. All tests should start with testing device showing Chats tab.
+6. Start by running test `1A`.
+7. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
+   1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
+   2. `6B_request_flow_test` requires a message request to have just been received 
+   3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
+   4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
+8. We will have some duplicate screenshots in there - run `python3 scripts/screenshot_generation_assets/remove_dups.py [your android-lantern-path]/screenshots/` to deduplicate.
+9. To generate stitched landscape images for all screenshots in a given test folder, run `python3 scripts/screenshot_generation_assets/merge_screenshots.py [your android-lantern-path]/screenshots/[a locale e.g. en_US]`
+  
 This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
 
 WARNING - when running with flutter driver enabled, the on-screen keyboard does not work.
@@ -113,6 +124,8 @@ WARNING - when running with flutter driver enabled, the on-screen keyboard does 
 WARNING - if you try to run an instance of the app using `--observatory-port` and you already have another instance running with that same observatory-port, the 2nd instance will hang on launch because flutter cannot bind to that port.
 
 TODO: we need to automate the running of integration tests in a CI environment using Flutter driver.
+
+NOTE ⚠ : Flutter driver is borderline maintained and clearly the expectation is to move to using `integration_test`. [Here](https://github.com/flutter/flutter/issues/12810) is a good depiction of related conversations. 
 
 ##### Testing Replica
 A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.
@@ -124,32 +137,6 @@ The tests should transparently setup and teardown the dummy server but you need 
 * For testing all `android/app/src/androidTest` tests, run `./gradlew :app:connectedAndroidTest`
 * For testing a specific an `androidTest` test, easiest is to open that file in Android Studio and clicking on the green play button next to the test
 * For testing the internalsdk package, run `cd ./internalsdk && go test ./...`
-
-#### Testing with VSCode
-
-To run the unit test you need to input the following setup.
-- Create a folder on the root of your project named: `.vscode`
-- Inside .vscode create a file named: `launch.json`
-- Add the following inside `launch.json`
-- The segment named `program` is to specificy if you wish to run all the U.T or a specific one.
-
-```json
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Widget Test",
-            "program": "test/",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "debug",
-            "args": [
-              "--coverage"
-            ]
-          }
-    ]
-}
-```
 
 #### Unit Test Graph
 
@@ -360,40 +347,18 @@ If you like that VSCode start running the project without the need of be constan
 
 ```json
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Debug",
-            "program": "lib/main.dart",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "debug",
-            "args": ["--no-sound-null-safety"]
-        }
-    ]
-}
-```
-
-## Debugging with VSCode
-
-Create this `.vscode/launch.json` file: 
-
-```
-{
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-    {
-      "name": "android-lantern (prod mode)",
+      {
+      "name": "Debug",
+      "program": "lib/main.dart",
       "request": "launch",
       "type": "dart",
       "flutterMode": "debug",
       "args": [
         "--no-sound-null-safety",
         "--flavor",
-        "prod"
+        "prod",
       ]
     }
   ]

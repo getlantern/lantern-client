@@ -65,7 +65,6 @@ class _VoiceRecorderState extends State<VoiceRecorder>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      key: const ValueKey('btnRecord'),
       onPanDown: (details) async {
         unawaited(animationController.forward(from: startingScale));
         await widget.onRecording();

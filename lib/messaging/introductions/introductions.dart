@@ -52,6 +52,7 @@ class Introductions extends StatelessWidget {
                       child: messagingModel.singleContactById(
                         introductorContactId,
                         (singleContactContext, introductor, child) => Column(
+                          key: const ValueKey('introductions_list'),
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
