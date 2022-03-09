@@ -1,4 +1,21 @@
 
+<a name="6.9.11"></a>
+## [6.9.11](https://github.com/getlantern/android-lantern/compare/6.9.10...6.9.11)
+
+> 2022-03-09
+
+### Pull Requests
+
+* Merge pull request [#736](https://github.com/getlantern/android-lantern/issues/736) from getlantern/kr/disclaimer
+* Merge pull request [#734](https://github.com/getlantern/android-lantern/issues/734) from getlantern/ox/back-to-ipproxy
+* Merge pull request [#727](https://github.com/getlantern/android-lantern/issues/727) from getlantern/soltzen/random-fixes-kalli
+* Merge pull request [#725](https://github.com/getlantern/android-lantern/issues/725) from getlantern/ox/issue5303
+* Merge pull request [#716](https://github.com/getlantern/android-lantern/issues/716) from getlantern/kr/bugSquashingSession
+* Merge pull request [#723](https://github.com/getlantern/android-lantern/issues/723) from getlantern/ox/tundirect
+* Merge pull request [#720](https://github.com/getlantern/android-lantern/issues/720) from getlantern/soltzen/li5283
+* Merge pull request [#718](https://github.com/getlantern/android-lantern/issues/718) from getlantern/ox/issue699
+
+
 <a name="6.9.10"></a>
 ## [6.9.10](https://github.com/getlantern/android-lantern/compare/6.9.9...6.9.10)
 
