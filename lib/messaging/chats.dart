@@ -114,6 +114,7 @@ class _ChatsState extends State<Chats> {
               ),
               // * Search
               IconButton(
+                key: const ValueKey('search_icon'),
                 visualDensity: VisualDensity.compact,
                 onPressed: () async => await showSearch(
                   context: context,
@@ -124,6 +125,7 @@ class _ChatsState extends State<Chats> {
               ),
               // * Bottom modal
               IconButton(
+                key: const ValueKey('chats_topbar_more_menu'),
                 visualDensity: VisualDensity.compact,
                 onPressed: () async => showBottomModal(
                   context: context,
@@ -216,6 +218,7 @@ class _ChatsState extends State<Chats> {
                           var contact = reshapedContactList[index].value;
                           var isUnaccepted = contact.isUnaccepted();
                           return Column(
+                            key: const ValueKey('chats_messages_list'),
                             children: [
                               ListItemFactory.messagingItem(
                                 customBg: isUnaccepted ? customBg : null,
@@ -281,6 +284,7 @@ class _ChatsState extends State<Chats> {
   }
 }
 
+/// Sorts message list from newest to oldest, from verified to unverified, and from accepted to unaccepted
 List<PathAndValue<Contact>> reshapeContactList(
   Iterable<PathAndValue<Contact>> contacts,
 ) {

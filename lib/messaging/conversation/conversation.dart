@@ -431,6 +431,7 @@ class ConversationState extends State<Conversation>
                 builder: (BuildContext context, bool value) {
                   if (!contact.isMe && contact.isUnverified() && value) {
                     return IconButton(
+                      key: const ValueKey('verification_badge'),
                       visualDensity: VisualDensity.compact,
                       onPressed: () async {
                         showVerificationOptions(
@@ -456,6 +457,7 @@ class ConversationState extends State<Conversation>
               ),
               if (!contact.isMe) CallAction(contact),
               IconButton(
+                key: const ValueKey('conversation_topbar_more_menu'),
                 visualDensity: VisualDensity.compact,
                 icon: const CAssetImage(path: ImagePaths.more_vert),
                 onPressed: () => showConversationOptions(
@@ -839,6 +841,7 @@ class ConversationState extends State<Conversation>
               isRecording
                   ? const SizedBox()
                   : IconButton(
+                      key: const ValueKey('filepicker_icon'),
                       onPressed: () async => await selectFilesToShare(),
                       icon: const CAssetImage(path: ImagePaths.add_circle),
                     ),
@@ -876,6 +879,7 @@ class ConversationState extends State<Conversation>
         ),
         if (!isSendIconVisible)
           VoiceRecorder(
+            key: const ValueKey('recorder_button'),
             isRecording: isRecording,
             onRecording: () async => await startRecording(),
             onStopRecording: () async =>
