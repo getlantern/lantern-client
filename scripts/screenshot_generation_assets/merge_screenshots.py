@@ -3,18 +3,30 @@ from PIL import Image
 import os
 
 padding = 100
+ideal_width = 6260
 
-def add_margin(pil_img, top, right, bottom, left, color):
-    width, height = pil_img.size
-    new_width = width + right + left
-    new_height = height + top + bottom
-    result = Image.new(pil_img.mode, (new_width, new_height), color)
-    result.paste(pil_img, (left, top))
-    return result
+# adds padding around the image
+def pad_image(img, top, right, bottom, left, color):
+  width, height = img.size
+  new_width = width + right + left
+  new_height = height + top + bottom
+  result = Image.new(img.mode, (new_width, new_height), color)
+  result.paste(img, (left, top))
+  return result
+
+# useful in case we have only one or two screenshots
+def frame_image(img):
+  width, height = img.size
+  if (width < ideal_width * 0.7):
+    # its probably too narrow, pad it up to ideal_width
+    return pad_image(img, 0, int((ideal_width - width)/2), 0, int((ideal_width - width)/2), (235, 235, 235))
+  return img
 
 def merge_images_from_dir(dirPath):
   for subsubdir, _, files in os.walk(dirPath):
     filePaths = []
+
+    # load all PNG files
     for file in files:
       filePath = os.path.join(subsubdir, file)
       if (filePath == ".DS_Store"):
@@ -24,16 +36,17 @@ def merge_images_from_dir(dirPath):
         filePaths.append(filePath)
 
     if (len(filePaths) > 0):
+      # sort list alphabetically since sometimes the paths aren't parsed in order
+      filePaths.sort()
+
       img = Image.open(filePaths[0])
       (imgWidth, imgHeight) = img.size
-      # calculate width
+
+      # calculate width of final mosaic
       stitched_gallery_width = (len(filePaths)) * imgWidth + padding * (len(filePaths))
       # create Image instance
       stitched_gallery = Image.new('RGB', (stitched_gallery_width, imgHeight), (235, 235, 235))
       index = 0
-
-      # sort list alphabetically since sometimes the paths aren't parsed in order
-      filePaths.sort()
 
       for filePath in filePaths:
         # read width and height of each file
@@ -60,8 +73,9 @@ for subdir, dirs, files in os.walk(dirPath):
       if result is not None:
         try:
           stitchedLocale = stichedDirPath + "/" + directory.split("/")[-1]
-          print("saving", stitchedLocale)
-          padded_result = add_margin(result, padding, 0, padding, padding, (235, 235, 235))
-          padded_result.save(stitchedLocale+"_stitched.png") 
+          padded = pad_image(result, padding, 0, padding, padding, (235, 235, 235))
+          framed = frame_image(padded)
+          framed.save(stitchedLocale+"_stitched.png") 
+          print("padded, framed, saved", stitchedLocale)
         except:
           print("something went wrong with", stitchedLocale)
