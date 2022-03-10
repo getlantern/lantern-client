@@ -701,7 +701,7 @@ class ConversationState extends State<Conversation>
               : MessageBarPreviewRecording(
                   audioController: audioPreviewController!,
                   onCancelRecording: () async {
-                    await HapticFeedback.lightImpact();
+                    unawaited(HapticFeedback.lightImpact());
                     setState(() {
                       isRecording = false;
                       finishedRecording = false;
