@@ -12,7 +12,7 @@ class VPNSwitch extends StatelessWidget {
           activeColor: onSwitchColor,
           inactiveColor: offSwitchColor,
           onToggle: (bool newValue) async {
-            await HapticFeedback.lightImpact();
+            unawaited(HapticFeedback.lightImpact());
             if (vpnStatus != 'connecting' || vpnStatus != 'disconnecting') {
               await vpnModel.switchVPN(newValue);
             }

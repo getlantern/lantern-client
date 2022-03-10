@@ -38,7 +38,7 @@ class Reactions extends StatelessWidget {
                 child: TextButton(
                   key: ValueKey(emoji),
                   onPressed: () async {
-                    await HapticFeedback.lightImpact();
+                    unawaited(HapticFeedback.lightImpact());
                     if (emoji == '•••') {
                       onEmojiTap();
                       Navigator.pop(context);
