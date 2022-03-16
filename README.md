@@ -194,9 +194,17 @@ You can find the exact values to add to your gradle.properties under the "Androi
 Note that this same key is used both for signing standalone APKs as well as signing aab app bundles for upload to
 Google Play.
 
-To build all release packages, run:
+#### Release build with Development Mode
+
+Development Mode can be handy for things like enabling screenshotting. It's possible to build release builds in development mode like this:
+
+```
+DEVELOPMENT_MODE=true make android-release
+```
 
 ### Building release packages
+
+To build all release packages, run:
 
 ```
 VERSION=<version here> make package-android
@@ -217,7 +225,7 @@ VERSION=<version here> make release-qa
 ```
 
 ### Testing Auto-Update with release builds
-Sometimes you may need to make a release bulid with an old version that is eligible for auto-update. You can do that by using the VERSION_CODE environment variable
+Sometimes you may need to make a release build with an old version that is eligible for auto-update. You can do that by using the VERSION_CODE environment variable
 
 ```
 APP=lantern VERSION_CODE=1 VERSION=1.0.0 make android-release
