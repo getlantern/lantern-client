@@ -66,6 +66,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
   Widget build(BuildContext context) {
     return GestureDetector(
       onPanDown: (details) async {
+        unawaited(HapticFeedback.lightImpact());
         unawaited(animationController.forward(from: startingScale));
         await widget.onRecording();
       },
@@ -77,6 +78,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
       },
       onTapUp: (details) async {
         animationController.stop(canceled: true);
+        unawaited(HapticFeedback.lightImpact());
         await widget.onTapUpListener();
         setState(() {
           scale = 1;
