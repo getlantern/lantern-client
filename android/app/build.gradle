@@ -165,7 +165,7 @@ android {
             shrinkResources false
             debuggable true
             // Run code coverage reports by default on debug builds.
-            buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
+            buildConfigField "boolean", "DEVELOPMENT_MODE", getBoolean("developmentMode")
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
@@ -182,7 +182,7 @@ android {
             minifyEnabled false
             shrinkResources false
             debuggable false
-            buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
+            buildConfigField "boolean", "DEVELOPMENT_MODE", getBoolean("developmentMode")
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
@@ -199,7 +199,7 @@ android {
             minifyEnabled true
             shrinkResources true
             debuggable false
-            buildConfigField "boolean", "DEVELOPMENT_MODE", "false"
+            buildConfigField "boolean", "DEVELOPMENT_MODE", getBoolean("developmentMode")
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
