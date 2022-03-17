@@ -37,22 +37,23 @@ CHANGELOG_MIN_VERSION ?= 5.0.0
 
 get-command = $(shell which="$$(which $(1) 2> /dev/null)" && if [[ ! -z "$$which" ]]; then printf %q "$$which"; fi)
 
-GO        := $(call get-command,go)
-NODE      := $(call get-command,node)
-NPM       := $(call get-command,npm)
-GULP      := $(call get-command,gulp)
-AWSCLI    := $(call get-command,aws)
-S3CMD     := $(call get-command,s3cmd)
-CHANGE    := $(call get-command,git-chglog)
-PIP       := $(call get-command,pip)
-WGET      := $(call get-command,wget)
-APPDMG    := $(call get-command,appdmg)
-MAGICK    := $(call get-command,magick)
-BUNDLER   := $(call get-command,bundle)
-ADB       := $(call get-command,adb)
-OPENSSL   := $(call get-command,openssl)
-GMSAAS    := $(call get-command,gmsaas)
-SENTRY    := $(call get-command,sentry-cli)
+GO         := $(call get-command,go)
+NODE       := $(call get-command,node)
+NPM        := $(call get-command,npm)
+GULP       := $(call get-command,gulp)
+AWSCLI     := $(call get-command,aws)
+S3CMD      := $(call get-command,s3cmd)
+CHANGE     := $(call get-command,git-chglog)
+PIP        := $(call get-command,pip)
+WGET       := $(call get-command,wget)
+APPDMG     := $(call get-command,appdmg)
+MAGICK     := $(call get-command,magick)
+BUNDLER    := $(call get-command,bundle)
+ADB        := $(call get-command,adb)
+OPENSSL    := $(call get-command,openssl)
+GMSAAS     := $(call get-command,gmsaas)
+SENTRY     := $(call get-command,sentry-cli)
+SOURCEDUMP := $(call get-command,sourcedump)
 
 GIT_REVISION_SHORTCODE := $(shell git rev-parse --short HEAD)
 GIT_REVISION := $(shell git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)
@@ -64,7 +65,6 @@ BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
 BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 
 UPDATE_SERVER_URL ?=
-VERSION ?= $$VERSION
 LDFLAGS := -s -w -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION)
 
 # Ref https://pkg.go.dev/cmd/link
@@ -176,7 +176,7 @@ define check-go-version
 endef
 
 guard-%:
-	 @ if [ -z '${${*}}' ]; then echo 'Environment variable $* not set' && exit 1; fi
+	@ if [ -z '${${*}}' ]; then echo 'Environment variable $* not set' && exit 1; fi
 
 .PHONY: require-app
 require-app: guard-APP
@@ -228,6 +228,10 @@ require-magick:
 .PHONY: require-sentry
 require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
+
+.PHONY: require-sourcedump
+require-sourcedump:
+	@if [[ -z "$(SOURCEDUMP)" ]]; then echo 'Missing "sourcedump" command. Try go install github.com/getlantern/sourcedump/cmd/sourcedump@latest'; exit 1; fi
 
 release-qa: require-version require-s3cmd require-changelog
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
@@ -445,7 +449,7 @@ changelog: require-version require-changelog require-app
 	$(call changelog,flashlight)
 
 # Creates a dump of the source code lantern-android-sources-<version>.tar.gz
-sourcedump: require-version
+sourcedump-original: require-version
 	here=`pwd` && \
 	rm -Rf /tmp/android-lantern ; \
 	mkdir -p /tmp/android-lantern && \
@@ -461,6 +465,14 @@ sourcedump: require-version
 	find vendor/github.com/getlantern -name "*.go" -exec perl -pi -e 's/"https?\:\/\/[^"]+/"URL_HIDDEN/g' {} \; && \
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
+
+sourcedump: require-version require-sourcedump
+	sourcedump --android --compress \
+		--go-source . \
+		-s LICENSE -s LICENSING.md -s android -s lib -s protos_flutteronly -s protos_shared \
+		-e android/alipaySdk-15.6.5-20190718211148 \
+		-r '"https?\:\/\/[^"]+':'"URL_HIDDEN' \
+		-t lantern-android-sources-$$VERSION.tar.gz
 
 clean:
 	rm -f liblantern*.aar && \
