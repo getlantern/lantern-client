@@ -164,8 +164,8 @@ android {
             minifyEnabled false
             shrinkResources false
             debuggable true
-            // Run code coverage reports by default on debug builds.
-            buildConfigField "boolean", "DEVELOPMENT_MODE", getBoolean("developmentMode")
+            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
+            buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
@@ -182,7 +182,8 @@ android {
             minifyEnabled false
             shrinkResources false
             debuggable false
-            buildConfigField "boolean", "DEVELOPMENT_MODE", getBoolean("developmentMode")
+            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
+            buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
@@ -199,6 +200,7 @@ android {
             minifyEnabled true
             shrinkResources true
             debuggable false
+            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
             buildConfigField "boolean", "DEVELOPMENT_MODE", getBoolean("developmentMode")
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
@@ -295,6 +297,14 @@ def paymentProvider() {
 
 def proServerUrl() {
     def value = project.getProperties().get("proServerUrl")
+    if (value == null || !value?.trim()) {
+        return "\"\""
+    }
+    return String.format("\"%s\"", value)
+}
+
+def matomoAuthToken() {
+    def value = project.getProperties().get("MATOMO_AUTH_TOKEN")
     if (value == null || !value?.trim()) {
         return "\"\""
     }
@@ -431,6 +441,9 @@ dependencies {
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:messaging-android:65aa7a4ac2'
     implementation 'com.github.getlantern:db-android:70d727d18a'
+
+    // Used for enabling Matomo debug logging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
