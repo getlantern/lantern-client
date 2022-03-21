@@ -72,7 +72,6 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
         } else {
             Logger.debug(TAG, String.format("Sending a %s request to %s", method, url))
         }
-        logRequest(request)
 
         httpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -117,15 +116,5 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
 
     companion object {
         var TAG = HttpClient::class.java.name
-        private fun logRequest(request: Request) {
-            try {
-                val copy = request.newBuilder().build()
-                val buffer = Buffer()
-                copy.body!!.writeTo(buffer)
-                Logger.debug(TAG, "New request: " + buffer.readUtf8())
-            } catch (e: Exception) {
-                Logger.error(TAG, "Unable to log request " + e.message)
-            }
-        }
     }
 }

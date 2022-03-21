@@ -187,6 +187,7 @@ project) and add the following to your
 KEYSTORE_PWD=$KEYSTORE_PASSWORD
 KEYSTORE_FILE=/path/to/your/keystore.release.jks
 KEY_PWD=$KEY_PASSWORD
+MATOMO_AUTH_TOKEN=$MATOMO_AUTH_TOKEN
 ```
 
 You can find the exact values to add to your gradle.properties under the "Android" entry in 1Password.

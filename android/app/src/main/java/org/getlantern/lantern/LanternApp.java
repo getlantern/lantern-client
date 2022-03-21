@@ -189,11 +189,11 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
      * Configures the default ProxySelector to send all traffic to the embedded Lantern proxy.
      */
     private void configureProxySelector() {
-        final SocketAddress proxyAddress = addrFromString(session.getSettings().getHttpProxyHost() + ":" +
-                session.getSettings().getHttpProxyPort());
         ProxySelector.setDefault(new ProxySelector() {
             @Override
             public List<Proxy> select(URI uri) {
+                final SocketAddress proxyAddress = addrFromString(session.getSettings().getHttpProxyHost() + ":" +
+                        session.getSettings().getHttpProxyPort());
                 final List<Proxy> proxiesList = new ArrayList();
                 proxiesList.add(new Proxy(Proxy.Type.HTTP, proxyAddress));
                 return proxiesList;
