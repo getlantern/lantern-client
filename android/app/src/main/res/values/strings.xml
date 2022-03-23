@@ -35,6 +35,8 @@
         <item>Cannot sign in</item>
         <item>Spinner loads endlessly</item>
         <item>Slow</item>
+        <item>Chat not working</item>
+        <item>Discover not working</item>
         <item>Other</item>
     </string-array>
     <string name="submit_code">Confirm Code</string>
