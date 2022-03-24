@@ -187,7 +187,18 @@ class _CTextFieldState extends State<CTextField> {
             ),
           )
         : widget.suffixIcon != null
-            ? Transform.scale(scale: 0.5, child: widget.suffixIcon)
+            ? Stack(
+                fit: StackFit.passthrough,
+                children: [
+                  GestureDetector(
+                    child: const SizedBox(
+                      width: 48,
+                      height: 48,
+                    ),
+                  ),
+                  Transform.scale(scale: 0.5, child: widget.suffixIcon)
+                ],
+              )
             : null;
   }
 

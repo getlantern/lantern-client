@@ -456,20 +456,23 @@ class ConversationState extends State<Conversation>
                 },
               ),
               if (!contact.isMe) CallAction(contact),
-              IconButton(
-                key: const ValueKey('conversation_topbar_more_menu'),
-                visualDensity: VisualDensity.compact,
-                icon: const CAssetImage(path: ImagePaths.more_vert),
-                onPressed: () => showConversationOptions(
-                  parentContext: context,
-                  contact: contact,
-                  topBarAnimationCallback: () async {
-                    setState(() => verifiedColor = indicatorGreen);
-                    await Future.delayed(
-                      longAnimationDuration,
-                      () => setState(() => verifiedColor = black),
-                    );
-                  },
+              SizedBox(
+                height: 48.0, // as per accessibility recs
+                child: IconButton(
+                  key: const ValueKey('conversation_topbar_more_menu'),
+                  visualDensity: VisualDensity.compact,
+                  icon: const CAssetImage(path: ImagePaths.more_vert),
+                  onPressed: () => showConversationOptions(
+                    parentContext: context,
+                    contact: contact,
+                    topBarAnimationCallback: () async {
+                      setState(() => verifiedColor = indicatorGreen);
+                      await Future.delayed(
+                        longAnimationDuration,
+                        () => setState(() => verifiedColor = black),
+                      );
+                    },
+                  ),
                 ),
               )
             ],

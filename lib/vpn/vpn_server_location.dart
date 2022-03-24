@@ -20,6 +20,7 @@ class ServerLocationWidget extends StatelessWidget {
             ),
           ),
           Container(
+            height: 48.0,
             transform: Matrix4.translationValues(0.0, 2.0, 0.0),
             child: Icon(
               Icons.info_outline_rounded,

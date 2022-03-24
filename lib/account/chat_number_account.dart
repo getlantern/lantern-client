@@ -42,30 +42,39 @@ class ChatNumberAccount extends StatelessWidget {
                   ],
                 ),
                 trailingArray: [
-                  CInkWell(
-                    onTap: () async {
-                      copyText(
-                        context,
-                        me.chatNumber.number.formattedChatNumber,
-                      );
-                      WidgetsBinding.instance?.addPostFrameCallback((_) async {
-                        setState(() => textCopied = true);
-                        await Future.delayed(
-                          defaultAnimationDuration,
-                          () => setState(() => textCopied = false),
-                        );
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                        start: 16.0,
+                  Stack(
+                    alignment: AlignmentDirectional.center,
+                    fit: StackFit.passthrough,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          copyText(
+                            context,
+                            me.chatNumber.number.formattedChatNumber,
+                          );
+                          WidgetsBinding.instance
+                              ?.addPostFrameCallback((_) async {
+                            setState(() => textCopied = true);
+                            await Future.delayed(
+                              defaultAnimationDuration,
+                              () => setState(() => textCopied = false),
+                            );
+                          });
+                        },
+                        child: Container(
+                            color: transparent, width: 48, height: 48),
                       ),
-                      child: CAssetImage(
-                        path: textCopied
-                            ? ImagePaths.check_green
-                            : ImagePaths.content_copy,
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 16.0,
+                        ),
+                        child: CAssetImage(
+                          path: textCopied
+                              ? ImagePaths.check_green
+                              : ImagePaths.content_copy,
+                        ),
                       ),
-                    ),
+                    ],
                   )
                 ],
               ),

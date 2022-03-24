@@ -50,7 +50,19 @@ class ReplicaVideoListItem extends StatelessWidget {
                 bottom: 4,
                 child: renderDurationTextbox(),
               ),
-              PlayButton(custom: true),
+              Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  GestureDetector(
+                    child: Container(
+                      color: transparent,
+                      width: 48,
+                      height: 48,
+                    ),
+                  ),
+                  PlayButton(custom: true)
+                ],
+              ),
             ],
           ),
         );
@@ -101,7 +113,19 @@ class ReplicaVideoListItem extends StatelessWidget {
                 bottom: 4,
                 child: renderDurationTextbox(),
               ),
-              PlayButton(custom: true),
+              Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  GestureDetector(
+                    child: Container(
+                      color: transparent,
+                      width: 48,
+                      height: 48,
+                    ),
+                  ),
+                  PlayButton(custom: true)
+                ],
+              ),
             ],
           ),
         );
