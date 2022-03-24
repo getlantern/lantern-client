@@ -120,9 +120,13 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
       scanning = true;
     });
     subscription = qrController?.scannedDataStream.listen((scanData) async {
+      if (scanData.code == null) {
+        return;
+      }
+
       try {
         await addOnce(() {
-          return _addProvisionalContact(model, scanData.code, 'qr');
+          return _addProvisionalContact(model, scanData.code!, 'qr');
         });
       } catch (e, s) {
         setState(() {

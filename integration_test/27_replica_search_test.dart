@@ -4,8 +4,8 @@ import 'integration_test_constants.dart';
 Future<void> main() async {
   await runTest(
     (driver) async {
-      await driver.openTab('Discover');
-      final messageContent = await driver.requestData('test_replica_search');
+      await driver.openTab('Discover', homeFirst: true);
+      final messageContent = await driver.translate('test_replica_search');
       await driver.waitForSeconds(2);
       await driver.tapType(
         'SearchField',

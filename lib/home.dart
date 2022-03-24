@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                   bottomNavigationBar: CustomBottomBar(
                     selectedTab: selectedTab,
                     isDevelop: developmentMode,
-                    isTesting: isTesting,
+                    isTesting: isTesting && false,
                   ),
                 );
               }),

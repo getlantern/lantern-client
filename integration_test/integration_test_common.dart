@@ -15,10 +15,13 @@ import 'integration_test_constants.dart';
 export 'package:flutter_driver/flutter_driver.dart';
 export 'package:test/test.dart';
 
-Future<FlutterDriver> connect({int port = 8888}) async {
+Future<FlutterDriver> connect({
+  int port = 8888,
+  timeout = 30,
+}) async {
   return await FlutterDriver.connect(
     dartVmServiceUrl: 'http://127.0.0.1:$port',
-    timeout: const Duration(seconds: 15),
+    timeout: Duration(seconds: timeout),
   );
 }
 
@@ -172,11 +175,8 @@ extension DriverExtension on FlutterDriver {
     SerializableFinder? parent,
     bool capitalize = false,
   }) async {
-    tapText = await requestData(tapText);
-    if (capitalize) {
-      tapText = tapText.toUpperCase();
-    }
-    waitText = waitText == null ? null : await requestData(waitText);
+    tapText = await translate(tapText, capitalize: capitalize);
+    waitText = waitText == null ? null : await translate(tapText);
     print('tapping on text: $tapText');
     try {
       await tapFinder(
@@ -249,7 +249,7 @@ extension DriverExtension on FlutterDriver {
 
   /// Finds and longpresses a specific string
   Future<void> longPressText(String text) async {
-    await longPress(target: find.text(await requestData(text)));
+    await longPress(target: find.text(await translate(text)));
   }
 
   /// Simulates a long press is simulated, and screenshots labeled as 'long_press' are saved.
@@ -333,7 +333,7 @@ extension DriverExtension on FlutterDriver {
       );
       await scrollUntilVisible(
         scrollable,
-        find.text(await requestData(text)),
+        find.text(await translate(text)),
         dyScroll: -500,
         timeout: const Duration(
           seconds: 600,
@@ -360,11 +360,11 @@ extension DriverExtension on FlutterDriver {
       skipScreenshot: true,
     );
     await tapText(
-      await requestData('chats'),
+      await translate('chats'),
       skipScreenshot: skipScreenshot,
     );
     await tapText(
-      (await requestData('get_started')).toUpperCase(),
+      (await translate('get_started')).toUpperCase(),
       skipScreenshot: skipScreenshot,
     );
     await tapText(
@@ -379,7 +379,7 @@ extension DriverExtension on FlutterDriver {
     String messageContent, {
     Duration? overwriteTimeout,
   }) async {
-    messageContent = await requestData(messageContent);
+    messageContent = await translate(messageContent);
     await waitForSeconds(2);
     await tapType(
       'TextFormField',
@@ -445,5 +445,13 @@ extension DriverExtension on FlutterDriver {
   /// long presses first item of descendants in list with given list_key
   Future<void> longPressFirstItemInList(String list_key) async {
     await longPress(target: await fistItemFinder(list_key));
+  }
+
+  Future<String> translate(
+    String key, {
+    bool capitalize = false,
+  }) async {
+    var result = await requestData(key);
+    return capitalize ? result.toUpperCase() : result;
   }
 }

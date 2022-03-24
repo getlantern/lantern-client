@@ -7,7 +7,7 @@ Future<void> main() async {
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
-    driver = await FlutterDriver.connect(timeout: const Duration(seconds: 30));
+    driver = await connect(timeout: 30);
     await driver.initScreenshotsDirectory(testName);
   });
 
@@ -20,6 +20,7 @@ Future<void> main() async {
       'Recovery_flow_test',
       () async {
         await driver.resetFlags();
+        await driver.home();
         await driver.tapText(
           'chats',
           waitText: 'welcome_title',

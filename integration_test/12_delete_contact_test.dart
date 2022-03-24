@@ -7,7 +7,7 @@ Future<void> main() async {
 
   setUpAll(() async {
     // Connect to a running Flutter application instance.
-    driver = await FlutterDriver.connect(timeout: const Duration(seconds: 30));
+    driver = await connect(timeout: 30);
     await driver.initScreenshotsDirectory(testName);
   });
 
@@ -35,6 +35,8 @@ Future<void> main() async {
           overwriteTimeout: defaultWaitTimeout,
         );
 
+        var delete = await driver.translate('delete_contact', capitalize: true);
+        await driver.scrollTextUntilVisible(delete);
         await driver.tapText('delete_contact', capitalize: true);
       },
       timeout: const Timeout(Duration(minutes: 5)),

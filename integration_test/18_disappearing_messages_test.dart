@@ -40,9 +40,9 @@ Future<void> main() async {
           overwriteTimeout: longWaitTimeout,
         );
 
-        final five = await driver.requestData('5');
+        final five = await driver.translate('5');
         final seconds =
-            (await driver.requestData('longform_seconds')).split(' ')[1];
+            (await driver.translate('longform_seconds')).split(' ')[1];
         await driver.tapText(
           '$five $seconds',
           overwriteTimeout: longWaitTimeout,

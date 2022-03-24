@@ -37,8 +37,11 @@ class ServerLocationWidget extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(4)),
-                      child:
-                          Flag(serverInfo.countryCode, height: 24, width: 36),
+                      child: Flag.fromString(
+                        serverInfo.countryCode,
+                        height: 24,
+                        width: 36,
+                      ),
                     ),
                     const SizedBox(width: 12),
                     CText(
