@@ -1,4 +1,16 @@
 
+<a name="7.0.0"></a>
+## [7.0.0](https://github.com/getlantern/android-lantern/compare/6.9.11...7.0.0)
+
+> 2022-03-24
+
+### Pull Requests
+
+* Merge pull request [#735](https://github.com/getlantern/android-lantern/issues/735) from getlantern/kr/formatting_hapticUX
+* Merge pull request [#686](https://github.com/getlantern/android-lantern/issues/686) from getlantern/kr/testingExtravaganza
+* Merge pull request [#722](https://github.com/getlantern/android-lantern/issues/722) from getlantern/ox/testingExtravaganza
+
+
 <a name="6.9.11"></a>
 ## [6.9.11](https://github.com/getlantern/android-lantern/compare/6.9.10...6.9.11)
 
