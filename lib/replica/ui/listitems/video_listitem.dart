@@ -51,6 +51,7 @@ class ReplicaVideoListItem extends StatelessWidget {
                 child: renderDurationTextbox(),
               ),
               Stack(
+                // as per recommendation recs
                 alignment: AlignmentDirectional.center,
                 children: [
                   GestureDetector(

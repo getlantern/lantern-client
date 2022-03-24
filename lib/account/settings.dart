@@ -98,6 +98,7 @@ class Settings extends StatelessWidget {
                     ),
                   ),
                   Stack(
+                    // as per recommendation recs
                     alignment: AlignmentDirectional.center,
                     children: [
                       GestureDetector(
