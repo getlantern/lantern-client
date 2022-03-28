@@ -50,11 +50,12 @@ class ReplicaVideoListItem extends StatelessWidget {
                 bottom: 4,
                 child: renderDurationTextbox(),
               ),
+              // TODO: fix accessibility + redundant play button
               Stack(
                 // as per accessibility recs
                 alignment: AlignmentDirectional.center,
                 children: [
-                  GestureDetector(
+                  CInkWell(
                     child: Container(
                       color: transparent,
                       width: 48,
@@ -114,10 +115,11 @@ class ReplicaVideoListItem extends StatelessWidget {
                 bottom: 4,
                 child: renderDurationTextbox(),
               ),
+              // TODO: fix accessibility + redundant play button
               Stack(
                 alignment: AlignmentDirectional.center,
                 children: [
-                  GestureDetector(
+                  CInkWell(
                     child: Container(
                       color: transparent,
                       width: 48,

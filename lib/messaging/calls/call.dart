@@ -296,7 +296,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
                               Wrap(
                                 children: [
                                   ...fragmentStatusMap.entries.map(
-                                    (entry) => GestureDetector(
+                                    (entry) => CInkWell(
                                       key: ValueKey(entry.key),
                                       onTap: () => handleTapping(entry.key),
                                       child: Padding(

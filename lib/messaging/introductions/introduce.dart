@@ -178,7 +178,7 @@ class _IntroduceState extends State<Introduce> {
                               ),
                             ),
                           // HACK - create transparent tiny text to be picked up by testing and select all checkboxes
-                          GestureDetector(
+                          CInkWell(
                             key: const ValueKey('select_all_intros'),
                             onTap: () => sortedContacts.forEach((e) {
                               setState(() {

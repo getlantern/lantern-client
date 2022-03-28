@@ -10,6 +10,7 @@ class ServerLocationWidget extends StatelessWidget {
         description: 'Server Location Info'.i18n,
         iconPath: ImagePaths.location_on,
       ),
+      disableSplash: true,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -22,8 +23,8 @@ class ServerLocationWidget extends StatelessWidget {
           Container(
             height: 48.0,
             transform: Matrix4.translationValues(0.0, 2.0, 0.0),
-            child: Icon(
-              Icons.info_outline_rounded,
+            child: CAssetImage(
+              path: ImagePaths.info,
               color: unselectedTabIconColor,
               size: 16,
             ),

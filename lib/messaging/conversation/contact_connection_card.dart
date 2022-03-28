@@ -39,7 +39,7 @@ class ContactConnectionCard extends StatelessWidget {
                 top: 16.0,
                 bottom: 4.0,
               ),
-              child: GestureDetector(
+              child: CInkWell(
                 onTap: () async {
                   if (inbound && message.introduction.isPending()) {
                     _showOptions(

@@ -90,7 +90,7 @@ class AttachmentBuilder extends StatelessWidget {
                 result = addScrim(result);
               }
               if (onTap != null) {
-                result = GestureDetector(onTap: onTap, child: result);
+                result = CInkWell(onTap: onTap, child: result);
               }
               return result;
             } else {

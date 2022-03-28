@@ -132,7 +132,7 @@ class CVideoViewerState extends ViewerState<CVideoViewer> {
                   alignment: Alignment.bottomCenter,
                   children: <Widget>[
                     // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                    GestureDetector(
+                    CInkWell(
                       onTap: () {
                         setState(() => _showPlayButton = !_showPlayButton);
                         Future.delayed(

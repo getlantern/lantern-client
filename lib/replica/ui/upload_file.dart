@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/base_screen.dart';
 import 'package:lantern/common/ui/button.dart';
 import 'package:lantern/common/ui/colors.dart';
@@ -229,7 +230,7 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return CInkWell(
       onTap: () {
         // Dismiss keyboard when clicking anywhere
         FocusScope.of(context).requestFocus(FocusNode());

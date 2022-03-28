@@ -2,13 +2,13 @@ import 'package:lantern/common/common.dart';
 
 class CInkWell extends StatelessWidget {
   final Widget child;
-  final Function onTap;
+  final Function? onTap;
   final RoundedRectangleBorder? customBorder;
   final bool disableSplash;
 
   const CInkWell({
     required this.child,
-    required this.onTap,
+    this.onTap,
     this.customBorder,
     this.disableSplash = false,
     Key? key,
@@ -25,7 +25,7 @@ class CInkWell extends StatelessWidget {
         borderRadius: const BorderRadius.all(
           Radius.circular(8.0),
         ),
-        onTap: () => onTap(),
+        onTap: () => onTap!(),
         customBorder: customBorder,
         child: child,
       ),

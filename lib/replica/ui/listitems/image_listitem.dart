@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/custom/asset_image.dart';
 import 'package:lantern/common/ui/custom/text.dart';
@@ -29,10 +30,11 @@ class ReplicaImageListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0.0,
-      child: GestureDetector(
+      child: CInkWell(
         onTap: onTap,
         child: FocusedMenuHolder(
-          menu: renderReplicaLongPressMenuItem(context, replicaApi, item.replicaLink),
+          menu: renderReplicaLongPressMenuItem(
+              context, replicaApi, item.replicaLink),
           menuWidth: MediaQuery.of(context).size.width * 0.8,
           builder: (_) {
             return GridTile(

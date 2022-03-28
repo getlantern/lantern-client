@@ -47,7 +47,7 @@ class ChatNumberAccount extends StatelessWidget {
                     alignment: AlignmentDirectional.center,
                     fit: StackFit.passthrough,
                     children: [
-                      GestureDetector(
+                      CInkWell(
                         onTap: () async {
                           copyText(
                             context,

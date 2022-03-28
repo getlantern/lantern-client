@@ -78,7 +78,7 @@ class ListItemFactory extends StatelessWidget {
                 trailingArray: trailingArray,
                 onTap: onTap,
                 showDivider: true,
-                disableSplash: true,
+                disableSplash: false,
               ),
             ],
           );

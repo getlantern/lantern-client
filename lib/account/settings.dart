@@ -84,39 +84,32 @@ class Settings extends StatelessWidget {
                 ListItemFactory.settingsItem(
               header: 'VPN'.i18n,
               icon: ImagePaths.key,
-              content: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: CText(
-                      'proxy_everything_is'
-                          .i18n
-                          .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
-                      softWrap: false,
-                      style: tsSubtitle1.short,
-                    ),
-                  ),
-                  Stack(
-                    // as per accessibility recs
-                    alignment: AlignmentDirectional.center,
+              content: CInkWell(
+                disableSplash: true,
+                onTap: () => openInfoProxyAll(context),
+                child: Container(
+                  height: 24,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () => openInfoProxyAll(context),
-                        child: Container(
-                          color: transparent,
-                          width: 24.0,
-                          height: 48.0,
+                      Flexible(
+                        child: CText(
+                          'proxy_everything_is'
+                              .i18n
+                              .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
+                          softWrap: false,
+                          style: tsSubtitle1.short,
                         ),
                       ),
                       const CAssetImage(
                         key: ValueKey('proxy_all_icon'),
                         path: ImagePaths.info,
                         size: 12,
-                      )
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
               trailingArray: [
                 FlutterSwitch(
