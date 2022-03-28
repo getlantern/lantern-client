@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/custom/asset_image.dart';
 
+// TODO: DRY we already have a PlayButton component
 class PlaybackButton extends StatelessWidget {
   final GestureTapCallback onTap;
   final String path;

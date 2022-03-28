@@ -43,7 +43,7 @@ class ChatNumberAccount extends StatelessWidget {
                 ),
                 trailingArray: [
                   Stack(
-                    // as per recommendation recs
+                    // as per accessibility recs
                     alignment: AlignmentDirectional.center,
                     fit: StackFit.passthrough,
                     children: [

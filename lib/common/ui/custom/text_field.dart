@@ -188,7 +188,7 @@ class _CTextFieldState extends State<CTextField> {
           )
         : widget.suffixIcon != null
             ? Stack(
-                // as per recommendation recs
+                // as per accessibility recs
                 fit: StackFit.passthrough,
                 children: [
                   GestureDetector(
