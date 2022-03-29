@@ -50,20 +50,9 @@ class ReplicaVideoListItem extends StatelessWidget {
                 bottom: 4,
                 child: renderDurationTextbox(),
               ),
-              // TODO: fix accessibility + redundant play button
-              Stack(
-                // as per accessibility recs
-                alignment: AlignmentDirectional.center,
-                children: [
-                  CInkWell(
-                    child: Container(
-                      color: transparent,
-                      width: 48,
-                      height: 48,
-                    ),
-                  ),
-                  PlayButton(custom: true)
-                ],
+              CAccessibleStack(
+                onTap: onTap,
+                foreground: PlayButton(custom: true),
               ),
             ],
           ),
@@ -115,19 +104,9 @@ class ReplicaVideoListItem extends StatelessWidget {
                 bottom: 4,
                 child: renderDurationTextbox(),
               ),
-              // TODO: fix accessibility + redundant play button
-              Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  CInkWell(
-                    child: Container(
-                      color: transparent,
-                      width: 48,
-                      height: 48,
-                    ),
-                  ),
-                  PlayButton(custom: true)
-                ],
+              CAccessibleStack(
+                onTap: () {}, // do nothing on tap for error
+                foreground: PlayButton(custom: true),
               ),
             ],
           ),

@@ -42,40 +42,56 @@ class ChatNumberAccount extends StatelessWidget {
                   ],
                 ),
                 trailingArray: [
-                  Stack(
-                    // as per accessibility recs
-                    alignment: AlignmentDirectional.center,
-                    fit: StackFit.passthrough,
-                    children: [
-                      CInkWell(
-                        onTap: () async {
-                          copyText(
-                            context,
-                            me.chatNumber.number.formattedChatNumber,
-                          );
-                          WidgetsBinding.instance
-                              ?.addPostFrameCallback((_) async {
-                            setState(() => textCopied = true);
-                            await Future.delayed(
-                              defaultAnimationDuration,
-                              () => setState(() => textCopied = false),
-                            );
-                          });
-                        },
-                        child: Container(
-                            color: transparent, width: 48, height: 48),
+                  CAccessibleStack(
+                    onTap: () async {
+                      copyText(
+                        context,
+                        me.chatNumber.number.formattedChatNumber,
+                      );
+                      WidgetsBinding.instance?.addPostFrameCallback((_) async {
+                        setState(() => textCopied = true);
+                        await Future.delayed(
+                          defaultAnimationDuration,
+                          () => setState(() => textCopied = false),
+                        );
+                      });
+                    },
+                    foreground: Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        start: 16.0,
                       ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                          start: 16.0,
-                        ),
-                        child: CAssetImage(
-                          path: textCopied
-                              ? ImagePaths.check_green
-                              : ImagePaths.content_copy,
-                        ),
+                      child: CAssetImage(
+                        path: textCopied
+                            ? ImagePaths.check_green
+                            : ImagePaths.content_copy,
                       ),
-                    ],
+                    ),
+                  ),
+                  CInkWell(
+                    onTap: () async {
+                      copyText(
+                        context,
+                        me.chatNumber.number.formattedChatNumber,
+                      );
+                      WidgetsBinding.instance?.addPostFrameCallback((_) async {
+                        setState(() => textCopied = true);
+                        await Future.delayed(
+                          defaultAnimationDuration,
+                          () => setState(() => textCopied = false),
+                        );
+                      });
+                    },
+                    child: Container(color: transparent, width: 48, height: 48),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 16.0,
+                    ),
+                    child: CAssetImage(
+                      path: textCopied
+                          ? ImagePaths.check_green
+                          : ImagePaths.content_copy,
+                    ),
                   )
                 ],
               ),
