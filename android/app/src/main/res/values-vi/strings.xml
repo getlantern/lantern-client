@@ -32,11 +32,13 @@
   <string name="purchase_date">Ngày Mua</string>
   <string-array name="common_issue_list">
     <item>Không truy cập được trang bị chặn</item>
-    <item>Không trả tiền được</item>
+    <item>Không thể hoàn tất giao dịch mua</item>
     <item>Không đăng nhập được</item>
     <item>Vòng xoay không ngừng chạy</item>
     <item>Chậm</item>
-    <item>Vấn đề khác</item>
+    <item>Trò chuyện không hoạt động</item>
+    <item>Khám phá không hoạt động</item>
+    <item>Khác</item>
   </string-array>
   <string name="submit_code">Mã Số Xác Nhận</string>
   <string name="on_text">BẬT</string>
@@ -46,6 +48,7 @@
   <string name="on_desc">Bạn có thể truy cập\r\ncác trang và dịch vụ bị chặn</string>
   <string name="off_desc">Bấm nút để truy cập các trang và dịch vụ bị chặn</string>
   <string name="service_connected">Đã kết nối với VPN</string>
+  <string name="service_issue">Không thể kết nối với VPN</string>
   <string name="ready_to_connect">Sẵn sàng kết nối</string>
   <string name="desktop_option">Phiên bản Để Bàn</string>
   <string name="contact_option">Liên lạc</string>
@@ -462,6 +465,7 @@
   <string name="email_optional">Email (Tùy chọn)</string>
   <string name="device_added">Đã thêm thiết bị</string>
   <string name="report_sent">Đã gửi báo cáo</string>
+  <string name="thank_you_for_reporting_your_issue">Cảm ơn bạn đã báo cáo sự cố của mình, chúng tôi sẽ liên hệ lại với bạn qua Email ngay khi có thể</string>
   <string name="have_a_lantern_pro_activation_code_click_here">Có mã kích hoạt Lantern Pro? Bấm vào đây</string>
   <string name="enter_email_and_activation_code">Nhập Email và Mã kích hoạt</string>
   <string name="activation_code">Mã kích hoạt</string>

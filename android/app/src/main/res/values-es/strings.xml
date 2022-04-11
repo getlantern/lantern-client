@@ -34,8 +34,10 @@
     <item>No se puede acceder a sitios bloqueados</item>
     <item>No se puede completar la compra</item>
     <item>No se puede iniciar sesión</item>
-    <item>El indicador de cagar gira sin fin</item>
-    <item>Lento</item>
+    <item>El indicador de carga no deja de girar</item>
+    <item>Velocidad lenta</item>
+    <item>El chat no funciona</item>
+    <item>La función Descubrir no funciona</item>
     <item>Otro</item>
   </string-array>
   <string name="submit_code">Confirmar código</string>
@@ -46,6 +48,7 @@
   <string name="on_desc">Ahora puede acceder a\r\nsitios bloqueados y servicios</string>
   <string name="off_desc">Haga clic en el botón para acceder a sitios bloqueados y servicios</string>
   <string name="service_connected">Conectado a la VPN</string>
+  <string name="service_issue">No se puede conectar la VPN</string>
   <string name="ready_to_connect">Listo para conectarse</string>
   <string name="desktop_option">Versión de escritorio</string>
   <string name="contact_option">Contacto</string>
@@ -470,6 +473,7 @@ iOS.</string>
   <string name="email_optional">Correo electrónico (opcional)</string>
   <string name="device_added">Dispositivo añadido</string>
   <string name="report_sent">Informe enviado</string>
+  <string name="thank_you_for_reporting_your_issue">Gracias por informarnos sobre su problema. Nos pondremos en contacto con usted por correo electrónico en cuanto podamos</string>
   <string name="have_a_lantern_pro_activation_code_click_here">¿Tiene un código de activación de Lantern Pro? Haga clic aquí</string>
   <string name="enter_email_and_activation_code">Introduzca el correo electrónico y el código de activación</string>
   <string name="activation_code">Código de Activación </string>

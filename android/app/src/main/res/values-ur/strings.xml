@@ -31,12 +31,14 @@
   <string name="no_purchase_date">برائے مہربانی انداز سے کسی اس تاریخ کا انتخاب کیجئے جب آپ کو لگتا ہو کہ آپ نے لینٹرن پرو خریدا تھا۔ </string>
   <string name="purchase_date">خریداری کی تاریخ</string>
   <string-array name="common_issue_list">
-    <item>بلاک ہوئی سائٹس تک رسائی ممکن نہیں</item>
-    <item>خریداری کی تکمیل نہیں کی جاسکتی</item>
-    <item>سائن اِن نہیں کیا جا سکتا</item>
-    <item>سپنر لوڈ بناء اختتام کے بے لگام چل رہا ہے</item>
-    <item>آہستہ</item>
-    <item>دوسرا یا علیحدہ</item>
+    <item>مسدود کردہ سائٹس تک رسائی نہیں کر سکتے</item>
+    <item>خریداری مکمل نہیں کر سکتے</item>
+    <item>سائن ان نہیں کر سکتے</item>
+    <item>اسپنر لامتناہی طور پر لوڈ ہوتا ہے</item>
+    <item>سست</item>
+    <item>چیٹ کام نہیں کر رہی</item>
+    <item>دریافت کریں کام نہیں کر رہا</item>
+    <item>دیگر</item>
   </string-array>
   <string name="submit_code">کوڈ کی تصدیق کیجئے</string>
   <string name="on_text">آن</string>
@@ -46,6 +48,8 @@
   <string name="on_desc">  اب آپ r\n\بلاک سائٹس اور سروس تک رسائی  حاصل کر سکتےہیں</string>
   <string name="off_desc">بلاک سائٹس اور سروسز تک رسائی  کےلئے بٹن پر کلک کیجئے</string>
   <string name="service_connected">VPN سے جڑا  ہوا</string>
+  <string name="service_issue">VPN سے مربوط ہونے سے قاصر ہیں</string>
+  <string name="ready_to_connect">مربوط ہونے کے لیے تیار</string>
   <string name="desktop_option">ڈیسک ٹاپ ورژن</string>
   <string name="contact_option">رابطہ کیجئے</string>
   <string name="check_for_update">اپ ڈیٹ کے لئے چیک کیجئے</string>
@@ -99,6 +103,7 @@
   <string name="not_now">ابھی نہیں </string>
   <string name="install_update">اَپ ڈیٹ</string>
   <string name="error_update">اَپ ڈیٹ ڈاؤن لوڈ کرنے میں دشواری</string>
+  <string name="error_install_update">اپ ڈیٹ انسٹال کرنے میں نقص</string>
   <string name="loading">لوڈ ہو رہا ہے۔۔</string>
   <string name="manual_update">حالیہ ورژن کو یہاں سے ڈاؤن لوڈ کرنے کی کوشش کیجئے &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">لینٹرن پرو میں خوش آمدید!</string>
@@ -460,6 +465,7 @@
   <string name="email_optional">ای میل (اختیاری)</string>
   <string name="device_added">آلہ جوڑا گیا</string>
   <string name="report_sent">رپورٹ بھیج دی گئی</string>
+  <string name="thank_you_for_reporting_your_issue">اپنے مسئلے کو رپورٹ کرنے کا شکریہ۔ کثیر تعداد کے سبب، ہم زیادہ تر مسائل کا جواب نہیں دے سکتے، لیکن ہم آپ کو یقین دلاتے ہیں کہ ہم آپ کی رپورٹس کی بنیاد پر Lantern کو بہتر بنانے کے لیے پوری طرح کوشاں ہیں۔</string>
   <string name="have_a_lantern_pro_activation_code_click_here">ایک لینٹرن پرو ایکٹیویشن کوڈ موجود ہے؟ یہاں کلک کریں</string>
   <string name="enter_email_and_activation_code">ای میل اور ایکٹیویشن کوڈ درج کریں</string>
   <string name="activation_code">ایکٹیویشن کوڈ</string>
@@ -475,8 +481,15 @@
   <string name="connection_error">کنکشن کی خرابی</string>
   <string name="reopen_to_try">براہ کرم دوبارہ کوشش کرنے کے لیے %1$s کو دوبارہ کھولیں۔</string>
   <string name="init_account">%1$s آپ کا اکاؤنٹ شروع کر رہا ہے، اس میں ایک لمحہ لگ سکتا ہے۔</string>
+  <string name="tampered_apk">ڈاؤن لوڈ کردہ apk سمجھوتہ شدہ ہے، براہ کرم آفیشل ورژن ڈاؤن لوڈ کریں</string>
   <string name="incoming_call">آنے والی کال</string>
   <string name="accept">قبول کریں</string>
+  <string name="decline">مسترد کریں</string>
+  <string name="new_message">نیا پیغام</string>
+  <string name="from_sender">%1$s کی جانب سے</string>
   <string name="unnamed_contact">رابطے کو بے نام کیا گیا</string>
   <string name="message_notifications_channel">پیغامات</string>
+  <string name="call_notifications_channel">کالز</string>
+  <string name="lantern_service">Lantern سروس</string>
+  <string name="replica_download">ریپلیکا ڈاؤن لوڈ</string>
 </resources>

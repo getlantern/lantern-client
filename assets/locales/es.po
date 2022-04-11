@@ -2,15 +2,16 @@
 # Translators:
 # Giorgio Maone <giorgio@maone.net>, 2021
 # tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2022
-# e2f <projects@e2f.com>, 2022
 # e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2022
+# e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022
 # tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2022
 # strel, 2022
-# e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022
+# e2f <projects@e2f.com>, 2022
+# e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022\n"
+"Last-Translator: e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2022\n"
 "Language-Team: Spanish (https://www.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -522,11 +523,13 @@ msgstr ""
 
 msgid "chat_number_not_found"
 msgstr ""
-"No se ha podido encontrar el Número de chat. Compruebe que es correcto y "
-"vuelva a intentarlo."
+"Número de chat no encontrado.\n"
+"Compruebe el número y vuelva a intentarlo."
 
 msgid "unable_to_add_contact"
-msgstr "Contacto no encontrado. Compruebe el número y vuelva a intentarlo."
+msgstr ""
+"Contacto no encontrado.\n"
+"Comprueba el número y vuelva a intentarlo."
 
 msgid "self_adding"
 msgstr "El Número de chat que ha introducido es el de usted."
@@ -794,10 +797,10 @@ msgid "recovery_error"
 msgstr "No ha sido posible recuperar su cuenta."
 
 msgid "recovery_input_error"
-msgstr "Asegúrese de introducir un número de recuperación válido"
+msgstr "Asegúrese de introducir una clave de recuperación válida"
 
 msgid "recovery_retrieval_error"
-msgstr "Algo ha fallado al tratar de obtener su clave de recuperación"
+msgstr "Algo ha fallado al recuperar su cuenta"
 
 msgid "recovery_success"
 msgstr "Ha recuperado correctamente su Número de chat"
@@ -887,9 +890,15 @@ msgid "audio"
 msgstr "Audio"
 
 msgid "image"
+msgstr "Imagen"
+
+msgid "images"
 msgstr "Imágenes"
 
 msgid "video"
+msgstr "Vídeo"
+
+msgid "videos"
 msgstr "Vídeos"
 
 msgid "app"
@@ -1069,10 +1078,10 @@ msgstr ""
 "Lo sentimos, no hemos encontrado resultados relacionados con esa búsqueda"
 
 msgid "search_result_error"
-msgstr ""
+msgstr "Error al obtener los resultados, vuelva a intentarlo más tarde"
 
 msgid "video_stream_error"
-msgstr ""
+msgstr "Error al renderizar el vídeo, vuelva a intentarlo más tarde"
 
 msgid "untitled"
 msgstr "Sin título"
@@ -1102,3 +1111,24 @@ msgstr "Póngale un nombre a su archivo"
 
 msgid "upload"
 msgstr "Subir"
+
+msgid "test_text"
+msgstr "Tengo antojo de pizza 🍕 😊"
+
+msgid "test_hello"
+msgstr "¡Buenas! ¿Qué tal?"
+
+msgid "test_reply"
+msgstr "Pues... ¡yo estaba pensando en sushi!"
+
+msgid "test_disappearing_messages_1"
+msgstr "En principio, todos los mensajes desaparecen a las 24 horas."
+
+msgid "test_disappearing_messages_2"
+msgstr "¡Este mensaje se esfumará muy pronto!"
+
+msgid "test_replica_search"
+msgstr "gato"
+
+msgid "discover_disclaimer"
+msgstr "Lantern hace anónimas sus búsquedas y las protege de terceras partes."

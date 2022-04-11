@@ -1,8 +1,8 @@
 # 
 # Translators:
 # e2f_tw r5 <tx_e2f_tw_r5@ate2f.com>, 2021
-# e2f <projects@e2f.com>, 2022
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2022
+# e2f <projects@e2f.com>, 2022
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2022
 # 
 msgid ""
@@ -474,10 +474,14 @@ msgid "qr_info_waiting_id"
 msgstr "正在等候好友輸入您的通訊 ID 或掃描您的 QR 碼..."
 
 msgid "chat_number_not_found"
-msgstr "找不到交談號碼，請檢查號碼並再試一次"
+msgstr ""
+"找不到這組交談號碼。\n"
+"請檢查您所輸入的號碼，並再試一次。"
 
 msgid "unable_to_add_contact"
-msgstr "找不到聯絡人，請檢查號碼並再試一次"
+msgstr ""
+"找不到這名聯絡人。\n"
+"請檢查您所輸入的號碼，並再試一次。"
 
 msgid "self_adding"
 msgstr "您輸入的是您的交談號碼"
@@ -732,10 +736,10 @@ msgid "recovery_error"
 msgstr "無法復原您的帳戶。"
 
 msgid "recovery_input_error"
-msgstr "請務必輸入有效的復原金鑰。"
+msgstr "請務必輸入有效的復原金鑰"
 
 msgid "recovery_retrieval_error"
-msgstr "擷取復原金鑰時發生了點問題。"
+msgstr "復原帳戶時發生問題"
 
 msgid "recovery_success"
 msgstr "您已成功復原交談號碼。"
@@ -824,7 +828,13 @@ msgstr "音訊"
 msgid "image"
 msgstr "圖像"
 
+msgid "images"
+msgstr "圖像"
+
 msgid "video"
+msgstr "影片"
+
+msgid "videos"
 msgstr "視訊"
 
 msgid "app"
@@ -996,10 +1006,10 @@ msgid "no_search_result_found"
 msgstr "很抱歉，找不到任何符合該搜尋條件的結果"
 
 msgid "search_result_error"
-msgstr ""
+msgstr "擷取結果時發生錯誤，請稍後再試"
 
 msgid "video_stream_error"
-msgstr ""
+msgstr "顯示影片時發生錯誤，請稍後再試"
 
 msgid "untitled"
 msgstr "無標題"
@@ -1027,3 +1037,24 @@ msgstr "命名您的檔案"
 
 msgid "upload"
 msgstr "上傳"
+
+msgid "test_text"
+msgstr "好想吃披薩 🍕 😊"
+
+msgid "test_hello"
+msgstr "嗨，你好嗎？"
+
+msgid "test_reply"
+msgstr "其實我還好，今天比較想吃壽司！"
+
+msgid "test_disappearing_messages_1"
+msgstr "起初，所有訊息都會在 24 小時後消失。"
+
+msgid "test_disappearing_messages_2"
+msgstr "現在，訊息應該很快就會消失！"
+
+msgid "test_replica_search"
+msgstr "貓"
+
+msgid "discover_disclaimer"
+msgstr "Lantern 會將您的搜尋內容匿名處理，以免第三方取得相關資料。"

@@ -1,7 +1,6 @@
 # 
 # Translators:
 # Vitaliy Grishenko, 2022
-# e2f <projects@e2f.com>, 2022
 # IvanLykov <chabib@list.ru>, 2022
 # Lowrider <pams@imail.ru>, 2022
 # sayanvd <sayanvd@yandex.ru>, 2022
@@ -9,13 +8,14 @@
 # Helen R <helen.russel88@gmail.com>, 2022
 # Helen Russel <coo@workogram.com>, 2022
 # tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2022
-# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2022
-# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2022
 # Derek F <derek@getlantern.org>, 2022
+# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2022
+# e2f <projects@e2f.com>, 2022
+# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2022\n"
+"Last-Translator: e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2022\n"
 "Language-Team: Russian (Russia) (https://www.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -519,10 +519,14 @@ msgstr ""
 "код…"
 
 msgid "chat_number_not_found"
-msgstr "Номер чата не найден. Проверьте его и повторите попытку."
+msgstr ""
+"Номер чата не найден.\n"
+"Проверьте его и повторите попытку."
 
 msgid "unable_to_add_contact"
-msgstr "Контакт не найден. Проверьте номер и повторите попытку."
+msgstr ""
+"Контакт не найден.\n"
+"Проверьте номер и повторите попытку."
 
 msgid "self_adding"
 msgstr "Введенный номер чата принадлежит вам"
@@ -788,10 +792,10 @@ msgid "recovery_error"
 msgstr "Не удалось восстановить аккаунт."
 
 msgid "recovery_input_error"
-msgstr "Проверьте, правильный ли ключ восстановления вы вводите"
+msgstr "Проверьте, правильный ли ключ восстановления вы ввели."
 
 msgid "recovery_retrieval_error"
-msgstr "Не удалось получить код восстановления"
+msgstr "Ошибка восстановления аккаунта."
 
 msgid "recovery_success"
 msgstr "Вы восстановили номер чата"
@@ -880,9 +884,15 @@ msgid "audio"
 msgstr "Аудио"
 
 msgid "image"
+msgstr "Изображение"
+
+msgid "images"
 msgstr "Изображения"
 
 msgid "video"
+msgstr "Видео"
+
+msgid "videos"
 msgstr "Видео"
 
 msgid "app"
@@ -1056,10 +1066,10 @@ msgid "no_search_result_found"
 msgstr "Мы ничего не нашли"
 
 msgid "search_result_error"
-msgstr ""
+msgstr "Не удалось предоставить результаты. Повторите попытку."
 
 msgid "video_stream_error"
-msgstr ""
+msgstr "Не удалось отобразить видео. Повторите попытку."
 
 msgid "untitled"
 msgstr "Без названия"
@@ -1090,5 +1100,24 @@ msgstr "Присвойте файлу имя"
 msgid "upload"
 msgstr "Отправить"
 
+msgid "test_text"
+msgstr "Съесть бы пару кусочков пиццы 🍕 😊"
+
+msgid "test_hello"
+msgstr "Привет! А ты что думаешь?"
+
+msgid "test_reply"
+msgstr "Нет, сегодня мне хочется суши."
+
+msgid "test_disappearing_messages_1"
+msgstr "Все сообщения исчезают через 24 часа."
+
+msgid "test_disappearing_messages_2"
+msgstr "Это сообщение должно исчезнуть в ближайшее время."
+
+msgid "test_replica_search"
+msgstr "кот"
+
 msgid "discover_disclaimer"
-msgstr "Lantern анонимизирует ваши поисковые запросы и защищает их от третьих лиц"
+msgstr ""
+"Lantern делает поисковые запросы анонимными и защищает их от третьих лиц."

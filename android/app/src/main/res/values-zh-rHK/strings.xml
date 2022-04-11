@@ -30,14 +30,6 @@
   <string name="cannot_find_email">糟糕！我們無法找到該電子郵件地址。</string>
   <string name="no_purchase_date">請選擇您購買 Lantern Pro 的大約日期</string>
   <string name="purchase_date">購買日期</string>
-  <string-array name="common_issue_list">
-    <item>無法存取封鎖的網站</item>
-    <item>無法完成購買</item>
-    <item>無法登入</item>
-    <item>無法載入</item>
-    <item>速度慢</item>
-    <item>其他</item>
-  </string-array>
   <string name="submit_code">確認代碼</string>
   <string name="on_text">開啟</string>
   <string name="off_text">關閉</string>
@@ -46,6 +38,7 @@
   <string name="on_desc">您現在可以存取\r\n封鎖的網站和服務</string>
   <string name="off_desc">按下按鈕以存取封鎖的網站及服務</string>
   <string name="service_connected">連接至 VPN</string>
+  <string name="service_issue">無法與 VPN 連線</string>
   <string name="ready_to_connect">準備連線</string>
   <string name="desktop_option">桌面版本</string>
   <string name="contact_option">聯絡方式</string>
@@ -469,6 +462,7 @@
   <string name="email_optional">電子郵件（選填）</string>
   <string name="device_added">已新增裝置</string>
   <string name="report_sent">報告已傳送</string>
+  <string name="thank_you_for_reporting_your_issue">感謝您回報問題。由於回報事項眾多，我們無法回覆大部分的問題，但我們保證已努力解決問題，根據您所回報的內容改善 Lantern。</string>
   <string name="have_a_lantern_pro_activation_code_click_here">是否具有 Lantern Pro 啟用代碼？按一下這裡</string>
   <string name="enter_email_and_activation_code">輸入電子郵件和啟動代碼</string>
   <string name="activation_code">啟用代碼</string>

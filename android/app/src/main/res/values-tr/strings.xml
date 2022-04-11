@@ -32,10 +32,12 @@
   <string name="purchase_date">Satın Alma Tarihi</string>
   <string-array name="common_issue_list">
     <item>Engelli sitelere giriş yapılamıyor</item>
-    <item>Ödeme tamamlanamıyor</item>
+    <item>Satın alma tamamlanamıyor</item>
     <item>Oturum açılamıyor</item>
     <item>Yükleme ekranı sürekli dönüyor</item>
     <item>Yavaş</item>
+    <item>Sohbet çalışmıyor</item>
+    <item>Keşfet çalışmıyor</item>
     <item>Diğer</item>
   </string-array>
   <string name="submit_code">Kodu Onayla</string>
@@ -46,6 +48,7 @@
   <string name="on_desc">Şimdi engelli\r\nsitelere ve hizmetlere ulaşabilirsiniz.</string>
   <string name="off_desc">Engelli sitelere ve hizmetlere ulaşmak için düğmeye basınız</string>
   <string name="service_connected">VPN\'e bağlı</string>
+  <string name="service_issue">VPN\'e bağlanılamıyor</string>
   <string name="ready_to_connect">Bağlanmaya Hazır</string>
   <string name="desktop_option">Masaüstü Versiyonu</string>
   <string name="contact_option">İletişim</string>
@@ -469,6 +472,7 @@
   <string name="email_optional">E-posta (İsteğe Bağlı)</string>
   <string name="device_added">Cihaz Eklendi</string>
   <string name="report_sent">Rapor Gönderildi</string>
+  <string name="thank_you_for_reporting_your_issue">Sorununuzu bildirdiğiniz için teşekkür ederiz, mümkün olan en kısa sürede e-posta yoluyla size geri dönüş yapacağız</string>
   <string name="have_a_lantern_pro_activation_code_click_here">Lantern Pro aktivasyon kodunuz mu var? Buraya tıklayın</string>
   <string name="enter_email_and_activation_code">E-posta ve Aktivasyon Kodu Gir</string>
   <string name="activation_code">Aktivasyon Kodu</string>

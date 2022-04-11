@@ -14,6 +14,7 @@ const languages = [
   'th_TH',
   'es_ES',
   'fr_FR',
+  'bn_BD',
 ];
 
 String displayLanguage(String languageCode) {
@@ -32,14 +33,16 @@ String displayLanguage(String languageCode) {
   if (languageCode == 'my_MM') {
     return 'မြန်မာစာ';
   }
+  var plainLanguageCode = languageCode;
   if (languageCode.contains('_')) {
     var splits = languageCode.split('_');
     if (splits.isNotEmpty) {
-      var displayName = localizedLocaleNames[splits.first];
-      if (displayName != null) {
-        return displayName;
-      }
+      plainLanguageCode = splits.first;
     }
+  }
+  var displayName = localizedLocaleNames[plainLanguageCode];
+  if (displayName != null) {
+    return displayName;
   }
   return 'English';
 }

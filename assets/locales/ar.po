@@ -2,20 +2,20 @@
 # Translators:
 # Amin Jobran, 2022
 # lamine Kacimi <k_lamine27@yahoo.fr>, 2022
-# e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2022
 # Abdelaziz Houcini <azhouhou@gmail.com>, 2022
 # e2f_ar c2 <tx_e2f_ar_c2@ate2f.com>, 2022
 # محيي الدين <tx99h4@hotmail.com>, 2022
 # Layla Taha <layla@asl19.org>, 2022
 # Rima Sghaier, 2022
-# e2f <projects@e2f.com>, 2022
 # Abed Abedd <abderrahman.younis@gmail.com>, 2022
-# Derek F <derek@getlantern.org>, 2022
 # e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2022
+# Derek F <derek@getlantern.org>, 2022
+# e2f <projects@e2f.com>, 2022
+# e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2022\n"
+"Last-Translator: e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2022\n"
 "Language-Team: Arabic (https://www.transifex.com/lantern-1/teams/94371/ar/)\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
@@ -512,10 +512,13 @@ msgstr ""
 
 msgid "chat_number_not_found"
 msgstr ""
-"تعذّر العثور على رقم الدردشة، يُرجى التحقق من الرقم والمحاولة مرة أخرى"
+"رقم الدردشة غير موجود.\n"
+"يرجى التحقق من الرقم الذي أدخلته وحاول مرة أخرى."
 
 msgid "unable_to_add_contact"
-msgstr "لم يتم العثور على جهة الاتصال، تحقق من الرقم وحاول مرة أخرى"
+msgstr ""
+"جهة الاتصال غير موجودة.\n"
+"تحقق من الرقم الذي أدخلته وحاول مرة أخرى."
 
 msgid "self_adding"
 msgstr "رقم الدردشة الذي أدخلته يخصك"
@@ -778,10 +781,10 @@ msgid "recovery_error"
 msgstr "يتعذّر استرداد حسابك."
 
 msgid "recovery_input_error"
-msgstr "يُرجى التأكد من إدخال مفتاح استرداد صالح"
+msgstr "تأكد من إدخال مفتاح استعادة صالح"
 
 msgid "recovery_retrieval_error"
-msgstr "حدث خطأ ما أثناء استرداد مفتاح الاسترداد"
+msgstr "حدث خطأ ما أثناء استعادة حسابك"
 
 msgid "recovery_success"
 msgstr "لقد نجحت في استرداد \"رقم الدردشة\" الخاص بك"
@@ -870,9 +873,15 @@ msgid "audio"
 msgstr "صوتي"
 
 msgid "image"
+msgstr "صورة"
+
+msgid "images"
 msgstr "الصور"
 
 msgid "video"
+msgstr "فيديو"
+
+msgid "videos"
 msgstr "مقاطع فيديو"
 
 msgid "app"
@@ -915,7 +924,7 @@ msgid "speaker_on"
 msgstr "مكبر الصوت قيد التشغيل"
 
 msgid "mute"
-msgstr "Mute"
+msgstr "كتم الصوت"
 
 msgid "muted"
 msgstr "تم كتم الصوت"
@@ -927,7 +936,7 @@ msgid "verify_contact"
 msgstr "التحقق من %s"
 
 msgid "verified"
-msgstr "Verified"
+msgstr "تم التحقق منه"
 
 msgid "pending_verification"
 msgstr "في انتظار التحقق"
@@ -1046,10 +1055,10 @@ msgid "no_search_result_found"
 msgstr "عذرًا، تعذر العثور على أي شيء يطابق البحث"
 
 msgid "search_result_error"
-msgstr ""
+msgstr "خطأ في إظهار النتائج، يرجى المحاولة مرة أخرى في وقت لاحق"
 
 msgid "video_stream_error"
-msgstr ""
+msgstr "خطأ في توفير الفيديو، يرجى المحاولة مرة أخرى في وقت لاحق"
 
 msgid "untitled"
 msgstr "بدون عنوان"
@@ -1079,3 +1088,26 @@ msgstr "قم بتسمية الملف الخاص بك"
 
 msgid "upload"
 msgstr "تحميل"
+
+msgid "test_text"
+msgstr "أريد أن آكل بعض البيتزا 🍕 😊"
+
+msgid "test_hello"
+msgstr "مرحبا كيف حالك؟"
+
+msgid "test_reply"
+msgstr "في الواقع لا، أعتقد أنني في حالة مزاجية لتناول السوشي اليوم!"
+
+msgid "test_disappearing_messages_1"
+msgstr " تختفي جميع الرسائل بعد 24 ساعة."
+
+msgid "test_disappearing_messages_2"
+msgstr "الآن يجب أن تختفي هذه الرسالة قريبًا جدًا!"
+
+msgid "test_replica_search"
+msgstr "قطة"
+
+msgid "discover_disclaimer"
+msgstr ""
+"قام Lantern بإخفاء هوية عمليات البحث التي تجريها وحمايتها من الجهات "
+"الخارجية."

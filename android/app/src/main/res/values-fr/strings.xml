@@ -36,6 +36,8 @@
     <item>Impossible de se connecter</item>
     <item>Le chargement n’aboutit jamais</item>
     <item>Lent</item>
+    <item>Le dialogue en ligne ne fonctionne pas</item>
+    <item>La découverte ne fonctionne pas</item>
     <item>Autre</item>
   </string-array>
   <string name="submit_code">Confirmer le code</string>
@@ -186,7 +188,7 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="email_recovery_code">Un courriel comprenant un code de récupération a été envoyé à %1$s si ce compte existe. Saisissez ci-dessus le code de ce courriel. Ce courriel pourrait prendre plusieurs heures pour vous parvenir.</string>
   <string name="thanks_report">Merci, l’équipe d’assistance de Lantern vous contactera d’ici 48 heures.</string>
   <string name="enter_valid_code">Veuillez saisir un code de récupération valide.</string>
-  <string name="too_many_devices">La limite d’appareils qui peuvent être reliés à votre compte Pro a été atteinte</string>
+  <string name="too_many_devices">La limite d’appareils qui peuvent être reliés à votre compte Pro a été atteinte.</string>
   <string name="check_spam_folder">* Veuillez vérifier votre dossier des courriels indésirables, des pourriels si vous ne trouvez pas le courriel</string>
   <string name="by_referral">J’ai reçu Pro en parrainant un ami</string>
   <string name="payment_method">Mode de paiement</string>
@@ -201,7 +203,7 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="link_this_device_0">Pour relier cet appareil à votre compte Pro :</string>
   <string name="link_this_device_1"><b>1.</b> Ouvrez l’élément de menu « Ajouter un appareil » sur votre appareil Pro.</string>
   <string name="link_this_device_2"><b>2.</b> Saisissez le code de liaison d’appareil et envoyez.</string>
-  <string name="make_sure_updated">* Assurez-vous d’avoir mis Lantern à jour vers la version la plus récente sur votre appareil Pro</string>
+  <string name="make_sure_updated">* Assurez-vous d’avoir mis Lantern à jour vers la version la plus récente sur votre appareil Pro.</string>
   <string name="make_sure_updated_2">* Assurez-vous d’avoir mis Lantern à jour vers la version la plus récente sur votre appareil non autorisé.</string>
   <string name="error_device_code">Erreur de récupération du code de liaison d’appareil. Veuillez réessayer ultérieurement.</string>
   <string name="decline_offer">Voulez-vous vraiment\n refuser cette offre ?</string>

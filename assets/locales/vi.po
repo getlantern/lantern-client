@@ -3,8 +3,8 @@
 # Anh Phan <vietnamesel10n@gmail.com>, 2022
 # Lantern, 2022
 # Yen Le Van <yenlevanbk@gmail.com>, 2022
-# e2f <projects@e2f.com>, 2022
 # Nathan Tran, 2022
+# e2f <projects@e2f.com>, 2022
 # e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2022
 # 
 msgid ""
@@ -505,10 +505,14 @@ msgid "qr_info_waiting_id"
 msgstr "Đang đợi bạn bè của bạn nhập mã Messenger hoặc quét mã QR của bạn..."
 
 msgid "chat_number_not_found"
-msgstr "Không thể tìm thấy số trò chuyện, vui lòng kiểm tra số và thử lại"
+msgstr ""
+"Không tìm thấy Số trò chuyện.\n"
+"Vui lòng kiểm tra số bạn đã nhập và thử lại."
 
 msgid "unable_to_add_contact"
-msgstr "Không tìm thấy liên hệ, hãy kiểm tra số và thử lại"
+msgstr ""
+"Không tìm thấy liên hệ.\n"
+"Vui lòng kiểm tra số bạn đã nhập và thử lại."
 
 msgid "self_adding"
 msgstr "Số trò chuyện bạn đã nhập thuộc về bạn"
@@ -776,10 +780,10 @@ msgid "recovery_error"
 msgstr "Không thể khôi phục tài khoản của bạn."
 
 msgid "recovery_input_error"
-msgstr "Hãy đảm bảo rằng bạn đang nhập khóa khôi phục hợp lệ"
+msgstr "Đảm bảo rằng bạn đã nhập khóa khôi phục hợp lệ"
 
 msgid "recovery_retrieval_error"
-msgstr "Đã xảy ra lỗi khi truy xuất khóa khôi phục của bạn"
+msgstr "Đã xảy ra lỗi khi khôi phục tài khoản của bạn"
 
 msgid "recovery_success"
 msgstr "Bạn đã khôi phục thành công Số trò chuyện của mình"
@@ -868,9 +872,15 @@ msgid "audio"
 msgstr "Âm thanh"
 
 msgid "image"
+msgstr "Ảnh"
+
+msgid "images"
 msgstr "Hình ảnh"
 
 msgid "video"
+msgstr "Video"
+
+msgid "videos"
 msgstr "Video"
 
 msgid "app"
@@ -1047,10 +1057,10 @@ msgstr ""
 "Rất tiếc, chúng tôi không thể tìm thấy bất cứ điều gì phù hợp với tìm kiếm"
 
 msgid "search_result_error"
-msgstr ""
+msgstr "Lỗi khi tìm nạp kết quả, vui lòng thử lại sau"
 
 msgid "video_stream_error"
-msgstr ""
+msgstr "Lỗi hiển thị video, vui lòng thử lại sau"
 
 msgid "untitled"
 msgstr "Không có tiêu đề"
@@ -1080,3 +1090,25 @@ msgstr "Đặt tên tệp của bạn"
 
 msgid "upload"
 msgstr "Tải lên"
+
+msgid "test_text"
+msgstr "Tôi muốn ăn một chút pizza 🍕 😊"
+
+msgid "test_hello"
+msgstr "Xin chào, bạn khỏe không?"
+
+msgid "test_reply"
+msgstr "Thực ra là không, tôi nghĩ hôm nay tôi muốn ăn sushi!"
+
+msgid "test_disappearing_messages_1"
+msgstr "Ban đầu tất cả các tin nhắn biến mất sau 24 giờ."
+
+msgid "test_disappearing_messages_2"
+msgstr "Bây giờ tin nhắn này sẽ sớm biến mất!"
+
+msgid "test_replica_search"
+msgstr "mèo"
+
+msgid "discover_disclaimer"
+msgstr ""
+"Lantern ẩn danh các tìm kiếm của bạn và bảo vệ chúng khỏi các bên thứ ba."

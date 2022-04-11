@@ -1,13 +1,13 @@
 # 
 # Translators:
-# tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2022
-# e2f <projects@e2f.com>, 2022
 # tx_e2f_bu r4 <tx_e2f_bu_r4@ate2f.com>, 2022
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
+# e2f <projects@e2f.com>, 2022
+# tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022\n"
+"Last-Translator: tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2022\n"
 "Language-Team: Burmese (https://www.transifex.com/lantern-1/teams/94371/my/)\n"
 "Language: my\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -521,13 +521,13 @@ msgstr ""
 
 msgid "chat_number_not_found"
 msgstr ""
-"ချက်နံပါတ်ကို မတွေ့ရှိသဖြင့် နံပါတ်ကို စစ်ဆေးပြီး နောက်တစ်ကြိမ် "
-"ကြိုးစားကြည့်ပါ"
+"ချတ် နံပါတ်ကို ရှာမတွေ့ပါ။\n"
+"သင်ထည့်သွင်းသော နံပါတ်ကို စစ်ဆေးပြီး ထပ်မံကြိုးစားပါ။"
 
 msgid "unable_to_add_contact"
 msgstr ""
-"အဆက်အသွယ်ကို မတွေ့ရှိသဖြင့် နံပါတ်ကို စစ်ဆေးပြီး နောက်တစ်ကြိမ် "
-"ကြိုးစားကြည့်ပါ"
+"အဆက်အသွယ်ကို ရှာမတွေ့ပါ။\n"
+"သင်ထည့်သွင်းသော နံပါတ်ကို စစ်ဆေးပြီး ထပ်မံကြိုးစားပါ။"
 
 msgid "self_adding"
 msgstr "သင်ရိုက်ထည့်ထားသည့် ချက်နံပါတ်သည် သင့်နံပါတ်ဖြစ်သည်"
@@ -801,10 +801,10 @@ msgid "recovery_error"
 msgstr "သင့်အကောင့်ကို ပြန်လည်မရယူနိုင်ပါ။"
 
 msgid "recovery_input_error"
-msgstr "သင်သည် မှန်ကန်သည့် ပြန်လည်ရယူမှုကီးကို ရိုက်ထည့်ထားကြောင်း သေချာပါစေ"
+msgstr "မှန်ကန်သော ပြန်လည်ရယူရေးကီးကို ထည့်သွင်းထားကြောင်း သေချာပါစေ"
 
 msgid "recovery_retrieval_error"
-msgstr "သင့် ပြန်လည်ရယူမှုကီးကို ပြန်လည်ရယူရာတွင် တစ်စုံတစ်ခု မှားသွားသည်"
+msgstr "သင့်အကောင့်ကို ပြန်လည်ရယူနေစဉ် တစ်စုံတစ်ခု မှားယွင်းသွားသည်"
 
 msgid "recovery_success"
 msgstr "သင့်ချက်နံပါတ်ကို အောင်မြင်စွာ ပြန်လည်ရယူပြီးပြီ"
@@ -894,9 +894,15 @@ msgid "audio"
 msgstr "အော်ဒီယို"
 
 msgid "image"
+msgstr "ပုံ"
+
+msgid "images"
 msgstr "ပုံများ"
 
 msgid "video"
+msgstr "ဗီဒီယို"
+
+msgid "videos"
 msgstr "ဗွီဒီယိုများ"
 
 msgid "app"
@@ -1075,10 +1081,11 @@ msgid "no_search_result_found"
 msgstr "ဝမ်းနည်းပါတယ်၊ ထိုရှာဖွေမှုအတွက် ကိုက်ညီတဲ့အရာကို ရှာဖွေမပေးနိုင်ပါ"
 
 msgid "search_result_error"
-msgstr ""
+msgstr "ရလဒ်များ ရယူရာတွင် အမှားအယွင်းဖြစ်သွားသည်၊ နောက်မှ ထပ်မံကြိုးစားပါ"
 
 msgid "video_stream_error"
 msgstr ""
+"ဗီဒီယိုကို အချောသတ်ရာတွင် အမှားအယွင်းဖြစ်သွားသည်၊ နောက်မှ ထပ်မံကြိုးစားပါ"
 
 msgid "untitled"
 msgstr "ခေါင်းစဉ်မဲ့"
@@ -1108,3 +1115,26 @@ msgstr "သင့်ဖိုင်ကို အမည်ပေးပါ"
 
 msgid "upload"
 msgstr "တင်ပါ"
+
+msgid "test_text"
+msgstr "ပီဇာ 🍕 😊 စားချင်တယ်"
+
+msgid "test_hello"
+msgstr "ဟိုင်း နေကောင်းလား။"
+
+msgid "test_reply"
+msgstr "သိပ်တော့မကောင်းဘူး၊ ဒီနေ့ ဆူရှီစားချင်နေသလိုပဲ။"
+
+msgid "test_disappearing_messages_1"
+msgstr "အစပိုင်းတွင် မက်ဆေ့ချ်အားလုံးသည် 24 နာရီကြာပြီးနောက် ပျောက်သွားသည်။"
+
+msgid "test_disappearing_messages_2"
+msgstr "အခု ဤမက်ဆေ့ချ်သည် သိပ်မကြာခင် ပျောက်သွားတော့မည်။"
+
+msgid "test_replica_search"
+msgstr "ကြောင်"
+
+msgid "discover_disclaimer"
+msgstr ""
+"Lantern သည် သင်၏ ရှာဖွေမှုများကို အမည်မဖော်ပြဘဲ ယင်းတို့ကို "
+"ပြင်ပအဖွဲ့အစည်းများထံ မရောက်ရှိစေရန် ကာကွယ်ပေးသည်။"

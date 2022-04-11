@@ -30,7 +30,16 @@
   <string name="cannot_find_email">Oops!  Kami sedang mengalami kesukaran mencari alamat emel tersebut.</string>
   <string name="no_purchase_date">Sila pilih satu tarikh anggaran bila anda akan membeli Lantern Pro</string>
   <string name="purchase_date">Tarikh Pembelian</string>
-  <string-array name="common_issue_list"/>
+  <string-array name="common_issue_list">
+    <item>Tidak boleh mengakses laman yang disekat</item>
+    <item>Tidak boleh menyelesaikan pembelian</item>
+    <item>Tidak boleh log masuk</item>
+    <item>Pemutar memuatkan tanpa henti</item>
+    <item>Perlahan</item>
+    <item>Sembang tidak berfungsi</item>
+    <item>Temukan tidak berfungsi</item>
+    <item>Lain</item>
+  </string-array>
   <string name="submit_code">Mengesahkan Kod</string>
   <string name="on_text">BUKA</string>
   <string name="off_text">TUTUP</string>
@@ -39,6 +48,8 @@
   <string name="on_desc">Anda kini boleh akses\r\nlaman-laman dan perkhidmatan yang disekat</string>
   <string name="off_desc">Klik butang untuk akses laman-laman dan perkhidmatan yang disekat</string>
   <string name="service_connected">Bersambung ke VPN</string>
+  <string name="service_issue">Tidak dapat menyambung ke VPN</string>
+  <string name="ready_to_connect">Sedia untuk Disambungkan</string>
   <string name="desktop_option">Versi Desktop</string>
   <string name="contact_option">Kontact</string>
   <string name="check_for_update">Semak untuk Kemas Kini</string>
@@ -92,6 +103,7 @@
   <string name="not_now">Bukan sekarang</string>
   <string name="install_update">Update</string>
   <string name="error_update">Ralat Muat Turun Update</string>
+  <string name="error_install_update">Ralat Pemasangan Kemas Kini</string>
   <string name="loading">Muat...</string>
   <string name="manual_update">Cuba memasang versi terkini secara manual dari &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">Selamat datang ke Lantern Pro!</string>
@@ -454,6 +466,7 @@
   <string name="email_optional">E-mel (Pilihan)</string>
   <string name="device_added">Peranti Ditambah</string>
   <string name="report_sent">Laporan Dihantar</string>
+  <string name="thank_you_for_reporting_your_issue">Terima kasih kerana melaporkan isu anda, kami akan menghubungi anda melalui E-mel secepat mungkin</string>
   <string name="have_a_lantern_pro_activation_code_click_here">Mempunyai kod pengaktifan Lantern Pro? Tekan di sini</string>
   <string name="enter_email_and_activation_code">Masukkan E-mel dan Kod Pengaktifan</string>
   <string name="activation_code">Kod Pengaktifan</string>
@@ -469,9 +482,15 @@
   <string name="connection_error">Ralat Sambungan</string>
   <string name="reopen_to_try">Sila buka semula%1$suntuk mencuba lagi.</string>
   <string name="init_account">%1$ssedang memulakan akaun anda, ini mungkin memerlukan sedikit masa.</string>
+  <string name="tampered_apk">Apk yang dimuat turun telah terjejas, sila muat turun versi rasmi</string>
   <string name="incoming_call">Panggilan Masuk</string>
   <string name="accept">Terima</string>
   <string name="decline">Decline</string>
+  <string name="new_message">Mesej Baharu</string>
+  <string name="from_sender">Daripada%1$s </string>
   <string name="unnamed_contact">Kenalan Tidak Dinamakan</string>
   <string name="message_notifications_channel">Mesej</string>
+  <string name="call_notifications_channel">Panggilan</string>
+  <string name="lantern_service">Perkhidmatan Lantern</string>
+  <string name="replica_download">Muat Turun Replika</string>
 </resources>
