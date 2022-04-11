@@ -30,14 +30,6 @@
   <string name="cannot_find_email">糟糕！我们找不到那个电子邮件地址了。</string>
   <string name="no_purchase_date">请选择您购买蓝灯专业版的大致日期。</string>
   <string name="purchase_date">购买日期</string>
-  <string-array name="common_issue_list">
-    <item>无法访问被封锁的网站</item>
-    <item>无法完成购买</item>
-    <item>无法登录</item>
-    <item>旋转器无休止地加载</item>
-    <item>慢速</item>
-    <item>其他</item>
-  </string-array>
   <string name="submit_code">确认代码</string>
   <string name="on_text">打开</string>
   <string name="off_text">关闭</string>
@@ -46,6 +38,7 @@
   <string name="on_desc">您现在可以访问被封锁的网站和服务了</string>
   <string name="off_desc">点击按钮访问被封锁的网站和服务。</string>
   <string name="service_connected">连接到 VPN</string>
+  <string name="service_issue">无法连接到 VPN</string>
   <string name="ready_to_connect">准备就绪，随时可以连接</string>
   <string name="desktop_option">桌面版</string>
   <string name="contact_option">联系我们</string>
@@ -469,6 +462,7 @@
   <string name="email_optional">电子邮件（可选）</string>
   <string name="device_added">新增设备</string>
   <string name="report_sent">报告已发送</string>
+  <string name="thank_you_for_reporting_your_issue">感谢您报告问题。由于数量众多，我们无法回复大多数问题，但我们向您保证，我们正在努力根据您的报告改进  Lantern。</string>
   <string name="have_a_lantern_pro_activation_code_click_here">有蓝灯专业版激活码？点击这里</string>
   <string name="enter_email_and_activation_code">输入电子邮件和激活码</string>
   <string name="activation_code">激活码</string>

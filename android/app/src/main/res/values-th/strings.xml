@@ -30,14 +30,6 @@
   <string name="cannot_find_email">โอ๊ะ! เราพบปัญหาในการหาที่อยู่อีเมลดังกล่าว</string>
   <string name="no_purchase_date">กรุณาเลือกวันที่โดยประมาณที่คุณทำการซื้อ Lantern Pro</string>
   <string name="purchase_date">วันที่ซื้อ</string>
-  <string-array name="common_issue_list">
-    <item>ไม่สามารถเข้าถึงเว็บไซต์ที่ถูกปิดกั้น</item>
-    <item>ไม่สามารถดำเนินการซื้อให้สมบูรณ์</item>
-    <item>ไม่สามารถลงชื่อเข้าใช้ได้</item>
-    <item>สัญลักษณ์การโหลดหมุนไม่หยุด</item>
-    <item>ช้า</item>
-    <item>อื่นๆ</item>
-  </string-array>
   <string name="submit_code">รหัสยืนยัน</string>
   <string name="on_text">เปิด</string>
   <string name="off_text">ปิด</string>
@@ -418,6 +410,7 @@
   <string name="email">อีเมล</string>
   <string name="describe_your_issue">คำอธิบายปัญหา</string>
   <string name="report_sent">ส่งรายงานแล้ว</string>
+  <string name="thank_you_for_reporting_your_issue">ขอบคุณสำหรับการรายงานปัญหา แล้วเราจะติดต่อกลับทางอีเมลโดยเร็วที่สุด</string>
   <string name="have_a_lantern_pro_activation_code_click_here">มีรหัสเปิดใช้งาน Lantern Pro หรือไม่? คลิกที่นี่</string>
   <string name="activation_code">รหัสเปิดใช้งาน</string>
   <string name="email_with_colon">อีเมล:</string>

@@ -16,7 +16,7 @@ msgid "app_name"
 msgstr "Lantern"
 
 msgid "introducing"
-msgstr "Présentation de la conversation instantanée"
+msgstr "Présentation du dialogue en ligne"
 
 msgid "introducing_des"
 msgstr ""
@@ -94,7 +94,7 @@ msgid "backup_recovery_key"
 msgstr "Clé de récupération de sauvegarde"
 
 msgid "delete_chat_data"
-msgstr "Supprimer toutes les données de la conversation instantanée"
+msgstr "Supprimer toutes les données du dialogue"
 
 msgid "delete_chat_data_description"
 msgstr ""
@@ -309,7 +309,7 @@ msgid "saved"
 msgstr "Enregistré !"
 
 msgid "new_chat"
-msgstr "Nouvelle conversation instantanée"
+msgstr "Nouvelle conversation"
 
 msgid "your_contact_info"
 msgstr "Vos coordonnées"
@@ -349,9 +349,9 @@ msgstr "Débloquer %s ?"
 
 msgid "block_info_description"
 msgstr ""
-"Bloquer cet utilisateur supprimera l'historique de la conversation "
-"instantanée et empêchera celui-ci de vous contacter par la suite. Vous "
-"pouvez débloquer des utilisateurs dans le menu des paramètres."
+"Bloquer cet utilisateur supprimera l'historique du dialogue et empêchera "
+"celui-ci de vous contacter par la suite. Vous pouvez débloquer des "
+"utilisateurs dans le menu des paramètres."
 
 msgid "unblock_info_description"
 msgstr ""
@@ -361,7 +361,7 @@ msgstr ""
 msgid "block_info_checkbox"
 msgstr ""
 "Je comprends que cette action entraînera la suppression de tout l'historique"
-" de la conversation instantanée."
+" du dialogue."
 
 msgid "unblock_info_checkbox"
 msgstr "Je confirme que je souhaite débloquer ce contact."
@@ -381,7 +381,7 @@ msgid "add_contact"
 msgstr "Ajouter un contact"
 
 msgid "share_your_chat_number"
-msgstr "Partager votre numéro de conversation instantanée"
+msgstr "Partager votre no de dialogue"
 
 msgid "scan_qr_code"
 msgstr "Scanner le code QR"
@@ -515,7 +515,7 @@ msgid "qr_for_your_contact"
 msgstr "Votre code QR"
 
 msgid "add_via_chat_number"
-msgstr "Ajouter via le numéro de conversation instantanée"
+msgstr "Ajouter par numéro de dialogue"
 
 msgid "qr_info_waiting_id"
 msgstr ""
@@ -524,11 +524,13 @@ msgstr ""
 
 msgid "chat_number_not_found"
 msgstr ""
-"Impossible de trouver le numéro de conversation instantanée ; veuillez "
-"vérifier le numéro et réessayer"
+"Le numéro de conversation est introuvable.\n"
+"Veuillez vérifier le numéro que vous avez saisi et réessayer."
 
 msgid "unable_to_add_contact"
-msgstr "Contact introuvable, vérifiez le numéro et réessayez"
+msgstr ""
+"Le contact est introuvable.\n"
+"Veuillez vérifier le numéro que vous avez saisi et réessayer."
 
 msgid "self_adding"
 msgstr ""
@@ -613,9 +615,7 @@ msgid "disappearing_messages"
 msgstr "Messages qui disparaissent"
 
 msgid "start_of_your_history"
-msgstr ""
-"Vos conversations instantanées et appels vocaux avec %s sont chiffrés de "
-"bout en bout"
+msgstr "Vos dialogues et appels vocaux avec %s sont chiffrés de bout en bout"
 
 msgid "banner_unaccepted"
 msgstr ""
@@ -734,7 +734,7 @@ msgid "messages"
 msgstr "Messages"
 
 msgid "chats"
-msgstr "Conversations instantanées"
+msgstr "Dialogues"
 
 msgid "new_requests"
 msgstr "Nouvelles demandes (%s)"
@@ -807,11 +807,10 @@ msgid "recovery_error"
 msgstr "Impossible de récupérer votre compte."
 
 msgid "recovery_input_error"
-msgstr "Assurez-vous de saisir une clé de récupération valide"
+msgstr "Assurez-vous d’avoir saisi une clé de récupération valide"
 
 msgid "recovery_retrieval_error"
-msgstr ""
-"Une erreur est survenue pendant la récupération de votre clé de récupération"
+msgstr "Une erreur est survenue lors de la récupération de votre compte"
 
 msgid "recovery_success"
 msgstr "Vous avez récupéré votre numéro de conversation instantanée"
@@ -903,9 +902,15 @@ msgid "audio"
 msgstr "Son"
 
 msgid "image"
+msgstr "Image"
+
+msgid "images"
 msgstr "Images"
 
 msgid "video"
+msgstr "Vidéo"
+
+msgid "videos"
 msgstr "Vidéos"
 
 msgid "app"
@@ -930,13 +935,13 @@ msgid "search_contacts"
 msgstr "Contacts (%s)"
 
 msgid "search_chats"
-msgstr "Conversations instantanées (%s)"
+msgstr "Dialogues (%s)"
 
 msgid "search_in_contacts"
 msgstr "Rechercher dans Contacts"
 
 msgid "search_in_chats"
-msgstr "Rechercher dans Conversations instantanées et Contacts"
+msgstr "Rechercher dans Dialogues et Contacts"
 
 msgid "could_not_render_title"
 msgstr "Impossible d'afficher le titre du fichier"
@@ -1120,3 +1125,25 @@ msgstr "Nommez votre fichier"
 
 msgid "upload"
 msgstr "Téléverser"
+
+msgid "test_text"
+msgstr "Je veux manger de la pizza 🍕 😊"
+
+msgid "test_hello"
+msgstr "Bonjour, comment vas-tu ?"
+
+msgid "test_reply"
+msgstr ""
+"En fait non, je pense que j’ai envie de manger des sushis aujourd’hui."
+
+msgid "test_disappearing_messages_1"
+msgstr "Initialement, tous les messages disparaissent après 24 heures."
+
+msgid "test_disappearing_messages_2"
+msgstr "Maintenant, ce message devrait disparaître très bientôt."
+
+msgid "test_replica_search"
+msgstr "chat"
+
+msgid "discover_disclaimer"
+msgstr "Lantern anonymise vos recherches et les protège contre les tiers."

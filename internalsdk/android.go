@@ -608,6 +608,7 @@ func run(configDir, locale string,
 		},
 		func(opts *config.GoogleSearchAdsOptions, query string) string { return "" },
 		func(category, action, label string) {},
+		nil,
 	)
 	if err != nil {
 		log.Fatalf("failed to start flashlight: %v", err)

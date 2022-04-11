@@ -32,10 +32,12 @@
   <string name="purchase_date">تاريخ الشراء</string>
   <string-array name="common_issue_list">
     <item>لا يمكن الوصول إلى المواقع المحجوبة</item>
-    <item>لا يمكن إكمال العملية الشرائية</item>
-    <item>لا يمكن الدخول</item>
-    <item>العجلة تدور لا نهائيا</item>
+    <item>لا يمكن إتمام عملية الشراء</item>
+    <item>لا يمكن تسجيل الدخول</item>
+    <item>العجلة تدور لا نهائيًا</item>
     <item>بطيء</item>
+    <item>الدردشة لا تعمل</item>
+    <item>الاكتشاف \"Discover\" لا يعمل</item>
     <item>آخر</item>
   </string-array>
   <string name="submit_code">تأكيد الرمز</string>
@@ -46,6 +48,7 @@
   <string name="on_desc">يمكنك الآن الوصول\r\nالمواقع و الخدمات المحجوبة</string>
   <string name="off_desc">اضغط الزر للوصول الى المواقع و الخدمات المحجوبة</string>
   <string name="service_connected">متصل بشبكة VPN</string>
+  <string name="service_issue">تعذر الاتصال بشبكة VPN</string>
   <string name="ready_to_connect">جاهز للاتصال</string>
   <string name="desktop_option">نسخة سطح المكتب</string>
   <string name="contact_option">إتصال</string>
@@ -469,6 +472,7 @@
   <string name="email_optional">البريد الإلكتروني (اختياري)</string>
   <string name="device_added">تمت إضافة الجهاز</string>
   <string name="report_sent">تم إرسال التقرير</string>
+  <string name="thank_you_for_reporting_your_issue">نشكرك على الإبلاغ عن المشكلة، وسنوافيك برسالة إلكترونية في أقرب فرصة ممكنة</string>
   <string name="have_a_lantern_pro_activation_code_click_here">هل لديك رمز تنشيط Lantern Pro؟ انقر هنا</string>
   <string name="enter_email_and_activation_code">أدخل البريد الإلكتروني ورمز التفعيل</string>
   <string name="activation_code">رمز التنشيط</string>

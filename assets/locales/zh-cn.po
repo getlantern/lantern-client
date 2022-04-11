@@ -1,12 +1,12 @@
 # 
 # Translators:
+# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2022
 # e2f <projects@e2f.com>, 2022
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2022
-# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2022\n"
+"Last-Translator: CN R10 <tx_e2f_cn_r10@ate2f.com>, 2022\n"
 "Language-Team: Chinese Simplified (https://www.transifex.com/lantern-1/teams/94371/zh-Hans/)\n"
 "Language: zh-Hans\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -474,10 +474,14 @@ msgid "qr_info_waiting_id"
 msgstr "正在等待好友输入您的聊天器 ID 或扫描您的二维码..."
 
 msgid "chat_number_not_found"
-msgstr "无法查找聊天号，请检查号码，然后重试"
+msgstr ""
+"找不到聊天号码。\n"
+"请检查您输入的号码，然后重试。"
 
 msgid "unable_to_add_contact"
-msgstr "找不到联系人，检查号码，然后重试"
+msgstr ""
+"找不到联系人。\n"
+"请检查您输入的号码，然后重试。"
 
 msgid "self_adding"
 msgstr "您输入了自己的聊天号"
@@ -732,10 +736,10 @@ msgid "recovery_error"
 msgstr "无法还原账户。"
 
 msgid "recovery_input_error"
-msgstr "请确保输入有效的还原密钥"
+msgstr "确保您输入的恢复密钥有效"
 
 msgid "recovery_retrieval_error"
-msgstr "检索还原密钥时出错了"
+msgstr "恢复您的帐户时出现问题"
 
 msgid "recovery_success"
 msgstr "您已成功还原聊天号"
@@ -824,7 +828,13 @@ msgstr "音频"
 msgid "image"
 msgstr "图片"
 
+msgid "images"
+msgstr "图片"
+
 msgid "video"
+msgstr "视频"
+
+msgid "videos"
 msgstr "视频"
 
 msgid "app"
@@ -996,10 +1006,10 @@ msgid "no_search_result_found"
 msgstr "抱歉，找不到与此搜索匹配的内容"
 
 msgid "search_result_error"
-msgstr ""
+msgstr "获取结果时出错，请稍后重试"
 
 msgid "video_stream_error"
-msgstr ""
+msgstr "渲染视频时出错，请稍后重试"
 
 msgid "untitled"
 msgstr "未命名"
@@ -1027,3 +1037,24 @@ msgstr "为文件命名"
 
 msgid "upload"
 msgstr "上传"
+
+msgid "test_text"
+msgstr "我想吃披萨🍕 😊"
+
+msgid "test_hello"
+msgstr "嗨，您好吗？"
+
+msgid "test_reply"
+msgstr "其实不好，我想我今天想吃寿司！"
+
+msgid "test_disappearing_messages_1"
+msgstr "最初，所有消息会在 24 小时后消失。"
+
+msgid "test_disappearing_messages_2"
+msgstr "现在这条消息应该很快就会消失！"
+
+msgid "test_replica_search"
+msgstr "猫"
+
+msgid "discover_disclaimer"
+msgstr "Lantern 会将您的搜索匿名化并保护它们免受第三方的侵害。"

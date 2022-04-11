@@ -212,50 +212,52 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ((provisionalContactId != null && scanning))
-                            ? PulseAnimation(
-                                CText(
-                                  'qr_info_waiting_qr'.i18n,
-                                  style: tsBody1Color(white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              )
-                            : Row(
-                                children: [
-                                  CText(
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.all(4),
+                      child: (provisionalContactId != null && scanning)
+                          ? PulseAnimation(
+                              CText(
+                                'qr_info_waiting_qr'.i18n,
+                                style: tsBody1Color(white),
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: CText(
                                     widget.isVerificationMode
                                         ? 'qr_info_verification_scan'.i18n
                                         : 'qr_info_f2f_scan'.i18n,
                                     style: tsBody1Color(white),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                      start: 4.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                    start: 4.0,
+                                  ),
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () => CDialog(
+                                      title: widget.isVerificationMode
+                                          ? 'qr_info_verification_title'.i18n
+                                          : 'qr_info_f2f_title'.i18n,
+                                      description: widget.isVerificationMode
+                                          ? 'qr_info_verification_des'.i18n
+                                          : 'qr_info_f2f_des'.i18n,
+                                      iconPath: ImagePaths.qr_code,
+                                    ).show(context),
+                                    child: Icon(
+                                      Icons.info,
+                                      size: 14,
+                                      color: white,
                                     ),
-                                    child: GestureDetector(
-                                      behavior: HitTestBehavior.translucent,
-                                      onTap: () => CDialog(
-                                        title: widget.isVerificationMode
-                                            ? 'qr_info_verification_title'.i18n
-                                            : 'qr_info_f2f_title'.i18n,
-                                        description: widget.isVerificationMode
-                                            ? 'qr_info_verification_des'.i18n
-                                            : 'qr_info_f2f_des'.i18n,
-                                        iconPath: ImagePaths.qr_code,
-                                      ).show(context),
-                                      child: Icon(
-                                        Icons.info,
-                                        size: 14,
-                                        color: white,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                      ],
+                                  ),
+                                )
+                              ],
+                            ),
                     ),
                   ),
                   /*

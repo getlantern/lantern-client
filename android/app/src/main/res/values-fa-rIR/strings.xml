@@ -31,12 +31,14 @@
   <string name="no_purchase_date">لطفاً تاریخ تقریبی از وقتی که لنترن حرفه ای را خریداری نمودید انتخاب نمایید</string>
   <string name="purchase_date">تاریخ خرید</string>
   <string-array name="common_issue_list">
-    <item>عدم امکان دسترسی به سایت های بسته شده</item>
-    <item>عدم امکان کامل نمودن خرید</item>
-    <item>عدم امکان ورود</item>
-    <item>نشان چرخنده به طور بی پایان می چرخد</item>
+    <item>دسترسی به سایت‌های مسدودشده ممکن نیست</item>
+    <item>تکمیل خرید ممکن نیست</item>
+    <item>ورود به سیستم ممکن نیست</item>
+    <item>نشان چرخان دائماً می‌چرخد</item>
     <item>سرعت پایین</item>
-    <item>غیره</item>
+    <item>چت کار نمی‌کند</item>
+    <item>Discover کار نمی‌کند</item>
+    <item>سایر</item>
   </string-array>
   <string name="submit_code">کد تایید</string>
   <string name="on_text">روشن</string>
@@ -46,6 +48,7 @@
   <string name="on_desc">اکنون شما می توانید/n/r به سایت ها و خدمات بسته شده دسترسی پیدا کنید</string>
   <string name="off_desc">دکمه را کلیک نموده تا به سایت ها و خدمات بسته شده دسترسی یابید</string>
   <string name="service_connected">متصل به VPN</string>
+  <string name="service_issue">اتصال به VPN امکان‌پذیر نبود</string>
   <string name="ready_to_connect">آماده اتصال</string>
   <string name="desktop_option">نسخه ویندوز</string>
   <string name="contact_option">‫تماس‬</string>
@@ -470,6 +473,7 @@ https://bit.ly/lanternapk</string>
   <string name="email_optional">ایمیل (اختیاری)</string>
   <string name="device_added">دستگاه اضافه شد</string>
   <string name="report_sent">گزارش فرستاده‌شد.</string>
+  <string name="thank_you_for_reporting_your_issue">سپاسگزاریم که مشکل‌تان را گزارش دادید. ما به محض اینکه بتوانیم با ایمیل به شما پاسخ خواهیم داد.</string>
   <string name="have_a_lantern_pro_activation_code_click_here">کد فعال‌سازی Lantern Pro دارید؟ اینجا کلیک کنید</string>
   <string name="enter_email_and_activation_code">ایمیل و کد فعال‌سازی را وارد کنید</string>
   <string name="activation_code">کد فعالسازی</string>

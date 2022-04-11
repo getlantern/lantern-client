@@ -7,8 +7,8 @@ require (
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.1
-	github.com/getlantern/flashlight v0.0.0-20220323180011-9bf0c75269a4
-	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f
+	github.com/getlantern/flashlight v0.0.0-20220411120838-48b70e3bb776
+	github.com/getlantern/golog v0.0.0-20211223150227-d4d95a44d873
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
@@ -16,13 +16,15 @@ require (
 	github.com/getlantern/protected v0.0.0-20220224141403-67d8ee971ae8
 	github.com/getlantern/replica v0.9.2
 	github.com/gorilla/mux v1.8.0
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	golang.org/x/mobile v0.0.0-20210831151748-9cba7bc03c0f
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
 	nhooyr.io/websocket v1.8.7
 )
 
 require (
+	git.torproject.org/pluggable-transports/obfs4.git v0.0.0-20180421031126-89c21805c212 // indirect
+	github.com/agl/ed25519 v0.0.0-20170116200512-5312a6153412 // indirect
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect

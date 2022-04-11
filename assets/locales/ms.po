@@ -3,14 +3,15 @@
 # abuyop <abuyop@gmail.com>, 2022
 # Lantern, 2022
 # Alyssa Chung <lisiachung7@gmail.com>, 2022
-# e2f <projects@e2f.com>, 2022
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2022
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
+# e2f <projects@e2f.com>, 2022
 # e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2022
+# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2022\n"
+"Last-Translator: tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2022\n"
 "Language-Team: Malay (https://www.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -519,10 +520,14 @@ msgstr ""
 " anda..."
 
 msgid "chat_number_not_found"
-msgstr "Tidak dapat mencari nombor sembang, sila semak nombor dan cuba lagi"
+msgstr ""
+"Nombor Sembang tidak ditemukan.\n"
+"Sila semak nombor yang anda masukkan dan cuba lagi."
 
 msgid "unable_to_add_contact"
-msgstr "Kenalan tidak ditemukan, semak nombor dan cuba lagi"
+msgstr ""
+"Kenalan tidak ditemukan.\n"
+"Semak nombor yang anda masukkan dan cuba lagi."
 
 msgid "self_adding"
 msgstr "Nombor Sembang yang anda masukkan milik anda"
@@ -792,10 +797,10 @@ msgid "recovery_error"
 msgstr "Tidak dapat memulihkan akaun anda."
 
 msgid "recovery_input_error"
-msgstr "Sila pastikan bahawa anda sedang memasukkan kunci pemulihan yang sah"
+msgstr "Pastikan anda memasukkan kunci pemulihan yang sah"
 
 msgid "recovery_retrieval_error"
-msgstr "Sesuatu tidak kena semasa mengambil semula kunci pemulihan anda"
+msgstr "Ada kesilapan berlaku semasa memulihkan akaun anda"
 
 msgid "recovery_success"
 msgstr "Anda telah berjaya memulihkan Nombor Sembang anda "
@@ -886,7 +891,13 @@ msgstr "Audio"
 msgid "image"
 msgstr "Imej"
 
+msgid "images"
+msgstr "Imej"
+
 msgid "video"
+msgstr "Video"
+
+msgid "videos"
 msgstr "Video"
 
 msgid "app"
@@ -1062,10 +1073,10 @@ msgstr ""
 "Maaf, kami tidak dapat menemukan apa-apa yang sepadan dengan carian tersebut"
 
 msgid "search_result_error"
-msgstr ""
+msgstr "Ralat mengambil keputusan, sila cuba lagi nanti"
 
 msgid "video_stream_error"
-msgstr ""
+msgstr "Ralat memaparkan video, sila cuba lagi nanti"
 
 msgid "untitled"
 msgstr "Tidak bertajuk"
@@ -1095,3 +1106,26 @@ msgstr "Namakan Fail Anda"
 
 msgid "upload"
 msgstr "Muat naik"
+
+msgid "test_text"
+msgstr "Saya ingin makan piza 🍕 😊"
+
+msgid "test_hello"
+msgstr "Hai, apa khabar?"
+
+msgid "test_reply"
+msgstr "Sebenarnya, saya rasa saya ingin makan sushi pada hari ini!"
+
+msgid "test_disappearing_messages_1"
+msgstr "Pada mulanya, semua mesej hilang selepas 24 jam."
+
+msgid "test_disappearing_messages_2"
+msgstr "Sekarang, mesej ini sepatutnya hilang tidak lama lagi!"
+
+msgid "test_replica_search"
+msgstr "kucing"
+
+msgid "discover_disclaimer"
+msgstr ""
+"Lantern menjadikan carian anda berciri awanama dan melindungi carian anda "
+"daripada pihak ketiga."

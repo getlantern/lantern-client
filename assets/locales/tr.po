@@ -516,10 +516,13 @@ msgstr ""
 
 msgid "chat_number_not_found"
 msgstr ""
-"Sohbet numarası bulunamıyor, lütfen numarayı kontrol edin ve tekrar deneyin"
+"Sohbet numarası bulunamadı.\n"
+"Lütfen girdiğiniz numarayı kontrol edin ve tekrar deneyin."
 
 msgid "unable_to_add_contact"
-msgstr "Kişi bulunamadı, numarayı kontrol edin ve tekrar deneyin"
+msgstr ""
+"Kişi bulunamadı.\n"
+"Girdiğiniz numarayı kontrol edin ve tekrar deneyin."
 
 msgid "self_adding"
 msgstr "Girdiğiniz Sohbet Numarası size ait"
@@ -785,10 +788,10 @@ msgid "recovery_error"
 msgstr "Hesabınız kurtarılamıyor."
 
 msgid "recovery_input_error"
-msgstr "Lütfen geçerli bir kurtarma anahtarı girdiğinizden emin olun."
+msgstr "Geçerli bir kurtarma anahtarı girdiğinizden emin olun"
 
 msgid "recovery_retrieval_error"
-msgstr "Kurtarma anahtarınız getirilirken bir sorun oluştu"
+msgstr "Hesabınız kurtarılırken bir sorun oluştu"
 
 msgid "recovery_success"
 msgstr "Sohbet Numaranızı başarıyla kurtardınız"
@@ -877,9 +880,15 @@ msgid "audio"
 msgstr "Ses"
 
 msgid "image"
+msgstr "Resim"
+
+msgid "images"
 msgstr "Görüntüler"
 
 msgid "video"
+msgstr "Video"
+
+msgid "videos"
 msgstr "Videolar"
 
 msgid "app"
@@ -1053,10 +1062,10 @@ msgid "no_search_result_found"
 msgstr "Üzgünüz, bu aramayla eşleşen hiçbir şey bulamadık"
 
 msgid "search_result_error"
-msgstr ""
+msgstr "Sonuçlar getirilirken hata, lütfen daha sonra tekrar deneyin"
 
 msgid "video_stream_error"
-msgstr ""
+msgstr "Video işlenirken hata, lütfen daha sonra tekrar deneyin"
 
 msgid "untitled"
 msgstr "Başlıksız"
@@ -1086,3 +1095,24 @@ msgstr "Dosyanızı Adlandırın"
 
 msgid "upload"
 msgstr "Yükle"
+
+msgid "test_text"
+msgstr "Pizza yemek istiyorum 🍕 😊"
+
+msgid "test_hello"
+msgstr "Merhaba, nasılsınız?"
+
+msgid "test_reply"
+msgstr "Aslında hayır, sanırım bugün suşi yiyesim var!"
+
+msgid "test_disappearing_messages_1"
+msgstr "Başlangıçta tüm mesajlar 24 saat sonra kaybolur."
+
+msgid "test_disappearing_messages_2"
+msgstr "Bu mesaj çok yakında kaybolacaktır!"
+
+msgid "test_replica_search"
+msgstr "kedi"
+
+msgid "discover_disclaimer"
+msgstr "Lantern aramalarınızı anonimleştirir ve üçüncü taraflardan korur."

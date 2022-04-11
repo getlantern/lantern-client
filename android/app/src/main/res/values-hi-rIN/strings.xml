@@ -31,12 +31,14 @@
   <string name="no_purchase_date">जब आप खरीदा लालटेन प्रो कृपया एक अनुमानित तिथि का चयन</string>
   <string name="purchase_date">खरीद की तारीख</string>
   <string-array name="common_issue_list">
-    <item>ब्लॉक की गई साइटों को एक्सेस नहीं कर पा रहे</item>
-    <item>ख़रीदारी पूरी नहीं कर पा रहे </item>
-    <item>साइन इन नहीं कर पा रहे </item>
-    <item>स्पिनर लगातार लोड होता है </item>
-    <item>धीरे </item>
-    <item>अन्य</item>
+    <item>ब्लॉक की गई साइटें नहीं खुल रही हैं</item>
+    <item>खरीदारी पूरी नहीं हो पा रही है</item>
+    <item>साइन इन नहीं हो पा रहा है</item>
+    <item>स्पिनर लगातार लोड हो रहा है</item>
+    <item>धीमा है</item>
+    <item>चैट की सुविधा काम नहीं कर रही है</item>
+    <item>डिस्कवर की सुविधा काम नहीं कर रही है</item>
+    <item>कुछ और</item>
   </string-array>
   <string name="submit_code">पुष्टि संहिता</string>
   <string name="on_text">चालू</string>
@@ -46,6 +48,7 @@
   <string name="on_desc">अब आप\r\nसाइटों और सेवाओं तक पहुँच प्राप्त कर सकते हैं</string>
   <string name="off_desc">अवरुद्ध साइटों और सेवाओं तक पहुँचने के लिए बटन पर क्लिक करें</string>
   <string name="service_connected">VPN से कनेक्टेड</string>
+  <string name="service_issue">VPN से कनेक्ट नहीं हो पा रहा है</string>
   <string name="ready_to_connect">कनेक्ट करने के लिए तैयार</string>
   <string name="desktop_option">डेस्कटॉप संस्करण</string>
   <string name="contact_option">संपर्क करें</string>
@@ -469,6 +472,7 @@
   <string name="email_optional">ईमेल (वैकल्पिक)</string>
   <string name="device_added">डिवाइस जोड़ा गया</string>
   <string name="report_sent">सूचना भेजी गई</string>
+  <string name="thank_you_for_reporting_your_issue">आपकी समस्या की रिपोर्ट करने के लिए धन्यवाद, जैसे ही हम सक्षम होंगे हम आपको ईमेल के माध्यम से वापस भेज देंगे</string>
   <string name="have_a_lantern_pro_activation_code_click_here">एक लालटेन प्रो सक्रियण कोड है? यहाँ क्लिक करें</string>
   <string name="enter_email_and_activation_code">ईमेल और एक्टिवेशन कोड एंटर करें</string>
   <string name="activation_code">एक्टिवेशन कोड</string>
