@@ -335,7 +335,7 @@
   <string name="congratulations">Поздравляем!</string>
   <string name="referral_code_used">Друг, которому Вы отправляли реферальный код, приобрел Lantern Pro. %d бесплатных месяцев Pro были применены к вашему аккаунту.</string>
   <string name="enter_email">Введите адрес электронной почты</string>
-  <string name="confirm_email">Подтвердите Email</string>
+  <string name="confirm_email">Подтвердите адрес электронный адрес</string>
   <string name="confirm_email_address">Подтвердите адрес электронной почты</string>
   <string name="register_pro_account">Регистрация учетной записи Pro</string>
   <string name="renew_now">Обновите сейчас и получите\n 3 месяца бесплатного использования</string>
@@ -373,7 +373,7 @@
   <string name="ad_attribution">Реклама</string>
   <string name="to_purchase_pro">Купить Lantern Pro</string>
   <string name="fastworldpay_desc">Купите ваучер на сайте Fast World Pay,\nа затем вернитесь на эту страницу\nи нажмите «Продолжить», чтобы\nзавершить оформление подписки.</string>
-  <string name="fastworldpay_tutorial_link">(Farsi Tutorial)</string>
+  <string name="fastworldpay_tutorial_link">(Инструкции на на фарси)</string>
   <string name="input_activation_code">Введите код активации</string>
   <string name="voucher_code">Код ваучера</string>
   <string name="voucher_code_placeholder">XXXXXXXXXXXX</string>
