@@ -1,4 +1,14 @@
 
+<a name="7.0.1"></a>
+## [7.0.1](https://github.com/getlantern/android-lantern/compare/7.0.0...7.0.1)
+
+> 2022-04-13
+
+### Pull Requests
+
+* Merge pull request [#741](https://github.com/getlantern/android-lantern/issues/741) from getlantern/dependabot/pip/scripts/screenshot_generation_assets/pillow-9.0.1
+
+
 <a name="7.0.0"></a>
 ## [7.0.0](https://github.com/getlantern/android-lantern/compare/6.9.11...7.0.0)
 
