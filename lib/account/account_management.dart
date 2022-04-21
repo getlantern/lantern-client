@@ -173,6 +173,7 @@ class _AccountManagementState extends State<AccountManagement>
                         icon: ImagePaths.clock,
                         content: expirationDate,
                         onTap: () {
+                          // TODO: move to Flutter route
                           LanternNavigator.startScreen(
                             LanternNavigator.SCREEN_PLANS,
                           );

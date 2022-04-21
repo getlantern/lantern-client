@@ -7,6 +7,8 @@ import 'package:lantern/account/device_linking/authorize_device_for_pro.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart';
 import 'package:lantern/account/language.dart';
+import 'package:lantern/account/plans/checkout.dart';
+import 'package:lantern/account/plans/upgrade.dart';
 import 'package:lantern/account/recovery_key.dart';
 import 'package:lantern/account/settings.dart';
 import 'package:lantern/common/ui/full_screen_dialog.dart';
@@ -250,6 +252,22 @@ import 'package:lantern/replica/ui/upload_file.dart';
       page: ReplicaUploadFileScreen,
       name: 'ReplicaUploadFileScreen',
       path: 'replicaUploadFileScreen',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: Upgrade,
+      name: 'Upgrade',
+      path: 'upgrade',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: Checkout,
+      name: 'Checkout',
+      path: 'checkout',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

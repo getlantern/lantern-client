@@ -10,6 +10,7 @@ class _ProBannerState extends State<ProBanner> {
   Widget build(BuildContext context) {
     return CInkWell(
       onTap: () {
+        // TODO: move to Flutter route
         LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
       }, // Handle your callback
       child: Container(

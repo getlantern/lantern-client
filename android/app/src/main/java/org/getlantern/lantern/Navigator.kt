@@ -12,6 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 import org.getlantern.lantern.activity.DesktopActivity_
 import org.getlantern.lantern.activity.InviteActivity_
 import org.getlantern.lantern.activity.PlansActivity_
+import org.getlantern.lantern.activity.CheckoutActivity_
 import org.getlantern.lantern.activity.RegisterProActivity_
 import org.getlantern.lantern.activity.authorizeDevice.LinkDeviceActivity_
 import org.getlantern.mobilesdk.activity.ReportIssueActivity
@@ -28,6 +29,7 @@ class Navigator(
         const val SCREEN_LINK_PIN = "SCREEN_LINK_PIN"
         const val SCREEN_SCREEN_REPORT_ISSUE = "SCREEN_SCREEN_REPORT_ISSUE"
         const val SCREEN_UPGRADE_TO_LANTERN_PRO = "SCREEN_UPGRADE_TO_LANTERN_PRO"
+        const val SCREEN_CHECKOUT_VIA_STRIPE = "SCREEN_CHECKOUT_VIA_STRIPE"
     }
 
     init {
@@ -60,6 +62,7 @@ class Navigator(
             SCREEN_LINK_PIN -> LinkDeviceActivity_::class.java
             SCREEN_SCREEN_REPORT_ISSUE -> ReportIssueActivity::class.java
             SCREEN_UPGRADE_TO_LANTERN_PRO -> PlansActivity_::class.java
+            SCREEN_CHECKOUT_VIA_STRIPE -> CheckoutActivity_::class.java
             else -> null
         }
     }
