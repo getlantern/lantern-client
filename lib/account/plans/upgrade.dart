@@ -3,11 +3,34 @@ import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/common/common.dart';
 
 class Upgrade extends StatelessWidget {
-  Upgrade({Key? key}) : super(key: key);
+  final bool? isCN;
+  final bool? isFree;
+  final bool? isPro;
+  final bool? isPlatinum;
+
+  Upgrade({this.isCN, Key? key, this.isFree, this.isPro, this.isPlatinum})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var isTwoYearPlan = true;
+    // TODO: temporary
+    const plans = [
+      {
+        'planName': 'Pro',
+        'currency': '\$',
+        'pricePerMonth': '3.20',
+        'pricePerYear': '30',
+        'isBestValue': false,
+      },
+      {
+        'planName': 'Platinum',
+        'currency': '\$',
+        'pricePerMonth': '4.30',
+        'pricePerYear': '50',
+        'isBestValue': true,
+      },
+    ];
     return FullScreenDialog(
       widget: StatefulBuilder(
         builder: (context, setState) => Container(
@@ -17,7 +40,7 @@ class Upgrade extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // * Logotype + X button
-              buildHeader(context),
+              buildHeader(context, isCN),
               // * Body
               Expanded(
                 child: Container(
@@ -29,13 +52,11 @@ class Upgrade extends StatelessWidget {
                   child: Column(
                     children: [
                       // * Renewal text or upsell
-                      buildRenewalTextOrUpsell(context),
+                      buildRenewalTextOrUpsell(context, isCN, isFree),
                       // * Step
                       Container(
                         padding:
                             const EdgeInsetsDirectional.only(top: 8, bottom: 8),
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width,
                         child: const PlanStep(
                           stepNum: '1',
                           description: 'Choose Plan', // TODO: translations
@@ -45,8 +66,6 @@ class Upgrade extends StatelessWidget {
                       Container(
                         padding:
                             const EdgeInsetsDirectional.only(top: 8, bottom: 8),
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -87,16 +106,16 @@ class Upgrade extends StatelessWidget {
                         ),
                       ),
                       // * Card
-                      Flexible(
-                        child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: PlanCard()),
-                      ),
-                      // * Card
-                      Flexible(
-                        child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: PlanCard()),
+                      ...plans.map(
+                        (plan) => PlanCard(
+                          isCN: isCN,
+                          // TODO: build isTwoYears logic here
+                          planName: plan['planName'] as String,
+                          currency: plan['currency'] as String,
+                          pricePerMonth: plan['pricePerMonth'] as String,
+                          pricePerYear: plan['pricePerYear'] as String,
+                          isBestValue: plan['isBestValue'] as bool,
+                        ),
                       ),
                     ],
                   ),
@@ -108,7 +127,13 @@ class Upgrade extends StatelessWidget {
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 color: grey3,
-                child: Text('Have a Lantern Pro activation code? Click here'),
+                child: GestureDetector(
+                  onTap: () {}, // TODO: which screen do we show here?
+                  child: CText(
+                    'Have a Lantern Pro activation code? Click here',
+                    style: tsBody1,
+                  ),
+                ), // Translations
               ),
             ],
           ),
@@ -117,7 +142,8 @@ class Upgrade extends StatelessWidget {
     );
   }
 
-  Widget buildRenewalTextOrUpsell(BuildContext context) {
+  Widget buildRenewalTextOrUpsell(
+      BuildContext context, bool? isCN, bool? isFree) {
     const featuresList = [
       // TODO: translations
       'Unlimited data',
@@ -132,31 +158,34 @@ class Upgrade extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // TODO: translations
-          CText('Bla bla text if we are renewing bla bla', style: tsBody1),
-          // TODO: only if !isCN
-          Column(
-            children: [
-              const CDivider(height: 24),
-              ...featuresList.map(
-                (feature) => Row(
-                  children: [
-                    const CAssetImage(
-                      path: ImagePaths.check_green_large,
-                      size: 24,
-                    ),
-                    CText(feature, style: tsBody1),
-                  ],
+          if (isFree == false)
+            CText(
+                'This is a Pro or Platinum user so they should have some text here',
+                style: tsBody1),
+          if (isCN == false)
+            Column(
+              children: [
+                const CDivider(height: 24),
+                ...featuresList.map(
+                  (feature) => Row(
+                    children: [
+                      const CAssetImage(
+                        path: ImagePaths.check_green_large,
+                        size: 24,
+                      ),
+                      CText(feature, style: tsBody1),
+                    ],
+                  ),
                 ),
-              ),
-              const CDivider(height: 24),
-            ],
-          )
+                const CDivider(height: 24),
+              ],
+            )
         ],
       ),
     );
   }
 
-  Widget buildHeader(BuildContext context) {
+  Widget buildHeader(BuildContext context, bool? isCN) {
     return Container(
       height: 100,
       child: Stack(
@@ -180,7 +209,7 @@ class Upgrade extends StatelessWidget {
             padding: const EdgeInsetsDirectional.only(top: 25, start: 32),
             alignment: Alignment.centerLeft,
             child: const CAssetImage(
-              // TODO: this should respond to isCN
+              // TODO: this depends on isCN
               path: ImagePaths.lantern_logotype,
               size: 20,
             ),

@@ -8,6 +8,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart';
 import 'package:lantern/account/language.dart';
 import 'package:lantern/account/plans/checkout.dart';
+import 'package:lantern/account/plans/stripe_checkout.dart';
 import 'package:lantern/account/plans/upgrade.dart';
 import 'package:lantern/account/recovery_key.dart';
 import 'package:lantern/account/settings.dart';
@@ -268,6 +269,14 @@ import 'package:lantern/replica/ui/upload_file.dart';
       page: Checkout,
       name: 'Checkout',
       path: 'checkout',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: StripeCheckout,
+      name: 'StripeCheckout',
+      path: 'stripeCheckout',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

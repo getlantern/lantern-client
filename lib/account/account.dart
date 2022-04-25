@@ -5,7 +5,15 @@ class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
 
   Future<void> upgradeToLanternPro(BuildContext context) async =>
-      await context.pushRoute(Upgrade());
+      // TODO: temporary hack for building interfaces
+      await context.pushRoute(
+        Upgrade(
+          isCN: true,
+          isFree: false,
+          isPro: true,
+          isPlatinum: false,
+        ),
+      );
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());

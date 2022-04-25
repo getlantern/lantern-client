@@ -305,7 +305,7 @@ Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`
 ### Autorouter
 
 Routes are defined in `lib/core/router` and need to be compiled into `lib/core/router/router.gr.dart` whenever they're changed.
-You can compile routes by running `make routes`.
+You can compile routes by running `make routes`. You can clean conflicting routes by `flutter pub run build_runner build --delete-conflicting-outputs`.
 
 ## Testing Google Play payments
 
