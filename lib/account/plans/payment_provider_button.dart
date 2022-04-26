@@ -55,7 +55,7 @@ class PaymentProviderButton extends StatelessWidget {
 }
 
 Widget buildLogoIcon({required String path}) => Container(
-      width: 50,
+      width: 55,
       height: 40,
       padding: const EdgeInsetsDirectional.only(
         start: 10.0,

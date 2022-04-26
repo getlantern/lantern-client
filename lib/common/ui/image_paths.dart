@@ -24,6 +24,10 @@ class ImagePaths {
   static const mastercard = 'assets/images/mastercard.svg';
   static const visa = 'assets/images/visa.svg';
   static const btc = 'assets/images/btc.svg';
+  static const dots = 'assets/images/dots.svg';
+  static const credit_card = 'assets/images/credit_card.svg';
+  static const calendar = 'assets/images/calendar.svg';
+  static const lock = 'assets/images/lock.svg';
 
   // Messaging
   static const more_vert = 'assets/images/more_vert.svg';

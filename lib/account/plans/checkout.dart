@@ -5,13 +5,19 @@ import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/common/common.dart';
 
 class Checkout extends StatefulWidget {
+  // TODO: temp workaround
   final bool? isCN;
   final bool? isFree;
   final bool? isPro;
   final bool? isPlatinum;
 
-  Checkout({this.isCN, Key? key, this.isFree, this.isPro, this.isPlatinum})
-      : super(key: key);
+  Checkout({
+    this.isCN,
+    this.isFree,
+    this.isPro,
+    this.isPlatinum,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Checkout> createState() => _CheckoutState();
@@ -38,16 +44,18 @@ class _CheckoutState extends State<Checkout> {
 
   final referralCode = '';
   var isPromoFieldShowing = false;
-  // TODO: this should not be here
+  // TODO: move this somewhere else
   final paymentProviders = [
     'stripe',
     'btc',
   ];
   var selectedPaymentProvider = 'stripe';
+  var loadingPercentage = 0;
 
   @override
   void initState() {
     super.initState();
+    WebView.platform = AndroidWebView();
   }
 
   @override
@@ -61,16 +69,19 @@ class _CheckoutState extends State<Checkout> {
   Widget build(BuildContext context) {
     return BaseScreen(
       // TODO: translations
-      title: 'Lantern Pro Checkout',
+      title:
+          'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
       body: Container(
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsetsDirectional.only(
           start: 16,
           end: 16,
           top: 24,
-          bottom: 24,
+          bottom: 32,
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // * Step 2
             const PlanStep(
@@ -152,49 +163,95 @@ class _CheckoutState extends State<Checkout> {
               description: 'Choose Payment Method',
             ), // TODO: translations
             //* Payment options
-            Flexible(
-              child: Container(
-                padding: const EdgeInsetsDirectional.only(top: 16, bottom: 16),
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // * Stripe
-                    PaymentProviderButton(
-                      logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
-                      onChanged: () => setState(
-                        () => selectedPaymentProvider = 'stripe',
-                      ),
-                      selectedPaymentProvider: selectedPaymentProvider,
-                      paymentType: 'stripe',
+            Container(
+              padding: const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // * Stripe
+                  PaymentProviderButton(
+                    logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
+                    onChanged: () => setState(
+                      () => selectedPaymentProvider = 'stripe',
                     ),
-                    // * BTC
-                    PaymentProviderButton(
-                      logoPaths: [ImagePaths.btc],
-                      onChanged: () => setState(
-                        () => selectedPaymentProvider = 'btc',
-                      ),
-                      selectedPaymentProvider: selectedPaymentProvider,
-                      paymentType: 'btc',
+                    selectedPaymentProvider: selectedPaymentProvider,
+                    paymentType: 'stripe',
+                  ),
+                  // * BTC
+                  PaymentProviderButton(
+                    logoPaths: [ImagePaths.btc],
+                    onChanged: () => setState(
+                      () => selectedPaymentProvider = 'btc',
+                    ),
+                    selectedPaymentProvider: selectedPaymentProvider,
+                    paymentType: 'btc',
+                  )
+                ],
+              ),
+            ),
+            const Spacer(),
+            Expanded(
+              flex: isPromoFieldShowing ? 2 : 1,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    PriceSummary(
+                      isCN: widget.isCN,
+                      isFree: widget.isFree,
+                      isPro: widget.isPro,
+                      isPlatinum: widget.isPlatinum,
+                      price: '10',
+                    ),
+                    // * Continue to Payment
+                    Button(
+                      text: 'Continue', // TODO: Translations
+                      onPressed: () async {
+                        if (selectedPaymentProvider == 'stripe') {
+                          await context.pushRoute(
+                              StripeCheckout(email: emailController.text));
+                        } else {
+                          await context.pushRoute(
+                            FullScreenDialogPage(
+                              widget: Center(
+                                child: Stack(
+                                  children: [
+                                    WebView(
+                                      // TODO: add BTCPAY call
+                                      initialUrl: 'https://flutter.dev',
+                                      onPageStarted: (url) {
+                                        setState(() {
+                                          loadingPercentage = 0;
+                                        });
+                                      },
+                                      onProgress: (progress) {
+                                        setState(() {
+                                          loadingPercentage = progress;
+                                        });
+                                      },
+                                      onPageFinished: (url) {
+                                        setState(() {
+                                          loadingPercentage = 100;
+                                        });
+                                      },
+                                    ),
+                                    if (loadingPercentage < 100)
+                                      LinearProgressIndicator(
+                                        value: loadingPercentage / 100.0,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      },
                     )
                   ],
                 ),
               ),
-            ),
-            // * Price summary
-            PriceSummary(
-              isCN: widget.isCN,
-              isFree: widget.isFree,
-              isPro: widget.isPro,
-              isPlatinum: widget.isPlatinum,
-              price: '\$10',
-            ),
-            // * Continue to Payment
-            // TODO: pin to bottom
-            Button(
-              text: 'Continue',
-              onPressed: () async =>
-                  await context.pushRoute(StripeCheckout(email: 'bla@bla.com')),
             ),
           ],
         ),

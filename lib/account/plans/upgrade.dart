@@ -108,7 +108,11 @@ class Upgrade extends StatelessWidget {
                       // * Card
                       ...plans.map(
                         (plan) => PlanCard(
+                          // TODO: temp workaround
                           isCN: isCN,
+                          isFree: isFree,
+                          isPro: isPro,
+                          isPlatinum: isPlatinum,
                           // TODO: build isTwoYears logic here
                           planName: plan['planName'] as String,
                           currency: plan['currency'] as String,
@@ -128,9 +132,16 @@ class Upgrade extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 color: grey3,
                 child: GestureDetector(
-                  onTap: () {}, // TODO: which screen do we show here?
+                  onTap: () async => await context.pushRoute(
+                    ActivationCodeCheckout(
+                      isCN: isCN,
+                      isFree: isFree,
+                      isPlatinum: isPlatinum,
+                      isPro: isPro,
+                    ),
+                  ),
                   child: CText(
-                    'Have a Lantern Pro activation code? Click here',
+                    'Have a Lantern Pro activation code? Click here.',
                     style: tsBody1,
                   ),
                 ), // Translations
@@ -160,8 +171,9 @@ class Upgrade extends StatelessWidget {
           // TODO: translations
           if (isFree == false)
             CText(
-                'This is a Pro or Platinum user so they should have some text here',
-                style: tsBody1),
+              'This is a Pro or Platinum user so they should have some text here',
+              style: tsBody1,
+            ),
           if (isCN == false)
             Column(
               children: [

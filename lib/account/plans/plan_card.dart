@@ -49,7 +49,11 @@ class PlanCard extends StatelessWidget {
         // TODO: we might not need isCN here
         await context.pushRoute(
           Checkout(
+            // TODO: temp workaround
             isCN: isCN,
+            isFree: isFree,
+            isPro: isPro,
+            isPlatinum: isPlatinum,
           ),
         );
       },
