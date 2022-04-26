@@ -21,6 +21,9 @@ class ImagePaths {
   static const number_2 = 'assets/images/number_2.svg';
   static const email = 'assets/images/email.svg';
   static const translate = 'assets/images/translate.svg';
+  static const mastercard = 'assets/images/mastercard.svg';
+  static const visa = 'assets/images/visa.svg';
+  static const btc = 'assets/images/btc.svg';
 
   // Messaging
   static const more_vert = 'assets/images/more_vert.svg';

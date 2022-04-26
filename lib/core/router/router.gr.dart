@@ -430,7 +430,13 @@ class AppRouter extends _i32.RootStackRouter {
       final args = routeData.argsAs<StripeCheckoutArgs>();
       return _i32.CustomPage<void>(
           routeData: routeData,
-          child: _i31.StripeCheckout(email: args.email, key: args.key),
+          child: _i31.StripeCheckout(
+              email: args.email,
+              key: args.key,
+              isCN: args.isCN,
+              isFree: args.isFree,
+              isPro: args.isPro,
+              isPlatinum: args.isPlatinum),
           transitionsBuilder: _i32.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -1209,23 +1215,49 @@ class CheckoutArgs {
 /// generated route for
 /// [_i31.StripeCheckout]
 class StripeCheckout extends _i32.PageRouteInfo<StripeCheckoutArgs> {
-  StripeCheckout({required String email, _i34.Key? key})
+  StripeCheckout(
+      {required String email,
+      _i34.Key? key,
+      bool? isCN,
+      bool? isFree,
+      bool? isPro,
+      bool? isPlatinum})
       : super(StripeCheckout.name,
             path: 'stripeCheckout',
-            args: StripeCheckoutArgs(email: email, key: key));
+            args: StripeCheckoutArgs(
+                email: email,
+                key: key,
+                isCN: isCN,
+                isFree: isFree,
+                isPro: isPro,
+                isPlatinum: isPlatinum));
 
   static const String name = 'StripeCheckout';
 }
 
 class StripeCheckoutArgs {
-  const StripeCheckoutArgs({required this.email, this.key});
+  const StripeCheckoutArgs(
+      {required this.email,
+      this.key,
+      this.isCN,
+      this.isFree,
+      this.isPro,
+      this.isPlatinum});
 
   final String email;
 
   final _i34.Key? key;
 
+  final bool? isCN;
+
+  final bool? isFree;
+
+  final bool? isPro;
+
+  final bool? isPlatinum;
+
   @override
   String toString() {
-    return 'StripeCheckoutArgs{email: $email, key: $key}';
+    return 'StripeCheckoutArgs{email: $email, key: $key, isCN: $isCN, isFree: $isFree, isPro: $isPro, isPlatinum: $isPlatinum}';
   }
 }
