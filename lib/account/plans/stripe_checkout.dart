@@ -1,3 +1,4 @@
+import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
@@ -23,6 +24,8 @@ class StripeCheckout extends StatefulWidget {
 }
 
 class _StripeCheckoutState extends State<StripeCheckout> {
+  late final ccValidator = CreditCardValidator();
+
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
@@ -34,33 +37,33 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   final creditCardFieldKey = GlobalKey<FormState>();
   late final creditCardController = CustomTextEditingController(
     formKey: creditCardFieldKey,
-    // TODO: use credit card validator
-    // via https://regexpattern.com/credit-card-number/
-    validator: (value) => value != null &&
-            RegExp(r'/^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/')
-                .hasMatch(value)
-        ? null
-        : 'Please enter a valid credit card number', // TODO: translations
+    validator: (value) =>
+        value != null && ccValidator.validateCCNum(value).isValid
+            ? null
+            : 'Please enter a valid credit card number', // TODO: translations
   );
 
   final expDateFieldKey = GlobalKey<FormState>();
   late final expDateController = CustomTextEditingController(
     formKey: expDateFieldKey,
-    // TODO: use credit card validator
-    validator: (value) => value != null &&
-            RegExp(r'/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/').hasMatch(value)
-        ? null
-        : 'Please enter a valid credit card number'.i18n,
+    validator: (value) =>
+        value != null && ccValidator.validateExpDate(value).isValid
+            ? null
+            : 'Please enter a valid expiration date'.i18n,
   );
 
-  final cvvFieldKey = GlobalKey<FormState>();
-  late final cvvFieldController = CustomTextEditingController(
-    formKey: cvvFieldKey,
-    // TODO: use credit card validator
-    validator: (value) => value != null && value.characters.length == 3
+  final cvcFieldKey = GlobalKey<FormState>();
+  late final cvcFieldController = CustomTextEditingController(
+    formKey: cvcFieldKey,
+    validator: (value) => value != null &&
+            // only numbers
+            RegExp(r'^\d+$').hasMatch(value) &&
+            (value.characters.length == 3 || value.characters.length == 4)
         ? null
-        : 'Please enter a valid credit card number'.i18n,
+        : 'Please enter a valid CVC'.i18n,
   );
+
+  var formIsValid = false;
 
   @override
   void initState() {
@@ -104,13 +107,19 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 top: 8,
                 bottom: 8,
               ),
-              child: CTextField(
-                initialValue: widget.email,
-                controller: emailController,
-                autovalidateMode: AutovalidateMode.disabled,
-                label: 'Email'.i18n,
-                keyboardType: TextInputType.emailAddress,
-                prefixIcon: const CAssetImage(path: ImagePaths.email),
+              child: Form(
+                onChanged: () => setState(() {
+                  formIsValid = determineFormIsValid();
+                }),
+                key: emailFieldKey,
+                child: CTextField(
+                  initialValue: widget.email,
+                  controller: emailController,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  label: 'Email'.i18n,
+                  keyboardType: TextInputType.emailAddress,
+                  prefixIcon: const CAssetImage(path: ImagePaths.email),
+                ),
               ),
             ),
             // * Credit card number
@@ -119,12 +128,19 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 top: 8,
                 bottom: 8,
               ),
-              child: CTextField(
-                controller: creditCardController,
-                autovalidateMode: AutovalidateMode.disabled,
-                label: 'Credit Card', // TODO: translations
-                keyboardType: TextInputType.number,
-                prefixIcon: const CAssetImage(path: ImagePaths.credit_card),
+              child: Form(
+                onChanged: () => setState(() {
+                  formIsValid = determineFormIsValid();
+                }),
+                key: creditCardFieldKey,
+                child: CTextField(
+                  controller: creditCardController,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  label: 'Credit Card', // TODO: translations
+                  keyboardType: TextInputType.number,
+                  maxLines: 1,
+                  prefixIcon: const CAssetImage(path: ImagePaths.credit_card),
+                ),
               ),
             ),
             // * Credit card month and expiration
@@ -138,28 +154,42 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //* Expiration
-                  // TODO: look up month year widgets
                   Container(
                     width: 160,
-                    child: CTextField(
-                      maxLines: 1,
-                      controller: expDateController,
-                      autovalidateMode: AutovalidateMode.disabled,
-                      label: 'MM/YY',
-                      keyboardType: TextInputType.datetime,
-                      prefixIcon: const CAssetImage(path: ImagePaths.calendar),
+                    child: Form(
+                      onChanged: () => setState(() {
+                        formIsValid = determineFormIsValid();
+                      }),
+                      key: expDateFieldKey,
+                      child: CTextField(
+                        maxLines: 1,
+                        maxLength: 5,
+                        controller: expDateController,
+                        autovalidateMode: AutovalidateMode.disabled,
+                        label: 'MM/YY', //TODO: translation?
+                        keyboardType: TextInputType.datetime,
+                        prefixIcon:
+                            const CAssetImage(path: ImagePaths.calendar),
+                      ),
                     ),
                   ),
                   //* CVV
                   Container(
-                    width: 160,
-                    child: CTextField(
-                      maxLines: 1,
-                      controller: cvvFieldController,
-                      autovalidateMode: AutovalidateMode.disabled,
-                      label: 'CVC',
-                      keyboardType: TextInputType.number,
-                      prefixIcon: const CAssetImage(path: ImagePaths.lock),
+                    width: 150,
+                    child: Form(
+                      onChanged: () => setState(() {
+                        formIsValid = determineFormIsValid();
+                      }),
+                      key: cvcFieldKey,
+                      child: CTextField(
+                        maxLines: 1,
+                        maxLength: 4,
+                        controller: cvcFieldController,
+                        autovalidateMode: AutovalidateMode.disabled,
+                        label: 'CVC',
+                        keyboardType: TextInputType.number,
+                        prefixIcon: const CAssetImage(path: ImagePaths.lock),
+                      ),
                     ),
                   ),
                 ],
@@ -173,17 +203,38 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 // * Price summary
                 PriceSummary(
                   id: widget.id,
+                  refCode: widget.refCode,
                 ),
                 const TOS(copy: copy),
                 // TODO: translations
-                // TODO: pin to bottom
-                // TODO: integrate Flutter Stripe SDK
-                Button(text: copy, onPressed: () {}),
+                // TODO: call updatePlans()
+                Button(
+                  disabled: !formIsValid,
+                  text: copy,
+                  onPressed: () {},
+                ),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  // returns true if we can submit
+  bool determineFormIsValid() {
+    // returns true if there is at least one empty field
+    final anyFieldsEmpty = emailController.value.text.isEmpty ||
+        creditCardController.value.text.isEmpty ||
+        expDateController.value.text.isEmpty ||
+        cvcFieldController.value.text.isEmpty;
+
+    // returns true if there is at least one invalid field
+    final anyFieldsInvalid = emailFieldKey.currentState?.validate() == false ||
+        creditCardFieldKey.currentState?.validate() == false ||
+        expDateFieldKey.currentState?.validate() == false ||
+        cvcFieldKey.currentState?.validate() == false;
+
+    return (!anyFieldsEmpty && !anyFieldsInvalid);
   }
 }

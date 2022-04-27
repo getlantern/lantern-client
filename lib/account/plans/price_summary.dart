@@ -4,10 +4,12 @@ import 'constants.dart';
 
 class PriceSummary extends StatelessWidget {
   final String id;
+  final String? refCode;
 
   const PriceSummary({
     Key? key,
     required this.id,
+    this.refCode,
   }) : super(key: key);
 
   @override
@@ -33,10 +35,21 @@ class PriceSummary extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // TODO: translations
-                // TODO: fetch from server
                 CText(
-                  'This is a Pro or Platinum user so here is some credit'
-                      .toUpperCase(),
+                  'X Credit months and X credit days'.toUpperCase(),
+                  style: tsOverline,
+                ),
+                // TODO: translations
+                CText('Free', style: tsOverline),
+              ],
+            ),
+          if (refCode != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // TODO: translations
+                CText(
+                  '1 month referral bonus'.toUpperCase(),
                   style: tsOverline,
                 ),
                 // TODO: translations

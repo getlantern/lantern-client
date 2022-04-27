@@ -47,3 +47,8 @@ const featuresList = [
   'Connect up to 3 devices',
   'No Ads',
 ];
+
+final paymentProviders = [
+  'stripe',
+  'btc',
+];

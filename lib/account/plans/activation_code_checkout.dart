@@ -23,13 +23,18 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
         : 'Please enter a valid email address'.i18n,
   );
 
-  final activationCodeField = GlobalKey<FormState>();
+  final activationCodeFieldKey = GlobalKey<FormState>();
   late final activationCodeController = CustomTextEditingController(
-    formKey: activationCodeField,
-    validator: (value) => EmailValidator.validate(value ?? '')
+    formKey: activationCodeFieldKey,
+    validator: (value) => value != null &&
+            // only allow letters, numbers and hyphens as well as length excluding dashes should be exactly 25 characters
+            RegExp(r'^[a-zA-Z0-9-]*$').hasMatch(value) &&
+            value.replaceAll('-', '').length == 25
         ? null
-        : 'Please enter a valid email address'.i18n,
+        : 'Please enter a valid activation code $value', // TODO: translations
   );
+
+  var formIsValid = false;
 
   @override
   void initState() {
@@ -73,12 +78,18 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                 top: 8,
                 bottom: 8,
               ),
-              child: CTextField(
-                controller: emailController,
-                autovalidateMode: AutovalidateMode.disabled,
-                label: 'Email'.i18n,
-                keyboardType: TextInputType.emailAddress,
-                prefixIcon: const CAssetImage(path: ImagePaths.email),
+              child: Form(
+                onChanged: () => setState(() {
+                  formIsValid = determineFormIsValid();
+                }),
+                key: emailFieldKey,
+                child: CTextField(
+                  controller: emailController,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  label: 'Email'.i18n,
+                  keyboardType: TextInputType.emailAddress,
+                  prefixIcon: const CAssetImage(path: ImagePaths.email),
+                ),
               ),
             ),
             // * Activation code field
@@ -87,12 +98,19 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                 top: 8,
                 bottom: 8,
               ),
-              child: CTextField(
-                controller: activationCodeController,
-                autovalidateMode: AutovalidateMode.disabled,
-                label: 'Activation Code', // TODO: Translations
-                keyboardType: TextInputType.text,
-                prefixIcon: const CAssetImage(path: ImagePaths.dots),
+              child: Form(
+                onChanged: () => setState(() {
+                  formIsValid = determineFormIsValid();
+                }),
+                key: activationCodeFieldKey,
+                child: CTextField(
+                  maxLength: 25 + 4,
+                  controller: activationCodeController,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  label: 'Activation Code', // TODO: Translations
+                  keyboardType: TextInputType.text,
+                  prefixIcon: const CAssetImage(path: ImagePaths.dots),
+                ),
               ),
             ),
             const Spacer(),
@@ -100,9 +118,9 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
               children: [
                 const TOS(copy: copy),
                 // * ActivationCodeCheckout
-                // TODO: pin to bottom
                 // TODO: Translations
                 Button(
+                  disabled: !formIsValid,
                   text: copy,
                   // TODO: not sure what should happen here? Presumably a request?
                   onPressed: () async => {},
@@ -113,5 +131,18 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
         ),
       ),
     );
+  }
+
+  // returns true if we can submit
+  bool determineFormIsValid() {
+    // returns true if there is at least one empty field
+    final anyFieldsEmpty = emailController.value.text.isEmpty ||
+        activationCodeController.value.text.isEmpty;
+
+    // returns true if there is at least one invalid field
+    final anyFieldsInvalid = emailFieldKey.currentState?.validate() == false ||
+        activationCodeFieldKey.currentState?.validate() == false;
+
+    return (!anyFieldsEmpty && !anyFieldsInvalid);
   }
 }

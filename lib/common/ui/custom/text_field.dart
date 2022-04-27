@@ -21,6 +21,7 @@ class CTextField extends StatefulWidget {
   late final TextInputAction? textInputAction;
   late final void Function(String value)? onFieldSubmitted;
   late final String? actionIconPath;
+  late final int? maxLength;
 
   CTextField({
     required this.controller,
@@ -39,6 +40,7 @@ class CTextField extends StatefulWidget {
     this.textInputAction,
     this.onFieldSubmitted,
     this.actionIconPath,
+    this.maxLength,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -79,6 +81,7 @@ class _CTextFieldState extends State<CTextField> {
             autovalidateMode: widget.autovalidateMode,
             focusNode: widget.controller.focusNode,
             keyboardType: widget.keyboardType,
+            maxLength: widget.maxLength,
             validator: (value) {
               // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
               var result = widget.controller.validate(value);
@@ -127,6 +130,7 @@ class _CTextFieldState extends State<CTextField> {
                       ? Transform.scale(scale: 0.5, child: widget.prefixIcon)
                       : null,
               suffixIcon: renderSuffixRow(),
+              counterText: '',
             ),
           ),
         ),
