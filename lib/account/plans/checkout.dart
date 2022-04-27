@@ -4,18 +4,13 @@ import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/common/common.dart';
 
+import 'constants.dart';
+
 class Checkout extends StatefulWidget {
-  // TODO: temp workaround
-  final bool? isCN;
-  final bool? isFree;
-  final bool? isPro;
-  final bool? isPlatinum;
+  final String id;
 
   Checkout({
-    this.isCN,
-    this.isFree,
-    this.isPro,
-    this.isPlatinum,
+    required this.id,
     Key? key,
   }) : super(key: key);
 
@@ -32,18 +27,20 @@ class _CheckoutState extends State<Checkout> {
         : 'Please enter a valid email address'.i18n,
   );
 
-  final promoFieldKey = GlobalKey<FormState>();
-  late final promoFieldController = CustomTextEditingController(
-    formKey: promoFieldKey,
+  final refCodeFieldKey = GlobalKey<FormState>();
+  late final refCodeController = CustomTextEditingController(
+    formKey: refCodeFieldKey,
     validator: (value) =>
         // only allow letters and numbers
-        value != null && RegExp(r'^[a-zA-Z0-9]*$').hasMatch(value)
+        value != null &&
+                RegExp(r'^[a-zA-Z0-9]*$').hasMatch(value) &&
+                value.characters.length == 5
             ? null
-            : 'Please enter a valid promo code'.i18n,
+            : 'Please enter a valid Referral code'.i18n,
   );
 
   final referralCode = '';
-  var isPromoFieldShowing = false;
+  var isRefCodeFieldShowing = false;
   // TODO: move this somewhere else
   final paymentProviders = [
     'stripe',
@@ -61,16 +58,17 @@ class _CheckoutState extends State<Checkout> {
   @override
   void dispose() {
     emailController.dispose();
-    promoFieldController.dispose();
+    refCodeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
+      resizeToAvoidBottomInset: false,
       // TODO: translations
       title:
-          'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
+          'Lantern ${isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
       body: Container(
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsetsDirectional.only(
@@ -102,9 +100,9 @@ class _CheckoutState extends State<Checkout> {
                 prefixIcon: const CAssetImage(path: ImagePaths.email),
               ),
             ),
-            // * Promo Code field
+            // * Referral Code field
             Visibility(
-              visible: isPromoFieldShowing,
+              visible: isRefCodeFieldShowing,
               child: Container(
                 padding: const EdgeInsetsDirectional.only(
                   top: 8,
@@ -112,12 +110,13 @@ class _CheckoutState extends State<Checkout> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Flexible(
                       child: CTextField(
-                        controller: promoFieldController,
+                        controller: refCodeController,
                         autovalidateMode: AutovalidateMode.disabled,
-                        label: 'Promo code', // TODO: translations
+                        label: 'Referral code', // TODO: translations
                         keyboardType: TextInputType.text,
                         prefixIcon: const CAssetImage(path: ImagePaths.star),
                       ),
@@ -128,7 +127,7 @@ class _CheckoutState extends State<Checkout> {
                         end: 16.0,
                       ),
                       child: CInkWell(
-                        onTap: () {}, // TODO: submit promo code
+                        onTap: () {}, // TODO: submit Referral code
                         child: CText(
                           'Apply'.toUpperCase(), // TODO: translations
                           style: tsButtonPink,
@@ -139,11 +138,11 @@ class _CheckoutState extends State<Checkout> {
                 ),
               ),
             ),
-            // * Add promo code
+            // * Add Referral code
             Visibility(
-              visible: !isPromoFieldShowing,
+              visible: !isRefCodeFieldShowing,
               child: GestureDetector(
-                onTap: () async => setState(() => isPromoFieldShowing = true),
+                onTap: () async => setState(() => isRefCodeFieldShowing = true),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsetsDirectional.only(
@@ -191,67 +190,64 @@ class _CheckoutState extends State<Checkout> {
               ),
             ),
             const Spacer(),
-            Expanded(
-              flex: isPromoFieldShowing ? 2 : 1,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    PriceSummary(
-                      isCN: widget.isCN,
-                      isFree: widget.isFree,
-                      isPro: widget.isPro,
-                      isPlatinum: widget.isPlatinum,
-                      price: '10',
-                    ),
-                    // * Continue to Payment
-                    Button(
-                      text: 'Continue', // TODO: Translations
-                      onPressed: () async {
-                        if (selectedPaymentProvider == 'stripe') {
-                          await context.pushRoute(
-                              StripeCheckout(email: emailController.text));
-                        } else {
-                          await context.pushRoute(
-                            FullScreenDialogPage(
-                              widget: Center(
-                                child: Stack(
-                                  children: [
-                                    WebView(
-                                      // TODO: add BTCPAY call
-                                      initialUrl: 'https://flutter.dev',
-                                      onPageStarted: (url) {
-                                        setState(() {
-                                          loadingPercentage = 0;
-                                        });
-                                      },
-                                      onProgress: (progress) {
-                                        setState(() {
-                                          loadingPercentage = progress;
-                                        });
-                                      },
-                                      onPageFinished: (url) {
-                                        setState(() {
-                                          loadingPercentage = 100;
-                                        });
-                                      },
-                                    ),
-                                    if (loadingPercentage < 100)
-                                      LinearProgressIndicator(
-                                        value: loadingPercentage / 100.0,
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                    )
-                  ],
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                PriceSummary(
+                  // TODO: this should take plan id into consideration
+                  id: widget.id,
                 ),
-              ),
+                // * Continue to Payment
+                Button(
+                  text: 'Continue', // TODO: Translations
+                  onPressed: () async {
+                    if (selectedPaymentProvider == 'stripe') {
+                      await context.pushRoute(
+                        StripeCheckout(
+                          email: emailController.text,
+                          refCode: refCodeController.text,
+                          id: widget.id,
+                        ),
+                      );
+                    } else {
+                      await context.pushRoute(
+                        FullScreenDialogPage(
+                          widget: Center(
+                            child: Stack(
+                              children: [
+                                // TODO: add BTCPAY call
+                                WebView(
+                                  initialUrl: 'https://flutter.dev',
+                                  onPageStarted: (url) {
+                                    setState(() {
+                                      loadingPercentage = 0;
+                                    });
+                                  },
+                                  onProgress: (progress) {
+                                    setState(() {
+                                      loadingPercentage = progress;
+                                    });
+                                  },
+                                  onPageFinished: (url) {
+                                    setState(() {
+                                      loadingPercentage = 100;
+                                    });
+                                  },
+                                ),
+                                if (loadingPercentage < 100)
+                                  LinearProgressIndicator(
+                                    value: loadingPercentage / 100.0,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                )
+              ],
             ),
           ],
         ),

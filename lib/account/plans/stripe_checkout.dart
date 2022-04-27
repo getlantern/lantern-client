@@ -4,21 +4,18 @@ import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
+import 'constants.dart';
+
 class StripeCheckout extends StatefulWidget {
   final String email;
-  // TODO: temp workaround
-  final bool? isCN;
-  final bool? isFree;
-  final bool? isPro;
-  final bool? isPlatinum;
+  final String? refCode;
+  final String id;
 
   const StripeCheckout({
     required this.email,
+    this.refCode,
+    required this.id,
     Key? key,
-    this.isCN,
-    this.isFree,
-    this.isPro,
-    this.isPlatinum,
   }) : super(key: key);
 
   @override
@@ -37,7 +34,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   final creditCardFieldKey = GlobalKey<FormState>();
   late final creditCardController = CustomTextEditingController(
     formKey: creditCardFieldKey,
-    // TODO: consolidate regex expressions in a regex constants file
+    // TODO: use credit card validator
     // via https://regexpattern.com/credit-card-number/
     validator: (value) => value != null &&
             RegExp(r'/^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/')
@@ -49,7 +46,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   final expDateFieldKey = GlobalKey<FormState>();
   late final expDateController = CustomTextEditingController(
     formKey: expDateFieldKey,
-    // TODO: consolidate regex expressions in a regex constants file
+    // TODO: use credit card validator
     validator: (value) => value != null &&
             RegExp(r'/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/').hasMatch(value)
         ? null
@@ -59,6 +56,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   final cvvFieldKey = GlobalKey<FormState>();
   late final cvvFieldController = CustomTextEditingController(
     formKey: cvvFieldKey,
+    // TODO: use credit card validator
     validator: (value) => value != null && value.characters.length == 3
         ? null
         : 'Please enter a valid credit card number'.i18n,
@@ -81,7 +79,8 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   Widget build(BuildContext context) {
     const copy = 'Complete Purchase'; // TODO: Translation
     return BaseScreen(
-      title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout',
+      resizeToAvoidBottomInset: false,
+      title: 'Lantern ${isPro == true ? 'Pro' : ''} Checkout',
       body: Container(
         padding: const EdgeInsetsDirectional.only(
           start: 16,
@@ -139,6 +138,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //* Expiration
+                  // TODO: look up month year widgets
                   Container(
                     width: 160,
                     child: CTextField(
@@ -166,28 +166,20 @@ class _StripeCheckoutState extends State<StripeCheckout> {
               ),
             ),
             const Spacer(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // * Price summary
-                    PriceSummary(
-                      isCN: widget.isCN,
-                      isFree: widget.isFree,
-                      isPro: widget.isPro,
-                      isPlatinum: widget.isPlatinum,
-                      price: '10',
-                    ),
-                    const TOS(copy: copy),
-                    // TODO: translations
-                    // TODO: pin to bottom
-                    // TODO: integrate Flutter Stripe SDK
-                    Button(text: copy, onPressed: () {}),
-                  ],
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // * Price summary
+                PriceSummary(
+                  id: widget.id,
                 ),
-              ),
+                const TOS(copy: copy),
+                // TODO: translations
+                // TODO: pin to bottom
+                // TODO: integrate Flutter Stripe SDK
+                Button(text: copy, onPressed: () {}),
+              ],
             ),
           ],
         ),

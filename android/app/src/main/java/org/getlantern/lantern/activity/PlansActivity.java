@@ -134,6 +134,7 @@ public class PlansActivity extends BaseFragmentActivity {
         });
     }
 
+    // TODO: put inside sessionModel.kt and save in session model
     protected void updatePlans() {
         LanternApp.getPlans(new LanternHttpClient.PlansCallback() {
             @Override

@@ -397,12 +397,7 @@ class AppRouter extends _i33.RootStackRouter {
           routeData.argsAs<UpgradeArgs>(orElse: () => const UpgradeArgs());
       return _i33.CustomPage<void>(
           routeData: routeData,
-          child: _i29.Upgrade(
-              isCN: args.isCN,
-              key: args.key,
-              isFree: args.isFree,
-              isPro: args.isPro,
-              isPlatinum: args.isPlatinum),
+          child: _i29.Upgrade(key: args.key),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -410,16 +405,10 @@ class AppRouter extends _i33.RootStackRouter {
           barrierDismissible: false);
     },
     Checkout.name: (routeData) {
-      final args =
-          routeData.argsAs<CheckoutArgs>(orElse: () => const CheckoutArgs());
+      final args = routeData.argsAs<CheckoutArgs>();
       return _i33.CustomPage<void>(
           routeData: routeData,
-          child: _i30.Checkout(
-              isCN: args.isCN,
-              isFree: args.isFree,
-              isPro: args.isPro,
-              isPlatinum: args.isPlatinum,
-              key: args.key),
+          child: _i30.Checkout(id: args.id, key: args.key),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -432,11 +421,9 @@ class AppRouter extends _i33.RootStackRouter {
           routeData: routeData,
           child: _i31.StripeCheckout(
               email: args.email,
-              key: args.key,
-              isCN: args.isCN,
-              isFree: args.isFree,
-              isPro: args.isPro,
-              isPlatinum: args.isPlatinum),
+              refCode: args.refCode,
+              id: args.id,
+              key: args.key),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -448,12 +435,7 @@ class AppRouter extends _i33.RootStackRouter {
           orElse: () => const ActivationCodeCheckoutArgs());
       return _i33.CustomPage<void>(
           routeData: routeData,
-          child: _i32.ActivationCodeCheckout(
-              isCN: args.isCN,
-              isFree: args.isFree,
-              isPro: args.isPro,
-              isPlatinum: args.isPlatinum,
-              key: args.key),
+          child: _i32.ActivationCodeCheckout(key: args.key),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -1160,74 +1142,43 @@ class ReplicaUploadFileScreenArgs {
 /// generated route for
 /// [_i29.Upgrade]
 class Upgrade extends _i33.PageRouteInfo<UpgradeArgs> {
-  Upgrade(
-      {bool? isCN, _i35.Key? key, bool? isFree, bool? isPro, bool? isPlatinum})
-      : super(Upgrade.name,
-            path: 'upgrade',
-            args: UpgradeArgs(
-                isCN: isCN,
-                key: key,
-                isFree: isFree,
-                isPro: isPro,
-                isPlatinum: isPlatinum));
+  Upgrade({_i35.Key? key})
+      : super(Upgrade.name, path: 'upgrade', args: UpgradeArgs(key: key));
 
   static const String name = 'Upgrade';
 }
 
 class UpgradeArgs {
-  const UpgradeArgs(
-      {this.isCN, this.key, this.isFree, this.isPro, this.isPlatinum});
-
-  final bool? isCN;
+  const UpgradeArgs({this.key});
 
   final _i35.Key? key;
 
-  final bool? isFree;
-
-  final bool? isPro;
-
-  final bool? isPlatinum;
-
   @override
   String toString() {
-    return 'UpgradeArgs{isCN: $isCN, key: $key, isFree: $isFree, isPro: $isPro, isPlatinum: $isPlatinum}';
+    return 'UpgradeArgs{key: $key}';
   }
 }
 
 /// generated route for
 /// [_i30.Checkout]
 class Checkout extends _i33.PageRouteInfo<CheckoutArgs> {
-  Checkout(
-      {bool? isCN, bool? isFree, bool? isPro, bool? isPlatinum, _i35.Key? key})
+  Checkout({required String id, _i35.Key? key})
       : super(Checkout.name,
-            path: 'checkout',
-            args: CheckoutArgs(
-                isCN: isCN,
-                isFree: isFree,
-                isPro: isPro,
-                isPlatinum: isPlatinum,
-                key: key));
+            path: 'checkout', args: CheckoutArgs(id: id, key: key));
 
   static const String name = 'Checkout';
 }
 
 class CheckoutArgs {
-  const CheckoutArgs(
-      {this.isCN, this.isFree, this.isPro, this.isPlatinum, this.key});
+  const CheckoutArgs({required this.id, this.key});
 
-  final bool? isCN;
-
-  final bool? isFree;
-
-  final bool? isPro;
-
-  final bool? isPlatinum;
+  final String id;
 
   final _i35.Key? key;
 
   @override
   String toString() {
-    return 'CheckoutArgs{isCN: $isCN, isFree: $isFree, isPro: $isPro, isPlatinum: $isPlatinum, key: $key}';
+    return 'CheckoutArgs{id: $id, key: $key}';
   }
 }
 
@@ -1236,48 +1187,32 @@ class CheckoutArgs {
 class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
   StripeCheckout(
       {required String email,
-      _i35.Key? key,
-      bool? isCN,
-      bool? isFree,
-      bool? isPro,
-      bool? isPlatinum})
+      String? refCode,
+      required String id,
+      _i35.Key? key})
       : super(StripeCheckout.name,
             path: 'stripeCheckout',
             args: StripeCheckoutArgs(
-                email: email,
-                key: key,
-                isCN: isCN,
-                isFree: isFree,
-                isPro: isPro,
-                isPlatinum: isPlatinum));
+                email: email, refCode: refCode, id: id, key: key));
 
   static const String name = 'StripeCheckout';
 }
 
 class StripeCheckoutArgs {
   const StripeCheckoutArgs(
-      {required this.email,
-      this.key,
-      this.isCN,
-      this.isFree,
-      this.isPro,
-      this.isPlatinum});
+      {required this.email, this.refCode, required this.id, this.key});
 
   final String email;
 
+  final String? refCode;
+
+  final String id;
+
   final _i35.Key? key;
-
-  final bool? isCN;
-
-  final bool? isFree;
-
-  final bool? isPro;
-
-  final bool? isPlatinum;
 
   @override
   String toString() {
-    return 'StripeCheckoutArgs{email: $email, key: $key, isCN: $isCN, isFree: $isFree, isPro: $isPro, isPlatinum: $isPlatinum}';
+    return 'StripeCheckoutArgs{email: $email, refCode: $refCode, id: $id, key: $key}';
   }
 }
 
@@ -1285,36 +1220,21 @@ class StripeCheckoutArgs {
 /// [_i32.ActivationCodeCheckout]
 class ActivationCodeCheckout
     extends _i33.PageRouteInfo<ActivationCodeCheckoutArgs> {
-  ActivationCodeCheckout(
-      {bool? isCN, bool? isFree, bool? isPro, bool? isPlatinum, _i35.Key? key})
+  ActivationCodeCheckout({_i35.Key? key})
       : super(ActivationCodeCheckout.name,
             path: 'activationCodeCheckout',
-            args: ActivationCodeCheckoutArgs(
-                isCN: isCN,
-                isFree: isFree,
-                isPro: isPro,
-                isPlatinum: isPlatinum,
-                key: key));
+            args: ActivationCodeCheckoutArgs(key: key));
 
   static const String name = 'ActivationCodeCheckout';
 }
 
 class ActivationCodeCheckoutArgs {
-  const ActivationCodeCheckoutArgs(
-      {this.isCN, this.isFree, this.isPro, this.isPlatinum, this.key});
-
-  final bool? isCN;
-
-  final bool? isFree;
-
-  final bool? isPro;
-
-  final bool? isPlatinum;
+  const ActivationCodeCheckoutArgs({this.key});
 
   final _i35.Key? key;
 
   @override
   String toString() {
-    return 'ActivationCodeCheckoutArgs{isCN: $isCN, isFree: $isFree, isPro: $isPro, isPlatinum: $isPlatinum, key: $key}';
+    return 'ActivationCodeCheckoutArgs{key: $key}';
   }
 }

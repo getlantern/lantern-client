@@ -395,6 +395,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         }
     }
 
+    // TODO: wire to StripeCheckout button
     private void submitStripe() {
         try {
             Pair<Integer, Integer> dates = expirationInput.getValidDateFields();

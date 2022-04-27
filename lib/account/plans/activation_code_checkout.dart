@@ -3,18 +3,10 @@ import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
-class ActivationCodeCheckout extends StatefulWidget {
-  // TODO: temp workaround
-  final bool? isCN;
-  final bool? isFree;
-  final bool? isPro;
-  final bool? isPlatinum;
+import 'constants.dart';
 
+class ActivationCodeCheckout extends StatefulWidget {
   ActivationCodeCheckout({
-    this.isCN,
-    this.isFree,
-    this.isPro,
-    this.isPlatinum,
     Key? key,
   }) : super(key: key);
 
@@ -57,7 +49,7 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
     return BaseScreen(
       // TODO: translations
       title:
-          'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
+          'Lantern ${isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
       body: Container(
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsetsDirectional.only(

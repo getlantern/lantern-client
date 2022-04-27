@@ -1,24 +1,21 @@
 import 'package:lantern/common/common.dart';
 
+import 'constants.dart';
+
 class PriceSummary extends StatelessWidget {
-  final bool? isCN;
-  final bool? isFree;
-  final bool? isPro;
-  final bool? isPlatinum;
-  final String price;
+  final String id;
 
   const PriceSummary({
     Key? key,
-    this.isCN,
-    this.isFree,
-    this.isPro,
-    this.isPlatinum,
-    required this.price,
+    required this.id,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    final selectedPlan = plans.firstWhere((p) => p['id'] == id);
+    final price = selectedPlan['pricePerYear'] as String;
+    final currency = selectedPlan['currency'] as String;
+    return Container(
       padding: const EdgeInsetsDirectional.only(top: 8.0, bottom: 8.0),
       child: Column(
         children: [
@@ -28,7 +25,7 @@ class PriceSummary extends StatelessWidget {
             children: [
               // TODO: translations
               CText('Plan type'.toUpperCase(), style: tsOverline),
-              CText(price, style: tsOverline),
+              CText(currency + price, style: tsOverline),
             ],
           ),
           if (isPro != false || isPlatinum != false)
@@ -52,8 +49,11 @@ class PriceSummary extends StatelessWidget {
               // TODO: translations
               CText('Total', style: tsBody1),
               CText(
-                price,
-                style: tsBody1.copiedWith(color: pink4),
+                currency + price,
+                style: tsBody1.copiedWith(
+                  color: pink4,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),

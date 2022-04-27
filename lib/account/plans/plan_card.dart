@@ -1,126 +1,145 @@
 import 'package:lantern/common/common.dart';
 
+import 'constants.dart';
+
 class PlanCard extends StatelessWidget {
-  final bool? isCN;
-  final bool? isFree;
-  final bool? isPro;
-  final bool? isPlatinum;
-  final String planName;
-  final String currency;
-  final String pricePerMonth;
-  final String pricePerYear;
-  final bool isBestValue;
-  final String? percentSavings;
+  final String id;
 
   const PlanCard({
-    this.isCN,
+    required this.id,
     Key? key,
-    this.isFree,
-    this.isPro,
-    this.isPlatinum,
-    required this.planName,
-    required this.currency,
-    required this.pricePerMonth,
-    required this.pricePerYear,
-    required this.isBestValue,
-    this.percentSavings,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const chinaPlanDetails = [
-      [
-        'Unlimited data',
-        'No logs',
-        'Connect up to 3 devices',
-      ],
-      [
-        'Everything included in Pro',
-        'Faster Data Centers',
-        'Dedicated Line',
-        'Increased Reliability',
-      ]
-    ];
+    final selectedPlan = plans.firstWhere((p) => p['id'] == id);
+    // TODO: we'll have to match plan id to actual titles here
+    final planName = selectedPlan['planName'] as String;
+    final currency = selectedPlan['currency'] as String;
+    final pricePerMonth = selectedPlan['pricePerMonth'] as String;
+    final pricePerYear = selectedPlan['pricePerYear'] as String;
+    final isBestValue = selectedPlan['isBestValue'] as bool;
 
     return CInkWell(
       onTap: () async {
-        // TODO: select plan
-        // TODO: show next step
-        // TODO: we might not need isCN here
         await context.pushRoute(
           Checkout(
-            // TODO: temp workaround
-            isCN: isCN,
-            isFree: isFree,
-            isPro: isPro,
-            isPlatinum: isPlatinum,
+            id: id,
           ),
         );
       },
-      child: Card(
-        color: isBestValue ? pink1 : white,
-        shadowColor: grey2,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 2.0,
-            color: isBestValue ? pink4 : grey2,
-          ),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        elevation: isBestValue ? 3 : 1,
-        child: Container(
-          padding: const EdgeInsetsDirectional.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // * Plan name
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Card(
+            color: isBestValue ? pink1 : white,
+            shadowColor: grey2,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 2.0,
+                color: isBestValue ? pink4 : grey2,
+              ),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            elevation: isBestValue ? 3 : 1,
+            child: Container(
+              padding: const EdgeInsetsDirectional.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CText(
-                    planName,
-                    style: tsSubtitle2.copiedWith(
-                      color: pink3,
-                    ),
+                  // * Plan name
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CText(
+                        planName,
+                        style: tsSubtitle2.copiedWith(
+                          color: pink3,
+                        ),
+                      ),
+                      const CAssetImage(
+                        path: ImagePaths.keyboard_arrow_right,
+                      )
+                    ],
                   ),
-                  const CAssetImage(
-                    path: ImagePaths.keyboard_arrow_right,
-                  )
-                ],
-              ),
-              const Padding(padding: EdgeInsetsDirectional.only(top: 6)),
-              // * Price per month
-              Row(
-                children: [
-                  CText('$currency$pricePerMonth', style: tsSubtitle1),
-                  // TODO: translation
-                  CText(' / month', style: tsBody1),
-                ],
-              ),
-              // * Price per year
-              Row(
-                children: [
-                  // TODO: translation
-                  CText(
-                    '$currency$pricePerYear billed one time',
-                    style: tsBody2.copiedWith(color: grey5),
+                  const Padding(padding: EdgeInsetsDirectional.only(top: 6)),
+                  // * Price per month
+                  Row(
+                    children: [
+                      CText('$currency$pricePerMonth', style: tsSubtitle1),
+                      // TODO: translation
+                      CText(' / month', style: tsBody1),
+                    ],
                   ),
+                  // * Price per year
+                  Row(
+                    children: [
+                      // TODO: translation
+                      CText(
+                        '$currency$pricePerYear billed one time',
+                        style: tsBody2.copiedWith(color: grey5),
+                      ),
+                    ],
+                  ),
+                  // * Plan details if in China
+                  if (isCN == true)
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(top: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ...chinaPlanDetails[isBestValue ? 1 : 0].map(
+                            (d) => Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                    end: 8.0,
+                                  ),
+                                  child: CAssetImage(
+                                    path: isBestValue
+                                        ? d == chinaPlanDetails[1].first
+                                            ? ImagePaths.check_black
+                                            : ImagePaths.add
+                                        : ImagePaths.check_black,
+                                    size: 16,
+                                  ),
+                                ),
+                                CText(d, style: tsBody1),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
                 ],
               ),
-              // * Plan details if in China
-              if (isCN == true)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(padding: EdgeInsetsDirectional.only(top: 6)),
-                    // TODO: add icons
-                    ...chinaPlanDetails[isBestValue ? 1 : 0]
-                        .map((d) => CText('+ $d', style: tsBody1))
-                  ],
-                )
-            ],
+            ),
           ),
-        ),
+          if (isBestValue)
+            Transform.translate(
+              offset: const Offset(0.0, 10.0),
+              child: Card(
+                color: yellow4,
+                shadowColor: grey2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                elevation: isBestValue ? 3 : 1,
+                child: Container(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 12.0,
+                    top: 0.0,
+                    end: 12.0,
+                    bottom: 4.0,
+                  ),
+                  child: CText(
+                    'Most Popular', // TODO: translations
+                    style: tsBody1,
+                  ),
+                ),
+              ),
+            )
+        ],
       ),
     );
   }

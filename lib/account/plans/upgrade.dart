@@ -2,35 +2,16 @@ import 'package:lantern/account/plans/plan_card.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/common/common.dart';
 
-class Upgrade extends StatelessWidget {
-  final bool? isCN;
-  final bool? isFree;
-  final bool? isPro;
-  final bool? isPlatinum;
+import 'constants.dart';
 
-  Upgrade({this.isCN, Key? key, this.isFree, this.isPro, this.isPlatinum})
-      : super(key: key);
+class Upgrade extends StatelessWidget {
+  Upgrade({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var isTwoYearPlan = true;
-    // TODO: temporary
-    const plans = [
-      {
-        'planName': 'Pro',
-        'currency': '\$',
-        'pricePerMonth': '3.20',
-        'pricePerYear': '30',
-        'isBestValue': false,
-      },
-      {
-        'planName': 'Platinum',
-        'currency': '\$',
-        'pricePerMonth': '4.30',
-        'pricePerYear': '50',
-        'isBestValue': true,
-      },
-    ];
     return FullScreenDialog(
       widget: StatefulBuilder(
         builder: (context, setState) => Container(
@@ -55,70 +36,90 @@ class Upgrade extends StatelessWidget {
                       buildRenewalTextOrUpsell(context, isCN, isFree),
                       // * Step
                       Container(
-                        padding:
-                            const EdgeInsetsDirectional.only(top: 8, bottom: 8),
+                        padding: const EdgeInsetsDirectional.only(
+                          top: 16.0,
+                          bottom: 16.0,
+                        ),
                         child: const PlanStep(
                           stepNum: '1',
                           description: 'Choose Plan', // TODO: translations
                         ),
                       ),
-                      // * Toggle
-                      Container(
-                        padding:
-                            const EdgeInsetsDirectional.only(top: 8, bottom: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsetsDirectional.only(end: 16.0),
-                              child: CText(
-                                '1 year pricing',
-                                style: isTwoYearPlan
-                                    ? tsBody1.copiedWith(color: grey5)
-                                    : tsBody1,
-                              ), // TODO: translations
-                            ),
-                            FlutterSwitch(
-                              width: 44.0,
-                              height: 24.0,
-                              valueFontSize: 12.0,
-                              padding: 2,
-                              toggleSize: 18.0,
-                              value: isTwoYearPlan,
-                              activeColor: indicatorGreen,
-                              onToggle: (bool newValue) {
-                                setState(() => isTwoYearPlan = newValue);
-                              },
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsetsDirectional.only(start: 16.0),
-                              child: CText(
-                                '2 year pricing',
-                                style: isTwoYearPlan
-                                    ? tsBody1
-                                    : tsBody1.copiedWith(color: grey5),
-                              ), // TODO: translations
-                            ),
-                            // TODO: Add saving % component
-                          ],
+                      if (isCN == true)
+                        // * Toggle
+                        Container(
+                          padding: const EdgeInsetsDirectional.only(
+                            bottom: 16,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsetsDirectional.only(end: 16.0),
+                                child: CText(
+                                  '1 year pricing',
+                                  style: isTwoYearPlan
+                                      ? tsBody1.copiedWith(color: grey5)
+                                      : tsBody1,
+                                ), // TODO: translations
+                              ),
+                              FlutterSwitch(
+                                width: 44.0,
+                                height: 24.0,
+                                valueFontSize: 12.0,
+                                padding: 2,
+                                toggleSize: 18.0,
+                                value: isTwoYearPlan,
+                                activeColor: indicatorGreen,
+                                onToggle: (bool newValue) {
+                                  setState(() => isTwoYearPlan = newValue);
+                                },
+                              ),
+                              Padding(
+                                padding: const EdgeInsetsDirectional.only(
+                                  start: 16.0,
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Transform.translate(
+                                      offset: const Offset(80.0, -25.0),
+                                      child: const CAssetImage(
+                                        path: ImagePaths.savings_arrow,
+                                      ),
+                                    ),
+                                    Transform.translate(
+                                      offset: const Offset(115.0, -30.0),
+                                      child: Transform.rotate(
+                                        angle: 0.1 * pi,
+                                        child: Stack(
+                                          children: [
+                                            CText(
+                                              'Save 32 %'.toUpperCase(),
+                                              style: tsBody1.copiedWith(
+                                                color: pink4,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    CText(
+                                      '2 year pricing',
+                                      style: isTwoYearPlan
+                                          ? tsBody1
+                                          : tsBody1.copiedWith(color: grey5),
+                                    )
+                                  ],
+                                ), // TODO: translations
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
                       // * Card
                       ...plans.map(
                         (plan) => PlanCard(
-                          // TODO: temp workaround
-                          isCN: isCN,
-                          isFree: isFree,
-                          isPro: isPro,
-                          isPlatinum: isPlatinum,
-                          // TODO: build isTwoYears logic here
-                          planName: plan['planName'] as String,
-                          currency: plan['currency'] as String,
-                          pricePerMonth: plan['pricePerMonth'] as String,
-                          pricePerYear: plan['pricePerYear'] as String,
-                          isBestValue: plan['isBestValue'] as bool,
+                          id: plan['id'] as String,
                         ),
                       ),
                     ],
@@ -133,12 +134,7 @@ class Upgrade extends StatelessWidget {
                 color: grey3,
                 child: GestureDetector(
                   onTap: () async => await context.pushRoute(
-                    ActivationCodeCheckout(
-                      isCN: isCN,
-                      isFree: isFree,
-                      isPlatinum: isPlatinum,
-                      isPro: isPro,
-                    ),
+                    ActivationCodeCheckout(),
                   ),
                   child: CText(
                     'Have a Lantern Pro activation code? Click here.',
@@ -154,15 +150,10 @@ class Upgrade extends StatelessWidget {
   }
 
   Widget buildRenewalTextOrUpsell(
-      BuildContext context, bool? isCN, bool? isFree) {
-    const featuresList = [
-      // TODO: translations
-      'Unlimited data',
-      'Faster data centers',
-      'No logs',
-      'Connect up to 3 devices',
-      'No Ads',
-    ];
+    BuildContext context,
+    bool? isCN,
+    bool? isFree,
+  ) {
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(
