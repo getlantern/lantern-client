@@ -13,12 +13,23 @@ class PlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedPlan = plans.firstWhere((p) => p['id'] == id);
-    // TODO: we'll have to match plan id to actual titles here
-    final planName = selectedPlan['planName'] as String;
-    final currency = selectedPlan['currency'] as String;
-    final pricePerMonth = selectedPlan['pricePerMonth'] as String;
-    final pricePerYear = selectedPlan['pricePerYear'] as String;
-    final isBestValue = selectedPlan['isBestValue'] as bool;
+    final description = selectedPlan['description'] as String;
+
+    // Get currency
+    final currencyObject = selectedPlan['price'] as Map<String, int>;
+    final currency = currencyObject.entries.first.key.toString().toUpperCase();
+
+    // Get price per month and year
+    final pricePerYear =
+        currencyFormatter.format(currencyObject.entries.first.value);
+    final pricePerMonthObject =
+        selectedPlan['expectedMonthlyPrice'] as Map<String, int>;
+
+    final pricePerMonth =
+        currencyFormatter.format(pricePerMonthObject.entries.first.value);
+
+    final isBestValue = selectedPlan['bestValue'] as bool;
+    final renewalBonus = selectedPlan['renewalBonus'] as Map<String, int>;
 
     return CInkWell(
       onTap: () async {
@@ -52,7 +63,11 @@ class PlanCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CText(
-                        planName,
+                        determinePlanDescription(
+                          description,
+                          renewalBonus,
+                          isPro,
+                        ),
                         style: tsSubtitle2.copiedWith(
                           color: pink3,
                         ),
@@ -66,7 +81,7 @@ class PlanCard extends StatelessWidget {
                   // * Price per month
                   Row(
                     children: [
-                      CText('$currency$pricePerMonth', style: tsSubtitle1),
+                      CText('$currency $pricePerMonth', style: tsSubtitle1),
                       // TODO: translation
                       CText(' / month', style: tsBody1),
                     ],
@@ -76,7 +91,7 @@ class PlanCard extends StatelessWidget {
                     children: [
                       // TODO: translation
                       CText(
-                        '$currency$pricePerYear billed one time',
+                        '$currency $pricePerYear billed one time',
                         style: tsBody2.copiedWith(color: grey5),
                       ),
                     ],
@@ -142,5 +157,17 @@ class PlanCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String determinePlanDescription(
+    String description,
+    Map<String, int> renewalBonus,
+    bool isPro,
+  ) {
+    // TODO: translations
+    final renewalMonths = renewalBonus['months'];
+    final renewalGlobal = '$description $renewalMonths ' +
+        '${renewalMonths == 1 ? 'month' : 'months'}'.i18n;
+    return (!isCN && isPro) ? renewalGlobal : description;
   }
 }

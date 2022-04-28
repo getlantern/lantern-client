@@ -56,7 +56,7 @@ class _CheckoutState extends State<Checkout>
         AnimationController(vsync: this, duration: longAnimationDuration);
     animationController.repeat(reverse: true);
     pulseAnimation =
-        Tween<double>(begin: 0.5, end: 2.0).animate(animationController);
+        Tween<double>(begin: 0.5, end: 1.5).animate(animationController);
 
     if (animationController.isCompleted) animationController.stop();
 

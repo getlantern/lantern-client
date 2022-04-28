@@ -104,7 +104,7 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                 }),
                 key: activationCodeFieldKey,
                 child: CTextField(
-                  maxLength: 25 + 4,
+                  maxLength: 25 + 4, //accounting for dashes
                   controller: activationCodeController,
                   autovalidateMode: AutovalidateMode.disabled,
                   label: 'Activation Code', // TODO: Translations

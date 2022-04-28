@@ -15,8 +15,12 @@ class PriceSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedPlan = plans.firstWhere((p) => p['id'] == id);
-    final price = selectedPlan['pricePerYear'] as String;
-    final currency = selectedPlan['currency'] as String;
+
+    final currencyObject = selectedPlan['price'] as Map<String, int>;
+    final currency = currencyObject.entries.first.key.toString().toUpperCase();
+    final pricePerYear =
+        currencyFormatter.format(currencyObject.entries.first.value);
+
     return Container(
       padding: const EdgeInsetsDirectional.only(top: 8.0, bottom: 8.0),
       child: Column(
@@ -27,7 +31,7 @@ class PriceSummary extends StatelessWidget {
             children: [
               // TODO: translations
               CText('Plan type'.toUpperCase(), style: tsOverline),
-              CText(currency + price, style: tsOverline),
+              CText('$currency  $pricePerYear', style: tsOverline),
             ],
           ),
           if (isPro != false || isPlatinum != false)
@@ -62,7 +66,7 @@ class PriceSummary extends StatelessWidget {
               // TODO: translations
               CText('Total', style: tsBody1),
               CText(
-                currency + price,
+                '$currency  $pricePerYear',
                 style: tsBody1.copiedWith(
                   color: pink4,
                   fontWeight: FontWeight.w500,

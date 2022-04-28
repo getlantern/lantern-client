@@ -12,6 +12,7 @@ class Upgrade extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var isTwoYearPlan = true;
+    var availablePlans = determineAvailablePlans(isTwoYearPlan);
     return FullScreenDialog(
       widget: StatefulBuilder(
         builder: (context, setState) => Container(
@@ -74,6 +75,10 @@ class Upgrade extends StatelessWidget {
                                 activeColor: indicatorGreen,
                                 onToggle: (bool newValue) {
                                   setState(() => isTwoYearPlan = newValue);
+                                  setState(
+                                    () => availablePlans =
+                                        determineAvailablePlans(newValue),
+                                  );
                                 },
                               ),
                               Padding(
@@ -95,7 +100,8 @@ class Upgrade extends StatelessWidget {
                                         child: Stack(
                                           children: [
                                             CText(
-                                              'Save 32 %'.toUpperCase(),
+                                              determineSavingsOrExtraMonths()
+                                                  .toUpperCase(),
                                               style: tsBody1.copiedWith(
                                                 color: pink4,
                                               ),
@@ -117,7 +123,7 @@ class Upgrade extends StatelessWidget {
                           ),
                         ),
                       // * Card
-                      ...plans.map(
+                      ...availablePlans.map(
                         (plan) => PlanCard(
                           id: plan['id'] as String,
                         ),
@@ -147,6 +153,34 @@ class Upgrade extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String determineSavingsOrExtraMonths() {
+    // TODO - this has to do with expiration status
+    const savingsPercentage = '34 %';
+    return isFree == true
+        ?
+        // Free user who is upgrading => fixed %
+        'Save $savingsPercentage'
+        :
+        // Pro user who is upgrading
+        // 1. in advance => + 3 months
+        // 2. upon expiry => + 3 months
+        // 3. after having recently expired => + 45 days
+        '+ 3 months';
+  }
+
+  List<Map<String, Object>> determineAvailablePlans(bool isTwoYearPlan) {
+    // if we are not in China, we only have two available plans which we both want to render
+    if (!isCN) return plans;
+
+    // we are in China, determine 2 out of 4 plans depending on where the toggle is set
+    return plans
+        .where(
+          (plan) =>
+              plan['id'].toString().startsWith(isTwoYearPlan ? '2y' : '1y'),
+        )
+        .toList();
   }
 
   Widget buildRenewalTextOrUpsell(
