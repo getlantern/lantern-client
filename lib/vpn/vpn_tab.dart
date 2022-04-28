@@ -1,3 +1,4 @@
+import 'package:lantern/account/plans/constants.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
 
@@ -16,7 +17,11 @@ class VPNTab extends StatelessWidget {
         .proUser((BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(
         title: SvgPicture.asset(
-          proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
+          isPlatinum
+              ? ImagePaths.lantern_platinum_logotype
+              : proUser
+                  ? ImagePaths.pro_logo
+                  : ImagePaths.free_logo,
           height: 16,
           fit: BoxFit.contain,
         ),
@@ -24,7 +29,9 @@ class VPNTab extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            proUser ? Container() : ProBanner(),
+            (isCN && isPlatinum) || (!isCN && proUser)
+                ? Container()
+                : ProBanner(),
             VPNSwitch(),
             Container(
               padding: const EdgeInsetsDirectional.all(16),

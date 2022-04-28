@@ -140,8 +140,8 @@ final paymentProviders = [
 // TODO: temporary
 const plans = plansCN;
 const isCN = true;
-const isFree = false;
-const isPro = true;
+const isFree = true;
+const isPro = false;
 const isPlatinum = false;
 
 final currencyFormatter = NumberFormat('#,##,000');

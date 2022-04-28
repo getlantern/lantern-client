@@ -170,6 +170,11 @@ class Upgrade extends StatelessWidget {
         '+ 3 months';
   }
 
+  String determineExpiryText() {
+    // TODO: depends on expiry status
+    return 'This is a Pro or Platinum user so they should have some text here';
+  }
+
   List<Map<String, Object>> determineAvailablePlans(bool isTwoYearPlan) {
     // if we are not in China, we only have two available plans which we both want to render
     if (!isCN) return plans;
@@ -196,7 +201,7 @@ class Upgrade extends StatelessWidget {
           // TODO: translations
           if (isFree == false)
             CText(
-              'This is a Pro or Platinum user so they should have some text here',
+              determineExpiryText(),
               style: tsBody1,
             ),
           if (isCN == false)
@@ -245,9 +250,10 @@ class Upgrade extends StatelessWidget {
           Container(
             padding: const EdgeInsetsDirectional.only(top: 25, start: 32),
             alignment: Alignment.centerLeft,
-            child: const CAssetImage(
-              // TODO: this depends on isCN
-              path: ImagePaths.lantern_logotype,
+            child: CAssetImage(
+              path: isCN == true
+                  ? ImagePaths.lantern_logotype
+                  : ImagePaths.lantern_pro_logotype,
               size: 20,
             ),
           ),

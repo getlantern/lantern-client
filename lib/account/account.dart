@@ -1,3 +1,4 @@
+import 'package:lantern/account/plans/constants.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
@@ -5,9 +6,7 @@ class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
 
   Future<void> upgradeToLanternPro(BuildContext context) async =>
-      await context.pushRoute(
-        Upgrade(),
-      );
+      await context.pushRoute(Upgrade());
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());
@@ -48,11 +47,14 @@ class AccountMenu extends StatelessWidget {
               )
             : const SizedBox(),
       ),
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.pro_icon_black,
-        content: 'Upgrade to Lantern Pro'.i18n,
-        onTap: () => upgradeToLanternPro(context),
-      ),
+      if (!isPlatinum)
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.pro_icon_black,
+          content:
+              '${isCN ? 'Upgrade ${isPro ? 'to Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
+                  .i18n, // TODO: translations
+          onTap: () => upgradeToLanternPro(context),
+        ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,

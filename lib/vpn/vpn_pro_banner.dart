@@ -1,3 +1,4 @@
+import 'package:lantern/account/plans/constants.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 class ProBanner extends StatefulWidget {
@@ -9,10 +10,8 @@ class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
     return CInkWell(
-      onTap: () {
-        // TODO: move to Flutter route
-        LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
-      }, // Handle your callback
+      onTap: () async =>
+          await context.pushRoute(Upgrade()), // Handle your callback
       child: Container(
         padding: const EdgeInsetsDirectional.all(16),
         decoration: BoxDecoration(
@@ -39,7 +38,8 @@ class _ProBannerState extends State<ProBanner> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CText(
-                      'Go Pro Title'.i18n,
+                      'Upgrade ${isCN ? isPro ? 'to Platinum' : '' : 'to Pro'}'
+                          .i18n, // TODO: translations
                       style: tsSubtitle2,
                     ),
                     const SizedBox(

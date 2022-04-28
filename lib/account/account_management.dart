@@ -1,5 +1,7 @@
 import 'package:lantern/messaging/messaging.dart';
 
+import 'plans/constants.dart';
+
 class AccountManagement extends StatefulWidget {
   AccountManagement({Key? key, required this.isPro}) : super(key: key);
   final bool isPro;
@@ -27,7 +29,7 @@ class _AccountManagementState extends State<AccountManagement>
   @override
   Widget build(BuildContext context) {
     var title = widget.isPro
-        ? 'Pro Account Management'.i18n
+        ? '${isCN ? '' : 'Pro'} Account Management'.i18n // TODO: translations
         : 'account_management'.i18n;
     var textCopied = false;
 
@@ -169,7 +171,9 @@ class _AccountManagementState extends State<AccountManagement>
                       Widget? child,
                     ) {
                       return ListItemFactory.settingsItem(
-                        header: 'Pro Account Expiration'.i18n,
+                        header:
+                            '${isPlatinum ? 'Platinum' : 'Pro'} Account Expiration'
+                                .i18n, // TODO: translations
                         icon: ImagePaths.clock,
                         content: expirationDate,
                         onTap: () {
@@ -292,7 +296,10 @@ class _AccountManagementState extends State<AccountManagement>
                               unselectedLabelColor: grey5,
                               tabs: [
                                 Tab(
-                                  text: 'Lantern Pro'.i18n.toUpperCase(),
+                                  text:
+                                      'Lantern ${isPlatinum ? 'Platinum' : 'Pro'}'
+                                          .i18n // TODO: translations
+                                          .toUpperCase(),
                                 ),
                                 Tab(
                                   text: 'chat'.i18n.toUpperCase(),
