@@ -141,7 +141,7 @@ final paymentProviders = [
 const plans = plansCN;
 const isCN = true;
 const isFree = true;
-const isPro = false;
+const isPro = true;
 const isPlatinum = false;
 
 final currencyFormatter = NumberFormat('#,##,000');

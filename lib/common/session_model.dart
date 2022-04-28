@@ -208,4 +208,20 @@ class SessionModel extends Model {
   Future<void> trackScreenView(String path) async {
     return methodChannel.invokeMethod('trackScreenView', path);
   }
+
+  Future<void> updatePlans() async {
+    return methodChannel.invokeMethod('updatePlans');
+  }
+
+  Future<void> resetCachedPlans() async {
+    return methodChannel.invokeMethod('resetCachedPlans');
+  }
+
+  Widget getPlans(ValueWidgetBuilder<String?> builder) {
+    return subscribedSingleValueBuilder<String?>(
+      'plans',
+      defaultValue: null,
+      builder: builder,
+    );
+  }
 }

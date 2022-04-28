@@ -110,6 +110,42 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
+            // * FETCH PLANS
+            ListItemFactory.settingsItem(
+              content: 'Fetch plans',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async {
+                    await sessionModel.updatePlans();
+                  },
+                  child: CText(
+                    'Fetch Plans'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
+              ],
+            ),
+            // * RESET FETCHED PLANS
+            ListItemFactory.settingsItem(
+              content: 'Reset cached plans',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async {
+                    await sessionModel.resetCachedPlans();
+                  },
+                  child: CText(
+                    'Reset Cached Plans'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
+              ],
+            ),
+            // * DISPLAY FETCHED PLANS
+            sessionModel.getPlans(
+              (context, cachedPlans, child) => ListItemFactory.settingsItem(
+                content: cachedPlans.toString(),
+              ),
+            ),
             // * RESET ONBOARDING + RECOVERY KEY FLAGS
             ListItemFactory.settingsItem(
               content: 'Reset chat flags',

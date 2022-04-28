@@ -5,8 +5,11 @@ import 'package:lantern/messaging/messaging_model.dart';
 class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
 
-  Future<void> upgradeToLanternPro(BuildContext context) async =>
-      await context.pushRoute(Upgrade());
+  Future<void> upgradeToLanternPro(BuildContext context) async {
+    // TODO: hit sessionModel.fetchPlans
+    // TODO: use exponential backoff on failure
+    await context.pushRoute(Upgrade());
+  }
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());

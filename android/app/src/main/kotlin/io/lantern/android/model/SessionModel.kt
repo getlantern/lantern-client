@@ -12,9 +12,11 @@ import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.LanternHttpClient
+import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
@@ -22,6 +24,7 @@ import org.getlantern.lantern.util.Analytics
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
+import java.util.concurrent.*
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -32,12 +35,14 @@ class SessionModel(
     flutterEngine: FlutterEngine? = null,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
+    private val plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
     companion object {
         private const val TAG = "SessionModel"
 
         const val PATH_PRO_USER = "prouser"
         const val PATH_PROXY_ALL = "proxyAll"
+        const val PATH_PLANS = "plans"
     }
 
     init {
@@ -50,6 +55,9 @@ class SessionModel(
             tx.put(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
+            )
+            tx.put(
+                PATH_PLANS, null
             )
         }
     }
@@ -105,6 +113,8 @@ class SessionModel(
                 }
             }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
+            "updatePlans" -> updatePlans()
+            "resetCachedPlans" -> resetCachedPlans()
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -318,5 +328,33 @@ class SessionModel(
                 }
             }
         )
+    }
+
+    private fun updatePlans() {
+        LanternApp.getPlans(object : PlansCallback {
+            override fun onFailure(t: Throwable?, error: ProError?) {
+                if (error != null && error.getMessage() != null) {
+                    Logger.error(TAG, "Unable to fetch plan data: $t.message")
+
+                    // TODO: only show this if the db has nothing cached
+                    activity.showErrorDialog(activity.resources.getString(R.string.error))
+                }
+            }
+
+            override fun onSuccess(proPlans: Map<String, ProPlan>) {
+                plans.clear()
+                plans.putAll(proPlans)
+            }
+        })
+        Logger.info(TAG, "Fetched plans $plans")
+        db.mutate { tx ->
+            tx.put(TAG, plans.toString())
+        }
+    }
+
+    private fun resetCachedPlans() {
+        db.mutate { tx ->
+            tx.put(PATH_PLANS, null)
+        }
     }
 }

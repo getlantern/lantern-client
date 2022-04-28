@@ -49,6 +49,9 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
+    // Cache plans in session storage
+    sessionModel.updatePlans();
+
     navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
     // Let back-end know that we're ready to handle navigation
     navigationChannel.invokeListMethod('ready');
