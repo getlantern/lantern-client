@@ -86,6 +86,12 @@ class SessionModel extends Model {
     });
   }
 
+  Future<bool> getPlayVersion() {
+    return methodChannel
+        .invokeMethod('getPlayVersion')
+        .then((value) => value as bool);
+  }
+
   Widget language(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>('lang', builder: builder);
   }
@@ -257,13 +263,13 @@ class SessionModel extends Model {
       'cardNumber': cardNumber,
       'expDate': expDate,
       'cvc': cvc,
-    });
+    }).then((value) => value as String);
   }
 
   Future<void> submitGooglePlay(String planID) async {
     return methodChannel.invokeMethod('submitGooglePlay', <String, dynamic>{
       'planID': planID,
-    });
+    }).then((value) => value as String);
   }
 
   Future<void> applyRefCode(

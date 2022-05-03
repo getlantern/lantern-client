@@ -118,6 +118,7 @@ class SessionModel(
                 LanternApp.getSession().isPlayVersion = call.argument("on") ?: false
                 activity.restartApp()
             }
+            "getPlayVersion" -> LanternApp.getSession().isPlayVersion
             "setForceCountry" -> {
                 LanternApp.getSession().setForceCountry(call.argument("countryCode") ?: "")
                 activity.restartApp()
@@ -386,7 +387,7 @@ class SessionModel(
     private fun updateAndCacheUserStatus() {
         // TODO: request to /user-data
         // TODO: save level to PATH_USER_STATUS
-        val userStatus = "platinum"
+        val userStatus = "pro"
         db.mutate { tx ->
             tx.put(PATH_USER_STATUS, userStatus)
         }
@@ -399,10 +400,8 @@ class SessionModel(
         cardNumber: String,
         expDate: String,
         cvc: String,
-        result: MethodChannel.Result) {
-        // TODO: carry over submitStripe() from CheckoutActivity.java (replace deprecated functions)
-        // TODO: handle error (ideally Flutter-side)
-        // TODO: call updatedAndCacheUserStatus to save new status
+        result: MethodChannel.Result
+    ) {
         try {
             LanternApp.getSession().setEmail(email)
             val dateComponents = expDate.split(expDate.trim(), "/")
@@ -412,7 +411,8 @@ class SessionModel(
                 cardNumber.trim(),
                 month,
                 year,
-                cvc.trim { it <= ' ' })
+                cvc.trim { it <= ' ' }
+            )
             // TODO: need to show progress dialog on Flutter side if we're not already
 //            dialog = ProgressDialog.show(
 //                this,
@@ -431,7 +431,7 @@ class SessionModel(
             )
             stripe.createCardToken(
                 card,
-                callback= object : ApiResultCallback<Token> {
+                callback = object : ApiResultCallback<Token> {
                     override fun onSuccess(token: Token) {
                         LanternApp.getSession().setStripeToken(token.id)
                         // TODO: close progress dialog in Flutter once this succeeds
@@ -448,33 +448,39 @@ class SessionModel(
             )
         } catch (t: Throwable) {
             Logger.error(STRIPE_TAG, "Error submitting to stripe", t)
-            // TODO: show this localized error in Flutter
             result.error(
                 "unknownError",
                 activity.resources.getString(R.string.error_making_purchase),
-            null,
+                null,
             )
         }
     }
 
     // TODO: WIP
     private fun submitGooglePlay(planID: String, result: MethodChannel.Result) {
-        // TODO: redirect to Google Play checkout flow
-        // TODO: handle error (ideally Flutter-side)
-        // TODO: call updatedAndCacheUserStatus to save new status
-        if (!LanternApp.getInAppBilling().startPurchase(
+        if (LanternApp.getInAppBilling() == null) {
+            Logger.error(TAG, "getInAppBilling is null")
+            result.error(
+                "unknownError",
+                activity.resources.getString(R.string.error_making_purchase),
+                null,
+            )
+            return
+        }
+        if (LanternApp.getInAppBilling() != null && !LanternApp.getInAppBilling().startPurchase(
                 activity,
-                LanternApp.getSession().getSelectedPlan()!!.id,
+                planID,
                 object : PurchasesUpdatedListener {
                     override fun onPurchasesUpdated(
                         billingResult: BillingResult,
-                        purchases: MutableList<Purchase>?) {
+                        purchases: MutableList<Purchase>?
+                    ) {
                         if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
                             result.error(
-                                "unknownError",
-                                activity.resources.getString(R.string.error_making_purchase),
-                            null,
-                            )
+                                    "unknownError",
+                                    activity.resources.getString(R.string.error_making_purchase),
+                                    null,
+                                )
                             return
                         }
 
@@ -482,23 +488,23 @@ class SessionModel(
                         for (purchase in purchases!!) {
                             if (!purchase.isAcknowledged) {
                                 Logger.debug(
-                                    TAG,
-                                    "Order Token: " + purchase.purchaseToken
-                                )
+                                        TAG,
+                                        "Order Token: " + purchase.purchaseToken
+                                    )
                                 tokens.add(purchase.purchaseToken)
                             }
                         }
 
                         if (tokens.size != 1) {
                             Logger.error(
-                                TAG,
-                                "Unexpected number of purchased products, not proceeding with purchase: " + tokens.size
-                            )
+                                    TAG,
+                                    "Unexpected number of purchased products, not proceeding with purchase: " + tokens.size
+                                )
                             result.error(
-                                "unknownError",
-                                activity.resources.getString(R.string.error_making_purchase),
-                            null,
-                            )
+                                    "unknownError",
+                                    activity.resources.getString(R.string.error_making_purchase),
+                                    null,
+                                )
                             return
                         }
 
@@ -510,11 +516,10 @@ class SessionModel(
                 }
             )
         ) {
-            // TODO: make sure to show this error on the Flutter side
             result.error(
                 "unknownError",
                 activity.resources.getString(R.string.error_making_purchase),
-            null,
+                null,
             )
         }
     }

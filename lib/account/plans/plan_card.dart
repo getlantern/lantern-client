@@ -39,20 +39,45 @@ class PlanCard extends StatelessWidget {
 
     return CInkWell(
       onTap: () async {
-        // TODO: Determine when we redirect to Google Pay
-        // try {
-        //   await sessionModel.submitGooglePlay(id);
-        // } catch (e) {
-        //   // TODO: handle Google Pay redirection failure
-        // }
-
-        await context.pushRoute(
-          Checkout(
-            id: id,
-            isPro: isPro,
-            isPlatinum: isPlatinum,
-          ),
-        );
+        final isPlayVersion = await sessionModel.getPlayVersion();
+        if (isPlayVersion) {
+          await sessionModel.submitGooglePlay(id).then((value) async {
+            await sessionModel.updateAndCachePlans();
+            await sessionModel.updateAndCacheUserStatus();
+          }).onError((error, stackTrace) {
+            // on failure
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: CText(
+                    (error as PlatformException).message ?? error.toString(),
+                    style: tsSubtitle1,
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: CText(
+                        'Dismiss'.i18n,
+                        style: tsButtonPink,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          });
+        } else {
+          await context.pushRoute(
+            Checkout(
+              id: id,
+              isPro: isPro,
+              isPlatinum: isPlatinum,
+            ),
+          );
+        }
       },
       child: Stack(
         alignment: Alignment.bottomCenter,
