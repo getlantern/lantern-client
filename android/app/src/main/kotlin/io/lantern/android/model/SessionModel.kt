@@ -3,6 +3,10 @@ package io.lantern.android.model
 import android.app.Activity
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
+import com.stripe.android.ApiResultCallback
+import com.stripe.android.Stripe
+import com.stripe.android.model.Card
+import com.stripe.android.model.Token
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -11,13 +15,8 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.model.LanternHttpClient
-import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
-import org.getlantern.lantern.model.LanternHttpClient.ProCallback
-import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
-import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.model.ProPlan
-import org.getlantern.lantern.model.ProUser
+import org.getlantern.lantern.model.*
+import org.getlantern.lantern.model.LanternHttpClient.*
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
 import org.getlantern.lantern.util.Analytics
@@ -25,8 +24,7 @@ import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.json.JSONObject
-import java.util.*
-import java.util.concurrent.*
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -41,6 +39,7 @@ class SessionModel(
 
     companion object {
         private const val TAG = "SessionModel"
+        private const val STRIPE_TAG = "$TAG.stripe"
 
         const val PATH_PRO_USER = "prouser"
         const val PATH_PROXY_ALL = "proxyAll"
@@ -90,7 +89,7 @@ class SessionModel(
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
             "updateAndCachePlans" -> updateAndCachePlans()
             "updateAndCacheUserStatus" -> updateAndCacheUserStatus()
-            "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!)
+            "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, result)
             "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!)
             "applyRefCode" -> applyRefCode(call.argument("email")!!, call.argument("refCode")!!)
             "redeemActivationCode" -> redeemActivationCode(call.argument("email")!!, call.argument("activationCode")!!)
@@ -391,10 +390,67 @@ class SessionModel(
 
     // TODO: WIP
     // Transmits the email and credit card info to Stripe checkout flow
-    private fun submitStripe(email: String, cardNumber: String, expDate: String, cvc: String) {
+    private fun submitStripe(
+        email: String,
+        cardNumber: String,
+        expDate: String,
+        cvc: String,
+        result: MethodChannel.Result) {
         // TODO: carry over submitStripe() from CheckoutActivity.java (replace deprecated functions)
         // TODO: handle error (ideally Flutter-side)
         // TODO: call updatedAndCacheUserStatus to save new status
+        try {
+            LanternApp.getSession().setEmail(email)
+            val dateComponents = expDate.split(expDate.trim(), "/")
+            val month = dateComponents[0].toInt()
+            val year = dateComponents[1].toInt()
+            val card: Card = Card.create(
+                cardNumber.trim(),
+                month,
+                year,
+                cvc.trim { it <= ' ' })
+            // TODO: need to show progress dialog on Flutter side if we're not already
+//            dialog = ProgressDialog.show(
+//                this,
+//                getResources().getString(R.string.processing_payment),
+//                "",
+//                true, false
+//            )
+            Logger.debug(
+                STRIPE_TAG,
+                "Stripe publishable key is '%s'",
+                LanternApp.getSession().stripePubKey()
+            )
+            val stripe = Stripe(
+                activity,
+                LanternApp.getSession().stripePubKey()!!
+            )
+            stripe.createCardToken(
+                card,
+                callback= object : ApiResultCallback<Token> {
+                    override fun onSuccess(token: Token) {
+                        LanternApp.getSession().setStripeToken(token.id)
+                        // TODO: close progress dialog in Flutter once this succeeds
+                        result.success(null)
+                        val paymentHandler = PaymentHandler(activity, "stripe")
+                        paymentHandler.sendPurchaseRequest()
+                    }
+
+                    override fun onError(error: Exception) {
+                        // TODO: show the localized error to the user in Flutter
+                        result.error("unknownError", error.localizedMessage, null)
+                    }
+                }
+            )
+        } catch (t: Throwable) {
+            Logger.error(STRIPE_TAG, "Error submitting to stripe", t)
+            // TODO: show this localized error in Flutter
+            result.error(
+                "unknownError",
+                activity.resources.getString(R.string.error_making_purchase),
+            null,
+            )
+        }
     }
 
     // TODO: WIP
