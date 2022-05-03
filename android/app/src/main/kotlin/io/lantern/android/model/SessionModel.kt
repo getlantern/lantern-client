@@ -91,7 +91,6 @@ class SessionModel(
             "updateAndCachePlans" -> updateAndCachePlans()
             "updateAndCacheUserStatus" -> updateAndCacheUserStatus()
             "submitStripe" -> submitStripe()
-            "submitBTC" -> submitBTC()
             "submitGooglePlay" -> submitGooglePlay()
             "applyRefCode" -> applyRefCode()
             "redeemActivationCode" -> redeemActivationCode()
@@ -392,22 +391,14 @@ class SessionModel(
 
     // TODO: WIP
     // Transmits the email and credit card info to Stripe checkout flow
-    private fun submitStripe(email: String, cardNumber: String, expDate: Date, cvc: String) {
+    private fun submitStripe(email: String, cardNumber: String, expDate: String, cvc: String) {
         // TODO: carry over submitStripe() from CheckoutActivity.java (replace deprecated functions)
         // TODO: handle error (ideally Flutter-side)
         // TODO: call updatedAndCacheUserStatus to save new status
     }
 
     // TODO: WIP
-    // Redirects to BTCPay endpoint (invoked in a WebView)
-    private fun submitBTC() {
-        // TODO: send request to BTCPay endpoint
-        // TODO: handle error (ideally Flutter-side)
-        // TODO: call updatedAndCacheUserStatus to save new status
-    }
-
-    // TODO: WIP
-    private fun submitGooglePlay() {
+    private fun submitGooglePlay(planID: String) {
         // TODO: redirect to Google Play checkout flow
         // TODO: handle error (ideally Flutter-side)
         // TODO: call updatedAndCacheUserStatus to save new status

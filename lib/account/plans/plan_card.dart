@@ -39,6 +39,13 @@ class PlanCard extends StatelessWidget {
 
     return CInkWell(
       onTap: () async {
+        // TODO: Determine when we redirect to Google Pay
+        // try {
+        //   await sessionModel.submitGooglePlay(id);
+        // } catch (e) {
+        //   // TODO: handle Google Pay redirection failure
+        // }
+
         await context.pushRoute(
           Checkout(
             id: id,

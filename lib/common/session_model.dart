@@ -245,4 +245,44 @@ class SessionModel extends Model {
       builder: builder,
     );
   }
+
+  Future<void> submitStripe(
+    String email,
+    String cardNumber,
+    String expDate,
+    String cvc,
+  ) async {
+    return methodChannel.invokeMethod('submitStripe', <String, dynamic>{
+      'email': email,
+      'cardNumber': cardNumber,
+      'expDate': expDate,
+      'cvc': cvc,
+    });
+  }
+
+  Future<void> submitGooglePlay(String planID) async {
+    return methodChannel.invokeMethod('submitGooglePlay', <String, dynamic>{
+      'planID': planID,
+    });
+  }
+
+  Future<void> applyRefCode(
+    String email,
+    String refCode,
+  ) async {
+    return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
+      'email': email,
+      'refCode': refCode,
+    });
+  }
+
+  Future<void> redeemActivationCode(
+    String email,
+    String activationCode,
+  ) async {
+    return methodChannel.invokeMethod('redeemActivationCode', <String, dynamic>{
+      'email': email,
+      'activationCode': activationCode,
+    });
+  }
 }

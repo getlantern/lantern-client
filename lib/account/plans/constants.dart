@@ -141,3 +141,5 @@ final paymentProviders = [
 const plans = plansCN;
 
 final currencyFormatter = NumberFormat('#,##,000');
+
+const btcPayURL = 'https://bp.128.network';

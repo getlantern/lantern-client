@@ -148,10 +148,16 @@ class _CheckoutState extends State<Checkout>
                       Flexible(
                         flex: 1,
                         child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              submittedRefCode = true;
-                            });
+                          onTap: () async {
+                            try {
+                              await sessionModel.applyRefCode(
+                                  emailController.text, referralCode);
+                              setState(() {
+                                submittedRefCode = true;
+                              });
+                            } catch (e) {
+                              // TODO: handle referral code application failure
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsetsDirectional.only(
@@ -259,39 +265,44 @@ class _CheckoutState extends State<Checkout>
                           ),
                         );
                       } else {
-                        await context.pushRoute(
-                          FullScreenDialogPage(
-                            widget: Center(
-                              child: Stack(
-                                children: [
-                                  // TODO: add BTCPAY call
-                                  WebView(
-                                    initialUrl: 'https://flutter.dev',
-                                    onPageStarted: (url) {
-                                      setState(() {
-                                        loadingPercentage = 0;
-                                      });
-                                    },
-                                    onProgress: (progress) {
-                                      setState(() {
-                                        loadingPercentage = progress;
-                                      });
-                                    },
-                                    onPageFinished: (url) {
-                                      setState(() {
-                                        loadingPercentage = 100;
-                                      });
-                                    },
-                                  ),
-                                  if (loadingPercentage < 100)
-                                    LinearProgressIndicator(
-                                      value: loadingPercentage / 100.0,
+                        try {
+                          const btcPayToken = ''; // TODO: not sure?
+                          await context.pushRoute(
+                            FullScreenDialogPage(
+                              widget: Center(
+                                child: Stack(
+                                  children: [
+                                    WebView(
+                                      initialUrl:
+                                          '$btcPayURL/$btcPayToken', // TODO: add BTCPay params
+                                      onPageStarted: (url) {
+                                        setState(() {
+                                          loadingPercentage = 0;
+                                        });
+                                      },
+                                      onProgress: (progress) {
+                                        setState(() {
+                                          loadingPercentage = progress;
+                                        });
+                                      },
+                                      onPageFinished: (url) {
+                                        setState(() {
+                                          loadingPercentage = 100;
+                                        });
+                                      },
                                     ),
-                                ],
+                                    if (loadingPercentage < 100)
+                                      LinearProgressIndicator(
+                                        value: loadingPercentage / 100.0,
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
+                          );
+                        } catch (e) {
+                          // TODO: handle error of redirecting to BTCPay URL
+                        }
                       }
                     },
                   )

@@ -122,8 +122,16 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                 Button(
                   disabled: !formIsValid,
                   text: copy,
-                  // TODO: not sure what should happen here? Presumably a request?
-                  onPressed: () async => {},
+                  onPressed: () async {
+                    try {
+                      await sessionModel.redeemActivationCode(
+                        emailController.text,
+                        activationCodeController.text,
+                      );
+                    } catch (e) {
+                      // TODO: handle activation code error
+                    }
+                  },
                 ),
               ],
             )

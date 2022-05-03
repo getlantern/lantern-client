@@ -215,7 +215,12 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                   text: copy, // TODO: translations
                   onPressed: () async {
                     try {
-                      // TODO: wire to CheckoutActivity
+                      await sessionModel.submitStripe(
+                        widget.email,
+                        creditCardController.text,
+                        expDateController.text,
+                        cvcFieldController.text,
+                      );
                     } catch (e) {
                       // TODO: show error dialog?
                     } finally {
