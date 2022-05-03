@@ -90,10 +90,10 @@ class SessionModel(
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
             "updateAndCachePlans" -> updateAndCachePlans()
             "updateAndCacheUserStatus" -> updateAndCacheUserStatus()
-            "submitStripe" -> submitStripe()
-            "submitGooglePlay" -> submitGooglePlay()
-            "applyRefCode" -> applyRefCode()
-            "redeemActivationCode" -> redeemActivationCode()
+            "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!)
+            "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!)
+            "applyRefCode" -> applyRefCode(call.argument("email")!!, call.argument("refCode")!!)
+            "redeemActivationCode" -> redeemActivationCode(call.argument("email")!!, call.argument("activationCode")!!)
             else -> super.doOnMethodCall(call, result)
         }
     }
