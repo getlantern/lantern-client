@@ -2,6 +2,10 @@ package io.lantern.android.model
 
 import android.app.Activity
 import androidx.core.content.ContextCompat
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.PurchasesUpdatedListener
 import com.google.gson.JsonObject
 import com.stripe.android.ApiResultCallback
 import com.stripe.android.Stripe
@@ -90,7 +94,7 @@ class SessionModel(
             "updateAndCachePlans" -> updateAndCachePlans()
             "updateAndCacheUserStatus" -> updateAndCacheUserStatus()
             "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, result)
-            "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!)
+            "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!, result)
             "applyRefCode" -> applyRefCode(call.argument("email")!!, call.argument("refCode")!!)
             "redeemActivationCode" -> redeemActivationCode(call.argument("email")!!, call.argument("activationCode")!!)
             else -> super.doOnMethodCall(call, result)
@@ -454,10 +458,65 @@ class SessionModel(
     }
 
     // TODO: WIP
-    private fun submitGooglePlay(planID: String) {
+    private fun submitGooglePlay(planID: String, result: MethodChannel.Result) {
         // TODO: redirect to Google Play checkout flow
         // TODO: handle error (ideally Flutter-side)
         // TODO: call updatedAndCacheUserStatus to save new status
+        if (!LanternApp.getInAppBilling().startPurchase(
+                activity,
+                LanternApp.getSession().getSelectedPlan()!!.id,
+                object : PurchasesUpdatedListener {
+                    override fun onPurchasesUpdated(
+                        billingResult: BillingResult,
+                        purchases: MutableList<Purchase>?) {
+                        if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                            result.error(
+                                "unknownError",
+                                activity.resources.getString(R.string.error_making_purchase),
+                            null,
+                            )
+                            return
+                        }
+
+                        val tokens: MutableList<String> = ArrayList()
+                        for (purchase in purchases!!) {
+                            if (!purchase.isAcknowledged) {
+                                Logger.debug(
+                                    TAG,
+                                    "Order Token: " + purchase.purchaseToken
+                                )
+                                tokens.add(purchase.purchaseToken)
+                            }
+                        }
+
+                        if (tokens.size != 1) {
+                            Logger.error(
+                                TAG,
+                                "Unexpected number of purchased products, not proceeding with purchase: " + tokens.size
+                            )
+                            result.error(
+                                "unknownError",
+                                activity.resources.getString(R.string.error_making_purchase),
+                            null,
+                            )
+                            return
+                        }
+
+                        result.success(null)
+                        val paymentHandler =
+                            PaymentHandler(activity, "googleplay", tokens[0])
+                        paymentHandler.sendPurchaseRequest()
+                    }
+                }
+            )
+        ) {
+            // TODO: make sure to show this error on the Flutter side
+            result.error(
+                "unknownError",
+                activity.resources.getString(R.string.error_making_purchase),
+            null,
+            )
+        }
     }
 
     // TODO: WIP
