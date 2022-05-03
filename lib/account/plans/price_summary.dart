@@ -5,10 +5,14 @@ import 'constants.dart';
 class PriceSummary extends StatelessWidget {
   final String id;
   final String? refCode;
+  final bool isPro;
+  final bool isPlatinum;
 
   const PriceSummary({
     Key? key,
     required this.id,
+    required this.isPro,
+    required this.isPlatinum,
     this.refCode,
   }) : super(key: key);
 

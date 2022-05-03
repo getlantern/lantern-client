@@ -78,7 +78,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                     elevation: 16,
                     underline: Container(
                       height: 2,
-                      color: Colors.deepPurpleAccent,
+                      color: black,
                     ),
                     onChanged: (String? newValue) {
                       sessionModel
@@ -88,12 +88,88 @@ class DeveloperSettingsTab extends StatelessWidget {
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: CText(value, style: tsBody1),
+                        child: CText(
+                          value,
+                          style: tsBody1,
+                        ),
                       );
                     }).toList(),
                   );
                 })
               ],
+            ),
+            // * FETCH PLANS
+            ListItemFactory.settingsItem(
+              content: 'Fetch plans (scroll 👇)',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async {
+                    try {
+                      await sessionModel.updateAndCachePlans();
+                    } catch (e) {
+                      showSnackbar(context: context, content: e.toString());
+                    }
+                  },
+                  child: CText(
+                    'Fetch Plans'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.green),
+                  ),
+                )
+              ],
+            ),
+            // * DISPLAY FETCHED PLANS
+            sessionModel.getCachedPlans(
+              (context, cachedPlans, child) => ListItemFactory.settingsItem(
+                content: SingleChildScrollView(
+                    child: CText(cachedPlans, style: tsOverline)),
+              ),
+            ),
+            // * FORCE USER STATUS
+            ListItemFactory.settingsItem(
+              content: 'Force User Status'.i18n,
+              trailingArray: [
+                sessionModel.forceUserStatus(
+                    (BuildContext context, String value, Widget? child) {
+                  return DropdownButton<String>(
+                    value: value,
+                    icon: const CAssetImage(path: ImagePaths.arrow_down),
+                    iconSize: iconSize,
+                    elevation: 16,
+                    underline: Container(
+                      height: 2,
+                      color: Colors.green,
+                    ),
+                    onChanged: (String? newStatus) {
+                      sessionModel.setForceUserStatus(newStatus ?? '');
+                    },
+                    items: <String>['', 'pro', 'platinum']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: CText(
+                          value,
+                          style: tsBody1.copiedWith(color: Colors.green),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                })
+              ],
+            ),
+            // * DISPLAY USER STATUS
+            sessionModel.getUserStatus(
+              (context, userStatus, child) => ListItemFactory.settingsItem(
+                content: CText(
+                  'User status (if empty then its Free)',
+                  style: tsBody3,
+                ),
+                trailingArray: [
+                  CText(
+                    userStatus.toString().toUpperCase(),
+                    style: tsBody1Short.copiedWith(color: Colors.green),
+                  )
+                ],
+              ),
             ),
             // * RESET ALL TIMESTAMPS
             ListItemFactory.settingsItem(
@@ -109,42 +185,6 @@ class DeveloperSettingsTab extends StatelessWidget {
                   ),
                 )
               ],
-            ),
-            // * FETCH PLANS
-            ListItemFactory.settingsItem(
-              content: 'Fetch plans',
-              trailingArray: [
-                TextButton(
-                  onPressed: () async {
-                    await sessionModel.updatePlans();
-                  },
-                  child: CText(
-                    'Fetch Plans'.toUpperCase(),
-                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
-                  ),
-                )
-              ],
-            ),
-            // * RESET FETCHED PLANS
-            ListItemFactory.settingsItem(
-              content: 'Reset cached plans',
-              trailingArray: [
-                TextButton(
-                  onPressed: () async {
-                    await sessionModel.resetCachedPlans();
-                  },
-                  child: CText(
-                    'Reset Cached Plans'.toUpperCase(),
-                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
-                  ),
-                )
-              ],
-            ),
-            // * DISPLAY FETCHED PLANS
-            sessionModel.getPlans(
-              (context, cachedPlans, child) => ListItemFactory.settingsItem(
-                content: cachedPlans.toString(),
-              ),
             ),
             // * RESET ONBOARDING + RECOVERY KEY FLAGS
             ListItemFactory.settingsItem(

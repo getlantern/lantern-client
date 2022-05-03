@@ -24,6 +24,8 @@ import org.getlantern.lantern.util.Analytics
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
+import org.json.JSONObject
+import java.util.*
 import java.util.concurrent.*
 
 /**
@@ -35,7 +37,7 @@ class SessionModel(
     flutterEngine: FlutterEngine? = null,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
-    private val plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
+    private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
     companion object {
         private const val TAG = "SessionModel"
@@ -43,6 +45,7 @@ class SessionModel(
         const val PATH_PRO_USER = "prouser"
         const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_PLANS = "plans"
+        const val PATH_USER_STATUS = "userStatus"
     }
 
     init {
@@ -57,7 +60,10 @@ class SessionModel(
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
             tx.put(
-                PATH_PLANS, null
+                PATH_PLANS, ""
+            )
+            tx.put(
+                PATH_USER_STATUS, ""
             )
         }
     }
@@ -82,6 +88,13 @@ class SessionModel(
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
+            "updateAndCachePlans" -> updateAndCachePlans()
+            "updateAndCacheUserStatus" -> updateAndCacheUserStatus()
+            "submitStripe" -> submitStripe()
+            "submitBTC" -> submitBTC()
+            "submitGooglePlay" -> submitGooglePlay()
+            "applyRefCode" -> applyRefCode()
+            "redeemActivationCode" -> redeemActivationCode()
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -113,8 +126,11 @@ class SessionModel(
                 }
             }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
-            "updatePlans" -> updatePlans()
-            "resetCachedPlans" -> resetCachedPlans()
+            "setForceUserStatus" -> {
+                db.mutate { tx ->
+                    tx.put(PATH_USER_STATUS, call.argument<String>("newStatus")!!)
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -330,13 +346,14 @@ class SessionModel(
         )
     }
 
-    private fun updatePlans() {
+    // TODO: WIP
+    private fun updateAndCachePlans() {
         LanternApp.getPlans(object : PlansCallback {
             override fun onFailure(t: Throwable?, error: ProError?) {
-                if (error != null && error.getMessage() != null) {
+                if (error?.message != null) {
                     Logger.error(TAG, "Unable to fetch plan data: $t.message")
 
-                    // TODO: only show this if the db has nothing cached
+                    // TODO: move this error handling to Flutter?
                     activity.showErrorDialog(activity.resources.getString(R.string.error))
                 }
             }
@@ -346,15 +363,66 @@ class SessionModel(
                 plans.putAll(proPlans)
             }
         })
-        Logger.info(TAG, "Fetched plans $plans")
+        Logger.info(TAG, "Successfully cached plans: $plans")
+
+        // TODO: delete
+        val mockPlansResponse = JSONObject(
+            """{'plan1': {'id': '1y-cny-9','description': '一年套餐','duration': {'days': 0, 'months': 0, 'years': 1},'price': {'cny': 34000},
+    'expectedMonthlyPrice': {'cny': 2836},'usdPrice': 4800,'usdPrice1Y': 4800,'usdPrice2Y': 8700,'redeemFor': {'days': 0, 'months': 1},'renewalBonus': {'days': 0, 'months': 1},
+    'renewalBonusExpired': {'days': 15, 'months': 0},'renewalBonusExpected': {'days': 0, 'months': 0},'discount': 0,'bestValue': false,'level': 'platinum'}, 'plan2': {'id': '1y-cny-9','description': '一年套餐','duration': {'days': 0, 'months': 0, 'years': 1},'price': {'cny': 34000},
+    'expectedMonthlyPrice': {'cny': 2836},'usdPrice': 4800,'usdPrice1Y': 4800,'usdPrice2Y': 8700,'redeemFor': {'days': 0, 'months': 1},'renewalBonus': {'days': 0, 'months': 1},
+    'renewalBonusExpired': {'days': 15, 'months': 0},'renewalBonusExpected': {'days': 0, 'months': 0},'discount': 0,'bestValue': false,'level': 'pro'}}"""
+        )
+
         db.mutate { tx ->
-            tx.put(TAG, plans.toString())
+            tx.put(PATH_PLANS, mockPlansResponse.toString())
         }
     }
 
-    private fun resetCachedPlans() {
+    // TODO: WIP
+    // Hits the /user-data endpoint from pro server and saves { level: null | "pro" | "platinum" } to PATH_USER_STATUS
+    private fun updateAndCacheUserStatus() {
+        // TODO: request to /user-data
+        // TODO: save level to PATH_USER_STATUS
+        val userStatus = "platinum"
         db.mutate { tx ->
-            tx.put(PATH_PLANS, null)
+            tx.put(PATH_USER_STATUS, userStatus)
         }
+    }
+
+    // TODO: WIP
+    // Transmits the email and credit card info to Stripe checkout flow
+    private fun submitStripe(email: String, cardNumber: String, expDate: Date, cvc: String) {
+        // TODO: carry over submitStripe() from CheckoutActivity.java (replace deprecated functions)
+        // TODO: handle error (ideally Flutter-side)
+        // TODO: call updatedAndCacheUserStatus to save new status
+    }
+
+    // TODO: WIP
+    // Redirects to BTCPay endpoint (invoked in a WebView)
+    private fun submitBTC() {
+        // TODO: send request to BTCPay endpoint
+        // TODO: handle error (ideally Flutter-side)
+        // TODO: call updatedAndCacheUserStatus to save new status
+    }
+
+    // TODO: WIP
+    private fun submitGooglePlay() {
+        // TODO: redirect to Google Play checkout flow
+        // TODO: handle error (ideally Flutter-side)
+        // TODO: call updatedAndCacheUserStatus to save new status
+    }
+
+    // TODO: WIP
+    private fun applyRefCode(email: String, refCode: String) {
+        // TODO: carry over handleReferral() from CheckoutActivity.java
+        // TODO: handle error (ideally Flutter-side)
+    }
+
+    // TODO: WIP
+    private fun redeemActivationCode(email: String, activationCode: String) {
+        // TODO: redeem activation code
+        // TODO: handle error (ideally Flutter-side)
+        // TODO: redirect to Plans page
     }
 }

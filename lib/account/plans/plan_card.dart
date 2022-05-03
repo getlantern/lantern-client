@@ -4,9 +4,15 @@ import 'constants.dart';
 
 class PlanCard extends StatelessWidget {
   final String id;
+  final bool isPro;
+  final bool isCN;
+  final bool isPlatinum;
 
   const PlanCard({
     required this.id,
+    required this.isPro,
+    required this.isCN,
+    required this.isPlatinum,
     Key? key,
   }) : super(key: key);
 
@@ -36,6 +42,8 @@ class PlanCard extends StatelessWidget {
         await context.pushRoute(
           Checkout(
             id: id,
+            isPro: isPro,
+            isPlatinum: isPlatinum,
           ),
         );
       },

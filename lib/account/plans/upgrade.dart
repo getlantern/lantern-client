@@ -5,8 +5,15 @@ import 'package:lantern/common/common.dart';
 import 'constants.dart';
 
 class Upgrade extends StatelessWidget {
+  final bool isCN;
+  final bool isPlatinum;
+  final bool isPro;
+
   Upgrade({
     Key? key,
+    required this.isCN,
+    required this.isPlatinum,
+    required this.isPro,
   }) : super(key: key);
 
   @override
@@ -34,7 +41,11 @@ class Upgrade extends StatelessWidget {
                   child: Column(
                     children: [
                       // * Renewal text or upsell
-                      buildRenewalTextOrUpsell(context, isCN, isFree),
+                      buildRenewalTextOrUpsell(
+                        context,
+                        isCN,
+                        isPro,
+                      ),
                       // * Step
                       Container(
                         padding: const EdgeInsetsDirectional.only(
@@ -56,8 +67,9 @@ class Upgrade extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsetsDirectional.only(end: 16.0),
+                                padding: const EdgeInsetsDirectional.only(
+                                  end: 16.0,
+                                ),
                                 child: CText(
                                   '1 year pricing',
                                   style: isTwoYearPlan
@@ -100,8 +112,9 @@ class Upgrade extends StatelessWidget {
                                         child: Stack(
                                           children: [
                                             CText(
-                                              determineSavingsOrExtraMonths()
-                                                  .toUpperCase(),
+                                              determineSavingsOrExtraMonths(
+                                                isPro,
+                                              ).toUpperCase(),
                                               style: tsBody1.copiedWith(
                                                 color: pink4,
                                               ),
@@ -114,7 +127,9 @@ class Upgrade extends StatelessWidget {
                                       '2 year pricing',
                                       style: isTwoYearPlan
                                           ? tsBody1
-                                          : tsBody1.copiedWith(color: grey5),
+                                          : tsBody1.copiedWith(
+                                              color: grey5,
+                                            ),
                                     )
                                   ],
                                 ), // TODO: translations
@@ -126,6 +141,9 @@ class Upgrade extends StatelessWidget {
                       ...availablePlans.map(
                         (plan) => PlanCard(
                           id: plan['id'] as String,
+                          isCN: isCN,
+                          isPro: isPro,
+                          isPlatinum: isPlatinum,
                         ),
                       ),
                     ],
@@ -140,7 +158,7 @@ class Upgrade extends StatelessWidget {
                 color: grey3,
                 child: GestureDetector(
                   onTap: () async => await context.pushRoute(
-                    ActivationCodeCheckout(),
+                    ActivationCodeCheckout(isPro: isPro),
                   ),
                   child: CText(
                     'Have a Lantern Pro activation code? Click here.',
@@ -155,7 +173,7 @@ class Upgrade extends StatelessWidget {
     );
   }
 
-  String determineSavingsOrExtraMonths() {
+  String determineSavingsOrExtraMonths(bool isFree) {
     // TODO - this has to do with expiration status
     const savingsPercentage = '34 %';
     return isFree == true

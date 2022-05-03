@@ -1,10 +1,16 @@
 import 'package:lantern/messaging/messaging.dart';
 
-import 'plans/constants.dart';
-
 class AccountManagement extends StatefulWidget {
-  AccountManagement({Key? key, required this.isPro}) : super(key: key);
   final bool isPro;
+  final bool isCN;
+  final bool isPlatinum;
+
+  AccountManagement({
+    Key? key,
+    required this.isPro,
+    required this.isCN,
+    required this.isPlatinum,
+  }) : super(key: key);
 
   @override
   State<AccountManagement> createState() => _AccountManagementState();
@@ -29,7 +35,8 @@ class _AccountManagementState extends State<AccountManagement>
   @override
   Widget build(BuildContext context) {
     var title = widget.isPro
-        ? '${isCN ? '' : 'Pro'} Account Management'.i18n // TODO: translations
+        ? '${widget.isCN ? '' : 'Pro'} Account Management'
+            .i18n // TODO: translations
         : 'account_management'.i18n;
     var textCopied = false;
 
@@ -172,15 +179,16 @@ class _AccountManagementState extends State<AccountManagement>
                     ) {
                       return ListItemFactory.settingsItem(
                         header:
-                            '${isPlatinum ? 'Platinum' : 'Pro'} Account Expiration'
+                            '${widget.isPlatinum ? 'Platinum' : 'Pro'} Account Expiration'
                                 .i18n, // TODO: translations
                         icon: ImagePaths.clock,
                         content: expirationDate,
-                        onTap: () {
-                          // TODO: move to Flutter route
-                          LanternNavigator.startScreen(
-                            LanternNavigator.SCREEN_PLANS,
-                          );
+                        onTap: () async {
+                          await context.pushRoute(Upgrade(
+                            isCN: widget.isCN,
+                            isPlatinum: widget.isPlatinum,
+                            isPro: widget.isPro,
+                          ));
                         },
                         trailingArray: [
                           CText('Renew'.i18n.toUpperCase(), style: tsButtonPink)
@@ -297,7 +305,7 @@ class _AccountManagementState extends State<AccountManagement>
                               tabs: [
                                 Tab(
                                   text:
-                                      'Lantern ${isPlatinum ? 'Platinum' : 'Pro'}'
+                                      'Lantern ${widget.isPlatinum ? 'Platinum' : 'Pro'}'
                                           .i18n // TODO: translations
                                           .toUpperCase(),
                                 ),

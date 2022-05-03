@@ -1,14 +1,23 @@
-import 'package:lantern/account/plans/constants.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
 class AccountMenu extends StatelessWidget {
-  AccountMenu({Key? key}) : super(key: key);
+  final bool isCN;
+  final bool isPlatinum;
 
-  Future<void> upgradeToLanternPro(BuildContext context) async {
+  AccountMenu({Key? key, required this.isCN, required this.isPlatinum})
+      : super(key: key);
+
+  Future<void> upgradeToLanternPro(BuildContext context, bool isPro) async {
     // TODO: hit sessionModel.fetchPlans
     // TODO: use exponential backoff on failure
-    await context.pushRoute(Upgrade());
+    await context.pushRoute(
+      Upgrade(
+        isCN: isCN,
+        isPlatinum: isPlatinum,
+        isPro: isPro,
+      ),
+    );
   }
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
@@ -35,29 +44,40 @@ class AccountMenu extends StatelessWidget {
                   bool hasCopiedRecoveryKey,
                   Widget? child,
                 ) =>
-                    ListItemFactory.settingsItem(
-                  icon: ImagePaths.account,
-                  content: 'account_management'.i18n,
-                  onTap: () async =>
-                      await context.pushRoute(AccountManagement(isPro: false)),
-                  trailingArray: [
-                    if (!hasCopiedRecoveryKey)
-                      const CAssetImage(
-                        path: ImagePaths.badge,
+                    sessionModel.getUserStatus((context, userStatus, child) {
+                  final isPro = userStatus == 'pro';
+                  return ListItemFactory.settingsItem(
+                    icon: ImagePaths.account,
+                    content: 'account_management'.i18n,
+                    onTap: () async => await context.pushRoute(
+                      AccountManagement(
+                        isPro: isPro,
+                        isCN: isCN,
+                        isPlatinum: isPlatinum,
                       ),
-                  ],
-                ),
+                    ),
+                    trailingArray: [
+                      if (!hasCopiedRecoveryKey)
+                        const CAssetImage(
+                          path: ImagePaths.badge,
+                        ),
+                    ],
+                  );
+                }),
               )
             : const SizedBox(),
       ),
       if (!isPlatinum)
-        ListItemFactory.settingsItem(
-          icon: ImagePaths.pro_icon_black,
-          content:
-              '${isCN ? 'Upgrade ${isPro ? 'to Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
-                  .i18n, // TODO: translations
-          onTap: () => upgradeToLanternPro(context),
-        ),
+        sessionModel.getUserStatus((context, userStatus, child) {
+          final isPro = userStatus == 'pro';
+          return ListItemFactory.settingsItem(
+            icon: ImagePaths.pro_icon_black,
+            content:
+                '${isCN ? 'Upgrade ${isPro ? 'to Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
+                    .i18n, // TODO: translations
+            onTap: () => upgradeToLanternPro(context, isPro),
+          );
+        }),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
@@ -94,8 +114,8 @@ class AccountMenu extends StatelessWidget {
               ListItemFactory.settingsItem(
             icon: ImagePaths.account,
             content: 'account_management'.i18n,
-            onTap: () async =>
-                await context.pushRoute(AccountManagement(isPro: true)),
+            onTap: () async => await context.pushRoute(AccountManagement(
+                isPro: true, isCN: isCN, isPlatinum: isPlatinum)),
             trailingArray: [
               if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
                 const CAssetImage(

@@ -8,9 +8,13 @@ import 'constants.dart';
 
 class Checkout extends StatefulWidget {
   final String id;
+  final bool isPro;
+  final bool isPlatinum;
 
   Checkout({
     required this.id,
+    required this.isPro,
+    required this.isPlatinum,
     Key? key,
   }) : super(key: key);
 
@@ -77,7 +81,7 @@ class _CheckoutState extends State<Checkout>
       resizeToAvoidBottomInset: false,
       // TODO: translations
       title:
-          'Lantern ${isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
+          'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
       body: Form(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -234,6 +238,8 @@ class _CheckoutState extends State<Checkout>
                 children: [
                   PriceSummary(
                     id: widget.id,
+                    isPlatinum: widget.isPlatinum,
+                    isPro: widget.isPro,
                   ),
                   // * Continue to Payment
                   Button(
@@ -241,12 +247,15 @@ class _CheckoutState extends State<Checkout>
                         emailFieldKey.currentState?.validate() == false,
                     text: 'Continue', // TODO: Translations
                     onPressed: () async {
+                      // TODO: handle failed payment effort
                       if (selectedPaymentProvider == 'stripe') {
                         await context.pushRoute(
                           StripeCheckout(
                             email: emailController.text,
                             refCode: refCodeController.text,
                             id: widget.id,
+                            isPlatinum: widget.isPlatinum,
+                            isPro: widget.isPro,
                           ),
                         );
                       } else {

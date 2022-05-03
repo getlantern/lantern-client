@@ -5,17 +5,19 @@ import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
-import 'constants.dart';
-
 class StripeCheckout extends StatefulWidget {
   final String email;
   final String? refCode;
   final String id;
+  final bool isPro;
+  final bool isPlatinum;
 
   const StripeCheckout({
     required this.email,
     this.refCode,
     required this.id,
+    required this.isPro,
+    required this.isPlatinum,
     Key? key,
   }) : super(key: key);
 
@@ -83,7 +85,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     const copy = 'Complete Purchase'; // TODO: Translation
     return BaseScreen(
       resizeToAvoidBottomInset: false,
-      title: 'Lantern ${isPro == true ? 'Pro' : ''} Checkout',
+      title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout',
       body: Container(
         padding: const EdgeInsetsDirectional.only(
           start: 16,
@@ -204,14 +206,22 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 PriceSummary(
                   id: widget.id,
                   refCode: widget.refCode,
+                  isPro: widget.isPro,
+                  isPlatinum: widget.isPlatinum,
                 ),
                 const TOS(copy: copy),
-                // TODO: translations
-                // TODO: call updatePlans()
                 Button(
                   disabled: !formIsValid,
-                  text: copy,
-                  onPressed: () {},
+                  text: copy, // TODO: translations
+                  onPressed: () async {
+                    try {
+                      // TODO: wire to CheckoutActivity
+                    } catch (e) {
+                      // TODO: show error dialog?
+                    } finally {
+                      await sessionModel.updateAndCachePlans();
+                    }
+                  },
                 ),
               ],
             ),

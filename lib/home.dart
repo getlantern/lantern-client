@@ -49,12 +49,15 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    // Cache plans in session storage
-    sessionModel.updatePlans();
+    // Cache plans and user status in session storage
+    sessionModel.updateAndCachePlans();
+    sessionModel.updateAndCacheUserStatus();
 
     navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
+
     // Let back-end know that we're ready to handle navigation
     navigationChannel.invokeListMethod('ready');
+
     _cancelEventSubscription =
         sessionModel.eventManager.subscribe(Event.All, (event, params) {
       switch (event) {
@@ -89,6 +92,12 @@ class _HomePageState extends State<HomePage> {
             ),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          break;
+        case Event.All:
+        case Event.NoNetworkAvailable:
+        case Event.NetworkAvailable:
+        case Event.NoProxyAvailable:
+        case Event.ProxyAvailable:
           break;
       }
     });
@@ -134,12 +143,21 @@ class _HomePageState extends State<HomePage> {
                       defaultValue: 'false',
                     ).toLowerCase() ==
                     'true';
-                return Scaffold(
-                  body: buildBody(selectedTab, isOnboarded),
-                  bottomNavigationBar: CustomBottomBar(
-                    selectedTab: selectedTab,
-                    isDevelop: developmentMode,
-                    isTesting: isTesting,
+                return sessionModel.getCachedPlans(
+                  (context, cachedPlans, child) => sessionModel.getUserStatus(
+                    (context, userStatus, child) => Scaffold(
+                      body: buildBody(
+                        selectedTab,
+                        isOnboarded,
+                        cachedPlans,
+                        userStatus,
+                      ),
+                      bottomNavigationBar: CustomBottomBar(
+                        selectedTab: selectedTab,
+                        isDevelop: developmentMode,
+                        isTesting: isTesting,
+                      ),
+                    ),
                   ),
                 );
               }),
@@ -150,7 +168,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildBody(String selectedTab, bool? isOnboarded) {
+  Widget buildBody(
+    String selectedTab,
+    bool? isOnboarded,
+    String? cachedPlans,
+    String? userStatus,
+  ) {
+    final isCN = determineLocation(cachedPlans);
+    final isPlatinum = determinePlatinum(userStatus);
     switch (selectedTab) {
       case TAB_CHATS:
         sessionModel.trackScreenView('Chats');
@@ -163,17 +188,26 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(color: white),
               )
             : isOnboarded
-                ? Chats()
+                ? Chats(
+                    isCN: isCN,
+                    isPlatinum: isPlatinum,
+                  )
                 : Welcome();
       case TAB_VPN:
         sessionModel.trackScreenView('VPN');
-        return VPNTab();
+        return VPNTab(
+          isCN: isCN,
+          isPlatinum: isPlatinum,
+        );
       case TAB_REPLICA:
         sessionModel.trackScreenView('Replica');
         return ReplicaTab();
       case TAB_ACCOUNT:
         sessionModel.trackScreenView('Account');
-        return AccountTab();
+        return AccountTab(
+          isCN: isCN,
+          isPlatinum: isPlatinum,
+        );
       case TAB_DEVELOPER:
         sessionModel.trackScreenView('Developer');
         return DeveloperSettingsTab();
@@ -181,5 +215,23 @@ class _HomePageState extends State<HomePage> {
         assert(false, 'unrecognized tab $selectedTab');
         return Container();
     }
+  }
+
+  // returns true if there are any Plans entries where { level: 'platinum' }
+  // depends on where the plans are fetched from
+  bool determineLocation(String? cachedPlans) {
+    if (cachedPlans == null) return false;
+    final cachedPlansMap = jsonDecode(cachedPlans) as Map;
+    final anyPlatinumLevels = cachedPlansMap.entries.map((p) {
+      final availablePlan = p.value as Map;
+      return availablePlan['level'] == 'platinum';
+    });
+    return anyPlatinumLevels.contains(true);
+  }
+
+  // returns true if the user status is platinum
+  // is independent of where the plans are fetched from
+  bool determinePlatinum(String? userStatus) {
+    return userStatus != null && userStatus == 'platinum';
   }
 }

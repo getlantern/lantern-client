@@ -209,17 +209,38 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('trackScreenView', path);
   }
 
-  Future<void> updatePlans() async {
-    return methodChannel.invokeMethod('updatePlans');
+  Future<void> updateAndCachePlans() async {
+    return methodChannel.invokeMethod('updateAndCachePlans');
   }
 
-  Future<void> resetCachedPlans() async {
-    return methodChannel.invokeMethod('resetCachedPlans');
+  Future<void> updateAndCacheUserStatus() async {
+    return methodChannel.invokeMethod('updateAndCacheUserStatus');
   }
 
-  Widget getPlans(ValueWidgetBuilder<String?> builder) {
-    return subscribedSingleValueBuilder<String?>(
+  Widget getCachedPlans(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
       'plans',
+      builder: builder,
+    );
+  }
+
+  Widget forceUserStatus(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'forceUserStatus',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
+  Future<void> setForceUserStatus(String newStatus) {
+    return methodChannel.invokeMethod('setForceUserStatus', <String, dynamic>{
+      'newStatus': newStatus,
+    });
+  }
+
+  Widget getUserStatus(ValueWidgetBuilder<String?> builder) {
+    return subscribedSingleValueBuilder<String?>(
+      'userStatus',
       defaultValue: null,
       builder: builder,
     );

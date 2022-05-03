@@ -4,6 +4,12 @@ import 'contacts/long_tap_menu.dart';
 import 'messaging.dart';
 
 class Chats extends StatefulWidget {
+  final bool isCN;
+  final bool isPlatinum;
+
+  Chats({Key? key, required this.isCN, required this.isPlatinum})
+      : super(key: key);
+
   @override
   State<Chats> createState() => _ChatsState();
 }
@@ -138,8 +144,12 @@ class _ChatsState extends State<Chats> {
                         content: 'account_management'.i18n,
                         onTap: () async {
                           await context.router.pop();
-                          await context.router
-                              .push(AccountManagement(isPro: isPro));
+                          await context.router.push(
+                            AccountManagement(
+                                isPro: isPro,
+                                isCN: widget.isCN,
+                                isPlatinum: widget.isPlatinum),
+                          );
                         },
                       ),
                     ),

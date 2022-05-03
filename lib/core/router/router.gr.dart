@@ -27,6 +27,7 @@ import 'package:lantern/account/plans/stripe_checkout.dart' as _i31;
 import 'package:lantern/account/plans/upgrade.dart' as _i29;
 import 'package:lantern/account/recovery_key.dart' as _i22;
 import 'package:lantern/account/settings.dart' as _i13;
+import 'package:lantern/common/common.dart' as _i35;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i4;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i8;
@@ -35,12 +36,12 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i7;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i5;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i9;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i10;
-import 'package:lantern/messaging/messaging.dart' as _i35;
+import 'package:lantern/messaging/messaging.dart' as _i36;
 import 'package:lantern/messaging/onboarding/chat_number_messaging.dart' as _i3;
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart' as _i2;
-import 'package:lantern/replica/logic/api.dart' as _i36;
-import 'package:lantern/replica/models/replica_link.dart' as _i37;
-import 'package:lantern/replica/models/searchcategory.dart' as _i38;
+import 'package:lantern/replica/logic/api.dart' as _i37;
+import 'package:lantern/replica/models/replica_link.dart' as _i38;
+import 'package:lantern/replica/models/searchcategory.dart' as _i39;
 import 'package:lantern/replica/ui/link_opener_screen.dart' as _i12;
 import 'package:lantern/replica/ui/media_views/audio_player_screen.dart'
     as _i16;
@@ -168,7 +169,11 @@ class AppRouter extends _i33.RootStackRouter {
       final args = routeData.argsAs<AccountManagementArgs>();
       return _i33.CustomPage<void>(
           routeData: routeData,
-          child: _i11.AccountManagement(key: args.key, isPro: args.isPro),
+          child: _i11.AccountManagement(
+              key: args.key,
+              isPro: args.isPro,
+              isCN: args.isCN,
+              isPlatinum: args.isPlatinum),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -393,11 +398,14 @@ class AppRouter extends _i33.RootStackRouter {
           barrierDismissible: false);
     },
     Upgrade.name: (routeData) {
-      final args =
-          routeData.argsAs<UpgradeArgs>(orElse: () => const UpgradeArgs());
+      final args = routeData.argsAs<UpgradeArgs>();
       return _i33.CustomPage<void>(
           routeData: routeData,
-          child: _i29.Upgrade(key: args.key),
+          child: _i29.Upgrade(
+              key: args.key,
+              isCN: args.isCN,
+              isPlatinum: args.isPlatinum,
+              isPro: args.isPro),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -408,7 +416,11 @@ class AppRouter extends _i33.RootStackRouter {
       final args = routeData.argsAs<CheckoutArgs>();
       return _i33.CustomPage<void>(
           routeData: routeData,
-          child: _i30.Checkout(id: args.id, key: args.key),
+          child: _i30.Checkout(
+              id: args.id,
+              isPro: args.isPro,
+              isPlatinum: args.isPlatinum,
+              key: args.key),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -423,6 +435,8 @@ class AppRouter extends _i33.RootStackRouter {
               email: args.email,
               refCode: args.refCode,
               id: args.id,
+              isPro: args.isPro,
+              isPlatinum: args.isPlatinum,
               key: args.key),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
@@ -431,11 +445,10 @@ class AppRouter extends _i33.RootStackRouter {
           barrierDismissible: false);
     },
     ActivationCodeCheckout.name: (routeData) {
-      final args = routeData.argsAs<ActivationCodeCheckoutArgs>(
-          orElse: () => const ActivationCodeCheckoutArgs());
+      final args = routeData.argsAs<ActivationCodeCheckoutArgs>();
       return _i33.CustomPage<void>(
           routeData: routeData,
-          child: _i32.ActivationCodeCheckout(key: args.key),
+          child: _i32.ActivationCodeCheckout(key: args.key, isPro: args.isPro),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -557,7 +570,7 @@ class FullScreenDialogPageArgs {
 /// [_i5.Conversation]
 class Conversation extends _i33.PageRouteInfo<ConversationArgs> {
   Conversation(
-      {required _i35.ContactId contactId,
+      {required _i36.ContactId contactId,
       int? initialScrollIndex,
       bool showContactEditingDialog = false})
       : super(Conversation.name,
@@ -576,7 +589,7 @@ class ConversationArgs {
       this.initialScrollIndex,
       this.showContactEditingDialog = false});
 
-  final _i35.ContactId contactId;
+  final _i36.ContactId contactId;
 
   final int? initialScrollIndex;
 
@@ -591,7 +604,7 @@ class ConversationArgs {
 /// generated route for
 /// [_i6.ContactInfo]
 class ContactInfo extends _i33.PageRouteInfo<ContactInfoArgs> {
-  ContactInfo({required _i35.Contact contact})
+  ContactInfo({required _i36.Contact contact})
       : super(ContactInfo.name,
             path: 'contactInfo', args: ContactInfoArgs(contact: contact));
 
@@ -601,7 +614,7 @@ class ContactInfo extends _i33.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.contact});
 
-  final _i35.Contact contact;
+  final _i36.Contact contact;
 
   @override
   String toString() {
@@ -629,7 +642,7 @@ class AddViaChatNumber extends _i33.PageRouteInfo<void> {
 /// generated route for
 /// [_i9.Introduce]
 class Introduce extends _i33.PageRouteInfo<IntroduceArgs> {
-  Introduce({required bool singleIntro, _i35.Contact? contactToIntro})
+  Introduce({required bool singleIntro, _i36.Contact? contactToIntro})
       : super(Introduce.name,
             path: 'introduce',
             args: IntroduceArgs(
@@ -643,7 +656,7 @@ class IntroduceArgs {
 
   final bool singleIntro;
 
-  final _i35.Contact? contactToIntro;
+  final _i36.Contact? contactToIntro;
 
   @override
   String toString() {
@@ -662,24 +675,38 @@ class Introductions extends _i33.PageRouteInfo<void> {
 /// generated route for
 /// [_i11.AccountManagement]
 class AccountManagement extends _i33.PageRouteInfo<AccountManagementArgs> {
-  AccountManagement({_i35.Key? key, required bool isPro})
+  AccountManagement(
+      {_i35.Key? key,
+      required bool isPro,
+      required bool isCN,
+      required bool isPlatinum})
       : super(AccountManagement.name,
             path: 'accountManagement',
-            args: AccountManagementArgs(key: key, isPro: isPro));
+            args: AccountManagementArgs(
+                key: key, isPro: isPro, isCN: isCN, isPlatinum: isPlatinum));
 
   static const String name = 'AccountManagement';
 }
 
 class AccountManagementArgs {
-  const AccountManagementArgs({this.key, required this.isPro});
+  const AccountManagementArgs({
+    this.key,
+    required this.isPro,
+    required this.isCN,
+    required this.isPlatinum,
+  });
 
   final _i35.Key? key;
 
   final bool isPro;
 
+  final bool isCN;
+
+  final bool isPlatinum;
+
   @override
   String toString() {
-    return 'AccountManagementArgs{key: $key, isPro: $isPro}';
+    return 'AccountManagementArgs{key: $key, isPro: $isPro, isCN: $isCN, isPlatinum: $isPlatinum}';
   }
 }
 
@@ -689,8 +716,8 @@ class ReplicaLinkOpenerScreen
     extends _i33.PageRouteInfo<ReplicaLinkOpenerScreenArgs> {
   ReplicaLinkOpenerScreen(
       {_i35.Key? key,
-      required _i36.ReplicaApi replicaApi,
-      required _i37.ReplicaLink replicaLink})
+      required _i37.ReplicaApi replicaApi,
+      required _i38.ReplicaLink replicaLink})
       : super(ReplicaLinkOpenerScreen.name,
             path: 'replicaLinkOpenerScreen',
             args: ReplicaLinkOpenerScreenArgs(
@@ -705,9 +732,9 @@ class ReplicaLinkOpenerScreenArgs {
 
   final _i35.Key? key;
 
-  final _i36.ReplicaApi replicaApi;
+  final _i37.ReplicaApi replicaApi;
 
-  final _i37.ReplicaLink replicaLink;
+  final _i38.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -741,8 +768,8 @@ class ReplicaVideoPlayerScreen
     extends _i33.PageRouteInfo<ReplicaVideoPlayerScreenArgs> {
   ReplicaVideoPlayerScreen(
       {_i35.Key? key,
-      required _i36.ReplicaApi replicaApi,
-      required _i37.ReplicaLink replicaLink,
+      required _i37.ReplicaApi replicaApi,
+      required _i38.ReplicaLink replicaLink,
       String? mimeType})
       : super(ReplicaVideoPlayerScreen.name,
             path: 'replicaVideoPlayerScreen',
@@ -764,9 +791,9 @@ class ReplicaVideoPlayerScreenArgs {
 
   final _i35.Key? key;
 
-  final _i36.ReplicaApi replicaApi;
+  final _i37.ReplicaApi replicaApi;
 
-  final _i37.ReplicaLink replicaLink;
+  final _i38.ReplicaLink replicaLink;
 
   final String? mimeType;
 
@@ -802,8 +829,8 @@ class ReplicaAudioPlayerScreen
     extends _i33.PageRouteInfo<ReplicaAudioPlayerScreenArgs> {
   ReplicaAudioPlayerScreen(
       {_i35.Key? key,
-      required _i36.ReplicaApi replicaApi,
-      required _i37.ReplicaLink replicaLink,
+      required _i37.ReplicaApi replicaApi,
+      required _i38.ReplicaLink replicaLink,
       String? mimeType})
       : super(ReplicaAudioPlayerScreen.name,
             path: 'replicaAudioPlayerScreen',
@@ -825,9 +852,9 @@ class ReplicaAudioPlayerScreenArgs {
 
   final _i35.Key? key;
 
-  final _i36.ReplicaApi replicaApi;
+  final _i37.ReplicaApi replicaApi;
 
-  final _i37.ReplicaLink replicaLink;
+  final _i38.ReplicaLink replicaLink;
 
   final String? mimeType;
 
@@ -863,7 +890,7 @@ class AuthorizeProArgs {
 class ReplicaImagePreviewScreen
     extends _i33.PageRouteInfo<ReplicaImagePreviewScreenArgs> {
   ReplicaImagePreviewScreen(
-      {_i35.Key? key, required _i37.ReplicaLink replicaLink})
+      {_i35.Key? key, required _i38.ReplicaLink replicaLink})
       : super(ReplicaImagePreviewScreen.name,
             path: 'replicaImagePreviewScreen',
             args: ReplicaImagePreviewScreenArgs(
@@ -877,7 +904,7 @@ class ReplicaImagePreviewScreenArgs {
 
   final _i35.Key? key;
 
-  final _i37.ReplicaLink replicaLink;
+  final _i38.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -1008,9 +1035,9 @@ class BlockedUsersArgs {
 class ReplicaPDFScreen extends _i33.PageRouteInfo<ReplicaPDFScreenArgs> {
   ReplicaPDFScreen(
       {_i35.Key? key,
-      required _i36.ReplicaApi replicaApi,
-      required _i37.ReplicaLink replicaLink,
-      required _i38.SearchCategory category,
+      required _i37.ReplicaApi replicaApi,
+      required _i38.ReplicaLink replicaLink,
+      required _i39.SearchCategory category,
       String? mimeType})
       : super(ReplicaPDFScreen.name,
             path: 'replicaPDFScreen',
@@ -1034,11 +1061,11 @@ class ReplicaPDFScreenArgs {
 
   final _i35.Key? key;
 
-  final _i36.ReplicaApi replicaApi;
+  final _i37.ReplicaApi replicaApi;
 
-  final _i37.ReplicaLink replicaLink;
+  final _i38.ReplicaLink replicaLink;
 
-  final _i38.SearchCategory category;
+  final _i39.SearchCategory category;
 
   final String? mimeType;
 
@@ -1054,8 +1081,8 @@ class ReplicaUnknownItemScreen
     extends _i33.PageRouteInfo<ReplicaUnknownItemScreenArgs> {
   ReplicaUnknownItemScreen(
       {_i35.Key? key,
-      required _i37.ReplicaLink replicaLink,
-      required _i38.SearchCategory category,
+      required _i38.ReplicaLink replicaLink,
+      required _i39.SearchCategory category,
       String? mimeType})
       : super(ReplicaUnknownItemScreen.name,
             path: 'replicaUnknownItemScreen',
@@ -1077,9 +1104,9 @@ class ReplicaUnknownItemScreenArgs {
 
   final _i35.Key? key;
 
-  final _i37.ReplicaLink replicaLink;
+  final _i38.ReplicaLink replicaLink;
 
-  final _i38.SearchCategory category;
+  final _i39.SearchCategory category;
 
   final String? mimeType;
 
@@ -1142,43 +1169,74 @@ class ReplicaUploadFileScreenArgs {
 /// generated route for
 /// [_i29.Upgrade]
 class Upgrade extends _i33.PageRouteInfo<UpgradeArgs> {
-  Upgrade({_i35.Key? key})
-      : super(Upgrade.name, path: 'upgrade', args: UpgradeArgs(key: key));
+  Upgrade(
+      {_i35.Key? key,
+      required bool isCN,
+      required bool isPlatinum,
+      required bool isPro})
+      : super(Upgrade.name,
+            path: 'upgrade',
+            args: UpgradeArgs(
+                key: key, isCN: isCN, isPlatinum: isPlatinum, isPro: isPro));
 
   static const String name = 'Upgrade';
 }
 
 class UpgradeArgs {
-  const UpgradeArgs({this.key});
+  const UpgradeArgs(
+      {this.key,
+      required this.isCN,
+      required this.isPlatinum,
+      required this.isPro});
 
   final _i35.Key? key;
 
+  final bool isCN;
+
+  final bool isPlatinum;
+
+  final bool isPro;
+
   @override
   String toString() {
-    return 'UpgradeArgs{key: $key}';
+    return 'UpgradeArgs{key: $key, isCN: $isCN, isPlatinum: $isPlatinum, isPro: $isPro}';
   }
 }
 
 /// generated route for
 /// [_i30.Checkout]
 class Checkout extends _i33.PageRouteInfo<CheckoutArgs> {
-  Checkout({required String id, _i35.Key? key})
+  Checkout(
+      {required String id,
+      required bool isPro,
+      required bool isPlatinum,
+      _i35.Key? key})
       : super(Checkout.name,
-            path: 'checkout', args: CheckoutArgs(id: id, key: key));
+            path: 'checkout',
+            args: CheckoutArgs(
+                id: id, isPro: isPro, isPlatinum: isPlatinum, key: key));
 
   static const String name = 'Checkout';
 }
 
 class CheckoutArgs {
-  const CheckoutArgs({required this.id, this.key});
+  const CheckoutArgs(
+      {required this.id,
+      required this.isPro,
+      required this.isPlatinum,
+      this.key});
 
   final String id;
+
+  final bool isPro;
+
+  final bool isPlatinum;
 
   final _i35.Key? key;
 
   @override
   String toString() {
-    return 'CheckoutArgs{id: $id, key: $key}';
+    return 'CheckoutArgs{id: $id, isPro: $isPro, isPlatinum: $isPlatinum, key: $key}';
   }
 }
 
@@ -1189,18 +1247,30 @@ class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
       {required String email,
       String? refCode,
       required String id,
+      required bool isPro,
+      required bool isPlatinum,
       _i35.Key? key})
       : super(StripeCheckout.name,
             path: 'stripeCheckout',
             args: StripeCheckoutArgs(
-                email: email, refCode: refCode, id: id, key: key));
+                email: email,
+                refCode: refCode,
+                id: id,
+                isPro: isPro,
+                isPlatinum: isPlatinum,
+                key: key));
 
   static const String name = 'StripeCheckout';
 }
 
 class StripeCheckoutArgs {
   const StripeCheckoutArgs(
-      {required this.email, this.refCode, required this.id, this.key});
+      {required this.email,
+      this.refCode,
+      required this.id,
+      required this.isPro,
+      required this.isPlatinum,
+      this.key});
 
   final String email;
 
@@ -1208,11 +1278,15 @@ class StripeCheckoutArgs {
 
   final String id;
 
+  final bool isPro;
+
+  final bool isPlatinum;
+
   final _i35.Key? key;
 
   @override
   String toString() {
-    return 'StripeCheckoutArgs{email: $email, refCode: $refCode, id: $id, key: $key}';
+    return 'StripeCheckoutArgs{email: $email, refCode: $refCode, id: $id, isPro: $isPro, isPlatinum: $isPlatinum, key: $key}';
   }
 }
 
@@ -1220,21 +1294,23 @@ class StripeCheckoutArgs {
 /// [_i32.ActivationCodeCheckout]
 class ActivationCodeCheckout
     extends _i33.PageRouteInfo<ActivationCodeCheckoutArgs> {
-  ActivationCodeCheckout({_i35.Key? key})
+  ActivationCodeCheckout({_i35.Key? key, required bool isPro})
       : super(ActivationCodeCheckout.name,
             path: 'activationCodeCheckout',
-            args: ActivationCodeCheckoutArgs(key: key));
+            args: ActivationCodeCheckoutArgs(key: key, isPro: isPro));
 
   static const String name = 'ActivationCodeCheckout';
 }
 
 class ActivationCodeCheckoutArgs {
-  const ActivationCodeCheckoutArgs({this.key});
+  const ActivationCodeCheckoutArgs({this.key, required this.isPro});
 
   final _i35.Key? key;
 
+  final bool isPro;
+
   @override
   String toString() {
-    return 'ActivationCodeCheckoutArgs{key: $key}';
+    return 'ActivationCodeCheckoutArgs{key: $key, isPro: $isPro}';
   }
 }

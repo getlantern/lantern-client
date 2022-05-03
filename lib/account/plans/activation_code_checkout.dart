@@ -3,11 +3,11 @@ import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
-import 'constants.dart';
-
 class ActivationCodeCheckout extends StatefulWidget {
+  final bool isPro;
   ActivationCodeCheckout({
     Key? key,
+    required this.isPro,
   }) : super(key: key);
 
   @override
@@ -54,7 +54,7 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
     return BaseScreen(
       // TODO: translations
       title:
-          'Lantern ${isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
+          'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
       body: Container(
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsetsDirectional.only(

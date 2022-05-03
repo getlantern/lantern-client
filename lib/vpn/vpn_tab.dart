@@ -1,4 +1,3 @@
-import 'package:lantern/account/plans/constants.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
 
@@ -9,7 +8,11 @@ import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
 class VPNTab extends StatelessWidget {
-  VPNTab({Key? key}) : super(key: key);
+  final bool isCN;
+  final bool isPlatinum;
+
+  VPNTab({Key? key, required this.isCN, required this.isPlatinum})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,10 @@ class VPNTab extends StatelessWidget {
           children: [
             (isCN && isPlatinum) || (!isCN && proUser)
                 ? Container()
-                : ProBanner(),
+                : ProBanner(
+                    isCN: isCN,
+                    isPlatinum: isPlatinum,
+                  ),
             VPNSwitch(),
             Container(
               padding: const EdgeInsetsDirectional.all(16),
