@@ -24,10 +24,10 @@ import org.getlantern.lantern.model.LanternHttpClient.*
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
 import org.getlantern.lantern.util.Analytics
+import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
-import org.json.JSONObject
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -350,6 +350,17 @@ class SessionModel(
     }
 
     // TODO: WIP
+    // Hits the /user-data endpoint from pro server and saves { level: null | "pro" | "platinum" } to PATH_USER_STATUS
+    private fun updateAndCacheUserStatus() {
+        // TODO: request to /user-data
+        // TODO: save level to PATH_USER_STATUS
+        val userStatus = "pro"
+        db.mutate { tx ->
+            tx.put(PATH_USER_STATUS, userStatus)
+        }
+    }
+
+    // TODO: WIP
     private fun updateAndCachePlans() {
         LanternApp.getPlans(object : PlansCallback {
             override fun onFailure(t: Throwable?, error: ProError?) {
@@ -368,28 +379,8 @@ class SessionModel(
         })
         Logger.info(TAG, "Successfully cached plans: $plans")
 
-        // TODO: delete
-        val mockPlansResponse = JSONObject(
-            """{'plan1': {'id': '1y-cny-9','description': '一年套餐','duration': {'days': 0, 'months': 0, 'years': 1},'price': {'cny': 34000},
-    'expectedMonthlyPrice': {'cny': 2836},'usdPrice': 4800,'usdPrice1Y': 4800,'usdPrice2Y': 8700,'redeemFor': {'days': 0, 'months': 1},'renewalBonus': {'days': 0, 'months': 1},
-    'renewalBonusExpired': {'days': 15, 'months': 0},'renewalBonusExpected': {'days': 0, 'months': 0},'discount': 0,'bestValue': false,'level': 'platinum'}, 'plan2': {'id': '1y-cny-9','description': '一年套餐','duration': {'days': 0, 'months': 0, 'years': 1},'price': {'cny': 34000},
-    'expectedMonthlyPrice': {'cny': 2836},'usdPrice': 4800,'usdPrice1Y': 4800,'usdPrice2Y': 8700,'redeemFor': {'days': 0, 'months': 1},'renewalBonus': {'days': 0, 'months': 1},
-    'renewalBonusExpired': {'days': 15, 'months': 0},'renewalBonusExpected': {'days': 0, 'months': 0},'discount': 0,'bestValue': false,'level': 'pro'}}"""
-        )
-
         db.mutate { tx ->
-            tx.put(PATH_PLANS, mockPlansResponse.toString())
-        }
-    }
-
-    // TODO: WIP
-    // Hits the /user-data endpoint from pro server and saves { level: null | "pro" | "platinum" } to PATH_USER_STATUS
-    private fun updateAndCacheUserStatus() {
-        // TODO: request to /user-data
-        // TODO: save level to PATH_USER_STATUS
-        val userStatus = "pro"
-        db.mutate { tx ->
-            tx.put(PATH_USER_STATUS, userStatus)
+            tx.put(PATH_PLANS, Json.gson.toJson(plans))
         }
     }
 
@@ -441,7 +432,6 @@ class SessionModel(
                     }
 
                     override fun onError(error: Exception) {
-                        // TODO: show the localized error to the user in Flutter
                         result.error("unknownError", error.localizedMessage, null)
                     }
                 }
@@ -460,6 +450,7 @@ class SessionModel(
     private fun submitGooglePlay(planID: String, result: MethodChannel.Result) {
         if (LanternApp.getInAppBilling() == null) {
             Logger.error(TAG, "getInAppBilling is null")
+            // TODO: if developing, display more verbose error
             result.error(
                 "unknownError",
                 activity.resources.getString(R.string.error_making_purchase),

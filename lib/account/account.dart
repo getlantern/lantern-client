@@ -1,6 +1,8 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
+import 'plans/constants.dart';
+
 class AccountMenu extends StatelessWidget {
   final bool isCN;
   final bool isPlatinum;
@@ -8,11 +10,11 @@ class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key, required this.isCN, required this.isPlatinum})
       : super(key: key);
 
-  Future<void> upgradeToLanternPro(BuildContext context, bool isPro) async {
-    // TODO: hit sessionModel.fetchPlans
-    // TODO: use exponential backoff on failure
+  Future<void> upgradeToLanternPro(
+      BuildContext context, bool isPro, List<Map<String, Object>> plans) async {
     await context.pushRoute(
       Upgrade(
+        plans: plans,
         isCN: isCN,
         isPlatinum: isPlatinum,
         isPro: isPro,
@@ -70,13 +72,20 @@ class AccountMenu extends StatelessWidget {
       if (!isPlatinum)
         sessionModel.getUserStatus((context, userStatus, child) {
           final isPro = userStatus == 'pro';
-          return ListItemFactory.settingsItem(
-            icon: ImagePaths.pro_icon_black,
-            content:
-                '${isCN ? 'Upgrade ${isPro ? 'to Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
-                    .i18n, // TODO: translations
-            onTap: () => upgradeToLanternPro(context, isPro),
-          );
+          return sessionModel.getCachedPlans((context, cachedPlans, child) {
+            final plans = formatCachedPlans(cachedPlans);
+            if (plans.isEmpty) {
+              handlePlansFailure(context);
+            }
+
+            return ListItemFactory.settingsItem(
+              icon: ImagePaths.pro_icon_black,
+              content:
+                  '${isCN ? 'Upgrade ${isPro ? 'to Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
+                      .i18n, // TODO: translations
+              onTap: () => upgradeToLanternPro(context, isPro, plans),
+            );
+          });
         }),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,

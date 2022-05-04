@@ -5,12 +5,14 @@ import 'package:lantern/common/common.dart';
 import 'constants.dart';
 
 class Upgrade extends StatelessWidget {
+  final List<Map<String, Object>> plans;
   final bool isCN;
   final bool isPlatinum;
   final bool isPro;
 
   Upgrade({
     Key? key,
+    required this.plans,
     required this.isCN,
     required this.isPlatinum,
     required this.isPro,
@@ -18,159 +20,167 @@ class Upgrade extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isTwoYearPlan = true;
-    var availablePlans = determineAvailablePlans(isTwoYearPlan);
-    return FullScreenDialog(
-      widget: StatefulBuilder(
-        builder: (context, setState) => Container(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // * Logotype + X button
-              buildHeader(context, isCN),
-              // * Body
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 32,
-                    end: 32,
-                    bottom: 32,
-                  ),
-                  child: Column(
-                    children: [
-                      // * Renewal text or upsell
-                      buildRenewalTextOrUpsell(
-                        context,
-                        isCN,
-                        isPro,
-                      ),
-                      // * Step
-                      Container(
-                        padding: const EdgeInsetsDirectional.only(
-                          top: 16.0,
-                          bottom: 16.0,
+    return sessionModel.getCachedPlans((context, cachedPlans, child) {
+      var isTwoYearPlan = true; // Toggle is by default to 2 years
+      var availablePlans = determineAvailablePlans(isTwoYearPlan, plans);
+
+      final isFree = isPro == false && isPlatinum == false;
+      return FullScreenDialog(
+        widget: StatefulBuilder(
+          builder: (context, setState) => Container(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // * Logotype + X button
+                buildHeader(context, isCN),
+                // * Body
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 32,
+                      end: 32,
+                      bottom: 32,
+                    ),
+                    child: Column(
+                      children: [
+                        // * Renewal text or upsell
+                        buildRenewalTextOrUpsell(
+                          context,
+                          isCN,
+                          isFree,
                         ),
-                        child: const PlanStep(
-                          stepNum: '1',
-                          description: 'Choose Plan', // TODO: translations
-                        ),
-                      ),
-                      if (isCN == true)
-                        // * Toggle
+                        // * Step
                         Container(
                           padding: const EdgeInsetsDirectional.only(
-                            bottom: 16,
+                            top: 16.0,
+                            bottom: 16.0,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                  end: 16.0,
+                          child: const PlanStep(
+                            stepNum: '1',
+                            description: 'Choose Plan', // TODO: translations
+                          ),
+                        ),
+                        if (isCN == true)
+                          // * Toggle
+                          Container(
+                            padding: const EdgeInsetsDirectional.only(
+                              bottom: 16,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                    end: 16.0,
+                                  ),
+                                  child: CText(
+                                    '1 year pricing',
+                                    style: isTwoYearPlan
+                                        ? tsBody1.copiedWith(color: grey5)
+                                        : tsBody1,
+                                  ), // TODO: translations
                                 ),
-                                child: CText(
-                                  '1 year pricing',
-                                  style: isTwoYearPlan
-                                      ? tsBody1.copiedWith(color: grey5)
-                                      : tsBody1,
-                                ), // TODO: translations
-                              ),
-                              FlutterSwitch(
-                                width: 44.0,
-                                height: 24.0,
-                                valueFontSize: 12.0,
-                                padding: 2,
-                                toggleSize: 18.0,
-                                value: isTwoYearPlan,
-                                activeColor: indicatorGreen,
-                                onToggle: (bool newValue) {
-                                  setState(() => isTwoYearPlan = newValue);
-                                  setState(
-                                    () => availablePlans =
-                                        determineAvailablePlans(newValue),
-                                  );
-                                },
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                  start: 16.0,
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Transform.translate(
-                                      offset: const Offset(80.0, -25.0),
-                                      child: const CAssetImage(
-                                        path: ImagePaths.savings_arrow,
+                                FlutterSwitch(
+                                  width: 44.0,
+                                  height: 24.0,
+                                  valueFontSize: 12.0,
+                                  padding: 2,
+                                  toggleSize: 18.0,
+                                  value: isTwoYearPlan,
+                                  activeColor: indicatorGreen,
+                                  onToggle: (bool newValue) {
+                                    setState(() => isTwoYearPlan = newValue);
+                                    setState(
+                                      () => availablePlans =
+                                          determineAvailablePlans(
+                                        newValue,
+                                        plans,
                                       ),
-                                    ),
-                                    Transform.translate(
-                                      offset: const Offset(115.0, -30.0),
-                                      child: Transform.rotate(
-                                        angle: 0.1 * pi,
-                                        child: Stack(
-                                          children: [
-                                            CText(
-                                              determineSavingsOrExtraMonths(
-                                                isPro,
-                                              ).toUpperCase(),
-                                              style: tsBody1.copiedWith(
-                                                color: pink4,
-                                              ),
-                                            )
-                                          ],
+                                    );
+                                  },
+                                ),
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                    start: 16.0,
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Transform.translate(
+                                        offset: const Offset(80.0, -25.0),
+                                        child: const CAssetImage(
+                                          path: ImagePaths.savings_arrow,
                                         ),
                                       ),
-                                    ),
-                                    CText(
-                                      '2 year pricing',
-                                      style: isTwoYearPlan
-                                          ? tsBody1
-                                          : tsBody1.copiedWith(
-                                              color: grey5,
-                                            ),
-                                    )
-                                  ],
-                                ), // TODO: translations
-                              ),
-                            ],
+                                      Transform.translate(
+                                        offset: const Offset(115.0, -30.0),
+                                        child: Transform.rotate(
+                                          angle: 0.1 * pi,
+                                          child: Stack(
+                                            children: [
+                                              CText(
+                                                determineSavingsOrExtraMonths(
+                                                  isFree,
+                                                ).toUpperCase(),
+                                                style: tsBody1.copiedWith(
+                                                  color: pink4,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      CText(
+                                        '2 year pricing',
+                                        style: isTwoYearPlan
+                                            ? tsBody1
+                                            : tsBody1.copiedWith(
+                                                color: grey5,
+                                              ),
+                                      )
+                                    ],
+                                  ), // TODO: translations
+                                ),
+                              ],
+                            ),
+                          ),
+                        // * Card
+                        ...availablePlans.map(
+                          (plan) => PlanCard(
+                            plans: plans,
+                            id: plan['id'] as String,
+                            isCN: isCN,
+                            isPro: isPro,
+                            isPlatinum: isPlatinum,
                           ),
                         ),
-                      // * Card
-                      ...availablePlans.map(
-                        (plan) => PlanCard(
-                          id: plan['id'] as String,
-                          isCN: isCN,
-                          isPro: isPro,
-                          isPlatinum: isPlatinum,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              // * Footer
-              Container(
-                height: 40,
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width,
-                color: grey3,
-                child: GestureDetector(
-                  onTap: () async => await context.pushRoute(
-                    ActivationCodeCheckout(isPro: isPro),
-                  ),
-                  child: CText(
-                    'Have a Lantern Pro activation code? Click here.',
-                    style: tsBody1,
-                  ),
-                ), // Translations
-              ),
-            ],
+                // * Footer
+                Container(
+                  height: 40,
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width,
+                  color: grey3,
+                  child: GestureDetector(
+                    onTap: () async => await context.pushRoute(
+                      ActivationCodeCheckout(isPro: isPro),
+                    ),
+                    child: CText(
+                      'Have a Lantern Pro activation code? Click here.',
+                      style: tsBody1,
+                    ),
+                  ), // Translations
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   String determineSavingsOrExtraMonths(bool isFree) {
@@ -190,10 +200,13 @@ class Upgrade extends StatelessWidget {
 
   String determineExpiryText() {
     // TODO: depends on expiry status
-    return 'This is a Pro or Platinum user so they should have some text here';
+    return renewalTextDependingOnExpiry['expiresSoon']!;
   }
 
-  List<Map<String, Object>> determineAvailablePlans(bool isTwoYearPlan) {
+  List<Map<String, Object>> determineAvailablePlans(
+    bool isTwoYearPlan,
+    List<Map<String, Object>> plans,
+  ) {
     // if we are not in China, we only have two available plans which we both want to render
     if (!isCN) return plans;
 

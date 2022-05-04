@@ -3,12 +3,14 @@ import 'package:lantern/common/common.dart';
 import 'constants.dart';
 
 class PlanCard extends StatelessWidget {
+  final List<Map<String, Object>> plans;
   final String id;
   final bool isPro;
   final bool isCN;
   final bool isPlatinum;
 
   const PlanCard({
+    required this.plans,
     required this.id,
     required this.isPro,
     required this.isCN,
@@ -22,24 +24,25 @@ class PlanCard extends StatelessWidget {
     final description = selectedPlan['description'] as String;
 
     // Get currency
-    final currencyObject = selectedPlan['price'] as Map<String, int>;
+    final currencyObject = selectedPlan['price'] as Map;
     final currency = currencyObject.entries.first.key.toString().toUpperCase();
 
     // Get price per month and year
     final pricePerYear =
         currencyFormatter.format(currencyObject.entries.first.value);
-    final pricePerMonthObject =
-        selectedPlan['expectedMonthlyPrice'] as Map<String, int>;
+    final pricePerMonthObject = selectedPlan['expectedMonthlyPrice'] as Map;
 
     final pricePerMonth =
         currencyFormatter.format(pricePerMonthObject.entries.first.value);
 
     final isBestValue = selectedPlan['bestValue'] as bool;
-    final renewalBonus = selectedPlan['renewalBonus'] as Map<String, int>;
+    final renewalBonus = selectedPlan['renewalBonus'] as Map;
 
     return CInkWell(
       onTap: () async {
         final isPlayVersion = await sessionModel.getPlayVersion();
+
+        // * Play version
         if (isPlayVersion) {
           await sessionModel.submitGooglePlay(id).then((value) async {
             await sessionModel.updateAndCachePlans();
@@ -70,8 +73,10 @@ class PlanCard extends StatelessWidget {
             );
           });
         } else {
+          // * Proceed to our own Checkout
           await context.pushRoute(
             Checkout(
+              plans: plans,
               id: id,
               isPro: isPro,
               isPlatinum: isPlatinum,
@@ -201,9 +206,12 @@ class PlanCard extends StatelessWidget {
 
   String determinePlanDescription(
     String description,
-    Map<String, int> renewalBonus,
+    Map? renewalBonus,
     bool isPro,
   ) {
+    if (renewalBonus == null) {
+      return description;
+    }
     // TODO: translations
     final renewalMonths = renewalBonus['months'];
     final renewalGlobal = '$description $renewalMonths ' +

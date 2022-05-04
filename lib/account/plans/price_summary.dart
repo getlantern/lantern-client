@@ -3,6 +3,7 @@ import 'package:lantern/common/common.dart';
 import 'constants.dart';
 
 class PriceSummary extends StatelessWidget {
+  final List<Map<String, Object>> plans;
   final String id;
   final String? refCode;
   final bool isPro;
@@ -10,6 +11,7 @@ class PriceSummary extends StatelessWidget {
 
   const PriceSummary({
     Key? key,
+    required this.plans,
     required this.id,
     required this.isPro,
     required this.isPlatinum,
@@ -20,7 +22,7 @@ class PriceSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final selectedPlan = plans.firstWhere((p) => p['id'] == id);
 
-    final currencyObject = selectedPlan['price'] as Map<String, int>;
+    final currencyObject = selectedPlan['price'] as Map;
     final currency = currencyObject.entries.first.key.toString().toUpperCase();
     final pricePerYear =
         currencyFormatter.format(currencyObject.entries.first.value);

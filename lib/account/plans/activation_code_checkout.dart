@@ -31,7 +31,7 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
             RegExp(r'^[a-zA-Z0-9-]*$').hasMatch(value) &&
             value.replaceAll('-', '').length == 25
         ? null
-        : 'Please enter a valid activation code $value', // TODO: translations
+        : 'Your activation code is invalid', // TODO: translations
   );
 
   var formIsValid = false;

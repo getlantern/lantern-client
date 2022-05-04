@@ -7,6 +7,7 @@ import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
 class StripeCheckout extends StatefulWidget {
+  final List<Map<String, Object>> plans;
   final String email;
   final String? refCode;
   final String id;
@@ -14,6 +15,7 @@ class StripeCheckout extends StatefulWidget {
   final bool isPlatinum;
 
   const StripeCheckout({
+    required this.plans,
     required this.email,
     this.refCode,
     required this.id,
@@ -205,6 +207,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
               children: [
                 // * Price summary
                 PriceSummary(
+                  plans: widget.plans,
                   id: widget.id,
                   refCode: widget.refCode,
                   isPro: widget.isPro,

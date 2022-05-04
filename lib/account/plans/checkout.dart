@@ -7,11 +7,13 @@ import 'package:lantern/common/common.dart';
 import 'constants.dart';
 
 class Checkout extends StatefulWidget {
+  final List<Map<String, Object>> plans;
   final String id;
   final bool isPro;
   final bool isPlatinum;
 
   Checkout({
+    required this.plans,
     required this.id,
     required this.isPro,
     required this.isPlatinum,
@@ -41,7 +43,7 @@ class _CheckoutState extends State<Checkout>
                 RegExp(r'^[a-zA-Z0-9]*$').hasMatch(value) &&
                 (6 <= value.characters.length && value.characters.length <= 13)
             ? null
-            : 'Please enter a valid Referral code'.i18n,
+            : 'Your referral code is invalid', // TODO: translations
   );
 
   final referralCode = '';
@@ -243,6 +245,7 @@ class _CheckoutState extends State<Checkout>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   PriceSummary(
+                    plans: widget.plans,
                     id: widget.id,
                     isPlatinum: widget.isPlatinum,
                     isPro: widget.isPro,
@@ -257,6 +260,7 @@ class _CheckoutState extends State<Checkout>
                       if (selectedPaymentProvider == 'stripe') {
                         await context.pushRoute(
                           StripeCheckout(
+                            plans: widget.plans,
                             email: emailController.text,
                             refCode: refCodeController.text,
                             id: widget.id,
@@ -266,15 +270,14 @@ class _CheckoutState extends State<Checkout>
                         );
                       } else {
                         try {
-                          const btcPayToken = ''; // TODO: not sure?
+                          const btcPayURL = ''; // TODO: fetch this from backend
                           await context.pushRoute(
                             FullScreenDialogPage(
                               widget: Center(
                                 child: Stack(
                                   children: [
                                     WebView(
-                                      initialUrl:
-                                          '$btcPayURL/$btcPayToken', // TODO: add BTCPay params
+                                      initialUrl: btcPayURL,
                                       onPageStarted: (url) {
                                         setState(() {
                                           loadingPercentage = 0;

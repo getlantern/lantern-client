@@ -1,5 +1,7 @@
 import 'package:lantern/messaging/messaging.dart';
 
+import 'plans/constants.dart';
+
 class AccountManagement extends StatefulWidget {
   final bool isPro;
   final bool isCN;
@@ -172,29 +174,43 @@ class _AccountManagementState extends State<AccountManagement>
                         trailingArray: [],
                       );
                     }),
-                    sessionModel.expiryDate((
-                      BuildContext context,
-                      String expirationDate,
-                      Widget? child,
-                    ) {
-                      return ListItemFactory.settingsItem(
-                        header:
-                            '${widget.isPlatinum ? 'Platinum' : 'Pro'} Account Expiration'
-                                .i18n, // TODO: translations
-                        icon: ImagePaths.clock,
-                        content: expirationDate,
-                        onTap: () async {
-                          await context.pushRoute(Upgrade(
-                            isCN: widget.isCN,
-                            isPlatinum: widget.isPlatinum,
-                            isPro: widget.isPro,
-                          ));
-                        },
-                        trailingArray: [
-                          CText('Renew'.i18n.toUpperCase(), style: tsButtonPink)
-                        ],
-                      );
-                    }),
+                    sessionModel.expiryDate(
+                      (
+                        BuildContext context,
+                        String expirationDate,
+                        Widget? child,
+                      ) =>
+                          sessionModel
+                              .getCachedPlans((context, cachedPlans, child) {
+                        final plans = formatCachedPlans(cachedPlans);
+                        if (plans.isEmpty) {
+                          handlePlansFailure(context);
+                        }
+                        return ListItemFactory.settingsItem(
+                          header:
+                              '${widget.isPlatinum ? 'Platinum' : 'Pro'} Account Expiration'
+                                  .i18n, // TODO: translations
+                          icon: ImagePaths.clock,
+                          content: expirationDate,
+                          onTap: () async {
+                            await context.pushRoute(
+                              Upgrade(
+                                plans: plans as List<Map<String, Object>>,
+                                isCN: widget.isCN,
+                                isPlatinum: widget.isPlatinum,
+                                isPro: widget.isPro,
+                              ),
+                            );
+                          },
+                          trailingArray: [
+                            CText(
+                              'Renew'.i18n.toUpperCase(),
+                              style: tsButtonPink,
+                            )
+                          ],
+                        );
+                      }),
+                    ),
                   ];
 
                   proItems.addAll(

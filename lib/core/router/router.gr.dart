@@ -403,6 +403,7 @@ class AppRouter extends _i33.RootStackRouter {
           routeData: routeData,
           child: _i29.Upgrade(
               key: args.key,
+              plans: args.plans,
               isCN: args.isCN,
               isPlatinum: args.isPlatinum,
               isPro: args.isPro),
@@ -417,6 +418,7 @@ class AppRouter extends _i33.RootStackRouter {
       return _i33.CustomPage<void>(
           routeData: routeData,
           child: _i30.Checkout(
+              plans: args.plans,
               id: args.id,
               isPro: args.isPro,
               isPlatinum: args.isPlatinum,
@@ -432,6 +434,7 @@ class AppRouter extends _i33.RootStackRouter {
       return _i33.CustomPage<void>(
           routeData: routeData,
           child: _i31.StripeCheckout(
+              plans: args.plans,
               email: args.email,
               refCode: args.refCode,
               id: args.id,
@@ -689,12 +692,11 @@ class AccountManagement extends _i33.PageRouteInfo<AccountManagementArgs> {
 }
 
 class AccountManagementArgs {
-  const AccountManagementArgs({
-    this.key,
-    required this.isPro,
-    required this.isCN,
-    required this.isPlatinum,
-  });
+  const AccountManagementArgs(
+      {this.key,
+      required this.isPro,
+      required this.isCN,
+      required this.isPlatinum});
 
   final _i35.Key? key;
 
@@ -1171,13 +1173,18 @@ class ReplicaUploadFileScreenArgs {
 class Upgrade extends _i33.PageRouteInfo<UpgradeArgs> {
   Upgrade(
       {_i35.Key? key,
+      required List<Map<String, Object>> plans,
       required bool isCN,
       required bool isPlatinum,
       required bool isPro})
       : super(Upgrade.name,
             path: 'upgrade',
             args: UpgradeArgs(
-                key: key, isCN: isCN, isPlatinum: isPlatinum, isPro: isPro));
+                key: key,
+                plans: plans,
+                isCN: isCN,
+                isPlatinum: isPlatinum,
+                isPro: isPro));
 
   static const String name = 'Upgrade';
 }
@@ -1185,11 +1192,14 @@ class Upgrade extends _i33.PageRouteInfo<UpgradeArgs> {
 class UpgradeArgs {
   const UpgradeArgs(
       {this.key,
+      required this.plans,
       required this.isCN,
       required this.isPlatinum,
       required this.isPro});
 
   final _i35.Key? key;
+
+  final List<Map<String, Object>> plans;
 
   final bool isCN;
 
@@ -1199,7 +1209,7 @@ class UpgradeArgs {
 
   @override
   String toString() {
-    return 'UpgradeArgs{key: $key, isCN: $isCN, isPlatinum: $isPlatinum, isPro: $isPro}';
+    return 'UpgradeArgs{key: $key, plans: $plans, isCN: $isCN, isPlatinum: $isPlatinum, isPro: $isPro}';
   }
 }
 
@@ -1207,24 +1217,32 @@ class UpgradeArgs {
 /// [_i30.Checkout]
 class Checkout extends _i33.PageRouteInfo<CheckoutArgs> {
   Checkout(
-      {required String id,
+      {required List<Map<String, Object>> plans,
+      required String id,
       required bool isPro,
       required bool isPlatinum,
       _i35.Key? key})
       : super(Checkout.name,
             path: 'checkout',
             args: CheckoutArgs(
-                id: id, isPro: isPro, isPlatinum: isPlatinum, key: key));
+                plans: plans,
+                id: id,
+                isPro: isPro,
+                isPlatinum: isPlatinum,
+                key: key));
 
   static const String name = 'Checkout';
 }
 
 class CheckoutArgs {
   const CheckoutArgs(
-      {required this.id,
+      {required this.plans,
+      required this.id,
       required this.isPro,
       required this.isPlatinum,
       this.key});
+
+  final List<Map<String, Object>> plans;
 
   final String id;
 
@@ -1236,7 +1254,7 @@ class CheckoutArgs {
 
   @override
   String toString() {
-    return 'CheckoutArgs{id: $id, isPro: $isPro, isPlatinum: $isPlatinum, key: $key}';
+    return 'CheckoutArgs{plans: $plans, id: $id, isPro: $isPro, isPlatinum: $isPlatinum, key: $key}';
   }
 }
 
@@ -1244,7 +1262,8 @@ class CheckoutArgs {
 /// [_i31.StripeCheckout]
 class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
   StripeCheckout(
-      {required String email,
+      {required List<Map<String, Object>> plans,
+      required String email,
       String? refCode,
       required String id,
       required bool isPro,
@@ -1253,6 +1272,7 @@ class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
       : super(StripeCheckout.name,
             path: 'stripeCheckout',
             args: StripeCheckoutArgs(
+                plans: plans,
                 email: email,
                 refCode: refCode,
                 id: id,
@@ -1265,12 +1285,15 @@ class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
 
 class StripeCheckoutArgs {
   const StripeCheckoutArgs(
-      {required this.email,
+      {required this.plans,
+      required this.email,
       this.refCode,
       required this.id,
       required this.isPro,
       required this.isPlatinum,
       this.key});
+
+  final List<Map<String, Object>> plans;
 
   final String email;
 
@@ -1286,7 +1309,7 @@ class StripeCheckoutArgs {
 
   @override
   String toString() {
-    return 'StripeCheckoutArgs{email: $email, refCode: $refCode, id: $id, isPro: $isPro, isPlatinum: $isPlatinum, key: $key}';
+    return 'StripeCheckoutArgs{plans: $plans, email: $email, refCode: $refCode, id: $id, isPro: $isPro, isPlatinum: $isPlatinum, key: $key}';
   }
 }
 
