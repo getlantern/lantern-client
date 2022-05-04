@@ -216,11 +216,15 @@ class SessionModel extends Model {
   }
 
   Future<void> updateAndCachePlans() async {
-    return methodChannel.invokeMethod('updateAndCachePlans');
+    return methodChannel
+        .invokeMethod('updateAndCachePlans')
+        .then((value) => value as String);
   }
 
   Future<void> updateAndCacheUserStatus() async {
-    return methodChannel.invokeMethod('updateAndCacheUserStatus');
+    return methodChannel
+        .invokeMethod('updateAndCacheUserStatus')
+        .then((value) => value as String);
   }
 
   Widget getCachedPlans(ValueWidgetBuilder<String> builder) {
@@ -244,10 +248,9 @@ class SessionModel extends Model {
     });
   }
 
-  Widget getUserStatus(ValueWidgetBuilder<String?> builder) {
-    return subscribedSingleValueBuilder<String?>(
+  Widget getCachedUserStatus(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
       'userStatus',
-      defaultValue: null,
       builder: builder,
     );
   }
@@ -279,7 +282,19 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
       'email': email,
       'refCode': refCode,
-    });
+    }).then((value) => value as String);
+  }
+
+  Future<void> submitBitcoin(
+    String planID,
+    String email,
+    String refCode,
+  ) async {
+    return methodChannel.invokeMethod('submitBitcoin', <String, dynamic>{
+      'planID': planID,
+      'email': email,
+      'refCode': refCode,
+    }).then((value) => value as String);
   }
 
   Future<void> redeemActivationCode(
@@ -289,6 +304,6 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('redeemActivationCode', <String, dynamic>{
       'email': email,
       'activationCode': activationCode,
-    });
+    }).then((value) => value as String);
   }
 }

@@ -44,33 +44,9 @@ List<Map<String, Object>> formatCachedPlans(String cachedPlans) {
   // transform the String cached in db to a workable format
   // ignore: omit_local_variable_types
   List<Map<String, Object>> plans = [];
+
+  if (cachedPlans == '') return [];
   final plansMap = jsonDecode(cachedPlans) as Map;
   plansMap.forEach((key, value) => plans.add(value));
   return plans;
-}
-
-// TODO: move to utils file
-void handlePlansFailure(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        content: CText(
-          'No available plans for the moment',
-          style: tsBody1,
-        ), // TODO: Translations
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: CText(
-              'Okay'.i18n,
-              style: tsButtonPink,
-            ),
-          ),
-        ],
-      );
-    },
-  );
 }

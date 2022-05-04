@@ -98,20 +98,63 @@ class DeveloperSettingsTab extends StatelessWidget {
                 })
               ],
             ),
+            // * FETCH USER DATA
+            ListItemFactory.settingsItem(
+              content: 'Fetch user status',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async {
+                    await sessionModel
+                        .updateAndCacheUserStatus()
+                        .then(
+                          (value) => showSnackbar(
+                            context: context,
+                            content: 'Success caching plans',
+                          ),
+                        )
+                        .onError(
+                          (error, stackTrace) => CDialog.showError(
+                            context,
+                            error: e,
+                            stackTrace: stackTrace,
+                            description: (error as PlatformException).message ??
+                                error.toString(),
+                          ),
+                        );
+                  },
+                  child: CText(
+                    'Fetch'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.green),
+                  ),
+                )
+              ],
+            ),
             // * FETCH PLANS
             ListItemFactory.settingsItem(
               content: 'Fetch plans (scroll 👇)',
               trailingArray: [
                 TextButton(
                   onPressed: () async {
-                    try {
-                      await sessionModel.updateAndCachePlans();
-                    } catch (e) {
-                      showSnackbar(context: context, content: e.toString());
-                    }
+                    await sessionModel
+                        .updateAndCachePlans()
+                        .then(
+                          (value) => showSnackbar(
+                            context: context,
+                            content: 'Success caching plans',
+                          ),
+                        )
+                        .onError(
+                          (error, stackTrace) => CDialog.showError(
+                            context,
+                            error: e,
+                            stackTrace: stackTrace,
+                            description: (error as PlatformException).message ??
+                                error.toString(),
+                          ),
+                        );
                   },
                   child: CText(
-                    'Fetch Plans'.toUpperCase(),
+                    'Fetch'.toUpperCase(),
                     style: tsButton.copiedWith(color: Colors.green),
                   ),
                 )
@@ -157,15 +200,17 @@ class DeveloperSettingsTab extends StatelessWidget {
               ],
             ),
             // * DISPLAY USER STATUS
-            sessionModel.getUserStatus(
+            sessionModel.getCachedUserStatus(
               (context, userStatus, child) => ListItemFactory.settingsItem(
                 content: CText(
-                  'User status (if empty then its Free)',
+                  'User status',
                   style: tsBody3,
                 ),
                 trailingArray: [
                   CText(
-                    userStatus.toString().toUpperCase(),
+                    (userStatus == '' ? 'free' : userStatus)
+                        .toString()
+                        .toUpperCase(),
                     style: tsBody1Short.copiedWith(color: Colors.green),
                   )
                 ],

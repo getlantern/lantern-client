@@ -1,6 +1,5 @@
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/account/plans/tos.dart';
@@ -226,33 +225,15 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       cvcFieldController.text,
                     )
                         .then((value) async {
-                      // on success
-                      await sessionModel.updateAndCachePlans();
-                      await sessionModel.updateAndCacheUserStatus();
+                      // TODO: show success screen
                     }).onError((error, stackTrace) {
                       // on failure
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: CText(
-                              (error as PlatformException).message ??
-                                  error.toString(),
-                              style: tsSubtitle1,
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: CText(
-                                  'Dismiss'.i18n,
-                                  style: tsButtonPink,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                      CDialog.showError(
+                        context,
+                        error: e,
+                        stackTrace: stackTrace,
+                        description: (error as PlatformException).message ??
+                            error.toString(),
                       );
                     });
                   },

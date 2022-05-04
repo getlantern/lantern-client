@@ -1,8 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
-import 'plans/constants.dart';
-
 class AccountMenu extends StatelessWidget {
   final bool isCN;
   final bool isPlatinum;
@@ -11,15 +9,28 @@ class AccountMenu extends StatelessWidget {
       : super(key: key);
 
   Future<void> upgradeToLanternPro(
-      BuildContext context, bool isPro, List<Map<String, Object>> plans) async {
-    await context.pushRoute(
-      Upgrade(
-        plans: plans,
-        isCN: isCN,
-        isPlatinum: isPlatinum,
-        isPro: isPro,
-      ),
-    );
+    BuildContext context,
+    bool isPro,
+  ) async {
+    await sessionModel
+        .updateAndCachePlans()
+        .then(
+          (value) async => await context.pushRoute(
+            Upgrade(
+              isCN: isCN,
+              isPlatinum: isPlatinum,
+              isPro: isPro,
+            ),
+          ),
+        )
+        .onError(
+          (error, stackTrace) => CDialog.showError(
+            context,
+            error: e,
+            stackTrace: stackTrace,
+            description: (error as PlatformException).message.toString(),
+          ),
+        );
   }
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
@@ -46,7 +57,8 @@ class AccountMenu extends StatelessWidget {
                   bool hasCopiedRecoveryKey,
                   Widget? child,
                 ) =>
-                    sessionModel.getUserStatus((context, userStatus, child) {
+                    sessionModel
+                        .getCachedUserStatus((context, userStatus, child) {
                   final isPro = userStatus == 'pro';
                   return ListItemFactory.settingsItem(
                     icon: ImagePaths.account,
@@ -70,22 +82,15 @@ class AccountMenu extends StatelessWidget {
             : const SizedBox(),
       ),
       if (!isPlatinum)
-        sessionModel.getUserStatus((context, userStatus, child) {
+        sessionModel.getCachedUserStatus((context, userStatus, child) {
           final isPro = userStatus == 'pro';
-          return sessionModel.getCachedPlans((context, cachedPlans, child) {
-            final plans = formatCachedPlans(cachedPlans);
-            if (plans.isEmpty) {
-              handlePlansFailure(context);
-            }
-
-            return ListItemFactory.settingsItem(
-              icon: ImagePaths.pro_icon_black,
-              content:
-                  '${isCN ? 'Upgrade ${isPro ? 'to Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
-                      .i18n, // TODO: translations
-              onTap: () => upgradeToLanternPro(context, isPro, plans),
-            );
-          });
+          return ListItemFactory.settingsItem(
+            icon: ImagePaths.pro_icon_black,
+            content:
+                '${isCN ? 'Upgrade ${isPro ? 'to Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
+                    .i18n, // TODO: translations
+            onTap: () => upgradeToLanternPro(context, isPro),
+          );
         }),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,

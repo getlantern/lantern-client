@@ -91,12 +91,13 @@ class SessionModel(
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
-            "updateAndCachePlans" -> updateAndCachePlans()
-            "updateAndCacheUserStatus" -> updateAndCacheUserStatus()
+            "updateAndCachePlans" -> updateAndCachePlans(result)
+            "updateAndCacheUserStatus" -> updateAndCacheUserStatus(result)
             "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, result)
             "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!, result)
-            "applyRefCode" -> applyRefCode(call.argument("email")!!, call.argument("refCode")!!)
-            "redeemActivationCode" -> redeemActivationCode(call.argument("email")!!, call.argument("activationCode")!!)
+            "applyRefCode" -> applyRefCode(call.argument("email")!!, call.argument("refCode")!!, result)
+            "submitBitcoin" -> applyRefCode(call.argument("planID")!!, call.argument("email")!!, result)
+            "redeemActivationCode" -> redeemActivationCode(call.argument("email")!!, call.argument("activationCode")!!, result)
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -349,38 +350,67 @@ class SessionModel(
         )
     }
 
-    // TODO: WIP
-    // Hits the /user-data endpoint from pro server and saves { level: null | "pro" | "platinum" } to PATH_USER_STATUS
-    private fun updateAndCacheUserStatus() {
-        // TODO: request to /user-data
-        // TODO: save level to PATH_USER_STATUS
-        val userStatus = "pro"
-        db.mutate { tx ->
-            tx.put(PATH_USER_STATUS, userStatus)
+    // Hits the /user-data endpoint and saves { level: null | "pro" | "platinum" } to PATH_USER_STATUS
+    private fun updateAndCacheUserStatus(result: MethodChannel.Result) {
+        try {
+            var userStatus = ""
+            lanternClient.userData(object : ProUserCallback {
+                override fun onSuccess(response: Response, userData: ProUser) {
+                    Logger.debug(TAG, "Successfully updated userData")
+                    userStatus = userData.userStatus
+                    result.success("Success caching userData")
+                }
+
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    Logger.error(TAG, "Unable to fetch user data: $t.message")
+                    result.error("errorUpdatingUserData", t?.message, error?.message) // TODO: can we use something localized here?
+                    return
+                }
+            })
+
+            db.mutate { tx ->
+                tx.put(PATH_USER_STATUS, userStatus)
+            }
+        } catch (t: Throwable) {
+            Logger.error(TAG, "Error caching user status", t)
+            result.error("unknownError", "Unable to cache user status: $t.message", null) // TODO: can we use something localized here?
         }
     }
 
-    // TODO: WIP
-    private fun updateAndCachePlans() {
-        LanternApp.getPlans(object : PlansCallback {
-            override fun onFailure(t: Throwable?, error: ProError?) {
-                if (error?.message != null) {
-                    Logger.error(TAG, "Unable to fetch plan data: $t.message")
-
-                    // TODO: move this error handling to Flutter?
-                    activity.showErrorDialog(activity.resources.getString(R.string.error))
+    // Hits the /plans endpoint and saves plans to PATH_PLANS
+    private fun updateAndCachePlans(result: MethodChannel.Result) {
+        try {
+            LanternApp.getPlans(object : PlansCallback {
+                override fun onSuccess(proPlans: Map<String, ProPlan>) {
+                    plans.clear()
+                    plans.putAll(proPlans)
+                    result.success("Success caching plans")
                 }
-            }
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    if (error?.message != null) {
+                        Logger.error(TAG, "Unable to fetch plan data: $t.message")
 
-            override fun onSuccess(proPlans: Map<String, ProPlan>) {
-                plans.clear()
-                plans.putAll(proPlans)
-            }
-        })
-        Logger.info(TAG, "Successfully cached plans: $plans")
+                        result.error(
+                            "unknownError",
+                            "Failure fetching plans", // TODO: can we use something localized here?
+                            null,
+                        )
+                        return
+                    }
+                }
+            })
+            Logger.info(TAG, "Successfully cached plans: $plans")
 
-        db.mutate { tx ->
-            tx.put(PATH_PLANS, Json.gson.toJson(plans))
+            db.mutate { tx ->
+                tx.put(PATH_PLANS, Json.gson.toJson(plans))
+            }
+        } catch (t: Throwable) {
+            Logger.error(TAG, "Error caching plans", t)
+            result.error(
+                "unknownError",
+                "Unable to cache plans $t.message", // TODO: can we use something localized here?
+                null,
+            )
         }
     }
 
@@ -437,7 +467,7 @@ class SessionModel(
                 }
             )
         } catch (t: Throwable) {
-            Logger.error(STRIPE_TAG, "Error submitting to stripe", t)
+            Logger.error(STRIPE_TAG, "Error submitting payment to stripe", t)
             result.error(
                 "unknownError",
                 activity.resources.getString(R.string.error_making_purchase),
@@ -450,7 +480,6 @@ class SessionModel(
     private fun submitGooglePlay(planID: String, result: MethodChannel.Result) {
         if (LanternApp.getInAppBilling() == null) {
             Logger.error(TAG, "getInAppBilling is null")
-            // TODO: if developing, display more verbose error
             result.error(
                 "unknownError",
                 activity.resources.getString(R.string.error_making_purchase),
@@ -516,13 +545,19 @@ class SessionModel(
     }
 
     // TODO: WIP
-    private fun applyRefCode(email: String, refCode: String) {
+    private fun applyRefCode(email: String, refCode: String, result: MethodChannel.Result) {
         // TODO: carry over handleReferral() from CheckoutActivity.java
         // TODO: handle error (ideally Flutter-side)
     }
 
     // TODO: WIP
-    private fun redeemActivationCode(email: String, activationCode: String) {
+    private fun submitBitcoin(planID: String, email: String, result: MethodChannel.Result) {
+        // TODO: carry over handleReferral() from CheckoutActivity.java
+        // TODO: handle error (ideally Flutter-side)
+    }
+
+    // TODO: WIP
+    private fun redeemActivationCode(email: String, activationCode: String, result: MethodChannel.Result) {
         // TODO: redeem activation code
         // TODO: handle error (ideally Flutter-side)
         // TODO: redirect to Plans page

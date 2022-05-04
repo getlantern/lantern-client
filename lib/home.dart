@@ -9,6 +9,7 @@ import 'package:lantern/replica/ui/replica_tab.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
+import 'dart:developer' as developer;
 
 import 'messaging/messaging_model.dart';
 
@@ -48,10 +49,6 @@ class _HomePageState extends State<HomePage> {
         });
       }
     });
-
-    // Cache plans and user status in session storage
-    sessionModel.updateAndCachePlans();
-    sessionModel.updateAndCacheUserStatus();
 
     navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
 
@@ -144,7 +141,8 @@ class _HomePageState extends State<HomePage> {
                     ).toLowerCase() ==
                     'true';
                 return sessionModel.getCachedPlans(
-                  (context, cachedPlans, child) => sessionModel.getUserStatus(
+                  (context, cachedPlans, child) =>
+                      sessionModel.getCachedUserStatus(
                     (context, userStatus, child) => Scaffold(
                       body: buildBody(
                         selectedTab,
@@ -171,8 +169,8 @@ class _HomePageState extends State<HomePage> {
   Widget buildBody(
     String selectedTab,
     bool? isOnboarded,
-    String? cachedPlans,
-    String? userStatus,
+    String cachedPlans,
+    String userStatus,
   ) {
     final isCN = determineLocation(cachedPlans);
     final isPlatinum = determinePlatinum(userStatus);
@@ -219,8 +217,9 @@ class _HomePageState extends State<HomePage> {
 
   // returns true if there are any Plans entries where { level: 'platinum' }
   // depends on where the plans are fetched from
-  bool determineLocation(String? cachedPlans) {
-    if (cachedPlans == null) return false;
+  bool determineLocation(String cachedPlans) {
+    if (cachedPlans == '') return false;
+
     final cachedPlansMap = jsonDecode(cachedPlans) as Map;
     final anyPlatinumLevels = cachedPlansMap.entries.map((p) {
       final availablePlan = p.value as Map;
@@ -231,7 +230,7 @@ class _HomePageState extends State<HomePage> {
 
   // returns true if the user status is platinum
   // is independent of where the plans are fetched from
-  bool determinePlatinum(String? userStatus) {
-    return userStatus != null && userStatus == 'platinum';
+  bool determinePlatinum(String userStatus) {
+    return userStatus == 'platinum';
   }
 }

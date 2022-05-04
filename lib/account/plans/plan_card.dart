@@ -44,32 +44,14 @@ class PlanCard extends StatelessWidget {
 
         // * Play version
         if (isPlayVersion) {
-          await sessionModel.submitGooglePlay(id).then((value) async {
-            await sessionModel.updateAndCachePlans();
-            await sessionModel.updateAndCacheUserStatus();
-          }).onError((error, stackTrace) {
+          await sessionModel.submitGooglePlay(id).onError((error, stackTrace) {
             // on failure
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: CText(
-                    (error as PlatformException).message ?? error.toString(),
-                    style: tsSubtitle1,
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: CText(
-                        'Dismiss'.i18n,
-                        style: tsButtonPink,
-                      ),
-                    ),
-                  ],
-                );
-              },
+            CDialog.showError(
+              context,
+              error: e,
+              stackTrace: stackTrace,
+              description:
+                  (error as PlatformException).message ?? error.toString(),
             );
           });
         } else {
