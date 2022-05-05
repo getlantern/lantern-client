@@ -50,3 +50,19 @@ List<Map<String, Object>> formatCachedPlans(String cachedPlans) {
   plansMap.forEach((key, value) => plans.add(value));
   return plans;
 }
+
+// TODO: move below to utils file
+void onAPIcallTimeout({code, message}) {
+  throw PlatformException(
+    code: code,
+    message:
+        message, // TODO: Display message as dev, show something localized for production
+  );
+}
+
+String localizedErrorDescription(error) => (error as PlatformException)
+    .message
+    .toString(); // TODO: Display this as dev, localize for production
+
+// TODO: we build a pollForUpdates logic instead of having a constant duration
+const defaultTimeoutDuration = Duration(seconds: 10);

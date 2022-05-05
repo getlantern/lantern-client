@@ -1,4 +1,5 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:lantern/account/plans/constants.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/replica/logic/markdown_link_builder.dart';
 import 'package:lantern/replica/models/replica_link.dart';
@@ -98,50 +99,22 @@ class DeveloperSettingsTab extends StatelessWidget {
                 })
               ],
             ),
-            // * FETCH USER DATA
-            ListItemFactory.settingsItem(
-              content: 'Fetch user status',
-              trailingArray: [
-                TextButton(
-                  onPressed: () async {
-                    context.loaderOverlay.show();
-                    await sessionModel
-                        .updateAndCacheUserStatus()
-                        .then(
-                          (value) => showSnackbar(
-                            context: context,
-                            content: 'Success updating and caching user status',
-                          ),
-                        )
-                        .onError(
-                          (error, stackTrace) => CDialog.showError(
-                            context,
-                            error: e,
-                            stackTrace: stackTrace,
-                            description: (error as PlatformException).message ??
-                                error.toString(),
-                          ),
-                        )
-                        .whenComplete(() {
-                      context.loaderOverlay.hide();
-                    });
-                  },
-                  child: CText(
-                    'Fetch'.toUpperCase(),
-                    style: tsButton.copiedWith(color: Colors.green),
-                  ),
-                )
-              ],
-            ),
             // * FETCH PLANS
             ListItemFactory.settingsItem(
-              content: 'Fetch plans (scroll 👇)',
+              content: 'Fetch plans',
               trailingArray: [
                 TextButton(
                   onPressed: () async {
                     context.loaderOverlay.show();
                     await sessionModel
                         .updateAndCachePlans()
+                        .timeout(
+                          defaultTimeoutDuration,
+                          onTimeout: () => throw PlatformException(
+                            code: 'updateAndCachePlansTimeout',
+                            message: 'updateAndCachePlansTimeout',
+                          ),
+                        )
                         .then(
                           (value) => showSnackbar(
                             context: context,
@@ -176,6 +149,61 @@ class DeveloperSettingsTab extends StatelessWidget {
                   child: CText(cachedPlans, style: tsOverline),
                 ),
               ),
+            ),
+            // * RESET CACHED PLANS
+            ListItemFactory.settingsItem(
+              content: 'Reset cached plans',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async => await sessionModel.resetCachedPlans(),
+                  child: CText(
+                    'Reset'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.green),
+                  ),
+                )
+              ],
+            ),
+            // * FETCH USER DATA
+            ListItemFactory.settingsItem(
+              content: 'Fetch user status',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async {
+                    context.loaderOverlay.show();
+                    await sessionModel
+                        .updateAndCacheUserStatus()
+                        .timeout(
+                          defaultTimeoutDuration,
+                          onTimeout: () => throw PlatformException(
+                            code: 'updateAndCacheUserStatusTimeout',
+                            message: 'updateAndCacheUserStatusTimeout',
+                          ),
+                        )
+                        .then(
+                          (value) => showSnackbar(
+                            context: context,
+                            content: 'Success updating and caching user status',
+                          ),
+                        )
+                        .onError(
+                          (error, stackTrace) => CDialog.showError(
+                            context,
+                            error: e,
+                            stackTrace: stackTrace,
+                            description: (error as PlatformException).message ??
+                                error.toString(),
+                          ),
+                        )
+                        .whenComplete(() {
+                      context.loaderOverlay.hide();
+                    });
+                  },
+                  child: CText(
+                    'Fetch'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.green),
+                  ),
+                )
+              ],
             ),
             // * FORCE USER STATUS
             ListItemFactory.settingsItem(
@@ -218,9 +246,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                 ),
                 trailingArray: [
                   CText(
-                    (userStatus == '' ? 'free' : userStatus)
-                        .toString()
-                        .toUpperCase(),
+                    userStatus.toString().toUpperCase(),
                     style: tsBody1Short.copiedWith(color: Colors.green),
                   )
                 ],

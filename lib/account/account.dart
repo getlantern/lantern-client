@@ -1,6 +1,8 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
+import 'plans/constants.dart';
+
 class AccountMenu extends StatelessWidget {
   final bool isCN;
   final bool isPlatinum;
@@ -13,7 +15,16 @@ class AccountMenu extends StatelessWidget {
     bool isPro,
   ) async {
     context.loaderOverlay.show();
-    await sessionModel.updateAndCachePlans().then((value) async {
+    await sessionModel
+        .updateAndCachePlans()
+        .timeout(
+          defaultTimeoutDuration,
+          onTimeout: () => onAPIcallTimeout(
+            code: 'updateAndCachePlansTimeout',
+            message: 'updateAndCachePlansTimeout',
+          ),
+        )
+        .then((value) async {
       context.loaderOverlay.hide();
       await context.pushRoute(
         Upgrade(
@@ -28,8 +39,7 @@ class AccountMenu extends StatelessWidget {
         context,
         error: e,
         stackTrace: stackTrace,
-        // TODO: Display this as dev, localize for production
-        description: (error as PlatformException).message.toString(),
+        description: localizedErrorDescription(error),
       );
     });
   }

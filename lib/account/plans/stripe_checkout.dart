@@ -1,5 +1,7 @@
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:lantern/account/plans/constants.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/account/plans/tos.dart';
@@ -199,6 +201,29 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 ],
               ),
             ),
+            //  TODO: Helper widget - remove
+            sessionModel.developmentMode(
+              (context, isDeveloperMode, child) => isDeveloperMode
+                  ? Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          emailController.text = 'test@email.com';
+                          creditCardController.text =
+                              '4242424242424242'; // more cases https://docs.page/flutter-stripe/flutter_stripe/sheet#5-test-the-integration
+                          cvcFieldController.text = '000';
+                          expDateController.text = '12/24';
+                        },
+                        child: Container(
+                          padding: const EdgeInsetsDirectional.all(24.0),
+                          child: CText(
+                            'Tap to prefill fields',
+                            style: tsButtonBlue,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ),
             const Spacer(),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -220,23 +245,36 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                     context.loaderOverlay.show();
                     await sessionModel
                         .submitStripe(
-                      widget.email,
-                      creditCardController.text,
-                      expDateController.text,
-                      cvcFieldController.text,
-                    )
+                          widget.email,
+                          creditCardController.text,
+                          expDateController.text,
+                          cvcFieldController.text,
+                        )
+                        .timeout(
+                          defaultTimeoutDuration,
+                          onTimeout: () => onAPIcallTimeout(
+                            code: 'submitStripeTimeout',
+                            message: 'submitStripeTimeout',
+                          ),
+                        )
                         .then((value) async {
                       context.loaderOverlay.hide();
-                      // TODO: redirect to success screen
+                      CDialog.showInfo(
+                        context,
+                        iconPath: ImagePaths.lantern_logo,
+                        size: 80,
+                        title: 'Success',
+                        description:
+                            'Successful Stripe purchase.', // TODO: Translations
+                        actionLabel: 'Continue',
+                      );
                     }).onError((error, stackTrace) {
                       context.loaderOverlay.hide();
                       CDialog.showError(
                         context,
                         error: e,
                         stackTrace: stackTrace,
-                        // the backend has localized this message already
-                        description: (error as PlatformException).message ??
-                            error.toString(),
+                        description: localizedErrorDescription(error),
                       );
                     });
                   },

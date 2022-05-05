@@ -1,3 +1,4 @@
+import 'package:lantern/account/plans/constants.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 class ProBanner extends StatefulWidget {
@@ -18,7 +19,16 @@ class _ProBannerState extends State<ProBanner> {
       (context, userStatus, child) => CInkWell(
         onTap: () async {
           context.loaderOverlay.show();
-          await sessionModel.updateAndCachePlans().then((value) async {
+          await sessionModel
+              .updateAndCachePlans()
+              .timeout(
+                defaultTimeoutDuration,
+                onTimeout: () => onAPIcallTimeout(
+                  code: 'updateAndCachePlansTimeout',
+                  message: 'updateAndCachePlansTimeout',
+                ),
+              )
+              .then((value) async {
             context.loaderOverlay.hide();
             await context.pushRoute(
               Upgrade(
@@ -27,18 +37,15 @@ class _ProBannerState extends State<ProBanner> {
                 isPro: userStatus == 'pro',
               ),
             );
-          }).onError(
-            (error, stackTrace) {
-              context.loaderOverlay.hide();
-              CDialog.showError(
-                context,
-                error: e,
-                stackTrace: stackTrace,
-                // TODO: Display this as dev, localize for production
-                description: (error as PlatformException).message.toString(),
-              );
-            },
-          );
+          }).onError((error, stackTrace) {
+            context.loaderOverlay.hide();
+            CDialog.showError(
+              context,
+              error: e,
+              stackTrace: stackTrace,
+              description: localizedErrorDescription(error),
+            );
+          });
         }, // Handle your callback
         child: Container(
           padding: const EdgeInsetsDirectional.all(16),

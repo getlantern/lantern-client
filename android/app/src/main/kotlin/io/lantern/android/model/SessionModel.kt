@@ -135,6 +135,11 @@ class SessionModel(
                     tx.put(PATH_USER_STATUS, call.argument<String>("newStatus")!!)
                 }
             }
+            "resetCachedPlans" -> {
+                db.mutate { tx ->
+                    tx.put(PATH_PLANS, "")
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -352,8 +357,8 @@ class SessionModel(
 
     // Hits the /user-data endpoint and saves { level: null | "pro" | "platinum" } to PATH_USER_STATUS
     private fun updateAndCacheUserStatus(result: MethodChannel.Result) {
+        var userStatus = ""
         try {
-            var userStatus = ""
             lanternClient.userData(object : ProUserCallback {
                 override fun onSuccess(response: Response, userData: ProUser) {
                     Logger.debug(TAG, "Successfully updated userData")
@@ -468,6 +473,7 @@ class SessionModel(
     }
 
     // TODO: WIP
+    // Handles Google Play transaction
     private fun submitGooglePlay(planID: String, result: MethodChannel.Result) {
         if (LanternApp.getInAppBilling() == null) {
             Logger.error(TAG, "getInAppBilling is null")
@@ -536,12 +542,23 @@ class SessionModel(
     }
 
     // TODO: WIP
+    // Applies referral code (before the user has initiated a transaction)
     private fun applyRefCode(email: String, refCode: String, result: MethodChannel.Result) {
-        // TODO: carry over handleReferral() from CheckoutActivity.java
-        // TODO: handle error
+        try {
+            // TODO: hit /purchase-redirect endpoint
+            // TODO: handle error
+        } catch (t: Throwable) {
+            Logger.error(TAG, "Unable to apply referral code", t)
+            result.error(
+                "unknownError",
+                "Unable to apply referral code $t.message",
+                null,
+            )
+        }
     }
 
     // TODO: WIP
+    // Fetches the BTCPay endpoint info which is needed to trigger the Webview
     private fun submitBitcoin(planID: String, email: String, result: MethodChannel.Result) {
         try {
             // TODO: hit /purchase-redirect endpoint
@@ -560,10 +577,10 @@ class SessionModel(
         try {
             // TODO: redeem activation code from CheckoutActivity (?)
         } catch (t: Throwable) {
-            Logger.error(TAG, "Error redeeming reseller codes", t)
+            Logger.error(TAG, "Unable to redeem reseller code", t)
             result.error(
                 "unknownError",
-                "Error redeeming reseller codes $t.message",
+                "Unable to redeem reseller code $t.message",
                 null,
             )
         }

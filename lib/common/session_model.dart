@@ -235,6 +235,10 @@ class SessionModel extends Model {
     );
   }
 
+  Future<void> resetCachedPlans() async {
+    return methodChannel.invokeMethod('resetCachedPlans');
+  }
+
   Widget forceUserStatus(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'forceUserStatus',

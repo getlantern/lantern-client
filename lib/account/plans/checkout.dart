@@ -153,7 +153,9 @@ class _CheckoutState extends State<Checkout>
                           onTap: () async {
                             try {
                               await sessionModel.applyRefCode(
-                                  emailController.text, referralCode);
+                                emailController.text,
+                                referralCode,
+                              );
                               setState(() {
                                 submittedRefCode = true;
                               });
@@ -239,6 +241,25 @@ class _CheckoutState extends State<Checkout>
                   ],
                 ),
               ),
+              //  TODO: Helper widget - remove
+              sessionModel.developmentMode(
+                (context, isDeveloperMode, child) => isDeveloperMode
+                    ? Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            emailController.text = 'test@email.com';
+                          },
+                          child: Container(
+                            padding: const EdgeInsetsDirectional.all(24.0),
+                            child: CText(
+                              'Tap to prefill field',
+                              style: tsButtonBlue,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+              ),
               const Spacer(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -274,14 +295,20 @@ class _CheckoutState extends State<Checkout>
                         context.loaderOverlay.show();
                         await sessionModel
                             .submitBitcoin(
-                          widget.id,
-                          emailController.text,
-                          refCodeController.text,
-                        )
+                              widget.id,
+                              emailController.text,
+                              refCodeController.text,
+                            )
+                            .timeout(
+                              defaultTimeoutDuration,
+                              onTimeout: () => onAPIcallTimeout(
+                                code: 'submitBitcoinTimeout',
+                                message: 'submitBitcoinTimeout',
+                              ),
+                            )
                             .then((value) async {
                           context.loaderOverlay.hide();
-                          await context
-                              .pushRoute(
+                          await context.pushRoute(
                             FullScreenDialogPage(
                               widget: Center(
                                 child: Stack(
@@ -303,6 +330,7 @@ class _CheckoutState extends State<Checkout>
                                           loadingPercentage = 100;
                                         });
                                       },
+                                      // TODO: listen for WebView close
                                     ),
                                     if (loadingPercentage < 100)
                                       LinearProgressIndicator(
@@ -312,19 +340,14 @@ class _CheckoutState extends State<Checkout>
                                 ),
                               ),
                             ),
-                          )
-                              .then((value) {
-                            // TODO: Success screen
-                          });
+                          );
                         }).onError((error, stackTrace) {
                           context.loaderOverlay.hide();
                           CDialog.showError(
                             context,
                             error: e,
                             stackTrace: stackTrace,
-                            // TODO: Display this as dev, localize for production
-                            description: (error as PlatformException).message ??
-                                error.toString(),
+                            description: localizedErrorDescription(error),
                           );
                         });
                       }

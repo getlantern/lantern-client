@@ -2,6 +2,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/vpn/vpn_tab.dart';
+
+import 'constants.dart';
 
 class ActivationCodeCheckout extends StatefulWidget {
   final bool isPro;
@@ -113,6 +116,25 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                 ),
               ),
             ),
+            //  TODO: Helper widget - remove
+            sessionModel.developmentMode(
+              (context, isDeveloperMode, child) => isDeveloperMode
+                  ? GestureDetector(
+                      onTap: () {
+                        emailController.text = 'test@email.com';
+                        activationCodeController.text =
+                            'VFVWR-GPPPB-9K2RR-9YH6P-2DVM2';
+                      },
+                      child: Container(
+                        padding: const EdgeInsetsDirectional.all(24.0),
+                        child: CText(
+                          'Tap to prefill field',
+                          style: tsButtonBlue,
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ),
             const Spacer(),
             Column(
               children: [
@@ -123,14 +145,40 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                   disabled: !formIsValid,
                   text: copy,
                   onPressed: () async {
-                    try {
-                      await sessionModel.redeemActivationCode(
-                        emailController.text,
-                        activationCodeController.text,
+                    context.loaderOverlay.show();
+                    await sessionModel
+                        .redeemActivationCode(
+                          emailController.text,
+                          activationCodeController.text,
+                        )
+                        .timeout(
+                          defaultTimeoutDuration,
+                          onTimeout: () => onAPIcallTimeout(
+                            code: 'redeemActivationCodeTimeout',
+                            message: 'redeemActivationCodeTimeout',
+                          ),
+                        )
+                        .then((value) {
+                      context.loaderOverlay.hide();
+                      CDialog.showInfo(
+                        context,
+                        iconPath: ImagePaths.lantern_logo,
+                        size: 80,
+                        title: 'Success',
+                        description:
+                            'Successfully redeemed activation codes.', // TODO: Translations
+                        actionLabel: 'Continue',
+                        dismissAction: () => context.router.pop(),
                       );
-                    } catch (e) {
-                      // TODO: handle activation code error
-                    }
+                    }).onError((error, stackTrace) {
+                      context.loaderOverlay.hide();
+                      CDialog.showError(
+                        context,
+                        error: e,
+                        stackTrace: stackTrace,
+                        description: localizedErrorDescription(error),
+                      );
+                    });
                   },
                 ),
               ],

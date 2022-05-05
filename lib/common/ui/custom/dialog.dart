@@ -27,18 +27,27 @@ class CDialog extends StatefulWidget {
   static void showInfo(
     BuildContext context, {
     String? iconPath,
+    double? size,
     required String title,
     required String description,
+    String? actionLabel,
+    Future<bool> Function()? agreeAction,
+    Future<bool> Function()? dismissAction,
   }) {
     CDialog(
       iconPath: iconPath,
+      size: size,
       title: title,
       description: description,
+      agreeText: actionLabel,
+      agreeAction: agreeAction,
+      dismissAction: dismissAction,
     ).show(context);
   }
 
   CDialog({
     this.iconPath,
+    this.size,
     required this.title,
     required this.description,
     this.checkboxLabel,
@@ -53,6 +62,7 @@ class CDialog extends StatefulWidget {
   }) : super();
 
   final String? iconPath;
+  final double? size;
   final String title;
   final dynamic description;
   final String? checkboxLabel;
@@ -123,7 +133,8 @@ class CDialogState extends State<CDialog> {
           if (widget.iconPath != null)
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 16),
-              child: CAssetImage(path: widget.iconPath!, size: 24),
+              child:
+                  CAssetImage(path: widget.iconPath!, size: widget.size ?? 24),
             ),
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 24, end: 24),
