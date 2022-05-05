@@ -9,7 +9,6 @@ import 'package:lantern/replica/ui/replica_tab.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
-import 'dart:developer' as developer;
 
 import 'messaging/messaging_model.dart';
 

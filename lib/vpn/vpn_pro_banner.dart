@@ -17,25 +17,28 @@ class _ProBannerState extends State<ProBanner> {
     return sessionModel.getCachedUserStatus(
       (context, userStatus, child) => CInkWell(
         onTap: () async {
-          await sessionModel
-              .updateAndCachePlans()
-              .then(
-                (value) async => await context.pushRoute(
-                  Upgrade(
-                    isCN: widget.isCN,
-                    isPlatinum: widget.isPlatinum,
-                    isPro: userStatus == 'pro',
-                  ),
-                ),
-              )
-              .onError(
-                (error, stackTrace) => CDialog.showError(
-                  context,
-                  error: e,
-                  stackTrace: stackTrace,
-                  description: (error as PlatformException).message.toString(),
-                ),
+          context.loaderOverlay.show();
+          await sessionModel.updateAndCachePlans().then((value) async {
+            context.loaderOverlay.hide();
+            await context.pushRoute(
+              Upgrade(
+                isCN: widget.isCN,
+                isPlatinum: widget.isPlatinum,
+                isPro: userStatus == 'pro',
+              ),
+            );
+          }).onError(
+            (error, stackTrace) {
+              context.loaderOverlay.hide();
+              CDialog.showError(
+                context,
+                error: e,
+                stackTrace: stackTrace,
+                // TODO: Display this as dev, localize for production
+                description: (error as PlatformException).message.toString(),
               );
+            },
+          );
         }, // Handle your callback
         child: Container(
           padding: const EdgeInsetsDirectional.all(16),

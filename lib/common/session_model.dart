@@ -230,6 +230,7 @@ class SessionModel extends Model {
   Widget getCachedPlans(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'plans',
+      defaultValue: '',
       builder: builder,
     );
   }
@@ -251,6 +252,7 @@ class SessionModel extends Model {
   Widget getCachedUserStatus(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'userStatus',
+      defaultValue: '',
       builder: builder,
     );
   }

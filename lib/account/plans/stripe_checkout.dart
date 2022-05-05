@@ -217,6 +217,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                   disabled: !formIsValid,
                   text: copy, // TODO: translations
                   onPressed: () async {
+                    context.loaderOverlay.show();
                     await sessionModel
                         .submitStripe(
                       widget.email,
@@ -225,13 +226,15 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       cvcFieldController.text,
                     )
                         .then((value) async {
-                      // TODO: show success screen
+                      context.loaderOverlay.hide();
+                      // TODO: redirect to success screen
                     }).onError((error, stackTrace) {
-                      // on failure
+                      context.loaderOverlay.hide();
                       CDialog.showError(
                         context,
                         error: e,
                         stackTrace: stackTrace,
+                        // the backend has localized this message already
                         description: (error as PlatformException).message ??
                             error.toString(),
                       );

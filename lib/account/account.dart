@@ -12,25 +12,26 @@ class AccountMenu extends StatelessWidget {
     BuildContext context,
     bool isPro,
   ) async {
-    await sessionModel
-        .updateAndCachePlans()
-        .then(
-          (value) async => await context.pushRoute(
-            Upgrade(
-              isCN: isCN,
-              isPlatinum: isPlatinum,
-              isPro: isPro,
-            ),
-          ),
-        )
-        .onError(
-          (error, stackTrace) => CDialog.showError(
-            context,
-            error: e,
-            stackTrace: stackTrace,
-            description: (error as PlatformException).message.toString(),
-          ),
-        );
+    context.loaderOverlay.show();
+    await sessionModel.updateAndCachePlans().then((value) async {
+      context.loaderOverlay.hide();
+      await context.pushRoute(
+        Upgrade(
+          isCN: isCN,
+          isPlatinum: isPlatinum,
+          isPro: isPro,
+        ),
+      );
+    }).onError((error, stackTrace) {
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        stackTrace: stackTrace,
+        // TODO: Display this as dev, localize for production
+        description: (error as PlatformException).message.toString(),
+      );
+    });
   }
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>

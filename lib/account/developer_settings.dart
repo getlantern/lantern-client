@@ -104,12 +104,13 @@ class DeveloperSettingsTab extends StatelessWidget {
               trailingArray: [
                 TextButton(
                   onPressed: () async {
+                    context.loaderOverlay.show();
                     await sessionModel
                         .updateAndCacheUserStatus()
                         .then(
                           (value) => showSnackbar(
                             context: context,
-                            content: 'Success caching plans',
+                            content: 'Success updating and caching user status',
                           ),
                         )
                         .onError(
@@ -120,7 +121,10 @@ class DeveloperSettingsTab extends StatelessWidget {
                             description: (error as PlatformException).message ??
                                 error.toString(),
                           ),
-                        );
+                        )
+                        .whenComplete(() {
+                      context.loaderOverlay.hide();
+                    });
                   },
                   child: CText(
                     'Fetch'.toUpperCase(),
@@ -135,12 +139,13 @@ class DeveloperSettingsTab extends StatelessWidget {
               trailingArray: [
                 TextButton(
                   onPressed: () async {
+                    context.loaderOverlay.show();
                     await sessionModel
                         .updateAndCachePlans()
                         .then(
                           (value) => showSnackbar(
                             context: context,
-                            content: 'Success caching plans',
+                            content: 'Success updating and caching plans',
                           ),
                         )
                         .onError(
@@ -148,10 +153,14 @@ class DeveloperSettingsTab extends StatelessWidget {
                             context,
                             error: e,
                             stackTrace: stackTrace,
+                            // this is not localized but thats fine
                             description: (error as PlatformException).message ??
                                 error.toString(),
                           ),
-                        );
+                        )
+                        .whenComplete(() {
+                      context.loaderOverlay.hide();
+                    });
                   },
                   child: CText(
                     'Fetch'.toUpperCase(),
@@ -164,12 +173,13 @@ class DeveloperSettingsTab extends StatelessWidget {
             sessionModel.getCachedPlans(
               (context, cachedPlans, child) => ListItemFactory.settingsItem(
                 content: SingleChildScrollView(
-                    child: CText(cachedPlans, style: tsOverline)),
+                  child: CText(cachedPlans, style: tsOverline),
+                ),
               ),
             ),
             // * FORCE USER STATUS
             ListItemFactory.settingsItem(
-              content: 'Force User Status'.i18n,
+              content: 'Force Cached User Status'.i18n,
               trailingArray: [
                 sessionModel.forceUserStatus(
                     (BuildContext context, String value, Widget? child) {

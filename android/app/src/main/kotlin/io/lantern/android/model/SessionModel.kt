@@ -96,7 +96,7 @@ class SessionModel(
             "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, result)
             "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!, result)
             "applyRefCode" -> applyRefCode(call.argument("email")!!, call.argument("refCode")!!, result)
-            "submitBitcoin" -> applyRefCode(call.argument("planID")!!, call.argument("email")!!, result)
+            "submitBitcoin" -> submitBitcoin(call.argument("planID")!!, call.argument("email")!!, result)
             "redeemActivationCode" -> redeemActivationCode(call.argument("email")!!, call.argument("activationCode")!!, result)
             else -> super.doOnMethodCall(call, result)
         }
@@ -357,23 +357,22 @@ class SessionModel(
             lanternClient.userData(object : ProUserCallback {
                 override fun onSuccess(response: Response, userData: ProUser) {
                     Logger.debug(TAG, "Successfully updated userData")
+                    Logger.info(TAG, "Successfully cached userData: $userData.userStatus")
+                    result.success("cachingUserDataSuccess")
                     userStatus = userData.userStatus
-                    result.success("Success caching userData")
                 }
-
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to fetch user data: $t.message")
-                    result.error("errorUpdatingUserData", t?.message, error?.message) // TODO: can we use something localized here?
+                    result.error("cachingUserDataError", t?.message, error?.message)
                     return
                 }
             })
-
             db.mutate { tx ->
                 tx.put(PATH_USER_STATUS, userStatus)
             }
         } catch (t: Throwable) {
             Logger.error(TAG, "Error caching user status", t)
-            result.error("unknownError", "Unable to cache user status: $t.message", null) // TODO: can we use something localized here?
+            result.error("unknownError", "Failure caching user status: $t.message", null)
         }
     }
 
@@ -384,23 +383,22 @@ class SessionModel(
                 override fun onSuccess(proPlans: Map<String, ProPlan>) {
                     plans.clear()
                     plans.putAll(proPlans)
-                    result.success("Success caching plans")
+                    Logger.info(TAG, "Successfully cached plans: $plans")
+                    result.success("cachingPlansSuccess")
                 }
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     if (error?.message != null) {
-                        Logger.error(TAG, "Unable to fetch plan data: $t.message")
-
+                        Logger.error(TAG, "Failure caching plans: $t.message")
                         result.error(
                             "unknownError",
-                            "Failure fetching plans", // TODO: can we use something localized here?
+                            "Failure caching plans: $t.message",
                             null,
                         )
                         return
                     }
                 }
             })
-            Logger.info(TAG, "Successfully cached plans: $plans")
-
+            Logger.info(TAG, "Saving plans: ${Json.gson.toJson(plans)}")
             db.mutate { tx ->
                 tx.put(PATH_PLANS, Json.gson.toJson(plans))
             }
@@ -408,7 +406,7 @@ class SessionModel(
             Logger.error(TAG, "Error caching plans", t)
             result.error(
                 "unknownError",
-                "Unable to cache plans $t.message", // TODO: can we use something localized here?
+                "Unable to cache plans $t.message",
                 null,
             )
         }
@@ -434,13 +432,6 @@ class SessionModel(
                 year,
                 cvc.trim { it <= ' ' }
             )
-            // TODO: need to show progress dialog on Flutter side if we're not already
-//            dialog = ProgressDialog.show(
-//                this,
-//                getResources().getString(R.string.processing_payment),
-//                "",
-//                true, false
-//            )
             Logger.debug(
                 STRIPE_TAG,
                 "Stripe publishable key is '%s'",
@@ -455,14 +446,14 @@ class SessionModel(
                 callback = object : ApiResultCallback<Token> {
                     override fun onSuccess(token: Token) {
                         LanternApp.getSession().setStripeToken(token.id)
-                        // TODO: close progress dialog in Flutter once this succeeds
-                        result.success(null)
+                        result.success("stripeSuccess")
                         val paymentHandler = PaymentHandler(activity, "stripe")
                         paymentHandler.sendPurchaseRequest()
                     }
 
                     override fun onError(error: Exception) {
                         result.error("unknownError", error.localizedMessage, null)
+                        return
                     }
                 }
             )
@@ -547,19 +538,34 @@ class SessionModel(
     // TODO: WIP
     private fun applyRefCode(email: String, refCode: String, result: MethodChannel.Result) {
         // TODO: carry over handleReferral() from CheckoutActivity.java
-        // TODO: handle error (ideally Flutter-side)
+        // TODO: handle error
     }
 
     // TODO: WIP
     private fun submitBitcoin(planID: String, email: String, result: MethodChannel.Result) {
-        // TODO: carry over handleReferral() from CheckoutActivity.java
-        // TODO: handle error (ideally Flutter-side)
+        try {
+            // TODO: hit /purchase-redirect endpoint
+        } catch (t: Throwable) {
+            Logger.error(TAG, "Unable to get BTCPay info", t)
+            result.error(
+                "unknownError",
+                "Unable to get BTCPay info $t.message",
+                null,
+            )
+        }
     }
 
     // TODO: WIP
     private fun redeemActivationCode(email: String, activationCode: String, result: MethodChannel.Result) {
-        // TODO: redeem activation code
-        // TODO: handle error (ideally Flutter-side)
-        // TODO: redirect to Plans page
+        try {
+            // TODO: redeem activation code from CheckoutActivity (?)
+        } catch (t: Throwable) {
+            Logger.error(TAG, "Error redeeming reseller codes", t)
+            result.error(
+                "unknownError",
+                "Error redeeming reseller codes $t.message",
+                null,
+            )
+        }
     }
 }

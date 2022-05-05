@@ -269,9 +269,19 @@ class _CheckoutState extends State<Checkout>
                           ),
                         );
                       } else {
-                        try {
-                          const btcPayURL = ''; // TODO: fetch this from backend
-                          await context.pushRoute(
+                        const btcPayURL = '';
+                        // Send request to /purchase-redirect via backend
+                        context.loaderOverlay.show();
+                        await sessionModel
+                            .submitBitcoin(
+                          widget.id,
+                          emailController.text,
+                          refCodeController.text,
+                        )
+                            .then((value) async {
+                          context.loaderOverlay.hide();
+                          await context
+                              .pushRoute(
                             FullScreenDialogPage(
                               widget: Center(
                                 child: Stack(
@@ -302,10 +312,21 @@ class _CheckoutState extends State<Checkout>
                                 ),
                               ),
                             ),
+                          )
+                              .then((value) {
+                            // TODO: Success screen
+                          });
+                        }).onError((error, stackTrace) {
+                          context.loaderOverlay.hide();
+                          CDialog.showError(
+                            context,
+                            error: e,
+                            stackTrace: stackTrace,
+                            // TODO: Display this as dev, localize for production
+                            description: (error as PlatformException).message ??
+                                error.toString(),
                           );
-                        } catch (e) {
-                          // TODO: handle error of redirecting to BTCPay URL
-                        }
+                        });
                       }
                     },
                   )
