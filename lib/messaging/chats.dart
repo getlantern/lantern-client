@@ -146,9 +146,10 @@ class _ChatsState extends State<Chats> {
                           await context.router.pop();
                           await context.router.push(
                             AccountManagement(
-                                isPro: isPro,
-                                isCN: widget.isCN,
-                                isPlatinum: widget.isPlatinum),
+                              isPro: isPro,
+                              isCN: widget.isCN,
+                              isPlatinum: widget.isPlatinum,
+                            ),
                           );
                         },
                       ),

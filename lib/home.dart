@@ -216,6 +216,7 @@ class _HomePageState extends State<HomePage> {
 
   // returns true if there are any Plans entries where { level: 'platinum' }
   // depends on where the plans are fetched from
+  // TODO: this will not work properly until the server updates are merged
   bool determineLocation(String cachedPlans) {
     if (cachedPlans == '') return false;
 
@@ -227,7 +228,7 @@ class _HomePageState extends State<HomePage> {
     return anyPlatinumLevels.contains(true);
   }
 
-  // returns true if the user status is platinum
+  // returns true if the cached user status is platinum
   // is independent of where the plans are fetched from
   bool determinePlatinum(String userStatus) {
     return userStatus == 'platinum';

@@ -35,6 +35,7 @@ class SessionModel extends Model {
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> proxyAvailable;
 
+  // TODO: we can probably combine this with the userStatus functions
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
   }
