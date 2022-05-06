@@ -1,6 +1,5 @@
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:lantern/account/plans/constants.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
@@ -46,7 +45,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     validator: (value) =>
         value != null && ccValidator.validateCCNum(value).isValid
             ? null
-            : 'Please enter a valid credit card number', // TODO: translations
+            : 'Please enter a valid credit card number'.i18n,
   );
 
   final expDateFieldKey = GlobalKey<FormState>();
@@ -86,10 +85,10 @@ class _StripeCheckoutState extends State<StripeCheckout> {
 
   @override
   Widget build(BuildContext context) {
-    const copy = 'Complete Purchase'; // TODO: Translation
+    final copy = 'Complete Purchase'.i18n;
     return BaseScreen(
       resizeToAvoidBottomInset: false,
-      title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout',
+      title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout'.i18n,
       body: Container(
         padding: const EdgeInsetsDirectional.only(
           start: 16,
@@ -102,10 +101,9 @@ class _StripeCheckoutState extends State<StripeCheckout> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // * Step 2
-            // TODO: translations
-            const PlanStep(
+            PlanStep(
               stepNum: '3',
-              description: 'Checkout',
+              description: 'Checkout'.i18n,
             ),
             // * Email
             Container(
@@ -142,7 +140,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 child: CTextField(
                   controller: creditCardController,
                   autovalidateMode: AutovalidateMode.disabled,
-                  label: 'Credit Card', // TODO: translations
+                  label: 'Credit Card'.i18n,
                   keyboardType: TextInputType.number,
                   maxLines: 1,
                   prefixIcon: const CAssetImage(path: ImagePaths.credit_card),
@@ -237,10 +235,10 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                   isPro: widget.isPro,
                   isPlatinum: widget.isPlatinum,
                 ),
-                const TOS(copy: copy),
+                TOS(copy: copy),
                 Button(
                   disabled: !formIsValid,
-                  text: copy, // TODO: translations
+                  text: copy,
                   onPressed: () async {
                     context.loaderOverlay.show();
                     await sessionModel
@@ -254,19 +252,19 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                           defaultTimeoutDuration,
                           onTimeout: () => onAPIcallTimeout(
                             code: 'submitStripeTimeout',
-                            message: 'submitStripeTimeout',
+                            message: 'stripe_timeout'.i18n,
                           ),
                         )
                         .then((value) async {
                       context.loaderOverlay.hide();
+                      // TODO: figure out status switch and show corresponding translations
                       CDialog.showInfo(
                         context,
                         iconPath: ImagePaths.lantern_logo,
                         size: 80,
-                        title: 'Success',
-                        description:
-                            'Successful Stripe purchase.', // TODO: Translations
-                        actionLabel: 'Continue',
+                        title: 'renewal_success'.i18n,
+                        description: 'stripe_success'.i18n,
+                        actionLabel: 'Continue'.i18n,
                       );
                     }).onError((error, stackTrace) {
                       context.loaderOverlay.hide();

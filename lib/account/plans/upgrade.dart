@@ -35,7 +35,7 @@ class Upgrade extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsetsDirectional.all(24.0),
                     child: CText(
-                      'Error fetching plans, please restart Lantern and try again.', // TODO: translation
+                      'error_fetching_plans'.i18n,
                       style: tsBody1,
                     ),
                   ),
@@ -81,9 +81,9 @@ class Upgrade extends StatelessWidget {
                               top: 16.0,
                               bottom: 16.0,
                             ),
-                            child: const PlanStep(
+                            child: PlanStep(
                               stepNum: '1',
-                              description: 'Choose Plan', // TODO: translations
+                              description: 'choose_plan'.i18n,
                             ),
                           ),
                           if (isCN == true)
@@ -100,11 +100,11 @@ class Upgrade extends StatelessWidget {
                                       end: 16.0,
                                     ),
                                     child: CText(
-                                      '1 year pricing',
+                                      '1y_pricing'.i18n,
                                       style: isTwoYearPlan
                                           ? tsBody1.copiedWith(color: grey5)
                                           : tsBody1,
-                                    ), // TODO: translations
+                                    ),
                                   ),
                                   FlutterSwitch(
                                     width: 44.0,
@@ -156,7 +156,7 @@ class Upgrade extends StatelessWidget {
                                           ),
                                         ),
                                         CText(
-                                          '2 year pricing',
+                                          '2y_pricing'.i18n,
                                           style: isTwoYearPlan
                                               ? tsBody1
                                               : tsBody1.copiedWith(
@@ -164,7 +164,7 @@ class Upgrade extends StatelessWidget {
                                                 ),
                                         )
                                       ],
-                                    ), // TODO: translations
+                                    ),
                                   ),
                                 ],
                               ),
@@ -254,7 +254,6 @@ class Upgrade extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // TODO: translations
           if (isFree == false)
             CText(
               determineExpiryText(),

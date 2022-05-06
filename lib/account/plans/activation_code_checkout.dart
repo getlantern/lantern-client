@@ -34,7 +34,7 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
             RegExp(r'^[a-zA-Z0-9-]*$').hasMatch(value) &&
             value.replaceAll('-', '').length == 25
         ? null
-        : 'Your activation code is invalid', // TODO: translations
+        : 'Your activation code is invalid'.i18n,
   );
 
   var formIsValid = false;
@@ -55,9 +55,7 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
   Widget build(BuildContext context) {
     const copy = 'Register for Pro';
     return BaseScreen(
-      // TODO: translations
-      title:
-          'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
+      title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout'.i18n,
       body: Container(
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsetsDirectional.only(
@@ -71,10 +69,10 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // * Step 2
-            const PlanStep(
+            PlanStep(
               stepNum: '2',
-              description: 'Enter Email and Activation code',
-            ), // TODO: translations
+              description: 'Enter Email and Activation code'.i18n,
+            ),
             // * Email field
             Container(
               padding: const EdgeInsetsDirectional.only(
@@ -110,7 +108,7 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                   maxLength: 25 + 4, //accounting for dashes
                   controller: activationCodeController,
                   autovalidateMode: AutovalidateMode.disabled,
-                  label: 'Activation Code', // TODO: Translations
+                  label: 'Activation Code'.i18n,
                   keyboardType: TextInputType.text,
                   prefixIcon: const CAssetImage(path: ImagePaths.dots),
                 ),
@@ -140,7 +138,6 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
               children: [
                 const TOS(copy: copy),
                 // * ActivationCodeCheckout
-                // TODO: Translations
                 Button(
                   disabled: !formIsValid,
                   text: copy,
@@ -155,19 +152,19 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                           defaultTimeoutDuration,
                           onTimeout: () => onAPIcallTimeout(
                             code: 'redeemActivationCodeTimeout',
-                            message: 'redeemActivationCodeTimeout',
+                            message: 'reseller_timeout'.i18n,
                           ),
                         )
                         .then((value) {
                       context.loaderOverlay.hide();
+                      // TODO: figure out status switch and show corresponding translations
                       CDialog.showInfo(
                         context,
                         iconPath: ImagePaths.lantern_logo,
                         size: 80,
-                        title: 'Success',
-                        description:
-                            'Successfully redeemed activation codes.', // TODO: Translations
-                        actionLabel: 'Continue',
+                        title: 'renewal_success'.i18n,
+                        description: 'reseller_success'.i18n,
+                        actionLabel: 'Continue'.i18n,
                         dismissAction: () => context.router.pop(),
                       );
                     }).onError((error, stackTrace) {

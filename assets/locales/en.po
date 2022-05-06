@@ -86,11 +86,29 @@ msgstr "I confirm that I want to delete my chat data"
 msgid "Pro Account Management"
 msgstr "Pro Account Management"
 
+msgid "Account Management"
+msgstr "Account Management"
+
 msgid "Link Device"
 msgstr "Link Device"
 
 msgid "Upgrade to Lantern Pro"
 msgstr "Upgrade to Lantern Pro"
+
+msgid "Upgrade to Lantern Platinum"
+msgstr "Upgrade to Lantern Platinum"
+
+msgid "Lantern Pro"
+msgstr "Lantern Pro"
+
+msgid "Lantern Platinum"
+msgstr "Lantern Platinum"
+
+msgid "Pro Account Expiration"
+msgstr "Pro Account Expiration"
+
+msgid "Platinum Account Expiration"
+msgstr "Platinum Account Expiration"
 
 msgid "Invite Friends"
 msgstr "Invite Friends"
@@ -178,8 +196,29 @@ msgstr "Submit"
 msgid "save"
 msgstr "Save"
 
+msgid "Step 1"
+msgstr "Step 1"
+
+msgid "Step 2"
+msgstr "Step 2"
+
+msgid "Step 3"
+msgstr "Step 3"
+
 msgid "Please enter a valid email address"
 msgstr "Please enter a valid email address"
+
+msgid "Please enter a valid credit card number"
+msgstr "Please enter a valid credit card number"
+
+msgid "Please enter a valid expiration date"
+msgstr "Please enter a valid expiration date"
+
+msgid "Please enter a valid CVC"
+msgstr "Please enter a valid CVC"
+
+msgid "Complete Purchase"
+msgstr "Complete Purchase"
 
 msgid "Re-send Email"
 msgstr "Re-send Email"
@@ -225,6 +264,162 @@ msgstr "Log Out"
 
 msgid "confirm_remove_device"
 msgstr "Are you sure you want to unlink this device from your Pro account?"
+
+msgid "Unlimited data"
+msgstr "Unlimited Data"
+
+msgid "No logs"
+msgstr "No logs"
+
+msgid "Connect up to 3 devices"
+msgstr "Connect up to 3 devices"
+
+msgid "Everything included in Pro"
+msgstr "Everything included in Pro"
+
+msgid "Faster Data Centers"
+msgstr "Faster Data Centers"
+
+msgid "Dedicated Line"
+msgstr "Dedicated Line"
+
+msgid "Increased Reliability"
+msgstr "Increased Reliability"
+
+msgid "No Ads"
+msgstr "No Ads"
+
+msgid "expires_soon"
+msgstr "Your membership is ending soon. Renew now and enjoy up to three months free!"
+
+msgid "expires_today"
+msgstr "Your membership ends today. Renew now and enjoy up to three months free!"
+
+msgid "expired"
+msgstr "Your membership has expired! Renew now and enjoy up to forty-five days free!"
+
+msgid "choose_plan"
+msgstr "Choose Plan"
+
+msgid "Checkout"
+msgstr "Checkout"
+
+msgid "Credit Card"
+msgstr "Credit Card"
+
+msgid "Lantern Pro Checkout"
+msgstr "Lantern Pro Checkout"
+
+msgid "Lantern Checkout"
+msgstr "Lantern Checkout"
+
+msgid "1y_pricing"
+msgstr "1 year pricing"
+
+msgid "2y_pricing"
+msgstr "2 year pricing"
+
+msgid "plan_type"
+msgstr "Plan type"
+
+msgid "most_popular"
+msgstr "Most Popular"
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "month"
+msgstr "month"
+
+msgid "months"
+msgstr "months"
+
+msgid "month"
+msgstr "%s %s billed one time"
+
+msgid "error_fetching_plans"
+msgstr "Error fetching plans, please restart Lantern and try again."
+
+msgid "Enter email"
+msgstr "Enter email"
+
+msgid "Apply"
+msgstr "Apply"
+
+msgid "Choose Payment Method"
+msgstr "Choose Payment Method"
+
+msgid "Enter Email and Activation code"
+msgstr "Enter Email and Activation code"
+
+msgid "Referral code"
+msgstr "Referral code"
+
+msgid "Activation Code"
+msgstr "Activation Code"
+
+msgid "Your referral code is invalid"
+msgstr "Your referral code is invalid"
+
+msgid "Your activation code is invalid"
+msgstr "Your activation code is invalid"
+
+msgid "update_cache_plans_timeout"
+msgstr "Something went wrong while fetching the available plans. Please restart Lantern and try again."
+
+msgid "bitcoin_timeout"
+msgstr "The BTCPay request has timed out. Please restart Lantern and try again."
+
+msgid "update_cache_user_timeout"
+msgstr "Something went wrong while fetching your account data. Please restart Lantern and try again."
+
+msgid "reseller_timeout"
+msgstr "Something went wrong while validating your activation code. Please restart Lantern and try again."
+
+msgid "reseller_success"
+msgstr "Successfully redeemed activation code."
+
+msgid "stripe_timeout"
+msgstr "Your Stripe payment has timed out. Please restart Lantern and try again."
+
+msgid "stripe_success"
+msgstr "Successful Stripe purchase."
+
+msgid "renewal_success"
+msgstr "Renewal Success"
+
+msgid "platinum_renewal_success_description"
+msgstr "Thank you for renewing your Lantern Platinum account.You now have unlimited access using our fastest data centers, and dedicated line.  Up to three devices can be connected to your account."
+
+msgid "pro_renewal_success_description"
+msgstr "Thank you for renewing your Lantern Pro account.You now have unlimited access using our fastest data centers.  Up to three devices can be connected to your account."
+
+msgid "platinum_purchase_success"
+msgstr "Welcome to Lantern Platinum"
+
+msgid "pro_purchase_success"
+msgstr "Welcome to Lantern Pro"
+
+msgid "platinum_purchase_success_descripion"
+msgstr "You now have unlimited access using our fastest data centers, and dedicated line.  Up to three devices can be connected to your account."
+
+msgid "pro_purchase_success_descripion"
+msgstr "You now have unlimited access using our fastest data centers.  Up to three devices can be connected to your account."
+
+msgid "by_clicking_tos"
+msgstr "By clicking %s, you agree to our"
+
+msgid "tos"
+msgstr "Terms of Service"
+
+msgid "Continue to Pro"
+msgstr "Continue to Pro"
+
+msgid "Continue to Platinum"
+msgstr "Continue to Platinum"
 
 msgid "n/a"
 msgstr "n/a"

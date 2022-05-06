@@ -33,14 +33,14 @@ class TOS extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CText(
-              'By clicking $copy, you agree to our ', // TODO: translations
+              'are_you_sure_you_want_to_open'.i18n.fill([copy]),
               style: tsOverline,
             ),
             CText(
-              'Terms of Service', // TODO: translations
+              'tos'.i18n,
               style: tsOverline.copiedWith(
                 color: blue3,
-              ), // TODO: make thsi clickable
+              ),
             ),
           ],
         ),

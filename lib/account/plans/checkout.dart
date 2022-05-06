@@ -43,7 +43,7 @@ class _CheckoutState extends State<Checkout>
                 RegExp(r'^[a-zA-Z0-9]*$').hasMatch(value) &&
                 (6 <= value.characters.length && value.characters.length <= 13)
             ? null
-            : 'Your referral code is invalid', // TODO: translations
+            : 'Your referral code is invalid'.i18n,
   );
 
   final referralCode = '';
@@ -81,9 +81,7 @@ class _CheckoutState extends State<Checkout>
   Widget build(BuildContext context) {
     return BaseScreen(
       resizeToAvoidBottomInset: false,
-      // TODO: translations
-      title:
-          'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout', // TODO: Translations
+      title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout'.i18n,
       body: Form(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -98,10 +96,10 @@ class _CheckoutState extends State<Checkout>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // * Step 2
-              const PlanStep(
+              PlanStep(
                 stepNum: '2',
-                description: 'Enter email',
-              ), // TODO: translations
+                description: 'Enter email'.i18n,
+              ),
               // * Email field
               Container(
                 padding: const EdgeInsetsDirectional.only(
@@ -139,8 +137,7 @@ class _CheckoutState extends State<Checkout>
                             enabled: !submittedRefCode,
                             controller: refCodeController,
                             autovalidateMode: AutovalidateMode.disabled,
-                            // TODO: translations
-                            label: 'Referral code',
+                            label: 'Referral code'.i18n,
                             keyboardType: TextInputType.text,
                             prefixIcon:
                                 const CAssetImage(path: ImagePaths.star),
@@ -160,7 +157,7 @@ class _CheckoutState extends State<Checkout>
                                 submittedRefCode = true;
                               });
                             } catch (e) {
-                              // TODO: handle referral code application failure
+                              // TODO: handle referral code failure
                             }
                           },
                           child: Container(
@@ -178,8 +175,7 @@ class _CheckoutState extends State<Checkout>
                                     ),
                                   )
                                 : CText(
-                                    // TODO: translations
-                                    'Apply'.toUpperCase(),
+                                    'Apply'.i18n.toUpperCase(),
                                     style: tsButtonPink,
                                   ),
                           ),
@@ -209,10 +205,10 @@ class _CheckoutState extends State<Checkout>
                 ),
               ),
               // * Step 3
-              const PlanStep(
+              PlanStep(
                 stepNum: '3',
-                description: 'Choose Payment Method',
-              ), // TODO: translations
+                description: 'Choose Payment Method'.i18n,
+              ),
               //* Payment options
               Container(
                 padding: const EdgeInsetsDirectional.only(top: 16, bottom: 16),
@@ -275,9 +271,8 @@ class _CheckoutState extends State<Checkout>
                   Button(
                     disabled: emailController.value.text.isEmpty ||
                         emailFieldKey.currentState?.validate() == false,
-                    text: 'Continue', // TODO: Translations
+                    text: 'Continue'.i18n,
                     onPressed: () async {
-                      // TODO: handle failed payment effort
                       if (selectedPaymentProvider == 'stripe') {
                         await context.pushRoute(
                           StripeCheckout(
@@ -291,7 +286,7 @@ class _CheckoutState extends State<Checkout>
                         );
                       } else {
                         const btcPayURL = '';
-                        // Send request to /purchase-redirect via backend
+                        // TODO: handle failed payment effort
                         context.loaderOverlay.show();
                         await sessionModel
                             .submitBitcoin(
@@ -303,7 +298,7 @@ class _CheckoutState extends State<Checkout>
                               defaultTimeoutDuration,
                               onTimeout: () => onAPIcallTimeout(
                                 code: 'submitBitcoinTimeout',
-                                message: 'submitBitcoinTimeout',
+                                message: 'bitcoin_timeout'.i18n,
                               ),
                             )
                             .then((value) async {

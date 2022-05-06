@@ -1,5 +1,7 @@
 import 'package:lantern/messaging/messaging.dart';
 
+import 'plans/constants.dart';
+
 class AccountManagement extends StatefulWidget {
   final bool isPro;
   final bool isCN;
@@ -35,8 +37,7 @@ class _AccountManagementState extends State<AccountManagement>
   @override
   Widget build(BuildContext context) {
     var title = widget.isPro
-        ? '${widget.isCN ? '' : 'Pro'} Account Management'
-            .i18n // TODO: translations
+        ? '${widget.isCN ? '' : 'Pro'} Account Management'.i18n
         : 'account_management'.i18n;
     var textCopied = false;
 
@@ -178,29 +179,53 @@ class _AccountManagementState extends State<AccountManagement>
                         String expirationDate,
                         Widget? child,
                       ) =>
-                          ListItemFactory.settingsItem(
-                        header:
-                            '${widget.isPlatinum ? 'Platinum' : 'Pro'} Account Expiration'
-                                .i18n, // TODO: translations
-                        icon: ImagePaths.clock,
-                        content: expirationDate,
-                        onTap: () async {
-                          // TODO: hit update plans and handle failure
-                          await context.pushRoute(
-                            Upgrade(
-                              isCN: widget.isCN,
-                              isPlatinum: widget.isPlatinum,
-                              isPro: widget.isPro,
-                            ),
-                          );
-                        },
-                        trailingArray: [
-                          CText(
-                            'Renew'.i18n.toUpperCase(),
-                            style: tsButtonPink,
-                          )
-                        ],
-                      ),
+                          sessionModel.getCachedUserStatus(
+                              (context, userStatus, child) {
+                        final isPro = userStatus == 'pro';
+                        return ListItemFactory.settingsItem(
+                          header:
+                              '${widget.isPlatinum ? 'Platinum' : 'Pro'} Account Expiration'
+                                  .i18n,
+                          icon: ImagePaths.clock,
+                          content: expirationDate,
+                          onTap: () async {
+                            context.loaderOverlay.show();
+                            await sessionModel
+                                .updateAndCachePlans()
+                                .timeout(
+                                  defaultTimeoutDuration,
+                                  onTimeout: () => onAPIcallTimeout(
+                                    code: 'updateAndCachePlansTimeout',
+                                    message: 'update_cache_plans_timeout'.i18n,
+                                  ),
+                                )
+                                .then((value) async {
+                              context.loaderOverlay.hide();
+                              await context.pushRoute(
+                                Upgrade(
+                                  isCN: widget.isCN,
+                                  isPlatinum: widget.isPlatinum,
+                                  isPro: isPro,
+                                ),
+                              );
+                            }).onError((error, stackTrace) {
+                              context.loaderOverlay.hide();
+                              CDialog.showError(
+                                context,
+                                error: e,
+                                stackTrace: stackTrace,
+                                description: localizedErrorDescription(error),
+                              );
+                            });
+                          },
+                          trailingArray: [
+                            CText(
+                              'Renew'.i18n.toUpperCase(),
+                              style: tsButtonPink,
+                            )
+                          ],
+                        );
+                      }),
                     ),
                   ];
 
@@ -313,7 +338,7 @@ class _AccountManagementState extends State<AccountManagement>
                                 Tab(
                                   text:
                                       'Lantern ${widget.isPlatinum ? 'Platinum' : 'Pro'}'
-                                          .i18n // TODO: translations
+                                          .i18n
                                           .toUpperCase(),
                                 ),
                                 Tab(

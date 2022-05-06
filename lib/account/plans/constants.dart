@@ -1,28 +1,26 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 
-// TODO: translations
-const chinaPlanDetails = [
+final chinaPlanDetails = [
   [
-    'Unlimited data',
-    'No logs',
-    'Connect up to 3 devices',
+    'Unlimited data'.i18n,
+    'No logs'.i18n,
+    'Connect up to 3 devices'.i18n,
   ],
   [
-    'Everything included in Pro',
-    'Faster Data Centers',
-    'Dedicated Line',
-    'Increased Reliability',
+    'Everything included in Pro'.i18n,
+    'Faster Data Centers'.i18n,
+    'Dedicated Line'.i18n,
+    'Increased Reliability'.i18n,
   ]
 ];
 
-// TODO: translations
-const featuresList = [
-  'Unlimited data',
-  'Faster data centers',
-  'No logs',
-  'Connect up to 3 devices',
-  'No Ads',
+final featuresList = [
+  'Unlimited data'.i18n,
+  'Faster Data Centers'.i18n,
+  'No logs'.i18n,
+  'Connect up to 3 devices'.i18n,
+  'No Ads'.i18n,
 ];
 
 final paymentProviders = [
@@ -31,10 +29,9 @@ final paymentProviders = [
 ];
 
 final renewalTextDependingOnExpiry = {
-  'expiresSoon':
-      'This is a Pro or Platinum user so they should have some text here',
-  'expiresTomorrow': '',
-  'expired': '',
+  'expiresSoon': 'expires_soon'.i18n,
+  'expiresToday': 'expires_today'.i18n,
+  'expired': 'expired'.i18n,
 };
 
 final currencyFormatter = NumberFormat('#,##,000');
@@ -55,14 +52,13 @@ List<Map<String, Object>> formatCachedPlans(String cachedPlans) {
 void onAPIcallTimeout({code, message}) {
   throw PlatformException(
     code: code,
-    message:
-        message, // TODO: Display message as dev, show something localized for production
+    message: message,
   );
 }
 
-String localizedErrorDescription(error) => (error as PlatformException)
-    .message
-    .toString(); // TODO: Display this as dev, localize for production
+// TODO: Make sure this is coming localized from the backend
+String localizedErrorDescription(error) =>
+    (error as PlatformException).message.toString();
 
 // TODO: we build a pollForUpdates logic instead of having a constant duration
 const defaultTimeoutDuration = Duration(seconds: 10);

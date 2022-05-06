@@ -108,17 +108,17 @@ class PlanCard extends StatelessWidget {
                   // * Price per month
                   Row(
                     children: [
-                      CText('$currency $pricePerMonth', style: tsSubtitle1),
-                      // TODO: translation
-                      CText(' / month', style: tsBody1),
+                      CText('$currency $pricePerMonth / ', style: tsSubtitle1),
+                      CText('month'.i18n, style: tsBody1),
                     ],
                   ),
                   // * Price per year
                   Row(
                     children: [
-                      // TODO: translation
                       CText(
-                        '$currency $pricePerYear billed one time',
+                        'currency_price_billed_one_time'
+                            .i18n
+                            .fill([currency, pricePerYear]),
                         style: tsBody2.copiedWith(color: grey5),
                       ),
                     ],
@@ -175,7 +175,7 @@ class PlanCard extends StatelessWidget {
                     bottom: 4.0,
                   ),
                   child: CText(
-                    'Most Popular', // TODO: translations
+                    'most_popular'.i18n,
                     style: tsBody1,
                   ),
                 ),
@@ -194,7 +194,6 @@ class PlanCard extends StatelessWidget {
     if (renewalBonus == null) {
       return description;
     }
-    // TODO: translations
     final renewalMonths = renewalBonus['months'];
     final renewalGlobal = '$description $renewalMonths ' +
         '${renewalMonths == 1 ? 'month' : 'months'}'.i18n;

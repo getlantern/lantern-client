@@ -25,7 +25,7 @@ class _ProBannerState extends State<ProBanner> {
                 defaultTimeoutDuration,
                 onTimeout: () => onAPIcallTimeout(
                   code: 'updateAndCachePlansTimeout',
-                  message: 'updateAndCachePlansTimeout',
+                  message: 'update_cache_plans_timeout'.i18n,
                 ),
               )
               .then((value) async {
@@ -76,8 +76,8 @@ class _ProBannerState extends State<ProBanner> {
                           .getCachedUserStatus((context, userStatus, child) {
                         final isPro = userStatus == 'pro';
                         return CText(
-                          'Upgrade ${widget.isCN ? isPro ? 'to Platinum' : '' : 'to Pro'}'
-                              .i18n, // TODO: translations
+                          'Upgrade ${widget.isCN ? isPro ? 'to Lantern Platinum' : '' : 'to Lantern Pro'}'
+                              .i18n,
                           style: tsSubtitle2,
                         );
                       }),

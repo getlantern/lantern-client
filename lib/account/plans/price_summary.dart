@@ -35,8 +35,7 @@ class PriceSummary extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // TODO: translations
-              CText('Plan type'.toUpperCase(), style: tsOverline),
+              CText('plan_type'.i18n.toUpperCase(), style: tsOverline),
               CText('$currency  $pricePerYear', style: tsOverline),
             ],
           ),
@@ -45,12 +44,12 @@ class PriceSummary extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // TODO: translations
+                // TODO: calculate text
                 CText(
-                  'X Credit months and X credit days'.toUpperCase(),
+                  'X Credit months and X credit days'.i18n.toUpperCase(),
                   style: tsOverline,
                 ),
-                // TODO: translations
-                CText('Free', style: tsOverline),
+                CText('Free'.i18n, style: tsOverline),
               ],
             ),
           if (refCode != null)
@@ -58,19 +57,18 @@ class PriceSummary extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // TODO: translations
+                // TODO: calculate text
                 CText(
-                  '1 month referral bonus'.toUpperCase(),
+                  '1 month referral bonus'.i18n.toUpperCase(),
                   style: tsOverline,
                 ),
-                // TODO: translations
-                CText('Free', style: tsOverline),
+                CText('Free'.i18n, style: tsOverline),
               ],
             ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // TODO: translations
-              CText('Total', style: tsBody1),
+              CText('Total'.i18n, style: tsBody1),
               CText(
                 '$currency  $pricePerYear',
                 style: tsBody1.copiedWith(

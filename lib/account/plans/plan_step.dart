@@ -28,7 +28,7 @@ class PlanStep extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(20)),
           ),
           child: CText(
-            'Step $stepNum',
+            'Step $stepNum'.i18n,
             style: tsBody1.copiedWith(color: white),
           ),
         ),

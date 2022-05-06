@@ -21,7 +21,7 @@ class AccountMenu extends StatelessWidget {
           defaultTimeoutDuration,
           onTimeout: () => onAPIcallTimeout(
             code: 'updateAndCachePlansTimeout',
-            message: 'updateAndCachePlansTimeout',
+            message: 'update_cache_plans_timeout'.i18n,
           ),
         )
         .then((value) async {
@@ -98,8 +98,8 @@ class AccountMenu extends StatelessWidget {
           return ListItemFactory.settingsItem(
             icon: ImagePaths.pro_icon_black,
             content:
-                '${isCN ? 'Upgrade ${isPro ? 'to Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
-                    .i18n, // TODO: translations
+                '${isCN ? 'Upgrade ${isPro ? 'to Lantern Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
+                    .i18n,
             onTap: () => upgradeToLanternPro(context, isPro),
           );
         }),
