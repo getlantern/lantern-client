@@ -357,14 +357,15 @@ class SessionModel(
 
     // Hits the /user-data endpoint and saves { level: null | "pro" | "platinum" } to PATH_USER_STATUS
     private fun updateAndCacheUserStatus(result: MethodChannel.Result) {
-        var userStatus = ""
         try {
             lanternClient.userData(object : ProUserCallback {
                 override fun onSuccess(response: Response, userData: ProUser) {
                     Logger.debug(TAG, "Successfully updated userData")
                     Logger.info(TAG, "Successfully cached userData: $userData.userStatus")
                     result.success("cachingUserDataSuccess")
-                    userStatus = userData.userStatus
+                    db.mutate { tx ->
+                        tx.put(PATH_USER_STATUS, userData.userStatus) // TODO: save the level
+                    }
                 }
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to fetch user data: $t.message")
@@ -372,9 +373,6 @@ class SessionModel(
                     return
                 }
             })
-            db.mutate { tx ->
-                tx.put(PATH_USER_STATUS, userStatus)
-            }
         } catch (t: Throwable) {
             Logger.error(TAG, "Error caching user status", t)
             result.error("unknownError", "Unable to cache user status", null) // This will be localized Flutter-side
@@ -390,6 +388,9 @@ class SessionModel(
                     plans.putAll(proPlans)
                     Logger.info(TAG, "Successfully cached plans: $plans")
                     result.success("cachingPlansSuccess")
+                    db.mutate { tx ->
+                        tx.put(PATH_PLANS, Json.gson.toJson(plans))
+                    }
                 }
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     if (error?.message != null) {
@@ -403,10 +404,6 @@ class SessionModel(
                     }
                 }
             })
-            Logger.info(TAG, "Saving plans: ${Json.gson.toJson(plans)}")
-            db.mutate { tx ->
-                tx.put(PATH_PLANS, Json.gson.toJson(plans))
-            }
         } catch (t: Throwable) {
             Logger.error(TAG, "Error caching plans", t)
             result.error(

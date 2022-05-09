@@ -45,6 +45,8 @@ public class ProUser {
     @SerializedName("devices")
     private List<Device> devices;
 
+    // TODO: add a "level" entry?
+
     public void setUserId(final Long userId) {
         this.userId = userId;
     }
