@@ -17,6 +17,7 @@ class VPNTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return sessionModel
+        // TODO: we can use the cached user status
         .proUser((BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(
         title: SvgPicture.asset(

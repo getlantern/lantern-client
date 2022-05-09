@@ -1,6 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
 
-import 'plans/constants.dart';
+import 'plans/purchase_utils.dart';
 
 class AccountManagement extends StatefulWidget {
   final bool isPro;
@@ -214,7 +214,7 @@ class _AccountManagementState extends State<AccountManagement>
                                 context,
                                 error: e,
                                 stackTrace: stackTrace,
-                                description: localizedErrorDescription(error),
+                                description: localizeCachingError(error),
                               );
                             });
                           },

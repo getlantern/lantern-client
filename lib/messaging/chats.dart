@@ -138,6 +138,7 @@ class _ChatsState extends State<Chats> {
                   children: [
                     messagingModel
                         .me((_, me, __) => ShareYourChatNumber(me).bottomItem),
+                    // TODO: we can use the cached user status
                     sessionModel.proUser(
                       (_, isPro, child) => ListItemFactory.bottomItem(
                         icon: ImagePaths.account,

@@ -2,22 +2,21 @@ import 'package:email_validator/email_validator.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/vpn/vpn_tab.dart';
 
-import 'constants.dart';
+import 'purchase_utils.dart';
 
-class ActivationCodeCheckout extends StatefulWidget {
+class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;
-  ActivationCodeCheckout({
+  ResellerCodeCheckout({
     Key? key,
     required this.isPro,
   }) : super(key: key);
 
   @override
-  State<ActivationCodeCheckout> createState() => _ActivationCodeCheckoutState();
+  State<ResellerCodeCheckout> createState() => _ResellerCodeCheckoutState();
 }
 
-class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
+class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
@@ -26,11 +25,12 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
         : 'Please enter a valid email address'.i18n,
   );
 
-  final activationCodeFieldKey = GlobalKey<FormState>();
-  late final activationCodeController = CustomTextEditingController(
-    formKey: activationCodeFieldKey,
+  final resellerCodeFieldKey = GlobalKey<FormState>();
+  late final resellerCodeController = CustomTextEditingController(
+    formKey: resellerCodeFieldKey,
     validator: (value) => value != null &&
             // only allow letters, numbers and hyphens as well as length excluding dashes should be exactly 25 characters
+            // TODO: reject our own referral code
             RegExp(r'^[a-zA-Z0-9-]*$').hasMatch(value) &&
             value.replaceAll('-', '').length == 25
         ? null
@@ -47,7 +47,7 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
   @override
   void dispose() {
     emailController.dispose();
-    activationCodeController.dispose();
+    resellerCodeController.dispose();
     super.dispose();
   }
 
@@ -103,10 +103,10 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                 onChanged: () => setState(() {
                   formIsValid = determineFormIsValid();
                 }),
-                key: activationCodeFieldKey,
+                key: resellerCodeFieldKey,
                 child: CTextField(
                   maxLength: 25 + 4, //accounting for dashes
-                  controller: activationCodeController,
+                  controller: resellerCodeController,
                   autovalidateMode: AutovalidateMode.disabled,
                   label: 'Activation Code'.i18n,
                   keyboardType: TextInputType.text,
@@ -120,7 +120,7 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                   ? GestureDetector(
                       onTap: () {
                         emailController.text = 'test@email.com';
-                        activationCodeController.text =
+                        resellerCodeController.text =
                             'VFVWR-GPPPB-9K2RR-9YH6P-2DVM2';
                       },
                       child: Container(
@@ -137,21 +137,21 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
             Column(
               children: [
                 const TOS(copy: copy),
-                // * ActivationCodeCheckout
+                // * resellerCodeCheckout
                 Button(
                   disabled: !formIsValid,
                   text: copy,
                   onPressed: () async {
                     context.loaderOverlay.show();
                     await sessionModel
-                        .redeemActivationCode(
+                        .redeemResellerCode(
                           emailController.text,
-                          activationCodeController.text,
+                          resellerCodeController.text,
                         )
                         .timeout(
                           defaultTimeoutDuration,
                           onTimeout: () => onAPIcallTimeout(
-                            code: 'redeemActivationCodeTimeout',
+                            code: 'redeemresellerCodeTimeout',
                             message: 'reseller_timeout'.i18n,
                           ),
                         )
@@ -173,7 +173,9 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
                         context,
                         error: e,
                         stackTrace: stackTrace,
-                        description: localizedErrorDescription(error),
+                        description: (error as PlatformException)
+                            .message
+                            .toString(), // This is coming localized
                       );
                     });
                   },
@@ -190,11 +192,11 @@ class _ActivationCodeCheckoutState extends State<ActivationCodeCheckout> {
   bool determineFormIsValid() {
     // returns true if there is at least one empty field
     final anyFieldsEmpty = emailController.value.text.isEmpty ||
-        activationCodeController.value.text.isEmpty;
+        resellerCodeController.value.text.isEmpty;
 
     // returns true if there is at least one invalid field
     final anyFieldsInvalid = emailFieldKey.currentState?.validate() == false ||
-        activationCodeFieldKey.currentState?.validate() == false;
+        resellerCodeFieldKey.currentState?.validate() == false;
 
     return (!anyFieldsEmpty && !anyFieldsInvalid);
   }

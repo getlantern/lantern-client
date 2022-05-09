@@ -337,7 +337,7 @@ msgstr "month"
 msgid "months"
 msgstr "months"
 
-msgid "month"
+msgid "currency_price_billed_one_time"
 msgstr "%s %s billed one time"
 
 msgid "error_fetching_plans"
@@ -364,6 +364,9 @@ msgstr "Activation Code"
 msgid "Your referral code is invalid"
 msgstr "Your referral code is invalid"
 
+msgid "Something went wrong while applying your referral code."
+msgstr "Something went wrong while applying your referral code."
+
 msgid "Your activation code is invalid"
 msgstr "Your activation code is invalid"
 
@@ -372,6 +375,9 @@ msgstr "Something went wrong while fetching the available plans. Please restart 
 
 msgid "bitcoin_timeout"
 msgstr "The BTCPay request has timed out. Please restart Lantern and try again."
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay is unavailable"
 
 msgid "update_cache_user_timeout"
 msgstr "Something went wrong while fetching your account data. Please restart Lantern and try again."

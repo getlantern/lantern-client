@@ -1,6 +1,6 @@
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:lantern/account/plans/constants.dart';
+import 'package:lantern/account/plans/purchase_utils.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/account/plans/tos.dart';
@@ -272,7 +272,9 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                         context,
                         error: e,
                         stackTrace: stackTrace,
-                        description: localizedErrorDescription(error),
+                        description: (error as PlatformException)
+                            .message
+                            .toString(), // This is coming localized
                       );
                     });
                   },

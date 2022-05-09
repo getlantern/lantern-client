@@ -1,6 +1,6 @@
 import 'package:lantern/common/common.dart';
 
-import 'constants.dart';
+import 'purchase_constants.dart';
 
 class PlanCard extends StatelessWidget {
   final List<Map<String, Object>> plans;

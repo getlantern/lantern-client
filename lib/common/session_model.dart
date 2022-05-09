@@ -35,7 +35,7 @@ class SessionModel extends Model {
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> proxyAvailable;
 
-  // TODO: we can probably combine this with the userStatus functions
+  // TODO: we can prob use the cached user status
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
   }
@@ -304,13 +304,13 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<void> redeemActivationCode(
+  Future<void> redeemResellerCode(
     String email,
-    String activationCode,
+    String resellerCode,
   ) async {
-    return methodChannel.invokeMethod('redeemActivationCode', <String, dynamic>{
+    return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
       'email': email,
-      'activationCode': activationCode,
+      'resellerCode': resellerCode,
     }).then((value) => value as String);
   }
 }

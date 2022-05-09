@@ -8,7 +8,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart';
 import 'package:lantern/account/language.dart';
 import 'package:lantern/account/plans/checkout.dart';
-import 'package:lantern/account/plans/activation_code_checkout.dart';
+import 'package:lantern/account/plans/reseller_code_checkout.dart';
 import 'package:lantern/account/plans/stripe_checkout.dart';
 import 'package:lantern/account/plans/upgrade.dart';
 import 'package:lantern/account/recovery_key.dart';
@@ -283,9 +283,9 @@ import 'package:lantern/replica/ui/upload_file.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: ActivationCodeCheckout,
-      name: 'ActivationCodeCheckout',
-      path: 'activationCodeCheckout',
+      page: ResellerCodeCheckout,
+      name: 'ResellerCodeCheckout',
+      path: 'resellerCodeCheckout',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

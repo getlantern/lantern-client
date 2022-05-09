@@ -1,5 +1,5 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:lantern/account/plans/constants.dart';
+import 'package:lantern/account/plans/purchase_utils.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/replica/logic/markdown_link_builder.dart';
 import 'package:lantern/replica/models/replica_link.dart';

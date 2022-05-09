@@ -2,7 +2,8 @@ import 'package:lantern/account/plans/plan_card.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/common/common.dart';
 
-import 'constants.dart';
+import 'purchase_constants.dart';
+import 'purchase_utils.dart';
 
 class Upgrade extends StatelessWidget {
   final bool isCN;
@@ -191,7 +192,7 @@ class Upgrade extends StatelessWidget {
                     color: grey3,
                     child: GestureDetector(
                       onTap: () async => await context.pushRoute(
-                        ActivationCodeCheckout(isPro: isPro),
+                        ResellerCodeCheckout(isPro: isPro),
                       ),
                       child: CText(
                         'Have a Lantern Pro activation code? Click here.',

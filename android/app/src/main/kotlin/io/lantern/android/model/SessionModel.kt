@@ -97,7 +97,7 @@ class SessionModel(
             "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!, result)
             "applyRefCode" -> applyRefCode(call.argument("email")!!, call.argument("refCode")!!, result)
             "submitBitcoin" -> submitBitcoin(call.argument("planID")!!, call.argument("email")!!, result)
-            "redeemActivationCode" -> redeemActivationCode(call.argument("email")!!, call.argument("activationCode")!!, result)
+            "redeemResellerCode" -> redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -368,7 +368,7 @@ class SessionModel(
                 }
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to fetch user data: $t.message")
-                    result.error("cachingUserDataError", t?.message, error?.message)
+                    result.error("cachingUserDataError", "Unable to cache user status", error?.message) // This will be localized Flutter-side
                     return
                 }
             })
@@ -377,7 +377,7 @@ class SessionModel(
             }
         } catch (t: Throwable) {
             Logger.error(TAG, "Error caching user status", t)
-            result.error("unknownError", "Failure caching user status: $t.message", null)
+            result.error("unknownError", "Unable to cache user status", null) // This will be localized Flutter-side
         }
     }
 
@@ -396,7 +396,7 @@ class SessionModel(
                         Logger.error(TAG, "Failure caching plans: $t.message")
                         result.error(
                             "unknownError",
-                            "Failure caching plans: $t.message",
+                            "Unable to cache plans",
                             null,
                         )
                         return
@@ -411,7 +411,7 @@ class SessionModel(
             Logger.error(TAG, "Error caching plans", t)
             result.error(
                 "unknownError",
-                "Unable to cache plans $t.message",
+                "Unable to cache plans", // This will be localized Flutter-side
                 null,
             )
         }
@@ -545,13 +545,13 @@ class SessionModel(
     // Applies referral code (before the user has initiated a transaction)
     private fun applyRefCode(email: String, refCode: String, result: MethodChannel.Result) {
         try {
-            // TODO: hit /purchase-redirect endpoint
+            // TODO: Migrate handleReferral() from CheckoutActivity
             // TODO: handle error
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to apply referral code", t)
             result.error(
                 "unknownError",
-                "Unable to apply referral code $t.message",
+                "Something went wrong while applying your referral code", // This error message is localized Flutter-side
                 null,
             )
         }
@@ -563,24 +563,29 @@ class SessionModel(
         try {
             // TODO: hit /purchase-redirect endpoint
         } catch (t: Throwable) {
-            Logger.error(TAG, "Unable to get BTCPay info", t)
+            Logger.error(TAG, "BTCPay is unavailable", t)
             result.error(
                 "unknownError",
-                "Unable to get BTCPay info $t.message",
+                "BTCPay is unavailable", // This error message is localized Flutter-side
                 null,
             )
         }
     }
 
     // TODO: WIP
-    private fun redeemActivationCode(email: String, activationCode: String, result: MethodChannel.Result) {
+    private fun redeemResellerCode(email: String, resellerCode: String, result: MethodChannel.Result) {
         try {
-            // TODO: redeem activation code from CheckoutActivity (?)
+            LanternApp.getSession().setEmail(email)
+            LanternApp.getSession().setResellerCode(resellerCode)
+            val paymentHandler =
+                PaymentHandler(activity, "reseller-code")
+            paymentHandler.sendPurchaseRequest()
+            result.success("redeemResellerSuccess")
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to redeem reseller code", t)
             result.error(
                 "unknownError",
-                "Unable to redeem reseller code $t.message",
+                activity.resources.getString(R.string.error_making_purchase),
                 null,
             )
         }

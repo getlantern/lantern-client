@@ -4,7 +4,8 @@ import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/common/common.dart';
 
-import 'constants.dart';
+import 'purchase_constants.dart';
+import 'purchase_utils.dart';
 
 class Checkout extends StatefulWidget {
   final List<Map<String, Object>> plans;
@@ -148,17 +149,25 @@ class _CheckoutState extends State<Checkout>
                         flex: 1,
                         child: GestureDetector(
                           onTap: () async {
-                            try {
-                              await sessionModel.applyRefCode(
-                                emailController.text,
-                                referralCode,
+                            await sessionModel
+                                .applyRefCode(
+                              emailController.text,
+                              referralCode,
+                            )
+                                .onError((error, stackTrace) {
+                              CDialog.showError(
+                                context,
+                                error: e,
+                                stackTrace: stackTrace,
+                                description: (error as PlatformException)
+                                    .message
+                                    .toString()
+                                    .i18n, // we are localizing this error Flutter-side
                               );
-                              setState(() {
-                                submittedRefCode = true;
-                              });
-                            } catch (e) {
-                              // TODO: handle referral code failure
-                            }
+                            });
+                            setState(() {
+                              submittedRefCode = true;
+                            });
                           },
                           child: Container(
                             padding: const EdgeInsetsDirectional.only(
@@ -338,12 +347,14 @@ class _CheckoutState extends State<Checkout>
                           );
                         }).onError((error, stackTrace) {
                           context.loaderOverlay.hide();
-                          CDialog.showError(
-                            context,
-                            error: e,
-                            stackTrace: stackTrace,
-                            description: localizedErrorDescription(error),
-                          );
+                          CDialog.showError(context,
+                              error: e,
+                              stackTrace: stackTrace,
+                              description: (error as PlatformException)
+                                  .message
+                                  .toString()
+                                  .i18n // we are localizing this error Flutter-side,
+                              );
                         });
                       }
                     },

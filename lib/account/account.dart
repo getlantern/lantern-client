@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
-import 'plans/constants.dart';
+import 'plans/purchase_utils.dart';
 
 class AccountMenu extends StatelessWidget {
   final bool isCN;
@@ -39,7 +39,7 @@ class AccountMenu extends StatelessWidget {
         context,
         error: e,
         stackTrace: stackTrace,
-        description: localizedErrorDescription(error),
+        description: localizeCachingError(error),
       );
     });
   }
@@ -179,6 +179,7 @@ class AccountMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: 'Account'.i18n,
+      // TODO: we can use the cached user status
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
         return ListView(

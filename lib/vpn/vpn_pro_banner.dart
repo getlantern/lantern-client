@@ -1,4 +1,4 @@
-import 'package:lantern/account/plans/constants.dart';
+import 'package:lantern/account/plans/purchase_utils.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 class ProBanner extends StatefulWidget {
@@ -43,7 +43,7 @@ class _ProBannerState extends State<ProBanner> {
               context,
               error: e,
               stackTrace: stackTrace,
-              description: localizedErrorDescription(error),
+              description: localizeCachingError(error),
             );
           });
         }, // Handle your callback
