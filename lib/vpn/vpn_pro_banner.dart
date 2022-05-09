@@ -2,10 +2,11 @@ import 'package:lantern/account/plans/purchase_utils.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 class ProBanner extends StatefulWidget {
-  final bool isCN;
+  final bool platinumAvailable;
   final bool isPlatinum;
 
-  ProBanner({Key? key, required this.isCN, required this.isPlatinum})
+  ProBanner(
+      {Key? key, required this.platinumAvailable, required this.isPlatinum})
       : super(key: key);
 
   @override
@@ -15,8 +16,8 @@ class ProBanner extends StatefulWidget {
 class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
-    return sessionModel.getCachedUserStatus(
-      (context, userStatus, child) => CInkWell(
+    return sessionModel.getCachedUserLevel(
+      (context, userLevel, child) => CInkWell(
         onTap: () async {
           context.loaderOverlay.show();
           await sessionModel
@@ -32,9 +33,9 @@ class _ProBannerState extends State<ProBanner> {
             context.loaderOverlay.hide();
             await context.pushRoute(
               Upgrade(
-                isCN: widget.isCN,
+                platinumAvailable: widget.platinumAvailable,
                 isPlatinum: widget.isPlatinum,
-                isPro: userStatus == 'pro',
+                isPro: userLevel == 'pro',
               ),
             );
           }).onError((error, stackTrace) {
@@ -73,10 +74,10 @@ class _ProBannerState extends State<ProBanner> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       sessionModel
-                          .getCachedUserStatus((context, userStatus, child) {
-                        final isPro = userStatus == 'pro';
+                          .getCachedUserLevel((context, userLevel, child) {
+                        final isPro = userLevel == 'pro';
                         return CText(
-                          'Upgrade ${widget.isCN ? isPro ? 'to Lantern Platinum' : '' : 'to Lantern Pro'}'
+                          'Upgrade ${widget.platinumAvailable ? isPro ? 'to Lantern Platinum' : '' : 'to Lantern Pro'}'
                               .i18n,
                           style: tsSubtitle2,
                         );

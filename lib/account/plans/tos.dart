@@ -33,7 +33,7 @@ class TOS extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CText(
-              'are_you_sure_you_want_to_open'.i18n.fill([copy]),
+              'by_clicking'.i18n.fill([copy]),
               style: tsOverline,
             ),
             CText(

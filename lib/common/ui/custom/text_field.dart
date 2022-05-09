@@ -22,6 +22,7 @@ class CTextField extends StatefulWidget {
   late final void Function(String value)? onFieldSubmitted;
   late final String? actionIconPath;
   late final int? maxLength;
+  late final TextCapitalization? textCapitalization;
 
   CTextField({
     required this.controller,
@@ -41,6 +42,7 @@ class CTextField extends StatefulWidget {
     this.onFieldSubmitted,
     this.actionIconPath,
     this.maxLength,
+    this.textCapitalization,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -98,6 +100,8 @@ class _CTextFieldState extends State<CTextField> {
             minLines: widget.minLines,
             maxLines: widget.maxLines,
             inputFormatters: widget.inputFormatters,
+            textCapitalization:
+                widget.textCapitalization ?? TextCapitalization.none,
             decoration: InputDecoration(
               isDense: true,
               floatingLabelBehavior: FloatingLabelBehavior.never,

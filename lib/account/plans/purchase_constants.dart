@@ -34,4 +34,5 @@ final renewalTextDependingOnExpiry = {
   'expired': 'expired'.i18n,
 };
 
+// TODO: this seems wrong, fix
 final currencyFormatter = NumberFormat('#,##,000');

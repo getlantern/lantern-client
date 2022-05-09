@@ -371,19 +371,19 @@ msgid "Your activation code is invalid"
 msgstr "Your activation code is invalid"
 
 msgid "update_cache_plans_timeout"
-msgstr "Something went wrong while fetching the available plans. Please restart Lantern and try again."
+msgstr "Something went wrong while fetching the available plans."
 
 msgid "bitcoin_timeout"
-msgstr "The BTCPay request has timed out. Please restart Lantern and try again."
+msgstr "The BTCPay request has timed out."
 
 msgid "BTCPay is unavailable"
 msgstr "BTCPay is unavailable"
 
 msgid "update_cache_user_timeout"
-msgstr "Something went wrong while fetching your account data. Please restart Lantern and try again."
+msgstr "Something went wrong while fetching your account data."
 
 msgid "reseller_timeout"
-msgstr "Something went wrong while validating your activation code. Please restart Lantern and try again."
+msgstr "Something went wrong while validating your activation code."
 
 msgid "reseller_success"
 msgstr "Successfully redeemed activation code."
@@ -564,6 +564,12 @@ msgstr "Continue"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "Are you sure you want to open %s?"
+
+msgid "Register for Pro"
+msgstr "Register for Pro"
+
+msgid "by_clicking"
+msgstr "By clicking %s, you agree to our "
 
 msgid "set"
 msgstr "Set"

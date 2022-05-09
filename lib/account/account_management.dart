@@ -4,13 +4,13 @@ import 'plans/purchase_utils.dart';
 
 class AccountManagement extends StatefulWidget {
   final bool isPro;
-  final bool isCN;
+  final bool platinumAvailable;
   final bool isPlatinum;
 
   AccountManagement({
     Key? key,
     required this.isPro,
-    required this.isCN,
+    required this.platinumAvailable,
     required this.isPlatinum,
   }) : super(key: key);
 
@@ -37,7 +37,7 @@ class _AccountManagementState extends State<AccountManagement>
   @override
   Widget build(BuildContext context) {
     var title = widget.isPro
-        ? '${widget.isCN ? '' : 'Pro'} Account Management'.i18n
+        ? '${widget.platinumAvailable ? '' : 'Pro'} Account Management'.i18n
         : 'account_management'.i18n;
     var textCopied = false;
 
@@ -179,9 +179,9 @@ class _AccountManagementState extends State<AccountManagement>
                         String expirationDate,
                         Widget? child,
                       ) =>
-                          sessionModel.getCachedUserStatus(
-                              (context, userStatus, child) {
-                        final isPro = userStatus == 'pro';
+                          sessionModel
+                              .getCachedUserLevel((context, userLevel, child) {
+                        final isPro = userLevel == 'pro';
                         return ListItemFactory.settingsItem(
                           header:
                               '${widget.isPlatinum ? 'Platinum' : 'Pro'} Account Expiration'
@@ -203,7 +203,7 @@ class _AccountManagementState extends State<AccountManagement>
                               context.loaderOverlay.hide();
                               await context.pushRoute(
                                 Upgrade(
-                                  isCN: widget.isCN,
+                                  platinumAvailable: widget.platinumAvailable,
                                   isPlatinum: widget.isPlatinum,
                                   isPro: isPro,
                                 ),

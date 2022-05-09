@@ -172,7 +172,7 @@ class AppRouter extends _i33.RootStackRouter {
           child: _i11.AccountManagement(
               key: args.key,
               isPro: args.isPro,
-              isCN: args.isCN,
+              platinumAvailable: args.platinumAvailable,
               isPlatinum: args.isPlatinum),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
@@ -403,7 +403,7 @@ class AppRouter extends _i33.RootStackRouter {
           routeData: routeData,
           child: _i29.Upgrade(
               key: args.key,
-              isCN: args.isCN,
+              platinumAvailable: args.platinumAvailable,
               isPlatinum: args.isPlatinum,
               isPro: args.isPro),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
@@ -680,12 +680,15 @@ class AccountManagement extends _i33.PageRouteInfo<AccountManagementArgs> {
   AccountManagement(
       {_i35.Key? key,
       required bool isPro,
-      required bool isCN,
+      required bool platinumAvailable,
       required bool isPlatinum})
       : super(AccountManagement.name,
             path: 'accountManagement',
             args: AccountManagementArgs(
-                key: key, isPro: isPro, isCN: isCN, isPlatinum: isPlatinum));
+                key: key,
+                isPro: isPro,
+                platinumAvailable: platinumAvailable,
+                isPlatinum: isPlatinum));
 
   static const String name = 'AccountManagement';
 }
@@ -694,20 +697,20 @@ class AccountManagementArgs {
   const AccountManagementArgs(
       {this.key,
       required this.isPro,
-      required this.isCN,
+      required this.platinumAvailable,
       required this.isPlatinum});
 
   final _i35.Key? key;
 
   final bool isPro;
 
-  final bool isCN;
+  final bool platinumAvailable;
 
   final bool isPlatinum;
 
   @override
   String toString() {
-    return 'AccountManagementArgs{key: $key, isPro: $isPro, isCN: $isCN, isPlatinum: $isPlatinum}';
+    return 'AccountManagementArgs{key: $key, isPro: $isPro, platinumAvailable: $platinumAvailable, isPlatinum: $isPlatinum}';
   }
 }
 
@@ -1172,13 +1175,16 @@ class ReplicaUploadFileScreenArgs {
 class Upgrade extends _i33.PageRouteInfo<UpgradeArgs> {
   Upgrade(
       {_i35.Key? key,
-      required bool isCN,
+      required bool platinumAvailable,
       required bool isPlatinum,
       required bool isPro})
       : super(Upgrade.name,
             path: 'upgrade',
             args: UpgradeArgs(
-                key: key, isCN: isCN, isPlatinum: isPlatinum, isPro: isPro));
+                key: key,
+                platinumAvailable: platinumAvailable,
+                isPlatinum: isPlatinum,
+                isPro: isPro));
 
   static const String name = 'Upgrade';
 }
@@ -1186,13 +1192,13 @@ class Upgrade extends _i33.PageRouteInfo<UpgradeArgs> {
 class UpgradeArgs {
   const UpgradeArgs(
       {this.key,
-      required this.isCN,
+      required this.platinumAvailable,
       required this.isPlatinum,
       required this.isPro});
 
   final _i35.Key? key;
 
-  final bool isCN;
+  final bool platinumAvailable;
 
   final bool isPlatinum;
 
@@ -1200,7 +1206,7 @@ class UpgradeArgs {
 
   @override
   String toString() {
-    return 'UpgradeArgs{key: $key, isCN: $isCN, isPlatinum: $isPlatinum, isPro: $isPro}';
+    return 'UpgradeArgs{key: $key, platinumAvailable: $platinumAvailable, isPlatinum: $isPlatinum, isPro: $isPro}';
   }
 }
 

@@ -8,22 +8,21 @@ import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
 class VPNTab extends StatelessWidget {
-  final bool isCN;
+  final bool platinumAvailable;
   final bool isPlatinum;
 
-  VPNTab({Key? key, required this.isCN, required this.isPlatinum})
+  VPNTab({Key? key, required this.platinumAvailable, required this.isPlatinum})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel
-        // TODO: we can use the cached user status
-        .proUser((BuildContext context, bool proUser, Widget? child) {
+    return sessionModel.getCachedUserLevel(
+        (BuildContext context, String userLevel, Widget? child) {
       return BaseScreen(
         title: SvgPicture.asset(
           isPlatinum
               ? ImagePaths.lantern_platinum_logotype
-              : proUser
+              : userLevel == 'pro'
                   ? ImagePaths.pro_logo
                   : ImagePaths.free_logo,
           height: 16,
@@ -33,10 +32,11 @@ class VPNTab extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            (isCN && isPlatinum) || (!isCN && proUser)
+            (platinumAvailable && isPlatinum) ||
+                    (!platinumAvailable && (userLevel == 'pro'))
                 ? Container()
                 : ProBanner(
-                    isCN: isCN,
+                    platinumAvailable: platinumAvailable,
                     isPlatinum: isPlatinum,
                   ),
             VPNSwitch(),

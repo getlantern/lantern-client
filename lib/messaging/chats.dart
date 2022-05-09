@@ -4,10 +4,10 @@ import 'contacts/long_tap_menu.dart';
 import 'messaging.dart';
 
 class Chats extends StatefulWidget {
-  final bool isCN;
+  final bool platinumAvailable;
   final bool isPlatinum;
 
-  Chats({Key? key, required this.isCN, required this.isPlatinum})
+  Chats({Key? key, required this.platinumAvailable, required this.isPlatinum})
       : super(key: key);
 
   @override
@@ -138,17 +138,16 @@ class _ChatsState extends State<Chats> {
                   children: [
                     messagingModel
                         .me((_, me, __) => ShareYourChatNumber(me).bottomItem),
-                    // TODO: we can use the cached user status
-                    sessionModel.proUser(
-                      (_, isPro, child) => ListItemFactory.bottomItem(
+                    sessionModel.getCachedUserLevel(
+                      (_, userLevel, child) => ListItemFactory.bottomItem(
                         icon: ImagePaths.account,
                         content: 'account_management'.i18n,
                         onTap: () async {
                           await context.router.pop();
                           await context.router.push(
                             AccountManagement(
-                              isPro: isPro,
-                              isCN: widget.isCN,
+                              isPro: userLevel == 'pro',
+                              platinumAvailable: widget.platinumAvailable,
                               isPlatinum: widget.isPlatinum,
                             ),
                           );

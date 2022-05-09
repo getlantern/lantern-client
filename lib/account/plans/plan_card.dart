@@ -6,14 +6,14 @@ class PlanCard extends StatelessWidget {
   final List<Map<String, Object>> plans;
   final String id;
   final bool isPro;
-  final bool isCN;
+  final bool platinumAvailable;
   final bool isPlatinum;
 
   const PlanCard({
     required this.plans,
     required this.id,
     required this.isPro,
-    required this.isCN,
+    required this.platinumAvailable,
     required this.isPlatinum,
     Key? key,
   }) : super(key: key);
@@ -43,7 +43,7 @@ class PlanCard extends StatelessWidget {
         final isPlayVersion = await sessionModel.getPlayVersion();
 
         // * Play version
-        if (isPlayVersion && !isCN) {
+        if (isPlayVersion && !platinumAvailable) {
           await sessionModel.submitGooglePlay(id).onError((error, stackTrace) {
             // on failure
             CDialog.showError(
@@ -124,7 +124,7 @@ class PlanCard extends StatelessWidget {
                     ],
                   ),
                   // * Plan details if in China
-                  if (isCN == true)
+                  if (platinumAvailable == true)
                     Padding(
                       padding: const EdgeInsetsDirectional.only(top: 8.0),
                       child: Column(
@@ -197,6 +197,6 @@ class PlanCard extends StatelessWidget {
     final renewalMonths = renewalBonus['months'];
     final renewalGlobal = '$description $renewalMonths ' +
         '${renewalMonths == 1 ? 'month' : 'months'}'.i18n;
-    return (!isCN && isPro) ? renewalGlobal : description;
+    return (!platinumAvailable && isPro) ? renewalGlobal : description;
   }
 }

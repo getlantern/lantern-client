@@ -141,13 +141,13 @@ class _HomePageState extends State<HomePage> {
                     'true';
                 return sessionModel.getCachedPlans(
                   (context, cachedPlans, child) =>
-                      sessionModel.getCachedUserStatus(
-                    (context, userStatus, child) => Scaffold(
+                      sessionModel.getCachedUserLevel(
+                    (context, userLevel, child) => Scaffold(
                       body: buildBody(
                         selectedTab,
                         isOnboarded,
                         cachedPlans,
-                        userStatus,
+                        userLevel,
                       ),
                       bottomNavigationBar: CustomBottomBar(
                         selectedTab: selectedTab,
@@ -169,10 +169,10 @@ class _HomePageState extends State<HomePage> {
     String selectedTab,
     bool? isOnboarded,
     String cachedPlans,
-    String userStatus,
+    String userLevel,
   ) {
-    final isCN = determineLocation(cachedPlans);
-    final isPlatinum = determinePlatinum(userStatus);
+    final platinumAvailable = determineLocation(cachedPlans);
+    final isPlatinum = determinePlatinum(userLevel);
     switch (selectedTab) {
       case TAB_CHATS:
         sessionModel.trackScreenView('Chats');
@@ -186,14 +186,14 @@ class _HomePageState extends State<HomePage> {
               )
             : isOnboarded
                 ? Chats(
-                    isCN: isCN,
+                    platinumAvailable: platinumAvailable,
                     isPlatinum: isPlatinum,
                   )
                 : Welcome();
       case TAB_VPN:
         sessionModel.trackScreenView('VPN');
         return VPNTab(
-          isCN: isCN,
+          platinumAvailable: platinumAvailable,
           isPlatinum: isPlatinum,
         );
       case TAB_REPLICA:
@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> {
       case TAB_ACCOUNT:
         sessionModel.trackScreenView('Account');
         return AccountTab(
-          isCN: isCN,
+          platinumAvailable: platinumAvailable,
           isPlatinum: isPlatinum,
         );
       case TAB_DEVELOPER:
@@ -230,7 +230,7 @@ class _HomePageState extends State<HomePage> {
 
   // returns true if the cached user status is platinum
   // is independent of where the plans are fetched from
-  bool determinePlatinum(String userStatus) {
-    return userStatus == 'platinum';
+  bool determinePlatinum(String userLevel) {
+    return userLevel == 'platinum';
   }
 }

@@ -4,10 +4,11 @@ import 'package:lantern/messaging/messaging_model.dart';
 import 'plans/purchase_utils.dart';
 
 class AccountMenu extends StatelessWidget {
-  final bool isCN;
+  final bool platinumAvailable;
   final bool isPlatinum;
 
-  AccountMenu({Key? key, required this.isCN, required this.isPlatinum})
+  AccountMenu(
+      {Key? key, required this.platinumAvailable, required this.isPlatinum})
       : super(key: key);
 
   Future<void> upgradeToLanternPro(
@@ -28,7 +29,7 @@ class AccountMenu extends StatelessWidget {
       context.loaderOverlay.hide();
       await context.pushRoute(
         Upgrade(
-          isCN: isCN,
+          platinumAvailable: platinumAvailable,
           isPlatinum: isPlatinum,
           isPro: isPro,
         ),
@@ -69,15 +70,15 @@ class AccountMenu extends StatelessWidget {
                   Widget? child,
                 ) =>
                     sessionModel
-                        .getCachedUserStatus((context, userStatus, child) {
-                  final isPro = userStatus == 'pro';
+                        .getCachedUserLevel((context, userLevel, child) {
+                  final isPro = userLevel == 'pro';
                   return ListItemFactory.settingsItem(
                     icon: ImagePaths.account,
                     content: 'account_management'.i18n,
                     onTap: () async => await context.pushRoute(
                       AccountManagement(
                         isPro: isPro,
-                        isCN: isCN,
+                        platinumAvailable: platinumAvailable,
                         isPlatinum: isPlatinum,
                       ),
                     ),
@@ -93,12 +94,12 @@ class AccountMenu extends StatelessWidget {
             : const SizedBox(),
       ),
       if (!isPlatinum)
-        sessionModel.getCachedUserStatus((context, userStatus, child) {
-          final isPro = userStatus == 'pro';
+        sessionModel.getCachedUserLevel((context, userLevel, child) {
+          final isPro = userLevel == 'pro';
           return ListItemFactory.settingsItem(
             icon: ImagePaths.pro_icon_black,
             content:
-                '${isCN ? 'Upgrade ${isPro ? 'to Lantern Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
+                '${platinumAvailable ? 'Upgrade ${isPro ? 'to Lantern Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
                     .i18n,
             onTap: () => upgradeToLanternPro(context, isPro),
           );
@@ -136,20 +137,38 @@ class AccountMenu extends StatelessWidget {
         (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus(
           (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
-              ListItemFactory.settingsItem(
-            icon: ImagePaths.account,
-            content: 'account_management'.i18n,
-            onTap: () async => await context.pushRoute(AccountManagement(
-                isPro: true, isCN: isCN, isPlatinum: isPlatinum)),
-            trailingArray: [
-              if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
-                const CAssetImage(
-                  path: ImagePaths.badge,
+              sessionModel.getCachedUserLevel(
+            (context, userLevel, child) => ListItemFactory.settingsItem(
+              icon: ImagePaths.account,
+              content: 'account_management'.i18n,
+              onTap: () async => await context.pushRoute(
+                AccountManagement(
+                  isPro: userLevel == 'pro',
+                  platinumAvailable: platinumAvailable,
+                  isPlatinum: isPlatinum,
                 ),
-            ],
+              ),
+              trailingArray: [
+                if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
+                  const CAssetImage(
+                    path: ImagePaths.badge,
+                  ),
+              ],
+            ),
           ),
         ),
       ),
+      if (!isPlatinum && true)
+        sessionModel.getCachedUserLevel((context, userLevel, child) {
+          final isPro = userLevel == 'pro';
+          return ListItemFactory.settingsItem(
+            icon: ImagePaths.pro_icon_black,
+            content:
+                '${platinumAvailable ? 'Upgrade ${isPro ? 'to Lantern Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
+                    .i18n,
+            onTap: () => upgradeToLanternPro(context, isPro),
+          );
+        }),
       ListItemFactory.settingsItem(
         icon: ImagePaths.devices,
         content: 'Link Device'.i18n,
@@ -179,11 +198,10 @@ class AccountMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: 'Account'.i18n,
-      // TODO: we can use the cached user status
-      body: sessionModel
-          .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
+      body: sessionModel.getCachedUserLevel(
+          (BuildContext sessionContext, String userLevel, Widget? child) {
         return ListView(
-          children: proUser
+          children: userLevel == 'pro'
               ? proItems(sessionContext)
               : freeItems(sessionContext, sessionModel),
         );

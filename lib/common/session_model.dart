@@ -35,7 +35,7 @@ class SessionModel extends Model {
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> proxyAvailable;
 
-  // TODO: we can prob use the cached user status
+  // TODO: remove - we are using getCachedUserLevel instead
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
   }
@@ -222,9 +222,9 @@ class SessionModel extends Model {
         .then((value) => value as String);
   }
 
-  Future<void> updateAndCacheUserStatus() async {
+  Future<void> updateAndCacheUserLevel() async {
     return methodChannel
-        .invokeMethod('updateAndCacheUserStatus')
+        .invokeMethod('updateAndCacheUserLevel')
         .then((value) => value as String);
   }
 
@@ -240,23 +240,23 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('resetCachedPlans');
   }
 
-  Widget forceUserStatus(ValueWidgetBuilder<String> builder) {
+  Widget forceUserLevel(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
-      'forceUserStatus',
+      'forceUserLevel',
       defaultValue: '',
       builder: builder,
     );
   }
 
-  Future<void> setForceUserStatus(String newStatus) {
-    return methodChannel.invokeMethod('setForceUserStatus', <String, dynamic>{
-      'newStatus': newStatus,
+  Future<void> setForceUserLevel(String newLevel) {
+    return methodChannel.invokeMethod('setForceUserLevel', <String, dynamic>{
+      'newLevel': newLevel,
     });
   }
 
-  Widget getCachedUserStatus(ValueWidgetBuilder<String> builder) {
+  Widget getCachedUserLevel(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
-      'userStatus',
+      'userLevel',
       defaultValue: '',
       builder: builder,
     );

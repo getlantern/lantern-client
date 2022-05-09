@@ -4,15 +4,16 @@ import 'package:lantern/common/common.dart';
 import 'account.dart';
 
 class AccountTab extends StatelessWidget {
-  final bool isCN;
+  final bool platinumAvailable;
   final bool isPlatinum;
 
-  AccountTab({Key? key, required this.isCN, required this.isPlatinum})
+  AccountTab(
+      {Key? key, required this.platinumAvailable, required this.isPlatinum})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) => AccountMenu(
-        isCN: isCN,
+        platinumAvailable: platinumAvailable,
         isPlatinum: isPlatinum,
       );
 }

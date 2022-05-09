@@ -53,7 +53,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
 
   @override
   Widget build(BuildContext context) {
-    const copy = 'Register for Pro';
+    final copy = 'Register for Pro'.i18n;
     return BaseScreen(
       title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout'.i18n,
       body: Container(
@@ -100,9 +100,23 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                 bottom: 8,
               ),
               child: Form(
-                onChanged: () => setState(() {
-                  formIsValid = determineFormIsValid();
-                }),
+                onChanged: () {
+                  final sLen = resellerCodeController.text.length;
+                  final insertHyphen =
+                      sLen == 5 || sLen == 11 || sLen == 17 || sLen == 23;
+                  if (insertHyphen) {
+                    final updatedText = resellerCodeController.text + '-';
+                    resellerCodeController.value =
+                        resellerCodeController.value.copyWith(
+                      text: updatedText,
+                      selection:
+                          TextSelection.collapsed(offset: updatedText.length),
+                    );
+                  }
+                  setState(() {
+                    formIsValid = determineFormIsValid();
+                  });
+                },
                 key: resellerCodeFieldKey,
                 child: CTextField(
                   maxLength: 25 + 4, //accounting for dashes
@@ -111,6 +125,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                   label: 'Activation Code'.i18n,
                   keyboardType: TextInputType.text,
                   prefixIcon: const CAssetImage(path: ImagePaths.dots),
+                  textCapitalization: TextCapitalization.characters,
                 ),
               ),
             ),
@@ -136,7 +151,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
             const Spacer(),
             Column(
               children: [
-                const TOS(copy: copy),
+                TOS(copy: copy),
                 // * resellerCodeCheckout
                 Button(
                   disabled: !formIsValid,

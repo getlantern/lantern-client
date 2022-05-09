@@ -171,12 +171,12 @@ class DeveloperSettingsTab extends StatelessWidget {
                   onPressed: () async {
                     context.loaderOverlay.show();
                     await sessionModel
-                        .updateAndCacheUserStatus()
+                        .updateAndCacheUserLevel()
                         .timeout(
                           defaultTimeoutDuration,
                           onTimeout: () => throw PlatformException(
-                            code: 'updateAndCacheUserStatusTimeout',
-                            message: 'updateAndCacheUserStatusTimeout',
+                            code: 'updateAndCacheUserLevelTimeout',
+                            message: 'updateAndCacheUserLevelTimeout',
                           ),
                         )
                         .then(
@@ -209,7 +209,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             ListItemFactory.settingsItem(
               content: 'Force Cached User Status'.i18n,
               trailingArray: [
-                sessionModel.forceUserStatus(
+                sessionModel.forceUserLevel(
                     (BuildContext context, String value, Widget? child) {
                   return DropdownButton<String>(
                     value: value,
@@ -220,8 +220,8 @@ class DeveloperSettingsTab extends StatelessWidget {
                       height: 2,
                       color: Colors.green,
                     ),
-                    onChanged: (String? newStatus) {
-                      sessionModel.setForceUserStatus(newStatus ?? '');
+                    onChanged: (String? newLevel) {
+                      sessionModel.setForceUserLevel(newLevel ?? '');
                     },
                     items: <String>['', 'pro', 'platinum']
                         .map<DropdownMenuItem<String>>((String value) {
@@ -238,15 +238,15 @@ class DeveloperSettingsTab extends StatelessWidget {
               ],
             ),
             // * DISPLAY USER STATUS
-            sessionModel.getCachedUserStatus(
-              (context, userStatus, child) => ListItemFactory.settingsItem(
+            sessionModel.getCachedUserLevel(
+              (context, userLevel, child) => ListItemFactory.settingsItem(
                 content: CText(
                   'User status',
                   style: tsBody3,
                 ),
                 trailingArray: [
                   CText(
-                    userStatus.toString().toUpperCase(),
+                    userLevel.toString().toUpperCase(),
                     style: tsBody1Short.copiedWith(color: Colors.green),
                   )
                 ],

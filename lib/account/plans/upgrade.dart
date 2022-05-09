@@ -6,13 +6,13 @@ import 'purchase_constants.dart';
 import 'purchase_utils.dart';
 
 class Upgrade extends StatelessWidget {
-  final bool isCN;
+  final bool platinumAvailable;
   final bool isPlatinum;
   final bool isPro;
 
   Upgrade({
     Key? key,
-    required this.isCN,
+    required this.platinumAvailable,
     required this.isPlatinum,
     required this.isPro,
   }) : super(key: key);
@@ -59,7 +59,7 @@ class Upgrade extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // * Logotype + X button
-                  buildHeader(context, isCN),
+                  buildHeader(context, platinumAvailable),
                   // * Body
                   Expanded(
                     child: Container(
@@ -73,7 +73,7 @@ class Upgrade extends StatelessWidget {
                           // * Renewal text or upsell
                           buildRenewalTextOrUpsell(
                             context,
-                            isCN,
+                            platinumAvailable,
                             isFree,
                           ),
                           // * Step
@@ -87,7 +87,7 @@ class Upgrade extends StatelessWidget {
                               description: 'choose_plan'.i18n,
                             ),
                           ),
-                          if (isCN == true)
+                          if (platinumAvailable == true)
                             // * Toggle
                             Container(
                               padding: const EdgeInsetsDirectional.only(
@@ -175,7 +175,7 @@ class Upgrade extends StatelessWidget {
                             (plan) => PlanCard(
                               plans: plans,
                               id: plan['id'] as String,
-                              isCN: isCN,
+                              platinumAvailable: platinumAvailable,
                               isPro: isPro,
                               isPlatinum: isPlatinum,
                             ),
@@ -185,21 +185,22 @@ class Upgrade extends StatelessWidget {
                     ),
                   ),
                   // * Footer
-                  Container(
-                    height: 40,
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
-                    color: grey3,
-                    child: GestureDetector(
-                      onTap: () async => await context.pushRoute(
-                        ResellerCodeCheckout(isPro: isPro),
-                      ),
-                      child: CText(
-                        'Have a Lantern Pro activation code? Click here.',
-                        style: tsBody1,
-                      ),
-                    ), // Translations
-                  ),
+                  if (!isPlatinum)
+                    Container(
+                      height: 40,
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      color: grey3,
+                      child: GestureDetector(
+                        onTap: () async => await context.pushRoute(
+                          ResellerCodeCheckout(isPro: isPro),
+                        ),
+                        child: CText(
+                          'Have a Lantern Pro activation code? Click here.',
+                          style: tsBody1,
+                        ),
+                      ), // Translations
+                    ),
                 ],
               ),
             ),
@@ -234,7 +235,7 @@ class Upgrade extends StatelessWidget {
     List<Map<String, Object>> plans,
   ) {
     // if we are not in China, we only have two available plans which we both want to render
-    if (!isCN) return plans;
+    if (!platinumAvailable) return plans;
 
     // we are in China, determine 2 out of 4 plans depending on where the toggle is set
     return plans
@@ -247,7 +248,7 @@ class Upgrade extends StatelessWidget {
 
   Widget buildRenewalTextOrUpsell(
     BuildContext context,
-    bool? isCN,
+    bool? platinumAvailable,
     bool? isFree,
   ) {
     return Container(
@@ -260,7 +261,7 @@ class Upgrade extends StatelessWidget {
               determineExpiryText(),
               style: tsBody1,
             ),
-          if (isCN == false)
+          if (platinumAvailable == false)
             Column(
               children: [
                 const CDivider(height: 24),
@@ -283,7 +284,7 @@ class Upgrade extends StatelessWidget {
     );
   }
 
-  Widget buildHeader(BuildContext context, bool? isCN) {
+  Widget buildHeader(BuildContext context, bool? platinumAvailable) {
     return Container(
       height: 100,
       child: Stack(
@@ -307,7 +308,7 @@ class Upgrade extends StatelessWidget {
             padding: const EdgeInsetsDirectional.only(top: 25, start: 32),
             alignment: Alignment.centerLeft,
             child: CAssetImage(
-              path: isCN == true
+              path: platinumAvailable == true
                   ? ImagePaths.lantern_logotype
                   : ImagePaths.lantern_pro_logotype,
               size: 20,

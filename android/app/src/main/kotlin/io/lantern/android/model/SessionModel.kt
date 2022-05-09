@@ -45,17 +45,17 @@ class SessionModel(
         private const val TAG = "SessionModel"
         private const val STRIPE_TAG = "$TAG.stripe"
 
-        const val PATH_PRO_USER = "prouser"
+        const val PATH_PRO_USER = "prouser" // TODO: we are not using this anymore
         const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_PLANS = "plans"
-        const val PATH_USER_STATUS = "userStatus"
+        const val PATH_USER_LEVEL = "userLevel"
     }
 
     init {
         db.mutate { tx ->
             // initialize data for fresh install // TODO remove the need to do this for each data path
-            tx.put(
-                PATH_PRO_USER,
+            tx.put( 
+                PATH_PRO_USER,  // TODO: we are not using this anymore
                 castToBoolean(tx.get(PATH_PRO_USER), false)
             )
             tx.put(
@@ -66,7 +66,7 @@ class SessionModel(
                 PATH_PLANS, ""
             )
             tx.put(
-                PATH_USER_STATUS, ""
+                PATH_USER_LEVEL, ""
             )
         }
     }
@@ -92,7 +92,7 @@ class SessionModel(
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
             "updateAndCachePlans" -> updateAndCachePlans(result)
-            "updateAndCacheUserStatus" -> updateAndCacheUserStatus(result)
+            "updateAndCacheUserLevel" -> updateAndCacheUserLevel(result)
             "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, result)
             "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!, result)
             "applyRefCode" -> applyRefCode(call.argument("email")!!, call.argument("refCode")!!, result)
@@ -130,9 +130,9 @@ class SessionModel(
                 }
             }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
-            "setForceUserStatus" -> {
+            "setForceUserLevel" -> {
                 db.mutate { tx ->
-                    tx.put(PATH_USER_STATUS, call.argument<String>("newStatus")!!)
+                    tx.put(PATH_USER_LEVEL, call.argument<String>("newLevel")!!)
                 }
             }
             "resetCachedPlans" -> {
@@ -355,16 +355,15 @@ class SessionModel(
         )
     }
 
-    // Hits the /user-data endpoint and saves { level: null | "pro" | "platinum" } to PATH_USER_STATUS
-    private fun updateAndCacheUserStatus(result: MethodChannel.Result) {
+    // Hits the /user-data endpoint and saves { level: null | "pro" | "platinum" } to PATH_USER_LEVEL
+    private fun updateAndCacheUserLevel(result: MethodChannel.Result) {
         try {
             lanternClient.userData(object : ProUserCallback {
                 override fun onSuccess(response: Response, userData: ProUser) {
                     Logger.debug(TAG, "Successfully updated userData")
-                    Logger.info(TAG, "Successfully cached userData: $userData.userStatus")
                     result.success("cachingUserDataSuccess")
                     db.mutate { tx ->
-                        tx.put(PATH_USER_STATUS, userData.userStatus) // TODO: save the level
+                        tx.put(PATH_USER_LEVEL, "pro") // TODO: should be userData.currentUserLevel
                     }
                 }
                 override fun onFailure(t: Throwable?, error: ProError?) {
