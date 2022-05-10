@@ -38,6 +38,8 @@ public class ProPlan {
     private Map<String, Long> expectedMonthlyPrice;
     @SerializedName("discount")
     private float discount;
+    @SerializedName("level")
+    private String level;
 
     private String currencyCode;
     private String costStr;

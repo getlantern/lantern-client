@@ -54,8 +54,9 @@ class SessionModel(
     init {
         db.mutate { tx ->
             // initialize data for fresh install // TODO remove the need to do this for each data path
-            tx.put( 
-                PATH_PRO_USER,  // TODO: we are not using this anymore
+            // TODO: we are not using PATH_PRO_USER anymore
+            tx.put(
+                PATH_PRO_USER,
                 castToBoolean(tx.get(PATH_PRO_USER), false)
             )
             tx.put(
@@ -355,7 +356,7 @@ class SessionModel(
         )
     }
 
-    // Hits the /user-data endpoint and saves { level: null | "pro" | "platinum" } to PATH_USER_LEVEL
+    // Hits the /user-data endpoint and saves { userLevel: null | "pro" | "platinum" } to PATH_USER_LEVEL
     private fun updateAndCacheUserLevel(result: MethodChannel.Result) {
         try {
             lanternClient.userData(object : ProUserCallback {
@@ -363,7 +364,7 @@ class SessionModel(
                     Logger.debug(TAG, "Successfully updated userData")
                     result.success("cachingUserDataSuccess")
                     db.mutate { tx ->
-                        tx.put(PATH_USER_LEVEL, "pro") // TODO: should be userData.currentUserLevel
+                        tx.put(PATH_USER_LEVEL, userData.userLevel)
                     }
                 }
                 override fun onFailure(t: Throwable?, error: ProError?) {

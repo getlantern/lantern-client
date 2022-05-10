@@ -184,7 +184,7 @@ public class LanternHttpClient extends HttpClient {
         final Map<String, String> params = new HashMap<String, String>();
         params.put("locale", LanternApp.getSession().getLanguage());
         params.put("countrycode", LanternApp.getSession().getCountryCode());
-        final HttpUrl url = createProUrl("/plans", params);
+        final HttpUrl url = createProUrl("/plans-v2", params);
         final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
         get(url, new ProCallback() {
             @Override

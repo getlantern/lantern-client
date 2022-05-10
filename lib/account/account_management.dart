@@ -142,7 +142,7 @@ class _AccountManagementState extends State<AccountManagement>
           )
         ];
 
-        return !widget.isPro
+        return !widget.isPro && !widget.isPlatinum
             ?
             // * FREE
             ListView(

@@ -126,47 +126,49 @@ class Upgrade extends StatelessWidget {
                                       );
                                     },
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                      start: 16.0,
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Transform.translate(
-                                          offset: const Offset(80.0, -25.0),
-                                          child: const CAssetImage(
-                                            path: ImagePaths.savings_arrow,
-                                          ),
-                                        ),
-                                        Transform.translate(
-                                          offset: const Offset(115.0, -30.0),
-                                          child: Transform.rotate(
-                                            angle: 0.1 * pi,
-                                            child: Stack(
-                                              children: [
-                                                CText(
-                                                  determineSavingsOrExtraMonths(
-                                                    isFree,
-                                                  ).toUpperCase(),
-                                                  style: tsBody1.copiedWith(
-                                                    color: pink4,
-                                                  ),
-                                                )
-                                              ],
+                                  if (isTwoYearPlan)
+                                    Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                        start: 16.0,
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          Transform.translate(
+                                            offset: const Offset(80.0, -25.0),
+                                            child: const CAssetImage(
+                                              path: ImagePaths.savings_arrow,
                                             ),
                                           ),
-                                        ),
-                                        CText(
-                                          '2y_pricing'.i18n,
-                                          style: isTwoYearPlan
-                                              ? tsBody1
-                                              : tsBody1.copiedWith(
-                                                  color: grey5,
-                                                ),
-                                        )
-                                      ],
+                                          Transform.translate(
+                                            offset: const Offset(115.0, -30.0),
+                                            child: Transform.rotate(
+                                              angle: 0.1 * pi,
+                                              child: Stack(
+                                                children: [
+                                                  CText(
+                                                    determineSavingsOrExtraMonths(
+                                                      isFree,
+                                                      plans,
+                                                    ).toUpperCase(),
+                                                    style: tsBody1.copiedWith(
+                                                      color: pink4,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          CText(
+                                            '2y_pricing'.i18n,
+                                            style: isTwoYearPlan
+                                                ? tsBody1
+                                                : tsBody1.copiedWith(
+                                                    color: grey5,
+                                                  ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -210,19 +212,42 @@ class Upgrade extends StatelessWidget {
     });
   }
 
-  String determineSavingsOrExtraMonths(bool isFree) {
-    // TODO - this has to do with expiration status
-    const savingsPercentage = '34 %';
+  String determineSavingsOrExtraMonths(
+      bool isFree, List<Map<String, Object>> plans) {
+    // for the savings banner we only compare 1y Platinum to 2y Platinum
+    final platinumPlans =
+        plans.where((element) => element['level'] == 'platinum');
+
+    final savingsPercentage = determineSavings(platinumPlans);
+    final renewalBonus = determineRenewalBonus(platinumPlans);
     return isFree == true
         ?
         // Free user who is upgrading => fixed %
-        'Save $savingsPercentage'
-        :
-        // Pro user who is upgrading
-        // 1. in advance => + 3 months
-        // 2. upon expiry => + 3 months
-        // 3. after having recently expired => + 45 days
-        '+ 3 months';
+        'Save $savingsPercentage%'
+        : renewalBonus;
+  }
+
+  String determineSavings(Iterable platinumPlans) {
+    final platinumPlanPrices =
+        platinumPlans.map((pr) => (pr['usdPrice'] as num)).toList();
+    final discount =
+        ((platinumPlanPrices.reduce(min) - platinumPlanPrices.reduce(max) / 2) /
+                platinumPlanPrices.reduce(min)) *
+            100;
+    return discount.toInt().toString();
+  }
+
+  String determineRenewalBonus(Iterable platinumPlans) {
+    final twoYearPlatinum = platinumPlans.firstWhere(
+            (p) => (p['id'] as String).startsWith('2y'))['renewalBonusExpected']
+        as Map<String, dynamic>;
+    var renewalBonus = '+';
+    twoYearPlatinum.forEach((key, value) {
+      if (value > 0) {
+        renewalBonus += '$value $key ';
+      }
+    });
+    return renewalBonus;
   }
 
   String determineExpiryText() {
