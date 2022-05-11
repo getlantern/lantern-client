@@ -41,7 +41,7 @@ class PriceSummary extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // TODO: calculate text
+                // TODO: calculate credit months text
                 CText(
                   credit.toUpperCase(),
                   style: tsOverline,

@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 
 final chinaPlanDetails = [
@@ -27,6 +26,3 @@ final paymentProviders = [
   'stripe',
   'btc',
 ];
-
-// TODO: this seems wrong, fix
-final currencyFormatter = NumberFormat('#,##,000');
