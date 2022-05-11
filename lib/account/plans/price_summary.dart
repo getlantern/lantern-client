@@ -1,7 +1,5 @@
 import 'package:lantern/common/common.dart';
 
-import 'purchase_constants.dart';
-
 class PriceSummary extends StatelessWidget {
   final List<Map<String, Object>> plans;
   final String id;
@@ -23,8 +21,8 @@ class PriceSummary extends StatelessWidget {
     final selectedPlan = plans.firstWhere((p) => p['id'] == id);
     final formattedPricePerYear =
         selectedPlan['totalCost'].toString().split(' ').first;
-    final renewalBonus = selectedPlan['formattedBonus'].toString();
-    final credit = 'bla bla bla';
+    final refCodeBonus = 'bonus from referral code';
+    final bonus = '+ ' + selectedPlan['formattedBonus'].toString();
     return Container(
       padding: const EdgeInsetsDirectional.only(top: 8.0, bottom: 8.0),
       child: Column(
@@ -43,7 +41,7 @@ class PriceSummary extends StatelessWidget {
               children: [
                 // TODO: calculate credit months text
                 CText(
-                  credit.toUpperCase(),
+                  bonus.toUpperCase(),
                   style: tsOverline,
                 ),
                 CText('Free'.i18n, style: tsOverline),
@@ -55,7 +53,7 @@ class PriceSummary extends StatelessWidget {
               children: [
                 // TODO: calculate text
                 CText(
-                  renewalBonus.toUpperCase(),
+                  refCodeBonus.toUpperCase(),
                   style: tsOverline,
                 ),
                 CText('Free'.i18n, style: tsOverline),
