@@ -160,6 +160,9 @@ msgstr "VPN"
 msgid "Authorize Device for Pro"
 msgstr "Authorize Device for Pro"
 
+msgid "Link Device"
+msgstr "Link Device"
+
 msgid "Authorize with Device Linking Pin"
 msgstr "Authorize with Device Linking Pin"
 
@@ -290,13 +293,13 @@ msgid "No Ads"
 msgstr "No Ads"
 
 msgid "expires_soon"
-msgstr "Your membership is ending soon. Renew now and enjoy up to three months free!"
+msgstr "Your membership is ending soon. Renew now and enjoy up to %s free!"
 
 msgid "expires_today"
-msgstr "Your membership ends today. Renew now and enjoy up to three months free!"
+msgstr "Your membership ends today. Renew now and enjoy up to %s free!"
 
 msgid "expired"
-msgstr "Your membership has expired! Renew now and enjoy up to forty-five days free!"
+msgstr "Your membership has expired! Renew now and enjoy up to %s free!"
 
 msgid "choose_plan"
 msgstr "Choose Plan"

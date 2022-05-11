@@ -28,11 +28,5 @@ final paymentProviders = [
   'btc',
 ];
 
-final renewalTextDependingOnExpiry = {
-  'expiresSoon': 'expires_soon'.i18n,
-  'expiresToday': 'expires_today'.i18n,
-  'expired': 'expired'.i18n,
-};
-
 // TODO: this seems wrong, fix
 final currencyFormatter = NumberFormat('#,##,000');

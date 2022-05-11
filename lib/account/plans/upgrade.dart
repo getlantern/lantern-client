@@ -47,7 +47,7 @@ class Upgrade extends StatelessWidget {
         }
 
         var isTwoYearPlan = true; // Toggle is by default to 2 years
-        var availablePlans = determineAvailablePlans(isTwoYearPlan, plans);
+        var visiblePlans = determineVisiblePlans(isTwoYearPlan, plans);
         final isFree = (isPro == false) && (isPlatinum == false);
 
         return FullScreenDialog(
@@ -75,6 +75,7 @@ class Upgrade extends StatelessWidget {
                             context,
                             platinumAvailable,
                             isFree,
+                            visiblePlans,
                           ),
                           // * Step
                           Container(
@@ -118,8 +119,8 @@ class Upgrade extends StatelessWidget {
                                     onToggle: (bool newValue) {
                                       setState(() => isTwoYearPlan = newValue);
                                       setState(
-                                        () => availablePlans =
-                                            determineAvailablePlans(
+                                        () => visiblePlans =
+                                            determineVisiblePlans(
                                           newValue,
                                           plans,
                                         ),
@@ -146,7 +147,7 @@ class Upgrade extends StatelessWidget {
                                               child: Stack(
                                                 children: [
                                                   CText(
-                                                    determineSavingsOrExtraMonths(
+                                                    determineBannerContent(
                                                       isFree,
                                                       plans,
                                                     ).toUpperCase(),
@@ -173,7 +174,7 @@ class Upgrade extends StatelessWidget {
                               ),
                             ),
                           // * Card
-                          ...availablePlans.map(
+                          ...visiblePlans.map(
                             (plan) => PlanCard(
                               plans: plans,
                               id: plan['id'] as String,
@@ -212,14 +213,16 @@ class Upgrade extends StatelessWidget {
     });
   }
 
-  String determineSavingsOrExtraMonths(
-      bool isFree, List<Map<String, Object>> plans) {
+  String determineBannerContent(
+    bool isFree,
+    List<Map<String, Object>> plans,
+  ) {
     // for the savings banner we only compare 1y Platinum to 2y Platinum
     final platinumPlans =
         plans.where((element) => element['level'] == 'platinum');
 
     final savingsPercentage = determineSavings(platinumPlans);
-    final renewalBonus = determineRenewalBonus(platinumPlans);
+    final renewalBonus = '+' + determineRenewalBonus(platinumPlans);
     return isFree == true
         ?
         // Free user who is upgrading => fixed %
@@ -238,24 +241,23 @@ class Upgrade extends StatelessWidget {
   }
 
   String determineRenewalBonus(Iterable platinumPlans) {
+    // This appears only in China, where to facilitate our lives we only compare Platinum plans to each other
+    // in order to come up with % savings (it's higher than comparing Pro plans to each other)
+    // This widget hidden for non-China locations
     final twoYearPlatinum = platinumPlans.firstWhere(
-            (p) => (p['id'] as String).startsWith('2y'))['renewalBonusExpected']
-        as Map<String, dynamic>;
-    var renewalBonus = '+';
+      (p) => (p['id'] as String).startsWith('2y'),
+    )['renewalBonusExpected'] as Map<String, dynamic>;
+
+    var renewalBonus = '';
     twoYearPlatinum.forEach((key, value) {
       if (value > 0) {
-        renewalBonus += '$value $key ';
+        renewalBonus += '$value $key';
       }
     });
     return renewalBonus;
   }
 
-  String determineExpiryText() {
-    // TODO: depends on expiry status
-    return renewalTextDependingOnExpiry['expiresSoon']!;
-  }
-
-  List<Map<String, Object>> determineAvailablePlans(
+  List<Map<String, Object>> determineVisiblePlans(
     bool isTwoYearPlan,
     List<Map<String, Object>> plans,
   ) {
@@ -275,6 +277,7 @@ class Upgrade extends StatelessWidget {
     BuildContext context,
     bool? platinumAvailable,
     bool? isFree,
+    Iterable visiblePlans,
   ) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -283,7 +286,8 @@ class Upgrade extends StatelessWidget {
         children: [
           if (isFree == false)
             CText(
-              determineExpiryText(),
+              visiblePlans
+                  .first['renewalText'], // TODO: just a placeholder - fix
               style: tsBody1,
             ),
           if (platinumAvailable == false)
@@ -309,7 +313,10 @@ class Upgrade extends StatelessWidget {
     );
   }
 
-  Widget buildHeader(BuildContext context, bool? platinumAvailable) {
+  Widget buildHeader(
+    BuildContext context,
+    bool? platinumAvailable,
+  ) {
     return Container(
       height: 100,
       child: Stack(

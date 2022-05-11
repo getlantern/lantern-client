@@ -21,12 +21,10 @@ class PriceSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedPlan = plans.firstWhere((p) => p['id'] == id);
-
-    final currencyObject = selectedPlan['price'] as Map;
-    final currency = currencyObject.entries.first.key.toString().toUpperCase();
-    final pricePerYear =
-        currencyFormatter.format(currencyObject.entries.first.value);
-
+    final formattedPricePerYear =
+        selectedPlan['totalCost'].toString().split(' ').first;
+    final renewalBonus = selectedPlan['formattedBonus'].toString();
+    final credit = 'bla bla bla';
     return Container(
       padding: const EdgeInsetsDirectional.only(top: 8.0, bottom: 8.0),
       child: Column(
@@ -36,17 +34,16 @@ class PriceSummary extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CText('plan_type'.i18n.toUpperCase(), style: tsOverline),
-              CText('$currency  $pricePerYear', style: tsOverline),
+              CText(formattedPricePerYear, style: tsOverline),
             ],
           ),
           if (isPro != false || isPlatinum != false)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // TODO: translations
                 // TODO: calculate text
                 CText(
-                  'X Credit months and X credit days'.i18n.toUpperCase(),
+                  credit.toUpperCase(),
                   style: tsOverline,
                 ),
                 CText('Free'.i18n, style: tsOverline),
@@ -56,10 +53,9 @@ class PriceSummary extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // TODO: translations
                 // TODO: calculate text
                 CText(
-                  '1 month referral bonus'.i18n.toUpperCase(),
+                  renewalBonus.toUpperCase(),
                   style: tsOverline,
                 ),
                 CText('Free'.i18n, style: tsOverline),
@@ -70,7 +66,7 @@ class PriceSummary extends StatelessWidget {
             children: [
               CText('Total'.i18n, style: tsBody1),
               CText(
-                '$currency  $pricePerYear',
+                formattedPricePerYear,
                 style: tsBody1.copiedWith(
                   color: pink4,
                   fontWeight: FontWeight.w500,

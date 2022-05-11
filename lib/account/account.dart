@@ -114,13 +114,16 @@ class AccountMenu extends StatelessWidget {
         content: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
       ),
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.devices,
-        content: 'Authorize Device for Pro'.i18n,
-        onTap: () {
-          authorizeDeviceForPro(context);
-        },
-      ),
+      sessionModel.getCachedUserLevel(
+          (context, userLevel, child) => ListItemFactory.settingsItem(
+                icon: ImagePaths.devices,
+                content: isPlatinum || (userLevel == 'pro')
+                    ? 'Link Device'.i18n
+                    : 'Authorize Device for Pro'.i18n,
+                onTap: () {
+                  authorizeDeviceForPro(context);
+                },
+              )),
       ListItemFactory.settingsItem(
         icon: ImagePaths.settings,
         content: 'settings'.i18n,
@@ -158,17 +161,23 @@ class AccountMenu extends StatelessWidget {
           ),
         ),
       ),
-      if (!isPlatinum && true)
-        sessionModel.getCachedUserLevel((context, userLevel, child) {
-          final isPro = userLevel == 'pro';
-          return ListItemFactory.settingsItem(
-            icon: ImagePaths.pro_icon_black,
-            content:
-                '${platinumAvailable ? 'Upgrade ${isPro ? 'to Lantern Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
-                    .i18n,
-            onTap: () => upgradeToLanternPro(context, isPro),
-          );
-        }),
+      sessionModel.getCachedUserLevel((context, userLevel, child) {
+        final isPro = userLevel == 'pro';
+        // Show Upgrade option if we are
+        // - in China and not Platinum
+        // - not in China and not Pro
+        final showUpgradeOption = (platinumAvailable && !isPlatinum) ||
+            (!platinumAvailable && !isPro);
+        return showUpgradeOption
+            ? ListItemFactory.settingsItem(
+                icon: ImagePaths.pro_icon_black,
+                content:
+                    '${platinumAvailable ? 'Upgrade ${isPro ? 'to Lantern Platinum' : ''}' : 'Upgrade to Lantern Pro'}'
+                        .i18n,
+                onTap: () => upgradeToLanternPro(context, isPro),
+              )
+            : Container();
+      }),
       ListItemFactory.settingsItem(
         icon: ImagePaths.devices,
         content: 'Link Device'.i18n,
@@ -201,7 +210,7 @@ class AccountMenu extends StatelessWidget {
       body: sessionModel.getCachedUserLevel(
           (BuildContext sessionContext, String userLevel, Widget? child) {
         return ListView(
-          children: userLevel == 'pro'
+          children: userLevel == 'pro' || isPlatinum
               ? proItems(sessionContext)
               : freeItems(sessionContext, sessionModel),
         );

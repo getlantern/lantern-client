@@ -46,6 +46,12 @@ public class ProPlan {
     private String costWithoutTaxStr;
     private String taxStr;
     private Locale locale = Locale.getDefault();
+    private String renewalText;
+    private String totalCost;
+    private String totalCostBilledOneTime;
+    private String formattedBonus;
+    private String oneMonthCost;
+    private String formattedDiscount;
 
     private static final String PLAN_COST = "%1$s%2$s";
     private static final String defaultCurrencyCode = "usd";
@@ -149,6 +155,36 @@ public class ProPlan {
         this.duration = duration;
     }
 
+    @SerializedName("renewalText")
+    public void setRenewalText(final String renewalText) {
+        this.renewalText = renewalText;
+    }
+
+    @SerializedName("totalCost")
+    public void setTotalCost(final String totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    @SerializedName("totalCost")
+    public void setTotalCostBilledOneTime(final String totalCostBilledOneTime) {
+        this.totalCostBilledOneTime = totalCostBilledOneTime;
+    }
+
+    @SerializedName("formattedBonus")
+    public void setFormattedBonus(final String formattedBonus) {
+        this.formattedBonus = formattedBonus;
+    }
+
+    @SerializedName("oneMonthCost")
+    public void setOneMonthCost(final String oneMonthCost) {
+        this.oneMonthCost = oneMonthCost;
+    }
+
+    @SerializedName("formattedDiscount")
+    public void setFormattedDiscount(final String formattedDiscount) {
+        this.formattedDiscount = formattedDiscount;
+    }
+
     public String toString() {
         return String.format("Plan: %s Description: %s Num Years %d",
                 id, description, numYears());
@@ -215,7 +251,7 @@ public class ProPlan {
         return getFormattedPrice(price);
     }
 
-    public String getFormatterPriceOneMonth() {
+    public String getFormattedPriceOneMonth() {
         return getFormattedPrice(expectedMonthlyPrice, true);
     }
 

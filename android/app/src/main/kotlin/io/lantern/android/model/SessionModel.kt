@@ -1,6 +1,7 @@
 package io.lantern.android.model
 
 import android.app.Activity
+import android.text.TextUtils
 import androidx.core.content.ContextCompat
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
@@ -24,17 +25,19 @@ import org.getlantern.lantern.model.LanternHttpClient.*
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
 import org.getlantern.lantern.util.Analytics
+import org.getlantern.lantern.util.DateUtil.isBefore
+import org.getlantern.lantern.util.DateUtil.isToday
 import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.*
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
  * settings can be observed.
  */
-class SessionModel(
+open class SessionModel(
     private val activity: Activity,
     flutterEngine: FlutterEngine? = null,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
@@ -388,6 +391,9 @@ class SessionModel(
                     plans.putAll(proPlans)
                     Logger.info(TAG, "Successfully cached plans: $plans")
                     result.success("cachingPlansSuccess")
+                    for (planId in proPlans.keys) {
+                        proPlans[planId]?.let { updatePrice(it) }
+                    }
                     db.mutate { tx ->
                         tx.put(PATH_PLANS, Json.gson.toJson(plans))
                     }
@@ -412,6 +418,59 @@ class SessionModel(
                 null,
             )
         }
+    }
+
+    protected fun updatePrice(plan: ProPlan) {
+        val formattedBonus = formatRenewalBonusExpected(plan.renewalBonusExpected)
+        val totalCost = plan.costWithoutTaxStr
+        var totalCostBilledOneTime = activity.resources.getString(R.string.total_cost, totalCost)
+        var formattedDiscount = ""
+        if (plan.discount > 0) {
+            formattedDiscount =
+                activity.resources.getString(R.string.discount, Math.round(plan.discount * 100).toString())
+        }
+        val oneMonthCost = plan.formattedPriceOneMonth
+        var renewalText = ""
+        // TODO: this logic needs to be updated?
+        if (LanternApp.getSession().isProUser) {
+            val localDateTime = LanternApp.getSession().getExpiration()
+            renewalText = when {
+                localDateTime.isToday() -> {
+                    activity.resources.getString(R.string.membership_ends_today, formattedBonus)
+                }
+                localDateTime.isBefore() -> {
+                    activity.resources.getString(R.string.membership_has_expired, formattedBonus)
+                }
+                else -> {
+                    activity.resources.getString(R.string.membership_end_soon, formattedBonus)
+                }
+            }
+        }
+        plan.setRenewalText(renewalText)
+        plan.setTotalCostBilledOneTime(totalCostBilledOneTime)
+        plan.setOneMonthCost(oneMonthCost)
+        plan.setFormattedBonus(formattedBonus)
+        plan.setFormattedDiscount(formattedDiscount)
+        plan.setTotalCost(totalCost)
+    }
+
+    private fun formatRenewalBonusExpected(planBonus: MutableMap<String, Int>): String? {
+        val bonusMonths: Int? = planBonus["months"]
+        val bonusDays: Int? = planBonus["days"]
+        val bonusParts: MutableList<String?> = java.util.ArrayList()
+        if (bonusMonths != null && bonusMonths > 0) {
+            bonusParts.add(
+                activity.resources.getQuantityString(
+                    R.plurals.month,
+                    bonusMonths.toInt(),
+                    bonusMonths
+                )
+            )
+        }
+        if (bonusDays != null && bonusDays > 0) {
+            bonusParts.add(activity.resources.getQuantityString(R.plurals.day, bonusDays.toInt(), bonusDays))
+        }
+        return TextUtils.join(" ", bonusParts)
     }
 
     // TODO: WIP
