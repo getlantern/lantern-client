@@ -235,20 +235,6 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('resetCachedPlans');
   }
 
-  Widget forceUserLevel(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      'forceUserLevel',
-      defaultValue: '',
-      builder: builder,
-    );
-  }
-
-  Future<void> setForceUserLevel(String newLevel) {
-    return methodChannel.invokeMethod('setForceUserLevel', <String, dynamic>{
-      'newLevel': newLevel,
-    });
-  }
-
   Widget getCachedUserLevel(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'userLevel',
