@@ -454,11 +454,12 @@ open class SessionModel(
     private fun formatRenewalBonusExpected(planBonus: MutableMap<String, Int>, longForm: Boolean): String? {
         val bonusMonths: Int? = planBonus["months"]
         val bonusDays: Int? = planBonus["days"]
-        val bonusPartsLongform: MutableList<String?> = java.util.ArrayList()
-        val bonusPartsShortform: MutableList<String?> = java.util.ArrayList()
-        if (bonusMonths != null && bonusMonths > 0) {
-            if (longForm) {
-                bonusPartsLongform.add(
+        val bonusParts: MutableList<String?> = java.util.ArrayList()
+        if (bonusMonths == null && bonusDays == null) return null
+        if (longForm) {
+            // "1 month and 15 days"
+            if (bonusMonths != null && bonusMonths > 0) {
+                bonusParts.add(
                     activity.resources.getQuantityString(
                         R.plurals.month,
                         bonusMonths.toInt(),
@@ -466,17 +467,12 @@ open class SessionModel(
                     )
                 )
             }
-        }
-        if (bonusDays != null && bonusDays > 0) {
-            if (longForm) {
-                bonusPartsLongform.add(activity.resources.getQuantityString(R.plurals.day, bonusDays.toInt(), bonusDays))
-            } else {
-                bonusPartsShortform.add(activity.resources.getQuantityString(R.plurals.day, (bonusMonths!! * 30 + bonusDays), bonusDays))
+            if (bonusDays != null && bonusDays > 0) {
+                bonusParts.add(activity.resources.getQuantityString(R.plurals.day, bonusDays.toInt(), bonusDays))
             }
+            return TextUtils.join(" ", bonusParts)
         }
-        Logger.debug("bonusPartsLongform", bonusPartsLongform.toString())
-        Logger.debug("bonusPartsLongform", bonusPartsShortform.toString())
-        return TextUtils.join(" ", if (longForm) bonusPartsLongform else bonusPartsShortform)
+        return activity.resources.getQuantityString(R.plurals.day, (bonusMonths!! * 30 + bonusDays!!), bonusDays)
     }
 
     // TODO: WIP

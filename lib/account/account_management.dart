@@ -142,7 +142,7 @@ class _AccountManagementState extends State<AccountManagement>
           )
         ];
 
-        return !widget.isPro && !widget.isPlatinum
+        return !(widget.isPro || widget.isPlatinum)
             ?
             // * FREE
             ListView(
@@ -155,7 +155,7 @@ class _AccountManagementState extends State<AccountManagement>
                 children: freeItems,
               )
             :
-            // * PRO - check onboarding status
+            // * PRO or PLATINUM - check onboarding status
             messagingModel
                 .getOnBoardingStatus((context, hasBeenOnboarded, child) {
                 return sessionModel.devices(
