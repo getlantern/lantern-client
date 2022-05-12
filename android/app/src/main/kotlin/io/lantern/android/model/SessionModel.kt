@@ -136,9 +136,6 @@ open class SessionModel(
                 }
             }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
-            "setForceUserLevel" -> {
-                LanternApp.getSession().setUserLevel(call.argument("newLevel") ?: "")
-            }
             "resetCachedPlans" -> {
                 LanternApp.getSession().setUserPlans("")
             }

@@ -205,38 +205,6 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
-            // * FORCE USER STATUS
-            ListItemFactory.settingsItem(
-              content: 'Force Cached User Status'.i18n,
-              trailingArray: [
-                sessionModel.forceUserLevel(
-                    (BuildContext context, String value, Widget? child) {
-                  return DropdownButton<String>(
-                    value: value,
-                    icon: const CAssetImage(path: ImagePaths.arrow_down),
-                    iconSize: iconSize,
-                    elevation: 16,
-                    underline: Container(
-                      height: 2,
-                      color: Colors.green,
-                    ),
-                    onChanged: (String? newLevel) {
-                      sessionModel.setForceUserLevel(newLevel ?? '');
-                    },
-                    items: <String>['', 'pro', 'platinum']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: CText(
-                          value,
-                          style: tsBody1.copiedWith(color: Colors.green),
-                        ),
-                      );
-                    }).toList(),
-                  );
-                })
-              ],
-            ),
             // * DISPLAY USER STATUS
             sessionModel.getCachedUserLevel(
               (context, userLevel, child) => ListItemFactory.settingsItem(
