@@ -35,11 +35,6 @@ class SessionModel extends Model {
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> proxyAvailable;
 
-  // TODO: remove - we are using getCachedUserLevel instead
-  Widget proUser(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
-  }
-
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('proxyAll', builder: builder);
   }

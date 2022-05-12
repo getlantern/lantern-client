@@ -415,7 +415,7 @@ open class SessionModel(
     }
 
     protected fun updatePrice(plan: ProPlan) {
-        val formattedBonus = formatRenewalBonusExpected(plan.renewalBonusExpected)
+        val formattedBonus = formatRenewalBonusExpected(plan.renewalBonusExpected, false)
         val totalCost = plan.costWithoutTaxStr
         var totalCostBilledOneTime = activity.resources.getString(R.string.total_cost, totalCost)
         var formattedDiscount = ""
@@ -425,12 +425,13 @@ open class SessionModel(
         }
         val oneMonthCost = plan.formattedPriceOneMonth
         var renewalText = ""
-        if (LanternApp.getSession().getUserLevel() == "pro" || LanternApp.getSession().getUserLevel() == "platinum" ) {
+        if (LanternApp.getSession().getUserLevel() == "pro" || LanternApp.getSession().getUserLevel() == "platinum") {
             val localDateTime = LanternApp.getSession().getExpiration()
             renewalText = when {
                 localDateTime.isToday() -> {
                     activity.resources.getString(R.string.membership_ends_today, formattedBonus)
                 }
+                // TODO: this is unreachable
                 localDateTime.isBefore() -> {
                     activity.resources.getString(R.string.membership_has_expired, formattedBonus)
                 }
@@ -446,24 +447,36 @@ open class SessionModel(
         plan.setFormattedDiscount(formattedDiscount)
         plan.setTotalCost(totalCost)
     }
-
-    private fun formatRenewalBonusExpected(planBonus: MutableMap<String, Int>): String? {
+    // TODO: we need to report this in only days
+    // Formats the renewal bonus
+    // longForm == false -> a day-only format (e.g. "45 days")
+    // longForm==true -> month and day format (e.g. "1 month and 15 days"
+    private fun formatRenewalBonusExpected(planBonus: MutableMap<String, Int>, longForm: Boolean): String? {
         val bonusMonths: Int? = planBonus["months"]
         val bonusDays: Int? = planBonus["days"]
-        val bonusParts: MutableList<String?> = java.util.ArrayList()
+        val bonusPartsLongform: MutableList<String?> = java.util.ArrayList()
+        val bonusPartsShortform: MutableList<String?> = java.util.ArrayList()
         if (bonusMonths != null && bonusMonths > 0) {
-            bonusParts.add(
-                activity.resources.getQuantityString(
-                    R.plurals.month,
-                    bonusMonths.toInt(),
-                    bonusMonths
+            if (longForm) {
+                bonusPartsLongform.add(
+                    activity.resources.getQuantityString(
+                        R.plurals.month,
+                        bonusMonths.toInt(),
+                        bonusMonths
+                    )
                 )
-            )
+            }
         }
         if (bonusDays != null && bonusDays > 0) {
-            bonusParts.add(activity.resources.getQuantityString(R.plurals.day, bonusDays.toInt(), bonusDays))
+            if (longForm) {
+                bonusPartsLongform.add(activity.resources.getQuantityString(R.plurals.day, bonusDays.toInt(), bonusDays))
+            } else {
+                bonusPartsShortform.add(activity.resources.getQuantityString(R.plurals.day, (bonusMonths!! * 30 + bonusDays), bonusDays))
+            }
         }
-        return TextUtils.join(" ", bonusParts)
+        Logger.debug("bonusPartsLongform", bonusPartsLongform.toString())
+        Logger.debug("bonusPartsLongform", bonusPartsShortform.toString())
+        return TextUtils.join(" ", if (longForm) bonusPartsLongform else bonusPartsShortform)
     }
 
     // TODO: WIP

@@ -34,9 +34,8 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
-    validator: (value) => EmailValidator.validate(value ?? '')
-        ? null
-        : 'Please enter a valid email address'.i18n,
+    validator: (value) =>
+        EmailValidator.validate(value ?? '') ? null : 'invalid_email'.i18n,
   );
 
   final creditCardFieldKey = GlobalKey<FormState>();
@@ -45,7 +44,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     validator: (value) =>
         value != null && ccValidator.validateCCNum(value).isValid
             ? null
-            : 'Please enter a valid credit card number'.i18n,
+            : 'invalid_card'.i18n,
   );
 
   final expDateFieldKey = GlobalKey<FormState>();
@@ -54,7 +53,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     validator: (value) =>
         value != null && ccValidator.validateExpDate(value).isValid
             ? null
-            : 'Please enter a valid expiration date'.i18n,
+            : 'invalid_expiration'.i18n,
   );
 
   final cvcFieldKey = GlobalKey<FormState>();
@@ -65,7 +64,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
             RegExp(r'^\d+$').hasMatch(value) &&
             (value.characters.length == 3 || value.characters.length == 4)
         ? null
-        : 'Please enter a valid CVC'.i18n,
+        : 'invalid_cvc'.i18n,
   );
 
   var formIsValid = false;
@@ -140,7 +139,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 child: CTextField(
                   controller: creditCardController,
                   autovalidateMode: AutovalidateMode.disabled,
-                  label: 'Credit Card'.i18n,
+                  label: 'card_number'.i18n,
                   keyboardType: TextInputType.number,
                   maxLines: 1,
                   prefixIcon: const CAssetImage(path: ImagePaths.credit_card),
@@ -170,7 +169,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                         maxLength: 5,
                         controller: expDateController,
                         autovalidateMode: AutovalidateMode.disabled,
-                        label: 'MM/YY', //TODO: translation?
+                        label: 'card_expiration'.i18n,
                         keyboardType: TextInputType.datetime,
                         prefixIcon:
                             const CAssetImage(path: ImagePaths.calendar),
@@ -190,7 +189,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                         maxLength: 4,
                         controller: cvcFieldController,
                         autovalidateMode: AutovalidateMode.disabled,
-                        label: 'CVC',
+                        label: 'cvc'.i18n.toUpperCase(),
                         keyboardType: TextInputType.number,
                         prefixIcon: const CAssetImage(path: ImagePaths.lock),
                       ),
@@ -214,7 +213,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                         child: Container(
                           padding: const EdgeInsetsDirectional.all(24.0),
                           child: CText(
-                            'Tap to prefill fields',
+                            'DEV PURPOSES - TAP TO PREFILLs',
                             style: tsButtonBlue,
                           ),
                         ),
@@ -257,7 +256,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                         )
                         .then((value) async {
                       context.loaderOverlay.hide();
-                      // TODO: figure out status switch and show corresponding translations
+                      // TODO: Renewal success -- figure out status switch and show corresponding translations
                       CDialog.showInfo(
                         context,
                         iconPath: ImagePaths.lantern_logo,

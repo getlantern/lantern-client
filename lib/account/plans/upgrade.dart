@@ -222,6 +222,8 @@ class Upgrade extends StatelessWidget {
     final platinumPlans =
         plans.where((element) => element['level'] == 'platinum');
 
+    if (platinumPlans.isEmpty) return '';
+
     final bannerSavings = determineSavings(platinumPlans);
     final bannerRenewalBonus = '+' + determineBannerRenewalBonus(platinumPlans);
     return isFree == true

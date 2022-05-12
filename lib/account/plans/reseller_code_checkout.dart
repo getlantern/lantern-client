@@ -141,7 +141,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                       child: Container(
                         padding: const EdgeInsetsDirectional.all(24.0),
                         child: CText(
-                          'Tap to prefill field',
+                          'DEV PURPOSES - TAP TO PREFILL',
                           style: tsButtonBlue,
                         ),
                       ),
@@ -172,7 +172,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                         )
                         .then((value) {
                       context.loaderOverlay.hide();
-                      // TODO: figure out status switch and show corresponding translations
+                      // TODO: Translations - the renewal success text depends on user status
                       CDialog.showInfo(
                         context,
                         iconPath: ImagePaths.lantern_logo,

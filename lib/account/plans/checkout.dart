@@ -257,7 +257,7 @@ class _CheckoutState extends State<Checkout>
                           child: Container(
                             padding: const EdgeInsetsDirectional.all(24.0),
                             child: CText(
-                              'Tap to prefill field',
+                              'DEV PURPOSES - TAP TO PREFILL',
                               style: tsButtonBlue,
                             ),
                           ),

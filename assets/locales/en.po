@@ -208,16 +208,25 @@ msgstr "Step 2"
 msgid "Step 3"
 msgstr "Step 3"
 
-msgid "Please enter a valid email address"
+msgid "invalid_email"
 msgstr "Please enter a valid email address"
 
-msgid "Please enter a valid credit card number"
+msgid "invalid_card"
 msgstr "Please enter a valid credit card number"
 
-msgid "Please enter a valid expiration date"
+msgid "invalid_expiration"
 msgstr "Please enter a valid expiration date"
 
-msgid "Please enter a valid CVC"
+msgid "cc_number"
+msgstr "Credit Card"
+
+msgid "card_number"
+msgstr "Card Number"
+
+msgid "card_expiration"
+msgstr "MM/YY"
+
+msgid "invalid_cvc"
 msgstr "Please enter a valid CVC"
 
 msgid "Complete Purchase"

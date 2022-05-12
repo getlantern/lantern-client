@@ -84,9 +84,7 @@ class PlanCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CText(
-                          (!platinumAvailable && isPro)
-                              ? renewalBonus
-                              : description,
+                          description,
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                           ),
