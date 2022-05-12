@@ -46,7 +46,7 @@ public class ProUser {
     private List<Device> devices;
 
     @SerializedName("userLevel")
-    private String userLevel;
+    public String userLevel;
 
     public void setUserId(final Long userId) {
         this.userId = userId;
@@ -87,8 +87,6 @@ public class ProUser {
     public String getUserStatus() {
         return userStatus;
     }
-
-    public String getUserLevel() { return userLevel; }
 
     public boolean isProUser() {
         return userStatus != null && userStatus.equals("active");

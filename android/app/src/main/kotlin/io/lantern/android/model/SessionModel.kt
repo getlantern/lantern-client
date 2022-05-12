@@ -48,7 +48,7 @@ open class SessionModel(
         private const val TAG = "SessionModel"
         private const val STRIPE_TAG = "$TAG.stripe"
 
-        const val PATH_PRO_USER = "prouser" // TODO: we are not using this anymore
+        const val PATH_PRO_USER = "prouser" // TODO: redundant
         const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_PLANS = "plans"
         const val PATH_USER_LEVEL = "userLevel"
@@ -57,7 +57,7 @@ open class SessionModel(
     init {
         db.mutate { tx ->
             // initialize data for fresh install // TODO remove the need to do this for each data path
-            // TODO: we are not using PATH_PRO_USER anymore
+            // TODO: PATH_PRO_USER is now redundant since we can derive from userLevel
             tx.put(
                 PATH_PRO_USER,
                 castToBoolean(tx.get(PATH_PRO_USER), false)
@@ -66,11 +66,13 @@ open class SessionModel(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
+            // TODO: do we need this?
             tx.put(
-                PATH_PLANS, ""
+                PATH_PLANS, tx.get(PATH_PLANS) ?: ""
             )
+            // TODO: do we need this?
             tx.put(
-                PATH_USER_LEVEL, ""
+                PATH_USER_LEVEL, tx.get(PATH_USER_LEVEL) ?: ""
             )
         }
     }
@@ -135,14 +137,10 @@ open class SessionModel(
             }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
             "setForceUserLevel" -> {
-                db.mutate { tx ->
-                    tx.put(PATH_USER_LEVEL, call.argument<String>("newLevel")!!)
-                }
+                LanternApp.getSession().setUserLevel(call.argument("newLevel") ?: "")
             }
             "resetCachedPlans" -> {
-                db.mutate { tx ->
-                    tx.put(PATH_PLANS, "")
-                }
+                LanternApp.getSession().setUserPlans("")
             }
             else -> super.doMethodCall(call, notImplemented)
         }
@@ -366,9 +364,7 @@ open class SessionModel(
                 override fun onSuccess(response: Response, userData: ProUser) {
                     Logger.debug(TAG, "Successfully updated userData")
                     result.success("cachingUserDataSuccess")
-                    db.mutate { tx ->
-                        tx.put(PATH_USER_LEVEL, userData.userLevel)
-                    }
+                    LanternApp.getSession().setUserLevel(userData.userLevel)
                 }
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to fetch user data: $t.message")
@@ -394,9 +390,7 @@ open class SessionModel(
                     for (planId in proPlans.keys) {
                         proPlans[planId]?.let { updatePrice(it) }
                     }
-                    db.mutate { tx ->
-                        tx.put(PATH_PLANS, Json.gson.toJson(plans))
-                    }
+                    LanternApp.getSession().setUserPlans(Json.gson.toJson(plans))
                 }
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     if (error?.message != null) {
@@ -431,8 +425,7 @@ open class SessionModel(
         }
         val oneMonthCost = plan.formattedPriceOneMonth
         var renewalText = ""
-        // TODO: this logic needs to be updated?
-        if (LanternApp.getSession().isProUser) {
+        if (LanternApp.getSession().getUserLevel() == "pro" || LanternApp.getSession().getUserLevel() == "platinum" ) {
             val localDateTime = LanternApp.getSession().getExpiration()
             renewalText = when {
                 localDateTime.isToday() -> {

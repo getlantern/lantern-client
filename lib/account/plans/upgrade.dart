@@ -213,6 +213,7 @@ class Upgrade extends StatelessWidget {
     });
   }
 
+  // Only visible in China
   String determineBannerContent(
     bool isFree,
     List<Map<String, Object>> plans,
@@ -221,15 +222,19 @@ class Upgrade extends StatelessWidget {
     final platinumPlans =
         plans.where((element) => element['level'] == 'platinum');
 
-    final savingsPercentage = determineSavings(platinumPlans);
-    final renewalBonus = '+' + determineRenewalBonus(platinumPlans);
+    final bannerSavings = determineSavings(platinumPlans);
+    final bannerRenewalBonus = '+' + determineBannerRenewalBonus(platinumPlans);
     return isFree == true
         ?
         // Free user who is upgrading => fixed %
-        'Save $savingsPercentage%'
-        : renewalBonus;
+        'Save $bannerSavings%'
+        : bannerRenewalBonus;
   }
 
+  // Only visible in China
+  // For Free users in China, it displays a renewal bonus %
+  // To facilitate our lives we only compare Platinum plans to each other
+  // (the result % is higher than comparing Pro plans to each other)
   String determineSavings(Iterable platinumPlans) {
     final platinumPlanPrices =
         platinumPlans.map((pr) => (pr['usdPrice'] as num)).toList();
@@ -240,23 +245,18 @@ class Upgrade extends StatelessWidget {
     return discount.toInt().toString();
   }
 
-  String determineRenewalBonus(Iterable platinumPlans) {
-    // This appears only in China, where to facilitate our lives we only compare Platinum plans to each other
-    // in order to come up with % savings (it's higher than comparing Pro plans to each other)
-    // This widget hidden for non-China locations
-    final twoYearPlatinum = platinumPlans.firstWhere(
+  // Only visible in China
+  // For Pro or Platinum users in China, it displays a "+3 months" text
+  String determineBannerRenewalBonus(Iterable platinumPlans) {
+    // TODO: waiting for feedback on how to handle long strings
+    var bannerRenewalBonus = platinumPlans.firstWhere(
       (p) => (p['id'] as String).startsWith('2y'),
-    )['renewalBonusExpected'] as Map<String, dynamic>;
-
-    var renewalBonus = '';
-    twoYearPlatinum.forEach((key, value) {
-      if (value > 0) {
-        renewalBonus += '$value $key';
-      }
-    });
-    return renewalBonus;
+    )['formattedBonus'];
+    return bannerRenewalBonus;
   }
 
+  // Takes toggle state into consideration to determine which plans are displayed
+  // If no toggle visible (= Global plans), then no filtering occurs.
   List<Map<String, Object>> determineVisiblePlans(
     bool isTwoYearPlan,
     List<Map<String, Object>> plans,
@@ -273,6 +273,7 @@ class Upgrade extends StatelessWidget {
         .toList();
   }
 
+  // Builds the renewal text (for Pro and Platinum, inside and outside China) and the list of features (for Pro and Platinum outside China)
   Widget buildRenewalTextOrUpsell(
     BuildContext context,
     bool? platinumAvailable,
@@ -284,12 +285,14 @@ class Upgrade extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Renewal text
+          // For Pro or Platinum users: "Your membership is ending soon. Renew now and enjoy up to three months free!"
           if (isFree == false)
             CText(
-              visiblePlans
-                  .first['renewalText'], // TODO: just a placeholder - fix
+              visiblePlans.last['renewalText'],
               style: tsBody1,
             ),
+          // List of features for non-China locations
           if (platinumAvailable == false)
             Column(
               children: [
