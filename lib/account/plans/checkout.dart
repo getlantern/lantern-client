@@ -42,7 +42,9 @@ class _CheckoutState extends State<Checkout>
         // only allow letters and numbers as well as 6 <= length <= 13
         value != null &&
                 RegExp(r'^[a-zA-Z0-9]*$').hasMatch(value) &&
-                (6 <= value.characters.length && value.characters.length <= 13)
+                (6 <= value.characters.length &&
+                    value.characters.length <= 13) &&
+                refCodeSuccessfullyApplied
             ? null
             : 'Your referral code is invalid'.i18n,
   );
@@ -54,6 +56,7 @@ class _CheckoutState extends State<Checkout>
   var submittedRefCode = false;
   late AnimationController animationController;
   late Animation pulseAnimation;
+  var refCodeSuccessfullyApplied = false;
 
   @override
   void initState() {
@@ -151,9 +154,15 @@ class _CheckoutState extends State<Checkout>
                           onTap: () async {
                             await sessionModel
                                 .applyRefCode(
-                              emailController.text,
-                              referralCode,
-                            )
+                                  emailController.text,
+                                  referralCode,
+                                )
+                                .then(
+                                  (value) => setState(() {
+                                    submittedRefCode = true;
+                                    refCodeSuccessfullyApplied = true;
+                                  }),
+                                )
                                 .onError((error, stackTrace) {
                               CDialog.showError(
                                 context,
@@ -164,9 +173,9 @@ class _CheckoutState extends State<Checkout>
                                     .toString()
                                     .i18n, // we are localizing this error Flutter-side
                               );
-                            });
-                            setState(() {
-                              submittedRefCode = true;
+                              setState(() {
+                                refCodeSuccessfullyApplied = false;
+                              });
                             });
                           },
                           child: Container(
@@ -176,7 +185,8 @@ class _CheckoutState extends State<Checkout>
                             ),
                             child: submittedRefCode &&
                                     refCodeFieldKey.currentState?.validate() ==
-                                        true
+                                        true &&
+                                    refCodeSuccessfullyApplied
                                 ? Transform.scale(
                                     scale: pulseAnimation.value,
                                     child: const CAssetImage(
@@ -310,7 +320,8 @@ class _CheckoutState extends State<Checkout>
                             )
                             .then((value) async {
                           context.loaderOverlay.hide();
-                          final btcPayURL = value as String;
+                          final btcPayURL = value
+                              as String; // TODO: presumably we get the BTCPay URL with token from callback
                           await context.pushRoute(
                             FullScreenDialogPage(
                               widget: Center(
@@ -318,6 +329,7 @@ class _CheckoutState extends State<Checkout>
                                   children: [
                                     WebView(
                                       initialUrl: btcPayURL,
+                                      // TODO: we don't need to keep this loadingPercentage, it was boilerplate code
                                       onPageStarted: (url) {
                                         setState(() {
                                           loadingPercentage = 0;
@@ -333,7 +345,7 @@ class _CheckoutState extends State<Checkout>
                                           loadingPercentage = 100;
                                         });
                                       },
-                                      // TODO: listen for WebView close
+                                      // TODO: listen for WebView close and handle success
                                     ),
                                     if (loadingPercentage < 100)
                                       LinearProgressIndicator(
