@@ -20,6 +20,7 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.activity.CheckoutActivity
 import org.getlantern.lantern.model.*
 import org.getlantern.lantern.model.LanternHttpClient.*
 import org.getlantern.lantern.openHome
@@ -600,8 +601,34 @@ open class SessionModel(
     // Applies referral code (before the user has initiated a transaction)
     private fun applyRefCode(email: String, refCode: String, result: MethodChannel.Result) {
         try {
-            // TODO: Migrate handleReferral() from CheckoutActivity
-            // TODO: handle error
+            val formBody: FormBody = FormBody.Builder().add("code", refCode).build()
+            CheckoutActivity.lanternClient.post(
+                createProUrl("/referral-attach"), formBody,
+                object : ProCallback {
+                    override fun onFailure(throwable: Throwable?, error: ProError?) {
+                        Logger.error(
+                            TAG,
+                            "Error retrieving referral code: $error"
+                        )
+                        if (error != null && error.message != null) {
+                            result.error(
+                                "unknownError",
+                                error.message, // This error message is localized Flutter-side
+                                null,
+                            )
+                            return
+                        }
+                    }
+
+                    override fun onSuccess(response: Response, result: JsonObject) {
+                        Logger.debug(
+                            TAG,
+                            "Successfully redeemed referral code$refCode"
+                        )
+                        LanternApp.getSession().setReferral(refCode)
+                    }
+                }
+            )
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to apply referral code", t)
             result.error(
@@ -613,10 +640,34 @@ open class SessionModel(
     }
 
     // TODO: WIP
-    // Fetches the BTCPay endpoint info which is needed to trigger the Webview
+    // Fetches the BTCPay endpoint info which is needed to trigger the WebView
     private fun submitBitcoin(planID: String, email: String, result: MethodChannel.Result) {
         try {
-            // TODO: hit /purchase-redirect endpoint
+            val params: MutableMap<String, String> = HashMap()
+            params["email"] = email
+            params["planID"] = planID
+            CheckoutActivity.lanternClient[
+                createProUrl("/payment-redirect", params), object :
+                    ProCallback {
+                    override fun onFailure(throwable: Throwable?, error: ProError?) {
+                        result.error(
+                            "unknownError",
+                            "BTCPay is unavailable", // This error message is localized Flutter-side
+                            null,
+                        )
+                        return
+                    }
+
+                    override fun onSuccess(response: Response, result: JsonObject) {
+                        Logger.debug(
+                            TAG,
+                            "Email successfully validated $email"
+                        )
+                        // TODO: return response to client
+                        Logger.debug("BTC result", result.toString())
+                    }
+                }
+            ]
         } catch (t: Throwable) {
             Logger.error(TAG, "BTCPay is unavailable", t)
             result.error(

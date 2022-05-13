@@ -26,7 +26,6 @@ class PlanCard extends StatelessWidget {
         selectedPlan['totalCostBilledOneTime'].toString();
     final formattedPricePerMonth = selectedPlan['oneMonthCost'].toString();
     final isBestValue = selectedPlan['bestValue'] as bool;
-    final renewalBonus = selectedPlan['formattedBonus'].toString();
 
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),

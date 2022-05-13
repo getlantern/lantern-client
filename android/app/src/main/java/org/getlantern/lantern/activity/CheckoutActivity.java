@@ -65,7 +65,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
     private static final String STRIPE_TAG = TAG + ".stripe";
 
     public static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
-    private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
+    public static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
     
     private ProgressDialog dialog;
 
@@ -321,6 +321,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         }
     }
 
+    // TODO: has been moved to and modified in SessionModel.kt
     private void handleReferral(final String referral, final String email) {
         dialog = ProgressDialog.show(this,
                 getResources().getString(R.string.applying_referral_code),

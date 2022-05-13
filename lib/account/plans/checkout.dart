@@ -294,8 +294,6 @@ class _CheckoutState extends State<Checkout>
                           ),
                         );
                       } else {
-                        const btcPayURL = '';
-                        // TODO: handle failed payment effort
                         context.loaderOverlay.show();
                         await sessionModel
                             .submitBitcoin(
@@ -312,6 +310,7 @@ class _CheckoutState extends State<Checkout>
                             )
                             .then((value) async {
                           context.loaderOverlay.hide();
+                          final btcPayURL = value as String;
                           await context.pushRoute(
                             FullScreenDialogPage(
                               widget: Center(
