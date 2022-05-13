@@ -272,7 +272,11 @@ class Upgrade extends StatelessWidget {
           (plan) =>
               plan['id'].toString().startsWith(isTwoYearPlan ? '2y' : '1y'),
         )
-        .toList();
+        .toList()
+      ..sort(
+        (a, b) =>
+            (a['bestValue'] as bool) ? 0 : 1, // sort bestValue plan to top
+      );
   }
 
   // Builds the renewal text (for Pro and Platinum, inside and outside China) and the list of features (for Pro and Platinum outside China)
