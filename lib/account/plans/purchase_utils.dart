@@ -5,9 +5,14 @@ List<Map<String, Object>> formatCachedPlans(String cachedPlans) {
   // ignore: omit_local_variable_types
   List<Map<String, Object>> plans = [];
 
-  if (cachedPlans == '') return [];
-  final plansMap = jsonDecode(cachedPlans) as Map;
-  plansMap.forEach((key, value) => plans.add(value));
+  if (cachedPlans.isEmpty) return [];
+  try {
+    final plansMap = jsonDecode(cachedPlans) as Map;
+    plansMap.forEach((key, value) => plans.add(value));
+  } on FormatException catch (e) {
+    print(e);
+    return [];
+  }
   return plans;
 }
 
