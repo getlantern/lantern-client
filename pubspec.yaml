@@ -102,8 +102,8 @@ dependencies:
 # Use our own fork of flutter_webrtc with more optimized audio quality settings
   flutter_webrtc:
     git:
-      url: git://github.com/getlantern/flutter-webrtc.git
-      ref: master
+      url: https://github.com/getlantern/flutter-webrtc.git
+      ref: 1bf2cd40af6e8b0c6180c937659051eb157c0a4e
 
   markdown: ^4.0.1
 

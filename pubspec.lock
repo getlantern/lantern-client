@@ -569,9 +569,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
+      ref: "1bf2cd40af6e8b0c6180c937659051eb157c0a4e"
       resolved-ref: "1bf2cd40af6e8b0c6180c937659051eb157c0a4e"
-      url: "git://github.com/getlantern/flutter-webrtc.git"
+      url: "https://github.com/getlantern/flutter-webrtc.git"
     source: git
     version: "0.7.1"
   fluttertoast:
@@ -752,6 +752,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.11"
+  material_color_utilities:
+    dependency: transitive
+    description:
+      name: material_color_utilities
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.3"
   meta:
     dependency: transitive
     description:
@@ -961,7 +968,7 @@ packages:
       name: platform
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2"
+    version: "3.1.0"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -1309,21 +1316,21 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.17.12"
+    version: "1.19.5"
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.3"
+    version: "0.4.8"
   test_core:
     dependency: transitive
     description:
       name: test_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.2"
+    version: "0.4.9"
   timezone:
     dependency: transitive
     description:
@@ -1463,7 +1470,7 @@ packages:
       name: vm_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.3.0"
+    version: "7.5.0"
   wakelock:
     dependency: "direct main"
     description:
