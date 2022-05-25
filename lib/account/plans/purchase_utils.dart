@@ -1,9 +1,9 @@
 import 'package:lantern/common/common.dart';
 
-List<Map<String, Object>> formatCachedPlans(String cachedPlans) {
+List<Map<String, dynamic>> formatCachedPlans(String cachedPlans) {
   // transform the String cached in db to a workable format
   // ignore: omit_local_variable_types
-  List<Map<String, Object>> plans = [];
+  List<Map<String, dynamic>> plans = [];
 
   if (cachedPlans.isEmpty) return [];
   try {

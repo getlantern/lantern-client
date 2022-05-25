@@ -3,7 +3,7 @@ import 'package:lantern/common/common.dart';
 import 'purchase_constants.dart';
 
 class PlanCard extends StatelessWidget {
-  final List<Map<String, Object>> plans;
+  final List<Map<String, dynamic>> plans;
   final String id;
   final bool isPro;
   final bool platinumAvailable;

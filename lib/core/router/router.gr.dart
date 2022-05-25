@@ -1214,7 +1214,7 @@ class UpgradeArgs {
 /// [_i30.Checkout]
 class Checkout extends _i33.PageRouteInfo<CheckoutArgs> {
   Checkout(
-      {required List<Map<String, Object>> plans,
+      {required List<Map<String, dynamic>> plans,
       required String id,
       required bool isPro,
       required bool isPlatinum,
@@ -1239,7 +1239,7 @@ class CheckoutArgs {
       required this.isPlatinum,
       this.key});
 
-  final List<Map<String, Object>> plans;
+  final List<Map<String, dynamic>> plans;
 
   final String id;
 
@@ -1259,7 +1259,7 @@ class CheckoutArgs {
 /// [_i31.StripeCheckout]
 class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
   StripeCheckout(
-      {required List<Map<String, Object>> plans,
+      {required List<Map<String, dynamic>> plans,
       required String email,
       String? refCode,
       required String id,
@@ -1290,7 +1290,7 @@ class StripeCheckoutArgs {
       required this.isPlatinum,
       this.key});
 
-  final List<Map<String, Object>> plans;
+  final List<Map<String, dynamic>> plans;
 
   final String email;
 

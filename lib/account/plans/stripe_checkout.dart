@@ -1,13 +1,13 @@
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:lantern/account/plans/purchase_utils.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
+import 'package:lantern/account/plans/purchase_utils.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
 class StripeCheckout extends StatefulWidget {
-  final List<Map<String, Object>> plans;
+  final List<Map<String, dynamic>> plans;
   final String email;
   final String? refCode;
   final String id;

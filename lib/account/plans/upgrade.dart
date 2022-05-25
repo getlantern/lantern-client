@@ -216,7 +216,7 @@ class Upgrade extends StatelessWidget {
   // Only visible in China
   String determineBannerContent(
     bool isFree,
-    List<Map<String, Object>> plans,
+    List<Map<String, dynamic>> plans,
   ) {
     // for the savings banner we only compare 1y Platinum to 2y Platinum
     final platinumPlans =
@@ -259,9 +259,9 @@ class Upgrade extends StatelessWidget {
 
   // Takes toggle state into consideration to determine which plans are displayed
   // If no toggle visible (= Global plans), then no filtering occurs.
-  List<Map<String, Object>> determineVisiblePlans(
+  List<Map<String, dynamic>> determineVisiblePlans(
     bool isTwoYearPlan,
-    List<Map<String, Object>> plans,
+    List<Map<String, dynamic>> plans,
   ) {
     // if we are not in China, we only have two available plans which we both want to render
     if (!platinumAvailable) return plans;

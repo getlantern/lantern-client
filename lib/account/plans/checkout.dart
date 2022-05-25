@@ -8,7 +8,7 @@ import 'purchase_constants.dart';
 import 'purchase_utils.dart';
 
 class Checkout extends StatefulWidget {
-  final List<Map<String, Object>> plans;
+  final List<Map<String, dynamic>> plans;
   final String id;
   final bool isPro;
   final bool isPlatinum;

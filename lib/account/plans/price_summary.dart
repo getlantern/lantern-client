@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 
 class PriceSummary extends StatelessWidget {
-  final List<Map<String, Object>> plans;
+  final List<Map<String, dynamic>> plans;
   final String id;
   final String? refCode;
   final bool isPro;
