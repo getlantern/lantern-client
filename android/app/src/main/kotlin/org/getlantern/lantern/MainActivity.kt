@@ -175,7 +175,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     override fun onResume() {
         val start = System.currentTimeMillis()
         updateUserData()
-        Logger.debug(TAG, "updateUserData90 finished at ${System.currentTimeMillis() - start}")
+        Logger.debug(TAG, "updateUserData() finished at ${System.currentTimeMillis() - start}")
+
+        // TODO: call update and cache plans / userLevel
 
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")

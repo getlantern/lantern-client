@@ -259,6 +259,9 @@ public class LanternHttpClient extends HttpClient {
                     final ProUser user = Json.gson.fromJson(result, ProUser.class);
                     if (user != null) {
                         Logger.debug(TAG, "User ID is " + user.getUserId());
+                        if (user.getUserLevel() == null) {
+                            user.setUserLevel("");
+                        }
                         LanternApp.getSession().storeUserData(user);
                     }
                     if (cb != null) {

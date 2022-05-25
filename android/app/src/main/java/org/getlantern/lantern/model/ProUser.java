@@ -64,6 +64,12 @@ public class ProUser {
         return token;
     }
 
+    public String getUserLevel() {
+        return this.userLevel;
+    }
+
+    public void setUserLevel(final String level) { this.userLevel = level; }
+
     public void setReferral(final String referral) {
         this.referral = referral;
     }
