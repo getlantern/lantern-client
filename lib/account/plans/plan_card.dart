@@ -74,7 +74,12 @@ class PlanCard extends StatelessWidget {
               ),
               elevation: isBestValue ? 3 : 1,
               child: Container(
-                padding: const EdgeInsetsDirectional.all(24.0),
+                padding: const EdgeInsetsDirectional.only(
+                  start: 24.0,
+                  end: 24.0,
+                  top: 12.0,
+                  bottom: 24.0,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

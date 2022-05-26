@@ -187,8 +187,8 @@ msgstr "Requires access to the email you used to buy Lantern Pro"
 msgid "Link via Email"
 msgstr "Link via Email"
 
-msgid "lantern_pro_email"
-msgstr "Lantern Pro Email"
+msgid "lantern_email"
+msgstr "Lantern Email"
 
 msgid "Email"
 msgstr "Email"
@@ -209,13 +209,13 @@ msgid "Step 3"
 msgstr "Step 3"
 
 msgid "invalid_email"
-msgstr "Please enter a valid email address"
+msgstr "Invalid email address"
 
 msgid "invalid_card"
-msgstr "Please enter a valid credit card number"
+msgstr "Invalid credit card number"
 
 msgid "invalid_expiration"
-msgstr "Please enter a valid expiration date"
+msgstr "Invalid expiration date"
 
 msgid "cc_number"
 msgstr "Credit Card"
@@ -227,7 +227,7 @@ msgid "card_expiration"
 msgstr "MM/YY"
 
 msgid "invalid_cvc"
-msgstr "Please enter a valid CVC"
+msgstr "Invalid CVC"
 
 msgid "Complete Purchase"
 msgstr "Complete Purchase"

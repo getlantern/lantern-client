@@ -99,7 +99,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // * Step 2
+            // * Step 3
             PlanStep(
               stepNum: '3',
               description: 'Checkout'.i18n,
@@ -107,7 +107,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
             // * Email
             Container(
               padding: const EdgeInsetsDirectional.only(
-                top: 8,
+                top: 16,
                 bottom: 8,
               ),
               child: Form(
@@ -153,7 +153,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 bottom: 16.0,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //* Expiration
@@ -176,9 +176,10 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       ),
                     ),
                   ),
+                  const Spacer(),
                   //* CVV
                   Container(
-                    width: 150,
+                    width: 144,
                     child: Form(
                       onChanged: () => setState(() {
                         formIsValid = determineFormIsValid();

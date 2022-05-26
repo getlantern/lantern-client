@@ -167,7 +167,7 @@ class _AccountManagementState extends State<AccountManagement>
                       Widget? child,
                     ) {
                       return ListItemFactory.settingsItem(
-                        header: 'lantern_pro_email'.i18n,
+                        header: 'lantern_email'.i18n,
                         icon: ImagePaths.email,
                         content: emailAddress,
                         trailingArray: [],

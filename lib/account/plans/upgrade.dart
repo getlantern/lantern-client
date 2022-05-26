@@ -116,6 +116,7 @@ class Upgrade extends StatelessWidget {
                                     toggleSize: 18.0,
                                     value: isTwoYearPlan,
                                     activeColor: indicatorGreen,
+                                    inactiveColor: indicatorGreen,
                                     onToggle: (bool newValue) {
                                       setState(() => isTwoYearPlan = newValue);
                                       setState(
@@ -127,50 +128,49 @@ class Upgrade extends StatelessWidget {
                                       );
                                     },
                                   ),
-                                  if (isTwoYearPlan)
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.only(
-                                        start: 16.0,
-                                      ),
-                                      // * Savings banner
-                                      child: Stack(
-                                        children: [
-                                          Transform.translate(
-                                            offset: const Offset(30.0, -25.0),
-                                            child: const CAssetImage(
-                                              path: ImagePaths.savings_arrow,
-                                            ),
-                                          ),
-                                          Transform.translate(
-                                            offset: const Offset(65.0, -30.0),
-                                            child: Transform.rotate(
-                                              angle: 0.1 * pi,
-                                              child: Stack(
-                                                children: [
-                                                  CText(
-                                                    determineBannerContent(
-                                                      isFree,
-                                                      plans,
-                                                    ).toUpperCase(),
-                                                    style: tsBody1.copiedWith(
-                                                      color: pink4,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          CText(
-                                            '2y_pricing'.i18n,
-                                            style: isTwoYearPlan
-                                                ? tsBody1
-                                                : tsBody1.copiedWith(
-                                                    color: grey5,
-                                                  ),
-                                          )
-                                        ],
-                                      ),
+                                  // * Savings banner
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                      start: 16.0,
                                     ),
+                                    child: Stack(
+                                      children: [
+                                        Transform.translate(
+                                          offset: const Offset(30.0, -25.0),
+                                          child: const CAssetImage(
+                                            path: ImagePaths.savings_arrow,
+                                          ),
+                                        ),
+                                        Transform.translate(
+                                          offset: const Offset(65.0, -30.0),
+                                          child: Transform.rotate(
+                                            angle: 0.1 * pi,
+                                            child: Stack(
+                                              children: [
+                                                CText(
+                                                  determineBannerContent(
+                                                    isFree,
+                                                    plans,
+                                                  ).toUpperCase(),
+                                                  style: tsBody1.copiedWith(
+                                                    color: pink4,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        CText(
+                                          '2y_pricing'.i18n,
+                                          style: isTwoYearPlan
+                                              ? tsBody1
+                                              : tsBody1.copiedWith(
+                                                  color: grey5,
+                                                ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

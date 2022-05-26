@@ -103,6 +103,7 @@ class _CTextFieldState extends State<CTextField> {
             textCapitalization:
                 widget.textCapitalization ?? TextCapitalization.none,
             decoration: InputDecoration(
+              contentPadding: const EdgeInsetsDirectional.all(0),
               isDense: true,
               floatingLabelBehavior: FloatingLabelBehavior.never,
               // we handle floating labels using our custom method below
@@ -131,7 +132,7 @@ class _CTextFieldState extends State<CTextField> {
               prefixIcon:
                   // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
                   widget.prefixIcon != null
-                      ? Transform.scale(scale: 0.5, child: widget.prefixIcon)
+                      ? Transform.scale(scale: 0.4, child: widget.prefixIcon)
                       : null,
               suffixIcon: renderSuffixRow(),
               counterText: '',
@@ -188,14 +189,14 @@ class _CTextFieldState extends State<CTextField> {
     if (isEmpty) return null;
     return hasError
         ? Transform.scale(
-            scale: 0.5,
+            scale: 0.4,
             child: CAssetImage(
               path: ImagePaths.error,
               color: indicatorRed,
             ),
           )
         : widget.suffixIcon != null
-            ? Transform.scale(scale: 0.5, child: widget.suffixIcon)
+            ? Transform.scale(scale: 0.4, child: widget.suffixIcon)
             : null;
   }
 
@@ -223,9 +224,10 @@ class _CTextFieldState extends State<CTextField> {
         }
       },
       child: CAssetImage(
-          key: const ValueKey('submit_text_field'),
-          path: widget.actionIconPath!,
-          color: white),
+        key: const ValueKey('submit_text_field'),
+        path: widget.actionIconPath!,
+        color: white,
+      ),
     );
   }
 }
