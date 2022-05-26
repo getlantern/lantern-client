@@ -160,24 +160,6 @@ android {
 
     buildTypes {
 
-        debug {
-            minifyEnabled false
-            shrinkResources false
-            debuggable true
-            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
-            buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
-            buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
-            buildConfigField "boolean", "STAGING", getBoolean("useStaging")
-            buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
-            buildConfigField "String", "COUNTRY", userCountry()
-            buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
-            buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
-            buildConfigField "String", "SIGNING_CERTIFICATE_SHA256", "\"\""
-            buildConfigField "String", "LOCONF_URL", '"https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json"'
-            buildConfigField "String", "PRIVACY_POLICY_URL", '"https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf"'
-            buildConfigField "String", "TERMS_OF_SERVICE_URL", '"https://s3.amazonaws.com/lantern/Lantern-TOS.pdf"'
-        }
-
         profile {
             minifyEnabled false
             shrinkResources false
@@ -219,6 +201,31 @@ android {
 
         play {
             initWith release
+            buildConfigField "boolean", "PLAY_VERSION", "true"
+        }
+
+        sideload {
+            initWith release
+            buildConfigField "boolean", "PLAY_VERSION", "false"
+        }
+
+        debug {
+            initWith sideload
+            minifyEnabled false
+            shrinkResources false
+            debuggable true
+            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
+            buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
+            buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
+            buildConfigField "boolean", "STAGING", getBoolean("useStaging")
+            buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
+            buildConfigField "String", "COUNTRY", userCountry()
+            buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
+            buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
+            buildConfigField "String", "SIGNING_CERTIFICATE_SHA256", "\"\""
+            buildConfigField "String", "LOCONF_URL", '"https://raw.githubusercontent.com/getlantern/loconf/master/test-messages.json"'
+            buildConfigField "String", "PRIVACY_POLICY_URL", '"https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf"'
+            buildConfigField "String", "TERMS_OF_SERVICE_URL", '"https://s3.amazonaws.com/lantern/Lantern-TOS.pdf"'
         }
     }
 
