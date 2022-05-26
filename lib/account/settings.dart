@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:lantern/i18n/localization_constants.dart';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
@@ -20,8 +20,7 @@ class Settings extends StatelessWidget {
 
   void changeLanguage(BuildContext context) => context.pushRoute(Language());
 
-  void reportIssue() =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
+  void reportIssue() async => await sessionModel.checkForUpdates();
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +55,14 @@ class Settings extends StatelessWidget {
           ListItemFactory.settingsItem(
             icon: ImagePaths.alert,
             content: 'report_issue'.i18n,
+            trailingArray: [
+              mirrorLTR(context: context, child: const ContinueArrow())
+            ],
+            onTap: reportIssue,
+          ),
+          ListItemFactory.settingsItem(
+            icon: ImagePaths.update,
+            content: 'check_for_updates'.i18n,
             trailingArray: [
               mirrorLTR(context: context, child: const ContinueArrow())
             ],

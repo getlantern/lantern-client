@@ -555,9 +555,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
+      ref: "1bf2cd40af6e8b0c6180c937659051eb157c0a4e"
       resolved-ref: "1bf2cd40af6e8b0c6180c937659051eb157c0a4e"
-      url: "git://github.com/getlantern/flutter-webrtc.git"
+      url: "https://github.com/getlantern/flutter-webrtc.git"
     source: git
     version: "0.7.1"
   fluttertoast:

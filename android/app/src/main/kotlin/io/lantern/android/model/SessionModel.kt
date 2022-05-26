@@ -11,6 +11,7 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
@@ -22,6 +23,7 @@ import org.getlantern.lantern.util.Analytics
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
+import org.greenrobot.eventbus.EventBus
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -105,6 +107,9 @@ class SessionModel(
                 }
             }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
+            "checkForUpdates" -> {
+                EventBus.getDefault().post(CheckUpdate(true))
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
