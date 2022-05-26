@@ -19,44 +19,43 @@ class PriceSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedPlan = plans.firstWhere((p) => p['id'] == id);
+    final description = selectedPlan['description'];
     final formattedPricePerYear =
         selectedPlan['totalCost'].toString().split(' ').first;
-    final refCodeBonus = 'bonus from referral code';
-    final bonus = '+ ' + selectedPlan['formattedBonus'].toString();
+    final bonus = selectedPlan['formattedBonus'].toString();
     return Container(
-      padding: const EdgeInsetsDirectional.only(top: 8.0, bottom: 8.0),
+      padding: const EdgeInsetsDirectional.only(top: 8.0),
       child: Column(
         children: [
           const CDivider(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CText('plan_type'.i18n.toUpperCase(), style: tsOverline),
+              CText(description.toUpperCase(), style: tsOverline),
               CText(formattedPricePerYear, style: tsOverline),
             ],
           ),
-          if (isPro != false || isPlatinum != false)
+          // * Renewal Bonus
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CText(
+                '+ ${bonus.toUpperCase()}',
+                style: tsOverline,
+              ),
+              CText('Free'.i18n.toUpperCase(), style: tsOverline),
+            ],
+          ),
+          // * Referral bonus
+          if (refCode != null && refCode!.isNotEmpty)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // TODO: calculate credit months text
                 CText(
-                  bonus.toUpperCase(),
+                  '+ 1 ${'month'.i18n.toUpperCase()} ${'referral bonus'.i18n.toUpperCase()}',
                   style: tsOverline,
                 ),
-                CText('Free'.i18n, style: tsOverline),
-              ],
-            ),
-          if (refCode != null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // TODO: calculate text
-                CText(
-                  refCodeBonus.toUpperCase(),
-                  style: tsOverline,
-                ),
-                CText('Free'.i18n, style: tsOverline),
+                CText('Free'.i18n.toUpperCase(), style: tsOverline),
               ],
             ),
           Row(

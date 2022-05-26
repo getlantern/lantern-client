@@ -234,12 +234,12 @@ class Upgrade extends StatelessWidget {
     if (platinumPlans.isEmpty) return '';
 
     final bannerSavings = determineSavings(platinumPlans);
-    final bannerRenewalBonus = '+' + determineBannerRenewalBonus(platinumPlans);
-    return isFree == true
+    final bannerRenewalBonus = determineBannerRenewalBonus(platinumPlans);
+    return isFree == true || bannerSavings == '0' || bannerRenewalBonus == '0'
         ?
         // Free user who is upgrading => fixed %
         'Save $bannerSavings%'
-        : bannerRenewalBonus;
+        : '+' + bannerRenewalBonus;
   }
 
   // Only visible in China
@@ -295,24 +295,31 @@ class Upgrade extends StatelessWidget {
     bool? isFree,
     Iterable visiblePlans,
   ) {
+    // TODO: not sure what we are doing here
+    final renewalText = visiblePlans.last['renewalText'];
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Renewal text
+          // * Renewal text
           // For Pro or Platinum users: "Your membership is ending soon. Renew now and enjoy up to three months free!"
-          if (isFree == false)
-            CText(
-              visiblePlans.last['renewalText'],
-              style: tsBody1,
+          if (renewalText != '')
+            Padding(
+              padding: const EdgeInsetsDirectional.only(bottom: 12.0),
+              child: CText(
+                renewalText,
+                style: tsBody1,
+              ),
             ),
-          // List of features for non-China locations
+          // * List of features for non-China locations
           if (platinumAvailable == false)
             Column(
               children: [
                 const Padding(
-                  padding: EdgeInsetsDirectional.only(bottom: 12.0),
+                  padding: EdgeInsetsDirectional.only(
+                    bottom: 12.0,
+                  ),
                   child: CDivider(),
                 ),
                 ...featuresList.map(

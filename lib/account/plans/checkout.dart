@@ -294,10 +294,20 @@ class _CheckoutState extends State<Checkout>
                     isPlatinum: widget.isPlatinum,
                     isPro: widget.isPro,
                   ),
+                  // * Unused Pro time disclaimer
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(bottom: 16.0),
+                    child: CText(
+                      'unused_pro_time'.i18n,
+                      textAlign: TextAlign.center,
+                      style: tsBody2.italic.copiedWith(color: grey5),
+                    ),
+                  ),
                   // * Continue to Payment
                   Button(
                     disabled: emailController.value.text.isEmpty ||
-                        emailFieldKey.currentState?.validate() == false,
+                        emailFieldKey.currentState?.validate() == false ||
+                        refCodeFieldKey.currentState?.validate() == false,
                     text: 'Continue'.i18n,
                     onPressed: () async {
                       if (selectedPaymentProvider == 'stripe') {

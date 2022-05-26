@@ -346,6 +346,15 @@ msgstr "Most Popular"
 msgid "Free"
 msgstr "Free"
 
+msgid "unused_pro_time"
+msgstr "Pro users upgrading to Platinum will see their converted Pro subscription listed as added time above."
+
+msgid "bonus"
+msgstr "Bonus"
+
+msgid "referral bonus"
+msgstr "referral bonus"
+
 msgid "Total"
 msgstr "Total"
 
