@@ -95,7 +95,7 @@ public class ProUser {
     }
 
     public boolean isProUser() {
-        return userStatus != null && userStatus.equals("active");
+        return userStatus != null && userStatus.equals("active") && (userLevel == "pro" || userLevel == "platinum");
     }
 
     public void setCode(final String code) {

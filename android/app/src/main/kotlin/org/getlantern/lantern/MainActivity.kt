@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Html
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -38,14 +39,19 @@ import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.CheckUpdate
+import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.DateUtil.isBefore
+import org.getlantern.lantern.util.DateUtil.isToday
 import org.getlantern.lantern.util.Json
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
@@ -58,6 +64,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
+import java.util.concurrent.*
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
@@ -69,6 +76,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
+    private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
     private val lanternClient = LanternApp.getLanternHttpClient()
 
@@ -177,7 +185,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         updateUserData()
         Logger.debug(TAG, "updateUserData() finished at ${System.currentTimeMillis() - start}")
 
-        // TODO: call update and cache plans / userLevel
+        updateUserPlans()
+        Logger.debug(TAG, "updateUserPlans() finished at ${System.currentTimeMillis() - start}")
 
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
@@ -269,6 +278,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
+        updateUserPlans()
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -283,6 +293,26 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             }
 
             override fun onSuccess(response: Response, user: ProUser?) {
+                LanternApp.getSession().setUserLevel(user?.userLevel!!)
+                Logger.debug(TAG, "Successfully updated user level")
+            }
+        })
+    }
+
+    private fun updateUserPlans() {
+        LanternApp.getPlans(object : LanternHttpClient.PlansCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+            }
+
+            override fun onSuccess(proPlans: Map<String, ProPlan>) {
+                plans.clear()
+                plans.putAll(proPlans)
+                for (planId in proPlans.keys) {
+                    proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+                }
+                LanternApp.getSession().setUserPlans(Json.gson.toJson(plans))
+                Logger.debug(TAG, "Successfully updated user plans")
             }
         })
     }

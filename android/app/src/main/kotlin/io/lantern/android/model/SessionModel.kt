@@ -1,7 +1,6 @@
 package io.lantern.android.model
 
 import android.app.Activity
-import android.text.TextUtils
 import androidx.core.content.ContextCompat
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
@@ -26,9 +25,8 @@ import org.getlantern.lantern.model.LanternHttpClient.*
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
 import org.getlantern.lantern.util.Analytics
-import org.getlantern.lantern.util.DateUtil.isBefore
-import org.getlantern.lantern.util.DateUtil.isToday
 import org.getlantern.lantern.util.Json
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
@@ -386,7 +384,7 @@ open class SessionModel(
                     Logger.info(TAG, "Successfully cached plans: $plans")
                     result.success("cachingPlansSuccess")
                     for (planId in proPlans.keys) {
-                        proPlans[planId]?.let { updatePrice(it) }
+                        proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
                     }
                     LanternApp.getSession().setUserPlans(Json.gson.toJson(plans))
                 }
@@ -410,67 +408,6 @@ open class SessionModel(
                 null,
             )
         }
-    }
-
-    protected fun updatePrice(plan: ProPlan) {
-        val formattedBonus = formatRenewalBonusExpected(plan.renewalBonusExpected, false)
-        val totalCost = plan.costWithoutTaxStr
-        var totalCostBilledOneTime = activity.resources.getString(R.string.total_cost, totalCost)
-        var formattedDiscount = ""
-        if (plan.discount > 0) {
-            formattedDiscount =
-                activity.resources.getString(R.string.discount, Math.round(plan.discount * 100).toString())
-        }
-        val oneMonthCost = plan.formattedPriceOneMonth
-        var renewalText = ""
-        if (LanternApp.getSession().getUserLevel() == "pro" || LanternApp.getSession().getUserLevel() == "platinum") {
-            val localDateTime = LanternApp.getSession().getExpiration()
-            renewalText = when {
-                localDateTime.isToday() -> {
-                    activity.resources.getString(R.string.membership_ends_today, formattedBonus)
-                }
-                // TODO: this is unreachable
-                localDateTime.isBefore() -> {
-                    activity.resources.getString(R.string.membership_has_expired, formattedBonus)
-                }
-                else -> {
-                    activity.resources.getString(R.string.membership_end_soon, formattedBonus)
-                }
-            }
-        }
-        plan.setRenewalText(renewalText)
-        plan.setTotalCostBilledOneTime(totalCostBilledOneTime)
-        plan.setOneMonthCost(oneMonthCost)
-        plan.setFormattedBonus(formattedBonus)
-        plan.setFormattedDiscount(formattedDiscount)
-        plan.setTotalCost(totalCost)
-    }
-    // TODO: we need to report this in only days
-    // Formats the renewal bonus
-    // longForm == false -> a day-only format (e.g. "45 days")
-    // longForm==true -> month and day format (e.g. "1 month and 15 days"
-    private fun formatRenewalBonusExpected(planBonus: MutableMap<String, Int>, longForm: Boolean): String? {
-        val bonusMonths: Int? = planBonus["months"]
-        val bonusDays: Int? = planBonus["days"]
-        val bonusParts: MutableList<String?> = java.util.ArrayList()
-        if (bonusMonths == null && bonusDays == null) return null
-        if (longForm) {
-            // "1 month and 15 days"
-            if (bonusMonths != null && bonusMonths > 0) {
-                bonusParts.add(
-                    activity.resources.getQuantityString(
-                        R.plurals.month,
-                        bonusMonths.toInt(),
-                        bonusMonths
-                    )
-                )
-            }
-            if (bonusDays != null && bonusDays > 0) {
-                bonusParts.add(activity.resources.getQuantityString(R.plurals.day, bonusDays.toInt(), bonusDays))
-            }
-            return TextUtils.join(" ", bonusParts)
-        }
-        return activity.resources.getQuantityString(R.plurals.day, (bonusMonths!! * 30 + bonusDays!!), bonusDays)
     }
 
     // TODO: WIP

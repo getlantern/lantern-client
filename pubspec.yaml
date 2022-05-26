@@ -103,7 +103,7 @@ dependencies:
   flutter_webrtc:
     git:
       url: https://github.com/getlantern/flutter-webrtc.git
-      ref: 1bf2cd40af6e8b0c6180c937659051eb157c0a4e
+      ref: 1bf2cd40af6e8b0c6180c937659051eb157c0a4e # see Git protocol troubleshooting section in https://github.blog/2021-09-01-improving-git-protocol-security-github/
 
   markdown: ^4.0.1
 

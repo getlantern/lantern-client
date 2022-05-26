@@ -27,16 +27,12 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getBoolean(PRO_USER, false)
     }
 
-    fun getUserLevel(): String {
-        return prefs.getString(USER_LEVEL, "")!!
+    fun getUserLevel(): String? {
+        return prefs.getString(USER_LEVEL, "")
     }
 
-    fun setUserLevel(userLevel: String) {
-        prefs.edit().putString(USER_LEVEL, userLevel).apply()
-    }
-
-    fun getUserPlans(): String {
-        return prefs.getString(PLANS, "")!!
+    fun setUserLevel(userLevel: String?) {
+        prefs.edit().putString(USER_LEVEL, userLevel ?: "").apply()
     }
 
     fun setUserPlans(plans: String) {
@@ -318,8 +314,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             tx.put(DEVICES, devices)
         }
 
-        // TODO: add platinum days left?
-        if (user.userLevel == "pro") {
+        if (user.isProUser) {
             EventBus.getDefault().post(UserStatus(user.isActive, user.monthsLeft().toLong()))
             prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft())
                 .putInt(PRO_DAYS_LEFT, user.daysLeft())
