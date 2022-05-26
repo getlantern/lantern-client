@@ -95,7 +95,8 @@ public class ProUser {
     }
 
     public boolean isProUser() {
-        return userStatus != null && userStatus.equals("active") && (userLevel == "pro" || userLevel == "platinum");
+        // TODO: added _expired_ here - confirm
+        return userStatus != null && (userStatus.equals("active") || userStatus.equals("expired")) && getUserLevel() != null;
     }
 
     public void setCode(final String code) {

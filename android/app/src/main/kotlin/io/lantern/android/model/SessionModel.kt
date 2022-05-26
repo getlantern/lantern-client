@@ -47,7 +47,7 @@ open class SessionModel(
         private const val TAG = "SessionModel"
         private const val STRIPE_TAG = "$TAG.stripe"
 
-        const val PATH_PRO_USER = "prouser" // TODO: redundant
+        const val PATH_PRO_USER = "prouser"
         const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_PLANS = "plans"
         const val PATH_USER_LEVEL = "userLevel"
@@ -56,7 +56,6 @@ open class SessionModel(
     init {
         db.mutate { tx ->
             // initialize data for fresh install // TODO remove the need to do this for each data path
-            // TODO: PATH_PRO_USER is now redundant since we can derive from userLevel
             tx.put(
                 PATH_PRO_USER,
                 castToBoolean(tx.get(PATH_PRO_USER), false)
@@ -65,11 +64,9 @@ open class SessionModel(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
-            // TODO: do we need this?
             tx.put(
                 PATH_PLANS, tx.get(PATH_PLANS) ?: ""
             )
-            // TODO: do we need this?
             tx.put(
                 PATH_USER_LEVEL, tx.get(PATH_USER_LEVEL) ?: ""
             )

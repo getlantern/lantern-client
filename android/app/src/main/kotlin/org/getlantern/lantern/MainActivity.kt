@@ -293,7 +293,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             }
 
             override fun onSuccess(response: Response, user: ProUser?) {
-                LanternApp.getSession().setUserLevel(user?.userLevel!!)
+                LanternApp.getSession().setUserLevel(user?.userLevel)
                 Logger.debug(TAG, "Successfully updated user level")
             }
         })

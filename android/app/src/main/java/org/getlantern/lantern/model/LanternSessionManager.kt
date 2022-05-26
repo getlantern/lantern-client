@@ -32,7 +32,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setUserLevel(userLevel: String?) {
-        prefs.edit().putString(USER_LEVEL, userLevel ?: "").apply()
+        prefs.edit().putString(USER_LEVEL, userLevel).apply()
     }
 
     fun setUserPlans(plans: String) {
@@ -299,10 +299,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         if (user.isActive) {
             linkDevice()
-        }
-
-        if (user.userLevel == null) {
-            setUserLevel("")
         }
 
         setExpiration(user.expiration)

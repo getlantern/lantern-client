@@ -5,8 +5,10 @@ import android.text.TextUtils
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.ProPlan
+import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.util.DateUtil.isBefore
 import org.getlantern.lantern.util.DateUtil.isToday
+import org.getlantern.mobilesdk.Logger
 
 object PlansUtil {
     @JvmStatic
