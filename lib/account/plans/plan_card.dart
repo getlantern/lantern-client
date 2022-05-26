@@ -67,7 +67,7 @@ class PlanCard extends StatelessWidget {
               shadowColor: grey2,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                  width: 2.0,
+                  width: isBestValue ? 2.0 : 1.0,
                   color: isBestValue ? pink4 : grey2,
                 ),
                 borderRadius: BorderRadius.circular(12.0),
@@ -86,6 +86,7 @@ class PlanCard extends StatelessWidget {
                           description,
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         const CAssetImage(
@@ -98,7 +99,7 @@ class PlanCard extends StatelessWidget {
                     Row(
                       children: [
                         CText('$formattedPricePerMonth / ', style: tsSubtitle1),
-                        CText('month'.i18n, style: tsBody1),
+                        CText('month'.i18n, style: tsBody2),
                       ],
                     ),
                     // * Price per year

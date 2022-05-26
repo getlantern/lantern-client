@@ -189,20 +189,28 @@ class Upgrade extends StatelessWidget {
                   ),
                   // * Footer
                   if (!isPlatinum)
-                    Container(
-                      height: 40,
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      color: grey3,
-                      child: GestureDetector(
-                        onTap: () async => await context.pushRoute(
-                          ResellerCodeCheckout(isPro: isPro),
+                    Stack(
+                      children: [
+                        Container(
+                          height: 40,
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          color: grey2,
+                          child: GestureDetector(
+                            onTap: () async => await context.pushRoute(
+                              ResellerCodeCheckout(isPro: isPro),
+                            ),
+                            child: CText(
+                              'Have a Lantern Pro activation code? Click here.',
+                              style: tsBody1,
+                            ),
+                          ), // Translations
                         ),
-                        child: CText(
-                          'Have a Lantern Pro activation code? Click here.',
-                          style: tsBody1,
+                        Divider(
+                          color: grey1,
+                          height: 2,
                         ),
-                      ), // Translations
+                      ],
                     ),
                 ],
               ),
@@ -302,7 +310,10 @@ class Upgrade extends StatelessWidget {
           if (platinumAvailable == false)
             Column(
               children: [
-                const CDivider(height: 24),
+                const Padding(
+                  padding: EdgeInsetsDirectional.only(bottom: 12.0),
+                  child: CDivider(),
+                ),
                 ...featuresList.map(
                   (feature) => Row(
                     children: [
