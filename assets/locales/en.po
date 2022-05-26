@@ -370,6 +370,9 @@ msgstr "Enter Email and Activation code"
 msgid "Referral code"
 msgstr "Referral code"
 
+msgid "Add Referral code"
+msgstr "Add Referral code"
+
 msgid "Activation Code"
 msgstr "Activation Code"
 

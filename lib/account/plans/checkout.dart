@@ -121,7 +121,7 @@ class _CheckoutState extends State<Checkout>
                   ),
                 ),
               ),
-              // * Referral Code field
+              // * Referral Code field - initially hidden
               Visibility(
                 visible: isRefCodeFieldShowing,
                 child: Container(
@@ -216,9 +216,17 @@ class _CheckoutState extends State<Checkout>
                       top: 8,
                       bottom: 16,
                     ),
-                    child: CText(
-                      '+ Add Referral code ',
-                      style: tsBody1,
+                    child: Row(
+                      children: [
+                        const CAssetImage(path: ImagePaths.add),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(start: 8.0),
+                          child: CText(
+                            'Add Referral code'.i18n,
+                            style: tsBody1,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

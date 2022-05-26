@@ -18,7 +18,7 @@ class PaymentProviderButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 64,
-      width: 200,
+      width: logoPaths.length > 1 ? 230 : 170,
       margin: const EdgeInsetsDirectional.only(bottom: 16),
       child: OutlinedButton(
         onPressed: () => onChanged(),
@@ -26,26 +26,24 @@ class PaymentProviderButton extends StatelessWidget {
           backgroundColor:
               selectedPaymentProvider == paymentType ? pink1 : white,
           side: BorderSide(
-            width: 2.0,
+            width: selectedPaymentProvider == paymentType ? 2.0 : 1.0,
             color: selectedPaymentProvider == paymentType ? pink4 : grey3,
           ),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ...logoPaths.map((p) => buildLogoIcon(path: p)),
-            Transform.scale(
-              scale: 0.9,
-              child: Radio(
-                value: selectedPaymentProvider == paymentType,
-                groupValue: true,
-                activeColor: black,
-                fillColor: MaterialStateProperty.resolveWith<Color>(
-                  (states) =>
-                      selectedPaymentProvider == paymentType ? black : grey3,
-                ),
-                onChanged: (value) async => onChanged(),
+            const Spacer(),
+            Radio(
+              value: selectedPaymentProvider == paymentType,
+              groupValue: true,
+              activeColor: black,
+              fillColor: MaterialStateProperty.resolveWith<Color>(
+                (states) =>
+                    selectedPaymentProvider == paymentType ? black : grey3,
               ),
+              onChanged: (value) async => onChanged(),
             ),
           ],
         ),
@@ -57,6 +55,9 @@ class PaymentProviderButton extends StatelessWidget {
 Widget buildLogoIcon({required String path}) => Container(
       width: 55,
       height: 40,
+      margin: const EdgeInsetsDirectional.only(
+        end: 8,
+      ),
       padding: const EdgeInsetsDirectional.only(
         start: 10.0,
         end: 10.0,
