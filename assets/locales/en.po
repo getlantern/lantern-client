@@ -313,6 +313,12 @@ msgstr "Your membership has expired! Renew now and enjoy up to %s free!"
 msgid "choose_plan"
 msgstr "Choose Plan"
 
+msgid "Pro Plan"
+msgstr "Pro Plan"
+
+msgid "Platinum Plan"
+msgstr "Platinum Plan"
+
 msgid "Checkout"
 msgstr "Checkout"
 

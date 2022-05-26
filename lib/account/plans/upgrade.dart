@@ -79,8 +79,8 @@ class Upgrade extends StatelessWidget {
                           ),
                           // * Step
                           Container(
-                            padding: const EdgeInsetsDirectional.only(
-                              top: 16.0,
+                            padding: EdgeInsetsDirectional.only(
+                              top: !platinumAvailable ? 16.0 : 0,
                               bottom: 16.0,
                             ),
                             child: PlanStep(
@@ -89,7 +89,7 @@ class Upgrade extends StatelessWidget {
                             ),
                           ),
                           if (platinumAvailable == true)
-                            // * Toggle
+                            // * Toggle and savings banner
                             Container(
                               padding: const EdgeInsetsDirectional.only(
                                 bottom: 16,
@@ -132,16 +132,17 @@ class Upgrade extends StatelessWidget {
                                       padding: const EdgeInsetsDirectional.only(
                                         start: 16.0,
                                       ),
+                                      // * Savings banner
                                       child: Stack(
                                         children: [
                                           Transform.translate(
-                                            offset: const Offset(80.0, -25.0),
+                                            offset: const Offset(30.0, -25.0),
                                             child: const CAssetImage(
                                               path: ImagePaths.savings_arrow,
                                             ),
                                           ),
                                           Transform.translate(
-                                            offset: const Offset(115.0, -30.0),
+                                            offset: const Offset(65.0, -30.0),
                                             child: Transform.rotate(
                                               angle: 0.1 * pi,
                                               child: Stack(
@@ -283,7 +284,7 @@ class Upgrade extends StatelessWidget {
         .toList()
       ..sort(
         (a, b) =>
-            (a['bestValue'] as bool) ? 0 : 1, // sort bestValue plan to top
+            (a['bestValue'] as bool) ? 1 : 0, // sort bestValue plan to bottom
       );
   }
 

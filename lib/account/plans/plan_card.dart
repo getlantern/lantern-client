@@ -83,8 +83,9 @@ class PlanCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CText(
-                          description,
-                          style: tsSubtitle2.copiedWith(
+                          '${id.contains('platinum') ? 'Platinum' : 'Pro'} Plan'
+                              .i18n,
+                          style: tsSubtitle1.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
                           ),
@@ -163,7 +164,7 @@ class PlanCard extends StatelessWidget {
                       bottom: 4.0,
                     ),
                     child: CText(
-                      'most_popular'.i18n,
+                      '${'most_popular'.i18n}!',
                       style: tsBody1,
                     ),
                   ),
