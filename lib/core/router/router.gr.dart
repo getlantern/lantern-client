@@ -421,6 +421,7 @@ class AppRouter extends _i33.RootStackRouter {
               id: args.id,
               isPro: args.isPro,
               isPlatinum: args.isPlatinum,
+              platinumAvailable: args.platinumAvailable,
               key: args.key),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
@@ -1218,6 +1219,7 @@ class Checkout extends _i33.PageRouteInfo<CheckoutArgs> {
       required String id,
       required bool isPro,
       required bool isPlatinum,
+      required bool platinumAvailable,
       _i35.Key? key})
       : super(Checkout.name,
             path: 'checkout',
@@ -1226,6 +1228,7 @@ class Checkout extends _i33.PageRouteInfo<CheckoutArgs> {
                 id: id,
                 isPro: isPro,
                 isPlatinum: isPlatinum,
+                platinumAvailable: platinumAvailable,
                 key: key));
 
   static const String name = 'Checkout';
@@ -1237,6 +1240,7 @@ class CheckoutArgs {
       required this.id,
       required this.isPro,
       required this.isPlatinum,
+      required this.platinumAvailable,
       this.key});
 
   final List<Map<String, dynamic>> plans;
@@ -1247,11 +1251,13 @@ class CheckoutArgs {
 
   final bool isPlatinum;
 
+  final bool platinumAvailable;
+
   final _i35.Key? key;
 
   @override
   String toString() {
-    return 'CheckoutArgs{plans: $plans, id: $id, isPro: $isPro, isPlatinum: $isPlatinum, key: $key}';
+    return 'CheckoutArgs{plans: $plans, id: $id, isPro: $isPro, isPlatinum: $isPlatinum, platinumAvailable: $platinumAvailable, key: $key}';
   }
 }
 

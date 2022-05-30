@@ -21,7 +21,7 @@ class PlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedPlan = plans.firstWhere((p) => p['id'] == id);
-    final description = selectedPlan['description'] as String;
+    // final description = selectedPlan['description'] as String;
     final formattedPricePerYear =
         selectedPlan['totalCostBilledOneTime'].toString();
     final formattedPricePerMonth = selectedPlan['oneMonthCost'].toString();
@@ -55,6 +55,7 @@ class PlanCard extends StatelessWidget {
                 id: id,
                 isPro: isPro,
                 isPlatinum: isPlatinum,
+                platinumAvailable: platinumAvailable,
               ),
             );
           }

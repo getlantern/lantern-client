@@ -12,12 +12,14 @@ class Checkout extends StatefulWidget {
   final String id;
   final bool isPro;
   final bool isPlatinum;
+  final bool platinumAvailable;
 
   Checkout({
     required this.plans,
     required this.id,
     required this.isPro,
     required this.isPlatinum,
+    required this.platinumAvailable,
     Key? key,
   }) : super(key: key);
 
@@ -295,14 +297,15 @@ class _CheckoutState extends State<Checkout>
                     isPro: widget.isPro,
                   ),
                   // * Unused Pro time disclaimer
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(bottom: 16.0),
-                    child: CText(
-                      'unused_pro_time'.i18n,
-                      textAlign: TextAlign.center,
-                      style: tsBody2.italic.copiedWith(color: grey5),
+                  if (widget.platinumAvailable)
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(bottom: 16.0),
+                      child: CText(
+                        'unused_pro_time'.i18n,
+                        textAlign: TextAlign.center,
+                        style: tsBody2.italic.copiedWith(color: grey5),
+                      ),
                     ),
-                  ),
                   // * Continue to Payment
                   Button(
                     disabled: emailController.value.text.isEmpty ||
