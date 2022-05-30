@@ -11,7 +11,7 @@ import org.getlantern.lantern.util.DateUtil.isToday
 object PlansUtil {
     @JvmStatic
     fun updatePrice(activity: Activity, plan: ProPlan) {
-        val formattedBonus = formatRenewalBonusExpected(activity, plan.renewalBonusExpected, true)
+        val formattedBonus = formatRenewalBonusExpected(activity, plan.renewalBonusExpected, false)
         val totalCost = plan.costWithoutTaxStr
         var totalCostBilledOneTime = activity.resources.getString(R.string.total_cost, totalCost)
         var formattedDiscount = ""
@@ -43,10 +43,9 @@ object PlansUtil {
         plan.setFormattedDiscount(formattedDiscount)
         plan.setTotalCost(totalCost)
     }
-    // TODO: we need to report this in only days
     // Formats the renewal bonus
     // longForm == false -> a day-only format (e.g. "45 days")
-    // longForm==true -> month and day format (e.g. "1 month and 15 days"
+    // longForm == true -> month and day format (e.g. "1 month and 15 days"
     private fun formatRenewalBonusExpected(activity: Activity, planBonus: MutableMap<String, Int>, longForm: Boolean): String? {
         val bonusMonths: Int? = planBonus["months"]
         val bonusDays: Int? = planBonus["days"]
@@ -67,7 +66,8 @@ object PlansUtil {
                 bonusParts.add(activity.resources.getQuantityString(R.plurals.day, bonusDays.toInt(), bonusDays))
             }
             return TextUtils.join(" ", bonusParts)
+        } else {
+            return activity.resources.getQuantityString(R.plurals.day, (bonusMonths!! * 30 + bonusDays!!), (bonusMonths!! * 30 + bonusDays!!))
         }
-        return activity.resources.getQuantityString(R.plurals.day, (bonusMonths!! * 30 + bonusDays!!), bonusDays)
     }
 }
