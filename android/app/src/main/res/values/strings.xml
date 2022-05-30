@@ -448,7 +448,7 @@
     <string name="most_popular">Most Popular!</string>
     <string name="membership_end_soon">Your membership is ending soon. Renew now and enjoy up to %s free!</string>
     <string name="membership_ends_today">Your membership ends today. Renew now and enjoy up to %s free!</string>
-    <string name="membership_has_expired">Your membership has expired! Renew now and enjoy up to f%s free!</string>
+    <string name="membership_has_expired">Your membership has expired! Renew now and enjoy up to %s free!</string>
     <string name="step_2">Step 2</string>
     <string name="enter_email_short">Enter Email</string>
     <string name="mm_yy">MM/YY</string>

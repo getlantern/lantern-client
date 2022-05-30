@@ -295,7 +295,7 @@ class Upgrade extends StatelessWidget {
     bool? isFree,
     Iterable visiblePlans,
   ) {
-    // TODO: not sure what we are doing here
+    // TODO: revisit
     final renewalText = visiblePlans.last['renewalText'];
     return Container(
       width: MediaQuery.of(context).size.width,

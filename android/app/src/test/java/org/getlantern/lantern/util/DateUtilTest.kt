@@ -1,6 +1,8 @@
 package org.getlantern.lantern.util
 
 import junit.framework.TestCase
+import org.getlantern.lantern.util.DateUtil.isAfter
+import org.getlantern.lantern.util.DateUtil.isBefore
 import org.getlantern.lantern.util.DateUtil.isToday
 import org.joda.time.LocalDateTime
 
@@ -14,17 +16,15 @@ class DateUtilTest : TestCase() {
         val date = LocalDateTime(
             2021, 4, 1, 0, 0
         )
-        val today = LocalDateTime()
-        assertTrue(date.isBefore(today))
+        assertTrue(date.isBefore())
         assertFalse(date.isToday())
-        assertFalse(date.isAfter(today))
+        assertFalse(date.isAfter())
     }
 
     fun `test date is after`() {
         val date = LocalDateTime().plusDays(1)
-        val today = LocalDateTime()
-        assertFalse(date.isBefore(today))
+        assertFalse(date.isBefore())
         assertFalse(date.isToday())
-        assertTrue(date.isAfter(today))
+        assertTrue(date.isAfter())
     }
 }

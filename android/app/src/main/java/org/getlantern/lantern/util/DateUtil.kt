@@ -9,10 +9,10 @@ object DateUtil {
     }
 
     fun LocalDateTime?.isBefore(): Boolean {
-        return this?.toLocalDate() == LocalDate.now()
+        return this?.toLocalDate()!!.isBefore(LocalDate.now())
     }
 
     fun LocalDateTime?.isAfter(): Boolean {
-        return this?.toLocalDate() == LocalDate.now()
+        return this?.toLocalDate()!!.isAfter(LocalDate.now())
     }
 }

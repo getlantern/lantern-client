@@ -5,15 +5,13 @@ import android.text.TextUtils
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.ProPlan
-import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.util.DateUtil.isBefore
 import org.getlantern.lantern.util.DateUtil.isToday
-import org.getlantern.mobilesdk.Logger
 
 object PlansUtil {
     @JvmStatic
     fun updatePrice(activity: Activity, plan: ProPlan) {
-        val formattedBonus = formatRenewalBonusExpected(activity, plan.renewalBonusExpected, false)
+        val formattedBonus = formatRenewalBonusExpected(activity, plan.renewalBonusExpected, true)
         val totalCost = plan.costWithoutTaxStr
         var totalCostBilledOneTime = activity.resources.getString(R.string.total_cost, totalCost)
         var formattedDiscount = ""
@@ -23,7 +21,7 @@ object PlansUtil {
         }
         val oneMonthCost = plan.formattedPriceOneMonth
         var renewalText = ""
-        if (LanternApp.getSession().isProUser) {
+        if (LanternApp.getSession().isProUser || LanternApp.getSession().isExpired()) {
             val localDateTime = LanternApp.getSession().getExpiration()
             renewalText = when {
                 localDateTime.isToday() -> {
