@@ -272,11 +272,9 @@ class SessionModel extends Model {
   }
 
   Future<void> applyRefCode(
-    String email,
     String refCode,
   ) async {
     return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
-      'email': email,
       'refCode': refCode,
     }).then((value) => value as String);
   }
@@ -300,6 +298,14 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
       'email': email,
       'resellerCode': resellerCode,
+    }).then((value) => value as String);
+  }
+
+  Future<void> checkEmailExistence(
+    String email,
+  ) async {
+    return methodChannel.invokeMethod('checkEmailExistence', <String, dynamic>{
+      'email': email,
     }).then((value) => value as String);
   }
 }

@@ -49,7 +49,6 @@ class _CheckoutState extends State<Checkout>
             : 'Invalid or incomplete referral code'.i18n,
   );
 
-  final referralCode = '';
   var isRefCodeFieldShowing = false;
   var selectedPaymentProvider = paymentProviders[0];
   var loadingPercentage = 0;
@@ -155,8 +154,7 @@ class _CheckoutState extends State<Checkout>
                           onTap: () async {
                             await sessionModel
                                 .applyRefCode(
-                                  emailController.text,
-                                  referralCode,
+                                  refCodeController.value.text,
                                 )
                                 .then(
                                   (value) => setState(() {
@@ -312,82 +310,24 @@ class _CheckoutState extends State<Checkout>
                         refCodeFieldKey.currentState?.validate() == false,
                     text: 'Continue'.i18n,
                     onPressed: () async {
-                      if (selectedPaymentProvider == 'stripe') {
-                        await context.pushRoute(
-                          StripeCheckout(
-                            plans: widget.plans,
-                            email: emailController.text,
-                            refCode: refCodeController.text,
-                            id: widget.id,
-                            isPlatinum: widget.isPlatinum,
-                            isPro: widget.isPro,
-                          ),
-                        );
-                      } else {
-                        context.loaderOverlay.show();
-                        await sessionModel
-                            .submitBitcoin(
-                              widget.id,
-                              emailController.text,
-                              refCodeController.text,
-                            )
-                            .timeout(
-                              defaultTimeoutDuration,
-                              onTimeout: () => onAPIcallTimeout(
-                                code: 'submitBitcoinTimeout',
-                                message: 'bitcoin_timeout'.i18n,
-                              ),
-                            )
-                            .then((value) async {
-                          context.loaderOverlay.hide();
-                          final btcPayURL = value
-                              as String; // TODO: presumably we get the BTCPay URL with token from callback
-                          await context.pushRoute(
-                            FullScreenDialogPage(
-                              widget: Center(
-                                child: Stack(
-                                  children: [
-                                    WebView(
-                                      initialUrl: btcPayURL,
-                                      // TODO: we don't need to keep this loadingPercentage, it was boilerplate code
-                                      onPageStarted: (url) {
-                                        setState(() {
-                                          loadingPercentage = 0;
-                                        });
-                                      },
-                                      onProgress: (progress) {
-                                        setState(() {
-                                          loadingPercentage = progress;
-                                        });
-                                      },
-                                      onPageFinished: (url) {
-                                        setState(() {
-                                          loadingPercentage = 100;
-                                        });
-                                      },
-                                      // TODO: listen for WebView close and handle success
-                                    ),
-                                    if (loadingPercentage < 100)
-                                      LinearProgressIndicator(
-                                        value: loadingPercentage / 100.0,
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }).onError((error, stackTrace) {
-                          context.loaderOverlay.hide();
-                          CDialog.showError(context,
+                      await Future.wait(
+                        [
+                          sessionModel
+                              .checkEmailExistence(emailController.value.text)
+                              .onError((error, stackTrace) {
+                            CDialog.showError(
+                              context,
                               error: e,
                               stackTrace: stackTrace,
                               description: (error as PlatformException)
                                   .message
-                                  .toString()
-                                  .i18n // we are localizing this error Flutter-side,
-                              );
-                        });
-                      }
+                                  .toString(),
+                            );
+                          }),
+                          resolvePaymentRoute(),
+                        ],
+                        eagerError: true,
+                      );
                     },
                   )
                 ],
@@ -397,5 +337,69 @@ class _CheckoutState extends State<Checkout>
         ),
       ),
     );
+  }
+
+  Future<void> resolvePaymentRoute() async {
+    if (selectedPaymentProvider == 'stripe') {
+      // * Stripe selected
+      await context.pushRoute(
+        StripeCheckout(
+          plans: widget.plans,
+          email: emailController.text,
+          refCode: refCodeController.text,
+          id: widget.id,
+          isPlatinum: widget.isPlatinum,
+          isPro: widget.isPro,
+        ),
+      );
+    } else {
+      // * BTC payment selected
+      context.loaderOverlay.show();
+      await sessionModel
+          .submitBitcoin(
+            widget.id,
+            emailController.text,
+            refCodeController.text,
+          )
+          .timeout(
+            defaultTimeoutDuration,
+            onTimeout: () => onAPIcallTimeout(
+              code: 'submitBitcoinTimeout',
+              message: 'bitcoin_timeout'.i18n,
+            ),
+          )
+          .then((value) async {
+        context.loaderOverlay.hide();
+        // TODO: get BTCPay URL with token from callback
+        final btcPayURL = value as String;
+        await context.pushRoute(
+          FullScreenDialogPage(
+            widget: Center(
+              child: Stack(
+                children: [
+                  WebView(
+                    initialUrl: btcPayURL,
+                    // TODO: listen for WebView close
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }).onError((error, stackTrace) {
+        context.loaderOverlay.hide();
+        CDialog.showError(
+          context,
+          error: e,
+          stackTrace: stackTrace,
+          description: (error as PlatformException)
+              .message
+              .toString()
+              .i18n // we are localizing this error Flutter-side,
+          ,
+        );
+      });
+    }
+    ;
   }
 }

@@ -98,9 +98,10 @@ open class SessionModel(
             "updateAndCacheUserLevel" -> updateAndCacheUserLevel(result)
             "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, result)
             "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!, result)
-            "applyRefCode" -> applyRefCode(call.argument("email")!!, call.argument("refCode")!!, result)
+            "applyRefCode" -> applyRefCode(call.argument("refCode")!!, result)
             "submitBitcoin" -> submitBitcoin(call.argument("planID")!!, call.argument("email")!!, result)
             "redeemResellerCode" -> redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
+            "checkEmailExistence" -> PlansUtil.checkEmailExistence(call.argument("email")!!, result)
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -155,7 +156,7 @@ open class SessionModel(
             .build()
 
         lanternClient.post(
-            LanternHttpClient.createProUrl("/user-recover"), formBody,
+            createProUrl("/user-recover"), formBody,
             object : ProCallback {
                 override fun onSuccess(response: Response?, result: JsonObject?) {
                     Logger.debug(TAG, "Account recovery response: $result")
@@ -229,7 +230,7 @@ open class SessionModel(
             .build()
         Logger.debug(TAG, "Validating link request; code:$code")
         lanternClient.post(
-            LanternHttpClient.createProUrl("/user-link-validate"), formBody,
+            createProUrl("/user-link-validate"), formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to validate link code", t)
@@ -270,7 +271,7 @@ open class SessionModel(
             .build()
 
         lanternClient.post(
-            LanternHttpClient.createProUrl("/link-code-approve"), formBody,
+            createProUrl("/link-code-approve"), formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error approving device link code: $error")
@@ -307,7 +308,7 @@ open class SessionModel(
             .build()
 
         lanternClient.post(
-            LanternHttpClient.createProUrl("/user-link-remove"), formBody,
+            createProUrl("/user-link-remove"), formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     if (error != null) {
@@ -532,12 +533,11 @@ open class SessionModel(
         }
     }
 
-    // TODO: WIP
     // Applies referral code (before the user has initiated a transaction)
-    private fun applyRefCode(email: String, refCode: String, result: MethodChannel.Result) {
+    private fun applyRefCode(refCode: String, result: MethodChannel.Result) {
         try {
             val formBody: FormBody = FormBody.Builder().add("code", refCode).build()
-            CheckoutActivity.lanternClient.post(
+            lanternClient.post(
                 createProUrl("/referral-attach"), formBody,
                 object : ProCallback {
                     override fun onFailure(throwable: Throwable?, error: ProError?) {
@@ -581,28 +581,27 @@ open class SessionModel(
             val params: MutableMap<String, String> = HashMap()
             params["email"] = email
             params["planID"] = planID
-            CheckoutActivity.lanternClient[
-                createProUrl("/payment-redirect", params), object :
-                    ProCallback {
-                    override fun onFailure(throwable: Throwable?, error: ProError?) {
-                        result.error(
-                            "unknownError",
-                            "BTCPay is unavailable", // This error message is localized Flutter-side
-                            null,
-                        )
-                        return
-                    }
-
-                    override fun onSuccess(response: Response, result: JsonObject) {
-                        Logger.debug(
-                            TAG,
-                            "Email successfully validated $email"
-                        )
-                        // TODO: return response to client
-                        Logger.debug("BTC result", result.toString())
-                    }
+            val formBody: RequestBody = FormBody.Builder().add("email", email).add("planID", planID).build()
+            lanternClient.post(createProUrl("/payment-redirect", params), formBody,
+                object : ProCallback {
+                override fun onFailure(throwable: Throwable?, error: ProError?) {
+                    result.error(
+                        "unknownError",
+                        "BTCPay is unavailable", // This error message is localized Flutter-side
+                        null,
+                    )
+                    return
                 }
-            ]
+
+                override fun onSuccess(response: Response, result: JsonObject) {
+                    Logger.debug(
+                        TAG,
+                        "Email successfully validated $email"
+                    )
+                    // TODO: return response to client
+                    Logger.debug("BTC result", result.toString())
+                }
+            })
         } catch (t: Throwable) {
             Logger.error(TAG, "BTCPay is unavailable", t)
             result.error(

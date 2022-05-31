@@ -1,12 +1,22 @@
 package org.getlantern.lantern.util
 
 import android.app.Activity
+import android.app.ProgressDialog
+import android.content.res.Resources
 import android.text.TextUtils
+import com.google.gson.JsonObject
+import io.flutter.plugin.common.MethodChannel
+import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.activity.CheckoutActivity
+import org.getlantern.lantern.model.LanternHttpClient
+import org.getlantern.lantern.model.LanternHttpClient.ProCallback
+import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.util.DateUtil.isBefore
 import org.getlantern.lantern.util.DateUtil.isToday
+import org.getlantern.mobilesdk.Logger
 
 object PlansUtil {
     @JvmStatic
@@ -69,5 +79,35 @@ object PlansUtil {
         } else {
             return activity.resources.getQuantityString(R.plurals.day, (bonusMonths!! * 30 + bonusDays!!), (bonusMonths!! * 30 + bonusDays!!))
         }
+    }
+    @JvmStatic
+    fun checkEmailExistence(email: String, result: MethodChannel.Result) {
+        val params: MutableMap<String, String> = HashMap()
+        params["email"] = email
+        CheckoutActivity.lanternClient[LanternHttpClient.createProUrl(
+            "/email-exists",
+            params
+        ), object : ProCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                Logger.debug(
+                    "checkEmailExistence",
+                    "Email $email already exists"
+                )
+                result.error(
+                    "unknownError",
+                    LanternApp.getAppContext().resources.getString(R.string.email_in_use),
+                    null,
+                )
+                return
+            }
+
+            override fun onSuccess(response: Response, result: JsonObject) {
+                Logger.debug(
+                    "checkEmailExistence",
+                    "Email successfully validated $email"
+                )
+                LanternApp.getSession().setEmail(email)
+            }
+        }]
     }
 }
