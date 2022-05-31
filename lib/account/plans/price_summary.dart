@@ -36,16 +36,17 @@ class PriceSummary extends StatelessWidget {
             ],
           ),
           // * Renewal Bonus
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CText(
-                '+ ${bonus.toUpperCase()}',
-                style: tsOverline,
-              ),
-              CText('Free'.i18n.toUpperCase(), style: tsOverline),
-            ],
-          ),
+          if (bonus != '0 days') // TODO: hacky
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CText(
+                  '+ ${bonus.toUpperCase()}',
+                  style: tsOverline,
+                ),
+                CText('Free'.i18n.toUpperCase(), style: tsOverline),
+              ],
+            ),
           // * Referral bonus
           if (refCode != null && refCode!.isNotEmpty)
             Row(

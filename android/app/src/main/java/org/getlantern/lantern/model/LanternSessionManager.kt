@@ -304,7 +304,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         setExpiration(user.expiration)
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
-
+        // save userId to display in dev panel
+        db.mutate { tx -> tx.put("userId", user.userId.toString()) }
         val devices = Vpn.Devices.newBuilder().addAllDevices(user.devices.map { Vpn.Device.newBuilder().setId(it.id).setName(it.name).setCreated(it.created).build() }).build()
         db.mutate { tx ->
             tx.put(DEVICES, devices)
@@ -343,7 +344,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private val TAG = LanternSessionManager::class.java.name
 
         // shared preferences
-        private const val PRO_USER = "prouser" // TODO: redundant
+        private const val PRO_USER = "prouser"
         private const val USER_LEVEL = "userLevel"
         private const val PLANS = "plans"
         private const val DEVICES = "devices"

@@ -29,6 +29,7 @@ import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
+import org.getlantern.mobilesdk.Lantern
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.*
 

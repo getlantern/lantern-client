@@ -44,11 +44,9 @@ class _CheckoutState extends State<Checkout>
         // only allow letters and numbers as well as 6 <= length <= 13
         value != null &&
                 RegExp(r'^[a-zA-Z0-9]*$').hasMatch(value) &&
-                (6 <= value.characters.length &&
-                    value.characters.length <= 13) &&
-                refCodeSuccessfullyApplied
+                (6 <= value.characters.length && value.characters.length <= 13)
             ? null
-            : 'Your referral code is invalid'.i18n,
+            : 'Invalid or incomplete referral code'.i18n,
   );
 
   final referralCode = '';
@@ -140,9 +138,10 @@ class _CheckoutState extends State<Checkout>
                         child: Form(
                           key: refCodeFieldKey,
                           child: CTextField(
-                            enabled: !submittedRefCode,
+                            enabled: !refCodeSuccessfullyApplied,
                             controller: refCodeController,
                             autovalidateMode: AutovalidateMode.disabled,
+                            textCapitalization: TextCapitalization.characters,
                             label: 'Referral code'.i18n,
                             keyboardType: TextInputType.text,
                             prefixIcon:

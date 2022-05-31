@@ -110,6 +110,14 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
   }
 
+  Widget getUserId(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'userId',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
   Widget devices(ValueWidgetBuilder<Devices> builder) {
     return subscribedSingleValueBuilder<Devices>(
       'devices',

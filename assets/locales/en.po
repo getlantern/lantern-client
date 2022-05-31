@@ -391,8 +391,8 @@ msgstr "Add Referral code"
 msgid "Activation Code"
 msgstr "Activation Code"
 
-msgid "Your referral code is invalid"
-msgstr "Your referral code is invalid"
+msgid "Invalid or incomplete referral code"
+msgstr "Invalid or incomplete referral code"
 
 msgid "Something went wrong while applying your referral code."
 msgstr "Something went wrong while applying your referral code."

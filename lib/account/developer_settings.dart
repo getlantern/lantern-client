@@ -29,6 +29,18 @@ class DeveloperSettingsTab extends StatelessWidget {
               margin: const EdgeInsetsDirectional.only(bottom: 16.0),
               child: CText('dev_payment_mode'.i18n, style: tsBody3),
             ),
+            sessionModel.getUserId(
+              (BuildContext context, String value, Widget? child) =>
+                  ListItemFactory.settingsItem(
+                content: 'UserID: $value'.i18n,
+                trailingArray: [
+                  TextButton(
+                    onPressed: () => copyText(context, value),
+                    child: CText('Copy'.toUpperCase(), style: tsButton),
+                  )
+                ],
+              ),
+            ),
             ListItemFactory.settingsItem(
               content: 'Payment Test Mode'.i18n,
               trailingArray: [
