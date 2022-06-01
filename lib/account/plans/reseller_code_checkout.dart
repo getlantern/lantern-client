@@ -30,7 +30,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
     formKey: resellerCodeFieldKey,
     validator: (value) => value != null &&
             // only allow letters, numbers and hyphens as well as length excluding dashes should be exactly 25 characters
-            // TODO: reject our own referral code
+            // our own code is rejected by the applyRefCode call to backend
             RegExp(r'^[a-zA-Z0-9-]*$').hasMatch(value) &&
             value.replaceAll('-', '').length == 25
         ? null

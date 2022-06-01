@@ -22,6 +22,7 @@ class Upgrade extends StatelessWidget {
     return sessionModel.getCachedPlans((context, cachedPlans, child) {
       return sessionModel.getCachedPlans((context, cachedPlans, child) {
         final plans = formatCachedPlans(cachedPlans);
+        // * Error screen if plans are empty
         if (plans.isEmpty) {
           return FullScreenDialog(
             widget: Center(
@@ -49,6 +50,7 @@ class Upgrade extends StatelessWidget {
         var isTwoYearPlan = true; // Toggle is by default to 2 years
         var visiblePlans = determineVisiblePlans(isTwoYearPlan, plans);
         final isFree = (isPro == false) && (isPlatinum == false);
+        final showBanner = determineBannerContent(isFree, plans);
 
         return FullScreenDialog(
           widget: StatefulBuilder(
@@ -135,31 +137,34 @@ class Upgrade extends StatelessWidget {
                                     ),
                                     child: Stack(
                                       children: [
-                                        Transform.translate(
-                                          offset: const Offset(30.0, -25.0),
-                                          child: const CAssetImage(
-                                            path: ImagePaths.savings_arrow,
-                                          ),
-                                        ),
-                                        Transform.translate(
-                                          offset: const Offset(65.0, -30.0),
-                                          child: Transform.rotate(
-                                            angle: 0.1 * pi,
-                                            child: Stack(
-                                              children: [
-                                                CText(
-                                                  determineBannerContent(
-                                                    isFree,
-                                                    plans,
-                                                  ).toUpperCase(),
-                                                  style: tsBody1.copiedWith(
-                                                    color: pink4,
-                                                  ),
-                                                )
-                                              ],
+                                        if (showBanner != null)
+                                          Transform.translate(
+                                            offset: const Offset(30.0, -25.0),
+                                            child: const CAssetImage(
+                                              path: ImagePaths.savings_arrow,
                                             ),
                                           ),
-                                        ),
+                                        if (showBanner != null)
+                                          Transform.translate(
+                                            offset: const Offset(65.0, -30.0),
+                                            child: Transform.rotate(
+                                              angle: 0.1 * pi,
+                                              child: Stack(
+                                                children: [
+                                                  CText(
+                                                    determineBannerContent(
+                                                      isFree,
+                                                      plans,
+                                                    )!
+                                                        .toUpperCase(),
+                                                    style: tsBody1.copiedWith(
+                                                      color: pink4,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         CText(
                                           '2y_pricing'.i18n,
                                           style: isTwoYearPlan
@@ -222,8 +227,8 @@ class Upgrade extends StatelessWidget {
     });
   }
 
-  // Only visible in China
-  String determineBannerContent(
+  // * Only visible in China
+  String? determineBannerContent(
     bool isFree,
     List<Map<String, dynamic>> plans,
   ) {
@@ -235,6 +240,7 @@ class Upgrade extends StatelessWidget {
 
     final bannerSavings = determineSavings(platinumPlans);
     final bannerRenewalBonus = determineBannerRenewalBonus(platinumPlans);
+    if (bannerSavings == '0' || bannerRenewalBonus == '0 days') return null;
     return isFree == true || bannerSavings == '0' || bannerRenewalBonus == '0'
         ?
         // Free user who is upgrading => fixed %
@@ -242,7 +248,7 @@ class Upgrade extends StatelessWidget {
         : '+' + bannerRenewalBonus;
   }
 
-  // Only visible in China
+  // * Only visible in China
   // For Free users in China, it displays a renewal bonus %
   // To facilitate our lives we only compare Platinum plans to each other
   // (the result % is higher than comparing Pro plans to each other)
@@ -256,10 +262,9 @@ class Upgrade extends StatelessWidget {
     return discount.toInt().toString();
   }
 
-  // Only visible in China
+  // * Only visible in China
   // For Pro or Platinum users in China, it displays a "+3 months" text
   String determineBannerRenewalBonus(Iterable platinumPlans) {
-    // TODO: waiting for feedback on how to handle long strings
     var bannerRenewalBonus = platinumPlans.firstWhere(
       (p) => (p['id'] as String).startsWith('2y'),
     )['formattedBonus'];
@@ -295,8 +300,6 @@ class Upgrade extends StatelessWidget {
     bool? isFree,
     Iterable visiblePlans,
   ) {
-    // TODO: revisit
-    final renewalText = visiblePlans.last['renewalText'];
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -304,14 +307,17 @@ class Upgrade extends StatelessWidget {
         children: [
           // * Renewal text
           // For Pro or Platinum users: "Your membership is ending soon. Renew now and enjoy up to three months free!"
-          if (renewalText != '')
-            Padding(
-              padding: const EdgeInsetsDirectional.only(bottom: 12.0),
-              child: CText(
-                renewalText,
-                style: tsBody1,
-              ),
-            ),
+          sessionModel.getRenewalText(
+            (context, renewalText, child) => renewalText.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsetsDirectional.only(bottom: 12.0),
+                    child: CText(
+                      renewalText,
+                      style: tsBody1,
+                    ),
+                  )
+                : const SizedBox(),
+          ),
           // * List of features for non-China locations
           if (platinumAvailable == false)
             Column(

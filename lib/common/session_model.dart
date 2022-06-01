@@ -308,4 +308,11 @@ class SessionModel extends Model {
       'email': email,
     }).then((value) => value as String);
   }
+
+  Widget getRenewalText(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'renewalText',
+      builder: builder,
+    );
+  }
 }

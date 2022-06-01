@@ -137,6 +137,7 @@ open class SessionModel(
             "resetCachedPlans" -> {
                 LanternApp.getSession().setUserPlans("")
             }
+            "getRenewalText" -> LanternApp.getSession().getRenewalText()
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -383,7 +384,10 @@ open class SessionModel(
                     Logger.info(TAG, "Successfully cached plans: $plans")
                     result.success("cachingPlansSuccess")
                     for (planId in proPlans.keys) {
-                        proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+                        proPlans[planId]?.let { plan ->
+                            PlansUtil.updatePrice(activity, plan)
+                            PlansUtil.calculateRenewalText(activity, plan)
+                        }
                     }
                     LanternApp.getSession().setUserPlans(Json.gson.toJson(plans))
                 }

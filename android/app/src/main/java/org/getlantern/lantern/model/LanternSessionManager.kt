@@ -340,12 +340,23 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putBoolean(PLAY_VERSION, playVersion).apply()
     }
 
+    fun setRenewalText(renewalText: String) {
+        db.mutate { tx ->
+            tx.put(RENEWAL_TEXT, renewalText)
+        }
+    }
+
+    fun getRenewalText() {
+        db.mutate { tx -> tx.get(RENEWAL_TEXT) ?: "" }
+    }
+
     companion object {
         private val TAG = LanternSessionManager::class.java.name
 
         // shared preferences
         private const val PRO_USER = "prouser"
         private const val USER_LEVEL = "userLevel"
+        private const val RENEWAL_TEXT = "renewalText"
         private const val PLANS = "plans"
         private const val DEVICES = "devices"
         private const val PRO_EXPIRED = "proexpired"
