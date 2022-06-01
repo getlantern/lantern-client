@@ -140,6 +140,9 @@ msgstr "Language"
 msgid "report_issue"
 msgstr "Report an issue"
 
+msgid "check_for_updates"
+msgstr "Check for Updates
+
 msgid "blocked_users"
 msgstr "Blocked Users"
 

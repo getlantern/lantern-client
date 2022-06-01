@@ -19,9 +19,13 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.CheckoutActivity
 import org.getlantern.lantern.model.*
-import org.getlantern.lantern.model.LanternHttpClient.*
+import org.getlantern.lantern.model.CheckUpdate
+import org.getlantern.lantern.model.LanternHttpClient.ProCallback
+import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
+import org.getlantern.lantern.model.LanternHttpClient.createProUrl
+import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
 import org.getlantern.lantern.util.Analytics
@@ -29,9 +33,9 @@ import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
-import org.getlantern.mobilesdk.Lantern
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -136,6 +140,9 @@ open class SessionModel(
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
             "resetCachedPlans" -> {
                 LanternApp.getSession().setUserPlans("")
+            }
+            "checkForUpdates" -> {
+                EventBus.getDefault().post(CheckUpdate(true))
             }
             else -> super.doMethodCall(call, notImplemented)
         }
@@ -376,8 +383,8 @@ open class SessionModel(
     // Hits the /plans endpoint and saves plans to PATH_PLANS
     private fun updateAndCachePlans(result: MethodChannel.Result) {
         try {
-            LanternApp.getPlans(object : PlansCallback {
-                override fun onSuccess(proPlans: Map<String, ProPlan>) {
+            LanternApp.getPlans(object : LanternHttpClient.PlansCallback {
+                 override fun onSuccess(proPlans: Map<String, ProPlan>) {
                     plans.clear()
                     plans.putAll(proPlans)
                     Logger.info(TAG, "Successfully cached plans: $plans")

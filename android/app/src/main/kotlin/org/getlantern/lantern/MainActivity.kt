@@ -3,6 +3,7 @@ package org.getlantern.lantern
 import android.Manifest
 import android.app.Activity
 import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -35,7 +36,6 @@ import io.lantern.messaging.WebRTCSignal
 import okhttp3.Response
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
-import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.CheckUpdate
@@ -458,7 +458,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun runCheckUpdate(checkUpdate: CheckUpdate) {
         val userInitiated = checkUpdate.userInitiated
-        if (LanternApp.getSession().isPlayVersion()) {
+        if (LanternApp.getSession().isPlayVersion) {
             Logger.debug(TAG, "App installed via Play; not checking for update")
             if (userInitiated) {
                 // If the user installed the app via Google Play,
@@ -520,7 +520,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                 "Update available at $url"
             )
             // an updated version of Lantern is available at the given url
-            val intent = Intent(activity, UpdateActivity_::class.java)
+            val intent = Intent()
+            intent.component = ComponentName(
+                activity.packageName,
+                "org.getlantern.lantern.activity.UpdateActivity_",
+            )
             intent.putExtra("updateUrl", url)
             startActivity(intent)
         }

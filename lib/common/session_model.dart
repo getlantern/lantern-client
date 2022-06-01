@@ -308,4 +308,8 @@ class SessionModel extends Model {
       'email': email,
     }).then((value) => value as String);
   }
+
+  Future<void> checkForUpdates() {
+    return methodChannel.invokeMethod('checkForUpdates');
+  }
 }
