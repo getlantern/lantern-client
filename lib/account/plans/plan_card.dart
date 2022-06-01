@@ -73,7 +73,7 @@ class PlanCard extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(12.0),
               ),
-              elevation: isBestValue ? 3 : 1,
+              elevation: isBestValue ? 3 : 0,
               child: Container(
                 padding: const EdgeInsetsDirectional.only(
                   start: 24.0,
@@ -91,7 +91,7 @@ class PlanCard extends StatelessWidget {
                         CText(
                           '${id.contains('platinum') ? 'Platinum' : 'Pro'} Plan'
                               .i18n,
-                          style: tsSubtitle1.copiedWith(
+                          style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
                           ),
@@ -101,11 +101,13 @@ class PlanCard extends StatelessWidget {
                         )
                       ],
                     ),
-                    const Padding(padding: EdgeInsetsDirectional.only(top: 6)),
                     // * Price per month
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
-                        CText('$formattedPricePerMonth / ', style: tsSubtitle1),
+                        CText(formattedPricePerMonth, style: tsHeading1),
+                        CText(' / ', style: tsBody2),
                         CText('month'.i18n, style: tsBody2),
                       ],
                     ),

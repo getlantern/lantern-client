@@ -346,9 +346,8 @@ class Upgrade extends StatelessWidget {
     bool? platinumAvailable,
   ) {
     return Container(
-      height: 100,
+      height: 90,
       child: Stack(
-        alignment: AlignmentDirectional.center,
         children: [
           Container(
             padding: const EdgeInsetsDirectional.only(top: 25),

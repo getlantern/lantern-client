@@ -470,7 +470,7 @@ msgid "dev_settings"
 msgstr "These settings are for development use only. Changing any setting will automatically stop and restart the application."
 
 msgid "dev_payment_mode"
-msgstr "When Payment Test Mode is enabled, the app uses a single hardcoded user. You can make Stripe purchases using the number 4242 4242 4242 4242, an expiration date in the future, and any CVV."
+msgstr "// OUTDATED // When Payment Test Mode is enabled, the app uses a single hardcoded user. You can make Stripe purchases using the number 4242 4242 4242 4242, an expiration date in the future, and any CVV."
 
 msgid "Payment Test Mode"
 msgstr "Payment Test Mode"

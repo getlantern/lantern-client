@@ -263,74 +263,53 @@ class _CheckoutState extends State<Checkout>
                   ],
                 ),
               ),
-              //  TODO: Helper widget - remove
-              sessionModel.developmentMode(
-                (context, isDeveloperMode, child) => isDeveloperMode
-                    ? Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            emailController.text = 'test@email.com';
-                          },
-                          child: Container(
-                            padding: const EdgeInsetsDirectional.all(24.0),
-                            child: CText(
-                              'DEV PURPOSES - TAP TO PREFILL',
-                              style: tsButtonBlue,
-                            ),
-                          ),
-                        ),
-                      )
-                    : Container(),
-              ),
-              const Spacer(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  PriceSummary(
-                    plans: widget.plans,
-                    id: widget.id,
-                    isPlatinum: widget.isPlatinum,
-                    isPro: widget.isPro,
-                  ),
-                  // * Unused Pro time disclaimer
-                  if (widget.platinumAvailable)
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(bottom: 16.0),
-                      child: CText(
-                        'unused_pro_time'.i18n,
-                        textAlign: TextAlign.center,
-                        style: tsBody2.italic.copiedWith(color: grey5),
-                      ),
+              // * Price summary, unused pro time disclaimer, Continue button
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    PriceSummary(
+                      plans: widget.plans,
+                      id: widget.id,
+                      isPlatinum: widget.isPlatinum,
+                      isPro: widget.isPro,
                     ),
-                  // * Continue to Payment
-                  Button(
-                    disabled: emailController.value.text.isEmpty ||
-                        emailFieldKey.currentState?.validate() == false ||
-                        refCodeFieldKey.currentState?.validate() == false,
-                    text: 'Continue'.i18n,
-                    onPressed: () async {
-                      await Future.wait(
-                        [
-                          sessionModel
-                              .checkEmailExistence(emailController.value.text)
-                              .onError((error, stackTrace) {
-                            CDialog.showError(
-                              context,
-                              error: e,
-                              stackTrace: stackTrace,
-                              description: (error as PlatformException)
-                                  .message
-                                  .toString(),
-                            );
-                          }),
-                          resolvePaymentRoute(),
-                        ],
-                        eagerError: true,
-                      );
-                    },
-                  )
-                ],
+                    if (widget.platinumAvailable)
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(bottom: 16.0),
+                        child: CText(
+                          'unused_pro_time'.i18n,
+                          textAlign: TextAlign.center,
+                          style: tsBody2.italic.copiedWith(color: grey5),
+                        ),
+                      ),
+                    Button(
+                      disabled: emailController.value.text.isEmpty ||
+                          emailFieldKey.currentState?.validate() == false ||
+                          refCodeFieldKey.currentState?.validate() == false,
+                      text: 'Continue'.i18n,
+                      onPressed: () async {
+                        await Future.wait(
+                          [
+                            sessionModel
+                                .checkEmailExistence(emailController.value.text)
+                                .onError((error, stackTrace) {
+                              CDialog.showError(
+                                context,
+                                error: e,
+                                stackTrace: stackTrace,
+                                description: error.toString(),
+                              );
+                            }),
+                            resolvePaymentRoute(),
+                          ],
+                          eagerError: true,
+                        );
+                      },
+                    )
+                  ],
+                ),
               ),
             ],
           ),

@@ -153,12 +153,12 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 bottom: 16.0,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //* Expiration
                   Container(
-                    width: 160,
+                    width: 150,
                     child: Form(
                       onChanged: () => setState(() {
                         formIsValid = determineFormIsValid();
@@ -176,10 +176,9 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       ),
                     ),
                   ),
-                  const Spacer(),
                   //* CVV
                   Container(
-                    width: 144,
+                    width: 150,
                     child: Form(
                       onChanged: () => setState(() {
                         formIsValid = determineFormIsValid();
@@ -222,64 +221,65 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                     )
                   : Container(),
             ),
-            const Spacer(),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // * Price summary
-                PriceSummary(
-                  plans: widget.plans,
-                  id: widget.id,
-                  refCode: widget.refCode,
-                  isPro: widget.isPro,
-                  isPlatinum: widget.isPlatinum,
-                ),
-                TOS(copy: copy),
-                Button(
-                  disabled: !formIsValid,
-                  text: copy,
-                  onPressed: () async {
-                    context.loaderOverlay.show();
-                    await sessionModel
-                        .submitStripe(
-                          widget.email,
-                          creditCardController.text,
-                          expDateController.text,
-                          cvcFieldController.text,
-                        )
-                        .timeout(
-                          defaultTimeoutDuration,
-                          onTimeout: () => onAPIcallTimeout(
-                            code: 'submitStripeTimeout',
-                            message: 'stripe_timeout'.i18n,
-                          ),
-                        )
-                        .then((value) async {
-                      context.loaderOverlay.hide();
-                      // TODO: Renewal success -- figure out status switch and show corresponding translations
-                      CDialog.showInfo(
-                        context,
-                        iconPath: ImagePaths.lantern_logo,
-                        size: 80,
-                        title: 'renewal_success'.i18n,
-                        description: 'stripe_success'.i18n,
-                        actionLabel: 'Continue'.i18n,
-                      );
-                    }).onError((error, stackTrace) {
-                      context.loaderOverlay.hide();
-                      CDialog.showError(
-                        context,
-                        error: e,
-                        stackTrace: stackTrace,
-                        description: (error as PlatformException)
-                            .message
-                            .toString(), // This is coming localized
-                      );
-                    });
-                  },
-                ),
-              ],
+            Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // * Price summary
+                  PriceSummary(
+                    plans: widget.plans,
+                    id: widget.id,
+                    refCode: widget.refCode,
+                    isPro: widget.isPro,
+                    isPlatinum: widget.isPlatinum,
+                  ),
+                  TOS(copy: copy),
+                  Button(
+                    disabled: !formIsValid,
+                    text: copy,
+                    onPressed: () async {
+                      context.loaderOverlay.show();
+                      await sessionModel
+                          .submitStripe(
+                            widget.email,
+                            creditCardController.text,
+                            expDateController.text,
+                            cvcFieldController.text,
+                          )
+                          .timeout(
+                            defaultTimeoutDuration,
+                            onTimeout: () => onAPIcallTimeout(
+                              code: 'submitStripeTimeout',
+                              message: 'stripe_timeout'.i18n,
+                            ),
+                          )
+                          .then((value) async {
+                        context.loaderOverlay.hide();
+                        // TODO: Renewal success -- figure out status switch and show corresponding translations
+                        CDialog.showInfo(
+                          context,
+                          iconPath: ImagePaths.lantern_logo,
+                          size: 80,
+                          title: 'renewal_success'.i18n,
+                          description: 'stripe_success'.i18n,
+                          actionLabel: 'Continue'.i18n,
+                        );
+                      }).onError((error, stackTrace) {
+                        context.loaderOverlay.hide();
+                        CDialog.showError(
+                          context,
+                          error: e,
+                          stackTrace: stackTrace,
+                          description: (error as PlatformException)
+                              .message
+                              .toString(), // This is coming localized
+                        );
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),
