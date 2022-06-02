@@ -28,6 +28,7 @@ class ImagePaths {
   static const credit_card = 'assets/images/credit_card.svg';
   static const calendar = 'assets/images/calendar.svg';
   static const lock = 'assets/images/lock.svg';
+  static const lantern_star = 'assets/images/lantern_star.svg';
 
   // Messaging
   static const more_vert = 'assets/images/more_vert.svg';

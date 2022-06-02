@@ -309,6 +309,10 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<void> checkForUpdates() {
+    return methodChannel.invokeMethod('checkForUpdates');
+  }
+
   Widget getRenewalText(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'renewalText',

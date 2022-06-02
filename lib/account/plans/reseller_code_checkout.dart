@@ -3,6 +3,7 @@ import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
+import 'purchase_success_dialog.dart';
 import 'purchase_utils.dart';
 
 class ResellerCodeCheckout extends StatefulWidget {
@@ -172,15 +173,13 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                         )
                         .then((value) {
                       context.loaderOverlay.hide();
-                      // TODO: Translations - the renewal success text depends on user status
-                      CDialog.showInfo(
-                        context,
-                        iconPath: ImagePaths.lantern_logo,
-                        size: 80,
-                        title: 'renewal_success'.i18n,
-                        description: 'reseller_success'.i18n,
-                        actionLabel: 'Continue'.i18n,
-                        dismissAction: () => context.router.pop(),
+                      // We only have reseller codes for Free -> Pro
+                      showDialog(
+                        context: context,
+                        builder: (context) => PurchaseSuccessDialog(
+                          title: 'pro_purchase_success_title'.i18n,
+                          description: 'pro_purchase_success_description'.i18n,
+                        ),
                       );
                     }).onError((error, stackTrace) {
                       context.loaderOverlay.hide();

@@ -6,6 +6,8 @@ import 'package:lantern/account/plans/purchase_utils.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
+import 'purchase_success_dialog.dart';
+
 class StripeCheckout extends StatefulWidget {
   final List<Map<String, dynamic>> plans;
   final String email;
@@ -254,16 +256,16 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                               message: 'stripe_timeout'.i18n,
                             ),
                           )
-                          .then((value) async {
+                          .then((value) {
                         context.loaderOverlay.hide();
-                        // TODO: Renewal success -- figure out status switch and show corresponding translations
-                        CDialog.showInfo(
-                          context,
-                          iconPath: ImagePaths.lantern_logo,
-                          size: 80,
-                          title: 'renewal_success'.i18n,
-                          description: 'stripe_success'.i18n,
-                          actionLabel: 'Continue'.i18n,
+                        // TODO: this can display either Pro or Platinum purchase success
+                        showDialog(
+                          context: context,
+                          builder: (context) => PurchaseSuccessDialog(
+                            title: 'pro_purchase_success_title'.i18n,
+                            description:
+                                'pro_purchase_success_description'.i18n,
+                          ),
                         );
                       }).onError((error, stackTrace) {
                         context.loaderOverlay.hide();

@@ -19,8 +19,14 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.model.*
-import org.getlantern.lantern.model.LanternHttpClient.*
+import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
+import org.getlantern.lantern.model.LanternHttpClient.ProCallback
+import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
+import org.getlantern.lantern.model.LanternHttpClient.createProUrl
+import org.getlantern.lantern.model.PaymentHandler
+import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProPlan
+import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
 import org.getlantern.lantern.util.Analytics
@@ -29,7 +35,9 @@ import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
+import java.util.*
 import java.util.concurrent.*
+
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -462,7 +470,6 @@ open class SessionModel(
         }
     }
 
-    // TODO: WIP
     // Handles Google Play transaction
     private fun submitGooglePlay(planID: String, result: MethodChannel.Result) {
         if (LanternApp.getInAppBilling() == null) {
@@ -576,6 +583,7 @@ open class SessionModel(
     // Fetches the BTCPay endpoint info which is needed to trigger the WebView
     private fun submitBitcoin(planID: String, email: String, result: MethodChannel.Result) {
         try {
+            LanternApp.getSession().setEmail(email)
             val params: MutableMap<String, String> = HashMap()
             params["email"] = email
             params["planID"] = planID
@@ -610,14 +618,11 @@ open class SessionModel(
         }
     }
 
-    // TODO: WIP
     private fun redeemResellerCode(email: String, resellerCode: String, result: MethodChannel.Result) {
         try {
             LanternApp.getSession().setEmail(email)
             LanternApp.getSession().setResellerCode(resellerCode)
-            val paymentHandler =
-                PaymentHandler(activity, "reseller-code")
-            paymentHandler.sendPurchaseRequest()
+            sendReferralRedeemRequest(resellerCode)
             result.success("redeemResellerSuccess")
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to redeem reseller code", t)
@@ -627,5 +632,36 @@ open class SessionModel(
                 null,
             )
         }
+    }
+
+    private fun sendReferralRedeemRequest(resellerCode: String) {
+        val url = createProUrl("/purchase")
+        var formBody: FormBody =  FormBody.Builder()
+            .add("resellerCode", resellerCode)
+            .add("idempotencyKey", java.lang.Long.toString(System.currentTimeMillis()))
+            .add("provider", "reseller-code")
+            .add("email", LanternApp.getSession().email())
+            .add("currency", LanternApp.getSession().currency().lowercase(Locale.getDefault()))
+            .add("deviceName", LanternApp.getSession().deviceName())
+            .build()
+        Logger.debug(TAG, "Sending reseller purchase request...")
+        lanternClient.post(url, formBody, object : ProCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                val error: String = activity.resources.getString(
+                    R.string.error_making_purchase
+                )
+                Logger.error(
+                    TAG,
+                    "Error with reseller purchase request:$error"
+                )
+                return
+            }
+            // TODO: this is not actually updating the server data
+            override fun onSuccess(response: Response?, result: JsonObject?) {
+                val paymentHandler = PaymentHandler(activity, "reseller-code")
+                paymentHandler.convertToPro()
+                Logger.debug(TAG, "New user level is ${LanternApp.getSession().getUserLevel()}")
+            }
+        })
     }
 }

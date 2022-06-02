@@ -421,35 +421,29 @@ msgstr "Something went wrong while fetching your account data."
 msgid "reseller_timeout"
 msgstr "Something went wrong while validating your activation code."
 
-msgid "reseller_success"
-msgstr "Successfully redeemed activation code."
-
 msgid "stripe_timeout"
 msgstr "Your Stripe payment has timed out. Please restart Lantern and try again."
 
 msgid "stripe_success"
 msgstr "Successful Stripe purchase."
 
-msgid "renewal_success"
-msgstr "Renewal Success"
+msgid "pro_purchase_success_title"
+msgstr "Welcome to Lantern Pro!"
 
-msgid "platinum_renewal_success_description"
-msgstr "Thank you for renewing your Lantern Platinum account.You now have unlimited access using our fastest data centers, and dedicated line.  Up to three devices can be connected to your account."
+msgid "pro_purchase_success_description"
+msgstr "You now have unlimited access using our fastest data centers.  Up to three devices can be connected to your account."
 
 msgid "pro_renewal_success_description"
 msgstr "Thank you for renewing your Lantern Pro account.You now have unlimited access using our fastest data centers.  Up to three devices can be connected to your account."
 
-msgid "platinum_purchase_success"
-msgstr "Welcome to Lantern Platinum"
+msgid "platinum_purchase_success_title"
+msgstr "Welcome to Lantern Platinum!"
 
-msgid "pro_purchase_success"
-msgstr "Welcome to Lantern Pro"
+msgid "platinum_renewal_success_description"
+msgstr "Thank you for renewing your Lantern Platinum account.You now have unlimited access using our fastest data centers, and dedicated line.  Up to three devices can be connected to your account."
 
 msgid "platinum_purchase_success_descripion"
 msgstr "You now have unlimited access using our fastest data centers, and dedicated line.  Up to three devices can be connected to your account."
-
-msgid "pro_purchase_success_descripion"
-msgstr "You now have unlimited access using our fastest data centers.  Up to three devices can be connected to your account."
 
 msgid "by_clicking_tos"
 msgstr "By clicking %s, you agree to our"

@@ -43,6 +43,14 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getBoolean(PRO_EXPIRED, false)
     }
 
+    fun setUserId(userId: String) {
+        prefs.edit().putString(USER_ID, userId).apply()
+    }
+
+    fun getUserId(): String? {
+        return prefs.getString(USER_ID, "")
+    }
+
     fun getCurrency(): Currency? {
         try {
             val lang = language
@@ -304,8 +312,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         setExpiration(user.expiration)
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
-        // save userId to display in dev panel
-        db.mutate { tx -> tx.put("userId", user.userId.toString()) }
         val devices = Vpn.Devices.newBuilder().addAllDevices(user.devices.map { Vpn.Device.newBuilder().setId(it.id).setName(it.name).setCreated(it.created).build() }).build()
         db.mutate { tx ->
             tx.put(DEVICES, devices)
@@ -356,6 +362,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         // shared preferences
         private const val PRO_USER = "prouser"
         private const val USER_LEVEL = "userLevel"
+        private const val USER_ID = "userId"
         private const val RENEWAL_TEXT = "renewalText"
         private const val PLANS = "plans"
         private const val DEVICES = "devices"
