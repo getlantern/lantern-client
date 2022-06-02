@@ -20,12 +20,16 @@ class PlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedPlan = plans.firstWhere((p) => p['id'] == id);
-    // final description = selectedPlan['description'] as String;
-    final formattedPricePerYear =
-        selectedPlan['totalCostBilledOneTime'].toString();
-    final formattedPricePerMonth = selectedPlan['oneMonthCost'].toString();
-    final isBestValue = selectedPlan['bestValue'] as bool;
+    final plan = plans.firstWhere((p) => p['id'] == id);
+    final planName = platinumAvailable
+        ? '${id.contains('platinum') ? 'Platinum' : 'Pro'} Plan'.i18n
+        : (plan['id'] as String).contains('2y')
+            ? 'Two Years Pro'.i18n
+            : 'One Year Pro'.i18n;
+    ;
+    final formattedPricePerYear = plan['totalCostBilledOneTime'].toString();
+    final formattedPricePerMonth = plan['oneMonthCost'].toString();
+    final isBestValue = plan['bestValue'] as bool;
 
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),
@@ -89,8 +93,7 @@ class PlanCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CText(
-                          '${id.contains('platinum') ? 'Platinum' : 'Pro'} Plan'
-                              .i18n,
+                          planName,
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,

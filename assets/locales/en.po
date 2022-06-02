@@ -319,6 +319,12 @@ msgstr "Pro Plan"
 msgid "Platinum Plan"
 msgstr "Platinum Plan"
 
+msgid "Two Years Pro"
+msgstr "Two Years Pro"
+
+msgid "One Year Pro"
+msgstr "One Year Pro"
+
 msgid "Checkout"
 msgstr "Checkout"
 
