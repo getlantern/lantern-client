@@ -137,7 +137,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                       onTap: () {
                         emailController.text = 'test@email.com';
                         resellerCodeController.text =
-                            'VFVWR-GPPPB-9K2RR-9YH6P-2DVM2';
+                            'GGXYP-DBKY8-Q2RG2-X39DR-9XM8R';
                       },
                       child: Container(
                         padding: const EdgeInsetsDirectional.all(24.0),

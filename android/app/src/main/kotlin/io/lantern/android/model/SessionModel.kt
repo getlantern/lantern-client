@@ -449,9 +449,9 @@ open class SessionModel(
                 callback = object : ApiResultCallback<Token> {
                     override fun onSuccess(token: Token) {
                         LanternApp.getSession().setStripeToken(token.id)
-                        result.success("stripeSuccess")
                         val paymentHandler = PaymentHandler(activity, "stripe")
                         paymentHandler.sendPurchaseRequest()
+                        result.success("stripeSuccess")
                     }
 
                     override fun onError(error: Exception) {
@@ -622,8 +622,9 @@ open class SessionModel(
         try {
             LanternApp.getSession().setEmail(email)
             LanternApp.getSession().setResellerCode(resellerCode)
-            sendReferralRedeemRequest(resellerCode)
             result.success("redeemResellerSuccess")
+            val paymentHandler = PaymentHandler(activity, "reseller-code")
+            paymentHandler.sendPurchaseRequest()
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to redeem reseller code", t)
             result.error(
@@ -632,36 +633,5 @@ open class SessionModel(
                 null,
             )
         }
-    }
-
-    private fun sendReferralRedeemRequest(resellerCode: String) {
-        val url = createProUrl("/purchase")
-        var formBody: FormBody =  FormBody.Builder()
-            .add("resellerCode", resellerCode)
-            .add("idempotencyKey", java.lang.Long.toString(System.currentTimeMillis()))
-            .add("provider", "reseller-code")
-            .add("email", LanternApp.getSession().email())
-            .add("currency", LanternApp.getSession().currency().lowercase(Locale.getDefault()))
-            .add("deviceName", LanternApp.getSession().deviceName())
-            .build()
-        Logger.debug(TAG, "Sending reseller purchase request...")
-        lanternClient.post(url, formBody, object : ProCallback {
-            override fun onFailure(throwable: Throwable?, error: ProError?) {
-                val error: String = activity.resources.getString(
-                    R.string.error_making_purchase
-                )
-                Logger.error(
-                    TAG,
-                    "Error with reseller purchase request:$error"
-                )
-                return
-            }
-            // TODO: this is not actually updating the server data
-            override fun onSuccess(response: Response?, result: JsonObject?) {
-                val paymentHandler = PaymentHandler(activity, "reseller-code")
-                paymentHandler.convertToPro()
-                Logger.debug(TAG, "New user level is ${LanternApp.getSession().getUserLevel()}")
-            }
-        })
     }
 }

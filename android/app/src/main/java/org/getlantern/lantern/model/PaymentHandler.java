@@ -77,14 +77,8 @@ public class PaymentHandler {
     }
 
     public void convertToPro() {
-        final Intent intent = new Intent(activity, WelcomeActivity_.class);
         LanternApp.getSession().linkDevice();
         LanternApp.getSession().setIsProUser(true);
-
-        intent.putExtra("provider", provider);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(intent);
-        activity.finish();
     }
 
     public void showDialog() {
@@ -133,20 +127,21 @@ public class PaymentHandler {
         }
 
         Logger.debug(TAG, "Sending purchase request...");
-        showDialog();
+//        showDialog();
         lanternClient.post(url, formBody.build(), new LanternHttpClient.ProCallback() {
             @Override
             public void onFailure(final Throwable throwable, final ProError error) {
                 final String errorMakingPurchase = getActivity().getString(
                         R.string.error_making_purchase);
                 Logger.error(TAG, "Error with purchase request:" + error);
-                dismissDialog();
-                ActivityExtKt.showErrorDialog(getActivity(), errorMakingPurchase);
+//                dismissDialog();
+//                ActivityExtKt.showErrorDialog(getActivity(), errorMakingPurchase);
             }
             @Override
             public void onSuccess(final Response response, final JsonObject result) {
-                dismissDialog();
+//                dismissDialog();
                 convertToPro();
+                sendPurchaseEvent(LanternApp.getAppContext(), provider);
             }
         });
     }
