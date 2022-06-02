@@ -9,7 +9,7 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.google.gson.JsonObject
 import com.stripe.android.ApiResultCallback
 import com.stripe.android.Stripe
-import com.stripe.android.model.Card
+import com.stripe.android.model.Card.Builder
 import com.stripe.android.model.Token
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -19,7 +19,6 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.CheckoutActivity
 import org.getlantern.lantern.model.*
 import org.getlantern.lantern.model.LanternHttpClient.*
 import org.getlantern.lantern.openHome
@@ -29,7 +28,6 @@ import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
-import org.getlantern.mobilesdk.Lantern
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.*
 
@@ -413,7 +411,6 @@ open class SessionModel(
         }
     }
 
-    // TODO: WIP
     // Transmits the email and credit card info to Stripe checkout flow
     private fun submitStripe(
         email: String,
@@ -422,17 +419,14 @@ open class SessionModel(
         cvc: String,
         result: MethodChannel.Result
     ) {
+        LanternApp.getSession().setEmail(email)
         try {
-            LanternApp.getSession().setEmail(email)
-            val dateComponents = expDate.split(expDate.trim(), "/")
-            val month = dateComponents[0].toInt()
-            val year = dateComponents[1].toInt()
-            val card: Card = Card.create(
-                cardNumber.trim(),
-                month,
-                year,
-                cvc.trim { it <= ' ' }
-            )
+            val card = Builder(
+                cardNumber,
+                expDate.split("/")[0].toInt(),
+                expDate.split("/")[1].toInt(),
+                cvc.trim(),
+            ).build()
             Logger.debug(
                 STRIPE_TAG,
                 "Stripe publishable key is '%s'",

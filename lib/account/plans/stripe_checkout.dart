@@ -243,9 +243,9 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       await sessionModel
                           .submitStripe(
                             widget.email,
-                            creditCardController.text,
-                            expDateController.text,
-                            cvcFieldController.text,
+                            creditCardController.value.text,
+                            expDateController.value.text,
+                            cvcFieldController.value.text,
                           )
                           .timeout(
                             defaultTimeoutDuration,
