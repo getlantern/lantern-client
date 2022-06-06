@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
-import 'plans/purchase_utils.dart';
+import 'plans/plan_utils.dart';
 
 class AccountMenu extends StatelessWidget {
   final bool platinumAvailable;
@@ -29,8 +29,6 @@ class AccountMenu extends StatelessWidget {
       context.loaderOverlay.hide();
       await context.pushRoute(
         Upgrade(
-          platinumAvailable: platinumAvailable,
-          isPlatinum: isPlatinum,
           isPro: isPro,
         ),
       );
@@ -69,9 +67,7 @@ class AccountMenu extends StatelessWidget {
                   bool hasCopiedRecoveryKey,
                   Widget? child,
                 ) =>
-                    sessionModel
-                        .getCachedUserLevel((context, userLevel, child) {
-                  final isPro = userLevel == 'pro';
+                    sessionModel.getIsPro((context, isPro, child) {
                   return ListItemFactory.settingsItem(
                     icon: ImagePaths.account,
                     content: 'account_management'.i18n,
@@ -94,8 +90,7 @@ class AccountMenu extends StatelessWidget {
             : const SizedBox(),
       ),
       if (!isPlatinum)
-        sessionModel.getCachedUserLevel((context, userLevel, child) {
-          final isPro = userLevel == 'pro';
+        sessionModel.getIsPro((context, isPro, child) {
           return ListItemFactory.settingsItem(
             icon: ImagePaths.pro_icon_black,
             content:
@@ -114,10 +109,10 @@ class AccountMenu extends StatelessWidget {
         content: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
       ),
-      sessionModel.getCachedUserLevel(
-          (context, userLevel, child) => ListItemFactory.settingsItem(
+      sessionModel
+          .getIsPro((context, isPro, child) => ListItemFactory.settingsItem(
                 icon: ImagePaths.devices,
-                content: isPlatinum || (userLevel == 'pro')
+                content: isPlatinum || isPro
                     ? 'Link Device'.i18n
                     : 'Authorize Device for Pro'.i18n,
                 onTap: () {
@@ -140,13 +135,13 @@ class AccountMenu extends StatelessWidget {
         (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus(
           (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
-              sessionModel.getCachedUserLevel(
-            (context, userLevel, child) => ListItemFactory.settingsItem(
+              sessionModel.getIsPro(
+            (context, isPro, child) => ListItemFactory.settingsItem(
               icon: ImagePaths.account,
               content: 'account_management'.i18n,
               onTap: () async => await context.pushRoute(
                 AccountManagement(
-                  isPro: userLevel == 'pro',
+                  isPro: isPro,
                   platinumAvailable: platinumAvailable,
                   isPlatinum: isPlatinum,
                 ),
@@ -161,8 +156,7 @@ class AccountMenu extends StatelessWidget {
           ),
         ),
       ),
-      sessionModel.getCachedUserLevel((context, userLevel, child) {
-        final isPro = userLevel == 'pro';
+      sessionModel.getIsPro((context, isPro, child) {
         // Show Upgrade option if we are
         // - in China and not Platinum
         // - not in China and not Pro
@@ -207,10 +201,10 @@ class AccountMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: 'Account'.i18n,
-      body: sessionModel.getCachedUserLevel(
-          (BuildContext sessionContext, String userLevel, Widget? child) {
+      body: sessionModel
+          .getIsPro((BuildContext sessionContext, bool isPro, Widget? child) {
         return ListView(
-          children: userLevel == 'pro' || isPlatinum
+          children: isPro
               ? proItems(sessionContext)
               : freeItems(sessionContext, sessionModel),
         );

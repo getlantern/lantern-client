@@ -5,21 +5,17 @@ import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/common/common.dart';
 
 import 'purchase_constants.dart';
-import 'purchase_utils.dart';
+import 'plan_utils.dart';
 
 class Checkout extends StatefulWidget {
   final List<Map<String, dynamic>> plans;
   final String id;
   final bool isPro;
-  final bool isPlatinum;
-  final bool platinumAvailable;
 
   Checkout({
     required this.plans,
     required this.id,
     required this.isPro,
-    required this.isPlatinum,
-    required this.platinumAvailable,
     Key? key,
   }) : super(key: key);
 
@@ -272,18 +268,23 @@ class _CheckoutState extends State<Checkout>
                     PriceSummary(
                       plans: widget.plans,
                       id: widget.id,
-                      isPlatinum: widget.isPlatinum,
                       isPro: widget.isPro,
                     ),
-                    if (widget.platinumAvailable)
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(bottom: 16.0),
-                        child: CText(
-                          'unused_pro_time'.i18n,
-                          textAlign: TextAlign.center,
-                          style: tsBody2.italic.copiedWith(color: grey5),
-                        ),
-                      ),
+                    sessionModel.getCachedPlans((context, cachedPlans, child) {
+                      final platinumAvailable =
+                          isPlatinumAvailable(cachedPlans);
+                      return platinumAvailable
+                          ? Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                  bottom: 16.0),
+                              child: CText(
+                                'unused_pro_time'.i18n,
+                                textAlign: TextAlign.center,
+                                style: tsBody2.italic.copiedWith(color: grey5),
+                              ),
+                            )
+                          : Container();
+                    }),
                     Button(
                       disabled: emailController.value.text.isEmpty ||
                           emailFieldKey.currentState?.validate() == false ||
@@ -327,7 +328,6 @@ class _CheckoutState extends State<Checkout>
           email: emailController.text,
           refCode: refCodeController.text,
           id: widget.id,
-          isPlatinum: widget.isPlatinum,
           isPro: widget.isPro,
         ),
       );

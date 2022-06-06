@@ -7,14 +7,12 @@ class PlanCard extends StatelessWidget {
   final String id;
   final bool isPro;
   final bool platinumAvailable;
-  final bool isPlatinum;
 
   const PlanCard({
     required this.plans,
     required this.id,
     required this.isPro,
     required this.platinumAvailable,
-    required this.isPlatinum,
     Key? key,
   }) : super(key: key);
 
@@ -58,8 +56,6 @@ class PlanCard extends StatelessWidget {
                 plans: plans,
                 id: id,
                 isPro: isPro,
-                isPlatinum: isPlatinum,
-                platinumAvailable: platinumAvailable,
               ),
             );
           }

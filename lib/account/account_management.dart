@@ -1,6 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
 
-import 'plans/purchase_utils.dart';
+import 'plans/plan_utils.dart';
 
 class AccountManagement extends StatefulWidget {
   final bool isPro;
@@ -179,9 +179,7 @@ class _AccountManagementState extends State<AccountManagement>
                         String expirationDate,
                         Widget? child,
                       ) =>
-                          sessionModel
-                              .getCachedUserLevel((context, userLevel, child) {
-                        final isPro = userLevel == 'pro';
+                          sessionModel.getIsPro((context, isPro, child) {
                         return ListItemFactory.settingsItem(
                           header:
                               '${widget.isPlatinum ? 'Platinum' : 'Pro'} Account Expiration'
@@ -203,8 +201,6 @@ class _AccountManagementState extends State<AccountManagement>
                               context.loaderOverlay.hide();
                               await context.pushRoute(
                                 Upgrade(
-                                  platinumAvailable: widget.platinumAvailable,
-                                  isPlatinum: widget.isPlatinum,
                                   isPro: isPro,
                                 ),
                               );

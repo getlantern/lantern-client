@@ -16,13 +16,13 @@ class VPNTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel.getCachedUserLevel(
-        (BuildContext context, String userLevel, Widget? child) {
+    return sessionModel
+        .getIsPro((BuildContext context, bool isPro, Widget? child) {
       return BaseScreen(
         title: SvgPicture.asset(
           isPlatinum
               ? ImagePaths.lantern_platinum_logotype
-              : userLevel == 'pro'
+              : isPro
                   ? ImagePaths.pro_logo
                   : ImagePaths.free_logo,
           height: 16,
@@ -32,11 +32,9 @@ class VPNTab extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            (platinumAvailable && isPlatinum) ||
-                    (!platinumAvailable && (userLevel == 'pro'))
+            (platinumAvailable && isPlatinum) || (!platinumAvailable && isPro)
                 ? Container()
                 : ProBanner(
-                    platinumAvailable: platinumAvailable,
                     isPlatinum: isPlatinum,
                   ),
             VPNSwitch(),

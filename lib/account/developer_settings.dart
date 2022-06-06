@@ -1,5 +1,5 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:lantern/account/plans/purchase_utils.dart';
+import 'package:lantern/account/plans/plan_utils.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/replica/logic/markdown_link_builder.dart';
 import 'package:lantern/replica/models/replica_link.dart';
@@ -29,17 +29,20 @@ class DeveloperSettingsTab extends StatelessWidget {
               margin: const EdgeInsetsDirectional.only(bottom: 16.0),
               child: CText('dev_payment_mode'.i18n, style: tsBody3),
             ),
-            sessionModel.getUserId(
-              (BuildContext context, String value, Widget? child) =>
-                  ListItemFactory.settingsItem(
-                content: 'UserID: $value'.i18n,
-                trailingArray: [
-                  TextButton(
-                    onPressed: () => copyText(context, value),
-                    child: CText('Copy'.toUpperCase(), style: tsButton),
-                  )
-                ],
-              ),
+            FutureBuilder(
+              future: sessionModel.getUserID(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) return Container();
+                return ListItemFactory.settingsItem(
+                  content: 'UserID: ${snapshot.data}'.i18n,
+                  trailingArray: [
+                    TextButton(
+                      onPressed: () => copyText(context, snapshot.data),
+                      child: CText('Copy'.toUpperCase(), style: tsButton),
+                    )
+                  ],
+                );
+              },
             ),
             ListItemFactory.settingsItem(
               content: 'Payment Test Mode'.i18n,

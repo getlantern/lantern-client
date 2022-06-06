@@ -328,4 +328,6 @@ public class ProPlan {
     public float getDiscount() {
         return discount;
     }
+
+    public String getLevel() {return level;}
 }

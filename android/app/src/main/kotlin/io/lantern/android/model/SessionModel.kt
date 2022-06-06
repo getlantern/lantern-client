@@ -144,6 +144,7 @@ open class SessionModel(
                 LanternApp.getSession().setUserPlans("")
             }
             "getRenewalText" -> LanternApp.getSession().getRenewalText()
+            "getUserID" -> LanternApp.getSession().userID
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -362,11 +363,17 @@ open class SessionModel(
     // Hits the /user-data endpoint and saves { userLevel: null | "pro" | "platinum" } to PATH_USER_LEVEL
     private fun updateAndCacheUserLevel(result: MethodChannel.Result) {
         try {
+            if (LanternApp.getSession().getUserLevel() != "") {
+                // We have already cached userLevel, no need to call endpoint again
+                Logger.info(TAG, "Using already cached user level: ${LanternApp.getSession().getUserLevel()}")
+                result.success("cachingPlansSuccess")
+                return
+            }
             lanternClient.userData(object : ProUserCallback {
                 override fun onSuccess(response: Response, userData: ProUser) {
                     Logger.debug(TAG, "Successfully updated userData")
-                    result.success("cachingUserDataSuccess")
                     LanternApp.getSession().setUserLevel(userData.userLevel)
+                    result.success("cachingUserDataSuccess")
                 }
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to fetch user data: $t.message")
@@ -383,6 +390,12 @@ open class SessionModel(
     // Hits the /plans endpoint and saves plans to PATH_PLANS
     private fun updateAndCachePlans(result: MethodChannel.Result) {
         try {
+            if (LanternApp.getSession().getUserPlans() != "") {
+                // We have already cached userPlans, no need to call endpoint again
+                Logger.info(TAG, "Using already cached plans: ${LanternApp.getSession().getUserPlans()}")
+                result.success("cachingPlansSuccess")
+                return
+            }
             LanternApp.getPlans(object : PlansCallback {
                 override fun onSuccess(proPlans: Map<String, ProPlan>) {
                     plans.clear()
@@ -451,6 +464,7 @@ open class SessionModel(
                         LanternApp.getSession().setStripeToken(token.id)
                         val paymentHandler = PaymentHandler(activity, "stripe")
                         paymentHandler.sendPurchaseRequest()
+                        checkUpgradePlatinum()
                         result.success("stripeSuccess")
                     }
 
@@ -470,7 +484,7 @@ open class SessionModel(
         }
     }
 
-    // Handles Google Play transaction
+    // Handles Google Play transaction - only valid for Global users (not China)
     private fun submitGooglePlay(planID: String, result: MethodChannel.Result) {
         if (LanternApp.getInAppBilling() == null) {
             Logger.error(TAG, "getInAppBilling is null")
@@ -522,10 +536,10 @@ open class SessionModel(
                             return
                         }
 
-                        result.success(null)
                         val paymentHandler =
                             PaymentHandler(activity, "googleplay", tokens[0])
                         paymentHandler.sendPurchaseRequest()
+                        result.success("googleplay")
                     }
                 }
             )
@@ -602,9 +616,10 @@ open class SessionModel(
                 override fun onSuccess(response: Response, result: JsonObject) {
                     Logger.debug(
                         TAG,
-                        "Email successfully validated $email"
+                        "Email successfully purchased plan with Bitcoin"
                     )
-                    // TODO: return response to client
+                    // TODO: return success response to client
+                    checkUpgradePlatinum()
                     Logger.debug("BTC result", result.toString())
                 }
             })
@@ -619,12 +634,43 @@ open class SessionModel(
     }
 
     private fun redeemResellerCode(email: String, resellerCode: String, result: MethodChannel.Result) {
+        LanternApp.getSession().setEmail(email)
+        LanternApp.getSession().setResellerCode(resellerCode)
+        // Copying bits of PaymentHandler.sendPurchaseRequest() to expose onSuccess and onError functions
         try {
-            LanternApp.getSession().setEmail(email)
-            LanternApp.getSession().setResellerCode(resellerCode)
-            result.success("redeemResellerSuccess")
-            val paymentHandler = PaymentHandler(activity, "reseller-code")
-            paymentHandler.sendPurchaseRequest()
+            Logger.debug(
+                TAG,
+                "Sending purchase request with reseller code"
+            )
+            val formBody: FormBody = FormBody.Builder()
+                .add("resellerCode", resellerCode)
+                .add("idempotencyKey", java.lang.Long.toString(System.currentTimeMillis()))
+                .add("provider", "reseller-code")
+                .add("email", email)
+                .add("currency", LanternApp.getSession().currency().lowercase(Locale.getDefault()))
+                .add("deviceName", LanternApp.getSession().deviceName())
+                .build()
+            lanternClient.post(createProUrl("/purchase"), formBody, object : ProCallback {
+                override fun onFailure(throwable: Throwable?, error: ProError?) {
+                    Logger.error(
+                        TAG,
+                        "Error with reseller request:$error"
+                    )
+                    result.error(
+                        "unknownError",
+                        activity.resources.getString(R.string.error_making_purchase),
+                        null,
+                    )
+                    return
+                }
+
+                override fun onSuccess(response: Response?, res: JsonObject?) {
+                    LanternApp.getSession().linkDevice()
+                    LanternApp.getSession().setIsProUser(true)
+                    Logger.debug(TAG, "Successfully updated user to ${LanternApp.getSession().isProUser}")
+                    result.success("resellerCodeSuccess")
+                }
+            })
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to redeem reseller code", t)
             result.error(
@@ -633,5 +679,11 @@ open class SessionModel(
                 null,
             )
         }
+    }
+
+    // Check if the user level needs to be updated from Pro to Platinum after a Stripe or Bitcoin purchase event
+    private fun checkUpgradePlatinum() {
+        val selectedPlan: ProPlan? = LanternApp.getSession().getSelectedPlan()
+        if (selectedPlan?.level == "platinum") LanternApp.getSession().setUserLevel("platinum")
     }
 }

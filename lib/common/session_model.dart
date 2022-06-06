@@ -35,6 +35,10 @@ class SessionModel extends Model {
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> proxyAvailable;
 
+  Widget getIsPro(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
+  }
+
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('proxyAll', builder: builder);
   }
@@ -110,12 +114,10 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
   }
 
-  Widget getUserId(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      'userId',
-      defaultValue: '',
-      builder: builder,
-    );
+  Future<String> getUserID() {
+    return methodChannel
+        .invokeMethod('getUserID')
+        .then((value) => value.toString());
   }
 
   Widget devices(ValueWidgetBuilder<Devices> builder) {

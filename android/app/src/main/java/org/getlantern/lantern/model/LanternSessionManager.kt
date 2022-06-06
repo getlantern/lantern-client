@@ -39,16 +39,12 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putString(PLANS, plans).apply()
     }
 
+    fun getUserPlans(): String? {
+        return prefs.getString(PLANS, "")
+    }
+
     fun isExpired(): Boolean {
         return prefs.getBoolean(PRO_EXPIRED, false)
-    }
-
-    fun setUserId(userId: String) {
-        prefs.edit().putString(USER_ID, userId).apply()
-    }
-
-    fun getUserId(): String? {
-        return prefs.getString(USER_ID, "")
     }
 
     fun getCurrency(): Currency? {
@@ -312,6 +308,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         setExpiration(user.expiration)
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
+        setUserLevel(user.userLevel)
         val devices = Vpn.Devices.newBuilder().addAllDevices(user.devices.map { Vpn.Device.newBuilder().setId(it.id).setName(it.name).setCreated(it.created).build() }).build()
         db.mutate { tx ->
             tx.put(DEVICES, devices)

@@ -101,6 +101,7 @@ public class PaymentHandler {
         });
     }
 
+    // the dialog rendering functions have been commented out since we are handling that Flutter side now
     public void sendPurchaseRequest() {
         final HttpUrl url = LanternHttpClient.createProUrl("/purchase");
         final JsonObject json = new JsonObject();
@@ -135,7 +136,7 @@ public class PaymentHandler {
                         R.string.error_making_purchase);
                 Logger.error(TAG, "Error with purchase request:" + error);
 //                dismissDialog();
-//                ActivityExtKt.showErrorDialog(getActivity(), errorMakingPurchase);
+                ActivityExtKt.showErrorDialog(getActivity(), errorMakingPurchase);
             }
             @Override
             public void onSuccess(final Response response, final JsonObject result) {

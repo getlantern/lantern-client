@@ -401,11 +401,7 @@ class AppRouter extends _i33.RootStackRouter {
       final args = routeData.argsAs<UpgradeArgs>();
       return _i33.CustomPage<void>(
           routeData: routeData,
-          child: _i29.Upgrade(
-              key: args.key,
-              platinumAvailable: args.platinumAvailable,
-              isPlatinum: args.isPlatinum,
-              isPro: args.isPro),
+          child: _i29.Upgrade(key: args.key, isPro: args.isPro),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -417,12 +413,7 @@ class AppRouter extends _i33.RootStackRouter {
       return _i33.CustomPage<void>(
           routeData: routeData,
           child: _i30.Checkout(
-              plans: args.plans,
-              id: args.id,
-              isPro: args.isPro,
-              isPlatinum: args.isPlatinum,
-              platinumAvailable: args.platinumAvailable,
-              key: args.key),
+              plans: args.plans, id: args.id, isPro: args.isPro, key: args.key),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -439,7 +430,6 @@ class AppRouter extends _i33.RootStackRouter {
               refCode: args.refCode,
               id: args.id,
               isPro: args.isPro,
-              isPlatinum: args.isPlatinum,
               key: args.key),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
@@ -1174,40 +1164,23 @@ class ReplicaUploadFileScreenArgs {
 /// generated route for
 /// [_i29.Upgrade]
 class Upgrade extends _i33.PageRouteInfo<UpgradeArgs> {
-  Upgrade(
-      {_i35.Key? key,
-      required bool platinumAvailable,
-      required bool isPlatinum,
-      required bool isPro})
+  Upgrade({_i35.Key? key, required bool isPro})
       : super(Upgrade.name,
-            path: 'upgrade',
-            args: UpgradeArgs(
-                key: key,
-                platinumAvailable: platinumAvailable,
-                isPlatinum: isPlatinum,
-                isPro: isPro));
+            path: 'upgrade', args: UpgradeArgs(key: key, isPro: isPro));
 
   static const String name = 'Upgrade';
 }
 
 class UpgradeArgs {
-  const UpgradeArgs(
-      {this.key,
-      required this.platinumAvailable,
-      required this.isPlatinum,
-      required this.isPro});
+  const UpgradeArgs({this.key, required this.isPro});
 
   final _i35.Key? key;
-
-  final bool platinumAvailable;
-
-  final bool isPlatinum;
 
   final bool isPro;
 
   @override
   String toString() {
-    return 'UpgradeArgs{key: $key, platinumAvailable: $platinumAvailable, isPlatinum: $isPlatinum, isPro: $isPro}';
+    return 'UpgradeArgs{key: $key, isPro: $isPro}';
   }
 }
 
@@ -1218,30 +1191,17 @@ class Checkout extends _i33.PageRouteInfo<CheckoutArgs> {
       {required List<Map<String, dynamic>> plans,
       required String id,
       required bool isPro,
-      required bool isPlatinum,
-      required bool platinumAvailable,
       _i35.Key? key})
       : super(Checkout.name,
             path: 'checkout',
-            args: CheckoutArgs(
-                plans: plans,
-                id: id,
-                isPro: isPro,
-                isPlatinum: isPlatinum,
-                platinumAvailable: platinumAvailable,
-                key: key));
+            args: CheckoutArgs(plans: plans, id: id, isPro: isPro, key: key));
 
   static const String name = 'Checkout';
 }
 
 class CheckoutArgs {
   const CheckoutArgs(
-      {required this.plans,
-      required this.id,
-      required this.isPro,
-      required this.isPlatinum,
-      required this.platinumAvailable,
-      this.key});
+      {required this.plans, required this.id, required this.isPro, this.key});
 
   final List<Map<String, dynamic>> plans;
 
@@ -1249,15 +1209,11 @@ class CheckoutArgs {
 
   final bool isPro;
 
-  final bool isPlatinum;
-
-  final bool platinumAvailable;
-
   final _i35.Key? key;
 
   @override
   String toString() {
-    return 'CheckoutArgs{plans: $plans, id: $id, isPro: $isPro, isPlatinum: $isPlatinum, platinumAvailable: $platinumAvailable, key: $key}';
+    return 'CheckoutArgs{plans: $plans, id: $id, isPro: $isPro, key: $key}';
   }
 }
 
@@ -1270,7 +1226,6 @@ class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
       String? refCode,
       required String id,
       required bool isPro,
-      required bool isPlatinum,
       _i35.Key? key})
       : super(StripeCheckout.name,
             path: 'stripeCheckout',
@@ -1280,7 +1235,6 @@ class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
                 refCode: refCode,
                 id: id,
                 isPro: isPro,
-                isPlatinum: isPlatinum,
                 key: key));
 
   static const String name = 'StripeCheckout';
@@ -1293,7 +1247,6 @@ class StripeCheckoutArgs {
       this.refCode,
       required this.id,
       required this.isPro,
-      required this.isPlatinum,
       this.key});
 
   final List<Map<String, dynamic>> plans;
@@ -1306,13 +1259,11 @@ class StripeCheckoutArgs {
 
   final bool isPro;
 
-  final bool isPlatinum;
-
   final _i35.Key? key;
 
   @override
   String toString() {
-    return 'StripeCheckoutArgs{plans: $plans, email: $email, refCode: $refCode, id: $id, isPro: $isPro, isPlatinum: $isPlatinum, key: $key}';
+    return 'StripeCheckoutArgs{plans: $plans, email: $email, refCode: $refCode, id: $id, isPro: $isPro, key: $key}';
   }
 }
 

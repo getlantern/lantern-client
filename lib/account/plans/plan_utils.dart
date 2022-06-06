@@ -27,4 +27,23 @@ String localizeCachingError(error) =>
     (error as PlatformException).message.toString();
 
 // TODO: we build a pollForUpdates logic instead of having a constant duration
-const defaultTimeoutDuration = Duration(seconds: 10);
+const defaultTimeoutDuration = Duration(seconds: 30);
+
+// returns true if there are any Plans entries where { level: 'platinum' }
+// depends on where the plans are fetched from
+bool isPlatinumAvailable(String cachedPlans) {
+  if (cachedPlans == '') return false;
+
+  final cachedPlansMap = jsonDecode(cachedPlans) as Map;
+  final anyPlatinumLevels = cachedPlansMap.entries.map((p) {
+    final availablePlan = p.value as Map;
+    return availablePlan['level'] == 'platinum';
+  });
+  return anyPlatinumLevels.contains(true);
+}
+
+// returns true if the cached user status is platinum
+// is independent of where the plans are fetched from
+bool isUserLevelPlatinum(String userLevel) {
+  return userLevel == 'platinum';
+}

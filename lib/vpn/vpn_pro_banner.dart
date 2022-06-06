@@ -1,13 +1,13 @@
-import 'package:lantern/account/plans/purchase_utils.dart';
+import 'package:lantern/account/plans/plan_utils.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 class ProBanner extends StatefulWidget {
-  final bool platinumAvailable;
   final bool isPlatinum;
 
-  ProBanner(
-      {Key? key, required this.platinumAvailable, required this.isPlatinum})
-      : super(key: key);
+  ProBanner({
+    Key? key,
+    required this.isPlatinum,
+  }) : super(key: key);
 
   @override
   _ProBannerState createState() => _ProBannerState();
@@ -16,8 +16,8 @@ class ProBanner extends StatefulWidget {
 class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
-    return sessionModel.getCachedUserLevel(
-      (context, userLevel, child) => CInkWell(
+    return sessionModel.getIsPro(
+      (context, isPro, child) => CInkWell(
         onTap: () async {
           context.loaderOverlay.show();
           await sessionModel
@@ -33,9 +33,7 @@ class _ProBannerState extends State<ProBanner> {
             context.loaderOverlay.hide();
             await context.pushRoute(
               Upgrade(
-                platinumAvailable: widget.platinumAvailable,
-                isPlatinum: widget.isPlatinum,
-                isPro: userLevel == 'pro',
+                isPro: isPro,
               ),
             );
           }).onError((error, stackTrace) {
@@ -73,15 +71,17 @@ class _ProBannerState extends State<ProBanner> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      sessionModel
-                          .getCachedUserLevel((context, userLevel, child) {
-                        final isPro = userLevel == 'pro';
-                        return CText(
-                          'Upgrade ${widget.platinumAvailable ? isPro ? 'to Lantern Platinum' : '' : 'to Lantern Pro'}'
-                              .i18n,
-                          style: tsSubtitle2,
-                        );
-                      }),
+                      sessionModel.getIsPro((context, isPro, child) =>
+                          sessionModel
+                              .getCachedPlans((context, cachedPlans, child) {
+                            final platinumAvailable =
+                                isPlatinumAvailable(cachedPlans);
+                            return CText(
+                              'Upgrade ${platinumAvailable ? isPro ? 'to Lantern Platinum' : '' : 'to Lantern Pro'}'
+                                  .i18n,
+                              style: tsSubtitle2,
+                            );
+                          })),
                       const SizedBox(
                         height: 4,
                       ),

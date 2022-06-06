@@ -10,6 +10,7 @@ import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
 
+import 'account/plans/plan_utils.dart';
 import 'messaging/messaging_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -171,8 +172,8 @@ class _HomePageState extends State<HomePage> {
     String cachedPlans,
     String userLevel,
   ) {
-    final platinumAvailable = determineLocation(cachedPlans);
-    final isPlatinum = determinePlatinum(userLevel);
+    final platinumAvailable = isPlatinumAvailable(cachedPlans);
+    final isPlatinum = isUserLevelPlatinum(userLevel);
     switch (selectedTab) {
       case TAB_CHATS:
         sessionModel.trackScreenView('Chats');
@@ -212,24 +213,5 @@ class _HomePageState extends State<HomePage> {
         assert(false, 'unrecognized tab $selectedTab');
         return Container();
     }
-  }
-
-  // returns true if there are any Plans entries where { level: 'platinum' }
-  // depends on where the plans are fetched from
-  bool determineLocation(String cachedPlans) {
-    if (cachedPlans == '') return false;
-
-    final cachedPlansMap = jsonDecode(cachedPlans) as Map;
-    final anyPlatinumLevels = cachedPlansMap.entries.map((p) {
-      final availablePlan = p.value as Map;
-      return availablePlan['level'] == 'platinum';
-    });
-    return anyPlatinumLevels.contains(true);
-  }
-
-  // returns true if the cached user status is platinum
-  // is independent of where the plans are fetched from
-  bool determinePlatinum(String userLevel) {
-    return userLevel == 'platinum';
   }
 }

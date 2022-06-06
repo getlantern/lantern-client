@@ -138,15 +138,15 @@ class _ChatsState extends State<Chats> {
                   children: [
                     messagingModel
                         .me((_, me, __) => ShareYourChatNumber(me).bottomItem),
-                    sessionModel.getCachedUserLevel(
-                      (_, userLevel, child) => ListItemFactory.bottomItem(
+                    sessionModel.getIsPro(
+                      (_, isPro, child) => ListItemFactory.bottomItem(
                         icon: ImagePaths.account,
                         content: 'account_management'.i18n,
                         onTap: () async {
                           await context.router.pop();
                           await context.router.push(
                             AccountManagement(
-                              isPro: userLevel == 'pro',
+                              isPro: isPro,
                               platinumAvailable: widget.platinumAvailable,
                               isPlatinum: widget.isPlatinum,
                             ),

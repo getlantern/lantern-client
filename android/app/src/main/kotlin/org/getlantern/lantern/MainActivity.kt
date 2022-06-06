@@ -294,8 +294,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
             override fun onSuccess(response: Response, user: ProUser?) {
                 LanternApp.getSession().setUserLevel(user?.userLevel)
-                // save userId to display in dev panel
-                LanternApp.getSession().setUserId(user?.userId.toString())
                 Logger.debug(TAG, "Successfully updated user level")
             }
         })

@@ -3,227 +3,227 @@ import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/common/common.dart';
 
 import 'purchase_constants.dart';
-import 'purchase_utils.dart';
+import 'plan_utils.dart';
 
 class Upgrade extends StatelessWidget {
-  final bool platinumAvailable;
-  final bool isPlatinum;
   final bool isPro;
 
   Upgrade({
     Key? key,
-    required this.platinumAvailable,
-    required this.isPlatinum,
     required this.isPro,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return sessionModel.getCachedPlans((context, cachedPlans, child) {
-      return sessionModel.getCachedPlans((context, cachedPlans, child) {
-        final plans = formatCachedPlans(cachedPlans);
-        // * Error screen if plans are empty
-        if (plans.isEmpty) {
-          return FullScreenDialog(
-            widget: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CAssetImage(
-                    path: ImagePaths.error,
-                    size: 100,
-                    color: grey5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.all(24.0),
-                    child: CText(
-                      'error_fetching_plans'.i18n,
-                      style: tsBody1,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        var isTwoYearPlan = true; // Toggle is by default to 2 years
-        var visiblePlans = determineVisiblePlans(isTwoYearPlan, plans);
-        final isFree = (isPro == false) && (isPlatinum == false);
-        final showBanner = determineBannerContent(isFree, plans);
-
+      final plans = formatCachedPlans(cachedPlans);
+      final platinumAvailable = isPlatinumAvailable(cachedPlans);
+      // * Error screen if plans are empty
+      if (plans.isEmpty) {
         return FullScreenDialog(
-          widget: StatefulBuilder(
-            builder: (context, setState) => Container(
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // * Logotype + X button
-                  buildHeader(context, platinumAvailable),
-                  // * Body
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsetsDirectional.only(
-                        start: 32,
-                        end: 32,
-                        bottom: 32,
-                      ),
-                      child: Column(
-                        children: [
-                          // * Renewal text or upsell
-                          buildRenewalTextOrUpsell(
-                            context,
-                            platinumAvailable,
-                            isFree,
-                            visiblePlans,
-                          ),
-                          // * Step
-                          Container(
-                            padding: EdgeInsetsDirectional.only(
-                              top: !platinumAvailable ? 16.0 : 0,
-                              bottom: 16.0,
-                            ),
-                            child: PlanStep(
-                              stepNum: '1',
-                              description: 'choose_plan'.i18n,
-                            ),
-                          ),
-                          if (platinumAvailable == true)
-                            // * Toggle and savings banner
-                            Container(
-                              padding: const EdgeInsetsDirectional.only(
-                                bottom: 16,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                      end: 16.0,
-                                    ),
-                                    child: CText(
-                                      '1y_pricing'.i18n,
-                                      style: isTwoYearPlan
-                                          ? tsBody1.copiedWith(color: grey5)
-                                          : tsBody1,
-                                    ),
-                                  ),
-                                  FlutterSwitch(
-                                    width: 44.0,
-                                    height: 24.0,
-                                    valueFontSize: 12.0,
-                                    padding: 2,
-                                    toggleSize: 18.0,
-                                    value: isTwoYearPlan,
-                                    activeColor: indicatorGreen,
-                                    inactiveColor: indicatorGreen,
-                                    onToggle: (bool newValue) {
-                                      setState(() => isTwoYearPlan = newValue);
-                                      setState(
-                                        () => visiblePlans =
-                                            determineVisiblePlans(
-                                          newValue,
-                                          plans,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  // * Savings banner
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                      start: 16.0,
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        if (showBanner != null)
-                                          Transform.translate(
-                                            offset: const Offset(30.0, -25.0),
-                                            child: const CAssetImage(
-                                              path: ImagePaths.savings_arrow,
-                                            ),
-                                          ),
-                                        if (showBanner != null)
-                                          Transform.translate(
-                                            offset: const Offset(65.0, -30.0),
-                                            child: Transform.rotate(
-                                              angle: 0.1 * pi,
-                                              child: Stack(
-                                                children: [
-                                                  CText(
-                                                    determineBannerContent(
-                                                      isFree,
-                                                      plans,
-                                                    )!
-                                                        .toUpperCase(),
-                                                    style: tsBody1.copiedWith(
-                                                      color: pink4,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        CText(
-                                          '2y_pricing'.i18n,
-                                          style: isTwoYearPlan
-                                              ? tsBody1
-                                              : tsBody1.copiedWith(
-                                                  color: grey5,
-                                                ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          // * Card
-                          ...visiblePlans.map(
-                            (plan) => PlanCard(
-                              plans: plans,
-                              id: plan['id'] as String,
-                              platinumAvailable: platinumAvailable,
-                              isPro: isPro,
-                              isPlatinum: isPlatinum,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+          widget: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CAssetImage(
+                  path: ImagePaths.error,
+                  size: 100,
+                  color: grey5,
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.all(24.0),
+                  child: CText(
+                    'error_fetching_plans'.i18n,
+                    style: tsBody1,
                   ),
-                  // * Footer
-                  if (!isPlatinum)
-                    Stack(
-                      children: [
-                        Container(
-                          height: 40,
-                          alignment: Alignment.center,
-                          width: MediaQuery.of(context).size.width,
-                          color: grey2,
-                          child: GestureDetector(
-                            onTap: () async => await context.pushRoute(
-                              ResellerCodeCheckout(isPro: isPro),
-                            ),
-                            child: CText(
-                              'Have a Lantern Pro activation code? Click here.',
-                              style: tsBody1,
-                            ),
-                          ), // Translations
-                        ),
-                        Divider(
-                          color: grey1,
-                          height: 2,
-                        ),
-                      ],
-                    ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );
-      });
+      }
+
+      var isTwoYearPlan = true; // Toggle is by default to 2 years
+      var visiblePlans =
+          determineVisiblePlans(isTwoYearPlan, plans, platinumAvailable);
+      final isFree = !isPro;
+      final showBanner = determineBannerContent(isFree, plans);
+
+      return FullScreenDialog(
+        widget: StatefulBuilder(
+          builder: (context, setState) => Container(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // * Logotype + X button
+                buildHeader(context, platinumAvailable),
+                // * Body
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 32,
+                      end: 32,
+                      bottom: 32,
+                    ),
+                    child: Column(
+                      children: [
+                        // * Renewal text or upsell
+                        buildRenewalTextOrUpsell(
+                          context,
+                          platinumAvailable,
+                          isFree,
+                          visiblePlans,
+                        ),
+                        // * Step
+                        Container(
+                          padding: EdgeInsetsDirectional.only(
+                            top: !platinumAvailable ? 16.0 : 0,
+                            bottom: 16.0,
+                          ),
+                          child: PlanStep(
+                            stepNum: '1',
+                            description: 'choose_plan'.i18n,
+                          ),
+                        ),
+                        if (platinumAvailable == true)
+                          // * Toggle and savings banner
+                          Container(
+                            padding: const EdgeInsetsDirectional.only(
+                              bottom: 16,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                    end: 16.0,
+                                  ),
+                                  child: CText(
+                                    '1y_pricing'.i18n,
+                                    style: isTwoYearPlan
+                                        ? tsBody1.copiedWith(color: grey5)
+                                        : tsBody1,
+                                  ),
+                                ),
+                                FlutterSwitch(
+                                  width: 44.0,
+                                  height: 24.0,
+                                  valueFontSize: 12.0,
+                                  padding: 2,
+                                  toggleSize: 18.0,
+                                  value: isTwoYearPlan,
+                                  activeColor: indicatorGreen,
+                                  inactiveColor: indicatorGreen,
+                                  onToggle: (bool newValue) {
+                                    setState(() => isTwoYearPlan = newValue);
+                                    setState(
+                                      () =>
+                                          visiblePlans = determineVisiblePlans(
+                                        newValue,
+                                        plans,
+                                        platinumAvailable,
+                                      ),
+                                    );
+                                  },
+                                ),
+                                // * Savings banner
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.only(
+                                    start: 16.0,
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      if (showBanner != null)
+                                        Transform.translate(
+                                          offset: const Offset(30.0, -25.0),
+                                          child: const CAssetImage(
+                                            path: ImagePaths.savings_arrow,
+                                          ),
+                                        ),
+                                      if (showBanner != null)
+                                        Transform.translate(
+                                          offset: const Offset(65.0, -30.0),
+                                          child: Transform.rotate(
+                                            angle: 0.1 * pi,
+                                            child: Stack(
+                                              children: [
+                                                CText(
+                                                  determineBannerContent(
+                                                    isFree,
+                                                    plans,
+                                                  )!
+                                                      .toUpperCase(),
+                                                  style: tsBody1.copiedWith(
+                                                    color: pink4,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      CText(
+                                        '2y_pricing'.i18n,
+                                        style: isTwoYearPlan
+                                            ? tsBody1
+                                            : tsBody1.copiedWith(
+                                                color: grey5,
+                                              ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        // * Card
+                        ...visiblePlans.map(
+                          (plan) => PlanCard(
+                            plans: plans,
+                            id: plan['id'] as String,
+                            platinumAvailable: platinumAvailable,
+                            isPro: isPro,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // * Footer
+                sessionModel.getCachedUserLevel((context, userLevel, child) {
+                  final isPlatinum = isUserLevelPlatinum(userLevel);
+                  return (isPlatinum)
+                      ? Container()
+                      : Stack(
+                          children: [
+                            Container(
+                              height: 40,
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width,
+                              color: grey2,
+                              child: GestureDetector(
+                                onTap: () async => await context.pushRoute(
+                                  ResellerCodeCheckout(isPro: isPro),
+                                ),
+                                child: CText(
+                                  'Have a Lantern Pro activation code? Click here.',
+                                  style: tsBody1,
+                                ),
+                              ), // Translations
+                            ),
+                            Divider(
+                              color: grey1,
+                              height: 2,
+                            ),
+                          ],
+                        );
+                }),
+              ],
+            ),
+          ),
+        ),
+      );
     });
   }
 
@@ -276,6 +276,7 @@ class Upgrade extends StatelessWidget {
   List<Map<String, dynamic>> determineVisiblePlans(
     bool isTwoYearPlan,
     List<Map<String, dynamic>> plans,
+    bool platinumAvailable,
   ) {
     // if we are not in China, we only have two available plans which we both want to render
     if (!platinumAvailable) return plans;

@@ -4,7 +4,7 @@ import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
 import 'purchase_success_dialog.dart';
-import 'purchase_utils.dart';
+import 'plan_utils.dart';
 
 class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;

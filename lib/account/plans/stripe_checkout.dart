@@ -2,7 +2,7 @@ import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
-import 'package:lantern/account/plans/purchase_utils.dart';
+import 'package:lantern/account/plans/plan_utils.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
@@ -14,7 +14,6 @@ class StripeCheckout extends StatefulWidget {
   final String? refCode;
   final String id;
   final bool isPro;
-  final bool isPlatinum;
 
   const StripeCheckout({
     required this.plans,
@@ -22,7 +21,6 @@ class StripeCheckout extends StatefulWidget {
     this.refCode,
     required this.id,
     required this.isPro,
-    required this.isPlatinum,
     Key? key,
   }) : super(key: key);
 
@@ -234,7 +232,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                     id: widget.id,
                     refCode: widget.refCode,
                     isPro: widget.isPro,
-                    isPlatinum: widget.isPlatinum,
                   ),
                   TOS(copy: copy),
                   Button(
