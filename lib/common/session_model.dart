@@ -258,12 +258,14 @@ class SessionModel extends Model {
     String cardNumber,
     String expDate,
     String cvc,
+    String planID,
   ) async {
     return methodChannel.invokeMethod('submitStripe', <String, dynamic>{
       'email': email,
       'cardNumber': cardNumber,
       'expDate': expDate,
       'cvc': cvc,
+      'planID': planID,
     }).then((value) => value as String);
   }
 

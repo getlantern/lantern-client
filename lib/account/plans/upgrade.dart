@@ -268,7 +268,7 @@ class Upgrade extends StatelessWidget {
     var bannerRenewalBonus = platinumPlans.firstWhere(
       (p) => (p['id'] as String).startsWith('2y'),
     )['formattedBonus'];
-    return bannerRenewalBonus;
+    return bannerRenewalBonus.toString();
   }
 
   // Takes toggle state into consideration to determine which plans are displayed

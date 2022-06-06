@@ -102,7 +102,7 @@ open class SessionModel(
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
             "updateAndCachePlans" -> updateAndCachePlans(result)
             "updateAndCacheUserLevel" -> updateAndCacheUserLevel(result)
-            "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, result)
+            "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, call.argument("planID")!!, result)
             "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!, result)
             "applyRefCode" -> applyRefCode(call.argument("refCode")!!, result)
             "submitBitcoin" -> submitBitcoin(call.argument("planID")!!, call.argument("email")!!, result)
@@ -390,9 +390,9 @@ open class SessionModel(
     // Hits the /plans endpoint and saves plans to PATH_PLANS
     private fun updateAndCachePlans(result: MethodChannel.Result) {
         try {
-            if (LanternApp.getSession().getUserPlans() != "") {
+            if (LanternApp.getSession().getCachedPlans() != "") {
                 // We have already cached userPlans, no need to call endpoint again
-                Logger.info(TAG, "Using already cached plans: ${LanternApp.getSession().getUserPlans()}")
+                Logger.info(TAG, "Using already cached plans: ${LanternApp.getSession().getCachedPlans()}")
                 result.success("cachingPlansSuccess")
                 return
             }
@@ -438,6 +438,7 @@ open class SessionModel(
         cardNumber: String,
         expDate: String,
         cvc: String,
+        planID: String,
         result: MethodChannel.Result
     ) {
         LanternApp.getSession().setEmail(email)
@@ -457,6 +458,7 @@ open class SessionModel(
                 activity,
                 LanternApp.getSession().stripePubKey()!!
             )
+            LanternApp.getSession().setProPlan(plans[planID])
             stripe.createCardToken(
                 card,
                 callback = object : ApiResultCallback<Token> {
@@ -464,7 +466,6 @@ open class SessionModel(
                         LanternApp.getSession().setStripeToken(token.id)
                         val paymentHandler = PaymentHandler(activity, "stripe")
                         paymentHandler.sendPurchaseRequest()
-                        checkUpgradePlatinum()
                         result.success("stripeSuccess")
                     }
 
@@ -511,7 +512,7 @@ open class SessionModel(
                                 )
                             return
                         }
-
+                        LanternApp.getSession().setProPlan(plans[planID])
                         val tokens: MutableList<String> = ArrayList()
                         for (purchase in purchases!!) {
                             if (!purchase.isAcknowledged) {
@@ -535,7 +536,6 @@ open class SessionModel(
                                 )
                             return
                         }
-
                         val paymentHandler =
                             PaymentHandler(activity, "googleplay", tokens[0])
                         paymentHandler.sendPurchaseRequest()
@@ -598,6 +598,7 @@ open class SessionModel(
     private fun submitBitcoin(planID: String, email: String, result: MethodChannel.Result) {
         try {
             LanternApp.getSession().setEmail(email)
+            LanternApp.getSession().setProPlan(plans[planID])
             val params: MutableMap<String, String> = HashMap()
             params["email"] = email
             params["planID"] = planID
@@ -613,14 +614,15 @@ open class SessionModel(
                     return
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
+                override fun onSuccess(response: Response, res: JsonObject) {
                     Logger.debug(
                         TAG,
                         "Email successfully purchased plan with Bitcoin"
                     )
                     // TODO: return success response to client
-                    checkUpgradePlatinum()
-                    Logger.debug("BTC result", result.toString())
+                    val paymentHandler = PaymentHandler(activity, "btc")
+                    paymentHandler.sendPurchaseRequest()
+                    Logger.debug("BTC result", res.toString())
                 }
             })
         } catch (t: Throwable) {
@@ -668,6 +670,7 @@ open class SessionModel(
                     LanternApp.getSession().linkDevice()
                     LanternApp.getSession().setIsProUser(true)
                     Logger.debug(TAG, "Successfully updated user to ${LanternApp.getSession().isProUser}")
+                    LanternApp.getSession().setUserLevel("pro")
                     result.success("resellerCodeSuccess")
                 }
             })
@@ -679,11 +682,5 @@ open class SessionModel(
                 null,
             )
         }
-    }
-
-    // Check if the user level needs to be updated from Pro to Platinum after a Stripe or Bitcoin purchase event
-    private fun checkUpgradePlatinum() {
-        val selectedPlan: ProPlan? = LanternApp.getSession().getSelectedPlan()
-        if (selectedPlan?.level == "platinum") LanternApp.getSession().setUserLevel("platinum")
     }
 }

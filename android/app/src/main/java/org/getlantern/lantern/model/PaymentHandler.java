@@ -79,6 +79,9 @@ public class PaymentHandler {
     public void convertToPro() {
         LanternApp.getSession().linkDevice();
         LanternApp.getSession().setIsProUser(true);
+        // TODO: we might need to update the userLevel status after a successful purchase
+        final ProPlan selectedPlan = LanternApp.getSession().getSelectedPlan();
+        LanternApp.getSession().setUserLevel(selectedPlan.getLevel());
     }
 
     public void showDialog() {

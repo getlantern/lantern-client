@@ -180,7 +180,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             ),
             // * FETCH USER DATA
             ListItemFactory.settingsItem(
-              content: 'Fetch user status',
+              content: 'Fetch user level',
               trailingArray: [
                 TextButton(
                   onPressed: () async {
@@ -197,7 +197,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                         .then(
                           (value) => showSnackbar(
                             context: context,
-                            content: 'Success updating and caching user status',
+                            content: 'Success updating and caching user level',
                           ),
                         )
                         .onError(
@@ -224,12 +224,27 @@ class DeveloperSettingsTab extends StatelessWidget {
             sessionModel.getCachedUserLevel(
               (context, userLevel, child) => ListItemFactory.settingsItem(
                 content: CText(
-                  'User status',
+                  'User level',
                   style: tsBody3,
                 ),
                 trailingArray: [
                   CText(
                     userLevel.toString().toUpperCase(),
+                    style: tsBody1Short.copiedWith(color: Colors.green),
+                  )
+                ],
+              ),
+            ),
+            // * DISPLAY USER STATUS
+            sessionModel.getIsPro(
+              (context, isPro, child) => ListItemFactory.settingsItem(
+                content: CText(
+                  'isPro',
+                  style: tsBody3,
+                ),
+                trailingArray: [
+                  CText(
+                    isPro.toString().toUpperCase(),
                     style: tsBody1Short.copiedWith(color: Colors.green),
                   )
                 ],

@@ -12,12 +12,14 @@ class PurchaseSuccessDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      contentPadding: const EdgeInsets.all(0),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Padding(
             padding: EdgeInsetsDirectional.only(
+              top: 24,
               bottom: 16,
             ),
             child: CAssetImage(
@@ -35,18 +37,16 @@ class PurchaseSuccessDialog extends StatelessWidget {
               style: tsSubtitle1Short,
             ),
           ),
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsetsDirectional.only(
-                start: 24,
-                end: 24,
-                top: 16,
-              ),
-              child: CText(
-                description,
-                style: tsBody1.copiedWith(
-                  color: grey5,
-                ),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(
+              start: 24,
+              end: 24,
+              top: 24,
+            ),
+            child: CText(
+              description,
+              style: tsBody1.copiedWith(
+                color: grey5,
               ),
             ),
           ),
@@ -61,6 +61,7 @@ class PurchaseSuccessDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             context.router.popUntilRoot();
+            sessionModel.resetCachedPlans();
           },
           child: CText(
             'Continue'.i18n.toUpperCase(),

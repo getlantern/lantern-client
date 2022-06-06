@@ -7,9 +7,11 @@ class AccountMenu extends StatelessWidget {
   final bool platinumAvailable;
   final bool isPlatinum;
 
-  AccountMenu(
-      {Key? key, required this.platinumAvailable, required this.isPlatinum})
-      : super(key: key);
+  AccountMenu({
+    Key? key,
+    required this.platinumAvailable,
+    required this.isPlatinum,
+  }) : super(key: key);
 
   Future<void> upgradeToLanternPro(
     BuildContext context,
@@ -204,7 +206,7 @@ class AccountMenu extends StatelessWidget {
       body: sessionModel
           .getIsPro((BuildContext sessionContext, bool isPro, Widget? child) {
         return ListView(
-          children: isPro
+          children: isPro || isPlatinum
               ? proItems(sessionContext)
               : freeItems(sessionContext, sessionModel),
         );

@@ -47,3 +47,27 @@ bool isPlatinumAvailable(String cachedPlans) {
 bool isUserLevelPlatinum(String userLevel) {
   return userLevel == 'platinum';
 }
+
+String getPurchaseDialogTitle(String userLevel) {
+  // TODO: fix
+  final isRenewal = true;
+  if (isRenewal) {
+    return 'renewal_success_title'.i18n;
+  }
+  return isUserLevelPlatinum(userLevel)
+      ? 'platinum_purchase_success_title'.i18n
+      : 'pro_purchase_success_title'.i18n;
+}
+
+String getPurchaseDialogText(String userLevel) {
+  // TODO: fix
+  final isRenewal = true;
+  if (isRenewal) {
+    return isUserLevelPlatinum(userLevel)
+        ? 'platinum_renewal_success_description'.i18n
+        : 'pro_renewal_success_description'.i18n;
+  }
+  return isUserLevelPlatinum(userLevel)
+      ? 'platinum_purchase_success_descripion'.i18n
+      : 'pro_purchase_success_description'.i18n;
+}

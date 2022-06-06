@@ -439,6 +439,9 @@ msgstr "Thank you for renewing your Lantern Pro account.You now have unlimited a
 msgid "platinum_purchase_success_title"
 msgstr "Welcome to Lantern Platinum!"
 
+msgid "renewal_success_title"
+msgstr "Renewal Success!"
+
 msgid "platinum_renewal_success_description"
 msgstr "Thank you for renewing your Lantern Platinum account.You now have unlimited access using our fastest data centers, and dedicated line.  Up to three devices can be connected to your account."
 

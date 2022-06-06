@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.text.TextUtils
 import io.lantern.android.model.Vpn
 import org.getlantern.lantern.BuildConfig
+import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
@@ -39,7 +40,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putString(PLANS, plans).apply()
     }
 
-    fun getUserPlans(): String? {
+    fun getCachedPlans(): String? {
         return prefs.getString(PLANS, "")
     }
 

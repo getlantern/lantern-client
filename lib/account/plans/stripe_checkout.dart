@@ -245,6 +245,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                             creditCardController.value.text,
                             expDateController.value.text,
                             cvcFieldController.value.text,
+                            widget.id,
                           )
                           .timeout(
                             defaultTimeoutDuration,
@@ -255,13 +256,14 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                           )
                           .then((value) {
                         context.loaderOverlay.hide();
-                        // TODO: this can display either Pro or Platinum purchase success
                         showDialog(
                           context: context,
-                          builder: (context) => PurchaseSuccessDialog(
-                            title: 'pro_purchase_success_title'.i18n,
-                            description:
-                                'pro_purchase_success_description'.i18n,
+                          builder: (context) => sessionModel.getCachedUserLevel(
+                            (context, userLevel, child) =>
+                                PurchaseSuccessDialog(
+                              title: getPurchaseDialogTitle(userLevel),
+                              description: getPurchaseDialogText(userLevel),
+                            ),
                           ),
                         );
                       }).onError((error, stackTrace) {
