@@ -23,6 +23,7 @@ class CTextField extends StatefulWidget {
   late final String? actionIconPath;
   late final int? maxLength;
   late final TextCapitalization? textCapitalization;
+  late final EdgeInsetsDirectional? contentPadding;
 
   CTextField({
     required this.controller,
@@ -43,6 +44,7 @@ class CTextField extends StatefulWidget {
     this.actionIconPath,
     this.maxLength,
     this.textCapitalization,
+    this.contentPadding,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -103,7 +105,8 @@ class _CTextFieldState extends State<CTextField> {
             textCapitalization:
                 widget.textCapitalization ?? TextCapitalization.none,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsetsDirectional.all(0),
+              contentPadding:
+                  widget.contentPadding ?? const EdgeInsetsDirectional.all(0),
               isDense: true,
               floatingLabelBehavior: FloatingLabelBehavior.never,
               // we handle floating labels using our custom method below
