@@ -4,6 +4,7 @@ import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/common/common.dart';
 
+import 'bitcoin_webview.dart';
 import 'purchase_constants.dart';
 import 'plan_utils.dart';
 
@@ -351,31 +352,7 @@ class _CheckoutState extends State<Checkout>
           final btcPayURL = jsonDecode(value as String)['redirect'];
           await context.pushRoute(
             FullScreenDialogPage(
-              widget: Center(
-                child: Stack(
-                  children: [
-                    // TODO: listen for Webview Submission and user updates
-                    // (Upgrade) Free -> Pro, Free -> Platinum
-                    // (Renewal) Pro -> Pro, Pro -> Platinum, Platinum -> Platinum
-                    WebView(
-                      initialUrl: btcPayURL,
-                      javascriptMode: JavascriptMode.unrestricted,
-                      onProgress: (int progress) {
-                        print('WebView is loading (progress : $progress%)');
-                      },
-                      onPageStarted: (String url) {
-                        print('WebView started loading: $url');
-                      },
-                      onPageFinished: (String url) {
-                        print('PWebViewage finished loading: $url');
-                        context.loaderOverlay.hide();
-                      },
-                      gestureNavigationEnabled: true,
-                      backgroundColor: const Color(0x00000000),
-                    ),
-                  ],
-                ),
-              ),
+              widget: BitcoinWebview(btcPayURL: btcPayURL, context: context),
             ),
           );
         } catch (e) {
