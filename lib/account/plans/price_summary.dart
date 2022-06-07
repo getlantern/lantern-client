@@ -34,7 +34,7 @@ class PriceSummary extends StatelessWidget {
             ],
           ),
           // * Renewal Bonus
-          if (bonus != '0 days' || bonus == 'null') // TODO: hacky
+          if (bonus != '0 days' && bonus != 'null') // TODO: hacky
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

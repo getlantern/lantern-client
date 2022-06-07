@@ -283,15 +283,13 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<void> submitBitcoin(
+  Future<void> getBitcoinEndpoint(
     String planID,
     String email,
-    String refCode,
   ) async {
-    return methodChannel.invokeMethod('submitBitcoin', <String, dynamic>{
+    return methodChannel.invokeMethod('getBitcoinEndpoint', <String, dynamic>{
       'planID': planID,
       'email': email,
-      'refCode': refCode,
     }).then((value) => value as String);
   }
 

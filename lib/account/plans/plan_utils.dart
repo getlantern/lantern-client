@@ -26,7 +26,6 @@ void onAPIcallTimeout({code, message}) {
 String localizeCachingError(error) =>
     (error as PlatformException).message.toString();
 
-// TODO: we build a pollForUpdates logic instead of having a constant duration
 const defaultTimeoutDuration = Duration(seconds: 30);
 
 // returns true if there are any Plans entries where { level: 'platinum' }

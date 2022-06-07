@@ -335,10 +335,9 @@ class _CheckoutState extends State<Checkout>
       // * BTC payment selected
       context.loaderOverlay.show();
       await sessionModel
-          .submitBitcoin(
+          .getBitcoinEndpoint(
             widget.id,
             emailController.text,
-            refCodeController.text,
           )
           .timeout(
             defaultTimeoutDuration,
@@ -348,23 +347,40 @@ class _CheckoutState extends State<Checkout>
             ),
           )
           .then((value) async {
-        context.loaderOverlay.hide();
-        // TODO: get BTCPay URL with token from callback
-        final btcPayURL = value as String;
-        await context.pushRoute(
-          FullScreenDialogPage(
-            widget: Center(
-              child: Stack(
-                children: [
-                  WebView(
-                    initialUrl: btcPayURL,
-                    // TODO: listen for WebView close
-                  ),
-                ],
+        try {
+          final btcPayURL = jsonDecode(value as String)['redirect'];
+          await context.pushRoute(
+            FullScreenDialogPage(
+              widget: Center(
+                child: Stack(
+                  children: [
+                    // TODO: listen for Webview Submission and user updates
+                    // (Upgrade) Free -> Pro, Free -> Platinum
+                    // (Renewal) Pro -> Pro, Pro -> Platinum, Platinum -> Platinum
+                    WebView(
+                      initialUrl: btcPayURL,
+                      javascriptMode: JavascriptMode.unrestricted,
+                      onProgress: (int progress) {
+                        print('WebView is loading (progress : $progress%)');
+                      },
+                      onPageStarted: (String url) {
+                        print('WebView started loading: $url');
+                      },
+                      onPageFinished: (String url) {
+                        print('PWebViewage finished loading: $url');
+                        context.loaderOverlay.hide();
+                      },
+                      gestureNavigationEnabled: true,
+                      backgroundColor: const Color(0x00000000),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
+        } catch (e) {
+          print(e);
+        }
       }).onError((error, stackTrace) {
         context.loaderOverlay.hide();
         CDialog.showError(

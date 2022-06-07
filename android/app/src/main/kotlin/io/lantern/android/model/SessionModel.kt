@@ -19,6 +19,7 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
@@ -105,7 +106,7 @@ open class SessionModel(
             "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, call.argument("planID")!!, result)
             "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!, result)
             "applyRefCode" -> applyRefCode(call.argument("refCode")!!, result)
-            "submitBitcoin" -> submitBitcoin(call.argument("planID")!!, call.argument("email")!!, result)
+            "getBitcoinEndpoint" -> getBitcoinEndpoint(call.argument("planID")!!, call.argument("email")!!, result)
             "redeemResellerCode" -> redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
             "checkEmailExistence" -> PlansUtil.checkEmailExistence(call.argument("email")!!, result)
             else -> super.doOnMethodCall(call, result)
@@ -603,22 +604,14 @@ open class SessionModel(
     }
 
     // TODO: WIP
-    // Fetches the BTCPay endpoint info which is needed to trigger the WebView
-    // Transmits the email and credit card info to Stripe checkout flow
-    // Calls PaymentHandler.sendPurchaseRequest()
-    // Possible user level updates:
-    // (Upgrade) Free -> Pro, Free -> Platinum
-    // (Renewal) Pro -> Pro, Pro -> Platinum, Platinum -> Platinum
-    private fun submitBitcoin(planID: String, email: String, result: MethodChannel.Result) {
+    // Returns the BTCPay endpoint which is needed to trigger the WebView Flutter-side
+    private fun getBitcoinEndpoint(planID: String, email: String, result: MethodChannel.Result) {
         try {
             LanternApp.getSession().setEmail(email)
             LanternApp.getSession().setProPlan(plans[planID])
-            val params: MutableMap<String, String> = HashMap()
-            params["email"] = email
-            params["planID"] = planID
-            val formBody: RequestBody = FormBody.Builder().add("email", email).add("planID", planID).build()
-            lanternClient.post(createProUrl("/payment-redirect", params), formBody,
-                object : ProCallback {
+            LanternApp.getSession().setProvider("btcpay")
+            // Send request to /payment-redirect endpoint
+            lanternClient.getBitcoinURL(planID, object: ProCallback {
                 override fun onFailure(throwable: Throwable?, error: ProError?) {
                     result.error(
                         "unknownError",
@@ -629,14 +622,8 @@ open class SessionModel(
                 }
 
                 override fun onSuccess(response: Response, res: JsonObject) {
-                    Logger.debug(
-                        TAG,
-                        "Email successfully purchased plan with Bitcoin"
-                    )
-                    // TODO: return success response to client
-                    val paymentHandler = PaymentHandler(activity, "btc")
-                    paymentHandler.sendPurchaseRequest()
-                    Logger.debug("BTC result", res.toString())
+                    Logger.debug("BTC URL", res.toString())
+                    result.success(res.toString())
                 }
             })
         } catch (t: Throwable) {
