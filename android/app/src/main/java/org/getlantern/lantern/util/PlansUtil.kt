@@ -1,8 +1,6 @@
 package org.getlantern.lantern.util
 
 import android.app.Activity
-import android.app.ProgressDialog
-import android.content.res.Resources
 import android.text.TextUtils
 import com.google.gson.JsonObject
 import io.flutter.plugin.common.MethodChannel
@@ -12,7 +10,6 @@ import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.CheckoutActivity
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
-import org.getlantern.lantern.model.LanternSessionManager
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.util.DateUtil.isBefore
@@ -89,6 +86,19 @@ object PlansUtil {
         plan.setFormattedBonus(formattedBonus)
         // We are only saving the renewalText from the bestValue == true plan
         if (plan.isBestValue) LanternApp.getSession().setRenewalText(renewalText)
+    }
+
+    @JvmStatic
+    fun getRenewalOrUpgrade(incomingLevel: String) {
+        // Flag Renewal or Upgrade
+        val currentLevel = LanternApp.getSession().getUserLevel()
+        var renewalOrUpgrade = ""
+        if (currentLevel === incomingLevel) {
+            renewalOrUpgrade = "renewal"
+        } else if (currentLevel !== "") {
+            renewalOrUpgrade = "upgrade"
+        }
+        LanternApp.getSession().setUpgradeOrRenewal(renewalOrUpgrade!!)
     }
 
     // Formats the renewal bonus

@@ -354,6 +354,14 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         db.mutate { tx -> tx.get(RENEWAL_TEXT) ?: "" }
     }
 
+    fun getUpgradeOrRenewal() {
+        db.mutate { tx -> tx.get(UPGRADE_OR_RENEWAL) ?: "" }
+    }
+
+    fun setUpgradeOrRenewal(renewalOrUpgrade: String) {
+        db.mutate { tx -> tx.put(UPGRADE_OR_RENEWAL, renewalOrUpgrade)}
+    }
+
     companion object {
         private val TAG = LanternSessionManager::class.java.name
 
@@ -362,6 +370,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val USER_LEVEL = "userLevel"
         private const val USER_ID = "userId"
         private const val RENEWAL_TEXT = "renewalText"
+        private const val UPGRADE_OR_RENEWAL = "upgrade_or_renewal"
         private const val PLANS = "plans"
         private const val DEVICES = "devices"
         private const val PRO_EXPIRED = "proexpired"

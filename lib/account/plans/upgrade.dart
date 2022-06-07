@@ -240,8 +240,12 @@ class Upgrade extends StatelessWidget {
 
     final bannerSavings = determineSavings(platinumPlans);
     final bannerRenewalBonus = determineBannerRenewalBonus(platinumPlans);
-    if (bannerSavings == '0' || bannerRenewalBonus == '0 days') return null;
-    return isFree == true || bannerSavings == '0' || bannerRenewalBonus == '0'
+    // TODO: hacky
+    if (bannerSavings == '0') return null;
+    return isFree == true ||
+            bannerSavings == '0' ||
+            bannerRenewalBonus == '0 days' ||
+            bannerRenewalBonus == 'null'
         ?
         // Free user who is upgrading => fixed %
         'Save $bannerSavings%'

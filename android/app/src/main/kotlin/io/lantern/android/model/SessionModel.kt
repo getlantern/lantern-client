@@ -145,6 +145,7 @@ open class SessionModel(
             }
             "getRenewalText" -> LanternApp.getSession().getRenewalText()
             "getUserID" -> LanternApp.getSession().userID
+            "getUpgradeOrRenewal" -> LanternApp.getSession().getUpgradeOrRenewal()
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -433,6 +434,10 @@ open class SessionModel(
     }
 
     // Transmits the email and credit card info to Stripe checkout flow
+    // Calls PaymentHandler.sendPurchaseRequest()
+    // Possible user level updates:
+    // (Upgrade) Free -> Pro, Free -> Platinum
+    // (Renewal) Pro -> Pro, Pro -> Platinum, Platinum -> Platinum
     private fun submitStripe(
         email: String,
         cardNumber: String,
@@ -486,6 +491,10 @@ open class SessionModel(
     }
 
     // Handles Google Play transaction - only valid for Global users (not China)
+    // Calls PaymentHandler.sendPurchaseRequest()
+    // Possible user level updates:
+    // (Upgrade) Free -> Pro
+    // (Renewal) Pro -> Pro
     private fun submitGooglePlay(planID: String, result: MethodChannel.Result) {
         if (LanternApp.getInAppBilling() == null) {
             Logger.error(TAG, "getInAppBilling is null")
@@ -595,6 +604,11 @@ open class SessionModel(
 
     // TODO: WIP
     // Fetches the BTCPay endpoint info which is needed to trigger the WebView
+    // Transmits the email and credit card info to Stripe checkout flow
+    // Calls PaymentHandler.sendPurchaseRequest()
+    // Possible user level updates:
+    // (Upgrade) Free -> Pro, Free -> Platinum
+    // (Renewal) Pro -> Pro, Pro -> Platinum, Platinum -> Platinum
     private fun submitBitcoin(planID: String, email: String, result: MethodChannel.Result) {
         try {
             LanternApp.getSession().setEmail(email)
@@ -635,6 +649,11 @@ open class SessionModel(
         }
     }
 
+    // Turns a user into Pro via using a reseller code
+    // Does not call PaymentHandler.sendPurchaseRequest()
+    // Possible user level updates:
+    // (Upgrade) Free -> Pro
+    // (Renewal) Pro -> Pro
     private fun redeemResellerCode(email: String, resellerCode: String, result: MethodChannel.Result) {
         LanternApp.getSession().setEmail(email)
         LanternApp.getSession().setResellerCode(resellerCode)
@@ -671,6 +690,7 @@ open class SessionModel(
                     LanternApp.getSession().setIsProUser(true)
                     Logger.debug(TAG, "Successfully updated user to ${LanternApp.getSession().isProUser}")
                     LanternApp.getSession().setUserLevel("pro")
+                    PlansUtil.getRenewalOrUpgrade(LanternApp.getSession().getUserLevel()!!)
                     result.success("resellerCodeSuccess")
                 }
             })

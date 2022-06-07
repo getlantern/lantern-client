@@ -176,9 +176,21 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                       // We only have reseller codes for Free -> Pro
                       showDialog(
                         context: context,
-                        builder: (context) => PurchaseSuccessDialog(
-                          title: 'pro_purchase_success_title'.i18n,
-                          description: 'pro_purchase_success_description'.i18n,
+                        builder: (context) => sessionModel.getCachedUserLevel(
+                          (context, userLevel, child) =>
+                              sessionModel.getUpgradeOrRenewal(
+                            (context, renewalOrUpgrade, child) =>
+                                PurchaseSuccessDialog(
+                              title: getPurchaseDialogTitle(
+                                userLevel,
+                                renewalOrUpgrade,
+                              ),
+                              description: getPurchaseDialogText(
+                                userLevel,
+                                renewalOrUpgrade,
+                              ),
+                            ),
+                          ),
                         ),
                       );
                     }).onError((error, stackTrace) {

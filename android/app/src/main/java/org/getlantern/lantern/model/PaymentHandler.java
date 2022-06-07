@@ -16,6 +16,8 @@ import org.getlantern.lantern.activity.WelcomeActivity_;
 import org.getlantern.lantern.service.BackgroundChecker_;
 import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.lantern.util.Analytics;
+import org.getlantern.lantern.util.PlansUtil;
+import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
 
 import okhttp3.FormBody;
@@ -76,12 +78,22 @@ public class PaymentHandler {
         activity.startService(checkerIntent);
     }
 
+    // Upgrades (Free -> Pro/Platinum) or renews (Pro -> Pro/Platinum)
     public void convertToPro() {
-        LanternApp.getSession().linkDevice();
-        LanternApp.getSession().setIsProUser(true);
-        // TODO: we might need to update the userLevel status after a successful purchase
         final ProPlan selectedPlan = LanternApp.getSession().getSelectedPlan();
-        LanternApp.getSession().setUserLevel(selectedPlan.getLevel());
+        final String incomingLevel = selectedPlan.getLevel();
+
+        // Link device to account
+        LanternApp.getSession().linkDevice();
+
+        PlansUtil.getRenewalOrUpgrade(incomingLevel);
+
+        // Update isProUser
+        // Both Pro and Platinum user levels are considered Pro
+        LanternApp.getSession().setIsProUser(true);
+
+        // Update user level
+        LanternApp.getSession().setUserLevel(incomingLevel);
     }
 
     public void showDialog() {

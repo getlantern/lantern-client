@@ -260,9 +260,18 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                           context: context,
                           builder: (context) => sessionModel.getCachedUserLevel(
                             (context, userLevel, child) =>
-                                PurchaseSuccessDialog(
-                              title: getPurchaseDialogTitle(userLevel),
-                              description: getPurchaseDialogText(userLevel),
+                                sessionModel.getUpgradeOrRenewal(
+                              (context, renewalOrUpgrade, child) =>
+                                  PurchaseSuccessDialog(
+                                title: getPurchaseDialogTitle(
+                                  userLevel,
+                                  renewalOrUpgrade,
+                                ),
+                                description: getPurchaseDialogText(
+                                  userLevel,
+                                  renewalOrUpgrade,
+                                ),
+                              ),
                             ),
                           ),
                         );

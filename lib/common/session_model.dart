@@ -323,4 +323,11 @@ class SessionModel extends Model {
       builder: builder,
     );
   }
+
+  Widget getUpgradeOrRenewal(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'upgrade_or_renewal',
+      builder: builder,
+    );
+  }
 }

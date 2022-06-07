@@ -48,9 +48,13 @@ bool isUserLevelPlatinum(String userLevel) {
   return userLevel == 'platinum';
 }
 
-String getPurchaseDialogTitle(String userLevel) {
-  // TODO: fix
-  final isRenewal = true;
+// calculates the Purchase Success dialog title
+// takes into account whether this is a Free -> Pro upgrade or a Renewal
+String getPurchaseDialogTitle(
+  String userLevel,
+  String renewalOrUpgrade,
+) {
+  final isRenewal = renewalOrUpgrade == 'renewal';
   if (isRenewal) {
     return 'renewal_success_title'.i18n;
   }
@@ -59,9 +63,13 @@ String getPurchaseDialogTitle(String userLevel) {
       : 'pro_purchase_success_title'.i18n;
 }
 
-String getPurchaseDialogText(String userLevel) {
-  // TODO: fix
-  final isRenewal = true;
+// calculates the Purchase Success dialog text
+// takes into account whether this is a Free -> Pro upgrade or a Renewal
+String getPurchaseDialogText(
+  String userLevel,
+  String renewalOrUpgrade,
+) {
+  final isRenewal = renewalOrUpgrade == 'renewal';
   if (isRenewal) {
     return isUserLevelPlatinum(userLevel)
         ? 'platinum_renewal_success_description'.i18n
