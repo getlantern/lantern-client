@@ -63,12 +63,24 @@ class DeveloperSettingsTab extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // * User email
-                      sessionModel.emailAddress(
-                        (context, emailAddress, child) => CText(
-                          emailAddress,
-                          style: tsBody2,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          // * User email
+                          sessionModel.emailAddress(
+                            (context, emailAddress, child) => CText(
+                              emailAddress,
+                              style: tsBody2,
+                            ),
+                          ),
+                          // * Expiration date
+                          sessionModel.expiryDate(
+                            (context, expiryDate, child) => CText(
+                              '  /  $expiryDate',
+                              style: tsBody2,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

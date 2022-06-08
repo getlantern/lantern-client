@@ -430,6 +430,7 @@ class AppRouter extends _i33.RootStackRouter {
               refCode: args.refCode,
               id: args.id,
               isPro: args.isPro,
+              refCodeSuccessfullyApplied: args.refCodeSuccessfullyApplied,
               key: args.key),
           transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
@@ -1226,6 +1227,7 @@ class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
       String? refCode,
       required String id,
       required bool isPro,
+      required bool refCodeSuccessfullyApplied,
       _i35.Key? key})
       : super(StripeCheckout.name,
             path: 'stripeCheckout',
@@ -1235,6 +1237,7 @@ class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
                 refCode: refCode,
                 id: id,
                 isPro: isPro,
+                refCodeSuccessfullyApplied: refCodeSuccessfullyApplied,
                 key: key));
 
   static const String name = 'StripeCheckout';
@@ -1247,6 +1250,7 @@ class StripeCheckoutArgs {
       this.refCode,
       required this.id,
       required this.isPro,
+      required this.refCodeSuccessfullyApplied,
       this.key});
 
   final List<Map<String, dynamic>> plans;
@@ -1259,11 +1263,13 @@ class StripeCheckoutArgs {
 
   final bool isPro;
 
+  final bool refCodeSuccessfullyApplied;
+
   final _i35.Key? key;
 
   @override
   String toString() {
-    return 'StripeCheckoutArgs{plans: $plans, email: $email, refCode: $refCode, id: $id, isPro: $isPro, key: $key}';
+    return 'StripeCheckoutArgs{plans: $plans, email: $email, refCode: $refCode, id: $id, isPro: $isPro, refCodeSuccessfullyApplied: $refCodeSuccessfullyApplied, key: $key}';
   }
 }
 

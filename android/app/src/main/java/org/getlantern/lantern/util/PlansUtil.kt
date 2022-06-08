@@ -93,7 +93,7 @@ object PlansUtil {
         // Flag Renewal or Upgrade
         val currentLevel = LanternApp.getSession().getUserLevel()
         var renewalOrUpgrade = ""
-        if (currentLevel === incomingLevel) {
+        if (currentLevel.toString() == incomingLevel) {
             renewalOrUpgrade = "renewal"
         }
         LanternApp.getSession().setUpgradeOrRenewal(renewalOrUpgrade!!)

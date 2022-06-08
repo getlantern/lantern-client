@@ -5,12 +5,14 @@ class PriceSummary extends StatelessWidget {
   final String id;
   final String? refCode;
   final bool isPro;
+  final bool refCodeSuccessfullyApplied;
 
   const PriceSummary({
     Key? key,
     required this.plans,
     required this.id,
     required this.isPro,
+    required this.refCodeSuccessfullyApplied,
     this.refCode,
   }) : super(key: key);
 
@@ -46,7 +48,9 @@ class PriceSummary extends StatelessWidget {
               ],
             ),
           // * Referral bonus
-          if (refCode != null && refCode!.isNotEmpty)
+          if (refCode != null &&
+              refCode!.isNotEmpty &&
+              refCodeSuccessfullyApplied)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

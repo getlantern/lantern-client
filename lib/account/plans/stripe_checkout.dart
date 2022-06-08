@@ -14,6 +14,7 @@ class StripeCheckout extends StatefulWidget {
   final String? refCode;
   final String id;
   final bool isPro;
+  final bool refCodeSuccessfullyApplied;
 
   const StripeCheckout({
     required this.plans,
@@ -21,6 +22,7 @@ class StripeCheckout extends StatefulWidget {
     this.refCode,
     required this.id,
     required this.isPro,
+    required this.refCodeSuccessfullyApplied,
     Key? key,
   }) : super(key: key);
 
@@ -232,6 +234,8 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                     id: widget.id,
                     refCode: widget.refCode,
                     isPro: widget.isPro,
+                    refCodeSuccessfullyApplied:
+                        widget.refCodeSuccessfullyApplied,
                   ),
                   TOS(copy: copy),
                   Button(

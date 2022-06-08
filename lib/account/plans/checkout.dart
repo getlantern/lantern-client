@@ -273,6 +273,7 @@ class _CheckoutState extends State<Checkout>
                       plans: widget.plans,
                       id: widget.id,
                       isPro: widget.isPro,
+                      refCodeSuccessfullyApplied: refCodeSuccessfullyApplied,
                     ),
                     sessionModel.getCachedPlans((context, cachedPlans, child) {
                       final platinumAvailable =
@@ -331,6 +332,7 @@ class _CheckoutState extends State<Checkout>
           plans: widget.plans,
           email: emailController.text,
           refCode: refCodeController.text,
+          refCodeSuccessfullyApplied: refCodeSuccessfullyApplied,
           id: widget.id,
           isPro: widget.isPro,
         ),

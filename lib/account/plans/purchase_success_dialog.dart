@@ -61,7 +61,6 @@ class PurchaseSuccessDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             context.router.popUntilRoot();
-            sessionModel.resetCachedPlans();
           },
           child: CText(
             'Continue'.i18n.toUpperCase(),
