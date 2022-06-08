@@ -85,13 +85,15 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                   formIsValid = determineFormIsValid();
                 }),
                 key: emailFieldKey,
-                child: CTextField(
-                  controller: emailController,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  label: 'Email'.i18n,
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const CAssetImage(path: ImagePaths.email),
-                ),
+                child: sessionModel
+                    .emailAddress((context, email, child) => CTextField(
+                          initialValue: email,
+                          controller: emailController,
+                          autovalidateMode: AutovalidateMode.disabled,
+                          label: 'Email'.i18n,
+                          keyboardType: TextInputType.emailAddress,
+                          prefixIcon: const CAssetImage(path: ImagePaths.email),
+                        )),
               ),
             ),
             // * Activation code field
