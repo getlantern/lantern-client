@@ -676,8 +676,8 @@ open class SessionModel(
                     LanternApp.getSession().linkDevice()
                     LanternApp.getSession().setIsProUser(true)
                     Logger.debug(TAG, "Successfully updated user to ${LanternApp.getSession().isProUser}")
+                    PlansUtil.getRenewalOrUpgrade("pro")
                     LanternApp.getSession().setUserLevel("pro")
-                    PlansUtil.getRenewalOrUpgrade(LanternApp.getSession().getUserLevel()!!)
                     result.success("resellerCodeSuccess")
                 }
             })

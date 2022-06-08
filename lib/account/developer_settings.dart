@@ -29,16 +29,53 @@ class DeveloperSettingsTab extends StatelessWidget {
               margin: const EdgeInsetsDirectional.only(bottom: 16.0),
               child: CText('dev_payment_mode'.i18n, style: tsBody3),
             ),
+            // * USER Info
             FutureBuilder(
               future: sessionModel.getUserID(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData) return Container();
                 return ListItemFactory.settingsItem(
-                  content: 'UserID: ${snapshot.data}'.i18n,
+                  content: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // * User ID
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CText(
+                            'ID=${snapshot.data}'.i18n,
+                            style: tsBody2,
+                          ),
+                          // * User level
+                          sessionModel.getCachedUserLevel(
+                            (context, userLevel, child) => CText(
+                              '  /  Level=$userLevel',
+                              style: tsBody2,
+                            ),
+                          ),
+                          // * isPro
+                          sessionModel.getIsPro(
+                            (context, isPro, child) => CText(
+                              '  /  isPro=$isPro',
+                              style: tsBody2,
+                            ),
+                          ),
+                        ],
+                      ),
+                      // * User email
+                      sessionModel.emailAddress(
+                        (context, emailAddress, child) => CText(
+                          emailAddress,
+                          style: tsBody2,
+                        ),
+                      ),
+                    ],
+                  ),
                   trailingArray: [
                     TextButton(
                       onPressed: () => copyText(context, snapshot.data),
-                      child: CText('Copy'.toUpperCase(), style: tsButton),
+                      child: CText('Copy ID'.toUpperCase(), style: tsButton),
                     )
                   ],
                 );
@@ -219,36 +256,6 @@ class DeveloperSettingsTab extends StatelessWidget {
                   ),
                 )
               ],
-            ),
-            // * DISPLAY USER STATUS
-            sessionModel.getCachedUserLevel(
-              (context, userLevel, child) => ListItemFactory.settingsItem(
-                content: CText(
-                  'User level',
-                  style: tsBody3,
-                ),
-                trailingArray: [
-                  CText(
-                    userLevel.toString().toUpperCase(),
-                    style: tsBody1Short.copiedWith(color: Colors.green),
-                  )
-                ],
-              ),
-            ),
-            // * DISPLAY USER STATUS
-            sessionModel.getIsPro(
-              (context, isPro, child) => ListItemFactory.settingsItem(
-                content: CText(
-                  'isPro',
-                  style: tsBody3,
-                ),
-                trailingArray: [
-                  CText(
-                    isPro.toString().toUpperCase(),
-                    style: tsBody1Short.copiedWith(color: Colors.green),
-                  )
-                ],
-              ),
             ),
             // * RESET ALL TIMESTAMPS
             ListItemFactory.settingsItem(

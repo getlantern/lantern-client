@@ -95,8 +95,6 @@ object PlansUtil {
         var renewalOrUpgrade = ""
         if (currentLevel === incomingLevel) {
             renewalOrUpgrade = "renewal"
-        } else if (currentLevel !== "") {
-            renewalOrUpgrade = "upgrade"
         }
         LanternApp.getSession().setUpgradeOrRenewal(renewalOrUpgrade!!)
     }
