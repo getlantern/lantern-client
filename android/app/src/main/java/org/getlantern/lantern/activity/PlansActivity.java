@@ -134,7 +134,7 @@ public class PlansActivity extends BaseFragmentActivity {
         });
     }
 
-    // TODO: has been moved to and modified in SessionModel.kt
+    // Has been moved to and modified in SessionModel.kt
     protected void updatePlans() {
         LanternApp.getPlans(new LanternHttpClient.PlansCallback() {
             @Override
@@ -161,7 +161,7 @@ public class PlansActivity extends BaseFragmentActivity {
             }
         });
     }
-    // TODO: has been moved to and modified in SessionModel.kt
+    // Has been moved to and modified in SessionModel.kt
     protected void updatePrice(ProPlan plan) {
         content.setVisibility(View.VISIBLE);
         String bonus = plan.formatRenewalBonusExpected(this);

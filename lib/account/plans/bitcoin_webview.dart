@@ -17,6 +17,7 @@ class BitcoinWebview extends StatelessWidget {
       children: [
         Container(
           height: MediaQuery.of(context).size.height * 0.9,
+          // TODO: WIP
           child: WebView(
             initialUrl: btcPayURL,
             javascriptMode: JavascriptMode.unrestricted,

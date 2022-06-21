@@ -6,7 +6,9 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import com.stripe.android.ApiResultCallback
 import com.stripe.android.Stripe
 import com.stripe.android.model.Card.Builder
@@ -19,7 +21,6 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
@@ -38,6 +39,7 @@ import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import java.util.*
 import java.util.concurrent.*
+import kotlin.reflect.typeOf
 
 
 /**
@@ -49,7 +51,6 @@ open class SessionModel(
     flutterEngine: FlutterEngine? = null,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
-    private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
     companion object {
         private const val TAG = "SessionModel"
@@ -391,6 +392,7 @@ open class SessionModel(
 
     // Hits the /plans endpoint and saves plans to PATH_PLANS
     private fun updateAndCachePlans(result: MethodChannel.Result) {
+        val plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
         try {
             if (LanternApp.getSession().getCachedPlans() != "") {
                 // We have already cached userPlans, no need to call endpoint again
@@ -448,6 +450,9 @@ open class SessionModel(
         result: MethodChannel.Result
     ) {
         LanternApp.getSession().setEmail(email)
+        val plansJSON = LanternApp.getSession().getCachedPlans().toString()
+        val plans = Gson().fromJson<ConcurrentHashMap<String, ProPlan>>(plansJSON, object : TypeToken<ConcurrentHashMap<String, ProPlan>>() {}.type)
+        LanternApp.getSession().setProPlan(plans[planID])
         try {
             val card = Builder(
                 cardNumber,
@@ -464,7 +469,6 @@ open class SessionModel(
                 activity,
                 LanternApp.getSession().stripePubKey()!!
             )
-            LanternApp.getSession().setProPlan(plans[planID])
             stripe.createCardToken(
                 card,
                 callback = object : ApiResultCallback<Token> {
@@ -522,6 +526,8 @@ open class SessionModel(
                                 )
                             return
                         }
+                        val plansJSON = LanternApp.getSession().getCachedPlans().toString()
+                        val plans = Gson().fromJson<ConcurrentHashMap<String, ProPlan>>(plansJSON, object : TypeToken<ConcurrentHashMap<String, ProPlan>>() {}.type)
                         LanternApp.getSession().setProPlan(plans[planID])
                         val tokens: MutableList<String> = ArrayList()
                         for (purchase in purchases!!) {
@@ -603,11 +609,12 @@ open class SessionModel(
         }
     }
 
-    // TODO: WIP
     // Returns the BTCPay endpoint which is needed to trigger the WebView Flutter-side
     private fun getBitcoinEndpoint(planID: String, email: String, result: MethodChannel.Result) {
         try {
             LanternApp.getSession().setEmail(email)
+            val plansJSON = LanternApp.getSession().getCachedPlans().toString()
+            val plans = Gson().fromJson<ConcurrentHashMap<String, ProPlan>>(plansJSON, object : TypeToken<ConcurrentHashMap<String, ProPlan>>() {}.type)
             LanternApp.getSession().setProPlan(plans[planID])
             LanternApp.getSession().setProvider("btcpay")
             // Send request to /payment-redirect endpoint

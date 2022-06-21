@@ -137,6 +137,7 @@ public class PaymentHandler {
             formBody.add("token", token);
         }
 
+        // TODO: is this correct?
         if (plan != null) {
             // there is no selected plan when purchasing via resellers
             formBody = formBody.add("plan", plan.getId());
