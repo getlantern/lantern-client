@@ -172,6 +172,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                     context.loaderOverlay.show();
                     await sessionModel
                         .updateAndCachePlans()
+                        // TODO: do we need this?
                         .timeout(
                           defaultTimeoutDuration,
                           onTimeout: () => throw PlatformException(
@@ -236,6 +237,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                     context.loaderOverlay.show();
                     await sessionModel
                         .updateAndCacheUserLevel()
+                        // TODO: do we need this?
                         .timeout(
                           defaultTimeoutDuration,
                           onTimeout: () => throw PlatformException(

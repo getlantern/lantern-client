@@ -118,6 +118,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 }),
                 key: emailFieldKey,
                 child: CTextField(
+                  // TODO: fix
                   enabled: widget.email.isEmpty,
                   initialValue: widget.email,
                   controller: emailController,
@@ -252,6 +253,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                             cvcFieldController.value.text,
                             widget.id,
                           )
+                          // TODO: remove (first confirm Stripe has an internal timeout)
                           .timeout(
                             defaultTimeoutDuration,
                             onTimeout: () => onAPIcallTimeout(

@@ -82,16 +82,13 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                 bottom: 8,
               ),
               child: Form(
-                onChanged: () {
-                  WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-                    setState(() {
-                      formIsValid = determineFormIsValid();
-                    });
-                  });
-                },
+                onChanged: () => setState(() {
+                  formIsValid = determineFormIsValid();
+                }),
                 key: emailFieldKey,
                 child: sessionModel.emailAddress(
                   (context, email, child) => CTextField(
+                    // TODO: fix
                     enabled: email.isEmpty,
                     initialValue: email,
                     controller: emailController,
@@ -146,7 +143,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                       onTap: () {
                         emailController.text = 'test@email.com';
                         resellerCodeController.text =
-                            'GGXYP-DBKY8-Q2RG2-X39DR-9XM8R';
+                            'XJWH3-Q4TYJ-CKV3P-D39FX-C9DJW';
                       },
                       child: Container(
                         padding: const EdgeInsetsDirectional.all(24.0),
@@ -173,6 +170,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                           emailController.text,
                           resellerCodeController.text,
                         )
+                        // TODO: do we need this?
                         .timeout(
                           defaultTimeoutDuration,
                           onTimeout: () => onAPIcallTimeout(

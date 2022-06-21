@@ -22,6 +22,7 @@ class _ProBannerState extends State<ProBanner> {
           context.loaderOverlay.show();
           await sessionModel
               .updateAndCachePlans()
+              // TODO: do we need this?
               .timeout(
                 defaultTimeoutDuration,
                 onTimeout: () => onAPIcallTimeout(

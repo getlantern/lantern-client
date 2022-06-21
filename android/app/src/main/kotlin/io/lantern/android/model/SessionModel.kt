@@ -469,6 +469,7 @@ open class SessionModel(
                 activity,
                 LanternApp.getSession().stripePubKey()!!
             )
+            // TODO: deprecated
             stripe.createCardToken(
                 card,
                 callback = object : ApiResultCallback<Token> {
@@ -476,6 +477,7 @@ open class SessionModel(
                         LanternApp.getSession().setStripeToken(token.id)
                         val paymentHandler = PaymentHandler(activity, "stripe")
                         paymentHandler.sendPurchaseRequest()
+                        // TODO: this needs to come from sendPurchaseRequest (pass result to sendPurchaseRequest?)
                         result.success("stripeSuccess")
                     }
 
@@ -554,6 +556,7 @@ open class SessionModel(
                         }
                         val paymentHandler =
                             PaymentHandler(activity, "googleplay", tokens[0])
+                        // TODO: same fix as Stripe payment
                         paymentHandler.sendPurchaseRequest()
                         result.success("googleplay")
                     }
@@ -684,6 +687,7 @@ open class SessionModel(
                     LanternApp.getSession().setIsProUser(true)
                     Logger.debug(TAG, "Successfully updated user to ${LanternApp.getSession().isProUser}")
                     PlansUtil.getRenewalOrUpgrade("pro")
+                    // TODO: this doesn't seem to upgrade the expiration date?
                     LanternApp.getSession().setUserLevel("pro")
                     result.success("resellerCodeSuccess")
                 }
