@@ -78,7 +78,7 @@ public class PaymentHandler {
         activity.startService(checkerIntent);
     }
 
-    // Upgrades (Free -> Pro/Platinum) or renews (Pro -> Pro/Platinum)
+    // <Platinum Updates PR #768> Upgrades (Free -> Pro/Platinum) or renews (Pro -> Pro/Platinum)
     public void convertToPro() {
         final ProPlan selectedPlan = LanternApp.getSession().getSelectedPlan();
         final String incomingLevel = selectedPlan.getLevel();
@@ -116,7 +116,7 @@ public class PaymentHandler {
         });
     }
 
-    // the dialog rendering functions have been commented out since we are handling that Flutter side now
+    // <Platinum Updates PR #768> The dialog rendering functions have been commented out since we are handling that Flutter side now
     public void sendPurchaseRequest() {
         final HttpUrl url = LanternHttpClient.createProUrl("/purchase");
         final JsonObject json = new JsonObject();

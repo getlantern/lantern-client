@@ -120,7 +120,7 @@ public class ProPlan {
         return duration.get("years");
     }
 
-    // Has been moved to and modified in SessionModel.kt
+    // <Platinum Updates PR #768> Has been moved to and modified in SessionModel.kt
     public String formatRenewalBonusExpected(Context context) {
         Integer bonusMonths = renewalBonusExpected.get("months");
         Integer bonusDays = renewalBonusExpected.get("days");

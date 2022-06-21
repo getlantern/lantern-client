@@ -321,7 +321,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         }
     }
 
-    // Has been moved to and modified in SessionModel.kt
+    // <Platinum Updates PR #768> Has been moved to and modified in SessionModel.kt
     private void handleReferral(final String referral, final String email) {
         dialog = ProgressDialog.show(this,
                 getResources().getString(R.string.applying_referral_code),

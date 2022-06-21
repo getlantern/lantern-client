@@ -205,6 +205,7 @@ public class LanternHttpClient extends HttpClient {
         });
     }
 
+    // <Platinum Updates PR #768>
     public void getBitcoinURL(final String planID, final ProCallback cb) {
         final Map<String, String> params = new HashMap<String, String>();
         params.put("locale", LanternApp.getSession().getLanguage());
