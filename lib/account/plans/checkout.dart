@@ -110,6 +110,7 @@ class _CheckoutState extends State<Checkout>
                   key: emailFieldKey,
                   child: sessionModel.emailAddress(
                     (context, email, child) => CTextField(
+                      enabled: email.isEmpty,
                       initialValue: email,
                       controller: emailController,
                       autovalidateMode: AutovalidateMode.disabled,
@@ -291,9 +292,9 @@ class _CheckoutState extends State<Checkout>
                           : Container();
                     }),
                     Button(
-                      disabled: emailController.value.text.isEmpty ||
+                      disabled:
                           emailFieldKey.currentState?.validate() == false ||
-                          refCodeFieldKey.currentState?.validate() == false,
+                              refCodeFieldKey.currentState?.validate() == false,
                       text: 'Continue'.i18n,
                       onPressed: () async {
                         await Future.wait(

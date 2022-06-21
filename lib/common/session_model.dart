@@ -99,6 +99,7 @@ class SessionModel extends Model {
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'emailAddress',
+      defaultValue: '',
       builder: builder,
     );
   }

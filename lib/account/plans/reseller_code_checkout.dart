@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
@@ -81,19 +82,25 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                 bottom: 8,
               ),
               child: Form(
-                onChanged: () => setState(() {
-                  formIsValid = determineFormIsValid();
-                }),
+                onChanged: () {
+                  WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+                    setState(() {
+                      formIsValid = determineFormIsValid();
+                    });
+                  });
+                },
                 key: emailFieldKey,
-                child: sessionModel
-                    .emailAddress((context, email, child) => CTextField(
-                          initialValue: email,
-                          controller: emailController,
-                          autovalidateMode: AutovalidateMode.disabled,
-                          label: 'Email'.i18n,
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: const CAssetImage(path: ImagePaths.email),
-                        )),
+                child: sessionModel.emailAddress(
+                  (context, email, child) => CTextField(
+                    enabled: email.isEmpty,
+                    initialValue: email,
+                    controller: emailController,
+                    autovalidateMode: AutovalidateMode.disabled,
+                    label: 'Email'.i18n,
+                    keyboardType: TextInputType.emailAddress,
+                    prefixIcon: const CAssetImage(path: ImagePaths.email),
+                  ),
+                ),
               ),
             ),
             // * Activation code field

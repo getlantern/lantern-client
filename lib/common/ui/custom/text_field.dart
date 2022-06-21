@@ -1,3 +1,4 @@
+import 'package:flutter/scheduler.dart';
 import 'package:lantern/common/common.dart';
 
 //// This a custom TextField that renders a label in its outline, aligned with
@@ -47,7 +48,9 @@ class CTextField extends StatefulWidget {
     this.contentPadding,
   }) {
     if (initialValue != null) {
-      controller.text = initialValue!;
+      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+        controller.text = initialValue!;
+      });
     }
   }
 
