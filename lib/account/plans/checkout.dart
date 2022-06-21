@@ -110,7 +110,6 @@ class _CheckoutState extends State<Checkout>
                   key: emailFieldKey,
                   child: sessionModel.emailAddress(
                     (context, email, child) => CTextField(
-                      // TODO: fix
                       enabled: email.isEmpty,
                       initialValue: email,
                       controller: emailController,

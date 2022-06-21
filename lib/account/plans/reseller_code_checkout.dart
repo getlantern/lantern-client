@@ -88,7 +88,6 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                 key: emailFieldKey,
                 child: sessionModel.emailAddress(
                   (context, email, child) => CTextField(
-                    // TODO: fix
                     enabled: email.isEmpty,
                     initialValue: email,
                     controller: emailController,

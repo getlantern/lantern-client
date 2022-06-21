@@ -118,7 +118,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 }),
                 key: emailFieldKey,
                 child: CTextField(
-                  // TODO: fix
                   enabled: widget.email.isEmpty,
                   initialValue: widget.email,
                   controller: emailController,
