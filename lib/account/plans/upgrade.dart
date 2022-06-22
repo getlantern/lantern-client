@@ -207,7 +207,8 @@ class Upgrade extends StatelessWidget {
                                   ResellerCodeCheckout(isPro: isPro),
                                 ),
                                 child: CText(
-                                  'Have a Lantern Pro activation code? Click here.',
+                                  'Have a Lantern Pro activation code? Click here.'
+                                      .i18n,
                                   style: tsBody1,
                                 ),
                               ), // Translations

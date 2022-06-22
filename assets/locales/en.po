@@ -313,6 +313,9 @@ msgstr "Your membership has expired! Renew now and enjoy up to %s free!"
 msgid "choose_plan"
 msgstr "Choose Plan"
 
+msgid "Have a Lantern Pro activation code? Click here."
+msgstr "Have a Lantern Pro activation code? Click here."
+
 msgid "Pro Plan"
 msgstr "Pro Plan"
 
