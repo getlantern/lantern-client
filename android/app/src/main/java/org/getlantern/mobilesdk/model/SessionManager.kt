@@ -477,7 +477,6 @@ abstract class SessionManager(application: Application) : Session {
         private const val REPLICA_ADDR = "replicaAddr"
         private const val CHAT_ENABLED = "chatEnabled"
         private const val MATOMO_ENABLED = "matomoEnabled"
-        const val PATH_PLAN_FLAGS = "planFlags"
         const val PATH_PLANS = "plans"
 
         private val chineseLocales = arrayOf<Locale?>(
