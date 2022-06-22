@@ -201,29 +201,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 ],
               ),
             ),
-            //  TODO: Helper widget - remove
-            sessionModel.developmentMode(
-              (context, isDeveloperMode, child) => isDeveloperMode
-                  ? Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          emailController.text = 'test@email.com';
-                          creditCardController.text =
-                              '4242424242424242'; // more cases https://docs.page/flutter-stripe/flutter_stripe/sheet#5-test-the-integration
-                          cvcFieldController.text = '000';
-                          expDateController.text = '12/24';
-                        },
-                        child: Container(
-                          padding: const EdgeInsetsDirectional.all(24.0),
-                          child: CText(
-                            'DEV PURPOSES - TAP TO PREFILLs',
-                            style: tsButtonBlue,
-                          ),
-                        ),
-                      ),
-                    )
-                  : Container(),
-            ),
             Flexible(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -246,20 +223,20 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       context.loaderOverlay.show();
                       await sessionModel
                           .submitStripe(
-                            widget.email,
-                            creditCardController.value.text,
-                            expDateController.value.text,
-                            cvcFieldController.value.text,
-                            widget.id,
-                          )
-                          // TODO: remove (first confirm Stripe has an internal timeout)
-                          .timeout(
-                            defaultTimeoutDuration,
-                            onTimeout: () => onAPIcallTimeout(
-                              code: 'submitStripeTimeout',
-                              message: 'stripe_timeout'.i18n,
-                            ),
-                          )
+                        widget.email,
+                        creditCardController.value.text,
+                        expDateController.value.text,
+                        cvcFieldController.value.text,
+                        widget.id,
+                      )
+                          // // Let's comment this out for now, to avoid timeout conflicts from Stripe's side
+                          // .timeout(
+                          //   defaultTimeoutDuration,
+                          //   onTimeout: () => onAPIcallTimeout(
+                          //     code: 'submitStripeTimeout',
+                          //     message: 'stripe_timeout'.i18n,
+                          //   ),
+                          // )
                           .then((value) {
                         context.loaderOverlay.hide();
                         showDialog(

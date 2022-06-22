@@ -142,7 +142,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                       onTap: () {
                         emailController.text = 'test@email.com';
                         resellerCodeController.text =
-                            '9DKXH-DVFRG-8J6JD-32CGC-C4BDG';
+                            '8RDMV-KYWCD-GQY86-Q9763-Y2GY3';
                       },
                       child: Container(
                         padding: const EdgeInsetsDirectional.all(24.0),
@@ -169,7 +169,6 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                           emailController.text,
                           resellerCodeController.text,
                         )
-                        // TODO: do we need this?
                         .timeout(
                           defaultTimeoutDuration,
                           onTimeout: () => onAPIcallTimeout(

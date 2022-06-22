@@ -190,7 +190,6 @@ class _AccountManagementState extends State<AccountManagement>
                             context.loaderOverlay.show();
                             await sessionModel
                                 .updateAndCachePlans()
-                                // TODO: do we need this?
                                 .timeout(
                                   defaultTimeoutDuration,
                                   onTimeout: () => onAPIcallTimeout(

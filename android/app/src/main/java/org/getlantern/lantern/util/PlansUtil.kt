@@ -37,6 +37,7 @@ object PlansUtil {
     fun checkEmailExistence(email: String, result: MethodChannel.Result) {
         val params: MutableMap<String, String> = HashMap()
         params["email"] = email
+        // TODO: not sure this is working correctly
         CheckoutActivity.lanternClient[LanternHttpClient.createProUrl(
             "/email-exists",
             params

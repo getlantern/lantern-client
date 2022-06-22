@@ -346,7 +346,6 @@ class _CheckoutState extends State<Checkout>
             widget.id,
             emailController.text,
           )
-          // TODO: do we need this?
           .timeout(
             defaultTimeoutDuration,
             onTimeout: () => onAPIcallTimeout(

@@ -556,7 +556,7 @@ open class SessionModel(
                         }
                         val paymentHandler =
                             PaymentHandler(activity, "googleplay", tokens[0])
-                        // TODO: same fix as Stripe payment
+                        // TODO: this needs to come from sendPurchaseRequest (pass result to sendPurchaseRequest?)
                         paymentHandler.sendPurchaseRequest()
                         result.success("googleplay")
                     }
@@ -682,12 +682,12 @@ open class SessionModel(
                     return
                 }
 
+                // TODO: we are still succeeding even if the reseller code is being reused - fix 
                 override fun onSuccess(response: Response?, res: JsonObject?) {
                     LanternApp.getSession().linkDevice()
                     LanternApp.getSession().setIsProUser(true)
                     Logger.debug(TAG, "Successfully updated user to ${LanternApp.getSession().isProUser}")
                     PlansUtil.getRenewalOrUpgrade("pro")
-                    // TODO: this doesn't seem to upgrade the expiration date?
                     LanternApp.getSession().setUserLevel("pro")
                     result.success("resellerCodeSuccess")
                 }

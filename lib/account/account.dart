@@ -20,7 +20,6 @@ class AccountMenu extends StatelessWidget {
     context.loaderOverlay.show();
     await sessionModel
         .updateAndCachePlans()
-        // TODO: do we need this?
         .timeout(
           defaultTimeoutDuration,
           onTimeout: () => onAPIcallTimeout(
