@@ -36,7 +36,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putString(USER_LEVEL, userLevel).apply()
     }
 
-    fun setUserPlans(plans: String) {
+    fun setCachedPlans(plans: String) {
         prefs.edit().putString(PLANS, plans).apply()
     }
 

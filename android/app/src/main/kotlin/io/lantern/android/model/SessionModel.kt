@@ -143,7 +143,7 @@ open class SessionModel(
             }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
             "resetCachedPlans" -> {
-                LanternApp.getSession().setUserPlans("")
+                LanternApp.getSession().setCachedPlans("")
             }
             "getRenewalText" -> LanternApp.getSession().getRenewalText()
             "getUserID" -> LanternApp.getSession().userID
@@ -412,7 +412,7 @@ open class SessionModel(
                             PlansUtil.calculateRenewalText(activity, plan)
                         }
                     }
-                    LanternApp.getSession().setUserPlans(Json.gson.toJson(plans))
+                    LanternApp.getSession().setCachedPlans(Json.gson.toJson(plans))
                 }
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     if (error?.message != null) {

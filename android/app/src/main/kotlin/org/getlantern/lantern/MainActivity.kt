@@ -311,7 +311,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                 for (planId in proPlans.keys) {
                     proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
                 }
-                LanternApp.getSession().setUserPlans(Json.gson.toJson(plans))
+                LanternApp.getSession().setCachedPlans(Json.gson.toJson(plans))
                 Logger.debug(TAG, "Successfully updated user plans")
             }
         })
