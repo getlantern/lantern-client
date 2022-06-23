@@ -1,5 +1,9 @@
  package org.getlantern.lantern.activity;
 
+ import androidx.annotation.Nullable;
+
+ import com.google.gson.JsonObject;
+
  import android.graphics.Bitmap;
  import android.webkit.WebView;
  import android.webkit.WebViewClient;
@@ -10,6 +14,7 @@
  import org.getlantern.lantern.R;
  import org.getlantern.lantern.model.LanternHttpClient;
  import org.getlantern.lantern.model.PaymentHandler;
+ import org.getlantern.lantern.model.ProError;
  import org.getlantern.lantern.model.ProPlan;
  import org.getlantern.mobilesdk.Logger;
 
@@ -18,8 +23,9 @@
  import java.util.Map;
 
  import okhttp3.HttpUrl;
+ import okhttp3.Response;
 
-@EActivity(R.layout.webview)
+ @EActivity(R.layout.webview)
 public class Gate2ShopActivity extends WebViewActivity {
     private static final String TAG = Gate2ShopActivity.class.getName();
     private static final String PROVIDER = "Gate2Shop";
@@ -78,7 +84,17 @@ public class Gate2ShopActivity extends WebViewActivity {
     }
 
     private void purchaseSuccess(final String url) {
-        paymentHandler.sendPurchaseRequest();
+        paymentHandler.sendPurchaseRequest(new LanternHttpClient.ProCallback() {
+            @Override
+            public void onFailure(@Nullable Throwable throwable, @Nullable ProError error) {
+                // TODO: log error
+            }
+
+            @Override
+            public void onSuccess(Response response, JsonObject result) {
+                // TODO: log success
+            }
+        });
     }
 
     private void setWebViewClient() {

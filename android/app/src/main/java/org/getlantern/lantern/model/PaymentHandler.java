@@ -20,6 +20,7 @@ import org.getlantern.lantern.util.PlansUtil;
 import org.getlantern.mobilesdk.Lantern;
 import org.getlantern.mobilesdk.Logger;
 
+import io.flutter.plugin.common.MethodChannel;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
@@ -117,7 +118,7 @@ public class PaymentHandler {
     }
 
     // <Platinum Updates PR #768> The dialog rendering functions have been commented out since we are handling that Flutter side now
-    public void sendPurchaseRequest() {
+    public void sendPurchaseRequest(final LanternHttpClient.ProCallback cb) {
         final HttpUrl url = LanternHttpClient.createProUrl("/purchase");
         final JsonObject json = new JsonObject();
         final ProPlan plan = LanternApp.getSession().getSelectedPlan();
@@ -155,10 +156,11 @@ public class PaymentHandler {
                 ActivityExtKt.showErrorDialog(getActivity(), errorMakingPurchase);
             }
             @Override
-            public void onSuccess(final Response response, final JsonObject result) {
+            public void onSuccess(final Response response, final JsonObject res) {
 //                dismissDialog();
                 convertToPro();
                 sendPurchaseEvent(LanternApp.getAppContext(), provider);
+                cb.onSuccess(response, res);
             }
         });
     }

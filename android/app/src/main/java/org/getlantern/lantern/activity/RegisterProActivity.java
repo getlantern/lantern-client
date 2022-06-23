@@ -84,31 +84,32 @@ public class RegisterProActivity extends BaseFragmentActivity {
         });
     }
 
-    @Click(R.id.continueBtn)
-    public void continueClicked(View view) {
-        final String email = emailInput.getText().toString().trim();
-        final String resellerCode = resellerCodeInput.getText().toString().trim();
+    // <Platinum Updates PR #768> Not used anymore
+    // @Click(R.id.continueBtn)
+    // public void continueClicked(View view) {
+    //     final String email = emailInput.getText().toString().trim();
+    //     final String resellerCode = resellerCodeInput.getText().toString().trim();
 
-        // email validation
-        if (!Utils.isEmailValid(email)) {
-            ActivityExtKt.showErrorDialog(this,
-                    getResources().getString(R.string.invalid_email));
-            return;
-        }
+    //     // email validation
+    //     if (!Utils.isEmailValid(email)) {
+    //         ActivityExtKt.showErrorDialog(this,
+    //                 getResources().getString(R.string.invalid_email));
+    //         return;
+    //     }
 
-        // reseller code validation
-        if (resellerCode.length() != RESELLER_CODE_LEN) {
-            // reseller code unexpected length
-            ActivityExtKt.showErrorDialog(this,
-                    getResources().getString(R.string.invalid_reseller_code));
-            return;
-        }
+    //     // reseller code validation
+    //     if (resellerCode.length() != RESELLER_CODE_LEN) {
+    //         // reseller code unexpected length
+    //         ActivityExtKt.showErrorDialog(this,
+    //                 getResources().getString(R.string.invalid_reseller_code));
+    //         return;
+    //     }
 
-        Logger.debug(TAG, "User entered a valid reseller code " + resellerCode + " -- submitting purchase request");
+    //     Logger.debug(TAG, "User entered a valid reseller code " + resellerCode + " -- submitting purchase request");
 
-        LanternApp.getSession().setEmail(email);
-        LanternApp.getSession().setResellerCode(resellerCode);
-        LanternApp.getSession().setProvider("reseller-code");
-        paymentHandler.sendPurchaseRequest();
-    }
+    //     LanternApp.getSession().setEmail(email);
+    //     LanternApp.getSession().setResellerCode(resellerCode);
+    //     LanternApp.getSession().setProvider("reseller-code");
+    //     paymentHandler.sendPurchaseRequest();
+    // }
 }

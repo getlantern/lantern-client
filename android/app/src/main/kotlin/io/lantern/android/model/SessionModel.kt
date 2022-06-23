@@ -21,6 +21,7 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
@@ -476,9 +477,17 @@ open class SessionModel(
                     override fun onSuccess(token: Token) {
                         LanternApp.getSession().setStripeToken(token.id)
                         val paymentHandler = PaymentHandler(activity, "stripe")
-                        paymentHandler.sendPurchaseRequest()
-                        // TODO: this needs to come from sendPurchaseRequest (pass result to sendPurchaseRequest?)
-                        result.success("stripeSuccess")
+                        // TODO: does passing the callback here make sense?
+                        paymentHandler.sendPurchaseRequest(object: ProCallback {
+                            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                                result.error("unknownError", error?.message, null)
+                                return
+                            }
+
+                            override fun onSuccess(response: Response, res: JsonObject) {
+                                result.success(res.toString())
+                            }
+                        })
                     }
 
                     override fun onError(error: Exception) {
@@ -557,8 +566,7 @@ open class SessionModel(
                         val paymentHandler =
                             PaymentHandler(activity, "googleplay", tokens[0])
                         // TODO: this needs to come from sendPurchaseRequest (pass result to sendPurchaseRequest?)
-                        paymentHandler.sendPurchaseRequest()
-                        result.success("googleplay")
+                        // paymentHandler.sendPurchaseRequest()
                     }
                 }
             )
