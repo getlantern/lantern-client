@@ -107,6 +107,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
               ),
               child: Form(
                 onChanged: () {
+                  // automatically insert hyphens every 5 characters
                   final sLen = resellerCodeController.text.length;
                   final insertHyphen =
                       sLen == 5 || sLen == 11 || sLen == 17 || sLen == 23;

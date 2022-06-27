@@ -82,253 +82,245 @@ class _CheckoutState extends State<Checkout>
     return BaseScreen(
       resizeToAvoidBottomInset: false,
       title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout'.i18n,
-      body: Form(
-        child: Container(
-          padding: const EdgeInsetsDirectional.only(
-            start: 16,
-            end: 16,
-            top: 24,
-            bottom: 32,
-          ),
-          child: Stack(
-            alignment: AlignmentDirectional.bottomCenter,
-            children: [
-              ListView(
-                children: [
-                  // * Step 2
-                  PlanStep(
-                    stepNum: '2',
-                    description: 'Enter email'.i18n,
+      body: Container(
+        padding: const EdgeInsetsDirectional.only(
+          start: 16,
+          end: 16,
+          top: 24,
+          bottom: 32,
+        ),
+        child: Stack(
+          alignment: AlignmentDirectional.bottomCenter,
+          children: [
+            ListView(
+              children: [
+                // * Step 2
+                PlanStep(
+                  stepNum: '2',
+                  description: 'Enter email'.i18n,
+                ),
+                // * Email field
+                Container(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 8,
+                    bottom: 8,
                   ),
-                  // * Email field
-                  Container(
-                    padding: const EdgeInsetsDirectional.only(
-                      top: 8,
-                      bottom: 8,
-                    ),
-                    child: Form(
-                      key: emailFieldKey,
-                      child: sessionModel.emailAddress(
-                        (context, email, child) => CTextField(
-                          enabled: email.isEmpty,
-                          initialValue: email,
-                          controller: emailController,
-                          autovalidateMode: AutovalidateMode.disabled,
-                          label: 'Email'.i18n,
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: const CAssetImage(path: ImagePaths.email),
-                        ),
+                  child: Form(
+                    key: emailFieldKey,
+                    child: sessionModel.emailAddress(
+                      (context, email, child) => CTextField(
+                        enabled: email.isEmpty,
+                        initialValue: email,
+                        controller: emailController,
+                        autovalidateMode: AutovalidateMode.disabled,
+                        label: 'Email'.i18n,
+                        keyboardType: TextInputType.emailAddress,
+                        prefixIcon: const CAssetImage(path: ImagePaths.email),
                       ),
                     ),
                   ),
-                  // * Referral Code field - initially hidden
-                  Visibility(
-                    visible: isRefCodeFieldShowing,
+                ),
+                // * Referral Code field - initially hidden
+                Visibility(
+                  visible: isRefCodeFieldShowing,
+                  child: Container(
+                    padding: const EdgeInsetsDirectional.only(
+                      top: 8,
+                      bottom: 16,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          flex: 2,
+                          child: Form(
+                            key: refCodeFieldKey,
+                            child: CTextField(
+                              maxLength: 13,
+                              enabled: !refCodeSuccessfullyApplied,
+                              controller: refCodeController,
+                              autovalidateMode: AutovalidateMode.disabled,
+                              textCapitalization: TextCapitalization.characters,
+                              label: 'Referral code'.i18n,
+                              keyboardType: TextInputType.text,
+                              prefixIcon:
+                                  const CAssetImage(path: ImagePaths.star),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: submittedRefCode &&
+                                  refCodeFieldKey.currentState?.validate() ==
+                                      true &&
+                                  refCodeSuccessfullyApplied
+                              ? Transform.scale(
+                                  scale: pulseAnimation.value,
+                                  child: const CAssetImage(
+                                    path: ImagePaths.check_green,
+                                  ),
+                                )
+                              : CInkWell(
+                                  onTap: () async {
+                                    await sessionModel
+                                        .applyRefCode(
+                                          refCodeController.value.text,
+                                        )
+                                        .then(
+                                          (value) => setState(() {
+                                            submittedRefCode = true;
+                                            refCodeSuccessfullyApplied = true;
+                                          }),
+                                        )
+                                        .onError((error, stackTrace) {
+                                      CDialog.showError(
+                                        context,
+                                        error: e,
+                                        stackTrace: stackTrace,
+                                        description: (error
+                                                as PlatformException)
+                                            .message
+                                            .toString()
+                                            .i18n, // we are localizing this error Flutter-side
+                                      );
+                                      setState(() {
+                                        refCodeSuccessfullyApplied = false;
+                                      });
+                                    });
+                                  },
+                                  child: Container(
+                                    padding:
+                                        const EdgeInsetsDirectional.all(16.0),
+                                    child: CText(
+                                      'Apply'.i18n.toUpperCase(),
+                                      style: tsButtonPink,
+                                    ),
+                                  ),
+                                ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                // * Add Referral code
+                Visibility(
+                  visible: !isRefCodeFieldShowing,
+                  child: GestureDetector(
+                    onTap: () async =>
+                        setState(() => isRefCodeFieldShowing = true),
                     child: Container(
+                      width: MediaQuery.of(context).size.width,
                       padding: const EdgeInsetsDirectional.only(
                         top: 8,
                         bottom: 16,
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Flexible(
-                            flex: 2,
-                            child: Form(
-                              key: refCodeFieldKey,
-                              child: CTextField(
-                                maxLength: 13,
-                                enabled: !refCodeSuccessfullyApplied,
-                                controller: refCodeController,
-                                autovalidateMode: AutovalidateMode.disabled,
-                                textCapitalization:
-                                    TextCapitalization.characters,
-                                label: 'Referral code'.i18n,
-                                keyboardType: TextInputType.text,
-                                prefixIcon:
-                                    const CAssetImage(path: ImagePaths.star),
-                              ),
+                          const CAssetImage(path: ImagePaths.add),
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.only(start: 8.0),
+                            child: CText(
+                              'Add Referral code'.i18n,
+                              style: tsBody1,
                             ),
                           ),
-                          Flexible(
-                            flex: 1,
-                            child: submittedRefCode &&
-                                    refCodeFieldKey.currentState?.validate() ==
-                                        true &&
-                                    refCodeSuccessfullyApplied
-                                ? Transform.scale(
-                                    scale: pulseAnimation.value,
-                                    child: const CAssetImage(
-                                      path: ImagePaths.check_green,
-                                    ),
-                                  )
-                                : CInkWell(
-                                    onTap: () async {
-                                      await sessionModel
-                                          .applyRefCode(
-                                            refCodeController.value.text,
-                                          )
-                                          .then(
-                                            (value) => setState(() {
-                                              submittedRefCode = true;
-                                              refCodeSuccessfullyApplied = true;
-                                            }),
-                                          )
-                                          .onError((error, stackTrace) {
-                                        CDialog.showError(
-                                          context,
-                                          error: e,
-                                          stackTrace: stackTrace,
-                                          description: (error
-                                                  as PlatformException)
-                                              .message
-                                              .toString()
-                                              .i18n, // we are localizing this error Flutter-side
-                                        );
-                                        setState(() {
-                                          refCodeSuccessfullyApplied = false;
-                                        });
-                                      });
-                                    },
-                                    child: Container(
-                                      padding:
-                                          const EdgeInsetsDirectional.all(16.0),
-                                      child: CText(
-                                        'Apply'.i18n.toUpperCase(),
-                                        style: tsButtonPink,
-                                      ),
-                                    ),
-                                  ),
-                          )
                         ],
                       ),
                     ),
                   ),
-                  // * Add Referral code
-                  Visibility(
-                    visible: !isRefCodeFieldShowing,
-                    child: GestureDetector(
-                      onTap: () async =>
-                          setState(() => isRefCodeFieldShowing = true),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsetsDirectional.only(
-                          top: 8,
-                          bottom: 16,
-                        ),
-                        child: Row(
-                          children: [
-                            const CAssetImage(path: ImagePaths.add),
-                            Padding(
-                              padding:
-                                  const EdgeInsetsDirectional.only(start: 8.0),
-                              child: CText(
-                                'Add Referral code'.i18n,
-                                style: tsBody1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  // * Step 3
-                  PlanStep(
-                    stepNum: '3',
-                    description: 'Choose Payment Method'.i18n,
-                  ),
-                  //* Payment options
-                  Flexible(
-                    child: Container(
-                      padding:
-                          const EdgeInsetsDirectional.only(top: 16, bottom: 16),
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // * Stripe
-                          PaymentProviderButton(
-                            logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
-                            onChanged: () => setState(
-                              () => selectedPaymentProvider = 'stripe',
-                            ),
-                            selectedPaymentProvider: selectedPaymentProvider,
-                            paymentType: 'stripe',
-                          ),
-                          // * BTC
-                          PaymentProviderButton(
-                            logoPaths: [ImagePaths.btc],
-                            onChanged: () => setState(
-                              () => selectedPaymentProvider = 'btc',
-                            ),
-                            selectedPaymentProvider: selectedPaymentProvider,
-                            paymentType: 'btc',
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              // * Price summary, unused pro time disclaimer, Continue button
-              Flexible(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    PriceSummary(
-                      plans: widget.plans,
-                      id: widget.id,
-                      isPro: widget.isPro,
-                      refCodeSuccessfullyApplied: refCodeSuccessfullyApplied,
-                    ),
-                    // * Disclaimer
-                    sessionModel.getCachedPlans((context, cachedPlans, child) {
-                      final platinumAvailable =
-                          isPlatinumAvailable(cachedPlans);
-                      return platinumAvailable
-                          ? Padding(
-                              padding: const EdgeInsetsDirectional.only(
-                                bottom: 16.0,
-                              ),
-                              child: CText(
-                                'unused_pro_time'.i18n,
-                                textAlign: TextAlign.center,
-                                style: tsBody2.italic.copiedWith(color: grey5),
-                              ),
-                            )
-                          : Container();
-                    }),
-                    Button(
-                      disabled:
-                          emailFieldKey.currentState?.validate() == false ||
-                              refCodeFieldKey.currentState?.validate() == false,
-                      text: 'Continue'.i18n,
-                      onPressed: () async {
-                        await Future.wait(
-                          [
-                            sessionModel
-                                .checkEmailExistence(emailController.value.text)
-                                .onError((error, stackTrace) {
-                              CDialog.showError(
-                                context,
-                                error: e,
-                                stackTrace: stackTrace,
-                                description: error.toString(),
-                              );
-                            }),
-                            resolvePaymentRoute(),
-                          ],
-                          eagerError: true,
-                        );
-                      },
-                    )
-                  ],
                 ),
-              ),
-            ],
-          ),
+                // * Step 3
+                PlanStep(
+                  stepNum: '3',
+                  description: 'Choose Payment Method'.i18n,
+                ),
+                //* Payment options
+                Flexible(
+                  child: Container(
+                    padding:
+                        const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // * Stripe
+                        PaymentProviderButton(
+                          logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
+                          onChanged: () => setState(
+                            () => selectedPaymentProvider = 'stripe',
+                          ),
+                          selectedPaymentProvider: selectedPaymentProvider,
+                          paymentType: 'stripe',
+                        ),
+                        // * BTC
+                        PaymentProviderButton(
+                          logoPaths: [ImagePaths.btc],
+                          onChanged: () => setState(
+                            () => selectedPaymentProvider = 'btc',
+                          ),
+                          selectedPaymentProvider: selectedPaymentProvider,
+                          paymentType: 'btc',
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            // * Price summary, TOS and Button
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                PriceSummary(
+                  plans: widget.plans,
+                  id: widget.id,
+                  isPro: widget.isPro,
+                  refCodeSuccessfullyApplied: refCodeSuccessfullyApplied,
+                ),
+                sessionModel.getCachedPlans((context, cachedPlans, child) {
+                  final platinumAvailable = isPlatinumAvailable(cachedPlans);
+                  return platinumAvailable
+                      ? Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                            bottom: 16.0,
+                          ),
+                          child: CText(
+                            'unused_pro_time'.i18n,
+                            textAlign: TextAlign.center,
+                            style: tsBody2.italic.copiedWith(color: grey5),
+                          ),
+                        )
+                      : Container();
+                }),
+                Button(
+                  disabled: emailFieldKey.currentState?.validate() == false ||
+                      refCodeFieldKey.currentState?.validate() == false,
+                  text: 'Continue'.i18n,
+                  onPressed: () async {
+                    await Future.wait(
+                      [
+                        sessionModel
+                            .checkEmailExistence(emailController.value.text)
+                            .onError((error, stackTrace) {
+                          CDialog.showError(
+                            context,
+                            error: e,
+                            stackTrace: stackTrace,
+                            description: error.toString(),
+                          );
+                        }),
+                        resolvePaymentRoute(),
+                      ],
+                      eagerError: true,
+                    );
+                  },
+                )
+              ],
+            ),
+          ],
         ),
       ),
     );

@@ -189,6 +189,9 @@ class Upgrade extends StatelessWidget {
                               isPro: isPro,
                             ),
                           ),
+                          const Padding(
+                            padding: EdgeInsetsDirectional.all(24.0),
+                          )
                         ],
                       ),
                     ),

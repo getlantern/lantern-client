@@ -70,6 +70,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   );
 
   var formIsValid = false;
+  var keyDown;
 
   @override
   void initState() {
@@ -102,7 +103,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
           children: [
             ListView(
               children: [
-                // * Step 3
                 PlanStep(
                   stepNum: '3',
                   description: 'Checkout'.i18n,
@@ -110,8 +110,8 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 // * Email
                 Container(
                   padding: const EdgeInsetsDirectional.only(
-                    top: 16,
-                    bottom: 8,
+                    top: 8.0,
+                    bottom: 8.0,
                   ),
                   child: Form(
                     onChanged: () => setState(() {
@@ -136,9 +136,25 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                     bottom: 8,
                   ),
                   child: Form(
-                    onChanged: () => setState(() {
-                      formIsValid = determineFormIsValid();
-                    }),
+                    onChanged: () {
+                      // TODO: does not work well with deleting digits one by one - see https://github.com/flutter/flutter/issues/14809 for why listening to delete events in text fields is apparently complex for Flutter
+                      // automatically insert a space every 4 digits
+                      final sLen = creditCardController.text.length;
+                      final insertSlash = sLen == 4 || sLen == 9 || sLen == 14;
+                      if (insertSlash) {
+                        final updatedText = creditCardController.text + ' ';
+                        creditCardController.value =
+                            creditCardController.value.copyWith(
+                          text: updatedText,
+                          selection: TextSelection.collapsed(
+                            offset: updatedText.length,
+                          ),
+                        );
+                      }
+                      setState(() {
+                        formIsValid = determineFormIsValid();
+                      });
+                    },
                     key: creditCardFieldKey,
                     child: CTextField(
                       controller: creditCardController,
@@ -146,50 +162,73 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       label: 'card_number'.i18n,
                       keyboardType: TextInputType.number,
                       maxLines: 1,
+                      maxLength: 19,
+                      hintText: 'XXXX XXXX XXXX XXXX',
                       prefixIcon:
                           const CAssetImage(path: ImagePaths.credit_card),
                     ),
                   ),
                 ),
-                // * Credit card month and expiration
+                // * Date and expiration
                 Container(
                   padding: const EdgeInsetsDirectional.only(
-                    top: 16.0,
-                    bottom: 16.0,
+                    top: 8.0,
+                    bottom: 8.0,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //* Expiration
-                      Container(
-                        width: 150,
+                      Flexible(
                         child: Form(
-                          onChanged: () => setState(() {
-                            formIsValid = determineFormIsValid();
-                          }),
+                          onChanged: () {
+                            // TODO: does not work well with deleting digits one by one
+                            // automatically insert a slash between 2nd and 3rd digit
+                            final sLen = expDateController.text.length;
+                            final insertSlash = sLen == 2;
+                            if (insertSlash) {
+                              final updatedText = expDateController.text + '/';
+                              expDateController.value =
+                                  expDateController.value.copyWith(
+                                text: updatedText,
+                                selection: TextSelection.collapsed(
+                                  offset: updatedText.length,
+                                ),
+                              );
+                            }
+
+                            setState(() {
+                              formIsValid = determineFormIsValid();
+                            });
+                          },
                           key: expDateFieldKey,
                           child: CTextField(
+                            contentPadding: EdgeInsetsDirectional.zero,
                             maxLines: 1,
                             maxLength: 5,
                             controller: expDateController,
                             autovalidateMode: AutovalidateMode.disabled,
                             label: 'card_expiration'.i18n,
-                            keyboardType: TextInputType.datetime,
-                            prefixIcon:
-                                const CAssetImage(path: ImagePaths.calendar),
+                            keyboardType: TextInputType.number,
+                            prefixIcon: const CAssetImage(
+                              path: ImagePaths.calendar,
+                            ),
                           ),
                         ),
                       ),
+                      const Padding(
+                        padding: EdgeInsetsDirectional.all(16.0),
+                      ),
                       //* CVV
-                      Container(
-                        width: 150,
+                      Flexible(
                         child: Form(
                           onChanged: () => setState(() {
                             formIsValid = determineFormIsValid();
                           }),
                           key: cvcFieldKey,
                           child: CTextField(
+                            contentPadding: EdgeInsetsDirectional.zero,
                             maxLines: 1,
                             maxLength: 4,
                             controller: cvcFieldController,
@@ -207,77 +246,74 @@ class _StripeCheckoutState extends State<StripeCheckout> {
               ],
             ),
             // * Price summary, TOS and Button
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  PriceSummary(
-                    plans: widget.plans,
-                    id: widget.id,
-                    refCode: widget.refCode,
-                    isPro: widget.isPro,
-                    refCodeSuccessfullyApplied:
-                        widget.refCodeSuccessfullyApplied,
-                  ),
-                  TOS(copy: copy),
-                  Button(
-                    disabled: !formIsValid,
-                    text: copy,
-                    onPressed: () async {
-                      context.loaderOverlay.show();
-                      await sessionModel
-                          .submitStripe(
-                        widget.email,
-                        creditCardController.value.text,
-                        expDateController.value.text,
-                        cvcFieldController.value.text,
-                        widget.id,
-                      )
-                          // // Let's comment this out for now, to avoid timeout conflicts from Stripe's side
-                          // .timeout(
-                          //   defaultTimeoutDuration,
-                          //   onTimeout: () => onAPIcallTimeout(
-                          //     code: 'submitStripeTimeout',
-                          //     message: 'stripe_timeout'.i18n,
-                          //   ),
-                          // )
-                          .then((value) {
-                        context.loaderOverlay.hide();
-                        showDialog(
-                          context: context,
-                          builder: (context) => sessionModel.getCachedUserLevel(
-                            (context, userLevel, child) =>
-                                sessionModel.getUpgradeOrRenewal(
-                              (context, renewalOrUpgrade, child) =>
-                                  PurchaseSuccessDialog(
-                                title: getPurchaseDialogTitle(
-                                  userLevel,
-                                  renewalOrUpgrade,
-                                ),
-                                description: getPurchaseDialogText(
-                                  userLevel,
-                                  renewalOrUpgrade,
-                                ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                PriceSummary(
+                  plans: widget.plans,
+                  id: widget.id,
+                  refCode: widget.refCode,
+                  isPro: widget.isPro,
+                  refCodeSuccessfullyApplied: widget.refCodeSuccessfullyApplied,
+                ),
+                TOS(copy: copy),
+                Button(
+                  disabled: !formIsValid,
+                  text: copy,
+                  onPressed: () async {
+                    context.loaderOverlay.show();
+                    await sessionModel
+                        .submitStripe(
+                      widget.email,
+                      creditCardController.value.text,
+                      expDateController.value.text,
+                      cvcFieldController.value.text,
+                      widget.id,
+                    )
+                        // // Let's comment this out for now, to avoid timeout conflicts from Stripe's side
+                        // .timeout(
+                        //   defaultTimeoutDuration,
+                        //   onTimeout: () => onAPIcallTimeout(
+                        //     code: 'submitStripeTimeout',
+                        //     message: 'stripe_timeout'.i18n,
+                        //   ),
+                        // )
+                        .then((value) {
+                      context.loaderOverlay.hide();
+                      showDialog(
+                        context: context,
+                        builder: (context) => sessionModel.getCachedUserLevel(
+                          (context, userLevel, child) =>
+                              sessionModel.getUpgradeOrRenewal(
+                            (context, renewalOrUpgrade, child) =>
+                                PurchaseSuccessDialog(
+                              title: getPurchaseDialogTitle(
+                                userLevel,
+                                renewalOrUpgrade,
+                              ),
+                              description: getPurchaseDialogText(
+                                userLevel,
+                                renewalOrUpgrade,
                               ),
                             ),
                           ),
-                        );
-                      }).onError((error, stackTrace) {
-                        context.loaderOverlay.hide();
-                        CDialog.showError(
-                          context,
-                          error: e,
-                          stackTrace: stackTrace,
-                          description: (error as PlatformException)
-                              .message
-                              .toString(), // This is coming localized
-                        );
-                      });
-                    },
-                  ),
-                ],
-              ),
+                        ),
+                      );
+                    }).onError((error, stackTrace) {
+                      context.loaderOverlay.hide();
+                      CDialog.showError(
+                        context,
+                        error: e,
+                        stackTrace: stackTrace,
+                        description: (error as PlatformException)
+                            .message
+                            .toString(), // This is coming localized
+                      );
+                    });
+                  },
+                ),
+              ],
             ),
           ],
         ),
