@@ -84,7 +84,6 @@ class _CheckoutState extends State<Checkout>
       title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout'.i18n,
       body: Form(
         child: Container(
-          height: MediaQuery.of(context).size.height,
           padding: const EdgeInsetsDirectional.only(
             start: 16,
             end: 16,
@@ -138,6 +137,7 @@ class _CheckoutState extends State<Checkout>
                         child: Form(
                           key: refCodeFieldKey,
                           child: CTextField(
+                            maxLength: 13,
                             enabled: !refCodeSuccessfullyApplied,
                             controller: refCodeController,
                             autovalidateMode: AutovalidateMode.disabled,
@@ -151,54 +151,52 @@ class _CheckoutState extends State<Checkout>
                       ),
                       Flexible(
                         flex: 1,
-                        child: GestureDetector(
-                          onTap: () async {
-                            await sessionModel
-                                .applyRefCode(
-                                  refCodeController.value.text,
-                                )
-                                .then(
-                                  (value) => setState(() {
-                                    submittedRefCode = true;
-                                    refCodeSuccessfullyApplied = true;
-                                  }),
-                                )
-                                .onError((error, stackTrace) {
-                              CDialog.showError(
-                                context,
-                                error: e,
-                                stackTrace: stackTrace,
-                                description: (error as PlatformException)
-                                    .message
-                                    .toString()
-                                    .i18n, // we are localizing this error Flutter-side
-                              );
-                              setState(() {
-                                refCodeSuccessfullyApplied = false;
-                              });
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsetsDirectional.only(
-                              start: 16.0,
-                              end: 16.0,
-                            ),
-                            child: submittedRefCode &&
-                                    refCodeFieldKey.currentState?.validate() ==
-                                        true &&
-                                    refCodeSuccessfullyApplied
-                                ? Transform.scale(
-                                    scale: pulseAnimation.value,
-                                    child: const CAssetImage(
-                                      path: ImagePaths.check_green,
-                                    ),
-                                  )
-                                : CText(
+                        child: submittedRefCode &&
+                                refCodeFieldKey.currentState?.validate() ==
+                                    true &&
+                                refCodeSuccessfullyApplied
+                            ? Transform.scale(
+                                scale: pulseAnimation.value,
+                                child: const CAssetImage(
+                                  path: ImagePaths.check_green,
+                                ),
+                              )
+                            : CInkWell(
+                                onTap: () async {
+                                  await sessionModel
+                                      .applyRefCode(
+                                        refCodeController.value.text,
+                                      )
+                                      .then(
+                                        (value) => setState(() {
+                                          submittedRefCode = true;
+                                          refCodeSuccessfullyApplied = true;
+                                        }),
+                                      )
+                                      .onError((error, stackTrace) {
+                                    CDialog.showError(
+                                      context,
+                                      error: e,
+                                      stackTrace: stackTrace,
+                                      description: (error as PlatformException)
+                                          .message
+                                          .toString()
+                                          .i18n, // we are localizing this error Flutter-side
+                                    );
+                                    setState(() {
+                                      refCodeSuccessfullyApplied = false;
+                                    });
+                                  });
+                                },
+                                child: Container(
+                                  padding:
+                                      const EdgeInsetsDirectional.all(16.0),
+                                  child: CText(
                                     'Apply'.i18n.toUpperCase(),
                                     style: tsButtonPink,
                                   ),
-                          ),
-                        ),
+                                ),
+                              ),
                       )
                     ],
                   ),
@@ -237,31 +235,34 @@ class _CheckoutState extends State<Checkout>
                 description: 'Choose Payment Method'.i18n,
               ),
               //* Payment options
-              Container(
-                padding: const EdgeInsetsDirectional.only(top: 16, bottom: 16),
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // * Stripe
-                    PaymentProviderButton(
-                      logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
-                      onChanged: () => setState(
-                        () => selectedPaymentProvider = 'stripe',
+              Flexible(
+                child: Container(
+                  padding:
+                      const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // * Stripe
+                      PaymentProviderButton(
+                        logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
+                        onChanged: () => setState(
+                          () => selectedPaymentProvider = 'stripe',
+                        ),
+                        selectedPaymentProvider: selectedPaymentProvider,
+                        paymentType: 'stripe',
                       ),
-                      selectedPaymentProvider: selectedPaymentProvider,
-                      paymentType: 'stripe',
-                    ),
-                    // * BTC
-                    PaymentProviderButton(
-                      logoPaths: [ImagePaths.btc],
-                      onChanged: () => setState(
-                        () => selectedPaymentProvider = 'btc',
-                      ),
-                      selectedPaymentProvider: selectedPaymentProvider,
-                      paymentType: 'btc',
-                    )
-                  ],
+                      // * BTC
+                      PaymentProviderButton(
+                        logoPaths: [ImagePaths.btc],
+                        onChanged: () => setState(
+                          () => selectedPaymentProvider = 'btc',
+                        ),
+                        selectedPaymentProvider: selectedPaymentProvider,
+                        paymentType: 'btc',
+                      )
+                    ],
+                  ),
                 ),
               ),
               // * Price summary, unused pro time disclaimer, Continue button
@@ -276,13 +277,15 @@ class _CheckoutState extends State<Checkout>
                       isPro: widget.isPro,
                       refCodeSuccessfullyApplied: refCodeSuccessfullyApplied,
                     ),
+                    // * Disclaimer
                     sessionModel.getCachedPlans((context, cachedPlans, child) {
                       final platinumAvailable =
                           isPlatinumAvailable(cachedPlans);
                       return platinumAvailable
                           ? Padding(
                               padding: const EdgeInsetsDirectional.only(
-                                  bottom: 16.0),
+                                bottom: 16.0,
+                              ),
                               child: CText(
                                 'unused_pro_time'.i18n,
                                 textAlign: TextAlign.center,

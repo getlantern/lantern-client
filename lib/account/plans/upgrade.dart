@@ -54,8 +54,6 @@ class Upgrade extends StatelessWidget {
           builder: (context, setState) => Container(
             height: MediaQuery.of(context).size.height,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // * Logotype + X button
                 buildHeader(context, platinumAvailable),
@@ -114,8 +112,8 @@ class Upgrade extends StatelessWidget {
                                   padding: 2,
                                   toggleSize: 18.0,
                                   value: isTwoYearPlan,
-                                  activeColor: indicatorGreen,
-                                  inactiveColor: indicatorGreen,
+                                  activeColor: pink4,
+                                  inactiveColor: grey4,
                                   onToggle: (bool newValue) {
                                     setState(() => isTwoYearPlan = newValue);
                                     setState(
@@ -358,7 +356,7 @@ class Upgrade extends StatelessWidget {
     bool? platinumAvailable,
   ) {
     return Container(
-      height: 90,
+      height: 100,
       child: Stack(
         children: [
           Container(

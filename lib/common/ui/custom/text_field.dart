@@ -47,7 +47,7 @@ class CTextField extends StatefulWidget {
     this.contentPadding,
   }) {
     // TODO: fix lifecycle error which results from this component being wrapped in the subscribedSingleValueBuilder() call that returns the email
-    if (initialValue != null) {
+    if (initialValue != null && initialValue != '') {
       controller.text = initialValue!;
     }
   }
