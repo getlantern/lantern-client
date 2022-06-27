@@ -84,10 +84,10 @@ class _CheckoutState extends State<Checkout>
       title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout'.i18n,
       body: Container(
         padding: const EdgeInsetsDirectional.only(
-          start: 16,
-          end: 16,
-          top: 24,
-          bottom: 32,
+          start: 8.0,
+          end: 8.0,
+          top: 24.0,
+          bottom: 32.0,
         ),
         child: Stack(
           alignment: AlignmentDirectional.bottomCenter,
