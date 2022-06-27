@@ -17,6 +17,7 @@ class BaseScreen extends StatelessWidget {
   late final Color foregroundColor;
   late final Color backgroundColor;
   final bool automaticallyImplyLeading;
+  final double elevation;
 
   BaseScreen({
     this.title,
@@ -32,6 +33,7 @@ class BaseScreen extends StatelessWidget {
     Color? backgroundColor,
     this.showAppBar = true,
     this.automaticallyImplyLeading = true,
+    this.elevation = 1.0,
     Key? key,
   }) : super(key: key) {
     this.foregroundColor = foregroundColor ?? black;
@@ -81,7 +83,7 @@ class BaseScreen extends StatelessWidget {
                                     .short,
                               )
                             : title,
-                        elevation: 1,
+                        elevation: elevation,
                         shadowColor: grey3,
                         foregroundColor: foregroundColor,
                         backgroundColor: backgroundColor,

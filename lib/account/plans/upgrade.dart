@@ -51,142 +51,148 @@ class Upgrade extends StatelessWidget {
 
       return FullScreenDialog(
         widget: StatefulBuilder(
-          builder: (context, setState) => Container(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
+          builder: (context, setState) => BaseScreen(
+            automaticallyImplyLeading: false,
+            padHorizontal: false,
+            elevation: 0.0,
+            // * Title
+            title: buildHeader(context, platinumAvailable),
+            body: Stack(
+              alignment: AlignmentDirectional.bottomCenter,
               children: [
-                // * Logotype + X button
-                buildHeader(context, platinumAvailable),
-                // * Body
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsetsDirectional.only(
-                      start: 32,
-                      end: 32,
-                      bottom: 32,
-                    ),
-                    child: Column(
-                      children: [
-                        // * Renewal text or upsell
-                        buildRenewalTextOrUpsell(
-                          context,
-                          platinumAvailable,
-                          isFree,
-                          visiblePlans,
-                        ),
-                        // * Step
-                        Container(
-                          padding: EdgeInsetsDirectional.only(
-                            top: !platinumAvailable ? 16.0 : 0,
-                            bottom: 16.0,
+                ListView(
+                  physics: defaultScrollPhysics,
+                  children: [
+                    // * Body
+                    Container(
+                      padding: const EdgeInsetsDirectional.only(
+                        top: 24.0,
+                        start: 24.0,
+                        end: 24.0,
+                      ),
+                      child: Column(
+                        children: [
+                          // * Renewal text or upsell
+                          buildRenewalTextOrUpsell(
+                            context,
+                            platinumAvailable,
+                            isFree,
+                            visiblePlans,
                           ),
-                          child: PlanStep(
-                            stepNum: '1',
-                            description: 'choose_plan'.i18n,
-                          ),
-                        ),
-                        if (platinumAvailable == true)
-                          // * Toggle and savings banner
+                          // * Step
                           Container(
-                            padding: const EdgeInsetsDirectional.only(
-                              bottom: 16,
+                            padding: EdgeInsetsDirectional.only(
+                              top: !platinumAvailable ? 16.0 : 0,
+                              bottom: 16.0,
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                    end: 16.0,
+                            child: PlanStep(
+                              stepNum: '1',
+                              description: 'choose_plan'.i18n,
+                            ),
+                          ),
+                          if (platinumAvailable == true)
+                            // * Toggle and savings banner
+                            Container(
+                              padding: const EdgeInsetsDirectional.only(
+                                bottom: 16,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                      end: 16.0,
+                                    ),
+                                    child: CText(
+                                      '1y_pricing'.i18n,
+                                      style: isTwoYearPlan
+                                          ? tsBody1.copiedWith(color: grey5)
+                                          : tsBody1,
+                                    ),
                                   ),
-                                  child: CText(
-                                    '1y_pricing'.i18n,
-                                    style: isTwoYearPlan
-                                        ? tsBody1.copiedWith(color: grey5)
-                                        : tsBody1,
-                                  ),
-                                ),
-                                FlutterSwitch(
-                                  width: 44.0,
-                                  height: 24.0,
-                                  valueFontSize: 12.0,
-                                  padding: 2,
-                                  toggleSize: 18.0,
-                                  value: isTwoYearPlan,
-                                  activeColor: pink4,
-                                  inactiveColor: grey4,
-                                  onToggle: (bool newValue) {
-                                    setState(() => isTwoYearPlan = newValue);
-                                    setState(
-                                      () =>
-                                          visiblePlans = determineVisiblePlans(
-                                        newValue,
-                                        plans,
-                                        platinumAvailable,
-                                      ),
-                                    );
-                                  },
-                                ),
-                                // * Savings banner
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                    start: 16.0,
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      if (showBanner != null)
-                                        Transform.translate(
-                                          offset: const Offset(30.0, -25.0),
-                                          child: const CAssetImage(
-                                            path: ImagePaths.savings_arrow,
-                                          ),
+                                  FlutterSwitch(
+                                    width: 44.0,
+                                    height: 24.0,
+                                    valueFontSize: 12.0,
+                                    padding: 2,
+                                    toggleSize: 18.0,
+                                    value: isTwoYearPlan,
+                                    activeColor: pink4,
+                                    inactiveColor: grey4,
+                                    onToggle: (bool newValue) {
+                                      setState(() => isTwoYearPlan = newValue);
+                                      setState(
+                                        () => visiblePlans =
+                                            determineVisiblePlans(
+                                          newValue,
+                                          plans,
+                                          platinumAvailable,
                                         ),
-                                      if (showBanner != null)
-                                        Transform.translate(
-                                          offset: const Offset(65.0, -30.0),
-                                          child: Transform.rotate(
-                                            angle: 0.1 * pi,
-                                            child: Stack(
-                                              children: [
-                                                CText(
-                                                  determineBannerContent(
-                                                    isFree,
-                                                    plans,
-                                                  )!
-                                                      .toUpperCase(),
-                                                  style: tsBody1.copiedWith(
-                                                    color: pink4,
-                                                  ),
-                                                )
-                                              ],
+                                      );
+                                    },
+                                  ),
+                                  // * Savings banner
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                      start: 16.0,
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        if (showBanner != null)
+                                          Transform.translate(
+                                            offset: const Offset(30.0, -25.0),
+                                            child: const CAssetImage(
+                                              path: ImagePaths.savings_arrow,
                                             ),
                                           ),
-                                        ),
-                                      CText(
-                                        '2y_pricing'.i18n,
-                                        style: isTwoYearPlan
-                                            ? tsBody1
-                                            : tsBody1.copiedWith(
-                                                color: grey5,
+                                        if (showBanner != null)
+                                          Transform.translate(
+                                            offset: const Offset(65.0, -30.0),
+                                            child: Transform.rotate(
+                                              angle: 0.1 * pi,
+                                              child: Stack(
+                                                children: [
+                                                  CText(
+                                                    determineBannerContent(
+                                                      isFree,
+                                                      plans,
+                                                    )!
+                                                        .toUpperCase(),
+                                                    style: tsBody1.copiedWith(
+                                                      color: pink4,
+                                                    ),
+                                                  )
+                                                ],
                                               ),
-                                      )
-                                    ],
+                                            ),
+                                          ),
+                                        CText(
+                                          '2y_pricing'.i18n,
+                                          style: isTwoYearPlan
+                                              ? tsBody1
+                                              : tsBody1.copiedWith(
+                                                  color: grey5,
+                                                ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                            ),
+                          // * Card
+                          ...visiblePlans.map(
+                            (plan) => PlanCard(
+                              plans: plans,
+                              id: plan['id'] as String,
+                              platinumAvailable: platinumAvailable,
+                              isPro: isPro,
                             ),
                           ),
-                        // * Card
-                        ...visiblePlans.map(
-                          (plan) => PlanCard(
-                            plans: plans,
-                            id: plan['id'] as String,
-                            platinumAvailable: platinumAvailable,
-                            isPro: isPro,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
                 // * Footer
                 sessionModel.getCachedUserLevel((context, userLevel, child) {
@@ -217,7 +223,7 @@ class Upgrade extends StatelessWidget {
                             ),
                           ],
                         );
-                }),
+                })
               ],
             ),
           ),
@@ -356,12 +362,24 @@ class Upgrade extends StatelessWidget {
     bool? platinumAvailable,
   ) {
     return Container(
-      height: 100,
-      child: Stack(
+      padding: const EdgeInsetsDirectional.only(
+        start: 8.0,
+        end: 8.0,
+        top: 24.0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            padding: const EdgeInsetsDirectional.only(top: 25),
-            alignment: Alignment.centerRight,
+            padding: const EdgeInsetsDirectional.only(start: 16.0),
+            child: CAssetImage(
+              path: platinumAvailable == true
+                  ? ImagePaths.lantern_logotype
+                  : ImagePaths.lantern_pro_logotype,
+              size: 20,
+            ),
+          ),
+          Container(
             child: IconButton(
               icon: mirrorLTR(
                 context: context,
@@ -371,16 +389,6 @@ class Upgrade extends StatelessWidget {
                 ),
               ),
               onPressed: () => Navigator.pop(context, null),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsetsDirectional.only(top: 25, start: 32),
-            alignment: Alignment.centerLeft,
-            child: CAssetImage(
-              path: platinumAvailable == true
-                  ? ImagePaths.lantern_logotype
-                  : ImagePaths.lantern_pro_logotype,
-              size: 20,
             ),
           ),
         ],

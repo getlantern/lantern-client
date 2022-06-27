@@ -97,116 +97,121 @@ class _StripeCheckoutState extends State<StripeCheckout> {
           top: 24,
           bottom: 32,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Stack(
+          alignment: AlignmentDirectional.bottomCenter,
           children: [
-            // * Step 3
-            PlanStep(
-              stepNum: '3',
-              description: 'Checkout'.i18n,
-            ),
-            // * Email
-            Container(
-              padding: const EdgeInsetsDirectional.only(
-                top: 16,
-                bottom: 8,
-              ),
-              child: Form(
-                onChanged: () => setState(() {
-                  formIsValid = determineFormIsValid();
-                }),
-                key: emailFieldKey,
-                child: CTextField(
-                  enabled: widget.email.isEmpty,
-                  initialValue: widget.email,
-                  controller: emailController,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  label: 'Email'.i18n,
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const CAssetImage(path: ImagePaths.email),
+            ListView(
+              children: [
+                // * Step 3
+                PlanStep(
+                  stepNum: '3',
+                  description: 'Checkout'.i18n,
                 ),
-              ),
-            ),
-            // * Credit card number
-            Container(
-              padding: const EdgeInsetsDirectional.only(
-                top: 8,
-                bottom: 8,
-              ),
-              child: Form(
-                onChanged: () => setState(() {
-                  formIsValid = determineFormIsValid();
-                }),
-                key: creditCardFieldKey,
-                child: CTextField(
-                  controller: creditCardController,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  label: 'card_number'.i18n,
-                  keyboardType: TextInputType.number,
-                  maxLines: 1,
-                  prefixIcon: const CAssetImage(path: ImagePaths.credit_card),
-                ),
-              ),
-            ),
-            // * Credit card month and expiration
-            Container(
-              padding: const EdgeInsetsDirectional.only(
-                top: 16.0,
-                bottom: 16.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //* Expiration
-                  Container(
-                    width: 150,
-                    child: Form(
-                      onChanged: () => setState(() {
-                        formIsValid = determineFormIsValid();
-                      }),
-                      key: expDateFieldKey,
-                      child: CTextField(
-                        maxLines: 1,
-                        maxLength: 5,
-                        controller: expDateController,
-                        autovalidateMode: AutovalidateMode.disabled,
-                        label: 'card_expiration'.i18n,
-                        keyboardType: TextInputType.datetime,
-                        prefixIcon:
-                            const CAssetImage(path: ImagePaths.calendar),
-                      ),
+                // * Email
+                Container(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 16,
+                    bottom: 8,
+                  ),
+                  child: Form(
+                    onChanged: () => setState(() {
+                      formIsValid = determineFormIsValid();
+                    }),
+                    key: emailFieldKey,
+                    child: CTextField(
+                      enabled: widget.email.isEmpty,
+                      initialValue: widget.email,
+                      controller: emailController,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      label: 'Email'.i18n,
+                      keyboardType: TextInputType.emailAddress,
+                      prefixIcon: const CAssetImage(path: ImagePaths.email),
                     ),
                   ),
-                  //* CVV
-                  Container(
-                    width: 150,
-                    child: Form(
-                      onChanged: () => setState(() {
-                        formIsValid = determineFormIsValid();
-                      }),
-                      key: cvcFieldKey,
-                      child: CTextField(
-                        maxLines: 1,
-                        maxLength: 4,
-                        controller: cvcFieldController,
-                        autovalidateMode: AutovalidateMode.disabled,
-                        label: 'cvc'.i18n.toUpperCase(),
-                        keyboardType: TextInputType.number,
-                        prefixIcon: const CAssetImage(path: ImagePaths.lock),
-                      ),
+                ),
+                // * Credit card number
+                Container(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 8,
+                    bottom: 8,
+                  ),
+                  child: Form(
+                    onChanged: () => setState(() {
+                      formIsValid = determineFormIsValid();
+                    }),
+                    key: creditCardFieldKey,
+                    child: CTextField(
+                      controller: creditCardController,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      label: 'card_number'.i18n,
+                      keyboardType: TextInputType.number,
+                      maxLines: 1,
+                      prefixIcon:
+                          const CAssetImage(path: ImagePaths.credit_card),
                     ),
                   ),
-                ],
-              ),
+                ),
+                // * Credit card month and expiration
+                Container(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 16.0,
+                    bottom: 16.0,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //* Expiration
+                      Container(
+                        width: 150,
+                        child: Form(
+                          onChanged: () => setState(() {
+                            formIsValid = determineFormIsValid();
+                          }),
+                          key: expDateFieldKey,
+                          child: CTextField(
+                            maxLines: 1,
+                            maxLength: 5,
+                            controller: expDateController,
+                            autovalidateMode: AutovalidateMode.disabled,
+                            label: 'card_expiration'.i18n,
+                            keyboardType: TextInputType.datetime,
+                            prefixIcon:
+                                const CAssetImage(path: ImagePaths.calendar),
+                          ),
+                        ),
+                      ),
+                      //* CVV
+                      Container(
+                        width: 150,
+                        child: Form(
+                          onChanged: () => setState(() {
+                            formIsValid = determineFormIsValid();
+                          }),
+                          key: cvcFieldKey,
+                          child: CTextField(
+                            maxLines: 1,
+                            maxLength: 4,
+                            controller: cvcFieldController,
+                            autovalidateMode: AutovalidateMode.disabled,
+                            label: 'cvc'.i18n.toUpperCase(),
+                            keyboardType: TextInputType.number,
+                            prefixIcon:
+                                const CAssetImage(path: ImagePaths.lock),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
+            // * Price summary, TOS and Button
             Flexible(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // * Price summary
                   PriceSummary(
                     plans: widget.plans,
                     id: widget.id,
