@@ -13,8 +13,6 @@ import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternSessionManager;
 import org.getlantern.lantern.model.MessagingHolder;
-import org.getlantern.lantern.model.WelcomeDialog;
-import org.getlantern.lantern.model.WelcomeDialog_;
 import org.getlantern.lantern.util.SentryUtil;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.ProdLogger;
@@ -141,14 +139,15 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
 //            return;
 //        }
 
-        WelcomeDialog welcome = WelcomeDialog_.builder().layout(WelcomeDialog.LAYOUT_DEFAULT).build();
-        if (welcome == null) {
-            Logger.error(TAG, "Could not create welcome screen dialog");
-            return;
-        }
-
-        session.setWelcomeLastSeen();
-        welcome.show(getCurrentActivity().getFragmentManager(), "dialog");
+        // TODO: show plans screen for renewals when necessary
+//        WelcomeDialog welcome = WelcomeDialog_.builder().layout(WelcomeDialog.LAYOUT_DEFAULT).build();
+//        if (welcome == null) {
+//            Logger.error(TAG, "Could not create welcome screen dialog");
+//            return;
+//        }
+//
+//        session.setWelcomeLastSeen();
+//        welcome.show(getCurrentActivity().getFragmentManager(), "dialog");
     }
 
     public static Context getAppContext() {

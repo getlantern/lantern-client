@@ -406,7 +406,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private fun showSurvey(survey: Survey?) {
         survey ?: return
         if (survey.showPlansScreen) {
-            startActivity(Intent(this@MainActivity, LanternApp.getSession().plansActivity()))
+            // TODO: this needs to show the plans screen in Flutter
+//            startActivity(Intent(this@MainActivity, LanternApp.getSession().plansActivity()))
             return
         }
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
