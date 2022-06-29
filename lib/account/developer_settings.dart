@@ -84,7 +84,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                       sessionModel
                           .setForceCountry(newValue == '' ? null : newValue);
                     },
-                    items: <String>['', 'CN', 'IR', 'US']
+                    items: <String>['', 'CN', 'IR', 'US', 'AE']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,

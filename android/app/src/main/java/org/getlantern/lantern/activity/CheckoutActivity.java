@@ -121,7 +121,9 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
     @AfterViews
     void afterViews() {
         boolean isPlayVersion = LanternApp.getSession().isPlayVersion();
-        useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay();
+        boolean isInUAE = "AE".equalsIgnoreCase(LanternApp.getSession().getCountryCode());
+        useStripe = isInUAE
+                || (!isPlayVersion && !LanternApp.getSession().defaultToAlipay());
         ProPlan plan = LanternApp.getSession().getSelectedPlan();
         price.setText(plan.getCostStr());
         String taxString = plan.getTaxStr();
