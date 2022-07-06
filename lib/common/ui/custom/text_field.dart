@@ -46,9 +46,11 @@ class CTextField extends StatefulWidget {
     this.textCapitalization,
     this.contentPadding,
   }) {
-    // TODO: fix lifecycle error which results from this component being wrapped in the subscribedSingleValueBuilder() call that returns the email
     if (initialValue != null && initialValue != '') {
-      controller.text = initialValue!;
+      // add a small delay to lifecycle error which results from this component being wrapped in the subscribedSingleValueBuilder() call that returns the email
+      Future.delayed(defaultTransitionDuration, () {
+        controller.text = initialValue!;
+      });
     }
   }
 
@@ -71,6 +73,12 @@ class _CTextFieldState extends State<CTextField> {
         hasFocus = widget.controller.focusNode.hasFocus;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    widget.controller.focusNode.dispose();
+    super.dispose();
   }
 
   @override

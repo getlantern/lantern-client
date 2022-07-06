@@ -237,34 +237,32 @@ class _CheckoutState extends State<Checkout>
                   description: 'Choose Payment Method'.i18n,
                 ),
                 //* Payment options
-                Flexible(
-                  child: Container(
-                    padding:
-                        const EdgeInsetsDirectional.only(top: 16, bottom: 16),
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // * Stripe
-                        PaymentProviderButton(
-                          logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
-                          onChanged: () => setState(
-                            () => selectedPaymentProvider = 'stripe',
-                          ),
-                          selectedPaymentProvider: selectedPaymentProvider,
-                          paymentType: 'stripe',
+                Container(
+                  padding:
+                      const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // * Stripe
+                      PaymentProviderButton(
+                        logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
+                        onChanged: () => setState(
+                          () => selectedPaymentProvider = 'stripe',
                         ),
-                        // * BTC
-                        PaymentProviderButton(
-                          logoPaths: [ImagePaths.btc],
-                          onChanged: () => setState(
-                            () => selectedPaymentProvider = 'btc',
-                          ),
-                          selectedPaymentProvider: selectedPaymentProvider,
-                          paymentType: 'btc',
-                        )
-                      ],
-                    ),
+                        selectedPaymentProvider: selectedPaymentProvider,
+                        paymentType: 'stripe',
+                      ),
+                      // * BTC
+                      PaymentProviderButton(
+                        logoPaths: [ImagePaths.btc],
+                        onChanged: () => setState(
+                          () => selectedPaymentProvider = 'btc',
+                        ),
+                        selectedPaymentProvider: selectedPaymentProvider,
+                        paymentType: 'btc',
+                      )
+                    ],
                   ),
                 ),
               ],
