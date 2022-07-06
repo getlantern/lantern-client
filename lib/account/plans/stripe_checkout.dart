@@ -5,6 +5,7 @@ import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/account/plans/plan_utils.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/ui/custom/text_input_formatter.dart';
 
 import 'purchase_success_dialog.dart';
 
@@ -152,7 +153,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                           const CAssetImage(path: ImagePaths.credit_card),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
-                        CardFormatter(separator: ' ', cutoff: 4),
+                        CTextInputFormatter(separator: ' ', cutoff: 4),
                       ],
                     ),
                   ),
@@ -188,7 +189,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                             hintText: 'XX/XX',
                             inputFormatters: [
                               FilteringTextInputFormatter.digitsOnly,
-                              CardFormatter(separator: '/', cutoff: 2),
+                              CTextInputFormatter(separator: '/', cutoff: 2),
                             ],
                           ),
                         ),
@@ -313,47 +314,5 @@ class _StripeCheckoutState extends State<StripeCheckout> {
         cvcFieldKey.currentState?.validate() == false;
 
     return (!anyFieldsEmpty && !anyFieldsInvalid);
-  }
-}
-
-// From https://stackoverflow.com/a/71633921
-class CardFormatter extends TextInputFormatter {
-  final String separator;
-  final int cutoff;
-
-  CardFormatter({
-    Key? key,
-    required this.separator,
-    required this.cutoff,
-  });
-
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue previousValue,
-    TextEditingValue nextValue,
-  ) {
-    var inputText = nextValue.text;
-
-    if (nextValue.selection.baseOffset == 0) {
-      return nextValue;
-    }
-
-    var bufferString = StringBuffer();
-    for (var i = 0; i < inputText.length; i++) {
-      bufferString.write(inputText[i]);
-      var nonZeroIndexValue = i + 1;
-      if (nonZeroIndexValue % cutoff == 0 &&
-          nonZeroIndexValue != inputText.length) {
-        bufferString.write(separator);
-      }
-    }
-
-    var string = bufferString.toString();
-    return nextValue.copyWith(
-      text: string,
-      selection: TextSelection.collapsed(
-        offset: string.length,
-      ),
-    );
   }
 }
