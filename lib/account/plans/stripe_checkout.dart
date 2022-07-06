@@ -136,25 +136,9 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                     bottom: 8,
                   ),
                   child: Form(
-                    onChanged: () {
-                      // TODO: does not work well with deleting digits one by one - see https://github.com/flutter/flutter/issues/14809 for why listening to delete events in text fields is apparently complex for Flutter
-                      // automatically insert a space every 4 digits
-                      final sLen = creditCardController.text.length;
-                      final insertSlash = sLen == 4 || sLen == 9 || sLen == 14;
-                      if (insertSlash) {
-                        final updatedText = creditCardController.text + ' ';
-                        creditCardController.value =
-                            creditCardController.value.copyWith(
-                          text: updatedText,
-                          selection: TextSelection.collapsed(
-                            offset: updatedText.length,
-                          ),
-                        );
-                      }
-                      setState(() {
-                        formIsValid = determineFormIsValid();
-                      });
-                    },
+                    onChanged: () => setState(() {
+                      formIsValid = determineFormIsValid();
+                    }),
                     key: creditCardFieldKey,
                     child: CTextField(
                       controller: creditCardController,
@@ -166,6 +150,10 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       hintText: 'XXXX XXXX XXXX XXXX',
                       prefixIcon:
                           const CAssetImage(path: ImagePaths.credit_card),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        CardFormatter(separator: ' ', cutoff: 4),
+                      ],
                     ),
                   ),
                 ),
@@ -182,26 +170,9 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       //* Expiration
                       Flexible(
                         child: Form(
-                          onChanged: () {
-                            // TODO: does not work well with deleting digits one by one
-                            // automatically insert a slash between 2nd and 3rd digit
-                            final sLen = expDateController.text.length;
-                            final insertSlash = sLen == 2;
-                            if (insertSlash) {
-                              final updatedText = expDateController.text + '/';
-                              expDateController.value =
-                                  expDateController.value.copyWith(
-                                text: updatedText,
-                                selection: TextSelection.collapsed(
-                                  offset: updatedText.length,
-                                ),
-                              );
-                            }
-
-                            setState(() {
-                              formIsValid = determineFormIsValid();
-                            });
-                          },
+                          onChanged: () => setState(() {
+                            formIsValid = determineFormIsValid();
+                          }),
                           key: expDateFieldKey,
                           child: CTextField(
                             contentPadding: EdgeInsetsDirectional.zero,
@@ -214,6 +185,11 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                             prefixIcon: const CAssetImage(
                               path: ImagePaths.calendar,
                             ),
+                            hintText: 'XX/XX',
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              CardFormatter(separator: '/', cutoff: 2),
+                            ],
                           ),
                         ),
                       ),
@@ -237,6 +213,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                             keyboardType: TextInputType.number,
                             prefixIcon:
                                 const CAssetImage(path: ImagePaths.lock),
+                            hintText: 'XXX',
                           ),
                         ),
                       ),
@@ -336,5 +313,47 @@ class _StripeCheckoutState extends State<StripeCheckout> {
         cvcFieldKey.currentState?.validate() == false;
 
     return (!anyFieldsEmpty && !anyFieldsInvalid);
+  }
+}
+
+// From https://stackoverflow.com/a/71633921
+class CardFormatter extends TextInputFormatter {
+  final String separator;
+  final int cutoff;
+
+  CardFormatter({
+    Key? key,
+    required this.separator,
+    required this.cutoff,
+  });
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue previousValue,
+    TextEditingValue nextValue,
+  ) {
+    var inputText = nextValue.text;
+
+    if (nextValue.selection.baseOffset == 0) {
+      return nextValue;
+    }
+
+    var bufferString = StringBuffer();
+    for (var i = 0; i < inputText.length; i++) {
+      bufferString.write(inputText[i]);
+      var nonZeroIndexValue = i + 1;
+      if (nonZeroIndexValue % cutoff == 0 &&
+          nonZeroIndexValue != inputText.length) {
+        bufferString.write(separator);
+      }
+    }
+
+    var string = bufferString.toString();
+    return nextValue.copyWith(
+      text: string,
+      selection: TextSelection.collapsed(
+        offset: string.length,
+      ),
+    );
   }
 }
