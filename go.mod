@@ -7,7 +7,7 @@ require (
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.1
-	github.com/getlantern/flashlight v0.0.0-20220412215028-bc2158dabc90
+	github.com/getlantern/flashlight v0.0.0-20220707144117-d489ebf11889
 	github.com/getlantern/golog v0.0.0-20211223150227-d4d95a44d873
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
@@ -18,13 +18,11 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/mobile v0.0.0-20210831151748-9cba7bc03c0f
-	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
+	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2
 	nhooyr.io/websocket v1.8.7
 )
 
 require (
-	git.torproject.org/pluggable-transports/obfs4.git v0.0.0-20180421031126-89c21805c212 // indirect
-	github.com/agl/ed25519 v0.0.0-20170116200512-5312a6153412 // indirect
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
@@ -48,11 +46,8 @@ replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-2022
 
 //replace github.com/getlantern/lantern-server => ../lantern-server
 
-// XXX <15-10-21, soltzen> Using our own crawshaw.io/sqlite fork mainly for:
-// - https://github.com/crawshaw/sqlite/pull/112
-// - https://github.com/crawshaw/sqlite/pull/103
-// - https://github.com/getlantern/sqlite/pull/4
-replace crawshaw.io/sqlite => github.com/getlantern/sqlite v0.3.3-0.20211018070028-9eeb5042b175
+// For https://github.com/crawshaw/sqlite/pull/112 and https://github.com/crawshaw/sqlite/pull/103.
+replace crawshaw.io/sqlite => github.com/getlantern/sqlite v0.0.0-20220301112206-cb2f8bc7cb56
 
 replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93
 

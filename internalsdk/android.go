@@ -606,7 +606,7 @@ func run(configDir, locale string,
 			}
 			return fmt.Sprintf("%v:%v", updatedHost, port), nil
 		},
-		func(opts *config.GoogleSearchAdsOptions, query string) string { return "" },
+		func() string { return "" },
 		func(category, action, label string) {},
 		nil,
 	)
