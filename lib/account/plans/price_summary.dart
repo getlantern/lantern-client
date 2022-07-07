@@ -48,9 +48,7 @@ class PriceSummary extends StatelessWidget {
               ],
             ),
           // * Referral bonus
-          if (refCode != null &&
-              refCode!.isNotEmpty &&
-              refCodeSuccessfullyApplied)
+          if (refCodeSuccessfullyApplied)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

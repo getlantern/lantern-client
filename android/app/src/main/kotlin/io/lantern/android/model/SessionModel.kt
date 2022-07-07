@@ -107,7 +107,7 @@ open class SessionModel(
             "updateAndCacheUserLevel" -> updateAndCacheUserLevel(result)
             "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, call.argument("planID")!!, result)
             "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!, result)
-            "applyRefCode" -> applyRefCode(call.argument("refCode")!!, result)
+            "applyRefCode" -> applyRefCode(call.argument("refCode")!!, call.argument("email")!!, result)
             "getBitcoinEndpoint" -> getBitcoinEndpoint(call.argument("planID")!!, call.argument("email")!!, result)
             "redeemResellerCode" -> redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
             "checkEmailExistence" -> PlansUtil.checkEmailExistence(call.argument("email")!!, result)
@@ -580,7 +580,9 @@ open class SessionModel(
     }
 
     // Applies referral code (before the user has initiated a transaction)
-    private fun applyRefCode(refCode: String, result: MethodChannel.Result) {
+    private fun applyRefCode(refCode: String, email: String, result: MethodChannel.Result) {
+        LanternApp.getSession().setReferral(refCode)
+        LanternApp.getSession().setEmail(email)
         try {
             val formBody: FormBody = FormBody.Builder().add("code", refCode).build()
             lanternClient.post(
@@ -601,12 +603,12 @@ open class SessionModel(
                         }
                     }
 
-                    override fun onSuccess(response: Response, result: JsonObject) {
+                    override fun onSuccess(response: Response, res: JsonObject) {
                         Logger.debug(
                             TAG,
                             "Successfully redeemed referral code$refCode"
                         )
-                        LanternApp.getSession().setReferral(refCode)
+                        result.success("refCodeSuccess")
                     }
                 }
             )

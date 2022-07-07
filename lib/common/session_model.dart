@@ -278,9 +278,11 @@ class SessionModel extends Model {
 
   Future<void> applyRefCode(
     String refCode,
+    String email,
   ) async {
     return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
       'refCode': refCode,
+      'email': email,
     }).then((value) => value as String);
   }
 

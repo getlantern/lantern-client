@@ -26,7 +26,7 @@ void onAPIcallTimeout({code, message}) {
 String localizeCachingError(error) =>
     (error as PlatformException).message.toString();
 
-const defaultTimeoutDuration = Duration(seconds: 30);
+const defaultTimeoutDuration = Duration(seconds: 10);
 
 // returns true if there are any Plans entries where { level: 'platinum' }
 // depends on where the plans are fetched from

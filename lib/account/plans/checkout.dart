@@ -51,22 +51,11 @@ class _CheckoutState extends State<Checkout>
   var selectedPaymentProvider = 'stripe';
   var loadingPercentage = 0;
   var submittedRefCode = false;
-  late AnimationController animationController;
-  late Animation pulseAnimation;
   var refCodeSuccessfullyApplied = false;
 
   @override
   void initState() {
     WebView.platform = AndroidWebView();
-
-    animationController =
-        AnimationController(vsync: this, duration: longAnimationDuration);
-    animationController.repeat(reverse: true);
-    pulseAnimation =
-        Tween<double>(begin: 0.5, end: 1.5).animate(animationController);
-
-    if (animationController.isCompleted) animationController.stop();
-
     super.initState();
   }
 
@@ -74,7 +63,6 @@ class _CheckoutState extends State<Checkout>
   void dispose() {
     emailController.dispose();
     refCodeController.dispose();
-    animationController.dispose();
     super.dispose();
   }
 
@@ -156,17 +144,15 @@ class _CheckoutState extends State<Checkout>
                                   refCodeFieldKey.currentState?.validate() ==
                                       true &&
                                   refCodeSuccessfullyApplied
-                              ? Transform.scale(
-                                  scale: pulseAnimation.value,
-                                  child: const CAssetImage(
-                                    path: ImagePaths.check_green,
-                                  ),
+                              ? const CAssetImage(
+                                  path: ImagePaths.check_green,
                                 )
                               : CInkWell(
                                   onTap: () async {
                                     await sessionModel
                                         .applyRefCode(
                                           refCodeController.value.text,
+                                          emailController.value.text,
                                         )
                                         .then(
                                           (value) => setState(() {
@@ -331,8 +317,8 @@ class _CheckoutState extends State<Checkout>
       await context.pushRoute(
         StripeCheckout(
           plans: widget.plans,
-          email: emailController.text,
-          refCode: refCodeController.text,
+          email: emailController.value.text,
+          refCode: refCodeController.value.text,
           refCodeSuccessfullyApplied: refCodeSuccessfullyApplied,
           id: widget.id,
           isPro: widget.isPro,
@@ -344,7 +330,7 @@ class _CheckoutState extends State<Checkout>
       await sessionModel
           .getBitcoinEndpoint(
             widget.id,
-            emailController.text,
+            emailController.value.text,
           )
           .timeout(
             defaultTimeoutDuration,
