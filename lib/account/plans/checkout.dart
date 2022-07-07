@@ -47,7 +47,8 @@ class _CheckoutState extends State<Checkout>
   );
 
   var isRefCodeFieldShowing = false;
-  var selectedPaymentProvider = paymentProviders[0];
+  // var selectedPaymentProvider = paymentProviders[0]; // Commenting this out until we bring BTC payments back
+  var selectedPaymentProvider = 'stripe';
   var loadingPercentage = 0;
   var submittedRefCode = false;
   late AnimationController animationController;
@@ -231,40 +232,40 @@ class _CheckoutState extends State<Checkout>
                     ),
                   ),
                 ),
-                // * Step 3
-                PlanStep(
-                  stepNum: '3',
-                  description: 'Choose Payment Method'.i18n,
-                ),
-                //* Payment options
-                Container(
-                  padding:
-                      const EdgeInsetsDirectional.only(top: 16, bottom: 16),
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // * Stripe
-                      PaymentProviderButton(
-                        logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
-                        onChanged: () => setState(
-                          () => selectedPaymentProvider = 'stripe',
-                        ),
-                        selectedPaymentProvider: selectedPaymentProvider,
-                        paymentType: 'stripe',
-                      ),
-                      // * BTC
-                      PaymentProviderButton(
-                        logoPaths: [ImagePaths.btc],
-                        onChanged: () => setState(
-                          () => selectedPaymentProvider = 'btc',
-                        ),
-                        selectedPaymentProvider: selectedPaymentProvider,
-                        paymentType: 'btc',
-                      )
-                    ],
-                  ),
-                ),
+                // // * Step 3
+                // PlanStep(
+                //   stepNum: '3',
+                //   description: 'Choose Payment Method'.i18n,
+                // ),
+                // //* Payment options
+                // Container(
+                //   padding:
+                //       const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                //   width: MediaQuery.of(context).size.width,
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       // * Stripe
+                //       PaymentProviderButton(
+                //         logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
+                //         onChanged: () => setState(
+                //           () => selectedPaymentProvider = 'stripe',
+                //         ),
+                //         selectedPaymentProvider: selectedPaymentProvider,
+                //         paymentType: 'stripe',
+                //       ),
+                //       // * BTC
+                //       PaymentProviderButton(
+                //         logoPaths: [ImagePaths.btc],
+                //         onChanged: () => setState(
+                //           () => selectedPaymentProvider = 'btc',
+                //         ),
+                //         selectedPaymentProvider: selectedPaymentProvider,
+                //         paymentType: 'btc',
+                //       )
+                //     ],
+                //   ),
+                // ),
               ],
             ),
             // * Price summary, TOS and Button

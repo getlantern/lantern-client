@@ -29,13 +29,10 @@ class CTextInputFormatter extends TextInputFormatter {
       if (nonZeroIndexValue % cutoff == 0 &&
           nonZeroIndexValue != inputText.length) {
         bufferString.write(separator);
-        print(
-            'here i $i nonZeroIndexValue $nonZeroIndexValue bufferString $bufferString');
       }
     }
 
     var string = bufferString.toString();
-    print('here string $string');
     return nextValue.copyWith(
       text: string,
       selection: TextSelection.collapsed(
