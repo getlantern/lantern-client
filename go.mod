@@ -12,8 +12,6 @@ require (
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
-	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd
-	github.com/getlantern/protected v0.0.0-20220224141403-67d8ee971ae8
 	github.com/getlantern/replica v0.9.2
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.7.1
@@ -25,6 +23,7 @@ require (
 require (
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
+	github.com/miekg/dns v1.1.43 // indirect
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
 	golang.org/x/tools v0.1.8 // indirect
 )

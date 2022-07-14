@@ -13,7 +13,6 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/idletiming"
 	"github.com/getlantern/ipproxy"
-	"github.com/getlantern/netx"
 
 	"golang.org/x/net/proxy"
 )
@@ -70,7 +69,8 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int) error {
 				// we blackhole this traffic.
 				return nil, errors.New("blackholing QUIC UDP traffic to %v", addr)
 			}
-			conn, err := netx.DialContext(ctx, network, addr)
+			var d net.Dialer
+			conn, err := d.DialContext(ctx, network, addr)
 			if isDNS && err == nil {
 				// wrap our DNS requests in a connection that closes immediately to avoid piling up file descriptors for DNS requests
 				conn = idletiming.Conn(conn, 10*time.Second, nil)
