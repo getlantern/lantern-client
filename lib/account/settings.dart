@@ -20,7 +20,10 @@ class Settings extends StatelessWidget {
 
   void changeLanguage(BuildContext context) => context.pushRoute(Language());
 
-  void reportIssue() async => await sessionModel.checkForUpdates();
+  void reportIssue() async =>
+      LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
+
+  void checkForUpdates() async => await sessionModel.checkForUpdates();
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +69,7 @@ class Settings extends StatelessWidget {
             trailingArray: [
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
-            onTap: reportIssue,
+            onTap: checkForUpdates,
           ),
           //* Blocked
           messagingModel.getOnBoardingStatus(
