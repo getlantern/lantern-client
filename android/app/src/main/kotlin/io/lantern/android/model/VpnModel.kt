@@ -5,7 +5,7 @@ import io.flutter.plugin.common.MethodCall
 import org.getlantern.mobilesdk.Logger
 
 class VpnModel(
-    flutterEngine: FlutterEngine? = null,
+    flutterEngine: FlutterEngine,
     private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
 ) : BaseModel("vpn", flutterEngine, masterDB.withSchema(VPN_SCHEMA)) {
 
@@ -72,6 +72,7 @@ class VpnModel(
     }
 
     fun saveBandwidth(bandwidth: Vpn.Bandwidth) {
+        Logger.d(TAG, "Bandwidth updated to " + bandwidth.remaining + " remaining out of " + bandwidth.allowed + " allowed")
         db.mutate { tx ->
             tx.put(PATH_BANDWIDTH, bandwidth)
         }
