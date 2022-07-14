@@ -156,7 +156,6 @@ github.com/anacrolix/dht/v2 v2.10.5-0.20210902001729-06cc4fe90e53/go.mod h1:zHji
 github.com/anacrolix/dht/v2 v2.10.6-0.20211007004332-99263ec9c1c8/go.mod h1:WID4DexLrucfnwzv1OV8REzgoCpyVDwEczxIOrUeFrY=
 github.com/anacrolix/dht/v2 v2.14.1-0.20211220010335-4062f7927abf/go.mod h1:zJgaiAU2yhzmchZE2mY8WyZ64LK/F/D9MAeN0ct73qQ=
 github.com/anacrolix/dht/v2 v2.15.2-0.20220123034220-0538803801cb/go.mod h1:GCylVI6WTvbxvhY7pBoHiE5dmjfDWkhqbobDpjND01A=
-github.com/anacrolix/dht/v2 v2.16.2-0.20220311024416-dd658f18fd51 h1:issCwqC43gQ7n0gg9rn0EeVYXnQMI7vlnWub4oidtlU=
 github.com/anacrolix/dht/v2 v2.16.2-0.20220311024416-dd658f18fd51/go.mod h1:osiyaNrMLG9dw7wUtVMaII/NdCjlXeHjUcYzXnmop68=
 github.com/anacrolix/dht/v2 v2.18.0 h1:btjVjzjKqO5nKGbJHJ2UmuwiRx+EgX3e+OCHC9+WRz8=
 github.com/anacrolix/dht/v2 v2.18.0/go.mod h1:mxrSeP/LIY429SgWMO9o6UdjBjB8ZjBh6HHCmd8Ly1g=
@@ -189,7 +188,6 @@ github.com/anacrolix/log v0.10.0/go.mod h1:s5yBP/j046fm9odtUTbHOfDUq/zh1W8OkPpJt
 github.com/anacrolix/log v0.10.1-0.20220123034749-3920702c17f8/go.mod h1:GmnE2c0nvz8pOIPUSC9Rawgefy1sDXqposC2wgtBZE4=
 github.com/anacrolix/log v0.11.0/go.mod h1:D4+CvN8SnruK6zIFS/xPoRJmtvtnxs+CSfDQ+BFxZ68=
 github.com/anacrolix/log v0.13.0/go.mod h1:D4+CvN8SnruK6zIFS/xPoRJmtvtnxs+CSfDQ+BFxZ68=
-github.com/anacrolix/log v0.13.1 h1:BmVwTdxHd5VcNrLylgKwph4P4wf+5VvPgOK4yi91fTY=
 github.com/anacrolix/log v0.13.1/go.mod h1:D4+CvN8SnruK6zIFS/xPoRJmtvtnxs+CSfDQ+BFxZ68=
 github.com/anacrolix/log v0.13.2-0.20220426014722-7b7d13a55d55 h1:22o7jDD18WtIYUa2I983X58o6t8e9GVbcdYOKoy+Y4g=
 github.com/anacrolix/log v0.13.2-0.20220426014722-7b7d13a55d55/go.mod h1:D4+CvN8SnruK6zIFS/xPoRJmtvtnxs+CSfDQ+BFxZ68=
@@ -555,10 +553,6 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight v0.0.0-20220707144117-d489ebf11889 h1:gXccxbTbTE5T1oZxxA55BF7lak2pHKockQIyO+ndBMY=
-github.com/getlantern/flashlight v0.0.0-20220707144117-d489ebf11889/go.mod h1:hpDYFi+M58kOUcUYl3Leo2IIASpm1GmkFY45xA9Vxn4=
-github.com/getlantern/flashlight v0.0.0-20220714122355-2565e61ccbe5 h1:JqBtH4vaC5p3IbaKjw4Hs6h+VxEWnht+zOuJETCsigw=
-github.com/getlantern/flashlight v0.0.0-20220714122355-2565e61ccbe5/go.mod h1:alAEV8/QMSsgc0+CnV7ZitijMo2R+b8H/7UmllPflvM=
 github.com/getlantern/flashlight v0.0.0-20220714140548-37d19c44a108 h1:QuEvPMPk48CiT/FNlEXN8Qt2JtIXzcLlIQiwBdPEJ6c=
 github.com/getlantern/flashlight v0.0.0-20220714140548-37d19c44a108/go.mod h1:alAEV8/QMSsgc0+CnV7ZitijMo2R+b8H/7UmllPflvM=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
@@ -699,8 +693,6 @@ github.com/getlantern/probednet v0.0.0-20190725133252-1cfdb2354b4d/go.mod h1:7sl
 github.com/getlantern/probednet v0.0.0-20200930023717-dd97fef56a97/go.mod h1:noglym51kFdkZEV/WjiIzRKV6qwwTI9/vSAjeOI/zCU=
 github.com/getlantern/probednet v0.0.0-20211216020507-22fd9c1d3bf6 h1:8jg6OehdQr90Ybmyc68raXEqM/1hk8E7F2YAUfmcvzE=
 github.com/getlantern/probednet v0.0.0-20211216020507-22fd9c1d3bf6/go.mod h1:noglym51kFdkZEV/WjiIzRKV6qwwTI9/vSAjeOI/zCU=
-github.com/getlantern/protected v0.0.0-20220224141403-67d8ee971ae8 h1:MUXIHzkDx9H3UDMzylSzqLLiOxoaLSVMNyjBqdPcf8g=
-github.com/getlantern/protected v0.0.0-20220224141403-67d8ee971ae8/go.mod h1:B+WG9wugTdW6/fCuilOJ7gZAPI9tACGWYkLnijoMpOY=
 github.com/getlantern/proxy/v2 v2.0.0/go.mod h1:jU6qNaMq92qDY0slT9afuER7arXLnh7jU+DTg3W/oDs=
 github.com/getlantern/proxy/v2 v2.0.1-0.20220303164029-b34b76e0e581 h1:7NrSoq9ce/n15O+0smA756lo86c+coYoyGAhefRJCPw=
 github.com/getlantern/proxy/v2 v2.0.1-0.20220303164029-b34b76e0e581/go.mod h1:81jIwwI/5NGYj2CSvbsZapcTe87jd6AeEu6yJD1NKIg=
@@ -1831,7 +1823,6 @@ golang.org/x/exp v0.0.0-20191129062945-2f5052295587/go.mod h1:2RIsYlXP63K8oxa1u0
 golang.org/x/exp v0.0.0-20191227195350-da58074b4299/go.mod h1:2RIsYlXP63K8oxa1u096TMicItID8zy7Y6sNkU49FU4=
 golang.org/x/exp v0.0.0-20200119233911-0405dc783f0a/go.mod h1:2RIsYlXP63K8oxa1u096TMicItID8zy7Y6sNkU49FU4=
 golang.org/x/exp v0.0.0-20200207192155-f17229e696bd/go.mod h1:J/WKrq2StrnmMY6+EHIKF9dgMWnmCNThgcyBT1FY9mM=
-golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6 h1:QE6XYQK6naiK1EPAe1g/ILLxN5RBoH5xkJk3CqlMI/Y=
 golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6/go.mod h1:3jZMyOhIsHpP37uCMkUooju7aAi5cS1Q23tOzKc+0MU=
 golang.org/x/exp v0.0.0-20220328175248-053ad81199eb h1:pC9Okm6BVmxEw76PUu0XUbOTQ92JX11hfvqTjAV3qxM=
 golang.org/x/exp v0.0.0-20220328175248-053ad81199eb/go.mod h1:lgLbSvA5ygNOMpwM/9anMpWVlVJ7Z+cHWq/eFuinpGE=
@@ -1860,7 +1851,6 @@ golang.org/x/mod v0.3.0/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/mod v0.4.0/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/mod v0.4.1/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/mod v0.4.2/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
-golang.org/x/mod v0.5.1 h1:OJxoQ/rynoF0dcCdI7cLPktw/hR2cueqYfjm43oqK38=
 golang.org/x/mod v0.5.1/go.mod h1:5OXOZSfqPIIbmVBIIKWRFfZjPR0E5r58TLhUjH0a2Ro=
 golang.org/x/mod v0.6.0-dev.0.20211013180041-c96bc1413d57 h1:LQmS1nU0twXLA96Kt7U9qtHJEbBk3z6Q0V4UXjZkpr4=
 golang.org/x/mod v0.6.0-dev.0.20211013180041-c96bc1413d57/go.mod h1:3p9vT2HGsQu2K1YbXdKPJLVgG5VJdoTa1poYQBtP1AY=

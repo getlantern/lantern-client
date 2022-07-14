@@ -2,6 +2,7 @@ package org.getlantern.lantern.vpn;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
 
@@ -37,6 +38,13 @@ public class GoTun2SocksProvider implements Provider {
     builder.addAddress(privateAddress, 24);
     // route IPv4 through VPN
     builder.addRoute("0.0.0.0", 0);
+    // Don't capture traffic originating from Lantern itself in the VPN
+    String ourPackageName = vpnService.getPackageName();
+    try {
+      builder.addDisallowedApplication(ourPackageName);
+    } catch (PackageManager.NameNotFoundException e) {
+      throw new RuntimeException("Unable to exclude Lantern from routes", e);
+    }
     // don't currently route IPv6 through VPN because our proxies don't currently support IPv6
     // see https://github.com/getlantern/lantern-internal/issues/4961
     // Note - if someone performs a DNS lookup for an IPv6 only host like ipv6.google.com, dnsgrab
