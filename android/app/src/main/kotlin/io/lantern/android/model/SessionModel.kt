@@ -31,7 +31,7 @@ import org.greenrobot.eventbus.EventBus
  */
 class SessionModel(
     private val activity: Activity,
-    flutterEngine: FlutterEngine? = null,
+    flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
 
