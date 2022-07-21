@@ -178,7 +178,7 @@ android {
             buildConfigField "String", "TERMS_OF_SERVICE_URL", '"https://s3.amazonaws.com/lantern/Lantern-TOS.pdf"'
         }
 
-        release {
+        base {
             minifyEnabled true
             shrinkResources true
             debuggable false
@@ -194,7 +194,10 @@ android {
             buildConfigField "String", "LOCONF_URL", '"https://raw.githubusercontent.com/getlantern/loconf/master/messages.json"'
             buildConfigField "String", "PRIVACY_POLICY_URL", '"https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf"'
             buildConfigField "String", "TERMS_OF_SERVICE_URL", '"https://s3.amazonaws.com/lantern/Lantern-TOS.pdf"'
+        }
 
+        release {
+            initWith base
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -210,7 +213,7 @@ android {
         }
 
         debug {
-            initWith sideload
+            initWith base
             minifyEnabled false
             shrinkResources false
             debuggable true
