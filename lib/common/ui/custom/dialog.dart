@@ -39,6 +39,7 @@ class CDialog extends StatefulWidget {
 
   CDialog({
     this.iconPath,
+    this.iconSize,
     required this.title,
     required this.description,
     this.checkboxLabel,
@@ -53,6 +54,7 @@ class CDialog extends StatefulWidget {
   }) : super();
 
   final String? iconPath;
+  final double? iconSize;
   final String title;
   final dynamic description;
   final String? checkboxLabel;
@@ -63,7 +65,7 @@ class CDialog extends StatefulWidget {
   final String? agreeText;
   final Future<bool> Function()? agreeAction;
   final Future<bool> Function(bool confirmed)? maybeAgreeAction;
-  final Future<void> Function()? dismissAction;
+  final Future<void> Function(bool confirmed)? dismissAction;
   final closeOnce = once();
 
   void Function() show(BuildContext context) {
@@ -96,7 +98,7 @@ class CDialogState extends State<CDialog> {
 
     if (widget.autoDismissAfter != null) {
       autoDismissTimer = Timer(widget.autoDismissAfter!, () {
-        widget.dismissAction?.call();
+        widget.dismissAction?.call(checkboxChecked);
       });
     }
   }
@@ -123,7 +125,7 @@ class CDialogState extends State<CDialog> {
           if (widget.iconPath != null)
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 16),
-              child: CAssetImage(path: widget.iconPath!, size: 24),
+              child: CAssetImage(path: widget.iconPath!, size: widget.iconSize != null ? widget.iconSize! : 24),
             ),
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 24, end: 24),
@@ -196,7 +198,7 @@ class CDialogState extends State<CDialog> {
                   TextButton(
                     onPressed: () async {
                       if (widget.dismissAction != null) {
-                        await widget.dismissAction!();
+                        await widget.dismissAction!(checkboxChecked);
                       }
                       widget.close(context);
                     },

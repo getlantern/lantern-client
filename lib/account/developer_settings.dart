@@ -4,6 +4,7 @@ import 'package:lantern/replica/logic/markdown_link_builder.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/replica_model.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:url_launcher/url_launcher.dart';
 
 class DeveloperSettingsTab extends StatelessWidget {
   DeveloperSettingsTab({Key? key}) : super(key: key);
@@ -105,6 +106,46 @@ class DeveloperSettingsTab extends StatelessWidget {
                   },
                   child: CText(
                     'Reset Timestamps'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
+              ],
+            ),
+            // * LAUNCH YINSHI DIALOG
+            ListItemFactory.settingsItem(
+              content: 'Launch Yinshi Dialog',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async => CDialog(
+                    iconPath: ImagePaths.yinshi_logo,
+                    iconSize: 60,
+                    title:
+                    '${'announcing_yinshi'.i18n}',
+                    description: 'yinshi_description'.i18n,
+                    checkboxLabel: 'yinshi_dont_show_again'.i18n,
+                    dismissText: 'dismiss'.i18n.toUpperCase(),
+                    agreeText: 'visit_yinshi'.i18n.toUpperCase(),
+                    dismissAction: (checked) async {
+                      debugPrint(checked.toString()); // @todo send to backend
+                    },
+                    maybeAgreeAction: (checked) async {
+                      debugPrint(checked.toString()); // @todo send to backend
+                      const url = 'https://yinshix.com'; //@todo should this go in a global constants or env?
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        CDialog.showError(
+                          context,
+                          error: 'Could not launch $url in device browser.',
+                          stackTrace: null,
+                          description: 'browser_launch_error_description'.i18n,
+                        );
+                      }
+                      return true;
+                    },
+                  ).show(context),
+                  child: CText(
+                    'Launch Yinshi Dialog'.toUpperCase(),
                     style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
                   ),
                 )

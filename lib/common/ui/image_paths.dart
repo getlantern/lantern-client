@@ -121,4 +121,7 @@ class ImagePaths {
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';
+
+  // Yinshi
+  static const yinshi_logo = 'assets/images/yinshi_logo.svg';
 }
