@@ -106,6 +106,12 @@ class SessionModel(
                     tx.put("/selectedTab", call.argument<String>("tab")!!)
                 }
             }
+            "setSuppressYinshiDialog" -> {
+                val suppress = call.argument<Boolean>("suppress") ?: false
+                db.mutate { tx ->
+                    tx.put("suppressYinshiDialog", suppress)
+                }
+            }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
             "checkForUpdates" -> {
                 EventBus.getDefault().post(CheckUpdate(true))

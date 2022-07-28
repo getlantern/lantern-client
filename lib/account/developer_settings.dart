@@ -125,12 +125,14 @@ class DeveloperSettingsTab extends StatelessWidget {
                     checkboxLabel: 'yinshi_dont_show_again'.i18n,
                     dismissText: 'dismiss'.i18n.toUpperCase(),
                     agreeText: 'visit_yinshi'.i18n.toUpperCase(),
-                    dismissAction: (checked) async {
-                      debugPrint(checked.toString()); // @todo send to backend
+                    dismissAction: (suppress) async {
+                      // final suppress = await sessionModel.getSuppressYinshiDialog(); //checking db write worked :) @todo use in conditional launch of modal
+                      // debugPrint(suppress.toString());
+                      await sessionModel.setSuppressYinshiDialog(suppress);
                     },
-                    maybeAgreeAction: (checked) async {
-                      debugPrint(checked.toString()); // @todo send to backend
+                    maybeAgreeAction: (suppress) async {
                       const url = 'https://yinshix.com'; //@todo should this go in a global constants or env?
+                      await sessionModel.setSuppressYinshiDialog(suppress);
                       if (await canLaunch(url)) {
                         await launch(url);
                       } else {

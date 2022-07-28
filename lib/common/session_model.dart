@@ -212,4 +212,14 @@ class SessionModel extends Model {
   Future<void> checkForUpdates() {
     return methodChannel.invokeMethod('checkForUpdates');
   }
+
+  Future<bool?> getSuppressYinshiDialog() async {
+    return methodChannel.invokeMethod('get', 'suppressYinshiDialog');
+  }
+
+  Future<void> setSuppressYinshiDialog(bool suppress) async {
+    return methodChannel.invokeMethod('setSuppressYinshiDialog', {
+      'suppress': suppress,
+    });
+  }
 }
