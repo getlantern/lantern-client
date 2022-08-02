@@ -1037,7 +1037,7 @@ msgid "discover_disclaimer"
 msgstr "Lantern anonymizes your searches and protects them from third parties."
 
 msgid "announcing_yinshi"
-msgstr "Announcing Yinshi!
+msgstr "Announcing Yinshi!"
 
 msgid "yinshi_description"
 msgstr "A new, anonymous, zero fee, instant cryptocurrency exchange from the Lantern Team!"
