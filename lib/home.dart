@@ -1,6 +1,7 @@
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/ui/custom/yinshi_popup.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/chats.dart';
 import 'package:lantern/messaging/onboarding/welcome.dart';
@@ -9,7 +10,6 @@ import 'package:lantern/replica/ui/replica_tab.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
-
 import 'messaging/messaging_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -131,14 +131,16 @@ class _HomePageState extends State<HomePage> {
                       defaultValue: 'false',
                     ).toLowerCase() ==
                     'true';
-                return Scaffold(
-                  body: buildBody(selectedTab, isOnboarded),
-                  bottomNavigationBar: CustomBottomBar(
-                    selectedTab: selectedTab,
-                    isDevelop: developmentMode,
-                    isTesting: isTesting,
-                  ),
-                );
+                return sessionModel.getSuppressYinshiDialog((_, isSuppressed, child) {
+                  return Scaffold(
+                    body: buildBody(context, selectedTab, isOnboarded, isSuppressed),
+                    bottomNavigationBar: CustomBottomBar(
+                      selectedTab: selectedTab,
+                      isDevelop: developmentMode,
+                      isTesting: isTesting,
+                    ),
+                  );
+                });
               }),
             );
           },
@@ -147,7 +149,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildBody(String selectedTab, bool? isOnboarded) {
+  Widget buildBody(BuildContext context, String selectedTab, bool? isOnboarded, bool isSuppressed) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      // @todo don't show on every re-render
+      if (!isSuppressed && selectedTab != TAB_CHATS) return await showYinshiPopup(context);
+    });
     switch (selectedTab) {
       case TAB_CHATS:
         sessionModel.trackScreenView('Chats');

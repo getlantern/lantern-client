@@ -1,0 +1,33 @@
+import 'package:lantern/common/common.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+Future<void> showYinshiPopup(BuildContext context) async {
+  CDialog(
+    iconPath: ImagePaths.yinshi_logo,
+    iconSize: 60,
+    title: '${'announcing_yinshi'.i18n}',
+    description: 'yinshi_description'.i18n,
+    checkboxLabel: 'yinshi_dont_show_again'.i18n,
+    dismissText: 'dismiss'.i18n.toUpperCase(),
+    agreeText: 'visit_yinshi'.i18n.toUpperCase(),
+    dismissAction: (suppress) async {
+      await sessionModel.setSuppressYinshiDialog(suppress);
+    },
+    maybeAgreeAction: (suppress) async {
+      const url =
+          'https://yinshix.com'; //@todo should this go in a global constants or env?
+      await sessionModel.setSuppressYinshiDialog(suppress);
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        CDialog.showError(
+          context,
+          error: 'Could not launch $url in device browser.',
+          stackTrace: null,
+          description: 'browser_launch_error_description'.i18n,
+        );
+      }
+      return true;
+    },
+  ).show(context);
+}

@@ -213,8 +213,12 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('checkForUpdates');
   }
 
-  Future<bool?> getSuppressYinshiDialog() async {
-    return methodChannel.invokeMethod('get', 'suppressYinshiDialog');
+  Widget getSuppressYinshiDialog(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>(
+      'suppressYinshiDialog',
+      defaultValue: false,
+      builder: builder,
+    );
   }
 
   Future<void> setSuppressYinshiDialog(bool suppress) async {

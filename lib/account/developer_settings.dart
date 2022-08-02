@@ -4,7 +4,7 @@ import 'package:lantern/replica/logic/markdown_link_builder.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/replica_model.dart';
 import 'package:markdown/markdown.dart' as md;
-import 'package:url_launcher/url_launcher.dart';
+import '../common/ui/custom/yinshi_popup.dart';
 
 class DeveloperSettingsTab extends StatelessWidget {
   DeveloperSettingsTab({Key? key}) : super(key: key);
@@ -116,36 +116,7 @@ class DeveloperSettingsTab extends StatelessWidget {
               content: 'Launch Yinshi Dialog',
               trailingArray: [
                 TextButton(
-                  onPressed: () async => CDialog(
-                    iconPath: ImagePaths.yinshi_logo,
-                    iconSize: 60,
-                    title:
-                    '${'announcing_yinshi'.i18n}',
-                    description: 'yinshi_description'.i18n,
-                    checkboxLabel: 'yinshi_dont_show_again'.i18n,
-                    dismissText: 'dismiss'.i18n.toUpperCase(),
-                    agreeText: 'visit_yinshi'.i18n.toUpperCase(),
-                    dismissAction: (suppress) async {
-                      // final suppress = await sessionModel.getSuppressYinshiDialog(); //checking db write worked :) @todo use in conditional launch of modal
-                      // debugPrint(suppress.toString());
-                      await sessionModel.setSuppressYinshiDialog(suppress);
-                    },
-                    maybeAgreeAction: (suppress) async {
-                      const url = 'https://yinshix.com'; //@todo should this go in a global constants or env?
-                      await sessionModel.setSuppressYinshiDialog(suppress);
-                      if (await canLaunch(url)) {
-                        await launch(url);
-                      } else {
-                        CDialog.showError(
-                          context,
-                          error: 'Could not launch $url in device browser.',
-                          stackTrace: null,
-                          description: 'browser_launch_error_description'.i18n,
-                        );
-                      }
-                      return true;
-                    },
-                  ).show(context),
+                  onPressed: () async => await showYinshiPopup(context),
                   child: CText(
                     'Launch Yinshi Dialog'.toUpperCase(),
                     style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
