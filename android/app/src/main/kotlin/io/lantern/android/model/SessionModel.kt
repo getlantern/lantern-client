@@ -114,12 +114,12 @@ class SessionModel(
             }
             "setDismissYinshiPopup" -> {
                 db.mutate { tx ->
-                    tx.put("dismissYinshiPopup", true)
+                    tx.put("dismissYinshiPopup", call.argument("doNotShowAgain") ?: false)
                 }
             }
             "setSuppressYinshiPopup" -> {
                 db.mutate { tx ->
-                    tx.put("suppressYinshiPopup", true)
+                    tx.put("suppressYinshiPopup", call.argument("doNotShowAgain") ?: false)
                 }
             }
             "shouldShowYinshiPopup" -> {

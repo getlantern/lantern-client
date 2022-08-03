@@ -125,22 +125,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                 ),
               ],
             ),
-            // * RESET ALL TIMESTAMPS
-            ListItemFactory.settingsItem(
-              content: 'Reset all timestamps',
-              trailingArray: [
-                TextButton(
-                  onPressed: () async {
-                    await messagingModel.resetTimestamps();
-                  },
-                  child: CText(
-                    'Reset Timestamps'.toUpperCase(),
-                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
-                  ),
-                )
-              ],
-            ),
-            // * RESET ONBOARDING + RECOVERY KEY FLAGS
+            // * RESET ONBOARDING + RECOVERY KEY + YINSHI FLAGS
             ListItemFactory.settingsItem(
               content: 'Reset chat and Yinshi popup flags',
               trailingArray: [
@@ -151,6 +136,21 @@ class DeveloperSettingsTab extends StatelessWidget {
                   },
                   child: CText(
                     'Reset Flags'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
+              ],
+            ),
+            // * RESET ALL TIMESTAMPS
+            ListItemFactory.settingsItem(
+              content: 'Reset all timestamps',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async {
+                    await messagingModel.resetTimestamps();
+                  },
+                  child: CText(
+                    'Reset Timestamps'.toUpperCase(),
                     style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
                   ),
                 )

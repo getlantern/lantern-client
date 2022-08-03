@@ -11,15 +11,15 @@ Future<void> showYinshiPopup(BuildContext context) async {
     checkboxLabel: 'yinshi_dont_show_again'.i18n,
     dismissText: 'dismiss'.i18n.toUpperCase(),
     agreeText: 'visit_yinshi'.i18n.toUpperCase(),
-    dismissAction: (suppress) async =>
-        await sessionModel.setDismissYinshiPopup(),
-    maybeAgreeAction: (suppress) async {
+    dismissAction: (doNotShowAgain) async =>
+        await sessionModel.setDismissYinshiPopup(doNotShowAgain),
+    maybeAgreeAction: (doNotShowAgain) async {
       const url =
           'https://yinshix.com'; //@todo should this go in a global constants or env?
       // if checkbox is checked, we suppress, if not, we dismiss
-      suppress == true
-          ? await sessionModel.setSuppressYinshiPopup()
-          : await sessionModel.setDismissYinshiPopup();
+      doNotShowAgain == true
+          ? await sessionModel.setSuppressYinshiPopup(doNotShowAgain)
+          : await sessionModel.setDismissYinshiPopup(doNotShowAgain);
       if (await canLaunch(url)) {
         await launch(url);
       } else {
