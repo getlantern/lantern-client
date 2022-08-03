@@ -113,12 +113,21 @@ class DeveloperSettingsTab extends StatelessWidget {
             ),
             // * LAUNCH YINSHI DIALOG
             ListItemFactory.settingsItem(
-              content: 'Launch Yinshi Dialog',
+              content: Row(
+                children: [
+                  sessionModel.getYinshiPopupState(
+                    (context, value, child) => CText(
+                      value.toString().toUpperCase(),
+                      style: tsSubtitle1,
+                    ),
+                  ),
+                ],
+              ),
               trailingArray: [
                 TextButton(
                   onPressed: () async => await showYinshiPopup(context),
                   child: CText(
-                    'Launch Yinshi Dialog'.toUpperCase(),
+                    'Show dialog'.toUpperCase(),
                     style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
                   ),
                 )

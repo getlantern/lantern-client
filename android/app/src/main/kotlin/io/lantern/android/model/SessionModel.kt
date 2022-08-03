@@ -106,10 +106,23 @@ class SessionModel(
                     tx.put("/selectedTab", call.argument<String>("tab")!!)
                 }
             }
-            "setSuppressYinshiDialog" -> {
-                val suppress = call.argument<Boolean>("suppress") ?: false
+            "setDismissYinshiPopup" -> {
                 db.mutate { tx ->
-                    tx.put("suppressYinshiDialog", suppress)
+                    tx.put("dismissYinshiPopup", true)
+                }
+            }
+            "setSuppressYinshiPopup" -> {
+                db.mutate { tx ->
+                    tx.put("suppressYinshiPopup", true)
+                }
+            }
+            "shouldShowYinshiPopup" -> {
+                return db.mutate { tx ->
+                    // TODO: hasSuppressed needs to persist across sessions, so maybe move to preferences?
+                    val hasSuppressed = tx.get("suppressYinshiPopup") ?: false
+                    val hasDismissed = tx.get("dismissYinshiPopup") ?: false
+                    tx.put("shouldShowYinshiPopup",!hasSuppressed && !hasDismissed) // saving this so we can display in Dev panel
+                    !hasSuppressed && !hasDismissed
                 }
             }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)

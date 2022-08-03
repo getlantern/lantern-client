@@ -213,17 +213,25 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('checkForUpdates');
   }
 
-  Widget getSuppressYinshiDialog(ValueWidgetBuilder<bool> builder) {
+  // We need to address two things for Yinshi popup:
+  // 1. Dismiss popup: A user can just ignore it by clicking outside it -> we need to show it during next session, but not keep showing it when they click around the tabs
+  // 2. Suppress popup: A user has either visited URL or clicked on checkbox -> we don't need to show it at all anymore
+  Future<void> setDismissYinshiPopup() =>
+      methodChannel.invokeMethod('setDismissYinshiPopup');
+
+  Future<void> setSuppressYinshiPopup() =>
+      methodChannel.invokeMethod('setSuppressYinshiPopup');
+
+  // We use a single backend method to delegate logic to
+  Future<bool> shouldShowYinshiPopup() => methodChannel
+      .invokeMethod('shouldShowYinshiPopup')
+      .then((value) => value as bool);
+
+  Widget getYinshiPopupState(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>(
-      'suppressYinshiDialog',
+      'shouldShowYinshiPopup',
       defaultValue: false,
       builder: builder,
     );
-  }
-
-  Future<void> setSuppressYinshiDialog(bool suppress) async {
-    return methodChannel.invokeMethod('setSuppressYinshiDialog', {
-      'suppress': suppress,
-    });
   }
 }
