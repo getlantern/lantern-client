@@ -229,7 +229,7 @@ class SessionModel extends Model {
 
   Widget getYinshiPopupState(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>(
-      'shouldShowYinshiPopup',
+      'showYinshiPopup',
       defaultValue: false,
       builder: builder,
     );

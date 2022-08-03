@@ -116,8 +116,8 @@ class DeveloperSettingsTab extends StatelessWidget {
               content: Row(
                 children: [
                   sessionModel.getYinshiPopupState(
-                    (context, value, child) => CText(
-                      value.toString().toUpperCase(),
+                    (context, shouldShowYinshiPopup, child) => CText(
+                      'Show show Yinshi popup? ${shouldShowYinshiPopup.toString().toUpperCase()}',
                       style: tsSubtitle1,
                     ),
                   ),
@@ -135,7 +135,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             ),
             // * RESET ONBOARDING + RECOVERY KEY FLAGS
             ListItemFactory.settingsItem(
-              content: 'Reset chat flags',
+              content: 'Reset chat and Yinshi popup flags',
               trailingArray: [
                 TextButton(
                   onPressed: () async {

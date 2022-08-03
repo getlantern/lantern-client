@@ -121,8 +121,9 @@ class SessionModel(
                     // TODO: hasSuppressed needs to persist across sessions, so maybe move to preferences?
                     val hasSuppressed = tx.get("suppressYinshiPopup") ?: false
                     val hasDismissed = tx.get("dismissYinshiPopup") ?: false
-                    tx.put("shouldShowYinshiPopup",!hasSuppressed && !hasDismissed) // saving this so we can display in Dev panel
-                    !hasSuppressed && !hasDismissed
+                    val shouldShow = !hasSuppressed && !hasDismissed
+                    tx.put("showYinshiPopup", shouldShow)
+                    shouldShow
                 }
             }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)

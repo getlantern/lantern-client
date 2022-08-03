@@ -381,6 +381,8 @@ class MessagingModel constructor(
                     tx.put("hasShownTryLanternChatModal", false)
                     tx.put("onBoardingStatus", false)
                     tx.put("copiedRecoveryStatus", false)
+                    tx.put("suppressYinshiPopup", false)
+                    tx.put("dismissYinshiPopup", false)
                 }
             }
             "saveDummyAttachment" -> {
