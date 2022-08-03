@@ -11,6 +11,7 @@ Future<void> showYinshiPopup(BuildContext context) async {
     checkboxLabel: 'yinshi_dont_show_again'.i18n,
     dismissText: 'dismiss'.i18n.toUpperCase(),
     agreeText: 'visit_yinshi'.i18n.toUpperCase(),
+    agreeTextColor: tsButtonPink,
     dismissAction: (doNotShowAgain) async =>
         await sessionModel.setDismissYinshiPopup(doNotShowAgain),
     maybeAgreeAction: (doNotShowAgain) async {

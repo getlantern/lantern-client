@@ -51,6 +51,7 @@ class CDialog extends StatefulWidget {
     this.barrierDismissible = true,
     this.dismissText,
     this.agreeText,
+    this.agreeTextColor,
     this.agreeAction,
     this.maybeAgreeAction,
     this.dismissAction,
@@ -66,6 +67,7 @@ class CDialog extends StatefulWidget {
   final bool barrierDismissible;
   final String? dismissText;
   final String? agreeText;
+  final CTextStyle? agreeTextColor;
   final Future<bool> Function()? agreeAction;
   final Future<bool> Function(bool confirmed)? maybeAgreeAction;
   final Future<void> Function(bool confirmed)? dismissAction;
@@ -232,6 +234,8 @@ class CDialogState extends State<CDialog> {
                     (widget.agreeText ?? 'OK'.i18n).toUpperCase(),
                     style: widget.checkboxLabel == null || checkboxChecked
                         ? tsButtonPink
+                        : widget.agreeTextColor != null
+                        ? widget.agreeTextColor!
                         : tsButtonGrey,
                   ),
                 ),
