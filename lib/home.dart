@@ -120,15 +120,15 @@ class _HomePageState extends State<HomePage> {
         } else {
           Logger.level = Level.error;
         }
-        sessionModel.shouldShowYinshiPopup().then((shouldShowPopup) async {
-          if (shouldShowPopup) {
-            await showYinshiPopup(context);
-          }
-        });
 
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
+            sessionModel.shouldShowYinshiPopup().then((shouldShowPopup) async {
+              if (shouldShowPopup && lang == 'zh_CN') {
+                await showYinshiPopup(context);
+              }
+            });
             return sessionModel.selectedTab(
               (context, selectedTab, child) =>
                   messagingModel.getOnBoardingStatus((_, isOnboarded, child) {

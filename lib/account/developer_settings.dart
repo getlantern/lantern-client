@@ -4,7 +4,6 @@ import 'package:lantern/replica/logic/markdown_link_builder.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/replica_model.dart';
 import 'package:markdown/markdown.dart' as md;
-import '../common/ui/custom/yinshi_popup.dart';
 
 class DeveloperSettingsTab extends StatelessWidget {
   DeveloperSettingsTab({Key? key}) : super(key: key);
