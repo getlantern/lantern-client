@@ -98,21 +98,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             // * YINSHI DIALOG
             ListItemFactory.settingsItem(
               content: CText(
-                'Dismiss Yinshi Popup state:',
-                style: tsSubtitle1,
-              ),
-              trailingArray: [
-                sessionModel.getYinshiDismissFlag(
-                  (context, dismissed, child) => CText(
-                    dismissed.toString().toUpperCase(),
-                    style: tsSubtitle1.copiedWith(color: Colors.orangeAccent),
-                  ),
-                ),
-              ],
-            ),
-            ListItemFactory.settingsItem(
-              content: CText(
-                'Suppress Yinshi Popup state:',
+                'Suppress Yinshi Popup states:',
                 style: tsSubtitle1,
               ),
               trailingArray: [

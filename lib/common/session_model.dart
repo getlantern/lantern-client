@@ -213,14 +213,7 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('checkForUpdates');
   }
 
-  // We need to address two things for Yinshi popup:
-  // 1. Dismiss popup: A user can just ignore it by clicking outside it -> we need to show it during next session, but not keep showing it when they click around the tabs
-  // 2. Suppress popup: A user has either visited URL or clicked on checkbox -> we don't need to show it at all anymore
-  Future<void> setDismissYinshiPopup(bool doNotShowAgain) async =>
-      methodChannel.invokeMethod('setDismissYinshiPopup', <String, dynamic>{
-        'doNotShowAgain': doNotShowAgain,
-      });
-
+  // Suppress popup: A user has clicked on checkbox -> we don't need to show it at all anymore
   Future<void> setSuppressYinshiPopup(bool doNotShowAgain) async =>
       methodChannel.invokeMethod('setSuppressYinshiPopup', <String, dynamic>{
         'doNotShowAgain': doNotShowAgain,
@@ -229,14 +222,6 @@ class SessionModel extends Model {
   Future<bool> shouldShowYinshiPopup() async => methodChannel
       .invokeMethod('shouldShowYinshiPopup')
       .then((value) => value as bool);
-
-  Widget getYinshiDismissFlag(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
-      'dismissYinshiPopup',
-      defaultValue: false,
-      builder: builder,
-    );
-  }
 
   Widget getYinshiSuppressFlag(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>(

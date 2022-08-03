@@ -125,7 +125,8 @@ class _HomePageState extends State<HomePage> {
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
             sessionModel.shouldShowYinshiPopup().then((shouldShowPopup) async {
-              if (shouldShowPopup && lang == 'zh_CN') {
+              debugPrint(lang);
+              if (shouldShowPopup && (lang == ('zh_CN') || lang == 'zh_HK')) {
                 await showYinshiPopup(context);
               }
             });
