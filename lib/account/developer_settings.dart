@@ -96,6 +96,35 @@ class DeveloperSettingsTab extends StatelessWidget {
                 })
               ],
             ),
+            // * YINSHI DIALOG
+            ListItemFactory.settingsItem(
+              content: CText(
+                'Dismiss Yinshi Popup state:',
+                style: tsSubtitle1,
+              ),
+              trailingArray: [
+                sessionModel.getYinshiDismissFlag(
+                  (context, dismissed, child) => CText(
+                    dismissed.toString().toUpperCase(),
+                    style: tsSubtitle1.copiedWith(color: Colors.orangeAccent),
+                  ),
+                ),
+              ],
+            ),
+            ListItemFactory.settingsItem(
+              content: CText(
+                'Suppress Yinshi Popup state:',
+                style: tsSubtitle1,
+              ),
+              trailingArray: [
+                sessionModel.getYinshiSuppressFlag(
+                  (context, suppressed, child) => CText(
+                    suppressed.toString().toUpperCase(),
+                    style: tsSubtitle1.copiedWith(color: Colors.orangeAccent),
+                  ),
+                ),
+              ],
+            ),
             // * RESET ALL TIMESTAMPS
             ListItemFactory.settingsItem(
               content: 'Reset all timestamps',
@@ -111,26 +140,14 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
-            // * LAUNCH YINSHI DIALOG
-            ListItemFactory.settingsItem(
-              content: 'Launch Yinshi Dialog',
-              trailingArray: [
-                TextButton(
-                  onPressed: () async => await showYinshiPopup(context),
-                  child: CText(
-                    'Launch Yinshi Dialog'.toUpperCase(),
-                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
-                  ),
-                )
-              ],
-            ),
             // * RESET ONBOARDING + RECOVERY KEY FLAGS
             ListItemFactory.settingsItem(
-              content: 'Reset chat flags',
+              content: 'Reset chat and Yinshi popup flags',
               trailingArray: [
                 TextButton(
                   onPressed: () async {
                     await messagingModel.resetFlags();
+                    await sessionModel.resetYinshiFlags();
                   },
                   child: CText(
                     'Reset Flags'.toUpperCase(),

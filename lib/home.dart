@@ -120,6 +120,12 @@ class _HomePageState extends State<HomePage> {
         } else {
           Logger.level = Level.error;
         }
+        sessionModel.shouldShowYinshiPopup().then((shouldShowPopup) async {
+          if (true) {
+            await showYinshiPopup(context);
+          }
+        });
+
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
@@ -131,16 +137,14 @@ class _HomePageState extends State<HomePage> {
                       defaultValue: 'false',
                     ).toLowerCase() ==
                     'true';
-                return sessionModel.getSuppressYinshiDialog((_, isSuppressed, child) {
-                  return Scaffold(
-                    body: buildBody(context, selectedTab, isOnboarded, isSuppressed),
-                    bottomNavigationBar: CustomBottomBar(
-                      selectedTab: selectedTab,
-                      isDevelop: developmentMode,
-                      isTesting: isTesting,
-                    ),
-                  );
-                });
+                return Scaffold(
+                  body: buildBody(context, selectedTab, isOnboarded),
+                  bottomNavigationBar: CustomBottomBar(
+                    selectedTab: selectedTab,
+                    isDevelop: developmentMode,
+                    isTesting: isTesting,
+                  ),
+                );
               }),
             );
           },
@@ -149,11 +153,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildBody(BuildContext context, String selectedTab, bool? isOnboarded, bool isSuppressed) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      // @todo don't show on every re-render
-      if (!isSuppressed && selectedTab != TAB_CHATS) return await showYinshiPopup(context);
-    });
+  Widget buildBody(
+    BuildContext context,
+    String selectedTab,
+    bool? isOnboarded,
+  ) {
     switch (selectedTab) {
       case TAB_CHATS:
         sessionModel.trackScreenView('Chats');

@@ -3,7 +3,10 @@ import 'dart:developer' as developer;
 import 'package:lantern/common/common.dart';
 
 /// CDialog incorporates the standard dialog styling and behavior as defined
-/// in the [component library](https://www.figma.com/file/Jz424KUVkFFc2NsxuYaZKL/Lantern-Component-Library?node-id=27%3A28).
+/// in the [component library](https://www.figma.com/file/Jz424KUVkFFc2NsxuYaZKL/Lantern-Component-Library?node-id=27%3A28)
+/// dismissAction -> DISMISS button
+/// maybeAgreeAction -> Checkbox-aware AGREE button
+/// agreeAction -> AGREE button
 class CDialog extends StatefulWidget {
   /// logs the given exception+stacktrace and shows a standard error dialog.
   static void showError(
@@ -125,7 +128,9 @@ class CDialogState extends State<CDialog> {
           if (widget.iconPath != null)
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 16),
-              child: CAssetImage(path: widget.iconPath!, size: widget.iconSize != null ? widget.iconSize! : 24),
+              child: CAssetImage(
+                  path: widget.iconPath!,
+                  size: widget.iconSize != null ? widget.iconSize! : 24),
             ),
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 24, end: 24),

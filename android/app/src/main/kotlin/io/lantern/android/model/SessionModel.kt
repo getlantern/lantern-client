@@ -53,6 +53,12 @@ class SessionModel(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
+            if (!db.contains("suppressYinshiPopup")) {
+                tx.put("suppressYinshiPopup", false)
+            }
+            if (db.contains("dismissYinshiPopup")) {
+                tx.put("dismissYinshiPopup", false) // reset it to false if it exists already
+            }
         }
     }
 
@@ -106,10 +112,31 @@ class SessionModel(
                     tx.put("/selectedTab", call.argument<String>("tab")!!)
                 }
             }
-            "setSuppressYinshiDialog" -> {
-                val suppress = call.argument<Boolean>("suppress") ?: false
+            "setDismissYinshiPopup" -> {
                 db.mutate { tx ->
-                    tx.put("suppressYinshiDialog", suppress)
+                    tx.put("dismissYinshiPopup", true)
+                }
+            }
+            "setSuppressYinshiPopup" -> {
+                db.mutate { tx ->
+                    tx.put("suppressYinshiPopup", true)
+                }
+            }
+            "shouldShowYinshiPopup" -> {
+                return db.mutate { tx ->
+                    //  We might not need both of these, but I was thinking that hasSuppressed needs to persist across sessions,
+                    //  and hasDismissed can be renewed on every session
+                    val hasSuppressed = tx.get("suppressYinshiPopup") ?: false
+                    val hasDismissed = tx.get("dismissYinshiPopup") ?: false
+                    val shouldShow = !hasSuppressed && !hasDismissed
+                    shouldShow
+                }
+            }
+            // for Dev
+            "resetYinshiFlags" -> {
+                db.mutate { tx ->
+                    tx.put("suppressYinshiPopup", false)
+                    tx.put("dismissYinshiPopup", false)
                 }
             }
             "trackScreenView" -> Analytics.screen(activity, call.arguments as String)

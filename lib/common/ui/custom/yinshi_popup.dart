@@ -5,18 +5,21 @@ Future<void> showYinshiPopup(BuildContext context) async {
   CDialog(
     iconPath: ImagePaths.yinshi_logo,
     iconSize: 60,
+    barrierDismissible: false,
     title: '${'announcing_yinshi'.i18n}',
     description: 'yinshi_description'.i18n,
     checkboxLabel: 'yinshi_dont_show_again'.i18n,
     dismissText: 'dismiss'.i18n.toUpperCase(),
     agreeText: 'visit_yinshi'.i18n.toUpperCase(),
-    dismissAction: (suppress) async {
-      await sessionModel.setSuppressYinshiDialog(suppress);
-    },
+    dismissAction: (suppress) async =>
+        await sessionModel.setDismissYinshiPopup(),
     maybeAgreeAction: (suppress) async {
       const url =
           'https://yinshix.com'; //@todo should this go in a global constants or env?
-      await sessionModel.setSuppressYinshiDialog(suppress);
+      // if checkbox is checked, we suppress, if not, we dismiss
+      suppress == true
+          ? await sessionModel.setSuppressYinshiPopup()
+          : await sessionModel.setDismissYinshiPopup();
       if (await canLaunch(url)) {
         await launch(url);
       } else {
