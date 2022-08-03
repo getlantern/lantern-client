@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> {
           Logger.level = Level.error;
         }
         sessionModel.shouldShowYinshiPopup().then((shouldShowPopup) async {
-          if (true) {
+          if (shouldShowPopup) {
             await showYinshiPopup(context);
           }
         });
