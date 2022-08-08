@@ -1,13 +1,5 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/replica/ui/listitems/video_listitem.dart';
-import 'package:lantern/replica/ui/listviews/common_listview.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+import 'package:lantern/replica/common.dart';
 
 /// ReplicaVideoListView renders a list of ReplicaVideoListItem.
 /// Looks like this docs/replica_search_tabs.png

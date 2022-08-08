@@ -1,13 +1,5 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/replica/ui/listitems/app_listitem.dart';
-import 'package:lantern/replica/ui/listviews/common_listview.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+import 'package:lantern/replica/common.dart';
 
 /// ReplicaAppListView renders 'App' Replica items
 /// Looks quite similar to ReplicaDocumentListView: docs/replica_app_listview.png

@@ -1,13 +1,9 @@
 import 'package:filesize/filesize.dart';
 import 'package:lantern/common/ui/humanize_seconds.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:logger/logger.dart';
+import 'package:lantern/replica/common.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
-
+/// Defines the generic structure of a Replica search result
+// TODO <08-08-22, kalli> This should reflect the title/filename decisions
 class ReplicaSearchItem {
   ReplicaSearchItem(
     this.displayName,

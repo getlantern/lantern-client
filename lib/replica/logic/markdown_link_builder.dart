@@ -1,11 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/replica_model.dart';
+import 'package:lantern/replica/common.dart';
 import 'package:markdown/markdown.dart' as md;
-
-import 'api.dart';
 
 /// ReplicaLinkMarkdownElementBuilder matches all words (in a markdown text)
 /// starting with the keyword 'replica://' and converts them to clickable links

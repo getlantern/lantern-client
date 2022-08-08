@@ -12,6 +12,7 @@ void main() {
     HttpOverrides.global = null;
   });
 
+  // TODO <08-08-22, kalli> Do we need this test?
   testWidgets('Assert Replica search web works', (WidgetTester tester) async {
     return;
     // TODO <29-11-2021> soltzen: this test doesn't work: it hangs immediately

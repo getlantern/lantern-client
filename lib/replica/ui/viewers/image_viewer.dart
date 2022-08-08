@@ -1,11 +1,10 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/replica_model.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
+import 'package:lantern/replica/common.dart';
 
 /// ReplicaImagePreviewScreen renders a Replica image in the middle of its view
 ///
 /// This screen supports landscape and portrait orientations
+// TODO <08-08-22, kalli> Update to reflect Figma
 class ReplicaImagePreviewScreen extends StatefulWidget {
   ReplicaImagePreviewScreen({Key? key, required this.replicaLink});
 
@@ -58,6 +57,7 @@ class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
           IconButton(
             onPressed: () async {
               await replicaApi.download(widget.replicaLink);
+              // TODO <08-08-22, kalli> Confirm we can use BotToast
               BotToast.showText(text: 'download_started'.i18n);
             },
             icon: CAssetImage(

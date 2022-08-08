@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lantern/common/ui/colors.dart';
 import 'package:lantern/common/ui/custom/asset_image.dart';
 
+// TODO <08-08-22, kalli> We probably won't need this if we shift to using the audio components from messaging
 class PlaybackButton extends StatelessWidget {
   final GestureTapCallback onTap;
   final String path;

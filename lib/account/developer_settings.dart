@@ -291,7 +291,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                 'replica': ReplicaLinkMarkdownElementBuilder(
                   openLink: (replicaApi, replicaLink) {
                     context.pushRoute(
-                      ReplicaLinkOpenerScreen(
+                      ReplicaLinkHandler(
                         replicaApi: replicaApi,
                         replicaLink: replicaLink,
                       ),

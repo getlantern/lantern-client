@@ -1,15 +1,6 @@
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/search_item.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/replica/ui/listitems/image_listitem.dart';
-import 'package:lantern/replica/ui/listviews/common_listview.dart';
 import 'package:lantern/vpn/vpn.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+import 'package:lantern/replica/common.dart';
 
 /// ReplicaImageListView renders a list of ReplicaImageListItem.
 /// Looks like this docs/replica_image_listview.png

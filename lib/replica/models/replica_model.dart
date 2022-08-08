@@ -1,5 +1,5 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
+import 'package:lantern/replica/common.dart';
 
 final replicaModel = ReplicaModel();
 

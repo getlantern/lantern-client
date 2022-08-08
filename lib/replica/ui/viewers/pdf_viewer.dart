@@ -1,17 +1,9 @@
 import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/replica_model.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/replica/ui/common.dart';
-import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:lantern/common/common.dart';
+import 'package:lantern/replica/common.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
-
+// TODO <08-08-22, kalli> Update to reflect Figma
 class ReplicaPDFScreen extends StatefulWidget {
   ReplicaPDFScreen({
     Key? key,

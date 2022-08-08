@@ -1,16 +1,5 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/models/replica_model.dart';
-import 'package:lantern/replica/ui/common.dart';
-import 'package:lantern/replica/ui/listviews/app_listview.dart';
-import 'package:lantern/replica/ui/listviews/audio_listview.dart';
-import 'package:lantern/replica/ui/listviews/document_listview.dart';
-import 'package:lantern/replica/ui/listviews/image_listview.dart';
-import 'package:lantern/replica/ui/listviews/video_listview.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+import 'package:lantern/replica/common.dart';
 
 // ReplicaSearchScreen renders a text field with a TabBar to display the
 // different categories. Each category is a child of ListView (except the
@@ -111,6 +100,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               valueListenable: _searchQueryListener,
               builder: (BuildContext context, String value, Widget? child) {
                 return Expanded(
+                  // TODO <08-08-22, kalli> Everything below is full screen, we want the bottom tabs to show.
                   child: TabBarView(
                     key: const Key('replica_tab_view'),
                     controller: _tabController,

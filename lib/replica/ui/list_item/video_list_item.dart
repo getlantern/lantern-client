@@ -1,13 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/search_item.dart';
-import 'package:logger/logger.dart';
+import 'package:lantern/replica/common.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
-
+// TODO <08-08-22, kalli> Update to reflect Figma
 class ReplicaVideoListItem extends StatelessWidget {
   ReplicaVideoListItem({
     required this.item,

@@ -54,6 +54,7 @@ void main() {
                           mockObserver,
                         ],
                       ),
+                      // TODO <08-08-22, kalli> Confirm we can use BotToast
                       builder: BotToastInit(),
                       supportedLocales: [
                         const Locale('ar', 'EG'),

@@ -1,31 +1,13 @@
-import 'dart:io';
-
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:lantern/common/ui/base_screen.dart';
-import 'package:lantern/common/ui/button.dart';
-import 'package:lantern/common/ui/colors.dart';
-import 'package:lantern/common/ui/custom/asset_image.dart';
-import 'package:lantern/common/ui/custom/list_item_factory.dart';
-import 'package:lantern/common/ui/custom/text.dart';
-import 'package:lantern/common/ui/custom/text_field.dart';
-import 'package:lantern/common/ui/image_paths.dart';
-import 'package:lantern/common/ui/text_styles.dart';
-import 'package:lantern/i18n/i18n.dart';
-import 'package:lantern/replica/logic/uploader.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:logger/logger.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+import 'package:lantern/common/common.dart';
+import 'package:lantern/replica/common.dart';
 
 // ReplicaUploadFileScreen renders a single-item ListView with the contents of
 // 'fileToUpload', allowing the user to change the display name of the upload.
+// TODO <08-08-22, kalli> Will be completely overhauled
 class ReplicaUploadFileScreen extends StatefulWidget {
   final File fileToUpload;
 
@@ -61,6 +43,7 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
         prefixIcon: const CAssetImage(path: ImagePaths.mode_edit),
         keyboardType: TextInputType.text,
         controller: _textEditingController,
+        // TODO <08-08-22, kalli> Confirm our extension/naming strategy
         label: 'name_your_file'.i18n,
         textInputAction: TextInputAction.done,
         onFieldSubmitted: (query) async {
@@ -85,6 +68,7 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
       case SearchCategory.Video:
         // We're using VideoPlayerController to get the duration of the video,
         // which we'll use to pick a thumbnail in the middle
+        // TODO <08-08-22, kalli> Seems a bit hacky to me
         var c = VideoPlayerController.file(file);
         var duration = await c
             .initialize()
@@ -120,6 +104,7 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
     }
   }
 
+  // TODO <08-08-22, kalli> Pretty sure this isn't actually used? We never show a list of uploads 🤔
   Widget renderUploadList() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
@@ -180,9 +165,11 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 2.0),
                     ),
+                    // TODO <08-08-22, kalli> Confirm our extension/naming strategy
                     if (path.extension(widget.fileToUpload.path).isNotEmpty)
                       CText(
                         path
+                            // TODO <08-08-22, kalli> Confirm our extension/naming strategy
                             .extension(widget.fileToUpload.path)
                             .toUpperCase()
                             .replaceAll('.', ''),
@@ -216,9 +203,11 @@ class _ReplicaUploadFileScreenState extends State<ReplicaUploadFileScreen> {
           onPressed: () async {
             await ReplicaUploader.inst.uploadFile(
               widget.fileToUpload,
+              // TODO <08-08-22, kalli> Confirm our extension/naming strategy
               // Add the display name with the extension
               '$_displayName${path.extension(widget.fileToUpload.path)}',
             );
+            // TODO <08-08-22, kalli> Confirm we can use BotToast
             BotToast.showText(text: 'upload_started'.i18n);
             Navigator.of(context).pop();
           },

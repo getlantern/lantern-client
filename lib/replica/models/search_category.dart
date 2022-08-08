@@ -89,6 +89,7 @@ extension MimeTypes on SearchCategory {
   }
 }
 
+// TODO <08-08-22, kalli> Confirm our extension/naming strategy
 SearchCategory SearchCategoryFromMimeType(String? contentType) {
   if (contentType == null || contentType.isEmpty) {
     return SearchCategory.Unknown;

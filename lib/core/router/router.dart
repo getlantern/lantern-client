@@ -20,14 +20,14 @@ import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
-import 'package:lantern/replica/ui/link_opener_screen.dart';
-import 'package:lantern/replica/ui/media_views/audio_player_screen.dart';
-import 'package:lantern/replica/ui/media_views/image_preview_screen.dart';
-import 'package:lantern/replica/ui/media_views/pdf_screen.dart';
-import 'package:lantern/replica/ui/media_views/unknown_item_screen.dart';
-import 'package:lantern/replica/ui/media_views/video_player_screen.dart';
-import 'package:lantern/replica/ui/search_screen.dart';
-import 'package:lantern/replica/ui/upload_file.dart';
+import 'package:lantern/replica/link_handler.dart';
+import 'package:lantern/replica/ui/viewers/audio_viewer.dart';
+import 'package:lantern/replica/ui/viewers/image_viewer.dart';
+import 'package:lantern/replica/ui/viewers/pdf_viewer.dart';
+import 'package:lantern/replica/ui/viewers/unknown.dart';
+import 'package:lantern/replica/ui/viewers/video_viewer.dart';
+import 'package:lantern/replica/search.dart';
+import 'package:lantern/replica/upload.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -119,9 +119,9 @@ import 'package:lantern/replica/ui/upload_file.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: ReplicaLinkOpenerScreen,
-      name: 'ReplicaLinkOpenerScreen',
-      path: 'replicaLinkOpenerScreen',
+      page: ReplicaLinkHandler,
+      name: 'ReplicaLinkHandler',
+      path: 'replicaLinkHandler',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
@@ -174,6 +174,8 @@ import 'package:lantern/replica/ui/upload_file.dart';
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
+    // TODO <08-08-22, kalli> Add route(s) for upload edit flow
+    // TODO <08-08-22, kalli> Add route(s) for upload confirm flow
     CustomRoute<void>(
       page: AuthorizeDeviceViaEmail,
       name: 'AuthorizeDeviceEmail',
