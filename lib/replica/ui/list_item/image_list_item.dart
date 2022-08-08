@@ -6,15 +6,9 @@ import 'package:lantern/common/ui/custom/text.dart';
 import 'package:lantern/common/ui/focused_menu.dart';
 import 'package:lantern/common/ui/image_paths.dart';
 import 'package:lantern/common/ui/text_styles.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/search_item.dart';
-import 'package:lantern/replica/ui/common.dart';
-import 'package:logger/logger.dart';
+import 'package:lantern/replica/common.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
-
+// TODO <08-08-22, kalli> Update to reflect Figma
 class ReplicaImageListItem extends StatelessWidget {
   ReplicaImageListItem({
     required this.item,
@@ -32,7 +26,8 @@ class ReplicaImageListItem extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: FocusedMenuHolder(
-          menu: renderReplicaLongPressMenuItem(context, replicaApi, item.replicaLink),
+          menu: renderReplicaLongPressMenuItem(
+              context, replicaApi, item.replicaLink),
           menuWidth: MediaQuery.of(context).size.width * 0.8,
           builder: (_) {
             return GridTile(

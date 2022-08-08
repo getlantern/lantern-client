@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/search_item.dart';
+import 'package:lantern/replica/common.dart';
 
+// TODO <08-08-22, kalli> Update to reflect Figma
 class ReplicaAudioListItem extends StatelessWidget {
   ReplicaAudioListItem({
     required this.item,

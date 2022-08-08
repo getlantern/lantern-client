@@ -30,6 +30,7 @@ Widget boilerplate(Widget child) {
   );
 }
 
+// TODO <08-08-22, kalli> We might want to move this to integration tests and use our test driver library
 void main() {
   testWidgets('Assert Replica links work in MarkdownBody',
       (WidgetTester tester) async {

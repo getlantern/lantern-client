@@ -2,11 +2,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/replica_model.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
+import 'package:lantern/replica/models/search_category.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 // renderReplicaLongPressMenuItem is used for rendering list/grid items located
-// in the ./ui/replica/listitems directory
+// in the ./ui/replica/list_item directory
 SizedBox renderReplicaLongPressMenuItem(
   BuildContext context,
   ReplicaApi api,
@@ -37,7 +37,8 @@ SizedBox renderReplicaLongPressMenuItem(
 }
 
 // renderReplicaMediaViewScreen is used as the root widget for all Replica media
-// views (located in ./ui/replica/media_views directory)
+// views (located in ./ui/replica/viewers directory)
+// TODO <08-08-22, kalli> This is a layout, rename and/or move accordingly
 Widget renderReplicaMediaViewScreen({
   required BuildContext context,
   required ReplicaApi api,
@@ -76,6 +77,7 @@ Widget renderReplicaMediaViewScreen({
       IconButton(
         onPressed: () async {
           await api.download(link);
+          // TODO <08-08-22, kalli> Confirm we can use BotToast
           BotToast.showText(text: 'download_started'.i18n);
         },
         icon: CAssetImage(
@@ -99,6 +101,7 @@ Widget renderReplicaMediaViewScreen({
 // - When the upload is done, send another notification saying it's done
 //   - If the user clicks on this notification, they would be prompted
 //     with a Share dialog to share the Replica link
+// TODO <08-08-22, kalli> Will be overhauled entirely, and will be broken up in multiple screens
 Future<void> onUploadButtonPressed(BuildContext context) async {
   var result = await FilePicker.platform.pickFiles();
   if (result == null) {

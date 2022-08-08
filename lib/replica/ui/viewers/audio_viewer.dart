@@ -1,20 +1,14 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/notifications.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/replica/ui/common.dart';
-import 'package:logger/logger.dart' as log;
-
-var logger = log.Logger(
-  printer: log.PrettyPrinter(),
-);
+import 'package:lantern/replica/common.dart';
 
 /// ReplicaAudioPlayScreen takes a 'replicaLink' of an audio and attempts to
 /// stream it. If it can't stream the link, it'll show an error screen.
 ///
 /// This screen supports landscape and portrait orientations
+// TODO <08-08-22, kalli> Will need to move away from audioplayers package
+// and use in messaging/conversation/audio
 class ReplicaAudioPlayerScreen extends StatefulWidget {
   ReplicaAudioPlayerScreen({
     Key? key,

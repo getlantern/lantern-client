@@ -1,14 +1,7 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:logger/logger.dart';
+import 'package:lantern/replica/common.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
-
-/// LinkOpenerScreen is a 'loading' screen for Replica links that:
+/// ReplicaLinkHandler is a 'loading' screen for Replica links that:
 /// - Checks if Replica is available by re-running ReplicaCommon.init()
 ///   - This may not be initialized if we came from a deeplink
 /// - Determine the content type of this Replica link (e.g., video, PDF, etc.)
@@ -25,8 +18,8 @@ var logger = Logger(
 /// tab will not be visible if Replica is not initialized.
 /// In other words, we will never reach any Replica screen (other than this) if
 /// Replica is not initialized.
-class ReplicaLinkOpenerScreen extends StatefulWidget {
-  ReplicaLinkOpenerScreen({
+class ReplicaLinkHandler extends StatefulWidget {
+  ReplicaLinkHandler({
     Key? key,
     required this.replicaApi,
     required this.replicaLink,
@@ -38,7 +31,7 @@ class ReplicaLinkOpenerScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _LinkOpenerScreen();
 }
 
-class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
+class _LinkOpenerScreen extends State<ReplicaLinkHandler> {
   @override
   void initState() {
     widget.replicaApi

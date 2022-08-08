@@ -1,10 +1,5 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/ui/common.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+import 'package:lantern/replica/common.dart';
 
 /// ReplicaHomeScreen is the entrypoint for the user to search through Replica.
 /// See docs/replica_home.png for a preview
@@ -18,7 +13,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   late final _textEditingController =
       CustomTextEditingController(formKey: _formKey);
 
-  // Two ways to navigate to seach screen:
+  // Two ways to navigate to search screen:
   // - Click the magnifier icon next to the search bar
   // - Or, just click enter in the search bar
   Future<void> _navigateToSearchScreen(String query) async {
@@ -51,14 +46,14 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
                 },
               ),
             ),
-            renderDescription()
+            renderDiscoverPopup()
           ],
         ),
       ),
     );
   }
 
-  Widget renderDescription() {
+  Widget renderDiscoverPopup() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 10.0),
       child: Column(

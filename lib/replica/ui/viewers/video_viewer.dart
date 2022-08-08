@@ -1,11 +1,9 @@
-import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
 import 'package:video_player/video_player.dart';
+import 'package:lantern/common/common.dart';
+import 'package:lantern/replica/common.dart';
 
 /// ReplicaVideoPlayerScreen takes a 'replicaLink' of a video and attempts to stream it. CVideoViewer handles orientation and errors.
-
+// TODO <08-08-22, kalli> Update to reflect Figma
 class ReplicaVideoPlayerScreen extends StatelessWidget {
   ReplicaVideoPlayerScreen({
     Key? key,
@@ -52,6 +50,7 @@ class ReplicaVideoPlayerScreen extends StatelessWidget {
           IconButton(
             onPressed: () async {
               await replicaApi.download(replicaLink);
+              // TODO <08-08-22, kalli> Confirm we can use BotToast
               BotToast.showText(text: 'download_started'.i18n);
             },
             icon: CAssetImage(

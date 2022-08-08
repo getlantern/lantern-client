@@ -1,10 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/replica_model.dart';
-import 'package:lantern/replica/models/search_item.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:logger/logger.dart';
+import 'package:lantern/replica/common.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 var logger = Logger(

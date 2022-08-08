@@ -1,11 +1,6 @@
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/notifications.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
 
 /// ReplicaUploader is a singleton class. Use it like this:
 /// - Initialize ReplicaUploader by calling ReplicaUploader.inst.init()

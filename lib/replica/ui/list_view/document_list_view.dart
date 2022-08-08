@@ -1,15 +1,7 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:lantern/core/router/router.gr.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/replica/ui/listitems/document_listitem.dart';
-import 'package:lantern/replica/ui/listviews/common_listview.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+import 'package:lantern/replica/common.dart';
 
 /// ReplicaDocumentListView renders a list of ReplicaDocumentListItem.
 /// Looks very similar to ReplicaAppListView

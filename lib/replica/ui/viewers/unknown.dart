@@ -1,13 +1,5 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/replica_model.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/replica/ui/common.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+import 'package:lantern/replica/common.dart';
 
 /// ReplicaUnknownItemScreen is the default preview screen for replica items
 /// that we couldn't figure out their category.
@@ -19,6 +11,7 @@ var logger = Logger(
 /// this screen: this happens since the error could've occurred because of a
 /// timeout, not a faulty link. This should be fixed to address faulty links as
 /// opposed to timeouts
+// TODO <08-08-22, kalli> Pending design confirmation, sounds like we should chat with soltzen about this too
 class ReplicaUnknownItemScreen extends StatefulWidget {
   ReplicaUnknownItemScreen({
     Key? key,
@@ -68,6 +61,7 @@ class _ReplicaUnknownItemScreenState extends State<ReplicaUnknownItemScreen> {
                   TextButton(
                     onPressed: () async {
                       await replicaApi.download(widget.replicaLink);
+                      // TODO <08-08-22, kalli> Confirm we can use BotToast
                       BotToast.showText(text: 'download_started'.i18n);
                     },
                     child: CText(

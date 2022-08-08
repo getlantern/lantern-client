@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/ui/common.dart';
+import 'package:lantern/replica/ui/utils.dart';
 
 class ListItemFactory extends StatelessWidget {
   final Widget Function(BuildContext, ListItemFactory) builder;
