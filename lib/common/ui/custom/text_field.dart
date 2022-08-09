@@ -21,6 +21,7 @@ class CTextField extends StatefulWidget {
   late final TextInputAction? textInputAction;
   late final void Function(String value)? onFieldSubmitted;
   late final String? actionIconPath;
+  late final TextStyle? style;
 
   CTextField({
     required this.controller,
@@ -39,6 +40,7 @@ class CTextField extends StatefulWidget {
     this.textInputAction,
     this.onFieldSubmitted,
     this.actionIconPath,
+    this.style,
   }) {
     if (initialValue != null) {
       controller.text = initialValue!;
@@ -94,6 +96,7 @@ class _CTextFieldState extends State<CTextField> {
             textInputAction: widget.textInputAction,
             minLines: widget.minLines,
             maxLines: widget.maxLines,
+            style: widget.style,
             inputFormatters: widget.inputFormatters,
             decoration: InputDecoration(
               isDense: true,

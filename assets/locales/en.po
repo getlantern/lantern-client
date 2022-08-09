@@ -123,7 +123,7 @@ msgid "report_issue"
 msgstr "Report an issue"
 
 msgid "check_for_updates"
-msgstr "Check for Updates
+msgstr "Check for Updates"
 
 msgid "blocked_users"
 msgstr "Blocked Users"
@@ -1009,11 +1009,32 @@ msgstr "Share"
 msgid "upload_file_screen"
 msgstr "Upload File"
 
+msgid "edit_title"
+msgstr "Edit Title"
+
+msgid "add_description"
+msgstr "Add Description"
+
+msgid "description_initial_value"
+msgstr "Description cannot be modified once published"
+
 msgid "name_your_file"
 msgstr "Name Your File"
 
 msgid "upload"
 msgstr "Upload"
+
+msgid "review"
+msgstr "Review"
+
+msgid "publish"
+msgstr "Publish"
+
+msgid "important"
+msgstr "Important!"
+
+msgid "upload_tos_agree"
+msgstr "I understand"
 
 msgid "test_text"
 msgstr "I want to eat some pizza 🍕 😊"
