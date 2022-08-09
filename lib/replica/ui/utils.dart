@@ -1,9 +1,9 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/replica_model.dart';
-import 'package:lantern/replica/models/search_category.dart';
 import 'package:lantern/vpn/vpn.dart';
+import 'package:video_player/video_player.dart';
+import 'package:mime/mime.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:lantern/replica/common.dart';
 
 // renderReplicaLongPressMenuItem is used for rendering list/grid items located
 // in the ./ui/replica/list_item directory
@@ -102,6 +102,7 @@ Widget renderReplicaMediaViewScreen({
 //   - If the user clicks on this notification, they would be prompted
 //     with a Share dialog to share the Replica link
 // TODO <08-08-22, kalli> Will be overhauled entirely, and will be broken up in multiple screens
+// TODO <08-09-22, kalli> Make sure comments are updated
 Future<void> onUploadButtonPressed(BuildContext context) async {
   var result = await FilePicker.platform.pickFiles();
   if (result == null) {
@@ -115,7 +116,7 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
   if (suppressUploadWarning == true) {
     // Immediately proceed to upload screen
     await context.pushRoute(
-      ReplicaUploadFileScreen(
+      ReplicaUploadTitle(
         fileToUpload: file,
       ),
     );
@@ -131,13 +132,63 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
           await replicaModel.setSuppressUploadWarning(true);
         }
         await context.pushRoute(
-          ReplicaUploadFileScreen(
+          ReplicaUploadTitle(
             fileToUpload: file,
           ),
         );
         return true;
       },
     ).show(context);
+  }
+}
+
+Future<Widget> getUploadThumbnailFromFile(File file) async {
+  var cat = SearchCategoryFromMimeType(lookupMimeType(file.path));
+  switch (cat) {
+    case SearchCategory.Image:
+      return Image.file(
+        file,
+        width: 150,
+        height: 150,
+        filterQuality: FilterQuality.medium,
+        fit: BoxFit.cover,
+      );
+    case SearchCategory.Video:
+      // We're using VideoPlayerController to get the duration of the video,
+      // which we'll use to pick a thumbnail in the middle
+      // TODO <08-08-22, kalli> Seems a bit hacky to me
+      var c = VideoPlayerController.file(file);
+      var duration = await c
+          .initialize()
+          .then((_) => c.value.duration.inMilliseconds)
+          .onError((error, stackTrace) => 0);
+      logger.v('Duration: $duration');
+      if (duration == 0.0) {
+        // If we failed to fetch the duration, just return the default SVG
+        return CAssetImage(path: cat.getRelevantImagePath());
+      }
+      var b = await VideoThumbnail.thumbnailData(
+        video: file.path,
+        imageFormat: ImageFormat.JPEG,
+        maxWidth: 150,
+        maxHeight: 150,
+        quality: 25,
+        timeMs: duration ~/ 2,
+      );
+      if (b == null) {
+        // If we failed to fetch the thumbnail, just return the default SVG
+        return CAssetImage(path: cat.getRelevantImagePath());
+      }
+      return Image.memory(
+        b,
+        width: 150,
+        height: 150,
+      );
+    case SearchCategory.Audio:
+    case SearchCategory.Document:
+    case SearchCategory.App:
+    case SearchCategory.Unknown:
+      return CAssetImage(path: cat.getRelevantImagePath());
   }
 }
 

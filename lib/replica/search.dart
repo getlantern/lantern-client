@@ -17,18 +17,18 @@ class ReplicaSearchScreen extends StatefulWidget {
 
 class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
     with TickerProviderStateMixin {
-  late ValueNotifier<String> _searchQueryListener;
-  late final TabController _tabController =
+  late ValueNotifier<String> searchQueryListener;
+  late final TabController tabController =
       // Video + Image + Audio + Document + App = 5 categories
       TabController(length: 5, vsync: this);
-  final _formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
-  late final CustomTextEditingController _textEditingController;
+  final formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
+  late final CustomTextEditingController textEditingController;
 
   _ReplicaSearchScreenState(String searchQuery) {
-    _textEditingController =
-        CustomTextEditingController(formKey: _formKey, text: searchQuery);
+    textEditingController =
+        CustomTextEditingController(formKey: formKey, text: searchQuery);
     if (searchQuery != '') {
-      _searchQueryListener = ValueNotifier<String>(searchQuery);
+      searchQueryListener = ValueNotifier<String>(searchQuery);
     }
   }
 
@@ -56,19 +56,19 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
           children: [
             const SizedBox(height: 30),
             SearchField(
-              controller: _textEditingController,
+              controller: textEditingController,
               search: (query) async {
                 FocusScope.of(context).requestFocus(FocusNode());
-                if (_textEditingController.text != '') {
+                if (textEditingController.text != '') {
                   setState(() {
-                    _searchQueryListener.value = _textEditingController.text;
+                    searchQueryListener.value = textEditingController.text;
                   });
                 }
               },
             ),
             const SizedBox(height: 10),
             TabBar(
-              controller: _tabController,
+              controller: tabController,
               unselectedLabelStyle: tsBody1,
               unselectedLabelColor: grey5,
               indicatorColor: indicatorRed,
@@ -97,13 +97,13 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
             // TODO <17-12-2021> soltzen: ValueListenableBuilder may not be
             // necessary: try without it (just with setState and see)
             ValueListenableBuilder<String>(
-              valueListenable: _searchQueryListener,
+              valueListenable: searchQueryListener,
               builder: (BuildContext context, String value, Widget? child) {
                 return Expanded(
                   // TODO <08-08-22, kalli> Everything below is full screen, we want the bottom tabs to show.
                   child: TabBarView(
                     key: const Key('replica_tab_view'),
-                    controller: _tabController,
+                    controller: tabController,
                     children: [
                       ReplicaVideoListView(
                         replicaApi: replicaApi,

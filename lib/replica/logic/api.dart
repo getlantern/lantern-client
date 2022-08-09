@@ -24,13 +24,13 @@ class ReplicaApi {
         connectTimeout: 30000, // 30s
       ),
     );
-    _durationCache = LRUCache<ReplicaLink, double?>(1000, doFetchDuration);
+    durationCache = LRUCache<ReplicaLink, double?>(1000, doFetchDuration);
   }
 
   late Dio dio;
   final String replicaHostAddr;
-  final _defaultTimeoutDuration = const Duration(seconds: 7);
-  late final LRUCache<ReplicaLink, double?> _durationCache;
+  final defaultTimeoutDuration = const Duration(seconds: 7);
+  late final LRUCache<ReplicaLink, double?> durationCache;
 
   bool get available {
     return replicaHostAddr != '';
@@ -94,7 +94,7 @@ class ReplicaApi {
     logger.v('fetchCategoryFromReplicaLink: $u');
 
     try {
-      var resp = await dio.head(u).timeout(_defaultTimeoutDuration);
+      var resp = await dio.head(u).timeout(defaultTimeoutDuration);
       if (resp.statusCode != 200) {
         throw Exception('fetching category from $u');
       }
@@ -108,7 +108,7 @@ class ReplicaApi {
   /// fetchDuration fetches the duration of 'replicaLink' through Replica's backend.
   /// If it can't find it (or failed to find it), return a null
   ValueListenable<CachedValue<double?>> getDuration(ReplicaLink replicaLink) {
-    return _durationCache.get(replicaLink);
+    return durationCache.get(replicaLink);
   }
 
   Future<double?> doFetchDuration(ReplicaLink replicaLink) async {

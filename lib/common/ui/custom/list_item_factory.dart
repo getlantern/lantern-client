@@ -8,27 +8,6 @@ class ListItemFactory extends StatelessWidget {
 
   ListItemFactory(this.builder);
 
-  ListItemFactory.uploadEditItem({
-    Widget? leading,
-    required Widget content,
-    List<Widget>? trailingArray,
-    double height = 90.0,
-  }) : this((BuildContext context, ListItemFactory factory) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              factory.buildBase(
-                leading: leading,
-                content: content,
-                trailingArray: trailingArray,
-                showDivider: true,
-                height: height,
-              ),
-            ],
-          );
-        });
-
   ListItemFactory.replicaItem({
     Widget? leading,
     required Widget content,

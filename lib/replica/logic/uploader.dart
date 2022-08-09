@@ -36,6 +36,7 @@ class ReplicaUploader {
 
   Future<void> uploadFile(File file, String displayName) async {
     final replicaAddr = await sessionModel.getReplicaAddr();
+    // TODO <08-09-22, kalli> Depends on naming decisions
     var uploadUrl =
         'http://$replicaAddr/replica/upload?name=${Uri.encodeComponent(displayName)}';
     logger.v('uploadUrl: $uploadUrl');

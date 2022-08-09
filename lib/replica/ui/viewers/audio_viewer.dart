@@ -26,19 +26,19 @@ class ReplicaAudioPlayerScreen extends StatefulWidget {
 
 class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
   final mode = PlayerMode.MEDIA_PLAYER;
-  final _defaultSeekDurationInSeconds = 3;
-  late AudioPlayer _audioPlayer;
-  Duration? _totalDuration;
-  Duration? _position;
-  PlayerState _playerState = PlayerState.STOPPED;
-  StreamSubscription? _durationSubscription;
-  StreamSubscription? _positionSubscription;
-  StreamSubscription? _playerCompleteSubscription;
-  StreamSubscription? _playerErrorSubscription;
-  StreamSubscription? _playerStateSubscription;
-  StreamSubscription<PlayerControlCommand>? _playerControlCommandSubscription;
+  final defaultSeekDurationInSeconds = 3;
+  late AudioPlayer audioPlayer;
+  Duration? totalDuration;
+  Duration? position;
+  PlayerState playerState = PlayerState.STOPPED;
+  StreamSubscription? durationSubscription;
+  StreamSubscription? positionSubscription;
+  StreamSubscription? playerCompleteSubscription;
+  StreamSubscription? playerErrorSubscription;
+  StreamSubscription? playerStateSubscription;
+  StreamSubscription<PlayerControlCommand>? playerControlCommandSubscription;
 
-  bool get _isPlaying => _playerState == PlayerState.PLAYING;
+  bool get _isPlaying => playerState == PlayerState.PLAYING;
 
   @override
   void initState() {
@@ -48,13 +48,13 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
-    _durationSubscription?.cancel();
-    _positionSubscription?.cancel();
-    _playerCompleteSubscription?.cancel();
-    _playerErrorSubscription?.cancel();
-    _playerStateSubscription?.cancel();
-    _playerControlCommandSubscription?.cancel();
+    audioPlayer.dispose();
+    durationSubscription?.cancel();
+    positionSubscription?.cancel();
+    playerCompleteSubscription?.cancel();
+    playerErrorSubscription?.cancel();
+    playerStateSubscription?.cancel();
+    playerControlCommandSubscription?.cancel();
     super.dispose();
   }
 
@@ -99,16 +99,16 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
                 size: 16,
               ),
               onPressed: () async {
-                if (_position == null) {
+                if (position == null) {
                   return;
                 }
-                _position = Duration(
+                position = Duration(
                   seconds: max(
                     0,
-                    _position!.inSeconds - _defaultSeekDurationInSeconds,
+                    position!.inSeconds - defaultSeekDurationInSeconds,
                   ).round(),
                 );
-                await _audioPlayer.seek(_position!);
+                await audioPlayer.seek(position!);
               },
             ),
           ),
@@ -136,16 +136,16 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
             height: 32,
             child: FloatingActionButton(
               onPressed: () async {
-                if (_position == null || _totalDuration == null) {
+                if (position == null || totalDuration == null) {
                   return;
                 }
-                _position = Duration(
+                position = Duration(
                   seconds: min(
-                    _totalDuration!.inSeconds,
-                    _position!.inSeconds + _defaultSeekDurationInSeconds,
+                    totalDuration!.inSeconds,
+                    position!.inSeconds + defaultSeekDurationInSeconds,
                   ).round(),
                 );
-                await _audioPlayer.seek(_position!);
+                await audioPlayer.seek(position!);
               },
               child: const CAssetImage(
                 path: ImagePaths.fast_forward,
@@ -175,19 +175,18 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
           children: [
             Slider(
               onChanged: (v) {
-                final duration = _totalDuration;
+                final duration = totalDuration;
                 if (duration == null) {
                   return;
                 }
                 final Position = v * duration.inMilliseconds;
-                _audioPlayer.seek(Duration(milliseconds: Position.round()));
+                audioPlayer.seek(Duration(milliseconds: Position.round()));
               },
-              value: (_position != null &&
-                      _totalDuration != null &&
-                      _position!.inMilliseconds > 0 &&
-                      _position!.inMilliseconds <
-                          _totalDuration!.inMilliseconds)
-                  ? _position!.inMilliseconds / _totalDuration!.inMilliseconds
+              value: (position != null &&
+                      totalDuration != null &&
+                      position!.inMilliseconds > 0 &&
+                      position!.inMilliseconds < totalDuration!.inMilliseconds)
+                  ? position!.inMilliseconds / totalDuration!.inMilliseconds
                   : 0.0,
             ),
 
@@ -199,14 +198,14 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CText(
-                    _position != null
-                        ? _position!.toString().split('.').first
+                    position != null
+                        ? position!.toString().split('.').first
                         : '00:00',
                     style: CTextStyle(fontSize: 12.0, lineHeight: 4.0),
                   ),
                   CText(
-                    _totalDuration != null
-                        ? _totalDuration!.toString().split('.').first
+                    totalDuration != null
+                        ? totalDuration!.toString().split('.').first
                         : '00:00',
                     style: CTextStyle(fontSize: 12.0, lineHeight: 4.0),
                   ),
@@ -220,36 +219,35 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
   }
 
   void _initAudioPlayer() {
-    _audioPlayer = AudioPlayer(mode: mode);
-    _durationSubscription = _audioPlayer.onDurationChanged.listen((duration) {
-      setState(() => _totalDuration = duration);
+    audioPlayer = AudioPlayer(mode: mode);
+    durationSubscription = audioPlayer.onDurationChanged.listen((duration) {
+      setState(() => totalDuration = duration);
     });
 
-    _positionSubscription = _audioPlayer.onAudioPositionChanged.listen(
+    positionSubscription = audioPlayer.onAudioPositionChanged.listen(
       (p) => setState(() {
-        _position = p;
+        position = p;
       }),
     );
 
-    _playerCompleteSubscription =
-        _audioPlayer.onPlayerCompletion.listen((event) {
+    playerCompleteSubscription = audioPlayer.onPlayerCompletion.listen((event) {
       _onComplete();
       setState(() {
-        _position = _totalDuration;
+        position = totalDuration;
       });
     });
 
-    _playerErrorSubscription = _audioPlayer.onPlayerError.listen((msg) {
+    playerErrorSubscription = audioPlayer.onPlayerError.listen((msg) {
       logger.w('audioPlayer error : $msg');
       setState(() {
-        _playerState = PlayerState.STOPPED;
-        _totalDuration = const Duration();
-        _position = const Duration();
+        playerState = PlayerState.STOPPED;
+        totalDuration = const Duration();
+        position = const Duration();
       });
     });
 
-    _playerControlCommandSubscription =
-        _audioPlayer.notificationService.onPlayerCommand.listen((command) {});
+    playerControlCommandSubscription =
+        audioPlayer.notificationService.onPlayerCommand.listen((command) {});
 
     _play().then((_) {
       setState(() {});
@@ -257,32 +255,32 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
   }
 
   Future<int> _play() async {
-    final playPosition = (_position != null &&
-            _totalDuration != null &&
-            _position!.inMilliseconds > 0 &&
-            _position!.inMilliseconds < _totalDuration!.inMilliseconds)
-        ? _position
+    final playPosition = (position != null &&
+            totalDuration != null &&
+            position!.inMilliseconds > 0 &&
+            position!.inMilliseconds < totalDuration!.inMilliseconds)
+        ? position
         : null;
-    final result = await _audioPlayer.play(
+    final result = await audioPlayer.play(
       widget.replicaApi.getDownloadAddr(widget.replicaLink),
       position: playPosition,
     );
     if (result == 1) {
-      setState(() => _playerState = PlayerState.PLAYING);
+      setState(() => playerState = PlayerState.PLAYING);
     }
 
     return result;
   }
 
   Future<int> _pause() async {
-    final result = await _audioPlayer.pause();
+    final result = await audioPlayer.pause();
     if (result == 1) {
-      setState(() => _playerState = PlayerState.PAUSED);
+      setState(() => playerState = PlayerState.PAUSED);
     }
     return result;
   }
 
   void _onComplete() {
-    setState(() => _playerState = PlayerState.STOPPED);
+    setState(() => playerState = PlayerState.STOPPED);
   }
 }

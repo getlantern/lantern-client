@@ -27,7 +27,9 @@ import 'package:lantern/replica/ui/viewers/pdf_viewer.dart';
 import 'package:lantern/replica/ui/viewers/unknown.dart';
 import 'package:lantern/replica/ui/viewers/video_viewer.dart';
 import 'package:lantern/replica/search.dart';
-import 'package:lantern/replica/upload.dart';
+import 'package:lantern/replica/upload/title.dart';
+import 'package:lantern/replica/upload/description.dart';
+import 'package:lantern/replica/upload/review.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -174,8 +176,6 @@ import 'package:lantern/replica/upload.dart';
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
-    // TODO <08-08-22, kalli> Add route(s) for upload edit flow
-    // TODO <08-08-22, kalli> Add route(s) for upload confirm flow
     CustomRoute<void>(
       page: AuthorizeDeviceViaEmail,
       name: 'AuthorizeDeviceEmail',
@@ -249,9 +249,25 @@ import 'package:lantern/replica/upload.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: ReplicaUploadFileScreen,
-      name: 'ReplicaUploadFileScreen',
-      path: 'replicaUploadFileScreen',
+      page: ReplicaUploadTitle,
+      name: 'ReplicaUploadTitle',
+      path: 'replicaUploadTitle',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: ReplicaUploadDescription,
+      name: 'ReplicaUploadDescription',
+      path: 'replicaUploadDescription',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: ReplicaUploadReview,
+      name: 'ReplicaUploadReview',
+      path: 'replicaUploadReview',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
