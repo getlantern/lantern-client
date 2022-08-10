@@ -27,6 +27,7 @@ class CTextField extends StatefulWidget {
   late final TextStyle? style;
   late final void Function()? onTap;
   late final bool removeBorder;
+  late final bool? autofocus;
 
   CTextField({
     required this.controller,
@@ -51,6 +52,7 @@ class CTextField extends StatefulWidget {
     this.style,
     this.onTap,
     this.removeBorder = false,
+    this.autofocus = false,
   }) {
     if (initialValue != null && initialValue != '') {
       controller.text = initialValue!;
@@ -102,6 +104,7 @@ class _CTextFieldState extends State<CTextField> {
           padding: const EdgeInsetsDirectional.only(top: 7),
           child: TextFormField(
             key: fieldKey,
+            autofocus: widget.autofocus!,
             enabled: widget.enabled,
             controller: widget.controller,
             autovalidateMode: widget.autovalidateMode,
@@ -168,7 +171,9 @@ class _CTextFieldState extends State<CTextField> {
                       ? Transform.scale(scale: 0.4, child: widget.prefixIcon)
                       : null,
               suffixIcon: renderSuffixRow(),
-              counterText: '',
+              // forcibly remove if removeBorder == true
+              // otherwise, it will show up if we have a maxLength set
+              counterText: widget.removeBorder ? '' : null,
             ),
           ),
         ),

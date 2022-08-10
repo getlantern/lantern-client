@@ -36,7 +36,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
               child: SearchField(
                 controller: _textEditingController,
                 search: (query) async {
@@ -55,7 +55,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
 
   Widget renderDiscoverPopup() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 10.0),
+      padding: const EdgeInsetsDirectional.all(12.0),
       child: Column(
         children: [
           CText('replica_search_intro'.i18n, style: tsBody1),

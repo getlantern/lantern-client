@@ -377,7 +377,10 @@ class AppRouter extends _i31.RootStackRouter {
       return _i31.CustomPage<void>(
           routeData: routeData,
           child: _i28.ReplicaUploadTitle(
-              key: args.key, fileToUpload: args.fileToUpload),
+              key: args.key,
+              fileToUpload: args.fileToUpload,
+              fileTitle: args.fileTitle,
+              fileDescription: args.fileDescription),
           transitionsBuilder: _i31.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -391,7 +394,8 @@ class AppRouter extends _i31.RootStackRouter {
           child: _i29.ReplicaUploadDescription(
               key: args.key,
               fileToUpload: args.fileToUpload,
-              fileTitle: args.fileTitle),
+              fileTitle: args.fileTitle,
+              fileDescription: args.fileDescription),
           transitionsBuilder: _i31.TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           reverseDurationInMilliseconds: 200,
@@ -1082,24 +1086,40 @@ class ReplicaSearchScreenArgs {
 /// generated route for
 /// [_i28.ReplicaUploadTitle]
 class ReplicaUploadTitle extends _i31.PageRouteInfo<ReplicaUploadTitleArgs> {
-  ReplicaUploadTitle({_i33.Key? key, required _i33.File fileToUpload})
+  ReplicaUploadTitle(
+      {_i33.Key? key,
+      required _i33.File fileToUpload,
+      String? fileTitle,
+      String? fileDescription})
       : super(ReplicaUploadTitle.name,
             path: 'replicaUploadTitle',
-            args: ReplicaUploadTitleArgs(key: key, fileToUpload: fileToUpload));
+            args: ReplicaUploadTitleArgs(
+                key: key,
+                fileToUpload: fileToUpload,
+                fileTitle: fileTitle,
+                fileDescription: fileDescription));
 
   static const String name = 'ReplicaUploadTitle';
 }
 
 class ReplicaUploadTitleArgs {
-  const ReplicaUploadTitleArgs({this.key, required this.fileToUpload});
+  const ReplicaUploadTitleArgs(
+      {this.key,
+      required this.fileToUpload,
+      this.fileTitle,
+      this.fileDescription});
 
   final _i33.Key? key;
 
   final _i33.File fileToUpload;
 
+  final String? fileTitle;
+
+  final String? fileDescription;
+
   @override
   String toString() {
-    return 'ReplicaUploadTitleArgs{key: $key, fileToUpload: $fileToUpload}';
+    return 'ReplicaUploadTitleArgs{key: $key, fileToUpload: $fileToUpload, fileTitle: $fileTitle, fileDescription: $fileDescription}';
   }
 }
 
@@ -1110,18 +1130,25 @@ class ReplicaUploadDescription
   ReplicaUploadDescription(
       {_i33.Key? key,
       required _i33.File fileToUpload,
-      required String fileTitle})
+      required String fileTitle,
+      String? fileDescription})
       : super(ReplicaUploadDescription.name,
             path: 'replicaUploadDescription',
             args: ReplicaUploadDescriptionArgs(
-                key: key, fileToUpload: fileToUpload, fileTitle: fileTitle));
+                key: key,
+                fileToUpload: fileToUpload,
+                fileTitle: fileTitle,
+                fileDescription: fileDescription));
 
   static const String name = 'ReplicaUploadDescription';
 }
 
 class ReplicaUploadDescriptionArgs {
   const ReplicaUploadDescriptionArgs(
-      {this.key, required this.fileToUpload, required this.fileTitle});
+      {this.key,
+      required this.fileToUpload,
+      required this.fileTitle,
+      this.fileDescription});
 
   final _i33.Key? key;
 
@@ -1129,9 +1156,11 @@ class ReplicaUploadDescriptionArgs {
 
   final String fileTitle;
 
+  final String? fileDescription;
+
   @override
   String toString() {
-    return 'ReplicaUploadDescriptionArgs{key: $key, fileToUpload: $fileToUpload, fileTitle: $fileTitle}';
+    return 'ReplicaUploadDescriptionArgs{key: $key, fileToUpload: $fileToUpload, fileTitle: $fileTitle, fileDescription: $fileDescription}';
   }
 }
 
@@ -1142,7 +1171,7 @@ class ReplicaUploadReview extends _i31.PageRouteInfo<ReplicaUploadReviewArgs> {
       {_i33.Key? key,
       required _i33.File fileToUpload,
       required String fileTitle,
-      required String fileDescription})
+      String? fileDescription})
       : super(ReplicaUploadReview.name,
             path: 'replicaUploadReview',
             args: ReplicaUploadReviewArgs(
@@ -1159,7 +1188,7 @@ class ReplicaUploadReviewArgs {
       {this.key,
       required this.fileToUpload,
       required this.fileTitle,
-      required this.fileDescription});
+      this.fileDescription});
 
   final _i33.Key? key;
 
@@ -1167,7 +1196,7 @@ class ReplicaUploadReviewArgs {
 
   final String fileTitle;
 
-  final String fileDescription;
+  final String? fileDescription;
 
   @override
   String toString() {

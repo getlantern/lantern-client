@@ -7,8 +7,15 @@ import 'package:lantern/replica/common.dart';
 // TODO <08-08-22, kalli> Confirm our extension/naming strategy
 class ReplicaUploadTitle extends StatefulWidget {
   final File fileToUpload;
+  final String? fileTitle;
+  final String? fileDescription;
 
-  ReplicaUploadTitle({Key? key, required this.fileToUpload});
+  ReplicaUploadTitle({
+    Key? key,
+    required this.fileToUpload,
+    this.fileTitle,
+    this.fileDescription,
+  });
 
   @override
   State<StatefulWidget> createState() => _ReplicaUploadTitleState();
@@ -23,7 +30,7 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
   @override
   void initState() {
     fileTitle = path.withoutExtension(path.basename(widget.fileToUpload.path));
-    textEditingController.text = fileTitle;
+    textEditingController.text = widget.fileTitle ?? fileTitle;
     ReplicaUploader.inst.init();
     super.initState();
   }
@@ -74,16 +81,12 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
       controller: textEditingController,
       label: 'edit_title'.i18n,
       textInputAction: TextInputAction.done,
+      maxLength: 100,
       contentPadding: const EdgeInsetsDirectional.only(
         top: 12.0,
         bottom: 12.0,
         end: 12.0,
       ),
-      onFieldSubmitted: (query) async {
-        setState(() {
-          fileTitle = query;
-        });
-      },
     );
   }
 
@@ -96,9 +99,9 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
           text: 'publish'.i18n,
           secondary: true,
           onPressed: () async => await handleUploadConfirm(
-            context,
-            widget.fileToUpload,
-            fileTitle,
+            context: context,
+            fileToUpload: widget.fileToUpload,
+            fileTitle: textEditingController.text,
           ),
         ),
         Button(
@@ -107,7 +110,8 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
           onPressed: () async => await context.pushRoute(
             ReplicaUploadDescription(
               fileToUpload: widget.fileToUpload,
-              fileTitle: fileTitle,
+              fileTitle: textEditingController.text,
+              fileDescription: widget.fileDescription,
             ),
           ),
         ),
