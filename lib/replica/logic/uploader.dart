@@ -32,11 +32,16 @@ class ReplicaUploader {
         .setBackgroundHandler(ReplicaUploaderBackgroundHandler);
   }
 
-  Future<void> uploadFile(File file, String displayName) async {
+  // TODO <08-09-22, kalli> Depends on naming decisions
+  Future<void> uploadFile({
+    required File file,
+    required String fileName,
+    String? fileDescription,
+  }) async {
     final replicaAddr = await sessionModel.getReplicaAddr();
-    // TODO <08-09-22, kalli> Depends on naming decisions
+    // TODO <08-10-22, kalli> Add description here
     var uploadUrl =
-        'http://$replicaAddr/replica/upload?name=${Uri.encodeComponent(displayName)}';
+        'http://$replicaAddr/replica/upload?name=${Uri.encodeComponent(fileName)}';
     logger.v('uploadUrl: $uploadUrl');
     await inst.uploader!.enqueue(
       RawUpload(

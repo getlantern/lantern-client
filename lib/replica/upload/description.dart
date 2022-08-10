@@ -3,11 +3,13 @@ import 'package:lantern/common/common.dart';
 class ReplicaUploadDescription extends StatefulWidget {
   final File fileToUpload;
   final String fileTitle;
+  final String? fileDescription;
 
   ReplicaUploadDescription({
     Key? key,
     required this.fileToUpload,
     required this.fileTitle,
+    this.fileDescription,
   });
 
   @override
@@ -18,11 +20,10 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
   final formKey = GlobalKey<FormState>(debugLabel: 'replicaUploadDescription');
   late final textEditingController =
       CustomTextEditingController(formKey: formKey);
-  late TextStyle textStyle = tsBody2.copiedWith(color: grey5);
-  late String initialValue = 'description_initial_value'.i18n;
 
   @override
   void initState() {
+    textEditingController.text = widget.fileDescription ?? '';
     super.initState();
   }
 
@@ -50,7 +51,11 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
   Widget renderDescriptionField() {
     const maxCharLength = 1000;
     return Padding(
-      padding: const EdgeInsetsDirectional.only(top: 24.0),
+      padding: const EdgeInsetsDirectional.only(
+        top: 24.0,
+        start: 8.0,
+        end: 8.0,
+      ),
       child: Stack(
         clipBehavior: Clip.hardEdge,
         alignment: AlignmentDirectional.topStart,
@@ -68,14 +73,15 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
           ),
           CTextField(
             minLines: 10,
+            autofocus: true,
             keyboardType: TextInputType.text,
             controller: textEditingController,
             maxLength: maxCharLength,
+            // TODO: <08-10-22, kalli> Hacky, but as per design
             label:
                 '${textEditingController.value.text.characters.length}/$maxCharLength',
-            style: textStyle,
+            style: tsBody2,
             // to keep the layout according to specs, we need an initial value as well as hintText
-            initialValue: initialValue,
             hintText: 'description_initial_value'.i18n,
             textInputAction: TextInputAction.done,
             removeBorder: true,
@@ -83,14 +89,6 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
               top: 12.0,
               bottom: 12.0,
             ),
-            onTap: () {
-              // We only clear this on first tap, once the initial value is removed
-              if (initialValue != '') textEditingController.text = '';
-              setState(() {
-                textStyle = tsBody2;
-                initialValue = '';
-              });
-            },
           ),
         ],
       ),
@@ -105,7 +103,8 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
         ReplicaUploadReview(
           fileToUpload: widget.fileToUpload,
           fileTitle: widget.fileTitle,
-          fileDescription: textEditingController.text,
+          // if initial value is not empty (so the user has not interacted with text field), don't carry it over to next screen
+          fileDescription: widget.fileDescription ?? textEditingController.text,
         ),
       ),
     );

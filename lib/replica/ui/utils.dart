@@ -202,15 +202,17 @@ Future<Widget> getUploadThumbnailFromFile({
 /// Invokes ReplicaUploader.uploadFile
 /// Shows "Upload started" notification
 /// Pops router until root
-Future<void> handleUploadConfirm(
-  BuildContext context,
-  File fileToUpload,
-  String fileTitle,
-) async {
+// TODO <08-08-22, kalli> Confirm our extension/naming strategy
+Future<void> handleUploadConfirm({
+  required BuildContext context,
+  required File fileToUpload,
+  required String fileTitle,
+  String? fileDescription,
+}) async {
   await ReplicaUploader.inst.uploadFile(
-    fileToUpload,
-    // TODO <08-08-22, kalli> Confirm our extension/naming strategy
-    '$fileTitle${path.extension(fileToUpload.path)}',
+    file: fileToUpload,
+    fileName: '$fileTitle${path.extension(fileToUpload.path)}',
+    fileDescription: fileDescription,
   );
   // TODO <08-08-22, kalli> Upload notifications pattern will be updated in subsequent ticket
   BotToast.showText(text: 'upload_started'.i18n);

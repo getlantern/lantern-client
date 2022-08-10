@@ -6,13 +6,13 @@ import 'package:lantern/replica/common.dart';
 class ReplicaUploadReview extends StatefulWidget {
   final File fileToUpload;
   final String fileTitle;
-  final String fileDescription;
+  final String? fileDescription;
 
   ReplicaUploadReview({
     Key? key,
     required this.fileToUpload,
     required this.fileTitle,
-    required this.fileDescription,
+    this.fileDescription,
   });
 
   @override
@@ -48,7 +48,7 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: BaseScreen(
-        padHorizontal: true,
+        padHorizontal: false,
         showAppBar: true,
         title: 'review'.i18n,
         body: PinnedButtonLayout(
@@ -66,6 +66,8 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
     return Container(
       padding: const EdgeInsetsDirectional.only(
         top: 24.0,
+        start: 24.0,
+        end: 24.0,
       ),
       color: grey1,
       child: Column(
@@ -96,65 +98,84 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
                 },
               ),
               //  * File metadata
-              Container(
-                height: thumbnailHeight,
-                padding: const EdgeInsetsDirectional.only(
-                  start: 12.0,
-                  end: 12.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // * File mimetype
-                    // TODO <08-10-22, kalli> Show file type not mime type
-                    Container(
-                      child:
-                          (path.extension(widget.fileToUpload.path).isNotEmpty)
-                              ? CText(
-                                  path
-                                      // TODO <08-08-22, kalli> Confirm our extension/naming strategy
-                                      .extension(widget.fileToUpload.path)
-                                      .toUpperCase()
-                                      .replaceAll('.', ''),
-                                  style: tsOverline.copiedWith(color: pink4),
-                                )
-                              : CText(
-                                  'image_unknown'.i18n,
-                                  style: tsBody1.copiedWith(color: pink4),
-                                ),
-                    ),
-                    // * File title
-                    CText(
-                      widget.fileTitle,
-                      maxLines: 3,
-                      style: tsBody3.copiedWith(color: grey5),
-                    )
-                  ],
+              Expanded(
+                child: Container(
+                  height: thumbnailHeight,
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 12.0,
+                    end: 12.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // * File mimetype
+                      // TODO <08-10-22, kalli> Show file type not mime type
+                      Container(
+                        child: (path
+                                .extension(widget.fileToUpload.path)
+                                .isNotEmpty)
+                            ? CText(
+                                path
+                                    // TODO <08-08-22, kalli> Confirm our extension/naming strategy
+                                    .extension(widget.fileToUpload.path)
+                                    .toUpperCase()
+                                    .replaceAll('.', ''),
+                                style: tsOverline.copiedWith(color: pink4),
+                              )
+                            : CText(
+                                'image_unknown'.i18n,
+                                style: tsBody1.copiedWith(color: pink4),
+                              ),
+                      ),
+                      // * File title
+                      CText(
+                        widget.fileTitle,
+                        maxLines: 3,
+                        style: tsBody3.copiedWith(color: grey5),
+                      )
+                    ],
+                  ),
                 ),
               ),
               // * Edit metadata
-              renderEditIcon(),
+              renderEditIcon(
+                // onTap action
+                () async => await context.router.push(
+                  ReplicaUploadTitle(
+                    fileToUpload: widget.fileToUpload,
+                    fileTitle: widget.fileTitle,
+                    fileDescription: widget.fileDescription,
+                  ),
+                ),
+              ),
             ],
           ),
           //  * File description
           Row(
             children: [
               Expanded(
-                child: Container(
-                  padding: const EdgeInsetsDirectional.only(
-                    top: 16.0,
-                    bottom: 16.0,
-                  ),
-                  child: CText(
-                    widget.fileDescription,
-                    style: tsBody2,
-                    maxLines: 4,
-                  ),
+                child: CText(
+                  widget.fileDescription ?? 'No description provided',
+                  style: widget.fileDescription != null
+                      ? tsBody2
+                      : tsBody2.copiedWith(
+                          fontStyle: FontStyle.italic,
+                        ),
+                  maxLines: 4,
                 ),
               ),
               // * Edit metadata
-              renderEditIcon(),
+              renderEditIcon(
+                // onTap action
+                () async => await context.router.push(
+                  ReplicaUploadDescription(
+                    fileToUpload: widget.fileToUpload,
+                    fileTitle: widget.fileTitle,
+                    fileDescription: widget.fileDescription,
+                  ),
+                ),
+              ),
             ],
           )
         ],
@@ -162,12 +183,11 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
     );
   }
 
-  Widget renderEditIcon() {
-    return GestureDetector(
-      // TODO <08-10-22, kalli> Add edit action handler
-      onTap: () {},
-      child: Container(
-        height: thumbnailHeight,
+  Widget renderEditIcon(Function onTap) {
+    return Container(
+      height: thumbnailHeight,
+      child: CInkWell(
+        onTap: () => onTap(),
         child: const CAssetImage(path: ImagePaths.mode_edit),
       ),
     );
@@ -175,7 +195,11 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
 
   Widget renderTOS() {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(top: 24.0),
+      padding: const EdgeInsetsDirectional.only(
+        start: 24.0,
+        end: 24.0,
+        top: 24.0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -226,26 +250,30 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
   }
 
   Widget renderButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Button(
-          width: 150,
-          text: 'cancel'.i18n,
-          onPressed: () async => context.router.popUntilRoot(),
-          secondary: true,
-        ),
-        Button(
-          disabled: !checkboxChecked,
-          width: 150,
-          text: 'publish'.i18n,
-          onPressed: () async => await handleUploadConfirm(
-            context,
-            widget.fileToUpload,
-            widget.fileTitle,
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: 24.0, end: 24.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Button(
+            width: 150,
+            text: 'cancel'.i18n,
+            onPressed: () async => context.router.popUntilRoot(),
+            secondary: true,
           ),
-        ),
-      ],
+          Button(
+            disabled: !checkboxChecked,
+            width: 150,
+            text: 'publish'.i18n,
+            onPressed: () async => await handleUploadConfirm(
+              context: context,
+              fileToUpload: widget.fileToUpload,
+              fileTitle: widget.fileTitle,
+              fileDescription: widget.fileDescription,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
