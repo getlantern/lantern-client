@@ -105,6 +105,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                     key: const Key('replica_tab_view'),
                     controller: tabController,
                     children: [
+                      // TODO <08-10-22, kalli> Hide tabs if we have no results
                       ReplicaVideoListView(
                         replicaApi: replicaApi,
                         searchQuery: value,

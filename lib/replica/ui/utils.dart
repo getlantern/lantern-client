@@ -214,8 +214,7 @@ Future<void> handleUploadConfirm({
     fileName: '$fileTitle${path.extension(fileToUpload.path)}',
     fileDescription: fileDescription,
   );
-  // TODO <08-08-22, kalli> Upload notifications pattern will be updated in subsequent ticket
-  BotToast.showText(text: 'upload_started'.i18n);
+  showSnackbar(context: context, content: 'upload_started'.i18n);
   context.router.popUntilRoot();
 }
 
