@@ -25,13 +25,18 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
       CustomTextEditingController(formKey: formKey);
   late final Future<Widget> getUploadThumbnailFromFileFuture;
   late bool checkboxChecked = false;
+  final thumbnailWidth = 110.0;
+  final thumbnailHeight = 110.0;
 
   @override
   void initState() {
     ReplicaUploader.inst.init();
 
-    getUploadThumbnailFromFileFuture =
-        getUploadThumbnailFromFile(widget.fileToUpload);
+    getUploadThumbnailFromFileFuture = getUploadThumbnailFromFile(
+      file: widget.fileToUpload,
+      width: thumbnailWidth,
+      height: thumbnailHeight,
+    );
     super.initState();
   }
 
@@ -46,16 +51,12 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
         padHorizontal: true,
         showAppBar: true,
         title: 'review'.i18n,
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              renderPreview(),
-              renderTOS(),
-              renderPublishButton(),
-            ],
-          ),
+        body: PinnedButtonLayout(
+          content: [
+            renderPreview(),
+            renderTOS(),
+          ],
+          button: renderButtons(),
         ),
       ),
     );
@@ -63,12 +64,15 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
 
   Widget renderPreview() {
     return Container(
+      padding: const EdgeInsetsDirectional.only(
+        top: 24.0,
+      ),
       color: grey1,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // * Thumbnail
               FutureBuilder(
@@ -92,129 +96,156 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
                 },
               ),
               //  * File metadata
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      // TODO <08-08-22, kalli> Confirm our extension/naming strategy
-                      if (path.extension(widget.fileToUpload.path).isNotEmpty)
-                        CText(
-                          path
-                              // TODO <08-08-22, kalli> Confirm our extension/naming strategy
-                              .extension(widget.fileToUpload.path)
-                              .toUpperCase()
-                              .replaceAll('.', ''),
-                          style: tsOverline.copiedWith(color: pink4),
-                        )
-                      else
-                        CText(
-                          'image_unknown'.i18n,
-                          style: tsBody1.copiedWith(color: pink4),
-                        ),
-                    ],
-                  ),
-                  // Render mime type
-                  // If mimetype is nil, just render 'app/unknown'
-                  // TODO <08-09-22, kalli> Fix overflows
-                  CText(
-                    widget.fileTitle,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: tsBody3,
-                  )
-                ],
-              )
+              Container(
+                height: thumbnailHeight,
+                padding: const EdgeInsetsDirectional.only(
+                  start: 12.0,
+                  end: 12.0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // * File mimetype
+                    // TODO <08-10-22, kalli> Show file type not mime type
+                    Container(
+                      child:
+                          (path.extension(widget.fileToUpload.path).isNotEmpty)
+                              ? CText(
+                                  path
+                                      // TODO <08-08-22, kalli> Confirm our extension/naming strategy
+                                      .extension(widget.fileToUpload.path)
+                                      .toUpperCase()
+                                      .replaceAll('.', ''),
+                                  style: tsOverline.copiedWith(color: pink4),
+                                )
+                              : CText(
+                                  'image_unknown'.i18n,
+                                  style: tsBody1.copiedWith(color: pink4),
+                                ),
+                    ),
+                    // * File title
+                    CText(
+                      widget.fileTitle,
+                      maxLines: 3,
+                      style: tsBody3.copiedWith(color: grey5),
+                    )
+                  ],
+                ),
+              ),
+              // * Edit metadata
+              renderEditIcon(),
             ],
           ),
-          // TODO <08-09-22, kalli> Remove placeholder
-          CText(
-            'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-            style: tsBody2,
+          //  * File description
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 16.0,
+                    bottom: 16.0,
+                  ),
+                  child: CText(
+                    widget.fileDescription,
+                    style: tsBody2,
+                    maxLines: 4,
+                  ),
+                ),
+              ),
+              // * Edit metadata
+              renderEditIcon(),
+            ],
           )
         ],
       ),
     );
   }
 
-  Widget renderTOS() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.only(bottom: 8.0),
-          child: CText(
-            'important'.i18n,
-            style: tsSubtitle1,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsetsDirectional.only(bottom: 8.0),
-          child: CText(
-            'replica_upload_confirmation_body'.i18n,
-            style: tsBody1,
-          ),
-        ),
-        CInkWell(
-          onTap: () => setState(() => checkboxChecked = !checkboxChecked),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Checkbox(
-                visualDensity: VisualDensity.compact,
-                shape: const RoundedRectangleBorder(
-                  side: BorderSide.none,
-                  borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                ),
-                checkColor: Colors.white,
-                fillColor: MaterialStateProperty.resolveWith(
-                  (states) => getCheckboxFillColor(black, states),
-                ),
-                value: checkboxChecked,
-                onChanged: (bool? value) {
-                  setState(() => checkboxChecked = value!);
-                },
-              ),
-              CText(
-                'upload_tos_agree'.i18n,
-                style: tsBody1Short,
-              ),
-            ],
-          ),
-        )
-      ],
+  Widget renderEditIcon() {
+    return GestureDetector(
+      // TODO <08-10-22, kalli> Add edit action handler
+      onTap: () {},
+      child: Container(
+        height: thumbnailHeight,
+        child: const CAssetImage(path: ImagePaths.mode_edit),
+      ),
     );
   }
 
-  Widget renderPublishButton() {
-    return Align(
-      alignment: FractionalOffset.bottomCenter,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget renderTOS() {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(top: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Button(
-            width: 150,
-            text: 'cancel'.i18n,
-            onPressed: () async => context.router.popUntilRoot(),
-            secondary: true,
+          Padding(
+            padding: const EdgeInsetsDirectional.only(bottom: 8.0),
+            child: CText(
+              'important'.i18n,
+              style: tsSubtitle1,
+            ),
           ),
-          Button(
-            width: 150,
-            text: 'publish'.i18n,
-            onPressed: () async {
-              await ReplicaUploader.inst.uploadFile(
-                widget.fileToUpload,
-                // TODO <08-08-22, kalli> Confirm our extension/naming strategy
-                '$widget.fileTitle${path.extension(widget.fileToUpload.path)}',
-              );
-              // TODO <08-08-22, kalli> Confirm we can use BotToast
-              BotToast.showText(text: 'upload_started'.i18n);
-              context.router.popUntilRoot();
-            },
+          Padding(
+            padding: const EdgeInsetsDirectional.only(bottom: 8.0),
+            child: CText(
+              'replica_upload_confirmation_body'.i18n,
+              style: tsBody1,
+            ),
           ),
+          CInkWell(
+            onTap: () => setState(() => checkboxChecked = !checkboxChecked),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Checkbox(
+                  visualDensity: VisualDensity.compact,
+                  shape: const RoundedRectangleBorder(
+                    side: BorderSide.none,
+                    borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                  ),
+                  checkColor: Colors.white,
+                  fillColor: MaterialStateProperty.resolveWith(
+                    (states) => getCheckboxFillColor(black, states),
+                  ),
+                  value: checkboxChecked,
+                  onChanged: (bool? value) {
+                    setState(() => checkboxChecked = value!);
+                  },
+                ),
+                CText(
+                  'upload_tos_agree'.i18n,
+                  style: tsBody1Short,
+                ),
+              ],
+            ),
+          )
         ],
       ),
+    );
+  }
+
+  Widget renderButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Button(
+          width: 150,
+          text: 'cancel'.i18n,
+          onPressed: () async => context.router.popUntilRoot(),
+          secondary: true,
+        ),
+        Button(
+          disabled: !checkboxChecked,
+          width: 150,
+          text: 'publish'.i18n,
+          onPressed: () async => await handleUploadConfirm(
+            context,
+            widget.fileToUpload,
+            widget.fileTitle,
+          ),
+        ),
+      ],
     );
   }
 }

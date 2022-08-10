@@ -7,15 +7,13 @@ import 'package:lantern/messaging/notifications.dart';
 ///   - Ideally in an initState() of a top-level widget
 ///   - Calling it multiple times is safe
 /// - Upload files with ReplicaUploader.inst.uploadFile()
-///   - This'll use flutter_uploader plugin, which uses Android's WorkManager, to
-///     schedule a background upload
+///     to schedule a background upload
 ///
 /// There are two notifications here:
-/// - One to track the upload's progress
-/// - One when the upload is done.
-///   - If it succeeded (i.e., not failed or got cancelled), the user can click
-///     on this notification, they would be prompted with a Share dialog to share
-///     the Replica link
+/// - One (Flutter side) to track the upload's progress, handled in review.dart
+/// - One (native) when the upload is done.
+///   - If it succeeded (i.e., not failed or got cancelled), a native notification shows up
+///   - ** NOT YET IMPLEMENTED ** the user can click it and be prompted with a Share dialog to share the Replica link
 class ReplicaUploader {
   // Private, named constructor to avoid instantiations
   ReplicaUploader._private();
@@ -55,6 +53,8 @@ void ReplicaUploaderBackgroundHandler() async {
   var isolateUploader = FlutterUploader();
 
   // Listen to progress and show a single notification showing the progress
+
+  // TODO <08-10-22, kalli> Upload notifications pattern will be updated in subsequent ticket
   isolateUploader.progress.listen((progress) async {
     // This code runs in a different Flutter engine than the usual UI code, so
     // we have to make sure localizations are initialized here before
