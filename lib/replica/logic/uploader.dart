@@ -1,6 +1,7 @@
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/notifications.dart';
+import 'package:http/http.dart' as http;
 
 /// ReplicaUploader is a singleton class. Use it like this:
 /// - Initialize ReplicaUploader by calling ReplicaUploader.inst.init()
@@ -32,16 +33,17 @@ class ReplicaUploader {
         .setBackgroundHandler(ReplicaUploaderBackgroundHandler);
   }
 
-  // TODO <08-09-22, kalli> Depends on naming decisions
   Future<void> uploadFile({
     required File file,
     required String fileName,
     String? fileDescription,
   }) async {
     final replicaAddr = await sessionModel.getReplicaAddr();
-    // TODO <08-10-22, kalli> Add description here
     var uploadUrl =
         'http://$replicaAddr/replica/upload?name=${Uri.encodeComponent(fileName)}';
+    if (fileDescription != null || fileDescription! != '') {
+      uploadUrl += '&description=${Uri.encodeComponent(fileDescription)}';
+    }
     logger.v('uploadUrl: $uploadUrl');
     await inst.uploader!.enqueue(
       RawUpload(
@@ -50,6 +52,15 @@ class ReplicaUploader {
         method: UploadMethod.POST,
       ),
     );
+  }
+
+  // TODO <08-10-22, kalli> Figure out how to query endpoint with infohash
+  Future<void> queryFile({
+    required String infohash,
+  }) async {
+    final fetchEndpoint = '';
+    final resp = await http.get(Uri.parse(fetchEndpoint));
+    logger.v(resp);
   }
 }
 
