@@ -11,6 +11,11 @@ class SearchField extends CTextField {
           },
           label: 'search'.i18n,
           textInputAction: TextInputAction.search,
+          contentPadding: const EdgeInsetsDirectional.only(
+            start: 16.0,
+            top: 4.0,
+            bottom: 4.0,
+          ),
           suffixIcon: ValueListenableBuilder(
             valueListenable: controller,
             builder: (BuildContext context, TextEditingValue value, _) =>

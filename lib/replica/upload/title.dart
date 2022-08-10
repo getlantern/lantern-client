@@ -39,16 +39,12 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
         showAppBar: true,
         padHorizontal: true,
         title: 'edit_title'.i18n,
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              renderEditingNotice(),
-              renderTitleField(),
-              renderAddDescriptionButton(),
-            ],
-          ),
+        body: PinnedButtonLayout(
+          content: [
+            renderEditingNotice(),
+            renderTitleField(),
+          ],
+          button: renderButtons(),
         ),
       ),
     );
@@ -59,8 +55,10 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
       color: grey1,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsetsDirectional.all(10.0),
-      margin:
-          const EdgeInsetsDirectional.only(start: 10.0, end: 10.0, top: 24.0),
+      margin: const EdgeInsetsDirectional.only(
+        top: 24.0,
+        bottom: 12.0,
+      ),
       child: CText(
         'Filenames cannot be edited once published.',
         style: tsBody1,
@@ -76,6 +74,11 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
       controller: textEditingController,
       label: 'edit_title'.i18n,
       textInputAction: TextInputAction.done,
+      contentPadding: const EdgeInsetsDirectional.only(
+        top: 12.0,
+        bottom: 12.0,
+        end: 12.0,
+      ),
       onFieldSubmitted: (query) async {
         setState(() {
           fileTitle = query;
@@ -84,19 +87,31 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
     );
   }
 
-  Widget renderAddDescriptionButton() {
-    return Align(
-      alignment: FractionalOffset.bottomCenter,
-      child: Button(
-        width: 200,
-        text: 'add_description'.i18n,
-        onPressed: () async => await context.pushRoute(
-          ReplicaUploadDescription(
-            fileToUpload: widget.fileToUpload,
-            fileTitle: fileTitle,
+  Widget renderButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Button(
+          width: 150,
+          text: 'publish'.i18n,
+          secondary: true,
+          onPressed: () async => await handleUploadConfirm(
+            context,
+            widget.fileToUpload,
+            fileTitle,
           ),
         ),
-      ),
+        Button(
+          width: 150,
+          text: 'add_description'.i18n,
+          onPressed: () async => await context.pushRoute(
+            ReplicaUploadDescription(
+              fileToUpload: widget.fileToUpload,
+              fileTitle: fileTitle,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

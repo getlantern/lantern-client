@@ -1,9 +1,9 @@
 import 'package:lantern/common/common.dart';
 
-//// This a custom TextField that renders a label in its outline, aligned with
-//// the prefix icon. We don't use the default behavior of OutlineInputBorder
-//// because it aligns the label to the right of the prefix icon, in
-//// contravention of the Material design specification.
+/// This a custom TextField that renders a label in its outline, aligned with
+/// the prefix icon. We don't use the default behavior of OutlineInputBorder
+/// because it aligns the label to the right of the prefix icon, in
+/// contravention of the Material design specification.
 class CTextField extends StatefulWidget {
   late final CustomTextEditingController controller;
   late final String? initialValue;
@@ -21,7 +21,12 @@ class CTextField extends StatefulWidget {
   late final TextInputAction? textInputAction;
   late final void Function(String value)? onFieldSubmitted;
   late final String? actionIconPath;
+  late final int? maxLength;
+  late final TextCapitalization? textCapitalization;
+  late final EdgeInsetsDirectional? contentPadding;
   late final TextStyle? style;
+  late final void Function()? onTap;
+  late final bool removeBorder;
 
   CTextField({
     required this.controller,
@@ -40,10 +45,19 @@ class CTextField extends StatefulWidget {
     this.textInputAction,
     this.onFieldSubmitted,
     this.actionIconPath,
+    this.maxLength,
+    this.textCapitalization,
+    this.contentPadding,
     this.style,
+    this.onTap,
+    this.removeBorder = false,
   }) {
-    if (initialValue != null) {
+    if (initialValue != null && initialValue != '') {
       controller.text = initialValue!;
+      // add a small delay to lifecycle error which results from this component being wrapped in the subscribedSingleValueBuilder() call that returns the initial value
+      Future.delayed(defaultTransitionDuration, () {
+        controller.text = initialValue!;
+      });
     }
   }
 
@@ -69,7 +83,19 @@ class _CTextFieldState extends State<CTextField> {
   }
 
   @override
+  void dispose() {
+    widget.controller.focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    const noBorder = OutlineInputBorder(
+      borderSide: BorderSide(
+        width: 0,
+        style: BorderStyle.none,
+      ),
+    );
     return Stack(
       children: [
         Container(
@@ -81,6 +107,7 @@ class _CTextFieldState extends State<CTextField> {
             autovalidateMode: widget.autovalidateMode,
             focusNode: widget.controller.focusNode,
             keyboardType: widget.keyboardType,
+            maxLength: widget.maxLength,
             validator: (value) {
               // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
               var result = widget.controller.validate(value);
@@ -89,6 +116,7 @@ class _CTextFieldState extends State<CTextField> {
               });
               return result;
             },
+            onTap: widget.onTap,
             onChanged: (value) {
               fieldKey.currentState!.validate();
             },
@@ -98,7 +126,11 @@ class _CTextFieldState extends State<CTextField> {
             maxLines: widget.maxLines,
             style: widget.style,
             inputFormatters: widget.inputFormatters,
+            textCapitalization:
+                widget.textCapitalization ?? TextCapitalization.none,
             decoration: InputDecoration(
+              contentPadding:
+                  widget.contentPadding ?? const EdgeInsetsDirectional.all(0),
               isDense: true,
               floatingLabelBehavior: FloatingLabelBehavior.never,
               // we handle floating labels using our custom method below
@@ -106,30 +138,37 @@ class _CTextFieldState extends State<CTextField> {
               helperText: widget.helperText,
               hintText: widget.hintText,
               helperMaxLines: 2,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: blue4,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: indicatorRed,
-                ),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 1,
-                  color: grey3,
-                ),
-              ),
+              focusedBorder: !widget.removeBorder
+                  ? OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: blue4,
+                      ),
+                    )
+                  : noBorder,
+              errorBorder: !widget.removeBorder
+                  ? OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: indicatorRed,
+                      ),
+                    )
+                  : noBorder,
+              border: !widget.removeBorder
+                  ? OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: grey3,
+                      ),
+                    )
+                  : noBorder,
               prefixIcon:
                   // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
                   widget.prefixIcon != null
-                      ? Transform.scale(scale: 0.5, child: widget.prefixIcon)
+                      ? Transform.scale(scale: 0.4, child: widget.prefixIcon)
                       : null,
               suffixIcon: renderSuffixRow(),
+              counterText: '',
             ),
           ),
         ),
@@ -183,14 +222,14 @@ class _CTextFieldState extends State<CTextField> {
     if (isEmpty) return null;
     return hasError
         ? Transform.scale(
-            scale: 0.5,
+            scale: 0.4,
             child: CAssetImage(
               path: ImagePaths.error,
               color: indicatorRed,
             ),
           )
         : widget.suffixIcon != null
-            ? Transform.scale(scale: 0.5, child: widget.suffixIcon)
+            ? Transform.scale(scale: 0.4, child: widget.suffixIcon)
             : null;
   }
 
@@ -218,9 +257,10 @@ class _CTextFieldState extends State<CTextField> {
         }
       },
       child: CAssetImage(
-          key: const ValueKey('submit_text_field'),
-          path: widget.actionIconPath!,
-          color: white),
+        key: const ValueKey('submit_text_field'),
+        path: widget.actionIconPath!,
+        color: white,
+      ),
     );
   }
 }

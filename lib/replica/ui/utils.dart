@@ -4,6 +4,7 @@ import 'package:video_player/video_player.dart';
 import 'package:mime/mime.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:lantern/replica/common.dart';
+import 'package:path/path.dart' as path;
 
 // renderReplicaLongPressMenuItem is used for rendering list/grid items located
 // in the ./ui/replica/list_item directory
@@ -142,14 +143,20 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
   }
 }
 
-Future<Widget> getUploadThumbnailFromFile(File file) async {
+Future<Widget> getUploadThumbnailFromFile({
+  required File file,
+  required double width,
+  required double height,
+  int? maxWidth,
+  int? maxHeight,
+}) async {
   var cat = SearchCategoryFromMimeType(lookupMimeType(file.path));
   switch (cat) {
     case SearchCategory.Image:
       return Image.file(
         file,
-        width: 150,
-        height: 150,
+        width: width,
+        height: height,
         filterQuality: FilterQuality.medium,
         fit: BoxFit.cover,
       );
@@ -170,8 +177,8 @@ Future<Widget> getUploadThumbnailFromFile(File file) async {
       var b = await VideoThumbnail.thumbnailData(
         video: file.path,
         imageFormat: ImageFormat.JPEG,
-        maxWidth: 150,
-        maxHeight: 150,
+        maxWidth: maxWidth ?? width.toInt(),
+        maxHeight: maxHeight ?? height.toInt(),
         quality: 25,
         timeMs: duration ~/ 2,
       );
@@ -181,8 +188,8 @@ Future<Widget> getUploadThumbnailFromFile(File file) async {
       }
       return Image.memory(
         b,
-        width: 150,
-        height: 150,
+        width: width,
+        height: height,
       );
     case SearchCategory.Audio:
     case SearchCategory.Document:
@@ -190,6 +197,24 @@ Future<Widget> getUploadThumbnailFromFile(File file) async {
     case SearchCategory.Unknown:
       return CAssetImage(path: cat.getRelevantImagePath());
   }
+}
+
+/// Invokes ReplicaUploader.uploadFile
+/// Shows "Upload started" notification
+/// Pops router until root
+Future<void> handleUploadConfirm(
+  BuildContext context,
+  File fileToUpload,
+  String fileTitle,
+) async {
+  await ReplicaUploader.inst.uploadFile(
+    fileToUpload,
+    // TODO <08-08-22, kalli> Confirm our extension/naming strategy
+    '$fileTitle${path.extension(fileToUpload.path)}',
+  );
+  // TODO <08-08-22, kalli> Upload notifications pattern will be updated in subsequent ticket
+  BotToast.showText(text: 'upload_started'.i18n);
+  context.router.popUntilRoot();
 }
 
 /// Renders an error message when necessary
