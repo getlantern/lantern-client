@@ -4,6 +4,7 @@ import 'package:video_player/video_player.dart';
 import 'package:mime/mime.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:lantern/replica/common.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:path/path.dart' as path;
 
 // renderReplicaLongPressMenuItem is used for rendering list/grid items located
@@ -34,61 +35,6 @@ SizedBox renderReplicaLongPressMenuItem(
         ],
       ),
     ),
-  );
-}
-
-// renderReplicaMediaViewScreen is used as the root widget for all Replica media
-// views (located in ./ui/replica/viewers directory)
-// TODO <08-08-22, kalli> This is a layout, rename and/or move accordingly
-Widget renderReplicaMediaViewScreen({
-  required BuildContext context,
-  required ReplicaApi api,
-  required ReplicaLink link,
-  required SearchCategory category,
-  required Widget body,
-  required Color backgroundColor,
-  Color? foregroundColor,
-  String? mimeType,
-}) {
-  return BaseScreen(
-    showAppBar: true,
-    foregroundColor: foregroundColor,
-    title: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        CText(
-          link.displayName ?? 'untitled'.i18n,
-          style: tsHeading3.copiedWith(color: foregroundColor),
-        ),
-        if (mimeType != null)
-          CText(
-            mimeType,
-            style: tsOverline.copiedWith(color: foregroundColor),
-          )
-        else
-          CText(
-            category.toShortString(),
-            style: tsOverline.copiedWith(color: foregroundColor),
-          )
-      ],
-    ),
-    backgroundColor: backgroundColor,
-    actions: [
-      IconButton(
-        onPressed: () async {
-          await api.download(link);
-          // TODO <08-08-22, kalli> Confirm we can use BotToast
-          BotToast.showText(text: 'download_started'.i18n);
-        },
-        icon: CAssetImage(
-          size: 20,
-          path: ImagePaths.file_download,
-          color: foregroundColor,
-        ),
-      ),
-    ],
-    body: body,
   );
 }
 
@@ -234,5 +180,32 @@ Widget renderReplicaErrorUI({required String text, Color? color}) {
         ),
       )
     ],
+  );
+}
+
+/// Used in ReplicaViewerLayout and ReplicaImageListItem to render a thumbnail preview (of variable size) for an image asset
+Widget renderImageThumbnail({
+  required ReplicaApi replicaApi,
+  required ReplicaSearchItem item,
+}) {
+  return Flexible(
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(4.0),
+      child: CachedNetworkImage(
+        imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            CircularProgressIndicator(value: downloadProgress.progress),
+        errorWidget: (context, url, error) => Stack(
+          children: [
+            Container(color: grey4),
+            const Center(
+              child: CAssetImage(
+                path: ImagePaths.image_inactive,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }

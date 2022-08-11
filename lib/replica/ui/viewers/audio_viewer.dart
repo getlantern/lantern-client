@@ -60,27 +60,28 @@ class _ReplicaAudioPlayerScreenState extends State<ReplicaAudioPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return renderReplicaMediaViewScreen(
-      context: context,
-      api: widget.replicaApi,
-      link: widget.replicaLink,
-      category: SearchCategory.Audio,
-      mimeType: widget.mimeType,
-      backgroundColor: grey2,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              renderPlaybackSliderAndDuration(),
-              renderPlaybackButtons(),
-            ],
-          ),
-        ),
-      ),
-    );
+    return Text('Audio - TBD');
+    // return ReplicaViewerLayout(
+    //   context: context,
+    //   api: widget.replicaApi,
+    //   link: widget.replicaLink,
+    //   category: SearchCategory.Audio,
+    //   mimeType: widget.mimeType,
+    //   backgroundColor: grey2,
+    //   body: Center(
+    //     child: Padding(
+    //       padding: const EdgeInsets.all(30.0),
+    //       child: Column(
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         crossAxisAlignment: CrossAxisAlignment.center,
+    //         children: <Widget>[
+    //           renderPlaybackSliderAndDuration(),
+    //           renderPlaybackButtons(),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   Widget renderPlaybackButtons() {

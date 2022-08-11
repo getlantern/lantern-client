@@ -1,10 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:lantern/common/ui/colors.dart';
-import 'package:lantern/common/ui/custom/asset_image.dart';
 import 'package:lantern/common/ui/custom/text.dart';
 import 'package:lantern/common/ui/focused_menu.dart';
-import 'package:lantern/common/ui/image_paths.dart';
 import 'package:lantern/common/ui/text_styles.dart';
 import 'package:lantern/replica/common.dart';
 
@@ -33,7 +29,7 @@ class ReplicaImageListItem extends StatelessWidget {
             return GridTile(
               child: Column(
                 children: [
-                  renderThumbnail(),
+                  renderImageThumbnail(replicaApi: replicaApi, item: item),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
                   renderDescription(),
                 ],
@@ -53,32 +49,6 @@ class ReplicaImageListItem extends StatelessWidget {
         maxLines: 3,
         overflow: TextOverflow.ellipsis,
         style: tsBody2,
-      ),
-    );
-  }
-
-  Widget renderThumbnail() {
-    return Flexible(
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(5.0),
-          child: CachedNetworkImage(
-            imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                CircularProgressIndicator(value: downloadProgress.progress),
-            errorWidget: (context, url, error) => Stack(
-              children: [
-                Container(color: grey4),
-                const Center(
-                  child: CAssetImage(
-                    path: ImagePaths.image_inactive,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

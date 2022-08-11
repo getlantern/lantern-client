@@ -47,8 +47,9 @@ class _LinkOpenerScreen extends State<ReplicaLinkHandler> {
             ),
           );
         case SearchCategory.Image:
+          // TODO <08-11-2022> kalli: this should navigate to ReplicaViewerLayout
           return context.replaceRoute(
-            ReplicaImagePreviewScreen(replicaLink: widget.replicaLink),
+            ReplicaImageFullScreenViewer(replicaLink: widget.replicaLink),
           );
         case SearchCategory.Audio:
           return context.replaceRoute(

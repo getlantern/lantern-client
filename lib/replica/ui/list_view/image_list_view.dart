@@ -48,7 +48,11 @@ class _ReplicaImageListViewState extends ReplicaCommonListViewState {
             replicaApi: widget.replicaApi,
             onTap: () async {
               await context.pushRoute(
-                ReplicaImagePreviewScreen(replicaLink: item.replicaLink),
+                ReplicaViewerLayout(
+                  replicaApi: widget.replicaApi,
+                  category: SearchCategory.Image,
+                  item: item,
+                ),
               );
             },
           );
