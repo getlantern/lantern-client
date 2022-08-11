@@ -252,7 +252,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                     style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
                   ),
                   onPressed: () async => await context.pushRoute(
-                    ReplicaImagePreviewScreen(
+                    ReplicaImageFullScreenViewer(
                       replicaLink: ReplicaLink.New(
                         'magnet%3A%3Fxt%3Durn%3Abtih%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26xs%3Dreplica%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26dn%3D1N_%40X%5B%604Z%5BF2K%40L%25J%402OYA2.png%26so%3D0',
                       )!,

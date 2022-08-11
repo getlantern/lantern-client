@@ -52,34 +52,35 @@ class ReplicaPDFScreenState extends State<ReplicaPDFScreen> {
   Widget build(BuildContext context) {
     return replicaModel.withReplicaApi(
       (context, replicaApi, child) {
-        return renderReplicaMediaViewScreen(
-          context: context,
-          api: replicaApi,
-          link: widget.replicaLink,
-          backgroundColor: white,
-          category: widget.category,
-          mimeType: widget.mimeType,
-          body: FutureBuilder(
-            future: fetched,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
+        return Text('PDF - TBD');
+        // return ReplicaViewerLayout(
+        //   context: context,
+        //   api: replicaApi,
+        //   link: widget.replicaLink,
+        //   backgroundColor: white,
+        //   category: widget.category,
+        //   mimeType: widget.mimeType,
+        //   body: FutureBuilder(
+        //     future: fetched,
+        //     builder: (context, snapshot) {
+        //       if (snapshot.connectionState != ConnectionState.done) {
+        //         return const Center(
+        //           child: CircularProgressIndicator(),
+        //         );
+        //       }
 
-              if (snapshot.hasError) {
-                logger.e(
-                  'Error loading PDF: ${snapshot.error}',
-                );
-              }
+        //       if (snapshot.hasError) {
+        //         logger.e(
+        //           'Error loading PDF: ${snapshot.error}',
+        //         );
+        //       }
 
-              return PDFView(
-                filePath: tempFile,
-              );
-            },
-          ),
-        );
+        //       return PDFView(
+        //         filePath: tempFile,
+        //       );
+        //     },
+        //   ),
+        // );
       },
     );
   }

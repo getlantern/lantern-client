@@ -1,21 +1,19 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
-/// ReplicaImagePreviewScreen renders a Replica image in the middle of its view
-///
-/// This screen supports landscape and portrait orientations
-// TODO <08-08-22, kalli> Update to reflect Figma
-class ReplicaImagePreviewScreen extends StatefulWidget {
-  ReplicaImagePreviewScreen({Key? key, required this.replicaLink});
+/// ReplicaImageFullScreenViewer renders a full screen Replica image. It uses CImageViewer() to handle tapping and support landscape and portrait orientations.
+class ReplicaImageFullScreenViewer extends StatefulWidget {
+  ReplicaImageFullScreenViewer({Key? key, required this.replicaLink});
 
   final ReplicaLink replicaLink;
 
   @override
-  State<ReplicaImagePreviewScreen> createState() =>
-      _ReplicaImagePreviewScreenState();
+  State<ReplicaImageFullScreenViewer> createState() =>
+      _ReplicaImageFullScreenViewerState();
 }
 
-class _ReplicaImagePreviewScreenState extends State<ReplicaImagePreviewScreen> {
+class _ReplicaImageFullScreenViewerState
+    extends State<ReplicaImageFullScreenViewer> {
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([

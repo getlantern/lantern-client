@@ -29,10 +29,10 @@ class _ReplicaVideoListViewState extends ReplicaCommonListViewState {
         replicaApi: widget.replicaApi,
         onTap: () {
           context.pushRoute(
-            ReplicaVideoPlayerScreen(
+            ReplicaViewerLayout(
               replicaApi: widget.replicaApi,
-              replicaLink: item.replicaLink,
-              mimeType: item.primaryMimeType,
+              item: item,
+              category: SearchCategory.Video,
             ),
           );
         },

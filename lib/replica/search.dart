@@ -67,6 +67,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               },
             ),
             const SizedBox(height: 10),
+            // TODO <08-10-22, kalli> Hide tabs if we have no results
             TabBar(
               controller: tabController,
               unselectedLabelStyle: tsBody1,

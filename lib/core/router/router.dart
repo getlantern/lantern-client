@@ -22,10 +22,11 @@ import 'package:lantern/messaging/onboarding/chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
 import 'package:lantern/replica/link_handler.dart';
 import 'package:lantern/replica/ui/viewers/audio_viewer.dart';
-import 'package:lantern/replica/ui/viewers/image_viewer.dart';
-import 'package:lantern/replica/ui/viewers/pdf_viewer.dart';
-import 'package:lantern/replica/ui/viewers/unknown.dart';
-import 'package:lantern/replica/ui/viewers/video_viewer.dart';
+import 'package:lantern/replica/ui/viewers/fullscreen_image_viewer.dart';
+import 'package:lantern/replica/ui/viewers/layout.dart';
+import 'package:lantern/replica/ui/viewers/fullscreen_pdf_viewer.dart';
+import 'package:lantern/replica/ui/viewers/unknown_viewer.dart';
+import 'package:lantern/replica/ui/viewers/fullscreen_video_viewer.dart';
 import 'package:lantern/replica/search.dart';
 import 'package:lantern/replica/upload/title.dart';
 import 'package:lantern/replica/upload/description.dart';
@@ -169,9 +170,9 @@ import 'package:lantern/replica/upload/review.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: ReplicaImagePreviewScreen,
-      name: 'ReplicaImagePreviewScreen',
-      path: 'replicaImagePreviewScreen',
+      page: ReplicaImageFullScreenViewer,
+      name: 'ReplicaImageFullScreenViewer',
+      path: 'replicaImageFullScreenViewer',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
@@ -268,6 +269,14 @@ import 'package:lantern/replica/upload/review.dart';
       page: ReplicaUploadReview,
       name: 'ReplicaUploadReview',
       path: 'replicaUploadReview',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: ReplicaViewerLayout,
+      name: 'ReplicaViewerLayout',
+      path: 'replicaViewerLayout',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

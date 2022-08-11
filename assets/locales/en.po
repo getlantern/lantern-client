@@ -1027,6 +1027,12 @@ msgstr "Upload"
 msgid "review"
 msgstr "Review"
 
+msgid "replica_layout_filetype"
+msgstr "Filetype: %s"
+
+msgid "empty_description"
+msgstr "No description was provided."
+
 msgid "publish"
 msgstr "Publish"
 
