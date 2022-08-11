@@ -22,23 +22,16 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   VideoPlayerController? controller;
   var playing = false;
   var _showPlayButton = false;
-  late final Future decryptVideoFile = Future.value(widget.item.replicaLink);
 
   @override
   void initState() {
     super.initState();
-    // first decrypt the video file - only really needed by Chat videos for the moment
-    decryptVideoFile.catchError((e, stack) {
-      logger.e('Error while decrypting video file: $e, $stack');
-    }).then(
-      // upon successful decryption, the value (either the String path in case of Chat, or the Replicalink replicaLink in case of Replica) is loaded by the respective loadVideoFile() arguments
-      (value) => setState(() {
-        controller = VideoPlayerController.network(
-          widget.replicaApi.getViewAddr(widget.item.replicaLink),
-        );
-        handleListener();
-      }),
-    );
+    setState(() {
+      controller = VideoPlayerController.network(
+        widget.replicaApi.getViewAddr(widget.item.replicaLink),
+      )..initialize();
+      handleListener();
+    });
   }
 
   void handleListener() {
@@ -69,7 +62,7 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   @override
   void dispose() {
     controller?.dispose();
-    controller = null;
+    controller == null;
     Wakelock.disable();
     super.dispose();
   }
@@ -133,24 +126,43 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
           item: widget.item,
         );
       case SearchCategory.Video:
-        // * Error handling
-        if (controller == null) {
-          return Text('video_stream_error'.i18n);
-        }
+        return renderVideoThumbnail();
+      case SearchCategory.Audio:
+        return Text('Audio preview');
+      case SearchCategory.Document:
+        return Text('Document preview');
+      case SearchCategory.Unknown:
+        return Text('Unknown icon');
+      case SearchCategory.App:
+        return Text('App icon');
+      default:
+        return Text('oops I do not know how to render this!');
+    }
+  }
 
-        // * Display video and play button
-        return Stack(
-          alignment: Alignment.center,
+  Widget renderVideoThumbnail() {
+    if (controller == null) {
+      return Text('video_stream_error'.i18n);
+    }
+
+    return Flexible(
+      child: ClipRRect(
+        borderRadius: defaultBorderRadius,
+        child: Stack(
+          alignment: Alignment.bottomLeft,
           children: [
             ValueListenableBuilder(
               valueListenable: controller!,
               builder: (
                 BuildContext context,
-                VideoPlayerValue value,
+                VideoPlayerValue videoResult,
                 Widget? child,
               ) {
-                if (!value.isInitialized) {
-                  return Text('not initialized');
+                if (!videoResult.isInitialized) {
+                  return Container(
+                    alignment: Alignment.center,
+                    child: const CircularProgressIndicator(),
+                  );
                 }
                 return Stack(
                   fit: StackFit.passthrough,
@@ -173,32 +185,63 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                     VideoProgressIndicator(
                       controller!,
                       allowScrubbing: true,
+                      padding: const EdgeInsets.only(bottom: 36.0),
                     ),
                   ],
                 );
               },
             ),
-            // button goes in main stack
-            if (_showPlayButton)
-              PlayButton(
-                size: 48,
-                custom: true,
-                playing: controller!.value.isPlaying,
-                onPressed: () => handleButtonTap(),
-              ),
+            // * Play and full screen butons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8.0,
+                    bottom: 2.0,
+                  ),
+                  child: RoundButton(
+                    diameter: 24,
+                    padding: 0,
+                    backgroundColor: transparent,
+                    icon: CAssetImage(
+                      size: 24,
+                      color: white,
+                      path: playing ? ImagePaths.pause : ImagePaths.play,
+                    ),
+                    onPressed: () => handleButtonTap(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    end: 8.0,
+                    bottom: 2.0,
+                  ),
+                  child: RoundButton(
+                    diameter: 30,
+                    padding: 0,
+                    backgroundColor: transparent,
+                    icon: CAssetImage(
+                      size: 30,
+                      color: white,
+                      path: ImagePaths.fullscreen_icon,
+                    ),
+                    // TODO <08-11-22, kalli> This should take into account where we are in the video duration
+                    onPressed: () => context.router.push(
+                      ReplicaVideoPlayerScreen(
+                        replicaApi: widget.replicaApi,
+                        replicaLink: widget.item.replicaLink,
+                        mimeType: widget.item.primaryMimeType,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
-        );
-      case SearchCategory.Audio:
-        return Text('Audio preview');
-      case SearchCategory.Document:
-        return Text('Document preview');
-      case SearchCategory.Unknown:
-        return Text('Unknown icon');
-      case SearchCategory.App:
-        return Text('App icon');
-      default:
-        return Text('oops I do not know how to render this!');
-    }
+        ),
+      ),
+    );
   }
 
   Widget renderText() {

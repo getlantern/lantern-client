@@ -47,3 +47,5 @@ double calculateStickerHeight(BuildContext context, int messageCount) {
 double appBarHeight = 56.0;
 
 double defaultWarningBarHeight = 30.0;
+
+BorderRadius defaultBorderRadius = BorderRadius.circular(6.0);

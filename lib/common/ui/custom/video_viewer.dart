@@ -4,7 +4,7 @@ import 'package:video_player/video_player.dart';
 
 /// CVideoViewer extends Viewer and also receives decryption and loading functions from Chat and Replica components. It has no awareness of the video file (Chat or Replica) it displays.
 /// It handles tapping/pausing/playing, as well as disabling the screensaver when a video is playing. It also handles video file decryption and loading errors.
-// TODO <08-11-22, kalli> Extend this for full screen and embedded
+// TODO <08-11-22, kalli> Extend this for full screen and embedded, we have duplicated a lot of this code in replica/ui/viewers/layout.dart
 class CVideoViewer extends ViewerWidget {
   final Function loadVideoFile;
   final Future decryptVideoFile;
