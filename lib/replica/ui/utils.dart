@@ -190,7 +190,7 @@ Widget renderImageThumbnail({
 }) {
   return Flexible(
     child: ClipRRect(
-      borderRadius: BorderRadius.circular(4.0),
+      borderRadius: defaultBorderRadius,
       child: CachedNetworkImage(
         imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
         progressIndicatorBuilder: (context, url, downloadProgress) =>
