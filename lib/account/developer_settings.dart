@@ -212,7 +212,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                     style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
                   ),
                   onPressed: () async => await context.pushRoute(
-                    ReplicaVideoPlayerScreen(
+                    FullscreenReplicaVideoViewer(
                       replicaApi: replicaApi,
                       replicaLink: ReplicaLink.New(
                         'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0',
@@ -252,7 +252,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                     style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
                   ),
                   onPressed: () async => await context.pushRoute(
-                    ReplicaImageFullScreenViewer(
+                    FullscreenReplicaImageViewer(
                       replicaLink: ReplicaLink.New(
                         'magnet%3A%3Fxt%3Durn%3Abtih%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26xs%3Dreplica%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26dn%3D1N_%40X%5B%604Z%5BF2K%40L%25J%402OYA2.png%26so%3D0',
                       )!,

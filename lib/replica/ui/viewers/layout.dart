@@ -44,7 +44,7 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
     });
   }
 
-  void handleButtonTap() {
+  void handleVideoTap() {
     Wakelock.toggle(enable: controller!.value.isPlaying);
     if (controller!.value.isPlaying) {
       setState(() {
@@ -121,22 +121,34 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   Widget renderPreview(SearchCategory category) {
     switch (category) {
       case SearchCategory.Image:
-        return renderImageThumbnail(
-          replicaApi: widget.replicaApi,
-          item: widget.item,
+        return GestureDetector(
+          child: renderImageThumbnail(
+            replicaApi: widget.replicaApi,
+            item: widget.item,
+          ),
+          onTap: () => context.router.push(
+            FullscreenReplicaImageViewer(
+              replicaLink: widget.item.replicaLink,
+            ),
+          ),
         );
       case SearchCategory.Video:
         return renderVideoThumbnail();
       case SearchCategory.Audio:
+        // TODO <08-11-22, kalli>
         return Text('Audio preview');
       case SearchCategory.Document:
+        // TODO <08-11-22, kalli>
         return Text('Document preview');
       case SearchCategory.Unknown:
-        return Text('Unknown icon');
+        // TODO <08-11-22, kalli>
+        return Text('Unknown preview');
       case SearchCategory.App:
-        return Text('App icon');
+        // TODO <08-11-22, kalli>
+        return Text('App preview');
       default:
-        return Text('oops I do not know how to render this!');
+        // TODO <08-11-22, kalli>
+        return Text('Oops I do not know how to render this!');
     }
   }
 
@@ -174,7 +186,7 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                         setState(() => _showPlayButton = !_showPlayButton);
                         Future.delayed(
                           defaultTransitionDuration,
-                          () => handleButtonTap(),
+                          () => handleVideoTap(),
                         );
                       },
                       child: AspectRatio(
@@ -209,7 +221,7 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                       color: white,
                       path: playing ? ImagePaths.pause : ImagePaths.play,
                     ),
-                    onPressed: () => handleButtonTap(),
+                    onPressed: () => handleVideoTap(),
                   ),
                 ),
                 Padding(
@@ -228,7 +240,7 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                     ),
                     // TODO <08-11-22, kalli> This should take into account where we are in the video duration
                     onPressed: () => context.router.push(
-                      ReplicaVideoPlayerScreen(
+                      FullscreenReplicaVideoViewer(
                         replicaApi: widget.replicaApi,
                         replicaLink: widget.item.replicaLink,
                         mimeType: widget.item.primaryMimeType,

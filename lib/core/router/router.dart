@@ -25,7 +25,6 @@ import 'package:lantern/replica/ui/viewers/audio_viewer.dart';
 import 'package:lantern/replica/ui/viewers/fullscreen_image_viewer.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
 import 'package:lantern/replica/ui/viewers/fullscreen_pdf_viewer.dart';
-import 'package:lantern/replica/ui/viewers/unknown_viewer.dart';
 import 'package:lantern/replica/ui/viewers/fullscreen_video_viewer.dart';
 import 'package:lantern/replica/search.dart';
 import 'package:lantern/replica/upload/title.dart';
@@ -138,9 +137,9 @@ import 'package:lantern/replica/upload/review.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: ReplicaVideoPlayerScreen,
-      name: 'ReplicaVideoPlayerScreen',
-      path: 'replicaVideoPlayerScreen',
+      page: FullscreenReplicaVideoViewer,
+      name: 'FullscreenReplicaVideoViewer',
+      path: 'fullscreenReplicaVideoViewer',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
@@ -170,9 +169,9 @@ import 'package:lantern/replica/upload/review.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: ReplicaImageFullScreenViewer,
-      name: 'ReplicaImageFullScreenViewer',
-      path: 'replicaImageFullScreenViewer',
+      page: FullscreenReplicaImageViewer,
+      name: 'FullscreenReplicaImageViewer',
+      path: 'fullscreenReplicaImageViewer',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
@@ -226,17 +225,9 @@ import 'package:lantern/replica/upload/review.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: ReplicaPDFScreen,
-      name: 'ReplicaPDFScreen',
-      path: 'replicaPDFScreen',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: ReplicaUnknownItemScreen,
-      name: 'ReplicaUnknownItemScreen',
-      path: 'replicaUnknownItemScreen',
+      page: FullscreenReplicaPDFViewer,
+      name: 'FullscreenReplicaPDFViewer',
+      path: 'fullscreenReplicaPDFViewer',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

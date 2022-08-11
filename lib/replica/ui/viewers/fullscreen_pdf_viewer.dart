@@ -4,8 +4,8 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
 // TODO <08-08-22, kalli> Update to reflect Figma
-class ReplicaPDFScreen extends StatefulWidget {
-  ReplicaPDFScreen({
+class FullscreenReplicaPDFViewer extends StatefulWidget {
+  FullscreenReplicaPDFViewer({
     Key? key,
     required this.replicaApi,
     required this.replicaLink,
@@ -19,10 +19,12 @@ class ReplicaPDFScreen extends StatefulWidget {
   final String? mimeType;
 
   @override
-  ReplicaPDFScreenState createState() => ReplicaPDFScreenState();
+  FullscreenReplicaPDFViewerState createState() =>
+      FullscreenReplicaPDFViewerState();
 }
 
-class ReplicaPDFScreenState extends State<ReplicaPDFScreen> {
+class FullscreenReplicaPDFViewerState
+    extends State<FullscreenReplicaPDFViewer> {
   String? tempFile;
   Future<void>? fetched;
 

@@ -1,19 +1,19 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
-/// ReplicaImageFullScreenViewer renders a full screen Replica image. It uses CImageViewer() to handle tapping and support landscape and portrait orientations.
-class ReplicaImageFullScreenViewer extends StatefulWidget {
-  ReplicaImageFullScreenViewer({Key? key, required this.replicaLink});
+/// FullscreenReplicaImageViewer renders a full screen Replica image. It uses CImageViewer() to handle tapping and support landscape and portrait orientations.
+class FullscreenReplicaImageViewer extends StatefulWidget {
+  FullscreenReplicaImageViewer({Key? key, required this.replicaLink});
 
   final ReplicaLink replicaLink;
 
   @override
-  State<ReplicaImageFullScreenViewer> createState() =>
-      _ReplicaImageFullScreenViewerState();
+  State<FullscreenReplicaImageViewer> createState() =>
+      _FullscreenReplicaImageViewerState();
 }
 
-class _ReplicaImageFullScreenViewerState
-    extends State<ReplicaImageFullScreenViewer> {
+class _FullscreenReplicaImageViewerState
+    extends State<FullscreenReplicaImageViewer> {
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([

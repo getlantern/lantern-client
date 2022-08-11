@@ -27,10 +27,10 @@ class _ReplicaAudioListViewState extends ReplicaCommonListViewState {
         item: item,
         onTap: () {
           context.pushRoute(
-            ReplicaAudioPlayerScreen(
+            ReplicaViewerLayout(
               replicaApi: widget.replicaApi,
-              replicaLink: item.replicaLink,
-              mimeType: item.primaryMimeType,
+              item: item,
+              category: SearchCategory.Audio,
             ),
           );
         },

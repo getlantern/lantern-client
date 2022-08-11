@@ -32,7 +32,7 @@ class _ReplicaDocumentListViewState extends ReplicaCommonListViewState {
         onTap: () {
           if (item.primaryMimeType == 'application/pdf') {
             context.pushRoute(
-              ReplicaPDFScreen(
+              FullscreenReplicaPDFViewer(
                 replicaApi: widget.replicaApi,
                 replicaLink: item.replicaLink,
                 category: SearchCategory.Document,
@@ -40,8 +40,9 @@ class _ReplicaDocumentListViewState extends ReplicaCommonListViewState {
             );
           } else {
             context.pushRoute(
-              ReplicaUnknownItemScreen(
-                replicaLink: item.replicaLink,
+              ReplicaViewerLayout(
+                item: item,
+                replicaApi: widget.replicaApi,
                 category: SearchCategory.Document,
               ),
             );
