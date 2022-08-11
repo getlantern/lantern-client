@@ -41,7 +41,7 @@ class _LinkOpenerScreen extends State<ReplicaLinkHandler> {
       switch (cat) {
         case SearchCategory.Video:
           return context.replaceRoute(
-            ReplicaVideoPlayerScreen(
+            FullscreenReplicaVideoViewer(
               replicaApi: widget.replicaApi,
               replicaLink: widget.replicaLink,
             ),
@@ -49,9 +49,10 @@ class _LinkOpenerScreen extends State<ReplicaLinkHandler> {
         case SearchCategory.Image:
           // TODO <08-11-2022> kalli: this should navigate to ReplicaViewerLayout
           return context.replaceRoute(
-            ReplicaImageFullScreenViewer(replicaLink: widget.replicaLink),
+            FullscreenReplicaImageViewer(replicaLink: widget.replicaLink),
           );
         case SearchCategory.Audio:
+          // TODO <08-11-2022> kalli: this should navigate to ReplicaViewerLayout
           return context.replaceRoute(
             ReplicaAudioPlayerScreen(
               replicaApi: widget.replicaApi,
@@ -61,12 +62,14 @@ class _LinkOpenerScreen extends State<ReplicaLinkHandler> {
         case SearchCategory.Document:
         case SearchCategory.App:
         case SearchCategory.Unknown:
-          return context.replaceRoute(
-            ReplicaUnknownItemScreen(
-              category: cat,
-              replicaLink: widget.replicaLink,
-            ),
-          );
+          // TODO <08-11-2022> kalli: this should navigate to ReplicaViewerLayout
+          // return context.replaceRoute(
+          //   ReplicaUnknownItemScreen(
+          //     category: cat,
+          //     replicaLink: widget.replicaLink,
+          //   ),
+          // );
+          return Container();
       }
     });
 

@@ -28,9 +28,10 @@ class _ReplicaAppListViewState extends ReplicaCommonListViewState {
         replicaApi: widget.replicaApi,
         onTap: () async {
           await context.pushRoute(
-            ReplicaUnknownItemScreen(
-              replicaLink: item.replicaLink,
+            ReplicaViewerLayout(
+              item: item,
               category: SearchCategory.App,
+              replicaApi: widget.replicaApi,
             ),
           );
         },

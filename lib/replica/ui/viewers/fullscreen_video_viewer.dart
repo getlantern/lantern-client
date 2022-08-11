@@ -2,10 +2,10 @@ import 'package:video_player/video_player.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
-/// ReplicaVideoPlayerScreen takes a 'replicaLink' of a video and attempts to stream it. CVideoViewer handles orientation and errors.
+/// FullscreenReplicaVideoViewer takes a 'replicaLink' of a video and attempts to stream it. CVideoViewer handles orientation and errors.
 // TODO <08-08-22, kalli> Update to reflect Figma
-class ReplicaVideoPlayerScreen extends StatelessWidget {
-  ReplicaVideoPlayerScreen({
+class FullscreenReplicaVideoViewer extends StatelessWidget {
+  FullscreenReplicaVideoViewer({
     Key? key,
     required this.replicaApi,
     required this.replicaLink,
