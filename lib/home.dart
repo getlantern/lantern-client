@@ -124,11 +124,15 @@ class _HomePageState extends State<HomePage> {
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
-            sessionModel.shouldShowYinshiPopup().then((shouldShowPopup) async {
-              debugPrint(lang);
-              if (shouldShowPopup && (lang == ('zh_CN') || lang == 'zh_HK')) {
-                await showYinshiPopup(context);
-              }
+            messagingModel.shouldShowTryLanternChatModal().then((shouldShowChatModal) {
+              /**
+               * Don't show Yinshi banner until user has seen the Chat modal.
+               */
+              sessionModel.shouldShowYinshiPopup().then((shouldShowPopup) async {
+                if (shouldShowPopup && !shouldShowChatModal) {
+                  await showYinshiPopup(context);
+                }
+              });
             });
             return sessionModel.selectedTab(
               (context, selectedTab, child) =>

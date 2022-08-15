@@ -115,9 +115,17 @@ class SessionModel(
                 }
             }
             "shouldShowYinshiPopup" -> {
+                /**
+                 * Show Yinshi banner if it has not been suppressed
+                 * and if user country is China or language is Chinese.
+                 */
                 return db.mutate { tx ->
+                    val country = LanternApp.getSession().getCountryCode() ?: ""
+                    val isChina = country == "CN"
+                    val language = LanternApp.getSession().locale() ?: ""
+                    val isChinese = language.contains("zh")
                     val hasSuppressed = tx.get("suppressYinshiPopup") ?: false
-                    !hasSuppressed
+                    !hasSuppressed && (isChina || isChinese)
                 }
             }
             // for Dev
