@@ -11,7 +11,7 @@ class ImageAttachment extends VisualAttachment {
   ) : super(contact, message, attachment, inbound);
 
   @override
-  Widget buildViewer() => CImageViewer(
+  Widget buildViewer() => FullScreenImageViewer(
         loadImageFile: messagingModel.decryptAttachment(attachment),
         title: CText(
           contact.displayNameOrFallback,

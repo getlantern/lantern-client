@@ -1,71 +1,33 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
-import 'package:video_player/video_player.dart';
 
-class ReplicaViewerLayout extends StatefulWidget {
-  ReplicaViewerLayout({
-    Key? key,
-    required this.replicaApi,
-    required this.item,
-    required this.category,
-  }) : super(key: key);
-
+/// Base layout class for Replica viewers
+abstract class ReplicaViewerLayout extends StatefulWidget {
   final ReplicaApi replicaApi;
   final ReplicaSearchItem item;
   final SearchCategory category;
 
-  @override
-  State<ReplicaViewerLayout> createState() => _ReplicaViewerLayoutState();
+  ReplicaViewerLayout({
+    required this.replicaApi,
+    required this.item,
+    required this.category,
+  });
 }
 
-class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
-  VideoPlayerController? controller;
-  var playing = false;
-  var _showPlayButton = false;
-
+abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      controller = VideoPlayerController.network(
-        widget.replicaApi.getViewAddr(widget.item.replicaLink),
-      )..initialize();
-      handleListener();
-    });
-  }
-
-  void handleListener() {
-    controller?.addListener(() {
-      if (controller!.value.isPlaying != playing) {
-        setState(() {
-          playing = !playing;
-        });
-      }
-    });
-  }
-
-  void handleVideoTap() {
-    Wakelock.toggle(enable: controller!.value.isPlaying);
-    if (controller!.value.isPlaying) {
-      setState(() {
-        controller!.pause();
-        _showPlayButton = true;
-      });
-    } else {
-      setState(() {
-        controller!.play();
-        _showPlayButton = false;
-      });
-    }
   }
 
   @override
   void dispose() {
-    controller?.dispose();
-    controller == null;
-    Wakelock.disable();
     super.dispose();
   }
+
+  bool ready();
+
+  Widget body(BuildContext context);
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +72,7 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            renderPreview(widget.category),
+            body(context),
             renderText(),
           ],
         ),
@@ -118,143 +80,64 @@ class _ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
     );
   }
 
-  Widget renderPreview(SearchCategory category) {
-    switch (category) {
-      case SearchCategory.Image:
-        return GestureDetector(
-          child: renderImageThumbnail(
-            replicaApi: widget.replicaApi,
-            item: widget.item,
-          ),
-          onTap: () => context.router.push(
-            FullscreenReplicaImageViewer(
-              replicaLink: widget.item.replicaLink,
-            ),
-          ),
-        );
-      case SearchCategory.Video:
-        return renderVideoThumbnail();
-      case SearchCategory.Audio:
-        // TODO <08-11-22, kalli>
-        return Text('Audio preview');
-      case SearchCategory.Document:
-        // TODO <08-11-22, kalli>
-        return Text('Document preview');
-      case SearchCategory.Unknown:
-        // TODO <08-11-22, kalli>
-        return Text('Unknown preview');
-      case SearchCategory.App:
-        // TODO <08-11-22, kalli>
-        return Text('App preview');
-      default:
-        // TODO <08-11-22, kalli>
-        return Text('Oops I do not know how to render this!');
-    }
-  }
+  // Widget renderPreview(SearchCategory category) {
+  //   switch (category) {
+  //     case SearchCategory.Image:
+  //       return GestureDetector(
+  //         child: renderImageThumbnail(
+  //           replicaApi: widget.replicaApi,
+  //           item: widget.item,
+  //         ),
+  //         onTap: () => context.router.push(
+  //           FullscreenReplicaImageViewer(
+  //             replicaLink: widget.item.replicaLink,
+  //           ),
+  //         ),
+  //       );
+  //     case SearchCategory.Video:
+  //       return renderVideoThumbnail();
+  //     case SearchCategory.Audio:
+  //       return Text('audio');
+  //     // return ReplicaAudioPlayerScreen(
+  //     //     replicaApi: widget.replicaApi,
+  //     //     replicaLink: widget.item.replicaLink);
+  //     case SearchCategory.Document:
+  //       final isPDF = widget.item.primaryMimeType == 'application/pdf';
+  //       return GestureDetector(
+  //         // EXTRA: render a preview of first page of PDF?
+  //         child: renderIconPlaceholder(
+  //           isPDF ? ImagePaths.pdf : ImagePaths.spreadsheet,
+  //         ),
+  //         onTap: () async {
+  //           if (isPDF) {
+  //             await context.router.push(
+  //               FullscreenReplicaPDFViewer(
+  //                 replicaApi: widget.replicaApi,
+  //                 replicaLink: widget.item.replicaLink,
+  //                 category: SearchCategory.Document,
+  //               ),
+  //             );
+  //           }
+  //           ;
+  //         },
+  //       );
+  //     case SearchCategory.Unknown:
+  //       return renderIconPlaceholder(ImagePaths.alert);
+  //     case SearchCategory.App:
+  //       return renderIconPlaceholder(ImagePaths.spreadsheet);
+  //     default:
+  //       return renderIconPlaceholder(ImagePaths.alert);
+  //   }
+  // }
 
-  Widget renderVideoThumbnail() {
-    if (controller == null) {
-      return Text('video_stream_error'.i18n);
-    }
-
-    return Flexible(
-      child: ClipRRect(
-        borderRadius: defaultBorderRadius,
-        child: Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            ValueListenableBuilder(
-              valueListenable: controller!,
-              builder: (
-                BuildContext context,
-                VideoPlayerValue videoResult,
-                Widget? child,
-              ) {
-                if (!videoResult.isInitialized) {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: const CircularProgressIndicator(),
-                  );
-                }
-                return Stack(
-                  fit: StackFit.passthrough,
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                    GestureDetector(
-                      onTap: () {
-                        setState(() => _showPlayButton = !_showPlayButton);
-                        Future.delayed(
-                          defaultTransitionDuration,
-                          () => handleVideoTap(),
-                        );
-                      },
-                      child: AspectRatio(
-                        aspectRatio: controller!.value.aspectRatio,
-                        child: VideoPlayer(controller!),
-                      ),
-                    ),
-                    VideoProgressIndicator(
-                      controller!,
-                      allowScrubbing: true,
-                      padding: const EdgeInsets.only(bottom: 36.0),
-                    ),
-                  ],
-                );
-              },
-            ),
-            // * Play and full screen butons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 8.0,
-                    bottom: 2.0,
-                  ),
-                  child: RoundButton(
-                    diameter: 24,
-                    padding: 0,
-                    backgroundColor: transparent,
-                    icon: CAssetImage(
-                      size: 24,
-                      color: white,
-                      path: playing ? ImagePaths.pause : ImagePaths.play,
-                    ),
-                    onPressed: () => handleVideoTap(),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    end: 8.0,
-                    bottom: 2.0,
-                  ),
-                  child: RoundButton(
-                    diameter: 30,
-                    padding: 0,
-                    backgroundColor: transparent,
-                    icon: CAssetImage(
-                      size: 30,
-                      color: white,
-                      path: ImagePaths.fullscreen_icon,
-                    ),
-                    // TODO <08-11-22, kalli> This should take into account where we are in the video duration
-                    onPressed: () => context.router.push(
-                      FullscreenReplicaVideoViewer(
-                        replicaApi: widget.replicaApi,
-                        replicaLink: widget.item.replicaLink,
-                        mimeType: widget.item.primaryMimeType,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget renderIconPlaceholder(String path) {
+  //   return Flexible(
+  //     child: CAssetImage(
+  //       path: path,
+  //       size: 100,
+  //     ),
+  //   );
+  // }
 
   Widget renderText() {
     return Flexible(

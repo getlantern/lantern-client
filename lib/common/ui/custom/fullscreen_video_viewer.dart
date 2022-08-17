@@ -2,10 +2,9 @@ import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/replica/ui/utils.dart';
 import 'package:video_player/video_player.dart';
 
-/// CVideoViewer extends Viewer and also receives decryption and loading functions from Chat and Replica components. It has no awareness of the video file (Chat or Replica) it displays.
+/// FullScreenVideoViewer extends Viewer and also receives decryption and loading functions from Chat and Replica components. It has no awareness of the video file (Chat or Replica) it displays.
 /// It handles tapping/pausing/playing, as well as disabling the screensaver when a video is playing. It also handles video file decryption and loading errors.
-// TODO <08-11-22, kalli> Extend this for full screen and embedded, we have duplicated a lot of this code in replica/ui/viewers/layout.dart
-class CVideoViewer extends ViewerWidget {
+class FullScreenVideoViewer extends FullScreenViewer {
   final Function loadVideoFile;
   final Future decryptVideoFile;
   @override
@@ -15,7 +14,7 @@ class CVideoViewer extends ViewerWidget {
   @override
   final Map<String, dynamic>? metadata;
 
-  CVideoViewer({
+  FullScreenVideoViewer({
     required this.loadVideoFile,
     required this.decryptVideoFile,
     this.title,
@@ -24,10 +23,11 @@ class CVideoViewer extends ViewerWidget {
   }) : super();
 
   @override
-  State<StatefulWidget> createState() => CVideoViewerState();
+  State<StatefulWidget> createState() => FullScreenVideoViewerState();
 }
 
-class CVideoViewerState extends ViewerState<CVideoViewer> {
+class FullScreenVideoViewerState
+    extends FullScreenViewerState<FullScreenVideoViewer> {
   VideoPlayerController? controller;
   var playing = false;
   var _showPlayButton = false;

@@ -29,7 +29,10 @@ class ReplicaImageListItem extends StatelessWidget {
             return GridTile(
               child: Column(
                 children: [
-                  renderImageThumbnail(replicaApi: replicaApi, item: item),
+                  renderImageThumbnail(
+                    imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
+                    item: item,
+                  ),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
                   renderDescription(),
                 ],
