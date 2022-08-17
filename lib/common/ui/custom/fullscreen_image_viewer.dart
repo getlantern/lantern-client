@@ -1,6 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
 
-class CImageViewer extends ViewerWidget {
+class FullScreenImageViewer extends FullScreenViewer {
   final Future<Uint8List> loadImageFile;
   @override
   final Widget? title;
@@ -9,7 +9,7 @@ class CImageViewer extends ViewerWidget {
   @override
   final Map<String, dynamic>? metadata;
 
-  CImageViewer({
+  FullScreenImageViewer({
     required this.loadImageFile,
     this.title,
     this.actions,
@@ -17,10 +17,11 @@ class CImageViewer extends ViewerWidget {
   }) : super();
 
   @override
-  State<StatefulWidget> createState() => CImageViewerState();
+  State<StatefulWidget> createState() => FullScreenImageViewerState();
 }
 
-class CImageViewerState extends ViewerState<CImageViewer> {
+class FullScreenImageViewerState
+    extends FullScreenViewerState<FullScreenImageViewer> {
   BasicMemoryImage? image;
 
   @override

@@ -13,7 +13,7 @@ class VideoAttachment extends VisualAttachment {
   ) : super(contact, message, attachment, inbound);
 
   @override
-  Widget buildViewer() => CVideoViewer(
+  Widget buildViewer() => FullScreenVideoViewer(
         decryptVideoFile: messagingModel.decryptVideoForPlayback(attachment),
         loadVideoFile: (String path) => VideoPlayerController.file(
           File(path),

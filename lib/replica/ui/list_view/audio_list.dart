@@ -1,10 +1,10 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
-/// ReplicaVideoListView renders a list of ReplicaVideoListItem.
-/// Looks like this docs/replica_search_tabs.png
-class ReplicaVideoListView extends ReplicaCommonListView {
-  ReplicaVideoListView({
+/// ReplicaAppListView renders a list of ReplicaAudioListItem
+/// Looks like this docs/replica_audio_listview.png
+class ReplicaAudioListView extends ReplicaCommonListView {
+  ReplicaAudioListView({
     Key? key,
     required ReplicaApi replicaApi,
     required String searchQuery,
@@ -12,30 +12,29 @@ class ReplicaVideoListView extends ReplicaCommonListView {
           key: key,
           replicaApi: replicaApi,
           searchQuery: searchQuery,
-          searchCategory: SearchCategory.Video,
+          searchCategory: SearchCategory.Audio,
         );
 
   @override
-  State<StatefulWidget> createState() => _ReplicaVideoListViewState();
+  State<StatefulWidget> createState() => _ReplicaAudioListViewState();
 }
 
-class _ReplicaVideoListViewState extends ReplicaCommonListViewState {
+class _ReplicaAudioListViewState extends ReplicaCommonListViewState {
   @override
   Widget build(BuildContext context) {
     return renderPaginatedListView((context, item, index) {
-      return ReplicaVideoListItem(
-        key: Key(item.replicaLink.infohash),
+      return ReplicaAudioListItem(
         item: item,
-        replicaApi: widget.replicaApi,
         onTap: () {
           context.pushRoute(
-            ReplicaViewerLayout(
+            ReplicaAudioViewer(
               replicaApi: widget.replicaApi,
               item: item,
-              category: SearchCategory.Video,
+              category: SearchCategory.Audio,
             ),
           );
         },
+        replicaApi: widget.replicaApi,
       );
     });
   }

@@ -29,24 +29,14 @@ class _ReplicaDocumentListViewState extends ReplicaCommonListViewState {
       return ReplicaDocumentListItem(
         item: item,
         replicaApi: widget.replicaApi,
-        onTap: () {
-          if (item.primaryMimeType == 'application/pdf') {
-            context.pushRoute(
-              FullscreenReplicaPDFViewer(
-                replicaApi: widget.replicaApi,
-                replicaLink: item.replicaLink,
-                category: SearchCategory.Document,
-              ),
-            );
-          } else {
-            context.pushRoute(
-              ReplicaViewerLayout(
-                item: item,
-                replicaApi: widget.replicaApi,
-                category: SearchCategory.Document,
-              ),
-            );
-          }
+        onTap: () async {
+          await context.pushRoute(
+            ReplicaMiscViewer(
+              item: item,
+              replicaApi: widget.replicaApi,
+              category: SearchCategory.Document,
+            ),
+          );
         },
       );
     });

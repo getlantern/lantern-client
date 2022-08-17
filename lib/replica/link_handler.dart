@@ -40,29 +40,30 @@ class _LinkOpenerScreen extends State<ReplicaLinkHandler> {
       logger.v('category is ${cat.toString()}');
       switch (cat) {
         case SearchCategory.Video:
-          return context.replaceRoute(
-            FullscreenReplicaVideoViewer(
-              replicaApi: widget.replicaApi,
-              replicaLink: widget.replicaLink,
-            ),
-          );
+        // TODO <08-17-22, kalli> This should navigate to ReplicaVideoViewer
+        // return context.replaceRoute(
+        //   FullscreenReplicaVideoViewer(
+        //     replicaApi: widget.replicaApi,
+        //     replicaLink: widget.replicaLink,
+        //   ),
+        // );
         case SearchCategory.Image:
-          // TODO <08-11-2022> kalli: this should navigate to ReplicaViewerLayout
-          return context.replaceRoute(
-            FullscreenReplicaImageViewer(replicaLink: widget.replicaLink),
-          );
+        // TODO <08-11-2022> kalli: this should navigate to ReplicaImageViewer
+        // return context.replaceRoute(
+        //   FullscreenReplicaImageViewer(replicaLink: widget.replicaLink),
+        // );
         case SearchCategory.Audio:
-          // TODO <08-11-2022> kalli: this should navigate to ReplicaViewerLayout
-          return context.replaceRoute(
-            ReplicaAudioPlayerScreen(
-              replicaApi: widget.replicaApi,
-              replicaLink: widget.replicaLink,
-            ),
-          );
+        // TODO <08-11-2022> kalli: this should navigate to ReplicaAudioViewer
+        // return context.replaceRoute(
+        //   ReplicaAudioPlayerScreen(
+        //     replicaApi: widget.replicaApi,
+        //     replicaLink: widget.replicaLink,
+        //   ),
+        // );
         case SearchCategory.Document:
         case SearchCategory.App:
         case SearchCategory.Unknown:
-          // TODO <08-11-2022> kalli: this should navigate to ReplicaViewerLayout
+          // TODO <08-11-2022> kalli: this should navigate to ReplicaMiscViewer
           // return context.replaceRoute(
           //   ReplicaUnknownItemScreen(
           //     category: cat,

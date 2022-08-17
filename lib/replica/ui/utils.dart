@@ -185,14 +185,14 @@ Widget renderReplicaErrorUI({required String text, Color? color}) {
 
 /// Used in ReplicaViewerLayout and ReplicaImageListItem to render a thumbnail preview (of variable size) for an image asset
 Widget renderImageThumbnail({
-  required ReplicaApi replicaApi,
+  required String imageUrl,
   required ReplicaSearchItem item,
 }) {
   return Flexible(
     child: ClipRRect(
       borderRadius: defaultBorderRadius,
       child: CachedNetworkImage(
-        imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
+        imageUrl: imageUrl,
         progressIndicatorBuilder: (context, url, downloadProgress) =>
             CircularProgressIndicator(value: downloadProgress.progress),
         errorWidget: (context, url, error) => Stack(
