@@ -70,74 +70,16 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
           top: 24.0,
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            body(context),
+            SizedBox(child: body(context)),
             renderText(),
           ],
         ),
       ),
     );
   }
-
-  // Widget renderPreview(SearchCategory category) {
-  //   switch (category) {
-  //     case SearchCategory.Image:
-  //       return GestureDetector(
-  //         child: renderImageThumbnail(
-  //           replicaApi: widget.replicaApi,
-  //           item: widget.item,
-  //         ),
-  //         onTap: () => context.router.push(
-  //           FullscreenReplicaImageViewer(
-  //             replicaLink: widget.item.replicaLink,
-  //           ),
-  //         ),
-  //       );
-  //     case SearchCategory.Video:
-  //       return renderVideoThumbnail();
-  //     case SearchCategory.Audio:
-  //       return Text('audio');
-  //     // return ReplicaAudioPlayerScreen(
-  //     //     replicaApi: widget.replicaApi,
-  //     //     replicaLink: widget.item.replicaLink);
-  //     case SearchCategory.Document:
-  //       final isPDF = widget.item.primaryMimeType == 'application/pdf';
-  //       return GestureDetector(
-  //         // EXTRA: render a preview of first page of PDF?
-  //         child: renderIconPlaceholder(
-  //           isPDF ? ImagePaths.pdf : ImagePaths.spreadsheet,
-  //         ),
-  //         onTap: () async {
-  //           if (isPDF) {
-  //             await context.router.push(
-  //               FullscreenReplicaPDFViewer(
-  //                 replicaApi: widget.replicaApi,
-  //                 replicaLink: widget.item.replicaLink,
-  //                 category: SearchCategory.Document,
-  //               ),
-  //             );
-  //           }
-  //           ;
-  //         },
-  //       );
-  //     case SearchCategory.Unknown:
-  //       return renderIconPlaceholder(ImagePaths.alert);
-  //     case SearchCategory.App:
-  //       return renderIconPlaceholder(ImagePaths.spreadsheet);
-  //     default:
-  //       return renderIconPlaceholder(ImagePaths.alert);
-  //   }
-  // }
-
-  // Widget renderIconPlaceholder(String path) {
-  //   return Flexible(
-  //     child: CAssetImage(
-  //       path: path,
-  //       size: 100,
-  //     ),
-  //   );
-  // }
 
   Widget renderText() {
     return Flexible(

@@ -31,6 +31,7 @@ class _ReplicaImageViewerState extends ReplicaViewerLayoutState {
       child: renderImageThumbnail(
         imageUrl: imageUrl,
         item: widget.item,
+        size: 100,
       ),
       // * Trigger FullScreenImageViewer() on tap
       onTap: () async => await launchFullScreen(context),
