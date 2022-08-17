@@ -32,6 +32,7 @@ class ReplicaImageListItem extends StatelessWidget {
                   renderImageThumbnail(
                     imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
                     item: item,
+                    size: 24,
                   ),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
                   renderDescription(),

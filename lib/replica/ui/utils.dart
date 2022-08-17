@@ -187,6 +187,7 @@ Widget renderReplicaErrorUI({required String text, Color? color}) {
 Widget renderImageThumbnail({
   required String imageUrl,
   required ReplicaSearchItem item,
+  required double size,
 }) {
   return Flexible(
     child: ClipRRect(
@@ -198,9 +199,10 @@ Widget renderImageThumbnail({
         errorWidget: (context, url, error) => Stack(
           children: [
             Container(color: grey4),
-            const Center(
+            Center(
               child: CAssetImage(
                 path: ImagePaths.image_inactive,
+                size: size,
               ),
             ),
           ],

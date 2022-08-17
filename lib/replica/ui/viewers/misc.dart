@@ -1,7 +1,13 @@
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
+import 'package:path_provider/path_provider.dart';
 
+/// Multi-purpose class which renders a Replica viewer for
+/// 1. Documents
+/// 2. Apps
+/// 3. Unknown
 class ReplicaMiscViewer extends ReplicaViewerLayout {
   ReplicaMiscViewer({
     required ReplicaApi replicaApi,
@@ -14,9 +20,30 @@ class ReplicaMiscViewer extends ReplicaViewerLayout {
 }
 
 class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
+  String? tempFile;
+  Future<void>? fetched;
+
   @override
   void initState() {
     super.initState();
+    // Fetch to PDF to an application-specific temp file so that we can open it
+    // in a PDFView.
+    getTemporaryDirectory().then((tempDir) {
+      setState(() {
+        tempFile =
+            '${tempDir.absolute.path}/${widget.item.replicaLink.infohash}';
+        fetched = widget.replicaApi.fetch(widget.item.replicaLink, tempFile!);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // Delete the temp file when we're done viewing it.
+    if (tempFile != null) {
+      File(tempFile!).deleteSync();
+    }
+    super.dispose();
   }
 
   @override
@@ -24,6 +51,41 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
 
   @override
   Widget body(BuildContext context) {
-    return Text('Misc viewer');
+    final isPDF = widget.item.primaryMimeType == 'application/pdf';
+    switch (widget.category) {
+      case SearchCategory.Document:
+        return GestureDetector(
+          child: renderIconPlaceholder(
+            isPDF ? ImagePaths.pdf : ImagePaths.spreadsheet,
+          ),
+          onTap: () async {
+            if (isPDF) {
+              await context.router.push(
+                FullScreenDialogPage(
+                  widget: PDFView(
+                    filePath: tempFile,
+                  ),
+                ),
+              );
+            }
+            ;
+          },
+        );
+      case SearchCategory.App:
+        return renderIconPlaceholder(ImagePaths.spreadsheet);
+      case SearchCategory.Unknown:
+      default:
+        // TODO <08-17-22, kalli> Change icon
+        return renderIconPlaceholder(ImagePaths.alert);
+    }
+  }
+
+  Widget renderIconPlaceholder(String path) {
+    return Flexible(
+      child: CAssetImage(
+        path: path,
+        size: 100,
+      ),
+    );
   }
 }
