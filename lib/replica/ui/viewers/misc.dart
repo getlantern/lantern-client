@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 /// 1. Documents
 /// 2. Apps
 /// 3. Unknown
+/// It does not offer a full screen option (since we don't preview these files)
 class ReplicaMiscViewer extends ReplicaViewerLayout {
   ReplicaMiscViewer({
     required ReplicaApi replicaApi,

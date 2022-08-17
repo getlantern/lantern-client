@@ -1,6 +1,8 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
+// TODO <08-11-2022> kalli: This isn't used right now?
+
 /// ReplicaLinkHandler is a 'loading' screen for Replica links that:
 /// - Checks if Replica is available by re-running ReplicaCommon.init()
 ///   - This may not be initialized if we came from a deeplink

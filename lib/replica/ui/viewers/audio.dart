@@ -3,6 +3,9 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
 
+// TODO <08-17-22, kalli> This works, but doesn't look like the specs. We need to create an abstract Audio Player which can be reused in:
+// 1. Messaging (it appears in two places - rendered inside conversation as well as underneath message bar while reocrding an audio message)
+// 2. Replica audio preview
 class ReplicaAudioViewer extends ReplicaViewerLayout {
   ReplicaAudioViewer({
     required ReplicaApi replicaApi,

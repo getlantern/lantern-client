@@ -3,6 +3,8 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
 
+/// Renders an embedded video player with fullscreen option
+/// wrapped by our reusable ReplicaViewer layout
 class ReplicaVideoViewer extends ReplicaViewerLayout {
   ReplicaVideoViewer({
     required ReplicaApi replicaApi,
