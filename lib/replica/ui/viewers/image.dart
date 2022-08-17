@@ -2,6 +2,8 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
 
+/// Renders an embedded image preview with fullscreen option
+/// wrapped by our reusable ReplicaViewer layout
 class ReplicaImageViewer extends ReplicaViewerLayout {
   ReplicaImageViewer({
     required ReplicaApi replicaApi,

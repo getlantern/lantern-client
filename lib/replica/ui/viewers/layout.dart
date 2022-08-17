@@ -1,7 +1,11 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
-/// Base layout class for Replica viewers
+/// Base layout class for Replica viewers. It is extended by:
+/// replica/ui/viewers/audio
+/// replica/ui/viewers/image
+/// replica/ui/viewers/misc
+/// replica/ui/viewers/video
 abstract class ReplicaViewerLayout extends StatefulWidget {
   final ReplicaApi replicaApi;
   final ReplicaSearchItem item;
