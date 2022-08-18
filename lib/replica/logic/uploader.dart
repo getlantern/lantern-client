@@ -54,7 +54,7 @@ class ReplicaUploader {
     );
   }
 
-  // TODO <08-10-22, kalli> Figure out how to query endpoint with infohash
+  // TODO <08-10-22, kalli> Figure out how to query endpoint with infohash (for rendering preview after uploading something)
   Future<void> queryFile({
     required String infohash,
   }) async {

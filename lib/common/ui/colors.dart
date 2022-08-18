@@ -31,6 +31,7 @@ Color getAvatarColor(double hue, {bool inverted = false}) {
   return HSLColor.fromAHSL(1, hue, 1, 0.3).toColor();
 }
 
+// @echo
 Color getReplicaMimeBgColor(String mime) {
   final hue = sha1Hue(mime);
   return HSLColor.fromAHSL(0.6, hue, 0.3, 0.2).toColor();

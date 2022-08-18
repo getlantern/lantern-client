@@ -2,6 +2,7 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
 // TODO <08-08-22, kalli> Update to reflect Figma
+// @echo
 class ReplicaAppListItem extends StatelessWidget {
   ReplicaAppListItem({
     required this.item,

@@ -36,7 +36,7 @@ class ReplicaApi {
     return replicaHostAddr != '';
   }
 
-  // TODO <08-10-22, kalli> Do we need to add description here?
+  // TODO <08-10-22, kalli> Add escription here?
   Future<List<ReplicaSearchItem>> search(
     String query,
     SearchCategory category,

@@ -4,6 +4,7 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:markdown/markdown.dart' as md;
 
+// TODO: this is not currently used?
 /// ReplicaLinkMarkdownElementBuilder matches all words (in a markdown text)
 /// starting with the keyword 'replica://' and converts them to clickable links
 /// (i.e., SelectableText) that runs 'runReplicaLink' when tapped
