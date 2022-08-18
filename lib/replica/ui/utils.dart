@@ -194,8 +194,11 @@ Widget renderImageThumbnail({
       borderRadius: defaultBorderRadius,
       child: CachedNetworkImage(
         imageUrl: imageUrl,
-        progressIndicatorBuilder: (context, url, downloadProgress) =>
-            CircularProgressIndicator(value: downloadProgress.progress),
+        progressIndicatorBuilder: (context, url, downloadProgress) => Padding(
+          padding: const EdgeInsetsDirectional.all(4.0),
+          child: CircularProgressIndicator(value: downloadProgress.progress),
+        ),
+        // TODO <08-18-22, kalli> This very often throws a 403 but on tap, the image does load (in full screen viewer)
         errorWidget: (context, url, error) => Stack(
           children: [
             Container(color: grey4),
@@ -223,7 +226,7 @@ Widget renderMimeIcon(String primaryMimeType) {
         alignment: Alignment.center,
         children: [
           Container(
-            color: grey5,
+            color: getReplicaMimeBgColor(fileExtension),
           ),
           CText(
             fileExtension.isNotEmpty ? fileExtension : '?',

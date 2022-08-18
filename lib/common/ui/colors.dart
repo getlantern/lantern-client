@@ -31,6 +31,11 @@ Color getAvatarColor(double hue, {bool inverted = false}) {
   return HSLColor.fromAHSL(1, hue, 1, 0.3).toColor();
 }
 
+Color getReplicaMimeBgColor(String mime) {
+  final hue = sha1Hue(mime);
+  return HSLColor.fromAHSL(0.6, hue, 0.3, 0.2).toColor();
+}
+
 final maxSha1Hash = BigInt.from(2).pow(160);
 final numHues = BigInt.from(360);
 
