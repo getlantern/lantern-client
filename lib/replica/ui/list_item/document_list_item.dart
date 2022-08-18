@@ -27,7 +27,7 @@ class ReplicaDocumentListItem extends StatelessWidget {
         verticalDirection: VerticalDirection.down,
         children: [
           CText(
-            item.displayName,
+            removeExtension(item.displayName),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style: tsSubtitle1Short,
