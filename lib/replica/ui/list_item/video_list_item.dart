@@ -15,7 +15,6 @@ class ReplicaVideoListItem extends StatelessWidget {
   final ReplicaSearchItem item;
   final Function() onTap;
   final ReplicaApi replicaApi;
-
   // renderMetadata() fetches a thumbnail from Replica and renders it.
   // CachedNetworkVideo takes care of the caching for list items in a sensible way.
   // If there's no duration (i.e., request failed), don't render it.
@@ -157,12 +156,24 @@ class ReplicaVideoListItem extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsetsDirectional.all(8.0),
-              child: CText(
-                removeExtension(item.displayName),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: tsBody1Short.copiedWith(color: blue4),
-              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CText(
+                    removeExtension(item.displayName),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: tsBody1Short.copiedWith(color: blue4),
+                  ),
+                  const SizedBox(height: 10),
+                  CText(
+                    item.description, // @todo get description from api
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: tsBody2Short,
+                  ),
+                ]
+              )
             ),
           ),
         ],
