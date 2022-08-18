@@ -598,7 +598,7 @@ msgstr "%sw"
 msgid "longform_weeks"
 msgstr "%s weeks"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "Unknown"
 
 msgid "banner_source_qr"
@@ -990,6 +990,12 @@ msgstr "Error rendering video, please try again later"
 
 msgid "untitled"
 msgstr "Untitled"
+
+msgid "preview_not_available"
+msgstr "Preview not available"
+
+msgid "download_to_view"
+msgstr "Download file to view it"
 
 msgid "failed_to_init_replica"
 msgstr "Error: Failed to initialize Replica"
