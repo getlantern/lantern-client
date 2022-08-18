@@ -158,7 +158,7 @@ class ReplicaVideoListItem extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsetsDirectional.all(8.0),
               child: CText(
-                item.displayName,
+                removeExtension(item.displayName),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: tsBody1Short.copiedWith(color: blue4),
