@@ -164,7 +164,7 @@ Future<void> handleUploadConfirm({
   context.router.popUntilRoot();
 }
 
-/// Renders an error message when necessary
+// TODO <08-18-22, kalli> Render a custom error state
 Widget renderReplicaErrorUI({required String text, Color? color}) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
