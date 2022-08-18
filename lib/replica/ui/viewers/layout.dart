@@ -141,7 +141,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 children: [
                   Expanded(
                     child: CText(
-                      widget.item.displayName,
+                      removeExtension(widget.item.displayName),
                       style: tsHeading3,
                     ),
                   ),

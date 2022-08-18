@@ -263,3 +263,9 @@ Future handleDownload(
     );
   }
 }
+
+// remove extension from filenames
+String removeExtension(String filename) {
+  final index = filename.lastIndexOf('.');
+  return index >= 0 ? filename.substring(0, index) : filename;
+}
