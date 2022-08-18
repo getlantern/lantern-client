@@ -64,10 +64,14 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
             if (isPDF) {
               await context.router.push(
                 FullScreenDialogPage(
-                  // TODO <08-17-22, kalli> Add controls to this view
+                  // TODO <08-17-22, kalli> Implement landscape, corrupt PDF etc - https://pub.dev/packages/flutter_pdfview/example
                   widget: PDFView(
                     filePath: tempFile,
-                    fitEachPage: true,
+                    enableSwipe: true,
+                    pageFling: true,
+                    pageSnap: true,
+                    fitPolicy: FitPolicy.BOTH,
+                    preventLinkNavigation: false,
                   ),
                 ),
               );

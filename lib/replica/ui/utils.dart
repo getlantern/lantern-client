@@ -256,7 +256,7 @@ Future handleDownload(
       builder: (context) {
         return CDialog(
           // TODO <08-18-22, kalli> i18n
-          title: 'Error downloading file',
+          title: 'Error downloading ${item.displayName}',
           description: 'Something went wrong!',
         );
       },
