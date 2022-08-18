@@ -5,6 +5,7 @@ import 'package:lantern/common/ui/text_styles.dart';
 import 'package:lantern/replica/common.dart';
 
 // TODO <08-08-22, kalli> Update to reflect Figma
+// @echo
 class ReplicaImageListItem extends StatelessWidget {
   ReplicaImageListItem({
     required this.item,

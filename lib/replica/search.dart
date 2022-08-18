@@ -107,7 +107,6 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                     controller: tabController,
                     children: [
                       // TODO <08-10-22, kalli> Hide tabs if we have no results
-                      // TODO <08-16-22, kalli> Since we use a single layout, we don't need to have media-specific ListView widgets
                       ReplicaVideoListView(
                         replicaApi: replicaApi,
                         searchQuery: value,
