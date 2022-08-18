@@ -124,15 +124,13 @@ class _HomePageState extends State<HomePage> {
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
             Localization.locale = lang;
-            messagingModel.shouldShowTryLanternChatModal().then((shouldShowChatModal) {
-              /**
-               * Don't show Yinshi banner until user has seen the Chat modal.
-               */
-              sessionModel.shouldShowYinshiPopup().then((shouldShowPopup) async {
-                if (shouldShowPopup && !shouldShowChatModal) {
-                  await showYinshiPopup(context);
-                }
-              });
+            /**
+             * Show Yinshi popup if "should"
+             */
+            sessionModel.shouldShowYinshiPopup().then((shouldShowPopup) async {
+              if (shouldShowPopup) {
+                await showYinshiPopup(context);
+              }
             });
             return sessionModel.selectedTab(
               (context, selectedTab, child) =>

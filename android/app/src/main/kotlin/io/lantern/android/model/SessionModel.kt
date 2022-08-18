@@ -53,9 +53,6 @@ class SessionModel(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
-            if (!db.contains("suppressYinshiPopup")) {
-                tx.put("suppressYinshiPopup", false)
-            }
         }
     }
 
