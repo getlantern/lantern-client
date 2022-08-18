@@ -18,7 +18,7 @@ class ReplicaAudioListItem extends StatelessWidget {
     return ListItemFactory.replicaItem(
       link: item.replicaLink,
       api: replicaApi,
-      leading: const CAssetImage(path: ImagePaths.audio),
+      leading: renderMimeIcon(item.primaryMimeType.toString()),
       onTap: onTap,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

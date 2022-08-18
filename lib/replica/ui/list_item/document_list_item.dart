@@ -18,9 +18,7 @@ class ReplicaDocumentListItem extends StatelessWidget {
     return ListItemFactory.replicaItem(
       link: item.replicaLink,
       api: replicaApi,
-      leading: item.primaryMimeType == 'application/pdf'
-          ? const CAssetImage(path: ImagePaths.pdf)
-          : const CAssetImage(path: ImagePaths.doc),
+      leading: renderMimeIcon(item.primaryMimeType.toString()),
       onTap: onTap,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

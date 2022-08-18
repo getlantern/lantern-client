@@ -63,8 +63,10 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
             if (isPDF) {
               await context.router.push(
                 FullScreenDialogPage(
+                  // TODO <08-17-22, kalli> Add controls to this view
                   widget: PDFView(
                     filePath: tempFile,
+                    fitEachPage: true,
                   ),
                 ),
               );
