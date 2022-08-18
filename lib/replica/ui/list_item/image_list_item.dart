@@ -36,7 +36,7 @@ class ReplicaImageListItem extends StatelessWidget {
                     size: 24,
                   ),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
-                  renderDescription(),
+                  renderName(),
                 ],
               ),
             );
@@ -46,11 +46,11 @@ class ReplicaImageListItem extends StatelessWidget {
     );
   }
 
-  Widget renderDescription() {
+  Widget renderName() {
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: CText(
-        item.displayName,
+        removeExtension(item.displayName),
         maxLines: 3,
         overflow: TextOverflow.ellipsis,
         style: tsBody2,
