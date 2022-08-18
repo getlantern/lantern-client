@@ -52,7 +52,7 @@ class Button extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(end: 8.0),
                   child: CAssetImage(
                     path: iconPath!,
-                    color: white,
+                    color: !secondary ? white : pink4,
                   ),
                 ),
               Expanded(

@@ -110,6 +110,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
   }
 
   @override
+  // TODO <08-18-22, kalli> Detect error state
   bool ready() => true;
 
   @override

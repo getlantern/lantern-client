@@ -228,9 +228,12 @@ Widget renderMimeIcon(String primaryMimeType) {
           Container(
             color: getReplicaMimeBgColor(fileExtension),
           ),
-          CText(
-            fileExtension.isNotEmpty ? fileExtension : '?',
-            style: tsButtonWhite.copiedWith(fontSize: 14),
+          Padding(
+            padding: const EdgeInsetsDirectional.all(8.0),
+            child: CText(
+              fileExtension.isNotEmpty ? fileExtension : '?',
+              style: tsButtonWhite.copiedWith(fontSize: 12),
+            ),
           )
         ],
       ),

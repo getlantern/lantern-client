@@ -58,6 +58,7 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
   }
 
   @override
+  // TODO <08-18-22, kalli> Detect error state
   bool ready() => controller != null;
 
   @override

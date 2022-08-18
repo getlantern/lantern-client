@@ -43,29 +43,35 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
           bottom: 6.0,
         ),
         alignment: Alignment.centerLeft,
-        child: (widget.item.primaryMimeType != null)
-            ? CText(
-                'replica_layout_filetype'
-                    .i18n
-                    .fill([widget.item.primaryMimeType!]),
-                style: tsSubtitle1,
-              )
+        child: ready()
+            ? (widget.item.primaryMimeType != null)
+                ? CText(
+                    'replica_layout_filetype'
+                        .i18n
+                        .fill([widget.item.primaryMimeType!]),
+                    style: tsSubtitle1,
+                  )
+                : CText(
+                    widget.category.toShortString(),
+                    style: tsSubtitle1,
+                  )
             : CText(
-                widget.category.toShortString(),
+                'Unknown'.i18n,
                 style: tsSubtitle1,
               ),
       ),
       actions: [
-        Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsetsDirectional.only(
-            end: 12.0,
+        if (ready())
+          Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsetsDirectional.only(
+              end: 12.0,
+            ),
+            child: CText(
+              widget.item.humanizedFileSize,
+              style: tsButton,
+            ),
           ),
-          child: CText(
-            widget.item.humanizedFileSize,
-            style: tsButton,
-          ),
-        ),
       ],
       body: Padding(
         padding: const EdgeInsetsDirectional.only(
@@ -73,14 +79,43 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
           end: 12.0,
           top: 24.0,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(child: body(context)),
-            renderText(),
-          ],
-        ),
+        child: ready()
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(child: body(context)),
+                  renderText(),
+                ],
+              )
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CText(
+                      'preview_not_available'.i18n,
+                      style: tsHeading1,
+                    ),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        top: 16.0,
+                        bottom: 16.0,
+                      ),
+                      child: CText(
+                        'download_to_view'.i18n,
+                        style: tsSubtitle1Short,
+                      ),
+                    ),
+                    // TODO <08-18-22, kalli> Add download
+                    Button(
+                      text: 'download'.i18n,
+                      iconPath: ImagePaths.file_download,
+                      secondary: true,
+                    )
+                  ],
+                ),
+              ),
       ),
     );
   }
