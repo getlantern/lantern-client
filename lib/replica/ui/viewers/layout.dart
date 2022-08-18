@@ -107,11 +107,15 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                         style: tsSubtitle1Short,
                       ),
                     ),
-                    // TODO <08-18-22, kalli> Add download
                     Button(
                       text: 'download'.i18n,
                       iconPath: ImagePaths.file_download,
                       secondary: true,
+                      onPressed: () => handleDownload(
+                        context,
+                        widget.item,
+                        widget.replicaApi,
+                      ),
                     )
                   ],
                 ),
@@ -142,11 +146,8 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () async {
-                      await widget.replicaApi.download(widget.item.replicaLink);
-                      // TODO <08-08-22, kalli> Confirm we can use BotToast
-                      BotToast.showText(text: 'download_started'.i18n);
-                    },
+                    onPressed: () =>
+                        handleDownload(context, widget.item, widget.replicaApi),
                     icon: const CAssetImage(
                       size: 20,
                       path: ImagePaths.file_download,

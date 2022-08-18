@@ -240,3 +240,26 @@ Widget renderMimeIcon(String primaryMimeType) {
     ),
   );
 }
+
+Future handleDownload(
+  BuildContext context,
+  ReplicaSearchItem item,
+  ReplicaApi replicaApi,
+) async {
+  try {
+    await replicaApi.download(item.replicaLink);
+    // TODO <08-08-22, kalli> Confirm we can use BotToast
+    BotToast.showText(text: 'download_started'.i18n);
+  } catch (e) {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return CDialog(
+          // TODO <08-18-22, kalli> i18n
+          title: 'Error downloading file',
+          description: 'Something went wrong!',
+        );
+      },
+    );
+  }
+}

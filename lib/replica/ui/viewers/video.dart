@@ -185,11 +185,11 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
           ),
           actions: [
             IconButton(
-              onPressed: () async {
-                await widget.replicaApi.download(widget.item.replicaLink);
-                // TODO <08-08-22, kalli> Confirm we can use BotToast
-                BotToast.showText(text: 'download_started'.i18n);
-              },
+              onPressed: () async => handleDownload(
+                context,
+                widget.item,
+                widget.replicaApi,
+              ),
               icon: CAssetImage(
                 size: 20,
                 path: ImagePaths.file_download,

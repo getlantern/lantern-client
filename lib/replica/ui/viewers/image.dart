@@ -16,23 +16,24 @@ class ReplicaImageViewer extends ReplicaViewerLayout {
 }
 
 class _ReplicaImageViewerState extends ReplicaViewerLayoutState {
-  var imageUrl = '';
+  var thumbnailURL = '';
+  var imageURL = '';
   @override
   void initState() {
     super.initState();
-    imageUrl = widget.replicaApi.getThumbnailAddr(widget.item.replicaLink);
+    thumbnailURL = widget.replicaApi.getThumbnailAddr(widget.item.replicaLink);
+    imageURL = widget.replicaApi.getDownloadAddr(widget.item.replicaLink);
   }
 
   @override
-  // TODO <08-18-22, kalli> Detect error state
-  bool ready() => imageUrl.isNotEmpty;
+  bool ready() => thumbnailURL.isNotEmpty && imageURL.isNotEmpty;
 
   @override
   Widget body(BuildContext context) {
     return GestureDetector(
       // * Thumbnail
       child: renderImageThumbnail(
-        imageUrl: imageUrl,
+        imageUrl: thumbnailURL,
         item: widget.item,
         size: 100,
       ),
@@ -46,7 +47,7 @@ class _ReplicaImageViewerState extends ReplicaViewerLayoutState {
       FullScreenDialogPage(
         widget: FullScreenImageViewer(
           loadImageFile: widget.replicaApi.getImageBytesFromURL(
-            widget.replicaApi.getDownloadAddr(widget.item.replicaLink),
+            imageURL,
           ),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,11 +65,11 @@ class _ReplicaImageViewerState extends ReplicaViewerLayoutState {
           ),
           actions: [
             IconButton(
-              onPressed: () async {
-                await widget.replicaApi.download(widget.item.replicaLink);
-                // TODO <08-08-22, kalli> Confirm we can use BotToast
-                BotToast.showText(text: 'download_started'.i18n);
-              },
+              onPressed: () async => handleDownload(
+                context,
+                widget.item,
+                widget.replicaApi,
+              ),
               icon: CAssetImage(
                 size: 20,
                 path: ImagePaths.file_download,
