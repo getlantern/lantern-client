@@ -211,3 +211,26 @@ Widget renderImageThumbnail({
     ),
   );
 }
+
+Widget renderMimeIcon(String primaryMimeType) {
+  final fileExtension = '.${primaryMimeType.split('/')[1]}';
+  return SizedBox(
+    width: 60,
+    height: 60,
+    child: ClipRRect(
+      borderRadius: defaultBorderRadius,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            color: grey5,
+          ),
+          CText(
+            fileExtension.isNotEmpty ? fileExtension : '?',
+            style: tsButtonWhite.copiedWith(fontSize: 14),
+          )
+        ],
+      ),
+    ),
+  );
+}
