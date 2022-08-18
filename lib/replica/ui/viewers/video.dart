@@ -143,10 +143,10 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
                       color: white,
                       path: ImagePaths.fullscreen_icon,
                     ),
-                    // TODO <08-11-22, kalli> This should take into account where we are in the video duration
-                    onPressed: () => launchFullScreen(
-                      context,
-                    ),
+                    onPressed: () {
+                      handleVideoTap();
+                      launchFullScreen(context);
+                    },
                   ),
                 ),
               ],
@@ -158,9 +158,13 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
   }
 
   Future launchFullScreen(BuildContext context) async {
+    // TODO <08-11-22, kalli> Calling FullScreenVideoViewer isn't ideal here - it fetches the file again and creates a new video controller. This should carry the controller into the full screen component, and send it back
+    // Useful issues https://github.com/flutter/flutter/issues/90080
+    // https://github.com/flutter/flutter/issues/97198
     return await context.router.push(
       FullScreenDialogPage(
         widget: FullScreenVideoViewer(
+          startAtDuration: controller!.value.duration,
           decryptVideoFile: Future.value(
             widget.item.replicaLink,
           ), // feels hacky...explanation: we don't need to decrypt videos for Replica,so we create a "fake" future that returns replicaLink when resolved (replicaLink is needed by loadVideoFile below)

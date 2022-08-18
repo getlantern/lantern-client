@@ -80,6 +80,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
           top: 24.0,
         ),
         child: ready()
+            // * Render media preview
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,6 +89,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                   renderText(),
                 ],
               )
+            // * Error handling
             : Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -59,6 +59,7 @@ class ReplicaApi {
     logger.v('_search(): uri: ${Uri.parse(s)}');
 
     final resp = await dio.get(s);
+    // TODO <08-11-22, kalli> Keeps throwing errors
     if (resp.statusCode == 200) {
       logger
           .v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
@@ -88,6 +89,7 @@ class ReplicaApi {
     return 'http://$replicaHostAddr/replica/view?link=${replicaLink.toMagnetLink()}';
   }
 
+  // TODO <08-11-22, kalli> Keeps throwing errors
   Future<SearchCategory> fetchCategoryFromReplicaLink(
     ReplicaLink replicaLink,
   ) async {
@@ -112,6 +114,7 @@ class ReplicaApi {
     return durationCache.get(replicaLink);
   }
 
+  // TODO <08-11-22, kalli> Keeps throwing errors
   Future<double?> doFetchDuration(ReplicaLink replicaLink) async {
     var s = 'duration?replicaLink=${replicaLink.toMagnetLink()}';
     // logger.v('Duration request uri: $s');
@@ -120,12 +123,14 @@ class ReplicaApi {
     try {
       final durationResp = await dio.get(s);
       if (durationResp.statusCode != 200) {
-        throw Exception(
-          'fetch duration: ${durationResp.statusCode} -> ${durationResp.data.toString()}',
-        );
+        // throw Exception(
+        //   'fetch duration: ${durationResp.statusCode} -> ${durationResp.data.toString()}',
+        // );
+        throw Error();
       }
       // logger.v('Duration request success: $duration');
       duration = double.parse(durationResp.data.toString());
+      logger.v(duration);
     } catch (err) {
       if (err is DioError) {
         logger.w(

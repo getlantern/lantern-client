@@ -48,8 +48,7 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
   }
 
   @override
-  // TODO <08-18-22, kalli> Detect error state
-  bool ready() => true;
+  bool ready() => fetched != null;
 
   @override
   Widget body(BuildContext context) {
@@ -57,9 +56,7 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
     switch (widget.category) {
       case SearchCategory.Document:
         return GestureDetector(
-          child: renderIconPlaceholder(
-            isPDF ? ImagePaths.pdf : ImagePaths.spreadsheet,
-          ),
+          child: renderIconPlaceholder(widget.item.primaryMimeType.toString()),
           onTap: () async {
             if (isPDF) {
               await context.router.push(
@@ -80,20 +77,16 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
           },
         );
       case SearchCategory.App:
-        return renderIconPlaceholder(ImagePaths.spreadsheet);
+        return renderIconPlaceholder(widget.item.primaryMimeType.toString());
       case SearchCategory.Unknown:
       default:
-        // TODO <08-17-22, kalli> Change icon
-        return renderIconPlaceholder(ImagePaths.alert);
+        return renderIconPlaceholder(widget.item.primaryMimeType.toString());
     }
   }
 
-  Widget renderIconPlaceholder(String path) {
+  Widget renderIconPlaceholder(String primaryMimeType) {
     return Flexible(
-      child: CAssetImage(
-        path: path,
-        size: 100,
-      ),
+      child: renderMimeIcon(primaryMimeType),
     );
   }
 }

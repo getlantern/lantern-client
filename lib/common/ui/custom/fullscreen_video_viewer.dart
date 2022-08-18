@@ -1,5 +1,4 @@
 import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/replica/ui/utils.dart';
 import 'package:video_player/video_player.dart';
 
 /// FullScreenVideoViewer extends Viewer and also receives decryption and loading functions from Chat and Replica components. It has no awareness of the video file (Chat or Replica) it displays.
@@ -13,6 +12,7 @@ class FullScreenVideoViewer extends FullScreenViewer {
   final List<Widget>? actions;
   @override
   final Map<String, dynamic>? metadata;
+  final Duration? startAtDuration;
 
   FullScreenVideoViewer({
     required this.loadVideoFile,
@@ -20,6 +20,7 @@ class FullScreenVideoViewer extends FullScreenViewer {
     this.title,
     this.actions,
     this.metadata,
+    this.startAtDuration,
   }) : super();
 
   @override
@@ -43,7 +44,7 @@ class FullScreenVideoViewerState
       // upon successful decryption, the value (either the String path in case of Chat, or the Replicalink replicaLink in case of Replica) is loaded by the respective loadVideoFile() arguments
       (value) => setState(() {
         controller = widget.loadVideoFile(value)
-          ..initialize().then((__) {
+          ..initialize(initialPosition: widget.startAtDuration).then((__) {
             updateController(widget.metadata?['rotation']);
           });
         handleListener();
@@ -106,14 +107,6 @@ class FullScreenVideoViewerState
   Widget body(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        // * Error handling
-        if (controller == null) {
-          return renderReplicaErrorUI(
-            text: 'video_stream_error'.i18n,
-            color: white,
-          );
-        }
-
         // * Display video and play button
         return Stack(
           alignment: Alignment.center,
