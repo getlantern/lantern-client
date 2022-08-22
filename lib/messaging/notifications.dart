@@ -93,6 +93,7 @@ class Notifications {
                 // https://github.com/getlantern/replica/blob/c61b1855475391c715a1e8e370da87b31848d514/server/object.go#L12
                 var link = ReplicaLink.New(resp['replicaLink']);
                 if (link == null) {
+                  // TODO <08-22-22, kalli> Don't throw exception directly
                   throw Exception('Replicalink.New() failed');
                 }
                 // Prompt the user a Share dialog

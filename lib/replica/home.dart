@@ -42,6 +42,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
                 search: (query) async {
                   if (query != '') {
                     await _navigateToSearchScreen(query);
+                    await replicaModel.setSearchTerm(query);
                   }
                 },
               ),
