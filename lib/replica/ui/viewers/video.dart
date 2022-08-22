@@ -157,56 +157,51 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
     );
   }
 
-  Future launchFullScreen(BuildContext context) async {
-    // TODO <08-11-22, kalli> Calling FullScreenVideoViewer isn't ideal here - it fetches the file again and creates a new video controller. This should carry the controller into the full screen component, and send it back
-    // Useful issues https://github.com/flutter/flutter/issues/90080
-    // https://github.com/flutter/flutter/issues/97198
-    return await context.router
-        .push(
-      FullScreenDialogPage(
-        widget: FullScreenVideoViewer(
-          startAtPosition: controller!.value.position,
-          // feels hacky...explanation: we don't need to decrypt videos for Replica,so we create a "fake" future that returns replicaLink when resolved (replicaLink is needed by loadVideoFile below)
-          decryptVideoFile: Future.value(widget.item.replicaLink),
-          loadVideoFile: (ReplicaLink replicaLink) =>
-              VideoPlayerController.network(
-            widget.replicaApi.getViewAddr(replicaLink),
-          ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CText(
-                widget.item.replicaLink.displayName ?? 'untitled'.i18n,
-                style: tsHeading3.copiedWith(color: white),
+  Future launchFullScreen(BuildContext context) async => await context.router
+          .push(
+        FullScreenDialogPage(
+          widget: FullScreenVideoViewer(
+            startAtPosition: controller!.value.position,
+            // feels hacky...explanation: we don't need to decrypt videos for Replica,so we create a "fake" future that returns replicaLink when resolved (replicaLink is needed by loadVideoFile below)
+            decryptVideoFile: Future.value(widget.item.replicaLink),
+            loadVideoFile: (ReplicaLink replicaLink) =>
+                VideoPlayerController.network(
+              widget.replicaApi.getViewAddr(replicaLink),
+            ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CText(
+                  widget.item.replicaLink.displayName ?? 'untitled'.i18n,
+                  style: tsHeading3.copiedWith(color: white),
+                ),
+                CText(
+                  SearchCategory.Video.toShortString(),
+                  style: tsOverline.copiedWith(color: white),
+                )
+              ],
+            ),
+            actions: [
+              IconButton(
+                onPressed: () async => handleDownload(
+                  context,
+                  widget.item,
+                  widget.replicaApi,
+                ),
+                icon: CAssetImage(
+                  size: 20,
+                  path: ImagePaths.file_download,
+                  color: white,
+                ),
               ),
-              CText(
-                SearchCategory.Video.toShortString(),
-                style: tsOverline.copiedWith(color: white),
-              )
             ],
           ),
-          actions: [
-            IconButton(
-              onPressed: () async => handleDownload(
-                context,
-                widget.item,
-                widget.replicaApi,
-              ),
-              icon: CAssetImage(
-                size: 20,
-                path: ImagePaths.file_download,
-                color: white,
-              ),
-            ),
-          ],
         ),
-      ),
-    )
-        // When we exit full screen, we need to update this controller to the video position we were just at
-        .then((value) {
-      final seekToPosition = value as Duration;
-      controller!.seekTo(seekToPosition);
-    });
-  }
+      )
+          // When we exit full screen, we need to update this controller to the video position we were just at
+          .then((value) {
+        final seekToPosition = value as Duration;
+        controller!.seekTo(seekToPosition);
+      });
 }
