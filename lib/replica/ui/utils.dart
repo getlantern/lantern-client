@@ -192,20 +192,35 @@ Widget renderImageThumbnail({
   return Flexible(
     child: ClipRRect(
       borderRadius: defaultBorderRadius,
+      clipBehavior: Clip.hardEdge,
       child: CachedNetworkImage(
         imageUrl: imageUrl,
-        progressIndicatorBuilder: (context, url, downloadProgress) => Padding(
-          padding: const EdgeInsetsDirectional.all(4.0),
-          child: CircularProgressIndicator(value: downloadProgress.progress),
+        imageBuilder: (context, imageProvider) {
+          return Image(
+            image: imageProvider,
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.high,
+            height: size,
+          );
+        },
+        progressIndicatorBuilder: (context, url, downloadProgress) => Container(
+          color: grey4,
+          child: Center(
+            child: SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(value: downloadProgress.progress, color: white),
+            ),
+          ),
         ),
         // TODO <08-18-22, kalli> This very often throws a 403 but on tap, the image does load (in full screen viewer)
         errorWidget: (context, url, error) => Stack(
           children: [
             Container(color: grey4),
-            Center(
+            const Center(
               child: CAssetImage(
                 path: ImagePaths.image_inactive,
-                size: size,
+                size: 24,
               ),
             ),
           ],

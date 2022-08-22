@@ -52,19 +52,22 @@ class ReplicaVideoListItem extends StatelessWidget {
       },
       imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
       progressIndicatorBuilder: (context, url, downloadProgress) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          clipBehavior: Clip.hardEdge,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * .45,
-            height: 100,
-            child: Container(
-              color: grey4,
-              child: Center(
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(color: white),
+        return Padding(
+            padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8), // padding to match loaded thumbnail item
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            clipBehavior: Clip.hardEdge,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * .45,
+              height: 100,
+              child: Container(
+                color: grey4,
+                child: Center(
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(color: white),
+                  ),
                 ),
               ),
             ),
@@ -167,7 +170,7 @@ class ReplicaVideoListItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   CText(
-                    item.description, // @todo get description from api
+                    item.description, // TODO get description from api
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: tsBody2Short,

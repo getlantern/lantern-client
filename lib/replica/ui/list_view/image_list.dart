@@ -31,7 +31,8 @@ class _ReplicaImageListViewState extends ReplicaCommonListViewState {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 5.0,
-        mainAxisSpacing: 10.0,
+        mainAxisSpacing: 5.0,
+        childAspectRatio: 5/4
       ),
       cacheExtent:
           super.getCommonCacheExtent(super.pagingController.value.itemList),

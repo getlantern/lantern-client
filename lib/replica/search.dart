@@ -95,7 +95,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            // const SizedBox(height: 10), // <08-22-22, echo> I feel like the standard list view under tabs scrolls directly under tab (no padding) no?
             // TODO <17-12-2021> soltzen: ValueListenableBuilder may not be
             // necessary: try without it (just with setState and see)
             ValueListenableBuilder<String>(
