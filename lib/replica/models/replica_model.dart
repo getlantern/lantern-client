@@ -31,4 +31,18 @@ class ReplicaModel extends Model {
       'suppress': suppress,
     });
   }
+
+  Future<void> setSearchTerm<T>(String searchTerm) async {
+    return methodChannel.invokeMethod('setSearchTerm', <String, dynamic>{
+      'searchTerm': searchTerm,
+    });
+  }
+
+  Widget getSearchTerm(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      '/searchTerm',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
 }

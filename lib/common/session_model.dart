@@ -186,6 +186,7 @@ class SessionModel extends Model {
   Future<String> getReplicaAddr() async {
     final replicaAddr = await methodChannel.invokeMethod('get', 'replicaAddr');
     if (replicaAddr == null || replicaAddr == '') {
+      // TODO <08-22-22, kalli> Don't throw exception directly
       throw Exception('Replica not enabled');
     }
     return replicaAddr;

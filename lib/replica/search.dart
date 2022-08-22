@@ -63,6 +63,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                   setState(() {
                     searchQueryListener.value = textEditingController.text;
                   });
+                  await replicaModel.setSearchTerm(textEditingController.text);
                 }
               },
             ),

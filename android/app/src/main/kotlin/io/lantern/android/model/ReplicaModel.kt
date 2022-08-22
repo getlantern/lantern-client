@@ -23,6 +23,11 @@ class ReplicaModel(
         return when (call.method) {
             "downloadFile" -> downloadFile(call)
             "setSuppressUploadWarning" -> setSuppressUploadWarning(call)
+            "setSearchTerm" -> {
+                db.mutate { tx ->
+                    tx.put("/searchTerm", call.argument<String>("searchTerm")!!)
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
