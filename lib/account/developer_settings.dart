@@ -291,7 +291,7 @@ class DeveloperSettingsTab extends StatelessWidget {
             ListItemFactory.settingsItem(
               content: 'Replica - current search term',
               trailingArray: [
-                replicaModel.getSearchTerm(
+                replicaModel.getSearchTermWidget(
                   (context, value, child) => CText(
                     value,
                     style: tsBody1,

@@ -277,6 +277,7 @@ class CustomTextEditingController extends TextEditingController {
   final GlobalKey<FormState> formKey;
   final FormFieldValidator<String>? validator;
   String? _error;
+  String? initialValue;
 
   CustomTextEditingController({
     String? text,
@@ -295,6 +296,12 @@ class CustomTextEditingController extends TextEditingController {
       return null;
     }
     return validator!(value);
+  }
+
+  set initialize(String? initialValue) {
+    if (initialValue != null) {
+      this.initialValue = initialValue;
+    }
   }
 
   /// Sets custom error and forces form validation to make error show up.
