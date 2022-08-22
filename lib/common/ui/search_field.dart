@@ -10,6 +10,7 @@ class SearchField extends CTextField {
             await search(query);
           },
           label: 'search'.i18n,
+          initialValue: controller.initialValue,
           textInputAction: TextInputAction.search,
           contentPadding: const EdgeInsetsDirectional.only(
             start: 16.0,
