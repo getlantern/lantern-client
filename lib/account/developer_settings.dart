@@ -287,6 +287,18 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
+            // * REPLICA TEST IMAGE
+            ListItemFactory.settingsItem(
+              content: 'Replica - current search term',
+              trailingArray: [
+                replicaModel.getSearchTerm(
+                  (context, value, child) => CText(
+                    value,
+                    style: tsBody1,
+                  ),
+                )
+              ],
+            ),
             // TODO <08-17-22, kalli> Not sure if this is doing what its supposed to do, fix
             // MarkdownBody(
             //   data:

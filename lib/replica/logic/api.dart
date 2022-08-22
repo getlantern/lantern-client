@@ -54,6 +54,7 @@ class ReplicaApi {
         s = 'search?s=$query&offset=$page&orderBy=relevance&lang=$lang&type=${category.mimeTypes()}';
         break;
       case SearchCategory.Unknown:
+        // TODO <08-22-22, kalli> Don't throw exception directly
         throw Exception('Unknown category. Should never be triggered');
     }
     logger.v('_search(): uri: ${Uri.parse(s)}');
@@ -65,6 +66,7 @@ class ReplicaApi {
           .v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
       return ReplicaSearchItem.fromJson(category, resp.data);
     } else {
+      // TODO <08-22-22, kalli> Don't throw exception directly
       throw Exception(
         'Failed to fetch search query: ${resp.statusCode} -> ${resp.data.toString()}',
       );
@@ -99,6 +101,7 @@ class ReplicaApi {
     try {
       var resp = await dio.head(u).timeout(defaultTimeoutDuration);
       if (resp.statusCode != 200) {
+        // TODO <08-22-22, kalli> Don't throw exception directly
         throw Exception('fetching category from $u');
       }
       return SearchCategoryFromMimeType(resp.headers.value('content-type'));
@@ -123,10 +126,10 @@ class ReplicaApi {
     try {
       final durationResp = await dio.get(s);
       if (durationResp.statusCode != 200) {
-        // throw Exception(
-        //   'fetch duration: ${durationResp.statusCode} -> ${durationResp.data.toString()}',
-        // );
-        throw Error();
+        // TODO <08-22-22, kalli> Don't throw exception directly
+        throw Exception(
+          'fetch duration: ${durationResp.statusCode} -> ${durationResp.data.toString()}',
+        );
       }
       // logger.v('Duration request success: $duration');
       duration = double.parse(durationResp.data.toString());
@@ -166,6 +169,7 @@ class ReplicaApi {
   Future<void> fetch(ReplicaLink link, String localFilePath) async {
     final resp = await dio.download(getViewAddr(link), localFilePath);
     if (resp.statusCode != 200) {
+      // TODO <08-22-22, kalli> Don't throw exception directly
       throw Exception(
         'Failed to fetch: ${resp.statusCode} -> ${resp.data.toString()}',
       );
