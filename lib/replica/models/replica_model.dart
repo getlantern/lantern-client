@@ -38,11 +38,15 @@ class ReplicaModel extends Model {
     });
   }
 
-  Widget getSearchTerm(ValueWidgetBuilder<String> builder) {
+  Widget getSearchTermWidget(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       '/searchTerm',
       defaultValue: '',
       builder: builder,
     );
+  }
+
+  Future<String?> getSearchTerm() async {
+    return methodChannel.invokeMethod('get', '/searchTerm');
   }
 }

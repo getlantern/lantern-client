@@ -21,6 +21,16 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   }
 
   @override
+  void initState() {
+    // TODO <08-22-22, kalli>  We can initialize this to prev search term if needed?
+    Future.delayed(Duration.zero, () async {
+      final value = await replicaModel.getSearchTerm();
+      if (value != '') _textEditingController.initialValue = value;
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
