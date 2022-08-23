@@ -8,7 +8,8 @@ class ReplicaAppListItem extends StatelessWidget {
     required this.item,
     required this.onTap,
     required this.replicaApi,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final ReplicaSearchItem item;
   final Function() onTap;

@@ -27,8 +27,7 @@ class ReplicaSearchItem {
   ) {
     var serverError = body['error'];
     if (serverError != null) {
-      // TODO <08-22-22, kalli> Don't throw exception directly
-      throw Exception(serverError);
+      logger.e(serverError);
     }
 
     var items = <ReplicaSearchItem>[];
