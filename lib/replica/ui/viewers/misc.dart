@@ -53,40 +53,30 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
   @override
   Widget body(BuildContext context) {
     final isPDF = widget.item.primaryMimeType == 'application/pdf';
-    switch (widget.category) {
-      case SearchCategory.Document:
-        return GestureDetector(
-          child: renderIconPlaceholder(widget.item.primaryMimeType.toString()),
-          onTap: () async {
-            if (isPDF) {
-              await context.router.push(
-                FullScreenDialogPage(
-                  // TODO <08-17-22, kalli> Implement landscape, corrupt PDF etc - https://pub.dev/packages/flutter_pdfview/example
-                  widget: PDFView(
-                    filePath: tempFile,
-                    enableSwipe: true,
-                    pageFling: true,
-                    pageSnap: true,
-                    fitPolicy: FitPolicy.BOTH,
-                    preventLinkNavigation: false,
-                  ),
-                ),
-              );
-            }
-            ;
-          },
-        );
-      case SearchCategory.App:
-        return renderIconPlaceholder(widget.item.primaryMimeType.toString());
-      case SearchCategory.Unknown:
-      default:
-        return renderIconPlaceholder(widget.item.primaryMimeType.toString());
-    }
+    return GestureDetector(
+      child: renderIconPlaceholder(widget.item.primaryMimeType.toString()),
+      onTap: () async {
+        if (isPDF) {
+          await context.router.push(
+            FullScreenDialogPage(
+              // TODO <08-17-22, kalli> Implement landscape, corrupt PDF etc - https://pub.dev/packages/flutter_pdfview/example
+              widget: PDFView(
+                filePath: tempFile,
+                enableSwipe: true,
+                pageFling: true,
+                pageSnap: true,
+                fitPolicy: FitPolicy.BOTH,
+                preventLinkNavigation: false,
+              ),
+            ),
+          );
+        }
+        ;
+      },
+    );
   }
 
   Widget renderIconPlaceholder(String primaryMimeType) {
-    return Flexible(
-      child: renderMimeIcon(primaryMimeType),
-    );
+    return SizedBox(child: renderMimeIcon(primaryMimeType));
   }
 }
