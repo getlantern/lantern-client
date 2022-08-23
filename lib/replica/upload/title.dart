@@ -67,7 +67,7 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
         bottom: 12.0,
       ),
       child: CText(
-        'Filenames cannot be edited once published.',
+        'filenames_cannot_be_edited'.i18n,
         style: tsBody1,
         textAlign: TextAlign.center,
       ),

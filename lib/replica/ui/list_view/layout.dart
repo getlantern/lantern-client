@@ -39,6 +39,7 @@ class _ReplicaListLayoutState extends ReplicaCommonListViewState {
               super.getCommonCacheExtent(super.pagingController.value.itemList),
           scrollDirection: Axis.vertical,
           pagingController: super.pagingController,
+          physics: defaultScrollPhysics,
           builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
             animateTransitions: true,
             noItemsFoundIndicatorBuilder: (context) {

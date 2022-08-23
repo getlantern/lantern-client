@@ -156,7 +156,7 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
             children: [
               Expanded(
                 child: CText(
-                  widget.fileDescription ?? 'No description provided',
+                  widget.fileDescription ?? 'no_description'.i18n,
                   style: widget.fileDescription != null
                       ? tsBody2
                       : tsBody2.copiedWith(

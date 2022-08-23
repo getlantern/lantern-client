@@ -1018,8 +1018,14 @@ msgstr "Upload File"
 msgid "edit_title"
 msgstr "Edit Title"
 
+msgid "filenames_cannot_be_edited"
+msgstr "Filenames cannot be edited once published."
+
 msgid "add_description"
 msgstr "Add Description"
+
+msgid "no_description"
+msgstr "No description provided"
 
 msgid "description_initial_value"
 msgstr "Description cannot be modified once published"
