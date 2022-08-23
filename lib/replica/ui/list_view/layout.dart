@@ -46,6 +46,7 @@ class _ReplicaListLayoutState extends ReplicaCommonListViewState {
             },
             itemBuilder: (context, item, index) {
               return ReplicaImageListItem(
+                key: ValueKey(item.replicaLink.infohash),
                 item: item,
                 replicaApi: widget.replicaApi,
                 onTap: () async {
@@ -81,6 +82,7 @@ class _ReplicaListLayoutState extends ReplicaCommonListViewState {
       case SearchCategory.Audio:
         return renderPaginatedListView(
           (context, item, index) => ReplicaAudioListItem(
+            key: ValueKey(item.replicaLink.infohash),
             item: item,
             onTap: () {
               context.pushRoute(
@@ -97,6 +99,7 @@ class _ReplicaListLayoutState extends ReplicaCommonListViewState {
       case SearchCategory.Document:
         return renderPaginatedListView(
           (context, item, index) => ReplicaDocumentListItem(
+            key: ValueKey(item.replicaLink.infohash),
             item: item,
             replicaApi: widget.replicaApi,
             onTap: () async {
@@ -113,6 +116,7 @@ class _ReplicaListLayoutState extends ReplicaCommonListViewState {
       case SearchCategory.App:
         return renderPaginatedListView(
           (context, item, index) => ReplicaAppListItem(
+            key: ValueKey(item.replicaLink.infohash),
             item: item,
             replicaApi: widget.replicaApi,
             onTap: () async {

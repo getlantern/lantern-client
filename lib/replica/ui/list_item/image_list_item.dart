@@ -11,7 +11,8 @@ class ReplicaImageListItem extends StatelessWidget {
     required this.item,
     required this.onTap,
     required this.replicaApi,
-  });
+    Key? key,
+  }) : super(key: key);
   final ReplicaSearchItem item;
   final ReplicaApi replicaApi;
   final void Function() onTap;

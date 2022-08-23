@@ -36,7 +36,6 @@ class ReplicaApi {
     return replicaHostAddr != '';
   }
 
-  // TODO <08-10-22, kalli> Add escription here?
   Future<List<ReplicaSearchItem>> search(
     String query,
     SearchCategory category,
@@ -51,25 +50,23 @@ class ReplicaApi {
       case SearchCategory.Image:
       case SearchCategory.Document:
       case SearchCategory.App:
+        // TODO <08-10-22, kalli> Can we also search for description?
         s = 'search?s=$query&offset=$page&orderBy=relevance&lang=$lang&type=${category.mimeTypes()}';
         break;
       case SearchCategory.Unknown:
-        // TODO <08-22-22, kalli> Don't throw exception directly
-        throw Exception('Unknown category. Should never be triggered');
+        logger.e('Unknown category. Should never be triggered');
+        break;
     }
     logger.v('_search(): uri: ${Uri.parse(s)}');
 
     final resp = await dio.get(s);
-    // TODO <08-11-22, kalli> Keeps throwing errors
     if (resp.statusCode == 200) {
       logger
           .v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
       return ReplicaSearchItem.fromJson(category, resp.data);
     } else {
-      // TODO <08-22-22, kalli> Don't throw exception directly
       throw Exception(
-        'Failed to fetch search query: ${resp.statusCode} -> ${resp.data.toString()}',
-      );
+          'Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
     }
   }
 
@@ -91,7 +88,6 @@ class ReplicaApi {
     return 'http://$replicaHostAddr/replica/view?link=${replicaLink.toMagnetLink()}';
   }
 
-  // TODO <08-11-22, kalli> Keeps throwing errors
   Future<SearchCategory> fetchCategoryFromReplicaLink(
     ReplicaLink replicaLink,
   ) async {
@@ -101,12 +97,14 @@ class ReplicaApi {
     try {
       var resp = await dio.head(u).timeout(defaultTimeoutDuration);
       if (resp.statusCode != 200) {
-        // TODO <08-22-22, kalli> Don't throw exception directly
-        throw Exception('fetching category from $u');
+        logger.e('error fetching category from $u');
       }
       return SearchCategoryFromMimeType(resp.headers.value('content-type'));
     } on TimeoutException catch (_) {
       // On a timeout, just return an unknown category
+      logger.w(
+        'Timed out while fetching category from replica link, will return Unknown',
+      );
       return SearchCategory.Unknown;
     }
   }
@@ -117,7 +115,6 @@ class ReplicaApi {
     return durationCache.get(replicaLink);
   }
 
-  // TODO <08-11-22, kalli> Keeps throwing errors
   Future<double?> doFetchDuration(ReplicaLink replicaLink) async {
     var s = 'duration?replicaLink=${replicaLink.toMagnetLink()}';
     // logger.v('Duration request uri: $s');
@@ -126,8 +123,7 @@ class ReplicaApi {
     try {
       final durationResp = await dio.get(s);
       if (durationResp.statusCode != 200) {
-        // TODO <08-22-22, kalli> Don't throw exception directly
-        throw Exception(
+        logger.e(
           'fetch duration: ${durationResp.statusCode} -> ${durationResp.data.toString()}',
         );
       }
@@ -169,8 +165,7 @@ class ReplicaApi {
   Future<void> fetch(ReplicaLink link, String localFilePath) async {
     final resp = await dio.download(getViewAddr(link), localFilePath);
     if (resp.statusCode != 200) {
-      // TODO <08-22-22, kalli> Don't throw exception directly
-      throw Exception(
+      logger.e(
         'Failed to fetch: ${resp.statusCode} -> ${resp.data.toString()}',
       );
     }

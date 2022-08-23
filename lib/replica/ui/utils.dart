@@ -48,8 +48,6 @@ SizedBox renderReplicaLongPressMenuItem(
 // - When the upload is done, send another notification saying it's done
 //   - If the user clicks on this notification, they would be prompted
 //     with a Share dialog to share the Replica link
-// TODO <08-08-22, kalli> Will be overhauled entirely, and will be broken up in multiple screens
-// TODO <08-09-22, kalli> Make sure comments are updated
 Future<void> onUploadButtonPressed(BuildContext context) async {
   var result = await FilePicker.platform.pickFiles();
   if (result == null) {
@@ -192,13 +190,16 @@ Widget renderImageThumbnail({
   return Flexible(
     child: ClipRRect(
       borderRadius: defaultBorderRadius,
+      // TODO <08-11-22, kalli> Keeps throwing uncaught exceptions
+      // See https://github.com/Baseflow/flutter_cached_network_image/issues/273 - really annoying!! 😠
+      // Maybe try this: https://github.com/Baseflow/flutter_cached_network_image/issues/536#issuecomment-1216715184
       child: CachedNetworkImage(
+        key: ValueKey<String>(imageUrl),
         imageUrl: imageUrl,
         progressIndicatorBuilder: (context, url, downloadProgress) => Padding(
           padding: const EdgeInsetsDirectional.all(4.0),
           child: CircularProgressIndicator(value: downloadProgress.progress),
         ),
-        // TODO <08-18-22, kalli> This very often throws a 403 but on tap, the image does load (in full screen viewer)
         errorWidget: (context, url, error) => Stack(
           children: [
             Container(color: grey4),
