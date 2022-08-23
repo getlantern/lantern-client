@@ -47,7 +47,7 @@ LinearGradient stringToGradient(String string) {
   var arr = string.split('').sublist(0, 5).map((r) { return r.codeUnitAt(0); }).toList();
   final largest = arr.reduce(max);
   final index = arr.indexWhere(((n) => n == largest));
-  final colors = gradientColors[index >= 0 ? index : 0];
+  final colors = gradientColors[index];
   return LinearGradient(
     begin: Alignment.topLeft,
     end: const Alignment(0.8, 1),
