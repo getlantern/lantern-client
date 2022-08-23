@@ -102,37 +102,42 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               valueListenable: searchQueryListener,
               builder: (BuildContext context, String value, Widget? child) {
                 return Expanded(
-                  // TODO <08-08-22, kalli> Everything below is full screen, we want the bottom tabs to show.
                   child: TabBarView(
                     key: const Key('replica_tab_view'),
                     controller: tabController,
+                    physics: defaultScrollPhysics,
                     children: [
-                      // TODO <08-10-22, kalli> Hide tabs if we have no results
-                      ReplicaVideoListView(
+                      ReplicaListLayout(
                         replicaApi: replicaApi,
                         searchQuery: value,
+                        searchCategory: SearchCategory.Video,
                       ),
-                      ReplicaImageListView(
+                      ReplicaListLayout(
                         replicaApi: replicaApi,
                         searchQuery: value,
+                        searchCategory: SearchCategory.Image,
                       ),
-                      ReplicaAudioListView(
+                      ReplicaListLayout(
                         replicaApi: replicaApi,
                         searchQuery: value,
+                        searchCategory: SearchCategory.Audio,
                       ),
-                      ReplicaDocumentListView(
+                      ReplicaListLayout(
                         replicaApi: replicaApi,
                         searchQuery: value,
+                        searchCategory: SearchCategory.Document,
                       ),
-                      ReplicaAppListView(
+                      ReplicaListLayout(
                         replicaApi: replicaApi,
                         searchQuery: value,
+                        searchCategory: SearchCategory.App,
                       ),
                     ],
                   ),
                 );
               },
             ),
+            const SizedBox(height: 10),
           ],
         );
       }),
