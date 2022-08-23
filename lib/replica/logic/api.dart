@@ -133,7 +133,8 @@ class ReplicaApi {
     } catch (err) {
       if (err is DioError) {
         logger.w(
-            'failed to fetch duration. Will default to ??:??. Error: ${err.error}');
+          'failed to fetch duration. Will default to ??:??. Error: ${err.error}',
+        );
       } else {
         logger
             .w('failed to fetch duration. Will default to ??:??. Error: $err');

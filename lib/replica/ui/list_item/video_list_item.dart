@@ -21,6 +21,9 @@ class ReplicaVideoListItem extends StatelessWidget {
   // If there's no duration (i.e., request failed), don't render it.
   // If there's no thumbnail (i.e., request failed), render a black box
   Widget renderMetadata() {
+    // <08-22-22, kalli> Keeps throwing uncaught exceptions
+    // See https://github.com/Baseflow/flutter_cached_network_image/issues/273 - really annoying!! 😠
+    // Maybe try this: https://github.com/Baseflow/flutter_cached_network_image/issues/536#issuecomment-1216715184
     return CachedNetworkImage(
       imageBuilder: (context, imageProvider) {
         return Padding(

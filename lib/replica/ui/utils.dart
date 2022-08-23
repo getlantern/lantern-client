@@ -190,7 +190,7 @@ Widget renderImageThumbnail({
   return Flexible(
     child: ClipRRect(
       borderRadius: defaultBorderRadius,
-      // TODO <08-11-22, kalli> Keeps throwing uncaught exceptions
+      // <08-22-22, kalli> Keeps throwing uncaught exceptions
       // See https://github.com/Baseflow/flutter_cached_network_image/issues/273 - really annoying!! 😠
       // Maybe try this: https://github.com/Baseflow/flutter_cached_network_image/issues/536#issuecomment-1216715184
       child: CachedNetworkImage(
@@ -200,17 +200,20 @@ Widget renderImageThumbnail({
           padding: const EdgeInsetsDirectional.all(4.0),
           child: CircularProgressIndicator(value: downloadProgress.progress),
         ),
-        errorWidget: (context, url, error) => Stack(
-          children: [
-            Container(color: grey4),
-            Center(
-              child: CAssetImage(
-                path: ImagePaths.image_inactive,
-                size: size,
+        errorWidget: (context, url, error) {
+          logger.e(error);
+          return Stack(
+            children: [
+              Container(color: grey4),
+              Center(
+                child: CAssetImage(
+                  path: ImagePaths.image_inactive,
+                  size: size,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
     ),
   );
