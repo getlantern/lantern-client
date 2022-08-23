@@ -68,7 +68,6 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               },
             ),
             const SizedBox(height: 10),
-            // TODO <08-10-22, kalli> Hide tabs if we have no results
             TabBar(
               controller: tabController,
               unselectedLabelStyle: tsBody1,
@@ -100,7 +99,8 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
             // necessary: try without it (just with setState and see)
             ValueListenableBuilder<String>(
               valueListenable: searchQueryListener,
-              builder: (BuildContext context, String value, Widget? child) {
+              builder:
+                  (BuildContext context, String searchQuery, Widget? child) {
                 return Expanded(
                   child: TabBarView(
                     key: const Key('replica_tab_view'),
@@ -109,27 +109,27 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                     children: [
                       ReplicaListLayout(
                         replicaApi: replicaApi,
-                        searchQuery: value,
+                        searchQuery: searchQuery,
                         searchCategory: SearchCategory.Video,
                       ),
                       ReplicaListLayout(
                         replicaApi: replicaApi,
-                        searchQuery: value,
+                        searchQuery: searchQuery,
                         searchCategory: SearchCategory.Image,
                       ),
                       ReplicaListLayout(
                         replicaApi: replicaApi,
-                        searchQuery: value,
+                        searchQuery: searchQuery,
                         searchCategory: SearchCategory.Audio,
                       ),
                       ReplicaListLayout(
                         replicaApi: replicaApi,
-                        searchQuery: value,
+                        searchQuery: searchQuery,
                         searchCategory: SearchCategory.Document,
                       ),
                       ReplicaListLayout(
                         replicaApi: replicaApi,
-                        searchQuery: value,
+                        searchQuery: searchQuery,
                         searchCategory: SearchCategory.App,
                       ),
                     ],
