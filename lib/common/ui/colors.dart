@@ -26,51 +26,41 @@ Color grey5 = HexColor('#707070');
 Color scrimGrey = HexColor('#C4C4C4');
 Color black = HexColor('#000000');
 
-
-// Gradient colors
-Color gradient0L = HexColor('#007A7C');
-Color gradient0R = HexColor('#00237C');
-Color gradient1L = HexColor('#9174CE');
-Color gradient1R = HexColor('#749CCE');
-Color gradient2L = HexColor('#5DADEC');
-Color gradient2R = HexColor('#5DD2EC');
-Color gradient3L = HexColor('#007A7C');
-Color gradient3R = HexColor('#0A7C00');
-Color gradient4L = HexColor('#007A7C');
-Color gradient4R = HexColor('#00237C');
-
 // Avatars
 Color getAvatarColor(double hue, {bool inverted = false}) {
   return HSLColor.fromAHSL(1, hue, 1, 0.3).toColor();
 }
 
-// @echo
-Color getReplicaMimeBgColor(String mime) {
-  final hue = sha1Hue(mime);
-  return HSLColor.fromAHSL(0.6, hue, 0.3, 0.2).toColor();
-}
+// gradient color pairs map
+List<List<Color>> gradientColors = [
+  [HexColor('#007A7C'), HexColor('#00237C')],
+  [HexColor('#9174CE'), HexColor('#749CCE')],
+  [HexColor('#5DADEC'), HexColor('#5DD2EC')],
+  [HexColor('#007A7C'), HexColor('#0A7C00')],
+  [HexColor('#007A7C'), HexColor('#00237C')],
+];
 
 // create consistent random gradient mappings from strings
+// this method mirrors the generator in desktop
 LinearGradient stringToGradient(String string) {
   string = string + '     '; // ensure string is always at least 5 chars long (space is smallest single char code 32)
   var arr = string.split('').sublist(0, 5).map((r) { return r.codeUnitAt(0); }).toList();
   final largest = arr.reduce(max);
   final index = arr.indexWhere(((n) => n == largest));
-  final leftColor = index == 1 ? gradient1L : index == 2 ? gradient2L : index == 3 ? gradient3L : index == 4 ? gradient4L : gradient0L;
-  final rightColor = index == 1 ? gradient1R : index == 2 ? gradient2R : index == 3 ? gradient3R : index == 4 ? gradient4R : gradient0R;
+  final colors = gradientColors[index >= 0 ? index : 0];
   return LinearGradient(
     begin: Alignment.topLeft,
     end: const Alignment(0.8, 1),
     colors: <Color>[
-      leftColor,
-      rightColor,
+      colors[0],
+      colors[1],
     ],
     tileMode: TileMode.mirror,
   );
 }
 
 BoxDecoration getReplicaExtensionBgDecoration(String extension) {
-  stringToGradient(extension);
+  stringToGradient(extension.replaceAll('.', ''));
   return BoxDecoration(
     gradient: stringToGradient(extension),
   );
