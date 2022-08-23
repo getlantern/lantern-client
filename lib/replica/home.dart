@@ -1,5 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
+import 'package:lantern/replica/search.dart';
 
 /// ReplicaHomeScreen is the entrypoint for the user to search through Replica.
 /// See docs/replica_home.png for a preview
@@ -12,17 +13,12 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
   late final _textEditingController =
       CustomTextEditingController(formKey: _formKey);
-
-  // Two ways to navigate to search screen:
-  // - Click the magnifier icon next to the search bar
-  // - Or, just click enter in the search bar
-  Future<void> _navigateToSearchScreen(String query) async {
-    await context.pushRoute(ReplicaSearchScreen(searchQuery: query));
-  }
+  late bool showResults = false;
+  late String currentQuery;
 
   @override
   void initState() {
-    // TODO <08-22-22, kalli>  We can initialize this to prev search term if needed?
+    // TODO <08-22-22, kalli>  We can initialize this to prev search term if needed? This doesn't work currently
     Future.delayed(Duration.zero, () async {
       final value = await replicaModel.getSearchTerm();
       if (value != '') _textEditingController.initialValue = value;
@@ -32,6 +28,10 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // We are showing the ReplicaSearchScreen here since we want the bottom tabs to be visible (they are not if it's its own route)
+    if (showResults) return ReplicaSearchScreen(searchQuery: currentQuery);
+
+    // No active query, return the landing search bar instead
     return GestureDetector(
       onTap: () {
         // Dismiss keyboard when clicking anywhere
@@ -51,7 +51,10 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
                 controller: _textEditingController,
                 search: (query) async {
                   if (query != '') {
-                    await _navigateToSearchScreen(query);
+                    setState(() {
+                      currentQuery = query;
+                      showResults = true;
+                    });
                     await replicaModel.setSearchTerm(query);
                   }
                 },
