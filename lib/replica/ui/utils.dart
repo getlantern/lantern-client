@@ -230,8 +230,8 @@ Widget renderImageThumbnail({
   );
 }
 
-Widget renderMimeIcon(String primaryMimeType) {
-  final fileExtension = '.${primaryMimeType.split('/')[1]}';
+Widget renderMimeIcon(String filename) {
+  final fileExtension = getExtension(filename).toLowerCase();
   return SizedBox(
     width: 60,
     height: 60,
@@ -241,7 +241,7 @@ Widget renderMimeIcon(String primaryMimeType) {
         alignment: Alignment.center,
         children: [
           Container(
-            color: getReplicaMimeBgColor(fileExtension),
+            decoration: getReplicaExtensionBgDecoration(fileExtension),
           ),
           Padding(
             padding: const EdgeInsetsDirectional.all(8.0),
@@ -283,4 +283,10 @@ Future handleDownload(
 String removeExtension(String filename) {
   final index = filename.lastIndexOf('.');
   return index >= 0 ? filename.substring(0, index) : filename;
+}
+
+// extension from filenames
+String getExtension(String filename) {
+  final index = filename.lastIndexOf('.');
+  return index >= 0 ? filename.substring(index, filename.length) : '';
 }
