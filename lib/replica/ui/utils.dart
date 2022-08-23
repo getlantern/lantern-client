@@ -273,3 +273,41 @@ String removeExtension(String filename) {
   final index = filename.lastIndexOf('.');
   return index >= 0 ? filename.substring(0, index) : filename;
 }
+
+Widget renderErrorViewingFile(
+  BuildContext context,
+  ReplicaSearchItem item,
+  ReplicaApi replicaApi,
+) =>
+    Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CText(
+            'preview_not_available'.i18n,
+            style: tsHeading1,
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(
+              top: 16.0,
+              bottom: 16.0,
+            ),
+            child: CText(
+              'download_to_view'.i18n,
+              style: tsSubtitle1Short,
+            ),
+          ),
+          Button(
+            text: 'download'.i18n,
+            iconPath: ImagePaths.file_download,
+            secondary: true,
+            onPressed: () => handleDownload(
+              context,
+              item,
+              replicaApi,
+            ),
+          )
+        ],
+      ),
+    );

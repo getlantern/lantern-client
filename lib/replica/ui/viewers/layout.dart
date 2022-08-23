@@ -90,37 +90,10 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 ],
               )
             // * Error handling
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CText(
-                      'preview_not_available'.i18n,
-                      style: tsHeading1,
-                    ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                        top: 16.0,
-                        bottom: 16.0,
-                      ),
-                      child: CText(
-                        'download_to_view'.i18n,
-                        style: tsSubtitle1Short,
-                      ),
-                    ),
-                    Button(
-                      text: 'download'.i18n,
-                      iconPath: ImagePaths.file_download,
-                      secondary: true,
-                      onPressed: () => handleDownload(
-                        context,
-                        widget.item,
-                        widget.replicaApi,
-                      ),
-                    )
-                  ],
-                ),
+            : renderErrorViewingFile(
+                context,
+                widget.item,
+                widget.replicaApi,
               ),
       ),
     );
