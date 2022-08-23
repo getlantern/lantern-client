@@ -47,6 +47,8 @@ class ReplicaModel extends Model {
   }
 
   Future<String?> getSearchTerm() async {
-    return methodChannel.invokeMethod('get', '/searchTerm');
+    return methodChannel
+        .invokeMethod('get', '/searchTerm')
+        .then((value) => value ?? '');
   }
 }

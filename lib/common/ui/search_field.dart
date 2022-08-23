@@ -4,6 +4,7 @@ class SearchField extends CTextField {
   SearchField({
     required CustomTextEditingController controller,
     required Future<void> Function(String query) search,
+    Future<void> Function()? onClear,
   }) : super(
           controller: controller,
           onFieldSubmitted: (query) async {
@@ -28,8 +29,9 @@ class SearchField extends CTextField {
                           size: 48,
                           color: black,
                         ),
-                        onTap: () {
+                        onTap: () async {
                           controller.clear();
+                          await onClear!();
                         },
                       ),
           ),
