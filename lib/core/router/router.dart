@@ -198,14 +198,6 @@ import 'package:lantern/replica/upload/review.dart';
     // * REPLICA ROUTES
     //
     CustomRoute<void>(
-      page: ReplicaSearchScreen,
-      name: 'ReplicaSearchScreen',
-      path: 'replicaSearchScreen',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
       page: ReplicaUploadTitle,
       name: 'ReplicaUploadTitle',
       path: 'replicaUploadTitle',
