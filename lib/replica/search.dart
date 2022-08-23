@@ -59,13 +59,14 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               controller: textEditingController,
               search: (query) async {
                 FocusScope.of(context).requestFocus(FocusNode());
+                await replicaModel.setSearchTerm(textEditingController.text);
                 if (textEditingController.text != '') {
                   setState(() {
                     searchQueryListener.value = textEditingController.text;
                   });
-                  await replicaModel.setSearchTerm(textEditingController.text);
                 }
               },
+              onClear: () async => await replicaModel.setSearchTerm(''),
             ),
             const SizedBox(height: 10),
             TabBar(

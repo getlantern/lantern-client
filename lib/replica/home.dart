@@ -18,10 +18,14 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
 
   @override
   void initState() {
-    // TODO <08-22-22, kalli>  We can initialize this to prev search term if needed? This doesn't work currently
-    Future.delayed(Duration.zero, () async {
-      final value = await replicaModel.getSearchTerm();
-      if (value != '') _textEditingController.initialValue = value;
+    replicaModel.getSearchTerm().then((value) {
+      if (value != '') {
+        _textEditingController.initialValue = value;
+        setState(() {
+          currentQuery = value!;
+          showResults = true;
+        });
+      }
     });
     super.initState();
   }
@@ -29,6 +33,8 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   @override
   Widget build(BuildContext context) {
     // We are showing the ReplicaSearchScreen here since we want the bottom tabs to be visible (they are not if it's its own route)
+
+    // TODO <08-23-22, kalli>  Not ideal UX - maybe add a spinner? Not sure
     if (showResults) return ReplicaSearchScreen(searchQuery: currentQuery);
 
     // No active query, return the landing search bar instead
@@ -50,14 +56,15 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
               child: SearchField(
                 controller: _textEditingController,
                 search: (query) async {
+                  await replicaModel.setSearchTerm(query);
                   if (query != '') {
                     setState(() {
                       currentQuery = query;
                       showResults = true;
                     });
-                    await replicaModel.setSearchTerm(query);
                   }
                 },
+                onClear: () async => await replicaModel.setSearchTerm(''),
               ),
             ),
             renderDiscoverPopup()
