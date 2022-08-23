@@ -33,7 +33,6 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   @override
   Widget build(BuildContext context) {
     // We are showing the ReplicaSearchScreen here since we want the bottom tabs to be visible (they are not if it's its own route)
-
     // TODO <08-23-22, kalli>  Not ideal UX - maybe add a spinner? Not sure
     if (showResults) return ReplicaSearchScreen(searchQuery: currentQuery);
 
