@@ -140,6 +140,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
       cacheExtent: getCommonCacheExtent(pagingController.value.itemList),
       scrollDirection: Axis.vertical,
       pagingController: pagingController,
+      physics: defaultScrollPhysics,
       builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
         animateTransitions: true,
         noItemsFoundIndicatorBuilder: (context) {
