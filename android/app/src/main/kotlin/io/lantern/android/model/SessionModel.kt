@@ -40,6 +40,7 @@ class SessionModel(
 
         const val PATH_PRO_USER = "prouser"
         const val PATH_PROXY_ALL = "proxyAll"
+        const val PATH_SEARCH_TERM = "searchTerm"
     }
 
     init {
@@ -52,6 +53,11 @@ class SessionModel(
             tx.put(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
+            )
+            // TODO <08-24-22, kalli> Reset on a new session
+            tx.put(
+                PATH_SEARCH_TERM,
+                ""
             )
         }
     }
