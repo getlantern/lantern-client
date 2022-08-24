@@ -20,7 +20,7 @@ class ReplicaAudioListItem extends StatelessWidget {
     return ListItemFactory.replicaItem(
       link: item.replicaLink,
       api: replicaApi,
-      leading: renderMimeIcon(item.displayName),
+      leading: renderPlayIcon(item.replicaLink),
       onTap: onTap,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
