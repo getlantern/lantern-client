@@ -56,19 +56,23 @@ class ReplicaVideoListItem extends StatelessWidget {
       },
       imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
       progressIndicatorBuilder: (context, url, downloadProgress) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          clipBehavior: Clip.hardEdge,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * .45,
-            height: 100,
-            child: Container(
-              color: grey4,
-              child: Center(
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(color: white),
+        return Padding(
+          padding: const EdgeInsetsDirectional.only(
+              top: 8, bottom: 8), // padding to match loaded thumbnail item
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            clipBehavior: Clip.hardEdge,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * .45,
+              height: 100,
+              child: Container(
+                color: grey4,
+                child: Center(
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(color: white),
+                  ),
                 ),
               ),
             ),
@@ -160,11 +164,23 @@ class ReplicaVideoListItem extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsetsDirectional.all(8.0),
-              child: CText(
-                removeExtension(item.displayName),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: tsBody1Short.copiedWith(color: blue4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CText(
+                    removeExtension(item.displayName),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: tsBody1Short.copiedWith(color: blue4),
+                  ),
+                  const SizedBox(height: 10),
+                  CText(
+                    item.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: tsBody2Short,
+                  ),
+                ],
               ),
             ),
           ),

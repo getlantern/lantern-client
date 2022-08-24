@@ -190,15 +190,31 @@ Widget renderImageThumbnail({
   return Flexible(
     child: ClipRRect(
       borderRadius: defaultBorderRadius,
+      clipBehavior: Clip.hardEdge,
       // <08-22-22, kalli> Keeps throwing uncaught exceptions
       // See https://github.com/Baseflow/flutter_cached_network_image/issues/273 - really annoying!! 😠
       // Maybe try this: https://github.com/Baseflow/flutter_cached_network_image/issues/536#issuecomment-1216715184
       child: CachedNetworkImage(
         key: ValueKey<String>(imageUrl),
         imageUrl: imageUrl,
-        progressIndicatorBuilder: (context, url, downloadProgress) => Padding(
-          padding: const EdgeInsetsDirectional.all(4.0),
-          child: CircularProgressIndicator(value: downloadProgress.progress),
+        imageBuilder: (context, imageProvider) {
+          return Image(
+            image: imageProvider,
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.high,
+            height: size,
+          );
+        },
+        progressIndicatorBuilder: (context, url, downloadProgress) => Container(
+          color: grey4,
+          child: Center(
+            child: SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                  value: downloadProgress.progress, color: white),
+            ),
+          ),
         ),
         errorWidget: (context, url, error) {
           logger.e(error);
@@ -219,8 +235,8 @@ Widget renderImageThumbnail({
   );
 }
 
-Widget renderMimeIcon(String primaryMimeType) {
-  final fileExtension = '.${primaryMimeType.split('/')[1]}';
+Widget renderMimeIcon(String filename) {
+  final fileExtension = getExtension(filename).toLowerCase();
   return SizedBox(
     width: 60,
     height: 60,
@@ -230,7 +246,7 @@ Widget renderMimeIcon(String primaryMimeType) {
         alignment: Alignment.center,
         children: [
           Container(
-            color: getReplicaMimeBgColor(fileExtension),
+            decoration: getReplicaExtensionBgDecoration(fileExtension),
           ),
           Padding(
             padding: const EdgeInsetsDirectional.all(8.0),
@@ -243,6 +259,12 @@ Widget renderMimeIcon(String primaryMimeType) {
       ),
     ),
   );
+}
+
+// getextension from filenames
+String getExtension(String filename) {
+  final index = filename.lastIndexOf('.');
+  return index >= 0 ? filename.substring(index, filename.length) : '';
 }
 
 Future handleDownload(

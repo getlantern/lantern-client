@@ -34,9 +34,14 @@ class ReplicaImageListItem extends StatelessWidget {
                   renderImageThumbnail(
                     imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
                     item: item,
-                    size: 24,
+                    size: 100,
                   ),
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
+                  const Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      top: 1.0,
+                      end: 1.0,
+                    ),
+                  ),
                   renderName(),
                 ],
               ),
@@ -48,14 +53,11 @@ class ReplicaImageListItem extends StatelessWidget {
   }
 
   Widget renderName() {
-    return Padding(
-      padding: const EdgeInsets.all(6.0),
-      child: CText(
-        removeExtension(item.displayName),
-        maxLines: 3,
-        overflow: TextOverflow.ellipsis,
-        style: tsBody2,
-      ),
+    return CText(
+      removeExtension(item.displayName),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: tsBody2Short,
     );
   }
 }

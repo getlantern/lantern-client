@@ -19,19 +19,21 @@ abstract class ReplicaViewerLayout extends StatefulWidget {
 }
 
 abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
-  late String description = '';
+  // TODO <08-24-22, kalli> What do we get back from /object_info endpoint?
+  // late String description = '';
   late String title = '';
   late String creationDate = '';
   @override
   void initState() {
     super.initState();
-    widget.replicaApi
-        .fetchObjectInfo(widget.item.replicaLink)
-        .then((ReplicaObjectInfo value) {
-      description = value.description;
-      title = value.title;
-      creationDate = value.creationDate;
-    });
+    // TODO <08-24-22, kalli> Fix
+    // widget.replicaApi
+    //     .fetchObjectInfo(widget.item.replicaLink)
+    //     .then((ReplicaObjectInfo value) {
+    //   // description = value.description;
+    //   title = value.title;
+    //   creationDate = value.creationDate;
+    // });
   }
 
   @override
@@ -153,8 +155,10 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 bottom: 64.0,
               ),
               child: CText(
-                description.isEmpty ? 'empty_description'.i18n : description,
-                style: description.isEmpty
+                widget.item.description.isEmpty
+                    ? 'empty_description'.i18n
+                    : widget.item.description,
+                style: widget.item.description.isEmpty
                     ? tsSubtitle1.copiedWith(
                         fontStyle: FontStyle.italic,
                       )
