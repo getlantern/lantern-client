@@ -37,6 +37,44 @@ Color getReplicaMimeBgColor(String mime) {
   return HSLColor.fromAHSL(0.6, hue, 0.3, 0.2).toColor();
 }
 
+// gradient color pairs map
+List<List<Color>> gradientColors = [
+  [HexColor('#007A7C'), HexColor('#00237C')],
+  [HexColor('#9174CE'), HexColor('#749CCE')],
+  [HexColor('#5DADEC'), HexColor('#5DD2EC')],
+  [HexColor('#007A7C'), HexColor('#0A7C00')],
+  [HexColor('#007A7C'), HexColor('#00237C')],
+];
+
+// create consistent random gradient mappings from strings
+// this method mirrors the generator in desktop
+LinearGradient stringToGradient(String string) {
+  string = string +
+      '     '; // ensure string is always at least 5 chars long (space is smallest single char code 32)
+  var arr = string.split('').sublist(0, 5).map((r) {
+    return r.codeUnitAt(0);
+  }).toList();
+  final largest = arr.reduce(max);
+  final index = arr.indexWhere(((n) => n == largest));
+  final colors = gradientColors[index];
+  return LinearGradient(
+    begin: Alignment.topLeft,
+    end: const Alignment(0.8, 1),
+    colors: <Color>[
+      colors[0],
+      colors[1],
+    ],
+    tileMode: TileMode.mirror,
+  );
+}
+
+BoxDecoration getReplicaExtensionBgDecoration(String extension) {
+  stringToGradient(extension.replaceAll('.', ''));
+  return BoxDecoration(
+    gradient: stringToGradient(extension),
+  );
+}
+
 final maxSha1Hash = BigInt.from(2).pow(160);
 final numHues = BigInt.from(360);
 

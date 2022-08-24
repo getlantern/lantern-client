@@ -20,7 +20,7 @@ class ReplicaAppListItem extends StatelessWidget {
     return ListItemFactory.replicaItem(
       link: item.replicaLink,
       api: replicaApi,
-      leading: renderMimeIcon(item.primaryMimeType.toString()),
+      leading: renderMimeIcon(item.displayName),
       onTap: onTap,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

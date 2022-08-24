@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
-import 'package:lantern/replica/models/replica_object_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 var logger = Logger(
@@ -52,7 +51,7 @@ class ReplicaApi {
       case SearchCategory.Image:
       case SearchCategory.Document:
       case SearchCategory.App:
-        // TODO <08-10-22, kalli> Can we also search for description?
+        // TODO <08-10-22, kalli> Implement search on description?
         s = 'search?s=$query&offset=$page&orderBy=relevance&lang=$lang&type=${category.mimeTypes()}';
         break;
       case SearchCategory.Unknown:
@@ -176,7 +175,6 @@ class ReplicaApi {
 
   // hit the /object_info endpoint to get title, description and creationDate strings
   // returns an object with '' fields for all 3 if not found
-// TODO <08-24-22, kalli> Really unsure about this
   Future<ReplicaObjectInfo> fetchObjectInfo(
     ReplicaLink replicaLink,
   ) async {

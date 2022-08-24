@@ -68,7 +68,9 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               },
               onClear: () async => await replicaModel.setSearchTerm(''),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(
+              height: 10,
+            ), // <08-22-22, echo> I feel like the standard list view under tabs scrolls directly under tab (no padding) no?
             TabBar(
               controller: tabController,
               unselectedLabelStyle: tsBody1,
