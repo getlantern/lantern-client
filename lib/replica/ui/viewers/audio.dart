@@ -121,6 +121,11 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          Container(
+            width: 100,
+            height: 100,
+            child: renderMimeIcon(widget.item.displayName),
+          ),
           renderWaveform(),
           renderControls(),
         ],
@@ -131,7 +136,6 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
   Widget renderControls() {
     return Container(
       width: 200,
-      padding: const EdgeInsetsDirectional.only(top: 18.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
