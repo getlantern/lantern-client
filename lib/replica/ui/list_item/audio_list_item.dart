@@ -1,7 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
-// TODO <08-08-22, kalli> Update to reflect Figma
 // @echo
 class ReplicaAudioListItem extends StatelessWidget {
   ReplicaAudioListItem({
@@ -20,7 +19,7 @@ class ReplicaAudioListItem extends StatelessWidget {
     return ListItemFactory.replicaItem(
       link: item.replicaLink,
       api: replicaApi,
-      leading: renderMimeIcon(item.displayName),
+      leading: renderMimeIcon(item.displayName, 1.0),
       onTap: onTap,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

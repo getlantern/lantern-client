@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
-// TODO <08-08-22, kalli> Update to reflect Figma
 // @echo
 class ReplicaVideoListItem extends StatelessWidget {
   ReplicaVideoListItem({

@@ -19,21 +19,9 @@ abstract class ReplicaViewerLayout extends StatefulWidget {
 }
 
 abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
-  // TODO <08-24-22, kalli> What do we get back from /object_info endpoint?
-  // late String description = '';
-  late String title = '';
-  late String creationDate = '';
   @override
   void initState() {
     super.initState();
-    // TODO <08-24-22, kalli> Fix
-    // widget.replicaApi
-    //     .fetchObjectInfo(widget.item.replicaLink)
-    //     .then((ReplicaObjectInfo value) {
-    //   // description = value.description;
-    //   title = value.title;
-    //   creationDate = value.creationDate;
-    // });
   }
 
   @override
@@ -111,63 +99,86 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
     );
   }
 
-// TODO <08-24-22, kalli> Reflect displayName vs title choices
   Widget renderText() {
-    return Flexible(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // * Title
-            Container(
-              padding: const EdgeInsetsDirectional.only(
-                top: 24.0,
-                bottom: 12.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: CText(
-                      removeExtension(widget.item.displayName),
-                      style: tsHeading3,
-                    ),
+    return FutureBuilder(
+      future: widget.replicaApi.fetchObjectInfo(widget.item.replicaLink),
+      builder: ((BuildContext context, AsyncSnapshot<void> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        // For the Viewers in Replica, we are sending another request to fetch the below params.
+        // That request goes to `/object_info` endpoint (as opposed it coming bundled in our ReplicaSearchItem)
+        // We don't go through the usual motions of checking the snapshot state since we can render an empty string if there is an error (and we don't want the rest of the UI to stall from rendering)
+        final replicaObjectInfo = !snapshot.hasError
+            ? snapshot.data as ReplicaObjectInfo
+            : EmptyReplicaObjectInfo();
+        final description = replicaObjectInfo.description;
+        final title = replicaObjectInfo.title;
+        final creationDate = replicaObjectInfo.creationDate;
+        return Flexible(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // * Title
+                Container(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 24.0,
+                    bottom: 12.0,
                   ),
-                  IconButton(
-                    onPressed: () =>
-                        handleDownload(context, widget.item, widget.replicaApi),
-                    icon: const CAssetImage(
-                      size: 20,
-                      path: ImagePaths.file_download,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CText(
+                          removeExtension(
+                            title.isNotEmpty ? title : widget.item.displayName,
+                          ),
+                          style: tsHeading3,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => handleDownload(
+                          context,
+                          widget.item,
+                          widget.replicaApi,
+                        ),
+                        icon: const CAssetImage(
+                          size: 20,
+                          path: ImagePaths.file_download,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Divider(
+                  color: black,
+                ),
+                // * Description
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 24.0,
+                    bottom: 64.0,
+                  ),
+                  child: CText(
+                    description.isEmpty
+                        ? 'empty_description'.i18n
+                        : description,
+                    style: description.isEmpty
+                        ? tsSubtitle1.copiedWith(
+                            fontStyle: FontStyle.italic,
+                          )
+                        : tsSubtitle1,
+                  ),
+                ),
+              ],
             ),
-            Divider(
-              color: black,
-            ),
-            // * Description
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsetsDirectional.only(
-                top: 24.0,
-                bottom: 64.0,
-              ),
-              child: CText(
-                widget.item.description.isEmpty
-                    ? 'empty_description'.i18n
-                    : widget.item.description,
-                style: widget.item.description.isEmpty
-                    ? tsSubtitle1.copiedWith(
-                        fontStyle: FontStyle.italic,
-                      )
-                    : tsSubtitle1,
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }),
     );
   }
 }

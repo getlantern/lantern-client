@@ -235,11 +235,13 @@ Widget renderImageThumbnail({
   );
 }
 
-Widget renderMimeIcon(String filename) {
+/// Receives a filename and a scaleBy factor
+/// Renders an extension-specific color gradient
+Widget renderMimeIcon(String filename, double scaleBy) {
   final fileExtension = getExtension(filename).toLowerCase();
   return SizedBox(
-    width: 60,
     height: 60,
+    width: 60,
     child: ClipRRect(
       borderRadius: defaultBorderRadius,
       child: Stack(
@@ -252,7 +254,7 @@ Widget renderMimeIcon(String filename) {
             padding: const EdgeInsetsDirectional.all(8.0),
             child: CText(
               fileExtension.isNotEmpty ? fileExtension : '?',
-              style: tsButtonWhite.copiedWith(fontSize: 12),
+              style: tsButtonWhite.copiedWith(fontSize: 12 * (scaleBy)),
             ),
           )
         ],
