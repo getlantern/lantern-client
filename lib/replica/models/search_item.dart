@@ -12,6 +12,7 @@ class ReplicaSearchItem {
     this.humanizedFileSize,
     this.replicaLink,
     this.description,
+    this.title,
   );
 
   String? primaryMimeType;
@@ -20,6 +21,7 @@ class ReplicaSearchItem {
   late ReplicaLink replicaLink;
   late String displayName;
   late String description;
+  late String title;
 
   static List<ReplicaSearchItem> fromJson(
     SearchCategory category,
@@ -57,7 +59,9 @@ class ReplicaSearchItem {
             .humanizeSeconds();
         final humanizedFileSize = filesize(result['fileSize'] as int);
         final displayName = link.displayName ?? result['displayName'];
-        final description = result['description'] ?? '';
+        final metadata = result['metadata'];
+        final description = metadata['description'] ?? '';
+        final title = metadata['title'] ?? '';
         items.add(
           ReplicaSearchItem(
             displayName,
@@ -66,6 +70,7 @@ class ReplicaSearchItem {
             humanizedFileSize,
             link,
             description,
+            title,
           ),
         );
       } catch (err) {

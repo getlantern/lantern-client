@@ -178,13 +178,14 @@ class ReplicaApi {
   Future<ReplicaObjectInfo> fetchObjectInfo(
     ReplicaLink replicaLink,
   ) async {
-    var u = 'object_info?link=${replicaLink.toMagnetLink()}';
-    logger.v('fetch object_info: $u');
+    var obj = 'object_info?link=${replicaLink.toMagnetLink()}';
+    logger.v('fetch object_info: $obj');
 
     try {
-      var resp = await dio.head(u).timeout(defaultTimeoutDuration);
+      var resp = await dio.get(obj).timeout(defaultTimeoutDuration);
       if (resp.statusCode != 200) {
-        logger.e('error fetching object_info $u');
+        logger.e('error fetching object_info $obj');
+        return EmptyReplicaObjectInfo();
       }
       final description = resp.headers['description'];
       final title = resp.headers['title'];
