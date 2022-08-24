@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
@@ -139,6 +140,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
             width: 32,
             height: 32,
             child: FloatingActionButton(
+              backgroundColor: HexColor('#ffffff'),
               child: const CAssetImage(
                 path: ImagePaths.fast_rewind,
                 size: 16,
@@ -162,6 +164,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
             width: 56,
             height: 56,
             child: FloatingActionButton(
+              backgroundColor: HexColor('#00BCD4'),
               onPressed: () async {
                 isPlaying ? await pause() : await play();
               },
@@ -187,6 +190,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
                 );
                 await audioPlayer.seek(position!);
               },
+              backgroundColor: HexColor('#ffffff'),
               child: const CAssetImage(
                 path: ImagePaths.fast_forward,
                 size: 16,
@@ -207,7 +211,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
         color: white,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
-      height: 80.0,
+      height: 60.0,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -222,6 +226,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
                 final Position = v * duration.inMilliseconds;
                 audioPlayer.seek(Duration(milliseconds: Position.round()));
               },
+              activeColor: HexColor('#00BCD4'),
               value: (position != null &&
                       totalDuration != null &&
                       position!.inMilliseconds > 0 &&
