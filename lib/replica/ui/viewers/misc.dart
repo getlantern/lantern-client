@@ -104,8 +104,6 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.item.displayName,
-      backgroundColor: black,
-      foregroundColor: white,
       body: Stack(
         children: <Widget>[
           PDFView(

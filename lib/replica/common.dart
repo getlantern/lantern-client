@@ -8,6 +8,7 @@ export 'models/replica_link.dart';
 export 'models/replica_model.dart';
 export 'models/search_category.dart';
 export 'models/search_item.dart';
+export 'models/replica_object_info.dart';
 
 export 'ui/utils.dart';
 export 'ui/list_item/app_list_item.dart';

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
+import 'package:lantern/replica/models/replica_object_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 var logger = Logger(
@@ -17,6 +18,7 @@ class Metadata {
 }
 
 class ReplicaApi {
+  // cache duration upfront
   ReplicaApi(this.replicaHostAddr) {
     dio = Dio(
       BaseOptions(
@@ -169,6 +171,36 @@ class ReplicaApi {
       logger.e(
         'Failed to fetch: ${resp.statusCode} -> ${resp.data.toString()}',
       );
+    }
+  }
+
+  // hit the /object_info endpoint to get title, description and creationDate strings
+  // returns an object with '' fields for all 3 if not found
+// TODO <08-24-22, kalli> Really unsure about this
+  Future<ReplicaObjectInfo> fetchObjectInfo(
+    ReplicaLink replicaLink,
+  ) async {
+    var u = 'object_info?link=${replicaLink.toMagnetLink()}';
+    logger.v('fetch object_info: $u');
+
+    try {
+      var resp = await dio.head(u).timeout(defaultTimeoutDuration);
+      if (resp.statusCode != 200) {
+        logger.e('error fetching object_info $u');
+      }
+      final description = resp.headers['description'];
+      final title = resp.headers['title'];
+      final creationDate = resp.headers['creationDate'];
+      return ReplicaObjectInfo(
+        description.toString(),
+        title.toString(),
+        creationDate.toString(),
+      );
+    } on TimeoutException catch (_) {
+      logger.w(
+        'Timed out while fetching object_info from replica link, will return',
+      );
+      return EmptyReplicaObjectInfo();
     }
   }
 }
