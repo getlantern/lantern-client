@@ -178,7 +178,7 @@ class ReplicaApi {
   Future<ReplicaObjectInfo> fetchObjectInfo(
     ReplicaLink replicaLink,
   ) async {
-    var obj = 'object_info?link=${replicaLink.toMagnetLink()}';
+    var obj = 'object_info?replicaLink=${replicaLink.toMagnetLink()}';
     logger.v('fetch object_info: $obj');
 
     try {
