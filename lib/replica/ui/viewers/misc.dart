@@ -57,7 +57,7 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
   @override
   Widget body(BuildContext context) {
     return GestureDetector(
-      child: renderMimeIcon(widget.item.primaryMimeType.toString()),
+      child: renderMimeIcon(widget.item.displayName),
       onTap: () async {
         if (isPDF && tempFile != null) {
           await context.router.push(
