@@ -69,9 +69,14 @@ LinearGradient stringToGradient(String string) {
 }
 
 BoxDecoration getReplicaExtensionBgDecoration(String extension) {
-  stringToGradient(extension.replaceAll('.', ''));
   return BoxDecoration(
-    gradient: stringToGradient(extension),
+    gradient: stringToGradient(extension.replaceAll('.', '')),
+  );
+}
+
+BoxDecoration getReplicaHashBgDecoration(String hash) {
+  return BoxDecoration(
+    gradient: stringToGradient(hash),
   );
 }
 
