@@ -26,20 +26,22 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   @override
   void initState() {
     super.initState();
-    infoTitle = widget.item.metaTitle;
-    infoDescription = widget.item.metaDescription;
     // For the Viewers in Replica, we are sending another request to fetch the below params.
     // That request goes to `/object_info` endpoint (as opposed it coming bundled in our ReplicaSearchItem)
-    getObjectInfo();
+    doFetchObjectInfo();
   }
 
-  void getObjectInfo() async {
+  void doFetchObjectInfo() async {
     await widget.replicaApi
         .fetchObjectInfo(widget.item.replicaLink)
         .then((value) {
       setState(() {
-        infoTitle = value.infoTitle;
-        infoDescription = value.infoDescription;
+        infoTitle = value.infoTitle.isNotEmpty
+            ? value.infoTitle
+            : widget.item.metaTitle;
+        infoDescription = value.infoDescription.isNotEmpty
+            ? value.infoDescription
+            : widget.item.metaDescription;
         infoCreationDate = value.infoCreationDate;
       });
     });
