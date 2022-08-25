@@ -108,6 +108,15 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.item.fileNameTitle,
+      actionButton: FutureBuilder<PDFViewController>(
+        future: _controller.future,
+        builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
+          if (snapshot.hasData) {
+            return InfoTextBox(text: '${currentPage! + 1} / ${pages! + 1}');
+          }
+          return Container();
+        },
+      ),
       body: Stack(
         children: <Widget>[
           PDFView(
