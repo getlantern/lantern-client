@@ -174,7 +174,7 @@ class ReplicaVideoListItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   CText(
-                    item.description,
+                    item.metaDescription,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: tsBody2Short,

@@ -1,13 +1,13 @@
 class ReplicaObjectInfo {
   ReplicaObjectInfo(
-    this.description,
-    this.title,
-    this.creationDate,
+    this.infoDescription,
+    this.infoTitle,
+    this.infoCreationDate,
   );
 
-  late String description;
-  late String title;
-  late String creationDate;
+  late String infoDescription;
+  late String infoTitle;
+  late String infoCreationDate;
 }
 
 ReplicaObjectInfo EmptyReplicaObjectInfo() {
