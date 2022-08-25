@@ -18,10 +18,12 @@ class ReplicaAudioViewer extends ReplicaViewerLayout {
   State<StatefulWidget> createState() => _ReplicaAudioViewerState();
 }
 
-class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
+class _ReplicaAudioViewerState extends ReplicaViewerLayoutState with TickerProviderStateMixin {
   final mode = PlayerMode.MEDIA_PLAYER;
   final defaultSeekDurationInSeconds = 3;
   late AudioPlayer audioPlayer;
+  late AnimationController _controller;
+  late Animation<double> _animation;
   Duration? totalDuration;
   Duration? position;
   PlayerState playerState = PlayerState.STOPPED;
@@ -36,6 +38,27 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
 
   @override
   void initState() {
+    _controller = AnimationController(
+      duration: const Duration(
+        milliseconds: 8000,
+      ),
+      lowerBound: -2,
+      upperBound: 2,
+      vsync: this,
+    );
+    _animation = _controller
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _controller.reset();
+          _controller.forward();
+        } else if (status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      });
+    // _controller.forward();
     audioPlayer = AudioPlayer(mode: mode);
     durationSubscription = audioPlayer.onDurationChanged.listen((duration) {
       setState(() => totalDuration = duration);
@@ -46,6 +69,14 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
         position = p;
       }),
     );
+
+    playerStateSubscription = audioPlayer.onPlayerStateChanged.listen((event) {
+      if (event == PlayerState.STOPPED || event == PlayerState.PAUSED) {
+        _controller.stop();
+      } else if (event == PlayerState.PLAYING) {
+        _controller.forward();
+      }
+    });
 
     playerCompleteSubscription = audioPlayer.onPlayerCompletion.listen((event) {
       setState(() => playerState = PlayerState.STOPPED);
@@ -124,7 +155,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
           Container(
             width: 200,
             height: 200,
-            child: renderMimeIcon(widget.item.fileNameTitle, 2.0),
+            child: renderAnimatedMimeIcon(widget.item.fileNameTitle, widget.item.replicaLink, _animation.value),
           ),
           renderWaveform(),
           renderControls(),
