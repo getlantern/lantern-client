@@ -146,6 +146,8 @@ Future<Widget> getUploadThumbnailFromFile({
 /// Invokes ReplicaUploader.uploadFile
 /// Shows "Upload started" notification
 /// Pops router until root
+/// fileTitle: whatever the "name your file" field shows on submit, no extension
+/// fileName: fileTitle + extension (automatically generated from fileToUpload)
 Future<void> handleUploadConfirm({
   required BuildContext context,
   required File fileToUpload,
@@ -155,9 +157,9 @@ Future<void> handleUploadConfirm({
   try {
     await ReplicaUploader.inst.uploadFile(
       file: fileToUpload,
-      // TODO <08-25-22, kalli> How do we upload the title given (as opposed to file's system name?)
       fileName: '$fileTitle${path.extension(fileToUpload.path)}',
-      fileDescription: fileDescription ?? '',
+      fileDescription: fileDescription,
+      fileTitle: fileTitle,
     );
     showSnackbar(context: context, content: 'upload_started'.i18n);
     context.router.popUntilRoot();

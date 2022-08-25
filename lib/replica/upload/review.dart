@@ -79,8 +79,10 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
               // * Thumbnail
               FutureBuilder(
                 future: getUploadThumbnailFromFileFuture,
-                builder:
-                    (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+                builder: (
+                  BuildContext thumbnailContext,
+                  AsyncSnapshot<Widget> snapshot,
+                ) {
                   if (snapshot.connectionState != ConnectionState.done) {
                     return const CircularProgressIndicator();
                   }
@@ -89,8 +91,7 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
                       snapshot.data == null) {
                     return CAssetImage(
                       path: SearchCategoryFromMimeType(
-                        // TODO <08-09-22, kalli> Fix this path to an always available fallback
-                        lookupMimeType(widget.fileToUpload.path) ?? '',
+                        lookupMimeType(widget.fileToUpload.path),
                       ).getRelevantImagePath(),
                     );
                   }
@@ -110,14 +111,12 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // * File mimetype
-                      // TODO <08-10-22, kalli> Show file type not mime type
                       Container(
                         child: (path
                                 .extension(widget.fileToUpload.path)
                                 .isNotEmpty)
                             ? CText(
                                 path
-                                    // TODO <08-08-22, kalli> Confirm our extension/naming strategy
                                     .extension(widget.fileToUpload.path)
                                     .toUpperCase()
                                     .replaceAll('.', ''),

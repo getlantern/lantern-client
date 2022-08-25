@@ -33,16 +33,24 @@ class ReplicaUploader {
         .setBackgroundHandler(ReplicaUploaderBackgroundHandler);
   }
 
+  /// fileTitle: no extension
+  /// fileName: has extension
   Future<void> uploadFile({
     required File file,
     required String fileName,
     String? fileDescription,
+    required String fileTitle,
   }) async {
     final replicaAddr = await sessionModel.getReplicaAddr();
     var uploadUrl =
-        'http://$replicaAddr/replica/upload?name=${Uri.encodeComponent(fileName)}';
-    if (fileDescription != null || fileDescription! != '') {
+        'http://$replicaAddr/replica/upload?filename=${Uri.encodeComponent(fileName)}';
+    // add description
+    if (fileDescription != null) {
       uploadUrl += '&description=${Uri.encodeComponent(fileDescription)}';
+    }
+    // add title
+    if (fileTitle.isNotEmpty) {
+      uploadUrl += '&title=${Uri.encodeComponent(fileTitle)}';
     }
     logger.v('uploadUrl: $uploadUrl');
     await inst.uploader!.enqueue(
