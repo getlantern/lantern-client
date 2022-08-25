@@ -964,6 +964,9 @@ msgstr "Upload Failed"
 msgid "upload_cancelled"
 msgstr "Upload Cancelled"
 
+msgid "upload_unknown_error"
+msgstr "Something went wrong while trying to publish"
+
 msgid "replica_link_fetcher"
 msgstr "Replica Link Fetcher"
 

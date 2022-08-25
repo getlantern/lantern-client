@@ -4,7 +4,6 @@ import 'package:lantern/replica/common.dart';
 
 // ReplicaUploadTitle renders a single-item ListView with the contents of
 // 'fileToUpload', allowing the user to change the display name of the upload.
-// TODO <08-08-22, kalli> Confirm our extension/naming strategy
 class ReplicaUploadTitle extends StatefulWidget {
   final File fileToUpload;
   final String? fileTitle;

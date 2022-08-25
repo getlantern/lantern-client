@@ -146,20 +146,25 @@ Future<Widget> getUploadThumbnailFromFile({
 /// Invokes ReplicaUploader.uploadFile
 /// Shows "Upload started" notification
 /// Pops router until root
-// TODO <08-08-22, kalli> Confirm our extension/naming strategy
 Future<void> handleUploadConfirm({
   required BuildContext context,
   required File fileToUpload,
   required String fileTitle,
   String? fileDescription,
 }) async {
-  await ReplicaUploader.inst.uploadFile(
-    file: fileToUpload,
-    fileName: '$fileTitle${path.extension(fileToUpload.path)}',
-    fileDescription: fileDescription,
-  );
-  showSnackbar(context: context, content: 'upload_started'.i18n);
-  context.router.popUntilRoot();
+  try {
+    await ReplicaUploader.inst.uploadFile(
+      file: fileToUpload,
+      // TODO <08-25-22, kalli> How do we upload the title given (as opposed to file's system name?)
+      fileName: '$fileTitle${path.extension(fileToUpload.path)}',
+      fileDescription: fileDescription ?? '',
+    );
+    showSnackbar(context: context, content: 'upload_started'.i18n);
+    context.router.popUntilRoot();
+  } catch (e) {
+    logger.e('Error uploading: $e');
+    showSnackbar(context: context, content: 'upload_unknown_error'.i18n);
+  }
 }
 
 // TODO <08-18-22, kalli> Render a custom error state
