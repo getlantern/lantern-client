@@ -272,6 +272,35 @@ Widget renderMimeIcon(String filename, double scaleBy) {
   );
 }
 
+
+/// Renders an animated hash-specific color gradient with mime icon
+Widget renderAnimatedMimeIcon(String filename, ReplicaLink replicaLink, double animatedValue) {
+  final fileExtension = getExtension(filename).toLowerCase();
+  return SizedBox(
+    height: 60,
+    width: 60,
+    child: ClipRRect(
+      borderRadius: defaultBorderRadius,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            decoration: getReplicaHashAnimatedBgDecoration(replicaLink.infohash, animatedValue),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.all(8.0),
+            child: CText(
+              fileExtension.isNotEmpty ? fileExtension : '?',
+              style: tsButtonWhite.copiedWith(fontSize: 24),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+/// Renders a hash-specific color gradient with play icon
 Widget renderPlayIcon(ReplicaLink replicaLink) {
   return SizedBox(
     width: 60,
