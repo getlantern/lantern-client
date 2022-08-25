@@ -128,7 +128,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
               builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
                 if (snapshot.hasData) {
                   return InfoTextBox(
-                    text: '${currentPage! + 1} / ${pages! + 1}',
+                    text: '${currentPage! + 1} / $pages!',
                   );
                 }
                 return Container();
