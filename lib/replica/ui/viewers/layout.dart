@@ -19,9 +19,30 @@ abstract class ReplicaViewerLayout extends StatefulWidget {
 }
 
 abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
+  late String infoTitle;
+  late String infoDescription;
+  late String infoCreationDate;
+
   @override
   void initState() {
     super.initState();
+    infoTitle = widget.item.metaTitle;
+    infoDescription = widget.item.metaDescription;
+    // For the Viewers in Replica, we are sending another request to fetch the below params.
+    // That request goes to `/object_info` endpoint (as opposed it coming bundled in our ReplicaSearchItem)
+    getObjectInfo();
+  }
+
+  void getObjectInfo() async {
+    await widget.replicaApi
+        .fetchObjectInfo(widget.item.replicaLink)
+        .then((value) {
+      setState(() {
+        infoTitle = value.infoTitle;
+        infoDescription = value.infoDescription;
+        infoCreationDate = value.infoCreationDate;
+      });
+    });
   }
 
   @override
@@ -99,9 +120,6 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
     );
   }
 
-  // For the Viewers in Replica, we are sending another request to fetch the below params.
-  // That request goes to `/object_info` endpoint (as opposed it coming bundled in our ReplicaSearchItem)
-  // We don't go through the usual motions of checking the snapshot state since we can render an empty string if there is an error (and we don't want the rest of the UI to stall from rendering)
   Widget renderText() {
     return Flexible(
       child: SingleChildScrollView(
@@ -118,31 +136,9 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: FutureBuilder(
-                      future: widget.replicaApi
-                          .fetchObjectInfo(widget.item.replicaLink),
-                      builder:
-                          (BuildContext context, AsyncSnapshot<void> snapshot) {
-                        // * render metaTitle as a fallback
-                        if (snapshot.connectionState ==
-                                ConnectionState.waiting ||
-                            snapshot.hasError) {
-                          return CText(
-                            removeExtension(
-                              widget.item.metaTitle,
-                            ),
-                            style: tsHeading3,
-                          );
-                        }
-                        // * render infoTitle once it's available
-                        final replicaObjectInfo =
-                            snapshot.data as ReplicaObjectInfo;
-                        final infoTitle = replicaObjectInfo.infoTitle;
-                        return CText(
-                          removeExtension(infoTitle),
-                          style: tsHeading3,
-                        );
-                      },
+                    child: CText(
+                      removeExtension(infoTitle),
+                      style: tsHeading3,
                     ),
                   ),
                   IconButton(
@@ -169,41 +165,15 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 top: 24.0,
                 bottom: 64.0,
               ),
-              child: FutureBuilder(
-                future:
-                    widget.replicaApi.fetchObjectInfo(widget.item.replicaLink),
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<void> snapshot,
-                ) {
-                  // * render metaDescription as a fallback
-                  if (snapshot.connectionState == ConnectionState.waiting ||
-                      snapshot.hasError) {
-                    return CText(
-                      widget.item.metaDescription.isEmpty
-                          ? 'empty_description'.i18n
-                          : widget.item.metaDescription,
-                      style: widget.item.metaDescription.isEmpty
-                          ? tsSubtitle1.copiedWith(
-                              fontStyle: FontStyle.italic,
-                            )
-                          : tsSubtitle1,
-                    );
-                  }
-                  // * render infoDescription once it's available
-                  final replicaObjectInfo = snapshot.data as ReplicaObjectInfo;
-                  final infoDescription = replicaObjectInfo.infoDescription;
-                  return CText(
-                    infoDescription.isEmpty
-                        ? 'empty_description'.i18n
-                        : infoDescription,
-                    style: infoDescription.isEmpty
-                        ? tsSubtitle1.copiedWith(
-                            fontStyle: FontStyle.italic,
-                          )
-                        : tsSubtitle1,
-                  );
-                },
+              child: CText(
+                infoDescription.isEmpty
+                    ? 'empty_description'.i18n
+                    : infoDescription,
+                style: infoDescription.isEmpty
+                    ? tsSubtitle1.copiedWith(
+                        fontStyle: FontStyle.italic,
+                      )
+                    : tsSubtitle1,
               ),
             ),
           ],
