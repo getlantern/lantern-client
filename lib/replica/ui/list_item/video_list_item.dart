@@ -167,7 +167,7 @@ class ReplicaVideoListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CText(
-                    removeExtension(item.displayName),
+                    removeExtension(item.fileNameTitle),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: tsBody1Short.copiedWith(color: blue4),

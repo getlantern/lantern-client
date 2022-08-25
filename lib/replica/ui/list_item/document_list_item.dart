@@ -20,7 +20,7 @@ class ReplicaDocumentListItem extends StatelessWidget {
     return ListItemFactory.replicaItem(
       link: item.replicaLink,
       api: replicaApi,
-      leading: renderMimeIcon(item.displayName, 1.0),
+      leading: renderMimeIcon(item.fileNameTitle, 1.0),
       onTap: onTap,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +28,7 @@ class ReplicaDocumentListItem extends StatelessWidget {
         verticalDirection: VerticalDirection.down,
         children: [
           CText(
-            removeExtension(item.displayName),
+            removeExtension(item.fileNameTitle),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style: tsSubtitle1Short,

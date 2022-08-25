@@ -124,7 +124,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
           Container(
             width: 100,
             height: 100,
-            child: renderMimeIcon(widget.item.displayName),
+            child: renderMimeIcon(widget.item.fileNameTitle, 1.0),
           ),
           renderWaveform(),
           renderControls(),

@@ -212,7 +212,9 @@ Widget renderImageThumbnail({
               width: 24,
               height: 24,
               child: CircularProgressIndicator(
-                  value: downloadProgress.progress, color: white),
+                value: downloadProgress.progress,
+                color: white,
+              ),
             ),
           ),
         ),
@@ -303,7 +305,7 @@ Future handleDownload(
       builder: (context) {
         return CDialog(
           // TODO <08-18-22, kalli> i18n
-          title: 'Error downloading ${item.displayName}',
+          title: 'Error downloading ${item.fileNameTitle}',
           description: 'Something went wrong!',
         );
       },
