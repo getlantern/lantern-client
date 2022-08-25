@@ -74,6 +74,7 @@ export 'ui/show_snackbar.dart';
 export 'ui/text_highlighter.dart';
 export 'ui/text_styles.dart';
 export 'ui/transitions.dart';
+export 'ui/info_text_box.dart';
 
 // custom components
 export 'ui/custom/asset_image.dart';

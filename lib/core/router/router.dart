@@ -21,7 +21,6 @@ import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
 import 'package:lantern/replica/link_handler.dart';
-import 'package:lantern/replica/search.dart';
 import 'package:lantern/replica/ui/viewers/audio.dart';
 import 'package:lantern/replica/ui/viewers/image.dart';
 import 'package:lantern/replica/ui/viewers/video.dart';

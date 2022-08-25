@@ -123,20 +123,8 @@ class ReplicaVideoListItem extends StatelessWidget {
           return Container();
         }
 
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Container(
-            padding: const EdgeInsetsDirectional.only(
-              start: 8,
-              end: 8,
-              bottom: 2,
-            ),
-            decoration: BoxDecoration(color: black),
-            child: CText(
-              cached.value!.toMinutesAndSeconds(),
-              style: tsOverline.copiedWith(color: white),
-            ),
-          ),
+        return InfoTextBox(
+          text: cached.value!.toMinutesAndSeconds(),
         );
       },
     );
