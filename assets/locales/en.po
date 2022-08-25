@@ -1027,6 +1027,9 @@ msgstr "Add Description"
 msgid "no_description"
 msgstr "No description provided"
 
+msgid "read_details"
+msgstr "Read Details"
+
 msgid "description_initial_value"
 msgstr "Description cannot be modified once published"
 

@@ -56,26 +56,40 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
 
   @override
   Widget body(BuildContext context) {
-    return Container(
-      height: 150,
-      width: 150,
-      child: GestureDetector(
-        child: renderMimeIcon(widget.item.fileNameTitle, 2.0),
-        onTap: () async {
-          if (isPDF && tempFile != null) {
-            await context.router.push(
-              FullScreenDialogPage(
-                widget: PDFScreen(
-                  path: tempFile!,
-                  item: widget.item,
-                  replicaApi: widget.replicaApi,
-                ),
-              ),
-            );
-          }
-          ;
-        },
-      ),
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      fit: StackFit.loose,
+      children: [
+        Container(
+          height: 150,
+          width: 150,
+          child: GestureDetector(
+            child: renderMimeIcon(widget.item.fileNameTitle, 2.0),
+            onTap: () async {
+              if (isPDF && tempFile != null) {
+                await context.router.push(
+                  FullScreenDialogPage(
+                    widget: PDFScreen(
+                      path: tempFile!,
+                      item: widget.item,
+                      replicaApi: widget.replicaApi,
+                    ),
+                  ),
+                );
+              }
+              ;
+            },
+          ),
+        ),
+        if (isPDF)
+          Transform.translate(
+            offset: const Offset(0, -10),
+            child: InfoTextBox(
+              text: 'read_details'.i18n.toUpperCase(),
+              invertColors: true,
+            ),
+          ),
+      ],
     );
   }
 }
@@ -108,15 +122,19 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.item.fileNameTitle,
-      actionButton: FutureBuilder<PDFViewController>(
-        future: _controller.future,
-        builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
-          if (snapshot.hasData) {
-            return InfoTextBox(text: '${currentPage! + 1} / ${pages! + 1}');
-          }
-          return Container();
-        },
-      ),
+      actionButton: (errorMessage.isEmpty)
+          ? FutureBuilder<PDFViewController>(
+              future: _controller.future,
+              builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
+                if (snapshot.hasData) {
+                  return InfoTextBox(
+                    text: '${currentPage! + 1} / ${pages! + 1}',
+                  );
+                }
+                return Container();
+              },
+            )
+          : Container(),
       body: Stack(
         children: <Widget>[
           PDFView(
@@ -146,9 +164,9 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
             onViewCreated: (PDFViewController pdfViewController) {
               _controller.complete(pdfViewController);
             },
-            // onLinkHandler: (String? uri) {
-            //   print('goto uri: $uri');
-            // },
+            onLinkHandler: (String? uri) {
+              print('goto uri: $uri');
+            },
             onPageChanged: (int? page, int? total) {
               setState(() {
                 currentPage = page;
