@@ -3,25 +3,30 @@ import 'package:lantern/common/ui/humanize_seconds.dart';
 import 'package:lantern/replica/common.dart';
 
 /// Defines the generic structure of a Replica search result
-// TODO <08-08-22, kalli> This should reflect the title/filename decisions
+/// The server returns a { metadata: {title}, {description}} field in its response. It's a bit redundant since we can get that same info (+ the creationDate field) via the `/object_info` endpoint. We are rendering the title and description returned as part of ReplicaSearchItem in the Results views and requesting the same info again from the `/object_info` endpoint when we are viewing a specific replicaLink in one of the Viewers.
+/// There is also a {displayName} field returned in the ReplicaSearchItem, which corresponds to the file name at the moment of its upload.
+/// We will be using the following notation to disambiguate:
+/// ReplicaSearchItem: {metadata: {title}, {description}} -> metaTitle, metaDescription
+/// Viewer: {title, description, creationDate} returned from `/object_info` -> infoTitle, infoDescription, infoCreationDate
+/// ReplicaSearchItem: { displayName } -> fileNameTitle, which will be used as a backup as needed
 class ReplicaSearchItem {
   ReplicaSearchItem(
-    this.displayName,
+    this.fileNameTitle,
     this.primaryMimeType,
     this.humanizedLastModified,
     this.humanizedFileSize,
     this.replicaLink,
-    this.description,
-    this.title,
+    this.metaDescription,
+    this.metaTitle,
   );
 
   String? primaryMimeType;
   String humanizedLastModified;
   String humanizedFileSize;
   late ReplicaLink replicaLink;
-  late String displayName;
-  late String description;
-  late String title;
+  late String fileNameTitle;
+  late String metaDescription;
+  late String metaTitle;
 
   static List<ReplicaSearchItem> fromJson(
     SearchCategory category,
@@ -58,19 +63,20 @@ class ReplicaSearchItem {
             .inSeconds
             .humanizeSeconds();
         final humanizedFileSize = filesize(result['fileSize'] as int);
-        final displayName = link.displayName ?? result['displayName'];
+        // using the fileNameTitle notation to be consistent with desktop
+        final fileNameTitle = link.displayName ?? result['displayName'];
         final metadata = result['metadata'];
-        final description = metadata['description'] ?? '';
-        final title = metadata['title'] ?? '';
+        final metaDescription = metadata['description'] ?? '';
+        final metaTitle = metadata['title'] ?? '';
         items.add(
           ReplicaSearchItem(
-            displayName,
+            fileNameTitle,
             primaryMimeType,
             humanizedLastModified,
             humanizedFileSize,
             link,
-            description,
-            title,
+            metaDescription,
+            metaTitle,
           ),
         );
       } catch (err) {

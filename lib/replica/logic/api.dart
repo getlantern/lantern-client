@@ -51,7 +51,6 @@ class ReplicaApi {
       case SearchCategory.Image:
       case SearchCategory.Document:
       case SearchCategory.App:
-        // TODO <08-10-22, kalli> Implement search on description?
         s = 'search?s=$query&offset=$page&orderBy=relevance&lang=$lang&type=${category.mimeTypes()}';
         break;
       case SearchCategory.Unknown:
@@ -173,8 +172,9 @@ class ReplicaApi {
     }
   }
 
-  // hit the /object_info endpoint to get title, description and creationDate strings
-  // returns an object with '' fields for all 3 if not found
+  /// Hits the /object_info endpoint to get title, description and creationDate strings
+  /// Returns an object with '' fields for all 3 if not found
+  /// We only call this from inside the Replica Viewer components, since we use the title and description returned as part oft he ReplicaSearchItem for the list views
   Future<ReplicaObjectInfo> fetchObjectInfo(
     ReplicaLink replicaLink,
   ) async {
@@ -187,13 +187,13 @@ class ReplicaApi {
         logger.e('error fetching object_info $obj');
         return EmptyReplicaObjectInfo();
       }
-      final description = resp.headers['description'];
-      final title = resp.headers['title'];
-      final creationDate = resp.headers['creationDate'];
+      final infoDescription = resp.data['description'];
+      final infoTitle = resp.data['title'];
+      final infoCreationDate = resp.data['creationDate'];
       return ReplicaObjectInfo(
-        description.toString(),
-        title.toString(),
-        creationDate.toString(),
+        infoDescription.toString(),
+        infoTitle.toString(),
+        infoCreationDate.toString(),
       );
     } on TimeoutException catch (_) {
       logger.w(
