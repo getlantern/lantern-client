@@ -36,7 +36,7 @@ class ReplicaAudioListItem extends StatelessWidget {
 
   Widget renderAudioFilename() {
     return CText(
-      removeExtension(item.metaTitle),
+      removeExtension(item.fileNameTitle),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
       style: tsSubtitle1Short,
