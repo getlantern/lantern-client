@@ -6,30 +6,35 @@ import 'package:lantern/replica/common.dart';
 // 'image' tab, which is a child of GridView)
 // Looks like this: docs/replica_search_tabs.png
 class ReplicaSearchScreen extends StatefulWidget {
-  ReplicaSearchScreen({Key? key, required this.searchQuery});
+  ReplicaSearchScreen({
+    Key? key,
+    required this.currentQuery,
+    required this.currentTab,
+  });
 
-  final String searchQuery;
+  final String currentQuery;
+  final int currentTab;
 
   @override
-  _ReplicaSearchScreenState createState() =>
-      _ReplicaSearchScreenState(searchQuery);
+  _ReplicaSearchScreenState createState() => _ReplicaSearchScreenState();
 }
 
 class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
     with TickerProviderStateMixin {
-  late ValueNotifier<String> searchQueryListener;
   late final TabController tabController =
       // Video + Image + Audio + Document + App = 5 categories
       TabController(length: 5, vsync: this);
   final formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
   late final CustomTextEditingController textEditingController;
+  late String searchQuery = widget.currentQuery;
+  late int searchTab = widget.currentTab;
 
-  _ReplicaSearchScreenState(String searchQuery) {
+  @override
+  void initState() {
+    super.initState();
     textEditingController =
         CustomTextEditingController(formKey: formKey, text: searchQuery);
-    if (searchQuery != '') {
-      searchQueryListener = ValueNotifier<String>(searchQuery);
-    }
+    tabController.index = searchTab;
   }
 
   @override
@@ -59,10 +64,11 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               controller: textEditingController,
               search: (query) async {
                 FocusScope.of(context).requestFocus(FocusNode());
-                await replicaModel.setSearchTerm(textEditingController.text);
+                await replicaModel.setSearchTerm(query);
+                await replicaModel.setSearchTab(tabController.index);
                 if (textEditingController.text != '') {
                   setState(() {
-                    searchQueryListener.value = textEditingController.text;
+                    searchQuery = textEditingController.text;
                   });
                 }
               },
@@ -73,6 +79,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
             ), // <08-22-22, echo> I feel like the standard list view under tabs scrolls directly under tab (no padding) no?
             TabBar(
               controller: tabController,
+              onTap: (tab) async => await replicaModel.setSearchTab(tab),
               unselectedLabelStyle: tsBody1,
               unselectedLabelColor: grey5,
               indicatorColor: indicatorRed,
@@ -98,47 +105,39 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               ],
             ),
             const SizedBox(height: 10),
-            // TODO <17-12-2021> soltzen: ValueListenableBuilder may not be
-            // necessary: try without it (just with setState and see)
-            ValueListenableBuilder<String>(
-              valueListenable: searchQueryListener,
-              builder:
-                  (BuildContext context, String searchQuery, Widget? child) {
-                return Expanded(
-                  child: TabBarView(
-                    key: const Key('replica_tab_view'),
-                    controller: tabController,
-                    physics: defaultScrollPhysics,
-                    children: [
-                      ReplicaListLayout(
-                        replicaApi: replicaApi,
-                        searchQuery: searchQuery,
-                        searchCategory: SearchCategory.Video,
-                      ),
-                      ReplicaListLayout(
-                        replicaApi: replicaApi,
-                        searchQuery: searchQuery,
-                        searchCategory: SearchCategory.Image,
-                      ),
-                      ReplicaListLayout(
-                        replicaApi: replicaApi,
-                        searchQuery: searchQuery,
-                        searchCategory: SearchCategory.Audio,
-                      ),
-                      ReplicaListLayout(
-                        replicaApi: replicaApi,
-                        searchQuery: searchQuery,
-                        searchCategory: SearchCategory.Document,
-                      ),
-                      ReplicaListLayout(
-                        replicaApi: replicaApi,
-                        searchQuery: searchQuery,
-                        searchCategory: SearchCategory.App,
-                      ),
-                    ],
+            Expanded(
+              child: TabBarView(
+                key: const Key('replica_tab_view'),
+                controller: tabController,
+                physics: defaultScrollPhysics,
+                children: [
+                  ReplicaListLayout(
+                    replicaApi: replicaApi,
+                    searchQuery: searchQuery,
+                    searchCategory: SearchCategory.Video,
                   ),
-                );
-              },
+                  ReplicaListLayout(
+                    replicaApi: replicaApi,
+                    searchQuery: searchQuery,
+                    searchCategory: SearchCategory.Image,
+                  ),
+                  ReplicaListLayout(
+                    replicaApi: replicaApi,
+                    searchQuery: searchQuery,
+                    searchCategory: SearchCategory.Audio,
+                  ),
+                  ReplicaListLayout(
+                    replicaApi: replicaApi,
+                    searchQuery: searchQuery,
+                    searchCategory: SearchCategory.Document,
+                  ),
+                  ReplicaListLayout(
+                    replicaApi: replicaApi,
+                    searchQuery: searchQuery,
+                    searchCategory: SearchCategory.App,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 10),
           ],

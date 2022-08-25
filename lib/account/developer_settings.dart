@@ -290,11 +290,23 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
-            // * REPLICA TEST IMAGE
+            // * REPLICA SEARCH TERM
             ListItemFactory.settingsItem(
               content: 'Replica - current search term',
               trailingArray: [
                 replicaModel.getSearchTermWidget(
+                  (context, value, child) => CText(
+                    value,
+                    style: tsBody1,
+                  ),
+                )
+              ],
+            ),
+            // * REPLICA SEARCH TAB
+            ListItemFactory.settingsItem(
+              content: 'Replica - current search tab',
+              trailingArray: [
+                replicaModel.getSearchTabWidget(
                   (context, value, child) => CText(
                     value,
                     style: tsBody1,

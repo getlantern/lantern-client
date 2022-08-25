@@ -38,6 +38,12 @@ class ReplicaModel extends Model {
     });
   }
 
+  Future<void> setSearchTab<T>(int searchTab) async {
+    return methodChannel.invokeMethod('setSearchTab', <String, dynamic>{
+      'searchTab': searchTab.toString(),
+    });
+  }
+
   Widget getSearchTermWidget(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       '/searchTerm',
@@ -46,9 +52,24 @@ class ReplicaModel extends Model {
     );
   }
 
-  Future<String?> getSearchTerm() async {
+  Widget getSearchTabWidget(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      '/searchTab',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
+  Future<String> getSearchTerm() async {
     return methodChannel
         .invokeMethod('get', '/searchTerm')
         .then((value) => value ?? '');
+  }
+
+  Future<int> getSearchTab() async {
+    return methodChannel.invokeMethod('get', '/searchTab').then((value) {
+      logger.e(value);
+      return value == null ? 0 : int.parse(value);
+    });
   }
 }
