@@ -122,9 +122,9 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            width: 100,
-            height: 100,
-            child: renderMimeIcon(widget.item.fileNameTitle, 1.0),
+            width: 200,
+            height: 200,
+            child: renderMimeIcon(widget.item.fileNameTitle, 2.0),
           ),
           renderWaveform(),
           renderControls(),
@@ -215,7 +215,6 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState {
         color: white,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
-      height: 60.0,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
