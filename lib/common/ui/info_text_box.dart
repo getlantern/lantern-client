@@ -2,8 +2,10 @@ import 'package:lantern/common/common.dart';
 
 class InfoTextBox extends StatelessWidget {
   final String text;
+  final bool? invertColors;
   const InfoTextBox({
     required this.text,
+    this.invertColors = false,
     Key? key,
   }) : super(key: key);
 
@@ -17,10 +19,10 @@ class InfoTextBox extends StatelessWidget {
           end: 8,
           bottom: 4,
         ),
-        decoration: BoxDecoration(color: black),
+        decoration: BoxDecoration(color: invertColors! ? white : black),
         child: CText(
           text,
-          style: tsOverline.copiedWith(color: white),
+          style: tsOverline.copiedWith(color: invertColors! ? black : white),
         ),
       ),
     );
