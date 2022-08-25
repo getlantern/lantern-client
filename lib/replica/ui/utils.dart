@@ -221,10 +221,10 @@ Widget renderImageThumbnail({
           return Stack(
             children: [
               Container(color: grey4),
-              Center(
+              const Center(
                 child: CAssetImage(
                   path: ImagePaths.image_inactive,
-                  size: size,
+                  size: 24,
                 ),
               ),
             ],
@@ -257,6 +257,25 @@ Widget renderMimeIcon(String filename, double scaleBy) {
               style: tsButtonWhite.copiedWith(fontSize: 12 * (scaleBy)),
             ),
           )
+        ],
+      ),
+    ),
+  );
+}
+
+Widget renderPlayIcon(ReplicaLink replicaLink) {
+  return SizedBox(
+    width: 60,
+    height: 60,
+    child: ClipRRect(
+      borderRadius: defaultBorderRadius,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            decoration: getReplicaHashBgDecoration(replicaLink.infohash),
+          ),
+          PlayButton(custom: true),
         ],
       ),
     ),
