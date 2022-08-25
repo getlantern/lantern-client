@@ -19,9 +19,10 @@ abstract class ReplicaViewerLayout extends StatefulWidget {
 }
 
 abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
-  late String infoTitle = widget.item.metaTitle;
+  // initialize to the fallback metaTitle and metaDescription
+  late String infoTitle = widget.item.fileNameTitle;
   late String infoDescription = widget.item.metaDescription;
-  late String infoCreationDate = '';
+  // late String infoCreationDate = '';
 
   @override
   void initState() {
@@ -34,15 +35,19 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   void doFetchObjectInfo() async {
     await widget.replicaApi
         .fetchObjectInfo(widget.item.replicaLink)
-        .then((value) {
+        .then((ReplicaObjectInfo value) {
       setState(() {
         infoTitle = value.infoTitle.isNotEmpty
             ? value.infoTitle
-            : widget.item.metaTitle;
+            : widget.item.metaTitle.isNotEmpty
+                ? widget.item.metaTitle
+                : widget.item.fileNameTitle;
         infoDescription = value.infoDescription.isNotEmpty
             ? value.infoDescription
-            : widget.item.metaDescription;
-        infoCreationDate = value.infoCreationDate;
+            : widget.item.metaDescription.isNotEmpty
+                ? widget.item.metaDescription
+                : 'empty_description'.i18n;
+        // infoCreationDate = value.infoCreationDate;
       });
     });
   }
@@ -168,9 +173,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 bottom: 64.0,
               ),
               child: CText(
-                infoDescription.isEmpty
-                    ? 'empty_description'.i18n
-                    : infoDescription,
+                infoDescription,
                 style: infoDescription.isEmpty
                     ? tsSubtitle1.copiedWith(
                         fontStyle: FontStyle.italic,
