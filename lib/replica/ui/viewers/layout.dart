@@ -19,9 +19,9 @@ abstract class ReplicaViewerLayout extends StatefulWidget {
 }
 
 abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
-  late String infoTitle;
-  late String infoDescription;
-  late String infoCreationDate;
+  late String infoTitle = widget.item.metaTitle;
+  late String infoDescription = widget.item.metaDescription;
+  late String infoCreationDate = '';
 
   @override
   void initState() {
