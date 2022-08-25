@@ -14,27 +14,37 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   late final _textEditingController =
       CustomTextEditingController(formKey: _formKey);
   late bool showResults = false;
-  late String currentQuery;
+  late String currentQuery = '';
+  late int currentTab = 0;
 
   @override
   void initState() {
-    replicaModel.getSearchTerm().then((value) {
-      if (value != '') {
-        _textEditingController.initialValue = value;
+    super.initState();
+    replicaModel.getSearchTerm().then((String cachedSearchTerm) {
+      if (cachedSearchTerm.isNotEmpty) {
+        _textEditingController.initialValue = cachedSearchTerm;
         setState(() {
-          currentQuery = value!;
+          currentQuery = cachedSearchTerm;
           showResults = true;
         });
       }
     });
-    super.initState();
+
+    replicaModel.getSearchTab().then(
+          (int cachedSearchTab) => setState(() => currentTab = cachedSearchTab),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     // We are showing the ReplicaSearchScreen here since we want the bottom tabs to be visible (they are not if it's its own route)
     // TODO <08-23-22, kalli>  Not ideal UX - maybe add a spinner? Not sure
-    if (showResults) return ReplicaSearchScreen(searchQuery: currentQuery);
+    if (showResults) {
+      return ReplicaSearchScreen(
+        currentQuery: currentQuery,
+        currentTab: currentTab,
+      );
+    }
 
     // No active query, return the landing search bar instead
     return GestureDetector(

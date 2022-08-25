@@ -28,6 +28,11 @@ class ReplicaModel(
                     tx.put("/searchTerm", call.argument<String>("searchTerm")!!)
                 }
             }
+            "setSearchTab" -> {
+                db.mutate { tx ->
+                    tx.put("/searchTab", call.argument<String>("searchTab")!!)
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
