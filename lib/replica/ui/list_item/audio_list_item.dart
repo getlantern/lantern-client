@@ -19,7 +19,7 @@ class ReplicaAudioListItem extends StatelessWidget {
     return ListItemFactory.replicaItem(
       link: item.replicaLink,
       api: replicaApi,
-      leading: renderMimeIcon(item.displayName, 1.0),
+      leading: renderMimeIcon(item.replicaLink, 1.0),
       onTap: onTap,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ class ReplicaAudioListItem extends StatelessWidget {
 
   Widget renderAudioFilename() {
     return CText(
-      removeExtension(item.displayName),
+      removeExtension(item.metaTitle),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
       style: tsSubtitle1Short,
