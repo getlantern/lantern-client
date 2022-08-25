@@ -43,7 +43,7 @@ class ReplicaUploader {
   }) async {
     final replicaAddr = await sessionModel.getReplicaAddr();
     var uploadUrl =
-        'http://$replicaAddr/replica/upload?filename=${Uri.encodeComponent(fileName)}';
+        'http://$replicaAddr/replica/upload?name=${Uri.encodeComponent(fileName)}';
     // add description
     if (fileDescription != null) {
       uploadUrl += '&description=${Uri.encodeComponent(fileDescription)}';
