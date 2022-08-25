@@ -53,7 +53,7 @@ class ReplicaImageListItem extends StatelessWidget {
 
   Widget renderName() {
     return CText(
-      removeExtension(item.displayName),
+      removeExtension(item.fileNameTitle),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: tsBody2Short,
