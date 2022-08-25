@@ -191,9 +191,9 @@ class ReplicaApi {
       final infoTitle = resp.data['title'];
       final infoCreationDate = resp.data['creationDate'];
       return ReplicaObjectInfo(
-        infoDescription.toString(),
-        infoTitle.toString(),
-        infoCreationDate.toString(),
+        infoDescription ?? '',
+        infoTitle ?? '',
+        infoCreationDate ?? '',
       );
     } on TimeoutException catch (_) {
       logger.w(
