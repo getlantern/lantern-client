@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:lantern/common/ui/custom/text.dart';
-import 'package:lantern/common/ui/focused_menu.dart';
-import 'package:lantern/common/ui/text_styles.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
 // @echo
@@ -18,45 +15,50 @@ class ReplicaImageListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0.0,
-      child: GestureDetector(
-        onTap: onTap,
-        child: FocusedMenuHolder(
-          menu: renderReplicaLongPressMenuItem(
-              context, replicaApi, item.replicaLink),
-          menuWidth: MediaQuery.of(context).size.width * 0.8,
-          builder: (_) {
-            return GridTile(
-              child: Column(
-                children: [
-                  renderImageThumbnail(
-                    imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
-                    item: item,
-                    size: 100,
-                  ),
-                  const Padding(
-                    padding: EdgeInsetsDirectional.only(
-                      top: 1.0,
-                      end: 1.0,
-                    ),
-                  ),
-                  renderName(),
-                ],
-              ),
-            );
-          },
+    return GestureDetector(
+      onTap: onTap,
+      child: FocusedMenuHolder(
+        menu: renderReplicaLongPressMenuItem(
+          context,
+          replicaApi,
+          item.replicaLink,
         ),
+        menuWidth: MediaQuery.of(context).size.width * 0.5,
+        builder: (_) {
+          return GridTile(
+            child: Column(
+              children: [
+                renderImageThumbnail(
+                  imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
+                  item: item,
+                ),
+                renderName(context),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget renderName() {
-    return CText(
-      removeExtension(item.fileNameTitle),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: tsBody2Short,
+  Widget renderName(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsetsDirectional.only(
+              start: 8.0,
+              end: 8.0,
+            ),
+            child: CText(
+              removeExtension(item.fileNameTitle),
+              maxLines: 1,
+              style: tsBody2Short,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        )
+      ],
     );
   }
 }
