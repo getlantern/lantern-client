@@ -72,7 +72,10 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                   });
                 }
               },
-              onClear: () async => await replicaModel.setSearchTerm(''),
+              onClear: () async {
+                await replicaModel.setSearchTerm('');
+                await replicaModel.setSearchTab(0);
+              },
             ),
             const SizedBox(
               height: 10,

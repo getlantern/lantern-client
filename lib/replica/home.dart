@@ -73,7 +73,10 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
                     });
                   }
                 },
-                onClear: () async => await replicaModel.setSearchTerm(''),
+                onClear: () async {
+                  await replicaModel.setSearchTerm('');
+                  await replicaModel.setSearchTab(0);
+                },
               ),
             ),
             renderDiscoverPopup()

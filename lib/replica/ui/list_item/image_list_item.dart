@@ -15,28 +15,32 @@ class ReplicaImageListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: FocusedMenuHolder(
-        menu: renderReplicaLongPressMenuItem(
-          context,
-          replicaApi,
-          item.replicaLink,
+    return Container(
+      child: GestureDetector(
+        onTap: onTap,
+        child: FocusedMenuHolder(
+          menu: renderReplicaLongPressMenuItem(
+            context,
+            replicaApi,
+            item.replicaLink,
+          ),
+          menuWidth: MediaQuery.of(context).size.width * 0.5,
+          builder: (_) {
+            return GridTile(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  renderImageThumbnail(
+                    imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
+                    item: item,
+                  ),
+                  renderName(context),
+                ],
+              ),
+            );
+          },
         ),
-        menuWidth: MediaQuery.of(context).size.width * 0.5,
-        builder: (_) {
-          return GridTile(
-            child: Column(
-              children: [
-                renderImageThumbnail(
-                  imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
-                  item: item,
-                ),
-                renderName(context),
-              ],
-            ),
-          );
-        },
       ),
     );
   }

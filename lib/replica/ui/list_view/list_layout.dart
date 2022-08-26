@@ -32,8 +32,8 @@ class _ReplicaListLayoutState extends ReplicaCommonListViewState {
         return PagedGridView<int, ReplicaSearchItem>(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 5.0,
-            mainAxisSpacing: 5.0,
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
           ),
           cacheExtent:
               super.getCommonCacheExtent(super.pagingController.value.itemList),
