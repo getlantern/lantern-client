@@ -192,12 +192,12 @@ Widget renderReplicaErrorUI({required String text, Color? color}) {
 Widget renderImageThumbnail({
   required String imageUrl,
   required ReplicaSearchItem item,
-  required double size,
+  double? size,
 }) {
   return Flexible(
     child: ClipRRect(
       borderRadius: defaultBorderRadius,
-      clipBehavior: Clip.hardEdge,
+      clipBehavior: Clip.antiAlias,
       // <08-22-22, kalli> Keeps throwing uncaught exceptions
       // See https://github.com/Baseflow/flutter_cached_network_image/issues/273 - really annoying!! 😠
       // Maybe try this: https://github.com/Baseflow/flutter_cached_network_image/issues/536#issuecomment-1216715184
@@ -207,9 +207,10 @@ Widget renderImageThumbnail({
         imageBuilder: (context, imageProvider) {
           return Image(
             image: imageProvider,
-            fit: BoxFit.cover,
+            fit: BoxFit.fitWidth,
             filterQuality: FilterQuality.high,
-            height: size,
+            width: size ?? MediaQuery.of(context).size.width,
+            height: size ?? MediaQuery.of(context).size.height,
           );
         },
         progressIndicatorBuilder: (context, url, downloadProgress) => Container(
@@ -272,9 +273,9 @@ Widget renderMimeIcon(String filename, double scaleBy) {
   );
 }
 
-
 /// Renders an animated hash-specific color gradient with mime icon
-Widget renderAnimatedMimeIcon(String filename, ReplicaLink replicaLink, double animatedValue) {
+Widget renderAnimatedMimeIcon(
+    String filename, ReplicaLink replicaLink, double animatedValue) {
   final fileExtension = getExtension(filename).toLowerCase();
   return SizedBox(
     height: 60,
@@ -285,7 +286,8 @@ Widget renderAnimatedMimeIcon(String filename, ReplicaLink replicaLink, double a
         alignment: Alignment.center,
         children: [
           Container(
-            decoration: getReplicaHashAnimatedBgDecoration(replicaLink.infohash, animatedValue),
+            decoration: getReplicaHashAnimatedBgDecoration(
+                replicaLink.infohash, animatedValue),
           ),
           Padding(
             padding: const EdgeInsetsDirectional.all(8.0),
