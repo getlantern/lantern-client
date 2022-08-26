@@ -192,7 +192,7 @@ Widget renderReplicaErrorUI({required String text, Color? color}) {
 Widget renderImageThumbnail({
   required String imageUrl,
   required ReplicaSearchItem item,
-  double? size,
+  double? width,
 }) {
   return Flexible(
     child: ClipRRect(
@@ -207,10 +207,9 @@ Widget renderImageThumbnail({
         imageBuilder: (context, imageProvider) {
           return Image(
             image: imageProvider,
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.cover,
             filterQuality: FilterQuality.high,
-            width: size ?? MediaQuery.of(context).size.width,
-            height: size ?? MediaQuery.of(context).size.height,
+            width: width ?? MediaQuery.of(context).size.width,
           );
         },
         progressIndicatorBuilder: (context, url, downloadProgress) => Container(
