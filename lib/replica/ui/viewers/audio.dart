@@ -4,9 +4,6 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
 
-// TODO <08-17-22, kalli> This works, but doesn't look like the specs. We need to create an abstract Audio Player which can be reused in:
-// 1. Messaging (it appears in two places - rendered inside conversation as well as underneath message bar while reocrding an audio message)
-// 2. Replica audio preview
 class ReplicaAudioViewer extends ReplicaViewerLayout {
   ReplicaAudioViewer({
     required ReplicaApi replicaApi,
@@ -18,7 +15,8 @@ class ReplicaAudioViewer extends ReplicaViewerLayout {
   State<StatefulWidget> createState() => _ReplicaAudioViewerState();
 }
 
-class _ReplicaAudioViewerState extends ReplicaViewerLayoutState with TickerProviderStateMixin {
+class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
+    with TickerProviderStateMixin {
   final mode = PlayerMode.MEDIA_PLAYER;
   final defaultSeekDurationInSeconds = 3;
   late AudioPlayer audioPlayer;
@@ -58,7 +56,6 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState with TickerProvi
           _controller.forward();
         }
       });
-    // _controller.forward();
     audioPlayer = AudioPlayer(mode: mode);
     durationSubscription = audioPlayer.onDurationChanged.listen((duration) {
       setState(() => totalDuration = duration);
@@ -97,9 +94,9 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState with TickerProvi
     playerControlCommandSubscription =
         audioPlayer.notificationService.onPlayerCommand.listen((command) {});
 
-    play().then((_) {
-      setState(() {});
-    });
+    // play().then((_) {
+    //   setState(() {});
+    // });
     super.initState();
   }
 
@@ -147,20 +144,22 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState with TickerProvi
 
   @override
   Widget body(BuildContext context) {
-    return Flexible(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 200,
-            height: 200,
-            child: renderAnimatedMimeIcon(widget.item.fileNameTitle, widget.item.replicaLink, _animation.value),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          width: 200,
+          height: 200,
+          child: renderAnimatedMimeIcon(
+            widget.item.fileNameTitle,
+            widget.item.replicaLink,
+            _animation.value,
           ),
-          renderWaveform(),
-          renderControls(),
-        ],
-      ),
+        ),
+        renderWaveform(),
+        renderControls()
+      ],
     );
   }
 
@@ -175,6 +174,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState with TickerProvi
             width: 32,
             height: 32,
             child: FloatingActionButton(
+              heroTag: 'Reverse',
               backgroundColor: HexColor('#ffffff'),
               child: const CAssetImage(
                 path: ImagePaths.fast_rewind,
@@ -199,6 +199,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState with TickerProvi
             width: 56,
             height: 56,
             child: FloatingActionButton(
+              heroTag: 'Pause',
               backgroundColor: HexColor('#00BCD4'),
               onPressed: () async {
                 isPlaying ? await pause() : await play();
@@ -213,6 +214,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState with TickerProvi
             width: 32,
             height: 32,
             child: FloatingActionButton(
+              heroTag: 'Forward',
               onPressed: () async {
                 if (position == null || totalDuration == null) {
                   return;
@@ -268,7 +270,6 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState with TickerProvi
                   ? position!.inMilliseconds / totalDuration!.inMilliseconds
                   : 0.0,
             ),
-
             // Render the current position duration and total duration at the
             // edges of the container, right below the slider
             Padding(

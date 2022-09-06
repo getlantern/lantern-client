@@ -297,7 +297,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                 replicaModel.getSearchTermWidget(
                   (context, value, child) => CText(
                     value,
-                    style: tsBody1,
+                    style: tsBody1.copiedWith(color: Colors.deepOrangeAccent),
                   ),
                 )
               ],
@@ -309,7 +309,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                 replicaModel.getSearchTabWidget(
                   (context, value, child) => CText(
                     value,
-                    style: tsBody1,
+                    style: tsBody1.copiedWith(color: Colors.deepOrangeAccent),
                   ),
                 )
               ],

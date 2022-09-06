@@ -113,7 +113,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Flexible(flex: 2, child: body(context)),
+                  Flexible(flex: 1, child: body(context)),
                   renderText(),
                 ],
               )
@@ -178,6 +178,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 style: infoDescription.isEmpty
                     ? tsSubtitle1.copiedWith(
                         fontStyle: FontStyle.italic,
+                        color: grey4,
                       )
                     : tsSubtitle1,
               ),

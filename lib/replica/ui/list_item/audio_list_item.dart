@@ -21,15 +21,23 @@ class ReplicaAudioListItem extends StatelessWidget {
       api: replicaApi,
       leading: renderPlayIcon(item.replicaLink),
       onTap: onTap,
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        verticalDirection: VerticalDirection.down,
-        children: [
-          // Render audio file name
-          renderAudioFilename(),
-          renderDurationAndMimetype()
-        ],
+      content: SizedBox(
+        height: 60,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                renderAudioFilename(),
+                renderDuration(),
+              ],
+            ),
+            renderMimeType(),
+          ],
+        ),
       ),
     );
   }
@@ -43,9 +51,7 @@ class ReplicaAudioListItem extends StatelessWidget {
     );
   }
 
-  // Render the duration and mime types
-  // If mimetype is nil, just render 'audio/unknown'
-  Widget renderDurationAndMimetype() {
+  Widget renderDuration() {
     return Row(
       children: [
         ValueListenableBuilder(
@@ -64,16 +70,23 @@ class ReplicaAudioListItem extends StatelessWidget {
             );
           },
         ),
-        const Padding(padding: EdgeInsets.symmetric(horizontal: 2.0)),
+      ],
+    );
+  }
+
+  // If mimetype is nil, just render 'audio/unknown'
+  Widget renderMimeType() {
+    return Row(
+      children: [
         if (item.primaryMimeType != null)
           CText(
             item.primaryMimeType!,
-            style: tsBody1.copiedWith(color: pink4),
+            style: tsBody1.copiedWith(color: grey5),
           )
         else
           CText(
             'audio_unknown'.i18n,
-            style: tsBody1.copiedWith(color: pink4),
+            style: tsBody1.copiedWith(color: grey5),
           ),
       ],
     );
