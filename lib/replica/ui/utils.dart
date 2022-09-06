@@ -195,6 +195,7 @@ Widget renderImageThumbnail({
   double? width,
 }) {
   return Flexible(
+    fit: FlexFit.tight,
     child: ClipRRect(
       borderRadius: defaultBorderRadius,
       clipBehavior: Clip.antiAlias,

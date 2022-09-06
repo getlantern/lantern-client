@@ -113,7 +113,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(child: body(context)),
+                  Flexible(flex: 2, child: body(context)),
                   renderText(),
                 ],
               )
@@ -129,6 +129,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
 
   Widget renderText() {
     return Flexible(
+      flex: 1,
       child: SingleChildScrollView(
         child: Column(
           children: [

@@ -1031,7 +1031,7 @@ msgid "no_description"
 msgstr "No description provided"
 
 msgid "read_details"
-msgstr "Read Details"
+msgstr "Read PDF"
 
 msgid "description_initial_value"
 msgstr "Description cannot be modified once published"

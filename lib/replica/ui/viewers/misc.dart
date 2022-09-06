@@ -21,7 +21,7 @@ class ReplicaMiscViewer extends ReplicaViewerLayout {
 }
 
 class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
-  String? tempFile;
+  String? tempFilePath;
   Future<void>? fetched;
   late bool isPDF = false;
 
@@ -30,13 +30,14 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
     super.initState();
     isPDF = widget.item.primaryMimeType == 'application/pdf';
     if (isPDF) {
-      // Fetch to PDF to an application-specific temp file so that we can open it
+      // Fetch the PDF to an application-specific temp file so that we can open it
       // in a PDFView.
       getTemporaryDirectory().then((tempDir) {
         setState(() {
-          tempFile =
+          tempFilePath =
               '${tempDir.absolute.path}/${widget.item.replicaLink.infohash}';
-          fetched = widget.replicaApi.fetch(widget.item.replicaLink, tempFile!);
+          fetched =
+              widget.replicaApi.fetch(widget.item.replicaLink, tempFilePath!);
         });
       });
     }
@@ -45,8 +46,13 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
   @override
   void dispose() {
     // Delete the temp PDF file when we're done viewing it.
-    if (isPDF && tempFile != null) {
-      File(tempFile!).deleteSync();
+    if (isPDF && tempFilePath != null) {
+      try {
+        File(tempFilePath!).deleteSync();
+      } catch (e) {
+        logger.e(
+            'Something went wrong while deleting the temporary PDF after viewing it $e');
+      }
     }
     super.dispose();
   }
@@ -66,11 +72,11 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
           child: GestureDetector(
             child: renderMimeIcon(widget.item.fileNameTitle, 2.0),
             onTap: () async {
-              if (isPDF && tempFile != null) {
+              if (isPDF && tempFilePath != null) {
                 await context.router.push(
                   FullScreenDialogPage(
                     widget: PDFScreen(
-                      path: tempFile!,
+                      path: tempFilePath!,
                       item: widget.item,
                       replicaApi: widget.replicaApi,
                     ),
