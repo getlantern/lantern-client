@@ -77,7 +77,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                     'replica_layout_filetype'
                         .i18n
                         .fill([widget.item.primaryMimeType!]),
-                    style: tsSubtitle1,
+                    style: tsSubtitle1.copiedWith(color: grey5),
                   )
                 : CText(
                     widget.category.toShortString(),
@@ -136,7 +136,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
             // * Title
             Container(
               padding: const EdgeInsetsDirectional.only(
-                top: 24.0,
+                top: 12.0,
                 bottom: 12.0,
               ),
               child: Row(
@@ -156,7 +156,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                       widget.replicaApi,
                     ),
                     icon: const CAssetImage(
-                      size: 20,
+                      size: 24,
                       path: ImagePaths.file_download,
                     ),
                   ),

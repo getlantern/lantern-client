@@ -95,7 +95,7 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
       children: [
         Button(
           width: 150,
-          text: 'publish'.i18n,
+          text: 'done'.i18n,
           secondary: true,
           onPressed: () async => await handleUploadConfirm(
             context: context,

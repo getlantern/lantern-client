@@ -932,7 +932,7 @@ msgid "replica_upload_confirmation_title"
 msgstr "Important!"
 
 msgid "replica_upload_confirmation_body"
-msgstr "Files uploaded to the Lantern Network are publicly accessible. They are decentralized and cannot be deleted from the network by anyone.\n\nAvoid personally identifying information in the file content and filename when uploading sensitive content."
+msgstr "Files uploaded to the Lantern Network are publicly accessible. No one can delete it. Please don’t include personal or identifying information in your file content or filename."
 
 msgid "replica_upload_confirmation_agree"
 msgstr "Resume Upload"
@@ -956,7 +956,7 @@ msgid "upload_in_progress"
 msgstr "Upload in Progress"
 
 msgid "upload_complete"
-msgstr "Upload Complete"
+msgstr "Your file was published successfully"
 
 msgid "upload_failed"
 msgstr "Upload Failed"
@@ -1045,8 +1045,11 @@ msgstr "Upload"
 msgid "review"
 msgstr "Review"
 
+msgid "done"
+msgstr "Done"
+
 msgid "replica_layout_filetype"
-msgstr "Filetype: %s"
+msgstr "filetype: %s"
 
 msgid "empty_description"
 msgstr "No description was provided."

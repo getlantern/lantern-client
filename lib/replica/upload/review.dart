@@ -213,7 +213,7 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
             padding: const EdgeInsetsDirectional.only(bottom: 8.0),
             child: CText(
               'replica_upload_confirmation_body'.i18n,
-              style: tsBody1,
+              style: tsBody1.copiedWith(fontStyle: FontStyle.italic),
             ),
           ),
           CInkWell(
