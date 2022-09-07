@@ -147,7 +147,7 @@ Future<Widget> getUploadThumbnailFromFile({
     case SearchCategory.Document:
     case SearchCategory.App:
     case SearchCategory.Unknown:
-      return CAssetImage(path: cat.getRelevantImagePath());
+      return CAssetImage(size: width, path: cat.getRelevantImagePath());
   }
 }
 
@@ -170,6 +170,7 @@ Future<void> handleUploadConfirm({
       fileTitle: fileTitle,
     );
     showSnackbar(context: context, content: 'upload_started'.i18n);
+    // TODO <07-09-22, kalli> Unstable
     context.router.popUntilRoot();
   } catch (e) {
     logger.e('Error uploading: $e');
@@ -177,7 +178,6 @@ Future<void> handleUploadConfirm({
   }
 }
 
-// TODO <08-18-22, kalli> Render a custom error state
 Widget renderReplicaErrorUI({required String text, Color? color}) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -350,9 +350,8 @@ Future handleDownload(
       context: context,
       builder: (context) {
         return CDialog(
-          // TODO <08-18-22, kalli> i18n
-          title: 'Error downloading ${item.fileNameTitle}',
-          description: 'Something went wrong!',
+          title: 'error'.i18n,
+          description: 'download_unknown_error'.i18n.fill([item.fileNameTitle]),
         );
       },
     );
