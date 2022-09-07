@@ -90,6 +90,7 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
                       !snapshot.hasData ||
                       snapshot.data == null) {
                     return CAssetImage(
+                      size: 100,
                       path: SearchCategoryFromMimeType(
                         lookupMimeType(widget.fileToUpload.path),
                       ).getRelevantImagePath(),
