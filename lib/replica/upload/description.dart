@@ -51,7 +51,7 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
   }
 
   Widget renderDescriptionField() {
-    const maxCharLength = 100;
+    const maxCharLength = 1000;
     return Padding(
       padding: const EdgeInsetsDirectional.only(
         top: 24.0,
@@ -77,7 +77,7 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
             onChanged: (value) => setState(() {
               textLength = value.length;
             }),
-            minLines: 10,
+            maxLines: 10,
             autofocus: true,
             keyboardType: TextInputType.text,
             textCapitalization: TextCapitalization.words,
