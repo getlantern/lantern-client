@@ -131,7 +131,9 @@ class _CTextFieldState extends State<CTextField> {
               },
               onTap: widget.onTap,
               onChanged: (value) {
-                widget.onChanged!(value);
+                if (widget.onChanged != null) {
+                  widget.onChanged!(value);
+                }
                 fieldKey.currentState!.validate();
               },
               onFieldSubmitted: widget.onFieldSubmitted,

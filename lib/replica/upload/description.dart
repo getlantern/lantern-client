@@ -25,7 +25,8 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
   @override
   void initState() {
     textEditingController.text = widget.fileDescription ?? '';
-    textLength = widget.fileDescription!.length;
+    textLength =
+        widget.fileDescription != null ? widget.fileDescription!.length : 0;
     super.initState();
   }
 

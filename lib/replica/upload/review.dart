@@ -71,10 +71,12 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
       ),
       color: grey1,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // * Thumbnail
               FutureBuilder(
@@ -90,7 +92,7 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
                       !snapshot.hasData ||
                       snapshot.data == null) {
                     return CAssetImage(
-                      size: 100,
+                      size: thumbnailWidth,
                       path: SearchCategoryFromMimeType(
                         lookupMimeType(widget.fileToUpload.path),
                       ).getRelevantImagePath(),
