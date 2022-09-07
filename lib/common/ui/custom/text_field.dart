@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:lantern/common/common.dart';
 
 /// This a custom TextField that renders a label in its outline, aligned with
@@ -7,7 +8,7 @@ import 'package:lantern/common/common.dart';
 class CTextField extends StatefulWidget {
   late final CustomTextEditingController controller;
   late final String? initialValue;
-  late final String label;
+  late final dynamic label;
   late final String? helperText;
   late final String? hintText;
   late final Widget? prefixIcon;
@@ -28,6 +29,7 @@ class CTextField extends StatefulWidget {
   late final void Function()? onTap;
   late final bool removeBorder;
   late final bool? autofocus;
+  late final void Function(String value)? onChanged;
 
   CTextField({
     required this.controller,
@@ -53,6 +55,7 @@ class CTextField extends StatefulWidget {
     this.onTap,
     this.removeBorder = false,
     this.autofocus = false,
+    this.onChanged,
   }) {
     if (initialValue != null && initialValue != '') {
       controller.text = initialValue!;
@@ -121,6 +124,7 @@ class _CTextFieldState extends State<CTextField> {
             },
             onTap: widget.onTap,
             onChanged: (value) {
+              widget.onChanged!(value);
               fieldKey.currentState!.validate();
             },
             onFieldSubmitted: widget.onFieldSubmitted,
@@ -137,7 +141,7 @@ class _CTextFieldState extends State<CTextField> {
               isDense: true,
               floatingLabelBehavior: FloatingLabelBehavior.never,
               // we handle floating labels using our custom method below
-              labelText: widget.label,
+              labelText: (widget.label is String) ? widget.label : '',
               helperText: widget.helperText,
               hintText: widget.hintText,
               helperMaxLines: 2,
@@ -177,27 +181,30 @@ class _CTextFieldState extends State<CTextField> {
             ),
           ),
         ),
-        Container(
-          margin: const EdgeInsetsDirectional.only(start: 11),
-          padding: EdgeInsetsDirectional.only(
-            start: hasFocus ? 2 : 0,
-            end: hasFocus ? 2 : 0,
-          ),
-          color: white,
-          child: !hasFocus && widget.controller.value.text.isEmpty
-              ? Container()
-              : CText(
-                  widget.label,
-                  style: CTextStyle(
-                    fontSize: 12,
-                    lineHeight: 12,
-                    color: fieldKey.currentState?.mounted == true &&
-                            fieldKey.currentState?.hasError == true
-                        ? indicatorRed
-                        : blue4,
-                  ),
+        // * Label
+        (widget.label is String)
+            ? Container(
+                margin: const EdgeInsetsDirectional.only(start: 11),
+                padding: EdgeInsetsDirectional.only(
+                  start: hasFocus ? 2 : 0,
+                  end: hasFocus ? 2 : 0,
                 ),
-        ),
+                color: white,
+                child: !hasFocus && widget.controller.value.text.isEmpty
+                    ? Container()
+                    : CText(
+                        widget.label,
+                        style: CTextStyle(
+                          fontSize: 12,
+                          lineHeight: 12,
+                          color: fieldKey.currentState?.mounted == true &&
+                                  fieldKey.currentState?.hasError == true
+                              ? indicatorRed
+                              : blue4,
+                        ),
+                      ),
+              )
+            : widget.label,
       ],
     );
   }

@@ -33,6 +33,7 @@ class ListItemFactory extends StatelessWidget {
                   onTap: onTap,
                   height: height,
                   showDivider: !menuOpen,
+                  overrideColor: blue1,
                 ),
               );
             },
@@ -173,11 +174,13 @@ class ListItemFactory extends StatelessWidget {
     bool enableHighlighting = false,
     bool? disableSplash,
     String? subtitle,
+    Color? overrideColor,
   }) =>
       Material(
         color: transparent,
         child: CInkWell(
           disableSplash: disableSplash ?? false,
+          overrideColor: overrideColor,
           onTap: onTap ?? () {},
           child: Container(
             height: height ?? 72,

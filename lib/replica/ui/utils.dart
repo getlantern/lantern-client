@@ -57,34 +57,42 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
   var file = File(result.files.single.path!);
   logger.v('Picked a file $file');
 
-  final suppressUploadWarning = await replicaModel.getSuppressUploadWarning();
-  if (suppressUploadWarning == true) {
-    // Immediately proceed to upload screen
-    await context.pushRoute(
-      ReplicaUploadTitle(
-        fileToUpload: file,
-      ),
-    );
-  } else {
-    // Warn user about dangers of uploading first, then proceed to upload screen
-    CDialog(
-      title: 'replica_upload_confirmation_title'.i18n,
-      description: 'replica_upload_confirmation_body'.i18n,
-      checkboxLabel: 'dont_show_me_this_again'.i18n,
-      agreeText: 'replica_upload_confirmation_agree'.i18n,
-      maybeAgreeAction: (doNotShowAgain) async {
-        if (doNotShowAgain == true) {
-          await replicaModel.setSuppressUploadWarning(true);
-        }
-        await context.pushRoute(
-          ReplicaUploadTitle(
-            fileToUpload: file,
-          ),
-        );
-        return true;
-      },
-    ).show(context);
-  }
+  // TODO <07-09-2022, kalli> This is useful code, and while the designs don't call for this right now, I'm keeping it in.
+  // final suppressUploadWarning = await replicaModel.getSuppressUploadWarning();
+  // if (suppressUploadWarning == true) {
+  //   // Immediately proceed to upload screen
+  //   await context.pushRoute(
+  //     ReplicaUploadTitle(
+  //       fileToUpload: file,
+  //     ),
+  //   );
+  // } else {
+  //   // Warn user about dangers of uploading first, then proceed to upload screen
+  //   CDialog(
+  //     title: 'replica_upload_confirmation_title'.i18n,
+  //     description: 'replica_upload_confirmation_body'.i18n,
+  //     checkboxLabel: 'dont_show_me_this_again'.i18n,
+  //     agreeText: 'replica_upload_confirmation_agree'.i18n,
+  //     maybeAgreeAction: (doNotShowAgain) async {
+  //       if (doNotShowAgain == true) {
+  //         await replicaModel.setSuppressUploadWarning(true);
+  //       }
+  //       await context.pushRoute(
+  //         ReplicaUploadTitle(
+  //           fileToUpload: file,
+  //         ),
+  //       );
+  //       return true;
+  //     },
+  //   ).show(context);
+  // }
+
+  // We immediately proceed to upload flow since the disclaimer is part of that flow now
+  await context.pushRoute(
+    ReplicaUploadTitle(
+      fileToUpload: file,
+    ),
+  );
 }
 
 Future<Widget> getUploadThumbnailFromFile({

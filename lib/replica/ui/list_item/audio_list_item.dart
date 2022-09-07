@@ -1,7 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
-// @echo
 class ReplicaAudioListItem extends StatelessWidget {
   ReplicaAudioListItem({
     required this.item,
@@ -24,8 +23,8 @@ class ReplicaAudioListItem extends StatelessWidget {
       content: SizedBox(
         height: 60,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +46,7 @@ class ReplicaAudioListItem extends StatelessWidget {
       removeExtension(item.fileNameTitle),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
-      style: tsSubtitle1Short,
+      style: tsSubtitle1Short.copiedWith(color: grey5),
     );
   }
 
@@ -77,6 +76,7 @@ class ReplicaAudioListItem extends StatelessWidget {
   // If mimetype is nil, just render 'audio/unknown'
   Widget renderMimeType() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         if (item.primaryMimeType != null)
           CText(

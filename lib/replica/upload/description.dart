@@ -20,10 +20,12 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
   final formKey = GlobalKey<FormState>(debugLabel: 'replicaUploadDescription');
   late final textEditingController =
       CustomTextEditingController(formKey: formKey);
+  late int textLength;
 
   @override
   void initState() {
     textEditingController.text = widget.fileDescription ?? '';
+    textLength = widget.fileDescription!.length;
     super.initState();
   }
 
@@ -49,7 +51,7 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
   }
 
   Widget renderDescriptionField() {
-    const maxCharLength = 1000;
+    const maxCharLength = 100;
     return Padding(
       padding: const EdgeInsetsDirectional.only(
         top: 24.0,
@@ -61,7 +63,7 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
         alignment: AlignmentDirectional.topStart,
         children: [
           Transform.translate(
-            offset: const Offset(0, 16),
+            offset: const Offset(0, 14),
             child: Container(
               decoration: BoxDecoration(
                 color: grey5,
@@ -72,14 +74,24 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
             ),
           ),
           CTextField(
+            onChanged: (value) => setState(() {
+              textLength = value.length;
+            }),
             minLines: 10,
             autofocus: true,
             keyboardType: TextInputType.text,
+            textCapitalization: TextCapitalization.words,
             controller: textEditingController,
             maxLength: maxCharLength,
-            // TODO: <08-10-22, kalli> Hacky, but as per design
-            label:
-                '${textEditingController.value.text.characters.length}/$maxCharLength',
+            // Hacky, but as per design
+            label: CText(
+              '$textLength/$maxCharLength',
+              style: CTextStyle(
+                fontSize: 12,
+                lineHeight: 12,
+                color: textLength < (maxCharLength - 10) ? black : indicatorRed,
+              ),
+            ),
             style: tsBody2,
             // to keep the layout according to specs, we need an initial value as well as hintText
             hintText: 'description_initial_value'.i18n,
@@ -98,13 +110,12 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
   Widget renderButtons() {
     return Button(
       width: 200,
-      text: 'review'.i18n,
+      text: 'done'.i18n,
       onPressed: () async => await context.pushRoute(
         ReplicaUploadReview(
           fileToUpload: widget.fileToUpload,
           fileTitle: widget.fileTitle,
-          // if initial value is not empty (so the user has not interacted with text field), don't carry it over to next screen
-          fileDescription: widget.fileDescription ?? textEditingController.text,
+          fileDescription: textEditingController.text,
         ),
       ),
     );
