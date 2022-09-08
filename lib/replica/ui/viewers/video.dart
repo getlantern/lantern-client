@@ -62,95 +62,98 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
 
   @override
   Widget body(BuildContext context) {
-    return ClipRRect(
-      borderRadius: defaultBorderRadius,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          ValueListenableBuilder(
-            valueListenable: controller!,
-            builder: (
-              BuildContext context,
-              VideoPlayerValue videoResult,
-              Widget? child,
-            ) {
-              if (!videoResult.isInitialized) {
-                return Container(
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(),
-                );
-              }
-              return Stack(
-                fit: StackFit.passthrough,
-                alignment: Alignment.bottomCenter,
-                children: <Widget>[
-                  // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                  GestureDetector(
-                    onTap: () {
-                      setState(() => _showPlayButton = !_showPlayButton);
-                      Future.delayed(
-                        defaultTransitionDuration,
-                        () => handleVideoTap(),
-                      );
-                    },
-                    child: AspectRatio(
-                      aspectRatio: controller!.value.aspectRatio,
-                      child: VideoPlayer(controller!),
+    return Flexible(
+      flex: 1,
+      child: ClipRRect(
+        borderRadius: defaultBorderRadius,
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            ValueListenableBuilder(
+              valueListenable: controller!,
+              builder: (
+                BuildContext context,
+                VideoPlayerValue videoResult,
+                Widget? child,
+              ) {
+                if (!videoResult.isInitialized) {
+                  return Container(
+                    alignment: Alignment.center,
+                    child: const CircularProgressIndicator(),
+                  );
+                }
+                return Stack(
+                  fit: StackFit.passthrough,
+                  alignment: Alignment.bottomCenter,
+                  children: <Widget>[
+                    // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
+                    GestureDetector(
+                      onTap: () {
+                        setState(() => _showPlayButton = !_showPlayButton);
+                        Future.delayed(
+                          defaultTransitionDuration,
+                          () => handleVideoTap(),
+                        );
+                      },
+                      child: AspectRatio(
+                        aspectRatio: controller!.value.aspectRatio,
+                        child: VideoPlayer(controller!),
+                      ),
                     ),
+                    VideoProgressIndicator(
+                      controller!,
+                      allowScrubbing: true,
+                      padding: const EdgeInsets.only(bottom: 36.0),
+                    ),
+                  ],
+                );
+              },
+            ),
+            // * Play and full screen butons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 8.0,
+                    bottom: 2.0,
                   ),
-                  VideoProgressIndicator(
-                    controller!,
-                    allowScrubbing: true,
-                    padding: const EdgeInsets.only(bottom: 36.0),
+                  child: RoundButton(
+                    diameter: 24,
+                    padding: 0,
+                    backgroundColor: transparent,
+                    icon: CAssetImage(
+                      size: 24,
+                      color: white,
+                      path: playing ? ImagePaths.pause : ImagePaths.play,
+                    ),
+                    onPressed: () => handleVideoTap(),
                   ),
-                ],
-              );
-            },
-          ),
-          // * Play and full screen butons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  start: 8.0,
-                  bottom: 2.0,
                 ),
-                child: RoundButton(
-                  diameter: 24,
-                  padding: 0,
-                  backgroundColor: transparent,
-                  icon: CAssetImage(
-                    size: 24,
-                    color: white,
-                    path: playing ? ImagePaths.pause : ImagePaths.play,
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    end: 8.0,
+                    bottom: 2.0,
                   ),
-                  onPressed: () => handleVideoTap(),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  end: 8.0,
-                  bottom: 2.0,
-                ),
-                child: RoundButton(
-                  diameter: 30,
-                  padding: 0,
-                  backgroundColor: transparent,
-                  icon: CAssetImage(
-                    size: 30,
-                    color: white,
-                    path: ImagePaths.fullscreen_icon,
+                  child: RoundButton(
+                    diameter: 30,
+                    padding: 0,
+                    backgroundColor: transparent,
+                    icon: CAssetImage(
+                      size: 30,
+                      color: white,
+                      path: ImagePaths.fullscreen_icon,
+                    ),
+                    onPressed: () {
+                      handleVideoTap();
+                      launchFullScreen(context);
+                    },
                   ),
-                  onPressed: () {
-                    handleVideoTap();
-                    launchFullScreen(context);
-                  },
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

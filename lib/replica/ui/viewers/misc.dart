@@ -62,40 +62,43 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
 
   @override
   Widget body(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      fit: StackFit.loose,
-      children: [
-        Container(
-          height: 150,
-          width: 150,
-          child: GestureDetector(
-            child: renderMimeIcon(widget.item.fileNameTitle, 2.0),
-            onTap: () async {
-              if (isPDF && tempFilePath != null) {
-                await context.router.push(
-                  FullScreenDialogPage(
-                    widget: PDFScreen(
-                      path: tempFilePath!,
-                      item: widget.item,
-                      replicaApi: widget.replicaApi,
+    return Flexible(
+      flex: 1,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        fit: StackFit.loose,
+        children: [
+          Container(
+            height: 150,
+            width: 150,
+            child: GestureDetector(
+              child: renderMimeIcon(widget.item.fileNameTitle, 2.0),
+              onTap: () async {
+                if (isPDF && tempFilePath != null) {
+                  await context.router.push(
+                    FullScreenDialogPage(
+                      widget: PDFScreen(
+                        path: tempFilePath!,
+                        item: widget.item,
+                        replicaApi: widget.replicaApi,
+                      ),
                     ),
-                  ),
-                );
-              }
-              ;
-            },
-          ),
-        ),
-        if (isPDF)
-          Transform.translate(
-            offset: const Offset(0, -10),
-            child: InfoTextBox(
-              text: 'read_details'.i18n.toUpperCase(),
-              invertColors: true,
+                  );
+                }
+                ;
+              },
             ),
           ),
-      ],
+          if (isPDF)
+            Transform.translate(
+              offset: const Offset(0, -10),
+              child: InfoTextBox(
+                text: 'read_details'.i18n.toUpperCase(),
+                invertColors: true,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

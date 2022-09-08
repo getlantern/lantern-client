@@ -31,14 +31,17 @@ class _ReplicaImageViewerState extends ReplicaViewerLayoutState {
 
   @override
   Widget body(BuildContext context) {
-    return GestureDetector(
-      // * Thumbnail
-      child: renderImageThumbnail(
-        imageUrl: thumbnailURL,
-        item: widget.item,
+    return Flexible(
+      flex: 2,
+      child: GestureDetector(
+        // * Thumbnail
+        child: renderImageThumbnail(
+          imageUrl: thumbnailURL,
+          item: widget.item,
+        ),
+        // * Trigger FullScreenImageViewer() on tap
+        onTap: () async => await launchFullScreen(context),
       ),
-      // * Trigger FullScreenImageViewer() on tap
-      onTap: () async => await launchFullScreen(context),
     );
   }
 
