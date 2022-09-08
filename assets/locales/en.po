@@ -1055,7 +1055,7 @@ msgid "replica_layout_filetype"
 msgstr "filetype: %s"
 
 msgid "replica_layout_creation_date"
-msgstr "Created on: %s"
+msgstr "Created on %s"
 
 msgid "empty_description"
 msgstr "No description was provided."
