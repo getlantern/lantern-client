@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/replica/ui/utils.dart';
 
 /// Base class for widgets that allow viewing files like images and videos, for both Chat and Replica.
 abstract class FullScreenViewer extends StatefulWidget {
@@ -69,15 +70,15 @@ abstract class FullScreenViewerState<T extends FullScreenViewer>
       showAppBar: showInfo,
       body: GestureDetector(
         onTap: () => setState(() => showInfo = !showInfo),
-        child: !showInfo && ready()
-            ? Align(alignment: Alignment.center, child: body(context))
-            : Column(
+        child: showInfo
+            ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: !ready() ? spinner : body(context)),
+                  Expanded(child: body(context)),
                   widget.metadata?['ts'] ?? Container(),
                 ],
-              ),
+              )
+            : body(context),
       ),
     );
   }

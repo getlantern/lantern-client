@@ -68,7 +68,6 @@ class ReplicaModel extends Model {
 
   Future<int> getSearchTab() async {
     return methodChannel.invokeMethod('get', '/searchTab').then((value) {
-      logger.e(value);
       return value == null ? 0 : int.parse(value);
     });
   }
