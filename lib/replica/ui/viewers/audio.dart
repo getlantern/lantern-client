@@ -139,7 +139,6 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
   }
 
   @override
-  // TODO <08-18-22, kalli> Not sure this is enough
   bool ready() => playerErrorSubscription != null;
 
   @override

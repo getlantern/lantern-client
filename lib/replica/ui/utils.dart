@@ -28,7 +28,7 @@ SizedBox renderReplicaLongPressMenuItem(
             content: 'download'.i18n,
             onTap: () async {
               await api.download(link);
-              BotToast.showText(text: 'download_started'.i18n);
+              showSnackbar(context: context, content: 'download_started'.i18n);
               Navigator.of(context).pop();
             },
           ),
@@ -57,7 +57,7 @@ Future<void> onUploadButtonPressed(BuildContext context) async {
   var file = File(result.files.single.path!);
   logger.v('Picked a file $file');
 
-  // TODO <07-09-2022, kalli> This is useful code, and while the designs don't call for this right now, I'm keeping it in.
+  // <07-09-2022, kalli> This is useful code, and while the designs don't call for this right now, I'm keeping it in.
   // final suppressUploadWarning = await replicaModel.getSuppressUploadWarning();
   // if (suppressUploadWarning == true) {
   //   // Immediately proceed to upload screen
@@ -115,7 +115,7 @@ Future<Widget> getUploadThumbnailFromFile({
     case SearchCategory.Video:
       // We're using VideoPlayerController to get the duration of the video,
       // which we'll use to pick a thumbnail in the middle
-      // TODO <08-08-22, kalli> Seems a bit hacky to me
+      // <08-08-22, kalli> Seems a bit hacky to me
       var c = VideoPlayerController.file(file);
       var duration = await c
           .initialize()
@@ -170,7 +170,6 @@ Future<void> handleUploadConfirm({
       fileTitle: fileTitle,
     );
     showSnackbar(context: context, content: 'upload_started'.i18n);
-    // TODO <07-09-22, kalli> Unstable
     context.router.popUntilRoot();
   } catch (e) {
     logger.e('Error uploading: $e');
@@ -343,8 +342,7 @@ Future handleDownload(
 ) async {
   try {
     await replicaApi.download(item.replicaLink);
-    // TODO <08-08-22, kalli> Confirm we can use BotToast
-    BotToast.showText(text: 'download_started'.i18n);
+    showSnackbar(context: context, content: 'download_started'.i18n);
   } catch (e) {
     await showDialog(
       context: context,

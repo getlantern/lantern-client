@@ -1,4 +1,3 @@
-// TODO <08-10-22, kalli> Confirm our extension/naming strategy
 class ReplicaLink {
   static final regexp = RegExp(r'^magnet:\?xt=urn:btih:([0-9a-fA-F]{40}).*');
 
