@@ -22,7 +22,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   // initialize to the fallback metaTitle and metaDescription
   late String infoTitle = widget.item.fileNameTitle;
   late String infoDescription = widget.item.metaDescription;
-  // late String infoCreationDate = '';
+  late String infoCreationDate = '';
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
             : widget.item.metaDescription.isNotEmpty
                 ? widget.item.metaDescription
                 : 'empty_description'.i18n;
-        // infoCreationDate = value.infoCreationDate;
+        infoCreationDate = value.infoCreationDate;
       });
     });
   }
@@ -139,27 +139,36 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 top: 12.0,
                 bottom: 12.0,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: CText(
-                      removeExtension(infoTitle),
-                      style: tsHeading3,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CText(
+                          removeExtension(infoTitle),
+                          style: tsHeading3,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => handleDownload(
+                          context,
+                          widget.item,
+                          widget.replicaApi,
+                        ),
+                        icon: const CAssetImage(
+                          size: 24,
+                          path: ImagePaths.file_download,
+                        ),
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    onPressed: () => handleDownload(
-                      context,
-                      widget.item,
-                      widget.replicaApi,
-                    ),
-                    icon: const CAssetImage(
-                      size: 24,
-                      path: ImagePaths.file_download,
-                    ),
-                  ),
+                  CText(
+                    humanizeCreationDate(context, infoCreationDate),
+                    style: tsBody1Short,
+                  )
                 ],
               ),
             ),
