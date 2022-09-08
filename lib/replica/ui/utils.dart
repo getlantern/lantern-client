@@ -6,6 +6,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:path/path.dart' as path;
+import 'package:intl/intl.dart';
 
 // renderReplicaLongPressMenuItem is used for rendering list/grid items located
 // in the ./ui/replica/list_item directory
@@ -399,3 +400,12 @@ Widget renderErrorViewingFile(
         ],
       ),
     );
+
+String humanizeCreationDate(BuildContext context, String creationDate) {
+  if (creationDate.isEmpty) return '';
+  final dateFormat =
+      DateFormat.yMd(Localizations.localeOf(context).languageCode);
+  final humanizedCreationDate = DateTime.parse(creationDate);
+  final formattedDate = dateFormat.format(humanizedCreationDate);
+  return 'replica_layout_creation_date'.i18n.fill([formattedDate]);
+}

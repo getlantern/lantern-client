@@ -21,6 +21,7 @@ class ListItemFactory extends StatelessWidget {
             menuWidth: MediaQuery.of(context).size.width * 0.8,
             builder: (menuOpen) {
               return Container(
+                padding: const EdgeInsetsDirectional.all(4.0),
                 decoration: BoxDecoration(
                   color: white,
                   borderRadius: const BorderRadius.all(
