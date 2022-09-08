@@ -45,36 +45,25 @@ class _ReplicaImageViewerState extends ReplicaViewerLayoutState {
   Future launchFullScreen(BuildContext context) async {
     return await context.router.push(
       FullScreenDialogPage(
-        widget: FullScreenImageViewer(
-          loadImageFile: widget.replicaApi.getImageBytesFromURL(imageURL),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CText(
-                widget.item.replicaLink.displayName ?? 'untitled'.i18n,
-                style: tsHeading3.copiedWith(color: white),
-              ),
-              CText(
-                SearchCategory.Image.toShortString(),
-                style: tsOverline.copiedWith(color: white),
-              )
-            ],
-          ),
-          actions: [
-            IconButton(
-              onPressed: () async => handleDownload(
-                context,
-                widget.item,
-                widget.replicaApi,
-              ),
-              icon: CAssetImage(
-                size: 20,
-                path: ImagePaths.file_download,
-                color: white,
-              ),
-            ),
-          ],
+        widget: LayoutBuilder(
+          builder: ((context, constraints) => Container(
+                decoration: BoxDecoration(
+                  color: black,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: constraints.maxWidth,
+                      child: renderImageThumbnail(
+                        imageUrl: thumbnailURL,
+                        item: widget.item,
+                      ),
+                    ),
+                  ],
+                ),
+              )),
         ),
       ),
     );
