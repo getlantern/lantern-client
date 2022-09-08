@@ -113,7 +113,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Flexible(flex: 1, child: body(context)),
+                  Flexible(child: body(context)),
                   renderText(),
                 ],
               )
@@ -128,73 +128,69 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   }
 
   Widget renderText() {
-    return Flexible(
-      flex: 1,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // * Title
-            Container(
-              padding: const EdgeInsetsDirectional.only(
-                top: 12.0,
-                bottom: 12.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CText(
-                          removeExtension(infoTitle),
-                          style: tsHeading3,
-                        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // * Title
+          Container(
+            padding: const EdgeInsetsDirectional.only(
+              top: 12.0,
+              bottom: 12.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CText(
+                        removeExtension(infoTitle),
+                        style: tsHeading3,
                       ),
-                      IconButton(
-                        onPressed: () => handleDownload(
-                          context,
-                          widget.item,
-                          widget.replicaApi,
-                        ),
-                        icon: const CAssetImage(
-                          size: 24,
-                          path: ImagePaths.file_download,
-                        ),
+                    ),
+                    IconButton(
+                      onPressed: () => handleDownload(
+                        context,
+                        widget.item,
+                        widget.replicaApi,
                       ),
-                    ],
-                  ),
-                  CText(
-                    humanizeCreationDate(context, infoCreationDate)
-                        .toUpperCase(),
-                    style: tsBody1Short.copiedWith(color: grey5),
-                  )
-                ],
-              ),
+                      icon: const CAssetImage(
+                        size: 24,
+                        path: ImagePaths.file_download,
+                      ),
+                    ),
+                  ],
+                ),
+                CText(
+                  humanizeCreationDate(context, infoCreationDate).toUpperCase(),
+                  style: tsBody1Short.copiedWith(color: grey5),
+                )
+              ],
             ),
-            Divider(
-              color: black,
+          ),
+          Divider(
+            color: black,
+          ),
+          // * Description
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsetsDirectional.only(
+              top: 24.0,
+              bottom: 64.0,
             ),
-            // * Description
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsetsDirectional.only(
-                top: 24.0,
-                bottom: 64.0,
-              ),
-              child: CText(
-                infoDescription,
-                style: infoDescription.isEmpty
-                    ? tsSubtitle1.copiedWith(
-                        fontStyle: FontStyle.italic,
-                        color: grey4,
-                      )
-                    : tsSubtitle1,
-              ),
+            child: CText(
+              infoDescription,
+              style: infoDescription.isEmpty
+                  ? tsSubtitle1.copiedWith(
+                      fontStyle: FontStyle.italic,
+                      color: grey4,
+                    )
+                  : tsSubtitle1,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
