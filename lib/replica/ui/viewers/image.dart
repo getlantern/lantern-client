@@ -18,14 +18,12 @@ class ReplicaImageViewer extends ReplicaViewerLayout {
 class _ReplicaImageViewerState extends ReplicaViewerLayoutState {
   var thumbnailURL = '';
   var imageURL = '';
-  late Future<Uint8List> loadImageFile;
+
   @override
   void initState() {
     super.initState();
     thumbnailURL = widget.replicaApi.getThumbnailAddr(widget.item.replicaLink);
     imageURL = widget.replicaApi.getDownloadAddr(widget.item.replicaLink);
-    // while loading, fetch the future we will pass to FullScreenImageViewer so that its ready when we tap the image
-    loadImageFile = widget.replicaApi.getImageBytesFromURL(imageURL);
   }
 
   @override
@@ -48,7 +46,7 @@ class _ReplicaImageViewerState extends ReplicaViewerLayoutState {
     return await context.router.push(
       FullScreenDialogPage(
         widget: FullScreenImageViewer(
-          loadImageFile: loadImageFile,
+          loadImageFile: widget.replicaApi.getImageBytesFromURL(imageURL),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,

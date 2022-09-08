@@ -23,26 +23,45 @@ class FullScreenImageViewer extends FullScreenViewer {
 class FullScreenImageViewerState
     extends FullScreenViewerState<FullScreenImageViewer> {
   BasicMemoryImage? image;
+  var hasError = false;
 
   @override
   void initState() {
     super.initState();
-    widget.loadImageFile.catchError((e, stack) {
+    try {
+      widget.loadImageFile.then((bytes) {
+        BasicMemoryImage? newImage = BasicMemoryImage(bytes);
+        setState(() => image = newImage);
+      });
+    } on TimeoutException catch (e) {
+      setState(() {
+        hasError = true;
+      });
+    } catch (e, stack) {
       logger.e('Error while loading image file: $e, $stack');
-    }).then((bytes) {
-      BasicMemoryImage? newImage = BasicMemoryImage(bytes);
-      setState(() => image = newImage);
-    });
+      setState(() {
+        hasError = true;
+      });
+    }
   }
 
   @override
-  bool ready() => image != null;
+  bool ready() => image != null && !hasError;
 
   @override
   Widget body(BuildContext context) => Align(
         alignment: Alignment.center,
-        child: InteractiveViewer(
-          child: image!,
-        ),
+        child: ready()
+            ? InteractiveViewer(
+                child: image!,
+              )
+            : Align(
+                alignment: Alignment.center,
+                child: CAssetImage(
+                  path: ImagePaths.error,
+                  size: 100,
+                  color: white,
+                ),
+              ),
       );
 }
