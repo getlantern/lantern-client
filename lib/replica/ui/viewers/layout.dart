@@ -166,8 +166,9 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                     ],
                   ),
                   CText(
-                    humanizeCreationDate(context, infoCreationDate),
-                    style: tsBody1Short,
+                    humanizeCreationDate(context, infoCreationDate)
+                        .toUpperCase(),
+                    style: tsBody1Short.copiedWith(color: grey5),
                   )
                 ],
               ),
