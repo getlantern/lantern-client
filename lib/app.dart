@@ -93,7 +93,6 @@ class LanternApp extends StatelessWidget {
                   AnalyticsNavigatorObserver(),
                 ],
               ),
-              // TODO <08-08-22, kalli> We might not want to use BotToast (will require us showing notifications Java-side though)
               builder: BotToastInit(),
               supportedLocales: [
                 const Locale('ar', 'EG'),
