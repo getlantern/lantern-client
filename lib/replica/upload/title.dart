@@ -95,12 +95,14 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
       children: [
         Button(
           width: 150,
-          text: 'done'.i18n,
+          text: 'skip'.i18n,
           secondary: true,
-          onPressed: () async => await handleUploadConfirm(
-            context: context,
-            fileToUpload: widget.fileToUpload,
-            fileTitle: textEditingController.text,
+          onPressed: () async => await context.pushRoute(
+            ReplicaUploadReview(
+              fileToUpload: widget.fileToUpload,
+              fileTitle: textEditingController.text,
+              fileDescription: widget.fileDescription,
+            ),
           ),
         ),
         Button(
