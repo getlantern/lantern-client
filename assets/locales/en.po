@@ -1048,8 +1048,8 @@ msgstr "Upload"
 msgid "review"
 msgstr "Review"
 
-msgid "done"
-msgstr "Done"
+msgid "skip"
+msgstr "Skip"
 
 msgid "replica_layout_filetype"
 msgstr "filetype: %s"
