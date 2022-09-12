@@ -27,13 +27,13 @@ class ReplicaAppListItem extends StatelessWidget {
           Expanded(
             child: CText(
               removeExtension(item.fileNameTitle),
-              maxLines: 2,
+              maxLines: 3,
               overflow: TextOverflow.ellipsis,
               style: tsSubtitle1Short.copiedWith(color: grey5),
             ),
           ),
           Padding(
-            padding: const EdgeInsetsDirectional.only(end: 8.0),
+            padding: const EdgeInsetsDirectional.only(start: 8.0),
             child: CText(item.humanizedFileSize, style: tsBody1),
           ),
           // renderMimeType()

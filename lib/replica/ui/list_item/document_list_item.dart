@@ -24,13 +24,18 @@ class ReplicaDocumentListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CText(
-            removeExtension(item.fileNameTitle),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: tsSubtitle1Short.copiedWith(color: grey5),
+          Expanded(
+            child: CText(
+              removeExtension(item.fileNameTitle),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: tsSubtitle1Short.copiedWith(color: grey5),
+            ),
           ),
-          CText(item.humanizedFileSize, style: tsBody1),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 8.0),
+            child: CText(item.humanizedFileSize, style: tsBody1),
+          ),
           // renderMimeType()
         ],
       ),
