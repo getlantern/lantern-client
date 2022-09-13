@@ -56,7 +56,7 @@ public class GoTun2SocksProvider implements Provider {
     builder.addDnsServer(SessionManager.getFakeDnsIP());
 
     Intent intent = new Intent(vpnService, MainActivity.class);
-    PendingIntent pendingIntent = PendingIntent.getActivity(vpnService, 0, intent, 0);
+    PendingIntent pendingIntent = PendingIntent.getActivity(vpnService, 0, intent, PendingIntent.FLAG_IMMUTABLE);
     builder.setConfigureIntent(pendingIntent);
 
     builder.setSession(sessionName);

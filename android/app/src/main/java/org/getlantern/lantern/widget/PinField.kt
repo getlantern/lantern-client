@@ -89,7 +89,7 @@ open class PinField : AppCompatEditText {
     var isCustomBackground = false
         set(value) {
             if (!value) {
-                setBackgroundResource(R.color.transparent)
+                setBackgroundResource(R.color.white)
             }
             field = value
         }

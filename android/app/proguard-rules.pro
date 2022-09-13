@@ -33,9 +33,6 @@
 -keep class org.getlantern.** { *; }
 -keep class io.lantern.** { *; }
 
-# PW
--keep class com.paymentwall.alipayadapter.** { *; }
-
 # Optimizely
 -keep class com.optimizely.ab.** { *; }
 

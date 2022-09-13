@@ -61,11 +61,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.paymentwall.pwunifiedsdk.core.PaymentSelectionActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateVisible|adjustResize|adjustPan"/>
-
         <service
             android:enabled="true"
             android:exported="false"
@@ -89,13 +84,6 @@
         <activity
             android:name=".activity.authorizeDevice.LinkDeviceActivity_"
             android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".activity.PaymentWallActivity_"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="locale|layoutDirection"
-            android:noHistory="true">
         </activity>
 
         <activity
@@ -145,7 +133,7 @@
             android:name=".activity.PrivacyDisclosureActivity_"
             android:screenOrientation="portrait"
             />
-
+        
         <!-- It's required to update Lantern on API 24+ -->
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -157,7 +145,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <service android:name="org.getlantern.lantern.vpn.LanternVpnService"
+        <service
+            android:enabled="true"
+            android:name=".vpn.LanternVpnService"
             android:exported="false"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
@@ -176,7 +166,8 @@
         </receiver>
 
         <receiver android:enabled="true" android:name=".service.AutoStarter"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />

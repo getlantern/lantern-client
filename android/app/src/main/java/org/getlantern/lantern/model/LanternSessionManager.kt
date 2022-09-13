@@ -85,8 +85,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun defaultToAlipay(): Boolean {
-        // Currently we default to Alipay for Yuan purchases
-        return "cny" == getSelectedPlanCurrency()
+        return false
     }
 
     fun setRemoteConfigPaymentProvider(provider: String?) {

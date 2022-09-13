@@ -161,18 +161,18 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
      * correctly applied to the user's account.
      */
     private void checkForUnacknowledgedPurchases() {
-        Logger.debug(TAG, "Checking for pending purchases");
-        Purchase.PurchasesResult purchases = billingClient.queryPurchases(SkuType.INAPP);
-        BillingResult billingResult = purchases.getBillingResult();
-        if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
-            if (isRetriable(billingResult)) {
-                handler.postDelayed(() -> checkForUnacknowledgedPurchases(), 5000);
-            }
-            return;
-        }
-
-        Logger.debug(TAG, "Got purchases: " + purchases.getPurchasesList().size());
-        handleAcknowledgedPurchases(purchases.getPurchasesList());
+//        Logger.debug(TAG, "Checking for pending purchases");
+//        Purchase.PurchasesResult purchases = billingClient.queryPurchases(SkuType.INAPP);
+//        BillingResult billingResult = purchases.getBillingResult();
+//        if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+//            if (isRetriable(billingResult)) {
+//                handler.postDelayed(() -> checkForUnacknowledgedPurchases(), 5000);
+//            }
+//            return;
+//        }
+//
+//        Logger.debug(TAG, "Got purchases: " + purchases.getPurchasesList().size());
+//        handleAcknowledgedPurchases(purchases.getPurchasesList());
     }
 
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {

@@ -396,39 +396,39 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
     }
 
     private void submitStripe() {
-        try {
-            Pair<Integer, Integer> dates = expirationInput.getValidDateFields();
-            Card card = Card.create(cardInput.getCardNumber(), dates.component1(), dates.component2(), cvcInput.getText().toString().trim());
-            dialog = ProgressDialog.show(this,
-                    getResources().getString(R.string.processing_payment),
-                    "",
-                    true, false);
-            Logger.debug(STRIPE_TAG, "Stripe publishable key is '%s'", LanternApp.getSession().stripePubKey());
-            final Stripe stripe = new Stripe(
-                    this,
-                    LanternApp.getSession().stripePubKey()
-            );
-            stripe.createCardToken(
-                    card,
-                    new ApiResultCallback<Token>() {
-                        public void onSuccess(@NonNull Token token) {
-                            LanternApp.getSession().setStripeToken(token.getId());
-                            closeDialog();
-                            PaymentHandler paymentHandler = new PaymentHandler(CheckoutActivity.this, "stripe");
-                            paymentHandler.sendPurchaseRequest();
-                        }
-
-                        public void onError(@NonNull Exception error) {
-                            closeDialog();
-                            ActivityExtKt.showErrorDialog(CheckoutActivity.this, error.getLocalizedMessage());
-                        }
-                    }
-            );
-        } catch (Throwable t) {
-            Logger.error(STRIPE_TAG, "Error submitting to stripe", t);
-            closeDialog();
-            ActivityExtKt.showErrorDialog(CheckoutActivity.this, getResources().getString(R.string.error_making_purchase));
-        }
+//        try {
+//            Pair<Integer, Integer> dates = expirationInput.getValidDateFields();
+//            Card card = Card.create(cardInput.getCardNumber(), dates.component1(), dates.component2(), cvcInput.getText().toString().trim());
+//            dialog = ProgressDialog.show(this,
+//                    getResources().getString(R.string.processing_payment),
+//                    "",
+//                    true, false);
+//            Logger.debug(STRIPE_TAG, "Stripe publishable key is '%s'", LanternApp.getSession().stripePubKey());
+//            final Stripe stripe = new Stripe(
+//                    this,
+//                    LanternApp.getSession().stripePubKey()
+//            );
+//            stripe.createCardToken(
+//                    card,
+//                    new ApiResultCallback<Token>() {
+//                        public void onSuccess(@NonNull Token token) {
+//                            LanternApp.getSession().setStripeToken(token.getId());
+//                            closeDialog();
+//                            PaymentHandler paymentHandler = new PaymentHandler(CheckoutActivity.this, "stripe");
+//                            paymentHandler.sendPurchaseRequest();
+//                        }
+//
+//                        public void onError(@NonNull Exception error) {
+//                            closeDialog();
+//                            ActivityExtKt.showErrorDialog(CheckoutActivity.this, error.getLocalizedMessage());
+//                        }
+//                    }
+//            );
+//        } catch (Throwable t) {
+//            Logger.error(STRIPE_TAG, "Error submitting to stripe", t);
+//            closeDialog();
+//            ActivityExtKt.showErrorDialog(CheckoutActivity.this, getResources().getString(R.string.error_making_purchase));
+//        }
     }
 
     private void continueToPayment(final String email) {
@@ -482,16 +482,16 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
 //            case "adyen":
 //                activityClass = AdyenActivity_.class;
 //                break;
-            case "paymentwall":
-                activityClass = PaymentWallActivity_.class;
-                break;
+//            case "paymentwall":
+//                activityClass = PaymentWallActivity_.class;
+//                break;
             default:
                 Logger.error(TAG, "Unknown payment provider");
                 return;
         }
-        final Intent intent = new Intent(this, activityClass);
-        intent.putExtra("userEmail", email);
-        startActivity(intent);
+//        final Intent intent = new Intent(this, activityClass);
+//        intent.putExtra("userEmail", email);
+//        startActivity(intent);
     }
 
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {

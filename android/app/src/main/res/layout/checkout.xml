@@ -171,20 +171,6 @@
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/togglePaymentMethod"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/switch_to_alipay"
-                android:layout_marginTop="@dimen/space_normal"
-                android:padding="@dimen/space_small"
-                android:textColor="@color/tertiary_green"
-                android:textAppearance="?attr/textAppearanceOverline"
-                android:background="?attr/selectableItemBackground"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/referralCodeLayout"/>
-
             <View
                 android:id="@+id/divider2"
                 android:layout_width="0dp"

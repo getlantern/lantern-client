@@ -192,7 +192,7 @@ class SessionModel(
                 activity.runOnUiThread {
                     methodCallResult.error("unableToRequestRecoveryCode", t?.message, null)
                 }
-                activity.showErrorDialog(activity.resources.getString(R.string.unknown_error))
+                activity.showErrorDialog("Unkown error")
             }
         })
     }

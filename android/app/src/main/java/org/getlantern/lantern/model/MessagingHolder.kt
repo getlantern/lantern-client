@@ -153,7 +153,7 @@ class MessagingHolder {
                 )
                 val openMainActivity = PendingIntent.getActivity(
                     application, notificationId, mainActivityIntent,
-                    PendingIntent.FLAG_ONE_SHOT
+                    PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
                 )
                 val builder = NotificationCompat.Builder(
                     application,
@@ -267,7 +267,7 @@ class MessagingHolder {
             context,
             notificationId,
             acceptIntent,
-            PendingIntent.FLAG_ONE_SHOT
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -289,7 +289,7 @@ class MessagingHolder {
             context,
             notificationId,
             declineIntent,
-            PendingIntent.FLAG_ONE_SHOT
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -362,7 +362,7 @@ class MessagingHolder {
             builder.setVibrate(ringVibrationPattern)
 
             // Hack - set an empty full screen intent to keep the notification up
-            val dummyIntent = PendingIntent.getActivity(context, 0, Intent(), 0)
+            val dummyIntent = PendingIntent.getActivity(context, 0, Intent(),  PendingIntent.FLAG_IMMUTABLE)
             builder.setFullScreenIntent(dummyIntent, true)
         }
 

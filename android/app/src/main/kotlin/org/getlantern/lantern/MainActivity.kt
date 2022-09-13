@@ -607,10 +607,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                     TAG,
                     "Requesting VPN connection"
                 )
-                startActivityForResult(
-                    intent.setAction(LanternVpnService.ACTION_CONNECT),
-                    REQUEST_VPN
-                )
+                startActivity(intent)
+                startActivityForResult(intent, REQUEST_VPN)
             } else {
                 Logger.debug(
                     TAG,
@@ -707,6 +705,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     }
 
     private fun startVpnService() {
+        Logger.d(TAG, "Starting VPN service")
         startService(
             Intent(
                 this,

@@ -106,4 +106,6 @@
     <color name="pink_light">#FFF4F8</color>
     <color name="yellow">#FFC107</color>
     <color name="green">#00A83E</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black_transparent">#000000AA</color>
 </resources>
