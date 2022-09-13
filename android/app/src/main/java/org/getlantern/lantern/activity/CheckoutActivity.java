@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -16,7 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
+import androidx.annotation.Nullable;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
@@ -30,6 +31,9 @@ import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 import com.stripe.android.view.CardNumberEditText;
 import com.stripe.android.view.ExpiryDateEditText;
+import com.yuansfer.pay.YSAppPay;
+import com.yuansfer.pay.aliwx.AliWxPayMgr;
+import com.yuansfer.pay.util.ErrStatus;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -59,14 +63,14 @@ import okhttp3.FormBody;
 import okhttp3.Response;
 
 @EActivity(R.layout.checkout)
-public class CheckoutActivity extends BaseFragmentActivity implements PurchasesUpdatedListener {
+public class CheckoutActivity extends BaseFragmentActivity implements PurchasesUpdatedListener, AliWxPayMgr.IAliWxPayCallback {
 
     private static final String TAG = CheckoutActivity.class.getName();
     private static final String STRIPE_TAG = TAG + ".stripe";
 
     public static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-    
+
     private ProgressDialog dialog;
 
     @ViewById
@@ -115,6 +119,15 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
     private void closeDialog() {
         if (dialog != null) {
             dialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (!LanternApp.getSession().isPlayVersion()) {
+            YSAppPay.registerAliWxPayCallback(this);
         }
     }
 
@@ -475,9 +488,13 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
             provider = "bulk-codes";
         }
 
+        // TODO: make this selectable from the backend if/when the UI can support multiple
+        // different providers.
+        provider = "yuansfer";
+
         Logger.debug(TAG, "Attempting to use payment provider: " + provider);
 
-        final Class<? extends Activity> activityClass;
+        Class<? extends Activity> activityClass = null;
         switch (provider.toLowerCase()) {
 //            case "adyen":
 //                activityClass = AdyenActivity_.class;
@@ -485,13 +502,30 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
             case "paymentwall":
                 activityClass = PaymentWallActivity_.class;
                 break;
+            case "yuansfer":
+                YSAppPay.getInstance().registerWXAPP(this, "wxa0d4a241e5d692df");
+                lanternClient.prepareYuansfer("alipay", new LanternHttpClient.YuansferCallback() {
+                    @Override
+                    public void onFailure(@Nullable Throwable throwable, @Nullable ProError error) {
+                        Logger.error(TAG, "Unable to prepare Yuansfer: " + error.getMessage());
+                        ActivityExtKt.showErrorDialog(CheckoutActivity.this, error.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(String paymentInfo) {
+                        YSAppPay.getInstance().requestAliPayment(CheckoutActivity.this, paymentInfo);
+                    }
+                });
+                break;
             default:
-                Logger.error(TAG, "Unknown payment provider");
+                Logger.error(TAG, "Unknown payment provider " + provider.toLowerCase());
                 return;
         }
-        final Intent intent = new Intent(this, activityClass);
-        intent.putExtra("userEmail", email);
-        startActivity(intent);
+        if (activityClass != null) {
+            final Intent intent = new Intent(this, activityClass);
+            intent.putExtra("userEmail", email);
+            startActivity(intent);
+        }
     }
 
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
@@ -516,5 +550,22 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
 
         PaymentHandler paymentHandler = new PaymentHandler(CheckoutActivity.this, "googleplay", tokens.get(0));
         paymentHandler.sendPurchaseRequest();
+    }
+
+    @Override
+    public void onPayFail(int payType, ErrStatus errStatus) {
+        String msg = errStatus.getErrCode() + " : " + errStatus.getErrMsg();
+        Logger.error(TAG, "Error on Yuansfer Payment: " + msg);
+        ActivityExtKt.showErrorDialog(this, msg);
+    }
+
+    @Override
+    public void onPaySuccess(int payType) {
+        Logger.debug(TAG, "Yuansfer Payment succeeded");
+    }
+
+    @Override
+    public void onPayCancel(int payType) {
+        Logger.debug(TAG, "Yuansfer Payment canceled");
     }
 }
