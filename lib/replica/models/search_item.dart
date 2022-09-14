@@ -44,7 +44,7 @@ class ReplicaSearchItem {
         // Can't continue if replicaLink is not there
         final link = ReplicaLink.New(result['replicaLink'] as String);
         if (link == null) {
-          logger.w('Bad replicaLink: ${result['replicaLink'] as String}');
+          logger.e('Bad replicaLink: ${result['replicaLink'] as String}');
           continue;
         }
 
@@ -66,8 +66,9 @@ class ReplicaSearchItem {
         // using the fileNameTitle notation to be consistent with desktop
         final fileNameTitle = link.displayName ?? result['displayName'];
         final metadata = result['metadata'];
-        final metaDescription = metadata['description'] ?? '';
-        final metaTitle = metadata['title'] ?? '';
+        final metaDescription =
+            metadata != null ? metadata['description'] ?? '' : '';
+        final metaTitle = metadata != null ? metadata['title'] ?? '' : '';
         items.add(
           ReplicaSearchItem(
             fileNameTitle,
@@ -80,7 +81,7 @@ class ReplicaSearchItem {
           ),
         );
       } catch (err) {
-        logger.w(
+        logger.e(
           'Error parsing item ${result['replicaLink'] ??= '[invalid link]'}. Will ignore link',
         );
         continue;
