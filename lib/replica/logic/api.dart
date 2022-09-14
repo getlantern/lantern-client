@@ -25,7 +25,7 @@ class ReplicaApi {
         connectTimeout: 30000, // 30s
       ),
     );
-    durationCache = LRUCache<ReplicaLink, double?>(1000, doFetchDuration);
+    durationCache = LRUCache<ReplicaLink, double?>(100, doFetchDuration);
   }
 
   late Dio dio;
@@ -204,6 +204,9 @@ class ReplicaApi {
       logger.w(
         'Timed out while fetching object_info from replica link, will return',
       );
+      return EmptyReplicaObjectInfo();
+    } catch (err) {
+      logger.e('Error while fetching object_info $err');
       return EmptyReplicaObjectInfo();
     }
   }
