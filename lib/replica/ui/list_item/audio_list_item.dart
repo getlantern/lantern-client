@@ -42,11 +42,13 @@ class ReplicaAudioListItem extends StatelessWidget {
   }
 
   Widget renderAudioFilename() {
-    return CText(
-      removeExtension(item.fileNameTitle),
-      maxLines: 3,
-      overflow: TextOverflow.ellipsis,
-      style: tsSubtitle1Short.copiedWith(color: grey5),
+    return Expanded(
+      child: CText(
+        removeExtension(item.fileNameTitle),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: tsSubtitle1Short.copiedWith(color: grey5),
+      ),
     );
   }
 
@@ -60,11 +62,8 @@ class ReplicaAudioListItem extends StatelessWidget {
             CachedValue<double?> cached,
             Widget? child,
           ) {
-            if (cached.value == null) {
-              return Container();
-            }
             return CText(
-              cached.value!.toMinutesAndSeconds(),
+              cached.value != null ? cached.value!.toMinutesAndSeconds() : '',
               style: tsBody1.copiedWith(color: grey5),
             );
           },

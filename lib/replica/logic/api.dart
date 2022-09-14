@@ -65,8 +65,12 @@ class ReplicaApi {
           .v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
       return ReplicaSearchItem.fromJson(category, resp.data);
     } else {
+      logger.e(
+        'Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}',
+      );
       throw Exception(
-          'Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
+        'Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}',
+      );
     }
   }
 
@@ -128,16 +132,17 @@ class ReplicaApi {
         );
       }
       // logger.v('Duration request success: $duration');
-      duration = double.parse(durationResp.data.toString());
+      duration = durationResp.data != ''
+          ? double.parse(durationResp.data.toString())
+          : null;
       logger.v(duration);
     } catch (err) {
       if (err is DioError) {
-        logger.w(
-          'failed to fetch duration. Will default to ??:??. Error: ${err.error}',
+        logger.e(
+          'Dio Error - failed to fetch duration. Error: ${err.error}',
         );
       } else {
-        logger
-            .w('failed to fetch duration. Will default to ??:??. Error: $err');
+        logger.e('Unknown error - failed to fetch duration. Error: $err');
       }
     }
     return duration;
