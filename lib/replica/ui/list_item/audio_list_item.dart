@@ -62,6 +62,7 @@ class ReplicaAudioListItem extends StatelessWidget {
             CachedValue<double?> cached,
             Widget? child,
           ) {
+            logger.wtf(cached.value, item.fileNameTitle);
             return CText(
               cached.value != null ? cached.value!.toMinutesAndSeconds() : '',
               style: tsBody1.copiedWith(color: grey5),

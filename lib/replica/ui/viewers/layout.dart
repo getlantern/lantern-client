@@ -23,6 +23,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   late String infoTitle = widget.item.fileNameTitle;
   late String infoDescription = widget.item.metaDescription;
   late String infoCreationDate = '';
+  late bool hasError = false;
 
   @override
   void initState() {
@@ -33,23 +34,30 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   }
 
   void doFetchObjectInfo() async {
-    await widget.replicaApi
-        .fetchObjectInfo(widget.item.replicaLink)
-        .then((ReplicaObjectInfo value) {
-      setState(() {
-        infoTitle = value.infoTitle.isNotEmpty
-            ? value.infoTitle
-            : widget.item.metaTitle.isNotEmpty
-                ? widget.item.metaTitle
-                : widget.item.fileNameTitle;
-        infoDescription = value.infoDescription.isNotEmpty
-            ? value.infoDescription
-            : widget.item.metaDescription.isNotEmpty
-                ? widget.item.metaDescription
-                : 'empty_description'.i18n;
-        infoCreationDate = value.infoCreationDate;
+    try {
+      await widget.replicaApi
+          .fetchObjectInfo(widget.item.replicaLink)
+          .then((ReplicaObjectInfo value) {
+        setState(() {
+          infoTitle = value.infoTitle.isNotEmpty
+              ? value.infoTitle
+              : widget.item.metaTitle.isNotEmpty
+                  ? widget.item.metaTitle
+                  : widget.item.fileNameTitle;
+          infoDescription = value.infoDescription.isNotEmpty
+              ? value.infoDescription
+              : widget.item.metaDescription.isNotEmpty
+                  ? widget.item.metaDescription
+                  : 'empty_description'.i18n;
+          infoCreationDate = value.infoCreationDate;
+        });
       });
-    });
+    } catch (err) {
+      logger.e('Could not fetch object_info: $err');
+      setState(() {
+        hasError = true;
+      });
+    }
   }
 
   @override
@@ -107,7 +115,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
           end: 12.0,
           top: 24.0,
         ),
-        child: ready()
+        child: ready() & !hasError
             // * Render media preview
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.start,
