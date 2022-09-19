@@ -53,6 +53,7 @@ class ReplicaImageListItem extends StatelessWidget {
             padding: const EdgeInsetsDirectional.only(
               start: 8.0,
               end: 8.0,
+              top: 4.0,
             ),
             child: CText(
               removeExtension(item.fileNameTitle),
