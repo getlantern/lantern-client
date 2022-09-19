@@ -10,6 +10,6 @@ class ReplicaObjectInfo {
   late String infoCreationDate;
 }
 
-ReplicaObjectInfo EmptyReplicaObjectInfo() {
-  return ReplicaObjectInfo('', '', '');
+class EmptyReplicaObjectInfo extends ReplicaObjectInfo {
+  EmptyReplicaObjectInfo() : super('', '', '');
 }
