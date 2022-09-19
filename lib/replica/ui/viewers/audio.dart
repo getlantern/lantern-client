@@ -151,7 +151,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
         children: <Widget>[
           Container(
             width: 200,
-            height: 200,
+            height: 184, // fix overflow
             child: renderAnimatedMimeIcon(
               widget.item.fileNameTitle,
               widget.item.replicaLink,
