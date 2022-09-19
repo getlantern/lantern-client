@@ -23,7 +23,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   late String infoTitle = widget.item.fileNameTitle;
   late String infoDescription = widget.item.metaDescription;
   late String infoCreationDate = '';
-  late bool hasError = false;
+  late bool infoError = false;
 
   @override
   void initState() {
@@ -34,30 +34,31 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   }
 
   void doFetchObjectInfo() async {
-    try {
-      await widget.replicaApi
-          .fetchObjectInfo(widget.item.replicaLink)
-          .then((ReplicaObjectInfo value) {
-        setState(() {
-          infoTitle = value.infoTitle.isNotEmpty
-              ? value.infoTitle
-              : widget.item.metaTitle.isNotEmpty
-                  ? widget.item.metaTitle
-                  : widget.item.fileNameTitle;
-          infoDescription = value.infoDescription.isNotEmpty
-              ? value.infoDescription
-              : widget.item.metaDescription.isNotEmpty
-                  ? widget.item.metaDescription
-                  : 'empty_description'.i18n;
-          infoCreationDate = value.infoCreationDate;
-        });
-      });
-    } catch (err) {
-      logger.e('Could not fetch object_info: $err');
+    await widget.replicaApi
+        .fetchObjectInfo(widget.item.replicaLink)
+        .then((ReplicaObjectInfo value) {
+      if (value is EmptyReplicaObjectInfo) {
+        logger.i('Empty response from object_info');
+      }
       setState(() {
-        hasError = true;
+        infoTitle = value.infoTitle.isNotEmpty
+            ? value.infoTitle
+            : widget.item.metaTitle.isNotEmpty
+                ? widget.item.metaTitle
+                : widget.item.fileNameTitle;
+        infoDescription = value.infoDescription.isNotEmpty
+            ? value.infoDescription
+            : widget.item.metaDescription.isNotEmpty
+                ? widget.item.metaDescription
+                : 'empty_description'.i18n;
+        infoCreationDate = value.infoCreationDate;
       });
-    }
+    }).onError((error, stackTrace) {
+      logger.e('Could not fetch object_info: $error , $stackTrace');
+      setState(() {
+        infoError = true;
+      });
+    });
   }
 
   @override
@@ -115,7 +116,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
           end: 12.0,
           top: 24.0,
         ),
-        child: ready() & !hasError
+        child: ready() & !infoError
             // * Render media preview
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.start,
