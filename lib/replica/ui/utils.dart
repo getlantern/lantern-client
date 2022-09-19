@@ -301,7 +301,7 @@ Widget renderAnimatedMimeIcon(
             padding: const EdgeInsetsDirectional.all(8.0),
             child: CText(
               fileExtension.isNotEmpty ? fileExtension : '?',
-              style: tsButtonWhite.copiedWith(fontSize: 24),
+              style: tsButtonWhite.copiedWith(fontSize: 24, lineHeight: 24),
             ),
           )
         ],
