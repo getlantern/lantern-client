@@ -34,7 +34,14 @@ class ReplicaAudioListItem extends StatelessWidget {
                 renderDuration(),
               ],
             ),
-            renderMimeType(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                renderDescription(),
+                renderMimeType(),
+              ],
+            ),
           ],
         ),
       ),
@@ -64,7 +71,7 @@ class ReplicaAudioListItem extends StatelessWidget {
           ) =>
               CText(
             cached.value != null ? cached.value!.toMinutesAndSeconds() : '',
-            style: tsBody1.copiedWith(color: grey5),
+            style: tsBody1,
           ),
         ),
       ],
@@ -79,14 +86,26 @@ class ReplicaAudioListItem extends StatelessWidget {
         if (item.primaryMimeType != null)
           CText(
             item.primaryMimeType!,
-            style: tsBody1.copiedWith(color: grey5),
+            style: tsBody2Short.copiedWith(color: grey5),
           )
         else
           CText(
             'audio_unknown'.i18n,
-            style: tsBody1.copiedWith(color: grey5),
+            style: tsBody2Short.copiedWith(color: grey5),
           ),
       ],
+    );
+  }
+
+  Widget renderDescription() {
+    return Expanded(
+      child:
+        CText(
+          item.metaDescription,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: tsBody2Short,
+        ),
     );
   }
 }
