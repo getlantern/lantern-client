@@ -78,10 +78,10 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
             onChanged: (value) => setState(() {
               textLength = value.length;
             }),
-            maxLines: 10,
+            maxLines: 8,
             autofocus: true,
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.words,
+            keyboardType: TextInputType.multiline,
+            textCapitalization: TextCapitalization.sentences,
             controller: textEditingController,
             maxLength: maxCharLength,
             // Hacky, but as per design
@@ -96,7 +96,7 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
             style: tsBody2,
             // to keep the layout according to specs, we need an initial value as well as hintText
             hintText: 'description_initial_value'.i18n,
-            textInputAction: TextInputAction.done,
+            textInputAction: TextInputAction.newline,
             removeBorder: true,
             contentPadding: const EdgeInsetsDirectional.only(
               top: 12.0,
