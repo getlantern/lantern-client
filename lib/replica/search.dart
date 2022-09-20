@@ -51,7 +51,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               .copiedWith(color: black)
               .short,
         ),
-        // onTap: () async => await resetState(false), // TODO @kalli why is the screen blank when it resets? see https://github.com/getlantern/android-lantern/pull/778#issuecomment-1252498708
+        onTap: () async => await resetState(false), // TODO @kalli why is the screen blank when it resets? see https://github.com/getlantern/android-lantern/pull/778#issuecomment-1252498708
       ),
       actions: [
         IconButton(
