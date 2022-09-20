@@ -1,11 +1,9 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:lantern/account/plans/payment_provider_button.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/common/common.dart';
 
 import 'bitcoin_webview.dart';
-import 'purchase_constants.dart';
 import 'plan_utils.dart';
 
 class Checkout extends StatefulWidget {
@@ -135,6 +133,7 @@ class _CheckoutState extends State<Checkout>
                               keyboardType: TextInputType.text,
                               prefixIcon:
                                   const CAssetImage(path: ImagePaths.star),
+                              removeCounter: true,
                             ),
                           ),
                         ),

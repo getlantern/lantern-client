@@ -155,6 +155,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                         FilteringTextInputFormatter.digitsOnly,
                         CTextInputFormatter(separator: ' ', cutoff: 4),
                       ],
+                      removeCounter: true,
                     ),
                   ),
                 ),
@@ -191,6 +192,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                               FilteringTextInputFormatter.digitsOnly,
                               CTextInputFormatter(separator: '/', cutoff: 2),
                             ],
+                            removeCounter: true,
                           ),
                         ),
                       ),
@@ -215,6 +217,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                             prefixIcon:
                                 const CAssetImage(path: ImagePaths.lock),
                             hintText: 'XXX',
+                            removeCounter: true,
                           ),
                         ),
                       ),

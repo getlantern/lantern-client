@@ -29,6 +29,7 @@ class CTextField extends StatefulWidget {
   late final bool removeBorder;
   late final bool? autofocus;
   late final void Function(String value)? onChanged;
+  late final bool removeCounter;
 
   CTextField({
     required this.controller,
@@ -55,6 +56,7 @@ class CTextField extends StatefulWidget {
     this.removeBorder = false,
     this.autofocus = false,
     this.onChanged,
+    this.removeCounter = false,
   }) {
     if (initialValue != null && initialValue != '') {
       controller.text = initialValue!;
@@ -183,9 +185,9 @@ class _CTextFieldState extends State<CTextField> {
                         ? Transform.scale(scale: 0.4, child: widget.prefixIcon)
                         : null,
                 suffixIcon: renderSuffixRow(),
-                // forcibly remove if removeBorder == true
+                // forcibly remove if removeCounter == true
                 // otherwise, it will show up if we have a maxLength set
-                counterText: widget.removeBorder ? '' : null,
+                counterText: widget.removeCounter ? '' : null,
               ),
             ),
           ),

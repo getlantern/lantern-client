@@ -98,6 +98,7 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
             hintText: 'description_initial_value'.i18n,
             textInputAction: TextInputAction.done,
             removeBorder: true,
+            removeCounter: true,
             contentPadding: const EdgeInsetsDirectional.only(
               top: 12.0,
               bottom: 12.0,
