@@ -58,8 +58,6 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
       );
     }
 
-    debugPrint('here');
-
     // No active query, return the landing search bar instead
     return GestureDetector(
       onTap: () {
