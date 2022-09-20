@@ -32,8 +32,6 @@ import (
 	"github.com/getlantern/golog"
 	"github.com/getlantern/memhelper"
 	"github.com/getlantern/mtime"
-	"github.com/getlantern/netx"
-	"github.com/getlantern/protected"
 
 	// import gomobile just to make sure it stays in go.mod
 	_ "golang.org/x/mobile/bind/java"
@@ -336,32 +334,6 @@ type SocketProtector interface {
 	DNSServerIP() string
 }
 
-// ProtectConnections allows connections made by Lantern to be protected from
-// routing via a VPN. This is useful when running Lantern as a VPN on Android,
-// because it keeps Lantern's own connections from being captured by the VPN and
-// resulting in an infinite loop.
-
-func ProtectConnections(protector SocketProtector) {
-	log.Debug("Protecting connections")
-	p := protected.New(protector.ProtectConn, protector.DNSServerIP)
-	netx.OverrideDial(p.DialContext)
-	netx.OverrideDialUDP(p.DialUDP)
-	netx.OverrideResolveIPs(p.ResolveIPs)
-	netx.OverrideListenUDP(p.ListenUDP)
-	bal := getBalancer(0)
-	if bal != nil {
-		log.Debug("Protected after balancer already created, force redial")
-		bal.ResetFromExisting()
-	}
-}
-
-// RemoveOverrides removes the protected tlsdialer overrides
-// that allowed connections to bypass the VPN.
-func RemoveOverrides() {
-	log.Debug("Removing overrides")
-	netx.Reset()
-}
-
 func getBalancer(timeout time.Duration) *balancer.Balancer {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
@@ -606,7 +578,7 @@ func run(configDir, locale string,
 			}
 			return fmt.Sprintf("%v:%v", updatedHost, port), nil
 		},
-		func(opts *config.GoogleSearchAdsOptions, query string) string { return "" },
+		func() string { return "" },
 		func(category, action, label string) {},
 		nil,
 	)

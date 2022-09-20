@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 abstract class BaseModel(
     private val name: String,
-    flutterEngine: FlutterEngine? = null,
+    flutterEngine: FlutterEngine,
     val db: DB,
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
     private val activeSubscribers = ConcurrentSkipListSet<String>()
@@ -111,7 +111,7 @@ abstract class BaseModel(
     }
 
     init {
-        flutterEngine?.let {
+        flutterEngine.let {
             eventChannel = EventChannel(
                 flutterEngine.dartExecutor,
                 "${name}_event_channel"

@@ -1,13 +1,13 @@
 import 'package:lantern/common/common.dart';
 
-//// This a custom TextField that renders a label in its outline, aligned with
-//// the prefix icon. We don't use the default behavior of OutlineInputBorder
-//// because it aligns the label to the right of the prefix icon, in
-//// contravention of the Material design specification.
+/// This a custom TextField that renders a label in its outline, aligned with
+/// the prefix icon. We don't use the default behavior of OutlineInputBorder
+/// because it aligns the label to the right of the prefix icon, in
+/// contravention of the Material design specification.
 class CTextField extends StatefulWidget {
   late final CustomTextEditingController controller;
   late final String? initialValue;
-  late final String label;
+  late final dynamic label;
   late final String? helperText;
   late final String? hintText;
   late final Widget? prefixIcon;
@@ -24,6 +24,11 @@ class CTextField extends StatefulWidget {
   late final int? maxLength;
   late final TextCapitalization? textCapitalization;
   late final EdgeInsetsDirectional? contentPadding;
+  late final TextStyle? style;
+  late final void Function()? onTap;
+  late final bool removeBorder;
+  late final bool? autofocus;
+  late final void Function(String value)? onChanged;
 
   CTextField({
     required this.controller,
@@ -45,9 +50,15 @@ class CTextField extends StatefulWidget {
     this.maxLength,
     this.textCapitalization,
     this.contentPadding,
+    this.style,
+    this.onTap,
+    this.removeBorder = false,
+    this.autofocus = false,
+    this.onChanged,
   }) {
     if (initialValue != null && initialValue != '') {
-      // add a small delay to lifecycle error which results from this component being wrapped in the subscribedSingleValueBuilder() call that returns the email
+      controller.text = initialValue!;
+      // add a small delay to lifecycle error which results from this component being wrapped in the subscribedSingleValueBuilder() call that returns the initial value
       Future.delayed(defaultTransitionDuration, () {
         controller.text = initialValue!;
       });
@@ -64,6 +75,7 @@ class _CTextFieldState extends State<CTextField> {
   var hasFocus = false;
 
   final fieldKey = GlobalKey<FormFieldState>();
+  final scrollController = ScrollController();
 
   @override
   void initState() {
@@ -83,95 +95,125 @@ class _CTextFieldState extends State<CTextField> {
 
   @override
   Widget build(BuildContext context) {
+    const noBorder = OutlineInputBorder(
+      borderSide: BorderSide(
+        width: 0,
+        style: BorderStyle.none,
+      ),
+    );
     return Stack(
       children: [
         Container(
           padding: const EdgeInsetsDirectional.only(top: 7),
-          child: TextFormField(
-            key: fieldKey,
-            enabled: widget.enabled,
-            controller: widget.controller,
-            autovalidateMode: widget.autovalidateMode,
-            focusNode: widget.controller.focusNode,
-            keyboardType: widget.keyboardType,
-            maxLength: widget.maxLength,
-            validator: (value) {
-              // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
-              var result = widget.controller.validate(value);
-              WidgetsBinding.instance?.addPostFrameCallback((_) {
-                setState(() {});
-              });
-              return result;
-            },
-            onChanged: (value) {
-              fieldKey.currentState!.validate();
-            },
-            onFieldSubmitted: widget.onFieldSubmitted,
-            textInputAction: widget.textInputAction,
-            minLines: widget.minLines,
-            maxLines: widget.maxLines,
-            inputFormatters: widget.inputFormatters,
-            textCapitalization:
-                widget.textCapitalization ?? TextCapitalization.none,
-            decoration: InputDecoration(
-              contentPadding:
-                  widget.contentPadding ?? const EdgeInsetsDirectional.all(0),
-              isDense: true,
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              // we handle floating labels using our custom method below
-              labelText: widget.label,
-              helperText: widget.helperText,
-              hintText: widget.hintText,
-              helperMaxLines: 2,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: blue4,
-                ),
+          child: Scrollbar(
+            controller: scrollController,
+            interactive: true,
+            isAlwaysShown: false,
+            showTrackOnHover: true,
+            child: TextFormField(
+              key: fieldKey,
+              autofocus: widget.autofocus!,
+              enabled: widget.enabled,
+              controller: widget.controller,
+              scrollPhysics: defaultScrollPhysics,
+              autovalidateMode: widget.autovalidateMode,
+              focusNode: widget.controller.focusNode,
+              keyboardType: widget.keyboardType,
+              maxLength: widget.maxLength,
+              validator: (value) {
+                // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
+                var result = widget.controller.validate(value);
+                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  setState(() {});
+                });
+                return result;
+              },
+              onTap: widget.onTap,
+              onChanged: (value) {
+                if (widget.onChanged != null) {
+                  widget.onChanged!(value);
+                }
+                fieldKey.currentState!.validate();
+              },
+              onFieldSubmitted: widget.onFieldSubmitted,
+              textInputAction: widget.textInputAction,
+              minLines: widget.minLines,
+              maxLines: widget.maxLines,
+              style: widget.style,
+              inputFormatters: widget.inputFormatters,
+              textCapitalization:
+                  widget.textCapitalization ?? TextCapitalization.none,
+              decoration: InputDecoration(
+                contentPadding:
+                    widget.contentPadding ?? const EdgeInsetsDirectional.all(0),
+                isDense: true,
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                // we handle floating labels using our custom method below
+                labelText: (widget.label is String) ? widget.label : '',
+                helperText: widget.helperText,
+                hintText: widget.hintText,
+                helperMaxLines: 2,
+                focusedBorder: !widget.removeBorder
+                    ? OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: blue4,
+                        ),
+                      )
+                    : noBorder,
+                errorBorder: !widget.removeBorder
+                    ? OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: indicatorRed,
+                        ),
+                      )
+                    : noBorder,
+                border: !widget.removeBorder
+                    ? OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: grey3,
+                        ),
+                      )
+                    : noBorder,
+                prefixIcon:
+                    // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
+                    widget.prefixIcon != null
+                        ? Transform.scale(scale: 0.4, child: widget.prefixIcon)
+                        : null,
+                suffixIcon: renderSuffixRow(),
+                // forcibly remove if removeBorder == true
+                // otherwise, it will show up if we have a maxLength set
+                counterText: widget.removeBorder ? '' : null,
               ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: indicatorRed,
-                ),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 1,
-                  color: grey3,
-                ),
-              ),
-              prefixIcon:
-                  // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
-                  widget.prefixIcon != null
-                      ? Transform.scale(scale: 0.4, child: widget.prefixIcon)
-                      : null,
-              suffixIcon: renderSuffixRow(),
-              counterText: '',
             ),
           ),
         ),
-        Container(
-          margin: const EdgeInsetsDirectional.only(start: 11),
-          padding: EdgeInsetsDirectional.only(
-            start: hasFocus ? 2 : 0,
-            end: hasFocus ? 2 : 0,
-          ),
-          color: white,
-          child: !hasFocus && widget.controller.value.text.isEmpty
-              ? Container()
-              : CText(
-                  widget.label,
-                  style: CTextStyle(
-                    fontSize: 12,
-                    lineHeight: 12,
-                    color: fieldKey.currentState?.mounted == true &&
-                            fieldKey.currentState?.hasError == true
-                        ? indicatorRed
-                        : blue4,
-                  ),
+        // * Label
+        (widget.label is String)
+            ? Container(
+                margin: const EdgeInsetsDirectional.only(start: 11),
+                padding: EdgeInsetsDirectional.only(
+                  start: hasFocus ? 2 : 0,
+                  end: hasFocus ? 2 : 0,
                 ),
-        ),
+                color: white,
+                child: !hasFocus && widget.controller.value.text.isEmpty
+                    ? Container()
+                    : CText(
+                        widget.label,
+                        style: CTextStyle(
+                          fontSize: 12,
+                          lineHeight: 12,
+                          color: fieldKey.currentState?.mounted == true &&
+                                  fieldKey.currentState?.hasError == true
+                              ? indicatorRed
+                              : blue4,
+                        ),
+                      ),
+              )
+            : widget.label,
       ],
     );
   }
@@ -251,6 +293,7 @@ class CustomTextEditingController extends TextEditingController {
   final GlobalKey<FormState> formKey;
   final FormFieldValidator<String>? validator;
   String? _error;
+  String? initialValue;
 
   CustomTextEditingController({
     String? text,
@@ -269,6 +312,12 @@ class CustomTextEditingController extends TextEditingController {
       return null;
     }
     return validator!(value);
+  }
+
+  set initialize(String? initialValue) {
+    if (initialValue != null) {
+      this.initialValue = initialValue;
+    }
   }
 
   /// Sets custom error and forces form validation to make error show up.

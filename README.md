@@ -35,7 +35,7 @@ All those dependencies must be in your PATH
   * NDK should be version 22.x, for example 22.1.7171670. Newer versions of the NDK don't work with the current release of gomobile.
 * [Git LFS](https://git-lfs.github.com)
   - more information in [Usage](#usage)
-* [Flutter (latest version)](https://flutter.dev)
+* [Flutter (2.10.5)](https://flutter.dev)
 * [sentry-cli](https://docs.sentry.io/product/cli/installation/)
   - This is used for uploading native debug symbols to Sentry
 * [gomobile](https://github.com/golang/go/wiki/Mobile#tools)

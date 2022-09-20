@@ -1,4 +1,38 @@
 
+<a name="7.0.6"></a>
+## [7.0.6](https://github.com/getlantern/android-lantern/compare/7.0.5...7.0.6)
+
+> 2022-07-14
+
+### Pull Requests
+
+* Merge pull request [#773](https://github.com/getlantern/android-lantern/issues/773) from getlantern/ox/noprotected
+
+
+<a name="7.0.5"></a>
+## [7.0.5](https://github.com/getlantern/android-lantern/compare/7.0.4...7.0.5)
+
+> 2022-07-07
+
+
+<a name="7.0.4"></a>
+## [7.0.4](https://github.com/getlantern/android-lantern/compare/7.0.3...7.0.4)
+
+> 2022-06-29
+
+
+<a name="7.0.3"></a>
+## [7.0.3](https://github.com/getlantern/android-lantern/compare/7.0.2...7.0.3)
+
+> 2022-05-26
+
+
+<a name="7.0.2"></a>
+## [7.0.2](https://github.com/getlantern/android-lantern/compare/7.0.1...7.0.2)
+
+> 2022-05-01
+
+
 <a name="7.0.1"></a>
 ## [7.0.1](https://github.com/getlantern/android-lantern/compare/7.0.0...7.0.1)
 

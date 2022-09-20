@@ -116,22 +116,6 @@ public class LanternVpnService extends VpnService implements Runnable {
     public void run() {
         try {
             Logger.d(TAG, "Loading Lantern library");
-            Internalsdk.protectConnections(new SocketProtector() {
-                // Protect is used to exclude a socket specified by fileDescriptor
-                // from the VPN connection. Once protected, the underlying connection
-                // is bound to the VPN device and won't be forwarded
-                @Override
-                public void protectConn(long fileDescriptor) throws Exception {
-                    if (!protect((int) fileDescriptor)) {
-                        throw new Exception("protect socket failed");
-                    }
-                }
-
-                public String dnsServerIP() {
-                    return LanternApp.getSession().getDNSServer();
-                }
-            });
-
             getOrInitProvider().run(this, new Builder(), LanternApp.getSession().getSOCKS5Addr(), LanternApp.getSession().getDNSGrabAddr());
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,12 +153,6 @@ public class LanternVpnService extends VpnService implements Runnable {
             EventBus.getDefault().post(new VpnState(false));
         } catch (Throwable t) {
             Logger.e(TAG, "error posting updated vpnstate", t);
-        }
-        try {
-            Logger.d(TAG, "removing overrides");
-            Internalsdk.removeOverrides();
-        } catch (Throwable t) {
-            Logger.e(TAG, "error removing overrides", t);
         }
     }
 }

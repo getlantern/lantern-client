@@ -24,14 +24,14 @@ import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
-import 'package:lantern/replica/ui/link_opener_screen.dart';
-import 'package:lantern/replica/ui/media_views/audio_player_screen.dart';
-import 'package:lantern/replica/ui/media_views/image_preview_screen.dart';
-import 'package:lantern/replica/ui/media_views/pdf_screen.dart';
-import 'package:lantern/replica/ui/media_views/unknown_item_screen.dart';
-import 'package:lantern/replica/ui/media_views/video_player_screen.dart';
-import 'package:lantern/replica/ui/search_screen.dart';
-import 'package:lantern/replica/ui/upload_file.dart';
+import 'package:lantern/replica/link_handler.dart';
+import 'package:lantern/replica/ui/viewers/audio.dart';
+import 'package:lantern/replica/ui/viewers/image.dart';
+import 'package:lantern/replica/ui/viewers/video.dart';
+import 'package:lantern/replica/ui/viewers/misc.dart';
+import 'package:lantern/replica/upload/title.dart';
+import 'package:lantern/replica/upload/description.dart';
+import 'package:lantern/replica/upload/review.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -41,6 +41,81 @@ import 'package:lantern/replica/ui/upload_file.dart';
       name: 'Home',
       page: HomePage,
       path: '/',
+    ),
+    CustomRoute<void>(
+      page: FullScreenDialog,
+      name: 'FullScreenDialogPage',
+      path: 'fullScreenDialogPage',
+      transitionsBuilder: popupTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: AccountManagement,
+      name: 'AccountManagement',
+      path: 'accountManagement',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: Settings,
+      name: 'Settings',
+      path: 'settings',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: Language,
+      name: 'Language',
+      path: 'language',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: AuthorizeDeviceForPro,
+      name: 'AuthorizePro',
+      path: 'authorizePro',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: AuthorizeDeviceViaEmail,
+      name: 'AuthorizeDeviceEmail',
+      path: 'authorizeDeviceEmail',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: AuthorizeDeviceViaEmailPin,
+      name: 'AuthorizeDeviceEmailPin',
+      path: 'authorizeDeviceEmailPin',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: ApproveDevice,
+      name: 'ApproveDevice',
+      path: 'approveDevice',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    //
+    // * CHAT ROUTES
+    //
+    CustomRoute<void>(
+      page: RecoveryKey,
+      name: 'RecoveryKey',
+      path: 'recoveryKey',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
       page: ChatNumberRecovery,
@@ -55,14 +130,6 @@ import 'package:lantern/replica/ui/upload_file.dart';
       name: 'ChatNumberMessaging',
       path: 'chatNumberMessaging',
       transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: FullScreenDialog,
-      name: 'FullScreenDialogPage',
-      path: 'fullScreenDialogPage',
-      transitionsBuilder: popupTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
@@ -115,102 +182,6 @@ import 'package:lantern/replica/ui/upload_file.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: AccountManagement,
-      name: 'AccountManagement',
-      path: 'accountManagement',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: ReplicaLinkOpenerScreen,
-      name: 'ReplicaLinkOpenerScreen',
-      path: 'replicaLinkOpenerScreen',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: Settings,
-      name: 'Settings',
-      path: 'settings',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: ReplicaVideoPlayerScreen,
-      name: 'ReplicaVideoPlayerScreen',
-      path: 'replicaVideoPlayerScreen',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: Language,
-      name: 'Language',
-      path: 'language',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: ReplicaAudioPlayerScreen,
-      name: 'ReplicaAudioPlayerScreen',
-      path: 'replicaAudioPlayerScreen',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: AuthorizeDeviceForPro,
-      name: 'AuthorizePro',
-      path: 'authorizePro',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: ReplicaImagePreviewScreen,
-      name: 'ReplicaImagePreviewScreen',
-      path: 'replicaImagePreviewScreen',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: AuthorizeDeviceViaEmail,
-      name: 'AuthorizeDeviceEmail',
-      path: 'authorizeDeviceEmail',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: AuthorizeDeviceViaEmailPin,
-      name: 'AuthorizeDeviceEmailPin',
-      path: 'authorizeDeviceEmailPin',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: ApproveDevice,
-      name: 'ApproveDevice',
-      path: 'approveDevice',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
-      page: RecoveryKey,
-      name: 'RecoveryKey',
-      path: 'recoveryKey',
-      transitionsBuilder: defaultTransition,
-      durationInMilliseconds: defaultTransitionMillis,
-      reverseDurationInMilliseconds: defaultTransitionMillis,
-    ),
-    CustomRoute<void>(
       page: ChatNumberAccount,
       name: 'ChatNumberAccount',
       path: 'chatNumberAccount',
@@ -226,34 +197,69 @@ import 'package:lantern/replica/ui/upload_file.dart';
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
+    //
+    // * REPLICA ROUTES
+    //
     CustomRoute<void>(
-      page: ReplicaPDFScreen,
-      name: 'ReplicaPDFScreen',
-      path: 'replicaPDFScreen',
+      page: ReplicaUploadTitle,
+      name: 'ReplicaUploadTitle',
+      path: 'replicaUploadTitle',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: ReplicaUnknownItemScreen,
-      name: 'ReplicaUnknownItemScreen',
-      path: 'replicaUnknownItemScreen',
+      page: ReplicaUploadDescription,
+      name: 'ReplicaUploadDescription',
+      path: 'replicaUploadDescription',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: ReplicaSearchScreen,
-      name: 'ReplicaSearchScreen',
-      path: 'replicaSearchScreen',
+      page: ReplicaUploadReview,
+      name: 'ReplicaUploadReview',
+      path: 'replicaUploadReview',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: ReplicaUploadFileScreen,
-      name: 'ReplicaUploadFileScreen',
-      path: 'replicaUploadFileScreen',
+      page: ReplicaLinkHandler,
+      name: 'ReplicaLinkHandler',
+      path: 'replicaLinkHandler',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: ReplicaMiscViewer,
+      name: 'ReplicaMiscViewer',
+      path: 'replicaMiscViewer',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: ReplicaImageViewer,
+      name: 'ReplicaImageViewer',
+      path: 'replicaImageViewer',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: ReplicaVideoViewer,
+      name: 'ReplicaVideoViewer',
+      path: 'replicaVideoViewer',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: ReplicaAudioViewer,
+      name: 'ReplicaAudioViewer',
+      path: 'replicaAudioViewer',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

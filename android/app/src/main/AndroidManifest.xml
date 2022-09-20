@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -141,16 +140,6 @@
             android:name=".activity.CheckoutActivity_"
             android:screenOrientation="portrait"
             />
-
-        <activity
-            android:name=".activity.UpdateActivity_"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false"
-            android:theme="@style/Theme.Blank.Dialog">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
 
         <activity
             android:name=".activity.PrivacyDisclosureActivity_"

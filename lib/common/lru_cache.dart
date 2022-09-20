@@ -1,6 +1,8 @@
 // based on https://github.com/platelk/dcache
 import 'dart:collection';
 
+import 'package:lantern/replica/common.dart';
+
 import 'common.dart';
 
 typedef LoadFunc<K, V> = Future<V> Function(K key);
@@ -21,6 +23,7 @@ class LRUCache<K, V> {
         entry!.value.value =
             CachedValue(future: future, loading: false, value: v);
       }).catchError((e) {
+        logger.e(e);
         entry!.value.value =
             CachedValue(future: future, loading: false, error: e);
         _entries.remove(entry.key);

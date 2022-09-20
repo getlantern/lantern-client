@@ -5,7 +5,7 @@ import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/chats.dart';
 import 'package:lantern/messaging/onboarding/welcome.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/replica/ui/replica_tab.dart';
+import 'package:lantern/replica/replica_tab.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';

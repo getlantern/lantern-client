@@ -1,6 +1,7 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/account/plans/plan_utils.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/logic/markdown_link_builder.dart';
 import 'package:lantern/replica/models/replica_link.dart';
 import 'package:lantern/replica/models/replica_model.dart';
@@ -386,11 +387,20 @@ class DeveloperSettingsTab extends StatelessWidget {
                     style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
                   ),
                   onPressed: () async => await context.pushRoute(
-                    ReplicaVideoPlayerScreen(
+                    ReplicaVideoViewer(
                       replicaApi: replicaApi,
-                      replicaLink: ReplicaLink.New(
-                        'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0',
-                      )!,
+                      item: ReplicaSearchItem(
+                        'displayName',
+                        'primaryMimeType',
+                        'humanizedLastModified',
+                        'humanizedFileSize',
+                        ReplicaLink.New(
+                          'magnet%3A%3Fxt%3Durn%3Abtih%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26xs%3Dreplica%3A638f6f674c06a05f4cb4e45871beba10ad57818c%26dn%3DToto%2B-%2BRosanna%2B(Official%2BMusic%2BVideo).mp4%26so%3D0',
+                        )!,
+                        'description',
+                        'title',
+                      ),
+                      category: SearchCategory.Video,
                     ),
                   ),
                 )
@@ -406,11 +416,20 @@ class DeveloperSettingsTab extends StatelessWidget {
                     style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
                   ),
                   onPressed: () async => await context.pushRoute(
-                    ReplicaAudioPlayerScreen(
+                    ReplicaAudioViewer(
                       replicaApi: replicaApi,
-                      replicaLink: ReplicaLink.New(
-                        'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0',
-                      )!,
+                      category: SearchCategory.Audio,
+                      item: ReplicaSearchItem(
+                        'audio test',
+                        'mp3',
+                        'humanizedLastModified',
+                        'humanizedFileSize',
+                        ReplicaLink.New(
+                          'magnet%3A%3Fxt%3Durn%3Abtih%3A4915e9ff7c162ea784e466de665b03f1de654edb%26xs%3Dreplica%3A4915e9ff7c162ea784e466de665b03f1de654edb%26dn%3D1.mp3%26so%3D0',
+                        )!,
+                        'description',
+                        'title',
+                      ),
                     ),
                   ),
                 )
@@ -426,56 +445,91 @@ class DeveloperSettingsTab extends StatelessWidget {
                     style: tsButton.copiedWith(color: Colors.deepOrangeAccent),
                   ),
                   onPressed: () async => await context.pushRoute(
-                    ReplicaImagePreviewScreen(
-                      replicaLink: ReplicaLink.New(
-                        'magnet%3A%3Fxt%3Durn%3Abtih%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26xs%3Dreplica%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26dn%3D1N_%40X%5B%604Z%5BF2K%40L%25J%402OYA2.png%26so%3D0',
-                      )!,
+                    ReplicaImageViewer(
+                      replicaApi: replicaApi,
+                      category: SearchCategory.Image,
+                      item: ReplicaSearchItem(
+                        'image test',
+                        'png',
+                        'humanizedLastModified',
+                        'humanizedFileSize',
+                        ReplicaLink.New(
+                          'magnet%3A%3Fxt%3Durn%3Abtih%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26xs%3Dreplica%3Ae3cc2486d0875a07b82df20de98db7fab5e6371e%26dn%3D1N_%40X%5B%604Z%5BF2K%40L%25J%402OYA2.png%26so%3D0',
+                        )!,
+                        'description',
+                        'title',
+                      ),
                     ),
                   ),
                 )
               ],
             ),
-            MarkdownBody(
-              data:
-                  '''This is a markdown text blob. Only the links starting with replica:// count.
-                    replica://
-                      Nothing happens here: the link is empty
-
-                    hello world!
-                      Nothing happens here
-
-                    bunnyfoofooreplica://
-                      Nothing happens here
-
-                    replica://bunnyfoofoo
-                      This link counts
-
-                    replica://magnet:?xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d&dn=sintel.mp4
-                      This link counts
-
-                    replica://xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d&dn=sintel.mp4
-                      This link does not count since it has no leading 'magnet:?'
-
-                    magnet://xt=urn:btih:32729D0D089180D1095279069148DDC27323188B&dn=The%20Suicide%20Squad%20(2021)%20%5B1080p%5D%20%5BWEBRip%5D%20%5B5.1%5D%20&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&so=0
-                      This link does not count because it has the wrong prefix
-
-                    http://www.google.com
-                      This link does not count''',
-              builders: {
-                'replica': ReplicaLinkMarkdownElementBuilder(
-                  openLink: (replicaApi, replicaLink) {
-                    context.pushRoute(
-                      ReplicaLinkOpenerScreen(
-                        replicaApi: replicaApi,
-                        replicaLink: replicaLink,
-                      ),
-                    );
-                  },
-                ),
-              },
-              extensionSet: md.ExtensionSet.gitHubFlavored,
-              inlineSyntaxes: <md.InlineSyntax>[ReplicaLinkSyntax()],
+            // * REPLICA SEARCH TERM
+            ListItemFactory.settingsItem(
+              content: 'Replica - current search term',
+              trailingArray: [
+                replicaModel.getSearchTermWidget(
+                  (context, value, child) => CText(
+                    value,
+                    style: tsBody1.copiedWith(color: Colors.deepOrangeAccent),
+                  ),
+                )
+              ],
             ),
+            // * REPLICA SEARCH TAB
+            ListItemFactory.settingsItem(
+              content: 'Replica - current search tab',
+              trailingArray: [
+                replicaModel.getSearchTabWidget(
+                  (context, value, child) => CText(
+                    value,
+                    style: tsBody1.copiedWith(color: Colors.deepOrangeAccent),
+                  ),
+                )
+              ],
+            ),
+            // TODO <08-17-22, kalli> Not sure if this is doing what its supposed to do, fix
+            // MarkdownBody(
+            //   data:
+            //       '''This is a markdown text blob. Only the links starting with replica:// count.
+            //         replica://
+            //           Nothing happens here: the link is empty
+
+            //         hello world!
+            //           Nothing happens here
+
+            //         bunnyfoofooreplica://
+            //           Nothing happens here
+
+            //         replica://bunnyfoofoo
+            //           This link counts
+
+            //         replica://magnet:?xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d&dn=sintel.mp4
+            //           This link counts
+
+            //         replica://xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d&dn=sintel.mp4
+            //           This link does not count since it has no leading 'magnet:?'
+
+            //         magnet://xt=urn:btih:32729D0D089180D1095279069148DDC27323188B&dn=The%20Suicide%20Squad%20(2021)%20%5B1080p%5D%20%5BWEBRip%5D%20%5B5.1%5D%20&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&so=0
+            //           This link does not count because it has the wrong prefix
+
+            //         http://www.google.com
+            //           This link does not count''',
+            //   builders: {
+            //     'replica': ReplicaLinkMarkdownElementBuilder(
+            //       openLink: (replicaApi, replicaLink) {
+            //         context.pushRoute(
+            //           ReplicaLinkHandler(
+            //             replicaApi: replicaApi,
+            //             replicaLink: replicaLink,
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   },
+            //   extensionSet: md.ExtensionSet.gitHubFlavored,
+            //   inlineSyntaxes: <md.InlineSyntax>[ReplicaLinkSyntax()],
+            // ),
           ],
         ),
       );

@@ -48,6 +48,8 @@ CTextStyle tsBody1Color(color) => tsBody1.copiedWith(color: color);
 
 CTextStyle tsBody2 = CTextStyle(fontSize: 12, lineHeight: 19);
 
+CTextStyle tsBody2Short = CTextStyle(fontSize: 12, lineHeight: 14);
+
 CTextStyle tsBody3 = CTextStyle(fontSize: 16, lineHeight: 24);
 
 CTextStyle tsTextField = CTextStyle(fontSize: 16, lineHeight: 18.75);

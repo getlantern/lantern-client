@@ -32,6 +32,68 @@ Color getAvatarColor(double hue, {bool inverted = false}) {
   return HSLColor.fromAHSL(1, hue, 1, 0.3).toColor();
 }
 
+// @echo
+Color getReplicaMimeBgColor(String mime) {
+  final hue = sha1Hue(mime);
+  return HSLColor.fromAHSL(0.6, hue, 0.3, 0.2).toColor();
+}
+
+// gradient color pairs map
+List<List<Color>> gradientColors = [
+  [HexColor('#007A7C'), HexColor('#00237C')],
+  [HexColor('#9174CE'), HexColor('#749CCE')],
+  [HexColor('#5DADEC'), HexColor('#5DD2EC')],
+  [HexColor('#007A7C'), HexColor('#0A7C00')],
+  [HexColor('#007A7C'), HexColor('#00237C')],
+];
+
+// create consistent random gradient mappings from strings
+// this method mirrors the generator in desktop
+List<Color> stringToGradientColors(String string) {
+  // ensure string is always at least 5 chars long (space is smallest single char code 32)
+  string = string + '     ';
+  var arr = string.split('').sublist(0, 5).map((r) {
+    return r.codeUnitAt(0);
+  }).toList();
+  final largest = arr.reduce(max);
+  final index = arr.indexWhere(((n) => n == largest));
+  return gradientColors[index];
+}
+
+BoxDecoration getReplicaExtensionBgDecoration(String extension) {
+  return BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: const Alignment(0.8, 1),
+      colors: stringToGradientColors(extension.replaceAll('.', '')),
+      tileMode: TileMode.mirror,
+    ),
+  );
+}
+
+BoxDecoration getReplicaHashAnimatedBgDecoration(String hash, double animatedValue) {
+  return BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment(-1 + animatedValue,-1),
+      end: Alignment(animatedValue, 0),
+      colors: stringToGradientColors(hash),
+      tileMode: TileMode.mirror,
+    ),
+  );
+}
+
+BoxDecoration getReplicaHashBgDecoration(String hash) {
+  return BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: const Alignment(0.8, 1),
+      colors: stringToGradientColors(hash),
+      tileMode: TileMode.mirror,
+    ),
+  );
+}
+
+
 final maxSha1Hash = BigInt.from(2).pow(160);
 final numHues = BigInt.from(360);
 

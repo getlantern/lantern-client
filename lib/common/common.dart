@@ -75,6 +75,7 @@ export 'ui/show_snackbar.dart';
 export 'ui/text_highlighter.dart';
 export 'ui/text_styles.dart';
 export 'ui/transitions.dart';
+export 'ui/info_text_box.dart';
 
 // custom components
 export 'ui/custom/asset_image.dart';
@@ -86,6 +87,6 @@ export 'ui/custom/list_item_factory.dart';
 export 'ui/custom/rounded_rectangle_border.dart';
 export 'ui/custom/text.dart';
 export 'ui/custom/text_field.dart';
-export 'ui/custom/video_viewer.dart';
-export 'ui/custom/image_viewer.dart';
-export 'ui/custom/viewer.dart';
+export 'ui/custom/fullscreen_video_viewer.dart';
+export 'ui/custom/fullscreen_image_viewer.dart';
+export 'ui/custom/fullscreen_viewer.dart';

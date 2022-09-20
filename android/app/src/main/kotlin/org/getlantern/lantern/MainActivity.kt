@@ -3,6 +3,7 @@ package org.getlantern.lantern
 import android.Manifest
 import android.app.Activity
 import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -27,19 +28,12 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.lantern.android.model.MessagingModel
-import io.lantern.android.model.ReplicaModel
-import io.lantern.android.model.SessionModel
-import io.lantern.android.model.VpnModel
+import io.lantern.android.model.*
 import io.lantern.messaging.WebRTCSignal
 import okhttp3.Response
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
-import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.event.EventManager
-import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.CheckUpdate
-import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.ProError
@@ -212,6 +206,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         super.onDestroy()
         vpnModel.destroy()
         sessionModel.destroy()
+        // TODO <09-08-22, kalli> we weren't invoking destroy() on replicaModel previously
+        replicaModel.destroy()
         EventBus.getDefault().unregister(this)
     }
 
@@ -279,6 +275,29 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
         updateUserPlans()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun bandwidthUpdated(update: Bandwidth) {
+        vpnModel.saveBandwidth(
+            Vpn.Bandwidth.newBuilder()
+                .setPercent(update.percent)
+                .setRemaining(update.remaining)
+                .setAllowed(update.allowed)
+                .setTtlSeconds(update.ttlSeconds)
+                .build()
+        )
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun statsUpdated(stats: Stats) {
+        vpnModel.saveServerInfo(
+            Vpn.ServerInfo.newBuilder()
+                .setCity(stats.city)
+                .setCountry(stats.country)
+                .setCountryCode(stats.countryCode)
+                .build()
+        )
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -458,7 +477,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun runCheckUpdate(checkUpdate: CheckUpdate) {
         val userInitiated = checkUpdate.userInitiated
-        if (LanternApp.getSession().isPlayVersion()) {
+        if (LanternApp.getSession().isPlayVersion) {
             Logger.debug(TAG, "App installed via Play; not checking for update")
             if (userInitiated) {
                 // If the user installed the app via Google Play,
@@ -520,7 +539,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
                 "Update available at $url"
             )
             // an updated version of Lantern is available at the given url
-            val intent = Intent(activity, UpdateActivity_::class.java)
+            val intent = Intent()
+            intent.component = ComponentName(
+                activity.packageName,
+                "org.getlantern.lantern.activity.UpdateActivity_",
+            )
             intent.putExtra("updateUrl", url)
             startActivity(intent)
         }
@@ -743,14 +766,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         EventBus.getDefault().post(VpnState(useVpn))
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
-        val handler = Handler(Looper.getMainLooper())
-        // Force a delay to test the support for connecting/disconnecting state
-        handler.postDelayed(
-            {
-                vpnModel.setVpnOn(useVpn)
-            },
-            500
-        )
+        vpnModel.setVpnOn(useVpn)
     }
 
     // Recreate the activity when the language changes

@@ -21,6 +21,7 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
@@ -42,6 +43,7 @@ import java.util.*
 import java.util.concurrent.*
 import kotlin.reflect.typeOf
 
+import org.greenrobot.eventbus.EventBus
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -49,7 +51,7 @@ import kotlin.reflect.typeOf
  */
 open class SessionModel(
     private val activity: Activity,
-    flutterEngine: FlutterEngine? = null,
+    flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
 
@@ -149,6 +151,9 @@ open class SessionModel(
             "getRenewalText" -> LanternApp.getSession().getRenewalText()
             "getUserID" -> LanternApp.getSession().userID
             "getUpgradeOrRenewal" -> LanternApp.getSession().getUpgradeOrRenewal()
+            "checkForUpdates" -> {
+                EventBus.getDefault().post(CheckUpdate(true))
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }

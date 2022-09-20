@@ -7,28 +7,44 @@ require (
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.1
-	github.com/getlantern/flashlight v0.0.0-20220412215028-bc2158dabc90
+	github.com/getlantern/flashlight v0.0.0-20220714140548-37d19c44a108
 	github.com/getlantern/golog v0.0.0-20211223150227-d4d95a44d873
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
-	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd
-	github.com/getlantern/protected v0.0.0-20220224141403-67d8ee971ae8
-	github.com/getlantern/replica v0.9.2
+	github.com/getlantern/replica v0.10.1-0.20220823141235-065fd4224cd3
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/mobile v0.0.0-20210831151748-9cba7bc03c0f
-	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
+	golang.org/x/net v0.0.0-20220822230855-b0a4917ee28c
 	nhooyr.io/websocket v1.8.7
 )
 
 require (
-	git.torproject.org/pluggable-transports/obfs4.git v0.0.0-20180421031126-89c21805c212 // indirect
-	github.com/agl/ed25519 v0.0.0-20170116200512-5312a6153412 // indirect
+	github.com/RoaringBitmap/roaring v1.2.1 // indirect
+	github.com/anacrolix/dht/v2 v2.18.1 // indirect
+	github.com/anacrolix/multiless v0.3.0 // indirect
+	github.com/anacrolix/stm v0.4.0 // indirect
+	github.com/anacrolix/torrent v1.46.0 // indirect
+	github.com/bits-and-blooms/bitset v1.3.0 // indirect
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
+	github.com/google/btree v1.1.2 // indirect
+	github.com/gorilla/websocket v1.5.0 // indirect
+	github.com/lispad/go-generics-tools v1.1.0 // indirect
+	github.com/miekg/dns v1.1.43 // indirect
+	github.com/pion/ice/v2 v2.2.7 // indirect
+	github.com/pion/interceptor v0.1.12 // indirect
+	github.com/pion/sdp/v3 v3.0.6 // indirect
+	github.com/pion/webrtc/v3 v3.1.43 // indirect
+	github.com/rs/dnscache v0.0.0-20211102005908-e0241e321417 // indirect
+	github.com/tidwall/btree v1.4.2 // indirect
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
-	golang.org/x/tools v0.1.8 // indirect
+	golang.org/x/crypto v0.0.0-20220817201139-bc19a97f63c8 // indirect
+	golang.org/x/exp v0.0.0-20220823124025-807a23277127 // indirect
+	golang.org/x/sync v0.0.0-20220819030929-7fc1605a5dde // indirect
+	golang.org/x/sys v0.0.0-20220818161305-2296e01440c6 // indirect
+	golang.org/x/time v0.0.0-20220722155302-e5dcc9cfc0b9 // indirect
 )
 
 replace github.com/lucas-clemente/quic-go => github.com/getlantern/quic-go v0.7.1-0.20220215050330-93bd217f5741
@@ -48,11 +64,8 @@ replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-2022
 
 //replace github.com/getlantern/lantern-server => ../lantern-server
 
-// XXX <15-10-21, soltzen> Using our own crawshaw.io/sqlite fork mainly for:
-// - https://github.com/crawshaw/sqlite/pull/112
-// - https://github.com/crawshaw/sqlite/pull/103
-// - https://github.com/getlantern/sqlite/pull/4
-replace crawshaw.io/sqlite => github.com/getlantern/sqlite v0.3.3-0.20211018070028-9eeb5042b175
+// For https://github.com/crawshaw/sqlite/pull/112 and https://github.com/crawshaw/sqlite/pull/103.
+replace crawshaw.io/sqlite => github.com/getlantern/sqlite v0.0.0-20220301112206-cb2f8bc7cb56
 
 replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93
 

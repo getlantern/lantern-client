@@ -12,17 +12,36 @@ import org.getlantern.lantern.R
 
 class ReplicaModel(
     private val activity: MainActivity,
-    flutterEngine: FlutterEngine? = null,
+    flutterEngine: FlutterEngine,
 ) : BaseModel("replica", flutterEngine, masterDB.withSchema("replica")) {
 
     companion object {
         private const val TAG = "ReplicaModel"
+        const val PATH_SEARCH_TERM = "/searchTerm"
+        const val PATH_SEARCH_TAB = "/searchTab"
+    }
+
+    init {
+        db.mutate { tx ->
+            tx.put(PATH_SEARCH_TERM, "")
+            tx.put(PATH_SEARCH_TAB, 0)
+        }
     }
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
             "downloadFile" -> downloadFile(call)
             "setSuppressUploadWarning" -> setSuppressUploadWarning(call)
+            "setSearchTerm" -> {
+                db.mutate { tx ->
+                    tx.put(PATH_SEARCH_TERM, call.argument<String>("searchTerm")!!)
+                }
+            }
+            "setSearchTab" -> {
+                db.mutate { tx ->
+                    tx.put(PATH_SEARCH_TAB, call.argument<String>("searchTab")!!)
+                }
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }

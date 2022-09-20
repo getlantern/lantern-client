@@ -13,7 +13,6 @@ import internalsdk.AdSettings
 import internalsdk.Session
 import io.lantern.android.model.BaseModel
 import io.lantern.android.model.Vpn
-import io.lantern.android.model.VpnModel
 import io.lantern.db.DB
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
@@ -40,7 +39,6 @@ abstract class SessionManager(application: Application) : Session {
     protected val context: Context
     protected val prefs: SharedPreferences
     val db: DB
-    protected val vpnModel: VpnModel
 
     // dynamic settings passed to internal services
     private val internalHeaders: SharedPreferences
@@ -316,14 +314,6 @@ abstract class SessionManager(application: Application) : Session {
     private fun saveLatestBandwidth(update: Bandwidth) {
         val amount = String.format("%s", update.percent)
         prefs.edit().putString(LATEST_BANDWIDTH, amount).apply()
-        vpnModel.saveBandwidth(
-            Vpn.Bandwidth.newBuilder()
-                .setPercent(update.percent)
-                .setRemaining(update.remaining)
-                .setAllowed(update.allowed)
-                .setTtlSeconds(update.ttlSeconds)
-                .build()
-        )
     }
 
     fun savedBandwidth(): String? {
@@ -380,13 +370,6 @@ abstract class SessionManager(application: Application) : Session {
             .putString(SERVER_CITY, city)
             .putString(SERVER_COUNTRY_CODE, countryCode)
             .putBoolean(HAS_SUCCEEDING_PROXY, hasSucceedingProxy).apply()
-        vpnModel.saveServerInfo(
-            Vpn.ServerInfo.newBuilder()
-                .setCity(city)
-                .setCountry(country)
-                .setCountryCode(countryCode)
-                .build()
-        )
     }
 
     /**
@@ -497,8 +480,6 @@ abstract class SessionManager(application: Application) : Session {
         appVersion = Utils.appVersion(application)
         Logger.debug(TAG, "Utils.appVersion finished at ${System.currentTimeMillis() - start}")
         context = application
-        vpnModel = VpnModel()
-        Logger.debug(TAG, "VpnModel() finished at ${System.currentTimeMillis() - start}")
         db = BaseModel.masterDB.withSchema(PREFERENCES_SCHEMA)
         db.registerType(2000, Vpn.Device::class.java)
         db.registerType(2001, Vpn.Devices::class.java)

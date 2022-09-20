@@ -2,7 +2,7 @@ import 'package:lantern/common/common.dart';
 
 void showSnackbar({
   required BuildContext context,
-  required String content,
+  required dynamic content,
   Duration duration = defaultAnimationDuration,
   SnackBarAction? action,
 }) {
@@ -11,11 +11,13 @@ void showSnackbar({
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
-          child: CText(
-            content,
-            style: tsBody1Color(white),
-            textAlign: TextAlign.start,
-          ),
+          child: content is String
+              ? CText(
+                  content,
+                  style: tsBody1Color(white),
+                  textAlign: TextAlign.start,
+                )
+              : content,
         ),
       ],
     ),

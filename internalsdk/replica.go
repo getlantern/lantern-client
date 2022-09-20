@@ -149,7 +149,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	input.GlobalConfig = func() replicaServer.ReplicaOptions {
 		return optsFunc()
 	}
-	input.ProxiedRoundTripper = proxied.ParallelForIdempotent()
+	input.HttpClient.Transport = proxied.ParallelForIdempotent()
 	input.ProcessCORSHeaders = common.ProcessCORS
 	input.InstrumentResponseWriter = func(w http.ResponseWriter,
 		label string) replicaServer.InstrumentedResponseWriter {

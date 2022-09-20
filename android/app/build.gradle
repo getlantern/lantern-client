@@ -216,6 +216,16 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        play {
+            initWith release
+            buildConfigField "boolean", "PLAY_VERSION", "true"
+        }
+
+        sideload {
+            initWith release
+            buildConfigField "boolean", "PLAY_VERSION", "false"
+        }
     }
 
     sourceSets {
