@@ -24,6 +24,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
   late String infoDescription = widget.item.metaDescription;
   late String infoCreationDate = '';
   late bool infoError = false;
+  late bool textCopied = false;
 
   @override
   void initState() {
@@ -159,6 +160,27 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                         child: CText(
                           removeExtension(infoTitle),
                           style: tsHeading3,
+                        ),
+                      ),
+                      CInkWell(
+                        onTap: () async {
+                          copyText(
+                            context,
+                            removeExtension(infoTitle),
+                          );
+                          setState(() => textCopied = true);
+                          await Future.delayed(
+                            defaultAnimationDuration,
+                            () => setState(
+                              () => textCopied = false,
+                            ),
+                          );
+                        },
+                        child: CAssetImage(
+                          size: 20,
+                          path: textCopied
+                              ? ImagePaths.check_green
+                              : ImagePaths.content_copy,
                         ),
                       ),
                       IconButton(
