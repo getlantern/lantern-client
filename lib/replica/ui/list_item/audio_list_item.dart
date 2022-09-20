@@ -15,6 +15,7 @@ class ReplicaAudioListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasDescription = item.metaDescription != '';
     return ListItemFactory.replicaItem(
       link: item.replicaLink,
       api: replicaApi,
@@ -23,18 +24,31 @@ class ReplicaAudioListItem extends StatelessWidget {
       content: SizedBox(
         height: 60,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: hasDescription ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 renderAudioFilename(),
-                renderDuration(),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 8.0),
+                  child: renderDuration(),
+                ),
               ],
             ),
-            renderMimeType(),
+            if (hasDescription) Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                renderDescription(),
+                // Padding(
+                //   padding: const EdgeInsetsDirectional.only(start: 8.0),
+                //   child: renderMimeType(), // Figma has no mimeType, but maybe useful to end user?
+                // ),
+              ],
+            ),
           ],
         ),
       ),
@@ -53,40 +67,35 @@ class ReplicaAudioListItem extends StatelessWidget {
   }
 
   Widget renderDuration() {
-    return Row(
-      children: [
-        ValueListenableBuilder(
-          valueListenable: replicaApi.getDuration(item.replicaLink),
-          builder: (
-            BuildContext context,
-            CachedValue<double?> cached,
-            Widget? child,
+    return ValueListenableBuilder(
+      valueListenable: replicaApi.getDuration(item.replicaLink),
+      builder: (
+          BuildContext context,
+          CachedValue<double?> cached,
+          Widget? child,
           ) =>
-              CText(
+          CText(
             cached.value != null ? cached.value!.toMinutesAndSeconds() : '',
-            style: tsBody1.copiedWith(color: grey5),
+            style: tsBody1,
           ),
-        ),
-      ],
     );
   }
 
   // If mimetype is nil, just render 'audio/unknown'
-  Widget renderMimeType() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        if (item.primaryMimeType != null)
-          CText(
-            item.primaryMimeType!,
-            style: tsBody1.copiedWith(color: grey5),
-          )
-        else
-          CText(
-            'audio_unknown'.i18n,
-            style: tsBody1.copiedWith(color: grey5),
-          ),
-      ],
+  Widget renderMimeType() => CText(
+    item.primaryMimeType != null ? item.primaryMimeType! : 'audio_unknown'.i18n,
+    style: tsBody2Short.copiedWith(color: grey5),
+  );
+
+  Widget renderDescription() {
+    return Expanded(
+      child:
+        CText(
+          item.metaDescription,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: tsBody2Short,
+        ),
     );
   }
 }
