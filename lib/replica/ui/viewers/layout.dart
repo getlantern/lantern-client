@@ -77,9 +77,6 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
       showAppBar: true,
       padHorizontal: true,
       title: Container(
-        padding: const EdgeInsetsDirectional.only(
-          bottom: 6.0,
-        ),
         alignment: Alignment.centerLeft,
         child: ready()
             ? (widget.item.primaryMimeType != null)
@@ -87,27 +84,27 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                     'replica_layout_filetype'
                         .i18n
                         .fill([widget.item.primaryMimeType!]),
-                    style: tsSubtitle1.copiedWith(color: grey5),
+                    style: tsSubtitle1.copiedWith(color: grey5, lineHeight: 16), // line-height for center align
                   )
                 : CText(
                     widget.category.toShortString(),
-                    style: tsSubtitle1,
+                    style: tsSubtitle1.copiedWith(color: grey5, lineHeight: 16),
                   )
             : CText(
                 'Unknown'.i18n,
-                style: tsSubtitle1,
+                style: tsSubtitle1.copiedWith(color: grey5, lineHeight: 16),
               ),
       ),
       actions: [
         if (ready())
           Container(
-            alignment: Alignment.center,
+            alignment: Alignment.centerRight,
             padding: const EdgeInsetsDirectional.only(
               end: 12.0,
             ),
             child: CText(
               widget.item.humanizedFileSize,
-              style: tsButton,
+              style: tsButton.copiedWith(lineHeight: 16), // line-height for center align matching title
             ),
           ),
       ],
@@ -205,7 +202,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
               ),
             ),
             Divider(
-              color: black,
+              color: grey5,
             ),
             // * Description
             Container(
