@@ -8,6 +8,7 @@ class ReplicaUploadTitle extends StatefulWidget {
   final File fileToUpload;
   final String? fileTitle;
   final String? fileDescription;
+  var disabled = false;
 
   ReplicaUploadTitle({
     Key? key,
@@ -87,10 +88,14 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
         bottom: 12.0,
         end: 12.0,
       ),
+      onChanged: (text) async {
+        setState(() => widget.disabled = text == '');
+      },
     );
   }
 
   Widget renderButtons() {
+    debugPrint(textEditingController.text);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -98,6 +103,7 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
           width: 150,
           text: 'skip'.i18n,
           secondary: true,
+          disabled: widget.disabled,
           onPressed: () async => await context.pushRoute(
             ReplicaUploadReview(
               fileToUpload: widget.fileToUpload,
@@ -109,6 +115,7 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
         Button(
           width: 150,
           text: 'add_description'.i18n,
+          disabled: widget.disabled,
           onPressed: () async => await context.pushRoute(
             ReplicaUploadDescription(
               fileToUpload: widget.fileToUpload,
