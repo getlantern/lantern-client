@@ -90,11 +90,13 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
             ),
           ),
           if (isPDF)
-            Transform.translate(
-              offset: const Offset(0, -10),
-              child: InfoTextBox(
-                text: 'read_details'.i18n.toUpperCase(),
-                invertColors: true,
+            IgnorePointer( // pass gesture to mime icon
+              child: Transform.translate(
+                offset: const Offset(0, -10),
+                child: InfoTextBox(
+                  text: 'read_details'.i18n.toUpperCase(),
+                  invertColors: true,
+                ),
               ),
             ),
         ],

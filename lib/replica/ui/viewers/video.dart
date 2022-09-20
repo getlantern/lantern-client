@@ -61,6 +61,12 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
   bool ready() => controller != null;
 
   @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget body(BuildContext context) {
     return Flexible(
       flex: 1,
