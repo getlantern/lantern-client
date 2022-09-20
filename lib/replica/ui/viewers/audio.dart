@@ -148,14 +148,21 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 200,
-            height: 184, // fix overflow
-            child: renderAnimatedMimeIcon(
-              widget.item.fileNameTitle,
-              widget.item.replicaLink,
-              _animation.value,
+        children: [
+          Expanded(
+            child: OverflowBox(
+              maxWidth: MediaQuery.of(context).size.width,
+              maxHeight: 208,
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 208,
+                child: renderAnimatedMimeIcon(
+                  widget.item.fileNameTitle,
+                  widget.item.replicaLink,
+                  _animation.value,
+                ),
+              ),
             ),
           ),
           renderWaveform(),

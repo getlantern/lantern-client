@@ -110,8 +110,8 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
       ],
       body: Padding(
         padding: const EdgeInsetsDirectional.only(
-          start: 12.0,
-          end: 12.0,
+          start: 4.0,
+          end: 4.0,
           top: 24.0,
         ),
         child: ready() & !infoError
