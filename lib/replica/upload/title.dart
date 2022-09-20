@@ -81,6 +81,7 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
       label: 'edit_title'.i18n,
       textInputAction: TextInputAction.done,
       maxLength: 100,
+      textCapitalization: TextCapitalization.sentences,
       contentPadding: const EdgeInsetsDirectional.only(
         top: 12.0,
         bottom: 12.0,
