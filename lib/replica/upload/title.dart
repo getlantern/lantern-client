@@ -58,7 +58,7 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
 
   Widget renderEditingNotice() {
     return Container(
-      color: grey1,
+      color: grey2,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsetsDirectional.all(10.0),
       margin: const EdgeInsetsDirectional.only(
