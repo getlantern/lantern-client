@@ -1,6 +1,6 @@
 import 'package:lantern/common/common.dart';
 
-final chinaPlanDetails = [
+final platinumPlanDetails = [
   [
     'Unlimited data'.i18n,
     'No logs'.i18n,

@@ -1,5 +1,7 @@
 import 'package:lantern/messaging/messaging.dart';
 
+/// Extends FullScreenViewer to display an image w/ metadata on a black backdrop
+/// Used in Chat
 class FullScreenImageViewer extends FullScreenViewer {
   final Future<Uint8List> loadImageFile;
   @override

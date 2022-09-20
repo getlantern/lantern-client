@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 
+// transform the String cached in db to a workable format
 List<Map<String, dynamic>> formatCachedPlans(String cachedPlans) {
-  // transform the String cached in db to a workable format
   // ignore: omit_local_variable_types
   List<Map<String, dynamic>> plans = [];
 
@@ -16,6 +16,8 @@ List<Map<String, dynamic>> formatCachedPlans(String cachedPlans) {
   return plans;
 }
 
+// throws a code expection when fetching or parsing plans has timed out
+// used across all Plans flow
 void onAPIcallTimeout({code, message}) {
   throw PlatformException(
     code: code,

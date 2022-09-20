@@ -126,7 +126,7 @@ class PlanCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ...chinaPlanDetails[isBestValue ? 1 : 0].map(
+                            ...platinumPlanDetails[isBestValue ? 1 : 0].map(
                               (d) => Row(
                                 children: [
                                   Padding(
@@ -135,7 +135,7 @@ class PlanCard extends StatelessWidget {
                                     ),
                                     child: CAssetImage(
                                       path: isBestValue
-                                          ? d == chinaPlanDetails[1].first
+                                          ? d == platinumPlanDetails[1].first
                                               ? ImagePaths.check_black
                                               : ImagePaths.add
                                           : ImagePaths.check_black,
