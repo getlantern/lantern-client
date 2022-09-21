@@ -296,7 +296,9 @@ Widget renderAnimatedMimeIcon(
         children: [
           Container(
             decoration: getReplicaHashAnimatedBgDecoration(
-                replicaLink.infohash, animatedValue),
+              replicaLink.infohash,
+              animatedValue,
+            ),
           ),
           Padding(
             padding: const EdgeInsetsDirectional.all(8.0),
