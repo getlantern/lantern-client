@@ -169,7 +169,11 @@ class ReplicaApi {
   }
 
   Future<void> fetch(ReplicaLink link, String localFilePath) async {
-    final resp = await dio.download(getViewAddr(link), localFilePath);
+    final resp = await dio.download(
+      getViewAddr(link),
+      localFilePath,
+      deleteOnError: true,
+    );
     if (resp.statusCode != 200) {
       logger.e(
         'Failed to fetch: ${resp.statusCode} -> ${resp.data.toString()}',
