@@ -158,11 +158,15 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
             children: [
               Expanded(
                 child: CText(
-                  widget.fileDescription ?? 'no_description'.i18n,
-                  style: widget.fileDescription != null
+                  widget.fileDescription != null &&
+                          widget.fileDescription!.isNotEmpty
+                      ? widget.fileDescription!
+                      : 'add_description'.i18n.toUpperCase(),
+                  style: widget.fileDescription != null &&
+                          widget.fileDescription!.isNotEmpty
                       ? tsBody2
                       : tsBody2.copiedWith(
-                          fontStyle: FontStyle.italic,
+                          color: grey5,
                         ),
                   maxLines: 4,
                 ),
@@ -236,7 +240,7 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
                       ),
                       checkColor: Colors.white,
                       fillColor: MaterialStateProperty.resolveWith(
-                            (states) => getCheckboxFillColor(black, states),
+                        (states) => getCheckboxFillColor(black, states),
                       ),
                       value: checkboxChecked,
                       onChanged: (bool? value) {
