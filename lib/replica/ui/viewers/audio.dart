@@ -3,6 +3,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
+import 'dart:ui';
 
 class ReplicaAudioViewer extends ReplicaViewerLayout {
   ReplicaAudioViewer({
@@ -37,8 +38,8 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(
-        milliseconds: 8000,
+      duration: Duration(
+        milliseconds: 40 * (window.physicalSize / window.devicePixelRatio).width.toInt(),
       ),
       lowerBound: -2,
       upperBound: 2,
