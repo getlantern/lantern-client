@@ -3,7 +3,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
-import 'dart:ui';
 
 class ReplicaAudioViewer extends ReplicaViewerLayout {
   ReplicaAudioViewer({
@@ -38,8 +37,8 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
   @override
   void initState() {
     _controller = AnimationController(
-      duration: Duration(
-        milliseconds: 40 * (window.physicalSize / window.devicePixelRatio).width.toInt(),
+      duration: const Duration(
+        milliseconds: 8000,
       ),
       lowerBound: -2,
       upperBound: 2,
@@ -150,20 +149,13 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            child: OverflowBox(
-              maxWidth: MediaQuery.of(context).size.width,
-              maxHeight: 208,
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 208,
-                child: renderAnimatedMimeIcon(
-                  widget.item.fileNameTitle,
-                  widget.item.replicaLink,
-                  _animation.value,
-                ),
-              ),
+          Container(
+            width: 184,
+            height: 184,
+            child: renderAnimatedMimeIcon(
+              widget.item.fileNameTitle,
+              widget.item.replicaLink,
+              _animation.value,
             ),
           ),
           renderWaveform(),
