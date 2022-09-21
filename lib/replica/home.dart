@@ -35,16 +35,6 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         );
   }
 
-  void resetState (bool _showResults) async {
-    await replicaModel.setSearchTerm('');
-    await replicaModel.setSearchTab(0);
-    setState(() {
-      currentTab = 0;
-      currentQuery = '';
-      showResults = _showResults;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // We are showing the ReplicaSearchScreen here since we want the bottom tabs to be visible (they are not if it's its own route)
@@ -54,7 +44,6 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
       return ReplicaSearchScreen(
         currentQuery: currentQuery,
         currentTab: currentTab,
-        resetState: resetState,
       );
     }
 
@@ -85,7 +74,10 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
                     });
                   }
                 },
-                onClear: () async => resetState(false),
+                onClear: () async {
+                  await replicaModel.setSearchTerm('');
+                  await replicaModel.setSearchTab(0);
+                },
               ),
             ),
             renderDiscoverPopup()

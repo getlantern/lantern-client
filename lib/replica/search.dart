@@ -10,12 +10,10 @@ class ReplicaSearchScreen extends StatefulWidget {
     Key? key,
     required this.currentQuery,
     required this.currentTab,
-    required this.resetState,
   });
 
   final String currentQuery;
   final int currentTab;
-  final Function resetState;
 
   @override
   _ReplicaSearchScreenState createState() => _ReplicaSearchScreenState();
@@ -30,7 +28,6 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
   late final CustomTextEditingController textEditingController;
   late String searchQuery = widget.currentQuery;
   late int searchTab = widget.currentTab;
-  late Function resetState = widget.resetState;
 
   @override
   void initState() {
@@ -47,11 +44,9 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
       title: GestureDetector(
         child: CText(
           'discover'.i18n,
-          style: tsHeading3
-              .copiedWith(color: black)
-              .short,
+          style: tsHeading3.copiedWith(color: black).short,
         ),
-        onTap: () async => await resetState(false), // TODO @kalli why is the screen blank when it resets? see https://github.com/getlantern/android-lantern/pull/778#issuecomment-1252498708
+        onTap: () {},
       ),
       actions: [
         IconButton(
@@ -83,7 +78,10 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                   });
                 }
               },
-              onClear: () async => resetState(true),
+              onClear: () async {
+                await replicaModel.setSearchTerm('');
+                await replicaModel.setSearchTab(0);
+              },
             ),
             const SizedBox(
               height: 10,

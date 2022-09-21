@@ -95,7 +95,6 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
   }
 
   Widget renderButtons() {
-    debugPrint(textEditingController.text);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
