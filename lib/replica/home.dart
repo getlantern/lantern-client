@@ -29,10 +29,14 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         });
       }
     });
+    doGetCachedTab();
+  }
 
-    replicaModel.getSearchTab().then(
-          (int cachedSearchTab) => setState(() => currentTab = cachedSearchTab),
-        );
+  void doGetCachedTab() async {
+    final cachedTab = await replicaModel.getSearchTab();
+    setState(() {
+      currentTab = int.parse(cachedTab);
+    });
   }
 
   @override
