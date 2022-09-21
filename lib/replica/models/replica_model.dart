@@ -63,12 +63,12 @@ class ReplicaModel extends Model {
   Future<String> getSearchTerm() async {
     return methodChannel
         .invokeMethod('get', '/searchTerm')
-        .then((value) => value ?? '');
+        .then((value) => value as String);
   }
 
-  Future<int> getSearchTab() async {
+  Future<String> getSearchTab() async {
     return methodChannel
         .invokeMethod('get', '/searchTab')
-        .then((value) => value.parseInt() ?? 0);
+        .then((value) => value as String);
   }
 }
