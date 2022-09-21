@@ -289,8 +289,7 @@ Widget renderAnimatedMimeIcon(
     height: 60,
     width: 60,
     child: ClipRRect(
-      // borderRadius: defaultBorderRadius,
-      borderRadius: BorderRadius.circular(0),
+      borderRadius: defaultBorderRadius,
       child: Stack(
         alignment: Alignment.center,
         children: [
