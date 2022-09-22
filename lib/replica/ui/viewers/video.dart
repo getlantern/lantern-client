@@ -85,6 +85,7 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
                 if (!videoResult.isInitialized) {
                   return Container(
                     alignment: Alignment.center,
+                    height: 200,
                     child: const CircularProgressIndicator(),
                   );
                 }

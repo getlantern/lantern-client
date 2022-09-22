@@ -140,7 +140,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
 
   Widget renderText() {
     return Flexible(
-      flex: 2,
+      flex: 1,
       child: Column(
         children: [
           // * Title
