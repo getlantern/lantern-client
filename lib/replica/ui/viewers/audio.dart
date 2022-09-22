@@ -144,14 +144,14 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
   @override
   Widget body(BuildContext context) {
     return Flexible(
-      flex: 1,
+      flex: 0,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 184,
-            height: 184,
+            width: 150,
+            height: 150,
             child: renderAnimatedMimeIcon(
               widget.item.fileNameTitle,
               widget.item.replicaLink,
