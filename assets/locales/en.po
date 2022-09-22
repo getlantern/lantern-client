@@ -1061,7 +1061,7 @@ msgid "empty_description"
 msgstr "No description was provided."
 
 msgid "publish"
-msgstr "Publish"
+msgstr "Yes, Publish"
 
 msgid "important"
 msgstr "Important!"

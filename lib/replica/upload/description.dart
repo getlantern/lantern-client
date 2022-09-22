@@ -111,7 +111,7 @@ class ReplicaUploadDescriptionState extends State<ReplicaUploadDescription> {
   Widget renderButtons() {
     return Button(
       width: 200,
-      text: 'done'.i18n,
+      text: 'next'.i18n,
       onPressed: () async => await context.pushRoute(
         ReplicaUploadReview(
           fileToUpload: widget.fileToUpload,
