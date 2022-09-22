@@ -25,6 +25,7 @@ Color grey4 = HexColor('#BFBFBF');
 Color grey5 = HexColor('#707070');
 Color scrimGrey = HexColor('#C4C4C4');
 Color black = HexColor('#000000');
+Color videoControlsGrey = black.withOpacity(0.1);
 
 // Avatars
 Color getAvatarColor(double hue, {bool inverted = false}) {
@@ -70,10 +71,11 @@ BoxDecoration getReplicaExtensionBgDecoration(String extension) {
   );
 }
 
-BoxDecoration getReplicaHashAnimatedBgDecoration(String hash, double animatedValue) {
+BoxDecoration getReplicaHashAnimatedBgDecoration(
+    String hash, double animatedValue) {
   return BoxDecoration(
     gradient: LinearGradient(
-      begin: Alignment(-1 + animatedValue,-1),
+      begin: Alignment(-1 + animatedValue, -1),
       end: Alignment(animatedValue, 0),
       colors: stringToGradientColors(hash),
       tileMode: TileMode.mirror,
@@ -91,7 +93,6 @@ BoxDecoration getReplicaHashBgDecoration(String hash) {
     ),
   );
 }
-
 
 final maxSha1Hash = BigInt.from(2).pow(160);
 final numHues = BigInt.from(360);
