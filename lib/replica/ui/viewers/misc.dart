@@ -165,6 +165,8 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
+      padHorizontal: false,
+      padVertical: true,
       title: widget.item.fileNameTitle,
       actionButton: (errorMessage.isEmpty)
           ? FutureBuilder<PDFViewController>(
