@@ -9,7 +9,9 @@ extension HumanizeDuration on double {
     return this >= 3600
         ? duration.toString().substring(0, 7).padLeft(8, '0')
         : this >= 60
-            ? duration.toString().substring(2, 7)
+            ? duration.inMinutes >= 10
+                ? duration.toString().substring(2, 7)
+                : duration.toString().substring(3, 7)
             : duration.toString().substring(4, 7).padLeft(5, '0');
   }
 }
