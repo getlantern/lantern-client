@@ -82,12 +82,6 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
                 VideoPlayerValue videoResult,
                 Widget? child,
               ) {
-                // if (!videoResult.isInitialized) {
-                //   return Container(
-                //     alignment: Alignment.center,
-                //     child: const CircularProgressIndicator(),
-                //   );
-                // }
                 return Stack(
                   alignment: Alignment.bottomCenter,
                   children: <Widget>[
