@@ -84,7 +84,9 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                     'replica_layout_filetype'
                         .i18n
                         .fill([widget.item.primaryMimeType!]),
-                    style: tsSubtitle1.copiedWith(color: grey5, lineHeight: 16), // line-height for center align
+                    style: tsSubtitle1.copiedWith(
+                        color: grey5,
+                        lineHeight: 16), // line-height for center align
                   )
                 : CText(
                     widget.category.toShortString(),
@@ -104,7 +106,9 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
             ),
             child: CText(
               widget.item.humanizedFileSize,
-              style: tsButton.copiedWith(lineHeight: 16), // line-height for center align matching title
+              style: tsButton.copiedWith(
+                  lineHeight:
+                      16), // line-height for center align matching title
             ),
           ),
       ],
@@ -136,93 +140,98 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
 
   Widget renderText() {
     return Flexible(
-      flex: 1,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // * Title
-            Container(
-              padding: const EdgeInsetsDirectional.only(
-                top: 12.0,
-                bottom: 12.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
+      flex: 2,
+      child: Column(
+        children: [
+          // * Title
+          Container(
+            padding: const EdgeInsetsDirectional.only(
+              top: 12.0,
+              bottom: 12.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 8.0),
                         child: CText(
                           removeExtension(infoTitle),
                           style: tsHeading3,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      CInkWell(
-                        onTap: () async {
-                          copyText(
-                            context,
-                            removeExtension(infoTitle),
-                          );
-                          setState(() => textCopied = true);
-                          await Future.delayed(
-                            defaultAnimationDuration,
-                            () => setState(
-                              () => textCopied = false,
-                            ),
-                          );
-                        },
-                        child: CAssetImage(
-                          size: 20,
-                          path: textCopied
-                              ? ImagePaths.check_green
-                              : ImagePaths.content_copy,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => handleDownload(
+                    ),
+                    CInkWell(
+                      onTap: () async {
+                        copyText(
                           context,
-                          widget.item,
-                          widget.replicaApi,
-                        ),
-                        icon: const CAssetImage(
-                          size: 24,
-                          path: ImagePaths.file_download,
-                        ),
+                          removeExtension(infoTitle),
+                        );
+                        setState(() => textCopied = true);
+                        await Future.delayed(
+                          defaultAnimationDuration,
+                          () => setState(
+                            () => textCopied = false,
+                          ),
+                        );
+                      },
+                      child: CAssetImage(
+                        size: 20,
+                        path: textCopied
+                            ? ImagePaths.check_green
+                            : ImagePaths.content_copy,
                       ),
-                    ],
-                  ),
-                  CText(
-                    humanizeCreationDate(context, infoCreationDate)
-                        .toUpperCase(),
-                    style: tsBody1Short.copiedWith(color: grey5),
-                  )
-                ],
+                    ),
+                    IconButton(
+                      onPressed: () => handleDownload(
+                        context,
+                        widget.item,
+                        widget.replicaApi,
+                      ),
+                      icon: const CAssetImage(
+                        size: 24,
+                        path: ImagePaths.file_download,
+                      ),
+                    ),
+                  ],
+                ),
+                CText(
+                  humanizeCreationDate(context, infoCreationDate).toUpperCase(),
+                  style: tsBody1Short.copiedWith(color: grey5),
+                )
+              ],
+            ),
+          ),
+          Divider(
+            color: grey5,
+          ),
+          // * Description
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsetsDirectional.only(
+                  bottom: 24.0,
+                ),
+                child: CText(
+                  infoDescription,
+                  style: infoDescription.isEmpty
+                      ? tsSubtitle1.copiedWith(
+                          fontStyle: FontStyle.italic,
+                          color: grey4,
+                        )
+                      : tsSubtitle1,
+                ),
               ),
             ),
-            Divider(
-              color: grey5,
-            ),
-            // * Description
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsetsDirectional.only(
-                top: 24.0,
-                bottom: 64.0,
-              ),
-              child: CText(
-                infoDescription,
-                style: infoDescription.isEmpty
-                    ? tsSubtitle1.copiedWith(
-                        fontStyle: FontStyle.italic,
-                        color: grey4,
-                      )
-                    : tsSubtitle1,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
