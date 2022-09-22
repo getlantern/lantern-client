@@ -110,54 +110,59 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
                     VideoProgressIndicator(
                       controller!,
                       allowScrubbing: true,
-                      padding: const EdgeInsets.only(bottom: 36.0),
+                      padding: const EdgeInsets.only(bottom: 32.0),
                     ),
                   ],
                 );
               },
             ),
-            // * Play and full screen butons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 8.0,
-                    bottom: 2.0,
-                  ),
-                  child: RoundButton(
-                    diameter: 24,
-                    padding: 0,
-                    backgroundColor: transparent,
-                    icon: CAssetImage(
-                      size: 24,
-                      color: white,
-                      path: playing ? ImagePaths.pause : ImagePaths.play,
+            // * Play and full screen buttons
+            Container(
+              color: videoControlsGrey,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Play
+                  Container(
+                    margin: const EdgeInsetsDirectional.only(
+                      start: 8.0,
+                      bottom: 2.0,
                     ),
-                    onPressed: () => handleVideoTap(),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    end: 8.0,
-                    bottom: 2.0,
-                  ),
-                  child: RoundButton(
-                    diameter: 30,
-                    padding: 0,
-                    backgroundColor: transparent,
-                    icon: CAssetImage(
-                      size: 30,
-                      color: white,
-                      path: ImagePaths.fullscreen_icon,
+                    child: RoundButton(
+                      diameter: 24,
+                      padding: 0,
+                      backgroundColor: transparent,
+                      icon: CAssetImage(
+                        size: 24,
+                        color: white,
+                        path: playing ? ImagePaths.pause : ImagePaths.play,
+                      ),
+                      onPressed: () => handleVideoTap(),
                     ),
-                    onPressed: () {
-                      handleVideoTap();
-                      launchFullScreen(context);
-                    },
                   ),
-                ),
-              ],
+                  // Maximize
+                  Container(
+                    margin: const EdgeInsetsDirectional.only(
+                      end: 8.0,
+                      bottom: 2.0,
+                    ),
+                    child: RoundButton(
+                      diameter: 30,
+                      padding: 0,
+                      backgroundColor: transparent,
+                      icon: CAssetImage(
+                        size: 30,
+                        color: white,
+                        path: ImagePaths.fullscreen_icon,
+                      ),
+                      onPressed: () {
+                        handleVideoTap();
+                        launchFullScreen(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             )
           ],
         ),
