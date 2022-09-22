@@ -85,8 +85,9 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                         .i18n
                         .fill([widget.item.primaryMimeType!]),
                     style: tsSubtitle1.copiedWith(
-                        color: grey5,
-                        lineHeight: 16), // line-height for center align
+                      color: grey5,
+                      lineHeight: 16,
+                    ), // line-height for center align
                   )
                 : CText(
                     widget.category.toShortString(),
@@ -107,8 +108,8 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
             child: CText(
               widget.item.humanizedFileSize,
               style: tsButton.copiedWith(
-                  lineHeight:
-                      16), // line-height for center align matching title
+                lineHeight: 16,
+              ), // line-height for center align matching title
             ),
           ),
       ],
@@ -140,7 +141,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
 
   Widget renderText() {
     return Flexible(
-      flex: 1,
+      flex: 2,
       child: Column(
         children: [
           // * Title
