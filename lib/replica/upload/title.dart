@@ -96,24 +96,23 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
 
   Widget renderButtons() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // Button(
+        //   width: 150,
+        //   text: 'skip'.i18n,
+        //   secondary: true,
+        //   disabled: disabled,
+        //   onPressed: () async => await context.pushRoute(
+        //     ReplicaUploadReview(
+        //       fileToUpload: widget.fileToUpload,
+        //       fileTitle: textEditingController.text,
+        //       fileDescription: widget.fileDescription,
+        //     ),
+        //   ),
+        // ),
         Button(
-          width: 150,
-          text: 'skip'.i18n,
-          secondary: true,
-          disabled: disabled,
-          onPressed: () async => await context.pushRoute(
-            ReplicaUploadReview(
-              fileToUpload: widget.fileToUpload,
-              fileTitle: textEditingController.text,
-              fileDescription: widget.fileDescription,
-            ),
-          ),
-        ),
-        Button(
-          width: 150,
-          text: 'add_description'.i18n,
+          text: 'next'.i18n,
           disabled: disabled,
           onPressed: () async => await context.pushRoute(
             ReplicaUploadDescription(

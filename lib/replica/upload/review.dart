@@ -268,14 +268,14 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Button(
-            width: 150,
+            width: MediaQuery.of(context).size.width * 0.4,
             text: 'cancel'.i18n,
             onPressed: () async => context.router.popUntilRoot(),
             secondary: true,
           ),
           Button(
+            width: MediaQuery.of(context).size.width * 0.4,
             disabled: !checkboxChecked,
-            width: 150,
             text: 'publish'.i18n,
             onPressed: () async => await handleUploadConfirm(
               context: context,
