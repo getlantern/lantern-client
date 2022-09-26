@@ -41,7 +41,7 @@ dependencies:
 
   qr_flutter: ^4.0.0
 
-  qr_code_scanner: ^0.5.2
+  # qr_code_scanner: ^0.5.2
 
   loader_overlay: ^2.0.0
 
@@ -98,12 +98,12 @@ dependencies:
 
   file_picker: ^4.0.2
 
-#  flutter_webrtc: ^0.7.1
+  flutter_webrtc: ^0.9.7
 # Use our own fork of flutter_webrtc with more optimized audio quality settings
-  flutter_webrtc:
-    git:
-      url: https://github.com/getlantern/flutter-webrtc.git
-      ref: 1bf2cd40af6e8b0c6180c937659051eb157c0a4e
+  # flutter_webrtc:
+  #   git:
+  #     url: https://github.com/getlantern/flutter-webrtc.git
+  #     ref: 1bf2cd40af6e8b0c6180c937659051eb157c0a4e
 
   markdown: ^4.0.1
 
@@ -119,7 +119,7 @@ dependencies:
 
   dio: ^4.0.4
 
-  path_provider: ^2.0.8
+  path_provider: ^2.0.11
 
   permission_handler: ^8.3.0
 
@@ -129,7 +129,7 @@ dependencies:
 
   infinite_scroll_pagination: ^3.1.0
 
-  share_plus: ^3.0.4
+  share_plus: ^4.4.0
 
   package_info_plus: ^1.3.0
 

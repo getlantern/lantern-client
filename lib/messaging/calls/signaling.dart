@@ -405,7 +405,7 @@ class Signaling {
               candidateString.replaceFirst(hostAndPort, relayAddr);
           await _send(peerId, 'candidate', {
             'candidate': {
-              'sdpMLineIndex': candidate.sdpMlineIndex,
+              'sdpMLineIndex': candidate.sdpMLineIndex,
               'sdpMid': candidate.sdpMid,
               'candidate': candidateString,
             },
@@ -441,7 +441,7 @@ class Signaling {
           candidate.candidate!
               .replaceFirst(relayAddr, localRelayAddr.replaceFirst(':', ' ')),
           candidate.sdpMid,
-          candidate.sdpMlineIndex,
+          candidate.sdpMLineIndex,
         );
         await session.pc!.addCandidate(localCandidate);
       }

@@ -1,5 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+// TODO: remove
+// import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import 'qr_scanner_border_painter.dart';
@@ -22,9 +23,9 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
 
   // bool usingId = false;
   final _qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? qrController;
+  // QRViewController? qrController;
   bool scanning = false;
-  StreamSubscription<Barcode>? subscription;
+  // StreamSubscription<Barcode>? subscription;
   bool proceedWithoutProvisionals = false;
   ValueNotifier<Contact?>? contactNotifier;
   void Function()? listener;
@@ -40,7 +41,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      qrController?.pauseCamera();
+      // qrController?.pauseCamera();
       setState(() {
         scanning = false;
       });
@@ -113,32 +114,32 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller, MessagingModel model) {
-    qrController = controller;
-    qrController?.pauseCamera();
-    setState(() {
-      scanning = true;
-    });
-    subscription = qrController?.scannedDataStream.listen((scanData) async {
-      try {
-        await addOnce(() {
-          return _addProvisionalContact(model, scanData.code, 'qr');
-        });
-      } catch (e, s) {
-        setState(() {
-          scanning = false;
-        });
-        CDialog.showError(
-          context,
-          error: e,
-          stackTrace: s,
-          description: 'qr_error_description'.i18n,
-        );
-      } finally {
-        await qrController?.pauseCamera();
-      }
-    });
-  }
+  // void _onQRViewCreated(QRViewController controller, MessagingModel model) {
+  //   qrController = controller;
+  //   qrController?.pauseCamera();
+  //   setState(() {
+  //     scanning = true;
+  //   });
+  //   subscription = qrController?.scannedDataStream.listen((scanData) async {
+  //     try {
+  //       await addOnce(() {
+  //         return _addProvisionalContact(model, scanData.code, 'qr');
+  //       });
+  //     } catch (e, s) {
+  //       setState(() {
+  //         scanning = false;
+  //       });
+  //       CDialog.showError(
+  //         context,
+  //         error: e,
+  //         stackTrace: s,
+  //         description: 'qr_error_description'.i18n,
+  //       );
+  //     } finally {
+  //       await qrController?.pauseCamera();
+  //     }
+  //   });
+  // }
 
   @override
   void initState() {
@@ -149,8 +150,8 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    subscription?.cancel();
-    qrController?.dispose();
+    // subscription?.cancel();
+    // qrController?.dispose();
     countdownController.dispose();
     if (listener != null) {
       contactNotifier?.removeListener(listener!);
@@ -287,14 +288,16 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                                           : 1,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
-                                    child: QRView(
-                                      key: _qrKey,
-                                      onQRViewCreated: (controller) =>
-                                          _onQRViewCreated(
-                                        controller,
-                                        messagingModel,
-                                      ),
-                                    ),
+                                    // child: QRView(
+                                    //   key: _qrKey,
+                                    //   onQRViewCreated: (controller) =>
+                                    //       _onQRViewCreated(
+                                    //     controller,
+                                    //     messagingModel,
+                                    //   ),
+                                    // ),
+                                    // TODO: temporary until we figure out QR scanning
+                                    child: Container(color: yellow4),
                                   ),
                                 ),
                               ),
