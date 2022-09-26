@@ -220,14 +220,22 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 padding: const EdgeInsetsDirectional.only(
                   bottom: 24.0,
                 ),
-                child: CText(
-                  infoDescription,
-                  style: infoDescription.isEmpty
-                      ? tsSubtitle1.copiedWith(
-                          fontStyle: FontStyle.italic,
-                          color: grey4,
-                        )
-                      : tsSubtitle1,
+                child: GestureDetector(
+                  onTap: () async {
+                    copyText(
+                      context,
+                      infoDescription,
+                    );
+                  },
+                  child: CText(
+                    infoDescription,
+                    style: infoDescription.isEmpty
+                        ? tsSubtitle1.copiedWith(
+                            fontStyle: FontStyle.italic,
+                            color: grey4,
+                          )
+                        : tsSubtitle1,
+                  ),
                 ),
               ),
             ),
