@@ -28,12 +28,12 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     // reset orientation
     orientation = Orientation.portrait;
     SystemChrome.setPreferredOrientations([
@@ -46,7 +46,7 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
   @override
   void didChangeMetrics() {
     orientation = MediaQuery.of(context).orientation;
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         orientation = MediaQuery.of(context).orientation;
       });

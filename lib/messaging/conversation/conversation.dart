@@ -96,8 +96,8 @@ class ConversationState extends State<Conversation>
 
     var currentKeyboardHeight = max(
       EdgeInsets.fromWindowPadding(
-        WidgetsBinding.instance!.window.viewInsets,
-        WidgetsBinding.instance!.window.devicePixelRatio,
+        WidgetsBinding.instance.window.viewInsets,
+        WidgetsBinding.instance.window.devicePixelRatio,
       ).bottom,
       MediaQuery.of(context).viewInsets.bottom,
     );
@@ -187,14 +187,14 @@ class ConversationState extends State<Conversation>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     BackButtonInterceptor.add(interceptBackButton);
     subscribeToKeyboardChanges();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     clearCurrentConversationContact();
     newMessage.dispose();
     stopWatchTimer.dispose();
