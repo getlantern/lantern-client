@@ -40,7 +40,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      qrController?.pauseCamera();
+      // qrController?.pauseCamera();
       setState(() {
         scanning = false;
       });
@@ -122,7 +122,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
     subscription = qrController?.scannedDataStream.listen((scanData) async {
       try {
         await addOnce(() {
-          return _addProvisionalContact(model, scanData.code, 'qr');
+          return _addProvisionalContact(model, scanData.code!, 'qr');
         });
       } catch (e, s) {
         setState(() {
