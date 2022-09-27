@@ -108,6 +108,8 @@ class _CTextFieldState extends State<CTextField> {
           child: Scrollbar(
             controller: scrollController,
             interactive: true,
+            thumbVisibility: false,
+            trackVisibility: true,
             child: TextFormField(
               key: fieldKey,
               autofocus: widget.autofocus!,

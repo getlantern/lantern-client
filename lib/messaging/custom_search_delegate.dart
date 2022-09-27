@@ -63,8 +63,8 @@ class CustomSearchDelegate extends SearchDelegate {
         return Scrollbar(
           controller: scrollController,
           interactive: true,
-          isAlwaysShown: false,
-          showTrackOnHover: true,
+          thumbVisibility: false,
+          trackVisibility: true,
           radius: const Radius.circular(scrollBarRadius),
           child: Container(
             padding: const EdgeInsetsDirectional.all(16.0),
