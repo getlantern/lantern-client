@@ -108,7 +108,8 @@ class _CTextFieldState extends State<CTextField> {
           child: Scrollbar(
             controller: scrollController,
             interactive: true,
-            thumbVisibility: false,
+            // TODO: this generates an annoying error https://github.com/flutter/flutter/issues/97873
+            // thumbVisibility: true,
             trackVisibility: true,
             child: TextFormField(
               key: fieldKey,
