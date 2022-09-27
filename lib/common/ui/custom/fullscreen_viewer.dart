@@ -29,12 +29,12 @@ abstract class FullScreenViewerState<T extends FullScreenViewer>
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     // reset orientation
     orientation = Orientation.portrait;
     SystemChrome.setPreferredOrientations([
@@ -47,7 +47,7 @@ abstract class FullScreenViewerState<T extends FullScreenViewer>
   @override
   void didChangeMetrics() {
     orientation = MediaQuery.of(context).orientation;
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         orientation = MediaQuery.of(context).orientation;
       });

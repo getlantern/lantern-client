@@ -27,9 +27,10 @@ class AddDummyContactsCommandExtension extends CommandExtension {
 
   @override
   Command deserialize(
-      Map<String, String> params,
-      DeserializeFinderFactory finderFactory,
-      DeserializeCommandFactory commandFactory) {
+    Map<String, String> params,
+    DeserializeFinderFactory finderFactory,
+    DeserializeCommandFactory commandFactory,
+  ) {
     return AddDummyContactsCommand.deserialize(params);
   }
 }

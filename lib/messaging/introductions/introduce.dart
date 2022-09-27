@@ -17,7 +17,7 @@ class _IntroduceState extends State<Introduce> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
 
   @override
