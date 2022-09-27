@@ -26,7 +26,8 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
     super.initState();
     setState(() {
       controller = VideoPlayerController.network(
-        widget.replicaApi.getViewAddr(widget.item.replicaLink),
+        // 'https://dl8.webmfiles.org/big-buck-bunny_trailer.webm',
+        widget.replicaApi.getDownloadAddr(widget.item.replicaLink),
       )..initialize();
       handleListener();
     });
