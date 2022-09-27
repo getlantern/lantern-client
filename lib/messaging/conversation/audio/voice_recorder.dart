@@ -28,7 +28,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     animationController = AnimationController(
       vsync: this,
       lowerBound: startingScale,
@@ -43,7 +43,7 @@ class _VoiceRecorderState extends State<VoiceRecorder>
   @override
   void dispose() {
     animationController.dispose();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

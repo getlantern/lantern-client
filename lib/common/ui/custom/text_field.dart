@@ -1,4 +1,3 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:lantern/common/common.dart';
 
 /// This a custom TextField that renders a label in its outline, aligned with
@@ -109,8 +108,6 @@ class _CTextFieldState extends State<CTextField> {
           child: Scrollbar(
             controller: scrollController,
             interactive: true,
-            isAlwaysShown: false,
-            showTrackOnHover: true,
             child: TextFormField(
               key: fieldKey,
               autofocus: widget.autofocus!,
