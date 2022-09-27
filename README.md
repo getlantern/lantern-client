@@ -407,3 +407,15 @@ This auto-formats all Kotlin files in the project.
 ```
 
 This manually runs the linter against all Kotlin files in the project.
+
+## FAQ
+
+### Why is there a long-running notification?
+
+We run Lantern as a foreground service so that it remains on and connected with our messaging server. Typical Android applications use Google Play Services for push notifications, so they don't have have to maintain this kind of connection themselves.
+
+We can't use Google Play Services because:
+
+- A lot of our users don't even have Google Play Services installed
+- Google is blocked in a lot of placess
+- Some people view using Google for delivering messages as a privacy issue

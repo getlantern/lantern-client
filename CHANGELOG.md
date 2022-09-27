@@ -1,4 +1,19 @@
 
+<a name="7.0.7"></a>
+## [7.0.7](https://github.com/getlantern/android-lantern/compare/7.0.6...7.0.7)
+
+> 2022-09-14
+
+### Reverts
+
+* Always allow Stripe purchasing in UAE no matter what
+
+### Pull Requests
+
+* Merge pull request [#786](https://github.com/getlantern/android-lantern/issues/786) from getlantern/dependabot/pip/scripts/screenshot_generation_assets/numpy-1.22.0
+* Merge pull request [#783](https://github.com/getlantern/android-lantern/issues/783) from getlantern/update-replica-dep
+
+
 <a name="7.0.6"></a>
 ## [7.0.6](https://github.com/getlantern/android-lantern/compare/7.0.5...7.0.6)
 
