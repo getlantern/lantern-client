@@ -130,9 +130,10 @@ Future showConversationOptions({
                                   maxHeight: maxHeight,
                                 ),
                                 child: Scrollbar(
-                                  controller: scrollController,
+                                  controller: ScrollController(),
                                   interactive: true,
-                                  thumbVisibility: true,
+                                  // TODO: this generates an annoying error https://github.com/flutter/flutter/issues/97873
+                                  // thumbVisibility: true,
                                   trackVisibility: true,
                                   radius: const Radius.circular(
                                     scrollBarRadius,
