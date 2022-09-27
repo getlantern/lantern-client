@@ -132,8 +132,8 @@ Future showConversationOptions({
                                 child: Scrollbar(
                                   controller: scrollController,
                                   interactive: true,
-                                  isAlwaysShown: true,
-                                  showTrackOnHover: true,
+                                  thumbVisibility: true,
+                                  trackVisibility: true,
                                   radius: const Radius.circular(
                                     scrollBarRadius,
                                   ),
