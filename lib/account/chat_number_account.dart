@@ -48,7 +48,7 @@ class ChatNumberAccount extends StatelessWidget {
                         context,
                         me.chatNumber.number.formattedChatNumber,
                       );
-                      WidgetsBinding.instance?.addPostFrameCallback((_) async {
+                      WidgetsBinding.instance.addPostFrameCallback((_) async {
                         setState(() => textCopied = true);
                         await Future.delayed(
                           defaultAnimationDuration,

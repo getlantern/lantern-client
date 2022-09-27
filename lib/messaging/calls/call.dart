@@ -24,7 +24,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     disableBackButton();
     signaling = messagingModel.signaling;
 
@@ -56,7 +56,7 @@ class _CallState extends State<Call> with WidgetsBindingObserver {
   @override
   void dispose() async {
     super.dispose();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     enableBackButton();
     if (session != null) {
       session!.removeListener(onSignalingStateChange);
