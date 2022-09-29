@@ -1,15 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/search_item.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:lantern/replica/ui/common.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+import 'package:lantern/replica/common.dart';
 
 abstract class ReplicaCommonListView extends StatefulWidget {
   ReplicaCommonListView({
@@ -148,6 +140,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
       cacheExtent: getCommonCacheExtent(pagingController.value.itemList),
       scrollDirection: Axis.vertical,
       pagingController: pagingController,
+      physics: defaultScrollPhysics,
       builderDelegate: PagedChildBuilderDelegate<ReplicaSearchItem>(
         animateTransitions: true,
         noItemsFoundIndicatorBuilder: (context) {

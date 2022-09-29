@@ -289,7 +289,7 @@ class MessageBubble extends StatelessWidget {
                                         openLink: (replicaApi, replicaLink) {
                                           // TODO <10-11-21, soltzen> Determine MIME type first
                                           // context.pushRoute(
-                                          //     ReplicaVideoPlayerScreen(
+                                          //     FullscreenReplicaVideoViewer(
                                           //         replicaLink: replicaLink));
                                         },
                                       ),

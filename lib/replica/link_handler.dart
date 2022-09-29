@@ -1,14 +1,9 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:logger/logger.dart';
+import 'package:lantern/replica/common.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+// TODO <08-11-2022> kalli: This isn't used right now?
 
-/// LinkOpenerScreen is a 'loading' screen for Replica links that:
+/// ReplicaLinkHandler is a 'loading' screen for Replica links that:
 /// - Checks if Replica is available by re-running ReplicaCommon.init()
 ///   - This may not be initialized if we came from a deeplink
 /// - Determine the content type of this Replica link (e.g., video, PDF, etc.)
@@ -25,8 +20,8 @@ var logger = Logger(
 /// tab will not be visible if Replica is not initialized.
 /// In other words, we will never reach any Replica screen (other than this) if
 /// Replica is not initialized.
-class ReplicaLinkOpenerScreen extends StatefulWidget {
-  ReplicaLinkOpenerScreen({
+class ReplicaLinkHandler extends StatefulWidget {
+  ReplicaLinkHandler({
     Key? key,
     required this.replicaApi,
     required this.replicaLink,
@@ -38,7 +33,7 @@ class ReplicaLinkOpenerScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _LinkOpenerScreen();
 }
 
-class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
+class _LinkOpenerScreen extends State<ReplicaLinkHandler> {
   @override
   void initState() {
     widget.replicaApi
@@ -47,32 +42,37 @@ class _LinkOpenerScreen extends State<ReplicaLinkOpenerScreen> {
       logger.v('category is ${cat.toString()}');
       switch (cat) {
         case SearchCategory.Video:
-          return context.replaceRoute(
-            ReplicaVideoPlayerScreen(
-              replicaApi: widget.replicaApi,
-              replicaLink: widget.replicaLink,
-            ),
-          );
+        // TODO <08-17-22, kalli> This should navigate to ReplicaVideoViewer
+        // return context.replaceRoute(
+        //   FullscreenReplicaVideoViewer(
+        //     replicaApi: widget.replicaApi,
+        //     replicaLink: widget.replicaLink,
+        //   ),
+        // );
         case SearchCategory.Image:
-          return context.replaceRoute(
-            ReplicaImagePreviewScreen(replicaLink: widget.replicaLink),
-          );
+        // TODO <08-11-2022> kalli: this should navigate to ReplicaImageViewer
+        // return context.replaceRoute(
+        //   FullscreenReplicaImageViewer(replicaLink: widget.replicaLink),
+        // );
         case SearchCategory.Audio:
-          return context.replaceRoute(
-            ReplicaAudioPlayerScreen(
-              replicaApi: widget.replicaApi,
-              replicaLink: widget.replicaLink,
-            ),
-          );
+        // TODO <08-11-2022> kalli: this should navigate to ReplicaAudioViewer
+        // return context.replaceRoute(
+        //   ReplicaAudioPlayerScreen(
+        //     replicaApi: widget.replicaApi,
+        //     replicaLink: widget.replicaLink,
+        //   ),
+        // );
         case SearchCategory.Document:
         case SearchCategory.App:
         case SearchCategory.Unknown:
-          return context.replaceRoute(
-            ReplicaUnknownItemScreen(
-              category: cat,
-              replicaLink: widget.replicaLink,
-            ),
-          );
+          // TODO <08-11-2022> kalli: this should navigate to ReplicaMiscViewer
+          // return context.replaceRoute(
+          //   ReplicaUnknownItemScreen(
+          //     category: cat,
+          //     replicaLink: widget.replicaLink,
+          //   ),
+          // );
+          return Container();
       }
     });
 

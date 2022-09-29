@@ -1,21 +1,22 @@
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/replica/ui/utils.dart';
 
 /// Base class for widgets that allow viewing files like images and videos, for both Chat and Replica.
-abstract class ViewerWidget extends StatefulWidget {
+abstract class FullScreenViewer extends StatefulWidget {
   final Widget? title;
   final List<Widget>? actions;
   final Map<String, dynamic>? metadata;
 
-  ViewerWidget({
+  FullScreenViewer({
     this.title,
     this.actions,
     this.metadata,
   });
 }
 
-/// Base class for state associated with ViewerWidgets. It is extended by CVideoViewer and CImageViewer, which in turn get extended by the respective Chat and Replica image/video rendering widgets. It handles orientation changes and compensates for a known Flutter bug in video orientation: https://github.com/flutter/flutter/issues/60327
-abstract class ViewerState<T extends ViewerWidget> extends State<T>
-    with WidgetsBindingObserver {
+/// Base class for state associated with FullScreenViewers. It is extended by CVideoViewer and CImageViewer, which in turn get extended by the respective Chat and Replica image/video rendering widgets. It handles orientation changes and compensates for a known Flutter bug in video orientation: https://github.com/flutter/flutter/issues/60327
+abstract class FullScreenViewerState<T extends FullScreenViewer>
+    extends State<T> with WidgetsBindingObserver {
   bool showInfo = true;
   Orientation orientation = Orientation.portrait;
 
@@ -69,15 +70,15 @@ abstract class ViewerState<T extends ViewerWidget> extends State<T>
       showAppBar: showInfo,
       body: GestureDetector(
         onTap: () => setState(() => showInfo = !showInfo),
-        child: !showInfo && ready()
-            ? Align(alignment: Alignment.center, child: body(context))
-            : Column(
+        child: showInfo
+            ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: !ready() ? spinner : body(context)),
+                  Expanded(child: body(context)),
                   widget.metadata?['ts'] ?? Container(),
                 ],
-              ),
+              )
+            : body(context),
       ),
     );
   }

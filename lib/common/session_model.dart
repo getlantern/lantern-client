@@ -1,3 +1,5 @@
+import 'package:lantern/replica/common.dart';
+
 import 'common.dart';
 
 final sessionModel = SessionModel();
@@ -186,7 +188,7 @@ class SessionModel extends Model {
   Future<String> getReplicaAddr() async {
     final replicaAddr = await methodChannel.invokeMethod('get', 'replicaAddr');
     if (replicaAddr == null || replicaAddr == '') {
-      throw Exception('Replica not enabled');
+      logger.e('Replica not enabled');
     }
     return replicaAddr;
   }

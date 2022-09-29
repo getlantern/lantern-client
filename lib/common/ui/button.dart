@@ -52,14 +52,14 @@ class Button extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(end: 8.0),
                   child: CAssetImage(
                     path: iconPath!,
-                    color: white,
+                    color: !secondary ? white : !disabled ? pink4 : grey5,
                   ),
                 ),
               Expanded(
                 flex: 0,
                 child: CText(
                   text.toUpperCase(),
-                  style: getTextStyle(secondary),
+                  style: getTextStyle(secondary, disabled),
                   overflow: TextOverflow.visible,
                   textAlign: TextAlign.center,
                 ),

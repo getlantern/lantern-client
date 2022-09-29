@@ -48,6 +48,8 @@ CTextStyle tsBody1Color(color) => tsBody1.copiedWith(color: color);
 
 CTextStyle tsBody2 = CTextStyle(fontSize: 12, lineHeight: 19);
 
+CTextStyle tsBody2Short = CTextStyle(fontSize: 12, lineHeight: 14);
+
 CTextStyle tsBody3 = CTextStyle(fontSize: 16, lineHeight: 24);
 
 CTextStyle tsTextField = CTextStyle(fontSize: 16, lineHeight: 18.75);
@@ -86,8 +88,11 @@ CTextStyle tsButtonWhite = tsButton.copiedWith(color: white);
 
 CTextStyle tsButtonBlue = tsButton.copiedWith(color: blue4);
 
-CTextStyle getTextStyle(bool secondary) {
-  if (secondary) return tsButtonPink;
+CTextStyle getTextStyle(bool secondary, bool disabled) {
+  if (secondary) {
+    if (disabled) return tsButtonGrey;
+    return tsButtonPink;
+  }
   return tsButtonWhite;
 }
 

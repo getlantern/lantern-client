@@ -29,6 +29,7 @@ public class Settings implements internalsdk.Settings {
     // TODO <13-10-21, soltzen> We'll set this to true always in the future,
     // when Replica is ready on mobile. For now, just keep it public and easy
     // to work with
+    // TODO <08-08-22, kalli> Implement above comment?
     public transient boolean shouldRunReplica = true;
 
     public static Settings init(final Context context) {
