@@ -47,9 +47,15 @@ List<List<Color>> gradientColors = [
   [HexColor('#007A7C'), HexColor('#00237C')],
 ];
 
+// default "unknown" filetype colors
+List<Color> unknownColors = [HexColor('#68028C'), HexColor('#C91153')];
+
 // create consistent random gradient mappings from strings
 // this method mirrors the generator in desktop
 List<Color> stringToGradientColors(String string) {
+  // for "unknown" mapping
+  if (string.isEmpty) return unknownColors;
+
   // ensure string is always at least 5 chars long (space is smallest single char code 32)
   string = string + '     ';
   var arr = string.split('').sublist(0, 5).map((r) {
