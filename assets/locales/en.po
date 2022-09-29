@@ -123,7 +123,7 @@ msgid "report_issue"
 msgstr "Report an issue"
 
 msgid "check_for_updates"
-msgstr "Check for Updates
+msgstr "Check for Updates"
 
 msgid "blocked_users"
 msgstr "Blocked Users"
@@ -598,7 +598,7 @@ msgstr "%sw"
 msgid "longform_weeks"
 msgstr "%s weeks"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "Unknown"
 
 msgid "banner_source_qr"
@@ -932,7 +932,7 @@ msgid "replica_upload_confirmation_title"
 msgstr "Important!"
 
 msgid "replica_upload_confirmation_body"
-msgstr "Files uploaded to the Lantern Network are publicly accessible. They are decentralized and cannot be deleted from the network by anyone.\n\nAvoid personally identifying information in the file content and filename when uploading sensitive content."
+msgstr "Files uploaded to the Lantern Network are publicly accessible. No one can delete it. Please don’t include personal or identifying information in your file content or filename."
 
 msgid "replica_upload_confirmation_agree"
 msgstr "Resume Upload"
@@ -956,13 +956,19 @@ msgid "upload_in_progress"
 msgstr "Upload in Progress"
 
 msgid "upload_complete"
-msgstr "Upload Complete"
+msgstr "Your file was published successfully"
 
 msgid "upload_failed"
 msgstr "Upload Failed"
 
 msgid "upload_cancelled"
 msgstr "Upload Cancelled"
+
+msgid "upload_unknown_error"
+msgstr "Something went wrong while trying to publish"
+
+msgid "download_unknown_error"
+msgstr "Something went wrong while trying to download %s"
 
 msgid "replica_link_fetcher"
 msgstr "Replica Link Fetcher"
@@ -991,6 +997,12 @@ msgstr "Error rendering video, please try again later"
 msgid "untitled"
 msgstr "Untitled"
 
+msgid "preview_not_available"
+msgstr "Preview not available"
+
+msgid "download_to_view"
+msgstr "Download file to view it"
+
 msgid "failed_to_init_replica"
 msgstr "Error: Failed to initialize Replica"
 
@@ -1009,11 +1021,53 @@ msgstr "Share"
 msgid "upload_file_screen"
 msgstr "Upload File"
 
+msgid "edit_title"
+msgstr "Edit Title"
+
+msgid "filenames_cannot_be_edited"
+msgstr "Filenames cannot be edited once published."
+
+msgid "add_description"
+msgstr "Add Description"
+
+msgid "no_description"
+msgstr "No description provided"
+
+msgid "read_details"
+msgstr "Read PDF"
+
+msgid "description_initial_value"
+msgstr "Description cannot be modified once published"
+
 msgid "name_your_file"
 msgstr "Name Your File"
 
 msgid "upload"
 msgstr "Upload"
+
+msgid "review"
+msgstr "Review"
+
+msgid "skip"
+msgstr "Skip"
+
+msgid "replica_layout_filetype"
+msgstr "filetype: %s"
+
+msgid "replica_layout_creation_date"
+msgstr "Created on %s"
+
+msgid "empty_description"
+msgstr "No description was provided."
+
+msgid "publish"
+msgstr "Yes, Publish"
+
+msgid "important"
+msgstr "Important!"
+
+msgid "upload_tos_agree"
+msgstr "I understand"
 
 msgid "test_text"
 msgstr "I want to eat some pizza 🍕 😊"

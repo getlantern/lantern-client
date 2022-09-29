@@ -74,9 +74,11 @@ class Notifications {
               messagingModel.signaling
                   .onMessage(data['peerId'], data['messageJson'], false);
               break;
-            // TODO <16-12-2021> soltzen: This code does not work as of today: the
-            // notification click events are not being processed. This'll be
+            // TODO <16-12-2021> soltzen: This code does not work as of today:
+            // The notification click events are not being processed. This'll be
             // addressed here: https://github.com/getlantern/lantern-internal/issues/5133
+            // TODO <08-10-22, kalli> Building on above comment:
+            // While we are technically close to being able to share replica links, there are big pieces missing from how this can meaningfully and safely be put in production. Some concerns involve handling cases where someone doesn't know or use Lantern, as well as sharing increasing censor attack exposure area. More context: https://github.com/getlantern/lantern-internal/issues/3577
             case PayloadType.Upload:
               // The payload here is a possible JSON response body
               // See ReplicaUploader for more info on this payload type
@@ -90,6 +92,7 @@ class Notifications {
                 // https://github.com/getlantern/replica/blob/c61b1855475391c715a1e8e370da87b31848d514/server/object.go#L12
                 var link = ReplicaLink.New(resp['replicaLink']);
                 if (link == null) {
+                  // TODO <08-22-22, kalli> Don't throw exception directly
                   throw Exception('Replicalink.New() failed');
                 }
                 // Prompt the user a Share dialog

@@ -1,26 +1,20 @@
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/notifications.dart';
-import 'package:logger/logger.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+import 'package:http/http.dart' as http;
 
 /// ReplicaUploader is a singleton class. Use it like this:
 /// - Initialize ReplicaUploader by calling ReplicaUploader.inst.init()
 ///   - Ideally in an initState() of a top-level widget
 ///   - Calling it multiple times is safe
 /// - Upload files with ReplicaUploader.inst.uploadFile()
-///   - This'll use flutter_uploader plugin, which uses Android's WorkManager, to
-///     schedule a background upload
+///     to schedule a background upload
 ///
 /// There are two notifications here:
-/// - One to track the upload's progress
-/// - One when the upload is done.
-///   - If it succeeded (i.e., not failed or got cancelled), the user can click
-///     on this notification, they would be prompted with a Share dialog to share
-///     the Replica link
+/// - One (Flutter side) to track the upload's progress, handled in review.dart
+/// - One (native) when the upload is done.
+///   - If it succeeded (i.e., not failed or got cancelled), a native notification shows up
+///   - ** NOT YET IMPLEMENTED ** the user can click it and be prompted with a Share dialog to share the Replica link
 class ReplicaUploader {
   // Private, named constructor to avoid instantiations
   ReplicaUploader._private();
@@ -39,10 +33,25 @@ class ReplicaUploader {
         .setBackgroundHandler(ReplicaUploaderBackgroundHandler);
   }
 
-  Future<void> uploadFile(File file, String displayName) async {
+  /// fileTitle: no extension
+  /// fileName: has extension
+  Future<void> uploadFile({
+    required File file,
+    required String fileName,
+    String? fileDescription,
+    required String fileTitle,
+  }) async {
     final replicaAddr = await sessionModel.getReplicaAddr();
     var uploadUrl =
-        'http://$replicaAddr/replica/upload?name=${Uri.encodeComponent(displayName)}';
+        'http://$replicaAddr/replica/upload?name=${Uri.encodeComponent(fileName)}';
+    // add description
+    if (fileDescription != null) {
+      uploadUrl += '&description=${Uri.encodeComponent(fileDescription)}';
+    }
+    // add title
+    if (fileTitle.isNotEmpty) {
+      uploadUrl += '&title=${Uri.encodeComponent(fileTitle)}';
+    }
     logger.v('uploadUrl: $uploadUrl');
     await inst.uploader!.enqueue(
       RawUpload(
@@ -52,6 +61,15 @@ class ReplicaUploader {
       ),
     );
   }
+
+  // TODO <08-10-22, kalli> Figure out how to query endpoint with infohash (for rendering preview after uploading a file)
+  Future<void> queryFile({
+    required String infohash,
+  }) async {
+    final fetchEndpoint = '';
+    final resp = await http.get(Uri.parse(fetchEndpoint));
+    logger.v(resp);
+  }
 }
 
 void ReplicaUploaderBackgroundHandler() async {
@@ -59,6 +77,8 @@ void ReplicaUploaderBackgroundHandler() async {
   var isolateUploader = FlutterUploader();
 
   // Listen to progress and show a single notification showing the progress
+
+  // TODO <08-10-22, kalli> Upload notifications pattern will be updated in subsequent ticket
   isolateUploader.progress.listen((progress) async {
     // This code runs in a different Flutter engine than the usual UI code, so
     // we have to make sure localizations are initialized here before

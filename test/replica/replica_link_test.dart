@@ -13,6 +13,7 @@ class TestCase {
   ReplicaLink? expectedOutput;
 }
 
+// TODO <08-08-22, kalli> We might want to move this to integration tests and use our test driver library
 void main() {
   test('', () {
     var cases = [

@@ -61,10 +61,11 @@ class CustomSearchDelegate extends SearchDelegate {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Scrollbar(
-          controller: scrollController,
+          controller: ScrollController(),
           interactive: true,
-          isAlwaysShown: false,
-          showTrackOnHover: true,
+          // TODO: this generates an annoying error https://github.com/flutter/flutter/issues/97873
+          // thumbVisibility: true,
+          trackVisibility: true,
           radius: const Radius.circular(scrollBarRadius),
           child: Container(
             padding: const EdgeInsetsDirectional.all(16.0),

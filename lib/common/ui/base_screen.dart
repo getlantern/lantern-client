@@ -17,6 +17,7 @@ class BaseScreen extends StatelessWidget {
   late final Color foregroundColor;
   late final Color backgroundColor;
   final bool automaticallyImplyLeading;
+  final List<Widget>? persistentFooterButtons;
 
   BaseScreen({
     this.title,
@@ -32,6 +33,7 @@ class BaseScreen extends StatelessWidget {
     Color? backgroundColor,
     this.showAppBar = true,
     this.automaticallyImplyLeading = true,
+    this.persistentFooterButtons,
     Key? key,
   }) : super(key: key) {
     this.foregroundColor = foregroundColor ?? black;
@@ -61,6 +63,7 @@ class BaseScreen extends StatelessWidget {
       Scaffold(
         backgroundColor: backgroundColor,
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+        persistentFooterButtons: persistentFooterButtons,
         appBar: !showAppBar
             ? null
             : PreferredSize(

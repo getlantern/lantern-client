@@ -74,7 +74,6 @@ class ImagePaths {
   static const play = 'assets/images/play_arrow.svg';
   static const fast_forward = 'assets/images/fast_forward.svg';
   static const fast_rewind = 'assets/images/fast_rewind.svg';
-  static const unknown = 'assets/images/unknown_black.svg';
   static const file_upload = 'assets/images/file_upload.svg';
   static const search_empty = 'assets/images/search_empty.svg';
   static const trailing_icon = 'assets/images/trailing_icon.svg';
@@ -84,6 +83,7 @@ class ImagePaths {
   static const video_black = 'assets/images/video_black.svg';
   static const zip_black = 'assets/images/zip_black.svg';
   static const mode_edit = 'assets/images/mode_edit.svg';
+  static const fullscreen_icon = 'assets/images/fullscreen_icon.svg';
 
   // Commonly used
   static const arrow_down = 'assets/images/arrow_down.svg';

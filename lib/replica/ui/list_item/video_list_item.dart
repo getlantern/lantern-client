@@ -1,13 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/search_item.dart';
-import 'package:logger/logger.dart';
+import 'package:lantern/replica/common.dart';
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
-
+// @echo
 class ReplicaVideoListItem extends StatelessWidget {
   ReplicaVideoListItem({
     required this.item,
@@ -25,6 +20,9 @@ class ReplicaVideoListItem extends StatelessWidget {
   // If there's no duration (i.e., request failed), don't render it.
   // If there's no thumbnail (i.e., request failed), render a black box
   Widget renderMetadata() {
+    // <08-22-22, kalli> Keeps throwing uncaught exceptions
+    // See https://github.com/Baseflow/flutter_cached_network_image/issues/273 - really annoying!! 😠
+    // Maybe try this: https://github.com/Baseflow/flutter_cached_network_image/issues/536#issuecomment-1216715184
     return CachedNetworkImage(
       imageBuilder: (context, imageProvider) {
         return Padding(
@@ -57,19 +55,25 @@ class ReplicaVideoListItem extends StatelessWidget {
       },
       imageUrl: replicaApi.getThumbnailAddr(item.replicaLink),
       progressIndicatorBuilder: (context, url, downloadProgress) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          clipBehavior: Clip.hardEdge,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * .45,
-            height: 100,
-            child: Container(
-              color: grey4,
-              child: Center(
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(color: white),
+        return Padding(
+          padding: const EdgeInsetsDirectional.only(
+            top: 8,
+            bottom: 8,
+          ), // padding to match loaded thumbnail item
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            clipBehavior: Clip.hardEdge,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * .45,
+              height: 100,
+              child: Container(
+                color: grey4,
+                child: Center(
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(color: white),
+                  ),
                 ),
               ),
             ),
@@ -120,21 +124,8 @@ class ReplicaVideoListItem extends StatelessWidget {
         if (cached.value == null) {
           return Container();
         }
-
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Container(
-            padding: const EdgeInsetsDirectional.only(
-              start: 8,
-              end: 8,
-              bottom: 2,
-            ),
-            decoration: BoxDecoration(color: black),
-            child: CText(
-              cached.value!.toMinutesAndSeconds(),
-              style: tsOverline.copiedWith(color: white),
-            ),
-          ),
+        return InfoTextBox(
+          text: cached.value!.toMinutesAndSeconds(),
         );
       },
     );
@@ -161,11 +152,23 @@ class ReplicaVideoListItem extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsetsDirectional.all(8.0),
-              child: CText(
-                item.displayName,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: tsBody1Short.copiedWith(color: blue4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CText(
+                    removeExtension(item.fileNameTitle),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: tsBody1Short.copiedWith(color: blue4),
+                  ),
+                  const SizedBox(height: 10),
+                  CText(
+                    item.metaDescription,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: tsBody2Short,
+                  ),
+                ],
               ),
             ),
           ),

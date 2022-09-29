@@ -1,33 +1,12 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/logic/api.dart';
 import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/ui/common.dart';
+import 'package:lantern/replica/ui/utils.dart';
 
 class ListItemFactory extends StatelessWidget {
   final Widget Function(BuildContext, ListItemFactory) builder;
 
   ListItemFactory(this.builder);
-
-  ListItemFactory.uploadEditItem({
-    Widget? leading,
-    required Widget content,
-    List<Widget>? trailingArray,
-    double height = 90.0,
-  }) : this((BuildContext context, ListItemFactory factory) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              factory.buildBase(
-                leading: leading,
-                content: content,
-                trailingArray: trailingArray,
-                showDivider: true,
-                height: height,
-              ),
-            ],
-          );
-        });
 
   ListItemFactory.replicaItem({
     Widget? leading,
@@ -42,6 +21,7 @@ class ListItemFactory extends StatelessWidget {
             menuWidth: MediaQuery.of(context).size.width * 0.8,
             builder: (menuOpen) {
               return Container(
+                padding: const EdgeInsetsDirectional.all(4.0),
                 decoration: BoxDecoration(
                   color: white,
                   borderRadius: const BorderRadius.all(
@@ -54,6 +34,7 @@ class ListItemFactory extends StatelessWidget {
                   onTap: onTap,
                   height: height,
                   showDivider: !menuOpen,
+                  overrideColor: blue1,
                 ),
               );
             },
@@ -194,11 +175,13 @@ class ListItemFactory extends StatelessWidget {
     bool enableHighlighting = false,
     bool? disableSplash,
     String? subtitle,
+    Color? overrideColor,
   }) =>
       Material(
         color: transparent,
         child: CInkWell(
           disableSplash: disableSplash ?? false,
+          overrideColor: overrideColor,
           onTap: onTap ?? () {},
           child: Container(
             height: height ?? 72,

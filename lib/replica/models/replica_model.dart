@@ -1,5 +1,5 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/logic/api.dart';
+import 'package:lantern/replica/common.dart';
 
 final replicaModel = ReplicaModel();
 
@@ -30,5 +30,45 @@ class ReplicaModel extends Model {
     return methodChannel.invokeMethod('setSuppressUploadWarning', {
       'suppress': suppress,
     });
+  }
+
+  Future<void> setSearchTerm<T>(String searchTerm) async {
+    return methodChannel.invokeMethod('setSearchTerm', <String, dynamic>{
+      'searchTerm': searchTerm,
+    });
+  }
+
+  Future<void> setSearchTab<T>(int searchTab) async {
+    return methodChannel.invokeMethod('setSearchTab', <String, dynamic>{
+      'searchTab': searchTab.toString(),
+    });
+  }
+
+  Widget getSearchTermWidget(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      '/searchTerm',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
+  Widget getSearchTabWidget(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      '/searchTab',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
+  Future<String> getSearchTerm() async {
+    return methodChannel
+        .invokeMethod('get', '/searchTerm')
+        .then((value) => value.toString());
+  }
+
+  Future<String> getSearchTab() async {
+    return methodChannel
+        .invokeMethod('get', '/searchTab')
+        .then((value) => value.toString());
   }
 }

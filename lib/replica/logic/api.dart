@@ -1,10 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/replica_model.dart';
-import 'package:lantern/replica/models/search_item.dart';
-import 'package:lantern/replica/models/searchcategory.dart';
-import 'package:logger/logger.dart';
+import 'package:lantern/replica/common.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 var logger = Logger(
@@ -21,6 +17,7 @@ class Metadata {
 }
 
 class ReplicaApi {
+  // cache duration upfront
   ReplicaApi(this.replicaHostAddr) {
     dio = Dio(
       BaseOptions(
@@ -28,13 +25,13 @@ class ReplicaApi {
         connectTimeout: 30000, // 30s
       ),
     );
-    _durationCache = LRUCache<ReplicaLink, double?>(1000, doFetchDuration);
+    durationCache = LRUCache<ReplicaLink, double?>(100, doFetchDuration);
   }
 
   late Dio dio;
   final String replicaHostAddr;
-  final _defaultTimeoutDuration = const Duration(seconds: 7);
-  late final LRUCache<ReplicaLink, double?> _durationCache;
+  final defaultTimeoutDuration = const Duration(seconds: 7);
+  late final LRUCache<ReplicaLink, double?> durationCache;
 
   bool get available {
     return replicaHostAddr != '';
@@ -57,7 +54,8 @@ class ReplicaApi {
         s = 'search?s=$query&offset=$page&orderBy=relevance&lang=$lang&type=${category.mimeTypes()}';
         break;
       case SearchCategory.Unknown:
-        throw Exception('Unknown category. Should never be triggered');
+        logger.e('Unknown category. Should never be triggered');
+        break;
     }
     logger.v('_search(): uri: ${Uri.parse(s)}');
 
@@ -67,8 +65,11 @@ class ReplicaApi {
           .v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
       return ReplicaSearchItem.fromJson(category, resp.data);
     } else {
+      logger.e(
+        'Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}',
+      );
       throw Exception(
-        'Failed to fetch search query: ${resp.statusCode} -> ${resp.data.toString()}',
+        'Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}',
       );
     }
   }
@@ -98,13 +99,16 @@ class ReplicaApi {
     logger.v('fetchCategoryFromReplicaLink: $u');
 
     try {
-      var resp = await dio.head(u).timeout(_defaultTimeoutDuration);
+      var resp = await dio.head(u).timeout(defaultTimeoutDuration);
       if (resp.statusCode != 200) {
-        throw Exception('fetching category from $u');
+        logger.e('error fetching category from $u');
       }
       return SearchCategoryFromMimeType(resp.headers.value('content-type'));
     } on TimeoutException catch (_) {
       // On a timeout, just return an unknown category
+      logger.w(
+        'Timed out while fetching category from replica link, will return Unknown',
+      );
       return SearchCategory.Unknown;
     }
   }
@@ -112,7 +116,7 @@ class ReplicaApi {
   /// fetchDuration fetches the duration of 'replicaLink' through Replica's backend.
   /// If it can't find it (or failed to find it), return a null
   ValueListenable<CachedValue<double?>> getDuration(ReplicaLink replicaLink) {
-    return _durationCache.get(replicaLink);
+    return durationCache.get(replicaLink);
   }
 
   Future<double?> doFetchDuration(ReplicaLink replicaLink) async {
@@ -123,19 +127,22 @@ class ReplicaApi {
     try {
       final durationResp = await dio.get(s);
       if (durationResp.statusCode != 200) {
-        throw Exception(
+        logger.e(
           'fetch duration: ${durationResp.statusCode} -> ${durationResp.data.toString()}',
         );
       }
       // logger.v('Duration request success: $duration');
-      duration = double.parse(durationResp.data.toString());
+      duration = durationResp.data != ''
+          ? double.parse(durationResp.data.toString())
+          : null;
+      logger.v(duration);
     } catch (err) {
       if (err is DioError) {
-        logger.w(
-            'failed to fetch duration. Will default to ??:??. Error: ${err.error}');
+        logger.e(
+          'Dio Error - failed to fetch duration. Error: ${err.error}',
+        );
       } else {
-        logger
-            .w('failed to fetch duration. Will default to ??:??. Error: $err');
+        logger.e('Unknown error - failed to fetch duration. Error: $err');
       }
     }
     return duration;
@@ -162,11 +169,49 @@ class ReplicaApi {
   }
 
   Future<void> fetch(ReplicaLink link, String localFilePath) async {
-    final resp = await dio.download(getViewAddr(link), localFilePath);
+    final resp = await dio.download(
+      getViewAddr(link),
+      localFilePath,
+      deleteOnError: true,
+    );
     if (resp.statusCode != 200) {
-      throw Exception(
+      logger.e(
         'Failed to fetch: ${resp.statusCode} -> ${resp.data.toString()}',
       );
+    }
+  }
+
+  /// Hits the /object_info endpoint to get title, description and creationDate strings
+  /// Returns an object with '' fields for all 3 if not found
+  /// We only call this from inside the Replica Viewer components, since we use the title and description returned as part oft he ReplicaSearchItem for the list views
+  Future<ReplicaObjectInfo> fetchObjectInfo(
+    ReplicaLink replicaLink,
+  ) async {
+    var obj = 'object_info?replicaLink=${replicaLink.toMagnetLink()}';
+    logger.v('fetch object_info: $obj');
+
+    try {
+      var resp = await dio.get(obj).timeout(defaultTimeoutDuration);
+      if (resp.statusCode != 200) {
+        logger.e('error fetching object_info $obj');
+        return EmptyReplicaObjectInfo();
+      }
+      final infoDescription = resp.data['description'];
+      final infoTitle = resp.data['title'];
+      final infoCreationDate = resp.data['creationDate'];
+      return ReplicaObjectInfo(
+        infoDescription ?? '',
+        infoTitle ?? '',
+        infoCreationDate ?? '',
+      );
+    } on TimeoutException catch (_) {
+      logger.w(
+        'Timed out while fetching object_info from replica link, will return',
+      );
+      return EmptyReplicaObjectInfo();
+    } catch (err) {
+      logger.e('Error while fetching object_info $err');
+      return EmptyReplicaObjectInfo();
     }
   }
 }
