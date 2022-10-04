@@ -26,6 +26,7 @@ Color grey4 = HexColor('#BFBFBF');
 Color grey5 = HexColor('#707070');
 Color scrimGrey = HexColor('#C4C4C4');
 Color black = HexColor('#000000');
+Color videoControlsGrey = black.withOpacity(0.1);
 
 // Avatars
 Color getAvatarColor(double hue, {bool inverted = false}) {
@@ -47,9 +48,15 @@ List<List<Color>> gradientColors = [
   [HexColor('#007A7C'), HexColor('#00237C')],
 ];
 
+// default "unknown" filetype colors
+List<Color> unknownColors = [HexColor('#68028C'), HexColor('#C91153')];
+
 // create consistent random gradient mappings from strings
 // this method mirrors the generator in desktop
 List<Color> stringToGradientColors(String string) {
+  // for "unknown" mapping
+  if (string.isEmpty) return unknownColors;
+
   // ensure string is always at least 5 chars long (space is smallest single char code 32)
   string = string + '     ';
   var arr = string.split('').sublist(0, 5).map((r) {
@@ -71,10 +78,11 @@ BoxDecoration getReplicaExtensionBgDecoration(String extension) {
   );
 }
 
-BoxDecoration getReplicaHashAnimatedBgDecoration(String hash, double animatedValue) {
+BoxDecoration getReplicaHashAnimatedBgDecoration(
+    String hash, double animatedValue) {
   return BoxDecoration(
     gradient: LinearGradient(
-      begin: Alignment(-1 + animatedValue,-1),
+      begin: Alignment(-1 + animatedValue, -1),
       end: Alignment(animatedValue, 0),
       colors: stringToGradientColors(hash),
       tileMode: TileMode.mirror,
@@ -92,7 +100,6 @@ BoxDecoration getReplicaHashBgDecoration(String hash) {
     ),
   );
 }
-
 
 final maxSha1Hash = BigInt.from(2).pow(160);
 final numHues = BigInt.from(360);

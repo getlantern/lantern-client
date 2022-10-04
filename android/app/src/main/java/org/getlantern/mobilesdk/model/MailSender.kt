@@ -14,11 +14,12 @@ import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 
+// MailSender calls Go's `internalsdk/email.go:EmailMessage.Send()` method to
+// actually send emails through the github.com/getlantern/mandrill package. If
+// successful, onSuccess() callback would trigger, else onError()
 class MailSender @JvmOverloads constructor(
     private val context: Context,
     private val template: String,
-    private val showProgress: Boolean,
-    private val finish: Boolean,
     private val title: String? = null,
     private val message: String? = null
 ) : AsyncTask<String, Void, Boolean>(), EmailResponseHandler {
@@ -32,11 +33,33 @@ class MailSender @JvmOverloads constructor(
     }
 
     override fun onError(message: String) {
-        try {
-            (context as Activity).showErrorDialog(message)
-        } catch (e: Exception) {
-            Logger.error(TAG, "Unable to show error message sending email: ", e)
+      dialog?.let { dialog ->
+        if (dialog.isShowing()) {
+          dialog.dismiss()
         }
+      }
+      (context as Activity).showAlertDialog(
+          title ?: getAppName(),
+          message ?: message,
+          // Don't close the dialog if there's an error. This'll remove the
+          // user's input. Let the user close the dialog or try again if they
+          // want.
+          finish = false
+      )
+    }
+
+    override fun onSuccess() {
+        dialog?.let { dialog ->
+            if (dialog.isShowing()) {
+                dialog.dismiss()
+            }
+        }
+            (context as Activity).showAlertDialog(
+                title ?: getAppName(),
+                message ?: getResponseMessage(),
+                // Close the dialog after a successful send.
+                finish = true
+            )
     }
 
     override fun onPreExecute() {
@@ -77,6 +100,10 @@ class MailSender @JvmOverloads constructor(
             msg.putString(key, value)
         }
         try {
+            // This function calls Go's `internalsdk/email.go:EmailMessage.Send()`.
+            // It will call `onSuccess()` or `onError()` when it's done with
+            // the request. This function doesn't block or return an error but
+            // we're wrapping it with a try-catch just to be safe
             msg.send(this)
         } catch (e: Exception) {
             Logger.error(TAG, "Error trying to send mail: ", e)
@@ -85,35 +112,13 @@ class MailSender @JvmOverloads constructor(
         return true
     }
 
-    private fun getResponseMessage(success: Boolean): String {
-        val msg: Int
-        msg = if (success) {
-            Logger.debug(TAG, "Successfully called send mail")
-            if (sendLogs) R.string.success_log_email else R.string.success_email
-        } else {
-            if (sendLogs) R.string.error_log_email else R.string.error_email
-        }
+    private fun getResponseMessage(): String {
+        val msg = if (sendLogs) R.string.success_log_email else R.string.success_email
         return context.resources.getString(msg).format(getAppName())
     }
 
     private fun getAppName(): String {
         return context.resources.getString(R.string.app_name)
-    }
-
-    override fun onPostExecute(success: Boolean) {
-        super.onPostExecute(success)
-        dialog?.let { dialog ->
-            if (dialog.isShowing()) {
-                dialog.dismiss()
-            }
-        }
-        if (showProgress) {
-            (context as Activity).showAlertDialog(
-                title ?: getAppName(),
-                message ?: getResponseMessage(success),
-                finish = finish
-            )
-        }
     }
 
     companion object {
@@ -124,10 +129,8 @@ class MailSender @JvmOverloads constructor(
         appVersion = Utils.appVersion(context)
         userEmail = LanternApp.getSession().email()
         sendLogs = template == "user-send-logs"
-        if (showProgress) {
             dialog = ProgressDialog(context)
             dialog!!.setCancelable(false)
             dialog!!.setCanceledOnTouchOutside(false)
-        }
     }
 }

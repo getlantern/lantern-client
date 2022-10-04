@@ -57,7 +57,9 @@ class ReplicaVideoListItem extends StatelessWidget {
       progressIndicatorBuilder: (context, url, downloadProgress) {
         return Padding(
           padding: const EdgeInsetsDirectional.only(
-              top: 8, bottom: 8), // padding to match loaded thumbnail item
+            top: 8,
+            bottom: 8,
+          ), // padding to match loaded thumbnail item
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             clipBehavior: Clip.hardEdge,
@@ -122,7 +124,6 @@ class ReplicaVideoListItem extends StatelessWidget {
         if (cached.value == null) {
           return Container();
         }
-
         return InfoTextBox(
           text: cached.value!.toMinutesAndSeconds(),
         );

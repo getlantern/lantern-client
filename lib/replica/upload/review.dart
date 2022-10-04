@@ -158,11 +158,15 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
             children: [
               Expanded(
                 child: CText(
-                  widget.fileDescription ?? 'no_description'.i18n,
-                  style: widget.fileDescription != null
+                  widget.fileDescription != null &&
+                          widget.fileDescription!.isNotEmpty
+                      ? widget.fileDescription!
+                      : 'add_description'.i18n.toUpperCase(),
+                  style: widget.fileDescription != null &&
+                          widget.fileDescription!.isNotEmpty
                       ? tsBody2
                       : tsBody2.copiedWith(
-                          fontStyle: FontStyle.italic,
+                          color: grey5,
                         ),
                   maxLines: 4,
                 ),
@@ -224,20 +228,26 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Checkbox(
-                  visualDensity: VisualDensity.compact,
-                  shape: const RoundedRectangleBorder(
-                    side: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                  child: SizedBox(
+                    width: 20.0, // hack to rm checkbox left paddings
+                    child: Checkbox(
+                      visualDensity: VisualDensity.compact,
+                      shape: const RoundedRectangleBorder(
+                        side: BorderSide.none,
+                        borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                      ),
+                      checkColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith(
+                        (states) => getCheckboxFillColor(black, states),
+                      ),
+                      value: checkboxChecked,
+                      onChanged: (bool? value) {
+                        setState(() => checkboxChecked = value!);
+                      },
+                    ),
                   ),
-                  checkColor: Colors.white,
-                  fillColor: MaterialStateProperty.resolveWith(
-                    (states) => getCheckboxFillColor(black, states),
-                  ),
-                  value: checkboxChecked,
-                  onChanged: (bool? value) {
-                    setState(() => checkboxChecked = value!);
-                  },
                 ),
                 CText(
                   'upload_tos_agree'.i18n,
@@ -258,14 +268,14 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Button(
-            width: 150,
+            width: MediaQuery.of(context).size.width * 0.4,
             text: 'cancel'.i18n,
             onPressed: () async => context.router.popUntilRoot(),
             secondary: true,
           ),
           Button(
+            width: MediaQuery.of(context).size.width * 0.4,
             disabled: !checkboxChecked,
-            width: 150,
             text: 'publish'.i18n,
             onPressed: () async => await handleUploadConfirm(
               context: context,

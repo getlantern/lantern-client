@@ -25,6 +25,7 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
   late final textEditingController =
       CustomTextEditingController(formKey: formKey);
   late final String fileTitle;
+  late bool disabled = false;
 
   @override
   void initState() {
@@ -58,7 +59,7 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
 
   Widget renderEditingNotice() {
     return Container(
-      color: grey1,
+      color: grey2,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsetsDirectional.all(10.0),
       margin: const EdgeInsetsDirectional.only(
@@ -81,33 +82,38 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
       label: 'edit_title'.i18n,
       textInputAction: TextInputAction.done,
       maxLength: 100,
+      textCapitalization: TextCapitalization.sentences,
       contentPadding: const EdgeInsetsDirectional.only(
         top: 12.0,
         bottom: 12.0,
         end: 12.0,
       ),
+      onChanged: (text) async {
+        setState(() => disabled = text == '');
+      },
     );
   }
 
   Widget renderButtons() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // Button(
+        //   width: 150,
+        //   text: 'skip'.i18n,
+        //   secondary: true,
+        //   disabled: disabled,
+        //   onPressed: () async => await context.pushRoute(
+        //     ReplicaUploadReview(
+        //       fileToUpload: widget.fileToUpload,
+        //       fileTitle: textEditingController.text,
+        //       fileDescription: widget.fileDescription,
+        //     ),
+        //   ),
+        // ),
         Button(
-          width: 150,
-          text: 'skip'.i18n,
-          secondary: true,
-          onPressed: () async => await context.pushRoute(
-            ReplicaUploadReview(
-              fileToUpload: widget.fileToUpload,
-              fileTitle: textEditingController.text,
-              fileDescription: widget.fileDescription,
-            ),
-          ),
-        ),
-        Button(
-          width: 150,
-          text: 'add_description'.i18n,
+          text: 'next'.i18n,
+          disabled: disabled,
           onPressed: () async => await context.pushRoute(
             ReplicaUploadDescription(
               fileToUpload: widget.fileToUpload,

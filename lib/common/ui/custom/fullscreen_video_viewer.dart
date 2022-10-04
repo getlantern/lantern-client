@@ -75,7 +75,6 @@ class FullScreenVideoViewerState
     });
   }
 
-  // TODO <08-19-22, kalli> This is not great UX, fix
   void handleButtonTap() {
     Wakelock.toggle(enable: controller!.value.isPlaying);
     if (controller!.value.isPlaying) {

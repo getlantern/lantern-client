@@ -41,7 +41,13 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
   Widget build(BuildContext context) {
     return BaseScreen(
       centerTitle: true,
-      title: 'discover'.i18n,
+      title: GestureDetector(
+        child: CText(
+          'discover'.i18n,
+          style: tsHeading3.copiedWith(color: black).short,
+        ),
+        onTap: () {},
+      ),
       actions: [
         IconButton(
           onPressed: () async {

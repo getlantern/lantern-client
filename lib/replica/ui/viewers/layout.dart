@@ -77,9 +77,6 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
       showAppBar: true,
       padHorizontal: true,
       title: Container(
-        padding: const EdgeInsetsDirectional.only(
-          bottom: 6.0,
-        ),
         alignment: Alignment.centerLeft,
         child: ready()
             ? (widget.item.primaryMimeType != null)
@@ -87,34 +84,39 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                     'replica_layout_filetype'
                         .i18n
                         .fill([widget.item.primaryMimeType!]),
-                    style: tsSubtitle1.copiedWith(color: grey5),
+                    style: tsSubtitle1.copiedWith(
+                      color: grey5,
+                      lineHeight: 16,
+                    ), // line-height for center align
                   )
                 : CText(
                     widget.category.toShortString(),
-                    style: tsSubtitle1,
+                    style: tsSubtitle1.copiedWith(color: grey5, lineHeight: 16),
                   )
             : CText(
                 'Unknown'.i18n,
-                style: tsSubtitle1,
+                style: tsSubtitle1.copiedWith(color: grey5, lineHeight: 16),
               ),
       ),
       actions: [
         if (ready())
           Container(
-            alignment: Alignment.center,
+            alignment: Alignment.centerRight,
             padding: const EdgeInsetsDirectional.only(
               end: 12.0,
             ),
             child: CText(
               widget.item.humanizedFileSize,
-              style: tsButton,
+              style: tsButton.copiedWith(
+                lineHeight: 16,
+              ), // line-height for center align matching title
             ),
           ),
       ],
       body: Padding(
         padding: const EdgeInsetsDirectional.only(
-          start: 12.0,
-          end: 12.0,
+          start: 4.0,
+          end: 4.0,
           top: 24.0,
         ),
         child: ready() & !infoError
@@ -139,93 +141,106 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
 
   Widget renderText() {
     return Flexible(
-      flex: 1,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // * Title
-            Container(
-              padding: const EdgeInsetsDirectional.only(
-                top: 12.0,
-                bottom: 12.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
+      flex: 2,
+      child: Column(
+        children: [
+          // * Title
+          Container(
+            padding: const EdgeInsetsDirectional.only(
+              top: 12.0,
+              bottom: 12.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 8.0),
                         child: CText(
                           removeExtension(infoTitle),
                           style: tsHeading3,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      CInkWell(
-                        onTap: () async {
-                          copyText(
-                            context,
-                            removeExtension(infoTitle),
-                          );
-                          setState(() => textCopied = true);
-                          await Future.delayed(
-                            defaultAnimationDuration,
-                            () => setState(
-                              () => textCopied = false,
-                            ),
-                          );
-                        },
-                        child: CAssetImage(
-                          size: 20,
-                          path: textCopied
-                              ? ImagePaths.check_green
-                              : ImagePaths.content_copy,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => handleDownload(
+                    ),
+                    CInkWell(
+                      onTap: () async {
+                        copyText(
                           context,
-                          widget.item,
-                          widget.replicaApi,
-                        ),
-                        icon: const CAssetImage(
-                          size: 24,
-                          path: ImagePaths.file_download,
-                        ),
+                          removeExtension(infoTitle),
+                        );
+                        setState(() => textCopied = true);
+                        await Future.delayed(
+                          defaultAnimationDuration,
+                          () => setState(
+                            () => textCopied = false,
+                          ),
+                        );
+                      },
+                      child: CAssetImage(
+                        size: 20,
+                        path: textCopied
+                            ? ImagePaths.check_green
+                            : ImagePaths.content_copy,
                       ),
-                    ],
+                    ),
+                    IconButton(
+                      onPressed: () => handleDownload(
+                        context,
+                        widget.item,
+                        widget.replicaApi,
+                      ),
+                      icon: const CAssetImage(
+                        size: 24,
+                        path: ImagePaths.file_download,
+                      ),
+                    ),
+                  ],
+                ),
+                CText(
+                  humanizeCreationDate(context, infoCreationDate).toUpperCase(),
+                  style: tsBody1Short.copiedWith(color: grey5),
+                )
+              ],
+            ),
+          ),
+          Divider(
+            color: grey5,
+          ),
+          // * Description
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsetsDirectional.only(
+                  bottom: 24.0,
+                ),
+                child: GestureDetector(
+                  onTap: () async {
+                    copyText(
+                      context,
+                      infoDescription,
+                    );
+                  },
+                  child: CText(
+                    infoDescription,
+                    style: infoDescription.isEmpty
+                        ? tsSubtitle1.copiedWith(
+                            fontStyle: FontStyle.italic,
+                            color: grey4,
+                          )
+                        : tsSubtitle1,
                   ),
-                  CText(
-                    humanizeCreationDate(context, infoCreationDate)
-                        .toUpperCase(),
-                    style: tsBody1Short.copiedWith(color: grey5),
-                  )
-                ],
+                ),
               ),
             ),
-            Divider(
-              color: black,
-            ),
-            // * Description
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsetsDirectional.only(
-                top: 24.0,
-                bottom: 64.0,
-              ),
-              child: CText(
-                infoDescription,
-                style: infoDescription.isEmpty
-                    ? tsSubtitle1.copiedWith(
-                        fontStyle: FontStyle.italic,
-                        color: grey4,
-                      )
-                    : tsSubtitle1,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

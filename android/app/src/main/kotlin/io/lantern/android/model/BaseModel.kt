@@ -139,9 +139,13 @@ abstract class BaseModel(
                         }
                     }
 
-                    override fun error(errorCode: String?, errorMessage: String?, errorDetails: Any?) {
+                    override fun error(
+                        errorCode: String,
+                        errorMessage: String?,
+                        errorDetails: Any?
+                    ) {
                         mainHandler.post {
-                            mcResult.error(errorCode, errorMessage, errorDetails)
+                                mcResult.error(errorCode!!, errorMessage, errorDetails)
                         }
                     }
 
@@ -174,7 +178,7 @@ abstract class BaseModel(
         return when (call.method) {
             "get" -> {
                 val path = call.arguments<String>()
-                db.getRaw<Any>(path)?.valueOrProtoBytes
+                db.getRaw<Any>(path!!)?.valueOrProtoBytes
             }
             "list" -> {
                 val path = call.argument<String>("path")

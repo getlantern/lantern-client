@@ -26,7 +26,8 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
     super.initState();
     setState(() {
       controller = VideoPlayerController.network(
-        widget.replicaApi.getViewAddr(widget.item.replicaLink),
+        // 'https://dl8.webmfiles.org/big-buck-bunny_trailer.webm',
+        widget.replicaApi.getDownloadAddr(widget.item.replicaLink),
       )..initialize();
       handleListener();
     });
@@ -82,16 +83,10 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
                 VideoPlayerValue videoResult,
                 Widget? child,
               ) {
-                if (!videoResult.isInitialized) {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: const CircularProgressIndicator(),
-                  );
-                }
                 return Stack(
-                  fit: StackFit.passthrough,
                   alignment: Alignment.bottomCenter,
                   children: <Widget>[
+                    // * Video
                     // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
                     GestureDetector(
                       onTap: () {
@@ -101,63 +96,72 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
                           () => handleVideoTap(),
                         );
                       },
-                      child: AspectRatio(
-                        aspectRatio: controller!.value.aspectRatio,
-                        child: VideoPlayer(controller!),
+                      child: videoResult.isInitialized
+                          ? VideoPlayer(controller!)
+                          : const Center(child: CircularProgressIndicator()),
+                    ),
+                    // * Scrubber
+                    if (videoResult.isInitialized)
+                      VideoProgressIndicator(
+                        controller!,
+                        allowScrubbing: true,
+                        padding: const EdgeInsets.only(bottom: 32.0),
                       ),
-                    ),
-                    VideoProgressIndicator(
-                      controller!,
-                      allowScrubbing: true,
-                      padding: const EdgeInsets.only(bottom: 36.0),
-                    ),
+                    // * Play and full screen buttons
+                    if (videoResult.isInitialized)
+                      Container(
+                        color: videoControlsGrey,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Play
+                            Container(
+                              margin: const EdgeInsetsDirectional.only(
+                                start: 8.0,
+                                bottom: 2.0,
+                              ),
+                              child: RoundButton(
+                                diameter: 24,
+                                padding: 0,
+                                backgroundColor: transparent,
+                                icon: CAssetImage(
+                                  size: 24,
+                                  color: white,
+                                  path: playing
+                                      ? ImagePaths.pause
+                                      : ImagePaths.play,
+                                ),
+                                onPressed: () => handleVideoTap(),
+                              ),
+                            ),
+                            // Maximize
+                            Container(
+                              margin: const EdgeInsetsDirectional.only(
+                                end: 8.0,
+                                bottom: 2.0,
+                              ),
+                              child: RoundButton(
+                                diameter: 30,
+                                padding: 0,
+                                backgroundColor: transparent,
+                                icon: CAssetImage(
+                                  size: 30,
+                                  color: white,
+                                  path: ImagePaths.fullscreen_icon,
+                                ),
+                                onPressed: () {
+                                  handleVideoTap();
+                                  launchFullScreen(context);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                   ],
                 );
               },
             ),
-            // * Play and full screen butons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 8.0,
-                    bottom: 2.0,
-                  ),
-                  child: RoundButton(
-                    diameter: 24,
-                    padding: 0,
-                    backgroundColor: transparent,
-                    icon: CAssetImage(
-                      size: 24,
-                      color: white,
-                      path: playing ? ImagePaths.pause : ImagePaths.play,
-                    ),
-                    onPressed: () => handleVideoTap(),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(
-                    end: 8.0,
-                    bottom: 2.0,
-                  ),
-                  child: RoundButton(
-                    diameter: 30,
-                    padding: 0,
-                    backgroundColor: transparent,
-                    icon: CAssetImage(
-                      size: 30,
-                      color: white,
-                      path: ImagePaths.fullscreen_icon,
-                    ),
-                    onPressed: () {
-                      handleVideoTap();
-                      launchFullScreen(context);
-                    },
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),

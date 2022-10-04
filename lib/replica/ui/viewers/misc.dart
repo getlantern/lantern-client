@@ -22,8 +22,8 @@ class ReplicaMiscViewer extends ReplicaViewerLayout {
 
 class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
   String? tempFilePath;
-  Future<void>? fetched;
   late bool isPDF = false;
+  var hasError = false;
 
   @override
   void initState() {
@@ -36,8 +36,6 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
         setState(() {
           tempFilePath =
               '${tempDir.absolute.path}/${widget.item.replicaLink.infohash}';
-          fetched =
-              widget.replicaApi.fetch(widget.item.replicaLink, tempFilePath!);
         });
       });
     }
@@ -58,7 +56,7 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
   }
 
   @override
-  bool ready() => fetched != null || !isPDF;
+  bool ready() => true;
 
   @override
   Widget body(BuildContext context) {
@@ -75,12 +73,45 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
               child: renderMimeIcon(widget.item.fileNameTitle, 2.0),
               onTap: () async {
                 if (isPDF && tempFilePath != null) {
+                  // open full screen dialog with PDF viewer
                   await context.router.push(
                     FullScreenDialogPage(
-                      widget: PDFScreen(
-                        path: tempFilePath!,
-                        item: widget.item,
-                        replicaApi: widget.replicaApi,
+                      widget: FutureBuilder(
+                        // download to local file path
+                        future: widget.replicaApi
+                            .fetch(widget.item.replicaLink, tempFilePath!),
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return BaseScreen(
+                                title: widget.item.fileNameTitle,
+                                body: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            default:
+                              if (snapshot.hasError) {
+                                setState(() {
+                                  hasError = true;
+                                });
+                                return BaseScreen(
+                                  title: widget.item.fileNameTitle,
+                                  body: renderErrorViewingFile(
+                                    context,
+                                    widget.item,
+                                    widget.replicaApi,
+                                  ),
+                                );
+                              } else {
+                                return PDFScreen(
+                                  path: tempFilePath!,
+                                  item: widget.item,
+                                  replicaApi: widget.replicaApi,
+                                  hasError: hasError,
+                                );
+                              }
+                          }
+                        },
                       ),
                     ),
                   );
@@ -90,7 +121,8 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
             ),
           ),
           if (isPDF)
-            IgnorePointer( // pass gesture to mime icon
+            IgnorePointer(
+              // pass gesture to mime icon
               child: Transform.translate(
                 offset: const Offset(0, -10),
                 child: InfoTextBox(
@@ -109,12 +141,14 @@ class PDFScreen extends StatefulWidget {
   final String path;
   final ReplicaSearchItem item;
   final ReplicaApi replicaApi;
+  final bool hasError;
 
   PDFScreen({
     Key? key,
     required this.path,
     required this.item,
     required this.replicaApi,
+    required this.hasError,
   }) : super(key: key);
 
   @override
@@ -126,12 +160,13 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
       Completer<PDFViewController>();
   int? pages = 0;
   int? currentPage = 0;
-  bool isReady = false;
   String errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
+      padHorizontal: false,
+      padVertical: true,
       title: widget.item.fileNameTitle,
       actionButton: (errorMessage.isEmpty)
           ? FutureBuilder<PDFViewController>(
@@ -146,56 +181,40 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
               },
             )
           : Container(),
-      body: Stack(
-        children: <Widget>[
-          PDFView(
-            filePath: widget.path,
-            enableSwipe: true,
-            // swipeHorizontal: true,
-            autoSpacing: false,
-            pageFling: true,
-            pageSnap: true,
-            fitEachPage: true,
-            defaultPage: currentPage!,
-            fitPolicy: FitPolicy.BOTH,
-            preventLinkNavigation:
-                false, // if set to true the link is handled in flutter
-            onRender: (_pages) {
-              setState(() {
-                pages = _pages;
-                isReady = true;
-              });
-            },
-            onError: (error) {
-              setState(() {
-                errorMessage = error.toString();
-              });
-              logger.e(error);
-            },
-            onViewCreated: (PDFViewController pdfViewController) {
-              _controller.complete(pdfViewController);
-            },
-            onLinkHandler: (String? uri) {
-              print('goto uri: $uri');
-            },
-            onPageChanged: (int? page, int? total) {
-              setState(() {
-                currentPage = page;
-              });
-            },
-          ),
-          errorMessage.isEmpty
-              ? !isReady
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Container()
-              : renderErrorViewingFile(
-                  context,
-                  widget.item,
-                  widget.replicaApi,
-                ),
-        ],
+      body: PDFView(
+        filePath: widget.path,
+        enableSwipe: true,
+        // swipeHorizontal: true,
+        autoSpacing: false,
+        pageFling: true,
+        pageSnap: true,
+        fitEachPage: true,
+        defaultPage: currentPage!,
+        fitPolicy: FitPolicy.BOTH,
+        preventLinkNavigation:
+            false, // if set to true the link is handled in flutter
+        onRender: (_pages) {
+          setState(() {
+            pages = _pages;
+          });
+        },
+        onError: (error) {
+          setState(() {
+            errorMessage = error.toString();
+          });
+          logger.e(error);
+        },
+        onViewCreated: (PDFViewController pdfViewController) {
+          _controller.complete(pdfViewController);
+        },
+        onLinkHandler: (String? uri) {
+          print('goto uri: $uri');
+        },
+        onPageChanged: (int? page, int? total) {
+          setState(() {
+            currentPage = page;
+          });
+        },
       ),
     );
   }
