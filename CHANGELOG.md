@@ -1,4 +1,21 @@
 
+<a name="7.0.8"></a>
+## [7.0.8](https://github.com/getlantern/android-lantern/compare/7.0.7...7.0.8)
+
+> 2022-10-05
+
+### Pull Requests
+
+* Merge pull request [#789](https://github.com/getlantern/android-lantern/issues/789) from getlantern/soltzen/li5636_issue_reporting
+* Merge pull request [#778](https://github.com/getlantern/android-lantern/issues/778) from getlantern/kr/searchHits
+* Merge pull request [#791](https://github.com/getlantern/android-lantern/issues/791) from getlantern/echo/unknownGradient
+* Merge pull request [#790](https://github.com/getlantern/android-lantern/issues/790) from getlantern/kr/flutter3.3.2
+* Merge pull request [#788](https://github.com/getlantern/android-lantern/issues/788) from getlantern/echo/replicaSearchHits
+* Merge pull request [#785](https://github.com/getlantern/android-lantern/issues/785) from getlantern/echo/audo-animation
+* Merge pull request [#780](https://github.com/getlantern/android-lantern/issues/780) from getlantern/dependabot/pip/scripts/screenshot_generation_assets/numpy-1.22.0
+* Merge pull request [#770](https://github.com/getlantern/android-lantern/issues/770) from getlantern/dependabot/pip/scripts/screenshot_generation_assets/numpy-1.22.0
+
+
 <a name="7.0.7"></a>
 ## [7.0.7](https://github.com/getlantern/android-lantern/compare/7.0.6...7.0.7)
 
