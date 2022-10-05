@@ -2,6 +2,8 @@ import 'package:i18n_extension/i18n_extension.dart';
 import 'package:i18n_extension/io/import.dart';
 import 'package:lantern/common/common.dart';
 
+// TODO <10-05-22, kalli> : This is doing something just Flutter-side?
+
 extension Localization on String {
   static String defaultLocale = 'en';
   static String locale = defaultLocale;
