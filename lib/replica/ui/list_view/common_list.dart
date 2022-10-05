@@ -56,6 +56,9 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
         lastSearchQuery,
         widget.searchCategory,
         page,
+        // When we load the Flutter client, we call the locale from the backend which informs i18n's locale var
+        // (so effectively we are always using our backend's locale instead of whatever i18n would detect)
+        // TODO <10-05-22, kalli> Confirm this ^ actually happens
         Localization.localeShort,
       );
       if (ret.isEmpty) {

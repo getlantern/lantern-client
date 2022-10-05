@@ -122,6 +122,7 @@ class _HomePageState extends State<HomePage> {
         }
         return sessionModel.language(
           (BuildContext context, String lang, Widget? child) {
+            // TODO <10-05-22, kalli> Confirm we are correctly enforcing our locale as fetched from backend in line below
             Localization.locale = lang;
             return sessionModel.selectedTab(
               (context, selectedTab, child) =>

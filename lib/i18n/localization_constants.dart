@@ -1,4 +1,3 @@
-// TODO <10-05-22, kalli> : Consolidate/confirm
 const languages = [
   'en_US',
   'fa_IR',
@@ -19,7 +18,6 @@ const languages = [
   'bn_BD',
 ];
 
-// TODO <10-05-22, kalli> : Consolidate/confirm
 String displayLanguage(String languageCode) {
   if (languageCode == 'ar_EG') {
     return 'العربية';
