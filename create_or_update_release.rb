@@ -50,16 +50,25 @@ if response.body.include? "already_exists"
       @client.delete_release_asset(asset.url)
     end
   end
-
-  # Then upload the assets
-  filenames.each do |filename|
-    begin
-      ct = MIME::Types.of(filename).first.to_str || "application/octet-stream"
-      @client.upload_asset(target_release.url, filename, {content_type: ct})
-    rescue Octokit::UnprocessableEntity
-      abort "\nAsset already exists? Should never happen\n"
-    end
-  end
 else
   abort response.body unless response.is_a?(Net::HTTPSuccess)
+  puts "Created release"
+  # Wait for release to actually appear
+  sleep(5)
+  releases = @client.releases "#{user}/#{repo}"
+  target_release = releases.select { |r| r.tag_name == tag }[0]
+end
+
+if target_release.empty?
+  abort "Target release didn't exist, please try again"
+end
+
+# Then upload the assets
+filenames.each do |filename|
+  begin
+    ct = MIME::Types.of(filename).first.to_str || "application/octet-stream"
+    @client.upload_asset(target_release.url, filename, {content_type: ct})
+  rescue Octokit::UnprocessableEntity
+    abort "\nAsset already exists? Should never happen\n"
+  end
 end
