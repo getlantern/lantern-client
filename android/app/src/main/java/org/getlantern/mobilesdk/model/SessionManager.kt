@@ -82,6 +82,7 @@ abstract class SessionManager(application: Application) : Session {
      */
     // TODO <10-05-22, kalli> : useful but not used anywhere?
     private fun isFrom(c: String?, l: Array<Locale?>): Boolean {
+        // TODO <10-05-22, kalli> : another way to get the locale?
         val locale = Locale(language)
         val country = countryCode
         return country.equals(c, ignoreCase = true) ||

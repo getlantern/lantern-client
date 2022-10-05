@@ -40,6 +40,7 @@ public class Gate2ShopActivity extends WebViewActivity {
         params.put("deviceName", LanternApp.getSession().deviceName());
         params.put("forcePaymentProvider", "gate2shop");
         params.put("platform", "android");
+        // TODO <10-05-22, kalli> : language is used as locale?
         params.put("locale", lang());
         params.put("currency", LanternApp.getSession().getSelectedPlanCurrency().toLowerCase());
         params.put("plan", planId);
