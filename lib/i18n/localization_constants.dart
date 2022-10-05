@@ -1,7 +1,9 @@
+// TODO <10-05-22, kalli> : Consolidate/confirm
 const languages = [
   'en_US',
   'fa_IR',
   'zh_CN',
+  // TODO <10-05-22, kalli> : Shouldn't zh_TW be also included here?
   'zh_HK',
   'ms_MY',
   'my_MM',
@@ -17,6 +19,7 @@ const languages = [
   'bn_BD',
 ];
 
+// TODO <10-05-22, kalli> : Consolidate/confirm
 String displayLanguage(String languageCode) {
   if (languageCode == 'ar_EG') {
     return 'العربية';
@@ -27,6 +30,7 @@ String displayLanguage(String languageCode) {
   if (languageCode == 'zh_CN') {
     return '中文 (简体)';
   }
+  // TODO <10-05-22, kalli> : Shouldn't zh_TW be also included here?
   if (languageCode == 'zh_HK') {
     return '中文 (繁體)';
   }
@@ -40,6 +44,7 @@ String displayLanguage(String languageCode) {
       plainLanguageCode = splits.first;
     }
   }
+  // TODO <10-05-22, kalli> : Where is this actually displayed? Do we have translations for these languages?
   var displayName = localizedLocaleNames[plainLanguageCode];
   if (displayName != null) {
     return displayName;
