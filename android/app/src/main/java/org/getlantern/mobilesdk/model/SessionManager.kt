@@ -80,6 +80,7 @@ abstract class SessionManager(application: Application) : Session {
      * it returns true if the country code matches c or if the default locale
      * is contained in a list of locales
      */
+    // TODO <10-05-22, kalli> : useful but not used anywhere?
     private fun isFrom(c: String?, l: Array<Locale?>): Boolean {
         val locale = Locale(language)
         val country = countryCode
@@ -87,6 +88,7 @@ abstract class SessionManager(application: Application) : Session {
             listOf(*l).contains(locale)
     }
 
+    // TODO <10-05-22, kalli> : useful but not used anywhere?
     val isEnglishUser: Boolean
         get() = isFrom("US", englishLocales)
     val isChineseUser: Boolean
@@ -100,6 +102,7 @@ abstract class SessionManager(application: Application) : Session {
         return DateFormat.getDateTimeInstance().timeZone.id
     }
 
+    // Called from SessionManager.kt which in turn is invoked via setLanguage in session_model.dart
     fun setLanguage(lang: String?) {
         if (lang != null) {
             val locale = LocaleInfo(context, lang).locale
@@ -108,6 +111,7 @@ abstract class SessionManager(application: Application) : Session {
         }
     }
 
+    // TODO <10-05-22, kalli> : What is the difference between setLocale and setLanguage? Looks like setLocale eventually overrides the LANG field in preferences...
     private fun setLocale(locale: Locale?) {
         if (locale != null) {
             val oldLocale = prefs.getString(LANG, "")
@@ -461,6 +465,7 @@ abstract class SessionManager(application: Application) : Session {
         private const val CHAT_ENABLED = "chatEnabled"
         private const val MATOMO_ENABLED = "matomoEnabled"
 
+        // TODO <10-05-22, kalli> : useful but not used anywhere?
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),
             Locale("zh", "TW")

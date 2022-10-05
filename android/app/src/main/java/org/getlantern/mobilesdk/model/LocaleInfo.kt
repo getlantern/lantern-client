@@ -5,6 +5,7 @@ import org.getlantern.lantern.R
 import java.text.Collator
 import java.util.Locale
 
+// TODO <10-05-22, kalli> : Is this the main logic for locale detection?
 class LocaleInfo(var label: String, val language: String, var country: String) : Comparable<LocaleInfo> {
 
     val locale: Locale by lazy {

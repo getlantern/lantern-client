@@ -10,6 +10,7 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import java.util.Locale
 
+// TODO <10-05-22, kalli> : this is not used
 class LangAdapter(context: Context?, lang: List<String>, val localeMap: Map<String, Locale>) : ArrayAdapter<String>(context!!, 0, lang) {
     override fun getView(position: Int, _convertView: View?, parent: ViewGroup): View {
         var convertView = _convertView
