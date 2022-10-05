@@ -182,7 +182,8 @@ public class LanternHttpClient extends HttpClient {
 
     public void getPlans(final PlansCallback cb, InAppBilling inAppBilling) {
         final Map<String, String> params = new HashMap<String, String>();
-        // TODO <10-05-22, kalli> : language is used as locale?
+        // TODO <10-05-22, kalli> Rename getLanguage()?
+        // getLanguage() returns a locale 
         params.put("locale", LanternApp.getSession().getLanguage());
         params.put("countrycode", LanternApp.getSession().getCountryCode());
         final HttpUrl url = createProUrl("/plans", params);
@@ -270,7 +271,8 @@ public class LanternHttpClient extends HttpClient {
      */
     public void userData(final ProUserCallback cb) {
         final Map<String, String> params = new HashMap<String, String>();
-        // TODO <10-05-22, kalli> : language is used as locale?
+        // TODO <10-05-22, kalli> Rename getLanguage()?
+        // getLanguage() returns a locale 
         params.put("locale", LanternApp.getSession().getLanguage());
         final HttpUrl url = createProUrl("/user-data", params);
         get(url, new ProCallback() {

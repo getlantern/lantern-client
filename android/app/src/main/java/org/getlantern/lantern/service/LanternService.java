@@ -106,7 +106,8 @@ public class LanternService extends Service implements Runnable {
     public void run() {
         // move the current thread of the service to the background
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-
+        // TODO <10-05-22, kalli> Rename getLanguage()?
+        // getLanguage() returns a locale 
         final String locale = LanternApp.getSession().getLanguage();
         final Settings settings = LanternApp.getSession().getSettings();
         try {
@@ -164,6 +165,8 @@ public class LanternService extends Service implements Runnable {
         public void run() {
             final HttpUrl url = LanternHttpClient.createProUrl("/user-create");
             final JsonObject json = new JsonObject();
+            // TODO <10-05-22, kalli> Rename getLanguage()?
+            // getLanguage() returns a locale
             json.addProperty("locale", LanternApp.getSession().getLanguage());
             lanternClient.post(url, LanternHttpClient.createJsonBody(json), this);
         }

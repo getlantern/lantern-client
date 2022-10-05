@@ -40,22 +40,24 @@ public class Gate2ShopActivity extends WebViewActivity {
         params.put("deviceName", LanternApp.getSession().deviceName());
         params.put("forcePaymentProvider", "gate2shop");
         params.put("platform", "android");
-        // TODO <10-05-22, kalli> : language is used as locale?
         params.put("locale", lang());
         params.put("currency", LanternApp.getSession().getSelectedPlanCurrency().toLowerCase());
         params.put("plan", planId);
         return LanternHttpClient.createProUrl("/payment-gateway-widget", params);
     }
 
+    // This is actually returning a four-letter encoded locale (as in "zh-CN")
     private String lang() {
         final Locale locale = new Locale(LanternApp.getSession().getLanguage());
         final String locLang = locale.getLanguage();
         final String country = locale.getCountry();
+        // TODO <10-05-22, kalli> Use isFrom() here?
         if (locLang.equalsIgnoreCase("zh")) {
             if (country.equalsIgnoreCase("CN")) {
                 return "zh_CN";
             } else if (country.equalsIgnoreCase("TW")) {
                 return "zh_TW";
+            // TODO <10-05-22, kalli> Add case for "HK"?
             } else {
                 return "zh_CN";
             }

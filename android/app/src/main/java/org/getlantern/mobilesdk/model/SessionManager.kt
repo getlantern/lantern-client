@@ -80,16 +80,15 @@ abstract class SessionManager(application: Application) : Session {
      * it returns true if the country code matches c or if the default locale
      * is contained in a list of locales
      */
-    // TODO <10-05-22, kalli> : useful but not used anywhere?
+    // TODO <10-05-22, kalli> Are we using this?
     private fun isFrom(c: String?, l: Array<Locale?>): Boolean {
-        // TODO <10-05-22, kalli> : another way to get the locale?
+        // we need this to parse a string locale into a java.util.Locale.
         val locale = Locale(language)
         val country = countryCode
         return country.equals(c, ignoreCase = true) ||
             listOf(*l).contains(locale)
     }
 
-    // TODO <10-05-22, kalli> : useful but not used anywhere?
     val isEnglishUser: Boolean
         get() = isFrom("US", englishLocales)
     val isChineseUser: Boolean
@@ -112,7 +111,10 @@ abstract class SessionManager(application: Application) : Session {
         }
     }
 
-    // TODO <10-05-22, kalli> : What is the difference between setLocale and setLanguage? Looks like setLocale eventually overrides the LANG field in preferences...
+    // The choice of var names isn't helpful here. The "language" is actually a full locale, it's just the string version of it rather than the java.util.Locale
+    // Example of locale: "en-CA" (Canadian English)
+    // Example of language: "en"
+    // TODO <10-05-22, kalli>  Save and recalculate an "effectiveCountry" var in prefs
     private fun setLocale(locale: Locale?) {
         if (locale != null) {
             val oldLocale = prefs.getString(LANG, "")

@@ -65,6 +65,8 @@ public class PaymentWallActivity extends BaseFragmentActivity {
         final Map<String, String> params = new HashMap<String, String>();
         params.put("plan", plan.getId());
         params.put("email", userEmail);
+        // TODO <10-05-22, kalli> Rename getLanguage()?
+        // getLanguage() returns a locale
         params.put("locale", LanternApp.getSession().getLanguage());
         params.put("userCurrency", currency.toLowerCase());
         params.put("deviceName", LanternApp.getSession().deviceName());

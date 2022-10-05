@@ -53,6 +53,7 @@ public class Analytics {
                     trackMe.set(QueryParams.VISITOR_ID, LanternApp.getSession().getDeviceID());
 
                     // Format language as for Accept-Language header
+                    // getLanguage() returns a locale (as in "zh-CN")
                     String lang = LanternApp.getSession().getLanguage().replace("_", "-");
                     // Explicitly set language to help with geolocation
                     trackMe.set(QueryParams.LANGUAGE, lang);
