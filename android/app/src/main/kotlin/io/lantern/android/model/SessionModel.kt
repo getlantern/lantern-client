@@ -22,10 +22,10 @@ import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.CheckUpdate
-import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
+import org.getlantern.lantern.model.LanternHttpClient.YuansferCallback
 import org.getlantern.lantern.model.LanternHttpClient.createProUrl
 import org.getlantern.lantern.model.PaymentHandler
 import org.getlantern.lantern.model.ProError
@@ -39,11 +39,10 @@ import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 import java.util.concurrent.*
-import kotlin.reflect.typeOf
 
-import org.greenrobot.eventbus.EventBus
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -113,6 +112,7 @@ open class SessionModel(
             "getBitcoinEndpoint" -> getBitcoinEndpoint(call.argument("planID")!!, call.argument("email")!!, result)
             "redeemResellerCode" -> redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
             "checkEmailExistence" -> PlansUtil.checkEmailExistence(call.argument("email")!!, result)
+            "prepareYuansfer" -> prepareYuansfer(result)
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -712,6 +712,36 @@ open class SessionModel(
             result.error(
                 "unknownError",
                 activity.resources.getString(R.string.error_making_purchase),
+                null,
+            )
+        }
+    }
+
+    // Get Yuansfer redirection URL
+    private fun prepareYuansfer(result: MethodChannel.Result) {
+        try {
+        lanternClient.prepareYuansfer("alipay",  object: YuansferCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                result.error(
+                    "unknownError",
+                    "BTCPay is unavailable", // This error message is localized Flutter-side
+                    null,
+                )
+                return
+            }
+
+            override fun onSuccess(paymentInfo: String?) {
+                Logger.debug("Yuansfer Payment info", paymentInfo.toString())
+                result.success(paymentInfo.toString())
+            }
+
+        })
+        }
+        catch (t: Throwable) {
+            Logger.error(TAG, "Unable to redirect to Yuansfer widget", t)
+            result.error(
+                "unknownError",
+                "Something went wrong while accessing AliPay", // This error message is localized Flutter-side
                 null,
             )
         }

@@ -418,6 +418,9 @@ msgstr "Something went wrong while fetching the available plans."
 msgid "bitcoin_timeout"
 msgstr "The BTCPay request has timed out."
 
+msgid "alipay_timeout"
+msgstr "The AliPay request has timed out."
+
 msgid "BTCPay is unavailable"
 msgstr "BTCPay is unavailable"
 
@@ -429,6 +432,9 @@ msgstr "Something went wrong while validating your activation code."
 
 msgid "stripe_timeout"
 msgstr "Your Stripe payment has timed out. Please restart Lantern and try again."
+
+msgid "Something went wrong while accessing AliPay"
+msgstr "Something went wrong while accessing AliPay"
 
 msgid "stripe_success"
 msgstr "Successful Stripe purchase."

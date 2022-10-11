@@ -1,13 +1,13 @@
 import 'package:lantern/common/common.dart';
 
-class BitcoinWebview extends StatelessWidget {
-  const BitcoinWebview({
+class PaymentWebview extends StatelessWidget {
+  const PaymentWebview({
     Key? key,
-    required this.btcPayURL,
+    required this.url,
     required this.context,
   }) : super(key: key);
 
-  final String btcPayURL;
+  final String url;
   final BuildContext context;
 
   @override
@@ -19,7 +19,7 @@ class BitcoinWebview extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.9,
           // TODO: WIP
           child: WebView(
-            initialUrl: btcPayURL,
+            initialUrl: url,
             javascriptMode: JavascriptMode.unrestricted,
             onProgress: (int progress) {
               print('WebView is loading (progress : $progress%)');

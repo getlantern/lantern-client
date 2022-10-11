@@ -235,6 +235,35 @@ public class LanternHttpClient extends HttpClient {
         });
     }
 
+    public void prepareYuansfer(final String vendor, final YuansferCallback cb) {
+        final HttpUrl url = createProUrl("/yuansfer-prepay");
+        final RequestBody formBody = new FormBody.Builder()
+                .add("plan", LanternApp.getSession().getSelectedPlan().getId())
+                .add("email", LanternApp.getSession().email())
+                .add("deviceName", LanternApp.getSession().deviceName())
+                .add("paymentVendor", vendor)
+                .build();
+
+        post(url, formBody,
+                new LanternHttpClient.ProCallback() {
+                    @Override
+                    public void onFailure(final Throwable throwable, final ProError error) {
+                        if (cb != null) {
+                            cb.onFailure(throwable, error);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(final Response response, final JsonObject result) {
+                        if (result.get("error") != null) {
+                            onFailure(null, new ProError(result));
+                        } else if (cb != null) {
+                            cb.onSuccess(((JsonObject) result.get("alipay")).get("payInfo").getAsString());
+                        }
+                    }
+                });
+    }
+
     public void sendLinkRequest(final ProCallback cb) {
         final HttpUrl url = createProUrl("/user-link-request");
         final RequestBody formBody = new FormBody.Builder()
@@ -451,5 +480,11 @@ public class LanternHttpClient extends HttpClient {
         public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
 
         public void onSuccess(Map<String, ProPlan> plans);
+    }
+
+    public interface YuansferCallback {
+        public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
+
+        public void onSuccess(String paymentInfo);
     }
 }

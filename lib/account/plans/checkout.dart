@@ -3,7 +3,7 @@ import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/common/common.dart';
 
-import 'bitcoin_webview.dart';
+import 'payment_webview.dart';
 import 'payment_provider_button.dart';
 import 'plan_utils.dart';
 import 'purchase_constants.dart';
@@ -353,7 +353,7 @@ class _CheckoutState extends State<Checkout>
             final btcPayURL = jsonDecode(value as String)['redirect'];
             await context.pushRoute(
               FullScreenDialogPage(
-                widget: BitcoinWebview(btcPayURL: btcPayURL, context: context),
+                widget: PaymentWebview(url: btcPayURL, context: context),
               ),
             );
           } catch (e) {
@@ -374,7 +374,40 @@ class _CheckoutState extends State<Checkout>
         });
         break;
       case 'alipay':
-        await sessionModel.prepareYuansfer();
+        context.loaderOverlay.show();
+        await sessionModel
+            .prepareYuansfer()
+            .timeout(
+              defaultTimeoutDuration,
+              onTimeout: () => onAPIcallTimeout(
+                code: 'yuansferTimeout',
+                message: 'alipay_timeout'.i18n,
+              ),
+            )
+            .then((value) async {
+          try {
+            final alipayURL = jsonDecode(value as String)['redirect'];
+            await context.pushRoute(
+              FullScreenDialogPage(
+                widget: PaymentWebview(url: alipayURL, context: context),
+              ),
+            );
+          } catch (e) {
+            print(e);
+          }
+        }).onError((error, stackTrace) {
+          context.loaderOverlay.hide();
+          CDialog.showError(
+            context,
+            error: e,
+            stackTrace: stackTrace,
+            description: (error as PlatformException)
+                .message
+                .toString()
+                .i18n // we are localizing this error Flutter-side,
+            ,
+          );
+        });
         break;
       default:
     }

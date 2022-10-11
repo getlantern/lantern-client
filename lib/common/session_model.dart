@@ -272,7 +272,6 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  // TODO: implement this Kotlin-side
   Future<void> prepareYuansfer() async {
     return methodChannel
         .invokeMethod('prepareYuansfer')
