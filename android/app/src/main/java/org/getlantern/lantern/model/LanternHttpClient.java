@@ -270,7 +270,7 @@ public class LanternHttpClient extends HttpClient {
                 .add("plan", LanternApp.getSession().getSelectedPlan().getId())
                 .add("email", LanternApp.getSession().email())
                 .add("deviceName", LanternApp.getSession().deviceName())
-                .add("paymentVendor", vendor)
+                // .add("paymentVendor", vendor)
                 .build();
 
         post(url, formBody,
