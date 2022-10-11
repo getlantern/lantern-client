@@ -507,19 +507,19 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
                 break;
             // TODO: this is not invoked in this PR 
             case "yuansfer":
-                YSAppPay.getInstance().registerWXAPP(this, "wxa0d4a241e5d692df");
-                lanternClient.prepareYuansfer("alipay", new LanternHttpClient.YuansferCallback() {
-                    @Override
-                    public void onFailure(@Nullable Throwable throwable, @Nullable ProError error) {
-                        Logger.error(TAG, "Unable to prepare Yuansfer: " + error.getMessage());
-                        ActivityExtKt.showErrorDialog(CheckoutActivity.this, error.getMessage());
-                    }
+                // YSAppPay.getInstance().registerWXAPP(this, "wxa0d4a241e5d692df");
+                // lanternClient.prepareYuansfer("alipay", new LanternHttpClient.YuansferCallback() {
+                //     @Override
+                //     public void onFailure(@Nullable Throwable throwable, @Nullable ProError error) {
+                //         Logger.error(TAG, "Unable to prepare Yuansfer: " + error.getMessage());
+                //         ActivityExtKt.showErrorDialog(CheckoutActivity.this, error.getMessage());
+                //     }
 
-                    @Override
-                    public void onSuccess(String paymentInfo) {
-                        YSAppPay.getInstance().requestAliPayment(CheckoutActivity.this, paymentInfo);
-                    }
-                });
+                //     @Override
+                //     public void onSuccess(String paymentInfo) {
+                //         YSAppPay.getInstance().requestAliPayment(CheckoutActivity.this, paymentInfo);
+                //     }
+                // });
                 break;
             default:
                 Logger.error(TAG, "Unknown payment provider " + provider.toLowerCase());
