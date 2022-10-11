@@ -338,17 +338,19 @@ class _CheckoutState extends State<Checkout>
         context.loaderOverlay.show();
         await sessionModel
             .getBitcoinEndpoint(
-              widget.id,
-              emailController.value.text,
-            )
+          widget.id,
+          emailController.value.text,
+        )
             .timeout(
-              defaultTimeoutDuration,
-              onTimeout: () => onAPIcallTimeout(
-                code: 'submitBitcoinTimeout',
-                message: 'bitcoin_timeout'.i18n,
-              ),
-            )
-            .then((value) async {
+          defaultTimeoutDuration,
+          onTimeout: () {
+            context.loaderOverlay.hide();
+            onAPIcallTimeout(
+              code: 'submitBitcoinTimeout',
+              message: 'bitcoin_timeout'.i18n,
+            );
+          },
+        ).then((value) async {
           try {
             final btcPayURL = jsonDecode(value as String)['redirect'];
             await context.pushRoute(
@@ -357,6 +359,7 @@ class _CheckoutState extends State<Checkout>
               ),
             );
           } catch (e) {
+            context.loaderOverlay.hide();
             print(e);
           }
         }).onError((error, stackTrace) {
@@ -377,26 +380,32 @@ class _CheckoutState extends State<Checkout>
         context.loaderOverlay.show();
         await sessionModel
             .prepareYuansfer(
-              widget.id,
-              emailController.value.text,
-            )
+          widget.id,
+          emailController.value.text,
+        )
             .timeout(
-              defaultTimeoutDuration,
-              onTimeout: () => onAPIcallTimeout(
-                code: 'yuansferTimeout',
-                message: 'alipay_timeout'.i18n,
-              ),
-            )
-            .then((value) async {
+          defaultTimeoutDuration,
+          onTimeout: () {
+            context.loaderOverlay.hide();
+            onAPIcallTimeout(
+              code: 'yuansferTimeout',
+              message: 'alipay_timeout'.i18n,
+            );
+          },
+        ).then((value) async {
           try {
-            // TODO: update this
-            final alipayURL = jsonDecode(value as String)['redirect'];
+            // Example response
+            // "_input_charset="UTF-8"&currency="USD"&forex_biz="FP"&it_b_pay="60m"&notify_url="https://mapi.yuansfer.com/appIpnCallbackNotify/2805/3029/321926428154256546/alipay-transaction-notify"&out_trade_no="321926428154256546"&partner="2088331716685923"&payment_type="1"&product_code="NEW_WAP_OVERSEAS_SELLER"&refer_url="https://www.goodmorningtech.io"&rmb_fee="2297.00"&secondary_merchant_id="202805"&secondary_merchant_industry="7392"&secondary_merchant_name="Good Morning Tech LLC"&seller_id="2088331716685923"&service="mobile.securitypay.pay"&subject="Good Morning Tech"&sign="J%2BQWSGkcSzRqMkDoKgruflktKJeI19khV2tXn2WS95ZUPghblZOZJb7sF8ggjch%2F7PSlNboCvkUmH1gmhMWZCHI9hdNVv18JdHilnDtcD5ffSDVoyUdyQcMCfCoOGmUzpO1B%2FAgd1ljQiFYTayrQSPoH2l%2BkY2CC26PydRGctnw%3D"&sign_type="RSA""
+
+            // TODO: extract redirect URL
+            final alipayURL = '';
             await context.pushRoute(
               FullScreenDialogPage(
                 widget: PaymentWebview(url: alipayURL, context: context),
               ),
             );
           } catch (e) {
+            context.loaderOverlay.hide();
             print(e);
           }
         }).onError((error, stackTrace) {
