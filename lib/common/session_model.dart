@@ -272,10 +272,14 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<void> prepareYuansfer() async {
-    return methodChannel
-        .invokeMethod('prepareYuansfer')
-        .then((value) => value as String);
+  Future<void> prepareYuansfer(
+    String planID,
+    String email,
+  ) async {
+    return methodChannel.invokeMethod('prepareYuansfer', <String, dynamic>{
+      'planID': planID,
+      'email': email,
+    }).then((value) => value as String);
   }
 
   Future<void> submitGooglePlay(String planID) async {

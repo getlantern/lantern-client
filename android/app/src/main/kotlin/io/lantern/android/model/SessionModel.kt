@@ -112,7 +112,7 @@ open class SessionModel(
             "getBitcoinEndpoint" -> getBitcoinEndpoint(call.argument("planID")!!, call.argument("email")!!, result)
             "redeemResellerCode" -> redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
             "checkEmailExistence" -> PlansUtil.checkEmailExistence(call.argument("email")!!, result)
-            "prepareYuansfer" -> prepareYuansfer(result)
+            "prepareYuansfer" -> prepareYuansfer(call.argument("planID")!!, call.argument("email")!!, result)
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -718,13 +718,13 @@ open class SessionModel(
     }
 
     // Get Yuansfer redirection URL
-    private fun prepareYuansfer(result: MethodChannel.Result) {
+    private fun prepareYuansfer(planID: String, email: String, result: MethodChannel.Result) {
         try {
-        lanternClient.prepareYuansfer("alipay",  object: YuansferCallback {
+        lanternClient.prepareYuansfer(planID, email, "alipay", object: YuansferCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
                 result.error(
                     "unknownError",
-                    "BTCPay is unavailable", // This error message is localized Flutter-side
+                    "Something went wrong while accessing AliPay", // This error message is localized Flutter-side
                     null,
                 )
                 return

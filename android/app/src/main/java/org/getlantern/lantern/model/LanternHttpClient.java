@@ -235,11 +235,11 @@ public class LanternHttpClient extends HttpClient {
         });
     }
 
-    public void prepareYuansfer(final String vendor, final YuansferCallback cb) {
+    public void prepareYuansfer(final String planID, final String email, final String vendor, final YuansferCallback cb) {
         final HttpUrl url = createProUrl("/yuansfer-prepay");
         final RequestBody formBody = new FormBody.Builder()
-                .add("plan", LanternApp.getSession().getSelectedPlan().getId())
-                .add("email", LanternApp.getSession().email())
+                .add("plan", planID)
+                .add("email", email)
                 .add("deviceName", LanternApp.getSession().deviceName())
                 .add("paymentVendor", vendor)
                 .build();
@@ -284,8 +284,7 @@ public class LanternHttpClient extends HttpClient {
                     public void onSuccess(final Response response, final JsonObject result) {
                         if (result.get("error") != null) {
                             onFailure(null, new ProError(result));
-                        }
-                        if (cb != null) {
+                        } else if (cb != null) {
                             cb.onSuccess(response, result);
                         }
                     }

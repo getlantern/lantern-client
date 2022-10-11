@@ -376,7 +376,10 @@ class _CheckoutState extends State<Checkout>
       case 'alipay':
         context.loaderOverlay.show();
         await sessionModel
-            .prepareYuansfer()
+            .prepareYuansfer(
+              widget.id,
+              emailController.value.text,
+            )
             .timeout(
               defaultTimeoutDuration,
               onTimeout: () => onAPIcallTimeout(
@@ -386,6 +389,7 @@ class _CheckoutState extends State<Checkout>
             )
             .then((value) async {
           try {
+            // TODO: update this
             final alipayURL = jsonDecode(value as String)['redirect'];
             await context.pushRoute(
               FullScreenDialogPage(
