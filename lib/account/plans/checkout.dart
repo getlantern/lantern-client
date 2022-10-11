@@ -4,7 +4,9 @@ import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/common/common.dart';
 
 import 'bitcoin_webview.dart';
+import 'payment_provider_button.dart';
 import 'plan_utils.dart';
+import 'purchase_constants.dart';
 
 class Checkout extends StatefulWidget {
   final List<Map<String, dynamic>> plans;
@@ -45,8 +47,7 @@ class _CheckoutState extends State<Checkout>
   );
 
   var isRefCodeFieldShowing = false;
-  // var selectedPaymentProvider = paymentProviders[0]; // Commenting this out until we bring BTC payments back
-  var selectedPaymentProvider = 'stripe';
+  var selectedPaymentProvider = paymentProviders[0];
   var loadingPercentage = 0;
   var submittedRefCode = false;
   var refCodeSuccessfullyApplied = false;
@@ -217,40 +218,49 @@ class _CheckoutState extends State<Checkout>
                     ),
                   ),
                 ),
-                // // * Step 3
-                // PlanStep(
-                //   stepNum: '3',
-                //   description: 'Choose Payment Method'.i18n,
-                // ),
-                // //* Payment options
-                // Container(
-                //   padding:
-                //       const EdgeInsetsDirectional.only(top: 16, bottom: 16),
-                //   width: MediaQuery.of(context).size.width,
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       // * Stripe
-                //       PaymentProviderButton(
-                //         logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
-                //         onChanged: () => setState(
-                //           () => selectedPaymentProvider = 'stripe',
-                //         ),
-                //         selectedPaymentProvider: selectedPaymentProvider,
-                //         paymentType: 'stripe',
-                //       ),
-                //       // * BTC
-                //       PaymentProviderButton(
-                //         logoPaths: [ImagePaths.btc],
-                //         onChanged: () => setState(
-                //           () => selectedPaymentProvider = 'btc',
-                //         ),
-                //         selectedPaymentProvider: selectedPaymentProvider,
-                //         paymentType: 'btc',
-                //       )
-                //     ],
-                //   ),
-                // ),
+                // * Step 3
+                PlanStep(
+                  stepNum: '3',
+                  description: 'Choose Payment Method'.i18n,
+                ),
+                // * Payment options
+                Container(
+                  padding:
+                      const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // * Alipay
+                      PaymentProviderButton(
+                        logoPaths: [ImagePaths.alipay],
+                        onChanged: () => setState(
+                          () => selectedPaymentProvider = 'alipay',
+                        ),
+                        selectedPaymentProvider: selectedPaymentProvider,
+                        paymentType: 'alipay',
+                      ),
+                      // * BTC
+                      PaymentProviderButton(
+                        logoPaths: [ImagePaths.btc],
+                        onChanged: () => setState(
+                          () => selectedPaymentProvider = 'btc',
+                        ),
+                        selectedPaymentProvider: selectedPaymentProvider,
+                        paymentType: 'btc',
+                      ),
+                      // * VISA (Stripe)
+                      PaymentProviderButton(
+                        logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
+                        onChanged: () => setState(
+                          () => selectedPaymentProvider = 'stripe',
+                        ),
+                        selectedPaymentProvider: selectedPaymentProvider,
+                        paymentType: 'stripe',
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
             // * Price summary, TOS and Button
@@ -296,7 +306,7 @@ class _CheckoutState extends State<Checkout>
                             description: error.toString(),
                           );
                         }),
-                        resolvePaymentRoute(),
+                        resolvePaymentRoute(selectedPaymentProvider),
                       ],
                       eagerError: true,
                     );
@@ -310,59 +320,65 @@ class _CheckoutState extends State<Checkout>
     );
   }
 
-  Future<void> resolvePaymentRoute() async {
-    if (selectedPaymentProvider == 'stripe') {
-      // * Stripe selected
-      await context.pushRoute(
-        StripeCheckout(
-          plans: widget.plans,
-          email: emailController.value.text,
-          refCode: refCodeController.value.text,
-          refCodeSuccessfullyApplied: refCodeSuccessfullyApplied,
-          id: widget.id,
-          isPro: widget.isPro,
-        ),
-      );
-    } else {
-      // * BTC payment selected
-      context.loaderOverlay.show();
-      await sessionModel
-          .getBitcoinEndpoint(
-            widget.id,
-            emailController.value.text,
-          )
-          .timeout(
-            defaultTimeoutDuration,
-            onTimeout: () => onAPIcallTimeout(
-              code: 'submitBitcoinTimeout',
-              message: 'bitcoin_timeout'.i18n,
-            ),
-          )
-          .then((value) async {
-        try {
-          final btcPayURL = jsonDecode(value as String)['redirect'];
-          await context.pushRoute(
-            FullScreenDialogPage(
-              widget: BitcoinWebview(btcPayURL: btcPayURL, context: context),
-            ),
-          );
-        } catch (e) {
-          print(e);
-        }
-      }).onError((error, stackTrace) {
-        context.loaderOverlay.hide();
-        CDialog.showError(
-          context,
-          error: e,
-          stackTrace: stackTrace,
-          description: (error as PlatformException)
-              .message
-              .toString()
-              .i18n // we are localizing this error Flutter-side,
-          ,
+  Future<void> resolvePaymentRoute(String selectedPaymentProvider) async {
+    switch (selectedPaymentProvider) {
+      case 'stripe':
+        await context.pushRoute(
+          StripeCheckout(
+            plans: widget.plans,
+            email: emailController.value.text,
+            refCode: refCodeController.value.text,
+            refCodeSuccessfullyApplied: refCodeSuccessfullyApplied,
+            id: widget.id,
+            isPro: widget.isPro,
+          ),
         );
-      });
+        break;
+      case 'btc':
+        context.loaderOverlay.show();
+        await sessionModel
+            .getBitcoinEndpoint(
+              widget.id,
+              emailController.value.text,
+            )
+            .timeout(
+              defaultTimeoutDuration,
+              onTimeout: () => onAPIcallTimeout(
+                code: 'submitBitcoinTimeout',
+                message: 'bitcoin_timeout'.i18n,
+              ),
+            )
+            .then((value) async {
+          try {
+            final btcPayURL = jsonDecode(value as String)['redirect'];
+            await context.pushRoute(
+              FullScreenDialogPage(
+                widget: BitcoinWebview(btcPayURL: btcPayURL, context: context),
+              ),
+            );
+          } catch (e) {
+            print(e);
+          }
+        }).onError((error, stackTrace) {
+          context.loaderOverlay.hide();
+          CDialog.showError(
+            context,
+            error: e,
+            stackTrace: stackTrace,
+            description: (error as PlatformException)
+                .message
+                .toString()
+                .i18n // we are localizing this error Flutter-side,
+            ,
+          );
+        });
+        break;
+      case 'alipay':
+        await sessionModel.prepareYuansfer();
+        break;
+      default:
     }
+
     ;
   }
 }

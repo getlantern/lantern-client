@@ -23,6 +23,7 @@ final featuresList = [
 ];
 
 final paymentProviders = [
-  'stripe',
+  'alipay',
   'btc',
+  'stripe',
 ];

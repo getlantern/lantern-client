@@ -272,6 +272,13 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  // TODO: implement this Kotlin-side
+  Future<void> prepareYuansfer() async {
+    return methodChannel
+        .invokeMethod('prepareYuansfer')
+        .then((value) => value as String);
+  }
+
   Future<void> submitGooglePlay(String planID) async {
     return methodChannel.invokeMethod('submitGooglePlay', <String, dynamic>{
       'planID': planID,

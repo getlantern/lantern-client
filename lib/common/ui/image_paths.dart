@@ -23,6 +23,7 @@ class ImagePaths {
   static const translate = 'assets/images/translate.svg';
   static const mastercard = 'assets/images/mastercard.svg';
   static const visa = 'assets/images/visa.svg';
+  static const alipay = 'assets/images/alipay.svg';
   static const btc = 'assets/images/btc.svg';
   static const dots = 'assets/images/dots.svg';
   static const credit_card = 'assets/images/credit_card.svg';
