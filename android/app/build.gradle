@@ -359,10 +359,13 @@ dependencies {
 
     implementation(name:'paymentwall-android-sdk', ext: 'aar')
 
-    implementation project(':alipaySdk-15.6.5-20190718211148')
     implementation(name:'alipayadapter-release', ext: 'aar') {
         transitive = true
     }
+
+    implementation 'com.github.yuansfer:yuansfer-payment-android:1.2.0'
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
+    implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
 
     // https://mvnrepository.com/artifact/net.jodah/expiringmap
     implementation group: 'net.jodah', name: 'expiringmap', version: '0.5.9'

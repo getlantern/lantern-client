@@ -267,8 +267,10 @@ public class LanternHttpClient extends HttpClient {
     public void sendLinkRequest(final ProCallback cb) {
         final HttpUrl url = createProUrl("/user-link-request");
         final RequestBody formBody = new FormBody.Builder()
+                .add("plan", LanternApp.getSession().getSelectedPlan().getId())
                 .add("email", LanternApp.getSession().email())
                 .add("deviceName", LanternApp.getSession().deviceName())
+                .add("paymentVendor", vendor)
                 .build();
 
         post(url, formBody,
@@ -446,9 +448,9 @@ public class LanternHttpClient extends HttpClient {
                     final String error = result.get("error").getAsString();
                     Logger.error(TAG, "Error making request to " + url + ":" + result + " error:" + error);
                     cb.onFailure(null, new ProError(result));
-                    return;
+                } else if (cb != null) {
+                    cb.onSuccess(response, result);
                 }
-                cb.onSuccess(response, result);
             }
         });
     }
