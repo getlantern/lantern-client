@@ -17,6 +17,8 @@ import org.getlantern.lantern.util.DateUtil.isToday
 import org.getlantern.mobilesdk.Logger
 
 object PlansUtil {
+    private val lanternClient = LanternApp.getLanternHttpClient()
+
     @JvmStatic
     fun updatePrice(activity: Activity, plan: ProPlan) {
         val totalCost = plan.costWithoutTaxStr
@@ -38,7 +40,7 @@ object PlansUtil {
         val params: MutableMap<String, String> = HashMap()
         params["email"] = email
         // TODO: not sure this is working correctly
-        CheckoutActivity.lanternClient[LanternHttpClient.createProUrl(
+        lanternClient.get(LanternHttpClient.createProUrl(
             "/email-exists",
             params
         ), object : ProCallback {
@@ -62,7 +64,7 @@ object PlansUtil {
                 )
                 LanternApp.getSession().setEmail(email)
             }
-        }]
+        })
     }
 
     @JvmStatic

@@ -109,7 +109,6 @@ open class SessionModel(
             "submitStripe" -> submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, call.argument("expDate")!!, call.argument("cvc")!!, call.argument("planID")!!, result)
             "submitGooglePlay" -> submitGooglePlay(call.argument("planID")!!, result)
             "applyRefCode" -> applyRefCode(call.argument("refCode")!!, call.argument("email")!!, result)
-            "getBitcoinEndpoint" -> getBitcoinEndpoint(call.argument("planID")!!, call.argument("email")!!, result)
             "redeemResellerCode" -> redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
             "checkEmailExistence" -> PlansUtil.checkEmailExistence(call.argument("email")!!, result)
             "prepareYuansfer" -> prepareYuansfer(call.argument("planID")!!, call.argument("email")!!, result)
@@ -622,40 +621,6 @@ open class SessionModel(
             result.error(
                 "unknownError",
                 "Something went wrong while applying your referral code", // This error message is localized Flutter-side
-                null,
-            )
-        }
-    }
-
-    // Returns the BTCPay endpoint which is needed to trigger the WebView Flutter-side
-    private fun getBitcoinEndpoint(planID: String, email: String, result: MethodChannel.Result) {
-        try {
-            LanternApp.getSession().setEmail(email)
-            val plansJSON = LanternApp.getSession().getCachedPlans().toString()
-            val plans = Gson().fromJson<ConcurrentHashMap<String, ProPlan>>(plansJSON, object : TypeToken<ConcurrentHashMap<String, ProPlan>>() {}.type)
-            LanternApp.getSession().setProPlan(plans[planID])
-            LanternApp.getSession().setProvider("btcpay")
-            // Send request to /payment-redirect endpoint
-            lanternClient.getBitcoinURL(planID, object: ProCallback {
-                override fun onFailure(throwable: Throwable?, error: ProError?) {
-                    result.error(
-                        "unknownError",
-                        "BTCPay is unavailable", // This error message is localized Flutter-side
-                        null,
-                    )
-                    return
-                }
-
-                override fun onSuccess(response: Response, res: JsonObject) {
-                    Logger.debug("BTC URL", res.toString())
-                    result.success(res.toString())
-                }
-            })
-        } catch (t: Throwable) {
-            Logger.error(TAG, "BTCPay is unavailable", t)
-            result.error(
-                "unknownError",
-                "BTCPay is unavailable", // This error message is localized Flutter-side
                 null,
             )
         }

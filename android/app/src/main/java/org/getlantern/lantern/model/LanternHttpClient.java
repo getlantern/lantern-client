@@ -205,36 +205,6 @@ public class LanternHttpClient extends HttpClient {
         });
     }
 
-    // <Platinum Updates PR #768>
-    public void getBitcoinURL(final String planID, final ProCallback cb) {
-        final Map<String, String> params = new HashMap<String, String>();
-        params.put("locale", LanternApp.getSession().getLanguage());
-        params.put("countrycode", LanternApp.getSession().getCountryCode());
-        params.put("email", LanternApp.getSession().email());
-        params.put("plan", planID);
-        params.put("provider", "btcpay");
-        params.put("deviceName", LanternApp.getSession().deviceName());
-        final HttpUrl url = createProUrl("/payment-redirect", params);
-        final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
-        get(url, new ProCallback() {
-            @Override
-            public void onFailure(final Throwable throwable, final ProError error) {
-                Logger.error(TAG, "Request to /payment-redirect failed", throwable);
-                cb.onFailure(throwable, error);
-            }
-
-            @Override
-            public void onSuccess(final Response response, final JsonObject result) {
-                try {
-                    Logger.debug(TAG, "JSON response for " + url + ":" + result.toString());
-                    cb.onSuccess(response, result);
-                } catch (Exception e) {
-                    Logger.error(TAG, "Unable to fetch plans: " + e.getMessage(), e);
-                }
-            }
-        });
-    }
-
     public void prepareYuansfer(final String planID, final String email, final String vendor, final YuansferCallback cb) {
         final HttpUrl url = createProUrl("/yuansfer-prepay");
         final RequestBody formBody = new FormBody.Builder()

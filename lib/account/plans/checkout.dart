@@ -77,191 +77,184 @@ class _CheckoutState extends State<Checkout>
           top: 24.0,
           bottom: 32.0,
         ),
-        child: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
+        child: Column(
           children: [
-            ListView(
-              children: [
-                // * Step 2
-                PlanStep(
-                  stepNum: '2',
-                  description: 'Enter email'.i18n,
-                ),
-                // * Email field
-                Container(
-                  padding: const EdgeInsetsDirectional.only(
-                    top: 8,
-                    bottom: 8,
+            Expanded(
+              child: ListView(
+                children: [
+                  // * Step 2
+                  PlanStep(
+                    stepNum: '2',
+                    description: 'Enter email'.i18n,
                   ),
-                  child: Form(
-                    key: emailFieldKey,
-                    child: sessionModel.emailAddress(
-                      (context, email, child) => CTextField(
-                        enabled: email.isEmpty,
-                        initialValue: email,
-                        controller: emailController,
-                        autovalidateMode: AutovalidateMode.disabled,
-                        label: 'Email'.i18n,
-                        keyboardType: TextInputType.emailAddress,
-                        prefixIcon: const CAssetImage(path: ImagePaths.email),
+                  // * Email field
+                  Container(
+                    padding: const EdgeInsetsDirectional.only(
+                      top: 8,
+                      bottom: 8,
+                    ),
+                    child: Form(
+                      key: emailFieldKey,
+                      child: sessionModel.emailAddress(
+                        (context, email, child) => CTextField(
+                          enabled: email.isEmpty,
+                          initialValue: email,
+                          controller: emailController,
+                          autovalidateMode: AutovalidateMode.disabled,
+                          label: 'Email'.i18n,
+                          keyboardType: TextInputType.emailAddress,
+                          prefixIcon: const CAssetImage(path: ImagePaths.email),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                // * Referral Code field - initially hidden
-                Visibility(
-                  visible: isRefCodeFieldShowing,
-                  child: Container(
-                    padding: const EdgeInsetsDirectional.only(
-                      top: 8,
-                      bottom: 16,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 2,
-                          child: Form(
-                            key: refCodeFieldKey,
-                            child: CTextField(
-                              maxLength: 13,
-                              enabled: !refCodeSuccessfullyApplied,
-                              controller: refCodeController,
-                              autovalidateMode: AutovalidateMode.disabled,
-                              textCapitalization: TextCapitalization.characters,
-                              label: 'Referral code'.i18n,
-                              keyboardType: TextInputType.text,
-                              prefixIcon:
-                                  const CAssetImage(path: ImagePaths.star),
-                              removeCounter: true,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: submittedRefCode &&
-                                  refCodeFieldKey.currentState?.validate() ==
-                                      true &&
-                                  refCodeSuccessfullyApplied
-                              ? const CAssetImage(
-                                  path: ImagePaths.check_green,
-                                )
-                              : CInkWell(
-                                  onTap: () async {
-                                    await sessionModel
-                                        .applyRefCode(
-                                          refCodeController.value.text,
-                                          emailController.value.text,
-                                        )
-                                        .then(
-                                          (value) => setState(() {
-                                            submittedRefCode = true;
-                                            refCodeSuccessfullyApplied = true;
-                                          }),
-                                        )
-                                        .onError((error, stackTrace) {
-                                      CDialog.showError(
-                                        context,
-                                        error: e,
-                                        stackTrace: stackTrace,
-                                        description: (error
-                                                as PlatformException)
-                                            .message
-                                            .toString()
-                                            .i18n, // we are localizing this error Flutter-side
-                                      );
-                                      setState(() {
-                                        refCodeSuccessfullyApplied = false;
-                                      });
-                                    });
-                                  },
-                                  child: Container(
-                                    padding:
-                                        const EdgeInsetsDirectional.all(16.0),
-                                    child: CText(
-                                      'Apply'.i18n.toUpperCase(),
-                                      style: tsButtonPink,
-                                    ),
-                                  ),
-                                ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                // * Add Referral code
-                Visibility(
-                  visible: !isRefCodeFieldShowing,
-                  child: GestureDetector(
-                    onTap: () async =>
-                        setState(() => isRefCodeFieldShowing = true),
+                  // * Referral Code field - initially hidden
+                  Visibility(
+                    visible: isRefCodeFieldShowing,
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
                       padding: const EdgeInsetsDirectional.only(
                         top: 8,
                         bottom: 16,
                       ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const CAssetImage(path: ImagePaths.add),
-                          Padding(
-                            padding:
-                                const EdgeInsetsDirectional.only(start: 8.0),
-                            child: CText(
-                              'Add Referral code'.i18n,
-                              style: tsBody1,
+                          Flexible(
+                            flex: 2,
+                            child: Form(
+                              key: refCodeFieldKey,
+                              child: CTextField(
+                                maxLength: 13,
+                                enabled: !refCodeSuccessfullyApplied,
+                                controller: refCodeController,
+                                autovalidateMode: AutovalidateMode.disabled,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                label: 'Referral code'.i18n,
+                                keyboardType: TextInputType.text,
+                                prefixIcon:
+                                    const CAssetImage(path: ImagePaths.star),
+                                removeCounter: true,
+                              ),
                             ),
                           ),
+                          Flexible(
+                            flex: 1,
+                            child: submittedRefCode &&
+                                    refCodeFieldKey.currentState?.validate() ==
+                                        true &&
+                                    refCodeSuccessfullyApplied
+                                ? const CAssetImage(
+                                    path: ImagePaths.check_green,
+                                  )
+                                : CInkWell(
+                                    onTap: () async {
+                                      await sessionModel
+                                          .applyRefCode(
+                                            refCodeController.value.text,
+                                            emailController.value.text,
+                                          )
+                                          .then(
+                                            (value) => setState(() {
+                                              submittedRefCode = true;
+                                              refCodeSuccessfullyApplied = true;
+                                            }),
+                                          )
+                                          .onError((error, stackTrace) {
+                                        CDialog.showError(
+                                          context,
+                                          error: e,
+                                          stackTrace: stackTrace,
+                                          description: (error
+                                                  as PlatformException)
+                                              .message
+                                              .toString()
+                                              .i18n, // we are localizing this error Flutter-side
+                                        );
+                                        setState(() {
+                                          refCodeSuccessfullyApplied = false;
+                                        });
+                                      });
+                                    },
+                                    child: Container(
+                                      padding:
+                                          const EdgeInsetsDirectional.all(16.0),
+                                      child: CText(
+                                        'Apply'.i18n.toUpperCase(),
+                                        style: tsButtonPink,
+                                      ),
+                                    ),
+                                  ),
+                          )
                         ],
                       ),
                     ),
                   ),
-                ),
-                // * Step 3
-                PlanStep(
-                  stepNum: '3',
-                  description: 'Choose Payment Method'.i18n,
-                ),
-                // * Payment options
-                Container(
-                  padding:
-                      const EdgeInsetsDirectional.only(top: 16, bottom: 16),
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // * Alipay
-                      PaymentProviderButton(
-                        logoPaths: [ImagePaths.alipay],
-                        onChanged: () => setState(
-                          () => selectedPaymentProvider = 'alipay',
+                  // * Add Referral code
+                  Visibility(
+                    visible: !isRefCodeFieldShowing,
+                    child: GestureDetector(
+                      onTap: () async =>
+                          setState(() => isRefCodeFieldShowing = true),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsetsDirectional.only(
+                          top: 8,
+                          bottom: 16,
                         ),
-                        selectedPaymentProvider: selectedPaymentProvider,
-                        paymentType: 'alipay',
-                      ),
-                      // * BTC
-                      PaymentProviderButton(
-                        logoPaths: [ImagePaths.btc],
-                        onChanged: () => setState(
-                          () => selectedPaymentProvider = 'btc',
+                        child: Row(
+                          children: [
+                            const CAssetImage(path: ImagePaths.add),
+                            Padding(
+                              padding:
+                                  const EdgeInsetsDirectional.only(start: 8.0),
+                              child: CText(
+                                'Add Referral code'.i18n,
+                                style: tsBody1,
+                              ),
+                            ),
+                          ],
                         ),
-                        selectedPaymentProvider: selectedPaymentProvider,
-                        paymentType: 'btc',
                       ),
-                      // * VISA (Stripe)
-                      PaymentProviderButton(
-                        logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
-                        onChanged: () => setState(
-                          () => selectedPaymentProvider = 'stripe',
-                        ),
-                        selectedPaymentProvider: selectedPaymentProvider,
-                        paymentType: 'stripe',
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                  // * Step 3
+                  PlanStep(
+                    stepNum: '3',
+                    description: 'Choose Payment Method'.i18n,
+                  ),
+                  // * Payment options
+                  Container(
+                    padding:
+                        const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // * Alipay
+                        PaymentProviderButton(
+                          logoPaths: [ImagePaths.alipay],
+                          onChanged: () => setState(
+                            () => selectedPaymentProvider = 'alipay',
+                          ),
+                          selectedPaymentProvider: selectedPaymentProvider,
+                          paymentType: 'alipay',
+                        ),
+                        // * VISA (Stripe)
+                        PaymentProviderButton(
+                          logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
+                          onChanged: () => setState(
+                            () => selectedPaymentProvider = 'stripe',
+                          ),
+                          selectedPaymentProvider: selectedPaymentProvider,
+                          paymentType: 'stripe',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             // * Price summary, TOS and Button
             Column(
@@ -333,48 +326,6 @@ class _CheckoutState extends State<Checkout>
             isPro: widget.isPro,
           ),
         );
-        break;
-      case 'btc':
-        context.loaderOverlay.show();
-        await sessionModel
-            .getBitcoinEndpoint(
-          widget.id,
-          emailController.value.text,
-        )
-            .timeout(
-          defaultTimeoutDuration,
-          onTimeout: () {
-            context.loaderOverlay.hide();
-            onAPIcallTimeout(
-              code: 'submitBitcoinTimeout',
-              message: 'bitcoin_timeout'.i18n,
-            );
-          },
-        ).then((value) async {
-          try {
-            final btcPayURL = jsonDecode(value as String)['redirect'];
-            await context.pushRoute(
-              FullScreenDialogPage(
-                widget: PaymentWebview(url: btcPayURL, context: context),
-              ),
-            );
-          } catch (e) {
-            context.loaderOverlay.hide();
-            print(e);
-          }
-        }).onError((error, stackTrace) {
-          context.loaderOverlay.hide();
-          CDialog.showError(
-            context,
-            error: e,
-            stackTrace: stackTrace,
-            description: (error as PlatformException)
-                .message
-                .toString()
-                .i18n // we are localizing this error Flutter-side,
-            ,
-          );
-        });
         break;
       case 'alipay':
         context.loaderOverlay.show();

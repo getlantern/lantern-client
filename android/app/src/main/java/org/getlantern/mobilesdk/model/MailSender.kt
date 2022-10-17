@@ -48,7 +48,7 @@ class MailSender @JvmOverloads constructor(
       )
     }
 
-    fun onSuccess() {
+    override fun onSuccess() {
         dialog?.let { dialog ->
             if (dialog.isShowing()) {
                 dialog.dismiss()
