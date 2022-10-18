@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.text.TextUtils
 import io.lantern.android.model.Vpn
 import org.getlantern.lantern.BuildConfig
-import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.WelcomeActivity_
 import org.getlantern.mobilesdk.Logger

@@ -11,7 +11,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import org.getlantern.lantern.activity.DesktopActivity_
 import org.getlantern.lantern.activity.InviteActivity_
-import org.getlantern.lantern.activity.RegisterProActivity_
 import org.getlantern.lantern.activity.authorizeDevice.LinkDeviceActivity_
 import org.getlantern.mobilesdk.activity.ReportIssueActivity
 
@@ -82,8 +81,4 @@ fun Activity.restartApp() {
     val mgr: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     mgr.set(AlarmManager.RTC, java.lang.System.currentTimeMillis() + 100, mPendingIntent)
     Process.killProcess(Process.myPid())
-}
-
-fun Activity.openCheckOutReseller() {
-    startActivity(Intent(this, RegisterProActivity_::class.java))
 }

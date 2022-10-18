@@ -92,13 +92,6 @@
         </activity>
 
         <activity
-            android:name=".activity.PaymentWallActivity_"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="locale|layoutDirection"
-            android:noHistory="true">
-        </activity>
-
-        <activity
             android:name=".activity.WelcomeActivity_"
             android:screenOrientation="portrait"
             android:noHistory="true">
@@ -118,11 +111,6 @@
 
         <activity
             android:name=".activity.WebViewActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.RegisterProActivity_"
             android:screenOrientation="portrait"
             />
 
