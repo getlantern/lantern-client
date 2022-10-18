@@ -13,13 +13,10 @@ import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternSessionManager;
 import org.getlantern.lantern.model.MessagingHolder;
-import org.getlantern.lantern.model.WelcomeDialog;
-import org.getlantern.lantern.model.WelcomeDialog_;
 import org.getlantern.lantern.util.SentryUtil;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.ProdLogger;
 import org.getlantern.mobilesdk.util.HttpClient;
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -121,34 +118,6 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
 
     public Activity getCurrentActivity() {
         return this.currentActivity;
-    }
-
-    private void showWelcomeScreen() {
-        if (getCurrentActivity() == null) {
-            return;
-        }
-
-        String experiment;
-        if (session.isProUser() || session.isExpired()) {
-            return; // experiment = WelcomeDialog.LAYOUT_RENEWAL;
-        } else {
-//            experiment = firebaseRemoteConfig.getString(FIREBASE_WELCOME_SCREEN_KEY);
-//            Logger.debug(TAG, String.format("welcome_screen = `%s`", experiment));
-        }
-
-//        if (!WelcomeDialog.isSupportedLayout(experiment)) {
-//            Logger.debug(TAG, String.format("No supported welcome screen configured (`%s`), skipping.", experiment));
-//            return;
-//        }
-
-        WelcomeDialog welcome = WelcomeDialog_.builder().layout(WelcomeDialog.LAYOUT_DEFAULT).build();
-        if (welcome == null) {
-            Logger.error(TAG, "Could not create welcome screen dialog");
-            return;
-        }
-
-        session.setWelcomeLastSeen();
-        welcome.show(getCurrentActivity().getFragmentManager(), "dialog");
     }
 
     public static Context getAppContext() {

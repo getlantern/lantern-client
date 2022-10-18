@@ -427,10 +427,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
     private fun showSurvey(survey: Survey?) {
         survey ?: return
-        if (survey.showPlansScreen) {
-            startActivity(Intent(this@MainActivity, LanternApp.getSession().plansActivity()))
-            return
-        }
+        // TODO: when we moved plans and purchasing to Flutter, we lost the ability to show plans
+        // in response to a survey configuration. We might want to resurrect this eventually.
+//        if (survey.showPlansScreen) {
+//            startActivity(Intent(this@MainActivity, LanternApp.getSession().plansActivity()))
+//            return
+//        }
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
 
         // For some reason, telegram.me links create infinite redirects. To solve this, we disable

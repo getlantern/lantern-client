@@ -127,16 +127,6 @@
             />
 
         <activity
-            android:name=".activity.Gate2ShopActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.PlansActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
             android:name=".activity.PrivacyDisclosureActivity_"
             android:screenOrientation="portrait"
             />
