@@ -120,20 +120,6 @@ public class ProPlan {
         return duration.get("years");
     }
 
-    // <Platinum Updates PR #768> Has been moved to and modified in SessionModel.kt
-    public String formatRenewalBonusExpected(Context context) {
-        Integer bonusMonths = renewalBonusExpected.get("months");
-        Integer bonusDays = renewalBonusExpected.get("days");
-        List<String> bonusParts = new ArrayList<>();
-        if (bonusMonths != null && bonusMonths > 0) {
-            bonusParts.add(context.getResources().getQuantityString(R.plurals.month, bonusMonths, bonusMonths));
-        }
-        if (bonusDays != null && bonusDays > 0) {
-            bonusParts.add(context.getResources().getQuantityString(R.plurals.day, bonusDays, bonusDays));
-        }
-        return TextUtils.join(" ", bonusParts);
-    }
-
     public Map<String, Long> getPrice() {
         return price;
     }
@@ -300,25 +286,6 @@ public class ProPlan {
         } else {
             this.costWithoutTaxStr = this.costStr;
         }
-    }
-
-    public String getFormatPriceWithBonus(Context context, boolean useNumber) {
-        String durationFormat;
-        if (useNumber) {
-            durationFormat = context.getString(R.string.plan_duration, numYears());
-        } else {
-            if (numYears() == 1) {
-                durationFormat = context.getString(R.string.one_year_lantern_pro);
-            } else {
-                durationFormat = context.getString(R.string.two_years_lantern_pro);
-            }
-        }
-
-        String bonus = formatRenewalBonusExpected(context);
-        if (!bonus.isEmpty()) {
-            durationFormat += " + " + formatRenewalBonusExpected(context);
-        }
-        return durationFormat;
     }
 
     public boolean isBestValue() {
