@@ -12,7 +12,6 @@ import io.flutter.plugin.common.MethodChannel
 import org.getlantern.lantern.activity.DesktopActivity_
 import org.getlantern.lantern.activity.InviteActivity_
 import org.getlantern.lantern.activity.PlansActivity_
-import org.getlantern.lantern.activity.CheckoutActivity_
 import org.getlantern.lantern.activity.RegisterProActivity_
 import org.getlantern.lantern.activity.authorizeDevice.LinkDeviceActivity_
 import org.getlantern.mobilesdk.activity.ReportIssueActivity

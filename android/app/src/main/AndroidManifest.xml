@@ -137,11 +137,6 @@
             />
 
         <activity
-            android:name=".activity.CheckoutActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
             android:name=".activity.PrivacyDisclosureActivity_"
             android:screenOrientation="portrait"
             />

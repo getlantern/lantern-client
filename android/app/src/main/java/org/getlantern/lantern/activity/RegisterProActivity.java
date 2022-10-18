@@ -40,7 +40,7 @@ public class RegisterProActivity extends BaseFragmentActivity {
     private final ClickSpan.OnClickListener clickSpan = () -> {
             final Intent intent = new Intent(RegisterProActivity.this,
                 WebViewActivity_.class);
-            intent.putExtra("url", CheckoutActivity.TERMS_OF_SERVICE_URL);
+            intent.putExtra("url", BuildConfig.TERMS_OF_SERVICE_URL);
             startActivity(intent);
         };
 
