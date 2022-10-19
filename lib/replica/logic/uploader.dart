@@ -1,7 +1,7 @@
 import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:http/http.dart' as http;
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/notifications.dart';
-import 'package:http/http.dart' as http;
 
 /// ReplicaUploader is a singleton class. Use it like this:
 /// - Initialize ReplicaUploader by calling ReplicaUploader.inst.init()

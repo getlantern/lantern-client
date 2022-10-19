@@ -1,9 +1,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/price_summary.dart';
+import 'package:lantern/account/plans/purchase_success_dialog.dart';
 import 'package:lantern/common/common.dart';
 
-import 'payment_webview.dart';
 import 'payment_provider_button.dart';
 import 'plan_utils.dart';
 import 'purchase_constants.dart';
@@ -54,7 +54,6 @@ class _CheckoutState extends State<Checkout>
 
   @override
   void initState() {
-    WebView.platform = AndroidWebView();
     super.initState();
   }
 
@@ -328,54 +327,47 @@ class _CheckoutState extends State<Checkout>
         );
         break;
       case 'alipay':
-        context.loaderOverlay.show();
         await sessionModel
-            .prepareYuansfer(
+            .payWithYuansfer(
           widget.id,
           emailController.value.text,
         )
-            .timeout(
-          defaultTimeoutDuration,
-          onTimeout: () {
-            context.loaderOverlay.hide();
-            onAPIcallTimeout(
-              code: 'yuansferTimeout',
-              message: 'alipay_timeout'.i18n,
-            );
-          },
-        ).then((value) async {
-          try {
-            // Example response
-            // "_input_charset="UTF-8"&currency="USD"&forex_biz="FP"&it_b_pay="60m"&notify_url="https://mapi.yuansfer.com/appIpnCallbackNotify/2805/3029/321926428154256546/alipay-transaction-notify"&out_trade_no="321926428154256546"&partner="2088331716685923"&payment_type="1"&product_code="NEW_WAP_OVERSEAS_SELLER"&refer_url="https://www.goodmorningtech.io"&rmb_fee="2297.00"&secondary_merchant_id="202805"&secondary_merchant_industry="7392"&secondary_merchant_name="Good Morning Tech LLC"&seller_id="2088331716685923"&service="mobile.securitypay.pay"&subject="Good Morning Tech"&sign="J%2BQWSGkcSzRqMkDoKgruflktKJeI19khV2tXn2WS95ZUPghblZOZJb7sF8ggjch%2F7PSlNboCvkUmH1gmhMWZCHI9hdNVv18JdHilnDtcD5ffSDVoyUdyQcMCfCoOGmUzpO1B%2FAgd1ljQiFYTayrQSPoH2l%2BkY2CC26PydRGctnw%3D"&sign_type="RSA""
-
-            // TODO: extract redirect URL
-            final alipayURL = '';
-            await context.pushRoute(
-              FullScreenDialogPage(
-                widget: PaymentWebview(url: alipayURL, context: context),
+            .then((value) async {
+          await showDialog(
+            context: context,
+            builder: (context) => sessionModel.getCachedUserLevel(
+              (context, userLevel, child) => sessionModel.getUpgradeOrRenewal(
+                (context, renewalOrUpgrade, child) => PurchaseSuccessDialog(
+                  title: getPurchaseDialogTitle(
+                    userLevel,
+                    renewalOrUpgrade,
+                  ),
+                  description: getPurchaseDialogText(
+                    userLevel,
+                    renewalOrUpgrade,
+                  ),
+                ),
               ),
-            );
-          } catch (e) {
-            context.loaderOverlay.hide();
-            print(e);
-          }
+            ),
+          );
         }).onError((error, stackTrace) {
-          context.loaderOverlay.hide();
+          var pe = (error as PlatformException);
+          if (pe.code == 'canceled') {
+            // this simply means the user canceled out of the flow, no need to show an error
+            return;
+          }
           CDialog.showError(
             context,
             error: e,
             stackTrace: stackTrace,
-            description: (error as PlatformException)
-                .message
+            description: pe.message
                 .toString()
-                .i18n // we are localizing this error Flutter-side,
-            ,
+                .i18n, // we are localizing this error Flutter-side,
           );
         });
         break;
       default:
     }
-
     ;
   }
 }

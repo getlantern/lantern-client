@@ -85,7 +85,8 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
             ),
             const SizedBox(
               height: 10,
-            ), // <08-22-22, echo> I feel like the standard list view under tabs scrolls directly under tab (no padding) no?
+            ),
+            // <08-22-22, echo> I feel like the standard list view under tabs scrolls directly under tab (no padding) no?
             TabBar(
               controller: tabController,
               onTap: (tab) async => await replicaModel.setSearchTab(tab),

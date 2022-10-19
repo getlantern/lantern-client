@@ -1,6 +1,7 @@
 package io.lantern.android.model
 
 import android.app.Activity
+import android.app.ProgressDialog
 import androidx.core.content.ContextCompat
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
@@ -13,31 +14,19 @@ import com.stripe.android.ApiResultCallback
 import com.stripe.android.Stripe
 import com.stripe.android.model.Card.Builder
 import com.stripe.android.model.Token
+import com.yuansfer.pay.YSAppPay
+import com.yuansfer.pay.aliwx.AliWxPayMgr
+import com.yuansfer.pay.util.ErrStatus
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
-import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.R
-import org.getlantern.lantern.model.CheckUpdate
-import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
-import org.getlantern.lantern.model.LanternHttpClient.ProCallback
-import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
-import org.getlantern.lantern.model.LanternHttpClient.YuansferCallback
-import org.getlantern.lantern.model.LanternHttpClient.createProUrl
-import org.getlantern.lantern.model.PaymentHandler
-import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.model.ProPlan
-import org.getlantern.lantern.model.ProUser
-import org.getlantern.lantern.openHome
-import org.getlantern.lantern.restartApp
-import org.getlantern.lantern.util.Analytics
-import org.getlantern.lantern.util.Json
-import org.getlantern.lantern.util.PlansUtil
-import org.getlantern.lantern.util.showAlertDialog
-import org.getlantern.lantern.util.showErrorDialog
+import org.getlantern.lantern.*
+import org.getlantern.lantern.model.*
+import org.getlantern.lantern.model.LanternHttpClient.*
+import org.getlantern.lantern.util.*
 import org.getlantern.mobilesdk.Logger
 import org.greenrobot.eventbus.EventBus
 import java.util.*
@@ -111,7 +100,7 @@ open class SessionModel(
             "applyRefCode" -> applyRefCode(call.argument("refCode")!!, call.argument("email")!!, result)
             "redeemResellerCode" -> redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
             "checkEmailExistence" -> PlansUtil.checkEmailExistence(call.argument("email")!!, result)
-            "prepareYuansfer" -> prepareYuansfer(call.argument("planID")!!, call.argument("email")!!, result)
+            "payWithYuansfer" -> payWithYuansfer(call.argument("planID")!!, call.argument("email")!!, result)
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -682,33 +671,45 @@ open class SessionModel(
         }
     }
 
-    // Get Yuansfer redirection URL
-    private fun prepareYuansfer(planID: String, email: String, result: MethodChannel.Result) {
-        try {
-        lanternClient.prepareYuansfer(planID, email, "alipay", object: YuansferCallback {
+    private fun payWithYuansfer(planID: String, email: String, result: MethodChannel.Result) {
+        val progressDialog = ProgressDialog(activity)
+        mainHandler.post { progressDialog.show() }
+        YSAppPay.getInstance().registerWXAPP(activity, "wxa0d4a241e5d692df")
+        lanternClient.prepareYuansfer(planID, email, "alipay", object : YuansferCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
-                result.error(
-                    "unknownError",
-                    "Something went wrong while accessing AliPay", // This error message is localized Flutter-side
-                    null,
-                )
-                return
+                Logger.error(TAG, "Unable to prepare Yuansfer: " + error!!.message)
+                mainHandler.post { progressDialog.hide() }
+                result.error(error!!.id, error!!.message, null)
             }
 
-            override fun onSuccess(paymentInfo: String?) {
-                Logger.debug("Yuansfer Payment info", paymentInfo.toString())
-                result.success(paymentInfo.toString())
+            override fun onSuccess(paymentInfo: String) {
+                YSAppPay.registerAliWxPayCallback(YuansferPayCallback(result));
+                mainHandler.post { progressDialog.hide() }
+                YSAppPay.getInstance().requestAliPayment(activity, paymentInfo)
             }
-
         })
-        }
-        catch (t: Throwable) {
-            Logger.error(TAG, "Unable to redirect to Yuansfer widget", t)
-            result.error(
-                "unknownError",
-                "Something went wrong while accessing AliPay", // This error message is localized Flutter-side
-                null,
-            )
-        }
+    }
+}
+
+class YuansferPayCallback(val result: MethodChannel.Result) : AliWxPayMgr.IAliWxPayCallback {
+    override fun onPaySuccess(payType: Int) {
+        Logger.debug(TAG, "Yuansfer Payment succeeded")
+        result.success("success")
+    }
+
+    override fun onPayFail(payType: Int, errStatus: ErrStatus) {
+        YSAppPay.unregisterAliWxPayCallback(this)
+        val msg = errStatus.errCode + " : " + errStatus.errMsg
+        Logger.error(TAG, "Error on Yuansfer Payment: $msg")
+        result.error(errStatus.errCode, msg, null)
+    }
+
+    override fun onPayCancel(payType: Int) {
+        Logger.debug(TAG, "Yuansfer Payment canceled")
+        result.error("canceled", "Yuansfer Payment canceled", null)
+    }
+
+    companion object {
+        private const val TAG = "YuansferCallback"
     }
 }

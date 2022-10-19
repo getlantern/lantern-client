@@ -10,6 +10,7 @@ class ContactInfoTopBar extends StatelessWidget {
     required this.contact,
     required this.verifiedColor,
   }) : super();
+
   @override
   Widget build(BuildContext context) {
     return Row(

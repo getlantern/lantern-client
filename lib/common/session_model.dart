@@ -272,11 +272,11 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<void> prepareYuansfer(
+  Future<void> payWithYuansfer(
     String planID,
     String email,
   ) async {
-    return methodChannel.invokeMethod('prepareYuansfer', <String, dynamic>{
+    return methodChannel.invokeMethod('payWithYuansfer', <String, dynamic>{
       'planID': planID,
       'email': email,
     }).then((value) => value as String);

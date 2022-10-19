@@ -1,11 +1,6 @@
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lantern/account/plans/plan_utils.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/replica/common.dart';
-import 'package:lantern/replica/logic/markdown_link_builder.dart';
-import 'package:lantern/replica/models/replica_link.dart';
-import 'package:lantern/replica/models/replica_model.dart';
-import 'package:markdown/markdown.dart' as md;
 
 class DeveloperSettingsTab extends StatelessWidget {
   DeveloperSettingsTab({Key? key}) : super(key: key);

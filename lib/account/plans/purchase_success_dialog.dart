@@ -3,6 +3,7 @@ import 'package:lantern/common/common.dart';
 class PurchaseSuccessDialog extends StatelessWidget {
   final String title;
   final String description;
+
   const PurchaseSuccessDialog({
     required this.title,
     required this.description,

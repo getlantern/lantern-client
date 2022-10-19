@@ -33,7 +33,7 @@ class _PulsatingIndicatorState extends State<PulsatingIndicator>
     _animationController.repeat(reverse: true);
     _animation = Tween<double>(begin: 0, end: widget.size * .25)
         .animate(_animationController)
-          ..addListener(() => setState(() {}));
+      ..addListener(() => setState(() {}));
     super.initState();
   }
 

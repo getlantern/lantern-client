@@ -111,16 +111,17 @@ class AccountMenu extends StatelessWidget {
         content: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
       ),
-      sessionModel
-          .getIsPro((context, isPro, child) => ListItemFactory.settingsItem(
-                icon: ImagePaths.devices,
-                content: isPlatinum || isPro
-                    ? 'Link Device'.i18n
-                    : 'Authorize Device for Pro'.i18n,
-                onTap: () {
-                  authorizeDeviceForPro(context);
-                },
-              )),
+      sessionModel.getIsPro(
+        (context, isPro, child) => ListItemFactory.settingsItem(
+          icon: ImagePaths.devices,
+          content: isPlatinum || isPro
+              ? 'Link Device'.i18n
+              : 'Authorize Device for Pro'.i18n,
+          onTap: () {
+            authorizeDeviceForPro(context);
+          },
+        ),
+      ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.settings,
         content: 'settings'.i18n,

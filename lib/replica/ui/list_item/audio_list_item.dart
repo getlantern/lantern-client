@@ -24,7 +24,9 @@ class ReplicaAudioListItem extends StatelessWidget {
       content: SizedBox(
         height: 60,
         child: Column(
-          mainAxisAlignment: hasDescription ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+          mainAxisAlignment: hasDescription
+              ? MainAxisAlignment.spaceBetween
+              : MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
@@ -38,17 +40,18 @@ class ReplicaAudioListItem extends StatelessWidget {
                 ),
               ],
             ),
-            if (hasDescription) Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                renderDescription(),
-                // Padding(
-                //   padding: const EdgeInsetsDirectional.only(start: 8.0),
-                //   child: renderMimeType(), // Figma has no mimeType, but maybe useful to end user?
-                // ),
-              ],
-            ),
+            if (hasDescription)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  renderDescription(),
+                  // Padding(
+                  //   padding: const EdgeInsetsDirectional.only(start: 8.0),
+                  //   child: renderMimeType(), // Figma has no mimeType, but maybe useful to end user?
+                  // ),
+                ],
+              ),
           ],
         ),
       ),
@@ -70,32 +73,33 @@ class ReplicaAudioListItem extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: replicaApi.getDuration(item.replicaLink),
       builder: (
-          BuildContext context,
-          CachedValue<double?> cached,
-          Widget? child,
-          ) =>
+        BuildContext context,
+        CachedValue<double?> cached,
+        Widget? child,
+      ) =>
           CText(
-            cached.value != null ? cached.value!.toMinutesAndSeconds() : '',
-            style: tsBody1,
-          ),
+        cached.value != null ? cached.value!.toMinutesAndSeconds() : '',
+        style: tsBody1,
+      ),
     );
   }
 
   // If mimetype is nil, just render 'audio/unknown'
   Widget renderMimeType() => CText(
-    item.primaryMimeType != null ? item.primaryMimeType! : 'audio_unknown'.i18n,
-    style: tsBody2Short.copiedWith(color: grey5),
-  );
+        item.primaryMimeType != null
+            ? item.primaryMimeType!
+            : 'audio_unknown'.i18n,
+        style: tsBody2Short.copiedWith(color: grey5),
+      );
 
   Widget renderDescription() {
     return Expanded(
-      child:
-        CText(
-          item.metaDescription,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: tsBody2Short,
-        ),
+      child: CText(
+        item.metaDescription,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: tsBody2Short,
+      ),
     );
   }
 }

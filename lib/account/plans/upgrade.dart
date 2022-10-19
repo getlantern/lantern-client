@@ -2,8 +2,8 @@ import 'package:lantern/account/plans/plan_card.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/common/common.dart';
 
-import 'purchase_constants.dart';
 import 'plan_utils.dart';
+import 'purchase_constants.dart';
 
 class Upgrade extends StatelessWidget {
   final bool isPro;

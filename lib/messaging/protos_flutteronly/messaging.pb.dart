@@ -37,6 +37,7 @@ class ContactId extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   ContactId._() : super();
+
   factory ContactId({
     ContactType? type,
     $core.String? id,
@@ -50,16 +51,20 @@ class ContactId extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory ContactId.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory ContactId.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   ContactId clone() => ContactId()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -67,10 +72,14 @@ class ContactId extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ContactId))
           as ContactId; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ContactId create() => ContactId._();
+
   ContactId createEmptyInstance() => create();
+
   static $pb.PbList<ContactId> createRepeated() => $pb.PbList<ContactId>();
+
   @$core.pragma('dart2js:noInline')
   static ContactId getDefault() =>
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ContactId>(create);
@@ -78,6 +87,7 @@ class ContactId extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   ContactType get type => $_getN(0);
+
   @$pb.TagNumber(1)
   set type(ContactType v) {
     setField(1, v);
@@ -85,11 +95,13 @@ class ContactId extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasType() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearType() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get id => $_getSZ(1);
+
   @$pb.TagNumber(2)
   set id($core.String v) {
     $_setString(1, v);
@@ -97,6 +109,7 @@ class ContactId extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasId() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearId() => clearField(2);
 }
@@ -130,6 +143,7 @@ class ChatNumber extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   ChatNumber._() : super();
+
   factory ChatNumber({
     $core.String? number,
     $core.String? shortNumber,
@@ -147,16 +161,20 @@ class ChatNumber extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory ChatNumber.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory ChatNumber.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   ChatNumber clone() => ChatNumber()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -164,10 +182,14 @@ class ChatNumber extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ChatNumber))
           as ChatNumber; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ChatNumber create() => ChatNumber._();
+
   ChatNumber createEmptyInstance() => create();
+
   static $pb.PbList<ChatNumber> createRepeated() => $pb.PbList<ChatNumber>();
+
   @$core.pragma('dart2js:noInline')
   static ChatNumber getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<ChatNumber>(create);
@@ -175,6 +197,7 @@ class ChatNumber extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.String get number => $_getSZ(0);
+
   @$pb.TagNumber(1)
   set number($core.String v) {
     $_setString(0, v);
@@ -182,11 +205,13 @@ class ChatNumber extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasNumber() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearNumber() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get shortNumber => $_getSZ(1);
+
   @$pb.TagNumber(2)
   set shortNumber($core.String v) {
     $_setString(1, v);
@@ -194,11 +219,13 @@ class ChatNumber extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasShortNumber() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearShortNumber() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get domain => $_getSZ(2);
+
   @$pb.TagNumber(3)
   set domain($core.String v) {
     $_setString(2, v);
@@ -206,6 +233,7 @@ class ChatNumber extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasDomain() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearDomain() => clearField(3);
 }
@@ -261,6 +289,7 @@ class Datum extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   Datum._() : super();
+
   factory Datum({
     $core.String? string,
     $core.double? float,
@@ -286,16 +315,20 @@ class Datum extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory Datum.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory Datum.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   Datum clone() => Datum()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -303,20 +336,26 @@ class Datum extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as Datum))
           as Datum; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Datum create() => Datum._();
+
   Datum createEmptyInstance() => create();
+
   static $pb.PbList<Datum> createRepeated() => $pb.PbList<Datum>();
+
   @$core.pragma('dart2js:noInline')
   static Datum getDefault() =>
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Datum>(create);
   static Datum? _defaultInstance;
 
   Datum_Value whichValue() => _Datum_ValueByTag[$_whichOneof(0)]!;
+
   void clearValue() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
   $core.String get string => $_getSZ(0);
+
   @$pb.TagNumber(1)
   set string($core.String v) {
     $_setString(0, v);
@@ -324,11 +363,13 @@ class Datum extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasString() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearString() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.double get float => $_getN(1);
+
   @$pb.TagNumber(2)
   set float($core.double v) {
     $_setDouble(1, v);
@@ -336,11 +377,13 @@ class Datum extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasFloat() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearFloat() => clearField(2);
 
   @$pb.TagNumber(3)
   $fixnum.Int64 get int_3 => $_getI64(2);
+
   @$pb.TagNumber(3)
   set int_3($fixnum.Int64 v) {
     $_setInt64(2, v);
@@ -348,11 +391,13 @@ class Datum extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasInt_3() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearInt_3() => clearField(3);
 
   @$pb.TagNumber(4)
   $core.bool get bool_4 => $_getBF(3);
+
   @$pb.TagNumber(4)
   set bool_4($core.bool v) {
     $_setBool(3, v);
@@ -360,11 +405,13 @@ class Datum extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasBool_4() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearBool_4() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.List<$core.int> get bytes => $_getN(4);
+
   @$pb.TagNumber(5)
   set bytes($core.List<$core.int> v) {
     $_setBytes(4, v);
@@ -372,6 +419,7 @@ class Datum extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $core.bool hasBytes() => $_has(4);
+
   @$pb.TagNumber(5)
   void clearBytes() => clearField(5);
 }
@@ -538,6 +586,7 @@ class Contact extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   Contact._() : super();
+
   factory Contact({
     ContactId? contactId,
     $core.Iterable<$core.String>? memberIds,
@@ -627,16 +676,20 @@ class Contact extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory Contact.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory Contact.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   Contact clone() => Contact()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -644,10 +697,14 @@ class Contact extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as Contact))
           as Contact; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Contact create() => Contact._();
+
   Contact createEmptyInstance() => create();
+
   static $pb.PbList<Contact> createRepeated() => $pb.PbList<Contact>();
+
   @$core.pragma('dart2js:noInline')
   static Contact getDefault() =>
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Contact>(create);
@@ -655,6 +712,7 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   ContactId get contactId => $_getN(0);
+
   @$pb.TagNumber(1)
   set contactId(ContactId v) {
     setField(1, v);
@@ -662,8 +720,10 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasContactId() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearContactId() => clearField(1);
+
   @$pb.TagNumber(1)
   ContactId ensureContactId() => $_ensure(0);
 
@@ -672,6 +732,7 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.String get displayName => $_getSZ(2);
+
   @$pb.TagNumber(3)
   set displayName($core.String v) {
     $_setString(2, v);
@@ -679,11 +740,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasDisplayName() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearDisplayName() => clearField(3);
 
   @$pb.TagNumber(4)
   $fixnum.Int64 get createdTs => $_getI64(3);
+
   @$pb.TagNumber(4)
   set createdTs($fixnum.Int64 v) {
     $_setInt64(3, v);
@@ -691,11 +754,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasCreatedTs() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearCreatedTs() => clearField(4);
 
   @$pb.TagNumber(5)
   $fixnum.Int64 get mostRecentMessageTs => $_getI64(4);
+
   @$pb.TagNumber(5)
   set mostRecentMessageTs($fixnum.Int64 v) {
     $_setInt64(4, v);
@@ -703,11 +768,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $core.bool hasMostRecentMessageTs() => $_has(4);
+
   @$pb.TagNumber(5)
   void clearMostRecentMessageTs() => clearField(5);
 
   @$pb.TagNumber(6)
   MessageDirection get mostRecentMessageDirection => $_getN(5);
+
   @$pb.TagNumber(6)
   set mostRecentMessageDirection(MessageDirection v) {
     setField(6, v);
@@ -715,11 +782,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(6)
   $core.bool hasMostRecentMessageDirection() => $_has(5);
+
   @$pb.TagNumber(6)
   void clearMostRecentMessageDirection() => clearField(6);
 
   @$pb.TagNumber(7)
   $core.String get mostRecentMessageText => $_getSZ(6);
+
   @$pb.TagNumber(7)
   set mostRecentMessageText($core.String v) {
     $_setString(6, v);
@@ -727,11 +796,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(7)
   $core.bool hasMostRecentMessageText() => $_has(6);
+
   @$pb.TagNumber(7)
   void clearMostRecentMessageText() => clearField(7);
 
   @$pb.TagNumber(8)
   $core.String get mostRecentAttachmentMimeType => $_getSZ(7);
+
   @$pb.TagNumber(8)
   set mostRecentAttachmentMimeType($core.String v) {
     $_setString(7, v);
@@ -739,11 +810,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(8)
   $core.bool hasMostRecentAttachmentMimeType() => $_has(7);
+
   @$pb.TagNumber(8)
   void clearMostRecentAttachmentMimeType() => clearField(8);
 
   @$pb.TagNumber(9)
   $core.int get messagesDisappearAfterSeconds => $_getIZ(8);
+
   @$pb.TagNumber(9)
   set messagesDisappearAfterSeconds($core.int v) {
     $_setSignedInt32(8, v);
@@ -751,11 +824,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(9)
   $core.bool hasMessagesDisappearAfterSeconds() => $_has(8);
+
   @$pb.TagNumber(9)
   void clearMessagesDisappearAfterSeconds() => clearField(9);
 
   @$pb.TagNumber(10)
   $fixnum.Int64 get firstReceivedMessageTs => $_getI64(9);
+
   @$pb.TagNumber(10)
   set firstReceivedMessageTs($fixnum.Int64 v) {
     $_setInt64(9, v);
@@ -763,11 +838,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(10)
   $core.bool hasFirstReceivedMessageTs() => $_has(9);
+
   @$pb.TagNumber(10)
   void clearFirstReceivedMessageTs() => clearField(10);
 
   @$pb.TagNumber(11)
   $core.bool get hasReceivedMessage => $_getBF(10);
+
   @$pb.TagNumber(11)
   set hasReceivedMessage($core.bool v) {
     $_setBool(10, v);
@@ -775,11 +852,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(11)
   $core.bool hasHasReceivedMessage() => $_has(10);
+
   @$pb.TagNumber(11)
   void clearHasReceivedMessage() => clearField(11);
 
   @$pb.TagNumber(12)
   $fixnum.Int64 get mostRecentHelloTs => $_getI64(11);
+
   @$pb.TagNumber(12)
   set mostRecentHelloTs($fixnum.Int64 v) {
     $_setInt64(11, v);
@@ -787,11 +866,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(12)
   $core.bool hasMostRecentHelloTs() => $_has(11);
+
   @$pb.TagNumber(12)
   void clearMostRecentHelloTs() => clearField(12);
 
   @$pb.TagNumber(13)
   ContactSource get source => $_getN(12);
+
   @$pb.TagNumber(13)
   set source(ContactSource v) {
     setField(13, v);
@@ -799,6 +880,7 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(13)
   $core.bool hasSource() => $_has(12);
+
   @$pb.TagNumber(13)
   void clearSource() => clearField(13);
 
@@ -807,6 +889,7 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(15)
   VerificationLevel get verificationLevel => $_getN(14);
+
   @$pb.TagNumber(15)
   set verificationLevel(VerificationLevel v) {
     setField(15, v);
@@ -814,11 +897,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(15)
   $core.bool hasVerificationLevel() => $_has(14);
+
   @$pb.TagNumber(15)
   void clearVerificationLevel() => clearField(15);
 
   @$pb.TagNumber(16)
   $core.String get numericFingerprint => $_getSZ(15);
+
   @$pb.TagNumber(16)
   set numericFingerprint($core.String v) {
     $_setString(15, v);
@@ -826,11 +911,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(16)
   $core.bool hasNumericFingerprint() => $_has(15);
+
   @$pb.TagNumber(16)
   void clearNumericFingerprint() => clearField(16);
 
   @$pb.TagNumber(17)
   $core.bool get blocked => $_getBF(16);
+
   @$pb.TagNumber(17)
   set blocked($core.bool v) {
     $_setBool(16, v);
@@ -838,6 +925,7 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(17)
   $core.bool hasBlocked() => $_has(16);
+
   @$pb.TagNumber(17)
   void clearBlocked() => clearField(17);
 
@@ -846,6 +934,7 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(19)
   ChatNumber get chatNumber => $_getN(18);
+
   @$pb.TagNumber(19)
   set chatNumber(ChatNumber v) {
     setField(19, v);
@@ -853,13 +942,16 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(19)
   $core.bool hasChatNumber() => $_has(18);
+
   @$pb.TagNumber(19)
   void clearChatNumber() => clearField(19);
+
   @$pb.TagNumber(19)
   ChatNumber ensureChatNumber() => $_ensure(18);
 
   @$pb.TagNumber(20)
   $core.bool get isMe => $_getBF(19);
+
   @$pb.TagNumber(20)
   set isMe($core.bool v) {
     $_setBool(19, v);
@@ -867,11 +959,13 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(20)
   $core.bool hasIsMe() => $_has(19);
+
   @$pb.TagNumber(20)
   void clearIsMe() => clearField(20);
 
   @$pb.TagNumber(21)
   $core.int get numUnviewedMessages => $_getIZ(20);
+
   @$pb.TagNumber(21)
   set numUnviewedMessages($core.int v) {
     $_setSignedInt32(20, v);
@@ -879,6 +973,7 @@ class Contact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(21)
   $core.bool hasNumUnviewedMessages() => $_has(20);
+
   @$pb.TagNumber(21)
   void clearNumUnviewedMessages() => clearField(21);
 }
@@ -927,6 +1022,7 @@ class ProvisionalContact extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   ProvisionalContact._() : super();
+
   factory ProvisionalContact({
     $core.String? contactId,
     $fixnum.Int64? expiresAt,
@@ -948,16 +1044,20 @@ class ProvisionalContact extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory ProvisionalContact.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory ProvisionalContact.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   ProvisionalContact clone() => ProvisionalContact()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -965,11 +1065,15 @@ class ProvisionalContact extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ProvisionalContact))
           as ProvisionalContact; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ProvisionalContact create() => ProvisionalContact._();
+
   ProvisionalContact createEmptyInstance() => create();
+
   static $pb.PbList<ProvisionalContact> createRepeated() =>
       $pb.PbList<ProvisionalContact>();
+
   @$core.pragma('dart2js:noInline')
   static ProvisionalContact getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<ProvisionalContact>(create);
@@ -977,6 +1081,7 @@ class ProvisionalContact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.String get contactId => $_getSZ(0);
+
   @$pb.TagNumber(1)
   set contactId($core.String v) {
     $_setString(0, v);
@@ -984,11 +1089,13 @@ class ProvisionalContact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasContactId() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearContactId() => clearField(1);
 
   @$pb.TagNumber(2)
   $fixnum.Int64 get expiresAt => $_getI64(1);
+
   @$pb.TagNumber(2)
   set expiresAt($fixnum.Int64 v) {
     $_setInt64(1, v);
@@ -996,11 +1103,13 @@ class ProvisionalContact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasExpiresAt() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearExpiresAt() => clearField(2);
 
   @$pb.TagNumber(3)
   ContactSource get source => $_getN(2);
+
   @$pb.TagNumber(3)
   set source(ContactSource v) {
     setField(3, v);
@@ -1008,11 +1117,13 @@ class ProvisionalContact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasSource() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearSource() => clearField(3);
 
   @$pb.TagNumber(4)
   VerificationLevel get verificationLevel => $_getN(3);
+
   @$pb.TagNumber(4)
   set verificationLevel(VerificationLevel v) {
     setField(4, v);
@@ -1020,6 +1131,7 @@ class ProvisionalContact extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasVerificationLevel() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearVerificationLevel() => clearField(4);
 }
@@ -1077,6 +1189,7 @@ class Attachment extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   Attachment._() : super();
+
   factory Attachment({
     $core.String? mimeType,
     $core.List<$core.int>? keyMaterial,
@@ -1106,16 +1219,20 @@ class Attachment extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory Attachment.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory Attachment.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   Attachment clone() => Attachment()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -1123,10 +1240,14 @@ class Attachment extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as Attachment))
           as Attachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Attachment create() => Attachment._();
+
   Attachment createEmptyInstance() => create();
+
   static $pb.PbList<Attachment> createRepeated() => $pb.PbList<Attachment>();
+
   @$core.pragma('dart2js:noInline')
   static Attachment getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<Attachment>(create);
@@ -1134,6 +1255,7 @@ class Attachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.String get mimeType => $_getSZ(0);
+
   @$pb.TagNumber(1)
   set mimeType($core.String v) {
     $_setString(0, v);
@@ -1141,11 +1263,13 @@ class Attachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasMimeType() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearMimeType() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.List<$core.int> get keyMaterial => $_getN(1);
+
   @$pb.TagNumber(2)
   set keyMaterial($core.List<$core.int> v) {
     $_setBytes(1, v);
@@ -1153,11 +1277,13 @@ class Attachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasKeyMaterial() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearKeyMaterial() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.List<$core.int> get digest => $_getN(2);
+
   @$pb.TagNumber(3)
   set digest($core.List<$core.int> v) {
     $_setBytes(2, v);
@@ -1165,11 +1291,13 @@ class Attachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasDigest() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearDigest() => clearField(3);
 
   @$pb.TagNumber(4)
   $fixnum.Int64 get plaintextLength => $_getI64(3);
+
   @$pb.TagNumber(4)
   set plaintextLength($fixnum.Int64 v) {
     $_setInt64(3, v);
@@ -1177,6 +1305,7 @@ class Attachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasPlaintextLength() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearPlaintextLength() => clearField(4);
 
@@ -1185,6 +1314,7 @@ class Attachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(6)
   $core.String get downloadUrl => $_getSZ(5);
+
   @$pb.TagNumber(6)
   set downloadUrl($core.String v) {
     $_setString(5, v);
@@ -1192,6 +1322,7 @@ class Attachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(6)
   $core.bool hasDownloadUrl() => $_has(5);
+
   @$pb.TagNumber(6)
   void clearDownloadUrl() => clearField(6);
 }
@@ -1247,6 +1378,7 @@ class StoredAttachment extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   StoredAttachment._() : super();
+
   factory StoredAttachment({
     $core.String? guid,
     Attachment? attachment,
@@ -1276,16 +1408,20 @@ class StoredAttachment extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory StoredAttachment.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory StoredAttachment.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   StoredAttachment clone() => StoredAttachment()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -1293,11 +1429,15 @@ class StoredAttachment extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as StoredAttachment))
           as StoredAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static StoredAttachment create() => StoredAttachment._();
+
   StoredAttachment createEmptyInstance() => create();
+
   static $pb.PbList<StoredAttachment> createRepeated() =>
       $pb.PbList<StoredAttachment>();
+
   @$core.pragma('dart2js:noInline')
   static StoredAttachment getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<StoredAttachment>(create);
@@ -1305,6 +1445,7 @@ class StoredAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.String get guid => $_getSZ(0);
+
   @$pb.TagNumber(1)
   set guid($core.String v) {
     $_setString(0, v);
@@ -1312,11 +1453,13 @@ class StoredAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasGuid() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearGuid() => clearField(1);
 
   @$pb.TagNumber(2)
   Attachment get attachment => $_getN(1);
+
   @$pb.TagNumber(2)
   set attachment(Attachment v) {
     setField(2, v);
@@ -1324,13 +1467,16 @@ class StoredAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasAttachment() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearAttachment() => clearField(2);
+
   @$pb.TagNumber(2)
   Attachment ensureAttachment() => $_ensure(1);
 
   @$pb.TagNumber(3)
   $core.String get encryptedFilePath => $_getSZ(2);
+
   @$pb.TagNumber(3)
   set encryptedFilePath($core.String v) {
     $_setString(2, v);
@@ -1338,11 +1484,13 @@ class StoredAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasEncryptedFilePath() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearEncryptedFilePath() => clearField(3);
 
   @$pb.TagNumber(4)
   StoredAttachment_Status get status => $_getN(3);
+
   @$pb.TagNumber(4)
   set status(StoredAttachment_Status v) {
     setField(4, v);
@@ -1350,11 +1498,13 @@ class StoredAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearStatus() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get plainTextFilePath => $_getSZ(4);
+
   @$pb.TagNumber(5)
   set plainTextFilePath($core.String v) {
     $_setString(4, v);
@@ -1362,11 +1512,13 @@ class StoredAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $core.bool hasPlainTextFilePath() => $_has(4);
+
   @$pb.TagNumber(5)
   void clearPlainTextFilePath() => clearField(5);
 
   @$pb.TagNumber(6)
   StoredAttachment get thumbnail => $_getN(5);
+
   @$pb.TagNumber(6)
   set thumbnail(StoredAttachment v) {
     setField(6, v);
@@ -1374,8 +1526,10 @@ class StoredAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(6)
   $core.bool hasThumbnail() => $_has(5);
+
   @$pb.TagNumber(6)
   void clearThumbnail() => clearField(6);
+
   @$pb.TagNumber(6)
   StoredAttachment ensureThumbnail() => $_ensure(5);
 }
@@ -1405,6 +1559,7 @@ class AttachmentWithThumbnail extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   AttachmentWithThumbnail._() : super();
+
   factory AttachmentWithThumbnail({
     Attachment? attachment,
     Attachment? thumbnail,
@@ -1418,17 +1573,21 @@ class AttachmentWithThumbnail extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory AttachmentWithThumbnail.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory AttachmentWithThumbnail.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   AttachmentWithThumbnail clone() =>
       AttachmentWithThumbnail()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -1437,11 +1596,15 @@ class AttachmentWithThumbnail extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as AttachmentWithThumbnail))
           as AttachmentWithThumbnail; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static AttachmentWithThumbnail create() => AttachmentWithThumbnail._();
+
   AttachmentWithThumbnail createEmptyInstance() => create();
+
   static $pb.PbList<AttachmentWithThumbnail> createRepeated() =>
       $pb.PbList<AttachmentWithThumbnail>();
+
   @$core.pragma('dart2js:noInline')
   static AttachmentWithThumbnail getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<AttachmentWithThumbnail>(create);
@@ -1449,6 +1612,7 @@ class AttachmentWithThumbnail extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   Attachment get attachment => $_getN(0);
+
   @$pb.TagNumber(1)
   set attachment(Attachment v) {
     setField(1, v);
@@ -1456,13 +1620,16 @@ class AttachmentWithThumbnail extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasAttachment() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearAttachment() => clearField(1);
+
   @$pb.TagNumber(1)
   Attachment ensureAttachment() => $_ensure(0);
 
   @$pb.TagNumber(2)
   Attachment get thumbnail => $_getN(1);
+
   @$pb.TagNumber(2)
   set thumbnail(Attachment v) {
     setField(2, v);
@@ -1470,8 +1637,10 @@ class AttachmentWithThumbnail extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasThumbnail() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearThumbnail() => clearField(2);
+
   @$pb.TagNumber(2)
   Attachment ensureThumbnail() => $_ensure(1);
 }
@@ -1511,6 +1680,7 @@ class Introduction extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   Introduction._() : super();
+
   factory Introduction({
     $core.List<$core.int>? id,
     $core.String? displayName,
@@ -1528,16 +1698,20 @@ class Introduction extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory Introduction.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory Introduction.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   Introduction clone() => Introduction()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -1545,11 +1719,15 @@ class Introduction extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as Introduction))
           as Introduction; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Introduction create() => Introduction._();
+
   Introduction createEmptyInstance() => create();
+
   static $pb.PbList<Introduction> createRepeated() =>
       $pb.PbList<Introduction>();
+
   @$core.pragma('dart2js:noInline')
   static Introduction getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<Introduction>(create);
@@ -1557,6 +1735,7 @@ class Introduction extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get id => $_getN(0);
+
   @$pb.TagNumber(1)
   set id($core.List<$core.int> v) {
     $_setBytes(0, v);
@@ -1564,11 +1743,13 @@ class Introduction extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get displayName => $_getSZ(1);
+
   @$pb.TagNumber(2)
   set displayName($core.String v) {
     $_setString(1, v);
@@ -1576,11 +1757,13 @@ class Introduction extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasDisplayName() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearDisplayName() => clearField(2);
 
   @$pb.TagNumber(3)
   VerificationLevel get verificationLevel => $_getN(2);
+
   @$pb.TagNumber(3)
   set verificationLevel(VerificationLevel v) {
     setField(3, v);
@@ -1588,6 +1771,7 @@ class Introduction extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasVerificationLevel() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearVerificationLevel() => clearField(3);
 }
@@ -1652,6 +1836,7 @@ class IntroductionDetails extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   IntroductionDetails._() : super();
+
   factory IntroductionDetails({
     ContactId? to,
     $core.String? displayName,
@@ -1681,16 +1866,20 @@ class IntroductionDetails extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory IntroductionDetails.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory IntroductionDetails.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   IntroductionDetails clone() => IntroductionDetails()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -1698,11 +1887,15 @@ class IntroductionDetails extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as IntroductionDetails))
           as IntroductionDetails; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static IntroductionDetails create() => IntroductionDetails._();
+
   IntroductionDetails createEmptyInstance() => create();
+
   static $pb.PbList<IntroductionDetails> createRepeated() =>
       $pb.PbList<IntroductionDetails>();
+
   @$core.pragma('dart2js:noInline')
   static IntroductionDetails getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<IntroductionDetails>(create);
@@ -1710,6 +1903,7 @@ class IntroductionDetails extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   ContactId get to => $_getN(0);
+
   @$pb.TagNumber(1)
   set to(ContactId v) {
     setField(1, v);
@@ -1717,13 +1911,16 @@ class IntroductionDetails extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasTo() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearTo() => clearField(1);
+
   @$pb.TagNumber(1)
   ContactId ensureTo() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $core.String get displayName => $_getSZ(1);
+
   @$pb.TagNumber(2)
   set displayName($core.String v) {
     $_setString(1, v);
@@ -1731,11 +1928,13 @@ class IntroductionDetails extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasDisplayName() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearDisplayName() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get originalDisplayName => $_getSZ(2);
+
   @$pb.TagNumber(3)
   set originalDisplayName($core.String v) {
     $_setString(2, v);
@@ -1743,11 +1942,13 @@ class IntroductionDetails extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasOriginalDisplayName() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearOriginalDisplayName() => clearField(3);
 
   @$pb.TagNumber(4)
   IntroductionDetails_IntroductionStatus get status => $_getN(3);
+
   @$pb.TagNumber(4)
   set status(IntroductionDetails_IntroductionStatus v) {
     setField(4, v);
@@ -1755,11 +1956,13 @@ class IntroductionDetails extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasStatus() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearStatus() => clearField(4);
 
   @$pb.TagNumber(5)
   VerificationLevel get verificationLevel => $_getN(4);
+
   @$pb.TagNumber(5)
   set verificationLevel(VerificationLevel v) {
     setField(5, v);
@@ -1767,11 +1970,13 @@ class IntroductionDetails extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $core.bool hasVerificationLevel() => $_has(4);
+
   @$pb.TagNumber(5)
   void clearVerificationLevel() => clearField(5);
 
   @$pb.TagNumber(6)
   VerificationLevel get constrainedVerificationLevel => $_getN(5);
+
   @$pb.TagNumber(6)
   set constrainedVerificationLevel(VerificationLevel v) {
     setField(6, v);
@@ -1779,6 +1984,7 @@ class IntroductionDetails extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(6)
   $core.bool hasConstrainedVerificationLevel() => $_has(5);
+
   @$pb.TagNumber(6)
   void clearConstrainedVerificationLevel() => clearField(6);
 }
@@ -1844,6 +2050,7 @@ class Message extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   Message._() : super();
+
   factory Message({
     $core.List<$core.int>? id,
     $core.List<$core.int>? replyToSenderId,
@@ -1877,16 +2084,20 @@ class Message extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory Message.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory Message.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   Message clone() => Message()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -1894,10 +2105,14 @@ class Message extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as Message))
           as Message; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Message create() => Message._();
+
   Message createEmptyInstance() => create();
+
   static $pb.PbList<Message> createRepeated() => $pb.PbList<Message>();
+
   @$core.pragma('dart2js:noInline')
   static Message getDefault() =>
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Message>(create);
@@ -1905,6 +2120,7 @@ class Message extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get id => $_getN(0);
+
   @$pb.TagNumber(1)
   set id($core.List<$core.int> v) {
     $_setBytes(0, v);
@@ -1912,11 +2128,13 @@ class Message extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.List<$core.int> get replyToSenderId => $_getN(1);
+
   @$pb.TagNumber(2)
   set replyToSenderId($core.List<$core.int> v) {
     $_setBytes(1, v);
@@ -1924,11 +2142,13 @@ class Message extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasReplyToSenderId() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearReplyToSenderId() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.List<$core.int> get replyToId => $_getN(2);
+
   @$pb.TagNumber(3)
   set replyToId($core.List<$core.int> v) {
     $_setBytes(2, v);
@@ -1936,11 +2156,13 @@ class Message extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasReplyToId() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearReplyToId() => clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get text => $_getSZ(3);
+
   @$pb.TagNumber(4)
   set text($core.String v) {
     $_setString(3, v);
@@ -1948,6 +2170,7 @@ class Message extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasText() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearText() => clearField(4);
 
@@ -1956,6 +2179,7 @@ class Message extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(6)
   $core.int get disappearAfterSeconds => $_getIZ(5);
+
   @$pb.TagNumber(6)
   set disappearAfterSeconds($core.int v) {
     $_setSignedInt32(5, v);
@@ -1963,11 +2187,13 @@ class Message extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(6)
   $core.bool hasDisappearAfterSeconds() => $_has(5);
+
   @$pb.TagNumber(6)
   void clearDisappearAfterSeconds() => clearField(6);
 
   @$pb.TagNumber(7)
   Introduction get introduction => $_getN(6);
+
   @$pb.TagNumber(7)
   set introduction(Introduction v) {
     setField(7, v);
@@ -1975,8 +2201,10 @@ class Message extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(7)
   $core.bool hasIntroduction() => $_has(6);
+
   @$pb.TagNumber(7)
   void clearIntroduction() => clearField(7);
+
   @$pb.TagNumber(7)
   Introduction ensureIntroduction() => $_ensure(6);
 }
@@ -2119,6 +2347,7 @@ class StoredMessage extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   StoredMessage._() : super();
+
   factory StoredMessage({
     ContactId? contactId,
     $core.String? senderId,
@@ -2196,16 +2425,20 @@ class StoredMessage extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory StoredMessage.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory StoredMessage.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   StoredMessage clone() => StoredMessage()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -2213,11 +2446,15 @@ class StoredMessage extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as StoredMessage))
           as StoredMessage; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static StoredMessage create() => StoredMessage._();
+
   StoredMessage createEmptyInstance() => create();
+
   static $pb.PbList<StoredMessage> createRepeated() =>
       $pb.PbList<StoredMessage>();
+
   @$core.pragma('dart2js:noInline')
   static StoredMessage getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<StoredMessage>(create);
@@ -2225,6 +2462,7 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   ContactId get contactId => $_getN(0);
+
   @$pb.TagNumber(1)
   set contactId(ContactId v) {
     setField(1, v);
@@ -2232,13 +2470,16 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasContactId() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearContactId() => clearField(1);
+
   @$pb.TagNumber(1)
   ContactId ensureContactId() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $core.String get senderId => $_getSZ(1);
+
   @$pb.TagNumber(2)
   set senderId($core.String v) {
     $_setString(1, v);
@@ -2246,11 +2487,13 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasSenderId() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearSenderId() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get id => $_getSZ(2);
+
   @$pb.TagNumber(3)
   set id($core.String v) {
     $_setString(2, v);
@@ -2258,11 +2501,13 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasId() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearId() => clearField(3);
 
   @$pb.TagNumber(4)
   $fixnum.Int64 get ts => $_getI64(3);
+
   @$pb.TagNumber(4)
   set ts($fixnum.Int64 v) {
     $_setInt64(3, v);
@@ -2270,11 +2515,13 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasTs() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearTs() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get replyToSenderId => $_getSZ(4);
+
   @$pb.TagNumber(5)
   set replyToSenderId($core.String v) {
     $_setString(4, v);
@@ -2282,11 +2529,13 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $core.bool hasReplyToSenderId() => $_has(4);
+
   @$pb.TagNumber(5)
   void clearReplyToSenderId() => clearField(5);
 
   @$pb.TagNumber(6)
   $core.String get replyToId => $_getSZ(5);
+
   @$pb.TagNumber(6)
   set replyToId($core.String v) {
     $_setString(5, v);
@@ -2294,11 +2543,13 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(6)
   $core.bool hasReplyToId() => $_has(5);
+
   @$pb.TagNumber(6)
   void clearReplyToId() => clearField(6);
 
   @$pb.TagNumber(7)
   $core.String get text => $_getSZ(6);
+
   @$pb.TagNumber(7)
   set text($core.String v) {
     $_setString(6, v);
@@ -2306,11 +2557,13 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(7)
   $core.bool hasText() => $_has(6);
+
   @$pb.TagNumber(7)
   void clearText() => clearField(7);
 
   @$pb.TagNumber(8)
   $core.int get disappearAfterSeconds => $_getIZ(7);
+
   @$pb.TagNumber(8)
   set disappearAfterSeconds($core.int v) {
     $_setSignedInt32(7, v);
@@ -2318,6 +2571,7 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(8)
   $core.bool hasDisappearAfterSeconds() => $_has(7);
+
   @$pb.TagNumber(8)
   void clearDisappearAfterSeconds() => clearField(8);
 
@@ -2326,6 +2580,7 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(10)
   MessageDirection get direction => $_getN(9);
+
   @$pb.TagNumber(10)
   set direction(MessageDirection v) {
     setField(10, v);
@@ -2333,6 +2588,7 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(10)
   $core.bool hasDirection() => $_has(9);
+
   @$pb.TagNumber(10)
   void clearDirection() => clearField(10);
 
@@ -2341,6 +2597,7 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(12)
   StoredMessage_DeliveryStatus get status => $_getN(11);
+
   @$pb.TagNumber(12)
   set status(StoredMessage_DeliveryStatus v) {
     setField(12, v);
@@ -2348,11 +2605,13 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(12)
   $core.bool hasStatus() => $_has(11);
+
   @$pb.TagNumber(12)
   void clearStatus() => clearField(12);
 
   @$pb.TagNumber(13)
   $fixnum.Int64 get firstViewedAt => $_getI64(12);
+
   @$pb.TagNumber(13)
   set firstViewedAt($fixnum.Int64 v) {
     $_setInt64(12, v);
@@ -2360,11 +2619,13 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(13)
   $core.bool hasFirstViewedAt() => $_has(12);
+
   @$pb.TagNumber(13)
   void clearFirstViewedAt() => clearField(13);
 
   @$pb.TagNumber(14)
   $fixnum.Int64 get disappearAt => $_getI64(13);
+
   @$pb.TagNumber(14)
   set disappearAt($fixnum.Int64 v) {
     $_setInt64(13, v);
@@ -2372,6 +2633,7 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(14)
   $core.bool hasDisappearAt() => $_has(13);
+
   @$pb.TagNumber(14)
   void clearDisappearAt() => clearField(14);
 
@@ -2380,6 +2642,7 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(16)
   $fixnum.Int64 get remotelyDeletedAt => $_getI64(15);
+
   @$pb.TagNumber(16)
   set remotelyDeletedAt($fixnum.Int64 v) {
     $_setInt64(15, v);
@@ -2387,11 +2650,13 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(16)
   $core.bool hasRemotelyDeletedAt() => $_has(15);
+
   @$pb.TagNumber(16)
   void clearRemotelyDeletedAt() => clearField(16);
 
   @$pb.TagNumber(17)
   ContactId get remotelyDeletedBy => $_getN(16);
+
   @$pb.TagNumber(17)
   set remotelyDeletedBy(ContactId v) {
     setField(17, v);
@@ -2399,13 +2664,16 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(17)
   $core.bool hasRemotelyDeletedBy() => $_has(16);
+
   @$pb.TagNumber(17)
   void clearRemotelyDeletedBy() => clearField(17);
+
   @$pb.TagNumber(17)
   ContactId ensureRemotelyDeletedBy() => $_ensure(16);
 
   @$pb.TagNumber(18)
   IntroductionDetails get introduction => $_getN(17);
+
   @$pb.TagNumber(18)
   set introduction(IntroductionDetails v) {
     setField(18, v);
@@ -2413,8 +2681,10 @@ class StoredMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(18)
   $core.bool hasIntroduction() => $_has(17);
+
   @$pb.TagNumber(18)
   void clearIntroduction() => clearField(18);
+
   @$pb.TagNumber(18)
   IntroductionDetails ensureIntroduction() => $_ensure(17);
 }
@@ -2451,6 +2721,7 @@ class Reaction extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   Reaction._() : super();
+
   factory Reaction({
     $core.List<$core.int>? reactingToSenderId,
     $core.List<$core.int>? reactingToMessageId,
@@ -2468,16 +2739,20 @@ class Reaction extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory Reaction.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory Reaction.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   Reaction clone() => Reaction()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -2485,10 +2760,14 @@ class Reaction extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as Reaction))
           as Reaction; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Reaction create() => Reaction._();
+
   Reaction createEmptyInstance() => create();
+
   static $pb.PbList<Reaction> createRepeated() => $pb.PbList<Reaction>();
+
   @$core.pragma('dart2js:noInline')
   static Reaction getDefault() =>
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Reaction>(create);
@@ -2496,6 +2775,7 @@ class Reaction extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get reactingToSenderId => $_getN(0);
+
   @$pb.TagNumber(1)
   set reactingToSenderId($core.List<$core.int> v) {
     $_setBytes(0, v);
@@ -2503,11 +2783,13 @@ class Reaction extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasReactingToSenderId() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearReactingToSenderId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.List<$core.int> get reactingToMessageId => $_getN(1);
+
   @$pb.TagNumber(2)
   set reactingToMessageId($core.List<$core.int> v) {
     $_setBytes(1, v);
@@ -2515,11 +2797,13 @@ class Reaction extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasReactingToMessageId() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearReactingToMessageId() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get emoticon => $_getSZ(2);
+
   @$pb.TagNumber(3)
   set emoticon($core.String v) {
     $_setString(2, v);
@@ -2527,6 +2811,7 @@ class Reaction extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasEmoticon() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearEmoticon() => clearField(3);
 }
@@ -2551,6 +2836,7 @@ class DisappearSettings extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   DisappearSettings._() : super();
+
   factory DisappearSettings({
     $core.int? messagesDisappearAfterSeconds,
   }) {
@@ -2560,16 +2846,20 @@ class DisappearSettings extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory DisappearSettings.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory DisappearSettings.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   DisappearSettings clone() => DisappearSettings()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -2577,11 +2867,15 @@ class DisappearSettings extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as DisappearSettings))
           as DisappearSettings; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static DisappearSettings create() => DisappearSettings._();
+
   DisappearSettings createEmptyInstance() => create();
+
   static $pb.PbList<DisappearSettings> createRepeated() =>
       $pb.PbList<DisappearSettings>();
+
   @$core.pragma('dart2js:noInline')
   static DisappearSettings getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<DisappearSettings>(create);
@@ -2589,6 +2883,7 @@ class DisappearSettings extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.int get messagesDisappearAfterSeconds => $_getIZ(0);
+
   @$pb.TagNumber(1)
   set messagesDisappearAfterSeconds($core.int v) {
     $_setSignedInt32(0, v);
@@ -2596,6 +2891,7 @@ class DisappearSettings extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasMessagesDisappearAfterSeconds() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearMessagesDisappearAfterSeconds() => clearField(1);
 }
@@ -2618,6 +2914,7 @@ class Hello extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   Hello._() : super();
+
   factory Hello({
     $core.bool? final_2,
   }) {
@@ -2627,16 +2924,20 @@ class Hello extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory Hello.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory Hello.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   Hello clone() => Hello()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -2644,10 +2945,14 @@ class Hello extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as Hello))
           as Hello; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Hello create() => Hello._();
+
   Hello createEmptyInstance() => create();
+
   static $pb.PbList<Hello> createRepeated() => $pb.PbList<Hello>();
+
   @$core.pragma('dart2js:noInline')
   static Hello getDefault() =>
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Hello>(create);
@@ -2655,6 +2960,7 @@ class Hello extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool get final_2 => $_getBF(0);
+
   @$pb.TagNumber(2)
   set final_2($core.bool v) {
     $_setBool(0, v);
@@ -2662,6 +2968,7 @@ class Hello extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasFinal_2() => $_has(0);
+
   @$pb.TagNumber(2)
   void clearFinal_2() => clearField(2);
 }
@@ -2744,6 +3051,7 @@ class TransferMessage extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   TransferMessage._() : super();
+
   factory TransferMessage({
     $core.List<$core.int>? message,
     $core.List<$core.int>? reaction,
@@ -2777,16 +3085,20 @@ class TransferMessage extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory TransferMessage.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory TransferMessage.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   TransferMessage clone() => TransferMessage()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -2794,11 +3106,15 @@ class TransferMessage extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as TransferMessage))
           as TransferMessage; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static TransferMessage create() => TransferMessage._();
+
   TransferMessage createEmptyInstance() => create();
+
   static $pb.PbList<TransferMessage> createRepeated() =>
       $pb.PbList<TransferMessage>();
+
   @$core.pragma('dart2js:noInline')
   static TransferMessage getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<TransferMessage>(create);
@@ -2806,10 +3122,12 @@ class TransferMessage extends $pb.GeneratedMessage {
 
   TransferMessage_Content whichContent() =>
       _TransferMessage_ContentByTag[$_whichOneof(0)]!;
+
   void clearContent() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get message => $_getN(0);
+
   @$pb.TagNumber(1)
   set message($core.List<$core.int> v) {
     $_setBytes(0, v);
@@ -2817,11 +3135,13 @@ class TransferMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasMessage() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearMessage() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.List<$core.int> get reaction => $_getN(1);
+
   @$pb.TagNumber(2)
   set reaction($core.List<$core.int> v) {
     $_setBytes(1, v);
@@ -2829,11 +3149,13 @@ class TransferMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasReaction() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearReaction() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.List<$core.int> get deleteMessageId => $_getN(2);
+
   @$pb.TagNumber(3)
   set deleteMessageId($core.List<$core.int> v) {
     $_setBytes(2, v);
@@ -2841,11 +3163,13 @@ class TransferMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasDeleteMessageId() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearDeleteMessageId() => clearField(3);
 
   @$pb.TagNumber(4)
   $core.List<$core.int> get disappearSettings => $_getN(3);
+
   @$pb.TagNumber(4)
   set disappearSettings($core.List<$core.int> v) {
     $_setBytes(3, v);
@@ -2853,11 +3177,13 @@ class TransferMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasDisappearSettings() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearDisappearSettings() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.List<$core.int> get hello => $_getN(4);
+
   @$pb.TagNumber(5)
   set hello($core.List<$core.int> v) {
     $_setBytes(4, v);
@@ -2865,11 +3191,13 @@ class TransferMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $core.bool hasHello() => $_has(4);
+
   @$pb.TagNumber(5)
   void clearHello() => clearField(5);
 
   @$pb.TagNumber(6)
   $core.List<$core.int> get webRTCSignal => $_getN(5);
+
   @$pb.TagNumber(6)
   set webRTCSignal($core.List<$core.int> v) {
     $_setBytes(5, v);
@@ -2877,11 +3205,13 @@ class TransferMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(6)
   $core.bool hasWebRTCSignal() => $_has(5);
+
   @$pb.TagNumber(6)
   void clearWebRTCSignal() => clearField(6);
 
   @$pb.TagNumber(10000)
   $fixnum.Int64 get sent => $_getI64(6);
+
   @$pb.TagNumber(10000)
   set sent($fixnum.Int64 v) {
     $_setInt64(6, v);
@@ -2889,6 +3219,7 @@ class TransferMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(10000)
   $core.bool hasSent() => $_has(6);
+
   @$pb.TagNumber(10000)
   void clearSent() => clearField(10000);
 }
@@ -2991,6 +3322,7 @@ class OutboundMessage extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   OutboundMessage._() : super();
+
   factory OutboundMessage({
     $core.String? id,
     $core.String? senderId,
@@ -3037,16 +3369,20 @@ class OutboundMessage extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory OutboundMessage.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory OutboundMessage.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   OutboundMessage clone() => OutboundMessage()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -3054,11 +3390,15 @@ class OutboundMessage extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as OutboundMessage))
           as OutboundMessage; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static OutboundMessage create() => OutboundMessage._();
+
   OutboundMessage createEmptyInstance() => create();
+
   static $pb.PbList<OutboundMessage> createRepeated() =>
       $pb.PbList<OutboundMessage>();
+
   @$core.pragma('dart2js:noInline')
   static OutboundMessage getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<OutboundMessage>(create);
@@ -3066,10 +3406,12 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   OutboundMessage_Content whichContent() =>
       _OutboundMessage_ContentByTag[$_whichOneof(0)]!;
+
   void clearContent() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
   $core.String get id => $_getSZ(0);
+
   @$pb.TagNumber(1)
   set id($core.String v) {
     $_setString(0, v);
@@ -3077,11 +3419,13 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get senderId => $_getSZ(1);
+
   @$pb.TagNumber(2)
   set senderId($core.String v) {
     $_setString(1, v);
@@ -3089,11 +3433,13 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasSenderId() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearSenderId() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get recipientId => $_getSZ(2);
+
   @$pb.TagNumber(3)
   set recipientId($core.String v) {
     $_setString(2, v);
@@ -3101,11 +3447,13 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasRecipientId() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearRecipientId() => clearField(3);
 
   @$pb.TagNumber(4)
   $fixnum.Int64 get sent => $_getI64(3);
+
   @$pb.TagNumber(4)
   set sent($fixnum.Int64 v) {
     $_setInt64(3, v);
@@ -3113,6 +3461,7 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasSent() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearSent() => clearField(4);
 
@@ -3122,6 +3471,7 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(31)
   $core.String get messageId => $_getSZ(5);
+
   @$pb.TagNumber(31)
   set messageId($core.String v) {
     $_setString(5, v);
@@ -3129,11 +3479,13 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(31)
   $core.bool hasMessageId() => $_has(5);
+
   @$pb.TagNumber(31)
   void clearMessageId() => clearField(31);
 
   @$pb.TagNumber(32)
   $core.List<$core.int> get reaction => $_getN(6);
+
   @$pb.TagNumber(32)
   set reaction($core.List<$core.int> v) {
     $_setBytes(6, v);
@@ -3141,11 +3493,13 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(32)
   $core.bool hasReaction() => $_has(6);
+
   @$pb.TagNumber(32)
   void clearReaction() => clearField(32);
 
   @$pb.TagNumber(33)
   $core.List<$core.int> get deleteMessageId => $_getN(7);
+
   @$pb.TagNumber(33)
   set deleteMessageId($core.List<$core.int> v) {
     $_setBytes(7, v);
@@ -3153,11 +3507,13 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(33)
   $core.bool hasDeleteMessageId() => $_has(7);
+
   @$pb.TagNumber(33)
   void clearDeleteMessageId() => clearField(33);
 
   @$pb.TagNumber(34)
   $core.List<$core.int> get disappearSettings => $_getN(8);
+
   @$pb.TagNumber(34)
   set disappearSettings($core.List<$core.int> v) {
     $_setBytes(8, v);
@@ -3165,11 +3521,13 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(34)
   $core.bool hasDisappearSettings() => $_has(8);
+
   @$pb.TagNumber(34)
   void clearDisappearSettings() => clearField(34);
 
   @$pb.TagNumber(35)
   $core.List<$core.int> get hello => $_getN(9);
+
   @$pb.TagNumber(35)
   set hello($core.List<$core.int> v) {
     $_setBytes(9, v);
@@ -3177,6 +3535,7 @@ class OutboundMessage extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(35)
   $core.bool hasHello() => $_has(9);
+
   @$pb.TagNumber(35)
   void clearHello() => clearField(35);
 }
@@ -3224,6 +3583,7 @@ class InboundAttachment extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   InboundAttachment._() : super();
+
   factory InboundAttachment({
     $core.String? senderId,
     $core.String? messageId,
@@ -3249,16 +3609,20 @@ class InboundAttachment extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory InboundAttachment.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory InboundAttachment.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   InboundAttachment clone() => InboundAttachment()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -3266,11 +3630,15 @@ class InboundAttachment extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as InboundAttachment))
           as InboundAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static InboundAttachment create() => InboundAttachment._();
+
   InboundAttachment createEmptyInstance() => create();
+
   static $pb.PbList<InboundAttachment> createRepeated() =>
       $pb.PbList<InboundAttachment>();
+
   @$core.pragma('dart2js:noInline')
   static InboundAttachment getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<InboundAttachment>(create);
@@ -3278,6 +3646,7 @@ class InboundAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.String get senderId => $_getSZ(0);
+
   @$pb.TagNumber(1)
   set senderId($core.String v) {
     $_setString(0, v);
@@ -3285,11 +3654,13 @@ class InboundAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.bool hasSenderId() => $_has(0);
+
   @$pb.TagNumber(1)
   void clearSenderId() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get messageId => $_getSZ(1);
+
   @$pb.TagNumber(2)
   set messageId($core.String v) {
     $_setString(1, v);
@@ -3297,11 +3668,13 @@ class InboundAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(2)
   $core.bool hasMessageId() => $_has(1);
+
   @$pb.TagNumber(2)
   void clearMessageId() => clearField(2);
 
   @$pb.TagNumber(3)
   $fixnum.Int64 get ts => $_getI64(2);
+
   @$pb.TagNumber(3)
   set ts($fixnum.Int64 v) {
     $_setInt64(2, v);
@@ -3309,11 +3682,13 @@ class InboundAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.bool hasTs() => $_has(2);
+
   @$pb.TagNumber(3)
   void clearTs() => clearField(3);
 
   @$pb.TagNumber(4)
   $core.int get attachmentId => $_getIZ(3);
+
   @$pb.TagNumber(4)
   set attachmentId($core.int v) {
     $_setSignedInt32(3, v);
@@ -3321,11 +3696,13 @@ class InboundAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(4)
   $core.bool hasAttachmentId() => $_has(3);
+
   @$pb.TagNumber(4)
   void clearAttachmentId() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.bool get isThumbnail => $_getBF(4);
+
   @$pb.TagNumber(5)
   set isThumbnail($core.bool v) {
     $_setBool(4, v);
@@ -3333,6 +3710,7 @@ class InboundAttachment extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $core.bool hasIsThumbnail() => $_has(4);
+
   @$pb.TagNumber(5)
   void clearIsThumbnail() => clearField(5);
 }
@@ -3356,6 +3734,7 @@ class AudioWaveform extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   AudioWaveform._() : super();
+
   factory AudioWaveform({
     $core.Iterable<$core.int>? bars,
   }) {
@@ -3365,16 +3744,20 @@ class AudioWaveform extends $pb.GeneratedMessage {
     }
     return _result;
   }
+
   factory AudioWaveform.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(i, r);
+
   factory AudioWaveform.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   AudioWaveform clone() => AudioWaveform()..mergeFromMessage(this);
+
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
@@ -3382,11 +3765,15 @@ class AudioWaveform extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as AudioWaveform))
           as AudioWaveform; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static AudioWaveform create() => AudioWaveform._();
+
   AudioWaveform createEmptyInstance() => create();
+
   static $pb.PbList<AudioWaveform> createRepeated() =>
       $pb.PbList<AudioWaveform>();
+
   @$core.pragma('dart2js:noInline')
   static AudioWaveform getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<AudioWaveform>(create);

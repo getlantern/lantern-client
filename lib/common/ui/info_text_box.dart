@@ -3,6 +3,7 @@ import 'package:lantern/common/common.dart';
 class InfoTextBox extends StatelessWidget {
   final String text;
   final bool? invertColors;
+
   const InfoTextBox({
     required this.text,
     this.invertColors = false,

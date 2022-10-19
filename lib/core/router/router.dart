@@ -27,11 +27,11 @@ import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
 import 'package:lantern/replica/link_handler.dart';
 import 'package:lantern/replica/ui/viewers/audio.dart';
 import 'package:lantern/replica/ui/viewers/image.dart';
-import 'package:lantern/replica/ui/viewers/video.dart';
 import 'package:lantern/replica/ui/viewers/misc.dart';
-import 'package:lantern/replica/upload/title.dart';
+import 'package:lantern/replica/ui/viewers/video.dart';
 import 'package:lantern/replica/upload/description.dart';
 import 'package:lantern/replica/upload/review.dart';
+import 'package:lantern/replica/upload/title.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',

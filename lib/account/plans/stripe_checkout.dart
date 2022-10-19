@@ -1,8 +1,8 @@
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/account/plans/plan_step.dart';
-import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/account/plans/plan_utils.dart';
+import 'package:lantern/account/plans/price_summary.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/custom/text_input_formatter.dart';

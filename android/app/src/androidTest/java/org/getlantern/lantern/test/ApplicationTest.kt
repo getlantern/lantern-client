@@ -118,20 +118,6 @@ class ApplicationTest {
         // verifyVPNOff();
     }
 
-    @Test
-    fun upgradeWithStripe() {
-        Log.d(TAG, "Testing upgrading to Pro with a Stripe purchase")
-//        clickButton(R.id.upgradeBtn)
-        clickButton(R.id.oneYearBtn)
-        fillField(R.id.emailInput, "ox+testuser@gmail.com")
-        fillField(R.id.cardInput, "4242424242424242")
-        fillField(R.id.expirationInput, "03/24")
-        fillField(R.id.cvcInput, "123")
-        Espresso.onView(ViewMatchers.withId(R.id.cvcInput)).perform(ViewActions.closeSoftKeyboard())
-        clickButton(R.id.continueBtn)
-        clickButton(R.id.continueToProBtn, attempts = 30, sleep = 1000)
-    }
-
     private fun verifyVPNOn() {
         SystemClock.sleep(1000)
         Espresso.onView(ViewMatchers.withId(R.id.powerLantern)).check(

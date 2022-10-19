@@ -71,17 +71,18 @@ class _ProBannerState extends State<ProBanner> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      sessionModel.getIsPro((context, isPro, child) =>
-                          sessionModel
-                              .getCachedPlans((context, cachedPlans, child) {
-                            final platinumAvailable =
-                                isPlatinumAvailable(cachedPlans);
-                            return CText(
-                              'Upgrade ${platinumAvailable ? isPro ? 'to Lantern Platinum' : '' : 'to Lantern Pro'}'
-                                  .i18n,
-                              style: tsSubtitle2,
-                            );
-                          })),
+                      sessionModel.getIsPro(
+                        (context, isPro, child) => sessionModel
+                            .getCachedPlans((context, cachedPlans, child) {
+                          final platinumAvailable =
+                              isPlatinumAvailable(cachedPlans);
+                          return CText(
+                            'Upgrade ${platinumAvailable ? isPro ? 'to Lantern Platinum' : '' : 'to Lantern Pro'}'
+                                .i18n,
+                            style: tsSubtitle2,
+                          );
+                        }),
+                      ),
                       const SizedBox(
                         height: 4,
                       ),

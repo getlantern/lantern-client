@@ -35,7 +35,7 @@ class FullScreenImageViewerState
         BasicMemoryImage? newImage = BasicMemoryImage(bytes);
         setState(() => image = newImage);
       });
-    } on TimeoutException catch (e) {
+    } on TimeoutException {
       setState(() {
         hasError = true;
       });

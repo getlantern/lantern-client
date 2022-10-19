@@ -449,7 +449,7 @@ msgid "renewal_success_title"
 msgstr "Renewal Success!"
 
 msgid "platinum_renewal_success_description"
-msgstr "Thank you for renewing your Lantern Platinum account.You now have unlimited access using our fastest data centers, and dedicated line.  Up to three devices can be connected to your account."
+msgstr "Thank you for renewing your Lantern Platinum account. You now have unlimited access using our dedicated lines and fastest data centers. Up to three devices can be connected to your account."
 
 msgid "platinum_purchase_success_descripion"
 msgstr "You now have unlimited access using our dedicated lines and fastest data centers.  Up to three devices can be connected to your account."

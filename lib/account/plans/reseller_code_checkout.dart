@@ -1,14 +1,14 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:lantern/account/plans/plan_step.dart';
 import 'package:lantern/account/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
-import 'purchase_success_dialog.dart';
 import 'plan_utils.dart';
+import 'purchase_success_dialog.dart';
 
 class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;
+
   ResellerCodeCheckout({
     Key? key,
     required this.isPro,
@@ -127,7 +127,8 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                 },
                 key: resellerCodeFieldKey,
                 child: CTextField(
-                  maxLength: 25 + 4, //accounting for dashes
+                  maxLength: 25 + 4,
+                  //accounting for dashes
                   controller: resellerCodeController,
                   autovalidateMode: AutovalidateMode.disabled,
                   label: 'Activation Code'.i18n,

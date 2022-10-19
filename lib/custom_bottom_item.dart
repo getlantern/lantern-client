@@ -23,7 +23,9 @@ class CustomBottomBarItem extends StatelessWidget {
   final Widget Function(Widget) addBadge;
 
   int get totalTabs => tabToIndex.length;
+
   int get tabIndex => tabToIndex[name]!;
+
   bool get active => currentTabIndex == tabIndex;
 
   static Widget defaultAddBadge(Widget child) => child;

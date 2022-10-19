@@ -10,10 +10,7 @@ import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Html
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -23,6 +20,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.thefinestartist.finestwebview.FinestWebView
+import com.yuansfer.pay.YSAppPay
+import com.yuansfer.pay.aliwx.AliWxPayMgr
+import com.yuansfer.pay.util.ErrStatus
 import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -31,21 +31,10 @@ import io.flutter.plugin.common.MethodChannel
 import io.lantern.android.model.*
 import io.lantern.messaging.WebRTCSignal
 import okhttp3.Response
-import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager
-import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.Bandwidth
-import org.getlantern.lantern.model.CheckUpdate
-import org.getlantern.lantern.model.LanternHttpClient
+import org.getlantern.lantern.model.*
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
-import org.getlantern.lantern.model.LanternStatus
-import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.model.ProPlan
-import org.getlantern.lantern.model.ProUser
-import org.getlantern.lantern.model.Stats
-import org.getlantern.lantern.model.Utils
-import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.PlansUtil
@@ -60,8 +49,11 @@ import org.getlantern.mobilesdk.model.Survey
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.Locale
+import java.util.*
+import org.getlantern.lantern.util.*
+
 import java.util.concurrent.*
+
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 

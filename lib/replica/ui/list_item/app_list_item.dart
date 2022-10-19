@@ -24,7 +24,9 @@ class ReplicaAppListItem extends StatelessWidget {
       content: SizedBox(
         height: 60,
         child: Column(
-          mainAxisAlignment: hasDescription ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+          mainAxisAlignment: hasDescription
+              ? MainAxisAlignment.spaceBetween
+              : MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -38,17 +40,18 @@ class ReplicaAppListItem extends StatelessWidget {
                 ),
               ],
             ),
-            if (hasDescription) Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                renderDescription(),
-                // Padding(
-                //   padding: EdgeInsetsDirectional.only(start: 8.0),
-                //   child: renderMimeType(), // Figma has no mimeType, but maybe useful to end user?
-                // )
-              ],
-            ),
+            if (hasDescription)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  renderDescription(),
+                  // Padding(
+                  //   padding: EdgeInsetsDirectional.only(start: 8.0),
+                  //   child: renderMimeType(), // Figma has no mimeType, but maybe useful to end user?
+                  // )
+                ],
+              ),
           ],
         ),
       ),
@@ -68,14 +71,15 @@ class ReplicaAppListItem extends StatelessWidget {
 
   // If mimetype is nil, just render 'app/unknown'
   Widget renderMimeType() => CText(
-    item.primaryMimeType != null ? item.primaryMimeType! : 'app_unknown'.i18n,
-    style: tsBody2Short.copiedWith(color: grey5),
-  );
+        item.primaryMimeType != null
+            ? item.primaryMimeType!
+            : 'app_unknown'.i18n,
+        style: tsBody2Short.copiedWith(color: grey5),
+      );
 
   Widget renderDescription() {
     return Expanded(
-      child:
-      CText(
+      child: CText(
         item.metaDescription,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
