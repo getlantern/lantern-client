@@ -6,8 +6,8 @@ require (
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
-	github.com/getlantern/errors v1.0.1
-	github.com/getlantern/flashlight v0.0.0-20221004113822-990fb60a98b8
+	github.com/getlantern/errors v1.0.3
+	github.com/getlantern/flashlight v0.0.0-20221013141438-fb11037bdbf7
 	github.com/getlantern/golog v0.0.0-20211223150227-d4d95a44d873
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
@@ -96,7 +96,6 @@ require (
 	github.com/getlantern/geo v0.0.0-20210511192032-f563c52422c5 // indirect
 	github.com/getlantern/geolookup v0.0.0-20210901195705-eec711834596 // indirect
 	github.com/getlantern/go-cache v0.0.0-20141028142048-88b53914f467 // indirect
-	github.com/getlantern/go-ping v0.0.0-20210901195920-5415d0f18231 // indirect
 	github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 // indirect
 	github.com/getlantern/go-update v0.0.0-20211217174922-3d156473e8cd // indirect
 	github.com/getlantern/goexpr v0.0.0-20211215215226-4cdd4fd2847b // indirect
@@ -126,7 +125,7 @@ require (
 	github.com/getlantern/msgpack v3.1.4+incompatible // indirect
 	github.com/getlantern/multipath v0.0.0-20220721104633-92b6c4b27b91 // indirect
 	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd // indirect
-	github.com/getlantern/ops v0.0.0-20220622024155-46238aeb954f // indirect
+	github.com/getlantern/ops v0.0.0-20220713155959-1315d978fff7 // indirect
 	github.com/getlantern/osversion v0.0.0-20190510010111-432ecec19031 // indirect
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 // indirect
 	github.com/getlantern/pcapper v0.0.0-20210901200029-bf37dc0a4259 // indirect
@@ -244,7 +243,6 @@ require (
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 // indirect
 	github.com/songgao/water v0.0.0-20200317203138-2b4b6d7c09d8 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
-	github.com/sparrc/go-ping v0.0.0-20190613174326-4e5b6552494c // indirect
 	github.com/templexxx/cpu v0.0.8 // indirect
 	github.com/templexxx/xorsimd v0.4.1 // indirect
 	github.com/ti-mo/conntrack v0.3.0 // indirect
@@ -260,12 +258,12 @@ require (
 	gitlab.com/yawning/edwards25519-extra.git v0.0.0-20211229043746-2f91fcc9fbdb // indirect
 	gitlab.com/yawning/obfs4.git v0.0.0-20220204003609-77af0cba934d // indirect
 	go.etcd.io/bbolt v1.3.6 // indirect
-	go.opentelemetry.io/otel v1.7.0 // indirect
+	go.opentelemetry.io/otel v1.9.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/internal/retry v1.7.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.7.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.7.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.7.0 // indirect
-	go.opentelemetry.io/otel/trace v1.7.0 // indirect
+	go.opentelemetry.io/otel/trace v1.9.0 // indirect
 	go.opentelemetry.io/proto/otlp v0.16.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
@@ -314,7 +312,7 @@ replace github.com/elazarl/goproxy => github.com/getlantern/goproxy v0.0.0-20220
 
 replace github.com/lucas-clemente/quic-go => github.com/getlantern/quic-go v0.27.1-0.20220428155905-cb005872fecc
 
-replace github.com/refraction-networking/utls => github.com/getlantern/utls v0.0.0-20211116192935-1abdc4b1acab
+replace github.com/refraction-networking/utls => github.com/getlantern/utls v0.0.0-20221011213556-17014cb6fc4a
 
 // git.apache.org isn't working at the moment, use mirror (should probably switch back once we can)
 replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110319-2566ecd5d999
