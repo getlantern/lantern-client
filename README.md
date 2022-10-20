@@ -175,13 +175,9 @@ STAGING=true make android-debug android-install
 
 ### Making release builds
 
-The Android app is distributed in two ways, as an APK for side-loaded installation and as an app bundle (aab)
-for distribution on the Google Play Store. The APKs are architecture specific whereas the app bundle contains
-all 4 architectures (arm and x86 in 32-bit and 64-bit variants).
+The Android app is distributed in two ways, as an APK for side-loaded installation and as an app bundle (aab) for distribution on the Google Play Store. The APKs are architecture specific whereas the app bundle contains all 4 architectures (arm and x86 in 32-bit and 64-bit variants).
 
-To create a release build, put the keystore.release.jks in your home folder (or some other location outside of this
-project) and add the following to your
-`~/.gradle/gradle.properties` file:
+To create a release build, put the keystore.release.jks in your home folder (or some other location outside of this project) and add the following to your `~/.gradle/gradle.properties` file:
 
 ```
 KEYSTORE_PWD=$KEYSTORE_PASSWORD
@@ -190,10 +186,9 @@ KEY_PWD=$KEY_PASSWORD
 MATOMO_AUTH_TOKEN=$MATOMO_AUTH_TOKEN
 ```
 
-You can find the exact values to add to your gradle.properties under the "Android" entry in 1Password.
+You can find the exact values to add to your gradle.properties under the "Android" entry in 1Password: https://my.1password.com/vaults/all/allitems/rp5dzcli5ghilzfsanajwz6nqm
 
-Note that this same key is used both for signing standalone APKs as well as signing aab app bundles for upload to
-Google Play.
+Note that this same key is used both for signing standalone APKs as well as signing aab app bundles for upload to Google Play.
 
 #### Release build with Development Mode
 
