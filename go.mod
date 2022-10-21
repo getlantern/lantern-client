@@ -12,7 +12,7 @@ require (
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
-	github.com/getlantern/replica v0.10.1-0.20220823141235-065fd4224cd3
+	github.com/getlantern/replica v0.11.0
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/mobile v0.0.0-20210831151748-9cba7bc03c0f

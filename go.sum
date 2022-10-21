@@ -512,8 +512,8 @@ github.com/getlantern/quicwrapper v0.0.0-20220427102501-537d4dc89543/go.mod h1:1
 github.com/getlantern/reconn v0.0.0-20161128113912-7053d017511c h1:IkjF+RwRs8B/RsuD638eUFO2K/227OO2B1FLXGp17Ro=
 github.com/getlantern/reconn v0.0.0-20161128113912-7053d017511c/go.mod h1:kExwbqTx1krUnT9ohmXG3jayDTEBfxUKeoRzU6XucLw=
 github.com/getlantern/redis-utils v0.0.0-20210823133122-d4f0e525e095/go.mod h1:1X9DhzvePQ89WjJRzY2DA5Xpgi7jI0i5E0rFjYxgPWI=
-github.com/getlantern/replica v0.10.1-0.20220823141235-065fd4224cd3 h1:qye2boyhsIf+54V/nDpSFAFmaDsgc1gVo66cKdRQi4A=
-github.com/getlantern/replica v0.10.1-0.20220823141235-065fd4224cd3/go.mod h1:bRU8ekbLnjaBNV2GwdBoo2M2Z9gxNelqtROYZ8F/FZc=
+github.com/getlantern/replica v0.11.0 h1:XJOYa/H7ApWvy+Uxmhg0TmJSbKmzz4ZqsIz/aomc9KU=
+github.com/getlantern/replica v0.11.0/go.mod h1:fgocLs3qZs8Fp6BOS2rhSttdb73FQT6NScKIePIWpWk=
 github.com/getlantern/ring v0.0.0-20210901200052-aea475211e37 h1:HjlstWzGvYp12q6Qdb9LREV/6tOgKuvE2nDWMlm7Mbc=
 github.com/getlantern/ring v0.0.0-20210901200052-aea475211e37/go.mod h1:mnw3NsM0/oiJdZDMujNx+Kg60o72UClHB1UNqrEWqOM=
 github.com/getlantern/rot13 v0.0.0-20210901200056-01bce62cb8bb h1:2GJMhsjopXkytAkhHFCsss8s2o21v9FNUw0evfbTCjI=
