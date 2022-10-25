@@ -1,4 +1,14 @@
 
+<a name="7.0.9"></a>
+## [7.0.9](https://github.com/getlantern/android-lantern/compare/7.0.8...7.0.9)
+
+> 2022-10-25
+
+### Pull Requests
+
+* Merge pull request [#794](https://github.com/getlantern/android-lantern/issues/794) from getlantern/harry/new-hellos
+
+
 <a name="7.0.8"></a>
 ## [7.0.8](https://github.com/getlantern/android-lantern/compare/7.0.7...7.0.8)
 
