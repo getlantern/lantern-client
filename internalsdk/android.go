@@ -84,7 +84,6 @@ type Session interface {
 	GetForcedCountryCode() (string, error)
 	GetDNSServer() (string, error)
 	Provider() (string, error)
-	AppVersion() (string, error)
 	IsPlayVersion() (bool, error)
 	Email() (string, error)
 	Currency() (string, error)
@@ -117,7 +116,6 @@ type panickingSession interface {
 	GetForcedCountryCode() string
 	GetDNSServer() string
 	Provider() string
-	AppVersion() string
 	IsPlayVersion() bool
 	Email() string
 	Currency() string
@@ -235,12 +233,6 @@ func (s *panickingSessionImpl) GetDNSServer() string {
 
 func (s *panickingSessionImpl) Provider() string {
 	result, err := s.wrapped.Provider()
-	panicIfNecessary(err)
-	return result
-}
-
-func (s *panickingSessionImpl) AppVersion() string {
-	result, err := s.wrapped.AppVersion()
 	panicIfNecessary(err)
 	return result
 }
@@ -700,4 +692,9 @@ func buildUpdateCfg() *autoupdate.Config {
 		HTTPClient:     updateClient,
 		PublicKey:      []byte(autoupdate.PackagePublicKey),
 	}
+}
+
+// Get the version number of the Go library.
+func SDKVersion() string {
+	return common.PackageVersion
 }

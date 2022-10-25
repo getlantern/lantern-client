@@ -230,7 +230,7 @@ abstract class SessionManager(application: Application) : Session {
         return prefs.getBoolean(MATOMO_ENABLED, false)
     }
 
-    override fun appVersion(): String {
+    fun appVersion(): String {
         return appVersion
     }
 

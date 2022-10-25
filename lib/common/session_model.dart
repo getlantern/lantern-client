@@ -201,6 +201,14 @@ class SessionModel extends Model {
     );
   }
 
+  Widget sdkVersion(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'sdkVersion',
+      defaultValue: 'unknown',
+      builder: builder,
+    );
+  }
+
   Future<bool> getChatEnabled() async {
     return methodChannel
         .invokeMethod('get', 'chatEnabled')
