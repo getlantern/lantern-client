@@ -6,6 +6,7 @@ import com.google.gson.JsonObject
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import internalsdk.Internalsdk
 import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
@@ -40,6 +41,7 @@ class SessionModel(
 
         const val PATH_PRO_USER = "prouser"
         const val PATH_PROXY_ALL = "proxyAll"
+        const val PATH_SDK_VERSION = "sdkVersion"
     }
 
     init {
@@ -53,6 +55,7 @@ class SessionModel(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
+            tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
         }
     }
 

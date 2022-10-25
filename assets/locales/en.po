@@ -116,6 +116,9 @@ msgstr "Version %s"
 msgid "build_number"
 msgstr "Build %s"
 
+msgid "sdk_version"
+msgstr "SDK %s"
+
 msgid "language"
 msgstr "Language"
 

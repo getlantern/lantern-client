@@ -173,6 +173,20 @@ class Settings extends StatelessWidget {
                         style: tsOverline.copiedWith(color: pink4),
                       ),
                     ),
+                    Container(
+                      padding: const EdgeInsetsDirectional.only(
+                        bottom: 8.0,
+                        end: 8.0,
+                      ),
+                      child: sessionModel.sdkVersion(
+                        (context, sdkVersion, _) => CText(
+                          'sdk_version'
+                              .i18n
+                              .fill([sdkVersion]),
+                          style: tsOverline.copiedWith(color: pink4),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               );
