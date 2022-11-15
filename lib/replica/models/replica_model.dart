@@ -44,6 +44,20 @@ class ReplicaModel extends Model {
     });
   }
 
+  Future<void> setShowNewBadge(bool show) async {
+    return methodChannel.invokeMethod('setSuppressUploadWarning', {
+      'showNewBadge': show,
+    });
+  }
+
+  Widget getShowNewBadgeWidget(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>(
+      '/showNewBadge',
+      defaultValue: true,
+      builder: builder,
+    );
+  }
+
   Widget getSearchTermWidget(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       '/searchTerm',
