@@ -61,31 +61,40 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         actionButton: renderFap(context),
         centerTitle: true,
         title: 'discover'.i18n,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
-              child: SearchField(
-                controller: _textEditingController,
-                search: (query) async {
-                  await replicaModel.setSearchTerm(query);
-                  if (query != '') {
-                    setState(() {
-                      currentQuery = query;
-                      showResults = true;
-                    });
-                  }
-                },
-                onClear: () async {
-                  await replicaModel.setSearchTerm('');
-                  await replicaModel.setSearchTab(0);
-                },
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsetsDirectional.only(bottom: 46, top: 30),
+                child: CAssetImage(
+                  path: ImagePaths.lantern_logo,
+                  size: 72,
+                ),
               ),
-            ),
-            renderDiscoverPopup()
-          ],
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
+                child: SearchField(
+                  controller: _textEditingController,
+                  search: (query) async {
+                    await replicaModel.setSearchTerm(query);
+                    if (query != '') {
+                      setState(() {
+                        currentQuery = query;
+                        showResults = true;
+                      });
+                    }
+                  },
+                  onClear: () async {
+                    await replicaModel.setSearchTerm('');
+                    await replicaModel.setSearchTab(0);
+                  },
+                ),
+              ),
+              renderDiscoverPopup()
+            ],
+          ),
         ),
       ),
     );

@@ -19,12 +19,14 @@ class ReplicaModel(
         private const val TAG = "ReplicaModel"
         const val PATH_SEARCH_TERM = "/searchTerm"
         const val PATH_SEARCH_TAB = "/searchTab"
+        const val PATH_SHOW_NEW_BADGE = "/showNewBadge"
     }
 
     init {
         db.mutate { tx ->
             tx.put(PATH_SEARCH_TERM, "")
             tx.put(PATH_SEARCH_TAB, 0)
+            tx.put(PATH_SHOW_NEW_BADGE, true)
         }
     }
 
@@ -40,6 +42,11 @@ class ReplicaModel(
             "setSearchTab" -> {
                 db.mutate { tx ->
                     tx.put(PATH_SEARCH_TAB, call.argument<String>("searchTab")!!)
+                }
+            }
+            "setNewBadge" -> {
+                db.mutate { tx ->
+                    tx.put(PATH_SHOW_NEW_BADGE, call.argument<Boolean>("showNewBadge")!!)
                 }
             }
             else -> super.doMethodCall(call, notImplemented)
