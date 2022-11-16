@@ -116,39 +116,15 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   void Function() renderNewDialog(BuildContext context) {
     return CDialog(
       iconPath: ImagePaths.newspaper,
-      title: 'New Discover Category',
-      description: 'Discover now allows you to search for news articles!',
-      agreeText: 'Check it out',
+      title: 'replica_new_discover'.i18n,
+      description: 'replica_new_discover_news'.i18n,
+      agreeText: 'replica_check_it_out'.i18n,
       agreeAction: () async {
         await replicaModel.setShowNewBadge(false);
         return true;
       },
       includeCancel: false,
     ).show(context);
-    // return showDialog(
-    //   context: context,
-    //   builder: (context) {
-    //     return AlertDialog(
-    //       content: Column(
-    //         children: [
-    //           CText('Paste from clipboard?'.i18n, style: tsBody1),
-    //         ],
-    //       ),
-    //       actions: <Widget>[
-    //         TextButton(
-    //           onPressed: () {
-    //             Navigator.pop(context);
-    //           },
-    //           child: CText(
-    //             // 'Yes'.i18n,
-    //             'Check it Out',
-    //             style: tsButtonPink,
-    //           ),
-    //         ),
-    //       ],
-    //     );
-    //   },
-    // );
   }
 
   Widget renderDiscoverText() {
