@@ -111,6 +111,22 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
+            // * RESET REPLICA SHOW NEW BADGE
+            ListItemFactory.settingsItem(
+              content: 'Reset replica new badge',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async {
+                    debugPrint('here');
+                    await replicaModel.setShowNewBadge(true);
+                  },
+                  child: CText(
+                    'Reset Badge'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
+              ],
+            ),
             // * RESET ONBOARDING + RECOVERY KEY FLAGS
             ListItemFactory.settingsItem(
               content: 'Reset chat flags',
