@@ -44,9 +44,9 @@ class ReplicaModel extends Model {
     });
   }
 
-  Future<void> setShowNewBadge(bool show) async {
-    return methodChannel.invokeMethod('setSuppressUploadWarning', {
-      'showNewBadge': show,
+  Future<void> setShowNewBadge(bool showNewBadge) async {
+    return methodChannel.invokeMethod('setShowNewBadge', {
+      'showNewBadge': showNewBadge,
     });
   }
 
@@ -72,6 +72,12 @@ class ReplicaModel extends Model {
       defaultValue: '',
       builder: builder,
     );
+  }
+
+  Future<bool> getShowNewBadge() async {
+    return methodChannel
+        .invokeMethod('get', '/showNewBadge')
+        .then((value) => value);
   }
 
   Future<String> getSearchTerm() async {

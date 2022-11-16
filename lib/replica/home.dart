@@ -16,6 +16,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   late bool showResults = false;
   late String currentQuery = '';
   late int currentTab = 0;
+  late bool showNewModal = false;
 
   @override
   void initState() {
@@ -26,6 +27,13 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         setState(() {
           currentQuery = cachedSearchTerm;
           showResults = true;
+        });
+      }
+    });
+    replicaModel.getShowNewBadge().then((bool showNewBadge) {
+      if (showNewBadge) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          renderNewDialog(context);
         });
       }
     });
@@ -61,46 +69,89 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         actionButton: renderFap(context),
         centerTitle: true,
         title: 'discover'.i18n,
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsetsDirectional.only(bottom: 46, top: 30),
-                child: CAssetImage(
-                  path: ImagePaths.lantern_logo,
-                  size: 72,
-                ),
+        body: Stack(
+          children: [
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsetsDirectional.only(bottom: 46, top: 30),
+                      child: CAssetImage(
+                        path: ImagePaths.lantern_logo,
+                        size: 72,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
+                      child: SearchField(
+                        controller: _textEditingController,
+                        search: (query) async {
+                          await replicaModel.setSearchTerm(query);
+                          if (query != '') {
+                            setState(() {
+                              currentQuery = query;
+                              showResults = true;
+                            });
+                          }
+                        },
+                        onClear: () async {
+                          await replicaModel.setSearchTerm('');
+                          await replicaModel.setSearchTab(0);
+                        },
+                      ),
+                    ),
+                    renderDiscoverText(),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
-                child: SearchField(
-                  controller: _textEditingController,
-                  search: (query) async {
-                    await replicaModel.setSearchTerm(query);
-                    if (query != '') {
-                      setState(() {
-                        currentQuery = query;
-                        showResults = true;
-                      });
-                    }
-                  },
-                  onClear: () async {
-                    await replicaModel.setSearchTerm('');
-                    await replicaModel.setSearchTab(0);
-                  },
-                ),
-              ),
-              renderDiscoverPopup()
-            ],
-          ),
+            ),
+            // if (!showNewModal) renderNewDialog(context)
+          ],
         ),
       ),
     );
   }
 
-  Widget renderDiscoverPopup() {
+  void Function() renderNewDialog(BuildContext context) {
+    return CDialog(
+      iconPath: ImagePaths.newspaper,
+      title: 'New Discover Category',
+      description: 'Discover now allows you to search for news articles!',
+      agreeText: 'Check it out',
+      agreeAction: () async {
+        await replicaModel.setShowNewBadge(false);
+        return true;
+      },
+      includeCancel: false,
+    ).show(context);
+    // return showDialog(
+    //   context: context,
+    //   builder: (context) {
+    //     return AlertDialog(
+    //       content: Column(
+    //         children: [
+    //           CText('Paste from clipboard?'.i18n, style: tsBody1),
+    //         ],
+    //       ),
+    //       actions: <Widget>[
+    //         TextButton(
+    //           onPressed: () {
+    //             Navigator.pop(context);
+    //           },
+    //           child: CText(
+    //             // 'Yes'.i18n,
+    //             'Check it Out',
+    //             style: tsButtonPink,
+    //           ),
+    //         ),
+    //       ],
+    //     );
+    //   },
+    // );
+  }
+
+  Widget renderDiscoverText() {
     return Padding(
       padding: const EdgeInsetsDirectional.all(12.0),
       child: Column(
