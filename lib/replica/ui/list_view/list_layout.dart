@@ -131,6 +131,7 @@ class _ReplicaListLayoutState extends ReplicaCommonListViewState {
             },
           ),
         );
+      case SearchCategory.News:
       case SearchCategory.Unknown:
       default:
         return renderNoItemsFoundWidget();

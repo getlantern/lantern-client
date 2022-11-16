@@ -1,6 +1,6 @@
 import 'package:lantern/common/ui/image_paths.dart';
 
-enum SearchCategory { Image, Video, Audio, Document, App, Unknown }
+enum SearchCategory { Image, Video, Audio, Document, App, News, Unknown }
 
 // Taken mostly from here
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
@@ -55,6 +55,8 @@ extension GetRelevantImagePath on SearchCategory {
         return ImagePaths.zip_black;
       case SearchCategory.Unknown:
         return ImagePaths.unknown_black;
+      case SearchCategory.News:
+        return ImagePaths.unknown_black;
     }
   }
 }
@@ -84,6 +86,8 @@ extension MimeTypes on SearchCategory {
         return 'message+www+chemical+model+paleovu+x-world+xgl+multipart+application/zip+application/octet-stream+application/vnd.android.package-archive';
       case SearchCategory.Unknown:
         // Web and Unknown don't use mime types
+        return '';
+      case SearchCategory.News:
         return '';
     }
   }
