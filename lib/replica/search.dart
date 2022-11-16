@@ -111,6 +111,9 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                 Tab(
                   text: 'app'.i18n,
                 ),
+                Tab(
+                  text: 'news'.i18n,
+                ),
               ],
             ),
             const SizedBox(height: 10),
