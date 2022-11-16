@@ -22,8 +22,8 @@ class ReplicaSearchScreen extends StatefulWidget {
 class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
     with TickerProviderStateMixin {
   late final TabController tabController =
-      // Video + Image + Audio + Document + App = 5 categories
-      TabController(length: 5, vsync: this);
+      // Video + Image + Audio + Document + App + News = 6 categories
+      TabController(length: 6, vsync: this);
   final formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
   late final CustomTextEditingController textEditingController;
   late String searchQuery = widget.currentQuery;
@@ -147,6 +147,11 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                     replicaApi: replicaApi,
                     searchQuery: searchQuery,
                     searchCategory: SearchCategory.App,
+                  ),
+                  ReplicaListLayout(
+                    replicaApi: replicaApi,
+                    searchQuery: searchQuery,
+                    searchCategory: SearchCategory.News,
                   ),
                 ],
               ),
