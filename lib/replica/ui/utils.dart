@@ -149,6 +149,8 @@ Future<Widget> getUploadThumbnailFromFile({
     case SearchCategory.App:
     case SearchCategory.Unknown:
       return CAssetImage(size: width, path: cat.getRelevantImagePath());
+    case SearchCategory.News:
+      return CAssetImage(size: width, path: cat.getRelevantImagePath());
   }
 }
 
