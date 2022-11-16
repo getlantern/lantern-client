@@ -50,6 +50,7 @@ class CDialog extends StatefulWidget {
     this.agreeAction,
     this.maybeAgreeAction,
     this.dismissAction,
+    this.includeCancel = true
   }) : super();
 
   final String? iconPath;
@@ -65,6 +66,7 @@ class CDialog extends StatefulWidget {
   final Future<bool> Function(bool confirmed)? maybeAgreeAction;
   final Future<void> Function()? dismissAction;
   final closeOnce = once();
+  final bool includeCancel;
 
   void Function() show(BuildContext context) {
     showDialog(
@@ -191,8 +193,9 @@ class CDialogState extends State<CDialog> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 // DISMISS
-                if (widget.agreeAction != null ||
-                    widget.maybeAgreeAction != null)
+                if ((widget.agreeAction != null ||
+                    widget.maybeAgreeAction != null) &&
+                    widget.includeCancel)
                   TextButton(
                     onPressed: () async {
                       if (widget.dismissAction != null) {
