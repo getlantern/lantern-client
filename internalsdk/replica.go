@@ -14,9 +14,9 @@ import (
 	"github.com/getlantern/flashlight/client"
 	"github.com/getlantern/flashlight/common"
 	"github.com/getlantern/flashlight/config"
-	"github.com/getlantern/flashlight/geolookup"
 	"github.com/getlantern/flashlight/ops"
 	"github.com/getlantern/flashlight/proxied"
+	replicaConfig "github.com/getlantern/replica/config"
 	replicaServer "github.com/getlantern/replica/server"
 	replicaService "github.com/getlantern/replica/service"
 
@@ -118,15 +118,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	}
 
 	log.Debugf("Starting replica with configDir [%v] and userConfig [%+v]\n", s.ConfigDir, s.UserConfig)
-	optsFunc := func() *config.ReplicaOptionsRoot {
-		var opts config.ReplicaOptionsRoot
-		err := s.Flashlight.FeatureOptions(config.FeatureReplica, &opts)
-		if err != nil {
-			log.Errorf("Error on getting feature options, this should never happen in practice: %v", err)
-			return nil
-		}
-		return &opts
-	}
+	optsFunc := replicaConfig.NewReplicaOptionsGetter(s.Flashlight, s.Session.GetCountryCode)
 
 	input := replicaServer.NewHttpHandlerInput{}
 	input.SetDefaults()
@@ -146,9 +138,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	input.AddCommonHeaders = func(r *http.Request) {
 		common.AddCommonNonUserHeaders(s.UserConfig, r)
 	}
-	input.GlobalConfig = func() replicaServer.ReplicaOptions {
-		return optsFunc()
-	}
+	input.GlobalConfig = optsFunc
 	input.HttpClient.Transport = proxied.ParallelForIdempotent()
 	input.ProcessCORSHeaders = common.ProcessCORS
 	input.InstrumentResponseWriter = func(w http.ResponseWriter,
@@ -223,40 +213,8 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	input.ReplicaServiceClient = replicaService.ServiceClient{
 		HttpClient: input.HttpClient,
 		ReplicaServiceEndpoint: func() *url.URL {
-			// Fetch options
-			opts := optsFunc()
-			if opts == nil {
-				log.Errorf("ReplicaOptions is not ready yet: triggering geolookup.Refresh() and using default endpoint: %v",
-					replicaService.GlobalChinaDefaultServiceUrl)
-				geolookup.Refresh()
-				return replicaService.GlobalChinaDefaultServiceUrl
-			}
-
-			// Fetch country: if country wasn't fetch-able, use the default endpoint
-			raw := opts.ReplicaRustDefaultEndpoint
-			country, err := s.Session.GetCountryCode()
-			if err != nil {
-				log.Errorf("failed to fetch country while configuring new replica-rust endpoint: re-running geolookup and defaulting to %q: %v", opts.ReplicaRustDefaultEndpoint, err)
-				geolookup.Refresh()
-			}
-			if countryRaw := opts.ReplicaRustEndpoints[country]; countryRaw != "" {
-				raw = countryRaw
-			} else {
-				log.Tracef("No custom replica endpoint for %v. Using default one: %v", country, raw)
-			}
-
-			// Parse endpoint
-			url, err := url.Parse(raw)
-			if err != nil {
-				log.Errorf("could not parse replica rust URL %v", err)
-				return replicaService.GlobalChinaDefaultServiceUrl
-			}
-			log.Tracef("parsed new endpoint for country %s successfully: %v", country, url.String())
-			return url
+			return replicaConfig.GetReplicaServiceEndpointUrl(optsFunc())
 		},
-	}
-	input.GlobalConfig = func() replicaServer.ReplicaOptions {
-		return optsFunc()
 	}
 	replicaHandler, err := replicaServer.NewHTTPHandler(input)
 	if err != nil {
