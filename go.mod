@@ -7,16 +7,16 @@ require (
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.3
-	github.com/getlantern/flashlight v0.0.0-20221202002330-7d23490ea815
+	github.com/getlantern/flashlight v0.0.0-20221214082952-31e9077fef85
 	github.com/getlantern/golog v0.0.0-20211223150227-d4d95a44d873
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/replica v0.11.2-0.20221211032104-08e1f835bf8e
 	github.com/gorilla/mux v1.8.0
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.1
 	golang.org/x/mobile v0.0.0-20210831151748-9cba7bc03c0f
-	golang.org/x/net v0.0.0-20220822230855-b0a4917ee28c
+	golang.org/x/net v0.1.0
 	nhooyr.io/websocket v1.8.7
 )
 
@@ -25,6 +25,7 @@ require (
 	filippo.io/edwards25519 v1.0.0-rc.1.0.20210721174708-390f27c3be20 // indirect
 	git.torproject.org/pluggable-transports/goptlib.git v1.2.0 // indirect
 	github.com/HdrHistogram/hdrhistogram-go v1.1.0 // indirect
+	github.com/Jigsaw-Code/outline-ss-server v0.0.0-00010101000000-000000000000 // indirect
 	github.com/OperatorFoundation/Replicant-go/Replicant/v3 v3.0.8 // indirect
 	github.com/OperatorFoundation/Starbridge-go/Starbridge/v3 v3.0.9 // indirect
 	github.com/OperatorFoundation/ghostwriter-go v1.0.6 // indirect
@@ -194,7 +195,7 @@ require (
 	github.com/juju/ratelimit v1.0.1 // indirect
 	github.com/keighl/mandrill v0.0.0-20170605120353-1775dd4b3b41 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
-	github.com/klauspost/compress v1.15.7 // indirect
+	github.com/klauspost/compress v1.15.12 // indirect
 	github.com/klauspost/cpuid v1.3.1 // indirect
 	github.com/klauspost/pgzip v1.2.5 // indirect
 	github.com/klauspost/reedsolomon v1.9.9 // indirect
@@ -204,7 +205,7 @@ require (
 	github.com/marten-seemann/qtls-go1-16 v0.1.5 // indirect
 	github.com/marten-seemann/qtls-go1-17 v0.1.1 // indirect
 	github.com/marten-seemann/qtls-go1-18 v0.1.1 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
+	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/mdlayher/netlink v1.1.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.1 // indirect
 	github.com/mikioh/tcp v0.0.0-20180707144002-02a37043a4f7 // indirect
@@ -220,8 +221,8 @@ require (
 	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7 // indirect
-	github.com/oschwald/geoip2-golang v1.5.0 // indirect
-	github.com/oschwald/maxminddb-golang v1.8.0 // indirect
+	github.com/oschwald/geoip2-golang v1.8.0 // indirect
+	github.com/oschwald/maxminddb-golang v1.10.0 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pierrec/lz4/v4 v4.1.8 // indirect
@@ -240,10 +241,10 @@ require (
 	github.com/pion/udp v0.1.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_golang v1.12.2 // indirect
+	github.com/prometheus/client_golang v1.13.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
-	github.com/prometheus/common v0.35.0 // indirect
-	github.com/prometheus/procfs v0.7.3 // indirect
+	github.com/prometheus/common v0.37.0 // indirect
+	github.com/prometheus/procfs v0.8.0 // indirect
 	github.com/refraction-networking/utls v1.0.0 // indirect
 	github.com/ryszard/goskiplist v0.0.0-20150312221310-2dfbae5fcf46 // indirect
 	github.com/samber/lo v1.25.0 // indirect
@@ -260,7 +261,7 @@ require (
 	github.com/tklauser/go-sysconf v0.3.6 // indirect
 	github.com/tklauser/numcpus v0.2.2 // indirect
 	github.com/tkuchiki/go-timezone v0.2.0 // indirect
-	github.com/ulikunitz/xz v0.5.9 // indirect
+	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xtaci/smux v1.5.15-0.20200704123958-f7188026ba01 // indirect
 	github.com/xwb1989/sqlparser v0.0.0-20180606152119-120387863bf2 // indirect
@@ -278,12 +279,12 @@ require (
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.19.1 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/text v0.3.8-0.20211105212822-18b340fc7af2 // indirect
+	golang.org/x/text v0.4.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20220630174209-ad1d48641aa7 // indirect
-	google.golang.org/grpc v1.47.0 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/genproto v0.0.0-20220802133213-ce4fa296bf78 // indirect
+	google.golang.org/grpc v1.48.0 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
@@ -310,10 +311,10 @@ require (
 	github.com/rs/dnscache v0.0.0-20211102005908-e0241e321417 // indirect
 	github.com/tidwall/btree v1.4.2 // indirect
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
-	golang.org/x/crypto v0.0.0-20220817201139-bc19a97f63c8 // indirect
+	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/exp v0.0.0-20220823124025-807a23277127 // indirect
 	golang.org/x/sync v0.0.0-20220819030929-7fc1605a5dde // indirect
-	golang.org/x/sys v0.0.0-20220818161305-2296e01440c6 // indirect
+	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/time v0.0.0-20220722155302-e5dcc9cfc0b9 // indirect
 )
 
@@ -351,3 +352,5 @@ replace github.com/ulikunitz/xz => github.com/ulikunitz/xz v0.5.8
 // We use a fork of gomobile that allows reusing the cache directory for faster builds, based
 // on this unmerged PR against gomobile - https://github.com/golang/mobile/pull/58.
 replace golang.org/x/mobile => github.com/oxtoacart/mobile v0.0.0-20220116191336-0bdf708b6d0f
+
+replace github.com/Jigsaw-Code/outline-ss-server => github.com/getlantern/lantern-shadowsocks v1.3.6-0.20221214082121-805a0ddbe9c1
