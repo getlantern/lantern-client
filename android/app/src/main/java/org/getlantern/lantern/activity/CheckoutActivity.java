@@ -28,12 +28,11 @@ import com.google.gson.JsonObject;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
 import com.stripe.android.model.Card;
+import com.stripe.android.model.CardParams;
+import com.stripe.android.model.ExpirationDate;
 import com.stripe.android.model.Token;
 import com.stripe.android.view.CardNumberEditText;
 import com.stripe.android.view.ExpiryDateEditText;
-import com.yuansfer.pay.YSAppPay;
-import com.yuansfer.pay.aliwx.AliWxPayMgr;
-import com.yuansfer.pay.util.ErrStatus;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -63,7 +62,7 @@ import okhttp3.FormBody;
 import okhttp3.Response;
 
 @EActivity(R.layout.checkout)
-public class CheckoutActivity extends BaseFragmentActivity implements PurchasesUpdatedListener, AliWxPayMgr.IAliWxPayCallback {
+public class CheckoutActivity extends BaseFragmentActivity implements PurchasesUpdatedListener {
 
     private static final String TAG = CheckoutActivity.class.getName();
     private static final String STRIPE_TAG = TAG + ".stripe";
@@ -119,15 +118,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
     private void closeDialog() {
         if (dialog != null) {
             dialog.dismiss();
-        }
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (!LanternApp.getSession().isPlayVersion()) {
-            YSAppPay.registerAliWxPayCallback(this);
         }
     }
 
@@ -410,8 +400,13 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
 
     private void submitStripe() {
         try {
-            Pair<Integer, Integer> dates = expirationInput.getValidDateFields();
-            Card card = Card.create(cardInput.getCardNumber(), dates.component1(), dates.component2(), cvcInput.getText().toString().trim());
+            ExpirationDate.Validated date = expirationInput.getValidatedDate();
+            String cardNumber = cardInput.getText().toString().replaceAll("\\s", "");
+            CardParams card = new CardParams(
+                    cardNumber,
+                    date.getMonth(),
+                    date.getYear(),
+                    cvcInput.getText().toString().trim());
             dialog = ProgressDialog.show(this,
                     getResources().getString(R.string.processing_payment),
                     "",
@@ -490,7 +485,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
 
         // TODO: make this selectable from the backend if/when the UI can support multiple
         // different providers.
-        provider = "yuansfer";
+        provider = "paymentwall";
 
         Logger.debug(TAG, "Attempting to use payment provider: " + provider);
 
@@ -501,21 +496,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
 //                break;
             case "paymentwall":
                 activityClass = PaymentWallActivity_.class;
-                break;
-            case "yuansfer":
-                YSAppPay.getInstance().registerWXAPP(this, "wxa0d4a241e5d692df");
-                lanternClient.prepareYuansfer("alipay", new LanternHttpClient.YuansferCallback() {
-                    @Override
-                    public void onFailure(@Nullable Throwable throwable, @Nullable ProError error) {
-                        Logger.error(TAG, "Unable to prepare Yuansfer: " + error.getMessage());
-                        ActivityExtKt.showErrorDialog(CheckoutActivity.this, error.getMessage());
-                    }
-
-                    @Override
-                    public void onSuccess(String paymentInfo) {
-                        YSAppPay.getInstance().requestAliPayment(CheckoutActivity.this, paymentInfo);
-                    }
-                });
                 break;
             default:
                 Logger.error(TAG, "Unknown payment provider " + provider.toLowerCase());
@@ -550,22 +530,5 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
 
         PaymentHandler paymentHandler = new PaymentHandler(CheckoutActivity.this, "googleplay", tokens.get(0));
         paymentHandler.sendPurchaseRequest();
-    }
-
-    @Override
-    public void onPayFail(int payType, ErrStatus errStatus) {
-        String msg = errStatus.getErrCode() + " : " + errStatus.getErrMsg();
-        Logger.error(TAG, "Error on Yuansfer Payment: " + msg);
-        ActivityExtKt.showErrorDialog(this, msg);
-    }
-
-    @Override
-    public void onPaySuccess(int payType) {
-        Logger.debug(TAG, "Yuansfer Payment succeeded");
-    }
-
-    @Override
-    public void onPayCancel(int payType) {
-        Logger.debug(TAG, "Yuansfer Payment canceled");
     }
 }
