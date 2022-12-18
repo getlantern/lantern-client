@@ -58,7 +58,7 @@ class ServiceHelper(
         }
         val openMainActivity = PendingIntent.getActivity(
             service, 0, Intent(service, MainActivity::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
         val notificationBuilder = channelId?.let { NotificationCompat.Builder(service, it) }
             ?: NotificationCompat.Builder(service)
