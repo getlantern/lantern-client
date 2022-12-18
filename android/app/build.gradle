@@ -363,10 +363,6 @@ dependencies {
         transitive = true
     }
 
-    implementation 'com.github.yuansfer:yuansfer-payment-android:1.2.0'
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
-    implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
-
     // https://mvnrepository.com/artifact/net.jodah/expiringmap
     implementation group: 'net.jodah', name: 'expiringmap', version: '0.5.9'
 
@@ -414,7 +410,7 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
-    implementation 'com.stripe:stripe-android:16.10.2'
+    implementation 'com.stripe:stripe-android:20.17.0'
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 
@@ -435,8 +431,8 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.annotation:annotation:1.1.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
