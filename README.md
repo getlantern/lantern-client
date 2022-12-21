@@ -22,7 +22,7 @@ update the generated dart code.
 
 Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`. It seems that one can ignore this.
 
-## Building from Android Studio
+## Building and Releasing
 
 ### Dependencies
 
@@ -89,61 +89,11 @@ A sane terminal command (using [pidcat](https://github.com/JakeWharton/pidcat)) 
 The core Lantern functionality is written in Go and lives in `./internalsdk`.
 It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to an AAR file that lives in `./android/app/libs` and is called `liblantern-ARCH.aar`.
 
-Package the AAR with `make android-lib-debug ANDROID_ARCH=all` (use `android-lib-prod` for a production release (i.e., one that has symbols stripped, etc.))
+Package the AAR with `make android-lib ANDROID_ARCH=all`
 
-### Testing
+#### Testing against Lantern's staging servers
 
-#### Flutter
-
-##### Unit Testing
-* Run running Flutter unit tests run `make test`
-* To run independent Flutter tests, go to the root of the project and type: `flutter test test/my_folder_test.dart`
-  * in case that you need the code coverage just add the following argument: `flutter test --coverage test/my_folder_test.dart`
-
-##### Integration Testing
-You can run integration tests from the integration_test directory against a live app using the following steps:
-
-1. Run the app with these additional run arguments `--dart-define=driver=true --observatory-port 8888 --disable-service-auth-codes`
-2. Run the integration test as a dart application
-3. When running tests in different locales, change `const simulatedLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale. 
-4. Go to SETTINGS view and then run `change_language_test.dart`.
-5. All tests should start with testing device showing Chats tab.
-6. Start by running test `1A`.
-7. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
-   1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
-   2. `6B_request_flow_test` requires a message request to have just been received 
-   3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
-   4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
-8. We will have some duplicate screenshots in there - run `python3 scripts/screenshot_generation_assets/remove_dups.py [your android-lantern-path]/screenshots/` to deduplicate.
-9. To generate stitched landscape images for all screenshots in a given test folder, run `python3 scripts/screenshot_generation_assets/merge_screenshots.py [your android-lantern-path]/screenshots/[a locale e.g. en_US]`
-  
-This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
-
-WARNING - when running with flutter driver enabled, the on-screen keyboard does not work.
-
-WARNING - if you try to run an instance of the app using `--observatory-port` and you already have another instance running with that same observatory-port, the 2nd instance will hang on launch because flutter cannot bind to that port.
-
-TODO: we need to automate the running of integration tests in a CI environment using Flutter driver.
-
-NOTE ⚠ : Flutter driver is borderline maintained and clearly the expectation is to move to using `integration_test`. [Here](https://github.com/flutter/flutter/issues/12810) is a good depiction of related conversations. 
-
-##### Testing Replica
-A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.
-The tests should transparently setup and teardown the dummy server but you need to have `json-server` in your PATH.
-
-#### Java/Kotlin
-
-* For testing all `android/app/src/test` tests, run `./gradlew :app:test`
-* For testing all `android/app/src/androidTest` tests, run `./gradlew :app:connectedAndroidTest`
-* For testing a specific an `androidTest` test, easiest is to open that file in Android Studio and clicking on the green play button next to the test
-* For testing the internalsdk package, run `cd ./internalsdk && go test ./...`
-
-#### Unit Test Graph
-
-If you wanna visualize the current percentage of code coverage you need to do the following steps.
-
-1. On your `terminal` check if you have installed: `lcov` if not then install.
-2. Go to on your terminal `android-lantern/coverage` and type: `genhtml coverage/lcov.info -o coverage/html` that will generate a nice html file with the code coverage of all your files.
+Package the AAR with `make android-lib ANDROID_ARCH=all STAGING=true`
 
 ### Making debug builds
 
@@ -263,46 +213,61 @@ ANDROID_ARCH=386 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make 
 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-bundle
 ```
 
-##### Source Dump
-Lantern Android source code is made available via source dump tarballs. To create one, run:
+## Testing
 
-```
-VERSION=2.0.0 make sourcedump
-```
+### Flutter
 
-This will create a file `lantern-android-sources-2.0.0.tar.gz`.
+#### Unit Testing
+* Run running Flutter unit tests run `make test`
+* To run independent Flutter tests, go to the root of the project and type: `flutter test test/my_folder_test.dart`
+  * in case that you need the code coverage just add the following argument: `flutter test --coverage test/my_folder_test.dart`
 
-This tarball deliberately excludes UI resources like images and localized strings. It also deliberately excludes 3rd party Java libraries from the libs folder.
+#### Integration Testing
+You can run integration tests from the integration_test directory against a live app using the following steps:
 
-The tarball does include vendored Go libraries, including all of the getlantern.org Go libraries. In this tarball, these are all licensed under the GPL
-as explained in [LICENSING.md](LICENSING.md).
+1. Run the app with these additional run arguments `--dart-define=driver=true --observatory-port 8888 --disable-service-auth-codes`
+2. Run the integration test as a dart application
+3. When running tests in different locales, change `const simulatedLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale. 
+4. Go to SETTINGS view and then run `change_language_test.dart`.
+5. All tests should start with testing device showing Chats tab.
+6. Start by running test `1A`.
+7. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
+   1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
+   2. `6B_request_flow_test` requires a message request to have just been received 
+   3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
+   4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
+8. We will have some duplicate screenshots in there - run `python3 scripts/screenshot_generation_assets/remove_dups.py [your android-lantern-path]/screenshots/` to deduplicate.
+9. To generate stitched landscape images for all screenshots in a given test folder, run `python3 scripts/screenshot_generation_assets/merge_screenshots.py [your android-lantern-path]/screenshots/[a locale e.g. en_US]`
+  
+This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
 
-All embedded URL literals in the getlantern.org Go code are elided to make it harder for clones to build a working version of Lantern.
+WARNING - when running with flutter driver enabled, the on-screen keyboard does not work.
 
-TODO: once we're confident these are working well, we should automate the upload of these to S3 and GitHub along with the upload of releases.
+WARNING - if you try to run an instance of the app using `--observatory-port` and you already have another instance running with that same observatory-port, the 2nd instance will hang on launch because flutter cannot bind to that port.
+
+TODO: we need to automate the running of integration tests in a CI environment using Flutter driver.
+
+NOTE ⚠ : Flutter driver is borderline maintained and clearly the expectation is to move to using `integration_test`. [Here](https://github.com/flutter/flutter/issues/12810) is a good depiction of related conversations. 
+
+#### Testing Replica
+A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.
+The tests should transparently setup and teardown the dummy server but you need to have `json-server` in your PATH.
+
+### Java/Kotlin
+
+* For testing all `android/app/src/test` tests, run `./gradlew :app:test`
+* For testing all `android/app/src/androidTest` tests, run `./gradlew :app:connectedAndroidTest`
+* For testing a specific an `androidTest` test, easiest is to open that file in Android Studio and clicking on the green play button next to the test
+* For testing the internalsdk package, run `cd ./internalsdk && go test ./...`
+
+### Unit Test Graph
+
+If you wanna visualize the current percentage of code coverage you need to do the following steps.
+
+1. On your `terminal` check if you have installed: `lcov` if not then install.
+2. Go to on your terminal `android-lantern/coverage` and type: `genhtml coverage/lcov.info -o coverage/html` that will generate a nice html file with the code coverage of all your files.
 
 ## Testing Google Play Payments
----
-
-## Code Generation
-
-This project includes various pieces of autogenerated code like protocol buffers and routes.
-All of this code can be generated by running `make codegen` or just `make`. Specific pieces of
-code can be generated per the below instructions.
-
-## Protocol buffers
-
-If you update the protocol buffer definitions in protos_shared, make sure to run `make protos` to
-update the generated dart code.
-
-Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`. It seems that one can ignore this.
-
-### Autorouter
-
-Routes are defined in `lib/core/router` and need to be compiled into `lib/core/router/router.gr.dart` whenever they're changed.
-You can compile routes by running `make routes`.
-
-## Testing Google Play payments
 
 If you're trying to test Google Play Payments with a sideloaded build, you will need to satisfy one of the following conditions, otherwise you'll get an error saying "the item you requested is not available for purchase"
 when trying to purchase in-app.
@@ -326,6 +291,45 @@ B. Alternately, you can also try to follow [these steps](https://stackoverflow.c
 
     Make sure to set VersionCode and VersionName in the manifest to be the same as the version in the developer console (Alpha, Beta or Production. Drafts does not work anymore). @alexgophermix answer worked for me.
 ```
+
+## Testing Freekassa Payments
+
+You'd most probably wanna run this against Lantern's staging servers **and** turn on testing mode for Freekassa. Unfortunately in Freekassa, once you turn on `Testing Mode`, you can't switch back without affecting live payments. Ideally, contant Freekassa support to see how you can enable a separate testing mode. I'll just mention here some helpful notes while testing Freekassa before we went live with it.
+
+- Building the Flashlight library (i.e., `internalsdk`) with `make android-lib ANDROID_ARCH=all STAGING=true` is tempting, but it's not gonna work since all staging proxies you'll use (i.e., `fallback-*` proxies did not work at all for me as of today <25-12-2022, soltzen>).
+  - You'll need to do the incredibly-hacky approach of modifying this function `LanternHttpClient:createProUrl`:
+
+        public static HttpUrl createProUrl(final String uri, final Map<String, String> params) {
+            // final String url = String.format("http://localhost/pro%s", uri);
+            final String url = String.format("https://api-staging.getiantem.org%s", uri);
+            HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
+            if (params != null) {
+                for (Map.Entry<String, String> param : params.entrySet()) {
+                    builder.addQueryParameter(param.getKey(), param.getValue());
+                }
+            }
+            return builder.build();
+        }
+
+- You can debug pro-server-neu's staging instance (i.e., `api-staging.getiantem.org`) using a combination of log, telemetry and checking the staging Redis instance (see [here](https://github.com/getlantern/pro-server-neu/blob/c79c1b8da9e418bc4b075392fde9b051c699141d/README.md?plain=1#L125) for more info)
+
+## Source Dump
+Lantern Android source code is made available via source dump tarballs. To create one, run:
+
+```
+VERSION=2.0.0 make sourcedump
+```
+
+This will create a file `lantern-android-sources-2.0.0.tar.gz`.
+
+This tarball deliberately excludes UI resources like images and localized strings. It also deliberately excludes 3rd party Java libraries from the libs folder.
+
+The tarball does include vendored Go libraries, including all of the getlantern.org Go libraries. In this tarball, these are all licensed under the GPL
+as explained in [LICENSING.md](LICENSING.md).
+
+All embedded URL literals in the getlantern.org Go code are elided to make it harder for clones to build a working version of Lantern.
+
+TODO: once we're confident these are working well, we should automate the upload of these to S3 and GitHub along with the upload of releases.
 
 ## Known issues when building the project
 
