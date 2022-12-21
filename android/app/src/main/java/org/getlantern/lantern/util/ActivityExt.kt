@@ -1,12 +1,12 @@
 package org.getlantern.lantern.util
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Utils
 import org.getlantern.mobilesdk.Logger
@@ -51,7 +51,7 @@ fun Activity.showAlertDialog(
         } else {
             imageView.visibility = View.GONE
         }
-        MaterialAlertDialogBuilder(this)
+        AlertDialog.Builder(this)
             .setView(contentView)
             .setPositiveButton(okLabel) { dialog: DialogInterface, which: Int ->
                 dialog.dismiss()

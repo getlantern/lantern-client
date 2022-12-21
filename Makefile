@@ -63,9 +63,10 @@ BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
 # We explicitly set a build-id for use in the liblantern ELF binary so that Sentry can successfully associate uploaded debug symbols with corresponding errors/crashes
 BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 
+STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= $$VERSION
-LDFLAGS := -s -w -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION)
+LDFLAGS := -s -w -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION) -X github.com/getlantern/flashlight/common.StagingMode=$(STAGING)
 
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
