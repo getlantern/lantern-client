@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -17,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
@@ -27,7 +25,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
-import com.stripe.android.model.Card;
 import com.stripe.android.model.CardParams;
 import com.stripe.android.model.ExpirationDate;
 import com.stripe.android.model.Token;
@@ -57,21 +54,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kotlin.Pair;
 import okhttp3.FormBody;
 import okhttp3.Response;
 
 @EActivity(R.layout.checkout)
 public class CheckoutActivity extends BaseFragmentActivity implements PurchasesUpdatedListener {
 
+    public static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
     private static final String TAG = CheckoutActivity.class.getName();
     private static final String STRIPE_TAG = TAG + ".stripe";
-
-    public static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
     private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
-
-    private ProgressDialog dialog;
-
+    protected final ClickSpan.OnClickListener clickSpan = new ClickSpan.OnClickListener() {
+        @Override
+        public void onClick() {
+            final Intent intent = new Intent(CheckoutActivity.this, WebViewActivity_.class);
+            intent.putExtra("url", TERMS_OF_SERVICE_URL);
+            startActivity(intent);
+        }
+    };
     @ViewById
     EditText emailInput, referralCodeInput, cvcInput;
 
@@ -99,21 +99,9 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
     @Extra
     String headerText;
 
-    @Extra
-    String paymentProvider;
-
+    String forcedPaymentProvider;
+    private ProgressDialog dialog;
     private boolean useStripe;
-
-    protected final ClickSpan.OnClickListener clickSpan =
-            new ClickSpan.OnClickListener() {
-                @Override
-                public void onClick() {
-                    final Intent intent = new Intent(CheckoutActivity.this,
-                            WebViewActivity_.class);
-                    intent.putExtra("url", TERMS_OF_SERVICE_URL);
-                    startActivity(intent);
-                }
-            };
 
     private void closeDialog() {
         if (dialog != null) {
@@ -142,6 +130,22 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
             continueBtn.setEnabled(false);
         }
 
+        // XXX <25-12-2022, soltzen> As of today, RU users default to Freekassa.
+        // We just need the email from this form (to check for duplicate
+        // emails) and nothing else.
+        // See here for more info: https://github.com/getlantern/lantern-internal/issues/5863
+        boolean isInRU = "ru".equalsIgnoreCase(LanternApp.getSession().getCountryCode());
+        if (isInRU) {
+            Logger.d(TAG, "Detected RU: Forcing Freekassa payment provider");
+            forcedPaymentProvider = "freekassa";
+            useStripe = false;
+            cardLayout.setVisibility(View.GONE);
+            expirationLayout.setVisibility(View.GONE);
+            cvcLayout.setVisibility(View.GONE);
+            referralCodeLayout.setVisibility(View.GONE);
+            togglePaymentMethod.setVisibility(View.GONE);
+        }
+
         // update the screen title with a custom headerText
         if (headerText != null && !headerText.equals("")) {
             header.setText(headerText);
@@ -150,7 +154,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         TextWatcher validator = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -441,7 +444,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
 
     private void continueToPayment(final String email) {
         closeDialog();
-        openPaymentProvider(email, paymentProvider != null && paymentProvider.equals("bulk-codes"));
+        openPaymentProvider(email);
     }
 
     private void confirmEmailError(final ProError error) {
@@ -463,29 +466,45 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
      * @param email the email address is to use when configuring the payment
      *              gateway
      */
-    private void openPaymentProvider(final String email, final boolean bulkCodes) {
-        String provider = LanternApp.getSession().getPaymentProvider();
+    private void openPaymentProvider(final String email) {
+        // TODO <23-12-2022, soltzen> Make this selectable from the backend
+        // if/when the UI can support multiple different providers.
+        // The ideal path for this is:
+        // - PlansActivity.java (which is the only activity that can call this
+        //   activity) calls pro-server-neu's `/user-payment-gateway` endpoint
+        //   - Which returns a payment provider based on the user's params
+        // - We'll be allowed to force a provider client-side *only* for
+        //   testing purposes
+        // For now, the payment provider selection logic is a bit all over the
+        // place (server and client-side) since payment provider selection is
+        // quite voltatile in our company.
+        //
+        // By default, always use paymentwall unless something else is forced.
+        //
+        // String provider = LanternApp.getSession().getPaymentProvider();
+        String provider = "paymentwall";
+
+        // Debug providers take precedence
+        //
+        // Then, forcedPaymentProvider (which is usually controlled client-side
+        // depending on the country)
+        //
+        // Finally, if we didn't force a provider, try to see if this is coming
+        // from Google Play. If it is, it has it's own workflow which can short
+        // circuit the rest of the function.
         if (!BuildConfig.PAYMENT_PROVIDER.equals("")) {
             // for debug builds, allow overriding default payment provider
             provider = BuildConfig.PAYMENT_PROVIDER;
             Logger.debug(TAG, "Overriding default payment provider to " + provider);
-        } else {
-            if (LanternApp.getSession().isPlayVersion()) {
-                if (!LanternApp.getInAppBilling().startPurchase(this, LanternApp.getSession().getSelectedPlan().getId(), this)) {
-                    ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
-                }
-                return;
+        } else if (forcedPaymentProvider != "") {
+            provider = forcedPaymentProvider;
+            Logger.debug(TAG, "Overriding default payment provider to " + provider);
+        } else if (LanternApp.getSession().isPlayVersion()) {
+            if (!LanternApp.getInAppBilling().startPurchase(this, LanternApp.getSession().getSelectedPlan().getId(), this)) {
+                ActivityExtKt.showErrorDialog(this, getResources().getString(R.string.error_making_purchase));
             }
-            provider = LanternApp.getSession().getPaymentProvider();
+            return;
         }
-
-        if (bulkCodes) {
-            provider = "bulk-codes";
-        }
-
-        // TODO: make this selectable from the backend if/when the UI can support multiple
-        // different providers.
-        provider = "paymentwall";
 
         Logger.debug(TAG, "Attempting to use payment provider: " + provider);
 
@@ -494,6 +513,9 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
 //            case "adyen":
 //                activityClass = AdyenActivity_.class;
 //                break;
+            case "freekassa":
+                activityClass = FreeKassaActivity_.class;
+                break;
             case "paymentwall":
                 activityClass = PaymentWallActivity_.class;
                 break;
