@@ -145,7 +145,7 @@ dependencies:
 
   video_thumbnail: ^0.4.3
 
-  flutter_pdfview: ^1.2.1
+  flutter_pdfview: ^1.2.5
 
   wakelock: ^0.6.0+1
 
