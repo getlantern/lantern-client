@@ -505,7 +505,7 @@ packages:
       name: flutter_pdfview
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.3"
+    version: "1.2.5"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
