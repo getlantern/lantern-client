@@ -1,4 +1,10 @@
 
+<a name="7.2.0"></a>
+## [7.2.0](https://github.com/getlantern/android-lantern/compare/7.1.1...7.2.0)
+
+> 2022-12-24
+
+
 <a name="7.1.1"></a>
 ## [7.1.1](https://github.com/getlantern/android-lantern/compare/7.0.12...7.1.1)
 
