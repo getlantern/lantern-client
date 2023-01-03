@@ -91,7 +91,7 @@
   <string name="install_update">Update</string>
   <string name="error_update">Kesalahan Mendownload Update</string>
   <string name="loading">Memuat..</string>
-  <string name="manual_update">Coba instal secara manual versi terbaru dari &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
+  <string name="manual_update">Coba instal secara manual versi terbaru dari &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">Selamat datang di Lantern Pro!</string>
   <string name="happy_anniversary">HAPPY LANTERN ANNIVERSARY!</string>
   <string name="welcome_greeting">Selamat datang di Lantern</string>

@@ -104,7 +104,7 @@
     <string name="error_update">Error Downloading Update</string>
     <string name="error_install_update">Error Installing Update</string>
     <string name="loading">Loading..</string>
-    <string name="manual_update">Try manually installing the latest version from &lt;a href="https://lantern-android.io">here1&lt;/a></string>
+    <string name="manual_update">Try manually installing the latest version from &lt;a href="https://github.com/getlantern/lantern"&gt;here&lt;/a&gt;</string>
     <string name="pro_welcome_text">Welcome to Lantern Pro!</string>
     <string name="happy_anniversary">HAPPY LANTERN ANNIVERSARY!</string>
     <string name="welcome_greeting">Welcome to Lantern</string>

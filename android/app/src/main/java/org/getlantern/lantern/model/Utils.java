@@ -244,6 +244,8 @@ public class Utils {
                         });
                 if (!activity.isFinishing()) {
                     alertDialog.show();
+                    // Make the message clickable in case it has embedded links
+                    ((TextView) alertDialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
                 }
                 alertDialog.setCancelable(cancelable);
             }

@@ -85,7 +85,7 @@
   <string name="not_now">나중에</string>
   <string name="install_update">업데이트</string>
   <string name="error_update">다운로드 오류</string>
-  <string name="manual_update">&lt;a href=\"https://lantern-android.io\"&gt;이곳1&lt;/a&gt;에서 최신 버전을 수동으로 설치해 주세요.</string>
+  <string name="manual_update">&lt;a href=\"https://github.com/getlantern/lantern\"&gt;이곳&lt;/a&gt;에서 최신 버전을 수동으로 설치해 주세요.</string>
   <string name="pro_welcome_text">랜턴 프로에 오신 것을 환영합니다.</string>
   <string name="welcome_to_lantern">새롭고 개선된 랜턴에 오신 것을 환영합니다.</string>
   <string name="to_get_unlimited">무제한 데이터, 궁극의 속도, 강력한 차단 우회를 위해\n프로로 업그레이드하세요!</string>
