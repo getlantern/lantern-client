@@ -106,7 +106,7 @@
   <string name="error_update">আপডেট ডাউনলোড করতে ত্রৃটি</string>
   <string name="error_install_update">আপডেট ইনস্টল করা সংক্রান্ত ত্রুটি</string>
   <string name="loading">লোড হচ্ছে...</string>
-  <string name="manual_update">নিজে থেকে সর্বশেষ সংস্করণ ইনস্টল করার চেষ্টা করুন: https://lantern-android.io</string>
+  <string name="manual_update">নিজে থেকে সর্বশেষ সংস্করণ ইনস্টল করার চেষ্টা করুন: https://github.com/getlantern/lantern</string>
   <string name="pro_welcome_text">Lantern Pro এ আপনাকে স্বগাতম!</string>
   <string name="happy_anniversary">শুভ LANTERN বার্ষিকী!</string>
   <string name="welcome_greeting">Lantern এ আপনাকে স্বগাতম!</string>
