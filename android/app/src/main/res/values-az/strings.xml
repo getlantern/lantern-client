@@ -85,7 +85,7 @@
   <string name="not_now">İndi Yox</string>
   <string name="install_update">Yenilə</string>
   <string name="error_update">Yenilənmənin Yüklənməsində Xəta</string>
-  <string name="manual_update">Yeni versiyanı yükləmək üçün &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
+  <string name="manual_update">Yeni versiyanı yükləmək üçün &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">Lantern Pro-ya xoş gəldiniz!</string>
   <string name="welcome_to_lantern">Yenilənmiş Lanternə xoş gəldiniz</string>
   <string name="to_get_unlimited">Limitsiz məzmun, əla sürət və daha yaxşı blokaçma imkanlarını\nYENİLƏMƏ ilə PRoda əldə edin!</string>

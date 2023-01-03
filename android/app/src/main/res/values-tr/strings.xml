@@ -105,7 +105,7 @@
   <string name="error_update">Güncelleme İndirilirken Hata Oluştu</string>
   <string name="error_install_update">Güncelleme Kurulurken Hata Oluştu</string>
   <string name="loading">Yükleniyor..</string>
-  <string name="manual_update">Son sürümü &lt;a href=\"https://lantern-android.io\"&gt;buradan1&lt;/a&gt; elle kurmayı deneyin.</string>
+  <string name="manual_update">Son sürümü &lt;a href=\"https://github.com/getlantern/lantern\"&gt;buradan&lt;/a&gt; elle kurmayı deneyin.</string>
   <string name="pro_welcome_text">Lantern Pro\'ya Hoş Geldiniz!</string>
   <string name="happy_anniversary">MUTLU LANTERN YILDÖNÜMÜ!</string>
   <string name="welcome_greeting">Lantern\'e Hoşgeldiniz</string>

@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Html;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -238,7 +239,7 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
             Utils.showAlertDialog(
                     activity,
                     context.getString(R.string.error_install_update),
-                    context.getString(R.string.manual_update),
+                    manualUpdateHTML(),
                     true);
         }
 
@@ -269,14 +270,14 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
 
             if (!result) {
                 Logger.debug(TAG, "Error trying to install Lantern update");
-                Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), context.getString(R.string.manual_update), false);
+                Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), manualUpdateHTML(), false);
                 return;
             }
 
             Logger.debug(TAG, "About to install new version of Lantern Android");
             if (!apkPath.isFile()) {
                 Logger.error(TAG, "Error loading APK; not found at " + apkPath);
-                Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), context.getString(R.string.manual_update), false);
+                Utils.showAlertDialog(this.activity, context.getString(R.string.error_update), manualUpdateHTML(), false);
                 return;
             }
             try {
@@ -303,6 +304,10 @@ public class UpdateActivity extends Activity implements ActivityCompat.OnRequest
             i.setDataAndType(apkURI, "application/vnd.android.package-archive");
             this.context.startActivity(i);
             activity.finish();
+        }
+
+        private CharSequence manualUpdateHTML() {
+            return Html.fromHtml("<span>" + context.getString(R.string.manual_update) + "</span>");
         }
     }
 }

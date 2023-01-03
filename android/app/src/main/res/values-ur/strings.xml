@@ -105,7 +105,7 @@
   <string name="error_update">اَپ ڈیٹ ڈاؤن لوڈ کرنے میں دشواری</string>
   <string name="error_install_update">اپ ڈیٹ انسٹال کرنے میں نقص</string>
   <string name="loading">لوڈ ہو رہا ہے۔۔</string>
-  <string name="manual_update">حالیہ ورژن کو یہاں سے ڈاؤن لوڈ کرنے کی کوشش کیجئے &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
+  <string name="manual_update">حالیہ ورژن کو یہاں سے ڈاؤن لوڈ کرنے کی کوشش کیجئے &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">لینٹرن پرو میں خوش آمدید!</string>
   <string name="happy_anniversary">لینٹرن سالگرہ مبارک!</string>
   <string name="welcome_greeting">لینٹرن میں خوش آمدید!</string>

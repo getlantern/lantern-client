@@ -78,7 +78,7 @@
   <string name="install_update">Aktualisieren</string>
   <string name="error_update">Fehler beim Herunterladen der Aktualisierung</string>
   <string name="loading">Ladevorgang..</string>
-  <string name="manual_update">Versuchen Sie die neueste Version von &lt;a href=\"https://lantern-android.io\"&gt;hier1&lt;/a&gt; manuell zu installieren</string>
+  <string name="manual_update">Versuchen Sie die neueste Version von &lt;a href=\"https://github.com/getlantern/lantern\"&gt;hier&lt;/a&gt; manuell zu installieren</string>
   <string name="pro_welcome_text">Willkommen bei Lantern Pro!</string>
   <string name="lantern_pro_radio">Lantern Pro - Unbegrenzt Daten</string>
   <string name="lantern_free_radio">Lantern Basic - 500 MB Daten</string>

@@ -105,7 +105,7 @@
   <string name="error_update">Có lỗi tải phiên bản cập nhật</string>
   <string name="error_install_update">Lỗi khi cài đặt bản cập nhật</string>
   <string name="loading">Đang nạp...</string>
-  <string name="manual_update">Thử cài đặt bằng tay phiên bản mới nhất từ &lt;a href=\"https://lantern-android.io\"&gt;nơi đây&lt;/a&gt;</string>
+  <string name="manual_update">Thử cài đặt bằng tay phiên bản mới nhất từ &lt;a href=\"https://github.com/getlantern/lantern\"&gt;nơi đây&lt;/a&gt;</string>
   <string name="pro_welcome_text">Chào mừng đến với Lantern Pro!</string>
   <string name="happy_anniversary">CHÚC MỪNG SINH NHẬT LANTERN!</string>
   <string name="welcome_greeting">Xin chào mừng bạn đã đến với Lantern</string>
