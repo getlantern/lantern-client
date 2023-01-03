@@ -63,7 +63,7 @@
   <string name="not_now">下次</string>
   <string name="install_update">更新</string>
   <string name="error_update">下載更新時錯誤</string>
-  <string name="manual_update">請嘗試從下列網址下載並安裝最新版 &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
+  <string name="manual_update">請嘗試從下列網址下載並安裝最新版 &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">歡迎來到 Lantern Pro！</string>
   <string name="renew_pro_account">更新付費專業版帳號</string>
   <string name="logout">登出</string>

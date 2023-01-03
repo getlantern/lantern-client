@@ -88,7 +88,7 @@
   <string name="install_update">Update</string>
   <string name="error_update">Fout Downloaden Update</string>
   <string name="loading">Bezig met laden...</string>
-  <string name="manual_update">Probeer handmatig de laatste versie te installeren via &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
+  <string name="manual_update">Probeer handmatig de laatste versie te installeren via &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">Welkom bij Lantern Pro!</string>
   <string name="welcome_to_lantern">Welkom bij het nieuwe en verbeterde Lantern</string>
   <string name="to_get_unlimited">Om ongelimiteerde data te verkrijgen, hoogste snelheid en zelfs sterkere blokkade resistentie\nUPGRADE naar Pro!</string>

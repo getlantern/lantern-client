@@ -240,8 +240,7 @@ func TestInternalHeaders(t *testing.T) {
 
 // This test requires the tag "lantern" to be set at testing time like:
 //
-//    go test -tags="lantern"
-//
+//	go test -tags="lantern"
 func TestAutoUpdate(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skip test in short mode")
