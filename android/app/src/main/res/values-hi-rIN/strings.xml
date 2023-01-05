@@ -133,6 +133,7 @@
   <string name="share_friends_text">मुफ्त महीने कमाने के लिए दोस्तों के साथ साझा करें!</string>
   <string name="email_address">ईमेल पता</string>
   <string name="switch_to_alipay">Alipay पर स्विच करें</string>
+  <string name="switch_to_stripe">Stripe पर स्विच करें</string>
   <string name="switch_to_credit_card">क्रेडिट कार्ड भुगतान पर स्विच करें</string>
   <string name="continue_to_pro">PRO जारी रखें</string>
   <string name="continue_to_basic">मूल संस्करण के लिए जारी रखें</string>

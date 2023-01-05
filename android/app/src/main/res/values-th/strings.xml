@@ -120,6 +120,7 @@
   <string name="share_friends_text">แชร์ให้กับเพื่อนเพื่อรับเดือนเพิ่มฟรี!</string>
   <string name="email_address">ที่อยู่อีเมล</string>
   <string name="switch_to_alipay">เปลี่ยนเป็น Alipay</string>
+  <string name="switch_to_stripe">เปลี่ยนเป็น Stripe</string>
   <string name="switch_to_credit_card">เปลี่ยนเป็นการชำระเงินด้วยบัตรเครดิต</string>
   <string name="continue_to_pro">ดำเนินการต่อไปยัง PRO</string>
   <string name="continue_to_basic">ดำเนินการต่อไปยังเวอร์ชัน Basic</string>
