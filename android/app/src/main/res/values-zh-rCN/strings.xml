@@ -123,6 +123,7 @@
   <string name="share_friends_text">分享给朋友，就能赚取免费使用期！</string>
   <string name="email_address">电子邮件地址</string>
   <string name="switch_to_alipay">切换到支付宝</string>
+  <string name="switch_to_stripe">切换到条纹</string>
   <string name="switch_to_credit_card">转用信用卡支付</string>
   <string name="continue_to_pro">继续到专业版</string>
   <string name="continue_to_basic">继续到基本版</string>

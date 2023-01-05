@@ -63,7 +63,7 @@ open class FreeKassaActivity : BaseFragmentActivity() {
         )
     }
 
-    fun assertIntentExtras() {
+    private fun assertIntentExtras() {
         if (userEmail == null) {
             throw RuntimeException("User email is null. This should never happen")
         }

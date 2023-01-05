@@ -132,7 +132,8 @@
   <string name="invite_friends_btn">دعوت از دوستان</string>
   <string name="share_friends_text">با دوستانتان به اشتراک بگذارید تا یک ماه عضویت ویژه رایگان دریافت کنید</string>
   <string name="email_address">آدرس ایمیل</string>
-  <string name="switch_to_alipay">به Allpay بروید</string>
+  <string name="switch_to_alipay">به Alipay بروید</string>
+  <string name="switch_to_stripe">به Stripe بروید</string>
   <string name="switch_to_credit_card">به بخش پرداخت با کارت اعتباری بروید</string>
   <string name="continue_to_pro">به استفاده از فانوس  Pro ادامه دهید!</string>
   <string name="continue_to_basic">به نسخه پایه ادامه دهید</string>

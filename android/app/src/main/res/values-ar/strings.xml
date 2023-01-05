@@ -133,6 +133,7 @@
   <string name="share_friends_text">شارك مع أصدقائك لتربح أشهرا مجانية</string>
   <string name="email_address">البريد الالكتروني</string>
   <string name="switch_to_alipay">التبديل إلى Alipay</string>
+  <string name="switch_to_stripe">التبديل إلى Stripe</string>
   <string name="switch_to_credit_card">التبديل للدفع باستخدام بطاقة الائتمان</string>
   <string name="continue_to_pro">أكمل إلى برو</string>
   <string name="continue_to_basic">الاستمرار في حساب لانترن الأساسي</string>

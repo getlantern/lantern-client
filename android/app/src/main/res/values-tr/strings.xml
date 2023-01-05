@@ -133,6 +133,7 @@
   <string name="share_friends_text">Arkadaşlarınla paylaş ve ücretsiz aylık üyelik kazan</string>
   <string name="email_address">E-posta Adresi</string>
   <string name="switch_to_alipay">Alipay\'e Geç</string>
+  <string name="switch_to_stripe">Stripe\'e Geç</string>
   <string name="switch_to_credit_card">Kredi Kartı Ödemesine Geç</string>
   <string name="continue_to_pro">PRO üyeliğe devam et</string>
   <string name="continue_to_basic">Temel Versiyona devam et</string>

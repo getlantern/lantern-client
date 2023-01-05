@@ -133,6 +133,7 @@
   <string name="share_friends_text">အခမဲ့လများရရှိရန် မိတ်ဆွေသူငယ်ချင်းများနှင့် မျှဝေပါ။</string>
   <string name="email_address">အီးမေးလိပ်စာ</string>
   <string name="switch_to_alipay">Alipay သို့ပြောင်းပါ</string>
+  <string name="switch_to_stripe">Stripe သို့ပြောင်းပါ</string>
   <string name="switch_to_credit_card">Credit Card Payment ကိုပြောင်းပါ</string>
   <string name="continue_to_pro">PRO ကိုဆက်သွားပါ</string>
   <string name="continue_to_basic">Basic ဗားရှင်းကိုဆက်သွားပါ</string>
