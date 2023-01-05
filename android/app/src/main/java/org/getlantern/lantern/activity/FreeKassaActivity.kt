@@ -204,7 +204,9 @@ open class FreeKassaActivity : BaseFragmentActivity() {
             }
             val u = Freekassa.getPayURI(
                 merchantId,
-                plan.currencyPrice,
+                // plan.currencyPrice is for example 4800 usd for a 1 year plan
+                // (supposed to be 48.00 usd)
+                plan.currencyPrice / 100,
                 LanternApp.getSession().currency(),
                 plan.id,
                 secretWordOne,
