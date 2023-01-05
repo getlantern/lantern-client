@@ -1,15 +1,14 @@
 package org.getlantern.lantern.util
 
 import android.net.Uri
-import android.util.Log
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
 
 class Freekassa {
     companion object {
-        private val AcceptedLanguages = listOf("ru", "en")
-        private val AcceptedCurrencies = listOf("RUB", "USD", "EUR", "UAH", "KZT")
+        private val ACCEPTED_LANGUAGES = listOf("ru", "en")
+        private val ACCEPTED_CURRENCIES = listOf("RUB", "USD", "EUR", "UAH", "KZT")
 
         private fun validateValueOrPickDefault(
             v: String,
@@ -37,12 +36,12 @@ class Freekassa {
         ): Uri {
             val validatedCurrency = validateValueOrPickDefault(
                 currency.uppercase(Locale.getDefault()),
-                AcceptedCurrencies,
+                ACCEPTED_CURRENCIES,
                 "RUB"
             )
             val validatedLanguage = validateValueOrPickDefault(
                 lang.lowercase(Locale.getDefault()),
-                AcceptedLanguages,
+                ACCEPTED_LANGUAGES,
                 "ru"
             )
             // API docs:
