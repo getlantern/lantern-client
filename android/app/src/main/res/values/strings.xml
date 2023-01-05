@@ -132,6 +132,7 @@
     <string name="share_friends_text">Share with friends to earn free months!</string>
     <string name="email_address">Email Address</string>
     <string name="switch_to_alipay">Switch to Alipay</string>
+    <string name="switch_to_stripe">Switch to Stripe</string>
     <string name="switch_to_credit_card">Switch to Credit Card Payment</string>
     <string name="continue_to_pro">Continue to PRO</string>
     <string name="continue_to_basic">Continue to Basic Version</string>
