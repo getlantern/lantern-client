@@ -123,6 +123,7 @@
   <string name="share_friends_text">跟好友分享，賺取免費月份！</string>
   <string name="email_address">電子郵件地址</string>
   <string name="switch_to_alipay">切換至支付寶</string>
+  <string name="switch_to_stripe">切换到条纹</string>
   <string name="switch_to_credit_card">切換至信用卡付款</string>
   <string name="continue_to_pro">繼續前往 PRO 版本</string>
   <string name="continue_to_basic">繼續前往 Basic 版本</string>

@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <fragment
-        xmlns:lantern="http://schemas.android.com/apk/res-auto"
+    <fragment xmlns:lantern="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
+        class="org.getlantern.lantern.fragment.TitleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        class="org.getlantern.lantern.fragment.TitleBar"
-        lantern:titleText="@string/lantern_pro_checkout"/>
+        lantern:titleText="@string/lantern_pro_checkout" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,214 +21,228 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="32dp"
-            android:clipToPadding="false">
+            android:clipToPadding="false"
+            android:paddingBottom="32dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/stepContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="@dimen/space_large"
                 android:layout_marginTop="@dimen/space_large"
                 app:cardBackgroundColor="@color/black"
-                app:cardCornerRadius="@dimen/radius_large">
+                app:cardCornerRadius="@dimen/radius_large"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:text="@string/step_2"
+                    android:id="@+id/tvStep"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="2dp"
-                    android:textColor="@color/accent_white"
+                    android:text="@string/step_2"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:id="@+id/tvStep"/>
+                    android:textColor="@color/accent_white" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:text="@string/enter_payment_details"
+                android:id="@+id/tvStepDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvStepDescription"
-                android:textAppearance="?attr/textAppearanceBody2"
                 android:layout_marginStart="@dimen/space_small"
-                app:layout_constraintTop_toTopOf="@+id/stepContainer"
+                android:text="@string/enter_payment_details"
+                android:textAppearance="?attr/textAppearanceBody2"
                 app:layout_constraintBottom_toBottomOf="@+id/stepContainer"
-                app:layout_constraintStart_toEndOf="@+id/stepContainer"/>
+                app:layout_constraintStart_toEndOf="@+id/stepContainer"
+                app:layout_constraintTop_toTopOf="@+id/stepContainer" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailLayout"
+                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/email"
-                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/stepContainer"
                 android:layout_marginStart="@dimen/space_large"
-                android:layout_marginEnd="@dimen/space_large"
                 android:layout_marginTop="@dimen/space_large"
+                android:layout_marginEnd="@dimen/space_large"
+                android:hint="@string/email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stepContainer"
                 app:startIconDrawable="@drawable/email_icon">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailInput"
-                    android:textColor="@color/black"
-                    android:inputType="textEmailAddress"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/switchToStripe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_above_normal"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/space_small"
+                android:text="@string/switch_to_stripe"
+                android:textAppearance="?attr/textAppearanceOverline"
+                android:textColor="@color/tertiary_green"
+                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
+                app:layout_constraintStart_toStartOf="@+id/emailLayout"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/emailLayout" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cardLayout"
+                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/credit_card"
-                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
-                app:layout_constraintStart_toStartOf="@+id/emailLayout"
-                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
-                app:layout_constraintTop_toBottomOf="@+id/emailLayout"
                 android:layout_marginTop="@dimen/space_above_normal"
+                android:hint="@string/credit_card"
+                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
+                app:layout_constraintStart_toStartOf="@+id/emailLayout"
+                app:layout_constraintTop_toBottomOf="@+id/emailLayout"
                 app:startIconDrawable="@drawable/ic_credit_card">
 
                 <com.stripe.android.view.CardNumberEditText
                     android:id="@+id/cardInput"
-                    android:textColor="@color/black"
-                    android:inputType="number"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineCenterHoz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/guidelineCenterHoz"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5"/>
+                app:layout_constraintGuide_percent="0.5" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/expirationLayout"
+                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/mm_yy"
-                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
-                app:layout_constraintStart_toStartOf="@+id/emailLayout"
-                app:layout_constraintEnd_toEndOf="@+id/guidelineCenterHoz"
-                app:layout_constraintTop_toBottomOf="@+id/cardLayout"
-                app:startIconDrawable="@drawable/ic_date_small"
                 android:layout_marginTop="@dimen/space_above_normal"
-                android:layout_marginEnd="@dimen/space_pretty_small">
+                android:layout_marginEnd="@dimen/space_pretty_small"
+                android:hint="@string/mm_yy"
+                app:layout_constraintEnd_toEndOf="@+id/guidelineCenterHoz"
+                app:layout_constraintStart_toStartOf="@+id/emailLayout"
+                app:layout_constraintTop_toBottomOf="@+id/cardLayout"
+                app:startIconDrawable="@drawable/ic_date_small">
 
                 <com.stripe.android.view.ExpiryDateEditText
                     android:id="@+id/expirationInput"
-                    android:textColor="@color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:inputType="number"
                     android:maxLength="5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cvcLayout"
+                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/cvc"
-                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
-                app:layout_constraintStart_toStartOf="@+id/guidelineCenterHoz"
-                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
-                app:layout_constraintTop_toTopOf="@+id/expirationLayout"
                 android:layout_marginStart="@dimen/space_pretty_small"
+                android:hint="@string/cvc"
+                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
+                app:layout_constraintStart_toStartOf="@+id/guidelineCenterHoz"
+                app:layout_constraintTop_toTopOf="@+id/expirationLayout"
                 app:startIconDrawable="@drawable/ic_lock">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cvcInput"
-                    android:textColor="@color/black"
-                    android:maxLength="4"
-                    android:inputType="number"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/referralCodeLayout"
+                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/referral_code_optional"
-                style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
-                app:layout_constraintStart_toStartOf="@+id/emailLayout"
-                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
-                app:layout_constraintTop_toBottomOf="@+id/expirationLayout"
                 android:layout_marginTop="@dimen/space_above_normal"
+                android:hint="@string/referral_code_optional"
+                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
+                app:layout_constraintStart_toStartOf="@+id/emailLayout"
+                app:layout_constraintTop_toBottomOf="@+id/expirationLayout"
                 app:startIconDrawable="@drawable/ic_referral_code">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/referralCodeInput"
-                    android:textColor="@color/black"
-                    android:inputType="text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/togglePaymentMethod"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/switch_to_alipay"
                 android:layout_marginTop="@dimen/space_normal"
-                android:padding="@dimen/space_small"
-                android:textColor="@color/tertiary_green"
-                android:textAppearance="?attr/textAppearanceOverline"
                 android:background="?attr/selectableItemBackground"
-                app:layout_constraintStart_toStartOf="parent"
+                android:padding="@dimen/space_small"
+                android:text="@string/switch_to_alipay"
+                android:textAppearance="?attr/textAppearanceOverline"
+                android:textColor="@color/tertiary_green"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/referralCodeLayout"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/referralCodeLayout" />
 
             <View
                 android:id="@+id/divider2"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/divider"
+                android:layout_marginHorizontal="@dimen/space_normal"
                 android:layout_marginTop="@dimen/space_normal"
                 android:background="@color/divider"
-                android:layout_marginHorizontal="@dimen/space_normal"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/togglePaymentMethod"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/togglePaymentMethod" />
 
             <TextView
                 android:id="@+id/productText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_large"
-                android:textColor="?android:attr/textColorSecondary"
-                tools:text="TWO YEARS LANTERN PRO"
                 android:layout_marginTop="@dimen/space_normal"
-                android:textAppearance="?attr/textAppearanceOverline"
                 android:textAllCaps="true"
+                android:textAppearance="?attr/textAppearanceOverline"
+                android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2"
-                />
+                tools:text="TWO YEARS LANTERN PRO" />
 
             <TextView
                 android:id="@+id/priceWithoutTax"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_large"
-                android:textColor="?android:attr/textColorSecondary"
-                tools:text="$4 USD"
                 android:textAppearance="?attr/textAppearanceOverline"
+                android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/productText"/>
+                app:layout_constraintTop_toTopOf="@+id/productText"
+                tools:text="$4 USD" />
 
             <TextView
                 android:id="@+id/taxLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_large"
-                android:textColor="?android:attr/textColorSecondary"
-                android:text="@string/tax"
-                android:textAppearance="?attr/textAppearanceOverline"
-                android:textAllCaps="true"
                 android:layout_marginTop="@dimen/space_between_text_small"
+                android:text="@string/tax"
+                android:textAllCaps="true"
+                android:textAppearance="?attr/textAppearanceOverline"
+                android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/productText" />
 
@@ -239,77 +251,77 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_large"
-                android:textColor="?android:attr/textColorSecondary"
-                tools:text="$4 USD"
                 android:textAppearance="?attr/textAppearanceOverline"
+                android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/taxLabel"/>
+                app:layout_constraintTop_toTopOf="@+id/taxLabel"
+                tools:text="$4 USD" />
 
             <TextView
                 android:id="@+id/tvTotalPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_large"
+                android:layout_marginTop="@dimen/space_between_text_small"
                 android:text="@string/total"
                 android:textAppearance="?attr/textAppearanceBody2"
-                android:layout_marginTop="@dimen/space_between_text_small"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/taxLabel"/>
+                app:layout_constraintTop_toBottomOf="@+id/taxLabel" />
 
             <TextView
                 android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_large"
-                tools:text="$58 USD"
                 android:textAppearance="?attr/textAppearanceBody2"
-                android:textStyle="bold"
                 android:textColor="@color/secondary_pink"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tvTotalPrimary"/>
+                app:layout_constraintTop_toTopOf="@+id/tvTotalPrimary"
+                tools:text="$58 USD" />
 
             <View
                 android:id="@+id/divider1"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/divider"
+                android:layout_marginHorizontal="@dimen/space_normal"
                 android:layout_marginTop="@dimen/space_normal"
                 android:background="@color/divider"
-                android:layout_marginHorizontal="@dimen/space_normal"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTotalPrimary"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTotalPrimary" />
 
             <TextView
-                android:text="@string/terms_of_service_complete_purchase"
+                android:id="@+id/termsOfServiceText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/termsOfServiceText"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintTop_toBottomOf="@+id/divider1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:textAppearance="@style/TextAppearance.MyApp.Overline.Small"
-                android:layout_marginTop="@dimen/space_large"
                 android:layout_marginStart="@dimen/space_large"
-                android:layout_marginEnd="@dimen/space_large"/>
+                android:layout_marginTop="@dimen/space_large"
+                android:layout_marginEnd="@dimen/space_large"
+                android:text="@string/terms_of_service_complete_purchase"
+                android:textAppearance="@style/TextAppearance.MyApp.Overline.Small"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/continueBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/complete_purchase"
                 android:layout_marginTop="@dimen/space_large"
+                android:text="@string/complete_purchase"
                 app:backgroundTint="@color/bg_color_selector"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/termsOfServiceText"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/termsOfServiceText" />
 
             <androidx.constraintlayout.widget.Group
+                android:id="@+id/stripeSection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/stripeSection"
-                app:constraint_referenced_ids="cardLayout,expirationLayout,cvcLayout"/>
+                app:constraint_referenced_ids="cardLayout,expirationLayout,cvcLayout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
