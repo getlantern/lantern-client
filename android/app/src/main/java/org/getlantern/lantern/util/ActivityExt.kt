@@ -51,7 +51,7 @@ fun Activity.showAlertDialog(
         } else {
             imageView.visibility = View.GONE
         }
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setView(contentView)
             .setPositiveButton(okLabel) { dialog: DialogInterface, which: Int ->
                 dialog.dismiss()

@@ -331,7 +331,11 @@ release-autoupdate: require-version
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-$(ANDROID_LIB): $(GO_SOURCES)
+.PHONY: $(MOBILE_ANDROID_LIB)
+$(MOBILE_ANDROID_LIB): $(GO_SOURCES)
+	mkdir -p $(MOBILE_LIBS) && \
+	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
+
 	$(call check-go-version) && \
 	$(GO) env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	$(GO) install golang.org/x/mobile/cmd/gomobile && \
@@ -343,10 +347,6 @@ $(ANDROID_LIB): $(GO_SOURCES)
 		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		$(ANDROID_LIB_PKG)
-
-$(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
-	mkdir -p $(MOBILE_LIBS) && \
-	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
 .PHONY: android-lib
 android-lib: $(MOBILE_ANDROID_LIB)
