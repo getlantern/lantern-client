@@ -87,12 +87,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
     @ViewById
     TextView header, price, priceWithoutTax, tax, productText, togglePaymentMethod, termsOfServiceText;
 
-    // This TextView is only active when we have a country-specific override
-    // (e.g., Freekassa for RU users). It gives the user a chance to always use
-    // Stripe as a fallback.
-    @ViewById
-    TextView switchToStripe;
-
     @ViewById
     View stripeSection, taxLabel;
 
@@ -104,13 +98,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
 
     @Extra
     String headerText;
-
-    // If true, we're using Stripe and ignoring any country-specific overrides
-    // (e.g., using Freekassa as a provider for RU users)
-    // TODO <05-01-2023, soltzen> In theory, this can be coalesced with
-    // forcedPaymentProvider.
-    @Extra
-    Boolean forceStripe;
 
     String forcedPaymentProvider;
     private ProgressDialog dialog;
@@ -125,11 +112,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
     @AfterViews
     void afterViews() {
         boolean isPlayVersion = LanternApp.getSession().isPlayVersion();
-        // Always give `forceStripe` a non-nil value so we don't have to worry
-        // about null checks later.
-        if (forceStripe == null) {
-            forceStripe = false;
-        }
         useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay();
         ProPlan plan = LanternApp.getSession().getSelectedPlan();
         price.setText(plan.getCostStr());
@@ -153,7 +135,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         // emails) and nothing else.
         // See here for more info: https://github.com/getlantern/lantern-internal/issues/5863
         boolean isInRU = "ru".equalsIgnoreCase(LanternApp.getSession().getCountryCode());
-        if (isInRU && !forceStripe) {
+        if (isInRU) {
             Logger.d(TAG, "Detected RU: Forcing Freekassa payment provider");
             forcedPaymentProvider = "freekassa";
             useStripe = false;
@@ -162,7 +144,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
             cvcLayout.setVisibility(View.GONE);
             referralCodeLayout.setVisibility(View.GONE);
             togglePaymentMethod.setVisibility(View.GONE);
-            switchToStripe.setVisibility(View.VISIBLE);
         }
 
         // update the screen title with a custom headerText
@@ -230,16 +211,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         togglePaymentMethod.setOnClickListener(v -> {
             useStripe = !useStripe;
             displayStripeOrAlipay();
-        });
-        // If the user wants to switch to Stripe, we'll basically re-render
-        // this same activity **but** we'll make sure to "force" Stripe this
-        // time
-        switchToStripe.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CheckoutActivity_.class);
-            intent.putExtra("forceStripe", true);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            this.startActivity(intent);
-            this.finish();
         });
 
         referralCodeInput.setOnEditorActionListener(submitForm);

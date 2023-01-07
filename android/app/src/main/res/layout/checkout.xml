@@ -79,21 +79,6 @@
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/switchToStripe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_above_normal"
-                android:background="?attr/selectableItemBackground"
-                android:padding="@dimen/space_small"
-                android:text="@string/switch_to_stripe"
-                android:textAppearance="?attr/textAppearanceOverline"
-                android:textColor="@color/tertiary_green"
-                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
-                app:layout_constraintStart_toStartOf="@+id/emailLayout"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/emailLayout" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cardLayout"
                 style="@style/Widget.MyApp.TextInputLayout.OutlinedBox"
