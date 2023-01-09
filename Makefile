@@ -422,10 +422,10 @@ android-release: $(MOBILE_RELEASE_APK)
 
 android-bundle: $(MOBILE_BUNDLE)
 
-android-debug-install: $(MOBILE_DEBUG_APK)
+android-debug-install: clean $(MOBILE_DEBUG_APK)
 	$(ADB) uninstall $(MOBILE_APPID) ; $(ADB) install -r $(MOBILE_DEBUG_APK)
 
-android-release-install: $(MOBILE_RELEASE_APK)
+android-release-install: clean $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
 
 package-android: require-version clean
@@ -468,6 +468,7 @@ sourcedump: require-version
 clean:
 	rm -f liblantern*.aar && \
 	rm -f $(MOBILE_ANDROID_LIB) && \
+	rm -rf $(MOBILE_DEBUG_APK) && \
 	rm -Rf android/app/build && \
 	rm -Rf *.aab && \
 	rm -Rf *.apk
