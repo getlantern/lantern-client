@@ -21,7 +21,7 @@ require (
 )
 
 require (
-	crawshaw.io/sqlite v0.3.3-0.20210127221821-98b1f83c5508 // indirect
+	crawshaw.io/sqlite v0.3.3-0.20220618202545-d1964889ea3c // indirect
 	filippo.io/edwards25519 v1.0.0-rc.1.0.20210721174708-390f27c3be20 // indirect
 	git.torproject.org/pluggable-transports/goptlib.git v1.2.0 // indirect
 	github.com/HdrHistogram/hdrhistogram-go v1.1.0 // indirect
@@ -296,7 +296,7 @@ require (
 	github.com/anacrolix/dht/v2 v2.19.2-0.20221121215055-066ad8494444 // indirect
 	github.com/anacrolix/multiless v0.3.0 // indirect
 	github.com/anacrolix/stm v0.4.0 // indirect
-	github.com/anacrolix/torrent v1.47.1-0.20221223001836-291c42801633 // indirect
+	github.com/anacrolix/torrent v1.48.1-0.20230103142631-c20f73d53e9f // indirect
 	github.com/bits-and-blooms/bitset v1.3.0 // indirect
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
@@ -309,7 +309,7 @@ require (
 	github.com/pion/sdp/v3 v3.0.6 // indirect
 	github.com/pion/webrtc/v3 v3.1.43 // indirect
 	github.com/rs/dnscache v0.0.0-20211102005908-e0241e321417 // indirect
-	github.com/tidwall/btree v1.4.2 // indirect
+	github.com/tidwall/btree v1.6.0 // indirect
 	github.com/vishvananda/netns v0.0.0-20210104183010-2eb08e3e575f // indirect
 	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/exp v0.0.0-20220823124025-807a23277127 // indirect
