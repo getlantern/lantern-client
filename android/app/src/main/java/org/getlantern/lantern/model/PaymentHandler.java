@@ -129,10 +129,9 @@ public class PaymentHandler {
 
         if (plan != null) {
             // there is no selected plan when purchasing via resellers
-            formBody = formBody.add("plan", plan.getId());
+            formBody.add("plan", plan.getId());
         }
 
-        Logger.debug(TAG, "Sending purchase request...");
         showDialog();
         lanternClient.post(url, formBody.build(), new LanternHttpClient.ProCallback() {
             @Override

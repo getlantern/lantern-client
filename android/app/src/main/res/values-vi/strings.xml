@@ -133,6 +133,7 @@
   <string name="share_friends_text">Chia sẻ mã số với bạn bè để được thêm các tháng miễn phí!</string>
   <string name="email_address">Địa chỉ Email</string>
   <string name="switch_to_alipay">Chuyển sang Alipay</string>
+  <string name="switch_to_stripe">Chuyển sang Stripe</string>
   <string name="switch_to_credit_card">Chuyển sang thanh toán bằng thẻ tín dụng</string>
   <string name="continue_to_pro">Tiếp tục qua Pro</string>
   <string name="continue_to_basic">Tiếp tục với bản Basic</string>

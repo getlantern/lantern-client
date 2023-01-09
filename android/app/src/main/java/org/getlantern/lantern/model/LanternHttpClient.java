@@ -1,5 +1,7 @@
 package org.getlantern.lantern.model;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -42,6 +44,8 @@ public class LanternHttpClient extends HttpClient {
     private static final String DEVICE_ID_HEADER = "X-Lantern-Device-Id";
     private static final String USER_ID_HEADER = "X-Lantern-User-Id";
     private static final String PRO_TOKEN_HEADER = "X-Lantern-Pro-Token";
+    private static final String APP_VERSION_HEADER = "X-Lantern-Version";
+    private static final String PLATFORM_HEADER = "X-Lantern-Platform";
 
     private static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
@@ -92,6 +96,8 @@ public class LanternHttpClient extends HttpClient {
         headers.put(DEVICE_ID_HEADER, LanternApp.getSession().getDeviceID());
         headers.put(PRO_TOKEN_HEADER, LanternApp.getSession().getToken());
         headers.put(USER_ID_HEADER, String.valueOf(LanternApp.getSession().getUserID()));
+        headers.put(PLATFORM_HEADER, "android");
+        headers.put(APP_VERSION_HEADER, Utils.appVersion(LanternApp.getAppContext()));
         headers.putAll(LanternApp.getSession().getInternalHeaders());
         return headers;
     }
