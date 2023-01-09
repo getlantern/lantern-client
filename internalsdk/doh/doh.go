@@ -1,14 +1,14 @@
-/* package doh implements dns-over-https
+/*
+	package doh implements dns-over-https
 
 Example:
 
-		ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancelFunc()
-		httpClient := &http.Client{Timeout: time.Second * 10}
-		resp, err := MakeDohRequest(ctx, httpClient, doh.DnsDomain("cloudflare.com), doh.TypeA)
-		require.NoError(t, err)
-		require.NotNil(t, resp)
-
+	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancelFunc()
+	httpClient := &http.Client{Timeout: time.Second * 10}
+	resp, err := MakeDohRequest(ctx, httpClient, doh.DnsDomain("cloudflare.com), doh.TypeA)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
 */
 package doh
 
