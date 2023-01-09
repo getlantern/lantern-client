@@ -133,6 +133,7 @@
   <string name="share_friends_text">Поделиться с друзьями, чтобы заработать бесплатные месяцы!</string>
   <string name="email_address">Адрес электронной почты</string>
   <string name="switch_to_alipay">Выбрать оплату через Alipay</string>
+  <string name="switch_to_stripe">Выбрать оплату через Stripe</string>
   <string name="switch_to_credit_card">Выбрать оплату банковской картой</string>
   <string name="continue_to_pro">Продолжить в PRO</string>
   <string name="continue_to_basic">Продолжить использование Basic Version</string>

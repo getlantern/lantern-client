@@ -134,6 +134,7 @@
   <string name="share_friends_text">Berkongsi dengan rakan-rakan untuk mendapatkan bulan-bulan percuma!</string>
   <string name="email_address">Alamat emel</string>
   <string name="switch_to_alipay">Tukar kepada Alipay</string>
+  <string name="switch_to_stripe">Tukar kepada Stripe</string>
   <string name="switch_to_credit_card">Tukar kepada Pembayaran Kad Kredit</string>
   <string name="continue_to_pro">Teruskan ke PRO</string>
   <string name="continue_to_basic">Teruskan ke Basic Version</string>

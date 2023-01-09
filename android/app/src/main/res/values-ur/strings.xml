@@ -133,6 +133,7 @@
   <string name="share_friends_text">مفت ماہ حاصل کرنے کے لئے دوستوں کو مدعو کیجئے!</string>
   <string name="email_address">ای میل ایڈریس</string>
   <string name="switch_to_alipay">Alipay پر سوئچ کریں</string>
+  <string name="switch_to_stripe">Stripe پر سوئچ کریں</string>
   <string name="switch_to_credit_card">کریڈٹ کارڈ کی ادائیگی پر سوئچ کریں</string>
   <string name="continue_to_pro">پرو کو جاری رکھئے</string>
   <string name="continue_to_basic">بیسک ورژن کو جاری رکھئے</string>

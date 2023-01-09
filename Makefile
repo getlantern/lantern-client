@@ -63,9 +63,10 @@ BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
 # We explicitly set a build-id for use in the liblantern ELF binary so that Sentry can successfully associate uploaded debug symbols with corresponding errors/crashes
 BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 
+STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= $$VERSION
-LDFLAGS := -s -w -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION)
+LDFLAGS := -s -w -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION) -X github.com/getlantern/flashlight/common.StagingMode=$(STAGING)
 
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
@@ -330,21 +331,22 @@ release-autoupdate: require-version
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-$(ANDROID_LIB): $(GO_SOURCES)
-	@$(call check-go-version) && \
+.PHONY: $(MOBILE_ANDROID_LIB)
+$(MOBILE_ANDROID_LIB): $(GO_SOURCES)
+	mkdir -p $(MOBILE_LIBS) && \
+	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
+
+	$(call check-go-version) && \
 	$(GO) env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	$(GO) install golang.org/x/mobile/cmd/gomobile && \
 	gomobile init && \
 	gomobile bind -cache `pwd`/.gomobilecache \
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
+		-androidapi=19 \
 		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		$(ANDROID_LIB_PKG)
-
-$(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
-	mkdir -p $(MOBILE_LIBS) && \
-	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
 .PHONY: android-lib
 android-lib: $(MOBILE_ANDROID_LIB)
@@ -420,10 +422,10 @@ android-release: $(MOBILE_RELEASE_APK)
 
 android-bundle: $(MOBILE_BUNDLE)
 
-android-debug-install: $(MOBILE_DEBUG_APK)
+android-debug-install: clean $(MOBILE_DEBUG_APK)
 	$(ADB) uninstall $(MOBILE_APPID) ; $(ADB) install -r $(MOBILE_DEBUG_APK)
 
-android-release-install: $(MOBILE_RELEASE_APK)
+android-release-install: clean $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
 
 package-android: require-version clean
@@ -466,6 +468,7 @@ sourcedump: require-version
 clean:
 	rm -f liblantern*.aar && \
 	rm -f $(MOBILE_ANDROID_LIB) && \
+	rm -rf $(MOBILE_DEBUG_APK) && \
 	rm -Rf android/app/build && \
 	rm -Rf *.aab && \
 	rm -Rf *.apk

@@ -133,6 +133,7 @@
   <string name="share_friends_text">¡Compártalo con sus amigos para conseguir meses gratis!</string>
   <string name="email_address">Dirección de email</string>
   <string name="switch_to_alipay">Cambiar a Alipay</string>
+  <string name="switch_to_stripe">Cambiar a Stripe</string>
   <string name="switch_to_credit_card">Cambiar al pago con tarjeta de crédito</string>
   <string name="continue_to_pro">Continuar hacia PRO</string>
   <string name="continue_to_basic">Continuar hacia la versión Básica</string>

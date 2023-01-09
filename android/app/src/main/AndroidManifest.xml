@@ -97,6 +97,11 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="locale|layoutDirection"
             android:noHistory="true">
+      </activity>
+
+        <activity
+            android:name=".activity.FreeKassaActivity_"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity
