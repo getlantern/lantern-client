@@ -331,11 +331,7 @@ release-autoupdate: require-version
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-.PHONY: $(MOBILE_ANDROID_LIB)
-$(MOBILE_ANDROID_LIB): $(GO_SOURCES)
-	mkdir -p $(MOBILE_LIBS) && \
-	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
-
+$(ANDROID_LIB): $(GO_SOURCES)
 	$(call check-go-version) && \
 	$(GO) env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	$(GO) install golang.org/x/mobile/cmd/gomobile && \
@@ -347,6 +343,10 @@ $(MOBILE_ANDROID_LIB): $(GO_SOURCES)
 		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		$(ANDROID_LIB_PKG)
+
+$(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
+	mkdir -p $(MOBILE_LIBS) && \
+	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
 .PHONY: android-lib
 android-lib: $(MOBILE_ANDROID_LIB)
@@ -384,7 +384,8 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
 $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
-	@mkdir -p ~/.gradle && \
+	echo $(MOBILE_ANDROID_LIB) && \
+	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
@@ -422,10 +423,10 @@ android-release: $(MOBILE_RELEASE_APK)
 
 android-bundle: $(MOBILE_BUNDLE)
 
-android-debug-install: clean $(MOBILE_DEBUG_APK)
+android-debug-install: $(MOBILE_DEBUG_APK)
 	$(ADB) uninstall $(MOBILE_APPID) ; $(ADB) install -r $(MOBILE_DEBUG_APK)
 
-android-release-install: clean $(MOBILE_RELEASE_APK)
+android-release-install: $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
 
 package-android: require-version clean
@@ -467,8 +468,7 @@ sourcedump: require-version
 
 clean:
 	rm -f liblantern*.aar && \
-	rm -f $(MOBILE_ANDROID_LIB) && \
-	rm -rf $(MOBILE_DEBUG_APK) && \
+	rm -f $(MOBILE_LIBS)/liblantern-* && \
 	rm -Rf android/app/build && \
 	rm -Rf *.aab && \
 	rm -Rf *.apk
