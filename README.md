@@ -153,15 +153,7 @@ DEVELOPMENT_MODE=true make android-release
 To build all release packages, run:
 
 ```
-VERSION=<version here> make package-android
-```
-
-### Tagging releases
-
-This creates a git tag and updates CHANGELOG.md for the currently checked out code.
-
-```
-VERSION=<version here> make tag
+VERSION=<version here> SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS make package-android
 ```
 
 ### Deploying a release to QA
@@ -169,6 +161,38 @@ VERSION=<version here> make tag
 ```
 VERSION=<version here> make release-qa
 ```
+
+### Deploying a release to Beta
+
+```
+VERSION=<version here> make release-beta
+```
+
+### Deploying a release to Prod
+
+First, tag the release.
+
+```
+VERSION=<version here> make tag
+```
+
+Then, release the sideload installers to production.
+
+```
+VERSION=<version here> make release-prod
+```
+
+Then, go to the Lantern App on the [Google Play Console](https://play.google.com/console/u/0/developers/4642290275832863621/app/4973965144252805146/app-dashboard?timespan=thirtyDays) and create a new release using the [app bundle](lantern-all.aab).
+
+### Enabling Auto-Update for a Sideloaded Release
+
+Just because something's been released to prod doesn't mean clients will auto-update, there's an additional step for that.
+
+```
+GH_TOKEN=<token> VERSION=7.2.0 make release-autoupdate
+```
+
+You can obtain the GH_TOKEN for releasing auto-updates from [1Password](https://start.1password.com/open/i?a=HHU7O6L7H5E33C6UDFD6Q3SYH4&v=nupvcrpazomdrozlmemsywqfj4&i=qlxf7ffkjnhu7nqkshvwi7ocpm&h=lantern.1password.com).
 
 ### Testing Auto-Update with release builds
 Sometimes you may need to make a release build with an old version that is eligible for auto-update. You can do that by using the VERSION_CODE environment variable
