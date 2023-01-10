@@ -8,7 +8,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight v0.0.0-20221224120836-4cc864b0394e
+	github.com/getlantern/flashlight v0.0.0-20230109121011-c49f92269dfc
 	github.com/getlantern/golog v0.0.0-20211223150227-d4d95a44d873
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
@@ -111,7 +111,7 @@ require (
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c // indirect
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
-	github.com/getlantern/fronted v0.0.0-20220707102541-0478ae49d9d3 // indirect
+	github.com/getlantern/fronted v0.0.0-20221102104652-893705395782 // indirect
 	github.com/getlantern/geo v0.0.0-20210511192032-f563c52422c5 // indirect
 	github.com/getlantern/geolookup v0.0.0-20210901195705-eec711834596 // indirect
 	github.com/getlantern/go-cache v0.0.0-20141028142048-88b53914f467 // indirect
