@@ -134,6 +134,13 @@ The Android app is distributed in two ways, as an APK for side-loaded installati
 
 Do this to make a release build:
 
+- Make sure `./android/local.properties` exists. If not, create it to look like this (Replace with your own values. Find `flutter.sdk` by running `flutter doctor -v`):
+
+        ```
+        sdk.dir=/Users/AwesomeLanternDev/Library/Android/sdk
+        flutter.sdk=/opt/homebrew/Caskroom/flutter/3.3.4/flutter
+        ```
+
 - Download [sentry-cli](https://docs.sentry.io/product/cli/installation/)
   - Authenticate with [these credentials](https://my.1password.com/vaults/all/allitems/npsu55phkvbytbomlhnfuhqcii) by running `sentry-cli login`. You need this, else the Makefile task will fail
 - Download [this release keystore](https://my.1password.com/vaults/all/allitems/rp5dzcli5ghilzfsanajwz6nqm) file and put it somewhere like `/tmp/mykeystore,jks`
