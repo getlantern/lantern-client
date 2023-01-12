@@ -134,11 +134,13 @@ The Android app is distributed in two ways, as an APK for side-loaded installati
 
 Do this to make a release build:
 
+- Download [sentry-cli](https://docs.sentry.io/product/cli/installation/)
+  - Authenticate with [these credentials](https://my.1password.com/vaults/all/allitems/npsu55phkvbytbomlhnfuhqcii) by running `sentry-cli login`. You need this, else the Makefile task will fail
 - Download [this release keystore](https://my.1password.com/vaults/all/allitems/rp5dzcli5ghilzfsanajwz6nqm) file and put it somewhere like `/tmp/mykeystore,jks`
 - Replace `~/.gradle/gradle.properties` with the values found [here](https://my.1password.com/vaults/all/allitems/jq67eb556b44gb6nlfjm2yh3tq)
   - Make sure to replace `KEYSTORE_FILE` with the location of your keystore (`/tmp/mykeystore,jks` in our case above)
-- Run `make android-release`
-  - Or, `DEVELOPMENT_MODE=true make android-release` to enable "Development Mode" which has extra dev features like taking screenshots and dev settings.
+- Run `VERSION=<version here> make android-release ANDROID_ARCH=all`
+  - Or, `DEVELOPMENT_MODE=true make android-release ANDROID_ARCH=all` to enable "Development Mode" which has extra dev features like taking screenshots and dev settings.
 
 ### Building release packages
 
