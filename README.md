@@ -40,6 +40,9 @@ All those dependencies must be in your PATH
   - This is used for uploading native debug symbols to Sentry
 * [gomobile](https://github.com/golang/go/wiki/Mobile#tools)
 * [json-server](https://github.com/typicode/json-server)
+  * Only necessary for testing Replica
+* CMake 3.18.1
+  * You can get this from Android SDK Manager
 
 In the welcome screen choose the "Open an existing Android Studio" option and select the `android` folder.
 
@@ -123,30 +126,19 @@ To build mobile for staging, use the STAGING command line argument:
 STAGING=true make android-debug android-install
 ```
 
+This will build Flashlight with the same [STAGING flag](https://github.com/getlantern/flashlight/blob/9eb8abbe036e86b9e72a1a938f29e59f75391676/common/const.go#L43), which allows your client to use the [staging pro-server](https://github.com/getlantern/pro-server-neu/blob/fa2859edf213998e15cd7c00461e52fd97a9e570/README.md#L125) instance instead of the production one.
+
 ### Making release builds
 
 The Android app is distributed in two ways, as an APK for side-loaded installation and as an app bundle (aab) for distribution on the Google Play Store. The APKs are architecture specific whereas the app bundle contains all 4 architectures (arm and x86 in 32-bit and 64-bit variants).
 
-To create a release build, put the keystore.release.jks in your home folder (or some other location outside of this project) and add the following to your `~/.gradle/gradle.properties` file:
+Do this to make a release build:
 
-```
-KEYSTORE_PWD=$KEYSTORE_PASSWORD
-KEYSTORE_FILE=/path/to/your/keystore.release.jks
-KEY_PWD=$KEY_PASSWORD
-MATOMO_AUTH_TOKEN=$MATOMO_AUTH_TOKEN
-```
-
-You can find the exact values to add to your gradle.properties under the "Android" entry in 1Password: https://my.1password.com/vaults/all/allitems/rp5dzcli5ghilzfsanajwz6nqm
-
-Note that this same key is used both for signing standalone APKs as well as signing aab app bundles for upload to Google Play.
-
-#### Release build with Development Mode
-
-Development Mode can be handy for things like enabling screenshotting. It's possible to build release builds in development mode like this:
-
-```
-DEVELOPMENT_MODE=true make android-release
-```
+- Download [this release keystore](https://my.1password.com/vaults/all/allitems/rp5dzcli5ghilzfsanajwz6nqm) file and put it somewhere like `/tmp/mykeystore,jks`
+- Replace `~/.gradle/gradle.properties` with the values found [here](https://my.1password.com/vaults/all/allitems/jq67eb556b44gb6nlfjm2yh3tq)
+  - Make sure to replace `KEYSTORE_FILE` with the location of your keystore (`/tmp/mykeystore,jks` in our case above)
+- Run `make android-release`
+  - Or, `DEVELOPMENT_MODE=true make android-release` to enable "Development Mode" which has extra dev features like taking screenshots and dev settings.
 
 ### Building release packages
 
