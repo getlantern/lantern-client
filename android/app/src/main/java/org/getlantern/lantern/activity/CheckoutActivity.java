@@ -134,8 +134,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         // We just need the email from this form (to check for duplicate
         // emails) and nothing else.
         // See here for more info: https://github.com/getlantern/lantern-internal/issues/5863
-        boolean isInRU = "ru".equalsIgnoreCase(LanternApp.getSession().getCountryCode());
-        if (isInRU) {
+        if (LanternApp.getSession().isRussianUser()) {
             Logger.d(TAG, "Detected RU: Forcing Freekassa payment provider");
             forcedPaymentProvider = "freekassa";
             useStripe = false;
