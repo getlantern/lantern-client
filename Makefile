@@ -419,7 +419,7 @@ android-push-translations:
 
 android-debug: $(MOBILE_DEBUG_APK)
 
-android-release: $(MOBILE_RELEASE_APK)
+android-release: pubget $(MOBILE_RELEASE_APK)
 
 android-bundle: $(MOBILE_BUNDLE)
 
