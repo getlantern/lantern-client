@@ -93,6 +93,8 @@ abstract class SessionManager(application: Application) : Session {
         get() = isFrom("CN", chineseLocales)
     val isIranianUser: Boolean
         get() = isFrom("IR", iranLocale)
+    val isRussianUser: Boolean
+        get() = isFrom("RU", russianLocale)
     val language: String
         get() = prefs.getString(LANG, locale.toString())!!
 
@@ -471,6 +473,9 @@ abstract class SessionManager(application: Application) : Session {
         )
         private val iranLocale = arrayOf<Locale?>(
             Locale("fa", "IR")
+        )
+        private val russianLocale = arrayOf<Locale?>(
+            Locale("ru", "RU")
         )
     }
 
