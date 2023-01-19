@@ -2,7 +2,7 @@
 <resources>
   <string name="app_name">Lantern</string>
   <string name="action_settings">Cài đặt</string>
-  <string name="proxy_all_setting">Dùng proxy cho tất cả lưu lượng mạng</string>
+  <string name="proxy_all_setting">Proxy tất cả lưu lượng</string>
   <string name="proxy_all_on_header">BẬT (Tùy chọn an toàn nhất)</string>
   <string name="proxy_all_off_header">TẮT (Tùy chọn lẹ nhất)</string>
   <string name="proxy_all_on">Với tùy chọn này, tất cả lưu lượng thiết bị của bạn sẽ được gửi qua %1$s</string>
@@ -105,7 +105,7 @@
   <string name="error_update">Có lỗi tải phiên bản cập nhật</string>
   <string name="error_install_update">Lỗi khi cài đặt bản cập nhật</string>
   <string name="loading">Đang nạp...</string>
-  <string name="manual_update">Thử cài đặt bằng tay phiên bản mới nhất từ &lt;a href=\"https://github.com/getlantern/lantern\"&gt;nơi đây&lt;/a&gt;</string>
+  <string name="manual_update">Thử cài đặt bằng tay phiên bản mới nhất từ &lt;a href=\"https://lantern-android.io\"&gt;nơi đây&lt;/a&gt;</string>
   <string name="pro_welcome_text">Chào mừng đến với Lantern Pro!</string>
   <string name="happy_anniversary">CHÚC MỪNG SINH NHẬT LANTERN!</string>
   <string name="welcome_greeting">Xin chào mừng bạn đã đến với Lantern</string>
@@ -133,7 +133,6 @@
   <string name="share_friends_text">Chia sẻ mã số với bạn bè để được thêm các tháng miễn phí!</string>
   <string name="email_address">Địa chỉ Email</string>
   <string name="switch_to_alipay">Chuyển sang Alipay</string>
-  <string name="switch_to_stripe">Chuyển sang Stripe</string>
   <string name="switch_to_credit_card">Chuyển sang thanh toán bằng thẻ tín dụng</string>
   <string name="continue_to_pro">Tiếp tục qua Pro</string>
   <string name="continue_to_basic">Tiếp tục với bản Basic</string>

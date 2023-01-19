@@ -3,7 +3,6 @@
 # Vitaliy Grishenko, 2022
 # IvanLykov <chabib@list.ru>, 2022
 # Lowrider <pams@imail.ru>, 2022
-# sayanvd <sayanvd@yandex.ru>, 2022
 # Николай Кочкин <urfiner@gmail.com>, 2022
 # Helen R <helen.russel88@gmail.com>, 2022
 # Helen Russel <coo@workogram.com>, 2022
@@ -12,10 +11,12 @@
 # Anna Evdokimova <anna.evdokimova@yahoo.com>, 2022
 # e2f <projects@e2f.com>, 2022
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2022
+# sayanvd <sayanvd@yandex.ru>, 2022
+# Tina T, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2022\n"
+"Last-Translator: Tina T, 2022\n"
 "Language-Team: Russian (Russia) (https://www.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -148,6 +149,9 @@ msgstr "Язык"
 
 msgid "report_issue"
 msgstr "Сообщить о проблеме"
+
+msgid "check_for_updates"
+msgstr "Проверить обновления"
 
 msgid "blocked_users"
 msgstr "Заблокированные пользователи"
@@ -294,7 +298,7 @@ msgid "Error"
 msgstr "Ошибка"
 
 msgid "accept"
-msgstr "Да"
+msgstr "Принять"
 
 msgid "cancel"
 msgstr "Отмена"
@@ -658,7 +662,7 @@ msgstr "%s нед."
 msgid "longform_weeks"
 msgstr "%s нед."
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "Неизвестно"
 
 msgid "banner_source_qr"
@@ -947,7 +951,7 @@ msgid "verify_contact"
 msgstr "Подтвердить контакт %s"
 
 msgid "verified"
-msgstr "Verified"
+msgstr "Верифицировано"
 
 msgid "pending_verification"
 msgstr "Ожидает подтверждения"
@@ -1013,9 +1017,10 @@ msgstr "Важно!"
 
 msgid "replica_upload_confirmation_body"
 msgstr ""
-"Файлы, загруженные в децентрализованную сеть Lantern, становятся общедоступными. Их никто не сможет удалить.\n"
-"\n"
-"Во время загрузки конфиденциальных материалов проверяйте, чтобы в их содержимом и названии файлов не было идентификационной информации."
+"Файлы, загруженные в децентрализованную сеть Lantern, становятся "
+"общедоступными. Их никто не сможет удалить. Во время загрузки материалов "
+"убедитесь, что в их содержимом и названии файлов нет персональной или "
+"идентифицирующей вас информации."
 
 msgid "replica_upload_confirmation_agree"
 msgstr "Возобновить отправку"
@@ -1039,13 +1044,19 @@ msgid "upload_in_progress"
 msgstr "Загрузка…"
 
 msgid "upload_complete"
-msgstr "Загрузка выполнена"
+msgstr "Загрузка выполнена успешно"
 
 msgid "upload_failed"
 msgstr "Ошибка загрузки"
 
 msgid "upload_cancelled"
 msgstr "Загрузка отменена"
+
+msgid "upload_unknown_error"
+msgstr "Ошибка отправки материала"
+
+msgid "download_unknown_error"
+msgstr "Ошибка при скачивании"
 
 msgid "replica_link_fetcher"
 msgstr "Поставщик ссылок на копии"
@@ -1074,6 +1085,12 @@ msgstr "Не удалось отобразить видео. Повторите 
 msgid "untitled"
 msgstr "Без названия"
 
+msgid "preview_not_available"
+msgstr "Предварительный просмотр недоступен"
+
+msgid "download_to_view"
+msgstr "Скачайте файл для просмотра"
+
 msgid "failed_to_init_replica"
 msgstr "Ошибка. Не удалось выполнить инициализацию реплики."
 
@@ -1094,11 +1111,53 @@ msgstr "Поделиться"
 msgid "upload_file_screen"
 msgstr "Отправить файл"
 
+msgid "edit_title"
+msgstr "Изменить название"
+
+msgid "filenames_cannot_be_edited"
+msgstr "Имена файлов нельзя редактировать после загрузки."
+
+msgid "add_description"
+msgstr "Добавить описание"
+
+msgid "no_description"
+msgstr "Без описания"
+
+msgid "read_details"
+msgstr "Читать PDF"
+
+msgid "description_initial_value"
+msgstr "Описание нельзя редактировать после загрузки"
+
 msgid "name_your_file"
 msgstr "Присвойте файлу имя"
 
 msgid "upload"
 msgstr "Отправить"
+
+msgid "review"
+msgstr "Проверить"
+
+msgid "skip"
+msgstr "Пропустить"
+
+msgid "replica_layout_filetype"
+msgstr "тип файла"
+
+msgid "replica_layout_creation_date"
+msgstr "Создан"
+
+msgid "empty_description"
+msgstr "Описание не предоставлено."
+
+msgid "publish"
+msgstr "Да, опубликовать"
+
+msgid "important"
+msgstr "Важно!"
+
+msgid "upload_tos_agree"
+msgstr "Я понимаю"
 
 msgid "test_text"
 msgstr "Съесть бы пару кусочков пиццы 🍕 😊"

@@ -8,13 +8,13 @@
 # Vaseto Nora <n.nouri67@gmail.com>, 2022
 # b0b47d46632b78a09a40de799fda9a65, 2022
 # Evan <alireza.firoozi68@gmail.com>, 2022
-# Lantern, 2022
-# NoProfile, 2022
 # Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2022
 # Mary Sol <salar.adlparvar@gmail.com>, 2022
 # Amir Moezzi <amirreza.mz@yahoo.com>, 2022
 # Mokah <unfilternet@getlantern.org>, 2022
 # Chip Stehr <chip@getlantern.org>, 2022
+# NoProfile, 2022
+# Lantern, 2022
 # e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2022
 # 
 msgid ""
@@ -151,6 +151,9 @@ msgstr "زبان"
 
 msgid "report_issue"
 msgstr "گزارش مشکل"
+
+msgid "check_for_updates"
+msgstr "بررسی وجود به‌روزرسانی‌ها"
 
 msgid "blocked_users"
 msgstr "کاربران مسدود"
@@ -654,7 +657,7 @@ msgstr "%s هفته"
 msgid "longform_weeks"
 msgstr "%s هفته"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "ناشناخته"
 
 msgid "banner_source_qr"
@@ -1009,9 +1012,9 @@ msgstr "مهم!"
 
 msgid "replica_upload_confirmation_body"
 msgstr ""
-"فایل‌های آپلودشده در شبکه Lantern برای عموم قابل دسترس هستند. آنها غیرمتمرکز هستند و هیچکس نمی‌تواند آنها را از شبکه حذف کند.\n"
-"\n"
-" هنگام آپلود محتوای حساس، از ارسال اطلاعات شخصی هویتی موجود در محتوای فایل و نام فایل خودداری کنید."
+"فایل‌های آپلود‌شده در «شبکه Lantern» به‌صورت عمومی قابل دسترسی است. هیچ‌کس "
+"نمی‌تواند آن‌ها را حذف کند. لطفاً اطلاعات شخصی مرتبط با هویت خود را به‌عنوان"
+" نام فایل و یا در محتوای فایل وارد نکنید.  "
 
 msgid "replica_upload_confirmation_agree"
 msgstr "ازسرگیری آپلود"
@@ -1035,13 +1038,19 @@ msgid "upload_in_progress"
 msgstr "آپلود در حال انجام است"
 
 msgid "upload_complete"
-msgstr "آپلود انجام شد"
+msgstr "فایل‌ شما با موفقیت منتشر شد. "
 
 msgid "upload_failed"
 msgstr "آپلود انجام نشد"
 
 msgid "upload_cancelled"
 msgstr "آپلود لغو شد"
+
+msgid "upload_unknown_error"
+msgstr "در زمانی که در تلاش برای انتشار بودید، مشکلی به وجود آمد!"
+
+msgid "download_unknown_error"
+msgstr "در زمان دانلود %s، مشکلی پیش آمده است!"
 
 msgid "replica_link_fetcher"
 msgstr "دریافت‌کننده پیوند روگرفت"
@@ -1070,6 +1079,12 @@ msgstr "هنگام رندر کردن ویدیو خطایی رخ داد؛ لطف�
 msgid "untitled"
 msgstr "بدون عنوان"
 
+msgid "preview_not_available"
+msgstr "پیش‌نمایش در دسترس نیست"
+
+msgid "download_to_view"
+msgstr "فایل را دانلود کنید تا آن‌ را ببینید"
+
 msgid "failed_to_init_replica"
 msgstr "خطا: راه‌اندازی «روگرفت» ناموفق بود"
 
@@ -1090,11 +1105,53 @@ msgstr "اشتراك گذاري"
 msgid "upload_file_screen"
 msgstr "بارگذاری فایل"
 
+msgid "edit_title"
+msgstr "ویرایش عنوان"
+
+msgid "filenames_cannot_be_edited"
+msgstr "نام فایل‌ها پس از انتشار قابل ویرایش نیست. "
+
+msgid "add_description"
+msgstr "افزودن توضیحات "
+
+msgid "no_description"
+msgstr "توضیحی ارائه نشده است. "
+
+msgid "read_details"
+msgstr "خواندن PDF"
+
+msgid "description_initial_value"
+msgstr "توضیح پس از انتشار قابل تغییر نیست."
+
 msgid "name_your_file"
 msgstr "نامی برای فایل انتخاب کنید"
 
 msgid "upload"
 msgstr "آپلود"
+
+msgid "review"
+msgstr "بررسی"
+
+msgid "skip"
+msgstr "رد کردن"
+
+msgid "replica_layout_filetype"
+msgstr "نوع فایل"
+
+msgid "replica_layout_creation_date"
+msgstr "ایجاد شده در"
+
+msgid "empty_description"
+msgstr "هیچ توضیحی ارائه نشده است "
+
+msgid "publish"
+msgstr "بله، منتشر شود"
+
+msgid "important"
+msgstr "مهم!"
+
+msgid "upload_tos_agree"
+msgstr "متوجهم "
 
 msgid "test_text"
 msgstr "می‌خواهم پیتزا بخورم 🍕 😊"

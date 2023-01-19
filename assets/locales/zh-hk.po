@@ -132,6 +132,9 @@ msgstr "語言"
 msgid "report_issue"
 msgstr "回報問題"
 
+msgid "check_for_updates"
+msgstr "檢查更新"
+
 msgid "blocked_users"
 msgstr "封鎖的使用者"
 
@@ -609,7 +612,7 @@ msgstr "%s 週"
 msgid "longform_weeks"
 msgstr "%s 週"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "未知"
 
 msgid "banner_source_qr"
@@ -952,10 +955,7 @@ msgid "replica_upload_confirmation_title"
 msgstr "重要！"
 
 msgid "replica_upload_confirmation_body"
-msgstr ""
-"上傳至 Lantern 網路的檔案會開放給所有人存取。這些檔案採取去中心化的處理方式，任何人都無法從網路中刪除。\n"
-"\n"
-"上傳敏感內容時，請注意檔案內容和檔案名稱應避免出現個人識別資訊。"
+msgstr "上傳至 Lantern 網路的檔案會開放給所有人存取。任何人都無法刪除。 請勿在檔案內容或檔案名稱中加入個人或識別資訊。"
 
 msgid "replica_upload_confirmation_agree"
 msgstr "恢復上傳"
@@ -979,13 +979,19 @@ msgid "upload_in_progress"
 msgstr "上傳中"
 
 msgid "upload_complete"
-msgstr "上傳完成"
+msgstr "已成功發佈您的檔案"
 
 msgid "upload_failed"
 msgstr "上傳失敗"
 
 msgid "upload_cancelled"
 msgstr "已取消上傳"
+
+msgid "upload_unknown_error"
+msgstr "嘗試發佈時發生了點問題"
+
+msgid "download_unknown_error"
+msgstr "嘗試下載 %s 時發生了點問題"
 
 msgid "replica_link_fetcher"
 msgstr "複本連結擷取工具"
@@ -1014,6 +1020,12 @@ msgstr "顯示影片時發生錯誤，請稍後再試"
 msgid "untitled"
 msgstr "無標題"
 
+msgid "preview_not_available"
+msgstr "無法預覽"
+
+msgid "download_to_view"
+msgstr "下載檔案加以檢視"
+
 msgid "failed_to_init_replica"
 msgstr "錯誤：無法初始化複本"
 
@@ -1032,11 +1044,53 @@ msgstr "分享"
 msgid "upload_file_screen"
 msgstr "上傳檔案"
 
+msgid "edit_title"
+msgstr "編輯標題"
+
+msgid "filenames_cannot_be_edited"
+msgstr "發佈後無法編輯檔案名稱。"
+
+msgid "add_description"
+msgstr "新增說明"
+
+msgid "no_description"
+msgstr "未提供說明"
+
+msgid "read_details"
+msgstr "閱讀 PDF"
+
+msgid "description_initial_value"
+msgstr "發佈後無法修改說明"
+
 msgid "name_your_file"
 msgstr "命名您的檔案"
 
 msgid "upload"
 msgstr "上傳"
+
+msgid "review"
+msgstr "審閱"
+
+msgid "skip"
+msgstr "略過"
+
+msgid "replica_layout_filetype"
+msgstr "檔案類型：%s"
+
+msgid "replica_layout_creation_date"
+msgstr "建立日期：%s"
+
+msgid "empty_description"
+msgstr "未提供說明。"
+
+msgid "publish"
+msgstr "是，請發佈"
+
+msgid "important"
+msgstr "重要！"
+
+msgid "upload_tos_agree"
+msgstr "我瞭解"
 
 msgid "test_text"
 msgstr "好想吃披薩 🍕 😊"

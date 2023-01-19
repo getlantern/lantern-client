@@ -1,8 +1,8 @@
 # 
 # Translators:
 # tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2021
-# Diversity83 83, 2022
 # e2f <projects@e2f.com>, 2022
+# Diversity83 83, 2022
 # tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2022
 # 
 msgid ""
@@ -142,6 +142,9 @@ msgstr "زبان"
 
 msgid "report_issue"
 msgstr "مسئلہ کو رپورٹ کریں"
+
+msgid "check_for_updates"
+msgstr "اپ ڈیٹس کے لیے پڑتال کریں"
 
 msgid "blocked_users"
 msgstr "مسدود کردہ صارفین"
@@ -655,7 +658,7 @@ msgstr "%s ہفتہ"
 msgid "longform_weeks"
 msgstr "%s ہفتے"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "نامعلوم"
 
 msgid "banner_source_qr"
@@ -1009,9 +1012,9 @@ msgstr "اہم!"
 
 msgid "replica_upload_confirmation_body"
 msgstr ""
-"Lantern Network پر اپ لوڈ کردہ فائلز عوامی طور پر قابل رسائی ہوتی ہیں۔ وہ غیر مرکزی کر دی جاتی ہیں اور کوئی بھی ان کو نیٹ ورک سے حذف نہیں کر سکتا۔\n"
-"\n"
-"جب حساس مواد اپ لوڈ کر رہے ہوں تو فائل کے مواد اور فائل کے نام میں ذاتی شناخت ظاہر کرنے والی معلومات فراہم کرنے سے گریز کریں۔"
+"Lantern نیٹ ورک پر اپ لوڈ کردہ فائلز عوامی طور پر رسائی کے قابل ہوتی ہیں۔ "
+"کوئی بھی اسے حذف نہیں کر سکتا۔ براہ کرم اپنی فائل کے مواد یا فائل کے نام میں"
+" ذاتی یا قابل شناخت معلومات شامل نہ کریں۔"
 
 msgid "replica_upload_confirmation_agree"
 msgstr "اپ لوڈ دوبارہ شروع کریں"
@@ -1035,13 +1038,19 @@ msgid "upload_in_progress"
 msgstr "اپ لوڈ میں پیش رفت ہو رہی ہے"
 
 msgid "upload_complete"
-msgstr "اپ لوڈ مکمل ہوئی"
+msgstr "آپ کی فائل کامیابی سے شائع ہو گئی تھی"
 
 msgid "upload_failed"
 msgstr "اپ لوڈ میں ناکامی ہوئی"
 
 msgid "upload_cancelled"
 msgstr "اپ لوڈ منسوخ ہو گئی"
+
+msgid "upload_unknown_error"
+msgstr "شائع کرنے کی کوشش کے دوران کچھ غلط ہو گیا تھا"
+
+msgid "download_unknown_error"
+msgstr "%s ڈاؤن لوڈ کرنے کی کوشش کے دوران کچھ غلط ہو گیا تھا"
 
 msgid "replica_link_fetcher"
 msgstr "ریپلیکا لنک لینے والا"
@@ -1070,6 +1079,12 @@ msgstr "ویڈیو رینڈر کرنے کا نقص، براہ کرم بعد می
 msgid "untitled"
 msgstr "بلاعنوان"
 
+msgid "preview_not_available"
+msgstr "پیش منظر دستیاب نہیں"
+
+msgid "download_to_view"
+msgstr "فائل کو دیکھنے کے لیے اسے ڈاؤن لوڈ کریں"
+
 msgid "failed_to_init_replica"
 msgstr "نقص: ریپلیکا کی ابتدا کرنے میں ناکام ہو گئے"
 
@@ -1090,11 +1105,53 @@ msgstr "شیئر"
 msgid "upload_file_screen"
 msgstr "فائل اپ لوڈ کریں"
 
+msgid "edit_title"
+msgstr "موضوع میں ترمیم کریں"
+
+msgid "filenames_cannot_be_edited"
+msgstr "شائع ہو جانے کے بعد فائل کے ناموں میں ترمیم نہیں کی جا سکتی۔"
+
+msgid "add_description"
+msgstr "وضاحت شامل کریں"
+
+msgid "no_description"
+msgstr "کوئی وضاحت فراہم نہیں کی گئی"
+
+msgid "read_details"
+msgstr "PDF کو پڑھیں"
+
+msgid "description_initial_value"
+msgstr "شائع ہو جانے کے بعد وضاحت میں تدوین نہیں کی جا سکتی"
+
 msgid "name_your_file"
 msgstr "اپنی فائل کو نام دیں"
 
 msgid "upload"
 msgstr "اپ لوڈ کریں"
+
+msgid "review"
+msgstr "جائزہ"
+
+msgid "skip"
+msgstr "نظر انداز کریں"
+
+msgid "replica_layout_filetype"
+msgstr "فائل کی قسم: %s"
+
+msgid "replica_layout_creation_date"
+msgstr "%s کو تخلیق کردہ"
+
+msgid "empty_description"
+msgstr "کوئی وضاحت فراہم نہیں کی گئی تھی۔"
+
+msgid "publish"
+msgstr "جی ہاں، شائع کریں"
+
+msgid "important"
+msgstr "اہم!"
+
+msgid "upload_tos_agree"
+msgstr "میں سمجھ گیا"
 
 msgid "test_text"
 msgstr "میں پیزا کھانا چاہتا/چاہتی ہوں 🍕 😊"
