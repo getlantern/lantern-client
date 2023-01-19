@@ -3,11 +3,11 @@
 # Volkan Gezer <volkangezer@gmail.com>, 2022
 # Kudret <kudretemre@hotmail.com.tr>, 2022
 # Zeynel Cebeci <cebeciz@gmail.com>, 2022
-# Aşkın Yollu <askin@askin.ws>, 2022
+# Aşkın Özgür <askin@askin.ws>, 2022
 # efe kerem sözeri <eksozeri@hotmail.com>, 2022
-# Teo Westbrook, 2022
 # e2f <projects@e2f.com>, 2022
 # Derek F <derek@getlantern.org>, 2022
+# Teo Westbrook, 2022
 # e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2022
 # 
 msgid ""
@@ -146,6 +146,9 @@ msgstr "Dil"
 
 msgid "report_issue"
 msgstr "Sorun bildir"
+
+msgid "check_for_updates"
+msgstr "Güncellemeleri Kontrol Et"
 
 msgid "blocked_users"
 msgstr "Engellenmiş Kullanıcılar"
@@ -654,7 +657,7 @@ msgstr "%s h"
 msgid "longform_weeks"
 msgstr "%s hafta"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "Bilinmeyen"
 
 msgid "banner_source_qr"
@@ -1009,9 +1012,9 @@ msgstr "Önemli!"
 
 msgid "replica_upload_confirmation_body"
 msgstr ""
-"Lantern Ağı'na yüklenen dosyalar herkes tarafından erişilebilir olur. Bunlar merkezi olmayan hale getirilir ve hiç kimse tarafından ağdan silinemez.\n"
-"\n"
-"Hassas içerikler yüklerken dosya içeriğinde ve dosya adında kişisel kimlik tanımlayıcı bilgilerden kaçının."
+"Lantern Ağına yüklenen dosyalara herkes erişebilir. Kimse dosyaları silemez."
+" Lütfen dosya içeriğinize veya dosya adına kişisel bilgi veya tanımlama "
+"bilgisi dahil etmeyin."
 
 msgid "replica_upload_confirmation_agree"
 msgstr "Yüklemeye Devam Et"
@@ -1035,13 +1038,19 @@ msgid "upload_in_progress"
 msgstr "Yükleme Devam Ediyor"
 
 msgid "upload_complete"
-msgstr "Yükleme Tamamlandı"
+msgstr "Dosyanız başarılı bir şekilde yayımlandı"
 
 msgid "upload_failed"
 msgstr "Yükleme Başarısız Oldu"
 
 msgid "upload_cancelled"
 msgstr "Yükleme İptal Edildi"
+
+msgid "upload_unknown_error"
+msgstr "Yayımlamaya çalışırken bir sorun oluştu"
+
+msgid "download_unknown_error"
+msgstr "İndirmeye çalışırken bir sorun oluştu %s"
 
 msgid "replica_link_fetcher"
 msgstr "Çoğaltma Bağlantısı Getirici"
@@ -1070,6 +1079,12 @@ msgstr "Video işlenirken hata, lütfen daha sonra tekrar deneyin"
 msgid "untitled"
 msgstr "Başlıksız"
 
+msgid "preview_not_available"
+msgstr "Önizleme kullanılamıyor"
+
+msgid "download_to_view"
+msgstr "Görüntülemek için dosyayı indirin"
+
 msgid "failed_to_init_replica"
 msgstr "Hata: Çoğaltma başlatılamadı"
 
@@ -1090,11 +1105,53 @@ msgstr "Paylaş"
 msgid "upload_file_screen"
 msgstr "Dosya Yükle"
 
+msgid "edit_title"
+msgstr "Başlığı Düzenle"
+
+msgid "filenames_cannot_be_edited"
+msgstr "Dosya adları yayımlandıktan sonra değiştirilemez"
+
+msgid "add_description"
+msgstr "Tanım Ekle"
+
+msgid "no_description"
+msgstr "Sağlanan tanım yok"
+
+msgid "read_details"
+msgstr "PDF'yi Oku"
+
+msgid "description_initial_value"
+msgstr "Yayımlandıktan sonra tanım değiştirilemez"
+
 msgid "name_your_file"
 msgstr "Dosyanızı Adlandırın"
 
 msgid "upload"
 msgstr "Yükle"
+
+msgid "review"
+msgstr "Gözden geçir"
+
+msgid "skip"
+msgstr "Atla"
+
+msgid "replica_layout_filetype"
+msgstr "dosya türü: %s"
+
+msgid "replica_layout_creation_date"
+msgstr "%s tarihinde oluşturuldu"
+
+msgid "empty_description"
+msgstr "Sağlanan tanım yok."
+
+msgid "publish"
+msgstr "Evet, Yayımla"
+
+msgid "important"
+msgstr "Önemli!"
+
+msgid "upload_tos_agree"
+msgstr "Anlıyorum"
 
 msgid "test_text"
 msgstr "Pizza yemek istiyorum 🍕 😊"

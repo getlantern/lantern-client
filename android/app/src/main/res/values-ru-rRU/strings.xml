@@ -105,7 +105,7 @@
   <string name="error_update">Ошибка в скачивании обновления</string>
   <string name="error_install_update">Ошибка при установке обновления</string>
   <string name="loading">Загрузка..</string>
-  <string name="manual_update">Попробуйте вручную установить последнюю версию из &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+  <string name="manual_update">Попробуйте вручную установить последнюю версию из &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">Добро пожаловать в Lantern Pro!</string>
   <string name="happy_anniversary">С LANTERN ЮБИЛЕЕМ!</string>
   <string name="welcome_greeting">Добро пожаловать в Lantern</string>
@@ -133,7 +133,6 @@
   <string name="share_friends_text">Поделиться с друзьями, чтобы заработать бесплатные месяцы!</string>
   <string name="email_address">Адрес электронной почты</string>
   <string name="switch_to_alipay">Выбрать оплату через Alipay</string>
-  <string name="switch_to_stripe">Выбрать оплату через Stripe</string>
   <string name="switch_to_credit_card">Выбрать оплату банковской картой</string>
   <string name="continue_to_pro">Продолжить в PRO</string>
   <string name="continue_to_basic">Продолжить использование Basic Version</string>

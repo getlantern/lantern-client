@@ -105,7 +105,7 @@
   <string name="error_update">خطأ في تنزيل التحديث</string>
   <string name="error_install_update">خطأ في تثبيت التحديث</string>
   <string name="loading">جاري التحميل..</string>
-  <string name="manual_update">جرب تثبيت أحدث نسخة من لانترن هنا &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+  <string name="manual_update">جرب تثبيت أحدث نسخة من لانترن هنا &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">مرحبا بك في لانترن برو!</string>
   <string name="happy_anniversary">ذكري سنوية سعيد لـ لانترن!</string>
   <string name="welcome_greeting">مرحبا في لانتيرن</string>
@@ -133,7 +133,6 @@
   <string name="share_friends_text">شارك مع أصدقائك لتربح أشهرا مجانية</string>
   <string name="email_address">البريد الالكتروني</string>
   <string name="switch_to_alipay">التبديل إلى Alipay</string>
-  <string name="switch_to_stripe">التبديل إلى Stripe</string>
   <string name="switch_to_credit_card">التبديل للدفع باستخدام بطاقة الائتمان</string>
   <string name="continue_to_pro">أكمل إلى برو</string>
   <string name="continue_to_basic">الاستمرار في حساب لانترن الأساسي</string>

@@ -2,7 +2,7 @@
 <resources>
   <string name="app_name">لنترن</string>
   <string name="action_settings">تنظیمات</string>
-  <string name="proxy_all_setting">پراکسی کردن تمام ترافیک رد و بدل شده</string>
+  <string name="proxy_all_setting">پروکسی تمام ترافیک</string>
   <string name="proxy_all_on_header">روشن(امن ترین روش)</string>
   <string name="proxy_all_off_header">خاموش (سریع ترین روش)</string>
   <string name="proxy_all_on">با این گزینه، همه ترافیک دستگاه شما از طریق %1$s ارسال خواهد شد</string>
@@ -105,7 +105,7 @@
   <string name="error_update">ایراد در دانلود به روز رسانی</string>
   <string name="error_install_update">خطا در نصب نسخه به‌روز</string>
   <string name="loading">در حال بارگذاری...</string>
-  <string name="manual_update">به صورت دستی آخرین نسخه را از  &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt; دانلود کنید</string>
+  <string name="manual_update">به صورت دستی آخرین نسخه را از  &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt; دانلود کنید</string>
   <string name="pro_welcome_text">به  فانوس Pro خوش آمدید!</string>
   <string name="happy_anniversary">سالگرد فانوس مبارک!</string>
   <string name="welcome_greeting">به  فانوس خوش آمدید</string>
@@ -132,8 +132,7 @@
   <string name="invite_friends_btn">دعوت از دوستان</string>
   <string name="share_friends_text">با دوستانتان به اشتراک بگذارید تا یک ماه عضویت ویژه رایگان دریافت کنید</string>
   <string name="email_address">آدرس ایمیل</string>
-  <string name="switch_to_alipay">به Alipay بروید</string>
-  <string name="switch_to_stripe">به Stripe بروید</string>
+  <string name="switch_to_alipay">به Allpay بروید</string>
   <string name="switch_to_credit_card">به بخش پرداخت با کارت اعتباری بروید</string>
   <string name="continue_to_pro">به استفاده از فانوس  Pro ادامه دهید!</string>
   <string name="continue_to_basic">به نسخه پایه ادامه دهید</string>

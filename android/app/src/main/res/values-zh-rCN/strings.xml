@@ -95,7 +95,7 @@
   <string name="error_update">下载更新时出错</string>
   <string name="error_install_update">安装更新时出错</string>
   <string name="loading">正在加载...</string>
-  <string name="manual_update">请尝试从以下网站手动安装最新版本：&lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+  <string name="manual_update">请尝试从以下网站手动安装最新版本：&lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">欢迎使用“蓝灯专业版”！</string>
   <string name="happy_anniversary">祝蓝灯周年快乐！</string>
   <string name="welcome_greeting">欢迎来到蓝灯</string>
@@ -123,7 +123,6 @@
   <string name="share_friends_text">分享给朋友，就能赚取免费使用期！</string>
   <string name="email_address">电子邮件地址</string>
   <string name="switch_to_alipay">切换到支付宝</string>
-  <string name="switch_to_stripe">切换到条纹</string>
   <string name="switch_to_credit_card">转用信用卡支付</string>
   <string name="continue_to_pro">继续到专业版</string>
   <string name="continue_to_basic">继续到基本版</string>
@@ -462,9 +461,10 @@
   <string name="send_report">发送报告</string>
   <string name="email_optional">电子邮件（可选）</string>
   <string name="device_added">新增设备</string>
+  <string name="device_authorized_pro">该设备现在已被授权使用您的蓝灯专业版帐户。请等待几分钟来生效</string>
   <string name="report_sent">报告已发送</string>
   <string name="thank_you_for_reporting_your_issue">感谢您报告问题。由于数量众多，我们无法回复大多数问题，但我们向您保证，我们正在努力根据您的报告改进  Lantern。</string>
-  <string name="have_a_lantern_pro_activation_code_click_here">有蓝灯专业版激活码？点击这里</string>
+  <string name="have_a_lantern_pro_activation_code_click_here">网上打折购买了专业版激活码？点击这里</string>
   <string name="enter_email_and_activation_code">输入电子邮件和激活码</string>
   <string name="activation_code">激活码</string>
   <string name="by_clicking_register_for_pro_you_agree_to_our_terms_of_service">点击注册专业版，即表示您同意我们的服务条款。</string>
