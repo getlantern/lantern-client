@@ -2,19 +2,19 @@
 # Translators:
 # Giorgio Maone <giorgio@maone.net>, 2021
 # tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2022
-# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2022
-# e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022
 # tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2022
-# strel, 2022
 # e2f <projects@e2f.com>, 2022
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2022
+# e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022
+# strel, 2022
+# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2022\n"
+"Last-Translator: e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2022\n"
 "Language-Team: Spanish (https://www.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 msgid "app_name"
 msgstr "Lantern"
@@ -145,6 +145,9 @@ msgstr "Idioma"
 
 msgid "report_issue"
 msgstr "Informar de un problema"
+
+msgid "check_for_updates"
+msgstr "Buscar actualizaciones"
 
 msgid "blocked_users"
 msgstr "Usuarios bloqueados"
@@ -663,7 +666,7 @@ msgstr "%s sem"
 msgid "longform_weeks"
 msgstr "%s semanas"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "Desconocido"
 
 msgid "banner_source_qr"
@@ -1024,9 +1027,9 @@ msgstr "¡Importante!"
 
 msgid "replica_upload_confirmation_body"
 msgstr ""
-"Los archivos subidos a la red de Lantern son de acceso público. Además, no están centralizados y nadie puede eliminarlos de la red.\n"
-"\n"
-"Evite añadir datos personales e identificativos al archivo y tampoco los refleje en el nombre del mismo al subir contenido sensible."
+"Los archivos subidos a la red de Lantern son de acceso público y nadie puede"
+" borrarlos. No incluya información de identificación personal en el "
+"contenido ni en el nombre del archivo."
 
 msgid "replica_upload_confirmation_agree"
 msgstr "Reanudar subida"
@@ -1050,13 +1053,19 @@ msgid "upload_in_progress"
 msgstr "Subida en curso"
 
 msgid "upload_complete"
-msgstr "Subida completada"
+msgstr "Su archivo se ha publicado correctamente"
 
 msgid "upload_failed"
 msgstr "Subida fallida"
 
 msgid "upload_cancelled"
 msgstr "Subida cancelada"
+
+msgid "upload_unknown_error"
+msgstr "Algo ha fallado al intentar publicar"
+
+msgid "download_unknown_error"
+msgstr "Algo ha fallado al intentar descargar %s"
 
 msgid "replica_link_fetcher"
 msgstr "Obtención de enlaces de réplica"
@@ -1086,6 +1095,12 @@ msgstr "Error al renderizar el vídeo, vuelva a intentarlo más tarde"
 msgid "untitled"
 msgstr "Sin título"
 
+msgid "preview_not_available"
+msgstr "Vista previa no disponible"
+
+msgid "download_to_view"
+msgstr "Descarga el archivo para verlo"
+
 msgid "failed_to_init_replica"
 msgstr "Error: No se ha podido inicializar la réplica"
 
@@ -1106,11 +1121,55 @@ msgstr "Compartir"
 msgid "upload_file_screen"
 msgstr "Subir archivo"
 
+msgid "edit_title"
+msgstr "Editar título"
+
+msgid "filenames_cannot_be_edited"
+msgstr ""
+"Una vez que se publican los nombres de los archivos, ya no se pueden "
+"modificar."
+
+msgid "add_description"
+msgstr "Añadir descripción"
+
+msgid "no_description"
+msgstr "No se ha facilitado ninguna descripción"
+
+msgid "read_details"
+msgstr "Leer PDF"
+
+msgid "description_initial_value"
+msgstr "Una vez que se publica la descripción, ya no se puede modificar"
+
 msgid "name_your_file"
 msgstr "Póngale un nombre a su archivo"
 
 msgid "upload"
 msgstr "Subir"
+
+msgid "review"
+msgstr "Revisar"
+
+msgid "skip"
+msgstr "Saltar"
+
+msgid "replica_layout_filetype"
+msgstr "tipo de archivo: %s"
+
+msgid "replica_layout_creation_date"
+msgstr "Creado el %s"
+
+msgid "empty_description"
+msgstr "No se ha facilitado ninguna descripción."
+
+msgid "publish"
+msgstr "Sí, publicar"
+
+msgid "important"
+msgstr "¡Importante!"
+
+msgid "upload_tos_agree"
+msgstr "Acepto"
 
 msgid "test_text"
 msgstr "Tengo antojo de pizza 🍕 😊"

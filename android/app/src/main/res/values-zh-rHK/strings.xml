@@ -95,7 +95,7 @@
   <string name="error_update">下載更新錯誤</string>
   <string name="error_install_update">安裝更新時發生錯誤</string>
   <string name="loading">正在載入…</string>
-  <string name="manual_update">嘗試手動安裝最新版本，網址為 &amp;lt;a href="https://github.com/getlantern/lantern"&amp;gt;here&amp;lt;/a&amp;gt；</string>
+  <string name="manual_update">嘗試手動安裝最新版本，網址為 &amp;lt;a href="https://lantern-android.io"&amp;gt;here1&amp;lt;/a&amp;gt；</string>
   <string name="pro_welcome_text">歡迎加入 Lantern Pro！</string>
   <string name="happy_anniversary">LANTERN 周年紀念！</string>
   <string name="welcome_greeting">歡迎來到 Lantern</string>
@@ -123,7 +123,6 @@
   <string name="share_friends_text">跟好友分享，賺取免費月份！</string>
   <string name="email_address">電子郵件地址</string>
   <string name="switch_to_alipay">切換至支付寶</string>
-  <string name="switch_to_stripe">切换到条纹</string>
   <string name="switch_to_credit_card">切換至信用卡付款</string>
   <string name="continue_to_pro">繼續前往 PRO 版本</string>
   <string name="continue_to_basic">繼續前往 Basic 版本</string>

@@ -1,7 +1,7 @@
 # 
 # Translators:
-# tx_e2f_bu r4 <tx_e2f_bu_r4@ate2f.com>, 2022
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
+# tx_e2f_bu r4 <tx_e2f_bu_r4@ate2f.com>, 2022
 # e2f <projects@e2f.com>, 2022
 # tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2022
 # 
@@ -143,6 +143,9 @@ msgstr "ဘာသာစကား"
 
 msgid "report_issue"
 msgstr "ပြဿနာတစ်ခုကို သတင်းပို့ပါ"
+
+msgid "check_for_updates"
+msgstr "အပ်ဒိတ်များကိုစစ်ဆေးပါ"
 
 msgid "blocked_users"
 msgstr "ပိတ်ဆို့ထားသည့် အသုံးပြုသူများ"
@@ -664,7 +667,7 @@ msgstr "%s ရက်သတ္တပတ်"
 msgid "longform_weeks"
 msgstr "%s ရက်သတ္တပတ်"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "မသိဘူး"
 
 msgid "banner_source_qr"
@@ -1028,9 +1031,10 @@ msgstr "အရေးကြီးသည်။"
 
 msgid "replica_upload_confirmation_body"
 msgstr ""
-"Lantern ကွန်ရက်သို့ အပ်လုဒ်လုပ်ထားသည့်ဖိုင်များကို အများက ဝင်ရောက်သုံးစွဲနိုင်သည်။ ၎င်းတို့ကို ဗဟိုမှ ချုပ်ကိုင်မထားသည့်အပြင် မည်သူမဆို ကွန်ရက်မှ ဖျက်ပစ်နိုင်သည်။\n"
-"\n"
-"အထိအခိုက်မခံနိုင်သော အကြောင်းအရာကို အပ်လုဒ်လုပ်သည့်အခါ ဖိုင်အကြောင်းအရာရှိ အချက်အလက်များနှင့် ဖိုင်နာမည်အား ကိုယ်တိုင် ခွဲခြားသတ်မှတ်ခြင်းကို ရှောင်ကြဉ်ပါ။"
+"Lantern ကွန်ရက်သို့ အပ်လုဒ်လုပ်ထားသည့် ဖိုင်များကို မည်သူမဆို ရယူနိုင်သည်။ "
+"၎င်းကို မည်သူမှ ဖျက်ပစ်၍မရပါ။ သင်၏ ဖိုင်ပါအကြောင်းအရာ သို့မဟုတ် "
+"ဖိုင်အမည်တွင် ပုဂ္ဂိုလ်ရေး အချက်အလက်များ သို့မဟုတ် အမျိုးအမည်ဖော်ထုတ်သည့် "
+"အချက်အလက်များ မထည့်ပါနှင့်။"
 
 msgid "replica_upload_confirmation_agree"
 msgstr "တင်နေသည်ကို ဆက်လုပ်ပါ"
@@ -1054,13 +1058,19 @@ msgid "upload_in_progress"
 msgstr "အပ်လုဒ် လုပ်နေဆဲ"
 
 msgid "upload_complete"
-msgstr "အပ်လုဒ် ပြီးဆုံးသွားပြီ"
+msgstr "သင့်ဖိုင်ကို အောင်မြင်စွာ တင်လိုက်သည်"
 
 msgid "upload_failed"
 msgstr "အပ်လုဒ် မအောင်မြင်ပါ"
 
 msgid "upload_cancelled"
 msgstr "အပ်လုဒ် ပယ်ဖျက်ထားသည်"
+
+msgid "upload_unknown_error"
+msgstr "တင်ရန် ကြိုးစားနေစဉ် တစ်စုံတစ်ရာ မှားယွင်းသွားသည်"
+
+msgid "download_unknown_error"
+msgstr "%s ကို ဒေါင်းလုဒ်လုပ်ရန် ကြိုးစားနေစဉ် တစ်စုံတစ်ရာ မှားယွင်းသွားသည်"
 
 msgid "replica_link_fetcher"
 msgstr "ပုံတူပွားလင့်ခ်ရယူသည့်ကိရိယာ"
@@ -1090,6 +1100,12 @@ msgstr ""
 msgid "untitled"
 msgstr "ခေါင်းစဉ်မဲ့"
 
+msgid "preview_not_available"
+msgstr "အစမ်းကြည့်ရှုမှု မရနိုင်ပါ"
+
+msgid "download_to_view"
+msgstr "၎င်းကိုကြည့်ရန် ဖိုင်ကို ဒေါင်းလုဒ်လုပ်ပါ"
+
 msgid "failed_to_init_replica"
 msgstr "ချွတ်ယွင်းချက်- ပုံတူပွားမှုကို အစပြုလုပ်ဆောင်မရနိုင်ပါ"
 
@@ -1110,11 +1126,53 @@ msgstr "မျှဝေပါ"
 msgid "upload_file_screen"
 msgstr "ဖိုင်ကို အပ်လုဒ်လုပ်ပါ"
 
+msgid "edit_title"
+msgstr "ခေါင်းစဉ်ကို တည်းဖြတ်ပါ"
+
+msgid "filenames_cannot_be_edited"
+msgstr "တင်လိုက်သည်နှင့် ဖိုင်အမည်များကို တည်းဖြတ်၍မရတော့ပါ။"
+
+msgid "add_description"
+msgstr "ဖော်ပြချက် ထည့်ပါ"
+
+msgid "no_description"
+msgstr "ဖော်ပြချက်များ ပေးမထားပါ"
+
+msgid "read_details"
+msgstr "PDF ကို ဖတ်ပါ"
+
+msgid "description_initial_value"
+msgstr "တင်လိုက်သည်နှင့် ဖော်ပြချက်ကို မွမ်းမံပြင်ဆင်၍မရတော့ပါ"
+
 msgid "name_your_file"
 msgstr "သင့်ဖိုင်ကို အမည်ပေးပါ"
 
 msgid "upload"
 msgstr "တင်ပါ"
+
+msgid "review"
+msgstr "သုံးသပ်မှု"
+
+msgid "skip"
+msgstr "ကျော်မည်"
+
+msgid "replica_layout_filetype"
+msgstr "ဖိုင်အမျိုးအစား- %s"
+
+msgid "replica_layout_creation_date"
+msgstr "%s တွင် ဖန်တီးထားသည်"
+
+msgid "empty_description"
+msgstr "ဖော်ပြချက်များ ပေးမထားပါ။"
+
+msgid "publish"
+msgstr "ဟုတ်ကဲ့၊ တင်ပါမည်"
+
+msgid "important"
+msgstr "အရေးကြီးသည်။"
+
+msgid "upload_tos_agree"
+msgstr "ကျွန်ုပ် နားလည်ပါသည်"
 
 msgid "test_text"
 msgstr "ပီဇာ 🍕 😊 စားချင်တယ်"

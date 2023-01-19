@@ -2,16 +2,16 @@
 # Translators:
 # abuyop <abuyop@gmail.com>, 2022
 # Lantern, 2022
-# Alyssa Chung <lisiachung7@gmail.com>, 2022
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2022
-# tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
 # e2f <projects@e2f.com>, 2022
 # e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2022
 # tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2022
+# Alyssa Chung <lisiachung7@gmail.com>, 2022
+# tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2022\n"
+"Last-Translator: tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022\n"
 "Language-Team: Malay (https://www.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -145,6 +145,9 @@ msgstr "Bahasa"
 
 msgid "report_issue"
 msgstr "Laporkan isu"
+
+msgid "check_for_updates"
+msgstr "Semak kemas kini"
 
 msgid "blocked_users"
 msgstr "Pengguna Disekat"
@@ -662,7 +665,7 @@ msgstr "%sm"
 msgid "longform_weeks"
 msgstr "%s minggu"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "Tidak diketahui"
 
 msgid "banner_source_qr"
@@ -1019,9 +1022,9 @@ msgstr "Penting!"
 
 msgid "replica_upload_confirmation_body"
 msgstr ""
-"Fail yang dimuat naik kepada Rangkaian Lantern boleh diakses secara awam. Ia dipencarkan dan tidak dapat dipadamkan daripada rangkaian oleh sesiapa pun.\n"
-"\n"
-"Elakkan maklumat yang dikenal pasti secara peribadi dalam kandungan fail dan nama fail semasa memuat naik kandungan sensitif."
+"Fail yang dimuat naik ke Lantern Network boleh diakses secara umum. Tiada "
+"siapa-siapa boleh memadamnya. Jangan masukkan maklumat peribadi atau "
+"pengenalan diri dalam kandungan fail atau nama fail anda."
 
 msgid "replica_upload_confirmation_agree"
 msgstr "Sambung Semula Muat Naik"
@@ -1045,13 +1048,19 @@ msgid "upload_in_progress"
 msgstr "Muat Naik Sedang Berlangsung"
 
 msgid "upload_complete"
-msgstr "Muat Naik Selesai"
+msgstr "Fail anda berjaya diterbitkan"
 
 msgid "upload_failed"
 msgstr "Muat Naik Gagal"
 
 msgid "upload_cancelled"
 msgstr "Muat Naik Dibatalkan"
+
+msgid "upload_unknown_error"
+msgstr "Terdapat masalah semasa cuba untuk menerbitkan"
+
+msgid "download_unknown_error"
+msgstr "Terdapat masalah semasa cuba untuk memuat turun %s"
 
 msgid "replica_link_fetcher"
 msgstr "Pengambil Pautan Replika"
@@ -1081,6 +1090,12 @@ msgstr "Ralat memaparkan video, sila cuba lagi nanti"
 msgid "untitled"
 msgstr "Tidak bertajuk"
 
+msgid "preview_not_available"
+msgstr "Pratonton tidak tersedia"
+
+msgid "download_to_view"
+msgstr "Muat turun fail untuk melihatnya"
+
 msgid "failed_to_init_replica"
 msgstr "Ralat: Gagal untuk mengasalkan Replika"
 
@@ -1101,11 +1116,53 @@ msgstr "Kongsi"
 msgid "upload_file_screen"
 msgstr "Muat Naik Fail"
 
+msgid "edit_title"
+msgstr "Edit Tajuk"
+
+msgid "filenames_cannot_be_edited"
+msgstr "Nama fail tidak boleh diedit setelah diterbitkan."
+
+msgid "add_description"
+msgstr "Tambahkan Penerangan"
+
+msgid "no_description"
+msgstr "Tiada penerangan diberikan"
+
+msgid "read_details"
+msgstr "Baca PDF"
+
+msgid "description_initial_value"
+msgstr "Penerangan tidak boleh diubah suai setelah diterbitkan"
+
 msgid "name_your_file"
 msgstr "Namakan Fail Anda"
 
 msgid "upload"
 msgstr "Muat naik"
+
+msgid "review"
+msgstr "Semak semula"
+
+msgid "skip"
+msgstr "Langkau"
+
+msgid "replica_layout_filetype"
+msgstr "filetype: %s"
+
+msgid "replica_layout_creation_date"
+msgstr "Dicipta pada %s"
+
+msgid "empty_description"
+msgstr "Tiada penerangan diberikan."
+
+msgid "publish"
+msgstr "Ya, Terbitkan"
+
+msgid "important"
+msgstr "Penting!"
+
+msgid "upload_tos_agree"
+msgstr "Saya faham"
 
 msgid "test_text"
 msgstr "Saya ingin makan piza 🍕 😊"

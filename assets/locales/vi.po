@@ -2,9 +2,9 @@
 # Translators:
 # Anh Phan <vietnamesel10n@gmail.com>, 2022
 # Lantern, 2022
-# Yen Le Van <yenlevanbk@gmail.com>, 2022
 # Nathan Tran, 2022
 # e2f <projects@e2f.com>, 2022
+# Yen Le Van <yenlevanbk@gmail.com>, 2022
 # e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2022
 # 
 msgid ""
@@ -143,6 +143,9 @@ msgstr "Ngôn ngữ"
 
 msgid "report_issue"
 msgstr "Báo cáo lỗi"
+
+msgid "check_for_updates"
+msgstr "Kiểm tra bản cập nhật"
 
 msgid "blocked_users"
 msgstr "Người dùng bị chặn"
@@ -646,7 +649,7 @@ msgstr "%st"
 msgid "longform_weeks"
 msgstr "%s tuần"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "Không rõ"
 
 msgid "banner_source_qr"
@@ -1003,9 +1006,9 @@ msgstr "Quan trọng!"
 
 msgid "replica_upload_confirmation_body"
 msgstr ""
-"Các tệp được tải lên Mạng Lantern có thể truy cập công khai. Chúng được tản quyền và không thể bị xóa khỏi mạng bởi bất kỳ ai.\n"
-"\n"
-"Tránh thông tin nhận dạng cá nhân trong nội dung tệp và tên tệp khi tải lên nội dung nhạy cảm."
+"Các tệp được tải lên Mạng Lantern có thể truy cập công khai. Không ai có thể"
+" xóa các tệp này. Vui lòng không bao gồm thông tin cá nhân hoặc thông tin "
+"nhận dạng trong nội dung tệp hoặc tên tệp của bạn."
 
 msgid "replica_upload_confirmation_agree"
 msgstr "Tiếp tục Tải lên"
@@ -1029,13 +1032,19 @@ msgid "upload_in_progress"
 msgstr "Đang tải lên"
 
 msgid "upload_complete"
-msgstr "Tải lên hoàn tất"
+msgstr "Tệp của bạn đã được xuất bản thành công"
 
 msgid "upload_failed"
 msgstr "Tải lên thất bại"
 
 msgid "upload_cancelled"
 msgstr "Tải lên bị hủy"
+
+msgid "upload_unknown_error"
+msgstr "Đã xảy ra lỗi khi cố gắng xuất bản"
+
+msgid "download_unknown_error"
+msgstr "Đã xảy ra lỗi khi cố gắng tải xuống %s"
 
 msgid "replica_link_fetcher"
 msgstr "Trình tìm nạp liên kết bản sao"
@@ -1065,6 +1074,12 @@ msgstr "Lỗi hiển thị video, vui lòng thử lại sau"
 msgid "untitled"
 msgstr "Không có tiêu đề"
 
+msgid "preview_not_available"
+msgstr "Tính năng xem trước không khả dụng"
+
+msgid "download_to_view"
+msgstr "Tải xuống tệp để xem"
+
 msgid "failed_to_init_replica"
 msgstr "Lỗi: Không thể khởi tạo Bản sao"
 
@@ -1085,11 +1100,53 @@ msgstr "Chia sẻ"
 msgid "upload_file_screen"
 msgstr "Tải tệp lên"
 
+msgid "edit_title"
+msgstr "Sửa tiêu đề"
+
+msgid "filenames_cannot_be_edited"
+msgstr "Tên tệp không thể chỉnh sửa sau khi xuất bản."
+
+msgid "add_description"
+msgstr "Thêm mô tả"
+
+msgid "no_description"
+msgstr "Không có mô tả nào được cung cấp"
+
+msgid "read_details"
+msgstr "Đọc PDF"
+
+msgid "description_initial_value"
+msgstr "Không thể sửa đổi mô tả sau khi đã xuất bản"
+
 msgid "name_your_file"
 msgstr "Đặt tên tệp của bạn"
 
 msgid "upload"
 msgstr "Tải lên"
+
+msgid "review"
+msgstr "Kiểm tra"
+
+msgid "skip"
+msgstr "Bỏ qua"
+
+msgid "replica_layout_filetype"
+msgstr "loại tệp: %s"
+
+msgid "replica_layout_creation_date"
+msgstr "Đã tạo vào %s"
+
+msgid "empty_description"
+msgstr "Không có mô tả nào được cung cấp."
+
+msgid "publish"
+msgstr "Có, Xuất bản"
+
+msgid "important"
+msgstr "Quan trọng!"
+
+msgid "upload_tos_agree"
+msgstr "Tôi hiểu"
 
 msgid "test_text"
 msgstr "Tôi muốn ăn một chút pizza 🍕 😊"

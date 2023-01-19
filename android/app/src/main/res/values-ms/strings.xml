@@ -105,7 +105,7 @@
   <string name="error_update">Ralat Muat Turun Update</string>
   <string name="error_install_update">Ralat Pemasangan Kemas Kini</string>
   <string name="loading">Muat...</string>
-  <string name="manual_update">Cuba memasang versi terkini secara manual dari &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+  <string name="manual_update">Cuba memasang versi terkini secara manual dari &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">Selamat datang ke Lantern Pro!</string>
   <string name="happy_anniversary">SELAMAT ULANG TAHUN LANTERN!</string>
   <string name="welcome_greeting">Selamat datang ke Lantern</string>
@@ -134,7 +134,6 @@
   <string name="share_friends_text">Berkongsi dengan rakan-rakan untuk mendapatkan bulan-bulan percuma!</string>
   <string name="email_address">Alamat emel</string>
   <string name="switch_to_alipay">Tukar kepada Alipay</string>
-  <string name="switch_to_stripe">Tukar kepada Stripe</string>
   <string name="switch_to_credit_card">Tukar kepada Pembayaran Kad Kredit</string>
   <string name="continue_to_pro">Teruskan ke PRO</string>
   <string name="continue_to_basic">Teruskan ke Basic Version</string>
