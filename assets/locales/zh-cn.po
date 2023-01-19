@@ -1,7 +1,8 @@
 # 
 # Translators:
-# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2022
 # e2f <projects@e2f.com>, 2022
+# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2022
+# Lantern, 2022
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2022
 # 
 msgid ""
@@ -130,6 +131,9 @@ msgstr "语种"
 
 msgid "report_issue"
 msgstr "报告问题"
+
+msgid "check_for_updates"
+msgstr "检查更新"
 
 msgid "blocked_users"
 msgstr "屏蔽的用户"
@@ -609,7 +613,7 @@ msgstr "%s 周"
 msgid "longform_weeks"
 msgstr "%s 周"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "未知"
 
 msgid "banner_source_qr"
@@ -952,10 +956,7 @@ msgid "replica_upload_confirmation_title"
 msgstr "非常重要！"
 
 msgid "replica_upload_confirmation_body"
-msgstr ""
-"上传到蓝灯网络的文件可以公开访问。它们是分散的，任何人都不能从网络中删除。\n"
-"\n"
-"上传敏感内容时，避免文件内容和文件名中的个人识别信息。"
+msgstr "上传到 Lantern Network 的文件可供所有人公开访问。任何人都无法删除它。请勿在您的文件内容或文件名中加入个人或识别信息。"
 
 msgid "replica_upload_confirmation_agree"
 msgstr "恢复简历"
@@ -979,13 +980,19 @@ msgid "upload_in_progress"
 msgstr "正在上传"
 
 msgid "upload_complete"
-msgstr "上传完成"
+msgstr "您的文件已成功发布"
 
 msgid "upload_failed"
 msgstr "上传失败"
 
 msgid "upload_cancelled"
 msgstr "上传已取消"
+
+msgid "upload_unknown_error"
+msgstr "尝试发布时出现问题"
+
+msgid "download_unknown_error"
+msgstr "尝试下载时出现问题 %s"
 
 msgid "replica_link_fetcher"
 msgstr "副本链接获取器"
@@ -1014,6 +1021,12 @@ msgstr "渲染视频时出错，请稍后重试"
 msgid "untitled"
 msgstr "未命名"
 
+msgid "preview_not_available"
+msgstr "预览不可用"
+
+msgid "download_to_view"
+msgstr "下载文件以查看"
+
 msgid "failed_to_init_replica"
 msgstr "错误：无法初始化副本"
 
@@ -1032,11 +1045,53 @@ msgstr "分享"
 msgid "upload_file_screen"
 msgstr "上传文件"
 
+msgid "edit_title"
+msgstr "编辑标题"
+
+msgid "filenames_cannot_be_edited"
+msgstr "文件发布后，文件名无法修改"
+
+msgid "add_description"
+msgstr "加入说明"
+
+msgid "no_description"
+msgstr "无描述"
+
+msgid "read_details"
+msgstr "阅读 PDF"
+
+msgid "description_initial_value"
+msgstr "说明一经发布不可修改"
+
 msgid "name_your_file"
 msgstr "为文件命名"
 
 msgid "upload"
 msgstr "上传"
+
+msgid "review"
+msgstr "查阅"
+
+msgid "skip"
+msgstr "跳过"
+
+msgid "replica_layout_filetype"
+msgstr "文件类型：%s"
+
+msgid "replica_layout_creation_date"
+msgstr "创建于 %s"
+
+msgid "empty_description"
+msgstr "没有提供说明。"
+
+msgid "publish"
+msgstr "是的，发布吧"
+
+msgid "important"
+msgstr "非常重要！"
+
+msgid "upload_tos_agree"
+msgstr "我明白"
 
 msgid "test_text"
 msgstr "我想吃披萨🍕 😊"

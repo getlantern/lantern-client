@@ -105,7 +105,7 @@
   <string name="error_update">Erreur de téléchargement de la mise à jour</string>
   <string name="error_install_update">Erreur lors de l\'installation de la mise à jour</string>
   <string name="loading">Chargement…</string>
-  <string name="manual_update">Essayez d’installer manuellement la dernière version sur &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+  <string name="manual_update">Essayez d’installer manuellement la dernière version sur &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">Bienvenue à Lantern Pro !</string>
   <string name="happy_anniversary">JOYEUX ANNIVERSAIRE, LANTERN.</string>
   <string name="welcome_greeting">Bienvenue à Lantern</string>
@@ -133,7 +133,6 @@
   <string name="share_friends_text">Partagez avec des amis pour obtenir des mois gratuits.</string>
   <string name="email_address">Adresse courriel</string>
   <string name="switch_to_alipay">Préférer Alipay</string>
-  <string name="switch_to_stripe">Préférer Stripe</string>
   <string name="switch_to_credit_card">Préférer un paiement par carte de crédit</string>
   <string name="continue_to_pro">Poursuivre vers Pro</string>
   <string name="continue_to_basic">Poursuivre vers la version de base</string>

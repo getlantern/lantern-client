@@ -2,7 +2,7 @@
 <resources>
   <string name="app_name">Lantern</string>
   <string name="action_settings">সেটিংস</string>
-  <string name="proxy_all_setting">সকল ট্রাফিকে প্রক্সি ব্যবহার করুন</string>
+  <string name="proxy_all_setting">ট্রাফিকগুলি প্রক্সি করুন</string>
   <string name="proxy_all_on_header">চালু (সর্বাধিক নিরাপদ বিকল্প)</string>
   <string name="proxy_all_off_header">বন্ধ (দ্রুততম বিকল্প)</string>
   <string name="proxy_all_on">এই বিকল্পটির সাথে, আপনার সমস্ত ডিভাইস ট্র্যাফিক %1$s এর মাধ্যমে পাঠানো হবে</string>
@@ -106,7 +106,7 @@
   <string name="error_update">আপডেট ডাউনলোড করতে ত্রৃটি</string>
   <string name="error_install_update">আপডেট ইনস্টল করা সংক্রান্ত ত্রুটি</string>
   <string name="loading">লোড হচ্ছে...</string>
-  <string name="manual_update">নিজে থেকে সর্বশেষ সংস্করণ ইনস্টল করার চেষ্টা করুন: https://github.com/getlantern/lantern</string>
+  <string name="manual_update">নিজে থেকে সর্বশেষ সংস্করণ ইনস্টল করার চেষ্টা করুন: https://lantern-android.io</string>
   <string name="pro_welcome_text">Lantern Pro এ আপনাকে স্বগাতম!</string>
   <string name="happy_anniversary">শুভ LANTERN বার্ষিকী!</string>
   <string name="welcome_greeting">Lantern এ আপনাকে স্বগাতম!</string>

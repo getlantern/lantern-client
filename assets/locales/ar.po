@@ -2,15 +2,15 @@
 # Translators:
 # Amin Jobran, 2022
 # lamine Kacimi <k_lamine27@yahoo.fr>, 2022
-# Abdelaziz Houcini <azhouhou@gmail.com>, 2022
-# e2f_ar c2 <tx_e2f_ar_c2@ate2f.com>, 2022
+# Abdelaziz “Azhou” Houcini <azhouhou@gmail.com>, 2022
+# 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2022
 # محيي الدين <tx99h4@hotmail.com>, 2022
 # Layla Taha <layla@asl19.org>, 2022
 # Rima Sghaier, 2022
-# Abed Abedd <abderrahman.younis@gmail.com>, 2022
-# e2f_ar c1 <tx_e2f_ar_c1@ate2f.com>, 2022
 # Derek F <derek@getlantern.org>, 2022
 # e2f <projects@e2f.com>, 2022
+# dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2022
+# Abed Abedd <abderrahman.younis@gmail.com>, 2022
 # e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2022
 # 
 msgid ""
@@ -147,6 +147,9 @@ msgstr "لغة"
 
 msgid "report_issue"
 msgstr "الإبلاغ عن مشكلة"
+
+msgid "check_for_updates"
+msgstr "تحقق من وجود تحديثات"
 
 msgid "blocked_users"
 msgstr "المستخدمون المحظورون"
@@ -648,7 +651,7 @@ msgstr "%s أسبوع"
 msgid "longform_weeks"
 msgstr "%s أسابيع"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "غير معروف"
 
 msgid "banner_source_qr"
@@ -1002,9 +1005,9 @@ msgstr "مهم!"
 
 msgid "replica_upload_confirmation_body"
 msgstr ""
-"يمكن الوصول إلى الملفات التي تم تحميلها على Lantern Network علانيةً. إنها ملفات لا مركزية ولا يمكن لأي شخص حذفها من الشبكة.\n"
-"\n"
-"تجنب إضافة معلومات التعريف الشخصية إلى محتويات الملفات وأسمائها عند تحميل محتوى حساس."
+"الملفات التي تم تحميلها على Lantern Network متاحة للجمهور. لا أحد يستطيع "
+"حذفها. الرجاء عدم تضمين معلومات شخصية أو تعريفية في محتوى الملف أو اسم "
+"الملف."
 
 msgid "replica_upload_confirmation_agree"
 msgstr "استئناف التحميل"
@@ -1028,13 +1031,19 @@ msgid "upload_in_progress"
 msgstr "جارٍ التحميل"
 
 msgid "upload_complete"
-msgstr "اكتمل التحميل"
+msgstr "تم نشر ملفك بنجاح"
 
 msgid "upload_failed"
 msgstr "فشل التحميل"
 
 msgid "upload_cancelled"
 msgstr "تم إلغاء التحميل"
+
+msgid "upload_unknown_error"
+msgstr "حدث خطأ ما في أثناء محاولة النشر"
+
+msgid "download_unknown_error"
+msgstr "حدث خطأ ما في أثناء محاولة تنزيل %s"
 
 msgid "replica_link_fetcher"
 msgstr "أداة إحضار رابط النسخة المتماثلة"
@@ -1063,6 +1072,12 @@ msgstr "خطأ في توفير الفيديو، يرجى المحاولة مرة
 msgid "untitled"
 msgstr "بدون عنوان"
 
+msgid "preview_not_available"
+msgstr "المعاينة غير متوفرة"
+
+msgid "download_to_view"
+msgstr "تنزيل الملف لرؤيته"
+
 msgid "failed_to_init_replica"
 msgstr "خطأ: فشلت تهيئة النسخة المتماثلة"
 
@@ -1083,11 +1098,53 @@ msgstr "مشاركة"
 msgid "upload_file_screen"
 msgstr "تحميل ملف"
 
+msgid "edit_title"
+msgstr "تعديل العنوان"
+
+msgid "filenames_cannot_be_edited"
+msgstr "لا يمكن تعديل أسماء الملفات بعد نشرها."
+
+msgid "add_description"
+msgstr "إضافة وصف"
+
+msgid "no_description"
+msgstr "لم يتم توفير وصف"
+
+msgid "read_details"
+msgstr "قراءة PDF"
+
+msgid "description_initial_value"
+msgstr "لا يمكن تعديل الوصف بعد نشره."
+
 msgid "name_your_file"
 msgstr "قم بتسمية الملف الخاص بك"
 
 msgid "upload"
 msgstr "تحميل"
+
+msgid "review"
+msgstr "مراجعة"
+
+msgid "skip"
+msgstr "تخط"
+
+msgid "replica_layout_filetype"
+msgstr "نوع الملف: %s"
+
+msgid "replica_layout_creation_date"
+msgstr "تم الإنشاء في %s"
+
+msgid "empty_description"
+msgstr "لم يتم توفير وصف."
+
+msgid "publish"
+msgstr "نعم، نشر"
+
+msgid "important"
+msgstr "مهم!"
+
+msgid "upload_tos_agree"
+msgstr "فهمت"
 
 msgid "test_text"
 msgstr "أريد أن آكل بعض البيتزا 🍕 😊"

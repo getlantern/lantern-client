@@ -105,7 +105,7 @@
   <string name="error_update">အပ်ဒိတ်ကို ဒေါင်းလုပ်ဆွဲယူခြင်းအမှား</string>
   <string name="error_install_update">အပ်ဒိတ် ထည့်သွင်းရာတွင် မှားယွင်းမှု</string>
   <string name="loading">တင်နေသည် ..</string>
-  <string name="manual_update">&lt;a href="https://github.com/getlantern/lantern"&gt; here &lt;/a&gt; မှ နောက်ဆုံးပေါ်ဗားရှင်းကို ကိုယ်တိုင်ကိုယ်ကျထည့်သွင်းရန်ကြိုးစားပါ</string>
+  <string name="manual_update">&lt;a href="https://lantern-android.io"&gt; here1 &lt;/a&gt; မှ နောက်ဆုံးပေါ်ဗားရှင်းကို ကိုယ်တိုင်ကိုယ်ကျထည့်သွင်းရန်ကြိုးစားပါ</string>
   <string name="pro_welcome_text">Lantern Pro မှကြိုဆိုပါသည်။</string>
   <string name="happy_anniversary">ပျော်ရွှင်စရာ LANTERN နှစ်ပတ်လည်</string>
   <string name="welcome_greeting">Lantern မှကြိုဆိုပါတယ်</string>
@@ -133,7 +133,6 @@
   <string name="share_friends_text">အခမဲ့လများရရှိရန် မိတ်ဆွေသူငယ်ချင်းများနှင့် မျှဝေပါ။</string>
   <string name="email_address">အီးမေးလိပ်စာ</string>
   <string name="switch_to_alipay">Alipay သို့ပြောင်းပါ</string>
-  <string name="switch_to_stripe">Stripe သို့ပြောင်းပါ</string>
   <string name="switch_to_credit_card">Credit Card Payment ကိုပြောင်းပါ</string>
   <string name="continue_to_pro">PRO ကိုဆက်သွားပါ</string>
   <string name="continue_to_basic">Basic ဗားရှင်းကိုဆက်သွားပါ</string>
