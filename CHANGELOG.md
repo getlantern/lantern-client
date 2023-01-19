@@ -1,4 +1,14 @@
 
+<a name="7.2.3"></a>
+## [7.2.3](https://github.com/getlantern/android-lantern/compare/7.2.0...7.2.3)
+
+> 2023-01-19
+
+### Pull Requests
+
+* Merge pull request [#798](https://github.com/getlantern/android-lantern/issues/798) from getlantern/soltzen/li5841__freekassa_integration
+
+
 <a name="7.2.0"></a>
 ## [7.2.0](https://github.com/getlantern/android-lantern/compare/7.1.1...7.2.0)
 
