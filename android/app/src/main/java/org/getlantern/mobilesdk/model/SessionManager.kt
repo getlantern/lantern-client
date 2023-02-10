@@ -217,7 +217,9 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(CHAT_ENABLED, actuallyEnabled).apply()
     }
 
-    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
+//    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
+    // for now, disable Chat completely
+    fun chatEnabled(): Boolean { return false }
 
     override fun setMatomoEnabled(enabled: Boolean) {
         Logger.d(TAG, "Setting $MATOMO_ENABLED to $enabled")
@@ -460,7 +462,7 @@ abstract class SessionManager(application: Application) : Session {
         val PLAY_VERSION = "playVersion"
 
         private const val REPLICA_ADDR = "replicaAddr"
-        private const val CHAT_ENABLED = "chatEnabled"
+        public const val CHAT_ENABLED = "chatEnabled"
         private const val MATOMO_ENABLED = "matomoEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(

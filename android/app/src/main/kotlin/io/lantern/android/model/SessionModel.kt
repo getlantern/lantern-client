@@ -24,6 +24,7 @@ import org.getlantern.lantern.util.Analytics
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
+import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -55,6 +56,8 @@ class SessionModel(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
+            // hard disable chat
+            tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
         }
     }
