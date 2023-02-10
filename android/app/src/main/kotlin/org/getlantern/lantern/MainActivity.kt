@@ -67,7 +67,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
-        messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
+        messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
@@ -139,18 +139,18 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             intent.removeExtra("contactForConversation")
         }
 
-        // handles incoming call intent
-        intent.getStringExtra("signal")?.let { signal ->
-            val webRTCSignal = Json.gson.fromJson(signal, WebRTCSignal::class.java)
-            val notificationManager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!
-            // pass this on to Kotlin and then Dart messaging model
-            messagingModel.sendSignal(webRTCSignal, true)
-            LanternApp.messaging.dismissIncomingCallNotification(
-                notificationManager,
-                webRTCSignal
-            )
-            intent.removeExtra("signal")
-        }
+//        // handles incoming call intent
+//        intent.getStringExtra("signal")?.let { signal ->
+//            val webRTCSignal = Json.gson.fromJson(signal, WebRTCSignal::class.java)
+//            val notificationManager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!
+//            // pass this on to Kotlin and then Dart messaging model
+//            messagingModel.sendSignal(webRTCSignal, true)
+//            LanternApp.messaging.dismissIncomingCallNotification(
+//                notificationManager,
+//                webRTCSignal
+//            )
+//            intent.removeExtra("signal")
+//        }
     }
 
     override fun onStart() {

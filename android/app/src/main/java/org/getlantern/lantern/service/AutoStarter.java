@@ -20,10 +20,6 @@ public class AutoStarter extends BroadcastReceiver {
                 intent.getAction() == Intent.ACTION_BOOT_COMPLETED
         );
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(serviceIntent);
-        } else {
-            context.startService(serviceIntent);
-        }
+        context.startService(serviceIntent);
     }
 }
