@@ -12,7 +12,7 @@ import androidx.multidex.MultiDex;
 import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternSessionManager;
-import org.getlantern.lantern.model.MessagingHolder;
+//import org.getlantern.lantern.model.MessagingHolder;
 import org.getlantern.lantern.model.WelcomeDialog;
 import org.getlantern.lantern.model.WelcomeDialog_;
 import org.getlantern.lantern.util.SentryUtil;
@@ -39,7 +39,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     private static InAppBilling inAppBilling;
     private static boolean isForeground;
     private Activity currentActivity;
-    public static final MessagingHolder messaging = new MessagingHolder();
+//    public static final MessagingHolder messaging = new MessagingHolder();
 
     @Override
     public void onCreate() {
@@ -61,8 +61,8 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
         Logger.debug(TAG, "setCompatVectorFromResourcesEnabled finished at " + (System.currentTimeMillis() - start));
 
         appContext = getApplicationContext();
-        messaging.init(this);
-        Logger.debug(TAG, "messaging.init() finished at " + (System.currentTimeMillis() - start));
+//        messaging.init(this);
+//        Logger.debug(TAG, "messaging.init() finished at " + (System.currentTimeMillis() - start));
         session = new LanternSessionManager(this);
         configureProxySelector();
         Logger.debug(TAG, "new LanternSessionManager finished at " + (System.currentTimeMillis() - start));
