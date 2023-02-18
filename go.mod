@@ -35,13 +35,13 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight v0.0.0-20230217225056-d85f85ee2730
+	github.com/getlantern/flashlight v0.0.0-20230218070418-3458417b6f77
 	github.com/getlantern/golog v0.0.0-20221014032422-49749a7176cf
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
-	github.com/getlantern/replica v0.12.1
+	github.com/getlantern/replica v0.12.2-0.20230218070558-6049eb77f5b1
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.8.1
 	golang.org/x/mobile v0.0.0-20221110043201-43a038452099
@@ -115,17 +115,17 @@ require (
 	github.com/getlantern/bbrconn v0.0.0-20210901194755-12169918fdf9 // indirect
 	github.com/getlantern/borda v0.0.0-20220308134056-c4a5602f778e // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
-	github.com/getlantern/byteexec v0.0.0-20200509011419-2f5ed5531ada // indirect
+	github.com/getlantern/byteexec v0.0.0-20220903142956-e6ed20032cfd // indirect
 	github.com/getlantern/cmux v0.0.0-20200905031936-c55b16ee8462 // indirect
 	github.com/getlantern/cmux/v2 v2.0.0-20200905031936-c55b16ee8462 // indirect
 	github.com/getlantern/cmuxprivate v0.0.0-20211216020409-d29d0d38be54 // indirect
 	github.com/getlantern/common v1.2.0 // indirect
 	github.com/getlantern/context v0.0.0-20220418194847-3d5e7a086201 // indirect
 	github.com/getlantern/detour v0.0.0-20200814023224-28e20f4ac2d1 // indirect
-	github.com/getlantern/dhtup v0.0.0-20220627142103-ed614929df34 // indirect
+	github.com/getlantern/dhtup v0.0.0-20230218063409-258bc7570a27 // indirect
 	github.com/getlantern/dns v0.0.0-20210120185712-8d005533efa0 // indirect
 	github.com/getlantern/domains v0.0.0-20220311111720-94f59a903271 // indirect
-	github.com/getlantern/elevate v0.0.0-20210901195629-ce58359e4d0e // indirect
+	github.com/getlantern/elevate v0.0.0-20220903142053-479ab992b264 // indirect
 	github.com/getlantern/ema v0.0.0-20190620044903-5943d28f40e4 // indirect
 	github.com/getlantern/enhttp v0.0.0-20210901195634-6f89d45ee033 // indirect
 	github.com/getlantern/enproxy v0.0.0-20180913191734-002212d417a4 // indirect
@@ -212,7 +212,7 @@ require (
 	github.com/gonum/stat v0.0.0-20180125090729-ec9c8a1062f4 // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/netstack v0.0.0-00010101000000-000000000000 // indirect
-	github.com/google/pprof v0.0.0-20210720184732-4bb14d4b1be1 // indirect
+	github.com/google/pprof v0.0.0-20220608213341-c488b8fa1db3 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.2 // indirect
