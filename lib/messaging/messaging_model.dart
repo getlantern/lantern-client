@@ -1,11 +1,11 @@
-import 'calls/signaling.dart';
+// import 'calls/signaling.dart';
 import 'messaging.dart';
 
 final messagingModel = MessagingModel();
 
 class MessagingModel extends Model {
   late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;
-  late Signaling signaling;
+  // late Signaling signaling;
 
   MessagingModel() : super('messaging') {
     _thumbnailCache = LRUCache<StoredAttachment, Uint8List>(
@@ -18,18 +18,18 @@ class MessagingModel extends Model {
       }).then((value) => value as Uint8List),
     );
 
-    signaling = Signaling(methodChannel);
+    // signaling = Signaling(methodChannel);
 
     methodChannel.setMethodCallHandler((call) async {
       switch (call.method) {
-        case 'onSignal':
-          var args = call.arguments as Map;
-          signaling.onMessage(
-            args['senderId'],
-            args['content'],
-            args['acceptedCall'],
-          );
-          break;
+        // case 'onSignal':
+        //   var args = call.arguments as Map;
+        //   signaling.onMessage(
+        //     args['senderId'],
+        //     args['content'],
+        //     args['acceptedCall'],
+        //   );
+        //   break;
         default:
           break;
       }
