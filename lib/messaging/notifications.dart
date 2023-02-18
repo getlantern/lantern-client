@@ -69,11 +69,11 @@ class Notifications {
         if (payloadString?.isNotEmpty == true) {
           var payload = Payload.fromJson(payloadString!);
           switch (payload.type) {
-            case PayloadType.Ringing:
-              Map<String, dynamic> data = payload.data;
-              messagingModel.signaling
-                  .onMessage(data['peerId'], data['messageJson'], false);
-              break;
+            // case PayloadType.Ringing:
+            //   Map<String, dynamic> data = payload.data;
+            //   messagingModel.signaling
+            //       .onMessage(data['peerId'], data['messageJson'], false);
+            //   break;
             // TODO <16-12-2021> soltzen: This code does not work as of today:
             // The notification click events are not being processed. This'll be
             // addressed here: https://github.com/getlantern/lantern-internal/issues/5133
