@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/calls/call.dart';
+// import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 
 import '../messaging.dart';
@@ -52,23 +52,23 @@ void showVerificationOptions({
           trailingArray: [const ContinueArrow()],
         ),
       ),
-      ListItemFactory.bottomItem(
-        icon: ImagePaths.phone,
-        content: 'verify_via_call'.i18n,
-        onTap: () async {
-          await bottomModalContext.router
-              .popAndPush(
-            FullScreenDialogPage(widget: Call(contact: contact)),
-          )
-              .then((value) async {
-            // * we just successfully verified someone via a Call
-            if (value == true) {
-              verificationUX();
-            }
-          });
-        },
-        trailingArray: [const ContinueArrow()],
-      ),
+      // ListItemFactory.bottomItem(
+      //   icon: ImagePaths.phone,
+      //   content: 'verify_via_call'.i18n,
+      //   onTap: () async {
+      //     await bottomModalContext.router
+      //         .popAndPush(
+      //       FullScreenDialogPage(widget: Call(contact: contact)),
+      //     )
+      //         .then((value) async {
+      //       // * we just successfully verified someone via a Call
+      //       if (value == true) {
+      //         verificationUX();
+      //       }
+      //     });
+      //   },
+      //   trailingArray: [const ContinueArrow()],
+      // ),
       if (showDismissNotification)
         ListItemFactory.bottomItem(
           icon: ImagePaths.cancel,
