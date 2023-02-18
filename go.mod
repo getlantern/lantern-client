@@ -35,7 +35,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight v0.0.0-20230218070418-3458417b6f77
+	github.com/getlantern/flashlight v0.0.0-20230218162029-d59fe37917e1
 	github.com/getlantern/golog v0.0.0-20221014032422-49749a7176cf
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
