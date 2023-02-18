@@ -1,4 +1,10 @@
 
+<a name="7.3.2"></a>
+## [7.3.2](https://github.com/getlantern/android-lantern/compare/7.3.0...7.3.2)
+
+> 2023-02-18
+
+
 <a name="7.3.0"></a>
 ## [7.3.0](https://github.com/getlantern/android-lantern/compare/7.2.3...7.3.0)
 
