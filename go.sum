@@ -420,6 +420,7 @@ github.com/getlantern/http-proxy-lantern/v2 v2.8.1-0.20230214112357-cbc156402ad0
 github.com/getlantern/http-proxy-lantern/v2 v2.8.1-0.20230214112357-cbc156402ad0/go.mod h1:H/jxigDFUhX3LahQHkY4cKsy2nG2tscZP5mSKlndXxM=
 github.com/getlantern/http-proxy-lantern/v2 v2.8.1-0.20230214122156-c283919631c4 h1:9iyRTdEw3Oc9Y4hW4x+tC4D+42fn/g7we76bST6PjTY=
 github.com/getlantern/http-proxy-lantern/v2 v2.8.1-0.20230214122156-c283919631c4/go.mod h1:P933PGfkJHnAbh7PorY+fo8pJTQAMpgM6lmj8DzlyZ8=
+github.com/getlantern/http-proxy-lantern/v2 v2.8.1-0.20230215114357-157d6da42017 h1:8xNSI99SHy6VYtWvqY7GVPFcBzwf2PYfdJ7UbC2SBNM=
 github.com/getlantern/http-proxy-lantern/v2 v2.8.1-0.20230215114357-157d6da42017/go.mod h1:P933PGfkJHnAbh7PorY+fo8pJTQAMpgM6lmj8DzlyZ8=
 github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca h1:Of3VwFEfKbVnK5/VGy05XUbi6QvTs5Y2eLDfPv3O50E=
 github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca/go.mod h1:TNC/xJFmctsSGyXqcnVWwCRCPD/4zGQP7yBVnLDRa/U=
