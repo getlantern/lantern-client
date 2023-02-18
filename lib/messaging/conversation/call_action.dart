@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/calls/call.dart';
+// import 'package:lantern/messaging/calls/call.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 class CallAction extends StatelessWidget {
@@ -20,16 +20,16 @@ class CallAction extends StatelessWidget {
             style: tsSubtitle1,
           ),
           children: [
-            ListItemFactory.bottomItem(
-              icon: ImagePaths.phone,
-              content: 'call'.i18n,
-              onTap: () async {
-                Navigator.pop(context);
-                await context.pushRoute(
-                  FullScreenDialogPage(widget: Call(contact: contact)),
-                );
-              },
-            ),
+            // ListItemFactory.bottomItem(
+            //   icon: ImagePaths.phone,
+            //   content: 'call'.i18n,
+            //   onTap: () async {
+            //     Navigator.pop(context);
+            //     await context.pushRoute(
+            //       FullScreenDialogPage(widget: Call(contact: contact)),
+            //     );
+            //   },
+            // ),
             ListItemFactory.bottomItem(
               icon: ImagePaths.cancel,
               content: 'cancel'.i18n,
