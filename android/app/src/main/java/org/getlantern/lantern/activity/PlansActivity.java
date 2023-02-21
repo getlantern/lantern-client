@@ -88,12 +88,8 @@ public class PlansActivity extends BaseFragmentActivity {
         tvDurationFirst = (TextView) itemPlanYear1.findViewById(R.id.tvDuration);
         tvDurationSecond = (TextView) itemPlanYear2.findViewById(R.id.tvDuration);
         View activateCodeContainer = findViewById(R.id.activateCodeContainer);
-        if (LanternApp.getSession().isProUser()) {
-            activateCodeContainer.setVisibility(View.GONE);
-        } else {
-            activateCodeContainer.setVisibility(View.VISIBLE);
-            activateCodeContainer.setOnClickListener(v -> NavigatorKt.openCheckOutReseller(this));
-        }
+        activateCodeContainer.setVisibility(View.VISIBLE);
+        activateCodeContainer.setOnClickListener(v -> NavigatorKt.openCheckOutReseller(this));
     }
 
     private void sendScreenViewEvent() {
