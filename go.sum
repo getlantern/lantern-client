@@ -371,6 +371,8 @@ github.com/getlantern/flashlight v0.0.0-20230218162029-d59fe37917e1 h1:f90aQLtoB
 github.com/getlantern/flashlight v0.0.0-20230218162029-d59fe37917e1/go.mod h1:xZubx2njmZbdN1lpfisyDlifrWkJlpL+Z8qYiQxy2rM=
 github.com/getlantern/flashlight v0.0.0-20230218223257-1c3c12318ee3 h1:XRD50ZAVUs/GpBPjkZB5n7ONQqY5PK8vFgEypudb3/c=
 github.com/getlantern/flashlight v0.0.0-20230218223257-1c3c12318ee3/go.mod h1:sgU22caIjTmbPERP2Put1Ri9MUDXHATV2IB+xBykkyA=
+github.com/getlantern/flashlight v0.0.0-20230221132617-a04e52e369f8 h1:TaALPbDKdsy5htChR53Qp0Vj9vFevIbq5VwdFuRWWms=
+github.com/getlantern/flashlight v0.0.0-20230221132617-a04e52e369f8/go.mod h1:S/FBqwrI0Vzmca/fijNkyUrvdzS8BIHjYEJyJY07Oo8=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20221102104652-893705395782 h1:Fjzra0nFtIqHLCnUA4XiSa+gFCmpi4/xe8vLAH1dN+U=
@@ -385,6 +387,7 @@ github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 h1:RBKofGGMt2
 github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5/go.mod h1:kGHRXch95rnGLHjER/GhhFiHvfnqNz7KqWD9kGfATHY=
 github.com/getlantern/go-update v0.0.0-20230110113721-06ce639b721d h1:5hCHwxfRDIprcqxkKWt/wyuihur1CEGzwbODaBuV+/I=
 github.com/getlantern/go-update v0.0.0-20230110113721-06ce639b721d/go.mod h1:TDlCySQQXSWyNoFAYxdIw+P7mYf7BOQiNvgLiZKtuMI=
+github.com/getlantern/go-update v0.0.0-20230221120840-8d795213a8bc/go.mod h1:DQAFBxfQlSru9Loud3pLM+rF//qf0FQBtB//grF89IA=
 github.com/getlantern/goexpr v0.0.0-20211215215226-4cdd4fd2847b/go.mod h1:ZaY9C4jtM37dI+XfwuKqKIdVQAdeQPIiFtwBMN/TSY4=
 github.com/getlantern/golog v0.0.0-20190809085441-26e09e6dd330/go.mod h1:zx/1xUUeYPy3Pcmet8OSXLbF47l+3y6hIPpyLWoR9oc=
 github.com/getlantern/golog v0.0.0-20190830074920-4ef2e798c2d7/go.mod h1:zx/1xUUeYPy3Pcmet8OSXLbF47l+3y6hIPpyLWoR9oc=
@@ -483,6 +486,8 @@ github.com/getlantern/ops v0.0.0-20220713155959-1315d978fff7 h1:Od0xvR4iK3gZwhkI
 github.com/getlantern/ops v0.0.0-20220713155959-1315d978fff7/go.mod h1:D5ao98qkA6pxftxoqzibIBBrLSUli+kYnJqrgBf9cIA=
 github.com/getlantern/osversion v0.0.0-20230110113619-07839d9f2ba0 h1:vVECfpMkKVEt6CwDUxrvNfFh50MyldcXI6vRGYmk08Y=
 github.com/getlantern/osversion v0.0.0-20230110113619-07839d9f2ba0/go.mod h1:UO/kpuJwVG8Bo8U3n0G9Jnikt907lEhXLDtZIjyhIj8=
+github.com/getlantern/osversion v0.0.0-20230221120431-d6f9971f8ccf h1:eBrN3ukzZnzTvKA5pf4Kh2bqRxUVzxKiga453r/S1wk=
+github.com/getlantern/osversion v0.0.0-20230221120431-d6f9971f8ccf/go.mod h1:m3uzMz4/vMTlZEIP3aQL0wjpSFblQsuNcgMZpfRgmos=
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 h1:pijUoofaQcAM/8zbDzZM2LQ90kGVbKfnSAkFnQwLZZU=
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360/go.mod h1:nsJPNYUSY96xB+p7uiDW8O4uiKea+KjeUdS5d6tf9IU=
 github.com/getlantern/preconn v0.0.0-20180328114929-0b5766010efe/go.mod h1:FvIxQD61iYA42UjaJyzGl9DNne8jbowbgicdeNk/7kE=

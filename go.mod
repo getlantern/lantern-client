@@ -35,7 +35,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight v0.0.0-20230218223257-1c3c12318ee3
+	github.com/getlantern/flashlight v0.0.0-20230221132617-a04e52e369f8
 	github.com/getlantern/golog v0.0.0-20221014032422-49749a7176cf
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
@@ -139,7 +139,7 @@ require (
 	github.com/getlantern/geolookup v0.0.0-20210901195705-eec711834596 // indirect
 	github.com/getlantern/go-cache v0.0.0-20141028142048-88b53914f467 // indirect
 	github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 // indirect
-	github.com/getlantern/go-update v0.0.0-20230110113721-06ce639b721d // indirect
+	github.com/getlantern/go-update v0.0.0-20230221120840-8d795213a8bc // indirect
 	github.com/getlantern/gonat v0.0.0-20201001145726-634575ba87fb // indirect
 	github.com/getlantern/grtrack v0.0.0-20210901195719-bdf9e1d12dac // indirect
 	github.com/getlantern/hellosplitter v0.1.1 // indirect
@@ -165,7 +165,7 @@ require (
 	github.com/getlantern/multipath v0.0.0-20220920195041-55195f38df73 // indirect
 	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd // indirect
 	github.com/getlantern/ops v0.0.0-20220713155959-1315d978fff7 // indirect
-	github.com/getlantern/osversion v0.0.0-20230110113619-07839d9f2ba0 // indirect
+	github.com/getlantern/osversion v0.0.0-20230221120431-d6f9971f8ccf // indirect
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 // indirect
 	github.com/getlantern/preconn v1.0.0 // indirect
 	github.com/getlantern/proxy/v2 v2.0.1-0.20220303164029-b34b76e0e581 // indirect
