@@ -14,6 +14,7 @@ import (
 	"github.com/getlantern/flashlight/client"
 	"github.com/getlantern/flashlight/common"
 	"github.com/getlantern/flashlight/config"
+	"github.com/getlantern/flashlight/geolookup"
 	"github.com/getlantern/flashlight/ops"
 	"github.com/getlantern/flashlight/proxied"
 	replicaConfig "github.com/getlantern/replica/config"
@@ -118,7 +119,12 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	}
 
 	log.Debugf("Starting replica with configDir [%v] and userConfig [%+v]\n", s.ConfigDir, s.UserConfig)
-	optsFunc := replicaConfig.NewReplicaOptionsGetter(s.Flashlight, s.Session.GetCountryCode)
+	optsFunc := replicaConfig.NewReplicaOptionsGetter(
+		func(options replicaConfig.FeatureOptions) error {
+			return s.Flashlight.FeatureOptions(config.FeatureReplica, options)
+		},
+		s.Session.GetCountryCode,
+		geolookup.Refresh)
 
 	input := replicaServer.NewHttpHandlerInput{}
 	input.SetDefaults()
