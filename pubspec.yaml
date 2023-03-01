@@ -3,7 +3,7 @@ description: Lantern
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -27,7 +27,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  i18n_extension: ^4.2.0
+  i18n_extension: ^6.0.0
+
+  analyzer: ^5.6.0
 
   provider: ^5.0.0
 
@@ -37,7 +39,7 @@ dependencies:
 
   flutter_switch: ^0.3.0
 
-  flag: ^5.0.0-nullsafety
+  flag: ^6.0.0
 
   qr_flutter: ^4.0.0
 
@@ -47,7 +49,7 @@ dependencies:
 
   audioplayers: ^0.20.1
 
-  auto_route: ^3.2.0
+  auto_route: ^5.0.4
 
   bot_toast: ^4.0.1
 
@@ -65,7 +67,7 @@ dependencies:
 
   video_player: ^2.4.7
 
-  flutter_svg: ^0.21.0-nullsafety.0
+  flutter_svg: ^1.0.1
 
   hexcolor: ^2.0.4
 
@@ -84,7 +86,7 @@ dependencies:
   # Version 1.0.7 seems glitchy, so we're using 1.0.6 explicitly
   emoji_picker_flutter: 1.0.6
 
-  email_validator: '^2.0.1'
+  email_validator: "^2.0.1"
 
   pin_code_text_field: ^1.8.0
 
@@ -98,8 +100,8 @@ dependencies:
 
   file_picker: ^4.0.2
 
-#  flutter_webrtc: ^0.9.20
-# Use our own fork of flutter_webrtc with more optimized audio quality settings
+  #  flutter_webrtc: ^0.9.20
+  # Use our own fork of flutter_webrtc with more optimized audio quality settings
   # flutter_webrtc:
   #   git:
   #     url: https://github.com/getlantern/flutter-webrtc.git
@@ -159,7 +161,7 @@ dev_dependencies:
 
   test: ^1.15.7
   mockito: ^5.0.12
-  auto_route_generator: ^3.2.0
+  auto_route_generator: ^5.0.3
   build_runner: ^2.0.5
 
 # For information on the generic Dart part of this file, see the
@@ -168,9 +170,9 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   fonts:
-  - family: RobotoMono
-    fonts:
-      - asset: assets/fonts/RobotoMono.ttf
+    - family: RobotoMono
+      fonts:
+        - asset: assets/fonts/RobotoMono.ttf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
