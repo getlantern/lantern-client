@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/account/account_management.dart';
+import 'package:lantern/account/appslist.dart';
 import 'package:lantern/account/blocked_users.dart';
 import 'package:lantern/account/chat_number_account.dart';
 import 'package:lantern/account/device_linking/approve_device.dart';
@@ -58,6 +59,14 @@ import 'package:lantern/replica/upload/review.dart';
       page: Settings,
       name: 'Settings',
       path: 'settings',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: AppsList,
+      name: 'AppsList',
+      path: 'appslist',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

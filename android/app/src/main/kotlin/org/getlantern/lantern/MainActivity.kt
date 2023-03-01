@@ -32,6 +32,7 @@ import io.lantern.messaging.WebRTCSignal
 import okhttp3.Response
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
+import org.getlantern.lantern.apps.AppsProvider
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.*
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
@@ -52,6 +53,7 @@ import java.util.Locale
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
+    private lateinit var appsProvider: AppsProvider
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
@@ -67,6 +69,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
+        appsProvider = AppsProvider(this.getPackageManager(), "org.getlantern.lantern")
+        appsProvider.printAppsList()
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)

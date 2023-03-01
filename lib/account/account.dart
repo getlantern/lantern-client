@@ -1,5 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+import './appslist.dart';
 
 class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
@@ -18,6 +19,9 @@ class AccountMenu extends StatelessWidget {
       LanternNavigator.startScreen(LanternNavigator.SCREEN_DESKTOP_VERSION);
 
   void openSettings(BuildContext context) async =>
+      await context.pushRoute(Settings());
+
+  void openAppsList(BuildContext context) async =>
       await context.pushRoute(Settings());
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
@@ -72,6 +76,13 @@ class AccountMenu extends StatelessWidget {
         content: 'settings'.i18n,
         onTap: () {
           openSettings(context);
+        },
+      ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.settings,
+        content: 'Apps List'.i18n,
+        onTap: () {
+          openAppsList(context);
         },
       ),
     ];
