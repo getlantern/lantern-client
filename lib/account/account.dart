@@ -1,6 +1,5 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import './appslist.dart';
 
 class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
@@ -22,7 +21,7 @@ class AccountMenu extends StatelessWidget {
       await context.pushRoute(Settings());
 
   void openAppsList(BuildContext context) async =>
-      await context.pushRoute(Settings());
+      await context.pushRoute(AppsList());
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
