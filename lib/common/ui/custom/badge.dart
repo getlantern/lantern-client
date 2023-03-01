@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:lantern/common/common.dart';
 
 class CBadge extends StatelessWidget {
@@ -29,7 +29,7 @@ class CBadge extends StatelessWidget {
       return child;
     }
 
-    return Badge(
+    return badges.Badge(
       padding: (customPadding != null)
           ? customPadding!
           : (customBadge != null)
@@ -40,11 +40,11 @@ class CBadge extends StatelessWidget {
                   top: 2,
                   bottom: 2,
                 ),
-      position: BadgePosition(
+      position: badges.BadgePosition(
         end: end,
         top: top,
       ),
-      animationType: BadgeAnimationType.fade,
+      animationType: badges.BadgeAnimationType.fade,
       elevation: 0,
       // no drop-shadow
       badgeColor: (customBadge != null) ? Colors.white : pink4,
