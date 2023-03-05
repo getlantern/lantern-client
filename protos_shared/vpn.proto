@@ -1,5 +1,5 @@
 syntax = "proto3";
-option java_package = "io.lantern.android.model";
+option java_package = "io.lantern.model";
 
 message ServerInfo {
   string city = 1;

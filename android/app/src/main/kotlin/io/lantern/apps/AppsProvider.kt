@@ -1,4 +1,4 @@
-package org.getlantern.lantern.apps
+package io.lantern.apps
 
 import android.Manifest
 import android.content.pm.ApplicationInfo

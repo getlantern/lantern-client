@@ -1,4 +1,4 @@
-package io.lantern.android.model
+package io.lantern.model
 
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall

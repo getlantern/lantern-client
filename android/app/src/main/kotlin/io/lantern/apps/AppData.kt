@@ -1,4 +1,4 @@
-package org.getlantern.lantern.apps
+package io.lantern.apps
 
 data class AppData(
     val packageName: String,

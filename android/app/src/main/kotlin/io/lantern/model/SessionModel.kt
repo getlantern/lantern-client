@@ -1,8 +1,9 @@
-package io.lantern.android.model
+package io.lantern.model
 
 import android.app.Activity
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
+import io.lantern.apps.AppData
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -12,7 +13,6 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.apps.AppData
 import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
