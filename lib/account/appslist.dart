@@ -4,17 +4,17 @@ import 'package:lantern/i18n/localization_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:drawable/drawable.dart';
 
-class SwitchExample extends StatefulWidget {
+class AppSwitch extends StatefulWidget {
   final String packageName;
   bool isExcluded;
 
-  SwitchExample ({ Key? key, this.packageName = '', this.isExcluded = false}): super(key: key);
+  AppSwitch ({ Key? key, this.packageName = '', this.isExcluded = false}): super(key: key);
 
   @override
-  State<SwitchExample> createState() => _SwitchExampleState();
+  State<AppSwitch> createState() => _AppSwitchState();
 }
 
-class _SwitchExampleState extends State<SwitchExample> {
+class _AppSwitchState extends State<AppSwitch> {
   bool light = false;
 
   @override
@@ -57,7 +57,7 @@ class AppsProvider extends StatelessWidget {
   Widget buildAppDataItem(AppData appData, bool isExcluded) {
     return ListTile(
       contentPadding: const EdgeInsetsDirectional.all(4),
-      trailing: SwitchExample(packageName: appData.packageName, isExcluded: isExcluded),
+      trailing: AppSwitch(packageName: appData.packageName, isExcluded: isExcluded),
       title: CText(
         toBeginningOfSentenceCase(
         appData.name)!,
