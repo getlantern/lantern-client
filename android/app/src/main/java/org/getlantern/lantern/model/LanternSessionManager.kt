@@ -307,7 +307,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setAppsList(appsList: List<AppData>) {
-      val apps = Vpn.AppsData.newBuilder().addAllAppsList(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIconRes(it.iconRes).setName(it.name).setIsSystemApp(it.isSystemApp).build() }).build()
+      val appsData:Vpn.AppsData = getAppsData()
+      val apps = Vpn.AppsData.newBuilder(appsData).addAllAppsList(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIconRes(it.iconRes).setName(it.name).setIsSystemApp(it.isSystemApp).build() }).build()
       db.mutate { tx ->
           tx.put(APPS_DATA, apps)
       }

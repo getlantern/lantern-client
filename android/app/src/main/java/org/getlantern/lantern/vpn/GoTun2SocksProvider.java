@@ -37,7 +37,7 @@ public class GoTun2SocksProvider implements Provider {
     // Configure a builder while parsing the parameters.
     builder.setMtu(VPN_MTU);
 
-    for (String packageName : LanternApp.getSession().excludedApps(.keySet()) {
+    for (String packageName : LanternApp.getSession().excludedApps().keySet()) {
       Logger.debug(TAG, "Excluding app from VPN " + packageName);
       try {
         builder.addDisallowedApplication(packageName);
