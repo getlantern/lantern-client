@@ -8,6 +8,8 @@ import android.os.ParcelFileDescriptor;
 
 import internalsdk.Internalsdk; // Lantern's go android package
 
+import io.lantern.model.Vpn;
+import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.MainActivity;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.model.SessionManager;
@@ -34,6 +36,16 @@ public class GoTun2SocksProvider implements Provider {
 
     // Configure a builder while parsing the parameters.
     builder.setMtu(VPN_MTU);
+
+    for (String packageName : LanternApp.getSession().excludedApps(.keySet()) {
+      Logger.debug(TAG, "Excluding app from VPN " + packageName);
+      try {
+        builder.addDisallowedApplication(packageName);
+      } catch (PackageManager.NameNotFoundException e) {
+        Logger.error(TAG, "Unable to exclude app from VPN ", e);
+      }
+    }
+  
 
     builder.addAddress(privateAddress, 24);
     // route IPv4 through VPN

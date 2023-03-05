@@ -277,6 +277,19 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putBoolean(DEVICE_LINKED, true).apply()
     }
 
+    private fun getAppsData():Vpn.AppsData {
+      var appsData:Vpn.AppsData = Vpn.AppsData.newBuilder().build()
+      db.mutate { tx ->
+        appsData = tx.get(APPS_DATA)!!
+      }
+      return appsData
+    }
+
+    fun excludedApps():Map<String, Boolean> {
+      val appsData:Vpn.AppsData = getAppsData()
+      return appsData.excludedApps.excludedAppsMap
+    }
+
     fun addExcludedApp(packageName: String) {
       db.mutate { tx ->
         val appsData:Vpn.AppsData = tx.get(APPS_DATA)!!
@@ -286,7 +299,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun removeExcludedApp(packageName: String) {
-        db.mutate { tx ->
+      db.mutate { tx ->
         val appsData:Vpn.AppsData = tx.get(APPS_DATA)!!
         tx.put(APPS_DATA, Vpn.AppsData.newBuilder(appsData).setExcludedApps(
                 Vpn.ExcludedApps.newBuilder(appsData.excludedApps).removeExcludedApps(packageName)).build())
