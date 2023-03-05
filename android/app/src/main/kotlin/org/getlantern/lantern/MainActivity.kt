@@ -27,12 +27,12 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.lantern.android.model.*
+import io.lantern.apps.AppsProvider
+import io.lantern.model.*
 import io.lantern.messaging.WebRTCSignal
 import okhttp3.Response
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
-import org.getlantern.lantern.apps.AppsProvider
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.*
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback

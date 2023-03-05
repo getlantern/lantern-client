@@ -3,12 +3,12 @@ package org.getlantern.lantern.model
 import android.app.Application
 import android.content.res.Resources
 import android.text.TextUtils
-import io.lantern.android.model.Vpn
+import io.lantern.apps.AppData
+import io.lantern.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
-import org.getlantern.lantern.apps.AppData
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
