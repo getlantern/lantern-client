@@ -64,9 +64,9 @@ import 'package:lantern/replica/upload/review.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: AppsList,
-      name: 'AppsList',
-      path: 'appslist',
+      page: AppsProvider,
+      name: 'AppsProvider',
+      path: 'appsProvider',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

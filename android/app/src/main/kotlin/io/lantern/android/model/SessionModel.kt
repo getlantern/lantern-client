@@ -12,6 +12,7 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.apps.AppData
 import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
@@ -46,7 +47,7 @@ class SessionModel(
     }
 
     init {
-        db.mutate { tx ->
+      db.mutate { tx ->
             // initialize data for fresh install // TODO remove the need to do this for each data path
             tx.put(
                 PATH_PRO_USER,
@@ -91,6 +92,12 @@ class SessionModel(
             "setProxyAll" -> {
                 val on = call.argument("on") ?: false
                 saveProxyAll(on)
+            }
+            "addExcludedApp" -> {
+              LanternApp.getSession().addExcludedApp(call.argument("packageName")!!)
+            }
+            "removeExcludedApp" -> {
+              LanternApp.getSession().removeExcludedApp(call.argument("packageName")!!)
             }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))

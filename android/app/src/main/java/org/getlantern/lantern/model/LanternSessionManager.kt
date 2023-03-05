@@ -8,6 +8,7 @@ import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
+import org.getlantern.lantern.apps.AppData
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
@@ -276,6 +277,29 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putBoolean(DEVICE_LINKED, true).apply()
     }
 
+    fun addExcludedApp(packageName: String) {
+      db.mutate { tx ->
+        val appsData:Vpn.AppsData = tx.get(APPS_DATA)!!
+        tx.put(APPS_DATA, Vpn.AppsData.newBuilder(appsData).mergeExcludedApps(
+                Vpn.ExcludedApps.newBuilder().putExcludedApps(packageName, true).build()).build())
+      }
+    }
+
+    fun removeExcludedApp(packageName: String) {
+        db.mutate { tx ->
+        val appsData:Vpn.AppsData = tx.get(APPS_DATA)!!
+        tx.put(APPS_DATA, Vpn.AppsData.newBuilder(appsData).setExcludedApps(
+                Vpn.ExcludedApps.newBuilder(appsData.excludedApps).removeExcludedApps(packageName)).build())
+      }
+    }
+
+    fun setAppsList(appsList: List<AppData>) {
+      val apps = Vpn.AppsData.newBuilder().addAllAppsList(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIconRes(it.iconRes).setName(it.name).setIsSystemApp(it.isSystemApp).build() }).build()
+      db.mutate { tx ->
+          tx.put(APPS_DATA, apps)
+      }
+    }
+
     fun storeUserData(user: ProUser?) {
         if (user!!.email != null && user.email != "") {
             setEmail(user.email)
@@ -332,6 +356,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         // shared preferences
         private const val PRO_USER = "prouser"
+        private const val APPS_DATA = "appsData"
+        private const val EXCLUDED_APPS = "excludedApps"
         private const val DEVICES = "devices"
         private const val PRO_EXPIRED = "proexpired"
         private const val PRO_PLAN = "proplan"

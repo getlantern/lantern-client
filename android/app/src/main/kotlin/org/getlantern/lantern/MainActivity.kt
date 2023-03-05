@@ -70,7 +70,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         super.configureFlutterEngine(flutterEngine)
 
         appsProvider = AppsProvider(this.getPackageManager(), "org.getlantern.lantern")
-        appsProvider.printAppsList()
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
@@ -112,6 +111,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
+
+        LanternApp.getSession().setAppsList(appsProvider.getAppsList())
 
         // if not in dev mode, prevent screenshots of this activity by other apps
         if (!BuildConfig.DEVELOPMENT_MODE) {

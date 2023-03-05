@@ -20,8 +20,8 @@ class AccountMenu extends StatelessWidget {
   void openSettings(BuildContext context) async =>
       await context.pushRoute(Settings());
 
-  void openAppsList(BuildContext context) async =>
-      await context.pushRoute(AppsList());
+  void openAppsProvider(BuildContext context) async =>
+      await context.pushRoute(AppsProvider());
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
@@ -81,7 +81,7 @@ class AccountMenu extends StatelessWidget {
         icon: ImagePaths.settings,
         content: 'Apps List'.i18n,
         onTap: () {
-          openAppsList(context);
+          openAppsProvider(context);
         },
       ),
     ];

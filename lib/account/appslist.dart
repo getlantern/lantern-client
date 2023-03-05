@@ -1,56 +1,85 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
+import 'package:flutter/foundation.dart';
+import 'package:drawable/drawable.dart';
 
-class AppsList extends StatelessWidget {
-  AppsList({Key? key}) : super(key: key);
+class SwitchExample extends StatefulWidget {
+  final String packageName;
+  bool isExcluded;
 
-  void upgradeToLanternPro() => LanternNavigator.startScreen(
-        LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO,
-      );
+  SwitchExample ({ Key? key, this.packageName = '', this.isExcluded = false}): super(key: key);
 
-  Future<void> authorizeDeviceForPro(BuildContext context) async =>
-      await context.pushRoute(AuthorizePro());
+  @override
+  State<SwitchExample> createState() => _SwitchExampleState();
+}
 
-  void inviteFriends() =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_INVITE_FRIEND);
-
-  void openDesktopVersion() =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_DESKTOP_VERSION);
-
-  void openSettings(BuildContext context) async =>
-      await context.pushRoute(Settings());
-
-  List<Widget> appsList(BuildContext context, SessionModel sessionModel) {
-    return [
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.pro_icon_black,
-        content: 'Snapchat'.i18n,
-        onTap: upgradeToLanternPro,
-      ),
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.star,
-        content: 'Instagram'.i18n,
-        onTap: inviteFriends,
-      ),
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.desktop,
-        content: 'WhatsApp'.i18n,
-        onTap: openDesktopVersion,
-      ),
-    ];
-  }
+class _SwitchExampleState extends State<SwitchExample> {
+  bool light = false;
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      title: 'AppsList'.i18n,
-      body: sessionModel
-          .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        return ListView(
-          children: appsList(sessionContext, sessionModel),
-        );
-      }),
+    return Switch(
+      // This bool value toggles the switch.
+      value: light || widget.isExcluded,
+      activeColor: Colors.lightBlue,
+      onChanged: (bool value) {
+        // This is called when the user toggles the switch.
+        setState(() {
+          light = value;
+          if (value) {
+            sessionModel.addExcludedApp(widget.packageName);
+          } else {
+            sessionModel.removeExcludedApp(widget.packageName);
+          }
+        });
+      },
     );
+  }
+}
+
+
+class AppsProvider extends StatelessWidget {
+  AppsProvider({Key? key}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Apps List'),
+      ),
+      body: getAppItems(context),
+    );
+  }
+
+
+  Widget buildAppDataItem(AppData appData, bool isExcluded) {
+    return ListTile(
+      contentPadding: const EdgeInsetsDirectional.all(4),
+      trailing: SwitchExample(packageName: appData.packageName, isExcluded: isExcluded),
+      title: CText(
+        toBeginningOfSentenceCase(
+        appData.name)!,
+        style: tsBody1,
+      ),
+    );
+  }
+
+
+  Widget getAppItems(BuildContext context) {
+    return sessionModel
+          .appsData((BuildContext context, AppsData appsData, Widget? child) {
+          debugPrint('Excluded apps ');
+          appsData.excludedApps.excludedApps.forEach((k, v) => print('${k}: ${v}'));
+          return ListView.builder(
+            itemCount: appsData.appsList.length,
+            itemBuilder: (BuildContext context, int index) {
+              var appData = appsData.appsList[index];
+              bool isExcluded = appsData.excludedApps.excludedApps[appData.packageName] ?? false;
+              return buildAppDataItem(appData, isExcluded);
+            },
+          );
+      });
   }
 }

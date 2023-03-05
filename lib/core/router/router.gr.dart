@@ -107,12 +107,12 @@ class AppRouter extends _i30.RootStackRouter {
         barrierDismissible: false,
       );
     },
-    AppsList.name: (routeData) {
-      final args =
-          routeData.argsAs<AppsListArgs>(orElse: () => const AppsListArgs());
+    AppsProvider.name: (routeData) {
+      final args = routeData.argsAs<AppsProviderArgs>(
+          orElse: () => const AppsProviderArgs());
       return _i30.CustomPage<void>(
         routeData: routeData,
-        child: _i5.AppsList(key: args.key),
+        child: _i5.AppsProvider(key: args.key),
         transitionsBuilder: _i30.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
@@ -472,8 +472,8 @@ class AppRouter extends _i30.RootStackRouter {
           path: 'settings',
         ),
         _i30.RouteConfig(
-          AppsList.name,
-          path: 'appslist',
+          AppsProvider.name,
+          path: 'appsProvider',
         ),
         _i30.RouteConfig(
           Language.name,
@@ -692,26 +692,26 @@ class SettingsArgs {
 }
 
 /// generated route for
-/// [_i5.AppsList]
-class AppsList extends _i30.PageRouteInfo<AppsListArgs> {
-  AppsList({_i32.Key? key})
+/// [_i5.AppsProvider]
+class AppsProvider extends _i30.PageRouteInfo<AppsProviderArgs> {
+  AppsProvider({_i32.Key? key})
       : super(
-          AppsList.name,
-          path: 'appslist',
-          args: AppsListArgs(key: key),
+          AppsProvider.name,
+          path: 'appsProvider',
+          args: AppsProviderArgs(key: key),
         );
 
-  static const String name = 'AppsList';
+  static const String name = 'AppsProvider';
 }
 
-class AppsListArgs {
-  const AppsListArgs({this.key});
+class AppsProviderArgs {
+  const AppsProviderArgs({this.key});
 
   final _i32.Key? key;
 
   @override
   String toString() {
-    return 'AppsListArgs{key: $key}';
+    return 'AppsProviderArgs{key: $key}';
   }
 }
 

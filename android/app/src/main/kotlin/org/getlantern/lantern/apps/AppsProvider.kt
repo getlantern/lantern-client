@@ -3,6 +3,7 @@ package org.getlantern.lantern.apps
 import android.Manifest
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import com.google.gson.annotations.SerializedName
 
 class AppsProvider(
     private val packageManager: PackageManager,
@@ -13,6 +14,7 @@ class AppsProvider(
             !isSelfApplication(appInfo.packageName)
     }
 
+    @SerializedName("appsList")
     fun getAppsList(): List<AppData> {
         return packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
             .asSequence()
@@ -20,7 +22,7 @@ class AppsProvider(
             .map { info ->
                 AppData(
                     info.packageName,
-                    info.icon,
+                    info.icon.toLong(),
                     info.loadLabel(packageManager).toString(),
                     !isLaunchable(info.packageName)
                 )

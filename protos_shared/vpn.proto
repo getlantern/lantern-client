@@ -7,6 +7,22 @@ message ServerInfo {
   string countryCode = 3;
 }
 
+message AppData {
+  string packageName = 1;
+  int64 iconRes = 2;
+  string name = 3;
+  bool isSystemApp = 4;
+}
+
+message ExcludedApps {
+  map<string, bool> excludedApps = 1;
+}
+
+message AppsData {
+  repeated AppData appsList = 1;
+  optional ExcludedApps excludedApps = 2;
+}
+
 message Bandwidth {
   int64 percent = 1; // [0, 100]
   int64 remaining = 2; // in MB

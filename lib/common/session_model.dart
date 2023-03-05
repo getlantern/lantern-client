@@ -106,6 +106,28 @@ class SessionModel extends Model {
     );
   }
 
+  Widget appsData(ValueWidgetBuilder<AppsData> builder) {
+    return subscribedSingleValueBuilder<AppsData>(
+      'appsData',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return AppsData.fromBuffer(serialized);
+      },
+    );
+  }
+
+  Future<void> addExcludedApp(String packageName) {
+    return methodChannel.invokeMethod('addExcludedApp', <String, dynamic>{
+      'packageName': packageName,
+    });
+  }
+
+  Future<void> removeExcludedApp(String packageName) {
+    return methodChannel.invokeMethod('removeExcludedApp', <String, dynamic>{
+      'packageName': packageName,
+    });
+  }
+
   Widget deviceId(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
   }
