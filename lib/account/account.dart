@@ -79,7 +79,7 @@ class AccountMenu extends StatelessWidget {
       ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.settings,
-        content: 'Apps List'.i18n,
+        content: 'Split Tunneling'.i18n,
         onTap: () {
           openSplitTunneling(context);
         },

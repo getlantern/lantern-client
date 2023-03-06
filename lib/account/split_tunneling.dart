@@ -45,7 +45,7 @@ class SplitTunneling extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Apps List'),
+        title: Text('Split Tunneling'),
       ),
       body: appsList(context),
     );
