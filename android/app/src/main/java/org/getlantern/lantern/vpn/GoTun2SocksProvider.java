@@ -37,8 +37,10 @@ public class GoTun2SocksProvider implements Provider {
     // Configure a builder while parsing the parameters.
     builder.setMtu(VPN_MTU);
 
+    // Add applications that are denied access to the VPN connection. By default, all 
+    // applications are allowed access, except those denied access via the Excluded Apps screen
     for (String packageName : LanternApp.getSession().excludedApps().keySet()) {
-      Logger.debug(TAG, "Excluding app from VPN " + packageName);
+      Logger.debug(TAG, "Excluding app from VPN connection: " + packageName);
       try {
         builder.addDisallowedApplication(packageName);
       } catch (PackageManager.NameNotFoundException e) {

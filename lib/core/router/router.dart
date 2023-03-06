@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/account/account_management.dart';
-import 'package:lantern/account/appslist.dart';
 import 'package:lantern/account/blocked_users.dart';
 import 'package:lantern/account/chat_number_account.dart';
 import 'package:lantern/account/device_linking/approve_device.dart';
@@ -10,6 +9,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
 import 'package:lantern/account/language.dart';
 import 'package:lantern/account/recovery_key.dart';
 import 'package:lantern/account/settings.dart';
+import 'package:lantern/account/split_tunneling.dart';
 import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/home.dart';
@@ -64,9 +64,9 @@ import 'package:lantern/replica/upload/review.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: AppsProvider,
-      name: 'AppsProvider',
-      path: 'appsProvider',
+      page: SplitTunneling,
+      name: 'SplitTunneling',
+      path: 'splitTunneling',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

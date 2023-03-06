@@ -90,7 +90,6 @@ class AppData extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'packageName', protoName: 'packageName')
     ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iconRes', protoName: 'iconRes')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isSystemApp', protoName: 'isSystemApp')
     ..hasRequiredFields = false
   ;
 
@@ -99,7 +98,6 @@ class AppData extends $pb.GeneratedMessage {
     $core.String? packageName,
     $fixnum.Int64? iconRes,
     $core.String? name,
-    $core.bool? isSystemApp,
   }) {
     final _result = create();
     if (packageName != null) {
@@ -110,9 +108,6 @@ class AppData extends $pb.GeneratedMessage {
     }
     if (name != null) {
       _result.name = name;
-    }
-    if (isSystemApp != null) {
-      _result.isSystemApp = isSystemApp;
     }
     return _result;
   }
@@ -163,15 +158,6 @@ class AppData extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(2);
   @$pb.TagNumber(3)
   void clearName() => clearField(3);
-
-  @$pb.TagNumber(4)
-  $core.bool get isSystemApp => $_getBF(3);
-  @$pb.TagNumber(4)
-  set isSystemApp($core.bool v) { $_setBool(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasIsSystemApp() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearIsSystemApp() => clearField(4);
 }
 
 class ExcludedApps extends $pb.GeneratedMessage {

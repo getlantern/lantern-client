@@ -27,7 +27,7 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.lantern.apps.AppsProvider
+import io.lantern.apps.AppsDataProvider
 import io.lantern.model.*
 import io.lantern.messaging.WebRTCSignal
 import okhttp3.Response
@@ -53,7 +53,7 @@ import java.util.Locale
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
-    private lateinit var appsProvider: AppsProvider
+    private lateinit var appsDataProvider: AppsDataProvider
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
@@ -69,7 +69,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
-        appsProvider = AppsProvider(this.getPackageManager(), "org.getlantern.lantern")
+        appsDataProvider = AppsDataProvider(this.getPackageManager(), this.getPackageName())
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
@@ -112,7 +112,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
 
-        LanternApp.getSession().setAppsList(appsProvider.getAppsList())
+        LanternApp.getSession().setAppsList(appsDataProvider.listOfApps())
 
         // if not in dev mode, prevent screenshots of this activity by other apps
         if (!BuildConfig.DEVELOPMENT_MODE) {

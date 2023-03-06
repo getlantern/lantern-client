@@ -16,7 +16,6 @@ import 'dart:io' as _i33;
 import 'package:auto_route/auto_route.dart' as _i30;
 import 'package:flutter/material.dart' as _i31;
 import 'package:lantern/account/account_management.dart' as _i3;
-import 'package:lantern/account/appslist.dart' as _i5;
 import 'package:lantern/account/blocked_users.dart' as _i21;
 import 'package:lantern/account/chat_number_account.dart' as _i20;
 import 'package:lantern/account/device_linking/approve_device.dart' as _i10;
@@ -29,6 +28,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
 import 'package:lantern/account/language.dart' as _i6;
 import 'package:lantern/account/recovery_key.dart' as _i11;
 import 'package:lantern/account/settings.dart' as _i4;
+import 'package:lantern/account/split_tunneling.dart' as _i5;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i2;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i17;
@@ -107,12 +107,12 @@ class AppRouter extends _i30.RootStackRouter {
         barrierDismissible: false,
       );
     },
-    AppsProvider.name: (routeData) {
-      final args = routeData.argsAs<AppsProviderArgs>(
-          orElse: () => const AppsProviderArgs());
+    SplitTunneling.name: (routeData) {
+      final args = routeData.argsAs<SplitTunnelingArgs>(
+          orElse: () => const SplitTunnelingArgs());
       return _i30.CustomPage<void>(
         routeData: routeData,
-        child: _i5.AppsProvider(key: args.key),
+        child: _i5.SplitTunneling(key: args.key),
         transitionsBuilder: _i30.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
@@ -472,8 +472,8 @@ class AppRouter extends _i30.RootStackRouter {
           path: 'settings',
         ),
         _i30.RouteConfig(
-          AppsProvider.name,
-          path: 'appsProvider',
+          SplitTunneling.name,
+          path: 'splitTunneling',
         ),
         _i30.RouteConfig(
           Language.name,
@@ -692,26 +692,26 @@ class SettingsArgs {
 }
 
 /// generated route for
-/// [_i5.AppsProvider]
-class AppsProvider extends _i30.PageRouteInfo<AppsProviderArgs> {
-  AppsProvider({_i32.Key? key})
+/// [_i5.SplitTunneling]
+class SplitTunneling extends _i30.PageRouteInfo<SplitTunnelingArgs> {
+  SplitTunneling({_i32.Key? key})
       : super(
-          AppsProvider.name,
-          path: 'appsProvider',
-          args: AppsProviderArgs(key: key),
+          SplitTunneling.name,
+          path: 'splitTunneling',
+          args: SplitTunnelingArgs(key: key),
         );
 
-  static const String name = 'AppsProvider';
+  static const String name = 'SplitTunneling';
 }
 
-class AppsProviderArgs {
-  const AppsProviderArgs({this.key});
+class SplitTunnelingArgs {
+  const SplitTunnelingArgs({this.key});
 
   final _i32.Key? key;
 
   @override
   String toString() {
-    return 'AppsProviderArgs{key: $key}';
+    return 'SplitTunnelingArgs{key: $key}';
   }
 }
 

@@ -290,6 +290,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
       return appsData.excludedApps.excludedAppsMap
     }
 
+    // Add application to set of excluded apps that are denied access to the VPN connection 
     fun addExcludedApp(packageName: String) {
       db.mutate { tx ->
         val appsData:Vpn.AppsData = tx.get(APPS_DATA)!!
@@ -298,6 +299,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
       }
     }
 
+    // Remove application from set of excluded apps that are denied access to the VPN connection
     fun removeExcludedApp(packageName: String) {
       db.mutate { tx ->
         val appsData:Vpn.AppsData = tx.get(APPS_DATA)!!
@@ -308,7 +310,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun setAppsList(appsList: List<AppData>) {
       val appsData:Vpn.AppsData = getAppsData()
-      val apps = Vpn.AppsData.newBuilder(appsData).addAllAppsList(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIconRes(it.iconRes).setName(it.name).setIsSystemApp(it.isSystemApp).build() }).build()
+      val apps = Vpn.AppsData.newBuilder(appsData).addAllAppsList(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIconRes(it.iconRes).setName(it.name).build() }).build()
       db.mutate { tx ->
           tx.put(APPS_DATA, apps)
       }
