@@ -33,8 +33,6 @@ dependencies:
 
   provider: ^5.0.0
 
-  drawable: 0.1.0
-
   protobuf: any
 
   google_fonts:
