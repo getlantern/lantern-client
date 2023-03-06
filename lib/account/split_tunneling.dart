@@ -2,13 +2,12 @@ import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:flutter/foundation.dart';
-import 'package:drawable/drawable.dart';
 
 class AppSwitch extends StatefulWidget {
   final String packageName;
   bool isExcluded;
 
-  AppSwitch ({ Key? key, this.packageName = '', this.isExcluded = false}): super(key: key);
+  AppSwitch({required this.packageName, required this.isExcluded});
 
   @override
   State<AppSwitch> createState() => _AppSwitchState();
@@ -38,7 +37,7 @@ class _AppSwitchState extends State<AppSwitch> {
 }
 
 class SplitTunneling extends StatelessWidget {
-  SplitTunneling({Key? key}) : super(key: key);
+  SplitTunneling({Key? key});
 
 
   @override
