@@ -112,12 +112,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
 
-        LanternApp.getSession().setAppsList(appsDataProvider.listOfApps())
-
-        // if not in dev mode, prevent screenshots of this activity by other apps
-        if (!BuildConfig.DEVELOPMENT_MODE) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        }
+// While Chat is disabled, don't bother with preventing screenshots
+//        // if not in dev mode, prevent screenshots of this activity by other apps
+//        if (!BuildConfig.DEVELOPMENT_MODE) {
+//            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+//        }
 
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
@@ -175,6 +174,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
+
+        LanternApp.getSession().setAppsList(appsDataProvider.listOfApps())
 
         if (LanternApp.getSession().isPlayVersion()) {
             if (!LanternApp.getSession().hasAcceptedTerms()) {
