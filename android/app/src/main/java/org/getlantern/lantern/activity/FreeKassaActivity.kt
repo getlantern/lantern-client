@@ -213,7 +213,6 @@ open class FreeKassaActivity : BaseFragmentActivity() {
                 LanternApp.getSession().language,
                 userEmail!!,
                 mapOf(
-                    "userid" to LanternApp.getSession().userID.toString(),
                     "transactionid" to transactionID,
                     "paymentcurrency" to LanternApp.getSession().currency()
                 )
