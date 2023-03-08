@@ -9,7 +9,7 @@ message ServerInfo {
 
 message AppData {
   string packageName = 1;
-  int64 iconRes = 2;
+  string icon = 2;
   string name = 3;
 }
 

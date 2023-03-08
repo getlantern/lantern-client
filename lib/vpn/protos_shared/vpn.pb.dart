@@ -88,7 +88,7 @@ class ServerInfo extends $pb.GeneratedMessage {
 class AppData extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AppData', createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'packageName', protoName: 'packageName')
-    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iconRes', protoName: 'iconRes')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'icon')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..hasRequiredFields = false
   ;
@@ -96,15 +96,15 @@ class AppData extends $pb.GeneratedMessage {
   AppData._() : super();
   factory AppData({
     $core.String? packageName,
-    $fixnum.Int64? iconRes,
+    $core.String? icon,
     $core.String? name,
   }) {
     final _result = create();
     if (packageName != null) {
       _result.packageName = packageName;
     }
-    if (iconRes != null) {
-      _result.iconRes = iconRes;
+    if (icon != null) {
+      _result.icon = icon;
     }
     if (name != null) {
       _result.name = name;
@@ -142,13 +142,13 @@ class AppData extends $pb.GeneratedMessage {
   void clearPackageName() => clearField(1);
 
   @$pb.TagNumber(2)
-  $fixnum.Int64 get iconRes => $_getI64(1);
+  $core.String get icon => $_getSZ(1);
   @$pb.TagNumber(2)
-  set iconRes($fixnum.Int64 v) { $_setInt64(1, v); }
+  set icon($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasIconRes() => $_has(1);
+  $core.bool hasIcon() => $_has(1);
   @$pb.TagNumber(2)
-  void clearIconRes() => clearField(2);
+  void clearIcon() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get name => $_getSZ(2);

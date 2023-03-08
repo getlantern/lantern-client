@@ -52,8 +52,20 @@ class SplitTunneling extends StatelessWidget {
 
 
   Widget buildAppListItem(AppData appData, bool isExcluded) {
+    debugPrint("base64 is " + appData.icon);
+    Uint8List bytes = base64.decode(appData.icon);
+    
     return ListTile(
       contentPadding: const EdgeInsetsDirectional.all(4),
+      leading: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: 44,
+          minHeight: 44,
+          maxWidth: 64,
+          maxHeight: 64,
+        ),
+        child: new Image.memory(bytes, fit: BoxFit.cover),
+      ),
       trailing: AppSwitch(packageName: appData.packageName, isExcluded: isExcluded),
       title: CText(
         toBeginningOfSentenceCase(

@@ -3,7 +3,13 @@ package io.lantern.apps
 import android.Manifest
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import com.google.gson.annotations.SerializedName
+import java.io.ByteArrayOutputStream
+import java.util.Base64
 
 class AppsDataProvider(
     private val packageManager: PackageManager,
@@ -13,6 +19,24 @@ class AppsDataProvider(
         hasInternetPermission(appInfo.packageName) &&
         isLaunchable(appInfo.packageName) &&
         !isSelfApplication(appInfo.packageName)
+    }
+
+    fun ByteArray.toBase64(): String = String(Base64.getEncoder().encode(this))
+
+    fun appIconDrawableToBase64(packageName:String): String {
+      try {
+        val icon:Drawable = packageManager.getApplicationIcon(packageName)
+        val bitmap:Bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888)
+        val canvas:Canvas = Canvas(bitmap)
+        icon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+        icon.draw(canvas)
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        return stream.toByteArray().toBase64()
+      } catch (e:Exception) {
+        e.printStackTrace()
+      }
+      return ""
     }
 
     // Return a list of all application packages that are installed for the current user,
@@ -25,7 +49,7 @@ class AppsDataProvider(
             .map { info ->
                 AppData(
                     info.packageName,
-                    info.icon.toLong(),
+                    appIconDrawableToBase64(info.packageName),
                     info.loadLabel(packageManager).toString()
                 )
             }

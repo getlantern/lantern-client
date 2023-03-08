@@ -280,7 +280,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     private fun getAppsData():Vpn.AppsData {
       var appsData:Vpn.AppsData = Vpn.AppsData.newBuilder().build()
       db.mutate { tx ->
-        appsData = tx.get(APPS_DATA)!!
+        if (tx.get(APPS_DATA) as Vpn.AppsData? != null ?: null) {
+          appsData = tx.get(APPS_DATA)!!
+        }
       }
       return appsData
     }
@@ -310,7 +312,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun setAppsList(appsList: List<AppData>) {
       val appsData:Vpn.AppsData = getAppsData()
-      val apps = Vpn.AppsData.newBuilder(appsData).addAllAppsList(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIconRes(it.iconRes).setName(it.name).build() }).build()
+      val apps = Vpn.AppsData.newBuilder(appsData).addAllAppsList(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIcon(it.icon).setName(it.name).build() }).build()
       db.mutate { tx ->
           tx.put(APPS_DATA, apps)
       }

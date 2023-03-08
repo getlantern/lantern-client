@@ -25,13 +25,13 @@ const AppData$json = const {
   '1': 'AppData',
   '2': const [
     const {'1': 'packageName', '3': 1, '4': 1, '5': 9, '10': 'packageName'},
-    const {'1': 'iconRes', '3': 2, '4': 1, '5': 3, '10': 'iconRes'},
+    const {'1': 'icon', '3': 2, '4': 1, '5': 9, '10': 'icon'},
     const {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
 /// Descriptor for `AppData`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List appDataDescriptor = $convert.base64Decode('CgdBcHBEYXRhEiAKC3BhY2thZ2VOYW1lGAEgASgJUgtwYWNrYWdlTmFtZRIYCgdpY29uUmVzGAIgASgDUgdpY29uUmVzEhIKBG5hbWUYAyABKAlSBG5hbWU=');
+final $typed_data.Uint8List appDataDescriptor = $convert.base64Decode('CgdBcHBEYXRhEiAKC3BhY2thZ2VOYW1lGAEgASgJUgtwYWNrYWdlTmFtZRISCgRpY29uGAIgASgJUgRpY29uEhIKBG5hbWUYAyABKAlSBG5hbWU=');
 @$core.Deprecated('Use excludedAppsDescriptor instead')
 const ExcludedApps$json = const {
   '1': 'ExcludedApps',
