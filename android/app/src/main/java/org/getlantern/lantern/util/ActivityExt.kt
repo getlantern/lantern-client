@@ -12,11 +12,11 @@ import org.getlantern.lantern.model.Utils
 import org.getlantern.mobilesdk.Logger
 
 fun Activity.showErrorDialog(
-    error: String
+    error: String,
 ) {
     showAlertDialog(
         title = getString(R.string.validation_errors),
-        msg = error
+        msg = error,
     )
 }
 
@@ -28,7 +28,7 @@ fun Activity.showAlertDialog(
     onClick: Runnable? = null,
     okLabel: CharSequence? = getString(R.string.ok),
     finish: Boolean = false,
-    negativeLabel: CharSequence? = null
+    negativeLabel: CharSequence? = null,
 ) {
     if (isDestroyed) {
         return

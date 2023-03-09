@@ -1,4 +1,4 @@
-package io.lantern.android.model
+package io.lantern.model
 
 import android.app.DownloadManager
 import android.content.Context
@@ -58,7 +58,7 @@ class ReplicaModel(
         // already exists by appending a sequence number to it.
         request.setDestinationInExternalPublicDir(
             Environment.DIRECTORY_DOWNLOADS,
-            displayName
+            displayName,
         )
         activity.getSystemService(Context.DOWNLOAD_SERVICE)?.let { manager ->
             (manager as DownloadManager).enqueue(request)

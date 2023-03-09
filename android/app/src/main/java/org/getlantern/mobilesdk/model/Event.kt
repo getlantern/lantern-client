@@ -6,5 +6,5 @@ enum class Event {
     NoNetworkAvailable,
     NetworkAvailable,
     NoProxyAvailable,
-    ProxyAvailable
+    ProxyAvailable,
 }

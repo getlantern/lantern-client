@@ -1,4 +1,4 @@
-package io.lantern.android.model
+package io.lantern.model
 
 import android.content.Context
 import android.os.Handler
@@ -84,7 +84,7 @@ abstract class BaseModel(
                 val insecureDB = DB.createOrOpen(
                     context,
                     File(insecureDbDir, "db").absolutePath,
-                    insecurePassword.toByteArray(Charsets.UTF_8)
+                    insecurePassword.toByteArray(Charsets.UTF_8),
                 )
                 var keysMigrated = 0
                 masterDB.withSchema(SessionManager.PREFERENCES_SCHEMA).mutate { tx ->
@@ -114,13 +114,13 @@ abstract class BaseModel(
         flutterEngine.let {
             eventChannel = EventChannel(
                 flutterEngine.dartExecutor,
-                "${name}_event_channel"
+                "${name}_event_channel",
             )
             eventChannel.setStreamHandler(this)
 
             methodChannel = MethodChannel(
                 flutterEngine.dartExecutor.binaryMessenger,
-                "${name}_method_channel"
+                "${name}_method_channel",
             )
             methodChannel.setMethodCallHandler(this)
         }
@@ -142,10 +142,10 @@ abstract class BaseModel(
                     override fun error(
                         errorCode: String,
                         errorMessage: String?,
-                        errorDetails: Any?
+                        errorDetails: Any?,
                     ) {
                         mainHandler.post {
-                                mcResult.error(errorCode!!, errorMessage, errorDetails)
+                            mcResult.error(errorCode!!, errorMessage, errorDetails)
                         }
                     }
 
@@ -154,7 +154,7 @@ abstract class BaseModel(
                             mcResult.notImplemented()
                         }
                     }
-                }
+                },
             )
         }
     }
@@ -212,8 +212,8 @@ abstract class BaseModel(
                                 mapOf(
                                     "s" to subscriberID,
                                     "u" to changes.updates.map { (path, value) -> path to value.value.valueOrProtoBytes }.toMap(),
-                                    "d" to changes.deletions.toList()
-                                )
+                                    "d" to changes.deletions.toList(),
+                                ),
                             )
                         }
                     }
@@ -229,8 +229,8 @@ abstract class BaseModel(
                                 mapOf(
                                     "s" to subscriberID,
                                     "u" to changes.updates.map { (path, value) -> path to value.valueOrProtoBytes }.toMap(),
-                                    "d" to changes.deletions.toList()
-                                )
+                                    "d" to changes.deletions.toList(),
+                                ),
                             )
                         }
                     }

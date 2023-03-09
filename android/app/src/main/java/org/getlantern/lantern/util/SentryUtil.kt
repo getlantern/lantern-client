@@ -28,7 +28,7 @@ object SentryUtil {
                     val myPid = Process.myPid().toString()
                     val goErrorLog = StringBuilder()
                     val process = Runtime.getRuntime().exec(
-                        "logcat -d -v brief"
+                        "logcat -d -v brief",
                     )
                     BufferedReader(InputStreamReader(process.inputStream)).use { reader ->
                         reader.forEachLine { line ->

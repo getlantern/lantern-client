@@ -18,11 +18,11 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.lantern.android.model.MessagingModel
-import io.lantern.android.model.SessionModel
-import io.lantern.android.model.ReplicaModel
-import io.lantern.android.model.Vpn
-import io.lantern.android.model.VpnModel
+import io.lantern.model.MessagingModel
+import io.lantern.model.SessionModel
+import io.lantern.model.ReplicaModel
+import io.lantern.model.Vpn
+import io.lantern.model.VpnModel
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager

@@ -54,7 +54,8 @@ class LoConf {
         fun fetch(client: HttpClient, loconfUrl: String, cb: LoConfCallback) {
             val builder = loconfUrl.toHttpUrlOrNull()!!.newBuilder()
             client.request(
-                "GET", builder.build(),
+                "GET",
+                builder.build(),
                 object : HttpCallback {
                     override fun onFailure(throwable: Throwable?) {
                         Logger.error(TAG, "Unable to fetch surveys", throwable)
@@ -69,7 +70,7 @@ class LoConf {
                             Logger.error(TAG, "Unable to parse surveys: " + e.message, e)
                         }
                     }
-                }
+                },
             )
         }
     }

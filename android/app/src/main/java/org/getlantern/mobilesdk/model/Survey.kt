@@ -42,7 +42,10 @@ class Survey {
     override fun toString(): String {
         return String.format(
             "URL: %s userType: %s Thanks:%s  Message:%s",
-            url, userType, thanks, message
+            url,
+            userType,
+            thanks,
+            message,
         )
     }
 }

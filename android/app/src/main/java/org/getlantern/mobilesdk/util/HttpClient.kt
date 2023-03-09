@@ -11,7 +11,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
-import okio.Buffer
 import org.getlantern.mobilesdk.Logger
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -33,7 +32,7 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
             .retryOnConnectionFailure(true)
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
-            .build()
+            .build(),
     )
 
     fun request(method: String, url: HttpUrl, cb: HttpCallback) {
@@ -45,7 +44,7 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
         url: HttpUrl,
         headers: Map<String, String>?,
         _body: RequestBody?,
-        cb: HttpCallback
+        cb: HttpCallback,
     ) {
         var body = _body
         var builder = Request.Builder()
@@ -66,8 +65,10 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
                 TAG,
                 String.format(
                     "Sending a %s request to %s (Headers: %s)",
-                    method, url, request.headers
-                )
+                    method,
+                    url,
+                    request.headers,
+                ),
             )
         } else {
             Logger.debug(TAG, String.format("Sending a %s request to %s", method, url))

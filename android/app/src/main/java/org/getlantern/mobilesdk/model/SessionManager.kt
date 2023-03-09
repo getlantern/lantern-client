@@ -11,9 +11,9 @@ import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
 import internalsdk.AdSettings
 import internalsdk.Session
-import io.lantern.android.model.BaseModel
-import io.lantern.android.model.Vpn
 import io.lantern.db.DB
+import io.lantern.model.BaseModel
+import io.lantern.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
@@ -53,8 +53,9 @@ abstract class SessionManager(application: Application) : Session {
             TAG,
             String.format(
                 "Lantern successfully started; HTTP proxy address: %s SOCKS proxy address: %s",
-                hTTPAddr, sOCKS5Addr
-            )
+                hTTPAddr,
+                sOCKS5Addr,
+            ),
         )
     }
 
@@ -65,15 +66,21 @@ abstract class SessionManager(application: Application) : Session {
     val hTTPAddr: String
         get() = if (startResult == null) {
             ""
-        } else startResult!!.httpAddr
+        } else {
+            startResult!!.httpAddr
+        }
     val sOCKS5Addr: String
         get() = if (startResult == null) {
             ""
-        } else startResult!!.socks5Addr
+        } else {
+            startResult!!.socks5Addr
+        }
     val dNSGrabAddr: String
         get() = if (startResult == null) {
             ""
-        } else startResult!!.dnsGrabAddr
+        } else {
+            startResult!!.dnsGrabAddr
+        }
 
     /**
      * isFrom checks if a user is from a particular country or region
@@ -187,7 +194,9 @@ abstract class SessionManager(application: Application) : Session {
         val forceCountry = forcedCountryCode
         return if (forceCountry.isNotEmpty()) {
             forceCountry
-        } else prefs.getString(GEO_COUNTRY_CODE, "")!!
+        } else {
+            prefs.getString(GEO_COUNTRY_CODE, "")!!
+        }
     }
 
     override fun getForcedCountryCode(): String {
@@ -282,14 +291,18 @@ abstract class SessionManager(application: Application) : Session {
             // production environment but that gets special treatment from the proserver to hit
             // payment providers' test endpoints.
             9007199254740992L
-        } else prefs.getLong(USER_ID, 0)
+        } else {
+            prefs.getLong(USER_ID, 0)
+        }
     }
 
     override fun getToken(): String {
         return if (isPaymentTestMode) {
             // Auth token corresponding to the specific test user ID
             "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA"
-        } else prefs.getString(TOKEN, "")!!
+        } else {
+            prefs.getString(TOKEN, "")!!
+        }
     }
 
     private val isPaymentTestMode: Boolean
@@ -358,7 +371,7 @@ abstract class SessionManager(application: Application) : Session {
         countryCode: String,
         httpsUpgrades: Long,
         adsBlocked: Long,
-        hasSucceedingProxy: Boolean
+        hasSucceedingProxy: Boolean,
     ) {
         if (hasUpdatedStats.compareAndSet(false, true)) {
             // The first time that we get the stats, hasSucceedingProxy is always false because we
@@ -458,6 +471,7 @@ abstract class SessionManager(application: Application) : Session {
         protected const val DEVELOPMENT_MODE = "developmentMode"
         private const val PAYMENT_TEST_MODE = "paymentTestMode"
         protected const val FORCE_COUNTRY = "forceCountry"
+
         @JvmStatic
         val PLAY_VERSION = "playVersion"
 
@@ -467,17 +481,17 @@ abstract class SessionManager(application: Application) : Session {
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),
-            Locale("zh", "TW")
+            Locale("zh", "TW"),
         )
         private val englishLocales = arrayOf<Locale?>(
             Locale("en", "US"),
-            Locale("en", "GB")
+            Locale("en", "GB"),
         )
         private val iranLocale = arrayOf<Locale?>(
-            Locale("fa", "IR")
+            Locale("fa", "IR"),
         )
         private val russianLocale = arrayOf<Locale?>(
-            Locale("ru", "RU")
+            Locale("ru", "RU"),
         )
     }
 
@@ -491,7 +505,7 @@ abstract class SessionManager(application: Application) : Session {
         db.registerType(2001, Vpn.Devices::class.java)
         Logger.debug(TAG, "register types finished at ${System.currentTimeMillis() - start}")
         val prefsAdapter = db.asSharedPreferences(
-            context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE),
         )
         prefs = prefsAdapter
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
@@ -501,7 +515,7 @@ abstract class SessionManager(application: Application) : Session {
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
         internalHeaders = context.getSharedPreferences(
             INTERNAL_HEADERS_PREF_NAME,
-            Context.MODE_PRIVATE
+            Context.MODE_PRIVATE,
         )
         settings = Settings.init(context)
         Logger.debug(TAG, "Settings.init() finished at ${System.currentTimeMillis() - start}")
@@ -511,7 +525,7 @@ abstract class SessionManager(application: Application) : Session {
             Logger.debug(
                 TAG,
                 "Configured locale was %1\$s, setting as default locale",
-                configuredLocale
+                configuredLocale,
             )
             locale = LocaleInfo(context, configuredLocale!!).locale
             Lingver.init(application, locale!!)

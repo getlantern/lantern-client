@@ -46,16 +46,17 @@ object ApkSignatureVerifier {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
             info = packageManager.getPackageArchiveInfo(
                 file.absolutePath,
-                PackageManager.GET_SIGNING_CERTIFICATES
+                PackageManager.GET_SIGNING_CERTIFICATES,
             )
             if (info?.signingInfo == null) {
                 info = packageManager.getPackageArchiveInfo(
                     file.absolutePath,
-                    PackageManager.GET_SIGNATURES
+                    PackageManager.GET_SIGNATURES,
                 )
             }
-            if (info == null)
+            if (info == null) {
                 throw SignatureVerificationException("No package information available for APK at ${file.absolutePath}")
+            }
             val signingInfo: SigningInfo? = info.signingInfo
             val signatures: Array<Signature>? =
                 if (signingInfo == null) info.signatures else signingInfo.apkContentsSigners
@@ -63,17 +64,19 @@ object ApkSignatureVerifier {
         } else {
             info = packageManager.getPackageArchiveInfo(
                 file.absolutePath,
-                PackageManager.GET_SIGNATURES
+                PackageManager.GET_SIGNATURES,
             )
             return getSignatureSha256(info?.signatures, file)
         }
     }
 
     private fun getSignatureSha256(signatures: Array<Signature>?, file: File): String {
-        if (signatures == null)
+        if (signatures == null) {
             throw SignatureVerificationException("No signatures found for APK at ${file.absolutePath}")
-        if (signatures.size != 1)
+        }
+        if (signatures.size != 1) {
             throw SignatureVerificationException("Found ${signatures.size} signatures when expecting only 1 for APK at ${file.absolutePath}")
+        }
         return sha256(signatures[0].toByteArray())
     }
 
@@ -95,7 +98,7 @@ object ApkSignatureVerifier {
         'c',
         'd',
         'e',
-        'f'
+        'f',
     )
 
     // Read an array of bytes and proceeds to convert it into a string which represents

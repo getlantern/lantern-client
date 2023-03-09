@@ -1,30 +1,17 @@
-package io.lantern.android.model
+package io.lantern.model
 
-import android.app.DownloadManager
-import android.content.Context
 import android.content.pm.PackageManager
 import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import io.lantern.db.SnippetConfig
-import io.lantern.messaging.Messaging
-import io.lantern.messaging.Model
 import io.lantern.messaging.WebRTCSignal
-import io.lantern.messaging.dbPath
-import io.lantern.messaging.directContactPath
-import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
-import org.getlantern.lantern.R
-import org.getlantern.lantern.restartApp
-import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(
@@ -34,11 +21,11 @@ class MessagingModel constructor(
 ) : BaseModel("messaging", flutterEngine, BaseModel.masterDB.withSchema("messaging")) {
     private val voiceMemoFile = File(
         activity.cacheDir,
-        "_voicememo.opus"
+        "_voicememo.opus",
     ) // TODO: would be nice not to record the unencrypted voice memo to disk
     private val videoFile = File(
         activity.cacheDir,
-        "_playingvideo"
+        "_playingvideo",
     ) // TODO: would be nice to expose this via a MediaDataSource instead
     private val stopRecording = AtomicReference<Runnable>()
 
@@ -70,7 +57,7 @@ class MessagingModel constructor(
                     "senderId" to signal.senderId,
                     "content" to signal.content.toString(Charsets.UTF_8),
                     "acceptedCall" to acceptedCall,
-                )
+                ),
             )
         }
     }
@@ -404,13 +391,13 @@ class MessagingModel constructor(
 
     private fun startRecordingVoiceMemo(): Boolean {
         return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && activity.checkSelfPermission(
-                android.Manifest.permission.RECORD_AUDIO
+                android.Manifest.permission.RECORD_AUDIO,
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 activity,
                 arrayOf(android.Manifest.permission.RECORD_AUDIO),
-                MainActivity.RECORD_AUDIO_PERMISSIONS_REQUEST
+                MainActivity.RECORD_AUDIO_PERMISSIONS_REQUEST,
             )
             false
         } else {
@@ -430,7 +417,7 @@ class MessagingModel constructor(
                 16000,
                 24000,
                 false,
-                120000
+                120000,
             ) { audioSessionId ->
                 if (AutomaticGainControl.isAvailable()) {
                     try {
@@ -448,7 +435,7 @@ class MessagingModel constructor(
                         // couldn't init noise suppressor, won't use
                     }
                 }
-            }
+            },
         )
     }
 

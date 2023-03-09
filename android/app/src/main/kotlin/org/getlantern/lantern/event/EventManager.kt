@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 abstract class EventManager(
     private val name: String,
-    flutterEngine: FlutterEngine? = null
+    flutterEngine: FlutterEngine? = null,
 ) : EventChannel.StreamHandler {
 
     private val activeSubscribers: EnumMap<Event, ConcurrentSkipListSet<Int>> =
@@ -25,7 +25,7 @@ abstract class EventManager(
         flutterEngine?.let {
             EventChannel(
                 flutterEngine.dartExecutor,
-                name
+                name,
             ).setStreamHandler(this)
         }
     }

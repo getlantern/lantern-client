@@ -18,7 +18,7 @@ import org.getlantern.mobilesdk.activity.ReportIssueActivity
 
 class Navigator(
     private val activity: Activity,
-    flutterEngine: FlutterEngine? = null
+    flutterEngine: FlutterEngine? = null,
 ) : MethodChannel.MethodCallHandler {
 
     companion object {
@@ -34,7 +34,7 @@ class Navigator(
         flutterEngine?.let {
             MethodChannel(
                 flutterEngine.dartExecutor.binaryMessenger,
-                "navigator_method_channel"
+                "navigator_method_channel",
             ).setMethodCallHandler(this)
         }
     }
@@ -70,7 +70,7 @@ fun Activity.openHome() {
         Intent(this, MainActivity::class.java)
             .apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            }
+            },
     )
     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 }
@@ -82,7 +82,7 @@ fun Activity.restartApp() {
         this,
         mPendingIntentId,
         mStartActivity,
-        PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
     val mgr: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     mgr.set(AlarmManager.RTC, java.lang.System.currentTimeMillis() + 100, mPendingIntent)
