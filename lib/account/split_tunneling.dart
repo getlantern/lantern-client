@@ -4,7 +4,9 @@ import 'package:lantern/i18n/localization_constants.dart';
 import 'package:flutter/foundation.dart';
 
 class AppSwitch extends StatefulWidget {
+  // The package name of the application the AppSwitch corresponds with
   final String packageName;
+  // Whether the app should be excluded from the VPN connection
   bool isExcluded;
 
   AppSwitch({required this.packageName, required this.isExcluded});
@@ -14,11 +16,14 @@ class AppSwitch extends StatefulWidget {
 }
 
 class _AppSwitchState extends State<AppSwitch> {
+  // Whether this switch is on or off
   bool light = false;
 
   @override
   Widget build(BuildContext context) {
     return Switch(
+      // If an app has previously been excluded from the VPN connection by a user,
+      // the switch is turned on by default
       value: light || widget.isExcluded,
       activeColor: Colors.lightBlue,
       onChanged: (bool value) {
@@ -52,7 +57,6 @@ class SplitTunneling extends StatelessWidget {
 
 
   Widget buildAppListItem(AppData appData, bool isExcluded) {
-    debugPrint("base64 is " + appData.icon);
     Uint8List bytes = base64.decode(appData.icon);
     
     return ListTile(
@@ -75,7 +79,8 @@ class SplitTunneling extends StatelessWidget {
     );
   }
 
-
+  // appsList builds a ListView that contains all application packages installed for
+  // the current user along with a set of apps to exclude from the VPN connection
   Widget appsList(BuildContext context) {
     return sessionModel
           .appsData((BuildContext context, AppsData appsData, Widget? child) {
