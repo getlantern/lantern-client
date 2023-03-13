@@ -1,6 +1,7 @@
 package org.getlantern.lantern
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.VpnService
@@ -14,27 +15,31 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.thefinestartist.finestwebview.FinestWebView
+import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.model.MessagingModel
-import io.lantern.model.SessionModel
 import io.lantern.model.ReplicaModel
+import io.lantern.model.SessionModel
 import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
+import org.getlantern.lantern.model.CheckUpdate
+import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
-import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -49,7 +54,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 
-class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
+class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, CoroutineScope by MainScope() {
 
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
@@ -441,6 +446,45 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 //        val intent = Intent(this, PopUpAdActivity_::class.java)
 //        intent.putExtra("popUpAdStr", Gson().toJson(popUpAd))
 //        startActivity(intent)
+    }
+
+    private suspend fun doCheckUpdate(userInitiated: Boolean) {
+        if (LanternApp.getSession().isPlayVersion && userInitiated) {
+            Utils.openPlayStore(context)
+        } else {
+            val updateURL = Internalsdk.checkForUpdates()
+            if (updateURL == "") {
+                Logger.debug(TAG, "No update available")
+                if (userInitiated) {
+                    // show an alert dialog if the user checked for an update
+                    // via the Settings screen and no update is available
+                    val appName = resources.getString(R.string.app_name)
+                    val noUpdateTitle = resources.getString(R.string.no_update_available)
+                    val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
+                    showAlertDialog(noUpdateTitle, noUpdateMsg)
+                }
+            } else {
+                Logger.debug(
+                    TAG,
+                    "Update available at $updateURL",
+                )
+                // an updated version of Lantern is available at the given url
+                val intent = Intent()
+                intent.component = ComponentName(
+                    activity.packageName,
+                    "org.getlantern.lantern.activity.UpdateActivity_",
+                )
+                intent.putExtra("updateUrl", updateURL)
+                startActivity(intent)
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun runCheckUpdate(checkUpdate: CheckUpdate) {
+      CoroutineScope(Main).launch {
+        doCheckUpdate(checkUpdate.userInitiated)
+      }
     }
 
     @Throws(Exception::class)
