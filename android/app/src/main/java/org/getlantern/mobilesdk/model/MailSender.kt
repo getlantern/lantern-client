@@ -11,7 +11,6 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.util.showAlertDialog
-import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 
 // MailSender calls Go's `internalsdk/email.go:EmailMessage.Send()` method to
@@ -21,7 +20,7 @@ class MailSender @JvmOverloads constructor(
     private val context: Context,
     private val template: String,
     private val title: String? = null,
-    private val message: String? = null
+    private val message: String? = null,
 ) : AsyncTask<String, Void, Boolean>(), EmailResponseHandler {
     private var dialog: ProgressDialog? = null
     private val userEmail: String
@@ -33,19 +32,19 @@ class MailSender @JvmOverloads constructor(
     }
 
     override fun onError(message: String) {
-      dialog?.let { dialog ->
-        if (dialog.isShowing()) {
-          dialog.dismiss()
+        dialog?.let { dialog ->
+            if (dialog.isShowing()) {
+                dialog.dismiss()
+            }
         }
-      }
-      (context as Activity).showAlertDialog(
-          title ?: getAppName(),
-          message ?: message,
-          // Don't close the dialog if there's an error. This'll remove the
-          // user's input. Let the user close the dialog or try again if they
-          // want.
-          finish = false
-      )
+        (context as Activity).showAlertDialog(
+            title ?: getAppName(),
+            message ?: message,
+            // Don't close the dialog if there's an error. This'll remove the
+            // user's input. Let the user close the dialog or try again if they
+            // want.
+            finish = false,
+        )
     }
 
     override fun onSuccess() {
@@ -54,12 +53,12 @@ class MailSender @JvmOverloads constructor(
                 dialog.dismiss()
             }
         }
-            (context as Activity).showAlertDialog(
-                title ?: getAppName(),
-                message ?: getResponseMessage(),
-                // Close the dialog after a successful send.
-                finish = true
-            )
+        (context as Activity).showAlertDialog(
+            title ?: getAppName(),
+            message ?: getResponseMessage(),
+            // Close the dialog after a successful send.
+            finish = true,
+        )
     }
 
     override fun onPreExecute() {
@@ -129,8 +128,8 @@ class MailSender @JvmOverloads constructor(
         appVersion = Utils.appVersion(context)
         userEmail = LanternApp.getSession().email()
         sendLogs = template == "user-send-logs"
-            dialog = ProgressDialog(context)
-            dialog!!.setCancelable(false)
-            dialog!!.setCanceledOnTouchOutside(false)
+        dialog = ProgressDialog(context)
+        dialog!!.setCancelable(false)
+        dialog!!.setCanceledOnTouchOutside(false)
     }
 }
