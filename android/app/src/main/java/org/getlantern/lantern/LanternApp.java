@@ -187,7 +187,7 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
             // In Russia, we neve user inAppBilling even on play store installs
             iab = null;
         }
-        lanternHttpClient.getPlans(cb, inAppBilling);
+        lanternHttpClient.getPlans(cb, iab);
     }
 
     /**
