@@ -14,6 +14,7 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.thefinestartist.finestwebview.FinestWebView
 import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
@@ -26,7 +27,6 @@ import io.lantern.model.SessionModel
 import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Main
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager
@@ -47,7 +47,6 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.Event
 import org.getlantern.mobilesdk.model.LoConf
 import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
-import org.getlantern.mobilesdk.model.PopUpAd
 import org.getlantern.mobilesdk.model.Survey
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -322,9 +321,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             SURVEY_TAG,
             "Processing loconf; country code is $countryCode",
         )
-        if (loconf.popUpAds != null) {
-            handlePopUpAd(loconf.popUpAds!!)
-        }
         if (loconf.surveys == null) {
             Logger.debug(SURVEY_TAG, "No survey config")
             return
@@ -417,74 +413,38 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             .show(survey.url!!)
     }
 
-    /**
-     * Check if a popup ad is enabled for the current region or language
-     * and display the corresponding ad to the user if so
-     * @param popUpAds the popUpAds as defined in loconf
-     */
-    private fun handlePopUpAd(popUpAds: Map<String, PopUpAd>) {
-        // Currently, the only use of Popup Ads was Yinbi, which is no longer used.
-        // If/when we want to start using popup ads again, we'll need to redesign the popup ad layout
-
-//        var popUpAd = popUpAds[LanternApp.getSession().countryCode]
-//        if (popUpAd == null) {
-//            popUpAd = popUpAds[LanternApp.getSession().language]
-//        }
-//        if (popUpAd == null || !popUpAd.enabled) {
-//            return
-//        }
-//        if (!LanternApp.getSession().hasPrefExpired("popUpAd")) {
-//            Logger.debug(
-//                TAG,
-//                "Not showing popup ad: not enough time has elapsed since it was last shown to the user"
-//            )
-//            return
-//        }
-//        Logger.debug(TAG, "Displaying popup ad..")
-//        val numSeconds = popUpAd.displayFrequency
-//        LanternApp.getSession().saveExpiringPref("popUpAd", numSeconds!!)
-//        val intent = Intent(this, PopUpAdActivity_::class.java)
-//        intent.putExtra("popUpAdStr", Gson().toJson(popUpAd))
-//        startActivity(intent)
+    private fun noUpdateAvailable(userInitiated: Boolean) {
+        if (!userInitiated) return
+        val appName = resources.getString(R.string.app_name)
+        val noUpdateTitle = resources.getString(R.string.no_update_available)
+        val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
+        showAlertDialog(noUpdateTitle, noUpdateMsg)
     }
 
-    private suspend fun doCheckUpdate(userInitiated: Boolean) {
-        if (LanternApp.getSession().isPlayVersion && userInitiated) {
-            Utils.openPlayStore(context)
-        } else {
-            val updateURL = Internalsdk.checkForUpdates()
-            if (updateURL == "") {
-                Logger.debug(TAG, "No update available")
-                if (userInitiated) {
-                    // show an alert dialog if the user checked for an update
-                    // via the Settings screen and no update is available
-                    val appName = resources.getString(R.string.app_name)
-                    val noUpdateTitle = resources.getString(R.string.no_update_available)
-                    val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
-                    showAlertDialog(noUpdateTitle, noUpdateMsg)
-                }
-            } else {
-                Logger.debug(
-                    TAG,
-                    "Update available at $updateURL",
-                )
-                // an updated version of Lantern is available at the given url
-                val intent = Intent()
-                intent.component = ComponentName(
-                    activity.packageName,
-                    "org.getlantern.lantern.activity.UpdateActivity_",
-                )
-                intent.putExtra("updateUrl", updateURL)
-                startActivity(intent)
-            }
-        }
+    private fun startUpdateActivity(updateURL:String) {
+        val intent = Intent()
+        intent.component = ComponentName(
+            activity.packageName,
+            "org.getlantern.lantern.activity.UpdateActivity_",
+        )
+        intent.putExtra("updateUrl", updateURL)
+        startActivity(intent)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun runCheckUpdate(checkUpdate: CheckUpdate) {
-      CoroutineScope(Main).launch {
-        doCheckUpdate(checkUpdate.userInitiated)
-      }
+        val userInitiated = checkUpdate.userInitiated
+        if (LanternApp.getSession().isPlayVersion && userInitiated) {
+            Utils.openPlayStore(context)
+            return
+        }
+        lifecycleScope.launch {
+            val updateURL = Internalsdk.checkForUpdates()
+            when {
+                updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
+                else -> startUpdateActivity(updateURL)
+            }
+        }
     }
 
     @Throws(Exception::class)
