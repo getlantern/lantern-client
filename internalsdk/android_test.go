@@ -253,14 +253,14 @@ func TestAutoUpdate(t *testing.T) {
 	updateCfg.Arch = "arm"
 
 	// Update available
-	result, err := checkForUpdates(updateCfg)
+	result, err := CheckForUpdates(updateCfg, "qcom", "Nokia 7 plus", "28")
 	require.NoError(t, err)
 	assert.Contains(t, result, "update_android_arm.bz2")
 	assert.Contains(t, result, strings.ToLower(common.DefaultAppName))
 
 	// No update available
 	updateCfg.CurrentVersion = "9999.9.9"
-	result, err = checkForUpdates(updateCfg)
+	result, err = CheckForUpdates(updateCfg, "qcom", "Nokia 7 plus", "28")
 	require.NoError(t, err)
 	assert.Empty(t, result)
 }

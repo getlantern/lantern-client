@@ -28,6 +28,7 @@ import (
 	"github.com/getlantern/flashlight/email"
 	"github.com/getlantern/flashlight/geolookup"
 	"github.com/getlantern/flashlight/logging"
+	"github.com/getlantern/flashlight/ops"
 	"github.com/getlantern/flashlight/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/memhelper"
@@ -675,14 +676,30 @@ func CheckForUpdates() (string, error) {
 	return checkForUpdates(buildUpdateCfg())
 }
 
-func checkForUpdates(updateCfg *autoupdate.Config) (string, error) {
-	return autoupdate.CheckMobileUpdate(updateCfg)
+func checkForUpdates(cfg *autoupdate.Config) (string, error) {
+	op := ops.Begin("check_update").
+		Set("current_version", cfg.CurrentVersion)
+	defer op.End()
+	cfg.CurrentVersion = "6.6.9"
+	updateURL, err := autoupdate.CheckMobileUpdate(cfg)
+	if err != nil {
+		return "", op.FailIf(log.Errorf("Error checking for update: %v", err))
+	}
+	return updateURL, nil
 }
 
 // DownloadUpdate downloads the latest APK from the given url to the apkPath
 // file destination.
-func DownloadUpdate(url, apkPath string, updater Updater) {
-	autoupdate.UpdateMobile(url, apkPath, updater, updateClient)
+func DownloadUpdate(model, hardware string, sdkVersion int, url, apkPath string, updater Updater) {
+	op := ops.Begin("autoupdate").
+		Set("model", model).
+		Set("hardware", hardware).
+		Set("sdk_version", sdkVersion)
+	defer op.End()
+	err := autoupdate.UpdateMobile(url, apkPath, updater, updateClient)
+	if err != nil {
+		op.FailIf(log.Errorf("Error downloading update: %v", err))
+	}
 }
 
 func buildUpdateCfg() *autoupdate.Config {
