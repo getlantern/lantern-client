@@ -680,7 +680,6 @@ func checkForUpdates(cfg *autoupdate.Config) (string, error) {
 	op := ops.Begin("check_update").
 		Set("current_version", cfg.CurrentVersion)
 	defer op.End()
-	cfg.CurrentVersion = "6.6.9"
 	updateURL, err := autoupdate.CheckMobileUpdate(cfg)
 	if err != nil {
 		return "", op.FailIf(log.Errorf("Error checking for update: %v", err))
