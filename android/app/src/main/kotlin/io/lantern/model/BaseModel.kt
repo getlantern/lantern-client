@@ -1,4 +1,4 @@
-package io.lantern.android.model
+package io.lantern.model
 
 import android.content.Context
 import android.os.Handler
