@@ -182,7 +182,12 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
     }
 
     public static void getPlans(LanternHttpClient.PlansCallback cb) {
-        lanternHttpClient.getPlans(cb, inAppBilling);
+        InAppBilling iab = inAppBilling;
+        if (session.isRussianUser()) {
+            // In Russia, we neve user inAppBilling even on play store installs
+            iab = null;
+        }
+        lanternHttpClient.getPlans(cb, iab);
     }
 
     /**
