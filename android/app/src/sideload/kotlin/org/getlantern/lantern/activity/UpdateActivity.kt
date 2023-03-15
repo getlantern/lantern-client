@@ -27,8 +27,8 @@ import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.util.ApkSignatureVerifier
+import org.getlantern.lantern.util.DeviceInfo
 import org.getlantern.lantern.util.SignatureVerificationException
-import org.getlantern.lantern.util.SystemInfoHelper
 import org.getlantern.lantern.util.getAppInstallIntent
 import org.getlantern.mobilesdk.Logger
 import java.io.File
@@ -66,11 +66,8 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         val updater = Updater { percent: Long -> progressBar!!.progress = percent.toInt() }
         try {
             apkDir.mkdirs()
-
             Internalsdk.downloadUpdate(
-                SystemInfoHelper.model(),
-                SystemInfoHelper.hardware(),
-                SystemInfoHelper.sdkVersion().toLong(),
+                DeviceInfo,
                 intent.getStringExtra("updateUrl").toString(),
                 apkPath.getAbsolutePath(),
                 updater,
@@ -87,7 +84,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         return false
     }
 
-    // // show an alert notifying the user that the downloaded apk has been tampered
+    // show an alert notifying the user that the downloaded apk has been tampered
     private fun displayTamperedApk(context: Context) {
         Utils.showAlertDialog(
             this,
@@ -108,17 +105,20 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
             var context: Context = applicationContext
             var apkDir: File = File(context.cacheDir, "updates")
             val apkPath = File(apkDir, "Lantern.apk")
-
+            var success = false
             try {
-                val success = downloadUpdate(context, apkDir, apkPath)
+                success = downloadUpdate(context, apkDir, apkPath)
                 if (success) {
                     val intent: Intent? = context.getAppInstallIntent(apkPath)
                     applicationContext.startActivity(intent)
                     finish()
                 }
             } catch (sfe: SignatureVerificationException) {
+                success = false
                 Logger.error(TAG, "Error installing update", sfe)
                 displayTamperedApk(context)
+            } finally {
+              Internalsdk.installFinished(DeviceInfo, success)
             }
         }
     }

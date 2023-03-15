@@ -41,6 +41,7 @@ import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.DeviceInfo
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
@@ -439,7 +440,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             return
         }
         lifecycleScope.launch {
-            val updateURL = Internalsdk.checkForUpdates()
+            val deviceInfo:internalsdk.DeviceInfo = DeviceInfo
+            val updateURL = Internalsdk.checkForUpdates(deviceInfo)
             when {
                 updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
                 else -> startUpdateActivity(updateURL)
