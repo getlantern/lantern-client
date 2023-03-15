@@ -238,6 +238,16 @@ func TestInternalHeaders(t *testing.T) {
 	}
 }
 
+type testDeviceInfo struct {
+	DeviceInfo
+}
+
+func (d testDeviceInfo) DeviceID() string { return "123456789" }
+func (d testDeviceInfo) UserID() string   { return "1" }
+func (d testDeviceInfo) Model() string    { return "Nokia 7 plus" }
+func (d testDeviceInfo) Hardware() string { return "qcom" }
+func (d testDeviceInfo) SdkVersion() int  { return 28 }
+
 // This test requires the tag "lantern" to be set at testing time like:
 //
 //	go test -tags="lantern"
@@ -252,15 +262,16 @@ func TestAutoUpdate(t *testing.T) {
 	updateCfg.OS = "android"
 	updateCfg.Arch = "arm"
 
+	deviceInfo := testDeviceInfo{}
 	// Update available
-	result, err := CheckForUpdates(updateCfg, "qcom", "Nokia 7 plus", "28")
+	result, err := checkForUpdates(updateCfg, deviceInfo)
 	require.NoError(t, err)
 	assert.Contains(t, result, "update_android_arm.bz2")
 	assert.Contains(t, result, strings.ToLower(common.DefaultAppName))
 
 	// No update available
 	updateCfg.CurrentVersion = "9999.9.9"
-	result, err = CheckForUpdates(updateCfg, "qcom", "Nokia 7 plus", "28")
+	result, err = checkForUpdates(updateCfg, deviceInfo)
 	require.NoError(t, err)
 	assert.Empty(t, result)
 }
