@@ -1,6 +1,4 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-
-
   <LinearLayout
       android:id="@+id/updater_view"
       android:layout_width="280dp"
@@ -12,7 +10,6 @@
       android:paddingRight="20dip"
       android:paddingTop="10dip"
       android:paddingBottom="10dip">
-
 
       <ImageView
           android:id="@+id/update_icon"
@@ -43,7 +40,6 @@
           android:textAppearance="@style/subTitle"
           android:translationY="-3.3sp" />
 
-      <!-- Progress Bar Section -->
       <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/progressBarLayout"
         android:orientation="vertical"
@@ -67,7 +63,6 @@
           />
     </LinearLayout>
 
-    <!-- Update Buttons Section -->
     <LinearLayout
         android:id="@+id/updateButtons"
         android:layout_width="fill_parent"
@@ -99,6 +94,5 @@
             android:textColor="#DB0A5B"
             android:textSize="14sp" />
     </LinearLayout>
-
   </LinearLayout>
 </merge>
