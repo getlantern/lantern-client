@@ -43,14 +43,14 @@
           android:textAppearance="@style/subTitle"
           android:translationY="-3.3sp" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      <!-- Progress Bar Section -->
+      <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/progressBarLayout"
         android:orientation="vertical"
         android:padding="20dp"
         android:visibility="gone"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
-
         <ProgressBar
           android:id="@+id/progressBar"
           style="@android:style/Widget.ProgressBar.Horizontal"
@@ -58,7 +58,6 @@
           android:layout_height="wrap_content"
           android:progressDrawable="@drawable/progress_drawable_blue"
           android:progress="0"/>
-
         <TextView
             android:id="@+id/percentage"
             android:textColor="#000000"
@@ -66,9 +65,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/progressBar"
           />
-
     </LinearLayout>
 
+    <!-- Update Buttons Section -->
     <LinearLayout
         android:id="@+id/updateButtons"
         android:layout_width="fill_parent"
@@ -78,7 +77,6 @@
         android:layout_marginTop="18dp"
         android:gravity="right|bottom"
         android:orientation="horizontal">
-
         <Button
             android:id="@+id/notNow"
             android:layout_width="wrap_content"
@@ -89,7 +87,6 @@
             android:text="@string/not_now"
             android:textColor="#707070"
             android:textSize="14sp" />
-
         <Button
             android:id="@+id/installUpdate"
             android:layout_width="wrap_content"
@@ -102,5 +99,6 @@
             android:textColor="#DB0A5B"
             android:textSize="14sp" />
     </LinearLayout>
+
   </LinearLayout>
 </merge>
