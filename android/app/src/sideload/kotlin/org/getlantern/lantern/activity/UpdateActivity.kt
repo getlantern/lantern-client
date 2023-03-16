@@ -35,7 +35,7 @@ import org.getlantern.lantern.util.getAppInstallIntent
 import org.getlantern.mobilesdk.Logger
 import java.io.File
 
-@EActivity(R.layout.activity_updater)
+@EActivity(R.layout.update_dialog)
 open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListener {
 
     companion object {
@@ -44,36 +44,27 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     }
 
     @ViewById
-    @JvmField
-    protected var updateAvailable: TextView? = null
+    lateinit var title: TextView
 
     @ViewById
-    @JvmField
-    protected var progressBarLayout: LinearLayout? = null
+    lateinit var subTitle: TextView
 
     @ViewById
-    @JvmField
-    protected var updateButtons: LinearLayout? = null
+    lateinit var progressBarLayout: LinearLayout
 
     @ViewById
-    @JvmField
-    protected var progressBar: ProgressBar? = null
+    lateinit var progressBar: ProgressBar
 
     @ViewById
-    @JvmField
-    protected var percentage: TextView? = null
+    lateinit var updateButtons: LinearLayout
 
-    @AfterViews
-    fun afterViews() {
-        val appName: String = getString(R.string.app_name)
-        val message: String = String.format(getString(R.string.update_available), appName)
-        updateAvailable!!.text = message
-    }
-
+    @ViewById
+    lateinit var percentage: TextView
+    
     fun publishProgress(percent: Long) {
-        progressBar!!.progress = percent.toInt()
+        progressBar.progress = percent.toInt()
         runOnUiThread {
-            percentage!!.text = "$percent%"
+            percentage.text = "$percent%"
         }
     }
 
@@ -120,9 +111,11 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     private fun installUpdate() {
         val callingActivity = this
         // make progress bar layout in update prompt visible and hide the update buttons
-        progressBarLayout!!.setVisibility(View.VISIBLE)
-        updateButtons!!.setVisibility(View.GONE)
-        updateAvailable!!.text = String.format(getString(R.string.updating_lantern), getString(R.string.app_name))
+        progressBarLayout.setVisibility(View.VISIBLE)
+        subTitle.setVisibility(View.GONE)
+        updateButtons.setVisibility(View.GONE)
+        title.text = getString(R.string.updating_lantern)
+
         lifecycleScope.launch(IO) {
             Logger.debug(TAG, "Installing update")
             var context: Context = applicationContext
