@@ -6,8 +6,8 @@
       android:background="@drawable/update_border"
       android:gravity="center"
       android:orientation="vertical"
-      android:paddingLeft="20dip"
-      android:paddingRight="20dip"
+      android:paddingLeft="18dip"
+      android:paddingRight="18dip"
       android:paddingTop="10dip"
       android:paddingBottom="10dip">
 
@@ -63,36 +63,36 @@
           />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/updateButtons"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_weight="1"
         android:layout_marginTop="18dp"
-        android:gravity="right|bottom"
         android:orientation="horizontal">
         <Button
             android:id="@+id/notNow"
-            android:layout_width="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="63dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:layout_weight="1"
             android:onClick="onClick"
+            android:layout_marginRight="85dp"
+            android:layout_alignParentRight="true"
             android:text="@string/not_now"
             android:textColor="#707070"
             android:textSize="14sp" />
         <Button
             android:id="@+id/installUpdate"
-            android:layout_width="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="63dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:layout_weight="1"
             android:onClick="onClick"
-            android:layout_marginRight="4dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
             android:text="@string/install_update"
             android:textColor="#DB0A5B"
             android:textSize="14sp" />
-    </LinearLayout>
+    </RelativeLayout>
   </LinearLayout>
 </merge>
