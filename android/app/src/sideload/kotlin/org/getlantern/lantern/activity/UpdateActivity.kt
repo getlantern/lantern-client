@@ -6,16 +6,14 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.text.Html
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatButton
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
@@ -65,7 +63,6 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     @JvmField
     protected var percentage: TextView? = null
 
-
     @AfterViews
     fun afterViews() {
         val appName: String = getString(R.string.app_name)
@@ -73,16 +70,16 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         updateAvailable!!.text = message
     }
 
-    fun publishProgress(percent:Long) {
+    fun publishProgress(percent: Long) {
         progressBar!!.progress = percent.toInt()
         runOnUiThread {
-          percentage!!.text = "${percent.toString()}%"
+            percentage!!.text = "$percent%"
         }
     }
 
     // downloadUpdate creates a new instance of Updater and downloads an update via Go.
     // Once the download is complete, ApkSignatureVerifier verifies the APK signature
-    private fun downloadUpdate(context:Context, apkDir: File, apkPath: File): Boolean {
+    private fun downloadUpdate(context: Context, apkDir: File, apkPath: File): Boolean {
         val updater = Updater { percent: Long -> publishProgress(percent) }
         try {
             apkDir.mkdirs()
@@ -104,7 +101,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         return false
     }
 
-    // show an alert notifying the user that the downloaded apk has been tampered
+    // show an alert notifying the user that the downloaded apk has been tampered with
     private fun displayTamperedApk(context: Context) {
         Utils.showAlertDialog(
             this,
@@ -115,7 +112,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
-      finish()
+        finish()
     }
 
     // installUpdate launches a new coroutine to download an update and serves the APK
@@ -144,7 +141,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
                 Logger.error(TAG, "Error installing update", sfe)
                 displayTamperedApk(context)
             } finally {
-              Internalsdk.installFinished(DeviceInfo, success)
+                Internalsdk.installFinished(DeviceInfo, success)
             }
         }
     }
