@@ -440,11 +440,15 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             return
         }
         lifecycleScope.launch {
-            val deviceInfo:internalsdk.DeviceInfo = DeviceInfo
-            val updateURL = Internalsdk.checkForUpdates(deviceInfo)
-            when {
+            try {
+              val deviceInfo:internalsdk.DeviceInfo = DeviceInfo
+              val updateURL = Internalsdk.checkForUpdates(deviceInfo)
+              when {
                 updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
                 else -> startUpdateActivity(updateURL)
+              }
+            } catch (e:Exception) {
+              Logger.d(TAG, "Unable to check for update: %s", e.message)
             }
         }
     }
