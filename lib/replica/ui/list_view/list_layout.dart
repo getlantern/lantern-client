@@ -1,6 +1,8 @@
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
+import 'package:lantern/replica/ui/list_item/news_list_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ReplicaListLayout extends ReplicaCommonListView {
   ReplicaListLayout({
@@ -132,6 +134,19 @@ class _ReplicaListLayoutState extends ReplicaCommonListViewState {
           ),
         );
       case SearchCategory.News:
+        return renderPaginatedListView(
+              (context, item, index) => ReplicaNewsListItem(
+            key: ValueKey(item.replicaLink.infohash),
+            item: item,
+            replicaApi: widget.replicaApi,
+            onTap: () async {
+              if (item.serpLink != null) {
+                await launch(item.serpLink as String);
+              }
+              return true;
+            },
+          ),
+        );
       case SearchCategory.Unknown:
       default:
         return renderNoItemsFoundWidget();

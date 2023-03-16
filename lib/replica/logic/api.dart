@@ -54,7 +54,7 @@ class ReplicaApi {
         s = 'search?s=$query&offset=$page&orderBy=relevance&lang=$lang&type=${category.mimeTypes()}';
         break;
       case SearchCategory.News:
-        s = 'news?s=$query&offset=$page';
+        s = 'search/news?s=$query&offset=$page&lang=$lang';
         break;
       case SearchCategory.Unknown:
         logger.e('Unknown category. Should never be triggered');
