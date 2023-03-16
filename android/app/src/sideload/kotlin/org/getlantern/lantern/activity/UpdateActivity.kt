@@ -81,7 +81,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     }
 
     // downloadUpdate creates a new instance of Updater and downloads an update via Go.
-    // Once the download is complete, and verifies the APK signature with ApkSignatureVerifier
+    // Once the download is complete, ApkSignatureVerifier verifies the APK signature
     private fun downloadUpdate(context:Context, apkDir: File, apkPath: File): Boolean {
         val updater = Updater { percent: Long -> publishProgress(percent) }
         try {
