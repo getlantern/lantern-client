@@ -28,7 +28,8 @@ type DeviceInfo interface {
 
 // CheckForUpdates checks to see if a new version of Lantern is available
 func CheckForUpdates(deviceInfo DeviceInfo) (string, error) {
-	return checkForUpdates(buildUpdateCfg(), deviceInfo)
+	cfg := buildUpdateCfg()
+	return checkForUpdates(cfg, deviceInfo)
 }
 
 func checkForUpdates(cfg *autoupdate.Config, deviceInfo DeviceInfo) (string, error) {
@@ -37,7 +38,6 @@ func checkForUpdates(cfg *autoupdate.Config, deviceInfo DeviceInfo) (string, err
 		Set("device_id", deviceInfo.DeviceID()).
 		Set("current_version", cfg.CurrentVersion)
 	defer op.End()
-	cfg.CurrentVersion = "6.9.9"
 	updateURL, err := autoupdate.CheckMobileUpdate(cfg)
 	if err != nil {
 		return "", op.FailIf(log.Errorf("Error checking for update: %v", err))
