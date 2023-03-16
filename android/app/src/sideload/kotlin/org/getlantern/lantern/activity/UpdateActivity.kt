@@ -6,12 +6,16 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.text.Html
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatButton
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
@@ -47,23 +51,39 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
 
     @ViewById
     @JvmField
+    protected var progressBarLayout: LinearLayout? = null
+
+    @ViewById
+    @JvmField
+    protected var updateButtons: LinearLayout? = null
+
+    @ViewById
+    @JvmField
     protected var progressBar: ProgressBar? = null
 
     @ViewById
     @JvmField
-    protected var progressBarMessage: TextView? = null
+    protected var percentage: TextView? = null
+
 
     @AfterViews
     fun afterViews() {
         val appName: String = getString(R.string.app_name)
         val message: String = String.format(getString(R.string.update_available), appName)
         updateAvailable!!.text = message
-        progressBarMessage!!.text = String.format(getString(R.string.updating_lantern), appName)
     }
 
-    // downloadUpdate 
+    fun publishProgress(percent:Long) {
+        progressBar!!.progress = percent.toInt()
+        runOnUiThread {
+          percentage!!.text = "${percent.toString()}%"
+        }
+    }
+
+    // downloadUpdate creates a new instance of Updater and downloads an update via Go.
+    // Once the download is complete, and verifies the APK signature with ApkSignatureVerifier
     private fun downloadUpdate(context:Context, apkDir: File, apkPath: File): Boolean {
-        val updater = Updater { percent: Long -> progressBar!!.progress = percent.toInt() }
+        val updater = Updater { percent: Long -> publishProgress(percent) }
         try {
             apkDir.mkdirs()
             Internalsdk.downloadUpdate(
@@ -95,11 +115,17 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
-        finish()
+      finish()
     }
 
+    // installUpdate launches a new coroutine to download an update and serves the APK
+    // for installation once the download completes
     private fun installUpdate() {
         val callingActivity = this
+        // make progress bar layout in update prompt visible and hide the update buttons
+        progressBarLayout!!.setVisibility(View.VISIBLE)
+        updateButtons!!.setVisibility(View.GONE)
+        updateAvailable!!.text = String.format(getString(R.string.updating_lantern), getString(R.string.app_name))
         lifecycleScope.launch(IO) {
             Logger.debug(TAG, "Installing update")
             var context: Context = applicationContext
