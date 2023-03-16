@@ -56,7 +56,8 @@
     <string name="error_checking_for_update">Error checking for new version of %1$s</string>
     <string name="error_making_purchase">Error trying to make purchase</string>
     <string name="have_latest_version">%1$s %2$s is the newest version available.</string>
-    <string name="updating_lantern">Updating %1$s</string>
+    <string name="updating_lantern">Updating Lantern...</string>
+    <string name="update_lantern">Update Lantern</string>
     <string name="cancel">Cancel</string>
     <string name="newsfeed_option">Try Lanten Feed</string>
     <string name="newsfeed_off_option">Turn off Feed</string>
@@ -98,7 +99,7 @@
     <string name="contact_email">team@getlantern.org</string>
     <string name="contact_message">Help Me</string>
     <string name="contact_subject">Lantern Android</string>
-    <string name="update_available">A new version of %1$s is available! Would you like to upgrade now?</string>
+    <string name="update_available">A new version of Lantern is available! Would you like to upgrade now?</string>
     <string name="not_now">Not Now</string>
     <string name="install_update">Update</string>
     <string name="error_update">Error Downloading Update</string>

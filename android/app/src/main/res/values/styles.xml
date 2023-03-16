@@ -15,7 +15,9 @@
          This Theme is only used starting with V2 of Flutter's Android embedding. -->
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
-    </style>
+    </style><!-- styles.xml -->
+
+
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
@@ -26,11 +28,13 @@
         <item name="android:colorBackground">@color/accent_white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="windowActionModeOverlay">true</item>
+
         <!-- Shape style -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MediumComponent</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.LargeComponent</item>
         <!-- Text style -->
+
         <item name="textAppearanceHeadline6">@style/TextAppearance.MyApp.Headline6</item>
         <item name="textAppearanceOverline">@style/TextAppearance.MyApp.Overline</item>
         <item name="textAppearanceBody1">@style/TextAppearance.MyApp.Body1</item>
@@ -47,7 +51,14 @@
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.MyApp.MaterialAlertDialog</item>
         <item name="radioButtonStyle">@style/Widget.MyApp.RadioButton</item>
     </style>
-
+    <style name="title">
+      <item name="android:textSize">16sp</item>
+      <item name="android:textColor">#000000</item>
+    </style>
+    <style name="subTitle">
+      <item name="android:textSize">14sp</item>
+      <item name="android:textColor">#707070</item>
+    </style>
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/secondary_pink</item>
     </style>
