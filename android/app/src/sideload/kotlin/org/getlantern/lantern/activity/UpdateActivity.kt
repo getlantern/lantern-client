@@ -13,6 +13,7 @@ import android.text.Html
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -21,7 +22,6 @@ import internalsdk.Internalsdk
 import internalsdk.Updater
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import org.androidannotations.annotations.AfterViews
 import org.androidannotations.annotations.Click
 import org.androidannotations.annotations.EActivity
 import org.androidannotations.annotations.ViewById
@@ -56,11 +56,11 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     lateinit var progressBar: ProgressBar
 
     @ViewById
-    lateinit var updateButtons: LinearLayout
+    lateinit var updateButtons: RelativeLayout
 
     @ViewById
     lateinit var percentage: TextView
-    
+
     fun publishProgress(percent: Long) {
         progressBar.progress = percent.toInt()
         runOnUiThread {
@@ -68,18 +68,32 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         }
     }
 
-    // downloadUpdate creates a new instance of Updater and downloads an update via Go.
+    fun showErrorAlert() {
+        Utils.showAlertDialog(this, getString(R.string.error_update), manualUpdateHTML(), false)
+    }
+
+    // downloadUpdate creates a new instance of Updater and downloads an update via Go
     // Once the download is complete, ApkSignatureVerifier verifies the APK signature
     private fun downloadUpdate(context: Context, apkDir: File, apkPath: File): Boolean {
         val updater = Updater { percent: Long -> publishProgress(percent) }
         try {
             apkDir.mkdirs()
-            Internalsdk.downloadUpdate(
+            val result: Boolean = Internalsdk.downloadUpdate(
                 DeviceInfo,
                 intent.getStringExtra("updateUrl").toString(),
                 apkPath.getAbsolutePath(),
                 updater,
             )
+            if (!result) {
+                // show an alert if there was an error downloading the update
+                showErrorAlert()
+                return false
+            }
+            if (!apkPath.isFile()) {
+                Logger.error(TAG, "Error loading APK; not found at " + apkPath)
+                showErrorAlert()
+                return false
+            }
             ApkSignatureVerifier.verify(
                 context,
                 apkPath,
