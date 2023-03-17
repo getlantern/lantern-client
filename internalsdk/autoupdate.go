@@ -28,8 +28,7 @@ type DeviceInfo interface {
 
 // CheckForUpdates checks to see if a new version of Lantern is available
 func CheckForUpdates(deviceInfo DeviceInfo) (string, error) {
-	cfg := buildUpdateCfg()
-	return checkForUpdates(cfg, deviceInfo)
+	return checkForUpdates(buildUpdateCfg(), deviceInfo)
 }
 
 func checkForUpdates(cfg *autoupdate.Config, deviceInfo DeviceInfo) (string, error) {
@@ -56,13 +55,15 @@ func deviceOps(name string, deviceInfo DeviceInfo) *ops.Op {
 
 // DownloadUpdate downloads the latest APK from the given url to the apkPath
 // file destination.
-func DownloadUpdate(deviceInfo DeviceInfo, url, apkPath string, updater Updater) {
+func DownloadUpdate(deviceInfo DeviceInfo, url, apkPath string, updater Updater) bool {
 	op := deviceOps("autoupdate_download", deviceInfo)
 	defer op.End()
 	err := autoupdate.UpdateMobile(url, apkPath, updater, updateClient)
 	if err != nil {
 		op.FailIf(log.Errorf("Error downloading update: %v", err))
+		return false
 	}
+	return true
 }
 
 // InstallFinished is called after an update successfully installs or fails to
