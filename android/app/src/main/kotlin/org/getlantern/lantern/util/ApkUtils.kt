@@ -17,7 +17,7 @@ fun Context.getAppInstallIntent(apkFile: File): Intent? {
         uri = Uri.fromFile(apkFile)
     } else {
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-        val authority = "$packageName.fileprovider"
+        val authority = "$packageName.fileProvider"
         uri = FileProvider.getUriForFile(this, authority, apkFile)
     }
     intent.setDataAndType(uri, "application/vnd.android.package-archive")
