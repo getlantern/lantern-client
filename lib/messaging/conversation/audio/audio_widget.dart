@@ -54,25 +54,19 @@ class AudioController extends ValueNotifier<AudioValue> {
     });
   }
 
-  Future<int> pause() async {
-    final result = await audio.pause();
-    if (result == 1) {
-      value.playerState = PlayerState.paused;
-      notifyListeners();
-    }
-    return result;
+  Future<void> pause() async {
+    await audio.pause();
+    value.playerState = PlayerState.paused;
+    notifyListeners();
   }
 
-  Future<int> stop() async {
-    final result = await audio.stop();
-    if (result == 1) {
-      value.playerState = PlayerState.paused;
-      value.position = const Duration();
-      value.realDuration = const Duration();
-      value.pendingPercentage = 0;
-      notifyListeners();
-    }
-    return result;
+  Future<void> stop() async {
+    await audio.stop();
+    value.playerState = PlayerState.paused;
+    value.position = const Duration();
+    value.realDuration = const Duration();
+    value.pendingPercentage = 0;
+    notifyListeners();
   }
 
   Future<void> seek(Duration position) async {
@@ -120,10 +114,9 @@ class AudioController extends ValueNotifier<AudioValue> {
   }
 
   Future<void> _resume() async {
-    if (await audio.resume() == 1) {
-      value.playerState = PlayerState.playing;
-      notifyListeners();
-    }
+    await audio.resume();
+    value.playerState = PlayerState.playing;
+    notifyListeners();
   }
 }
 
