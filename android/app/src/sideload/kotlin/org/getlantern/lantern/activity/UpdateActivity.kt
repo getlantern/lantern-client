@@ -102,7 +102,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
             ApkSignatureVerifier.verify(
                 context,
                 apkPath,
-                "108f612ae55354078ec12b10bb705362840d48fa78b9262c11b6d0adeff6f289",
+                BuildConfig.SIGNING_CERTIFICATE_SHA256,
             )
             return true
         } catch (sfe: SignatureVerificationException) {
