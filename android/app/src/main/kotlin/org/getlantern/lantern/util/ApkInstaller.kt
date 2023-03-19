@@ -15,7 +15,6 @@ import androidx.core.content.FileProvider
 import internalsdk.Internalsdk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.getlantern.lantern.activity.UpdateActivity
 import org.getlantern.mobilesdk.Logger
 import java.io.File
 import java.io.IOException
@@ -85,7 +84,7 @@ class ApkInstaller(
         }
 
     private fun createIntentSender(sessionId: Int): IntentSender {
-        val broadcastIntent = Intent(UpdateActivity.PACKAGE_INSTALLED_ACTION)
+        val broadcastIntent = Intent(PACKAGE_INSTALLED_ACTION)
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_MUTABLE
         } else {
@@ -170,5 +169,7 @@ class ApkInstaller(
 
     companion object {
         private const val TAG = "ApkInstaller"
+        private const val PACKAGE_INSTALLED_ACTION =
+            "org.getlantern.lantern.SESSION_API_PACKAGE_INSTALLED"
     }
 }

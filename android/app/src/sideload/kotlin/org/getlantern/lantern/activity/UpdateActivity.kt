@@ -26,13 +26,12 @@ import org.androidannotations.annotations.Click
 import org.androidannotations.annotations.EActivity
 import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.BuildConfig
-import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.R
 import org.getlantern.lantern.util.ApkInstaller
 import org.getlantern.lantern.util.ApkSignatureVerifier
 import org.getlantern.lantern.util.DeviceInfo
 import org.getlantern.lantern.util.SignatureVerificationException
-import org.getlantern.lantern.util.getAppInstallIntent
 import org.getlantern.mobilesdk.Logger
 import java.io.File
 
@@ -42,11 +41,9 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     companion object {
         private val TAG = UpdateActivity::class.java.name
         private const val REQUEST_CODE_PERMISSION = 1252
-        const val PACKAGE_INSTALLED_ACTION =
-            "org.getlantern.lantern.SESSION_API_PACKAGE_INSTALLED"
     }
 
-    private lateinit var apkInstaller: ApkInstaller
+    private var apkInstaller: ApkInstaller? = null
 
     @ViewById
     lateinit var title: TextView
@@ -108,14 +105,13 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         } catch (sfe: SignatureVerificationException) {
             Logger.debug(TAG, "Error verifying update: " + sfe.message)
             displayTamperedApk(context)
-
         }
         return false
     }
 
     override fun onDestroy() {
-      super.onDestroy()
-      apkInstaller.unregisterCallback()
+        super.onDestroy()
+        apkInstaller?.let { it.unregisterCallback() }
     }
 
     // show an alert notifying the user that the downloaded apk has been tampered with
@@ -148,7 +144,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         lifecycleScope.launch(IO) {
             val success = downloadUpdate(context, apkDir, apkPath)
             if (success) {
-              apkInstaller.execute()
+                apkInstaller?.execute()
             }
         }
     }
