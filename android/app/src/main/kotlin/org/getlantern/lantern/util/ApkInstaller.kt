@@ -15,11 +15,11 @@ import androidx.core.content.FileProvider
 import internalsdk.Internalsdk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.getlantern.lantern.activity.UpdateActivity
 import org.getlantern.mobilesdk.Logger
 import java.io.File
 import java.io.IOException
 
+// ApkInstaller is a utility class for installing APKs
 class ApkInstaller(
     private val activity: Activity,
     private val apkFile: File,
@@ -43,29 +43,32 @@ class ApkInstaller(
                 installWithPackageInstaller()
             }
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
-                createInstallIntentWithContentUri()?.let(this::launchInstaller)
+                createInstallIntentContentUri()?.let(this::launchInstaller)
             }
             else -> {
-                createInstallIntentWithFileUri()?.let(this::launchInstaller)
+                createInstallIntentFileUri()?.let(this::launchInstaller)
             }
         }
     }
 
+    // installWithPackageInstaller uses PackageInstaller to install an update of Lantern on a device
     private suspend fun installWithPackageInstaller() =
         withContext(Dispatchers.IO) {
             try {
                 val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
+                // create a new session using the given params, returning a unique ID that represents the session
                 val sessionId = packageInstaller.createSession(params)
-                Logger.debug(TAG, "sessionId=$sessionId")
+                // open an existing session to actively perform work
                 packageInstaller.openSession(sessionId).use { session ->
                     try {
-                        session.openWrite("apk", 0/*offset*/, apkFile.length())
+                        session.openWrite("apk", 0, apkFile.length())
                             .use { outputStream ->
                                 apkFile.inputStream().use { inputStream ->
                                     inputStream.copyTo(outputStream)
                                 }
                                 session.fsync(outputStream)
                             }
+                        // attempt to commit everything staged in this session
                         session.commit(createIntentSender(sessionId))
                         Logger.debug(TAG, "session committed")
                     } catch (e: RuntimeException) {
@@ -80,22 +83,14 @@ class ApkInstaller(
             }
         }
 
-
-    private fun createSessionParams(packageSize: Long): SessionParams =
-        SessionParams(SessionParams.MODE_FULL_INSTALL).apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                setRequireUserAction(SessionParams.USER_ACTION_NOT_REQUIRED)
-            }
-            setSize(packageSize)
-        }
-
     private fun createIntentSender(sessionId: Int): IntentSender {
-        val broadcastIntent = Intent(UpdateActivity.PACKAGE_INSTALLED_ACTION)
+        val broadcastIntent = Intent(PACKAGE_INSTALLED_ACTION)
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_MUTABLE
         } else {
             0
         }
+        // Retrieve a PendingIntent that will perform a broadcast when an install finishes
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             sessionId,
@@ -111,7 +106,7 @@ class ApkInstaller(
         Logger.error(TAG, "Failed to launch apk installer", e)
     }
 
-    private fun createInstallIntentWithContentUri(): Intent? {
+    private fun createInstallIntentContentUri(): Intent? {
         val packageName = context.packageName
         val authority = "$packageName.fileProvider"
         val apkFileUri = FileProvider.getUriForFile(context, authority, apkFile)
@@ -122,7 +117,7 @@ class ApkInstaller(
         }
     }
 
-    private suspend fun createInstallIntentWithFileUri(): Intent? =
+    private suspend fun createInstallIntentFileUri(): Intent? =
         withContext(Dispatchers.IO) {
             val externalApkFile =
                 File(context.getExternalFilesDir(null), "apk").resolve(apkFile.name)
@@ -144,6 +139,7 @@ class ApkInstaller(
             }
         }
 
+    // SessionCallback is used to observe events of a Session lifecycle
     private class SessionCallback(private val activity: Activity) : PackageInstaller.SessionCallback() {
         override fun onCreated(sessionId: Int) {
             Logger.debug(TAG, "onCreated: sessionId=$sessionId")
@@ -161,6 +157,8 @@ class ApkInstaller(
             Logger.debug(TAG, "onProgressChanged: sessionId=$sessionId, progress=$progress")
         }
 
+        // onFinished is called when an installer commits or abandons the session, resulting in the session
+        // being finished.
         override fun onFinished(sessionId: Int, success: Boolean) {
             Logger.debug(TAG, "onFinished: sessionId=$sessionId, success=$success")
             Logger.debug(TAG, "App install result " + success)
@@ -171,5 +169,7 @@ class ApkInstaller(
 
     companion object {
         private const val TAG = "ApkInstaller"
+        private const val PACKAGE_INSTALLED_ACTION =
+            "org.getlantern.lantern.SESSION_API_PACKAGE_INSTALLED"
     }
 }

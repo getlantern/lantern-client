@@ -248,6 +248,12 @@ func (d testDeviceInfo) Model() string    { return "Nokia 7 plus" }
 func (d testDeviceInfo) Hardware() string { return "qcom" }
 func (d testDeviceInfo) SdkVersion() int  { return 28 }
 
+type testUpdater struct{}
+
+func (tu testUpdater) Progress(percent int) {
+
+}
+
 // This test requires the tag "lantern" to be set at testing time like:
 //
 //	go test -tags="lantern"
@@ -274,4 +280,15 @@ func TestAutoUpdate(t *testing.T) {
 	result, err = checkForUpdates(updateCfg, deviceInfo)
 	require.NoError(t, err)
 	assert.Empty(t, result)
+}
+
+func TestCheckForUpdates(t *testing.T) {
+	deviceInfo := testDeviceInfo{}
+	_, err := CheckForUpdates(deviceInfo)
+	require.Error(t, err)
+}
+
+func TestDownloadUpdate(t *testing.T) {
+	deviceInfo := testDeviceInfo{}
+	assert.False(t, DownloadUpdate(deviceInfo, "", "", &testUpdater{}))
 }
