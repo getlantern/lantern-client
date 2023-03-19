@@ -28,6 +28,7 @@ import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.util.ApkInstaller
 import org.getlantern.lantern.util.ApkSignatureVerifier
 import org.getlantern.lantern.util.DeviceInfo
 import org.getlantern.lantern.util.SignatureVerificationException
@@ -41,7 +42,11 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     companion object {
         private val TAG = UpdateActivity::class.java.name
         private const val REQUEST_CODE_PERMISSION = 1252
+        const val PACKAGE_INSTALLED_ACTION =
+            "org.getlantern.lantern.SESSION_API_PACKAGE_INSTALLED"
     }
+
+    private lateinit var apkInstaller: ApkInstaller
 
     @ViewById
     lateinit var title: TextView
@@ -97,13 +102,20 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
             ApkSignatureVerifier.verify(
                 context,
                 apkPath,
-                BuildConfig.SIGNING_CERTIFICATE_SHA256,
+                "108f612ae55354078ec12b10bb705362840d48fa78b9262c11b6d0adeff6f289",
             )
             return true
-        } catch (e: Exception) {
-            Logger.debug(TAG, "Error downloading update: " + e.message)
+        } catch (sfe: SignatureVerificationException) {
+            Logger.debug(TAG, "Error verifying update: " + sfe.message)
+            displayTamperedApk(context)
+
         }
         return false
+    }
+
+    override fun onDestroy() {
+      super.onDestroy()
+      apkInstaller.unregisterCallback()
     }
 
     // show an alert notifying the user that the downloaded apk has been tampered with
@@ -129,26 +141,14 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         subTitle.setVisibility(View.GONE)
         updateButtons.setVisibility(View.GONE)
         title.text = getString(R.string.updating_lantern)
-
+        var context: Context = applicationContext
+        var apkDir: File = File(context.cacheDir, "updates")
+        val apkPath = File(apkDir, "Lantern.apk")
+        apkInstaller = ApkInstaller(this, apkPath)
         lifecycleScope.launch(IO) {
-            Logger.debug(TAG, "Installing update")
-            var context: Context = applicationContext
-            var apkDir: File = File(context.cacheDir, "updates")
-            val apkPath = File(apkDir, "Lantern.apk")
-            var success = false
-            try {
-                success = downloadUpdate(context, apkDir, apkPath)
-                if (success) {
-                    val intent: Intent? = context.getAppInstallIntent(apkPath)
-                    applicationContext.startActivity(intent)
-                    finish()
-                }
-            } catch (sfe: SignatureVerificationException) {
-                success = false
-                Logger.error(TAG, "Error installing update", sfe)
-                displayTamperedApk(context)
-            } finally {
-                Internalsdk.installFinished(DeviceInfo, success)
+            val success = downloadUpdate(context, apkDir, apkPath)
+            if (success) {
+              apkInstaller.execute()
             }
         }
     }
