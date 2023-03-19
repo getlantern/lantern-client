@@ -1,5 +1,5 @@
 plugins {
-  id "io.sentry.android.gradle" version "2.1.2"
+  id "io.sentry.android.gradle" version "3.4.2"
   id 'com.android.application'
   id 'kotlin-android'
   id 'org.jlleitschuh.gradle.ktlint'
@@ -427,8 +427,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
 
     implementation 'com.google.firebase:firebase-analytics-ktx'
-
-    implementation 'io.sentry:sentry-android:6.14.0'
 
     implementation 'com.github.matomo-org:matomo-sdk-android:4.1.4'
 
