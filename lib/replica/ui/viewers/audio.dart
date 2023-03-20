@@ -81,21 +81,6 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
       });
     });
 
-    /*playerErrorSubscription = audioPlayer.onPlayerError.listen((msg) {
-      logger.w('audioPlayer error : $msg');
-      setState(() {
-        playerState = PlayerState.stopped;
-        totalDuration = const Duration();
-        position = const Duration();
-      });
-    });
-
-    playerControlCommandSubscription =
-        audioPlayer.onPlayerCommand.listen((command) {});*/
-
-    // play().then((_) {
-    //   setState(() {});
-    // });
     super.initState();
   }
 
