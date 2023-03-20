@@ -520,6 +520,7 @@ class ConversationState extends State<Conversation>
                     keyboardMode != KeyboardMode.emojiReaction,
                 child: MessagingEmojiPicker(
                   height: keyboardHeight,
+                  emptySuggestions: 'no_recents'.i18n,
                   onBackspacePressed: () {
                     newMessage
                       ..text = newMessage.text.characters.skipLast(1).toString()
