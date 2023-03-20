@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:filesize/filesize.dart';
 import 'package:lantern/common/ui/humanize_seconds.dart';
 import 'package:lantern/replica/common.dart';

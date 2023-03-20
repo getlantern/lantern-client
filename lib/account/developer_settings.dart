@@ -117,7 +117,6 @@ class DeveloperSettingsTab extends StatelessWidget {
               trailingArray: [
                 TextButton(
                   onPressed: () async {
-                    debugPrint('here');
                     await replicaModel.setShowNewBadge(true);
                   },
                   child: CText(

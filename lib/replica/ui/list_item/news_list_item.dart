@@ -25,23 +25,9 @@ class ReplicaNewsListItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                renderTitle(),
-              ],
-            ),
-            Row(
-              children: [
-                renderLink(),
-              ],
-            ),
-            Row(
-              children: [
-                renderSnippet(),
-              ],
-            ),
-          ],
+          children: [renderTitle, renderLink, renderSnippet]
+              .map((f) => Row(children: [f()]))
+              .toList(),
         ),
       ),
     );

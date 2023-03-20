@@ -18,6 +18,12 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   late int currentTab = 0;
   late bool showNewModal = false;
 
+  void setSearchTab(int tab) async {
+    setState(() {
+      currentTab = tab;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +39,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
     replicaModel.getShowNewBadge().then((bool showNewBadge) {
       if (showNewBadge) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          renderNewDialog(context);
+          renderNewDialog(context, setSearchTab);
         });
       }
     });
@@ -42,9 +48,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
 
   void doGetCachedTab() async {
     final cachedTab = await replicaModel.getSearchTab();
-    setState(() {
-      currentTab = int.parse(cachedTab);
-    });
+    setSearchTab(int.parse(cachedTab));
   }
 
   @override
@@ -113,7 +117,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
     );
   }
 
-  void Function() renderNewDialog(BuildContext context) {
+  void Function() renderNewDialog(BuildContext context, setSearchTab) {
     return CDialog(
       iconPath: ImagePaths.newspaper,
       title: 'replica_new_discover'.i18n,
@@ -121,6 +125,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
       agreeText: 'replica_check_it_out'.i18n,
       agreeAction: () async {
         await replicaModel.setShowNewBadge(false);
+        await setSearchTab(5); // News is index 5
         return true;
       },
       includeCancel: false,
