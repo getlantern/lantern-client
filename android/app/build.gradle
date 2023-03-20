@@ -414,7 +414,7 @@ dependencies {
 
     // FinestWebView dependencies
     implementation 'com.nineoldandroids:library:2.4.0'
-    //implementation 'com.thefinestartist:utils:0.9.5'
+
     implementation (group: 'com.google.guava', name: 'guava', version: '23.0-android') {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }

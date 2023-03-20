@@ -24,10 +24,6 @@ class Audio {
     _audioPlayer.onPlayerComplete.listen((e) {
       _onDetachedIfAvailable();
     });
-
-    /*_audioPlayer.onPlayerError.listen((e) {
-      _onDetachedIfAvailable();
-    });*/
   }
 
   /// Plays the audio in the given bytes.
