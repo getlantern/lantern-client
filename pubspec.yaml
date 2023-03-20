@@ -86,17 +86,17 @@ dependencies:
   # Version 1.0.7 seems glitchy, so we're using 1.0.6 explicitly
   emoji_picker_flutter: 1.5.2
 
-  email_validator: "^2.0.1"
+  email_validator: ^2.1.17
 
   pin_code_text_field: ^1.8.0
 
   styled_text: ^4.0.0+1
 
-  back_button_interceptor: ^5.0.0
+  back_button_interceptor: ^6.0.2
 
   scrollable_positioned_list: ^0.2.0-nullsafety.0
 
-  extended_image: ^4.1.0
+  extended_image: ^7.0.2
 
   file_picker: ^5.2.6
 
@@ -113,7 +113,7 @@ dependencies:
 
   flutter_local_notifications: ^9.1.4
 
-  http: ^0.13.4
+  http: ^0.13.5
 
   enum_to_string: ^2.0.1
 
@@ -121,7 +121,7 @@ dependencies:
 
   dio: ^4.0.4
 
-  path_provider: ^2.0.11
+  path_provider: ^2.0.13
 
   permission_handler: ^8.3.0
 
@@ -129,7 +129,7 @@ dependencies:
 
   infinite_scroll_pagination: ^3.1.0
 
-  share_plus: ^4.4.0
+  share_plus: ^6.3.1
 
   package_info_plus: ^3.0.3
 
@@ -141,13 +141,13 @@ dependencies:
 
   flutter_uploader: ^3.0.0-beta.3
 
-  mime: ^1.0.1
+  mime: ^1.0.4
 
-  video_thumbnail: ^0.4.3
+  video_thumbnail: ^0.5.3
 
   flutter_pdfview: ^1.2.9
 
-  wakelock: ^0.6.0+1
+  wakelock: ^0.6.2
 
 dev_dependencies:
   flutter_test:
