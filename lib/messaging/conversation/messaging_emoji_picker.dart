@@ -3,11 +3,13 @@ import 'package:lantern/common/common.dart';
 
 class MessagingEmojiPicker extends StatelessWidget {
   final double height;
+  final String emptySuggestions;
   final Function(ep.Category?, ep.Emoji) onEmojiSelected;
   final VoidCallback? onBackspacePressed;
 
   const MessagingEmojiPicker({
     required this.height,
+    required this.emptySuggestions,
     this.onBackspacePressed,
     required this.onEmojiSelected,
     Key? key,
@@ -34,8 +36,8 @@ class MessagingEmojiPicker extends StatelessWidget {
                 columns: constraints.maxWidth ~/ 50.0,
                 iconColor: grey5,
                 iconColorSelected: black,
-                noRecents: const Text(
-                  'no_recents',
+                noRecents: Text(
+                  emptySuggestions,
                   style: TextStyle(fontSize: 15, color: Colors.black26),
                   textAlign: TextAlign.center,
                 ),
