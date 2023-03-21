@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:mime/mime.dart';
 
 final audio = Audio();
 
@@ -45,7 +46,9 @@ class Audio {
     _onDurationChanged = onDurationChanged;
     _onPositionChanged = onPositionChanged;
     _onDetached = onDetached;
-    await _audioPlayer.play(UrlSource(Uri.dataFromBytes(bytes, mimeType: "audio/mpeg").toString()));
+    // defaults to having the mime-type application/octet-stream
+    final mime = lookupMimeType('', headerBytes: bytes) ?? "application/octet-stream";
+    await _audioPlayer.play(UrlSource(Uri.dataFromBytes(bytes, mimeType: mime).toString()));
     onAttached();
   }
 

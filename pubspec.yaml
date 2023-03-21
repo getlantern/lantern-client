@@ -63,11 +63,11 @@ dependencies:
 
   # wechat_camera_picker: ^2.3.0
 
-  flutter_keyboard_visibility: ^5.0.3
+  flutter_keyboard_visibility: ^5.4.0
 
   video_player: ^2.6.0
 
-  flutter_svg: ^1.0.1
+  flutter_svg: ^2.0.4
 
   hexcolor: ^3.0.1
 
@@ -123,11 +123,11 @@ dependencies:
 
   path_provider: ^2.0.13
 
-  permission_handler: ^8.3.0
+  permission_handler: ^10.2.0
 
   path: ^1.8.0
 
-  infinite_scroll_pagination: ^3.1.0
+  infinite_scroll_pagination: ^3.2.0
 
   share_plus: ^6.3.1
 
