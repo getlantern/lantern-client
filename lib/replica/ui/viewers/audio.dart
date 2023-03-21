@@ -35,6 +35,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
 
   @override
   void initState() {
+    super.initState();
     _controller = AnimationController(
       duration: const Duration(
         milliseconds: 8000,
@@ -80,8 +81,6 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
         position = totalDuration;
       });
     });
-
-    super.initState();
   }
 
   Future<void> play() async {
