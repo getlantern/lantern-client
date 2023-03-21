@@ -55,7 +55,7 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
         infoCreationDate = value.infoCreationDate;
       });
     }).onError((error, stackTrace) {
-      logger.e('Could not fetch object_info: $error , $stackTrace');
+      logger.v('Could not fetch object_info: $error , $stackTrace');
       setState(() {
         infoError = true;
       });

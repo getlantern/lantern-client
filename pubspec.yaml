@@ -67,7 +67,7 @@ dependencies:
 
   video_player: ^2.6.0
 
-  flutter_svg: ^2.0.4
+  flutter_svg: ^1.0.1
 
   hexcolor: ^3.0.1
 
