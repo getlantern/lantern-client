@@ -80,6 +80,14 @@ jobs:
     - name: Install Flutter dependencies
       run: flutter pub get
 
+    - name: Set gradle properties
+      env:
+        GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
+      run: |
+        mkdir -p ~/.gradle/
+        echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
+        echo "${GRADLE_PROPERTIES}" > ~/.gradle/gradle.properties
+
     - name: Decode Keystore
       id: write_file
       uses: timheuer/base64-to-file@v1.2
@@ -93,4 +101,4 @@ jobs:
         ln -fs android/gradle.properties .
         ./android/gradlew -PlanternVersion=$VERSION -PandroidArch=$ANDROID_ARCH -PandroidArchJava="$ANDROID_ARCH_JAVA" \
         -PlanternRevisionDate=$REVISION_DATE -b android/app/build.gradle assembleProdSideload
-        cp build/app/outputs/apk/prod/sideload/app-prod-sideload.apk ../$INSTALLER_NAME-$ANDROID_ARCH.apk
+        cp build/app/outputs/apk/prod/sideload/app-prod-sideload.apk $INSTALLER_NAME-$ANDROID_ARCH.apk
