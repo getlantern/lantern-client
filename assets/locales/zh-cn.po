@@ -1,13 +1,13 @@
 # 
 # Translators:
 # e2f <projects@e2f.com>, 2022
-# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2022
 # Lantern, 2022
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2022
+# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: CN R10 <tx_e2f_cn_r10@ate2f.com>, 2022\n"
+"Last-Translator: e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2023\n"
 "Language-Team: Chinese Simplified (https://www.transifex.com/lantern-1/teams/94371/zh-Hans/)\n"
 "Language: zh-Hans\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -125,6 +125,9 @@ msgstr "版本 %s"
 
 msgid "build_number"
 msgstr "构建版本 %s"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "语种"
@@ -1038,6 +1041,18 @@ msgstr "发现"
 
 msgid "replica_search_intro"
 msgstr "在蓝灯网络上搜索用户上传的内容，或自行上传以供他人发现。"
+
+msgid "replica_new_discover"
+msgstr "新发现类别"
+
+msgid "replica_new_discover_news"
+msgstr "“发现”现在可供您搜索新闻文章！"
+
+msgid "replica_check_it_out"
+msgstr "立即查看"
+
+msgid "news"
+msgstr "新闻"
 
 msgid "share"
 msgstr "分享"
