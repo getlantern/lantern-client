@@ -332,6 +332,8 @@ release-autoupdate: require-version
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
 $(ANDROID_LIB): $(GO_SOURCES)
+	$(call check-go-version) && \
+	$(GO) env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	$(GO) install golang.org/x/mobile/cmd/gomobile && \
 	gomobile init && \
 	gomobile bind -cache `pwd`/.gomobilecache \
