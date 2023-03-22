@@ -34,17 +34,10 @@ jobs:
       run: |
         git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
-    - name: Install Go mobile
+    - name: Setup Go mobile
       run: |
         go install golang.org/x/mobile/cmd/gomobile@latest
         gomobile init
-
-    - name: Set environment variables
-      run: |
-        echo "GIT_REVISION_SHORTCODE=$(git rev-parse --short HEAD)"
-        echo "GIT_REVISION=$(git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)"
-        echo "REVISION_DATE=$(date -u -j -f '%F %T %z' '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S' 2>/dev/null || date -u -d '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S')"
-        echo "BUILD_DATE=$(date -u +%Y%m%d.%H%M%S)"
 
     - name: Setup Sentry CLI
       uses: mathieu-bour/setup-sentry-cli@v1
@@ -60,6 +53,13 @@ jobs:
         distribution: temurin
         java-version: 11
         cache: gradle
+
+    - name: Set environment variables
+      run: |
+        echo "GIT_REVISION_SHORTCODE=$(git rev-parse --short HEAD)"
+        echo "GIT_REVISION=$(git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)"
+        echo "REVISION_DATE=$(date -u -j -f '%F %T %z' '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S' 2>/dev/null || date -u -d '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S')"
+        echo "BUILD_DATE=$(date -u +%Y%m%d.%H%M%S)"
  
     - name: Build Lantern core Android library
       run: |
@@ -75,5 +75,5 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        cd app
+        cd android
         ./gradlew build
