@@ -12,49 +12,48 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest-8-cores
+    steps:
+    - uses: actions/checkout@v3
 
-  steps:
-  - uses: actions/checkout@v3
+    # Install Flutter
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: "3.7.6"
+        channel: "stable"
+    - run: flutter --version
 
-  # Install Flutter
-  - uses: subosito/flutter-action@v2
-    with:
-      flutter-version: "3.7.6"
-      channel: "stable"
-  - run: flutter --version
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
 
-  - name: Set up Go
-    uses: actions/setup-go@v3
-    with:
-      go-version: 1.19
+    - name: Granting private modules access
+      run: |
+        git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
-  - name: Granting private modules access
-    run: |
-      git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+    - name: Build Lantern core Android library
+      run: |
+        make android-lib
 
-  - name: Build Lantern core Android library
-    run: |
-      make android-lib
+    - name: Setup Sentry CLI
+      uses: mathieu-bour/setup-sentry-cli@v1
+      with:
+        version: latest
+        token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
+        organization: getlantern
+        project: android
 
-  - name: Setup Sentry CLI
-    uses: mathieu-bour/setup-sentry-cli@v1
-    with:
-      version: latest
-      token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
-      organization: getlantern
-      project: android
+    - name: setup JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: 11
+        cache: gradle
 
-  - name: setup JDK 11
-    uses: actions/setup-java@v3
-    with:
-      java-version: 11
-      cache: gradle
+    - name: Install Flutter dependencies
+      run: flutter pub get
 
-  - name: Install Flutter dependencies
-    run: flutter pub get
+    - name: Run gradle tests
+      run: ./gradlew test
 
-  - name: Run gradle tests
-    run: ./gradlew test
-
-  - name: Build with gradle
-    run: ./gradlew build
+    - name: Build with gradle
+      run: ./gradlew build
