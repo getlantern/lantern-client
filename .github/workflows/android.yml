@@ -3,8 +3,7 @@ name: Android CI
 on:
   pull_request:
   push:
-    branches:
-      - "atavism/android-ci"
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -81,6 +80,6 @@ jobs:
     - name: Build with Gradle
       run: |
         cd $MOBILE_DIR
-        ./gradlew -PlanternVersion=${{ env.VERSION }} -PandroidArch=$ANDROID_ARCH -PandroidArchJava=$ANDROID_ARCH_JAVA \
+        ./gradlew -PlanternVersion=${{ env.VERSION }} -PandroidArch=$ANDROID_ARCH -PandroidArchJava="$ANDROID_ARCH_JAVA" \
         -PlanternRevisionDate=$REVISION_DATE -b app/build.gradle assembleProdSideload
         cp build/app/outputs/apk/prod/sideload/app-prod-sideload.apk ../$INSTALLER_NAME-$ANDROID_ARCH.apk
