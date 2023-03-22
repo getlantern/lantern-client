@@ -50,7 +50,7 @@ jobs:
         -target=android/arm,android/arm64,android/386,android/amd64 \
         -tags='headless lantern' -o=liblantern-all.aar \
         -androidapi=19 \
-        -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) \
+        -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=${{env.REVISION_DATE}} \
                   -X github.com/getlantern/flashlight/common.BuildDate=${{env.BUILD_DATE}} \
                   -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=${{env.VERSION}}" \
         github.com/getlantern/android-lantern/internalsdk
