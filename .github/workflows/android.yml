@@ -80,6 +80,14 @@ jobs:
     - name: Install Flutter dependencies
       run: flutter pub get
 
+    - name: Decode Keystore
+      id: write_file
+      uses: timheuer/base64-to-file@v1.2
+      with:
+        fileName: 'keystore.release.jks'
+        fileDir: './android/app'
+        encodedString: ${{ secrets.KEYSTORE }}
+
     - name: Build with Gradle
       run: |
         ln -fs android/gradle.properties .
