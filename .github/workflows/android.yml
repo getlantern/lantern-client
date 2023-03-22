@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  VERSION: 7.0.0
+  GOPRIVATE: github.com/getlantern
 jobs:
   build:
     runs-on: ubuntu-latest-8-cores
@@ -33,7 +36,7 @@ jobs:
 
     - name: Build Lantern core Android library
       run: |
-        VERSION=7.0.0 make android-lib
+        make android-lib
 
     - name: Setup Sentry CLI
       uses: mathieu-bour/setup-sentry-cli@v1
