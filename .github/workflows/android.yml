@@ -39,20 +39,22 @@ jobs:
         go install golang.org/x/mobile/cmd/gomobile@latest
         gomobile init
 
+    - name: Set environment variables
+      run: |
+        echo "GIT_REVISION_SHORTCODE=$(git rev-parse --short HEAD)"
+        echo "GIT_REVISION=$(git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)"
+        echo "REVISION_DATE=$(date -u -j -f '%F %T %z' '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S' 2>/dev/null || date -u -d '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S')"
+        echo "BUILD_DATE=$(date -u +%Y%m%d.%H%M%S)"
+
     - name: Build Lantern core Android library
-      env:
-        GIT_REVISION_SHORTCODE: git rev-parse --short HEAD
-        GIT_REVISION: git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD
-        REVISION_DATE: date -u -j -f "%F %T %z" "${{env.GIT_REVISION_DATE}}" +"%Y%m%d.%H%M%S" 2>/dev/null || date -u -d "${{env.GIT_REVISION_DATE}}" +"%Y%m%d.%H%M%S"
-        BUILD_DATE: date -u +%Y%m%d.%H%M%S
       run: |
         gomobile bind -cache ${{ github.workspace }}/.gomobilecache \
         -target=android/arm,android/arm64,android/386,android/amd64 \
         -tags='headless lantern' -o=liblantern-all.aar \
         -androidapi=19 \
-        -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=${{env.REVISION_DATE}} \
-                  -X github.com/getlantern/flashlight/common.BuildDate=${{env.BUILD_DATE}} \
-                  -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=${{env.VERSION}}" \
+        -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=$REVISION_DATE \
+                  -X github.com/getlantern/flashlight/common.BuildDate=$BUILD_DATE \
+                  -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$VERSION" \
         github.com/getlantern/android-lantern/internalsdk
 
     - name: Setup Sentry CLI
