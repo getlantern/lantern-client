@@ -70,13 +70,11 @@ jobs:
     - name: Build Lantern core Android library
       run: |
         gomobile bind -target=${{ env.ANDROID_ARCH_GOMOBILE }} \
-        -tags='headless lantern' -o=liblantern-all.aar -androidapi=19 \
+        -tags='headless lantern' -o=android/app/libs/liblantern-all.aar -androidapi=19 \
         -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=$REVISION_DATE \
                   -X github.com/getlantern/flashlight/common.BuildDate=$BUILD_DATE \
                   -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=${{ env.VERSION }}" \
         github.com/getlantern/android-lantern/internalsdk
-        mkdir -p android/app/libs
-        cp liblantern-all.aar android/app/libs
 
     - name: Install Flutter dependencies
       run: flutter pub get
