@@ -73,7 +73,7 @@ jobs:
         -tags='headless lantern' -o=android/app/libs/liblantern-all.aar -androidapi=19 \
         -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=$REVISION_DATE \
                   -X github.com/getlantern/flashlight/common.BuildDate=$BUILD_DATE \
-                  -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=${{ env.VERSION }}" \
+                  -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$VERSION" \
         github.com/getlantern/android-lantern/internalsdk
 
     - name: Install Flutter dependencies
@@ -82,6 +82,6 @@ jobs:
     - name: Build with Gradle
       run: |
         ln -fs android/gradle.properties .
-        gradle -PlanternVersion=${{ env.VERSION }} -PandroidArch=$ANDROID_ARCH -PandroidArchJava="$ANDROID_ARCH_JAVA" \
+        gradle -PlanternVersion=$VERSION -PandroidArch=$ANDROID_ARCH -PandroidArchJava="$ANDROID_ARCH_JAVA" \
         -PlanternRevisionDate=$REVISION_DATE -b android/app/build.gradle assembleProdSideload
         cp build/app/outputs/apk/prod/sideload/app-prod-sideload.apk ../$INSTALLER_NAME-$ANDROID_ARCH.apk
