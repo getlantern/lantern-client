@@ -5,13 +5,13 @@
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2022
 # e2f <projects@e2f.com>, 2022
 # e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2022
-# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2022
 # Alyssa Chung <lisiachung7@gmail.com>, 2022
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
+# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022\n"
+"Last-Translator: tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2023\n"
 "Language-Team: Malay (https://www.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -139,6 +139,9 @@ msgstr "Versi %s"
 
 msgid "build_number"
 msgstr "Bina %s"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "Bahasa"
@@ -1109,6 +1112,18 @@ msgid "replica_search_intro"
 msgstr ""
 "Cari kandungan dimuat naik pengguna melalui Rangkaian Lantern atau muat naik"
 " kandungan anda sendiri untuk ditemukan orang lain."
+
+msgid "replica_new_discover"
+msgstr "Kategori Penemuan Baharu"
+
+msgid "replica_new_discover_news"
+msgstr "Temukan sekarang membolehkan anda mencari artikel baharu!"
+
+msgid "replica_check_it_out"
+msgstr "Cuba gunakan"
+
+msgid "news"
+msgstr "Berita"
 
 msgid "share"
 msgstr "Kongsi"

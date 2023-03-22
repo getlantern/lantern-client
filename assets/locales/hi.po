@@ -4,14 +4,14 @@
 # Minnie Kaur <tuteja.minnie@gmail.com>, 2022
 # Kalyan Dikshit <dikshitrocks93@gmail.com>, 2022
 # tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2022
-# tx_e2f_hi r2 <tx_e2f_hi_r2@ate2f.com>, 2022
 # tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2022
 # e2f <projects@e2f.com>, 2022
 # Lantern, 2022
+# tx_e2f_hi r2 <tx_e2f_hi_r2@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2022\n"
+"Last-Translator: tx_e2f_hi r2 <tx_e2f_hi_r2@ate2f.com>, 2023\n"
 "Language-Team: Hindi (India) (https://www.transifex.com/lantern-1/teams/94371/hi_IN/)\n"
 "Language: hi_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -137,6 +137,9 @@ msgstr "वर्शन %s"
 
 msgid "build_number"
 msgstr "बिल्ड %s"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "भाषा"
@@ -1088,6 +1091,18 @@ msgid "replica_search_intro"
 msgstr ""
 "Lantern नेटवर्क पर यूज़र द्वारा अपलोड किया गया कंटेंट खोजें, या दूसरों को "
 "खोजने के लिए अपनी खुद का कंटेंट अपलोड करें."
+
+msgid "replica_new_discover"
+msgstr "डिस्कवर की नई श्रेणी"
+
+msgid "replica_new_discover_news"
+msgstr "अब आप डिस्कवर के ज़रिए खबरें भी खोज सकते हैं!"
+
+msgid "replica_check_it_out"
+msgstr "इसे आज़माएँ"
+
+msgid "news"
+msgstr "खबरें"
 
 msgid "share"
 msgstr "शेयर"
