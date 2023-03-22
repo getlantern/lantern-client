@@ -55,10 +55,6 @@ jobs:
         distribution: temurin
         java-version: 11
 
-    - uses: gradle/gradle-build-action@v2
-      with:
-        gradle-version: 7.6
-
     - name: Set environment variables
       run: |
         echo "VERSION=$(cat VERSION)"
@@ -82,6 +78,6 @@ jobs:
     - name: Build with Gradle
       run: |
         ln -fs android/gradle.properties .
-        gradle -PlanternVersion=$VERSION -PandroidArch=$ANDROID_ARCH -PandroidArchJava="$ANDROID_ARCH_JAVA" \
+        ./android/gradlew -PlanternVersion=$VERSION -PandroidArch=$ANDROID_ARCH -PandroidArchJava="$ANDROID_ARCH_JAVA" \
         -PlanternRevisionDate=$REVISION_DATE -b android/app/build.gradle assembleProdSideload
         cp build/app/outputs/apk/prod/sideload/app-prod-sideload.apk ../$INSTALLER_NAME-$ANDROID_ARCH.apk
