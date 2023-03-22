@@ -27,9 +27,7 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
   StreamSubscription? durationSubscription;
   StreamSubscription? positionSubscription;
   StreamSubscription? playerCompleteSubscription;
-  StreamSubscription? playerErrorSubscription;
   StreamSubscription? playerStateSubscription;
-  StreamSubscription? playerControlCommandSubscription;
 
   bool get isPlaying => playerState == PlayerState.playing;
 
@@ -108,14 +106,12 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
     durationSubscription?.cancel();
     positionSubscription?.cancel();
     playerCompleteSubscription?.cancel();
-    playerErrorSubscription?.cancel();
     playerStateSubscription?.cancel();
-    playerControlCommandSubscription?.cancel();
     super.dispose();
   }
 
   @override
-  bool ready() => playerErrorSubscription != null;
+  bool ready() => playerStateSubscription != null;
 
   @override
   Widget body(BuildContext context) {
