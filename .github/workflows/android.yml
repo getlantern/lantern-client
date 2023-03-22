@@ -46,15 +46,6 @@ jobs:
         echo "REVISION_DATE=$(date -u -j -f '%F %T %z' '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S' 2>/dev/null || date -u -d '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S')"
         echo "BUILD_DATE=$(date -u +%Y%m%d.%H%M%S)"
 
-    - name: Build Lantern core Android library
-      run: |
-        gomobile bind -target=android/arm,android/arm64,android/386,android/amd64 \
-        -tags='headless lantern' -o=liblantern-all.aar -androidapi=19 \
-        -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=$REVISION_DATE \
-                  -X github.com/getlantern/flashlight/common.BuildDate=$BUILD_DATE \
-                  -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=${{ env.VERSION}}" \
-        github.com/getlantern/android-lantern/internalsdk
-
     - name: Setup Sentry CLI
       uses: mathieu-bour/setup-sentry-cli@v1
       with:
@@ -63,17 +54,26 @@ jobs:
         organization: getlantern
         project: android
 
-    - name: setup JDK 11
+    - name: Setup JDK 11
       uses: actions/setup-java@v3
       with:
+        distribution: temurin
         java-version: 11
         cache: gradle
+ 
+    - name: Build Lantern core Android library
+      run: |
+        gomobile bind -target=android/arm,android/arm64,android/386,android/amd64 \
+        -tags='headless lantern' -o=liblantern-all.aar -androidapi=19 \
+        -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=$REVISION_DATE \
+                  -X github.com/getlantern/flashlight/common.BuildDate=$BUILD_DATE \
+                  -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=${{ env.VERSION }}" \
+        github.com/getlantern/android-lantern/internalsdk
 
     - name: Install Flutter dependencies
       run: flutter pub get
 
-    - name: Run gradle tests
-      run: ./gradlew test
-
-    - name: Build with gradle
-      run: ./gradlew build
+    - name: Build with Gradle
+      run: |
+        cd app
+        ./gradlew build
