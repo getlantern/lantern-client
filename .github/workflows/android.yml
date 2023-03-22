@@ -81,6 +81,6 @@ jobs:
     - name: Build with Gradle
       run: |
         ln -fs $MOBILE_DIR/gradle.properties .
-        gradle -planternVersion=${{ env.VERSION }} -pandroidArch=$ANDROID_ARCH -pandroidArchJava=$ANDROID_ARCH_JAVA \
+        gradle -PlanternVersion=${{ env.VERSION }} -PandroidArch=$ANDROID_ARCH -PandroidArchJava=$ANDROID_ARCH_JAVA \
         -b $MOBILE_DIR/app/build.gradle assembleProdSideload
         cp build/app/outputs/apk/prod/sideload/app-prod-sideload.apk $INSTALLER_NAME-$ANDROID_ARCH.apk
