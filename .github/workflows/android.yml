@@ -12,6 +12,11 @@ permissions:
 env:
   VERSION: 7.0.0
   GOPRIVATE: github.com/getlantern
+  ANDROID_ARCH: all
+  ANDROID_ARCH_JAVA: armeabi-v7a arm64-v8a x86 x86_64
+  ANDROID_ARCH_GOMOBILE: android/arm,android/arm64,android/386,android/amd64 
+  INSTALLER_NAME: lantern-installer
+  MOBILE_DIR: android
 jobs:
   build:
     runs-on: ubuntu-latest-8-cores
@@ -25,7 +30,7 @@ jobs:
         channel: "stable"
     - run: flutter --version
 
-    - name: Set up Go
+    - name: Setup Go
       uses: actions/setup-go@v3
       with:
         go-version: 1.19
@@ -63,7 +68,7 @@ jobs:
  
     - name: Build Lantern core Android library
       run: |
-        gomobile bind -target=android/arm,android/arm64,android/386,android/amd64 \
+        gomobile bind -target=${{ env.ANDROID_ARCH_GOMOBILE }} \
         -tags='headless lantern' -o=liblantern-all.aar -androidapi=19 \
         -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=$REVISION_DATE \
                   -X github.com/getlantern/flashlight/common.BuildDate=$BUILD_DATE \
@@ -75,5 +80,7 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        cd android
-        ./gradlew build
+        ln -fs $MOBILE_DIR/gradle.properties .
+        gradle -planternVersion=${{ env.VERSION }} -pandroidArch=$ANDROID_ARCH -pandroidArchJava=$ANDROID_ARCH_JAVA \
+        -b $MOBILE_DIR/app/build.gradle assembleProdSideload
+        cp build/app/outputs/apk/prod/sideload/app-prod-sideload.apk $INSTALLER_NAME-$ANDROID_ARCH.apk
