@@ -9,7 +9,6 @@ permissions:
   contents: read
 
 env:
-  VERSION: 7.0.0
   GOPRIVATE: github.com/getlantern
   ANDROID_ARCH: all
   ANDROID_ARCH_JAVA: armeabi-v7a arm64-v8a x86 x86_64
@@ -60,6 +59,7 @@ jobs:
 
     - name: Set environment variables
       run: |
+        echo "VERSION=$(cat VERSION)"
         echo "GIT_REVISION_SHORTCODE=$(git rev-parse --short HEAD)"
         echo "GIT_REVISION=$(git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)"
         echo "REVISION_DATE=$(date -u -j -f '%F %T %z' '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S' 2>/dev/null || date -u -d '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S')"
