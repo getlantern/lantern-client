@@ -451,7 +451,7 @@ dependencies {
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     // from https://github.com/getlantern/opus_android
-    //implementation(name:'opuslib-release', ext: 'aar')
+    implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:messaging-android:65aa7a4ac2'
     implementation 'com.github.getlantern:db-android:70d727d18a'
