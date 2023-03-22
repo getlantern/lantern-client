@@ -19,6 +19,11 @@ jobs:
     runs-on: ubuntu-latest-8-cores
     steps:
     - uses: actions/checkout@v3
+      with:
+        lfs: true
+
+    - name: Pull LFS objects
+      run: git lfs pull
 
     # Install Flutter
     - uses: subosito/flutter-action@v2
