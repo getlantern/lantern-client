@@ -48,13 +48,11 @@ jobs:
 
     - name: Build Lantern core Android library
       run: |
-        gomobile bind -cache ${{ github.workspace }}/.gomobilecache \
-        -target=android/arm,android/arm64,android/386,android/amd64 \
-        -tags='headless lantern' -o=liblantern-all.aar \
-        -androidapi=19 \
+        gomobile bind -target=android/arm,android/arm64,android/386,android/amd64 \
+        -tags='headless lantern' -o=liblantern-all.aar -androidapi=19 \
         -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=$REVISION_DATE \
                   -X github.com/getlantern/flashlight/common.BuildDate=$BUILD_DATE \
-                  -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$VERSION" \
+                  -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=${{ env.VERSION}}" \
         github.com/getlantern/android-lantern/internalsdk
 
     - name: Setup Sentry CLI
