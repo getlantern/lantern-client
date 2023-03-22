@@ -75,6 +75,8 @@ jobs:
                   -X github.com/getlantern/flashlight/common.BuildDate=$BUILD_DATE \
                   -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=${{ env.VERSION }}" \
         github.com/getlantern/android-lantern/internalsdk
+        mkdir -p android/app/libs
+        cp liblantern-all.aar android/app/libs
 
     - name: Install Flutter dependencies
       run: flutter pub get
