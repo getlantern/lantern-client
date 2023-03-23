@@ -119,10 +119,9 @@ jobs:
 
     - name: Upload to S3
       run: |
-        echo "BASE_NAME=lantern-installer-internal"
-        echo "INSTALLER_NAMES=$(ls -1 $BASE_NAME*.*)"
+        echo "INSTALLER_NAMES=$(ls -1 lantern-installer-internal*.*)"
         echo "S3_BUCKET=${{ secrets.S3_BUCKET }}"
-        for NAME in $INSTALLER_NAMES; do
+        for NAME in "$INSTALLER_NAMES"; do
           sha256sum ${NAME} | cut -d ' ' -f 1 > ${NAME}.test.sha256
           echo "Uploading SHA-256 $(cat ${NAME}.test.sha256)"
           s3cmd put -P ${NAME}.test.sha256 s3://$S3_BUCKET
@@ -133,4 +132,3 @@ jobs:
           s3cmd setacl s3://$S3_BUCKET/$VERSIONED --acl-public
           s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' s3://$S3_BUCKET/${NAME} 
         done
-
