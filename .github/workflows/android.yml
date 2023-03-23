@@ -115,19 +115,6 @@ jobs:
         region: ${{ secrets.AWS_REGION }}
         access_key: ${{ secrets.AWS_ACCESS_KEY }}
         secret_key: ${{ secrets.AWS_SECRET_KEY }}
-
+                            
     - name: Upload to S3
-      run: |
-        echo "INSTALLER_NAMES=$(ls -1 lantern-installer-internal*.*)"
-        echo "S3_BUCKET=${{ secrets.S3_BUCKET }}"
-        for NAME in "$INSTALLER_NAMES"; do
-          sha256sum "${NAME}" | cut -d ' ' -f 1 > "${NAME}.test.sha256"
-          echo "Uploading SHA-256 $(cat ${NAME}.test.sha256)"
-          s3cmd put -P "${NAME}.test.sha256 s3://$S3_BUCKET"
-          echo "Uploading ${NAME} to S3"
-          s3cmd put -P "${NAME} s3://$S3_BUCKET"
-          echo "VERSIONED=${NAME}-$VERSION.${NAME#*.}"
-          s3cmd cp "s3://$S3_BUCKET/${NAME} s3://$S3_BUCKET/$VERSIONED"
-          s3cmd setacl "s3://$S3_BUCKET/$VERSIONED" --acl-public
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${NAME}"
-        done
+      run: "VERSION=$VERSION" make release-qa

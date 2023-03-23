@@ -81,7 +81,8 @@ BINARIES_BRANCH ?= main
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
-S3_BUCKET ?= lantern
+# temporary change
+S3_BUCKET ?= lanterninstallers
 FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
 
@@ -230,15 +231,12 @@ require-magick:
 require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
 
-release-qa: require-version require-s3cmd require-changelog
+release-qa: require-version require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
 	VERSION_FILE_NAME="version-qa-android.txt" && \
-	rm -f $$BASE_NAME* && \
-	cp $(INSTALLER_NAME)-arm32.apk $$BASE_NAME.apk && \
-	cp lantern-all.aab $$BASE_NAME.aab && \
 	echo "Uploading installer packages and shasums" && \
 	for NAME in $$(ls -1 $$BASE_NAME*.*); do \
-		shasum -a 256 $$NAME | cut -d " " -f 1 > $$NAME.sha256 && \
+		sha256sum $$NAME | cut -d " " -f 1 > $$NAME.sha256 && \
 		echo "Uploading SHA-256 `cat $$NAME.sha256`" && \
 		$(S3CMD) put -P $$NAME.sha256 s3://$(S3_BUCKET) && \
 		echo "Uploading $$NAME to S3" && \
