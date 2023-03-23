@@ -61,21 +61,9 @@ jobs:
     - name: Set environment variables
       run: |
         echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
-        echo "GIT_REVISION_SHORTCODE=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-        echo "GIT_REVISION=$(git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)" >> $GITHUB_ENV
-        echo "GIT_REVISION_DATE=$(git show -s --format=%ci ${GIT_REVISION_SHORTCODE})" >> $GITHUB_ENV
-        echo "REVISION_DATE=$(date -u -j -f '%F %T %z' '${GIT_REVISION_DATE}' +'%Y%m%d.%H%M%S' 2>/dev/null || date -u -d '${GIT_REVISION_DATE}' +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
-        echo "BUILD_DATE=$(date -u +%Y%m%d.%H%M%S)" >> $GITHUB_ENV
-        echo "TAG_COMMIT=$(git rev-list --abbrev-commit -1 ${VERSION})" >> $GITHUB_ENV
  
     - name: Build Lantern core Android library
-      run: |
-        gomobile bind -target=${{ env.ANDROID_ARCH_GOMOBILE }} \
-        -tags='headless lantern' -o=android/app/libs/liblantern-all.aar -androidapi=19 \
-        -ldflags="-s -w -X github.com/getlantern/flashlight/common.RevisionDate=$REVISION_DATE \
-                  -X github.com/getlantern/flashlight/common.BuildDate=$BUILD_DATE \
-                  -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$VERSION" \
-        github.com/getlantern/android-lantern/internalsdk
+      run: make android-lib
 
     - name: Install Flutter dependencies
       run: flutter pub get
