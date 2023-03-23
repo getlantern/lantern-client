@@ -261,10 +261,6 @@ release-qa:
 	s3cmd put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
 	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)"
 
-release-qa-linux: release-qa
-
-release-qa-mac: require-version require-s3cmd release-qa
-
 release-beta: require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
 	VERSION_FILE_NAME="version-beta-android.txt" && \
