@@ -238,27 +238,27 @@ release-qa:
 	for NAME in $$(ls -1 $$BASE_NAME*.*); do \
 		sha256sum $$NAME | cut -d " " -f 1 > $$NAME.sha256 && \
 		echo "Uploading SHA-256 `cat $$NAME.sha256`" && \
-		$(S3CMD) put -P $$NAME.sha256 s3://$(S3_BUCKET) && \
+		s3cmd put -P $$NAME.sha256 s3://$(S3_BUCKET) && \
 		echo "Uploading $$NAME to S3" && \
-		$(S3CMD) put -P $$NAME s3://$(S3_BUCKET) && \
+		s3cmd put -P $$NAME s3://$(S3_BUCKET) && \
 		SUFFIX=$$(echo "$$NAME" | sed s/$$BASE_NAME//g) && \
 		VERSIONED=$(INSTALLER_NAME)-$$VERSION$$SUFFIX && \
 		echo "Copying $$VERSIONED" && \
-		$(S3CMD) cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$VERSIONED && \
+		s3cmd cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$VERSIONED && \
 		echo "Copied $$VERSIONED ... setting acl to public" && \
-		$(S3CMD) setacl s3://$(S3_BUCKET)/$$VERSIONED --acl-public; \
+		s3cmd setacl s3://$(S3_BUCKET)/$$VERSIONED --acl-public; \
 	done && \
 	echo "Setting content types for installer packages" && \
 	for NAME in $$BASE_NAME.apk $(INSTALLER_NAME)-$$VERSION.apk $$BASE_NAME.aab ; do \
-		$(S3CMD) modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$NAME; \
+		s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$NAME; \
 	done && \
 	for NAME in update_android_arm ; do \
 		cp lantern_$$NAME.bz2 lantern_$$NAME-$$VERSION.bz2 && \
 		echo "Copying versioned name lantern_$$NAME-$$VERSION.bz2..." && \
-		$(S3CMD) put -P lantern_$$NAME-$$VERSION.bz2 s3://$(S3_BUCKET); \
+		s3cmd put -P lantern_$$NAME-$$VERSION.bz2 s3://$(S3_BUCKET); \
 	done && \
 	echo $$VERSION > $$VERSION_FILE_NAME && \
-	$(S3CMD) put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
+	s3cmd put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
 	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)"
 
 release-qa-linux: release-qa
