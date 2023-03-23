@@ -242,7 +242,7 @@ release-qa:
 		echo "Uploading $$NAME to S3" && \
 		s3cmd put -P $$NAME s3://$(S3_BUCKET) && \
 		SUFFIX=$$(echo "$$NAME" | sed s/$$BASE_NAME//g) && \
-		VERSIONED=$(INSTALLER_NAME)-$$VERSION$$SUFFIX && \
+		VERSIONED="$(INSTALLER_NAME)-$$VERSION$$SUFFIX" && \
 		echo "Copying $$VERSIONED" && \
 		s3cmd cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$VERSIONED && \
 		echo "Copied $$VERSIONED ... setting acl to public" && \
