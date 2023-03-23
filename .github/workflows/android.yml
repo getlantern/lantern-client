@@ -60,12 +60,12 @@ jobs:
 
     - name: Set environment variables
       run: |
-        echo "VERSION=$(cat VERSION)"
-        echo "GIT_REVISION_SHORTCODE=$(git rev-parse --short HEAD)"
-        echo "GIT_REVISION=$(git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)"
-        echo "REVISION_DATE=$(date -u -j -f '%F %T %z' '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S' 2>/dev/null || date -u -d '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S')"
-        echo "BUILD_DATE=$(date -u +%Y%m%d.%H%M%S)"
-        echo "TAG_COMMIT=$(git rev-list --abbrev-commit -1 $VERSION)"
+        echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
+        echo "GIT_REVISION_SHORTCODE=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        echo "GIT_REVISION=$(git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)" >> $GITHUB_ENV
+        echo "REVISION_DATE=$(date -u -j -f '%F %T %z' '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S' 2>/dev/null || date -u -d '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
+        echo "BUILD_DATE=$(date -u +%Y%m%d.%H%M%S)" >> $GITHUB_ENV
+        echo "TAG_COMMIT=$(git rev-list --abbrev-commit -1 $VERSION)" > $GITHUB_ENV
  
     - name: Build Lantern core Android library
       run: |
@@ -117,4 +117,4 @@ jobs:
         secret_key: ${{ secrets.AWS_SECRET_KEY }}
 
     - name: Upload to S3
-      run: VERSION="$VERSION" make release-qa
+      run: make release-qa
