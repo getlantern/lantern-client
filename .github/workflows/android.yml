@@ -63,10 +63,10 @@ jobs:
         echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
         echo "GIT_REVISION_SHORTCODE=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
         echo "GIT_REVISION=$(git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)" >> $GITHUB_ENV
-        echo "GIT_REVISION_DATE=$(git show -s --format=%ci $GIT_REVISION_SHORTCODE)" >> $GITHUB_ENV
-        echo "REVISION_DATE=$(date -u -j -f '%F %T %z' '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S' 2>/dev/null || date -u -d '$GIT_REVISION_DATE' +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
+        echo "GIT_REVISION_DATE=$(git show -s --format=%ci ${GIT_REVISION_SHORTCODE})" >> $GITHUB_ENV
+        echo "REVISION_DATE=$(date -u -j -f '%F %T %z' '${GIT_REVISION_DATE}' +'%Y%m%d.%H%M%S' 2>/dev/null || date -u -d '${GIT_REVISION_DATE}' +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
         echo "BUILD_DATE=$(date -u +%Y%m%d.%H%M%S)" >> $GITHUB_ENV
-        echo "TAG_COMMIT=$(git rev-list --abbrev-commit -1 $VERSION)" >> $GITHUB_ENV
+        echo "TAG_COMMIT=$(git rev-list --abbrev-commit -1 ${VERSION})" >> $GITHUB_ENV
  
     - name: Build Lantern core Android library
       run: |
