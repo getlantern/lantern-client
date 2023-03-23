@@ -231,7 +231,7 @@ require-magick:
 require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
 
-release-qa: require-version require-s3cmd
+release-qa:
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
 	VERSION_FILE_NAME="version-qa-android.txt" && \
 	echo "Uploading installer packages and shasums" && \
@@ -259,7 +259,11 @@ release-qa: require-version require-s3cmd
 	done && \
 	echo $$VERSION > $$VERSION_FILE_NAME && \
 	$(S3CMD) put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
-	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" 
+	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)"
+
+release-qa-linux: release-qa
+
+release-qa-mac: require-version require-s3cmd release-qa
 
 release-beta: require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
