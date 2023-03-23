@@ -252,11 +252,6 @@ release-qa:
 	for NAME in $$BASE_NAME.apk $(INSTALLER_NAME)-$$VERSION.apk $$BASE_NAME.aab ; do \
 		s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$NAME; \
 	done && \
-	for NAME in update_android_arm ; do \
-		cp lantern_$$NAME.bz2 lantern_$$NAME-$$VERSION.bz2 && \
-		echo "Copying versioned name lantern_$$NAME-$$VERSION.bz2..." && \
-		s3cmd put -P lantern_$$NAME-$$VERSION.bz2 s3://$(S3_BUCKET); \
-	done && \
 	echo $$VERSION > $$VERSION_FILE_NAME && \
 	s3cmd put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
 	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)"
