@@ -13,8 +13,5 @@ type Engine interface {
 }
 
 func New() Engine {
-	if useMatomo {
-		return NewMatomo()
-	}
 	return NewGA()
 }
