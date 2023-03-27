@@ -105,7 +105,6 @@
   <string name="error_update">ایراد در دانلود به روز رسانی</string>
   <string name="error_install_update">خطا در نصب نسخه به‌روز</string>
   <string name="loading">در حال بارگذاری...</string>
-  <string name="manual_update">به صورت دستی آخرین نسخه را از  &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt; دانلود کنید</string>
   <string name="pro_welcome_text">به  فانوس Pro خوش آمدید!</string>
   <string name="happy_anniversary">سالگرد فانوس مبارک!</string>
   <string name="welcome_greeting">به  فانوس خوش آمدید</string>

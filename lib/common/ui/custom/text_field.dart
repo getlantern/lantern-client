@@ -263,6 +263,7 @@ class _CTextFieldState extends State<CTextField> {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(blue4),
+        elevation: MaterialStateProperty.all(0),
         fixedSize: MaterialStateProperty.all(const Size(56, 56)),
         shape: MaterialStateProperty.all(
           const RoundedRectangleBorder(
