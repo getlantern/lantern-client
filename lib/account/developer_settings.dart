@@ -111,6 +111,21 @@ class DeveloperSettingsTab extends StatelessWidget {
                 )
               ],
             ),
+            // * RESET REPLICA SHOW NEW BADGE
+            ListItemFactory.settingsItem(
+              content: 'Reset replica new badge',
+              trailingArray: [
+                TextButton(
+                  onPressed: () async {
+                    await replicaModel.setShowNewBadge(true);
+                  },
+                  child: CText(
+                    'Reset Badge'.toUpperCase(),
+                    style: tsButton.copiedWith(color: Colors.deepPurpleAccent),
+                  ),
+                )
+              ],
+            ),
             // * RESET ONBOARDING + RECOVERY KEY FLAGS
             ListItemFactory.settingsItem(
               content: 'Reset chat flags',
@@ -225,6 +240,11 @@ class DeveloperSettingsTab extends StatelessWidget {
                         )!,
                         'description',
                         'title',
+                        'serpTitle',
+                        'serpSnippet',
+                        'serpSource',
+                        'serpDate',
+                        'serpLink',
                       ),
                       category: SearchCategory.Video,
                     ),
@@ -255,6 +275,11 @@ class DeveloperSettingsTab extends StatelessWidget {
                         )!,
                         'description',
                         'title',
+                        'serpTitle',
+                        'serpSnippet',
+                        'serpSource',
+                        'serpDate',
+                        'serpLink',
                       ),
                     ),
                   ),
@@ -284,6 +309,11 @@ class DeveloperSettingsTab extends StatelessWidget {
                         )!,
                         'description',
                         'title',
+                        'serpTitle',
+                        'serpSnippet',
+                        'serpSource',
+                        'serpDate',
+                        'serpLink',
                       ),
                     ),
                   ),

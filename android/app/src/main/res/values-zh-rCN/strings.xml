@@ -95,7 +95,6 @@
   <string name="error_update">下载更新时出错</string>
   <string name="error_install_update">安装更新时出错</string>
   <string name="loading">正在加载...</string>
-  <string name="manual_update">请尝试从以下网站手动安装最新版本：&lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">欢迎使用“蓝灯专业版”！</string>
   <string name="happy_anniversary">祝蓝灯周年快乐！</string>
   <string name="welcome_greeting">欢迎来到蓝灯</string>
@@ -447,15 +446,15 @@
   <string name="email">电子邮件</string>
   <string name="authorize_with_device_linking_pin">用设备连接码进行授权</string>
   <string name="requires_physical_access_to_a_lantern_pro_device">需要实际访问蓝灯专业版设备。</string>
-  <string name="link_with_pin">与 PIN 链接</string>
+  <string name="link_with_pin">使用设备码授权</string>
   <string name="authorize_device_via_email">通过电子邮件授权设备</string>
   <string name="requires_access_to_the_email_you_used_to_buy_lantern_pro">需要访问您购买蓝灯专业版时用的电子邮件。</string>
   <string name="link_via_email">链接到电子邮件</string>
-  <string name="device_linking_pin">设备连接码</string>
+  <string name="device_linking_pin">设备码授权</string>
   <string name="open_the_add_device_menu_item_on_your_pro_device">打开专业版设备上的“添加设备”菜单项。</string>
-  <string name="enter_the_device_linking_pin_and_submit">输入设备链接码，然后提交。</string>
+  <string name="enter_the_device_linking_pin_and_submit">输入设备码，然后提交。</string>
   <string name="ensure_both_devices_are_running_the_most_recent_version_of_lantern">*确保两台设备都在运行最新版的蓝灯。</string>
-  <string name="your_device_linking_pin_has_been_sent">您的设备连接码已发送至 %s。该邮件可能需要几个小时才能收到。如果您没有找到它，请检查您的垃圾邮件文件夹。</string>
+  <string name="your_device_linking_pin_has_been_sent">您的邮箱码已发送至 %s。该邮件可能需要几个小时才能收到。如果您没有找到它，请检查您的垃圾邮件文件夹。</string>
   <string name="enter_or_paste_device_linking_pin">输入或粘贴设备连接码</string>
   <string name="describe_your_issue">问题描述</string>
   <string name="send_report">发送报告</string>

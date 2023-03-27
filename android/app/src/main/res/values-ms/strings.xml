@@ -105,7 +105,6 @@
   <string name="error_update">Ralat Muat Turun Update</string>
   <string name="error_install_update">Ralat Pemasangan Kemas Kini</string>
   <string name="loading">Muat...</string>
-  <string name="manual_update">Cuba memasang versi terkini secara manual dari &lt;a href=\"https://lantern-android.io\"&gt;here1&lt;/a&gt;</string>
   <string name="pro_welcome_text">Selamat datang ke Lantern Pro!</string>
   <string name="happy_anniversary">SELAMAT ULANG TAHUN LANTERN!</string>
   <string name="welcome_greeting">Selamat datang ke Lantern</string>
