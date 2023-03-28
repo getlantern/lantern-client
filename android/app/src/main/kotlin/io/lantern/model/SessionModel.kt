@@ -1,4 +1,4 @@
-package io.lantern.android.model
+package io.lantern.model
 
 import android.app.Activity
 import androidx.core.content.ContextCompat

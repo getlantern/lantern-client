@@ -11,8 +11,8 @@ import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
 import internalsdk.AdSettings
 import internalsdk.Session
-import io.lantern.android.model.BaseModel
-import io.lantern.android.model.Vpn
+import io.lantern.model.BaseModel
+import io.lantern.model.Vpn
 import io.lantern.db.DB
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Bandwidth
