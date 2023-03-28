@@ -13,6 +13,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/getlantern/android-lantern/internalsdk/analytics"
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/autoupdate"
 	"github.com/getlantern/dnsgrab"
@@ -38,6 +39,8 @@ import (
 )
 
 const (
+	// forever indicates that Get should wait forever
+	forever       = -1
 	maxDNSGrabAge = 24 * time.Hour // this doesn't need to be huge, since we use a TTL of 1 second for our DNS responses
 )
 
@@ -453,6 +456,14 @@ func EnableLogging(configDir string) {
 	logging.EnableFileLogging(common.DefaultAppName, configDir)
 }
 
+func newAnalyticsSession(deviceID string) analytics.Session {
+	session := analytics.Start(deviceID, common.Version)
+	go func() {
+		session.SetIP(geolookup.GetIP(forever))
+	}()
+	return session
+}
+
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
 
@@ -579,10 +590,11 @@ func run(configDir, locale string,
 	}
 
 	replicaServer := &ReplicaServer{
-		ConfigDir:  configDir,
-		Flashlight: runner,
-		Session:    session.Wrapped(),
-		UserConfig: userConfig,
+		ConfigDir:        configDir,
+		Flashlight:       runner,
+		analyticsSession: newAnalyticsSession(session.GetDeviceID()),
+		Session:          session.Wrapped(),
+		UserConfig:       userConfig,
 	}
 	session.Wrapped().SetReplicaAddr("") // start off with no Replica address
 
