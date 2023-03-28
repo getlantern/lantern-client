@@ -3,7 +3,7 @@ package org.getlantern.lantern.model
 import android.app.Application
 import android.content.res.Resources
 import android.text.TextUtils
-import io.lantern.android.model.Vpn
+import io.lantern.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.PlansActivity_
@@ -146,6 +146,14 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun deviceCode(): String? {
         return prefs.getString(DEVICE_LINKING_CODE, "")
+    }
+
+    fun deviceID(): String? {
+      return prefs.getString(DEVICE_ID, "")
+    }
+
+    fun userID(): Long {
+      return prefs.getLong(USER_ID, 0)
     }
 
     fun getDeviceExp(): Long {
@@ -344,6 +352,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val STRIPE_API_KEY = "stripe_api_key"
         private const val DEFAULT_CURRENCY_CODE = "usd"
         private const val DEVICE_LINKED = "DeviceLinked"
+        private const val DEVICE_ID = "deviceid"
+        private const val USER_ID = "userid"
         private const val REFERRAL_CODE = "referral"
         private const val PW_SIGNATURE = "pwsignature"
         private const val DEVICE_LINKING_CODE = "devicelinkingcode"

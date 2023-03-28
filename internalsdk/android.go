@@ -6,10 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 	"time"
 
@@ -29,7 +27,6 @@ import (
 	"github.com/getlantern/flashlight/email"
 	"github.com/getlantern/flashlight/geolookup"
 	"github.com/getlantern/flashlight/logging"
-	"github.com/getlantern/flashlight/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/memhelper"
 	"github.com/getlantern/mtime"
@@ -46,9 +43,6 @@ const (
 
 var (
 	log = golog.LoggerFor("lantern")
-
-	// XXX mobile does not respect the autoupdate global config
-	updateClient = &http.Client{Transport: proxied.ChainedThenFrontedWith("")}
 
 	startOnce sync.Once
 
@@ -680,33 +674,4 @@ func afterStart(session panickingSession) {
 			session.SetCountry(country)
 		}
 	}()
-}
-
-// CheckForUpdates checks to see if a new version of Lantern is available
-func CheckForUpdates() (string, error) {
-	return checkForUpdates(buildUpdateCfg())
-}
-
-func checkForUpdates(updateCfg *autoupdate.Config) (string, error) {
-	return autoupdate.CheckMobileUpdate(updateCfg)
-}
-
-// DownloadUpdate downloads the latest APK from the given url to the apkPath
-// file destination.
-func DownloadUpdate(url, apkPath string, updater Updater) {
-	autoupdate.UpdateMobile(url, apkPath, updater, updateClient)
-}
-
-func buildUpdateCfg() *autoupdate.Config {
-	return &autoupdate.Config{
-		CurrentVersion: common.CompileTimePackageVersion,
-		URL:            fmt.Sprintf("https://update.getlantern.org/update/%s", strings.ToLower(common.DefaultAppName)),
-		HTTPClient:     updateClient,
-		PublicKey:      []byte(autoupdate.PackagePublicKey),
-	}
-}
-
-// Get the version number of the Go library.
-func SDKVersion() string {
-	return common.PackageVersion
 }
