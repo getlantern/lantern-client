@@ -132,11 +132,12 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     // for installation once the download completes
     private fun installUpdate() {
         val callingActivity = this
+        val appName = getString(R.string.app_name)
         // make progress bar layout in update prompt visible and hide the update buttons
         progressBarLayout.setVisibility(View.VISIBLE)
         subTitle.setVisibility(View.GONE)
         updateButtons.setVisibility(View.GONE)
-        title.text = getString(R.string.updating_lantern)
+        title.text = String.format(getString(R.string.updating_lantern), appName)
         var context: Context = applicationContext
         var apkDir: File = File(context.cacheDir, "updates")
         val apkPath = File(apkDir, "Lantern.apk")
