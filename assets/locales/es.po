@@ -7,11 +7,11 @@
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2022
 # e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022
 # strel, 2022
-# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2022
+# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2022\n"
+"Last-Translator: e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2023\n"
 "Language-Team: Spanish (https://www.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -139,6 +139,9 @@ msgstr "Versión %s"
 
 msgid "build_number"
 msgstr "Compilación %s"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "Idioma"
@@ -1114,6 +1117,18 @@ msgid "replica_search_intro"
 msgstr ""
 "Busque contenido subido por usuarios en la red de Lantern o suba su propio "
 "contenido para que otros usuarios lo descubran."
+
+msgid "replica_new_discover"
+msgstr "Nueva categoría de Descubrir"
+
+msgid "replica_new_discover_news"
+msgstr "¡Ya puede buscar artículos de noticias con la función Descubrir!"
+
+msgid "replica_check_it_out"
+msgstr "Eche un vistazo"
+
+msgid "news"
+msgstr "Noticias"
 
 msgid "share"
 msgstr "Compartir"

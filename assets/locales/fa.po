@@ -15,11 +15,11 @@
 # Chip Stehr <chip@getlantern.org>, 2022
 # NoProfile, 2022
 # Lantern, 2022
-# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2022
+# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2022\n"
+"Last-Translator: e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023\n"
 "Language-Team: Persian (Iran) (https://www.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -145,6 +145,9 @@ msgstr "نسخه %s"
 
 msgid "build_number"
 msgstr "ساخت %s"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "زبان"
@@ -1098,6 +1101,18 @@ msgid "replica_search_intro"
 msgstr ""
 "محتوای آپلودشده توسط کاربر را در شبکه Lantern جستجو کنید یا محتوای خود را "
 "برای استفاده دیگران آپلود کنید."
+
+msgid "replica_new_discover"
+msgstr "طبقه‌بندی جدید Discover"
+
+msgid "replica_new_discover_news"
+msgstr "Discover now به شما امکان می‌دهد که مقالات جدید را جستجو کنید!"
+
+msgid "replica_check_it_out"
+msgstr "امتحانش کنید"
+
+msgid "news"
+msgstr "اخبار"
 
 msgid "share"
 msgstr "اشتراك گذاري"

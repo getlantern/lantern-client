@@ -15,9 +15,11 @@ class ListItemFactory extends StatelessWidget {
     required ReplicaApi api,
     required ReplicaLink link,
     double height = 90.0,
+    String? serpLink,
   }) : this((BuildContext context, ListItemFactory factory) {
           return FocusedMenuHolder(
-            menu: renderReplicaLongPressMenuItem(context, api, link),
+            // provide download menu if not a serp result item
+            menu: serpLink == null ? renderReplicaLongPressMenuItem(context, api, link) : const SizedBox(),
             menuWidth: MediaQuery.of(context).size.width * 0.8,
             builder: (menuOpen) {
               return Container(

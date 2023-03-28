@@ -4,19 +4,20 @@
 # e2f_fr r9 <tx_e2f_fr_r9@ate2f.com>, 2022
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2022
 # AO <ao@localizationlab.org>, 2022
+# e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: AO <ao@localizationlab.org>, 2022\n"
+"Last-Translator: e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2023\n"
 "Language-Team: French (https://www.transifex.com/lantern-1/teams/94371/fr/)\n"
 "Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 msgid "app_name"
 msgstr "Lantern"
 
 msgid "introducing"
-msgstr "Présentation du dialogue en ligne"
+msgstr "Nous présentons le Dialogue en ligne"
 
 msgid "introducing_des"
 msgstr ""
@@ -98,15 +99,12 @@ msgstr "Supprimer toutes les données du dialogue"
 
 msgid "delete_chat_data_description"
 msgstr ""
-"Cette action supprimera votre numéro de conversation instantanée, vos "
-"contacts ainsi que vos messages de cet appareil. Sans votre clé de "
-"récupération de sauvegarde, vous ne pourrez plus accéder à votre numéro de "
-"conversation instantanée."
+"Cela supprimera votre numéro de conversation, vos contacts et messages de "
+"cet appareil. Sans votre clé de récupération de sauvegarde, vous perdrez "
+"l’accès votre numéro de conversation instantanée."
 
 msgid "delete_chat_data_confirmation"
-msgstr ""
-"Je confirme que je souhaite supprimer les données de ma conversation "
-"instantanée"
+msgstr "Je confirme que je veux supprimer les données de ma conversation"
 
 msgid "Pro Account Management"
 msgstr "Gestion du compte Pro"
@@ -141,11 +139,17 @@ msgstr "Version %s"
 msgid "build_number"
 msgstr "Build %s"
 
+msgid "sdk_version"
+msgstr "SDK %s"
+
 msgid "language"
 msgstr "Langue"
 
 msgid "report_issue"
 msgstr "Signaler un problème"
+
+msgid "check_for_updates"
+msgstr "Rechercher des mises à jour"
 
 msgid "blocked_users"
 msgstr "Utilisateurs bloqués"
@@ -349,8 +353,8 @@ msgstr "Débloquer %s ?"
 
 msgid "block_info_description"
 msgstr ""
-"Bloquer cet utilisateur supprimera l'historique du dialogue et empêchera "
-"celui-ci de vous contacter par la suite. Vous pouvez débloquer des "
+"Bloquer cet utilisateur supprimera l’historique des conversations et "
+"l’empêchera de vous contacter à l’avenir. Vous pouvez débloquer des "
 "utilisateurs dans le menu des paramètres."
 
 msgid "unblock_info_description"
@@ -359,9 +363,7 @@ msgstr ""
 "débloqué."
 
 msgid "block_info_checkbox"
-msgstr ""
-"Je comprends que cette action entraînera la suppression de tout l'historique"
-" du dialogue."
+msgstr "Je comprends que cela supprimera tout l’historique des conversations"
 
 msgid "unblock_info_checkbox"
 msgstr "Je confirme que je souhaite débloquer ce contact."
@@ -371,8 +373,8 @@ msgstr "Supprimer définitivement l'utilisateur"
 
 msgid "delete_info_description"
 msgstr ""
-"Une fois l'utilisateur supprimé, vous devrez ajouter ses coordonnées si vous"
-" souhaitez à nouveau discuter avec lui."
+"Après suppression, vous devrez ajouter ses coordonnées si vous voulez "
+"dialoguer avec cette personne de nouveau."
 
 msgid "add_new_contact"
 msgstr "Ajouter un nouveau contact"
@@ -390,7 +392,7 @@ msgid "add_contact_in_person"
 msgstr "Ajouter des contacts en face à face"
 
 msgid "start_chat"
-msgstr "Démarrer une conversation instantanée"
+msgstr "Lancer une conversation"
 
 msgid "message_disappearing"
 msgstr "Certains messages resteront visibles pour vous et %s."
@@ -515,7 +517,7 @@ msgid "qr_for_your_contact"
 msgstr "Votre code QR"
 
 msgid "add_via_chat_number"
-msgstr "Ajouter par numéro de dialogue"
+msgstr "Ajouter par no de conversation"
 
 msgid "qr_info_waiting_id"
 msgstr ""
@@ -533,11 +535,10 @@ msgstr ""
 "Veuillez vérifier le numéro que vous avez saisi et réessayer."
 
 msgid "self_adding"
-msgstr ""
-"Le numéro de conversation instantanée que vous avez saisi est le vôtre"
+msgstr "Le numéro de conversation que vous avez saisi est le vôtre"
 
 msgid "chat_number_type"
-msgstr "Saisir un numéro de conversation instantanée"
+msgstr "Saisir un numéro de conversation"
 
 msgid "letter_and_numbers_only"
 msgstr "Lettres et chiffres uniquement"
@@ -565,9 +566,8 @@ msgstr "Accepter la présentation à %s"
 
 msgid "introductions_info"
 msgstr ""
-"Les deux parties doivent accepter la présentation pour entamer une "
-"conversation. Les présentations disparaissent après sept jours si aucune "
-"action n'a été entreprise."
+"Les deux parties doivent accepter la présentation pour dialoguer. Les "
+"présentations disparaissent après sept jours si aucune action n’a été prise."
 
 msgid "introduction_reject_title"
 msgstr "Refuser la présentation"
@@ -615,12 +615,13 @@ msgid "disappearing_messages"
 msgstr "Messages qui disparaissent"
 
 msgid "start_of_your_history"
-msgstr "Vos dialogues et appels vocaux avec %s sont chiffrés de bout en bout"
+msgstr ""
+"Vos conversations et appels vocaux avec %s sont chiffrés de bout en bout"
 
 msgid "banner_unaccepted"
 msgstr ""
-"%s ne fait pas partie de votre liste de contacts. Souhaitez-vous accepter la"
-" demande de conversation instantanée ?"
+"%s n’est pas dans votre liste de contacts. Souhaitez-vous accepter la "
+"demande de dialogue ?"
 
 msgid "banner_messages_persist"
 msgstr "Les nouveaux messages ne disparaissent pas."
@@ -670,7 +671,7 @@ msgstr "%s sem."
 msgid "longform_weeks"
 msgstr "%s semaines"
 
-msgid "banner_source_unknown"
+msgid "unknown"
 msgstr "Inconnu"
 
 msgid "banner_source_qr"
@@ -734,13 +735,13 @@ msgid "messages"
 msgstr "Messages"
 
 msgid "chats"
-msgstr "Dialogues"
+msgstr "Conversations"
 
 msgid "new_requests"
 msgstr "Nouvelles demandes (%s)"
 
 msgid "chat"
-msgstr "Dialogue en ligne"
+msgstr "Conversation"
 
 msgid "lantern_chat"
 msgstr "Dialogue en ligne Lantern"
@@ -750,26 +751,26 @@ msgstr "Bienvenue dans le dialogue en ligne Lantern."
 
 msgid "welcome_text"
 msgstr ""
-"Un outil de conversation instantanée chiffrée pour protéger votre vie privée"
-" et intégrant une technologie de résistance aux blocages de premier ordre."
+"Un dialogue en ligne chiffré pour protéger votre vie privée et vos données "
+"avec la meilleure technologie de résistance aux blocages."
 
 msgid "get_started"
 msgstr "Démarrer"
 
 msgid "want_to_recover"
-msgstr "Vous possédez un numéro de conversation instantanée ?"
+msgstr "Avez-vous un numéro de conversation ?"
 
 msgid "recover"
 msgstr "Récupérer"
 
 msgid "chat_number"
-msgstr "Numéro de conversation instantanée"
+msgstr "Numéro de conversation"
 
 msgid "your_chat_number"
-msgstr "Votre numéro de conversation instantanée"
+msgstr "Votre numéro de conversation"
 
 msgid "chat_number_recovery"
-msgstr "Récupération du numéro de conversation instantanée"
+msgstr "Récupération du numéro de conversation"
 
 msgid "recovery_helper_text"
 msgstr "Veuillez saisir une clé de récupération valide"
@@ -777,7 +778,7 @@ msgstr "Veuillez saisir une clé de récupération valide"
 msgid "recovery_button"
 msgstr ""
 "Saisissez votre clé de récupération pour récupérer votre numéro de "
-"conversation instantanée."
+"conversation."
 
 msgid "recovery_label"
 msgstr "Saisissez votre clé de récupération"
@@ -787,21 +788,21 @@ msgstr "Clé de récupération"
 
 msgid "secure_text_explanation"
 msgstr ""
-"Votre numéro de conversation instantanée s'apparente à un numéro de "
-"téléphone que vos amis peuvent utiliser pour vous contacter sur Lantern."
+"Votre numéro de conversation fonctionne comme un numéro de téléphone que vos"
+" amis peuvent utiliser pour vous contacter sur Lantern."
 
 msgid "secure_text_explanation_account"
 msgstr ""
-"Il s'agit de la version complète de votre numéro de conversation instantanée ; partager ce numéro plus long garantit une sécurité accrue, en particulier si vous disposez d'un autre canal chiffré de bout en bout sur lequel le partager.\n"
+"Il s’agit de la version complète de votre numéro de conversation ; partager ce numéro plus long apporte une sécurité accrue, en particulier si vous disposez d’un autre canal chiffré de bout en bout sur lequel le partager.\n"
 "\n"
-"Lantern fournit une version plus courte du numéro de conversation instantanée pour faciliter le partage de coordonnées."
+"Lantern fournit une version plus courte du numéro de conversation pour faciliter le partage de coordonnées."
 
 msgid "recovery_key_account_explanation"
 msgstr ""
 "Conservez cette clé en lieu sûr et ne la partagez avec personne. Elle "
-"constitue la seule façon de récupérer votre numéro de conversation "
-"instantanée si vous perdez votre téléphone, changez d'appareil ou "
-"réinitialisez le système d'exploitation."
+"constitue la seule façon de récupérer votre numéro de conversation si vous "
+"perdez votre téléphone, changez d’appareil ou réinitialisez le système "
+"d’exploitation."
 
 msgid "recovery_error"
 msgstr "Impossible de récupérer votre compte."
@@ -813,12 +814,10 @@ msgid "recovery_retrieval_error"
 msgstr "Une erreur est survenue lors de la récupération de votre compte"
 
 msgid "recovery_success"
-msgstr "Vous avez récupéré votre numéro de conversation instantanée"
+msgstr "Vous avez récupéré votre numéro de conversation avec succès"
 
 msgid "empty_chats_text"
-msgstr ""
-"Partagez votre numéro de conversation instantanée ou ajoutez un contact "
-"ici !"
+msgstr "Partagez votre numéro de conversation ou ajoutez un contact ici."
 
 msgid "next"
 msgstr "Suivante"
@@ -941,7 +940,7 @@ msgid "search_in_contacts"
 msgstr "Rechercher dans Contacts"
 
 msgid "search_in_chats"
-msgstr "Rechercher dans Dialogues et Contacts"
+msgstr "Rechercher dans Conversations et Contacts"
 
 msgid "could_not_render_title"
 msgstr "Impossible d'afficher le titre du fichier"
@@ -1034,9 +1033,9 @@ msgstr "Important !"
 
 msgid "replica_upload_confirmation_body"
 msgstr ""
-"Les fichiers chargés sur le réseau Lantern sont accessibles publiquement. Ils sont décentralisés et personne ne peut les supprimer du réseau.\n"
-"\n"
-"Évitez de mentionner des informations d’identification personnelle dans le contenu et le nom du fichier lorsque vous chargez du contenu sensible."
+"Les fichiers chargés sur le réseau Lantern sont accessibles publiquement. "
+"Personne ne peut les supprimer. N'incluez pas d'informations personnelles ou"
+" permettant de vous identifier dans le contenu ou le nom de vos fichiers."
 
 msgid "replica_upload_confirmation_agree"
 msgstr "Reprendre le téléversement"
@@ -1060,13 +1059,20 @@ msgid "upload_in_progress"
 msgstr "Chargement en cours"
 
 msgid "upload_complete"
-msgstr "Chargement terminé"
+msgstr "Votre fichier a bien été publié"
 
 msgid "upload_failed"
 msgstr "Échec du chargement"
 
 msgid "upload_cancelled"
 msgstr "Chargement annulé"
+
+msgid "upload_unknown_error"
+msgstr "Une erreur s'est produite lors de la tentative de publication"
+
+msgid "download_unknown_error"
+msgstr ""
+"Une erreur s'est produite lors de la tentative de téléchargement de %s"
 
 msgid "replica_link_fetcher"
 msgstr "Outil de récupération du lien de réplique"
@@ -1099,6 +1105,12 @@ msgstr ""
 msgid "untitled"
 msgstr "Sans titre"
 
+msgid "preview_not_available"
+msgstr "Aperçu indisponible"
+
+msgid "download_to_view"
+msgstr "Téléchargez le fichier pour le consulter"
+
 msgid "failed_to_init_replica"
 msgstr "Erreur : échec de l'initialisation de la réplique"
 
@@ -1114,17 +1126,72 @@ msgstr ""
 "chargez votre propre contenu de manière à ce que d'autres utilisateurs "
 "puissent le découvrir."
 
+msgid "replica_new_discover"
+msgstr "Nouvelle catégorie de découverte"
+
+msgid "replica_new_discover_news"
+msgstr "L'option découverte vous permet de chercher de nouveaux articles !"
+
+msgid "replica_check_it_out"
+msgstr "Jeter un œil"
+
+msgid "news"
+msgstr "Actualités"
+
 msgid "share"
 msgstr "Partager"
 
 msgid "upload_file_screen"
 msgstr "Téléverser un fichier"
 
+msgid "edit_title"
+msgstr "Modifier le titre"
+
+msgid "filenames_cannot_be_edited"
+msgstr ""
+"Les noms des fichiers ne peuvent pas être modifiés après leur publication."
+
+msgid "add_description"
+msgstr "Ajouter une description"
+
+msgid "no_description"
+msgstr "Aucune description fournie"
+
+msgid "read_details"
+msgstr "Lire le PDF"
+
+msgid "description_initial_value"
+msgstr "La description ne peut pas être modifiée après sa publication."
+
 msgid "name_your_file"
 msgstr "Nommez votre fichier"
 
 msgid "upload"
 msgstr "Téléverser"
+
+msgid "review"
+msgstr "Vérifier"
+
+msgid "skip"
+msgstr "Ignorer"
+
+msgid "replica_layout_filetype"
+msgstr "type de fichier : %s"
+
+msgid "replica_layout_creation_date"
+msgstr "Créé le %s"
+
+msgid "empty_description"
+msgstr "Aucune description n'a été fournie."
+
+msgid "publish"
+msgstr "Oui, publier"
+
+msgid "important"
+msgstr "Important !"
+
+msgid "upload_tos_agree"
+msgstr "Je comprends"
 
 msgid "test_text"
 msgstr "Je veux manger de la pizza 🍕 😊"

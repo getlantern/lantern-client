@@ -1018,6 +1018,18 @@ msgstr "Discover"
 msgid "replica_search_intro"
 msgstr "Search user-uploaded content on the Lantern Network, or upload your own for others to discover."
 
+msgid "replica_new_discover"
+msgstr "New Discover Category"
+
+msgid "replica_new_discover_news"
+msgstr "Discover now allows you to search for news articles!"
+
+msgid "replica_check_it_out"
+msgstr "Check it out"
+
+msgid "news"
+msgstr "News"
+
 msgid "share"
 msgstr "Share"
 

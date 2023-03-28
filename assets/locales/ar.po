@@ -11,11 +11,11 @@
 # e2f <projects@e2f.com>, 2022
 # dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2022
 # Abed Abedd <abderrahman.younis@gmail.com>, 2022
-# e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2022
+# e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2022\n"
+"Last-Translator: e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2023\n"
 "Language-Team: Arabic (https://www.transifex.com/lantern-1/teams/94371/ar/)\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
@@ -141,6 +141,9 @@ msgstr "الإصدار %s"
 
 msgid "build_number"
 msgstr "البنية %s"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "لغة"
@@ -1091,6 +1094,18 @@ msgid "replica_search_intro"
 msgstr ""
 "ابحث في المحتوى الذي تم تحميله من خلال المستخدم على Lantern Network ، أو "
 "حمّل محتواك الخاص ليكتشفه الآخرون."
+
+msgid "replica_new_discover"
+msgstr "فئة اكتشف جديد"
+
+msgid "replica_new_discover_news"
+msgstr "خاصية اكتشف الآن يتيح لك البحث عن المقالات الإخبارية!"
+
+msgid "replica_check_it_out"
+msgstr "تحقق من ذلك"
+
+msgid "news"
+msgstr "أخبار"
 
 msgid "share"
 msgstr "مشاركة"
