@@ -84,6 +84,7 @@ class ImagePaths {
   static const zip_black = 'assets/images/zip_black.svg';
   static const mode_edit = 'assets/images/mode_edit.svg';
   static const fullscreen_icon = 'assets/images/fullscreen_icon.svg';
+  static const newspaper = 'assets/images/newspaper.svg';
 
   // Commonly used
   static const arrow_down = 'assets/images/arrow_down.svg';

@@ -3,11 +3,11 @@
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
 # tx_e2f_bu r4 <tx_e2f_bu_r4@ate2f.com>, 2022
 # e2f <projects@e2f.com>, 2022
-# tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2022
+# tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2022\n"
+"Last-Translator: tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2023\n"
 "Language-Team: Burmese (https://www.transifex.com/lantern-1/teams/94371/my/)\n"
 "Language: my\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -137,6 +137,9 @@ msgstr "ဗားရှင်း %s"
 
 msgid "build_number"
 msgstr "တည်ဆောက်မှုနံပါတ် %s"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "ဘာသာစကား"
@@ -1119,6 +1122,18 @@ msgid "replica_search_intro"
 msgstr ""
 "အသုံးပြုသူ အပ်လုဒ်လုပ်ထားသည့် အကြောင်းအရာကို Lantern Network တွင် ရှာပါ "
 "သို့မဟုတ် အခြားသူများရှာတွေ့စေရန် သင့်ကိုယ်ပိုင်အကြောင်းအရာ အပ်လုဒ်လုပ်ပါ။"
+
+msgid "replica_new_discover"
+msgstr "ရှာဖွေလေ့လာရေး အမျိုးအစားအသစ်"
+
+msgid "replica_new_discover_news"
+msgstr "ယခု ရှာဖွေလေ့လာရေးသည် ဆောင်းပါးအသစ်များကို ရှာဖွေနိုင်စေပါသည်။"
+
+msgid "replica_check_it_out"
+msgstr "စစ်ဆေးကြည့်ရှုပါ"
+
+msgid "news"
+msgstr "သတင်း"
 
 msgid "share"
 msgstr "မျှဝေပါ"
