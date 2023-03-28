@@ -5,11 +5,11 @@
 # Nathan Tran, 2022
 # e2f <projects@e2f.com>, 2022
 # Yen Le Van <yenlevanbk@gmail.com>, 2022
-# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2022
+# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2022\n"
+"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2023\n"
 "Language-Team: Vietnamese (https://www.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -137,6 +137,9 @@ msgstr "Phiên bản %s"
 
 msgid "build_number"
 msgstr "Xây dựng %s"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "Ngôn ngữ"
@@ -1093,6 +1096,18 @@ msgid "replica_search_intro"
 msgstr ""
 "Tìm kiếm nội dung do người dùng tải lên trên Mạng Lantern hoặc tải lên nội "
 "dung của riêng bạn để người khác khám phá."
+
+msgid "replica_new_discover"
+msgstr "Danh mục khám phá mới"
+
+msgid "replica_new_discover_news"
+msgstr "Khám phá ngay cho phép bạn tìm kiếm các bài báo tin tức!"
+
+msgid "replica_check_it_out"
+msgstr "Xem ngay"
+
+msgid "news"
+msgstr "Tin tức"
 
 msgid "share"
 msgstr "Chia sẻ"

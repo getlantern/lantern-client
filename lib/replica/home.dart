@@ -16,6 +16,13 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   late bool showResults = false;
   late String currentQuery = '';
   late int currentTab = 0;
+  late bool showNewModal = false;
+
+  void setSearchTab(int tab) async {
+    setState(() {
+      currentTab = tab;
+    });
+  }
 
   @override
   void initState() {
@@ -29,14 +36,19 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         });
       }
     });
+    replicaModel.getShowNewBadge().then((bool showNewBadge) {
+      if (showNewBadge) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          renderNewDialog(context, setSearchTab);
+        });
+      }
+    });
     doGetCachedTab();
   }
 
   void doGetCachedTab() async {
     final cachedTab = await replicaModel.getSearchTab();
-    setState(() {
-      currentTab = int.parse(cachedTab);
-    });
+    setSearchTab(int.parse(cachedTab));
   }
 
   @override
@@ -61,37 +73,66 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         actionButton: renderFap(context),
         centerTitle: true,
         title: 'discover'.i18n,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+        body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
-              child: SearchField(
-                controller: _textEditingController,
-                search: (query) async {
-                  await replicaModel.setSearchTerm(query);
-                  if (query != '') {
-                    setState(() {
-                      currentQuery = query;
-                      showResults = true;
-                    });
-                  }
-                },
-                onClear: () async {
-                  await replicaModel.setSearchTerm('');
-                  await replicaModel.setSearchTab(0);
-                },
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsetsDirectional.only(bottom: 46, top: 30),
+                      child: CAssetImage(
+                        path: ImagePaths.lantern_logo,
+                        size: 72,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
+                      child: SearchField(
+                        controller: _textEditingController,
+                        search: (query) async {
+                          await replicaModel.setSearchTerm(query);
+                          if (query != '') {
+                            setState(() {
+                              currentQuery = query;
+                              showResults = true;
+                            });
+                          }
+                        },
+                        onClear: () async {
+                          await replicaModel.setSearchTerm('');
+                          await replicaModel.setSearchTab(0);
+                        },
+                      ),
+                    ),
+                    renderDiscoverText(),
+                ],
               ),
             ),
-            renderDiscoverPopup()
+            // if (!showNewModal) renderNewDialog(context)
           ],
         ),
       ),
     );
   }
 
-  Widget renderDiscoverPopup() {
+  void Function() renderNewDialog(BuildContext context, setSearchTab) {
+    return CDialog(
+      iconPath: ImagePaths.newspaper,
+      title: 'replica_new_discover'.i18n,
+      description: 'replica_new_discover_news'.i18n,
+      agreeText: 'replica_check_it_out'.i18n,
+      agreeAction: () async {
+        await replicaModel.setShowNewBadge(false);
+        await setSearchTab(5); // News is index 5
+        return true;
+      },
+      includeCancel: false,
+    ).show(context);
+  }
+
+  Widget renderDiscoverText() {
     return Padding(
       padding: const EdgeInsetsDirectional.all(12.0),
       child: Column(

@@ -1,13 +1,13 @@
 # 
 # Translators:
 # Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2021
-# tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2022
 # code smite <codesmite@gmail.com>, 2022
 # Lantern, 2022
+# tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2022\n"
+"Last-Translator: tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2023\n"
 "Language-Team: Bengali (https://www.transifex.com/lantern-1/teams/94371/bn/)\n"
 "Language: bn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -135,6 +135,9 @@ msgstr "সংস্করণ %s"
 
 msgid "build_number"
 msgstr "বিল্ড %s"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "ভাষা"
@@ -1093,6 +1096,18 @@ msgid "replica_search_intro"
 msgstr ""
 "Lantern নেটওয়ার্কে ব্যবহারকারীর আপলোড করা বিষয়বস্তু অনুসন্ধান করুন, বা "
 "অন্যদের আবিষ্কারের জন্য আপনার নিজের বিষয়বস্তু আপলোড করুন।"
+
+msgid "replica_new_discover"
+msgstr "নতুন খোঁজার ক্যাটাগরি"
+
+msgid "replica_new_discover_news"
+msgstr "এখনই খুঁজুন ফিচারটির মাধ্যমে খবরের আর্টিকেল খুঁজতে পারবেন!"
+
+msgid "replica_check_it_out"
+msgstr "এখনই দেখুন"
+
+msgid "news"
+msgstr "খবর"
 
 msgid "share"
 msgstr "শেয়ার"

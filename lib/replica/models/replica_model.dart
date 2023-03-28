@@ -44,6 +44,20 @@ class ReplicaModel extends Model {
     });
   }
 
+  Future<void> setShowNewBadge(bool showNewBadge) async {
+    return methodChannel.invokeMethod('setShowNewBadge', {
+      'showNewBadge': showNewBadge,
+    });
+  }
+
+  Widget getShowNewBadgeWidget(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>(
+      '/showNewBadge',
+      defaultValue: true,
+      builder: builder,
+    );
+  }
+
   Widget getSearchTermWidget(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       '/searchTerm',
@@ -58,6 +72,12 @@ class ReplicaModel extends Model {
       defaultValue: '',
       builder: builder,
     );
+  }
+
+  Future<bool> getShowNewBadge() async {
+    return methodChannel
+        .invokeMethod('get', '/showNewBadge')
+        .then((value) => value);
   }
 
   Future<String> getSearchTerm() async {
