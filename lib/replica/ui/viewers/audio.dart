@@ -17,25 +17,23 @@ class ReplicaAudioViewer extends ReplicaViewerLayout {
 
 class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
     with TickerProviderStateMixin {
-  final mode = PlayerMode.MEDIA_PLAYER;
   final defaultSeekDurationInSeconds = 3;
   late AudioPlayer audioPlayer;
   late AnimationController _controller;
   late Animation<double> _animation;
   Duration? totalDuration;
   Duration? position;
-  PlayerState playerState = PlayerState.STOPPED;
+  PlayerState playerState = PlayerState.stopped;
   StreamSubscription? durationSubscription;
   StreamSubscription? positionSubscription;
   StreamSubscription? playerCompleteSubscription;
-  StreamSubscription? playerErrorSubscription;
   StreamSubscription? playerStateSubscription;
-  StreamSubscription? playerControlCommandSubscription;
 
-  bool get isPlaying => playerState == PlayerState.PLAYING;
+  bool get isPlaying => playerState == PlayerState.playing;
 
   @override
   void initState() {
+    super.initState();
     _controller = AnimationController(
       duration: const Duration(
         milliseconds: 8000,
@@ -56,74 +54,50 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
           _controller.forward();
         }
       });
-    audioPlayer = AudioPlayer(mode: mode);
+    audioPlayer = AudioPlayer();
     durationSubscription = audioPlayer.onDurationChanged.listen((duration) {
       setState(() => totalDuration = duration);
     });
 
-    positionSubscription = audioPlayer.onAudioPositionChanged.listen(
+    positionSubscription = audioPlayer.onPositionChanged.listen(
       (p) => setState(() {
         position = p;
       }),
     );
 
     playerStateSubscription = audioPlayer.onPlayerStateChanged.listen((event) {
-      if (event == PlayerState.STOPPED || event == PlayerState.PAUSED) {
+      if (event == PlayerState.stopped || event == PlayerState.paused) {
         _controller.stop();
-      } else if (event == PlayerState.PLAYING) {
+      } else if (event == PlayerState.playing) {
         _controller.forward();
       }
     });
 
-    playerCompleteSubscription = audioPlayer.onPlayerCompletion.listen((event) {
-      setState(() => playerState = PlayerState.STOPPED);
+    playerCompleteSubscription = audioPlayer.onPlayerComplete.listen((event) {
+      setState(() => playerState = PlayerState.stopped);
       setState(() {
         position = totalDuration;
       });
     });
-
-    playerErrorSubscription = audioPlayer.onPlayerError.listen((msg) {
-      logger.w('audioPlayer error : $msg');
-      setState(() {
-        playerState = PlayerState.STOPPED;
-        totalDuration = const Duration();
-        position = const Duration();
-      });
-    });
-
-    playerControlCommandSubscription =
-        audioPlayer.notificationService.onPlayerCommand.listen((command) {});
-
-    // play().then((_) {
-    //   setState(() {});
-    // });
-    super.initState();
   }
 
-  Future<int> play() async {
+  Future<void> play() async {
     final playPosition = (position != null &&
             totalDuration != null &&
             position!.inMilliseconds > 0 &&
             position!.inMilliseconds < totalDuration!.inMilliseconds)
         ? position
         : null;
-    final result = await audioPlayer.play(
-      widget.replicaApi.getDownloadAddr(widget.item.replicaLink),
+    await audioPlayer.play(
+      UrlSource(widget.replicaApi.getDownloadAddr(widget.item.replicaLink)),
       position: playPosition,
     );
-    if (result == 1) {
-      setState(() => playerState = PlayerState.PLAYING);
-    }
-
-    return result;
+    setState(() => playerState = PlayerState.playing);
   }
 
-  Future<int> pause() async {
-    final result = await audioPlayer.pause();
-    if (result == 1) {
-      setState(() => playerState = PlayerState.PAUSED);
-    }
-    return result;
+  Future<void> pause() async {
+    await audioPlayer.pause();
+    setState(() => playerState = PlayerState.paused);
   }
 
   @override
@@ -132,14 +106,12 @@ class _ReplicaAudioViewerState extends ReplicaViewerLayoutState
     durationSubscription?.cancel();
     positionSubscription?.cancel();
     playerCompleteSubscription?.cancel();
-    playerErrorSubscription?.cancel();
     playerStateSubscription?.cancel();
-    playerControlCommandSubscription?.cancel();
     super.dispose();
   }
 
   @override
-  bool ready() => playerErrorSubscription != null;
+  bool ready() => playerStateSubscription != null;
 
   @override
   Widget body(BuildContext context) {
