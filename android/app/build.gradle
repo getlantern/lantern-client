@@ -1,7 +1,9 @@
 plugins {
-  id "io.sentry.android.gradle" version "2.1.2"
+  id "io.sentry.android.gradle" version "3.4.2"
   id 'com.android.application'
   id 'kotlin-android'
+  id 'org.jlleitschuh.gradle.ktlint'
+  id 'org.jetbrains.kotlin.android'
   id 'kotlin-parcelize'
   id 'kotlin-kapt'
   id 'com.google.protobuf'
@@ -58,11 +60,6 @@ android {
     useLibrary 'org.apache.http.legacy'
 
 //    useLibrary 'android.test.runner'
-
-    dexOptions {
-        javaMaxHeapSize "8g"
-        preDexLibraries true
-    }
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
@@ -143,12 +140,13 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
+        freeCompilerArgs = ["-Xallow-result-return-type"]
     }
 
     lintOptions {
@@ -384,7 +382,7 @@ dependencies {
 
     // The below aar is built from https://github.com/getlantern/FinestWebView-Android
     implementation(name:'finestwebview', ext: 'aar')
-    implementation 'com.kyleduo.switchbutton:library:1.4.6'
+    implementation 'com.kyleduo.switchbutton:library:2.1.0'
 
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
 
@@ -416,7 +414,7 @@ dependencies {
 
     // FinestWebView dependencies
     implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'com.thefinestartist:utils:0.9.0'
+
     implementation (group: 'com.google.guava', name: 'guava', version: '23.0-android') {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
@@ -429,8 +427,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
 
     implementation 'com.google.firebase:firebase-analytics-ktx'
-
-    implementation 'io.sentry:sentry-android:6.14.0'
 
     implementation 'com.github.matomo-org:matomo-sdk-android:4.1.4'
 
