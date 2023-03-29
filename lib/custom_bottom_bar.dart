@@ -1,5 +1,6 @@
 import 'package:lantern/custom_bottom_item.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/replica/common.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final String selectedTab;
@@ -123,7 +124,7 @@ class CustomBottomBar extends StatelessWidget {
 
                   return CBadge(
                     end: -20,
-                    top: -10,
+                    top: -5,
                     showBadge: true,
                     customBadge: Container(
                       padding: const EdgeInsetsDirectional.only(
@@ -189,13 +190,49 @@ class CustomBottomBar extends StatelessWidget {
     if (replicaEnabled) {
       items.add(
         BottomNavigationBarItem(
-          icon: CustomBottomBarItem(
-            name: TAB_REPLICA,
-            currentTabIndex: currentIndex,
-            indexToTab: indexToTab,
-            tabToIndex: tabToIndex,
-            label: 'discover'.i18n,
-            icon: ImagePaths.discover,
+          icon: replicaModel.getShowNewBadgeWidget((context, showNewBadge, child) =>
+              CustomBottomBarItem(
+                name: TAB_REPLICA,
+                currentTabIndex: currentIndex,
+                indexToTab: indexToTab,
+                tabToIndex: tabToIndex,
+                label: 'discover'.i18n,
+                icon: ImagePaths.discover,
+                addBadge: (child) {
+                  if (showNewBadge) {
+                    return CBadge(
+                      end: -20,
+                      top: -5,
+                      showBadge: true,
+                      customBadge: Container(
+                        padding: const EdgeInsetsDirectional.only(
+                          top: 2.0,
+                          bottom: 2.0,
+                          start: 5.0,
+                          end: 5.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: blue3,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(80.0),
+                          ),
+                        ),
+                        child: Text(
+                          'new'.i18n.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: white,
+                          ),
+                        ),
+                      ),
+                      child: child,
+                    );
+                  }
+                  else {
+                    return CBadge(child: child);
+                  }
+                },
+              ),
           ),
           label: '',
           tooltip: 'discover'.i18n,

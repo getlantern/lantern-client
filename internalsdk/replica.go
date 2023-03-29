@@ -21,6 +21,7 @@ import (
 	replicaServer "github.com/getlantern/replica/server"
 	replicaService "github.com/getlantern/replica/service"
 
+	"github.com/getlantern/android-lantern/internalsdk/analytics"
 	"github.com/getlantern/android-lantern/internalsdk/doh"
 
 	"github.com/gorilla/mux"
@@ -28,6 +29,8 @@ import (
 
 // Replica HTTP Server that handles Replica API requests on localhost at a random port.
 type ReplicaServer struct {
+	analyticsSession analytics.Session
+
 	ConfigDir  string
 	Flashlight *flashlight.Flashlight
 	Session    Session
@@ -222,6 +225,15 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 			return replicaConfig.GetReplicaServiceEndpointUrl(optsFunc())
 		},
 	}
+
+	input.OnRequestReceived = func(handler string, extraInfo string) {
+		s.analyticsSession.EventWithLabel(
+			"replica",
+			handler,
+			extraInfo,
+		)
+	}
+
 	replicaHandler, err := replicaServer.NewHTTPHandler(input)
 	if err != nil {
 		return nil, log.Errorf("creating replica http server: %v", err)

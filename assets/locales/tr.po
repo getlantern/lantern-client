@@ -8,11 +8,11 @@
 # e2f <projects@e2f.com>, 2022
 # Derek F <derek@getlantern.org>, 2022
 # Teo Westbrook, 2022
-# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2022
+# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2022\n"
+"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023\n"
 "Language-Team: Turkish (https://www.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -140,6 +140,9 @@ msgstr "Sürüm %s"
 
 msgid "build_number"
 msgstr "%s adet oluştur"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "Dil"
@@ -1098,6 +1101,18 @@ msgid "replica_search_intro"
 msgstr ""
 "Lantern Ağı'nda kullanıcılar tarafından yüklenmiş içerikler arayın veya "
 "başkalarının keşfetmesi için kendi içeriklerinizi yükleyin."
+
+msgid "replica_new_discover"
+msgstr "Yeni Keşif Kategorisi"
+
+msgid "replica_new_discover_news"
+msgstr "Hemen keşfet, yeni makaleler aramanızı sağlar!"
+
+msgid "replica_check_it_out"
+msgstr "Göz atın"
+
+msgid "news"
+msgstr "Haberler"
 
 msgid "share"
 msgstr "Paylaş"

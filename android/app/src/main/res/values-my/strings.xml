@@ -105,7 +105,6 @@
   <string name="error_update">အပ်ဒိတ်ကို ဒေါင်းလုပ်ဆွဲယူခြင်းအမှား</string>
   <string name="error_install_update">အပ်ဒိတ် ထည့်သွင်းရာတွင် မှားယွင်းမှု</string>
   <string name="loading">တင်နေသည် ..</string>
-  <string name="manual_update">&lt;a href="https://lantern-android.io"&gt; here1 &lt;/a&gt; မှ နောက်ဆုံးပေါ်ဗားရှင်းကို ကိုယ်တိုင်ကိုယ်ကျထည့်သွင်းရန်ကြိုးစားပါ</string>
   <string name="pro_welcome_text">Lantern Pro မှကြိုဆိုပါသည်။</string>
   <string name="happy_anniversary">ပျော်ရွှင်စရာ LANTERN နှစ်ပတ်လည်</string>
   <string name="welcome_greeting">Lantern မှကြိုဆိုပါတယ်</string>
