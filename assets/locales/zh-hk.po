@@ -3,11 +3,11 @@
 # e2f_tw r5 <tx_e2f_tw_r5@ate2f.com>, 2021
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2022
 # e2f <projects@e2f.com>, 2022
-# e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2022
+# e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2022\n"
+"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2023\n"
 "Language-Team: Chinese Traditional (https://www.transifex.com/lantern-1/teams/94371/zh-Hant/)\n"
 "Language: zh-Hant\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -125,6 +125,9 @@ msgstr "第 %s 版"
 
 msgid "build_number"
 msgstr "組建 %s"
+
+msgid "sdk_version"
+msgstr "SDK %s"
 
 msgid "language"
 msgstr "語言"
@@ -1037,6 +1040,18 @@ msgstr "發現"
 
 msgid "replica_search_intro"
 msgstr "您可在 Lantern 網路中搜尋使用者上傳的內容，或者也能自行上傳內容，供其他人探索。"
+
+msgid "replica_new_discover"
+msgstr "全新探索類別"
+
+msgid "replica_new_discover_news"
+msgstr "「探索」現在可讓您搜尋新聞文章！"
+
+msgid "replica_check_it_out"
+msgstr "立即查看"
+
+msgid "news"
+msgstr "新聞"
 
 msgid "share"
 msgstr "分享"
