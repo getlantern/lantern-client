@@ -52,8 +52,6 @@ class _AppCheckmarkState extends State<AppCheckmark> {
       Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
       };
       if (states.any(interactiveStates.contains)) {
         return Colors.white;
@@ -120,31 +118,30 @@ class SplitTunneling extends StatelessWidget {
     );
   }
 
-  Widget navigationPanel(BuildContext context) {
-    return Row(children: <Widget>[
-     CText('split_tunneling_info'.i18n,
+  // appsList builds a ListView that contains all application packages installed for
+  // the current user along with a set of apps to exclude from the VPN connection
+  Widget appsList(BuildContext context) {
+    return sessionModel.splitTunnelingEnabled((BuildContext context, bool value, Widget? child) {
+      if (!value) {
+        return Row(children: <Widget>[
+          CText('split_tunneling_info'.i18n,
            style: CTextStyle(
                 fontSize: 14,
                 lineHeight: 21,
                 color: black,
               )),
-     SplitTunnelingSwitch(splitTunnelingEnabled: false),
-    ]);
-  }
-
-  // appsList builds a ListView that contains all application packages installed for
-  // the current user along with a set of apps to exclude from the VPN connection
-  Widget appsList(BuildContext context) {
-    return sessionModel
-          .appsData((BuildContext context, AppsData appsData, Widget? child) {
-          return ListView.builder(
-            itemCount: appsData.appsList.length,
-            itemBuilder: (BuildContext context, int index) {
-              var appData = appsData.appsList[index];
-              bool isExcluded = appsData.excludedApps.excludedApps[appData.packageName] ?? false;
-              return buildAppListItem(appData, isExcluded);
-            },
-          );
+          SplitTunnelingSwitch(splitTunnelingEnabled: value),
+        ]);
+      }
+      return sessionModel.appsData((BuildContext context, AppsData appsData, Widget? child) {
+        return ListView.builder(
+          itemCount: appsData.appsList.length,
+          itemBuilder: (BuildContext context, int index) {
+            var appData = appsData.appsList[index];
+            bool isExcluded = appsData.excludedApps.excludedApps[appData.packageName] ?? false;
+            return buildAppListItem(appData, isExcluded);
+          });
       });
+    });
   }
 }
