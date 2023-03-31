@@ -9,21 +9,15 @@ class Settings extends StatelessWidget {
 
   final packageInfo = PackageInfo.fromPlatform();
 
-  void openInfoProxyAll(BuildContext context) {
-    CDialog.showInfo(
-      context,
-      title: 'proxy_all'.i18n,
-      description: 'description_proxy_all_dialog'.i18n,
-      iconPath: ImagePaths.key,
-    );
-  }
-
   void changeLanguage(BuildContext context) => context.pushRoute(Language());
 
   void reportIssue() async =>
       LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
 
   void checkForUpdates() async => await sessionModel.checkForUpdates();
+
+  void openSplitTunneling(BuildContext context) async =>
+      await context.pushRoute(SplitTunneling());
 
   @override
   Widget build(BuildContext context) {
@@ -88,23 +82,23 @@ class Settings extends StatelessWidget {
                   )
                 : const SizedBox(),
           ),
-          //* Proxy
-          sessionModel.proxyAll(
-            (BuildContext context, bool proxyAll, Widget? child) =>
+          //* Split tunneling
+          sessionModel.splitTunnelingEnabled(
+            (BuildContext context, bool splitTunneling, Widget? child) =>
                 ListItemFactory.settingsItem(
               header: 'VPN'.i18n,
               icon: ImagePaths.key,
               content: CInkWell(
-                onTap: () => openInfoProxyAll(context),
+                onTap: () => openSplitTunneling(context),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Flexible(
                       child: CText(
-                        'proxy_everything_is'
+                        'split_tunneling'
                             .i18n
-                            .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
+                            .fill([splitTunneling ? 'ON'.i18n : 'OFF'.i18n]),
                         softWrap: false,
                         style: tsSubtitle1.short,
                       ),
@@ -112,29 +106,14 @@ class Settings extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsetsDirectional.only(start: 4.0),
                       child: CAssetImage(
-                        key: ValueKey('proxy_all_icon'),
-                        path: ImagePaths.info,
+                        key: ValueKey('split_tunneling'),
+                        path: ImagePaths.split_tunneling,
                         size: 12,
                       ),
                     ),
                   ],
                 ),
               ),
-              trailingArray: [
-                FlutterSwitch(
-                  width: 44.0,
-                  height: 24.0,
-                  valueFontSize: 12.0,
-                  padding: 2,
-                  toggleSize: 18.0,
-                  value: proxyAll,
-                  activeColor: indicatorGreen,
-                  inactiveColor: offSwitchColor,
-                  onToggle: (bool newValue) {
-                    sessionModel.setProxyAll(newValue);
-                  },
-                ),
-              ],
             ),
           ),
           //* Build version

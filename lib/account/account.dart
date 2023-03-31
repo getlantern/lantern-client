@@ -20,9 +20,6 @@ class AccountMenu extends StatelessWidget {
   void openSettings(BuildContext context) async =>
       await context.pushRoute(Settings());
 
-  void openSplitTunneling(BuildContext context) async =>
-      await context.pushRoute(SplitTunneling());
-
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
       messagingModel.getOnBoardingStatus(
@@ -77,13 +74,6 @@ class AccountMenu extends StatelessWidget {
           openSettings(context);
         },
       ),
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.settings,
-        content: 'Split Tunneling'.i18n,
-        onTap: () {
-          openSplitTunneling(context);
-        },
-      ),
     ];
   }
 
@@ -127,13 +117,6 @@ class AccountMenu extends StatelessWidget {
         content: 'settings'.i18n,
         onTap: () {
           openSettings(context);
-        },
-      ),
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.settings,
-        content: 'Split Tunneling'.i18n,
-        onTap: () {
-          openSplitTunneling(context);
         },
       ),
     ];
