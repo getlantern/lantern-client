@@ -74,9 +74,6 @@ class LanternApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                 brightness: Brightness.light,
-                checkboxTheme: CheckboxThemeData(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25))),
                 primarySwatch: Colors.grey,
                 appBarTheme: const AppBarTheme(
                   systemOverlayStyle: SystemUiOverlayStyle.light,

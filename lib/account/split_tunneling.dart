@@ -60,6 +60,7 @@ class _AppCheckmarkState extends State<AppCheckmark> {
     }
     return Checkbox(
       checkColor: Colors.white,
+      shape: CircleBorder(),
       fillColor: MaterialStateProperty.resolveWith(getColor),
       // If an app has previously been excluded from the VPN connection by a user,
       // the switch is turned on by default
