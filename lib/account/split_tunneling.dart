@@ -63,7 +63,7 @@ class SplitTunneling extends StatelessWidget {
       appBar: AppBar(
         title: Text('split_tunneling'.i18n),
       ),
-      body: appsList(context),
+      body: splitTunneling(context),
     );
   }
 
@@ -91,9 +91,7 @@ class SplitTunneling extends StatelessWidget {
     );
   }
 
-  // appsList builds a ListView that contains all application packages installed for
-  // the current user along with a set of apps to exclude from the VPN connection
-  Widget appsList(BuildContext context) {
+  Widget splitTunneling(BuildContext context) {
     return sessionModel.splitTunnelingEnabled((BuildContext context, bool value, Widget? child) {
       if (!value) {
         return Row(children: <Widget>[
@@ -112,6 +110,9 @@ class SplitTunneling extends StatelessWidget {
           ),
         ]);
       }
+      // build a ListView that contains all application packages installed for
+      // the current useralong with a set of apps to exclude from the VPN
+      // connection
       return sessionModel.appsData((BuildContext context, AppsData appsData, Widget? child) {
         return ListView.builder(
           itemCount: appsData.appsList.length,
