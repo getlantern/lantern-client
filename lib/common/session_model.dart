@@ -45,6 +45,16 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<bool>('proxyAll', builder: builder);
   }
 
+  Widget splitTunnelingEnabled(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('splitTunneling', builder: builder);
+  }
+
+  Future<void> setSplitTunneling(bool on) {
+    return methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
+      'on': on,
+    });
+  }
+
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>(
       'developmentMode',
@@ -58,6 +68,7 @@ class SessionModel extends Model {
       builder: builder,
     );
   }
+
 
   Future<void> setPaymentTestMode(bool on) {
     return methodChannel.invokeMethod('setPaymentTestMode', <String, dynamic>{

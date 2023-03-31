@@ -349,6 +349,18 @@ msgstr "Add contacts in person"
 msgid "start_chat"
 msgstr "Start chat"
 
+msgid "apps"
+msgstr "Apps"
+
+msgid "apps_selected"
+msgstr "Apps selected below will not go through Lantern when connected."
+
+msgid "split_tunneling"
+msgstr "Split Tunneling"
+
+msgid "split_tunneling_info"
+msgstr "Split tunneling allows you to exclude selected apps from going through Lantern when connected."
+
 msgid "message_disappearing"
 msgstr "All messages will not disappear for you and %s."
 

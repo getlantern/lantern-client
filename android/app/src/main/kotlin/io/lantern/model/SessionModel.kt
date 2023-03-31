@@ -44,6 +44,7 @@ class SessionModel(
         const val PATH_PRO_USER = "prouser"
         const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_SDK_VERSION = "sdkVersion"
+        const val PATH_SPLIT_TUNNELING ="splitTunneling"
     }
 
     init {
@@ -93,6 +94,10 @@ class SessionModel(
                 val on = call.argument("on") ?: false
                 saveProxyAll(on)
             }
+            "setSplitTunneling" -> {
+                val on = call.argument("on") ?: false
+                saveSplitTunneling(on)
+            }
             "addExcludedApp" -> {
               LanternApp.getSession().addExcludedApp(call.argument("packageName")!!)
             }
@@ -130,6 +135,16 @@ class SessionModel(
     private fun saveProxyAll(on: Boolean) {
         db.mutate { tx ->
             tx.put(PATH_PROXY_ALL, on)
+        }
+    }
+
+    fun splitTunnelingEnabled(): Boolean {
+      return db.get(PATH_SPLIT_TUNNELING) ?: false
+    }
+
+    private fun saveSplitTunneling(value: Boolean) {
+        db.mutate { tx ->
+            tx.put(PATH_SPLIT_TUNNELING, value)
         }
     }
 

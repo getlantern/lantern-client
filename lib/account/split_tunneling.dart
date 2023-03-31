@@ -3,34 +3,74 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:flutter/foundation.dart';
 
-class AppSwitch extends StatefulWidget {
-  // The package name of the application the AppSwitch corresponds with
-  final String packageName;
-  // Whether the app should be excluded from the VPN connection
-  bool isExcluded;
+class SplitTunnelingSwitch extends StatefulWidget {
+  // Whether split tunneling is enabled
+  bool splitTunnelingEnabled;
 
-  AppSwitch({required this.packageName, required this.isExcluded});
+  SplitTunnelingSwitch({required this.splitTunnelingEnabled});
 
   @override
-  State<AppSwitch> createState() => _AppSwitchState();
+  State<SplitTunnelingSwitch> createState() => _SplitTunnelingSwitch();
 }
 
-class _AppSwitchState extends State<AppSwitch> {
-  // Whether this switch is on or off
-  bool light = false;
+class _SplitTunnelingSwitch extends State<SplitTunnelingSwitch> {
+  bool splitTunnelingEnabled = false;
 
   @override
   Widget build(BuildContext context) {
     return Switch(
-      // If an app has previously been excluded from the VPN connection by a user,
-      // the switch is turned on by default
-      value: light || widget.isExcluded,
-      activeColor: Colors.lightBlue,
+      value: splitTunnelingEnabled,
       onChanged: (bool value) {
         // This is called when the user toggles the switch.
         setState(() {
-          light = value;
-          if (value) {
+          splitTunnelingEnabled = value;
+          sessionModel.setSplitTunneling(value);
+        });
+      },
+    );
+  }
+}
+
+class AppCheckmark extends StatefulWidget {
+  // The package name of the application the AppCheckmark corresponds with
+  final String packageName;
+  // Whether the app should be excluded from the VPN connection
+  bool isExcluded;
+
+  AppCheckmark({required this.packageName, required this.isExcluded});
+
+  @override
+  State<AppCheckmark> createState() => _AppCheckmarkState();
+}
+
+class _AppCheckmarkState extends State<AppCheckmark> {
+  // Whether the app is excluded from the VPN connection
+  bool isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+      Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Colors.white;
+      }
+      return Colors.green;
+    }
+    return Checkbox(
+      checkColor: Colors.white,
+      fillColor: MaterialStateProperty.resolveWith(getColor),
+      // If an app has previously been excluded from the VPN connection by a user,
+      // the switch is turned on by default
+      value: isChecked || widget.isExcluded,
+      onChanged: (bool? value) {
+        // This is called when the user toggles the switch.
+        setState(() {
+          isChecked = value!;
+          if (isChecked) {
             sessionModel.addExcludedApp(widget.packageName);
           } else {
             sessionModel.removeExcludedApp(widget.packageName);
@@ -41,6 +81,7 @@ class _AppSwitchState extends State<AppSwitch> {
   }
 }
 
+
 class SplitTunneling extends StatelessWidget {
   SplitTunneling({Key? key});
 
@@ -49,7 +90,7 @@ class SplitTunneling extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Split Tunneling'),
+        title: Text('split_tunneling'.i18n),
       ),
       body: appsList(context),
     );
@@ -70,13 +111,25 @@ class SplitTunneling extends StatelessWidget {
         ),
         child: new Image.memory(bytes, fit: BoxFit.cover),
       ),
-      trailing: AppSwitch(packageName: appData.packageName, isExcluded: isExcluded),
+      trailing: AppCheckmark(packageName: appData.packageName, isExcluded: isExcluded),
       title: CText(
         toBeginningOfSentenceCase(
         appData.name)!,
         style: tsBody1,
       ),
     );
+  }
+
+  Widget navigationPanel(BuildContext context) {
+    return Row(children: <Widget>[
+     CText('split_tunneling_info'.i18n,
+           style: CTextStyle(
+                fontSize: 14,
+                lineHeight: 21,
+                color: black,
+              )),
+     SplitTunnelingSwitch(splitTunnelingEnabled: false),
+    ]);
   }
 
   // appsList builds a ListView that contains all application packages installed for

@@ -21,6 +21,7 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.lantern.apps.AppsDataProvider
 import io.lantern.model.MessagingModel
 import io.lantern.model.ReplicaModel
 import io.lantern.model.SessionModel
