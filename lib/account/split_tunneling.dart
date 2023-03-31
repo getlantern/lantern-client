@@ -3,33 +3,6 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:flutter/foundation.dart';
 
-class SplitTunnelingSwitch extends StatefulWidget {
-  // Whether split tunneling is enabled
-  bool splitTunnelingEnabled;
-
-  SplitTunnelingSwitch({required this.splitTunnelingEnabled});
-
-  @override
-  State<SplitTunnelingSwitch> createState() => _SplitTunnelingSwitch();
-}
-
-class _SplitTunnelingSwitch extends State<SplitTunnelingSwitch> {
-  bool splitTunnelingEnabled = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Switch(
-      value: splitTunnelingEnabled,
-      onChanged: (bool value) {
-        // This is called when the user toggles the switch.
-        setState(() {
-          splitTunnelingEnabled = value;
-          sessionModel.setSplitTunneling(value);
-        });
-      },
-    );
-  }
-}
 
 class AppCheckmark extends StatefulWidget {
   // The package name of the application the AppCheckmark corresponds with
@@ -84,7 +57,6 @@ class _AppCheckmarkState extends State<AppCheckmark> {
 class SplitTunneling extends StatelessWidget {
   SplitTunneling({Key? key});
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,13 +97,19 @@ class SplitTunneling extends StatelessWidget {
     return sessionModel.splitTunnelingEnabled((BuildContext context, bool value, Widget? child) {
       if (!value) {
         return Row(children: <Widget>[
-          CText('split_tunneling_info'.i18n,
+          CText('split_tunneling'.i18n,
            style: CTextStyle(
                 fontSize: 14,
                 lineHeight: 21,
                 color: black,
               )),
-          SplitTunnelingSwitch(splitTunnelingEnabled: value),
+          Switch(
+            value: value,
+            onChanged: (bool value) {
+              // This is called when the user toggles the switch.
+              sessionModel.setSplitTunneling(value);
+            }
+          ),
         ]);
       }
       return sessionModel.appsData((BuildContext context, AppsData appsData, Widget? child) {
