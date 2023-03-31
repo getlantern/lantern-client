@@ -6,13 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 	"time"
 
+	"github.com/getlantern/android-lantern/internalsdk/analytics"
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/autoupdate"
 	"github.com/getlantern/dnsgrab"
@@ -28,7 +27,6 @@ import (
 	"github.com/getlantern/flashlight/email"
 	"github.com/getlantern/flashlight/geolookup"
 	"github.com/getlantern/flashlight/logging"
-	"github.com/getlantern/flashlight/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/memhelper"
 	"github.com/getlantern/mtime"
@@ -38,14 +36,13 @@ import (
 )
 
 const (
+	// forever indicates that Get should wait forever
+	forever       = -1
 	maxDNSGrabAge = 24 * time.Hour // this doesn't need to be huge, since we use a TTL of 1 second for our DNS responses
 )
 
 var (
 	log = golog.LoggerFor("lantern")
-
-	// XXX mobile does not respect the autoupdate global config
-	updateClient = &http.Client{Transport: proxied.ChainedThenFrontedWith("")}
 
 	startOnce sync.Once
 
@@ -453,6 +450,14 @@ func EnableLogging(configDir string) {
 	logging.EnableFileLogging(common.DefaultAppName, configDir)
 }
 
+func newAnalyticsSession(deviceID string) analytics.Session {
+	session := analytics.Start(deviceID, common.Version)
+	go func() {
+		session.SetIP(geolookup.GetIP(forever))
+	}()
+	return session
+}
+
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
 
@@ -579,10 +584,11 @@ func run(configDir, locale string,
 	}
 
 	replicaServer := &ReplicaServer{
-		ConfigDir:  configDir,
-		Flashlight: runner,
-		Session:    session.Wrapped(),
-		UserConfig: userConfig,
+		ConfigDir:        configDir,
+		Flashlight:       runner,
+		analyticsSession: newAnalyticsSession(session.GetDeviceID()),
+		Session:          session.Wrapped(),
+		UserConfig:       userConfig,
 	}
 	session.Wrapped().SetReplicaAddr("") // start off with no Replica address
 
@@ -668,33 +674,4 @@ func afterStart(session panickingSession) {
 			session.SetCountry(country)
 		}
 	}()
-}
-
-// CheckForUpdates checks to see if a new version of Lantern is available
-func CheckForUpdates() (string, error) {
-	return checkForUpdates(buildUpdateCfg())
-}
-
-func checkForUpdates(updateCfg *autoupdate.Config) (string, error) {
-	return autoupdate.CheckMobileUpdate(updateCfg)
-}
-
-// DownloadUpdate downloads the latest APK from the given url to the apkPath
-// file destination.
-func DownloadUpdate(url, apkPath string, updater Updater) {
-	autoupdate.UpdateMobile(url, apkPath, updater, updateClient)
-}
-
-func buildUpdateCfg() *autoupdate.Config {
-	return &autoupdate.Config{
-		CurrentVersion: common.CompileTimePackageVersion,
-		URL:            fmt.Sprintf("https://update.getlantern.org/update/%s", strings.ToLower(common.DefaultAppName)),
-		HTTPClient:     updateClient,
-		PublicKey:      []byte(autoupdate.PackagePublicKey),
-	}
-}
-
-// Get the version number of the Go library.
-func SDKVersion() string {
-	return common.PackageVersion
 }

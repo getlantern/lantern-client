@@ -57,6 +57,7 @@
     <string name="error_making_purchase">Error trying to make purchase</string>
     <string name="have_latest_version">%1$s %2$s is the newest version available.</string>
     <string name="updating_lantern">Updating %1$s</string>
+    <string name="update_lantern">Update Lantern</string>
     <string name="cancel">Cancel</string>
     <string name="newsfeed_option">Try Lanten Feed</string>
     <string name="newsfeed_off_option">Turn off Feed</string>

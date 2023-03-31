@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:mime/mime.dart';
 
 final audio = Audio();
 
@@ -17,15 +18,11 @@ class Audio {
       _onDurationChanged(d);
     });
 
-    _audioPlayer.onAudioPositionChanged.listen((p) {
+    _audioPlayer.onPositionChanged.listen((p) {
       _onPositionChanged(p);
     });
 
-    _audioPlayer.onPlayerCompletion.listen((e) {
-      _onDetachedIfAvailable();
-    });
-
-    _audioPlayer.onPlayerError.listen((e) {
+    _audioPlayer.onPlayerComplete.listen((e) {
       _onDetachedIfAvailable();
     });
   }
@@ -49,9 +46,10 @@ class Audio {
     _onDurationChanged = onDurationChanged;
     _onPositionChanged = onPositionChanged;
     _onDetached = onDetached;
-    if (1 == await _audioPlayer.playBytes(bytes)) {
-      onAttached();
-    }
+    // defaults to having the mime-type application/octet-stream
+    final mime = lookupMimeType('', headerBytes: bytes) ?? "application/octet-stream";
+    await _audioPlayer.play(UrlSource(Uri.dataFromBytes(bytes, mimeType: mime).toString()));
+    onAttached();
   }
 
   void _onDetachedIfAvailable() {
@@ -66,14 +64,14 @@ class Audio {
     }
   }
 
-  Future<int> seek(Duration position) async =>
+  Future<void> seek(Duration position) async =>
       await _audioPlayer.seek(position);
 
-  Future<int> resume() async => await _audioPlayer.resume();
+  Future<void> resume() async => await _audioPlayer.resume();
 
-  Future<int> pause() async => await _audioPlayer.pause();
+  Future<void> pause() async => await _audioPlayer.pause();
 
-  Future<int> stop() async {
+  Future<void> stop() async {
     var result = await _audioPlayer.stop();
     _onDetachedIfAvailable();
     return result;

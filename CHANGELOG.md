@@ -1,4 +1,23 @@
 
+<a name="7.3.9"></a>
+## [7.3.9](https://github.com/getlantern/android-lantern/compare/7.3.8...7.3.9)
+
+> 2023-03-15
+
+
+<a name="7.3.8"></a>
+## [7.3.8](https://github.com/getlantern/android-lantern/compare/7.3.2...7.3.8)
+
+> 2023-03-14
+
+### Pull Requests
+
+* Merge pull request [#809](https://github.com/getlantern/android-lantern/issues/809) from getlantern/soltzen/li5931__dont_pass_userid
+* Merge pull request [#807](https://github.com/getlantern/android-lantern/issues/807) from getlantern/atavism/update-cbadge-widget
+* Merge pull request [#805](https://github.com/getlantern/android-lantern/issues/805) from getlantern/atavism/upgrade-firebase
+* Merge pull request [#802](https://github.com/getlantern/android-lantern/issues/802) from getlantern/echo/renew-code
+
+
 <a name="7.3.2"></a>
 ## [7.3.2](https://github.com/getlantern/android-lantern/compare/7.3.0...7.3.2)
 

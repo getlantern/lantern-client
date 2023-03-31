@@ -35,7 +35,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight v0.0.0-20230308124523-b03e17a3f259
+	github.com/getlantern/flashlight v0.0.0-20230327184230-d65fce926ea1
 	github.com/getlantern/golog v0.0.0-20221014032422-49749a7176cf
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20201020142114-ed7e3a8d5d87
@@ -54,11 +54,11 @@ require (
 	filippo.io/edwards25519 v1.0.0-rc.1.0.20210721174708-390f27c3be20 // indirect
 	git.torproject.org/pluggable-transports/goptlib.git v1.2.0 // indirect
 	github.com/Jigsaw-Code/outline-ss-server v1.4.0 // indirect
-	github.com/OperatorFoundation/Replicant-go/Replicant/v3 v3.0.8 // indirect
-	github.com/OperatorFoundation/Starbridge-go/Starbridge/v3 v3.0.9 // indirect
+	github.com/OperatorFoundation/Replicant-go/Replicant/v3 v3.0.14 // indirect
+	github.com/OperatorFoundation/Starbridge-go/Starbridge/v3 v3.0.12 // indirect
 	github.com/OperatorFoundation/ghostwriter-go v1.0.6 // indirect
 	github.com/OperatorFoundation/go-bloom v1.0.1 // indirect
-	github.com/OperatorFoundation/go-shadowsocks2 v1.1.11 // indirect
+	github.com/OperatorFoundation/go-shadowsocks2 v1.1.12 // indirect
 	github.com/OperatorFoundation/monolith-go/monolith v1.0.10 // indirect
 	github.com/OperatorFoundation/shapeshifter-ipc/v3 v3.0.0 // indirect
 	github.com/PuerkitoBio/goquery v1.7.0 // indirect

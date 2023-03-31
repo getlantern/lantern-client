@@ -149,6 +149,14 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getString(DEVICE_LINKING_CODE, "")
     }
 
+    fun deviceID(): String? {
+      return prefs.getString(DEVICE_ID, "")
+    }
+
+    fun userID(): Long {
+      return prefs.getLong(USER_ID, 0)
+    }
+
     fun getDeviceExp(): Long {
         return prefs.getLong(DEVICE_CODE_EXP, 0)
     }
@@ -388,6 +396,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val STRIPE_API_KEY = "stripe_api_key"
         private const val DEFAULT_CURRENCY_CODE = "usd"
         private const val DEVICE_LINKED = "DeviceLinked"
+        private const val DEVICE_ID = "deviceid"
+        private const val USER_ID = "userid"
         private const val REFERRAL_CODE = "referral"
         private const val PW_SIGNATURE = "pwsignature"
         private const val DEVICE_LINKING_CODE = "devicelinkingcode"
