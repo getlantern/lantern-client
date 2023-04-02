@@ -105,8 +105,8 @@ class Settings extends StatelessWidget {
                 ),
               ),
               trailingArray: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 16),
+                 Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
                   child: CText(
                     value ? 'ON'.i18n : 'OFF'.i18n,
                     style: tsSubtitle2.copiedWith(color: pink4),
