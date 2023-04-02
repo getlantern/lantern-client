@@ -51,86 +51,86 @@ class SplitTunneling extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseScreen(
         title: 'split_tunneling'.i18n,
-        body: Column(children: <Widget>[
-          splitTunnelingSwitch(context),
-          CText('split_tunneling_info'.i18n, style: tsBody3),
-          ListSectionHeader('apps'.i18n),
-          sessionModel.appsData(
-              (BuildContext context, AppsData appsData, Widget? child) =>
-                  Expanded(
-                      child: ListView.separated(
-                          itemCount: 10 /*appsData.appsList.length*/,
-                          itemBuilder: (BuildContext context, int index) {
-                            var appData = appsData.appsList[index];
-                            debugPrint('data: $appData');
-                            bool isExcluded = appsData.excludedApps
-                                    .excludedApps[appData.packageName] ??
-                                false;
-                            return buildAppListItem(appData, isExcluded);
-                          },
-                          separatorBuilder: (context, index) {
-                            return Divider();
-                          })))
-        ]));
-  }
-
-  Widget buildAppListItem(AppData appData, bool isExcluded) {
-    Uint8List bytes = base64.decode(appData.icon);
-    return ListTile(
-      //contentPadding: const EdgeInsetsDirectional.only(top: 24, bottom: 24),
-      leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 24,
-                minHeight: 24,
-                maxWidth: 24,
-                maxHeight: 24,
+        body: sessionModel.splitTunneling((BuildContext context, bool value,
+                Widget? child) =>
+            Column(children: <Widget>[
+              Container(
+                height: 72.0,
+                child: Row(children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      end: 16.0,
+                    ),
+                    child: CAssetImage(path: ImagePaths.split_tunneling),
+                  ),
+                  CText(
+                    'split_tunneling'.i18n,
+                    softWrap: false,
+                    style: tsSubtitle1.short,
+                  ),
+                  Spacer(),
+                  FlutterSwitch(
+                    width: 44.0,
+                    height: 24.0,
+                    valueFontSize: 12.0,
+                    activeColor: Colors.green,
+                    padding: 2,
+                    toggleSize: 18.0,
+                    value: value,
+                    onToggle: (bool newValue) {
+                      sessionModel.setSplitTunneling(newValue);
+                    },
+                  )
+                ]),
               ),
-              child: new Image.memory(bytes, fit: BoxFit.cover),
-            )
-          ]),
-      trailing: AppCheckmark(
-          packageName: appData.packageName, isExcluded: isExcluded),
-      title: CText(
-        toBeginningOfSentenceCase(appData.name)!,
-        style: tsBody1,
-      ),
-    );
+              CText(value ? 'apps_selected'.i18n : 'split_tunneling_info'.i18n,
+                  style: tsBody3),
+              // if split tunneling is enabled, include the installed apps
+              // in the column
+              if (value) ...buildInstalledAppsList(),
+            ])));
   }
 
-  Widget splitTunnelingSwitch(BuildContext context) {
-    return sessionModel.splitTunneling(
-      (BuildContext context, bool value, Widget? child) => Container(
-        height: 72.0,
-        child: Row(children: <Widget>[
-          Padding(
-            padding: const EdgeInsetsDirectional.only(
-              end: 16.0,
-            ),
-            child: CAssetImage(path: ImagePaths.split_tunneling),
-          ),
-          CText(
-            'split_tunneling'.i18n,
-            softWrap: false,
-            style: tsSubtitle1.short,
-          ),
-          Spacer(),
-          FlutterSwitch(
-            width: 44.0,
-            height: 24.0,
-            valueFontSize: 12.0,
-            activeColor: Colors.green,
-            padding: 2,
-            toggleSize: 18.0,
-            value: value,
-            onToggle: (bool newValue) {
-              sessionModel.setSplitTunneling(newValue);
-            },
-          )
-        ]),
-      ),
-    );
+  List<Widget> buildInstalledAppsList() {
+    return [
+      ListSectionHeader('apps'.i18n),
+      sessionModel.appsData(
+          (BuildContext context, AppsData appsData, Widget? child) => Expanded(
+              child: ListView.separated(
+                  itemCount: appsData.appsList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var appData = appsData.appsList[index];
+                    bool isExcluded = appsData
+                            .excludedApps.excludedApps[appData.packageName] ??
+                        false;
+                    Uint8List bytes = base64.decode(appData.icon);
+
+                    return ListTile(
+                      leading: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 24,
+                                minHeight: 24,
+                                maxWidth: 24,
+                                maxHeight: 24,
+                              ),
+                              child: new Image.memory(bytes, fit: BoxFit.cover),
+                            )
+                          ]),
+                      trailing: AppCheckmark(
+                          packageName: appData.packageName,
+                          isExcluded: isExcluded),
+                      title: CText(
+                        toBeginningOfSentenceCase(appData.name)!,
+                        style: tsBody1,
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider(height: 1.0);
+                  })))
+    ];
   }
 }
