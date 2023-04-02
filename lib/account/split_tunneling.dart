@@ -3,7 +3,6 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:flutter/foundation.dart';
 
-
 class AppCheckmark extends StatefulWidget {
   // The package name of the application the AppCheckmark corresponds with
   final String packageName;
@@ -22,19 +21,11 @@ class _AppCheckmarkState extends State<AppCheckmark> {
 
   @override
   Widget build(BuildContext context) {
-      Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.white;
-      }
-      return Colors.green;
-    }
     return Checkbox(
       checkColor: Colors.white,
       shape: CircleBorder(),
-      fillColor: MaterialStateProperty.resolveWith(getColor),
+      activeColor: Colors.green,
+      side: BorderSide(color: Colors.black),
       // If an app has previously been excluded from the VPN connection by a user,
       // the switch is turned on by default
       value: isChecked || widget.isExcluded,
@@ -53,75 +44,93 @@ class _AppCheckmarkState extends State<AppCheckmark> {
   }
 }
 
-
 class SplitTunneling extends StatelessWidget {
   SplitTunneling({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('split_tunneling'.i18n),
-      ),
-      body: splitTunneling(context),
-    );
+    return BaseScreen(
+        title: 'split_tunneling'.i18n,
+        body: Column(children: <Widget>[
+          splitTunnelingSwitch(context),
+          CText('split_tunneling_info'.i18n, style: tsBody3),
+          ListSectionHeader('apps'.i18n),
+          sessionModel.appsData(
+              (BuildContext context, AppsData appsData, Widget? child) =>
+                  Expanded(
+                      child: ListView.separated(
+                          itemCount: 10 /*appsData.appsList.length*/,
+                          itemBuilder: (BuildContext context, int index) {
+                            var appData = appsData.appsList[index];
+                            debugPrint('data: $appData');
+                            bool isExcluded = appsData.excludedApps
+                                    .excludedApps[appData.packageName] ??
+                                false;
+                            return buildAppListItem(appData, isExcluded);
+                          },
+                          separatorBuilder: (context, index) {
+                            return Divider();
+                          })))
+        ]));
   }
-
 
   Widget buildAppListItem(AppData appData, bool isExcluded) {
     Uint8List bytes = base64.decode(appData.icon);
-    
     return ListTile(
-      contentPadding: const EdgeInsetsDirectional.all(4),
-      leading: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: 44,
-          minHeight: 44,
-          maxWidth: 64,
-          maxHeight: 64,
-        ),
-        child: new Image.memory(bytes, fit: BoxFit.cover),
-      ),
-      trailing: AppCheckmark(packageName: appData.packageName, isExcluded: isExcluded),
+      //contentPadding: const EdgeInsetsDirectional.only(top: 24, bottom: 24),
+      leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 24,
+                minHeight: 24,
+                maxWidth: 24,
+                maxHeight: 24,
+              ),
+              child: new Image.memory(bytes, fit: BoxFit.cover),
+            )
+          ]),
+      trailing: AppCheckmark(
+          packageName: appData.packageName, isExcluded: isExcluded),
       title: CText(
-        toBeginningOfSentenceCase(
-        appData.name)!,
+        toBeginningOfSentenceCase(appData.name)!,
         style: tsBody1,
       ),
     );
   }
 
-  Widget splitTunneling(BuildContext context) {
-    return sessionModel.splitTunnelingEnabled((BuildContext context, bool value, Widget? child) {
-      if (!value) {
-        return Row(children: <Widget>[
-          CText('split_tunneling'.i18n,
-           style: CTextStyle(
-                fontSize: 14,
-                lineHeight: 21,
-                color: black,
-              )),
-          Switch(
-            value: value,
-            onChanged: (bool value) {
-              // This is called when the user toggles the switch.
-              sessionModel.setSplitTunneling(value);
-            }
+  Widget splitTunnelingSwitch(BuildContext context) {
+    return sessionModel.splitTunneling(
+      (BuildContext context, bool value, Widget? child) => Container(
+        height: 72.0,
+        child: Row(children: <Widget>[
+          Padding(
+            padding: const EdgeInsetsDirectional.only(
+              end: 16.0,
+            ),
+            child: CAssetImage(path: ImagePaths.split_tunneling),
           ),
-        ]);
-      }
-      // build a ListView that contains all application packages installed for
-      // the current useralong with a set of apps to exclude from the VPN
-      // connection
-      return sessionModel.appsData((BuildContext context, AppsData appsData, Widget? child) {
-        return ListView.builder(
-          itemCount: appsData.appsList.length,
-          itemBuilder: (BuildContext context, int index) {
-            var appData = appsData.appsList[index];
-            bool isExcluded = appsData.excludedApps.excludedApps[appData.packageName] ?? false;
-            return buildAppListItem(appData, isExcluded);
-          });
-      });
-    });
+          CText(
+            'split_tunneling'.i18n,
+            softWrap: false,
+            style: tsSubtitle1.short,
+          ),
+          Spacer(),
+          FlutterSwitch(
+            width: 44.0,
+            height: 24.0,
+            valueFontSize: 12.0,
+            activeColor: Colors.green,
+            padding: 2,
+            toggleSize: 18.0,
+            value: value,
+            onToggle: (bool newValue) {
+              sessionModel.setSplitTunneling(newValue);
+            },
+          )
+        ]),
+      ),
+    );
   }
 }

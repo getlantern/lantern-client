@@ -45,14 +45,14 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<bool>('proxyAll', builder: builder);
   }
 
-  Widget splitTunnelingEnabled(ValueWidgetBuilder<bool> builder) {
+  Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('splitTunneling', builder: builder);
   }
 
-  Future<void> setSplitTunneling(bool on) {
-    return methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
+  Future<void> setSplitTunneling<T>(bool on) async {
+    unawaited(methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
       'on': on,
-    });
+    }));
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {

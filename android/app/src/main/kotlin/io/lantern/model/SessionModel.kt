@@ -58,6 +58,10 @@ class SessionModel(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
+            tx.put(
+                PATH_SPLIT_TUNNELING,
+                castToBoolean(tx.get(PATH_SPLIT_TUNNELING), false)
+            )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())

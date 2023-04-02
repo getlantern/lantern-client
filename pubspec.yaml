@@ -37,7 +37,7 @@ dependencies:
 
   google_fonts:
 
-  flutter_switch: ^0.3.0
+  flutter_switch: ^0.3.2
 
   flag: ^6.0.0
 

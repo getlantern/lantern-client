@@ -83,11 +83,11 @@ class Settings extends StatelessWidget {
                 : const SizedBox(),
           ),
           //* Split tunneling
-          sessionModel.splitTunnelingEnabled(
-            (BuildContext context, bool splitTunneling, Widget? child) =>
+          sessionModel.splitTunneling(
+            (BuildContext context, bool value, Widget? child) =>
                 ListItemFactory.settingsItem(
               header: 'VPN'.i18n,
-              icon: ImagePaths.key,
+              icon: ImagePaths.split_tunneling,
               content: CInkWell(
                 onTap: () => openSplitTunneling(context),
                 child: Row(
@@ -96,24 +96,27 @@ class Settings extends StatelessWidget {
                   children: [
                     Flexible(
                       child: CText(
-                        'split_tunneling'
-                            .i18n
-                            .fill([splitTunneling ? 'ON'.i18n : 'OFF'.i18n]),
+                        'split_tunneling'.i18n,
                         softWrap: false,
                         style: tsSubtitle1.short,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsetsDirectional.only(start: 4.0),
-                      child: CAssetImage(
-                        key: ValueKey('split_tunneling'),
-                        path: ImagePaths.split_tunneling,
-                        size: 12,
                       ),
                     ),
                   ],
                 ),
               ),
+              trailingArray: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16),
+                  child: CText(
+                    value ? 'ON'.i18n : 'OFF'.i18n,
+                    style: tsSubtitle2.copiedWith(color: pink4),
+                  ),
+                ),
+                mirrorLTR(
+                  context: context,
+                  child: const ContinueArrow(),
+                )
+              ],
             ),
           ),
           //* Build version
@@ -159,9 +162,7 @@ class Settings extends StatelessWidget {
                       ),
                       child: sessionModel.sdkVersion(
                         (context, sdkVersion, _) => CText(
-                          'sdk_version'
-                              .i18n
-                              .fill([sdkVersion]),
+                          'sdk_version'.i18n.fill([sdkVersion]),
                           style: tsOverline.copiedWith(color: pink4),
                         ),
                       ),
