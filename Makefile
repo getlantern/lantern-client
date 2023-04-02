@@ -81,8 +81,7 @@ BINARIES_BRANCH ?= main
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
-# temporary change
-S3_BUCKET ?= lanterninstallers
+S3_BUCKET ?= lantern
 FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
 
@@ -231,30 +230,38 @@ require-magick:
 require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
 
-release-qa:
+release-qa: require-version require-s3cmd require-changelog
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
 	VERSION_FILE_NAME="version-qa-android.txt" && \
+	rm -f $$BASE_NAME* && \
+	cp $(INSTALLER_NAME)-arm32.apk $$BASE_NAME.apk && \
+	cp lantern-all.aab $$BASE_NAME.aab && \
 	echo "Uploading installer packages and shasums" && \
 	for NAME in $$(ls -1 $$BASE_NAME*.*); do \
-		sha256sum $$NAME | cut -d " " -f 1 > $$NAME.sha256 && \
+		shasum -a 256 $$NAME | cut -d " " -f 1 > $$NAME.sha256 && \
 		echo "Uploading SHA-256 `cat $$NAME.sha256`" && \
-		s3cmd put -P $$NAME.sha256 s3://$(S3_BUCKET) && \
+		$(S3CMD) put -P $$NAME.sha256 s3://$(S3_BUCKET) && \
 		echo "Uploading $$NAME to S3" && \
-		s3cmd put -P $$NAME s3://$(S3_BUCKET) && \
+		$(S3CMD) put -P $$NAME s3://$(S3_BUCKET) && \
 		SUFFIX=$$(echo "$$NAME" | sed s/$$BASE_NAME//g) && \
-		VERSIONED="$(INSTALLER_NAME)-$$VERSION$$SUFFIX" && \
+		VERSIONED=$(INSTALLER_NAME)-$$VERSION$$SUFFIX && \
 		echo "Copying $$VERSIONED" && \
-		s3cmd cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$VERSIONED && \
+		$(S3CMD) cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$VERSIONED && \
 		echo "Copied $$VERSIONED ... setting acl to public" && \
-		s3cmd setacl s3://$(S3_BUCKET)/$$VERSIONED --acl-public; \
+		$(S3CMD) setacl s3://$(S3_BUCKET)/$$VERSIONED --acl-public; \
 	done && \
 	echo "Setting content types for installer packages" && \
 	for NAME in $$BASE_NAME.apk $(INSTALLER_NAME)-$$VERSION.apk $$BASE_NAME.aab ; do \
-		s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$NAME; \
+		$(S3CMD) modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$NAME; \
+	done && \
+	for NAME in update_android_arm ; do \
+		cp lantern_$$NAME.bz2 lantern_$$NAME-$$VERSION.bz2 && \
+		echo "Copying versioned name lantern_$$NAME-$$VERSION.bz2..." && \
+		$(S3CMD) put -P lantern_$$NAME-$$VERSION.bz2 s3://$(S3_BUCKET); \
 	done && \
 	echo $$VERSION > $$VERSION_FILE_NAME && \
-	s3cmd put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
-	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)"
+	$(S3CMD) put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
+	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" 
 
 release-beta: require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
@@ -325,7 +332,12 @@ release-autoupdate: require-version
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
 $(ANDROID_LIB): $(GO_SOURCES)
-	gomobile bind -target=$(ANDROID_ARCH_GOMOBILE) \
+	$(call check-go-version) && \
+	$(GO) env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	$(GO) install golang.org/x/mobile/cmd/gomobile && \
+	gomobile init && \
+	gomobile bind -cache `pwd`/.gomobilecache \
+	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=19 \
 		-ldflags="$(LDFLAGS)" \
