@@ -44,8 +44,38 @@ class _AppCheckmarkState extends State<AppCheckmark> {
   }
 }
 
-class SplitTunneling extends StatelessWidget {
+class SplitTunneling extends StatefulWidget {
   SplitTunneling({Key? key});
+
+  @override
+  State<SplitTunneling> createState() => _SplitTunnelingState();
+}
+
+class _SplitTunnelingState extends State<SplitTunneling> {
+  AppsData? appsData;
+
+  late ValueNotifier<AppsData?> appsDataNotifier;
+  late void Function() appsDataListener;
+
+  @override
+  void initState() {
+    super.initState();
+    appsDataNotifier = sessionModel.appsDataNotifier();
+    appsDataListener = () async {
+      if (appsDataNotifier.value != null) {
+        setState(() {
+          appsData = appsDataNotifier.value;
+        });
+      }
+    };
+    appsDataNotifier.addListener(appsDataListener);
+  }
+
+  @override
+  void dispose() {
+    appsDataNotifier.removeListener(appsDataListener);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,56 +124,46 @@ class SplitTunneling extends StatelessWidget {
   // buildAppsLists builds lists for excluded and allowed installed apps and
   // returns both along with their associated headers
   List<Widget> buildAppsLists() {
+    if (appsData == null) return [];
+    List<AppData> appsList = appsData!.appsList.toSet().toList();
     return [
       ListSectionHeader('excluded_apps'.i18n.toUpperCase()),
-      sessionModel.appsData(
-          (BuildContext context, AppsData appsData, Widget? child) =>
-              buildAppList(appsData, false)),
+      buildAppList(appsList.where((appData) => isAppExcluded(appData.packageName))
+          .toList()),
       ListSectionHeader('allowed_apps'.i18n.toUpperCase()),
-      sessionModel.appsData(
-          (BuildContext context, AppsData appsData, Widget? child) =>
-              buildAppList(appsData, true)),
+      buildAppList(appsList.where((appData) => !isAppExcluded(appData.packageName))
+          .toList()),
     ];
   }
 
-  bool isAppExcluded(AppsData appsData, String packageName) {
-    return appsData.excludedApps.excludedApps[packageName] ?? false;
+  bool isAppExcluded(String packageName) {
+    return appsData?.excludedApps.excludedApps[packageName] ?? false;
   }
 
-  Widget buildAppList(AppsData appsData, bool excludedApps) {
-    List<AppData> filtered;
-    if (excludedApps) {
-      // filter apps that are excluded for the excluded apps list
-      filtered = appsData.appsList
-          .where((appData) => isAppExcluded(appsData, appData.packageName))
-          .toList();
-    } else {
-      // filter apps that are not excluded for the allowed apps list
-      filtered = appsData.appsList
-          .where((appData) => !isAppExcluded(appsData, appData.packageName))
-          .toList();
-    }
-    if (filtered.length == 0) {
+  Widget buildAppList(List<AppData> apps) {
+    if (apps.length == 0) {
       return SizedBox.shrink();
     }
 
     return Expanded(
         child: ListView.separated(
-            itemCount: filtered.length,
+            itemCount: apps.length,
             itemBuilder: (BuildContext context, int index) {
-              var appData = filtered[index];
+              var appData = apps[index];
               Uint8List bytes = base64.decode(appData.icon);
-              return buildAppItem(
-                  appData, isAppExcluded(appsData, appData.packageName));
+              bool isExcluded = isAppExcluded(appData.packageName);
+              Widget appItem = buildAppItem(appData, isExcluded);
+              return appItem;
             },
             separatorBuilder: (context, index) {
-              return Divider(height: 1.0);
+              return Divider(height: 2.0);
             }));
   }
 
   Widget buildAppItem(AppData appData, bool isAppExcluded) {
     Uint8List iconBytes = base64.decode(appData.icon);
     return ListTile(
+      key: Key(appData.packageName),
       leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

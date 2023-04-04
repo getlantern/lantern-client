@@ -117,10 +117,16 @@ class SessionModel extends Model {
     );
   }
 
-  Widget appsData(ValueWidgetBuilder<AppsData> builder) {
-    return subscribedSingleValueBuilder<AppsData>(
+  Future<AppsData> appsData() {
+    return methodChannel
+        .invokeMethod('get', 'appsData')
+        .then((value) => AppsData.fromBuffer(value as Uint8List));
+  }
+
+  ValueNotifier<AppsData?> appsDataNotifier() {
+    return singleValueNotifier(
       'appsData',
-      builder: builder,
+      null,
       deserialize: (Uint8List serialized) {
         return AppsData.fromBuffer(serialized);
       },
