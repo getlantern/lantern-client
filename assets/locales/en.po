@@ -349,8 +349,11 @@ msgstr "Add contacts in person"
 msgid "start_chat"
 msgstr "Start chat"
 
-msgid "apps"
-msgstr "Apps"
+msgid "allowed_apps"
+msgstr "Allowed Apps"
+
+msgid "excluded_apps"
+msgstr "Excluded Apps"
 
 msgid "apps_selected"
 msgstr "Apps selected below will not go through Lantern when connected."

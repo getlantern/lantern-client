@@ -24,7 +24,7 @@ class _AppCheckmarkState extends State<AppCheckmark> {
     return Checkbox(
       checkColor: Colors.white,
       shape: CircleBorder(),
-      activeColor: Colors.green,
+      activeColor: Colors.black,
       side: BorderSide(color: Colors.black),
       // If an app has previously been excluded from the VPN connection by a user,
       // the switch is turned on by default
@@ -87,50 +87,82 @@ class SplitTunneling extends StatelessWidget {
                   style: tsBody3),
               // if split tunneling is enabled, include the installed apps
               // in the column
-              if (value) ...buildInstalledAppsList(),
+              if (value) ...buildAppsLists(),
             ])));
   }
 
-  List<Widget> buildInstalledAppsList() {
+  // buildAppsLists builds lists for excluded and allowed installed apps and
+  // returns both along with their associated headers
+  List<Widget> buildAppsLists() {
     return [
-      ListSectionHeader('apps'.i18n),
+      ListSectionHeader('excluded_apps'.i18n.toUpperCase()),
       sessionModel.appsData(
-          (BuildContext context, AppsData appsData, Widget? child) => Expanded(
-              child: ListView.separated(
-                  itemCount: appsData.appsList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var appData = appsData.appsList[index];
-                    bool isExcluded = appsData
-                            .excludedApps.excludedApps[appData.packageName] ??
-                        false;
-                    Uint8List bytes = base64.decode(appData.icon);
-
-                    return ListTile(
-                      leading: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minWidth: 24,
-                                minHeight: 24,
-                                maxWidth: 24,
-                                maxHeight: 24,
-                              ),
-                              child: new Image.memory(bytes, fit: BoxFit.cover),
-                            )
-                          ]),
-                      trailing: AppCheckmark(
-                          packageName: appData.packageName,
-                          isExcluded: isExcluded),
-                      title: CText(
-                        toBeginningOfSentenceCase(appData.name)!,
-                        style: tsBody1,
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return Divider(height: 1.0);
-                  })))
+          (BuildContext context, AppsData appsData, Widget? child) =>
+              buildAppList(appsData, false)),
+      ListSectionHeader('allowed_apps'.i18n.toUpperCase()),
+      sessionModel.appsData(
+          (BuildContext context, AppsData appsData, Widget? child) =>
+              buildAppList(appsData, true)),
     ];
+  }
+
+  bool isAppExcluded(AppsData appsData, String packageName) {
+    return appsData.excludedApps.excludedApps[packageName] ?? false;
+  }
+
+  Widget buildAppList(AppsData appsData, bool excludedApps) {
+    List<AppData> filtered;
+    if (excludedApps) {
+      // filter apps that are excluded for the excluded apps list
+      filtered = appsData.appsList
+          .where((appData) => isAppExcluded(appsData, appData.packageName))
+          .toList();
+    } else {
+      // filter apps that are not excluded for the allowed apps list
+      filtered = appsData.appsList
+          .where((appData) => !isAppExcluded(appsData, appData.packageName))
+          .toList();
+    }
+    if (filtered.length == 0) {
+      return SizedBox.shrink();
+    }
+
+    return Expanded(
+        child: ListView.separated(
+            itemCount: filtered.length,
+            itemBuilder: (BuildContext context, int index) {
+              var appData = filtered[index];
+              Uint8List bytes = base64.decode(appData.icon);
+              return buildAppItem(
+                  appData, isAppExcluded(appsData, appData.packageName));
+            },
+            separatorBuilder: (context, index) {
+              return Divider(height: 1.0);
+            }));
+  }
+
+  Widget buildAppItem(AppData appData, bool isAppExcluded) {
+    Uint8List iconBytes = base64.decode(appData.icon);
+    return ListTile(
+      leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 24,
+                minHeight: 24,
+                maxWidth: 24,
+                maxHeight: 24,
+              ),
+              child: new Image.memory(iconBytes, fit: BoxFit.cover),
+            )
+          ]),
+      trailing: AppCheckmark(
+          packageName: appData.packageName, isExcluded: isAppExcluded),
+      title: CText(
+        toBeginningOfSentenceCase(appData.name)!,
+        style: tsBody1,
+      ),
+    );
   }
 }
