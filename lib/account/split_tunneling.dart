@@ -116,42 +116,45 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     return Container(
         height: 72,
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Color(0xFFEBEBEB), width: 1.0)),
+          border:
+              Border(bottom: BorderSide(color: Color(0xFFEBEBEB), width: 1.0)),
         ),
-        child: ListTile(
-          key: Key(appData.packageName),
-          leading: ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: 24,
-              minHeight: 24,
-              maxWidth: 24,
-              maxHeight: 24,
-            ),
-            child: new Image.memory(iconBytes, fit: BoxFit.cover),
-          ),
-          trailing: Checkbox(
-            checkColor: Colors.white,
-            shape: CircleBorder(),
-            activeColor: Colors.black,
-            side: BorderSide(color: Colors.black),
-            value: isAppExcluded,
-            onChanged: (bool? value) {
-              setState(() {
-                if (value != null && value!) {
-                  excludedApps[appData.packageName] = true;
-                  sessionModel.addExcludedApp(appData.packageName);
-                } else {
-                  excludedApps.remove(appData.packageName);
-                  sessionModel.removeExcludedApp(appData.packageName);
-                }
-              });
-            },
-          ),
-          title: CText(
-            toBeginningOfSentenceCase(appData.name)!,
-            softWrap: false,
-            style: tsSubtitle1.short,
-          ),
-        ));
+        child: Align(
+            alignment: Alignment.center,
+            child: ListTile(
+              key: Key(appData.packageName),
+              leading: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 24,
+                  minHeight: 24,
+                  maxWidth: 24,
+                  maxHeight: 24,
+                ),
+                child: new Image.memory(iconBytes, fit: BoxFit.cover),
+              ),
+              trailing: Checkbox(
+                checkColor: Colors.white,
+                shape: CircleBorder(),
+                activeColor: Colors.black,
+                side: BorderSide(color: Colors.black),
+                value: isAppExcluded,
+                onChanged: (bool? value) {
+                  setState(() {
+                    if (value != null && value!) {
+                      excludedApps[appData.packageName] = true;
+                      sessionModel.addExcludedApp(appData.packageName);
+                    } else {
+                      excludedApps.remove(appData.packageName);
+                      sessionModel.removeExcludedApp(appData.packageName);
+                    }
+                  });
+                },
+              ),
+              title: CText(
+                toBeginningOfSentenceCase(appData.name)!,
+                softWrap: false,
+                style: tsSubtitle1.short,
+              ),
+            )));
   }
 }

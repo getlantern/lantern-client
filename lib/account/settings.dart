@@ -16,8 +16,8 @@ class Settings extends StatelessWidget {
 
   void checkForUpdates() async => await sessionModel.checkForUpdates();
 
-  void openSplitTunneling(BuildContext context) async =>
-      await context.pushRoute(SplitTunneling());
+  void openSplitTunneling(BuildContext context) =>
+      context.pushRoute(SplitTunneling());
 
   @override
   Widget build(BuildContext context) {
@@ -88,24 +88,24 @@ class Settings extends StatelessWidget {
                 ListItemFactory.settingsItem(
               header: 'VPN'.i18n,
               icon: ImagePaths.split_tunneling,
-              content: CInkWell(
-                onTap: () => openSplitTunneling(context),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: CText(
-                        'split_tunneling'.i18n,
-                        softWrap: false,
-                        style: tsSubtitle1.short,
-                      ),
+              onTap: () {
+                openSplitTunneling(context);
+              },
+              content: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: CText(
+                      'split_tunneling'.i18n,
+                      softWrap: false,
+                      style: tsSubtitle1.short,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               trailingArray: [
-                 Padding(
+                Padding(
                   padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
                   child: CText(
                     value ? 'ON'.i18n : 'OFF'.i18n,
