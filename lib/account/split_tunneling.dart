@@ -3,47 +3,6 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:flutter/foundation.dart';
 
-class AppCheckmark extends StatefulWidget {
-  // The package name of the application the AppCheckmark corresponds with
-  final String packageName;
-  // Whether the app should be excluded from the VPN connection
-  bool isExcluded;
-
-  AppCheckmark({required this.packageName, required this.isExcluded});
-
-  @override
-  State<AppCheckmark> createState() => _AppCheckmarkState();
-}
-
-class _AppCheckmarkState extends State<AppCheckmark> {
-  // Whether the app is excluded from the VPN connection
-  bool isChecked = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Checkbox(
-      checkColor: Colors.white,
-      shape: CircleBorder(),
-      activeColor: Colors.black,
-      side: BorderSide(color: Colors.black),
-      // If an app has previously been excluded from the VPN connection by a user,
-      // the switch is turned on by default
-      value: isChecked || widget.isExcluded,
-      onChanged: (bool? value) {
-        // This is called when the user toggles the switch.
-        setState(() {
-          isChecked = value!;
-          if (isChecked) {
-            sessionModel.addExcludedApp(widget.packageName);
-          } else {
-            sessionModel.removeExcludedApp(widget.packageName);
-          }
-        });
-      },
-    );
-  }
-}
-
 class SplitTunneling extends StatefulWidget {
   SplitTunneling({Key? key});
 
@@ -56,25 +15,24 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 
   late ValueNotifier<AppsData?> appsDataNotifier;
   late void Function() appsDataListener;
+  final Map<String, bool> excludedApps = new Map();
 
   @override
   void initState() {
     super.initState();
-    appsDataNotifier = sessionModel.appsDataNotifier();
-    appsDataListener = () async {
-      if (appsDataNotifier.value != null) {
-        setState(() {
-          appsData = appsDataNotifier.value;
-        });
-      }
-    };
-    appsDataNotifier.addListener(appsDataListener);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initSplitTunneling();
+    });
   }
 
-  @override
-  void dispose() {
-    appsDataNotifier.removeListener(appsDataListener);
-    super.dispose();
+  initSplitTunneling() async {
+    AppsData _appsData = await sessionModel.appsData();
+    for (var packageName in _appsData.excludedApps.excludedApps.keys) {
+      excludedApps[packageName] = true;
+    }
+    setState(() {
+      appsData = _appsData;
+    });
   }
 
   @override
@@ -84,21 +42,10 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         body: sessionModel.splitTunneling((BuildContext context, bool value,
                 Widget? child) =>
             Column(children: <Widget>[
-              Container(
-                height: 72.0,
-                child: Row(children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                      end: 16.0,
-                    ),
-                    child: CAssetImage(path: ImagePaths.split_tunneling),
-                  ),
-                  CText(
-                    'split_tunneling'.i18n,
-                    softWrap: false,
-                    style: tsSubtitle1.short,
-                  ),
-                  Spacer(),
+              ListItemFactory.settingsItem(
+                icon: ImagePaths.split_tunneling,
+                content: 'split_tunneling'.i18n,
+                trailingArray: [
                   FlutterSwitch(
                     width: 44.0,
                     height: 24.0,
@@ -111,7 +58,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                       sessionModel.setSplitTunneling(newValue);
                     },
                   )
-                ]),
+                ],
               ),
               CText(value ? 'apps_selected'.i18n : 'split_tunneling_info'.i18n,
                   style: tsBody3),
@@ -128,16 +75,18 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     List<AppData> appsList = appsData!.appsList.toSet().toList();
     return [
       ListSectionHeader('excluded_apps'.i18n.toUpperCase()),
-      buildAppList(appsList.where((appData) => isAppExcluded(appData.packageName))
+      buildAppList(appsList
+          .where((appData) => isAppExcluded(appData.packageName))
           .toList()),
       ListSectionHeader('allowed_apps'.i18n.toUpperCase()),
-      buildAppList(appsList.where((appData) => !isAppExcluded(appData.packageName))
+      buildAppList(appsList
+          .where((appData) => !isAppExcluded(appData.packageName))
           .toList()),
     ];
   }
 
   bool isAppExcluded(String packageName) {
-    return appsData?.excludedApps.excludedApps[packageName] ?? false;
+    return excludedApps[packageName] ?? false;
   }
 
   Widget buildAppList(List<AppData> apps) {
@@ -162,27 +111,54 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 
   Widget buildAppItem(AppData appData, bool isAppExcluded) {
     Uint8List iconBytes = base64.decode(appData.icon);
-    return ListTile(
-      key: Key(appData.packageName),
-      leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 24,
-                minHeight: 24,
-                maxWidth: 24,
-                maxHeight: 24,
-              ),
-              child: new Image.memory(iconBytes, fit: BoxFit.cover),
-            )
-          ]),
-      trailing: AppCheckmark(
-          packageName: appData.packageName, isExcluded: isAppExcluded),
-      title: CText(
-        toBeginningOfSentenceCase(appData.name)!,
-        style: tsBody1,
-      ),
-    );
+    return Container(
+        height: 72,
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              ListTile(
+                key: Key(appData.packageName),
+                leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 24,
+                          minHeight: 24,
+                          maxWidth: 24,
+                          maxHeight: 24,
+                        ),
+                        child: new Image.memory(iconBytes, fit: BoxFit.cover),
+                      )
+                    ]),
+                trailing: Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 24),
+                  child: Checkbox(
+                    checkColor: Colors.white,
+                    shape: CircleBorder(),
+                    activeColor: Colors.black,
+                    side: BorderSide(color: Colors.black),
+                    value: isAppExcluded,
+                    onChanged: (bool? value) {
+                      // This is called when the user toggles the switch.
+                      setState(() {
+                        if (value!) {
+                          excludedApps[appData.packageName] = true;
+                          sessionModel.addExcludedApp(appData.packageName);
+                        } else {
+                          excludedApps.remove(appData.packageName);
+                          sessionModel.removeExcludedApp(appData.packageName);
+                        }
+                      });
+                    },
+                  ),
+                ),
+                title: CText(
+                  toBeginningOfSentenceCase(appData.name)!,
+                  softWrap: false,
+                  style: tsSubtitle1.short,
+                ),
+              )
+            ]));
   }
 }

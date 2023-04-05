@@ -49,6 +49,7 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<bool>('splitTunneling', builder: builder);
   }
 
+
   Future<void> setSplitTunneling<T>(bool on) async {
     unawaited(methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
       'on': on,
