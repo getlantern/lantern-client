@@ -41,36 +41,38 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         title: 'split_tunneling'.i18n,
         body: sessionModel.splitTunneling(
             (BuildContext context, bool value, Widget? child) =>
-                Column(children: <Widget>[
-                  ListItemFactory.settingsItem(
-                    icon: ImagePaths.split_tunneling,
-                    content: 'split_tunneling'.i18n,
-                    trailingArray: [
-                      FlutterSwitch(
-                        width: 44.0,
-                        height: 24.0,
-                        valueFontSize: 12.0,
-                        activeColor: Colors.green,
-                        padding: 2,
-                        toggleSize: 18.0,
-                        value: value,
-                        onToggle: (bool newValue) {
-                          sessionModel.setSplitTunneling(newValue);
-                        },
-                      )
-                    ],
-                  ),
-                  Padding(
-                      padding: const EdgeInsetsDirectional.only(top: 16),
-                      child: CText(
-                          value
-                              ? 'apps_selected'.i18n
-                              : 'split_tunneling_info'.i18n,
-                          style: tsBody3)),
-                  // if split tunneling is enabled, include the installed apps
-                  // in the column
-                  if (value) ...buildAppsLists(),
-                ])));
+                SingleChildScrollView(
+                    physics: ScrollPhysics(),
+                    child: Column(children: <Widget>[
+                      ListItemFactory.settingsItem(
+                        icon: ImagePaths.split_tunneling,
+                        content: 'split_tunneling'.i18n,
+                        trailingArray: [
+                          FlutterSwitch(
+                            width: 44.0,
+                            height: 24.0,
+                            valueFontSize: 12.0,
+                            activeColor: Colors.green,
+                            padding: 2,
+                            toggleSize: 18.0,
+                            value: value,
+                            onToggle: (bool newValue) {
+                              sessionModel.setSplitTunneling(newValue);
+                            },
+                          )
+                        ],
+                      ),
+                      Padding(
+                          padding: const EdgeInsetsDirectional.only(top: 16),
+                          child: CText(
+                              value
+                                  ? 'apps_selected'.i18n
+                                  : 'split_tunneling_info'.i18n,
+                              style: tsBody3)),
+                      // if split tunneling is enabled, include the installed apps
+                      // in the column
+                      if (value) ...buildAppsLists(),
+                    ]))));
   }
 
   // buildAppsLists builds lists for excluded and allowed installed apps and
@@ -99,22 +101,24 @@ class _SplitTunnelingState extends State<SplitTunneling> {
       return SizedBox.shrink();
     }
 
-    return Expanded(
-        child: ListView.builder(
-            itemCount: apps.length,
-            itemBuilder: (BuildContext context, int index) {
-              var appData = apps[index];
-              Uint8List bytes = base64.decode(appData.icon);
-              bool isExcluded = isAppExcluded(appData.packageName);
-              Widget appItem = buildAppItem(appData, isExcluded);
-              return appItem;
-            }));
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: apps.length,
+        itemBuilder: (BuildContext context, int index) {
+          var appData = apps[index];
+          Uint8List bytes = base64.decode(appData.icon);
+          bool isExcluded = isAppExcluded(appData.packageName);
+          Widget appItem = buildAppItem(appData, isExcluded);
+          return appItem;
+        });
   }
 
   Widget buildAppItem(AppData appData, bool isAppExcluded) {
     Uint8List iconBytes = base64.decode(appData.icon);
     return Container(
         height: 72,
+        padding: EdgeInsets.zero,
         decoration: BoxDecoration(
           border:
               Border(bottom: BorderSide(color: Color(0xFFEBEBEB), width: 1.0)),
@@ -123,6 +127,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
             alignment: Alignment.center,
             child: ListTile(
               key: Key(appData.packageName),
+              minLeadingWidth: 20,
               leading: ConstrainedBox(
                 constraints: BoxConstraints(
                   minWidth: 24,
@@ -132,24 +137,27 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                 ),
                 child: new Image.memory(iconBytes, fit: BoxFit.cover),
               ),
-              trailing: Checkbox(
-                checkColor: Colors.white,
-                shape: CircleBorder(),
-                activeColor: Colors.black,
-                side: BorderSide(color: Colors.black),
-                value: isAppExcluded,
-                onChanged: (bool? value) {
-                  setState(() {
-                    if (value != null && value!) {
-                      excludedApps[appData.packageName] = true;
-                      sessionModel.addExcludedApp(appData.packageName);
-                    } else {
-                      excludedApps.remove(appData.packageName);
-                      sessionModel.removeExcludedApp(appData.packageName);
-                    }
-                  });
-                },
-              ),
+              trailing: SizedBox(
+                  height: 24.0,
+                  width: 24.0,
+                  child: Checkbox(
+                    checkColor: Colors.white,
+                    shape: CircleBorder(),
+                    activeColor: Colors.black,
+                    side: BorderSide(color: Colors.black),
+                    value: isAppExcluded,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        if (value != null && value!) {
+                          excludedApps[appData.packageName] = true;
+                          sessionModel.addExcludedApp(appData.packageName);
+                        } else {
+                          excludedApps.remove(appData.packageName);
+                          sessionModel.removeExcludedApp(appData.packageName);
+                        }
+                      });
+                    },
+                  )),
               title: CText(
                 toBeginningOfSentenceCase(appData.name)!,
                 softWrap: false,
