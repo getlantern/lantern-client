@@ -85,20 +85,10 @@ jobs:
         encodedString: ${{ secrets.KEYSTORE }}
 
     - name: Build with Gradle
-      run: |
-        ln -fs android/gradle.properties .
-        ./android/gradlew -PlanternVersion=$VERSION -PandroidArch=all -PandroidArchJava="${{ env.ANDROID_ARCH_JAVA }}" \
-        -PlanternRevisionDate=$REVISION_DATE -b android/app/build.gradle assembleProdSideload
-        cp build/app/outputs/apk/prod/sideload/app-prod-sideload.apk lantern-installer-internal.apk
-        sentry upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodRelease/out/lib
-        cat lantern-internal-internal.apk | bzip2 > lantern_update_android_arm.bz2
+      run: make android-release
 
     - name: Build Mobile Bundle
-      run: |
-        ./android/gradlew -PlanternVersion=$VERSION -PandroidArch=all -PandroidArchJava="${{ env.ANDROID_ARCH_JAVA }}" \
-        -PlanternRevisionDate=$REVISION_DATE -b android/app/build.gradle bundlePlay
-        sentry upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodRelease/out/lib
-        cp build/app/outputs/bundle/prodPlay/app-prod-play.aab lantern-installer-internal.aab
+      run: make android-bundle
 
     - name: Setup S3cmd cli tool
       uses: s3-actions/s3cmd@v1.4.0
