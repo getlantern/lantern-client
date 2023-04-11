@@ -3,23 +3,24 @@ name: "Push to transifex"
 on:
   push:
     paths:
-      - 'src/main/res/values/strings.xml'
-    branches: [ main ]
+      - "src/main/res/values/strings.xml"
+      - "assets/locales/en.po"
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  
+
 jobs:
   push-strings-to-transifex:
     name: push-strings-to-transifex
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: "Push main translations file"
-      env:
+      - uses: actions/checkout@v2
+      - name: "Push main translations file"
+        env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
-      run: |
-        sudo apt-get install python3-pip 
-        pip install transifex-client
-        tx init --force --no-interactive
-        tx push -s 
+        run: |
+          sudo apt-get install python3-pip 
+          pip install transifex-client
+          tx init --force --no-interactive
+          tx push -s
