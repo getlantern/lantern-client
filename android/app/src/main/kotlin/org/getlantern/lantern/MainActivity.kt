@@ -460,7 +460,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         // disable the on/off switch while the VpnService
         // is updating the connection
         if (on) {
-            internalsdk.Geolookup()
             // Make sure we have the necessary permissions
             val neededPermissions: Array<String> = missingPermissions()
             if (neededPermissions.isNotEmpty()) {
