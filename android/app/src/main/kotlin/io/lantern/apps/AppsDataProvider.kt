@@ -55,7 +55,7 @@ class AppsDataProvider(
                     info.loadLabel(packageManager).toString()
                 )
             }
-            .toList()
+            .toList().sortedBy { it.name }
     }
 
     // check whether a particular package has been granted permission to open network sockets
