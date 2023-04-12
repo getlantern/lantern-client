@@ -58,7 +58,29 @@ open class PlansActivity : BaseFragmentActivity() {
     @JvmField
     protected var content:View
 
-    protected var tvOneMonthCostFirst, tvTwoMonthCostSecond, tvDurationFirst, tvDurationSecond, tvTotalCostFirst, tvTotalCostSecond: TextView
+    @ViewById
+    @JvmField
+    protected var tvOneMonthCostFirst:TextView
+
+    @ViewById
+    @JvmField
+    protected var tvTwoMonthCostSecond:TextView
+
+    @ViewById
+    @JvmField
+    protected var tvDurationFirst:TextView
+
+    @ViewById
+    @JvmField
+    protected var tvDurationSecond:TextView
+
+    @ViewById
+    @JvmField
+    protected var tvTotalCostFirst:TextView
+
+    @ViewById
+    @JvmField
+    protected var tvTotalCostSecond:TextView
 
     @AfterViews
     fun afterViews() {
@@ -84,15 +106,8 @@ open class PlansActivity : BaseFragmentActivity() {
     }
 
     private fun initViews() {
-        tvOneMonthCostFirst = (TextView) itemPlanYear1.findViewById(R.id.tvCost)
-        tvTwoMonthCostSecond = (TextView) itemPlanYear2.findViewById(R.id.tvCost)
-        tvTotalCostFirst = (TextView) itemPlanYear1.findViewById(R.id.tvTotalCost)
-        tvTotalCostSecond = (TextView) itemPlanYear2.findViewById(R.id.tvTotalCost)
-        tvDurationFirst = (TextView) itemPlanYear1.findViewById(R.id.tvDuration)
-        tvDurationSecond = (TextView) itemPlanYear2.findViewById(R.id.tvDuration)
-        View activateCodeContainer = findViewById(R.id.activateCodeContainer)
+        var activateCodeContainer:View = findViewById(R.id.activateCodeContainer)
         activateCodeContainer.setVisibility(View.VISIBLE)
-        activateCodeContainer.setOnClickListener(v -> NavigatorKt.openCheckOutReseller(this))
     }
 
     private fun sendScreenViewEvent() {
@@ -100,24 +115,24 @@ open class PlansActivity : BaseFragmentActivity() {
     }
 
     protected fun setPaymentGateway() {
-        final Map<String, String> params = new HashMap<String, String>()
+        var params:Map<String, String> = HashMap<String, String>()
         params.put("appVersion", LanternApp.getSession().appVersion())
         params.put("country", LanternApp.getSession().getCountryCode())
         // send any payment provider we get back from Firebase to the pro
         // server
         params.put("remoteConfigPaymentProvider", LanternApp.getSession().getRemoteConfigPaymentProvider())
         params.put("deviceOS", LanternApp.getSession().deviceOS())
-        final HttpUrl url = LanternHttpClient.createProUrl("/user-payment-gateway", params)
-        lanternClient.get(url, new LanternHttpClient.ProCallback() {
+        var url:HttpUrl = LanternHttpClient.createProUrl("/user-payment-gateway", params)
+        lanternClient.get(url, LanternHttpClient.ProCallback() {
             @Override
-            public void onFailure(final Throwable throwable, final ProError error) {
+            public fun onFailure(var throwable:Throwable, var error:ProError) {
                 if (error != null) {
                     Logger.error(TAG, "Unable to fetch user payment gateway:" + error)
                 }
             }
             @Override
-            public void onSuccess(final Response response, final JsonObject result) {
-                final Map<String, String> params = new HashMap<String, String>()
+            public fun onSuccess(var response:Response, var result:JsonObject) {
+                var params:Map<String, String> = HashMap<String, String>()
 
                 try {
                     var provider: String = result.get("provider").getAsString()
@@ -125,7 +140,7 @@ open class PlansActivity : BaseFragmentActivity() {
                         Logger.debug(TAG, "Payment provider is " + provider)
                         LanternApp.getSession().setPaymentProvider(provider)
                     }
-                } catch (Exception e) {
+                } catch (e:Exception) {
                     Logger.error(TAG, "Unable to fetch plans", e)
                     return
                 }
@@ -134,26 +149,23 @@ open class PlansActivity : BaseFragmentActivity() {
     }
 
     protected fun updatePlans() {
-        LanternApp.getPlans(new LanternHttpClient.PlansCallback() {
+        LanternApp.getPlans(LanternHttpClient.PlansCallback() {
             @Override
-            public void onFailure(final Throwable throwable, final ProError error) {
+            public fun onFailure(var throwable:Throwable, var error:ProError) {
                 if (error != null && error.getMessage() != null) {
-                    ActivityExtKt.showErrorDialog(PlansActivity.this, error.getMessage())
+                    ActivityExtKt.showErrorDialog(PlansActivity::class.java.name, error.getMessage())
                 }
             }
             @Override
-            public void onSuccess(final Map<String, ProPlan> proPlans) {
+            public fun onSuccess(final proPlans:Map<String, ProPlan>) {
                 if (proPlans == null) {
                     return
                 }
                 plans.clear()
                 plans.putAll(proPlans)
-                runOnUiThread(new Runnable() {
+                runOnUiThread(Runnable() {
                     @Override
-                    public void run() {
-                        for (String planId : proPlans.keySet()) {
-                            updatePrice(proPlans.get(planId))
-                        }
+                    public fun run() {
                     }
                 })
             }
@@ -162,19 +174,19 @@ open class PlansActivity : BaseFragmentActivity() {
 
     protected fun updatePrice(plan: ProPlan) {
         content.setVisibility(View.VISIBLE)
-        String bonus = plan.formatRenewalBonusExpected(this)
-        CharSequence totalCost = getString(R.string.total_cost, plan.getCostWithoutTaxStr())
+        var bonus:String = plan.formatRenewalBonusExpected(this)
+        var totalCost:CharSequence = getString(R.string.total_cost, plan.getCostWithoutTaxStr())
         if (plan.getDiscount() > 0) {
             totalCost += " - "
-            int startForegroundPos = totalCost.length()
-            String discount = getString(R.string.discount, String.valueOf(Math.round(plan.getDiscount() * 100)))
+            var startForegroundPos:Int = totalCost.length()
+            var discount:String = getString(R.string.discount, String.valueOf(Math.round(plan.getDiscount() * 100)))
             totalCost += discount
-            SpannableString totalCostSpanned = new SpannableString(totalCost)
+            var totalCostSpanned:SpannableString = new SpannableString(totalCost)
             totalCostSpanned.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.secondary_pink)), startForegroundPos, totalCost.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             totalCost = totalCostSpanned
         }
-        String oneMonth = plan.getFormatterPriceOneMonth()
-        String durationFormat = plan.getFormatPriceWithBonus(this, true)
+        var oneMonth:String = plan.getFormatterPriceOneMonth()
+        var durationFormat:String = plan.getFormatPriceWithBonus(this, true)
         if (plan.numYears() == 1) {
             itemPlanYear1.setVisibility(View.VISIBLE)
             tvOneMonthCostFirst.setText(oneMonth)
@@ -192,7 +204,7 @@ open class PlansActivity : BaseFragmentActivity() {
             itemPlanYear2.setTag(plan.getId())
             if (LanternApp.getSession().isProUser()) {
                 tvRenew.setVisibility(View.VISIBLE)
-                LocalDateTime localDateTime = LanternApp.getSession().getExpiration()
+                var localDateTime:LocalDateTime = LanternApp.getSession().getExpiration()
                 if (DateUtil.INSTANCE.isToday(localDateTime)) {
                     tvRenew.setText(getString(R.string.membership_ends_today, bonus))
                 } else if (DateUtil.INSTANCE.isBefore(localDateTime)) {
@@ -215,10 +227,10 @@ open class PlansActivity : BaseFragmentActivity() {
         if (view.getTag() == null) {
             return
         }
-        final String planId = (String) view.getTag()
+        var planId:String = view.getTag()
         Logger.debug(TAG, "Plan selected: " + planId)
 
-        final Map<Integer, String> params = new HashMap<>()
+        var params:Map<Integer, String> = HashMap<Integer, String>()
         params.put(Analytics.DIMENSION_PLAN_ID, planId)
         Analytics.event(
                 this,
@@ -227,11 +239,11 @@ open class PlansActivity : BaseFragmentActivity() {
                 params)
 
         LanternApp.getSession().setProPlan(plans.get(planId))
-        startActivity(new Intent(this, CheckoutActivity_.class))
+        startActivity(Intent(this, CheckoutActivity_::class.java.name))
     }
 
     companion object {
         private val TAG = PlansActivity::class.java.name
-        private lanternClient:LanternHttpClient = LanternApp.getLanternHttpClient()
+        private val lanternClient:LanternHttpClient = LanternApp.getLanternHttpClient()
     }
 }
