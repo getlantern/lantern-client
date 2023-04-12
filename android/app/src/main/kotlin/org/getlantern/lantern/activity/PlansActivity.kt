@@ -32,33 +32,33 @@ import java.util.concurrent.ConcurrentHashMap
 @EActivity(R.layout.activity_plan)
 open class PlansActivity : BaseFragmentActivity() {
 
-    private ConcurrentHashMap<String, ProPlan> plans = new ConcurrentHashMap<String, ProPlan>()
+    private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
     @ViewById
     @JvmField
-    View itemPlanYear1
+    protected var itemPlanYear1:View 
 
     @ViewById
     @JvmField
-    View itemPlanYear2
+    protected var itemPlanYear2:View
 
     @ViewById
     @JvmField
-    TextView tvRenew
+    protected var tvRenew:TextView
 
     @ViewById
     @JvmField
-    View mostPopularYear1
+    protected var mostPopularYear1:View
 
     @ViewById
     @JvmField
-    View mostPopularYear2
+    protected var mostPopularYear2:View
 
     @ViewById
     @JvmField
-    View content
+    protected var content:View
 
-    private TextView tvOneMonthCostFirst, tvTwoMonthCostSecond, tvDurationFirst, tvDurationSecond, tvTotalCostFirst, tvTotalCostSecond
+    protected var tvOneMonthCostFirst, tvTwoMonthCostSecond, tvDurationFirst, tvDurationSecond, tvTotalCostFirst, tvTotalCostSecond: TextView
 
     @AfterViews
     fun afterViews() {
@@ -83,7 +83,7 @@ open class PlansActivity : BaseFragmentActivity() {
         onBackPressed()
     }
 
-    private void initViews() {
+    private fun initViews() {
         tvOneMonthCostFirst = (TextView) itemPlanYear1.findViewById(R.id.tvCost)
         tvTwoMonthCostSecond = (TextView) itemPlanYear2.findViewById(R.id.tvCost)
         tvTotalCostFirst = (TextView) itemPlanYear1.findViewById(R.id.tvTotalCost)
@@ -232,6 +232,6 @@ open class PlansActivity : BaseFragmentActivity() {
 
     companion object {
         private val TAG = PlansActivity::class.java.name
-        private final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient()
+        private lanternClient:LanternHttpClient = LanternApp.getLanternHttpClient()
     }
 }
