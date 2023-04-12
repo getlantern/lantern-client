@@ -111,6 +111,7 @@ type panickingSession interface {
 	GetTimeZone() string
 	Code() string
 	GetCountryCode() string
+	Geolookup()
 	GetForcedCountryCode() string
 	GetDNSServer() string
 	Provider() string
@@ -215,6 +216,10 @@ func (s *panickingSessionImpl) GetCountryCode() string {
 	result, err := s.wrapped.GetCountryCode()
 	panicIfNecessary(err)
 	return result
+}
+
+func (s *panickingSessionImpl) Geolookup() {
+	s.wrapped.Geolookup()
 }
 
 func (s *panickingSessionImpl) GetForcedCountryCode() string {
