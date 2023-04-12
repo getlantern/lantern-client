@@ -85,7 +85,6 @@ type Session interface {
 	Email() (string, error)
 	Currency() (string, error)
 	DeviceOS() (string, error)
-	Geolookup()
 	IsProUser() (bool, error)
 	SetReplicaAddr(string)
 	ForceReplica() bool
@@ -668,12 +667,11 @@ func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 func afterStart(session panickingSession) {
 	bandwidthUpdates(session)
 
-	go Geolookup()
-}
-
-func Geolookup() {
-	if <-geolookup.OnRefresh() {
-		country := geolookup.GetCountry(0)
-		log.Debugf("Successful geolookup: country %s", country)
-	}
+	go func() {
+		if <-geolookup.OnRefresh() {
+			country := geolookup.GetCountry(0)
+			log.Debugf("Successful geolookup: country %s", country)
+			session.SetCountry(country)
+		}
+	}()
 }
