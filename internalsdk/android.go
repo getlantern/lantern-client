@@ -675,6 +675,5 @@ func Geolookup() {
 	if <-geolookup.OnRefresh() {
 		country := geolookup.GetCountry(0)
 		log.Debugf("Successful geolookup: country %s", country)
-		session.SetCountry(country)
 	}
 }
