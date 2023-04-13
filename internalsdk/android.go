@@ -72,7 +72,6 @@ type Session interface {
 	UpdateAdSettings(AdSettings) error
 	UpdateStats(string, string, string, int, int, bool) error
 	SetStaging(bool) error
-	ProxyAll() (bool, error)
 	BandwidthUpdate(int, int, int, int) error
 	Locale() (string, error)
 	GetTimeZone() (string, error)
@@ -90,6 +89,7 @@ type Session interface {
 	ForceReplica() bool
 	SetChatEnabled(bool)
 	SetMatomoEnabled(bool)
+	SplitTunnelingEnabled() (bool, error)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -104,7 +104,6 @@ type panickingSession interface {
 	UpdateAdSettings(AdSettings)
 	UpdateStats(string, string, string, int, int, bool)
 	SetStaging(bool)
-	ProxyAll() bool
 	BandwidthUpdate(int, int, int, int)
 	Locale() string
 	GetTimeZone() string
@@ -120,7 +119,7 @@ type panickingSession interface {
 	IsProUser() bool
 	SetChatEnabled(bool)
 	SetMatomoEnabled(bool)
-
+	SplitTunnelingEnabled() bool
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
@@ -182,8 +181,8 @@ func (s *panickingSessionImpl) SetStaging(staging bool) {
 	panicIfNecessary(s.wrapped.SetStaging(staging))
 }
 
-func (s *panickingSessionImpl) ProxyAll() bool {
-	result, err := s.wrapped.ProxyAll()
+func (s *panickingSessionImpl) SplitTunnelingEnabled() bool {
+	result, err := s.wrapped.SplitTunnelingEnabled()
 	panicIfNecessary(err)
 	return result
 }
@@ -530,7 +529,7 @@ func run(configDir, locale string,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
-		session.ProxyAll,
+		session.SplitTunnelingEnabled,
 		func() bool { return false }, // don't intercept Google ads
 		func() bool { return false }, // do not proxy private hosts on Android
 		// TODO: allow configuring whether or not to enable reporting (just like we

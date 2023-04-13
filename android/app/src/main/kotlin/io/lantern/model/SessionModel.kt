@@ -42,7 +42,6 @@ class SessionModel(
         private const val TAG = "SessionModel"
 
         const val PATH_PRO_USER = "prouser"
-        const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_SDK_VERSION = "sdkVersion"
         const val PATH_SPLIT_TUNNELING ="splitTunneling"
     }
@@ -53,10 +52,6 @@ class SessionModel(
             tx.put(
                 PATH_PRO_USER,
                 castToBoolean(tx.get(PATH_PRO_USER), false)
-            )
-            tx.put(
-                PATH_PROXY_ALL,
-                castToBoolean(tx.get(PATH_PROXY_ALL), false)
             )
             tx.put(
                 PATH_SPLIT_TUNNELING,
@@ -94,10 +89,6 @@ class SessionModel(
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
-            "setProxyAll" -> {
-                val on = call.argument("on") ?: false
-                saveProxyAll(on)
-            }
             "setSplitTunneling" -> {
                 val on = call.argument("on") ?: false
                 saveSplitTunneling(on)
@@ -136,11 +127,6 @@ class SessionModel(
         }
     }
 
-    private fun saveProxyAll(on: Boolean) {
-        db.mutate { tx ->
-            tx.put(PATH_PROXY_ALL, on)
-        }
-    }
 
     fun splitTunnelingEnabled(): Boolean {
       return db.get(PATH_SPLIT_TUNNELING) ?: false

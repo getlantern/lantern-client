@@ -172,12 +172,8 @@ abstract class SessionManager(application: Application) : Session {
         return dnsDetector.dnsServer
     }
 
-    override fun proxyAll(): Boolean {
-        return prefs.getBoolean(PROXY_ALL, false)
-    }
-
-    fun setProxyAll(proxyAll: Boolean) {
-        prefs.edit().putBoolean(PROXY_ALL, proxyAll).apply()
+    override fun splitTunnelingEnabled(): Boolean {
+        return prefs.getBoolean(SPLIT_TUNNELING, false)
     }
 
     val serverCountry: String?
@@ -442,7 +438,7 @@ abstract class SessionManager(application: Application) : Session {
 
         @JvmStatic
         val TOKEN = "token"
-        protected const val PROXY_ALL = "proxyAll"
+        protected const val SPLIT_TUNNELING = "splitTunneling"
         protected const val LANG = "lang"
         protected const val SHOW_ADS_AFTER_DAYS = "showadsafterdays"
 
