@@ -30,7 +30,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     setState(() {
       appsData = _appsData;
       for (var packageName in _appsData.excludedApps.excludedApps.keys) {
-        excludedApps[packageName] = true;
+          excludedApps[packageName] = true;
       }
     });
   }
@@ -102,8 +102,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     }
 
     return ListView.builder(
-        shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
         itemCount: apps.length,
         itemBuilder: (BuildContext context, int index) {
           var appData = apps[index];
