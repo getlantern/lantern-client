@@ -166,3 +166,41 @@ class _SplitTunnelingState extends State<SplitTunneling> {
             )));
   }
 }
+
+// SplitTunnelingHome is the split tunneling widget that appears on the main VPN screen
+class SplitTunnelingHome extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return sessionModel.splitTunneling(
+        (BuildContext context, bool splitTunneling, Widget? child) {
+      return InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SplitTunneling(),
+                ));
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CText(
+                'split_tunneling'.i18n,
+                style: tsBody1.copiedWith(
+                  color: unselectedTabIconColor,
+                ),
+              ),
+              splitTunneling
+                  ? CText(
+                      'on'.i18n,
+                      style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
+                    )
+                  : CText(
+                      'off'.i18n,
+                      style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
+                    )
+            ],
+          ));
+    });
+  }
+}

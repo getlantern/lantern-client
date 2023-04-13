@@ -1,6 +1,7 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
 
+import '../account/split_tunneling.dart';
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
@@ -44,6 +45,13 @@ class VPNTab extends StatelessWidget {
                     child: const CDivider(height: 32.0),
                   ),
                   ServerLocationWidget(),
+                  Container(
+                    child: const CDivider(height: 32.0),
+                  ),
+                  SplitTunnelingHome(),
+                  Container(
+                    child: const CDivider(height: 32.0),
+                  ),
                   VPNBandwidth(),
                 ],
               ),
