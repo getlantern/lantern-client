@@ -51,10 +51,6 @@ class SessionModel extends Model {
         builder: builder);
   }
 
-  ValueNotifier<bool?> splitTunnelingNotifier() {
-    return singleValueNotifier('splitTunneling', false);
-  }
-
   Future<void> setSplitTunneling<T>(bool on) async {
     unawaited(methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
       'on': on,

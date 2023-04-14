@@ -17,8 +17,6 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   List<AppData> appsList = <AppData>[];
   // A map of apps that should be excluded from the VPN connection
   final Map<String, bool> excludedApps = new Map();
-  // A map of application package names to app icons
-  final Map<String, Image?> appIcons = new Map();
   // Whether or not split tunneling is enabled for the current user
   bool splitTunnelingEnabled = false;
 
@@ -32,16 +30,12 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 
   initSplitTunneling() async {
     AppsData _appsData = await sessionModel.appsData();
-    // save app icons to the cache directory
-    for (var appData in _appsData.appsList) {
-      Image appIcon = await saveAppIconCacheDirectory(appData);
-      appIcons[appData.packageName] = appIcon;
+    for (var packageName in _appsData.excludedApps.excludedApps.keys) {
+      excludedApps[packageName] = true;
     }
     setState(() {
       appsList = _appsData.appsList.toSet().toList();
-      splitTunnelingEnabled =
-          sessionModel.splitTunnelingEnabled.value != null &&
-              sessionModel.splitTunnelingEnabled.value!;
+      splitTunnelingEnabled = sessionModel.splitTunnelingEnabled.value ?? false;
     });
   }
 
@@ -138,11 +132,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   }
 
   Widget buildAppItem(AppData appData, bool isAppExcluded) {
-    Image appIcon;
-    if (appIcons[appData.packageName] == null) {
-      return SizedBox.shrink();
-    }
-
+    Uint8List iconBytes = base64.decode(appData.icon);
     return Container(
         height: 72,
         padding: EdgeInsets.zero,
@@ -162,7 +152,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                   maxWidth: 24,
                   maxHeight: 24,
                 ),
-                child: appIcons[appData.packageName]!,
+                child: Image.memory(iconBytes, fit: BoxFit.cover),
               ),
               trailing: SizedBox(
                   height: 24.0,
@@ -198,34 +188,31 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 class SplitTunnelingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SplitTunneling(),
-              ));
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CText(
-              'split_tunneling'.i18n,
-              style: tsSubtitle3.copiedWith(
-                color: unselectedTabIconColor,
-              ),
-            ),
-            new Spacer(),
-            Padding(
-                padding: const EdgeInsetsDirectional.only(end: 8),
-                child: CText(
-                    sessionModel.splitTunnelingEnabled.value != null &&
-                            sessionModel.splitTunnelingEnabled.value!
-                        ? 'on'.i18n
-                        : 'off'.i18n,
-                    style: tsSubtitle4)),
-            mirrorLTR(context: context, child: const ContinueArrow())
-          ],
-        ));
+    return sessionModel.splitTunneling(
+        (BuildContext context, bool value, Widget? child) => InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SplitTunneling(),
+                  ));
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CText(
+                  'split_tunneling'.i18n,
+                  style: tsSubtitle3.copiedWith(
+                    color: unselectedTabIconColor,
+                  ),
+                ),
+                new Spacer(),
+                Padding(
+                    padding: const EdgeInsetsDirectional.only(end: 8),
+                    child: CText(value ? 'on'.i18n : 'off'.i18n,
+                        style: tsSubtitle4)),
+                mirrorLTR(context: context, child: const ContinueArrow())
+              ],
+            )));
   }
 }
