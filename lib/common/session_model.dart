@@ -32,23 +32,28 @@ class SessionModel extends Model {
       'hasSucceedingProxy',
       true,
     );
+    splitTunnelingEnabled = singleValueNotifier(
+      'splitTunneling',
+      false,
+    );
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> proxyAvailable;
+  late ValueNotifier<bool?> splitTunnelingEnabled;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
   }
 
-  Widget proxyAll(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('proxyAll', builder: builder);
-  }
-
   Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('splitTunneling', builder: builder);
+    return subscribedSingleValueBuilder<bool>('splitTunneling',
+        builder: builder);
   }
 
+  ValueNotifier<bool?> splitTunnelingNotifier() {
+    return singleValueNotifier('splitTunneling', false);
+  }
 
   Future<void> setSplitTunneling<T>(bool on) async {
     unawaited(methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
@@ -69,7 +74,6 @@ class SessionModel extends Model {
       builder: builder,
     );
   }
-
 
   Future<void> setPaymentTestMode(bool on) {
     return methodChannel.invokeMethod('setPaymentTestMode', <String, dynamic>{

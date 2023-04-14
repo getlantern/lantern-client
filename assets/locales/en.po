@@ -379,6 +379,9 @@ msgstr "View Contact Info"
 msgid "off"
 msgstr "Off"
 
+msgid "on"
+msgstr "On"
+
 msgid "continue"
 msgstr "Continue"
 

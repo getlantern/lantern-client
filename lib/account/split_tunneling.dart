@@ -1,7 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SplitTunneling extends StatefulWidget {
   SplitTunneling({Key? key});
@@ -11,11 +13,14 @@ class SplitTunneling extends StatefulWidget {
 }
 
 class _SplitTunnelingState extends State<SplitTunneling> {
-  AppsData? appsData;
-
-  late ValueNotifier<AppsData?> appsDataNotifier;
-  late void Function() appsDataListener;
+  // A list of all application packages installed for the current user
+  List<AppData> appsList = <AppData>[];
+  // A map of apps that should be excluded from the VPN connection
   final Map<String, bool> excludedApps = new Map();
+  // A map of application package names to app icons
+  final Map<String, Image?> appIcons = new Map();
+  // Whether or not split tunneling is enabled for the current user
+  bool splitTunnelingEnabled = false;
 
   @override
   void initState() {
@@ -27,11 +32,16 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 
   initSplitTunneling() async {
     AppsData _appsData = await sessionModel.appsData();
+    // save app icons to the cache directory
+    for (var appData in _appsData.appsList) {
+      Image appIcon = await saveAppIconCacheDirectory(appData);
+      appIcons[appData.packageName] = appIcon;
+    }
     setState(() {
-      appsData = _appsData;
-      for (var packageName in _appsData.excludedApps.excludedApps.keys) {
-          excludedApps[packageName] = true;
-      }
+      appsList = _appsData.appsList.toSet().toList();
+      splitTunnelingEnabled =
+          sessionModel.splitTunnelingEnabled.value != null &&
+              sessionModel.splitTunnelingEnabled.value!;
     });
   }
 
@@ -39,47 +49,45 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   Widget build(BuildContext context) {
     return BaseScreen(
         title: 'split_tunneling'.i18n,
-        body: sessionModel.splitTunneling(
-            (BuildContext context, bool value, Widget? child) =>
-                SingleChildScrollView(
-                    physics: ScrollPhysics(),
-                    child: Column(children: <Widget>[
-                      ListItemFactory.settingsItem(
-                        icon: ImagePaths.split_tunneling,
-                        content: 'split_tunneling'.i18n,
-                        trailingArray: [
-                          FlutterSwitch(
-                            width: 44.0,
-                            height: 24.0,
-                            valueFontSize: 12.0,
-                            activeColor: Colors.green,
-                            padding: 2,
-                            toggleSize: 18.0,
-                            value: value,
-                            onToggle: (bool newValue) {
-                              sessionModel.setSplitTunneling(newValue);
-                            },
-                          )
-                        ],
-                      ),
-                      Padding(
-                          padding: const EdgeInsetsDirectional.only(top: 16),
-                          child: CText(
-                              value
-                                  ? 'apps_selected'.i18n
-                                  : 'split_tunneling_info'.i18n,
-                              style: tsBody3)),
-                      // if split tunneling is enabled, include the installed apps
-                      // in the column
-                      if (value) ...buildAppsLists(),
-                    ]))));
+        body: SingleChildScrollView(
+            child: Column(children: <Widget>[
+          ListItemFactory.settingsItem(
+            icon: ImagePaths.split_tunneling,
+            content: 'split_tunneling'.i18n,
+            trailingArray: [
+              SizedBox(
+                  width: 44.0,
+                  height: 24.0,
+                  child: CupertinoSwitch(
+                    value: splitTunnelingEnabled,
+                    activeColor: CupertinoColors.activeGreen,
+                    onChanged: (bool? value) {
+                      bool newValue = value ?? false;
+                      setState(() {
+                        splitTunnelingEnabled = newValue;
+                        sessionModel.setSplitTunneling(newValue);
+                      });
+                    },
+                  )),
+            ],
+          ),
+          Padding(
+              padding: const EdgeInsetsDirectional.only(top: 16),
+              child: CText(
+                  splitTunnelingEnabled
+                      ? 'apps_selected'.i18n
+                      : 'split_tunneling_info'.i18n,
+                  style: tsBody3)),
+          // if split tunneling is enabled, include the installed apps
+          // in the column
+          if (splitTunnelingEnabled) ...buildAppsLists(),
+        ])));
   }
 
   // buildAppsLists builds lists for excluded and allowed installed apps and
   // returns both along with their associated headers
   List<Widget> buildAppsLists() {
-    if (appsData == null) return [];
-    List<AppData> appsList = appsData!.appsList.toSet().toList();
+    if (appsList.length == 0) return [];
     return [
       ListSectionHeader('excluded_apps'.i18n.toUpperCase()),
       buildAppList(appsList
@@ -114,8 +122,27 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         });
   }
 
-  Widget buildAppItem(AppData appData, bool isAppExcluded) {
+  // saveAppIconTempDirectory decodes the app icon bytes part of appData and saves
+  // the corresponding image to the application temporary directory
+  Future<Image> saveAppIconTempDirectory(AppData appData) async {
     Uint8List iconBytes = base64.decode(appData.icon);
+    final Directory temp = await getTemporaryDirectory();
+    final File imageFile =
+        File('${temp.path}/images/' + appData.packageName + '.png');
+
+    if (!await imageFile.exists()) {
+      await imageFile.create(recursive: true);
+      await imageFile.writeAsBytes(iconBytes);
+    }
+    return Image(image: FileImage(imageFile), fit: BoxFit.cover);
+  }
+
+  Widget buildAppItem(AppData appData, bool isAppExcluded) {
+    Image appIcon;
+    if (appIcons[appData.packageName] == null) {
+      return SizedBox.shrink();
+    }
+
     return Container(
         height: 72,
         padding: EdgeInsets.zero,
@@ -135,7 +162,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                   maxWidth: 24,
                   maxHeight: 24,
                 ),
-                child: new Image.memory(iconBytes, fit: BoxFit.cover),
+                child: appIcons[appData.packageName]!,
               ),
               trailing: SizedBox(
                   height: 24.0,
@@ -161,46 +188,44 @@ class _SplitTunnelingState extends State<SplitTunneling> {
               title: CText(
                 toBeginningOfSentenceCase(appData.name)!,
                 softWrap: false,
-                style: tsSubtitle1.short,
+                style: tsSubtitle3.short,
               ),
             )));
   }
 }
 
-// SplitTunnelingHome is the split tunneling widget that appears on the main VPN screen
-class SplitTunnelingHome extends StatelessWidget {
+// SplitTunnelingWidget is the split tunneling widget that appears on the main VPN screen
+class SplitTunnelingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return sessionModel.splitTunneling(
-        (BuildContext context, bool splitTunneling, Widget? child) {
-      return InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SplitTunneling(),
-                ));
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CText(
-                'split_tunneling'.i18n,
-                style: tsBody1.copiedWith(
-                  color: unselectedTabIconColor,
-                ),
+    return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SplitTunneling(),
+              ));
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CText(
+              'split_tunneling'.i18n,
+              style: tsSubtitle3.copiedWith(
+                color: unselectedTabIconColor,
               ),
-              splitTunneling
-                  ? CText(
-                      'on'.i18n,
-                      style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
-                    )
-                  : CText(
-                      'off'.i18n,
-                      style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
-                    )
-            ],
-          ));
-    });
+            ),
+            new Spacer(),
+            Padding(
+                padding: const EdgeInsetsDirectional.only(end: 8),
+                child: CText(
+                    sessionModel.splitTunnelingEnabled.value != null &&
+                            sessionModel.splitTunnelingEnabled.value!
+                        ? 'on'.i18n
+                        : 'off'.i18n,
+                    style: tsSubtitle4)),
+            mirrorLTR(context: context, child: const ContinueArrow())
+          ],
+        ));
   }
 }
