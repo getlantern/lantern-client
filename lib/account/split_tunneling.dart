@@ -35,7 +35,6 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     }
     setState(() {
       appsList = _appsData.appsList.toSet().toList();
-      splitTunnelingEnabled = sessionModel.splitTunnelingEnabled.value ?? false;
     });
   }
 
@@ -43,39 +42,41 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   Widget build(BuildContext context) {
     return BaseScreen(
         title: 'split_tunneling'.i18n,
-        body: SingleChildScrollView(
-            child: Column(children: <Widget>[
-          ListItemFactory.settingsItem(
-            icon: ImagePaths.split_tunneling,
-            content: 'split_tunneling'.i18n,
-            trailingArray: [
-              SizedBox(
-                  width: 44.0,
-                  height: 24.0,
-                  child: CupertinoSwitch(
-                    value: splitTunnelingEnabled,
-                    activeColor: CupertinoColors.activeGreen,
-                    onChanged: (bool? value) {
-                      bool newValue = value ?? false;
-                      setState(() {
-                        splitTunnelingEnabled = newValue;
-                        sessionModel.setSplitTunneling(newValue);
-                      });
-                    },
-                  )),
-            ],
-          ),
-          Padding(
-              padding: const EdgeInsetsDirectional.only(top: 16),
-              child: CText(
-                  splitTunnelingEnabled
-                      ? 'apps_selected'.i18n
-                      : 'split_tunneling_info'.i18n,
-                  style: tsBody3)),
-          // if split tunneling is enabled, include the installed apps
-          // in the column
-          if (splitTunnelingEnabled) ...buildAppsLists(),
-        ])));
+        body: sessionModel.splitTunneling(
+            (BuildContext context, bool value, Widget? child) =>
+                SingleChildScrollView(
+                    child: Column(children: <Widget>[
+                  ListItemFactory.settingsItem(
+                    icon: ImagePaths.split_tunneling,
+                    content: 'split_tunneling'.i18n,
+                    trailingArray: [
+                      SizedBox(
+                          width: 44.0,
+                          height: 24.0,
+                          child: CupertinoSwitch(
+                            value: splitTunnelingEnabled || value,
+                            activeColor: CupertinoColors.activeGreen,
+                            onChanged: (bool? value) {
+                              bool newValue = value ?? false;
+                              setState(() {
+                                splitTunnelingEnabled = newValue;
+                                sessionModel.setSplitTunneling(newValue);
+                              });
+                            },
+                          )),
+                    ],
+                  ),
+                  Padding(
+                      padding: const EdgeInsetsDirectional.only(top: 16),
+                      child: CText(
+                          value
+                              ? 'apps_selected'.i18n
+                              : 'split_tunneling_info'.i18n,
+                          style: tsBody3)),
+                  // if split tunneling is enabled, include the installed apps
+                  // in the column
+                  if (value) ...buildAppsLists(),
+                ]))));
   }
 
   // buildAppsLists builds lists for excluded and allowed installed apps and

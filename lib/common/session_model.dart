@@ -32,15 +32,10 @@ class SessionModel extends Model {
       'hasSucceedingProxy',
       true,
     );
-    splitTunnelingEnabled = singleValueNotifier(
-      'splitTunneling',
-      false,
-    );
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> proxyAvailable;
-  late ValueNotifier<bool?> splitTunnelingEnabled;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
