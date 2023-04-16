@@ -56,16 +56,16 @@ class NotificationHelper(private val activity:Activity, private val receiver: No
     	 return PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
-    private fun sendDisconnectBroadcast():PendingIntent {
+    private fun disconnectBroadcast():PendingIntent {
         val intent = Intent(activity, NotificationReceiver::class.java)
         val packageName = activity.packageName
         intent.setAction("$packageName.intent.VPN_DISCONNECTED")
         return PendingIntent.getBroadcast(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
-    private fun createContentView():RemoteViews {
-    	return RemoteViews(packageName, R.layout.activity_after_notification)
-    }
+    /*private fun createContentView():RemoteViews {
+    	return RemoteViews(packageName, R.layout.activity_notification)
+    }*/
 
     public fun vpnConnectedNotification() {
     	builder.setChannelId(CHANNEL_VPN)
@@ -74,7 +74,7 @@ class NotificationHelper(private val activity:Activity, private val receiver: No
 
     public fun dataUsageNotification() {
     	builder.setChannelId(CHANNEL_DATA_USAGE)
-    	manager.notify(1234, builder.build())    	
+    	manager.notify(1234, builder.build())
     }
 
     fun clearNotification() {
@@ -98,10 +98,10 @@ class NotificationHelper(private val activity:Activity, private val receiver: No
             initChannels()
         }
         builder = Notification.Builder(this)
-        	.setContent(createContentView())
+        	//.setContent(createContentView())
             .setSmallIcon(R.drawable.lantern_notification_icon)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
             .setContentIntent(createPendingIntent())
-            .addAction(R.drawable.notification_icon, "Disconnect", sendDisconnectBroadcast())
+            .addAction(R.drawable.notification_icon, "Disconnect", disconnectBroadcast())
     } 
 }
