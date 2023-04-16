@@ -10,10 +10,12 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.widget.RemoteViews
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.afterNotification
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-class NotificationHelper(private val activity: Activity, private val receiver: NotificationReceiver?) : ContextWrapper(activity) {
+class NotificationHelper(private val activity: Activity, private val receiver: NotificationReceiver) : ContextWrapper(activity) {
 
     // Used to notify a user of events that happen in the background
     private val manager: NotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -47,21 +49,22 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         manager.createNotificationChannel(notificationChannel)
     }
 
-    private fun createPendingIntent(): PendingIntent {
-        val intent = Intent(activity, afterNotification::class.java)
-        return PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-    }
-
     private fun disconnectBroadcast(): PendingIntent {
         val intent = Intent(activity, NotificationReceiver::class.java)
         val packageName = activity.packageName
         intent.setAction("$packageName.intent.VPN_DISCONNECTED")
+        // Retrieve a PendingIntent that will perform a broadcast
         return PendingIntent.getBroadcast(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
-    /*private fun createContentView():RemoteViews {
-    	return RemoteViews(packageName, R.layout.activity_notification)
-    }*/
+    private fun createContentView(): RemoteViews {
+        var contentView: RemoteViews = RemoteViews(packageName, R.layout.activity_notification)
+        contentView.setImageViewResource(R.id.image, R.drawable.lantern_notification_icon)
+        contentView.setTextViewText(R.id.title, "Connected to VPN")
+        contentView.setOnClickPendingIntent(R.id.disconnect, disconnectBroadcast())
+        contentView.setTextViewText(R.id.time, LocalDateTime.now().format(DateTimeFormatter.ofPattern("h:mm a")))
+        return contentView
+    }
 
     public fun vpnConnectedNotification() {
         builder.setChannelId(CHANNEL_VPN)
@@ -94,10 +97,8 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
             initChannels()
         }
         builder = Notification.Builder(this)
-            // .setContent(createContentView())
+            .setContent(createContentView())
             .setSmallIcon(R.drawable.lantern_notification_icon)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
-            .setContentIntent(createPendingIntent())
-            .addAction(R.drawable.notification_icon, "Disconnect", disconnectBroadcast())
     }
 }
