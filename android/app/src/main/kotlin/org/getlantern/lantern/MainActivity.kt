@@ -130,8 +130,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
-
-        IntentFilter("${activity.packageName}.intent.VPN_DISCONNECTED").also {
+        val packageName = activity.packageName
+        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
             registerReceiver(receiver,it)
         }
     }
