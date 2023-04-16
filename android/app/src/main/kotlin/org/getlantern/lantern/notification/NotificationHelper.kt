@@ -10,6 +10,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.view.View
 import android.widget.RemoteViews
 import org.getlantern.lantern.R
 import java.time.LocalDateTime
@@ -20,6 +21,7 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
     // Used to notify a user of events that happen in the background
     private val manager: NotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     private val builder: Notification.Builder
+    //private val dropDown: DropDownNav
     private lateinit var dataUsageNotificationChannel: NotificationChannel
     private lateinit var vpnNotificationChannel: NotificationChannel
 
@@ -58,7 +60,7 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
     }
 
     private fun createContentView(): RemoteViews {
-        var contentView: RemoteViews = RemoteViews(packageName, R.layout.activity_notification)
+        var contentView: RemoteViews = RemoteViews(packageName, R.layout.notification)
         contentView.setImageViewResource(R.id.image, R.drawable.lantern_notification_icon)
         contentView.setTextViewText(R.id.title, "Connected to VPN")
         contentView.setOnClickPendingIntent(R.id.disconnect, disconnectBroadcast())
@@ -75,6 +77,8 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         builder.setChannelId(CHANNEL_DATA_USAGE)
         manager.notify(1234, builder.build())
     }
+
+
 
     fun clearNotification() {
         manager.cancelAll()
