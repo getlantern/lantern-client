@@ -18,7 +18,9 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   // A map of apps that should be excluded from the VPN connection
   final Map<String, bool> excludedApps = new Map();
   // Whether or not split tunneling is enabled for the current user
+  bool vpnConnected = false;
   bool splitTunnelingEnabled = false;
+  bool snackbarShown = false;
 
   @override
   void initState() {
@@ -33,8 +35,10 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     for (var packageName in _appsData.excludedApps.excludedApps.keys) {
       excludedApps[packageName] = true;
     }
+    bool _vpnConnected = await vpnModel.isVpnConnected();
     setState(() {
       appsList = _appsData.appsList.toSet().toList();
+      vpnConnected = _vpnConnected;
     });
   }
 
@@ -117,6 +121,23 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         });
   }
 
+  // showSnackBar shows a snackbar with a message indicating that settings will be applied
+  // next time, if the user is connected to the VPN, and it hasn't already been shown
+  void showSnackBar(BuildContext context) {
+    if (!vpnConnected || snackbarShown) {
+      return;
+    }
+    final snackBar = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 7),
+        backgroundColor: Colors.black,
+        content: CText(
+          'applied_next_time'.i18n,
+          style: tsSubtitle3.copiedWith(color: Colors.white),
+        ));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   // saveAppIconTempDirectory decodes the app icon bytes part of appData and saves
   // the corresponding image to the application temporary directory
   Future<Image> saveAppIconTempDirectory(AppData appData) async {
@@ -173,6 +194,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                           excludedApps.remove(appData.packageName);
                           sessionModel.removeExcludedApp(appData.packageName);
                         }
+
+                        showSnackBar(context);
                       });
                     },
                   )),

@@ -18,6 +18,11 @@ class VpnModel extends Model {
     );
   }
 
+  Future<bool> isVpnConnected() async {
+    final vpnStatus = await methodChannel.invokeMethod('get', '/vpn_status');
+    return vpnStatus == 'connected';
+  }
+
   Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
     return subscribedSingleValueBuilder<ServerInfo>(
       '/server_info',

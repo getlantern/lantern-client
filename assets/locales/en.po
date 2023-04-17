@@ -364,6 +364,9 @@ msgstr "Split Tunneling"
 msgid "split_tunneling_info"
 msgstr "Split tunneling allows you to exclude selected apps from going through Lantern when connected."
 
+msgid "applied_next_time"
+msgstr "New split tunneling settings will be applied next time you reconnect."
+
 msgid "message_disappearing"
 msgstr "All messages will not disappear for you and %s."
 
