@@ -136,6 +136,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
           style: tsSubtitle3.copiedWith(color: Colors.white),
         ));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    snackbarShown = true;
   }
 
   // saveAppIconTempDirectory decodes the app icon bytes part of appData and saves
