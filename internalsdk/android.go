@@ -529,7 +529,7 @@ func run(configDir, locale string,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
-		session.SplitTunnelingEnabled,
+		func() bool { return true },
 		func() bool { return false }, // don't intercept Google ads
 		func() bool { return false }, // do not proxy private hosts on Android
 		// TODO: allow configuring whether or not to enable reporting (just like we
