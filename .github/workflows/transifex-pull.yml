@@ -1,0 +1,30 @@
+name: "Pull from transifex"
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  pull-strings-from-transifex:
+    name: pull-strings-from-transifex
+    runs-on: ubuntu-latest
+    steps:
+    - name: Granting private modules access
+      run: |
+          git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+    - uses: actions/checkout@v3
+    - name: "Pull new translations"
+      env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+      run: |
+        curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
+        source /home/runner/.bashrc
+        tx pull --minimum-perc 90 -f
+        git config user.name git
+        git config user.email github-actions@github.com
+        git ls-files --modified public/locale | xargs git add
+        git diff --cached --exit-code || git commit -m "updated translations..." && git push origin main
+
