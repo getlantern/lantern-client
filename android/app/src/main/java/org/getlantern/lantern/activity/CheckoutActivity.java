@@ -206,9 +206,17 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         cvcInput.addTextChangedListener(validator);
         cvcInput.setOnFocusChangeListener(focusListener);
         cvcInput.setOnEditorActionListener(submitForm);
+        togglePaymentMethod.setPaintFlags(togglePaymentMethod.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        togglePaymentMethod.setOnClickListener(v -> {
+            useStripe = !useStripe;
+            displayStripeOrFreekassa();
+        });
 
         referralCodeInput.setOnEditorActionListener(submitForm);
 
+        if (isPlayVersion) {
+            togglePaymentMethod.setVisibility(View.GONE);
+        }
         displayStripeOrFreekassa();
     }
 
@@ -226,7 +234,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         // hide the buttons and move the referral code
         if (useStripe) {
             stripeSection.setVisibility(View.VISIBLE);
-            togglePaymentMethod.setVisibility((View.GONE));
+            togglePaymentMethod.setVisibility(View.GONE);
             tvStepDescription.setText(R.string.enter_payment_details);
             referralCodeLayout.setTranslationY(0);
         } else {
