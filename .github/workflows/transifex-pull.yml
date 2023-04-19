@@ -20,7 +20,6 @@ jobs:
       env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
       run: |
-        cd ui
         curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
         source /home/runner/.bashrc
         tx pull --minimum-perc 90 -f
