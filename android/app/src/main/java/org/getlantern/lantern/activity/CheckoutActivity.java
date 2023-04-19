@@ -206,21 +206,36 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         cvcInput.addTextChangedListener(validator);
         cvcInput.setOnFocusChangeListener(focusListener);
         cvcInput.setOnEditorActionListener(submitForm);
+
         referralCodeInput.setOnEditorActionListener(submitForm);
 
-        displayStripe();
+        displayStripeOrFreekassa();
     }
 
-    private void displayStripe() {
-        int tosText = R.string.terms_of_service_text_complete_purchase;
-        int continueText = R.string.complete_purchase;
+    private void displayStripeOrFreekassa() {
+        int tosText = R.string.terms_of_service_text;
+        int continueText = R.string.continue_to_payment;
+        if (useStripe) {
+            tosText = R.string.terms_of_service_text_complete_purchase;
+            continueText = R.string.complete_purchase;
+        }
         termsOfServiceText.setText(getResources().getText(tosText));
         continueBtn.setText(getResources().getText(continueText));
         MaterialUtil.clickify(termsOfServiceText, getString(R.string.terms_of_service), clickSpan);
 
-        stripeSection.setVisibility(View.VISIBLE);
-        tvStepDescription.setText(R.string.enter_payment_details);
-        referralCodeLayout.setTranslationY(0);
+        // hide the buttons and move the referral code
+        if (useStripe) {
+            stripeSection.setVisibility(View.VISIBLE);
+            togglePaymentMethod.setVisibility((View.GONE));
+            tvStepDescription.setText(R.string.enter_payment_details);
+            referralCodeLayout.setTranslationY(0);
+        } else {
+            stripeSection.setVisibility((View.INVISIBLE));
+            togglePaymentMethod.setText(getText(R.string.switch_to_credit_card));
+            tvStepDescription.setText(R.string.enter_email_short);
+            float referralCodeTranslateY = cardLayout.getBottom() - referralCodeLayout.getBottom();
+            referralCodeLayout.setTranslationY(referralCodeTranslateY);
+        }
 
         // immediately run validation to enable button if we can
         validate();
