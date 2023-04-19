@@ -206,44 +206,23 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         cvcInput.addTextChangedListener(validator);
         cvcInput.setOnFocusChangeListener(focusListener);
         cvcInput.setOnEditorActionListener(submitForm);
-        togglePaymentMethod.setPaintFlags(togglePaymentMethod.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        togglePaymentMethod.setOnClickListener(v -> {
-            useStripe = !useStripe;
-            displayStripeOrAlipay();
-        });
-
         referralCodeInput.setOnEditorActionListener(submitForm);
 
-        if (isPlayVersion) {
-            togglePaymentMethod.setVisibility(View.GONE);
-        }
-        displayStripeOrAlipay();
+
+        displayStripe();
     }
 
-    private void displayStripeOrAlipay() {
-        int tosText = R.string.terms_of_service_text;
-        int continueText = R.string.continue_to_payment;
-        if (useStripe) {
-            tosText = R.string.terms_of_service_text_complete_purchase;
-            continueText = R.string.complete_purchase;
-        }
+    private void displayStripe() {
+        int tosText = R.string.terms_of_service_text_complete_purchase;
+        int continueText = R.string.complete_purchase;
         termsOfServiceText.setText(getResources().getText(tosText));
         continueBtn.setText(getResources().getText(continueText));
         MaterialUtil.clickify(termsOfServiceText, getString(R.string.terms_of_service), clickSpan);
 
         // hide the buttons and move the referral code
-        if (useStripe) {
-            stripeSection.setVisibility(View.VISIBLE);
-            togglePaymentMethod.setText(getText(R.string.switch_to_alipay));
-            tvStepDescription.setText(R.string.enter_payment_details);
-            referralCodeLayout.setTranslationY(0);
-        } else {
-            stripeSection.setVisibility((View.INVISIBLE));
-            togglePaymentMethod.setText(getText(R.string.switch_to_credit_card));
-            tvStepDescription.setText(R.string.enter_email_short);
-            float referralCodeTranslateY = cardLayout.getBottom() - referralCodeLayout.getBottom();
-            referralCodeLayout.setTranslationY(referralCodeTranslateY);
-        }
+        stripeSection.setVisibility(View.VISIBLE);
+        tvStepDescription.setText(R.string.enter_payment_details);
+        referralCodeLayout.setTranslationY(0);
 
         // immediately run validation to enable button if we can
         validate();
