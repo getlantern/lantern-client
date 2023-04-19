@@ -208,7 +208,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         cvcInput.setOnEditorActionListener(submitForm);
         referralCodeInput.setOnEditorActionListener(submitForm);
 
-
         displayStripe();
     }
 
@@ -219,7 +218,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         continueBtn.setText(getResources().getText(continueText));
         MaterialUtil.clickify(termsOfServiceText, getString(R.string.terms_of_service), clickSpan);
 
-        // hide the buttons and move the referral code
         stripeSection.setVisibility(View.VISIBLE);
         tvStepDescription.setText(R.string.enter_payment_details);
         referralCodeLayout.setTranslationY(0);
