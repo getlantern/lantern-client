@@ -55,7 +55,7 @@ class SessionModel(
             )
             tx.put(
                 PATH_SPLIT_TUNNELING,
-                castToBoolean(tx.get(PATH_SPLIT_TUNNELING), false)
+                castToBoolean(tx.get(PATH_SPLIT_TUNNELING), true)
             )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
