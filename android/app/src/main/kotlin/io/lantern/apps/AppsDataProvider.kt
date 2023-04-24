@@ -3,6 +3,7 @@ package io.lantern.apps
 import android.Manifest
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
@@ -10,8 +11,13 @@ import android.graphics.drawable.Drawable
 import com.google.gson.annotations.SerializedName
 import java.io.ByteArrayOutputStream
 import java.util.Base64
+import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.R
+import java.io.BufferedReader
+import java.io.InputStream
 
 class AppsDataProvider(
+    private val resources:Resources,
     private val packageManager: PackageManager,
     private val thisPackageName: String
 ) {
@@ -39,6 +45,28 @@ class AppsDataProvider(
         e.printStackTrace()
       }
       return ""
+    }
+
+    // setWhitelistedApps iterates through the list of all application packages and excludes
+    // from the VPN connection any found on the whitelist of top domestic apps
+    fun setWhitelistedApps(appsList:List<AppData>) {
+        var inputStream:InputStream? = null
+        if (LanternApp.getSession().isChineseUser) {
+            inputStream = resources.openRawResource(R.raw.whitelist_apps_cn)
+        } else if (LanternApp.getSession().isRussianUser) {
+            inputStream = resources.openRawResource(R.raw.whitelist_apps_ru)
+        }
+        if (inputStream == null) {
+          return
+        }
+        val content = inputStream.bufferedReader().use(BufferedReader::readText)
+        val apps = content.split("[\r\n]+".toRegex()).toTypedArray()
+        val appsMap = listOf(*apps).associateBy({it}, {true})
+        for (appData in appsList) {
+            if (appsMap[appData.packageName] != null) {
+                LanternApp.getSession().addExcludedApp(appData.packageName)
+            }
+        }
     }
 
     // Return a list of all application packages that are installed for the current user,

@@ -73,7 +73,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
-        appsDataProvider = AppsDataProvider(this.getPackageManager(), this.getPackageName())
+        appsDataProvider = AppsDataProvider(resources, this.getPackageManager(), this.getPackageName())
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
@@ -179,7 +179,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
 
-        LanternApp.getSession().setAppsList(appsDataProvider.listOfApps())
+        val apps = appsDataProvider.listOfApps()
+        appsDataProvider.setWhitelistedApps(apps)
+        LanternApp.getSession().setAppsList(apps)
 
         if (LanternApp.getSession().isPlayVersion()) {
             if (!LanternApp.getSession().hasAcceptedTerms()) {
