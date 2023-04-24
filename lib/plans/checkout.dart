@@ -4,28 +4,6 @@ import 'package:lantern/plans/plans.dart';
 import 'package:lantern/plans/price_summary.dart';
 import 'package:lantern/common/common.dart';
 
-final planDetails = [
-  [
-    'Unlimited data'.i18n,
-    'No logs'.i18n,
-    'Connect up to 3 devices'.i18n,
-  ],
-  [
-    'Everything included in Pro'.i18n,
-    'Faster Data Centers'.i18n,
-    'Dedicated Line'.i18n,
-    'Increased Reliability'.i18n,
-  ]
-];
-
-final featuresList = [
-  'Unlimited data'.i18n,
-  'Faster Data Centers'.i18n,
-  'No logs'.i18n,
-  'Connect up to 3 devices'.i18n,
-  'No Ads'.i18n,
-];
-
 final paymentProviders = [
   'stripe',
   'btc',
@@ -292,18 +270,8 @@ class _CheckoutState extends State<Checkout>
                     PriceSummary(
                       plans: widget.plans,
                       id: widget.id,
-                      isPlatinum: widget.isPlatinum,
                       isPro: widget.isPro,
                     ),
-                    if (widget.platinumAvailable)
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(bottom: 16.0),
-                        child: CText(
-                          'unused_pro_time'.i18n,
-                          textAlign: TextAlign.center,
-                          style: tsBody2.italic.copiedWith(color: grey5),
-                        ),
-                      ),
                     Button(
                       disabled: emailController.value.text.isEmpty ||
                           emailFieldKey.currentState?.validate() == false ||
@@ -401,5 +369,3 @@ class _CheckoutState extends State<Checkout>
     ;
   }
 }
-
-

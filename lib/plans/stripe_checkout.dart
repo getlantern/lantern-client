@@ -11,7 +11,6 @@ class StripeCheckout extends StatefulWidget {
   final String? refCode;
   final String id;
   final bool isPro;
-  final bool isPlatinum;
 
   const StripeCheckout({
     required this.plans,
@@ -19,7 +18,6 @@ class StripeCheckout extends StatefulWidget {
     this.refCode,
     required this.id,
     required this.isPro,
-    required this.isPlatinum,
     Key? key,
   }) : super(key: key);
 
@@ -231,7 +229,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                     id: widget.id,
                     refCode: widget.refCode,
                     isPro: widget.isPro,
-                    isPlatinum: widget.isPlatinum,
                   ),
                   TOS(copy: copy),
                   Button(
@@ -255,7 +252,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                           )
                           .then((value) async {
                         context.loaderOverlay.hide();
-                        // TODO: Renewal success -- figure out status switch and show corresponding translations
                         CDialog.showInfo(
                           context,
                           iconPath: ImagePaths.lantern_logo,
@@ -286,7 +282,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     );
   }
 
-  // returns true if we can submit
   bool determineFormIsValid() {
     // returns true if there is at least one empty field
     final anyFieldsEmpty = emailController.value.text.isEmpty ||
