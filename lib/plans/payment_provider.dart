@@ -33,7 +33,44 @@ class PaymentProvider extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ...logoPaths.map((p) => buildLogoIcon(path: p)),
+            ...logoPaths.map((p) => Container(
+                  width: 55,
+                  height: 40,
+                  margin: const EdgeInsetsDirectional.only(
+                    end: 8,
+                  ),
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 10.0,
+                    end: 10.0,
+                    top: 10.0,
+                    bottom: 10.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border(
+                      top: BorderSide(
+                        width: 1.0,
+                        color: grey2,
+                      ),
+                      left: BorderSide(
+                        width: 1.0,
+                        color: grey2,
+                      ),
+                      right: BorderSide(
+                        width: 1.0,
+                        color: grey2,
+                      ),
+                      bottom: BorderSide(
+                        width: 1.0,
+                        color: grey2,
+                      ),
+                    ),
+                  ),
+                  child: CAssetImage(
+                    path: p,
+                  ),
+                )),
             const Spacer(),
             Radio(
               value: selectedPaymentProvider == paymentType,
@@ -51,42 +88,3 @@ class PaymentProvider extends StatelessWidget {
     );
   }
 }
-
-Widget buildLogoIcon({required String path}) => Container(
-      width: 55,
-      height: 40,
-      margin: const EdgeInsetsDirectional.only(
-        end: 8,
-      ),
-      padding: const EdgeInsetsDirectional.only(
-        start: 10.0,
-        end: 10.0,
-        top: 10.0,
-        bottom: 10.0,
-      ),
-      decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(5.0),
-        border: Border(
-          top: BorderSide(
-            width: 1.0,
-            color: grey2,
-          ),
-          left: BorderSide(
-            width: 1.0,
-            color: grey2,
-          ),
-          right: BorderSide(
-            width: 1.0,
-            color: grey2,
-          ),
-          bottom: BorderSide(
-            width: 1.0,
-            color: grey2,
-          ),
-        ),
-      ),
-      child: CAssetImage(
-        path: path,
-      ),
-    );

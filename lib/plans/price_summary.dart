@@ -5,14 +5,12 @@ class PriceSummary extends StatelessWidget {
   final String id;
   final String? refCode;
   final bool isPro;
-  final bool isPlatinum;
 
   const PriceSummary({
     Key? key,
     required this.plans,
     required this.id,
     required this.isPro,
-    required this.isPlatinum,
     this.refCode,
   }) : super(key: key);
 
@@ -36,7 +34,7 @@ class PriceSummary extends StatelessWidget {
             ],
           ),
           // * Renewal Bonus
-          if (bonus != '0 days') // TODO: hacky
+          if (bonus != '0 days')
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

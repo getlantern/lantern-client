@@ -20,6 +20,10 @@ import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
+import 'package:lantern/account/plans/checkout.dart';
+import 'package:lantern/account/plans/reseller_checkout.dart';
+import 'package:lantern/account/plans/stripe_checkout.dart';
+import 'package:lantern/account/plans/upgrade.dart';
 import 'package:lantern/replica/link_handler.dart';
 import 'package:lantern/replica/ui/viewers/audio.dart';
 import 'package:lantern/replica/ui/viewers/image.dart';
@@ -193,6 +197,38 @@ import 'package:lantern/replica/upload/review.dart';
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
+    CustomRoute<void>(
+      page: Checkout,
+      name: 'Checkout',
+      path: 'checkout',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),
+    CustomRoute<void>(
+      page: ResellerCheckout,
+      name: 'ResellerCheckout',
+      path: 'resellerCheckout',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),
+    CustomRoute<void>(
+      page: StripeCheckout,
+      name: 'StripeCheckout',
+      path: 'stripeCheckout',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),
+    CustomRoute<void>(
+      page: Upgrade,
+      name: 'Upgrade',
+      path: 'upgrade',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),    
     //
     // * REPLICA ROUTES
     //
