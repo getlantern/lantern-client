@@ -122,25 +122,6 @@ class _ResellerCheckoutState extends State<ResellerCheckout> {
                 ),
               ),
             ),
-            //  TODO: Helper widget - remove
-            sessionModel.developmentMode(
-              (context, isDeveloperMode, child) => isDeveloperMode
-                  ? GestureDetector(
-                      onTap: () {
-                        emailController.text = 'test@email.com';
-                        resellerCodeController.text =
-                            'VFVWR-GPPPB-9K2RR-9YH6P-2DVM2';
-                      },
-                      child: Container(
-                        padding: const EdgeInsetsDirectional.all(24.0),
-                        child: CText(
-                          'DEV PURPOSES - TAP TO PREFILL',
-                          style: tsButtonBlue,
-                        ),
-                      ),
-                    )
-                  : Container(),
-            ),
             const Spacer(),
             Column(
               children: [
