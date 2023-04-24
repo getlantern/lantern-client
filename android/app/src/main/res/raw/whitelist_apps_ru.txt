@@ -37,3 +37,13 @@ ru.dublgis.dgismobile
 ru.beru.android
 ru.aliexpress.buyer
 com.gamma.scan
+ru.yandex.music
+com.lenovo.anyshare.gps
+com.viber.voip
+com.pinterest
+com.uma.musicvk
+ru.beeline.services
+ru.megafon.mlk
+ru.ok.android
+ru.tinkoff.mvno
+ru.urentbike.app
