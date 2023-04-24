@@ -1,7 +1,6 @@
 org.telegram.messenger
 com.yandex.shedevrus
 ru.ozon.app.android
-com.whatsapp
 com.avito.android
 com.wildberries.ru
 ru.pyaterochka.app.browser
@@ -25,7 +24,6 @@ com.freevpnplanet
 ru.rutube.app
 com.punicapp.whoosh
 com.snapchat.android
-com.whatsapp.w4b
 ru.sportmaster.app
 app.source.getcontact
 ru.tander.magnit
