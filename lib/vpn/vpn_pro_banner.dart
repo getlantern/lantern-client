@@ -1,4 +1,5 @@
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/plans/upgrade.dart';
 
 class ProBanner extends StatefulWidget {
   @override
@@ -9,8 +10,12 @@ class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
     return CInkWell(
-      onTap: () {
-        LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
+      onTap: () async {
+        await context.pushRoute(
+          Upgrade(
+            isPro: isPro,
+          ),
+        );
       }, // Handle your callback
       child: Container(
         padding: const EdgeInsetsDirectional.all(16),
