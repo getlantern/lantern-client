@@ -51,16 +51,16 @@ class PriceSummary extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CText(
-                  '+ 1 ${'month'.i18n.toUpperCase()} ${'referral bonus'.i18n.toUpperCase()}',
+                  '+ 1 ${'month'.i18n.toUpperCase()} ${'referral_bonus'.i18n.toUpperCase()}',
                   style: tsOverline,
                 ),
-                CText('Free'.i18n.toUpperCase(), style: tsOverline),
+                CText('free'.i18n.toUpperCase(), style: tsOverline),
               ],
             ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CText('Total'.i18n, style: tsBody1),
+              CText('total'.i18n, style: tsBody1),
               CText(
                 formattedPricePerYear,
                 style: tsBody1.copiedWith(

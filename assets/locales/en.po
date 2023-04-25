@@ -187,8 +187,26 @@ msgstr "Save"
 msgid "please_enter_a_valid_email_address"
 msgstr "Please enter a valid email address"
 
+msgid "bonus"
+msgstr "Bonus"
+
+msgid "referral_bonus"
+msgstr "referral bonus"
+
+msgid "total"
+msgstr "Total"
+
+msgid "month"
+msgstr "month"
+
+msgid "months"
+msgstr "months"
+
 msgid "enter_email"
 msgstr "Enter email"
+
+msgid "error_fetching_plans"
+msgstr "Error fetching plans, please restart Lantern and try again."
 
 msgid "apply"
 msgstr "Apply"
@@ -196,7 +214,10 @@ msgstr "Apply"
 msgid "choose_payment_method"
 msgstr "Choose Payment Method"
 
-msgid "Enter Email and Activation code"
+msgid "pro_plan"
+msgstr "Pro Plan"
+
+msgid "enter_email_and_activation_code"
 msgstr "Enter Email and Activation code"
 
 msgid "referral_code"
@@ -211,10 +232,13 @@ msgstr "Activation Code"
 msgid "invalid_or_incomplete_referral_code"
 msgstr "Invalid or incomplete referral code"
 
+msgid "register_for_pro"
+msgstr "Register for Pro"
+
 msgid "Something went wrong while applying your referral code."
 msgstr "Something went wrong while applying your referral code."
 
-msgid "Your activation code is invalid"
+msgid "your_activation_code_is_invalid"
 msgstr "Your activation code is invalid"
 
 msgid "update_cache_plans_timeout"
@@ -346,6 +370,12 @@ msgstr "Unlimited Data"
 msgid "no_logs"
 msgstr "No logs"
 
+msgid "no_ads"
+msgstr "No Ads"
+
+msgid "choose_plan"
+msgstr "Choose Plan"
+
 msgid "connect_up_to_3_devices"
 msgstr "Connect up to 3 devices"
 
@@ -381,6 +411,9 @@ msgstr "Plan type"
 
 msgid "most_popular"
 msgstr "Most Popular"
+
+msgid "free"
+msgstr "Free"
 
 msgid "n/a"
 msgstr "n/a"

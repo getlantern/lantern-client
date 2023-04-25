@@ -81,7 +81,7 @@ class PlanCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CText(
-                          'Pro Plan'.i18n,
+                          'pro_plan'.i18n,
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
@@ -174,7 +174,7 @@ class PlanStep extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(20)),
           ),
           child: CText(
-            'Step $stepNum'.i18n,
+            'step_$stepNum'.i18n,
             style: tsBody1.copiedWith(color: white),
           ),
         ),

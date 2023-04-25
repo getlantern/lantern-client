@@ -20,7 +20,7 @@ class _ResellerCheckoutState extends State<ResellerCheckout> {
     formKey: emailFieldKey,
     validator: (value) => EmailValidator.validate(value ?? '')
         ? null
-        : 'Please enter a valid email address'.i18n,
+        : 'please_enter_a_valid_email_address'.i18n,
   );
 
   final resellerCodeFieldKey = GlobalKey<FormState>();
@@ -32,7 +32,7 @@ class _ResellerCheckoutState extends State<ResellerCheckout> {
             RegExp(r'^[a-zA-Z0-9-]*$').hasMatch(value) &&
             value.replaceAll('-', '').length == 25
         ? null
-        : 'Your activation code is invalid'.i18n,
+        : 'your_activation_code_is_invalid'.i18n,
   );
 
   var formIsValid = false;
@@ -46,9 +46,9 @@ class _ResellerCheckoutState extends State<ResellerCheckout> {
 
   @override
   Widget build(BuildContext context) {
-    final copy = 'Register for Pro'.i18n;
+    final copy = 'register_for_pro'.i18n;
     return BaseScreen(
-      title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout'.i18n,
+      title: 'lantern_${widget.isPro ? 'pro_' : ''}checkout'.i18n,
       body: Container(
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsetsDirectional.only(
@@ -64,7 +64,7 @@ class _ResellerCheckoutState extends State<ResellerCheckout> {
             // * Step 2
             PlanStep(
               stepNum: '2',
-              description: 'Enter Email and Activation code'.i18n,
+              description: 'enter_email_and_activation_code'.i18n,
             ),
             // * Email field
             Container(

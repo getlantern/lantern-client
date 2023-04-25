@@ -2,11 +2,11 @@ import 'package:lantern/plans/plans.dart';
 import 'package:lantern/common/common.dart';
 
 final featuresList = [
-  'Unlimited data'.i18n,
-  'Faster Data Centers'.i18n,
-  'No logs'.i18n,
-  'Connect up to 3 devices'.i18n,
-  'No Ads'.i18n,
+  'unlimited_data'.i18n,
+  'faster_data_centers'.i18n,
+  'no_logs'.i18n,
+  'connect_up_to_3_devices'.i18n,
+  'no_ads'.i18n,
 ];
 
 class Upgrade extends StatelessWidget {
