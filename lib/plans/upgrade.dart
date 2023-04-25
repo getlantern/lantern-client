@@ -19,7 +19,7 @@ class Upgrade extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel.getPlans((context, plans, child) {
+    return sessionModel.getPlans((context, cachedPlans, child) {
       final plans = formatPlans(plans);
       if (plans.isEmpty) {
         return FullScreenDialog(
