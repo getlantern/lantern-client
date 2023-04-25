@@ -22,6 +22,13 @@ class ImagePaths {
   static const email = 'assets/images/email.svg';
   static const translate = 'assets/images/translate.svg';
   static const update = 'assets/images/update.svg';
+  static const mastercard = 'assets/images/mastercard.svg';
+  static const visa = 'assets/images/visa.svg';
+  static const btc = 'assets/images/btc.svg';
+  static const dots = 'assets/images/dots.svg';
+  static const credit_card = 'assets/images/credit_card.svg';
+  static const calendar = 'assets/images/calendar.svg';
+  static const lock = 'assets/images/lock.svg';
 
   // Messaging
   static const more_vert = 'assets/images/more_vert.svg';
@@ -119,6 +126,8 @@ class ImagePaths {
   static const empty_chats = 'assets/images/empty_chats.svg';
   static const empty_chats_rtl = 'assets/images/empty_chats_rtl.svg';
   static const empty_search = 'assets/images/empty_search.svg';
+  static const lantern_logotype = 'assets/images/lantern_logotype.svg';
+  static const lantern_pro_logotype = 'assets/images/lantern_pro_logotype.svg';
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';

@@ -1,6 +1,6 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:lantern/account/plans/plans.dart';
-import 'package:lantern/account/plans/tos.dart';
+import 'package:lantern/plans/plans.dart';
+import 'package:lantern/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 
 class ResellerCheckout extends StatefulWidget {
@@ -11,7 +11,7 @@ class ResellerCheckout extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ResellerCodeCheckout> createState() => _ResellerCodeCheckoutState();
+  State<ResellerCheckout> createState() => _ResellerCheckoutState();
 }
 
 class _ResellerCheckoutState extends State<ResellerCheckout> {
