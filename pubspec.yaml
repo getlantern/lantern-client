@@ -33,6 +33,8 @@ dependencies:
 
   credit_card_validator: ^2.0.1
 
+  webview_flutter: ^4.2.0
+
   provider: ^5.0.0
 
   protobuf: any
