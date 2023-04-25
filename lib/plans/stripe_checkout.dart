@@ -84,7 +84,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     final copy = 'Complete Purchase'.i18n;
     return BaseScreen(
       resizeToAvoidBottomInset: false,
-      title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout'.i18n,
+      title: 'lantern_${widget.isPro ? 'pro_' : ''}checkout'.i18n,
       body: Container(
         padding: const EdgeInsetsDirectional.only(
           start: 16,
@@ -99,7 +99,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
             // * Step 3
             PlanStep(
               stepNum: '3',
-              description: 'Checkout'.i18n,
+              description: 'checkout'.i18n,
             ),
             // * Email
             Container(
@@ -116,7 +116,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                   initialValue: widget.email,
                   controller: emailController,
                   autovalidateMode: AutovalidateMode.disabled,
-                  label: 'Email'.i18n,
+                  label: 'email'.i18n,
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: const CAssetImage(path: ImagePaths.email),
                 ),
@@ -235,7 +235,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                           size: 80,
                           title: 'renewal_success'.i18n,
                           description: 'stripe_success'.i18n,
-                          actionLabel: 'Continue'.i18n,
+                          actionLabel: 'continue'.i18n,
                         );
                       }).onError((error, stackTrace) {
                         context.loaderOverlay.hide();
