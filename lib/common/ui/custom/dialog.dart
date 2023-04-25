@@ -60,6 +60,7 @@ class CDialog extends StatefulWidget {
   }) : super();
 
   final String? iconPath;
+  final double? size;
   final String title;
   final dynamic description;
   final String? checkboxLabel;
