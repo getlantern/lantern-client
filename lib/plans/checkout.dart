@@ -1,15 +1,14 @@
+import 'package:lantern/common/common.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plans.dart';
 import 'package:lantern/plans/price_summary.dart';
-import 'package:lantern/common/common.dart';
+import 'package:lantern/plans/utils.dart';
 
 final paymentProviders = [
   'stripe',
   'btc',
 ];
-
-const defaultTimeoutDuration = Duration(seconds: 10);
 
 class Checkout extends StatefulWidget {
   final List<Map<String, dynamic>> plans;

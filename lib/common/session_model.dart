@@ -253,6 +253,14 @@ class SessionModel extends Model {
     );
   }
 
+  Widget userStatus(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'userLevel',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
   Future<void> redeemResellerCode(
     String email,
     String resellerCode,
