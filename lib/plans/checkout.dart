@@ -58,8 +58,6 @@ class _CheckoutState extends State<Checkout>
 
   @override
   void initState() {
-    WebView.platform = AndroidWebView();
-
     animationController =
         AnimationController(vsync: this, duration: longAnimationDuration);
     animationController.repeat(reverse: true);
@@ -338,13 +336,33 @@ class _CheckoutState extends State<Checkout>
           .then((value) async {
         context.loaderOverlay.hide();
         final btcPayURL = value as String;
+        var controller = WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setBackgroundColor(const Color(0x00000000))
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onProgress: (int progress) {
+                // Update loading bar.
+              },
+              onPageStarted: (String url) {},
+              onPageFinished: (String url) {},
+              onWebResourceError: (WebResourceError error) {},
+              onNavigationRequest: (NavigationRequest request) {
+                if (request.url.startsWith('https://www.youtube.com/')) {
+                  return NavigationDecision.prevent;
+                }
+                return NavigationDecision.navigate;
+              },
+            ),
+          )
+          ..loadRequest(Uri.parse(btcPayURL));
         await context.pushRoute(
           FullScreenDialogPage(
             widget: Center(
               child: Stack(
                 children: [
-                  WebView(
-                    initialUrl: btcPayURL,
+                  WebViewWidget(
+                    controller: controller,
                   ),
                 ],
               ),
