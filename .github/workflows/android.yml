@@ -2,8 +2,10 @@ name: Android CI
 
 on:
   pull_request:
+  # Triggers the workflow on push when pushing to a version tag
   push:
-    branches: [ main ]
+    tags:
+      - 'lantern-*'
 
 permissions:
   contents: read

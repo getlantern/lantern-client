@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plans.dart';
 import 'package:lantern/plans/price_summary.dart';
+import 'package:lantern/plans/stripe_checkout.dart';
 import 'package:lantern/common/common.dart';
 
 final paymentProviders = [
@@ -281,7 +282,7 @@ class _CheckoutState extends State<Checkout>
                         await Future.wait(
                           [
                             sessionModel
-                                .checkEmailExistence(emailController.value.text)
+                                .checkEmailExists(emailController.value.text)
                                 .onError((error, stackTrace) {
                               CDialog.showError(
                                 context,
@@ -322,7 +323,7 @@ class _CheckoutState extends State<Checkout>
       // * BTC payment selected
       context.loaderOverlay.show();
       await sessionModel
-          .submitBitcoin(
+          .submitBitcoinPayment(
             widget.id,
             emailController.text,
             refCodeController.text,

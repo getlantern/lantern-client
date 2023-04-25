@@ -222,4 +222,79 @@ class SessionModel extends Model {
   Future<void> checkForUpdates() {
     return methodChannel.invokeMethod('checkForUpdates');
   }
+
+  Widget getPlans(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'plans',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
+  Future<void> applyRefCode(
+    String refCode,
+  ) async {
+    return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
+      'refCode': refCode,
+    }).then((value) => value as String);
+  }
+
+  Future<bool> playVersion() {
+    return methodChannel
+        .invokeMethod('getPlayVersion')
+        .then((value) => value as bool);
+  }
+
+   Widget getUserId(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'userId',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
+  Future<void> redeemResellerCode(
+    String email,
+    String resellerCode,
+  ) async {
+    return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
+      'email': email,
+      'resellerCode': resellerCode,
+    }).then((value) => value as String);
+  }
+
+  Future<void> submitBitcoinPayment(
+    String planID,
+     String email,
+    String refCode,
+    String resellerCode,
+   ) async {
+    return methodChannel.invokeMethod('submitBitcoin', <String, dynamic>{
+      'planID': planID,
+      'email': email,
+      'refCode': refCode,
+     }).then((value) => value as String);
+   }
+
+  Future<void> submitStripePayment(
+    String email,
+    String cardNumber,
+    String expDate,
+    String cvc,
+  ) async {
+    return methodChannel.invokeMethod('submitStripe', <String, dynamic>{
+      'email': email,
+      'cardNumber': cardNumber,
+      'expDate': expDate,
+      'cvc': cvc,
+    }).then((value) => value as String);
+  }
+
+  Future<void> checkEmailExists(
+    String email,
+  ) async {
+    return methodChannel.invokeMethod('checkEmailExistence', <String, dynamic>{
+      'email': email,
+    }).then((value) => value as String);
+  }
 }

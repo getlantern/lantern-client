@@ -25,7 +25,7 @@ class PlanCard extends StatelessWidget {
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),
       child: CInkWell(
         onTap: () async {
-          final isPlayVersion = await sessionModel.getPlayVersion();
+          final isPlayVersion = await sessionModel.playVersion();
 
           // * Play version
           if (isPlayVersion) {
