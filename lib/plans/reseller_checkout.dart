@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:lantern/plans/plans.dart';
 import 'package:lantern/plans/tos.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/plans/utils.dart';
 
 class ResellerCheckout extends StatefulWidget {
   final bool isPro;

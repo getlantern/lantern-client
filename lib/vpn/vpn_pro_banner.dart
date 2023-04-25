@@ -8,11 +8,12 @@ class ProBanner extends StatefulWidget {
 class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
-    return CInkWell(
+    return sessionModel.userStatus(
+      (context, status, child) => CInkWell(
       onTap: () async {
         await context.pushRoute(
           Upgrade(
-            isPro: isPro,
+            isPro: status == 'pro',
           ),
         );
       }, // Handle your callback
@@ -60,6 +61,6 @@ class _ProBannerState extends State<ProBanner> {
           ],
         ),
       ),
-    );
+    ));
   }
 }

@@ -1,5 +1,6 @@
-import 'package:lantern/plans/plans.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/plans/plans.dart';
+import 'package:lantern/plans/utils.dart';
 
 final featuresList = [
   'unlimited_data'.i18n,

@@ -27,11 +27,16 @@ class CDialog extends StatefulWidget {
   static void showInfo(
     BuildContext context, {
     String? iconPath,
+    double? size,
     required String title,
     required String description,
+    String? actionLabel,
+    Future<bool> Function()? agreeAction,
+    Future<bool> Function()? dismissAction,
   }) {
     CDialog(
       iconPath: iconPath,
+      size: size,
       title: title,
       description: description,
     ).show(context);
@@ -39,6 +44,7 @@ class CDialog extends StatefulWidget {
 
   CDialog({
     this.iconPath,
+    this.size,
     required this.title,
     required this.description,
     this.checkboxLabel,
