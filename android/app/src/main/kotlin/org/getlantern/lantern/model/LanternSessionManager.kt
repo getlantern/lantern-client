@@ -27,6 +27,18 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getBoolean(PRO_USER, false)
     }
 
+    fun getUserLevel(): String? {
+        return prefs.getString(USER_LEVEL, "")
+    }
+
+    fun setUserLevel(userLevel: String?) {
+        prefs.edit().putString(USER_LEVEL, userLevel).apply()
+    }
+
+    fun setUserPlans(plans: String) {
+        prefs.edit().putString(PLANS, plans).apply()
+    }
+
     fun isExpired(): Boolean {
         return prefs.getBoolean(PRO_EXPIRED, false)
     }
@@ -339,6 +351,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private val TAG = LanternSessionManager::class.java.name
 
         // shared preferences
+        private const val PLANS = "plans"
+        private const val USER_LEVEL = "userLevel"
         private const val PRO_USER = "prouser"
         private const val DEVICES = "devices"
         private const val PRO_EXPIRED = "proexpired"

@@ -17,15 +17,19 @@ import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
 import org.getlantern.lantern.util.Analytics
+import org.getlantern.lantern.util.Json
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
+import java.util.concurrent.*
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -36,13 +40,15 @@ class SessionModel(
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
+    private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
     companion object {
         private const val TAG = "SessionModel"
-
+        const val PATH_PLANS = "plans"
         const val PATH_PRO_USER = "prouser"
         const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_SDK_VERSION = "sdkVersion"
+        const val PATH_USER_LEVEL = "userLevel"
     }
 
     init {
@@ -55,6 +61,12 @@ class SessionModel(
             tx.put(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false)
+            )
+            tx.put(
+                PATH_PLANS, tx.get(PATH_PLANS) ?: ""
+            )
+            tx.put(
+               PATH_USER_LEVEL, tx.get(PATH_USER_LEVEL) ?: ""
             )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
@@ -82,6 +94,8 @@ class SessionModel(
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
+            "getPlans" -> getPlans(result)
+            "userStatus" -> userStatus(result)
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -329,5 +343,63 @@ class SessionModel(
                 }
             }
         )
+    }
+
+    // Hits the /user-data endpoint and saves { userLevel: null | "pro" | "platinum" } to PATH_USER_LEVEL
+    private fun userStatus(result: MethodChannel.Result) {
+        try {
+            lanternClient.userData(object : ProUserCallback {
+                override fun onSuccess(response: Response, userData: ProUser) {
+                    Logger.debug(TAG, "Successfully updated userData")
+                    result.success("cachingUserDataSuccess")
+                    LanternApp.getSession().setUserLevel(userData.userLevel)
+                }
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    Logger.error(TAG, "Unable to fetch user data: $t.message")
+                    result.error("cachingUserDataError", "Unable to cache user status", error?.message) // This will be localized Flutter-side
+                    return
+                }
+            })
+        } catch (t: Throwable) {
+            Logger.error(TAG, "Error caching user status", t)
+            result.error("unknownError", "Unable to cache user status", null) // This will be localized Flutter-side
+        }
+    }
+
+    // Hits the /plans endpoint and saves plans to PATH_PLANS
+    private fun getPlans(result: MethodChannel.Result) {
+        try {
+            LanternApp.getPlans(object : LanternHttpClient.PlansCallback {
+                 override fun onSuccess(proPlans: Map<String, ProPlan>) {
+                    plans.clear()
+                    plans.putAll(proPlans)
+                    Logger.info(TAG, "Successfully cached plans: $plans")
+                    result.success("cachingPlansSuccess")
+                    for (planId in proPlans.keys) {
+                        proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+                    }
+                    LanternApp.getSession().setUserPlans(Json.gson.toJson(plans))
+                }
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    Logger.error(TAG, "Error fetching plans: $error")
+                    if (error?.message != null) {
+                        Logger.error(TAG, "Failure caching plans: $t.message")
+                        result.error(
+                            "unknownError",
+                            "Unable to cache plans",
+                            null,
+                        )
+                        return
+                    }
+                }
+            })
+        } catch (t: Throwable) {
+            Logger.error(TAG, "Error caching plans", t)
+            result.error(
+                "unknownError",
+                "Unable to cache plans", // This will be localized Flutter-side
+                null,
+            )
+        }
     }
 }

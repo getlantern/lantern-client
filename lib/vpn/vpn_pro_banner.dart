@@ -8,15 +8,12 @@ class ProBanner extends StatefulWidget {
 class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
-    return sessionModel.userStatus(
-      (context, status, child) => CInkWell(
+    return CInkWell(
       onTap: () async {
         await context.pushRoute(
-          Upgrade(
-            isPro: status == 'pro',
-          ),
+          Upgrade(),
         );
-      }, // Handle your callback
+      },
       child: Container(
         padding: const EdgeInsetsDirectional.all(16),
         decoration: BoxDecoration(
@@ -61,6 +58,6 @@ class _ProBannerState extends State<ProBanner> {
           ],
         ),
       ),
-    ));
+    );
   }
 }

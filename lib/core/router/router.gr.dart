@@ -362,13 +362,11 @@ class AppRouter extends _i33.RootStackRouter {
       );
     },
     Upgrade.name: (routeData) {
-      final args = routeData.argsAs<UpgradeArgs>();
+      final args =
+          routeData.argsAs<UpgradeArgs>(orElse: () => const UpgradeArgs());
       return _i33.CustomPage<void>(
         routeData: routeData,
-        child: _i24.Upgrade(
-          key: args.key,
-          isPro: args.isPro,
-        ),
+        child: _i24.Upgrade(key: args.key),
         transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
@@ -1233,34 +1231,24 @@ class StripeCheckoutArgs {
 /// generated route for
 /// [_i24.Upgrade]
 class Upgrade extends _i33.PageRouteInfo<UpgradeArgs> {
-  Upgrade({
-    _i35.Key? key,
-    required bool isPro,
-  }) : super(
+  Upgrade({_i35.Key? key})
+      : super(
           Upgrade.name,
           path: 'upgrade',
-          args: UpgradeArgs(
-            key: key,
-            isPro: isPro,
-          ),
+          args: UpgradeArgs(key: key),
         );
 
   static const String name = 'Upgrade';
 }
 
 class UpgradeArgs {
-  const UpgradeArgs({
-    this.key,
-    required this.isPro,
-  });
+  const UpgradeArgs({this.key});
 
   final _i35.Key? key;
 
-  final bool isPro;
-
   @override
   String toString() {
-    return 'UpgradeArgs{key: $key, isPro: $isPro}';
+    return 'UpgradeArgs{key: $key}';
   }
 }
 

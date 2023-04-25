@@ -225,8 +225,7 @@ class SessionModel extends Model {
 
   Widget getPlans(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
-      'plans',
-      defaultValue: '',
+      'getPlans',
       builder: builder,
     );
   }
