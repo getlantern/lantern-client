@@ -267,10 +267,10 @@ class _StripeCheckoutState extends State<StripeCheckout> {
         cvcFieldController.value.text.isEmpty;
 
     // returns true if there is at least one invalid field
-    final anyFieldsInvalid = !emailFieldKey.currentState?.validate() ||
-        !creditCardFieldKey.currentState?.validate() ||
-        !expDateFieldKey.currentState?.validate() ||
-        !cvcFieldKey.currentState?.validate();
+    final anyFieldsInvalid = emailFieldKey.currentState?.validate() == false ||
+        creditCardFieldKey.currentState?.validate() == false ||
+        expDateFieldKey.currentState?.validate() == false ||
+        cvcFieldKey.currentState?.validate()  == false;
 
     return (!anyFieldsEmpty && !anyFieldsInvalid);
   }
