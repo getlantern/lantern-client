@@ -2,13 +2,14 @@ import 'package:email_validator/email_validator.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plans.dart';
 import 'package:lantern/plans/price_summary.dart';
-import 'package:lantern/plans/stripe_checkout.dart';
 import 'package:lantern/common/common.dart';
 
 final paymentProviders = [
   'stripe',
   'btc',
 ];
+
+const defaultTimeoutDuration = Duration(seconds: 10);
 
 class Checkout extends StatefulWidget {
   final List<Map<String, dynamic>> plans;
@@ -242,7 +243,7 @@ class _CheckoutState extends State<Checkout>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // * Stripe
-                    PaymentProviderButton(
+                    PaymentProvider(
                       logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
                       onChanged: () => setState(
                         () => selectedPaymentProvider = 'stripe',
@@ -251,7 +252,7 @@ class _CheckoutState extends State<Checkout>
                       paymentType: 'stripe',
                     ),
                     // * BTC
-                    PaymentProviderButton(
+                    PaymentProvider(
                       logoPaths: [ImagePaths.btc],
                       onChanged: () => setState(
                         () => selectedPaymentProvider = 'btc',
@@ -337,7 +338,6 @@ class _CheckoutState extends State<Checkout>
           )
           .then((value) async {
         context.loaderOverlay.hide();
-        // TODO: get BTCPay URL with token from callback
         final btcPayURL = value as String;
         await context.pushRoute(
           FullScreenDialogPage(
@@ -346,7 +346,6 @@ class _CheckoutState extends State<Checkout>
                 children: [
                   WebView(
                     initialUrl: btcPayURL,
-                    // TODO: listen for WebView close
                   ),
                 ],
               ),
