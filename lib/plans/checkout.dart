@@ -33,7 +33,7 @@ class _CheckoutState extends State<Checkout>
     formKey: emailFieldKey,
     validator: (value) => EmailValidator.validate(value ?? '')
         ? null
-        : 'Please enter a valid email address'.i18n,
+        : 'please_enter_a_valid_email_address'.i18n,
   );
 
   final refCodeFieldKey = GlobalKey<FormState>();
@@ -45,7 +45,7 @@ class _CheckoutState extends State<Checkout>
                 RegExp(r'^[a-zA-Z0-9]*$').hasMatch(value) &&
                 (6 <= value.characters.length && value.characters.length <= 13)
             ? null
-            : 'Invalid or incomplete referral code'.i18n,
+            : 'invalid_or_incomplete_referral_code'.i18n,
   );
 
   var isRefCodeFieldShowing = false;
@@ -83,7 +83,7 @@ class _CheckoutState extends State<Checkout>
   Widget build(BuildContext context) {
     return BaseScreen(
       resizeToAvoidBottomInset: false,
-      title: 'Lantern ${widget.isPro == true ? 'Pro' : ''} Checkout'.i18n,
+      title: 'lantern_${widget.isPro == true ? 'pro' : ''}_checkout'.i18n,
       body: Form(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -100,7 +100,7 @@ class _CheckoutState extends State<Checkout>
               // * Step 2
               PlanStep(
                 stepNum: '2',
-                description: 'Enter email'.i18n,
+                description: 'enter_email'.i18n,
               ),
               // * Email field
               Container(
@@ -113,7 +113,7 @@ class _CheckoutState extends State<Checkout>
                   child: CTextField(
                     controller: emailController,
                     autovalidateMode: AutovalidateMode.disabled,
-                    label: 'Email'.i18n,
+                    label: 'email'.i18n,
                     keyboardType: TextInputType.emailAddress,
                     prefixIcon: const CAssetImage(path: ImagePaths.email),
                   ),
@@ -140,7 +140,7 @@ class _CheckoutState extends State<Checkout>
                             controller: refCodeController,
                             autovalidateMode: AutovalidateMode.disabled,
                             textCapitalization: TextCapitalization.characters,
-                            label: 'Referral code'.i18n,
+                            label: 'referral_code'.i18n,
                             keyboardType: TextInputType.text,
                             prefixIcon:
                                 const CAssetImage(path: ImagePaths.star),
@@ -192,7 +192,7 @@ class _CheckoutState extends State<Checkout>
                                     ),
                                   )
                                 : CText(
-                                    'Apply'.i18n.toUpperCase(),
+                                    'apply'.i18n.toUpperCase(),
                                     style: tsButtonPink,
                                   ),
                           ),
@@ -220,7 +220,7 @@ class _CheckoutState extends State<Checkout>
                         Padding(
                           padding: const EdgeInsetsDirectional.only(start: 8.0),
                           child: CText(
-                            'Add Referral code'.i18n,
+                            'add_referral_code'.i18n,
                             style: tsBody1,
                           ),
                         ),
@@ -232,7 +232,7 @@ class _CheckoutState extends State<Checkout>
               // * Step 3
               PlanStep(
                 stepNum: '3',
-                description: 'Choose Payment Method'.i18n,
+                description: 'choose_payment_method'.i18n,
               ),
               //* Payment options
               Container(
@@ -277,7 +277,7 @@ class _CheckoutState extends State<Checkout>
                       disabled: emailController.value.text.isEmpty ||
                           emailFieldKey.currentState?.validate() == false ||
                           refCodeFieldKey.currentState?.validate() == false,
-                      text: 'Continue'.i18n,
+                      text: 'continue'.i18n,
                       onPressed: () async {
                         await Future.wait(
                           [
