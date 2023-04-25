@@ -267,7 +267,6 @@ class SessionModel extends Model {
     String planID,
      String email,
     String refCode,
-    String resellerCode,
    ) async {
     return methodChannel.invokeMethod('submitBitcoin', <String, dynamic>{
       'planID': planID,
