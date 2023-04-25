@@ -38,7 +38,6 @@ com.gamma.scan
 ru.yandex.music
 com.lenovo.anyshare.gps
 com.viber.voip
-com.pinterest
 com.uma.musicvk
 ru.beeline.services
 ru.megafon.mlk
