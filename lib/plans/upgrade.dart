@@ -10,18 +10,21 @@ final featuresList = [
   'no_ads'.i18n,
 ];
 
-class Upgrade extends StatelessWidget {
-  final bool isPro;
+class Upgrade extends StatefulWidget {
+  Upgrade({Key? key});
 
-  Upgrade({
-    Key? key,
-    required this.isPro,
-  }) : super(key: key);
+  @override
+  State<Upgrade> createState() => _UpgradeState();
+}
+
+class _UpgradeState extends State<Upgrade> {
+  final bool isPro = false;
 
   @override
   Widget build(BuildContext context) {
     return sessionModel.getPlans((context, cachedPlans, child) {
       final plans = formatPlans(cachedPlans);
+      debugPrint("Plans: ${plans}");
       if (plans.isEmpty) {
         return FullScreenDialog(
           widget: Center(

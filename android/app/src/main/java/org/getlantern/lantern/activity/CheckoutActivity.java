@@ -63,7 +63,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
     public static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
     private static final String TAG = CheckoutActivity.class.getName();
     private static final String STRIPE_TAG = TAG + ".stripe";
-    private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
+    public static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
     protected final ClickSpan.OnClickListener clickSpan = new ClickSpan.OnClickListener() {
         @Override
         public void onClick() {
@@ -463,21 +463,6 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
      *              gateway
      */
     private void openPaymentProvider(final String email) {
-        // TODO <23-12-2022, soltzen> Make this selectable from the backend
-        // if/when the UI can support multiple different providers.
-        // The ideal path for this is:
-        // - PlansActivity.java (which is the only activity that can call this
-        //   activity) calls pro-server-neu's `/user-payment-gateway` endpoint
-        //   - Which returns a payment provider based on the user's params
-        // - We'll be allowed to force a provider client-side *only* for
-        //   testing purposes
-        // For now, the payment provider selection logic is a bit all over the
-        // place (server and client-side) since payment provider selection is
-        // quite voltatile in our company.
-        //
-        // By default, always use paymentwall unless something else is forced.
-        //
-        // String provider = LanternApp.getSession().getPaymentProvider();
         String provider = "paymentwall";
 
         // Debug providers take precedence
