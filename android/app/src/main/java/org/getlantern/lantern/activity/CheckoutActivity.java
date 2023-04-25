@@ -63,7 +63,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
     public static final String TERMS_OF_SERVICE_URL = "https://s3.amazonaws.com/lantern/Lantern-TOS.html";
     private static final String TAG = CheckoutActivity.class.getName();
     private static final String STRIPE_TAG = TAG + ".stripe";
-    private static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
+    public static final LanternHttpClient lanternClient = LanternApp.getLanternHttpClient();
     protected final ClickSpan.OnClickListener clickSpan = new ClickSpan.OnClickListener() {
         @Override
         public void onClick() {

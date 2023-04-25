@@ -170,7 +170,7 @@ public class PlansActivity extends BaseFragmentActivity {
             totalCostSpanned.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.secondary_pink)), startForegroundPos, totalCost.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             totalCost = totalCostSpanned;
         }
-        String oneMonth = plan.getFormatterPriceOneMonth();
+        String oneMonth = plan.getFormattedPriceOneMonth();
         String durationFormat = plan.getFormatPriceWithBonus(this, true);
         if (plan.numYears() == 1) {
             itemPlanYear1.setVisibility(View.VISIBLE);
