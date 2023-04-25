@@ -239,7 +239,7 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<bool> playVersion() {
+  Future<bool> getPlayVersion() {
     return methodChannel
         .invokeMethod('getPlayVersion')
         .then((value) => value as bool);
