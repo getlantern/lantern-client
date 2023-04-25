@@ -245,7 +245,7 @@ class SessionModel extends Model {
         .then((value) => value as bool);
   }
 
-   Widget getUserId(ValueWidgetBuilder<String> builder) {
+  Widget getUserId(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'userId',
       defaultValue: '',
@@ -265,15 +265,21 @@ class SessionModel extends Model {
 
   Future<void> submitBitcoinPayment(
     String planID,
-     String email,
+    String email,
     String refCode,
-   ) async {
+  ) async {
     return methodChannel.invokeMethod('submitBitcoin', <String, dynamic>{
       'planID': planID,
       'email': email,
       'refCode': refCode,
-     }).then((value) => value as String);
-   }
+    }).then((value) => value as String);
+  }
+
+  Future<void> submitGooglePlay(String planID) async {
+    return methodChannel.invokeMethod('submitGooglePlay', <String, dynamic>{
+      'planID': planID,
+    }).then((value) => value as String);
+  }
 
   Future<void> submitStripePayment(
     String email,

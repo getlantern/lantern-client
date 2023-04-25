@@ -221,7 +221,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                             cvcFieldController.text,
                           )
                           .timeout(
-                            defaultTimeoutDuration,
+                            Duration(seconds: 10),
                             onTimeout: () => onAPIcallTimeout(
                               code: 'submitStripeTimeout',
                               message: 'stripe_timeout'.i18n,

@@ -20,7 +20,7 @@ class Upgrade extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return sessionModel.getPlans((context, cachedPlans, child) {
-      final plans = formatPlans(plans);
+      final plans = formatPlans(cachedPlans);
       if (plans.isEmpty) {
         return FullScreenDialog(
           widget: Center(
@@ -170,7 +170,7 @@ class Upgrade extends StatelessWidget {
                       color: grey2,
                       child: GestureDetector(
                         onTap: () async => await context.pushRoute(
-                          ResellerCodeCheckout(isPro: isPro),
+                          ResellerCheckout(isPro: isPro),
                         ),
                         child: CText(
                           'Have a Lantern Pro activation code? Click here.',
