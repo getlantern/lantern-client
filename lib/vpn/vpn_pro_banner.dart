@@ -1,5 +1,4 @@
 import 'package:lantern/vpn/vpn.dart';
-import 'package:lantern/plans/upgrade.dart';
 
 class ProBanner extends StatefulWidget {
   @override
