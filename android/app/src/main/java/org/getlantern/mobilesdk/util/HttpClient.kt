@@ -37,7 +37,7 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
     )
 
     fun request(method: String, url: HttpUrl, cb: HttpCallback) {
-        request(method, url, null, null, cb)
+        request(method, url, null, null, true, cb)
     }
 
     fun request(
@@ -45,6 +45,7 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
         url: HttpUrl,
         headers: Map<String, String>?,
         _body: RequestBody?,
+        jsonResponse: Boolean,
         cb: HttpCallback
     ) {
         var body = _body
@@ -94,8 +95,12 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
                     Logger.error(TAG, String.format("Invalid response body for %s request", url))
                     return
                 }
+                if (!jsonResponse) {
+                    cb.onSuccess(response, JsonObject())
+                    return
+                }
                 val responseData = response.body!!.string()
-                val result: JsonObject
+                var result: JsonObject = JsonObject()
                 result = try {
                     JsonParser().parse(responseData).asJsonObject
                 } catch (t: Throwable) {

@@ -22,6 +22,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.apps.AppsDataProvider
+import io.lantern.apps.AppsWhitelist
 import io.lantern.model.MessagingModel
 import io.lantern.model.ReplicaModel
 import io.lantern.model.SessionModel
@@ -58,6 +59,7 @@ import java.util.Locale
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, CoroutineScope by MainScope() {
 
     private lateinit var appsDataProvider: AppsDataProvider
+    private lateinit var appsWhitelist: AppsWhitelist
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
@@ -73,7 +75,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
-        appsDataProvider = AppsDataProvider(resources, this.getPackageManager(), this.getPackageName())
+        appsDataProvider = AppsDataProvider(getPackageManager(), getPackageName())
+        appsWhitelist = AppsWhitelist(resources, lanternClient)
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
@@ -180,7 +183,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
 
         val apps = appsDataProvider.listOfApps()
-        appsDataProvider.setWhitelistedApps(apps)
+        appsWhitelist.setApps(apps, false)
         LanternApp.getSession().setAppsList(apps)
 
         if (LanternApp.getSession().isPlayVersion()) {
