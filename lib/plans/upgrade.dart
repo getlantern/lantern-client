@@ -26,9 +26,7 @@ class _UpgradeState extends State<Upgrade> {
   @override
   Widget build(BuildContext context) {
     return sessionModel.getPlans((context, cachedPlans, child) {
-      debugPrint("cached plans: ${cachedPlans}");
       final plans = formatPlans(cachedPlans);
-      debugPrint("Plans: ${plans}");
       if (plans.isEmpty) {
         return FullScreenDialog(
           widget: Center(
