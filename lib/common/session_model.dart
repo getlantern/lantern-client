@@ -119,16 +119,6 @@ class SessionModel extends Model {
         .then((value) => AppsData.fromBuffer(value as Uint8List));
   }
 
-  ValueNotifier<AppsData?> appsDataNotifier() {
-    return singleValueNotifier(
-      'appsData',
-      null,
-      deserialize: (Uint8List serialized) {
-        return AppsData.fromBuffer(serialized);
-      },
-    );
-  }
-
   Future<void> addExcludedApp(String packageName) {
     return methodChannel.invokeMethod('addExcludedApp', <String, dynamic>{
       'packageName': packageName,
