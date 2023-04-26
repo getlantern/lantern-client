@@ -134,6 +134,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
+
+        val apps = appsDataProvider.listOfApps()
+        appsWhitelist.setApps(apps, false)
+        LanternApp.getSession().setAppsList(apps)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -181,10 +185,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
 
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
-
-        val apps = appsDataProvider.listOfApps()
-        appsWhitelist.setApps(apps, false)
-        LanternApp.getSession().setAppsList(apps)
 
         if (LanternApp.getSession().isPlayVersion()) {
             if (!LanternApp.getSession().hasAcceptedTerms()) {
