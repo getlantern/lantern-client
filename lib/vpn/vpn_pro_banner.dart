@@ -9,8 +9,8 @@ class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
     return CInkWell(
-      onTap: () async {
-        await context.pushRoute(
+      onTap: () {
+        context.pushRoute(
           Upgrade(),
         );
       },
