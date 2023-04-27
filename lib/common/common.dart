@@ -30,6 +30,8 @@ export 'package:provider/provider.dart';
 export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 export 'package:stop_watch_timer/stop_watch_timer.dart';
 export 'package:wakelock/wakelock.dart';
+export 'package:flutter_dotenv/flutter_dotenv.dart';
+export 'package:datadog_flutter_plugin/datadog_flutter_plugin.dart';
 
 export 'add_nonbreaking_spaces.dart';
 export 'disable_back_button.dart';

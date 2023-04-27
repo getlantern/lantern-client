@@ -2,6 +2,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:lantern/analytics_navigator_observer.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:datadog_flutter_plugin/datadog_flutter_plugin.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 final globalRouter = AppRouter(navigatorKey);
@@ -91,6 +92,7 @@ class LanternApp extends StatelessWidget {
                 navigatorObservers: () => [
                   BotToastNavigatorObserver(),
                   AnalyticsNavigatorObserver(),
+                  DatadogNavigationObserver(datadogSdk: DatadogSdk.instance),
                 ],
               ),
               builder: BotToastInit(),
