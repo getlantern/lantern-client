@@ -171,7 +171,6 @@ android {
             minifyEnabled false
             shrinkResources false
             debuggable true
-            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
             buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
@@ -189,7 +188,6 @@ android {
             minifyEnabled false
             shrinkResources false
             debuggable false
-            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
             buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
@@ -207,7 +205,6 @@ android {
             minifyEnabled true
             shrinkResources true
             debuggable false
-            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
             buildConfigField "boolean", "DEVELOPMENT_MODE", getBoolean("developmentMode")
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
@@ -320,14 +317,6 @@ def proServerUrl() {
     return String.format("\"%s\"", value)
 }
 
-def matomoAuthToken() {
-    def value = project.getProperties().get("MATOMO_AUTH_TOKEN")
-    if (value == null || !value?.trim()) {
-        return "\"\""
-    }
-    return String.format("\"%s\"", value)
-}
-
 repositories {
     flatDir {
         dirs 'libs'
@@ -428,8 +417,6 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    implementation 'com.github.matomo-org:matomo-sdk-android:4.1.4'
-
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
@@ -455,9 +442,6 @@ dependencies {
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:messaging-android:65aa7a4ac2'
     implementation 'com.github.getlantern:db-android:70d727d18a'
-
-    // Used for enabling Matomo debug logging
-    implementation 'com.jakewharton.timber:timber:4.7.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
