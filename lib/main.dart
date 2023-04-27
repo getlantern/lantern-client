@@ -28,7 +28,24 @@ Future<void> main() async {
       ],
     );
   }
+
+  var clientToken = dotenv.get('DD_CLIENT_TOKEN', fallback: '');
+  var applicationId = dotenv.maybeGet('DD_APPLICATION_ID');
+
+  DatadogSdk.instance.sdkVerbosity = Verbosity.verbose;
+  final configuration = DdSdkConfiguration(
+    clientToken: clientToken,
+    env: dotenv.get('DD_ENV', fallback: ''),
+    site: DatadogSite.eu1,
+    trackingConsent: TrackingConsent.granted,
+    nativeCrashReportEnabled: true,
+    loggingConfiguration: LoggingConfiguration(),
+    rumConfiguration: applicationId != null ? RumConfiguration(applicationId: applicationId) : null,
+  );
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  setupCatcherAndRun(LanternApp());
+  await DatadogSdk.runApp(configuration, () async {
+    setupCatcherAndRun(LanternApp());
+    //runApp(LanternApp());
+  });
 }
