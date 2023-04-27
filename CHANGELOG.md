@@ -1,4 +1,20 @@
 
+<a name="7.4.0"></a>
+## [7.4.0](https://github.com/getlantern/android-lantern/compare/7.3.9...7.4.0)
+
+> 2023-04-27
+
+### Pull Requests
+
+* Merge pull request [#821](https://github.com/getlantern/android-lantern/issues/821) from getlantern/atavism/remove-switch-to-alipay
+* Merge pull request [#815](https://github.com/getlantern/android-lantern/issues/815) from getlantern/atavism/android-ci
+* Merge pull request [#813](https://github.com/getlantern/android-lantern/issues/813) from getlantern/atavism/upgrade-android-gradle-plugin
+* Merge pull request [#812](https://github.com/getlantern/android-lantern/issues/812) from getlantern/atavism/autoupdate-changes
+* Merge pull request [#816](https://github.com/getlantern/android-lantern/issues/816) from getlantern/atavism/replica-report-metrics-to-ga
+* Merge pull request [#817](https://github.com/getlantern/android-lantern/issues/817) from getlantern/harry/starbridge
+* Merge pull request [#814](https://github.com/getlantern/android-lantern/issues/814) from getlantern/atavism/otf-ads
+
+
 <a name="7.3.9"></a>
 ## [7.3.9](https://github.com/getlantern/android-lantern/compare/7.3.8...7.3.9)
 
