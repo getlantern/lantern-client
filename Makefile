@@ -66,7 +66,8 @@ BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= $$VERSION
-LDFLAGS := -s -w -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION) -X github.com/getlantern/flashlight/common.StagingMode=$(STAGING)
+# Note - we don't bother stripping symbols or DWARF table as Android's packaging seems to take care of that for us
+LDFLAGS := -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION) -X github.com/getlantern/flashlight/common.StagingMode=$(STAGING)
 
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
