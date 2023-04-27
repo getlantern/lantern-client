@@ -90,6 +90,7 @@ class AppData extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'packageName', protoName: 'packageName')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'icon')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isExcluded', protoName: 'isExcluded')
     ..hasRequiredFields = false
   ;
 
@@ -98,6 +99,7 @@ class AppData extends $pb.GeneratedMessage {
     $core.String? packageName,
     $core.String? icon,
     $core.String? name,
+    $core.bool? isExcluded,
   }) {
     final _result = create();
     if (packageName != null) {
@@ -108,6 +110,9 @@ class AppData extends $pb.GeneratedMessage {
     }
     if (name != null) {
       _result.name = name;
+    }
+    if (isExcluded != null) {
+      _result.isExcluded = isExcluded;
     }
     return _result;
   }
@@ -158,67 +163,30 @@ class AppData extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(2);
   @$pb.TagNumber(3)
   void clearName() => clearField(3);
-}
 
-class ExcludedApps extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ExcludedApps', createEmptyInstance: create)
-    ..m<$core.String, $core.bool>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'excludedApps', protoName: 'excludedApps', entryClassName: 'ExcludedApps.ExcludedAppsEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OB)
-    ..hasRequiredFields = false
-  ;
-
-  ExcludedApps._() : super();
-  factory ExcludedApps({
-    $core.Map<$core.String, $core.bool>? excludedApps,
-  }) {
-    final _result = create();
-    if (excludedApps != null) {
-      _result.excludedApps.addAll(excludedApps);
-    }
-    return _result;
-  }
-  factory ExcludedApps.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ExcludedApps.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ExcludedApps clone() => ExcludedApps()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ExcludedApps copyWith(void Function(ExcludedApps) updates) => super.copyWith((message) => updates(message as ExcludedApps)) as ExcludedApps; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static ExcludedApps create() => ExcludedApps._();
-  ExcludedApps createEmptyInstance() => create();
-  static $pb.PbList<ExcludedApps> createRepeated() => $pb.PbList<ExcludedApps>();
-  @$core.pragma('dart2js:noInline')
-  static ExcludedApps getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ExcludedApps>(create);
-  static ExcludedApps? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.Map<$core.String, $core.bool> get excludedApps => $_getMap(0);
+  @$pb.TagNumber(4)
+  $core.bool get isExcluded => $_getBF(3);
+  @$pb.TagNumber(4)
+  set isExcluded($core.bool v) { $_setBool(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasIsExcluded() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearIsExcluded() => clearField(4);
 }
 
 class AppsData extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AppsData', createEmptyInstance: create)
     ..pc<AppData>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'appsList', $pb.PbFieldType.PM, protoName: 'appsList', subBuilder: AppData.create)
-    ..aOM<ExcludedApps>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'excludedApps', protoName: 'excludedApps', subBuilder: ExcludedApps.create)
     ..hasRequiredFields = false
   ;
 
   AppsData._() : super();
   factory AppsData({
     $core.Iterable<AppData>? appsList,
-    ExcludedApps? excludedApps,
   }) {
     final _result = create();
     if (appsList != null) {
       _result.appsList.addAll(appsList);
-    }
-    if (excludedApps != null) {
-      _result.excludedApps = excludedApps;
     }
     return _result;
   }
@@ -245,17 +213,6 @@ class AppsData extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<AppData> get appsList => $_getList(0);
-
-  @$pb.TagNumber(2)
-  ExcludedApps get excludedApps => $_getN(1);
-  @$pb.TagNumber(2)
-  set excludedApps(ExcludedApps v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasExcludedApps() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearExcludedApps() => clearField(2);
-  @$pb.TagNumber(2)
-  ExcludedApps ensureExcludedApps() => $_ensure(1);
 }
 
 class Bandwidth extends $pb.GeneratedMessage {

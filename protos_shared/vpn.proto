@@ -11,15 +11,11 @@ message AppData {
   string packageName = 1;
   string icon = 2;
   string name = 3;
-}
-
-message ExcludedApps {
-  map<string, bool> excludedApps = 1;
+  bool isExcluded = 4;
 }
 
 message AppsData {
   repeated AppData appsList = 1;
-  optional ExcludedApps excludedApps = 2;
 }
 
 message Bandwidth {

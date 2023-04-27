@@ -113,10 +113,17 @@ class SessionModel extends Model {
     );
   }
 
-  Future<AppsData> appsData() {
-    return methodChannel
-        .invokeMethod('get', 'appsData')
-        .then((value) => AppsData.fromBuffer(value as Uint8List));
+  Widget appsData({
+    required ValueWidgetBuilder<Iterable<PathAndValue<AppData>>> builder,
+  }) {
+    return subscribedListBuilder<AppData>(
+      '/appsData/',
+      details: true,
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return AppData.fromBuffer(serialized);
+      },
+    );
   }
 
   Future<void> addExcludedApp(String packageName) {

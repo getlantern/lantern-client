@@ -27,46 +27,22 @@ const AppData$json = const {
     const {'1': 'packageName', '3': 1, '4': 1, '5': 9, '10': 'packageName'},
     const {'1': 'icon', '3': 2, '4': 1, '5': 9, '10': 'icon'},
     const {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'isExcluded', '3': 4, '4': 1, '5': 8, '10': 'isExcluded'},
   ],
 };
 
 /// Descriptor for `AppData`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List appDataDescriptor = $convert.base64Decode('CgdBcHBEYXRhEiAKC3BhY2thZ2VOYW1lGAEgASgJUgtwYWNrYWdlTmFtZRISCgRpY29uGAIgASgJUgRpY29uEhIKBG5hbWUYAyABKAlSBG5hbWU=');
-@$core.Deprecated('Use excludedAppsDescriptor instead')
-const ExcludedApps$json = const {
-  '1': 'ExcludedApps',
-  '2': const [
-    const {'1': 'excludedApps', '3': 1, '4': 3, '5': 11, '6': '.ExcludedApps.ExcludedAppsEntry', '10': 'excludedApps'},
-  ],
-  '3': const [ExcludedApps_ExcludedAppsEntry$json],
-};
-
-@$core.Deprecated('Use excludedAppsDescriptor instead')
-const ExcludedApps_ExcludedAppsEntry$json = const {
-  '1': 'ExcludedAppsEntry',
-  '2': const [
-    const {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
-    const {'1': 'value', '3': 2, '4': 1, '5': 8, '10': 'value'},
-  ],
-  '7': const {'7': true},
-};
-
-/// Descriptor for `ExcludedApps`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List excludedAppsDescriptor = $convert.base64Decode('CgxFeGNsdWRlZEFwcHMSQwoMZXhjbHVkZWRBcHBzGAEgAygLMh8uRXhjbHVkZWRBcHBzLkV4Y2x1ZGVkQXBwc0VudHJ5UgxleGNsdWRlZEFwcHMaPwoRRXhjbHVkZWRBcHBzRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKAhSBXZhbHVlOgI4AQ==');
+final $typed_data.Uint8List appDataDescriptor = $convert.base64Decode('CgdBcHBEYXRhEiAKC3BhY2thZ2VOYW1lGAEgASgJUgtwYWNrYWdlTmFtZRISCgRpY29uGAIgASgJUgRpY29uEhIKBG5hbWUYAyABKAlSBG5hbWUSHgoKaXNFeGNsdWRlZBgEIAEoCFIKaXNFeGNsdWRlZA==');
 @$core.Deprecated('Use appsDataDescriptor instead')
 const AppsData$json = const {
   '1': 'AppsData',
   '2': const [
     const {'1': 'appsList', '3': 1, '4': 3, '5': 11, '6': '.AppData', '10': 'appsList'},
-    const {'1': 'excludedApps', '3': 2, '4': 1, '5': 11, '6': '.ExcludedApps', '9': 0, '10': 'excludedApps', '17': true},
-  ],
-  '8': const [
-    const {'1': '_excludedApps'},
   ],
 };
 
 /// Descriptor for `AppsData`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List appsDataDescriptor = $convert.base64Decode('CghBcHBzRGF0YRIkCghhcHBzTGlzdBgBIAMoCzIILkFwcERhdGFSCGFwcHNMaXN0EjYKDGV4Y2x1ZGVkQXBwcxgCIAEoCzINLkV4Y2x1ZGVkQXBwc0gAUgxleGNsdWRlZEFwcHOIAQFCDwoNX2V4Y2x1ZGVkQXBwcw==');
+final $typed_data.Uint8List appsDataDescriptor = $convert.base64Decode('CghBcHBzRGF0YRIkCghhcHBzTGlzdBgBIAMoCzIILkFwcERhdGFSCGFwcHNMaXN0');
 @$core.Deprecated('Use bandwidthDescriptor instead')
 const Bandwidth$json = const {
   '1': 'Bandwidth',

@@ -4,6 +4,7 @@ import 'package:lantern/i18n/localization_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'dart:developer' as dev;
 
 class SplitTunneling extends StatefulWidget {
   SplitTunneling({Key? key});
@@ -13,31 +14,20 @@ class SplitTunneling extends StatefulWidget {
 }
 
 class _SplitTunnelingState extends State<SplitTunneling> {
-  // A list of all application packages installed for the current user
-  List<AppData> appsList = <AppData>[];
-  // A map of apps that should be excluded from the VPN connection
-  final Map<String, bool> excludedApps = new Map();
-  // Whether or not split tunneling is enabled for the current user
   bool vpnConnected = false;
-  bool splitTunnelingEnabled = false;
   bool snackbarShown = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      initSplitTunneling();
+      init();
     });
   }
 
-  initSplitTunneling() async {
-    AppsData _appsData = await sessionModel.appsData();
-    for (var packageName in _appsData.excludedApps.excludedApps.keys) {
-      excludedApps[packageName] = true;
-    }
+  init() async {
     bool _vpnConnected = await vpnModel.isVpnConnected();
     setState(() {
-      appsList = _appsData.appsList.toSet().toList();
       vpnConnected = _vpnConnected;
     });
   }
@@ -46,64 +36,61 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   Widget build(BuildContext context) {
     return BaseScreen(
         title: 'split_tunneling'.i18n,
-        body: sessionModel.splitTunneling(
-            (BuildContext context, bool value, Widget? child) =>
-                SingleChildScrollView(
-                    child: Column(children: <Widget>[
-                  ListItemFactory.settingsItem(
-                    icon: ImagePaths.split_tunneling,
-                    content: 'split_tunneling'.i18n,
-                    trailingArray: [
-                      SizedBox(
-                          width: 44.0,
-                          height: 24.0,
-                          child: CupertinoSwitch(
-                            value: splitTunnelingEnabled || value,
-                            activeColor: CupertinoColors.activeGreen,
-                            onChanged: (bool? value) {
-                              bool newValue = value ?? false;
-                              setState(() {
-                                splitTunnelingEnabled = newValue;
-                                sessionModel.setSplitTunneling(newValue);
-                              });
-                            },
-                          )),
-                    ],
-                  ),
-                  Padding(
-                      padding: const EdgeInsetsDirectional.only(top: 16),
-                      child: CText(
-                          value
-                              ? 'apps_selected'.i18n
-                              : 'split_tunneling_info'.i18n,
-                          style: tsBody3)),
-                  // if split tunneling is enabled, include the installed apps
-                  // in the column
-                  if (value) ...buildAppsLists(),
-                ]))));
+        body: sessionModel.splitTunneling((BuildContext context, bool value,
+                Widget? child) =>
+            sessionModel.appsData(
+                builder: (
+              context,
+              Iterable<PathAndValue<AppData>> _appsData,
+              Widget? child,
+            ) =>
+                    SingleChildScrollView(
+                        child: Column(children: <Widget>[
+                      ListItemFactory.settingsItem(
+                        icon: ImagePaths.split_tunneling,
+                        content: 'split_tunneling'.i18n,
+                        trailingArray: [
+                          SizedBox(
+                              width: 44.0,
+                              height: 24.0,
+                              child: CupertinoSwitch(
+                                value: value,
+                                activeColor: CupertinoColors.activeGreen,
+                                onChanged: (bool? value) {
+                                  bool newValue = value ?? false;
+                                  setState(() {
+                                    sessionModel.setSplitTunneling(newValue);
+                                  });
+                                },
+                              )),
+                        ],
+                      ),
+                      Padding(
+                          padding: const EdgeInsetsDirectional.only(top: 16),
+                          child: CText(
+                              value
+                                  ? 'apps_selected'.i18n
+                                  : 'split_tunneling_info'.i18n,
+                              style: tsBody3)),
+                      // if split tunneling is enabled, include the installed apps
+                      // in the column
+                      if (value) ...buildAppsLists(_appsData),
+                    ])))));
   }
 
   // buildAppsLists builds lists for excluded and allowed installed apps and
   // returns both along with their associated headers
-  List<Widget> buildAppsLists() {
+  List<Widget> buildAppsLists(Iterable<PathAndValue<AppData>> appsList) {
     if (appsList.length == 0) return [];
     return [
       ListSectionHeader('excluded_apps'.i18n.toUpperCase()),
-      buildAppList(appsList
-          .where((appData) => isAppExcluded(appData.packageName))
-          .toList()),
+      buildAppList(appsList.where((appData) => appData.value.isExcluded).toList()),
       ListSectionHeader('allowed_apps'.i18n.toUpperCase()),
-      buildAppList(appsList
-          .where((appData) => !isAppExcluded(appData.packageName))
-          .toList()),
+      buildAppList(appsList.where((appData) => !appData.value.isExcluded).toList()),
     ];
   }
 
-  bool isAppExcluded(String packageName) {
-    return excludedApps[packageName] ?? false;
-  }
-
-  Widget buildAppList(List<AppData> apps) {
+  Widget buildAppList(List<PathAndValue<AppData>> apps) {
     if (apps.length == 0) {
       return SizedBox.shrink();
     }
@@ -113,17 +100,16 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         shrinkWrap: true,
         itemCount: apps.length,
         itemBuilder: (BuildContext context, int index) {
-          var appData = apps[index];
+          var appData = apps[index].value;
           Uint8List bytes = base64.decode(appData.icon);
-          bool isExcluded = isAppExcluded(appData.packageName);
-          Widget appItem = buildAppItem(appData, isExcluded);
+          Widget appItem = buildAppItem(appData);
           return appItem;
         });
   }
 
   // showSnackBar shows a snackbar with a message indicating that settings will be applied
   // next time, if the user is connected to the VPN, and it hasn't already been shown
-  void showSnackBar(BuildContext context) {
+  void showSnackBar(BuildContext context) async {
     if (!vpnConnected || snackbarShown) {
       return;
     }
@@ -154,7 +140,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     return Image(image: FileImage(imageFile), fit: BoxFit.cover);
   }
 
-  Widget buildAppItem(AppData appData, bool isAppExcluded) {
+  Widget buildAppItem(AppData appData) {
     Uint8List iconBytes = base64.decode(appData.icon);
     return Container(
         height: 72,
@@ -185,14 +171,12 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                     shape: CircleBorder(),
                     activeColor: Colors.black,
                     side: BorderSide(color: Colors.black),
-                    value: isAppExcluded,
-                    onChanged: (bool? value) {
+                    value: appData.isExcluded,
+                    onChanged: (bool? value) async {
                       setState(() {
                         if (value != null && value!) {
-                          excludedApps[appData.packageName] = true;
                           sessionModel.addExcludedApp(appData.packageName);
                         } else {
-                          excludedApps.remove(appData.packageName);
                           sessionModel.removeExcludedApp(appData.packageName);
                         }
 
