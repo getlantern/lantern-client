@@ -1,5 +1,4 @@
 import 'package:flutter_driver/driver_extension.dart';
-import 'package:lantern/catcher_setup.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/flutter_driver_extensions/add_dummy_contacts_command_extension.dart';
 import 'package:lantern/flutter_driver_extensions/navigate_command_extension.dart';
@@ -45,7 +44,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await DatadogSdk.runApp(configuration, () async {
-    setupCatcherAndRun(LanternApp());
-    //runApp(LanternApp());
+    runApp(LanternApp());
   });
 }
