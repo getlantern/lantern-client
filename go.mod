@@ -19,10 +19,6 @@ replace github.com/keighl/mandrill => github.com/getlantern/mandrill v0.0.0-2022
 // For https://github.com/crawshaw/sqlite/pull/112 and https://github.com/crawshaw/sqlite/pull/103.
 replace crawshaw.io/sqlite => github.com/getlantern/sqlite v0.0.0-20220301112206-cb2f8bc7cb56
 
-// We use a fork of gomobile that allows reusing the cache directory for faster builds, based
-// on this unmerged PR against gomobile - https://github.com/golang/mobile/pull/58.
-replace golang.org/x/mobile => github.com/oxtoacart/mobile v0.0.0-20230427024107-8aa9814fcf23
-
 replace github.com/Jigsaw-Code/outline-ss-server => github.com/getlantern/lantern-shadowsocks v1.3.6-0.20230114153732-0193919d4860
 
 replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-20220824143118-037ff0cd9c33
