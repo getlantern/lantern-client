@@ -98,10 +98,6 @@ else ifeq ($(ANDROID_ARCH), amd64)
   ANDROID_ARCH_JAVA := x86_64
   ANDROID_ARCH_GOMOBILE := android/amd64
   APK_QUALIFIER := -x86_64
-else ifeq ($(ANDROID_ARCH), 386)
-  ANDROID_ARCH_JAVA := x86 x86_64
-  ANDROID_ARCH_GOMOBILE := android/386,android/amd64
-  APK_QUALIFIER :=
 else ifeq ($(ANDROID_ARCH), arm32)
   ANDROID_ARCH_JAVA := armeabi-v7a
   ANDROID_ARCH_GOMOBILE := android/arm
@@ -115,8 +111,11 @@ else ifeq ($(ANDROID_ARCH), arm)
   ANDROID_ARCH_GOMOBILE := android/arm,android/arm64
   APK_QUALIFIER :=
 else ifeq ($(ANDROID_ARCH), all)
-  ANDROID_ARCH_JAVA := armeabi-v7a arm64-v8a x86 x86_64
-  ANDROID_ARCH_GOMOBILE := android/arm,android/arm64,android/386,android/amd64
+# Note - we exclude x86 because flutter does not support x86. By excluding x86
+# native libs, 32 bit Intel devices will just emulate ARM.
+# DO NOT ADD x86 TO THIS LIST!!
+  ANDROID_ARCH_JAVA := armeabi-v7a arm64-v8a x86_64
+  ANDROID_ARCH_GOMOBILE := android/arm,android/arm64,android/amd64
   APK_QUALIFIER :=
 else
   $(error unsupported ANDROID_ARCH "$(ANDROID_ARCH)")
@@ -472,4 +471,6 @@ clean:
 	rm -f $(MOBILE_LIBS)/liblantern-* && \
 	rm -Rf android/app/build && \
 	rm -Rf *.aab && \
-	rm -Rf *.apk
+	rm -Rf *.apk && \
+	rm -f `which gomobile` && \
+	rm -f `which gobind`
