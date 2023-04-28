@@ -224,6 +224,7 @@ android {
         play {
             initWith release
             buildConfigField "boolean", "PLAY_VERSION", "true"
+            ndk.abiFilters = abiFilters()
         }
 
         sideload {
@@ -250,7 +251,7 @@ android {
 
     splits {
         abi {
-            enable true
+            enable !bool("playVersion")
             reset()
             include androidArchJava()
         }
@@ -283,6 +284,26 @@ def getBoolean(name) {
         return "false"
     }
     return value
+}
+
+def bool(name) {
+    def value = project.getProperties().get(name)
+    return "true".equalsIgnoreCase(value)
+}
+
+def abiFilters() {
+    if (bool("playVersion")) {
+        // Flutter does not support 32 bit x86. Some of our other native libraries do
+        // support x86, which by default means that we'll include an x86 folder of native
+        // libs. When this is present, 32 bit x86 devices will attempt to run the app as an
+        // x86 app and will crash because there's no x86 flutter.so. As a workaround for
+        // this, we omit the x86 architecture entirely so that such clients will run Lantern
+        // in ARM emulated mode.
+        //
+        // SO, DO NOT INCLUDE x86 HERE!!!
+        return ['arm64-v8a', 'armeabi-v7a', 'x86_64']
+    }
+    return []
 }
 
 def getInt(name) {
