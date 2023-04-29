@@ -390,8 +390,8 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
-    // The below aar is built from https://github.com/getlantern/FinestWebView-Android
-    implementation(name:'finestwebview', ext: 'aar')
+    implementation 'com.thefinestartist:finestwebview:1.2.7'
+    implementation "androidx.webkit:webkit:1.6.1"
     implementation 'com.kyleduo.switchbutton:library:2.1.0'
 
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
@@ -422,9 +422,6 @@ dependencies {
     // https://mvnrepository.com/artifact/javax.mail/mail
     implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
 
-    // FinestWebView dependencies
-    implementation 'com.nineoldandroids:library:2.4.0'
-
     implementation (group: 'com.google.guava', name: 'guava', version: '23.0-android') {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
@@ -446,8 +443,8 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.annotation:annotation:1.1.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'

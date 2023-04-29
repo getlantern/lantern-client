@@ -15,6 +15,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.webkit.ProxyConfig
+import androidx.webkit.ProxyController
 import com.thefinestartist.finestwebview.FinestWebView
 import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
@@ -404,14 +406,15 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         // For some reason, telegram.me links create infinite redirects. To solve this, we disable
         // JavaScript when opening such links.
         val javaScriptEnabled = !survey.url!!.contains("t.me") && !survey.url!!.contains("telegram.me")
-        FinestWebView.Builder(this@MainActivity)
-            .webViewLoadWithProxy(LanternApp.getSession().hTTPAddr)
+        val builder = FinestWebView.Builder(this@MainActivity)
             .webViewSupportMultipleWindows(true)
             .webViewJavaScriptEnabled(javaScriptEnabled)
             .webViewJavaScriptCanOpenWindowsAutomatically(javaScriptEnabled)
             .swipeRefreshColorRes(R.color.black)
             .webViewAllowFileAccessFromFileURLs(true)
-            .show(survey.url!!)
+        runOnUiThread {
+            builder.show(survey.url!!)
+        }
     }
 
     private fun noUpdateAvailable(userInitiated: Boolean) {
