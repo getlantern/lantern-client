@@ -69,7 +69,8 @@ open class AppsWhitelist(private val resources:Resources, @JvmField val httpClie
         val appsMap = listOf(*apps).associateBy({it}, {true})
         for (appData in appsList) {
             if (appsMap[appData.packageName] != null) {
-                LanternApp.getSession().addExcludedApp(appData.packageName)
+                appData.isExcluded = true
+                LanternApp.getSession().updateAppData(appData)
             }
         }      
     }

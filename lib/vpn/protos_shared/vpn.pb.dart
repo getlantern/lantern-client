@@ -176,17 +176,17 @@ class AppData extends $pb.GeneratedMessage {
 
 class AppsData extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AppsData', createEmptyInstance: create)
-    ..pc<AppData>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'appsList', $pb.PbFieldType.PM, protoName: 'appsList', subBuilder: AppData.create)
+    ..pc<AppData>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'apps', $pb.PbFieldType.PM, subBuilder: AppData.create)
     ..hasRequiredFields = false
   ;
 
   AppsData._() : super();
   factory AppsData({
-    $core.Iterable<AppData>? appsList,
+    $core.Iterable<AppData>? apps,
   }) {
     final _result = create();
-    if (appsList != null) {
-      _result.appsList.addAll(appsList);
+    if (apps != null) {
+      _result.apps.addAll(apps);
     }
     return _result;
   }
@@ -212,7 +212,7 @@ class AppsData extends $pb.GeneratedMessage {
   static AppsData? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<AppData> get appsList => $_getList(0);
+  $core.List<AppData> get apps => $_getList(0);
 }
 
 class Bandwidth extends $pb.GeneratedMessage {

@@ -15,7 +15,7 @@ message AppData {
 }
 
 message AppsData {
-  repeated AppData appsList = 1;
+  repeated AppData apps = 1;
 }
 
 message Bandwidth {

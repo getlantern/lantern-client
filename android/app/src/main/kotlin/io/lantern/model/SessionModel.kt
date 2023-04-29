@@ -93,11 +93,8 @@ class SessionModel(
                 val on = call.argument("on") ?: false
                 saveSplitTunneling(on)
             }
-            "addExcludedApp" -> {
-              LanternApp.getSession().addExcludedApp(call.argument("packageName")!!)
-            }
-            "removeExcludedApp" -> {
-              LanternApp.getSession().removeExcludedApp(call.argument("packageName")!!)
+            "updateAppData" -> {
+              LanternApp.getSession().updateAppData(call.argument("appData")!!)
             }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))

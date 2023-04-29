@@ -56,7 +56,8 @@ class AppsDataProvider(
                 AppData(
                     info.packageName,
                     appIconDrawableToBase64(info.packageName),
-                    info.loadLabel(packageManager).toString()
+                    info.loadLabel(packageManager).toString(),
+                    false
                 )
             }
             .toList().sortedBy { it.name }

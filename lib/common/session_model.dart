@@ -126,15 +126,9 @@ class SessionModel extends Model {
     );
   }
 
-  Future<void> addExcludedApp(String packageName) {
-    return methodChannel.invokeMethod('addExcludedApp', <String, dynamic>{
-      'packageName': packageName,
-    });
-  }
-
-  Future<void> removeExcludedApp(String packageName) {
-    return methodChannel.invokeMethod('removeExcludedApp', <String, dynamic>{
-      'packageName': packageName,
+  Future<void> updateAppData(AppData appData) {
+    return methodChannel.invokeMethod('updateAppData', <String, dynamic>{
+      'appData': AppData,
     });
   }
 

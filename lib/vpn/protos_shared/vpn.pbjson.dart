@@ -37,12 +37,12 @@ final $typed_data.Uint8List appDataDescriptor = $convert.base64Decode('CgdBcHBEY
 const AppsData$json = const {
   '1': 'AppsData',
   '2': const [
-    const {'1': 'appsList', '3': 1, '4': 3, '5': 11, '6': '.AppData', '10': 'appsList'},
+    const {'1': 'apps', '3': 1, '4': 3, '5': 11, '6': '.AppData', '10': 'apps'},
   ],
 };
 
 /// Descriptor for `AppsData`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List appsDataDescriptor = $convert.base64Decode('CghBcHBzRGF0YRIkCghhcHBzTGlzdBgBIAMoCzIILkFwcERhdGFSCGFwcHNMaXN0');
+final $typed_data.Uint8List appsDataDescriptor = $convert.base64Decode('CghBcHBzRGF0YRIcCgRhcHBzGAEgAygLMgguQXBwRGF0YVIEYXBwcw==');
 @$core.Deprecated('Use bandwidthDescriptor instead')
 const Bandwidth$json = const {
   '1': 'Bandwidth',

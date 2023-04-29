@@ -39,7 +39,11 @@ public class GoTun2SocksProvider implements Provider {
 
     // Add applications that are denied access to the VPN connection. By default, all 
     // applications are allowed access, except those denied access via the Excluded Apps screen
-    for (String packageName : LanternApp.getSession().excludedApps().keySet()) {
+    for (Vpn.AppData appData : LanternApp.getSession().getAppsData().getAppsList()) {
+      if (!appData.getIsExcluded()) {
+        continue;
+      }
+      String packageName = appData.getPackageName();
       Logger.debug(TAG, "Excluding app from VPN connection: " + packageName);
       try {
         builder.addDisallowedApplication(packageName);

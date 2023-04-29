@@ -174,12 +174,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                     value: appData.isExcluded,
                     onChanged: (bool? value) async {
                       setState(() {
-                        if (value != null && value!) {
-                          sessionModel.addExcludedApp(appData.packageName);
-                        } else {
-                          sessionModel.removeExcludedApp(appData.packageName);
-                        }
-
+                        sessionModel.updateAppData(appData);
                         showSnackBar(context);
                       });
                     },

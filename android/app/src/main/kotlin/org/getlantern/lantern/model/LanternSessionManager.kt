@@ -285,7 +285,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putBoolean(DEVICE_LINKED, true).apply()
     }
 
-    private fun getAppsData():Vpn.AppsData {
+    fun getAppsData():Vpn.AppsData {
       var appsData:Vpn.AppsData = Vpn.AppsData.newBuilder().build()
       db.mutate { tx ->
         if (tx.get(APPS_DATA) as Vpn.AppsData? != null ?: null) {
@@ -295,32 +295,21 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
       return appsData
     }
 
-    fun excludedApps():Map<String, Boolean> {
-      val appsData:Vpn.AppsData = getAppsData()
-      return appsData.excludedApps.excludedAppsMap
-    }
-
     // Add application to set of excluded apps that are denied access to the VPN connection
-    fun addExcludedApp(packageName: String) {
-      db.mutate { tx ->
-        val appsData:Vpn.AppsData = tx.get(APPS_DATA)!!
-        tx.put(APPS_DATA, Vpn.AppsData.newBuilder(appsData).mergeExcludedApps(
-                Vpn.ExcludedApps.newBuilder().putExcludedApps(packageName, true).build()).build())
-      }
-    }
-
-    // Remove application from set of excluded apps that are denied access to the VPN connection
-    fun removeExcludedApp(packageName: String) {
-      db.mutate { tx ->
-        val appsData:Vpn.AppsData = tx.get(APPS_DATA)!!
-        tx.put(APPS_DATA, Vpn.AppsData.newBuilder(appsData).setExcludedApps(
-                Vpn.ExcludedApps.newBuilder(appsData.excludedApps).removeExcludedApps(packageName)).build())
-      }
+    fun updateAppData(appData: AppData) {
+        var appsData:Vpn.AppsData = getAppsData()
+        var appsList = appsData.appsList.toMutableList()
+        var app = Vpn.AppData.newBuilder(appsData.appsList.find { it.packageName == appData.packageName })
+        app?.isExcluded = appData.isExcluded
+        appsList.add(app.build())
+        db.mutate { tx ->
+            tx.put(APPS_DATA, Vpn.AppsData.newBuilder().addAllApps(appsList.distinct().toList()).build())
+        }
     }
 
     fun setAppsList(appsList: List<AppData>) {
       val appsData:Vpn.AppsData = getAppsData()
-      val apps = Vpn.AppsData.newBuilder(appsData).addAllAppsList(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIcon(it.icon).setName(it.name).build() }).build()
+      val apps = Vpn.AppsData.newBuilder(appsData).addAllApps(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIcon(it.icon).setName(it.name).build() }).build()
       db.mutate { tx ->
         tx.put(APPS_DATA, apps)
       }
