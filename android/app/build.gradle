@@ -171,7 +171,6 @@ android {
             minifyEnabled false
             shrinkResources false
             debuggable true
-            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
             buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
@@ -189,7 +188,6 @@ android {
             minifyEnabled false
             shrinkResources false
             debuggable false
-            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
             buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
@@ -207,7 +205,6 @@ android {
             minifyEnabled true
             shrinkResources true
             debuggable false
-            buildConfigField "String", "MATOMO_AUTH_TOKEN", matomoAuthToken()
             buildConfigField "boolean", "DEVELOPMENT_MODE", getBoolean("developmentMode")
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
@@ -227,6 +224,7 @@ android {
         play {
             initWith release
             buildConfigField "boolean", "PLAY_VERSION", "true"
+            ndk.abiFilters = abiFilters()
         }
 
         sideload {
@@ -253,7 +251,7 @@ android {
 
     splits {
         abi {
-            enable true
+            enable !bool("playVersion")
             reset()
             include androidArchJava()
         }
@@ -288,6 +286,26 @@ def getBoolean(name) {
     return value
 }
 
+def bool(name) {
+    def value = project.getProperties().get(name)
+    return "true".equalsIgnoreCase(value)
+}
+
+def abiFilters() {
+    if (bool("playVersion")) {
+        // Flutter does not support 32 bit x86. Some of our other native libraries do
+        // support x86, which by default means that we'll include an x86 folder of native
+        // libs. When this is present, 32 bit x86 devices will attempt to run the app as an
+        // x86 app and will crash because there's no x86 flutter.so. As a workaround for
+        // this, we omit the x86 architecture entirely so that such clients will run Lantern
+        // in ARM emulated mode.
+        //
+        // SO, DO NOT INCLUDE x86 HERE!!!
+        return ['arm64-v8a', 'armeabi-v7a', 'x86_64']
+    }
+    return []
+}
+
 def getInt(name) {
     def value = project.getProperties().get(name)
     if (value == null || !value?.trim()) {
@@ -314,14 +332,6 @@ def paymentProvider() {
 
 def proServerUrl() {
     def value = project.getProperties().get("proServerUrl")
-    if (value == null || !value?.trim()) {
-        return "\"\""
-    }
-    return String.format("\"%s\"", value)
-}
-
-def matomoAuthToken() {
-    def value = project.getProperties().get("MATOMO_AUTH_TOKEN")
     if (value == null || !value?.trim()) {
         return "\"\""
     }
@@ -428,8 +438,6 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    implementation 'com.github.matomo-org:matomo-sdk-android:4.1.4'
-
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
@@ -455,9 +463,6 @@ dependencies {
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:messaging-android:65aa7a4ac2'
     implementation 'com.github.getlantern:db-android:70d727d18a'
-
-    // Used for enabling Matomo debug logging
-    implementation 'com.jakewharton.timber:timber:4.7.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

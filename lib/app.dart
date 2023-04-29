@@ -1,5 +1,4 @@
 import 'package:flutter/scheduler.dart';
-import 'package:lantern/analytics_navigator_observer.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging.dart';
 
@@ -90,8 +89,11 @@ class LanternApp extends StatelessWidget {
               routerDelegate: globalRouter.delegate(
                 navigatorObservers: () => [
                   BotToastNavigatorObserver(),
+<<<<<<< HEAD
                   AnalyticsNavigatorObserver(),
                   DatadogNavigationObserver(datadogSdk: DatadogSdk.instance),
+=======
+>>>>>>> origin/main
                 ],
               ),
               builder: BotToastInit(),

@@ -221,19 +221,6 @@ abstract class SessionManager(application: Application) : Session {
     // for now, disable Chat completely
     fun chatEnabled(): Boolean { return false }
 
-    override fun setMatomoEnabled(enabled: Boolean) {
-        Logger.d(TAG, "Setting $MATOMO_ENABLED to $enabled")
-        prefs.edit().putBoolean(MATOMO_ENABLED, enabled).apply()
-    }
-
-    fun matomoEnabled(): Boolean {
-        val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
-        if (isDevMode) {
-            return true
-        }
-        return prefs.getBoolean(MATOMO_ENABLED, false)
-    }
-
     fun appVersion(): String {
         return appVersion
     }
@@ -463,7 +450,6 @@ abstract class SessionManager(application: Application) : Session {
 
         private const val REPLICA_ADDR = "replicaAddr"
         public const val CHAT_ENABLED = "chatEnabled"
-        private const val MATOMO_ENABLED = "matomoEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),
