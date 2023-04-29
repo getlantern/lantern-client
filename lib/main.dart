@@ -27,14 +27,12 @@ Future<void> main() async {
       ],
     );
   }
-  await dotenv.load(mergeWith: Platform.environment);
-  var clientToken = dotenv.get('DD_CLIENT_TOKEN', fallback: '');
-  var applicationId = dotenv.maybeGet('DD_APPLICATION_ID');
+  var applicationId = const String.fromEnvironment('DD_APPLICATION_ID');
 
   DatadogSdk.instance.sdkVerbosity = Verbosity.verbose;
   final configuration = DdSdkConfiguration(
-    clientToken: clientToken,
-    env: dotenv.get('DD_ENV', fallback: ''),
+    clientToken: const String.fromEnvironment('DD_CLIENT_TOKEN'),
+    env: 'prod',
     site: DatadogSite.eu1,
     trackingConsent: TrackingConsent.granted,
     nativeCrashReportEnabled: true,

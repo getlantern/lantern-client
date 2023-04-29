@@ -33,8 +33,6 @@ dependencies:
 
   datadog_flutter_plugin: ^1.4.0
 
-  flutter_dotenv: ^5.0.2
-
   provider: ^5.0.0
 
   protobuf: any
