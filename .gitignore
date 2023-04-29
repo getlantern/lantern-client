@@ -48,7 +48,6 @@ coverage/lcov.info
 .pub/
 /build/
 flutter_app
-*.env
 
 # Web related
 lib/generated_plugin_registrant.dart
