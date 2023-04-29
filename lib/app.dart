@@ -89,11 +89,7 @@ class LanternApp extends StatelessWidget {
               routerDelegate: globalRouter.delegate(
                 navigatorObservers: () => [
                   BotToastNavigatorObserver(),
-<<<<<<< HEAD
-                  AnalyticsNavigatorObserver(),
                   DatadogNavigationObserver(datadogSdk: DatadogSdk.instance),
-=======
->>>>>>> origin/main
                 ],
               ),
               builder: BotToastInit(),
