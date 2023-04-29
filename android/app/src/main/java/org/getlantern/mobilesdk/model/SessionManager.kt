@@ -7,6 +7,9 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.provider.Settings.Secure
 import android.text.TextUtils
+import androidx.core.content.ContextCompat
+import androidx.webkit.ProxyConfig
+import androidx.webkit.ProxyController
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
 import internalsdk.AdSettings
@@ -15,6 +18,7 @@ import io.lantern.model.BaseModel
 import io.lantern.model.Vpn
 import io.lantern.db.DB
 import org.getlantern.lantern.BuildConfig
+import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
@@ -49,6 +53,14 @@ abstract class SessionManager(application: Application) : Session {
 
     fun setStartResult(result: StartResult?) {
         startResult = result
+        val proxyConfig = ProxyConfig.Builder()
+            .addProxyRule("http://${LanternApp.getSession().hTTPAddr}")
+            .build()
+        ProxyController.getInstance().setProxyOverride(
+            proxyConfig,
+            ContextCompat.getMainExecutor(context)
+        ) {}
+
         Logger.debug(
             TAG,
             String.format(
