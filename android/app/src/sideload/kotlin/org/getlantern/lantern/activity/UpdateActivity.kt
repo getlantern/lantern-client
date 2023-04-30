@@ -63,6 +63,11 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     @ViewById
     lateinit var percentage: TextView
 
+    override fun onStart() {
+        super.onStart()
+        subTitle.setText(getString(R.string.update_available, getString(R.string.app_name)))
+    }
+    
     fun publishProgress(percent: Long) {
         progressBar.progress = percent.toInt()
         runOnUiThread {
@@ -136,6 +141,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         // make progress bar layout in update prompt visible and hide the update buttons
         progressBarLayout.setVisibility(View.VISIBLE)
         subTitle.setVisibility(View.GONE)
+        subTitle.setText(getString(R.string.update_available, getString(R.string.app_name)))
         updateButtons.setVisibility(View.GONE)
         title.text = String.format(getString(R.string.updating_lantern), appName)
         var context: Context = applicationContext
