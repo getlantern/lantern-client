@@ -308,6 +308,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             }
 
             override fun onSuccess(response: Response, user: ProUser?) {
+                val devices = user?.getDevices()
+                val deviceID = LanternApp.getSession().deviceID()
+                // switch to free user if device is unlinked from Pro account
+                devices?.filter { it.id == deviceID }?.run {
+                    if (isEmpty()) LanternApp.getSession().setIsProUser(false)
+                }
             }
         })
     }
