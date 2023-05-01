@@ -113,15 +113,12 @@ class SessionModel extends Model {
     );
   }
 
-  Widget appsData({
-    required ValueWidgetBuilder<Iterable<PathAndValue<AppData>>> builder,
-  }) {
-    return subscribedListBuilder<AppData>(
+  Widget appsData(ValueWidgetBuilder<AppsData> builder) {
+    return subscribedSingleValueBuilder<AppsData>(
       'appsData',
-      details: true,
       builder: builder,
       deserialize: (Uint8List serialized) {
-        return AppData.fromBuffer(serialized);
+        return AppsData.fromBuffer(serialized);
       },
     );
   }
