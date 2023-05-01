@@ -411,7 +411,6 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines-release` && \
-	echo "DART DEFINES $$DART_DEFINES" && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
