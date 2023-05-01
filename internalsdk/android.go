@@ -85,7 +85,6 @@ type Session interface {
 	Email() (string, error)
 	Currency() (string, error)
 	DeviceOS() (string, error)
-	Geolookup()
 	IsProUser() (bool, error)
 	SetReplicaAddr(string)
 	ForceReplica() bool
@@ -111,7 +110,6 @@ type panickingSession interface {
 	GetTimeZone() string
 	Code() string
 	GetCountryCode() string
-	Geolookup()
 	GetForcedCountryCode() string
 	GetDNSServer() string
 	Provider() string
@@ -216,10 +214,6 @@ func (s *panickingSessionImpl) GetCountryCode() string {
 	result, err := s.wrapped.GetCountryCode()
 	panicIfNecessary(err)
 	return result
-}
-
-func (s *panickingSessionImpl) Geolookup() {
-	s.wrapped.Geolookup()
 }
 
 func (s *panickingSessionImpl) GetForcedCountryCode() string {
@@ -670,15 +664,26 @@ func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	return percent, remaining, int(quota.MiBAllowed)
 }
 
+func doGeoLookup(session panickingSession) {
+	country := geolookup.GetCountry(0)
+	log.Debugf("Successful geolookup: country %s", country)
+	session.SetCountry(country)
+}
+
 func afterStart(session panickingSession) {
 	bandwidthUpdates(session)
 
-	go Geolookup()
+	go func() {
+		if <-geolookup.OnRefresh() {
+			doGeoLookup(session)
+		}
+	}()
 }
 
-func Geolookup() {
-	if <-geolookup.OnRefresh() {
-		country := geolookup.GetCountry(0)
-		log.Debugf("Successful geolookup: country %s", country)
-	}
+func GeoLookup(wrappedSession Session) {
+	go func() {
+		session := &panickingSessionImpl{wrappedSession}
+		doGeoLookup(session)
+		session.SetIP(geolookup.GetIP(forever))
+	}()
 }
