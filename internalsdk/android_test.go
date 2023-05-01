@@ -42,7 +42,6 @@ func (c testSession) BandwidthUpdate(int, int, int, int) error { return nil }
 func (c testSession) ConfigUpdate(bool) error                  { return nil }
 func (c testSession) GetUserID() (int64, error)                { return 0, nil }
 func (c testSession) GetToken() (string, error)                { return "", nil }
-func (c testSession) Geolookup()                               {}
 func (c testSession) GetForcedCountryCode() (string, error)    { return "", nil }
 func (c testSession) GetDNSServer() (string, error)            { return "8.8.8.8", nil }
 func (c testSession) SetStaging(bool) error                    { return nil }

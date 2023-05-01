@@ -640,7 +640,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
                 LanternVpnService::class.java,
             ).setAction(LanternVpnService.ACTION_CONNECT),
         )
-        internalsdk.Geolookup()
+        internalsdk.geoLookup()
     }
 
     private fun stopVpnService() {
