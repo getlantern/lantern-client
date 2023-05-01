@@ -84,7 +84,7 @@ BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
 ## vault secrets
-VAULT_DD_SECRETS_PATH ?= secret/lantern_cloud/datadog/android
+VAULT_DD_SECRETS_PATH ?= secret/apps/datadog/android
 
 S3_BUCKET ?= lantern
 FORCE_PLAY_VERSION ?= false
