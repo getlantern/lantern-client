@@ -403,7 +403,7 @@ env-secret-%:
 
 dart-defines-release:
 	@DART_DEFINES=`make env-secret-DD_CLIENT_TOKEN`; \
-	DART_DEFINES+=`printf ',' && make env-secret-DD_CLIENT_TOKEN`; \
+	DART_DEFINES+=`printf ',' && make env-secret-DD_APPLICATION_ID`; \
 	printf $$DART_DEFINES
 
 $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
