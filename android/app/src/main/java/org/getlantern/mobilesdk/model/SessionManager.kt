@@ -24,6 +24,7 @@ import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.util.DnsDetector
 import org.greenrobot.eventbus.EventBus
 import java.text.DateFormat
+import java.util.ArrayList
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.HashMap
@@ -485,7 +486,9 @@ abstract class SessionManager(application: Application) : Session {
         db = BaseModel.masterDB.withSchema(PREFERENCES_SCHEMA)
         db.registerType(2000, Vpn.Device::class.java)
         db.registerType(2001, Vpn.Devices::class.java)
-        db.registerType(2002, Vpn.AppsData::class.java)
+        db.registerType(2002, Vpn.AppData::class.java)
+        db.registerType(2003, Vpn.AppsData::class.java)
+        db.registerType(2004, ArrayList::class.java)
         Logger.debug(TAG, "register types finished at ${System.currentTimeMillis() - start}")
         val prefsAdapter = db.asSharedPreferences(
             context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)

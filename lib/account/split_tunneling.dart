@@ -81,12 +81,15 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   // buildAppsLists builds lists for excluded and allowed installed apps and
   // returns both along with their associated headers
   List<Widget> buildAppsLists(Iterable<PathAndValue<AppData>> appsList) {
+    debugPrint("apps list: ${appsList}");
     if (appsList.length == 0) return [];
     return [
       ListSectionHeader('excluded_apps'.i18n.toUpperCase()),
-      buildAppList(appsList.where((appData) => appData.value.isExcluded).toList()),
+      buildAppList(
+          appsList.where((appData) => appData.value.isExcluded).toList()),
       ListSectionHeader('allowed_apps'.i18n.toUpperCase()),
-      buildAppList(appsList.where((appData) => !appData.value.isExcluded).toList()),
+      buildAppList(
+          appsList.where((appData) => !appData.value.isExcluded).toList()),
     ];
   }
 
@@ -174,7 +177,11 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                     value: appData.isExcluded,
                     onChanged: (bool? value) async {
                       setState(() {
-                        sessionModel.updateAppData(appData);
+                        if (value != null && value!) {
+                          sessionModel.addExcludedApp(appData.packageName);
+                        } else {
+                          sessionModel.removeExcludedApp(appData.packageName);
+                        }
                         showSnackBar(context);
                       });
                     },

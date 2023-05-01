@@ -3,6 +3,7 @@ package io.lantern.model
 import android.app.Activity
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
+import com.google.protobuf.*
 import io.lantern.apps.AppData
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -27,6 +28,7 @@ import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
+import java.lang.reflect.Field
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -43,7 +45,8 @@ class SessionModel(
 
         const val PATH_PRO_USER = "prouser"
         const val PATH_SDK_VERSION = "sdkVersion"
-        const val PATH_SPLIT_TUNNELING ="splitTunneling"
+        const val PATH_SPLIT_TUNNELING = "splitTunneling"
+        const val PATH_APPS_DATA = "appsData"
     }
 
     init {
@@ -93,8 +96,11 @@ class SessionModel(
                 val on = call.argument("on") ?: false
                 saveSplitTunneling(on)
             }
-            "updateAppData" -> {
-              LanternApp.getSession().updateAppData(call.argument("appData")!!)
+            "addExcludedApp" -> {
+              updateAppData(call.argument("packageName")!!, true)
+            }
+            "removeExcludedApp" -> {
+              updateAppData(call.argument("packageName")!!, false)
             }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
@@ -134,6 +140,53 @@ class SessionModel(
             tx.put(PATH_SPLIT_TUNNELING, value)
         }
     }
+
+    fun getAppsData():Vpn.AppsData {
+      var appsData:Vpn.AppsData = Vpn.AppsData.newBuilder().build()
+      db.mutate { tx ->
+        if (tx.get(PATH_APPS_DATA) as Vpn.AppsData? != null ?: null) {
+          appsData = tx.get(PATH_APPS_DATA)!!
+        }
+      }
+      return appsData
+    }
+
+
+    fun getAppsList():MutableList<Vpn.AppData> {
+      var appsData:MutableList<Vpn.AppData> = mutableListOf()
+      db.mutate { tx ->
+        if (tx.get(PATH_APPS_DATA) as List<Vpn.AppData>? != null ?: null) {
+          appsData = tx.get(PATH_APPS_DATA)!!
+        }
+      }
+      return appsData
+    }
+
+    fun excludedApps():List<String> {
+        val appsData:Vpn.AppsData = getAppsData()
+        return appsData.appsList.filter { it.isExcluded }.map { it.packageName }
+    }
+
+    // Add application to set of excluded apps that are denied access to the VPN connection
+    fun updateAppData(packageName: String, isExcluded: Boolean) {
+        var appsData:Vpn.AppsData = getAppsData()
+        var appsList = appsData.appsList.toMutableList()
+        var app = Vpn.AppData.newBuilder(appsData.appsList.find { it.packageName == packageName })
+        app?.isExcluded = isExcluded
+        appsList.add(app.build())
+        db.mutate { tx ->
+            tx.put(PATH_APPS_DATA, Vpn.AppsData.newBuilder().addAllApps(appsList.distinct().toList()).build())
+        }
+    }
+
+    fun setAppsList(appsList: List<AppData>) {
+      val appsData:Vpn.AppsData = getAppsData()
+      //Logger.debug(TAG, "Existing app data: $appsData")
+      val apps = Vpn.AppsData.newBuilder(appsData).addAllApps(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIcon(it.icon).setName(it.name).build() }).build()
+      db.mutate { tx ->
+        tx.put(PATH_APPS_DATA, apps)
+      }
+    }    
 
     private fun authorizeViaEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
         Logger.debug(TAG, "Start Account recovery with email $emailAddress")

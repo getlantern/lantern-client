@@ -76,11 +76,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         super.configureFlutterEngine(flutterEngine)
 
         appsDataProvider = AppsDataProvider(getPackageManager(), getPackageName())
-        appsWhitelist = AppsWhitelist(resources, lanternClient)
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
+        appsWhitelist = AppsWhitelist(sessionModel, resources, lanternClient)
         navigator = Navigator(this, flutterEngine)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
@@ -137,7 +137,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
 
         val apps = appsDataProvider.listOfApps()
         appsWhitelist.setApps(apps, false)
-        LanternApp.getSession().setAppsList(apps)
+        sessionModel.setAppsList(apps)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -432,7 +432,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         showAlertDialog(noUpdateTitle, noUpdateMsg)
     }
 
-    private fun startUpdateActivity(updateURL:String) {
+    private fun startUpdateActivity(updateURL: String) {
         val intent = Intent()
         intent.component = ComponentName(
             activity.packageName,
@@ -451,14 +451,14 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         }
         lifecycleScope.launch {
             try {
-              val deviceInfo:internalsdk.DeviceInfo = DeviceInfo
-              val updateURL = Internalsdk.checkForUpdates(deviceInfo)
-              when {
-                updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
-                else -> startUpdateActivity(updateURL)
-              }
-            } catch (e:Exception) {
-              Logger.d(TAG, "Unable to check for update: %s", e.message)
+                val deviceInfo: internalsdk.DeviceInfo = DeviceInfo
+                val updateURL = Internalsdk.checkForUpdates(deviceInfo)
+                when {
+                    updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
+                    else -> startUpdateActivity(updateURL)
+                }
+            } catch (e: Exception) {
+                Logger.d(TAG, "Unable to check for update: %s", e.message)
             }
         }
     }
@@ -644,12 +644,14 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
     }
 
     private fun startVpnService() {
-        startService(
-            Intent(
-                this,
-                LanternVpnService::class.java,
-            ).setAction(LanternVpnService.ACTION_CONNECT),
+        val excludedApps = ArrayList(sessionModel.excludedApps())
+        val intent: Intent = Intent(
+            this,
+            LanternVpnService::class.java,
         )
+        .putStringArrayListExtra("excludedApps", excludedApps)
+        .setAction(LanternVpnService.ACTION_CONNECT)
+        startService(intent)
     }
 
     private fun stopVpnService() {

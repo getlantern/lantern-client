@@ -117,7 +117,7 @@ class SessionModel extends Model {
     required ValueWidgetBuilder<Iterable<PathAndValue<AppData>>> builder,
   }) {
     return subscribedListBuilder<AppData>(
-      '/appsData/',
+      'appsData',
       details: true,
       builder: builder,
       deserialize: (Uint8List serialized) {
@@ -126,9 +126,15 @@ class SessionModel extends Model {
     );
   }
 
-  Future<void> updateAppData(AppData appData) {
-    return methodChannel.invokeMethod('updateAppData', <String, dynamic>{
-      'appData': AppData,
+  Future<void> addExcludedApp(String packageName) {
+    return methodChannel.invokeMethod('addExcludedApp', <String, dynamic>{
+      'packageName': packageName,
+    });
+  }
+
+  Future<void> removeExcludedApp(String packageName) {
+    return methodChannel.invokeMethod('removeExcludedApp', <String, dynamic>{
+      'packageName': packageName,
     });
   }
 

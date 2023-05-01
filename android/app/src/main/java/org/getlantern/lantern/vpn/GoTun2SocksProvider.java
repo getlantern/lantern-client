@@ -14,6 +14,7 @@ import org.getlantern.lantern.MainActivity;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.model.SessionManager;
 
+import java.util.List;
 import java.util.Locale;
 
 public class GoTun2SocksProvider implements Provider {
@@ -25,6 +26,12 @@ public class GoTun2SocksProvider implements Provider {
   private final static int VPN_MTU = 1500;
 
   private ParcelFileDescriptor mInterface;
+
+  private List<String> excludedApps;
+
+  public GoTun2SocksProvider(List<String> excludedApps) {
+    this.excludedApps = excludedApps;
+  }
 
   private synchronized ParcelFileDescriptor createBuilder(final VpnService vpnService,
       final VpnService.Builder builder) {
@@ -39,11 +46,7 @@ public class GoTun2SocksProvider implements Provider {
 
     // Add applications that are denied access to the VPN connection. By default, all 
     // applications are allowed access, except those denied access via the Excluded Apps screen
-    for (Vpn.AppData appData : LanternApp.getSession().getAppsData().getAppsList()) {
-      if (!appData.getIsExcluded()) {
-        continue;
-      }
-      String packageName = appData.getPackageName();
+    for (String packageName : excludedApps) {
       Logger.debug(TAG, "Excluding app from VPN connection: " + packageName);
       try {
         builder.addDisallowedApplication(packageName);

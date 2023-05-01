@@ -4,6 +4,7 @@ import android.content.res.Resources
 import com.google.gson.JsonObject
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Response
+import io.lantern.model.SessionModel
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
@@ -13,7 +14,10 @@ import org.getlantern.mobilesdk.util.HttpClient
 import java.io.BufferedReader
 import java.io.InputStream
 
-open class AppsWhitelist(private val resources:Resources, @JvmField val httpClient: HttpClient) {
+open class AppsWhitelist(
+    private val sessionModel:SessionModel,
+    private val resources:Resources, 
+    @JvmField val httpClient: HttpClient) {
 
     private val isChineseUser = LanternApp.getSession().isChineseUser
     private val isRussianUser = LanternApp.getSession().isRussianUser
@@ -68,9 +72,10 @@ open class AppsWhitelist(private val resources:Resources, @JvmField val httpClie
         val apps = content.split("[\r\n]+".toRegex()).toTypedArray()
         val appsMap = listOf(*apps).associateBy({it}, {true})
         for (appData in appsList) {
-            if (appsMap[appData.packageName] != null) {
+            val packageName = appData.packageName
+            if (appsMap[packageName] != null) {
                 appData.isExcluded = true
-                LanternApp.getSession().updateAppData(appData)
+                sessionModel.updateAppData(packageName, true)
             }
         }      
     }

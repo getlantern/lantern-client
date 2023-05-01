@@ -295,26 +295,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
       return appsData
     }
 
-    // Add application to set of excluded apps that are denied access to the VPN connection
-    fun updateAppData(appData: AppData) {
-        var appsData:Vpn.AppsData = getAppsData()
-        var appsList = appsData.appsList.toMutableList()
-        var app = Vpn.AppData.newBuilder(appsData.appsList.find { it.packageName == appData.packageName })
-        app?.isExcluded = appData.isExcluded
-        appsList.add(app.build())
-        db.mutate { tx ->
-            tx.put(APPS_DATA, Vpn.AppsData.newBuilder().addAllApps(appsList.distinct().toList()).build())
-        }
-    }
-
-    fun setAppsList(appsList: List<AppData>) {
-      val appsData:Vpn.AppsData = getAppsData()
-      val apps = Vpn.AppsData.newBuilder(appsData).addAllApps(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIcon(it.icon).setName(it.name).build() }).build()
-      db.mutate { tx ->
-        tx.put(APPS_DATA, apps)
-      }
-    }
-
     fun storeUserData(user: ProUser?) {
         if (user!!.email != null && user.email != "") {
             setEmail(user.email)
@@ -371,8 +351,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         // shared preferences
         private const val PRO_USER = "prouser"
-        private const val APPS_DATA = "appsData"
-        private const val EXCLUDED_APPS = "excludedApps"
+        private const val APPS_DATA = "/appsData/"
         private const val DEVICES = "devices"
         private const val PRO_EXPIRED = "proexpired"
         private const val PRO_PLAN = "proplan"
