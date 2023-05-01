@@ -397,9 +397,13 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
+env-secret-%:
+	@SECRET=$(shell echo "$(${*})"); \
+	printf ${*}=$$SECRET | ${BASE64}
+
 dart-defines-release:
-	@DART_DEFINES=`DD_CLIENT_TOKEN=$(DD_CLIENT_TOKEN) | ${BASE64}`; \
-	DART_DEFINES=`printf ',' && DD_APPLICATION_ID=$(DD_APPLICATION_ID) | ${BASE64}`; \
+	@DART_DEFINES=`make env-secret-DD_CLIENT_TOKEN`; \
+	DART_DEFINES+=`printf ',' && make env-secret-DD_CLIENT_TOKEN`; \
 	printf $$DART_DEFINES
 
 $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
@@ -407,6 +411,7 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines-release` && \
+	echo "DART DEFINES $$DART_DEFINES" && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
