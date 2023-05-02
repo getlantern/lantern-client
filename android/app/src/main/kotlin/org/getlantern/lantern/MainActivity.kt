@@ -32,6 +32,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
+import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
@@ -420,18 +421,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
 
     private fun noUpdateAvailable(userInitiated: Boolean) {
         if (!userInitiated) return
-        val appName = resources.getString(R.string.app_name)
-        val noUpdateTitle = resources.getString(R.string.no_update_available)
-        val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
-        showAlertDialog(noUpdateTitle, noUpdateMsg)
+        runOnUiThread {
+            val appName = resources.getString(R.string.app_name)
+            val noUpdateTitle = resources.getString(R.string.no_update_available)
+            val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
+            showAlertDialog(noUpdateTitle, noUpdateMsg)
+        }
     }
 
     private fun startUpdateActivity(updateURL:String) {
-        val intent = Intent()
-        intent.component = ComponentName(
-            activity.packageName,
-            "org.getlantern.lantern.activity.UpdateActivity_",
-        )
+        val intent = Intent(this@MainActivity, UpdateActivity_::class.java)
         intent.putExtra("updateUrl", updateURL)
         startActivity(intent)
     }
@@ -443,7 +442,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             Utils.openPlayStore(context)
             return
         }
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
               val deviceInfo:internalsdk.DeviceInfo = DeviceInfo
               val updateURL = Internalsdk.checkForUpdates(deviceInfo)
