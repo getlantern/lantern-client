@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.multidex.MultiDex
 
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.LanternHttpClient
@@ -21,10 +22,15 @@ open class LanternApp : Application() {
         }
 
         if (BuildConfig.DEBUG) {
-            StrictMode.enableDefaults()
-        } else {
-            StrictMode.setVmPolicy(StrictMode.VmPolicy.LAX)
-            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.LAX)
+             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                     .detectNetwork()
+                     .penaltyLog()
+                     .build())
+             StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                     .detectLeakedSqlLiteObjects()
+                     .detectLeakedClosableObjects()
+                     .penaltyLog()
+                     .build())
         }
     }
 
@@ -41,6 +47,15 @@ open class LanternApp : Application() {
 
 
         lanternHttpClient = LanternHttpClient()
+    }
+
+    override fun attachBaseContext(base:Context) {
+        super.attachBaseContext(base)
+        // this is necessary running earlier versions of Android
+        // multidex support has to be added manually
+        // in addition to being enabled in the app build.gradle
+        // See http://stackoverflow.com/questions/36907916/java-lang-noclassdeffounderror-while-registering-eventbus-in-onstart-method-for
+        MultiDex.install(this)
     }
 
     companion object {
