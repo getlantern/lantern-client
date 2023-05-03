@@ -1,14 +1,3 @@
-package org.getlantern.lantern.model;
+package org.getlantern.lantern.model
 
-public class CheckUpdate {
-
-    private boolean userInitiated;
-
-    public CheckUpdate(final boolean userInitiated) {
-        this.userInitiated = userInitiated;
-    }
-
-    public boolean getUserInitiated() {
-        return userInitiated;
-    }
-}
+data class CheckUpdate(val userInitiated:Boolean)

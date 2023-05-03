@@ -15,7 +15,6 @@ import android.os.IBinder;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Stats;
-import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.lantern.service.ServiceHelper;
 import org.getlantern.mobilesdk.Logger;
@@ -147,12 +146,6 @@ public class LanternVpnService extends VpnService implements Runnable {
             LanternApp.getSession().updateVpnPreference(false);
         } catch (Throwable t) {
             Logger.e(TAG, "error updating vpn preference", t);
-        }
-        try {
-            Logger.d(TAG, "posting updated vpnstate");
-            EventBus.getDefault().post(new VpnState(false));
-        } catch (Throwable t) {
-            Logger.e(TAG, "error posting updated vpnstate", t);
         }
     }
 }
