@@ -430,7 +430,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
     }
 
     private fun startUpdateActivity(updateURL:String) {
-        val intent = Intent(this@MainActivity, UpdateActivity_::class.java)
+        val intent = Intent()
+        intent.component = ComponentName(
+            activity.packageName,
+            "org.getlantern.lantern.activity.UpdateActivity_",
+        )
         intent.putExtra("updateUrl", updateURL)
         startActivity(intent)
     }
