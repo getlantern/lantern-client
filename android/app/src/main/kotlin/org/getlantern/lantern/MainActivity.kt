@@ -67,6 +67,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
+    private var autoUpdateJob: Job? = null
 
     private val lanternClient = LanternApp.getLanternHttpClient()
 
@@ -445,7 +446,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             Utils.openPlayStore(context)
             return
         }
-        lifecycleScope.launch(Dispatchers.IO) {
+        if (autoUpdateJob != null && autoUpdateJob!!.isActive) {
+            Logger.d(TAG, "Already checking for updates")
+            return
+        }
+        autoUpdateJob = lifecycleScope.launch(Dispatchers.IO) {
             try {
               val deviceInfo:internalsdk.DeviceInfo = DeviceInfo
               val updateURL = Internalsdk.checkForUpdates(deviceInfo)
