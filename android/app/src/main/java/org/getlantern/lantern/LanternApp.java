@@ -12,14 +12,11 @@ import androidx.multidex.MultiDex;
 import org.getlantern.lantern.model.InAppBilling;
 import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.LanternSessionManager;
-//import org.getlantern.lantern.model.MessagingHolder;
 import org.getlantern.lantern.model.WelcomeDialog;
 import org.getlantern.lantern.model.WelcomeDialog_;
 import org.getlantern.lantern.util.SentryUtil;
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.mobilesdk.ProdLogger;
 import org.getlantern.mobilesdk.util.HttpClient;
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -49,8 +46,10 @@ public class LanternApp extends Application implements ActivityLifecycleCallback
 
         SentryUtil.enableGoPanicEnrichment(this);
 
-        ProdLogger.enable(getApplicationContext());
-        Logger.debug(TAG, "ProdLogger.enable() finished at " + (System.currentTimeMillis() - start));
+        // Logging to Go might be causing ANRs like this - https://getlantern.sentry.io/issues/4146960327/?project=5850353&referrer=release-issue-stream
+        // Temporarily disable
+//        ProdLogger.enable(getApplicationContext());
+//        Logger.debug(TAG, "ProdLogger.enable() finished at " + (System.currentTimeMillis() - start));
 
         registerActivityLifecycleCallbacks(this);
         Logger.debug(TAG, "registerActivityLifecycleCallbacks finished at " + (System.currentTimeMillis() - start));
