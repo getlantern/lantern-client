@@ -369,6 +369,10 @@ flutter {
     source '../..'
 }
 
+configurations {
+    debugImplementation.exclude group: "junit", module: "junit"
+}
+
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.5"
     implementation "com.google.protobuf:protobuf-javalite:$protoc_version"
@@ -402,7 +406,7 @@ dependencies {
     implementation group: 'joda-time', name: 'joda-time', version: '2.8.2'
 
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'

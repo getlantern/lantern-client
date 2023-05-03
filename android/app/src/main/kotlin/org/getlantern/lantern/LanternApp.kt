@@ -22,15 +22,19 @@ open class LanternApp : Application() {
         }
 
         if (BuildConfig.DEBUG) {
-             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-                     .detectNetwork()
-                     .penaltyLog()
-                     .build())
-             StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
-                     .detectLeakedSqlLiteObjects()
-                     .detectLeakedClosableObjects()
-                     .penaltyLog()
-                     .build())
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build(),
+            )
+            StrictMode.setVmPolicy(
+                StrictMode.VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .build(),
+            )
         }
     }
 
@@ -45,11 +49,10 @@ open class LanternApp : Application() {
 
         if (session.isPlayVersion()) inAppBilling = InAppBilling(this)
 
-
         lanternHttpClient = LanternHttpClient()
     }
 
-    override fun attachBaseContext(base:Context) {
+    override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         // this is necessary running earlier versions of Android
         // multidex support has to be added manually
