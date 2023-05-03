@@ -505,7 +505,8 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         Logger.debug(TAG, "Attempting to use payment provider: " + provider);
 
         Class<? extends Activity> activityClass = null;
-        switch (provider.toLowerCase()) {
+        String lowerCaseProvider = provider == null ? "" : provider.toLowerCase();
+        switch (lowerCaseProvider) {
 //            case "adyen":
 //                activityClass = AdyenActivity_.class;
 //                break;
