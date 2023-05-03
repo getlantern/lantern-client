@@ -2,7 +2,6 @@ package org.getlantern.lantern
 
 import android.Manifest
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -29,6 +28,7 @@ import io.lantern.model.SessionModel
 import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager
@@ -68,8 +68,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
-    private lateinit var notifications:NotificationHelper
-    private lateinit var receiver:NotificationReceiver
+    private lateinit var notifications: NotificationHelper
+    private lateinit var receiver: NotificationReceiver
+    private var autoUpdateJob: Job? = null
 
     private val lanternClient = LanternApp.getLanternHttpClient()
 
@@ -132,7 +133,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
         val packageName = activity.packageName
         IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
-            registerReceiver(receiver,it)
+            registerReceiver(receiver, it)
         }
     }
 
@@ -401,25 +402,28 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         // For some reason, telegram.me links create infinite redirects. To solve this, we disable
         // JavaScript when opening such links.
         val javaScriptEnabled = !survey.url!!.contains("t.me") && !survey.url!!.contains("telegram.me")
-        FinestWebView.Builder(this@MainActivity)
-            .webViewLoadWithProxy(LanternApp.getSession().hTTPAddr)
+        val builder = FinestWebView.Builder(this@MainActivity)
             .webViewSupportMultipleWindows(true)
             .webViewJavaScriptEnabled(javaScriptEnabled)
             .webViewJavaScriptCanOpenWindowsAutomatically(javaScriptEnabled)
             .swipeRefreshColorRes(R.color.black)
             .webViewAllowFileAccessFromFileURLs(true)
-            .show(survey.url!!)
+        runOnUiThread {
+            builder.show(survey.url!!)
+        }
     }
 
     private fun noUpdateAvailable(userInitiated: Boolean) {
         if (!userInitiated) return
-        val appName = resources.getString(R.string.app_name)
-        val noUpdateTitle = resources.getString(R.string.no_update_available)
-        val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
-        showAlertDialog(noUpdateTitle, noUpdateMsg)
+        runOnUiThread {
+            val appName = resources.getString(R.string.app_name)
+            val noUpdateTitle = resources.getString(R.string.no_update_available)
+            val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
+            showAlertDialog(noUpdateTitle, noUpdateMsg)
+        }
     }
 
-    private fun startUpdateActivity(updateURL:String) {
+    private fun startUpdateActivity(updateURL: String) {
         val intent = Intent()
         intent.component = ComponentName(
             activity.packageName,
@@ -436,16 +440,20 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             Utils.openPlayStore(context)
             return
         }
-        lifecycleScope.launch {
+        if (autoUpdateJob != null && autoUpdateJob!!.isActive) {
+            Logger.d(TAG, "Already checking for updates")
+            return
+        }
+        autoUpdateJob = lifecycleScope.launch(Dispatchers.IO) {
             try {
-              val deviceInfo:internalsdk.DeviceInfo = DeviceInfo
-              val updateURL = Internalsdk.checkForUpdates(deviceInfo)
-              when {
-                updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
-                else -> startUpdateActivity(updateURL)
-              }
-            } catch (e:Exception) {
-              Logger.d(TAG, "Unable to check for update: %s", e.message)
+                val deviceInfo: internalsdk.DeviceInfo = DeviceInfo
+                val updateURL = Internalsdk.checkForUpdates(deviceInfo)
+                when {
+                    updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
+                    else -> startUpdateActivity(updateURL)
+                }
+            } catch (e: Exception) {
+                Logger.d(TAG, "Unable to check for update: %s", e.message)
             }
         }
     }
@@ -651,7 +659,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
 
     private fun updateStatus(useVpn: Boolean) {
         Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
-        //EventBus.getDefault().post(VpnState(useVpn))
+        // EventBus.getDefault().post(VpnState(useVpn))
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
         vpnModel.setVpnOn(useVpn)

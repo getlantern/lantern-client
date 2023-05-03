@@ -150,7 +150,6 @@ class _HomePageState extends State<HomePage> {
   Widget buildBody(String selectedTab, bool? isOnboarded) {
     switch (selectedTab) {
       case TAB_CHATS:
-        sessionModel.trackScreenView('Chats');
         return isOnboarded == null
             // While onboarding status is not yet know, show a white container
             // that matches the background of our usual pages.
@@ -163,16 +162,12 @@ class _HomePageState extends State<HomePage> {
                 ? Chats()
                 : Welcome();
       case TAB_VPN:
-        sessionModel.trackScreenView('VPN');
         return VPNTab();
       case TAB_REPLICA:
-        sessionModel.trackScreenView('Replica');
         return ReplicaTab();
       case TAB_ACCOUNT:
-        sessionModel.trackScreenView('Account');
         return AccountTab();
       case TAB_DEVELOPER:
-        sessionModel.trackScreenView('Developer');
         return DeveloperSettingsTab();
       default:
         assert(false, 'unrecognized tab $selectedTab');
