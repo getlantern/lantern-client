@@ -314,7 +314,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
                 val deviceID = LanternApp.getSession().deviceID()
                 // switch to free user if device is unlinked from Pro account
                 devices?.filter { it.id == deviceID }?.run {
-                    if (isEmpty()) LanternApp.getSession().setIsProUser(false)
+                    if (user.isProUser() && isEmpty()) {
+                        LanternApp.getSession().logout()
+                        restartApp()
+                    }
                 }
             }
         })
