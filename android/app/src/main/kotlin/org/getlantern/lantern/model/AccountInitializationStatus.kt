@@ -1,31 +1,20 @@
-package org.getlantern.lantern.model;
+package org.getlantern.lantern.model
 
-public class AccountInitializationStatus {
+data class AccountInitializationStatus(val status:AccountInitializationStatus.Status) {
 
-    private AccountInitializationStatus.Status status;
-
-    public enum Status {
-        PROCESSING, SUCCESS, FAILURE;
+    enum class Status {
+        PROCESSING, SUCCESS, FAILURE
     }
 
-    public AccountInitializationStatus(final AccountInitializationStatus.Status status) {
-        this.status = status;
+    fun isProcessing():Boolean {
+        return status == Status.PROCESSING
     }
 
-    public AccountInitializationStatus.Status getStatus() {
-        return status;
+    fun isSuccess():Boolean {
+        return status == Status.SUCCESS
     }
 
-    public boolean isProcessing() {
-        return status != null && status.equals(Status.PROCESSING);
+    fun isFailure():Boolean {
+        return status == Status.FAILURE
     }
-
-    public boolean isSuccess() {
-        return status != null && status.equals(Status.SUCCESS);
-    }
-
-    public boolean isFailure() {
-        return status != null && status.equals(Status.FAILURE);
-    }
-
 }
