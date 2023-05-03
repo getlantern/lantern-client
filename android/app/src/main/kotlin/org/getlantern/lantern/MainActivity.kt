@@ -29,6 +29,7 @@ import io.lantern.model.SessionModel
 import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager
@@ -66,6 +67,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
+    private var autoUpdateJob: Job? = null
 
     private val lanternClient = LanternApp.getLanternHttpClient()
 
@@ -419,10 +421,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
 
     private fun noUpdateAvailable(userInitiated: Boolean) {
         if (!userInitiated) return
-        val appName = resources.getString(R.string.app_name)
-        val noUpdateTitle = resources.getString(R.string.no_update_available)
-        val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
-        showAlertDialog(noUpdateTitle, noUpdateMsg)
+        runOnUiThread {
+            val appName = resources.getString(R.string.app_name)
+            val noUpdateTitle = resources.getString(R.string.no_update_available)
+            val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
+            showAlertDialog(noUpdateTitle, noUpdateMsg)
+        }
     }
 
     private fun startUpdateActivity(updateURL:String) {
@@ -442,7 +446,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             Utils.openPlayStore(context)
             return
         }
-        lifecycleScope.launch {
+        if (autoUpdateJob != null && autoUpdateJob!!.isActive) {
+            Logger.d(TAG, "Already checking for updates")
+            return
+        }
+        autoUpdateJob = lifecycleScope.launch(Dispatchers.IO) {
             try {
               val deviceInfo:internalsdk.DeviceInfo = DeviceInfo
               val updateURL = Internalsdk.checkForUpdates(deviceInfo)
