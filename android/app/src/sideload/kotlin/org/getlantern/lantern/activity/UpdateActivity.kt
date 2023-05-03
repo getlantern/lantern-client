@@ -67,7 +67,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         super.onStart()
         subTitle.setText(getString(R.string.update_available, getString(R.string.app_name)))
     }
-    
+
     fun publishProgress(percent: Long) {
         progressBar.progress = percent.toInt()
         runOnUiThread {
