@@ -1,22 +1,27 @@
 package org.getlantern.mobilesdk.model
 
 import android.app.Application
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Proxy
 import android.os.Build
 import android.provider.Settings.Secure
 import android.text.TextUtils
+import android.util.ArrayMap
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.webkit.ProxyConfig
 import androidx.webkit.ProxyController
+import androidx.webkit.WebViewFeature
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
 import internalsdk.AdSettings
 import internalsdk.Session
+import io.lantern.db.DB
 import io.lantern.model.BaseModel
 import io.lantern.model.Vpn
-import io.lantern.db.DB
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.model.Bandwidth
@@ -27,10 +32,12 @@ import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.util.DnsDetector
 import org.greenrobot.eventbus.EventBus
+import java.io.PrintWriter
+import java.io.StringWriter
+import java.lang.reflect.InvocationTargetException
 import java.text.DateFormat
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.HashMap
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -53,13 +60,7 @@ abstract class SessionManager(application: Application) : Session {
 
     fun setStartResult(result: StartResult?) {
         startResult = result
-        val proxyConfig = ProxyConfig.Builder()
-            .addProxyRule("http://${LanternApp.getSession().hTTPAddr}")
-            .build()
-        ProxyController.getInstance().setProxyOverride(
-            proxyConfig,
-            ContextCompat.getMainExecutor(context)
-        ) {}
+        setWebViewProxy()
 
         Logger.debug(
             TAG,
@@ -520,6 +521,91 @@ abstract class SessionManager(application: Application) : Session {
             Logger.debug(TAG, "Configured language was empty, using %1\$s", locale)
             setLocale(locale)
             Logger.debug(TAG, "doSetLanguage() finished at ${System.currentTimeMillis() - start}")
+        }
+    }
+
+    private fun setWebViewProxy() {
+        // We set ourselves as the WebView proxy if and only if WebViewFeature.PROXY_OVERRIDE
+        // is supported.
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.PROXY_OVERRIDE)) {
+            val proxyConfig = ProxyConfig.Builder()
+                .addProxyRule("http://${LanternApp.getSession().hTTPAddr}")
+                .build()
+            ProxyController.getInstance().setProxyOverride(
+                proxyConfig,
+                ContextCompat.getMainExecutor(context)
+            ) {}
+        } else {
+            // Below code based on suggestion here - https://stackoverflow.com/a/18453384
+            try {
+                val appContext = context.applicationContext
+                val addressParts = LanternApp.getSession().hTTPAddr.split(":")
+                val host = addressParts[0]
+                val port = addressParts[1]
+                System.setProperty("http.proxyHost", host)
+                System.setProperty("http.proxyPort", port)
+                System.setProperty("https.proxyHost", host)
+                System.setProperty("https.proxyPort", port)
+                val applicationClass = LanternApp::class.java
+                val loadedApkField = applicationClass.getField("mLoadedApk")
+                loadedApkField.isAccessible = true
+                val loadedApk: Any = loadedApkField.get(appContext)
+                val loadedApkCls = Class.forName("android.app.LoadedApk")
+                val receiversField = loadedApkCls.getDeclaredField("mReceivers")
+                receiversField.isAccessible = true
+                val receivers = receiversField.get(loadedApk) as ArrayMap<Context, ArrayMap<BroadcastReceiver, Any>>
+                for (receiverMap in receivers.values) {
+                    for (rec in (receiverMap as ArrayMap).keys) {
+                        val clazz: Class<*> = rec.javaClass
+                        if (clazz.name.contains("ProxyChangeListener")) {
+                            val onReceiveMethod = clazz.getDeclaredMethod(
+                                "onReceive",
+                                Context::class.java,
+                                Intent::class.java
+                            )
+                            val intent = Intent(Proxy.PROXY_CHANGE_ACTION)
+                            onReceiveMethod.invoke(rec, appContext, intent)
+                        }
+                    }
+                }
+                Log.d(TAG, "Setting proxy with >= 4.4 API successful!")
+            } catch (e: ClassNotFoundException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            } catch (e: NoSuchFieldException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            } catch (e: IllegalAccessException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            } catch (e: IllegalArgumentException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            } catch (e: NoSuchMethodException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            } catch (e: InvocationTargetException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            }
         }
     }
 }
