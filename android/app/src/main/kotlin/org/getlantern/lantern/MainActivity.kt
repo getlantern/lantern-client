@@ -32,7 +32,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
-import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
