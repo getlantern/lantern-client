@@ -1,10 +1,9 @@
-package org.getlantern.lantern.vpn;
+package org.getlantern.lantern.vpn
 
-import android.net.VpnService;
+import android.net.VpnService
 
 // A provider provides the implementation of VPN internals.
 interface Provider {
-  void run(final VpnService vpnService, final VpnService.Builder builder, final String socksAddr, final String dnsGrabAddr) throws Exception;
-
-  void stop() throws Exception;
+  @Throws(Exception::class) fun run(vpnService:VpnService, builder:VpnService.Builder, socksAddr:String, dnsGrabAddr:String)
+  @Throws(Exception::class) fun stop()
 }
