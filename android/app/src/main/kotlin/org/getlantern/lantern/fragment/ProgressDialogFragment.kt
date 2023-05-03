@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.annotation.NonNull
 import androidx.fragment.app.DialogFragment
 
-class ProgressDialogFragment : DialogFragment() {
+open class ProgressDialogFragment : DialogFragment() {
 
     @NonNull
     override fun onCreateDialog(savedInstanceState:Bundle?):Dialog {
@@ -17,6 +17,7 @@ class ProgressDialogFragment : DialogFragment() {
     }
 
     companion object {
+        @JvmStatic
         fun newInstance(msgId:Int):ProgressDialogFragment {
             val fragment = ProgressDialogFragment()
             val args:Bundle = Bundle()
