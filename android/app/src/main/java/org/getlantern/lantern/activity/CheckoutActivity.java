@@ -209,7 +209,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         togglePaymentMethod.setPaintFlags(togglePaymentMethod.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         togglePaymentMethod.setOnClickListener(v -> {
             useStripe = !useStripe;
-            displayStripeOrAlipay();
+            displayStripeOrFreekassa();
         });
 
         referralCodeInput.setOnEditorActionListener(submitForm);
@@ -217,10 +217,10 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         if (isPlayVersion) {
             togglePaymentMethod.setVisibility(View.GONE);
         }
-        displayStripeOrAlipay();
+        displayStripeOrFreekassa();
     }
 
-    private void displayStripeOrAlipay() {
+    private void displayStripeOrFreekassa() {
         int tosText = R.string.terms_of_service_text;
         int continueText = R.string.continue_to_payment;
         if (useStripe) {
@@ -234,7 +234,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         // hide the buttons and move the referral code
         if (useStripe) {
             stripeSection.setVisibility(View.VISIBLE);
-            togglePaymentMethod.setText(getText(R.string.switch_to_alipay));
+            togglePaymentMethod.setVisibility(View.GONE);
             tvStepDescription.setText(R.string.enter_payment_details);
             referralCodeLayout.setTranslationY(0);
         } else {
@@ -505,7 +505,8 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         Logger.debug(TAG, "Attempting to use payment provider: " + provider);
 
         Class<? extends Activity> activityClass = null;
-        switch (provider.toLowerCase()) {
+        String lowerCaseProvider = provider == null ? "" : provider.toLowerCase();
+        switch (lowerCaseProvider) {
 //            case "adyen":
 //                activityClass = AdyenActivity_.class;
 //                break;
