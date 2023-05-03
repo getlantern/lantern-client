@@ -9,7 +9,6 @@ import androidx.multidex.MultiDex
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternSessionManager
-// import org.getlantern.lantern.model.MessagingHolder;
 import org.getlantern.lantern.util.debugOnly
 import org.getlantern.lantern.util.LanternProxySelector
 import org.getlantern.lantern.util.SentryUtil
