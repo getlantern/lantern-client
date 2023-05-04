@@ -333,8 +333,8 @@ release: require-version require-s3cmd require-wget require-lantern-binaries req
 
 $(ANDROID_LIB): $(GO_SOURCES)
 	$(call check-go-version) && \
-	$(GO) env 'GOPRIVATE=github.com/getlantern/*' && \
-	$(GO) install golang.org/x/mobile/cmd/gomobile && \
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	go install golang.org/x/mobile/cmd/gomobile && \
 	gomobile init && \
 	gomobile bind \
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
