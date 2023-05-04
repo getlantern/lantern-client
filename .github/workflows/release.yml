@@ -1,4 +1,4 @@
-name: Publish releases
+name: Publish release
 on:
   # Triggers the workflow on push when pushing to a version tag
   push:
@@ -6,9 +6,6 @@ on:
       - 'lantern-*'
   workflow_run:
     workflows: [ "go", "android" ]
-    types:
-      - completed
-  workflow_dispatch:
 
 jobs:
     set-version:
