@@ -47,6 +47,7 @@ jobs:
           print(f'::set-output name=prefix::{li}')
           print(f'::set-output name=version_file::{vf}')
     publish-binaries:
+      runs-on: ubuntu-latest
       needs: [ set-version ]
       steps:
       - name: Setup S3cmd cli tool
