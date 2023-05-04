@@ -5,7 +5,7 @@ on:
     tags:
       - 'lantern-*'
   workflow_run:
-    workflows: [ "go", "android", "version" ]
+    workflows: [ "Set version", "Go Build and Test", "Android CI" ]
     types: [completed]
 
 jobs:
