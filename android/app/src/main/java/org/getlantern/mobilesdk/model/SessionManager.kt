@@ -376,6 +376,10 @@ abstract class SessionManager(application: Application) : Session {
             .putBoolean(HAS_SUCCEEDING_PROXY, hasSucceedingProxy).apply()
     }
 
+    fun resetHasSucceedingProxy() {
+        prefs.edit().remove(HAS_SUCCEEDING_PROXY).apply()
+    }
+
     /**
      * hasPrefExpired checks whether or not a particular
      * shared preference has expired (assuming its stored value
