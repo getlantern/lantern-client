@@ -35,7 +35,7 @@ INSTALLER_NAME ?= lantern-installer
 CHANGELOG_NAME ?= CHANGELOG.md
 CHANGELOG_MIN_VERSION ?= 5.0.0
 
-get-command = $(shell which="$$(which $(1) 2> /dev/null)" && if [[ ! -z "$$which" ]]; then printf %q "$$which"; fi)
+get-command = $(shell which="$$(which $(1) 2> /dev/null)" && if [[ "$$which" ]]; then printf %q "$$which"; fi)
 
 GO        := $(call get-command,go)
 NODE      := $(call get-command,node)
