@@ -18,31 +18,44 @@ jobs:
         prefix: ${{ steps.set-version.outputs.prefix }}
         version_file: ${{ steps.set-version.outputs.version_file }}
       steps:
-        - id: set-version
-          shell: python
-          run: |
-            import sys, os
-            ref = os.environ.get("GITHUB_REF","")
-            a = ref.strip().replace('refs/tags/lantern-', '')
-            parts = a.split('-',1)
-            suffix = parts[1] if len(parts)>1 else ''
-            beta = 'beta' in suffix
-            internal = 'internal' in suffix
-            if beta:
-                li = 'lantern-installer-preview'
-                vf = 'version-beta.txt'
-                version = parts[0]
-            elif internal:
-                li = 'lantern-installer-internal'
-                vf = 'version-internal.txt'
-                version = parts[0]
-            else:
-                li = 'lantern-installer'
-                vf = 'version.txt'
-                version = a
-            print('Setting version to ' + version)
-            print('Setting prefix to ' + li)
-            print('Setting version file to ' + vf)
-            print(f'::set-output name=version::{version}')
-            print(f'::set-output name=prefix::{li}')
-            print(f'::set-output name=version_file::{vf}')
+      - id: set-version
+        shell: python
+        run: |
+          import sys, os
+          ref = os.environ.get("GITHUB_REF","")
+          a = ref.strip().replace('refs/tags/lantern-', '')
+          parts = a.split('-',1)
+          suffix = parts[1] if len(parts)>1 else ''
+          beta = 'beta' in suffix
+          internal = 'internal' in suffix
+          if beta:
+              li = 'lantern-installer-preview'
+              vf = 'version-beta.txt'
+              version = parts[0]
+          elif internal:
+              li = 'lantern-installer-internal'
+              vf = 'version-internal.txt'
+              version = parts[0]
+          else:
+              li = 'lantern-installer'
+              vf = 'version.txt'
+              version = a
+          print('Setting version to ' + version)
+          print('Setting prefix to ' + li)
+          print('Setting version file to ' + vf)
+          print(f'::set-output name=version::{version}')
+          print(f'::set-output name=prefix::{li}')
+          print(f'::set-output name=version_file::{vf}')
+    publish-binaries:
+      needs: [ set-version ]
+      steps:
+      - name: Setup S3cmd cli tool
+        uses: s3-actions/s3cmd@v1.4.0
+        with:
+          provider: aws
+          region: ${{ secrets.AWS_REGION }}
+          access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          secret_key: ${{ secrets.AWS_SECRET_KEY }}
+
+      #- name: Upload to S3
+      #  run: make release-qa
