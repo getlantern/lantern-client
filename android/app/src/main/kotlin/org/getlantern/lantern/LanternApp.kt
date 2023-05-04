@@ -51,6 +51,10 @@ open class LanternApp : Application() {
         if (session.isPlayVersion()) inAppBilling = InAppBilling(this)
 
         lanternHttpClient = LanternHttpClient()
+
+        // When the app starts, reset our "hasSucceedingProxy" flag to clear any old warnings
+        // about proxies being unavailable.
+        session.resetHasSucceedingProxy()
     }
 
     override fun attachBaseContext(base: Context) {
