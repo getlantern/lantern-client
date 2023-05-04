@@ -51,9 +51,7 @@ open class LanternService : Service(), Runnable {
         if (autoBooted) {
             Logger.debug(
                 TAG,
-                """
-                Attempted to auto boot but user has not onboarded to messaging, stop LanternService
-            """,
+                "Attempted to auto boot but user has not onboarded to messaging, stop LanternService",
             )
             stopSelf()
             return START_NOT_STICKY
