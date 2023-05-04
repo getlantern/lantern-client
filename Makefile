@@ -35,7 +35,7 @@ INSTALLER_NAME ?= lantern-installer
 CHANGELOG_NAME ?= CHANGELOG.md
 CHANGELOG_MIN_VERSION ?= 5.0.0
 
-get-command = $(shell which="$$(which $(1) 2> /dev/null)" && if [[ "$$which" ]]; then printf %q "$$which"; fi)
+get-command = $(shell which="$$(which $(1) 2> /dev/null)" && if [[ ! -z "$$which" ]]; then printf %q "$$which"; fi)
 
 GO        := $(call get-command,go)
 NODE      := $(call get-command,node)
@@ -393,9 +393,9 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	VERSION_CODE="$$VERSION_CODE" && \
 	DEVELOPMENT_MODE="$$DEVELOPMENT_MODE" && \
-	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle \
+	gradle -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle \
 		assembleProdSideload && \
-	$(SENTRY) upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodSideload/out/lib && \
+	sentry upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodSideload/out/lib && \
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
 
