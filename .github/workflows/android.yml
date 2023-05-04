@@ -1,10 +1,5 @@
 name: Android CI
 
-on:
-  pull_request:
-  push:
-    branches: [ main ]
-
 permissions:
   contents: read
 
@@ -93,13 +88,13 @@ jobs:
         access_key: ${{ secrets.AWS_ACCESS_KEY }}
         secret_key: ${{ secrets.AWS_SECRET_KEY }}
 
-    - name: Upload to S3
-      run: make release-qa
+#    - name: Upload to S3
+#      run: make release-qa
 
-    - name: Upload Android Release to Play Store Alpha track
-      uses: r0adkll/upload-google-play@v1
-      with:
-        serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
-        packageName: org.getlantern.lantern
-        releaseFiles: lantern-installer-internal.aab
-        track: alpha
+#    - name: Upload Android Release to Play Store Alpha track
+#      uses: r0adkll/upload-google-play@v1
+#      with:
+#        serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
+#        packageName: org.getlantern.lantern
+#        releaseFiles: lantern-installer-internal.aab
+#        track: alpha
