@@ -6,6 +6,7 @@ on:
       - 'lantern-*'
   workflow_run:
     workflows: [ "go", "android" ]
+    types: [completed]
 
 jobs:
     set-version:
@@ -45,6 +46,7 @@ jobs:
           print(f'::set-output name=version_file::{vf}')
     publish-binaries:
       runs-on: ubuntu-latest
+      if: ${{ github.event.workflow_run.conclusion == 'success' }}
       needs: [ set-version ]
       steps:
       - name: Setup S3cmd cli tool
