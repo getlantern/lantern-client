@@ -9,8 +9,8 @@ import androidx.fragment.app.DialogFragment
 open class ProgressDialogFragment : DialogFragment() {
 
     @NonNull
-    override fun onCreateDialog(savedInstanceState:Bundle?):Dialog {
-        val msgId:Int? = getArguments()?.getInt("msgId")
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val msgId: Int? = getArguments()?.getInt("msgId")
         val dialog = ProgressDialog(requireContext())
         if (msgId != null) dialog.setMessage(getString(msgId))
         return dialog
@@ -18,9 +18,9 @@ open class ProgressDialogFragment : DialogFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(msgId:Int):ProgressDialogFragment {
+        fun newInstance(msgId: Int): ProgressDialogFragment {
             val fragment = ProgressDialogFragment()
-            val args:Bundle = Bundle()
+            val args: Bundle = Bundle()
             args.putInt("msgId", msgId)
             fragment.setArguments(args)
             return fragment
