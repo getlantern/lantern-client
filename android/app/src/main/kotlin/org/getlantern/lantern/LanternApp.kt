@@ -95,14 +95,10 @@ open class LanternApp : Application() {
 
         @JvmStatic
         fun getPlans(cb: LanternHttpClient.PlansCallback) {
-            var iab: InAppBilling? = null
-            if (session.isPlayVersion) {
-                iab = inAppBilling
-            }
-            if (session.isRussianUser) {
-                iab = null
-            }
-            lanternHttpClient.getPlans(cb, iab)
+            lanternHttpClient.getPlans(
+                cb,
+                if (session.isPlayVersion && !session.isRussianUser) inAppBilling else null
+            )
         }
 
         @JvmStatic
