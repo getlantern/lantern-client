@@ -20,7 +20,11 @@ import org.greenrobot.eventbus.Subscribe
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class LanternVpnService : VpnService(), Runnable {
     private var provider: Provider? = null
-    private val helper: ServiceHelper = ServiceHelper(this, R.drawable.status_connected, R.string.service_connected)
+    private val helper: ServiceHelper = ServiceHelper(
+        this,
+        R.drawable.status_connected,
+        R.string.service_connected,
+    )
     private val lanternServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName) {
             Logger.e(TAG, "LanternService disconnected, disconnecting VPN")
@@ -32,7 +36,11 @@ class LanternVpnService : VpnService(), Runnable {
     override fun onCreate() {
         super.onCreate()
         Logger.d(TAG, "VpnService created")
-        bindService(Intent(this, LanternService_::class.java), lanternServiceConnection, Context.BIND_AUTO_CREATE)
+        bindService(
+            Intent(this, LanternService_::class.java),
+            lanternServiceConnection,
+            Context.BIND_AUTO_CREATE,
+        )
         EventBus.getDefault().register(this)
     }
 
@@ -77,7 +85,12 @@ class LanternVpnService : VpnService(), Runnable {
     override fun run() {
         try {
             Logger.d(TAG, "Loading Lantern library")
-            getOrInitProvider()?.run(this, Builder(), LanternApp.getSession().sOCKS5Addr, LanternApp.getSession().dNSGrabAddr)
+            getOrInitProvider()?.run(
+                this,
+                Builder(),
+                LanternApp.getSession().sOCKS5Addr,
+                LanternApp.getSession().dNSGrabAddr,
+            )
         } catch (e: Exception) {
             Logger.error(TAG, "Error running VPN", e)
         } finally {
