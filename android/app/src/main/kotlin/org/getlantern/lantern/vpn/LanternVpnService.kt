@@ -8,7 +8,6 @@ import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.Build
 import android.os.IBinder
-
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Stats
@@ -18,26 +17,23 @@ import org.getlantern.mobilesdk.Logger
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
-import internalsdk.Internalsdk
-import internalsdk.SocketProtector
-
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class LanternVpnService : VpnService(), Runnable {
-    private var provider:Provider? = null
-    private val helper:ServiceHelper = ServiceHelper(this, R.drawable.status_connected, R.string.service_connected)
-    private val lanternServiceConnection:ServiceConnection = object : ServiceConnection {
-        override fun onServiceDisconnected(name:ComponentName) {
+    private var provider: Provider? = null
+    private val helper: ServiceHelper = ServiceHelper(this, R.drawable.status_connected, R.string.service_connected)
+    private val lanternServiceConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName) {
             Logger.e(TAG, "LanternService disconnected, disconnecting VPN")
-            stop()            
+            stop()
         }
-        override fun onServiceConnected(name:ComponentName, service:IBinder) {}
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {}
     }
 
     override fun onCreate() {
         super.onCreate()
         Logger.d(TAG, "VpnService created")
         bindService(Intent(this, LanternService_::class.java), lanternServiceConnection, Context.BIND_AUTO_CREATE)
-        EventBus.getDefault().register(this)  
+        EventBus.getDefault().register(this)
     }
 
     override fun onDestroy() {
@@ -46,27 +42,27 @@ class LanternVpnService : VpnService(), Runnable {
         doStop()
         unbindService(lanternServiceConnection)
         helper.onDestroy()
-        EventBus.getDefault().unregister(this)   
+        EventBus.getDefault().unregister(this)
     }
 
     override fun onRevoke() {
         Logger.d(TAG, "revoked")
-        stop()        
+        stop()
     }
 
-    override fun onStartCommand(intent:Intent, flags:Int, startId:Int):Int {
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         return if (intent.action == ACTION_DISCONNECT) {
-                stop()
-                START_NOT_STICKY
-            } else {
-                START_STICKY
-            }
+            stop()
+            START_NOT_STICKY
+        } else {
+            START_STICKY
+        }
     }
 
     private fun connect() {
         Logger.d(TAG, "connect")
         helper.makeForeground()
-        Thread(this, "VpnService").start()  
+        Thread(this, "VpnService").start()
     }
 
     @Subscribe(sticky = true)
@@ -81,12 +77,12 @@ class LanternVpnService : VpnService(), Runnable {
     override fun run() {
         try {
             Logger.d(TAG, "Loading Lantern library")
-            getOrInitProvider()?.run(this, Builder(), LanternApp.getSession().sOCKS5Addr, LanternApp.getSession().dNSGrabAddr)            
-        } catch (e:Exception) {
+            getOrInitProvider()?.run(this, Builder(), LanternApp.getSession().sOCKS5Addr, LanternApp.getSession().dNSGrabAddr)
+        } catch (e: Exception) {
             Logger.error(TAG, "Error running VPN", e)
         } finally {
             Logger.debug(TAG, "Lantern terminated.")
-            stop()            
+            stop()
         }
     }
 
@@ -109,12 +105,12 @@ class LanternVpnService : VpnService(), Runnable {
         try {
             Logger.d(TAG, "updating vpn preference")
             LanternApp.getSession().updateVpnPreference(false)
-        } catch (t:Throwable) {
+        } catch (t: Throwable) {
             Logger.e(TAG, "error updating vpn preference", t)
-        }        
+        }
     }
 
-    @Synchronized fun getOrInitProvider():Provider? {
+    @Synchronized fun getOrInitProvider(): Provider? {
         Logger.d(TAG, "getOrInitProvider()")
         if (provider == null) {
             Logger.d(TAG, "Using Go tun2socks")
