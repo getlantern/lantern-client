@@ -1,4 +1,16 @@
 
+<a name="7.4.6"></a>
+## [7.4.6](https://github.com/getlantern/android-lantern/compare/7.4.1...7.4.6)
+
+> 2023-05-05
+
+### Pull Requests
+
+* Merge pull request [#828](https://github.com/getlantern/android-lantern/issues/828) from getlantern/atavism/device-remains-pro-after-unlinking
+* Merge pull request [#830](https://github.com/getlantern/android-lantern/issues/830) from getlantern/ox/issue56
+* Merge pull request [#829](https://github.com/getlantern/android-lantern/issues/829) from getlantern/atavism/enable-strictmode-debug-builds
+
+
 <a name="7.4.1"></a>
 ## [7.4.1](https://github.com/getlantern/android-lantern/compare/7.4.0...7.4.1)
 
