@@ -123,6 +123,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
 //            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
 //        }
 
+
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
