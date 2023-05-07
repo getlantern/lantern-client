@@ -156,7 +156,6 @@ class Settings extends StatelessWidget {
                   ))
             ],
           ),
-          //* Report
           ListItemFactory.settingsItem(
             content: 'terms_of_service'.i18n,
             trailingArray: [
