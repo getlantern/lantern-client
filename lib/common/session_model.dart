@@ -218,4 +218,10 @@ class SessionModel extends Model {
   Future<void> checkForUpdates() {
     return methodChannel.invokeMethod('checkForUpdates');
   }
+
+  Future<void> openWebview(String url) {
+    return methodChannel.invokeMethod('openWebview', <String, dynamic>{
+      'url': url,
+    });
+  }
 }

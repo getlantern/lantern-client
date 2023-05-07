@@ -104,6 +104,15 @@ msgstr "Settings"
 msgid "general"
 msgstr "General"
 
+msgid "about"
+msgstr "About"
+
+msgid "privacy_policy"
+msgstr "Privacy Policy"
+
+msgid "terms_of_service"
+msgstr "Terms of Service"
+
 msgid "proxy_all"
 msgstr "Proxy everything"
 

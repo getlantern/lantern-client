@@ -25,6 +25,8 @@ class Settings extends StatelessWidget {
 
   void checkForUpdates() async => await sessionModel.checkForUpdates();
 
+  void openWebview(String url) => sessionModel.openWebview(url);
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
@@ -137,6 +139,41 @@ class Settings extends StatelessWidget {
               ],
             ),
           ),
+          ListItemFactory.settingsItem(
+            header: 'about'.i18n,
+            content: 'privacy_policy'.i18n,
+            onTap: () {
+              openWebview("https://lantern.io/privacy");
+            },
+            trailingArray: [
+              mirrorLTR(
+                  context: context,
+                  child: const Padding(
+                    padding: EdgeInsetsDirectional.only(start: 4.0),
+                    child: const CAssetImage(
+                      path: ImagePaths.open,
+                    ),
+                  ))
+            ],
+          ),
+          //* Report
+          ListItemFactory.settingsItem(
+            content: 'terms_of_service'.i18n,
+            trailingArray: [
+              mirrorLTR(
+                context: context,
+                child: const Padding(
+                  padding: EdgeInsetsDirectional.only(start: 4.0),
+                  child: const CAssetImage(
+                    path: ImagePaths.open,
+                  ),
+                ),
+              )
+            ],
+            onTap: () {
+              openWebview("https://lantern.io/terms");
+            },
+          ),
           //* Build version
           FutureBuilder<PackageInfo>(
             future: packageInfo,
@@ -180,9 +217,7 @@ class Settings extends StatelessWidget {
                       ),
                       child: sessionModel.sdkVersion(
                         (context, sdkVersion, _) => CText(
-                          'sdk_version'
-                              .i18n
-                              .fill([sdkVersion]),
+                          'sdk_version'.i18n.fill([sdkVersion]),
                           style: tsOverline.copiedWith(color: pink4),
                         ),
                       ),
