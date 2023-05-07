@@ -13,7 +13,7 @@ object SentryUtil {
 
     /**
      * Enables enrichment of sentry crash reports with the most recent Go panic from logcat.
-     * Keep in mind that Sentry only finds panics the next time that it runs after the processed
+     * Keep in mind that Sentry only finds panics the next time that it runs after the process
      * actually panicked. So, we can safely exclude logs from our current run.
      *
      * Keep in mind also that there's no guarantee that the panic log in question belongs to our
