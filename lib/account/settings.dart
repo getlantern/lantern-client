@@ -23,7 +23,28 @@ class Settings extends StatelessWidget {
   void reportIssue() async =>
       LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
 
-  void checkForUpdates() async => await sessionModel.checkForUpdates();
+  Future<void> checkForUpdates(BuildContext context) async {
+    showProgressDialog(context);
+    sleep(Duration(seconds: 3));
+    await sessionModel.checkForUpdates();
+    Navigator.pop(context);
+  }
+
+  void showProgressDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: SizedBox(
+                width: 40.0,
+                height: 40.0,
+                child: const CircularProgressIndicator(
+                    backgroundColor: Colors.black,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +90,12 @@ class Settings extends StatelessWidget {
             trailingArray: [
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
-            onTap: checkForUpdates,
+            onTap: () {
+              showProgressDialog(context);
+              sessionModel.checkForUpdates();
+              //sleep(Duration(seconds: 3));
+              Navigator.pop(context);
+            },
           ),
           //* Blocked
           messagingModel.getOnBoardingStatus(
@@ -180,9 +206,7 @@ class Settings extends StatelessWidget {
                       ),
                       child: sessionModel.sdkVersion(
                         (context, sdkVersion, _) => CText(
-                          'sdk_version'
-                              .i18n
-                              .fill([sdkVersion]),
+                          'sdk_version'.i18n.fill([sdkVersion]),
                           style: tsOverline.copiedWith(color: pink4),
                         ),
                       ),
