@@ -72,6 +72,7 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
 
     @Override
     public void onBillingSetupFinished(BillingResult billingResult) {
+        Logger.debug(TAG, "onBillingSetupFinished with response code: " + billingResult.getResponseCode());
         if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
             if (isRetriable(billingResult)) {
                 handler.postDelayed(() -> {
@@ -88,9 +89,7 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
 
     @Override
     public void onBillingServiceDisconnected() {
-        // Try to restart the connection on the next request to
-        // Google Play by calling the startConnection() method.
-        startConnection();
+        Logger.debug(TAG, "onBillingServiceDisconnected");
     }
 
     /**

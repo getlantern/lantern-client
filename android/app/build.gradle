@@ -420,7 +420,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.3.0'
 
     // lib that simplifies event bus communication between activities, fragments, threads, services, etc
-    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'org.greenrobot:eventbus:3.3.1'
 
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.12'
 
