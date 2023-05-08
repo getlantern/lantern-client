@@ -41,7 +41,6 @@ import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
-import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.DeviceInfo
 import org.getlantern.lantern.util.showAlertDialog
@@ -627,7 +626,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
 
     private fun updateStatus(useVpn: Boolean) {
         Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
-        EventBus.getDefault().post(VpnState(useVpn))
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
         vpnModel.setVpnOn(useVpn)
