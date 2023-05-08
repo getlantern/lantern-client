@@ -328,7 +328,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 // we are setting static user for payment mode
                 if (user?.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
 
-                devices?.filter { it.id == deviceID }?.run 
+                //Switch to free account if device it not linked
+                devices?.filter { it.id == deviceID }?.run {
                     if (isEmpty()) {
                         LanternApp.getSession().logout()
                         restartApp()
