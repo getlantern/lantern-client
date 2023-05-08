@@ -329,13 +329,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 if (user?.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
 
                 devices?.filter { it.id == deviceID }?.run {
-                    if (user.isProUser && isEmpty()) {
                         LanternApp.getSession().logout()
                         restartApp()
-                    }
                 }
-
-
             }
         })
     }
