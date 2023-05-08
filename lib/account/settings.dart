@@ -23,12 +23,7 @@ class Settings extends StatelessWidget {
   void reportIssue() async =>
       LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
 
-  Future<void> checkForUpdates(BuildContext context) async {
-    showProgressDialog(context);
-    sleep(Duration(seconds: 3));
-    await sessionModel.checkForUpdates();
-    Navigator.pop(context);
-  }
+  void checkForUpdates() async => await sessionModel.checkForUpdates();
 
   void showProgressDialog(BuildContext context) {
     showDialog(
@@ -39,9 +34,9 @@ class Settings extends StatelessWidget {
             child: SizedBox(
                 width: 40.0,
                 height: 40.0,
-                child: const CircularProgressIndicator(
+                child: CircularProgressIndicator(
                     backgroundColor: Colors.black,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
+                    valueColor: AlwaysStoppedAnimation<Color>(blue4))),
           );
         });
   }
@@ -90,10 +85,9 @@ class Settings extends StatelessWidget {
             trailingArray: [
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
-            onTap: () async {
+            onTap: () {
               showProgressDialog(context);
-              await sessionModel.checkForUpdates();
-              //sleep(Duration(seconds: 3));
+              checkForUpdates();
               Navigator.pop(context);
             },
           ),
