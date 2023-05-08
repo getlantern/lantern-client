@@ -17,7 +17,6 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <permission
         android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"
@@ -148,16 +147,6 @@
             android:name=".activity.PrivacyDisclosureActivity_"
             android:screenOrientation="portrait"
             />
-
-        <activity
-            android:name=".activity.UpdateActivity_"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false"
-            android:theme="@style/Theme.Blank.Dialog">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
 
         <!-- It's required to update Lantern on API 24+ -->
         <provider
