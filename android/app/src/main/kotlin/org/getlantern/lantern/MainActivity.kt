@@ -325,17 +325,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 val deviceID = LanternApp.getSession().deviceID()
                 // if the payment test mode is enabled
                 // then do nothing To avoid restarting app while debugging
-                // we are setting static for our testamentary mode
-                if (!LanternApp.getSession().isPaymentTestMode) {
-                    // switch to free user if device is unlinked from Pro account
-                    devices?.filter { it.id == deviceID }?.run {
-                        if (user.isProUser && isEmpty()) {
-                            LanternApp.getSession().logout()
-                            // Todo here we are getting app crash
-//                         restartApp()
-                        }
+                // we are setting static user for payment mode
+                if (user?.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
+
+                devices?.filter { it.id == deviceID }?.run {
+                    if (user.isProUser && isEmpty()) {
+                        LanternApp.getSession().logout()
+                        restartApp()
                     }
                 }
+
 
             }
         })
