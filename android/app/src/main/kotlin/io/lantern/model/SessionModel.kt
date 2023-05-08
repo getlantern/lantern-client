@@ -113,7 +113,7 @@ class SessionModel(
                 }
             }
             "checkForUpdates" -> {
-                autoUpdater.checkForUpdates(true)
+                autoUpdater.checkForUpdates()
             }
             else -> super.doMethodCall(call, notImplemented)
         }
