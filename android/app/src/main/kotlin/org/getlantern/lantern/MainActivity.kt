@@ -1,7 +1,6 @@
 package org.getlantern.lantern
 
 import android.Manifest
-import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.VpnService
@@ -14,11 +13,7 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import androidx.webkit.ProxyConfig
-import androidx.webkit.ProxyController
 import com.thefinestartist.finestwebview.FinestWebView
-import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -29,7 +24,6 @@ import io.lantern.model.SessionModel
 import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager
@@ -42,7 +36,6 @@ import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.service.LanternService_
-import org.getlantern.lantern.util.DeviceInfo
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
@@ -119,7 +112,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
 //        if (!BuildConfig.DEVELOPMENT_MODE) {
 //            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
 //        }
-
 
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
