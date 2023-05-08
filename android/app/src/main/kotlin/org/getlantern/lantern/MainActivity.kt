@@ -35,7 +35,6 @@ import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
-import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.ProError
@@ -67,7 +66,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
-    private var autoUpdateJob: Job? = null
 
     private val lanternClient = LanternApp.getLanternHttpClient()
 
@@ -426,51 +424,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             .webViewAllowFileAccessFromFileURLs(true)
         runOnUiThread {
             builder.show(survey.url!!)
-        }
-    }
-
-    private fun noUpdateAvailable(userInitiated: Boolean) {
-        if (!userInitiated) return
-        runOnUiThread {
-            val appName = resources.getString(R.string.app_name)
-            val noUpdateTitle = resources.getString(R.string.no_update_available)
-            val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
-            showAlertDialog(noUpdateTitle, noUpdateMsg)
-        }
-    }
-
-    private fun startUpdateActivity(updateURL:String) {
-        val intent = Intent()
-        intent.component = ComponentName(
-            activity.packageName,
-            "org.getlantern.lantern.activity.UpdateActivity_",
-        )
-        intent.putExtra("updateUrl", updateURL)
-        startActivity(intent)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun runCheckUpdate(checkUpdate: CheckUpdate) {
-        val userInitiated = checkUpdate.userInitiated
-        if (LanternApp.getSession().isPlayVersion && userInitiated) {
-            Utils.openPlayStore(context)
-            return
-        }
-        if (autoUpdateJob != null && autoUpdateJob!!.isActive) {
-            Logger.d(TAG, "Already checking for updates")
-            return
-        }
-        autoUpdateJob = lifecycleScope.launch(Dispatchers.IO) {
-            try {
-              val deviceInfo:internalsdk.DeviceInfo = DeviceInfo
-              val updateURL = Internalsdk.checkForUpdates(deviceInfo)
-              when {
-                updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
-                else -> startUpdateActivity(updateURL)
-              }
-            } catch (e:Exception) {
-              Logger.d(TAG, "Unable to check for update: %s", e.message)
-            }
         }
     }
 

@@ -129,7 +129,7 @@ public class LanternService extends Service implements Runnable {
             createUser(0);
         }
 
-        if (!BuildConfig.PLAY_VERSION) {
+        if (!BuildConfig.PLAY_VERSION && !BuildConfig.DEVELOPMENT_MODE) {
             // check if an update is available
             EventBus.getDefault().post(new CheckUpdate(false));
         }

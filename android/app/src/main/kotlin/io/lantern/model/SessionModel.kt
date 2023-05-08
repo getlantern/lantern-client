@@ -12,7 +12,6 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
@@ -20,6 +19,7 @@ import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
+import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
@@ -35,6 +35,7 @@ class SessionModel(
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
+    private val autoUpdater = AutoUpdater(activity, activity)
 
     companion object {
         private const val TAG = "SessionModel"
@@ -112,7 +113,7 @@ class SessionModel(
                 }
             }
             "checkForUpdates" -> {
-                EventBus.getDefault().post(CheckUpdate(true))
+                autoUpdater.checkForUpdates(true)
             }
             else -> super.doMethodCall(call, notImplemented)
         }

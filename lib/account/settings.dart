@@ -90,9 +90,9 @@ class Settings extends StatelessWidget {
             trailingArray: [
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
-            onTap: () {
+            onTap: () async {
               showProgressDialog(context);
-              sessionModel.checkForUpdates();
+              await sessionModel.checkForUpdates();
               //sleep(Duration(seconds: 3));
               Navigator.pop(context);
             },
