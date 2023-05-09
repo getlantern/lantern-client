@@ -25,6 +25,8 @@ class DnsDetector(val context: Context, val fakeDnsIP: String) {
     private var connectivityManager: ConnectivityManager = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
     private var allNetworks = mutableListOf<Network>()
 
+    val dnsServer: String get() = doGetDnsServer() 
+
     init {
         connectivityManager.registerNetworkCallback(
             NetworkRequest.Builder()
@@ -45,12 +47,6 @@ class DnsDetector(val context: Context, val fakeDnsIP: String) {
                 }
             },
         )
-    }
-
-    fun getDnsServer(): String {
-        val dnsServer = doGetDnsServer()
-        Logger.debug(TAG, "Using DNS server " + dnsServer)
-        return dnsServer
     }
 
     fun doGetDnsServer(): String {
