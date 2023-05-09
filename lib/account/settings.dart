@@ -23,21 +23,20 @@ class Settings extends StatelessWidget {
   void reportIssue() async =>
       LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
 
-  void checkForUpdates() async => await sessionModel.checkForUpdates();
-
   void showProgressDialog(BuildContext context) {
     showDialog(
         context: context,
         barrierDismissible: false,
+        barrierColor: Colors.transparent,
         builder: (BuildContext context) {
           return Center(
-            child: SizedBox(
-                width: 40.0,
-                height: 40.0,
-                child: CircularProgressIndicator(
-                    backgroundColor: Colors.black,
-                    valueColor: AlwaysStoppedAnimation<Color>(blue4))),
-          );
+              child: SizedBox(
+            width: 40.0,
+            height: 40.0,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(grey5),
+            ),
+          ));
         });
   }
 
@@ -85,9 +84,9 @@ class Settings extends StatelessWidget {
             trailingArray: [
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
-            onTap: () {
+            onTap: () async {
               showProgressDialog(context);
-              checkForUpdates();
+              await sessionModel.checkForUpdates();
               Navigator.pop(context);
             },
           ),
