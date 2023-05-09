@@ -1,4 +1,16 @@
 
+<a name="7.4.7"></a>
+## [7.4.7](https://github.com/getlantern/android-lantern/compare/7.4.6...7.4.7)
+
+> 2023-05-09
+
+### Pull Requests
+
+* Merge pull request [#832](https://github.com/getlantern/android-lantern/issues/832) from getlantern/ox/issue66
+* Merge pull request [#833](https://github.com/getlantern/android-lantern/issues/833) from getlantern/ox/issue69
+* Merge pull request [#834](https://github.com/getlantern/android-lantern/issues/834) from getlantern/ox/issue63
+
+
 <a name="7.4.6"></a>
 ## [7.4.6](https://github.com/getlantern/android-lantern/compare/7.4.1...7.4.6)
 
