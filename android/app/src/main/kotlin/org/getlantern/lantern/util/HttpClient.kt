@@ -1,4 +1,4 @@
-package org.getlantern.mobilesdk.util
+package org.getlantern.lantern.util
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser

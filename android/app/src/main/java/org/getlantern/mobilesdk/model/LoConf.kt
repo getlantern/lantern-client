@@ -1,4 +1,4 @@
-package org.getlantern.mobilesdk.model
+package org.getlantern.lantern.model
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -8,9 +8,9 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Response
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.util.HttpCallback
+import org.getlantern.lantern.util.HttpClient
 import org.getlantern.mobilesdk.Logger
-import org.getlantern.mobilesdk.util.HttpCallback
-import org.getlantern.mobilesdk.util.HttpClient
 
 fun interface LoConfCallback {
     fun onSuccess(loconf: LoConf)

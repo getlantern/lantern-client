@@ -10,9 +10,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.androidannotations.annotations.EService;
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProUser;
+import org.getlantern.lantern.util.LanternHttpClient;
 import org.getlantern.mobilesdk.Logger;
 
 import java.lang.ref.WeakReference;

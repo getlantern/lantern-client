@@ -18,11 +18,11 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
-import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.util.ActivityExtKt;
+import org.getlantern.lantern.util.LanternHttpClient;
 import org.getlantern.mobilesdk.Logger;
 
 import java.math.BigDecimal;

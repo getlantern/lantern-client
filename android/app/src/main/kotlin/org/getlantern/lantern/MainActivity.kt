@@ -36,7 +36,6 @@ import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.CheckUpdate
-import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
@@ -44,6 +43,7 @@ import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.DeviceInfo
+import org.getlantern.lantern.util.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger

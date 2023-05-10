@@ -40,13 +40,13 @@ import org.getlantern.lantern.BuildConfig;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.fragment.ClickSpan;
-import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.MaterialUtil;
 import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.model.ProPlan;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.util.ActivityExtKt;
+import org.getlantern.lantern.util.LanternHttpClient;
 import org.getlantern.mobilesdk.Logger;
 
 import java.util.ArrayList;

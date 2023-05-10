@@ -16,10 +16,10 @@ import org.androidannotations.annotations.Extra
 import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.PaymentHandler
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.util.Freekassa
+import org.getlantern.lantern.util.LanternHttpClient
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.json.JSONException

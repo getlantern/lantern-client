@@ -17,9 +17,9 @@ import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.MainActivity;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.BaseFragmentActivity;
-import org.getlantern.lantern.model.LanternHttpClient;
 import org.getlantern.lantern.model.ProError;
 import org.getlantern.lantern.util.ActivityExtKt;
+import org.getlantern.lantern.util.LanternHttpClient;
 import org.getlantern.mobilesdk.Logger;
 
 import java.lang.ref.WeakReference;
