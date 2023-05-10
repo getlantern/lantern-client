@@ -22,7 +22,6 @@ import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
-import org.getlantern.lantern.util.Analytics
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
@@ -122,7 +121,6 @@ class SessionModel(
                     tx.put("/selectedTab", call.argument<String>("tab")!!)
                 }
             }
-            "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
             "checkForUpdates" -> {
                 EventBus.getDefault().post(CheckUpdate(true))
             }

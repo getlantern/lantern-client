@@ -244,10 +244,6 @@ class SessionModel extends Model {
         .then((enabled) => enabled == true);
   }
 
-  Future<void> trackScreenView(String path) async {
-    return methodChannel.invokeMethod('trackScreenView', path);
-  }
-
   Future<void> checkForUpdates() {
     return methodChannel.invokeMethod('checkForUpdates');
   }

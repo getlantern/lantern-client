@@ -21,7 +21,6 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.*;
 import org.getlantern.lantern.util.ActivityExtKt;
 import org.getlantern.lantern.util.DateUtil;
-import org.getlantern.lantern.util.Analytics;
 import org.getlantern.mobilesdk.Logger;
 import org.joda.time.LocalDateTime;
 
@@ -62,7 +61,6 @@ public class PlansActivity extends BaseFragmentActivity {
         initViews();
         updatePlans();
         setPaymentGateway();
-        sendScreenViewEvent();
     }
 
     @Click
@@ -90,10 +88,6 @@ public class PlansActivity extends BaseFragmentActivity {
         View activateCodeContainer = findViewById(R.id.activateCodeContainer);
         activateCodeContainer.setVisibility(View.VISIBLE);
         activateCodeContainer.setOnClickListener(v -> NavigatorKt.openCheckOutReseller(this));
-    }
-
-    private void sendScreenViewEvent() {
-        Analytics.event(this, Analytics.CATEGORY_PURCHASING, "plans_view");
     }
 
     protected void setPaymentGateway() {
@@ -214,14 +208,6 @@ public class PlansActivity extends BaseFragmentActivity {
         }
         final String planId = (String) view.getTag();
         Logger.debug(TAG, "Plan selected: " + planId);
-
-        final Map<Integer, String> params = new HashMap<>();
-        params.put(Analytics.DIMENSION_PLAN_ID, planId);
-        Analytics.event(
-                this,
-                Analytics.CATEGORY_PURCHASING,
-                "plan_selected",
-                params);
 
         LanternApp.getSession().setProPlan(plans.get(planId));
         startActivity(new Intent(this, CheckoutActivity_.class));
