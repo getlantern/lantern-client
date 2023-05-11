@@ -209,7 +209,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         togglePaymentMethod.setPaintFlags(togglePaymentMethod.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         togglePaymentMethod.setOnClickListener(v -> {
             useStripe = !useStripe;
-            displayStripeOrAlipay();
+            displayStripeOrFreekassa();
         });
 
         referralCodeInput.setOnEditorActionListener(submitForm);
@@ -217,10 +217,10 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         if (isPlayVersion) {
             togglePaymentMethod.setVisibility(View.GONE);
         }
-        displayStripeOrAlipay();
+        displayStripeOrFreekassa();
     }
 
-    private void displayStripeOrAlipay() {
+    private void displayStripeOrFreekassa() {
         int tosText = R.string.terms_of_service_text;
         int continueText = R.string.continue_to_payment;
         if (useStripe) {
@@ -234,7 +234,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         // hide the buttons and move the referral code
         if (useStripe) {
             stripeSection.setVisibility(View.VISIBLE);
-            togglePaymentMethod.setText(getText(R.string.switch_to_alipay));
+            togglePaymentMethod.setVisibility(View.GONE);
             tvStepDescription.setText(R.string.enter_payment_details);
             referralCodeLayout.setTranslationY(0);
         } else {
@@ -488,11 +488,11 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         // Finally, if we didn't force a provider, try to see if this is coming
         // from Google Play. If it is, it has it's own workflow which can short
         // circuit the rest of the function.
-        if (!BuildConfig.PAYMENT_PROVIDER.equals("")) {
+        if (!TextUtils.isEmpty(BuildConfig.PAYMENT_PROVIDER)) {
             // for debug builds, allow overriding default payment provider
             provider = BuildConfig.PAYMENT_PROVIDER;
             Logger.debug(TAG, "Overriding default payment provider to " + provider);
-        } else if (forcedPaymentProvider != "") {
+        } else if (!TextUtils.isEmpty(forcedPaymentProvider)) {
             provider = forcedPaymentProvider;
             Logger.debug(TAG, "Overriding default payment provider to " + provider);
         } else if (LanternApp.getSession().isPlayVersion()) {
@@ -505,7 +505,8 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         Logger.debug(TAG, "Attempting to use payment provider: " + provider);
 
         Class<? extends Activity> activityClass = null;
-        switch (provider.toLowerCase()) {
+        String lowerCaseProvider = provider == null ? "" : provider.toLowerCase();
+        switch (lowerCaseProvider) {
 //            case "adyen":
 //                activityClass = AdyenActivity_.class;
 //                break;
@@ -516,7 +517,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
                 activityClass = PaymentWallActivity_.class;
                 break;
             default:
-                Logger.error(TAG, "Unknown payment provider " + provider.toLowerCase());
+                Logger.error(TAG, "Unknown payment provider " + lowerCaseProvider);
                 return;
         }
         if (activityClass != null) {

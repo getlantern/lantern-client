@@ -1,20 +1,29 @@
 package org.getlantern.mobilesdk.model
 
 import android.app.Application
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Proxy
 import android.os.Build
 import android.provider.Settings.Secure
 import android.text.TextUtils
+import android.util.ArrayMap
+import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.webkit.ProxyConfig
+import androidx.webkit.ProxyController
+import androidx.webkit.WebViewFeature
 import com.google.gson.GsonBuilder
 import com.yariksoffice.lingver.Lingver
 import internalsdk.AdSettings
 import internalsdk.Session
+import io.lantern.db.DB
 import io.lantern.model.BaseModel
 import io.lantern.model.Vpn
-import io.lantern.db.DB
 import org.getlantern.lantern.BuildConfig
+import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
@@ -23,10 +32,12 @@ import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.util.DnsDetector
 import org.greenrobot.eventbus.EventBus
+import java.io.PrintWriter
+import java.io.StringWriter
+import java.lang.reflect.InvocationTargetException
 import java.text.DateFormat
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.HashMap
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -49,6 +60,8 @@ abstract class SessionManager(application: Application) : Session {
 
     fun setStartResult(result: StartResult?) {
         startResult = result
+        setWebViewProxy()
+
         Logger.debug(
             TAG,
             String.format(
@@ -221,19 +234,6 @@ abstract class SessionManager(application: Application) : Session {
     // for now, disable Chat completely
     fun chatEnabled(): Boolean { return false }
 
-    override fun setMatomoEnabled(enabled: Boolean) {
-        Logger.d(TAG, "Setting $MATOMO_ENABLED to $enabled")
-        prefs.edit().putBoolean(MATOMO_ENABLED, enabled).apply()
-    }
-
-    fun matomoEnabled(): Boolean {
-        val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
-        if (isDevMode) {
-            return true
-        }
-        return prefs.getBoolean(MATOMO_ENABLED, false)
-    }
-
     fun appVersion(): String {
         return appVersion
     }
@@ -292,7 +292,7 @@ abstract class SessionManager(application: Application) : Session {
         } else prefs.getString(TOKEN, "")!!
     }
 
-    private val isPaymentTestMode: Boolean
+     val isPaymentTestMode: Boolean
         get() = prefs.getBoolean(PAYMENT_TEST_MODE, false)
 
     fun setPaymentTestMode(mode: Boolean) {
@@ -374,6 +374,10 @@ abstract class SessionManager(application: Application) : Session {
             .putString(SERVER_CITY, city)
             .putString(SERVER_COUNTRY_CODE, countryCode)
             .putBoolean(HAS_SUCCEEDING_PROXY, hasSucceedingProxy).apply()
+    }
+
+    fun resetHasSucceedingProxy() {
+        prefs.edit().remove(HAS_SUCCEEDING_PROXY).apply()
     }
 
     /**
@@ -463,7 +467,6 @@ abstract class SessionManager(application: Application) : Session {
 
         private const val REPLICA_ADDR = "replicaAddr"
         public const val CHAT_ENABLED = "chatEnabled"
-        private const val MATOMO_ENABLED = "matomoEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),
@@ -522,6 +525,91 @@ abstract class SessionManager(application: Application) : Session {
             Logger.debug(TAG, "Configured language was empty, using %1\$s", locale)
             setLocale(locale)
             Logger.debug(TAG, "doSetLanguage() finished at ${System.currentTimeMillis() - start}")
+        }
+    }
+
+    private fun setWebViewProxy() {
+        // We set ourselves as the WebView proxy if and only if WebViewFeature.PROXY_OVERRIDE
+        // is supported.
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.PROXY_OVERRIDE)) {
+            val proxyConfig = ProxyConfig.Builder()
+                .addProxyRule("http://${LanternApp.getSession().hTTPAddr}")
+                .build()
+            ProxyController.getInstance().setProxyOverride(
+                proxyConfig,
+                ContextCompat.getMainExecutor(context)
+            ) {}
+        } else {
+            // Below code based on suggestion here - https://stackoverflow.com/a/18453384
+            try {
+                val appContext = context.applicationContext
+                val addressParts = LanternApp.getSession().hTTPAddr.split(":")
+                val host = addressParts[0]
+                val port = addressParts[1]
+                System.setProperty("http.proxyHost", host)
+                System.setProperty("http.proxyPort", port)
+                System.setProperty("https.proxyHost", host)
+                System.setProperty("https.proxyPort", port)
+                val applicationClass = LanternApp::class.java
+                val loadedApkField = applicationClass.getField("mLoadedApk")
+                loadedApkField.isAccessible = true
+                val loadedApk: Any = loadedApkField.get(appContext)
+                val loadedApkCls = Class.forName("android.app.LoadedApk")
+                val receiversField = loadedApkCls.getDeclaredField("mReceivers")
+                receiversField.isAccessible = true
+                val receivers = receiversField.get(loadedApk) as ArrayMap<Context, ArrayMap<BroadcastReceiver, Any>>
+                for (receiverMap in receivers.values) {
+                    for (rec in (receiverMap as ArrayMap).keys) {
+                        val clazz: Class<*> = rec.javaClass
+                        if (clazz.name.contains("ProxyChangeListener")) {
+                            val onReceiveMethod = clazz.getDeclaredMethod(
+                                "onReceive",
+                                Context::class.java,
+                                Intent::class.java
+                            )
+                            val intent = Intent(Proxy.PROXY_CHANGE_ACTION)
+                            onReceiveMethod.invoke(rec, appContext, intent)
+                        }
+                    }
+                }
+                Log.d(TAG, "Setting proxy with >= 4.4 API successful!")
+            } catch (e: ClassNotFoundException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            } catch (e: NoSuchFieldException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            } catch (e: IllegalAccessException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            } catch (e: IllegalArgumentException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            } catch (e: NoSuchMethodException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            } catch (e: InvocationTargetException) {
+                val sw = StringWriter()
+                e.printStackTrace(PrintWriter(sw))
+                val exceptionAsString = sw.toString()
+                e.message?.let { Log.v(TAG, it) }
+                Log.v(TAG, exceptionAsString)
+            }
         }
     }
 }

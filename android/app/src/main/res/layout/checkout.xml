@@ -176,7 +176,7 @@
                 android:layout_marginTop="@dimen/space_normal"
                 android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/space_small"
-                android:text="@string/switch_to_alipay"
+                android:text="@string/switch_to_credit_card"
                 android:textAppearance="?attr/textAppearanceOverline"
                 android:textColor="@color/tertiary_green"
                 app:layout_constraintEnd_toEndOf="parent"
