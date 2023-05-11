@@ -292,7 +292,7 @@ abstract class SessionManager(application: Application) : Session {
         } else prefs.getString(TOKEN, "")!!
     }
 
-    private val isPaymentTestMode: Boolean
+     val isPaymentTestMode: Boolean
         get() = prefs.getBoolean(PAYMENT_TEST_MODE, false)
 
     fun setPaymentTestMode(mode: Boolean) {
