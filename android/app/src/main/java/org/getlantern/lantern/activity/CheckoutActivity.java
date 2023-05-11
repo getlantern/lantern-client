@@ -488,11 +488,11 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
         // Finally, if we didn't force a provider, try to see if this is coming
         // from Google Play. If it is, it has it's own workflow which can short
         // circuit the rest of the function.
-        if (!BuildConfig.PAYMENT_PROVIDER.equals("")) {
+        if (!TextUtils.isEmpty(BuildConfig.PAYMENT_PROVIDER)) {
             // for debug builds, allow overriding default payment provider
             provider = BuildConfig.PAYMENT_PROVIDER;
             Logger.debug(TAG, "Overriding default payment provider to " + provider);
-        } else if (forcedPaymentProvider != "") {
+        } else if (!TextUtils.isEmpty(forcedPaymentProvider)) {
             provider = forcedPaymentProvider;
             Logger.debug(TAG, "Overriding default payment provider to " + provider);
         } else if (LanternApp.getSession().isPlayVersion()) {
@@ -517,7 +517,7 @@ public class CheckoutActivity extends BaseFragmentActivity implements PurchasesU
                 activityClass = PaymentWallActivity_.class;
                 break;
             default:
-                Logger.error(TAG, "Unknown payment provider " + provider.toLowerCase());
+                Logger.error(TAG, "Unknown payment provider " + lowerCaseProvider);
                 return;
         }
         if (activityClass != null) {

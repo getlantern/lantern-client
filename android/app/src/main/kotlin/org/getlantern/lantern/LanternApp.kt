@@ -48,9 +48,13 @@ open class LanternApp : Application() {
         session = LanternSessionManager(this)
         LanternProxySelector(session)
 
-        if (session.isPlayVersion()) inAppBilling = InAppBilling(this)
+        if (session.isPlayVersion) inAppBilling = InAppBilling(this)
 
         lanternHttpClient = LanternHttpClient()
+
+        // When the app starts, reset our "hasSucceedingProxy" flag to clear any old warnings
+        // about proxies being unavailable.
+        session.resetHasSucceedingProxy()
     }
 
     override fun attachBaseContext(base: Context) {
@@ -91,9 +95,10 @@ open class LanternApp : Application() {
 
         @JvmStatic
         fun getPlans(cb: LanternHttpClient.PlansCallback) {
-            var iab: InAppBilling? = inAppBilling
-            if (session.isRussianUser) iab = null
-            lanternHttpClient.getPlans(cb, iab)
+            lanternHttpClient.getPlans(
+                cb,
+                if (session.isPlayVersion && !session.isRussianUser) inAppBilling else null
+            )
         }
 
         @JvmStatic
