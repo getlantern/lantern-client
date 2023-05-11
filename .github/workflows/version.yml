@@ -2,7 +2,7 @@ name: Set version
 on:
   # Triggers the workflow on push when pushing to a version tag
   push:
-    branches: [atavism/ci-updates]
+    branches: [main]
 jobs:
     set-version:
       runs-on: ubuntu-latest
