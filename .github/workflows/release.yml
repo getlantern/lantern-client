@@ -8,6 +8,7 @@ on:
     workflows: [Set version, Go Build and Test, Android CI]
     branches: [atavism/ci-updates]
     types: [completed]
+  workflow_dispatch:
 
 jobs:
     publish-binaries:
