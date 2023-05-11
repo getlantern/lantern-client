@@ -1,14 +1,13 @@
 name: Publish release
 on:
   # Triggers the workflow on push when pushing to a version tag
-  #push:
-  #  tags:
-  #    - 'lantern-*'
+  push:
+    branches: [atavism/ci-updates]
   workflow_dispatch:
   workflow_run:
     workflows: [Set version, Go Build and Test, Android CI]
-    branches: [atavism/ci-updates]
-    types: [completed]
+    types:
+      - completed
 
 jobs:
     publish-binaries:
