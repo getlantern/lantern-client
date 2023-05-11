@@ -15,8 +15,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.webkit.ProxyConfig
-import androidx.webkit.ProxyController
 import com.thefinestartist.finestwebview.FinestWebView
 import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
@@ -56,7 +54,9 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 
-class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
+class MainActivity :
+    FlutterActivity(),
+    MethodChannel.MethodCallHandler,
     CoroutineScope by MainScope() {
 
     private lateinit var messagingModel: MessagingModel
@@ -86,7 +86,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     fetchLoConf()
                     Logger.debug(
                         TAG,
-                        "fetchLoConf() finished at ${System.currentTimeMillis() - start}"
+                        "fetchLoConf() finished at ${System.currentTimeMillis() - start}",
                     )
                 }
                 LanternApp.getSession().dnsDetector.publishNetworkAvailability()
@@ -115,7 +115,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
         Logger.debug(
             TAG,
-            "configureFlutterEngine finished at ${System.currentTimeMillis() - start}"
+            "configureFlutterEngine finished at ${System.currentTimeMillis() - start}",
         )
     }
 
@@ -327,7 +327,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 // we are setting static user for payment mode
                 if (user?.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
 
-                //Switch to free account if device it not linked
+                // Switch to free account if device it not linked
                 devices?.filter { it.id == deviceID }?.run {
                     if (isEmpty()) {
                         LanternApp.getSession().logout()
@@ -452,7 +452,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             val noUpdateMsg = String.format(
                 resources.getString(R.string.have_latest_version),
                 appName,
-                LanternApp.getSession().appVersion()
+                LanternApp.getSession().appVersion(),
             )
             showAlertDialog(noUpdateTitle, noUpdateMsg)
         }
