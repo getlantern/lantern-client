@@ -10,20 +10,20 @@ on:
       - completed
 
 jobs:
-    publish-binaries:
-      runs-on: ubuntu-latest
-      if: ${{ github.event.workflow_run.conclusion == 'success' }}
-      steps:
-      - name: Setup S3cmd cli tool
-        uses: s3-actions/s3cmd@v1.4.0
-        with:
-          provider: aws
-          region: ${{ secrets.AWS_REGION }}
-          access_key: ${{ secrets.AWS_ACCESS_KEY }}
-          secret_key: ${{ secrets.AWS_SECRET_KEY }}
+  publish-binaries:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+    - name: Setup S3cmd cli tool
+      uses: s3-actions/s3cmd@v1.4.0
+      with:
+        provider: aws
+        region: ${{ secrets.AWS_REGION }}
+        access_key: ${{ secrets.AWS_ACCESS_KEY }}
+        secret_key: ${{ secrets.AWS_SECRET_KEY }}
 
-      - name: Upload to S3
-        run: make release-qa
+    - name: Upload to S3
+      run: make release-qa
 
 #      - name: Upload Android Release to Play Store Alpha track
 #        uses: r0adkll/upload-google-play@v1
