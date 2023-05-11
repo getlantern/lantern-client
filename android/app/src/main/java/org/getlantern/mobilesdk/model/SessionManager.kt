@@ -292,7 +292,7 @@ abstract class SessionManager(application: Application) : Session {
         } else prefs.getString(TOKEN, "")!!
     }
 
-    private val isPaymentTestMode: Boolean
+     val isPaymentTestMode: Boolean
         get() = prefs.getBoolean(PAYMENT_TEST_MODE, false)
 
     fun setPaymentTestMode(mode: Boolean) {
@@ -374,6 +374,10 @@ abstract class SessionManager(application: Application) : Session {
             .putString(SERVER_CITY, city)
             .putString(SERVER_COUNTRY_CODE, countryCode)
             .putBoolean(HAS_SUCCEEDING_PROXY, hasSucceedingProxy).apply()
+    }
+
+    fun resetHasSucceedingProxy() {
+        prefs.edit().remove(HAS_SUCCEEDING_PROXY).apply()
     }
 
     /**
