@@ -1,4 +1,50 @@
 
+<a name="7.4.7"></a>
+## [7.4.7](https://github.com/getlantern/android-lantern/compare/7.4.6...7.4.7)
+
+> 2023-05-09
+
+### Pull Requests
+
+* Merge pull request [#832](https://github.com/getlantern/android-lantern/issues/832) from getlantern/ox/issue66
+* Merge pull request [#833](https://github.com/getlantern/android-lantern/issues/833) from getlantern/ox/issue69
+* Merge pull request [#834](https://github.com/getlantern/android-lantern/issues/834) from getlantern/ox/issue63
+
+
+<a name="7.4.6"></a>
+## [7.4.6](https://github.com/getlantern/android-lantern/compare/7.4.1...7.4.6)
+
+> 2023-05-05
+
+### Pull Requests
+
+* Merge pull request [#828](https://github.com/getlantern/android-lantern/issues/828) from getlantern/atavism/device-remains-pro-after-unlinking
+* Merge pull request [#830](https://github.com/getlantern/android-lantern/issues/830) from getlantern/ox/issue56
+* Merge pull request [#829](https://github.com/getlantern/android-lantern/issues/829) from getlantern/atavism/enable-strictmode-debug-builds
+
+
+<a name="7.4.1"></a>
+## [7.4.1](https://github.com/getlantern/android-lantern/compare/7.4.0...7.4.1)
+
+> 2023-04-27
+
+
+<a name="7.4.0"></a>
+## [7.4.0](https://github.com/getlantern/android-lantern/compare/7.3.9...7.4.0)
+
+> 2023-04-27
+
+### Pull Requests
+
+* Merge pull request [#821](https://github.com/getlantern/android-lantern/issues/821) from getlantern/atavism/remove-switch-to-alipay
+* Merge pull request [#815](https://github.com/getlantern/android-lantern/issues/815) from getlantern/atavism/android-ci
+* Merge pull request [#813](https://github.com/getlantern/android-lantern/issues/813) from getlantern/atavism/upgrade-android-gradle-plugin
+* Merge pull request [#812](https://github.com/getlantern/android-lantern/issues/812) from getlantern/atavism/autoupdate-changes
+* Merge pull request [#816](https://github.com/getlantern/android-lantern/issues/816) from getlantern/atavism/replica-report-metrics-to-ga
+* Merge pull request [#817](https://github.com/getlantern/android-lantern/issues/817) from getlantern/harry/starbridge
+* Merge pull request [#814](https://github.com/getlantern/android-lantern/issues/814) from getlantern/atavism/otf-ads
+
+
 <a name="7.3.9"></a>
 ## [7.3.9](https://github.com/getlantern/android-lantern/compare/7.3.8...7.3.9)
 
