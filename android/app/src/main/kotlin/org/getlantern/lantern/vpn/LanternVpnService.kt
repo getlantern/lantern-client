@@ -63,6 +63,7 @@ class LanternVpnService : VpnService(), Runnable {
             stop()
             START_NOT_STICKY
         } else {
+            connect()
             START_STICKY
         }
     }
