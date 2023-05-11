@@ -4,10 +4,9 @@ on:
   #push:
   #  tags:
   #    - 'lantern-*'
-  push:
-    branches: [atavism/ci-updates]
   workflow_run:
     workflows: [Set version, Go Build and Test, Android CI]
+    branches: [atavism/ci-updates]
     types: [completed]
 
 jobs:
