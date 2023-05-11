@@ -2,6 +2,7 @@ package org.getlantern.lantern.activity
 
 import android.app.ProgressDialog
 import android.view.KeyEvent
+import android.view.View
 import android.webkit.WebSettings.PluginState
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -75,6 +76,10 @@ open class WebViewActivity : BaseFragmentActivity() {
         settings.setSupportZoom(false)
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY)
         webView.loadUrl(url)
+    }
+
+    public fun closeWebView(view: View) {
+        finish()
     }
 
     companion object {
