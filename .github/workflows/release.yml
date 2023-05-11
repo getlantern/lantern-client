@@ -2,33 +2,32 @@ name: Publish release
 on:
   # Triggers the workflow on push when pushing to a version tag
   push:
-    branches: [atavism/ci-updates]
-  workflow_dispatch:
+    tags:
+      - 'lantern-*'
   workflow_run:
-    workflows: [ "version", "go", "android" ]
-    types:
-      - completed
+    workflows: [Set version, Go Build and Test, Android CI]
+    types: [completed]
 
 jobs:
-  publish-binaries:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    steps:
-    - name: Setup S3cmd cli tool
-      uses: s3-actions/s3cmd@v1.4.0
-      with:
-        provider: aws
-        region: ${{ secrets.AWS_REGION }}
-        access_key: ${{ secrets.AWS_ACCESS_KEY }}
-        secret_key: ${{ secrets.AWS_SECRET_KEY }}
+    publish-binaries:
+      runs-on: ubuntu-latest
+      if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      steps:
+      - name: Setup S3cmd cli tool
+        uses: s3-actions/s3cmd@v1.4.0
+        with:
+          provider: aws
+          region: ${{ secrets.AWS_REGION }}
+          access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          secret_key: ${{ secrets.AWS_SECRET_KEY }}
 
-    - name: Upload to S3
-      run: make release-qa
+      - name: Upload to S3
+        run: make release-qa
 
-#      - name: Upload Android Release to Play Store Alpha track
-#        uses: r0adkll/upload-google-play@v1
-#        with:
-#         serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
-#         packageName: org.getlantern.lantern
-#         releaseFiles: lantern-installer-internal.aab
-#         track: alpha
+      - name: Upload Android Release to Play Store Alpha track
+        uses: r0adkll/upload-google-play@v1
+        with:
+         serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
+         packageName: org.getlantern.lantern
+         releaseFiles: lantern-installer-internal.aab
+         track: alpha
