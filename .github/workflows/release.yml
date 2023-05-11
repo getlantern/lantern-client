@@ -5,7 +5,7 @@ on:
     branches: [atavism/ci-updates]
   workflow_dispatch:
   workflow_run:
-    workflows: [Set version, Go Build and Test, Android CI]
+    workflows: [version, go, android]
     types:
       - completed
 
