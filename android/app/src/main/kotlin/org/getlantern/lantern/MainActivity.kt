@@ -682,7 +682,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 LanternVpnService::class.java,
             ).setAction(LanternVpnService.ACTION_CONNECT),
         )
-        internalsdk.geoLookup(LanternApp.getSession())
     }
 
     private fun stopVpnService() {

@@ -654,7 +654,7 @@ func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	return percent, remaining, int(quota.MiBAllowed)
 }
 
-func doGeoLookup(session panickingSession) {
+func geoLookup(session panickingSession) {
 	country := geolookup.GetCountry(0)
 	log.Debugf("Successful geolookup: country %s", country)
 	session.SetCountry(country)
@@ -665,11 +665,7 @@ func afterStart(session panickingSession) {
 
 	go func() {
 		if <-geolookup.OnRefresh() {
-			doGeoLookup(session)
+			geoLookup(session)
 		}
 	}()
-}
-
-func GeoLookup(wrappedSession Session) {
-	go doGeoLookup(&panickingSessionImpl{wrappedSession})
 }
