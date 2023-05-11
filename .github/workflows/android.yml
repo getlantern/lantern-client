@@ -2,7 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [atavism/ci-updates]
+    branches: [main]
 
 permissions:
   contents: read
