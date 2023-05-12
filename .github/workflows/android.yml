@@ -2,7 +2,7 @@ name: android
 
 on:
   push:
-    branches: [ atavism/ci-updates-test ]
+    branches: [ main ]
 
 permissions:
   contents: read
