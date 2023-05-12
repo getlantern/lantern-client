@@ -59,7 +59,9 @@ jobs:
       uses: arduino/setup-protoc@v1.1.2
 
     - name: Install Flutter dependencies
-      run: flutter pub get
+      run: |
+        flutter pub get
+        dart pub global activate protoc_plugin
 
     - name: Set gradle properties
       env:
