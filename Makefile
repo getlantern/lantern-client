@@ -171,7 +171,7 @@ tag: require-version
 	git push
 
 define check-go-version
-    if [ -z '${IGNORE_GO_VERSION}' ] && $(GO) version | grep -q -v $(GO_VERSION); then \
+    if [ -z '${IGNORE_GO_VERSION}' ] && go version | grep -q -v $(GO_VERSION); then \
 		echo "go $(GO_VERSION) is required." && exit 1; \
 	fi
 endef
@@ -333,8 +333,8 @@ release: require-version require-s3cmd require-wget require-lantern-binaries req
 
 $(ANDROID_LIB): $(GO_SOURCES)
 	$(call check-go-version) && \
-	$(GO) env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	$(GO) install golang.org/x/mobile/cmd/gomobile && \
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	go install golang.org/x/mobile/cmd/gomobile && \
 	gomobile init && \
 	gomobile bind \
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
