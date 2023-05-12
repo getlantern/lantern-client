@@ -31,7 +31,9 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: 'settings'.i18n,
-      body: Column(
+      padVertical: true,
+      body: ListView(
+        shrinkWrap: true,
         children: [
           //* Language
           ListItemFactory.settingsItem(
