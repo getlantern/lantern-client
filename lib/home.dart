@@ -126,14 +126,11 @@ class _HomePageState extends State<HomePage> {
             return sessionModel.selectedTab(
               (context, selectedTab, child) =>
                   messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
-                final isTesting = const String.fromEnvironment(
-                      'driver',
-                      defaultValue: 'false',
-                    ).toLowerCase() ==
-                    'true';
+                final isTesting = const String.fromEnvironment('driver', defaultValue: 'false',).toLowerCase() == 'true';
                 return Scaffold(
                   body: buildBody(selectedTab, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
+                    key: const Key('bottomBar'),
                     selectedTab: selectedTab,
                     isDevelop: developmentMode,
                     isTesting: isTesting,

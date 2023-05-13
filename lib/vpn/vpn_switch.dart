@@ -8,6 +8,7 @@ class VPNSwitch extends StatelessWidget {
       child: vpnModel
           .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
         return FlutterSwitch(
+          key: ValueKey('vpnSwitch'),
           value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
           activeColor: onSwitchColor,
           inactiveColor: offSwitchColor,
