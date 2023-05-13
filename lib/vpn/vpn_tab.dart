@@ -12,8 +12,10 @@ class VPNTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('VPNTab build called');
     return sessionModel
         .proUser((BuildContext context, bool proUser, Widget? child) {
+      print('VPNTab proUser called');
       return BaseScreen(
         title: SvgPicture.asset(
           proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
