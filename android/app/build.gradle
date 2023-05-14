@@ -274,7 +274,7 @@ def androidArch() {
 def androidArchJava() {
     def value = project.getProperties().get("androidArchJava")
     if (value == null || !value?.trim()) {
-        return "armeabi-v7a arm64-v8a x86 x86_64"
+        return "armeabi-v7a arm64-v8a x86_64"
     }
     return value
 }
