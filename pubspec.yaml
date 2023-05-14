@@ -157,7 +157,8 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
 
-  test: ^1.15.7
+  appium_driver: any
+  test: ^1.16.5
   mockito: ^5.0.12
   auto_route_generator: ^5.0.3
   build_runner: ^2.0.5

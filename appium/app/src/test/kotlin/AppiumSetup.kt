@@ -2,6 +2,7 @@ import io.appium.java_client.AppiumDriver
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.remote.AndroidMobileCapabilityType
 import io.appium.java_client.remote.MobileCapabilityType
+import org.junit.jupiter.api.After
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.openqa.selenium.remote.DesiredCapabilities
@@ -13,12 +14,14 @@ open class AppiumSetup {
 
         private const val activityName = "org.getlantern.lantern.MainActivity"
         private const val appPackage = "org.getlantern.lantern"
-        private const val automationName = "UiAutomator2"
+        // private const val automationName = "UiAutomator2"
+        private const val automationName = "Flutter"
         private const val platformName = "Android"
         private const val serverUrl = "http://localhost:4723/wd/hub"
 
         lateinit var driver: AppiumDriver
         private val caps = DesiredCapabilities()
+
         @JvmStatic
         @BeforeAll
         fun setUp() {
@@ -28,12 +31,19 @@ open class AppiumSetup {
             caps.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, activityName)
             caps.setCapability(AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS, true)
             driver = AndroidDriver(URL(serverUrl), caps)
+            waitForFirstFrame()
         }
 
         @JvmStatic
         @AfterAll
         fun tearDown() {
             driver.quit()
+        }
+
+        @JvmStatic
+        @After
+        fun waitForFirstFrame() {
+            driver.executeScript("flutter:waitForFirstFrame")
         }
     }
 }

@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
+  appium_driver:
+    dependency: "direct dev"
+    description:
+      name: appium_driver
+      sha256: "0856066691378bb18df8d2a88fb691d4d66395265e52ac6e4185e4fe3f3f8b4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.0"
   archive:
     dependency: transitive
     description:
