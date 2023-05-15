@@ -24,4 +24,4 @@ Start the Appium server (in another Terminal tab)
 
 Attach your Android device to USB and finally run the tests:
 
-    $ ./gradlew test
+    $ cd app && ./gradlew test
