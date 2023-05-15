@@ -1,6 +1,7 @@
 package io.lantern.model
 
 import android.app.Activity
+import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import io.flutter.embedding.engine.FlutterEngine
@@ -12,6 +13,7 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
@@ -87,6 +89,14 @@ class SessionModel(
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
+            "openWebview" -> {
+                val url = call.argument("url") ?: ""
+                url.isNotEmpty().let {
+                    val intent = Intent(activity, WebViewActivity_::class.java)
+                    intent.putExtra("url", url)
+                    activity.startActivity(intent)
+                }
+            }
             "setProxyAll" -> {
                 val on = call.argument("on") ?: false
                 saveProxyAll(on)
