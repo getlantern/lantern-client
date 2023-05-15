@@ -2,25 +2,24 @@ import os
 import time
 import unittest
 from appium import webdriver
+from appium.options.android import UiAutomator2Options
 from appium.webdriver.common.appiumby import AppiumBy
-
-appium_server_url = 'http://localhost:4723/wd/hub'
 
 class ConnectToDevice:
     @staticmethod
     def connect_to_device(deviceName, apk_file,appPackage, appActivity ):
-        capabilities = {}
-        capabilities['platformName'] = 'Android'
-        capabilities['deviceName'] = deviceName
-
+        options = UiAutomator2Options()
+        options.platformName = 'Android'
+        options.deviceName = deviceName
+        options.appPackage = appPackage
 
         if apk_file:
-            capabilities['app'] = os.path.abspath(apk_file)
-        capabilities["appPackage"] = appPackage
-        if appActivity:
-            capabilities['appActivity'] = appActivity
+            options.app = os.path.abspath(apk_file)
 
-        driver = webdriver.Remote(appium_server_url, capabilities)
+        if appActivity:
+            options.appActivity = appActivity
+
+        driver = webdriver.Remote('http://localhost:4723/wd/hub', options = options)
         return driver
 
 
