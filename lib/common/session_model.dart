@@ -113,12 +113,15 @@ class SessionModel extends Model {
     );
   }
 
-  Widget appsData(ValueWidgetBuilder<AppsData> builder) {
-    return subscribedSingleValueBuilder<AppsData>(
+  Widget appsData({
+    required ValueWidgetBuilder<Iterable<PathAndValue<AppData>>> builder,
+  }) {
+    return subscribedListBuilder<AppData>(
       'appsData',
+      details: true,
       builder: builder,
       deserialize: (Uint8List serialized) {
-        return AppsData.fromBuffer(serialized);
+        return AppData.fromBuffer(serialized);
       },
     );
   }
@@ -246,5 +249,11 @@ class SessionModel extends Model {
 
   Future<void> checkForUpdates() {
     return methodChannel.invokeMethod('checkForUpdates');
+  }
+
+  Future<void> openWebview(String url) {
+    return methodChannel.invokeMethod('openWebview', <String, dynamic>{
+      'url': url,
+    });
   }
 }

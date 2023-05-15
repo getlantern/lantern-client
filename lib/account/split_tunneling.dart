@@ -38,9 +38,10 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         title: 'split_tunneling'.i18n,
         body: sessionModel.splitTunneling((BuildContext context, bool value,
                 Widget? child) =>
-            sessionModel.appsData((
+            sessionModel.appsData(
+                builder: (
               context,
-              AppsData _appsData,
+              Iterable<PathAndValue<AppData>> _appsData,
               Widget? child,
             ) =>
                     SingleChildScrollView(
@@ -73,26 +74,26 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                               style: tsBody3)),
                       // if split tunneling is enabled, include the installed apps
                       // in the column
-                      if (value) ...buildAppsLists(_appsData.apps),
+                      if (value) ...buildAppsLists(_appsData),
                     ])))));
   }
 
   // buildAppsLists builds lists for excluded and allowed installed apps and
   // returns both along with their associated headers
-  List<Widget> buildAppsLists(List<AppData> appsList) {
+  List<Widget> buildAppsLists(Iterable<PathAndValue<AppData>> appsList) {
     debugPrint("apps list: ${appsList}");
     if (appsList.length == 0) return [];
     return [
       ListSectionHeader('excluded_apps'.i18n.toUpperCase()),
       buildAppList(
-          appsList.where((appData) => appData.isExcluded).toList()),
+          appsList.where((appData) => appData.value.isExcluded).toList()),
       ListSectionHeader('allowed_apps'.i18n.toUpperCase()),
       buildAppList(
-          appsList.where((appData) => !appData.isExcluded).toList()),
+          appsList.where((appData) => !appData.value.isExcluded).toList()),
     ];
   }
 
-  Widget buildAppList(List<AppData> apps) {
+  Widget buildAppList(List<PathAndValue<AppData>> apps) {
     if (apps.length == 0) {
       return SizedBox.shrink();
     }
@@ -102,7 +103,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         shrinkWrap: true,
         itemCount: apps.length,
         itemBuilder: (BuildContext context, int index) {
-          var appData = apps[index];
+          var appData = apps[index].value;
           Uint8List bytes = base64.decode(appData.icon);
           Widget appItem = buildAppItem(appData);
           return appItem;
