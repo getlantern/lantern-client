@@ -2,15 +2,7 @@ import os
 import time
 import unittest
 from appium import webdriver
-from appium.options.android import UiAutomator2Options
 from appium.webdriver.common.appiumby import AppiumBy
-
-
-options = UiAutomator2Options()
-options.platformVersion = '10'
-options.appPackage = 'org.getlantern.lantern'
-options.appActivity = '.MainActivity'
-
 
 appium_server_url = 'http://localhost:4723/wd/hub'
 
@@ -28,7 +20,7 @@ class ConnectToDevice:
         if appActivity:
             capabilities['appActivity'] = appActivity
 
-        driver = webdriver.Remote('http://localhost:4723/wd/hub', capabilities)
+        driver = webdriver.Remote(appium_server_url, capabilities)
         return driver
 
 
