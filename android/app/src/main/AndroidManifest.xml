@@ -39,6 +39,7 @@
         android:label="@string/app_name">
         
         <meta-data android:name="io.sentry.dsn" android:value="https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353" />
+        <meta-data android:name="io.sentry.auto-init" android:value="false" />
 
         <activity
             android:name=".MainActivity"
@@ -125,11 +126,6 @@
 
         <activity
             android:name=".activity.RegisterProActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.Gate2ShopActivity_"
             android:screenOrientation="portrait"
             />
 

@@ -1,6 +1,7 @@
 package io.lantern.model
 
 import android.app.Activity
+import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import com.google.protobuf.*
@@ -14,6 +15,7 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
@@ -22,7 +24,6 @@ import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
-import org.getlantern.lantern.util.Analytics
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
@@ -92,6 +93,14 @@ class SessionModel(
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
+            "openWebview" -> {
+                val url = call.argument("url") ?: ""
+                url.isNotEmpty().let {
+                    val intent = Intent(activity, WebViewActivity_::class.java)
+                    intent.putExtra("url", url)
+                    activity.startActivity(intent)
+                }
+            }
             "setSplitTunneling" -> {
                 val on = call.argument("on") ?: false
                 saveSplitTunneling(on)
@@ -122,7 +131,6 @@ class SessionModel(
                     tx.put("/selectedTab", call.argument<String>("tab")!!)
                 }
             }
-            "trackScreenView" -> Analytics.screen(activity, call.arguments as String)
             "checkForUpdates" -> {
                 EventBus.getDefault().post(CheckUpdate(true))
             }

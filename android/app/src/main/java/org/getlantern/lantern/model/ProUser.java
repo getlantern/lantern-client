@@ -85,7 +85,7 @@ public class ProUser {
         return userStatus;
     }
 
-    public boolean isProUser() {
+    public Boolean isProUser() {
         return userStatus != null && userStatus.equals("active");
     }
 
@@ -132,11 +132,11 @@ public class ProUser {
         return null;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return userStatus != null && userStatus.equals("active");
     }
 
-    public boolean isExpired() {
+    public Boolean isExpired() {
         return userStatus != null && userStatus.equals("expired");
     }
 

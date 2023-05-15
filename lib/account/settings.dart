@@ -19,11 +19,16 @@ class Settings extends StatelessWidget {
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
 
+  void openWebview(String url) async => await sessionModel.openWebview(url);
+
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
       title: 'settings'.i18n,
-      body: Column(
+      padVertical: true,
+      body: ListView(
+        shrinkWrap: true,
         children: [
           //* Language
           ListItemFactory.settingsItem(
@@ -118,6 +123,36 @@ class Settings extends StatelessWidget {
                 )
               ],
             ),
+          ),
+          ListItemFactory.settingsItem(
+            header: 'about'.i18n,
+            content: 'privacy_policy'.i18n,
+            onTap: () => openWebview("https://lantern.io/privacy"),
+            trailingArray: [
+              mirrorLTR(
+                  context: context,
+                  child: const Padding(
+                    padding: EdgeInsetsDirectional.only(start: 4.0),
+                    child: const CAssetImage(
+                      path: ImagePaths.open,
+                    ),
+                  ))
+            ],
+          ),
+          ListItemFactory.settingsItem(
+            content: 'terms_of_service'.i18n,
+            trailingArray: [
+              mirrorLTR(
+                context: context,
+                child: const Padding(
+                  padding: EdgeInsetsDirectional.only(start: 4.0),
+                  child: const CAssetImage(
+                    path: ImagePaths.open,
+                  ),
+                ),
+              )
+            ],
+            onTap: () => openWebview("https://lantern.io/terms"),
           ),
           //* Build version
           FutureBuilder<PackageInfo>(

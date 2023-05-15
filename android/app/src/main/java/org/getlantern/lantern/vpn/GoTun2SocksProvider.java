@@ -8,7 +8,6 @@ import android.os.ParcelFileDescriptor;
 
 import internalsdk.Internalsdk; // Lantern's go android package
 
-import io.lantern.model.Vpn;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.MainActivity;
 import org.getlantern.mobilesdk.Logger;
@@ -96,7 +95,7 @@ public class GoTun2SocksProvider implements Provider {
       Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks");
       ParcelFileDescriptor intf = createBuilder(vpnService, builder);
       Logger.debug(TAG, "Running tun2socks");
-      Internalsdk.tun2Socks(intf.getFd(), socksAddr, dnsGrabAddr, VPN_MTU);
+      Internalsdk.tun2Socks(intf.getFd(), socksAddr, dnsGrabAddr, VPN_MTU, LanternApp.getSession());
     } catch (Throwable t) {
       Logger.e(TAG, "Exception while handling TUN device", t);
     } finally {
