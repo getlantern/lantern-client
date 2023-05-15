@@ -1,1 +1,1 @@
-const val VPN_SWITCH = "org.getlantern.lantern:id/digit_8"
+const val VPN_SWITCH = "org.getlantern.lantern:id/vpnSwitch"

@@ -2,13 +2,18 @@ import io.appium.java_client.AppiumDriver
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.remote.AndroidMobileCapabilityType
 import io.appium.java_client.remote.MobileCapabilityType
-import org.junit.jupiter.api.After
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.openqa.selenium.remote.DesiredCapabilities
 import java.net.URL
 
 open class AppiumSetup {
+
+    @AfterEach
+    fun waitForFirstFrame() {
+        driver.executeScript("flutter:waitForFirstFrame")
+    }
 
     companion object {
 
@@ -31,19 +36,12 @@ open class AppiumSetup {
             caps.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, activityName)
             caps.setCapability(AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS, true)
             driver = AndroidDriver(URL(serverUrl), caps)
-            waitForFirstFrame()
         }
 
         @JvmStatic
         @AfterAll
         fun tearDown() {
             driver.quit()
-        }
-
-        @JvmStatic
-        @After
-        fun waitForFirstFrame() {
-            driver.executeScript("flutter:waitForFirstFrame")
         }
     }
 }
