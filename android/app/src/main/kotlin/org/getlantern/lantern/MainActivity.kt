@@ -15,6 +15,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.webkit.ProxyConfig
+import androidx.webkit.ProxyController
 import com.thefinestartist.finestwebview.FinestWebView
 import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
@@ -27,6 +29,7 @@ import io.lantern.model.SessionModel
 import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager
@@ -59,7 +62,8 @@ import org.greenrobot.eventbus.ThreadMode
 import java.util.concurrent.*
 import java.util.Locale
 
-class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, CoroutineScope by MainScope() {
+class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
+    CoroutineScope by MainScope() {
 
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
@@ -69,6 +73,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
+    private var autoUpdateJob: Job? = null
 
     private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
@@ -87,7 +92,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
                     fetchLoConf()
-                    Logger.debug(TAG, "fetchLoConf() finished at ${System.currentTimeMillis() - start}")
+                    Logger.debug(
+                        TAG,
+                        "fetchLoConf() finished at ${System.currentTimeMillis() - start}"
+                    )
                 }
                 LanternApp.getSession().dnsDetector.publishNetworkAvailability()
             }
@@ -113,7 +121,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             }
         }
 
-        Logger.debug(TAG, "configureFlutterEngine finished at ${System.currentTimeMillis() - start}")
+        Logger.debug(
+            TAG,
+            "configureFlutterEngine finished at ${System.currentTimeMillis() - start}"
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -184,7 +195,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
 
-        if (LanternApp.getSession().isPlayVersion()) {
+        if (LanternApp.getSession().isPlayVersion) {
             if (!LanternApp.getSession().hasAcceptedTerms()) {
                 startActivity(Intent(this, PrivacyDisclosureActivity_::class.java))
             }
@@ -216,6 +227,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
                 showSurvey(lastSurvey)
                 result.success(true)
             }
+
             else -> result.notImplemented()
         }
     }
@@ -241,21 +253,24 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
                 accountInitDialog.setView(dialogView)
                 val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
                 tvMessage.setText(getString(R.string.init_account, appName))
-                dialogView.findViewById<View>(R.id.btnCancel).setOnClickListener(object : View.OnClickListener {
-                    override fun onClick(v: View?) {
-                        EventBus.getDefault().removeStickyEvent(status)
-                        accountInitDialog.dismiss()
-                        finish()
-                    }
-                })
+                dialogView.findViewById<View>(R.id.btnCancel)
+                    .setOnClickListener(object : View.OnClickListener {
+                        override fun onClick(v: View?) {
+                            EventBus.getDefault().removeStickyEvent(status)
+                            accountInitDialog.dismiss()
+                            finish()
+                        }
+                    })
                 accountInitDialog.show()
             }
+
             AccountInitializationStatus.Status.SUCCESS -> {
                 EventBus.getDefault().removeStickyEvent(status)
                 if (accountInitDialog != null) {
                     accountInitDialog.dismiss()
                 }
             }
+
             AccountInitializationStatus.Status.FAILURE -> {
                 EventBus.getDefault().removeStickyEvent(status)
                 if (accountInitDialog != null) {
@@ -314,7 +329,20 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             }
 
             override fun onSuccess(response: Response, user: ProUser?) {
-                LanternApp.getSession().setUserLevel(user?.userLevel)
+                val devices = user?.getDevices()
+                val deviceID = LanternApp.getSession().deviceID()
+                // if the payment test mode is enabled
+                // then do nothing To avoid restarting app while debugging
+                // we are setting static user for payment mode
+                if (user?.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
+
+                //Switch to free account if device it not linked
+                devices?.filter { it.id == deviceID }?.run {
+                    if (isEmpty()) {
+                        LanternApp.getSession().logout()
+                        restartApp()
+                    }
+                }
             }
         })
     }
@@ -430,26 +458,34 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
 
         // For some reason, telegram.me links create infinite redirects. To solve this, we disable
         // JavaScript when opening such links.
-        val javaScriptEnabled = !survey.url!!.contains("t.me") && !survey.url!!.contains("telegram.me")
-        FinestWebView.Builder(this@MainActivity)
-            .webViewLoadWithProxy(LanternApp.getSession().hTTPAddr)
+        val javaScriptEnabled =
+            !survey.url!!.contains("t.me") && !survey.url!!.contains("telegram.me")
+        val builder = FinestWebView.Builder(this@MainActivity)
             .webViewSupportMultipleWindows(true)
             .webViewJavaScriptEnabled(javaScriptEnabled)
             .webViewJavaScriptCanOpenWindowsAutomatically(javaScriptEnabled)
             .swipeRefreshColorRes(R.color.black)
             .webViewAllowFileAccessFromFileURLs(true)
-            .show(survey.url!!)
+        runOnUiThread {
+            builder.show(survey.url!!)
+        }
     }
 
     private fun noUpdateAvailable(userInitiated: Boolean) {
         if (!userInitiated) return
-        val appName = resources.getString(R.string.app_name)
-        val noUpdateTitle = resources.getString(R.string.no_update_available)
-        val noUpdateMsg = String.format(resources.getString(R.string.have_latest_version), appName, LanternApp.getSession().appVersion())
-        showAlertDialog(noUpdateTitle, noUpdateMsg)
+        runOnUiThread {
+            val appName = resources.getString(R.string.app_name)
+            val noUpdateTitle = resources.getString(R.string.no_update_available)
+            val noUpdateMsg = String.format(
+                resources.getString(R.string.have_latest_version),
+                appName,
+                LanternApp.getSession().appVersion()
+            )
+            showAlertDialog(noUpdateTitle, noUpdateMsg)
+        }
     }
 
-    private fun startUpdateActivity(updateURL:String) {
+    private fun startUpdateActivity(updateURL: String) {
         val intent = Intent()
         intent.component = ComponentName(
             activity.packageName,
@@ -466,16 +502,20 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
             Utils.openPlayStore(context)
             return
         }
-        lifecycleScope.launch {
+        if (autoUpdateJob != null && autoUpdateJob!!.isActive) {
+            Logger.d(TAG, "Already checking for updates")
+            return
+        }
+        autoUpdateJob = lifecycleScope.launch(Dispatchers.IO) {
             try {
-              val deviceInfo:internalsdk.DeviceInfo = DeviceInfo
-              val updateURL = Internalsdk.checkForUpdates(deviceInfo)
-              when {
-                updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
-                else -> startUpdateActivity(updateURL)
-              }
-            } catch (e:Exception) {
-              Logger.d(TAG, "Unable to check for update: %s", e.message)
+                val deviceInfo: internalsdk.DeviceInfo = DeviceInfo
+                val updateURL = Internalsdk.checkForUpdates(deviceInfo)
+                when {
+                    updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
+                    else -> startUpdateActivity(updateURL)
+                }
+            } catch (e: Exception) {
+                Logger.d(TAG, "Unable to check for update: %s", e.message)
             }
         }
     }
@@ -645,6 +685,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler, Corouti
                 }
                 return
             }
+
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }

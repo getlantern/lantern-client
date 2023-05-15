@@ -111,9 +111,6 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                 Tab(
                   text: 'app'.i18n,
                 ),
-                Tab(
-                  text: 'news'.i18n,
-                ),
               ],
             ),
             const SizedBox(height: 10),
@@ -147,11 +144,6 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
                     replicaApi: replicaApi,
                     searchQuery: searchQuery,
                     searchCategory: SearchCategory.App,
-                  ),
-                  ReplicaListLayout(
-                    replicaApi: replicaApi,
-                    searchQuery: searchQuery,
-                    searchCategory: SearchCategory.News,
                   ),
                 ],
               ),

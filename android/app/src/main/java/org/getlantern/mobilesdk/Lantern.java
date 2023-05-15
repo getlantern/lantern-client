@@ -3,8 +3,6 @@ package org.getlantern.mobilesdk;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import org.getlantern.lantern.util.Analytics;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -89,7 +87,6 @@ public abstract class Lantern {
 
         proxyOn(result.getHttpAddr());
 
-        trackStartSession(context);
         return result;
     }
 
@@ -139,13 +136,6 @@ public abstract class Lantern {
         System.clearProperty("https.proxyHost");
         System.clearProperty("https.proxyPort");
         // TODO: stop service if necessary
-    }
-
-    private static void trackStartSession(final Context context) {
-        Analytics.event(
-                context,
-                Analytics.CATEGORY_SESSION,
-                "start");
     }
 
     /**

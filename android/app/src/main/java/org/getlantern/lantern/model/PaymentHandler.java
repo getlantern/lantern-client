@@ -15,7 +15,6 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.activity.WelcomeActivity_;
 import org.getlantern.lantern.service.BackgroundChecker_;
 import org.getlantern.lantern.util.ActivityExtKt;
-import org.getlantern.lantern.util.Analytics;
 import org.getlantern.mobilesdk.Logger;
 
 import okhttp3.FormBody;
@@ -166,10 +165,6 @@ public class PaymentHandler {
             Logger.error(TAG, "Encountered error, not logging purchase event", error);
             return;
         }
-        Analytics.purchase(
-                context,
-                provider,
-                plan);
     }
 
 }
