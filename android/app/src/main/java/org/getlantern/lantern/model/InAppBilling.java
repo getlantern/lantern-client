@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
+
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClient.SkuType;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -13,6 +15,7 @@ import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
@@ -69,6 +72,7 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
 
     @Override
     public void onBillingSetupFinished(BillingResult billingResult) {
+        Logger.debug(TAG, "onBillingSetupFinished with response code: " + billingResult.getResponseCode());
         if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
             if (isRetriable(billingResult)) {
                 handler.postDelayed(() -> {
@@ -85,9 +89,7 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
 
     @Override
     public void onBillingServiceDisconnected() {
-        // Try to restart the connection on the next request to
-        // Google Play by calling the startConnection() method.
-        startConnection();
+        Logger.debug(TAG, "onBillingServiceDisconnected");
     }
 
     /**
@@ -162,17 +164,19 @@ public class InAppBilling implements PurchasesUpdatedListener, BillingClientStat
      */
     private void checkForUnacknowledgedPurchases() {
         Logger.debug(TAG, "Checking for pending purchases");
-        Purchase.PurchasesResult purchases = billingClient.queryPurchases(SkuType.INAPP);
-        BillingResult billingResult = purchases.getBillingResult();
-        if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
-            if (isRetriable(billingResult)) {
-                handler.postDelayed(() -> checkForUnacknowledgedPurchases(), 5000);
-            }
-            return;
-        }
+        billingClient.queryPurchasesAsync(SkuType.INAPP, new PurchasesResponseListener() {
+            public void onQueryPurchasesResponse(BillingResult billingResult, List<Purchase> purchases) {
+                if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+                    if (isRetriable(billingResult)) {
+                        handler.postDelayed(() -> checkForUnacknowledgedPurchases(), 5000);
+                    }
+                    return;
+                }
 
-        Logger.debug(TAG, "Got purchases: " + purchases.getPurchasesList().size());
-        handleAcknowledgedPurchases(purchases.getPurchasesList());
+                Logger.debug(TAG, "Got purchases: " + purchases.size());
+                handleAcknowledgedPurchases(purchases);
+            }
+        });
     }
 
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {

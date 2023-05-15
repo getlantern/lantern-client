@@ -215,10 +215,6 @@ class SessionModel extends Model {
         .then((enabled) => enabled == true);
   }
 
-  Future<void> trackScreenView(String path) async {
-    return methodChannel.invokeMethod('trackScreenView', path);
-  }
-
   Future<void> checkForUpdates() {
     return methodChannel.invokeMethod('checkForUpdates');
   }
@@ -308,5 +304,10 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('checkEmailExistence', <String, dynamic>{
       'email': email,
     }).then((value) => value as String);
+
+  Future<void> openWebview(String url) {
+    return methodChannel.invokeMethod('openWebview', <String, dynamic>{
+      'url': url,
+    });
   }
 }

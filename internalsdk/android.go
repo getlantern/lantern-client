@@ -89,7 +89,6 @@ type Session interface {
 	SetReplicaAddr(string)
 	ForceReplica() bool
 	SetChatEnabled(bool)
-	SetMatomoEnabled(bool)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -119,7 +118,6 @@ type panickingSession interface {
 	DeviceOS() string
 	IsProUser() bool
 	SetChatEnabled(bool)
-	SetMatomoEnabled(bool)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -266,10 +264,6 @@ func (s *panickingSessionImpl) IsProUser() bool {
 
 func (s *panickingSessionImpl) SetChatEnabled(enabled bool) {
 	s.wrapped.SetChatEnabled(enabled)
-}
-
-func (s *panickingSessionImpl) SetMatomoEnabled(enabled bool) {
-	s.wrapped.SetMatomoEnabled(enabled)
 }
 
 func (s *panickingSessionImpl) SerializedInternalHeaders() string {
@@ -603,10 +597,6 @@ func run(configDir, locale string,
 		chatEnabled := runner.FeatureEnabled("chat")
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
-
-		matomoEnabled := runner.FeatureEnabled(config.FeatureMatomo)
-		log.Debugf("Matomo enabled? %v", matomoEnabled)
-		session.SetMatomoEnabled(matomoEnabled)
 	}
 
 	// When features are enabled/disabled, the UI changes. To minimize this, we only check features once on startup, preferring
@@ -664,14 +654,18 @@ func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	return percent, remaining, int(quota.MiBAllowed)
 }
 
+func geoLookup(session panickingSession) {
+	country := geolookup.GetCountry(0)
+	log.Debugf("Successful geolookup: country %s", country)
+	session.SetCountry(country)
+}
+
 func afterStart(session panickingSession) {
 	bandwidthUpdates(session)
 
 	go func() {
 		if <-geolookup.OnRefresh() {
-			country := geolookup.GetCountry(0)
-			log.Debugf("Successful geolookup: country %s", country)
-			session.SetCountry(country)
+			geoLookup(session)
 		}
 	}()
 }
