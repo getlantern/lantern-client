@@ -2,7 +2,9 @@
 
 ## Running integration tests using Appium, JUnit5, and Kotlin
 
-Appium is an automated mobile application testing framework that we can use to test the Lantern Android app.
+Appium is a mobile application testing framework that we use to automate interaction with the Lantern Android app.
+
+## Setup
 
 Install Node:
 
@@ -12,7 +14,7 @@ Install Appium and the Appium client:
 
     $ npm install -g appium
 
-Note: it is recommended you install Appium Doctor in addition to Appium. It helps fix issues with Appium and Android settings easier.
+Note: it is recommended you install Appium Doctor in addition to Appium. It makes it easier to fix issues with Appium and Android settings.
 
     $ npm install -g appium-doctor
 
