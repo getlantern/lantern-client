@@ -19,8 +19,7 @@ open class AppiumSetup {
 
         private const val activityName = "org.getlantern.lantern.MainActivity"
         private const val appPackage = "org.getlantern.lantern"
-        // private const val automationName = "UiAutomator2"
-        private const val automationName = "Flutter"
+        private const val automationName = "UiAutomator2"
         private const val platformName = "Android"
         private const val serverUrl = "http://localhost:4723/wd/hub"
 
