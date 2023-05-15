@@ -274,7 +274,7 @@ def androidArch() {
 def androidArchJava() {
     def value = project.getProperties().get("androidArchJava")
     if (value == null || !value?.trim()) {
-        return "armeabi-v7a arm64-v8a x86 x86_64"
+        return "armeabi-v7a arm64-v8a x86_64"
     }
     return value
 }
@@ -463,8 +463,8 @@ dependencies {
     // from https://github.com/getlantern/opus_android
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
-    implementation 'com.github.getlantern:messaging-android:65aa7a4ac2'
-    implementation 'com.github.getlantern:db-android:70d727d18a'
+    implementation 'com.github.getlantern:messaging-android:1ce4613c8b'
+    implementation 'com.github.getlantern:db-android:573aba1458'
 }
 
 apply plugin: 'com.google.gms.google-services'
