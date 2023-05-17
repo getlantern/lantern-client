@@ -27,6 +27,7 @@ import (
 	"github.com/getlantern/flashlight/email"
 	"github.com/getlantern/flashlight/geolookup"
 	"github.com/getlantern/flashlight/logging"
+	"github.com/getlantern/flashlight/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/memhelper"
 	"github.com/getlantern/mtime"
@@ -551,6 +552,9 @@ func run(configDir, locale string,
 		func() string { return "" }, // only used for desktop
 		func() string { return "" }, // only used for desktop
 		func(addr string) (string, error) {
+			op := ops.Begin("reverse_dns")
+			defer op.End()
+
 			host, port, splitErr := net.SplitHostPort(addr)
 			if splitErr != nil {
 				host = addr
@@ -562,7 +566,7 @@ func run(configDir, locale string,
 			}
 			updatedHost, ok := grabber.ReverseLookup(ip)
 			if !ok {
-				return "", errors.New("unknown IP address %v", ip)
+				return "", op.FailIf(errors.New("unknown IP address %v", ip))
 			}
 			if splitErr != nil {
 				return updatedHost, nil
