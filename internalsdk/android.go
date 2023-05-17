@@ -562,7 +562,7 @@ func run(configDir, locale string,
 			}
 			updatedHost, ok := grabber.ReverseLookup(ip)
 			if !ok {
-				return "", errors.New("invalid IP address")
+				return "", errors.New("unknown IP address %v", ip)
 			}
 			if splitErr != nil {
 				return updatedHost, nil
