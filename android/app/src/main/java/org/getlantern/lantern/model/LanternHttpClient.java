@@ -149,14 +149,8 @@ public class LanternHttpClient extends HttpClient {
         proRequest("POST", url, userHeaders(), body, cb);
     }
 
-    private void processPlans(final JsonObject result, final PlansCallback cb, InAppBilling inAppBilling) {
+    private void processPlans(List<ProPlan> fetched, final PlansCallback cb, InAppBilling inAppBilling) {
         Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
-        String stripePubKey = result.get("providers").getAsJsonObject().get("stripe").getAsJsonObject().get("pubKey").getAsString();
-        LanternApp.getSession().setStripePubKey(stripePubKey);
-        Type listType = new TypeToken<List<ProPlan>>() {
-        }.getType();
-        Logger.debug(TAG, "Plans: " + result.get("plans"));
-        final List<ProPlan> fetched = Json.gson.fromJson(result.get("plans"), listType);
         Logger.debug(TAG, "Pro plans: " + fetched);
         for (ProPlan plan : fetched) {
             if (plan != null) {
@@ -184,6 +178,36 @@ public class LanternHttpClient extends HttpClient {
             }
         }
         cb.onSuccess(plans);
+    }
+
+    private void processPlansV1(final JsonObject result, final PlansCallback cb, InAppBilling inAppBilling) {
+        String stripePubKey = result.get("providers").getAsJsonObject().get("stripe").getAsJsonObject().get("pubKey").getAsString();
+        LanternApp.getSession().setStripePubKey(stripePubKey);
+        Type listType = new TypeToken<List<ProPlan>>() {
+        }.getType();
+        Logger.debug(TAG, "Plans: " + result.get("plans"));
+        Logger.debug(TAG, "Providers: " + result.get("plans"));
+        final List<ProPlan> fetched = Json.gson.fromJson(result.get("plans"), listType);
+        processPlans(fetched, cb, inAppBilling);
+    }
+
+    private void processPlansV3(final JsonObject result, final PlansCallback cb, InAppBilling inAppBilling) {
+        Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
+        PaymentMethodResponse response = Json.gson.fromJson(result, PaymentMethodResponse.class);
+        for (ProviderInfo provider : response.getProviders()) {
+            if (provider.getName().equalsIgnoreCase("stripe")) {
+                Map<String, Object> data = provider.getData();
+                if (data != null && data.get("pubKey") != null) {
+                    String stripePubKey = ((String)data.get("pubKey"));
+                    LanternApp.getSession().setStripePubKey(stripePubKey);
+                }
+                   
+            }
+        }
+        Type listType = new TypeToken<List<ProPlan>>() {
+        }.getType();
+        final List<ProPlan> fetched = Json.gson.fromJson(result.get("plans"), listType);
+        processPlans(fetched, cb, inAppBilling);
     }
 
     public void prepareYuansfer(final String vendor, final YuansferCallback cb) {
@@ -280,15 +304,12 @@ public class LanternHttpClient extends HttpClient {
         });
     }
 
-
-
-    public void getPlans(final PlansCallback cb, InAppBilling inAppBilling) {
+    public void plans(final PlansCallback cb, InAppBilling inAppBilling, Boolean v3Endpoint) {
         final Map<String, String> params = new HashMap<String, String>();
         params.put("locale", LanternApp.getSession().getLanguage());
         params.put("countrycode", LanternApp.getSession().getCountryCode());
-        final HttpUrl url = createProUrl("/plans", params);
+        final HttpUrl url = createProUrl(v3Endpoint ? "/plans-v3" : "/plans", params);
         final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
-        Logger.d(TAG, "Plans url is " + url);
         get(url, new ProCallback() {
             @Override
             public void onFailure(final Throwable throwable, final ProError error) {
@@ -300,7 +321,11 @@ public class LanternHttpClient extends HttpClient {
             public void onSuccess(final Response response, final JsonObject result) {
                 try {
                     Logger.debug(TAG, "JSON response for " + url + ":" + result.toString());
-                    processPlans(result, cb, inAppBilling);
+                    if (v3Endpoint) {
+                        processPlansV3(result, cb, inAppBilling);
+                    } else {
+                        processPlansV1(result, cb, inAppBilling);    
+                    }
                 } catch (Exception e) {
                     Logger.error(TAG, "Unable to fetch plans: " + e.getMessage(), e);
                 }
@@ -308,6 +333,13 @@ public class LanternHttpClient extends HttpClient {
         });
     }
 
+    public void plansV3(final PlansCallback cb, InAppBilling inAppBilling) {
+        plans(cb, inAppBilling, true);
+    }
+
+    public void getPlans(final PlansCallback cb, InAppBilling inAppBilling) {
+        plans(cb, inAppBilling, false);
+    }
 
     /**
      * Convert a JsonObject json into a RequestBody that transmits content
