@@ -6,7 +6,6 @@ import android.text.TextUtils
 import io.lantern.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
@@ -127,10 +126,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun stripePubKey(): String? {
         return prefs.getString(STRIPE_API_KEY, "")
-    }
-
-    fun plansActivity(): Class<*> {
-        return PlansActivity_::class.java
     }
 
     fun welcomeActivity(): Class<*> {
