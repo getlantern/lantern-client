@@ -88,6 +88,7 @@ class SessionModel(
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
+            "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
@@ -143,6 +144,34 @@ class SessionModel(
             tx.put(PATH_PROXY_ALL, on)
         }
     }
+
+    private fun confirmEmailError(error: ProError) {
+        val errorId = error.id
+        val resources = activity.resources
+        if (errorId.equals("existing-email")) {
+            activity.showErrorDialog(resources.getString(R.string.email_in_use))
+        } else if (error.message != null) {
+            activity.showErrorDialog(error.message)
+        }
+    }
+
+    private fun checkEmailExists(emailAddress: String, methodCallResult: MethodChannel.Result) {
+        val params = mapOf("email" to emailAddress)
+        val isPlayVersion = LanternApp.getSession().isPlayVersion()
+        val useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay()
+        lanternClient.get(LanternHttpClient.createProUrl("/email-exists", params),
+                object : ProCallback {
+                    override fun onFailure(t: Throwable?, error: ProError?) {
+                        if (error != null) confirmEmailError(error)
+                    }
+
+                    override fun onSuccess(response: Response?, result: JsonObject?) {
+                        Logger.debug(TAG, "Email successfully validated " + emailAddress)
+                        LanternApp.getSession().setEmail(emailAddress)
+                    }
+                });
+    }
+
 
     private fun authorizeViaEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
         Logger.debug(TAG, "Start Account recovery with email $emailAddress")
