@@ -64,6 +64,7 @@ class ImagePaths {
   static const insert_emoticon = 'assets/images/insert_emoticon.svg';
   static const keyboard = 'assets/images/keyboard.svg';
   static const savings_arrow = 'assets/images/savings_arrow.svg';
+  static const down_arrow = 'assets/images/down_arrow.svg';
   static const search = 'assets/images/search.svg';
   static const lock_clock = 'assets/images/lock_clock.svg';
   static const volume_up = 'assets/images/volume_up.svg';

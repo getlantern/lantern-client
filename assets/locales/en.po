@@ -481,8 +481,11 @@ msgstr "Edit"
 msgid "save_error"
 msgstr "Something went wrong while saving."
 
+msgid "fewer_options"
+msgstr "Fewer Options"
+
 msgid "more_options"
-msgstr "More options"
+msgstr "More Options"
 
 msgid "block_user"
 msgstr "Block user"
