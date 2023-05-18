@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/plans/payment_provider.dart';
-import 'package:lantern/plans/plans.dart';
+import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/price_summary.dart';
 import 'package:lantern/plans/utils.dart';
 
@@ -241,7 +241,7 @@ class _CheckoutState extends State<Checkout>
                   children: [
                     // * Stripe
                     PaymentProvider(
-                      logoPaths: [ImagePaths.visa, ImagePaths.mastercard],
+                      logoPaths: [ImagePaths.visa, ImagePaths.mastercard, ImagePaths.unionpay],
                       onChanged: () => setState(
                         () => selectedPaymentProvider = 'stripe',
                       ),

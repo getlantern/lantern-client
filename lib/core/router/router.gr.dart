@@ -361,12 +361,12 @@ class AppRouter extends _i33.RootStackRouter {
         barrierDismissible: false,
       );
     },
-    Upgrade.name: (routeData) {
+    PlansPage.name: (routeData) {
       final args =
-          routeData.argsAs<UpgradeArgs>(orElse: () => const UpgradeArgs());
+          routeData.argsAs<PlansPageArgs>(orElse: () => const PlansPageArgs());
       return _i33.CustomPage<void>(
         routeData: routeData,
-        child: _i24.Upgrade(key: args.key),
+        child: _i24.PlansPage(key: args.key),
         transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
@@ -602,8 +602,8 @@ class AppRouter extends _i33.RootStackRouter {
           path: 'stripeCheckout',
         ),
         _i33.RouteConfig(
-          Upgrade.name,
-          path: 'upgrade',
+          PlansPage.name,
+          path: 'plans',
         ),
         _i33.RouteConfig(
           ReplicaUploadTitle.name,
@@ -1229,26 +1229,26 @@ class StripeCheckoutArgs {
 }
 
 /// generated route for
-/// [_i24.Upgrade]
-class Upgrade extends _i33.PageRouteInfo<UpgradeArgs> {
-  Upgrade({_i35.Key? key})
+/// [_i24.PlansPage]
+class PlansPage extends _i33.PageRouteInfo<PlansPageArgs> {
+  PlansPage({_i35.Key? key})
       : super(
-          Upgrade.name,
-          path: 'upgrade',
-          args: UpgradeArgs(key: key),
+          PlansPage.name,
+          path: 'plans',
+          args: PlansPageArgs(key: key),
         );
 
-  static const String name = 'Upgrade';
+  static const String name = 'PlansPage';
 }
 
-class UpgradeArgs {
-  const UpgradeArgs({this.key});
+class PlansPageArgs {
+  const PlansPageArgs({this.key});
 
   final _i35.Key? key;
 
   @override
   String toString() {
-    return 'UpgradeArgs{key: $key}';
+    return 'PlansPageArgs{key: $key}';
   }
 }
 
