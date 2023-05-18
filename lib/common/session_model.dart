@@ -28,6 +28,10 @@ class SessionModel extends Model {
           break;
       }
     });
+    isPlayVersion = singleValueNotifier(
+      'playVersion',
+      false,
+    );
     proxyAvailable = singleValueNotifier(
       'hasSucceedingProxy',
       true,
@@ -35,6 +39,7 @@ class SessionModel extends Model {
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  late ValueNotifier<bool?> isPlayVersion;
   late ValueNotifier<bool?> proxyAvailable;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
@@ -220,12 +225,10 @@ class SessionModel extends Model {
   }
 
   Widget plans(ValueWidgetBuilder<Plans> builder) {
-    debugPrint('Getting plans...');
     return subscribedSingleValueBuilder<Plans>(
       'plans',
       builder: builder,
       deserialize: (Uint8List serialized) {
-        debugPrint('here...');
         return Plans.fromBuffer(serialized);
       },
     );
@@ -237,12 +240,6 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
       'refCode': refCode,
     }).then((value) => value as String);
-  }
-
-  Future<bool> getPlayVersion() {
-    return methodChannel
-        .invokeMethod('getPlayVersion')
-        .then((value) => value as bool);
   }
 
   Widget getUserId(ValueWidgetBuilder<String> builder) {

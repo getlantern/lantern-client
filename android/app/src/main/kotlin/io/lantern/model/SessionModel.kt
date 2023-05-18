@@ -45,6 +45,7 @@ class SessionModel(
     companion object {
         private const val TAG = "SessionModel"
         const val PATH_PRO_USER = "prouser"
+        const val PATH_PLAY_VERSION = "playVersion"
         const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_SDK_VERSION = "sdkVersion"
         const val PATH_USER_LEVEL = "userLevel"
