@@ -1,19 +1,12 @@
 import 'package:lantern/vpn/vpn.dart';
 
-class ProBanner extends StatefulWidget {
-  @override
-  _ProBannerState createState() => _ProBannerState();
-}
+class ProBanner extends StatelessWidget {
+  ProBanner({Key? key}) : super(key: key);
 
-class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
     return CInkWell(
-      onTap: () {
-        context.pushRoute(
-          Upgrade(),
-        );
-      },
+      onTap: () => context.pushRoute(Upgrade()),
       child: Container(
         padding: const EdgeInsetsDirectional.all(16),
         decoration: BoxDecoration(

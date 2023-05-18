@@ -35,10 +35,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putString(USER_LEVEL, userLevel).apply()
     }
 
-    fun setUserPlans(plans: String) {
-        prefs.edit().putString(PLANS, plans).apply()
-    }
-
     fun isExpired(): Boolean {
         return prefs.getBoolean(PRO_EXPIRED, false)
     }
@@ -283,6 +279,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putBoolean(PRO_USER, false)
             .putBoolean(DEVICE_LINKED, false)
             .remove(DEVICES)
+            .remove(PLANS)
             .remove(TOKEN)
             .remove(EMAIL_ADDRESS)
             .remove(USER_ID)
@@ -313,7 +310,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
 
-        val devices = Vpn.Devices.newBuilder().addAllDevices(user.devices.map { Vpn.Device.newBuilder().setId(it.id).setName(it.name).setCreated(it.created).build() }).build()
+        val devices = Vpn.Devices.newBuilder().addAllDevices(user.devices.map { Vpn.Device.newBuilder().setId(it.id)
+            .setName(it.name).setCreated(it.created).build() }).build()
         db.mutate { tx ->
             tx.put(DEVICES, devices)
         }
@@ -323,6 +321,17 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft())
                 .putInt(PRO_DAYS_LEFT, user.daysLeft())
                 .apply()
+        }
+    }
+
+    fun setUserPlans(proPlans: Map<String, ProPlan>) {
+        val plans = Vpn.Plans.newBuilder().addAllPlans(proPlans.values.toList().map { Vpn.Plan.newBuilder().setId(it.id)
+            .setDescription(it.description).setBestValue(it.bestValue).setUsdPrice(it.usdEquivalentPrice)
+            .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime).setOneMonthCost(it.oneMonthCost)
+            .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus).build()}).build()
+        Logger.d(TAG, "Plans are $plans")
+        db.mutate { tx ->
+            tx.put(PLANS, plans)
         }
     }
 
@@ -351,10 +360,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private val TAG = LanternSessionManager::class.java.name
 
         // shared preferences
-        private const val PLANS = "plans"
         private const val USER_LEVEL = "userLevel"
         private const val PRO_USER = "prouser"
         private const val DEVICES = "devices"
+        private const val PLANS = "plans"
         private const val PRO_EXPIRED = "proexpired"
         private const val PRO_PLAN = "proplan"
         private const val SHOW_RENEWAL_PREF = "renewalpref"

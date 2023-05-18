@@ -143,9 +143,17 @@ public class ProPlan {
         this.totalCost = totalCost;
     }
 
+    public String getTotalCost() {
+        return totalCost;
+    }
+
     @SerializedName("totalCost")
     public void setTotalCostBilledOneTime(final String totalCostBilledOneTime) {
         this.totalCostBilledOneTime = totalCostBilledOneTime;
+    }
+
+    public String getTotalCostBilledOneTime() {
+        return totalCostBilledOneTime;
     }
 
     @SerializedName("formattedBonus")
@@ -153,9 +161,17 @@ public class ProPlan {
         this.formattedBonus = formattedBonus;
     }
 
+    public String getFormattedBonus() {
+        return formattedBonus;
+    }
+
     @SerializedName("oneMonthCost")
     public void setOneMonthCost(final String oneMonthCost) {
         this.oneMonthCost = oneMonthCost;
+    }
+
+    public String getOneMonthCost() {
+        return oneMonthCost;
     }
 
     @SerializedName("formattedDiscount")
@@ -165,6 +181,10 @@ public class ProPlan {
 
     public Map<String, Long> getPrice() {
         return price;
+    }
+
+    public Map<String, Integer> getDuration() {
+        return duration;
     }
 
     public Long getCurrencyPrice() {
@@ -192,6 +212,10 @@ public class ProPlan {
 
     public void setLocale(Locale locale) {
         this.locale = locale;
+    }
+
+    public Boolean getBestValue() {
+        return bestValue;
     }
 
     public Locale getLocale() {

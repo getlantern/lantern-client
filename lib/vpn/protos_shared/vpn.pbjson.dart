@@ -55,3 +55,42 @@ const Devices$json = const {
 
 /// Descriptor for `Devices`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List devicesDescriptor = $convert.base64Decode('CgdEZXZpY2VzEiEKB2RldmljZXMYASADKAsyBy5EZXZpY2VSB2RldmljZXM=');
+@$core.Deprecated('Use planDescriptor instead')
+const Plan$json = const {
+  '1': 'Plan',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'description', '3': 2, '4': 1, '5': 9, '10': 'description'},
+    const {'1': 'bestValue', '3': 3, '4': 1, '5': 8, '10': 'bestValue'},
+    const {'1': 'usdPrice', '3': 4, '4': 1, '5': 3, '10': 'usdPrice'},
+    const {'1': 'price', '3': 5, '4': 3, '5': 11, '6': '.Plan.PriceEntry', '10': 'price'},
+    const {'1': 'totalCostBilledOneTime', '3': 6, '4': 1, '5': 9, '10': 'totalCostBilledOneTime'},
+    const {'1': 'oneMonthCost', '3': 7, '4': 1, '5': 9, '10': 'oneMonthCost'},
+    const {'1': 'totalCost', '3': 8, '4': 1, '5': 9, '10': 'totalCost'},
+    const {'1': 'formattedBonus', '3': 9, '4': 1, '5': 9, '10': 'formattedBonus'},
+  ],
+  '3': const [Plan_PriceEntry$json],
+};
+
+@$core.Deprecated('Use planDescriptor instead')
+const Plan_PriceEntry$json = const {
+  '1': 'PriceEntry',
+  '2': const [
+    const {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    const {'1': 'value', '3': 2, '4': 1, '5': 3, '10': 'value'},
+  ],
+  '7': const {'7': true},
+};
+
+/// Descriptor for `Plan`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List planDescriptor = $convert.base64Decode('CgRQbGFuEg4KAmlkGAEgASgJUgJpZBIgCgtkZXNjcmlwdGlvbhgCIAEoCVILZGVzY3JpcHRpb24SHAoJYmVzdFZhbHVlGAMgASgIUgliZXN0VmFsdWUSGgoIdXNkUHJpY2UYBCABKANSCHVzZFByaWNlEiYKBXByaWNlGAUgAygLMhAuUGxhbi5QcmljZUVudHJ5UgVwcmljZRI2ChZ0b3RhbENvc3RCaWxsZWRPbmVUaW1lGAYgASgJUhZ0b3RhbENvc3RCaWxsZWRPbmVUaW1lEiIKDG9uZU1vbnRoQ29zdBgHIAEoCVIMb25lTW9udGhDb3N0EhwKCXRvdGFsQ29zdBgIIAEoCVIJdG90YWxDb3N0EiYKDmZvcm1hdHRlZEJvbnVzGAkgASgJUg5mb3JtYXR0ZWRCb251cxo4CgpQcmljZUVudHJ5EhAKA2tleRgBIAEoCVIDa2V5EhQKBXZhbHVlGAIgASgDUgV2YWx1ZToCOAE=');
+@$core.Deprecated('Use plansDescriptor instead')
+const Plans$json = const {
+  '1': 'Plans',
+  '2': const [
+    const {'1': 'plans', '3': 1, '4': 3, '5': 11, '6': '.Plan', '10': 'plans'},
+  ],
+};
+
+/// Descriptor for `Plans`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List plansDescriptor = $convert.base64Decode('CgVQbGFucxIbCgVwbGFucxgBIAMoCzIFLlBsYW5SBXBsYW5z');

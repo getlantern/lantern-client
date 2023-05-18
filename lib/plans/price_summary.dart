@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 
 class PriceSummary extends StatelessWidget {
-  final List<Map<String, dynamic>> plans;
+  final List<Plan> plans;
   final String id;
   final String? refCode;
   final bool isPro;
@@ -16,11 +16,11 @@ class PriceSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedPlan = plans.firstWhere((p) => p['id'] == id);
-    final description = selectedPlan['description'];
+    final selectedPlan = plans.firstWhere((p) => p.id == id);
+    final description = selectedPlan.description;
     final formattedPricePerYear =
-        selectedPlan['totalCost'].toString().split(' ').first;
-    final bonus = selectedPlan['formattedBonus'].toString();
+        selectedPlan.totalCost.split(' ').first;
+    final bonus = selectedPlan.formattedBonus;
     return Container(
       padding: const EdgeInsetsDirectional.only(top: 8.0),
       child: Column(

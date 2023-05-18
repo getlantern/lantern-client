@@ -186,31 +186,6 @@ public class LanternHttpClient extends HttpClient {
         cb.onSuccess(plans);
     }
 
-    public void getPlans(final PlansCallback cb, InAppBilling inAppBilling) {
-        final Map<String, String> params = new HashMap<String, String>();
-        params.put("locale", LanternApp.getSession().getLanguage());
-        params.put("countrycode", LanternApp.getSession().getCountryCode());
-        final HttpUrl url = createProUrl("/plans", params);
-        final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
-        get(url, new ProCallback() {
-            @Override
-            public void onFailure(final Throwable throwable, final ProError error) {
-                Logger.error(TAG, "Unable to fetch plans", throwable);
-                cb.onFailure(throwable, error);
-            }
-
-            @Override
-            public void onSuccess(final Response response, final JsonObject result) {
-                try {
-                    Logger.debug(TAG, "JSON response for " + url + ":" + result.toString());
-                    processPlans(result, cb, inAppBilling);
-                } catch (Exception e) {
-                    Logger.error(TAG, "Unable to fetch plans: " + e.getMessage(), e);
-                }
-            }
-        });
-    }
-
     public void prepareYuansfer(final String vendor, final YuansferCallback cb) {
         final HttpUrl url = createProUrl("/yuansfer-prepay");
         final RequestBody formBody = new FormBody.Builder()
@@ -300,6 +275,34 @@ public class LanternHttpClient extends HttpClient {
                     }
                 } catch (Exception e) {
                     Logger.error(TAG, "Unable to fetch user data: " + e.getMessage(), e);
+                }
+            }
+        });
+    }
+
+
+
+    public void getPlans(final PlansCallback cb, InAppBilling inAppBilling) {
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("locale", LanternApp.getSession().getLanguage());
+        params.put("countrycode", LanternApp.getSession().getCountryCode());
+        final HttpUrl url = createProUrl("/plans", params);
+        final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
+        Logger.d(TAG, "Plans url is " + url);
+        get(url, new ProCallback() {
+            @Override
+            public void onFailure(final Throwable throwable, final ProError error) {
+                Logger.error(TAG, "Unable to fetch plans", throwable);
+                cb.onFailure(throwable, error);
+            }
+
+            @Override
+            public void onSuccess(final Response response, final JsonObject result) {
+                try {
+                    Logger.debug(TAG, "JSON response for " + url + ":" + result.toString());
+                    processPlans(result, cb, inAppBilling);
+                } catch (Exception e) {
+                    Logger.error(TAG, "Unable to fetch plans: " + e.getMessage(), e);
                 }
             }
         });

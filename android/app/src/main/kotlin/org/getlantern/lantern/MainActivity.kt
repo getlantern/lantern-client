@@ -188,9 +188,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     override fun onResume() {
         val start = System.currentTimeMillis()
-        updateUserData()
-        Logger.debug(TAG, "updateUserData() finished at ${System.currentTimeMillis() - start}")
-        updateUserPlans()
 
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
@@ -292,6 +289,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
+        updateUserPlans()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -359,7 +357,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 for (planId in proPlans.keys) {
                     proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
                 }
-                LanternApp.getSession().setUserPlans(Json.gson.toJson(plans))
+                LanternApp.getSession().setUserPlans(plans)
                 Logger.debug(TAG, "Successfully updated user plans")
              }
          }, null)

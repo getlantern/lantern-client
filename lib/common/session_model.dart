@@ -219,10 +219,15 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('checkForUpdates');
   }
 
-  Widget getPlans(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      'getPlans',
+  Widget plans(ValueWidgetBuilder<Plans> builder) {
+    debugPrint('Getting plans...');
+    return subscribedSingleValueBuilder<Plans>(
+      'plans',
       builder: builder,
+      deserialize: (Uint8List serialized) {
+        debugPrint('here...');
+        return Plans.fromBuffer(serialized);
+      },
     );
   }
 
@@ -304,6 +309,7 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('checkEmailExistence', <String, dynamic>{
       'email': email,
     }).then((value) => value as String);
+  }
 
   Future<void> openWebview(String url) {
     return methodChannel.invokeMethod('openWebview', <String, dynamic>{
