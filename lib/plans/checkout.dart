@@ -11,7 +11,7 @@ final paymentProviders = [
 ];
 
 class Checkout extends StatefulWidget {
-  final List<Map<String, dynamic>> plans;
+  final List<Plan> plans;
   final String id;
   final bool isPro;
 

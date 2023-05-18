@@ -41,9 +41,9 @@ import 'package:lantern/messaging/onboarding/chat_number_messaging.dart'
     as _i12;
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart' as _i11;
 import 'package:lantern/plans/checkout.dart' as _i21;
+import 'package:lantern/plans/plans.dart' as _i24;
 import 'package:lantern/plans/reseller_checkout.dart' as _i22;
 import 'package:lantern/plans/stripe_checkout.dart' as _i23;
-import 'package:lantern/plans/upgrade.dart' as _i24;
 import 'package:lantern/replica/common.dart' as _i37;
 import 'package:lantern/replica/link_handler.dart' as _i28;
 import 'package:lantern/replica/ui/viewers/audio.dart' as _i32;
@@ -1100,7 +1100,7 @@ class BlockedUsersArgs {
 /// [_i21.Checkout]
 class Checkout extends _i33.PageRouteInfo<CheckoutArgs> {
   Checkout({
-    required List<Map<String, dynamic>> plans,
+    required List<_i35.Plan> plans,
     required String id,
     required bool isPro,
     _i35.Key? key,
@@ -1126,7 +1126,7 @@ class CheckoutArgs {
     this.key,
   });
 
-  final List<Map<String, dynamic>> plans;
+  final List<_i35.Plan> plans;
 
   final String id;
 
@@ -1178,7 +1178,7 @@ class ResellerCheckoutArgs {
 /// [_i23.StripeCheckout]
 class StripeCheckout extends _i33.PageRouteInfo<StripeCheckoutArgs> {
   StripeCheckout({
-    required List<Map<String, dynamic>> plans,
+    required List<_i35.Plan> plans,
     required String email,
     String? refCode,
     required String id,
@@ -1210,7 +1210,7 @@ class StripeCheckoutArgs {
     this.key,
   });
 
-  final List<Map<String, dynamic>> plans;
+  final List<_i35.Plan> plans;
 
   final String email;
 

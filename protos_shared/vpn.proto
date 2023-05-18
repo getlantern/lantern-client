@@ -23,3 +23,19 @@ message Device {
 message Devices {
   repeated Device devices = 1;
 }
+
+message Plan {
+  string id = 1;
+  string description = 2;
+  bool bestValue = 3;
+  int64 usdPrice = 4;
+  map<string, int64> price = 5;
+  string totalCostBilledOneTime = 6;
+  string oneMonthCost = 7;
+  string totalCost = 8;
+  string formattedBonus = 9;
+}
+
+message Plans {
+  repeated Plan plans = 1;
+}

@@ -41,11 +41,9 @@ class SessionModel(
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
-    private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
     companion object {
         private const val TAG = "SessionModel"
-        const val PATH_PLANS = "plans"
         const val PATH_PRO_USER = "prouser"
         const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_SDK_VERSION = "sdkVersion"
@@ -62,10 +60,6 @@ class SessionModel(
             tx.put(
                 PATH_PROXY_ALL,
                 castToBoolean(tx.get(PATH_PROXY_ALL), false),
-            )
-            tx.put(
-                PATH_PLANS,
-                tx.get(PATH_PLANS) ?: "",
             )
             tx.put(
                 PATH_USER_LEVEL,
@@ -97,7 +91,6 @@ class SessionModel(
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
-            "getPlans" -> getPlans(result)
             "userStatus" -> userStatus(result)
             else -> super.doOnMethodCall(call, result)
         }
@@ -383,7 +376,7 @@ class SessionModel(
     }
 
     // Hits the /plans endpoint and saves plans to PATH_PLANS
-    private fun getPlans(result: MethodChannel.Result) {
+    /*private fun getPlans(result: MethodChannel.Result) {
         try {
             LanternApp.getPlans(object : LanternHttpClient.PlansCallback {
                 override fun onSuccess(proPlans: Map<String, ProPlan>) {
@@ -417,5 +410,5 @@ class SessionModel(
                 null,
             )
         }
-    }
+    }*/
 }

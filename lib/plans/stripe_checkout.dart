@@ -7,7 +7,7 @@ import 'package:lantern/plans/tos.dart';
 import 'package:lantern/plans/utils.dart';
 
 class StripeCheckout extends StatefulWidget {
-  final List<Map<String, dynamic>> plans;
+  final List<Plan> plans;
   final String email;
   final String? refCode;
   final String id;
