@@ -4,18 +4,18 @@ import 'package:lantern/plans/tos.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/plans/utils.dart';
 
-class ResellerCheckout extends StatefulWidget {
+class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;
-  ResellerCheckout({
+  ResellerCodeCheckout({
     Key? key,
     required this.isPro,
   }) : super(key: key);
 
   @override
-  State<ResellerCheckout> createState() => _ResellerCheckoutState();
+  State<ResellerCodeCheckout> createState() => _ResellerCodeCheckoutState();
 }
 
-class _ResellerCheckoutState extends State<ResellerCheckout> {
+class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
