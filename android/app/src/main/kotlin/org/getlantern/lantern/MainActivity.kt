@@ -448,10 +448,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     private fun showSurvey(survey: Survey?) {
         survey ?: return
-        if (survey.showPlansScreen) {
-            startActivity(Intent(this@MainActivity, LanternApp.getSession().plansActivity()))
-            return
-        }
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
 
         // For some reason, telegram.me links create infinite redirects. To solve this, we disable
