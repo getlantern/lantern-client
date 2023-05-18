@@ -222,9 +222,9 @@ import 'package:lantern/replica/upload/review.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
      ),
     CustomRoute<void>(
-      page: Upgrade,
-      name: 'Upgrade',
-      path: 'upgrade',
+      page: PlansPage,
+      name: 'PlansPage',
+      path: 'plans',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:lantern/plans/plans.dart';
+import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/price_summary.dart';
 import 'package:lantern/plans/tos.dart';
 import 'package:lantern/plans/utils.dart';
