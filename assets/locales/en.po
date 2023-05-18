@@ -184,7 +184,7 @@ msgstr "Link via Email"
 msgid "lantern_pro_email"
 msgstr "Lantern Pro Email"
 
-msgid "Email"
+msgid "email"
 msgstr "Email"
 
 msgid "Submit"
@@ -212,7 +212,7 @@ msgid "months"
 msgstr "months"
 
 msgid "enter_email"
-msgstr "Enter email"
+msgstr "Enter Email"
 
 msgid "error_fetching_plans"
 msgstr "Error fetching plans, please restart Lantern and try again."

@@ -28,6 +28,7 @@ class Checkout extends StatefulWidget {
 
 class _CheckoutState extends State<Checkout>
     with SingleTickerProviderStateMixin {
+  bool showMoreOptions = true;
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
@@ -91,9 +92,7 @@ class _CheckoutState extends State<Checkout>
             top: 24,
             bottom: 32,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: ListView(
             children: [
               // * Step 2
               PlanStep(
@@ -241,7 +240,11 @@ class _CheckoutState extends State<Checkout>
                   children: [
                     // * Stripe
                     PaymentProvider(
-                      logoPaths: [ImagePaths.visa, ImagePaths.mastercard, ImagePaths.unionpay],
+                      logoPaths: [
+                        ImagePaths.visa,
+                        ImagePaths.mastercard,
+                        ImagePaths.unionpay
+                      ],
                       onChanged: () => setState(
                         () => selectedPaymentProvider = 'stripe',
                       ),
@@ -256,7 +259,22 @@ class _CheckoutState extends State<Checkout>
                       ),
                       selectedPaymentProvider: selectedPaymentProvider,
                       paymentType: 'btc',
-                    )
+                    ),
+                    // * Freekassa
+                    if (showMoreOptions)
+                      PaymentProvider(
+                        logoPaths: [
+                          ImagePaths.mnp,
+                          ImagePaths.qiwi,
+                          ImagePaths.visa,
+                          ImagePaths.mastercard
+                        ],
+                        onChanged: () => setState(
+                          () => selectedPaymentProvider = 'freekassa',
+                        ),
+                        selectedPaymentProvider: selectedPaymentProvider,
+                        paymentType: 'freekassa',
+                      )
                   ],
                 ),
               ),

@@ -327,11 +327,11 @@ class AppRouter extends _i33.RootStackRouter {
         barrierDismissible: false,
       );
     },
-    ResellerCheckout.name: (routeData) {
-      final args = routeData.argsAs<ResellerCheckoutArgs>();
+    ResellerCodeCheckout.name: (routeData) {
+      final args = routeData.argsAs<ResellerCodeCheckoutArgs>();
       return _i33.CustomPage<void>(
         routeData: routeData,
-        child: _i22.ResellerCheckout(
+        child: _i22.ResellerCodeCheckout(
           key: args.key,
           isPro: args.isPro,
         ),
@@ -594,8 +594,8 @@ class AppRouter extends _i33.RootStackRouter {
           path: 'checkout',
         ),
         _i33.RouteConfig(
-          ResellerCheckout.name,
-          path: 'resellerCheckout',
+          ResellerCodeCheckout.name,
+          path: 'resellerCodeCheckout',
         ),
         _i33.RouteConfig(
           StripeCheckout.name,
@@ -1141,25 +1141,26 @@ class CheckoutArgs {
 }
 
 /// generated route for
-/// [_i22.ResellerCheckout]
-class ResellerCheckout extends _i33.PageRouteInfo<ResellerCheckoutArgs> {
-  ResellerCheckout({
+/// [_i22.ResellerCodeCheckout]
+class ResellerCodeCheckout
+    extends _i33.PageRouteInfo<ResellerCodeCheckoutArgs> {
+  ResellerCodeCheckout({
     _i35.Key? key,
     required bool isPro,
   }) : super(
-          ResellerCheckout.name,
-          path: 'resellerCheckout',
-          args: ResellerCheckoutArgs(
+          ResellerCodeCheckout.name,
+          path: 'resellerCodeCheckout',
+          args: ResellerCodeCheckoutArgs(
             key: key,
             isPro: isPro,
           ),
         );
 
-  static const String name = 'ResellerCheckout';
+  static const String name = 'ResellerCodeCheckout';
 }
 
-class ResellerCheckoutArgs {
-  const ResellerCheckoutArgs({
+class ResellerCodeCheckoutArgs {
+  const ResellerCodeCheckoutArgs({
     this.key,
     required this.isPro,
   });
@@ -1170,7 +1171,7 @@ class ResellerCheckoutArgs {
 
   @override
   String toString() {
-    return 'ResellerCheckoutArgs{key: $key, isPro: $isPro}';
+    return 'ResellerCodeCheckoutArgs{key: $key, isPro: $isPro}';
   }
 }
 

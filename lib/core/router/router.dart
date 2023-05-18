@@ -206,9 +206,9 @@ import 'package:lantern/replica/upload/review.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
      ),
     CustomRoute<void>(
-      page: ResellerCheckout,
-      name: 'ResellerCheckout',
-      path: 'resellerCheckout',
+      page: ResellerCodeCheckout,
+      name: 'ResellerCodeCheckout',
+      path: 'resellerCodeCheckout',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

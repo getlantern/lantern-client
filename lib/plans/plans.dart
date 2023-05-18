@@ -144,6 +144,7 @@ class _PlansPageState extends State<PlansPage> {
 
       final isFree = !isPro;
       var platinumAvailable = false;
+      var isPlatinum = false;
       //final renewalText = plans.last['renewalText'];
       return FullScreenDialog(
         widget: StatefulBuilder(
@@ -269,6 +270,31 @@ class _PlansPageState extends State<PlansPage> {
                           ],
                         ),
                       ),
+                    ),
+                  // * Footer
+                  if (!isPlatinum)
+                    Stack(
+                      children: [
+                        Container(
+                          height: 40,
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          color: grey2,
+                          child: GestureDetector(
+                            onTap: () async => await context.pushRoute(
+                              ResellerCodeCheckout(isPro: isPro),
+                            ),
+                            child: CText(
+                              'Have a Lantern Pro activation code? Click here.',
+                              style: tsBody1,
+                            ),
+                          ), // Translations
+                        ),
+                        Divider(
+                          color: grey1,
+                          height: 2,
+                        ),
+                      ],
                     ),
                   ])),
         ),
