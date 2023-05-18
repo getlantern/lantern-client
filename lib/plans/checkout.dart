@@ -78,11 +78,35 @@ class _CheckoutState extends State<Checkout>
     super.dispose();
   }
 
+  Widget options() => CInkWell(
+      onTap: () {
+        setState(() {
+          showMoreOptions = !showMoreOptions;
+        });
+      },
+      child: Container(
+          padding: const EdgeInsetsDirectional.only(bottom: 24),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CText(
+                  showMoreOptions ? 'fewer_options'.i18n : 'more_options'.i18n,
+                  style: tsBody1,
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 8),
+                  child: CAssetImage(
+                    path: ImagePaths.down_arrow,
+                  ),
+                ),
+              ])));
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
       resizeToAvoidBottomInset: false,
-      title: 'lantern_${widget.isPro == true ? 'pro' : ''}_checkout'.i18n,
+      title: 'lantern_pro_checkout'.i18n,
       body: Form(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -260,6 +284,7 @@ class _CheckoutState extends State<Checkout>
                       selectedPaymentProvider: selectedPaymentProvider,
                       paymentType: 'btc',
                     ),
+                    options(),
                     // * Freekassa
                     if (showMoreOptions)
                       PaymentProvider(
