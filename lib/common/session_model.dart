@@ -303,8 +303,8 @@ class SessionModel extends Model {
   Future<void> checkEmailExists(
     String email,
   ) async {
-    return methodChannel.invokeMethod('checkEmailExistence', <String, dynamic>{
-      'email': email,
+    return methodChannel.invokeMethod('checkEmailExists', <String, dynamic>{
+      'emailAddress': email,
     }).then((value) => value as String);
   }
 
