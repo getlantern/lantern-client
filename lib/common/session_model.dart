@@ -190,6 +190,14 @@ class SessionModel extends Model {
     );
   }
 
+  Widget countryCode(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'geo_country_code',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
   Future<String> getReplicaAddr() async {
     final replicaAddr = await methodChannel.invokeMethod('get', 'replicaAddr');
     if (replicaAddr == null || replicaAddr == '') {

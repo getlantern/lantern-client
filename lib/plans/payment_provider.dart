@@ -1,10 +1,12 @@
 import 'package:lantern/common/common.dart';
 
+enum PaymentProviders { stripe, btc, freekassa }
+
 class PaymentProvider extends StatelessWidget {
   final List<String> logoPaths;
   final Function onChanged;
-  final String selectedPaymentProvider;
-  final String paymentType;
+  final PaymentProviders selectedPaymentProvider;
+  final PaymentProviders paymentType;
 
   const PaymentProvider({
     Key? key,
