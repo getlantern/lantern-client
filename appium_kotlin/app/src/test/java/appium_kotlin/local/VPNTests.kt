@@ -1,7 +1,10 @@
 package appium_kotlin.local
 
 import appium_flutter_driver.FlutterFinder
+import appium_kotlin.CHROME_PACKAGE_ACTIVITY
+import appium_kotlin.CHROME_PACKAGE_ID
 import appium_kotlin.ContextType
+import appium_kotlin.IP_REQUEST_URL
 import appium_kotlin.LANTERN_PACKAGE_ID
 import appium_kotlin.local.BaseAndroidTest
 import io.appium.java_client.TouchAction
@@ -64,32 +67,29 @@ class VPNTests : BaseAndroidTest() {
         }
 
         // Get ip again after turing on VPN switch
-        appiumDriver.activateApp("com.android.chrome")
+        appiumDriver.activateApp(CHROME_PACKAGE_ID)
         Thread.sleep(2000)
-        pullToRefresh()
-
+        
         val afterIp = makeIpRequest()
-
-        // Ip should not be same at any case
-        // same it should be fail
-        // We might need add some more verification logic soon
-        if (beforeIp == afterIp) {
-            testFail()
-        } else {
-            testPassed()
-        }
-        print("IP Request before $beforeIp after $afterIp")
-        Assertions.assertEquals(beforeIp != afterIp, true)
 
         // Turn of VPN
         switchToContext(ContextType.FLUTTER)
         vpnSwitchFinder.click()
         Thread.sleep(2000)
+
+        // Ip should not be same at any case
+        // same it should be fail
+        // We might need add some more verification logic soon
+        print("IP Request before $beforeIp after $afterIp")
+        Assertions.assertEquals(beforeIp != afterIp, true)
+
     }
+
 
     @AfterEach
     fun afterTest() {
-        appiumDriver.context("NATIVE_APP")
+        switchToContext(ContextType.NATIVE_APP)
+
         // Uninstall app is test run successfully
         appiumDriver.removeApp(LANTERN_PACKAGE_ID)
 
@@ -99,7 +99,7 @@ class VPNTests : BaseAndroidTest() {
         // Activity activity = new Activity("com.android.chrome",
         // "com.google.android.apps.chrome.Main");
         val activity =
-            Activity("com.android.chrome", "org.chromium.chrome.browser.ChromeTabbedActivity")
+            Activity(CHROME_PACKAGE_ID, CHROME_PACKAGE_ACTIVITY)
         activity.setStopApp(false)
         appiumDriver.startActivity(activity)
         print("Android", "Chrome browser launched")
@@ -121,7 +121,7 @@ class VPNTests : BaseAndroidTest() {
     private fun makeIpRequest(): String {
         switchToContext(ContextType.WEBVIEW_CHROME)
         // appiumDriver.context("WEBVIEW_chrome");
-        appiumDriver.get("https://api64.ipify.org")
+        appiumDriver.get(IP_REQUEST_URL)
 
         Thread.sleep(5000)
         val ipElement = appiumDriver.findElement(By.tagName("pre"))

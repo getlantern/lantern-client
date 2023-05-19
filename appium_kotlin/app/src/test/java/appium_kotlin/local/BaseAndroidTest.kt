@@ -69,13 +69,6 @@ open class BaseAndroidTest {
             service.stop()
         }
 
-        fun testPassed() {
-            jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"Results found!\"}}")
-        }
-
-        fun testFail() {
-            jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Results not found\"}}")
-        }
 
         private fun waitForFirstFrame() {
             appiumDriver.executeScript("flutter:waitForFirstFrame")
