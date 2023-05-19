@@ -1,14 +1,14 @@
 {
   "server": "hub-cloud.browserstack.com",
-  "username": "jigarj_SNsRyw",
-  "access_key": "dA4yyG26fHbfJxRUYMwr",
+  "username": "jigarfumakiya_6dKXF7",
+  "access_key": "21qn1raPp8EN7jpctwen",
   "capabilities": {
     "automationName": "Flutter",
     "setWebContentsDebuggingEnabled": true,
     "appium:noReset": false,
     "appium:logLevel": true,
     "enablePerformanceLogging": true,
-    "app": "bs://5ecc53f8ececf1d878de9b86cdbf2b4cc12152e7",
+    "app": "bs://dfd260df78ec45a7f2fff2a8463df12b272d9585",
     "bstack:options": {
       "appiumVersion": "2.0.0",
       "networkLogs": true,
@@ -22,12 +22,17 @@
       "appium:deviceName": "Google Pixel 5",
       "platformVersion": "12.0",
       "platformName": "Android"
-    }, {
+    },
+    {
       "appium:deviceName": "Samsung Galaxy S21",
       "platformVersion": "11.0",
       "platformName": "Android"
+    },
+    {
+      "appium:deviceName": "Google Pixel 7 Pro",
+      "platformVersion": "13.0",
+      "platformName": "Android"
     }
-
   ]
 }
 

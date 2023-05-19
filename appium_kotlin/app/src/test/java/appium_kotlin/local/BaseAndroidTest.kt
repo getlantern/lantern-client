@@ -1,5 +1,7 @@
 package appium_kotlin.local
 
+import appium_kotlin.ContextType
+import appium_kotlin.LANTERN_APK_PATH
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.options.UiAutomator2Options
 import io.appium.java_client.remote.MobileCapabilityType
@@ -13,70 +15,11 @@ import org.junit.jupiter.api.BeforeAll
 import org.openqa.selenium.JavascriptExecutor
 import java.net.URL
 
-
 open class BaseAndroidTest {
-
-    // Enums representing the context types
-    enum class ContextType {
-        NATIVE_APP,
-        FLUTTER,
-        WEBVIEW_CHROME
-    }
-
-
     companion object {
         private lateinit var service: AppiumDriverLocalService
         lateinit var appiumDriver: AndroidDriver
         lateinit var jse: JavascriptExecutor
-
-        // this should be dynamic
-        private const val LANTERN_APK_PATH =
-            "/Users/jigarfumakiya/Documents/getlantern/mobile_app/android-lantern/build/app/outputs/flutter-apk/app-prod-debug.apk"
-        const val LANTERN_PACKAGE_ID = "org.getlantern.lantern"
-        const val APP_URL = "bs://5ecc53f8ececf1d878de9b86cdbf2b4cc12152e7"
-        var username = "jigarj_SNsRyw"
-        var accessKey = "dA4yyG26fHbfJxRUYMwr"
-
-//        @JvmStatic
-//        @BeforeAll
-//        fun setupAppium() {
-//            val capabilities = UiAutomator2Options()
-//            // Re-install app each time
-//            capabilities.setCapability("appium:noReset", false)
-//            capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Flutter")
-//
-//            // Logging:
-//            capabilities.setCapability(MobileCapabilityType.ENABLE_PERFORMANCE_LOGGING, false)
-//            capabilities.setCapability("appium:logLevel", "debug")
-//
-//            // Timeouts:
-//            capabilities.setCapability("webkitResponseTimeout", 5000)
-//            capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 5000)
-//
-//            capabilities.setCapability("appium:deviceName", "Google Pixel 5")
-//
-//            capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, MobilePlatform.ANDROID)
-//            capabilities.setCapability("setWebContentsDebuggingEnabled", "true")
-//
-//            capabilities.setCapability("app", APP_URL)
-//            val browserstackOptions = HashMap<String, Any>()
-//            browserstackOptions["appiumVersion"] = "2.0.0"
-//            browserstackOptions["networkLogs"] = "true"
-//            browserstackOptions["projectName"] = "Lantern"
-//            browserstackOptions["buildName"] = "lantern-app-debug"
-//            browserstackOptions["appiumLogs"] = "true";
-//            capabilities.setCapability("bstack:options", browserstackOptions)
-//            browserstackOptions["networkLogsExcludeHosts"] = arrayOf("api64.ipify.org")
-//
-//            appiumDriver = AndroidDriver(
-//                URL("https://$username:$accessKey@hub-cloud.browserstack.com/wd/hub"),
-//                capabilities
-//            )
-//            jse = appiumDriver
-//
-//            // Wait for first frame to render
-//            waitForFirstFrame()
-//        }
 
         @JvmStatic
         @BeforeAll
@@ -113,7 +56,7 @@ open class BaseAndroidTest {
             capabilities.setCapability("setWebContentsDebuggingEnabled", "true")
             capabilities.setCapability("app", LANTERN_APK_PATH)
 
-              appiumDriver = AndroidDriver(service.url, capabilities)
+            appiumDriver = AndroidDriver(service.url, capabilities)
 
             // Wait for first frame to render
             waitForFirstFrame()
@@ -152,7 +95,6 @@ open class BaseAndroidTest {
             ContextType.NATIVE_APP -> "NATIVE_APP"
             ContextType.FLUTTER -> "FLUTTER"
             ContextType.WEBVIEW_CHROME -> "WEBVIEW_chrome"
-            else -> throw IllegalArgumentException("Invalid context type: $contextType")
         }
     }
 

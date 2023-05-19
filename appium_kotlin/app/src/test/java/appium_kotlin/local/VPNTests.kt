@@ -1,6 +1,8 @@
 package appium_kotlin.local
 
 import appium_flutter_driver.FlutterFinder
+import appium_kotlin.ContextType
+import appium_kotlin.LANTERN_PACKAGE_ID
 import appium_kotlin.local.BaseAndroidTest
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
