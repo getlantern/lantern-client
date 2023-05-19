@@ -13,6 +13,7 @@ plugins {
     application
     kotlin("jvm") version "1.8.21"
     kotlin("plugin.serialization") version "1.8.21"
+    `maven-publish`
 }
 
 repositories {
@@ -23,43 +24,26 @@ repositories {
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
-
     // This dependency is used by the application.
     implementation("com.google.guava:guava:31.1-jre")
-    implementation ("org.junit.platform:junit-platform-runner:1.5.2")
+    implementation("org.junit.platform:junit-platform-runner:1.5.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
     testImplementation("io.appium:java-client:8.4.0")
-//    testImplementation("org.seleniumhq.selenium:selenium-java:4.9.1")
-    implementation ("com.google.code.gson:gson:2.8.9")
+    implementation("com.google.code.gson:gson:2.8.9")
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 }
 
-//application {
-//    // Define the main class for the application.
-//    mainClass.set("appium_kotlin.App")
-//}
+
 
 tasks.test {
     useJUnitPlatform()
     testLogging {
         events("started", "passed", "skipped", "failed", "standardOut", "standardError")
-         showExceptions = true
+        showExceptions = true
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         showCauses = true
         showStackTraces = true
     }
 }
 
-//tasks.withType<KotlinCompile> {
-//    kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
-//}
-
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_15.toString()
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_15.toString()
-}
