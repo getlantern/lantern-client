@@ -20,15 +20,12 @@ import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
-import org.getlantern.lantern.util.Json
-import org.getlantern.lantern.util.PlansUtil
+import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
-import org.getlantern.lantern.util.StripeUtil
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
@@ -43,7 +40,7 @@ class SessionModel(
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
-    private val stripeUtil = StripeUtil(activity)
+    private val paymentsUtil = PaymentsUtil(activity)
 
     companion object {
         private const val TAG = "SessionModel"
@@ -96,8 +93,19 @@ class SessionModel(
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
-            "submitStripe" -> stripeUtil.submitPayment(call.argument("email")!!, call.argument("cardNumber")!!,
-                call.argument("expDate")!!, call.argument("cvc")!!, result)
+            "submitBitcoinPayment" -> paymentsUtil.submitBitcoinPayment(
+                call.argument("planID")!!,
+                call.argument("email")!!,
+                call.argument("refCode")!!,
+                result,
+            )
+            "submitStripePayment" -> paymentsUtil.submitStripePayment(
+                call.argument("email")!!,
+                call.argument("cardNumber")!!,
+                call.argument("expDate")!!,
+                call.argument("cvc")!!,
+                result,
+            )
             "userStatus" -> userStatus(result)
             else -> super.doOnMethodCall(call, result)
         }
@@ -141,11 +149,13 @@ class SessionModel(
                 val userEmail = call.argument("email") ?: ""
                 val planID = call.argument("planID") ?: ""
                 val currencyPrice = call.argument("currencyPrice") ?: ""
-                activity.startActivity(Intent(activity, FreeKassaActivity_::class.java).apply {
-                    putExtra("userEmail", userEmail)
-                    putExtra("planID", planID)
-                    putExtra("currencyPrice", currencyPrice)
-                })
+                activity.startActivity(
+                    Intent(activity, FreeKassaActivity_::class.java).apply {
+                        putExtra("userEmail", userEmail)
+                        putExtra("planID", planID)
+                        putExtra("currencyPrice", currencyPrice)
+                    },
+                )
             }
             "checkForUpdates" -> {
                 EventBus.getDefault().post(CheckUpdate(true))
@@ -174,17 +184,19 @@ class SessionModel(
         val params = mapOf("email" to emailAddress)
         val isPlayVersion = LanternApp.getSession().isPlayVersion()
         val useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay()
-        lanternClient.get(LanternHttpClient.createProUrl("/email-exists", params),
-                object : ProCallback {
-                    override fun onFailure(t: Throwable?, error: ProError?) {
-                        if (error != null) confirmEmailError(error)
-                    }
+        lanternClient.get(
+            LanternHttpClient.createProUrl("/email-exists", params),
+            object : ProCallback {
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    if (error != null) confirmEmailError(error)
+                }
 
-                    override fun onSuccess(response: Response?, result: JsonObject?) {
-                        Logger.debug(TAG, "Email successfully validated " + emailAddress)
-                        LanternApp.getSession().setEmail(emailAddress)
-                    }
-                });
+                override fun onSuccess(response: Response?, result: JsonObject?) {
+                    Logger.debug(TAG, "Email successfully validated " + emailAddress)
+                    LanternApp.getSession().setEmail(emailAddress)
+                }
+            },
+        )
     }
 
     private fun authorizeViaEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
