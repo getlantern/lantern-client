@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:lantern/common/common.dart';
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:email_validator/email_validator.dart';
@@ -27,6 +28,8 @@ class StripeCheckout extends StatefulWidget {
 }
 
 class _StripeCheckoutState extends State<StripeCheckout> {
+  final copy = 'Complete Purchase'.i18n;
+  final _formKey = GlobalKey<FormState>();
   late final ccValidator = CreditCardValidator();
 
   final emailFieldKey = GlobalKey<FormState>();
@@ -80,183 +83,177 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     super.dispose();
   }
 
+  Widget checkoutButton() {
+    return Button(
+      disabled: !formIsValid,
+      text: copy,
+      onPressed: () async {
+        context.loaderOverlay.show();
+        await sessionModel
+            .submitStripePayment(
+              widget.email,
+              creditCardController.text,
+              expDateController.text,
+              cvcFieldController.text,
+            )
+            .timeout(
+              Duration(seconds: 10),
+              onTimeout: () => onAPIcallTimeout(
+                code: 'submitStripeTimeout',
+                message: 'stripe_timeout'.i18n,
+              ),
+            )
+            .then((value) async {
+          context.loaderOverlay.hide();
+          CDialog.showInfo(
+            context,
+            iconPath: ImagePaths.lantern_logo,
+            size: 80,
+            title: 'renewal_success'.i18n,
+            description: 'stripe_success'.i18n,
+            actionLabel: 'continue'.i18n,
+          );
+        }).onError((error, stackTrace) {
+          context.loaderOverlay.hide();
+          CDialog.showError(
+            context,
+            error: e,
+            stackTrace: stackTrace,
+            description: (error as PlatformException)
+                .message
+                .toString(), // This is coming localized
+          );
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final copy = 'Complete Purchase'.i18n;
     return BaseScreen(
       resizeToAvoidBottomInset: false,
       title: 'lantern_${widget.isPro ? 'pro_' : ''}checkout'.i18n,
-      body: Container(
-        padding: const EdgeInsetsDirectional.only(
-          start: 16,
-          end: 16,
-          top: 24,
-          bottom: 32,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // * Step 3
-            PlanStep(
-              stepNum: '3',
-              description: 'checkout'.i18n,
+      body: Form(
+          key: _formKey,
+          onChanged: () => setState(() {
+                formIsValid = determineFormIsValid();
+              }),
+          child: Container(
+            padding: const EdgeInsetsDirectional.only(
+              start: 16,
+              end: 16,
+              top: 24,
+              bottom: 32,
             ),
-            // * Email
-            Container(
-              padding: const EdgeInsetsDirectional.only(
-                top: 16,
-                bottom: 8,
-              ),
-              child: Form(
-                onChanged: () => setState(() {
-                  formIsValid = determineFormIsValid();
-                }),
-                key: emailFieldKey,
-                child: CTextField(
-                  initialValue: widget.email,
-                  controller: emailController,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  label: 'email'.i18n,
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const CAssetImage(path: ImagePaths.email),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // * Step 3
+                PlanStep(
+                  stepNum: '3',
+                  description: 'checkout'.i18n,
                 ),
-              ),
-            ),
-            // * Credit card number
-            Container(
-              padding: const EdgeInsetsDirectional.only(
-                top: 8,
-                bottom: 8,
-              ),
-              child: Form(
-                onChanged: () => setState(() {
-                  formIsValid = determineFormIsValid();
-                }),
-                key: creditCardFieldKey,
-                child: CTextField(
-                  controller: creditCardController,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  label: 'card_number'.i18n,
-                  keyboardType: TextInputType.number,
-                  maxLines: 1,
-                  prefixIcon: const CAssetImage(path: ImagePaths.credit_card),
+                // * Email
+                Container(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 16,
+                    bottom: 8,
+                  ),
+                  child: CTextField(
+                    //key: emailFieldKey,
+                    initialValue: widget.email,
+                    controller: emailController,
+                    autovalidateMode: AutovalidateMode.disabled,
+                    label: 'email'.i18n,
+                    keyboardType: TextInputType.emailAddress,
+                    prefixIcon: const CAssetImage(path: ImagePaths.email),
+                  ),
                 ),
-              ),
-            ),
-            // * Credit card month and expiration
-            Container(
-              padding: const EdgeInsetsDirectional.only(
-                top: 16.0,
-                bottom: 16.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //* Expiration
-                  Container(
-                    width: 150,
-                    child: Form(
-                      onChanged: () => setState(() {
-                        formIsValid = determineFormIsValid();
-                      }),
-                      key: expDateFieldKey,
-                      child: CTextField(
-                        maxLines: 1,
-                        maxLength: 5,
-                        controller: expDateController,
-                        autovalidateMode: AutovalidateMode.disabled,
-                        label: 'card_expiration'.i18n,
-                        keyboardType: TextInputType.datetime,
-                        prefixIcon:
-                            const CAssetImage(path: ImagePaths.calendar),
+                // * Credit card number
+                Container(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 8,
+                    bottom: 8,
+                  ),
+                  child: CTextField(
+                    //key: creditCardFieldKey,
+                    controller: creditCardController,
+                    autovalidateMode: AutovalidateMode.disabled,
+                    label: 'card_number'.i18n,
+                    keyboardType: TextInputType.number,
+                    maxLines: 1,
+                    prefixIcon: const CAssetImage(path: ImagePaths.credit_card),
+                  ),
+                ),
+                // * Credit card month and expiration
+                Container(
+                  padding: const EdgeInsetsDirectional.only(
+                    top: 16.0,
+                    bottom: 16.0,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //* Expiration
+                      Container(
+                        width: 144,
+                        padding: const EdgeInsetsDirectional.only(
+                          end: 16,
+                        ),
+                        child: CTextField(
+                          maxLines: 1,
+                          maxLength: 5,
+                          controller: expDateController,
+                          autovalidateMode: AutovalidateMode.disabled,
+                          label: 'card_expiration'.i18n,
+                          onChanged: (value) {
+                            if (value.length == 2) {
+                              expDateController.text = "${value}/";
+                            }
+                          },
+                          keyboardType: TextInputType.datetime,
+                          prefixIcon:
+                              const CAssetImage(path: ImagePaths.calendar),
+                        ),
                       ),
-                    ),
-                  ),
-                  //* CVV
-                  Container(
-                    width: 150,
-                    child: Form(
-                      onChanged: () => setState(() {
-                        formIsValid = determineFormIsValid();
-                      }),
-                      key: cvcFieldKey,
-                      child: CTextField(
-                        maxLines: 1,
-                        maxLength: 4,
-                        controller: cvcFieldController,
-                        autovalidateMode: AutovalidateMode.disabled,
-                        label: 'cvc'.i18n.toUpperCase(),
-                        keyboardType: TextInputType.number,
-                        prefixIcon: const CAssetImage(path: ImagePaths.lock),
+                      //* CVV
+                      Container(
+                        width: 144,
+                        child: CTextField(
+                          maxLines: 1,
+                          maxLength: 4,
+                          controller: cvcFieldController,
+                          autovalidateMode: AutovalidateMode.disabled,
+                          label: 'cvc'.i18n.toUpperCase(),
+                          keyboardType: TextInputType.number,
+                          prefixIcon: const CAssetImage(path: ImagePaths.lock),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Flexible(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // * Price summary
+                      PriceSummary(
+                        plans: widget.plans,
+                        id: widget.id,
+                        refCode: widget.refCode,
+                        isPro: widget.isPro,
+                      ),
+                      TOS(copy: copy),
+                      checkoutButton(),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // * Price summary
-                  PriceSummary(
-                    plans: widget.plans,
-                    id: widget.id,
-                    refCode: widget.refCode,
-                    isPro: widget.isPro,
-                  ),
-                  TOS(copy: copy),
-                  Button(
-                    disabled: !formIsValid,
-                    text: copy,
-                    onPressed: () async {
-                      context.loaderOverlay.show();
-                      await sessionModel
-                          .submitStripePayment(
-                            widget.email,
-                            creditCardController.text,
-                            expDateController.text,
-                            cvcFieldController.text,
-                          )
-                          .timeout(
-                            Duration(seconds: 10),
-                            onTimeout: () => onAPIcallTimeout(
-                              code: 'submitStripeTimeout',
-                              message: 'stripe_timeout'.i18n,
-                            ),
-                          )
-                          .then((value) async {
-                        context.loaderOverlay.hide();
-                        CDialog.showInfo(
-                          context,
-                          iconPath: ImagePaths.lantern_logo,
-                          size: 80,
-                          title: 'renewal_success'.i18n,
-                          description: 'stripe_success'.i18n,
-                          actionLabel: 'continue'.i18n,
-                        );
-                      }).onError((error, stackTrace) {
-                        context.loaderOverlay.hide();
-                        CDialog.showError(
-                          context,
-                          error: e,
-                          stackTrace: stackTrace,
-                          description: (error as PlatformException)
-                              .message
-                              .toString(), // This is coming localized
-                        );
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 
@@ -271,7 +268,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     final anyFieldsInvalid = emailFieldKey.currentState?.validate() == false ||
         creditCardFieldKey.currentState?.validate() == false ||
         expDateFieldKey.currentState?.validate() == false ||
-        cvcFieldKey.currentState?.validate()  == false;
+        cvcFieldKey.currentState?.validate() == false;
 
     return (!anyFieldsEmpty && !anyFieldsInvalid);
   }

@@ -17,7 +17,6 @@ import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.LanternHttpClient
-import org.getlantern.lantern.model.PaymentHandler
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.util.Freekassa
 import org.getlantern.lantern.util.showErrorDialog
@@ -190,11 +189,6 @@ open class FreeKassaActivity : BaseFragmentActivity() {
                         // so that the user can't go back to it
                         convertToPro()
                     } else if (url.contains("freekassa-error")) {
-                        PaymentHandler.sendPurchaseEvent(
-                            this@FreeKassaActivity,
-                            "freekassa",
-                            "freekassa purchase failed"
-                        )
                         view.clearHistory()
                         Logger.e(TAG, "FreeKassa purchase failed")
                         showErrorDialog("FreeKassa purchase failed")
