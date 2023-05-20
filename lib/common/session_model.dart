@@ -281,7 +281,7 @@ class SessionModel extends Model {
     String email,
     String refCode,
   ) async {
-    return methodChannel.invokeMethod('submitBitcoin', <String, dynamic>{
+    return methodChannel.invokeMethod('submitBitcoinPayment', <String, dynamic>{
       'planID': planID,
       'email': email,
       'refCode': refCode,
@@ -300,7 +300,7 @@ class SessionModel extends Model {
     String expDate,
     String cvc,
   ) async {
-    return methodChannel.invokeMethod('submitStripe', <String, dynamic>{
+    return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
       'email': email,
       'cardNumber': cardNumber,
       'expDate': expDate,
