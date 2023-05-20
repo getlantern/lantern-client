@@ -177,6 +177,12 @@ First, tag the release.
 VERSION=<version here> make tag
 ```
 
+If you want to tag a specific revision, you can use
+
+```
+VERSION=<version here> make tag TAG_HEAD=<commit sha>
+```
+
 Then, release the sideload installers to production.
 
 ```
