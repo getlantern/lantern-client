@@ -308,6 +308,14 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<void> submitFreekassa(String email, String planID, int currencyPrice) async {
+    return await methodChannel.invokeMethod('submitFreekassa', <String, dynamic>{
+      'email': email,
+      'planID': planID,
+      'currencyPrice': currencyPrice,
+    });
+  }
+
   Future<void> checkEmailExists(
     String email,
   ) async {
