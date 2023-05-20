@@ -195,7 +195,7 @@ public class LanternHttpClient extends HttpClient {
         Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
         PaymentMethodResponse response = Json.gson.fromJson(result, PaymentMethodResponse.class);
         for (ProviderInfo provider : response.getProviders()) {
-            if (provider.getName().equalsIgnoreCase("stripe")) {
+            if (provider.getName().toString().equalsIgnoreCase("stripe")) {
                 Map<String, Object> data = provider.getData();
                 if (data != null && data.get("pubKey") != null) {
                     String stripePubKey = ((String)data.get("pubKey"));

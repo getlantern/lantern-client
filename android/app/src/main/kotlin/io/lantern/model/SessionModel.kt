@@ -13,12 +13,12 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
-import org.getlantern.lantern.model.PaymentHandler
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
@@ -28,6 +28,7 @@ import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
+import org.getlantern.lantern.util.StripeUtil
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
@@ -42,7 +43,7 @@ class SessionModel(
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
-    private val paymentHandler = PaymentHandler(activity)
+    private val stripeUtil = StripeUtil(activity)
 
     companion object {
         private const val TAG = "SessionModel"
@@ -95,7 +96,7 @@ class SessionModel(
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
-            "submitStripe" -> paymentHandler.submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, 
+            "submitStripe" -> stripeUtil.submitPayment(call.argument("email")!!, call.argument("cardNumber")!!,
                 call.argument("expDate")!!, call.argument("cvc")!!, result)
             "userStatus" -> userStatus(result)
             else -> super.doOnMethodCall(call, result)
@@ -135,6 +136,16 @@ class SessionModel(
                 db.mutate { tx ->
                     tx.put("/selectedTab", call.argument<String>("tab")!!)
                 }
+            }
+            "submitFreekassa" -> {
+                val userEmail = call.argument("email") ?: ""
+                val planID = call.argument("planID") ?: ""
+                val currencyPrice = call.argument("currencyPrice") ?: ""
+                activity.startActivity(Intent(activity, FreeKassaActivity_::class.java).apply {
+                    putExtra("userEmail", userEmail)
+                    putExtra("planID", planID)
+                    putExtra("currencyPrice", currencyPrice)
+                })
             }
             "checkForUpdates" -> {
                 EventBus.getDefault().post(CheckUpdate(true))

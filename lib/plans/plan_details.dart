@@ -48,6 +48,7 @@ class PlanCard extends StatelessWidget {
                 plans: plans,
                 id: id,
                 isPro: isPro,
+                selectedPlan: selectedPlan,
               ),
             );
           }

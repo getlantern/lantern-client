@@ -318,6 +318,7 @@ class AppRouter extends _i33.RootStackRouter {
           plans: args.plans,
           id: args.id,
           isPro: args.isPro,
+          selectedPlan: args.selectedPlan,
           key: args.key,
         ),
         transitionsBuilder: _i33.TransitionsBuilders.fadeIn,
@@ -1103,6 +1104,7 @@ class Checkout extends _i33.PageRouteInfo<CheckoutArgs> {
     required List<_i35.Plan> plans,
     required String id,
     required bool isPro,
+    required _i35.Plan selectedPlan,
     _i35.Key? key,
   }) : super(
           Checkout.name,
@@ -1111,6 +1113,7 @@ class Checkout extends _i33.PageRouteInfo<CheckoutArgs> {
             plans: plans,
             id: id,
             isPro: isPro,
+            selectedPlan: selectedPlan,
             key: key,
           ),
         );
@@ -1123,6 +1126,7 @@ class CheckoutArgs {
     required this.plans,
     required this.id,
     required this.isPro,
+    required this.selectedPlan,
     this.key,
   });
 
@@ -1132,11 +1136,13 @@ class CheckoutArgs {
 
   final bool isPro;
 
+  final _i35.Plan selectedPlan;
+
   final _i35.Key? key;
 
   @override
   String toString() {
-    return 'CheckoutArgs{plans: $plans, id: $id, isPro: $isPro, key: $key}';
+    return 'CheckoutArgs{plans: $plans, id: $id, isPro: $isPro, selectedPlan: $selectedPlan, key: $key}';
   }
 }
 

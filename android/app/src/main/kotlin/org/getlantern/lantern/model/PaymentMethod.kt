@@ -7,8 +7,7 @@ enum class PaymentMethod(val method: String) {
 	UnionPay("unionpay"),
 	Alipay("alipay"),
 	BTC("btc"),
-	WeChatPay("wechatpay"),
-	Freekassa("freekassa")
+	WeChatPay("wechatpay")
 }
 
 data class PaymentMethodResponse(

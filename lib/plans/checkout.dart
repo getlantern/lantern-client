@@ -11,11 +11,13 @@ class Checkout extends StatefulWidget {
   final List<Plan> plans;
   final String id;
   final bool isPro;
+  final Plan selectedPlan;
 
   Checkout({
     required this.plans,
     required this.id,
     required this.isPro,
+    required this.selectedPlan,
     Key? key,
   }) : super(key: key);
 
@@ -143,84 +145,62 @@ class _CheckoutState extends State<Checkout>
   }
 
   Future<void> resolvePaymentRoute() async {
-    if (selectedPaymentProvider == PaymentProviders.stripe) {
-      // * Stripe selected
-      await context.pushRoute(
-        StripeCheckout(
-          plans: widget.plans,
-          email: emailController.text,
-          refCode: refCodeController.text,
-          id: widget.id,
-          isPro: widget.isPro,
-        ),
-      );
-    } else {
-      // * BTC payment selected
-      context.loaderOverlay.show();
-      await sessionModel
-          .submitBitcoinPayment(
-            widget.id,
-            emailController.text,
-            refCodeController.text,
-          )
-          .timeout(
-            defaultTimeoutDuration,
-            onTimeout: () => onAPIcallTimeout(
-              code: 'submitBitcoinTimeout',
-              message: 'bitcoin_timeout'.i18n,
-            ),
-          )
-          .then((value) async {
-        context.loaderOverlay.hide();
-        final btcPayURL = value as String;
-        var controller = WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..setBackgroundColor(const Color(0x00000000))
-          ..setNavigationDelegate(
-            NavigationDelegate(
-              onProgress: (int progress) {
-                // Update loading bar.
-              },
-              onPageStarted: (String url) {},
-              onPageFinished: (String url) {},
-              onWebResourceError: (WebResourceError error) {},
-              onNavigationRequest: (NavigationRequest request) {
-                if (request.url.startsWith('https://www.youtube.com/')) {
-                  return NavigationDecision.prevent;
-                }
-                return NavigationDecision.navigate;
-              },
-            ),
-          )
-          ..loadRequest(Uri.parse(btcPayURL));
+    switch (selectedPaymentProvider) {
+      case PaymentProviders.stripe:
+        // * Stripe selected
         await context.pushRoute(
-          FullScreenDialogPage(
-            widget: Center(
-              child: Stack(
-                children: [
-                  WebViewWidget(
-                    controller: controller,
-                  ),
-                ],
-              ),
-            ),
+          StripeCheckout(
+            plans: widget.plans,
+            email: emailController.text,
+            refCode: refCodeController.text,
+            id: widget.id,
+            isPro: widget.isPro,
           ),
         );
-      }).onError((error, stackTrace) {
-        context.loaderOverlay.hide();
-        CDialog.showError(
-          context,
-          error: e,
-          stackTrace: stackTrace,
-          description: (error as PlatformException)
-              .message
-              .toString()
-              .i18n // we are localizing this error Flutter-side,
-          ,
-        );
-      });
+        break;
+      case PaymentProviders.btc:
+        // * BTC payment selected
+        context.loaderOverlay.show();
+        await sessionModel
+            .submitBitcoinPayment(
+              widget.id,
+              emailController.text,
+              refCodeController.text,
+            )
+            .timeout(
+              defaultTimeoutDuration,
+              onTimeout: () => onAPIcallTimeout(
+                code: 'submitBitcoinTimeout',
+                message: 'bitcoin_timeout'.i18n,
+              ),
+            )
+            .then((value) async {
+          context.loaderOverlay.hide();
+          final btcPayURL = value as String;
+          await sessionModel.openWebview(btcPayURL);
+        }).onError((error, stackTrace) {
+          context.loaderOverlay.hide();
+          CDialog.showError(
+            context,
+            error: e,
+            stackTrace: stackTrace,
+            description: (error as PlatformException)
+                .message
+                .toString()
+                .i18n // we are localizing this error Flutter-side,
+            ,
+          );
+        });
+        break;
+      case PaymentProviders.freekassa:
+        var strs = widget.id.split('-');
+        if (strs.length != 2) break;
+        var currency = strs[1];
+        var currencyCost = widget.selectedPlan.price[currency];
+        if (currencyCost == null) break;
+        await sessionModel.submitFreekassa(emailController.text, widget.id, currencyCost.toInt()!!);
+        break;
     }
-    ;
   }
 
   @override
