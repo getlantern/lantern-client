@@ -18,6 +18,7 @@ import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
+import org.getlantern.lantern.model.PaymentHandler
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
@@ -41,6 +42,7 @@ class SessionModel(
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
+    private val paymentHandler = PaymentHandler(activity)
 
     companion object {
         private const val TAG = "SessionModel"
@@ -93,6 +95,8 @@ class SessionModel(
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
+            "submitStripe" -> paymentHandler.submitStripe(call.argument("email")!!, call.argument("cardNumber")!!, 
+                call.argument("expDate")!!, call.argument("cvc")!!, result)
             "userStatus" -> userStatus(result)
             else -> super.doOnMethodCall(call, result)
         }
@@ -171,7 +175,6 @@ class SessionModel(
                     }
                 });
     }
-
 
     private fun authorizeViaEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
         Logger.debug(TAG, "Start Account recovery with email $emailAddress")
@@ -404,41 +407,4 @@ class SessionModel(
             result.error("unknownError", "Unable to cache user status", null) // This will be localized Flutter-side
         }
     }
-
-    // Hits the /plans endpoint and saves plans to PATH_PLANS
-    /*private fun getPlans(result: MethodChannel.Result) {
-        try {
-            LanternApp.getPlans(object : LanternHttpClient.PlansCallback {
-                override fun onSuccess(proPlans: Map<String, ProPlan>) {
-                    plans.clear()
-                    plans.putAll(proPlans)
-                    Logger.info(TAG, "Successfully cached plans: $plans")
-                    result.success("cachingPlansSuccess")
-                    for (planId in proPlans.keys) {
-                        proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
-                    }
-                    LanternApp.getSession().setUserPlans(Json.gson.toJson(plans))
-                }
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.error(TAG, "Error fetching plans: $error")
-                    if (error?.message != null) {
-                        Logger.error(TAG, "Failure caching plans: $t.message")
-                        result.error(
-                            "unknownError",
-                            "Unable to cache plans",
-                            null,
-                        )
-                        return
-                    }
-                }
-            })
-        } catch (t: Throwable) {
-            Logger.error(TAG, "Error caching plans", t)
-            result.error(
-                "unknownError",
-                "Unable to cache plans", // This will be localized Flutter-side
-                null,
-            )
-        }
-    }*/
 }

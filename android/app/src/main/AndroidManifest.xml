@@ -63,11 +63,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.paymentwall.pwunifiedsdk.core.PaymentSelectionActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateVisible|adjustResize|adjustPan"/>
-
         <service
             android:enabled="true"
             android:exported="false"
@@ -94,13 +89,6 @@
         </activity>
 
         <activity
-            android:name=".activity.PaymentWallActivity_"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="locale|layoutDirection"
-            android:noHistory="true">
-      </activity>
-
-        <activity
             android:name=".activity.FreeKassaActivity_"
             android:screenOrientation="portrait">
         </activity>
@@ -125,11 +113,6 @@
 
         <activity
             android:name=".activity.WebViewActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.RegisterProActivity_"
             android:screenOrientation="portrait"
             />
 
