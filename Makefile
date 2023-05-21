@@ -31,6 +31,7 @@ TEST ?= *_test
 GO_VERSION := 1.19
 
 TAG ?= $$VERSION
+TAG_HEAD := $(shell git rev-parse HEAD)
 INSTALLER_NAME ?= lantern-installer
 CHANGELOG_NAME ?= CHANGELOG.md
 CHANGELOG_MIN_VERSION ?= 5.0.0
@@ -162,7 +163,7 @@ tag: require-version
 	@(git diff-index --quiet HEAD -- || (echo "Attempted to tag dirty working tree" && exit 1)) && \
 	git pull && \
 	echo "Tagging..." && \
-	git tag -a "$(TAG)" -f --annotate -m"Tagged $(TAG)" && \
+	git tag -a "$(TAG)" "$(TAG_HEAD)" -f --annotate -m"Tagged $(TAG)" && \
 	git push --force-with-lease origin $(TAG) && \
 	echo "Updating $(CHANGELOG_NAME)" && \
 	$(CHANGE) --output $(CHANGELOG_NAME) $(CHANGELOG_MIN_VERSION)..$(TAG) && \
