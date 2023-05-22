@@ -93,10 +93,16 @@ class SessionModel(
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
+            "applyRefCode" -> paymentsUtil.applyRefCode(call.argument("refCode")!!, result)
+            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
             "submitBitcoinPayment" -> paymentsUtil.submitBitcoinPayment(
                 call.argument("planID")!!,
                 call.argument("email")!!,
                 call.argument("refCode")!!,
+                result,
+            )
+            "submitGooglePlayPayment" -> paymentsUtil.submitGooglePlayPayment(
+                call.argument("planID")!!,
                 result,
             )
             "submitStripePayment" -> paymentsUtil.submitStripePayment(

@@ -105,7 +105,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
             )
             .then((value) async {
           context.loaderOverlay.hide();
-          if (isPro) {
+          if (widget.isPro) {
             CDialog.showInfo(
               context,
               iconPath: ImagePaths.lantern_star,
