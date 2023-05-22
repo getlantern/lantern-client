@@ -4,6 +4,7 @@ import 'package:lantern/i18n/localization_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:lantern/common/app_data.dart';
 import 'dart:developer' as dev;
 
 class SplitTunneling extends StatefulWidget {
@@ -14,6 +15,7 @@ class SplitTunneling extends StatefulWidget {
 }
 
 class _SplitTunnelingState extends State<SplitTunneling> {
+  List<AppData> installedApps = [];
   bool vpnConnected = false;
   bool snackbarShown = false;
 
@@ -26,8 +28,10 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   }
 
   init() async {
+    List<AppData> _installedApps = await sessionModel.getInstalledApps();
     bool _vpnConnected = await vpnModel.isVpnConnected();
     setState(() {
+      installedApps = _installedApps;
       vpnConnected = _vpnConnected;
     });
   }
@@ -36,64 +40,68 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   Widget build(BuildContext context) {
     return BaseScreen(
         title: 'split_tunneling'.i18n,
-        body: sessionModel.splitTunneling((BuildContext context, bool value,
-                Widget? child) =>
-            sessionModel.appsData(
-                builder: (
-              context,
-              Iterable<PathAndValue<AppData>> _appsData,
-              Widget? child,
-            ) =>
-                    SingleChildScrollView(
-                        child: Column(children: <Widget>[
-                      ListItemFactory.settingsItem(
-                        icon: ImagePaths.split_tunneling,
-                        content: 'split_tunneling'.i18n,
-                        trailingArray: [
-                          SizedBox(
-                              width: 44.0,
-                              height: 24.0,
-                              child: CupertinoSwitch(
-                                value: value,
-                                activeColor: CupertinoColors.activeGreen,
-                                onChanged: (bool? value) {
-                                  bool newValue = value ?? false;
-                                  setState(() {
-                                    sessionModel.setSplitTunneling(newValue);
-                                  });
-                                },
-                              )),
-                        ],
-                      ),
-                      Padding(
-                          padding: const EdgeInsetsDirectional.only(top: 16),
-                          child: CText(
-                              value
-                                  ? 'apps_selected'.i18n
-                                  : 'split_tunneling_info'.i18n,
-                              style: tsBody3)),
-                      // if split tunneling is enabled, include the installed apps
-                      // in the column
-                      if (value) ...buildAppsLists(_appsData),
-                    ])))));
+        body: sessionModel.splitTunneling(
+            (BuildContext context, bool splitTunnelingEnabled, Widget? child) {
+          return sessionModel.excludedApps(builder: (
+            context,
+            Iterable<PathAndValue<String>> _excludedApps,
+            Widget? child,
+          ) {
+            List<AppData> appsData = [];
+            var excludedApps = _excludedApps.isEmpty ? "" : _excludedApps.first.value;
+            for (var appData in installedApps) {
+              appData.isExcluded = excludedApps.contains(appData.packageName!);
+              appsData.add(appData);
+            }
+            return SingleChildScrollView(
+                child: Column(children: <Widget>[
+              ListItemFactory.settingsItem(
+                icon: ImagePaths.split_tunneling,
+                content: 'split_tunneling'.i18n,
+                trailingArray: [
+                  SizedBox(
+                      width: 44.0,
+                      height: 24.0,
+                      child: CupertinoSwitch(
+                        value: splitTunnelingEnabled,
+                        activeColor: CupertinoColors.activeGreen,
+                        onChanged: (bool? value) {
+                          bool newValue = value ?? false;
+                          setState(() {
+                            sessionModel.setSplitTunneling(newValue);
+                          });
+                        },
+                      )),
+                ],
+              ),
+              Padding(
+                  padding: const EdgeInsetsDirectional.only(top: 16),
+                  child: CText(
+                      splitTunnelingEnabled
+                          ? 'apps_selected'.i18n
+                          : 'split_tunneling_info'.i18n,
+                      style: tsBody3)),
+              // if split tunneling is enabled, include the installed apps
+              // in the column
+              if (splitTunnelingEnabled) ...buildAppsLists(appsData),
+            ]));
+          });
+        }));
   }
 
   // buildAppsLists builds lists for excluded and allowed installed apps and
   // returns both along with their associated headers
-  List<Widget> buildAppsLists(Iterable<PathAndValue<AppData>> appsList) {
-    debugPrint("apps list: ${appsList}");
-    if (appsList.length == 0) return [];
+  List<Widget> buildAppsLists(List<AppData> appsData) {
+    if (appsData.length == 0) return [];
     return [
       ListSectionHeader('excluded_apps'.i18n.toUpperCase()),
-      buildAppList(
-          appsList.where((appData) => appData.value.isExcluded).toList()),
+      buildAppList(appsData.where((app) => app.isExcluded).toList()),
       ListSectionHeader('allowed_apps'.i18n.toUpperCase()),
-      buildAppList(
-          appsList.where((appData) => !appData.value.isExcluded).toList()),
+      buildAppList(appsData.where((app) => !app.isExcluded).toList()),
     ];
   }
 
-  Widget buildAppList(List<PathAndValue<AppData>> apps) {
+  Widget buildAppList(List<AppData> apps) {
     if (apps.length == 0) {
       return SizedBox.shrink();
     }
@@ -103,8 +111,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         shrinkWrap: true,
         itemCount: apps.length,
         itemBuilder: (BuildContext context, int index) {
-          var appData = apps[index].value;
-          Uint8List bytes = base64.decode(appData.icon);
+          var appData = apps[index];
+          Uint8List bytes = base64.decode(appData.icon!);
           Widget appItem = buildAppItem(appData);
           return appItem;
         });
@@ -128,23 +136,9 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     snackbarShown = true;
   }
 
-  // saveAppIconTempDirectory decodes the app icon bytes part of appData and saves
-  // the corresponding image to the application temporary directory
-  Future<Image> saveAppIconTempDirectory(AppData appData) async {
-    Uint8List iconBytes = base64.decode(appData.icon);
-    final Directory temp = await getTemporaryDirectory();
-    final File imageFile =
-        File('${temp.path}/images/' + appData.packageName + '.png');
-
-    if (!await imageFile.exists()) {
-      await imageFile.create(recursive: true);
-      await imageFile.writeAsBytes(iconBytes);
-    }
-    return Image(image: FileImage(imageFile), fit: BoxFit.cover);
-  }
-
   Widget buildAppItem(AppData appData) {
-    Uint8List iconBytes = base64.decode(appData.icon);
+    Uint8List iconBytes = base64.decode(appData.icon!);
+    var packageName = appData.packageName!;
     return Container(
         height: 72,
         padding: EdgeInsets.zero,
@@ -155,7 +149,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         child: Align(
             alignment: Alignment.center,
             child: ListTile(
-              key: Key(appData.packageName),
+              key: Key(appData.packageName!),
               minLeadingWidth: 20,
               leading: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -178,9 +172,9 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                     onChanged: (bool? value) async {
                       setState(() {
                         if (value != null && value!) {
-                          sessionModel.addExcludedApp(appData.packageName);
+                          sessionModel.addExcludedApp(packageName);
                         } else {
-                          sessionModel.removeExcludedApp(appData.packageName);
+                          sessionModel.removeExcludedApp(packageName);
                         }
                         showSnackBar(context);
                       });

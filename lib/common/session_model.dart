@@ -1,5 +1,5 @@
 import 'package:lantern/replica/common.dart';
-
+import 'package:lantern/common/app_data.dart';
 import 'common.dart';
 
 final sessionModel = SessionModel();
@@ -113,19 +113,6 @@ class SessionModel extends Model {
     );
   }
 
-  Widget appsData({
-    required ValueWidgetBuilder<Iterable<PathAndValue<AppData>>> builder,
-  }) {
-    return subscribedListBuilder<AppData>(
-      'appsData',
-      details: true,
-      builder: builder,
-      deserialize: (Uint8List serialized) {
-        return AppData.fromBuffer(serialized);
-      },
-    );
-  }
-
   Future<void> addExcludedApp(String packageName) {
     return methodChannel.invokeMethod('addExcludedApp', <String, dynamic>{
       'packageName': packageName,
@@ -214,6 +201,37 @@ class SessionModel extends Model {
       'replicaAddr',
       defaultValue: '',
       builder: builder,
+    );
+  }
+
+  Future<bool> splitTunnelingEnabled() async {
+    final enabled = await methodChannel.invokeMethod('get', 'splitTunneling');
+    return enabled;
+  }
+
+  Future<List<AppData>> getInstalledApps() async {
+    List<dynamic> apps = await methodChannel.invokeMethod('getInstalledApps');
+    List<AppData> appsData = apps.map((app) => AppData.create(app)).toList();
+    appsData.sort((a, b) => a.name!.compareTo(b.name!));
+    return appsData;
+  }
+
+  Widget excludedAppsOld(ValueWidgetBuilder<ExcludedApps> builder) {
+    return subscribedSingleValueBuilder<ExcludedApps>(
+      'excludedApps',
+      builder: builder,
+    );
+  }
+
+  Widget excludedApps({
+    required ValueWidgetBuilder<Iterable<PathAndValue<String>>> builder,
+  }) {
+    return subscribedListBuilder<String>(
+      '/excludedApps/',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return String.fromCharCodes(serialized);
+      },
     );
   }
 

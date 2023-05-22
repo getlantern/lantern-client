@@ -285,16 +285,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putBoolean(DEVICE_LINKED, true).apply()
     }
 
-    fun getAppsData():Vpn.AppsData {
-      var appsData:Vpn.AppsData = Vpn.AppsData.newBuilder().build()
-      db.mutate { tx ->
-        if (tx.get(APPS_DATA) as Vpn.AppsData? != null ?: null) {
-          appsData = tx.get(APPS_DATA)!!
-        }
-      }
-      return appsData
-    }
-
     fun storeUserData(user: ProUser?) {
         if (user!!.email != null && user.email != "") {
             setEmail(user.email)
@@ -351,7 +341,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         // shared preferences
         private const val PRO_USER = "prouser"
-        private const val APPS_DATA = "/appsData/"
         private const val DEVICES = "devices"
         private const val PRO_EXPIRED = "proexpired"
         private const val PRO_PLAN = "proplan"

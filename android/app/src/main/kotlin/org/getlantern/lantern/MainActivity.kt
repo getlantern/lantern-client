@@ -23,8 +23,6 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.lantern.apps.AppsDataProvider
-import io.lantern.apps.AppsWhitelist
 import io.lantern.model.MessagingModel
 import io.lantern.model.ReplicaModel
 import io.lantern.model.SessionModel
@@ -61,9 +59,6 @@ import java.util.Locale
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     CoroutineScope by MainScope() {
-
-    private lateinit var appsDataProvider: AppsDataProvider
-    private lateinit var appsWhitelist: AppsWhitelist
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
@@ -80,12 +75,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
-        appsDataProvider = AppsDataProvider(getPackageManager(), getPackageName())
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
-        appsWhitelist = AppsWhitelist(sessionModel, resources, lanternClient)
         navigator = Navigator(this, flutterEngine)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
@@ -145,10 +138,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
-
-        val apps = appsDataProvider.listOfApps()
-        appsWhitelist.setApps(apps, false)
-        sessionModel.setAppsList(apps)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -686,7 +675,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     }
 
     private fun startVpnService() {
-        val excludedApps = ArrayList(sessionModel.excludedApps())
+        val excludedApps = ArrayList(sessionModel.excludedApps().getAppsList())
         val intent: Intent = Intent(
             this,
             LanternVpnService::class.java,

@@ -9,6 +9,7 @@ import io.lantern.apps.AppData
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.lantern.apps.AppsDataProvider
 import internalsdk.Internalsdk
 import okhttp3.FormBody
 import okhttp3.RequestBody
@@ -24,6 +25,7 @@ import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
+import org.getlantern.lantern.util.serializeToMap
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
@@ -40,6 +42,8 @@ class SessionModel(
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
+    private val appsDataProvider: AppsDataProvider = AppsDataProvider(
+        activity.getPackageManager(), activity.getPackageName())
 
     companion object {
         private const val TAG = "SessionModel"
@@ -47,7 +51,7 @@ class SessionModel(
         const val PATH_PRO_USER = "prouser"
         const val PATH_SDK_VERSION = "sdkVersion"
         const val PATH_SPLIT_TUNNELING = "splitTunneling"
-        const val PATH_APPS_DATA = "appsData"
+        const val PATH_EXCLUDED_APPS = "/excludedApps/"
     }
 
     init {
@@ -83,6 +87,22 @@ class SessionModel(
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
+            "getInstalledApps" -> {
+                Thread {
+                    val excluded:Map<String, Boolean> = excludedApps().getAppsList()
+                        .associateBy({it}, {true})
+                    val appsData = appsDataProvider.listOfApps()
+                    appsData.forEachIndexed { idx, it ->
+                        val isExcluded = excluded.get(it.packageName)
+                        if (isExcluded != null && isExcluded!!) appsData[idx].isExcluded = true
+                    }
+                     val apps = mutableListOf<Map<String, Any>>()
+                     for (appData in appsData) {
+                        apps.add(appData.serializeToMap())
+                     }
+                    result.success(apps)
+                }.start()
+            }
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
@@ -106,10 +126,10 @@ class SessionModel(
                 saveSplitTunneling(on)
             }
             "addExcludedApp" -> {
-              updateAppData(call.argument("packageName")!!, true)
+              excludeApp(call.argument("packageName")!!)
             }
             "removeExcludedApp" -> {
-              updateAppData(call.argument("packageName")!!, false)
+              includeApp(call.argument("packageName")!!)
             }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
@@ -149,52 +169,30 @@ class SessionModel(
         }
     }
 
-    fun getAppsData():Vpn.AppsData {
-      var appsData:Vpn.AppsData = Vpn.AppsData.newBuilder().build()
+    fun excludedApps():Vpn.ExcludedApps {
+      var apps: Vpn.ExcludedApps? = null
       db.mutate { tx ->
-        if (tx.get(PATH_APPS_DATA) as Vpn.AppsData? != null ?: null) {
-          appsData = tx.get(PATH_APPS_DATA)!!
-        }
+        apps = tx.get(PATH_EXCLUDED_APPS) as Vpn.ExcludedApps?
       }
-      return appsData
-    }
-
-
-    fun getAppsList():MutableList<Vpn.AppData> {
-      var appsData:MutableList<Vpn.AppData> = mutableListOf()
-      db.mutate { tx ->
-        if (tx.get(PATH_APPS_DATA) as List<Vpn.AppData>? != null ?: null) {
-          appsData = tx.get(PATH_APPS_DATA)!!
-        }
-      }
-      return appsData
-    }
-
-    fun excludedApps():List<String> {
-        val appsData:Vpn.AppsData = getAppsData()
-        return appsData.appsList.filter { it.isExcluded }.map { it.packageName }
+      return if (apps != null) apps!! else Vpn.ExcludedApps.newBuilder().build()
     }
 
     // Add application to set of excluded apps that are denied access to the VPN connection
-    fun updateAppData(packageName: String, isExcluded: Boolean) {
-        var appsData:Vpn.AppsData = getAppsData()
-        var appsList = appsData.appsList.toMutableList()
-        var app = Vpn.AppData.newBuilder(appsData.appsList.find { it.packageName == packageName })
-        app?.isExcluded = isExcluded
-        appsList.add(app.build())
+    fun excludeApp(packageName: String) {
+        val listValue = Vpn.ExcludedApps.newBuilder(excludedApps()).addApps(packageName).build()
         db.mutate { tx ->
-            tx.put(PATH_APPS_DATA, Vpn.AppsData.newBuilder().addAllApps(appsList.distinct().toList()).build())
+            tx.put(PATH_EXCLUDED_APPS, listValue)
         }
     }
 
-    fun setAppsList(appsList: List<AppData>) {
-      val appsData:Vpn.AppsData = getAppsData()
-      //Logger.debug(TAG, "Existing app data: $appsData")
-      val apps = Vpn.AppsData.newBuilder(appsData).addAllApps(appsList.map { Vpn.AppData.newBuilder().setPackageName(it.packageName).setIcon(it.icon).setName(it.name).build() }).build()
-      db.mutate { tx ->
-        tx.put(PATH_APPS_DATA, apps)
-      }
-    }    
+    // Add application to set of excluded apps that are denied access to the VPN connection
+    fun includeApp(packageName: String) {
+        val appsList = excludedApps().getAppsList().filter { it != packageName }
+        val appsData = Vpn.ExcludedApps.newBuilder().addAllApps(appsList).build()
+        db.mutate { tx ->
+            tx.put(PATH_EXCLUDED_APPS, appsData)
+        }
+    }
 
     private fun authorizeViaEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
         Logger.debug(TAG, "Start Account recovery with email $emailAddress")

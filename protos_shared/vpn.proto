@@ -7,15 +7,8 @@ message ServerInfo {
   string countryCode = 3;
 }
 
-message AppData {
-  string packageName = 1;
-  string icon = 2;
-  string name = 3;
-  bool isExcluded = 4;
-}
-
-message AppsData {
-  repeated AppData apps = 1;
+message ExcludedApps {
+  repeated string apps = 1;
 }
 
 message Bandwidth {
