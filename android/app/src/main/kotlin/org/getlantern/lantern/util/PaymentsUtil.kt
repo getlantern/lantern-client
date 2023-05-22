@@ -63,21 +63,35 @@ class PaymentsUtil(private val activity: Activity) {
 
                     override fun onError(@NonNull error: Exception) {
                         dialog?.dismiss()
-                        methodCallResult.error("errorSubmittingToStripe", error.getLocalizedMessage(), null)
+                        methodCallResult.error(
+                            "errorSubmittingToStripe",
+                            error.getLocalizedMessage(),
+                            null,
+                        )
                     }
                 },
             )
         } catch (t: Throwable) {
             Logger.error(TAG, "Error submitting to Stripe", t)
             dialog?.dismiss()
-            methodCallResult.error("errorSubmittingToStripe", activity.getString(R.string.error_making_purchase), null)
+            methodCallResult.error(
+                "errorSubmittingToStripe",
+                activity.getString(R.string.error_making_purchase),
+                null,
+            )
         }
     }
 
-    fun submitBitcoinPayment(planID: String, email: String, refCode: String, methodCallResult: MethodChannel.Result) {
+    fun submitBitcoinPayment(
+        planID: String,
+        email: String,
+        refCode: String,
+        methodCallResult: MethodChannel.Result,
+    ) {
         try {
             val params = mutableMapOf<String, String>("email" to email, "planID" to planID)
-            val formBody: RequestBody = FormBody.Builder().add("email", email).add("planID", planID).build()
+            val formBody: RequestBody = FormBody.Builder()
+                .add("email", email).add("planID", planID).build()
             lanternClient.post(
                 LanternHttpClient.createProUrl("/payment-redirect", params),
                 formBody,
@@ -147,7 +161,7 @@ class PaymentsUtil(private val activity: Activity) {
                     if (tokens.size != 1) {
                         Logger.error(
                             TAG,
-                            "Unexpected number of purchased products, not proceeding with purchase: " + tokens.size,
+                            "Unexpected number of purchased products, not proceeding with purchase",
                         )
                         methodCallResult.error(
                             "unknownError",
@@ -246,7 +260,12 @@ class PaymentsUtil(private val activity: Activity) {
         )
     }
 
-    private fun sendPurchaseRequest(email: String, token: String, provider: PaymentProvider, methodCallResult: MethodChannel.Result) {
+    private fun sendPurchaseRequest(
+        email: String,
+        token: String,
+        provider: PaymentProvider,
+        methodCallResult: MethodChannel.Result,
+    ) {
         Logger.d(TAG, "Sending purchase request with provider $provider")
         val session = session
         val resellerCode = session.resellerCode()
