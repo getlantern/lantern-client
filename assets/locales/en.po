@@ -562,6 +562,9 @@ msgstr "Off"
 msgid "continue"
 msgstr "Continue"
 
+msgid "continue_to_pro"
+msgstr "Continue to Pro"
+
 msgid "are_you_sure_you_want_to_open"
 msgstr "Are you sure you want to open %s?"
 
