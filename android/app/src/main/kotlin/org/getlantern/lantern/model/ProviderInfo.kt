@@ -4,7 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 enum class PaymentProvider(val provider: String) {
 	Stripe("stripe"),
-	Freekassa("freekassa")
+	Freekassa("freekassa"),
+	GooglePlay("googleplay"),
+	ResellerCode("resellercode")
 }
 
 data class ProviderInfo(
