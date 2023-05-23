@@ -231,8 +231,6 @@ require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
 
 release-qa: require-version require-s3cmd
-	echo "version is $$VERSION" && \
-	exit && \
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
 	VERSION_FILE_NAME="version-qa-android.txt" && \
 	rm -f $$BASE_NAME* && \
