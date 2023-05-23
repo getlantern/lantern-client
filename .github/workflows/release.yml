@@ -92,9 +92,6 @@ jobs:
         distribution: temurin
         java-version: 11
 
-    - name: Setup protoc
-      uses: arduino/setup-protoc@v1.1.2
-
     - name: Set gradle properties
       env:
         GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
@@ -113,7 +110,6 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        flutter pub get
         dart pub global activate protoc_plugin
         make android-release ANDROID_ARCH=all
 
