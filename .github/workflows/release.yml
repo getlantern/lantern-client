@@ -97,6 +97,9 @@ jobs:
       with:
         version: '3.x'
 
+    - name: Activate protoc-gen-dart plugin
+      run: dart pub global activate protoc_plugin
+
     - name: Set gradle properties
       env:
         GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
@@ -113,16 +116,8 @@ jobs:
         fileDir: './android/app'
         encodedString: ${{ secrets.KEYSTORE }}
 
-    - name: Build Debug with Gradle
-      if: github.ref != 'refs/heads/main'
-      run: |
-        dart pub global activate protoc_plugin
-        make android-debug
-
     - name: Build Release with Gradle
-      if: github.ref == 'refs/heads/main'
       run: |
-        dart pub global activate protoc_plugin
         make android-release
 
     - name: Build Mobile Release Bundle
