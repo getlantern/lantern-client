@@ -94,12 +94,10 @@ jobs:
 
     - name: Setup protoc
       uses: arduino/setup-protoc@v1.1.2
+
+    - name: Activate protoc-gen-dart
       run: |
         dart pub global activate protoc_plugin
-
-    - name: Install Flutter dependencies
-      run: |
-        flutter pub get
 
     - name: Set gradle properties
       env:
