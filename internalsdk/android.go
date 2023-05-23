@@ -464,9 +464,7 @@ func run(configDir, locale string,
 		configDir, locale, settings.StickyConfig())
 
 	flags := map[string]interface{}{
-		"borda-report-interval":   5 * time.Minute,
-		"borda-sample-percentage": float64(0.01),
-		"staging":                 common.Staging,
+		"staging": common.Staging,
 	}
 
 	err := os.MkdirAll(configDir, 0755)
