@@ -97,6 +97,13 @@ jobs:
       with:
         version: '3.x'
 
+    - name: Activate protoc-gen-dart plugin
+      run: |
+        echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
+        dart pub global activate protoc_plugin
+        mkdir -p "${HOME}/.pub-cache/bin"
+        mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
+
     - name: Set gradle properties
       env:
         GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
@@ -113,9 +120,8 @@ jobs:
         fileDir: './android/app'
         encodedString: ${{ secrets.KEYSTORE }}
 
-    - name: Build Debug with Gradle
+    - name: Build Release with Gradle
       run: |
-        dart pub global activate protoc_plugin
         make android-release
 
     - name: Build Mobile Release Bundle
