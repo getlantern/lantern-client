@@ -121,12 +121,10 @@ jobs:
         encodedString: ${{ secrets.KEYSTORE }}
 
     - name: Build Release with Gradle
-      run: |
-        make android-release
+      run: make android-release
 
-    - name: Build Mobile Release Bundle
-      if: github.ref == 'refs/heads/main'
-      run: make package-android
+    - name: Build Mobile Bundle
+      run: make android-bundle
 
     - name: Setup S3cmd cli tool
       uses: s3-actions/s3cmd@v1.4.0
