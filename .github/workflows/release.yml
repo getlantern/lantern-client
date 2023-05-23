@@ -121,7 +121,6 @@ jobs:
         make android-release
 
     - name: Build Mobile Release Bundle
-      if: github.ref == 'refs/heads/main'
       run: make package-android
 
     - name: Setup S3cmd cli tool
