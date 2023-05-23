@@ -6,9 +6,10 @@ import appium_kotlin.CHROME_PACKAGE_ID
 import appium_kotlin.ContextType
 import appium_kotlin.IP_REQUEST_URL
 import appium_kotlin.LANTERN_PACKAGE_ID
-import appium_kotlin.local.BaseAndroidTest
+import appium_kotlin.LOGS_DIALED_MESSAGE
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
+import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.touch.WaitOptions.waitOptions
 import io.appium.java_client.touch.offset.PointOption.point
 import org.junit.jupiter.api.AfterEach
@@ -16,7 +17,11 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
+import org.openqa.selenium.logging.LogEntries
+import org.openqa.selenium.logging.LogEntry
 import java.time.Duration.ofMillis
+import java.util.regex.Pattern
+import java.util.stream.StreamSupport
 
 
 // there some issue with getting webview_chrome context some time it work
@@ -69,9 +74,9 @@ class VPNTests : BaseAndroidTest() {
         // Get ip again after turing on VPN switch
         appiumDriver.activateApp(CHROME_PACKAGE_ID)
         Thread.sleep(2000)
-        
-        val afterIp = makeIpRequest()
 
+        makeIpRequest()
+        val afterIp = captureLogcat()
         // Turn of VPN
         switchToContext(ContextType.FLUTTER)
         vpnSwitchFinder.click()
@@ -80,9 +85,8 @@ class VPNTests : BaseAndroidTest() {
         // Ip should not be same at any case
         // same it should be fail
         // We might need add some more verification logic soon
-        print("IP Request before $beforeIp after $afterIp")
+        println("IP Request before $beforeIp after $afterIp")
         Assertions.assertEquals(beforeIp != afterIp, true)
-
     }
 
 
@@ -129,6 +133,30 @@ class VPNTests : BaseAndroidTest() {
         val ip = ipElement.text
         print("IP Request", "Current IP $ip")
         return ip
+    }
+
+    /**Read logs from device
+    Make sure tha we are actually bypassing traffic
+    One way to know ths read logs from **Successfully dialed via**/
+    private fun captureLogcat(): String {
+        switchToContext(ContextType.NATIVE_APP)
+        val pattern = Pattern.compile("\\((.*):\\d+\\)") // regex pattern to match (IP:Port)
+        val logtypes: Set<*> = appiumDriver.manage().logs().availableLogTypes
+        println("supported log types: $logtypes") // [logcat, bugreport, server, client]
+
+        val logs: LogEntries = appiumDriver.manage().logs().get("logcat")
+        for (logEntry in logs) {
+            //here are checking the logcat for log message
+            // also when we connect vpn then ip is predefined so
+            // we get that and match with old ip
+            if (logEntry.message.contains(LOGS_DIALED_MESSAGE)) {
+                val matcher = pattern.matcher(logEntry.message)
+                if (matcher.find()) {
+                    return matcher.group(1) // return the IP address immediately after match found
+                }
+            }
+        }
+        return ""
     }
 
 }

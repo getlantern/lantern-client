@@ -104,7 +104,7 @@ open class ParallelTest {
 
     fun testPassed(driver: AndroidDriver) {
         val jse = (driver as JavascriptExecutor)
-        jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"Results found!\"}}")
+        jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"All test passed!\"}}")
     }
 
     fun testFail(failureMessage: String, driver: AndroidDriver) {

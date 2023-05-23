@@ -55,6 +55,7 @@ open class BaseAndroidTest {
             capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, MobilePlatform.ANDROID)
             capabilities.setCapability("setWebContentsDebuggingEnabled", "true")
             capabilities.setCapability("app", LANTERN_APK_PATH)
+            capabilities.setCapability("clearDeviceLogsOnStart", true)
 
             appiumDriver = AndroidDriver(service.url, capabilities)
 
