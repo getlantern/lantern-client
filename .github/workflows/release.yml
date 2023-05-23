@@ -97,6 +97,11 @@ jobs:
       with:
         version: '3.x'
 
+    - name: Activate protoc-gen-dart plugin
+      run: |
+        dart pub global activate protoc_plugin
+        echo "/home/runner/.pub-cache/bin" >> $GITHUB_PATH
+
     - name: Set gradle properties
       env:
         GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
@@ -115,7 +120,6 @@ jobs:
 
     - name: Build Release with Gradle
       run: |
-        dart pub global activate protoc_plugin
         make android-release
 
     - name: Build Mobile Release Bundle
