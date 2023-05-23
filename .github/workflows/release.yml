@@ -100,7 +100,7 @@ jobs:
     - name: Activate protoc-gen-dart plugin
       run: |
         dart pub global activate protoc_plugin
-        echo "/home/runner/.pub-cache/bin" >> $GITHUB_PATH
+        ls /home/runner/.pub-cache/bin/protoc-gen-dart
 
     - name: Set gradle properties
       env:
@@ -140,7 +140,7 @@ jobs:
         VERSION: ${{ needs.set-version.outputs.version }}
       run: make release-qa
 
-    - name: Upload to S3 (prod)
+    - name: Upload to S3 (p[])
       if: github.ref == 'refs/heads/main'
       env:
         VERSION: ${{ needs.set-version.outputs.version }}
