@@ -124,7 +124,7 @@ jobs:
       run: make android-release
 
     - name: Build Mobile Bundle
-      run: make android-bundle
+      run: make android-bundle ANDROID_ARCH=all
 
     - name: Setup S3cmd cli tool
       uses: s3-actions/s3cmd@v1.4.0
@@ -140,7 +140,7 @@ jobs:
         VERSION: ${{ needs.set-version.outputs.version }}
       run: make release-qa
 
-    - name: Upload to S3 (p)
+    - name: Upload to S3 (Prod)
       if: github.ref == 'refs/heads/main'
       env:
         VERSION: ${{ needs.set-version.outputs.version }}
