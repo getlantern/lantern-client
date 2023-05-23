@@ -95,10 +95,6 @@ jobs:
     - name: Setup protoc
       uses: arduino/setup-protoc@v1.1.2
 
-    - name: Activate protoc-gen-dart
-      run: |
-        dart pub global activate protoc_plugin
-
     - name: Set gradle properties
       env:
         GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
@@ -116,7 +112,10 @@ jobs:
         encodedString: ${{ secrets.KEYSTORE }}
 
     - name: Build with Gradle
-      run: make android-release ANDROID_ARCH=all
+      run: |
+        flutter pub get
+        dart pub global activate protoc_plugin
+        make android-release ANDROID_ARCH=all
 
     - name: Build Mobile Bundle
       run: make android-bundle ANDROID_ARCH=all
