@@ -14,6 +14,7 @@ class PlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final planName = id.split('-')[0];
     final selectedPlan = plans.firstWhere((p) => p.id == id);
     // final description = selectedPlan['description'] as String;
     final formattedPricePerYear =
@@ -82,7 +83,7 @@ class PlanCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CText(
-                          'pro_plan'.i18n,
+                          planName == '1y' ? 'one_year_plan'.i18n : 'two_year_plan'.i18n,
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,

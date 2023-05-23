@@ -276,14 +276,14 @@ class _PlansPageState extends State<PlansPage> {
                           height: 40,
                           alignment: Alignment.center,
                           width: MediaQuery.of(context).size.width,
-                          color: grey2,
+                          color: grey1,
                           child: GestureDetector(
                             onTap: () async => await context.pushRoute(
                               ResellerCodeCheckout(isPro: isPro),
                             ),
                             child: CText(
                               'Have a Lantern Pro activation code? Click here.',
-                              style: tsBody1,
+                              style: tsBody1.copiedWith(color: grey5),
                             ),
                           ), // Translations
                         ),

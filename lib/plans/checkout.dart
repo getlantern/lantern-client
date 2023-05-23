@@ -376,11 +376,6 @@ class _CheckoutState extends State<Checkout>
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      PriceSummary(
-                        plans: widget.plans,
-                        id: widget.id,
-                        isPro: widget.isPro,
-                      ),
                       Button(
                         disabled: emailController.value.text.isEmpty ||
                             emailFieldKey.currentState?.validate() == false ||
