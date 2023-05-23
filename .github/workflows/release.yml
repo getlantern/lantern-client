@@ -99,8 +99,8 @@ jobs:
 
     - name: Activate protoc-gen-dart plugin
       run: |
+        echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
         dart pub global activate protoc_plugin
-        ls /home/runner/.pub-cache/bin/protoc-gen-dart
 
     - name: Set gradle properties
       env:
@@ -118,7 +118,13 @@ jobs:
         fileDir: './android/app'
         encodedString: ${{ secrets.KEYSTORE }}
 
+    - name: Build Debug with Gradle
+      if: github.ref != 'refs/heads/main'
+      run: |
+        make android-debug
+
     - name: Build Release with Gradle
+      if: github.ref == 'refs/heads/main'
       run: |
         make android-release
 
@@ -140,7 +146,7 @@ jobs:
         VERSION: ${{ needs.set-version.outputs.version }}
       run: make release-qa
 
-    - name: Upload to S3 (p[])
+    - name: Upload to S3 (p)
       if: github.ref == 'refs/heads/main'
       env:
         VERSION: ${{ needs.set-version.outputs.version }}
