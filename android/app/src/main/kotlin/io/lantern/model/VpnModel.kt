@@ -99,7 +99,6 @@ class VpnModel(
     fun updateAppData(packageName: String, isExcluded: Boolean) {
         db.mutate { tx ->
             var appData = tx.get<Vpn.AppData>(PATH_APPS_DATA + packageName)
-            Logger.d(TAG, "App data is $appData")
             appData?.let {
                 tx.put(PATH_APPS_DATA + packageName, Vpn.AppData.newBuilder()
                     .setPackageName(appData.packageName).setIcon(appData.icon)
