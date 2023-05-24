@@ -4,12 +4,10 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.AsyncTask
-import android.os.Build
 import internalsdk.EmailMessage
 import internalsdk.EmailResponseHandler
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.mobilesdk.Logger
 
@@ -23,17 +21,11 @@ class MailSender @JvmOverloads constructor(
     private val message: String? = null,
 ) : AsyncTask<String, Void, Boolean>(), EmailResponseHandler {
     private var dialog: ProgressDialog? = null
-    private val userEmail: String
-    private val appVersion: String
-    private val sendLogs: Boolean
     private val mergeValues: MutableMap<String, String> = HashMap()
-    fun addMergeVar(name: String, value: String) {
-        mergeValues[name] = value
-    }
 
     override fun onError(message: String) {
         dialog?.let { dialog ->
-            if (dialog.isShowing()) {
+            if (dialog.isShowing) {
                 dialog.dismiss()
             }
         }
@@ -49,7 +41,7 @@ class MailSender @JvmOverloads constructor(
 
     override fun onSuccess() {
         dialog?.let { dialog ->
-            if (dialog.isShowing()) {
+            if (dialog.isShowing) {
                 dialog.dismiss()
             }
         }
@@ -71,29 +63,14 @@ class MailSender @JvmOverloads constructor(
     protected override fun doInBackground(vararg params: String): Boolean {
         val msg = EmailMessage()
         msg.template = template
-        if (sendLogs) {
-            msg.subject = params[0]
-            msg.from = userEmail
-            msg.maxLogSize = "10MB"
+        msg.to = params[0]
+        if (template == "manual-recover-account") {
             msg.putInt("userid", LanternApp.getSession().userID)
-            msg.putString("protoken", LanternApp.getSession().token)
+            msg.putString("usertoken", LanternApp.getSession().token)
             msg.putString("deviceid", LanternApp.getSession().deviceID)
-            msg.putString("emailaddress", userEmail)
-            msg.putString("appversion", "${getAppName()} $appVersion")
-            msg.putString("prouser", LanternApp.getSession().isProUser.toString())
-            msg.putString("androiddevice", Build.DEVICE)
-            msg.putString("androidmodel", Build.MODEL)
-            msg.putString("androidversion", "" + Build.VERSION.SDK_INT + " (" + Build.VERSION.RELEASE + ")")
-        } else {
-            msg.to = params[0]
-            if (template == "manual-recover-account") {
-                msg.putInt("userid", LanternApp.getSession().userID)
-                msg.putString("usertoken", LanternApp.getSession().token)
-                msg.putString("deviceid", LanternApp.getSession().deviceID)
-                msg.putString("deviceName", LanternApp.getSession().deviceName())
-                msg.putString("email", userEmail)
-                msg.putString("referralCode", LanternApp.getSession().code())
-            }
+            msg.putString("deviceName", LanternApp.getSession().deviceName())
+            msg.putString("email", LanternApp.getSession().email())
+            msg.putString("referralCode", LanternApp.getSession().code())
         }
         for ((key, value) in mergeValues) {
             msg.putString(key, value)
@@ -112,7 +89,7 @@ class MailSender @JvmOverloads constructor(
     }
 
     private fun getResponseMessage(): String {
-        val msg = if (sendLogs) R.string.success_log_email else R.string.success_email
+        val msg = R.string.success_email
         return context.resources.getString(msg).format(getAppName())
     }
 
@@ -125,9 +102,6 @@ class MailSender @JvmOverloads constructor(
     }
 
     init {
-        appVersion = Utils.appVersion(context)
-        userEmail = LanternApp.getSession().email()
-        sendLogs = template == "user-send-logs"
         dialog = ProgressDialog(context)
         dialog!!.setCancelable(false)
         dialog!!.setCanceledOnTouchOutside(false)

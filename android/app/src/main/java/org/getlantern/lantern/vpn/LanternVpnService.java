@@ -22,9 +22,6 @@ import org.getlantern.mobilesdk.Logger;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import internalsdk.Internalsdk;
-import internalsdk.SocketProtector;
-
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LanternVpnService extends VpnService implements Runnable {
     public static final String ACTION_CONNECT = "org.getlantern.lantern.vpn.START";
