@@ -75,7 +75,7 @@ class AppTest() : BaseTest() {
             makeIpRequest(androidDriver)
             Thread.sleep(4000)
 
-            val afterIp = captureLogcat(androidDriver)
+            val afterIp: String = captureLogcat(androidDriver)
 
             if (!isLocalRun) {
                 if (beforeIp == afterIp || afterIp.isBlank()) {
@@ -88,7 +88,11 @@ class AppTest() : BaseTest() {
                 }
             }
             println("TaskId: $taskId | IP Request before $beforeIp after $afterIp")
-            Assertions.assertEquals(beforeIp != afterIp, true)
+
+            Assertions.assertEquals(
+                (afterIp.isNotBlank() && beforeIp.isNotBlank() && beforeIp != afterIp),
+                true
+            )
 
         } catch (e: Exception) {
             e.printStackTrace()
