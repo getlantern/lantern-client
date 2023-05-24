@@ -54,7 +54,7 @@ func (c testSession) GetTimeZone() (string, error)             { return "America
 func (c testSession) IsProUser() (bool, error)                 { return true, nil }
 func (c testSession) ForceReplica() bool                       { return true }
 func (c testSession) SetReplicaAddr(replicaAddr string)        {}
-
+func (c testSession) SplitTunnelingEnabled() (bool, error) { return true, nil }
 func (c testSession) UpdateStats(string, string, string, int, int, bool) error { return nil }
 
 func (c testSession) UpdateAdSettings(AdSettings) error { return nil }
