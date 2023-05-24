@@ -79,8 +79,13 @@ class AppTest() : BaseTest() {
 
             if (!isLocalRun) {
                 if (beforeIp == afterIp || afterIp.isBlank()) {
+                    val testMessage = if (afterIp.isBlank()) {
+                        "TaskId: $taskId | Both Ip are same or IP is blank before: $beforeIp after: afterIp coming as blank"
+                    } else {
+                        "TaskId: $taskId | Both Ip are same or IP is blank before: $beforeIp after: $afterIp"
+                    }
                     testFail(
-                        "TaskId: $taskId | Both Ip are same or IP is blank before: $beforeIp after: $afterIp",
+                        testMessage,
                         androidDriver
                     )
                 } else {
