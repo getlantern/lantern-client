@@ -92,11 +92,8 @@ class PaymentsUtil(private val activity: Activity) {
     ) {
         try {
             val params = mutableMapOf<String, String>("email" to email, "planID" to planID)
-            val formBody: RequestBody = FormBody.Builder()
-                .add("email", email).add("planID", planID).build()
-            lanternClient.post(
+            lanternClient.get(
                 LanternHttpClient.createProUrl("/payment-redirect", params),
-                formBody,
                 object : ProCallback {
                     override fun onFailure(throwable: Throwable?, error: ProError?) {
                         methodCallResult.error(
