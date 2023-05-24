@@ -31,8 +31,6 @@ jobs:
       - run: echo "GOPATH=$(go env GOPATH)" >> $GITHUB_ENV
       - run: echo "PATH=$(go env GOPATH)/bin:$PATH" >> $GITHUB_ENV
       - run: go version
-      - run: go get golang.org/x/mobile/cmd/gomobile
-      - run: gomobile init
 
       - name: Granting private modules access
         run: |
