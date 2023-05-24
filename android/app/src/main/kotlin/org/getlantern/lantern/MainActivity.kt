@@ -3,6 +3,7 @@ package org.getlantern.lantern
 import android.Manifest
 import android.content.ComponentName
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.Bundle
@@ -15,8 +16,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.webkit.ProxyConfig
-import androidx.webkit.ProxyController
 import com.thefinestartist.finestwebview.FinestWebView
 import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
@@ -43,6 +42,8 @@ import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
+import org.getlantern.lantern.notification.NotificationHelper
+import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.DeviceInfo
 import org.getlantern.lantern.util.showAlertDialog
@@ -67,6 +68,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
+    private lateinit var notifications: NotificationHelper
+    private lateinit var receiver: NotificationReceiver
     private var autoUpdateJob: Job? = null
 
     private val lanternClient = LanternApp.getLanternHttpClient()
@@ -80,6 +83,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
+        receiver = NotificationReceiver()
+        notifications = NotificationHelper(this, receiver)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
@@ -123,12 +128,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
 
-// While Chat is disabled, don't bother with preventing screenshots
-//        // if not in dev mode, prevent screenshots of this activity by other apps
-//        if (!BuildConfig.DEVELOPMENT_MODE) {
-//            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-//        }
-
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
@@ -138,6 +137,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
+        val packageName = activity.packageName
+        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
+            registerReceiver(receiver, it)
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -153,29 +156,15 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             flutterNavigation.invokeMethod("openConversation", contact)
             intent.removeExtra("contactForConversation")
         }
-
-//        // handles incoming call intent
-//        intent.getStringExtra("signal")?.let { signal ->
-//            val webRTCSignal = Json.gson.fromJson(signal, WebRTCSignal::class.java)
-//            val notificationManager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!
-//            // pass this on to Kotlin and then Dart messaging model
-//            messagingModel.sendSignal(webRTCSignal, true)
-//            LanternApp.messaging.dismissIncomingCallNotification(
-//                notificationManager,
-//                webRTCSignal
-//            )
-//            intent.removeExtra("signal")
-//        }
     }
 
     override fun onStart() {
         super.onStart()
-        visible = true
     }
 
     override fun onStop() {
-        visible = false
         super.onStop()
+        unregisterReceiver(receiver)
     }
 
     override fun onResume() {
@@ -278,6 +267,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 )
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun vpnStateChanged(state: VpnState) {
+        updateStatus(false)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -675,16 +669,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     }
 
     private fun startVpnService() {
-        val excludedApps = ArrayList(vpnModel.excludedApps())
         val intent: Intent = Intent(
             this,
             LanternVpnService::class.java,
         ).apply {
-            putStringArrayListExtra("excludedApps", excludedApps)
+            putStringArrayListExtra("excludedApps", ArrayList(vpnModel.excludedApps()))
             setAction(LanternVpnService.ACTION_CONNECT)
         }
 
         startService(intent)
+        notifications.vpnConnectedNotification()
     }
 
     private fun stopVpnService() {
@@ -698,7 +692,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     private fun updateStatus(useVpn: Boolean) {
         Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
-        EventBus.getDefault().post(VpnState(useVpn))
+        // EventBus.getDefault().post(VpnState(useVpn))
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
         vpnModel.setVpnOn(useVpn)
@@ -717,6 +711,5 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         private val FULL_PERMISSIONS_REQUEST = 8888
         val RECORD_AUDIO_PERMISSIONS_REQUEST = 8889
         private val REQUEST_VPN = 7777
-        var visible = false
     }
 }
