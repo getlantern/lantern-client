@@ -33,6 +33,7 @@ class PaymentsUtil(private val activity: Activity) {
     protected var dialog: ProgressDialog? = null
 
     public fun submitStripePayment(
+        planID: String,
         email: String,
         cardNumber: String,
         expirationDate: String,
@@ -54,6 +55,7 @@ class PaymentsUtil(private val activity: Activity) {
                 callback = object : ApiResultCallback<Token> {
                     override fun onSuccess(@NonNull token: Token) {
                         sendPurchaseRequest(
+                            planID,
                             email,
                             token.id,
                             PaymentProvider.Stripe,
@@ -173,6 +175,7 @@ class PaymentsUtil(private val activity: Activity) {
 
                     methodCallResult.success(null)
                     sendPurchaseRequest(
+                        planID,
                         "",
                         tokens[0],
                         PaymentProvider.GooglePlay,
@@ -238,7 +241,7 @@ class PaymentsUtil(private val activity: Activity) {
         try {
             session.setEmail(email)
             session.setResellerCode(resellerCode)
-            sendPurchaseRequest(email, "", PaymentProvider.ResellerCode, result)
+            sendPurchaseRequest("", email, "", PaymentProvider.ResellerCode, result)
             result.success("redeemResellerSuccess")
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to redeem reseller code", t)
@@ -261,6 +264,7 @@ class PaymentsUtil(private val activity: Activity) {
     }
 
     private fun sendPurchaseRequest(
+        planID: String,
         email: String,
         token: String,
         provider: PaymentProvider,
@@ -271,8 +275,9 @@ class PaymentsUtil(private val activity: Activity) {
         val resellerCode = session.resellerCode()
         val formBody: FormBody.Builder = FormBody.Builder()
             .add("idempotencyKey", System.currentTimeMillis().toString())
-            .add("provider", provider.toString())
+            .add("provider", provider.toString().lowercase())
             .add("email", email)
+            .add("plan", planID)
             .add("currency", session.currency().lowercase())
             .add("deviceName", session.deviceName())
 

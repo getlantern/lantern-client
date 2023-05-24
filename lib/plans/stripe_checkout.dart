@@ -70,6 +70,8 @@ class _StripeCheckoutState extends State<StripeCheckout> {
 
   var formIsValid = false;
 
+  Future<void> navigateHome(BuildContext context) async => await context.pushRoute(Home());
+
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -91,6 +93,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
         context.loaderOverlay.show();
         await sessionModel
             .submitStripePayment(
+              widget.id,
               widget.email,
               creditCardController.text,
               expDateController.text,
@@ -109,19 +112,25 @@ class _StripeCheckoutState extends State<StripeCheckout> {
             CDialog.showInfo(
               context,
               iconPath: ImagePaths.lantern_star,
-              size: 80,
               title: 'renewal_success'.i18n,
               description: 'pro_renewal_success_description'.i18n,
               actionLabel: 'continue_to_pro'.i18n,
+              agreeAction: () async {
+                await navigateHome(context);
+                return true;
+              },
             );
           } else {
             CDialog.showInfo(
               context,
               iconPath: ImagePaths.lantern_star,
-              size: 80,
               title: 'pro_purchase_success'.i18n,
               description: 'pro_purchase_success_descripion'.i18n,
               actionLabel: 'continue_to_pro'.i18n,
+              agreeAction: () async {
+                await navigateHome(context);
+                return true;
+              },
             );
           }
         }).onError((error, stackTrace) {

@@ -106,6 +106,7 @@ class SessionModel(
                 result,
             )
             "submitStripePayment" -> paymentsUtil.submitStripePayment(
+                call.argument("planID")!!,
                 call.argument("email")!!,
                 call.argument("cardNumber")!!,
                 call.argument("expDate")!!,
