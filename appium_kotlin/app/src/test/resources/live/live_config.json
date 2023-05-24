@@ -2,7 +2,7 @@
   "server": "hub-cloud.browserstack.com/wd/hub",
   "username": "jigarfumakiya_6dKXF7",
   "access_key": "21qn1raPp8EN7jpctwen",
-  "app": "bs://dfd260df78ec45a7f2fff2a8463df12b272d9585",
+  "app": "bs://72c671a479ab93d9cff2cdd29a58bf630ce98852",
   "capabilities": {
     "automationName": "Flutter",
     "setWebContentsDebuggingEnabled": true,
