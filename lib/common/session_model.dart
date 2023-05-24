@@ -295,12 +295,14 @@ class SessionModel extends Model {
   }
 
   Future<void> submitStripePayment(
+    String planID,
     String email,
     String cardNumber,
     String expDate,
     String cvc,
   ) async {
     return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
+      'planID': planID,
       'email': email,
       'cardNumber': cardNumber,
       'expDate': expDate,
