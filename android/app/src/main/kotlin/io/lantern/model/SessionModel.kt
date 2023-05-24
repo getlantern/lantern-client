@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
+import com.google.protobuf.*
+import io.lantern.apps.AppData
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -22,11 +24,14 @@ import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
+import org.getlantern.lantern.util.castToBoolean
+import org.getlantern.lantern.util.serializeToMap
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
+import java.lang.reflect.Field
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -42,37 +47,19 @@ class SessionModel(
         private const val TAG = "SessionModel"
 
         const val PATH_PRO_USER = "prouser"
-        const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_SDK_VERSION = "sdkVersion"
     }
 
     init {
-        db.mutate { tx ->
+      db.mutate { tx ->
             // initialize data for fresh install // TODO remove the need to do this for each data path
             tx.put(
                 PATH_PRO_USER,
                 castToBoolean(tx.get(PATH_PRO_USER), false)
             )
-            tx.put(
-                PATH_PROXY_ALL,
-                castToBoolean(tx.get(PATH_PROXY_ALL), false)
-            )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
-        }
-    }
-
-    /**
-     * Sometimes, preferences values from old clients that are supposed to be booleans will actually
-     * be stored as numeric values or as strings. This normalizes them all to Booleans.
-     */
-    private fun castToBoolean(value: Any?, defaultValue: Boolean): Boolean {
-        return when (value) {
-            is Boolean -> value
-            is Number -> value.toInt() == 1
-            is String -> value.toBoolean()
-            else -> defaultValue
         }
     }
 
@@ -96,10 +83,6 @@ class SessionModel(
                     intent.putExtra("url", url)
                     activity.startActivity(intent)
                 }
-            }
-            "setProxyAll" -> {
-                val on = call.argument("on") ?: false
-                saveProxyAll(on)
             }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
@@ -125,12 +108,6 @@ class SessionModel(
                 EventBus.getDefault().post(CheckUpdate(true))
             }
             else -> super.doMethodCall(call, notImplemented)
-        }
-    }
-
-    private fun saveProxyAll(on: Boolean) {
-        db.mutate { tx ->
-            tx.put(PATH_PROXY_ALL, on)
         }
     }
 
