@@ -24,7 +24,6 @@ import (
 	"github.com/getlantern/flashlight/client"
 	"github.com/getlantern/flashlight/common"
 	"github.com/getlantern/flashlight/config"
-	"github.com/getlantern/flashlight/email"
 	"github.com/getlantern/flashlight/geolookup"
 	"github.com/getlantern/flashlight/logging"
 	"github.com/getlantern/flashlight/ops"
@@ -309,15 +308,6 @@ func newUserConfig(session panickingSession) *userConfig {
 	return &userConfig{session: session}
 }
 
-// SocketProtector is an interface for classes that can protect Android sockets,
-// meaning those sockets will not be passed through the VPN.
-type SocketProtector interface {
-	ProtectConn(fileDescriptor int) error
-	// The DNS server is used to resolve host only when dialing a protected connection
-	// from within Lantern client.
-	DNSServerIP() string
-}
-
 func getBalancer(timeout time.Duration) *balancer.Balancer {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
@@ -535,7 +525,6 @@ func run(configDir, locale string,
 			if session.IsPlayVersion() {
 				runner.EnableNamedDomainRules("google_play") // for google play build we want to make sure that Google Play domains are not being proxied
 			}
-			email.SetDefaultRecipient(cfg.ReportIssueEmail)
 			select {
 			case globalConfigChanged <- nil:
 				// okay

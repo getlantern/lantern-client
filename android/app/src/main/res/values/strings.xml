@@ -37,6 +37,8 @@
         <item>Slow</item>
         <item>Chat not working</item>
         <item>Discover not working</item>
+        <item>Cannot link device</item>
+        <item>Application crashes</item>
         <item>Other</item>
     </string-array>
     <string name="submit_code">Confirm Code</string>
@@ -476,6 +478,7 @@
     <string name="device_authorized_pro">Your new device is now Authorized to use your Pro account. Please wait a couple of minutes for changes to take effect.</string>
     <string name="report_sent">Report Sent</string>
     <string name="thank_you_for_reporting_your_issue">Thank you for reporting your issue. Due to volume, we cannot respond to most issues, but we assure you we are working hard to improve Lantern based on your reports.</string>
+    <string name="unable_to_submit_issue">Unable to submit issue</string>
     <string name="have_a_lantern_pro_activation_code_click_here">Have a Lantern Pro activation code? Click here</string>
     <string name="enter_email_and_activation_code">Enter Email and Activation Code</string>
     <string name="activation_code">Activation Code</string>
