@@ -194,11 +194,12 @@ class _CheckoutState extends State<Checkout>
         break;
       case PaymentProviders.freekassa:
         var strs = widget.id.split('-');
-        if (strs.length != 2) break;
+        if (strs.length < 2) break;
         var currency = strs[1];
         var currencyCost = widget.selectedPlan.price[currency];
         if (currencyCost == null) break;
-        await sessionModel.submitFreekassa(emailController.text, widget.id, currencyCost.toInt()!!);
+        await sessionModel.submitFreekassa(
+            emailController.text, widget.id, currencyCost.toString()!!);
         break;
     }
   }
@@ -367,7 +368,8 @@ class _CheckoutState extends State<Checkout>
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: paymentOptions(Country.values.firstWhere((e) => e.toString() == 'Country.' + countryCode)),
+                    children: paymentOptions(Country.values.firstWhere(
+                        (e) => e.toString() == 'Country.' + countryCode)),
                   ),
                 ),
                 // * Price summary, unused pro time disclaimer, Continue button
