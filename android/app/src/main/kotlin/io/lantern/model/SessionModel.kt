@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
-import com.google.protobuf.*
 import internalsdk.Internalsdk
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
