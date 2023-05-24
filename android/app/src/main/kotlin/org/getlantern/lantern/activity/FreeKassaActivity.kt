@@ -77,14 +77,6 @@ open class FreeKassaActivity : BaseFragmentActivity() {
     }
 
     private fun makeRequestToPrepayHandler(onSuccess: (String) -> Unit, onError: (String) -> Unit) {
-        val plan = LanternApp.getSession().getSelectedPlan()
-        if (plan == null) {
-            val error = "Unable to prepare FreeKassa: Plan is null"
-            Logger.error(TAG, error)
-            showErrorDialog(error)
-            return
-        }
-
         val params = hashMapOf(
             "locale" to LanternApp.getSession().language,
         )
@@ -94,6 +86,8 @@ open class FreeKassaActivity : BaseFragmentActivity() {
             .add("plan", planID!!)
             .add("email", userEmail!!)
             .build()
+
+        Logger.d(TAG, "Sending request to Freekassa prepay handler")
 
         lanternHTTPClient.post(
             url,

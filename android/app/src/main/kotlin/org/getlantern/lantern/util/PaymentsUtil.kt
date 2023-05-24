@@ -14,7 +14,6 @@ import com.stripe.android.model.CardParams
 import com.stripe.android.model.Token
 import io.flutter.plugin.common.MethodChannel
 import okhttp3.FormBody
-import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
@@ -91,7 +90,13 @@ class PaymentsUtil(private val activity: Activity) {
         methodCallResult: MethodChannel.Result,
     ) {
         try {
-            val params = mutableMapOf<String, String>("email" to email, "planID" to planID)
+            val provider = PaymentProvider.BTCPay.toString().lowercase()
+            val params = mutableMapOf<String, String>(
+                "email" to email,
+                "plan" to planID,
+                "provider" to provider,
+                "deviceName" to session.deviceName(),
+            )
             lanternClient.get(
                 LanternHttpClient.createProUrl("/payment-redirect", params),
                 object : ProCallback {

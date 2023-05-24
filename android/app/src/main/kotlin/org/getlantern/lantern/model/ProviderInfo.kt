@@ -6,6 +6,7 @@ enum class PaymentProvider(val provider: String) {
 	Stripe("stripe"),
 	Freekassa("freekassa"),
 	GooglePlay("googleplay"),
+	BTCPay("btcpay"),
 	ResellerCode("resellercode")
 }
 
