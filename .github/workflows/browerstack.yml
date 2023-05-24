@@ -28,9 +28,6 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.19
-      - run: echo "GOPATH=$(go env GOPATH)" >> $GITHUB_ENV
-      - run: echo "PATH=$(go env GOPATH)/bin:$PATH" >> $GITHUB_ENV
-      - run: go version
 
       - name: Granting private modules access
         run: |
@@ -48,7 +45,7 @@ jobs:
       - name: Build APK
         run: |
           flutter pub get
-          flutter build apk --flavor prod
+          flutter build apk --debug --flavor prod
 
       - name: Install jq
         run: sudo apt-get install jq
