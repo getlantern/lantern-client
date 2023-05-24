@@ -68,4 +68,6 @@ jobs:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           RUN_ENV: "live"
-        run: cd appium_folder && ./gradlew test
+        run: |
+          cd appium_kotlin
+          ./gradlew test
