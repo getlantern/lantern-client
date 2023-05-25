@@ -74,7 +74,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                 ),
                 // if split tunneling is enabled, include the installed apps
                 // in the column
-                if (splitTunnelingEnabled) Expanded(child: buildAppsList(_appsData)),
+                if (splitTunnelingEnabled)
+                  Expanded(child: buildAppsList(_appsData)),
               ],
             );
           },
@@ -98,7 +99,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         if (index == 0) {
           return ListSectionHeader('excluded_apps'.i18n.toUpperCase());
         }
-        if (index == excludedApps.length+1) {
+        if (index == excludedApps.length + 1) {
           return ListSectionHeader('allowed_apps'.i18n.toUpperCase());
         }
         late PathAndValue<AppData> appData;
@@ -113,22 +114,21 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     );
   }
 
-  // showSnackBar shows a snackbar with a message indicating that settings will be applied
-  // next time, if the user is connected to the VPN, and it hasn't already been shown
-  void showSnackBar(BuildContext context) async {
+  // showRestartVPNSnackBar shows a snackbar with a message indicating that
+  // settings will be applied when the VPN is restarted (and only if the
+  // snackbar hasn't already been shown)
+  void showRestartVPNSnackBar(BuildContext context) async {
     if (!vpnConnected || snackbarShown) {
       return;
     }
-    final snackBar = SnackBar(
-      behavior: SnackBarBehavior.floating,
-      duration: const Duration(seconds: 7),
-      backgroundColor: Colors.black,
+    showSnackbar(
+      context: context,
       content: CText(
         'applied_next_time'.i18n,
         style: tsSubtitle3.copiedWith(color: Colors.white),
       ),
+      duration: const Duration(seconds: 7),
     );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
     snackbarShown = true;
   }
 
@@ -172,7 +172,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                   } else {
                     vpnModel.removeExcludedApp(packageName);
                   }
-                  showSnackBar(context);
+                  showRestartVPNSnackBar(context);
                 });
               },
             ),
