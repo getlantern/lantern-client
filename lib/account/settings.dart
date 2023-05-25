@@ -2,7 +2,6 @@ import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-import 'package:lantern/vpn/vpn_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class Settings extends StatelessWidget {
@@ -21,7 +20,6 @@ class Settings extends StatelessWidget {
       context.pushRoute(SplitTunneling());
 
   void openWebview(String url) async => await sessionModel.openWebview(url);
-
 
   @override
   Widget build(BuildContext context) {
@@ -128,16 +126,17 @@ class Settings extends StatelessWidget {
           ListItemFactory.settingsItem(
             header: 'about'.i18n,
             content: 'privacy_policy'.i18n,
-            onTap: () => openWebview("https://lantern.io/privacy"),
+            onTap: () => openWebview('https://lantern.io/privacy'),
             trailingArray: [
               mirrorLTR(
-                  context: context,
-                  child: const Padding(
-                    padding: EdgeInsetsDirectional.only(start: 4.0),
-                    child: const CAssetImage(
-                      path: ImagePaths.open,
-                    ),
-                  ))
+                context: context,
+                child: const Padding(
+                  padding: EdgeInsetsDirectional.only(start: 4.0),
+                  child: CAssetImage(
+                    path: ImagePaths.open,
+                  ),
+                ),
+              )
             ],
           ),
           ListItemFactory.settingsItem(
@@ -147,13 +146,13 @@ class Settings extends StatelessWidget {
                 context: context,
                 child: const Padding(
                   padding: EdgeInsetsDirectional.only(start: 4.0),
-                  child: const CAssetImage(
+                  child: CAssetImage(
                     path: ImagePaths.open,
                   ),
                 ),
               )
             ],
-            onTap: () => openWebview("https://lantern.io/terms"),
+            onTap: () => openWebview('https://lantern.io/terms'),
           ),
           //* Build version
           FutureBuilder<PackageInfo>(
