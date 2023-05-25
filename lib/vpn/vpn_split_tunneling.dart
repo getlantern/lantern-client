@@ -46,8 +46,9 @@ class _SplitTunnelingState extends State<SplitTunneling> {
           ) {
             var appsData = _appsData.toList();
             appsData.sort((a, b) => a.value.name!.compareTo(b.value.name!));
-            return SingleChildScrollView(
-                child: Column(children: <Widget>[
+            return ListView(
+              shrinkWrap: true,
+              children: [Column(children: <Widget>[
               ListItemFactory.settingsItem(
                 icon: ImagePaths.split_tunneling,
                 content: 'split_tunneling'.i18n,
@@ -77,7 +78,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
               // if split tunneling is enabled, include the installed apps
               // in the column
               if (splitTunnelingEnabled) ...buildAppsLists(appsData),
-            ]));
+            ])]);
           });
         }));
   }
@@ -88,27 +89,23 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     if (appsData.length == 0) return [];
     return [
       ListSectionHeader('excluded_apps'.i18n.toUpperCase()),
-      buildAppList(appsData.where((app) => app.value.isExcluded).toList()),
+      ...buildAppList(appsData.where((app) => app.value.isExcluded).toList()),
       ListSectionHeader('allowed_apps'.i18n.toUpperCase()),
-      buildAppList(appsData.where((app) => !app.value.isExcluded).toList()),
+      ...buildAppList(appsData.where((app) => !app.value.isExcluded).toList()),
     ];
   }
 
-  Widget buildAppList(List<PathAndValue<AppData>> apps) {
+  List<Widget> buildAppList(List<PathAndValue<AppData>> apps) {
     if (apps.length == 0) {
-      return SizedBox.shrink();
+      return [SizedBox.shrink()];
     }
 
-    return ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: apps.length,
-        itemBuilder: (BuildContext context, int index) {
-          var appData = apps[index].value;
-          Uint8List bytes = base64.decode(appData.icon!);
-          Widget appItem = buildAppItem(appData);
-          return appItem;
-        });
+    List<Widget> widgets = [];
+    for (var appData in apps) {
+      widgets.add(buildAppItem(appData.value));
+    }
+
+    return widgets;
   }
 
   // showSnackBar shows a snackbar with a message indicating that settings will be applied
