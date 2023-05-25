@@ -44,6 +44,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
             Iterable<PathAndValue<AppData>> _appsData,
             Widget? child,
           ) {
+            _appsData.sort((a, b) => a.value.name!.compareTo(b.value.name!));
             return SingleChildScrollView(
                 child: Column(children: <Widget>[
               ListItemFactory.settingsItem(
