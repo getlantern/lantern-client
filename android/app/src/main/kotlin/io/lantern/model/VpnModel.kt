@@ -3,14 +3,10 @@ package io.lantern.model
 import android.app.Activity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
 import io.lantern.apps.AppData
 import io.lantern.apps.AppsDataProvider
-import io.lantern.db.PathAndValue
-import io.lantern.model.Vpn
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.lantern.util.castToBoolean
-import org.getlantern.lantern.util.serializeToMap
 
 class VpnModel(
     private val activity: Activity,
@@ -80,12 +76,12 @@ class VpnModel(
     // excludedApps returns a list of package names for those apps that should be excluded from
     // the VPN connection
     fun excludedApps():List<String> {
-      var excludedApps = db.list<Vpn.AppData>(PATH_APPS_DATA)
-      val packageNames = mutableListOf<String>()
-      for (appData in excludedApps) {
-        if (appData.value.isExcluded) packageNames.add(appData.value.packageName)
+      var allApps = db.list<Vpn.AppData>(PATH_APPS_DATA + "%")
+      val excludedApps = mutableListOf<String>()
+      for (appData in allApps) {
+        if (appData.value.isExcluded) excludedApps.add(appData.value.packageName)
       }
-      return packageNames
+      return excludedApps
     }
 
     private fun saveSplitTunneling(value: Boolean) {
