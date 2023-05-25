@@ -164,7 +164,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     override fun onStop() {
         super.onStop()
-        unregisterReceiver(receiver)
     }
 
     override fun onResume() {
@@ -198,6 +197,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         sessionModel.destroy()
         // TODO <09-08-22, kalli> we weren't invoking destroy() on replicaModel previously
         replicaModel.destroy()
+        unregisterReceiver(receiver)
         EventBus.getDefault().unregister(this)
     }
 
