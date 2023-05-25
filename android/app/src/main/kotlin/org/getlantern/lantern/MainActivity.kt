@@ -195,7 +195,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         super.onDestroy()
         vpnModel.destroy()
         sessionModel.destroy()
-        // TODO <09-08-22, kalli> we weren't invoking destroy() on replicaModel previously
         replicaModel.destroy()
         unregisterReceiver(receiver)
         EventBus.getDefault().unregister(this)
