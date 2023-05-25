@@ -365,7 +365,7 @@ msgid "excluded_apps"
 msgstr "Excluded Apps"
 
 msgid "apps_selected"
-msgstr "Apps selected below will not go through Lantern when connected."
+msgstr "Apps selected below will not go through Lantern when connected. If an app isn't blocked, adding it to the excluded list can improve performance and save bandwidth."
 
 msgid "split_tunneling"
 msgstr "Split Tunneling"
