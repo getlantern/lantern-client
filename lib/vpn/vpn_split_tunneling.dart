@@ -135,6 +135,15 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   Widget buildAppItem(AppData appData) {
     var iconBytes = base64.decode(appData.icon);
     var packageName = appData.packageName;
+
+    var addOrRemoveExcludedApp = () => setState(() {
+          if (appData.isExcluded) {
+            vpnModel.removeExcludedApp(packageName);
+          } else {
+            vpnModel.addExcludedApp(packageName);
+          }
+          showRestartVPNSnackBar(context);
+        });
     return Container(
       height: 72,
       padding: EdgeInsets.zero,
@@ -156,6 +165,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
             ),
             child: Image.memory(iconBytes, fit: BoxFit.cover),
           ),
+          onTap: () => addOrRemoveExcludedApp(),
           trailing: SizedBox(
             height: 24.0,
             width: 24.0,
@@ -164,17 +174,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
               shape: const CircleBorder(),
               activeColor: Colors.black,
               side: const BorderSide(color: Colors.black),
+              onChanged: (bool? value) => addOrRemoveExcludedApp(),
               value: appData.isExcluded,
-              onChanged: (bool? value) async {
-                setState(() {
-                  if (value != null && value) {
-                    vpnModel.addExcludedApp(packageName);
-                  } else {
-                    vpnModel.removeExcludedApp(packageName);
-                  }
-                  showRestartVPNSnackBar(context);
-                });
-              },
             ),
           ),
           title: CText(
