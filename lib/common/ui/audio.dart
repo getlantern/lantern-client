@@ -47,7 +47,7 @@ class Audio {
     _onPositionChanged = onPositionChanged;
     _onDetached = onDetached;
     // defaults to having the mime-type application/octet-stream
-    final mime = lookupMimeType('', headerBytes: bytes) ?? "application/octet-stream";
+    final mime = lookupMimeType('', headerBytes: bytes) ?? 'application/octet-stream';
     await _audioPlayer.play(UrlSource(Uri.dataFromBytes(bytes, mimeType: mime).toString()));
     onAttached();
   }

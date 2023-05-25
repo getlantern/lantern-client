@@ -13,6 +13,7 @@ import org.getlantern.lantern.MainActivity;
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.model.SessionManager;
 
+import java.util.List;
 import java.util.Locale;
 
 public class GoTun2SocksProvider implements Provider {
@@ -25,6 +26,12 @@ public class GoTun2SocksProvider implements Provider {
 
   private ParcelFileDescriptor mInterface;
 
+  private List<String> excludedApps;
+
+  public GoTun2SocksProvider(List<String> excludedApps) {
+    this.excludedApps = excludedApps;
+  }
+
   private synchronized ParcelFileDescriptor createBuilder(final VpnService vpnService,
       final VpnService.Builder builder) {
     // Set the locale to English
@@ -35,6 +42,18 @@ public class GoTun2SocksProvider implements Provider {
 
     // Configure a builder while parsing the parameters.
     builder.setMtu(VPN_MTU);
+
+    // Add applications that are denied access to the VPN connection. By default, all
+    // applications are allowed access, except those denied access via the Excluded Apps screen
+    for (String packageName : excludedApps) {
+      Logger.debug(TAG, "Excluding app from VPN connection: " + packageName);
+      try {
+        builder.addDisallowedApplication(packageName);
+      } catch (PackageManager.NameNotFoundException e) {
+        Logger.error(TAG, "Unable to exclude app from VPN ", e);
+      }
+    }
+
 
     builder.addAddress(privateAddress, 24);
     // route IPv4 through VPN

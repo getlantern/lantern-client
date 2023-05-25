@@ -10,7 +10,7 @@ class VPNStatus extends StatelessWidget {
         children: [
           CText(
             'VPN Status'.i18n,
-            style: tsBody1.copiedWith(
+            style: tsSubtitle3.copiedWith(
               color: unselectedTabIconColor,
             ),
           ),
@@ -21,7 +21,7 @@ class VPNStatus extends StatelessWidget {
                       (vpnStatus == 'connecting')
                           ? 'Connecting'.i18n
                           : 'Disconnecting'.i18n,
-                      style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
+                      style: tsSubtitle4,
                     ),
                     const Padding(
                       padding: EdgeInsetsDirectional.only(start: 12),
@@ -39,7 +39,7 @@ class VPNStatus extends StatelessWidget {
                   (vpnStatus == 'connected')
                       ? 'connected'.i18n
                       : 'Disconnected'.i18n,
-                  style: tsBody2.copiedWith(fontWeight: FontWeight.w500),
+                  style: tsSubtitle4,
                 ),
         ],
       );

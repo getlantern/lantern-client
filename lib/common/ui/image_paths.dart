@@ -22,6 +22,7 @@ class ImagePaths {
   static const email = 'assets/images/email.svg';
   static const translate = 'assets/images/translate.svg';
   static const update = 'assets/images/update.svg';
+  static const split_tunneling = 'assets/images/split_tunneling.svg';
 
   // Messaging
   static const more_vert = 'assets/images/more_vert.svg';

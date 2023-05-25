@@ -60,7 +60,6 @@ import java.util.Locale
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     CoroutineScope by MainScope() {
-
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
@@ -80,7 +79,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         super.configureFlutterEngine(flutterEngine)
 
         messagingModel = MessagingModel(this, flutterEngine)
-        vpnModel = VpnModel(flutterEngine, ::switchLantern)
+        vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
@@ -670,12 +669,17 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     }
 
     private fun startVpnService() {
-        startService(
-            Intent(
-                this,
-                LanternVpnService::class.java,
-            ).setAction(LanternVpnService.ACTION_CONNECT),
-        )
+        val excludedApps = ArrayList(vpnModel.excludedApps())
+        Logger.d(TAG, "Excluded apps: ${excludedApps}")
+        val intent: Intent = Intent(
+            this,
+            LanternVpnService::class.java,
+        ).apply {
+            putStringArrayListExtra("excludedApps", excludedApps)
+            setAction(LanternVpnService.ACTION_CONNECT)
+        }
+
+        startService(intent)
         notifications.vpnConnectedNotification()
     }
 

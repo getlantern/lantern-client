@@ -38,7 +38,7 @@ class MessagingEmojiPicker extends StatelessWidget {
                 iconColorSelected: black,
                 noRecents: Text(
                   emptySuggestions,
-                  style: TextStyle(fontSize: 15, color: Colors.black26),
+                  style: const TextStyle(fontSize: 15, color: Colors.black26),
                   textAlign: TextAlign.center,
                 ),
                 bgColor: white,
