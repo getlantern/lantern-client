@@ -44,7 +44,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
             Iterable<PathAndValue<AppData>> _appsData,
             Widget? child,
           ) {
-            _appsData.sort((a, b) => a.value.name!.compareTo(b.value.name!));
+            var appsData = _appsData.toList();
+            appsData.sort((a, b) => a.value.name!.compareTo(b.value.name!));
             return SingleChildScrollView(
                 child: Column(children: <Widget>[
               ListItemFactory.settingsItem(
@@ -75,7 +76,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                       style: tsBody3)),
               // if split tunneling is enabled, include the installed apps
               // in the column
-              if (splitTunnelingEnabled) ...buildAppsLists(_appsData),
+              if (splitTunnelingEnabled) ...buildAppsLists(appsData),
             ]));
           });
         }));
@@ -83,7 +84,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 
   // buildAppsLists builds lists for excluded and allowed installed apps and
   // returns both along with their associated headers
-  List<Widget> buildAppsLists(Iterable<PathAndValue<AppData>> appsData) {
+  List<Widget> buildAppsLists(List<PathAndValue<AppData>> appsData) {
     if (appsData.length == 0) return [];
     return [
       ListSectionHeader('excluded_apps'.i18n.toUpperCase()),
