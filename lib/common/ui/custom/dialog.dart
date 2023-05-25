@@ -50,7 +50,7 @@ class CDialog extends StatefulWidget {
     this.agreeAction,
     this.maybeAgreeAction,
     this.dismissAction,
-    this.includeCancel = true
+    this.includeCancel = true,
   }) : super();
 
   final String? iconPath;
@@ -194,7 +194,7 @@ class CDialogState extends State<CDialog> {
               children: [
                 // DISMISS
                 if ((widget.agreeAction != null ||
-                    widget.maybeAgreeAction != null) &&
+                        widget.maybeAgreeAction != null) &&
                     widget.includeCancel)
                   TextButton(
                     onPressed: () async {
