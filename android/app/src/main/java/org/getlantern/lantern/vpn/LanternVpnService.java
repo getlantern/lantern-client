@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.VpnService;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 
 import org.getlantern.lantern.LanternApp;
@@ -24,6 +25,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import internalsdk.Internalsdk;
 import internalsdk.SocketProtector;
+import java.util.List;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LanternVpnService extends VpnService implements Runnable {
@@ -33,6 +35,8 @@ public class LanternVpnService extends VpnService implements Runnable {
     private static final String TAG = "VpnService";
 
     private Provider mProvider = null;
+
+    private List<String> excludedApps = null;
 
     final private ServiceHelper helper = new ServiceHelper(
             this,
@@ -55,7 +59,7 @@ public class LanternVpnService extends VpnService implements Runnable {
         Logger.d(TAG, "getOrInitProvider()");
         if (mProvider == null) {
             Logger.d(TAG, "Using Go tun2socks");
-            mProvider = new GoTun2SocksProvider();
+            mProvider = new GoTun2SocksProvider(excludedApps);
         }
         return mProvider;
     }
@@ -92,6 +96,8 @@ public class LanternVpnService extends VpnService implements Runnable {
             stop();
             return START_NOT_STICKY;
         } else {
+            Bundle bundle = intent.getExtras();
+            excludedApps = bundle.getStringArrayList("excludedApps");
             connect();
             return START_STICKY;
         }
