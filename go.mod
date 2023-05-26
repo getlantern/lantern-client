@@ -37,7 +37,7 @@ require (
 	github.com/getlantern/ipproxy v0.0.0-20230511223023-ee52513fd782
 	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
-	github.com/getlantern/replica v0.13.0
+	github.com/getlantern/replica v0.14.1
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.8.2
 	golang.org/x/mobile v0.0.0-20221110043201-43a038452099
@@ -68,7 +68,7 @@ require (
 	github.com/anacrolix/envpprof v1.3.0 // indirect
 	github.com/anacrolix/generics v0.0.0-20230428105757-683593396d68 // indirect
 	github.com/anacrolix/go-libutp v1.2.0 // indirect
-	github.com/anacrolix/log v0.13.2-0.20221123232138-02e2764801c3 // indirect
+	github.com/anacrolix/log v0.13.2-0.20230518105052-6aef2c4c91f1 // indirect
 	github.com/anacrolix/missinggo v1.3.0 // indirect
 	github.com/anacrolix/missinggo/perf v1.0.0 // indirect
 	github.com/anacrolix/missinggo/v2 v2.7.1 // indirect
@@ -77,7 +77,7 @@ require (
 	github.com/anacrolix/squirrel v0.4.1-0.20220903122644-f24aa78cd96c // indirect
 	github.com/anacrolix/stm v0.5.0 // indirect
 	github.com/anacrolix/sync v0.4.0 // indirect
-	github.com/anacrolix/torrent v1.50.0 // indirect
+	github.com/anacrolix/torrent v1.51.2 // indirect
 	github.com/anacrolix/upnp v0.1.3-0.20220123035249-922794e51c96 // indirect
 	github.com/anacrolix/utp v0.1.0 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
