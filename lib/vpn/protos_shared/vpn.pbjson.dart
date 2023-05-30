@@ -33,6 +33,19 @@ const Bandwidth$json = const {
 
 /// Descriptor for `Bandwidth`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List bandwidthDescriptor = $convert.base64Decode('CglCYW5kd2lkdGgSGAoHcGVyY2VudBgBIAEoA1IHcGVyY2VudBIcCglyZW1haW5pbmcYAiABKANSCXJlbWFpbmluZxIYCgdhbGxvd2VkGAMgASgDUgdhbGxvd2VkEh4KCnR0bFNlY29uZHMYBCABKANSCnR0bFNlY29uZHM=');
+@$core.Deprecated('Use appDataDescriptor instead')
+const AppData$json = const {
+  '1': 'AppData',
+  '2': const [
+    const {'1': 'packageName', '3': 1, '4': 1, '5': 9, '10': 'packageName'},
+    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'icon', '3': 3, '4': 1, '5': 9, '10': 'icon'},
+    const {'1': 'isExcluded', '3': 4, '4': 1, '5': 8, '10': 'isExcluded'},
+  ],
+};
+
+/// Descriptor for `AppData`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List appDataDescriptor = $convert.base64Decode('CgdBcHBEYXRhEiAKC3BhY2thZ2VOYW1lGAEgASgJUgtwYWNrYWdlTmFtZRISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGljb24YAyABKAlSBGljb24SHgoKaXNFeGNsdWRlZBgEIAEoCFIKaXNFeGNsdWRlZA==');
 @$core.Deprecated('Use deviceDescriptor instead')
 const Device$json = const {
   '1': 'Device',

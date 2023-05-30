@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
-    android:extractNativeLibs="true"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.getlantern.lantern">
     <uses-permission android:name="android.permission.INTERNET" />
@@ -72,6 +71,12 @@
 
         <receiver android:name = ".model.DeclineCallBroadcastReceiver" />
 
+        <receiver android:name="org.getlantern.lantern.notification.NotificationReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="org.getlantern.lantern.intent.VPN_DISCONNECTED"/>
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
             android:hardwareAccelerated="true"
@@ -79,10 +84,6 @@
             android:screenOrientation="sensor"
             android:theme="@style/FinestWebViewTheme.Light" />
 
-        <activity
-            android:name="org.getlantern.mobilesdk.activity.SettingsActivity"
-            android:screenOrientation="portrait">
-        </activity>
         <activity
             android:name=".activity.authorizeDevice.LinkDeviceActivity_"
             android:screenOrientation="portrait">

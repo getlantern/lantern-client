@@ -124,7 +124,7 @@ class _CTextFieldState extends State<CTextField> {
               validator: (value) {
                 // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
                 var result = widget.controller.validate(value);
-                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
                   setState(() {});
                 });
                 return result;

@@ -174,6 +174,95 @@ class Bandwidth extends $pb.GeneratedMessage {
   void clearTtlSeconds() => clearField(4);
 }
 
+class AppData extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AppData', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'packageName', protoName: 'packageName')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'icon')
+    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isExcluded', protoName: 'isExcluded')
+    ..hasRequiredFields = false
+  ;
+
+  AppData._() : super();
+  factory AppData({
+    $core.String? packageName,
+    $core.String? name,
+    $core.String? icon,
+    $core.bool? isExcluded,
+  }) {
+    final _result = create();
+    if (packageName != null) {
+      _result.packageName = packageName;
+    }
+    if (name != null) {
+      _result.name = name;
+    }
+    if (icon != null) {
+      _result.icon = icon;
+    }
+    if (isExcluded != null) {
+      _result.isExcluded = isExcluded;
+    }
+    return _result;
+  }
+  factory AppData.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AppData.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AppData clone() => AppData()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AppData copyWith(void Function(AppData) updates) => super.copyWith((message) => updates(message as AppData)) as AppData; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AppData create() => AppData._();
+  AppData createEmptyInstance() => create();
+  static $pb.PbList<AppData> createRepeated() => $pb.PbList<AppData>();
+  @$core.pragma('dart2js:noInline')
+  static AppData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AppData>(create);
+  static AppData? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get packageName => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set packageName($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPackageName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPackageName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get icon => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set icon($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasIcon() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearIcon() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get isExcluded => $_getBF(3);
+  @$pb.TagNumber(4)
+  set isExcluded($core.bool v) { $_setBool(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasIsExcluded() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearIsExcluded() => clearField(4);
+}
+
 class Device extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Device', createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')

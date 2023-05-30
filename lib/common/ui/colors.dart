@@ -79,7 +79,9 @@ BoxDecoration getReplicaExtensionBgDecoration(String extension) {
 }
 
 BoxDecoration getReplicaHashAnimatedBgDecoration(
-    String hash, double animatedValue) {
+  String hash,
+  double animatedValue,
+) {
   return BoxDecoration(
     gradient: LinearGradient(
       begin: Alignment(-1 + animatedValue, -1),

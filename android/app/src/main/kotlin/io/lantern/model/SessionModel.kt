@@ -24,6 +24,7 @@ import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
 import org.getlantern.lantern.util.PaymentsUtil
+import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
@@ -46,7 +47,7 @@ class SessionModel(
         private const val TAG = "SessionModel"
         const val PATH_PRO_USER = "prouser"
         const val PATH_PLAY_VERSION = "playVersion"
-        const val PATH_PROXY_ALL = "proxyAll"
+
         const val PATH_SDK_VERSION = "sdkVersion"
         const val PATH_USER_LEVEL = "userLevel"
     }
@@ -59,29 +60,12 @@ class SessionModel(
                 castToBoolean(tx.get(PATH_PRO_USER), false),
             )
             tx.put(
-                PATH_PROXY_ALL,
-                castToBoolean(tx.get(PATH_PROXY_ALL), false),
-            )
-            tx.put(
                 PATH_USER_LEVEL,
                 tx.get(PATH_USER_LEVEL) ?: "",
             )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
-        }
-    }
-
-    /**
-     * Sometimes, preferences values from old clients that are supposed to be booleans will actually
-     * be stored as numeric values or as strings. This normalizes them all to Booleans.
-     */
-    private fun castToBoolean(value: Any?, defaultValue: Boolean): Boolean {
-        return when (value) {
-            is Boolean -> value
-            is Number -> value.toInt() == 1
-            is String -> value.toBoolean()
-            else -> defaultValue
         }
     }
 
@@ -128,10 +112,6 @@ class SessionModel(
                     activity.startActivity(intent)
                 }
             }
-            "setProxyAll" -> {
-                val on = call.argument("on") ?: false
-                saveProxyAll(on)
-            }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
             }
@@ -168,12 +148,6 @@ class SessionModel(
                 EventBus.getDefault().post(CheckUpdate(true))
             }
             else -> super.doMethodCall(call, notImplemented)
-        }
-    }
-
-    private fun saveProxyAll(on: Boolean) {
-        db.mutate { tx ->
-            tx.put(PATH_PROXY_ALL, on)
         }
     }
 
