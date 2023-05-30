@@ -6,6 +6,12 @@ import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/price_summary.dart';
 import 'package:lantern/plans/tos.dart';
 import 'package:lantern/plans/utils.dart';
+import 'package:flutter/foundation.dart';
+
+const lanternStarLogo = CAssetImage(
+  path: ImagePaths.lantern_star,
+  size: 72,
+);
 
 class StripeCheckout extends StatefulWidget {
   final List<Plan> plans;
@@ -70,8 +76,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
 
   var formIsValid = false;
 
-  Future<void> navigateHome(BuildContext context) async => await context.pushRoute(Home());
-
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -84,6 +88,15 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     creditCardController.dispose();
     super.dispose();
   }
+
+  void showInfo(String title, String description) => CDialog.showInfo(context,
+          icon: lanternStarLogo,
+          title: title,
+          description: description,
+          actionLabel: 'continue_to_pro'.i18n, agreeAction: () async {
+        await context.pushRoute(Home());
+        return true;
+      });
 
   Widget checkoutButton() {
     return Button(
@@ -109,29 +122,11 @@ class _StripeCheckoutState extends State<StripeCheckout> {
             .then((value) async {
           context.loaderOverlay.hide();
           if (widget.isPro) {
-            CDialog.showInfo(
-              context,
-              iconPath: ImagePaths.lantern_star,
-              title: 'renewal_success'.i18n,
-              description: 'pro_renewal_success_description'.i18n,
-              actionLabel: 'continue_to_pro'.i18n,
-              agreeAction: () async {
-                await navigateHome(context);
-                return true;
-              },
-            );
+            showInfo('pro_purchase_success'.i18n,
+                'pro_purchase_success_descripion'.i18n);
           } else {
-            CDialog.showInfo(
-              context,
-              iconPath: ImagePaths.lantern_star,
-              title: 'pro_purchase_success'.i18n,
-              description: 'pro_purchase_success_descripion'.i18n,
-              actionLabel: 'continue_to_pro'.i18n,
-              agreeAction: () async {
-                await navigateHome(context);
-                return true;
-              },
-            );
+            showInfo(
+                'renewal_success'.i18n, 'pro_renewal_success_description'.i18n);
           }
         }).onError((error, stackTrace) {
           context.loaderOverlay.hide();
