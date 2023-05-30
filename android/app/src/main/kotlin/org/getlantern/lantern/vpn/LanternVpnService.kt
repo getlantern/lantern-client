@@ -19,7 +19,9 @@ import org.greenrobot.eventbus.Subscribe
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class LanternVpnService : VpnService(), Runnable {
-    private var provider: Provider? = null
+    private var provider : Provider? = null
+    private lateinit var excludedApps : List<String>
+    
     private val helper: ServiceHelper = ServiceHelper(
         this,
         R.drawable.status_connected,
@@ -63,6 +65,8 @@ class LanternVpnService : VpnService(), Runnable {
             stop()
             START_NOT_STICKY
         } else {
+            val bundle = intent.extras
+            excludedApps = bundle?.getStringArrayList("excludedApps") ?: listOf<String>()
             connect()
             START_STICKY
         }
@@ -128,7 +132,7 @@ class LanternVpnService : VpnService(), Runnable {
         Logger.d(TAG, "getOrInitProvider()")
         if (provider == null) {
             Logger.d(TAG, "Using Go tun2socks")
-            provider = GoTun2SocksProvider()
+            provider = GoTun2SocksProvider(excludedApps)
         }
         return provider
     }
