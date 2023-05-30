@@ -6,12 +6,13 @@ import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
 import internalsdk.Internalsdk
+import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import java.util.Locale
 
-class GoTun2SocksProvider : Provider {
+class GoTun2SocksProvider(val excludedApps: List<String>) : Provider {
     private var mInterface: ParcelFileDescriptor? = null
 
     @Synchronized private fun createBuilder(vpnService: VpnService, builder: VpnService.Builder): ParcelFileDescriptor? {
@@ -24,9 +25,21 @@ class GoTun2SocksProvider : Provider {
         // Configure a builder while parsing the parameters.
         builder.setMtu(VPN_MTU)
 
+        // Add applications that are denied access to the VPN connection. By default, all
+        // applications are allowed access, except those denied access via the Excluded Apps screen
+        for (packageName in excludedApps) {
+            Logger.d(TAG, "Excluding app from VPN connection: " + packageName)
+            try {
+                builder.addDisallowedApplication(packageName)
+            } catch (e: PackageManager.NameNotFoundException) {
+                Logger.e(TAG, "Unable to exclude app from VPN ", e)
+            }
+        }
+
         builder.addAddress(privateAddress, 24)
         // route IPv4 through VPN
         builder.addRoute("0.0.0.0", 0)
+
         // Don't capture traffic originating from Lantern itself in the VPN
         val ourPackageName = vpnService.getPackageName()
         try {
@@ -64,7 +77,7 @@ class GoTun2SocksProvider : Provider {
             Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks")
             val intf: ParcelFileDescriptor? = createBuilder(vpnService, builder)
             Logger.debug(TAG, "Running tun2socks")
-            if (intf != null) Internalsdk.tun2Socks(intf.getFd().toLong(), socksAddr, dnsGrabAddr, VPN_MTU.toLong())
+            if (intf != null) Internalsdk.tun2Socks(intf.getFd().toLong(), socksAddr, dnsGrabAddr, VPN_MTU.toLong(), LanternApp.getSession())
         } catch (t: Throwable) {
             Logger.e(TAG, "Exception while handling TUN device", t)
         } finally {
