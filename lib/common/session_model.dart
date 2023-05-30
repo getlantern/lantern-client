@@ -1,5 +1,4 @@
 import 'package:lantern/replica/common.dart';
-
 import 'common.dart';
 
 final sessionModel = SessionModel();
@@ -39,10 +38,6 @@ class SessionModel extends Model {
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
-  }
-
-  Widget proxyAll(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('proxyAll', builder: builder);
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
@@ -217,5 +212,11 @@ class SessionModel extends Model {
 
   Future<void> checkForUpdates() {
     return methodChannel.invokeMethod('checkForUpdates');
+  }
+
+  Future<void> openWebview(String url) {
+    return methodChannel.invokeMethod('openWebview', <String, dynamic>{
+      'url': url,
+    });
   }
 }

@@ -27,6 +27,7 @@ import (
 	"github.com/getlantern/flashlight/email"
 	"github.com/getlantern/flashlight/geolookup"
 	"github.com/getlantern/flashlight/logging"
+	"github.com/getlantern/flashlight/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/memhelper"
 	"github.com/getlantern/mtime"
@@ -72,7 +73,6 @@ type Session interface {
 	UpdateAdSettings(AdSettings) error
 	UpdateStats(string, string, string, int, int, bool) error
 	SetStaging(bool) error
-	ProxyAll() (bool, error)
 	BandwidthUpdate(int, int, int, int) error
 	Locale() (string, error)
 	GetTimeZone() (string, error)
@@ -89,6 +89,7 @@ type Session interface {
 	SetReplicaAddr(string)
 	ForceReplica() bool
 	SetChatEnabled(bool)
+	SplitTunnelingEnabled() (bool, error)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -103,7 +104,6 @@ type panickingSession interface {
 	UpdateAdSettings(AdSettings)
 	UpdateStats(string, string, string, int, int, bool)
 	SetStaging(bool)
-	ProxyAll() bool
 	BandwidthUpdate(int, int, int, int)
 	Locale() string
 	GetTimeZone() string
@@ -118,6 +118,7 @@ type panickingSession interface {
 	DeviceOS() string
 	IsProUser() bool
 	SetChatEnabled(bool)
+	SplitTunnelingEnabled() bool
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -180,8 +181,8 @@ func (s *panickingSessionImpl) SetStaging(staging bool) {
 	panicIfNecessary(s.wrapped.SetStaging(staging))
 }
 
-func (s *panickingSessionImpl) ProxyAll() bool {
-	result, err := s.wrapped.ProxyAll()
+func (s *panickingSessionImpl) SplitTunnelingEnabled() bool {
+	result, err := s.wrapped.SplitTunnelingEnabled()
 	panicIfNecessary(err)
 	return result
 }
@@ -524,7 +525,7 @@ func run(configDir, locale string,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
-		session.ProxyAll,
+		func() bool { return true },
 		func() bool { return false }, // don't intercept Google ads
 		func() bool { return false }, // do not proxy private hosts on Android
 		// TODO: allow configuring whether or not to enable reporting (just like we
@@ -551,6 +552,9 @@ func run(configDir, locale string,
 		func() string { return "" }, // only used for desktop
 		func() string { return "" }, // only used for desktop
 		func(addr string) (string, error) {
+			op := ops.Begin("reverse_dns")
+			defer op.End()
+
 			host, port, splitErr := net.SplitHostPort(addr)
 			if splitErr != nil {
 				host = addr
@@ -562,7 +566,7 @@ func run(configDir, locale string,
 			}
 			updatedHost, ok := grabber.ReverseLookup(ip)
 			if !ok {
-				return "", errors.New("invalid IP address")
+				return "", op.FailIf(errors.New("unknown IP address %v", ip))
 			}
 			if splitErr != nil {
 				return updatedHost, nil
@@ -654,14 +658,18 @@ func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	return percent, remaining, int(quota.MiBAllowed)
 }
 
+func geoLookup(session panickingSession) {
+	country := geolookup.GetCountry(0)
+	log.Debugf("Successful geolookup: country %s", country)
+	session.SetCountry(country)
+}
+
 func afterStart(session panickingSession) {
 	bandwidthUpdates(session)
 
 	go func() {
 		if <-geolookup.OnRefresh() {
-			country := geolookup.GetCountry(0)
-			log.Debugf("Successful geolookup: country %s", country)
-			session.SetCountry(country)
+			geoLookup(session)
 		}
 	}()
 }
