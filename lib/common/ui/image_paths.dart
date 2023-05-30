@@ -22,6 +22,7 @@ class ImagePaths {
   static const email = 'assets/images/email.svg';
   static const translate = 'assets/images/translate.svg';
   static const update = 'assets/images/update.svg';
+  static const split_tunneling = 'assets/images/split_tunneling.svg';
 
   // Messaging
   static const more_vert = 'assets/images/more_vert.svg';
@@ -99,6 +100,7 @@ class ImagePaths {
   static const error_outline = 'assets/images/error_outline.svg';
   static const cancel = 'assets/images/cancel.svg';
   static const delete = 'assets/images/delete.svg';
+  static const open = 'assets/images/open.svg';
   static const done_all = 'assets/images/done_all.svg';
   static const timer = 'assets/images/timer.svg';
   static const verification_alert = 'assets/images/verification_alert.svg';

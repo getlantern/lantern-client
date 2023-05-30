@@ -9,15 +9,6 @@ class Settings extends StatelessWidget {
 
   final packageInfo = PackageInfo.fromPlatform();
 
-  void openInfoProxyAll(BuildContext context) {
-    CDialog.showInfo(
-      context,
-      title: 'proxy_all'.i18n,
-      description: 'description_proxy_all_dialog'.i18n,
-      iconPath: ImagePaths.key,
-    );
-  }
-
   void changeLanguage(BuildContext context) => context.pushRoute(Language());
 
   void reportIssue() async =>
@@ -25,11 +16,18 @@ class Settings extends StatelessWidget {
 
   void checkForUpdates() async => await sessionModel.checkForUpdates();
 
+  void openSplitTunneling(BuildContext context) =>
+      context.pushRoute(SplitTunneling());
+
+  void openWebview(String url) async => await sessionModel.openWebview(url);
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
       title: 'settings'.i18n,
-      body: Column(
+      padVertical: true,
+      body: ListView(
+        shrinkWrap: true,
         children: [
           //* Language
           ListItemFactory.settingsItem(
@@ -88,54 +86,73 @@ class Settings extends StatelessWidget {
                   )
                 : const SizedBox(),
           ),
-          //* Proxy
-          sessionModel.proxyAll(
-            (BuildContext context, bool proxyAll, Widget? child) =>
+          //* Split tunneling
+          vpnModel.splitTunneling(
+            (BuildContext context, bool value, Widget? child) =>
                 ListItemFactory.settingsItem(
               header: 'VPN'.i18n,
-              icon: ImagePaths.key,
-              content: CInkWell(
-                onTap: () => openInfoProxyAll(context),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: CText(
-                        'proxy_everything_is'
-                            .i18n
-                            .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
-                        softWrap: false,
-                        style: tsSubtitle1.short,
-                      ),
+              icon: ImagePaths.split_tunneling,
+              onTap: () {
+                openSplitTunneling(context);
+              },
+              content: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: CText(
+                      'split_tunneling'.i18n,
+                      softWrap: false,
+                      style: tsSubtitle1.short,
                     ),
-                    const Padding(
-                      padding: EdgeInsetsDirectional.only(start: 4.0),
-                      child: CAssetImage(
-                        key: ValueKey('proxy_all_icon'),
-                        path: ImagePaths.info,
-                        size: 12,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               trailingArray: [
-                FlutterSwitch(
-                  width: 44.0,
-                  height: 24.0,
-                  valueFontSize: 12.0,
-                  padding: 2,
-                  toggleSize: 18.0,
-                  value: proxyAll,
-                  activeColor: indicatorGreen,
-                  inactiveColor: offSwitchColor,
-                  onToggle: (bool newValue) {
-                    sessionModel.setProxyAll(newValue);
-                  },
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
+                  child: CText(
+                    value ? 'ON'.i18n : 'OFF'.i18n,
+                    style: tsSubtitle2.copiedWith(color: pink4),
+                  ),
                 ),
+                mirrorLTR(
+                  context: context,
+                  child: const ContinueArrow(),
+                )
               ],
             ),
+          ),
+          ListItemFactory.settingsItem(
+            header: 'about'.i18n,
+            content: 'privacy_policy'.i18n,
+            onTap: () => openWebview('https://lantern.io/privacy'),
+            trailingArray: [
+              mirrorLTR(
+                context: context,
+                child: const Padding(
+                  padding: EdgeInsetsDirectional.only(start: 4.0),
+                  child: CAssetImage(
+                    path: ImagePaths.open,
+                  ),
+                ),
+              )
+            ],
+          ),
+          ListItemFactory.settingsItem(
+            content: 'terms_of_service'.i18n,
+            trailingArray: [
+              mirrorLTR(
+                context: context,
+                child: const Padding(
+                  padding: EdgeInsetsDirectional.only(start: 4.0),
+                  child: CAssetImage(
+                    path: ImagePaths.open,
+                  ),
+                ),
+              )
+            ],
+            onTap: () => openWebview('https://lantern.io/terms'),
           ),
           //* Build version
           FutureBuilder<PackageInfo>(
@@ -180,9 +197,7 @@ class Settings extends StatelessWidget {
                       ),
                       child: sessionModel.sdkVersion(
                         (context, sdkVersion, _) => CText(
-                          'sdk_version'
-                              .i18n
-                              .fill([sdkVersion]),
+                          'sdk_version'.i18n.fill([sdkVersion]),
                           style: tsOverline.copiedWith(color: pink4),
                         ),
                       ),

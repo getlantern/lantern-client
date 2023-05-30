@@ -112,7 +112,7 @@
         android:id="@+id/tvShare"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/referral_code_share_description_pro"
+        android:text="@string/referral_code_share_description"
         android:layout_marginHorizontal="@dimen/space_large"
         android:layout_marginTop="@dimen/space_large"
         android:textAppearance="?attr/textAppearanceBody2"

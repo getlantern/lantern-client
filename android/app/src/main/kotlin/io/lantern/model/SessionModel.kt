@@ -1,17 +1,19 @@
 package io.lantern.model
 
 import android.app.Activity
+import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
+import internalsdk.Internalsdk
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import internalsdk.Internalsdk
 import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
@@ -20,6 +22,7 @@ import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
+import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
@@ -40,7 +43,6 @@ class SessionModel(
         private const val TAG = "SessionModel"
 
         const val PATH_PRO_USER = "prouser"
-        const val PATH_PROXY_ALL = "proxyAll"
         const val PATH_SDK_VERSION = "sdkVersion"
     }
 
@@ -49,28 +51,11 @@ class SessionModel(
             // initialize data for fresh install // TODO remove the need to do this for each data path
             tx.put(
                 PATH_PRO_USER,
-                castToBoolean(tx.get(PATH_PRO_USER), false)
-            )
-            tx.put(
-                PATH_PROXY_ALL,
-                castToBoolean(tx.get(PATH_PROXY_ALL), false)
+                castToBoolean(tx.get(PATH_PRO_USER), false),
             )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
-        }
-    }
-
-    /**
-     * Sometimes, preferences values from old clients that are supposed to be booleans will actually
-     * be stored as numeric values or as strings. This normalizes them all to Booleans.
-     */
-    private fun castToBoolean(value: Any?, defaultValue: Boolean): Boolean {
-        return when (value) {
-            is Boolean -> value
-            is Number -> value.toInt() == 1
-            is String -> value.toBoolean()
-            else -> defaultValue
         }
     }
 
@@ -87,9 +72,13 @@ class SessionModel(
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
         return when (call.method) {
-            "setProxyAll" -> {
-                val on = call.argument("on") ?: false
-                saveProxyAll(on)
+            "openWebview" -> {
+                val url = call.argument("url") ?: ""
+                url.isNotEmpty().let {
+                    val intent = Intent(activity, WebViewActivity_::class.java)
+                    intent.putExtra("url", url)
+                    activity.startActivity(intent)
+                }
             }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
@@ -118,12 +107,6 @@ class SessionModel(
         }
     }
 
-    private fun saveProxyAll(on: Boolean) {
-        db.mutate { tx ->
-            tx.put(PATH_PROXY_ALL, on)
-        }
-    }
-
     private fun authorizeViaEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
         Logger.debug(TAG, "Start Account recovery with email $emailAddress")
 
@@ -133,7 +116,8 @@ class SessionModel(
             .build()
 
         lanternClient.post(
-            LanternHttpClient.createProUrl("/user-recover"), formBody,
+            LanternHttpClient.createProUrl("/user-recover"),
+            formBody,
             object : ProCallback {
                 override fun onSuccess(response: Response?, result: JsonObject?) {
                     Logger.debug(TAG, "Account recovery response: $result")
@@ -144,10 +128,12 @@ class SessionModel(
                         LanternApp.getSession().linkDevice()
                         LanternApp.getSession().setIsProUser(true)
                         activity.showAlertDialog(
-                            activity.getString(R.string.device_added), activity.getString(R.string.device_authorized_pro), ContextCompat.getDrawable(activity, R.drawable.ic_filled_check),
+                            activity.getString(R.string.device_added),
+                            activity.getString(R.string.device_authorized_pro),
+                            ContextCompat.getDrawable(activity, R.drawable.ic_filled_check),
                             {
                                 activity.openHome()
-                            }
+                            },
                         )
                     } else {
                         Logger.error(TAG, "Got empty recovery result, can't continue")
@@ -179,7 +165,7 @@ class SessionModel(
                         Logger.error(TAG, "Unknown error recovering account:$error")
                     }
                 }
-            }
+            },
         )
     }
 
@@ -207,7 +193,8 @@ class SessionModel(
             .build()
         Logger.debug(TAG, "Validating link request; code:$code")
         lanternClient.post(
-            LanternHttpClient.createProUrl("/user-link-validate"), formBody,
+            LanternHttpClient.createProUrl("/user-link-validate"),
+            formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to validate link code", t)
@@ -238,7 +225,7 @@ class SessionModel(
                         activity.showAlertDialog(activity.getString(R.string.device_added), activity.getString(R.string.device_authorized_pro), ContextCompat.getDrawable(activity, R.drawable.ic_filled_check), { activity.openHome() })
                     }
                 }
-            }
+            },
         )
     }
 
@@ -248,7 +235,8 @@ class SessionModel(
             .build()
 
         lanternClient.post(
-            LanternHttpClient.createProUrl("/link-code-approve"), formBody,
+            LanternHttpClient.createProUrl("/link-code-approve"),
+            formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error approving device link code: $error")
@@ -274,7 +262,7 @@ class SessionModel(
                         }
                     })
                 }
-            }
+            },
         )
     }
 
@@ -285,7 +273,8 @@ class SessionModel(
             .build()
 
         lanternClient.post(
-            LanternHttpClient.createProUrl("/user-link-remove"), formBody,
+            LanternHttpClient.createProUrl("/user-link-remove"),
+            formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     if (error != null) {
@@ -325,7 +314,7 @@ class SessionModel(
                         }
                     })
                 }
-            }
+            },
         )
     }
 }
