@@ -1,12 +1,12 @@
-import 'package:file_picker/file_picker.dart';
-import 'package:lantern/vpn/vpn.dart';
-import 'package:video_player/video_player.dart';
-import 'package:mime/mime.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
-import 'package:lantern/replica/common.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:path/path.dart' as path;
+import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:lantern/replica/common.dart';
+import 'package:lantern/vpn/vpn.dart';
+import 'package:mime/mime.dart';
+import 'package:path/path.dart' as path;
+import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 // renderReplicaLongPressMenuItem is used for rendering list/grid items located
 // in the ./ui/replica/list_item directory
@@ -285,7 +285,10 @@ Widget renderMimeIcon(String filename, double scaleBy) {
 
 /// Renders an animated hash-specific color gradient with mime icon
 Widget renderAnimatedMimeIcon(
-    String filename, ReplicaLink replicaLink, double animatedValue) {
+  String filename,
+  ReplicaLink replicaLink,
+  double animatedValue,
+) {
   final fileExtension = getExtension(filename).toLowerCase();
   return SizedBox(
     height: 60,

@@ -32,6 +32,7 @@ import 'package:lantern/replica/ui/viewers/misc.dart';
 import 'package:lantern/replica/upload/title.dart';
 import 'package:lantern/replica/upload/description.dart';
 import 'package:lantern/replica/upload/review.dart';
+import 'package:lantern/vpn/vpn_split_tunneling.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -62,6 +63,14 @@ import 'package:lantern/replica/upload/review.dart';
       page: Settings,
       name: 'Settings',
       path: 'settings',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: SplitTunneling,
+      name: 'SplitTunneling',
+      path: 'splitTunneling',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
