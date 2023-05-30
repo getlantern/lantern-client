@@ -5,6 +5,7 @@ import 'package:lantern/flutter_driver_extensions/add_dummy_contacts_command_ext
 import 'package:lantern/flutter_driver_extensions/navigate_command_extension.dart';
 import 'package:lantern/flutter_driver_extensions/reset_flags_command_extension.dart';
 import 'package:lantern/flutter_driver_extensions/send_dummy_files_command_extension.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'app.dart';
 
@@ -28,7 +29,16 @@ Future<void> main() async {
       ],
     );
   }
-  WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  setupCatcherAndRun(LanternApp());
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = 'https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353';
+    },
+    // Init your App.
+    appRunner: () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      await SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp]);
+      setupCatcherAndRun(LanternApp());
+    },
+  );
 }
