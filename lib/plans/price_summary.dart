@@ -21,7 +21,7 @@ class PriceSummary extends StatelessWidget {
     final formattedPricePerYear =
         selectedPlan.totalCost.split(' ').first;
     final bonus = selectedPlan.formattedBonus;
-    return Container(
+    return Padding(
       padding: const EdgeInsetsDirectional.only(top: 8.0),
       child: Column(
         children: [
