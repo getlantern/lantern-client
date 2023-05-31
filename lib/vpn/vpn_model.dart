@@ -66,14 +66,14 @@ class VpnModel extends Model {
     );
   }
 
-  Future<void> addExcludedApp(String packageName) {
-    return methodChannel.invokeMethod('addExcludedApp', <String, dynamic>{
+  Future<void> allowAppAccess(String packageName) {
+    return methodChannel.invokeMethod('allowAppAccess', <String, dynamic>{
       'packageName': packageName,
     });
   }
 
-  Future<void> removeExcludedApp(String packageName) {
-    return methodChannel.invokeMethod('removeExcludedApp', <String, dynamic>{
+  Future<void> denyAppAccess(String packageName) {
+    return methodChannel.invokeMethod('denyAppAccess', <String, dynamic>{
       'packageName': packageName,
     });
   }

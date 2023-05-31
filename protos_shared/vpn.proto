@@ -18,7 +18,7 @@ message AppData {
   string packageName = 1;
   string name = 2;
   string icon = 3;
-  bool isExcluded = 4;
+  bool allowedAccess = 4;
 }
 
 message Device {
