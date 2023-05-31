@@ -26,10 +26,10 @@ public class GoTun2SocksProvider implements Provider {
 
   private ParcelFileDescriptor mInterface;
 
-  private List<String> excludedApps;
+  private List<String> appsAllowedAccess;
 
-  public GoTun2SocksProvider(List<String> excludedApps) {
-    this.excludedApps = excludedApps;
+  public GoTun2SocksProvider(List<String> appsAllowedAccess) {
+    this.appsAllowedAccess = appsAllowedAccess;
   }
 
   private synchronized ParcelFileDescriptor createBuilder(final VpnService vpnService,
@@ -43,12 +43,13 @@ public class GoTun2SocksProvider implements Provider {
     // Configure a builder while parsing the parameters.
     builder.setMtu(VPN_MTU);
 
-    // Add applications that are denied access to the VPN connection. By default, all
-    // applications are allowed access, except those denied access via the Excluded Apps screen
-    for (String packageName : excludedApps) {
-      Logger.debug(TAG, "Excluding app from VPN connection: " + packageName);
+    // Adds an application that's allowed to access the VPN connection. 
+    // If this method is called at least once, only applications added through 
+    // this method (and no others) are allowed access.
+    for (String packageName : appsAllowedAccess) {
+      Logger.debug(TAG, "Allowing app access to VPN connection: " + packageName);
       try {
-        builder.addDisallowedApplication(packageName);
+        builder.addAllowedApplication(packageName);
       } catch (PackageManager.NameNotFoundException e) {
         Logger.error(TAG, "Unable to exclude app from VPN ", e);
       }
@@ -58,12 +59,16 @@ public class GoTun2SocksProvider implements Provider {
     builder.addAddress(privateAddress, 24);
     // route IPv4 through VPN
     builder.addRoute("0.0.0.0", 0);
-    // Don't capture traffic originating from Lantern itself in the VPN
-    String ourPackageName = vpnService.getPackageName();
-    try {
-      builder.addDisallowedApplication(ourPackageName);
-    } catch (PackageManager.NameNotFoundException e) {
-      throw new RuntimeException("Unable to exclude Lantern from routes", e);
+    // Don't capture traffic originating from Lantern itself in the VPN. If split tunneling is enabled, and
+    // any apps were allowed access to the VPN connection, we skip adding our own app as a disallowed application
+    // to avoid a "addAllowedApplication already called" UnsupportedOperationException
+    if (appsAllowedAccess == null || appsAllowedAccess.size() == 0) {
+      try {
+        String ourPackageName = vpnService.getPackageName();
+        builder.addDisallowedApplication(ourPackageName);
+      } catch (PackageManager.NameNotFoundException e) {
+        throw new RuntimeException("Unable to exclude Lantern from routes", e);
+      }
     }
     // don't currently route IPv6 through VPN because our proxies don't currently support IPv6
     // see https://github.com/getlantern/lantern-internal/issues/4961

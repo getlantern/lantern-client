@@ -40,12 +40,12 @@ const AppData$json = const {
     const {'1': 'packageName', '3': 1, '4': 1, '5': 9, '10': 'packageName'},
     const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     const {'1': 'icon', '3': 3, '4': 1, '5': 9, '10': 'icon'},
-    const {'1': 'isExcluded', '3': 4, '4': 1, '5': 8, '10': 'isExcluded'},
+    const {'1': 'allowedAccess', '3': 4, '4': 1, '5': 8, '10': 'allowedAccess'},
   ],
 };
 
 /// Descriptor for `AppData`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List appDataDescriptor = $convert.base64Decode('CgdBcHBEYXRhEiAKC3BhY2thZ2VOYW1lGAEgASgJUgtwYWNrYWdlTmFtZRISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGljb24YAyABKAlSBGljb24SHgoKaXNFeGNsdWRlZBgEIAEoCFIKaXNFeGNsdWRlZA==');
+final $typed_data.Uint8List appDataDescriptor = $convert.base64Decode('CgdBcHBEYXRhEiAKC3BhY2thZ2VOYW1lGAEgASgJUgtwYWNrYWdlTmFtZRISCgRuYW1lGAIgASgJUgRuYW1lEhIKBGljb24YAyABKAlSBGljb24SJAoNYWxsb3dlZEFjY2VzcxgEIAEoCFINYWxsb3dlZEFjY2Vzcw==');
 @$core.Deprecated('Use deviceDescriptor instead')
 const Device$json = const {
   '1': 'Device',

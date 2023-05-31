@@ -59,10 +59,10 @@ class VpnModel(
                 val on = call.argument("on") ?: false
                 saveSplitTunneling(on)
             }
-            "addExcludedApp" -> {
+            "allowAppAccess" -> {
               updateAppData(call.argument("packageName")!!, true)
             }
-            "removeExcludedApp" -> {
+            "denyAppAccess" -> {
               updateAppData(call.argument("packageName")!!, false)
             }
             else -> super.doMethodCall(call, notImplemented)
@@ -73,15 +73,16 @@ class VpnModel(
       return db.get(PATH_SPLIT_TUNNELING) ?: false
     }
 
-    // excludedApps returns a list of package names for those apps that should be excluded from
-    // the VPN connection
-    fun excludedApps():List<String> {
-      var allApps = db.list<Vpn.AppData>(PATH_APPS_DATA + "%")
-      val excludedApps = mutableListOf<String>()
-      for (appData in allApps) {
-        if (appData.value.isExcluded) excludedApps.add(appData.value.packageName)
+    // appsAllowedAccess returns a list of package names for those applications that are allowed
+    // to access the VPN connection. If any split tunneling is enabled, and any app is added to
+    // the list, only those applications (and no others) are allowed access.
+    fun appsAllowedAccess():List<String> {
+      var installedApps = db.list<Vpn.AppData>(PATH_APPS_DATA + "%")
+      val apps = mutableListOf<String>()
+      for (appData in installedApps) {
+        if (appData.value.allowedAccess) apps.add(appData.value.packageName)
       }
-      return excludedApps
+      return apps
     }
 
     private fun saveSplitTunneling(value: Boolean) {
@@ -91,14 +92,19 @@ class VpnModel(
     }
 
     // updateAppData looks up the app data for the given package name and updates whether or
-    // not the app is excluded from the VPN connection in the database
-    fun updateAppData(packageName: String, isExcluded: Boolean) {
+    // not the app is allowed access to the VPN connection in the database
+    fun updateAppData(packageName: String, allowedAccess: Boolean) {
+        if (allowedAccess) {
+            Logger.d(TAG, "Allow $packageName access to VPN connection")
+        } else {
+            Logger.d(TAG, "Denying $packageName access to VPN connection")
+        }
         db.mutate { tx ->
             var appData = tx.get<Vpn.AppData>(PATH_APPS_DATA + packageName)
             appData?.let {
                 tx.put(PATH_APPS_DATA + packageName, Vpn.AppData.newBuilder()
                     .setPackageName(appData.packageName).setIcon(appData.icon)
-                    .setName(appData.name).setIsExcluded(isExcluded).build())
+                    .setName(appData.name).setAllowedAccess(allowedAccess).build())
             }
         }
     }

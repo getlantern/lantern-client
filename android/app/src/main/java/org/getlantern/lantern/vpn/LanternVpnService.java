@@ -36,7 +36,7 @@ public class LanternVpnService extends VpnService implements Runnable {
 
     private Provider mProvider = null;
 
-    private List<String> excludedApps = null;
+    private List<String> appsAllowedAccess = null;
 
     final private ServiceHelper helper = new ServiceHelper(
             this,
@@ -59,7 +59,7 @@ public class LanternVpnService extends VpnService implements Runnable {
         Logger.d(TAG, "getOrInitProvider()");
         if (mProvider == null) {
             Logger.d(TAG, "Using Go tun2socks");
-            mProvider = new GoTun2SocksProvider(excludedApps);
+            mProvider = new GoTun2SocksProvider(appsAllowedAccess);
         }
         return mProvider;
     }
@@ -97,7 +97,7 @@ public class LanternVpnService extends VpnService implements Runnable {
             return START_NOT_STICKY;
         } else {
             Bundle bundle = intent.getExtras();
-            excludedApps = bundle.getStringArrayList("excludedApps");
+            appsAllowedAccess = bundle.getStringArrayList("appsAllowedAccess");
             connect();
             return START_STICKY;
         }
