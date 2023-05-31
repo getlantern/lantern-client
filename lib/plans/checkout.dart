@@ -206,7 +206,7 @@ class _CheckoutState extends State<Checkout>
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel.countryCode(
+    return sessionModel.geoCountryCode(
         (BuildContext sessionContext, String countryCode, Widget? child) {
       return BaseScreen(
         resizeToAvoidBottomInset: false,
