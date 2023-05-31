@@ -15,7 +15,8 @@ class VpnModel(
 ) : BaseModel("vpn", flutterEngine, masterDB.withSchema(VPN_SCHEMA)) {
 
     private val appsDataProvider: AppsDataProvider = AppsDataProvider(
-        activity.getPackageManager(), activity.getPackageName())
+        activity.packageManager, activity.packageName
+    )
 
     companion object {
         private const val TAG = "VpnModel"
