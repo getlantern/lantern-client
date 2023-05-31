@@ -57,6 +57,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                           var newValue = value ?? false;
                           setState(() {
                             vpnModel.setSplitTunneling(newValue);
+                            showRestartVPNSnackBar(context);
                           });
                         },
                       ),

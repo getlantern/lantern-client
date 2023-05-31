@@ -668,14 +668,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     }
 
     private fun startVpnService() {
+        val splitTunnelingEnabled = vpnModel.splitTunnelingEnabled()
         val appsAllowedAccess = ArrayList(vpnModel.appsAllowedAccess())
-        Logger.d(TAG, "Apps allowed access to VPN connection: ${appsAllowedAccess}")
+        Logger.d(TAG, "Apps allowed access to VPN connection: $appsAllowedAccess")
         val intent: Intent = Intent(
             this,
             LanternVpnService::class.java,
         ).apply {
+            putExtra("splitTunnelingEnabled", splitTunnelingEnabled)
             putStringArrayListExtra("appsAllowedAccess", appsAllowedAccess)
-            setAction(LanternVpnService.ACTION_CONNECT)
+            action = LanternVpnService.ACTION_CONNECT
         }
 
         startService(intent)

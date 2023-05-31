@@ -36,6 +36,7 @@ public class LanternVpnService extends VpnService implements Runnable {
 
     private Provider mProvider = null;
 
+    private boolean splitTunnelingEnabled = false;
     private List<String> appsAllowedAccess = null;
 
     final private ServiceHelper helper = new ServiceHelper(
@@ -59,7 +60,11 @@ public class LanternVpnService extends VpnService implements Runnable {
         Logger.d(TAG, "getOrInitProvider()");
         if (mProvider == null) {
             Logger.d(TAG, "Using Go tun2socks");
-            mProvider = new GoTun2SocksProvider(appsAllowedAccess);
+            mProvider = new GoTun2SocksProvider(
+                    getPackageManager(),
+                    splitTunnelingEnabled,
+                    appsAllowedAccess
+            );
         }
         return mProvider;
     }
@@ -97,6 +102,7 @@ public class LanternVpnService extends VpnService implements Runnable {
             return START_NOT_STICKY;
         } else {
             Bundle bundle = intent.getExtras();
+            splitTunnelingEnabled = bundle.getBoolean("splitTunnelingEnabled");
             appsAllowedAccess = bundle.getStringArrayList("appsAllowedAccess");
             connect();
             return START_STICKY;
