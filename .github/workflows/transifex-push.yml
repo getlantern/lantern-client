@@ -22,5 +22,4 @@ jobs:
         run: |
           sudo apt-get install python3-pip 
           pip install transifex-client
-          tx init --force --no-interactive
-          tx push -s
+          make android-push-translations
