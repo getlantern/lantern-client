@@ -78,6 +78,11 @@ class SessionModel extends Model {
     });
   }
 
+  Widget geoCountryCode(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>('geo_country_code',
+        builder: builder);
+  }
+
   Widget playVersion(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
   }
