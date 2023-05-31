@@ -120,7 +120,7 @@ msgid "Link Device"
 msgstr "پیوند دادن دستگاه"
 
 msgid "Upgrade to Lantern Pro"
-msgstr "رتقاء به نسخه Pro  فانوس"
+msgstr "ارتقا به نسخه پرو فانوس"
 
 msgid "Invite Friends"
 msgstr "دعوت از دوستان"
@@ -177,7 +177,7 @@ msgid "VPN"
 msgstr "VPN"
 
 msgid "Authorize Device for Pro"
-msgstr "تایید دستگاه برای نسخه حرفه ای"
+msgstr "تایید دستگاه برای نسخه حرفه‌ای"
 
 msgid "Authorize with Device Linking Pin"
 msgstr "تأیید با «پین اتصال دستگاه»"
