@@ -74,7 +74,7 @@ class VpnModel(
     }
 
     // appsAllowedAccess returns a list of package names for those applications that are allowed
-    // to access the VPN connection. If any split tunneling is enabled, and any app is added to
+    // to access the VPN connection. If split tunneling is enabled, and any app is added to
     // the list, only those applications (and no others) are allowed access.
     fun appsAllowedAccess():List<String> {
       var installedApps = db.list<Vpn.AppData>(PATH_APPS_DATA + "%")
@@ -94,11 +94,6 @@ class VpnModel(
     // updateAppData looks up the app data for the given package name and updates whether or
     // not the app is allowed access to the VPN connection in the database
     fun updateAppData(packageName: String, allowedAccess: Boolean) {
-        if (allowedAccess) {
-            Logger.d(TAG, "Allow $packageName access to VPN connection")
-        } else {
-            Logger.d(TAG, "Denying $packageName access to VPN connection")
-        }
         db.mutate { tx ->
             var appData = tx.get<Vpn.AppData>(PATH_APPS_DATA + packageName)
             appData?.let {
