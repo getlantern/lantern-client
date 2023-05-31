@@ -25,11 +25,11 @@ class AppsDataProvider(
         !isSelfApplication(appInfo.packageName)
     }
 
-    fun ByteArray.toBase64(): String = String(Base64.getEncoder().encode(this))
+    private fun ByteArray.toBase64(): String = String(Base64.getEncoder().encode(this))
 
     // appIconDrawableToBase64 retrieves the icon associated with an application, converts it to
     // a Bitmap, and then to a Base64-encoded byte array prior to being sent to Flutter
-    fun appIconDrawableToBase64(packageName:String): String {
+    private fun appIconDrawableToBase64(packageName:String): String {
       try {
         val icon:Drawable = packageManager.getApplicationIcon(packageName)
         val bitmap:Bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888)

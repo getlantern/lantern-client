@@ -179,7 +179,7 @@ class AppData extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'packageName', protoName: 'packageName')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'icon')
-    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isExcluded', protoName: 'isExcluded')
+    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'allowedAccess', protoName: 'allowedAccess')
     ..hasRequiredFields = false
   ;
 
@@ -188,7 +188,7 @@ class AppData extends $pb.GeneratedMessage {
     $core.String? packageName,
     $core.String? name,
     $core.String? icon,
-    $core.bool? isExcluded,
+    $core.bool? allowedAccess,
   }) {
     final _result = create();
     if (packageName != null) {
@@ -200,8 +200,8 @@ class AppData extends $pb.GeneratedMessage {
     if (icon != null) {
       _result.icon = icon;
     }
-    if (isExcluded != null) {
-      _result.isExcluded = isExcluded;
+    if (allowedAccess != null) {
+      _result.allowedAccess = allowedAccess;
     }
     return _result;
   }
@@ -254,13 +254,13 @@ class AppData extends $pb.GeneratedMessage {
   void clearIcon() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.bool get isExcluded => $_getBF(3);
+  $core.bool get allowedAccess => $_getBF(3);
   @$pb.TagNumber(4)
-  set isExcluded($core.bool v) { $_setBool(3, v); }
+  set allowedAccess($core.bool v) { $_setBool(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasIsExcluded() => $_has(3);
+  $core.bool hasAllowedAccess() => $_has(3);
   @$pb.TagNumber(4)
-  void clearIsExcluded() => clearField(4);
+  void clearAllowedAccess() => clearField(4);
 }
 
 class Device extends $pb.GeneratedMessage {
