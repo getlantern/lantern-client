@@ -231,15 +231,13 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 val dialogView = inflater.inflate(R.layout.init_account_dialog, null)
                 accountInitDialog.setView(dialogView)
                 val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
-                tvMessage.setText(getString(R.string.init_account, appName))
+                tvMessage.text = getString(R.string.init_account, appName)
                 dialogView.findViewById<View>(R.id.btnCancel)
-                    .setOnClickListener(object : View.OnClickListener {
-                        override fun onClick(v: View?) {
-                            EventBus.getDefault().removeStickyEvent(status)
-                            accountInitDialog.dismiss()
-                            finish()
-                        }
-                    })
+                    .setOnClickListener {
+                        EventBus.getDefault().removeStickyEvent(status)
+                        accountInitDialog.dismiss()
+                        finish()
+                    }
                 accountInitDialog.show()
             }
 

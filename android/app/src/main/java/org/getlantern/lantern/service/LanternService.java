@@ -53,8 +53,7 @@ public class LanternService extends Service implements Runnable {
     private final CreateUser createUserRunnable = new CreateUser();
 
     private final Random random = new Random();
-    // initial number of ms to wait until we try creating a new Pro user
-    private final int baseWaitMs = 3000;
+    private final int baseCreateUserRetryDelay = 3000; // milliseconds
 
     private final ServiceHelper helper = new ServiceHelper(
             this,
@@ -147,8 +146,14 @@ public class LanternService extends Service implements Runnable {
     }
 
     private void createUser(final int attempt) {
-        final int timeOut = baseWaitMs * Math.max(1, random.nextInt(1 << attempt));
-        createUserHandler.postDelayed(createUserRunnable, timeOut);
+        long waitTime = 0;
+        if (attempt > 0) {
+            // on retries, wait a little bit
+            waitTime = Math.round(baseCreateUserRetryDelay * (1.0 + random.nextFloat()));
+        }
+        waitTime = 100;
+        Logger.d(TAG, "createUser waiting ms: " + waitTime);
+        createUserHandler.postDelayed(createUserRunnable, waitTime);
     }
 
     private static class InvalidUserException extends RuntimeException {
