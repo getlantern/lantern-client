@@ -59,9 +59,10 @@ public class GoTun2SocksProvider implements Provider {
     builder.addAddress(privateAddress, 24);
     // route IPv4 through VPN
     builder.addRoute("0.0.0.0", 0);
-    // Don't capture traffic originating from Lantern itself in the VPN. If split tunneling is enabled, and
-    // any apps were allowed access to the VPN connection, we skip adding our own app as a disallowed application
-    // to avoid a "addAllowedApplication already called" UnsupportedOperationException
+    // Don't capture traffic originating from Lantern itself in the VPN. If split tunneling 
+    // is enabled, and any apps are allowed access to the VPN connection, we skip adding our
+    // own app as a disallowed application to avoid an "addAllowedApplication already called" 
+    // UnsupportedOperationException
     if (appsAllowedAccess == null || appsAllowedAccess.size() == 0) {
       try {
         String ourPackageName = vpnService.getPackageName();
