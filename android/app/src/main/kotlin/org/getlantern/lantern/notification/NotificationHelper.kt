@@ -102,6 +102,7 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
                     disconnectBroadcast(),
                 ).build(),
             )
+            .setOngoing(true)
             .setShowWhen(true)
             .setSmallIcon(R.drawable.lantern_notification_icon)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
