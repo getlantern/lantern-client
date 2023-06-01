@@ -174,7 +174,7 @@ msgid "VPN Status"
 msgstr "وضعیت VPN"
 
 msgid "VPN"
-msgstr "VPN"
+msgstr "فیلترشکن"
 
 msgid "Authorize Device for Pro"
 msgstr "تایید دستگاه برای نسخه حرفه‌ای"
@@ -324,6 +324,9 @@ msgstr "اطلاعات مخاطب شما"
 
 msgid "display_name"
 msgstr "نام نمایشی"
+
+msgid "split_tunneling"
+msgstr "جداسازی تونل"
 
 msgid "edit"
 msgstr "ویرایش"
@@ -1185,6 +1188,21 @@ msgstr "حالا این پیام باید به‌زودی ناپدید شود!"
 
 msgid "test_replica_search"
 msgstr "گربه"
+
+msgid "ON"
+msgstr "روشن"
+
+msgid "OFF"
+msgstr "خاموش"
+
+msgid "privacy_policy"
+msgstr "حریم خصوصی"
+
+msgid "terms_of_service"
+msgstr "شرایط استفاده"
+
+
+
 
 msgid "discover_disclaimer"
 msgstr ""
