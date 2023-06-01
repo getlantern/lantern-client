@@ -99,7 +99,7 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
                 ).build(),
             )
             .setShowWhen(true)
-            .setSmallIcon(R.drawable.status_connected)
+            .setSmallIcon(R.drawable.notification_icon)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
     }
 }
