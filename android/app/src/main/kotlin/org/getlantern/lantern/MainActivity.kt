@@ -36,8 +36,10 @@ import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
+import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
+import org.getlantern.lantern.model.PaymentProviders
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
@@ -282,6 +284,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
         updateUserPlans()
+        plansV3()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -350,6 +353,18 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
                 }
                 LanternApp.getSession().setUserPlans(plans)
+                Logger.debug(TAG, "Successfully updated user plans")
+             }
+         }, null)
+     }
+
+    private fun plansV3() {
+        lanternClient.plansV3(object : PlansV3Callback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+            }
+
+            override fun onSuccess(proPlans: Map<String, ProPlan>, providers: List<PaymentProviders>) {
                 Logger.debug(TAG, "Successfully updated user plans")
              }
          }, null)
