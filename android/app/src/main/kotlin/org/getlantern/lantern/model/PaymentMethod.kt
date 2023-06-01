@@ -10,7 +10,11 @@ enum class PaymentMethod(val method: String) {
 	WeChatPay("wechatpay")
 }
 
-data class PaymentMethodResponse(
+data class PaymentProviders(
   @SerializedName("method") val method: PaymentMethod, 
   @SerializedName("providers") val providers: List<ProviderInfo>
+)
+
+data class PaymentMethodResponse(
+  @SerializedName("providers") val providers: Map<String, List<PaymentProviders>>
 )
