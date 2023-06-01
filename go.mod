@@ -2,6 +2,10 @@ module github.com/getlantern/android-lantern
 
 go 1.19
 
+// replace github.com/getlantern/flashlight => ../flashlight
+
+// replace github.com/getlantern/fronted => ../fronted
+
 // v0.5.6 has a security issue and using require leaves a reference to it in go.sum
 replace github.com/ulikunitz/xz => github.com/ulikunitz/xz v0.5.8
 
