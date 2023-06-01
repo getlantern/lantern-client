@@ -20,7 +20,6 @@ jobs:
         env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
         run: |
-          sudo apt-get install python3-pip 
+          sudo apt-get install python3-pip
           pip install transifex-client
-          tx init --force --no-interactive
-          tx push -s
+          make android-push-translations

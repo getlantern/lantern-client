@@ -20,9 +20,9 @@ jobs:
       env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
       run: |
-        curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
-        source /home/runner/.bashrc
-        tx pull --minimum-perc 90 -f
+        sudo apt-get install python3-pip
+        pip install transifex-client
+        make android-pull-translations
         git config user.name git
         git config user.email github-actions@github.com
         git ls-files --modified public/locale | xargs git add
