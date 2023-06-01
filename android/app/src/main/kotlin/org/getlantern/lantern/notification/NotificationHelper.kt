@@ -47,15 +47,19 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         manager.createNotificationChannel(notificationChannel)
     }
 
-    private fun disconnectBroadcast(): PendingIntent {
-        val intent = Intent(activity, NotificationReceiver::class.java)
+    fun disconnectIntent(): Intent {
         val packageName = activity.packageName
-        intent.action = "$packageName.intent.VPN_DISCONNECTED"
+        return Intent(activity, NotificationReceiver::class.java).apply {
+            action = "$packageName.intent.VPN_DISCONNECTED"
+        }
+    }
+
+    private fun disconnectBroadcast(): PendingIntent {
         // Retrieve a PendingIntent that will perform a broadcast
         return PendingIntent.getBroadcast(
             activity,
             0,
-            intent,
+            disconnectIntent(),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
         )
     }
@@ -78,7 +82,7 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         private val TAG = NotificationHelper::class.java.simpleName
         private const val LANTERN_NOTIFICATION = "lantern.notification"
         private const val DATA_USAGE = 36
-        private const val VPN_CONNECTED = 37
+        const val VPN_CONNECTED = 37
         private const val CHANNEL_VPN = "vpn"
         private const val CHANNEL_DATA_USAGE = "data_usage"
         private const val VPN_DESC = "VPN"
