@@ -10,18 +10,15 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-import android.view.View
-import android.widget.RemoteViews
 import org.getlantern.lantern.R
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class NotificationHelper(private val activity: Activity, private val receiver: NotificationReceiver) : ContextWrapper(activity) {
 
     // Used to notify a user of events that happen in the background
     private val manager: NotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     private val builder: Notification.Builder
-    //private val dropDown: DropDownNav
+
+    // private val dropDown: DropDownNav
     private lateinit var dataUsageNotificationChannel: NotificationChannel
     private lateinit var vpnNotificationChannel: NotificationChannel
 
@@ -60,17 +57,8 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
             activity,
             0,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
         )
-    }
-
-    private fun createContentView(): RemoteViews {
-        var contentView: RemoteViews = RemoteViews(packageName, R.layout.notification)
-        contentView.setImageViewResource(R.id.image, R.drawable.lantern_notification_icon)
-        contentView.setTextViewText(R.id.title, baseContext.getText(R.string.service_connected))
-        contentView.setOnClickPendingIntent(R.id.disconnect, disconnectBroadcast())
-        contentView.setTextViewText(R.id.time, LocalDateTime.now().format(DateTimeFormatter.ofPattern("h:mm a")))
-        return contentView
     }
 
     public fun vpnConnectedNotification() {
@@ -82,8 +70,6 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         builder.setChannelId(CHANNEL_DATA_USAGE)
         manager.notify(1234, builder.build())
     }
-
-
 
     fun clearNotification() {
         manager.cancelAll()
@@ -106,7 +92,14 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
             initChannels()
         }
         builder = Notification.Builder(this)
-            .setContent(createContentView())
+            .setContentTitle(activity.getString(R.string.service_connected))
+            .addAction(
+                Notification.Action.Builder(
+                    android.R.drawable.ic_delete,
+                    activity.getString(R.string.disconnect),
+                    disconnectBroadcast(),
+                ).build(),
+            )
             .setSmallIcon(R.drawable.lantern_notification_icon)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
     }
