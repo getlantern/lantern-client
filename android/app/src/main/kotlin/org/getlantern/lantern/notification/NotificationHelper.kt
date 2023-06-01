@@ -8,6 +8,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.ContextWrapper
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import org.getlantern.lantern.R
@@ -99,7 +100,9 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
                 ).build(),
             )
             .setShowWhen(true)
-            .setSmallIcon(R.drawable.notification_icon)
+            .setSmallIcon(R.drawable.lantern_notification_icon)
+            .setLargeIcon(BitmapFactory.decodeResource(activity.resources, 
+                R.drawable.lantern_notification_icon))
             .setVisibility(Notification.VISIBILITY_PUBLIC)
     }
 }
