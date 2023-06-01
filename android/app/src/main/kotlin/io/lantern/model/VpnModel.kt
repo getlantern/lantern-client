@@ -5,15 +5,14 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.lantern.apps.AppData
 import io.lantern.apps.AppsDataProvider
-import org.getlantern.mobilesdk.Logger
 import org.getlantern.lantern.util.castToBoolean
+import org.getlantern.mobilesdk.Logger
 
 class VpnModel(
-    private val activity: Activity,
+    activity: Activity,
     flutterEngine: FlutterEngine,
     private var switchLanternHandler: ((vpnOn: Boolean) -> Unit)? = null,
 ) : BaseModel("vpn", flutterEngine, masterDB.withSchema(VPN_SCHEMA)) {
-
     private val appsDataProvider: AppsDataProvider = AppsDataProvider(
         activity.packageManager, activity.packageName
     )
@@ -46,7 +45,6 @@ class VpnModel(
             tx.put(PATH_VPN_STATUS, tx.get<String>(PATH_VPN_STATUS) ?: "disconnected")
         }
         Logger.debug(TAG, "db.mutate finished at ${System.currentTimeMillis() - start}")
-        setAppsData(appsDataProvider.listOfApps())
     }
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
@@ -56,34 +54,42 @@ class VpnModel(
                 saveVpnStatus(if (on) "connecting" else "disconnecting")
                 switchLantern(on)
             }
+
             "setSplitTunneling" -> {
                 val on = call.argument("on") ?: false
                 saveSplitTunneling(on)
             }
+
             "allowAppAccess" -> {
-              updateAppData(call.argument("packageName")!!, true)
+                updateAppData(call.argument("packageName")!!, true)
             }
+
             "denyAppAccess" -> {
-              updateAppData(call.argument("packageName")!!, false)
+                updateAppData(call.argument("packageName")!!, false)
             }
+
+            "refreshAppsList" -> {
+                setAppsData(appsDataProvider.listOfApps())
+            }
+
             else -> super.doMethodCall(call, notImplemented)
         }
     }
 
     fun splitTunnelingEnabled(): Boolean {
-      return db.get(PATH_SPLIT_TUNNELING) ?: false
+        return db.get(PATH_SPLIT_TUNNELING) ?: false
     }
 
     // appsAllowedAccess returns a list of package names for those applications that are allowed
     // to access the VPN connection. If split tunneling is enabled, and any app is added to
     // the list, only those applications (and no others) are allowed access.
-    fun appsAllowedAccess():List<String> {
-      var installedApps = db.list<Vpn.AppData>(PATH_APPS_DATA + "%")
-      val apps = mutableListOf<String>()
-      for (appData in installedApps) {
-        if (appData.value.allowedAccess) apps.add(appData.value.packageName)
-      }
-      return apps
+    fun appsAllowedAccess(): List<String> {
+        var installedApps = db.list<Vpn.AppData>(PATH_APPS_DATA + "%")
+        val apps = mutableListOf<String>()
+        for (appData in installedApps) {
+            if (appData.value.allowedAccess) apps.add(appData.value.packageName)
+        }
+        return apps
     }
 
     private fun saveSplitTunneling(value: Boolean) {
@@ -98,20 +104,29 @@ class VpnModel(
         db.mutate { tx ->
             var appData = tx.get<Vpn.AppData>(PATH_APPS_DATA + packageName)
             appData?.let {
-                tx.put(PATH_APPS_DATA + packageName, Vpn.AppData.newBuilder()
-                    .setPackageName(appData.packageName).setIcon(appData.icon)
-                    .setName(appData.name).setAllowedAccess(allowedAccess).build())
+                tx.put(
+                    PATH_APPS_DATA + packageName, Vpn.AppData.newBuilder()
+                        .setPackageName(appData.packageName).setIcon(appData.icon)
+                        .setName(appData.name).setAllowedAccess(allowedAccess).build()
+                )
             }
         }
     }
 
     // setAppsData stores app data for the list of applications installed for the current
     // user in the database
-    fun setAppsData(appsList: List<AppData>) {
-        db.mutate { tx ->   
+    private fun setAppsData(appsList: List<AppData>) {
+        db.mutate { tx ->
             appsList.forEach {
-                tx.putIfAbsent(PATH_APPS_DATA + it.packageName, Vpn.AppData.newBuilder()
-                    .setPackageName(it.packageName).setIcon(it.icon).setName(it.name).build())
+                val path = PATH_APPS_DATA + it.packageName
+                if (!tx.contains(path)) {
+                    // App not already in list, add it
+                    tx.put(
+                        PATH_APPS_DATA + it.packageName, Vpn.AppData.newBuilder()
+                            .setPackageName(it.packageName).setIcon(it.icon).setName(it.name)
+                            .build()
+                    )
+                }
             }
         }
     }
@@ -147,8 +162,10 @@ class VpnModel(
     }
 
     fun saveBandwidth(bandwidth: Vpn.Bandwidth) {
-        Logger.d(TAG, "Bandwidth updated to " + bandwidth.remaining + " remaining out of " + 
-            bandwidth.allowed + " allowed")
+        Logger.d(
+            TAG, "Bandwidth updated to " + bandwidth.remaining + " remaining out of " +
+                    bandwidth.allowed + " allowed"
+        )
         db.mutate { tx ->
             tx.put(PATH_BANDWIDTH, bandwidth)
         }

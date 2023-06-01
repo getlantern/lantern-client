@@ -18,6 +18,10 @@ class VpnModel extends Model {
     );
   }
 
+  Future<void> refreshAppsList() async {
+    await methodChannel.invokeMethod('refreshAppsList');
+  }
+
   Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('/splitTunneling',
         builder: builder,);
