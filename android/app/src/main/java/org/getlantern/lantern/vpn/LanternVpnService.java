@@ -18,10 +18,7 @@ import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Stats;
 import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.service.LanternService_;
-import org.getlantern.lantern.service.ServiceHelper;
 import org.getlantern.mobilesdk.Logger;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import internalsdk.Internalsdk;
 import internalsdk.SocketProtector;
@@ -38,11 +35,6 @@ public class LanternVpnService extends VpnService implements Runnable {
 
     private boolean splitTunnelingEnabled = false;
     private List<String> appsAllowedAccess = null;
-
-    final private ServiceHelper helper = new ServiceHelper(
-            this,
-            R.drawable.status_connected,
-            R.string.service_connected);
 
     private final ServiceConnection lanternServiceConnection = new ServiceConnection() {
         @Override
@@ -74,7 +66,6 @@ public class LanternVpnService extends VpnService implements Runnable {
         super.onCreate();
         Logger.d(TAG, "VpnService created");
         bindService(new Intent(this, LanternService_.class), lanternServiceConnection, Context.BIND_AUTO_CREATE);
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -83,8 +74,6 @@ public class LanternVpnService extends VpnService implements Runnable {
         doStop();
         super.onDestroy();
         unbindService(lanternServiceConnection);
-        helper.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -111,17 +100,7 @@ public class LanternVpnService extends VpnService implements Runnable {
 
     private void connect() {
         Logger.d(TAG, "connect");
-        helper.makeForeground();
         new Thread(this, "VpnService").start();
-    }
-
-    @Subscribe(sticky = true)
-    public void onStats(Stats stats) {
-        helper.updateNotification(
-                stats.isHasSucceedingProxy() ?
-                        R.drawable.status_connected : R.drawable.status_issue,
-                stats.isHasSucceedingProxy() ?
-                        R.string.service_connected : R.string.service_issue);
     }
 
     @Override
@@ -159,12 +138,6 @@ public class LanternVpnService extends VpnService implements Runnable {
             LanternApp.getSession().updateVpnPreference(false);
         } catch (Throwable t) {
             Logger.e(TAG, "error updating vpn preference", t);
-        }
-        try {
-            Logger.d(TAG, "posting updated vpnstate");
-            EventBus.getDefault().post(new VpnState(false));
-        } catch (Throwable t) {
-            Logger.e(TAG, "error posting updated vpnstate", t);
         }
     }
 }

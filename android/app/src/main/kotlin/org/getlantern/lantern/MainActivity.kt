@@ -83,8 +83,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
-        receiver = NotificationReceiver()
-        notifications = NotificationHelper(this, receiver)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
@@ -138,9 +136,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
         val packageName = activity.packageName
-        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
-            registerReceiver(receiver, it)
-        }
+        receiver = NotificationReceiver()
+        notifications = NotificationHelper(this, receiver)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -160,10 +157,14 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     override fun onStart() {
         super.onStart()
+        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
+            registerReceiver(receiver, it)
+        }
     }
 
     override fun onStop() {
         super.onStop()
+        unregisterReceiver(receiver)
     }
 
     override fun onResume() {
@@ -196,7 +197,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
-        unregisterReceiver(receiver)
         EventBus.getDefault().unregister(this)
     }
 
