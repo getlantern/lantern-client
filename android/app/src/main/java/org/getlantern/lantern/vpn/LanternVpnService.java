@@ -16,7 +16,6 @@ import android.os.IBinder;
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Stats;
-import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.mobilesdk.Logger;
 
