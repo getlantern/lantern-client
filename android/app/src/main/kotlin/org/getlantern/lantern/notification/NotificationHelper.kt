@@ -18,7 +18,6 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
     private val manager: NotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     private val builder: Notification.Builder
 
-    // private val dropDown: DropDownNav
     private lateinit var dataUsageNotificationChannel: NotificationChannel
     private lateinit var vpnNotificationChannel: NotificationChannel
 
