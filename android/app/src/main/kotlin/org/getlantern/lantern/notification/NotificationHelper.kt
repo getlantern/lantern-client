@@ -11,6 +11,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import org.getlantern.lantern.R
+import org.getlantern.lantern.MainActivity
 
 class NotificationHelper(private val activity: Activity, private val receiver: NotificationReceiver) : ContextWrapper(activity) {
 
@@ -93,6 +94,8 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             initChannels()
         }
+        val contentIntent = PendingIntent.getActivity(activity, 0, 
+            Intent(activity, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
         builder = Notification.Builder(this)
             .setContentTitle(activity.getString(R.string.service_connected))
             .addAction(
@@ -102,6 +105,7 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
                     disconnectBroadcast(),
                 ).build(),
             )
+            .setContentIntent(contentIntent)
             .setOngoing(true)
             .setShowWhen(true)
             .setSmallIcon(R.drawable.lantern_notification_icon)
