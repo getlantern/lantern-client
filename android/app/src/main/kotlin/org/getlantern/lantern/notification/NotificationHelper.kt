@@ -62,12 +62,12 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
 
     public fun vpnConnectedNotification() {
         builder.setChannelId(CHANNEL_VPN)
-        manager.notify(1234, builder.build())
+        manager.notify(VPN_CONNECTED, builder.build())
     }
 
     public fun dataUsageNotification() {
         builder.setChannelId(CHANNEL_DATA_USAGE)
-        manager.notify(1234, builder.build())
+        manager.notify(DATA_USAGE, builder.build())
     }
 
     fun clearNotification() {
@@ -79,7 +79,6 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         private const val LANTERN_NOTIFICATION = "lantern.notification"
         private const val DATA_USAGE = 36
         private const val VPN_CONNECTED = 37
-        private const val VPN_DISCONNECTED = 38
         private const val CHANNEL_VPN = "vpn"
         private const val CHANNEL_DATA_USAGE = "data_usage"
         private const val VPN_DESC = "VPN"
@@ -99,7 +98,8 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
                     disconnectBroadcast(),
                 ).build(),
             )
-            .setSmallIcon(R.drawable.lantern_notification_icon)
+            .setShowWhen(true)
+            .setSmallIcon(R.drawable.status_connected)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
     }
 }
