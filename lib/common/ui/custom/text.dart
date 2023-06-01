@@ -34,11 +34,13 @@ class CText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontFamily = _getLocaleBasedFont(context);
+
     if (style.minFontSize == null) {
       // Can't do special auto-scaling, just return regular Text
       return Text(
         text,
-        style: style,
+        style: style.copyWith(fontFamily: fontFamily),
         textAlign: textAlign,
         overflow: overflow,
         maxLines: maxLines,
@@ -63,6 +65,7 @@ class CText extends StatelessWidget {
             fontSize: fontSize,
             minFontSize: 0,
             lineHeight: newLineHeight,
+            fontFamily: fontFamily,
           ),
           textAlign: textAlign,
           overflow: overflow,
@@ -90,6 +93,16 @@ class CText extends StatelessWidget {
     // Need to scale down, rounded down by to the nearest even font size
     final targetSize = (widthRatio * maxFontSize / 2).floor() * 2;
     return max(targetSize.toDouble(), style.minFontSize!);
+  }
+
+  //Change font family depending on locale
+  String _getLocaleBasedFont(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    if (locale.languageCode == 'fa') {
+      return 'Samim'; // Farsi font
+    } else {
+      return 'Roboto'; // Default font for other languages
+    }
   }
 }
 
