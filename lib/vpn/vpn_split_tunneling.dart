@@ -56,10 +56,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                         activeColor: CupertinoColors.activeGreen,
                         onChanged: (bool? value) {
                           var newValue = value ?? false;
-                          setState(() {
-                            vpnModel.setSplitTunneling(newValue);
-                            showRestartVPNSnackBar(context);
-                          });
+                          vpnModel.setSplitTunneling(newValue);
+                          showRestartVPNSnackBar(context);
                         },
                       ),
                     ),
@@ -132,21 +130,23 @@ class _SplitTunnelingState extends State<SplitTunneling> {
       ),
       duration: const Duration(seconds: 7),
     );
-    snackbarShown = true;
+    setState(() {
+      snackbarShown = true;
+    });
   }
 
   Widget buildAppItem(AppData appData) {
     var iconBytes = appData.icon;
     var packageName = appData.packageName;
 
-    var allowOrDenyAppAccess = () => setState(() {
-          if (appData.allowedAccess) {
-            vpnModel.denyAppAccess(packageName);
-          } else {
-            vpnModel.allowAppAccess(packageName);
-          }
-          showRestartVPNSnackBar(context);
-        });
+    var allowOrDenyAppAccess = () {
+      if (appData.allowedAccess) {
+        vpnModel.denyAppAccess(packageName);
+      } else {
+        vpnModel.allowAppAccess(packageName);
+      }
+      showRestartVPNSnackBar(context);
+    };
     return Container(
       height: 72,
       padding: EdgeInsets.zero,
