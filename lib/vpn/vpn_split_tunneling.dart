@@ -90,7 +90,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   // and installed apps. It returns both along with their associated headers.
   ListView buildAppsList(Iterable<PathAndValue<AppData>> appsData) {
     var allowedApps = appsData.where((app) => app.value.allowedAccess).toList();
-    var excludedApps = appsData.where((app) => !app.value.allowedAccess).toList();
+    var excludedApps =
+        appsData.where((app) => !app.value.allowedAccess).toList();
 
     allowedApps.sort((a, b) => a.value.name.compareTo(b.value.name));
     excludedApps.sort((a, b) => a.value.name.compareTo(b.value.name));
@@ -99,7 +100,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
       itemCount: appsData.isEmpty ? 0 : appsData.length + 2,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
-          return ListSectionHeader('apps_routed_through_lantern'.i18n.toUpperCase());
+          return ListSectionHeader(
+              'apps_routed_through_lantern'.i18n.toUpperCase());
         }
         if (index == allowedApps.length + 1) {
           return ListSectionHeader('your_installed_apps'.i18n.toUpperCase());
@@ -110,8 +112,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         } else {
           appData = excludedApps[index - allowedApps.length - 2];
         }
-        var appItem = buildAppItem(appData.value);
-        return appItem;
+        return buildAppItem(appData.value);
       },
     );
   }
@@ -135,7 +136,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   }
 
   Widget buildAppItem(AppData appData) {
-    var iconBytes = base64.decode(appData.icon);
+    var iconBytes = appData.icon;
     var packageName = appData.packageName;
 
     var allowOrDenyAppAccess = () => setState(() {
@@ -165,7 +166,9 @@ class _SplitTunnelingState extends State<SplitTunneling> {
               maxWidth: 24,
               maxHeight: 24,
             ),
-            child: Image.memory(iconBytes, fit: BoxFit.cover),
+            child: iconBytes.isNotEmpty
+                ? Image.memory(Uint8List.fromList(iconBytes), fit: BoxFit.cover)
+                : null,
           ),
           onTap: () => allowOrDenyAppAccess(),
           trailing: SizedBox(
