@@ -58,6 +58,7 @@
   <string name="error_making_purchase">Erreur lors de la tentative d’achat</string>
   <string name="have_latest_version">%1$s %2$s est la version la plus récente proposée.</string>
   <string name="updating_lantern">Mise à jour de %1$s</string>
+  <string name="update_lantern">Mettre Lantern à jour</string>
   <string name="cancel">Annuler</string>
   <string name="newsfeed_option">Essayer le fil d’actualité Lantern</string>
   <string name="newsfeed_off_option">Désactiver le fil d’actualité</string>
@@ -417,8 +418,6 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="privacy_disclosure_title">Avis de protection des données de Lantern</string>
   <string name="privacy_disclosure_accept">J’accepte</string>
   <string name="privacy_disclosure_body">Lantern s’engage à protéger vos données personnelles. Nous souhaitons que vous compreniez quels renseignements nous recueillons, ce que nous ne recueillons pas, et comment nous recueillons, utilisons et stockons ces renseignements. Nous dissocions vos renseignements de paiement de votre compte Lantern Pro. Nous ne journalisons ni votre activité, ni l’historique de navigation, ni la destination du trafic, ni le contenu des données, ni les requêtes DNS. De plus, nous n’enregistrons jamais aucun journal de connexion, c’est-à-dire aucun journal de votre adresse IP, de l’adresse IP de votre serveur Lantern sortant associée à l’estampille temporelle de connexion ni la durée de la session. Pour un compte Lantern Pro donné, Lantern ne peut techniquement pas associer le compte Lantern à l’identité réelle de l’utilisateur. Pour une adresse IP Lantern et une estampille temporelle précise données, Lantern ne peut techniquement pas attribuer cette adresse IP à un utilisateur de Lantern ni à l’adresse IP d’un utilisateur de Lantern.</string>
-  <string name="referral_code_share_description_free">Partagez votre code avec vos amis et obtenez un mois gratuit du service Lantern Pro s’ils achètent la version Pro.</string>
-  <string name="referral_code_share_description_pro">Partagez votre code avec vos amis et obtenez un mois supplémentaire gratuit du service Lantern Pro s’ils achètent la version Pro.</string>
   <string name="referral_code_share">Partager le code de parrainage</string>
   <string name="referral_code_share_title">Partagez votre code de parrainage :</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>

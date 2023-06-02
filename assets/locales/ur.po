@@ -2,13 +2,13 @@
 # Translators:
 # tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2021
 # e2f <projects@e2f.com>, 2022
-# Diversity83 83, 2022
 # tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2023
+# Diversity83 83, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2023\n"
-"Language-Team: Urdu (https://www.transifex.com/lantern-1/teams/94371/ur/)\n"
+"Last-Translator: Diversity83 83, 2023\n"
+"Language-Team: Urdu (https://app.transifex.com/lantern-1/teams/94371/ur/)\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -124,6 +124,15 @@ msgstr "سینٹنگ"
 
 msgid "general"
 msgstr "جنرل"
+
+msgid "about"
+msgstr "متعلق"
+
+msgid "privacy_policy"
+msgstr "پرائیوسی پالیسی"
+
+msgid "terms_of_service"
+msgstr "سروس کی شرائط"
 
 msgid "proxy_all"
 msgstr "پراکسی سب کُجھ"
@@ -389,6 +398,24 @@ msgstr "ذاتی طور پر رابطے شامل کریں"
 msgid "start_chat"
 msgstr "چیٹ شروع کریں"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "آپ اور %s کے لیے تمام پیغامات غائب نہیں ہوں گے۔"
 
@@ -403,6 +430,9 @@ msgstr "رابطے کی معلومات دیکھیں"
 
 msgid "off"
 msgstr "آف"
+
+msgid "on"
+msgstr "آن"
 
 msgid "continue"
 msgstr "جاری رکھئے"

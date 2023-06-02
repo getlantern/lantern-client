@@ -10,23 +10,22 @@ import android.os.Build
 import android.os.IBinder
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.service.LanternService_
-import org.getlantern.lantern.service.ServiceHelper
 import org.getlantern.mobilesdk.Logger
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class LanternVpnService : VpnService(), Runnable {
+
+    companion object {
+        const val ACTION_CONNECT = "org.getlantern.lantern.vpn.START"
+        const val ACTION_DISCONNECT = "org.getlantern.lantern.vpn.STOP"
+        private val TAG = LanternVpnService::class.java.simpleName
+    }
+
     private var provider : Provider? = null
-    private lateinit var excludedApps : List<String>
+    private var splitTunnelingEnabled : Boolean = false
+    private var appsAllowedAccess : List<String>? = null
     
-    private val helper: ServiceHelper = ServiceHelper(
-        this,
-        R.drawable.status_connected,
-        R.string.service_connected,
-    )
     private val lanternServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName) {
             Logger.e(TAG, "LanternService disconnected, disconnecting VPN")
@@ -47,12 +46,10 @@ class LanternVpnService : VpnService(), Runnable {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         Logger.d(TAG, "destroyed")
         doStop()
+        super.onDestroy()
         unbindService(lanternServiceConnection)
-        helper.onDestroy()
-        EventBus.getDefault().unregister(this)
     }
 
     override fun onRevoke() {
@@ -66,7 +63,8 @@ class LanternVpnService : VpnService(), Runnable {
             START_NOT_STICKY
         } else {
             val bundle = intent.extras
-            excludedApps = bundle?.getStringArrayList("excludedApps") ?: listOf<String>()
+            splitTunnelingEnabled = bundle.getBoolean("splitTunnelingEnabled")
+            appsAllowedAccess = bundle.getStringArrayList("appsAllowedAccess")
             connect()
             START_STICKY
         }
@@ -74,23 +72,13 @@ class LanternVpnService : VpnService(), Runnable {
 
     private fun connect() {
         Logger.d(TAG, "connect")
-        helper.makeForeground()
         Thread(this, "VpnService").start()
-    }
-
-    @Subscribe(sticky = true)
-    fun onStats(stats: Stats) {
-        if (stats.isHasSucceedingProxy()) {
-            helper.updateNotification(R.drawable.status_connected, R.string.service_connected)
-        } else {
-            helper.updateNotification(R.drawable.status_issue, R.string.service_issue)
-        }
     }
 
     override fun run() {
         try {
             Logger.d(TAG, "Loading Lantern library")
-            getOrInitProvider()?.run(
+            getOrInitProvider().run(
                 this,
                 Builder(),
                 LanternApp.getSession().sOCKS5Addr,
@@ -128,18 +116,16 @@ class LanternVpnService : VpnService(), Runnable {
         }
     }
 
-    @Synchronized fun getOrInitProvider(): Provider? {
+    @Synchronized fun getOrInitProvider(): Provider {
         Logger.d(TAG, "getOrInitProvider()")
         if (provider == null) {
             Logger.d(TAG, "Using Go tun2socks")
-            provider = GoTun2SocksProvider(excludedApps)
+            provider = GoTun2SocksProvider(
+                    getPackageManager(),
+                    splitTunnelingEnabled,
+                    appsAllowedAccess
+            )
         }
         return provider
-    }
-
-    companion object {
-        const val ACTION_CONNECT = "org.getlantern.lantern.vpn.START"
-        const val ACTION_DISCONNECT = "org.getlantern.lantern.vpn.STOP"
-        private val TAG = LanternVpnService::class.java.simpleName
     }
 }

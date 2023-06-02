@@ -2,6 +2,10 @@ module github.com/getlantern/android-lantern
 
 go 1.19
 
+// replace github.com/getlantern/flashlight => ../flashlight
+
+// replace github.com/getlantern/fronted => ../fronted
+
 // v0.5.6 has a security issue and using require leaves a reference to it in go.sum
 replace github.com/ulikunitz/xz => github.com/ulikunitz/xz v0.5.8
 
@@ -31,7 +35,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight v0.0.0-20230522142107-987beea4435f
+	github.com/getlantern/flashlight v0.0.0-20230601004902-dbd8143fe11e
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20230511223023-ee52513fd782
@@ -127,7 +131,7 @@ require (
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c // indirect
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
-	github.com/getlantern/fronted v0.0.0-20230518133520-a7a17ed0fc30 // indirect
+	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 // indirect
 	github.com/getlantern/geo v0.0.0-20221101125300-c661769d5822 // indirect
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4 // indirect
 	github.com/getlantern/go-cache v0.0.0-20141028142048-88b53914f467 // indirect
