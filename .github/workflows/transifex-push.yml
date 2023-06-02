@@ -19,4 +19,5 @@ jobs:
         run: |
           curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
           source /home/runner/.bashrc
+          export PATH="/home/runner/work/android-lantern/android-lantern:$PATH"
           tx push -s
