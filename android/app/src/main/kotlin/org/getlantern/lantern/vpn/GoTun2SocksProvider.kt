@@ -12,7 +12,7 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import java.util.Locale
 
-class GoTun2SocksProvider(val excludedApps: List<String>,
+class GoTun2SocksProvider(val packageManager: PackageManager,
     val splitTunnelingEnabled: Boolean,
     val appsAllowedAccess: Set<String>) : Provider {
 

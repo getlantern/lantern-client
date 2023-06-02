@@ -42,7 +42,6 @@ class LanternVpnService : VpnService(), Runnable {
             lanternServiceConnection,
             Context.BIND_AUTO_CREATE,
         )
-        EventBus.getDefault().register(this)
     }
 
     override fun onDestroy() {
@@ -63,8 +62,10 @@ class LanternVpnService : VpnService(), Runnable {
             START_NOT_STICKY
         } else {
             val bundle = intent.extras
-            splitTunnelingEnabled = bundle.getBoolean("splitTunnelingEnabled")
-            appsAllowedAccess = bundle.getStringArrayList("appsAllowedAccess")
+            if (bundle != null) {
+                splitTunnelingEnabled = bundle.getBoolean("splitTunnelingEnabled")
+                appsAllowedAccess = bundle.getStringArrayList("appsAllowedAccess")
+            }
             connect()
             START_STICKY
         }
@@ -78,7 +79,7 @@ class LanternVpnService : VpnService(), Runnable {
     override fun run() {
         try {
             Logger.d(TAG, "Loading Lantern library")
-            getOrInitProvider().run(
+            getOrInitProvider()?.run(
                 this,
                 Builder(),
                 LanternApp.getSession().sOCKS5Addr,
@@ -116,14 +117,14 @@ class LanternVpnService : VpnService(), Runnable {
         }
     }
 
-    @Synchronized fun getOrInitProvider(): Provider {
+    @Synchronized fun getOrInitProvider(): Provider? {
         Logger.d(TAG, "getOrInitProvider()")
         if (provider == null) {
             Logger.d(TAG, "Using Go tun2socks")
             provider = GoTun2SocksProvider(
                     getPackageManager(),
                     splitTunnelingEnabled,
-                    appsAllowedAccess
+                    HashSet(appsAllowedAccess)
             )
         }
         return provider

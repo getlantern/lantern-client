@@ -155,7 +155,7 @@ open class LanternService : Service(), Runnable {
                 Logger.error(TAG, "Unable to parse user from JSON")
                 return
             }
-            createUserHandler.removeCallbacks(createUserRunnable)
+            service.createUserHandler.removeCallbacks(service.createUserRunnable)
             Logger.debug(TAG, "Created new Lantern user: ${user.newUserDetails()}")
             LanternApp.getSession().setUserIdAndToken(user.getUserId(), user.getToken())
             val referral = user.getReferral()
