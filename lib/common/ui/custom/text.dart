@@ -98,7 +98,7 @@ class CText extends StatelessWidget {
   //Change font family depending on locale
   String _getLocaleBasedFont(BuildContext context) {
     final locale = Localizations.localeOf(context);
-    if (locale.languageCode == 'fa') {
+    if (locale.languageCode == 'fa'|| locale.languageCode == 'ur'|| locale.languageCode == 'eg') {
       return 'Samim'; // Farsi font
     } else {
       return 'Roboto'; // Default font for other languages
