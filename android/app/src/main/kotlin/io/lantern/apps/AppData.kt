@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import java.io.ByteArrayOutputStream
-import java.util.Base64
 
 data class AppData(
     val packageManager: PackageManager,
@@ -15,7 +14,7 @@ data class AppData(
     val packageName: String = info.packageName
     val name = info.loadLabel(packageManager).toString()
 
-    val icon: String by lazy {
+    val icon: ByteArray? by lazy {
         try {
             val icon: Drawable = packageManager.getApplicationIcon(packageName)
             val bitmap: Bitmap = Bitmap.createBitmap(
@@ -24,14 +23,14 @@ data class AppData(
                 Bitmap.Config.ARGB_8888
             )
             val canvas: Canvas = Canvas(bitmap)
-            icon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+            icon.setBounds(0, 0, canvas.width, canvas.height)
             icon.draw(canvas)
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            Base64.getEncoder().encodeToString(stream.toByteArray())
+            stream.toByteArray()
         } catch (e: Exception) {
             e.printStackTrace()
-            ""
+            null
         }
     }
 }
