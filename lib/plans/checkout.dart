@@ -368,8 +368,12 @@ class _CheckoutState extends State<Checkout>
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: paymentOptions(Country.values.firstWhere(
-                        (e) => e.toString() == 'Country.' + countryCode)),
+                    children: paymentOptions(
+                      Country.values.firstWhere(
+                        (e) => e.toString() == 'Country.' + countryCode,
+                        orElse: () => Country.US,
+                      ),
+                    ),
                   ),
                 ),
                 // * Price summary, unused pro time disclaimer, Continue button
