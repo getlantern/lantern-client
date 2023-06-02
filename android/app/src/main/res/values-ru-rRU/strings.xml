@@ -58,6 +58,7 @@
   <string name="error_making_purchase">Ошибка при попытке совершить покупку</string>
   <string name="have_latest_version">Самая новая из доступных версий — %1$s %2$s.</string>
   <string name="updating_lantern">Обновление %1$s</string>
+  <string name="update_lantern">Обновите Lantern</string>
   <string name="cancel">Отменить</string>
   <string name="newsfeed_option">Попробуйте Lantern Feed</string>
   <string name="newsfeed_off_option">Отключить Feed</string>
@@ -420,8 +421,6 @@
   <string name="privacy_disclosure_title">Политика конфиденциальности Lantern</string>
   <string name="privacy_disclosure_accept">Я принимаю</string>
   <string name="privacy_disclosure_body">Lantern серьезно относится к защите вашей конфиденциальности. Для нас важно, чтобы вы понимали, какую информацию мы собираем (и не собираем), как мы ее используем и храним. Ваши платежные данные не связаны с аккаунтом Lantern Pro. Мы не собираем логи о вашей активности (в том числе историю браузера, сведения об адресатах трафика, содержание данных или DNS-запросы). Мы никогда не храним логи соединений, то есть ваши зарегистрированные IP-адреса, IP-адрес исходящего сервера Lantern, связанный с временной меткой подключения, а также продолжительность сеансов. У нас нет технической возможности связать аккаунт Lantern Pro с реальной идентифицирующей информацией пользователя. Кроме того, имея IP-адрес Lantern и точную временную метку, мы не можем связать этот адрес с пользователем Lantern или IP-адресом этого пользователя.</string>
-  <string name="referral_code_share_description_free">Поделитесь кодом с друзьями и получите бесплатный месяц Lantern Pro, если они оформят подписку.</string>
-  <string name="referral_code_share_description_pro">Поделитесь кодом с друзьями и получите дополнительный месяц Lantern Pro бесплатно, если они оформят подписку.</string>
   <string name="referral_code_share">Поделитесь реферальным кодом </string>
   <string name="referral_code_share_title">Поделитесь своим реферальным кодом:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>

@@ -58,6 +58,7 @@
   <string name="error_making_purchase">Satın alma işleminde hata oluştu</string>
   <string name="have_latest_version">%1$s %2$s mevcut en yeni sürümdür.</string>
   <string name="updating_lantern">%1$s güncelleniyor</string>
+  <string name="update_lantern">Lantern\'ı Güncelle</string>
   <string name="cancel">İptal</string>
   <string name="newsfeed_option">Lantern Yayınını Dene</string>
   <string name="newsfeed_off_option">Yayını Kapat</string>
@@ -420,8 +421,6 @@
   <string name="privacy_disclosure_title">Lantern Gizlilik Anlaşması</string>
   <string name="privacy_disclosure_accept">Kabul Ediyorum</string>
   <string name="privacy_disclosure_body">Lantern gizliliğinizi korumayı taahhüt eder. Hangi bilgileri topladığımızı, hangilerini toplamadığımızı, bilgileri nasıl topladığımızı, kullandığımızı ve depoladığımızı anlamanızı istiyoruz. Ödeme bilgilerinizi Lantern Pro hesabınızla ilişkilendirmiyoruz. Aktivitenizin günlüklerini toplamıyoruz; örneğin tarama geçmişinizin, trafik hedefinizin, veri içeriğinizin veya DNS sorgularınızın günlüğünü tutmuyoruz. Ayrıca bağlantı günlüklerini hiçbir zaman depolamıyoruz; yani IP adresinizin, bağlantı zaman damgasıyla ilişkili giden Lantern sunucu IP adresinizin veya oturum sürenizin günlüğünü tutmuyoruz. Belirli bir Lantern Pro hesabı bakımından, Lantern\'ın bir Lantern hesabını kullanıcının gerçek kimliğiyle ilişkilendirmesi teknik olarak mümkün değildir. Lantern IP adresi ve kesin zaman damgası bakımından, Lantern\'ın bu IP adresini bir Lantern kullanıcısına veya Lantern kullanıcı IP adresine dayandırması teknik olarak mümkün değildir.</string>
-  <string name="referral_code_share_description_free">Kodunuzu arkadaşlarınızla paylaşın ve Pro satın aldıklarında bir aylık Lantern Pro hizmetini ücretsiz edinin!</string>
-  <string name="referral_code_share_description_pro">Kodunuzu arkadaşlarınızla paylaşın ve Pro satın aldıklarında bir aylık ek Lantern Pro hizmetini ücretsiz edinin!</string>
   <string name="referral_code_share">Referans kodu paylaş</string>
   <string name="referral_code_share_title">Referans kodunuzu paylaşın:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
