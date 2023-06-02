@@ -25,26 +25,6 @@ class AppsDataProvider(
         !isSelfApplication(appInfo.packageName)
     }
 
-    private fun ByteArray.toBase64(): String = String(Base64.getEncoder().encode(this))
-
-    // appIconDrawableToBase64 retrieves the icon associated with an application, converts it to
-    // a Bitmap, and then to a Base64-encoded byte array prior to being sent to Flutter
-    private fun appIconDrawableToBase64(packageName:String): String {
-      try {
-        val icon:Drawable = packageManager.getApplicationIcon(packageName)
-        val bitmap:Bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888)
-        val canvas:Canvas = Canvas(bitmap)
-        icon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
-        icon.draw(canvas)
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        return stream.toByteArray().toBase64()
-      } catch (e:Exception) {
-        e.printStackTrace()
-      }
-      return ""
-    }
-
     // Return a list of all application packages that are installed for the current user,
     // filtering system apps, apps that do not have Internet access, and our own
     // application
@@ -52,14 +32,7 @@ class AppsDataProvider(
         return packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
             .asSequence()
             .filter(applicationFilterPredicate)
-            .map { info ->
-                AppData(
-                    info.packageName,
-                    appIconDrawableToBase64(info.packageName),
-                    info.loadLabel(packageManager).toString(),
-                    false
-                )
-            }
+            .map { info ->  AppData(packageManager, info) }
             .toList().sortedBy { it.name }
     }
 

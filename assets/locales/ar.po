@@ -1,22 +1,23 @@
 # 
 # Translators:
 # Amin Jobran, 2022
-# lamine Kacimi <k_lamine27@yahoo.fr>, 2022
 # Abdelaziz “Azhou” Houcini <azhouhou@gmail.com>, 2022
 # 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2022
 # محيي الدين <tx99h4@hotmail.com>, 2022
 # Layla Taha <layla@asl19.org>, 2022
-# Rima Sghaier, 2022
 # Derek F <derek@getlantern.org>, 2022
 # e2f <projects@e2f.com>, 2022
-# dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2022
 # Abed Abedd <abderrahman.younis@gmail.com>, 2022
 # e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2023
+# dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2023
+# Rima Sghaier, 2023
+# Mhawesh, 2023
+# lamine Kacimi <k_lamine27@yahoo.fr>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2023\n"
-"Language-Team: Arabic (https://www.transifex.com/lantern-1/teams/94371/ar/)\n"
+"Last-Translator: lamine Kacimi <k_lamine27@yahoo.fr>, 2023\n"
+"Language-Team: Arabic (https://app.transifex.com/lantern-1/teams/94371/ar/)\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
@@ -129,6 +130,15 @@ msgstr "الاعدادات"
 
 msgid "general"
 msgstr "عام"
+
+msgid "about"
+msgstr "حول"
+
+msgid "privacy_policy"
+msgstr "سياسة الخصوصية"
+
+msgid "terms_of_service"
+msgstr "شروط الخدمة"
 
 msgid "proxy_all"
 msgstr "كل شيء على البروكسي"
@@ -390,6 +400,24 @@ msgstr "إضافة جهات اتصال شخصيًا"
 msgid "start_chat"
 msgstr "بدء الدردشة"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "لن تختفي جميع الرسائل بالنسبة لك و%s."
 
@@ -404,6 +432,9 @@ msgstr "عرض معلومات جهة الاتصال"
 
 msgid "off"
 msgstr "إيقاف التشغيل"
+
+msgid "on"
+msgstr "تشغيل"
 
 msgid "continue"
 msgstr "واصل"
