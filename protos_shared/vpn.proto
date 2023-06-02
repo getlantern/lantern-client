@@ -17,7 +17,7 @@ message Bandwidth {
 message AppData {
   string packageName = 1;
   string name = 2;
-  string icon = 3;
+  bytes icon = 3;
   bool allowedAccess = 4;
 }
 

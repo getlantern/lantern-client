@@ -30,6 +30,16 @@
   <string name="cannot_find_email">糟糕！我们找不到那个电子邮件地址了。</string>
   <string name="no_purchase_date">请选择您购买蓝灯专业版的大致日期。</string>
   <string name="purchase_date">购买日期</string>
+  <string-array name="common_issue_list">
+    <item>无法访问被封锁的网站</item>
+    <item>无法完成购买</item>
+    <item>无法登录</item>
+    <item>旋转器无休止地加载</item>
+    <item>慢速</item>
+    <item>聊天功能无法使用</item>
+    <item>发现功能无法使用</item>
+    <item>其他</item>
+  </string-array>
   <string name="submit_code">确认代码</string>
   <string name="on_text">打开</string>
   <string name="off_text">关闭</string>
@@ -48,6 +58,7 @@
   <string name="error_making_purchase">试图购买时出错</string>
   <string name="have_latest_version">%1$s%2$s是可用的最新版本。</string>
   <string name="updating_lantern">更新 %1$s</string>
+  <string name="update_lantern">更新蓝灯</string>
   <string name="cancel">取消</string>
   <string name="newsfeed_option">试试蓝灯摘要</string>
   <string name="newsfeed_off_option">关闭 Feed</string>
@@ -410,8 +421,6 @@
   <string name="privacy_disclosure_title">蓝灯隐私披露</string>
   <string name="privacy_disclosure_accept">我接受</string>
   <string name="privacy_disclosure_body">蓝灯致力于保护您的隐私。我们希望您了解我们收集哪些信息、不收集哪些信息，以及我们如何收集、使用和存储信息。我们不会将您的支付信息与您的蓝灯专业版帐户分开。我们不收集您的活动日志，包括不记录浏览历史、流量目的地、数据内容或 DNS 查询。我们也不会储存连接记录，即不会记录您的 IP 地址、与连接时间戳相关的蓝灯服务器的 IP 地址或会话持续时间。对于给定的蓝灯专业版帐户，蓝灯在技术上无法将蓝灯帐户与用户的真实身份联系起来。对于给定一个蓝灯 IP 地址和精确的时间戳，蓝灯在技术上也无法将此 IP 地址归属于蓝灯用户或蓝灯用户的 IP 地址。</string>
-  <string name="referral_code_share_description_free">将您的代码分享给您的朋友。如果他们购买专业版时，您可以免费获得一个月的蓝灯专业版服务!</string>
-  <string name="referral_code_share_description_pro">将您的代码分享给您的朋友。如果他们购买专业版，您可以免费获得一个月的蓝灯专业版服务!</string>
   <string name="referral_code_share">分享推荐码</string>
   <string name="referral_code_share_title">分享您的推荐码。</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
