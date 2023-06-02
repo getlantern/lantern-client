@@ -412,10 +412,10 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
 android-pull-translations:
-	@(cd $(MOBILE_DIR) && tx pull -af --minimum 100)
+	tx pull -af -minimum-perc 100
 
 android-push-translations:
-	@(cd $(MOBILE_DIR) && tx push --skip -l en_US -s)
+	tx push -s
 
 android-debug: $(MOBILE_DEBUG_APK)
 
