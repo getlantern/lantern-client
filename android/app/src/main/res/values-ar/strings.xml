@@ -58,6 +58,7 @@
   <string name="error_making_purchase">خطأ في اجراء الشراء</string>
   <string name="have_latest_version">%1$s %2$s هو أحدث إصدار متوفر.</string>
   <string name="updating_lantern">جارِ تحديث %1$s</string>
+  <string name="update_lantern">تحديث Lantern</string>
   <string name="cancel">إلغاء</string>
   <string name="newsfeed_option">جرب التزود بمقتطفات أخبار لانترن </string>
   <string name="newsfeed_off_option">ايقاف التزويد</string>
@@ -420,8 +421,6 @@
   <string name="privacy_disclosure_title">الكشف عن خصوصية لانترن</string>
   <string name="privacy_disclosure_accept">موافق</string>
   <string name="privacy_disclosure_body">تلتزم لانترن بحماية خصوصيتك. نود أن تفهم نوع المعلومات التي نجمعها، ونوع المعلومات التي لا نجمعها، وكيف نستخدمها، وكيف نُخزنها. نحن لا نربط معلومات الدفع الخاصة بك بحسابك على لانترن برو. ولا نجمع سجلات نشاطك، بما في ذلك عدم تسجيل محفوظات التصفح، أو وجهة البيانات، أو محتوى البيانات، أو استعلامات نظام أسماء النطاقات (DNS). كما أننا لا نُخزن مطلقًا سجلات الاتصال، أي لا يتم إنشاء أي سجلات عن عنوان بروتوكول الإنترنت (IP)، أو عنوان بروتوكول الإنترنت لخادم لانترن الصادر الخاص بك المرتبط بالطابع الزمني للاتصال، أو مدة الجلسة. نظرًا لحساب لانترن برو المحدد، يتعذر على لانترن من الناحية التقنية ربط حساب لانترن بهوية المستخدم الحقيقية. ومع وجود عنوان بروتوكول الإنترنت (IP) وطابع زمني دقيق في لانترن، يتعذر على لانترن من الناحية التقنية منح عنوان بروتوكول الإنترنت هذا إلى مستخدم لانترن أو  عنوان بروتوكول الإنترنت الخاص بمستخدم لانترن.</string>
-  <string name="referral_code_share_description_free">قم بمشاركة الرمز الخاص بك مع أصدقائك واحصل على شهر واحد مجانًا لخدمة لانترن برو عندما يقومون بشراء برو!</string>
-  <string name="referral_code_share_description_pro">قم بمشاركة الرمز الخاص بك مع أصدقائك واحصل على شهر واحد مجانًا من خدمة لانترن برو الإضافية عندما يقومون بشراء برو!</string>
   <string name="referral_code_share">مشاركة رمز الإحالة</string>
   <string name="referral_code_share_title">مشاركة رمز الإحالة الخاص بك:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
