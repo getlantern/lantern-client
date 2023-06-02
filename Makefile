@@ -411,12 +411,6 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodPlay/out/lib && \
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
-android-pull-translations:
-	tx pull -af -minimum-perc 90
-
-android-push-translations:
-	tx push -s
-
 android-debug: $(MOBILE_DEBUG_APK)
 
 android-release: pubget $(MOBILE_RELEASE_APK)
