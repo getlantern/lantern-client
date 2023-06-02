@@ -2,17 +2,17 @@
 # Translators:
 # E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2022
 # Minnie Kaur <tuteja.minnie@gmail.com>, 2022
-# Kalyan Dikshit <dikshitrocks93@gmail.com>, 2022
-# tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2022
 # tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2022
-# e2f <projects@e2f.com>, 2022
 # Lantern, 2022
 # tx_e2f_hi r2 <tx_e2f_hi_r2@ate2f.com>, 2023
+# tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2023
+# e2f <projects@e2f.com>, 2023
+# Kalyan Dikshit <dikshitrocks93@gmail.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_hi r2 <tx_e2f_hi_r2@ate2f.com>, 2023\n"
-"Language-Team: Hindi (India) (https://www.transifex.com/lantern-1/teams/94371/hi_IN/)\n"
+"Last-Translator: Kalyan Dikshit <dikshitrocks93@gmail.com>, 2023\n"
+"Language-Team: Hindi (India) (https://app.transifex.com/lantern-1/teams/94371/hi_IN/)\n"
 "Language: hi_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -125,6 +125,15 @@ msgstr "सेटिंग्स"
 
 msgid "general"
 msgstr "सामान्य"
+
+msgid "about"
+msgstr "बारे में"
+
+msgid "privacy_policy"
+msgstr "गोपनीयता नीति"
+
+msgid "terms_of_service"
+msgstr "सेवा की शर्तें"
 
 msgid "proxy_all"
 msgstr "सब कुछ प्रॉक्सी करें"
@@ -388,6 +397,24 @@ msgstr "लोगों की संपर्क जानकारी डा�
 msgid "start_chat"
 msgstr "चैट शेयर करें "
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "आपके लिए सभी मेसेज गायब नहीं होंगे और %s ."
 
@@ -402,6 +429,9 @@ msgstr "संपर्क जानकारी देखें"
 
 msgid "off"
 msgstr "बंद करें"
+
+msgid "on"
+msgstr "खोलें"
 
 msgid "continue"
 msgstr "जारी रखें"
