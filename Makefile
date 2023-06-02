@@ -412,7 +412,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
 android-pull-translations:
-	tx pull -af -minimum-perc 100
+	tx pull -af -minimum-perc 90
 
 android-push-translations:
 	tx push -s
