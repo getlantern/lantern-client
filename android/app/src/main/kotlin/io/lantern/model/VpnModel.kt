@@ -1,9 +1,10 @@
 package io.lantern.model
 
 import android.app.Activity
+import com.google.protobuf.ByteString
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-import io.lantern.apps.AppData
+import io.flutter.plugin.common.MethodChannel
 import io.lantern.apps.AppsDataProvider
 import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.mobilesdk.Logger
@@ -45,6 +46,16 @@ class VpnModel(
             tx.put(PATH_VPN_STATUS, tx.get<String>(PATH_VPN_STATUS) ?: "disconnected")
         }
         Logger.debug(TAG, "db.mutate finished at ${System.currentTimeMillis() - start}")
+        updateAppsData()
+    }
+
+    override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        if (call.method == "refreshAppsList") {
+            updateAppsData()
+            result.success(null)
+        } else {
+            super.doOnMethodCall(call, result)
+        }
     }
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
@@ -66,10 +77,6 @@ class VpnModel(
 
             "denyAppAccess" -> {
                 updateAppData(call.argument("packageName")!!, false)
-            }
-
-            "refreshAppsList" -> {
-                setAppsData(appsDataProvider.listOfApps())
             }
 
             else -> super.doMethodCall(call, notImplemented)
@@ -100,35 +107,60 @@ class VpnModel(
 
     // updateAppData looks up the app data for the given package name and updates whether or
     // not the app is allowed access to the VPN connection in the database
-    fun updateAppData(packageName: String, allowedAccess: Boolean) {
+    private fun updateAppData(packageName: String, allowedAccess: Boolean) {
         db.mutate { tx ->
             var appData = tx.get<Vpn.AppData>(PATH_APPS_DATA + packageName)
             appData?.let {
                 tx.put(
                     PATH_APPS_DATA + packageName, Vpn.AppData.newBuilder()
-                        .setPackageName(appData.packageName).setIcon(appData.icon)
-                        .setName(appData.name).setAllowedAccess(allowedAccess).build()
+                        .setPackageName(it.packageName).setIcon(it.icon)
+                        .setName(it.name).setAllowedAccess(allowedAccess).build()
                 )
             }
         }
     }
 
-    // setAppsData stores app data for the list of applications installed for the current
+    // updateAppsData stores app data for the list of applications installed for the current
     // user in the database
-    private fun setAppsData(appsList: List<AppData>) {
-        db.mutate { tx ->
-            appsList.forEach {
-                val path = PATH_APPS_DATA + it.packageName
-                if (!tx.contains(path)) {
-                    // App not already in list, add it
-                    tx.put(
-                        PATH_APPS_DATA + it.packageName, Vpn.AppData.newBuilder()
-                            .setPackageName(it.packageName).setIcon(it.icon).setName(it.name)
-                            .build()
-                    )
+    private fun updateAppsData() {
+        // This can be quite slow, run it on its own thread
+        Thread {
+            val appsList = appsDataProvider.listOfApps()
+            // First add just the app names to get a list quickly
+            db.mutate { tx ->
+                appsList.forEach {
+                    val path = PATH_APPS_DATA + it.packageName
+                    if (!tx.contains(path)) {
+                        // App not already in list, add it
+                        tx.put(
+                            path,
+                            Vpn.AppData.newBuilder()
+                                .setPackageName(it.packageName).setName(it.name)
+                                .build()
+                        )
+                    }
                 }
             }
-        }
+
+            // Then add icons
+            db.mutate { tx ->
+                appsList.forEach {
+                    val path = PATH_APPS_DATA + it.packageName
+                    tx.get<Vpn.AppData>(path)?.let { existing ->
+                        if (existing.icon.isEmpty) {
+                            it.icon.let { icon ->
+                                tx.put(
+                                    path,
+                                    existing.toBuilder()
+                                        .setIcon(ByteString.copyFrom(icon))
+                                        .build(),
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }.start()
     }
 
     fun isConnectedToVpn(): Boolean {
