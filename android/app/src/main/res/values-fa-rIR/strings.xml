@@ -421,8 +421,6 @@ https://bit.ly/lanternapk</string>
   <string name="privacy_disclosure_title">اعلامیه حریم خصوصی Lantern</string>
   <string name="privacy_disclosure_accept">می‌پذیرم</string>
   <string name="privacy_disclosure_body">Lantern متعهد است از حریم خصوصی شما حفاظت کند. از شما می‌خواهیم که بدانید چه اطلاعاتی را جمع‌آوری می‌کنیم، و چه اطلاعاتی را جمع‌آوری نمی‌کنیم، و چگونه اطلاعات را جمع‌آوری، استفاده و ذخیره می‌کنیم. ما اطلاعات پرداختتان را از حساب Lantern Pro شما جدا می‌کنیم. ما گزارش فعالیت‌های شما، اعم از تاریخچه مرور وب‌سایت‌ها، مقصد ترافیک، محتوای داده‌ها، یا جستارهای DNS را جمع‌آوری نمی‌کنیم. همچنین هرگز گزارش اتصال‌ها را ذخیره نمی‌کنیم، یعنی هیچ گزارشی از آدرس IP شما، آدرس IP سرور Lantern خروجی مرتبط با مهر زمانی اتصال، یا مدت جلسه را ذخیره نمی‌کنیم. با فرض در نظر گرفتن یک حساب خاص Lantern Pro‏، Lantern به لحاظ فنی، قادر به ارتباط دادن این حساب با هویت واقعی کاربر نیست. با فرض در نظر گرفتن یک IP آدرس و یک زمان دقیق از حضور در شبکه، Lantern به لحاظ فنی، قادر به ارتباط دادن این آدرس IP با یک کاربر Lantern یا آدرس IP یکی از کاربران Lantern نیست.</string>
-  <string name="referral_code_share_description_free">کد خود را با دوستانتان به اشتراک بگذارید و هنگامی که آن‌ها نسخه Pro خریداری می‌کنند، یک ماه خدمات lantern pro را به‌صورت رایگان دریافت کنید!</string>
-  <string name="referral_code_share_description_pro">کد خود را با دوستانتان به اشتراک بگذارید، و هنگامی که آن‌ها نسخه Pro خریداری می‌کنند، یک ماه خدمات Lantern pro اضافه را به‌صورت رایگان دریافت کنید!</string>
   <string name="referral_code_share">کد ارجاع را به اشتراک بگذارید</string>
   <string name="referral_code_share_title">کد ارجاع خود را به اشتراک بگذارید:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
