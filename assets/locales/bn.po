@@ -1,14 +1,14 @@
 # 
 # Translators:
 # Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2021
-# code smite <codesmite@gmail.com>, 2022
 # Lantern, 2022
 # tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2023
+# code smite <codesmite@gmail.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2023\n"
-"Language-Team: Bengali (https://www.transifex.com/lantern-1/teams/94371/bn/)\n"
+"Last-Translator: code smite <codesmite@gmail.com>, 2023\n"
+"Language-Team: Bengali (https://app.transifex.com/lantern-1/teams/94371/bn/)\n"
 "Language: bn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -123,6 +123,15 @@ msgstr "সেটিংস"
 
 msgid "general"
 msgstr "সাধারণ"
+
+msgid "about"
+msgstr "সম্পর্কে"
+
+msgid "privacy_policy"
+msgstr "গোপনীয়তা নীতি"
+
+msgid "terms_of_service"
+msgstr "সেবা পাবার শর্ত"
 
 msgid "proxy_all"
 msgstr "সমস্ত কিছু প্রক্সি করুন"
@@ -388,6 +397,24 @@ msgstr "ব্যক্তিগতভাবে পরিচিতি যোগ 
 msgid "start_chat"
 msgstr "চ্যাট শুরু করুন"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "আপনার এবং %s এর জন্য সমস্ত বার্তা অদৃশ্য হবে না।"
 
@@ -402,6 +429,9 @@ msgstr "যোগাযোগের তথ্য দেখুন"
 
 msgid "off"
 msgstr "বন্ধ করুন"
+
+msgid "on"
+msgstr "চালু করুন"
 
 msgid "continue"
 msgstr "চালিয়ে যান"
