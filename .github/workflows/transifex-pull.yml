@@ -20,8 +20,9 @@ jobs:
       env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
       run: |
-        sudo apt-get install python3-pip
-        pip install transifex-client
+        curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
+        source /home/runner/.bashrc
+        export PATH="/home/runner/work/android-lantern/android-lantern:$PATH"
         tx pull -af -minimum-perc 90
         git config user.name git
         git config user.email github-actions@github.com
