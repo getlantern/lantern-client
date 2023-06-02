@@ -12,11 +12,11 @@ jobs:
     name: push-strings-to-transifex
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: "Push main translations file"
         env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
         run: |
-          sudo apt-get install python3-pip
-          pip install transifex-client
+          curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
+          source /home/runner/.bashrc
           tx push -s
