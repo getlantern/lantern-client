@@ -26,6 +26,6 @@ jobs:
         tx pull -af -minimum-perc 90
         git config user.name git
         git config user.email github-actions@github.com
-        git ls-files --modified public/locale | xargs git add
+        git ls-files --modified assets/locales android/app/src/main/res | xargs git add
         git diff --cached --exit-code || git commit -m "updated translations..." && git push origin main
 
