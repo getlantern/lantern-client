@@ -192,7 +192,11 @@ public class LanternHttpClient extends HttpClient {
 
     private void processPlansV3(final JsonObject result, final PlansV3Callback cb, InAppBilling inAppBilling) {
         PaymentMethodResponse response = Json.gson.fromJson(result, PaymentMethodResponse.class);
+        Logger.d(TAG, "Response is ", response);
+        Logger.d(TAG, "Providers: ", response.getProviders());
+        Logger.d(TAG, "Android providers: ", response.getProviders().get("android"));
         List<PaymentProviders> providers = response.getProviders().get("android");
+        Logger.d(TAG, "Providers: ", providers);
         /*for (ProviderInfo provider : providers) {
             if (provider.getName().toString().equalsIgnoreCase("stripe")) {
                 Map<String, Object> data = provider.getData();
