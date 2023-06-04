@@ -5,19 +5,13 @@ import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/price_summary.dart';
 import 'package:lantern/plans/utils.dart';
 
-enum Country { US, RU, CN }
-
 class Checkout extends StatefulWidget {
-  final List<Plan> plans;
-  final String id;
+  final Plan plan;
   final bool isPro;
-  final Plan selectedPlan;
 
   Checkout({
-    required this.plans,
-    required this.id,
+    required this.plan,
     required this.isPro,
-    required this.selectedPlan,
     Key? key,
   }) : super(key: key);
 
@@ -107,7 +101,7 @@ class _CheckoutState extends State<Checkout>
     );
   }
 
-  List<Widget> paymentOptions(Country countryCode) {
+  List<Widget> paymentOptions(List<String> providers) {
     var freekassa = PaymentProvider(
       logoPaths: [
         ImagePaths.mnp,
@@ -133,15 +127,21 @@ class _CheckoutState extends State<Checkout>
       paymentType: PaymentProviders.btc,
     );
 
-    switch (countryCode) {
-      case Country.CN:
-        return [stripe, btc];
-      case Country.US:
-        return [stripe, btc, options(), if (showMoreOptions) freekassa];
-      case Country.RU:
-        return [freekassa, btc, if (showMoreOptions) stripe];
+    List<PaymentProvider> paymentProviders = [];
+    for (final provider in providers) {
+      switch (provider) {
+        case "stripe":
+          paymentProviders.add(stripe);
+          break;
+        case "freekassa":
+          paymentProviders.add(freekassa);
+          break;
+        case "btc":
+          paymentProviders.add(btc);
+          break;
+      }
     }
-    return [];
+    return paymentProviders;
   }
 
   Future<void> resolvePaymentRoute() async {
@@ -150,10 +150,9 @@ class _CheckoutState extends State<Checkout>
         // * Stripe selected
         await context.pushRoute(
           StripeCheckout(
-            plans: widget.plans,
             email: emailController.text,
             refCode: refCodeController.text,
-            id: widget.id,
+            plan: widget.plan,
             isPro: widget.isPro,
           ),
         );
@@ -163,7 +162,7 @@ class _CheckoutState extends State<Checkout>
         context.loaderOverlay.show();
         await sessionModel
             .submitBitcoinPayment(
-              widget.id,
+              widget.plan.id,
               emailController.text,
               refCodeController.text,
             )
@@ -193,21 +192,21 @@ class _CheckoutState extends State<Checkout>
         });
         break;
       case PaymentProviders.freekassa:
-        var strs = widget.id.split('-');
+        var strs = widget.plan.id.split('-');
         if (strs.length < 2) break;
         var currency = strs[1];
-        var currencyCost = widget.selectedPlan.price[currency];
+        var currencyCost = widget.plan.price[currency];
         if (currencyCost == null) break;
         await sessionModel.submitFreekassa(
-            emailController.text, widget.id, currencyCost.toString()!!);
+            emailController.text, widget.plan.id, currencyCost.toString()!!);
         break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel.geoCountryCode(
-        (BuildContext sessionContext, String countryCode, Widget? child) {
+    return sessionModel.paymentProviders((BuildContext context, Providers _providers, Widget? child) {
+      final providers = _providers.providers;
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         title: 'lantern_pro_checkout'.i18n,
@@ -368,12 +367,7 @@ class _CheckoutState extends State<Checkout>
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: paymentOptions(
-                      Country.values.firstWhere(
-                        (e) => e.toString() == 'Country.' + countryCode,
-                        orElse: () => Country.US,
-                      ),
-                    ),
+                    children: paymentOptions(providers),
                   ),
                 ),
                 // * Price summary, unused pro time disclaimer, Continue button

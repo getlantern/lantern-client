@@ -115,8 +115,12 @@ class _PlansPageState extends State<PlansPage> {
   @override
   Widget build(BuildContext context) {
     return FullScreenDialog(widget: sessionModel
-        .plans((BuildContext context, Plans _plans, Widget? child) {
-      final plans = _plans.plans;
+        .plans(
+          builder: (
+            context,
+            Iterable<PathAndValue<Plan>> plans,
+            Widget? child,
+          ) {
       if (plans.isEmpty) {
         return Center(
           child: Column(
@@ -257,11 +261,8 @@ class _PlansPageState extends State<PlansPage> {
                           if (plans != null)
                             ...plans.map(
                               (plan) => PlanCard(
-                                plans: plans,
-                                id: plan.id,
-                                //platinumAvailable: platinumAvailable,
+                                plan: plan.value,
                                 isPro: isPro,
-                                //isPlatinum: isPlatinum,
                               ),
                             ),
                         ],

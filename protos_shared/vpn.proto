@@ -46,3 +46,7 @@ message Plan {
 message Plans {
   repeated Plan plans = 1;
 }
+
+message Providers {
+  repeated string providers = 1;
+}

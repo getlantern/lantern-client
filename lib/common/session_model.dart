@@ -232,12 +232,24 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('checkForUpdates');
   }
 
-  Widget plans(ValueWidgetBuilder<Plans> builder) {
-    return subscribedSingleValueBuilder<Plans>(
-      'plans',
+  Widget plans({
+    required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
+  }) {
+    return subscribedListBuilder<Plan>(
+      '/plans/',
       builder: builder,
       deserialize: (Uint8List serialized) {
-        return Plans.fromBuffer(serialized);
+        return Plan.fromBuffer(serialized);
+      },
+    );
+  }
+
+  Widget paymentProviders(ValueWidgetBuilder<Providers> builder) {
+    return subscribedSingleValueBuilder<Providers>(
+      'paymentProviders',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return Providers.fromBuffer(serialized);
       },
     );
   }

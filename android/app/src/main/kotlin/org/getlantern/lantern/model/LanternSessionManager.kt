@@ -321,13 +321,21 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setUserPlans(proPlans: Map<String, ProPlan>) {
-        val plans = Vpn.Plans.newBuilder().addAllPlans(proPlans.values.toList().map { Vpn.Plan.newBuilder().setId(it.id)
-            .setDescription(it.description).setBestValue(it.bestValue).setUsdPrice(it.usdEquivalentPrice)
-            .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime).setOneMonthCost(it.oneMonthCost)
-            .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus).build()}).build()
-        Logger.d(TAG, "Plans are $plans")
         db.mutate { tx ->
-            tx.put(PLANS, plans)
+            proPlans.values.forEach {
+                val path = PLANS + it.id
+                tx.put(path, Vpn.Plan.newBuilder().setId(it.id)
+                    .setDescription(it.description).setBestValue(it.bestValue).setUsdPrice(it.usdEquivalentPrice)
+                    .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime).setOneMonthCost(it.oneMonthCost)
+                    .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus).build())
+            }
+        }
+    }
+
+    fun setPaymentProviders(paymentProviders: MutableList<String>) {
+        val providers = Vpn.Providers.newBuilder().addAllProviders(paymentProviders).build()
+        db.mutate { tx ->
+            tx.put(PAYMENT_PROVIDERS, providers)
         }
     }
 
@@ -359,7 +367,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val USER_LEVEL = "userLevel"
         private const val PRO_USER = "prouser"
         private const val DEVICES = "devices"
-        private const val PLANS = "plans"
+        private const val PLANS = "/plans/"
+        private const val PAYMENT_PROVIDERS = "paymentProviders"
         private const val PRO_EXPIRED = "proexpired"
         private const val PRO_PLAN = "proplan"
         private const val SHOW_RENEWAL_PREF = "renewalpref"
