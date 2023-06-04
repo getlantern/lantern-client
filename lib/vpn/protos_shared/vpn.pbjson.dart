@@ -107,3 +107,13 @@ const Plans$json = const {
 
 /// Descriptor for `Plans`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List plansDescriptor = $convert.base64Decode('CgVQbGFucxIbCgVwbGFucxgBIAMoCzIFLlBsYW5SBXBsYW5z');
+@$core.Deprecated('Use providersDescriptor instead')
+const Providers$json = const {
+  '1': 'Providers',
+  '2': const [
+    const {'1': 'providers', '3': 1, '4': 3, '5': 9, '10': 'providers'},
+  ],
+};
+
+/// Descriptor for `Providers`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List providersDescriptor = $convert.base64Decode('CglQcm92aWRlcnMSHAoJcHJvdmlkZXJzGAEgAygJUglwcm92aWRlcnM=');

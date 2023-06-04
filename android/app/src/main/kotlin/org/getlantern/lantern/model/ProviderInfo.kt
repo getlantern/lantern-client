@@ -11,6 +11,6 @@ enum class PaymentProvider(val provider: String) {
 }
 
 data class ProviderInfo(
-	@SerializedName("name") val name: PaymentProvider,
-	@SerializedName("data") val data: Map<String, Any>
+	@SerializedName("name") var name: PaymentProvider,
+	@SerializedName("data") var data: Map<String, Any>
 )

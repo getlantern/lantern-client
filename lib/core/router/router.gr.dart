@@ -329,10 +329,8 @@ class AppRouter extends _i34.RootStackRouter {
       return _i34.CustomPage<void>(
         routeData: routeData,
         child: _i22.Checkout(
-          plans: args.plans,
-          id: args.id,
+          plan: args.plan,
           isPro: args.isPro,
-          selectedPlan: args.selectedPlan,
           key: args.key,
         ),
         transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
@@ -362,10 +360,9 @@ class AppRouter extends _i34.RootStackRouter {
       return _i34.CustomPage<void>(
         routeData: routeData,
         child: _i24.StripeCheckout(
-          plans: args.plans,
+          plan: args.plan,
           email: args.email,
           refCode: args.refCode,
-          id: args.id,
           isPro: args.isPro,
           key: args.key,
         ),
@@ -1143,19 +1140,15 @@ class BlockedUsersArgs {
 /// [_i22.Checkout]
 class Checkout extends _i34.PageRouteInfo<CheckoutArgs> {
   Checkout({
-    required List<_i36.Plan> plans,
-    required String id,
+    required _i36.Plan plan,
     required bool isPro,
-    required _i36.Plan selectedPlan,
     _i36.Key? key,
   }) : super(
           Checkout.name,
           path: 'checkout',
           args: CheckoutArgs(
-            plans: plans,
-            id: id,
+            plan: plan,
             isPro: isPro,
-            selectedPlan: selectedPlan,
             key: key,
           ),
         );
@@ -1165,26 +1158,20 @@ class Checkout extends _i34.PageRouteInfo<CheckoutArgs> {
 
 class CheckoutArgs {
   const CheckoutArgs({
-    required this.plans,
-    required this.id,
+    required this.plan,
     required this.isPro,
-    required this.selectedPlan,
     this.key,
   });
 
-  final List<_i36.Plan> plans;
-
-  final String id;
+  final _i36.Plan plan;
 
   final bool isPro;
-
-  final _i36.Plan selectedPlan;
 
   final _i36.Key? key;
 
   @override
   String toString() {
-    return 'CheckoutArgs{plans: $plans, id: $id, isPro: $isPro, selectedPlan: $selectedPlan, key: $key}';
+    return 'CheckoutArgs{plan: $plan, isPro: $isPro, key: $key}';
   }
 }
 
@@ -1227,20 +1214,18 @@ class ResellerCodeCheckoutArgs {
 /// [_i24.StripeCheckout]
 class StripeCheckout extends _i34.PageRouteInfo<StripeCheckoutArgs> {
   StripeCheckout({
-    required List<_i36.Plan> plans,
+    required _i36.Plan plan,
     required String email,
     String? refCode,
-    required String id,
     required bool isPro,
     _i36.Key? key,
   }) : super(
           StripeCheckout.name,
           path: 'stripeCheckout',
           args: StripeCheckoutArgs(
-            plans: plans,
+            plan: plan,
             email: email,
             refCode: refCode,
-            id: id,
             isPro: isPro,
             key: key,
           ),
@@ -1251,21 +1236,18 @@ class StripeCheckout extends _i34.PageRouteInfo<StripeCheckoutArgs> {
 
 class StripeCheckoutArgs {
   const StripeCheckoutArgs({
-    required this.plans,
+    required this.plan,
     required this.email,
     this.refCode,
-    required this.id,
     required this.isPro,
     this.key,
   });
 
-  final List<_i36.Plan> plans;
+  final _i36.Plan plan;
 
   final String email;
 
   final String? refCode;
-
-  final String id;
 
   final bool isPro;
 
@@ -1273,7 +1255,7 @@ class StripeCheckoutArgs {
 
   @override
   String toString() {
-    return 'StripeCheckoutArgs{plans: $plans, email: $email, refCode: $refCode, id: $id, isPro: $isPro, key: $key}';
+    return 'StripeCheckoutArgs{plan: $plan, email: $email, refCode: $refCode, isPro: $isPro, key: $key}';
   }
 }
 

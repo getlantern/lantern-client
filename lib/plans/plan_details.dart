@@ -1,26 +1,22 @@
 import 'package:lantern/common/common.dart';
 
 class PlanCard extends StatelessWidget {
-  final List<Plan> plans;
-  final String id;
+  final Plan plan;
   final bool isPro;
 
   const PlanCard({
-    required this.plans,
-    required this.id,
+    required this.plan,
     required this.isPro,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final planName = id.split('-')[0];
-    final selectedPlan = plans.firstWhere((p) => p.id == id);
-    // final description = selectedPlan['description'] as String;
+    final planName = plan.id.split('-')[0];
     final formattedPricePerYear =
-        selectedPlan.totalCostBilledOneTime;
-    final formattedPricePerMonth = selectedPlan.oneMonthCost;
-    final isBestValue = selectedPlan.bestValue;
+        plan.totalCostBilledOneTime;
+    final formattedPricePerMonth = plan.oneMonthCost;
+    final isBestValue = plan.bestValue;
 
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),
@@ -31,7 +27,7 @@ class PlanCard extends StatelessWidget {
           // * Play version
           if (isPlayVersion) {
             await sessionModel
-                .submitGooglePlay(id)
+                .submitGooglePlay(plan.id)
                 .onError((error, stackTrace) {
               // on failure
               CDialog.showError(
@@ -46,10 +42,8 @@ class PlanCard extends StatelessWidget {
             // * Proceed to our own Checkout
             await context.pushRoute(
               Checkout(
-                plans: plans,
-                id: id,
+                plan: this.plan,
                 isPro: isPro,
-                selectedPlan: selectedPlan,
               ),
             );
           }

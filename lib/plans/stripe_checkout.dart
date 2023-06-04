@@ -14,17 +14,15 @@ const lanternStarLogo = CAssetImage(
 );
 
 class StripeCheckout extends StatefulWidget {
-  final List<Plan> plans;
+  final Plan plan;
   final String email;
   final String? refCode;
-  final String id;
   final bool isPro;
 
   const StripeCheckout({
-    required this.plans,
+    required this.plan,
     required this.email,
     this.refCode,
-    required this.id,
     required this.isPro,
     Key? key,
   }) : super(key: key);
@@ -106,7 +104,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
         context.loaderOverlay.show();
         await sessionModel
             .submitStripePayment(
-              widget.id,
+              widget.plan.id,
               widget.email,
               creditCardController.text,
               expDateController.text,
@@ -256,8 +254,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                     children: [
                       // * Price summary
                       PriceSummary(
-                        plans: widget.plans,
-                        id: widget.id,
+                        plan: widget.plan,
                         refCode: widget.refCode,
                         isPro: widget.isPro,
                       ),

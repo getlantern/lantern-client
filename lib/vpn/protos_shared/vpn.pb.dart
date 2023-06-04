@@ -573,3 +573,44 @@ class Plans extends $pb.GeneratedMessage {
   $core.List<Plan> get plans => $_getList(0);
 }
 
+class Providers extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Providers', createEmptyInstance: create)
+    ..pPS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'providers')
+    ..hasRequiredFields = false
+  ;
+
+  Providers._() : super();
+  factory Providers({
+    $core.Iterable<$core.String>? providers,
+  }) {
+    final _result = create();
+    if (providers != null) {
+      _result.providers.addAll(providers);
+    }
+    return _result;
+  }
+  factory Providers.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Providers.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Providers clone() => Providers()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Providers copyWith(void Function(Providers) updates) => super.copyWith((message) => updates(message as Providers)) as Providers; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Providers create() => Providers._();
+  Providers createEmptyInstance() => create();
+  static $pb.PbList<Providers> createRepeated() => $pb.PbList<Providers>();
+  @$core.pragma('dart2js:noInline')
+  static Providers getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Providers>(create);
+  static Providers? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.String> get providers => $_getList(0);
+}
+
