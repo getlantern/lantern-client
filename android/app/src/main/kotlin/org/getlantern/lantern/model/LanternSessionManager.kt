@@ -3,7 +3,6 @@ package org.getlantern.lantern.model
 import android.app.Application
 import android.content.res.Resources
 import android.text.TextUtils
-import io.lantern.apps.AppData
 import io.lantern.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
@@ -45,7 +44,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             val parts = lang.split("_".toRegex()).toTypedArray()
             return if (parts.isNotEmpty()) {
                 Currency.getInstance(Locale(parts[0], parts[1]))
-            } else Currency.getInstance(Locale.getDefault())
+            } else {
+                Currency.getInstance(Locale.getDefault())
+            }
         } catch (e: Exception) {
             Logger.error(TAG, e.message)
         }
@@ -89,7 +90,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         val plan = getSelectedPlan()
         return if (plan != null) {
             plan.currency
-        } else "usd"
+        } else {
+            "usd"
+        }
     }
 
     fun defaultToAlipay(): Boolean {
@@ -153,11 +156,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun deviceID(): String? {
-      return prefs.getString(DEVICE_ID, "")
+        return prefs.getString(DEVICE_ID, "")
     }
 
     fun userID(): Long {
-      return prefs.getLong(USER_ID, 0)
+        return prefs.getLong(USER_ID, 0)
     }
 
     fun getDeviceExp(): Long {
@@ -185,7 +188,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         val expiration = prefs.getLong(EXPIRY_DATE, 0L)
         return if (expiration == 0L) {
             null
-        } else LocalDateTime(expiration * 1000)
+        } else {
+            LocalDateTime(expiration * 1000)
+        }
     }
 
     fun showWelcomeScreen(): Boolean {
@@ -306,8 +311,12 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
 
-        val devices = Vpn.Devices.newBuilder().addAllDevices(user.devices.map { Vpn.Device.newBuilder().setId(it.id)
-            .setName(it.name).setCreated(it.created).build() }).build()
+        val devices = Vpn.Devices.newBuilder().addAllDevices(
+            user.devices.map {
+                Vpn.Device.newBuilder().setId(it.id)
+                    .setName(it.name).setCreated(it.created).build()
+            },
+        ).build()
         db.mutate { tx ->
             tx.put(DEVICES, devices)
         }
@@ -324,10 +333,13 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         db.mutate { tx ->
             proPlans.values.forEach {
                 val path = PLANS + it.id
-                tx.put(path, Vpn.Plan.newBuilder().setId(it.id)
-                    .setDescription(it.description).setBestValue(it.bestValue).setUsdPrice(it.usdEquivalentPrice)
-                    .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime).setOneMonthCost(it.oneMonthCost)
-                    .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus).build())
+                tx.put(
+                    path,
+                    Vpn.Plan.newBuilder().setId(it.id)
+                        .setDescription(it.description).setBestValue(it.bestValue).setUsdPrice(it.usdEquivalentPrice)
+                        .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime).setOneMonthCost(it.oneMonthCost)
+                        .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus).build(),
+                )
             }
         }
     }
@@ -336,9 +348,12 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         db.mutate { tx ->
             paymentMethods.forEachIndexed { index, it ->
                 val path = PAYMENT_METHODS + index
-                tx.put(path, Vpn.PaymentMethod.newBuilder().setMethod(it.method.toString().lowercase()).addAllProviders(
-                    it.providers.map { Vpn.PaymentProviders.newBuilder().setName(it.name.toString().lowercase()).build() }
-                ).build())
+                tx.put(
+                    path,
+                    Vpn.PaymentMethod.newBuilder().setMethod(it.method.toString().lowercase()).addAllProviders(
+                        it.providers.map { Vpn.PaymentProviders.newBuilder().setName(it.name.toString().lowercase()).build() },
+                    ).build(),
+                )
             }
         }
     }
