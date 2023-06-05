@@ -1,12 +1,16 @@
 import 'package:lantern/common/common.dart';
 
-enum PaymentProviders { stripe, btc, freekassa }
+enum Providers { stripe, btcpay, freekassa }
+
+Providers _getProvider(dynamic provider) {
+  return Providers.values.firstWhere((e) => describeEnum(e) == provider);
+}
 
 class PaymentProvider extends StatelessWidget {
   final List<String> logoPaths;
   final Function onChanged;
-  final PaymentProviders selectedPaymentProvider;
-  final PaymentProviders paymentType;
+  final Providers selectedPaymentProvider;
+  final Providers paymentType;
 
   const PaymentProvider({
     Key? key,

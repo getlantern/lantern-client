@@ -191,18 +191,18 @@ public class LanternHttpClient extends HttpClient {
     }
 
     private void processPlansV3(final JsonObject result, final PlansV3Callback cb, InAppBilling inAppBilling) {
-        final PaymentMethodResponse response = Json.gson.fromJson(result, PaymentMethodResponse.class);       
-        List<PaymentProviders> providers = response.getProviders().get("android");
+        Type mapType = new TypeToken<Map<String, List<PaymentMethods>>>() {
+        }.getType();
+        Map<String, List<PaymentMethods>> response = Json.gson.fromJson(result.get("providers"), mapType);
+        List<PaymentMethods> providers = response.get("android");
         Type listType = new TypeToken<List<ProPlan>>() {
         }.getType();
         final List<ProPlan> fetched = Json.gson.fromJson(result.get("plans"), listType);
+        Logger.debug(TAG, "Payment providers: " + providers);
         Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
-        Logger.debug(TAG, "Pro plans: " + fetched);
-        Logger.debug(TAG, "Providers: ", providers);
         for (ProPlan plan : fetched) {
             if (plan != null) {
                 plan.formatCost();
-                Logger.debug(TAG, "New plan is " + plan);
                 plans.put(plan.getId(), plan);
             }
         }
@@ -516,7 +516,7 @@ public class LanternHttpClient extends HttpClient {
     public interface PlansV3Callback {
         public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
 
-        public void onSuccess(Map<String, ProPlan> plans, List<PaymentProviders> providers);
+        public void onSuccess(Map<String, ProPlan> plans, List<PaymentMethods> methods);
     }
 
     public interface YuansferCallback {
