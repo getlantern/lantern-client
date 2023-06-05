@@ -114,13 +114,11 @@ class _PlansPageState extends State<PlansPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FullScreenDialog(widget: sessionModel
-        .plans(
-          builder: (
-            context,
-            Iterable<PathAndValue<Plan>> plans,
-            Widget? child,
-          ) {
+    return FullScreenDialog(widget: sessionModel.plans(builder: (
+      context,
+      Iterable<PathAndValue<Plan>> plans,
+      Widget? child,
+    ) {
       if (plans.isEmpty) {
         return Center(
           child: Column(

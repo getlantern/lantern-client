@@ -40,7 +40,8 @@ import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.PaymentProvider
-import org.getlantern.lantern.model.PaymentProviders
+import org.getlantern.lantern.model.PaymentMethod
+import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
@@ -363,14 +364,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
             }
 
-            override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentProviders>) {
-                Logger.debug(TAG, "Successfully fetched payment providers")
-                var providers: MutableList<String> = mutableListOf<String>()
-                for (paymentMethod in paymentMethods) {
-                    val provider = paymentMethod.providers.firstOrNull()
-                    if (provider != null) providers.add(provider.name.toString())
-                }
-                LanternApp.getSession().setPaymentProviders(providers)
+            override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
+                Logger.debug(TAG, "Successfully fetched payment methods")
+                LanternApp.getSession().setPaymentMethods(paymentMethods)
 
              }
          }, null)

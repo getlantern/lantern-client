@@ -532,85 +532,105 @@ class Plan extends $pb.GeneratedMessage {
   void clearFormattedBonus() => clearField(9);
 }
 
-class Plans extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Plans', createEmptyInstance: create)
-    ..pc<Plan>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'plans', $pb.PbFieldType.PM, subBuilder: Plan.create)
+class PaymentProviders extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PaymentProviders', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
-  Plans._() : super();
-  factory Plans({
-    $core.Iterable<Plan>? plans,
+  PaymentProviders._() : super();
+  factory PaymentProviders({
+    $core.String? name,
   }) {
     final _result = create();
-    if (plans != null) {
-      _result.plans.addAll(plans);
+    if (name != null) {
+      _result.name = name;
     }
     return _result;
   }
-  factory Plans.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Plans.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory PaymentProviders.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PaymentProviders.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  Plans clone() => Plans()..mergeFromMessage(this);
+  PaymentProviders clone() => PaymentProviders()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Plans copyWith(void Function(Plans) updates) => super.copyWith((message) => updates(message as Plans)) as Plans; // ignore: deprecated_member_use
+  PaymentProviders copyWith(void Function(PaymentProviders) updates) => super.copyWith((message) => updates(message as PaymentProviders)) as PaymentProviders; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static Plans create() => Plans._();
-  Plans createEmptyInstance() => create();
-  static $pb.PbList<Plans> createRepeated() => $pb.PbList<Plans>();
+  static PaymentProviders create() => PaymentProviders._();
+  PaymentProviders createEmptyInstance() => create();
+  static $pb.PbList<PaymentProviders> createRepeated() => $pb.PbList<PaymentProviders>();
   @$core.pragma('dart2js:noInline')
-  static Plans getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Plans>(create);
-  static Plans? _defaultInstance;
+  static PaymentProviders getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PaymentProviders>(create);
+  static PaymentProviders? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<Plan> get plans => $_getList(0);
+  $core.String get name => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set name($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearName() => clearField(1);
 }
 
-class Providers extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Providers', createEmptyInstance: create)
-    ..pPS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'providers')
+class PaymentMethod extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PaymentMethod', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'method')
+    ..pc<PaymentProviders>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'providers', $pb.PbFieldType.PM, subBuilder: PaymentProviders.create)
     ..hasRequiredFields = false
   ;
 
-  Providers._() : super();
-  factory Providers({
-    $core.Iterable<$core.String>? providers,
+  PaymentMethod._() : super();
+  factory PaymentMethod({
+    $core.String? method,
+    $core.Iterable<PaymentProviders>? providers,
   }) {
     final _result = create();
+    if (method != null) {
+      _result.method = method;
+    }
     if (providers != null) {
       _result.providers.addAll(providers);
     }
     return _result;
   }
-  factory Providers.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Providers.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory PaymentMethod.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PaymentMethod.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  Providers clone() => Providers()..mergeFromMessage(this);
+  PaymentMethod clone() => PaymentMethod()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Providers copyWith(void Function(Providers) updates) => super.copyWith((message) => updates(message as Providers)) as Providers; // ignore: deprecated_member_use
+  PaymentMethod copyWith(void Function(PaymentMethod) updates) => super.copyWith((message) => updates(message as PaymentMethod)) as PaymentMethod; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static Providers create() => Providers._();
-  Providers createEmptyInstance() => create();
-  static $pb.PbList<Providers> createRepeated() => $pb.PbList<Providers>();
+  static PaymentMethod create() => PaymentMethod._();
+  PaymentMethod createEmptyInstance() => create();
+  static $pb.PbList<PaymentMethod> createRepeated() => $pb.PbList<PaymentMethod>();
   @$core.pragma('dart2js:noInline')
-  static Providers getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Providers>(create);
-  static Providers? _defaultInstance;
+  static PaymentMethod getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PaymentMethod>(create);
+  static PaymentMethod? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$core.String> get providers => $_getList(0);
+  $core.String get method => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set method($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMethod() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMethod() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<PaymentProviders> get providers => $_getList(1);
 }
 

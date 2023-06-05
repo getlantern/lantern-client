@@ -332,10 +332,14 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         }
     }
 
-    fun setPaymentProviders(paymentProviders: MutableList<String>) {
-        val providers = Vpn.Providers.newBuilder().addAllProviders(paymentProviders).build()
+    fun setPaymentMethods(paymentMethods: List<PaymentMethods>) {
         db.mutate { tx ->
-            tx.put(PAYMENT_PROVIDERS, providers)
+            paymentMethods.forEachIndexed { index, it ->
+                val path = PAYMENT_METHODS + index
+                tx.put(path, Vpn.PaymentMethod.newBuilder().setMethod(it.method.toString().lowercase()).addAllProviders(
+                    it.providers.map { Vpn.PaymentProviders.newBuilder().setName(it.name.toString().lowercase()).build() }
+                ).build())
+            }
         }
     }
 
@@ -368,7 +372,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val PRO_USER = "prouser"
         private const val DEVICES = "devices"
         private const val PLANS = "/plans/"
-        private const val PAYMENT_PROVIDERS = "paymentProviders"
+        private const val PAYMENT_METHODS = "/paymentMethods/"
         private const val PRO_EXPIRED = "proexpired"
         private const val PRO_PLAN = "proplan"
         private const val SHOW_RENEWAL_PREF = "renewalpref"

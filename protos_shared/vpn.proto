@@ -43,10 +43,11 @@ message Plan {
   string formattedBonus = 9;
 }
 
-message Plans {
-  repeated Plan plans = 1;
+message PaymentProviders {
+  string name = 1;
 }
 
-message Providers {
-  repeated string providers = 1;
+message PaymentMethod {
+  string method = 1;
+  repeated PaymentProviders providers = 2;
 }

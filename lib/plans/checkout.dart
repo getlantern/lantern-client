@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:lantern/common/common.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/plans/payment_provider.dart';
@@ -43,7 +44,7 @@ class _CheckoutState extends State<Checkout>
   );
 
   var isRefCodeFieldShowing = false;
-  var selectedPaymentProvider = PaymentProviders.stripe;
+  var selectedPaymentProvider = Providers.stripe;
   var loadingPercentage = 0;
   var submittedRefCode = false;
   late AnimationController animationController;
@@ -95,58 +96,64 @@ class _CheckoutState extends State<Checkout>
                 ),
               ])));
 
-  void selectPaymentProvider(PaymentProviders provider) {
+  void selectPaymentProvider(Providers provider) {
     setState(
       () => selectedPaymentProvider = provider,
     );
   }
 
-  List<Widget> paymentOptions(List<String> providers) {
-    var freekassa = PaymentProvider(
-      logoPaths: [
-        ImagePaths.mnp,
-        ImagePaths.qiwi,
-        ImagePaths.visa,
-        ImagePaths.mastercard
-      ],
-      onChanged: () => selectPaymentProvider(PaymentProviders.freekassa),
-      selectedPaymentProvider: selectedPaymentProvider,
-      paymentType: PaymentProviders.freekassa,
-    );
-
-    var stripe = PaymentProvider(
-      logoPaths: [ImagePaths.visa, ImagePaths.mastercard, ImagePaths.unionpay],
-      onChanged: () => selectPaymentProvider(PaymentProviders.stripe),
-      selectedPaymentProvider: selectedPaymentProvider,
-      paymentType: PaymentProviders.stripe,
-    );
-    var btc = PaymentProvider(
-      logoPaths: [ImagePaths.btc],
-      onChanged: () => selectPaymentProvider(PaymentProviders.btc),
-      selectedPaymentProvider: selectedPaymentProvider,
-      paymentType: PaymentProviders.btc,
-    );
-
-    List<PaymentProvider> paymentProviders = [];
-    for (final provider in providers) {
-      switch (provider) {
-        case "stripe":
-          paymentProviders.add(stripe);
-          break;
-        case "freekassa":
-          paymentProviders.add(freekassa);
-          break;
-        case "btc":
-          paymentProviders.add(btc);
-          break;
+  List<Widget> paymentOptions(
+      Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+    List<Widget> widgets = [];
+    for (final paymentMethod in paymentMethods) {
+      if (widgets.length == 2) {
+        widgets.add(options());
+        if (!showMoreOptions) break;
+      }
+      for (final provider in paymentMethod.value.providers) {
+        switch (provider.name) {
+          case "stripe":
+            widgets.add(PaymentProvider(
+              logoPaths: [
+                ImagePaths.visa,
+                ImagePaths.mastercard,
+                ImagePaths.unionpay
+              ],
+              onChanged: () => selectPaymentProvider(Providers.stripe),
+              selectedPaymentProvider: selectedPaymentProvider,
+              paymentType: Providers.stripe,
+            ));
+            break;
+          case "freekassa":
+            widgets.add(PaymentProvider(
+              logoPaths: [
+                ImagePaths.mnp,
+                ImagePaths.qiwi,
+                ImagePaths.visa,
+                ImagePaths.mastercard
+              ],
+              onChanged: () => selectPaymentProvider(Providers.freekassa),
+              selectedPaymentProvider: selectedPaymentProvider,
+              paymentType: Providers.freekassa,
+            ));
+            break;
+          case "btcpay":
+            widgets.add(PaymentProvider(
+              logoPaths: [ImagePaths.btc],
+              onChanged: () => selectPaymentProvider(Providers.btcpay),
+              selectedPaymentProvider: selectedPaymentProvider,
+              paymentType: Providers.btcpay,
+            ));
+            break;
+          }
       }
     }
-    return paymentProviders;
+    return widgets;
   }
 
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider) {
-      case PaymentProviders.stripe:
+      case Providers.stripe:
         // * Stripe selected
         await context.pushRoute(
           StripeCheckout(
@@ -157,7 +164,7 @@ class _CheckoutState extends State<Checkout>
           ),
         );
         break;
-      case PaymentProviders.btc:
+      case Providers.btcpay:
         // * BTC payment selected
         context.loaderOverlay.show();
         await sessionModel
@@ -191,7 +198,7 @@ class _CheckoutState extends State<Checkout>
           );
         });
         break;
-      case PaymentProviders.freekassa:
+      case Providers.freekassa:
         var strs = widget.plan.id.split('-');
         if (strs.length < 2) break;
         var currency = strs[1];
@@ -205,8 +212,11 @@ class _CheckoutState extends State<Checkout>
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel.paymentProviders((BuildContext context, Providers _providers, Widget? child) {
-      final providers = _providers.providers;
+    return sessionModel.paymentMethods(builder: (
+      context,
+      Iterable<PathAndValue<PaymentMethod>> paymentMethods,
+      Widget? child,
+    ) {
       return BaseScreen(
         resizeToAvoidBottomInset: false,
         title: 'lantern_pro_checkout'.i18n,
@@ -367,7 +377,7 @@ class _CheckoutState extends State<Checkout>
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: paymentOptions(providers),
+                    children: paymentOptions(paymentMethods),
                   ),
                 ),
                 // * Price summary, unused pro time disclaimer, Continue button

@@ -244,12 +244,14 @@ class SessionModel extends Model {
     );
   }
 
-  Widget paymentProviders(ValueWidgetBuilder<Providers> builder) {
-    return subscribedSingleValueBuilder<Providers>(
-      'paymentProviders',
+  Widget paymentMethods({
+    required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
+  }) {
+    return subscribedListBuilder<PaymentMethod>(
+      '/paymentMethods/',
       builder: builder,
       deserialize: (Uint8List serialized) {
-        return Providers.fromBuffer(serialized);
+        return PaymentMethod.fromBuffer(serialized);
       },
     );
   }

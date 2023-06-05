@@ -3,19 +3,26 @@ package org.getlantern.lantern.model
 import com.google.gson.annotations.SerializedName
 
 enum class PaymentMethod(val method: String) {
-	CreditCard("credit-card"),
-	UnionPay("unionpay"),
-	Alipay("alipay"),
-	BTC("btc"),
-	WeChatPay("wechatpay"),
-	Freekassa("freekassa")
+    @SerializedName("credit-card")
+    CreditCard("credit-card"),
+
+    @SerializedName("unionpay")
+    UnionPay("unionpay"),
+
+    @SerializedName("alipay")
+    Alipay("alipay"),
+
+    @SerializedName("btc")
+    BTC("btc"),
+
+    @SerializedName("wechatpay")
+    WeChatPay("wechatpay"),
+
+    @SerializedName("freekassa")
+    Freekassa("freekassa"),
 }
 
-data class PaymentProviders(
-  @SerializedName("method") val method: PaymentMethod, 
-  @SerializedName("providers") val providers: List<ProviderInfo>
-)
-
-data class PaymentMethodResponse(
-  @SerializedName("providers") val providers: Map<String, List<PaymentProviders>>
+data class PaymentMethods(
+    @SerializedName("method") var method: PaymentMethod,
+    @SerializedName("providers") var providers: List<ProviderInfo>,
 )

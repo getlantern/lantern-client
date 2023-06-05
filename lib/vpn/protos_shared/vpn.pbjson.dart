@@ -97,23 +97,24 @@ const Plan_PriceEntry$json = const {
 
 /// Descriptor for `Plan`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List planDescriptor = $convert.base64Decode('CgRQbGFuEg4KAmlkGAEgASgJUgJpZBIgCgtkZXNjcmlwdGlvbhgCIAEoCVILZGVzY3JpcHRpb24SHAoJYmVzdFZhbHVlGAMgASgIUgliZXN0VmFsdWUSGgoIdXNkUHJpY2UYBCABKANSCHVzZFByaWNlEiYKBXByaWNlGAUgAygLMhAuUGxhbi5QcmljZUVudHJ5UgVwcmljZRI2ChZ0b3RhbENvc3RCaWxsZWRPbmVUaW1lGAYgASgJUhZ0b3RhbENvc3RCaWxsZWRPbmVUaW1lEiIKDG9uZU1vbnRoQ29zdBgHIAEoCVIMb25lTW9udGhDb3N0EhwKCXRvdGFsQ29zdBgIIAEoCVIJdG90YWxDb3N0EiYKDmZvcm1hdHRlZEJvbnVzGAkgASgJUg5mb3JtYXR0ZWRCb251cxo4CgpQcmljZUVudHJ5EhAKA2tleRgBIAEoCVIDa2V5EhQKBXZhbHVlGAIgASgDUgV2YWx1ZToCOAE=');
-@$core.Deprecated('Use plansDescriptor instead')
-const Plans$json = const {
-  '1': 'Plans',
+@$core.Deprecated('Use paymentProvidersDescriptor instead')
+const PaymentProviders$json = const {
+  '1': 'PaymentProviders',
   '2': const [
-    const {'1': 'plans', '3': 1, '4': 3, '5': 11, '6': '.Plan', '10': 'plans'},
+    const {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
-/// Descriptor for `Plans`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List plansDescriptor = $convert.base64Decode('CgVQbGFucxIbCgVwbGFucxgBIAMoCzIFLlBsYW5SBXBsYW5z');
-@$core.Deprecated('Use providersDescriptor instead')
-const Providers$json = const {
-  '1': 'Providers',
+/// Descriptor for `PaymentProviders`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List paymentProvidersDescriptor = $convert.base64Decode('ChBQYXltZW50UHJvdmlkZXJzEhIKBG5hbWUYASABKAlSBG5hbWU=');
+@$core.Deprecated('Use paymentMethodDescriptor instead')
+const PaymentMethod$json = const {
+  '1': 'PaymentMethod',
   '2': const [
-    const {'1': 'providers', '3': 1, '4': 3, '5': 9, '10': 'providers'},
+    const {'1': 'method', '3': 1, '4': 1, '5': 9, '10': 'method'},
+    const {'1': 'providers', '3': 2, '4': 3, '5': 11, '6': '.PaymentProviders', '10': 'providers'},
   ],
 };
 
-/// Descriptor for `Providers`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List providersDescriptor = $convert.base64Decode('CglQcm92aWRlcnMSHAoJcHJvdmlkZXJzGAEgAygJUglwcm92aWRlcnM=');
+/// Descriptor for `PaymentMethod`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List paymentMethodDescriptor = $convert.base64Decode('Cg1QYXltZW50TWV0aG9kEhYKBm1ldGhvZBgBIAEoCVIGbWV0aG9kEi8KCXByb3ZpZGVycxgCIAMoCzIRLlBheW1lbnRQcm92aWRlcnNSCXByb3ZpZGVycw==');

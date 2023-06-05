@@ -13,8 +13,7 @@ class PlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final planName = plan.id.split('-')[0];
-    final formattedPricePerYear =
-        plan.totalCostBilledOneTime;
+    final formattedPricePerYear = plan.totalCostBilledOneTime;
     final formattedPricePerMonth = plan.oneMonthCost;
     final isBestValue = plan.bestValue;
 
@@ -77,7 +76,9 @@ class PlanCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CText(
-                          planName == '1y' ? 'one_year_plan'.i18n : 'two_year_plan'.i18n,
+                          planName == '1y'
+                              ? 'one_year_plan'.i18n
+                              : 'two_year_plan'.i18n,
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
