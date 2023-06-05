@@ -139,10 +139,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
-        val packageName = activity.packageName
-        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
-            registerReceiver(receiver, it)
-        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -162,10 +158,15 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     override fun onStart() {
         super.onStart()
+        val packageName = activity.packageName
+        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
+            registerReceiver(receiver, it)
+        }
     }
 
     override fun onStop() {
         super.onStop()
+        unregisterReceiver(receiver)
     }
 
     override fun onResume() {
@@ -198,7 +199,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
-        unregisterReceiver(receiver)
         EventBus.getDefault().unregister(this)
     }
 
