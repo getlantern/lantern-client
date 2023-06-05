@@ -358,20 +358,20 @@ msgstr "Add contacts in person"
 msgid "start_chat"
 msgstr "Start chat"
 
-msgid "allowed_apps"
-msgstr "Allowed Apps"
+msgid "your_installed_apps"
+msgstr "Your Installed Apps"
 
-msgid "excluded_apps"
-msgstr "Excluded Apps"
+msgid "apps_routed_through_lantern"
+msgstr "Apps Routed Through Lantern"
 
-msgid "apps_selected"
-msgstr "Apps selected below will not go through Lantern when connected. If an app isn't blocked, adding it to the excluded list can improve performance and save bandwidth."
+msgid "apps_to_unblock"
+msgstr "Choose the apps you want to unblock. When connected, only the apps selected below will be routed through Lantern."
 
 msgid "split_tunneling"
 msgstr "Split Tunneling"
 
 msgid "split_tunneling_info"
-msgstr "Split tunneling allows you to exclude selected apps from going through Lantern when connected."
+msgstr "When split tunneling is enabled, selected apps will be routed through Lantern. This can improve performance and save bandwidth by only unblocking specified apps."
 
 msgid "applied_next_time"
 msgstr "New split tunneling settings will be applied next time you reconnect."

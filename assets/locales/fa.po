@@ -422,6 +422,7 @@ msgstr "جداسازی تونل"
 msgid "split_tunneling_info"
 msgstr "جداسازی تونل به شما امکان می‌دهد اپلیکیشن‌های انتخاب شده را از عبور از لنترن در هنگام اتصال مستثنی کنید"
 
+
 msgid "applied_next_time"
 msgstr ""
 

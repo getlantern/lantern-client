@@ -54,15 +54,20 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
     private fun disconnectBroadcast(): PendingIntent {
         val intent = Intent(activity, NotificationReceiver::class.java)
         val packageName = activity.packageName
-        intent.setAction("$packageName.intent.VPN_DISCONNECTED")
+        intent.action = "$packageName.intent.VPN_DISCONNECTED"
         // Retrieve a PendingIntent that will perform a broadcast
-        return PendingIntent.getBroadcast(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getBroadcast(
+            activity,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        )
     }
 
     private fun createContentView(): RemoteViews {
         var contentView: RemoteViews = RemoteViews(packageName, R.layout.notification)
         contentView.setImageViewResource(R.id.image, R.drawable.lantern_notification_icon)
-        contentView.setTextViewText(R.id.title, "Connected to VPN")
+        contentView.setTextViewText(R.id.title, baseContext.getText(R.string.service_connected))
         contentView.setOnClickPendingIntent(R.id.disconnect, disconnectBroadcast())
         contentView.setTextViewText(R.id.time, LocalDateTime.now().format(DateTimeFormatter.ofPattern("h:mm a")))
         return contentView
