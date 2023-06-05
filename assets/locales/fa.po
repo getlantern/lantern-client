@@ -2,10 +2,8 @@
 # Translators:
 # Derek F <derek@getlantern.org>, 2021
 # Sina <sina@asl19.org>, 2021
-# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2021
 # Pedram Azizallahi <pedram672004@yahoo.com>, 2021
 # ali jafarizadeh <ebrahimigv@gmail.com>, 2021
-# Vaseto Nora <n.nouri67@gmail.com>, 2022
 # b0b47d46632b78a09a40de799fda9a65, 2022
 # Evan <alireza.firoozi68@gmail.com>, 2022
 # Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2022
@@ -13,14 +11,17 @@
 # Amir Moezzi <amirreza.mz@yahoo.com>, 2022
 # Mokah <unfilternet@getlantern.org>, 2022
 # Chip Stehr <chip@getlantern.org>, 2022
-# NoProfile, 2022
 # Lantern, 2022
+# Jigar, 2023
 # e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023
+# NoProfile, 2023
+# Vaseto Nora <n.nouri67@gmail.com>, 2023
+# 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023\n"
-"Language-Team: Persian (Iran) (https://www.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
+"Last-Translator: 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023\n"
+"Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
@@ -120,7 +121,7 @@ msgid "Link Device"
 msgstr "پیوند دادن دستگاه"
 
 msgid "Upgrade to Lantern Pro"
-msgstr "ارتقا به نسخه پرو فانوس"
+msgstr "ارتقا به نسخه حرفه‌ای"
 
 msgid "Invite Friends"
 msgstr "دعوت از دوستان"
@@ -133,6 +134,15 @@ msgstr "تنظیمات"
 
 msgid "general"
 msgstr "عمومی"
+
+msgid "about"
+msgstr "‫‫درباره‬"
+
+msgid "privacy_policy"
+msgstr "حریم خصوصی"
+
+msgid "terms_of_service"
+msgstr "شرایط استفاده از خدمات"
 
 msgid "proxy_all"
 msgstr "پراکسی کردن همه چیز"
@@ -177,7 +187,7 @@ msgid "VPN"
 msgstr "فیلترشکن"
 
 msgid "Authorize Device for Pro"
-msgstr "تایید دستگاه برای نسخه حرفه‌ای"
+msgstr "تایید دستگاه‌های دیگر برای نسخه حرفه‌ای"
 
 msgid "Authorize with Device Linking Pin"
 msgstr "تأیید با «پین اتصال دستگاه»"
@@ -325,9 +335,6 @@ msgstr "اطلاعات مخاطب شما"
 msgid "display_name"
 msgstr "نام نمایشی"
 
-msgid "split_tunneling"
-msgstr "جداسازی تونل"
-
 msgid "edit"
 msgstr "ویرایش"
 
@@ -400,6 +407,24 @@ msgstr "افزودن مخاطبین حاضر"
 msgid "start_chat"
 msgstr "شروع گپ"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr "جداسازی تونل"
+
+msgid "split_tunneling_info"
+msgstr "جداسازی تونل به شما امکان می‌دهد اپلیکیشن‌های انتخاب شده را از عبور از لنترن در هنگام اتصال مستثنی کنید"
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "همه پیام‌ها برای شما و %s ناپدید نمی‌شوند."
 
@@ -412,8 +437,11 @@ msgstr "حذف"
 msgid "view_contact_info"
 msgstr "مشاهده اطلاعات مخاطب"
 
-msgid "off"
+msgid "OFF"
 msgstr "خاموش"
+
+msgid "on"
+msgstr "روشن"
 
 msgid "continue"
 msgstr "ادامه"
@@ -1188,21 +1216,6 @@ msgstr "حالا این پیام باید به‌زودی ناپدید شود!"
 
 msgid "test_replica_search"
 msgstr "گربه"
-
-msgid "ON"
-msgstr "روشن"
-
-msgid "OFF"
-msgstr "خاموش"
-
-msgid "privacy_policy"
-msgstr "حریم خصوصی"
-
-msgid "terms_of_service"
-msgstr "شرایط استفاده"
-
-
-
 
 msgid "discover_disclaimer"
 msgstr ""
