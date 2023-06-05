@@ -310,7 +310,7 @@ class _CheckoutState extends State<Checkout>
                                   description: (error as PlatformException)
                                       .message
                                       .toString()
-                                      .i18n, // we are localizing this error Flutter-side
+                                      .i18n,
                                 );
                                 setState(() {
                                   refCodeSuccessfullyApplied = false;

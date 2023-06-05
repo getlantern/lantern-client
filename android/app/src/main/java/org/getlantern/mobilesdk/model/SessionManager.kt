@@ -514,6 +514,10 @@ abstract class SessionManager(application: Application) : Session {
             .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
             .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, false))
             .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
+
+        // initialize email address to empty string (if it doesn't already exist)
+        if (email().isEmpty()) setEmail("")
+
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
         internalHeaders = context.getSharedPreferences(
             INTERNAL_HEADERS_PREF_NAME,
