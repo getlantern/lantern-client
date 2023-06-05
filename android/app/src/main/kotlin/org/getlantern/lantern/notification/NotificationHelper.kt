@@ -98,7 +98,7 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
             activity,
             0,
             Intent(activity, MainActivity::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
         )
         builder = Notification.Builder(this)
             .setContentTitle(activity.getString(R.string.service_connected))
