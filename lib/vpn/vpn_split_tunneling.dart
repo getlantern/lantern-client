@@ -23,6 +23,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   }
 
   void init() async {
+    unawaited(vpnModel.refreshAppsList());
     var _vpnConnected = await vpnModel.isVpnConnected();
     setState(() {
       vpnConnected = _vpnConnected;
@@ -55,9 +56,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                         activeColor: CupertinoColors.activeGreen,
                         onChanged: (bool? value) {
                           var newValue = value ?? false;
-                          setState(() {
-                            vpnModel.setSplitTunneling(newValue);
-                          });
+                          vpnModel.setSplitTunneling(newValue);
+                          showRestartVPNSnackBar(context);
                         },
                       ),
                     ),
@@ -67,7 +67,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                   padding: const EdgeInsetsDirectional.only(top: 16),
                   child: CText(
                     splitTunnelingEnabled
-                        ? 'apps_selected'.i18n
+                        ? 'apps_to_unblock'.i18n
                         : 'split_tunneling_info'.i18n,
                     style: tsBody3,
                   ),
@@ -84,32 +84,33 @@ class _SplitTunnelingState extends State<SplitTunneling> {
     );
   }
 
-  // buildAppsLists builds lists for excluded and allowed installed apps and
-  // returns both along with their associated headers
+  // buildAppsLists builds lists for apps allowed access to the VPN connection
+  // and installed apps. It returns both along with their associated headers.
   ListView buildAppsList(Iterable<PathAndValue<AppData>> appsData) {
-    var excludedApps = appsData.where((app) => app.value.isExcluded).toList();
-    var allowedApps = appsData.where((app) => !app.value.isExcluded).toList();
+    var allowedApps = appsData.where((app) => app.value.allowedAccess).toList();
+    var excludedApps =
+        appsData.where((app) => !app.value.allowedAccess).toList();
 
-    excludedApps.sort((a, b) => a.value.name.compareTo(b.value.name));
     allowedApps.sort((a, b) => a.value.name.compareTo(b.value.name));
+    excludedApps.sort((a, b) => a.value.name.compareTo(b.value.name));
 
     return ListView.builder(
       itemCount: appsData.isEmpty ? 0 : appsData.length + 2,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
-          return ListSectionHeader('excluded_apps'.i18n.toUpperCase());
+          return ListSectionHeader(
+              'apps_routed_through_lantern'.i18n.toUpperCase());
         }
-        if (index == excludedApps.length + 1) {
-          return ListSectionHeader('allowed_apps'.i18n.toUpperCase());
+        if (index == allowedApps.length + 1) {
+          return ListSectionHeader('your_installed_apps'.i18n.toUpperCase());
         }
         late PathAndValue<AppData> appData;
-        if (index <= excludedApps.length) {
-          appData = excludedApps[index - 1];
+        if (index <= allowedApps.length) {
+          appData = allowedApps[index - 1];
         } else {
-          appData = allowedApps[index - excludedApps.length - 2];
+          appData = excludedApps[index - allowedApps.length - 2];
         }
-        var appItem = buildAppItem(appData.value);
-        return appItem;
+        return buildAppItem(appData.value);
       },
     );
   }
@@ -129,21 +130,23 @@ class _SplitTunnelingState extends State<SplitTunneling> {
       ),
       duration: const Duration(seconds: 7),
     );
-    snackbarShown = true;
+    setState(() {
+      snackbarShown = true;
+    });
   }
 
   Widget buildAppItem(AppData appData) {
-    var iconBytes = base64.decode(appData.icon);
+    var iconBytes = appData.icon;
     var packageName = appData.packageName;
 
-    var addOrRemoveExcludedApp = () => setState(() {
-          if (appData.isExcluded) {
-            vpnModel.removeExcludedApp(packageName);
-          } else {
-            vpnModel.addExcludedApp(packageName);
-          }
-          showRestartVPNSnackBar(context);
-        });
+    var allowOrDenyAppAccess = () {
+      if (appData.allowedAccess) {
+        vpnModel.denyAppAccess(packageName);
+      } else {
+        vpnModel.allowAppAccess(packageName);
+      }
+      showRestartVPNSnackBar(context);
+    };
     return Container(
       height: 72,
       padding: EdgeInsets.zero,
@@ -163,9 +166,11 @@ class _SplitTunnelingState extends State<SplitTunneling> {
               maxWidth: 24,
               maxHeight: 24,
             ),
-            child: Image.memory(iconBytes, fit: BoxFit.cover),
+            child: iconBytes.isNotEmpty
+                ? Image.memory(Uint8List.fromList(iconBytes), fit: BoxFit.cover)
+                : null,
           ),
-          onTap: () => addOrRemoveExcludedApp(),
+          onTap: () => allowOrDenyAppAccess(),
           trailing: SizedBox(
             height: 24.0,
             width: 24.0,
@@ -174,8 +179,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
               shape: const CircleBorder(),
               activeColor: Colors.black,
               side: const BorderSide(color: Colors.black),
-              onChanged: (bool? value) => addOrRemoveExcludedApp(),
-              value: appData.isExcluded,
+              onChanged: (bool? value) => allowOrDenyAppAccess(),
+              value: appData.allowedAccess,
             ),
           ),
           title: CText(
