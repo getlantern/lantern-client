@@ -13,6 +13,31 @@ const lanternStarLogo = CAssetImage(
   size: 72,
 );
 
+class CardExpirationFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue value) {
+    final newValue = value.text;
+    String formattedValue = '';
+
+    for (int i = 0; i < newValue.length; i++) {
+      if (newValue[i] != '/') formattedValue += newValue[i];
+      var index = i + 1;
+      if (index % 2 == 0 &&
+          index != newValue.length &&
+          !(formattedValue.contains(RegExp(r'\/')))) {
+        formattedValue += '/';
+      }
+    }
+    return value.copyWith(
+      text: formattedValue,
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: formattedValue.length),
+      ),
+    );
+  }
+}
+
 class StripeCheckout extends StatefulWidget {
   final Plan plan;
   final String email;
@@ -198,11 +223,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                           controller: expDateController,
                           autovalidateMode: AutovalidateMode.disabled,
                           label: 'card_expiration'.i18n,
-                          onChanged: (value) {
-                            if (value.length == 2) {
-                              expDateController.text = "${value}/";
-                            }
-                          },
+                          inputFormatters: [CardExpirationFormatter()],
                           keyboardType: TextInputType.datetime,
                           prefixIcon:
                               const CAssetImage(path: ImagePaths.calendar),
