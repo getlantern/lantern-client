@@ -390,6 +390,7 @@ class Plan extends $pb.GeneratedMessage {
     ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'oneMonthCost', protoName: 'oneMonthCost')
     ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'totalCost', protoName: 'totalCost')
     ..aOS(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'formattedBonus', protoName: 'formattedBonus')
+    ..aOS(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'renewalText', protoName: 'renewalText')
     ..hasRequiredFields = false
   ;
 
@@ -404,6 +405,7 @@ class Plan extends $pb.GeneratedMessage {
     $core.String? oneMonthCost,
     $core.String? totalCost,
     $core.String? formattedBonus,
+    $core.String? renewalText,
   }) {
     final _result = create();
     if (id != null) {
@@ -432,6 +434,9 @@ class Plan extends $pb.GeneratedMessage {
     }
     if (formattedBonus != null) {
       _result.formattedBonus = formattedBonus;
+    }
+    if (renewalText != null) {
+      _result.renewalText = renewalText;
     }
     return _result;
   }
@@ -530,6 +535,15 @@ class Plan extends $pb.GeneratedMessage {
   $core.bool hasFormattedBonus() => $_has(8);
   @$pb.TagNumber(9)
   void clearFormattedBonus() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get renewalText => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set renewalText($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasRenewalText() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearRenewalText() => clearField(10);
 }
 
 class PaymentProviders extends $pb.GeneratedMessage {

@@ -133,9 +133,13 @@ public class ProPlan {
         return TextUtils.join(" ", bonusParts);
     }
 
-     @SerializedName("renewalText")
+    @SerializedName("renewalText")
     public void setRenewalText(final String renewalText) {
         this.renewalText = renewalText;
+    }
+
+    public String getRenewalText() {
+        return renewalText;
     }
 
     @SerializedName("totalCost")
