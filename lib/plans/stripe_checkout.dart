@@ -36,13 +36,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   final _formKey = GlobalKey<FormState>();
   late final ccValidator = CreditCardValidator();
 
-  final emailFieldKey = GlobalKey<FormState>();
-  late final emailController = CustomTextEditingController(
-    formKey: emailFieldKey,
-    validator: (value) =>
-        EmailValidator.validate(value ?? '') ? null : 'invalid_email'.i18n,
-  );
-
   final creditCardFieldKey = GlobalKey<FormState>();
   late final creditCardController = CustomTextEditingController(
     formKey: creditCardFieldKey,
@@ -82,7 +75,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
 
   @override
   void dispose() {
-    emailController.dispose();
+    ;
     creditCardController.dispose();
     super.dispose();
   }
@@ -166,22 +159,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 PlanStep(
                   stepNum: '3',
                   description: 'checkout'.i18n,
-                ),
-                // * Email
-                Container(
-                  padding: const EdgeInsetsDirectional.only(
-                    top: 16,
-                    bottom: 8,
-                  ),
-                  child: CTextField(
-                    //key: emailFieldKey,
-                    initialValue: widget.email,
-                    controller: emailController,
-                    autovalidateMode: AutovalidateMode.disabled,
-                    label: 'email'.i18n,
-                    keyboardType: TextInputType.emailAddress,
-                    prefixIcon: const CAssetImage(path: ImagePaths.email),
-                  ),
                 ),
                 // * Credit card number
                 Container(
@@ -271,16 +248,15 @@ class _StripeCheckoutState extends State<StripeCheckout> {
 
   bool determineFormIsValid() {
     // returns true if there is at least one empty field
-    final anyFieldsEmpty = emailController.value.text.isEmpty ||
-        creditCardController.value.text.isEmpty ||
+    final anyFieldsEmpty = creditCardController.value.text.isEmpty ||
         expDateController.value.text.isEmpty ||
         cvcFieldController.value.text.isEmpty;
 
     // returns true if there is at least one invalid field
-    final anyFieldsInvalid = emailFieldKey.currentState?.validate() == false ||
+    final anyFieldsInvalid =
         creditCardFieldKey.currentState?.validate() == false ||
-        expDateFieldKey.currentState?.validate() == false ||
-        cvcFieldKey.currentState?.validate() == false;
+            expDateFieldKey.currentState?.validate() == false ||
+            cvcFieldKey.currentState?.validate() == false;
 
     return (!anyFieldsEmpty && !anyFieldsInvalid);
   }

@@ -145,7 +145,7 @@ class _CheckoutState extends State<Checkout>
               paymentType: Providers.btcpay,
             ));
             break;
-          }
+        }
       }
     }
     return widgets;
@@ -244,13 +244,20 @@ class _CheckoutState extends State<Checkout>
                   ),
                   child: Form(
                     key: emailFieldKey,
-                    child: CTextField(
-                      controller: emailController,
-                      autovalidateMode: AutovalidateMode.disabled,
-                      label: 'email'.i18n,
-                      keyboardType: TextInputType.emailAddress,
-                      prefixIcon: const CAssetImage(path: ImagePaths.email),
-                    ),
+                    child: sessionModel.emailAddress((
+                      BuildContext context,
+                      String emailAddress,
+                      Widget? child,
+                    ) {
+                      return CTextField(
+                        initialValue: widget.isPro ? emailAddress : '',
+                        controller: emailController,
+                        autovalidateMode: AutovalidateMode.disabled,
+                        label: 'email'.i18n,
+                        keyboardType: TextInputType.emailAddress,
+                        prefixIcon: const CAssetImage(path: ImagePaths.email),
+                      );
+                    }),
                   ),
                 ),
                 // * Referral Code field - initially hidden

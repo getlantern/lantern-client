@@ -81,6 +81,7 @@ const Plan$json = const {
     const {'1': 'oneMonthCost', '3': 7, '4': 1, '5': 9, '10': 'oneMonthCost'},
     const {'1': 'totalCost', '3': 8, '4': 1, '5': 9, '10': 'totalCost'},
     const {'1': 'formattedBonus', '3': 9, '4': 1, '5': 9, '10': 'formattedBonus'},
+    const {'1': 'renewalText', '3': 10, '4': 1, '5': 9, '10': 'renewalText'},
   ],
   '3': const [Plan_PriceEntry$json],
 };
@@ -96,7 +97,7 @@ const Plan_PriceEntry$json = const {
 };
 
 /// Descriptor for `Plan`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List planDescriptor = $convert.base64Decode('CgRQbGFuEg4KAmlkGAEgASgJUgJpZBIgCgtkZXNjcmlwdGlvbhgCIAEoCVILZGVzY3JpcHRpb24SHAoJYmVzdFZhbHVlGAMgASgIUgliZXN0VmFsdWUSGgoIdXNkUHJpY2UYBCABKANSCHVzZFByaWNlEiYKBXByaWNlGAUgAygLMhAuUGxhbi5QcmljZUVudHJ5UgVwcmljZRI2ChZ0b3RhbENvc3RCaWxsZWRPbmVUaW1lGAYgASgJUhZ0b3RhbENvc3RCaWxsZWRPbmVUaW1lEiIKDG9uZU1vbnRoQ29zdBgHIAEoCVIMb25lTW9udGhDb3N0EhwKCXRvdGFsQ29zdBgIIAEoCVIJdG90YWxDb3N0EiYKDmZvcm1hdHRlZEJvbnVzGAkgASgJUg5mb3JtYXR0ZWRCb251cxo4CgpQcmljZUVudHJ5EhAKA2tleRgBIAEoCVIDa2V5EhQKBXZhbHVlGAIgASgDUgV2YWx1ZToCOAE=');
+final $typed_data.Uint8List planDescriptor = $convert.base64Decode('CgRQbGFuEg4KAmlkGAEgASgJUgJpZBIgCgtkZXNjcmlwdGlvbhgCIAEoCVILZGVzY3JpcHRpb24SHAoJYmVzdFZhbHVlGAMgASgIUgliZXN0VmFsdWUSGgoIdXNkUHJpY2UYBCABKANSCHVzZFByaWNlEiYKBXByaWNlGAUgAygLMhAuUGxhbi5QcmljZUVudHJ5UgVwcmljZRI2ChZ0b3RhbENvc3RCaWxsZWRPbmVUaW1lGAYgASgJUhZ0b3RhbENvc3RCaWxsZWRPbmVUaW1lEiIKDG9uZU1vbnRoQ29zdBgHIAEoCVIMb25lTW9udGhDb3N0EhwKCXRvdGFsQ29zdBgIIAEoCVIJdG90YWxDb3N0EiYKDmZvcm1hdHRlZEJvbnVzGAkgASgJUg5mb3JtYXR0ZWRCb251cxIgCgtyZW5ld2FsVGV4dBgKIAEoCVILcmVuZXdhbFRleHQaOAoKUHJpY2VFbnRyeRIQCgNrZXkYASABKAlSA2tleRIUCgV2YWx1ZRgCIAEoA1IFdmFsdWU6AjgB');
 @$core.Deprecated('Use paymentProvidersDescriptor instead')
 const PaymentProviders$json = const {
   '1': 'PaymentProviders',

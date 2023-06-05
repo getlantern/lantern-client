@@ -338,7 +338,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                     Vpn.Plan.newBuilder().setId(it.id)
                         .setDescription(it.description).setBestValue(it.bestValue).setUsdPrice(it.usdEquivalentPrice)
                         .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime).setOneMonthCost(it.oneMonthCost)
-                        .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus).build(),
+                        .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus).setRenewalText(it.renewalText).build(),
                 )
             }
         }

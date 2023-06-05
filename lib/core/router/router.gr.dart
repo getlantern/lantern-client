@@ -374,11 +374,9 @@ class AppRouter extends _i34.RootStackRouter {
       );
     },
     PlansPage.name: (routeData) {
-      final args =
-          routeData.argsAs<PlansPageArgs>(orElse: () => const PlansPageArgs());
       return _i34.CustomPage<void>(
         routeData: routeData,
-        child: _i25.PlansPage(key: args.key),
+        child: _i25.PlansPage(),
         transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
@@ -1261,26 +1259,14 @@ class StripeCheckoutArgs {
 
 /// generated route for
 /// [_i25.PlansPage]
-class PlansPage extends _i34.PageRouteInfo<PlansPageArgs> {
-  PlansPage({_i36.Key? key})
+class PlansPage extends _i34.PageRouteInfo<void> {
+  const PlansPage()
       : super(
           PlansPage.name,
           path: 'plans',
-          args: PlansPageArgs(key: key),
         );
 
   static const String name = 'PlansPage';
-}
-
-class PlansPageArgs {
-  const PlansPageArgs({this.key});
-
-  final _i36.Key? key;
-
-  @override
-  String toString() {
-    return 'PlansPageArgs{key: $key}';
-  }
 }
 
 /// generated route for
