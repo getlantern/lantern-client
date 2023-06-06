@@ -14,6 +14,13 @@ message Bandwidth {
   int64 ttlSeconds = 4; // number of seconds left before data reset
 }
 
+message AppData {
+  string packageName = 1;
+  string name = 2;
+  bytes icon = 3;
+  bool allowedAccess = 4;
+}
+
 message Device {
   string id = 1;
   string name = 2;

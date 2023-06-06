@@ -10,20 +10,18 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.VpnService;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 
 import org.getlantern.lantern.LanternApp;
 import org.getlantern.lantern.R;
 import org.getlantern.lantern.model.Stats;
-import org.getlantern.lantern.model.VpnState;
 import org.getlantern.lantern.service.LanternService_;
-import org.getlantern.lantern.service.ServiceHelper;
 import org.getlantern.mobilesdk.Logger;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import internalsdk.Internalsdk;
 import internalsdk.SocketProtector;
+import java.util.List;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LanternVpnService extends VpnService implements Runnable {
@@ -34,10 +32,8 @@ public class LanternVpnService extends VpnService implements Runnable {
 
     private Provider mProvider = null;
 
-    final private ServiceHelper helper = new ServiceHelper(
-            this,
-            R.drawable.status_connected,
-            R.string.service_connected);
+    private boolean splitTunnelingEnabled = false;
+    private List<String> appsAllowedAccess = null;
 
     private final ServiceConnection lanternServiceConnection = new ServiceConnection() {
         @Override
@@ -55,7 +51,11 @@ public class LanternVpnService extends VpnService implements Runnable {
         Logger.d(TAG, "getOrInitProvider()");
         if (mProvider == null) {
             Logger.d(TAG, "Using Go tun2socks");
-            mProvider = new GoTun2SocksProvider();
+            mProvider = new GoTun2SocksProvider(
+                    getPackageManager(),
+                    splitTunnelingEnabled,
+                    appsAllowedAccess
+            );
         }
         return mProvider;
     }
@@ -65,7 +65,6 @@ public class LanternVpnService extends VpnService implements Runnable {
         super.onCreate();
         Logger.d(TAG, "VpnService created");
         bindService(new Intent(this, LanternService_.class), lanternServiceConnection, Context.BIND_AUTO_CREATE);
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -74,8 +73,6 @@ public class LanternVpnService extends VpnService implements Runnable {
         doStop();
         super.onDestroy();
         unbindService(lanternServiceConnection);
-        helper.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -92,6 +89,9 @@ public class LanternVpnService extends VpnService implements Runnable {
             stop();
             return START_NOT_STICKY;
         } else {
+            Bundle bundle = intent.getExtras();
+            splitTunnelingEnabled = bundle.getBoolean("splitTunnelingEnabled");
+            appsAllowedAccess = bundle.getStringArrayList("appsAllowedAccess");
             connect();
             return START_STICKY;
         }
@@ -99,17 +99,7 @@ public class LanternVpnService extends VpnService implements Runnable {
 
     private void connect() {
         Logger.d(TAG, "connect");
-        helper.makeForeground();
         new Thread(this, "VpnService").start();
-    }
-
-    @Subscribe(sticky = true)
-    public void onStats(Stats stats) {
-        helper.updateNotification(
-                stats.isHasSucceedingProxy() ?
-                        R.drawable.status_connected : R.drawable.status_issue,
-                stats.isHasSucceedingProxy() ?
-                        R.string.service_connected : R.string.service_issue);
     }
 
     @Override
@@ -147,12 +137,6 @@ public class LanternVpnService extends VpnService implements Runnable {
             LanternApp.getSession().updateVpnPreference(false);
         } catch (Throwable t) {
             Logger.e(TAG, "error updating vpn preference", t);
-        }
-        try {
-            Logger.d(TAG, "posting updated vpnstate");
-            EventBus.getDefault().post(new VpnState(false));
-        } catch (Throwable t) {
-            Logger.e(TAG, "error posting updated vpnstate", t);
         }
     }
 }

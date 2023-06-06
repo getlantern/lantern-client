@@ -30,6 +30,16 @@
   <string name="cannot_find_email">糟糕！我們無法找到該電子郵件地址。</string>
   <string name="no_purchase_date">請選擇您購買 Lantern Pro 的大約日期</string>
   <string name="purchase_date">購買日期</string>
+  <string-array name="common_issue_list">
+    <item>无法访问被封锁的网站</item>
+    <item>无法完成购买</item>
+    <item>无法登录</item>
+    <item>旋转器无休止地加载</item>
+    <item>慢速</item>
+    <item>聊天功能无法使用</item>
+    <item>发现功能无法使用</item>
+    <item>其他</item>
+  </string-array>
   <string name="submit_code">確認代碼</string>
   <string name="on_text">開啟</string>
   <string name="off_text">關閉</string>
@@ -48,6 +58,7 @@
   <string name="error_making_purchase">嘗試購買時發生錯誤</string>
   <string name="have_latest_version">%1$s %2$s 是可用的最新版本。</string>
   <string name="updating_lantern">更新 %1$s 中</string>
+  <string name="update_lantern">更新蓝灯</string>
   <string name="cancel">取消</string>
   <string name="newsfeed_option">試試 Lanten 摘要</string>
   <string name="newsfeed_off_option">關閉摘要</string>
@@ -346,6 +357,7 @@
   <string name="account_left_desc">您的帳號中還有 %1$d 個月的 Lantern Pro 服務</string>
   <string name="optimized_location">最佳化的伺服器位置</string>
   <string name="current_location">目前位置：</string>
+  <string name="disconnect">斷開</string>
   <string name="disconnected">已中斷連線</string>
   <string name="https_upgrades">HTTPS 升級</string>
   <string name="data_usage">資料使用量</string>
@@ -410,8 +422,6 @@
   <string name="privacy_disclosure_title">Lantern 私隱權揭露</string>
   <string name="privacy_disclosure_accept">我接受</string>
   <string name="privacy_disclosure_body">Lantern 承諾保護您的私隱。我們希望您瞭解我們收集哪些資訊、不收集哪些資訊，以及我們收集、使用和存儲資訊的方式。我們會解除您的付款資訊與您 Lantern Pro 帳號的關聯。我們不會收集您的活動記錄，包括不記錄瀏覽歷程記錄、流量目的地、資料內容或 DNS 查詢。我們也不會儲存連線記錄檔，也就是說，您的 IP 位址、與連線時間戳記相關的外送 Lantern 伺服器 IP 位址，或工作階段持續時間。對於某個特定 Lantern Pro 帳號，Lantern 在技術上無法關聯 Lantern 帳號與使用者的真實身份。給定一個 Lantern  IP 位址和精確的時間戳記，Lantern 在技術上無法將此 IP 位址歸入 Lantern 使用者或 Lantern 使用者 IP 位址。</string>
-  <string name="referral_code_share_description_free">跟好友分享您的代碼，在購買 Pro 版服務時獲得免費 Lantern Pro 服務一個月！</string>
-  <string name="referral_code_share_description_pro">跟好友分享您的代碼，在購買 Pro 時額外獲得免費 Lantern Pro 服務一個月！</string>
   <string name="referral_code_share">分享推薦代碼</string>
   <string name="referral_code_share_title">分享您的推薦代碼：</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>

@@ -46,6 +46,8 @@
     <color name="reseller_text">#FFEA00</color>
     <color name="gray_device_link">#767476</color>
     <color name="custom_tab_icon">#fafafa</color>
+    <color name="notification_blue">#006163</color>
+    <color name="notification_time">#647480</color>
 
     <color name="ksw_md_ripple_normal">#1E000000</color>
     <color name="ksw_md_ripple_checked">#33019285</color>

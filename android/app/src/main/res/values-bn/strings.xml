@@ -359,6 +359,7 @@
   <string name="account_left_desc">আপনার Lantern Pro এর %1$dমাস অবশিষ্ট আছে</string>
   <string name="optimized_location">অপটিমাইজকৃত সার্ভারের অবস্থান</string>
   <string name="current_location">বর্তমান অবস্থান:</string>
+  <string name="disconnect">বিচ্ছিন্ন</string>
   <string name="disconnected">বিচ্ছিন্ন</string>
   <string name="https_upgrades">HTTPS আপগ্রেড</string>
   <string name="data_usage">ব্যবহৃত ডাটা</string>
@@ -423,8 +424,6 @@
   <string name="privacy_disclosure_title">Lantern গোপনীয়্তা প্রকাশ</string>
   <string name="privacy_disclosure_accept">আমি স্বীকার করি</string>
   <string name="privacy_disclosure_body">আপনার গোপনীয়তা রক্ষা করার জন্য Lantern অঙ্গীকারবদ্ধ। আমরা কী তথ্য সংগ্রহ করি, কী তথ্য সংগ্রহ করি না এবং কীভাবে আমরা সংগ্রহ ও ব্যবহার করি এবং তথ্য সংরক্ষণ করি তা আমরা আপনাকে বোঝাতে চাই। আমরা আপনার Lantern Pro অ্যাকাউন্টের সাথে আপনার পেমেন্টের তথ্য সংযোগ বিচ্ছিন্ন করি। ব্রাউজ করার ইতিহাস লগ না করা, ট্রাফিকের গন্তব্যস্থল, ডেটার বিষয়বস্তু বা DNS জিজ্ঞাস্যগুলি মতো আপনার কার্যকলাপের লগগুলি আমরা সংগ্রহ করি না। উপরন্তু আমরা কখনও সংযোগের লগগুলি, অর্থাৎ, আপনার IP ঠিকানার কোনও লগ, সংযোগের টাইমস্ট্যাম্পের সাথে সংযুক্ত আউটগোয়িং Lantern সার্ভারের IP ঠিকানা, বা সেশনের সময়কালও আমরা সংরক্ষণ করি না। একটি নির্দিষ্ট Lantern Pro অ্যাকাউন্টে, Lantern অ্যাকাউন্টের সাথে ব্যবহারকারীর প্রকৃত পরিচয় সংযুক্ত করতে Lantern প্রযুক্তিগতভাবে অপারগ। একটি নির্দিষ্ট Lantern IP ঠিকানা এবং একটি সুনির্দিষ্ট টাইম স্ট্যাম্পে, এই IP ঠিকানার বৈশিষ্ট্যটি একজন Lantern ব্যবহারকারী বা একটি Lantern ব্যবহারকারীর IP ঠিকানার সাথে সংযুক্ত করতে Lantern প্রযুক্তিগতভাবে অপারগ।</string>
-  <string name="referral_code_share_description_free">আপনার কোডটি আপনার বন্ধুদের সাথে শেয়ার করুন এবং তারা Pro ক্রয় করলে এক মাসের Lantern Pro পরিষেবা বিনামূল্যে পান!</string>
-  <string name="referral_code_share_description_pro">আপনার কোডটি আপনার বন্ধুদের সাথে শেয়ার করুন এবং তারা Pro ক্রয় করলে এক মাসের অতিরিক্ত Lantern Pro পরিষেবা বিনামূল্যে পান!</string>
   <string name="referral_code_share">রেফারেল কোড শেয়ার করুন</string>
   <string name="referral_code_share_title">আপনার রেফারেল কোড শেয়ার করুন:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
