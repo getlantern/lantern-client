@@ -357,6 +357,7 @@ iOS.</string>
   <string name="account_left_desc">Aún tiene %1$d meses de Lantern Pro en su cuenta.</string>
   <string name="optimized_location">Ubicación optimizada de servidor</string>
   <string name="current_location">Ubicación actual:</string>
+  <string name="disconnect">Desconectar</string>
   <string name="disconnected">Desconectado</string>
   <string name="https_upgrades">Actualizaciones a HTTPS</string>
   <string name="data_usage">Uso de datos</string>

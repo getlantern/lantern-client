@@ -22,9 +22,7 @@ class Language extends StatelessWidget {
               tileColor: lang == currentLang ? grey2 : transparent,
               dense: true,
               title: CText(
-                toBeginningOfSentenceCase(
-                  displayLanguage(lang),
-                )!,
+                toBeginningOfSentenceCase(displayLanguage(lang))!,
                 style: tsBody1,
               ),
               value: lang,

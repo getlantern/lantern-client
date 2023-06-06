@@ -354,6 +354,7 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="account_left_desc">Il vous reste %1$d de Lantern Pro dans votre compte.</string>
   <string name="optimized_location">Emplacement optimisé des serveurs</string>
   <string name="current_location">Emplacement actuel :</string>
+  <string name="disconnect">Se déconnecter</string>
   <string name="disconnected">Déconnecté</string>
   <string name="https_upgrades">Mises à niveau HTTPS</string>
   <string name="data_usage">Utilisation des données</string>
