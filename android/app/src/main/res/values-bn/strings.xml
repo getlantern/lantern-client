@@ -359,6 +359,7 @@
   <string name="account_left_desc">আপনার Lantern Pro এর %1$dমাস অবশিষ্ট আছে</string>
   <string name="optimized_location">অপটিমাইজকৃত সার্ভারের অবস্থান</string>
   <string name="current_location">বর্তমান অবস্থান:</string>
+  <string name="disconnect">বিচ্ছিন্ন</string>
   <string name="disconnected">বিচ্ছিন্ন</string>
   <string name="https_upgrades">HTTPS আপগ্রেড</string>
   <string name="data_usage">ব্যবহৃত ডাটা</string>

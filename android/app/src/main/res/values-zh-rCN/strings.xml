@@ -357,6 +357,7 @@
   <string name="account_left_desc">您的帐户显示还可使用蓝灯专业版 %1$d 个月。</string>
   <string name="optimized_location">优化的服务器位置</string>
   <string name="current_location">当前位置：</string>
+  <string name="disconnect">断开连接</string>
   <string name="disconnected">断线</string>
   <string name="https_upgrades">HTTPS 升级</string>
   <string name="data_usage">数据使用</string>
