@@ -354,6 +354,7 @@
   <string name="account_left_desc">သင့်အကောင့်တွင် Lantern Pro %1$dလ ကျန်သည်</string>
   <string name="optimized_location">အကောင်းဆုံးဆာဗာတည်နေရာ</string>
   <string name="current_location">လက်ရှိတည်နေရာ:</string>
+  <string name="disconnect">ချိတ်ဆက်မှုဖြတ်ပါ</string>
   <string name="disconnected">အဆက်ပြတ်</string>
   <string name="https_upgrades">HTTPS အဆင့်မြှင့်တင်မှုများ</string>
   <string name="data_usage">ဒေတာအသုံးပြုမှု</string>

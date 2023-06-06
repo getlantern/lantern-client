@@ -357,6 +357,7 @@
   <string name="account_left_desc">您的帳號中還有 %1$d 個月的 Lantern Pro 服務</string>
   <string name="optimized_location">最佳化的伺服器位置</string>
   <string name="current_location">目前位置：</string>
+  <string name="disconnect">斷開</string>
   <string name="disconnected">已中斷連線</string>
   <string name="https_upgrades">HTTPS 升級</string>
   <string name="data_usage">資料使用量</string>
