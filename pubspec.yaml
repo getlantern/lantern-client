@@ -171,6 +171,10 @@ flutter:
     - family: RobotoMono
       fonts:
         - asset: assets/fonts/RobotoMono.ttf
+    - family: Samim
+      fonts:
+        - asset: assets/fonts/Samim.ttf
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

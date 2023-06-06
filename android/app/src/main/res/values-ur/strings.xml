@@ -349,6 +349,7 @@
   <string name="account_left_desc">آپ کے اکاؤنٹ میں لینٹرن پرو کے %1$dماہ باقی  رہ  گئے ہیں </string>
   <string name="optimized_location">اوپٹمائزڈ سرور لوکیشن</string>
   <string name="current_location">حالیہ لوکیشن:</string>
+  <string name="disconnect">منقطع</string>
   <string name="disconnected">منقطع</string>
   <string name="https_upgrades">HTTPS اَپ گریڈز</string>
   <string name="data_usage">ڈیٹا کا استعمال</string>
