@@ -357,6 +357,7 @@
   <string name="account_left_desc">لديك %1$dشهور متبقية من حساب لانترن برو في حسابك</string>
   <string name="optimized_location">مواقع خوادم محسّنة</string>
   <string name="current_location">الموقع الحالي:</string>
+  <string name="disconnect">قطع الاتصال</string>
   <string name="disconnected">مفصول</string>
   <string name="https_upgrades">ترقيات HTTPS:</string>
   <string name="data_usage">استخدام البيانات</string>

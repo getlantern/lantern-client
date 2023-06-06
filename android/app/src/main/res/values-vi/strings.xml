@@ -349,6 +349,7 @@
   <string name="account_left_desc">Bạn còn %1$d tháng Lantern Pro trong tài khoản của mình</string>
   <string name="optimized_location">Địa chỉ server tối ưu</string>
   <string name="current_location">Địa chỉ hiện tại:</string>
+  <string name="disconnect">Ngắt kết nối</string>
   <string name="disconnected">Đã ngắt kết nối</string>
   <string name="https_upgrades">Nâng cấp HTTPS</string>
   <string name="data_usage">Sử dụng dữ liệu</string>

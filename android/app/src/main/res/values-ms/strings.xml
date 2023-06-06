@@ -350,6 +350,7 @@
   <string name="account_left_desc">Anda mempunyai %1$d bulan Lantern Pro yang masih tinggal di dalam akaun anda.</string>
   <string name="optimized_location">Lokasi server dioptimakan</string>
   <string name="current_location">Lokasi Sekarang:</string>
+  <string name="disconnect">Putuskan sambungan</string>
   <string name="disconnected">Terputus</string>
   <string name="https_upgrades">Upgrade HTTPS</string>
   <string name="data_usage">Penggunaan Data</string>

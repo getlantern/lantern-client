@@ -357,6 +357,7 @@
   <string name="account_left_desc">У вас осталось %1$dмесяцев работы с версией Lantern Pro в вашей учетной записи</string>
   <string name="optimized_location">Оптимизированное местоположение сервера</string>
   <string name="current_location">Текущее местоположение:</string>
+  <string name="disconnect">Отключиться</string>
   <string name="disconnected">Отключен</string>
   <string name="https_upgrades">Обновление HTTPS</string>
   <string name="data_usage">Использование данных</string>

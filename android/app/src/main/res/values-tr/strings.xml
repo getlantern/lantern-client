@@ -357,6 +357,7 @@
   <string name="account_left_desc">Hesabınızda %1$daylık Lantern Pro kaldı</string>
   <string name="optimized_location">Optimize edilmiş sunucu konumu</string>
   <string name="current_location">Mevcut Konum:</string>
+  <string name="disconnect">Bağlantıyı kes</string>
   <string name="disconnected">Bağlantıyı kes</string>
   <string name="https_upgrades">HTTPS Yükseltmeleri</string>
   <string name="data_usage">Veri Kullanımı</string>
