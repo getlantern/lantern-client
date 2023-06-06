@@ -15,7 +15,7 @@ class MainActivityTestSuite {
     @Test
     fun testEvent() {
         activityRule.scenario.onActivity { activity ->
-            
+
         }
     }
 }
