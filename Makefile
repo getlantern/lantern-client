@@ -230,6 +230,19 @@ require-magick:
 require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
 
+
+# Installs and runs the tests for prodDebug on connected devices
+connected-android-tests:
+	@cd $(MOBILE_DIR) && ./gradlew --project-dir app connectedProdDebugAndroidTest
+
+# Run unit tests for the prodDebug build
+android-debug-unit-tests:
+	@cd $(MOBILE_DIR) && ./gradlew --project-dir app testProdDebugUnitTest
+
+# Run unit tests for the prodSideload build
+android-sideload-unit-tests:
+	@cd $(MOBILE_DIR) && ./gradlew --project-dir app testProdSideloadUnitTest
+
 release-qa: require-version require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
 	VERSION_FILE_NAME="version-qa-android.txt" && \
