@@ -1,7 +1,9 @@
 package org.getlantern.lantern
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -137,10 +139,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
-        val packageName = activity.packageName
-        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
-            registerReceiver(receiver, it)
-        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -160,10 +158,15 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     override fun onStart() {
         super.onStart()
+        val packageName = activity.packageName
+        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
+            registerReceiver(receiver, it)
+        }
     }
 
     override fun onStop() {
         super.onStop()
+        unregisterReceiver(receiver)
     }
 
     override fun onResume() {
@@ -196,7 +199,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
-        unregisterReceiver(receiver)
         EventBus.getDefault().unregister(this)
     }
 
@@ -268,7 +270,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun vpnStateChanged(state: VpnState) {
-        updateStatus(false)
+        updateStatus(state.use())
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -578,8 +580,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 startVpnService()
             }
         } else {
-            stopVpnService()
-            updateStatus(false)
+            sendBroadcast(notifications.disconnectIntent())
         }
     }
 
@@ -682,18 +683,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         notifications.vpnConnectedNotification()
     }
 
-    private fun stopVpnService() {
-        startService(
-            Intent(
-                this,
-                LanternVpnService::class.java,
-            ).setAction(LanternVpnService.ACTION_DISCONNECT),
-        )
-    }
-
     private fun updateStatus(useVpn: Boolean) {
         Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
-        // EventBus.getDefault().post(VpnState(useVpn))
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
         vpnModel.setVpnOn(useVpn)

@@ -10,18 +10,15 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-import android.view.View
-import android.widget.RemoteViews
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class NotificationHelper(private val activity: Activity, private val receiver: NotificationReceiver) : ContextWrapper(activity) {
 
     // Used to notify a user of events that happen in the background
     private val manager: NotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     private val builder: Notification.Builder
-    //private val dropDown: DropDownNav
+
     private lateinit var dataUsageNotificationChannel: NotificationChannel
     private lateinit var vpnNotificationChannel: NotificationChannel
 
@@ -51,39 +48,32 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         manager.createNotificationChannel(notificationChannel)
     }
 
-    private fun disconnectBroadcast(): PendingIntent {
-        val intent = Intent(activity, NotificationReceiver::class.java)
+    fun disconnectIntent(): Intent {
         val packageName = activity.packageName
-        intent.action = "$packageName.intent.VPN_DISCONNECTED"
+        return Intent(activity, NotificationReceiver::class.java).apply {
+            action = "$packageName.intent.VPN_DISCONNECTED"
+        }
+    }
+
+    private fun disconnectBroadcast(): PendingIntent {
         // Retrieve a PendingIntent that will perform a broadcast
         return PendingIntent.getBroadcast(
             activity,
             0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            disconnectIntent(),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
-    }
-
-    private fun createContentView(): RemoteViews {
-        var contentView: RemoteViews = RemoteViews(packageName, R.layout.notification)
-        contentView.setImageViewResource(R.id.image, R.drawable.lantern_notification_icon)
-        contentView.setTextViewText(R.id.title, baseContext.getText(R.string.service_connected))
-        contentView.setOnClickPendingIntent(R.id.disconnect, disconnectBroadcast())
-        contentView.setTextViewText(R.id.time, LocalDateTime.now().format(DateTimeFormatter.ofPattern("h:mm a")))
-        return contentView
     }
 
     public fun vpnConnectedNotification() {
         builder.setChannelId(CHANNEL_VPN)
-        manager.notify(1234, builder.build())
+        manager.notify(VPN_CONNECTED, builder.build())
     }
 
     public fun dataUsageNotification() {
         builder.setChannelId(CHANNEL_DATA_USAGE)
-        manager.notify(1234, builder.build())
+        manager.notify(DATA_USAGE, builder.build())
     }
-
-
 
     fun clearNotification() {
         manager.cancelAll()
@@ -93,8 +83,7 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         private val TAG = NotificationHelper::class.java.simpleName
         private const val LANTERN_NOTIFICATION = "lantern.notification"
         private const val DATA_USAGE = 36
-        private const val VPN_CONNECTED = 37
-        private const val VPN_DISCONNECTED = 38
+        const val VPN_CONNECTED = 37
         private const val CHANNEL_VPN = "vpn"
         private const val CHANNEL_DATA_USAGE = "data_usage"
         private const val VPN_DESC = "VPN"
@@ -105,8 +94,24 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             initChannels()
         }
+        val contentIntent = PendingIntent.getActivity(
+            activity,
+            0,
+            Intent(activity, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
         builder = Notification.Builder(this)
-            .setContent(createContentView())
+            .setContentTitle(activity.getString(R.string.service_connected))
+            .addAction(
+                Notification.Action.Builder(
+                    android.R.drawable.ic_delete,
+                    activity.getString(R.string.disconnect),
+                    disconnectBroadcast(),
+                ).build(),
+            )
+            .setContentIntent(contentIntent)
+            .setOngoing(true)
+            .setShowWhen(true)
             .setSmallIcon(R.drawable.lantern_notification_icon)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
     }
