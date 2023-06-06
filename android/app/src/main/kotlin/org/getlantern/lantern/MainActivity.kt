@@ -1,7 +1,9 @@
 package org.getlantern.lantern
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -139,10 +141,6 @@ class MainActivity :
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
-        val packageName = activity.packageName
-        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
-            registerReceiver(receiver, it)
-        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -162,10 +160,15 @@ class MainActivity :
 
     override fun onStart() {
         super.onStart()
+        val packageName = activity.packageName
+        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
+            registerReceiver(receiver, it)
+        }
     }
 
     override fun onStop() {
         super.onStop()
+        unregisterReceiver(receiver)
     }
 
     override fun onResume() {
@@ -198,7 +201,6 @@ class MainActivity :
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
-        unregisterReceiver(receiver)
         EventBus.getDefault().unregister(this)
     }
 
@@ -270,7 +272,7 @@ class MainActivity :
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun vpnStateChanged(state: VpnState) {
-        updateStatus(false)
+        updateStatus(state.use())
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -580,8 +582,7 @@ class MainActivity :
                 startVpnService()
             }
         } else {
-            stopVpnService()
-            updateStatus(false)
+            sendBroadcast(notifications.disconnectIntent())
         }
     }
 
@@ -682,15 +683,6 @@ class MainActivity :
 
         startService(intent)
         notifications.vpnConnectedNotification()
-    }
-
-    private fun stopVpnService() {
-        startService(
-            Intent(
-                this,
-                LanternVpnService::class.java,
-            ).setAction(LanternVpnService.ACTION_DISCONNECT),
-        )
     }
 
     private fun updateStatus(useVpn: Boolean) {

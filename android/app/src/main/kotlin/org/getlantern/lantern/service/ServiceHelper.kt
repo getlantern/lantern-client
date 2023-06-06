@@ -1,3 +1,5 @@
+@file:JvmName("ServiceHelper")
+
 package org.getlantern.lantern.service
 
 import android.annotation.TargetApi

@@ -12,15 +12,15 @@
 # Mokah <unfilternet@getlantern.org>, 2022
 # Chip Stehr <chip@getlantern.org>, 2022
 # Lantern, 2022
-# Jigar, 2023
 # e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023
 # NoProfile, 2023
 # Vaseto Nora <n.nouri67@gmail.com>, 2023
 # 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023
+# Jigar, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023\n"
+"Last-Translator: Jigar, 2023\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -417,10 +417,11 @@ msgid "apps_to_unblock"
 msgstr ""
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "جداسازی تونل"
 
 msgid "split_tunneling_info"
-msgstr ""
+msgstr "جداسازی تونل به شما امکان می‌دهد اپلیکیشن‌های انتخاب شده را از عبور از لنترن در هنگام اتصال مستثنی کنید"
+
 
 msgid "applied_next_time"
 msgstr ""
@@ -437,7 +438,7 @@ msgstr "حذف"
 msgid "view_contact_info"
 msgstr "مشاهده اطلاعات مخاطب"
 
-msgid "off"
+msgid "OFF"
 msgstr "خاموش"
 
 msgid "on"

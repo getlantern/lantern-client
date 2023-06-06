@@ -357,6 +357,7 @@ https://bit.ly/lanternapk</string>
   <string name="account_left_desc">%1$d ماه از حساب لنترن پروی‌ اکانت شما مانده است.</string>
   <string name="optimized_location">بهینه سازی موقعیت سرور</string>
   <string name="current_location">موقعیت فعلی:</string>
+  <string name="disconnect">قطع شدن</string>
   <string name="disconnected">قطع شده است</string>
   <string name="https_upgrades">ارتقاء های HTTPS</string>
   <string name="data_usage">داده های استفاده شده</string>
