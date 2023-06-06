@@ -359,6 +359,7 @@
     <string name="account_left_desc">You have %1$d months of Lantern Pro left in your account</string>
     <string name="optimized_location">Optimized server location</string>
     <string name="current_location">Current Location: </string>
+    <string name="disconnect">Disconnect</string>
     <string name="disconnected">Disconnected</string>
     <string name="https_upgrades">HTTPS Upgrades</string>
     <string name="data_usage">Data Usage</string>

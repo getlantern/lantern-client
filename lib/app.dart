@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/scheduler.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging.dart';
@@ -6,6 +8,17 @@ final navigatorKey = GlobalKey<NavigatorState>();
 final globalRouter = AppRouter(navigatorKey);
 final networkWarningBarHeightRatio = ValueNotifier(0.0);
 var showConnectivityWarning = false;
+
+// This enum is used to manage the font families used in the application
+enum AppFontFamily {
+  semim('Semim'),
+  roboto('Roboto');
+
+  // the actual string value (the font family name) to each enum value
+  const AppFontFamily(this.fontFamily);
+
+  final String fontFamily;
+}
 
 class _TickerProviderImpl extends TickerProvider {
   @override
@@ -58,6 +71,8 @@ class LanternApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentLocal = window.locale;
+    print('selected local: ' + currentLocal.languageCode);
     return FutureBuilder(
       future: translations,
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -72,6 +87,7 @@ class LanternApp extends StatelessWidget {
             child: MaterialApp.router(
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
+                fontFamily: _getLocaleBasedFont(currentLocal),
                 brightness: Brightness.light,
                 primarySwatch: Colors.grey,
                 appBarTheme: const AppBarTheme(
@@ -113,5 +129,16 @@ class LanternApp extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _getLocaleBasedFont(Locale locale) {
+    if (locale.languageCode == 'fa' ||
+        locale.languageCode == 'ur' ||
+        locale.languageCode == 'eg') {
+      return AppFontFamily.semim.fontFamily; // Farsi font
+    } else {
+      return AppFontFamily
+          .roboto.fontFamily; // Default font for other languages
+    }
   }
 }

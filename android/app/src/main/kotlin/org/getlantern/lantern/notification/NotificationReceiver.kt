@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.app.NotificationManager
 import io.lantern.model.VpnModel
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.model.Utils
@@ -15,12 +16,14 @@ import org.greenrobot.eventbus.EventBus
 
 class NotificationReceiver() : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+        Logger.debug(TAG, "Received disconnect broadcast")
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.cancel(NotificationHelper.VPN_CONNECTED)
     	if (Utils.isServiceRunning(
                 context,
                 LanternVpnService::class.java,
             )
         ) {
-            Logger.debug(TAG, "Received disconnect broadcast")
             EventBus.getDefault().post(VpnState(false))
             context.startService(
 	            Intent(
