@@ -3,6 +3,7 @@ package org.getlantern.lantern.model
 import android.app.Application
 import android.content.res.Resources
 import android.text.TextUtils
+import io.lantern.apps.AppData
 import io.lantern.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R

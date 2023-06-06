@@ -350,6 +350,7 @@
   <string name="account_left_desc">Anda mempunyai %1$d bulan Lantern Pro yang masih tinggal di dalam akaun anda.</string>
   <string name="optimized_location">Lokasi server dioptimakan</string>
   <string name="current_location">Lokasi Sekarang:</string>
+  <string name="disconnect">Putuskan sambungan</string>
   <string name="disconnected">Terputus</string>
   <string name="https_upgrades">Upgrade HTTPS</string>
   <string name="data_usage">Penggunaan Data</string>
@@ -414,8 +415,6 @@
   <string name="privacy_disclosure_title">Pendedahan Privasi Lantern</string>
   <string name="privacy_disclosure_accept">Saya terima</string>
   <string name="privacy_disclosure_body">Lantern komited untuk melindungi privasi anda. Kami ingin anda memahami maklumat yang kami kumpulkan, maklumat yang tidak kami kumpulkan dan cara kami mengumpulkan, menggunakan dan menyimpan maklumat. Kami memisahkan maklumat pembayaran anda dengan akaun Lantern Pro anda. Kami tidak mengumpulkan log aktiviti anda, termasuk tidak mencatat sejarah penyemakan imbas, destinasi trafik, kandungan data atau pertanyaan DNS. Kami juga tidak pernah menyimpan log sambungan, yang bermaksud tidak ada log alamat IP anda, alamat IP pelayan Lantern keluar anda yang dikaitkan dengan cap waktu sambungan, atau tempoh sesi. Disebabkan akaun Lantern Pro yang tertentu, secara teknikal, Lantern tidak dapat mengaitkan akaun Lantern dengan identiti sebenar pengguna. Disebabkan alamat IP Lantern dan cap waktu yang tepat, Lantern secara teknikal tidak dapat menghubungkan alamat IP ini kepada pengguna Lantern atau alamat IP pengguna Lantern.</string>
-  <string name="referral_code_share_description_free">Kongsikan kod anda dengan rakan anda dan dapatkan perkhidmatan Lantern Pro selama satu bulan secara percuma apabila mereka membeli Pro!</string>
-  <string name="referral_code_share_description_pro">Kongsikan kod anda dengan rakan anda dan dapatkan tambahan satu bulan perkhidmatan Lantern Pro secara percuma apabila mereka membeli Pro!</string>
   <string name="referral_code_share">Kongsikan kod rujukan</string>
   <string name="referral_code_share_title">Kongsikan kod Rujukan anda:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>

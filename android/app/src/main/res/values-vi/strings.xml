@@ -349,6 +349,7 @@
   <string name="account_left_desc">Bạn còn %1$d tháng Lantern Pro trong tài khoản của mình</string>
   <string name="optimized_location">Địa chỉ server tối ưu</string>
   <string name="current_location">Địa chỉ hiện tại:</string>
+  <string name="disconnect">Ngắt kết nối</string>
   <string name="disconnected">Đã ngắt kết nối</string>
   <string name="https_upgrades">Nâng cấp HTTPS</string>
   <string name="data_usage">Sử dụng dữ liệu</string>
@@ -413,8 +414,6 @@
   <string name="privacy_disclosure_title">Tiết lộ quyền riêng tư của Lantern</string>
   <string name="privacy_disclosure_accept">Tôi đồng ý</string>
   <string name="privacy_disclosure_body">Lantern cam kết bảo vệ sự riêng tư của bạn. Chúng tôi muốn bạn hiểu thông tin nào chúng tôi thu thập, thông tin nào chúng tôi không thu thập và cách chúng tôi thu thập, sử dụng và lưu trữ thông tin. Chúng tôi tách thông tin thanh toán của bạn với tài khoản Lantern Pro của bạn. Chúng tôi không thu thập nhật ký hoạt động của bạn, bao gồm không ghi nhật ký lịch sử duyệt web, điểm đến của lưu lượng truy cập, nội dung dữ liệu hoặc truy vấn DNS. Chúng tôi cũng không bao giờ lưu trữ nhật ký kết nối, nghĩa là không có nhật ký nào về địa chỉ IP của bạn, địa chỉ IP máy chủ Lantern gửi đi của bạn được liên kết với dấu thời gian kết nối hoặc thời lượng mỗi phiên. Với tài khoản Lantern Pro cụ thể, về mặt kỹ thuật, Lantern không thể liên kết tài khoản Lantern với danh tính thực của người dùng. Với địa chỉ IP của Lantern và dấu thời gian chính xác, về mặt kỹ thuật, Lantern không thể gán địa chỉ IP này cho người dùng Lantern hoặc địa chỉ IP của người dùng Lantern.</string>
-  <string name="referral_code_share_description_free">Chia sẻ mã của bạn với bạn bè và nhận một tháng dịch vụ Lantern Pro miễn phí khi họ mua Pro!</string>
-  <string name="referral_code_share_description_pro">Chia sẻ mã của bạn với bạn bè và nhận thêm một tháng dịch vụ Lantern Pro miễn phí khi họ mua Pro!</string>
   <string name="referral_code_share">Chia sẻ mã giới thiệu</string>
   <string name="referral_code_share_title">Chia sẻ mã giới thiệu của bạn:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>

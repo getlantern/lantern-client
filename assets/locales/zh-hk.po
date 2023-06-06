@@ -1,14 +1,14 @@
 # 
 # Translators:
 # e2f_tw r5 <tx_e2f_tw_r5@ate2f.com>, 2021
-# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2022
-# e2f <projects@e2f.com>, 2022
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2023
+# e2f <projects@e2f.com>, 2023
+# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2023\n"
-"Language-Team: Chinese Traditional (https://www.transifex.com/lantern-1/teams/94371/zh-Hant/)\n"
+"Last-Translator: TW C2 <tx_e2f_tw_c2@ate2f.com>, 2023\n"
+"Language-Team: Chinese Traditional (https://app.transifex.com/lantern-1/teams/94371/zh-Hant/)\n"
 "Language: zh-Hant\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
@@ -113,6 +113,15 @@ msgstr "設定"
 
 msgid "general"
 msgstr "常規"
+
+msgid "about"
+msgstr "關於"
+
+msgid "privacy_policy"
+msgstr "私隐政策"
+
+msgid "terms_of_service"
+msgstr "服務條款"
 
 msgid "proxy_all"
 msgstr "全流量 Proxy 開啟"
@@ -359,6 +368,24 @@ msgstr "當面新增聯絡人"
 msgid "start_chat"
 msgstr "開始交談"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "您和 %s 之間傳送的所有訊息都不會消失。"
 
@@ -373,6 +400,9 @@ msgstr "查看聯絡資訊"
 
 msgid "off"
 msgstr "關閉"
+
+msgid "on"
+msgstr "於"
 
 msgid "continue"
 msgstr "繼續"

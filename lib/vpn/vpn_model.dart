@@ -18,6 +18,26 @@ class VpnModel extends Model {
     );
   }
 
+  Future<void> refreshAppsList() async {
+    await methodChannel.invokeMethod('refreshAppsList');
+  }
+
+  Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('/splitTunneling',
+        builder: builder,);
+  }
+
+  Future<void> setSplitTunneling<T>(bool on) async {
+    unawaited(methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
+      'on': on,
+    }),);
+  }
+
+  Future<bool> isVpnConnected() async {
+    final vpnStatus = await methodChannel.invokeMethod('get', '/vpn_status');
+    return vpnStatus == 'connected';
+  }
+
   Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
     return subscribedSingleValueBuilder<ServerInfo>(
       '/server_info',
@@ -36,5 +56,29 @@ class VpnModel extends Model {
         return Bandwidth.fromBuffer(serialized);
       },
     );
+  }
+
+  Widget appsData({
+    required ValueWidgetBuilder<Iterable<PathAndValue<AppData>>> builder,
+  }) {
+    return subscribedListBuilder<AppData>(
+      '/appsData/',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return AppData.fromBuffer(serialized);
+      },
+    );
+  }
+
+  Future<void> allowAppAccess(String packageName) {
+    return methodChannel.invokeMethod('allowAppAccess', <String, dynamic>{
+      'packageName': packageName,
+    });
+  }
+
+  Future<void> denyAppAccess(String packageName) {
+    return methodChannel.invokeMethod('denyAppAccess', <String, dynamic>{
+      'packageName': packageName,
+    });
   }
 }

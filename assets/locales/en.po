@@ -358,6 +358,24 @@ msgstr "Add contacts in person"
 msgid "start_chat"
 msgstr "Start chat"
 
+msgid "your_installed_apps"
+msgstr "Your Installed Apps"
+
+msgid "apps_routed_through_lantern"
+msgstr "Apps Routed Through Lantern"
+
+msgid "apps_to_unblock"
+msgstr "Choose the apps you want to unblock. When connected, only the apps selected below will be routed through Lantern."
+
+msgid "split_tunneling"
+msgstr "Split Tunneling"
+
+msgid "split_tunneling_info"
+msgstr "When split tunneling is enabled, selected apps will be routed through Lantern. This can improve performance and save bandwidth by only unblocking specified apps."
+
+msgid "applied_next_time"
+msgstr "New split tunneling settings will be applied next time you reconnect."
+
 msgid "message_disappearing"
 msgstr "All messages will not disappear for you and %s."
 
@@ -372,6 +390,9 @@ msgstr "View Contact Info"
 
 msgid "off"
 msgstr "Off"
+
+msgid "on"
+msgstr "On"
 
 msgid "continue"
 msgstr "Continue"

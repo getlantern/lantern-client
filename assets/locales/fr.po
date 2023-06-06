@@ -3,13 +3,13 @@
 # Derek F <derek@getlantern.org>, 2022
 # e2f_fr r9 <tx_e2f_fr_r9@ate2f.com>, 2022
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2022
-# AO <ao@localizationlab.org>, 2022
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2023
+# AO <ao@localizationlab.org>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2023\n"
-"Language-Team: French (https://www.transifex.com/lantern-1/teams/94371/fr/)\n"
+"Last-Translator: AO <ao@localizationlab.org>, 2023\n"
+"Language-Team: French (https://app.transifex.com/lantern-1/teams/94371/fr/)\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
@@ -126,6 +126,15 @@ msgstr "Paramètres"
 
 msgid "general"
 msgstr "Général"
+
+msgid "about"
+msgstr "À propos de Lantern"
+
+msgid "privacy_policy"
+msgstr "Politique de confidentialité "
+
+msgid "terms_of_service"
+msgstr "Conditions générales d’utilisation"
 
 msgid "proxy_all"
 msgstr "Tout relayer par le mandataire"
@@ -394,6 +403,24 @@ msgstr "Ajouter des contacts en face à face"
 msgid "start_chat"
 msgstr "Lancer une conversation"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "Certains messages resteront visibles pour vous et %s."
 
@@ -408,6 +435,9 @@ msgstr "Afficher les coordonnées"
 
 msgid "off"
 msgstr "désactivé"
+
+msgid "on"
+msgstr "Activée"
 
 msgid "continue"
 msgstr "Poursuivre"

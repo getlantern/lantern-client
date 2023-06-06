@@ -349,6 +349,7 @@
   <string name="account_left_desc">آپ کے اکاؤنٹ میں لینٹرن پرو کے %1$dماہ باقی  رہ  گئے ہیں </string>
   <string name="optimized_location">اوپٹمائزڈ سرور لوکیشن</string>
   <string name="current_location">حالیہ لوکیشن:</string>
+  <string name="disconnect">منقطع</string>
   <string name="disconnected">منقطع</string>
   <string name="https_upgrades">HTTPS اَپ گریڈز</string>
   <string name="data_usage">ڈیٹا کا استعمال</string>
@@ -413,8 +414,6 @@
   <string name="privacy_disclosure_title">لینٹرن کی رازداری کا اعلان</string>
   <string name="privacy_disclosure_accept">مجھے قبول ہے</string>
   <string name="privacy_disclosure_body">لینٹرن آپ کی رازداری کے تحفظ کے لئے پرعزم ہے۔ ہم چاہتے ہیں کہ آپ یہ سمجھیں کہ ہم کون سی معلومات اکٹھا کرتے ہیں، کیا اکٹھا نہیں کرتے، اور ہم معلومات کو کس طرح اکٹھا، استعمال اور اسٹور کرتے ہیں۔ ہم آپ کے لینٹرن پرو اکاؤنٹ سے آپ کی ادائیگی کی معلومات کو الگ کردیں۔ ہم آپ کی سرگرمی کے لاگز، بشمول براؤزنگ کی سرگزشت، ٹریفک کی منزل، ڈیٹا کے مشمولات، یا DNS استفسارات اکٹھا نہیں کرتے ہیں۔ ہم کبھی بھی کنیکشن لاگز کو اسٹور نہیں کرتے ہیں، یعنی آپ کے IP ایڈریس کی کوئی لاگز ، آپ کا باہر جانے والا لینٹرن سرور IP ایڈریس جو کنکشن ٹائم اسٹیمپ، یا سیشن کے دورانیے کے ساتھ وابستہ ہے۔ جہاں تک مخصوص لینٹرن پرو اکاؤنٹ کا سوال ہے تو، لینٹرن تکنیکی طور پر لینٹرن اکاؤنٹ کو صارف کی اصل شناخت کے ساتھ منسلک کرنے سے قاصر ہے۔ صرف لینٹرن کا IP ایڈریس اور ایک مختصر ٹائم اسٹیمپ دیئے جانے کے سبب، لینٹرن تکنیکی طور پر اس IP پتے کو کسی لینٹرن صارف یا کسی لینٹرن صارف کے IP پتے سے منسوب کرنے سے قاصر ہے۔</string>
-  <string name="referral_code_share_description_free">اپنے دوستوں کے ساتھ اپنے کوڈ کا اشتراک کریں اور جب وہ پرو خریدیں گے تو پائیں ایک ماہ کی لینٹرن پرو سروس مفت!</string>
-  <string name="referral_code_share_description_pro">اپنے دوستوں کے ساتھ اپنے کوڈ کا اشتراک کریں اور جب وہ پرو خریدیں گے تو پائیں ایک ماہ کی اضافی لینٹرن پرو سروس مفت!</string>
   <string name="referral_code_share">ریفرل کوڈ شیئر کریں</string>
   <string name="referral_code_share_title">اپنا ریفرل کوڈ شیئر کریں:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
