@@ -74,6 +74,7 @@ class PlanCard extends StatelessWidget {
                     // * Plan name
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CText(
                           planName == '1y'

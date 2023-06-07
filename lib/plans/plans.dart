@@ -46,115 +46,110 @@ class PlansPage extends StatelessWidget {
         }
 
         return StatefulBuilder(
-          builder: (context, setState) => Container(
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+            builder: (context, setState) => Center(
+                  child: ListView(shrinkWrap: true, children: [
+                    //height: MediaQuery.of(context).size.height,
+                    //ListView(shrinkWrap: true, children: [
                     Container(
-                      height: 90,
-                      child: Stack(
-                        children: [
-                          Container(
-                            padding: const EdgeInsetsDirectional.only(top: 25),
-                            alignment: Alignment.centerRight,
-                            child: IconButton(
-                              icon: mirrorLTR(
-                                context: context,
-                                child: CAssetImage(
-                                  path: ImagePaths.cancel,
-                                  color: black,
-                                ),
-                              ),
-                              onPressed: () => Navigator.pop(context, null),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsetsDirectional.only(
-                                top: 25, start: 32),
-                            alignment: Alignment.centerLeft,
-                            child: CAssetImage(
-                              path: ImagePaths.lantern_pro_logotype,
-                              size: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
                         padding: const EdgeInsetsDirectional.only(
-                          start: 32,
-                          end: 32,
-                          bottom: 32,
-                        ),
-                        child: Column(
+                            bottom: 25, start: 32, end: 16),
+                        child: Row(
                           children: [
-                            // * Renewal text or upsell
-                            if (proUser && plans.last.value.renewalText != '')
-                              Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                    bottom: 12.0),
-                                child: CText(
-                                  plans.last.value.renewalText,
-                                  style: tsBody1,
-                                ),
-                              ),
                             Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsetsDirectional.only(
-                                          bottom: 12.0,
-                                        ),
-                                        child: CDivider(),
-                                      ),
-                                      ...featuresList.map(
-                                        (feature) => Row(
-                                          children: [
-                                            const CAssetImage(
-                                              path:
-                                                  ImagePaths.check_green_large,
-                                              size: 24,
-                                            ),
-                                            CText(feature, style: tsBody1),
-                                          ],
-                                        ),
-                                      ),
-                                      const CDivider(height: 24),
-                                    ],
-                                  )
-                                ],
+                                padding:
+                                    const EdgeInsetsDirectional.only(top: 25),
+                                child: CAssetImage(
+                                  path: ImagePaths.lantern_pro_logotype,
+                                  size: 20,
+                                )),
+                            Spacer(),
+                            Container(
+                              padding:
+                                  const EdgeInsetsDirectional.only(top: 20),
+                              child: IconButton(
+                                icon: mirrorLTR(
+                                  context: context,
+                                  child: CAssetImage(
+                                    path: ImagePaths.cancel,
+                                    color: black,
+                                  ),
+                                ),
+                                onPressed: () => Navigator.pop(context, null),
                               ),
                             ),
-                            // * Step
-                            Container(
-                              padding: EdgeInsetsDirectional.only(
-                                top: 16.0,
-                                bottom: 16.0,
-                              ),
-                              child: PlanStep(
-                                stepNum: '1',
-                                description: 'choose_plan'.i18n,
-                              ),
-                            ),
-                            // * Card
-                            if (plans != null)
-                              ...plans.map(
-                                (plan) => PlanCard(
-                                  plan: plan.value,
-                                  isPro: proUser,
-                                ),
-                              ),
                           ],
-                        ),
-                      ),
-                    ),
+                        )),
+                    Expanded(
+                        child: Container(
+                            padding: const EdgeInsetsDirectional.only(
+                              start: 32,
+                              end: 32,
+                              bottom: 32,
+                            ),
+                            child: Column(
+                              children: [
+                                // * Renewal text or upsell
+                                if (proUser &&
+                                    plans.last.value.renewalText != '')
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                        bottom: 12.0),
+                                    child: CText(
+                                      plans.last.value.renewalText,
+                                      style: tsBody1,
+                                    ),
+                                  ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsetsDirectional.only(
+                                            bottom: 12.0,
+                                          ),
+                                          child: CDivider(),
+                                        ),
+                                        ...featuresList.map(
+                                          (feature) => Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              const CAssetImage(
+                                                path: ImagePaths
+                                                    .check_green_large,
+                                                size: 24,
+                                              ),
+                                              CText(feature, style: tsBody1),
+                                            ],
+                                          ),
+                                        ),
+                                        const CDivider(height: 24),
+                                      ]),
+                                ),
+                                // * Step
+                                Container(
+                                  padding: EdgeInsetsDirectional.only(
+                                    top: 16.0,
+                                    bottom: 16.0,
+                                  ),
+                                  child: PlanStep(
+                                    stepNum: '1',
+                                    description: 'choose_plan'.i18n,
+                                  ),
+                                ),
+                                // * Card
+                                if (plans != null)
+                                  ...plans.map(
+                                    (plan) => PlanCard(
+                                      plan: plan.value,
+                                      isPro: proUser,
+                                    ),
+                                  ),
+                              ],
+                            ))),
+                    //]),
                     // * Footer
                     Stack(
                       children: [
@@ -179,8 +174,8 @@ class PlansPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ])),
-        );
+                  ]),
+                ));
       });
     }));
   }
