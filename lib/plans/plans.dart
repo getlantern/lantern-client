@@ -48,11 +48,10 @@ class PlansPage extends StatelessWidget {
         return StatefulBuilder(
             builder: (context, setState) => Center(
                   child: ListView(shrinkWrap: true, children: [
-                    //height: MediaQuery.of(context).size.height,
-                    //ListView(shrinkWrap: true, children: [
                     Container(
                         padding: const EdgeInsetsDirectional.only(
                             bottom: 25, start: 32, end: 16),
+                        color: white,
                         child: Row(
                           children: [
                             Container(
@@ -81,10 +80,11 @@ class PlansPage extends StatelessWidget {
                         )),
                     Expanded(
                         child: Container(
+                            color: white,
                             padding: const EdgeInsetsDirectional.only(
                               start: 32,
                               end: 32,
-                              bottom: 32,
+                              bottom: 24,
                             ),
                             child: Column(
                               children: [
@@ -157,7 +157,12 @@ class PlansPage extends StatelessWidget {
                           height: 40,
                           alignment: Alignment.center,
                           width: MediaQuery.of(context).size.width,
-                          color: grey1,
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(width: 2.0, color: grey3),
+                            ),
+                            color: grey1,
+                          ),
                           child: GestureDetector(
                             onTap: () async => await context.pushRoute(
                               ResellerCodeCheckout(isPro: proUser),
