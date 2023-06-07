@@ -2,13 +2,14 @@
   "server": "hub-cloud.browserstack.com/wd/hub",
   "username": "jigarj_SNsRyw",
   "access_key": "dA4yyG26fHbfJxRUYMwr",
-  "app": "bs://72c671a479ab93d9cff2cdd29a58bf630ce98852",
+  "app": "bs://5fb3d71c0a06de7d496ff6fceba612a15e835577",
   "capabilities": {
     "automationName": "Flutter",
     "setWebContentsDebuggingEnabled": true,
     "appium:noReset": false,
     "appium:logLevel": true,
     "enablePerformanceLogging": true,
+    "orientation": "portrait",
     "bstack:options": {
       "appiumVersion": "2.0.0",
       "networkLogs": true,
@@ -18,11 +19,6 @@
     }
   },
   "environments": [
-    {
-      "appium:deviceName": "Samsung Galaxy S6",
-      "platformVersion": "5.0",
-      "platformName": "Android"
-    },
     {
       "appium:deviceName": "Samsung Galaxy S7",
       "platformVersion": "6.0",

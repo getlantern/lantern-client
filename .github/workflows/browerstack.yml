@@ -61,7 +61,9 @@ jobs:
             -F "file=@$BROWSERSTACK_APP_PATH" \
             -F "custom_id=LanternApp")
           app_url=$(echo $response | jq -r .app_url)
+          echo "$app_url"
           echo "BROWSERSTACK_APP_ID=$app_url" >> $GITHUB_ENV
+          
 
       - name: Run Tests
         env:
