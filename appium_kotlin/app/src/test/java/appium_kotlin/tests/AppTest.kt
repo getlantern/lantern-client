@@ -1,7 +1,5 @@
 package appium_kotlin.tests
 
-//import appium_flutter_driver.FlutterFinder
-
 import appium_kotlin.CHROME_PACKAGE_ACTIVITY
 import appium_kotlin.CHROME_PACKAGE_ID
 import appium_kotlin.ContextType
@@ -178,6 +176,5 @@ class AppTest() : BaseTest() {
         }
         return ""
     }
-
 
 }
