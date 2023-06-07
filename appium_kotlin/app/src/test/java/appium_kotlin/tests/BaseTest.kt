@@ -141,18 +141,16 @@ open class BaseTest {
     }
 
     fun testFail(failureMessage: String, driver: AndroidDriver) {
-
         val jse = (driver as JavascriptExecutor)
         jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"$failureMessage\"}}");
     }
 
 
     protected fun switchToContext(contextType: ContextType, driver: AndroidDriver) {
-        synchronized(this) {
-            val context = getContextString(contextType)
-            driver.context(context)
-            print("Android", "Switched to context: $context")
-        }
+        val context = getContextString(contextType)
+        driver.context(context)
+        print("Android", "Switched to context: $context")
+
     }
 
     private fun getContextString(contextType: ContextType): String {
