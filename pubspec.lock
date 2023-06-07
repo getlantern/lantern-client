@@ -313,6 +313,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.6.3"
+  credit_card_type_detector:
+    dependency: transitive
+    description:
+      name: credit_card_type_detector
+      sha256: e49d8ce0e76969093982ed9c920f2204bd34e41ddbcaf4589d999af6dc00a3e4
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
+  credit_card_validator:
+    dependency: "direct main"
+    description:
+      name: credit_card_validator
+      sha256: "90a38c5764dee7b4323cbed55118e09d0fb7bd72db3db5ccade4ac07bf475f2d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   cross_file:
     dependency: transitive
     description:

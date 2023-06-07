@@ -1,17 +1,12 @@
 import 'package:lantern/vpn/vpn.dart';
 
-class ProBanner extends StatefulWidget {
-  @override
-  _ProBannerState createState() => _ProBannerState();
-}
+class ProBanner extends StatelessWidget {
+  ProBanner({Key? key}) : super(key: key);
 
-class _ProBannerState extends State<ProBanner> {
   @override
   Widget build(BuildContext context) {
     return CInkWell(
-      onTap: () {
-        LanternNavigator.startScreen(LanternNavigator.SCREEN_PLANS);
-      }, // Handle your callback
+      onTap: () => context.pushRoute(PlansPage()),
       child: Container(
         padding: const EdgeInsetsDirectional.all(16),
         decoration: BoxDecoration(
