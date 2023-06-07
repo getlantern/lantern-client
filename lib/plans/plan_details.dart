@@ -85,9 +85,11 @@ class PlanCard extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const CAssetImage(
-                          path: ImagePaths.keyboard_arrow_right,
-                        )
+                        Padding(
+                            padding: const EdgeInsetsDirectional.only(top: 6.0),
+                            child: const CAssetImage(
+                              path: ImagePaths.keyboard_arrow_right,
+                            ))
                       ],
                     ),
                     // * Price per month
