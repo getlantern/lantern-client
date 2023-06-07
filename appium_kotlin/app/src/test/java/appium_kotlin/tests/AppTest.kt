@@ -1,6 +1,7 @@
 package appium_kotlin.tests
 
-import appium_flutter_driver.FlutterFinder
+//import appium_flutter_driver.FlutterFinder
+
 import appium_kotlin.CHROME_PACKAGE_ACTIVITY
 import appium_kotlin.CHROME_PACKAGE_ID
 import appium_kotlin.ContextType
@@ -17,6 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
 import org.openqa.selenium.logging.LogEntries
+import pro.truongsinh.appium_flutter.FlutterFinder
 import java.io.IOException
 import java.time.Duration
 import java.util.regex.Pattern
