@@ -161,7 +161,6 @@ class AppTest() : BaseTest() {
         val pattern = Pattern.compile("\\((.*):\\d+\\)") // regex pattern to match (IP:Port)
         val logtypes: Set<*> = androidDriver.manage().logs().availableLogTypes
         println("supported log types: $logtypes") // [logcat, bugreport, server, client]
-
         val logs: LogEntries = androidDriver.manage().logs().get("logcat")
         for (logEntry in logs) {
             //here are checking the logcat for LOGS_DIALED_MESSAGE that verifies internal that VPN is working
