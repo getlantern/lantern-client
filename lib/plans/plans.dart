@@ -52,7 +52,7 @@ class PlansPage extends StatelessWidget {
                     //ListView(shrinkWrap: true, children: [
                     Container(
                         padding: const EdgeInsetsDirectional.only(
-                            bottom: 25, start: 32, end: 24),
+                            bottom: 25, start: 32, end: 16),
                         child: Row(
                           children: [
                             Container(
@@ -82,8 +82,9 @@ class PlansPage extends StatelessWidget {
                     Expanded(
                         child: Container(
                             padding: const EdgeInsetsDirectional.only(
-                              start: 24,
-                              end: 24,
+                              start: 32,
+                              end: 32,
+                              bottom: 32,
                             ),
                             child: Column(
                               children: [
@@ -92,7 +93,7 @@ class PlansPage extends StatelessWidget {
                                     plans.last.value.renewalText != '')
                                   Padding(
                                     padding: const EdgeInsetsDirectional.only(
-                                        bottom: 21.0),
+                                        bottom: 12.0),
                                     child: CText(
                                       plans.last.value.renewalText,
                                       style: tsBody1,
@@ -106,39 +107,32 @@ class PlansPage extends StatelessWidget {
                                       children: [
                                         const Padding(
                                           padding: EdgeInsetsDirectional.only(
-                                            bottom: 21.0,
+                                            bottom: 12.0,
                                           ),
                                           child: CDivider(),
                                         ),
                                         ...featuresList.map(
                                           (feature) => Row(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                CrossAxisAlignment.center,
                                             children: [
                                               const CAssetImage(
                                                 path: ImagePaths
                                                     .check_green_large,
                                                 size: 24,
                                               ),
-                                              CText(feature,
-                                                  textAlign: TextAlign.center,
-                                                  style: tsBody1),
+                                              CText(feature, style: tsBody1),
                                             ],
                                           ),
                                         ),
-                                        const Padding(
-                                          padding: EdgeInsetsDirectional.only(
-                                            top: 11.0,
-                                          ),
-                                          child: CDivider(),
-                                        ),
+                                        const CDivider(height: 24),
                                       ]),
                                 ),
                                 // * Step
                                 Container(
                                   padding: EdgeInsetsDirectional.only(
-                                    top: 34.0,
-                                    bottom: 20.0,
+                                    top: 16.0,
+                                    bottom: 16.0,
                                   ),
                                   child: PlanStep(
                                     stepNum: '1',
@@ -155,26 +149,30 @@ class PlansPage extends StatelessWidget {
                                   ),
                               ],
                             ))),
-                    Spacer(),
-                    Container(
-                      height: 40,
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(width: 2.0, color: grey3),
+                    //]),
+                    // * Footer
+                    Stack(
+                      children: [
+                        Container(
+                          height: 40,
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          color: grey1,
+                          child: GestureDetector(
+                            onTap: () async => await context.pushRoute(
+                              ResellerCodeCheckout(isPro: proUser),
+                            ),
+                            child: CText(
+                              'Have a Lantern Pro activation code? Click here.',
+                              style: tsBody1.copiedWith(color: grey5),
+                            ),
+                          ), // Translations
                         ),
-                        color: grey1,
-                      ),
-                      child: GestureDetector(
-                        onTap: () async => await context.pushRoute(
-                          ResellerCodeCheckout(isPro: proUser),
+                        Divider(
+                          color: grey1,
+                          height: 2,
                         ),
-                        child: CText(
-                          'Have a Lantern Pro activation code? Click here.',
-                          style: tsBody1.copiedWith(color: grey5),
-                        ),
-                      ),
+                      ],
                     ),
                   ]),
                 ));
