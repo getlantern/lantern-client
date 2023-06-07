@@ -20,15 +20,20 @@ import com.android.billingclient.api.SkuDetailsResponseListener
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentHashMap
 
-open class InAppBilling(val context: Context) : PurchasesUpdatedListener, BillingClientStateListener, ConsumeResponseListener {
+class InAppBilling(
+    private val context: Context,
+) : PurchasesUpdatedListener, BillingClientStateListener, ConsumeResponseListener {
+
     companion object {
         private val TAG = InAppBilling::class.java.simpleName
     }
 
-    private val billingClient: BillingClient = BillingClient.newBuilder(context).enablePendingPurchases().setListener(this).build()
+    private val billingClient: BillingClient =
+        BillingClient.newBuilder(context).enablePendingPurchases().setListener(this).build()
     private val skus: ConcurrentHashMap<String, SkuDetails> = ConcurrentHashMap()
     private val handler = Handler(Looper.getMainLooper())
-    private val plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap()
+
+    val plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap()
 
     @Volatile
     private var purchasesUpdated: PurchasesUpdatedListener? = null
@@ -37,22 +42,16 @@ open class InAppBilling(val context: Context) : PurchasesUpdatedListener, Billin
         startConnection()
     }
 
-    fun getPlans():ConcurrentHashMap<String, ProPlan> { return plans }
-
     private fun startConnection() {
         Logger.d(TAG, "Starting connection")
         billingClient.startConnection(this)
     }
 
-    override fun onBillingServiceDisconnected() {
-        Logger.d(TAG, "onBillingServiceDisconnected")
-    }
+    override fun onBillingServiceDisconnected() = Logger.d(TAG, "onBillingServiceDisconnected")
 
     override fun onConsumeResponse(billingResult: BillingResult, s: String) {}
 
-    private fun BillingResult.responseCodeOK(): Boolean {
-        return getResponseCode() == BillingClient.BillingResponseCode.OK
-    }
+    private fun BillingResult.responseCodeOK() = responseCode == BillingClient.BillingResponseCode.OK
 
     @Synchronized
     fun startPurchase(activity: Activity, planID: String, cb: PurchasesUpdatedListener): Boolean {
@@ -99,9 +98,10 @@ open class InAppBilling(val context: Context) : PurchasesUpdatedListener, Billin
 
     private fun updateSkus() {
         Logger.d(TAG, "Updating SKUs")
-        val skuList = listOf<String>("1y", "2y")
+        val skuList = listOf("1y", "2y")
         val params = SkuDetailsParams.newBuilder()
-        params.setSkusList(skuList).setType(SkuType.INAPP)
+            .setType(SkuType.INAPP)
+            .setSkusList(skuList)
         billingClient.querySkuDetailsAsync(
             params.build(),
             object : SkuDetailsResponseListener {
@@ -180,11 +180,14 @@ open class InAppBilling(val context: Context) : PurchasesUpdatedListener, Billin
     private fun handleAcknowledgedPurchases(purchases: List<Purchase?>) {
         for (purchase in purchases) {
             if (purchase == null || !purchase.isAcknowledged()) continue
-            // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan, we have to consume
-            // it first, so we do that here. Since we don't actually know what has and what hasn't been consumed, we just do this
-            // every time we start up.
+            // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan,
+            // we have to consume it first, so we do that here. Since we don't actually know what has and what hasn't
+            // been consumed, we just do this every time we start up.
             Logger.d(TAG, "Consuming already acknowledged purchase ${purchase.getPurchaseToken()}")
-            billingClient.consumeAsync(ConsumeParams.newBuilder().setPurchaseToken(purchase.getPurchaseToken()).build(), this)
+            billingClient.consumeAsync(
+                ConsumeParams.newBuilder().setPurchaseToken(purchase.getPurchaseToken()).build(),
+                this,
+            )
         }
     }
 
