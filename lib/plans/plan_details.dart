@@ -65,7 +65,7 @@ class PlanCard extends StatelessWidget {
                 padding: const EdgeInsetsDirectional.only(
                   start: 24.0,
                   end: 24.0,
-                  top: 12.0,
+                  top: 16.0,
                   bottom: 24.0,
                 ),
                 child: Column(
@@ -74,7 +74,7 @@ class PlanCard extends StatelessWidget {
                     // * Plan name
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      //crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CText(
                           planName == '1y'
@@ -85,9 +85,11 @@ class PlanCard extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const CAssetImage(
-                          path: ImagePaths.keyboard_arrow_right,
-                        )
+                        Padding(
+                            padding: const EdgeInsetsDirectional.only(top: 6.0),
+                            child: const CAssetImage(
+                              path: ImagePaths.keyboard_arrow_right,
+                            ))
                       ],
                     ),
                     // * Price per month
