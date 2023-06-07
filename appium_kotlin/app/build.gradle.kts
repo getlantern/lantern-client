@@ -16,9 +16,15 @@ plugins {
     `maven-publish`
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+//    mavenLocal()
 }
 
 dependencies {
@@ -32,6 +38,9 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.9")
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation ("com.github.getlantern:finder-kotlin:0.0.8")
+
+
 }
 
 
@@ -46,4 +55,5 @@ tasks.test {
         showStackTraces = true
     }
 }
+
 
