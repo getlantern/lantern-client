@@ -143,7 +143,7 @@ class PlansPage extends StatelessWidget {
                       ),
                       // * Card
                       if (plans != null)
-                        ...plans.map(
+                        ...plans.toList().reversed.map(
                           (plan) => Container(
                               color: white,
                               padding: EdgeInsetsDirectional.only(
