@@ -140,7 +140,7 @@ class PaymentsUtil(private val activity: Activity) {
             )
             return
         }
-        val successfulPurchase = !inAppBilling.startPurchase(
+        inAppBilling.startPurchase(
             activity,
             planID,
             object : PurchasesUpdatedListener {
@@ -186,14 +186,6 @@ class PaymentsUtil(private val activity: Activity) {
                 }
             },
         )
-
-        if (!successfulPurchase) {
-            methodCallResult.error(
-                "unknownError",
-                activity.resources.getString(R.string.error_making_purchase),
-                null,
-            )
-        }
     }
 
     // Applies referral code (before the user has initiated a transaction)
