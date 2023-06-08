@@ -188,8 +188,8 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 // * Credit card number
                 Container(
                   padding: const EdgeInsetsDirectional.only(
-                    top: 8,
-                    bottom: 8,
+                    top: 16.0,
+                    bottom: 16.0,
                   ),
                   child: CTextField(
                     //key: creditCardFieldKey,
@@ -204,7 +204,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 // * Credit card month and expiration
                 Container(
                   padding: const EdgeInsetsDirectional.only(
-                    top: 16.0,
                     bottom: 16.0,
                   ),
                   child: Row(
