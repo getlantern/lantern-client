@@ -34,7 +34,7 @@ class InAppBilling(
     @get:Synchronized
     @set:Synchronized
     @Volatile
-    private var billingClient: BillingClient? = null
+    var billingClient: BillingClient? = null
 
     private val skus: ConcurrentHashMap<String, SkuDetails> = ConcurrentHashMap()
     private val handler = Handler(Looper.getMainLooper())
@@ -65,7 +65,7 @@ class InAppBilling(
                         Logger.d(TAG, "onBillingSetupFinished with response code: $responseCode")
                         if (billingResult.responseCodeOK()) {
                             updateSkus()
-                            checkForUnacknowledgedPurchases()
+                            handlePendingPurchases()
                             return
                         }
                         isRetriable(billingResult).then {
@@ -85,7 +85,7 @@ class InAppBilling(
         billingClient = null
     }
 
-    private fun ensureConnected(receivingFunction: BillingClient.() -> Unit) {
+    override fun ensureConnected(receivingFunction: BillingClient.() -> Unit) {
         billingClient?.takeIf { it.isReady }?.let {
             it.receivingFunction()
         }
@@ -193,19 +193,21 @@ class InAppBilling(
      * In either case, we'll let the pro-server know about the purchase to make sure that it gets
      * correctly applied to the user's account.
      */
-    private fun checkForUnacknowledgedPurchases() {
+    override fun handlePendingPurchases() {
         Logger.d(TAG, "Checking for pending purchases")
         ensureConnected {
             queryPurchasesAsync(
                 SkuType.INAPP,
             ) { billingResult: BillingResult, purchases: List<Purchase>? ->
                 if (!billingResult.responseCodeOK()) {
-                    isRetriable(billingResult).then { checkForUnacknowledgedPurchases() }
+                    isRetriable(billingResult).then { handlePendingPurchases() }
                     return@queryPurchasesAsync
                 }
                 if (purchases == null) {
                     return@queryPurchasesAsync
                 }
+                val pendingPurchases = purchases.filter { it.purchaseState == Purchase.PurchaseState.PENDING }
+                if (pendingPurchases.isEmpty()) return@queryPurchasesAsync
                 Logger.d(TAG, "Got ${purchases.size} purchases")
                 handleAcknowledgedPurchases(purchases)
             }
