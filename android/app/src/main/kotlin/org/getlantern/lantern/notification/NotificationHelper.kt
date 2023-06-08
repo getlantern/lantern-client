@@ -23,10 +23,12 @@ class NotificationHelper(
     // Used to notify a user of events that happen in the background
     private val manager: NotificationManager =
         getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-    private val builder: NotificationCompat.Builder
 
     private lateinit var dataUsageNotificationChannel: NotificationChannel
     private lateinit var vpnNotificationChannel: NotificationChannel
+    private lateinit var vpnBuilder: NotificationCompat.Builder
+    private lateinit var dataUsageBuilder: NotificationCompat.Builder
+
 
     @TargetApi(Build.VERSION_CODES.O)
     private fun initChannels() {
@@ -74,17 +76,11 @@ class NotificationHelper(
 
 
     public fun vpnConnectedNotification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(CHANNEL_VPN)
-        }
-        manager.notify(VPN_CONNECTED, builder.build())
+        manager.notify(VPN_CONNECTED, vpnBuilder.build())
     }
 
     public fun dataUsageNotification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(CHANNEL_DATA_USAGE)
-        }
-        manager.notify(DATA_USAGE, builder.build())
+        manager.notify(DATA_USAGE, dataUsageBuilder.build())
     }
 
     fun clearNotification() {
@@ -112,8 +108,20 @@ class NotificationHelper(
             Intent(activity, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
-        //NotificationCompat provides backward compatibility
-        builder = NotificationCompat.Builder(this)
+
+        // Configure vpnBuilder
+        vpnBuilder = buildNotification(CHANNEL_VPN, contentIntent)
+
+        // Configure dataUsageBuilder
+        dataUsageBuilder = buildNotification(CHANNEL_DATA_USAGE, contentIntent)
+    }
+
+
+    private fun buildNotification(
+        channelId: String,
+        contentIntent: PendingIntent
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(this, channelId) // Channel ID provided as parameter
             .setContentTitle(activity.getString(R.string.service_connected))
             .addAction(
                 android.R.drawable.ic_delete,
