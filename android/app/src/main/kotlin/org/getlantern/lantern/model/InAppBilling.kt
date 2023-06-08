@@ -44,10 +44,6 @@ class InAppBilling(
     @Volatile
     private var purchasesUpdated: PurchasesUpdatedListener? = null
 
-    /*init {
-        initConnection()
-    }*/
-
     override fun initConnection() {
         if (googleApiAvailability.isGooglePlayServicesAvailable(context)
             != ConnectionResult.SUCCESS
