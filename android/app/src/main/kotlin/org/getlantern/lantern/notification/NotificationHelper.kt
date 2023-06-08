@@ -10,17 +10,25 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 
-class NotificationHelper(private val activity: Activity, private val receiver: NotificationReceiver) : ContextWrapper(activity) {
+class NotificationHelper(
+    private val activity: Activity,
+    private val receiver: NotificationReceiver
+) : ContextWrapper(activity) {
 
     // Used to notify a user of events that happen in the background
-    private val manager: NotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-    private val builder: Notification.Builder
+    private val manager: NotificationManager =
+        getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
     private lateinit var dataUsageNotificationChannel: NotificationChannel
     private lateinit var vpnNotificationChannel: NotificationChannel
+    private lateinit var vpnBuilder: NotificationCompat.Builder
+    private lateinit var dataUsageBuilder: NotificationCompat.Builder
+
 
     @TargetApi(Build.VERSION_CODES.O)
     private fun initChannels() {
@@ -41,6 +49,7 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         channels.forEach { setChannelOptions(it) }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setChannelOptions(notificationChannel: NotificationChannel) {
         notificationChannel.enableLights(true)
         notificationChannel.lightColor = Color.GREEN
@@ -65,14 +74,13 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
         )
     }
 
+
     public fun vpnConnectedNotification() {
-        builder.setChannelId(CHANNEL_VPN)
-        manager.notify(VPN_CONNECTED, builder.build())
+        manager.notify(VPN_CONNECTED, vpnBuilder.build())
     }
 
     public fun dataUsageNotification() {
-        builder.setChannelId(CHANNEL_DATA_USAGE)
-        manager.notify(DATA_USAGE, builder.build())
+        manager.notify(DATA_USAGE, dataUsageBuilder.build())
     }
 
     fun clearNotification() {
@@ -100,19 +108,30 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
             Intent(activity, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
-        builder = Notification.Builder(this)
+
+        // Configure vpnBuilder
+        vpnBuilder = buildNotification(CHANNEL_VPN, contentIntent)
+
+        // Configure dataUsageBuilder
+        dataUsageBuilder = buildNotification(CHANNEL_DATA_USAGE, contentIntent)
+    }
+
+
+    private fun buildNotification(
+        channelId: String,
+        contentIntent: PendingIntent
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(this, channelId) // Channel ID provided as parameter
             .setContentTitle(activity.getString(R.string.service_connected))
             .addAction(
-                Notification.Action.Builder(
-                    android.R.drawable.ic_delete,
-                    activity.getString(R.string.disconnect),
-                    disconnectBroadcast(),
-                ).build(),
+                android.R.drawable.ic_delete,
+                activity.getString(R.string.disconnect),
+                disconnectBroadcast()
             )
             .setContentIntent(contentIntent)
             .setOngoing(true)
             .setShowWhen(true)
             .setSmallIcon(R.drawable.lantern_notification_icon)
-            .setVisibility(Notification.VISIBILITY_PUBLIC)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
     }
 }
