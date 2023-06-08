@@ -20,6 +20,10 @@ import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
+import 'package:lantern/plans/checkout.dart';
+import 'package:lantern/plans/plans.dart';
+import 'package:lantern/plans/reseller_checkout.dart';
+import 'package:lantern/plans/stripe_checkout.dart';
 import 'package:lantern/replica/link_handler.dart';
 import 'package:lantern/replica/ui/viewers/audio.dart';
 import 'package:lantern/replica/ui/viewers/image.dart';
@@ -202,6 +206,38 @@ import 'package:lantern/vpn/vpn_split_tunneling.dart';
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
+    CustomRoute<void>(
+      page: Checkout,
+      name: 'Checkout',
+      path: 'checkout',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),
+    CustomRoute<void>(
+      page: ResellerCodeCheckout,
+      name: 'ResellerCodeCheckout',
+      path: 'resellerCodeCheckout',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),
+    CustomRoute<void>(
+      page: StripeCheckout,
+      name: 'StripeCheckout',
+      path: 'stripeCheckout',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),
+    CustomRoute<void>(
+      page: PlansPage,
+      name: 'PlansPage',
+      path: 'plans',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),    
     //
     // * REPLICA ROUTES
     //

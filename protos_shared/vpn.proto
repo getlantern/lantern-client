@@ -30,3 +30,25 @@ message Device {
 message Devices {
   repeated Device devices = 1;
 }
+
+message Plan {
+  string id = 1;
+  string description = 2;
+  bool bestValue = 3;
+  int64 usdPrice = 4;
+  map<string, int64> price = 5;
+  string totalCostBilledOneTime = 6;
+  string oneMonthCost = 7;
+  string totalCost = 8;
+  string formattedBonus = 9;
+  string renewalText = 10;
+}
+
+message PaymentProviders {
+  string name = 1;
+}
+
+message PaymentMethod {
+  string method = 1;
+  repeated PaymentProviders providers = 2;
+}
