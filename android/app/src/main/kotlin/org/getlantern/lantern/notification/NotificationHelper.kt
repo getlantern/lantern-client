@@ -1,7 +1,7 @@
 package org.getlantern.lantern.notification
 
 import android.annotation.TargetApi
-import android.app.Activity
+import android.content.Context
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,7 +13,7 @@ import android.os.Build
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 
-class NotificationHelper(private val activity: Activity, private val receiver: NotificationReceiver) : ContextWrapper(activity) {
+class NotificationHelper(private val context: Context, private val receiver: NotificationReceiver) : ContextWrapper(context) {
 
     // Used to notify a user of events that happen in the background
     private val manager: NotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -49,16 +49,16 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
     }
 
     fun disconnectIntent(): Intent {
-        val packageName = activity.packageName
-        return Intent(activity, NotificationReceiver::class.java).apply {
+        val packageName = context.packageName
+        return Intent(context, NotificationReceiver::class.java).apply {
             action = "$packageName.intent.VPN_DISCONNECTED"
         }
     }
 
-    private fun disconnectBroadcast(): PendingIntent {
+    fun disconnectBroadcast(): PendingIntent {
         // Retrieve a PendingIntent that will perform a broadcast
         return PendingIntent.getBroadcast(
-            activity,
+            context,
             0,
             disconnectIntent(),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
@@ -95,17 +95,17 @@ class NotificationHelper(private val activity: Activity, private val receiver: N
             initChannels()
         }
         val contentIntent = PendingIntent.getActivity(
-            activity,
+            context,
             0,
-            Intent(activity, MainActivity::class.java),
+            Intent(context, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
         builder = Notification.Builder(this)
-            .setContentTitle(activity.getString(R.string.service_connected))
+            .setContentTitle(context.getString(R.string.service_connected))
             .addAction(
                 Notification.Action.Builder(
                     android.R.drawable.ic_delete,
-                    activity.getString(R.string.disconnect),
+                    context.getString(R.string.disconnect),
                     disconnectBroadcast(),
                 ).build(),
             )
