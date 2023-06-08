@@ -15,7 +15,6 @@ import org.androidannotations.annotations.ViewById;
 
 import org.getlantern.lantern.MainActivity;
 import org.getlantern.mobilesdk.Logger;
-import org.getlantern.lantern.model.PaymentHandler;
 import org.getlantern.lantern.model.Utils;
 import org.getlantern.lantern.R;
 
@@ -41,9 +40,6 @@ public class WelcomeActivity extends BaseFragmentActivity {
 
     @AfterViews
     void afterViews() {
-
-        PaymentHandler.sendPurchaseEvent(this, provider);
-
         // we re-use the titlebar component here
         // but center the label since there is no
         // back button on this screen

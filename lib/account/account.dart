@@ -4,10 +4,6 @@ import 'package:lantern/messaging/messaging_model.dart';
 class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
 
-  void upgradeToLanternPro() => LanternNavigator.startScreen(
-        LanternNavigator.SCREEN_UPGRADE_TO_LANTERN_PRO,
-      );
-
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());
 
@@ -19,6 +15,9 @@ class AccountMenu extends StatelessWidget {
 
   void openSettings(BuildContext context) async =>
       await context.pushRoute(Settings());
+
+  void upgradeToLanternPro(BuildContext context) async =>
+      await context.pushRoute(PlansPage());
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
@@ -48,7 +47,9 @@ class AccountMenu extends StatelessWidget {
       ListItemFactory.settingsItem(
         icon: ImagePaths.pro_icon_black,
         content: 'Upgrade to Lantern Pro'.i18n,
-        onTap: upgradeToLanternPro,
+        onTap: () {
+          upgradeToLanternPro(context);
+        },
       ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
