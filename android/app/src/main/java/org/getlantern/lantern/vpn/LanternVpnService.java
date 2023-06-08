@@ -21,9 +21,10 @@ import org.getlantern.mobilesdk.Logger;
 
 import internalsdk.Internalsdk;
 import internalsdk.SocketProtector;
+
 import java.util.List;
 
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+
 public class LanternVpnService extends VpnService implements Runnable {
     public static final String ACTION_CONNECT = "org.getlantern.lantern.vpn.START";
     public static final String ACTION_DISCONNECT = "org.getlantern.lantern.vpn.STOP";
@@ -84,8 +85,14 @@ public class LanternVpnService extends VpnService implements Runnable {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Logger.d(TAG, "LanternVpnService: onStartCommand()");
+        //Somehow we are getting null here when running on Android 5.0
+        // Handling null intent scenario
+        if (intent == null) {
+            Logger.d(TAG, "LanternVpnService: Received null intent, service is being restarted");
+            return START_STICKY;
+        }
 
-        if (intent != null && ACTION_DISCONNECT.equals(intent.getAction())) {
+        if (ACTION_DISCONNECT.equals(intent.getAction())) {
             stop();
             return START_NOT_STICKY;
         } else {
