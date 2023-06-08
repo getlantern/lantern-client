@@ -1,23 +1,44 @@
 package org.getlantern.lantern.vpn
 
+import android.Manifest
 import android.app.Application
+import android.content.Context
+import android.content.Intent
 import android.os.Environment
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
+import androidx.test.rule.ServiceTestRule
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4ClassRunner::class)
 class LanternVpnServiceTest {
 
-	companion object {
-        private val TAG = LanternVpnServiceTest::class.java.simpleName		
-	}
+    @get:Rule
+    val serviceRule = ServiceTestRule()
 
-    private val allRequiredPermissions = arrayOf(
+    val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+    @get:Rule
+    val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         Manifest.permission.INTERNET,
         Manifest.permission.ACCESS_WIFI_STATE,
         Manifest.permission.ACCESS_NETWORK_STATE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
     )
 
-	@get:Rule
-    val grant = grantPermissions(allRequiredPermissions)
+    @Test
+    fun testVPNService() {
+        serviceRule.startService(
+            Intent(appContext, LanternVpnService::class.java)
+        )
+    }
 
-    private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
+    companion object {
+        private val TAG = LanternVpnServiceTest::class.java.simpleName      
+    }
+
 }
