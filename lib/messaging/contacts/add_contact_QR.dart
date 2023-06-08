@@ -331,7 +331,7 @@ class _AddViaQRState extends State<AddViaQR> with TickerProviderStateMixin {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
-                        child: QrImage(
+                        child: QrImageView(
                           data: widget.me.contactId.id,
                           padding: const EdgeInsets.all(16),
                           backgroundColor: white,
