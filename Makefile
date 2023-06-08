@@ -239,6 +239,9 @@ connected-android-tests:
 android-debug-unit-tests:
 	@cd $(MOBILE_DIR) && ./gradlew --project-dir app testProdDebugUnitTest
 
+android-play-unit-tests:
+	@cd $(MOBILE_DIR) && ./gradlew --project-dir app testProdPlayUnitTest
+
 # Run unit tests for the prodSideload build
 android-sideload-unit-tests:
 	@cd $(MOBILE_DIR) && ./gradlew --project-dir app testProdSideloadUnitTest

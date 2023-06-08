@@ -1,5 +1,7 @@
 package org.getlantern.lantern.model
 
+import android.content.Context
+import androidx.test.platform.app.InstrumentationRegistry
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener
 import com.android.billingclient.api.BillingClient
@@ -15,6 +17,8 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.SkuDetailsResponseListener
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -24,6 +28,8 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import org.junit.Before
+import org.junit.Test
 
 class InAppBillingTest {
 
@@ -40,7 +46,7 @@ class InAppBillingTest {
 
 	@Before
     fun setUp() {
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val context = mockk<Context>(relaxed = true)
         MockKAnnotations.init(this, relaxUnitFun = true)
         every { builder.setListener(any()) } returns builder
         every { builder.build() } returns billingClient
