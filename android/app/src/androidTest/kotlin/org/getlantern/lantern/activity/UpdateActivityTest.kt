@@ -11,6 +11,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiSelector
 import org.getlantern.lantern.R
+import org.getlantern.lantern.activity.UpdateActivity_
 import org.getlantern.lantern.test.TestUtils
 import org.junit.Before
 import org.junit.Rule
