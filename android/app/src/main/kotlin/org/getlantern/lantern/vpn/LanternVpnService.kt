@@ -57,6 +57,12 @@ class LanternVpnService : VpnService(), Runnable {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        //Somehow we are getting null here when running on Android 5.0
+        // Handling null intent scenario
+        if (intent == null) {
+            Logger.d(TAG, "LanternVpnService: Received null intent, service is being restarted")
+            return START_STICKY
+        }
         return if (intent.action == ACTION_DISCONNECT) {
             stop()
             START_NOT_STICKY
