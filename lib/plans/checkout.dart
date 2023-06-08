@@ -290,58 +290,6 @@ class _CheckoutState extends State<Checkout>
                               ),
                             ),
                           ),
-                          Flexible(
-                            flex: 1,
-                            child: GestureDetector(
-                              onTap: () async {
-                                await sessionModel
-                                    .applyRefCode(
-                                      refCodeController.value.text,
-                                    )
-                                    .then(
-                                      (value) => setState(() {
-                                        submittedRefCode = true;
-                                        refCodeSuccessfullyApplied = true;
-                                      }),
-                                    )
-                                    .onError((error, stackTrace) {
-                                  CDialog.showError(
-                                    context,
-                                    error: e,
-                                    stackTrace: stackTrace,
-                                    description: (error as PlatformException)
-                                        .message
-                                        .toString()
-                                        .i18n,
-                                  );
-                                  setState(() {
-                                    refCodeSuccessfullyApplied = false;
-                                  });
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsetsDirectional.only(
-                                  start: 16.0,
-                                  end: 16.0,
-                                ),
-                                child: submittedRefCode &&
-                                        refCodeFieldKey.currentState
-                                                ?.validate() ==
-                                            true &&
-                                        refCodeSuccessfullyApplied
-                                    ? Transform.scale(
-                                        scale: pulseAnimation.value,
-                                        child: const CAssetImage(
-                                          path: ImagePaths.check_green,
-                                        ),
-                                      )
-                                    : CText(
-                                        'apply'.i18n.toUpperCase(),
-                                        style: tsButtonPink,
-                                      ),
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
