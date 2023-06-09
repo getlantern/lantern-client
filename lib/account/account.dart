@@ -1,3 +1,4 @@
+import 'package:lantern/account/support/support_widget.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
@@ -17,8 +18,11 @@ class AccountMenu extends StatelessWidget {
   void openDesktopVersion() =>
       LanternNavigator.startScreen(LanternNavigator.SCREEN_DESKTOP_VERSION);
 
-  void openSettings(BuildContext context) async =>
-      await context.pushRoute(Settings());
+  void openSettings(BuildContext context) => context.pushRoute(Settings());
+
+  void openSupport(BuildContext context) {
+    context.pushRoute(const Support());
+  }
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
@@ -69,11 +73,18 @@ class AccountMenu extends StatelessWidget {
       ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.settings,
+        content: 'support'.i18n,
+        onTap: () {
+          openSupport(context);
+        },
+      ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.settings,
         content: 'settings'.i18n,
         onTap: () {
           openSettings(context);
         },
-      ),
+      )
     ];
   }
 
@@ -111,6 +122,13 @@ class AccountMenu extends StatelessWidget {
         icon: ImagePaths.desktop,
         content: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
+      ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.settings,
+        content: 'support'.i18n,
+        onTap: () {
+          openSupport(context);
+        },
       ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.settings,
