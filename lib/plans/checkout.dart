@@ -50,7 +50,6 @@ class _CheckoutState extends State<Checkout>
   var loadingPercentage = 0;
   late AnimationController animationController;
   late Animation pulseAnimation;
-  var refCodeSuccessfullyApplied = false;
 
   @override
   void initState() {
@@ -357,7 +356,8 @@ class _CheckoutState extends State<Checkout>
                       children: [
                         Button(
                           disabled: emailController.value.text.isEmpty ||
-                              emailFieldKey.currentState?.validate() == false,
+                              emailFieldKey.currentState?.validate() == false ||
+                              refCodeFieldKey.currentState?.validate() == false,
                           text: 'continue'.i18n,
                           onPressed: () async {
                             var refCode = refCodeController.value;
