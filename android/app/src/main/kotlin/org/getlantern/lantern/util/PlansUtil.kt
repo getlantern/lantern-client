@@ -1,21 +1,14 @@
 package org.getlantern.lantern.util
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.res.Resources
 import android.text.TextUtils
-import com.google.gson.JsonObject
-import io.flutter.plugin.common.MethodChannel
-import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.model.LanternHttpClient
-import org.getlantern.lantern.model.LanternHttpClient.ProCallback
-import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.util.DateUtil.isBefore
 import org.getlantern.lantern.util.DateUtil.isToday
-import org.getlantern.mobilesdk.Logger
+import org.joda.time.LocalDateTime
 
 object PlansUtil {
     @JvmStatic
@@ -29,37 +22,40 @@ object PlansUtil {
                 activity.resources.getString(R.string.discount, Math.round(plan.discount * 100).toString())
         }
         val oneMonthCost = plan.formattedPriceOneMonth
-        var renewalText = ""
-        if (LanternApp.getSession().isProUser || LanternApp.getSession().isExpired()) {
-            val localDateTime = LanternApp.getSession().getExpiration()
-            renewalText = when {
-                localDateTime.isToday() -> {
-                    activity.resources.getString(R.string.membership_ends_today, formattedBonus)
-                }
-                // TODO: this is unreachable
-                localDateTime.isBefore() -> {
-                    activity.resources.getString(R.string.membership_has_expired, formattedBonus)
-                }
-                else -> {
-                    activity.resources.getString(R.string.membership_end_soon, formattedBonus)
-                }
-            }
-        }
-        plan.setRenewalText(renewalText)
+        plan.setRenewalText(proRenewalText(activity.resources, formattedBonus))
         plan.setTotalCostBilledOneTime(totalCostBilledOneTime)
         plan.setOneMonthCost(oneMonthCost)
         plan.setFormattedBonus(formattedBonus)
         plan.setFormattedDiscount(formattedDiscount)
         plan.setTotalCost(totalCost)
     }
+
+    private fun proRenewalText(resources: Resources, formattedBonus: String): String {
+        if (!LanternApp.getSession().isProUser) return ""
+        val proExpiration = LanternApp.getSession().getExpiration()
+        if (proExpiration == null) return ""
+        return when {
+                proExpiration.isBefore() -> {
+                    resources.getString(R.string.membership_has_expired, formattedBonus)
+                }
+                proExpiration.isToday() -> {
+                    resources.getString(R.string.membership_ends_today, formattedBonus)
+                }
+                proExpiration.isBefore(LocalDateTime.now().plusMonths(3)) -> {
+                    resources.getString(R.string.membership_end_soon, formattedBonus)
+                }
+                else -> ""
+            }
+    }
     // Formats the renewal bonus
     // longForm == false -> a day-only format (e.g. "45 days")
     // longForm == true -> month and day format (e.g. "1 month and 15 days"
-    private fun formatRenewalBonusExpected(activity: Activity, planBonus: MutableMap<String, Int>, longForm: Boolean): String? {
+    private fun formatRenewalBonusExpected(activity: Activity, planBonus: MutableMap<String, Int>, 
+        longForm: Boolean): String {
         val bonusMonths: Int? = planBonus["months"]
         val bonusDays: Int? = planBonus["days"]
         val bonusParts: MutableList<String?> = java.util.ArrayList()
-        if (bonusMonths == null && bonusDays == null) return null
+        if (bonusMonths == null && bonusDays == null) return ""
         if (longForm) {
             // "1 month and 15 days"
             if (bonusMonths != null && bonusMonths > 0) {
@@ -67,8 +63,8 @@ object PlansUtil {
                     activity.resources.getQuantityString(
                         R.plurals.month,
                         bonusMonths.toInt(),
-                        bonusMonths
-                    )
+                        bonusMonths,
+                    ),
                 )
             }
             if (bonusDays != null && bonusDays > 0) {
