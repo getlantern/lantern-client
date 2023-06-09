@@ -144,17 +144,17 @@ class PlansPage extends StatelessWidget {
                       // * Card
                       if (plans != null)
                         ...plans.toList().reversed.map(
-                          (plan) => Container(
-                              color: white,
-                              padding: EdgeInsetsDirectional.only(
-                                start: 32.0,
-                                end: 32.0,
-                              ),
-                              child: PlanCard(
-                                plan: plan.value,
-                                isPro: proUser,
-                              )),
-                        ),
+                              (plan) => Container(
+                                  color: white,
+                                  padding: EdgeInsetsDirectional.only(
+                                    start: 32.0,
+                                    end: 32.0,
+                                  ),
+                                  child: PlanCard(
+                                    plan: plan.value,
+                                    isPro: proUser,
+                                  )),
+                            ),
                     ])),
                     // * Footer
                     Padding(
