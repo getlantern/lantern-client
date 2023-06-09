@@ -44,7 +44,7 @@ class PlansPage extends StatelessWidget {
             ),
           );
         }
-
+        final renewalText = plans.last.value.renewalText;
         return StatefulBuilder(
           builder: (context, setState) => Container(
               color: white,
@@ -80,6 +80,15 @@ class PlansPage extends StatelessWidget {
                               ),
                             ],
                           )),
+                      if (renewalText != '')
+                        Padding(
+                          padding:
+                              const EdgeInsetsDirectional.only(bottom: 12.0),
+                          child: CText(
+                            renewalText,
+                            style: tsBody1,
+                          ),
+                        ),
                       Container(
                           color: white,
                           padding: const EdgeInsetsDirectional.only(
