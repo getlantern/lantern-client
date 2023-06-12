@@ -287,6 +287,18 @@ class SessionModel extends Model {
     );
   }
 
+  Future<String> requestLinkCode() {
+    return methodChannel.invokeMethod('requestLinkCode').then((value) => value as String);
+  }
+
+  Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'devicelinkingcode',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
   Future<void> redeemResellerCode(
     String email,
     String resellerCode,
