@@ -44,7 +44,7 @@ class PlansPage extends StatelessWidget {
             ),
           );
         }
-
+        final renewalText = plans.last.value.renewalText;
         return StatefulBuilder(
           builder: (context, setState) => Container(
               color: white,
@@ -80,6 +80,15 @@ class PlansPage extends StatelessWidget {
                               ),
                             ],
                           )),
+                      if (renewalText != '')
+                        Padding(
+                          padding:
+                              const EdgeInsetsDirectional.only(bottom: 12.0),
+                          child: CText(
+                            renewalText,
+                            style: tsBody1,
+                          ),
+                        ),
                       Container(
                           color: white,
                           padding: const EdgeInsetsDirectional.only(
@@ -144,17 +153,17 @@ class PlansPage extends StatelessWidget {
                       // * Card
                       if (plans != null)
                         ...plans.toList().reversed.map(
-                          (plan) => Container(
-                              color: white,
-                              padding: EdgeInsetsDirectional.only(
-                                start: 32.0,
-                                end: 32.0,
-                              ),
-                              child: PlanCard(
-                                plan: plan.value,
-                                isPro: proUser,
-                              )),
-                        ),
+                              (plan) => Container(
+                                  color: white,
+                                  padding: EdgeInsetsDirectional.only(
+                                    start: 32.0,
+                                    end: 32.0,
+                                  ),
+                                  child: PlanCard(
+                                    plan: plan.value,
+                                    isPro: proUser,
+                                  )),
+                            ),
                     ])),
                     // * Footer
                     Padding(
