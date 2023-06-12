@@ -1,0 +1,75 @@
+name: BrowserStack CI
+
+on:
+  push:
+    branches: [ user-journey-test-ci ]
+env:
+  GOPRIVATE: github.com/getlantern
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: Pull LFS objects
+        run: git lfs pull
+
+      # Install Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.7.12"
+          channel: "stable"
+      - run: flutter --version
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Granting private modules access
+        run: |
+          git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build Android-Lib
+        run: make android-lib ANDROID_ARCH=all
+
+      - name: Build APK
+        run: |
+          flutter pub get
+          flutter build apk --debug --flavor prod
+
+      - name: Install jq
+        run: sudo apt-get install jq
+
+      - name: Upload to BrowserStack
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          BROWSERSTACK_APP_PATH: "build/app/outputs/flutter-apk/app-prod-debug.apk"
+        run: |
+          response=$(curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" \
+            -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
+            -F "file=@$BROWSERSTACK_APP_PATH" \
+            -F "custom_id=LanternApp")
+          app_url=$(echo $response | jq -r .app_url)
+          echo "$app_url"
+          echo "BROWSERSTACK_APP_ID=$app_url" >> $GITHUB_ENV
+          
+
+      - name: Run Tests
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          RUN_ENV: "live"
+        run: |
+          cd appium_kotlin
+          ./gradlew test
