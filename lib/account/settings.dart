@@ -9,10 +9,11 @@ class Settings extends StatelessWidget {
 
   final packageInfo = PackageInfo.fromPlatform();
 
-  void changeLanguage(BuildContext context) => context.pushRoute(Language());
+  void changeLanguage(BuildContext context) async =>
+      await context.pushRoute(Language());
 
-  void reportIssue() async =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
+  void reportIssue(BuildContext context) async =>
+      await context.pushRoute(ReportIssue());
 
   void checkForUpdates() async => await sessionModel.checkForUpdates();
 
@@ -59,7 +60,9 @@ class Settings extends StatelessWidget {
             trailingArray: [
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
-            onTap: reportIssue,
+            onTap: () {
+              reportIssue(context);
+            },
           ),
           ListItemFactory.settingsItem(
             icon: ImagePaths.update,

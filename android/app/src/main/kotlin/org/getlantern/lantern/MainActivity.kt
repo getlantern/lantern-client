@@ -56,6 +56,7 @@ import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.DeviceInfo
 import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.PlansUtil
+import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
@@ -77,7 +78,6 @@ class MainActivity :
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var replicaModel: ReplicaModel
-    private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
@@ -97,7 +97,6 @@ class MainActivity :
         vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
-        navigator = Navigator(this, flutterEngine)
         receiver = NotificationReceiver()
         notifications = NotificationHelper(this, receiver)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {

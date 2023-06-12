@@ -36,9 +36,11 @@ class _CheckoutState extends State<Checkout>
     formKey: refCodeFieldKey,
     validator: (value) =>
         // only allow letters and numbers as well as 6 <= length <= 13
-        value != null &&
+        value == null ||
+                value.characters.length == 0 ||
                 RegExp(r'^[a-zA-Z0-9]*$').hasMatch(value) &&
-                (6 <= value.characters.length && value.characters.length <= 13)
+                    (6 <= value.characters.length &&
+                        value.characters.length <= 13)
             ? null
             : 'invalid_or_incomplete_referral_code'.i18n,
   );
@@ -46,10 +48,8 @@ class _CheckoutState extends State<Checkout>
   var isRefCodeFieldShowing = false;
   var selectedPaymentProvider = Providers.stripe;
   var loadingPercentage = 0;
-  var submittedRefCode = false;
   late AnimationController animationController;
   late Animation pulseAnimation;
-  var refCodeSuccessfullyApplied = false;
 
   @override
   void initState() {
@@ -70,6 +70,27 @@ class _CheckoutState extends State<Checkout>
     refCodeController.dispose();
     animationController.dispose();
     super.dispose();
+  }
+
+  static void showError(
+    BuildContext context, {
+    Object? error,
+    StackTrace? stackTrace,
+    String description = '',
+  }) {
+    if (description.isEmpty) {
+      if (error is PlatformException) {
+        description = (error as PlatformException).message.toString().i18n;
+      } else {
+        description = error.toString();
+      }
+    }
+    CDialog.showError(
+      context,
+      error: e,
+      stackTrace: stackTrace,
+      description: description,
+    );
   }
 
   Widget options() => CInkWell(
@@ -186,16 +207,7 @@ class _CheckoutState extends State<Checkout>
           await sessionModel.openWebview(btcPayURL);
         }).onError((error, stackTrace) {
           context.loaderOverlay.hide();
-          CDialog.showError(
-            context,
-            error: e,
-            stackTrace: stackTrace,
-            description: (error as PlatformException)
-                .message
-                .toString()
-                .i18n // we are localizing this error Flutter-side,
-            ,
-          );
+          showError(context, error: e, stackTrace: stackTrace);
         });
         break;
       case Providers.freekassa:
@@ -278,7 +290,6 @@ class _CheckoutState extends State<Checkout>
                             child: Form(
                               key: refCodeFieldKey,
                               child: CTextField(
-                                enabled: !refCodeSuccessfullyApplied,
                                 controller: refCodeController,
                                 autovalidateMode: AutovalidateMode.disabled,
                                 textCapitalization:
@@ -290,58 +301,6 @@ class _CheckoutState extends State<Checkout>
                               ),
                             ),
                           ),
-                          Flexible(
-                            flex: 1,
-                            child: GestureDetector(
-                              onTap: () async {
-                                await sessionModel
-                                    .applyRefCode(
-                                      refCodeController.value.text,
-                                    )
-                                    .then(
-                                      (value) => setState(() {
-                                        submittedRefCode = true;
-                                        refCodeSuccessfullyApplied = true;
-                                      }),
-                                    )
-                                    .onError((error, stackTrace) {
-                                  CDialog.showError(
-                                    context,
-                                    error: e,
-                                    stackTrace: stackTrace,
-                                    description: (error as PlatformException)
-                                        .message
-                                        .toString()
-                                        .i18n,
-                                  );
-                                  setState(() {
-                                    refCodeSuccessfullyApplied = false;
-                                  });
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsetsDirectional.only(
-                                  start: 16.0,
-                                  end: 16.0,
-                                ),
-                                child: submittedRefCode &&
-                                        refCodeFieldKey.currentState
-                                                ?.validate() ==
-                                            true &&
-                                        refCodeSuccessfullyApplied
-                                    ? Transform.scale(
-                                        scale: pulseAnimation.value,
-                                        child: const CAssetImage(
-                                          path: ImagePaths.check_green,
-                                        ),
-                                      )
-                                    : CText(
-                                        'apply'.i18n.toUpperCase(),
-                                        style: tsButtonPink,
-                                      ),
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -401,20 +360,32 @@ class _CheckoutState extends State<Checkout>
                               refCodeFieldKey.currentState?.validate() == false,
                           text: 'continue'.i18n,
                           onPressed: () async {
+                            var refCode = refCodeController.value;
                             await Future.wait(
                               [
                                 sessionModel
                                     .checkEmailExists(
                                         emailController.value.text)
                                     .onError((error, stackTrace) {
-                                  CDialog.showError(
+                                  showError(
                                     context,
                                     error: e,
                                     stackTrace: stackTrace,
-                                    description: error.toString(),
                                   );
                                 }),
-                                resolvePaymentRoute(),
+                                if (refCode != null && !refCode.text.isEmpty)
+                                  sessionModel
+                                      .applyRefCode(
+                                        refCode.text,
+                                      )
+                                      .then((value) => resolvePaymentRoute())
+                                      .onError((error, stackTrace) {
+                                    refCodeController.error =
+                                        'invalid_or_incomplete_referral_code'
+                                            .i18n;
+                                  })
+                                else
+                                  resolvePaymentRoute(),
                               ],
                               eagerError: true,
                             );
