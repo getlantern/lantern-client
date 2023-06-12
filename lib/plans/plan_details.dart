@@ -182,7 +182,7 @@ class PlanStep extends StatelessWidget {
         Container(
           padding: const EdgeInsetsDirectional.only(start: 8.0),
           margin: const EdgeInsetsDirectional.only(
-            bottom: 3.0),
+            bottom: 4.0),
           child: CText(description, style: tsBody1),
         )
       ],
