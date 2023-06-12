@@ -1,0 +1,43 @@
+{
+  "server": "hub-cloud.browserstack.com/wd/hub",
+  "username": "jigarj_SNsRyw",
+  "access_key": "dA4yyG26fHbfJxRUYMwr",
+  "app": "bs://5fb3d71c0a06de7d496ff6fceba612a15e835577",
+  "capabilities": {
+    "automationName": "Flutter",
+    "setWebContentsDebuggingEnabled": true,
+    "appium:noReset": false,
+    "appium:logLevel": true,
+    "enablePerformanceLogging": true,
+    "bstack:options": {
+      "appiumVersion": "2.0.0",
+      "networkLogs": true,
+      "projectName": "Lantern",
+      "buildName": "Lantern-APK",
+      "appiumLogs": true
+    }
+  },
+  "environments": [
+    {
+      "appium:deviceName": "Samsung Galaxy S7",
+      "platformVersion": "6.0",
+      "platformName": "Android"
+    },
+    {
+      "appium:deviceName": "Samsung Galaxy Note 8",
+      "platformVersion": "7.1",
+      "platformName": "Android"
+    },
+    {
+      "appium:deviceName": "Samsung Galaxy S21",
+      "platformVersion": "11.0",
+      "platformName": "Android"
+    },
+    {
+      "appium:deviceName": "Google Pixel 7 Pro",
+      "platformVersion": "13.0",
+      "platformName": "Android"
+    }
+  ]
+}
+
