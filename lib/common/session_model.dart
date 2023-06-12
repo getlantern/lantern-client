@@ -303,7 +303,7 @@ class SessionModel extends Model {
   }
 
   Future<void> submitGooglePlay(String planID) async {
-    return methodChannel.invokeMethod('submitGooglePlay', <String, dynamic>{
+    return methodChannel.invokeMethod('submitGooglePlayPayment', <String, dynamic>{
       'planID': planID,
     }).then((value) => value as String);
   }
