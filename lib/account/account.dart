@@ -72,7 +72,7 @@ class AccountMenu extends StatelessWidget {
         },
       ),
       ListItemFactory.settingsItem(
-        icon: ImagePaths.settings,
+        icon: ImagePaths.support,
         content: 'support'.i18n,
         onTap: () {
           openSupport(context);
@@ -124,7 +124,7 @@ class AccountMenu extends StatelessWidget {
         onTap: openDesktopVersion,
       ),
       ListItemFactory.settingsItem(
-        icon: ImagePaths.settings,
+        icon: ImagePaths.support,
         content: 'support'.i18n,
         onTap: () {
           openSupport(context);
