@@ -31,6 +31,18 @@ class LanternVpnServiceTest {
     )
 
     @Test
+    fun testWithBoundService() {
+        val serviceIntent = Intent(appContext, LanternVpnService::class.java)
+        // P
+    }
+
+    @Test
+    fun testWithExcludedApps() {
+        val excludedApps = listOf("com.facebook.katana", "com.snapchat.android")
+        val serviceIntent = Intent(appContext, LanternVpnService::class.java)
+    }
+
+    @Test
     fun testVPNService() {
         serviceRule.startService(
             Intent(appContext, LanternVpnService::class.java)
