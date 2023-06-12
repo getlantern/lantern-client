@@ -129,7 +129,7 @@ class PaymentsUtil(private val activity: Activity) {
     }
 
     // Handles Google Play transactions
-    fun submitGooglePlayPayment(id: String, methodCallResult: MethodChannel.Result) {
+    fun submitGooglePlayPayment(planID: String, methodCallResult: MethodChannel.Result) {
         val inAppBilling = LanternApp.getInAppBilling()
         if (inAppBilling == null) {
             Logger.error(TAG, "Missing inAppBilling")
@@ -140,12 +140,9 @@ class PaymentsUtil(private val activity: Activity) {
             )
             return
         }
-        var planID = id
-        val currency = LanternApp.getSession().getCurrency()
-        if (currency != null) planID += "-$currency"
         inAppBilling.startPurchase(
             activity,
-            planID.lowercase(),
+            planID,
             object : PurchasesUpdatedListener {
                 override fun onPurchasesUpdated(
                     billingResult: BillingResult,
@@ -178,7 +175,6 @@ class PaymentsUtil(private val activity: Activity) {
                         return
                     }
 
-                    methodCallResult.success("successfulPurchase")
                     sendPurchaseRequest(
                         planID,
                         "",
