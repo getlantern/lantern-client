@@ -70,7 +70,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
             // * Email field
             Container(
               padding: const EdgeInsetsDirectional.only(
-                top: 8,
+                top: 16,
                 bottom: 8,
               ),
               child: Form(
