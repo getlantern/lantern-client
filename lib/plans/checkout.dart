@@ -244,7 +244,7 @@ class _CheckoutState extends State<Checkout>
                 start: 16,
                 end: 16,
                 top: 24,
-                bottom: 24,
+                bottom: 32,
               ),
               child: ListView(
                 children: [
@@ -256,7 +256,7 @@ class _CheckoutState extends State<Checkout>
                   // * Email field
                   Container(
                     padding: const EdgeInsetsDirectional.only(
-                      top: 16,
+                      top: 8,
                       bottom: 8,
                     ),
                     child: Form(
@@ -279,7 +279,7 @@ class _CheckoutState extends State<Checkout>
                     child: Container(
                       padding: const EdgeInsetsDirectional.only(
                         top: 8,
-                        bottom: 24,
+                        bottom: 16,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -314,8 +314,8 @@ class _CheckoutState extends State<Checkout>
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsetsDirectional.only(
-                          top: 16,
-                          bottom: 24,
+                          top: 8,
+                          bottom: 16,
                         ),
                         child: Row(
                           children: [
