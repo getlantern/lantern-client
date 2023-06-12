@@ -111,6 +111,13 @@ class SessionModel extends Model {
     );
   }
 
+  Widget referralCode(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'referral',
+      builder: builder,
+    );
+  }
+
   Widget deviceId(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
   }

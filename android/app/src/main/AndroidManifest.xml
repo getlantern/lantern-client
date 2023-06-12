@@ -102,14 +102,6 @@
         </activity>
 
         <activity
-            android:name=".activity.InviteActivity_"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name=".activity.DesktopActivity_"
-            android:screenOrientation="portrait"/>
-
-        <activity
             android:name="org.getlantern.mobilesdk.activity.ReportIssueActivity"
             android:screenOrientation="portrait"/>
 
