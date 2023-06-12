@@ -197,7 +197,7 @@ class PaymentsUtil(private val activity: Activity) {
     }
 
     // Applies referral code (before the user has initiated a transaction)
-    fun applyRefCode(refCode: String, result: MethodChannel.Result) {
+    fun applyRefCode(refCode: String, methodCallResult: MethodChannel.Result) {
         try {
             val formBody: FormBody = FormBody.Builder()
                 .add("code", refCode).build()
@@ -211,7 +211,7 @@ class PaymentsUtil(private val activity: Activity) {
                             "Error retrieving referral code: $error",
                         )
                         if (error != null && error.message != null) {
-                            result.error(
+                            methodCallResult.error(
                                 "unknownError",
                                 error.message,
                                 null,
@@ -223,15 +223,16 @@ class PaymentsUtil(private val activity: Activity) {
                     override fun onSuccess(response: Response, result: JsonObject) {
                         Logger.debug(
                             TAG,
-                            "Successfully redeemed referral code$refCode",
+                            "Successfully redeemed referral code: $refCode",
                         )
                         session.setReferral(refCode)
+                        methodCallResult.success("applyCodeSuccessful")
                     }
                 },
             )
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to apply referral code", t)
-            result.error(
+            methodCallResult.error(
                 "unknownError",
                 "Something went wrong while applying your referral code",
                 null,
