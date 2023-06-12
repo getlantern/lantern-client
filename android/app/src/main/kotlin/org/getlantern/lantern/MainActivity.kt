@@ -77,7 +77,6 @@ class MainActivity :
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var replicaModel: ReplicaModel
-    private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
@@ -97,7 +96,6 @@ class MainActivity :
         vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
-        navigator = Navigator(this, flutterEngine)
         receiver = NotificationReceiver()
         notifications = NotificationHelper(this, receiver)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
@@ -281,7 +279,7 @@ class MainActivity :
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun vpnStateChanged(state: VpnState) {
-        updateStatus(state.use())
+        updateStatus(state.useVpn())
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
