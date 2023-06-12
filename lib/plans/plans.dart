@@ -56,12 +56,12 @@ class PlansPage extends StatelessWidget {
                         child: ListView(shrinkWrap: true, children: [
                       Container(
                           padding: const EdgeInsetsDirectional.only(
-                              top:25, bottom: 20, start: 32, end: 16),
+                              top: 20, bottom: 20, start: 32, end: 16),
                           color: white,
                           child: Row(
                             children: [
                               Container(
-                                  padding:
+                                  margin:
                                       const EdgeInsetsDirectional.only(top: 5),
                                   child: CAssetImage(
                                     path: ImagePaths.lantern_pro_logotype,
@@ -146,11 +146,12 @@ class PlansPage extends StatelessWidget {
                           end: 32.0,
                         ),
                         child: Container(
-                          margin: const EdgeInsetsDirectional.only(start: 4.0),
-                          child: PlanStep(
-                          stepNum: '1',
-                          description: 'choose_plan'.i18n,
-                        )),
+                            margin:
+                                const EdgeInsetsDirectional.only(start: 4.0),
+                            child: PlanStep(
+                              stepNum: '1',
+                              description: 'choose_plan'.i18n,
+                            )),
                       ),
                       // * Card
                       if (plans != null)
