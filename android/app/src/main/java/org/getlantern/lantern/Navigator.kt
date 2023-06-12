@@ -9,7 +9,6 @@ import android.os.Process
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import org.getlantern.lantern.activity.DesktopActivity_
 import org.getlantern.lantern.activity.InviteActivity_
 import org.getlantern.lantern.activity.authorizeDevice.LinkDeviceActivity_
 import org.getlantern.mobilesdk.activity.ReportIssueActivity
@@ -21,10 +20,8 @@ class Navigator(
 
     companion object {
         const val SCREEN_INVITE_FRIEND = "SCREEN_INVITE_FRIEND"
-        const val SCREEN_DESKTOP_VERSION = "SCREEN_DESKTOP_VERSION"
         const val SCREEN_LINK_PIN = "SCREEN_LINK_PIN"
         const val SCREEN_SCREEN_REPORT_ISSUE = "SCREEN_SCREEN_REPORT_ISSUE"
-        const val SCREEN_UPGRADE_TO_LANTERN_PRO = "SCREEN_UPGRADE_TO_LANTERN_PRO"
     }
 
     init {
@@ -52,7 +49,6 @@ class Navigator(
     private fun toActivityClass(screenName: String): Class<*>? {
         return when (screenName) {
             SCREEN_INVITE_FRIEND -> InviteActivity_::class.java
-            SCREEN_DESKTOP_VERSION -> DesktopActivity_::class.java
             SCREEN_LINK_PIN -> LinkDeviceActivity_::class.java
             SCREEN_SCREEN_REPORT_ISSUE -> ReportIssueActivity::class.java
             else -> null

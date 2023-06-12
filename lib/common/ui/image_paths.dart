@@ -76,6 +76,7 @@ class ImagePaths {
   static const account_remove = 'assets/images/account_remove.svg';
   static const lantern_logo = 'assets/images/lantern_logo.svg';
   static const lantern_star = 'assets/images/lantern_star.svg';
+  static const lantern_desktop = 'assets/images/lantern_desktop.svg';
   // Replica
   static const discover = 'assets/images/discover.svg';
   static const audio = 'assets/images/audio_black.svg';
