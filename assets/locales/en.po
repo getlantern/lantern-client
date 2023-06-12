@@ -1144,4 +1144,7 @@ msgstr "Lantern User Forum"
 msgid "faq"
 msgstr "FAQ"
 
+msgid "add_device"
+msgstr "Add Device"
+
 
