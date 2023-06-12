@@ -497,10 +497,6 @@ public class LanternHttpClient extends HttpClient {
         public void onSuccess(Response response, final ProUser userData);
     }
 
-    public interface AuctionInfoCallback {
-        public void onSuccess(final AuctionInfo auctionInfo);
-    }
-
     public interface HttpCallback {
         public void onFailure(@Nullable Throwable throwable);
 
