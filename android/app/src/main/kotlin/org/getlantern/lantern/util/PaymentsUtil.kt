@@ -175,7 +175,7 @@ class PaymentsUtil(private val activity: Activity) {
                         return
                     }
 
-                    methodCallResult.success(null)
+                    methodCallResult.success("successfulPurchase")
                     sendPurchaseRequest(
                         planID,
                         "",
