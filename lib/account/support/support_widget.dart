@@ -27,10 +27,9 @@ class SupportWidget extends StatelessWidget {
           ],
           onTap: reportIssue,
         ),
-        ListTile()
         ListItemFactory.settingsItem(
             content: 'lantern_user_forum'.i18n,
-            icon: ImagePaths.alert,
+            icon: ImagePaths.forum,
             trailingArray: [
               mirrorLTR(
                 context: context,
@@ -45,7 +44,7 @@ class SupportWidget extends StatelessWidget {
             onTap: () {}),
         ListItemFactory.settingsItem(
           content: 'faq'.i18n,
-          icon: ImagePaths.alert,
+          icon: ImagePaths.info,
           trailingArray: [
             mirrorLTR(
               context: context,
@@ -57,7 +56,7 @@ class SupportWidget extends StatelessWidget {
               ),
             )
           ],
-          onTap: faqTap,
+          onTap: () => faqTap(context),
         ),
       ],
     );
@@ -68,12 +67,11 @@ class SupportWidget extends StatelessWidget {
   void reportIssue() async =>
       LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
 
-  Future<void> faqTap() async {
-    if (!await launchUrl(
-      Uri.parse(faqUrl),
-      mode: LaunchMode.externalApplication
-    )) {
-      throw Exception('Could not launch $faqUrl');
+  Future<void> faqTap(BuildContext context) async {
+    try {
+      await launchUrl(Uri.parse(faqUrl), mode: LaunchMode.externalApplication);
+    } catch (e) {
+      showSnackbar(context: context, content: 'Fail to open link ');
     }
   }
 }
