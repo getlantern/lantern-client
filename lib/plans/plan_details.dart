@@ -166,8 +166,6 @@ class PlanStep extends StatelessWidget {
             top: 0,
             end: 12.0,
           ),
-          margin: const EdgeInsetsDirectional.only(
-            start: 4.0),
           decoration: BoxDecoration(
             color: black,
             borderRadius: const BorderRadius.all(Radius.circular(20)),
