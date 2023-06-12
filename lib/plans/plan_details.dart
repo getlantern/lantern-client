@@ -161,23 +161,30 @@ class PlanStep extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsetsDirectional.only(
+           padding: const EdgeInsetsDirectional.only(
             start: 12.0,
             top: 0,
             end: 12.0,
-            bottom: 2.0,
           ),
+          margin: const EdgeInsetsDirectional.only(
+            start: 4.0),
           decoration: BoxDecoration(
             color: black,
             borderRadius: const BorderRadius.all(Radius.circular(20)),
           ),
-          child: CText(
+          child: Container(
+            margin: const EdgeInsetsDirectional.only(
+            bottom: 4.0),
+            child: Text(
             'step_$stepNum'.i18n,
             style: tsBody1.copiedWith(color: white),
-          ),
+            textAlign: TextAlign.center
+          )),
         ),
-        Padding(
+        Container(
           padding: const EdgeInsetsDirectional.only(start: 8.0),
+          margin: const EdgeInsetsDirectional.only(
+            bottom: 3.0),
           child: CText(description, style: tsBody1),
         )
       ],
