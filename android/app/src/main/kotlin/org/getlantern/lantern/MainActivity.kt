@@ -281,7 +281,7 @@ class MainActivity :
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun vpnStateChanged(state: VpnState) {
-        updateStatus(state.useVpn)
+        updateStatus(state.use())
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
