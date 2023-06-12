@@ -129,7 +129,7 @@ class PaymentsUtil(private val activity: Activity) {
     }
 
     // Handles Google Play transactions
-    fun submitGooglePlayPayment(planID: String, methodCallResult: MethodChannel.Result) {
+    fun submitGooglePlayPayment(id: String, methodCallResult: MethodChannel.Result) {
         val inAppBilling = LanternApp.getInAppBilling()
         if (inAppBilling == null) {
             Logger.error(TAG, "Missing inAppBilling")
@@ -140,9 +140,12 @@ class PaymentsUtil(private val activity: Activity) {
             )
             return
         }
-        val successfulPurchase = !inAppBilling.startPurchase(
+        var planID = id
+        val currency = LanternApp.getSession().getCurrency()
+        if (currency != null) planID += "-$currency"
+        inAppBilling.startPurchase(
             activity,
-            planID,
+            planID.lowercase(),
             object : PurchasesUpdatedListener {
                 override fun onPurchasesUpdated(
                     billingResult: BillingResult,
@@ -186,14 +189,6 @@ class PaymentsUtil(private val activity: Activity) {
                 }
             },
         )
-
-        if (!successfulPurchase) {
-            methodCallResult.error(
-                "unknownError",
-                activity.resources.getString(R.string.error_making_purchase),
-                null,
-            )
-        }
     }
 
     // Applies referral code (before the user has initiated a transaction)

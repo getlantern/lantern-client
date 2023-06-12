@@ -31,6 +31,10 @@ class InAppBilling(
         private val TAG = InAppBilling::class.java.simpleName
     }
 
+    init {
+        initConnection()
+    }
+
     @get:Synchronized
     @set:Synchronized
     @Volatile
@@ -95,7 +99,6 @@ class InAppBilling(
 
     @Synchronized
     fun startPurchase(activity: Activity, planID: String, cb: PurchasesUpdatedListener): Boolean {
-        initConnection()
         this.purchasesUpdated = cb
         val skuDetails = skus.get(planID)
         if (skuDetails == null) {

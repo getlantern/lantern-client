@@ -26,7 +26,7 @@ class PlanCard extends StatelessWidget {
           // * Play version
           if (isPlayVersion) {
             await sessionModel
-                .submitGooglePlay(plan.id)
+                .submitGooglePlay(planName)
                 .onError((error, stackTrace) {
               // on failure
               CDialog.showError(
