@@ -56,6 +56,7 @@ import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.DeviceInfo
 import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.PlansUtil
+import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
@@ -279,7 +280,7 @@ class MainActivity :
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun vpnStateChanged(state: VpnState) {
-        updateStatus(state.useVpn())
+        updateStatus(state.useVpn)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
