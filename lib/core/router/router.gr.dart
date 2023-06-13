@@ -11,10 +11,10 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:io' as _i37;
+import 'dart:io' as _i38;
 
-import 'package:auto_route/auto_route.dart' as _i34;
-import 'package:flutter/material.dart' as _i35;
+import 'package:auto_route/auto_route.dart' as _i35;
+import 'package:flutter/material.dart' as _i36;
 import 'package:lantern/account/account_management.dart' as _i3;
 import 'package:lantern/account/blocked_users.dart' as _i21;
 import 'package:lantern/account/chat_number_account.dart' as _i20;
@@ -28,6 +28,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
 import 'package:lantern/account/language.dart' as _i6;
 import 'package:lantern/account/recovery_key.dart' as _i11;
 import 'package:lantern/account/settings.dart' as _i4;
+import 'package:lantern/account/support.dart' as _i34;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i2;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i17;
@@ -36,7 +37,7 @@ import 'package:lantern/messaging/contacts/new_chat.dart' as _i16;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i14;
 import 'package:lantern/messaging/introductions/introduce.dart' as _i18;
 import 'package:lantern/messaging/introductions/introductions.dart' as _i19;
-import 'package:lantern/messaging/messaging.dart' as _i36;
+import 'package:lantern/messaging/messaging.dart' as _i37;
 import 'package:lantern/messaging/onboarding/chat_number_messaging.dart'
     as _i13;
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart' as _i12;
@@ -44,7 +45,7 @@ import 'package:lantern/plans/checkout.dart' as _i22;
 import 'package:lantern/plans/plans.dart' as _i25;
 import 'package:lantern/plans/reseller_checkout.dart' as _i23;
 import 'package:lantern/plans/stripe_checkout.dart' as _i24;
-import 'package:lantern/replica/common.dart' as _i38;
+import 'package:lantern/replica/common.dart' as _i39;
 import 'package:lantern/replica/link_handler.dart' as _i29;
 import 'package:lantern/replica/ui/viewers/audio.dart' as _i33;
 import 'package:lantern/replica/ui/viewers/image.dart' as _i31;
@@ -55,28 +56,28 @@ import 'package:lantern/replica/upload/review.dart' as _i28;
 import 'package:lantern/replica/upload/title.dart' as _i26;
 import 'package:lantern/vpn/vpn_split_tunneling.dart' as _i5;
 
-class AppRouter extends _i34.RootStackRouter {
-  AppRouter([_i35.GlobalKey<_i35.NavigatorState>? navigatorKey])
+class AppRouter extends _i35.RootStackRouter {
+  AppRouter([_i36.GlobalKey<_i36.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i34.PageFactory> pagesMap = {
+  final Map<String, _i35.PageFactory> pagesMap = {
     Home.name: (routeData) {
       final args = routeData.argsAs<HomeArgs>(orElse: () => const HomeArgs());
-      return _i34.AdaptivePage<dynamic>(
+      return _i35.AdaptivePage<dynamic>(
         routeData: routeData,
         child: _i1.HomePage(key: args.key),
       );
     },
     FullScreenDialogPage.name: (routeData) {
       final args = routeData.argsAs<FullScreenDialogPageArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i2.FullScreenDialog(
           widget: args.widget,
           key: args.key,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.slideBottom,
+        transitionsBuilder: _i35.TransitionsBuilders.slideBottom,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -85,13 +86,13 @@ class AppRouter extends _i34.RootStackRouter {
     },
     AccountManagement.name: (routeData) {
       final args = routeData.argsAs<AccountManagementArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i3.AccountManagement(
           key: args.key,
           isPro: args.isPro,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -101,10 +102,10 @@ class AppRouter extends _i34.RootStackRouter {
     Settings.name: (routeData) {
       final args =
           routeData.argsAs<SettingsArgs>(orElse: () => const SettingsArgs());
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i4.Settings(key: args.key),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -114,10 +115,10 @@ class AppRouter extends _i34.RootStackRouter {
     SplitTunneling.name: (routeData) {
       final args = routeData.argsAs<SplitTunnelingArgs>(
           orElse: () => const SplitTunnelingArgs());
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i5.SplitTunneling(key: args.key),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -127,10 +128,10 @@ class AppRouter extends _i34.RootStackRouter {
     Language.name: (routeData) {
       final args =
           routeData.argsAs<LanguageArgs>(orElse: () => const LanguageArgs());
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i6.Language(key: args.key),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -140,10 +141,10 @@ class AppRouter extends _i34.RootStackRouter {
     AuthorizePro.name: (routeData) {
       final args = routeData.argsAs<AuthorizeProArgs>(
           orElse: () => const AuthorizeProArgs());
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i7.AuthorizeDeviceForPro(key: args.key),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -153,10 +154,10 @@ class AppRouter extends _i34.RootStackRouter {
     AuthorizeDeviceEmail.name: (routeData) {
       final args = routeData.argsAs<AuthorizeDeviceEmailArgs>(
           orElse: () => const AuthorizeDeviceEmailArgs());
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i8.AuthorizeDeviceViaEmail(key: args.key),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -166,10 +167,10 @@ class AppRouter extends _i34.RootStackRouter {
     AuthorizeDeviceEmailPin.name: (routeData) {
       final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>(
           orElse: () => const AuthorizeDeviceEmailPinArgs());
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i9.AuthorizeDeviceViaEmailPin(key: args.key),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -179,10 +180,10 @@ class AppRouter extends _i34.RootStackRouter {
     ApproveDevice.name: (routeData) {
       final args = routeData.argsAs<ApproveDeviceArgs>(
           orElse: () => const ApproveDeviceArgs());
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i10.ApproveDevice(key: args.key),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -192,10 +193,10 @@ class AppRouter extends _i34.RootStackRouter {
     RecoveryKey.name: (routeData) {
       final args = routeData.argsAs<RecoveryKeyArgs>(
           orElse: () => const RecoveryKeyArgs());
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i11.RecoveryKey(key: args.key),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -203,10 +204,10 @@ class AppRouter extends _i34.RootStackRouter {
       );
     },
     ChatNumberRecovery.name: (routeData) {
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i12.ChatNumberRecovery(),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -214,10 +215,10 @@ class AppRouter extends _i34.RootStackRouter {
       );
     },
     ChatNumberMessaging.name: (routeData) {
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i13.ChatNumberMessaging(),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -226,14 +227,14 @@ class AppRouter extends _i34.RootStackRouter {
     },
     Conversation.name: (routeData) {
       final args = routeData.argsAs<ConversationArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i14.Conversation(
           contactId: args.contactId,
           initialScrollIndex: args.initialScrollIndex,
           showContactEditingDialog: args.showContactEditingDialog,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -242,10 +243,10 @@ class AppRouter extends _i34.RootStackRouter {
     },
     ContactInfo.name: (routeData) {
       final args = routeData.argsAs<ContactInfoArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i15.ContactInfo(contact: args.contact),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -253,10 +254,10 @@ class AppRouter extends _i34.RootStackRouter {
       );
     },
     NewChat.name: (routeData) {
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i16.NewChat(),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -264,10 +265,10 @@ class AppRouter extends _i34.RootStackRouter {
       );
     },
     AddViaChatNumber.name: (routeData) {
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i17.AddViaChatNumber(),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -276,13 +277,13 @@ class AppRouter extends _i34.RootStackRouter {
     },
     Introduce.name: (routeData) {
       final args = routeData.argsAs<IntroduceArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i18.Introduce(
           singleIntro: args.singleIntro,
           contactToIntro: args.contactToIntro,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -290,10 +291,10 @@ class AppRouter extends _i34.RootStackRouter {
       );
     },
     Introductions.name: (routeData) {
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i19.Introductions(),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -301,10 +302,10 @@ class AppRouter extends _i34.RootStackRouter {
       );
     },
     ChatNumberAccount.name: (routeData) {
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i20.ChatNumberAccount(),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -314,10 +315,10 @@ class AppRouter extends _i34.RootStackRouter {
     BlockedUsers.name: (routeData) {
       final args = routeData.argsAs<BlockedUsersArgs>(
           orElse: () => const BlockedUsersArgs());
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i21.BlockedUsers(key: args.key),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -326,14 +327,14 @@ class AppRouter extends _i34.RootStackRouter {
     },
     Checkout.name: (routeData) {
       final args = routeData.argsAs<CheckoutArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i22.Checkout(
           plan: args.plan,
           isPro: args.isPro,
           key: args.key,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -342,13 +343,13 @@ class AppRouter extends _i34.RootStackRouter {
     },
     ResellerCodeCheckout.name: (routeData) {
       final args = routeData.argsAs<ResellerCodeCheckoutArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i23.ResellerCodeCheckout(
-          key: args.key,
           isPro: args.isPro,
+          key: args.key,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -357,7 +358,7 @@ class AppRouter extends _i34.RootStackRouter {
     },
     StripeCheckout.name: (routeData) {
       final args = routeData.argsAs<StripeCheckoutArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i24.StripeCheckout(
           plan: args.plan,
@@ -366,7 +367,7 @@ class AppRouter extends _i34.RootStackRouter {
           isPro: args.isPro,
           key: args.key,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -374,10 +375,10 @@ class AppRouter extends _i34.RootStackRouter {
       );
     },
     PlansPage.name: (routeData) {
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i25.PlansPage(),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -386,7 +387,7 @@ class AppRouter extends _i34.RootStackRouter {
     },
     ReplicaUploadTitle.name: (routeData) {
       final args = routeData.argsAs<ReplicaUploadTitleArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i26.ReplicaUploadTitle(
           key: args.key,
@@ -394,7 +395,7 @@ class AppRouter extends _i34.RootStackRouter {
           fileTitle: args.fileTitle,
           fileDescription: args.fileDescription,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -403,7 +404,7 @@ class AppRouter extends _i34.RootStackRouter {
     },
     ReplicaUploadDescription.name: (routeData) {
       final args = routeData.argsAs<ReplicaUploadDescriptionArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i27.ReplicaUploadDescription(
           key: args.key,
@@ -411,7 +412,7 @@ class AppRouter extends _i34.RootStackRouter {
           fileTitle: args.fileTitle,
           fileDescription: args.fileDescription,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -420,7 +421,7 @@ class AppRouter extends _i34.RootStackRouter {
     },
     ReplicaUploadReview.name: (routeData) {
       final args = routeData.argsAs<ReplicaUploadReviewArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i28.ReplicaUploadReview(
           key: args.key,
@@ -428,7 +429,7 @@ class AppRouter extends _i34.RootStackRouter {
           fileTitle: args.fileTitle,
           fileDescription: args.fileDescription,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -437,14 +438,14 @@ class AppRouter extends _i34.RootStackRouter {
     },
     ReplicaLinkHandler.name: (routeData) {
       final args = routeData.argsAs<ReplicaLinkHandlerArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i29.ReplicaLinkHandler(
           key: args.key,
           replicaApi: args.replicaApi,
           replicaLink: args.replicaLink,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -453,14 +454,14 @@ class AppRouter extends _i34.RootStackRouter {
     },
     ReplicaMiscViewer.name: (routeData) {
       final args = routeData.argsAs<ReplicaMiscViewerArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i30.ReplicaMiscViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -469,14 +470,14 @@ class AppRouter extends _i34.RootStackRouter {
     },
     ReplicaImageViewer.name: (routeData) {
       final args = routeData.argsAs<ReplicaImageViewerArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i31.ReplicaImageViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -485,14 +486,14 @@ class AppRouter extends _i34.RootStackRouter {
     },
     ReplicaVideoViewer.name: (routeData) {
       final args = routeData.argsAs<ReplicaVideoViewerArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i32.ReplicaVideoViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -501,14 +502,25 @@ class AppRouter extends _i34.RootStackRouter {
     },
     ReplicaAudioViewer.name: (routeData) {
       final args = routeData.argsAs<ReplicaAudioViewerArgs>();
-      return _i34.CustomPage<void>(
+      return _i35.CustomPage<void>(
         routeData: routeData,
         child: _i33.ReplicaAudioViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
         ),
-        transitionsBuilder: _i34.TransitionsBuilders.fadeIn,
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    Support.name: (routeData) {
+      return _i35.CustomPage<void>(
+        routeData: routeData,
+        child: const _i34.Support(),
+        transitionsBuilder: _i35.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
         opaque: true,
@@ -518,146 +530,150 @@ class AppRouter extends _i34.RootStackRouter {
   };
 
   @override
-  List<_i34.RouteConfig> get routes => [
-        _i34.RouteConfig(
+  List<_i35.RouteConfig> get routes => [
+        _i35.RouteConfig(
           Home.name,
           path: '/',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           FullScreenDialogPage.name,
           path: 'fullScreenDialogPage',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           AccountManagement.name,
           path: 'accountManagement',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           Settings.name,
           path: 'settings',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           SplitTunneling.name,
           path: 'splitTunneling',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           Language.name,
           path: 'language',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           AuthorizePro.name,
           path: 'authorizePro',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           AuthorizeDeviceEmail.name,
           path: 'authorizeDeviceEmail',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           AuthorizeDeviceEmailPin.name,
           path: 'authorizeDeviceEmailPin',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ApproveDevice.name,
           path: 'approveDevice',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           RecoveryKey.name,
           path: 'recoveryKey',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ChatNumberRecovery.name,
           path: 'chatNumberRecovery',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ChatNumberMessaging.name,
           path: 'chatNumberMessaging',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           Conversation.name,
           path: 'conversation',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ContactInfo.name,
           path: 'contactInfo',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           NewChat.name,
           path: 'newChat',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           AddViaChatNumber.name,
           path: 'addViaChatNumber',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           Introduce.name,
           path: 'introduce',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           Introductions.name,
           path: 'introductions',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ChatNumberAccount.name,
           path: 'chatNumberAccount',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           BlockedUsers.name,
           path: 'blockedUsers',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           Checkout.name,
           path: 'checkout',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ResellerCodeCheckout.name,
           path: 'resellerCodeCheckout',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           StripeCheckout.name,
           path: 'stripeCheckout',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           PlansPage.name,
           path: 'plans',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ReplicaUploadTitle.name,
           path: 'replicaUploadTitle',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ReplicaUploadDescription.name,
           path: 'replicaUploadDescription',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ReplicaUploadReview.name,
           path: 'replicaUploadReview',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ReplicaLinkHandler.name,
           path: 'replicaLinkHandler',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ReplicaMiscViewer.name,
           path: 'replicaMiscViewer',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ReplicaImageViewer.name,
           path: 'replicaImageViewer',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ReplicaVideoViewer.name,
           path: 'replicaVideoViewer',
         ),
-        _i34.RouteConfig(
+        _i35.RouteConfig(
           ReplicaAudioViewer.name,
           path: 'replicaAudioViewer',
+        ),
+        _i35.RouteConfig(
+          Support.name,
+          path: 'support',
         ),
       ];
 }
 
 /// generated route for
 /// [_i1.HomePage]
-class Home extends _i34.PageRouteInfo<HomeArgs> {
-  Home({_i36.Key? key})
+class Home extends _i35.PageRouteInfo<HomeArgs> {
+  Home({_i37.Key? key})
       : super(
           Home.name,
           path: '/',
@@ -670,7 +686,7 @@ class Home extends _i34.PageRouteInfo<HomeArgs> {
 class HomeArgs {
   const HomeArgs({this.key});
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -681,10 +697,10 @@ class HomeArgs {
 /// generated route for
 /// [_i2.FullScreenDialog]
 class FullScreenDialogPage
-    extends _i34.PageRouteInfo<FullScreenDialogPageArgs> {
+    extends _i35.PageRouteInfo<FullScreenDialogPageArgs> {
   FullScreenDialogPage({
-    required _i36.Widget widget,
-    _i36.Key? key,
+    required _i37.Widget widget,
+    _i37.Key? key,
   }) : super(
           FullScreenDialogPage.name,
           path: 'fullScreenDialogPage',
@@ -703,9 +719,9 @@ class FullScreenDialogPageArgs {
     this.key,
   });
 
-  final _i36.Widget widget;
+  final _i37.Widget widget;
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -715,9 +731,9 @@ class FullScreenDialogPageArgs {
 
 /// generated route for
 /// [_i3.AccountManagement]
-class AccountManagement extends _i34.PageRouteInfo<AccountManagementArgs> {
+class AccountManagement extends _i35.PageRouteInfo<AccountManagementArgs> {
   AccountManagement({
-    _i36.Key? key,
+    _i37.Key? key,
     required bool isPro,
   }) : super(
           AccountManagement.name,
@@ -737,7 +753,7 @@ class AccountManagementArgs {
     required this.isPro,
   });
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   final bool isPro;
 
@@ -749,8 +765,8 @@ class AccountManagementArgs {
 
 /// generated route for
 /// [_i4.Settings]
-class Settings extends _i34.PageRouteInfo<SettingsArgs> {
-  Settings({_i36.Key? key})
+class Settings extends _i35.PageRouteInfo<SettingsArgs> {
+  Settings({_i37.Key? key})
       : super(
           Settings.name,
           path: 'settings',
@@ -763,7 +779,7 @@ class Settings extends _i34.PageRouteInfo<SettingsArgs> {
 class SettingsArgs {
   const SettingsArgs({this.key});
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -773,8 +789,8 @@ class SettingsArgs {
 
 /// generated route for
 /// [_i5.SplitTunneling]
-class SplitTunneling extends _i34.PageRouteInfo<SplitTunnelingArgs> {
-  SplitTunneling({_i36.Key? key})
+class SplitTunneling extends _i35.PageRouteInfo<SplitTunnelingArgs> {
+  SplitTunneling({_i37.Key? key})
       : super(
           SplitTunneling.name,
           path: 'splitTunneling',
@@ -787,7 +803,7 @@ class SplitTunneling extends _i34.PageRouteInfo<SplitTunnelingArgs> {
 class SplitTunnelingArgs {
   const SplitTunnelingArgs({this.key});
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -797,8 +813,8 @@ class SplitTunnelingArgs {
 
 /// generated route for
 /// [_i6.Language]
-class Language extends _i34.PageRouteInfo<LanguageArgs> {
-  Language({_i36.Key? key})
+class Language extends _i35.PageRouteInfo<LanguageArgs> {
+  Language({_i37.Key? key})
       : super(
           Language.name,
           path: 'language',
@@ -811,7 +827,7 @@ class Language extends _i34.PageRouteInfo<LanguageArgs> {
 class LanguageArgs {
   const LanguageArgs({this.key});
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -821,8 +837,8 @@ class LanguageArgs {
 
 /// generated route for
 /// [_i7.AuthorizeDeviceForPro]
-class AuthorizePro extends _i34.PageRouteInfo<AuthorizeProArgs> {
-  AuthorizePro({_i36.Key? key})
+class AuthorizePro extends _i35.PageRouteInfo<AuthorizeProArgs> {
+  AuthorizePro({_i37.Key? key})
       : super(
           AuthorizePro.name,
           path: 'authorizePro',
@@ -835,7 +851,7 @@ class AuthorizePro extends _i34.PageRouteInfo<AuthorizeProArgs> {
 class AuthorizeProArgs {
   const AuthorizeProArgs({this.key});
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -846,8 +862,8 @@ class AuthorizeProArgs {
 /// generated route for
 /// [_i8.AuthorizeDeviceViaEmail]
 class AuthorizeDeviceEmail
-    extends _i34.PageRouteInfo<AuthorizeDeviceEmailArgs> {
-  AuthorizeDeviceEmail({_i36.Key? key})
+    extends _i35.PageRouteInfo<AuthorizeDeviceEmailArgs> {
+  AuthorizeDeviceEmail({_i37.Key? key})
       : super(
           AuthorizeDeviceEmail.name,
           path: 'authorizeDeviceEmail',
@@ -860,7 +876,7 @@ class AuthorizeDeviceEmail
 class AuthorizeDeviceEmailArgs {
   const AuthorizeDeviceEmailArgs({this.key});
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -871,8 +887,8 @@ class AuthorizeDeviceEmailArgs {
 /// generated route for
 /// [_i9.AuthorizeDeviceViaEmailPin]
 class AuthorizeDeviceEmailPin
-    extends _i34.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
-  AuthorizeDeviceEmailPin({_i36.Key? key})
+    extends _i35.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
+  AuthorizeDeviceEmailPin({_i37.Key? key})
       : super(
           AuthorizeDeviceEmailPin.name,
           path: 'authorizeDeviceEmailPin',
@@ -885,7 +901,7 @@ class AuthorizeDeviceEmailPin
 class AuthorizeDeviceEmailPinArgs {
   const AuthorizeDeviceEmailPinArgs({this.key});
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -895,8 +911,8 @@ class AuthorizeDeviceEmailPinArgs {
 
 /// generated route for
 /// [_i10.ApproveDevice]
-class ApproveDevice extends _i34.PageRouteInfo<ApproveDeviceArgs> {
-  ApproveDevice({_i36.Key? key})
+class ApproveDevice extends _i35.PageRouteInfo<ApproveDeviceArgs> {
+  ApproveDevice({_i37.Key? key})
       : super(
           ApproveDevice.name,
           path: 'approveDevice',
@@ -909,7 +925,7 @@ class ApproveDevice extends _i34.PageRouteInfo<ApproveDeviceArgs> {
 class ApproveDeviceArgs {
   const ApproveDeviceArgs({this.key});
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -919,8 +935,8 @@ class ApproveDeviceArgs {
 
 /// generated route for
 /// [_i11.RecoveryKey]
-class RecoveryKey extends _i34.PageRouteInfo<RecoveryKeyArgs> {
-  RecoveryKey({_i36.Key? key})
+class RecoveryKey extends _i35.PageRouteInfo<RecoveryKeyArgs> {
+  RecoveryKey({_i37.Key? key})
       : super(
           RecoveryKey.name,
           path: 'recoveryKey',
@@ -933,7 +949,7 @@ class RecoveryKey extends _i34.PageRouteInfo<RecoveryKeyArgs> {
 class RecoveryKeyArgs {
   const RecoveryKeyArgs({this.key});
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -943,7 +959,7 @@ class RecoveryKeyArgs {
 
 /// generated route for
 /// [_i12.ChatNumberRecovery]
-class ChatNumberRecovery extends _i34.PageRouteInfo<void> {
+class ChatNumberRecovery extends _i35.PageRouteInfo<void> {
   const ChatNumberRecovery()
       : super(
           ChatNumberRecovery.name,
@@ -955,7 +971,7 @@ class ChatNumberRecovery extends _i34.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i13.ChatNumberMessaging]
-class ChatNumberMessaging extends _i34.PageRouteInfo<void> {
+class ChatNumberMessaging extends _i35.PageRouteInfo<void> {
   const ChatNumberMessaging()
       : super(
           ChatNumberMessaging.name,
@@ -967,9 +983,9 @@ class ChatNumberMessaging extends _i34.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i14.Conversation]
-class Conversation extends _i34.PageRouteInfo<ConversationArgs> {
+class Conversation extends _i35.PageRouteInfo<ConversationArgs> {
   Conversation({
-    required _i36.ContactId contactId,
+    required _i37.ContactId contactId,
     int? initialScrollIndex,
     bool showContactEditingDialog = false,
   }) : super(
@@ -992,7 +1008,7 @@ class ConversationArgs {
     this.showContactEditingDialog = false,
   });
 
-  final _i36.ContactId contactId;
+  final _i37.ContactId contactId;
 
   final int? initialScrollIndex;
 
@@ -1006,8 +1022,8 @@ class ConversationArgs {
 
 /// generated route for
 /// [_i15.ContactInfo]
-class ContactInfo extends _i34.PageRouteInfo<ContactInfoArgs> {
-  ContactInfo({required _i36.Contact contact})
+class ContactInfo extends _i35.PageRouteInfo<ContactInfoArgs> {
+  ContactInfo({required _i37.Contact contact})
       : super(
           ContactInfo.name,
           path: 'contactInfo',
@@ -1020,7 +1036,7 @@ class ContactInfo extends _i34.PageRouteInfo<ContactInfoArgs> {
 class ContactInfoArgs {
   const ContactInfoArgs({required this.contact});
 
-  final _i36.Contact contact;
+  final _i37.Contact contact;
 
   @override
   String toString() {
@@ -1030,7 +1046,7 @@ class ContactInfoArgs {
 
 /// generated route for
 /// [_i16.NewChat]
-class NewChat extends _i34.PageRouteInfo<void> {
+class NewChat extends _i35.PageRouteInfo<void> {
   const NewChat()
       : super(
           NewChat.name,
@@ -1042,7 +1058,7 @@ class NewChat extends _i34.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i17.AddViaChatNumber]
-class AddViaChatNumber extends _i34.PageRouteInfo<void> {
+class AddViaChatNumber extends _i35.PageRouteInfo<void> {
   const AddViaChatNumber()
       : super(
           AddViaChatNumber.name,
@@ -1054,10 +1070,10 @@ class AddViaChatNumber extends _i34.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i18.Introduce]
-class Introduce extends _i34.PageRouteInfo<IntroduceArgs> {
+class Introduce extends _i35.PageRouteInfo<IntroduceArgs> {
   Introduce({
     required bool singleIntro,
-    _i36.Contact? contactToIntro,
+    _i37.Contact? contactToIntro,
   }) : super(
           Introduce.name,
           path: 'introduce',
@@ -1078,7 +1094,7 @@ class IntroduceArgs {
 
   final bool singleIntro;
 
-  final _i36.Contact? contactToIntro;
+  final _i37.Contact? contactToIntro;
 
   @override
   String toString() {
@@ -1088,7 +1104,7 @@ class IntroduceArgs {
 
 /// generated route for
 /// [_i19.Introductions]
-class Introductions extends _i34.PageRouteInfo<void> {
+class Introductions extends _i35.PageRouteInfo<void> {
   const Introductions()
       : super(
           Introductions.name,
@@ -1100,7 +1116,7 @@ class Introductions extends _i34.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i20.ChatNumberAccount]
-class ChatNumberAccount extends _i34.PageRouteInfo<void> {
+class ChatNumberAccount extends _i35.PageRouteInfo<void> {
   const ChatNumberAccount()
       : super(
           ChatNumberAccount.name,
@@ -1112,8 +1128,8 @@ class ChatNumberAccount extends _i34.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i21.BlockedUsers]
-class BlockedUsers extends _i34.PageRouteInfo<BlockedUsersArgs> {
-  BlockedUsers({_i36.Key? key})
+class BlockedUsers extends _i35.PageRouteInfo<BlockedUsersArgs> {
+  BlockedUsers({_i37.Key? key})
       : super(
           BlockedUsers.name,
           path: 'blockedUsers',
@@ -1126,7 +1142,7 @@ class BlockedUsers extends _i34.PageRouteInfo<BlockedUsersArgs> {
 class BlockedUsersArgs {
   const BlockedUsersArgs({this.key});
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -1136,11 +1152,11 @@ class BlockedUsersArgs {
 
 /// generated route for
 /// [_i22.Checkout]
-class Checkout extends _i34.PageRouteInfo<CheckoutArgs> {
+class Checkout extends _i35.PageRouteInfo<CheckoutArgs> {
   Checkout({
-    required _i36.Plan plan,
+    required _i37.Plan plan,
     required bool isPro,
-    _i36.Key? key,
+    _i37.Key? key,
   }) : super(
           Checkout.name,
           path: 'checkout',
@@ -1161,11 +1177,11 @@ class CheckoutArgs {
     this.key,
   });
 
-  final _i36.Plan plan;
+  final _i37.Plan plan;
 
   final bool isPro;
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -1176,16 +1192,16 @@ class CheckoutArgs {
 /// generated route for
 /// [_i23.ResellerCodeCheckout]
 class ResellerCodeCheckout
-    extends _i34.PageRouteInfo<ResellerCodeCheckoutArgs> {
+    extends _i35.PageRouteInfo<ResellerCodeCheckoutArgs> {
   ResellerCodeCheckout({
-    _i36.Key? key,
     required bool isPro,
+    _i37.Key? key,
   }) : super(
           ResellerCodeCheckout.name,
           path: 'resellerCodeCheckout',
           args: ResellerCodeCheckoutArgs(
-            key: key,
             isPro: isPro,
+            key: key,
           ),
         );
 
@@ -1194,29 +1210,29 @@ class ResellerCodeCheckout
 
 class ResellerCodeCheckoutArgs {
   const ResellerCodeCheckoutArgs({
-    this.key,
     required this.isPro,
+    this.key,
   });
-
-  final _i36.Key? key;
 
   final bool isPro;
 
+  final _i37.Key? key;
+
   @override
   String toString() {
-    return 'ResellerCodeCheckoutArgs{key: $key, isPro: $isPro}';
+    return 'ResellerCodeCheckoutArgs{isPro: $isPro, key: $key}';
   }
 }
 
 /// generated route for
 /// [_i24.StripeCheckout]
-class StripeCheckout extends _i34.PageRouteInfo<StripeCheckoutArgs> {
+class StripeCheckout extends _i35.PageRouteInfo<StripeCheckoutArgs> {
   StripeCheckout({
-    required _i36.Plan plan,
+    required _i37.Plan plan,
     required String email,
     String? refCode,
     required bool isPro,
-    _i36.Key? key,
+    _i37.Key? key,
   }) : super(
           StripeCheckout.name,
           path: 'stripeCheckout',
@@ -1241,7 +1257,7 @@ class StripeCheckoutArgs {
     this.key,
   });
 
-  final _i36.Plan plan;
+  final _i37.Plan plan;
 
   final String email;
 
@@ -1249,7 +1265,7 @@ class StripeCheckoutArgs {
 
   final bool isPro;
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
   @override
   String toString() {
@@ -1259,7 +1275,7 @@ class StripeCheckoutArgs {
 
 /// generated route for
 /// [_i25.PlansPage]
-class PlansPage extends _i34.PageRouteInfo<void> {
+class PlansPage extends _i35.PageRouteInfo<void> {
   const PlansPage()
       : super(
           PlansPage.name,
@@ -1271,10 +1287,10 @@ class PlansPage extends _i34.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i26.ReplicaUploadTitle]
-class ReplicaUploadTitle extends _i34.PageRouteInfo<ReplicaUploadTitleArgs> {
+class ReplicaUploadTitle extends _i35.PageRouteInfo<ReplicaUploadTitleArgs> {
   ReplicaUploadTitle({
-    _i36.Key? key,
-    required _i37.File fileToUpload,
+    _i37.Key? key,
+    required _i38.File fileToUpload,
     String? fileTitle,
     String? fileDescription,
   }) : super(
@@ -1299,9 +1315,9 @@ class ReplicaUploadTitleArgs {
     this.fileDescription,
   });
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
-  final _i37.File fileToUpload;
+  final _i38.File fileToUpload;
 
   final String? fileTitle;
 
@@ -1316,10 +1332,10 @@ class ReplicaUploadTitleArgs {
 /// generated route for
 /// [_i27.ReplicaUploadDescription]
 class ReplicaUploadDescription
-    extends _i34.PageRouteInfo<ReplicaUploadDescriptionArgs> {
+    extends _i35.PageRouteInfo<ReplicaUploadDescriptionArgs> {
   ReplicaUploadDescription({
-    _i36.Key? key,
-    required _i37.File fileToUpload,
+    _i37.Key? key,
+    required _i38.File fileToUpload,
     required String fileTitle,
     String? fileDescription,
   }) : super(
@@ -1344,9 +1360,9 @@ class ReplicaUploadDescriptionArgs {
     this.fileDescription,
   });
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
-  final _i37.File fileToUpload;
+  final _i38.File fileToUpload;
 
   final String fileTitle;
 
@@ -1360,10 +1376,10 @@ class ReplicaUploadDescriptionArgs {
 
 /// generated route for
 /// [_i28.ReplicaUploadReview]
-class ReplicaUploadReview extends _i34.PageRouteInfo<ReplicaUploadReviewArgs> {
+class ReplicaUploadReview extends _i35.PageRouteInfo<ReplicaUploadReviewArgs> {
   ReplicaUploadReview({
-    _i36.Key? key,
-    required _i37.File fileToUpload,
+    _i37.Key? key,
+    required _i38.File fileToUpload,
     required String fileTitle,
     String? fileDescription,
   }) : super(
@@ -1388,9 +1404,9 @@ class ReplicaUploadReviewArgs {
     this.fileDescription,
   });
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
-  final _i37.File fileToUpload;
+  final _i38.File fileToUpload;
 
   final String fileTitle;
 
@@ -1404,11 +1420,11 @@ class ReplicaUploadReviewArgs {
 
 /// generated route for
 /// [_i29.ReplicaLinkHandler]
-class ReplicaLinkHandler extends _i34.PageRouteInfo<ReplicaLinkHandlerArgs> {
+class ReplicaLinkHandler extends _i35.PageRouteInfo<ReplicaLinkHandlerArgs> {
   ReplicaLinkHandler({
-    _i36.Key? key,
-    required _i38.ReplicaApi replicaApi,
-    required _i38.ReplicaLink replicaLink,
+    _i37.Key? key,
+    required _i39.ReplicaApi replicaApi,
+    required _i39.ReplicaLink replicaLink,
   }) : super(
           ReplicaLinkHandler.name,
           path: 'replicaLinkHandler',
@@ -1429,11 +1445,11 @@ class ReplicaLinkHandlerArgs {
     required this.replicaLink,
   });
 
-  final _i36.Key? key;
+  final _i37.Key? key;
 
-  final _i38.ReplicaApi replicaApi;
+  final _i39.ReplicaApi replicaApi;
 
-  final _i38.ReplicaLink replicaLink;
+  final _i39.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -1443,11 +1459,11 @@ class ReplicaLinkHandlerArgs {
 
 /// generated route for
 /// [_i30.ReplicaMiscViewer]
-class ReplicaMiscViewer extends _i34.PageRouteInfo<ReplicaMiscViewerArgs> {
+class ReplicaMiscViewer extends _i35.PageRouteInfo<ReplicaMiscViewerArgs> {
   ReplicaMiscViewer({
-    required _i38.ReplicaApi replicaApi,
-    required _i38.ReplicaSearchItem item,
-    required _i38.SearchCategory category,
+    required _i39.ReplicaApi replicaApi,
+    required _i39.ReplicaSearchItem item,
+    required _i39.SearchCategory category,
   }) : super(
           ReplicaMiscViewer.name,
           path: 'replicaMiscViewer',
@@ -1468,11 +1484,11 @@ class ReplicaMiscViewerArgs {
     required this.category,
   });
 
-  final _i38.ReplicaApi replicaApi;
+  final _i39.ReplicaApi replicaApi;
 
-  final _i38.ReplicaSearchItem item;
+  final _i39.ReplicaSearchItem item;
 
-  final _i38.SearchCategory category;
+  final _i39.SearchCategory category;
 
   @override
   String toString() {
@@ -1482,11 +1498,11 @@ class ReplicaMiscViewerArgs {
 
 /// generated route for
 /// [_i31.ReplicaImageViewer]
-class ReplicaImageViewer extends _i34.PageRouteInfo<ReplicaImageViewerArgs> {
+class ReplicaImageViewer extends _i35.PageRouteInfo<ReplicaImageViewerArgs> {
   ReplicaImageViewer({
-    required _i38.ReplicaApi replicaApi,
-    required _i38.ReplicaSearchItem item,
-    required _i38.SearchCategory category,
+    required _i39.ReplicaApi replicaApi,
+    required _i39.ReplicaSearchItem item,
+    required _i39.SearchCategory category,
   }) : super(
           ReplicaImageViewer.name,
           path: 'replicaImageViewer',
@@ -1507,11 +1523,11 @@ class ReplicaImageViewerArgs {
     required this.category,
   });
 
-  final _i38.ReplicaApi replicaApi;
+  final _i39.ReplicaApi replicaApi;
 
-  final _i38.ReplicaSearchItem item;
+  final _i39.ReplicaSearchItem item;
 
-  final _i38.SearchCategory category;
+  final _i39.SearchCategory category;
 
   @override
   String toString() {
@@ -1521,11 +1537,11 @@ class ReplicaImageViewerArgs {
 
 /// generated route for
 /// [_i32.ReplicaVideoViewer]
-class ReplicaVideoViewer extends _i34.PageRouteInfo<ReplicaVideoViewerArgs> {
+class ReplicaVideoViewer extends _i35.PageRouteInfo<ReplicaVideoViewerArgs> {
   ReplicaVideoViewer({
-    required _i38.ReplicaApi replicaApi,
-    required _i38.ReplicaSearchItem item,
-    required _i38.SearchCategory category,
+    required _i39.ReplicaApi replicaApi,
+    required _i39.ReplicaSearchItem item,
+    required _i39.SearchCategory category,
   }) : super(
           ReplicaVideoViewer.name,
           path: 'replicaVideoViewer',
@@ -1546,11 +1562,11 @@ class ReplicaVideoViewerArgs {
     required this.category,
   });
 
-  final _i38.ReplicaApi replicaApi;
+  final _i39.ReplicaApi replicaApi;
 
-  final _i38.ReplicaSearchItem item;
+  final _i39.ReplicaSearchItem item;
 
-  final _i38.SearchCategory category;
+  final _i39.SearchCategory category;
 
   @override
   String toString() {
@@ -1560,11 +1576,11 @@ class ReplicaVideoViewerArgs {
 
 /// generated route for
 /// [_i33.ReplicaAudioViewer]
-class ReplicaAudioViewer extends _i34.PageRouteInfo<ReplicaAudioViewerArgs> {
+class ReplicaAudioViewer extends _i35.PageRouteInfo<ReplicaAudioViewerArgs> {
   ReplicaAudioViewer({
-    required _i38.ReplicaApi replicaApi,
-    required _i38.ReplicaSearchItem item,
-    required _i38.SearchCategory category,
+    required _i39.ReplicaApi replicaApi,
+    required _i39.ReplicaSearchItem item,
+    required _i39.SearchCategory category,
   }) : super(
           ReplicaAudioViewer.name,
           path: 'replicaAudioViewer',
@@ -1585,14 +1601,26 @@ class ReplicaAudioViewerArgs {
     required this.category,
   });
 
-  final _i38.ReplicaApi replicaApi;
+  final _i39.ReplicaApi replicaApi;
 
-  final _i38.ReplicaSearchItem item;
+  final _i39.ReplicaSearchItem item;
 
-  final _i38.SearchCategory category;
+  final _i39.SearchCategory category;
 
   @override
   String toString() {
     return 'ReplicaAudioViewerArgs{replicaApi: $replicaApi, item: $item, category: $category}';
   }
+}
+
+/// generated route for
+/// [_i34.Support]
+class Support extends _i35.PageRouteInfo<void> {
+  const Support()
+      : super(
+          Support.name,
+          path: 'support',
+        );
+
+  static const String name = 'Support';
 }
