@@ -1,9 +1,9 @@
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../common/common.dart';
+import '../common/common.dart';
 
-class SupportWidget extends StatelessWidget {
-  const SupportWidget({Key? key}) : super(key: key);
+class Support extends StatelessWidget {
+  const Support({Key? key}) : super(key: key);
 
   final faqUrl = 'https://lantern.io/faq';
   final forumsUrl = 'https://lantern.io/forums';
