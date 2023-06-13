@@ -56,7 +56,7 @@ class PlansPage extends StatelessWidget {
                         child: ListView(shrinkWrap: true, children: [
                       Container(
                           padding: const EdgeInsetsDirectional.only(
-                              top: 8, bottom: 8, start: 32, end: 16),
+                              top: 10, bottom: 10, start: 32, end: 16),
                           color: white,
                           child: Row(
                             children: [
@@ -89,7 +89,7 @@ class PlansPage extends StatelessWidget {
                             if (proUser && plans.last.value.renewalText != '')
                               Padding(
                                 padding: const EdgeInsetsDirectional.only(
-                                    bottom:8),
+                                    bottom: 12.0),
                                 child: CText(
                                   plans.last.value.renewalText,
                                   style: tsBody1,
