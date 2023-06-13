@@ -62,9 +62,9 @@ class PlansPage extends StatelessWidget {
                             children: [
                               Container(
                                   child: CAssetImage(
-                                    path: ImagePaths.lantern_pro_logotype,
-                                    size: 20,
-                                  )),
+                                path: ImagePaths.lantern_pro_logotype,
+                                size: 20,
+                              )),
                               Spacer(),
                               IconButton(
                                 icon: mirrorLTR(

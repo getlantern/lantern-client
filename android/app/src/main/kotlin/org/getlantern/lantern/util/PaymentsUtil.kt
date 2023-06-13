@@ -236,7 +236,6 @@ class PaymentsUtil(private val activity: Activity) {
             session.setEmail(email)
             session.setResellerCode(resellerCode)
             sendPurchaseRequest("", email, "", PaymentProvider.ResellerCode, result)
-            result.success("redeemResellerSuccess")
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to redeem reseller code", t)
             result.error(
@@ -266,7 +265,6 @@ class PaymentsUtil(private val activity: Activity) {
     ) {
         Logger.d(TAG, "Sending purchase request with provider $provider")
         val session = session
-        val resellerCode = session.resellerCode()
         val formBody: FormBody.Builder = FormBody.Builder()
             .add("idempotencyKey", System.currentTimeMillis().toString())
             .add("provider", provider.toString().lowercase())
@@ -286,9 +284,15 @@ class PaymentsUtil(private val activity: Activity) {
             PaymentProvider.GooglePlay -> {
                 formBody.add("token", token)
             }
+            PaymentProvider.ResellerCode -> {
+                val resellerCode = LanternApp.getSession().resellerCode()
+                resellerCode?.let {
+                    formBody.add("provider", "reseller-code")
+                    formBody.add("resellerCode", resellerCode)
+                }
+            }
             else -> {}
         }
-        resellerCode?.let { formBody.add("resellerCode", resellerCode) }
 
         lanternClient.post(
             LanternHttpClient.createProUrl("/purchase"),
@@ -303,12 +307,15 @@ class PaymentsUtil(private val activity: Activity) {
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
-                    val errorMakingPurchase = activity.getString(
-                        R.string.error_making_purchase,
-                    )
                     Logger.e(TAG, "Error with purchase request: $error")
                     dialog?.dismiss()
-                    activity.showErrorDialog(errorMakingPurchase)
+                    methodCallResult.error(
+                        "errorMakingPurchase",
+                        activity.getString(
+                            R.string.error_making_purchase,
+                        ),
+                        null,
+                    )
                 }
             },
         )

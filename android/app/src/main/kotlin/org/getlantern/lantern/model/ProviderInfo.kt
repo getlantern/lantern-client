@@ -11,8 +11,8 @@ enum class PaymentProvider(val provider: String) {
 	GooglePlay("googleplay"),
 	@SerializedName("btcpay")
 	BTCPay("btcpay"),
-	@SerializedName("resellercode")
-	ResellerCode("resellercode")
+	@SerializedName("reseller-code")
+	ResellerCode("reseller-code")
 }
 
 data class ProviderInfo(

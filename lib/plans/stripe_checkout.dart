@@ -8,11 +8,6 @@ import 'package:lantern/plans/tos.dart';
 import 'package:lantern/plans/utils.dart';
 import 'package:flutter/foundation.dart';
 
-const lanternStarLogo = CAssetImage(
-  path: ImagePaths.lantern_star,
-  size: 72,
-);
-
 class CardExpirationFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
@@ -100,23 +95,12 @@ class _StripeCheckoutState extends State<StripeCheckout> {
 
   @override
   void dispose() {
-    ;
     creditCardController.dispose();
     super.dispose();
   }
 
-  void showInfo(String title, String description) => CDialog.showInfo(context,
-          icon: lanternStarLogo,
-          title: title,
-          description: description,
-          actionLabel: 'continue_to_pro'.i18n, agreeAction: () async {
-        await context.pushRoute(Home());
-        return true;
-      });
-
   Widget checkoutButton() {
     return Button(
-      //disabled: !formIsValid,
       text: copy,
       onPressed: () async {
         context.loaderOverlay.show();
@@ -137,13 +121,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
             )
             .then((value) async {
           context.loaderOverlay.hide();
-          if (widget.isPro) {
-            showInfo('pro_purchase_success'.i18n,
-                'pro_purchase_success_descripion'.i18n);
-          } else {
-            showInfo(
-                'renewal_success'.i18n, 'pro_renewal_success_description'.i18n);
-          }
+          showSuccessDialog(context, widget.isPro);
         }).onError((error, stackTrace) {
           context.loaderOverlay.hide();
           CDialog.showError(
