@@ -56,7 +56,7 @@ class PlansPage extends StatelessWidget {
                         child: ListView(shrinkWrap: true, children: [
                       Container(
                           padding: const EdgeInsetsDirectional.only(
-                              top: 10, bottom: 10, start: 32, end: 16),
+                              top: 8, bottom: 8, start: 32, end: 16),
                           color: white,
                           child: Row(
                             children: [
@@ -78,15 +78,6 @@ class PlansPage extends StatelessWidget {
                               ),
                             ],
                           )),
-                      if (renewalText != '')
-                        Padding(
-                          padding:
-                              const EdgeInsetsDirectional.only(bottom: 12.0),
-                          child: CText(
-                            renewalText,
-                            style: tsBody1,
-                          ),
-                        ),
                       Container(
                           color: white,
                           padding: const EdgeInsetsDirectional.only(
@@ -98,7 +89,7 @@ class PlansPage extends StatelessWidget {
                             if (proUser && plans.last.value.renewalText != '')
                               Padding(
                                 padding: const EdgeInsetsDirectional.only(
-                                    bottom: 12.0),
+                                    bottom:8),
                                 child: CText(
                                   plans.last.value.renewalText,
                                   style: tsBody1,
@@ -106,7 +97,7 @@ class PlansPage extends StatelessWidget {
                               ),
                             Padding(
                               padding: EdgeInsetsDirectional.only(
-                                bottom: 12.0,
+                                bottom: 8.0,
                               ),
                               child: CDivider(),
                             ),
