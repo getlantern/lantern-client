@@ -56,7 +56,7 @@ class PlansPage extends StatelessWidget {
                         child: ListView(shrinkWrap: true, children: [
                       Container(
                           padding: const EdgeInsetsDirectional.only(
-                              top: 20, bottom: 20, start: 32, end: 16),
+                              top: 10, bottom: 10, start: 32, end: 16),
                           color: white,
                           child: Row(
                             children: [
