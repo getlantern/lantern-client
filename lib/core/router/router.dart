@@ -9,7 +9,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
 import 'package:lantern/account/language.dart';
 import 'package:lantern/account/recovery_key.dart';
 import 'package:lantern/account/settings.dart';
-import 'package:lantern/account/support/support_widget.dart';
+import 'package:lantern/account/support.dart';
 import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/home.dart';
@@ -271,7 +271,7 @@ import 'package:lantern/vpn/vpn_split_tunneling.dart';
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute<void>(
-      page: SupportWidget,
+      page: Support,
       name: 'Support',
       path: 'support',
       transitionsBuilder: defaultTransition,

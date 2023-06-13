@@ -28,7 +28,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
 import 'package:lantern/account/language.dart' as _i6;
 import 'package:lantern/account/recovery_key.dart' as _i11;
 import 'package:lantern/account/settings.dart' as _i4;
-import 'package:lantern/account/support/support_widget.dart' as _i30;
+import 'package:lantern/account/support.dart' as _i30;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i2;
 import 'package:lantern/home.dart' as _i1;
 import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i17;
@@ -455,7 +455,7 @@ class AppRouter extends _i31.RootStackRouter {
     Support.name: (routeData) {
       return _i31.CustomPage<void>(
         routeData: routeData,
-        child: const _i30.SupportWidget(),
+        child: const _i30.Support(),
         transitionsBuilder: _i31.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
@@ -1399,7 +1399,7 @@ class ReplicaAudioViewerArgs {
 }
 
 /// generated route for
-/// [_i30.SupportWidget]
+/// [_i30.Support]
 class Support extends _i31.PageRouteInfo<void> {
   const Support()
       : super(

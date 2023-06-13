@@ -1,4 +1,3 @@
-import 'package:lantern/account/support/support_widget.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
