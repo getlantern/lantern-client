@@ -61,8 +61,6 @@ class PlansPage extends StatelessWidget {
                           child: Row(
                             children: [
                               Container(
-                                  margin:
-                                      const EdgeInsetsDirectional.only(top: 5),
                                   child: CAssetImage(
                                     path: ImagePaths.lantern_pro_logotype,
                                     size: 20,
@@ -170,7 +168,7 @@ class PlansPage extends StatelessWidget {
                     ])),
                     // * Footer
                     Padding(
-                        padding: const EdgeInsetsDirectional.only(top: 16.0),
+                        padding: const EdgeInsetsDirectional.only(top: 24.0),
                         child: Container(
                           height: 40,
                           alignment: Alignment.center,
