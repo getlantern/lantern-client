@@ -17,8 +17,11 @@ class AccountMenu extends StatelessWidget {
   void openDesktopVersion() =>
       LanternNavigator.startScreen(LanternNavigator.SCREEN_DESKTOP_VERSION);
 
-  void openSettings(BuildContext context) async =>
-      await context.pushRoute(Settings());
+  void openSettings(BuildContext context) => context.pushRoute(Settings());
+
+  void openSupport(BuildContext context) {
+    context.pushRoute(const Support());
+  }
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
@@ -56,24 +59,13 @@ class AccountMenu extends StatelessWidget {
         onTap: inviteFriends,
       ),
       ListItemFactory.settingsItem(
-        icon: ImagePaths.desktop,
-        content: 'desktop_version'.i18n,
-        onTap: openDesktopVersion,
-      ),
-      ListItemFactory.settingsItem(
         icon: ImagePaths.devices,
         content: 'Authorize Device for Pro'.i18n,
         onTap: () {
           authorizeDeviceForPro(context);
         },
       ),
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.settings,
-        content: 'settings'.i18n,
-        onTap: () {
-          openSettings(context);
-        },
-      ),
+      ...commonItems(context)
     ];
   }
 
@@ -98,19 +90,32 @@ class AccountMenu extends StatelessWidget {
         ),
       ),
       ListItemFactory.settingsItem(
-        icon: ImagePaths.devices,
-        content: 'Link Device'.i18n,
-        onTap: () async => await context.pushRoute(ApproveDevice()),
-      ),
-      ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
         onTap: inviteFriends,
       ),
       ListItemFactory.settingsItem(
+        icon: ImagePaths.devices,
+        content: 'add_device'.i18n,
+        onTap: () async => await context.pushRoute(ApproveDevice()),
+      ),
+      ...commonItems(context)
+    ];
+  }
+
+  List<Widget> commonItems(BuildContext context) {
+    return [
+      ListItemFactory.settingsItem(
         icon: ImagePaths.desktop,
         content: 'desktop_version'.i18n,
         onTap: openDesktopVersion,
+      ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.support,
+        content: 'support'.i18n,
+        onTap: () {
+          openSupport(context);
+        },
       ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.settings,
