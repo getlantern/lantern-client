@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.19.6 <3.0.0"
+  sdk: '>=3.0.3 <4.0.0'
 
 dependencies:
   flutter:
@@ -27,13 +27,13 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  i18n_extension: ^6.0.0
+  i18n_extension: ^7.0.0
 
   analyzer: ^5.6.0
 
   credit_card_validator: ^2.0.1
 
-  provider: ^5.0.0
+  provider: ^6.0.5
 
   protobuf: any
 
@@ -41,7 +41,7 @@ dependencies:
 
   flutter_switch: ^0.3.2
 
-  flag: ^6.0.0
+  flag: ^7.0.0
 
   qr_flutter: ^4.0.0
 
@@ -55,7 +55,7 @@ dependencies:
 
   bot_toast: ^4.0.1
 
-  stop_watch_timer: ^1.0.0
+  stop_watch_timer: ^2.0.0
 
   uuid: ^3.0.3
 
@@ -69,7 +69,7 @@ dependencies:
 
   video_player: ^2.6.0
 
-  flutter_svg: ^1.0.1
+  flutter_svg: ^2.0.7
 
   hexcolor: ^3.0.1
 
@@ -77,16 +77,16 @@ dependencies:
 
   fluttertoast: ^8.2.1
 
-  catcher: ^0.7.0
+  #catcher: ^0.7.0
 
-  sentry: ^6.1.0
+  sentry: ^7.7.0
 
   badges: ^2.0.0-nullsafety.1
 
   dotted_border: ^2.0.0
 
   # Version 1.0.7 seems glitchy, so we're using 1.0.6 explicitly
-  emoji_picker_flutter: 1.5.2
+  emoji_picker_flutter: ^1.6.1
 
   email_validator: ^2.1.17
 
@@ -96,9 +96,9 @@ dependencies:
 
   back_button_interceptor: ^6.0.2
 
-  scrollable_positioned_list: ^0.2.0-nullsafety.0
+  scrollable_positioned_list: ^0.3.8
 
-  extended_image: ^7.0.2
+  extended_image: ^8.0.2
 
   file_picker: ^5.2.6
 
@@ -109,11 +109,11 @@ dependencies:
   #     url: https://github.com/getlantern/flutter-webrtc.git
   #     ref: 1bf2cd40af6e8b0c6180c937659051eb157c0a4e
 
-  markdown: ^4.0.1
+  markdown: ^7.1.0
 
   flutter_markdown: ^0.6.8
 
-  flutter_local_notifications: ^9.1.4
+  flutter_local_notifications: ^9.9.1
 
   http: ^0.13.5
 
@@ -121,7 +121,7 @@ dependencies:
 
   filesize: ^2.0.1
 
-  dio: ^4.0.4
+  dio: ^5.2.1+1
 
   path_provider: ^2.0.15
 

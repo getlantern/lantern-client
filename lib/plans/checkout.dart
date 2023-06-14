@@ -153,8 +153,8 @@ class _CheckoutState extends State<Checkout>
             widgets.add(
               PaymentProvider(
                 logoPaths: [
-                  ImagePaths.mnp,
                   ImagePaths.qiwi,
+                  ImagePaths.mnp,
                   ImagePaths.visa,
                   ImagePaths.mastercard
                 ],
