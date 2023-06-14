@@ -22,7 +22,7 @@ class ReplicaApi {
     dio = Dio(
       BaseOptions(
         baseUrl: 'http://$replicaHostAddr/replica/',
-        connectTimeout: 30000, // 30s
+        connectTimeout:  Duration(seconds: 30), // 30s
       ),
     );
     durationCache = LRUCache<ReplicaLink, double?>(100, doFetchDuration);
