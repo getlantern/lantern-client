@@ -24,7 +24,7 @@ class VpnModel extends Model {
 
   Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('/splitTunneling',
-        builder: builder);
+        builder: builder,);
   }
 
   Future<void> setSplitTunneling<T>(bool on) async {

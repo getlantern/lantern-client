@@ -173,7 +173,7 @@ class _AccountManagementState extends State<AccountManagement>
                         icon: ImagePaths.clock,
                         content: expirationDate,
                         onTap: () async {
-                          await context.pushRoute(PlansPage());
+                          await context.pushRoute(const PlansPage());
                         },
                         trailingArray: [
                           CText('Renew'.i18n.toUpperCase(), style: tsButtonPink)
