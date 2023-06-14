@@ -1220,3 +1220,15 @@ msgid "discover_disclaimer"
 msgstr ""
 "Lantern آپ کی تلاشوں کو گمنام بناتی ہے اور انہیں فریقین ثالث سے محفوظ رکھتی "
 "ہے۔"
+
+msgid "support"
+msgstr "سپورٹ"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr ""
+
+msgid "add_device"
+msgstr "ڈیوائس شامل کیجئے"
