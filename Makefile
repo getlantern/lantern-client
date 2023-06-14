@@ -67,7 +67,7 @@ STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= $$VERSION
 # Note - we don't bother stripping symbols or DWARF table as Android's packaging seems to take care of that for us
-LDFLAGS := -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION) -X github.com/getlantern/flashlight/common.StagingMode=$(STAGING)
+LDFLAGS := -X github.com/getlantern/android-lantern/internalsdk.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/android-lantern/internalsdk.ApplicationVersion=$(VERSION) -X github.com/getlantern/flashlight/v7/common.StagingMode=$(STAGING)
 
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
@@ -455,7 +455,7 @@ sourcedump: require-version
 	go mod tidy && \
 	go mod vendor && \
 	find . -name "CHANGELOG*" -exec rm {} \; && \
-	rm -Rf vendor/github.com/getlantern/flashlight/embeddedconfig vendor/github.com/getlantern/flashlight/genconfig && \
+	rm -Rf vendor/github.com/getlantern/flashlight/v7/embeddedconfig vendor/github.com/getlantern/flashlight/v7/genconfig && \
 	find vendor/github.com/getlantern -name "*.go" -exec perl -pi -e 's/"https?\:\/\/[^"]+/"URL_HIDDEN/g' {} \; && \
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
