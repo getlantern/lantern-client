@@ -8,5 +8,5 @@ Future<void> main() async {
   // enableFlutterDriverExtension();
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  LanternApp();
+  runApp(LanternApp());
 }
