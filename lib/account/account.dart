@@ -20,7 +20,7 @@ class AccountMenu extends StatelessWidget {
   }
 
   void upgradeToLanternPro(BuildContext context) async =>
-      await context.pushRoute(PlansPage());
+      await context.pushRoute(const PlansPage());
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
