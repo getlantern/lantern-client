@@ -10,13 +10,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/getlantern/flashlight"
-	"github.com/getlantern/flashlight/client"
-	"github.com/getlantern/flashlight/common"
-	"github.com/getlantern/flashlight/config"
-	"github.com/getlantern/flashlight/geolookup"
-	"github.com/getlantern/flashlight/ops"
-	"github.com/getlantern/flashlight/proxied"
+	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/client"
+	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/geolookup"
+	"github.com/getlantern/flashlight/v7/ops"
+	"github.com/getlantern/flashlight/v7/proxied"
 	replicaConfig "github.com/getlantern/replica/config"
 	replicaServer "github.com/getlantern/replica/server"
 	replicaService "github.com/getlantern/replica/service"
@@ -44,7 +44,7 @@ type ReplicaServer struct {
 // If enabled, the server is started lazily and the server's random address is reported to Session.SetReplicaAddr.
 // If disabled after having been enabled, the server keeps running and ReplicaAddr remains set to its old value.
 func (s *ReplicaServer) CheckEnabled() {
-	if !s.Session.ForceReplica() && !s.Flashlight.FeatureEnabled(config.FeatureReplica) {
+	if !s.Session.ForceReplica() && !s.Flashlight.FeatureEnabled(config.FeatureReplica, ApplicationVersion) {
 		// Replica is not enabled
 		log.Debug("Replica not enabled")
 		return
