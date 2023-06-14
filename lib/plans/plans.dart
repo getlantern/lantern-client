@@ -49,114 +49,113 @@ class PlansPage extends StatelessWidget {
           builder: (context, setState) => Container(
               color: white,
               child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                        child: ListView(shrinkWrap: true, children: [
-                      Container(
-                          padding: const EdgeInsetsDirectional.only(
-                              top: 10, bottom: 10, start: 32, end: 16),
-                          color: white,
-                          child: Row(
-                            children: [
-                              Container(
-                                  child: CAssetImage(
-                                path: ImagePaths.lantern_pro_logotype,
-                                size: 20,
-                              )),
-                              Spacer(),
-                              IconButton(
-                                icon: mirrorLTR(
-                                  context: context,
-                                  child: CAssetImage(
-                                    path: ImagePaths.cancel,
-                                    color: black,
-                                  ),
-                                ),
-                                onPressed: () => Navigator.pop(context, null),
-                              ),
-                            ],
-                          )),
-                      Container(
-                          color: white,
-                          padding: const EdgeInsetsDirectional.only(
-                            start: 24,
-                            end: 24,
-                          ),
-                          child: Column(children: [
-                            // * Renewal text or upsell
-                            if (proUser && plans.last.value.renewalText != '')
-                              Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                    bottom: 12.0),
-                                child: CText(
-                                  plans.last.value.renewalText,
-                                  style: tsBody1,
-                                ),
-                              ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.only(
-                                bottom: 8.0,
-                              ),
-                              child: CDivider(),
-                            ),
-                            ...featuresList.map((feature) => Container(
-                                padding: const EdgeInsetsDirectional.only(
-                                  start: 8,
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const CAssetImage(
-                                      path: ImagePaths.check_green_large,
-                                      size: 24,
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsetsDirectional.only(
-                                          start: 4.0,
-                                          bottom: 4.0,
-                                        ),
-                                        child: CText(feature,
-                                            textAlign: TextAlign.center,
-                                            style: tsBody1)),
-                                  ],
-                                ))),
-                            const CDivider(height: 24),
-                          ])),
-                      // * Step
-                      Container(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+      child: ListView(shrinkWrap: true, children: [
+                    Container(
+                        padding: const EdgeInsetsDirectional.only(
+                            top: 10, bottom: 10, start: 32, end: 16),
                         color: white,
-                        padding: EdgeInsetsDirectional.only(
-                          top: 16.0,
-                          bottom: 16.0,
-                          start: 32.0,
-                          end: 32.0,
-                        ),
-                        child: Container(
-                            margin:
-                                const EdgeInsetsDirectional.only(start: 4.0),
-                            child: PlanStep(
-                              stepNum: '1',
-                              description: 'choose_plan'.i18n,
+                        child: Row(
+                          children: [
+                            Container(
+                                child: CAssetImage(
+                              path: ImagePaths.lantern_pro_logotype,
+                              size: 20,
                             )),
-                      ),
-                      // * Card
-                      if (plans != null)
-                        ...plans.toList().reversed.map(
-                              (plan) => Container(
-                                  color: white,
-                                  padding: EdgeInsetsDirectional.only(
-                                    start: 32.0,
-                                    end: 32.0,
-                                  ),
-                                  child: PlanCard(
-                                    plan: plan.value,
-                                    isPro: proUser,
-                                  )),
+                            Spacer(),
+                            IconButton(
+                              icon: mirrorLTR(
+                                context: context,
+                                child: CAssetImage(
+                                  path: ImagePaths.cancel,
+                                  color: black,
+                                ),
+                              ),
+                              onPressed: () => Navigator.pop(context, null),
                             ),
-                    ])),
+                          ],
+                        )),
+                    Container(
+                        color: white,
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 24,
+                          end: 24,
+                        ),
+                        child: Column(children: [
+                          // * Renewal text or upsell
+                          if (proUser && plans.last.value.renewalText != '')
+                            Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                  bottom: 12.0),
+                              child: CText(
+                                plans.last.value.renewalText,
+                                style: tsBody1,
+                              ),
+                            ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.only(
+                              bottom: 8.0,
+                            ),
+                            child: CDivider(),
+                          ),
+                          ...featuresList.map((feature) => Container(
+                              padding: const EdgeInsetsDirectional.only(
+                                start: 8,
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const CAssetImage(
+                                    path: ImagePaths.check_green_large,
+                                    size: 24,
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsetsDirectional.only(
+                                        start: 4.0,
+                                        bottom: 4.0,
+                                      ),
+                                      child: CText(feature,
+                                          textAlign: TextAlign.center,
+                                          style: tsBody1)),
+                                ],
+                              ))),
+                          const CDivider(height: 24),
+                        ])),
+                    // * Step
+                    Container(
+                      color: white,
+                      padding: EdgeInsetsDirectional.only(
+                        top: 16.0,
+                        bottom: 16.0,
+                        start: 32.0,
+                        end: 32.0,
+                      ),
+                      child: Container(
+                          margin: const EdgeInsetsDirectional.only(start: 4.0),
+                          child: PlanStep(
+                            stepNum: '1',
+                            description: 'choose_plan'.i18n,
+                          )),
+                    ),
+                    // * Card
+                    if (plans != null)
+                      ...plans.toList().reversed.map(
+                            (plan) => Container(
+                                color: white,
+                                padding: EdgeInsetsDirectional.only(
+                                  start: 32.0,
+                                  end: 32.0,
+                                ),
+                                child: PlanCard(
+                                  plan: plan.value,
+                                  isPro: proUser,
+                                )),
+                          ),
+                    Spacer(),
                     // * Footer
                     Padding(
                         padding: const EdgeInsetsDirectional.only(top: 24.0),
@@ -180,7 +179,9 @@ class PlansPage extends StatelessWidget {
                             ),
                           ), // Translations
                         )),
-                  ])),
+                  ]))
+                ],
+              )),
         );
       });
     }));
