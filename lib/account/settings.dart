@@ -149,7 +149,8 @@ class Settings extends StatelessWidget {
               if (!snapshot.hasData) {
                 return Container();
               }
-              return Expanded(
+              return Padding(
+                padding: const EdgeInsetsDirectional.only(top: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.end,
