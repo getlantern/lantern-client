@@ -5,10 +5,11 @@
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2023
 # Chi-Hsun Tsai, 2023
 # e2f <projects@e2f.com>, 2023
+# 474874f569f96a33809d02f1de71479e_77020aa, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f <projects@e2f.com>, 2023\n"
+"Last-Translator: 474874f569f96a33809d02f1de71479e_77020aa, 2023\n"
 "Language-Team: Chinese Simplified (https://app.transifex.com/lantern-1/teams/94371/zh-Hans/)\n"
 "Language: zh-Hans\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1159,3 +1160,15 @@ msgstr "猫"
 
 msgid "discover_disclaimer"
 msgstr "Lantern 会将您的搜索匿名化并保护它们免受第三方的侵害。"
+
+msgid "support"
+msgstr "支持"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "蓝灯论坛"
+
+msgid "add_device"
+msgstr "添加设备"
