@@ -77,7 +77,11 @@ dependencies:
 
   fluttertoast: ^8.2.1
 
-  #catcher: ^0.7.0
+  # Use a fork of catcher since >=0.6.9 is incompatible with flutter_localizations
+  # from sdk. See https://github.com/jhomlala/catcher/pull/234 for more details
+  catcher:
+    git:
+      url: https://github.com/ThexXTURBOXx/catcher.git
 
   sentry: ^7.7.0
 
@@ -133,7 +137,7 @@ dependencies:
 
   share_plus: ^6.3.1
 
-  package_info_plus: ^3.0.3
+  package_info_plus: ^4.0.0
 
   logger: ^1.3.0
 
@@ -150,6 +154,11 @@ dependencies:
   flutter_pdfview: ^1.2.9
 
   wakelock: ^0.6.2
+
+# wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0
+# See https://github.com/creativecreatorormaybenot/wakelock/issues/211
+dependency_overrides:
+  win32: 3.1.4
 
 dev_dependencies:
   flutter_test:
