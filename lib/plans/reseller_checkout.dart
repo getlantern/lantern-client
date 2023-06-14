@@ -1,5 +1,5 @@
-import 'package:lantern/common/common.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/tos.dart';
 import 'package:lantern/plans/utils.dart';
@@ -7,17 +7,19 @@ import 'package:lantern/plans/utils.dart';
 class ResellerCodeFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue value) {
+    TextEditingValue oldValue,
+    TextEditingValue value,
+  ) {
     final newValue = value.text;
-    String formattedValue = '';
+    var formattedValue = '';
 
-    for (int i = 0; i < newValue.length; i++) {
+    for (var i = 0; i < newValue.length; i++) {
       if (newValue[i] != '-') formattedValue += newValue[i];
       var index = i + 1;
       var dashIndex = index == 5 || index == 11 || index == 17 || index == 23;
       if (dashIndex &&
           index != newValue.length &&
-          !(formattedValue.endsWith("-"))) {
+          !(formattedValue.endsWith('-'))) {
         formattedValue += '-';
       }
     }
@@ -32,6 +34,7 @@ class ResellerCodeFormatter extends TextInputFormatter {
 
 class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;
+
   ResellerCodeCheckout({
     required this.isPro,
     Key? key,
@@ -130,7 +133,8 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                 child: Form(
                   key: resellerCodeFieldKey,
                   child: CTextField(
-                    maxLength: 25 + 4, //accounting for dashes
+                    maxLength: 25 + 4,
+                    //accounting for dashes
                     controller: resellerCodeController,
                     autovalidateMode: AutovalidateMode.disabled,
                     inputFormatters: [ResellerCodeFormatter()],

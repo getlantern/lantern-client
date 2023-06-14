@@ -26,12 +26,15 @@ void showSuccessDialog(BuildContext context, bool isPro, [bool? isReseller]) {
     title = 'pro_purchase_success'.i18n;
     description = 'pro_purchase_success_descripion'.i18n;
   }
-  CDialog.showInfo(context,
-      icon: lanternStarLogo,
-      title: title,
-      description: description,
-      actionLabel: 'continue_to_pro'.i18n, agreeAction: () async {
-    await context.pushRoute(Home());
-    return true;
-  });
+  CDialog.showInfo(
+    context,
+    icon: lanternStarLogo,
+    title: title,
+    description: description,
+    actionLabel: 'continue_to_pro'.i18n,
+    agreeAction: () async {
+      await context.pushRoute(Home());
+      return true;
+    },
+  );
 }
