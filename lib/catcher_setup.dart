@@ -1,4 +1,4 @@
-/*import 'package:catcher/catcher.dart';
+import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry/sentry.dart';
 
@@ -41,4 +41,4 @@ Catcher setupCatcherAndRun(StatelessWidget root) {
     debugConfig: debugOption,
     releaseConfig: releaseOption,
   );
-}*/
+}
