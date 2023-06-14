@@ -18,16 +18,16 @@ import (
 	"github.com/getlantern/dnsgrab/persistentcache"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
-	"github.com/getlantern/flashlight"
-	"github.com/getlantern/flashlight/balancer"
-	"github.com/getlantern/flashlight/bandwidth"
-	"github.com/getlantern/flashlight/client"
-	"github.com/getlantern/flashlight/common"
-	"github.com/getlantern/flashlight/config"
-	"github.com/getlantern/flashlight/email"
-	"github.com/getlantern/flashlight/geolookup"
-	"github.com/getlantern/flashlight/logging"
-	"github.com/getlantern/flashlight/ops"
+	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/balancer"
+	"github.com/getlantern/flashlight/v7/bandwidth"
+	"github.com/getlantern/flashlight/v7/client"
+	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/email"
+	"github.com/getlantern/flashlight/v7/geolookup"
+	"github.com/getlantern/flashlight/v7/logging"
+	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/memhelper"
 	"github.com/getlantern/mtime"
@@ -446,7 +446,7 @@ func EnableLogging(configDir string) {
 }
 
 func newAnalyticsSession(deviceID string) analytics.Session {
-	session := analytics.Start(deviceID, common.Version)
+	session := analytics.Start(deviceID, ApplicationVersion)
 	go func() {
 		session.SetIP(geolookup.GetIP(forever))
 	}()
@@ -522,6 +522,8 @@ func run(configDir, locale string,
 	var runner *flashlight.Flashlight
 	runner, err = flashlight.New(
 		common.DefaultAppName,
+		ApplicationVersion,
+		RevisionDate,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
@@ -598,7 +600,7 @@ func run(configDir, locale string,
 	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
 	checkFeatures := func() {
 		replicaServer.CheckEnabled()
-		chatEnabled := runner.FeatureEnabled("chat")
+		chatEnabled := runner.FeatureEnabled("chat", ApplicationVersion)
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
 	}

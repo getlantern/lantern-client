@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/getlantern/flashlight/email"
+	"github.com/getlantern/flashlight/v7/email"
 )
 
 // EmailMessage exposes the type email.Message as part of this package.

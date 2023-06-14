@@ -1,17 +1,17 @@
 # 
 # Translators:
 # abuyop <abuyop@gmail.com>, 2022
-# Lantern, 2022
 # e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2022
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
 # tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2023
 # e2f <projects@e2f.com>, 2023
-# Alyssa Chung <lisiachung7@gmail.com>, 2023
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2023
+# Alyssa Chung <lisiachung7@gmail.com>, 2023
+# Lantern, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2023\n"
+"Last-Translator: Lantern, 2023\n"
 "Language-Team: Malay (https://app.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1231,3 +1231,15 @@ msgid "discover_disclaimer"
 msgstr ""
 "Lantern menjadikan carian anda berciri awanama dan melindungi carian anda "
 "daripada pihak ketiga."
+
+msgid "support"
+msgstr "Sokongan"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "FAQ"
+
+msgid "add_device"
+msgstr "Tambah Peranti"

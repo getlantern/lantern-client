@@ -1,15 +1,15 @@
 # 
 # Translators:
-# Lantern, 2022
 # e2f <projects@e2f.com>, 2022
 # e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2023
-# Nathan Tran, 2023
-# Yen Le Van <yenlevanbk@gmail.com>, 2023
 # Anh Phan <vietnamesel10n@gmail.com>, 2023
+# Yen Le Van <yenlevanbk@gmail.com>, 2023
+# Nathan Tran, 2023
+# Lantern, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Anh Phan <vietnamesel10n@gmail.com>, 2023\n"
+"Last-Translator: Lantern, 2023\n"
 "Language-Team: Vietnamese (https://app.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1214,3 +1214,15 @@ msgstr "mèo"
 msgid "discover_disclaimer"
 msgstr ""
 "Lantern ẩn danh các tìm kiếm của bạn và bảo vệ chúng khỏi các bên thứ ba."
+
+msgid "support"
+msgstr "Hỗ trợ"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "FAQ"
+
+msgid "add_device"
+msgstr "Thêm Máy"
