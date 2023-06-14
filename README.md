@@ -126,7 +126,7 @@ To build mobile for staging, use the STAGING command line argument:
 STAGING=true make android-debug android-install
 ```
 
-This will build Flashlight with the same [STAGING flag](https://github.com/getlantern/flashlight/blob/9eb8abbe036e86b9e72a1a938f29e59f75391676/common/const.go#L43), which allows your client to use the [staging pro-server](https://github.com/getlantern/pro-server-neu/blob/fa2859edf213998e15cd7c00461e52fd97a9e570/README.md#L125) instance instead of the production one.
+This will build Flashlight with the same [STAGING flag](https://github.com/getlantern/flashlight/v7/blob/9eb8abbe036e86b9e72a1a938f29e59f75391676/common/const.go#L43), which allows your client to use the [staging pro-server](https://github.com/getlantern/pro-server-neu/blob/fa2859edf213998e15cd7c00461e52fd97a9e570/README.md#L125) instance instead of the production one.
 
 ### Making release builds
 

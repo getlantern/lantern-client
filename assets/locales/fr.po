@@ -1244,3 +1244,15 @@ msgstr "chat"
 
 msgid "discover_disclaimer"
 msgstr "Lantern anonymise vos recherches et les protège contre les tiers."
+
+msgid "support"
+msgstr "Soutien"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "FAQ"
+
+msgid "add_device"
+msgstr "Ajouter un appareil"

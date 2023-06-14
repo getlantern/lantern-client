@@ -2,7 +2,9 @@ name: BrowserStack CI
 
 on:
   push:
-    branches: [ user-journey-test-ci ]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 env:
   GOPRIVATE: github.com/getlantern
 
