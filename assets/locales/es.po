@@ -1236,3 +1236,15 @@ msgstr "gato"
 
 msgid "discover_disclaimer"
 msgstr "Lantern hace anónimas sus búsquedas y las protege de terceras partes."
+
+msgid "support"
+msgstr "Soporte"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "Preguntas frecuentes (FAQ)"
+
+msgid "add_device"
+msgstr "Añadir dispositivo"
