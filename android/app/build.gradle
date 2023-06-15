@@ -191,7 +191,7 @@ android {
             shrinkResources false
             debuggable false
             buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
-            buildConfigField "boolean", "CI", getBoolean("CI")
+            buildConfigField "boolean", "CI", getBoolean("ci")
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
