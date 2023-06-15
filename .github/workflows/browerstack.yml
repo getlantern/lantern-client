@@ -47,7 +47,7 @@ jobs:
       - name: Build APK
         run: |
           flutter pub get
-          flutter build apk --debug --flavor prod
+          flutter build apk --debug --flavor prod --dart-define=CI=true
 
       - name: Install jq
         run: sudo apt-get install jq

@@ -5,8 +5,11 @@ import 'package:lantern/common/common.dart';
 import 'app.dart';
 
 Future<void> main() async {
-  //this works only in debug and profile mode
-  enableFlutterDriverExtension();
+  // CI will be true only when running appium test
+  var CI = const String.fromEnvironment('CI', defaultValue: 'false');
+  if (CI == 'true') {
+    enableFlutterDriverExtension();
+  }
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   setupCatcherAndRun(LanternApp());

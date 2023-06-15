@@ -32,6 +32,24 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def dartEnvironmentVariables = [
+        CI: false
+]
+if (project.hasProperty('dart-defines')) {
+    println("dart-defines property found. Setting Dart environment variables...")
+
+    dartEnvironmentVariables = dartEnvironmentVariables + project.property('dart-defines')
+            .split(',')
+            .collectEntries { entry ->
+                def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+                [(pair.first()): pair.last()]
+            }
+    println("Dart environment variables set: $dartEnvironmentVariables")
+
+} else {
+    println("dart-defines property not found. Skipping Dart environment variable setup.")
+
+}
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -131,6 +149,8 @@ android {
             versionName "3.0.0"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // Add this line to inject CI value into BuildConfig
+        buildConfigField 'String', 'CI', "\"${dartEnvironmentVariables.CI}\""
     }
 
     externalNativeBuild {
