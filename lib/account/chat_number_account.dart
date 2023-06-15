@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/messaging/messaging.dart';
 
+@RoutePage<void>(name: 'ChatNumberAccount')
 class ChatNumberAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

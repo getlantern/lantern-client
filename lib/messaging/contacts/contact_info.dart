@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/messaging/conversation/call_action.dart';
 
 import '../messaging.dart';
 
+@RoutePage<void>(name: 'ContactInfo')
 class ContactInfo extends StatefulWidget {
   final Contact contact;
 

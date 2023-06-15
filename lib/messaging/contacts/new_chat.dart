@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/messaging/contacts/add_contact_QR.dart';
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 import 'long_tap_menu.dart';
 
+@RoutePage<void>(name: 'NewChat')
 class NewChat extends StatefulWidget {
   @override
   _NewChatState createState() => _NewChatState();

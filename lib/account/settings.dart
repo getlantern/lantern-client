@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+@RoutePage<void>(name: 'Settings2kkf')
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
 

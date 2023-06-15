@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/vpn/vpn.dart';
 
+@RoutePage<void>(name: 'SplitTunneling')
 class SplitTunneling extends StatefulWidget {
   SplitTunneling({Key? key});
 

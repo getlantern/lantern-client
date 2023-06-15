@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
@@ -20,6 +21,7 @@ import 'show_conversation_options.dart';
 import 'show_verification_options.dart';
 import 'stopwatch_timer.dart';
 
+@RoutePage<void>(name: 'Conversation')
 class Conversation extends StatefulWidget {
   final ContactId contactId;
   final int? initialScrollIndex;

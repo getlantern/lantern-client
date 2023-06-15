@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
@@ -9,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 /// 2. Apps
 /// 3. Unknown
 /// It does not offer a full screen option unless we have a PDF
+@RoutePage<void>(name: 'ReplicaMiscViewer')
 class ReplicaMiscViewer extends ReplicaViewerLayout {
   ReplicaMiscViewer({
     required ReplicaApi replicaApi,

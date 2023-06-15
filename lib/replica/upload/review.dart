@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
+@RoutePage<void>(name: 'ReplicaUploadReview')
 class ReplicaUploadReview extends StatefulWidget {
   final File fileToUpload;
   final String fileTitle;
