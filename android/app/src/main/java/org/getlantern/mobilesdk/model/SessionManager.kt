@@ -304,7 +304,7 @@ abstract class SessionManager(application: Application) : Session {
     val isPaymentTestMode: Boolean
         get() {
             val paymentTestMode = prefs.getBoolean(PAYMENT_TEST_MODE, false)
-            val ciValue = BuildConfig.CI == "true"
+            val ciValue = BuildConfig.CI
             return ciValue || paymentTestMode
         }
 
