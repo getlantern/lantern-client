@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/common.dart';
 
+@RoutePage<void>(name: 'ApproveDevice')
 class ApproveDevice extends StatelessWidget {
   ApproveDevice({Key? key}) : super(key: key);
 

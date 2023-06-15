@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
@@ -20,6 +21,7 @@ import 'package:lantern/replica/common.dart';
 /// tab will not be visible if Replica is not initialized.
 /// In other words, we will never reach any Replica screen (other than this) if
 /// Replica is not initialized.
+@RoutePage<void>(name: 'ReplicaLinkHandler')
 class ReplicaLinkHandler extends StatefulWidget {
   ReplicaLinkHandler({
     Key? key,

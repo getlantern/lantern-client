@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
 
 
+@RoutePage<void>(name: 'AuthorizeDeviceEmail')
 class AuthorizeDeviceViaEmail extends StatelessWidget {
   AuthorizeDeviceViaEmail({Key? key}) : super(key: key);
 

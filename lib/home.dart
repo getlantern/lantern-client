@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/common/common.dart';
@@ -12,6 +13,7 @@ import 'package:logger/logger.dart';
 
 import 'messaging/messaging_model.dart';
 
+@RoutePage(name: 'Home')
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 

@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
 
+@RoutePage<void>(name: 'ReplicaAudioViewer')
 class ReplicaAudioViewer extends ReplicaViewerLayout {
   ReplicaAudioViewer({
     required ReplicaApi replicaApi,

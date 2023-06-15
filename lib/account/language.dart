@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 
+@RoutePage<void>(name: 'Language')
 class Language extends StatelessWidget {
   Language({Key? key}) : super(key: key);
 

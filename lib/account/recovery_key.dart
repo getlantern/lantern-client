@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/messaging/messaging.dart';
 
+@RoutePage<void>(name: 'RecoveryKey')
 class RecoveryKey extends StatelessWidget {
   RecoveryKey({Key? key}) : super(key: key);
 

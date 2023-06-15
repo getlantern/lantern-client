@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/common.dart';
 import 'package:styled_text/styled_text.dart';
 
+@RoutePage<void>(name: 'AuthorizeDeviceEmailPin')
 class AuthorizeDeviceViaEmailPin extends StatelessWidget {
   AuthorizeDeviceViaEmailPin({Key? key}) : super(key: key);
 
@@ -15,8 +17,9 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
             .i18n
             .replaceFirst('%s', '<highlight>$emailAddress</highlight>'),
         style: tsBody1,
-        styles: {
-          'highlight': TextStyle(color: blue4, fontWeight: FontWeight.bold),
+        tags: {
+          'highlight': StyledTextTag(
+              style: TextStyle(color: blue4, fontWeight: FontWeight.bold)),
         },
       );
     }

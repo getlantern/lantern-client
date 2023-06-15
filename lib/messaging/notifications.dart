@@ -65,6 +65,7 @@ class Notifications {
       const InitializationSettings(
         android: AndroidInitializationSettings('app_icon'),
       ),
+
       onSelectNotification: (payloadString) async {
         if (payloadString?.isNotEmpty == true) {
           var payload = Payload.fromJson(payloadString!);

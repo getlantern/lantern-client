@@ -2,10 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/scheduler.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/core/router/router.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
-final globalRouter = AppRouter(navigatorKey);
+final globalRouter = AppRouter();
 final networkWarningBarHeightRatio = ValueNotifier(0.0);
 var showConnectivityWarning = false;
 
@@ -102,12 +103,7 @@ class LanternApp extends StatelessWidget {
                 GlobalCupertinoLocalizations.delegate,
               ],
               routeInformationParser: globalRouter.defaultRouteParser(),
-              routerDelegate: globalRouter.delegate(
-                navigatorObservers: () => [
-                  BotToastNavigatorObserver(),
-                ],
-              ),
-              builder: BotToastInit(),
+              routerDelegate: globalRouter.delegate(),
               supportedLocales: [
                 const Locale('ar', 'EG'),
                 const Locale('fr', 'FR'),
