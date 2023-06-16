@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 
 /// callback that receives the current time
-abstract class _NowCallback {
+mixin _NowCallback {
   void onTime(DateTime now);
 }
 

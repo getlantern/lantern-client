@@ -65,6 +65,7 @@ class _LinkOpenerScreen extends State<ReplicaLinkHandler> {
         case SearchCategory.Document:
         case SearchCategory.App:
         case SearchCategory.Unknown:
+        default:
           // TODO <08-11-2022> kalli: this should navigate to ReplicaMiscViewer
           // return context.replaceRoute(
           //   ReplicaUnknownItemScreen(
