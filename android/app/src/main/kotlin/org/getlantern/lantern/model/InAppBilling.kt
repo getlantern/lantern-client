@@ -18,6 +18,7 @@ import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentHashMap
 
@@ -29,6 +30,10 @@ class InAppBilling(
 
     companion object {
         private val TAG = InAppBilling::class.java.simpleName
+    }
+
+    init {
+        initConnection()
     }
 
     @get:Synchronized
@@ -94,12 +99,15 @@ class InAppBilling(
     private fun BillingResult.responseCodeOK() = responseCode == BillingClient.BillingResponseCode.OK
 
     @Synchronized
-    fun startPurchase(activity: Activity, planID: String, cb: PurchasesUpdatedListener): Boolean {
+    fun startPurchase(activity: Activity, id: String, cb: PurchasesUpdatedListener) {
         this.purchasesUpdated = cb
-        val skuDetails = skus.get(planID)
+        var planID = id
+        val currency = LanternApp.getSession().getCurrency()
+        if (currency != null) planID += "-$currency"
+        val skuDetails = skus.get(planID.lowercase())
         if (skuDetails == null) {
             Logger.e(TAG, "Unable to find sku details for plan: $planID")
-            return false
+            return
         }
         Logger.d(TAG, "Launching billing flow for plan $planID, sku ${skuDetails.sku}")
         launchBillingFlow(
@@ -108,7 +116,6 @@ class InAppBilling(
                 .setSkuDetails(skuDetails)
                 .build(),
         )
-        return true
     }
 
     @UiThread

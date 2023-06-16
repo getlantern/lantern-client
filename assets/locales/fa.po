@@ -1,7 +1,6 @@
 # 
 # Translators:
 # Derek F <derek@getlantern.org>, 2021
-# Sina <sina@asl19.org>, 2021
 # Pedram Azizallahi <pedram672004@yahoo.com>, 2021
 # ali jafarizadeh <ebrahimigv@gmail.com>, 2021
 # b0b47d46632b78a09a40de799fda9a65, 2022
@@ -14,13 +13,14 @@
 # Lantern, 2022
 # e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023
 # NoProfile, 2023
-# Vaseto Nora <n.nouri67@gmail.com>, 2023
-# 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023
 # Jigar, 2023
+# Vaseto Nora <n.nouri67@gmail.com>, 2023
+# Sina <sina@asl19.org>, 2023
+# 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Jigar, 2023\n"
+"Last-Translator: 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -1223,3 +1223,15 @@ msgid "discover_disclaimer"
 msgstr ""
 "Lantern جستجوهای شما را بی‌نام می‌کند و از آن‌ها در برابر اشخاص ثالث محافظت "
 "می‌کند."
+
+msgid "support"
+msgstr "پشتیبانی"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "‫سوالات متداول"
+
+msgid "add_device"
+msgstr "افزودن دستگاه جدید"

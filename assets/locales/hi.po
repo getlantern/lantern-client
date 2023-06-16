@@ -1211,3 +1211,15 @@ msgid "discover_disclaimer"
 msgstr ""
 "आप जो भी सर्च करते हैं, Lantern उसे गुमनाम कर देता है और थर्ड पार्टियों से "
 "सुरक्षित रखता है."
+
+msgid "support"
+msgstr ""
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "सामान्य प्रश्न"
+
+msgid "add_device"
+msgstr "डिवाइस जोडे"
