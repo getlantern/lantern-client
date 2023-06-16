@@ -79,7 +79,6 @@ jobs:
           echo "$app_url"
           echo "BROWSERSTACK_APP_ID=$app_url" >> $GITHUB_ENV
           
-
       - name: Run Tests
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
