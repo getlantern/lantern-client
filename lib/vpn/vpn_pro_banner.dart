@@ -6,7 +6,7 @@ class ProBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CInkWell(
-      onTap: () => context.pushRoute(PlansPage()),
+      onTap: () => context.pushRoute(const PlansPage()),
       child: Container(
         padding: const EdgeInsetsDirectional.all(16),
         decoration: BoxDecoration(

@@ -1241,3 +1241,15 @@ msgid "discover_disclaimer"
 msgstr ""
 "Lantern သည် သင်၏ ရှာဖွေမှုများကို အမည်မဖော်ပြဘဲ ယင်းတို့ကို "
 "ပြင်ပအဖွဲ့အစည်းများထံ မရောက်ရှိစေရန် ကာကွယ်ပေးသည်။"
+
+msgid "support"
+msgstr ""
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr ""
+
+msgid "add_device"
+msgstr "ကိရိယာထည့်ပါ"

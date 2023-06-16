@@ -2,10 +2,6 @@ import 'package:lantern/common/common.dart';
 
 enum Providers { stripe, btcpay, freekassa }
 
-Providers _getProvider(dynamic provider) {
-  return Providers.values.firstWhere((e) => describeEnum(e) == provider);
-}
-
 class PaymentProvider extends StatelessWidget {
   final List<String> logoPaths;
   final Function onChanged;
@@ -44,32 +40,34 @@ class PaymentProvider extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ...logoPaths.map((p) => Container(
-                  width: 47,
-                  height: 32,
-                  margin: const EdgeInsetsDirectional.only(
-                    end: 8,
+            ...logoPaths.map(
+              (p) => Container(
+                width: 47,
+                height: 32,
+                margin: const EdgeInsetsDirectional.only(
+                  end: 8,
+                ),
+                padding: const EdgeInsetsDirectional.only(
+                  start: 8.0,
+                  end: 8.0,
+                  top: 8.0,
+                  bottom: 8.0,
+                ),
+                decoration: BoxDecoration(
+                  color: white,
+                  borderRadius: BorderRadius.circular(5.0),
+                  border: Border(
+                    top: borderSide(),
+                    left: borderSide(),
+                    right: borderSide(),
+                    bottom: borderSide(),
                   ),
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 8.0,
-                    end: 8.0,
-                    top: 8.0,
-                    bottom: 8.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border(
-                      top: borderSide(),
-                      left: borderSide(),
-                      right: borderSide(),
-                      bottom: borderSide(),
-                    ),
-                  ),
-                  child: CAssetImage(
-                    path: p,
-                  ),
-                )),
+                ),
+                child: CAssetImage(
+                  path: p,
+                ),
+              ),
+            ),
             Radio(
               value: selectedPaymentProvider == paymentType,
               groupValue: true,

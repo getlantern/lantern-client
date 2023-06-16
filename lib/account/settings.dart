@@ -11,15 +11,12 @@ class Settings extends StatelessWidget {
 
   void changeLanguage(BuildContext context) => context.pushRoute(Language());
 
-  void reportIssue() async =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
-
   void checkForUpdates() async => await sessionModel.checkForUpdates();
 
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
 
-  void openWebview(String url) async => await sessionModel.openWebview(url);
+  void openWebView(String url) async => await sessionModel.openWebview(url);
 
   @override
   Widget build(BuildContext context) {
@@ -51,15 +48,6 @@ class Settings extends StatelessWidget {
               ),
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
-          ),
-          //* Report
-          ListItemFactory.settingsItem(
-            icon: ImagePaths.alert,
-            content: 'report_issue'.i18n,
-            trailingArray: [
-              mirrorLTR(context: context, child: const ContinueArrow())
-            ],
-            onTap: reportIssue,
           ),
           ListItemFactory.settingsItem(
             icon: ImagePaths.update,
@@ -126,7 +114,7 @@ class Settings extends StatelessWidget {
           ListItemFactory.settingsItem(
             header: 'about'.i18n,
             content: 'privacy_policy'.i18n,
-            onTap: () => openWebview('https://lantern.io/privacy'),
+            onTap: () => openWebView('https://lantern.io/privacy'),
             trailingArray: [
               mirrorLTR(
                 context: context,
@@ -152,7 +140,7 @@ class Settings extends StatelessWidget {
                 ),
               )
             ],
-            onTap: () => openWebview('https://lantern.io/terms'),
+            onTap: () => openWebView('https://lantern.io/terms'),
           ),
           //* Build version
           FutureBuilder<PackageInfo>(
@@ -161,7 +149,8 @@ class Settings extends StatelessWidget {
               if (!snapshot.hasData) {
                 return Container();
               }
-              return Expanded(
+              return Padding(
+                padding: const EdgeInsetsDirectional.only(top: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.end,

@@ -1,7 +1,7 @@
 package internalsdk
 
 import (
-	"github.com/getlantern/flashlight/stats"
+	"github.com/getlantern/flashlight/v7/stats"
 )
 
 type statsTracker struct {
