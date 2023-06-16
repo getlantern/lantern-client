@@ -11,7 +11,7 @@ import (
 	"nhooyr.io/websocket"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/client"
+	"github.com/getlantern/flashlight/v7/client"
 )
 
 const (

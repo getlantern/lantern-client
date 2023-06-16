@@ -103,6 +103,8 @@ class Notifications {
                 );
               }
               break;
+            default:
+              break;
           }
         }
         return;

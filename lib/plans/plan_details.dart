@@ -26,7 +26,7 @@ class PlanCard extends StatelessWidget {
           // * Play version
           if (isPlayVersion) {
             await sessionModel
-                .submitGooglePlay(plan.id)
+                .submitGooglePlay(planName)
                 .onError((error, stackTrace) {
               // on failure
               CDialog.showError(
@@ -41,7 +41,7 @@ class PlanCard extends StatelessWidget {
             // * Proceed to our own Checkout
             await context.pushRoute(
               Checkout(
-                plan: this.plan,
+                plan: plan,
                 isPro: isPro,
               ),
             );
@@ -86,8 +86,9 @@ class PlanCard extends StatelessWidget {
                           ),
                         ),
                         Container(
-                            margin: const EdgeInsetsDirectional.only(top: 8),
-                            child: Icon(Icons.keyboard_arrow_right)),
+                          margin: const EdgeInsetsDirectional.only(top: 8),
+                          child: const Icon(Icons.keyboard_arrow_right),
+                        ),
                       ],
                     ),
                     // * Price per month
@@ -165,19 +166,23 @@ class PlanStep extends StatelessWidget {
             start: 12.0,
             top: 0,
             end: 12.0,
-            bottom: 2.0,
           ),
           decoration: BoxDecoration(
             color: black,
             borderRadius: const BorderRadius.all(Radius.circular(20)),
           ),
-          child: CText(
-            'step_$stepNum'.i18n,
-            style: tsBody1.copiedWith(color: white),
+          child: Container(
+            margin: const EdgeInsetsDirectional.only(bottom: 4.0),
+            child: CText(
+              'step_$stepNum'.i18n,
+              style: tsBody1.copiedWith(color: white),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
-        Padding(
+        Container(
           padding: const EdgeInsetsDirectional.only(start: 8.0),
+          margin: const EdgeInsetsDirectional.only(bottom: 4.0),
           child: CText(description, style: tsBody1),
         )
       ],

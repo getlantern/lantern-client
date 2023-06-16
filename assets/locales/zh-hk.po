@@ -4,10 +4,11 @@
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2023
 # e2f <projects@e2f.com>, 2023
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2023
+# 474874f569f96a33809d02f1de71479e_77020aa, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: TW C2 <tx_e2f_tw_c2@ate2f.com>, 2023\n"
+"Last-Translator: 474874f569f96a33809d02f1de71479e_77020aa, 2023\n"
 "Language-Team: Chinese Traditional (https://app.transifex.com/lantern-1/teams/94371/zh-Hant/)\n"
 "Language: zh-Hant\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1157,3 +1158,15 @@ msgstr "貓"
 
 msgid "discover_disclaimer"
 msgstr "Lantern 會將您的搜尋內容匿名處理，以免第三方取得相關資料。"
+
+msgid "support"
+msgstr "支持"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "蓝灯论坛"
+
+msgid "add_device"
+msgstr "新增裝置"
