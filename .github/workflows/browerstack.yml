@@ -62,6 +62,9 @@ jobs:
           echo "CI=true" >> $GITHUB_ENV
           make do-android-debug
 
+      - name: List files in current directory
+        run: ls -la
+
       - name: Install jq
         run: sudo apt-get install jq
 
@@ -78,7 +81,7 @@ jobs:
           app_url=$(echo $response | jq -r .app_url)
           echo "$app_url"
           echo "BROWSERSTACK_APP_ID=$app_url" >> $GITHUB_ENV
-          
+
       - name: Run Tests
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
