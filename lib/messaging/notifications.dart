@@ -102,6 +102,7 @@ class Notifications {
               );
             }
             break;
+          default:
         }
         return;
       },

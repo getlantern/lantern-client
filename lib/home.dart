@@ -89,6 +89,8 @@ class _HomePageState extends State<HomePage> {
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           break;
+        default:
+          break;
       }
     });
   }
