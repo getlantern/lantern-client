@@ -140,7 +140,7 @@ class PaymentsUtil(private val activity: Activity) {
             )
             return
         }
-        val successfulPurchase = !inAppBilling.startPurchase(
+        inAppBilling.startPurchase(
             activity,
             planID,
             object : PurchasesUpdatedListener {
@@ -175,7 +175,6 @@ class PaymentsUtil(private val activity: Activity) {
                         return
                     }
 
-                    methodCallResult.success(null)
                     sendPurchaseRequest(
                         planID,
                         "",
@@ -186,18 +185,10 @@ class PaymentsUtil(private val activity: Activity) {
                 }
             },
         )
-
-        if (!successfulPurchase) {
-            methodCallResult.error(
-                "unknownError",
-                activity.resources.getString(R.string.error_making_purchase),
-                null,
-            )
-        }
     }
 
     // Applies referral code (before the user has initiated a transaction)
-    fun applyRefCode(refCode: String, result: MethodChannel.Result) {
+    fun applyRefCode(refCode: String, methodCallResult: MethodChannel.Result) {
         try {
             val formBody: FormBody = FormBody.Builder()
                 .add("code", refCode).build()
@@ -211,7 +202,7 @@ class PaymentsUtil(private val activity: Activity) {
                             "Error retrieving referral code: $error",
                         )
                         if (error != null && error.message != null) {
-                            result.error(
+                            methodCallResult.error(
                                 "unknownError",
                                 error.message,
                                 null,
@@ -223,15 +214,16 @@ class PaymentsUtil(private val activity: Activity) {
                     override fun onSuccess(response: Response, result: JsonObject) {
                         Logger.debug(
                             TAG,
-                            "Successfully redeemed referral code$refCode",
+                            "Successfully redeemed referral code: $refCode",
                         )
                         session.setReferral(refCode)
+                        methodCallResult.success("applyCodeSuccessful")
                     }
                 },
             )
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to apply referral code", t)
-            result.error(
+            methodCallResult.error(
                 "unknownError",
                 "Something went wrong while applying your referral code",
                 null,
@@ -244,7 +236,6 @@ class PaymentsUtil(private val activity: Activity) {
             session.setEmail(email)
             session.setResellerCode(resellerCode)
             sendPurchaseRequest("", email, "", PaymentProvider.ResellerCode, result)
-            result.success("redeemResellerSuccess")
         } catch (t: Throwable) {
             Logger.error(TAG, "Unable to redeem reseller code", t)
             result.error(
@@ -274,7 +265,6 @@ class PaymentsUtil(private val activity: Activity) {
     ) {
         Logger.d(TAG, "Sending purchase request with provider $provider")
         val session = session
-        val resellerCode = session.resellerCode()
         val formBody: FormBody.Builder = FormBody.Builder()
             .add("idempotencyKey", System.currentTimeMillis().toString())
             .add("provider", provider.toString().lowercase())
@@ -294,9 +284,15 @@ class PaymentsUtil(private val activity: Activity) {
             PaymentProvider.GooglePlay -> {
                 formBody.add("token", token)
             }
+            PaymentProvider.ResellerCode -> {
+                val resellerCode = LanternApp.getSession().resellerCode()
+                resellerCode?.let {
+                    formBody.add("provider", "reseller-code")
+                    formBody.add("resellerCode", resellerCode)
+                }
+            }
             else -> {}
         }
-        resellerCode?.let { formBody.add("resellerCode", resellerCode) }
 
         lanternClient.post(
             LanternHttpClient.createProUrl("/purchase"),
@@ -311,12 +307,15 @@ class PaymentsUtil(private val activity: Activity) {
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
-                    val errorMakingPurchase = activity.getString(
-                        R.string.error_making_purchase,
-                    )
                     Logger.e(TAG, "Error with purchase request: $error")
                     dialog?.dismiss()
-                    activity.showErrorDialog(errorMakingPurchase)
+                    methodCallResult.error(
+                        "errorMakingPurchase",
+                        activity.getString(
+                            R.string.error_making_purchase,
+                        ),
+                        null,
+                    )
                 }
             },
         )

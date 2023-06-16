@@ -1,6 +1,5 @@
 # 
 # Translators:
-# Volkan Gezer <volkangezer@gmail.com>, 2022
 # Kudret <kudretemre@hotmail.com.tr>, 2022
 # Zeynel Cebeci <cebeciz@gmail.com>, 2022
 # Aşkın Özgür <askin@askin.ws>, 2022
@@ -10,10 +9,12 @@
 # efe kerem sözeri <eksozeri@hotmail.com>, 2023
 # Emre Deniz, 2023
 # Derek F <derek@getlantern.org>, 2023
+# Volkan Gezer <volkangezer@gmail.com>, 2023
+# M. Utkun Uyar, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2023\n"
+"Last-Translator: M. Utkun Uyar, 2023\n"
 "Language-Team: Turkish (https://app.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -1219,3 +1220,15 @@ msgstr "kedi"
 
 msgid "discover_disclaimer"
 msgstr "Lantern aramalarınızı anonimleştirir ve üçüncü taraflardan korur."
+
+msgid "support"
+msgstr ""
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "SSS"
+
+msgid "add_device"
+msgstr "Hesap Ekle"

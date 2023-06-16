@@ -1368,3 +1368,17 @@ msgstr "cat"
 
 msgid "discover_disclaimer"
 msgstr "Lantern anonymizes your searches and protects them from third parties."
+
+msgid "support"
+msgstr "Support"
+
+msgid "lantern_user_forum"
+msgstr "Lantern User Forum"
+
+msgid "faq"
+msgstr "FAQ"
+
+msgid "add_device"
+msgstr "Add Device"
+
+
