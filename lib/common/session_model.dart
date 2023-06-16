@@ -1,4 +1,5 @@
 import 'package:lantern/replica/common.dart';
+
 import 'common.dart';
 
 final sessionModel = SessionModel();
@@ -79,8 +80,10 @@ class SessionModel extends Model {
   }
 
   Widget geoCountryCode(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>('geo_country_code',
-        builder: builder);
+    return subscribedSingleValueBuilder<String>(
+      'geo_country_code',
+      builder: builder,
+    );
   }
 
   Widget playVersion(ValueWidgetBuilder<bool> builder) {
@@ -303,7 +306,8 @@ class SessionModel extends Model {
   }
 
   Future<void> submitGooglePlay(String planID) async {
-    return methodChannel.invokeMethod('submitGooglePlay', <String, dynamic>{
+    return methodChannel
+        .invokeMethod('submitGooglePlayPayment', <String, dynamic>{
       'planID': planID,
     }).then((value) => value as String);
   }
@@ -324,8 +328,13 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<void> submitFreekassa(String email, String planID, String currencyPrice) async {
-    return await methodChannel.invokeMethod('submitFreekassa', <String, dynamic>{
+  Future<void> submitFreekassa(
+    String email,
+    String planID,
+    String currencyPrice,
+  ) async {
+    return await methodChannel
+        .invokeMethod('submitFreekassa', <String, dynamic>{
       'email': email,
       'planID': planID,
       'currencyPrice': currencyPrice,

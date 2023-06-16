@@ -1,13 +1,13 @@
 # 
 # Translators:
 # Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2021
-# Lantern, 2022
 # tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2023
 # code smite <codesmite@gmail.com>, 2023
+# Lantern, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: code smite <codesmite@gmail.com>, 2023\n"
+"Last-Translator: Lantern, 2023\n"
 "Language-Team: Bengali (https://app.transifex.com/lantern-1/teams/94371/bn/)\n"
 "Language: bn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -1215,3 +1215,15 @@ msgid "discover_disclaimer"
 msgstr ""
 "Lantern আপনার অনুসন্ধানগুলিকে বেনামী করে এবং তৃতীয় পক্ষগুলির হাত থেকে রক্ষা"
 " করে।"
+
+msgid "support"
+msgstr "সাপোর্ট"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "FAQ"
+
+msgid "add_device"
+msgstr "ডিভাইস যোগ করুন"

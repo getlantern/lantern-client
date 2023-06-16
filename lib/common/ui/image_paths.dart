@@ -15,6 +15,7 @@ class ImagePaths {
   static const star = 'assets/images/star.svg';
   static const desktop = 'assets/images/desktop.svg';
   static const settings = 'assets/images/settings.svg';
+  static const support = 'assets/images/support.svg';
   static const qr_code = 'assets/images/qr_code.svg';
   static const qr_code_scanner = 'assets/images/qr_code_scanner.svg';
   static const number_1 = 'assets/images/number_1.svg';
@@ -33,6 +34,7 @@ class ImagePaths {
   static const calendar = 'assets/images/calendar.svg';
   static const lock = 'assets/images/lock.svg';
   static const split_tunneling = 'assets/images/split_tunneling.svg';
+  static const forum = 'assets/images/forum.svg';
 
   // Messaging
   static const more_vert = 'assets/images/more_vert.svg';

@@ -1,0 +1,22 @@
+{
+  "server": "hub-cloud.browserstack.com",
+  "username": "jigarfumakiya_6dKXF7",
+  "access_key": "21qn1raPp8EN7jpctwen",
+  "app": "/Users/jigarfumakiya/Documents/getlantern/mobile_app/android-lantern/build/app/outputs/flutter-apk/app-prod-debug.apk",
+  "capabilities": {
+    "automationName": "Flutter",
+    "setWebContentsDebuggingEnabled": true,
+    "appium:noReset": false,
+    "appium:logLevel": true,
+    "enablePerformanceLogging": true
+  },
+  "environments": [
+    {
+      "appium:deviceName": "Nokia 8.1",
+      "platformVersion": "11.0",
+      "platformName": "Android",
+      "appium:udid": "PNXID19010901034"
+    }
+  ]
+}
+
