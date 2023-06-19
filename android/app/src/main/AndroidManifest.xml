@@ -105,11 +105,6 @@
             android:screenOrientation="portrait"
             />
 
-        <activity
-            android:name=".activity.PrivacyDisclosureActivity_"
-            android:screenOrientation="portrait"
-            />
-
         <!-- It's required to update Lantern on API 24+ -->
         <provider
             android:name="androidx.core.content.FileProvider"

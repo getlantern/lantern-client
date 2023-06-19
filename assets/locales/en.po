@@ -98,6 +98,15 @@ msgstr "Invite Friends"
 msgid "share_lantern_pro"
 msgstr "Share Lantern Pro with a friend! When your friend uses your referral code during their purchase of Lantern Pro, you will both receive one month of Lantern Pro service for free!"
 
+msgid "privacy_disclosure_title"
+msgstr "Lantern Privacy Disclosure"
+
+msgid "privacy_disclosure_body"
+msgstr "Lantern is committed to protecting your privacy. We want you to understand what information we collect, what we don’t collect, and how we collect, use, and store information. We disassociate your payment information with your Lantern Pro account. We do not collect logs of your activity, including no logging of browsing history, traffic destination, data content, or DNS queries. We also never store connection logs, meaning no logs of your IP address, your outgoing Lantern server IP address associated with the connection timestamp, or session duration. Given a specific Lantern Pro account, Lantern is technically unable to associate the Lantern account with the real identity of the user. Given a Lantern IP address and a precise time-stamp, Lantern is technically unable to attribute this IP address to a Lantern user or a Lantern user IP address."
+
+msgid "privacy_disclosure_accept"
+msgstr "I Accept"
+
 msgid "desktop_version"
 msgstr "Desktop Version"
 
