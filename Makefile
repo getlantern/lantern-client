@@ -62,6 +62,8 @@ REVISION_DATE := $(shell date -u -j -f "%F %T %z" "$(GIT_REVISION_DATE)" +"%Y%m%
 BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
 # We explicitly set a build-id for use in the liblantern ELF binary so that Sentry can successfully associate uploaded debug symbols with corresponding errors/crashes
 BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
+export CI
+CIBASE := $(shell printf "CI=$$CI" | base64)
 
 STAGING = false
 UPDATE_SERVER_URL ?=
@@ -373,7 +375,8 @@ do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
 	CI="$$CI" && \
-	$(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PdevelopmentMode="true" -Pci=$(CI) -b $(MOBILE_DIR)/app/build.gradle \
+	echo "Base64 CI: $(CIBASE)" && \
+	$(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -Pdart-defines="$(CIBASE)" -PdevelopmentMode="true" -Pci=$(CI) -b $(MOBILE_DIR)/app/build.gradle \
 	assembleProdDebug
 
 pubget:

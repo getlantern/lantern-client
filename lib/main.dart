@@ -7,6 +7,7 @@ import 'app.dart';
 Future<void> main() async {
   // CI will be true only when running appium test
   var CI = const String.fromEnvironment('CI', defaultValue: 'false');
+  print('CI is running $CI');
   if (CI == 'true') {
     enableFlutterDriverExtension();
   }
