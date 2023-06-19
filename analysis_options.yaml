@@ -4,3 +4,6 @@ linter:
   rules:
     - prefer_const_constructors
     - require_trailing_commas
+    - avoid_unused_constructor_parameters
+    - unnecessary_statements
+    - avoid_unnecessary_containers
