@@ -119,7 +119,7 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
                     ),
                   );
                 }
-                ;
+
               },
             ),
           ),

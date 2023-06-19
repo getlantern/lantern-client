@@ -65,7 +65,7 @@ dependencies:
   # Navigation & Localization
   auto_route: ^7.4.0
   i18n_extension: ^7.0.0
-
+  intl: ^0.18.0
   # QR
   qr_flutter: ^4.1.0
   qr_code_scanner: ^1.0.1
@@ -97,6 +97,7 @@ dependencies:
   path_provider: ^2.0.15
   permission_handler: ^10.3.0
   flutter_markdown: ^0.6.15
+
 
 
 
