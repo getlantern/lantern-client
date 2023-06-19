@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/scheduler.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.dart';
@@ -72,8 +70,8 @@ class LanternApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentLocal = window.locale;
-    print('selected local: ' + currentLocal.languageCode);
+    final currentLocal = View.of(context).platformDispatcher.locale;
+    print('selected local: ${currentLocal.languageCode}');
     return FutureBuilder(
       future: translations,
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -99,28 +97,28 @@ class LanternApp extends StatelessWidget {
                     theme.colorScheme.copyWith(secondary: Colors.black),
               ),
               title: 'app_name'.i18n,
-              localizationsDelegates: [
+              localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
               routeInformationParser: globalRouter.defaultRouteParser(),
               routerDelegate: globalRouter.delegate(),
-              supportedLocales: [
-                const Locale('ar', 'EG'),
-                const Locale('fr', 'FR'),
-                const Locale('en', 'US'),
-                const Locale('fa', 'IR'),
-                const Locale('th', 'TH'),
-                const Locale('ms', 'MY'),
-                const Locale('ru', 'RU'),
-                const Locale('ur', 'IN'),
-                const Locale('zh', 'CN'),
-                const Locale('zh', 'HK'),
-                const Locale('es', 'ES'),
-                const Locale('tr', 'TR'),
-                const Locale('vi', 'VN'),
-                const Locale('my', 'MM'),
+              supportedLocales: const [
+                Locale('ar', 'EG'),
+                Locale('fr', 'FR'),
+                Locale('en', 'US'),
+                Locale('fa', 'IR'),
+                Locale('th', 'TH'),
+                Locale('ms', 'MY'),
+                Locale('ru', 'RU'),
+                Locale('ur', 'IN'),
+                Locale('zh', 'CN'),
+                Locale('zh', 'HK'),
+                Locale('es', 'ES'),
+                Locale('tr', 'TR'),
+                Locale('vi', 'VN'),
+                Locale('my', 'MM'),
               ],
             ),
           ),

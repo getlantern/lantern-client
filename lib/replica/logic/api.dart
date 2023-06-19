@@ -140,7 +140,7 @@ class ReplicaApi {
           : null;
       logger.v(duration);
     } catch (err) {
-      if (err is DioError) {
+      if (err is DioException) {
         logger.e(
           'Dio Error - failed to fetch duration. Error: ${err.error}',
         );
