@@ -13,16 +13,14 @@ class LanternDesktop extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
+          Padding(
             padding: const EdgeInsetsDirectional.only(top: 24, bottom: 32),
             child: CAssetImage(path: ImagePaths.lantern_desktop, size: 136),
           ),
-          Container(
-              child: InkWell(
-                  child: CText(SHARE_LINK,
-                      style: tsBody3.copiedWith(color: blue4)),
-                  onTap: () => launch(SHARE_LINK))),
-          Container(
+          InkWell(
+              child: CText(SHARE_LINK, style: tsBody3.copiedWith(color: blue4)),
+              onTap: () => launch(SHARE_LINK)),
+          Padding(
             padding:
                 const EdgeInsetsDirectional.only(top: 24, start: 12, end: 12),
             child: CText(

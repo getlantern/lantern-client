@@ -115,6 +115,9 @@ class SessionModel(
                     activity.startActivity(intent)
                 }
             }
+            "acceptTerms" -> {
+                LanternApp.getSession().acceptTerms()
+            }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
             }
