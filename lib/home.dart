@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/common/common.dart';

@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:lantern/common/common.dart';

@@ -1,4 +1,5 @@
 import 'package:lantern/replica/common.dart';
+
 import 'common.dart';
 
 final sessionModel = SessionModel();

@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:lantern/messaging/conversation/call_action.dart';
 
 import '../messaging.dart';

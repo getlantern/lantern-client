@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';

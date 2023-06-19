@@ -1,7 +1,6 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:path/path.dart' as path;
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
+import 'package:path/path.dart' as path;
 
 // ReplicaUploadTitle renders a single-item ListView with the contents of
 // 'fileToUpload', allowing the user to change the display name of the upload.
