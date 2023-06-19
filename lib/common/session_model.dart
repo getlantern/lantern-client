@@ -66,6 +66,19 @@ class SessionModel extends Model {
     });
   }
 
+  Future<void> acceptTerms() {
+    return methodChannel.invokeMethod('acceptTerms', <String, dynamic>{
+      'on': true,
+    });
+  }
+
+  Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>(
+      'accepted_terms_version',
+      builder: builder,
+    );
+  }
+
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'forceCountry',
@@ -291,7 +304,9 @@ class SessionModel extends Model {
   }
 
   Future<String> requestLinkCode() {
-    return methodChannel.invokeMethod('requestLinkCode').then((value) => value as String);
+    return methodChannel
+        .invokeMethod('requestLinkCode')
+        .then((value) => value as String);
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {

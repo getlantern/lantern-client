@@ -32,7 +32,6 @@ import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
-import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
@@ -186,13 +185,6 @@ class MainActivity :
 
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
-
-        if (LanternApp.getSession().isPlayVersion) {
-            if (!LanternApp.getSession().hasAcceptedTerms()) {
-                startActivity(Intent(this, PrivacyDisclosureActivity_::class.java))
-            }
-        }
-
         if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(
                 activity,
                 LanternVpnService::class.java,
