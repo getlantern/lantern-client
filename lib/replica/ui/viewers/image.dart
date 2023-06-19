@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';

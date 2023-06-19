@@ -1,8 +1,7 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:video_player/video_player.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
+import 'package:video_player/video_player.dart';
 
 /// Renders an embedded video player with fullscreen option
 /// wrapped by our reusable ReplicaViewer layout
