@@ -149,14 +149,8 @@ public class LanternHttpClient extends HttpClient {
         proRequest("POST", url, userHeaders(), body, cb);
     }
 
-    private void processPlans(final JsonObject result, final PlansCallback cb, InAppBilling inAppBilling) {
+    private void processPlans(List<ProPlan> fetched, final PlansCallback cb, InAppBilling inAppBilling) {
         Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
-        String stripePubKey = result.get("providers").getAsJsonObject().get("stripe").getAsJsonObject().get("pubKey").getAsString();
-        LanternApp.getSession().setStripePubKey(stripePubKey);
-        Type listType = new TypeToken<List<ProPlan>>() {
-        }.getType();
-        Logger.debug(TAG, "Plans: " + result.get("plans"));
-        final List<ProPlan> fetched = Json.gson.fromJson(result.get("plans"), listType);
         Logger.debug(TAG, "Pro plans: " + fetched);
         for (ProPlan plan : fetched) {
             if (plan != null) {
@@ -186,29 +180,33 @@ public class LanternHttpClient extends HttpClient {
         cb.onSuccess(plans);
     }
 
-    public void getPlans(final PlansCallback cb, InAppBilling inAppBilling) {
-        final Map<String, String> params = new HashMap<String, String>();
-        params.put("locale", LanternApp.getSession().getLanguage());
-        params.put("countrycode", LanternApp.getSession().getCountryCode());
-        final HttpUrl url = createProUrl("/plans", params);
-        final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
-        get(url, new ProCallback() {
-            @Override
-            public void onFailure(final Throwable throwable, final ProError error) {
-                Logger.error(TAG, "Unable to fetch plans", throwable);
-                cb.onFailure(throwable, error);
-            }
+    private void processPlansV1(final JsonObject result, final PlansCallback cb, InAppBilling inAppBilling) {
+        String stripePubKey = result.get("providers").getAsJsonObject().get("stripe").getAsJsonObject().get("pubKey").getAsString();
+        LanternApp.getSession().setStripePubKey(stripePubKey);
+        Type listType = new TypeToken<List<ProPlan>>() {
+        }.getType();
+        Logger.debug(TAG, "Plans: " + result.get("plans"));
+        final List<ProPlan> fetched = Json.gson.fromJson(result.get("plans"), listType);
+        processPlans(fetched, cb, inAppBilling);
+    }
 
-            @Override
-            public void onSuccess(final Response response, final JsonObject result) {
-                try {
-                    Logger.debug(TAG, "JSON response for " + url + ":" + result.toString());
-                    processPlans(result, cb, inAppBilling);
-                } catch (Exception e) {
-                    Logger.error(TAG, "Unable to fetch plans: " + e.getMessage(), e);
-                }
+    private void processPlansV3(final JsonObject result, final PlansV3Callback cb, InAppBilling inAppBilling) {
+        Type mapType = new TypeToken<Map<String, List<PaymentMethods>>>() {
+        }.getType();
+        Map<String, List<PaymentMethods>> response = Json.gson.fromJson(result.get("providers"), mapType);
+        List<PaymentMethods> providers = response.get("android");
+        Type listType = new TypeToken<List<ProPlan>>() {
+        }.getType();
+        final List<ProPlan> fetched = Json.gson.fromJson(result.get("plans"), listType);
+        Logger.debug(TAG, "Payment providers: " + providers);
+        Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
+        for (ProPlan plan : fetched) {
+            if (plan != null) {
+                plan.formatCost();
+                plans.put(plan.getId(), plan);
             }
-        });
+        }
+        cb.onSuccess(plans, providers);
     }
 
     public void prepareYuansfer(final String vendor, final YuansferCallback cb) {
@@ -305,6 +303,64 @@ public class LanternHttpClient extends HttpClient {
         });
     }
 
+    public void plans(final PlansCallback cb, InAppBilling inAppBilling) {
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("locale", LanternApp.getSession().getLanguage());
+        params.put("countrycode", LanternApp.getSession().getCountryCode());
+        final HttpUrl url = createProUrl("/plans", params);
+        final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
+        get(url, new ProCallback() {
+            @Override
+            public void onFailure(final Throwable throwable, final ProError error) {
+                Logger.error(TAG, "Unable to fetch plans", throwable);
+                cb.onFailure(throwable, error);
+            }
+
+            @Override
+            public void onSuccess(final Response response, final JsonObject result) {
+                try {
+                    Logger.debug(TAG, "JSON response for " + url + ":" + result.toString());
+                    processPlansV1(result, cb, inAppBilling);
+                } catch (Exception e) {
+                    Logger.error(TAG, "Unable to fetch plans: " + e.getMessage(), e);
+                }
+            }
+        });
+    }
+
+    public void plansV3(final PlansV3Callback cb, InAppBilling inAppBilling) {
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put("locale", LanternApp.getSession().getLanguage());
+        params.put("countrycode", LanternApp.getSession().getCountryCode());
+        final HttpUrl url = createProUrl("/plans-v3", params);
+        final Map<String, ProPlan> plans = new HashMap<String, ProPlan>();
+        get(url, new ProCallback() {
+            @Override
+            public void onFailure(final Throwable throwable, final ProError error) {
+                Logger.error(TAG, "Unable to fetch plans", throwable);
+                cb.onFailure(throwable, error);
+            }
+
+            @Override
+            public void onSuccess(final Response response, final JsonObject result) {
+                try {
+                    Logger.debug(TAG, "JSON response for " + url + ":" + result.toString());
+                    processPlansV3(result, cb, inAppBilling);
+                } catch (Exception e) {
+                    Logger.error(TAG, "Unable to fetch plans: " + e.getMessage(), e);
+                }
+            }
+        });
+    }
+
+
+    public void plansV3(final PlansCallback cb, InAppBilling inAppBilling) {
+        plansV3(cb, inAppBilling);
+    }
+
+    public void getPlans(final PlansCallback cb, InAppBilling inAppBilling) {
+        plans(cb, inAppBilling);
+    }
 
     /**
      * Convert a JsonObject json into a RequestBody that transmits content
@@ -455,6 +511,12 @@ public class LanternHttpClient extends HttpClient {
         public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
 
         public void onSuccess(Map<String, ProPlan> plans);
+    }
+
+    public interface PlansV3Callback {
+        public void onFailure(@Nullable Throwable throwable, @Nullable final ProError error);
+
+        public void onSuccess(Map<String, ProPlan> plans, List<PaymentMethods> methods);
     }
 
     public interface YuansferCallback {
