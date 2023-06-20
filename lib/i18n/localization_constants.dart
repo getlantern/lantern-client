@@ -22,7 +22,7 @@ String displayLanguage(String languageCode) {
     return 'العربية';
   }
   if (languageCode == 'fa_IR') {
-    return 'فارسی-';
+    return 'فارسی';
   }
   if (languageCode == 'zh_CN') {
     return '中文 (简体)';

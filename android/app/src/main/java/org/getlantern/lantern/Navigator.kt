@@ -11,8 +11,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import org.getlantern.lantern.activity.DesktopActivity_
 import org.getlantern.lantern.activity.InviteActivity_
-import org.getlantern.lantern.activity.PlansActivity_
-import org.getlantern.lantern.activity.RegisterProActivity_
 import org.getlantern.lantern.activity.authorizeDevice.LinkDeviceActivity_
 import org.getlantern.mobilesdk.activity.ReportIssueActivity
 
@@ -22,7 +20,6 @@ class Navigator(
 ) : MethodChannel.MethodCallHandler {
 
     companion object {
-        const val SCREEN_PLANS = "SCREEN_PLANS"
         const val SCREEN_INVITE_FRIEND = "SCREEN_INVITE_FRIEND"
         const val SCREEN_DESKTOP_VERSION = "SCREEN_DESKTOP_VERSION"
         const val SCREEN_LINK_PIN = "SCREEN_LINK_PIN"
@@ -54,12 +51,10 @@ class Navigator(
 
     private fun toActivityClass(screenName: String): Class<*>? {
         return when (screenName) {
-            SCREEN_PLANS -> LanternApp.getSession().plansActivity()
             SCREEN_INVITE_FRIEND -> InviteActivity_::class.java
             SCREEN_DESKTOP_VERSION -> DesktopActivity_::class.java
             SCREEN_LINK_PIN -> LinkDeviceActivity_::class.java
             SCREEN_SCREEN_REPORT_ISSUE -> ReportIssueActivity::class.java
-            SCREEN_UPGRADE_TO_LANTERN_PRO -> PlansActivity_::class.java
             else -> null
         }
     }
@@ -87,8 +82,4 @@ fun Activity.restartApp() {
     val mgr: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     mgr.set(AlarmManager.RTC, java.lang.System.currentTimeMillis() + 100, mPendingIntent)
     Process.killProcess(Process.myPid())
-}
-
-fun Activity.openCheckOutReseller() {
-    startActivity(Intent(this, RegisterProActivity_::class.java))
 }

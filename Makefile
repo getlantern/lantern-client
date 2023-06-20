@@ -43,7 +43,6 @@ NODE      := $(call get-command,node)
 NPM       := $(call get-command,npm)
 GULP      := $(call get-command,gulp)
 AWSCLI    := $(call get-command,aws)
-S3CMD     := $(call get-command,s3cmd)
 CHANGE    := $(call get-command,git-chglog)
 PIP       := $(call get-command,pip)
 WGET      := $(call get-command,wget)
@@ -68,7 +67,7 @@ STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= $$VERSION
 # Note - we don't bother stripping symbols or DWARF table as Android's packaging seems to take care of that for us
-LDFLAGS := -X github.com/getlantern/flashlight/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/flashlight/common.BuildDate=$(BUILD_DATE) -X github.com/getlantern/flashlight/common.CompileTimePackageVersion=$(VERSION) -X github.com/getlantern/flashlight/common.StagingMode=$(STAGING)
+LDFLAGS := -X github.com/getlantern/android-lantern/internalsdk.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/android-lantern/internalsdk.ApplicationVersion=$(VERSION) -X github.com/getlantern/flashlight/v7/common.StagingMode=$(STAGING)
 
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
@@ -172,7 +171,7 @@ tag: require-version
 	git push
 
 define check-go-version
-    if [ -z '${IGNORE_GO_VERSION}' ] && $(GO) version | grep -q -v $(GO_VERSION); then \
+    if [ -z '${IGNORE_GO_VERSION}' ] && go version | grep -q -v $(GO_VERSION); then \
 		echo "go $(GO_VERSION) is required." && exit 1; \
 	fi
 endef
@@ -209,7 +208,7 @@ require-awscli:
 
 .PHONY: require-s3cmd
 require-s3cmd:
-	@if [[ -z "$(S3CMD)" ]]; then echo 'Missing "s3cmd" command. Use "brew install s3cmd" or see https://github.com/s3tools/s3cmd/blob/master/INSTALL'; exit 1; fi
+	@if [[ -z "s3cmd" ]]; then echo 'Missing "s3cmd" command. Use "brew install s3cmd" or see https://github.com/s3tools/s3cmd/blob/master/INSTALL'; exit 1; fi
 
 .PHONY: require-changelog
 require-changelog:
@@ -231,7 +230,7 @@ require-magick:
 require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
 
-release-qa: require-version require-s3cmd require-changelog
+release-qa: require-version require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
 	VERSION_FILE_NAME="version-qa-android.txt" && \
 	rm -f $$BASE_NAME* && \
@@ -241,27 +240,27 @@ release-qa: require-version require-s3cmd require-changelog
 	for NAME in $$(ls -1 $$BASE_NAME*.*); do \
 		shasum -a 256 $$NAME | cut -d " " -f 1 > $$NAME.sha256 && \
 		echo "Uploading SHA-256 `cat $$NAME.sha256`" && \
-		$(S3CMD) put -P $$NAME.sha256 s3://$(S3_BUCKET) && \
+		s3cmd put -P $$NAME.sha256 s3://$(S3_BUCKET) && \
 		echo "Uploading $$NAME to S3" && \
-		$(S3CMD) put -P $$NAME s3://$(S3_BUCKET) && \
+		s3cmd put -P $$NAME s3://$(S3_BUCKET) && \
 		SUFFIX=$$(echo "$$NAME" | sed s/$$BASE_NAME//g) && \
 		VERSIONED=$(INSTALLER_NAME)-$$VERSION$$SUFFIX && \
 		echo "Copying $$VERSIONED" && \
-		$(S3CMD) cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$VERSIONED && \
+		s3cmd cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$VERSIONED && \
 		echo "Copied $$VERSIONED ... setting acl to public" && \
-		$(S3CMD) setacl s3://$(S3_BUCKET)/$$VERSIONED --acl-public; \
+		s3cmd setacl s3://$(S3_BUCKET)/$$VERSIONED --acl-public; \
 	done && \
 	echo "Setting content types for installer packages" && \
 	for NAME in $$BASE_NAME.apk $(INSTALLER_NAME)-$$VERSION.apk $$BASE_NAME.aab ; do \
-		$(S3CMD) modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$NAME; \
+		s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$NAME; \
 	done && \
 	for NAME in update_android_arm ; do \
 		cp lantern_$$NAME.bz2 lantern_$$NAME-$$VERSION.bz2 && \
 		echo "Copying versioned name lantern_$$NAME-$$VERSION.bz2..." && \
-		$(S3CMD) put -P lantern_$$NAME-$$VERSION.bz2 s3://$(S3_BUCKET); \
+		s3cmd put -P lantern_$$NAME-$$VERSION.bz2 s3://$(S3_BUCKET); \
 	done && \
 	echo $$VERSION > $$VERSION_FILE_NAME && \
-	$(S3CMD) put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
+	s3cmd put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
 	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" 
 
 release-beta: require-s3cmd
@@ -273,12 +272,12 @@ release-beta: require-s3cmd
 	for URL in s3://lantern/$$BASE_NAME.apk s3://lantern/$$BASE_NAME.aab; do \
 		NAME=$$(basename $$URL) && \
 		BETA=$$(echo $$NAME | sed s/"$$BASE_NAME"/$(BETA_BASE_NAME)/) && \
-		$(S3CMD) cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$BETA && \
-		$(S3CMD) setacl s3://$(S3_BUCKET)/$$BETA --acl-public && \
-		$(S3CMD) get --force s3://$(S3_BUCKET)/$$NAME $(BINARIES_PATH)/$$BETA; \
+		s3cmd cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$BETA && \
+		s3cmd setacl s3://$(S3_BUCKET)/$$BETA --acl-public && \
+		s3cmd get --force s3://$(S3_BUCKET)/$$NAME $(BINARIES_PATH)/$$BETA; \
 	done && \
-	$(S3CMD) cp s3://$(S3_BUCKET)/version-qa-android.txt s3://$(S3_BUCKET)/$$VERSION_FILE_NAME && \
-	$(S3CMD) setacl s3://$(S3_BUCKET)/$$VERSION_FILE_NAME --acl-public && \
+	s3cmd cp s3://$(S3_BUCKET)/version-qa-android.txt s3://$(S3_BUCKET)/$$VERSION_FILE_NAME && \
+	s3cmd setacl s3://$(S3_BUCKET)/$$VERSION_FILE_NAME --acl-public && \
 	echo "$$VERSION_FILE_NAME is now set to $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" && \
 	cd $(BINARIES_PATH) && \
 	git add $(BETA_BASE_NAME)* && \
@@ -295,16 +294,16 @@ release-prod: require-version require-s3cmd require-wget require-lantern-binarie
 		NAME=$$(basename $$URL) && \
 		PROD=$$(echo $$NAME | sed s/"$(BETA_BASE_NAME)"/$(PROD_BASE_NAME)/) && \
 		PROD2=$$(echo $$NAME | sed s/"$(BETA_BASE_NAME)"/$$PROD_BASE_NAME2/) && \
-		$(S3CMD) cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$PROD && \
-		$(S3CMD) setacl s3://$(S3_BUCKET)/$$PROD --acl-public && \
-		$(S3CMD) cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$PROD2 && \
-		$(S3CMD) setacl s3://$(S3_BUCKET)/$$PROD2 --acl-public && \
+		s3cmd cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$PROD && \
+		s3cmd setacl s3://$(S3_BUCKET)/$$PROD --acl-public && \
+		s3cmd cp s3://$(S3_BUCKET)/$$NAME s3://$(S3_BUCKET)/$$PROD2 && \
+		s3cmd setacl s3://$(S3_BUCKET)/$$PROD2 --acl-public && \
 		echo "Downloading released binary to $(BINARIES_PATH)/$$PROD" && \
-		$(S3CMD) get --force s3://$(S3_BUCKET)/$$PROD $(BINARIES_PATH)/$$PROD && \
+		s3cmd get --force s3://$(S3_BUCKET)/$$PROD $(BINARIES_PATH)/$$PROD && \
 		cp $(BINARIES_PATH)/$$PROD $(BINARIES_PATH)/$$PROD2; \
 	done && \
-	$(S3CMD) cp s3://$(S3_BUCKET)/version-beta.txt s3://$(S3_BUCKET)/$$VERSION_FILE_NAME && \
-	$(S3CMD) setacl s3://$(S3_BUCKET)/$$VERSION_FILE_NAME --acl-public && \
+	s3cmd cp s3://$(S3_BUCKET)/version-beta.txt s3://$(S3_BUCKET)/$$VERSION_FILE_NAME && \
+	s3cmd setacl s3://$(S3_BUCKET)/$$VERSION_FILE_NAME --acl-public && \
 	echo "$$VERSION_FILE_NAME is now set to $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" && \
 	echo "Uploading released binaries to $(BINARIES_PATH)"
 	@cd $(BINARIES_PATH) && \
@@ -326,7 +325,7 @@ release-autoupdate: require-version
 	for URL in s3://lantern/lantern_update_android_arm-$$VERSION.bz2; do \
 		NAME=$$(basename $$URL) && \
 		STRIPPED_NAME=$$(echo "$$NAME" | cut -d - -f 1 | sed s/lantern_//).bz2 && \
-		$(S3CMD) get --force s3://$(S3_BUCKET)/$$NAME $$STRIPPED_NAME; \
+		s3cmd get --force s3://$(S3_BUCKET)/$$NAME $$STRIPPED_NAME; \
 	done && \
 	$(RUBY) ./create_or_update_release.rb getlantern lantern $$VERSION update_android_arm.bz2
 
@@ -334,8 +333,8 @@ release: require-version require-s3cmd require-wget require-lantern-binaries req
 
 $(ANDROID_LIB): $(GO_SOURCES)
 	$(call check-go-version) && \
-	$(GO) env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	$(GO) install golang.org/x/mobile/cmd/gomobile && \
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	go install golang.org/x/mobile/cmd/gomobile && \
 	gomobile init && \
 	gomobile bind \
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
@@ -396,7 +395,7 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	DEVELOPMENT_MODE="$$DEVELOPMENT_MODE" && \
 	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle \
 		assembleProdSideload && \
-	$(SENTRY) upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodSideload/out/lib && \
+	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodSideload/out/lib && \
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
 
@@ -409,14 +408,8 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle \
 		bundlePlay && \
-	$(SENTRY) upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodPlay/out/lib && \
+	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodPlay/out/lib && \
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
-
-android-pull-translations:
-	@(cd $(MOBILE_DIR) && tx pull -af --minimum 100)
-
-android-push-translations:
-	@(cd $(MOBILE_DIR) && tx push --skip -l en_US -s)
 
 android-debug: $(MOBILE_DEBUG_APK)
 
@@ -437,7 +430,7 @@ package-android: require-version clean
 
 upload-aab-to-play: require-release-track require-pip
 	@echo "Uploading APK to Play store on $$APK_RELEASE_TRACK release track.." && \
-	$(S3CMD) get --force s3://$(S3_BUCKET)/$(PROD_BASE_NAME).aab $(PROD_BASE_NAME).aab && \
+	s3cmd get --force s3://$(S3_BUCKET)/$(PROD_BASE_NAME).aab $(PROD_BASE_NAME).aab && \
 	pip install --upgrade google-api-python-client && \
 	python upload_apk.py "$$APK_RELEASE_TRACK" $(PROD_BASE_NAME).aab
 
@@ -462,7 +455,7 @@ sourcedump: require-version
 	go mod tidy && \
 	go mod vendor && \
 	find . -name "CHANGELOG*" -exec rm {} \; && \
-	rm -Rf vendor/github.com/getlantern/flashlight/embeddedconfig vendor/github.com/getlantern/flashlight/genconfig && \
+	rm -Rf vendor/github.com/getlantern/flashlight/v7/embeddedconfig vendor/github.com/getlantern/flashlight/v7/genconfig && \
 	find vendor/github.com/getlantern -name "*.go" -exec perl -pi -e 's/"https?\:\/\/[^"]+/"URL_HIDDEN/g' {} \; && \
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .

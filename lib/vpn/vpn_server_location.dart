@@ -15,7 +15,7 @@ class ServerLocationWidget extends StatelessWidget {
         children: [
           CText(
             'Server Location'.i18n,
-            style: tsBody1.copiedWith(
+            style: tsSubtitle3.copiedWith(
               color: unselectedTabIconColor,
             ),
           ),
@@ -37,20 +37,23 @@ class ServerLocationWidget extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(4)),
-                      child:
-                          Flag.fromString(serverInfo.countryCode, height: 24, width: 36),
+                      child: Flag.fromString(
+                        serverInfo.countryCode,
+                        height: 24,
+                        width: 36,
+                      ),
                     ),
                     const SizedBox(width: 12),
                     CText(
                       serverInfo.city,
-                      style: tsSubtitle2,
+                      style: tsSubtitle4,
                     )
                   ],
                 );
               } else {
                 return CText(
                   'n/a'.i18n.toUpperCase(),
-                  style: tsSubtitle2,
+                  style: tsSubtitle4,
                 );
               }
             });

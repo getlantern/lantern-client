@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/getlantern/autoupdate"
-	"github.com/getlantern/flashlight/common"
-	"github.com/getlantern/flashlight/ops"
-	"github.com/getlantern/flashlight/proxied"
+	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/ops"
+	"github.com/getlantern/flashlight/v7/proxied"
 )
 
 var (
@@ -76,7 +76,7 @@ func InstallFinished(deviceInfo DeviceInfo, success bool) {
 
 func buildUpdateCfg() *autoupdate.Config {
 	return &autoupdate.Config{
-		CurrentVersion: common.CompileTimePackageVersion,
+		CurrentVersion: ApplicationVersion,
 		URL:            fmt.Sprintf("https://update.getlantern.org/update/%s", strings.ToLower(common.DefaultAppName)),
 		HTTPClient:     updateClient,
 		PublicKey:      []byte(autoupdate.PackagePublicKey),
@@ -85,5 +85,5 @@ func buildUpdateCfg() *autoupdate.Config {
 
 // Get the version number of the Go library.
 func SDKVersion() string {
-	return common.PackageVersion
+	return common.LibraryVersion
 }

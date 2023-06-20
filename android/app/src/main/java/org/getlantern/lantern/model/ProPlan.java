@@ -38,12 +38,20 @@ public class ProPlan {
     private Map<String, Long> expectedMonthlyPrice;
     @SerializedName("discount")
     private float discount;
+    @SerializedName("level")
+    private String level;
 
     private String currencyCode;
     private String costStr;
     private String costWithoutTaxStr;
     private String taxStr;
     private Locale locale = Locale.getDefault();
+    private String renewalText;
+    private String totalCost;
+    private String totalCostBilledOneTime;
+    private String formattedBonus;
+    private String oneMonthCost;
+    private String formattedDiscount;
 
     private static final String PLAN_COST = "%1$s%2$s";
     private static final String defaultCurrencyCode = "usd";
@@ -125,8 +133,62 @@ public class ProPlan {
         return TextUtils.join(" ", bonusParts);
     }
 
+    @SerializedName("renewalText")
+    public void setRenewalText(final String renewalText) {
+        this.renewalText = renewalText;
+    }
+
+    public String getRenewalText() {
+        return renewalText;
+    }
+
+    @SerializedName("totalCost")
+    public void setTotalCost(final String totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public String getTotalCost() {
+        return totalCost;
+    }
+
+    @SerializedName("totalCost")
+    public void setTotalCostBilledOneTime(final String totalCostBilledOneTime) {
+        this.totalCostBilledOneTime = totalCostBilledOneTime;
+    }
+
+    public String getTotalCostBilledOneTime() {
+        return totalCostBilledOneTime;
+    }
+
+    @SerializedName("formattedBonus")
+    public void setFormattedBonus(final String formattedBonus) {
+        this.formattedBonus = formattedBonus;
+    }
+
+    public String getFormattedBonus() {
+        return formattedBonus;
+    }
+
+    @SerializedName("oneMonthCost")
+    public void setOneMonthCost(final String oneMonthCost) {
+        this.oneMonthCost = oneMonthCost;
+    }
+
+    public String getOneMonthCost() {
+        return oneMonthCost;
+    }
+
+    @SerializedName("formattedDiscount")
+    public void setFormattedDiscount(final String formattedDiscount) {
+        this.formattedDiscount = formattedDiscount;
+    }
+
     public Map<String, Long> getPrice() {
         return price;
+    }
+
+    public Map<String, Integer> getDuration() {
+        return duration;
     }
 
     public Long getCurrencyPrice() {
@@ -154,6 +216,10 @@ public class ProPlan {
 
     public void setLocale(Locale locale) {
         this.locale = locale;
+    }
+
+    public Boolean getBestValue() {
+        return bestValue;
     }
 
     public Locale getLocale() {
@@ -213,7 +279,7 @@ public class ProPlan {
         return getFormattedPrice(price);
     }
 
-    public String getFormatterPriceOneMonth() {
+    public String getFormattedPriceOneMonth() {
         return getFormattedPrice(expectedMonthlyPrice, true);
     }
 

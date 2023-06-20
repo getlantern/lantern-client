@@ -357,6 +357,7 @@ iOS.</string>
   <string name="account_left_desc">Aún tiene %1$d meses de Lantern Pro en su cuenta.</string>
   <string name="optimized_location">Ubicación optimizada de servidor</string>
   <string name="current_location">Ubicación actual:</string>
+  <string name="disconnect">Desconectar</string>
   <string name="disconnected">Desconectado</string>
   <string name="https_upgrades">Actualizaciones a HTTPS</string>
   <string name="data_usage">Uso de datos</string>
@@ -421,8 +422,6 @@ iOS.</string>
   <string name="privacy_disclosure_title">Declaración de privacidad de Lantern</string>
   <string name="privacy_disclosure_accept">Acepto</string>
   <string name="privacy_disclosure_body">Lantern se compromete a proteger su privacidad. Queremos que sepa qué información recopilamos, cuál no, y cómo recopilamos, utilizamos y almacenamos sus datos. Su información de pago la tratamos con independencia a su cuenta de Lantern Pro. No recopilamos registros de su actividad, como el registro de su historial de navegación, el destino del tráfico, el contenido de los datos ni las consultas de DNS. Tampoco almacenamos los registros de conexión, lo que significa que no almacenamos su dirección IP, la dirección IP del servidor de Lantern de salida asociado a la marca de tiempo de su conexión ni la duración de sus sesiones. Al tratarse de una cuenta Lantern Pro particular, Lantern no dispone de los medios técnicos necesarios para asociar la cuenta Lantern con la identidad real del usuario. Asimismo, al tratarse de una dirección IP de Lantern y una marca de tiempo precisa, Lantern tampoco dispone de los medios necesarios para atribuir esa dirección IP a un usuario de Lantern ni a la dirección IP de un usuario de Lantern.</string>
-  <string name="referral_code_share_description_free">¡Dele su código a sus amigos y obtenga un mes del servicio Lantern Pro gratis cuando compren la versión Pro!</string>
-  <string name="referral_code_share_description_pro">¡Dele su código a sus amigos y obtenga un mes más del servicio Lantern Pro gratis cuando compren la versión Pro!</string>
   <string name="referral_code_share">Comparta el código de referencia</string>
   <string name="referral_code_share_title">Comparta su código de referencia:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
