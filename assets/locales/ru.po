@@ -6,19 +6,20 @@
 # Николай Кочкин <urfiner@gmail.com>, 2022
 # Helen R <helen.russel88@gmail.com>, 2022
 # Helen Russel <coo@workogram.com>, 2022
-# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2022
 # Derek F <derek@getlantern.org>, 2022
-# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2022
 # e2f <projects@e2f.com>, 2022
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2022
-# sayanvd <sayanvd@yandex.ru>, 2022
-# Tina T, 2022
 # e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023
+# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2023
+# Tina T, 2023
+# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2023
+# sayanvd <sayanvd@yandex.ru>, 2023
+# Serg <sergkoshkin@yandex.ru>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023\n"
-"Language-Team: Russian (Russia) (https://www.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
+"Last-Translator: Serg <sergkoshkin@yandex.ru>, 2023\n"
+"Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
@@ -132,6 +133,15 @@ msgstr "Настройки"
 
 msgid "general"
 msgstr "Основное"
+
+msgid "about"
+msgstr "О программе"
+
+msgid "privacy_policy"
+msgstr "Политика конфиденциальности "
+
+msgid "terms_of_service"
+msgstr "Условия использования"
 
 msgid "proxy_all"
 msgstr "Проксировать весь трафик"
@@ -397,6 +407,24 @@ msgstr "Добавить контакты лично"
 msgid "start_chat"
 msgstr "Начать чат"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "Для вас и пользователя %s сообщения не будут пропадать."
 
@@ -411,6 +439,9 @@ msgstr "Посмотреть контактную информацию"
 
 msgid "off"
 msgstr "Выкл."
+
+msgid "on"
+msgstr "Вкл."
 
 msgid "continue"
 msgstr "Продолжить"
@@ -1196,3 +1227,15 @@ msgstr "кот"
 msgid "discover_disclaimer"
 msgstr ""
 "Lantern делает поисковые запросы анонимными и защищает их от третьих лиц."
+
+msgid "support"
+msgstr "Поддержка"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "ЧаВо"
+
+msgid "add_device"
+msgstr "Добавить устройство"

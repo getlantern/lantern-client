@@ -18,15 +18,15 @@ import (
 	"github.com/getlantern/dnsgrab/persistentcache"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
-	"github.com/getlantern/flashlight"
-	"github.com/getlantern/flashlight/balancer"
-	"github.com/getlantern/flashlight/bandwidth"
-	"github.com/getlantern/flashlight/client"
-	"github.com/getlantern/flashlight/common"
-	"github.com/getlantern/flashlight/config"
-	"github.com/getlantern/flashlight/geolookup"
-	"github.com/getlantern/flashlight/logging"
-	"github.com/getlantern/flashlight/ops"
+	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/balancer"
+	"github.com/getlantern/flashlight/v7/bandwidth"
+	"github.com/getlantern/flashlight/v7/client"
+	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/geolookup"
+	"github.com/getlantern/flashlight/v7/logging"
+	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/memhelper"
 	"github.com/getlantern/mtime"
@@ -72,7 +72,6 @@ type Session interface {
 	UpdateAdSettings(AdSettings) error
 	UpdateStats(string, string, string, int, int, bool) error
 	SetStaging(bool) error
-	ProxyAll() (bool, error)
 	BandwidthUpdate(int, int, int, int) error
 	Locale() (string, error)
 	GetTimeZone() (string, error)
@@ -89,6 +88,7 @@ type Session interface {
 	SetReplicaAddr(string)
 	ForceReplica() bool
 	SetChatEnabled(bool)
+	SplitTunnelingEnabled() (bool, error)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -103,7 +103,6 @@ type panickingSession interface {
 	UpdateAdSettings(AdSettings)
 	UpdateStats(string, string, string, int, int, bool)
 	SetStaging(bool)
-	ProxyAll() bool
 	BandwidthUpdate(int, int, int, int)
 	Locale() string
 	GetTimeZone() string
@@ -118,6 +117,7 @@ type panickingSession interface {
 	DeviceOS() string
 	IsProUser() bool
 	SetChatEnabled(bool)
+	SplitTunnelingEnabled() bool
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -180,8 +180,8 @@ func (s *panickingSessionImpl) SetStaging(staging bool) {
 	panicIfNecessary(s.wrapped.SetStaging(staging))
 }
 
-func (s *panickingSessionImpl) ProxyAll() bool {
-	result, err := s.wrapped.ProxyAll()
+func (s *panickingSessionImpl) SplitTunnelingEnabled() bool {
+	result, err := s.wrapped.SplitTunnelingEnabled()
 	panicIfNecessary(err)
 	return result
 }
@@ -436,7 +436,7 @@ func EnableLogging(configDir string) {
 }
 
 func newAnalyticsSession(deviceID string) analytics.Session {
-	session := analytics.Start(deviceID, common.Version)
+	session := analytics.Start(deviceID, ApplicationVersion)
 	go func() {
 		session.SetIP(geolookup.GetIP(forever))
 	}()
@@ -454,7 +454,9 @@ func run(configDir, locale string,
 		configDir, locale, settings.StickyConfig())
 
 	flags := map[string]interface{}{
-		"staging": common.Staging,
+		"borda-report-interval":   5 * time.Minute,
+		"borda-sample-percentage": float64(0.01),
+		"staging":                 common.Staging,
 	}
 
 	err := os.MkdirAll(configDir, 0755)
@@ -510,10 +512,12 @@ func run(configDir, locale string,
 	var runner *flashlight.Flashlight
 	runner, err = flashlight.New(
 		common.DefaultAppName,
+		ApplicationVersion,
+		RevisionDate,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
-		session.ProxyAll,
+		func() bool { return true },
 		func() bool { return false }, // don't intercept Google ads
 		func() bool { return false }, // do not proxy private hosts on Android
 		// TODO: allow configuring whether or not to enable reporting (just like we
@@ -585,7 +589,7 @@ func run(configDir, locale string,
 	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
 	checkFeatures := func() {
 		replicaServer.CheckEnabled()
-		chatEnabled := runner.FeatureEnabled("chat")
+		chatEnabled := runner.FeatureEnabled("chat", ApplicationVersion)
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
 	}

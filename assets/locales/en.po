@@ -184,7 +184,7 @@ msgstr "Link via Email"
 msgid "lantern_pro_email"
 msgstr "Lantern Pro Email"
 
-msgid "Email"
+msgid "email"
 msgstr "Email"
 
 msgid "Submit"
@@ -193,8 +193,149 @@ msgstr "Submit"
 msgid "save"
 msgstr "Save"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "Please enter a valid email address"
+
+msgid "bonus"
+msgstr "Bonus"
+
+msgid "referral_bonus"
+msgstr "referral bonus"
+
+msgid "total"
+msgstr "Total"
+
+msgid "month"
+msgstr "month"
+
+msgid "months"
+msgstr "months"
+
+msgid "enter_email"
+msgstr "Enter Email"
+
+msgid "error_fetching_plans"
+msgstr "Error fetching plans, please restart Lantern and try again."
+
+msgid "apply"
+msgstr "Apply"
+
+msgid "choose_payment_method"
+msgstr "Choose Payment Method"
+
+msgid "pro_plan"
+msgstr "Pro Plan"
+
+msgid "one_year_plan"
+msgstr "1-Year Plan"
+
+msgid "two_year_plan"
+msgstr "2-Year Plan"
+
+msgid "plan_discount"
+msgstr "Save %d%%"
+
+msgid "enter_email_and_activation_code"
+msgstr "Enter Email and Activation code"
+
+msgid "referral_code"
+msgstr "Referral code"
+
+msgid "add_referral_code"
+msgstr "Add Referral code"
+
+msgid "Activation Code"
+msgstr "Activation Code"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "Invalid or incomplete referral code"
+
+msgid "register_for_pro"
+msgstr "Register for Pro"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "Something went wrong while applying your referral code."
+
+msgid "your_activation_code_is_invalid"
+msgstr "Your activation code is invalid"
+
+msgid "update_cache_plans_timeout"
+msgstr "Something went wrong while fetching the available plans."
+
+msgid "bitcoin_timeout"
+msgstr "The BTCPay request has timed out."
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay is unavailable"
+
+msgid "update_cache_user_timeout"
+msgstr "Something went wrong while fetching your account data."
+
+msgid "reseller_timeout"
+msgstr "Something went wrong while validating your activation code."
+
+msgid "reseller_success"
+msgstr "Successfully redeemed activation code."
+
+msgid "stripe_timeout"
+msgstr "Your Stripe payment has timed out. Please restart Lantern and try again."
+
+msgid "stripe_success"
+msgstr "Successful Stripe purchase."
+
+msgid "renewal_success"
+msgstr "Renewal Success"
+
+msgid "pro_renewal_success_description"
+msgstr "Thank you for renewing your Lantern Pro account.You now have unlimited access using our fastest data centers.  Up to three devices can be connected to your account."
+
+msgid "pro_purchase_success"
+msgstr "Welcome to Lantern Pro"
+
+msgid "platinum_purchase_success_descripion"
+msgstr "You now have unlimited access using our fastest data centers, and dedicated line.  Up to three devices can be connected to your account."
+
+msgid "pro_purchase_success_descripion"
+msgstr "You now have unlimited access using our fastest data centers.  Up to three devices can be connected to your account."
+
+msgid "by_clicking_tos"
+msgstr "By clicking %s, you agree to our"
+
+msgid "tos"
+msgstr "Terms of Service"
+
+msgid "step_1"
+msgstr "Step 1"
+
+msgid "step_2"
+msgstr "Step 2"
+
+msgid "step_3"
+msgstr "Step 3"
+
+msgid "invalid_email"
+msgstr "Invalid email address"
+
+msgid "invalid_card"
+msgstr "Invalid credit card number"
+
+msgid "invalid_expiration"
+msgstr "Invalid expiration date"
+
+msgid "cc_number"
+msgstr "Credit Card"
+
+msgid "card_number"
+msgstr "Card Number"
+
+msgid "card_expiration"
+msgstr "MM/YY"
+
+msgid "invalid_cvc"
+msgstr "Invalid CVC"
+
+msgid "complete_purchase"
+msgstr "Complete Purchase"
 
 msgid "Re-send Email"
 msgstr "Re-send Email"
@@ -240,6 +381,57 @@ msgstr "Log Out"
 
 msgid "confirm_remove_device"
 msgstr "Are you sure you want to unlink this device from your Pro account?"
+
+msgid "unlimited_data"
+msgstr "Unlimited Data"
+
+msgid "no_logs"
+msgstr "No logs"
+
+msgid "no_ads"
+msgstr "No Ads"
+
+msgid "choose_plan"
+msgstr "Choose Plan"
+
+msgid "connect_up_to_3_devices"
+msgstr "Connect up to 3 devices"
+
+msgid "faster_data_centers"
+msgstr "Faster Data Centers"
+
+msgid "dedicated_line"
+msgstr "Dedicated Line"
+
+msgid "increased_reliability"
+msgstr "Increased Reliability"
+
+msgid "checkout"
+msgstr "Checkout"
+
+msgid "credit_card"
+msgstr "Credit Card"
+
+msgid "lantern_pro_checkout"
+msgstr "Lantern Pro Checkout"
+
+msgid "lantern_checkout"
+msgstr "Lantern Checkout"
+
+msgid "1y_pricing"
+msgstr "1 year pricing"
+
+msgid "2y_pricing"
+msgstr "2 year pricing"
+
+msgid "plan_type"
+msgstr "Plan type"
+
+msgid "most_popular"
+msgstr "Most Popular"
+
+msgid "free"
+msgstr "Free"
 
 msgid "n/a"
 msgstr "n/a"
@@ -298,8 +490,11 @@ msgstr "Edit"
 msgid "save_error"
 msgstr "Something went wrong while saving."
 
+msgid "fewer_options"
+msgstr "Fewer Options"
+
 msgid "more_options"
-msgstr "More options"
+msgstr "More Options"
 
 msgid "block_user"
 msgstr "Block user"
@@ -358,6 +553,24 @@ msgstr "Add contacts in person"
 msgid "start_chat"
 msgstr "Start chat"
 
+msgid "your_installed_apps"
+msgstr "Your Installed Apps"
+
+msgid "apps_routed_through_lantern"
+msgstr "Apps Routed Through Lantern"
+
+msgid "apps_to_unblock"
+msgstr "Choose the apps you want to unblock. When connected, only the apps selected below will be routed through Lantern."
+
+msgid "split_tunneling"
+msgstr "Split Tunneling"
+
+msgid "split_tunneling_info"
+msgstr "When split tunneling is enabled, selected apps will be routed through Lantern. This can improve performance and save bandwidth by only unblocking specified apps."
+
+msgid "applied_next_time"
+msgstr "New split tunneling settings will be applied next time you reconnect."
+
 msgid "message_disappearing"
 msgstr "All messages will not disappear for you and %s."
 
@@ -373,8 +586,14 @@ msgstr "View Contact Info"
 msgid "off"
 msgstr "Off"
 
+msgid "on"
+msgstr "On"
+
 msgid "continue"
 msgstr "Continue"
+
+msgid "continue_to_pro"
+msgstr "Continue to Pro"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "Are you sure you want to open %s?"
@@ -1113,3 +1332,17 @@ msgstr "cat"
 
 msgid "discover_disclaimer"
 msgstr "Lantern anonymizes your searches and protects them from third parties."
+
+msgid "support"
+msgstr "Support"
+
+msgid "lantern_user_forum"
+msgstr "Lantern User Forum"
+
+msgid "faq"
+msgstr "FAQ"
+
+msgid "add_device"
+msgstr "Add Device"
+
+

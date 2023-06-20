@@ -1,14 +1,16 @@
 # 
 # Translators:
-# e2f <projects@e2f.com>, 2022
 # Lantern, 2022
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2022
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2023
+# Chi-Hsun Tsai, 2023
+# e2f <projects@e2f.com>, 2023
+# 474874f569f96a33809d02f1de71479e_77020aa, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2023\n"
-"Language-Team: Chinese Simplified (https://www.transifex.com/lantern-1/teams/94371/zh-Hans/)\n"
+"Last-Translator: 474874f569f96a33809d02f1de71479e_77020aa, 2023\n"
+"Language-Team: Chinese Simplified (https://app.transifex.com/lantern-1/teams/94371/zh-Hans/)\n"
 "Language: zh-Hans\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
@@ -113,6 +115,15 @@ msgstr "设置"
 
 msgid "general"
 msgstr "常规"
+
+msgid "about"
+msgstr "关于"
+
+msgid "privacy_policy"
+msgstr "私隐政策"
+
+msgid "terms_of_service"
+msgstr "服務條款"
 
 msgid "proxy_all"
 msgstr "全部代理"
@@ -360,6 +371,24 @@ msgstr "亲自添加联系人"
 msgid "start_chat"
 msgstr "开始聊天"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "您和 %s 的所有消息均不会消失。"
 
@@ -374,6 +403,9 @@ msgstr "查看联系人信息"
 
 msgid "off"
 msgstr "关"
+
+msgid "on"
+msgstr "开"
 
 msgid "continue"
 msgstr "继续"
@@ -1128,3 +1160,15 @@ msgstr "猫"
 
 msgid "discover_disclaimer"
 msgstr "Lantern 会将您的搜索匿名化并保护它们免受第三方的侵害。"
+
+msgid "support"
+msgstr "支持"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "蓝灯论坛"
+
+msgid "add_device"
+msgstr "添加设备"

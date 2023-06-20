@@ -28,6 +28,10 @@ class SessionModel extends Model {
           break;
       }
     });
+    isPlayVersion = singleValueNotifier(
+      'playVersion',
+      false,
+    );
     proxyAvailable = singleValueNotifier(
       'hasSucceedingProxy',
       true,
@@ -35,14 +39,11 @@ class SessionModel extends Model {
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  late ValueNotifier<bool?> isPlayVersion;
   late ValueNotifier<bool?> proxyAvailable;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
-  }
-
-  Widget proxyAll(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('proxyAll', builder: builder);
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
@@ -76,6 +77,13 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('setForceCountry', <String, dynamic>{
       'countryCode': countryCode,
     });
+  }
+
+  Widget geoCountryCode(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'geo_country_code',
+      builder: builder,
+    );
   }
 
   Widget playVersion(ValueWidgetBuilder<bool> builder) {
@@ -185,6 +193,14 @@ class SessionModel extends Model {
     );
   }
 
+  Widget countryCode(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'geo_country_code',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
   Future<String> getReplicaAddr() async {
     final replicaAddr = await methodChannel.invokeMethod('get', 'replicaAddr');
     if (replicaAddr == null || replicaAddr == '') {
@@ -217,6 +233,120 @@ class SessionModel extends Model {
 
   Future<void> checkForUpdates() {
     return methodChannel.invokeMethod('checkForUpdates');
+  }
+
+  Widget plans({
+    required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
+  }) {
+    return subscribedListBuilder<Plan>(
+      '/plans/',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return Plan.fromBuffer(serialized);
+      },
+    );
+  }
+
+  Widget paymentMethods({
+    required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
+  }) {
+    return subscribedListBuilder<PaymentMethod>(
+      '/paymentMethods/',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return PaymentMethod.fromBuffer(serialized);
+      },
+    );
+  }
+
+  Future<void> applyRefCode(
+    String refCode,
+  ) async {
+    return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
+      'refCode': refCode,
+    }).then((value) => value as String);
+  }
+
+  Widget getUserId(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'userId',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
+  Widget userStatus(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'userLevel',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
+  Future<void> redeemResellerCode(
+    String email,
+    String resellerCode,
+  ) async {
+    return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
+      'email': email,
+      'resellerCode': resellerCode,
+    }).then((value) => value as String);
+  }
+
+  Future<void> submitBitcoinPayment(
+    String planID,
+    String email,
+    String refCode,
+  ) async {
+    return methodChannel.invokeMethod('submitBitcoinPayment', <String, dynamic>{
+      'planID': planID,
+      'email': email,
+      'refCode': refCode,
+    }).then((value) => value as String);
+  }
+
+  Future<void> submitGooglePlay(String planID) async {
+    return methodChannel
+        .invokeMethod('submitGooglePlayPayment', <String, dynamic>{
+      'planID': planID,
+    }).then((value) => value as String);
+  }
+
+  Future<void> submitStripePayment(
+    String planID,
+    String email,
+    String cardNumber,
+    String expDate,
+    String cvc,
+  ) async {
+    return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
+      'planID': planID,
+      'email': email,
+      'cardNumber': cardNumber,
+      'expDate': expDate,
+      'cvc': cvc,
+    }).then((value) => value as String);
+  }
+
+  Future<void> submitFreekassa(
+    String email,
+    String planID,
+    String currencyPrice,
+  ) async {
+    return await methodChannel
+        .invokeMethod('submitFreekassa', <String, dynamic>{
+      'email': email,
+      'planID': planID,
+      'currencyPrice': currencyPrice,
+    });
+  }
+
+  Future<void> checkEmailExists(
+    String email,
+  ) async {
+    return methodChannel.invokeMethod('checkEmailExists', <String, dynamic>{
+      'emailAddress': email,
+    }).then((value) => value as String);
   }
 
   Future<void> openWebview(String url) {
