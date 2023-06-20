@@ -97,10 +97,6 @@
         </activity>
 
         <activity
-            android:name="org.getlantern.mobilesdk.activity.ReportIssueActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity
             android:name=".activity.WebViewActivity_"
             android:screenOrientation="portrait"
             />

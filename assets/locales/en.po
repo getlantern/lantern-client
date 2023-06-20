@@ -146,6 +146,27 @@ msgstr "Language"
 msgid "report_issue"
 msgstr "Report an issue"
 
+msgid "select_an_issue"
+msgstr "Please Select an Issue"
+
+msgid "cannot_access_blocked_sites"
+msgstr "Cannot access blocked sites"
+
+msgid "cannot_complete_purchase"
+msgstr "Cannot complete purchase"
+
+msgid "cannot_sign_in"
+msgstr "Cannot sign in"
+
+msgid "spinner_loads_endlessly"
+msgstr "Spinner loads endlessly"
+
+msgid "other"
+msgstr "Other"
+
+msgid "issue_description"
+msgstr "Issue Description"
+
 msgid "check_for_updates"
 msgstr "Check for Updates"
 
@@ -213,6 +234,12 @@ msgstr "Lantern Desktop"
 
 msgid "report_issue"
 msgstr "Report Issue"
+
+msgid "report_an_issue"
+msgstr "Report an Issue"
+
+msgid "send_report"
+msgstr "Send Report"
 
 msgid "most_recent_lantern_apps"
 msgstr "The most recent Lantern apps for desktop and all other platforms can be found at the link above."
