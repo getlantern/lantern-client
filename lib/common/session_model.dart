@@ -287,6 +287,19 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<void> reportIssue(
+    String email,
+    String issue,
+    String description
+  ) async {
+    return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
+      'email': email,
+      'issue': issue,
+      'description': description
+    }).then((value) => value as String);
+  }
+
+
   Widget getUserId(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'userId',

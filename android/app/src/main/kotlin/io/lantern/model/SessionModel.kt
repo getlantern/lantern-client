@@ -1,6 +1,8 @@
 package io.lantern.model
 
 import android.app.Activity
+import android.os.AsyncTask
+import android.os.Build
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
@@ -12,8 +14,8 @@ import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.R
 import org.getlantern.lantern.MainActivity
+import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.CheckUpdate
@@ -22,6 +24,7 @@ import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
+import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.openHome
@@ -29,6 +32,7 @@ import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
+import org.getlantern.mobilesdk.model.MailSender
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.*
@@ -79,9 +83,13 @@ class SessionModel(
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
+            "reportIssue" -> reportIssue(call.argument("email")!!, call.argument("issue")!!, call.argument("description")!!, result)
             "applyRefCode" -> paymentsUtil.applyRefCode(call.argument("refCode")!!, result)
-            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(call.argument("email")!!, 
-                call.argument("resellerCode")!!, result)
+            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(
+                call.argument("email")!!,
+                call.argument("resellerCode")!!,
+                result,
+            )
             "submitBitcoinPayment" -> paymentsUtil.submitBitcoinPayment(
                 call.argument("planID")!!,
                 call.argument("email")!!,
@@ -188,17 +196,17 @@ class SessionModel(
                     }
                 }
 
-                override fun onSuccess(response: Response?, result: JsonObject?) {     
+                override fun onSuccess(response: Response?, result: JsonObject?) {
                     result?.let {
-                        if (result["code"] == null  || result["expireAt"] == null) return
+                        if (result["code"] == null || result["expireAt"] == null) return
                         val code = result["code"].asString
                         val expireAt = result["expireAt"].asLong
                         LanternApp.getSession().setDeviceCode(code, expireAt)
                         methodCallResult.success(null)
-                    }                
+                    }
                 }
             },
-        )   
+        )
     }
 
     private fun redeemLinkCode() {
@@ -214,7 +222,7 @@ class SessionModel(
                     Logger.error(TAG, "Error making link redeem request..", t)
                 }
 
-                override fun onSuccess(response: Response?, result: JsonObject?) {  
+                override fun onSuccess(response: Response?, result: JsonObject?) {
                     if (result == null || result["token"] == null || result["userID"] == null) return
                     Logger.debug(TAG, "Successfully redeemed link code")
                     val userID = result["userID"].asLong
@@ -227,7 +235,7 @@ class SessionModel(
                     }
                     activity.startActivity(intent)
                 }
-            },                            
+            },
         )
     }
 
@@ -407,6 +415,29 @@ class SessionModel(
                 }
             },
         )
+    }
+
+    private fun reportIssue(email: String, issue: String, report: String, methodCallResult: MethodChannel.Result) {
+        if (!Utils.isNetworkAvailable(activity)) {
+            activity.showErrorDialog(activity.getString(R.string.no_internet_connection))
+            return
+        }
+        Logger.debug(TAG, "Reporting $issue issue on behalf of $email")
+        LanternApp.getSession().setEmail(email)
+        val mailSender = MailSender(
+            activity,
+            "user-send-logs",
+            activity.getString(R.string.report_sent),
+            activity.getString(R.string.thank_you_for_reporting_your_issue),
+        )
+        mailSender.addMergeVar("issue", issue)
+        mailSender.addMergeVar("report", report)
+        val subject: String = if (report.isEmpty()) issue else report
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            mailSender.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, subject)
+        } else {
+            mailSender.execute(subject)
+        }
     }
 
     private fun removeDevice(deviceId: String, methodCallResult: MethodChannel.Result) {
