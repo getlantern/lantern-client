@@ -172,10 +172,8 @@ class _AccountManagementState extends State<AccountManagement>
                         header: 'Pro Account Expiration'.i18n,
                         icon: ImagePaths.clock,
                         content: expirationDate,
-                        onTap: () {
-                          LanternNavigator.startScreen(
-                            LanternNavigator.SCREEN_PLANS,
-                          );
+                        onTap: () async {
+                          await context.pushRoute(const PlansPage());
                         },
                         trailingArray: [
                           CText('Renew'.i18n.toUpperCase(), style: tsButtonPink)
