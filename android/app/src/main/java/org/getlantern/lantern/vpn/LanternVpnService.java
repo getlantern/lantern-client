@@ -3,24 +3,17 @@
  */
 package org.getlantern.lantern.vpn;
 
-import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.VpnService;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.R;
-import org.getlantern.lantern.model.Stats;
 import org.getlantern.lantern.service.LanternService_;
 import org.getlantern.mobilesdk.Logger;
-
-import internalsdk.Internalsdk;
-import internalsdk.SocketProtector;
 
 import java.util.List;
 
