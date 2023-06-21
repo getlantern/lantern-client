@@ -62,9 +62,6 @@ open class ReportIssueActivity : FragmentActivity() {
             binding.issue.text?.toString()?.isEmpty() == true -> {
                 binding.sendBtn.isEnabled = false
             }
-            binding.emailInput.text?.toString()?.isEmpty() == true -> {
-                binding.sendBtn.isEnabled = false
-            }
             else -> {
                 binding.sendBtn.isEnabled = true
             }
@@ -83,7 +80,7 @@ open class ReportIssueActivity : FragmentActivity() {
             showErrorDialog(resources.getString(R.string.no_issue_selected))
             return
         }
-        if (!Utils.isEmailValid(email)) {
+        if (email.isNotEmpty() && !Utils.isEmailValid(email)) {
             showErrorDialog(resources.getString(R.string.invalid_email))
             return
         }
