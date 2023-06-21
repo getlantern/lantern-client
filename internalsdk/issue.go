@@ -3,7 +3,7 @@ package internalsdk
 import (
 	"strconv"
 
-	"github.com/getlantern/flashlight/issue"
+	"github.com/getlantern/flashlight/v7/issue"
 )
 
 func SendIssueReport(
@@ -26,6 +26,7 @@ func SendIssueReport(
 		description,
 		subscriptionLevel,
 		userEmail,
+		ApplicationVersion,
 		device,
 		model,
 		osVersion,
