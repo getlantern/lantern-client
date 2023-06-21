@@ -7,6 +7,7 @@ import android.os.AsyncTask
 import android.os.Build
 import internalsdk.EmailMessage
 import internalsdk.EmailResponseHandler
+import io.flutter.plugin.common.MethodChannel
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Utils
@@ -21,6 +22,7 @@ class MailSender @JvmOverloads constructor(
     private val template: String,
     private val title: String? = null,
     private val message: String? = null,
+    private val methodCallResult: MethodChannel.Result? = null,
 ) : AsyncTask<String, Void, Boolean>(), EmailResponseHandler {
     private var dialog: ProgressDialog? = null
     private val userEmail: String
@@ -37,6 +39,10 @@ class MailSender @JvmOverloads constructor(
                 dialog.dismiss()
             }
         }
+        if (methodCallResult != null) {
+            methodCallResult.error("errorReportingIssue", message, null)
+            return
+        }
         (context as Activity).showAlertDialog(
             title ?: getAppName(),
             message ?: message,
@@ -52,6 +58,10 @@ class MailSender @JvmOverloads constructor(
             if (dialog.isShowing()) {
                 dialog.dismiss()
             }
+        }
+        if (methodCallResult != null) {
+            methodCallResult.success("reportedIssue")
+            return
         }
         (context as Activity).showAlertDialog(
             title ?: getAppName(),
