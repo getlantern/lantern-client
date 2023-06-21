@@ -31,7 +31,6 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
-
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -131,6 +130,7 @@ android {
             versionName "3.0.0"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     externalNativeBuild {
@@ -173,6 +173,7 @@ android {
             shrinkResources false
             debuggable true
             buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
+            buildConfigField "boolean", "CI", getBoolean("ci")
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
@@ -190,6 +191,7 @@ android {
             shrinkResources false
             debuggable false
             buildConfigField "boolean", "DEVELOPMENT_MODE", "true"
+            buildConfigField "boolean", "CI", getBoolean("ci")
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
@@ -207,6 +209,7 @@ android {
             shrinkResources true
             debuggable false
             buildConfigField "boolean", "DEVELOPMENT_MODE", getBoolean("developmentMode")
+            buildConfigField "boolean", "CI", "false"
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
