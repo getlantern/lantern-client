@@ -13,6 +13,7 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
@@ -22,12 +23,14 @@ import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
+import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
+import java.util.concurrent.*
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -38,12 +41,15 @@ class SessionModel(
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
+    private val paymentsUtil = PaymentsUtil(activity)
 
     companion object {
         private const val TAG = "SessionModel"
-
         const val PATH_PRO_USER = "prouser"
+        const val PATH_PLAY_VERSION = "playVersion"
+
         const val PATH_SDK_VERSION = "sdkVersion"
+        const val PATH_USER_LEVEL = "userLevel"
     }
 
     init {
@@ -52,6 +58,10 @@ class SessionModel(
             tx.put(
                 PATH_PRO_USER,
                 castToBoolean(tx.get(PATH_PRO_USER), false),
+            )
+            tx.put(
+                PATH_USER_LEVEL,
+                tx.get(PATH_USER_LEVEL) ?: "",
             )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
@@ -62,10 +72,32 @@ class SessionModel(
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
+            "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
+            "applyRefCode" -> paymentsUtil.applyRefCode(call.argument("refCode")!!, result)
+            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
+            "submitBitcoinPayment" -> paymentsUtil.submitBitcoinPayment(
+                call.argument("planID")!!,
+                call.argument("email")!!,
+                call.argument("refCode")!!,
+                result,
+            )
+            "submitGooglePlayPayment" -> paymentsUtil.submitGooglePlayPayment(
+                call.argument("planID")!!,
+                result,
+            )
+            "submitStripePayment" -> paymentsUtil.submitStripePayment(
+                call.argument("planID")!!,
+                call.argument("email")!!,
+                call.argument("cardNumber")!!,
+                call.argument("expDate")!!,
+                call.argument("cvc")!!,
+                result,
+            )
+            "userStatus" -> userStatus(result)
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -100,11 +132,52 @@ class SessionModel(
                     tx.put("/selectedTab", call.argument<String>("tab")!!)
                 }
             }
+            "submitFreekassa" -> {
+                val userEmail = call.argument("email") ?: ""
+                val planID = call.argument("planID") ?: ""
+                val currencyPrice = call.argument("currencyPrice") ?: ""
+                activity.startActivity(
+                    Intent(activity, FreeKassaActivity_::class.java).apply {
+                        putExtra("userEmail", userEmail)
+                        putExtra("planID", planID)
+                        putExtra("currencyPrice", currencyPrice)
+                    },
+                )
+            }
             "checkForUpdates" -> {
                 EventBus.getDefault().post(CheckUpdate(true))
             }
             else -> super.doMethodCall(call, notImplemented)
         }
+    }
+
+    private fun confirmEmailError(error: ProError) {
+        val errorId = error.id
+        val resources = activity.resources
+        if (errorId.equals("existing-email")) {
+            activity.showErrorDialog(resources.getString(R.string.email_in_use))
+        } else if (error.message != null) {
+            activity.showErrorDialog(error.message)
+        }
+    }
+
+    private fun checkEmailExists(emailAddress: String, methodCallResult: MethodChannel.Result) {
+        val params = mapOf("email" to emailAddress)
+        val isPlayVersion = LanternApp.getSession().isPlayVersion()
+        val useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay()
+        lanternClient.get(
+            LanternHttpClient.createProUrl("/email-exists", params),
+            object : ProCallback {
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    if (error != null) confirmEmailError(error)
+                }
+
+                override fun onSuccess(response: Response?, result: JsonObject?) {
+                    Logger.debug(TAG, "Email successfully validated " + emailAddress)
+                    LanternApp.getSession().setEmail(emailAddress)
+                }
+            },
+        )
     }
 
     private fun authorizeViaEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
@@ -316,5 +389,26 @@ class SessionModel(
                 }
             },
         )
+    }
+
+    // Hits the /user-data endpoint and saves { userLevel: null | "pro" | "platinum" } to PATH_USER_LEVEL
+    private fun userStatus(result: MethodChannel.Result) {
+        try {
+            lanternClient.userData(object : ProUserCallback {
+                override fun onSuccess(response: Response, userData: ProUser) {
+                    Logger.debug(TAG, "Successfully updated userData")
+                    result.success("cachingUserDataSuccess")
+                    LanternApp.getSession().setUserLevel(userData.userLevel)
+                }
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    Logger.error(TAG, "Unable to fetch user data: $t.message")
+                    result.error("cachingUserDataError", "Unable to cache user status", error?.message) // This will be localized Flutter-side
+                    return
+                }
+            })
+        } catch (t: Throwable) {
+            Logger.error(TAG, "Error caching user status", t)
+            result.error("unknownError", "Unable to cache user status", null) // This will be localized Flutter-side
+        }
     }
 }

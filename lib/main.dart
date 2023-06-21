@@ -1,4 +1,3 @@
-import 'package:flutter_driver/driver_extension.dart';
 import 'package:lantern/catcher_setup.dart';
 import 'package:lantern/common/common.dart';
 
