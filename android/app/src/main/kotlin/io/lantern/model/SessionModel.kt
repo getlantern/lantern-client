@@ -419,7 +419,7 @@ class SessionModel(
 
     private fun reportIssue(email: String, issue: String, report: String, methodCallResult: MethodChannel.Result) {
         if (!Utils.isNetworkAvailable(activity)) {
-            activity.showErrorDialog(activity.getString(R.string.no_internet_connection))
+            methodCallResult.error("errorReportingIssue", activity.getString(R.string.no_internet_connection), null)
             return
         }
         Logger.debug(TAG, "Reporting $issue issue on behalf of $email")
@@ -429,6 +429,7 @@ class SessionModel(
             "user-send-logs",
             activity.getString(R.string.report_sent),
             activity.getString(R.string.thank_you_for_reporting_your_issue),
+            methodCallResult,
         )
         mailSender.addMergeVar("issue", issue)
         mailSender.addMergeVar("report", report)

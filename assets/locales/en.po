@@ -149,6 +149,9 @@ msgstr "Report an issue"
 msgid "select_an_issue"
 msgstr "Please Select an Issue"
 
+msgid "enter_description"
+msgstr "Please describe your issue"
+
 msgid "cannot_access_blocked_sites"
 msgstr "Cannot access blocked sites"
 
@@ -237,6 +240,12 @@ msgstr "Report Issue"
 
 msgid "report_an_issue"
 msgstr "Report an Issue"
+
+msgid "report_sent"
+msgstr "Report Sent"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr "Thank you for reporting your issue. Due to volume, we cannot respond to most issues, but we assure you we are working hard to improve Lantern based on your reports."
 
 msgid "send_report"
 msgstr "Send Report"
