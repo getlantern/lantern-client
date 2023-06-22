@@ -30,6 +30,9 @@
   <string name="cannot_find_email">အိုး၊ ဒီအီးမေးလ်လိပ်စာကိုရှာရတာ အခက်တွေ့နေတယ်။</string>
   <string name="no_purchase_date">Lantern Pro ကို ဝယ်သည့်အခါခန့်မှန်းခြေရက်စွဲကို ရွေးချယ်ပါ</string>
   <string name="purchase_date">ဝယ်ယူသည့်နေ့ရက်</string>
+  <string name="common_issue_list_0">ပိတ်ထားသောဆိုဒ်များကို ကြည့်၍မရပါ</string>
+  <string name="common_issue_list_4">နှေးနှေး</string>
+  <string name="common_issue_list_9">အခြား</string>
   <string name="submit_code">ကုဒ်အတည်ပြုပါ</string>
   <string name="on_text">ဖွင့်</string>
   <string name="off_text">ပိတ်</string>
