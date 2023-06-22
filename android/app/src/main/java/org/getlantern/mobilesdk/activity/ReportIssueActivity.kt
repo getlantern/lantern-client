@@ -14,10 +14,10 @@ import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.IssueReporter
-import org.getlantern.mobilesdk.model.MailSender
 
 open class ReportIssueActivity : FragmentActivity() {
     private lateinit var binding: ActivityReportIssueBinding
+
     // The below maps indexes of issues in the drop-down to indexes of the corresponding issue type
     // as understood by internalsdk.SendIssueReport
     private val issueTypeIndexes = hashMapOf(
@@ -62,6 +62,7 @@ open class ReportIssueActivity : FragmentActivity() {
             binding.issue.text?.toString()?.isEmpty() == true -> {
                 binding.sendBtn.isEnabled = false
             }
+
             else -> {
                 binding.sendBtn.isEnabled = true
             }
@@ -103,7 +104,18 @@ open class ReportIssueActivity : FragmentActivity() {
         }
     }
 
-    private fun issues(): Array<String> = resources.getStringArray(R.array.common_issue_list)
+    private fun issues() = arrayOf(
+        resources.getString(R.string.common_issue_list_0),
+        resources.getString(R.string.common_issue_list_1),
+        resources.getString(R.string.common_issue_list_2),
+        resources.getString(R.string.common_issue_list_3),
+        resources.getString(R.string.common_issue_list_4),
+        resources.getString(R.string.common_issue_list_5),
+        resources.getString(R.string.common_issue_list_6),
+        resources.getString(R.string.common_issue_list_7),
+        resources.getString(R.string.common_issue_list_8),
+        resources.getString(R.string.common_issue_list_9),
+    )
 
     companion object {
         private val TAG = ReportIssueActivity::class.java.name
