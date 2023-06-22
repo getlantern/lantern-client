@@ -127,7 +127,7 @@ android {
         if (project.hasProperty('lanternVersion')) {
             versionName "$project.lanternVersion ($project.lanternRevisionDate)"
         } else {
-            versionName "3.0.0"
+            versionName "9999.99.99"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
