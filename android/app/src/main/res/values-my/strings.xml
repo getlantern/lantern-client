@@ -30,16 +30,6 @@
   <string name="cannot_find_email">အိုး၊ ဒီအီးမေးလ်လိပ်စာကိုရှာရတာ အခက်တွေ့နေတယ်။</string>
   <string name="no_purchase_date">Lantern Pro ကို ဝယ်သည့်အခါခန့်မှန်းခြေရက်စွဲကို ရွေးချယ်ပါ</string>
   <string name="purchase_date">ဝယ်ယူသည့်နေ့ရက်</string>
-  <string-array name="common_issue_list">
-    <item>တားျမစ္ထားေသာဆိုဒ္မ်ားကို ဝင္ေရာက္သံုးစြဲ၍ မရႏိုင္ပါ</item>
-    <item>ဝယ္ယူမႈကို ၿပီးဆံုးေအာင္ မလုပ္ႏိုင္ပါ</item>
-    <item>ဝင္ေရာက္၍မရပါ</item>
-    <item>စပင္လွည့္စက္သည္ မရပ္မနား လည္ေနသည္</item>
-    <item>အေႏွး</item>
-    <item>ခ်တ္ အလုပ္မလုပ္ပါ</item>
-    <item>ရွာေဖြမႈ အလုပ္မလုပ္ပါ</item>
-    <item>အျခား</item>
-  </string-array>
   <string name="submit_code">ကုဒ်အတည်ပြုပါ</string>
   <string name="on_text">ဖွင့်</string>
   <string name="off_text">ပိတ်</string>

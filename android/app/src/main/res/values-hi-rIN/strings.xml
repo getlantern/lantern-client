@@ -30,16 +30,6 @@
   <string name="cannot_find_email">उफ़! हम दिक्कत यह है कि ई-मेल पते खोज कर रहे हैं।</string>
   <string name="no_purchase_date">जब आप खरीदा लालटेन प्रो कृपया एक अनुमानित तिथि का चयन</string>
   <string name="purchase_date">खरीद की तारीख</string>
-  <string-array name="common_issue_list">
-    <item>ब्लॉक की गई साइटें नहीं खुल रही हैं</item>
-    <item>खरीदारी पूरी नहीं हो पा रही है</item>
-    <item>साइन इन नहीं हो पा रहा है</item>
-    <item>स्पिनर लगातार लोड हो रहा है</item>
-    <item>धीमा है</item>
-    <item>चैट की सुविधा काम नहीं कर रही है</item>
-    <item>डिस्कवर की सुविधा काम नहीं कर रही है</item>
-    <item>कुछ और</item>
-  </string-array>
   <string name="submit_code">पुष्टि संहिता</string>
   <string name="on_text">चालू</string>
   <string name="off_text">बंद</string>

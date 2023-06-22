@@ -30,16 +30,6 @@
   <string name="cannot_find_email">اوہ! ہمیں ای میل ایڈریس تلاش کرنے مین دشواری پیش آرہی ہے۔ </string>
   <string name="no_purchase_date">برائے مہربانی انداز سے کسی اس تاریخ کا انتخاب کیجئے جب آپ کو لگتا ہو کہ آپ نے لینٹرن پرو خریدا تھا۔ </string>
   <string name="purchase_date">خریداری کی تاریخ</string>
-  <string-array name="common_issue_list">
-    <item>مسدود کردہ سائٹس تک رسائی نہیں کر سکتے</item>
-    <item>خریداری مکمل نہیں کر سکتے</item>
-    <item>سائن ان نہیں کر سکتے</item>
-    <item>اسپنر لامتناہی طور پر لوڈ ہوتا ہے</item>
-    <item>سست</item>
-    <item>چیٹ کام نہیں کر رہی</item>
-    <item>دریافت کریں کام نہیں کر رہا</item>
-    <item>دیگر</item>
-  </string-array>
   <string name="submit_code">کوڈ کی تصدیق کیجئے</string>
   <string name="on_text">آن</string>
   <string name="off_text">آف</string>
