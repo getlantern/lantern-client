@@ -398,7 +398,6 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
-    implementation 'com.thefinestartist:finestwebview:1.2.7'
     implementation "androidx.webkit:webkit:1.6.1"
     implementation 'com.kyleduo.switchbutton:library:2.1.0'
 
