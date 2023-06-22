@@ -30,5 +30,7 @@ const val MMYY = "mm_yy"
 const val CVC = "cvc"
 const val CHECK_OUT = "check_out"
 const val RENEWAL_SUCCESS_OK = "renew_success_ok"
+const val SUPPORT = "support"
+const val REPORT_AN_ISSUE = "report_issue"
 
 

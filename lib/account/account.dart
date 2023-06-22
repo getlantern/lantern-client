@@ -114,6 +114,7 @@ class AccountMenu extends StatelessWidget {
         onTap: openDesktopVersion,
       ),
       ListItemFactory.settingsItem(
+        key: AppKeys.support,
         icon: ImagePaths.support,
         content: 'support'.i18n,
         onTap: () {
