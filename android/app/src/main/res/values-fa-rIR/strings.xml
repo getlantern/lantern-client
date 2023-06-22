@@ -30,16 +30,6 @@
   <string name="cannot_find_email">آخ! ما در پیدا کردن آن نشانی ایمیل به مشکل برخوردیم.</string>
   <string name="no_purchase_date">لطفاً تاریخ تقریبی از وقتی که لنترن حرفه ای را خریداری نمودید انتخاب نمایید</string>
   <string name="purchase_date">تاریخ خرید</string>
-  <string-array name="common_issue_list">
-    <item>دسترسی به سایت‌های مسدودشده ممکن نیست</item>
-    <item>تکمیل خرید ممکن نیست</item>
-    <item>ورود به سیستم ممکن نیست</item>
-    <item>نشان چرخان دائماً می‌چرخد</item>
-    <item>سرعت پایین</item>
-    <item>چت کار نمی‌کند</item>
-    <item>Discover کار نمی‌کند</item>
-    <item>سایر</item>
-  </string-array>
   <string name="submit_code">کد تایید</string>
   <string name="on_text">روشن</string>
   <string name="off_text">خاموش</string>

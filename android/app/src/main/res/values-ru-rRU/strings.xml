@@ -30,16 +30,6 @@
   <string name="cannot_find_email">Мы не можем найти этот email адрес.</string>
   <string name="no_purchase_date">Пожалуйста, выберите приблизительную дату покупки Lantern Pro</string>
   <string name="purchase_date">Дата покупки</string>
-  <string-array name="common_issue_list">
-    <item>Не удается получить доступ к заблокированным сайтам</item>
-    <item>Не удается завершить покупку</item>
-    <item>Не удается залогиниться</item>
-    <item>Загрузка длится бесконечно</item>
-    <item>Медленная скорость</item>
-    <item>Чат не работает</item>
-    <item>Обзор не работает</item>
-    <item>Другое</item>
-  </string-array>
   <string name="submit_code">Подтвердить код</string>
   <string name="on_text">ВКЛ</string>
   <string name="off_text">ВЫКЛ</string>

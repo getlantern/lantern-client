@@ -30,16 +30,6 @@
   <string name="cannot_find_email">ওহো! এই ইমেল ঠিকানা খুঁজে পেতে সমস্যা হচ্ছে।</string>
   <string name="no_purchase_date">আপনার Lantern Pro ক্রয়ের একটি আনুমানিক তারিখ নির্বাচন করুন</string>
   <string name="purchase_date">ক্রয়ের তারিখ</string>
-  <string-array name="common_issue_list">
-    <item>ব্লক করা সাইটগুলি অ্যাক্সেস করা যবে না</item>
-    <item>কেনাকাটা সম্পূর্ণ করা যাবে না</item>
-    <item>সাইন ইন করা যাবে না</item>
-    <item>স্পিনার অন্তহীনভাবে লোড হয়</item>
-    <item>ধীর</item>
-    <item>চ্যাট কাজ করছে না</item>
-    <item>ডিসকভার কাজ করছে না</item>
-    <item>অন্যান্য</item>
-  </string-array>
   <string name="submit_code">কোড নিশ্চত করুন</string>
   <string name="on_text">চালু</string>
   <string name="off_text">বন্ধ</string>

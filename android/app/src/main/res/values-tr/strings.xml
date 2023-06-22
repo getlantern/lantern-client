@@ -30,16 +30,6 @@
   <string name="cannot_find_email">Eyvah! Bu e-posta adresini bulmakta sorun yaşıyoruz.</string>
   <string name="no_purchase_date">Lütfen Lantern Pro satın aldığınız yaklaşık tarihi seçin</string>
   <string name="purchase_date">Satın Alma Tarihi</string>
-  <string-array name="common_issue_list">
-    <item>Engelli sitelere giriş yapılamıyor</item>
-    <item>Satın alma tamamlanamıyor</item>
-    <item>Oturum açılamıyor</item>
-    <item>Yükleme ekranı sürekli dönüyor</item>
-    <item>Yavaş</item>
-    <item>Sohbet çalışmıyor</item>
-    <item>Keşfet çalışmıyor</item>
-    <item>Diğer</item>
-  </string-array>
   <string name="submit_code">Kodu Onayla</string>
   <string name="on_text">AÇIK</string>
   <string name="off_text">KAPALI</string>
