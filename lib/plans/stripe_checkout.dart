@@ -99,41 +99,46 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   }
 
   Widget checkoutButton() {
-    return Button(
-      text: copy,
-      onPressed: () async {
-        context.loaderOverlay.show();
-        await sessionModel
-            .submitStripePayment(
-              widget.plan.id,
-              widget.email,
-              creditCardController.text,
-              expDateController.text,
-              cvcFieldController.text,
-            )
-            .timeout(
-              const Duration(seconds: 10),
-              onTimeout: () => onAPIcallTimeout(
-                code: 'submitStripeTimeout',
-                message: 'stripe_timeout'.i18n,
-              ),
-            )
-            .then((value) async {
-          context.loaderOverlay.hide();
-          showSuccessDialog(context, widget.isPro);
-        }).onError((error, stackTrace) {
-          context.loaderOverlay.hide();
-          CDialog.showError(
-            context,
-            error: e,
-            stackTrace: stackTrace,
-            description: (error as PlatformException)
-                .message
-                .toString(), // This is coming localized
-          );
-        });
-      },
+    return Tooltip(
+      message: AppKeys.checkOut,
+      child: Button(
+        text: copy,
+        onPressed: onCheckoutButtonTap,
+      ),
     );
+  }
+
+  Future<void> onCheckoutButtonTap() async {
+    context.loaderOverlay.show();
+    await sessionModel
+        .submitStripePayment(
+          widget.plan.id,
+          widget.email,
+          creditCardController.text,
+          expDateController.text,
+          cvcFieldController.text,
+        )
+        .timeout(
+          const Duration(seconds: 10),
+          onTimeout: () => onAPIcallTimeout(
+            code: 'submitStripeTimeout',
+            message: 'stripe_timeout'.i18n,
+          ),
+        )
+        .then((value) async {
+      context.loaderOverlay.hide();
+      showSuccessDialog(context, widget.isPro);
+    }).onError((error, stackTrace) {
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        stackTrace: stackTrace,
+        description: (error as PlatformException)
+            .message
+            .toString(), // This is coming localized
+      );
+    });
   }
 
   @override
@@ -169,7 +174,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                   bottom: 16.0,
                 ),
                 child: CTextField(
-                  //key: creditCardFieldKey,
+                  tooltipMessage: AppKeys.cardNumberKey,
                   controller: creditCardController,
                   autovalidateMode: AutovalidateMode.disabled,
                   label: 'card_number'.i18n,
@@ -194,6 +199,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                         end: 16,
                       ),
                       child: CTextField(
+                        tooltipMessage: AppKeys.mmYYKey,
                         maxLines: 1,
                         maxLength: 5,
                         controller: expDateController,
@@ -209,6 +215,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                     Container(
                       width: 144,
                       child: CTextField(
+                        tooltipMessage: AppKeys.cvcKey,
                         maxLines: 1,
                         maxLength: 4,
                         controller: cvcFieldController,

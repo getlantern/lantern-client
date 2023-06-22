@@ -4,6 +4,7 @@ import appium_kotlin.ContextType
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import io.appium.java_client.AppiumDriver
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.service.local.AppiumDriverLocalService
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException
@@ -13,11 +14,12 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.junit.jupiter.params.provider.MethodSource
-import org.openqa.selenium.By
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.remote.DesiredCapabilities
+import pro.truongsinh.appium_flutter.FlutterFinder
 import java.io.FileReader
 import java.net.URL
+import java.util.concurrent.TimeUnit
 import java.util.stream.Stream
 
 /** Here is the device list-:https://www.browserstack.com/list-of-browsers-and-platforms/app_automate */
@@ -163,18 +165,6 @@ open class BaseTest {
 
     protected fun print(tag: String, message: String) {
         println("[$tag] $message")
-    }
-
-    fun waitForElement(driver: AndroidDriver, locator: By, timeoutInSeconds: Long = 10) {
-        for (i in 0 until timeoutInSeconds) {
-            try {
-                driver.findElement(locator)
-                return
-            } catch (e: NoSuchElementException) {
-                Thread.sleep(1000)  // wait for 1 second before trying again
-            }
-        }
-        throw NoSuchElementException("Element with locator '$locator' was not found in $timeoutInSeconds seconds")
     }
 
 }
