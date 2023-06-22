@@ -459,9 +459,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     private fun showSurvey(survey: Survey?) {
         survey ?: return
-        val intent = Intent(activity, WebViewActivity_::class.java)
+        val intent = Intent(this, WebViewActivity_::class.java)
         intent.putExtra("url", survey.url!!)
-        activity.startActivity(intent)
+        startActivity(intent)
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
     }
 
