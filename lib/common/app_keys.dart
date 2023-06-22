@@ -13,6 +13,7 @@ class AppKeys {
   static const upgrade_lantern_pro = ValueKey('upgrade_lantern_pro');
   static const account_management = ValueKey('account_management');
   static const account_renew = ValueKey('account_renew');
+  static const support = ValueKey('support');
 
   //Plans
   static const plan_list_view = ValueKey('plan_list_view');
@@ -25,4 +26,9 @@ class AppKeys {
   static const cvcKey = 'cvc';
   static const checkOut = 'check_out';
   static const renewalSuccessOk = 'renew_success_ok';
+
+  //Support
+  static const reportIssue = ValueKey('report_issue');
+
 }
+

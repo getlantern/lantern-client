@@ -15,9 +15,12 @@ import appium_kotlin.LOGS_DIALED_MESSAGE
 import appium_kotlin.MMYY
 import appium_kotlin.MOST_POPULAR
 import appium_kotlin.RENEWAL_SUCCESS_OK
+import appium_kotlin.REPORT_AN_ISSUE
+import appium_kotlin.SUPPORT
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
 import io.appium.java_client.android.AndroidDriver
+import io.appium.java_client.touch.TapOptions
 import io.appium.java_client.touch.WaitOptions
 import io.appium.java_client.touch.offset.PointOption
 import org.junit.jupiter.api.Assertions
@@ -53,10 +56,12 @@ class AppTest() : BaseTest() {
             // If the VPN flow is successful then test Payment flow
             paymentFlow(androidDriver, taskId, flutterFinder)
 
+            // Report and issue flow
+            reportAnIssueFlow(androidDriver, taskId, flutterFinder)
+
             if (!isLocalRun) {
                 testPassed(androidDriver)
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
             if (!isLocalRun) {
@@ -225,6 +230,76 @@ class AppTest() : BaseTest() {
 
         //If we reach here it means that we have already passed test
         // set assertions as true
+        Assertions.assertEquals(true, true)
+    }
+
+    @Throws(IOException::class, InterruptedException::class)
+    private fun reportAnIssueFlow(
+        androidDriver: AndroidDriver,
+        taskId: Int,
+        flutterFinder: FlutterFinder
+    ) {
+
+        print("TaskId: $taskId", "reportAnIssueFlow-->Switching to FLUTTER context.")
+        switchToContext(ContextType.FLUTTER, androidDriver)
+
+        print("TaskId: $taskId", "reportAnIssueFlow-->Locating and clicking on the ACCOUNT_TAP.")
+        val accountTap = flutterFinder.byValueKey(ACCOUNT_TAP)
+        accountTap.click()
+        Thread.sleep(2000)
+
+        print("TaskId: $taskId", "reportAnIssueFlow-->Locating and clicking on the SUPPORT.")
+        val supportTap = flutterFinder.byValueKey(SUPPORT)
+        supportTap.click()
+        Thread.sleep(1000)
+
+        print(
+            "TaskId: $taskId",
+            "reportAnIssueFlow-->Locating and clicking on the REPORT_AN_ISSUE."
+        )
+        val reportIssue = flutterFinder.byValueKey(REPORT_AN_ISSUE)
+        reportIssue.click()
+        Thread.sleep(1000)
+
+        print("TaskId: $taskId", "reportAnIssueFlow-->Switching to NATIVE_APP context.")
+        switchToContext(ContextType.NATIVE_APP, androidDriver)
+        val issueDropdown = androidDriver.findElement(By.id("org.getlantern.lantern:id/issue"))
+        issueDropdown.click()
+        Thread.sleep(1000)
+
+        print("TaskId: $taskId", "reportAnIssueFlow-->Performing tap action.")
+        TouchAction(androidDriver).tap(
+            TapOptions.tapOptions().withPosition(PointOption.point(127, 767))
+        ).perform()
+        Thread.sleep(1000)
+
+        print("TaskId: $taskId", "reportAnIssueFlow-->Entering description.")
+        val description = androidDriver.findElement(By.id("org.getlantern.lantern:id/description"))
+        description.click()
+        description.sendKeys("This is sample report and issue running vai Appium Test CI")
+        Thread.sleep(3000)
+
+        print("TaskId: $taskId", "reportAnIssueFlow-->Hiding keyboard.")
+        androidDriver.hideKeyboard()
+        Thread.sleep(2000)
+
+        print(
+            "TaskId: $taskId",
+            "reportAnIssueFlow-->Locating and clicking on the send report button."
+        )
+        val sendReportButton = androidDriver.findElement(By.id("org.getlantern.lantern:id/sendBtn"))
+        sendReportButton.click()
+        Thread.sleep(5000)
+
+        print(
+            "TaskId: $taskId",
+            "reportAnIssueFlow-->Locating and clicking on the report send button."
+        )
+        val reportSend = androidDriver.findElement(By.id("android:id/button1"))
+        reportSend.click()
+        Thread.sleep(2000)
+
+        print("TaskId: $taskId", "reportAnIssueFlow-->Test passed, assertion true.")
         Assertions.assertEquals(true, true)
     }
 
