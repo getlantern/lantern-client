@@ -19,7 +19,9 @@ class ListItemFactory extends StatelessWidget {
   }) : this((BuildContext context, ListItemFactory factory) {
           return FocusedMenuHolder(
             // provide download menu if not a serp result item
-            menu: serpLink == null ? renderReplicaLongPressMenuItem(context, api, link) : const SizedBox(),
+            menu: serpLink == null
+                ? renderReplicaLongPressMenuItem(context, api, link)
+                : const SizedBox(),
             menuWidth: MediaQuery.of(context).size.width * 0.8,
             builder: (menuOpen) {
               return Container(
@@ -49,6 +51,7 @@ class ListItemFactory extends StatelessWidget {
     dynamic content,
     void Function()? onTap,
     List<Widget>? trailingArray,
+    dynamic? key,
   }) : this((BuildContext context, ListItemFactory factory) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -58,6 +61,7 @@ class ListItemFactory extends StatelessWidget {
               factory.buildBase(
                 leading: icon,
                 content: content,
+                key: key,
                 trailingArray: trailingArray,
                 onTap: onTap,
                 showDivider: true,
@@ -168,6 +172,7 @@ class ListItemFactory extends StatelessWidget {
 
   Widget buildBase({
     dynamic leading,
+    dynamic? key,
     required dynamic content,
     required bool showDivider,
     double? height,
@@ -180,8 +185,10 @@ class ListItemFactory extends StatelessWidget {
     Color? overrideColor,
   }) =>
       Material(
+        key: key,
         color: transparent,
         child: CInkWell(
+
           disableSplash: disableSplash ?? false,
           overrideColor: overrideColor,
           onTap: onTap ?? () {},
