@@ -20,9 +20,6 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.0.3 <4.0.0'
 
-dependency_overrides:
-  win32: 3.1.4
-
 dependencies:
   # SDKs
   flutter:
@@ -100,6 +97,11 @@ dependencies:
 
 
 
+
+# wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0
+# See https://github.com/creativecreatorormaybenot/wakelock/issues/211
+dependency_overrides:
+  win32: 3.1.4
 
 dev_dependencies:
   flutter_test:

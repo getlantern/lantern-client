@@ -63,11 +63,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.paymentwall.pwunifiedsdk.core.PaymentSelectionActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateVisible|adjustResize|adjustPan"/>
-
         <service
             android:enabled="true"
             android:exported="false"
@@ -84,23 +79,9 @@
         </receiver>
 
         <activity
-            android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
-            android:hardwareAccelerated="true"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor"
-            android:theme="@style/FinestWebViewTheme.Light" />
-
-        <activity
             android:name=".activity.authorizeDevice.LinkDeviceActivity_"
             android:screenOrientation="portrait">
         </activity>
-
-        <activity
-            android:name=".activity.PaymentWallActivity_"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="locale|layoutDirection"
-            android:noHistory="true">
-      </activity>
 
         <activity
             android:name=".activity.FreeKassaActivity_"
@@ -127,21 +108,6 @@
 
         <activity
             android:name=".activity.WebViewActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.RegisterProActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.PlansActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.CheckoutActivity_"
             android:screenOrientation="portrait"
             />
 

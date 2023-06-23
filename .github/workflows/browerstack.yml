@@ -41,13 +41,29 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Setup protoc
+        uses: arduino/setup-protoc@v1.2.0
+        with:
+          version: '3.x'
+
+      - name: Activate protoc-gen-dart plugin
+        run: |
+          echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
+          dart pub global activate protoc_plugin
+          mkdir -p "${HOME}/.pub-cache/bin"
+          mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
+
       - name: Build Android-Lib
         run: make android-lib ANDROID_ARCH=all
 
       - name: Build APK
         run: |
           flutter pub get
-          flutter build apk --debug --flavor prod
+          echo "CI=true" >> $GITHUB_ENV
+          make do-android-debug ANDROID_ARCH=all
+
+      - name: List files in current directory
+        run: ls -la
 
       - name: Install jq
         run: sudo apt-get install jq
@@ -65,7 +81,6 @@ jobs:
           app_url=$(echo $response | jq -r .app_url)
           echo "$app_url"
           echo "BROWSERSTACK_APP_ID=$app_url" >> $GITHUB_ENV
-          
 
       - name: Run Tests
         env:

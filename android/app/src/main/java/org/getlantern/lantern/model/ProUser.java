@@ -45,6 +45,10 @@ public class ProUser {
     @SerializedName("devices")
     private List<Device> devices;
 
+
+    @SerializedName("userLevel")
+    public String userLevel;
+
     public void setUserId(final Long userId) {
         this.userId = userId;
     }
@@ -60,6 +64,12 @@ public class ProUser {
     public String getToken() {
         return token;
     }
+
+    public String getUserLevel() {
+        return this.userLevel;
+    }
+
+    public void setUserLevel(final String level) { this.userLevel = level; }
 
     public void setReferral(final String referral) {
         this.referral = referral;

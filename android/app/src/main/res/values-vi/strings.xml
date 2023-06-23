@@ -30,16 +30,9 @@
   <string name="cannot_find_email">Xin lỗi! Chúng tôi không tìm thấy địa chỉ email đó.</string>
   <string name="no_purchase_date">Xin cho biết khoảng thời gian bạn mua Lantern Pro</string>
   <string name="purchase_date">Ngày Mua</string>
-  <string-array name="common_issue_list">
-    <item>Không truy cập được trang bị chặn</item>
-    <item>Không thể hoàn tất giao dịch mua</item>
-    <item>Không đăng nhập được</item>
-    <item>Vòng xoay không ngừng chạy</item>
-    <item>Chậm</item>
-    <item>Trò chuyện không hoạt động</item>
-    <item>Khám phá không hoạt động</item>
-    <item>Khác</item>
-  </string-array>
+  <string name="common_issue_list_0">Không thể truy cập các trang bị chặn</string>
+  <string name="common_issue_list_4">chậm</string>
+  <string name="common_issue_list_9">Khác</string>
   <string name="submit_code">Mã Số Xác Nhận</string>
   <string name="on_text">BẬT</string>
   <string name="off_text">TẮT</string>

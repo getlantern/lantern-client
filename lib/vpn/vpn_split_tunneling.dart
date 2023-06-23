@@ -100,7 +100,8 @@ class _SplitTunnelingState extends State<SplitTunneling> {
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           return ListSectionHeader(
-              'apps_routed_through_lantern'.i18n.toUpperCase());
+            'apps_routed_through_lantern'.i18n.toUpperCase(),
+          );
         }
         if (index == allowedApps.length + 1) {
           return ListSectionHeader('your_installed_apps'.i18n.toUpperCase());

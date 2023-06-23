@@ -1,6 +1,28 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/core/router/router.gr.dart';
+import 'package:lantern/home.dart';
+import 'package:lantern/messaging/contacts/add_contact_number.dart';
+import 'package:lantern/messaging/contacts/contact_info.dart';
+import 'package:lantern/messaging/contacts/new_chat.dart';
+import 'package:lantern/messaging/conversation/conversation.dart';
+import 'package:lantern/messaging/introductions/introduce.dart';
+import 'package:lantern/messaging/introductions/introductions.dart';
+import 'package:lantern/messaging/onboarding/chat_number_messaging.dart';
+import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
+import 'package:lantern/plans/checkout.dart';
+import 'package:lantern/plans/plans.dart';
+import 'package:lantern/plans/reseller_checkout.dart';
+import 'package:lantern/plans/stripe_checkout.dart';
+import 'package:lantern/replica/link_handler.dart';
+import 'package:lantern/replica/ui/viewers/audio.dart';
+import 'package:lantern/replica/ui/viewers/image.dart';
+import 'package:lantern/replica/ui/viewers/video.dart';
+import 'package:lantern/replica/ui/viewers/misc.dart';
+import 'package:lantern/replica/upload/title.dart';
+import 'package:lantern/replica/upload/description.dart';
+import 'package:lantern/replica/upload/review.dart';
+import 'package:lantern/vpn/vpn_split_tunneling.dart';
 
 @AutoRouterConfig(
   replaceInRouteName: 'Page,Route,Screen',

@@ -30,16 +30,9 @@
   <string name="cannot_find_email">Oups ! Nous avons du mal à trouver cette adresse courriel.</string>
   <string name="no_purchase_date">Veuillez choisir la date approximative d’achat de Lantern Pro</string>
   <string name="purchase_date">Date d’achat</string>
-  <string-array name="common_issue_list">
-    <item>Impossible d’accéder à des sites bloqués</item>
-    <item>Impossible de conclure un achat</item>
-    <item>Impossible de se connecter</item>
-    <item>Le chargement n’aboutit jamais</item>
-    <item>Lent</item>
-    <item>Le dialogue en ligne ne fonctionne pas</item>
-    <item>La découverte ne fonctionne pas</item>
-    <item>Autre</item>
-  </string-array>
+  <string name="common_issue_list_0">Impossible d’accéder à des sites bloqués</string>
+  <string name="common_issue_list_4">Lent</string>
+  <string name="common_issue_list_9">Autre</string>
   <string name="submit_code">Confirmer le code</string>
   <string name="on_text">I</string>
   <string name="off_text">O</string>
