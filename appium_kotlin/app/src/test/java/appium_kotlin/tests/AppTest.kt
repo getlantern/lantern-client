@@ -16,7 +16,6 @@ import appium_kotlin.LOGS_DIALED_MESSAGE
 import appium_kotlin.MMYY
 import appium_kotlin.MOST_POPULAR
 import appium_kotlin.PAYMENT_PURCHASE_COMPLETED
-import appium_kotlin.RENEWAL_SUCCESS_OK
 import appium_kotlin.REPORT_AN_ISSUE
 import appium_kotlin.SUPPORT
 import io.appium.java_client.TouchAction
@@ -230,22 +229,12 @@ class AppTest() : BaseTest() {
         val errorPaymentLogs = capturePaymentLogcat(androidDriver, ERROR_PAYMENT_PURCHASE)
         val paymentPurchaseLogs = capturePaymentLogcat(androidDriver, PAYMENT_PURCHASE_COMPLETED)
 
-        if (errorPaymentLogs.isBlank() && paymentPurchaseLogs.isNotBlank()) {
-            val renewalSuccessOk = flutterFinder.byTooltip(RENEWAL_SUCCESS_OK)
-            switchToContext(ContextType.FLUTTER, androidDriver)
-            renewalSuccessOk.click()
-            Thread.sleep(5000)
-            println("TaskId: $taskId | testPaymentFlow-->clicked on renewal success ok ")
+        if (errorPaymentLogs.isNotBlank() && paymentPurchaseLogs.isBlank()) {
             if (!isLocalRun) {
-                testPassed(androidDriver)
-            }
-        } else {
-            //Payment has been failed
-            if (!isLocalRun) {
-                testFail(errorPaymentLogs, androidDriver)
+                testFail("Purchasing lantern pro failed", androidDriver)
             }
         }
-        Assertions.assertEquals(errorPaymentLogs.isBlank(), true)
+        Assertions.assertEquals(errorPaymentLogs.isBlank(), true, "Purchasing lantern pro failed")
     }
 
     @Throws(IOException::class, InterruptedException::class)
