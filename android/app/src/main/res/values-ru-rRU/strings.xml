@@ -31,7 +31,14 @@
   <string name="no_purchase_date">Пожалуйста, выберите приблизительную дату покупки Lantern Pro</string>
   <string name="purchase_date">Дата покупки</string>
   <string name="common_issue_list_0">Не удается получить доступ к заблокированным сайтам</string>
+  <string name="common_issue_list_1">Ваша покупка не может быть завершена</string>
+  <string name="common_issue_list_2">Не удается войти в аккаунт</string>
+  <string name="common_issue_list_3">Невозможно загрузить страницу </string>
   <string name="common_issue_list_4">Медленный</string>
+  <string name="common_issue_list_5">Не удается запустить чат </string>
+  <string name="common_issue_list_6">Не удается запустить Обзор </string>
+  <string name="common_issue_list_7">Не удается привязать устройство</string>
+  <string name="common_issue_list_8">Сбой работы приложения</string>
   <string name="common_issue_list_9">Другое</string>
   <string name="submit_code">Подтвердить код</string>
   <string name="on_text">ВКЛ</string>
@@ -51,7 +58,7 @@
   <string name="error_making_purchase">Ошибка при попытке совершить покупку</string>
   <string name="have_latest_version">Самая новая из доступных версий — %1$s %2$s.</string>
   <string name="updating_lantern">Обновление %1$s</string>
-  <string name="update_lantern">Обновите Lantern</string>
+  <string name="update_lantern">Обновить Lantern</string>
   <string name="cancel">Отменить</string>
   <string name="newsfeed_option">Попробуйте Lantern Feed</string>
   <string name="newsfeed_off_option">Отключить Feed</string>
@@ -99,6 +106,7 @@
   <string name="error_update">Ошибка в скачивании обновления</string>
   <string name="error_install_update">Ошибка при установке обновления</string>
   <string name="loading">Загрузка..</string>
+  <string name="manual_update">Попробуйте вручную установить последнюю версию приложения &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">Добро пожаловать в Lantern Pro!</string>
   <string name="happy_anniversary">С LANTERN ЮБИЛЕЕМ!</string>
   <string name="welcome_greeting">Добро пожаловать в Lantern</string>
@@ -126,6 +134,7 @@
   <string name="share_friends_text">Поделиться с друзьями, чтобы заработать бесплатные месяцы!</string>
   <string name="email_address">Адрес электронной почты</string>
   <string name="switch_to_alipay">Выбрать оплату через Alipay</string>
+  <string name="switch_to_stripe">Переключиться на Stripe </string>
   <string name="switch_to_credit_card">Выбрать оплату банковской картой</string>
   <string name="continue_to_pro">Продолжить в PRO</string>
   <string name="continue_to_basic">Продолжить использование Basic Version</string>
@@ -415,6 +424,7 @@
   <string name="privacy_disclosure_title">Политика конфиденциальности Lantern</string>
   <string name="privacy_disclosure_accept">Я принимаю</string>
   <string name="privacy_disclosure_body">Lantern серьезно относится к защите вашей конфиденциальности. Для нас важно, чтобы вы понимали, какую информацию мы собираем (и не собираем), как мы ее используем и храним. Ваши платежные данные не связаны с аккаунтом Lantern Pro. Мы не собираем логи о вашей активности (в том числе историю браузера, сведения об адресатах трафика, содержание данных или DNS-запросы). Мы никогда не храним логи соединений, то есть ваши зарегистрированные IP-адреса, IP-адрес исходящего сервера Lantern, связанный с временной меткой подключения, а также продолжительность сеансов. У нас нет технической возможности связать аккаунт Lantern Pro с реальной идентифицирующей информацией пользователя. Кроме того, имея IP-адрес Lantern и точную временную метку, мы не можем связать этот адрес с пользователем Lantern или IP-адресом этого пользователя.</string>
+  <string name="referral_code_share_description">Поделитесь кодом с друзьями - если они купят версию Pro, вы оба получите бесплатный месяц подписки на Lantern Pro!</string>
   <string name="referral_code_share">Поделитесь реферальным кодом </string>
   <string name="referral_code_share_title">Поделитесь своим реферальным кодом:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -467,6 +477,7 @@
 </string>
   <string name="report_sent">Отчет отправлен</string>
   <string name="thank_you_for_reporting_your_issue">Спасибо, что сообщили о своей проблеме. Из-за большого потока обращений мы не можем отвечать на большинство из них, однако будьте уверены, мы прилагаем все усилия, чтобы совершенствовать Lantern на основании ваших отзывов.</string>
+  <string name="unable_to_submit_issue">Не удалось отправить сообщение об ошибке</string>
   <string name="have_a_lantern_pro_activation_code_click_here">У вас есть код активации Lantern Pro? Нажмите сюда</string>
   <string name="enter_email_and_activation_code">Введите адрес электронной почты и код активации</string>
   <string name="activation_code">Код активации</string>
@@ -492,5 +503,5 @@
   <string name="message_notifications_channel">Сообщения</string>
   <string name="call_notifications_channel">Звонки</string>
   <string name="lantern_service">Сервис Lantern</string>
-  <string name="replica_download">Скачать копию</string>
+  <string name="replica_download">Загрузка файла </string>
 </resources>
