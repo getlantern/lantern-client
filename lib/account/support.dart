@@ -80,8 +80,10 @@ class Support extends StatelessWidget {
 
   Future<void> forumTap(BuildContext context) async {
     try {
-      await launchUrl(Uri.parse(forumsUrl),
-          mode: LaunchMode.externalApplication);
+      await launchUrl(
+        Uri.parse(forumsUrl),
+        mode: LaunchMode.externalApplication,
+      );
     } catch (e) {
       showSnackbar(context: context, content: 'Fail to open link ');
     }

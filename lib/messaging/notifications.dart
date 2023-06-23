@@ -86,23 +86,10 @@ class Notifications {
               if (!resp.containsKey('replicaLink')) {
                 return;
               }
-              // XXX <16-12-2021> soltzen: we don't care much for the other
-              // parameters, but they are here for reference:
-              // https://github.com/getlantern/replica/blob/c61b1855475391c715a1e8e370da87b31848d514/server/object.go#L12
-              var link = ReplicaLink.New(resp['replicaLink']);
-              if (link == null) {
-                // TODO <08-22-22, kalli> Don't throw exception directly
-                throw Exception('Replicalink.New() failed');
-              }
-              // Prompt the user a Share dialog
-              await Share.share('replica://${link.toMagnetLink()}');
-            } catch (ex) {
-              logger.w(
-                'Failed to decode upload json resp: ${payload.data}. Will not process upload notification clicks. Err: $ex',
-              );
-            }
-            break;
-          default:
+              break;
+            default:
+              break;
+          }
         }
         return;
       },

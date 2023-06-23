@@ -78,13 +78,14 @@ class LanternApp extends StatelessWidget {
         if (!snapshot.hasData) {
           return Container();
         }
-        final theme = ThemeData(
-            fontFamily: _getLocaleBasedFont(currentLocal),
-            brightness: Brightness.light,
-            primarySwatch: Colors.grey,
-            appBarTheme: const AppBarTheme(
-              systemOverlayStyle: SystemUiOverlayStyle.light,
-            ));
+        final ThemeData theme = ThemeData(
+          fontFamily: _getLocaleBasedFont(currentLocal),
+          brightness: Brightness.light,
+          primarySwatch: Colors.grey,
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+          ),
+        );
         return GlobalLoaderOverlay(
           overlayColor: Colors.black,
           overlayOpacity: 0.6,
@@ -92,9 +93,15 @@ class LanternApp extends StatelessWidget {
             initialLocale: const Locale('en', 'US'),
             child: MaterialApp.router(
               debugShowCheckedModeBanner: false,
-              theme: theme.copyWith(
+              theme: ThemeData(
+                fontFamily: _getLocaleBasedFont(currentLocal),
+                brightness: Brightness.light,
+                primarySwatch: Colors.grey,
+                appBarTheme: const AppBarTheme(
+                  systemOverlayStyle: SystemUiOverlayStyle.light,
+                ),
                 colorScheme:
-                    theme.colorScheme.copyWith(secondary: Colors.black),
+                    ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
               ),
               title: 'app_name'.i18n,
               localizationsDelegates: const [

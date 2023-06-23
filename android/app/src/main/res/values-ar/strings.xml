@@ -30,16 +30,9 @@
   <string name="cannot_find_email">عذراً، لدينا مشكلة في العثور على هذا البريد الالكتروني</string>
   <string name="no_purchase_date">يرجى تحديد تاريخ تقريبي لشرائك لانترن برو </string>
   <string name="purchase_date">تاريخ الشراء</string>
-  <string-array name="common_issue_list">
-    <item>لا يمكن الوصول إلى المواقع المحجوبة</item>
-    <item>لا يمكن إتمام عملية الشراء</item>
-    <item>لا يمكن تسجيل الدخول</item>
-    <item>العجلة تدور لا نهائيًا</item>
-    <item>بطيء</item>
-    <item>الدردشة لا تعمل</item>
-    <item>الاكتشاف \"Discover\" لا يعمل</item>
-    <item>آخر</item>
-  </string-array>
+  <string name="common_issue_list_0">لا يمكن الوصول الى المواقع المحظورة</string>
+  <string name="common_issue_list_4">بطئ</string>
+  <string name="common_issue_list_9">أخرى</string>
   <string name="submit_code">تأكيد الرمز</string>
   <string name="on_text">تشغيل</string>
   <string name="off_text">اغلاق</string>

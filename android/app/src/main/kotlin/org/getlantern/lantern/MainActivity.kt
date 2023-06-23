@@ -18,7 +18,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.thefinestartist.finestwebview.FinestWebView
 import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -33,13 +32,20 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
+import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.CheckUpdate
+import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
+import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
+import org.getlantern.lantern.model.PaymentProvider
+import org.getlantern.lantern.model.PaymentMethod
+import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
@@ -48,6 +54,8 @@ import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.DeviceInfo
+import org.getlantern.lantern.util.Json
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
@@ -58,6 +66,7 @@ import org.getlantern.mobilesdk.model.Survey
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.util.concurrent.*
 import java.util.Locale
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
@@ -73,6 +82,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     private lateinit var notifications: NotificationHelper
     private lateinit var receiver: NotificationReceiver
     private var autoUpdateJob: Job? = null
+
+    private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
     private val lanternClient = LanternApp.getLanternHttpClient()
 
@@ -171,8 +182,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     override fun onResume() {
         val start = System.currentTimeMillis()
-        updateUserData()
-        Logger.debug(TAG, "updateUserData90 finished at ${System.currentTimeMillis() - start}")
 
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
@@ -276,6 +285,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
+        updateUserPlans()
+        updatePaymentMethods()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -330,6 +341,38 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             }
         })
     }
+
+    private fun updateUserPlans() {
+        lanternClient.getPlans(object : PlansCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+            }
+
+            override fun onSuccess(proPlans: Map<String, ProPlan>) {
+                plans.clear()
+                plans.putAll(proPlans)
+                for (planId in proPlans.keys) {
+                    proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+                }
+                LanternApp.getSession().setUserPlans(plans)
+                Logger.debug(TAG, "Successfully updated user plans")
+             }
+         }, null)
+     }
+
+    private fun updatePaymentMethods() {
+        lanternClient.plansV3(object : PlansV3Callback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+            }
+
+            override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
+                Logger.debug(TAG, "Successfully fetched payment methods")
+                LanternApp.getSession().setPaymentMethods(paymentMethods)
+
+             }
+         }, null)
+     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {
@@ -416,25 +459,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     private fun showSurvey(survey: Survey?) {
         survey ?: return
-        if (survey.showPlansScreen) {
-            startActivity(Intent(this@MainActivity, LanternApp.getSession().plansActivity()))
-            return
-        }
+        val intent = Intent(this, WebViewActivity_::class.java)
+        intent.putExtra("url", survey.url!!)
+        startActivity(intent)
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
-
-        // For some reason, telegram.me links create infinite redirects. To solve this, we disable
-        // JavaScript when opening such links.
-        val javaScriptEnabled =
-            !survey.url!!.contains("t.me") && !survey.url!!.contains("telegram.me")
-        val builder = FinestWebView.Builder(this@MainActivity)
-            .webViewSupportMultipleWindows(true)
-            .webViewJavaScriptEnabled(javaScriptEnabled)
-            .webViewJavaScriptCanOpenWindowsAutomatically(javaScriptEnabled)
-            .swipeRefreshColorRes(R.color.black)
-            .webViewAllowFileAccessFromFileURLs(true)
-        runOnUiThread {
-            builder.show(survey.url!!)
-        }
     }
 
     private fun noUpdateAvailable(userInitiated: Boolean) {

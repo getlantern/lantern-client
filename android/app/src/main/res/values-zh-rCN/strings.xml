@@ -30,16 +30,9 @@
   <string name="cannot_find_email">糟糕！我们找不到那个电子邮件地址了。</string>
   <string name="no_purchase_date">请选择您购买蓝灯专业版的大致日期。</string>
   <string name="purchase_date">购买日期</string>
-  <string-array name="common_issue_list">
-    <item>无法访问被封锁的网站</item>
-    <item>无法完成购买</item>
-    <item>无法登录</item>
-    <item>旋转器无休止地加载</item>
-    <item>慢速</item>
-    <item>聊天功能无法使用</item>
-    <item>发现功能无法使用</item>
-    <item>其他</item>
-  </string-array>
+  <string name="common_issue_list_0">无法访问被封锁的网站</string>
+  <string name="common_issue_list_4">缓慢</string>
+  <string name="common_issue_list_9">其他</string>
   <string name="submit_code">确认代码</string>
   <string name="on_text">打开</string>
   <string name="off_text">关闭</string>
