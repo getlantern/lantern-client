@@ -30,8 +30,15 @@
   <string name="cannot_find_email">糟糕！我们找不到那个电子邮件地址了。</string>
   <string name="no_purchase_date">请选择您购买蓝灯专业版的大致日期。</string>
   <string name="purchase_date">购买日期</string>
-  <string name="common_issue_list_0">无法访问被封锁的网站</string>
+  <string name="common_issue_list_0">无法访问被屏蔽的网站</string>
+  <string name="common_issue_list_1">无法完成购买</string>
+  <string name="common_issue_list_2">无法登录</string>
+  <string name="common_issue_list_3">始终在加载中</string>
   <string name="common_issue_list_4">缓慢</string>
+  <string name="common_issue_list_5">聊天功能无法使用</string>
+  <string name="common_issue_list_6">发现功能无法使用</string>
+  <string name="common_issue_list_7">无法连接我的设备</string>
+  <string name="common_issue_list_8">应用崩溃</string>
   <string name="common_issue_list_9">其他</string>
   <string name="submit_code">确认代码</string>
   <string name="on_text">打开</string>
@@ -99,6 +106,7 @@
   <string name="error_update">下载更新时出错</string>
   <string name="error_install_update">安装更新时出错</string>
   <string name="loading">正在加载...</string>
+  <string name="manual_update">尝试手动安装最新版，请点击 &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">欢迎使用“蓝灯专业版”！</string>
   <string name="happy_anniversary">祝蓝灯周年快乐！</string>
   <string name="welcome_greeting">欢迎来到蓝灯</string>
@@ -126,6 +134,7 @@
   <string name="share_friends_text">分享给朋友，就能赚取免费使用期！</string>
   <string name="email_address">电子邮件地址</string>
   <string name="switch_to_alipay">切换到支付宝</string>
+  <string name="switch_to_stripe">切换到Stripe</string>
   <string name="switch_to_credit_card">转用信用卡支付</string>
   <string name="continue_to_pro">继续到专业版</string>
   <string name="continue_to_basic">继续到基本版</string>
@@ -258,8 +267,8 @@
   <string name="free_month">每次注册都可免费获得一个月的专业服务。</string>
   <string name="get_pro_now">立即获取专业版</string>
   <string name="inviting_friends">通过邀请朋友获得专业版积分</string>
-  <string name="data_cap_percent">还剩 %1$s MB 的免费数据。重置于 %2$s。请升级到专业版以便能够获得无限的高速数据。</string>
-  <string name="data_cap">您已经使用了你的蓝灯的所有高速数据。重置于 %1$s 。请升级到蓝灯专业版以便能够继续以全速使用蓝灯。</string>
+  <string name="data_cap_percent">还剩 %1$s MB 免费流量。免费流量将于 %2$s 重置。请升级到专业版，享受无限量高速上网。</string>
+  <string name="data_cap">您已用完所有高速流量。高速流量将于 %1$s 重置。请升级到蓝灯专业版，享受无限量高速上网。</string>
   <string name="data_cap_reset">您的免费蓝灯高速数据已重置。赶快开始浏览被封锁的网站和服务吧！</string>
   <string name="select">选择</string>
   <string name="one_year">1 年（非经常性）</string>
@@ -283,7 +292,7 @@
   <string name="pro_available_for">适用于 Windows、Android、Mac 和 Ubuntu。即将推出 iOS 。</string>
   <string name="upgrade_to_pro">升级到专业版、数据不受限制、速度更快、抗堵能力更强！</string>
   <string name="data_remaining">您的免费月度高速数据还剩余 %1$s%%。</string>
-  <string name="data_used">还剩 %1$s MB 的免费数据。\n重置于 %2$s。</string>
+  <string name="data_used">还剩 %1$s MB 的免费流量。\n将于 %2$s重置。</string>
   <string name="upgrade">升级</string>
   <string name="upgrade_pro">升级到专业版</string>
   <string name="upgrade_now">立即升级</string>
@@ -303,7 +312,7 @@
   <string name="unable_to_cancel_account">无法取消专业版帐户！请联系 team@getlantern.org</string>
   <string name="earn_free_month">每注册一个朋友，就能赚取一个月的免费服务。</string>
   <string name="credits_applied">您的积分将在下一个账单周期应用到您的帐户中。</string>
-  <string name="pro_invitation_subject">加入蓝灯专业版的邀请</string>
+  <string name="pro_invitation_subject">邀请他人加入蓝灯专业版</string>
   <string name="receive_free_month">要想免费使用蓝灯专业版一个月，请使用以下推荐码：%1$s ；您可以从这里下载：https://bit.ly/1M8x04u</string>
   <string name="share_feed_item">我在 %2$s 通过蓝灯阅读关于\"%1$s\"的内容。使用蓝灯来访问被封锁的网站和服务。你可以在这里下载它的安卓版：https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">您确定吗？此操作无法撤销！您可以随时随地再次注册成为专业版会员。</string>
@@ -415,6 +424,7 @@
   <string name="privacy_disclosure_title">蓝灯隐私披露</string>
   <string name="privacy_disclosure_accept">我接受</string>
   <string name="privacy_disclosure_body">蓝灯致力于保护您的隐私。我们希望您了解我们收集哪些信息、不收集哪些信息，以及我们如何收集、使用和存储信息。我们不会将您的支付信息与您的蓝灯专业版帐户分开。我们不收集您的活动日志，包括不记录浏览历史、流量目的地、数据内容或 DNS 查询。我们也不会储存连接记录，即不会记录您的 IP 地址、与连接时间戳相关的蓝灯服务器的 IP 地址或会话持续时间。对于给定的蓝灯专业版帐户，蓝灯在技术上无法将蓝灯帐户与用户的真实身份联系起来。对于给定一个蓝灯 IP 地址和精确的时间戳，蓝灯在技术上也无法将此 IP 地址归属于蓝灯用户或蓝灯用户的 IP 地址。</string>
+  <string name="referral_code_share_description">与朋友分享蓝灯专业版账户！您的朋友在购买蓝灯专业版时，只需顺手填入您的推荐码，您和朋友两人都将额外获赠一个月专业版时长！</string>
   <string name="referral_code_share">分享推荐码</string>
   <string name="referral_code_share_title">分享您的推荐码。</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -466,6 +476,7 @@
   <string name="device_authorized_pro">该设备现在已被授权使用您的蓝灯专业版帐户。请等待几分钟来生效</string>
   <string name="report_sent">报告已发送</string>
   <string name="thank_you_for_reporting_your_issue">感谢您报告问题。由于数量众多，我们无法回复大多数问题，但我们向您保证，我们正在努力根据您的报告改进  Lantern。</string>
+  <string name="unable_to_submit_issue">报告提交失败</string>
   <string name="have_a_lantern_pro_activation_code_click_here">网上打折购买了专业版激活码？点击这里</string>
   <string name="enter_email_and_activation_code">输入电子邮件和激活码</string>
   <string name="activation_code">激活码</string>
