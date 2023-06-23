@@ -399,6 +399,8 @@ func Start(configDir string,
 	settings Settings,
 	wrappedSession Session) (*StartResult, error) {
 
+	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
+
 	session := &panickingSessionImpl{wrappedSession}
 
 	startOnce.Do(func() {
@@ -428,11 +430,6 @@ func Start(configDir string,
 	}
 	return &StartResult{addr.(string), socksAddr.(string),
 		da.(string)}, nil
-}
-
-// EnableLogging enables logging.
-func EnableLogging(configDir string) {
-	logging.EnableFileLogging(common.DefaultAppName, configDir)
 }
 
 func newAnalyticsSession(deviceID string) analytics.Session {

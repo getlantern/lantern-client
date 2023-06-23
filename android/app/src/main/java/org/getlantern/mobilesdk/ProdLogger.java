@@ -10,7 +10,6 @@ public class ProdLogger extends Logger {
     }
 
     synchronized public static void enable(Context context) {
-        Internalsdk.enableLogging(Lantern.configDirFor(context, ""));
         Logger.instance = new ProdLogger();
     }
 

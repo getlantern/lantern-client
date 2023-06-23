@@ -30,6 +30,9 @@
   <string name="cannot_find_email">اوہ! ہمیں ای میل ایڈریس تلاش کرنے مین دشواری پیش آرہی ہے۔ </string>
   <string name="no_purchase_date">برائے مہربانی انداز سے کسی اس تاریخ کا انتخاب کیجئے جب آپ کو لگتا ہو کہ آپ نے لینٹرن پرو خریدا تھا۔ </string>
   <string name="purchase_date">خریداری کی تاریخ</string>
+  <string name="common_issue_list_0">بلاک سائٹس تک رسائی ممکن نہیں </string>
+  <string name="common_issue_list_4">آہستہ</string>
+  <string name="common_issue_list_9">دوسرے</string>
   <string name="submit_code">کوڈ کی تصدیق کیجئے</string>
   <string name="on_text">آن</string>
   <string name="off_text">آف</string>
