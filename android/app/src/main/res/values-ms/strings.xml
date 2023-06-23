@@ -30,6 +30,9 @@
   <string name="cannot_find_email">Oops!  Kami sedang mengalami kesukaran mencari alamat emel tersebut.</string>
   <string name="no_purchase_date">Sila pilih satu tarikh anggaran bila anda akan membeli Lantern Pro</string>
   <string name="purchase_date">Tarikh Pembelian</string>
+  <string name="common_issue_list_0">Tidak boleh akses laman-laman disekat</string>
+  <string name="common_issue_list_4">Lambat</string>
+  <string name="common_issue_list_9">Lain-lain</string>
   <string name="submit_code">Mengesahkan Kod</string>
   <string name="on_text">BUKA</string>
   <string name="off_text">TUTUP</string>
