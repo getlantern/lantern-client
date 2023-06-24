@@ -575,13 +575,13 @@ msgid "apps_to_unblock"
 msgstr "请选择您要翻墙访问的应用。在您连接蓝灯后，只有这些应用才会通过蓝灯访问。"
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "隧道分流"
 
 msgid "split_tunneling_info"
-msgstr ""
+msgstr "开启隧道分流模式后，只有您选定的应用才会通过蓝灯翻墙访问。这会有效提升您的上网体验，并节省带宽。"
 
 msgid "applied_next_time"
-msgstr ""
+msgstr "隧道分流的更新设置，将在您重启蓝灯后生效。"
 
 msgid "message_disappearing"
 msgstr "您和 %s 之間傳送的所有訊息都不會消失。"

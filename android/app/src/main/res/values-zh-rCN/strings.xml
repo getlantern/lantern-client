@@ -37,7 +37,7 @@
   <string name="common_issue_list_4">缓慢</string>
   <string name="common_issue_list_5">聊天功能无法使用</string>
   <string name="common_issue_list_6">发现功能无法使用</string>
-  <string name="common_issue_list_7">无法连接我的设备</string>
+  <string name="common_issue_list_7">无法关联设备</string>
   <string name="common_issue_list_8">应用崩溃</string>
   <string name="common_issue_list_9">其他</string>
   <string name="submit_code">确认代码</string>
