@@ -8,8 +8,6 @@
   <string name="proxy_all_on">Если вы выберете эту опцию, весь трафик на устройстве будет отправляться через %1$s</string>
   <string name="proxy_all_off">Когда эта опция отключена, через %1$s отправляется только трафик, связанный с заблокированными сайтами</string>
   <string name="button_text">Старт</string>
-  <string name="drawer_open">Открыть Drawer</string>
-  <string name="drawer_close">Закрыть Drawer</string>
   <string name="default_fragment">Фрагмент по умолчанию</string>
   <string name="receive_lantern">Получить версию Lantern для ПК по email</string>
   <string name="lantern_desktop">Версия Lantern для ПК</string>
@@ -149,8 +147,6 @@
   <string name="text_invite">Отправить приглашение текстовым сообщением</string>
   <string name="email_invite">Отправить приглашение по электронной почте</string>
   <string name="share_your_referral_code">Поделитесь своим реферальным кодом</string>
-  <string name="get_code">Получить код</string>
-  <string name="get_code_text">Введите адрес электронной почты для получения кода, чтобы поделиться им с друзьями и получить бесплатный месяц PRO за их подписку!</string>
   <string name="enter_your_email">Введите адрес электронной почты, чтобы получить реферальный код</string>
   <string name="fastworldpay_text">Нажав «Продолжить платеж», вы будете\nперенаправлены на внешний сайт, где совершите\nплатеж и получите код активации.</string>
   <string name="share_referral_text">Используйте мой код %1$s чтобы получить до 3 дополнительных месяцев бесплатно после покупки. Скачать Lantern https://bit.ly/lanternapk</string>
@@ -302,7 +298,6 @@
   <string name="reseller_email_subject">Расскажите о программе Lantern Reseller!</string>
   <string name="reseller_email_message">Когда вы станете реселлером Lantern, у вас будет возможность заработать до 25% при каждой продаже подписки на Lantern Pro. Расскажите немного о том, почему вы хотите стать реселлером ниже.</string>
   <string name="no_email_client">Нет установленных почтовых клиентов.</string>
-  <string name="no_wall_at_all">Нет стены вообще.</string>
   <string name="buy_pro_now">Купить Pro сейчас</string>
   <string name="update_billing_info">Обновить биллинговую информацию</string>
   <string name="pro_credits_text">Пригласите друзей, получите ещё Pro</string>

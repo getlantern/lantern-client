@@ -8,8 +8,6 @@
   <string name="proxy_all_on">Melalui pilihan ini, semua trafik peranti anda akan dihantar melalui %1$s</string>
   <string name="proxy_all_off">Apabila pilihan ini dimatikan, hanya trafik ke laman web yang disekat akan dihantar melalui %1$s</string>
   <string name="button_text">Mula</string>
-  <string name="drawer_open">Buka Drawer</string>
-  <string name="drawer_close">Tutup Drawer</string>
   <string name="default_fragment">Pecahan Default</string>
   <string name="receive_lantern">Menerima desktop Lantern melalui emel</string>
   <string name="lantern_desktop">Desktop Lantern</string>
@@ -140,8 +138,6 @@
   <string name="text_invite">Teks Jemput</string>
   <string name="email_invite">Emel Jemput</string>
   <string name="share_your_referral_code">Berkongsi Kod Rujukan Anda</string>
-  <string name="get_code">Dapatkan Kod</string>
-  <string name="get_code_text">Masukkan emel anda untuk menerima kod untuk dikongsikan dengan rakan-rakan, dapatkan satu bulan PRO percuma apabila mereka mendaftar!</string>
   <string name="enter_your_email">Masukkan emel anda untuk menerima kod rujukan</string>
   <string name="fastworldpay_text">Apabila anda klik teruskan untuk membuat pembelian, anda akan\ndihalakan semula ke laman web luaran untuk menyelesaikan\npembayaran dan mengumpulkan kod pengaktifan anda.</string>
   <string name="share_referral_text">Gunakan kod %1$s saya untuk mendapatkan 3 bulan tambahan percuma selepas pembelian.  Muat turun Lantern https://bit.ly/lanternapk</string>
@@ -286,7 +282,6 @@
   <string name="reseller_email_subject">Beritahu saya mengenai Program Reseller Lantern!</string>
   <string name="reseller_email_message">Apabila anda menjadi seorang Reseller Lantern anda berpeluang menjana sehingga 25% bagi setiap jualan langganan Lantern Pro.  Beritahulah kami mengapa anda ingin menjadi seorang reseller, di bawah.</string>
   <string name="no_email_client">Tiada emel pelanggan dipasang.</string>
-  <string name="no_wall_at_all">Langsung tiada dinding.</string>
   <string name="buy_pro_now">Beli Pro Sekarang</string>
   <string name="update_billing_info">Kemas kini Maklumat Pengebilan</string>
   <string name="pro_credits_text">Jemput rakan-rakan, dapatkan lebih Pro</string>

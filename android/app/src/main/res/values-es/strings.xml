@@ -8,8 +8,6 @@
   <string name="proxy_all_on">Con esta opción, todo el tráfico de su dispositivo se enviará a través de %1$s</string>
   <string name="proxy_all_off">Con esta opción desactivada, solo se enviará el tráfico a los sitios bloqueados a través de %1$s</string>
   <string name="button_text">Iniciar</string>
-  <string name="drawer_open">Panel deslizante abierto</string>
-  <string name="drawer_close">Panel deslizante cerrado</string>
   <string name="default_fragment">Fragmento predeterminado</string>
   <string name="receive_lantern">Recibir Lantern de escritorio por correo electrónico</string>
   <string name="lantern_desktop">Lantern de Escritorio</string>
@@ -139,8 +137,6 @@
   <string name="text_invite">Invitación de texto</string>
   <string name="email_invite">Invitación de correo electrónico</string>
   <string name="share_your_referral_code">Comparta su código de referencia</string>
-  <string name="get_code">Obtener código</string>
-  <string name="get_code_text">Introduzca su correo electrónico para recibir un código para compartir con sus amigos, ¡obtenga un mes de PRO cuando se registren!</string>
   <string name="enter_your_email">Introduzca su correo electrónico para recibir un código de referencia</string>
   <string name="fastworldpay_text">Cuando haga clic en Continuar con la compra,\nse le redirigirá a un sitio externo para completar\nel pago y obtener su código de activación.</string>
   <string name="share_referral_text">Use mi código %1$s para conseguir hasta 3 meses gratuitos adicionales tras la compra. Descargue Lantern https://bit.ly/lanternapk</string>
@@ -293,7 +289,6 @@ iOS.</string>
   <string name="reseller_email_subject">¡Hábleme sobre el Programa de Proveedores de Lantern!</string>
   <string name="reseller_email_message">Cuando se convierta en un Proveedor de Lantern tendrá la oportunidad de cargar hasta un 25% adicional en cada venta de una suscripción a Lantern Pro. Cuéntenos debajo un poco acerca de por qué quiere convertirse en un proveedor.</string>
   <string name="no_email_client">No hay clientes de correo instalados.</string>
-  <string name="no_wall_at_all">No hay barreras en absoluto.</string>
   <string name="buy_pro_now">Comprar Pro ahora</string>
   <string name="update_billing_info">Actualizar información de facturación</string>
   <string name="pro_credits_text">Invite a amigos, consiga más Pro</string>
