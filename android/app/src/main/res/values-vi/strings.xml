@@ -8,8 +8,6 @@
   <string name="proxy_all_on">Với tùy chọn này, tất cả lưu lượng thiết bị của bạn sẽ được gửi qua %1$s</string>
   <string name="proxy_all_off">Khi tắt tùy chọn này, chỉ lưu lượng truy cập đến các trang web bị chặn sẽ được gửi qua %1$s</string>
   <string name="button_text">Bắt đầu</string>
-  <string name="drawer_open">Ngăn kéo Mở</string>
-  <string name="drawer_close">Ngăn kéo Đóng</string>
   <string name="default_fragment">Phân Mảnh Mặc Định</string>
   <string name="receive_lantern">Nhận Lantern để bàn qua email </string>
   <string name="lantern_desktop">Lantern Để Bàn</string>
@@ -139,8 +137,6 @@
   <string name="text_invite">Gửi Lời Mời</string>
   <string name="email_invite">Email Lời Mời</string>
   <string name="share_your_referral_code">Chia sẻ mã số giới thiệu của bạn</string>
-  <string name="get_code">Lấy Mã Số</string>
-  <string name="get_code_text">Điền email của bạn để nhận mã số chia sẻ với bạn bè. Khi họ đăng ký, bạn sẽ được một tháng Pro miễn phí!</string>
   <string name="enter_your_email">Điền email của bạn để nhận mã số giới thiệu</string>
   <string name="fastworldpay_text">Khi bạn nhấp vào tiếp tục mua hàng, bạn sẽ\nđược chuyển hướng đến một trang web bên ngoài để hoàn tất\nthanh toán và lấy mã kích hoạt của bạn.</string>
   <string name="share_referral_text">Dùng mã số %1$s của tôi để có thêm 3 tháng miễn phí sau khi mua. Tải Lantern xuống từ https://bit.ly/lanternapk</string>
@@ -285,7 +281,6 @@
   <string name="reseller_email_subject">Cho biết thêm về Chương Trình Làm Đại Lý Lantern</string>
   <string name="reseller_email_message">Khi làm Đại Lý cho Lantern, bạn có thể hưởng lên tới 25% khi bán được một tài khoản Lantern Pro. Cho chúng tôi tại sao bạn muốn làm đại lý.</string>
   <string name="no_email_client">Không thấy phần mềm email nào cài đặt.</string>
-  <string name="no_wall_at_all">Phá mọi tường lửa.</string>
   <string name="buy_pro_now">Mua Bản Pro Ngay</string>
   <string name="update_billing_info">Cập nhật Thông Tin Tính Tiền</string>
   <string name="pro_credits_text">Mời bạn bè, được nhiều điểm Pro</string>

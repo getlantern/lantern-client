@@ -8,8 +8,6 @@
   <string name="proxy_all_on">使用该选项，您的所有设备流量将通过%1$s发送。</string>
   <string name="proxy_all_off">关闭此选项后，只有通往被封锁网站的流量会通过%1$s发送。</string>
   <string name="button_text">开始</string>
-  <string name="drawer_open">抽屉处于打开状态</string>
-  <string name="drawer_close">抽屉处于关闭状态</string>
   <string name="default_fragment">默认片段</string>
   <string name="receive_lantern">通过电子邮件接收蓝灯桌面版</string>
   <string name="lantern_desktop">蓝灯桌面版</string>
@@ -149,8 +147,6 @@
   <string name="text_invite">短信邀请函</string>
   <string name="email_invite">电子邮件邀请</string>
   <string name="share_your_referral_code">分享您的推荐码</string>
-  <string name="get_code">获取验证码</string>
-  <string name="get_code_text">输入您的电子邮件即可收到一个可以与您的朋友分享的代码。如果他们注册，即可免费使用专业版一个月！</string>
   <string name="enter_your_email">要收到一个推荐码，请输入您的电子邮件。</string>
   <string name="fastworldpay_text">当您点击继续购买时，您将被重定向到一个外部网站，以完成\n付款并收集您的激活码。</string>
   <string name="share_referral_text">购买后，使用我的代码%1$s可额外获得 3 个月的免费使用期。如需下载蓝灯，请点击以下链接：https://bit.ly/lanternapk</string>
@@ -302,7 +298,6 @@
   <string name="reseller_email_subject">请告知有关“蓝灯经销商计划”的信息！</string>
   <string name="reseller_email_message">当您成为蓝灯经销商时，您将有机会在每次销售蓝灯专业版订阅时获得高达 25% 的利润。请在下方告诉我们您为什么想成为经销商。</string>
   <string name="no_email_client">没有安装电子邮件客户端。</string>
-  <string name="no_wall_at_all">任何防火墙都无法阻挡信息的流通。</string>
   <string name="buy_pro_now">立即购买专业版</string>
   <string name="update_billing_info">更新账单信息</string>
   <string name="pro_credits_text">邀请朋友，获得更多专业版</string>

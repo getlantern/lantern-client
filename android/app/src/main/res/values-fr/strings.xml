@@ -8,8 +8,6 @@
   <string name="proxy_all_on">Avec cette option, tout le trafic de votre appareil est acheminé par %1$s</string>
   <string name="proxy_all_off">Quand cette option est désactivée, seul le trafic vers des sites bloqués est acheminé par %1$s</string>
   <string name="button_text">Démarrer</string>
-  <string name="drawer_open">Ouvrir le tiroir</string>
-  <string name="drawer_close">Fermer le tiroir</string>
   <string name="default_fragment">Fragment par défaut</string>
   <string name="receive_lantern">Recevoir Lantern pour ordinateur par courriel</string>
   <string name="lantern_desktop">Lantern pour ordinateur</string>
@@ -140,8 +138,6 @@
   <string name="text_invite">Texto d’invitation</string>
   <string name="email_invite">Courriel d’invitation</string>
   <string name="share_your_referral_code">Partagez votre code de parrainage</string>
-  <string name="get_code">Obtenir un code</string>
-  <string name="get_code_text">Saisissez votre adresse courriel pour recevoir un code à partager avec vos amis et pour obtenir gratuitement un mois de la version Pro s’ils s’inscrivent.</string>
   <string name="enter_your_email">Saisissez votre adresse courriel pour recevoir un code de parrainage</string>
   <string name="fastworldpay_text">En touchant Continuer pour acheter, vous\n serez redirigé vers un site externe pour achever\nle paiement et récupérer votre code d’activation.</string>
   <string name="share_referral_text">Utilisez mon code %1$s afin d’obtenir jusqu’à mois supplémentaires gratuits après l’achat.
@@ -290,7 +286,6 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="reseller_email_subject">Informez-moi sur le programme pour revendeur Lantern.</string>
   <string name="reseller_email_message">En devenant revendeur Lantern, vous aurez la possibilité de gagner jusqu’à 25 % sur chaque vente d’abonnement Lantern Pro. Expliquez-nous ci-dessous pourquoi vous souhaitez devenir revendeur ?</string>
   <string name="no_email_client">Aucun client de courriel n’est installé.</string>
-  <string name="no_wall_at_all">Sans aucune barrière.</string>
   <string name="buy_pro_now">Acheter Pro maintenant</string>
   <string name="update_billing_info">Mettre les infos de facturation à jour</string>
   <string name="pro_credits_text">Invitez des amis, obtenez plus de crédits Pro</string>

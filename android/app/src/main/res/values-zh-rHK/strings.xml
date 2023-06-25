@@ -8,8 +8,6 @@
   <string name="proxy_all_on">當此選項開啟時，所有裝置的流量會透過 %1$s 傳送</string>
   <string name="proxy_all_off">當此選項關閉時，只有通往封鎖網站的流量會透過 %1$s 傳送</string>
   <string name="button_text">開始</string>
-  <string name="drawer_open">抽屜開啟</string>
-  <string name="drawer_close">抽屜關閉</string>
   <string name="default_fragment">預設片段</string>
   <string name="receive_lantern">透過電子郵件接收 Lantern 桌面</string>
   <string name="lantern_desktop">Lantern 桌上型電腦</string>
@@ -149,8 +147,6 @@
   <string name="text_invite">文字邀請</string>
   <string name="email_invite">電子郵件邀請</string>
   <string name="share_your_referral_code">分享您的推薦代碼</string>
-  <string name="get_code">取得代碼</string>
-  <string name="get_code_text">輸入您的電子郵件，即可收到跟好友分享的驗證碼，註冊時可免費獲得 PRO 版一個月！</string>
   <string name="enter_your_email">輸入您的電子郵件以接收推薦代碼</string>
   <string name="fastworldpay_text">當您按一下繼續進行購買時，\n您將被重新導向至外部網站，以完成\n付款並收集您的啟用代碼。</string>
   <string name="share_referral_text">購買後，使用我的代碼 %1$s 可額外獲得最多 3 個月免費。下載 Lantern https://bit.ly/lanternapk</string>
@@ -302,7 +298,6 @@
   <string name="reseller_email_subject">請告訴我有關 Lantern 經銷商計畫的資訊！</string>
   <string name="reseller_email_message">當您成爲 Lantern 經銷商時，您將有機會從每份 Lantern Pro 訂閱獲得最高 25% 的時間。請在下方說明您想成為經銷商的原因。</string>
   <string name="no_email_client">未安裝任何電子郵件用戶端。</string>
-  <string name="no_wall_at_all">通行無阻。</string>
   <string name="buy_pro_now">立即購買 Pro 版 </string>
   <string name="update_billing_info">更新帳單資訊</string>
   <string name="pro_credits_text">邀請好友，獲得更多 Pro 版服務</string>

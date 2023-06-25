@@ -427,9 +427,6 @@ msgstr "信用卡"
 msgid "lantern_pro_checkout"
 msgstr "蓝灯专业版结账"
 
-msgid "lantern_checkout"
-msgstr ""
-
 msgid "1y_pricing"
 msgstr "1 年价格"
 
