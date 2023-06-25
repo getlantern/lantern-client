@@ -320,7 +320,7 @@ msgid "share_referral_code"
 msgstr "Share Referral Code"
 
 msgid "share_message_referral_code"
-msgstr "For a free month of Lantern Pro, use this referral code: %s ; You can download it from here: https://bit.ly/1M8x04u"
+msgstr "For a free month of Lantern Pro, use this referral code: %s ; You can download it from here: https://lantern.io/download"
 
 msgid "add_referral_code"
 msgstr "Add Referral code"
