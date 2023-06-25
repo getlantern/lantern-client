@@ -42,7 +42,7 @@ class PaymentProvider extends StatelessWidget {
           children: [
             ...logoPaths.map(
               (p) => Flexible(
-                child: Container(
+                  child: Container(
                 width: 47,
                 height: 32,
                 margin: const EdgeInsetsDirectional.only(
