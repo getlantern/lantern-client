@@ -496,9 +496,6 @@ msgstr "Credit Card"
 msgid "lantern_pro_checkout"
 msgstr "Lantern Pro Checkout"
 
-msgid "lantern_checkout"
-msgstr "Lantern Checkout"
-
 msgid "1y_pricing"
 msgstr "1 year pricing"
 
