@@ -67,7 +67,7 @@ CIBASE := $(shell printf "CI=$$CI" | base64)
 
 STAGING = false
 UPDATE_SERVER_URL ?=
-VERSION ?= $$VERSION
+VERSION ?= 9999.99.99
 # Note - we don't bother stripping symbols or DWARF table as Android's packaging seems to take care of that for us
 LDFLAGS := -X github.com/getlantern/android-lantern/internalsdk.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/android-lantern/internalsdk.ApplicationVersion=$(VERSION) -X github.com/getlantern/flashlight/v7/common.StagingMode=$(STAGING)
 

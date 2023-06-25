@@ -18,7 +18,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.thefinestartist.finestwebview.FinestWebView
 import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -33,6 +32,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
+import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
@@ -461,21 +461,10 @@ class MainActivity :
 
     private fun showSurvey(survey: Survey?) {
         survey ?: return
+        val intent = Intent(this, WebViewActivity_::class.java)
+        intent.putExtra("url", survey.url!!)
+        startActivity(intent)
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
-
-        // For some reason, telegram.me links create infinite redirects. To solve this, we disable
-        // JavaScript when opening such links.
-        val javaScriptEnabled =
-            !survey.url!!.contains("t.me") && !survey.url!!.contains("telegram.me")
-        val builder = FinestWebView.Builder(this@MainActivity)
-            .webViewSupportMultipleWindows(true)
-            .webViewJavaScriptEnabled(javaScriptEnabled)
-            .webViewJavaScriptCanOpenWindowsAutomatically(javaScriptEnabled)
-            .swipeRefreshColorRes(R.color.black)
-            .webViewAllowFileAccessFromFileURLs(true)
-        runOnUiThread {
-            builder.show(survey.url!!)
-        }
     }
 
     private fun noUpdateAvailable(userInitiated: Boolean) {

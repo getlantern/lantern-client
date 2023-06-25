@@ -1,8 +1,6 @@
 # 
 # Translators:
 # Derek F <derek@getlantern.org>, 2021
-# Pedram Azizallahi <pedram672004@yahoo.com>, 2021
-# ali jafarizadeh <ebrahimigv@gmail.com>, 2021
 # b0b47d46632b78a09a40de799fda9a65, 2022
 # Evan <alireza.firoozi68@gmail.com>, 2022
 # Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2022
@@ -11,16 +9,21 @@
 # Mokah <unfilternet@getlantern.org>, 2022
 # Chip Stehr <chip@getlantern.org>, 2022
 # Lantern, 2022
-# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023
-# NoProfile, 2023
 # Jigar, 2023
-# Vaseto Nora <n.nouri67@gmail.com>, 2023
-# Sina <sina@asl19.org>, 2023
 # 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023
+# Vaseto Nora <n.nouri67@gmail.com>, 2023
+# ali jafarizadeh <ebrahimigv@gmail.com>, 2023
+# Sina <sina@asl19.org>, 2023
+# NoProfile, 2023
+# Pedram Azizallahi <pedram672004@yahoo.com>, 2023
+# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2023
+# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023
+# zar24 <zarghamjan@yahoo.com>, 2023
+# Mersen M, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023\n"
+"Last-Translator: Mersen M, 2023\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -217,7 +220,7 @@ msgstr "پیوند از طریق ایمیل"
 msgid "lantern_pro_email"
 msgstr "ایمیل Lantern Pro"
 
-msgid "Email"
+msgid "email"
 msgstr "ایمیل"
 
 msgid "Submit"
@@ -226,8 +229,158 @@ msgstr "ثبت اطلاعات"
 msgid "save"
 msgstr "ذخیره"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "لطفاً آدرس ایمیل معتبری وارد کنید"
+
+msgid "bonus"
+msgstr "جایزه"
+
+msgid "referral_bonus"
+msgstr "جایزه معرفی"
+
+msgid "total"
+msgstr "مجموع"
+
+msgid "month"
+msgstr "ماه"
+
+msgid "months"
+msgstr "ماه‌ها"
+
+msgid "enter_email"
+msgstr "وارد کردن ایمیل"
+
+msgid "error_fetching_plans"
+msgstr ""
+"خطا در دریافت طرح‌ها، لطفا لنترن را مجددا راه‌اندازی و دوباره امتحان کنید."
+
+msgid "apply"
+msgstr "اعمال"
+
+msgid "choose_payment_method"
+msgstr "روش پرداخت را انتخاب کنید"
+
+msgid "pro_plan"
+msgstr "طرح حرفه‌ای"
+
+msgid "one_year_plan"
+msgstr "طرح یک ساله"
+
+msgid "two_year_plan"
+msgstr "طرح دو ساله"
+
+msgid "plan_discount"
+msgstr "ذخیره کنید %d%%"
+
+msgid "enter_email_and_activation_code"
+msgstr "ایمیل و کد فعالسازی را وارد کنید"
+
+msgid "referral_code"
+msgstr "کد ارجاع"
+
+msgid "add_referral_code"
+msgstr "کد معرف را وارد کنید"
+
+msgid "Activation Code"
+msgstr "کد فعالسازی"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "کد معرف اشتباه یا ناکامل است"
+
+msgid "register_for_pro"
+msgstr "ثبت‌نام برای Pro"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "هنگام اعمال کد معرف خطا دریافت شد"
+
+msgid "your_activation_code_is_invalid"
+msgstr "کد فعالسازی شما اشتباه است"
+
+msgid "update_cache_plans_timeout"
+msgstr "هنگام دریافت طرح‌های موجود خطا دریافت شد"
+
+msgid "bitcoin_timeout"
+msgstr "مهلت درخواست BTCpay تمام شد."
+
+msgid "BTCPay is unavailable"
+msgstr "در حال حاضر BTCpay در دسترس نیست."
+
+msgid "update_cache_user_timeout"
+msgstr "در هنگام دریافت داده‌های کاربر خطا دریافت شد."
+
+msgid "reseller_timeout"
+msgstr "در هنگام تایید کد معرف خطا دریافت شد."
+
+msgid "reseller_success"
+msgstr "کد معرف با موفقیت اعمال شد."
+
+msgid "stripe_timeout"
+msgstr ""
+"مهلت پرداخت Stripe تمام شد. لطفا لنترن را دوباره اجرا و از اول امتحان کنید."
+
+msgid "stripe_success"
+msgstr "خرید از Stripe انجام شد."
+
+msgid "renewal_success"
+msgstr "تمدید موفق"
+
+msgid "pro_renewal_success_description"
+msgstr ""
+"برای تمدید نسخه حرفه‌ای لنترن ممنونیم. حالا شما محدودیت ترافیک ندارید و به "
+"سریعترین دیتاسنترها وصل می‌شوید. تا سه دستگاه را میتوانید به این اکانت وصل "
+"کنید."
+
+msgid "pro_purchase_success"
+msgstr "به نسخه حرفه‌ای لنترن خوش آمدید"
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+"حالا شما به سریعترین دیتاسنترهای ما و خط ویژه دسترسی دارید. تا سه دستگاه را "
+"میتوانید به این اکانت وصل کنید."
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+"حالا شما به سریعترین دیتاسنترهای ما دسترسی دارید. تا سه دستگاه را میتوانید "
+"به این اکانت وصل کنید."
+
+msgid "by_clicking_tos"
+msgstr "با کلیک روی %sموافقت می‌کنید با"
+
+msgid "tos"
+msgstr "شرایط استفاده از خدمات"
+
+msgid "step_1"
+msgstr "مرحله 1"
+
+msgid "step_2"
+msgstr "مرحله 2"
+
+msgid "step_3"
+msgstr "مرحله 3"
+
+msgid "invalid_email"
+msgstr "آدرس ایمیل اشتباه است"
+
+msgid "invalid_card"
+msgstr "شماره کارت اعتباری اشتباه است"
+
+msgid "invalid_expiration"
+msgstr "تاریخ انقضا نادرست است"
+
+msgid "cc_number"
+msgstr "کارت اعتباری"
+
+msgid "card_number"
+msgstr "شماره کارت"
+
+msgid "card_expiration"
+msgstr "سال/ماه"
+
+msgid "invalid_cvc"
+msgstr "کد CVC نادرست است"
+
+msgid "complete_purchase"
+msgstr "خرید خود را کامل کنید"
 
 msgid "Re-send Email"
 msgstr "ارسال دوباره ایمیل"
@@ -278,6 +431,54 @@ msgstr "خروج از سیستم"
 msgid "confirm_remove_device"
 msgstr ""
 "آیا مطمئن هستید که میخواهید این دستگاه را از حساب Pro خود قطع اتصال کنید؟ "
+
+msgid "unlimited_data"
+msgstr "ترافیک نامحدود"
+
+msgid "no_logs"
+msgstr "هیچ گزارشی وجود ندارد"
+
+msgid "no_ads"
+msgstr "بدون تبلیغ"
+
+msgid "choose_plan"
+msgstr "انتخاب طرح"
+
+msgid "connect_up_to_3_devices"
+msgstr "اتصال تا حداکثر 3 دستگاه"
+
+msgid "faster_data_centers"
+msgstr "مراکز داده پرسرعت"
+
+msgid "dedicated_line"
+msgstr "خط ویژه"
+
+msgid "increased_reliability"
+msgstr "افزایش اطمینان"
+
+msgid "checkout"
+msgstr "وارسی"
+
+msgid "credit_card"
+msgstr "کارت اعتباری"
+
+msgid "lantern_pro_checkout"
+msgstr "پرداخت لنترن پرو"
+
+msgid "1y_pricing"
+msgstr "قیمت یک ساله"
+
+msgid "2y_pricing"
+msgstr "هزینه دو ساله"
+
+msgid "plan_type"
+msgstr "نوع طرح"
+
+msgid "most_popular"
+msgstr "محبوب‌ترین"
+
+msgid "free"
+msgstr "رایگان"
 
 msgid "n/a"
 msgstr "در دسترس نیست"
@@ -341,8 +542,11 @@ msgstr "ویرایش"
 msgid "save_error"
 msgstr "در حین ذخیره کردن، خطایی رخ داده است"
 
+msgid "fewer_options"
+msgstr "انتخاب‌های کمتر"
+
 msgid "more_options"
-msgstr "سایر گزینه‌ها"
+msgstr "انتخاب‌های بیشتر"
 
 msgid "block_user"
 msgstr "مسدود کردن کاربر"
@@ -408,13 +612,15 @@ msgid "start_chat"
 msgstr "شروع گپ"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "اپلیکیشن‌های نصب شده شما"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "اپلیکیشن‌هایی که از لنترن عبور می‌کنند"
 
 msgid "apps_to_unblock"
 msgstr ""
+"اپلیکیشن‌هایی که می‌خواهید رفع انسداد شوند را انتخاب کنید. وقتی وصل شوید، "
+"فقط اپلیکیشن‌هایی که در پایین انتخاب کردید از لنترن عبور می‌کنند."
 
 msgid "split_tunneling"
 msgstr "جداسازی تونل"
@@ -425,7 +631,7 @@ msgstr ""
 " در هنگام اتصال مستثنی کنید"
 
 msgid "applied_next_time"
-msgstr ""
+msgstr "تنظیمات جدید جداسازی تونل در اتصال بعدی شما اعمال خواهند شد."
 
 msgid "message_disappearing"
 msgstr "همه پیام‌ها برای شما و %s ناپدید نمی‌شوند."
@@ -447,6 +653,9 @@ msgstr "روشن"
 
 msgid "continue"
 msgstr "ادامه"
+
+msgid "continue_to_pro"
+msgstr "به استفاده از لنترن ویژه ادامه دهید!"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "مطمئنید که می‌خواهید %s را باز کنید؟"
@@ -1228,7 +1437,7 @@ msgid "support"
 msgstr "پشتیبانی"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "تالار گفتمان کاربران لنترن"
 
 msgid "faq"
 msgstr "‫سوالات متداول"

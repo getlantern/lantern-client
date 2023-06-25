@@ -2,7 +2,8 @@
   "project_info": {
     "project_number": "714458374144",
     "firebase_url": "https://lantern-2c50c.firebaseio.com",
-    "project_id": "lantern-2c50c"
+    "project_id": "lantern-2c50c",
+    "storage_bucket": "lantern-2c50c.appspot.com"
   },
   "client": [
     {
@@ -16,10 +17,6 @@
         {
           "client_id": "714458374144-ptcmqjvmmqpu8ngbtsn2dvat9vfqp4ks.apps.googleusercontent.com",
           "client_type": 3
-        },
-        {
-          "client_id": "714458374144-m1bf3uqts9osolpbs7n76p4s7jjl7p9b.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -28,15 +25,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "104121466674231221238",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
