@@ -41,7 +41,8 @@ class PaymentProvider extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ...logoPaths.map(
-              (p) => Container(
+              (p) => Flexible(
+                child: Container(
                 width: 47,
                 height: 32,
                 margin: const EdgeInsetsDirectional.only(
@@ -66,7 +67,7 @@ class PaymentProvider extends StatelessWidget {
                 child: CAssetImage(
                   path: p,
                 ),
-              ),
+              )),
             ),
             Radio(
               value: selectedPaymentProvider == paymentType,
