@@ -1,8 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-
 import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/core/router/router.gr.dart';
-
 
 @AutoRouterConfig(
   replaceInRouteName: 'Page,Route,Screen',
