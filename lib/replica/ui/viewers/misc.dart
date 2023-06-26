@@ -49,7 +49,8 @@ class _ReplicaMiscViewerState extends ReplicaViewerLayoutState {
         File(tempFilePath!).deleteSync();
       } catch (e) {
         logger.e(
-            'Something went wrong while deleting the temporary PDF after viewing it $e');
+          'Something went wrong while deleting the temporary PDF after viewing it $e',
+        );
       }
     }
     super.dispose();
@@ -191,8 +192,8 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
         fitEachPage: true,
         defaultPage: currentPage!,
         fitPolicy: FitPolicy.BOTH,
-        preventLinkNavigation:
-            false, // if set to true the link is handled in flutter
+        preventLinkNavigation: false,
+        // if set to true the link is handled in flutter
         onRender: (_pages) {
           setState(() {
             pages = _pages;

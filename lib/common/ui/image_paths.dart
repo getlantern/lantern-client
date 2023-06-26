@@ -15,6 +15,7 @@ class ImagePaths {
   static const star = 'assets/images/star.svg';
   static const desktop = 'assets/images/desktop.svg';
   static const settings = 'assets/images/settings.svg';
+  static const support = 'assets/images/support.svg';
   static const qr_code = 'assets/images/qr_code.svg';
   static const qr_code_scanner = 'assets/images/qr_code_scanner.svg';
   static const number_1 = 'assets/images/number_1.svg';
@@ -22,6 +23,18 @@ class ImagePaths {
   static const email = 'assets/images/email.svg';
   static const translate = 'assets/images/translate.svg';
   static const update = 'assets/images/update.svg';
+  static const mastercard = 'assets/images/mastercard.svg';
+  static const visa = 'assets/images/visa.svg';
+  static const unionpay = 'assets/images/unionpay.svg';
+  static const mnp = 'assets/images/mnp.svg';
+  static const qiwi = 'assets/images/qiwi.svg';
+  static const btc = 'assets/images/btc.svg';
+  static const dots = 'assets/images/dots.svg';
+  static const credit_card = 'assets/images/credit_card.svg';
+  static const calendar = 'assets/images/calendar.svg';
+  static const lock = 'assets/images/lock.svg';
+  static const split_tunneling = 'assets/images/split_tunneling.svg';
+  static const forum = 'assets/images/forum.svg';
 
   // Messaging
   static const more_vert = 'assets/images/more_vert.svg';
@@ -53,6 +66,8 @@ class ImagePaths {
   static const mic = 'assets/images/mic.svg';
   static const insert_emoticon = 'assets/images/insert_emoticon.svg';
   static const keyboard = 'assets/images/keyboard.svg';
+  static const savings_arrow = 'assets/images/savings_arrow.svg';
+  static const down_arrow = 'assets/images/down_arrow.svg';
   static const search = 'assets/images/search.svg';
   static const lock_clock = 'assets/images/lock_clock.svg';
   static const volume_up = 'assets/images/volume_up.svg';
@@ -61,9 +76,9 @@ class ImagePaths {
   static const notifications = 'assets/images/notifications.svg';
   static const person_add_alt_1 = 'assets/images/person_add_alt_1.svg';
   static const account_remove = 'assets/images/account_remove.svg';
-
-  // Replica
   static const lantern_logo = 'assets/images/lantern_logo.svg';
+  static const lantern_star = 'assets/images/lantern_star.svg';
+  // Replica
   static const discover = 'assets/images/discover.svg';
   static const audio = 'assets/images/audio_black.svg';
   static const doc = 'assets/images/doc_black.svg';
@@ -99,6 +114,7 @@ class ImagePaths {
   static const error_outline = 'assets/images/error_outline.svg';
   static const cancel = 'assets/images/cancel.svg';
   static const delete = 'assets/images/delete.svg';
+  static const open = 'assets/images/open.svg';
   static const done_all = 'assets/images/done_all.svg';
   static const timer = 'assets/images/timer.svg';
   static const verification_alert = 'assets/images/verification_alert.svg';
@@ -119,6 +135,8 @@ class ImagePaths {
   static const empty_chats = 'assets/images/empty_chats.svg';
   static const empty_chats_rtl = 'assets/images/empty_chats_rtl.svg';
   static const empty_search = 'assets/images/empty_search.svg';
+  static const lantern_logotype = 'assets/images/lantern_logotype.svg';
+  static const lantern_pro_logotype = 'assets/images/lantern_pro_logotype.svg';
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';

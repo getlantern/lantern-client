@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/scheduler.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging.dart';
@@ -6,6 +8,17 @@ final navigatorKey = GlobalKey<NavigatorState>();
 final globalRouter = AppRouter(navigatorKey);
 final networkWarningBarHeightRatio = ValueNotifier(0.0);
 var showConnectivityWarning = false;
+
+// This enum is used to manage the font families used in the application
+enum AppFontFamily {
+  semim('Samim'),
+  roboto('Roboto');
+
+  // the actual string value (the font family name) to each enum value
+  const AppFontFamily(this.fontFamily);
+
+  final String fontFamily;
+}
 
 class _TickerProviderImpl extends TickerProvider {
   @override
@@ -58,12 +71,22 @@ class LanternApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentLocal = window.locale;
+    print('selected local: ' + currentLocal.languageCode);
     return FutureBuilder(
       future: translations,
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
         if (!snapshot.hasData) {
           return Container();
         }
+        final ThemeData theme = ThemeData(
+          fontFamily: _getLocaleBasedFont(currentLocal),
+          brightness: Brightness.light,
+          primarySwatch: Colors.grey,
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+          ),
+        );
         return GlobalLoaderOverlay(
           overlayColor: Colors.black,
           overlayOpacity: 0.6,
@@ -72,12 +95,14 @@ class LanternApp extends StatelessWidget {
             child: MaterialApp.router(
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
+                fontFamily: _getLocaleBasedFont(currentLocal),
                 brightness: Brightness.light,
                 primarySwatch: Colors.grey,
                 appBarTheme: const AppBarTheme(
                   systemOverlayStyle: SystemUiOverlayStyle.light,
                 ),
-                accentColor: Colors.black,
+                colorScheme:
+                    ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
               ),
               title: 'app_name'.i18n,
               localizationsDelegates: [
@@ -114,5 +139,16 @@ class LanternApp extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _getLocaleBasedFont(Locale locale) {
+    if (locale.languageCode == 'fa' ||
+        locale.languageCode == 'ur' ||
+        locale.languageCode == 'eg') {
+      return AppFontFamily.semim.fontFamily; // Farsi font
+    } else {
+      return AppFontFamily
+          .roboto.fontFamily; // Default font for other languages
+    }
   }
 }

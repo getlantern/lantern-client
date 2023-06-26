@@ -8,8 +8,6 @@
   <string name="proxy_all_on">با این گزینه، همه ترافیک دستگاه شما از طریق %1$s ارسال خواهد شد</string>
   <string name="proxy_all_off">اگر این گزینه غیرفعال باشد، فقط ترافیک سایت‌های مسدود از طریق %1$s ارسال خواهد شد</string>
   <string name="button_text">شروع</string>
-  <string name="drawer_open">کشو باز</string>
-  <string name="drawer_close">کشو بسته</string>
   <string name="default_fragment">به طور پیش فرض قطعه</string>
   <string name="receive_lantern">فانوس نسخه رایانه را ازطریق ایمیل دریافت نمایید</string>
   <string name="lantern_desktop">فانوس رایانه</string>
@@ -30,16 +28,16 @@
   <string name="cannot_find_email">آخ! ما در پیدا کردن آن نشانی ایمیل به مشکل برخوردیم.</string>
   <string name="no_purchase_date">لطفاً تاریخ تقریبی از وقتی که لنترن حرفه ای را خریداری نمودید انتخاب نمایید</string>
   <string name="purchase_date">تاریخ خرید</string>
-  <string-array name="common_issue_list">
-    <item>دسترسی به سایت‌های مسدودشده ممکن نیست</item>
-    <item>تکمیل خرید ممکن نیست</item>
-    <item>ورود به سیستم ممکن نیست</item>
-    <item>نشان چرخان دائماً می‌چرخد</item>
-    <item>سرعت پایین</item>
-    <item>چت کار نمی‌کند</item>
-    <item>Discover کار نمی‌کند</item>
-    <item>سایر</item>
-  </string-array>
+  <string name="common_issue_list_0">عدم امکان دسترسی به سایت های بسته شده</string>
+  <string name="common_issue_list_1">خرید تکمیل نشد</string>
+  <string name="common_issue_list_2">ورود انجام نشد</string>
+  <string name="common_issue_list_3">اندیکاتور بی‌پایان بارگذاری می‌کند</string>
+  <string name="common_issue_list_4">آهسته</string>
+  <string name="common_issue_list_5">گپ کار نمی‌کند</string>
+  <string name="common_issue_list_6">بخش دیسکاور کار نمی‌کند</string>
+  <string name="common_issue_list_7">دستگاه متصل نمی‌شود</string>
+  <string name="common_issue_list_8">اپلیکیشن با مشکل مواجه است</string>
+  <string name="common_issue_list_9">غیره</string>
   <string name="submit_code">کد تایید</string>
   <string name="on_text">روشن</string>
   <string name="off_text">خاموش</string>
@@ -58,6 +56,7 @@
   <string name="error_making_purchase">خطا در تلاش برای ایجاد خرید</string>
   <string name="have_latest_version">%1$s%2$s جدیدترین نسخه موجود است.</string>
   <string name="updating_lantern">در حال به‌روزرسانی %1$s</string>
+  <string name="update_lantern">آپدیت لنترن</string>
   <string name="cancel">انصراف</string>
   <string name="newsfeed_option">سرعنوان فانوس را امتحان کنید</string>
   <string name="newsfeed_off_option">سرعنوان را خاموش کن</string>
@@ -105,6 +104,7 @@
   <string name="error_update">ایراد در دانلود به روز رسانی</string>
   <string name="error_install_update">خطا در نصب نسخه به‌روز</string>
   <string name="loading">در حال بارگذاری...</string>
+  <string name="manual_update">لطفا از اینجا سعی کنید آخرین نسخه رو به صورت دستی نصب کنید &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">به  فانوس Pro خوش آمدید!</string>
   <string name="happy_anniversary">سالگرد فانوس مبارک!</string>
   <string name="welcome_greeting">به  فانوس خوش آمدید</string>
@@ -132,6 +132,7 @@
   <string name="share_friends_text">با دوستانتان به اشتراک بگذارید تا یک ماه عضویت ویژه رایگان دریافت کنید</string>
   <string name="email_address">آدرس ایمیل</string>
   <string name="switch_to_alipay">به Allpay بروید</string>
+  <string name="switch_to_stripe">تغییر به Stripe</string>
   <string name="switch_to_credit_card">به بخش پرداخت با کارت اعتباری بروید</string>
   <string name="continue_to_pro">به استفاده از فانوس  Pro ادامه دهید!</string>
   <string name="continue_to_basic">به نسخه پایه ادامه دهید</string>
@@ -146,8 +147,6 @@
   <string name="text_invite">متن دعوت</string>
   <string name="email_invite">ایمیل دعوت</string>
   <string name="share_your_referral_code">کد ارجاع شما</string>
-  <string name="get_code">دریافت کد</string>
-  <string name="get_code_text">ایمیل خود را برای دریافت ایمیل و اشتراک گذاری با دوستانتان وارد کنید. هنگامی که آنها عضو شوند شما یک ماه عضویت رایگان ویژه دریافت خواهید کرد.</string>
   <string name="enter_your_email">ایمیل خود را برای دریافت کد ارجاعی وارد کنید.</string>
   <string name="fastworldpay_text">هنگامی که دکمه تکمیل خرید را کلیک می کنید، برای تکمیل پرداخت و دریافت کد فعالسازی به یک سایت خارجی منتقل می شوید.</string>
   <string name="share_referral_text">از کد  %1$s  استفاده کنید تا از حداکثر 3 ماه عضویت رایگان بعد از خرید استفاده کنید.لینک  فانوس را دانلود کنید https://bit.ly/lanternapk</string>
@@ -297,7 +296,6 @@
   <string name="reseller_email_subject">درباره برنامه فروش نمایندگی فانوس توضیح بیشتری بده!</string>
   <string name="reseller_email_message">وقتی شما عضو نمایندگان فروش فانوس شوید، می توانید با فروش هر فانوس  پرو تا حداکثر 25% کمیسیون دریافت کنید. در پایین کمی درباره چرایی پیوستن به نمایندگان فانوس توضیح دهید. </string>
   <string name="no_email_client">ایمیل مشتریان نصب شده نیست.</string>
-  <string name="no_wall_at_all">هیچ دیواری موجود نیست.</string>
   <string name="buy_pro_now">نسخه ویژه (پرو) را خریداری کنید</string>
   <string name="update_billing_info">اطلاعات صورتحسابتان را به روزرسانی کنید</string>
   <string name="pro_credits_text">دوستانتان را دعوت کنید تا pro بیشتری دریافت کنید. </string>
@@ -357,6 +355,7 @@ https://bit.ly/lanternapk</string>
   <string name="account_left_desc">%1$d ماه از حساب لنترن پروی‌ اکانت شما مانده است.</string>
   <string name="optimized_location">بهینه سازی موقعیت سرور</string>
   <string name="current_location">موقعیت فعلی:</string>
+  <string name="disconnect">قطع شدن</string>
   <string name="disconnected">قطع شده است</string>
   <string name="https_upgrades">ارتقاء های HTTPS</string>
   <string name="data_usage">داده های استفاده شده</string>
@@ -421,8 +420,7 @@ https://bit.ly/lanternapk</string>
   <string name="privacy_disclosure_title">اعلامیه حریم خصوصی Lantern</string>
   <string name="privacy_disclosure_accept">می‌پذیرم</string>
   <string name="privacy_disclosure_body">Lantern متعهد است از حریم خصوصی شما حفاظت کند. از شما می‌خواهیم که بدانید چه اطلاعاتی را جمع‌آوری می‌کنیم، و چه اطلاعاتی را جمع‌آوری نمی‌کنیم، و چگونه اطلاعات را جمع‌آوری، استفاده و ذخیره می‌کنیم. ما اطلاعات پرداختتان را از حساب Lantern Pro شما جدا می‌کنیم. ما گزارش فعالیت‌های شما، اعم از تاریخچه مرور وب‌سایت‌ها، مقصد ترافیک، محتوای داده‌ها، یا جستارهای DNS را جمع‌آوری نمی‌کنیم. همچنین هرگز گزارش اتصال‌ها را ذخیره نمی‌کنیم، یعنی هیچ گزارشی از آدرس IP شما، آدرس IP سرور Lantern خروجی مرتبط با مهر زمانی اتصال، یا مدت جلسه را ذخیره نمی‌کنیم. با فرض در نظر گرفتن یک حساب خاص Lantern Pro‏، Lantern به لحاظ فنی، قادر به ارتباط دادن این حساب با هویت واقعی کاربر نیست. با فرض در نظر گرفتن یک IP آدرس و یک زمان دقیق از حضور در شبکه، Lantern به لحاظ فنی، قادر به ارتباط دادن این آدرس IP با یک کاربر Lantern یا آدرس IP یکی از کاربران Lantern نیست.</string>
-  <string name="referral_code_share_description_free">کد خود را با دوستانتان به اشتراک بگذارید و هنگامی که آن‌ها نسخه Pro خریداری می‌کنند، یک ماه خدمات lantern pro را به‌صورت رایگان دریافت کنید!</string>
-  <string name="referral_code_share_description_pro">کد خود را با دوستانتان به اشتراک بگذارید، و هنگامی که آن‌ها نسخه Pro خریداری می‌کنند، یک ماه خدمات Lantern pro اضافه را به‌صورت رایگان دریافت کنید!</string>
+  <string name="referral_code_share_description">دوست خود را به نسخه حرفه‌ای لنترن دعوت کنید! وقتی دوست شما از کد دعوت شما برای خرید لنترن حرفه‌ای استفاده کند شما هم به طور رایگان به مدت یک ماه به لنترن نسخه حرفه‌ای دسترسی خواهی داشت!</string>
   <string name="referral_code_share">کد ارجاع را به اشتراک بگذارید</string>
   <string name="referral_code_share_title">کد ارجاع خود را به اشتراک بگذارید:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -471,8 +469,10 @@ https://bit.ly/lanternapk</string>
   <string name="send_report">ارسال گزارش </string>
   <string name="email_optional">ایمیل (اختیاری)</string>
   <string name="device_added">دستگاه اضافه شد</string>
+  <string name="device_authorized_pro">دستگاه جدید حالا به نسخه حرفه‌ای متصل شده است. لطفا چند دقیقه صبر کنید تا تعییرات اعمال شود.</string>
   <string name="report_sent">گزارش فرستاده‌شد.</string>
   <string name="thank_you_for_reporting_your_issue">سپاسگزاریم که مشکل‌تان را گزارش دادید. ما به محض اینکه بتوانیم با ایمیل به شما پاسخ خواهیم داد.</string>
+  <string name="unable_to_submit_issue">مشکل ارسال نمی‌شود!</string>
   <string name="have_a_lantern_pro_activation_code_click_here">کد فعال‌سازی Lantern Pro دارید؟ اینجا کلیک کنید</string>
   <string name="enter_email_and_activation_code">ایمیل و کد فعال‌سازی را وارد کنید</string>
   <string name="activation_code">کد فعالسازی</string>

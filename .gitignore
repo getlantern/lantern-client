@@ -73,3 +73,4 @@ web*.pem
 .gomobilecache
 screenshots
 profile.cov
+appium_kotlin/app/src/test/resources/local/local_config.json
