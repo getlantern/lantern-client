@@ -1,4 +1,24 @@
 
+<a name="7.4.9"></a>
+## [7.4.9](https://github.com/getlantern/android-lantern/compare/7.4.8...7.4.9)
+
+> 2023-05-16
+
+### Pull Requests
+
+* Merge pull request [#841](https://github.com/getlantern/android-lantern/issues/841) from getlantern/main_with_tos
+* Merge pull request [#840](https://github.com/getlantern/android-lantern/issues/840) from getlantern/atavism/scrollable-settings-screen
+* Merge pull request [#819](https://github.com/getlantern/android-lantern/issues/819) from getlantern/atavism/vpn-startup-sequence
+* Merge pull request [#835](https://github.com/getlantern/android-lantern/issues/835) from getlantern/atavism/add-tos-privacy-policy-settings
+* Merge pull request [#838](https://github.com/getlantern/android-lantern/issues/838) from getlantern/atavism/use-go-1.19-ci
+
+
+<a name="7.4.8"></a>
+## [7.4.8](https://github.com/getlantern/android-lantern/compare/7.4.7...7.4.8)
+
+> 2023-05-11
+
+
 <a name="7.4.7"></a>
 ## [7.4.7](https://github.com/getlantern/android-lantern/compare/7.4.6...7.4.7)
 

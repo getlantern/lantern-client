@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
-    android:extractNativeLibs="true"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.getlantern.lantern">
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,6 +16,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <permission
         android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"
@@ -63,11 +63,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.paymentwall.pwunifiedsdk.core.PaymentSelectionActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateVisible|adjustResize|adjustPan"/>
-
         <service
             android:enabled="true"
             android:exported="false"
@@ -77,28 +72,16 @@
 
         <receiver android:name = ".model.DeclineCallBroadcastReceiver" />
 
-        <activity
-            android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
-            android:hardwareAccelerated="true"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor"
-            android:theme="@style/FinestWebViewTheme.Light" />
+        <receiver android:name="org.getlantern.lantern.notification.NotificationReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="org.getlantern.lantern.intent.VPN_DISCONNECTED"/>
+            </intent-filter>
+        </receiver>
 
-        <activity
-            android:name="org.getlantern.mobilesdk.activity.SettingsActivity"
-            android:screenOrientation="portrait">
-        </activity>
         <activity
             android:name=".activity.authorizeDevice.LinkDeviceActivity_"
             android:screenOrientation="portrait">
         </activity>
-
-        <activity
-            android:name=".activity.PaymentWallActivity_"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="locale|layoutDirection"
-            android:noHistory="true">
-      </activity>
 
         <activity
             android:name=".activity.FreeKassaActivity_"
@@ -125,21 +108,6 @@
 
         <activity
             android:name=".activity.WebViewActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.RegisterProActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.PlansActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.CheckoutActivity_"
             android:screenOrientation="portrait"
             />
 

@@ -2,6 +2,7 @@ package org.getlantern.lantern
 
 import android.Manifest
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.Bundle
@@ -13,7 +14,6 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.thefinestartist.finestwebview.FinestWebView
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -26,16 +26,27 @@ import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
+import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
+import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
+import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
+import org.getlantern.lantern.model.PaymentProvider
+import org.getlantern.lantern.model.PaymentMethod
+import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.model.VpnState
+import org.getlantern.lantern.notification.NotificationHelper
+import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
@@ -46,13 +57,13 @@ import org.getlantern.mobilesdk.model.Survey
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.util.concurrent.*
 import java.util.Locale
 
 class MainActivity :
     FlutterActivity(),
     MethodChannel.MethodCallHandler,
     CoroutineScope by MainScope() {
-
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
@@ -61,6 +72,11 @@ class MainActivity :
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
+    private lateinit var notifications: NotificationHelper
+    private lateinit var receiver: NotificationReceiver
+    private var autoUpdateJob: Job? = null
+
+    private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
     private val lanternClient = LanternApp.getLanternHttpClient()
 
@@ -69,10 +85,12 @@ class MainActivity :
         super.configureFlutterEngine(flutterEngine)
 
         messagingModel = MessagingModel(this, flutterEngine)
-        vpnModel = VpnModel(flutterEngine, ::switchLantern)
+        vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
+        receiver = NotificationReceiver()
+        notifications = NotificationHelper(this, receiver)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
@@ -116,12 +134,6 @@ class MainActivity :
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
 
-// While Chat is disabled, don't bother with preventing screenshots
-//        // if not in dev mode, prevent screenshots of this activity by other apps
-//        if (!BuildConfig.DEVELOPMENT_MODE) {
-//            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-//        }
-
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
@@ -146,35 +158,23 @@ class MainActivity :
             flutterNavigation.invokeMethod("openConversation", contact)
             intent.removeExtra("contactForConversation")
         }
-
-//        // handles incoming call intent
-//        intent.getStringExtra("signal")?.let { signal ->
-//            val webRTCSignal = Json.gson.fromJson(signal, WebRTCSignal::class.java)
-//            val notificationManager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!
-//            // pass this on to Kotlin and then Dart messaging model
-//            messagingModel.sendSignal(webRTCSignal, true)
-//            LanternApp.messaging.dismissIncomingCallNotification(
-//                notificationManager,
-//                webRTCSignal
-//            )
-//            intent.removeExtra("signal")
-//        }
     }
 
     override fun onStart() {
         super.onStart()
-        visible = true
+        val packageName = activity.packageName
+        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
+            registerReceiver(receiver, it)
+        }
     }
 
     override fun onStop() {
-        visible = false
         super.onStop()
+        unregisterReceiver(receiver)
     }
 
     override fun onResume() {
         val start = System.currentTimeMillis()
-        updateUserData()
-        Logger.debug(TAG, "updateUserData90 finished at ${System.currentTimeMillis() - start}")
 
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
@@ -200,7 +200,6 @@ class MainActivity :
         super.onDestroy()
         vpnModel.destroy()
         sessionModel.destroy()
-        // TODO <09-08-22, kalli> we weren't invoking destroy() on replicaModel previously
         replicaModel.destroy()
         EventBus.getDefault().unregister(this)
     }
@@ -236,15 +235,13 @@ class MainActivity :
                 val dialogView = inflater.inflate(R.layout.init_account_dialog, null)
                 accountInitDialog.setView(dialogView)
                 val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
-                tvMessage.setText(getString(R.string.init_account, appName))
+                tvMessage.text = getString(R.string.init_account, appName)
                 dialogView.findViewById<View>(R.id.btnCancel)
-                    .setOnClickListener(object : View.OnClickListener {
-                        override fun onClick(v: View?) {
-                            EventBus.getDefault().removeStickyEvent(status)
-                            accountInitDialog.dismiss()
-                            finish()
-                        }
-                    })
+                    .setOnClickListener {
+                        EventBus.getDefault().removeStickyEvent(status)
+                        accountInitDialog.dismiss()
+                        finish()
+                    }
                 accountInitDialog.show()
             }
 
@@ -274,8 +271,15 @@ class MainActivity :
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    fun vpnStateChanged(state: VpnState) {
+        updateStatus(state.useVpn)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
+        updateUserPlans()
+        updatePaymentMethods()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -330,6 +334,38 @@ class MainActivity :
             }
         })
     }
+
+    private fun updateUserPlans() {
+        lanternClient.getPlans(object : PlansCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+            }
+
+            override fun onSuccess(proPlans: Map<String, ProPlan>) {
+                plans.clear()
+                plans.putAll(proPlans)
+                for (planId in proPlans.keys) {
+                    proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+                }
+                LanternApp.getSession().setUserPlans(plans)
+                Logger.debug(TAG, "Successfully updated user plans")
+             }
+         }, null)
+     }
+
+    private fun updatePaymentMethods() {
+        lanternClient.plansV3(object : PlansV3Callback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+            }
+
+            override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
+                Logger.debug(TAG, "Successfully fetched payment methods")
+                LanternApp.getSession().setPaymentMethods(paymentMethods)
+
+             }
+         }, null)
+     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {
@@ -416,25 +452,10 @@ class MainActivity :
 
     private fun showSurvey(survey: Survey?) {
         survey ?: return
-        if (survey.showPlansScreen) {
-            startActivity(Intent(this@MainActivity, LanternApp.getSession().plansActivity()))
-            return
-        }
+        val intent = Intent(this, WebViewActivity_::class.java)
+        intent.putExtra("url", survey.url!!)
+        startActivity(intent)
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
-
-        // For some reason, telegram.me links create infinite redirects. To solve this, we disable
-        // JavaScript when opening such links.
-        val javaScriptEnabled =
-            !survey.url!!.contains("t.me") && !survey.url!!.contains("telegram.me")
-        val builder = FinestWebView.Builder(this@MainActivity)
-            .webViewSupportMultipleWindows(true)
-            .webViewJavaScriptEnabled(javaScriptEnabled)
-            .webViewJavaScriptCanOpenWindowsAutomatically(javaScriptEnabled)
-            .swipeRefreshColorRes(R.color.black)
-            .webViewAllowFileAccessFromFileURLs(true)
-        runOnUiThread {
-            builder.show(survey.url!!)
-        }
     }
 
     @Throws(Exception::class)
@@ -531,8 +552,7 @@ class MainActivity :
                 startVpnService()
             }
         } else {
-            stopVpnService()
-            updateStatus(false)
+            sendBroadcast(notifications.disconnectIntent())
         }
     }
 
@@ -619,21 +639,20 @@ class MainActivity :
     }
 
     private fun startVpnService() {
-        startService(
-            Intent(
-                this,
-                LanternVpnService::class.java,
-            ).setAction(LanternVpnService.ACTION_CONNECT),
-        )
-    }
+        val splitTunnelingEnabled = vpnModel.splitTunnelingEnabled()
+        val appsAllowedAccess = ArrayList(vpnModel.appsAllowedAccess())
+        Logger.d(TAG, "Apps allowed access to VPN connection: $appsAllowedAccess")
+        val intent: Intent = Intent(
+            this,
+            LanternVpnService::class.java,
+        ).apply {
+            putExtra("splitTunnelingEnabled", splitTunnelingEnabled)
+            putStringArrayListExtra("appsAllowedAccess", appsAllowedAccess)
+            action = LanternVpnService.ACTION_CONNECT
+        }
 
-    private fun stopVpnService() {
-        startService(
-            Intent(
-                this,
-                LanternVpnService::class.java,
-            ).setAction(LanternVpnService.ACTION_DISCONNECT),
-        )
+        startService(intent)
+        notifications.vpnConnectedNotification()
     }
 
     private fun updateStatus(useVpn: Boolean) {
@@ -656,6 +675,5 @@ class MainActivity :
         private val FULL_PERMISSIONS_REQUEST = 8888
         val RECORD_AUDIO_PERMISSIONS_REQUEST = 8889
         private val REQUEST_VPN = 7777
-        var visible = false
     }
 }

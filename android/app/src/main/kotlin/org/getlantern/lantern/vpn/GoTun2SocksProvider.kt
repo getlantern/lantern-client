@@ -6,15 +6,27 @@ import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
 import internalsdk.Internalsdk
+import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import java.util.Locale
 
-class GoTun2SocksProvider : Provider {
+class GoTun2SocksProvider(val packageManager: PackageManager,
+    val splitTunnelingEnabled: Boolean,
+    val appsAllowedAccess: Set<String>) : Provider {
+
+    companion object {
+        private val TAG = GoTun2SocksProvider::class.java.simpleName
+        private const val sessionName = "LanternVpn"
+        private const val privateAddress = "10.0.0.2"
+        private const val VPN_MTU = 1500
+    }
+
     private var mInterface: ParcelFileDescriptor? = null
 
-    @Synchronized private fun createBuilder(vpnService: VpnService, builder: VpnService.Builder): ParcelFileDescriptor? {
+    @Synchronized 
+    private fun createBuilder(vpnService: VpnService, builder: VpnService.Builder): ParcelFileDescriptor? {
         // Set the locale to English
         // since the VpnBuilder encounters
         // issues with non-English numerals
@@ -23,13 +35,27 @@ class GoTun2SocksProvider : Provider {
 
         // Configure a builder while parsing the parameters.
         builder.setMtu(VPN_MTU)
-
         builder.addAddress(privateAddress, 24)
         // route IPv4 through VPN
         builder.addRoute("0.0.0.0", 0)
-        // Don't capture traffic originating from Lantern itself in the VPN
-        val ourPackageName = vpnService.getPackageName()
+
+        if (splitTunnelingEnabled) {
+            // Exclude any app that's not in our split tunneling allowed list
+            for (installedApp in packageManager.getInstalledApplications(0)) {
+                if (!appsAllowedAccess.contains(installedApp.packageName)) {
+                    try {
+                        Logger.debug(TAG, "Excluding " + installedApp.packageName + " from VPN")
+                        builder.addDisallowedApplication(installedApp.packageName)
+                    } catch (e: PackageManager.NameNotFoundException) {
+                        throw RuntimeException("Unable to exclude " + installedApp.packageName + " from VPN", e)
+                    }
+                }
+            }
+        }
+
+        // Never capture traffic originating from Lantern itself in the VPN.
         try {
+            val ourPackageName = vpnService.getPackageName()
             builder.addDisallowedApplication(ourPackageName)
         } catch (e: PackageManager.NameNotFoundException) {
             throw RuntimeException("Unable to exclude Lantern from routes", e)
@@ -64,7 +90,7 @@ class GoTun2SocksProvider : Provider {
             Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks")
             val intf: ParcelFileDescriptor? = createBuilder(vpnService, builder)
             Logger.debug(TAG, "Running tun2socks")
-            if (intf != null) Internalsdk.tun2Socks(intf.getFd().toLong(), socksAddr, dnsGrabAddr, VPN_MTU.toLong())
+            if (intf != null) Internalsdk.tun2Socks(intf.getFd().toLong(), socksAddr, dnsGrabAddr, VPN_MTU.toLong(), LanternApp.getSession())
         } catch (t: Throwable) {
             Logger.e(TAG, "Exception while handling TUN device", t)
         } finally {
@@ -82,12 +108,5 @@ class GoTun2SocksProvider : Provider {
             mInterface!!.close()
             mInterface = null
         }
-    }
-
-    companion object {
-        private val TAG = GoTun2SocksProvider::class.java.simpleName
-        private const val sessionName = "LanternVpn"
-        private const val privateAddress = "10.0.0.2"
-        private const val VPN_MTU = 1500
     }
 }

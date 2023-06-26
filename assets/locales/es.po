@@ -2,17 +2,17 @@
 # Translators:
 # Giorgio Maone <giorgio@maone.net>, 2021
 # tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2022
-# tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2022
 # e2f <projects@e2f.com>, 2022
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2022
 # e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022
-# strel, 2022
 # e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2023
+# tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2023
+# strel, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2023\n"
-"Language-Team: Spanish (https://www.transifex.com/lantern-1/teams/94371/es/)\n"
+"Last-Translator: strel, 2023\n"
+"Language-Team: Spanish (https://app.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
@@ -127,6 +127,15 @@ msgstr "Configuración"
 
 msgid "general"
 msgstr "General"
+
+msgid "about"
+msgstr "Acerca de"
+
+msgid "privacy_policy"
+msgstr "Política de privacidad"
+
+msgid "terms_of_service"
+msgstr "Condiciones del servicio"
 
 msgid "proxy_all"
 msgstr "Proxyficar todo"
@@ -395,6 +404,24 @@ msgstr "Añadir contactos en persona"
 msgid "start_chat"
 msgstr "Iniciar chat"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "No desaparecerán todos los mensajes entre usted y %s."
 
@@ -409,6 +436,9 @@ msgstr "Ver información de contacto"
 
 msgid "off"
 msgstr "Desconectado"
+
+msgid "on"
+msgstr "Conectado"
 
 msgid "continue"
 msgstr "Continuar"
@@ -1206,3 +1236,15 @@ msgstr "gato"
 
 msgid "discover_disclaimer"
 msgstr "Lantern hace anónimas sus búsquedas y las protege de terceras partes."
+
+msgid "support"
+msgstr "Soporte"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "Preguntas frecuentes (FAQ)"
+
+msgid "add_device"
+msgstr "Añadir dispositivo"

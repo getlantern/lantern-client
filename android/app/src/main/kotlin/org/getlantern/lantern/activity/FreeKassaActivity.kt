@@ -17,9 +17,8 @@ import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.LanternHttpClient
-import org.getlantern.lantern.model.PaymentHandler
 import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.util.Freekassa
+import org.getlantern.lantern.util.FreeKassa
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.json.JSONException
@@ -54,6 +53,14 @@ open class FreeKassaActivity : BaseFragmentActivity() {
     @JvmField
     protected var userEmail: String? = null
 
+    @Extra
+    @JvmField
+    protected var planID: String? = null
+
+    @Extra
+    @JvmField
+    protected var currencyPrice: String? = null
+
     @AfterViews
     fun afterViews() {
         assertIntentExtras()
@@ -70,23 +77,17 @@ open class FreeKassaActivity : BaseFragmentActivity() {
     }
 
     private fun makeRequestToPrepayHandler(onSuccess: (String) -> Unit, onError: (String) -> Unit) {
-        val plan = LanternApp.getSession().getSelectedPlan()
-        if (plan == null) {
-            val error = "Unable to prepare FreeKassa: Plan is null"
-            Logger.error(TAG, error)
-            showErrorDialog(error)
-            return
-        }
-
         val params = hashMapOf(
             "locale" to LanternApp.getSession().language,
         )
         val url = LanternHttpClient.createProUrl("/freekassa-prepay", params)
         val requestBodyParams = FormBody.Builder()
             .add("deviceName", LanternApp.getSession().deviceName())
-            .add("plan", plan.id)
+            .add("plan", planID!!)
             .add("email", userEmail!!)
             .build()
+
+        Logger.d(TAG, "Sending request to Freekassa prepay handler")
 
         lanternHTTPClient.post(
             url,
@@ -132,7 +133,7 @@ open class FreeKassaActivity : BaseFragmentActivity() {
                             return
                         }
                         val transactionID: String = result.get("transactionId").asString
-                        onSuccess(transactionID)
+                        displayWebView(transactionID)
                     } catch (e: JSONException) {
                         val error = "Unable to parse FreeKassa prepay response: $response"
                         Logger.error(TAG, error)
@@ -166,12 +167,10 @@ open class FreeKassaActivity : BaseFragmentActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun displayWebView(transactionID: String) {
-        val plan = LanternApp.getSession().getSelectedPlan()
-        if (plan == null) {
-            val error = "Unable to prepare FreeKassa: Plan is null"
-            Logger.error(TAG, error)
-            showErrorDialog(error)
-            return
+        // plan.currencyPrice is for example 4800 usd for a 1 year plan
+        // (supposed to be 48.00 usd)
+        val price = currencyPrice?.let {
+            it.toLong() / 100
         }
         webView!!.post {
             webView!!.settings.javaScriptEnabled = true
@@ -190,11 +189,6 @@ open class FreeKassaActivity : BaseFragmentActivity() {
                         // so that the user can't go back to it
                         convertToPro()
                     } else if (url.contains("freekassa-error")) {
-                        PaymentHandler.sendPurchaseEvent(
-                            this@FreeKassaActivity,
-                            "freekassa",
-                            "freekassa purchase failed"
-                        )
                         view.clearHistory()
                         Logger.e(TAG, "FreeKassa purchase failed")
                         showErrorDialog("FreeKassa purchase failed")
@@ -202,13 +196,11 @@ open class FreeKassaActivity : BaseFragmentActivity() {
                     }
                 }
             }
-            val u = Freekassa.getPayURI(
+            val u = FreeKassa.getPayURI(
                 merchantId,
-                // plan.currencyPrice is for example 4800 usd for a 1 year plan
-                // (supposed to be 48.00 usd)
-                plan.currencyPrice / 100,
+                price!!,
                 LanternApp.getSession().currency(),
-                plan.id,
+                planID!!,
                 secretWordOne,
                 LanternApp.getSession().language,
                 userEmail!!,

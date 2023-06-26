@@ -33,6 +33,15 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 @EService
 open class LanternService : Service(), Runnable {
+
+    companion object {
+        private val TAG = LanternService::class.java.simpleName
+        private const val MAX_CREATE_USER_TRIES = 11
+        private const val baseWaitMs = 3000
+        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
+        public val AUTO_BOOTED = "autoBooted"
+    }
+
     private var thread: Thread? = null
     private val createUserHandler: Handler = Handler(Looper.getMainLooper())
     private val createUserRunnable: CreateUser = CreateUser(this)
@@ -148,6 +157,7 @@ open class LanternService : Service(), Runnable {
                 Logger.error(TAG, "Unable to parse user from JSON")
                 return
             }
+            service.createUserHandler.removeCallbacks(service.createUserRunnable)
             Logger.debug(TAG, "Created new Lantern user: ${user.newUserDetails()}")
             LanternApp.getSession().setUserIdAndToken(user.getUserId(), user.getToken())
             val referral = user.getReferral()
@@ -181,13 +191,5 @@ open class LanternService : Service(), Runnable {
             .setAction("restartservice")
             .setClass(this, AutoStarter::class.java)
         sendBroadcast(broadcastIntent)
-    }
-
-    companion object {
-        private val TAG = LanternService::class.java.simpleName
-        private const val MAX_CREATE_USER_TRIES = 11
-        private const val baseWaitMs = 3000
-        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
-        public val AUTO_BOOTED = "autoBooted"
     }
 }

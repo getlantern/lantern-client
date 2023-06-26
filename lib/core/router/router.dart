@@ -9,6 +9,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
 import 'package:lantern/account/language.dart';
 import 'package:lantern/account/recovery_key.dart';
 import 'package:lantern/account/settings.dart';
+import 'package:lantern/account/support.dart';
 import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/home.dart';
@@ -20,6 +21,10 @@ import 'package:lantern/messaging/introductions/introduce.dart';
 import 'package:lantern/messaging/introductions/introductions.dart';
 import 'package:lantern/messaging/onboarding/chat_number_messaging.dart';
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart';
+import 'package:lantern/plans/checkout.dart';
+import 'package:lantern/plans/plans.dart';
+import 'package:lantern/plans/reseller_checkout.dart';
+import 'package:lantern/plans/stripe_checkout.dart';
 import 'package:lantern/replica/link_handler.dart';
 import 'package:lantern/replica/ui/viewers/audio.dart';
 import 'package:lantern/replica/ui/viewers/image.dart';
@@ -28,6 +33,7 @@ import 'package:lantern/replica/ui/viewers/misc.dart';
 import 'package:lantern/replica/upload/title.dart';
 import 'package:lantern/replica/upload/description.dart';
 import 'package:lantern/replica/upload/review.dart';
+import 'package:lantern/vpn/vpn_split_tunneling.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
@@ -58,6 +64,14 @@ import 'package:lantern/replica/upload/review.dart';
       page: Settings,
       name: 'Settings',
       path: 'settings',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: SplitTunneling,
+      name: 'SplitTunneling',
+      path: 'splitTunneling',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
@@ -102,9 +116,9 @@ import 'package:lantern/replica/upload/review.dart';
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
-    //
-    // * CHAT ROUTES
-    //
+//
+// * CHAT ROUTES
+//
     CustomRoute<void>(
       page: RecoveryKey,
       name: 'RecoveryKey',
@@ -193,9 +207,41 @@ import 'package:lantern/replica/upload/review.dart';
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
-    //
-    // * REPLICA ROUTES
-    //
+    CustomRoute<void>(
+      page: Checkout,
+      name: 'Checkout',
+      path: 'checkout',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),
+    CustomRoute<void>(
+      page: ResellerCodeCheckout,
+      name: 'ResellerCodeCheckout',
+      path: 'resellerCodeCheckout',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),
+    CustomRoute<void>(
+      page: StripeCheckout,
+      name: 'StripeCheckout',
+      path: 'stripeCheckout',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),
+    CustomRoute<void>(
+      page: PlansPage,
+      name: 'PlansPage',
+      path: 'plans',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+     ),
+//
+// * REPLICA ROUTES
+//
     CustomRoute<void>(
       page: ReplicaUploadTitle,
       name: 'ReplicaUploadTitle',
@@ -256,6 +302,14 @@ import 'package:lantern/replica/upload/review.dart';
       page: ReplicaAudioViewer,
       name: 'ReplicaAudioViewer',
       path: 'replicaAudioViewer',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: Support,
+      name: 'Support',
+      path: 'support',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
