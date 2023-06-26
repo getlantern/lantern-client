@@ -8,8 +8,6 @@
   <string name="proxy_all_on">इस विकल्प के साथ, आपके डिवाइस की सभी ट्रैफिक को %1$s के माध्यम से भेजा जाएगा</string>
   <string name="proxy_all_off">इस विकल्प के बंद होने पर, ट्रैफ़िक को केवल ब्लॉक की गई साइटों पर  %1$sके माध्यम से भेजा जाएगा</string>
   <string name="button_text">प्रारंभ</string>
-  <string name="drawer_open">दराज खुला</string>
-  <string name="drawer_close">दराज बंद</string>
   <string name="default_fragment">डिफ़ॉल्ट टुकड़ा</string>
   <string name="receive_lantern">ईमेल द्वारा लालटेन डेस्कटॉप करे</string>
   <string name="lantern_desktop">लालटेन डेस्कटॉप</string>
@@ -30,16 +28,9 @@
   <string name="cannot_find_email">उफ़! हम दिक्कत यह है कि ई-मेल पते खोज कर रहे हैं।</string>
   <string name="no_purchase_date">जब आप खरीदा लालटेन प्रो कृपया एक अनुमानित तिथि का चयन</string>
   <string name="purchase_date">खरीद की तारीख</string>
-  <string-array name="common_issue_list">
-    <item>ब्लॉक की गई साइटें नहीं खुल रही हैं</item>
-    <item>खरीदारी पूरी नहीं हो पा रही है</item>
-    <item>साइन इन नहीं हो पा रहा है</item>
-    <item>स्पिनर लगातार लोड हो रहा है</item>
-    <item>धीमा है</item>
-    <item>चैट की सुविधा काम नहीं कर रही है</item>
-    <item>डिस्कवर की सुविधा काम नहीं कर रही है</item>
-    <item>कुछ और</item>
-  </string-array>
+  <string name="common_issue_list_0">अवरुद्ध साइटों तक नहीं पहुँच सकते</string>
+  <string name="common_issue_list_4">धीरे</string>
+  <string name="common_issue_list_9">अन्य</string>
   <string name="submit_code">पुष्टि संहिता</string>
   <string name="on_text">चालू</string>
   <string name="off_text">बंद</string>
@@ -146,8 +137,6 @@
   <string name="text_invite">पाठ आमंत्रण</string>
   <string name="email_invite">ईमेल आमंत्रण</string>
   <string name="share_your_referral_code">अपना रेफ़रल कोड साझा करें</string>
-  <string name="get_code">कोड प्राप्त करें</string>
-  <string name="get_code_text">अपने दोस्तों के साथ शेयर करने के लिए एक कोड प्राप्त करने के लिए अपना ईमेल एंटर करें, जब वे साइन अप करें तो एक महीना PRO फ़्री पाएं!</string>
   <string name="enter_your_email">एक रेफरल कोड प्राप्त करने के लिए अपना ईमेल दर्ज करें</string>
   <string name="fastworldpay_text">जब आप खरीदी जारी रखें पर क्लिक करते हैं, तो आपको भुगतान पूरा करने और सक्रिय कोड एकत्र करने के लिए बाहरी साइट पर पुनर्निर्देशित किया जाएगा।</string>
   <string name="share_referral_text">खरीद के बाद 3 अतिरिक्त महीने मुफ्त पाने के लिए मेरे कोड%1$s का उपयोग करें। Lantern डाउनलोड करें https://bit.ly/lanternapk</string>
@@ -299,7 +288,6 @@
   <string name="reseller_email_subject">मुझे Lantern पुनर्विक्रेता कार्यक्रम के बारे में बताएं!</string>
   <string name="reseller_email_message">जब आप एक Lantern पुनर्विक्रेता बन जाते हैं तो आपके पास Lantern Pro सदस्यता की प्रत्येक बिक्री पर 25% तक कमाने का अवसर होगा। हमें नीचे थोड़ा बताएं कि आप पुनर्विक्रेता क्यों बनना चाहते हैं।</string>
   <string name="no_email_client">कोई ईमेल क्लाइंट स्थापित नहीं हैं।</string>
-  <string name="no_wall_at_all">कोई सुरक्षा नहीं।</string>
   <string name="buy_pro_now">अब प्रो खरीदें</string>
   <string name="update_billing_info">बिलिंग जानकारी अद्यतित करें</string>
   <string name="pro_credits_text">दोस्तों को आमंत्रित करें, अधिक Pro प्राप्त करें</string>
@@ -356,6 +344,7 @@
   <string name="account_left_desc">आपके खाते में Lantern Pro के %1$d महीने शेष हैं</string>
   <string name="optimized_location">अनुकूलित सर्वर स्थान</string>
   <string name="current_location">वर्तमान स्थान:</string>
+  <string name="disconnect">डिस्कनेक्ट</string>
   <string name="disconnected">डिस्कनेक्ट किया गया</string>
   <string name="https_upgrades">HTTPS अपग्रेड</string>
   <string name="data_usage">डेटा उपयोग</string>
@@ -420,8 +409,6 @@
   <string name="privacy_disclosure_title">Lantern गोपनीयता प्रकटीकरण</string>
   <string name="privacy_disclosure_accept">मुझे स्वीकार है</string>
   <string name="privacy_disclosure_body">Lantern आपकी गोपनीयता की रक्षा के लिए प्रतिबद्ध है. हम चाहते हैं कि आप यह समझें कि हम क्या जानकारी  इकट्ठा करते हैं और क्या नहीं, और हम उनका उपयोग कैसे करते हैं, और जानकारी स्टोर करते हैं. हम आपके Lantern Pro अकाउंट से आपकी भुगतान जानकारी को अलग कर देते हैं. हम आपकी गतिविधि के लॉग इकठ्ठा नहीं करते हैं, जिसमें ब्राउज़िंग इतिहास, ट्रैफ़िक गंतव्य, डेटा कंटेंट या DNS प्रश्नों का कोई लॉगिंग शामिल नहीं है. हम कभी भी कनेक्शन लॉग्स को स्टोर नहीं करते हैं, जिसका अर्थ है कि आपके IP पते का कोई लॉग, कनेक्शन टाइमस्टैम्प या सत्र अवधि के साथ जुड़ा हुआ आउटगोइंग Lantern सर्वर IP पता. एक विशिष्ट Latern Pro अकाउंट को देखते हुए, Lantern तकनीकी रूप से उपयोगकर्ता की वास्तविक पहचान के साथ Latern अकाउंट को जोड़ने में असमर्थ है। एक Latern IP पते और एक सटीक समय-टिकट को देखते हुए, Latern तकनीकी रूप से इस IP पते को Latern उपयोगकर्ता या Latern उपयोगकर्ता IP पते की विशेषता देने में असमर्थ है.</string>
-  <string name="referral_code_share_description_free">अपने दोस्तों के साथ अपना कोड  शेयर करें और उनके Pro ख़रीदने पर आप एक महीने की Lantern Pro सेवा फ़्री पाएं!</string>
-  <string name="referral_code_share_description_pro">अपने दोस्तों के साथ अपना कोड शेयर करें और उनके Pro ख़रीदने पर आप और एक  महीने की Lantern Pro सेवा फ़्री पाएं!</string>
   <string name="referral_code_share">रेफ़रल कोड शेयर करें</string>
   <string name="referral_code_share_title">अपना रेफ़रल कोड शेयर करें</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>

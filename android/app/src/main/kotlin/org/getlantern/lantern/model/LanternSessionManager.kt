@@ -6,7 +6,6 @@ import android.text.TextUtils
 import io.lantern.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.PlansActivity_
 import org.getlantern.lantern.activity.WelcomeActivity_
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
@@ -27,6 +26,14 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getBoolean(PRO_USER, false)
     }
 
+    fun getUserLevel(): String? {
+        return prefs.getString(USER_LEVEL, "")
+    }
+
+    fun setUserLevel(userLevel: String?) {
+        prefs.edit().putString(USER_LEVEL, userLevel).apply()
+    }
+
     fun isExpired(): Boolean {
         return prefs.getBoolean(PRO_EXPIRED, false)
     }
@@ -37,7 +44,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             val parts = lang.split("_".toRegex()).toTypedArray()
             return if (parts.isNotEmpty()) {
                 Currency.getInstance(Locale(parts[0], parts[1]))
-            } else Currency.getInstance(Locale.getDefault())
+            } else {
+                Currency.getInstance(Locale.getDefault())
+            }
         } catch (e: Exception) {
             Logger.error(TAG, e.message)
         }
@@ -81,7 +90,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         val plan = getSelectedPlan()
         return if (plan != null) {
             plan.currency
-        } else "usd"
+        } else {
+            "usd"
+        }
     }
 
     fun defaultToAlipay(): Boolean {
@@ -121,10 +132,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getString(STRIPE_API_KEY, "")
     }
 
-    fun plansActivity(): Class<*> {
-        return PlansActivity_::class.java
-    }
-
     fun welcomeActivity(): Class<*> {
         return WelcomeActivity_::class.java
     }
@@ -149,11 +156,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun deviceID(): String? {
-      return prefs.getString(DEVICE_ID, "")
+        return prefs.getString(DEVICE_ID, "")
     }
 
     fun userID(): Long {
-      return prefs.getLong(USER_ID, 0)
+        return prefs.getLong(USER_ID, 0)
     }
 
     fun getDeviceExp(): Long {
@@ -181,7 +188,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         val expiration = prefs.getLong(EXPIRY_DATE, 0L)
         return if (expiration == 0L) {
             null
-        } else LocalDateTime(expiration * 1000)
+        } else {
+            LocalDateTime(expiration * 1000)
+        }
     }
 
     fun showWelcomeScreen(): Boolean {
@@ -271,6 +280,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putBoolean(PRO_USER, false)
             .putBoolean(DEVICE_LINKED, false)
             .remove(DEVICES)
+            .remove(PLANS)
             .remove(TOKEN)
             .remove(EMAIL_ADDRESS)
             .remove(USER_ID)
@@ -301,7 +311,12 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
 
-        val devices = Vpn.Devices.newBuilder().addAllDevices(user.devices.map { Vpn.Device.newBuilder().setId(it.id).setName(it.name).setCreated(it.created).build() }).build()
+        val devices = Vpn.Devices.newBuilder().addAllDevices(
+            user.devices.map {
+                Vpn.Device.newBuilder().setId(it.id)
+                    .setName(it.name).setCreated(it.created).build()
+            },
+        ).build()
         db.mutate { tx ->
             tx.put(DEVICES, devices)
         }
@@ -311,6 +326,35 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft())
                 .putInt(PRO_DAYS_LEFT, user.daysLeft())
                 .apply()
+        }
+    }
+
+    fun setUserPlans(proPlans: Map<String, ProPlan>) {
+        db.mutate { tx ->
+            proPlans.values.forEach {
+                val path = PLANS + it.id
+                tx.put(
+                    path,
+                    Vpn.Plan.newBuilder().setId(it.id)
+                        .setDescription(it.description).setBestValue(it.bestValue).setUsdPrice(it.usdEquivalentPrice)
+                        .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime).setOneMonthCost(it.oneMonthCost)
+                        .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus).setRenewalText(it.renewalText).build(),
+                )
+            }
+        }
+    }
+
+    fun setPaymentMethods(paymentMethods: List<PaymentMethods>) {
+        db.mutate { tx ->
+            paymentMethods.forEachIndexed { index, it ->
+                val path = PAYMENT_METHODS + index
+                tx.put(
+                    path,
+                    Vpn.PaymentMethod.newBuilder().setMethod(it.method.toString().lowercase()).addAllProviders(
+                        it.providers.map { Vpn.PaymentProviders.newBuilder().setName(it.name.toString().lowercase()).build() },
+                    ).build(),
+                )
+            }
         }
     }
 
@@ -339,8 +383,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private val TAG = LanternSessionManager::class.java.name
 
         // shared preferences
+        private const val USER_LEVEL = "userLevel"
         private const val PRO_USER = "prouser"
         private const val DEVICES = "devices"
+        private const val PLANS = "/plans/"
+        private const val PAYMENT_METHODS = "/paymentMethods/"
         private const val PRO_EXPIRED = "proexpired"
         private const val PRO_PLAN = "proplan"
         private const val SHOW_RENEWAL_PREF = "renewalpref"

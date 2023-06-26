@@ -8,8 +8,6 @@
   <string name="proxy_all_on">Melalui pilihan ini, semua trafik peranti anda akan dihantar melalui %1$s</string>
   <string name="proxy_all_off">Apabila pilihan ini dimatikan, hanya trafik ke laman web yang disekat akan dihantar melalui %1$s</string>
   <string name="button_text">Mula</string>
-  <string name="drawer_open">Buka Drawer</string>
-  <string name="drawer_close">Tutup Drawer</string>
   <string name="default_fragment">Pecahan Default</string>
   <string name="receive_lantern">Menerima desktop Lantern melalui emel</string>
   <string name="lantern_desktop">Desktop Lantern</string>
@@ -30,16 +28,9 @@
   <string name="cannot_find_email">Oops!  Kami sedang mengalami kesukaran mencari alamat emel tersebut.</string>
   <string name="no_purchase_date">Sila pilih satu tarikh anggaran bila anda akan membeli Lantern Pro</string>
   <string name="purchase_date">Tarikh Pembelian</string>
-  <string-array name="common_issue_list">
-    <item>Tidak boleh mengakses laman yang disekat</item>
-    <item>Tidak boleh menyelesaikan pembelian</item>
-    <item>Tidak boleh log masuk</item>
-    <item>Pemutar memuatkan tanpa henti</item>
-    <item>Perlahan</item>
-    <item>Sembang tidak berfungsi</item>
-    <item>Temukan tidak berfungsi</item>
-    <item>Lain</item>
-  </string-array>
+  <string name="common_issue_list_0">Tidak boleh akses laman-laman disekat</string>
+  <string name="common_issue_list_4">Lambat</string>
+  <string name="common_issue_list_9">Lain-lain</string>
   <string name="submit_code">Mengesahkan Kod</string>
   <string name="on_text">BUKA</string>
   <string name="off_text">TUTUP</string>
@@ -147,8 +138,6 @@
   <string name="text_invite">Teks Jemput</string>
   <string name="email_invite">Emel Jemput</string>
   <string name="share_your_referral_code">Berkongsi Kod Rujukan Anda</string>
-  <string name="get_code">Dapatkan Kod</string>
-  <string name="get_code_text">Masukkan emel anda untuk menerima kod untuk dikongsikan dengan rakan-rakan, dapatkan satu bulan PRO percuma apabila mereka mendaftar!</string>
   <string name="enter_your_email">Masukkan emel anda untuk menerima kod rujukan</string>
   <string name="fastworldpay_text">Apabila anda klik teruskan untuk membuat pembelian, anda akan\ndihalakan semula ke laman web luaran untuk menyelesaikan\npembayaran dan mengumpulkan kod pengaktifan anda.</string>
   <string name="share_referral_text">Gunakan kod %1$s saya untuk mendapatkan 3 bulan tambahan percuma selepas pembelian.  Muat turun Lantern https://bit.ly/lanternapk</string>
@@ -293,7 +282,6 @@
   <string name="reseller_email_subject">Beritahu saya mengenai Program Reseller Lantern!</string>
   <string name="reseller_email_message">Apabila anda menjadi seorang Reseller Lantern anda berpeluang menjana sehingga 25% bagi setiap jualan langganan Lantern Pro.  Beritahulah kami mengapa anda ingin menjadi seorang reseller, di bawah.</string>
   <string name="no_email_client">Tiada emel pelanggan dipasang.</string>
-  <string name="no_wall_at_all">Langsung tiada dinding.</string>
   <string name="buy_pro_now">Beli Pro Sekarang</string>
   <string name="update_billing_info">Kemas kini Maklumat Pengebilan</string>
   <string name="pro_credits_text">Jemput rakan-rakan, dapatkan lebih Pro</string>
@@ -350,6 +338,7 @@
   <string name="account_left_desc">Anda mempunyai %1$d bulan Lantern Pro yang masih tinggal di dalam akaun anda.</string>
   <string name="optimized_location">Lokasi server dioptimakan</string>
   <string name="current_location">Lokasi Sekarang:</string>
+  <string name="disconnect">Putuskan sambungan</string>
   <string name="disconnected">Terputus</string>
   <string name="https_upgrades">Upgrade HTTPS</string>
   <string name="data_usage">Penggunaan Data</string>
@@ -414,8 +403,6 @@
   <string name="privacy_disclosure_title">Pendedahan Privasi Lantern</string>
   <string name="privacy_disclosure_accept">Saya terima</string>
   <string name="privacy_disclosure_body">Lantern komited untuk melindungi privasi anda. Kami ingin anda memahami maklumat yang kami kumpulkan, maklumat yang tidak kami kumpulkan dan cara kami mengumpulkan, menggunakan dan menyimpan maklumat. Kami memisahkan maklumat pembayaran anda dengan akaun Lantern Pro anda. Kami tidak mengumpulkan log aktiviti anda, termasuk tidak mencatat sejarah penyemakan imbas, destinasi trafik, kandungan data atau pertanyaan DNS. Kami juga tidak pernah menyimpan log sambungan, yang bermaksud tidak ada log alamat IP anda, alamat IP pelayan Lantern keluar anda yang dikaitkan dengan cap waktu sambungan, atau tempoh sesi. Disebabkan akaun Lantern Pro yang tertentu, secara teknikal, Lantern tidak dapat mengaitkan akaun Lantern dengan identiti sebenar pengguna. Disebabkan alamat IP Lantern dan cap waktu yang tepat, Lantern secara teknikal tidak dapat menghubungkan alamat IP ini kepada pengguna Lantern atau alamat IP pengguna Lantern.</string>
-  <string name="referral_code_share_description_free">Kongsikan kod anda dengan rakan anda dan dapatkan perkhidmatan Lantern Pro selama satu bulan secara percuma apabila mereka membeli Pro!</string>
-  <string name="referral_code_share_description_pro">Kongsikan kod anda dengan rakan anda dan dapatkan tambahan satu bulan perkhidmatan Lantern Pro secara percuma apabila mereka membeli Pro!</string>
   <string name="referral_code_share">Kongsikan kod rujukan</string>
   <string name="referral_code_share_title">Kongsikan kod Rujukan anda:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>

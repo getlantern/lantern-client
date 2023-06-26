@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/getlantern/flashlight/geolookup"
+	"github.com/getlantern/flashlight/v7/geolookup"
 )
 
 type GeoCallback interface {

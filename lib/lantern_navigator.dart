@@ -11,7 +11,6 @@ class LanternNavigator {
     );
   }
 
-  static const String SCREEN_PLANS = 'SCREEN_PLANS';
   static const String SCREEN_INVITE_FRIEND = 'SCREEN_INVITE_FRIEND';
   static const String SCREEN_DESKTOP_VERSION = 'SCREEN_DESKTOP_VERSION';
   static const String SCREEN_LINK_PIN = 'SCREEN_LINK_PIN';

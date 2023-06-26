@@ -1,14 +1,14 @@
 # 
 # Translators:
-# tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
 # tx_e2f_bu r4 <tx_e2f_bu_r4@ate2f.com>, 2022
-# e2f <projects@e2f.com>, 2022
 # tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2023
+# tx_e2f_my t1 <divinahramaroson@gmail.com>, 2023
+# e2f <projects@e2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2023\n"
-"Language-Team: Burmese (https://www.transifex.com/lantern-1/teams/94371/my/)\n"
+"Last-Translator: e2f <projects@e2f.com>, 2023\n"
+"Language-Team: Burmese (https://app.transifex.com/lantern-1/teams/94371/my/)\n"
 "Language: my\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
@@ -125,6 +125,15 @@ msgstr "ချိန်ညှိချက်များ"
 
 msgid "general"
 msgstr "အထွေထွေ"
+
+msgid "about"
+msgstr "အကြောင်း"
+
+msgid "privacy_policy"
+msgstr "ကိုယ်ရေးအချက်အလက်မူဝါဒ"
+
+msgid "terms_of_service"
+msgstr "ဝန်ဆောင်မှု၏စည်းကမ်းချက်များ"
 
 msgid "proxy_all"
 msgstr "အရာအားလုံး ကိုယ်စား"
@@ -395,6 +404,24 @@ msgstr "အဆက်အသွယ်များကို လူကိုယ်�
 msgid "start_chat"
 msgstr "ချက် စတင်မည်"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "မက်ဆေ့ချ်အားလုံးသည် သင်နှင့် %s အတွက် ပျောက်သွားမည်မဟုတ်ပါ။"
 
@@ -409,6 +436,9 @@ msgstr "အဆက်အသွယ် အချက်အလက်ကို ကြ�
 
 msgid "off"
 msgstr "ပိတ်"
+
+msgid "on"
+msgstr "ဖွင့်"
 
 msgid "continue"
 msgstr "ဆက်သွားပါ"
@@ -1211,3 +1241,15 @@ msgid "discover_disclaimer"
 msgstr ""
 "Lantern သည် သင်၏ ရှာဖွေမှုများကို အမည်မဖော်ပြဘဲ ယင်းတို့ကို "
 "ပြင်ပအဖွဲ့အစည်းများထံ မရောက်ရှိစေရန် ကာကွယ်ပေးသည်။"
+
+msgid "support"
+msgstr ""
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr ""
+
+msgid "add_device"
+msgstr "ကိရိယာထည့်ပါ"

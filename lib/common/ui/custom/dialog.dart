@@ -27,18 +27,30 @@ class CDialog extends StatefulWidget {
   static void showInfo(
     BuildContext context, {
     String? iconPath,
+    CAssetImage? icon,
+    double? size,
     required String title,
     required String description,
+    String? actionLabel,
+    Future<bool> Function()? agreeAction,
+    Future<bool> Function()? dismissAction,
   }) {
     CDialog(
       iconPath: iconPath,
+      icon: icon,
+      size: size,
       title: title,
+      includeCancel: false,
       description: description,
+      agreeAction: agreeAction,
+      dismissAction: dismissAction,
     ).show(context);
   }
 
   CDialog({
     this.iconPath,
+    this.icon,
+    this.size,
     required this.title,
     required this.description,
     this.checkboxLabel,
@@ -50,10 +62,12 @@ class CDialog extends StatefulWidget {
     this.agreeAction,
     this.maybeAgreeAction,
     this.dismissAction,
-    this.includeCancel = true
+    this.includeCancel = true,
   }) : super();
 
   final String? iconPath;
+  final CAssetImage? icon;
+  final double? size;
   final String title;
   final dynamic description;
   final String? checkboxLabel;
@@ -111,6 +125,7 @@ class CDialogState extends State<CDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var hasIcon = widget.icon != null || widget.iconPath != null;
     return AlertDialog(
       contentPadding: const EdgeInsetsDirectional.only(
         top: 24,
@@ -118,14 +133,14 @@ class CDialogState extends State<CDialog> {
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: widget.iconPath != null
+        crossAxisAlignment: hasIcon
             ? CrossAxisAlignment.center
             : CrossAxisAlignment.start,
         children: [
-          if (widget.iconPath != null)
+          if (hasIcon)
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 16),
-              child: CAssetImage(path: widget.iconPath!, size: 24),
+              child: widget.icon != null ? widget.icon! : CAssetImage(path: widget.iconPath!, size: 24),
             ),
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 24, end: 24),
@@ -194,7 +209,7 @@ class CDialogState extends State<CDialog> {
               children: [
                 // DISMISS
                 if ((widget.agreeAction != null ||
-                    widget.maybeAgreeAction != null) &&
+                        widget.maybeAgreeAction != null) &&
                     widget.includeCancel)
                   TextButton(
                     onPressed: () async {

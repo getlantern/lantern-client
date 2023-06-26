@@ -15,8 +15,8 @@ import (
 
 	"golang.org/x/net/proxy"
 
-	"github.com/getlantern/flashlight/common"
-	"github.com/getlantern/flashlight/integrationtest"
+	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/integrationtest"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -37,24 +37,24 @@ func (c testSettings) GetHttpProxyPort() int    { return 49128 }
 func (c testSettings) GetReplicaPort() int      { return 0 }
 func (c testSettings) ShouldRunReplica() bool   { return false }
 
-func (c testSession) AfterStart() error                        { return nil }
-func (c testSession) BandwidthUpdate(int, int, int, int) error { return nil }
-func (c testSession) ConfigUpdate(bool) error                  { return nil }
-func (c testSession) GetUserID() (int64, error)                { return 0, nil }
-func (c testSession) GetToken() (string, error)                { return "", nil }
-func (c testSession) GetForcedCountryCode() (string, error)    { return "", nil }
-func (c testSession) GetDNSServer() (string, error)            { return "8.8.8.8", nil }
-func (c testSession) SetStaging(bool) error                    { return nil }
-func (c testSession) SetCountry(string) error                  { return nil }
-func (c testSession) ProxyAll() (bool, error)                  { return true, nil }
-func (c testSession) GetDeviceID() (string, error)             { return "123456789", nil }
-func (c testSession) AccountId() (string, error)               { return "1234", nil }
-func (c testSession) Locale() (string, error)                  { return "en-US", nil }
-func (c testSession) GetTimeZone() (string, error)             { return "Americas/Chicago", nil }
-func (c testSession) IsProUser() (bool, error)                 { return true, nil }
-func (c testSession) ForceReplica() bool                       { return true }
-func (c testSession) SetReplicaAddr(replicaAddr string)        {}
-
+func (c testSession) AfterStart() error                                        { return nil }
+func (c testSession) BandwidthUpdate(int, int, int, int) error                 { return nil }
+func (c testSession) ConfigUpdate(bool) error                                  { return nil }
+func (c testSession) GetUserID() (int64, error)                                { return 0, nil }
+func (c testSession) GetToken() (string, error)                                { return "", nil }
+func (c testSession) GetForcedCountryCode() (string, error)                    { return "", nil }
+func (c testSession) GetDNSServer() (string, error)                            { return "8.8.8.8", nil }
+func (c testSession) SetStaging(bool) error                                    { return nil }
+func (c testSession) SetCountry(string) error                                  { return nil }
+func (c testSession) ProxyAll() (bool, error)                                  { return true, nil }
+func (c testSession) GetDeviceID() (string, error)                             { return "123456789", nil }
+func (c testSession) AccountId() (string, error)                               { return "1234", nil }
+func (c testSession) Locale() (string, error)                                  { return "en-US", nil }
+func (c testSession) GetTimeZone() (string, error)                             { return "Americas/Chicago", nil }
+func (c testSession) IsProUser() (bool, error)                                 { return true, nil }
+func (c testSession) ForceReplica() bool                                       { return true }
+func (c testSession) SetReplicaAddr(replicaAddr string)                        {}
+func (c testSession) SplitTunnelingEnabled() (bool, error)                     { return true, nil }
 func (c testSession) UpdateStats(string, string, string, int, int, bool) error { return nil }
 
 func (c testSession) UpdateAdSettings(AdSettings) error { return nil }
@@ -284,8 +284,9 @@ func TestAutoUpdate(t *testing.T) {
 
 func TestCheckForUpdates(t *testing.T) {
 	deviceInfo := testDeviceInfo{}
-	_, err := CheckForUpdates(deviceInfo)
-	require.Error(t, err)
+	result, err := CheckForUpdates(deviceInfo)
+	require.NoError(t, err, "Update check should succeed")
+	require.Empty(t, result, "UpdateURL should be empty because no update is available")
 }
 
 func TestDownloadUpdate(t *testing.T) {

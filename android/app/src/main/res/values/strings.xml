@@ -7,8 +7,6 @@
     <string name="proxy_all_on">With this option, all of your device traffic will be sent through %1$s</string>
     <string name="proxy_all_off">With this option off, only traffic to blocked sites will be sent through %1$s</string>
     <string name="button_text">Start</string>
-    <string name="drawer_open">Drawer Open</string>
-    <string name="drawer_close">Drawer Close</string>
     <string name="default_fragment">Default Fragment</string>
     <string name="receive_lantern">Receive Lantern desktop by email</string>
     <string name="lantern_desktop">Lantern Desktop</string>
@@ -29,16 +27,16 @@
     <string name="cannot_find_email">Oops! We\'re having trouble finding that email address.</string>
     <string name="no_purchase_date">Please select an approximate date when you purchased Lantern Pro</string>
     <string name="purchase_date">Purchase Date</string>
-    <string-array name="common_issue_list">
-        <item>Cannot access blocked sites</item>
-        <item>Cannot complete purchase</item>
-        <item>Cannot sign in</item>
-        <item>Spinner loads endlessly</item>
-        <item>Slow</item>
-        <item>Chat not working</item>
-        <item>Discover not working</item>
-        <item>Other</item>
-    </string-array>
+    <string name="common_issue_list_0">Cannot access blocked sites</string>
+    <string name="common_issue_list_1">Cannot complete purchase</string>
+    <string name="common_issue_list_2">Cannot sign in</string>
+    <string name="common_issue_list_3">Spinner loads endlessly</string>
+    <string name="common_issue_list_4">Slow</string>
+    <string name="common_issue_list_5">Chat not working</string>
+    <string name="common_issue_list_6">Discover not working</string>
+    <string name="common_issue_list_7">Cannot link device</string>
+    <string name="common_issue_list_8">Application crashes</string>
+    <string name="common_issue_list_9">Other</string>
     <string name="submit_code">Confirm Code</string>
     <string name="on_text">ON</string>
     <string name="off_text">OFF</string>
@@ -148,8 +146,6 @@
     <string name="text_invite">Text Invite</string>
     <string name="email_invite">Email Invite</string>
     <string name="share_your_referral_code">Share Your Referral Code</string>
-    <string name="get_code">Get Code</string>
-    <string name="get_code_text">Enter your email to receive a code to share with your friends, get a free month of PRO when they sign up!</string>
     <string name="enter_your_email">Enter your email to receive a referral code</string>
     <string name="fastworldpay_text">When you click continue to purchase you will\nbe redirected to an external site to complete\npayment and collect your activation code.</string>
     <string name="share_referral_text">Use my code %1$s to get up to 3 additional months free after purchase. Download Lantern https://bit.ly/lanternapk</string>
@@ -302,7 +298,6 @@
     <string name="reseller_email_subject">Tell me about the Lantern Reseller Program!</string>
     <string name="reseller_email_message">When you become a Lantern Reseller you will have the opportunity to make up to 25% on every sale of a Lantern Pro subscription. Tell us a bit about why you want to become a reseller below.</string>
     <string name="no_email_client">There are no email clients installed.</string>
-    <string name="no_wall_at_all">No wall at all.</string>
     <string name="buy_pro_now">Buy Pro Now</string>
     <string name="update_billing_info">Update Billing Info</string>
     <string name="pro_credits_text">Invite friends, get more Pro</string>
@@ -359,6 +354,7 @@
     <string name="account_left_desc">You have %1$d months of Lantern Pro left in your account</string>
     <string name="optimized_location">Optimized server location</string>
     <string name="current_location">Current Location: </string>
+    <string name="disconnect">Disconnect</string>
     <string name="disconnected">Disconnected</string>
     <string name="https_upgrades">HTTPS Upgrades</string>
     <string name="data_usage">Data Usage</string>
@@ -423,8 +419,7 @@
     <string name="privacy_disclosure_title">Lantern Privacy Disclosure</string>
     <string name="privacy_disclosure_accept">I Accept</string>
     <string name="privacy_disclosure_body">Lantern is committed to protecting your privacy. We want you to understand what information we collect, what we don’t collect, and how we collect, use, and store information. We disassociate your payment information with your Lantern Pro account. We do not collect logs of your activity, including no logging of browsing history, traffic destination, data content, or DNS queries. We also never store connection logs, meaning no logs of your IP address, your outgoing Lantern server IP address associated with the connection timestamp, or session duration. Given a specific Lantern Pro account, Lantern is technically unable to associate the Lantern account with the real identity of the user. Given a Lantern IP address and a precise time-stamp, Lantern is technically unable to attribute this IP address to a Lantern user or a Lantern user IP address.</string>
-    <string name="referral_code_share_description_free">Share your code with your friends and get one month of Lantern Pro service for free when they purchase Pro!</string>
-    <string name="referral_code_share_description_pro">Share your code with your friends and get one month of additional Lantern Pro service for free when they purchase Pro!</string>
+    <string name="referral_code_share_description">Share Lantern Pro with a friend! When your friend uses your referral code during their purchase of Lantern Pro, you will both receive one month of Lantern Pro service for free!</string>
     <string name="referral_code_share">Share referral code</string>
     <string name="referral_code_share_title">Share your Referral code:</string>
     <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -476,6 +471,7 @@
     <string name="device_authorized_pro">Your new device is now Authorized to use your Pro account. Please wait a couple of minutes for changes to take effect.</string>
     <string name="report_sent">Report Sent</string>
     <string name="thank_you_for_reporting_your_issue">Thank you for reporting your issue. Due to volume, we cannot respond to most issues, but we assure you we are working hard to improve Lantern based on your reports.</string>
+    <string name="unable_to_submit_issue">Unable to submit issue</string>
     <string name="have_a_lantern_pro_activation_code_click_here">Have a Lantern Pro activation code? Click here</string>
     <string name="enter_email_and_activation_code">Enter Email and Activation Code</string>
     <string name="activation_code">Activation Code</string>

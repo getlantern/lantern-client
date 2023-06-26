@@ -40,6 +40,19 @@ CTextStyle tsSubtitle2 = CTextStyle(
   fontWeight: FontWeight.w500,
 );
 
+CTextStyle tsSubtitle3 = CTextStyle(
+  fontFamily: 'Roboto',
+  fontSize: 14,
+  lineHeight: 23,
+);
+
+CTextStyle tsSubtitle4 = CTextStyle(
+  fontFamily: 'Roboto',
+  fontSize: 14,
+  lineHeight: 23,
+  fontWeight: FontWeight.w500,
+);
+
 CTextStyle tsBody1 = CTextStyle(fontSize: 14, lineHeight: 23);
 
 CTextStyle tsBody1Short = CTextStyle(fontSize: 14, lineHeight: 18);

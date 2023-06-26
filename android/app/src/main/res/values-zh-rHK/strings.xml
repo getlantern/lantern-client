@@ -8,8 +8,6 @@
   <string name="proxy_all_on">當此選項開啟時，所有裝置的流量會透過 %1$s 傳送</string>
   <string name="proxy_all_off">當此選項關閉時，只有通往封鎖網站的流量會透過 %1$s 傳送</string>
   <string name="button_text">開始</string>
-  <string name="drawer_open">抽屜開啟</string>
-  <string name="drawer_close">抽屜關閉</string>
   <string name="default_fragment">預設片段</string>
   <string name="receive_lantern">透過電子郵件接收 Lantern 桌面</string>
   <string name="lantern_desktop">Lantern 桌上型電腦</string>
@@ -30,6 +28,16 @@
   <string name="cannot_find_email">糟糕！我們無法找到該電子郵件地址。</string>
   <string name="no_purchase_date">請選擇您購買 Lantern Pro 的大約日期</string>
   <string name="purchase_date">購買日期</string>
+  <string name="common_issue_list_0">無法存取已阻止的網站</string>
+  <string name="common_issue_list_1">无法完成购买</string>
+  <string name="common_issue_list_2">无法登录</string>
+  <string name="common_issue_list_3">始终在加载中</string>
+  <string name="common_issue_list_4">慢</string>
+  <string name="common_issue_list_5">聊天功能无法使用</string>
+  <string name="common_issue_list_6">发现功能无法使用</string>
+  <string name="common_issue_list_7">无法连接我的设备</string>
+  <string name="common_issue_list_8">蓝灯软件崩溃</string>
+  <string name="common_issue_list_9">其他</string>
   <string name="submit_code">確認代碼</string>
   <string name="on_text">開啟</string>
   <string name="off_text">關閉</string>
@@ -48,6 +56,7 @@
   <string name="error_making_purchase">嘗試購買時發生錯誤</string>
   <string name="have_latest_version">%1$s %2$s 是可用的最新版本。</string>
   <string name="updating_lantern">更新 %1$s 中</string>
+  <string name="update_lantern">更新蓝灯</string>
   <string name="cancel">取消</string>
   <string name="newsfeed_option">試試 Lanten 摘要</string>
   <string name="newsfeed_off_option">關閉摘要</string>
@@ -95,6 +104,7 @@
   <string name="error_update">下載更新錯誤</string>
   <string name="error_install_update">安裝更新時發生錯誤</string>
   <string name="loading">正在載入…</string>
+  <string name="manual_update">尝试手动安装最新版，请点击 &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">歡迎加入 Lantern Pro！</string>
   <string name="happy_anniversary">LANTERN 周年紀念！</string>
   <string name="welcome_greeting">歡迎來到 Lantern</string>
@@ -122,6 +132,7 @@
   <string name="share_friends_text">跟好友分享，賺取免費月份！</string>
   <string name="email_address">電子郵件地址</string>
   <string name="switch_to_alipay">切換至支付寶</string>
+  <string name="switch_to_stripe">切换到Stripe</string>
   <string name="switch_to_credit_card">切換至信用卡付款</string>
   <string name="continue_to_pro">繼續前往 PRO 版本</string>
   <string name="continue_to_basic">繼續前往 Basic 版本</string>
@@ -136,8 +147,6 @@
   <string name="text_invite">文字邀請</string>
   <string name="email_invite">電子郵件邀請</string>
   <string name="share_your_referral_code">分享您的推薦代碼</string>
-  <string name="get_code">取得代碼</string>
-  <string name="get_code_text">輸入您的電子郵件，即可收到跟好友分享的驗證碼，註冊時可免費獲得 PRO 版一個月！</string>
   <string name="enter_your_email">輸入您的電子郵件以接收推薦代碼</string>
   <string name="fastworldpay_text">當您按一下繼續進行購買時，\n您將被重新導向至外部網站，以完成\n付款並收集您的啟用代碼。</string>
   <string name="share_referral_text">購買後，使用我的代碼 %1$s 可額外獲得最多 3 個月免費。下載 Lantern https://bit.ly/lanternapk</string>
@@ -289,7 +298,6 @@
   <string name="reseller_email_subject">請告訴我有關 Lantern 經銷商計畫的資訊！</string>
   <string name="reseller_email_message">當您成爲 Lantern 經銷商時，您將有機會從每份 Lantern Pro 訂閱獲得最高 25% 的時間。請在下方說明您想成為經銷商的原因。</string>
   <string name="no_email_client">未安裝任何電子郵件用戶端。</string>
-  <string name="no_wall_at_all">通行無阻。</string>
   <string name="buy_pro_now">立即購買 Pro 版 </string>
   <string name="update_billing_info">更新帳單資訊</string>
   <string name="pro_credits_text">邀請好友，獲得更多 Pro 版服務</string>
@@ -346,6 +354,7 @@
   <string name="account_left_desc">您的帳號中還有 %1$d 個月的 Lantern Pro 服務</string>
   <string name="optimized_location">最佳化的伺服器位置</string>
   <string name="current_location">目前位置：</string>
+  <string name="disconnect">斷開</string>
   <string name="disconnected">已中斷連線</string>
   <string name="https_upgrades">HTTPS 升級</string>
   <string name="data_usage">資料使用量</string>
@@ -410,8 +419,7 @@
   <string name="privacy_disclosure_title">Lantern 私隱權揭露</string>
   <string name="privacy_disclosure_accept">我接受</string>
   <string name="privacy_disclosure_body">Lantern 承諾保護您的私隱。我們希望您瞭解我們收集哪些資訊、不收集哪些資訊，以及我們收集、使用和存儲資訊的方式。我們會解除您的付款資訊與您 Lantern Pro 帳號的關聯。我們不會收集您的活動記錄，包括不記錄瀏覽歷程記錄、流量目的地、資料內容或 DNS 查詢。我們也不會儲存連線記錄檔，也就是說，您的 IP 位址、與連線時間戳記相關的外送 Lantern 伺服器 IP 位址，或工作階段持續時間。對於某個特定 Lantern Pro 帳號，Lantern 在技術上無法關聯 Lantern 帳號與使用者的真實身份。給定一個 Lantern  IP 位址和精確的時間戳記，Lantern 在技術上無法將此 IP 位址歸入 Lantern 使用者或 Lantern 使用者 IP 位址。</string>
-  <string name="referral_code_share_description_free">跟好友分享您的代碼，在購買 Pro 版服務時獲得免費 Lantern Pro 服務一個月！</string>
-  <string name="referral_code_share_description_pro">跟好友分享您的代碼，在購買 Pro 時額外獲得免費 Lantern Pro 服務一個月！</string>
+  <string name="referral_code_share_description">与朋友分享蓝灯专业版账户！您的朋友在购买蓝灯专业版时，只需顺手填入您的推荐码，您和朋友两人都将额外获赠一个月专业版时长！</string>
   <string name="referral_code_share">分享推薦代碼</string>
   <string name="referral_code_share_title">分享您的推薦代碼：</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -462,6 +470,7 @@
   <string name="device_added">已新增裝置</string>
   <string name="report_sent">報告已傳送</string>
   <string name="thank_you_for_reporting_your_issue">感謝您回報問題。由於回報事項眾多，我們無法回覆大部分的問題，但我們保證已努力解決問題，根據您所回報的內容改善 Lantern。</string>
+  <string name="unable_to_submit_issue">报告提交失败</string>
   <string name="have_a_lantern_pro_activation_code_click_here">是否具有 Lantern Pro 啟用代碼？按一下這裡</string>
   <string name="enter_email_and_activation_code">輸入電子郵件和啟動代碼</string>
   <string name="activation_code">啟用代碼</string>
