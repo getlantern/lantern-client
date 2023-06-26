@@ -44,9 +44,6 @@ public class InviteActivity extends BaseFragmentActivity {
     @ViewById
     View bgText;
 
-    @ViewById
-    TextView tvShare;
-
     private Handler handlerCopyAnim;
 
     @AfterViews
@@ -55,11 +52,6 @@ public class InviteActivity extends BaseFragmentActivity {
         bgText.setAlpha(0f);
         resources = getResources();
         progressFragment = ProgressDialogFragment.newInstance(R.string.progressMessage2);
-        if (LanternApp.getSession().isProUser()) {
-            tvShare.setText(getString(R.string.referral_code_share_description_pro));
-        } else {
-            tvShare.setText(getString(R.string.referral_code_share_description_free));
-        }
     }
 
     @Override

@@ -5,20 +5,23 @@
 # Lowrider <pams@imail.ru>, 2022
 # Николай Кочкин <urfiner@gmail.com>, 2022
 # Helen R <helen.russel88@gmail.com>, 2022
-# Helen Russel <coo@workogram.com>, 2022
-# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2022
 # Derek F <derek@getlantern.org>, 2022
-# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2022
 # e2f <projects@e2f.com>, 2022
-# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2022
-# sayanvd <sayanvd@yandex.ru>, 2022
-# Tina T, 2022
 # e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023
+# Serg <sergkoshkin@yandex.ru>, 2023
+# e2f_ru r1 <tx_e2f_ru_r1@ate2f.com>, 2023
+# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2023
+# Tina T, 2023
+# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2023
+# sayanvd <sayanvd@yandex.ru>, 2023
+# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2023
+# Helen Russel <coo@workogram.com>, 2023
+# Deanna D, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023\n"
-"Language-Team: Russian (Russia) (https://www.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
+"Last-Translator: Deanna D, 2023\n"
+"Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
@@ -133,6 +136,15 @@ msgstr "Настройки"
 msgid "general"
 msgstr "Основное"
 
+msgid "about"
+msgstr "О программе"
+
+msgid "privacy_policy"
+msgstr "Политика конфиденциальности "
+
+msgid "terms_of_service"
+msgstr "Условия использования"
+
 msgid "proxy_all"
 msgstr "Проксировать весь трафик"
 
@@ -207,7 +219,7 @@ msgstr "Ссылка по электронной почте"
 msgid "lantern_pro_email"
 msgstr "Адрес эл. почты аккаунта Lantern Pro"
 
-msgid "Email"
+msgid "email"
 msgstr "Электронная почта"
 
 msgid "Submit"
@@ -216,8 +228,149 @@ msgstr "Отправить"
 msgid "save"
 msgstr "Сохранить"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "Введите действительный адрес электронной почты"
+
+msgid "bonus"
+msgstr "Бонус "
+
+msgid "referral_bonus"
+msgstr "Реферальный бонус"
+
+msgid "total"
+msgstr "Всего "
+
+msgid "month"
+msgstr "месяц"
+
+msgid "months"
+msgstr "месяцы"
+
+msgid "enter_email"
+msgstr "Введите электронную почту"
+
+msgid "error_fetching_plans"
+msgstr "Ошибка загрузки. Перезапустите Lantern и повторите попытку."
+
+msgid "apply"
+msgstr "Применить"
+
+msgid "choose_payment_method"
+msgstr "Выберете способ оплаты "
+
+msgid "pro_plan"
+msgstr "Подписка Pro "
+
+msgid "one_year_plan"
+msgstr "Подписка на 1 год "
+
+msgid "two_year_plan"
+msgstr "Подписка на 2 года "
+
+msgid "plan_discount"
+msgstr ""
+
+msgid "enter_email_and_activation_code"
+msgstr "Введите email и код активации "
+
+msgid "referral_code"
+msgstr "Реферальный код"
+
+msgid "add_referral_code"
+msgstr "Ввести реферальный код "
+
+msgid "Activation Code"
+msgstr "Код активации"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "Неверный или неполный реферальный код"
+
+msgid "register_for_pro"
+msgstr "Зарегистрироваться в Pro"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "Что-то пошло не так, попробуйте ещё раз. "
+
+msgid "your_activation_code_is_invalid"
+msgstr "Неверный код активации"
+
+msgid "update_cache_plans_timeout"
+msgstr "Что-то пошло не так, попробуйте еще раз. "
+
+msgid "bitcoin_timeout"
+msgstr "Время ожидания запроса BTCPay истекло."
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay недоступен"
+
+msgid "update_cache_user_timeout"
+msgstr "Что-то пошло не так с загрузкой данных аккаунта. "
+
+msgid "reseller_timeout"
+msgstr "Что-то пошло не так с подтверждением кода активации. "
+
+msgid "reseller_success"
+msgstr "Код активации добавлен успешно."
+
+msgid "stripe_timeout"
+msgstr ""
+
+msgid "stripe_success"
+msgstr ""
+
+msgid "renewal_success"
+msgstr ""
+
+msgid "pro_renewal_success_description"
+msgstr ""
+
+msgid "pro_purchase_success"
+msgstr ""
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+
+msgid "by_clicking_tos"
+msgstr ""
+
+msgid "tos"
+msgstr "Условия использования"
+
+msgid "step_1"
+msgstr "Шаг 1"
+
+msgid "step_2"
+msgstr "Шаг 2"
+
+msgid "step_3"
+msgstr "Шаг 3"
+
+msgid "invalid_email"
+msgstr ""
+
+msgid "invalid_card"
+msgstr ""
+
+msgid "invalid_expiration"
+msgstr "Недействительный срок действия"
+
+msgid "cc_number"
+msgstr "Кредитная карта"
+
+msgid "card_number"
+msgstr "Номер карты"
+
+msgid "card_expiration"
+msgstr "ММ/ГГ"
+
+msgid "invalid_cvc"
+msgstr "Неверный CVC"
+
+msgid "complete_purchase"
+msgstr "Завершить покупку"
 
 msgid "Re-send Email"
 msgstr "Повторная отправка e-mail"
@@ -267,6 +420,54 @@ msgstr "Выйти"
 
 msgid "confirm_remove_device"
 msgstr "Вы уверены, что хотите отвязать это устройство от аккаунта Pro?"
+
+msgid "unlimited_data"
+msgstr "Безлимитный трафик"
+
+msgid "no_logs"
+msgstr "Нет логов"
+
+msgid "no_ads"
+msgstr "Без рекламы"
+
+msgid "choose_plan"
+msgstr "Выбрать план"
+
+msgid "connect_up_to_3_devices"
+msgstr "Подключение до трех устройств"
+
+msgid "faster_data_centers"
+msgstr "Более быстрые центры обработки данных"
+
+msgid "dedicated_line"
+msgstr ""
+
+msgid "increased_reliability"
+msgstr ""
+
+msgid "checkout"
+msgstr "Заказ"
+
+msgid "credit_card"
+msgstr "Кредитная карта"
+
+msgid "lantern_pro_checkout"
+msgstr "Приобрести Lantern Pro"
+
+msgid "1y_pricing"
+msgstr ""
+
+msgid "2y_pricing"
+msgstr ""
+
+msgid "plan_type"
+msgstr ""
+
+msgid "most_popular"
+msgstr ""
+
+msgid "free"
+msgstr ""
 
 msgid "n/a"
 msgstr "Не применимо"
@@ -331,8 +532,11 @@ msgstr "Редактировать"
 msgid "save_error"
 msgstr "Ошибка сохранения."
 
+msgid "fewer_options"
+msgstr ""
+
 msgid "more_options"
-msgstr "Еще"
+msgstr ""
 
 msgid "block_user"
 msgstr "Заблокировать пользователя"
@@ -397,6 +601,24 @@ msgstr "Добавить контакты лично"
 msgid "start_chat"
 msgstr "Начать чат"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "Для вас и пользователя %s сообщения не будут пропадать."
 
@@ -412,8 +634,14 @@ msgstr "Посмотреть контактную информацию"
 msgid "off"
 msgstr "Выкл."
 
+msgid "on"
+msgstr "Вкл."
+
 msgid "continue"
 msgstr "Продолжить"
+
+msgid "continue_to_pro"
+msgstr "Продолжить с версией Pro"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "Открыть %s?"
@@ -1196,3 +1424,15 @@ msgstr "кот"
 msgid "discover_disclaimer"
 msgstr ""
 "Lantern делает поисковые запросы анонимными и защищает их от третьих лиц."
+
+msgid "support"
+msgstr "Поддержка"
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "ЧаВо"
+
+msgid "add_device"
+msgstr "Добавить устройство"

@@ -18,15 +18,15 @@ import (
 	"github.com/getlantern/dnsgrab/persistentcache"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
-	"github.com/getlantern/flashlight"
-	"github.com/getlantern/flashlight/balancer"
-	"github.com/getlantern/flashlight/bandwidth"
-	"github.com/getlantern/flashlight/client"
-	"github.com/getlantern/flashlight/common"
-	"github.com/getlantern/flashlight/config"
-	"github.com/getlantern/flashlight/email"
-	"github.com/getlantern/flashlight/geolookup"
-	"github.com/getlantern/flashlight/logging"
+	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/balancer"
+	"github.com/getlantern/flashlight/v7/bandwidth"
+	"github.com/getlantern/flashlight/v7/client"
+	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/geolookup"
+	"github.com/getlantern/flashlight/v7/logging"
+	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/memhelper"
 	"github.com/getlantern/mtime"
@@ -72,7 +72,6 @@ type Session interface {
 	UpdateAdSettings(AdSettings) error
 	UpdateStats(string, string, string, int, int, bool) error
 	SetStaging(bool) error
-	ProxyAll() (bool, error)
 	BandwidthUpdate(int, int, int, int) error
 	Locale() (string, error)
 	GetTimeZone() (string, error)
@@ -89,6 +88,7 @@ type Session interface {
 	SetReplicaAddr(string)
 	ForceReplica() bool
 	SetChatEnabled(bool)
+	SplitTunnelingEnabled() (bool, error)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -103,7 +103,6 @@ type panickingSession interface {
 	UpdateAdSettings(AdSettings)
 	UpdateStats(string, string, string, int, int, bool)
 	SetStaging(bool)
-	ProxyAll() bool
 	BandwidthUpdate(int, int, int, int)
 	Locale() string
 	GetTimeZone() string
@@ -118,6 +117,7 @@ type panickingSession interface {
 	DeviceOS() string
 	IsProUser() bool
 	SetChatEnabled(bool)
+	SplitTunnelingEnabled() bool
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -180,8 +180,8 @@ func (s *panickingSessionImpl) SetStaging(staging bool) {
 	panicIfNecessary(s.wrapped.SetStaging(staging))
 }
 
-func (s *panickingSessionImpl) ProxyAll() bool {
-	result, err := s.wrapped.ProxyAll()
+func (s *panickingSessionImpl) SplitTunnelingEnabled() bool {
+	result, err := s.wrapped.SplitTunnelingEnabled()
 	panicIfNecessary(err)
 	return result
 }
@@ -308,15 +308,6 @@ func newUserConfig(session panickingSession) *userConfig {
 	return &userConfig{session: session}
 }
 
-// SocketProtector is an interface for classes that can protect Android sockets,
-// meaning those sockets will not be passed through the VPN.
-type SocketProtector interface {
-	ProtectConn(fileDescriptor int) error
-	// The DNS server is used to resolve host only when dialing a protected connection
-	// from within Lantern client.
-	DNSServerIP() string
-}
-
 func getBalancer(timeout time.Duration) *balancer.Balancer {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
@@ -408,6 +399,8 @@ func Start(configDir string,
 	settings Settings,
 	wrappedSession Session) (*StartResult, error) {
 
+	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
+
 	session := &panickingSessionImpl{wrappedSession}
 
 	startOnce.Do(func() {
@@ -439,13 +432,8 @@ func Start(configDir string,
 		da.(string)}, nil
 }
 
-// EnableLogging enables logging.
-func EnableLogging(configDir string) {
-	logging.EnableFileLogging(common.DefaultAppName, configDir)
-}
-
 func newAnalyticsSession(deviceID string) analytics.Session {
-	session := analytics.Start(deviceID, common.Version)
+	session := analytics.Start(deviceID, ApplicationVersion)
 	go func() {
 		session.SetIP(geolookup.GetIP(forever))
 	}()
@@ -521,10 +509,12 @@ func run(configDir, locale string,
 	var runner *flashlight.Flashlight
 	runner, err = flashlight.New(
 		common.DefaultAppName,
+		ApplicationVersion,
+		RevisionDate,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
-		session.ProxyAll,
+		func() bool { return true },
 		func() bool { return false }, // don't intercept Google ads
 		func() bool { return false }, // do not proxy private hosts on Android
 		// TODO: allow configuring whether or not to enable reporting (just like we
@@ -536,7 +526,6 @@ func run(configDir, locale string,
 			if session.IsPlayVersion() {
 				runner.EnableNamedDomainRules("google_play") // for google play build we want to make sure that Google Play domains are not being proxied
 			}
-			email.SetDefaultRecipient(cfg.ReportIssueEmail)
 			select {
 			case globalConfigChanged <- nil:
 				// okay
@@ -551,6 +540,9 @@ func run(configDir, locale string,
 		func() string { return "" }, // only used for desktop
 		func() string { return "" }, // only used for desktop
 		func(addr string) (string, error) {
+			op := ops.Begin("reverse_dns")
+			defer op.End()
+
 			host, port, splitErr := net.SplitHostPort(addr)
 			if splitErr != nil {
 				host = addr
@@ -562,7 +554,7 @@ func run(configDir, locale string,
 			}
 			updatedHost, ok := grabber.ReverseLookup(ip)
 			if !ok {
-				return "", errors.New("invalid IP address")
+				return "", op.FailIf(errors.New("unknown IP address %v", ip))
 			}
 			if splitErr != nil {
 				return updatedHost, nil
@@ -594,7 +586,7 @@ func run(configDir, locale string,
 	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
 	checkFeatures := func() {
 		replicaServer.CheckEnabled()
-		chatEnabled := runner.FeatureEnabled("chat")
+		chatEnabled := runner.FeatureEnabled("chat", ApplicationVersion)
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
 	}
@@ -654,14 +646,18 @@ func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	return percent, remaining, int(quota.MiBAllowed)
 }
 
+func geoLookup(session panickingSession) {
+	country := geolookup.GetCountry(0)
+	log.Debugf("Successful geolookup: country %s", country)
+	session.SetCountry(country)
+}
+
 func afterStart(session panickingSession) {
 	bandwidthUpdates(session)
 
 	go func() {
 		if <-geolookup.OnRefresh() {
-			country := geolookup.GetCountry(0)
-			log.Debugf("Successful geolookup: country %s", country)
-			session.SetCountry(country)
+			geoLookup(session)
 		}
 	}()
 }

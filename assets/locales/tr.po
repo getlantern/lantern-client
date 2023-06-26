@@ -1,19 +1,21 @@
 # 
 # Translators:
-# Volkan Gezer <volkangezer@gmail.com>, 2022
 # Kudret <kudretemre@hotmail.com.tr>, 2022
 # Zeynel Cebeci <cebeciz@gmail.com>, 2022
 # Aşkın Özgür <askin@askin.ws>, 2022
-# efe kerem sözeri <eksozeri@hotmail.com>, 2022
 # e2f <projects@e2f.com>, 2022
-# Derek F <derek@getlantern.org>, 2022
 # Teo Westbrook, 2022
 # e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023
+# efe kerem sözeri <eksozeri@hotmail.com>, 2023
+# Emre Deniz, 2023
+# Derek F <derek@getlantern.org>, 2023
+# Volkan Gezer <volkangezer@gmail.com>, 2023
+# M. Utkun Uyar, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023\n"
-"Language-Team: Turkish (https://www.transifex.com/lantern-1/teams/94371/tr/)\n"
+"Last-Translator: M. Utkun Uyar, 2023\n"
+"Language-Team: Turkish (https://app.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
@@ -128,6 +130,15 @@ msgstr "Ayarlar"
 
 msgid "general"
 msgstr "Genel"
+
+msgid "about"
+msgstr "Hakkında"
+
+msgid "privacy_policy"
+msgstr "Gizlilik Politikası"
+
+msgid "terms_of_service"
+msgstr "Hizmet Şartları"
 
 msgid "proxy_all"
 msgstr "Her şeyi proxy'le"
@@ -393,6 +404,24 @@ msgstr "Şahsen kişi ekle"
 msgid "start_chat"
 msgstr "Sohbet başlat"
 
+msgid "your_installed_apps"
+msgstr ""
+
+msgid "apps_routed_through_lantern"
+msgstr ""
+
+msgid "apps_to_unblock"
+msgstr ""
+
+msgid "split_tunneling"
+msgstr ""
+
+msgid "split_tunneling_info"
+msgstr ""
+
+msgid "applied_next_time"
+msgstr ""
+
 msgid "message_disappearing"
 msgstr "Siz ve %s için tüm mesajlar kaybolmayacaktır."
 
@@ -407,6 +436,9 @@ msgstr "İletişim Bilgilerini Görüntüle"
 
 msgid "off"
 msgstr "Kapalı"
+
+msgid "on"
+msgstr "Açık"
 
 msgid "continue"
 msgstr "Devam et"
@@ -1188,3 +1220,15 @@ msgstr "kedi"
 
 msgid "discover_disclaimer"
 msgstr "Lantern aramalarınızı anonimleştirir ve üçüncü taraflardan korur."
+
+msgid "support"
+msgstr ""
+
+msgid "lantern_user_forum"
+msgstr ""
+
+msgid "faq"
+msgstr "SSS"
+
+msgid "add_device"
+msgstr "Hesap Ekle"

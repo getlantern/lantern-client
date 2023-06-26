@@ -10,9 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/getlantern/flashlight/common"
-	"github.com/getlantern/flashlight/proxied"
-	"github.com/getlantern/flashlight/util"
+	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/proxied"
+	"github.com/getlantern/flashlight/v7/util"
 	"github.com/getlantern/golog"
 )
 

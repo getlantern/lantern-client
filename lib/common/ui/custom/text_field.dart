@@ -22,10 +22,12 @@ class CTextField extends StatefulWidget {
   late final void Function(String value)? onFieldSubmitted;
   late final String? actionIconPath;
   late final int? maxLength;
+  late final InputCounterWidgetBuilder? buildCounter;
   late final TextCapitalization? textCapitalization;
   late final EdgeInsetsDirectional? contentPadding;
   late final TextStyle? style;
   late final void Function()? onTap;
+  late final bool removeCounterText;
   late final bool removeBorder;
   late final bool? autofocus;
   late final void Function(String value)? onChanged;
@@ -48,10 +50,12 @@ class CTextField extends StatefulWidget {
     this.onFieldSubmitted,
     this.actionIconPath,
     this.maxLength,
+    this.buildCounter,
     this.textCapitalization,
     this.contentPadding,
     this.style,
     this.onTap,
+    this.removeCounterText = true,
     this.removeBorder = false,
     this.autofocus = false,
     this.onChanged,
@@ -124,7 +128,7 @@ class _CTextFieldState extends State<CTextField> {
               validator: (value) {
                 // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
                 var result = widget.controller.validate(value);
-                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
                   setState(() {});
                 });
                 return result;
@@ -186,7 +190,7 @@ class _CTextFieldState extends State<CTextField> {
                 suffixIcon: renderSuffixRow(),
                 // forcibly remove if removeBorder == true
                 // otherwise, it will show up if we have a maxLength set
-                counterText: widget.removeBorder ? '' : null,
+                counterText: (widget.removeCounterText || widget.removeBorder) ? '' : null,
               ),
             ),
           ),

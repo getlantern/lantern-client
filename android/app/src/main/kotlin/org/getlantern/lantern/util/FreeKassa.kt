@@ -5,15 +5,12 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
 
-class Freekassa {
+class FreeKassa {
     companion object {
-        private val ACCEPTED_LANGUAGES = listOf("ru", "en")
-        private val ACCEPTED_CURRENCIES = listOf("RUB", "USD", "EUR", "UAH", "KZT")
-
         private fun validateValueOrPickDefault(
             v: String,
             arr: List<String>,
-            default: String
+            default: String,
         ): String {
             for (i in arr) {
                 if (i == v) {
@@ -37,12 +34,12 @@ class Freekassa {
             val validatedCurrency = validateValueOrPickDefault(
                 currency.uppercase(Locale.getDefault()),
                 ACCEPTED_CURRENCIES,
-                "RUB"
+                "RUB",
             )
             val validatedLanguage = validateValueOrPickDefault(
                 lang.lowercase(Locale.getDefault()),
                 ACCEPTED_LANGUAGES,
-                "ru"
+                "ru",
             )
             // API docs:
             // https://docs.freekassa.ru/#section/1.-Vvedenie/1.3.-Nastrojka-formy-oplaty
@@ -57,7 +54,7 @@ class Freekassa {
                 .appendQueryParameter("o", orderId)
                 .appendQueryParameter(
                     "s",
-                    makeSignature(merchantId, validatedCurrency, amount, secretWordOne, orderId)
+                    makeSignature(merchantId, validatedCurrency, amount, secretWordOne, orderId),
                 )
                 .appendQueryParameter(
                     "language",
@@ -73,7 +70,7 @@ class Freekassa {
                     // handler). They must be prefixed with `us_`.
                     // https://docs.freekassa.ru/#section/1.-Vvedenie/1.3.-Nastrojka-formy-oplaty
                     for ((key, value) in additionalParams) {
-                        appendQueryParameter("us_${key}", value)
+                        appendQueryParameter("us_$key", value)
                     }
                 }
                 .build()
@@ -91,5 +88,8 @@ class Freekassa {
             val digest = md.digest(s.toByteArray())
             return String.format("%032x", BigInteger(1, digest))
         }
+
+        private val ACCEPTED_LANGUAGES = listOf("ru", "en")
+        private val ACCEPTED_CURRENCIES = listOf("RUB", "USD", "EUR", "UAH", "KZT")
     }
 }
