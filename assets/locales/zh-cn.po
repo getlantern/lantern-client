@@ -1,15 +1,16 @@
 # 
 # Translators:
-# Lantern, 2022
-# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2022
-# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2023
-# Chi-Hsun Tsai, 2023
-# e2f <projects@e2f.com>, 2023
 # 474874f569f96a33809d02f1de71479e_77020aa, 2023
+# Chi-Hsun Tsai, 2023
+# Lantern, 2023
+# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2023
+# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2023
+# e2f <projects@e2f.com>, 2023
+# Aki Ltn, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: 474874f569f96a33809d02f1de71479e_77020aa, 2023\n"
+"Last-Translator: Aki Ltn, 2023\n"
 "Language-Team: Chinese Simplified (https://app.transifex.com/lantern-1/teams/94371/zh-Hans/)\n"
 "Language: zh-Hans\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -194,7 +195,7 @@ msgstr "通过电子邮件连接"
 msgid "lantern_pro_email"
 msgstr "蓝灯专业版电子邮件"
 
-msgid "Email"
+msgid "email"
 msgstr "电子邮件"
 
 msgid "Submit"
@@ -203,8 +204,149 @@ msgstr "提交"
 msgid "save"
 msgstr "保存"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "请输入有效的电子邮件地址"
+
+msgid "bonus"
+msgstr "奖励"
+
+msgid "referral_bonus"
+msgstr "推荐奖励"
+
+msgid "total"
+msgstr "总计"
+
+msgid "month"
+msgstr "月"
+
+msgid "months"
+msgstr "月"
+
+msgid "enter_email"
+msgstr "输入电子邮件"
+
+msgid "error_fetching_plans"
+msgstr "获取计划信息出错，请重启蓝灯后，再次尝试。"
+
+msgid "apply"
+msgstr "申请"
+
+msgid "choose_payment_method"
+msgstr "选择付款方式"
+
+msgid "pro_plan"
+msgstr "专业版计划"
+
+msgid "one_year_plan"
+msgstr "1 年专业版"
+
+msgid "two_year_plan"
+msgstr "2 年专业版"
+
+msgid "plan_discount"
+msgstr "保存 %d%%"
+
+msgid "enter_email_and_activation_code"
+msgstr "填写电子邮箱地址和激活码"
+
+msgid "referral_code"
+msgstr "邀请码"
+
+msgid "add_referral_code"
+msgstr "填入推荐码"
+
+msgid "Activation Code"
+msgstr "激活码"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "推荐码无效或不全"
+
+msgid "register_for_pro"
+msgstr "注册专业版"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "使用您的推荐码时报错"
+
+msgid "your_activation_code_is_invalid"
+msgstr "您的激活码无效"
+
+msgid "update_cache_plans_timeout"
+msgstr "获取可选计划时报错"
+
+msgid "bitcoin_timeout"
+msgstr "BTCPay请求已超时"
+
+msgid "BTCPay is unavailable"
+msgstr "暂不支持BTCPay"
+
+msgid "update_cache_user_timeout"
+msgstr "获取您的账户数据时报错"
+
+msgid "reseller_timeout"
+msgstr "验证您的激活码时报错"
+
+msgid "reseller_success"
+msgstr "激活码兑换成功！"
+
+msgid "stripe_timeout"
+msgstr "您的Stripe支付请求已超时，请重启蓝灯后，再次尝试。"
+
+msgid "stripe_success"
+msgstr "Stripe支付成功！"
+
+msgid "renewal_success"
+msgstr "续费成功！"
+
+msgid "pro_renewal_success_description"
+msgstr "感谢您续费蓝灯专业版！在蓝灯最高速的数据中心支持下，您可尽享无限量高速上网，最高可同时支持三台设备！"
+
+msgid "pro_purchase_success"
+msgstr "欢迎使用蓝灯专业版！"
+
+msgid "platinum_purchase_success_descripion"
+msgstr "现在起，蓝灯最高速的数据中心和专线将开始为您提供无限量上网服务。您最多可同时接入三台设备。"
+
+msgid "pro_purchase_success_descripion"
+msgstr "现在起，蓝灯最高速的数据中心和专线将开始为您提供无限量上网服务。您最多可同时接入三台设备。"
+
+msgid "by_clicking_tos"
+msgstr "点击 %s，即为您已同意我们的"
+
+msgid "tos"
+msgstr "服務條款"
+
+msgid "step_1"
+msgstr "第一步"
+
+msgid "step_2"
+msgstr "第二步"
+
+msgid "step_3"
+msgstr "第 3 步"
+
+msgid "invalid_email"
+msgstr "电子邮件地址无效"
+
+msgid "invalid_card"
+msgstr "信用卡卡号无效"
+
+msgid "invalid_expiration"
+msgstr "无效的过期日期"
+
+msgid "cc_number"
+msgstr "信用卡"
+
+msgid "card_number"
+msgstr "卡号"
+
+msgid "card_expiration"
+msgstr "MM/YY"
+
+msgid "invalid_cvc"
+msgstr "无效的 CVC"
+
+msgid "complete_purchase"
+msgstr "完成购买"
 
 msgid "Re-send Email"
 msgstr "重新发送电子邮件"
@@ -251,6 +393,54 @@ msgstr "注销"
 
 msgid "confirm_remove_device"
 msgstr "您是否确定要从您的专业版帐户中取消链接此设备？"
+
+msgid "unlimited_data"
+msgstr "无限数据"
+
+msgid "no_logs"
+msgstr "无日志"
+
+msgid "no_ads"
+msgstr "无广告"
+
+msgid "choose_plan"
+msgstr "选择计划"
+
+msgid "connect_up_to_3_devices"
+msgstr "最多可连接 3 台设备"
+
+msgid "faster_data_centers"
+msgstr "更快的数据中心"
+
+msgid "dedicated_line"
+msgstr "专线"
+
+msgid "increased_reliability"
+msgstr "更可靠"
+
+msgid "checkout"
+msgstr "结账"
+
+msgid "credit_card"
+msgstr "信用卡"
+
+msgid "lantern_pro_checkout"
+msgstr "蓝灯专业版结账"
+
+msgid "1y_pricing"
+msgstr "1 年价格"
+
+msgid "2y_pricing"
+msgstr "2 年价格"
+
+msgid "plan_type"
+msgstr "计划选项"
+
+msgid "most_popular"
+msgstr "最多人购买"
+
+msgid "free"
+msgstr "免费"
 
 msgid "n/a"
 msgstr "n/a"
@@ -310,6 +500,9 @@ msgstr "编辑"
 
 msgid "save_error"
 msgstr "保存时出现问题。"
+
+msgid "fewer_options"
+msgstr "更少选项"
 
 msgid "more_options"
 msgstr "更多选项"
@@ -372,22 +565,22 @@ msgid "start_chat"
 msgstr "开始聊天"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "您已安装的应用"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "通过蓝灯访问的应用"
 
 msgid "apps_to_unblock"
-msgstr ""
+msgstr "请选择您要翻墙访问的应用。在您连接蓝灯后，只有这些应用才会通过蓝灯访问。"
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "隧道分流"
 
 msgid "split_tunneling_info"
-msgstr ""
+msgstr "开启隧道分流模式后，只有您选定的应用才会通过蓝灯翻墙访问。这会有效提升您的上网体验，并节省带宽。"
 
 msgid "applied_next_time"
-msgstr ""
+msgstr "隧道分流的更新设置，将在您重启蓝灯后生效。"
 
 msgid "message_disappearing"
 msgstr "您和 %s 的所有消息均不会消失。"
@@ -409,6 +602,9 @@ msgstr "开"
 
 msgid "continue"
 msgstr "继续"
+
+msgid "continue_to_pro"
+msgstr "继续使用专业版"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "确定要打开%s吗？"
@@ -1165,7 +1361,7 @@ msgid "support"
 msgstr "支持"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "蓝灯用户论坛"
 
 msgid "faq"
 msgstr "蓝灯论坛"
