@@ -306,8 +306,8 @@ class PaymentsUtil(private val activity: Activity) {
                     dialog?.dismiss()
                     session.linkDevice()
                     session.setIsProUser(true)
-                    methodCallResult.success("purchaseSuccessful")
                     Logger.e(TAG, "Purchase Completed: $response")
+                    methodCallResult.success("purchaseSuccessful")
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
