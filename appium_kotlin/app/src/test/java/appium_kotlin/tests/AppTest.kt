@@ -16,6 +16,7 @@ import appium_kotlin.LOGS_DIALED_MESSAGE
 import appium_kotlin.MMYY
 import appium_kotlin.MOST_POPULAR
 import appium_kotlin.PAYMENT_PURCHASE_COMPLETED
+import appium_kotlin.RENEWAL_SUCCESS_OK
 import appium_kotlin.REPORT_AN_ISSUE
 import appium_kotlin.SUPPORT
 import io.appium.java_client.TouchAction
@@ -66,12 +67,17 @@ class AppTest() : BaseTest() {
         } catch (e: Exception) {
             e.printStackTrace()
             if (!isLocalRun) {
-                testFail(e.message!!, androidDriver!!)
+                androidDriver?.let {
+                    testFail(e.message ?: "Unknown error", it)
+                }
             } else {
-                throw Exception(e)
+                throw e
             }
         } finally {
-            afterTest(androidDriver!!)
+            androidDriver?.let {
+                afterTest(it)
+            }
+
         }
     }
 
@@ -103,7 +109,7 @@ class AppTest() : BaseTest() {
 
         //Approve VPN Permissions dialog
         switchToContext(ContextType.NATIVE_APP, androidDriver)
-        Thread.sleep(2000)
+        Thread.sleep(1000)
         androidDriver.findElement(By.id("android:id/button1")).click()
 
         //Wait for VPN to connect
@@ -208,7 +214,6 @@ class AppTest() : BaseTest() {
         mmyy.click()
         mmyy.sendKeys(mmyyText)
         Thread.sleep(2000)
-
         println("TaskId: $taskId | testPaymentFlow-->expiration date entered ")
 
         val cvc = flutterFinder.byTooltip(CVC)
@@ -217,24 +222,32 @@ class AppTest() : BaseTest() {
         Thread.sleep(2000)
 
         println("TaskId: $taskId | testPaymentFlow-->CVC entered ")
-
         val checkOut = flutterFinder.byTooltip(CHECK_OUT)
         checkOut.click()
-        Thread.sleep(5000)
-        //wait till process completes
+        Thread.sleep(6000)
 
         println("TaskId: $taskId | testPaymentFlow-->clicked on checkout ")
-
         //Robust way to check is read logs from device
-        val errorPaymentLogs = capturePaymentLogcat(androidDriver, ERROR_PAYMENT_PURCHASE)
-        val paymentPurchaseLogs = capturePaymentLogcat(androidDriver, PAYMENT_PURCHASE_COMPLETED)
+        val paymentPurchaseLogs = capturePaymentPassLogcat(androidDriver)
+        println("TaskId: $taskId | paymentLogs-->$paymentPurchaseLogs")
 
-        if (errorPaymentLogs.isNotBlank() && paymentPurchaseLogs.isBlank()) {
+        if (paymentPurchaseLogs.isBlank()) {
             if (!isLocalRun) {
                 testFail("Purchasing lantern pro failed", androidDriver)
             }
         }
-        Assertions.assertEquals(errorPaymentLogs.isBlank(), true, "Purchasing lantern pro failed")
+
+        switchToContext(ContextType.FLUTTER, androidDriver)
+        val renewalSuccessOk = flutterFinder.byTooltip(RENEWAL_SUCCESS_OK)
+        renewalSuccessOk.click()
+        Thread.sleep(1000)
+
+        Assertions.assertEquals(
+            paymentPurchaseLogs.isNotBlank(),
+            true,
+            "Purchasing lantern pro failed"
+        )
+
     }
 
     @Throws(IOException::class, InterruptedException::class)
@@ -371,16 +384,30 @@ class AppTest() : BaseTest() {
         return ""
     }
 
-    private fun capturePaymentLogcat(androidDriver: AndroidDriver, message: String): String {
+    @Synchronized
+    private fun capturePaymentFailLogcat(androidDriver: AndroidDriver): String {
         switchToContext(ContextType.NATIVE_APP, androidDriver)
         val logtypes: Set<*> = androidDriver.manage().logs().availableLogTypes
         println("supported log types: $logtypes") // [logcat, bugreport, server, client]
         val logs: LogEntries = androidDriver.manage().logs().get("logcat")
         for (logEntry in logs) {
-            //here are checking the logcat for LOGS_DIALED_MESSAGE that verifies internal that VPN is working
-            // also when we connect vpn then ip is predefined so
-            // we get that and match with old ip
-            if (logEntry.message.contains(message)) {
+            if (logEntry.message.contains(ERROR_PAYMENT_PURCHASE)) {
+                println("contain log: ${logEntry.message}") // [logcat, bugreport, server, client]
+                return logEntry.message
+
+            }
+        }
+        return ""
+    }
+
+    @Synchronized
+    private fun capturePaymentPassLogcat(androidDriver: AndroidDriver): String {
+        switchToContext(ContextType.NATIVE_APP, androidDriver)
+        val logtypes: Set<*> = androidDriver.manage().logs().availableLogTypes
+        println("supported log types: $logtypes") // [logcat, bugreport, server, client]
+        val logs: LogEntries = androidDriver.manage().logs().get("logcat")
+        for (logEntry in logs) {
+            if (logEntry.message.contains(PAYMENT_PURCHASE_COMPLETED)) {
                 return logEntry.message
 
             }
