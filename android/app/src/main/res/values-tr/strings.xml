@@ -8,8 +8,6 @@
   <string name="proxy_all_on">Bu seçenekle, tüm cihaz trafiğiniz %1$s üzerinden gönderilecektir</string>
   <string name="proxy_all_off">Bu seçenek kapalıyken, yalnızca engellenen sitelere trafik %1$s üzerinden gönderilecektir</string>
   <string name="button_text">Başlat</string>
-  <string name="drawer_open">Çekmeceyi Aç</string>
-  <string name="drawer_close">Çekmeceyi Kapat</string>
   <string name="default_fragment">Varsayılan Bölümlenme</string>
   <string name="receive_lantern">Lantern\'i e-posta ile al</string>
   <string name="lantern_desktop">Lantern Masaüstü</string>
@@ -140,8 +138,6 @@
   <string name="text_invite">SMS ile Davet Et</string>
   <string name="email_invite">E-posta ile Davet Et</string>
   <string name="share_your_referral_code">Referans Kodunu Paylaş</string>
-  <string name="get_code">Kodu Al</string>
-  <string name="get_code_text">Arkadaşlarınızla paylaşmak üzere bir referans kodu oluşturmak için e-postanızı girin. Onlar bu kodla hesap açtıklarında bir ay ücretsiz PRO üyeliği kazanın.</string>
   <string name="enter_your_email">Referans kodunuzu almak için e-posta adresinizi girin</string>
   <string name="fastworldpay_text">Satın almak için devam düğmesine bastığınızda,\nödemeyi tamamlamak ve aktivasyon kodunuzu almak için\nharici bir siteye yönlendirileceksiniz.</string>
   <string name="share_referral_text">Benim referans kodumu kullanarak satın aldığında ücretsiz 3 ay daha kazanıyorsun: %1$s . Lantern\'i buradan indirebilirsin: https://bit.ly/lanternapk</string>
@@ -293,7 +289,6 @@
   <string name="reseller_email_subject">Lantern Ticareti Programı hakkında bilgi verin!</string>
   <string name="reseller_email_message">Bir Lantern Satıcısı olunca, bir Lantern Pro aboneliğinin her satışı üzerine 25% o  lik bir ödeme yapma şansına sahip olursunuz. Aşağıda neden bir bayi olmak istiyorsanız neden biraz bilgi verin.</string>
   <string name="no_email_client">Yüklü e-posta istemcisi yok.</string>
-  <string name="no_wall_at_all">Duvarları aşın.</string>
   <string name="buy_pro_now">Şimdi Pro Alın</string>
   <string name="update_billing_info">Fatura Bilgisini Güncelle</string>
   <string name="pro_credits_text">Arkadaşlarını davet et, daha çok Pro kazan</string>
