@@ -9,6 +9,7 @@ final featuresList = [
   'no_ads'.i18n,
 ];
 
+@RoutePage(name: "PlansPage")
 class PlansPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

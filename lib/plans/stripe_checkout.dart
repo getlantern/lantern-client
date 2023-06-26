@@ -32,6 +32,7 @@ class CardExpirationFormatter extends TextInputFormatter {
   }
 }
 
+@RoutePage(name: 'StripeCheckout')
 class StripeCheckout extends StatefulWidget {
   final Plan plan;
   final String email;
