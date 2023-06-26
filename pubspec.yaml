@@ -46,7 +46,7 @@ dependencies:
   infinite_scroll_pagination: ^3.2.0
   wakelock: ^0.6.2
   email_validator: ^2.1.17
-
+  credit_card_validator: ^2.1.0
   # Media & File handling
   audioplayers: ^4.1.0
   video_player: ^2.6.1
@@ -60,7 +60,7 @@ dependencies:
   flutter_pdfview: ^1.3.1
 
   # Navigation & Localization
-  auto_route: ^7.4.0
+  auto_route: ^7.5.0
   i18n_extension: ^7.0.0
   intl: ^0.18.0
   # QR

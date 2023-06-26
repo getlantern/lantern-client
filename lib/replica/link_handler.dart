@@ -76,8 +76,6 @@ class _LinkOpenerScreen extends State<ReplicaLinkHandler> {
           // );
           return Container();
 
-        default:
-          return Container();
       }
     });
 
