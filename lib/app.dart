@@ -78,14 +78,6 @@ class LanternApp extends StatelessWidget {
         if (!snapshot.hasData) {
           return Container();
         }
-        final ThemeData theme = ThemeData(
-          fontFamily: _getLocaleBasedFont(currentLocal),
-          brightness: Brightness.light,
-          primarySwatch: Colors.grey,
-          appBarTheme: const AppBarTheme(
-            systemOverlayStyle: SystemUiOverlayStyle.light,
-          ),
-        );
         return GlobalLoaderOverlay(
           overlayColor: Colors.black,
           overlayOpacity: 0.6,
