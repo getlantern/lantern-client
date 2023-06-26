@@ -8,8 +8,6 @@
   <string name="proxy_all_on">با این گزینه، همه ترافیک دستگاه شما از طریق %1$s ارسال خواهد شد</string>
   <string name="proxy_all_off">اگر این گزینه غیرفعال باشد، فقط ترافیک سایت‌های مسدود از طریق %1$s ارسال خواهد شد</string>
   <string name="button_text">شروع</string>
-  <string name="drawer_open">کشو باز</string>
-  <string name="drawer_close">کشو بسته</string>
   <string name="default_fragment">به طور پیش فرض قطعه</string>
   <string name="receive_lantern">فانوس نسخه رایانه را ازطریق ایمیل دریافت نمایید</string>
   <string name="lantern_desktop">فانوس رایانه</string>
@@ -149,8 +147,6 @@
   <string name="text_invite">متن دعوت</string>
   <string name="email_invite">ایمیل دعوت</string>
   <string name="share_your_referral_code">کد ارجاع شما</string>
-  <string name="get_code">دریافت کد</string>
-  <string name="get_code_text">ایمیل خود را برای دریافت ایمیل و اشتراک گذاری با دوستانتان وارد کنید. هنگامی که آنها عضو شوند شما یک ماه عضویت رایگان ویژه دریافت خواهید کرد.</string>
   <string name="enter_your_email">ایمیل خود را برای دریافت کد ارجاعی وارد کنید.</string>
   <string name="fastworldpay_text">هنگامی که دکمه تکمیل خرید را کلیک می کنید، برای تکمیل پرداخت و دریافت کد فعالسازی به یک سایت خارجی منتقل می شوید.</string>
   <string name="share_referral_text">از کد  %1$s  استفاده کنید تا از حداکثر 3 ماه عضویت رایگان بعد از خرید استفاده کنید.لینک  فانوس را دانلود کنید https://bit.ly/lanternapk</string>
@@ -300,7 +296,6 @@
   <string name="reseller_email_subject">درباره برنامه فروش نمایندگی فانوس توضیح بیشتری بده!</string>
   <string name="reseller_email_message">وقتی شما عضو نمایندگان فروش فانوس شوید، می توانید با فروش هر فانوس  پرو تا حداکثر 25% کمیسیون دریافت کنید. در پایین کمی درباره چرایی پیوستن به نمایندگان فانوس توضیح دهید. </string>
   <string name="no_email_client">ایمیل مشتریان نصب شده نیست.</string>
-  <string name="no_wall_at_all">هیچ دیواری موجود نیست.</string>
   <string name="buy_pro_now">نسخه ویژه (پرو) را خریداری کنید</string>
   <string name="update_billing_info">اطلاعات صورتحسابتان را به روزرسانی کنید</string>
   <string name="pro_credits_text">دوستانتان را دعوت کنید تا pro بیشتری دریافت کنید. </string>

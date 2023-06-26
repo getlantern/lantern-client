@@ -465,9 +465,6 @@ msgstr "کارت اعتباری"
 msgid "lantern_pro_checkout"
 msgstr "پرداخت لنترن پرو"
 
-msgid "lantern_checkout"
-msgstr "پرداخت لنترن"
-
 msgid "1y_pricing"
 msgstr "قیمت یک ساله"
 
