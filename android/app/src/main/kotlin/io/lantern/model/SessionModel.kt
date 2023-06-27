@@ -19,6 +19,7 @@ import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.CheckUpdate
+import org.getlantern.mobilesdk.model.IssueReporter
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
@@ -32,7 +33,6 @@ import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
-import org.getlantern.mobilesdk.model.MailSender
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.*
@@ -417,27 +417,22 @@ class SessionModel(
         )
     }
 
-    private fun reportIssue(email: String, issue: String, report: String, methodCallResult: MethodChannel.Result) {
+    private fun reportIssue(email: String, issue: String, description: String, methodCallResult: MethodChannel.Result) {
         if (!Utils.isNetworkAvailable(activity)) {
             methodCallResult.error("errorReportingIssue", activity.getString(R.string.no_internet_connection), null)
             return
         }
         Logger.debug(TAG, "Reporting $issue issue on behalf of $email")
         LanternApp.getSession().setEmail(email)
-        val mailSender = MailSender(
+        val issueReporter = IssueReporter(
             activity,
-            "user-send-logs",
-            activity.getString(R.string.report_sent),
-            activity.getString(R.string.thank_you_for_reporting_your_issue),
-            methodCallResult,
+            issue,
+            description,
         )
-        mailSender.addMergeVar("issue", issue)
-        mailSender.addMergeVar("report", report)
-        val subject: String = if (report.isEmpty()) issue else report
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            mailSender.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, subject)
+            issueReporter.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         } else {
-            mailSender.execute(subject)
+            issueReporter.execute()
         }
     }
 

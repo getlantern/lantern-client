@@ -96,7 +96,7 @@ class _ReportIssueState extends State<ReportIssue> {
                                       color: grey3,
                                     ),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
+                                  focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       width: 2,
                                       color: blue4,

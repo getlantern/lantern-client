@@ -1,10 +1,24 @@
 import 'package:lantern/common/common.dart';
 import 'explanation_step.dart';
 
-class LinkDevice extends StatelessWidget {
+class LinkDevice extends StatefulWidget {
+  LinkDevice({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<LinkDevice> createState() => _LinkDeviceState();
+}
+
+class _LinkDeviceState extends State<LinkDevice> {
+
+  @override
+  void initState() {
+      sessionModel.requestLinkCode();
+  }
+
   @override
   Widget build(BuildContext context) {
-    sessionModel.requestLinkCode();
     return BaseScreen(
       title: 'Authorize Device for Pro'.i18n,
       body: sessionModel.deviceLinkingCode((BuildContext context,
