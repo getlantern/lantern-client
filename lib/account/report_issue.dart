@@ -3,7 +3,16 @@ import 'package:lantern/common/common.dart';
 
 bool isEmpty(value) => value == null || value == '';
 
-class ReportIssue extends StatelessWidget {
+class ReportIssue extends StatefulWidget {
+  ReportIssue({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<ReportIssue> createState() => _ReportIssueState();
+}
+
+class _ReportIssueState extends State<ReportIssue> {
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
