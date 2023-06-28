@@ -45,13 +45,14 @@ class ListItemFactory extends StatelessWidget {
           );
         });
 
-  ListItemFactory.settingsItem({
-    String? header,
-    String? icon,
-    dynamic content,
-    void Function()? onTap,
-    List<Widget>? trailingArray,
-  }) : this((BuildContext context, ListItemFactory factory) {
+  ListItemFactory.settingsItem(
+      {String? header,
+      String? icon,
+      dynamic content,
+      void Function()? onTap,
+      List<Widget>? trailingArray,
+      double? height = 72})
+      : this((BuildContext context, ListItemFactory factory) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,6 +61,7 @@ class ListItemFactory extends StatelessWidget {
               factory.buildBase(
                 leading: icon,
                 content: content,
+                height: height,
                 trailingArray: trailingArray,
                 onTap: onTap,
                 showDivider: true,
