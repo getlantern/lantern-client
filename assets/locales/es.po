@@ -628,7 +628,7 @@ msgstr ""
 
 msgid "applied_next_time"
 msgstr ""
-"Los nuevos ajustes de túnel dividido se aplicará la próxima vez que se "
+"Los nuevos ajustes de túnel dividido se aplicarán la próxima vez que se "
 "conecte."
 
 msgid "message_disappearing"

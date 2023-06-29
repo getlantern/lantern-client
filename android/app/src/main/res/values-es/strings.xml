@@ -469,7 +469,7 @@ iOS.</string>
   <string name="send_report">Enviar informe</string>
   <string name="email_optional">Correo electrónico (opcional)</string>
   <string name="device_added">Dispositivo añadido</string>
-  <string name="device_authorized_pro">Su nuevo dispositivo ya tiene autorización para usar su cuenta Pro. Espere un par de minutos para que los cambios se apliquen.</string>
+  <string name="device_authorized_pro">Su nuevo dispositivo ya tiene autorización para usar su cuenta Pro. Espere un par de minutos para que los cambios surtan efecto.</string>
   <string name="report_sent">Informe enviado</string>
   <string name="thank_you_for_reporting_your_issue">Gracias por informarnos sobre su problema. Nos pondremos en contacto con usted por correo electrónico en cuanto podamos</string>
   <string name="unable_to_submit_issue">No se puede enviar la incidencia</string>
