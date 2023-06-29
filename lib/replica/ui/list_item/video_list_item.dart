@@ -141,7 +141,6 @@ class ReplicaVideoListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListItemFactory.replicaItem(
-      height: 116,
       link: item.replicaLink,
       api: replicaApi,
       onTap: onTap,
