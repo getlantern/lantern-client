@@ -367,6 +367,9 @@ class _CheckoutState extends State<Checkout>
                       message: AppKeys.continueCheckout,
                       child: Button(
                         text: 'continue'.i18n,
+                        disabled: emailController.value.text.isEmpty ||
+                            emailFieldKey.currentState?.validate() == false ||
+                            refCodeFieldKey.currentState?.validate() == false,
                         onPressed: onContinueTapped,
                       ),
                     ),
