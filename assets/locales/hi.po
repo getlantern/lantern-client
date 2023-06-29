@@ -1,17 +1,18 @@
 # 
 # Translators:
-# E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2022
 # Minnie Kaur <tuteja.minnie@gmail.com>, 2022
-# tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2022
-# Lantern, 2022
 # tx_e2f_hi r2 <tx_e2f_hi_r2@ate2f.com>, 2023
-# tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2023
+# Derek F <derek@getlantern.org>, 2023
+# Lantern, 2023
 # e2f <projects@e2f.com>, 2023
 # Kalyan Dikshit <dikshitrocks93@gmail.com>, 2023
+# tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2023
+# tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2023
+# E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Kalyan Dikshit <dikshitrocks93@gmail.com>, 2023\n"
+"Last-Translator: E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2023\n"
 "Language-Team: Hindi (India) (https://app.transifex.com/lantern-1/teams/94371/hi_IN/)\n"
 "Language: hi_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -207,7 +208,7 @@ msgstr "ईमेल से लिंक करें"
 msgid "lantern_pro_email"
 msgstr "Lantern Pro ईमेल"
 
-msgid "Email"
+msgid "email"
 msgstr "ईमेल"
 
 msgid "Submit"
@@ -216,8 +217,159 @@ msgstr "जमा करें"
 msgid "save"
 msgstr "सेव करें"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "कृपया एक मान्य ईमेल पता एंटर करें"
+
+msgid "bonus"
+msgstr "बोनस"
+
+msgid "referral_bonus"
+msgstr "रेफरल बोनस"
+
+msgid "total"
+msgstr "कुल"
+
+msgid "month"
+msgstr "महीना"
+
+msgid "months"
+msgstr "महीने"
+
+msgid "enter_email"
+msgstr "ईमेल दर्ज करें"
+
+msgid "error_fetching_plans"
+msgstr ""
+"प्‍लान लाने में त्रुटि, कृपया Lantern को पुनः आरंभ करें और पुनः प्रयास करें।"
+
+msgid "apply"
+msgstr "अप्लाई"
+
+msgid "choose_payment_method"
+msgstr "भुगतान का तरीका चुनें"
+
+msgid "pro_plan"
+msgstr "प्रो प्‍लान"
+
+msgid "one_year_plan"
+msgstr "1-वर्षीय प्‍लान"
+
+msgid "two_year_plan"
+msgstr "2-वर्षीय प्‍लान"
+
+msgid "plan_discount"
+msgstr "%d%% बचाएं"
+
+msgid "enter_email_and_activation_code"
+msgstr "ईमेल और सक्रियण कोड दर्ज करें"
+
+msgid "referral_code"
+msgstr "रेफरल कोड"
+
+msgid "add_referral_code"
+msgstr "रेफरल कोड जोड़ें"
+
+msgid "Activation Code"
+msgstr "एक्टिवेशन कोड"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "अमान्य या अधूरा रेफरल कोड"
+
+msgid "register_for_pro"
+msgstr "प्रो के लिए रजिस्टर करें"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "आपका रेफरल कोड लागू करते समय कुछ गड़बड़ हुई।"
+
+msgid "your_activation_code_is_invalid"
+msgstr "आपका सक्रियण कोड अमान्य है"
+
+msgid "update_cache_plans_timeout"
+msgstr "उपलब्ध प्‍लान लाते समय कुछ गड़बड़ हुई।"
+
+msgid "bitcoin_timeout"
+msgstr "BTCPay अनुरोध का समय समाप्त हो गया है।"
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay अनुपलब्ध है"
+
+msgid "update_cache_user_timeout"
+msgstr "आपका खाता डेटा लाते समय कुछ गड़बड़ हुई।"
+
+msgid "reseller_timeout"
+msgstr "आपके सक्रियण कोड को सत्यापित करते समय कुछ गड़बड़ हुई।"
+
+msgid "reseller_success"
+msgstr "सक्रियण कोड सफलतापूर्वक रीडीम किया गया।"
+
+msgid "stripe_timeout"
+msgstr ""
+"आपके स्ट्राइप भुगतान का समय समाप्त हो गया है। कृपया Lantern को पुनः आरंभ "
+"करें और पुनः प्रयास करें।"
+
+msgid "stripe_success"
+msgstr "स्ट्राइप खरीदारी सफल रही।"
+
+msgid "renewal_success"
+msgstr "रिन्यू करना सफल रहा"
+
+msgid "pro_renewal_success_description"
+msgstr ""
+"अपने Lantern Pro खाते को रिन्यू करने के लिए धन्यवाद। आपके पास अब हमारे सबसे "
+"तेज़ डेटा केंद्रों का उपयोग करके, असीमित पहुंच है।  आपके खाते से अधिकतम तीन "
+"डिवाइस कनेक्ट किए जा सकते हैं।"
+
+msgid "pro_purchase_success"
+msgstr "Lantern Pro में आपका स्वागत है"
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+"आपके पास अब हमारे सबसे तेज़ डेटा केंद्रों और समर्पित लाइन का उपयोग करके "
+"असीमित पहुंच है।  आपके खाते से अधिकतम तीन डिवाइस कनेक्ट किए जा सकते हैं।"
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+"आपके पास अब हमारे सबसे तेज़ डेटा केंद्रों का उपयोग करके, असीमित पहुंच है।  "
+"आपके खाते से अधिकतम तीन डिवाइस कनेक्ट किए जा सकते हैं।"
+
+msgid "by_clicking_tos"
+msgstr "%s पर क्लिक करके, आप हमारी बात से सहमत होते हैं"
+
+msgid "tos"
+msgstr "सेवा की शर्तें"
+
+msgid "step_1"
+msgstr "कदम 1"
+
+msgid "step_2"
+msgstr "कदम 2"
+
+msgid "step_3"
+msgstr "कदम 3"
+
+msgid "invalid_email"
+msgstr "अमान्य ईमेल पता"
+
+msgid "invalid_card"
+msgstr "अमान्य क्रेडिट कार्ड नंबर"
+
+msgid "invalid_expiration"
+msgstr "अमान्य समाप्ति तिथि"
+
+msgid "cc_number"
+msgstr "क्रेडिट कार्ड"
+
+msgid "card_number"
+msgstr "कार्ड नंबर"
+
+msgid "card_expiration"
+msgstr "महीना/वर्ष"
+
+msgid "invalid_cvc"
+msgstr "अमान्य CVC"
+
+msgid "complete_purchase"
+msgstr "पूरी खरीद"
 
 msgid "Re-send Email"
 msgstr "पुन: ईमेल भेजें"
@@ -267,6 +419,54 @@ msgstr "लॉग आउट "
 
 msgid "confirm_remove_device"
 msgstr "क्या आप वाकई इस डिवाइस को अपने Pro खाते से अनलिंक करना चाहते हैं?"
+
+msgid "unlimited_data"
+msgstr "असीमित डेटा"
+
+msgid "no_logs"
+msgstr "कोई लॉग नहीं"
+
+msgid "no_ads"
+msgstr "कोई विज्ञापन नहीं"
+
+msgid "choose_plan"
+msgstr "योजना चुनें"
+
+msgid "connect_up_to_3_devices"
+msgstr "3 डिवाइस तक कनेक्ट करें"
+
+msgid "faster_data_centers"
+msgstr "तेज़ डेटा सेंटर्स"
+
+msgid "dedicated_line"
+msgstr "समर्पित लाइन"
+
+msgid "increased_reliability"
+msgstr "बढ़ी हुई विश्वसनीयता"
+
+msgid "checkout"
+msgstr "चेक आउट"
+
+msgid "credit_card"
+msgstr "क्रेडिट कार्ड"
+
+msgid "lantern_pro_checkout"
+msgstr "Lantern Pro चेकआउट"
+
+msgid "1y_pricing"
+msgstr "1 वर्ष का मूल्य"
+
+msgid "2y_pricing"
+msgstr "2 वर्ष का मूल्य"
+
+msgid "plan_type"
+msgstr "प्लान का प्रकार"
+
+msgid "most_popular"
+msgstr "सबसे लोकप्रिय"
+
+msgid "free"
+msgstr "फ़्री"
 
 msgid "n/a"
 msgstr "n/a"
@@ -329,6 +529,9 @@ msgstr "बदलाव करें"
 
 msgid "save_error"
 msgstr "सेव करते वक़्त कुछ गड़बड़ी हुई "
+
+msgid "fewer_options"
+msgstr "कम विकल्प"
 
 msgid "more_options"
 msgstr "अन्य विकल्प"
@@ -398,22 +601,29 @@ msgid "start_chat"
 msgstr "चैट शेयर करें "
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "आपके द्वारा इंस्टॉल किए गए ऐप्स"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "Lantern के माध्यम से रूट किए गए ऐप्स"
 
 msgid "apps_to_unblock"
 msgstr ""
+"वे ऐप्स चुनें जिन्हें आप अनब्लॉक करना चाहते हैं। कनेक्ट होने पर, केवल नीचे "
+"चयनित ऐप्स को Lantern के माध्यम से रूट किया जाएगा।"
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "स्प्लिट टनलिंग"
 
 msgid "split_tunneling_info"
 msgstr ""
+"जब स्प्लिट टनलिंग सक्षम हो जाती है, तो चयनित ऐप्स को Lantern के माध्यम से "
+"रूट किया जाएगा। यह केवल निर्दिष्ट ऐप्स को अनब्लॉक करके प्रदर्शन में सुधार कर"
+" सकता है और बैंडविड्थ बचा सकता है।"
 
 msgid "applied_next_time"
 msgstr ""
+"अगली बार जब आप फिर से कनेक्ट करेंगे तो नई स्प्लिट टनलिंग सेटिंग्स लागू की "
+"जाएंगी।"
 
 msgid "message_disappearing"
 msgstr "आपके लिए सभी मेसेज गायब नहीं होंगे और %s ."
@@ -435,6 +645,9 @@ msgstr "खोलें"
 
 msgid "continue"
 msgstr "जारी रखें"
+
+msgid "continue_to_pro"
+msgstr "प्रो करने के लिए जारी"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "क्या आप सच में %s इसे खोलना चाहते हैं?"
@@ -1213,10 +1426,10 @@ msgstr ""
 "सुरक्षित रखता है."
 
 msgid "support"
-msgstr ""
+msgstr "सहायता"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "Lantern उपयोगकर्ता फोरम"
 
 msgid "faq"
 msgstr "सामान्य प्रश्न"
