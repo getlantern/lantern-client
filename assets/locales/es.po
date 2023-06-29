@@ -1,17 +1,20 @@
 # 
 # Translators:
 # Giorgio Maone <giorgio@maone.net>, 2021
-# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2022
-# e2f <projects@e2f.com>, 2022
-# e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2022
 # e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022
-# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2023
-# tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2023
+# Lantern, 2023
+# Emerson Castaneda, 2023
+# e2f <projects@e2f.com>, 2023
+# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2023
 # strel, 2023
+# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2023
+# fffw <fffw@getlantern.org>, 2023
+# tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2023
+# e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: strel, 2023\n"
+"Last-Translator: e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2023\n"
 "Language-Team: Spanish (https://app.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -211,7 +214,7 @@ msgstr "Vincular con correo electrónico"
 msgid "lantern_pro_email"
 msgstr "Correo electrónico de Lantern Pro"
 
-msgid "Email"
+msgid "email"
 msgstr "Correo electrónico"
 
 msgid "Submit"
@@ -220,8 +223,156 @@ msgstr "Enviar"
 msgid "save"
 msgstr "Guardar"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "Introduzca una dirección de correo electrónico válida"
+
+msgid "bonus"
+msgstr "Bonus"
+
+msgid "referral_bonus"
+msgstr "bonus por recomendación"
+
+msgid "total"
+msgstr "Total"
+
+msgid "month"
+msgstr "mes"
+
+msgid "months"
+msgstr "meses"
+
+msgid "enter_email"
+msgstr "Introducir correo electrónico"
+
+msgid "error_fetching_plans"
+msgstr "Error al obtener los planes, reinicie Lantern e inténtelo de nuevo."
+
+msgid "apply"
+msgstr "Aplicar"
+
+msgid "choose_payment_method"
+msgstr "Elegir método de pago"
+
+msgid "pro_plan"
+msgstr "Plan Pro"
+
+msgid "one_year_plan"
+msgstr "Plan de 1 año"
+
+msgid "two_year_plan"
+msgstr "Plan de 2 años"
+
+msgid "plan_discount"
+msgstr "Ahorre un %d%%"
+
+msgid "enter_email_and_activation_code"
+msgstr "Introduzca el correo electrónico y el código de activación"
+
+msgid "referral_code"
+msgstr "Código de referencia"
+
+msgid "add_referral_code"
+msgstr "Añadir código de recomendación"
+
+msgid "Activation Code"
+msgstr "Código de Activación"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "Código de recomendación incompleto o no válido"
+
+msgid "register_for_pro"
+msgstr "Regístrese en Pro"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "Algo ha fallado al aplicar su código de recomendación."
+
+msgid "your_activation_code_is_invalid"
+msgstr "Su código de activación no es válido"
+
+msgid "update_cache_plans_timeout"
+msgstr "Algo ha fallado al obtener los planes disponibles."
+
+msgid "bitcoin_timeout"
+msgstr "La solicitud de BTCPay ha caducado."
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay no está disponible"
+
+msgid "update_cache_user_timeout"
+msgstr "Algo ha fallado al obtener los datos de su cuenta."
+
+msgid "reseller_timeout"
+msgstr "Algo ha fallado al validar su código de activación."
+
+msgid "reseller_success"
+msgstr "Se ha canjeado el código de activación."
+
+msgid "stripe_timeout"
+msgstr "Su pago de Stripe ha caducado. Reinicie Lantern e inténtelo de nuevo."
+
+msgid "stripe_success"
+msgstr "Compra de Stripe realizada."
+
+msgid "renewal_success"
+msgstr "Renovación completada"
+
+msgid "pro_renewal_success_description"
+msgstr ""
+"Gracias por renovar su cuenta de Lantern Pro. Ahora dispone de acceso "
+"ilimitado con nuestros centros de datos más rápidos. Puede vincular hasta "
+"tres dispositivos a su cuenta."
+
+msgid "pro_purchase_success"
+msgstr "Le damos la bienvenida a Lantern Pro"
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+"Ahora dispone de acceso ilimitado con nuestros centros de datos más rápidos "
+"y una línea dedicada. Puede vincular hasta tres dispositivos a su cuenta."
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+"Ahora dispone de acceso ilimitado con nuestros centros de datos más rápidos."
+" Puede vincular hasta tres dispositivos a su cuenta."
+
+msgid "by_clicking_tos"
+msgstr "Al hacer clic en %s, acepta nuestras"
+
+msgid "tos"
+msgstr "Condiciones del servicio"
+
+msgid "step_1"
+msgstr "Paso 1"
+
+msgid "step_2"
+msgstr "Paso 2"
+
+msgid "step_3"
+msgstr "Paso 3"
+
+msgid "invalid_email"
+msgstr "Correo electrónico no válido"
+
+msgid "invalid_card"
+msgstr "Número de tarjeta de crédito no válido"
+
+msgid "invalid_expiration"
+msgstr "Fecha de caducidad no válida"
+
+msgid "cc_number"
+msgstr "Tarjeta de crédito"
+
+msgid "card_number"
+msgstr "Número de tarjeta"
+
+msgid "card_expiration"
+msgstr "MM/AA"
+
+msgid "invalid_cvc"
+msgstr "CVC no válido"
+
+msgid "complete_purchase"
+msgstr "Finalizar la compra"
 
 msgid "Re-send Email"
 msgstr "Re-enviar correo"
@@ -273,6 +424,54 @@ msgstr "Cerrar sesión"
 msgid "confirm_remove_device"
 msgstr ""
 "¿Está seguro de que quiere desvincular este dispositivo de su cuenta Pro?"
+
+msgid "unlimited_data"
+msgstr "Datos ilimitados"
+
+msgid "no_logs"
+msgstr "No hay registros"
+
+msgid "no_ads"
+msgstr "Sin publicidad"
+
+msgid "choose_plan"
+msgstr "Elegir plan"
+
+msgid "connect_up_to_3_devices"
+msgstr "Conecte hasta 3 dispositivos"
+
+msgid "faster_data_centers"
+msgstr "Centros de datos más rápidos"
+
+msgid "dedicated_line"
+msgstr "Línea dedicada"
+
+msgid "increased_reliability"
+msgstr "Mayor fiabilidad"
+
+msgid "checkout"
+msgstr "Caja"
+
+msgid "credit_card"
+msgstr "Tarjeta de crédito"
+
+msgid "lantern_pro_checkout"
+msgstr "Registro de Lantern Pro"
+
+msgid "1y_pricing"
+msgstr "Precio por 1 año"
+
+msgid "2y_pricing"
+msgstr "Precio por 2 años"
+
+msgid "plan_type"
+msgstr "Tipo de plan"
+
+msgid "most_popular"
+msgstr "Más popular"
+
+msgid "free"
+msgstr "Gratis"
 
 msgid "n/a"
 msgstr "n/d"
@@ -336,6 +535,9 @@ msgstr "Editar"
 
 msgid "save_error"
 msgstr "Algo ha fallado durante el proceso de guardado."
+
+msgid "fewer_options"
+msgstr "Menos opciones"
 
 msgid "more_options"
 msgstr "Más opciones"
@@ -405,22 +607,29 @@ msgid "start_chat"
 msgstr "Iniciar chat"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "Sus aplicaciones instaladas"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "Aplicaciones enrutadas a través de Lantern"
 
 msgid "apps_to_unblock"
 msgstr ""
+"Elija las aplicaciones que quiere desbloquear. Cuando se conecte, solo las "
+"seleccionadas a continuación se enrutarán a través de Lantern."
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "Túnel dividido"
 
 msgid "split_tunneling_info"
 msgstr ""
+"Al activar el túnel dividido, las aplicaciones seleccionadas se enrutarán a "
+"través de Lantern. Esto puede mejorar el rendimiento y ahorrar ancho de "
+"banda al desbloquear únicamente las aplicaciones indicadas."
 
 msgid "applied_next_time"
 msgstr ""
+"Los nuevos ajustes de túnel dividido se aplicará la próxima vez que se "
+"conecte."
 
 msgid "message_disappearing"
 msgstr "No desaparecerán todos los mensajes entre usted y %s."
@@ -442,6 +651,9 @@ msgstr "Conectado"
 
 msgid "continue"
 msgstr "Continuar"
+
+msgid "continue_to_pro"
+msgstr "Continuar hacia Pro"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "¿Seguro que desea abrir %s?"
@@ -1241,7 +1453,7 @@ msgid "support"
 msgstr "Soporte"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "Foro de Lantern"
 
 msgid "faq"
 msgstr "Preguntas frecuentes (FAQ)"

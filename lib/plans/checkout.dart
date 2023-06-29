@@ -21,6 +21,7 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout>
     with SingleTickerProviderStateMixin {
   bool showMoreOptions = false;
+  final _formKey = GlobalKey<FormState>();
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
