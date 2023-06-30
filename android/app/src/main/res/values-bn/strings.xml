@@ -29,7 +29,14 @@
   <string name="no_purchase_date">আপনার Lantern Pro ক্রয়ের একটি আনুমানিক তারিখ নির্বাচন করুন</string>
   <string name="purchase_date">ক্রয়ের তারিখ</string>
   <string name="common_issue_list_0">ব্লক সাইটগুলোতে যেতে পারছিনা</string>
+  <string name="common_issue_list_1">কেনা সম্পূর্ণ করা যাচ্ছে না</string>
+  <string name="common_issue_list_2">সাইন ইন করা যাচ্ছে না</string>
+  <string name="common_issue_list_3">স্পিনার অবিরাম লোড হয়</string>
   <string name="common_issue_list_4">ধীরগতি</string>
+  <string name="common_issue_list_5">চ্যাট কাজ করছে না</string>
+  <string name="common_issue_list_6">ডিসকভার কাজ করছে না</string>
+  <string name="common_issue_list_7">ডিভাইস লিংক করা যাচ্ছে না</string>
+  <string name="common_issue_list_8">অ্যাপ্লিকেশন ক্র্যাশ করেছে</string>
   <string name="common_issue_list_9">অন্যান্য</string>
   <string name="submit_code">কোড নিশ্চত করুন</string>
   <string name="on_text">চালু</string>
@@ -467,6 +474,7 @@
   <string name="device_authorized_pro">আপনার নতুন ডিভাইস এখন Pro অ্যাকাউন্ট ব্যবহার করার জন্য অনুমোদিত। পরিবর্তনগুলি কার্যকর হতে অনুগ্রহ করে কয়েক মিনিট অপেক্ষা করুন।</string>
   <string name="report_sent">রিপোর্ট পাঠানো হয়েছে</string>
   <string name="thank_you_for_reporting_your_issue">আপনার সমস্যা রিপোর্ট করার জন্য ধন্যবাদ। প্রচুর পরিমাণ সমস্যার জন্য আমরা বেশিরভাগ সমস্যার উত্তর দিতে পারি না, কিন্তু আমরা আপনাকে নিশ্চিত করি যে আপনার রিপোর্টগুলির উপর ভিত্তি করে, Lantern-কে উন্নত করার জন্য আমরা কঠোর পরিশ্রম করছি।</string>
+  <string name="unable_to_submit_issue">সমস্যা জমা দেওয়া যায়নি</string>
   <string name="have_a_lantern_pro_activation_code_click_here">একটি Lantern Pro সক্রিয়করণ কোড আছে? এখানে ক্লিক করুন</string>
   <string name="enter_email_and_activation_code">ইমেল এবং সক্রিয়করণ কোড লিখুন</string>
   <string name="activation_code">এক্টিভেশন কোড</string>

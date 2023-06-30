@@ -248,7 +248,7 @@ msgid "choose_payment_method"
 msgstr "পেমেন্ট পদ্ধতি বেছে নিন"
 
 msgid "pro_plan"
-msgstr "Pro প্ল্যান"
+msgstr "প্রো প্ল্যান"
 
 msgid "one_year_plan"
 msgstr "1-বছরর প্ল্যান"
@@ -287,7 +287,7 @@ msgid "update_cache_plans_timeout"
 msgstr "উপলভ্য প্ল্যানগুলো আনার সময় কিছু সমস্যা হয়েছে।"
 
 msgid "bitcoin_timeout"
-msgstr "BTCPay অনুরোধের সময় পেড়িয়ে গেছে।"
+msgstr "BTCPay অনুরোধের সময় পেরিয়ে গেছে।"
 
 msgid "BTCPay is unavailable"
 msgstr "BTCPay অনুপলভ্য"
@@ -303,19 +303,19 @@ msgstr "সক্রিয়করণ কোড সফলভাবে রিডি
 
 msgid "stripe_timeout"
 msgstr ""
-"আপনার স্ট্রাইপ পেমেন্টের সময় পেড়িয়ে গেছে। অনুগ্রহ করে Lantern আবার চালু করে"
-" আবার চেষ্টা করুন।"
+"আপনার স্ট্রাইপ পেমেন্টের সময় পেরিয়ে গেছে। অনুগ্রহ করে Lantern আবার চালু করে "
+"আবার চেষ্টা করুন।"
 
 msgid "stripe_success"
 msgstr "সফলভাবে স্ট্রাইপ কেনা সম্পন্ন হয়েছে।"
 
 msgid "renewal_success"
-msgstr "নবীকরণ সফল হয়েছে"
+msgstr "রিনিউ সফল হয়েছে"
 
 msgid "pro_renewal_success_description"
 msgstr ""
-"আপনার Lantern Pro অ্যাকাউন্ট পুনর্নবীকরণ করানোর জন্য ধন্যবাদ।আপনার কাছে এখন "
-"আমাদের দ্রুততম ডেটা সেন্টারগুলো ব্যবহার করার অপরিমিত অ্যাক্সেস আছে।  আপনার "
+"আপনার Lantern Pro অ্যাকাউন্ট রিনিউ করানোর জন্য ধন্যবাদ।আপনার কাছে এখন আমাদের"
+" দ্রুততম ডেটা সেন্টারগুলো ব্যবহার করার অপরিমিত অ্যাক্সেস আছে।  আপনার "
 "অ্যাকাউন্টের সাথে সর্বাধিক তিনটি ডিভাইস সংযুক্ত করা যেতে পারে।"
 
 msgid "pro_purchase_success"
@@ -352,7 +352,7 @@ msgid "invalid_email"
 msgstr "ইমেল ঠিকানা অবৈধ"
 
 msgid "invalid_card"
-msgstr ""
+msgstr "ক্রেডিট কার্ড নম্বর অবৈধ"
 
 msgid "invalid_expiration"
 msgstr "মেয়াদ শেষের তারিখ সঠিক নয়"
@@ -441,7 +441,7 @@ msgid "faster_data_centers"
 msgstr "দ্রুততর ডেটা সেন্টার"
 
 msgid "dedicated_line"
-msgstr ""
+msgstr "অবিচল লাইন"
 
 msgid "increased_reliability"
 msgstr "ক্রমবর্ধমান নির্ভরযোগ্যতা"
@@ -462,10 +462,10 @@ msgid "2y_pricing"
 msgstr "2 বছরের মূল্যনির্ধারণ"
 
 msgid "plan_type"
-msgstr ""
+msgstr "প্ল্যানের ধরন"
 
 msgid "most_popular"
-msgstr ""
+msgstr "সবচেয়ে জনপ্রিয়"
 
 msgid "free"
 msgstr "বিনামূল্যে"
