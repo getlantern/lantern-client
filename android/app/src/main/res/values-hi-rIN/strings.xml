@@ -29,13 +29,13 @@
   <string name="no_purchase_date">जब आप खरीदा लालटेन प्रो कृपया एक अनुमानित तिथि का चयन</string>
   <string name="purchase_date">खरीद की तारीख</string>
   <string name="common_issue_list_0">अवरुद्ध साइटों तक नहीं पहुँच सकते</string>
-  <string name="common_issue_list_1">खरीदारी पूरी नहीं की जा सकी</string>
-  <string name="common_issue_list_2">साइन इन नहीं कर सकते</string>
+  <string name="common_issue_list_1">खरीदारी पूरी नहीं की जा सकती है</string>
+  <string name="common_issue_list_2">साइन इन नहीं किया जा सकता है</string>
   <string name="common_issue_list_3">स्पिनर अंतहीन रूप से लोड होता है</string>
   <string name="common_issue_list_4">धीरे</string>
   <string name="common_issue_list_5">चैट काम नहीं कर रही</string>
   <string name="common_issue_list_6">डिस्‍कवर काम नहीं कर रहा</string>
-  <string name="common_issue_list_7">डिवाइस को लिंक नहीं कर सकता</string>
+  <string name="common_issue_list_7">डिवाइस लिंक नहीं किया जा सकता है</string>
   <string name="common_issue_list_8">एप्लिकेशन क्रैश हो जाता है</string>
   <string name="common_issue_list_9">अन्य</string>
   <string name="submit_code">पुष्टि संहिता</string>
@@ -419,7 +419,7 @@
   <string name="privacy_disclosure_title">Lantern गोपनीयता प्रकटीकरण</string>
   <string name="privacy_disclosure_accept">मुझे स्वीकार है</string>
   <string name="privacy_disclosure_body">Lantern आपकी गोपनीयता की रक्षा के लिए प्रतिबद्ध है. हम चाहते हैं कि आप यह समझें कि हम क्या जानकारी  इकट्ठा करते हैं और क्या नहीं, और हम उनका उपयोग कैसे करते हैं, और जानकारी स्टोर करते हैं. हम आपके Lantern Pro अकाउंट से आपकी भुगतान जानकारी को अलग कर देते हैं. हम आपकी गतिविधि के लॉग इकठ्ठा नहीं करते हैं, जिसमें ब्राउज़िंग इतिहास, ट्रैफ़िक गंतव्य, डेटा कंटेंट या DNS प्रश्नों का कोई लॉगिंग शामिल नहीं है. हम कभी भी कनेक्शन लॉग्स को स्टोर नहीं करते हैं, जिसका अर्थ है कि आपके IP पते का कोई लॉग, कनेक्शन टाइमस्टैम्प या सत्र अवधि के साथ जुड़ा हुआ आउटगोइंग Lantern सर्वर IP पता. एक विशिष्ट Latern Pro अकाउंट को देखते हुए, Lantern तकनीकी रूप से उपयोगकर्ता की वास्तविक पहचान के साथ Latern अकाउंट को जोड़ने में असमर्थ है। एक Latern IP पते और एक सटीक समय-टिकट को देखते हुए, Latern तकनीकी रूप से इस IP पते को Latern उपयोगकर्ता या Latern उपयोगकर्ता IP पते की विशेषता देने में असमर्थ है.</string>
-  <string name="referral_code_share_description">दोस्त के साथ Lantern Pro साझा करें! जब आपका दोस्त Lantern Pro की खरीद के दौरान आपके रेफरल कोड का उपयोग करता है, तो आप दोनों को एक महीने की Lantern Pro सेवा फ़्री मिलेगी!</string>
+  <string name="referral_code_share_description">दोस्त के साथ Lantern Pro साझा करें! जब आपका दोस्त Lantern Pro की खरीद के दौरान आपके रेफरल कोड का उपयोग करता है, तो आप दोनों को एक महीने की Lantern Pro सर्विस फ़्री मिलेगी!</string>
   <string name="referral_code_share">रेफ़रल कोड शेयर करें</string>
   <string name="referral_code_share_title">अपना रेफ़रल कोड शेयर करें</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -471,7 +471,7 @@
   <string name="device_authorized_pro">आपका नया डिवाइस अब आपके प्रो खाते का उपयोग करने के लिए अधिकृत है। बदलावों के प्रभावी होने के लिए कृपया कुछ मिनट प्रतीक्षा करें।</string>
   <string name="report_sent">सूचना भेजी गई</string>
   <string name="thank_you_for_reporting_your_issue">आपकी समस्या की रिपोर्ट करने के लिए धन्यवाद, जैसे ही हम सक्षम होंगे हम आपको ईमेल के माध्यम से वापस भेज देंगे</string>
-  <string name="unable_to_submit_issue">समस्या सबमिट नहीं की जा सकी</string>
+  <string name="unable_to_submit_issue">समस्या सबमिट करने में अक्षम</string>
   <string name="have_a_lantern_pro_activation_code_click_here">एक लालटेन प्रो सक्रियण कोड है? यहाँ क्लिक करें</string>
   <string name="enter_email_and_activation_code">ईमेल और एक्टिवेशन कोड एंटर करें</string>
   <string name="activation_code">एक्टिवेशन कोड</string>
