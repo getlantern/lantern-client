@@ -24,7 +24,7 @@
   <string name="select_issue">Выберите проблему</string>
   <string name="submit">Отправить</string>
   <string name="submit_issue">Подтвердить проблему</string>
-  <string name="no_issue_selected">Пожалуйста выберите проблему перед отправкой сообщения</string>
+  <string name="no_issue_selected">Пожалуйста, выберите проблему перед отправкой сообщения</string>
   <string name="cannot_find_email">Мы не можем найти этот email адрес.</string>
   <string name="no_purchase_date">Пожалуйста, выберите приблизительную дату покупки Lantern Pro</string>
   <string name="purchase_date">Дата покупки</string>
