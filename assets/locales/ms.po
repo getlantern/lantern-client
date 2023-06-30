@@ -262,13 +262,13 @@ msgid "plan_discount"
 msgstr "Jimat %d%%"
 
 msgid "enter_email_and_activation_code"
-msgstr "Masukkan E-mel dan Kod Pengaktifan"
+msgstr "Masukkan E-mel dan kod Pengaktifan"
 
 msgid "referral_code"
 msgstr "Kod rujukan"
 
 msgid "add_referral_code"
-msgstr "Tambah Kod Rujukan"
+msgstr "Tambah kod Rujukan"
 
 msgid "Activation Code"
 msgstr "Kod Pengaktifan"
@@ -280,45 +280,45 @@ msgid "register_for_pro"
 msgstr "Daftar untuk Pro"
 
 msgid "Something went wrong while applying your referral code."
-msgstr "Sesuatu tidak kena semasa menggunakan kod rujukan anda."
+msgstr "Ada kesilapan berlaku semasa menggunakan kod rujukan anda."
 
 msgid "your_activation_code_is_invalid"
 msgstr "Kod pengaktifan anda tidak sah"
 
 msgid "update_cache_plans_timeout"
-msgstr "Sesuatu tidak kena semasa memdapatkan pelan tersedia."
+msgstr "Ada kesilapan berlaku semasa memdapatkan pelan yang tersedia."
 
 msgid "bitcoin_timeout"
-msgstr "Permintaan BTCPay telah tamat tempoh."
+msgstr "Permintaan BTCPay telah tamat masa."
 
 msgid "BTCPay is unavailable"
 msgstr "BTCPay tidak tersedia"
 
 msgid "update_cache_user_timeout"
-msgstr "Sesuatu tidak kena semasa mendapatkan data akaun anda."
+msgstr "Ada kesilapan berlaku semasa mendapatkan data akaun anda."
 
 msgid "reseller_timeout"
-msgstr "Sesuatu tidak kena semasa mengesahkan kod pengaktifan anda."
+msgstr "Ada kesilapan berlaku semasa mengesahkan kod pengaktifan anda."
 
 msgid "reseller_success"
 msgstr "Berjaya menebus kod pengaktifan."
 
 msgid "stripe_timeout"
 msgstr ""
-"Pembayaran Stripe anda telah tamat tempoh. Sila mulakan semula Lantern dan "
+"Pembayaran Stripe anda telah tamat masa. Sila mulakan semula Lantern dan "
 "cuba lagi."
 
 msgid "stripe_success"
 msgstr "Pembelian Stripe yang berjaya."
 
 msgid "renewal_success"
-msgstr "Kejayaan Pembaharuan"
+msgstr "Pembaharuan Berjaya Dilakukan"
 
 msgid "pro_renewal_success_description"
 msgstr ""
-"Terima kasih kerana memperbaharui akaun Lantern Pro anda. Anda kini "
-"mempunyai akses tanpa had menggunakan pusat data terpantas kami. Hingga tiga"
-" peranti boleh dihubungkan ke akaun anda."
+"Terima kasih kerana membaharui akaun Lantern Pro anda. Kini anda mempunyai "
+"akses tanpa had menggunakan pusat data terpantas kami. Maksimum tiga peranti"
+" boleh dihubungkan dengan akaun anda."
 
 msgid "pro_purchase_success"
 msgstr "Selamat datang ke Lantern Pro"
@@ -326,13 +326,13 @@ msgstr "Selamat datang ke Lantern Pro"
 msgid "platinum_purchase_success_descripion"
 msgstr ""
 "Anda kini mempunyai akses tanpa had menggunakan pusat data terpantas kami "
-"dan talian berdedikasi. Hingga tiga peranti boleh disambungkan ke akaun "
+"dan talian khusus. Maksimum tiga peranti boleh disambungkan dengan akaun "
 "anda."
 
 msgid "pro_purchase_success_descripion"
 msgstr ""
-"Anda kini mempunyai akses tanpa had menggunakan pusat data terpantas kami. "
-"Hingga tiga peranti boleh disambungkan ke akaun anda."
+"Kini anda mempunyai akses tanpa had menggunakan pusat data terpantas kami. "
+"Maksimum tiga peranti boleh disambungkan dengan akaun anda."
 
 msgid "by_clicking_tos"
 msgstr "Dengan mengklik %s, anda bersetuju dengan"
@@ -443,10 +443,10 @@ msgid "faster_data_centers"
 msgstr "Pusat Data Lebih Cepat"
 
 msgid "dedicated_line"
-msgstr "Talian Berdedikasi"
+msgstr "Talian Khusus"
 
 msgid "increased_reliability"
-msgstr "Peningkatan Keutuhan"
+msgstr "Keutuhan Dipertingkatkan"
 
 msgid "checkout"
 msgstr "Daftar keluar"
@@ -467,7 +467,7 @@ msgid "plan_type"
 msgstr "Jenis pelan"
 
 msgid "most_popular"
-msgstr "Paling Popular"
+msgstr "Paling Digemari"
 
 msgid "free"
 msgstr "Percuma"
@@ -536,7 +536,7 @@ msgid "save_error"
 msgstr "Sesuatu tidak kena semasa menyimpan."
 
 msgid "fewer_options"
-msgstr "Pilihan Lebih Sedikit"
+msgstr "Sedikit Pilihan"
 
 msgid "more_options"
 msgstr "Lagi Pilihan"
@@ -607,28 +607,28 @@ msgid "start_chat"
 msgstr "Mulakan sembang"
 
 msgid "your_installed_apps"
-msgstr "Apl yang telah Dipasang Anda"
+msgstr "Apl yang telah Anda Pasang"
 
 msgid "apps_routed_through_lantern"
 msgstr "Apl yang Dihalakan Melalui Lantern"
 
 msgid "apps_to_unblock"
 msgstr ""
-"Pilih apl yang anda mahu nyahsekat. Apabila disambungkan, hanya apl yang "
+"Pilih apl yang mahu anda nyahsekat. Apabila disambungkan, hanya apl yang "
 "dipilih di bawah akan dihalakan melalui Lantern."
 
 msgid "split_tunneling"
-msgstr "Terowong Dipisahkan"
+msgstr "Penerowongan Pisah"
 
 msgid "split_tunneling_info"
 msgstr ""
-"Apabila terowong dipisahkan didayakan, apl terpilih akan dihalakan melalui "
-"Lantern. Proses ini boleh meningkatkan prestasi dan menjimatkan jalur lebar "
+"Apabila penerowongan pisah didayakan, apl terpilih akan dihalakan melalui "
+"Lantern. Proses ini boleh meningkatkan prestasi dan menjimatkan lebar jalur "
 "dengan menyahsekat apl tertentu sahaja."
 
 msgid "applied_next_time"
 msgstr ""
-"Tetapan terowong dipisahkan baharu akan digunakan apabila anda membuat "
+"Tetapan penerowongan pisah baharu akan digunakan apabila anda membuat "
 "sambungan semula sekali lagi."
 
 msgid "message_disappearing"

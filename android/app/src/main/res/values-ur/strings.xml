@@ -29,7 +29,14 @@
   <string name="no_purchase_date">برائے مہربانی انداز سے کسی اس تاریخ کا انتخاب کیجئے جب آپ کو لگتا ہو کہ آپ نے لینٹرن پرو خریدا تھا۔ </string>
   <string name="purchase_date">خریداری کی تاریخ</string>
   <string name="common_issue_list_0">بلاک سائٹس تک رسائی ممکن نہیں </string>
+  <string name="common_issue_list_1">خریداری مکمل نہیں کر سکتے</string>
+  <string name="common_issue_list_2">سائن ان نہیں کر سکتے</string>
+  <string name="common_issue_list_3">اسپنر لا محدود طور پر لوڈ کرتا ہے</string>
   <string name="common_issue_list_4">آہستہ</string>
+  <string name="common_issue_list_5">چیٹ کام نہیں کر رہی</string>
+  <string name="common_issue_list_6">ڈسکور کام نہیں کر رہا</string>
+  <string name="common_issue_list_7">ڈیوائس لنک نہیں کر سکتے</string>
+  <string name="common_issue_list_8">اپیلیکیشن کریش ہوتی ہے</string>
   <string name="common_issue_list_9">دوسرے</string>
   <string name="submit_code">کوڈ کی تصدیق کیجئے</string>
   <string name="on_text">آن</string>
@@ -49,6 +56,7 @@
   <string name="error_making_purchase">خریداری کرنے میں دشواری</string>
   <string name="have_latest_version">%1$s %2$s کا تازہ ترین ورژن دستیاب ہے۔</string>
   <string name="updating_lantern">%1$s اپ ڈیٹ ہو رہا ہے</string>
+  <string name="update_lantern">Lantern کو اپ ڈیٹ کریں</string>
   <string name="cancel">منسوخ</string>
   <string name="newsfeed_option">لینٹرن فیڈ کو آزمائیے</string>
   <string name="newsfeed_off_option">فیڈ کو بند کر دیں</string>
@@ -96,6 +104,7 @@
   <string name="error_update">اَپ ڈیٹ ڈاؤن لوڈ کرنے میں دشواری</string>
   <string name="error_install_update">اپ ڈیٹ انسٹال کرنے میں نقص</string>
   <string name="loading">لوڈ ہو رہا ہے۔۔</string>
+  <string name="manual_update">تازہ ترین ورژن دستی طور پر &lt;a href=\"https://github.com/getlantern/lantern\"&gt;یہاں&lt;/a&gt; سے انسٹال کرنے کی کوشش کریں</string>
   <string name="pro_welcome_text">لینٹرن پرو میں خوش آمدید!</string>
   <string name="happy_anniversary">لینٹرن سالگرہ مبارک!</string>
   <string name="welcome_greeting">لینٹرن میں خوش آمدید!</string>
@@ -123,6 +132,7 @@
   <string name="share_friends_text">مفت ماہ حاصل کرنے کے لئے دوستوں کو مدعو کیجئے!</string>
   <string name="email_address">ای میل ایڈریس</string>
   <string name="switch_to_alipay">Alipay پر سوئچ کریں</string>
+  <string name="switch_to_stripe">اسٹرائپ پر سوئچ کریں</string>
   <string name="switch_to_credit_card">کریڈٹ کارڈ کی ادائیگی پر سوئچ کریں</string>
   <string name="continue_to_pro">پرو کو جاری رکھئے</string>
   <string name="continue_to_basic">بیسک ورژن کو جاری رکھئے</string>
@@ -204,6 +214,13 @@
     <item>بلاکنک رززسٹنس</item>
     <item>تین ڈیوائسز</item>
     <item>کوئی اشتہار نہیں</item>
+  </string-array>
+  <string-array name="pro_features_new">
+    <item>زیادہ تیز رفتار</item>
+    <item>مزاحمت کو بلاک کرنا</item>
+    <item>زیادہ قابل بھروسہ</item>
+    <item>3 تک ڈیوائسز رجسٹر کریں</item>
+    <item>لامحدود ڈیٹا</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>لامحدود تیز رفتار ڈیٹا</item>
@@ -402,6 +419,7 @@
   <string name="privacy_disclosure_title">لینٹرن کی رازداری کا اعلان</string>
   <string name="privacy_disclosure_accept">مجھے قبول ہے</string>
   <string name="privacy_disclosure_body">لینٹرن آپ کی رازداری کے تحفظ کے لئے پرعزم ہے۔ ہم چاہتے ہیں کہ آپ یہ سمجھیں کہ ہم کون سی معلومات اکٹھا کرتے ہیں، کیا اکٹھا نہیں کرتے، اور ہم معلومات کو کس طرح اکٹھا، استعمال اور اسٹور کرتے ہیں۔ ہم آپ کے لینٹرن پرو اکاؤنٹ سے آپ کی ادائیگی کی معلومات کو الگ کردیں۔ ہم آپ کی سرگرمی کے لاگز، بشمول براؤزنگ کی سرگزشت، ٹریفک کی منزل، ڈیٹا کے مشمولات، یا DNS استفسارات اکٹھا نہیں کرتے ہیں۔ ہم کبھی بھی کنیکشن لاگز کو اسٹور نہیں کرتے ہیں، یعنی آپ کے IP ایڈریس کی کوئی لاگز ، آپ کا باہر جانے والا لینٹرن سرور IP ایڈریس جو کنکشن ٹائم اسٹیمپ، یا سیشن کے دورانیے کے ساتھ وابستہ ہے۔ جہاں تک مخصوص لینٹرن پرو اکاؤنٹ کا سوال ہے تو، لینٹرن تکنیکی طور پر لینٹرن اکاؤنٹ کو صارف کی اصل شناخت کے ساتھ منسلک کرنے سے قاصر ہے۔ صرف لینٹرن کا IP ایڈریس اور ایک مختصر ٹائم اسٹیمپ دیئے جانے کے سبب، لینٹرن تکنیکی طور پر اس IP پتے کو کسی لینٹرن صارف یا کسی لینٹرن صارف کے IP پتے سے منسوب کرنے سے قاصر ہے۔</string>
+  <string name="referral_code_share_description">Lantern Pro کو دوست کے ساتھ شیئر کریں! آپ کے دوست کی جانب سے Lantern Pro کی خریداری کے دوران آپ کا ریفرل کوڈ استعمال کرنے پر، آپ دونوں ایک ماہ کے لیے Lantern Pro سروس مفت حاصل کریں گے!</string>
   <string name="referral_code_share">ریفرل کوڈ شیئر کریں</string>
   <string name="referral_code_share_title">اپنا ریفرل کوڈ شیئر کریں:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -450,8 +468,10 @@
   <string name="send_report">رپورٹ بھیجیں</string>
   <string name="email_optional">ای میل (اختیاری)</string>
   <string name="device_added">آلہ جوڑا گیا</string>
+  <string name="device_authorized_pro">آپ کی نئی ڈیوائس اب آپ کا پرو اکاؤنٹ استعمال کرنے کے لیے اجازت یافتہ ہے۔ براہ کرم تبدیلیوں کے موثر ہونے کے لیے کچھ منٹ انتظار کریں۔</string>
   <string name="report_sent">رپورٹ بھیج دی گئی</string>
   <string name="thank_you_for_reporting_your_issue">اپنے مسئلے کو رپورٹ کرنے کا شکریہ۔ کثیر تعداد کے سبب، ہم زیادہ تر مسائل کا جواب نہیں دے سکتے، لیکن ہم آپ کو یقین دلاتے ہیں کہ ہم آپ کی رپورٹس کی بنیاد پر Lantern کو بہتر بنانے کے لیے پوری طرح کوشاں ہیں۔</string>
+  <string name="unable_to_submit_issue">مسئلہ جمع کروانے سے قاصر ہیں</string>
   <string name="have_a_lantern_pro_activation_code_click_here">ایک لینٹرن پرو ایکٹیویشن کوڈ موجود ہے؟ یہاں کلک کریں</string>
   <string name="enter_email_and_activation_code">ای میل اور ایکٹیویشن کوڈ درج کریں</string>
   <string name="activation_code">ایکٹیویشن کوڈ</string>
