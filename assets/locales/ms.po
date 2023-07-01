@@ -1,17 +1,17 @@
 # 
 # Translators:
 # abuyop <abuyop@gmail.com>, 2022
-# e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2022
-# tx_e2f_my t1 <divinahramaroson@gmail.com>, 2022
-# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2023
-# e2f <projects@e2f.com>, 2023
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2023
-# Alyssa Chung <lisiachung7@gmail.com>, 2023
 # Lantern, 2023
+# e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2023
+# e2f <projects@e2f.com>, 2023
+# Alyssa Chung <lisiachung7@gmail.com>, 2023
+# tx_e2f_my t1 <divinahramaroson@gmail.com>, 2023
+# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2023\n"
+"Last-Translator: tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2023\n"
 "Language-Team: Malay (https://app.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -210,7 +210,7 @@ msgstr "Pautkan melalui E-mel"
 msgid "lantern_pro_email"
 msgstr "E-mel Pro Lantern"
 
-msgid "Email"
+msgid "email"
 msgstr "Emel"
 
 msgid "Submit"
@@ -219,8 +219,159 @@ msgstr "Hantar"
 msgid "save"
 msgstr "Simpan"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "Sila masukkan alamat e-mel yang sah"
+
+msgid "bonus"
+msgstr "Bonus"
+
+msgid "referral_bonus"
+msgstr "bonus rujukan"
+
+msgid "total"
+msgstr "Jumlah"
+
+msgid "month"
+msgstr "bulan"
+
+msgid "months"
+msgstr "bulan"
+
+msgid "enter_email"
+msgstr "Masukkan E-mel"
+
+msgid "error_fetching_plans"
+msgstr "Ralat mendapatkan pelan, sila mulakan semula Lantern dan cuba lagi."
+
+msgid "apply"
+msgstr "Guna"
+
+msgid "choose_payment_method"
+msgstr "Pilih Kaedah Pembayaran"
+
+msgid "pro_plan"
+msgstr "Pelan Pro"
+
+msgid "one_year_plan"
+msgstr "Pelan 1 Tahun"
+
+msgid "two_year_plan"
+msgstr "Pelan 2 Tahun"
+
+msgid "plan_discount"
+msgstr "Jimat %d%%"
+
+msgid "enter_email_and_activation_code"
+msgstr "Masukkan E-mel dan Kod Pengaktifan"
+
+msgid "referral_code"
+msgstr "Kod rujukan"
+
+msgid "add_referral_code"
+msgstr "Tambah Kod Rujukan"
+
+msgid "Activation Code"
+msgstr "Kod Pengaktifan"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "Kod rujukan tidak sah atau tidak lengkap"
+
+msgid "register_for_pro"
+msgstr "Daftar untuk Pro"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "Sesuatu tidak kena semasa menggunakan kod rujukan anda."
+
+msgid "your_activation_code_is_invalid"
+msgstr "Kod pengaktifan anda tidak sah"
+
+msgid "update_cache_plans_timeout"
+msgstr "Sesuatu tidak kena semasa memdapatkan pelan tersedia."
+
+msgid "bitcoin_timeout"
+msgstr "Permintaan BTCPay telah tamat tempoh."
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay tidak tersedia"
+
+msgid "update_cache_user_timeout"
+msgstr "Sesuatu tidak kena semasa mendapatkan data akaun anda."
+
+msgid "reseller_timeout"
+msgstr "Sesuatu tidak kena semasa mengesahkan kod pengaktifan anda."
+
+msgid "reseller_success"
+msgstr "Berjaya menebus kod pengaktifan."
+
+msgid "stripe_timeout"
+msgstr ""
+"Pembayaran Stripe anda telah tamat tempoh. Sila mulakan semula Lantern dan "
+"cuba lagi."
+
+msgid "stripe_success"
+msgstr "Pembelian Stripe yang berjaya."
+
+msgid "renewal_success"
+msgstr "Kejayaan Pembaharuan"
+
+msgid "pro_renewal_success_description"
+msgstr ""
+"Terima kasih kerana memperbaharui akaun Lantern Pro anda. Anda kini "
+"mempunyai akses tanpa had menggunakan pusat data terpantas kami. Hingga tiga"
+" peranti boleh dihubungkan ke akaun anda."
+
+msgid "pro_purchase_success"
+msgstr "Selamat datang ke Lantern Pro"
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+"Anda kini mempunyai akses tanpa had menggunakan pusat data terpantas kami "
+"dan talian berdedikasi. Hingga tiga peranti boleh disambungkan ke akaun "
+"anda."
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+"Anda kini mempunyai akses tanpa had menggunakan pusat data terpantas kami. "
+"Hingga tiga peranti boleh disambungkan ke akaun anda."
+
+msgid "by_clicking_tos"
+msgstr "Dengan mengklik %s, anda bersetuju dengan"
+
+msgid "tos"
+msgstr "Terma Perkhidmatan"
+
+msgid "step_1"
+msgstr "Langkah 1"
+
+msgid "step_2"
+msgstr "Langkah 2"
+
+msgid "step_3"
+msgstr "Langkah 3"
+
+msgid "invalid_email"
+msgstr "Alamat e-mel tidak sah"
+
+msgid "invalid_card"
+msgstr "Nombor kad kredit tidak sah"
+
+msgid "invalid_expiration"
+msgstr "Tarikh tamat tempoh tidak sah"
+
+msgid "cc_number"
+msgstr "Kad Kredit"
+
+msgid "card_number"
+msgstr "Nombor Kad"
+
+msgid "card_expiration"
+msgstr "BB/TT"
+
+msgid "invalid_cvc"
+msgstr "CVC tidak sah"
+
+msgid "complete_purchase"
+msgstr "Pembelian Lengkap"
 
 msgid "Re-send Email"
 msgstr "Emel Dihantar semula"
@@ -272,6 +423,54 @@ msgstr "Log Keluar"
 msgid "confirm_remove_device"
 msgstr ""
 "Adakah anda pasti ingin mengeluarkan pautan peranti dari account Pro anda?"
+
+msgid "unlimited_data"
+msgstr "Data Tidak Terbatas"
+
+msgid "no_logs"
+msgstr "Tiada log"
+
+msgid "no_ads"
+msgstr "Tiada Iklan"
+
+msgid "choose_plan"
+msgstr "Pilih Pelan"
+
+msgid "connect_up_to_3_devices"
+msgstr "Sambungkan sehingga 3 peranti"
+
+msgid "faster_data_centers"
+msgstr "Pusat Data Lebih Cepat"
+
+msgid "dedicated_line"
+msgstr "Talian Berdedikasi"
+
+msgid "increased_reliability"
+msgstr "Peningkatan Keutuhan"
+
+msgid "checkout"
+msgstr "Daftar keluar"
+
+msgid "credit_card"
+msgstr "Kad Kredit"
+
+msgid "lantern_pro_checkout"
+msgstr "Daftar keluar Lantern Pro"
+
+msgid "1y_pricing"
+msgstr "Harga 1 tahun"
+
+msgid "2y_pricing"
+msgstr "Harga 2 tahun"
+
+msgid "plan_type"
+msgstr "Jenis pelan"
+
+msgid "most_popular"
+msgstr "Paling Popular"
+
+msgid "free"
+msgstr "Percuma"
 
 msgid "n/a"
 msgstr "t/b"
@@ -336,8 +535,11 @@ msgstr "Edit"
 msgid "save_error"
 msgstr "Sesuatu tidak kena semasa menyimpan."
 
+msgid "fewer_options"
+msgstr "Pilihan Lebih Sedikit"
+
 msgid "more_options"
-msgstr "Pilihan lanjut"
+msgstr "Lagi Pilihan"
 
 msgid "block_user"
 msgstr "Sekat pengguna"
@@ -405,22 +607,29 @@ msgid "start_chat"
 msgstr "Mulakan sembang"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "Apl yang telah Dipasang Anda"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "Apl yang Dihalakan Melalui Lantern"
 
 msgid "apps_to_unblock"
 msgstr ""
+"Pilih apl yang anda mahu nyahsekat. Apabila disambungkan, hanya apl yang "
+"dipilih di bawah akan dihalakan melalui Lantern."
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "Terowong Dipisahkan"
 
 msgid "split_tunneling_info"
 msgstr ""
+"Apabila terowong dipisahkan didayakan, apl terpilih akan dihalakan melalui "
+"Lantern. Proses ini boleh meningkatkan prestasi dan menjimatkan jalur lebar "
+"dengan menyahsekat apl tertentu sahaja."
 
 msgid "applied_next_time"
 msgstr ""
+"Tetapan terowong dipisahkan baharu akan digunakan apabila anda membuat "
+"sambungan semula sekali lagi."
 
 msgid "message_disappearing"
 msgstr "Semua mesej tidak akan hilang untuk anda dan %s."
@@ -442,6 +651,9 @@ msgstr "Dihidupkan"
 
 msgid "continue"
 msgstr "Teruskan"
+
+msgid "continue_to_pro"
+msgstr "Terus ke Pro"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "Adakah anda pasti bahawa anda ingin membuka %s?"
@@ -1236,7 +1448,7 @@ msgid "support"
 msgstr "Sokongan"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "Forum Pengguna Lantern"
 
 msgid "faq"
 msgstr "FAQ"

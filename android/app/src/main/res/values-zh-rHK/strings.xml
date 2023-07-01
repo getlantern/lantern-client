@@ -468,6 +468,7 @@
   <string name="send_report">傳送報告</string>
   <string name="email_optional">電子郵件（選填）</string>
   <string name="device_added">已新增裝置</string>
+  <string name="device_authorized_pro">您的新裝置現已被授權使用您的專業版帳戶。請等待幾分鐘讓變更生效。</string>
   <string name="report_sent">報告已傳送</string>
   <string name="thank_you_for_reporting_your_issue">感謝您回報問題。由於回報事項眾多，我們無法回覆大部分的問題，但我們保證已努力解決問題，根據您所回報的內容改善 Lantern。</string>
   <string name="unable_to_submit_issue">报告提交失败</string>

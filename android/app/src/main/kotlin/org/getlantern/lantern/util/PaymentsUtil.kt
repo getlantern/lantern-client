@@ -265,14 +265,15 @@ class PaymentsUtil(private val activity: Activity) {
     ) {
         Logger.d(TAG, "Sending purchase request with provider $provider")
         val session = session
+        val currency = session.currency().lowercase()
         val formBody: FormBody.Builder = FormBody.Builder()
             .add("idempotencyKey", System.currentTimeMillis().toString())
             .add("provider", provider.toString().lowercase())
             .add("email", email)
             .add("plan", planID)
-            .add("currency", session.currency().lowercase())
+            .add("currency", currency)
             .add("deviceName", session.deviceName())
-
+        Logger.d(TAG, "Currency is $currency")
         when (provider) {
             PaymentProvider.Stripe -> {
                 val stripePublicKey = session.stripePubKey()
