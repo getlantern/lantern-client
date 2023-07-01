@@ -312,7 +312,7 @@ class PaymentsUtil(private val activity: Activity) {
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.e(TAG, "Error with purchase request: $error")
+                    Logger.e(TAG, "Error with purchase request: $error .. currency is $currency")
                     dialog?.dismiss()
                     methodCallResult.error(
                         "errorMakingPurchase",
