@@ -39,6 +39,7 @@
   <string name="on_desc">ตอนนี้คุณสามารถเข้าชมเว็บไซต์ที่ถูกบล๊อกและบริการต่างๆ</string>
   <string name="off_desc">คลิกที่ปุ่มเพื่อเข้าถึงเว็บไซต์และบริการที่ถูกบล็อก</string>
   <string name="service_connected">เชื่อมต่อกับ VPN แล้ว</string>
+  <string name="ready_to_connect">พร้อมเชื่อมต่อแล้ว</string>
   <string name="desktop_option">เวอร์ชันเดสก์ท็อป</string>
   <string name="contact_option">ติดต่อ</string>
   <string name="check_for_update">ตรวจสอบการอัพเดต</string>
@@ -92,6 +93,7 @@
   <string name="not_now">ไม่ใช่ตอนนี้</string>
   <string name="install_update">อัพเดต</string>
   <string name="error_update">เกิดข้อผิดพลาดในการดาวน์โหลดอัพเดต</string>
+  <string name="error_install_update">เกิดข้อผิดพลาดในการติดตั้งอัพเดต</string>
   <string name="loading">กำลังโหลด...</string>
   <string name="manual_update">ทดลองติดตั้งเวอร์ชั่นล่าสุดด้วยตนเองจาก &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">ยินดีต้อนรับสู่ Lantern Pro!</string>
@@ -264,6 +266,7 @@
   <string name="get_lantern_pro">รับ Lantern Pro</string>
   <string name="upgrade_to_lantern_pro">อัปเกรดเป็น Lantern Pro</string>
   <string name="pro_available_for">สำหรับ Windows Android Mac Ubuntu ส่วน iOS จะมาในเร็ว ๆ นี้</string>
+  <string name="upgrade_to_pro">อัปเกรดเป็น Pro เพื่อใช้ข้อมูลความเร็วสูงกว่าเดิมแบบไม่จำกัด และต้านทานต่อการปิดกั้นได้ดียิ่งขึ้น!</string>
   <string name="data_remaining">การใช้งานข้อมูลความเร็วสูงรายเดือนฟรีของคุณเหลืออยู่ %1$s %%</string>
   <string name="upgrade">อัปเกรด</string>
   <string name="upgrade_pro">อัปเกรดเป็น Pro</string>
@@ -452,6 +455,17 @@
   <string name="pro_account_expiration">การหมดอายุบัญชี Pro:</string>
   <string name="lantern_pro_devices_up_to_3">อุปกรณ์ Lantern Pro (สูงสุด 3 เครื่อง)</string>
   <string name="renew_short">ต่ออายุ</string>
+  <string name="connection_error">การเชื่อมต่อล้มเหลว</string>
   <string name="init_account">%1$s กำลังเปิดระบบบัญชีของคุณ อาจใช้เวลาสักครู่</string>
+  <string name="tampered_apk">apk ที่ดาวน์โหลดแล้วถูก has been compromised โปรดดาวน์โหลดเวอร์ชันทางการ</string>
+  <string name="incoming_call">สายเข้า</string>
+  <string name="accept">ยอมรับ</string>
   <string name="decline">Decline</string>
+  <string name="new_message">ข้อความใหม่</string>
+  <string name="from_sender">จาก %1$s</string>
+  <string name="unnamed_contact">ผู้ติดต่อที่ไม่ระบุชื่อ</string>
+  <string name="message_notifications_channel">ข้อความ</string>
+  <string name="call_notifications_channel">โทร</string>
+  <string name="lantern_service">บริการ Lantern</string>
+  <string name="replica_download">ดาวน์โหลดซ้ำ</string>
 </resources>
