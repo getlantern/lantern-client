@@ -308,7 +308,7 @@
   <string name="earn_free_month">每注册一个朋友，就能赚取一个月的免费服务。</string>
   <string name="credits_applied">您的积分将在下一个账单周期应用到您的帐户中。</string>
   <string name="pro_invitation_subject">邀请他人加入蓝灯专业版</string>
-  <string name="receive_free_month">要想免费使用蓝灯专业版一个月，请使用以下推荐码：%1$s ；您可以从这里下载：https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">要想免费使用蓝灯专业版一个月，请使用以下推荐码：%1$s ；您可以从这里下载：https://lantern.io/download</string>
   <string name="share_feed_item">我在 %2$s 通过蓝灯阅读关于\"%1$s\"的内容。使用蓝灯来访问被封锁的网站和服务。你可以在这里下载它的安卓版：https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">您确定吗？此操作无法撤销！您可以随时随地再次注册成为专业版会员。</string>
   <string name="unauthorize_confirmation">您是否确定要从您的专业版帐户中取消链接此设备？</string>
