@@ -12,12 +12,13 @@ import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
 import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
+import java.util.concurrent.ConcurrentHashMap
 import java.util.Currency
 import java.util.Date
 import java.util.Locale
 
 class LanternSessionManager(application: Application) : SessionManager(application) {
-    private var selectedPlan: ProPlan? = null
+    private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
 
     private var referral: String? = null
     private var verifyCode: String? = null
@@ -54,50 +55,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     override fun currency(): String {
-        return selectedPlan?.currency ?: DEFAULT_CURRENCY_CODE
-    }
-
-    fun getSelectedPlan(): ProPlan? {
-        Logger.debug(TAG, "Current plan is $selectedPlan")
-        return selectedPlan
-    }
-
-    fun getSelectedPlanCost(): Long {
-        val plan = getSelectedPlan()
-        if (plan != null) {
-            val price = plan.currencyPrice
-            if (price != null) {
-                return price.toLong()
-            }
-        }
-        return DEFAULT_ONE_YEAR_COST
-    }
-
-    fun getReferralArray(res: Resources): Array<String?> {
-        val plan = getSelectedPlan()
-        if (plan == null) {
-            Logger.debug(TAG, "Selected plan is null. Returning default referral instructions")
-            return res.getStringArray(R.array.referral_promotion_list)
-        }
-        return if (plan.numYears() == 1) {
-            res.getStringArray(R.array.referral_promotion_list)
-        } else {
-            res.getStringArray(R.array.referral_promotion_list_two_year)
-        }
-    }
-
-    fun getSelectedPlanCurrency(): String {
-        val plan = getSelectedPlan()
-        return if (plan != null) {
-            plan.currency
-        } else {
-            "usd"
-        }
-    }
-
-    fun defaultToAlipay(): Boolean {
-        // Currently we default to Alipay for Yuan purchases
-        return "cny" == getSelectedPlanCurrency()
+        return getCurrency()?.let { it.currencyCode } ?: "usd"
     }
 
     fun setRemoteConfigPaymentProvider(provider: String?) {
@@ -224,10 +182,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getBoolean(SHOW_RENEWAL_PREF, true)
     }
 
-    fun setProPlan(plan: ProPlan?) {
-        selectedPlan = plan
-    }
-
     fun setIsProUser(isProUser: Boolean) {
         prefs.edit().putBoolean(PRO_USER, isProUser).apply()
     }
@@ -329,7 +283,16 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         }
     }
 
+    fun planByID(planID: String): ProPlan? {
+        for (plan in plans.values) {
+            if (plan.id == planID) return plan
+        }
+        return null
+    }
+
     fun setUserPlans(proPlans: Map<String, ProPlan>) {
+        plans.clear()
+        plans.putAll(proPlans)
         db.mutate { tx ->
             proPlans.values.forEach {
                 val path = PLANS + it.id

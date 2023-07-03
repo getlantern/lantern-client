@@ -4,11 +4,13 @@
 # e2f_fr r9 <tx_e2f_fr_r9@ate2f.com>, 2022
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2022
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2023
+# fffw <fffw@getlantern.org>, 2023
 # AO <ao@localizationlab.org>, 2023
+# e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: AO <ao@localizationlab.org>, 2023\n"
+"Last-Translator: e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2023\n"
 "Language-Team: French (https://app.transifex.com/lantern-1/teams/94371/fr/)\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -209,7 +211,7 @@ msgstr "Relier par courriel"
 msgid "lantern_pro_email"
 msgstr "Adresse courriel de Lantern Pro"
 
-msgid "Email"
+msgid "email"
 msgstr "Adresse courriel"
 
 msgid "Submit"
@@ -218,8 +220,166 @@ msgstr "Envoyer"
 msgid "save"
 msgstr "Enregistrer"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "Veuillez saisir une adresse courriel valide"
+
+msgid "bonus"
+msgstr "Bonus"
+
+msgid "referral_bonus"
+msgstr "bonus de parrainage"
+
+msgid "total"
+msgstr "Total"
+
+msgid "month"
+msgstr "mois"
+
+msgid "months"
+msgstr "mois"
+
+msgid "enter_email"
+msgstr "Saisissez votre adresse courriel"
+
+msgid "error_fetching_plans"
+msgstr ""
+"Erreur lors de la récupération des abonnements. Veuillez redémarrer Lantern "
+"et réessayer."
+
+msgid "apply"
+msgstr "Appliquer"
+
+msgid "choose_payment_method"
+msgstr "Choisissez un mode de paiement"
+
+msgid "pro_plan"
+msgstr "Abonnement Pro"
+
+msgid "one_year_plan"
+msgstr "Abonnement d’un an"
+
+msgid "two_year_plan"
+msgstr "Abonnement de deux ans"
+
+msgid "plan_discount"
+msgstr "Économisez %d %%"
+
+msgid "enter_email_and_activation_code"
+msgstr "Saisissez l’adresse courriel et le code d’activation"
+
+msgid "referral_code"
+msgstr "Code de parrainage"
+
+msgid "add_referral_code"
+msgstr "Ajouter un code de parrainage"
+
+msgid "Activation Code"
+msgstr "Code d’activation"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "Le code de parrainage est invalide ou incomplet"
+
+msgid "register_for_pro"
+msgstr "Passer à un compte Pro"
+
+msgid "Something went wrong while applying your referral code."
+msgstr ""
+"Une erreur est survenue lors de l’application de votre code de parrainage."
+
+msgid "your_activation_code_is_invalid"
+msgstr "Votre code d’activation est invalide"
+
+msgid "update_cache_plans_timeout"
+msgstr ""
+"Une erreur est survenue lors de la récupération des abonnements disponibles."
+
+msgid "bitcoin_timeout"
+msgstr "La demande BTCPay a expiré."
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay est indisponible"
+
+msgid "update_cache_user_timeout"
+msgstr ""
+"Une erreur est survenue lors de la récupération des données de votre compte."
+
+msgid "reseller_timeout"
+msgstr ""
+"Une erreur est survenue lors de la validation de votre code d’activation."
+
+msgid "reseller_success"
+msgstr "Le code d’activation a bien été utilisé."
+
+msgid "stripe_timeout"
+msgstr ""
+"Votre paiement Stripe a expiré. Veuillez redémarrer Lantern et réessayer."
+
+msgid "stripe_success"
+msgstr "L’achat Stripe a réussi."
+
+msgid "renewal_success"
+msgstr "Réussite du renouvellement"
+
+msgid "pro_renewal_success_description"
+msgstr ""
+"Nous vous remercions d’avoir renouvelé votre compte Lantern Pro. Vous "
+"disposez désormais d’un accès illimité à l’aide de nos centres de données "
+"les plus rapides. Vous pouvez connecter jusqu’à trois appareils à votre "
+"compte."
+
+msgid "pro_purchase_success"
+msgstr "Bienvenue à Lantern Pro "
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+"Vous disposez désormais d’un accès illimité à l’aide de nos centres de "
+"données les plus rapides et d’une ligne dédiée. Vous pouvez connecter "
+"jusqu’à trois appareils à votre compte."
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+"Vous disposez désormais d’un accès illimité à l’aide de nos centres de "
+"données les plus rapides. Vous pouvez connecter jusqu’à trois appareils à "
+"votre compte."
+
+msgid "by_clicking_tos"
+msgstr "En cliquant sur %s, vous acceptez nos"
+
+msgid "tos"
+msgstr "Conditions générales d’utilisation"
+
+msgid "step_1"
+msgstr "Étape 1"
+
+msgid "step_2"
+msgstr "Étape 2"
+
+msgid "step_3"
+msgstr "Étape 3"
+
+msgid "invalid_email"
+msgstr "Adresse courriel invalide"
+
+msgid "invalid_card"
+msgstr "Numéro de carte de paiement invalide"
+
+msgid "invalid_expiration"
+msgstr "La date d’expiration est invalide"
+
+msgid "cc_number"
+msgstr "Carte de crédit"
+
+msgid "card_number"
+msgstr "Numéro de carte"
+
+msgid "card_expiration"
+msgstr "MM/AA"
+
+msgid "invalid_cvc"
+msgstr "Le CVC est invalide"
+
+msgid "complete_purchase"
+msgstr "Terminer l’achat"
 
 msgid "Re-send Email"
 msgstr "Renvoyer le courriel"
@@ -271,6 +431,54 @@ msgstr "Déconnexion"
 
 msgid "confirm_remove_device"
 msgstr "Voulez-vous vraiment dissocier cet appareil de votre compte Pro ?"
+
+msgid "unlimited_data"
+msgstr "Données illimitées"
+
+msgid "no_logs"
+msgstr "Aucun journaux"
+
+msgid "no_ads"
+msgstr "Sans publicité"
+
+msgid "choose_plan"
+msgstr "Choisissez un abonnement"
+
+msgid "connect_up_to_3_devices"
+msgstr "Connectez jusqu’à trois appareils"
+
+msgid "faster_data_centers"
+msgstr "Des centres de traitement de données plus rapides"
+
+msgid "dedicated_line"
+msgstr "Ligne dédiée"
+
+msgid "increased_reliability"
+msgstr "Fiabilité accrue"
+
+msgid "checkout"
+msgstr "Caisse"
+
+msgid "credit_card"
+msgstr "Carte de crédit"
+
+msgid "lantern_pro_checkout"
+msgstr "Paiement de Lantern Pro"
+
+msgid "1y_pricing"
+msgstr "Tarif pour 1 an"
+
+msgid "2y_pricing"
+msgstr "Tarif pour 2 ans"
+
+msgid "plan_type"
+msgstr "Type d’abonnement"
+
+msgid "most_popular"
+msgstr "Le plus populaire"
+
+msgid "free"
+msgstr "Gratuit"
 
 msgid "n/a"
 msgstr "s/o"
@@ -336,8 +544,11 @@ msgstr "Modifier"
 msgid "save_error"
 msgstr "Une erreur est survenue pendant l'enregistrement."
 
+msgid "fewer_options"
+msgstr "Moins d’options"
+
 msgid "more_options"
-msgstr "Plus d'options"
+msgstr "Plus d’options"
 
 msgid "block_user"
 msgstr "Bloquer l'utilisateur"
@@ -404,22 +615,29 @@ msgid "start_chat"
 msgstr "Lancer une conversation"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "Vos applis installées"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "Applis acheminées par Lantern"
 
 msgid "apps_to_unblock"
 msgstr ""
+"Choisissez les applis que vous souhaitez débloquer. Après la connexion, "
+"seules les applis sélectionnées ci-dessous seront acheminées par Lantern."
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "Tunnellisation partagée"
 
 msgid "split_tunneling_info"
 msgstr ""
+"Lorsque la tunnellisation partagée est activée, les applis sélectionnées "
+"sont acheminées par Lantern. Cela peut améliorer les performances et "
+"économiser la bande passante en ne débloquant que les applis indiquées."
 
 msgid "applied_next_time"
 msgstr ""
+"Les nouveaux paramètres de tunnellisation partagée seront appliqués la "
+"prochaine fois que vous vous reconnecterez."
 
 msgid "message_disappearing"
 msgstr "Certains messages resteront visibles pour vous et %s."
@@ -441,6 +659,9 @@ msgstr "Activée"
 
 msgid "continue"
 msgstr "Poursuivre"
+
+msgid "continue_to_pro"
+msgstr "Poursuivre vers la version Pro"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "Voulez-vous vraiment ouvrir %s ?"
@@ -1249,7 +1470,7 @@ msgid "support"
 msgstr "Soutien"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "Forum des utilisateurs de Lantern"
 
 msgid "faq"
 msgstr "FAQ"
