@@ -29,8 +29,14 @@
   <string name="no_purchase_date">กรุณาเลือกวันที่โดยประมาณที่คุณทำการซื้อ Lantern Pro</string>
   <string name="purchase_date">วันที่ซื้อ</string>
   <string name="common_issue_list_0">ไม่สามารถเข้าถึงไซต์ที่ถูกปิดกั้น</string>
+  <string name="common_issue_list_1">ไม่สามารถดำเนินการซื้อได้เสร็จสิ้น</string>
+  <string name="common_issue_list_2">ไม่สามารถเข้าสู่ระบบ</string>
+  <string name="common_issue_list_3">Spinner ยังโหลดต่อไป</string>
   <string name="common_issue_list_4">ช้า</string>
   <string name="common_issue_list_5">แชทไม่ทำงาน</string>
+  <string name="common_issue_list_6">การค้นพบใหม่ไม่ทำงาน</string>
+  <string name="common_issue_list_7">ไม่สามารถเชื่อมโยงอุปกรณ์</string>
+  <string name="common_issue_list_8">แอปพลิเคชันขัดข้อง</string>
   <string name="common_issue_list_9">อื่นๆ</string>
   <string name="submit_code">รหัสยืนยัน</string>
   <string name="on_text">เปิด</string>
@@ -98,7 +104,7 @@
   <string name="error_update">เกิดข้อผิดพลาดในการดาวน์โหลดอัพเดต</string>
   <string name="error_install_update">เกิดข้อผิดพลาดในการติดตั้งอัพเดต</string>
   <string name="loading">กำลังโหลด...</string>
-  <string name="manual_update">ทดลองติดตั้งเวอร์ชั่นล่าสุดด้วยตนเองจาก &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+  <string name="manual_update">ทดลองติดตั้งเวอร์ชันล่าสุดด้วยตนเองจาก &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">ยินดีต้อนรับสู่ Lantern Pro!</string>
   <string name="happy_anniversary">สุขสันต์วันครบรอบ LANTERN</string>
   <string name="welcome_greeting">ยินดีต้อนรับสู่ Lantern</string>
@@ -257,7 +263,7 @@
   <string name="free_month">รับ Pro ฟรี 1 เดือนสำหรับการสมัครแต่ละครั้ง</string>
   <string name="get_pro_now">รับ Pro ตอนนี้</string>
   <string name="inviting_friends">รับเครดิต Pro โดยการเชิญเพื่อน</string>
-  <string name="data_cap_percent">มีข้อมูฟรีเหลืออยู่ %1$s MB เริ่มใช้งานอีกครั้งที่ %2$s อัปเกรดเป็น Pro สำหรับข้อมูลความเร็วสูงไม่จำกัด</string>
+  <string name="data_cap_percent">มีข้อมูลฟรีเหลืออยู่ %1$s MB เริ่มใช้งานอีกครั้งที่ %2$s อัปเกรดเป็น Pro สำหรับข้อมูลความเร็วสูงไม่จำกัด</string>
   <string name="data_cap">คุณใช้ข้อมูลความเร็วสูงของ Lantern สำหรับเดือนนี้หมดแล้ว เริ่มใช้งานอีกครั้งที่ %1$s อัปเกรดเป็น Lantern Pro เพื่อใช้ Lantern ต่อไปด้วยความเร็วเต็มที่</string>
   <string name="data_cap_reset">ข้อมูลความเร็วสูง Lantern ฟรีของคุณมีการตั้งค่าใหม่ เริ่มเรียกดูเว็บไซต์และบริการที่ถูกบล็อกได้ทันที!</string>
   <string name="select">เลือก</string>
@@ -465,6 +471,7 @@
   <string name="device_authorized_pro">อุปกรณ์ใหม่ของคุณได้รับการอนุญาตให้ใช้งานบัญชี Pro ของคุณ โปรดรอสักครู่จนกว่าจะมีการเปลี่ยนแปลง</string>
   <string name="report_sent">ส่งรายงานแล้ว</string>
   <string name="thank_you_for_reporting_your_issue">ขอบคุณสำหรับการรายงานปัญหา แล้วเราจะติดต่อกลับทางอีเมลโดยเร็วที่สุด</string>
+  <string name="unable_to_submit_issue">ไม่สามารถส่งปัญหาได้</string>
   <string name="have_a_lantern_pro_activation_code_click_here">มีรหัสเปิดใช้งาน Lantern Pro หรือไม่? คลิกที่นี่</string>
   <string name="enter_email_and_activation_code">ป้อนอีเมลและรหัสเปิดใช้งาน</string>
   <string name="activation_code">รหัสเปิดใช้งาน</string>
