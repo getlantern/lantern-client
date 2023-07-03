@@ -29,7 +29,14 @@
   <string name="no_purchase_date">Lütfen Lantern Pro satın aldığınız yaklaşık tarihi seçin</string>
   <string name="purchase_date">Satın Alma Tarihi</string>
   <string name="common_issue_list_0">Engellenen sitelere erişilemiyor</string>
+  <string name="common_issue_list_1">Satın alma tamamlanamadı</string>
+  <string name="common_issue_list_2">Giriş yapılamadı</string>
+  <string name="common_issue_list_3">Yükleme ekranı sürekli dönüyor</string>
   <string name="common_issue_list_4">Yavaş</string>
+  <string name="common_issue_list_5">Sohbet çalışmıyor</string>
+  <string name="common_issue_list_6">Keşfet çalışmıyor</string>
+  <string name="common_issue_list_7">Cihaz bağlanamıyor</string>
+  <string name="common_issue_list_8">Uygulama çökmeleri</string>
   <string name="common_issue_list_9">Diğer</string>
   <string name="submit_code">Kodu Onayla</string>
   <string name="on_text">AÇIK</string>
@@ -97,6 +104,7 @@
   <string name="error_update">Güncelleme İndirilirken Hata Oluştu</string>
   <string name="error_install_update">Güncelleme Kurulurken Hata Oluştu</string>
   <string name="loading">Yükleniyor..</string>
+  <string name="manual_update">En son sürümü &lt;a href=\"https://github.com/getlantern/lantern\"&gt;buradan&lt;/a&gt; elle kurmayı deneyin</string>
   <string name="pro_welcome_text">Lantern Pro\'ya Hoş Geldiniz!</string>
   <string name="happy_anniversary">MUTLU LANTERN YILDÖNÜMÜ!</string>
   <string name="welcome_greeting">Lantern\'e Hoşgeldiniz</string>
@@ -124,6 +132,7 @@
   <string name="share_friends_text">Arkadaşlarınla paylaş ve ücretsiz aylık üyelik kazan</string>
   <string name="email_address">E-posta Adresi</string>
   <string name="switch_to_alipay">Alipay\'e Geç</string>
+  <string name="switch_to_stripe">Stripe\'a Geç</string>
   <string name="switch_to_credit_card">Kredi Kartı Ödemesine Geç</string>
   <string name="continue_to_pro">PRO üyeliğe devam et</string>
   <string name="continue_to_basic">Temel Versiyona devam et</string>
@@ -299,7 +308,7 @@
   <string name="earn_free_month">Kayıt olan her arkadaşınız için bir ay ücretsiz Pro kazanın</string>
   <string name="credits_applied">Sıradaki ödeme döneminde kredileriniz hesabınıza eklenecek.</string>
   <string name="pro_invitation_subject">Lantern Pro\'ya katılma daveti</string>
-  <string name="receive_free_month">Bir ay ücretsiz Lantern Pro kullanmak için bu kodu kullanın: %1$s Lantern\'i şuradan indirebilirsiniz: https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">Bir ay ücretsiz Lantern Pro kullanmak için bu kodu kullanın: %1$s Lantern\'i şuradan indirebilirsiniz: https://lantern.io/download</string>
   <string name="share_feed_item">Lantern sayesinde \"%1$s\" hakkında %2$s okuyorum. Lantern kullanarak engelli sitelere ve hizmetlere erişebilirsiniz. Android için buradan indirebilirsiniz: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Emin misiniz? Bu işlem geri alınamaz. Dilediğiniz zaman yeniden Pro hesabına kayıt olabilirsiniz.</string>
   <string name="unauthorize_confirmation">Bu cihazı Pro hesabınızdan çıkartmak istediğinize emin misiniz?</string>
@@ -410,6 +419,7 @@
   <string name="privacy_disclosure_title">Lantern Gizlilik Anlaşması</string>
   <string name="privacy_disclosure_accept">Kabul Ediyorum</string>
   <string name="privacy_disclosure_body">Lantern gizliliğinizi korumayı taahhüt eder. Hangi bilgileri topladığımızı, hangilerini toplamadığımızı, bilgileri nasıl topladığımızı, kullandığımızı ve depoladığımızı anlamanızı istiyoruz. Ödeme bilgilerinizi Lantern Pro hesabınızla ilişkilendirmiyoruz. Aktivitenizin günlüklerini toplamıyoruz; örneğin tarama geçmişinizin, trafik hedefinizin, veri içeriğinizin veya DNS sorgularınızın günlüğünü tutmuyoruz. Ayrıca bağlantı günlüklerini hiçbir zaman depolamıyoruz; yani IP adresinizin, bağlantı zaman damgasıyla ilişkili giden Lantern sunucu IP adresinizin veya oturum sürenizin günlüğünü tutmuyoruz. Belirli bir Lantern Pro hesabı bakımından, Lantern\'ın bir Lantern hesabını kullanıcının gerçek kimliğiyle ilişkilendirmesi teknik olarak mümkün değildir. Lantern IP adresi ve kesin zaman damgası bakımından, Lantern\'ın bu IP adresini bir Lantern kullanıcısına veya Lantern kullanıcı IP adresine dayandırması teknik olarak mümkün değildir.</string>
+  <string name="referral_code_share_description">Lantern Pro\'yu bir arkadaşınızla paylaşın! Arkadaşınız Lantern Pro satın alırken referans kodunuzu kullanırsa ikiniz de bir ay ücretsiz Lantern Pro hizmeti kazanırsınız!</string>
   <string name="referral_code_share">Referans kodu paylaş</string>
   <string name="referral_code_share_title">Referans kodunuzu paylaşın:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -458,8 +468,10 @@
   <string name="send_report">Rapor gönder</string>
   <string name="email_optional">E-posta (İsteğe Bağlı)</string>
   <string name="device_added">Cihaz Eklendi</string>
+  <string name="device_authorized_pro">Yeni cihazınız Pro hesabınızı kullanmak için Yetkilendirildi. Lütfen değişikliklerin uygulanması için birkaç dakika bekleyin.</string>
   <string name="report_sent">Rapor Gönderildi</string>
   <string name="thank_you_for_reporting_your_issue">Sorununuzu bildirdiğiniz için teşekkür ederiz, mümkün olan en kısa sürede e-posta yoluyla size geri dönüş yapacağız</string>
+  <string name="unable_to_submit_issue">Sorun gönderilemedi</string>
   <string name="have_a_lantern_pro_activation_code_click_here">Lantern Pro aktivasyon kodunuz mu var? Buraya tıklayın</string>
   <string name="enter_email_and_activation_code">E-posta ve Aktivasyon Kodu Gir</string>
   <string name="activation_code">Aktivasyon Kodu</string>

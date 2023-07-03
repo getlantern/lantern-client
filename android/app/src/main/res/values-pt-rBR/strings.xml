@@ -280,7 +280,7 @@
   <string name="earn_free_month">Ganhe um mês grátis para cada amigo que se inscrever</string>
   <string name="credits_applied">Seus créditos serão aplicados à sua conta no próximo ciclo de faturamento.</string>
   <string name="pro_invitation_subject">Convite para participar do Lantern Pro</string>
-  <string name="receive_free_month">Para um mês grátis de Lantern Pro, use esse código de referência: %1$s ; Você pode baixá-lo aqui: https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">Para um mês grátis de Lantern Pro, use esse código de referência: %1$s ; Você pode baixá-lo aqui: https://lantern.io/download</string>
   <string name="share_feed_item">Estou lendo sobre \"%1$s\" à %2$s via Lantern. Use o Lantern para acessar sites e serviços bloqueados. Você pode baixá-lo para Android aqui: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Você tem certeza? Esta ação não pode ser desfeita! Você pode assinar o Pro novamente a qualquer momento.</string>
   <string name="unauthorize_confirmation">Você tem certeza que quer desvincular esse dispositivo de sua conta Pro?</string>
