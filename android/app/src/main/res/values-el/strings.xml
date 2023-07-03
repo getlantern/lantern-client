@@ -273,7 +273,7 @@
   <string name="earn_free_month">Κερδίστε ένα μήνα δωρεάν για κάθε φίλο που εγγράφεται</string>
   <string name="credits_applied">Οι μονάδες σας θα εφαρμοστούν στον επόμενο κύκλο χρέωσης του λογαριασμού σας.</string>
   <string name="pro_invitation_subject">Πρόσκληση συμμετοχής στο Lantern Pro</string>
-  <string name="receive_free_month">Για έναν μήνα δωρεάν χρήσης του Lantern Pro, χρησιμοποιήστε αυτόν τον κωδικό προώθησης:%1$s·  Μπορείτε να το κατεβάσετε από εδώ: https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">Για έναν μήνα δωρεάν χρήσης του Lantern Pro, χρησιμοποιήστε αυτόν τον κωδικό προώθησης:%1$s·  Μπορείτε να το κατεβάσετε από εδώ: https://lantern.io/download</string>
   <string name="share_feed_item">Διαβάζω για το \"%1$s\" στο %2$s μέσω του Lantern. Χρησιμοποιήστε το Lantern για να αποκτήσετε πρόσβαση σε αποκλεισμένες ιστοσελίδες και υπηρεσίες. Μπορείτε να το κατεβάσετε για Android εδώ: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Είσαι σίγουρος? Αυτή η πράξη δε μπορεί να αναιρεθεί! Μπορείτε να εγγραφείτε ξανά στο Pro οποιαδήποτε στιγμή.</string>
   <string name="unauthorize_confirmation">Είστε σίγουρος ότι θέλετε να αποσυνδέσετε αυτήν τη συσκευή από το λογαριασμό Pro;</string>
