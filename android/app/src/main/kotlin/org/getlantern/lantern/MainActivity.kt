@@ -368,6 +368,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
             override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
                 Logger.debug(TAG, "Successfully fetched payment methods")
+                Logger.debug(TAG, "Pro plans: $proPlans")
+                Logger.debug(TAG, "Payment methods: $paymentMethods")
                 LanternApp.getSession().setPaymentMethods(paymentMethods)
 
              }
