@@ -116,7 +116,7 @@
   <string name="earn_free_month">Guanyeu un mes gratuït per cada amic que s\'inscrigui</string>
   <string name="credits_applied">Els crèdits s\'aplicaran al vostre compte en el proper cicle de facturació.</string>
   <string name="pro_invitation_subject">Invitació per unir-se al Lantern Pro</string>
-  <string name="receive_free_month">Per obtenir un mes gratuït del Lantern Pro, useu aquest codi de referència: %1$s ; El podeu descarregar des d\'aquí: https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">Per obtenir un mes gratuït del Lantern Pro, useu aquest codi de referència: %1$s ; El podeu descarregar des d\'aquí: https://lantern.io/download</string>
   <string name="share_feed_item">Estic llegint sobre \"%1$s\" a %2$s via Lantern. Utilitzeu el Lantern per accedir als llocs i serveis bloquejats. El podeu descarregar per Android aquí: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">N\'esteu segur? Aquesta acció no es pot desfer! Us podeu inscriure a Pro en qualsevol altre moment.</string>
   <string name="unauthorize_confirmation">Es desvincularà aquest dispositiu del compte Pro. N\'esteu segur?</string>

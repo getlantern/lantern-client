@@ -308,7 +308,7 @@
   <string name="earn_free_month">Kayıt olan her arkadaşınız için bir ay ücretsiz Pro kazanın</string>
   <string name="credits_applied">Sıradaki ödeme döneminde kredileriniz hesabınıza eklenecek.</string>
   <string name="pro_invitation_subject">Lantern Pro\'ya katılma daveti</string>
-  <string name="receive_free_month">Bir ay ücretsiz Lantern Pro kullanmak için bu kodu kullanın: %1$s Lantern\'i şuradan indirebilirsiniz: https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">Bir ay ücretsiz Lantern Pro kullanmak için bu kodu kullanın: %1$s Lantern\'i şuradan indirebilirsiniz: https://lantern.io/download</string>
   <string name="share_feed_item">Lantern sayesinde \"%1$s\" hakkında %2$s okuyorum. Lantern kullanarak engelli sitelere ve hizmetlere erişebilirsiniz. Android için buradan indirebilirsiniz: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Emin misiniz? Bu işlem geri alınamaz. Dilediğiniz zaman yeniden Pro hesabına kayıt olabilirsiniz.</string>
   <string name="unauthorize_confirmation">Bu cihazı Pro hesabınızdan çıkartmak istediğinize emin misiniz?</string>
