@@ -3,18 +3,20 @@
 # Kudret <kudretemre@hotmail.com.tr>, 2022
 # Zeynel Cebeci <cebeciz@gmail.com>, 2022
 # Aşkın Özgür <askin@askin.ws>, 2022
-# e2f <projects@e2f.com>, 2022
-# Teo Westbrook, 2022
-# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023
-# efe kerem sözeri <eksozeri@hotmail.com>, 2023
-# Emre Deniz, 2023
 # Derek F <derek@getlantern.org>, 2023
-# Volkan Gezer <volkangezer@gmail.com>, 2023
 # M. Utkun Uyar, 2023
+# Emre Deniz, 2023
+# Volkan Gezer <volkangezer@gmail.com>, 2023
+# e2f <projects@e2f.com>, 2023
+# efe kerem sözeri <eksozeri@hotmail.com>, 2023
+# Alexander B. <road2monstercat@gmail.com>, 2023
+# fffw <fffw@getlantern.org>, 2023
+# Teo Westbrook, 2023
+# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: M. Utkun Uyar, 2023\n"
+"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023\n"
 "Language-Team: Turkish (https://app.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -213,7 +215,7 @@ msgstr "E-Posta Aracılığıyla Bağla"
 msgid "lantern_pro_email"
 msgstr "Lantern Pro E-Postası"
 
-msgid "Email"
+msgid "email"
 msgstr "E-posta"
 
 msgid "Submit"
@@ -222,8 +224,160 @@ msgstr "Gönder"
 msgid "save"
 msgstr "Kaydet"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "Lütfen geçerli bir e-posta adresi girin"
+
+msgid "bonus"
+msgstr "Bonus"
+
+msgid "referral_bonus"
+msgstr "referans bonusu"
+
+msgid "total"
+msgstr "Toplam"
+
+msgid "month"
+msgstr "ay"
+
+msgid "months"
+msgstr "ay"
+
+msgid "enter_email"
+msgstr "E-posta Gir"
+
+msgid "error_fetching_plans"
+msgstr ""
+"Planlar alınırken hata oluştu, lütfen Lantern'ı yeniden başlatın ve tekrar "
+"deneyin."
+
+msgid "apply"
+msgstr "Uygula"
+
+msgid "choose_payment_method"
+msgstr "Ödeme Yöntemi Seç"
+
+msgid "pro_plan"
+msgstr "Pro Plan"
+
+msgid "one_year_plan"
+msgstr "1 Yıllık Plan"
+
+msgid "two_year_plan"
+msgstr "2 Yıllık Plan"
+
+msgid "plan_discount"
+msgstr "%%d tasarruf edin"
+
+msgid "enter_email_and_activation_code"
+msgstr "E-posta ve Aktivasyon kodu girin"
+
+msgid "referral_code"
+msgstr "Referans kodu"
+
+msgid "add_referral_code"
+msgstr "Referans kodu ekleyin"
+
+msgid "Activation Code"
+msgstr "Aktivasyon Kodu"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "Geçersiz veya eksik referans kodu"
+
+msgid "register_for_pro"
+msgstr "Pro için kaydolun"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "Referans kodu uygulanırken bir sorun oluştu."
+
+msgid "your_activation_code_is_invalid"
+msgstr "Aktivasyon kodunuz geçersiz"
+
+msgid "update_cache_plans_timeout"
+msgstr "Mevcut planlar alınırken bir sorun oluştu."
+
+msgid "bitcoin_timeout"
+msgstr "BTCPay isteğinin süresi doldu."
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay mevcut değil"
+
+msgid "update_cache_user_timeout"
+msgstr "Hesap verileriniz alınırken bir sorun oluştu."
+
+msgid "reseller_timeout"
+msgstr "Aktivasyon kodunuz doğrulanırken bir sorun oluştu."
+
+msgid "reseller_success"
+msgstr "Aktivasyon kodu başarıyla kullanıldı."
+
+msgid "stripe_timeout"
+msgstr ""
+"Stripe ödemenizin süresi doldu. Lütfen Lantern'ı yeniden başlatın ve tekrar "
+"deneyin."
+
+msgid "stripe_success"
+msgstr "Başarılı Stripe satın alımı."
+
+msgid "renewal_success"
+msgstr "Yenileme Başarılı"
+
+msgid "pro_renewal_success_description"
+msgstr ""
+"Lantern Pro hesabınızı yenilediğiniz için teşekkürler. En hızlı veri "
+"merkezlerimizi kullanmak için sınırsız erişime sahipsiniz. Hesabınıza en "
+"fazla üç cihaz bağlanabilir."
+
+msgid "pro_purchase_success"
+msgstr "Lantern Pro'ya hoş geldiniz"
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+"En hızlı veri merkezlerimizi ve özel hattımızı kullanmak için sınırsız "
+"erişime sahipsiniz. Hesabınıza en fazla üç cihaz bağlanabilir."
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+"En hızlı veri merkezlerimizi kullanmak için sınırsız erişime sahipsiniz. "
+"Hesabınıza en fazla üç cihaz bağlanabilir."
+
+msgid "by_clicking_tos"
+msgstr "%s öğesine tıklayarak şunu kabul etmiş olursunuz:"
+
+msgid "tos"
+msgstr "Hizmet Şartları"
+
+msgid "step_1"
+msgstr "Adım 1"
+
+msgid "step_2"
+msgstr "Adım 2"
+
+msgid "step_3"
+msgstr "Adım 3"
+
+msgid "invalid_email"
+msgstr "Geçersiz e-posta adresi"
+
+msgid "invalid_card"
+msgstr "Geçersiz kredi kartı numarası"
+
+msgid "invalid_expiration"
+msgstr "Geçersiz son kullanma tarihi"
+
+msgid "cc_number"
+msgstr "Kredi Kartı"
+
+msgid "card_number"
+msgstr "Kart Numarası"
+
+msgid "card_expiration"
+msgstr "AA/YY"
+
+msgid "invalid_cvc"
+msgstr "Geçersiz CVC"
+
+msgid "complete_purchase"
+msgstr "Satın Almayı Tamamla"
 
 msgid "Re-send Email"
 msgstr "E-postayı Tekrar Gönder"
@@ -273,6 +427,54 @@ msgstr "Oturumu Kapat"
 
 msgid "confirm_remove_device"
 msgstr "Bu cihazı Pro hesabınızdan çıkartmak istediğinize emin misiniz?"
+
+msgid "unlimited_data"
+msgstr "Sınırsız Veri"
+
+msgid "no_logs"
+msgstr "Günlük yok"
+
+msgid "no_ads"
+msgstr "Reklamsız"
+
+msgid "choose_plan"
+msgstr "Plan Seç"
+
+msgid "connect_up_to_3_devices"
+msgstr "3 cihaza kadar bağlayın"
+
+msgid "faster_data_centers"
+msgstr "Daha Hızlı Veri Merkezleri"
+
+msgid "dedicated_line"
+msgstr "Özel Hat"
+
+msgid "increased_reliability"
+msgstr "Artmış Güvenilirlik"
+
+msgid "checkout"
+msgstr "Ödeme"
+
+msgid "credit_card"
+msgstr "Kredi Kartı"
+
+msgid "lantern_pro_checkout"
+msgstr "Lantern Pro Ödeme"
+
+msgid "1y_pricing"
+msgstr "1 yıllık fiyatlandırma"
+
+msgid "2y_pricing"
+msgstr "2 yıllık fiyatlandırma"
+
+msgid "plan_type"
+msgstr "Plan türü"
+
+msgid "most_popular"
+msgstr "En Popüler"
+
+msgid "free"
+msgstr "Ücretsiz"
 
 msgid "n/a"
 msgstr "uygulanamaz"
@@ -337,8 +539,11 @@ msgstr "Düzenle"
 msgid "save_error"
 msgstr "Kaydetme esnasında bir sorun oluştu."
 
+msgid "fewer_options"
+msgstr "Daha Az Seçenek"
+
 msgid "more_options"
-msgstr "Daha fazla seçenek"
+msgstr "Daha Fazla Seçenek"
 
 msgid "block_user"
 msgstr "Kullanıcı engelle"
@@ -405,22 +610,28 @@ msgid "start_chat"
 msgstr "Sohbet başlat"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "Yüklü Uygulamalarınız"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "Lantern Aracılığıyla Yönlendirilen Uygulamalar"
 
 msgid "apps_to_unblock"
 msgstr ""
+"Engelini kaldırmak istediğiniz uygulamaları seçin. Bağlanıldığında yalnızca "
+"aşağıda seçili uygulamalar Lantern aracılığıyla yönlendirilecek."
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "Bölünmüş Tünelleme"
 
 msgid "split_tunneling_info"
 msgstr ""
+"Bölünmüş Tünelleme etkinleştirildiğinde seçili uygulamalar Lantern "
+"aracılığıyla yönlendirilecek. Bu, yalnızca belirli uygulamaların engelini "
+"kaldırarak performansı artırabilir ve bant genişliğinden tasarruf etmenizi "
+"sağlayabilir. "
 
 msgid "applied_next_time"
-msgstr ""
+msgstr "Tekrar bağlandığınızda yeni bölünmüş tünelleme ayarları uygulanacak."
 
 msgid "message_disappearing"
 msgstr "Siz ve %s için tüm mesajlar kaybolmayacaktır."
@@ -442,6 +653,9 @@ msgstr "Açık"
 
 msgid "continue"
 msgstr "Devam et"
+
+msgid "continue_to_pro"
+msgstr "Pro'ya Devam Et"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "%s öğesini açmak istediğinizden emin misiniz?"
@@ -1222,10 +1436,10 @@ msgid "discover_disclaimer"
 msgstr "Lantern aramalarınızı anonimleştirir ve üçüncü taraflardan korur."
 
 msgid "support"
-msgstr ""
+msgstr "Destek"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "Lantern Kullanıcı Forumu"
 
 msgid "faq"
 msgstr "SSS"
