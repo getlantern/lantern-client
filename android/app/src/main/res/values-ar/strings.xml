@@ -29,7 +29,14 @@
   <string name="no_purchase_date">يرجى تحديد تاريخ تقريبي لشرائك لانترن برو </string>
   <string name="purchase_date">تاريخ الشراء</string>
   <string name="common_issue_list_0">لا يمكن الوصول الى المواقع المحظورة</string>
+  <string name="common_issue_list_1">لا يمكن إكمال عملية الشراء</string>
+  <string name="common_issue_list_2">لا يُمكن تسجيل الدخول</string>
+  <string name="common_issue_list_3">العجلة تدور بلا نهاية</string>
   <string name="common_issue_list_4">بطئ</string>
+  <string name="common_issue_list_5">الدردشة لا تعمل</string>
+  <string name="common_issue_list_6">خاصية Discover لا تعمل</string>
+  <string name="common_issue_list_7">لا يمكن توصيل الجهاز</string>
+  <string name="common_issue_list_8">تعطل التطبيق</string>
   <string name="common_issue_list_9">أخرى</string>
   <string name="submit_code">تأكيد الرمز</string>
   <string name="on_text">تشغيل</string>
@@ -97,6 +104,7 @@
   <string name="error_update">خطأ في تنزيل التحديث</string>
   <string name="error_install_update">خطأ في تثبيت التحديث</string>
   <string name="loading">جاري التحميل..</string>
+  <string name="manual_update">جرب تثبيت أحدث نسخة يدويًا من &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">مرحبا بك في لانترن برو!</string>
   <string name="happy_anniversary">ذكري سنوية سعيد لـ لانترن!</string>
   <string name="welcome_greeting">مرحبا في لانتيرن</string>
@@ -124,6 +132,7 @@
   <string name="share_friends_text">شارك مع أصدقائك لتربح أشهرا مجانية</string>
   <string name="email_address">البريد الالكتروني</string>
   <string name="switch_to_alipay">التبديل إلى Alipay</string>
+  <string name="switch_to_stripe">التبديل إلى Stripe</string>
   <string name="switch_to_credit_card">التبديل للدفع باستخدام بطاقة الائتمان</string>
   <string name="continue_to_pro">أكمل إلى برو</string>
   <string name="continue_to_basic">الاستمرار في حساب لانترن الأساسي</string>
@@ -410,6 +419,7 @@
   <string name="privacy_disclosure_title">الكشف عن خصوصية لانترن</string>
   <string name="privacy_disclosure_accept">موافق</string>
   <string name="privacy_disclosure_body">تلتزم لانترن بحماية خصوصيتك. نود أن تفهم نوع المعلومات التي نجمعها، ونوع المعلومات التي لا نجمعها، وكيف نستخدمها، وكيف نُخزنها. نحن لا نربط معلومات الدفع الخاصة بك بحسابك على لانترن برو. ولا نجمع سجلات نشاطك، بما في ذلك عدم تسجيل محفوظات التصفح، أو وجهة البيانات، أو محتوى البيانات، أو استعلامات نظام أسماء النطاقات (DNS). كما أننا لا نُخزن مطلقًا سجلات الاتصال، أي لا يتم إنشاء أي سجلات عن عنوان بروتوكول الإنترنت (IP)، أو عنوان بروتوكول الإنترنت لخادم لانترن الصادر الخاص بك المرتبط بالطابع الزمني للاتصال، أو مدة الجلسة. نظرًا لحساب لانترن برو المحدد، يتعذر على لانترن من الناحية التقنية ربط حساب لانترن بهوية المستخدم الحقيقية. ومع وجود عنوان بروتوكول الإنترنت (IP) وطابع زمني دقيق في لانترن، يتعذر على لانترن من الناحية التقنية منح عنوان بروتوكول الإنترنت هذا إلى مستخدم لانترن أو  عنوان بروتوكول الإنترنت الخاص بمستخدم لانترن.</string>
+  <string name="referral_code_share_description">شارك حساب Lantern Pro مع أحد أصدقائك! عندما يستخدم صديقك رمز الإحالة المخصص لك أثناء شرائه حساب Lantern Pro، فسيحصل كلاكما على خدمة Lantern Pro مجانًا لمدة شهر واحد!</string>
   <string name="referral_code_share">مشاركة رمز الإحالة</string>
   <string name="referral_code_share_title">مشاركة رمز الإحالة الخاص بك:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -458,8 +468,10 @@
   <string name="send_report">إرسال التقرير</string>
   <string name="email_optional">البريد الإلكتروني (اختياري)</string>
   <string name="device_added">تمت إضافة الجهاز</string>
+  <string name="device_authorized_pro">أصبح جهازك الجديد الآن مصرح له باستخدام حسابك الـPro، يرجى الانتظار لدقيقتين حتى تصبح التغييرات سارية.</string>
   <string name="report_sent">تم إرسال التقرير</string>
   <string name="thank_you_for_reporting_your_issue">نشكرك على الإبلاغ عن المشكلة، وسنوافيك برسالة إلكترونية في أقرب فرصة ممكنة</string>
+  <string name="unable_to_submit_issue">غير قادر على إرسال المشكلة</string>
   <string name="have_a_lantern_pro_activation_code_click_here">هل لديك رمز تنشيط Lantern Pro؟ انقر هنا</string>
   <string name="enter_email_and_activation_code">أدخل البريد الإلكتروني ورمز التفعيل</string>
   <string name="activation_code">رمز التنشيط</string>
