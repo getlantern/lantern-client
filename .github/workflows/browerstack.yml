@@ -2,7 +2,7 @@ name: BrowserStack CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ atavism/add-currency-to-plan-proto ]
   pull_request:
     branches: [ main ]
 env:

@@ -42,6 +42,7 @@ message Plan {
   string totalCost = 8;
   string formattedBonus = 9;
   string renewalText = 10;
+  string currencyCode = 11;
 }
 
 message PaymentProviders {
