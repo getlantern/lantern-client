@@ -283,7 +283,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
-        updatePlansAndPaymentMethods()
+        updatePlans()
+        updatePaymentMethods()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -339,18 +340,31 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         })
     }
 
-    private fun updatePlansAndPaymentMethods() {
+    private fun updatePlans() {
+        lanternClient.getPlans(object : PlansCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+            }
+
+            override fun onSuccess(proPlans: Map<String, ProPlan>) {
+                Logger.debug(TAG, "Successfully fetched plans")
+                for (planId in proPlans.keys) {
+                    proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+                }
+                LanternApp.getSession().setUserPlans(proPlans)
+
+             }
+         }, null)
+     }
+
+    private fun updatePaymentMethods() {
         lanternClient.plansV3(object : PlansV3Callback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
                 Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
             }
 
             override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
-                Logger.debug(TAG, "Successfully fetched plans and payment methods")
-                for (planId in proPlans.keys) {
-                    proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
-                }
-                LanternApp.getSession().setUserPlans(proPlans)
+                Logger.debug(TAG, "Successfully fetched payment methods")
                 LanternApp.getSession().setPaymentMethods(paymentMethods)
 
              }
