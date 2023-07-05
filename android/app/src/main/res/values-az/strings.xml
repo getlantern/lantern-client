@@ -234,7 +234,7 @@
   <string name="earn_free_month">Hər yeni dost qeydiyyatı üçün pulsuz aylar qazanın</string>
   <string name="credits_applied">Kreditləriniz növbəti ödəniş dövründə əlavə olunacaq.</string>
   <string name="pro_invitation_subject">Lantern Pro-ya qoşulmaq üçün dəvətnamə.</string>
-  <string name="receive_free_month">Pulsuz Lantern Pro ayı üçün bu koddan istifadə edin: %1$s ; Onu biradan yükləyə bilərsiniz: https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">Pulsuz Lantern Pro ayı üçün bu koddan istifadə edin: %1$s ; Onu biradan yükləyə bilərsiniz: https://lantern.io/download</string>
   <string name="share_feed_item">Mən Lantern vasitəsilə \"%1$s\" haqqında %2$s oxuyuram. Bloklanan saytlar və xidmətlər üçün LAnterndə istifadə edin. Android üçün burdan yükləyin: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Əminsiniz? Bunu geri qaytarmaq olmayacaq. İstənilən vaxt Pro üçün yenidən qeydiyyatdan keçə bilərsiniz.</string>
   <string name="unauthorize_confirmation">Pro hesabınızdan bu aləti çıxarmaq istədiyinizə əminsiniz?</string>

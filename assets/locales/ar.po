@@ -1,23 +1,24 @@
 # 
 # Translators:
-# Amin Jobran, 2022
 # Abdelaziz “Azhou” Houcini <azhouhou@gmail.com>, 2022
-# 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2022
 # محيي الدين <tx99h4@hotmail.com>, 2022
 # Layla Taha <layla@asl19.org>, 2022
 # Derek F <derek@getlantern.org>, 2022
-# e2f <projects@e2f.com>, 2022
-# e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2023
-# dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2023
-# Mhawesh, 2023
 # lamine Kacimi <k_lamine27@yahoo.fr>, 2023
-# Abed Abedd <abderrahman.younis@gmail.com>, 2023
-# Rima Sghaier, 2023
 # ouss <oussjarrouse@gmail.com>, 2023
+# Mhawesh, 2023
+# 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2023
+# e2f <projects@e2f.com>, 2023
+# Amin Jobran, 2023
+# Rima Sghaier, 2023
+# dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2023
+# Abdulaziz AlObaili <dr.alobaili@gmail.com>, 2023
+# Abed Abedd <abderrahman.younis@gmail.com>, 2023
+# e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: ouss <oussjarrouse@gmail.com>, 2023\n"
+"Last-Translator: e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2023\n"
 "Language-Team: Arabic (https://app.transifex.com/lantern-1/teams/94371/ar/)\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
@@ -213,7 +214,7 @@ msgstr "ربط عبر البريد الإلكتروني"
 msgid "lantern_pro_email"
 msgstr "البريد الإلكتروني الخاص بـ Lantern Pro"
 
-msgid "Email"
+msgid "email"
 msgstr "البريد الاكتروني"
 
 msgid "Submit"
@@ -222,8 +223,158 @@ msgstr "ارسال"
 msgid "save"
 msgstr "حفظ"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "يرجى إدخال عنوان بريد إلكتروني صالح"
+
+msgid "bonus"
+msgstr "الإضافة"
+
+msgid "referral_bonus"
+msgstr "إضافة الإحالة"
+
+msgid "total"
+msgstr "المجموع"
+
+msgid "month"
+msgstr "الشهر"
+
+msgid "months"
+msgstr "الشهور"
+
+msgid "enter_email"
+msgstr "أدخل البريد الإلكتروني"
+
+msgid "error_fetching_plans"
+msgstr "حدث خطأ أثناء إحضار الخطط، تُرجى إعادة تشغيل Lantern وإعادة المحاولة."
+
+msgid "apply"
+msgstr "تطبيق"
+
+msgid "choose_payment_method"
+msgstr "اختر وسيلة الدفع"
+
+msgid "pro_plan"
+msgstr "خطة Pro"
+
+msgid "one_year_plan"
+msgstr "خطة لمدة عام واحد"
+
+msgid "two_year_plan"
+msgstr "خطة لمدة عامين"
+
+msgid "plan_discount"
+msgstr "وفر %d%%"
+
+msgid "enter_email_and_activation_code"
+msgstr "أدخِل البريد الإلكتروني ورمز التنشيط"
+
+msgid "referral_code"
+msgstr "رمز الإحالة"
+
+msgid "add_referral_code"
+msgstr "أضف رمز الإحالة"
+
+msgid "Activation Code"
+msgstr "رمز التنشيط"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "رمز الإحالة غير صالح أو غير كامل"
+
+msgid "register_for_pro"
+msgstr "التسجيل لـ Pro"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "حدث خطأ ما أثناء تطبيق رمز الإحالة المخصص لك."
+
+msgid "your_activation_code_is_invalid"
+msgstr "إن رمز التنشيط الذي أدخلته غير صالح"
+
+msgid "update_cache_plans_timeout"
+msgstr "حدث خطأ ما أثناء إحضار الخطط المتاحة."
+
+msgid "bitcoin_timeout"
+msgstr "انتهى وقت طلب BTCPay."
+
+msgid "BTCPay is unavailable"
+msgstr "إن BTCPay غير متاح"
+
+msgid "update_cache_user_timeout"
+msgstr "حدث خطأ ما أثناء إحضار بيانات حسابك."
+
+msgid "reseller_timeout"
+msgstr "حدث خطأ ما أثناء التحقق من صحة رمز التنشيط الذي أدخلته."
+
+msgid "reseller_success"
+msgstr "نجح استرداد رمز التنشيط."
+
+msgid "stripe_timeout"
+msgstr ""
+"انتهى وقتك المخصص للدفع عبر Stripe، تُرجى إعادة تشغيل Lantern وإعادة "
+"المحاولة."
+
+msgid "stripe_success"
+msgstr "نجحت عملية الشراء عبر Stripe."
+
+msgid "renewal_success"
+msgstr "نجحت إعادة التجديد"
+
+msgid "pro_renewal_success_description"
+msgstr ""
+"شكرًا لك من أجل تجديد حسابك على Lantern Pro. لديك الآن وصول غير محدود "
+"باستخدام أسرع مراكز البيانات لدينا. يمكنك ربط ما يصل إلى ثلاثة أجهزة بحسابك."
+" "
+
+msgid "pro_purchase_success"
+msgstr "مرحبًا بك في Lantern Pro"
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+"لديك الآن وصول غير محدود باستخدام أسرع مراكز البيانات والخط المخصص لدينا. "
+"يمكنك ربط ما يصل إلى ثلاثة أجهزة بحسابك. "
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+"لديك الآن وصول غير محدود باستخدام أسرع مراكز البيانات لدينا. يمكنك ربط ما "
+"يصل إلى ثلاثة أجهزة بحسابك. "
+
+msgid "by_clicking_tos"
+msgstr "بالضغط على %s، فإنك بذلك توافق على "
+
+msgid "tos"
+msgstr "شروط الخدمة"
+
+msgid "step_1"
+msgstr "الخطوة 1"
+
+msgid "step_2"
+msgstr "الخطوة 2"
+
+msgid "step_3"
+msgstr "الخطوة 3"
+
+msgid "invalid_email"
+msgstr "عنوان البريد الإلكتروني غير صالح"
+
+msgid "invalid_card"
+msgstr "رقم بطاقة الإئتمان غير صالح"
+
+msgid "invalid_expiration"
+msgstr "تاريخ انتهاء صلاحية غير صالح"
+
+msgid "cc_number"
+msgstr "بطاقة ائتمانية"
+
+msgid "card_number"
+msgstr "رقم البطاقة"
+
+msgid "card_expiration"
+msgstr "شهر/سنة"
+
+msgid "invalid_cvc"
+msgstr "رمز CVC غير صالح"
+
+msgid "complete_purchase"
+msgstr "إكمال الشراء"
 
 msgid "Re-send Email"
 msgstr "إعادة إرسال البريد الإلكتروني"
@@ -274,6 +425,54 @@ msgstr "تسجيل الخروج"
 
 msgid "confirm_remove_device"
 msgstr "هل أنت متأكد من أنك تريد فك ربط هذا الجهاز مع حساب برو؟"
+
+msgid "unlimited_data"
+msgstr "بيانات غير محدودة"
+
+msgid "no_logs"
+msgstr "لا توجد سجلات"
+
+msgid "no_ads"
+msgstr "بدون إعلانات"
+
+msgid "choose_plan"
+msgstr "اختر الخطة"
+
+msgid "connect_up_to_3_devices"
+msgstr "توصيل ما يصل إلى 3 أجهزة"
+
+msgid "faster_data_centers"
+msgstr "مراكز بيانات أكثر سرعة"
+
+msgid "dedicated_line"
+msgstr "الخط المخصص"
+
+msgid "increased_reliability"
+msgstr "الموثوقية الزائدة"
+
+msgid "checkout"
+msgstr "الدفع"
+
+msgid "credit_card"
+msgstr "بطاقة ائتمانية"
+
+msgid "lantern_pro_checkout"
+msgstr "الدفع لحساب لانترن برو"
+
+msgid "1y_pricing"
+msgstr "سعر شراء عام واحد"
+
+msgid "2y_pricing"
+msgstr "سعر شراء عامين"
+
+msgid "plan_type"
+msgstr "نوع الخطة"
+
+msgid "most_popular"
+msgstr "الأكثر شيوعًا"
+
+msgid "free"
+msgstr "مجانًا"
 
 msgid "n/a"
 msgstr "لا ينطبق"
@@ -336,6 +535,9 @@ msgstr "تعديل"
 
 msgid "save_error"
 msgstr "حدث خطأ ما أثناء الحفظ."
+
+msgid "fewer_options"
+msgstr "خيارات أقل"
 
 msgid "more_options"
 msgstr "خيارات إضافية"
@@ -402,22 +604,28 @@ msgid "start_chat"
 msgstr "بدء الدردشة"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "تطبيقاتك المثبتة"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "التطبيقات الموجهة عن طريق Lantern"
 
 msgid "apps_to_unblock"
 msgstr ""
+"اختر التطبيقات التي ترغب بعدم حظرها. عند الاتصال، لن تُوجَّه عن طريق Lantern"
+" إلا التطبيقات المحددة بالأسفل."
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "الانقسام النفقي"
 
 msgid "split_tunneling_info"
 msgstr ""
+"عند تفعيل الانقسام النفقي، ستُوجَّه التطبيقات المحددة عن طريق Lantern، مما "
+"يُحسن الأداء ويوفر النطاق الترددي من خلال عدم حظر التطبيقات المحددة."
 
 msgid "applied_next_time"
 msgstr ""
+"ستُطبق إعدادت الانقسام النفقي الجديدة في المرة القادمة التي تعيد فيها "
+"الاتصال."
 
 msgid "message_disappearing"
 msgstr "لن تختفي جميع الرسائل بالنسبة لك و%s."
@@ -439,6 +647,9 @@ msgstr "تشغيل"
 
 msgid "continue"
 msgstr "واصل"
+
+msgid "continue_to_pro"
+msgstr "المتابعة الى حساب برو"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "هل تريد بالتأكيد فتح %s؟"
@@ -1220,7 +1431,7 @@ msgid "support"
 msgstr "الدعم"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "منتدى مستخدمي Lantern"
 
 msgid "faq"
 msgstr "أسئلة متكررة"

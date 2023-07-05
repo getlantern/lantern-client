@@ -1,15 +1,15 @@
 # 
 # Translators:
-# e2f <projects@e2f.com>, 2022
-# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2023
 # Anh Phan <vietnamesel10n@gmail.com>, 2023
-# Yen Le Van <yenlevanbk@gmail.com>, 2023
-# Nathan Tran, 2023
 # Lantern, 2023
+# e2f <projects@e2f.com>, 2023
+# Nathan Tran, 2023
+# Yen Le Van <yenlevanbk@gmail.com>, 2023
+# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2023\n"
+"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2023\n"
 "Language-Team: Vietnamese (https://app.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -206,7 +206,7 @@ msgstr "Liên kết qua Email"
 msgid "lantern_pro_email"
 msgstr "Lantern Pro Email"
 
-msgid "Email"
+msgid "email"
 msgstr "Email"
 
 msgid "Submit"
@@ -215,8 +215,160 @@ msgstr "Nộp"
 msgid "save"
 msgstr "Lưu"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "Vui lòng nhập địa chỉ email hợp lệ"
+
+msgid "bonus"
+msgstr "Thưởng"
+
+msgid "referral_bonus"
+msgstr "thưởng giới thiệu"
+
+msgid "total"
+msgstr "Tổng"
+
+msgid "month"
+msgstr "tháng"
+
+msgid "months"
+msgstr "tháng"
+
+msgid "enter_email"
+msgstr "Nhập Email"
+
+msgid "error_fetching_plans"
+msgstr "Lỗi khi tìm nạp gói, vui lòng khởi động lại Lantern và thử lại."
+
+msgid "apply"
+msgstr "Áp dụng"
+
+msgid "choose_payment_method"
+msgstr "Chọn phương thức thanh toán"
+
+msgid "pro_plan"
+msgstr "Gói Pro"
+
+msgid "one_year_plan"
+msgstr "Gói 1 năm"
+
+msgid "two_year_plan"
+msgstr "Gói 2 năm"
+
+msgid "plan_discount"
+msgstr "Tiết kiệm %d%%"
+
+msgid "enter_email_and_activation_code"
+msgstr "Nhập Email và Mã kích hoạt"
+
+msgid "referral_code"
+msgstr "Mã giới thiệu"
+
+msgid "add_referral_code"
+msgstr "Thêm mã giới thiệu"
+
+msgid "Activation Code"
+msgstr "Mã kích hoạt"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "Mã giới thiệu không hợp lệ hoặc không đầy đủ"
+
+msgid "register_for_pro"
+msgstr "Đăng ký Pro"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "Đã xảy ra lỗi khi áp dụng mã giới thiệu của bạn."
+
+msgid "your_activation_code_is_invalid"
+msgstr "Mã kích hoạt của bạn không hợp lệ"
+
+msgid "update_cache_plans_timeout"
+msgstr "Đã xảy ra lỗi khi tìm nạp các gói có sẵn."
+
+msgid "bitcoin_timeout"
+msgstr "Yêu cầu BTCPay đã hết thời gian."
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay không khả dụng"
+
+msgid "update_cache_user_timeout"
+msgstr "Đã xảy ra lỗi khi tìm nạp dữ liệu tài khoản của bạn."
+
+msgid "reseller_timeout"
+msgstr "Đã xảy ra lỗi khi xác thực mã kích hoạt của bạn."
+
+msgid "reseller_success"
+msgstr "Đổi thành công mã kích hoạt."
+
+msgid "stripe_timeout"
+msgstr ""
+"Thanh toán Stripe của bạn đã hết hạn. Vui lòng khởi động lại Lantern và thử "
+"lại."
+
+msgid "stripe_success"
+msgstr "Mua Stripe thành công."
+
+msgid "renewal_success"
+msgstr "Gia hạn thành công"
+
+msgid "pro_renewal_success_description"
+msgstr ""
+"Cảm ơn bạn đã gia hạn tài khoản Lantern Pro của mình. Giờ đây, bạn có quyền "
+"truy cập không giới hạn bằng cách sử dụng các trung tâm dữ liệu nhanh nhất "
+"của chúng tôi. Có thể kết nối tối đa ba thiết bị với tài khoản của bạn."
+
+msgid "pro_purchase_success"
+msgstr "Chào mừng đến với Lantern Pro"
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+"Giờ đây, bạn có quyền truy cập không giới hạn bằng cách sử dụng các trung "
+"tâm dữ liệu nhanh nhất và đường truyền chuyên dụng của chúng tôi. Có thể kết"
+" nối tối đa ba thiết bị với tài khoản của bạn."
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+"Bây giờ bạn có quyền truy cập không giới hạn bằng cách sử dụng các trung tâm"
+" dữ liệu nhanh nhất của chúng tôi. Có thể kết nối tối đa ba thiết bị với tài"
+" khoản của bạn."
+
+msgid "by_clicking_tos"
+msgstr "Bằng cách nhấp vào %s, bạn đồng ý với"
+
+msgid "tos"
+msgstr "Điều khoản Dịch vụ"
+
+msgid "step_1"
+msgstr "Bước 1"
+
+msgid "step_2"
+msgstr "Bước 2"
+
+msgid "step_3"
+msgstr "Bước 3"
+
+msgid "invalid_email"
+msgstr "Điạ chỉ email không hợp lệ"
+
+msgid "invalid_card"
+msgstr "Số thẻ tín dụng không hợp lệ"
+
+msgid "invalid_expiration"
+msgstr "Ngày hết hạn không hợp lệ"
+
+msgid "cc_number"
+msgstr "Thẻ Tín Dụng"
+
+msgid "card_number"
+msgstr "Số Thẻ Tín Dụng"
+
+msgid "card_expiration"
+msgstr "THÁNG/NĂM"
+
+msgid "invalid_cvc"
+msgstr "Mã xác minh không hợp lệ"
+
+msgid "complete_purchase"
+msgstr "Hoàn tất mua hàng"
 
 msgid "Re-send Email"
 msgstr "Gửi lại Email"
@@ -266,6 +418,54 @@ msgstr "Đăng xuất"
 
 msgid "confirm_remove_device"
 msgstr "Bạn có chắc là muốn gỡ kết nối máy này ra khỏi tài khoản Pro?"
+
+msgid "unlimited_data"
+msgstr "Dung Lượng Không Giới Hạn"
+
+msgid "no_logs"
+msgstr "Không có nhật ký"
+
+msgid "no_ads"
+msgstr "Không có quảng cáo"
+
+msgid "choose_plan"
+msgstr "Chọn gói"
+
+msgid "connect_up_to_3_devices"
+msgstr "Kết nối tối đa 3 thiết bị"
+
+msgid "faster_data_centers"
+msgstr "Trung tâm dữ liệu nhanh hơn"
+
+msgid "dedicated_line"
+msgstr "Đường truyền chuyên dụng"
+
+msgid "increased_reliability"
+msgstr "Tăng độ tin cậy"
+
+msgid "checkout"
+msgstr "Trả tiền"
+
+msgid "credit_card"
+msgstr "Thẻ Tín Dụng"
+
+msgid "lantern_pro_checkout"
+msgstr "Tính Tiền Lantern Pro"
+
+msgid "1y_pricing"
+msgstr "Báo giá 1 năm"
+
+msgid "2y_pricing"
+msgstr "Báo giá 2 năm"
+
+msgid "plan_type"
+msgstr "Loại gói"
+
+msgid "most_popular"
+msgstr "Phổ biến nhất"
+
+msgid "free"
+msgstr "Miễn phí"
 
 msgid "n/a"
 msgstr "không có"
@@ -329,8 +529,11 @@ msgstr "Chỉnh sửa"
 msgid "save_error"
 msgstr "Đã xảy ra lỗi khi lưu."
 
+msgid "fewer_options"
+msgstr "Ít tùy chọn hơn"
+
 msgid "more_options"
-msgstr "Tùy chọn khác"
+msgstr "Thêm tùy chọn"
 
 msgid "block_user"
 msgstr "Chặn người dùng"
@@ -396,22 +599,29 @@ msgid "start_chat"
 msgstr "Bắt đầu trò chuyện"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "Các ứng dụng đã cài đặt của bạn"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "Ứng dụng được định tuyến qua Lantern"
 
 msgid "apps_to_unblock"
 msgstr ""
+"Chọn ứng dụng bạn muốn bỏ chặn. Khi được kết nối, chỉ những ứng dụng được "
+"chọn bên dưới mới được định tuyến qua Lantern."
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "Chia lưu lượng"
 
 msgid "split_tunneling_info"
 msgstr ""
+"Khi bật chia lưu lượng, các ứng dụng đã chọn sẽ được định tuyến thông qua "
+"Lantern. Điều này có thể cải thiện hiệu suất và tiết kiệm băng thông bằng "
+"cách chỉ bỏ chặn các ứng dụng được chỉ định."
 
 msgid "applied_next_time"
 msgstr ""
+"Cài đặt chia lưu lượng mới sẽ được áp dụng vào lần tiếp theo bạn kết nối "
+"lại."
 
 msgid "message_disappearing"
 msgstr "Tất cả tin nhắn sẽ không biến mất đối với bạn và %s."
@@ -433,6 +643,9 @@ msgstr "Bật"
 
 msgid "continue"
 msgstr "Tiếp tục"
+
+msgid "continue_to_pro"
+msgstr "Tiếp tục qua bản Pro"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "Bạn có chắc chắn muốn mở %s không?"
@@ -1219,7 +1432,7 @@ msgid "support"
 msgstr "Hỗ trợ"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "Diễn đàn người dùng Lantern"
 
 msgid "faq"
 msgstr "FAQ"

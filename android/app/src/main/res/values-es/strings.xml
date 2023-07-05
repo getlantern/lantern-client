@@ -29,7 +29,14 @@
   <string name="no_purchase_date">Por favor, seleccione la fecha aproximada en la que adquirió Lantern Pro</string>
   <string name="purchase_date">Fecha de compra</string>
   <string name="common_issue_list_0">No se puede acceder a sitios bloqueados</string>
+  <string name="common_issue_list_1">No se puede realizar la compra</string>
+  <string name="common_issue_list_2">No se puede iniciar sesión</string>
+  <string name="common_issue_list_3">El indicador carga sin fin</string>
   <string name="common_issue_list_4">Lento</string>
+  <string name="common_issue_list_5">El chat no funciona</string>
+  <string name="common_issue_list_6">El descubrimiento no funciona</string>
+  <string name="common_issue_list_7">No se puede vincular el dispositivo</string>
+  <string name="common_issue_list_8">La aplicación se cuelga</string>
   <string name="common_issue_list_9">Otro</string>
   <string name="submit_code">Confirmar código</string>
   <string name="on_text">ACTIVO</string>
@@ -49,6 +56,7 @@
   <string name="error_making_purchase">Error al tratar de realizar la compra</string>
   <string name="have_latest_version">%1$s %2$s es la última versión disponible.</string>
   <string name="updating_lantern">Actualizando %1$s</string>
+  <string name="update_lantern">Actualizar Lantern</string>
   <string name="cancel">Cancelar</string>
   <string name="newsfeed_option">Pruebe la suscripción (feed) de Lantern</string>
   <string name="newsfeed_off_option">Desactivar la suscripción (feed)</string>
@@ -96,6 +104,7 @@
   <string name="error_update">Error al descargar actualización</string>
   <string name="error_install_update">Error al instalar la actualización</string>
   <string name="loading">Cargando...</string>
+  <string name="manual_update">Pruebe a instalar manualmente la última versión desde &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">¡Bienvenido a Lantern Pro!</string>
   <string name="happy_anniversary">¡FELIZ ANIVERSARIO DE LANTERN!</string>
   <string name="welcome_greeting">Bienvenido a Lantern</string>
@@ -123,6 +132,7 @@
   <string name="share_friends_text">¡Compártalo con sus amigos para conseguir meses gratis!</string>
   <string name="email_address">Dirección de email</string>
   <string name="switch_to_alipay">Cambiar a Alipay</string>
+  <string name="switch_to_stripe">Cambiar a Stripe</string>
   <string name="switch_to_credit_card">Cambiar al pago con tarjeta de crédito</string>
   <string name="continue_to_pro">Continuar hacia PRO</string>
   <string name="continue_to_basic">Continuar hacia la versión Básica</string>
@@ -299,7 +309,6 @@ iOS.</string>
   <string name="earn_free_month">Gane un mes gratis por cada amigo que se registre</string>
   <string name="credits_applied">Sus créditos se aplicarán a su cuenta el próximo ciclo de facturación.</string>
   <string name="pro_invitation_subject">Invitación para unirse a Lantern Pro</string>
-  <string name="receive_free_month">Para conseguir un mes gratis de Lantern Pro, use este código de referencia: %1$s ; Puede descargarlo de aquí: https://bit.ly/1M8x04u</string>
   <string name="share_feed_item">Estoy leyendo acerca de \"%1$s\" en %2$s a través de Lantern. Use Lantern para acceder a sitios y servicios bloqueados. Puede descargarlo para Android aquí: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">¿Está seguro? ¡Esta acción no se puede deshacer! Puede registrarse de nuevo para Pro en cualquier momento.</string>
   <string name="unauthorize_confirmation">¿Está seguro de que quiere desvincular este dispositivo de su cuenta Pro?</string>
@@ -410,6 +419,7 @@ iOS.</string>
   <string name="privacy_disclosure_title">Declaración de privacidad de Lantern</string>
   <string name="privacy_disclosure_accept">Acepto</string>
   <string name="privacy_disclosure_body">Lantern se compromete a proteger su privacidad. Queremos que sepa qué información recopilamos, cuál no, y cómo recopilamos, utilizamos y almacenamos sus datos. Su información de pago la tratamos con independencia a su cuenta de Lantern Pro. No recopilamos registros de su actividad, como el registro de su historial de navegación, el destino del tráfico, el contenido de los datos ni las consultas de DNS. Tampoco almacenamos los registros de conexión, lo que significa que no almacenamos su dirección IP, la dirección IP del servidor de Lantern de salida asociado a la marca de tiempo de su conexión ni la duración de sus sesiones. Al tratarse de una cuenta Lantern Pro particular, Lantern no dispone de los medios técnicos necesarios para asociar la cuenta Lantern con la identidad real del usuario. Asimismo, al tratarse de una dirección IP de Lantern y una marca de tiempo precisa, Lantern tampoco dispone de los medios necesarios para atribuir esa dirección IP a un usuario de Lantern ni a la dirección IP de un usuario de Lantern.</string>
+  <string name="referral_code_share_description">¡Comparta Lantern Pro con alguien! Cuando la otra persona use su código de recomendación al comprar Lantern Pro, ambos recibiréis gratis un mes de servicio de Lantern Pro.</string>
   <string name="referral_code_share">Comparta el código de referencia</string>
   <string name="referral_code_share_title">Comparta su código de referencia:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -458,8 +468,10 @@ iOS.</string>
   <string name="send_report">Enviar informe</string>
   <string name="email_optional">Correo electrónico (opcional)</string>
   <string name="device_added">Dispositivo añadido</string>
+  <string name="device_authorized_pro">Su nuevo dispositivo ya tiene autorización para usar su cuenta Pro. Espere un par de minutos para que los cambios surtan efecto.</string>
   <string name="report_sent">Informe enviado</string>
   <string name="thank_you_for_reporting_your_issue">Gracias por informarnos sobre su problema. Nos pondremos en contacto con usted por correo electrónico en cuanto podamos</string>
+  <string name="unable_to_submit_issue">No se puede enviar la incidencia</string>
   <string name="have_a_lantern_pro_activation_code_click_here">¿Tiene un código de activación de Lantern Pro? Haga clic aquí</string>
   <string name="enter_email_and_activation_code">Introduzca el correo electrónico y el código de activación</string>
   <string name="activation_code">Código de Activación </string>

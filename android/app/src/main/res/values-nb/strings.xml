@@ -269,7 +269,7 @@
   <string name="earn_free_month">Få en gratismåned for hver venn som melder seg på</string>
   <string name="credits_applied">Dine kreditter vil bli lagt til kontoen din i neste betalingsrunde.</string>
   <string name="pro_invitation_subject">Invitasjon til å ta del i Lantern Pro</string>
-  <string name="receive_free_month">For en gratismåned med Lantern Pro, bruk denne referent-koden: %1$s ; Du kan laste det ned herfra: https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">For en gratismåned med Lantern Pro, bruk denne referent-koden: %1$s ; Du kan laste det ned herfra: https://lantern.io/download</string>
   <string name="share_feed_item">Jeg leser om \"%1$s\" at %2$s via  Lantern. Bruk Lantern for å nå blokkerte sider og tjenester. Du kan laste det ned for Android her: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Er du sikker? Dette kan ikke angres! Du kan kjøpe Pro igjen når som helst.</string>
   <string name="unauthorize_confirmation">Er du sikker på at du vil avlenke denne enheten fra din Pro-konto?</string>
