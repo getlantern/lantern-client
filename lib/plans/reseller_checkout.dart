@@ -88,7 +88,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
     ) {
       return BaseScreen(
         resizeToAvoidBottomInset: false,
-        title: 'lantern_${widget.isPro ? 'pro_' : ''}checkout'.i18n,
+        title: 'lantern_pro_checkout'.i18n,
         body: Container(
           height: MediaQuery.of(context).size.height,
           padding: const EdgeInsetsDirectional.only(
