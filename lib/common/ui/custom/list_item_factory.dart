@@ -14,12 +14,14 @@ class ListItemFactory extends StatelessWidget {
     required void Function() onTap,
     required ReplicaApi api,
     required ReplicaLink link,
-    double height = 90.0,
+    double? height,
     String? serpLink,
   }) : this((BuildContext context, ListItemFactory factory) {
           return FocusedMenuHolder(
             // provide download menu if not a serp result item
-            menu: serpLink == null ? renderReplicaLongPressMenuItem(context, api, link) : const SizedBox(),
+            menu: serpLink == null
+                ? renderReplicaLongPressMenuItem(context, api, link)
+                : const SizedBox(),
             menuWidth: MediaQuery.of(context).size.width * 0.8,
             builder: (menuOpen) {
               return Container(
@@ -43,13 +45,14 @@ class ListItemFactory extends StatelessWidget {
           );
         });
 
-  ListItemFactory.settingsItem({
-    String? header,
-    String? icon,
-    dynamic content,
-    void Function()? onTap,
-    List<Widget>? trailingArray,
-  }) : this((BuildContext context, ListItemFactory factory) {
+  ListItemFactory.settingsItem(
+      {String? header,
+      String? icon,
+      dynamic content,
+      void Function()? onTap,
+      List<Widget>? trailingArray,
+      double? height = 72})
+      : this((BuildContext context, ListItemFactory factory) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,6 +61,7 @@ class ListItemFactory extends StatelessWidget {
               factory.buildBase(
                 leading: icon,
                 content: content,
+                height: height,
                 trailingArray: trailingArray,
                 onTap: onTap,
                 showDivider: true,
@@ -186,7 +190,8 @@ class ListItemFactory extends StatelessWidget {
           overrideColor: overrideColor,
           onTap: onTap ?? () {},
           child: Container(
-            height: height ?? 72,
+            // TODO: we should avoid using height or widget to make widget more responsive
+            height: height,
             decoration: showDivider
                 ? BoxDecoration(
                     border: Border(bottom: BorderSide(width: 1, color: grey3)),

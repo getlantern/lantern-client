@@ -29,7 +29,14 @@
   <string name="no_purchase_date">আপনার Lantern Pro ক্রয়ের একটি আনুমানিক তারিখ নির্বাচন করুন</string>
   <string name="purchase_date">ক্রয়ের তারিখ</string>
   <string name="common_issue_list_0">ব্লক সাইটগুলোতে যেতে পারছিনা</string>
+  <string name="common_issue_list_1">কেনা সম্পূর্ণ করা যাচ্ছে না</string>
+  <string name="common_issue_list_2">সাইন ইন করা যাচ্ছে না</string>
+  <string name="common_issue_list_3">স্পিনার অবিরাম লোড হয়</string>
   <string name="common_issue_list_4">ধীরগতি</string>
+  <string name="common_issue_list_5">চ্যাট কাজ করছে না</string>
+  <string name="common_issue_list_6">ডিসকভার কাজ করছে না</string>
+  <string name="common_issue_list_7">ডিভাইস লিংক করা যাচ্ছে না</string>
+  <string name="common_issue_list_8">অ্যাপ্লিকেশন ক্র্যাশ করেছে</string>
   <string name="common_issue_list_9">অন্যান্য</string>
   <string name="submit_code">কোড নিশ্চত করুন</string>
   <string name="on_text">চালু</string>
@@ -49,6 +56,7 @@
   <string name="error_making_purchase">ক্রয় করতে ত্রুটি ঘটেছে</string>
   <string name="have_latest_version">%1$s %2$s সাম্প্রতিক সংস্করণ উপলভ্য।</string>
   <string name="updating_lantern">%1$s আপডেট করা হচ্ছে</string>
+  <string name="update_lantern">Lantern আপডেট করুন</string>
   <string name="cancel">বাতিল</string>
   <string name="newsfeed_option">Lanten ফিড দেখতে পারেন</string>
   <string name="newsfeed_off_option">ফিড বন্ধ করুন</string>
@@ -97,6 +105,7 @@
   <string name="error_update">আপডেট ডাউনলোড করতে ত্রৃটি</string>
   <string name="error_install_update">আপডেট ইনস্টল করা সংক্রান্ত ত্রুটি</string>
   <string name="loading">লোড হচ্ছে...</string>
+  <string name="manual_update">&lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt; থেকে ম্যানুয়ালভাবে সর্বশেষ সংস্করণ ইনস্টল করার চেষ্টা করুন</string>
   <string name="pro_welcome_text">Lantern Pro এ আপনাকে স্বগাতম!</string>
   <string name="happy_anniversary">শুভ LANTERN বার্ষিকী!</string>
   <string name="welcome_greeting">Lantern এ আপনাকে স্বগাতম!</string>
@@ -124,6 +133,7 @@
   <string name="share_friends_text">বিনামূল্যে মাস উপার্জনের জন্য বন্ধুদের সাথে শেয়ার করুন!</string>
   <string name="email_address">ইমেইল ঠিকানা</string>
   <string name="switch_to_alipay">Alipayতে স্যুইচ করুন</string>
+  <string name="switch_to_stripe">স্ট্রাইপ-এ সুইচ করুন</string>
   <string name="switch_to_credit_card">ক্রেডিট কার্ড পেমেন্টে স্যুইচ করুন</string>
   <string name="continue_to_pro">PRO তে চলুন</string>
   <string name="continue_to_basic">Basic সংস্করনে চলুন</string>
@@ -301,7 +311,6 @@
   <string name="earn_free_month">প্রতি বন্ধুর সাইনআপ থেকে একটি ফ্রি মাস পান</string>
   <string name="credits_applied">আপনার ক্রেডিট পরবর্তী বিলিং চক্রে আপনার অ্যাকাউন্টে প্রয়োগ করা হবে।</string>
   <string name="pro_invitation_subject">Lantern Pro তে যোগ দেবার আমন্ত্রন</string>
-  <string name="receive_free_month">Lantern Pro এর একটি বিনামূল্য মাসের জন্য, এই রেফারেল কোডটি ব্যবহার করুন: %1$s ; আপনি এখান থেকে এটি ডাউনলোড করতে পারেন: https://bit.ly/1M8x04u</string>
   <string name="share_feed_item">%2$s এ আমি \"%1$s\" সর্ম্পকে পড়ছি  Lantern এর মাধ্যমে। ব্লক সাইট এবং সেবা অ্যাক্সেস করতে Lantern ব্যবহার করুন। আপনি এখানে অ্যান্ড্রয়েড জন্য এটি ডাউনলোড করতে পারেন: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">আপনি কি নিশ্চিত? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না! আপনি যে কোন সময় আবার Pro  এর জন্য সাইন আপ করতে পারেন।</string>
   <string name="unauthorize_confirmation">আপনি কি আপনার Pro অ্যাকাউন্ট থেকে এই ডিভাইসটি অপসারন করতে চান?</string>
@@ -412,6 +421,7 @@
   <string name="privacy_disclosure_title">Lantern গোপনীয়্তা প্রকাশ</string>
   <string name="privacy_disclosure_accept">আমি স্বীকার করি</string>
   <string name="privacy_disclosure_body">আপনার গোপনীয়তা রক্ষা করার জন্য Lantern অঙ্গীকারবদ্ধ। আমরা কী তথ্য সংগ্রহ করি, কী তথ্য সংগ্রহ করি না এবং কীভাবে আমরা সংগ্রহ ও ব্যবহার করি এবং তথ্য সংরক্ষণ করি তা আমরা আপনাকে বোঝাতে চাই। আমরা আপনার Lantern Pro অ্যাকাউন্টের সাথে আপনার পেমেন্টের তথ্য সংযোগ বিচ্ছিন্ন করি। ব্রাউজ করার ইতিহাস লগ না করা, ট্রাফিকের গন্তব্যস্থল, ডেটার বিষয়বস্তু বা DNS জিজ্ঞাস্যগুলি মতো আপনার কার্যকলাপের লগগুলি আমরা সংগ্রহ করি না। উপরন্তু আমরা কখনও সংযোগের লগগুলি, অর্থাৎ, আপনার IP ঠিকানার কোনও লগ, সংযোগের টাইমস্ট্যাম্পের সাথে সংযুক্ত আউটগোয়িং Lantern সার্ভারের IP ঠিকানা, বা সেশনের সময়কালও আমরা সংরক্ষণ করি না। একটি নির্দিষ্ট Lantern Pro অ্যাকাউন্টে, Lantern অ্যাকাউন্টের সাথে ব্যবহারকারীর প্রকৃত পরিচয় সংযুক্ত করতে Lantern প্রযুক্তিগতভাবে অপারগ। একটি নির্দিষ্ট Lantern IP ঠিকানা এবং একটি সুনির্দিষ্ট টাইম স্ট্যাম্পে, এই IP ঠিকানার বৈশিষ্ট্যটি একজন Lantern ব্যবহারকারী বা একটি Lantern ব্যবহারকারীর IP ঠিকানার সাথে সংযুক্ত করতে Lantern প্রযুক্তিগতভাবে অপারগ।</string>
+  <string name="referral_code_share_description">কোনও বন্ধুর সাথে Lantern Pro শেয়ার করুন! আপনার বন্ধু তার Lantern Pro কেনার সময় আপনার রেফারেল কোড ব্যবহার করলে, আপনারা দুজনেই একমাসের Lantern Pro পরিষেবা বিনামূল্যে পাবেন!</string>
   <string name="referral_code_share">রেফারেল কোড শেয়ার করুন</string>
   <string name="referral_code_share_title">আপনার রেফারেল কোড শেয়ার করুন:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -463,6 +473,7 @@
   <string name="device_authorized_pro">আপনার নতুন ডিভাইস এখন Pro অ্যাকাউন্ট ব্যবহার করার জন্য অনুমোদিত। পরিবর্তনগুলি কার্যকর হতে অনুগ্রহ করে কয়েক মিনিট অপেক্ষা করুন।</string>
   <string name="report_sent">রিপোর্ট পাঠানো হয়েছে</string>
   <string name="thank_you_for_reporting_your_issue">আপনার সমস্যা রিপোর্ট করার জন্য ধন্যবাদ। প্রচুর পরিমাণ সমস্যার জন্য আমরা বেশিরভাগ সমস্যার উত্তর দিতে পারি না, কিন্তু আমরা আপনাকে নিশ্চিত করি যে আপনার রিপোর্টগুলির উপর ভিত্তি করে, Lantern-কে উন্নত করার জন্য আমরা কঠোর পরিশ্রম করছি।</string>
+  <string name="unable_to_submit_issue">সমস্যা জমা দেওয়া যায়নি</string>
   <string name="have_a_lantern_pro_activation_code_click_here">একটি Lantern Pro সক্রিয়করণ কোড আছে? এখানে ক্লিক করুন</string>
   <string name="enter_email_and_activation_code">ইমেল এবং সক্রিয়করণ কোড লিখুন</string>
   <string name="activation_code">এক্টিভেশন কোড</string>
