@@ -308,7 +308,6 @@
   <string name="earn_free_month">รับฟรี 1 เดือนสำหรับเพื่อนทุกคนที่ลงทะเบียน</string>
   <string name="credits_applied">เครดิตของคุณจะถูกนำไปใช้กับบัญชีของคุณในรอบบิลถัดไป</string>
   <string name="pro_invitation_subject">คำเชิญเข้าร่วม Lantern Pro</string>
-  <string name="receive_free_month">ใช้รหัสแนะนำนี้เพื่อรับ Lantern Pro ฟรี 1 เดือน %1$s ; คุณสามารถดาวน์โหลดได้จากที่นี่: https://lantern.io/download</string>
   <string name="share_feed_item">ฉันกำลังอ่านเรื่อง \"%1$s\" ที่ %2$s ผ่าน Lantern ใช้ Lantern เพื่อเข้าถึงเว็บไซต์และบริการที่ถูกบล็อก คุณสามารถดาวน์โหลดแอปสำหรับแอนดรอยด์ได้ที่นี่: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">คุณแน่ใจหรือไม่ การกระทำนี้ไม่สามารถยกเลิกได้! คุณสามารถสมัครใช้ Pro อีกครั้งได้ตลอดเวลา</string>
   <string name="unauthorize_confirmation">คุณแน่ใจหรือไม่ว่าต้องการเลิกเชื่อมโยงอุปกรณ์นี้จากบัญชี Pro ของคุณ</string>
