@@ -263,7 +263,9 @@ class PaymentsUtil(private val activity: Activity) {
         provider: PaymentProvider,
         methodCallResult: MethodChannel.Result,
     ) {
-        val currency = LanternApp.getSession().planByID(planID)?.currency ?: "usd"
+        val currency = LanternApp.getSession().planByID(planID)?.let {
+            it.currency
+        } ?: "usd"
         Logger.d(TAG, "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency")
         val session = session
         val formBody: FormBody.Builder = FormBody.Builder()
