@@ -233,7 +233,8 @@ class AppTest() : BaseTest() {
         println("TaskId: $taskId | testPaymentFlow-->CVC entered ")
         val checkOut = flutterFinder.byTooltip(CHECK_OUT)
         checkOut.click()
-        Thread.sleep(6000)
+        //Same as our API timeout
+        Thread.sleep(15000)
 
         println("TaskId: $taskId | testPaymentFlow-->clicked on checkout ")
         //Robust way to check is read logs from device
