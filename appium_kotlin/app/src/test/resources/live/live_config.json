@@ -6,7 +6,7 @@
   "capabilities": {
     "automationName": "Flutter",
     "setWebContentsDebuggingEnabled": true,
-    "appium:noReset": false,
+    "appium:noReset": true,
     "appium:logLevel": true,
     "enablePerformanceLogging": true,
     "bstack:options": {
@@ -18,11 +18,6 @@
     }
   },
   "environments": [
-    {
-      "appium:deviceName": "Samsung Galaxy S7",
-      "platformVersion": "6.0",
-      "platformName": "Android"
-    },
     {
       "appium:deviceName": "Samsung Galaxy Note 8",
       "platformVersion": "7.1",
