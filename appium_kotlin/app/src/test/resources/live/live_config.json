@@ -2,7 +2,7 @@
   "server": "hub-cloud.browserstack.com/wd/hub",
   "username": "jigarj_SNsRyw",
   "access_key": "dA4yyG26fHbfJxRUYMwr",
-  "app": "bs://f2da01499cc9bd7e071f09ceec0ef6a6499369b6",
+  "app": "bs://c677edfd671db135ad3c05b1995eb749334903cc",
   "capabilities": {
     "automationName": "Flutter",
     "setWebContentsDebuggingEnabled": true,
@@ -19,8 +19,18 @@
   },
   "environments": [
     {
-      "appium:deviceName": "Samsung Galaxy S7",
-      "platformVersion": "6.0",
+      "appium:deviceName": "Samsung Galaxy Note 8",
+      "platformVersion": "7.1",
+      "platformName": "Android"
+    },
+    {
+      "appium:deviceName": "Samsung Galaxy S21",
+      "platformVersion": "11.0",
+      "platformName": "Android"
+    },
+    {
+      "appium:deviceName": "Google Pixel 7 Pro",
+      "platformVersion": "13.0",
       "platformName": "Android"
     }
   ]

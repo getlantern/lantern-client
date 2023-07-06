@@ -166,7 +166,6 @@ class AppTest() : BaseTest() {
         val accountTap = flutterFinder.byValueKey(ACCOUNT_TAP)
         accountTap.click()
         Thread.sleep(2000)
-
         println("TaskId: $taskId | testPaymentFlow-->clicked on account ")
 
 //        val accountManagement = flutterFinder.byValueKey(UPGRADE_LANTERN_PRO)
@@ -296,7 +295,7 @@ class AppTest() : BaseTest() {
 
         print("TaskId: $taskId", "reportAnIssueFlow-->Performing tap action.")
         TouchAction(androidDriver).tap(
-            TapOptions.tapOptions().withPosition(PointOption.point(127, 767))
+            TapOptions.tapOptions().withPosition(PointOption.point(473, 880))
         ).perform()
         Thread.sleep(1000)
 
