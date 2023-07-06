@@ -14,12 +14,15 @@ const val CHROME_PACKAGE_ACTIVITY = "org.chromium.chrome.browser.ChromeTabbedAct
 const val IP_REQUEST_URL = "https://api64.ipify.org"
 const val LOGS_DIALED_MESSAGE = "Successfully dialed via"
 const val ERROR_PAYMENT_PURCHASE = "Error with purchase request"
-const val PAYMENT_PURCHASE_COMPLETED = "org.getlantern.lantern.util.PaymentsUtil: Purchase Completed"
+const val PAYMENT_PURCHASE_COMPLETED =
+    "org.getlantern.lantern.util.PaymentsUtil: Purchase Completed"
 
 //Finder Keys
 
 const val ACCOUNT_TAP = "bottomBar_account_tap"
 const val ACCOUNT_MANAGEMENT = "account_management"
+const val UPGRADE_LANTERN_PRO = "upgrade_lantern_pro"
+const val EMAIL = "email"
 const val ACCOUNT_RENEW = "account_renew"
 const val MOST_POPULAR = "most_popular"
 const val CONTIUNE_CHECKOUT = "checkout"

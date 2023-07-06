@@ -280,6 +280,7 @@ class _CheckoutState extends State<Checkout>
                             child: Form(
                               key: emailFieldKey,
                               child: CTextField(
+                                tooltipMessage: AppKeys.email,
                                 initialValue: widget.isPro ? emailAddress : '',
                                 controller: emailController,
                                 autovalidateMode: widget.isPro
