@@ -311,7 +311,6 @@
   <string name="earn_free_month">প্রতি বন্ধুর সাইনআপ থেকে একটি ফ্রি মাস পান</string>
   <string name="credits_applied">আপনার ক্রেডিট পরবর্তী বিলিং চক্রে আপনার অ্যাকাউন্টে প্রয়োগ করা হবে।</string>
   <string name="pro_invitation_subject">Lantern Pro তে যোগ দেবার আমন্ত্রন</string>
-  <string name="receive_free_month">Lantern Pro এর একটি বিনামূল্য মাসের জন্য, এই রেফারেল কোডটি ব্যবহার করুন: %1$s ; আপনি এখান থেকে এটি ডাউনলোড করতে পারেন: https://lantern.io/download</string>
   <string name="share_feed_item">%2$s এ আমি \"%1$s\" সর্ম্পকে পড়ছি  Lantern এর মাধ্যমে। ব্লক সাইট এবং সেবা অ্যাক্সেস করতে Lantern ব্যবহার করুন। আপনি এখানে অ্যান্ড্রয়েড জন্য এটি ডাউনলোড করতে পারেন: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">আপনি কি নিশ্চিত? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না! আপনি যে কোন সময় আবার Pro  এর জন্য সাইন আপ করতে পারেন।</string>
   <string name="unauthorize_confirmation">আপনি কি আপনার Pro অ্যাকাউন্ট থেকে এই ডিভাইসটি অপসারন করতে চান?</string>

@@ -266,7 +266,7 @@ msgid "two_year_plan"
 msgstr "2 Yıllık Plan"
 
 msgid "plan_discount"
-msgstr "%%d tasarruf edin"
+msgstr "%%d% tasarruf edin"
 
 msgid "enter_email_and_activation_code"
 msgstr "E-posta ve Aktivasyon kodu girin"
@@ -299,7 +299,7 @@ msgid "bitcoin_timeout"
 msgstr "BTCPay isteğinin süresi doldu."
 
 msgid "BTCPay is unavailable"
-msgstr "BTCPay mevcut değil"
+msgstr "BTCPay kullanılamıyor"
 
 msgid "update_cache_user_timeout"
 msgstr "Hesap verileriniz alınırken bir sorun oluştu."
@@ -312,8 +312,8 @@ msgstr "Aktivasyon kodu başarıyla kullanıldı."
 
 msgid "stripe_timeout"
 msgstr ""
-"Stripe ödemenizin süresi doldu. Lütfen Lantern'ı yeniden başlatın ve tekrar "
-"deneyin."
+"Stripe ödemeniz zaman aşımına uğradı. Lütfen Lantern'ı yeniden başlatın ve "
+"tekrar deneyin."
 
 msgid "stripe_success"
 msgstr "Başarılı Stripe satın alımı."
@@ -323,7 +323,7 @@ msgstr "Yenileme Başarılı"
 
 msgid "pro_renewal_success_description"
 msgstr ""
-"Lantern Pro hesabınızı yenilediğiniz için teşekkürler. En hızlı veri "
+"Lantern Pro hesabınızı yenilediğiniz için teşekkürler. Artık en hızlı veri "
 "merkezlerimizi kullanmak için sınırsız erişime sahipsiniz. Hesabınıza en "
 "fazla üç cihaz bağlanabilir."
 
@@ -332,16 +332,16 @@ msgstr "Lantern Pro'ya hoş geldiniz"
 
 msgid "platinum_purchase_success_descripion"
 msgstr ""
-"En hızlı veri merkezlerimizi ve özel hattımızı kullanmak için sınırsız "
-"erişime sahipsiniz. Hesabınıza en fazla üç cihaz bağlanabilir."
+"Artık en hızlı veri merkezlerimizi ve özel hattımızı kullanmak için sınırsız"
+" erişime sahipsiniz. Hesabınıza en fazla üç cihaz bağlanabilir."
 
 msgid "pro_purchase_success_descripion"
 msgstr ""
-"En hızlı veri merkezlerimizi kullanmak için sınırsız erişime sahipsiniz. "
-"Hesabınıza en fazla üç cihaz bağlanabilir."
+"Artık en hızlı veri merkezlerimizi kullanmak için sınırsız erişime "
+"sahipsiniz. Hesabınıza en fazla üç cihaz bağlanabilir."
 
 msgid "by_clicking_tos"
-msgstr "%s öğesine tıklayarak şunu kabul etmiş olursunuz:"
+msgstr "%s ögesine tıklayarak şunu kabul etmiş olursunuz:"
 
 msgid "tos"
 msgstr "Hizmet Şartları"
