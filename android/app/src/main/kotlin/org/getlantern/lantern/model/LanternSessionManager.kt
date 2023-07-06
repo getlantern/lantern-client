@@ -332,7 +332,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     fun setUserPlans(proPlans: Map<String, ProPlan>) {
         db.mutate { tx ->
             proPlans.values.forEach {
-                val path = PLANS + it.id
+                val planID = it.id.substringBefore('-')
+                val path = PLANS + planID
                 tx.put(
                     path,
                     Vpn.Plan.newBuilder().setId(it.id)
