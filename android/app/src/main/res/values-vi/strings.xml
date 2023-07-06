@@ -308,7 +308,6 @@
   <string name="earn_free_month">Được một tháng miễn phí cho mỗi người đăng ký</string>
   <string name="credits_applied">Điểm của bạn sẽ được tính vào tài khoản trong chu kỳ tính tiền kế tiếp.</string>
   <string name="pro_invitation_subject">Mời Dùng Lantern Pro</string>
-  <string name="receive_free_month">Cho một tháng Lantern Pro miễn phí, dùng mã số giới thiệu này: %1$s ; Bạn có thể tải xuống từ đây: https://lantern.io/download</string>
   <string name="share_feed_item">Tôi đang xem \"%1$s\" at %2$s bằng Lantern. Dùng Lantern để truy cập các trang và dịch vụ bị chặn. Bạn có thể tải phiên bản cho Android ở đây: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Bạn có chắc không? Thao tác này không hủy bỏ được! Bạn có thể đăng ký lại bản Pro bất cứ lúc nào.</string>
   <string name="unauthorize_confirmation">Bạn có chắc là muốn gỡ kết nối máy này ra khỏi tài khoản Pro?</string>
