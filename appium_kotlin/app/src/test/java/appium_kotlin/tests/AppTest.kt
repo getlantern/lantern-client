@@ -1,5 +1,7 @@
 package appium_kotlin.tests
 
+import appium_kotlin.ACCOUNT_MANAGEMENT
+import appium_kotlin.ACCOUNT_RENEW
 import appium_kotlin.ACCOUNT_TAP
 import appium_kotlin.CARD_NUMBER
 import appium_kotlin.CHECK_OUT
@@ -7,7 +9,6 @@ import appium_kotlin.CHROME_PACKAGE_ACTIVITY
 import appium_kotlin.CHROME_PACKAGE_ID
 import appium_kotlin.CVC
 import appium_kotlin.ContextType
-import appium_kotlin.EMAIL
 import appium_kotlin.ERROR_PAYMENT_PURCHASE
 import appium_kotlin.IP_REQUEST_URL
 import appium_kotlin.LANTERN_PACKAGE_ID
@@ -18,7 +19,6 @@ import appium_kotlin.PAYMENT_PURCHASE_COMPLETED
 import appium_kotlin.RENEWAL_SUCCESS_OK
 import appium_kotlin.REPORT_AN_ISSUE
 import appium_kotlin.SUPPORT
-import appium_kotlin.UPGRADE_LANTERN_PRO
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
 import io.appium.java_client.android.AndroidDriver
@@ -169,36 +169,40 @@ class AppTest() : BaseTest() {
 
         println("TaskId: $taskId | testPaymentFlow-->clicked on account ")
 
-        val accountManagement = flutterFinder.byValueKey(UPGRADE_LANTERN_PRO)
+//        val accountManagement = flutterFinder.byValueKey(UPGRADE_LANTERN_PRO)
+//        accountManagement.click()
+//        Thread.sleep(1000)
+
+        println("TaskId: $taskId | testPaymentFlow-->clicked on account management ")
+        val accountManagement = flutterFinder.byValueKey(ACCOUNT_MANAGEMENT)
         accountManagement.click()
         Thread.sleep(1000)
 
-//        println("TaskId: $taskId | testPaymentFlow-->clicked on account management ")
-//        val accountRenew = flutterFinder.byValueKey(ACCOUNT_RENEW)
-//        accountRenew.click()
-//        Thread.sleep(1000)
-//        println("TaskId: $taskId | testPaymentFlow-->clicked on account renew ")
+
+        val accountRenew = flutterFinder.byValueKey(ACCOUNT_RENEW)
+        accountRenew.click()
+        Thread.sleep(1000)
+        println("TaskId: $taskId | testPaymentFlow-->clicked on account renew ")
 
         val mostPopular = flutterFinder.byValueKey(MOST_POPULAR)
         mostPopular.click()
         Thread.sleep(2000)
         println("TaskId: $taskId | testPaymentFlow-->clicked on most popular ")
 
-        val email = flutterFinder.byTooltip(EMAIL)
-        email.click()
-        email.sendKeys("lanternTetsing@gmail.com")
-        Thread.sleep(2000)
-        println("TaskId: $taskId | testPaymentFlow-->clicked on most popular ")
-
+//        val email = flutterFinder.byTooltip(EMAIL)
+//        email.click()
+//        email.sendKeys("lanternTetsing@gmail.com")
+//        Thread.sleep(2000)
+//        println("TaskId: $taskId | testPaymentFlow-->clicked on email ")
 
         switchToContext(ContextType.NATIVE_APP, androidDriver)
         val continueButton =
             androidDriver.findElement(By.xpath("//android.widget.Button[@content-desc=\"CONTINUE\"]"))
         continueButton.click()
         Thread.sleep(1000)
-
-
         println("TaskId: $taskId | testPaymentFlow-->clicked on continue button ")
+
+
         switchToContext(ContextType.FLUTTER, androidDriver)
         val cardNumber = flutterFinder.byTooltip(CARD_NUMBER)
         cardNumber.click()
@@ -381,6 +385,7 @@ class AppTest() : BaseTest() {
             // also when we connect vpn then ip is predefined so
             // we get that and match with old ip
             if (logEntry.message.contains(LOGS_DIALED_MESSAGE)) {
+                println(" IP Logs: ${logEntry.message}") // [logcat, bugreport, server, client]
                 val matcher = pattern.matcher(logEntry.message)
                 if (matcher.find()) {
                     return matcher.group(1) // return the IP address immediately after match found
