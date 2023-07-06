@@ -20,6 +20,7 @@ class AppKeys {
   static const mostPopular = ValueKey('most_popular');
 
   //Checkout
+  static const email = 'email';
   static const continueCheckout = 'checkout';
   static const cardNumberKey = 'card_number';
   static const mmYYKey = 'mm_yy';

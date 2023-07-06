@@ -166,33 +166,42 @@ class AppTest() : BaseTest() {
         val accountTap = flutterFinder.byValueKey(ACCOUNT_TAP)
         accountTap.click()
         Thread.sleep(2000)
-
         println("TaskId: $taskId | testPaymentFlow-->clicked on account ")
 
+//        val accountManagement = flutterFinder.byValueKey(UPGRADE_LANTERN_PRO)
+//        accountManagement.click()
+//        Thread.sleep(1000)
+
+        println("TaskId: $taskId | testPaymentFlow-->clicked on account management ")
         val accountManagement = flutterFinder.byValueKey(ACCOUNT_MANAGEMENT)
         accountManagement.click()
         Thread.sleep(1000)
 
-        println("TaskId: $taskId | testPaymentFlow-->clicked on account management ")
+
         val accountRenew = flutterFinder.byValueKey(ACCOUNT_RENEW)
         accountRenew.click()
         Thread.sleep(1000)
-
         println("TaskId: $taskId | testPaymentFlow-->clicked on account renew ")
+
         val mostPopular = flutterFinder.byValueKey(MOST_POPULAR)
         mostPopular.click()
         Thread.sleep(2000)
         println("TaskId: $taskId | testPaymentFlow-->clicked on most popular ")
 
+//        val email = flutterFinder.byTooltip(EMAIL)
+//        email.click()
+//        email.sendKeys("lanternTetsing@gmail.com")
+//        Thread.sleep(2000)
+//        println("TaskId: $taskId | testPaymentFlow-->clicked on email ")
 
         switchToContext(ContextType.NATIVE_APP, androidDriver)
         val continueButton =
             androidDriver.findElement(By.xpath("//android.widget.Button[@content-desc=\"CONTINUE\"]"))
         continueButton.click()
         Thread.sleep(1000)
-
-
         println("TaskId: $taskId | testPaymentFlow-->clicked on continue button ")
+
+
         switchToContext(ContextType.FLUTTER, androidDriver)
         val cardNumber = flutterFinder.byTooltip(CARD_NUMBER)
         cardNumber.click()
@@ -224,7 +233,8 @@ class AppTest() : BaseTest() {
         println("TaskId: $taskId | testPaymentFlow-->CVC entered ")
         val checkOut = flutterFinder.byTooltip(CHECK_OUT)
         checkOut.click()
-        Thread.sleep(6000)
+        //Same as our API timeout
+        Thread.sleep(15000)
 
         println("TaskId: $taskId | testPaymentFlow-->clicked on checkout ")
         //Robust way to check is read logs from device
@@ -286,7 +296,7 @@ class AppTest() : BaseTest() {
 
         print("TaskId: $taskId", "reportAnIssueFlow-->Performing tap action.")
         TouchAction(androidDriver).tap(
-            TapOptions.tapOptions().withPosition(PointOption.point(127, 767))
+            TapOptions.tapOptions().withPosition(PointOption.point(473, 880))
         ).perform()
         Thread.sleep(1000)
 
@@ -375,6 +385,7 @@ class AppTest() : BaseTest() {
             // also when we connect vpn then ip is predefined so
             // we get that and match with old ip
             if (logEntry.message.contains(LOGS_DIALED_MESSAGE)) {
+                println(" IP Logs: ${logEntry.message}") // [logcat, bugreport, server, client]
                 val matcher = pattern.matcher(logEntry.message)
                 if (matcher.find()) {
                     return matcher.group(1) // return the IP address immediately after match found

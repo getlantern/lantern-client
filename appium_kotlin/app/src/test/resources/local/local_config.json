@@ -1,7 +1,7 @@
 {
   "server": "hub-cloud.browserstack.com",
-  "username": "jigarfumakiya_6dKXF7",
-  "access_key": "21qn1raPp8EN7jpctwen",
+  "username": "jigarj_SNsRyw",
+  "access_key": "dA4yyG26fHbfJxRUYMwr",
   "app": "/Users/jigarfumakiya/Documents/getlantern/mobile_app/android-lantern/build/app/outputs/flutter-apk/app-prod-debug.apk",
   "capabilities": {
     "automationName": "Flutter",

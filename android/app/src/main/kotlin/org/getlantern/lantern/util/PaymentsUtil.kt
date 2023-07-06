@@ -263,10 +263,8 @@ class PaymentsUtil(private val activity: Activity) {
         provider: PaymentProvider,
         methodCallResult: MethodChannel.Result,
     ) {
-        val currency = LanternApp.getSession().planByID(planID)?.let {
-            it.currency
-        } ?: "usd"
-        Logger.d(TAG, "Sending purchase request with provider $provider")
+        val currency = LanternApp.getSession().planByID(planID)?.currency ?: "usd"
+        Logger.d(TAG, "Sending purchase request with provider $provider and currency is  $currency")
         val session = session
         val formBody: FormBody.Builder = FormBody.Builder()
             .add("idempotencyKey", System.currentTimeMillis().toString())
@@ -315,7 +313,8 @@ class PaymentsUtil(private val activity: Activity) {
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.e(TAG, "Error with purchase request: $error .. currency is $currency")
+                    Logger.e(TAG, " Currency is $currency")
+                    Logger.e(TAG, "Error with purchase request: $error")
                     dialog?.dismiss()
                     methodCallResult.error(
                         "errorMakingPurchase",
