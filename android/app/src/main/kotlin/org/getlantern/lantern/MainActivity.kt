@@ -85,8 +85,6 @@ class MainActivity :
     private lateinit var receiver: NotificationReceiver
     private var autoUpdateJob: Job? = null
 
-    private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
-
     private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -287,7 +285,7 @@ class MainActivity :
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
-        updateUserPlans()
+        updatePlans()
         updatePaymentMethods()
     }
 
@@ -344,20 +342,19 @@ class MainActivity :
         })
     }
 
-    private fun updateUserPlans() {
+    private fun updatePlans() {
         lanternClient.getPlans(object : PlansCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
                 Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
             }
 
             override fun onSuccess(proPlans: Map<String, ProPlan>) {
-                plans.clear()
-                plans.putAll(proPlans)
+                Logger.debug(TAG, "Successfully fetched plans")
                 for (planId in proPlans.keys) {
                     proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
                 }
-                LanternApp.getSession().setUserPlans(plans)
-                Logger.debug(TAG, "Successfully updated user plans")
+                LanternApp.getSession().setUserPlans(proPlans)
+
              }
          }, null)
      }
