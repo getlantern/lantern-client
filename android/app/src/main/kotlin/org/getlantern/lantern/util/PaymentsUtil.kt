@@ -264,7 +264,7 @@ class PaymentsUtil(private val activity: Activity) {
         methodCallResult: MethodChannel.Result,
     ) {
         val currency = LanternApp.getSession().planByID(planID)?.currency ?: "usd"
-        Logger.d(TAG, "Sending purchase request with provider $provider and currency is  $currency")
+        Logger.d(TAG, "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency")
         val session = session
         val formBody: FormBody.Builder = FormBody.Builder()
             .add("idempotencyKey", System.currentTimeMillis().toString())
@@ -273,7 +273,6 @@ class PaymentsUtil(private val activity: Activity) {
             .add("plan", planID)
             .add("currency", currency.lowercase())
             .add("deviceName", session.deviceName())
-        Logger.d(TAG, "Currency is $currency")
         when (provider) {
             PaymentProvider.Stripe -> {
                 val stripePublicKey = session.stripePubKey()
@@ -307,13 +306,11 @@ class PaymentsUtil(private val activity: Activity) {
                     dialog?.dismiss()
                     session.linkDevice()
                     session.setIsProUser(true)
-                    Logger.e(TAG, "Purchase Completed: $response")
                     methodCallResult.success("purchaseSuccessful")
                     Logger.d(TAG, "Successful purchase response: $result")
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.e(TAG, " Currency is $currency")
                     Logger.e(TAG, "Error with purchase request: $error")
                     dialog?.dismiss()
                     methodCallResult.error(
