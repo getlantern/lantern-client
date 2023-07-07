@@ -479,7 +479,7 @@ msgid "plan_type"
 msgstr "Тип плана"
 
 msgid "most_popular"
-msgstr "Наиболее популярные"
+msgstr "Наиболее популярный"
 
 msgid "free"
 msgstr "Бесплатно"

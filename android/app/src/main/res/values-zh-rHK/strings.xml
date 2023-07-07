@@ -308,7 +308,6 @@
   <string name="earn_free_month">每個註冊的朋友都可以獲得一個月免費</string>
   <string name="credits_applied">您的點數會在下一個帳單週期中套用至您的帳號。</string>
   <string name="pro_invitation_subject">邀請加入 Lantern Pro</string>
-  <string name="receive_free_month">要取得一個月免費 Lantern Pro，請使用以下推薦代碼：%1$s；您可以在此下載：https://bit.ly/1M8x04u</string>
   <string name="share_feed_item">我正透過 Lantern 閱讀 %2$s 的「%1$s」。透過 Lantern 存取封鎖的網站和服務。您可以在此下載 Android 版：https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">您是否確定？此動作無法復原！您可以隨時重新註冊 Pro 版服務。</string>
   <string name="unauthorize_confirmation">是否確定要將此裝置從群組中移除？</string>
