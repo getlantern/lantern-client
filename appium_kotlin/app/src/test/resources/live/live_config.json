@@ -29,7 +29,7 @@
       "platformName": "Android"
     },
     {
-      "appium:deviceName": "Samsung Galaxy S8",
+      "appium:deviceName": "Samsung Galaxy S8 Plus",
       "platformVersion": "7.0",
       "platformName": "Android"
     },
