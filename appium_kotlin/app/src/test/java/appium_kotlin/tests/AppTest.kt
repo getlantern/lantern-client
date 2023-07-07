@@ -409,6 +409,7 @@ class AppTest() : BaseTest() {
         val logs: LogEntries = androidDriver.manage().logs().get("logcat")
         for (logEntry in logs) {
             if (logEntry.message.contains(PAYMENT_PURCHASE_COMPLETED)) {
+                println("payment log: ${logEntry.message}")
                 return logEntry.message
 
             }
