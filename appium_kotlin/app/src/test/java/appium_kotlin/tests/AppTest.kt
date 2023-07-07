@@ -22,7 +22,6 @@ import appium_kotlin.SUPPORT
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
 import io.appium.java_client.android.AndroidDriver
-import io.appium.java_client.touch.TapOptions
 import io.appium.java_client.touch.WaitOptions
 import io.appium.java_client.touch.offset.PointOption
 import org.junit.jupiter.api.Assertions
@@ -279,18 +278,18 @@ class AppTest() : BaseTest() {
         reportIssue.click()
         Thread.sleep(1000)
 
-        print("TaskId: $taskId", "reportAnIssueFlow-->Switching to NATIVE_APP context.")
+//        print("TaskId: $taskId", "reportAnIssueFlow-->Switching to NATIVE_APP context.")
+//        switchToContext(ContextType.NATIVE_APP, androidDriver)
+//        val issueDropdown = androidDriver.findElement(By.id("org.getlantern.lantern:id/issue"))
+//        issueDropdown.click()
+//        Thread.sleep(1000)
+//
+//        print("TaskId: $taskId", "reportAnIssueFlow-->Performing tap action.")
+//        TouchAction(androidDriver).tap(
+//            TapOptions.tapOptions().withPosition(PointOption.point(473, 880))
+//        ).perform()
+//        Thread.sleep(1000)
         switchToContext(ContextType.NATIVE_APP, androidDriver)
-        val issueDropdown = androidDriver.findElement(By.id("org.getlantern.lantern:id/issue"))
-        issueDropdown.click()
-        Thread.sleep(1000)
-
-        print("TaskId: $taskId", "reportAnIssueFlow-->Performing tap action.")
-        TouchAction(androidDriver).tap(
-            TapOptions.tapOptions().withPosition(PointOption.point(473, 880))
-        ).perform()
-        Thread.sleep(1000)
-
         print("TaskId: $taskId", "reportAnIssueFlow-->Entering description.")
         val description = androidDriver.findElement(By.id("org.getlantern.lantern:id/description"))
         description.click()
