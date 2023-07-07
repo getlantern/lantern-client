@@ -31,7 +31,7 @@ open class HttpClient(@JvmField val httpClient: OkHttpClient) {
     constructor() : this(
         OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
-            .connectTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .build()
     )
