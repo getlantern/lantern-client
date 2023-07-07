@@ -308,7 +308,6 @@
   <string name="earn_free_month">Получи бесплатный месяц за каждого зарегистрированного друга </string>
   <string name="credits_applied">Ваши кредиты будут применены к вашей учетной записи на следующий платежный цикл.</string>
   <string name="pro_invitation_subject">Приглашение присоединиться к Lantern Pro</string>
-  <string name="receive_free_month">Для бесплатного месяца Lantern Pro, используйте этот реферальный код: %1$s ; Вы можете скачать его здесь:: https://bit.ly/1M8x04u</string>
   <string name="share_feed_item">Я читаю о \"%1$s\" на %2$s через Lantern. Используйте Lantern, чтобы получить доступ к заблокированным сайтам и услугам. Вы можете скачать версию для Android здесь: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Вы уверены? Это действие не может быть отменено! Вы можете подписаться на Pro снова в любое время.</string>
   <string name="unauthorize_confirmation">Вы уверены, что хотите отвязать это устройство от аккаунта Pro?</string>

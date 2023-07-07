@@ -31,12 +31,12 @@
   <string name="common_issue_list_0">Tidak boleh akses laman-laman disekat</string>
   <string name="common_issue_list_1">Tidak dapat melengkapkan pembelian</string>
   <string name="common_issue_list_2">Tidak boleh mendaftar masuk</string>
-  <string name="common_issue_list_3">Pemutar dimuatkan tanpa terhenti-henti</string>
+  <string name="common_issue_list_3">Pemutar dimuatkan tanpa henti</string>
   <string name="common_issue_list_4">Lambat</string>
   <string name="common_issue_list_5">Sembang tidak berfungsi</string>
   <string name="common_issue_list_6">Terokai tidak berfungsi</string>
   <string name="common_issue_list_7">Tidak dapat memautkan peranti</string>
-  <string name="common_issue_list_8">Aplikasi terhempas</string>
+  <string name="common_issue_list_8">Aplikasi ranap</string>
   <string name="common_issue_list_9">Lain-lain</string>
   <string name="submit_code">Mengesahkan Kod</string>
   <string name="on_text">BUKA</string>
@@ -56,7 +56,7 @@
   <string name="error_making_purchase">Kesalahan semasa cuba membuat pembelian</string>
   <string name="have_latest_version">%1$s %2$s ialah versi terbaharu yang tersedia.</string>
   <string name="updating_lantern">Mengemas kini %1$s</string>
-  <string name="update_lantern">Kemas kini Lantern</string>
+  <string name="update_lantern">Kemas kinikan Lantern</string>
   <string name="cancel">Batal</string>
   <string name="newsfeed_option">Cuba Feed Lantern</string>
   <string name="newsfeed_off_option">Tutup Feed</string>
@@ -104,7 +104,7 @@
   <string name="error_update">Ralat Muat Turun Update</string>
   <string name="error_install_update">Ralat Pemasangan Kemas Kini</string>
   <string name="loading">Muat...</string>
-  <string name="manual_update">Cuba memasang versi terkini secara manual dari &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+  <string name="manual_update">Cuba pasang versi terkini secara manual daripada &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
   <string name="pro_welcome_text">Selamat datang ke Lantern Pro!</string>
   <string name="happy_anniversary">SELAMAT ULANG TAHUN LANTERN!</string>
   <string name="welcome_greeting">Selamat datang ke Lantern</string>
@@ -133,7 +133,7 @@
   <string name="share_friends_text">Berkongsi dengan rakan-rakan untuk mendapatkan bulan-bulan percuma!</string>
   <string name="email_address">Alamat emel</string>
   <string name="switch_to_alipay">Tukar kepada Alipay</string>
-  <string name="switch_to_stripe">Bertukar ke Stripe</string>
+  <string name="switch_to_stripe">Tukar kepada Stripe</string>
   <string name="switch_to_credit_card">Tukar kepada Pembayaran Kad Kredit</string>
   <string name="continue_to_pro">Teruskan ke PRO</string>
   <string name="continue_to_basic">Teruskan ke Basic Version</string>
@@ -309,7 +309,6 @@
   <string name="earn_free_month">Dapatkan satu bulan percuma bagi setiap rakan yang mendaftar</string>
   <string name="credits_applied">Kredit-kredit anda akan dimasukkan ke dalam akaun anda pada kitaran pengebilan yang seterusnya.</string>
   <string name="pro_invitation_subject">Jemputan untuk menyertai Lantern Pro</string>
-  <string name="receive_free_month">Bagi sebulan percuma Lantern Pro, gunakan kod rujukan: %1$s ; Anda boleh muat turun dari sini:  https://bit.ly/1M8x04u</string>
   <string name="share_feed_item">Saya membaca mengenai \"%1$s\" at %2$s melalui Lantern. Guna Lantern untuk akses laman-laman dan perkhidmatan yang telah disekat. Anda boleh muat turun Android dari sini: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Adakah anda pasti?  Tindakan ini tidak boleh dibatalkan!  Anda boleh mendaftar untuk Pro bila-bila masa lagi.</string>
   <string name="unauthorize_confirmation">Adakah anda pasti ingin mengeluarkan pautan peranti dari account Pro anda?</string>
@@ -420,7 +419,7 @@
   <string name="privacy_disclosure_title">Pendedahan Privasi Lantern</string>
   <string name="privacy_disclosure_accept">Saya terima</string>
   <string name="privacy_disclosure_body">Lantern komited untuk melindungi privasi anda. Kami ingin anda memahami maklumat yang kami kumpulkan, maklumat yang tidak kami kumpulkan dan cara kami mengumpulkan, menggunakan dan menyimpan maklumat. Kami memisahkan maklumat pembayaran anda dengan akaun Lantern Pro anda. Kami tidak mengumpulkan log aktiviti anda, termasuk tidak mencatat sejarah penyemakan imbas, destinasi trafik, kandungan data atau pertanyaan DNS. Kami juga tidak pernah menyimpan log sambungan, yang bermaksud tidak ada log alamat IP anda, alamat IP pelayan Lantern keluar anda yang dikaitkan dengan cap waktu sambungan, atau tempoh sesi. Disebabkan akaun Lantern Pro yang tertentu, secara teknikal, Lantern tidak dapat mengaitkan akaun Lantern dengan identiti sebenar pengguna. Disebabkan alamat IP Lantern dan cap waktu yang tepat, Lantern secara teknikal tidak dapat menghubungkan alamat IP ini kepada pengguna Lantern atau alamat IP pengguna Lantern.</string>
-  <string name="referral_code_share_description">Berkongsi Lantern Pro dengan rakan! Apabila rakan anda menggunakan kod rujukan semasa pembelian Lantern Pro mereka, anda akan menerima perkhidmatan percuma Lantern Pro selama sebulan!</string>
+  <string name="referral_code_share_description">Kongsikan Lantern Pro dengan rakan! Apabila rakan anda menggunakan kod rujukan semasa pembelian Lantern Pro mereka, anda berdua akan menerima perkhidmatan percuma Lantern Pro selama sebulan!</string>
   <string name="referral_code_share">Kongsikan kod rujukan</string>
   <string name="referral_code_share_title">Kongsikan kod Rujukan anda:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
