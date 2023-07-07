@@ -19,16 +19,6 @@
   },
   "environments": [
     {
-      "appium:deviceName": "Google Pixel",
-      "platformVersion": "7.1",
-      "platformName": "Android"
-    },
-    {
-      "appium:deviceName": "OnePlus 7,",
-      "platformVersion": "9.0",
-      "platformName": "Android"
-    },
-    {
       "appium:deviceName": "Samsung Galaxy S21",
       "platformVersion": "11.0",
       "platformName": "Android"
@@ -36,6 +26,16 @@
     {
       "appium:deviceName": "Google Pixel 7 Pro",
       "platformVersion": "13.0",
+      "platformName": "Android"
+    },
+    {
+      "appium:deviceName": "Samsung Galaxy S8",
+      "platformVersion": "7.0",
+      "platformName": "Android"
+    },
+    {
+      "appium:deviceName": "Google Pixel 2",
+      "platformVersion": "8.0",
       "platformName": "Android"
     }
   ]
