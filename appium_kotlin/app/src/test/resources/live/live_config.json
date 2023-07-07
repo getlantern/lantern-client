@@ -19,8 +19,13 @@
   },
   "environments": [
     {
-      "appium:deviceName": "Samsung Galaxy Note 8",
+      "appium:deviceName": "Google Pixel",
       "platformVersion": "7.1",
+      "platformName": "Android"
+    },
+    {
+      "appium:deviceName": "OnePlus 7,",
+      "platformVersion": "9",
       "platformName": "Android"
     },
     {
