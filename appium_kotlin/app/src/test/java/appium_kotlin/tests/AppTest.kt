@@ -287,7 +287,7 @@ class AppTest() : BaseTest() {
 
         print("TaskId: $taskId", "reportAnIssueFlow-->Performing tap action.")
         TouchAction(androidDriver).tap(
-            TapOptions.tapOptions().withPosition(PointOption.point(127, 767))
+            TapOptions.tapOptions().withPosition(PointOption.point(473, 880))
         ).perform()
         Thread.sleep(1000)
 
