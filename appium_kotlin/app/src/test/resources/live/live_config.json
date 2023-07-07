@@ -32,11 +32,6 @@
       "appium:deviceName": "Samsung Galaxy S8 Plus",
       "platformVersion": "7.0",
       "platformName": "Android"
-    },
-    {
-      "appium:deviceName": "Google Pixel 2",
-      "platformVersion": "8.0",
-      "platformName": "Android"
     }
   ]
 }
