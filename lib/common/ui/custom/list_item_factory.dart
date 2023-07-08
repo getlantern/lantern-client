@@ -51,6 +51,7 @@ class ListItemFactory extends StatelessWidget {
       dynamic content,
       void Function()? onTap,
       List<Widget>? trailingArray,
+      dynamic? key,
       double? height = 72})
       : this((BuildContext context, ListItemFactory factory) {
           return Column(
@@ -61,6 +62,7 @@ class ListItemFactory extends StatelessWidget {
               factory.buildBase(
                 leading: icon,
                 content: content,
+                key: key,
                 height: height,
                 trailingArray: trailingArray,
                 onTap: onTap,
@@ -172,6 +174,7 @@ class ListItemFactory extends StatelessWidget {
 
   Widget buildBase({
     dynamic leading,
+    dynamic? key,
     required dynamic content,
     required bool showDivider,
     double? height,
@@ -184,8 +187,10 @@ class ListItemFactory extends StatelessWidget {
     Color? overrideColor,
   }) =>
       Material(
+        key: key,
         color: transparent,
         child: CInkWell(
+
           disableSplash: disableSplash ?? false,
           overrideColor: overrideColor,
           onTap: onTap ?? () {},

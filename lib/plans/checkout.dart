@@ -236,190 +236,182 @@ class _CheckoutState extends State<Checkout>
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel.paymentMethods(
-      builder: (
-        context,
-        Iterable<PathAndValue<PaymentMethod>> paymentMethods,
-        Widget? child,
-      ) {
-        return sessionModel.emailAddress((
-          BuildContext context,
-          String emailAddress,
+    return BaseScreen(
+      resizeToAvoidBottomInset: false,
+      title: 'lantern_pro_checkout'.i18n,
+      body: sessionModel.paymentMethods(
+        builder: (
+          context,
+          Iterable<PathAndValue<PaymentMethod>> paymentMethods,
           Widget? child,
         ) {
-          return BaseScreen(
-              resizeToAvoidBottomInset: false,
-              title: 'lantern_pro_checkout'.i18n,
-              body: Form(
-                  key: _formKey,
-                  child: Container(
-                    color: white,
-                    height: MediaQuery.of(context).size.height,
+          return sessionModel.emailAddress((
+            BuildContext context,
+            String emailAddress,
+            Widget? child,
+          ) {
+            return Container(
+              padding: const EdgeInsetsDirectional.only(
+                start: 16,
+                end: 16,
+                top: 24,
+                bottom: 32,
+              ),
+              child: Column(
+                children: [
+                  // * Step 2
+                  PlanStep(
+                    stepNum: '2',
+                    description: 'enter_email'.i18n,
+                  ),
+                  // * Email field
+                  Container(
                     padding: const EdgeInsetsDirectional.only(
-                      start: 16,
-                      end: 16,
-                      top: 24,
-                      bottom: 32,
+                      top: 8,
+                      bottom: 8,
                     ),
-                    child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
+                    child: Form(
+                      key: emailFieldKey,
+                      child: CTextField(
+                        initialValue: widget.isPro ? emailAddress : '',
+                        controller: emailController,
+                        autovalidateMode: widget.isPro
+                            ? AutovalidateMode.always
+                            : AutovalidateMode.disabled,
+                        label: 'email'.i18n,
+                        keyboardType: TextInputType.emailAddress,
+                        prefixIcon: const CAssetImage(path: ImagePaths.email),
+                      ),
+                    ),
+                  ),
+                  // * Referral Code field - initially hidden
+                  Visibility(
+                    visible: isRefCodeFieldShowing,
+                    child: Container(
+                      padding: const EdgeInsetsDirectional.only(
+                        top: 8,
+                        bottom: 16,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Expanded(
-                              child: ListView(shrinkWrap: true, children: [
-                            // * Step 2
-                            PlanStep(
-                              stepNum: '2',
-                              description: 'enter_email'.i18n,
+                          Flexible(
+                            flex: 2,
+                            child: Form(
+                              key: refCodeFieldKey,
+                              child: CTextField(
+                                controller: refCodeController,
+                                autovalidateMode: AutovalidateMode.disabled,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                label: 'referral_code'.i18n,
+                                keyboardType: TextInputType.text,
+                                prefixIcon:
+                                    const CAssetImage(path: ImagePaths.star),
+                              ),
                             ),
-                            // * Email field
-                            Container(
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // * Add Referral code
+                  Visibility(
+                    visible: !isRefCodeFieldShowing,
+                    child: GestureDetector(
+                      onTap: () async =>
+                          setState(() => isRefCodeFieldShowing = true),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsetsDirectional.only(
+                          top: 8,
+                          bottom: 16,
+                        ),
+                        child: Row(
+                          children: [
+                            const CAssetImage(path: ImagePaths.add),
+                            Padding(
                               padding: const EdgeInsetsDirectional.only(
-                                top: 8,
-                                bottom: 8,
+                                start: 8.0,
                               ),
-                              child: Form(
-                                key: emailFieldKey,
-                                child: CTextField(
-                                  initialValue:
-                                      widget.isPro ? emailAddress : '',
-                                  controller: emailController,
-                                  autovalidateMode: widget.isPro
-                                      ? AutovalidateMode.always
-                                      : AutovalidateMode.disabled,
-                                  label: 'email'.i18n,
-                                  keyboardType: TextInputType.emailAddress,
-                                  prefixIcon:
-                                      const CAssetImage(path: ImagePaths.email),
-                                ),
+                              child: CText(
+                                'add_referral_code'.i18n,
+                                style: tsBody1,
                               ),
                             ),
-                            // * Referral Code field - initially hidden
-                            Visibility(
-                              visible: isRefCodeFieldShowing,
-                              child: Container(
-                                padding: const EdgeInsetsDirectional.only(
-                                  top: 8,
-                                  bottom: 16,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                      flex: 2,
-                                      child: Form(
-                                        key: refCodeFieldKey,
-                                        child: CTextField(
-                                          controller: refCodeController,
-                                          autovalidateMode:
-                                              AutovalidateMode.disabled,
-                                          textCapitalization:
-                                              TextCapitalization.characters,
-                                          label: 'referral_code'.i18n,
-                                          keyboardType: TextInputType.text,
-                                          prefixIcon: const CAssetImage(
-                                              path: ImagePaths.star),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            // * Add Referral code
-                            Visibility(
-                              visible: !isRefCodeFieldShowing,
-                              child: GestureDetector(
-                                onTap: () async => setState(
-                                    () => isRefCodeFieldShowing = true),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: const EdgeInsetsDirectional.only(
-                                    top: 8,
-                                    bottom: 16,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const CAssetImage(path: ImagePaths.add),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.only(
-                                          start: 8.0,
-                                        ),
-                                        child: CText(
-                                          'add_referral_code'.i18n,
-                                          style: tsBody1,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // * Step 3
-                            PlanStep(
-                              stepNum: '3',
-                              description: 'choose_payment_method'.i18n,
-                            ),
-                            //* Payment options
-                            Container(
-                              padding: const EdgeInsetsDirectional.only(
-                                  top: 16, bottom: 16),
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: paymentOptions(paymentMethods),
-                              ),
-                            ),
-                          ])),
-                          // * Price summary, unused pro time disclaimer, Continue button
-                          Button(
-                            width: 200,
-                            disabled: emailController.value.text.isEmpty ||
-                                emailFieldKey.currentState?.validate() ==
-                                    false ||
-                                refCodeFieldKey.currentState?.validate() ==
-                                    false,
-                            text: 'continue'.i18n,
-                            onPressed: () async {
-                              var refCode = refCodeController.value;
-                              await Future.wait(
-                                [
-                                  sessionModel
-                                      .checkEmailExists(
-                                    emailController.value.text,
-                                  )
-                                      .onError((error, stackTrace) {
-                                    showError(
-                                      context,
-                                      error: e,
-                                      stackTrace: stackTrace,
-                                    );
-                                  }),
-                                  if (refCode.text.isNotEmpty)
-                                    sessionModel
-                                        .applyRefCode(
-                                          refCode.text,
-                                        )
-                                        .then((value) => resolvePaymentRoute())
-                                        .onError((error, stackTrace) {
-                                      refCodeController.error =
-                                          'invalid_or_incomplete_referral_code'
-                                              .i18n;
-                                    })
-                                  else
-                                    resolvePaymentRoute(),
-                                ],
-                                eagerError: true,
-                              );
-                            },
-                          )
-                        ]),
-                  )));
-        });
-      },
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  // * Step 3
+                  PlanStep(
+                    stepNum: '3',
+                    description: 'choose_payment_method'.i18n,
+                  ),
+                  //* Payment options
+                  Container(
+                    padding:
+                        const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: paymentOptions(paymentMethods),
+                    ),
+                  ),
+                  // * Price summary, unused pro time disclaimer, Continue button
+
+                  Center(
+                    child: Tooltip(
+                      message: AppKeys.continueCheckout,
+                      child: Button(
+                        text: 'continue'.i18n,
+                        disabled: emailController.value.text.isEmpty ||
+                            emailFieldKey.currentState?.validate() == false ||
+                            refCodeFieldKey.currentState?.validate() == false,
+                        onPressed: onContinueTapped,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+        },
+      ),
+    );
+  }
+
+  void onContinueTapped() {
+    var refCode = refCodeController.value;
+    Future.wait(
+      [
+        sessionModel
+            .checkEmailExists(
+          emailController.value.text,
+        )
+            .onError((error, stackTrace) {
+          showError(
+            context,
+            error: e,
+            stackTrace: stackTrace,
+          );
+        }),
+        if (refCode.text.isNotEmpty)
+          sessionModel
+              .applyRefCode(
+                refCode.text,
+              )
+              .then((value) => resolvePaymentRoute())
+              .onError((error, stackTrace) {
+            refCodeController.error =
+                'invalid_or_incomplete_referral_code'.i18n;
+          })
+        else
+          resolvePaymentRoute(),
+      ],
+      eagerError: true,
     );
   }
 }
