@@ -48,6 +48,7 @@ class AccountMenu extends StatelessWidget {
             : const SizedBox(),
       ),
       ListItemFactory.settingsItem(
+        key: AppKeys.upgrade_lantern_pro,
         icon: ImagePaths.pro_icon_black,
         content: 'Upgrade to Lantern Pro'.i18n,
         onTap: () {
@@ -77,6 +78,7 @@ class AccountMenu extends StatelessWidget {
             messagingModel.getCopiedRecoveryStatus(
           (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
               ListItemFactory.settingsItem(
+            key: AppKeys.account_management,
             icon: ImagePaths.account,
             content: 'account_management'.i18n,
             onTap: () async =>
@@ -112,6 +114,7 @@ class AccountMenu extends StatelessWidget {
         onTap: openDesktopVersion,
       ),
       ListItemFactory.settingsItem(
+        key: AppKeys.support,
         icon: ImagePaths.support,
         content: 'support'.i18n,
         onTap: () {
