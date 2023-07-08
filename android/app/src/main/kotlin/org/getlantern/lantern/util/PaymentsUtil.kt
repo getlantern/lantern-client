@@ -284,9 +284,11 @@ class PaymentsUtil(private val activity: Activity) {
                 formBody.add("stripeToken", token)
                 formBody.add("token", token)
             }
+
             PaymentProvider.GooglePlay -> {
                 formBody.add("token", token)
             }
+
             PaymentProvider.ResellerCode -> {
                 val resellerCode = LanternApp.getSession().resellerCode()
                 resellerCode?.let {
@@ -294,6 +296,7 @@ class PaymentsUtil(private val activity: Activity) {
                     formBody.add("resellerCode", resellerCode)
                 }
             }
+
             else -> {}
         }
 
@@ -306,6 +309,7 @@ class PaymentsUtil(private val activity: Activity) {
                     dialog?.dismiss()
                     session.linkDevice()
                     session.setIsProUser(true)
+                    Logger.e(TAG, "Purchase Completed: $response")
                     methodCallResult.success("purchaseSuccessful")
                     Logger.d(TAG, "Successful purchase response: $result")
                 }
