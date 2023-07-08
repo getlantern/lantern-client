@@ -169,12 +169,13 @@ class _AccountManagementState extends State<AccountManagement>
                       Widget? child,
                     ) {
                       return ListItemFactory.settingsItem(
+                        key: AppKeys.account_renew,
                         header: 'Pro Account Expiration'.i18n,
                         icon: ImagePaths.clock,
                         content: expirationDate,
                         onTap: () async {
                           await context.pushRoute(const PlansPage());
-                        },
+                          },
                         trailingArray: [
                           CText('Renew'.i18n.toUpperCase(), style: tsButtonPink)
                         ],
