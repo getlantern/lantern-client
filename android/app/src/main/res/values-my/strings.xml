@@ -296,7 +296,6 @@
   <string name="earn_free_month">sign up လုပ်သောသူငယ်ချင်းတိုင်းအတွက်အခမဲ့တစ်လ ရယူပါ</string>
   <string name="credits_applied">သင်၏ခရက်ဒစ်များကိုသင်၏အကောင့်သို့လာမည့်ငွေတောင်းခံသံသရာတွင်လျှောက်လိမ့်မည်</string>
   <string name="pro_invitation_subject">Lantern Pro သို့ဆက်သွယ်ရန်ဖိတ်ကြားခြင်း</string>
-  <string name="receive_free_month">Lantern Pro အခမဲ့တစ်လအတွက် ဤရည်ညွှန်းကုဒ်ကို အသုံးပြုပါ- %1$s၊ ဤနေရာမှ download ရယူနိုင်သည် - https://bit.ly/1M8x04u</string>
   <string name="share_feed_item">ငါ \" %1$s\" အကြောင်းကို %2$s မှာ Lantern က တစ်ဆင့် ဖတ်နေတာ။ ပိတ်ဆို့ထားသောဆိုဒ်များနှင့်ဝန်ဆောင်မှုများကို ရယူရန် Lantern ကိုအသုံးပြုပါ။ ဤနေရာတွင် Android အတွက် ရယူနိုင်သည် -  https://bit.ly/lanternapk </string>
   <string name="cancel_pro_confirmation">သေချာလား? ဒီလုပ်ဆောင်ချက်ကိုဖျက်သိမ်းလို့မရပါ။ သင်မည်သည့်အချိန်တွင်မဆို Pro အတွက်ထပ်မံစာရင်းသွင်းနိုင်သည်။</string>
   <string name="unauthorize_confirmation">ဤပစ္စည်းအားသင်၏ Pro အကောင့်မှသင်ပြန်ဖွင့်လိုသည်မှာသေချာပါသလား။</string>

@@ -271,7 +271,7 @@
   <string name="earn_free_month">Dapatkan bulan gratis untuk setiap teman yang mendaftar</string>
   <string name="credits_applied">Kredit anda akan diterapkan ke akun anda pada siklus penagihan berikutnya.</string>
   <string name="pro_invitation_subject">Undangan bergabung ke Lantern Pro</string>
-  <string name="receive_free_month">Untuk bulan gratis Lantern Pro, gunakan kode referal ini: %1$s ; Anda bisa mendownloadnya dari sini: https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">Untuk bulan gratis Lantern Pro, gunakan kode referal ini: %1$s ; Anda bisa mendownloadnya dari sini: https://lantern.io/download</string>
   <string name="share_feed_item">Saya sedang membaca tentang \"%1$s\" di %2$svia Lantern. Gunakan Lantern untuk mengakses situs dan layanan yang diblokir. Anda dapat mendownloadnya untuk Android di sini: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Apakah anda yakin? Tindakan ini tidak bisa dibatalkan! Anda dapat mendaftar ke Pro lagi kapan saja.</string>
   <string name="unauthorize_confirmation">Apa anda yakin ingin membatalkan tautan perangkat ini dari akun Pro anda?</string>
