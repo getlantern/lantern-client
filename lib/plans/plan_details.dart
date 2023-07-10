@@ -118,6 +118,7 @@ class PlanCard extends StatelessWidget {
               Transform.translate(
                 offset: const Offset(0.0, 10.0),
                 child: Card(
+                  key: AppKeys.mostPopular,
                   color: yellow4,
                   shadowColor: grey2,
                   shape: RoundedRectangleBorder(

@@ -159,7 +159,7 @@
   <string name="earn_free_month">每成功介紹一名用戶註冊即可得到兔費一個月的付費版使用</string>
   <string name="credits_applied">你的優惠點數可以在下回帳單中使用</string>
   <string name="pro_invitation_subject">邀求加入Latern專業付費版</string>
-  <string name="receive_free_month">取得免費一個月的使用專業版,請使用這個邀請碼: %1$s ; 可在此下載Latern藍燈: https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">取得免費一個月的使用專業版,請使用這個邀請碼: %1$s ; 可在此下載Latern藍燈: https://lantern.io/download</string>
   <string name="share_feed_item">我透過 Lantern來讀取 \"%1$s\" at %2$s 。使用Lantern 以突破被封鎖的網站與服務。 Latern安卓版可在此下載: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">確定嗎？這個動作將無法回復！你可以隨時再次註冊取得專業付費版。</string>
   <string name="unauthorize_confirmation">確定要將此設備自專業版帳號上移除？</string>

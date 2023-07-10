@@ -10,7 +10,7 @@ var showConnectivityWarning = false;
 
 // This enum is used to manage the font families used in the application
 enum AppFontFamily {
-  semim('Semim'),
+  semim('Samim'),
   roboto('Roboto');
 
   // the actual string value (the font family name) to each enum value

@@ -164,7 +164,7 @@ class SessionModel(
     private fun checkEmailExists(emailAddress: String, methodCallResult: MethodChannel.Result) {
         val params = mapOf("email" to emailAddress)
         val isPlayVersion = LanternApp.getSession().isPlayVersion()
-        val useStripe = !isPlayVersion && !LanternApp.getSession().defaultToAlipay()
+        val useStripe = !isPlayVersion
         lanternClient.get(
             LanternHttpClient.createProUrl("/email-exists", params),
             object : ProCallback {

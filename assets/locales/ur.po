@@ -1,13 +1,13 @@
 # 
 # Translators:
-# tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2021
-# e2f <projects@e2f.com>, 2022
-# tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2023
+# tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2023
 # Diversity83 83, 2023
+# e2f <projects@e2f.com>, 2023
+# tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Diversity83 83, 2023\n"
+"Last-Translator: tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2023\n"
 "Language-Team: Urdu (https://app.transifex.com/lantern-1/teams/94371/ur/)\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -207,7 +207,7 @@ msgstr "ای میل کے ذریعہ لنک"
 msgid "lantern_pro_email"
 msgstr "Lantern پرو ای میل"
 
-msgid "Email"
+msgid "email"
 msgstr "ای میل"
 
 msgid "Submit"
@@ -216,8 +216,160 @@ msgstr "جمع کرائیے"
 msgid "save"
 msgstr "محفوظ کریں"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "براہ کرم ایک درست ای میل پتہ درج کریں"
+
+msgid "bonus"
+msgstr "بونس"
+
+msgid "referral_bonus"
+msgstr "ریفرل بونس"
+
+msgid "total"
+msgstr "کُل"
+
+msgid "month"
+msgstr "ماہ"
+
+msgid "months"
+msgstr "مہینے"
+
+msgid "enter_email"
+msgstr "ای میل درج کریں"
+
+msgid "error_fetching_plans"
+msgstr ""
+"پلانز حاصل کرنے میں نقص واقع ہوا، براہ کرم Lantern کو ری اسٹارٹ کریں اور "
+"دوبارہ کوشش کریں۔"
+
+msgid "apply"
+msgstr "درخواست کریں"
+
+msgid "choose_payment_method"
+msgstr "ادائیگی کا طریقہ منتخب کریں"
+
+msgid "pro_plan"
+msgstr "پرو پلان"
+
+msgid "one_year_plan"
+msgstr "1 سال کا پلان"
+
+msgid "two_year_plan"
+msgstr "2 سال کا پلان"
+
+msgid "plan_discount"
+msgstr "%d%% بچائیں"
+
+msgid "enter_email_and_activation_code"
+msgstr "ای میل اور فعالیتی کوڈ درج کریں"
+
+msgid "referral_code"
+msgstr "حوالہ کوڈ"
+
+msgid "add_referral_code"
+msgstr "ریفرل کوڈ شامل کریں"
+
+msgid "Activation Code"
+msgstr "ایکٹیویشن کوڈ"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "غلط یا نامکمل ریفرل کوڈ"
+
+msgid "register_for_pro"
+msgstr "پرو کے لیے رجسٹر کریں"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "آپ کے ریفرل کوڈ کا اطلاق کرتے ہوئے کچھ غلط ہو گیا۔"
+
+msgid "your_activation_code_is_invalid"
+msgstr "آپ کا فعالیتی کوڈ غلط ہے"
+
+msgid "update_cache_plans_timeout"
+msgstr "دستیاب پلانز حاصل کرنے کے دوران کچھ غلط ہو گیا۔"
+
+msgid "bitcoin_timeout"
+msgstr "BTCPay کی درخواست کا وقت ختم ہو گیا۔"
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay دستیاب نہیں"
+
+msgid "update_cache_user_timeout"
+msgstr "آپ کا اکاؤنٹ ڈیٹا حاصل کرنے کے دوران کچھ غلط ہو گیا۔"
+
+msgid "reseller_timeout"
+msgstr "آپ کے فعالیتی کوڈ کی توثیق کے دوران کچھ غلط ہو گیا۔"
+
+msgid "reseller_success"
+msgstr "فعالیتی کوڈ کامیابی سے ریڈیم کر دیا گیا۔"
+
+msgid "stripe_timeout"
+msgstr ""
+"آپ کی اسٹرائپ ادائیگی کا وقت ختم ہو گیا ہے۔ براہ کرم Lantern کو ری اسٹارٹ "
+"کریں اور دوبارہ کوشش کریں۔"
+
+msgid "stripe_success"
+msgstr "کامیاب اسٹرائپ خریداری۔"
+
+msgid "renewal_success"
+msgstr "تجدید میں کامیابی"
+
+msgid "pro_renewal_success_description"
+msgstr ""
+"اپنے Lantern Pro اکاؤنٹ کی تجدید کرنے کے لیے آپ کا شکریہ۔ ہمارے تیز ترین "
+"ڈیٹا سینٹرز استعمال کر کے اب آپ کو لامحدود رسائی حاصل ہے۔  آپ کے اکاؤنٹ سے "
+"تین تک ڈیوائسز مربوط ہو سکتی ہیں۔"
+
+msgid "pro_purchase_success"
+msgstr "Lantern Pro پر خوش آمدید"
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+"ہمارے تیز ترین ڈیٹا سینٹرز اور مختص کردہ لائنز استعمال کر کے اب آپ کو "
+"لامحدود رسائی حاصل ہے۔  آپ کے اکاؤنٹ سے تین تک ڈیوائسز مربوط ہو سکتی ہیں۔"
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+"ہمارے تیز ترین ڈیٹا سینٹرز استعمال کر کے اب آپ کو لامحدود رسائی حاصل ہے۔  آپ"
+" کے اکاؤنٹ سے تین تک ڈیوائسز مربوط ہو سکتی ہیں۔"
+
+msgid "by_clicking_tos"
+msgstr "%s پر کلک کر کے، آپ ہمارے درج ذیل سے متفق ہیں"
+
+msgid "tos"
+msgstr "سروس کی شرائط"
+
+msgid "step_1"
+msgstr "مرحلہ  1"
+
+msgid "step_2"
+msgstr "مرحلہ 2"
+
+msgid "step_3"
+msgstr "مرحلہ 3"
+
+msgid "invalid_email"
+msgstr "غلط ای میل ایڈریس"
+
+msgid "invalid_card"
+msgstr "غلط کریڈٹ کارڈ نمبر"
+
+msgid "invalid_expiration"
+msgstr "میعاد ختم ہونے کی غلط تاریخ"
+
+msgid "cc_number"
+msgstr "کریڈٹ کارڈ"
+
+msgid "card_number"
+msgstr "کارڈ نمبر"
+
+msgid "card_expiration"
+msgstr "MM / YY"
+
+msgid "invalid_cvc"
+msgstr "غلط غلط CVC"
+
+msgid "complete_purchase"
+msgstr "خرید مکمل کریں"
 
 msgid "Re-send Email"
 msgstr "دوبارہ ای میل بھیجیں"
@@ -267,6 +419,54 @@ msgstr "لاگ آؤٹ کریں"
 
 msgid "confirm_remove_device"
 msgstr "کیا آپ واقعی اس ڈیوائس کو اپنے پرو اکاؤنٹ سے منقطع کرنا چاہتے ہیں ؟"
+
+msgid "unlimited_data"
+msgstr "لامحدود ڈیٹا"
+
+msgid "no_logs"
+msgstr "کوئی لاگز نہیں"
+
+msgid "no_ads"
+msgstr "کوئی اشتہار نہیں"
+
+msgid "choose_plan"
+msgstr "پلان چنیں"
+
+msgid "connect_up_to_3_devices"
+msgstr "3 تک آلات کو جوڑیں"
+
+msgid "faster_data_centers"
+msgstr "تیز تر ڈیٹا سینٹرز"
+
+msgid "dedicated_line"
+msgstr "مختص کردہ لائن"
+
+msgid "increased_reliability"
+msgstr "اضافی پائیداری"
+
+msgid "checkout"
+msgstr "چیک آؤٹ"
+
+msgid "credit_card"
+msgstr "کریڈٹ کارڈ"
+
+msgid "lantern_pro_checkout"
+msgstr "لینٹرن پرو چیک آؤٹ"
+
+msgid "1y_pricing"
+msgstr "1 سال کی قیمت"
+
+msgid "2y_pricing"
+msgstr "2 سال کی قیمت"
+
+msgid "plan_type"
+msgstr "پلان کی قسم"
+
+msgid "most_popular"
+msgstr "مقبول ترین"
+
+msgid "free"
+msgstr "مفت"
 
 msgid "n/a"
 msgstr "نا قابلِ اطلاق"
@@ -329,6 +529,9 @@ msgstr "ترمیم کریں"
 
 msgid "save_error"
 msgstr "محفوظ کرنے کے دوران کچھ غلط ہو گیا۔"
+
+msgid "fewer_options"
+msgstr "کم اختیارات"
 
 msgid "more_options"
 msgstr "مزید اختیارات"
@@ -399,22 +602,29 @@ msgid "start_chat"
 msgstr "چیٹ شروع کریں"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "آپ کی انسٹال کردہ ایپس"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "Lantern کے ذریعے ارسال کردہ ایپس"
 
 msgid "apps_to_unblock"
 msgstr ""
+"وہ ایپس منتخب کریں جنہیں آپ ان بلاک کرنا چاہتے ہیں۔ مربوط ہونے پر، صرف ذیل "
+"میں منتخب کردہ ایپس ہی Lantern کے ذریعے ارسال کی جائیں گی۔"
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "منقسم ٹنلنگ"
 
 msgid "split_tunneling_info"
 msgstr ""
+"منقسم ٹنلنگ فعال ہونے پر، منتخب کردہ ایپس Lantern کے ذریعے راؤٹ کی جائیں گی۔"
+" یہ صرف مخصوص ایپس کو ان بلاک کر کے کارکردگی کو بہتر اور بینڈ وڈتھ کو محفوظ "
+"کر سکتا ہے۔"
 
 msgid "applied_next_time"
 msgstr ""
+"نئی منقسم ٹنلنگ کی ترتیبات کا اطلاق آپ کے اگلی مرتبہ دوبارہ مربوط ہونے پر ہو"
+" گا۔"
 
 msgid "message_disappearing"
 msgstr "آپ اور %s کے لیے تمام پیغامات غائب نہیں ہوں گے۔"
@@ -436,6 +646,9 @@ msgstr "آن"
 
 msgid "continue"
 msgstr "جاری رکھئے"
+
+msgid "continue_to_pro"
+msgstr "پرو کو جار ی رکھیں"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "کیا آپ واقعی %s کو کھولنا چاہتے ہیں؟"
@@ -1225,10 +1438,10 @@ msgid "support"
 msgstr "سپورٹ"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "Lantern کا صارفی فورم"
 
 msgid "faq"
-msgstr ""
+msgstr "اکثر پوچھے جانے والے سوالات"
 
 msgid "add_device"
 msgstr "ڈیوائس شامل کیجئے"

@@ -229,7 +229,7 @@
   <string name="earn_free_month">친구가 가입할 때마다 한 달 무료 구독권을 받으세요</string>
   <string name="credits_applied">귀하의 구독권은 다음 결제에 적용될 것입니다.</string>
   <string name="pro_invitation_subject">랜턴 프로로의 초대</string>
-  <string name="receive_free_month">랜턴 프로를 한 달 동안 무료로 사용하려면 추천 코드 %1$s 를 이용하세요. https://bit.ly/1M8x04u 에서 다운로드할 수 있습니다.</string>
+  <string name="receive_free_month">랜턴 프로를 한 달 동안 무료로 사용하려면 추천 코드 %1$s 를 이용하세요. https://lantern.io/download 에서 다운로드할 수 있습니다.</string>
   <string name="share_feed_item">%2$s에서 \"%1$s\"에 대해 읽고 있습니다. 차단된 사이트와 서비스에 접근하기 위해 랜턴을 사용하세요. 안드로이드 앱을 https://bit.ly/lanternapk 에서 다운로드할 수 있습니다.</string>
   <string name="cancel_pro_confirmation">정말인가요? 이 행동은 되돌릴 수 없습니다. 언제든지 프로 등록을 다시 하실 수 있습니다.</string>
   <string name="unauthorize_confirmation">랜턴 프로 계정에서 이 기기를 정말로 연결 해지할까요?</string>
