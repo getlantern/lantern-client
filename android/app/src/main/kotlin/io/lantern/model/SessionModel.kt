@@ -18,7 +18,6 @@ import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
-import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.mobilesdk.model.IssueReporter
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
@@ -26,6 +25,9 @@ import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.openHome
+import org.getlantern.lantern.restartApp
+import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.openHome
@@ -46,6 +48,7 @@ class SessionModel(
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
     private val lanternClient = LanternApp.getLanternHttpClient()
+    private val autoUpdater = AutoUpdater(activity, activity)
     private val paymentsUtil = PaymentsUtil(activity)
 
     companion object {
@@ -159,7 +162,7 @@ class SessionModel(
                 )
             }
             "checkForUpdates" -> {
-                EventBus.getDefault().post(CheckUpdate(true))
+                autoUpdater.checkForUpdates()
             }
             else -> super.doMethodCall(call, notImplemented)
         }

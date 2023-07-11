@@ -14,12 +14,12 @@ import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.LanternStatus.Status
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
+import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.Json
 import org.getlantern.mobilesdk.Lantern
 import org.getlantern.mobilesdk.LanternNotRunningException
@@ -53,8 +53,10 @@ open class LanternService : Service(), Runnable {
     }
     private val helper: ServiceHelper = ServiceHelper(this, serviceIcon, R.string.ready_to_connect)
     private val started: AtomicBoolean = AtomicBoolean()
+    private lateinit var autoUpdater: AutoUpdater
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        autoUpdater = AutoUpdater(this)
         val autoBooted = intent.getBooleanExtra(AUTO_BOOTED, false)
         Logger.d(TAG, "Called onStartCommand, autoBooted?: $autoBooted")
         if (autoBooted) {
@@ -108,7 +110,7 @@ open class LanternService : Service(), Runnable {
 
         if (!BuildConfig.PLAY_VERSION && !BuildConfig.DEVELOPMENT_MODE) {
             // check if an update is available
-            EventBus.getDefault().post(CheckUpdate(false))
+            autoUpdater.checkForUpdates()
         }
 
         EventBus.getDefault().postSticky(LanternStatus(Status.ON))
