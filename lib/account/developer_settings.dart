@@ -30,6 +30,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                 sessionModel.paymentTestMode(
                     (BuildContext context, bool value, Widget? child) {
                   return FlutterSwitch(
+                    key: AppKeys.payment_mode_switch,
                     width: 44.0,
                     height: 24.0,
                     valueFontSize: 12.0,

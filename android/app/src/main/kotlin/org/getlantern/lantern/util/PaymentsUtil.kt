@@ -263,14 +263,17 @@ class PaymentsUtil(private val activity: Activity) {
         provider: PaymentProvider,
         methodCallResult: MethodChannel.Result,
     ) {
-        Logger.d(TAG, "Sending purchase request with provider $provider")
+        val currency = LanternApp.getSession().planByID(planID)?.let {
+            it.currency
+        } ?: "usd"
+        Logger.d(TAG, "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency")
         val session = session
         val formBody: FormBody.Builder = FormBody.Builder()
             .add("idempotencyKey", System.currentTimeMillis().toString())
             .add("provider", provider.toString().lowercase())
             .add("email", email)
             .add("plan", planID)
-            .add("currency", session.currency().lowercase())
+            .add("currency", currency.lowercase())
             .add("deviceName", session.deviceName())
 
         when (provider) {
@@ -281,9 +284,11 @@ class PaymentsUtil(private val activity: Activity) {
                 formBody.add("stripeToken", token)
                 formBody.add("token", token)
             }
+
             PaymentProvider.GooglePlay -> {
                 formBody.add("token", token)
             }
+
             PaymentProvider.ResellerCode -> {
                 val resellerCode = LanternApp.getSession().resellerCode()
                 resellerCode?.let {
@@ -291,6 +296,7 @@ class PaymentsUtil(private val activity: Activity) {
                     formBody.add("resellerCode", resellerCode)
                 }
             }
+
             else -> {}
         }
 
@@ -303,7 +309,9 @@ class PaymentsUtil(private val activity: Activity) {
                     dialog?.dismiss()
                     session.linkDevice()
                     session.setIsProUser(true)
+                    Logger.e(TAG, "Purchase Completed: $response")
                     methodCallResult.success("purchaseSuccessful")
+                    Logger.d(TAG, "Successful purchase response: $result")
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {

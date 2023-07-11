@@ -241,7 +241,7 @@
   <string name="earn_free_month">Verdien een gratis maand voor elke vriend die zich aanmeld</string>
   <string name="credits_applied">Je bonus wordt bijgeschreven op je account met de volgende factuur.</string>
   <string name="pro_invitation_subject">Uitnodiging voor deelname Lantern Pro</string>
-  <string name="receive_free_month">Voor een gratis maand Lantern Pro gebruik deze verwijscode:  %1$s  Je kunt deze hier downloaden:  https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">Voor een gratis maand Lantern Pro gebruik deze verwijscode:  %1$s  Je kunt deze hier downloaden:  https://lantern.io/download</string>
   <string name="share_feed_item">Ik lees over \"%1$s\" bij %2$s met Lantern. Gebruik Lantern om toegang te krijgen op geblokkeerde websites en diensten. Je kunt dit hier downloaden voor Android: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Weet je het zeker? Dit kan niet teruggedraaid worden! Je kunt je op ieder moment opnieuw registeren voor Pro.</string>
   <string name="unauthorize_confirmation">Weet je zeker dat je dit apparaat wilt verwijderen van je Pro-account?</string>
