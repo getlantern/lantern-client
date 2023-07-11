@@ -32,7 +32,6 @@ class ResellerCodeFormatter extends TextInputFormatter {
   }
 }
 
-@RoutePage(name: "ResellerCodeCheckout")
 class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;
 

@@ -1,9 +1,6 @@
-include: package:flutter_lints/flutter.yaml
+include: package:pedantic/analysis_options.yaml
 
 linter:
   rules:
     - prefer_const_constructors
     - require_trailing_commas
-    - avoid_unused_constructor_parameters
-    - unnecessary_statements
-    - avoid_unnecessary_containers

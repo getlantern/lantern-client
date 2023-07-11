@@ -1,6 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
 
-@RoutePage<void>(name: 'AddViaChatNumber')
 class AddViaChatNumber extends StatefulWidget {
   @override
   _AddViaChatNumberState createState() => _AddViaChatNumberState();

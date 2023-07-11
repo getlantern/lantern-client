@@ -70,7 +70,7 @@ class TryLanternChat extends StatelessWidget {
 
                       const iconSize = 48;
                       final horizontalMargin = 32;
-                      const verticalMargin = 40;
+                      final verticalMargin = 40;
                       final pairWidth = 2 * iconSize + 2 * horizontalMargin;
                       final pairHeight = iconSize + verticalMargin;
                       final numColumns =

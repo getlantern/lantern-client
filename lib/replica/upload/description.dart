@@ -1,6 +1,5 @@
 import 'package:lantern/common/common.dart';
 
-@RoutePage<void>(name: 'ReplicaUploadDescription')
 class ReplicaUploadDescription extends StatefulWidget {
   final File fileToUpload;
   final String fileTitle;

@@ -1,10 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/scheduler.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/core/router/router.dart';
 import 'package:lantern/messaging/messaging.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
-final globalRouter = AppRouter();
+final globalRouter = AppRouter(navigatorKey);
 final networkWarningBarHeightRatio = ValueNotifier(0.0);
 var showConnectivityWarning = false;
 
@@ -70,14 +71,22 @@ class LanternApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentLocal = View.of(context).platformDispatcher.locale;
-    print('selected local: ${currentLocal.languageCode}');
+    final currentLocal = window.locale;
+    print('selected local: ' + currentLocal.languageCode);
     return FutureBuilder(
       future: translations,
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
         if (!snapshot.hasData) {
           return Container();
         }
+        final ThemeData theme = ThemeData(
+          fontFamily: _getLocaleBasedFont(currentLocal),
+          brightness: Brightness.light,
+          primarySwatch: Colors.grey,
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+          ),
+        );
         return GlobalLoaderOverlay(
           overlayColor: Colors.black,
           overlayOpacity: 0.6,
@@ -96,28 +105,33 @@ class LanternApp extends StatelessWidget {
                     ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
               ),
               title: 'app_name'.i18n,
-              localizationsDelegates: const [
+              localizationsDelegates: [
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
               routeInformationParser: globalRouter.defaultRouteParser(),
-              routerDelegate: globalRouter.delegate(),
-              supportedLocales: const [
-                Locale('ar', 'EG'),
-                Locale('fr', 'FR'),
-                Locale('en', 'US'),
-                Locale('fa', 'IR'),
-                Locale('th', 'TH'),
-                Locale('ms', 'MY'),
-                Locale('ru', 'RU'),
-                Locale('ur', 'IN'),
-                Locale('zh', 'CN'),
-                Locale('zh', 'HK'),
-                Locale('es', 'ES'),
-                Locale('tr', 'TR'),
-                Locale('vi', 'VN'),
-                Locale('my', 'MM'),
+              routerDelegate: globalRouter.delegate(
+                navigatorObservers: () => [
+                  BotToastNavigatorObserver(),
+                ],
+              ),
+              builder: BotToastInit(),
+              supportedLocales: [
+                const Locale('ar', 'EG'),
+                const Locale('fr', 'FR'),
+                const Locale('en', 'US'),
+                const Locale('fa', 'IR'),
+                const Locale('th', 'TH'),
+                const Locale('ms', 'MY'),
+                const Locale('ru', 'RU'),
+                const Locale('ur', 'IN'),
+                const Locale('zh', 'CN'),
+                const Locale('zh', 'HK'),
+                const Locale('es', 'ES'),
+                const Locale('tr', 'TR'),
+                const Locale('vi', 'VN'),
+                const Locale('my', 'MM'),
               ],
             ),
           ),

@@ -1,6 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
 
-@RoutePage<void>(name: 'RecoveryKey')
 class RecoveryKey extends StatelessWidget {
   RecoveryKey({Key? key}) : super(key: key);
 

@@ -135,13 +135,13 @@ class _ReplicaListLayoutState extends ReplicaCommonListViewState {
         );
       case SearchCategory.News:
         return renderPaginatedListView(
-          (context, item, index) => ReplicaNewsListItem(
+              (context, item, index) => ReplicaNewsListItem(
             key: ValueKey(item.replicaLink.infohash),
             item: item,
             replicaApi: widget.replicaApi,
             onTap: () async {
               if (item.serpLink != null) {
-                await launchUrl(Uri.parse(item.serpLink as String));
+                await launch(item.serpLink as String);
               }
               return true;
             },

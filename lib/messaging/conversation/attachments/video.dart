@@ -1,6 +1,6 @@
 import 'package:lantern/messaging/conversation/attachments/attachment.dart';
-import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/messaging/conversation/status_row.dart';
 import 'package:video_player/video_player.dart';
 
 /// Base class for displaying a video attachment in Chat (conversation view as well as rendering the Video Viewer when that attachment is tapped). It extends VisualAttachment and overrides its buildViewer() and wrapThumbnail() functions.

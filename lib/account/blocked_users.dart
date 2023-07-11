@@ -1,6 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
 
-@RoutePage<void>(name: 'BlockedUsers')
 class BlockedUsers extends StatelessWidget {
   BlockedUsers({Key? key}) : super(key: key);
 
