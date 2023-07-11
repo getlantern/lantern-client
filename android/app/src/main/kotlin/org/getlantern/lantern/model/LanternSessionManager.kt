@@ -182,6 +182,23 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getBoolean(SHOW_RENEWAL_PREF, true)
     }
 
+    fun setAppsAllowedAccess(appsAllowedAccess: List<String>) {
+        prefs.edit().putString(APPS_ALLOWED_ACCESS, appsAllowedAccess.joinToString()).apply()
+    }
+
+    fun appsAllowedAccess(): List<String> {
+        val apps = prefs.getString(APPS_ALLOWED_ACCESS, "") ?: ""
+        return ArrayList(apps.split(",").map { it.trim() })
+    }
+
+    fun setSplitTunnelingEnabled(splitTunnelingEnabled: Boolean) {
+        prefs.edit().putBoolean(SPLIT_TUNNELING_ENABLED, splitTunnelingEnabled).apply()
+    }
+
+   override fun splitTunnelingEnabled(): Boolean {
+        return prefs.getBoolean(SPLIT_TUNNELING_ENABLED, false)
+    }
+
     fun setIsProUser(isProUser: Boolean) {
         prefs.edit().putBoolean(PRO_USER, isProUser).apply()
     }
@@ -350,6 +367,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val USER_LEVEL = "userLevel"
         private const val PRO_USER = "prouser"
         private const val DEVICES = "devices"
+        private const val APPS_ALLOWED_ACCESS = "appsAllowedAccess"
+        private const val SPLIT_TUNNELING_ENABLED = "splitTunneling"
         private const val PLANS = "/plans/"
         private const val PAYMENT_METHODS = "/paymentMethods/"
         private const val PRO_EXPIRED = "proexpired"
