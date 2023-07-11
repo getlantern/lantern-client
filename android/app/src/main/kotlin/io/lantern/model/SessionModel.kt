@@ -169,11 +169,9 @@ class SessionModel(
                 val on = call.argument("on") ?: false
                 saveSplitTunneling(on)
             }
-
             "allowAppAccess" -> {
                 updateAppData(call.argument("packageName")!!, true)
             }
-
             "denyAppAccess" -> {
                 updateAppData(call.argument("packageName")!!, false)
             }
