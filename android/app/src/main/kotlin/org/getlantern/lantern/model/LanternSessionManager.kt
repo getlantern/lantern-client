@@ -182,21 +182,20 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getBoolean(SHOW_RENEWAL_PREF, true)
     }
 
-    fun setAppsAllowedAccess(appsAllowedAccess: List<String>) {
-        prefs.edit().putString(APPS_ALLOWED_ACCESS, appsAllowedAccess.joinToString()).apply()
-    }
-
+    // appsAllowedAccess returns a list of package names for those applications that are allowed
+    // to access the VPN connection. If split tunneling is enabled, and any app is added to
+    // the list, only those applications (and no others) are allowed access.
     fun appsAllowedAccess(): List<String> {
-        val apps = prefs.getString(APPS_ALLOWED_ACCESS, "") ?: ""
-        return ArrayList(apps.split(",").map { it.trim() })
+        var installedApps = db.list<Vpn.AppData>(PATH_APPS_DATA + "%")
+        val apps = mutableListOf<String>()
+        for (appData in installedApps) {
+            if (appData.value.allowedAccess) apps.add(appData.value.packageName)
+        }
+        return apps
     }
 
-    fun setSplitTunnelingEnabled(splitTunnelingEnabled: Boolean) {
-        prefs.edit().putBoolean(SPLIT_TUNNELING_ENABLED, splitTunnelingEnabled).apply()
-    }
-
-   override fun splitTunnelingEnabled(): Boolean {
-        return prefs.getBoolean(SPLIT_TUNNELING_ENABLED, false)
+    override fun splitTunnelingEnabled(): Boolean {
+        return prefs.getBoolean(SPLIT_TUNNELING, false)
     }
 
     fun setIsProUser(isProUser: Boolean) {
@@ -367,8 +366,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val USER_LEVEL = "userLevel"
         private const val PRO_USER = "prouser"
         private const val DEVICES = "devices"
-        private const val APPS_ALLOWED_ACCESS = "appsAllowedAccess"
-        private const val SPLIT_TUNNELING_ENABLED = "splitTunneling"
+        private const val PATH_APPS_DATA = "/appsData/"
+        private const val SPLIT_TUNNELING = "/splitTunneling"
         private const val PLANS = "/plans/"
         private const val PAYMENT_METHODS = "/paymentMethods/"
         private const val PRO_EXPIRED = "proexpired"
