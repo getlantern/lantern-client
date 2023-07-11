@@ -190,13 +190,13 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             }
         }
 
-        if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(
-                activity,
-                LanternVpnService::class.java,
-            )
-        ) {
+        val isServiceRunning = Utils.isServiceRunning(activity, LanternVpnService::class.java)
+        if (vpnModel.isConnectedToVpn() && !isServiceRunning) {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
+        } else if (!vpnModel.isConnectedToVpn() && isServiceRunning) {
+            Logger.d(TAG, "LanternVpnService is running, updating VPN preference")
+            vpnModel.setVpnOn(true)
         }
         Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
     }
@@ -694,13 +694,13 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     private fun startVpnService() {
         val splitTunnelingEnabled = vpnModel.splitTunnelingEnabled()
         val appsAllowedAccess = ArrayList(vpnModel.appsAllowedAccess())
+        LanternApp.getSession().setAppsAllowedAccess(appsAllowedAccess)
+        LanternApp.getSession().setSplitTunnelingEnabled(splitTunnelingEnabled)
         Logger.d(TAG, "Apps allowed access to VPN connection: $appsAllowedAccess")
         val intent: Intent = Intent(
             this,
             LanternVpnService::class.java,
         ).apply {
-            putExtra("splitTunnelingEnabled", splitTunnelingEnabled)
-            putStringArrayListExtra("appsAllowedAccess", appsAllowedAccess)
             action = LanternVpnService.ACTION_CONNECT
         }
 
