@@ -1,5 +1,4 @@
 import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/vpn/vpn.dart';
 
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
@@ -8,8 +7,19 @@ import 'vpn_split_tunneling.dart';
 import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
-class VPNTab extends StatelessWidget {
+class VPNTab extends StatefulWidget {
   VPNTab({Key? key}) : super(key: key);
+
+  @override
+  State<VPNTab> createState() => _VPNTabState();
+}
+
+class _VPNTabState extends State<VPNTab> {
+  @override
+  void initState() {
+    logger.e('VPn tap init called');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
