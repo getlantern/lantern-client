@@ -7,19 +7,8 @@ import 'vpn_split_tunneling.dart';
 import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
-class VPNTab extends StatefulWidget {
+class VPNTab extends StatelessWidget {
   VPNTab({Key? key}) : super(key: key);
-
-  @override
-  State<VPNTab> createState() => _VPNTabState();
-}
-
-class _VPNTabState extends State<VPNTab> {
-  @override
-  void initState() {
-    logger.e('VPn tap init called');
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
