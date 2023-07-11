@@ -11,7 +11,6 @@ class VPNSwitch extends StatefulWidget {
 
 class _VPNSwitchState extends State<VPNSwitch> {
   InterstitialAd? _interstitialAd;
-  bool switchState = false;
 
   @override
   void initState() {
@@ -65,36 +64,45 @@ class _VPNSwitchState extends State<VPNSwitch> {
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
 
-  Future<void> onSwitchTap(bool newValue, String vpnStatus) async {
-    switchState = newValue;
+  Future<void> onSwitchTap(
+      bool newValue, String vpnStatus, bool proUser) async {
     unawaited(HapticFeedback.lightImpact());
-    if (isIdle(vpnStatus) && _interstitialAd != null) {
-      await _interstitialAd?.show();
+    if (isIdle(vpnStatus)) {
+      await vpnModel.switchVPN(newValue);
+    }
+    //add delayed to avoid flickering
+    if (vpnStatus != 'connected') {
+      Future.delayed(
+        const Duration(seconds: 1),
+        () async {
+          if (!proUser && _interstitialAd != null) {
+            await _interstitialAd?.show();
+          }
+        },
+      );
     }
   }
 
-  Future<void> toggleVPN() => vpnModel.switchVPN(switchState);
-  
   void postShowingAds() {
     _interstitialAd?.dispose();
-    toggleVPN();
     _interstitialAd = null;
     _loadInterstitialAd();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: 2,
-      child: vpnModel
-          .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
-        return FlutterSwitch(
-          value: isIdle(vpnStatus),
-          activeColor: onSwitchColor,
-          inactiveColor: offSwitchColor,
-          onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus),
-        );
-      }),
-    );
+    return sessionModel.proUser((context, proUser, child) => Transform.scale(
+          scale: 2,
+          child: vpnModel.vpnStatus(
+              (BuildContext context, String vpnStatus, Widget? child) {
+            return FlutterSwitch(
+              value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+              activeColor: onSwitchColor,
+              inactiveColor: offSwitchColor,
+              onToggle: (bool newValue) =>
+                  onSwitchTap(newValue, vpnStatus, proUser),
+            );
+          }),
+        ));
   }
 }
