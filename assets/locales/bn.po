@@ -1,13 +1,13 @@
 # 
 # Translators:
 # Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2021
-# tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2023
-# code smite <codesmite@gmail.com>, 2023
 # Lantern, 2023
+# code smite <codesmite@gmail.com>, 2023
+# tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2023\n"
+"Last-Translator: tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2023\n"
 "Language-Team: Bengali (https://app.transifex.com/lantern-1/teams/94371/bn/)\n"
 "Language: bn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -206,7 +206,7 @@ msgstr "ইমেলের মাধ্যমে লিঙ্ক করুন"
 msgid "lantern_pro_email"
 msgstr "Lantern প্রো ইমেল"
 
-msgid "Email"
+msgid "email"
 msgstr "ইমেইল"
 
 msgid "Submit"
@@ -215,8 +215,162 @@ msgstr "সাবমিট"
 msgid "save"
 msgstr "সংরক্ষণ করুন"
 
-msgid "Please enter a valid email address"
+msgid "please_enter_a_valid_email_address"
 msgstr "অনুগ্রহ করে একটি বৈধ ইমেল ঠিকানা লিখুন"
+
+msgid "bonus"
+msgstr "বোনাস"
+
+msgid "referral_bonus"
+msgstr "রেফারেল বোনাস"
+
+msgid "total"
+msgstr "মোট"
+
+msgid "month"
+msgstr "মাস"
+
+msgid "months"
+msgstr "মাস"
+
+msgid "enter_email"
+msgstr "ইমেল লিখুন"
+
+msgid "error_fetching_plans"
+msgstr ""
+"প্ল্যানগুলো আনার সময় ত্রুটি ঘটেছে, অনুগ্রহ করে Lantern আবার শুরু করে পুনরায় "
+"চেষ্টা করুন।"
+
+msgid "apply"
+msgstr "প্রয়োগ করুন"
+
+msgid "choose_payment_method"
+msgstr "পেমেন্ট পদ্ধতি বেছে নিন"
+
+msgid "pro_plan"
+msgstr "প্রো প্ল্যান"
+
+msgid "one_year_plan"
+msgstr "1-বছরর প্ল্যান"
+
+msgid "two_year_plan"
+msgstr "2-বছরর প্ল্যান"
+
+msgid "plan_discount"
+msgstr "সাশ্রয় করুন %d%%"
+
+msgid "enter_email_and_activation_code"
+msgstr "ইমেল এবং সক্রিয়করণ কোড লিখুন"
+
+msgid "referral_code"
+msgstr "রেফারেল কোড"
+
+msgid "add_referral_code"
+msgstr "রেফারেল কোড যোগ করুন"
+
+msgid "Activation Code"
+msgstr "এক্টিভেশন কোড"
+
+msgid "invalid_or_incomplete_referral_code"
+msgstr "রেফারেল কোড অবৈধ বা অসম্পূর্ণ"
+
+msgid "register_for_pro"
+msgstr "প্রো-এর জন্য রেজিস্টার করুন"
+
+msgid "Something went wrong while applying your referral code."
+msgstr "আপনার রেফারেল কোড প্রয়োগ করার সময় কিছু সমস্যা হয়েছে।"
+
+msgid "your_activation_code_is_invalid"
+msgstr "আপনার সক্রিয়করণ কোড অবৈধ"
+
+msgid "update_cache_plans_timeout"
+msgstr "উপলভ্য প্ল্যানগুলো আনার সময় কিছু সমস্যা হয়েছে।"
+
+msgid "bitcoin_timeout"
+msgstr "BTCPay অনুরোধের সময় পেরিয়ে গেছে।"
+
+msgid "BTCPay is unavailable"
+msgstr "BTCPay অনুপলভ্য"
+
+msgid "update_cache_user_timeout"
+msgstr "আপনার অ্যাকাউন্ট আনার সময় কিছু সমস্যা হয়েছে।"
+
+msgid "reseller_timeout"
+msgstr "আপনার সক্রিয়করণ কোড যাচাই করার সময় কিছু সমস্যা হয়েছে।"
+
+msgid "reseller_success"
+msgstr "সক্রিয়করণ কোড সফলভাবে রিডিম করা হয়েছে।"
+
+msgid "stripe_timeout"
+msgstr ""
+"আপনার স্ট্রাইপ পেমেন্টের সময় পেরিয়ে গেছে। অনুগ্রহ করে Lantern আবার চালু করে "
+"আবার চেষ্টা করুন।"
+
+msgid "stripe_success"
+msgstr "সফলভাবে স্ট্রাইপ কেনা সম্পন্ন হয়েছে।"
+
+msgid "renewal_success"
+msgstr "রিনিউ সফল হয়েছে"
+
+msgid "pro_renewal_success_description"
+msgstr ""
+"আপনার Lantern Pro অ্যাকাউন্ট রিনিউ করানোর জন্য ধন্যবাদ।আপনার কাছে এখন আমাদের"
+" দ্রুততম ডেটা সেন্টারগুলো ব্যবহার করার অপরিমিত অ্যাক্সেস আছে।  আপনার "
+"অ্যাকাউন্টের সাথে সর্বাধিক তিনটি ডিভাইস সংযুক্ত করা যেতে পারে।"
+
+msgid "pro_purchase_success"
+msgstr "Lantern Pro-এ আপনাকে স্বগাত"
+
+msgid "platinum_purchase_success_descripion"
+msgstr ""
+"আপনার কাছে এখন আমাদের দ্রুততম ডেটা সেন্টারগুলো এবং অবিচল লাইন ব্যবহার করার "
+"অপরিমিত অ্যাক্সেস আছে।  আপনার অ্যাকাউন্টের সাথে সর্বাধিক তিনটি ডিভাইস "
+"সংযুক্ত করা যেতে পারে।"
+
+msgid "pro_purchase_success_descripion"
+msgstr ""
+"আপনার কাছে এখন আমাদের দ্রুততম ডেটা সেন্টারগুলো ব্যবহার করার অপরিমিত "
+"অ্যাক্সেস আছে। আপনার অ্যাকাউন্টের সাথে সর্বাধিক তিনটি ডিভাইস সংযুক্ত করা "
+"যেতে পারে।"
+
+msgid "by_clicking_tos"
+msgstr "%sএ ক্লিক করে, আপনি সম্মত হন আমাদের"
+
+msgid "tos"
+msgstr "সেবা পাবার শর্ত"
+
+msgid "step_1"
+msgstr "ধাপ 1"
+
+msgid "step_2"
+msgstr "ধাপ 2"
+
+msgid "step_3"
+msgstr "ধাপ 3"
+
+msgid "invalid_email"
+msgstr "ইমেল ঠিকানা অবৈধ"
+
+msgid "invalid_card"
+msgstr "ক্রেডিট কার্ড নম্বর অবৈধ"
+
+msgid "invalid_expiration"
+msgstr "মেয়াদ শেষের তারিখ সঠিক নয়"
+
+msgid "cc_number"
+msgstr "ক্রেডিট কার্ড"
+
+msgid "card_number"
+msgstr "কার্ড নাম্বার"
+
+msgid "card_expiration"
+msgstr "মাস/বছর"
+
+msgid "invalid_cvc"
+msgstr "সিভিসি সঠিক নয়"
+
+msgid "complete_purchase"
+msgstr "কেনা সম্পূর্ণ করুন"
 
 msgid "Re-send Email"
 msgstr "আবার ইমেইল পাঠান"
@@ -267,6 +421,54 @@ msgstr "লগ আউট করুন"
 
 msgid "confirm_remove_device"
 msgstr "আপনি কি আপনার Pro অ্যাকাউন্ট থেকে এই ডিভাইসটি অপসারন করতে চান?"
+
+msgid "unlimited_data"
+msgstr "অসীম ডাটা"
+
+msgid "no_logs"
+msgstr "কোনও লগ নয়"
+
+msgid "no_ads"
+msgstr "কোন বিজ্ঞাপণ নেই"
+
+msgid "choose_plan"
+msgstr "প্ল্যান বাছুন"
+
+msgid "connect_up_to_3_devices"
+msgstr "সর্বাধিক 3টি ডিভাইসে সংযোগ করুন"
+
+msgid "faster_data_centers"
+msgstr "দ্রুততর ডেটা সেন্টার"
+
+msgid "dedicated_line"
+msgstr "অবিচল লাইন"
+
+msgid "increased_reliability"
+msgstr "ক্রমবর্ধমান নির্ভরযোগ্যতা"
+
+msgid "checkout"
+msgstr "চেকআউট"
+
+msgid "credit_card"
+msgstr "ক্রেডিট কার্ড"
+
+msgid "lantern_pro_checkout"
+msgstr "Lantern Pro চেকআউট"
+
+msgid "1y_pricing"
+msgstr "1 বছরের মূল্যনির্ধারণ"
+
+msgid "2y_pricing"
+msgstr "2 বছরের মূল্যনির্ধারণ"
+
+msgid "plan_type"
+msgstr "প্ল্যানের ধরন"
+
+msgid "most_popular"
+msgstr "সবচেয়ে জনপ্রিয়"
+
+msgid "free"
+msgstr "বিনামূল্যে"
 
 msgid "n/a"
 msgstr "উপলব্ধ নেই"
@@ -329,6 +531,9 @@ msgstr "সম্পাদনা করুন"
 
 msgid "save_error"
 msgstr "সংরক্ষণ করার সময় কিছু ত্রুটি ঘটেছে।"
+
+msgid "fewer_options"
+msgstr "আরও কম বিকল্প"
 
 msgid "more_options"
 msgstr "আরও বিকল্প"
@@ -398,22 +603,29 @@ msgid "start_chat"
 msgstr "চ্যাট শুরু করুন"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "আপনার ইনস্টল করা অ্যাপসমূহ"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "Lantern-এর মাধ্যমে চালিত অ্যাপসমূহ"
 
 msgid "apps_to_unblock"
 msgstr ""
+"আপনি যে অ্যাপগুলো আনলক করতে চান সেগুলো বাছুন। সংযুক্ত থাকাকালীন, একমাত্র "
+"নীচে নির্বাচিত অ্যাপগুলোই Lantern-এর মাধ্যমে চালিত হবে।"
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "বিভক্ত টানেলিং"
 
 msgid "split_tunneling_info"
 msgstr ""
+"বিভক্ত টানেলিং সক্রিয় থাকলে, নির্বাচিত অ্যাপগুলো Lantern-এর মাধ্যমে চালিত "
+"হবে। এটি পারফরম্যান্স উন্নত করতে পারে এবং শুধুমাত্র নির্দিষ্ট অ্যাপগুলো "
+"আনব্লক করে ব্যান্ডউইথ বাঁচাতে পারে।"
 
 msgid "applied_next_time"
 msgstr ""
+"পরেরবার আপনি যখন আবার সংযোগ করবেন তখন নতুন বিভক্ত টানেলিংয়ের সেটিংস প্রযোজ্য"
+" হবে।"
 
 msgid "message_disappearing"
 msgstr "আপনার এবং %s এর জন্য সমস্ত বার্তা অদৃশ্য হবে না।"
@@ -435,6 +647,9 @@ msgstr "চালু করুন"
 
 msgid "continue"
 msgstr "চালিয়ে যান"
+
+msgid "continue_to_pro"
+msgstr "প্রো তে চালুন"
 
 msgid "are_you_sure_you_want_to_open"
 msgstr "আপনি কি %s খুলতে চাওয়ার বিষয়ে নিশ্চিত?"
@@ -1220,7 +1435,7 @@ msgid "support"
 msgstr "সাপোর্ট"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "Lantern ব্যবহারকারীর ফোরাম"
 
 msgid "faq"
 msgstr "FAQ"

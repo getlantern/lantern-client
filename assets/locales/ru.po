@@ -17,10 +17,11 @@
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2023
 # Helen Russel <coo@workogram.com>, 2023
 # Deanna D, 2023
+# e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Deanna D, 2023\n"
+"Last-Translator: e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2023\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -269,6 +270,8 @@ msgstr "Подписка на 2 года "
 
 msgid "plan_discount"
 msgstr ""
+"Сэкономьте %d%%\n"
+" "
 
 msgid "enter_email_and_activation_code"
 msgstr "Введите email и код активации "
@@ -314,27 +317,39 @@ msgstr "Код активации добавлен успешно."
 
 msgid "stripe_timeout"
 msgstr ""
+"Время ожидания вашей оплаты Stripe истекло. Перезапустите Lantern и "
+"повторите попытку."
 
 msgid "stripe_success"
-msgstr ""
+msgstr "Успешная покупка Stripe."
 
 msgid "renewal_success"
-msgstr ""
+msgstr "Успешное обновление"
 
 msgid "pro_renewal_success_description"
 msgstr ""
+"Благодарим за обновление вашей учетной записи Lantern Pro. Вы получили "
+"неограниченный доступ, используя самые быстрые центры обработки данных. Вы "
+"можете подключить до трех устройств к вашему аккаунту."
 
 msgid "pro_purchase_success"
-msgstr ""
+msgstr "Добро пожаловать в Lantern Pro"
 
 msgid "platinum_purchase_success_descripion"
 msgstr ""
+"Теперь у вас есть неограниченный доступ благодаря использованию самых "
+"быстрых центров обработки данных и выделенной линии. К вашему аккаунту можно"
+" подключить до трех устройств."
 
 msgid "pro_purchase_success_descripion"
 msgstr ""
+"Вы получили неограниченный доступ благодаря самым быстрым центрам обработки "
+"данных. Вы можете подключить до трех устройств к вашему аккаунту."
 
 msgid "by_clicking_tos"
 msgstr ""
+"Нажимая %s, вы соглашаетесь с нашими\n"
+" "
 
 msgid "tos"
 msgstr "Условия использования"
@@ -349,10 +364,10 @@ msgid "step_3"
 msgstr "Шаг 3"
 
 msgid "invalid_email"
-msgstr ""
+msgstr "Неверный адрес электронной почты"
 
 msgid "invalid_card"
-msgstr ""
+msgstr "Неверный номер кредитной карты"
 
 msgid "invalid_expiration"
 msgstr "Недействительный срок действия"
@@ -440,10 +455,10 @@ msgid "faster_data_centers"
 msgstr "Более быстрые центры обработки данных"
 
 msgid "dedicated_line"
-msgstr ""
+msgstr "Выделенная линия"
 
 msgid "increased_reliability"
-msgstr ""
+msgstr "Повышенная надежность"
 
 msgid "checkout"
 msgstr "Заказ"
@@ -455,19 +470,19 @@ msgid "lantern_pro_checkout"
 msgstr "Приобрести Lantern Pro"
 
 msgid "1y_pricing"
-msgstr ""
+msgstr "Цены на 1 год"
 
 msgid "2y_pricing"
-msgstr ""
+msgstr "Цены на 2 года"
 
 msgid "plan_type"
-msgstr ""
+msgstr "Тип плана"
 
 msgid "most_popular"
-msgstr ""
+msgstr "Наиболее популярный"
 
 msgid "free"
-msgstr ""
+msgstr "Бесплатно"
 
 msgid "n/a"
 msgstr "Не применимо"
@@ -533,10 +548,10 @@ msgid "save_error"
 msgstr "Ошибка сохранения."
 
 msgid "fewer_options"
-msgstr ""
+msgstr "Меньше опций"
 
 msgid "more_options"
-msgstr ""
+msgstr "Больше опций"
 
 msgid "block_user"
 msgstr "Заблокировать пользователя"
@@ -602,22 +617,29 @@ msgid "start_chat"
 msgstr "Начать чат"
 
 msgid "your_installed_apps"
-msgstr ""
+msgstr "Ваши установленные приложения"
 
 msgid "apps_routed_through_lantern"
-msgstr ""
+msgstr "Приложения, маршрутизируемые через Lantern"
 
 msgid "apps_to_unblock"
 msgstr ""
+"Выберите приложения, которые вы хотите разблокировать. При подключении "
+"только выбранные ниже приложения будут маршрутизироваться через Lantern."
 
 msgid "split_tunneling"
-msgstr ""
+msgstr "Раздельное туннелирование"
 
 msgid "split_tunneling_info"
 msgstr ""
+"При включении раздельного туннелирования маршрутизация выбранных приложений будет осуществляться через Lantern. Это сможет повысить производительность и сэкономить трафик, поскольку разблокируются только определенные приложения.\n"
+"\n"
+" "
 
 msgid "applied_next_time"
 msgstr ""
+"При повторном подключении будут применены новые настройки раздельного "
+"туннелирования."
 
 msgid "message_disappearing"
 msgstr "Для вас и пользователя %s сообщения не будут пропадать."
@@ -1429,7 +1451,7 @@ msgid "support"
 msgstr "Поддержка"
 
 msgid "lantern_user_forum"
-msgstr ""
+msgstr "Форум пользователей Lantern"
 
 msgid "faq"
 msgstr "ЧаВо"
