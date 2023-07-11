@@ -101,7 +101,8 @@ public class LanternVpnService extends VpnService implements Runnable {
     public void run() {
         try {
             Logger.d(TAG, "Loading Lantern library");
-            getOrInitProvider().run(this, new Builder(), LanternApp.getSession().getSOCKS5Addr(), LanternApp.getSession().getDNSGrabAddr());
+            getOrInitProvider().run(this, new Builder(), LanternApp.getSession().getSOCKS5Addr(),
+                LanternApp.getSession().getDNSGrabAddr());
         } catch (Exception e) {
             e.printStackTrace();
             Logger.error(TAG, "Error running VPN", e);
