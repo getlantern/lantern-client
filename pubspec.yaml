@@ -154,6 +154,7 @@ dependencies:
   flutter_pdfview: ^1.2.9
 
   wakelock: ^0.6.2
+  google_mobile_ads: ^2.4.0
 
 # wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0
 # See https://github.com/creativecreatorormaybenot/wakelock/issues/211
