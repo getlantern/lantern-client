@@ -20,6 +20,7 @@ import 'show_conversation_options.dart';
 import 'show_verification_options.dart';
 import 'stopwatch_timer.dart';
 
+@RoutePage<void>(name: 'Conversation')
 class Conversation extends StatefulWidget {
   final ContactId contactId;
   final int? initialScrollIndex;
@@ -32,19 +33,14 @@ class Conversation extends StatefulWidget {
   }) : super();
 
   @override
-  ConversationState createState() => ConversationState(
-        showContactEditingDialog: showContactEditingDialog,
-      );
+  ConversationState createState() => ConversationState();
 }
 
 class ConversationState extends State<Conversation>
     with WidgetsBindingObserver {
-  ConversationState({required this.showContactEditingDialog});
-
-  bool showContactEditingDialog;
   bool reactingWithEmoji = false;
   bool hasPermission = false;
-
+  bool showContactEditingDialog = false;
   final TextEditingController newMessage = TextEditingController();
   final StopWatchTimer stopWatchTimer = StopWatchTimer();
   bool isRecording = false;
@@ -95,10 +91,9 @@ class ConversationState extends State<Conversation>
     }
 
     var currentKeyboardHeight = max(
-      EdgeInsets.fromWindowPadding(
-        WidgetsBinding.instance.window.viewInsets,
-        WidgetsBinding.instance.window.devicePixelRatio,
-      ).bottom,
+      EdgeInsets.fromViewPadding(
+              View.of(context).padding, View.of(context).devicePixelRatio)
+          .bottom,
       MediaQuery.of(context).viewInsets.bottom,
     );
     if (currentKeyboardHeight > 0) {
@@ -187,6 +182,7 @@ class ConversationState extends State<Conversation>
   @override
   void initState() {
     super.initState();
+    showContactEditingDialog = widget.showContactEditingDialog;
     WidgetsBinding.instance.addObserver(this);
     BackButtonInterceptor.add(interceptBackButton);
     subscribeToKeyboardChanges();
