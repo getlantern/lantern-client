@@ -108,7 +108,6 @@ require (
 	github.com/edsrzf/mmap-go v1.1.0 // indirect
 	github.com/elazarl/goproxy v0.0.0-20221015165544-a0805db90819 // indirect
 	github.com/felixge/httpsnoop v1.0.3 // indirect
-	github.com/getlantern/bbrconn v0.0.0-20210901194755-12169918fdf9 // indirect
 	github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 // indirect
 	github.com/getlantern/broflake v0.0.0-20230622192109-5b751baea668 // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
@@ -200,12 +199,6 @@ require (
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/gonum/blas v0.0.0-20180125090452-e7c5890b24cf // indirect
-	github.com/gonum/floats v0.0.0-20180125090339-7de1f4ea7ab5 // indirect
-	github.com/gonum/internal v0.0.0-20180125090855-fda53f8d2571 // indirect
-	github.com/gonum/lapack v0.0.0-20180125091020-f0b8b25edece // indirect
-	github.com/gonum/matrix v0.0.0-20180124231301-a41cc49d4c29 // indirect
-	github.com/gonum/stat v0.0.0-20180125090729-ec9c8a1062f4 // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/netstack v0.0.0-00010101000000-000000000000 // indirect
 	github.com/google/pprof v0.0.0-20230510103437-eeec1cb781c3 // indirect
@@ -230,9 +223,6 @@ require (
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/mdlayher/netlink v1.1.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.1 // indirect
-	github.com/mikioh/tcp v0.0.0-20180707144002-02a37043a4f7 // indirect
-	github.com/mikioh/tcpinfo v0.0.0-20180831101334-131b59fef27f // indirect
-	github.com/mikioh/tcpopt v0.0.0-20180707144150-7178f18b4ea8 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-ps v1.0.0 // indirect
 	github.com/mitchellh/go-server-timing v1.0.1 // indirect
@@ -261,7 +251,6 @@ require (
 	github.com/pion/stun v0.6.0 // indirect
 	github.com/pion/transport/v2 v2.2.1 // indirect
 	github.com/pion/turn/v2 v2.1.0 // indirect
-	github.com/pion/udp/v2 v2.0.1 // indirect
 	github.com/pion/webrtc/v3 v3.2.6 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
