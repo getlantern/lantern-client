@@ -29,7 +29,14 @@
   <string name="no_purchase_date">Xin cho biết khoảng thời gian bạn mua Lantern Pro</string>
   <string name="purchase_date">Ngày Mua</string>
   <string name="common_issue_list_0">Không thể truy cập các trang bị chặn</string>
+  <string name="common_issue_list_1">Không thể hoàn tất việc mua</string>
+  <string name="common_issue_list_2">Không thể đăng nhập</string>
+  <string name="common_issue_list_3">Spinner tải vô tận</string>
   <string name="common_issue_list_4">chậm</string>
+  <string name="common_issue_list_5">Trò chuyện không hoạt động</string>
+  <string name="common_issue_list_6">Khám phá không hoạt động</string>
+  <string name="common_issue_list_7">Không thể liên kết thiết bị</string>
+  <string name="common_issue_list_8">Ứng dụng bị treo</string>
   <string name="common_issue_list_9">Khác</string>
   <string name="submit_code">Mã Số Xác Nhận</string>
   <string name="on_text">BẬT</string>
@@ -49,6 +56,7 @@
   <string name="error_making_purchase">Lỗi khi đặt mua</string>
   <string name="have_latest_version">%1$s %2$s là phiên bản mới nhất hiện có.</string>
   <string name="updating_lantern">Đang cập nhật %1$s</string>
+  <string name="update_lantern">Cập nhật Lantern</string>
   <string name="cancel">Hủy bỏ</string>
   <string name="newsfeed_option">Thử Lantern Feed</string>
   <string name="newsfeed_off_option">Tắt Feed</string>
@@ -96,6 +104,7 @@
   <string name="error_update">Có lỗi tải phiên bản cập nhật</string>
   <string name="error_install_update">Lỗi khi cài đặt bản cập nhật</string>
   <string name="loading">Đang nạp...</string>
+  <string name="manual_update">Thử cài đặt thủ công phiên bản mới nhất từ <a href="https://github.com/getlantern/lantern">tại đây</a></string>
   <string name="pro_welcome_text">Chào mừng đến với Lantern Pro!</string>
   <string name="happy_anniversary">CHÚC MỪNG SINH NHẬT LANTERN!</string>
   <string name="welcome_greeting">Xin chào mừng bạn đã đến với Lantern</string>
@@ -123,6 +132,7 @@
   <string name="share_friends_text">Chia sẻ mã số với bạn bè để được thêm các tháng miễn phí!</string>
   <string name="email_address">Địa chỉ Email</string>
   <string name="switch_to_alipay">Chuyển sang Alipay</string>
+  <string name="switch_to_stripe">Chuyển sang Stripe</string>
   <string name="switch_to_credit_card">Chuyển sang thanh toán bằng thẻ tín dụng</string>
   <string name="continue_to_pro">Tiếp tục qua Pro</string>
   <string name="continue_to_basic">Tiếp tục với bản Basic</string>
@@ -204,6 +214,13 @@
     <item>Chống Tường Lửa</item>
     <item>Ba Máy</item>
     <item>Không Quảng Cáo</item>
+  </string-array>
+  <string-array name="pro_features_new">
+    <item>Tốc độ nhanh hơn</item>
+    <item>Chống chặn</item>
+    <item>Đáng tin cậy hơn</item>
+    <item>Đăng ký tối đa 3 thiết bị</item>
+    <item>Dữ liệu không giới hạn</item>
   </string-array>
   <string-array name="pro_features_welcome">
     <item>Dữ liệu tốc độ cao không giới hạn</item>
@@ -291,7 +308,6 @@
   <string name="earn_free_month">Được một tháng miễn phí cho mỗi người đăng ký</string>
   <string name="credits_applied">Điểm của bạn sẽ được tính vào tài khoản trong chu kỳ tính tiền kế tiếp.</string>
   <string name="pro_invitation_subject">Mời Dùng Lantern Pro</string>
-  <string name="receive_free_month">Cho một tháng Lantern Pro miễn phí, dùng mã số giới thiệu này: %1$s ; Bạn có thể tải xuống từ đây: https://bit.ly/1M8x04u</string>
   <string name="share_feed_item">Tôi đang xem \"%1$s\" at %2$s bằng Lantern. Dùng Lantern để truy cập các trang và dịch vụ bị chặn. Bạn có thể tải phiên bản cho Android ở đây: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Bạn có chắc không? Thao tác này không hủy bỏ được! Bạn có thể đăng ký lại bản Pro bất cứ lúc nào.</string>
   <string name="unauthorize_confirmation">Bạn có chắc là muốn gỡ kết nối máy này ra khỏi tài khoản Pro?</string>
@@ -402,6 +418,7 @@
   <string name="privacy_disclosure_title">Tiết lộ quyền riêng tư của Lantern</string>
   <string name="privacy_disclosure_accept">Tôi đồng ý</string>
   <string name="privacy_disclosure_body">Lantern cam kết bảo vệ sự riêng tư của bạn. Chúng tôi muốn bạn hiểu thông tin nào chúng tôi thu thập, thông tin nào chúng tôi không thu thập và cách chúng tôi thu thập, sử dụng và lưu trữ thông tin. Chúng tôi tách thông tin thanh toán của bạn với tài khoản Lantern Pro của bạn. Chúng tôi không thu thập nhật ký hoạt động của bạn, bao gồm không ghi nhật ký lịch sử duyệt web, điểm đến của lưu lượng truy cập, nội dung dữ liệu hoặc truy vấn DNS. Chúng tôi cũng không bao giờ lưu trữ nhật ký kết nối, nghĩa là không có nhật ký nào về địa chỉ IP của bạn, địa chỉ IP máy chủ Lantern gửi đi của bạn được liên kết với dấu thời gian kết nối hoặc thời lượng mỗi phiên. Với tài khoản Lantern Pro cụ thể, về mặt kỹ thuật, Lantern không thể liên kết tài khoản Lantern với danh tính thực của người dùng. Với địa chỉ IP của Lantern và dấu thời gian chính xác, về mặt kỹ thuật, Lantern không thể gán địa chỉ IP này cho người dùng Lantern hoặc địa chỉ IP của người dùng Lantern.</string>
+  <string name="referral_code_share_description">Chia sẻ Lantern Pro với bạn bè! Khi bạn của bạn sử dụng mã giới thiệu của bạn trong quá trình mua Lantern Pro, cả hai bạn sẽ nhận được một tháng dịch vụ Lantern Pro miễn phí!</string>
   <string name="referral_code_share">Chia sẻ mã giới thiệu</string>
   <string name="referral_code_share_title">Chia sẻ mã giới thiệu của bạn:</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -450,8 +467,10 @@
   <string name="send_report">Gửi báo cáo</string>
   <string name="email_optional">Email (Tùy chọn)</string>
   <string name="device_added">Đã thêm thiết bị</string>
+  <string name="device_authorized_pro">Thiết bị mới của bạn hiện Được phép sử dụng tài khoản Pro của bạn. Vui lòng đợi một vài phút để các thay đổi có hiệu lực.</string>
   <string name="report_sent">Đã gửi báo cáo</string>
   <string name="thank_you_for_reporting_your_issue">Cảm ơn bạn đã báo cáo sự cố của mình, chúng tôi sẽ liên hệ lại với bạn qua Email ngay khi có thể</string>
+  <string name="unable_to_submit_issue">Không thể gửi lỗi</string>
   <string name="have_a_lantern_pro_activation_code_click_here">Có mã kích hoạt Lantern Pro? Bấm vào đây</string>
   <string name="enter_email_and_activation_code">Nhập Email và Mã kích hoạt</string>
   <string name="activation_code">Mã kích hoạt</string>

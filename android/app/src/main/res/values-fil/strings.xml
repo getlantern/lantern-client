@@ -268,7 +268,7 @@
   <string name="earn_free_month">Kumita ng libreng buwan sa bawat kaibigan na magsa-sign up</string>
   <string name="credits_applied">Ang iyong credit ay lalabas sa kasunod na billing cycle ng iyong account.</string>
   <string name="pro_invitation_subject">Imbitasyon upang Sumali sa Lantern Pro</string>
-  <string name="receive_free_month">Para sa libreng buwan sa Lantern Pro, gamitin ang referral code na ito: %1$s; Maaari mo itong ma-download dito: https://bit.ly/1M8x04u</string>
+  <string name="receive_free_month">Para sa libreng buwan sa Lantern Pro, gamitin ang referral code na ito: %1$s; Maaari mo itong ma-download dito: https://lantern.io/download</string>
   <string name="share_feed_item">Binabasa ko ang tungkol sa \"%1$s\" sa %2$s gamit ang Lantern. Gamitin ang Lantern upang makapasok sa mga naka-block na site at serbisyo. Maaari mo itong i-download para sa Android dito: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Sigurado ka ba? Ang aksyong ito ay hindi na mababawi! Maaari kang mag-sign up muli sa Pro anumang oras.</string>
   <string name="unauthorize_confirmation">Sigurado ka bang nais mong tanggalin ang device na ito sa pagkaka-link mula sa iyong Pro account?</string>

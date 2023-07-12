@@ -22,6 +22,7 @@ class Support extends StatelessWidget {
         //* Report
         ListItemFactory.settingsItem(
           icon: ImagePaths.alert,
+          key: AppKeys.reportIssue,
           content: 'report_issue'.i18n,
           trailingArray: [
             mirrorLTR(context: context, child: const ContinueArrow())
