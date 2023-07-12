@@ -447,6 +447,8 @@ github.com/getlantern/lampshade v0.0.0-20201109225444-b06082e15f3a h1:z7G1v79GB1
 github.com/getlantern/lampshade v0.0.0-20201109225444-b06082e15f3a/go.mod h1:cGOfTjvllC9bcwS7cVW6tGT6fXc8Dki384uFjm7XBnw=
 github.com/getlantern/lantern-shadowsocks v1.3.6-0.20230114153732-0193919d4860 h1:eMJ05nKDxgglPGWvAqcs4e23RRB3NoofVCtD0DDOV/Q=
 github.com/getlantern/lantern-shadowsocks v1.3.6-0.20230114153732-0193919d4860/go.mod h1:YCEW57ujbWaUeGRMhRjF0OgMBqUTNb3QsErbaQZq5K8=
+github.com/getlantern/lantern-shadowsocks v1.3.6-0.20230301223223-150b18ac427d h1:YwH3hgY1qtp1J1V8iBx58wB+mAY6L7N1s+qYqNJgDjM=
+github.com/getlantern/lantern-shadowsocks v1.3.6-0.20230301223223-150b18ac427d/go.mod h1:Wwa1uDdu6LxVRANcN2dQ+aNI0rY+km+dqHW2G9Qm34k=
 github.com/getlantern/mandrill v0.0.0-20221004112352-e7c04248adcb h1:oyEMOT9jn4bzKyivF2sVBogsXyL8fBCK7HIT/P6h64Y=
 github.com/getlantern/mandrill v0.0.0-20221004112352-e7c04248adcb/go.mod h1:gz4iIB+vPk8hWxkAnnZSudQuIpBMnW7i89eHl9Fl+I8=
 github.com/getlantern/measured v0.0.0-20170302221919-0582bf799783/go.mod h1:5OW2WJitCKExpSw2bploW2fM7PjOd6QnLqyp+IqToqU=
