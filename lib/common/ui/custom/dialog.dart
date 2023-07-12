@@ -133,14 +133,15 @@ class CDialogState extends State<CDialog> {
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: hasIcon
-            ? CrossAxisAlignment.center
-            : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            hasIcon ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
           if (hasIcon)
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 16),
-              child: widget.icon != null ? widget.icon! : CAssetImage(path: widget.iconPath!, size: 24),
+              child: widget.icon != null
+                  ? widget.icon!
+                  : CAssetImage(path: widget.iconPath!, size: 24),
             ),
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 24, end: 24),
@@ -157,11 +158,11 @@ class CDialogState extends State<CDialog> {
                 child: widget.description is Widget
                     ? widget.description
                     : CText(
-                        widget.description as String,
-                        style: tsBody1.copiedWith(
-                          color: grey5,
-                        ),
-                      ),
+                            widget.description as String,
+                            style: tsBody1.copiedWith(
+                              color: grey5,
+                            ),
+                          ),
               ),
             ),
           ),
@@ -224,26 +225,29 @@ class CDialogState extends State<CDialog> {
                     ),
                   ),
                 // AGREE
-                TextButton(
-                  onPressed: () async {
-                    if (widget.maybeAgreeAction != null) {
-                      if (await widget.maybeAgreeAction!(checkboxChecked)) {
+                Tooltip(
+                  message: AppKeys.renewalSuccessOk,
+                  child: TextButton(
+                    onPressed: () async {
+                      if (widget.maybeAgreeAction != null) {
+                        if (await widget.maybeAgreeAction!(checkboxChecked)) {
+                          widget.close(context);
+                        }
+                      } else if (widget.agreeAction != null) {
+                        if ((widget.checkboxLabel == null || checkboxChecked) &&
+                            await widget.agreeAction!()) {
+                          widget.close(context);
+                        }
+                      } else {
                         widget.close(context);
                       }
-                    } else if (widget.agreeAction != null) {
-                      if ((widget.checkboxLabel == null || checkboxChecked) &&
-                          await widget.agreeAction!()) {
-                        widget.close(context);
-                      }
-                    } else {
-                      widget.close(context);
-                    }
-                  },
-                  child: CText(
-                    (widget.agreeText ?? 'OK'.i18n).toUpperCase(),
-                    style: widget.checkboxLabel == null || checkboxChecked
-                        ? tsButtonPink
-                        : tsButtonGrey,
+                    },
+                    child: CText(
+                      (widget.agreeText ?? 'OK'.i18n).toUpperCase(),
+                      style: widget.checkboxLabel == null || checkboxChecked
+                          ? tsButtonPink
+                          : tsButtonGrey,
+                    ),
                   ),
                 ),
               ],

@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
+import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.databinding.ActivityReportIssueBinding
@@ -39,6 +40,7 @@ open class ReportIssueActivity : FragmentActivity() {
         setContentView(binding.root)
 
         val email = LanternApp.getSession().email()
+
         if ("" != email) {
             binding.emailInput.setText(email)
         }
@@ -54,6 +56,13 @@ open class ReportIssueActivity : FragmentActivity() {
         }
         binding.emailInput.addTextChangedListener {
             checkValidField()
+        }
+        // this is necessary for Appium Test cases
+        //check if running from CI set no email
+        // Set dealt issue type
+        if (BuildConfig.CI) {
+            binding.emailInput.setText("")
+            binding.issue.setText(issues()[0])
         }
     }
 
