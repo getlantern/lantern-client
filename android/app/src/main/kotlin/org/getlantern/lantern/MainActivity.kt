@@ -1,9 +1,7 @@
 package org.getlantern.lantern
 
 import android.Manifest
-import android.app.NotificationManager
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -29,7 +27,6 @@ import io.lantern.model.SessionModel
 import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
 import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
@@ -41,8 +38,6 @@ import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
-import org.getlantern.lantern.model.PaymentProvider
-import org.getlantern.lantern.model.PaymentMethod
 import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
@@ -54,7 +49,6 @@ import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.DeviceInfo
-import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -66,8 +60,8 @@ import org.getlantern.mobilesdk.model.Survey
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.concurrent.*
 import java.util.Locale
+import java.util.concurrent.*
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     CoroutineScope by MainScope() {
@@ -353,9 +347,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 }
                 LanternApp.getSession().setUserPlans(proPlans)
 
-             }
-         }, null)
-     }
+            }
+        }, null)
+    }
 
     private fun updatePaymentMethods() {
         lanternClient.plansV3(object : PlansV3Callback {
@@ -363,13 +357,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
             }
 
-            override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
+            override fun onSuccess(
+                proPlans: Map<String, ProPlan>,
+                paymentMethods: List<PaymentMethods>
+            ) {
                 Logger.debug(TAG, "Successfully fetched payment methods")
                 LanternApp.getSession().setPaymentMethods(paymentMethods)
 
-             }
-         }, null)
-     }
+            }
+        }, null)
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {
@@ -597,6 +594,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 )
                 startActivityForResult(intent, REQUEST_VPN)
             } else {
+
                 Logger.debug(
                     TAG,
                     "VPN enabled, starting Lantern...",
@@ -688,6 +686,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             if (useVpn) {
                 startVpnService()
             }
+            // this mean user has already given
+            // system permissions
+            LanternApp.getSession().setHasAllPermissionGiven(true)
         }
     }
 

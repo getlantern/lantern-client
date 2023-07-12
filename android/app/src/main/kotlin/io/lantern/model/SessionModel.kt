@@ -30,7 +30,6 @@ import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
-import java.util.concurrent.*
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -72,23 +71,32 @@ class SessionModel(
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
+            "getCountryCode" -> result.success(LanternApp.getSession().countryCode)
+            "hasAllPermissionGiven" -> result.success(LanternApp.getSession().hasAllPermissionGiven())
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
             "applyRefCode" -> paymentsUtil.applyRefCode(call.argument("refCode")!!, result)
-            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
+            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(
+                call.argument("email")!!,
+                call.argument("resellerCode")!!,
+                result
+            )
+
             "submitBitcoinPayment" -> paymentsUtil.submitBitcoinPayment(
                 call.argument("planID")!!,
                 call.argument("email")!!,
                 call.argument("refCode")!!,
                 result,
             )
+
             "submitGooglePlayPayment" -> paymentsUtil.submitGooglePlayPayment(
                 call.argument("planID")!!,
                 result,
             )
+
             "submitStripePayment" -> paymentsUtil.submitStripePayment(
                 call.argument("planID")!!,
                 call.argument("email")!!,
@@ -97,6 +105,7 @@ class SessionModel(
                 call.argument("cvc")!!,
                 result,
             )
+
             "userStatus" -> userStatus(result)
             else -> super.doOnMethodCall(call, result)
         }
@@ -112,26 +121,32 @@ class SessionModel(
                     activity.startActivity(intent)
                 }
             }
+
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
             }
+
             "setPaymentTestMode" -> {
                 LanternApp.getSession().setPaymentTestMode(call.argument("on") ?: false)
                 activity.restartApp()
             }
+
             "setPlayVersion" -> {
                 LanternApp.getSession().isPlayVersion = call.argument("on") ?: false
                 activity.restartApp()
             }
+
             "setForceCountry" -> {
                 LanternApp.getSession().setForceCountry(call.argument("countryCode") ?: "")
                 activity.restartApp()
             }
+
             "setSelectedTab" -> {
                 db.mutate { tx ->
                     tx.put("/selectedTab", call.argument<String>("tab")!!)
                 }
             }
+
             "submitFreekassa" -> {
                 val userEmail = call.argument("email") ?: ""
                 val planID = call.argument("planID") ?: ""
@@ -144,9 +159,11 @@ class SessionModel(
                     },
                 )
             }
+
             "checkForUpdates" -> {
                 EventBus.getDefault().post(CheckUpdate(true))
             }
+
             else -> super.doMethodCall(call, notImplemented)
         }
     }
@@ -197,7 +214,8 @@ class SessionModel(
                     if (result!!["token"] != null && result["userID"] != null) {
                         Logger.debug(TAG, "Successfully recovered account")
                         // update token and user ID with those returned by the pro server
-                        LanternApp.getSession().setUserIdAndToken(result["userID"].asLong, result["token"].asString)
+                        LanternApp.getSession()
+                            .setUserIdAndToken(result["userID"].asLong, result["token"].asString)
                         LanternApp.getSession().linkDevice()
                         LanternApp.getSession().setIsProUser(true)
                         activity.showAlertDialog(
@@ -272,7 +290,11 @@ class SessionModel(
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to validate link code", t)
                     activity.runOnUiThread {
-                        methodCallResult.error("unableToVerifyRecoveryCode", t?.message, error?.message)
+                        methodCallResult.error(
+                            "unableToVerifyRecoveryCode",
+                            t?.message,
+                            error?.message
+                        )
                     }
                     if (error == null) {
                         Logger.error(TAG, "Unable to validate recovery code and no error to show")
@@ -292,10 +314,15 @@ class SessionModel(
                         Logger.debug(TAG, "Successfully validated recovery code")
                         // update token and user ID with those returned by the pro server
                         // update token and user ID with those returned by the pro server
-                        LanternApp.getSession().setUserIdAndToken(result["userID"].asLong, result["token"].asString)
+                        LanternApp.getSession()
+                            .setUserIdAndToken(result["userID"].asLong, result["token"].asString)
                         LanternApp.getSession().linkDevice()
                         LanternApp.getSession().setIsProUser(true)
-                        activity.showAlertDialog(activity.getString(R.string.device_added), activity.getString(R.string.device_authorized_pro), ContextCompat.getDrawable(activity, R.drawable.ic_filled_check), { activity.openHome() })
+                        activity.showAlertDialog(
+                            activity.getString(R.string.device_added),
+                            activity.getString(R.string.device_authorized_pro),
+                            ContextCompat.getDrawable(activity, R.drawable.ic_filled_check),
+                            { activity.openHome() })
                     }
                 }
             },
@@ -326,12 +353,20 @@ class SessionModel(
                             activity.runOnUiThread {
                                 methodCallResult.success("approvedDevice")
                             }
-                            activity.showAlertDialog(activity.resources.getString(R.string.device_added), activity.resources.getString(R.string.device_authorized_pro), ContextCompat.getDrawable(activity, R.drawable.ic_filled_check))
+                            activity.showAlertDialog(
+                                activity.resources.getString(R.string.device_added),
+                                activity.resources.getString(R.string.device_authorized_pro),
+                                ContextCompat.getDrawable(activity, R.drawable.ic_filled_check)
+                            )
                         }
 
                         override fun onFailure(t: Throwable?, error: ProError?) {
                             Logger.error(TAG, "Unable to fetch user data: $t.message")
-                            methodCallResult.error("errorUpdatingUserData", t?.message, error?.message)
+                            methodCallResult.error(
+                                "errorUpdatingUserData",
+                                t?.message,
+                                error?.message
+                            )
                         }
                     })
                 }
@@ -383,7 +418,11 @@ class SessionModel(
 
                         override fun onFailure(t: Throwable?, error: ProError?) {
                             Logger.error(TAG, "Unable to fetch user data: $t.message")
-                            methodCallResult.error("errorUpdatingUserData", t?.message, error?.message)
+                            methodCallResult.error(
+                                "errorUpdatingUserData",
+                                t?.message,
+                                error?.message
+                            )
                         }
                     })
                 }
@@ -400,15 +439,24 @@ class SessionModel(
                     result.success("cachingUserDataSuccess")
                     LanternApp.getSession().setUserLevel(userData.userLevel)
                 }
+
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to fetch user data: $t.message")
-                    result.error("cachingUserDataError", "Unable to cache user status", error?.message) // This will be localized Flutter-side
+                    result.error(
+                        "cachingUserDataError",
+                        "Unable to cache user status",
+                        error?.message
+                    ) // This will be localized Flutter-side
                     return
                 }
             })
         } catch (t: Throwable) {
             Logger.error(TAG, "Error caching user status", t)
-            result.error("unknownError", "Unable to cache user status", null) // This will be localized Flutter-side
+            result.error(
+                "unknownError",
+                "Unable to cache user status",
+                null
+            ) // This will be localized Flutter-side
         }
     }
 }

@@ -136,6 +136,15 @@ class SessionModel extends Model {
     );
   }
 
+  Future<String> getCountryCode() async {
+    return await methodChannel
+        .invokeMethod('getCountryCode', <String, dynamic>{});
+  }
+
+  Future<bool> hasAllPermissionGiven() async {
+    return await methodChannel.invokeMethod('hasAllPermissionGiven');
+  }
+
   Future<void> setLanguage(String lang) {
     return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
       'lang': lang,
