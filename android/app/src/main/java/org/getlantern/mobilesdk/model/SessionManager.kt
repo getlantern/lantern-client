@@ -104,7 +104,7 @@ abstract class SessionManager(application: Application) : Session {
         val locale = Locale(language)
         val country = countryCode
         return country.equals(c, ignoreCase = true) ||
-            listOf(*l).contains(locale)
+                listOf(*l).contains(locale)
     }
 
     val isEnglishUser: Boolean
@@ -235,9 +235,11 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(CHAT_ENABLED, enabled).apply()
     }
 
-//    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
+    //    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
     // for now, disable Chat completely
-    fun chatEnabled(): Boolean { return false }
+    fun chatEnabled(): Boolean {
+        return false
+    }
 
     fun appVersion(): String {
         return appVersion
@@ -393,6 +395,7 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().remove(HAS_SUCCEEDING_PROXY).apply()
     }
 
+
     /**
      * hasPrefExpired checks whether or not a particular
      * shared preference has expired (assuming its stored value
@@ -411,6 +414,14 @@ abstract class SessionManager(application: Application) : Session {
     fun saveExpiringPref(name: String?, numSeconds: Int) {
         val currentMilliseconds = System.currentTimeMillis()
         prefs.edit().putLong(name, currentMilliseconds + numSeconds * 1000).apply()
+    }
+
+    fun setHasAllPermissionGiven(status: Boolean) {
+        prefs.edit().putBoolean(HAS_ALL_PERMISSION_GIVEN, status).apply()
+    }
+
+    fun hasAllPermissionGiven():Boolean {
+       return prefs.getBoolean(HAS_ALL_PERMISSION_GIVEN, false);
     }
 
     fun getInternalHeaders(): Map<String, String> {
@@ -449,6 +460,7 @@ abstract class SessionManager(application: Application) : Session {
         protected const val SERVER_COUNTRY_CODE = "server_country_code"
         protected const val SERVER_CITY = "server_city"
         protected const val HAS_SUCCEEDING_PROXY = "hasSucceedingProxy"
+        protected const val HAS_ALL_PERMISSION_GIVEN = "hasAllPermissionGiven"
         protected const val DEVICE_ID = "deviceid"
 
         @JvmStatic
@@ -578,7 +590,8 @@ abstract class SessionManager(application: Application) : Session {
                 val loadedApkCls = Class.forName("android.app.LoadedApk")
                 val receiversField = loadedApkCls.getDeclaredField("mReceivers")
                 receiversField.isAccessible = true
-                val receivers = receiversField.get(loadedApk) as ArrayMap<Context, ArrayMap<BroadcastReceiver, Any>>
+                val receivers =
+                    receiversField.get(loadedApk) as ArrayMap<Context, ArrayMap<BroadcastReceiver, Any>>
                 for (receiverMap in receivers.values) {
                     for (rec in (receiverMap as ArrayMap).keys) {
                         val clazz: Class<*> = rec.javaClass

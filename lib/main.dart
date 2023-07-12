@@ -18,6 +18,7 @@ Future<void> main() async {
   setupCatcherAndRun(LanternApp());
 }
 
-Future<InitializationStatus> _initGoogleMobileAds() {
-  return MobileAds.instance.initialize();
+Future<void> _initGoogleMobileAds() async {
+  await MobileAds.instance.initialize();
+  // await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ['D79728264130CE0918737B5A2178D362']));
 }

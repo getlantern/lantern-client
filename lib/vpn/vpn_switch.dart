@@ -11,12 +11,10 @@ class VPNSwitch extends StatefulWidget {
 
 class _VPNSwitchState extends State<VPNSwitch> {
   InterstitialAd? _interstitialAd;
+  String countryCode = '';
+  final isProUser = false;
 
-  @override
-  void initState() {
-    _loadInterstitialAd(); //preload ads
-    super.initState();
-  }
+
 
   @override
   void dispose() {
@@ -24,38 +22,43 @@ class _VPNSwitchState extends State<VPNSwitch> {
     super.dispose();
   }
 
-  void _loadInterstitialAd() {
+  Future<void> _loadInterstitialAd() async {
+    final countryCode = await sessionModel.getCountryCode();
+    final hasAllPermissionGiven = await sessionModel.hasAllPermissionGiven();
+    logger.i('[Ads Request] making request with country $countryCode');
     //To avoid calling multiple ads request repeatedly
-    if (_interstitialAd == null) {
-      logger.i('Ads making request');
-      InterstitialAd.load(
+    if (_interstitialAd == null&&countryCode=='IR'&&hasAllPermissionGiven) {
+      logger.i('[Ads Request] making request');
+      await InterstitialAd.load(
         adUnitId: AdHelper.interstitialAdUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) {
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdClicked: (ad) {
-                logger.i('Ads  onAdClicked callback');
+                logger.i('[Ads Request]  onAdClicked callback');
               },
               onAdShowedFullScreenContent: (ad) {
                 logger.i('Showing Ads');
               },
               onAdFailedToShowFullScreenContent: (ad, error) {
-                logger.i('Ads  onAdFailedToShowFullScreenContent callback');
+                logger.i('[Ads Request]  onAdFailedToShowFullScreenContent callback');
                 //if ads fail to load let user turn on VPN
                 postShowingAds();
               },
               onAdDismissedFullScreenContent: (ad) {
-                logger.i('Ads  fullScreenContentCallback callback');
+                logger.i('[Ads Request]  fullScreenContentCallback callback');
                 postShowingAds();
               },
+              
             );
             _interstitialAd = ad;
-            logger.i('Ads to loaded $ad');
+            logger.i('[Ads Request] to loaded $ad');
           },
           onAdFailedToLoad: (err) {
-            logger.i('Ads failed to load $err');
+            logger.i('[Ads Request] failed to load $err');
           },
+          
         ),
       );
     }
@@ -75,7 +78,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
       Future.delayed(
         const Duration(seconds: 1),
         () async {
-          if (!proUser && _interstitialAd != null) {
+          //Show add only on iran region
+          if (_interstitialAd != null) {
             await _interstitialAd?.show();
           }
         },
@@ -92,17 +96,19 @@ class _VPNSwitchState extends State<VPNSwitch> {
   @override
   Widget build(BuildContext context) {
     return sessionModel.proUser((context, proUser, child) => Transform.scale(
-          scale: 2,
-          child: vpnModel.vpnStatus(
-              (BuildContext context, String vpnStatus, Widget? child) {
-            return FlutterSwitch(
-              value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
-              activeColor: onSwitchColor,
-              inactiveColor: offSwitchColor,
-              onToggle: (bool newValue) =>
-                  onSwitchTap(newValue, vpnStatus, proUser),
-            );
-          }),
-        ));
+        scale: 2,
+        child: vpnModel
+            .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+          if (!proUser) {
+            _loadInterstitialAd(); //preload ads
+          }
+          return FlutterSwitch(
+            value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+            activeColor: onSwitchColor,
+            inactiveColor: offSwitchColor,
+            onToggle: (bool newValue) =>
+                onSwitchTap(newValue, vpnStatus, proUser),
+          );
+        })));
   }
 }
