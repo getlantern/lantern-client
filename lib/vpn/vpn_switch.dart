@@ -14,8 +14,6 @@ class _VPNSwitchState extends State<VPNSwitch> {
   String countryCode = '';
   final isProUser = false;
 
-
-
   @override
   void dispose() {
     _interstitialAd?.dispose();
@@ -25,9 +23,12 @@ class _VPNSwitchState extends State<VPNSwitch> {
   Future<void> _loadInterstitialAd() async {
     final countryCode = await sessionModel.getCountryCode();
     final hasAllPermissionGiven = await sessionModel.hasAllPermissionGiven();
-    logger.i('[Ads Request] making request with country $countryCode');
+    logger.i('[Ads Request] support checking  with country $countryCode');
     //To avoid calling multiple ads request repeatedly
-    if (_interstitialAd == null&&countryCode=='IR'&&hasAllPermissionGiven) {
+    if (_interstitialAd == null &&
+        !AdHelper.notAdsSupportCountry.contains(countryCode) &&
+        hasAllPermissionGiven) {
+
       logger.i('[Ads Request] making request');
       await InterstitialAd.load(
         adUnitId: AdHelper.interstitialAdUnitId,
@@ -42,7 +43,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
                 logger.i('Showing Ads');
               },
               onAdFailedToShowFullScreenContent: (ad, error) {
-                logger.i('[Ads Request]  onAdFailedToShowFullScreenContent callback');
+                logger.i(
+                    '[Ads Request]  onAdFailedToShowFullScreenContent callback');
                 //if ads fail to load let user turn on VPN
                 postShowingAds();
               },
@@ -50,7 +52,6 @@ class _VPNSwitchState extends State<VPNSwitch> {
                 logger.i('[Ads Request]  fullScreenContentCallback callback');
                 postShowingAds();
               },
-              
             );
             _interstitialAd = ad;
             logger.i('[Ads Request] to loaded $ad');
@@ -58,7 +59,6 @@ class _VPNSwitchState extends State<VPNSwitch> {
           onAdFailedToLoad: (err) {
             logger.i('[Ads Request] failed to load $err');
           },
-          
         ),
       );
     }
