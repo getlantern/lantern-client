@@ -10,6 +10,10 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.apps.AppsDataProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
@@ -207,8 +211,8 @@ class SessionModel(
     // updateAppsData stores app data for the list of applications installed for the current
     // user in the database
     private fun updateAppsData() {
-        // This can be quite slow, run it on its own thread
-        Thread {
+        // This can be quite slow, run it on its own coroutine
+        CoroutineScope(Dispatchers.IO).launch {
             val appsList = appsDataProvider.listOfApps()
             // First add just the app names to get a list quickly
             db.mutate { tx ->
@@ -244,7 +248,7 @@ class SessionModel(
                     }
                 }
             }
-        }.start()
+        }
     }
 
     private fun confirmEmailError(error: ProError) {
