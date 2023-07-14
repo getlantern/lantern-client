@@ -509,6 +509,7 @@ abstract class SessionManager(application: Application) : Session {
         db.registerType(2002, Vpn.Plan::class.java)
         db.registerType(2004, Vpn.PaymentProviders::class.java)
         db.registerType(2005, Vpn.PaymentMethod::class.java)
+        db.registerType(2006, Vpn.AppData::class.java)
         Logger.debug(TAG, "register types finished at ${System.currentTimeMillis() - start}")
         val prefsAdapter = db.asSharedPreferences(
             context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE),

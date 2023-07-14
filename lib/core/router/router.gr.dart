@@ -28,6 +28,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
 import 'package:lantern/account/language.dart' as _i6;
 import 'package:lantern/account/recovery_key.dart' as _i11;
 import 'package:lantern/account/settings.dart' as _i4;
+import 'package:lantern/account/split_tunneling.dart' as _i5;
 import 'package:lantern/account/support.dart' as _i34;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i2;
 import 'package:lantern/home.dart' as _i1;
@@ -54,7 +55,6 @@ import 'package:lantern/replica/ui/viewers/video.dart' as _i32;
 import 'package:lantern/replica/upload/description.dart' as _i27;
 import 'package:lantern/replica/upload/review.dart' as _i28;
 import 'package:lantern/replica/upload/title.dart' as _i26;
-import 'package:lantern/vpn/vpn_split_tunneling.dart' as _i5;
 
 class AppRouter extends _i35.RootStackRouter {
   AppRouter([_i36.GlobalKey<_i36.NavigatorState>? navigatorKey])

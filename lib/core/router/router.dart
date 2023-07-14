@@ -9,6 +9,7 @@ import 'package:lantern/account/device_linking/authorize_device_via_email_pin.da
 import 'package:lantern/account/language.dart';
 import 'package:lantern/account/recovery_key.dart';
 import 'package:lantern/account/settings.dart';
+import 'package:lantern/account/split_tunneling.dart';
 import 'package:lantern/account/support.dart';
 import 'package:lantern/common/ui/full_screen_dialog.dart';
 import 'package:lantern/common/ui/transitions.dart';
@@ -33,7 +34,6 @@ import 'package:lantern/replica/ui/viewers/misc.dart';
 import 'package:lantern/replica/upload/title.dart';
 import 'package:lantern/replica/upload/description.dart';
 import 'package:lantern/replica/upload/review.dart';
-import 'package:lantern/vpn/vpn_split_tunneling.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route,Screen',
