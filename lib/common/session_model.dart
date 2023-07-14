@@ -354,4 +354,43 @@ class SessionModel extends Model {
       'url': url,
     });
   }
+
+  Future<void> refreshAppsList() async {
+    await methodChannel.invokeMethod('refreshAppsList');
+  }
+
+  Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('/splitTunneling',
+        builder: builder,);
+  }
+
+  Future<void> setSplitTunneling<T>(bool on) async {
+    unawaited(methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
+      'on': on,
+    }),);
+  }
+
+  Widget appsData({
+    required ValueWidgetBuilder<Iterable<PathAndValue<AppData>>> builder,
+  }) {
+    return subscribedListBuilder<AppData>(
+      '/appsData/',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return AppData.fromBuffer(serialized);
+      },
+    );
+  }
+
+  Future<void> allowAppAccess(String packageName) {
+    return methodChannel.invokeMethod('allowAppAccess', <String, dynamic>{
+      'packageName': packageName,
+    });
+  }
+
+  Future<void> denyAppAccess(String packageName) {
+    return methodChannel.invokeMethod('denyAppAccess', <String, dynamic>{
+      'packageName': packageName,
+    });
+  }
 }

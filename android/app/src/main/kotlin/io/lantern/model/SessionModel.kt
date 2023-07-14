@@ -4,10 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
+import com.google.protobuf.ByteString
 import internalsdk.Internalsdk
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.lantern.apps.AppsDataProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
@@ -40,6 +46,9 @@ class SessionModel(
     private val activity: Activity,
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
+    private val appsDataProvider: AppsDataProvider = AppsDataProvider(
+        activity.packageManager, activity.packageName
+    )
     private val lanternClient = LanternApp.getLanternHttpClient()
     private val paymentsUtil = PaymentsUtil(activity)
 
@@ -50,6 +59,9 @@ class SessionModel(
 
         const val PATH_SDK_VERSION = "sdkVersion"
         const val PATH_USER_LEVEL = "userLevel"
+
+        const val PATH_SPLIT_TUNNELING = "/splitTunneling"
+        const val PATH_APPS_DATA = "/appsData/"
     }
 
     init {
@@ -63,10 +75,15 @@ class SessionModel(
                 PATH_USER_LEVEL,
                 tx.get(PATH_USER_LEVEL) ?: "",
             )
+            tx.put(
+                PATH_SPLIT_TUNNELING,
+                castToBoolean(tx.get(PATH_SPLIT_TUNNELING), false)
+            )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
         }
+        updateAppsData()
     }
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -78,7 +95,12 @@ class SessionModel(
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
             "applyRefCode" -> paymentsUtil.applyRefCode(call.argument("refCode")!!, result)
-            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
+            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(call.argument("email")!!,
+                call.argument("resellerCode")!!, result)
+            "refreshAppsList" -> {
+                updateAppsData()
+                result.success(null)
+            }
             "submitBitcoinPayment" -> paymentsUtil.submitBitcoinPayment(
                 call.argument("planID")!!,
                 call.argument("email")!!,
@@ -147,7 +169,85 @@ class SessionModel(
             "checkForUpdates" -> {
                 EventBus.getDefault().post(CheckUpdate(true))
             }
+            "setSplitTunneling" -> {
+                val on = call.argument("on") ?: false
+                saveSplitTunneling(on)
+            }
+            "allowAppAccess" -> {
+                updateAppData(call.argument("packageName")!!, true)
+            }
+            "denyAppAccess" -> {
+                updateAppData(call.argument("packageName")!!, false)
+            }
             else -> super.doMethodCall(call, notImplemented)
+        }
+    }
+
+    fun splitTunnelingEnabled(): Boolean {
+        return db.get(PATH_SPLIT_TUNNELING) ?: false
+    }
+
+    private fun saveSplitTunneling(value: Boolean) {
+        db.mutate { tx ->
+            tx.put(PATH_SPLIT_TUNNELING, value)
+        }
+    }
+
+    // updateAppData looks up the app data for the given package name and updates whether or
+    // not the app is allowed access to the VPN connection in the database
+    private fun updateAppData(packageName: String, allowedAccess: Boolean) {
+        db.mutate { tx ->
+            var appData = tx.get<Vpn.AppData>(PATH_APPS_DATA + packageName)
+            appData?.let {
+                tx.put(
+                    PATH_APPS_DATA + packageName, Vpn.AppData.newBuilder()
+                        .setPackageName(it.packageName).setIcon(it.icon)
+                        .setName(it.name).setAllowedAccess(allowedAccess).build()
+                )
+            }
+        }
+    }
+
+    // updateAppsData stores app data for the list of applications installed for the current
+    // user in the database
+    private fun updateAppsData() {
+        // This can be quite slow, run it on its own coroutine
+        CoroutineScope(Dispatchers.IO).launch {
+            val appsList = appsDataProvider.listOfApps()
+            // First add just the app names to get a list quickly
+            db.mutate { tx ->
+                appsList.forEach {
+                    val path = PATH_APPS_DATA + it.packageName
+                    if (!tx.contains(path)) {
+                        // App not already in list, add it
+                        tx.put(
+                            path,
+                            Vpn.AppData.newBuilder()
+                                .setPackageName(it.packageName).setName(it.name)
+                                .build()
+                        )
+                    }
+                }
+            }
+
+            // Then add icons
+            db.mutate { tx ->
+                appsList.forEach {
+                    val path = PATH_APPS_DATA + it.packageName
+                    tx.get<Vpn.AppData>(path)?.let { existing ->
+                        if (existing.icon.isEmpty) {
+                            it.icon.let { icon ->
+                                tx.put(
+                                    path,
+                                    existing.toBuilder()
+                                        .setIcon(ByteString.copyFrom(icon))
+                                        .build(),
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
