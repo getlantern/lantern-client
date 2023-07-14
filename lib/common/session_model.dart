@@ -23,7 +23,6 @@ class SessionModel extends Model {
         case Event.NetworkAvailable:
           networkAvailable.value = true;
           break;
-
         default:
           break;
       }
