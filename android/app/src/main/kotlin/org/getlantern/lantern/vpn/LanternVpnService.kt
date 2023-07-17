@@ -122,7 +122,7 @@ class LanternVpnService : VpnService(), Runnable {
             provider = GoTun2SocksProvider(
                 getPackageManager(),
                 LanternApp.getSession().splitTunnelingEnabled(),
-                LanternApp.getSession().appsAllowedAccess(),
+                HashSet(LanternApp.getSession().appsAllowedAccess()),
             )
         }
         return provider
