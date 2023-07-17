@@ -109,7 +109,7 @@ class AppTest() : BaseTest() {
         //Approve VPN Permissions dialog
         switchToContext(ContextType.NATIVE_APP, androidDriver)
         Thread.sleep(1000)
-        androidDriver.findElement(By.id("android:id/button1")).click()
+        androidDriver.findElement(By.xpath(".//android.widget.Button[@text='Allow']")).click()
 
         //Wait for VPN to connect
         println("TaskId: $taskId | Going to Sleep")
