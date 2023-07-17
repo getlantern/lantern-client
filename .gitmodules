@@ -1,0 +1,3 @@
+[submodule "flashlight"]
+	path = flashlight
+	url = https://github.com/getlantern/flashlight.git
