@@ -1,7 +1,11 @@
 #1 Disable implicit rules
 .SUFFIXES:
 
-.PHONY: codegen protos routes mocks test integration-test sourcedump
+.PHONY: codegen protos routes mocks test integration-test sourcedump build-framework build-framework-debug clean archive require-version set-version show-version reset-build-number install-gomobile assert-go-version
+
+FLASHLIGHT_FRAMEWORK_PATH := ios/Tunnel/Ios.xcframework
+
+INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH := flashlight/Ios.xcframework
 
 codegen: protos routes
 
@@ -464,6 +468,37 @@ sourcedump: require-version
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
+
+
+build-framework: assert-go-version install-gomobile
+	@echo "Nuking $(FLASHLIGHT_FRAMEWORK_PATH) and $(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)"
+	rm -Rf $(FLASHLIGHT_FRAMEWORK_PATH)
+	rm -Rf $(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)
+
+	@echo "generating Ios.xcFramework"
+	EXTRA_LDFLAGS="-X github.com/getlantern/flashlight/v7/common.CompileTimePackageVersion=$$VERSION" && \
+	cd flashlight && \
+	gomobile init && \
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	gomobile bind -target=ios \
+	-tags='headless lantern ios' \
+	-ldflags="$(LDFLAGS)" github.com/getlantern/flashlight/v7/ios
+
+	@echo "copying framework"
+	cp -R $(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH) $(FLASHLIGHT_FRAMEWORK_PATH)
+
+	@echo "Nuking $(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)"
+	rm -Rf $(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)
+
+
+install-gomobile:
+	@echo "installing gomobile" && \
+	go install golang.org/x/mobile/cmd/gomobile@latest
+
+assert-go-version:
+	@if go version | grep -q -v $(GO_VERSION); then echo "go $(GO_VERSION) is required." && exit 1; fi
+
+
 clean:
 	rm -f liblantern*.aar && \
 	rm -f $(MOBILE_LIBS)/liblantern-* && \
@@ -472,3 +507,8 @@ clean:
 	rm -Rf *.apk && \
 	rm -f `which gomobile` && \
 	rm -f `which gobind`
+	rm -Rf "$(FLASHLIGHT_FRAMEWORK_PATH)" "$(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)"
+
+
+
+
