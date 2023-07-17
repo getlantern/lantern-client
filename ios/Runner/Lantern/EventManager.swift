@@ -27,14 +27,13 @@ class EventManager: NSObject, FlutterStreamHandler {
     private let mainThreadHandler = DispatchQueue.main
     var onListenClosure: (Event) -> Void
 
-    init(name: String, flutterEngine: FlutterEngine? = nil,onListenClosure: @escaping ((Event) -> Void)) {
+    init(name: String, binaryMessenger: FlutterBinaryMessenger ,onListenClosure: @escaping ((Event) -> Void)) {
         self.onListenClosure = onListenClosure
         self.name = name
         super.init()
-        if let engine = flutterEngine {
-            let eventChannel = FlutterEventChannel(name: name, binaryMessenger: engine.binaryMessenger)
-            eventChannel.setStreamHandler(self)
-        }
+        let eventChannel = FlutterEventChannel(name: name, binaryMessenger: binaryMessenger)
+        eventChannel.setStreamHandler(self)
+        
     }
     
     func onNewEvent(event: Event, params: [String : Any] = [:]) {
