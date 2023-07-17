@@ -8,8 +8,9 @@ import Flutter
     let LANTERN_EVENT_CHANNEL="lantern_event_channel"
     
     lazy var flutterEngine = FlutterEngine(name: "LanternIOS")
-    var eventManager: EventManager?
-    var flutterbinaryMessenger:FlutterBinaryMessenger?
+    var eventManager: EventManager!
+    var sessionModel:SessionModel!
+    var flutterbinaryMessenger:FlutterBinaryMessenger!
     
     override func application(
         _ application: UIApplication,
@@ -23,11 +24,12 @@ import Flutter
     }
     
     private func prepareChannel (){
-        eventManager = EventManager(name: LANTERN_EVENT_CHANNEL, binaryMessenger: flutterbinaryMessenger! ){event in
+        eventManager = EventManager(name: LANTERN_EVENT_CHANNEL, binaryMessenger: flutterbinaryMessenger ){event in
             print("[IOS App] Lantern Event channel setup $event")
         }
         
+        sessionModel=SessionModel(flutterBinary: flutterbinaryMessenger)
+        
     }
-    
     
 }

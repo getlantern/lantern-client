@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03D789A72A616DB7000D36F9 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D789A62A616DB7000D36F9 /* EventManager.swift */; };
+		03EE344C2A652B5500E37100 /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EE344B2A652B5500E37100 /* SessionModel.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		03D789A62A616DB7000D36F9 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
+		03EE344B2A652B5500E37100 /* SessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionModel.swift; sourceTree = "<group>"; };
 		04AF578F28344E5CF0932AA9 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 		03D789A42A616D25000D36F9 /* Lantern */ = {
 			isa = PBXGroup;
 			children = (
+				03EE344A2A652B3D00E37100 /* Models */,
 				03D789A52A616D83000D36F9 /* Event */,
 			);
 			path = Lantern;
@@ -77,6 +80,14 @@
 				03D789A62A616DB7000D36F9 /* EventManager.swift */,
 			);
 			name = Event;
+			sourceTree = "<group>";
+		};
+		03EE344A2A652B3D00E37100 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				03EE344B2A652B5500E37100 /* SessionModel.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
@@ -295,6 +306,7 @@
 			files = (
 				03D789A72A616DB7000D36F9 /* EventManager.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
+				03EE344C2A652B5500E37100 /* SessionModel.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
