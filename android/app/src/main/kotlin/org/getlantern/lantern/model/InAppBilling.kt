@@ -32,10 +32,6 @@ class InAppBilling(
         private val TAG = InAppBilling::class.java.simpleName
     }
 
-    init {
-        initConnection()
-    }
-
     @get:Synchronized
     @set:Synchronized
     @Volatile
@@ -73,10 +69,8 @@ class InAppBilling(
                             handlePendingPurchases()
                             return
                         }
-                        isRetriable(billingResult).then {
-                            endConnection()
-                            initConnection()
-                        }
+                        isRetriable(billingResult)
+                        endConnection()
                     }
                     override fun onBillingServiceDisconnected() =
                         Logger.d(TAG, "onBillingServiceDisconnected")
@@ -101,6 +95,7 @@ class InAppBilling(
     @Synchronized
     fun startPurchase(activity: Activity, id: String, cb: PurchasesUpdatedListener) {
         this.purchasesUpdated = cb
+        initConnection()
         var planID = id
         val currency = LanternApp.getSession().getCurrency()
         if (currency != null) planID += "-$currency"
