@@ -69,7 +69,6 @@ class InAppBilling(
                             handlePendingPurchases()
                             return
                         }
-                        isRetriable(billingResult)
                         endConnection()
                     }
                     override fun onBillingServiceDisconnected() =
