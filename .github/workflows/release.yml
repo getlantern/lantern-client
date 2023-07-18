@@ -6,6 +6,8 @@ permissions:
   contents: read
 
 env:
+  DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+  DATADOG_SITE: datadoghq.eu
   GOPRIVATE: github.com/getlantern
 jobs:
   set-version:
