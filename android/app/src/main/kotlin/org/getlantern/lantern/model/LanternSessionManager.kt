@@ -182,6 +182,22 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getBoolean(SHOW_RENEWAL_PREF, true)
     }
 
+    // appsAllowedAccess returns a list of package names for those applications that are allowed
+    // to access the VPN connection. If split tunneling is enabled, and any app is added to
+    // the list, only those applications (and no others) are allowed access.
+    fun appsAllowedAccess(): List<String> {
+        var installedApps = db.list<Vpn.AppData>(PATH_APPS_DATA + "%")
+        val apps = mutableListOf<String>()
+        for (appData in installedApps) {
+            if (appData.value.allowedAccess) apps.add(appData.value.packageName)
+        }
+        return apps
+    }
+
+    override fun splitTunnelingEnabled(): Boolean {
+        return prefs.getBoolean(SPLIT_TUNNELING, false)
+    }
+
     fun setIsProUser(isProUser: Boolean) {
         prefs.edit().putBoolean(PRO_USER, isProUser).apply()
     }
@@ -350,6 +366,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val USER_LEVEL = "userLevel"
         private const val PRO_USER = "prouser"
         private const val DEVICES = "devices"
+        private const val PATH_APPS_DATA = "/appsData/"
+        private const val SPLIT_TUNNELING = "/splitTunneling"
         private const val PLANS = "/plans/"
         private const val PAYMENT_METHODS = "/paymentMethods/"
         private const val PRO_EXPIRED = "proexpired"

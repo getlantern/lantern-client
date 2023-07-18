@@ -75,7 +75,7 @@ class Settings extends StatelessWidget {
                 : const SizedBox(),
           ),
           //* Split tunneling
-          vpnModel.splitTunneling(
+          sessionModel.splitTunneling(
             (BuildContext context, bool value, Widget? child) =>
                 ListItemFactory.settingsItem(
               header: 'VPN'.i18n,
