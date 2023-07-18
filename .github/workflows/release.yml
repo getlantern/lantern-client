@@ -54,6 +54,10 @@ jobs:
       with:
         lfs: true
 
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
     - name: Pull LFS objects
       run: git lfs pull
 
@@ -110,10 +114,8 @@ jobs:
         fileDir: './android/app'
         encodedString: ${{ secrets.KEYSTORE }}
 
-    - name: Install Datadog CLI and upload symbol files
-      run: |
-        curl -L --fail "https://github.com/DataDog/datadog-ci/releases/latest/download/datadog-ci_linux-x64" --output "/usr/local/bin/datadog-ci" && chmod +x /usr/local/bin/datadog-ci
-        datadog-ci flutter-symbols upload --service-name <your_service_name> --dart-symbols-location build/app/intermediates/merged_native_libs/prodSideload/out/lib/ --android-mapping --ios-dsyms
+    - name: Install Datadog CI
+      run: npm install -g @datadog/datadog-ci
 
     - name: Build Release with Gradle
       run: make android-release
