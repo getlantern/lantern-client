@@ -53,6 +53,7 @@ ADB       := $(call get-command,adb)
 OPENSSL   := $(call get-command,openssl)
 GMSAAS    := $(call get-command,gmsaas)
 SENTRY    := $(call get-command,sentry-cli)
+BASE64    := $(call get-command,base64)
 
 GIT_REVISION_SHORTCODE := $(shell git rev-parse --short HEAD)
 GIT_REVISION := $(shell git describe --abbrev=0 --tags --exact-match 2> /dev/null || git rev-parse --short HEAD)
@@ -83,6 +84,9 @@ BINARIES_BRANCH ?= main
 
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
+
+## vault secrets
+VAULT_DD_SECRETS_PATH ?= secret/apps/datadog/android
 
 S3_BUCKET ?= lantern
 FORCE_PLAY_VERSION ?= false
@@ -263,7 +267,7 @@ release-qa: require-version require-s3cmd
 	done && \
 	echo $$VERSION > $$VERSION_FILE_NAME && \
 	s3cmd put -P $$VERSION_FILE_NAME s3://$(S3_BUCKET) && \
-	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)" 
+	echo "Wrote $$VERSION_FILE_NAME as $$(wget -qO - http://$(S3_BUCKET).s3.amazonaws.com/$$VERSION_FILE_NAME)"
 
 release-beta: require-s3cmd
 	@BASE_NAME="$(INSTALLER_NAME)-internal" && \
@@ -318,7 +322,7 @@ release-prod: require-version require-s3cmd require-wget require-lantern-binarie
 	git commit -m "$$COMMIT_MESSAGE" && \
 	git push origin $(BINARIES_BRANCH) \
 	) || true
-	
+
 release-autoupdate: require-version
 	@TAG_COMMIT=$$(git rev-list --abbrev-commit -1 $(TAG)) && \
 	if [[ -z "$$TAG_COMMIT" ]]; then \
@@ -369,24 +373,24 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
 vault-secret-%:
- 	@SECRET=$(shell cd $$GOPATH/src/github.com/getlantern/lantern-cloud && bin/vault kv get -field=$(vault_field) ${VAULT_DD_SECRETS_PATH}); \
- 	printf ${*}=$$SECRET | ${BASE64}
+	@SECRET=$(shell cd $$GOPATH/src/github.com/getlantern/lantern-cloud && bin/vault kv get -field=$(vault_field) ${VAULT_DD_SECRETS_PATH}); \
+	printf ${*}=$$SECRET | ${BASE64}
 
- dart-defines-debug:
- 	DART_DEFINES+=`printf ',' && vault_field=interstitial_ad_unit_id make vault-secret-INTERSTITIAL_AD_UNIT_ID`; \
- 	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
- 	printf $$DART_DEFINES
+dart-defines-debug:
+	DART_DEFINES+=`printf ',' && vault_field=interstitial_ad_unit_id make vault-secret-INTERSTITIAL_AD_UNIT_ID`; \
+	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
+	printf $$DART_DEFINES
 
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
+	DART_DEFINES=`make dart-defines-debug` && \
 	COUNTRY="$$COUNTRY" && \
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
-	DART_DEFINES=`make dart-defines-debug` && \
 	CI="$$CI" && \
 	echo "Base64 CI: $(CIBASE)" && \
-	$(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -Pdart-defines="$$DART_DEFINES" -PdevelopmentMode="true" -Pci=$(CI) -b $(MOBILE_DIR)/app/build.gradle \
+	$(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -Pdart-defines="$$DART_DEFINES" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PdevelopmentMode="true" -Pci=$(CI) -b $(MOBILE_DIR)/app/build.gradle \
 	assembleProdDebug
 
 pubget:
@@ -398,13 +402,13 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
 env-secret-%:
- 	@SECRET=$(shell echo "$(${*})"); \
- 	printf ${*}=$$SECRET | ${BASE64}
+	@SECRET=$(shell echo "$(${*})"); \
+	printf ${*}=$$SECRET | ${BASE64}
 
- dart-defines-release:
-	DART_DEFINES+=`printf ',' && vault_field=interstitial_ad_unit_id make vault-secret-INTERSTITIAL_AD_UNIT_ID`; \
- 	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
- 	printf $$DART_DEFINES
+dart-defines-release:
+	DART_DEFINES+=`printf ',' && make env-secret-INTERSTITIAL_AD_UNIT_ID`; \
+	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
+	printf $$DART_DEFINES
 
 $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
 	echo $(MOBILE_ANDROID_LIB) && \
@@ -423,6 +427,7 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
 
+
 $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
 	@mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
@@ -434,6 +439,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 		bundlePlay && \
 	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodPlay/out/lib && \
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
+
 
 android-debug: $(MOBILE_DEBUG_APK)
 
