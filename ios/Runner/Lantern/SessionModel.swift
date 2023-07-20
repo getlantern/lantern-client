@@ -29,12 +29,12 @@ class SessionModel:NSObject, FlutterStreamHandler {
     
     
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        print("Session model onListen Called")
+        logger.log("Session Event listern called with \(arguments)")
         return nil
     }
     
     func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        print("Session model onListen Called")
+        logger.log("Session Event onCancel called with \(arguments)")
         return nil
     }
     

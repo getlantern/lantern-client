@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import Internalsdk
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -15,7 +16,7 @@ import Flutter
     var flutterbinaryMessenger:FlutterBinaryMessenger!
     var lanternMethodChannel:FlutterMethodChannel!
     var navigationChannel:FlutterMethodChannel!
-    
+   
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -28,9 +29,11 @@ import Flutter
     }
     
     private func prepareChannel (){
-       //Lanter Channles and Event
+        logger.log("prepareChannel method started")
+        //Lanter Channles and Event
         eventManager = EventManager(name: LANTERN_EVENT_CHANNEL, binaryMessenger: flutterbinaryMessenger ){event in
-            print("[IOS App] Lantern Event channel setup $event")
+            logger.log("Lantern Event channel setup  and lisntering $event")
+         
         }
         lanternMethodChannel=FlutterMethodChannel(name: LANTERN_METHOED_CHANNEL, binaryMessenger: flutterbinaryMessenger)
         lanternMethodChannel.setMethodCallHandler(handleLanternMethodCall)
