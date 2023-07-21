@@ -3,3 +3,4 @@ android/app/libs/opuslib-release.aar filter=lfs diff=lfs merge=lfs -text
 screenshots/ filter=lfs diff=lfs merge=lfs -text
 assets/testing/ filter=lfs diff=lfs merge=lfs -text
 android/app/libs/alipaySdk-15.7.6-20200521195109.aar filter=lfs diff=lfs merge=lfs -text
+Internalsdk.xcframework filter=lfs diff=lfs merge=lfs -text

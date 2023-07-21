@@ -16,7 +16,7 @@ import Internalsdk
     var flutterbinaryMessenger:FlutterBinaryMessenger!
     var lanternMethodChannel:FlutterMethodChannel!
     var navigationChannel:FlutterMethodChannel!
-   
+    
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -30,21 +30,20 @@ import Internalsdk
     
     private func prepareChannel (){
         logger.log("prepareChannel method started")
+        
         //Lanter Channles and Event
         eventManager = EventManager(name: LANTERN_EVENT_CHANNEL, binaryMessenger: flutterbinaryMessenger ){event in
-            logger.log("Lantern Event channel setup  and lisntering $event")
-         
+            logger.log("Lantern Event channel setup and lisntering $event")
+            
         }
         lanternMethodChannel=FlutterMethodChannel(name: LANTERN_METHOED_CHANNEL, binaryMessenger: flutterbinaryMessenger)
         lanternMethodChannel.setMethodCallHandler(handleLanternMethodCall)
-       
+        
         //Navigation Channel
         navigationChannel=FlutterMethodChannel(name: NAVIGATION_METHOED_CHANNEL, binaryMessenger: flutterbinaryMessenger)
         navigationChannel.setMethodCallHandler(handleNavigationethodCall)
-        
         //Init Models
         sessionModel=SessionModel(flutterBinary: flutterbinaryMessenger)
-        
     }
     
     
@@ -62,7 +61,6 @@ import Internalsdk
         }
     }
     
-    
     func handleNavigationethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         // Handle your method calls here
         // The 'call' contains the method name and arguments
@@ -73,8 +71,19 @@ import Internalsdk
             // handle yourMethod
             break
         default:
-              result(FlutterMethodNotImplemented)
+            result(FlutterMethodNotImplemented)
         }
+    }
+    
+    private func goHandler(){
+        do{
+            let result = try goMethodChannelHandler.invokeMethod(name: "GetAppName", argument: "SayHello")
+        }catch FlutterMethodChannelError.goError(let error) {
+            print("Error: \(error)")
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+        
     }
     
 }
