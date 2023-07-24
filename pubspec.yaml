@@ -79,12 +79,6 @@ dependencies:
 
   fluttertoast: ^8.2.1
 
-  # Use a fork of catcher since >=0.6.9 is incompatible with flutter_localizations
-  # from sdk. See https://github.com/jhomlala/catcher/pull/234 for more details
-  catcher:
-    git:
-      url: https://github.com/ThexXTURBOXx/catcher.git
-
   sentry: ^7.7.0
 
   badges: ^2.0.0-nullsafety.1
