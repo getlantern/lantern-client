@@ -109,7 +109,7 @@ public class GoTun2SocksProvider implements Provider {
             Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks");
             ParcelFileDescriptor intf = createBuilder(vpnService, builder);
             Logger.debug(TAG, "Running tun2socks");
-            Internalsdk.tun2Socks(intf.getFd(), socksAddr, dnsGrabAddr, VPN_MTU, LanternApp.getSession());
+            Internalsdk.tun2Socks(intf.detachFd(), socksAddr, dnsGrabAddr, VPN_MTU, LanternApp.getSession());
         } catch (Throwable t) {
             Logger.e(TAG, "Exception while handling TUN device", t);
         } finally {
@@ -120,10 +120,5 @@ public class GoTun2SocksProvider implements Provider {
     public synchronized void stop() throws Exception {
         Logger.d(TAG, "stop");
         Internalsdk.stopTun2Socks();
-        if (mInterface != null) {
-            Logger.d(TAG, "closing interface");
-            mInterface.close();
-            mInterface = null;
-        }
     }
 }
