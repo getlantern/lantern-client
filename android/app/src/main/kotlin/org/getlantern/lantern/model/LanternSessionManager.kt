@@ -338,23 +338,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         }
     }
 
-    // isPlayVersion checks whether or not the user installed Lantern via
-    // the Google Play store
-    override fun isPlayVersion(): Boolean {
-        if (BuildConfig.PLAY_VERSION || prefs.getBoolean(PLAY_VERSION, false)) {
-            return true
-        }
-        try {
-            val validInstallers: List<String> = ArrayList(listOf("com.android.vending", "com.google.android.feedback"))
-            val installer = context.packageManager
-                .getInstallerPackageName(context.packageName)
-            return installer != null && validInstallers.contains(installer)
-        } catch (e: java.lang.Exception) {
-            Logger.error(TAG, "Error fetching package information: " + e.message)
-        }
-        return false
-    }
-
     fun setPlayVersion(playVersion: Boolean) {
         prefs.edit().putBoolean(PLAY_VERSION, playVersion).apply()
     }
