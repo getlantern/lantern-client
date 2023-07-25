@@ -437,6 +437,23 @@ abstract class SessionManager(application: Application) : Session {
         return gson.toJson(headers)
     }
 
+    // isPlayVersion checks whether or not the user installed Lantern via the Google Play store
+    override fun isPlayVersion(): Boolean {
+        if (BuildConfig.PLAY_VERSION || prefs.getBoolean(PLAY_VERSION, false)) {
+            return true
+        }
+        try {
+            val validInstallers: List<String> = ArrayList(listOf("com.android.vending",
+                "com.google.android.feedback"))
+            val installer = context.packageManager
+                .getInstallerPackageName(context.packageName)
+            return installer != null && validInstallers.contains(installer)
+        } catch (e: java.lang.Exception) {
+            Logger.error(TAG, "Error fetching package information: " + e.message)
+        }
+        return false
+    }
+
     companion object {
         private val TAG = SessionManager::class.java.name
         const val PREFERENCES_SCHEMA = "session"
@@ -517,7 +534,7 @@ abstract class SessionManager(application: Application) : Session {
         prefs = prefsAdapter
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
             .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
-            .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, BuildConfig.PLAY_VERSION))
+            .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, isPlayVersion()))
             .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
 
         // initialize email address to empty string (if it doesn't already exist)
