@@ -534,7 +534,7 @@ abstract class SessionManager(application: Application) : Session {
         prefs = prefsAdapter
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
             .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
-            .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, isPlayVersion()))
+            .putBoolean(PLAY_VERSION, isPlayVersion())
             .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
 
         // initialize email address to empty string (if it doesn't already exist)
