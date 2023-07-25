@@ -3,7 +3,11 @@ import Flutter
 import Internalsdk
 
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, InternalsdkReceiveStreamProtocol {
+    
+    
+   
+    
     
     // List of channel and event method names
     let LANTERN_EVENT_CHANNEL="lantern_event_channel"
@@ -16,6 +20,7 @@ import Internalsdk
     var flutterbinaryMessenger:FlutterBinaryMessenger!
     var lanternMethodChannel:FlutterMethodChannel!
     var navigationChannel:FlutterMethodChannel!
+    let goEventHandler = InternalsdkEventChannel( "Gohandler")!
     
     override func application(
         _ application: UIApplication,
@@ -24,6 +29,7 @@ import Internalsdk
         let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
         flutterbinaryMessenger=controller.binaryMessenger
         prepareChannel()
+        setupEventChannel()
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
@@ -75,15 +81,31 @@ import Internalsdk
         }
     }
     
-    private func goHandler(){
-        do{
-            let result = try goMethodChannelHandler.invokeMethod(name: "GetAppName", argument: "SayHello")
-        }catch FlutterMethodChannelError.goError(let error) {
-            print("Error: \(error)")
-        } catch {
-            print("Unexpected error: \(error)")
-        }
-        
+  
+    func setupEventChannel(){
+        goEventHandler.setReceiveStream(self)
+        goEventHandler.invoke(onListen: " From Swift")
+        goEventHandler.invoke(onListen: " From Flutter")
+        goEventHandler.invoke(onListen: " From A")
+        goEventHandler.invoke(onListen: " From B")
+//        goEventHandler.setStreamHandler(self)
+//        goEventHandler.startSendingEvents()
+     
     }
+    
+//    func onCancel(_ arguments: String?) {
+//        logger.log("GoEventHandler with \(arguments!)")
+//    }
+//
+//    func onListen(_ arguments: String?, events: InternalsdkEventSinkProtocol?) {
+//        logger.log("GoEventHandler onListen with \(arguments!) with \(events)")
+//    }
+    
+    
+    func onDataReceived(_ data: String?) {
+        logger.log("GoEventHandler onDataReceived with \( data) ")
+    }
+    
+    
     
 }

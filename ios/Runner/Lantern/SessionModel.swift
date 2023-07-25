@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import Internalsdk
 class SessionModel:NSObject, FlutterStreamHandler {
     
     let SESSION_METHOD_CHANNEL="session_method_channel"
@@ -15,6 +15,7 @@ class SessionModel:NSObject, FlutterStreamHandler {
     var sessionEventChannel:FlutterEventChannel!
     var sessionMethodChannel:FlutterMethodChannel!
     var flutterbinaryMessenger:FlutterBinaryMessenger
+    let internalSessioModelChannel=InternalsdkSessionModelChannel()!
     
     init(flutterBinary:FlutterBinaryMessenger) {
         self.flutterbinaryMessenger=flutterBinary
@@ -25,8 +26,6 @@ class SessionModel:NSObject, FlutterStreamHandler {
         sessionMethodChannel = FlutterMethodChannel(name: SESSION_METHOD_CHANNEL, binaryMessenger: flutterBinary)
         sessionMethodChannel.setMethodCallHandler(handleMethodCall)
     }
-    
-    
     
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         logger.log("Session Event listern called with \(arguments)")
@@ -52,5 +51,14 @@ class SessionModel:NSObject, FlutterStreamHandler {
             result(FlutterMethodNotImplemented)
         }
     }
-    
+   
+    func invokeMethodOnGo(name: String, argument: String) -> String? {
+        var error: NSError?
+        let result = internalSessioModelChannel.invokeMethod(name, argument: argument, error: &error)
+        if let error = error {
+            logger.log("Error invoking method \(name) on channel SessionModel with argument \(argument): \(error)")
+                return nil
+        }
+        return result
+    }
 }

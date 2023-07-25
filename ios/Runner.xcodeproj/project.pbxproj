@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		035FDDD52A6A547F007B15C8 /* Internalsdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */; };
 		035FDDD72A6A9643007B15C8 /* GoMethodChannelHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035FDDD62A6A9643007B15C8 /* GoMethodChannelHandler.swift */; };
+		035FDDD92A6AAA7B007B15C8 /* GoEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035FDDD82A6AAA7B007B15C8 /* GoEventHandler.swift */; };
 		036AE7482A655C9A003AA025 /* Shared in Resources */ = {isa = PBXBuildFile; fileRef = 036AE7472A655C9A003AA025 /* Shared */; };
 		036AE74A2A655CA1003AA025 /* Tunnel in Resources */ = {isa = PBXBuildFile; fileRef = 036AE7492A655CA1003AA025 /* Tunnel */; };
 		03D789A72A616DB7000D36F9 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D789A62A616DB7000D36F9 /* EventManager.swift */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Internalsdk.xcframework; sourceTree = "<group>"; };
 		035FDDD62A6A9643007B15C8 /* GoMethodChannelHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoMethodChannelHandler.swift; sourceTree = "<group>"; };
+		035FDDD82A6AAA7B007B15C8 /* GoEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoEventHandler.swift; sourceTree = "<group>"; };
 		036AE7472A655C9A003AA025 /* Shared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shared; path = "../../lantern-ios/Shared"; sourceTree = "<group>"; };
 		036AE7492A655CA1003AA025 /* Tunnel */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Tunnel; path = "../../lantern-ios/Tunnel"; sourceTree = "<group>"; };
 		03D789A62A616DB7000D36F9 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			children = (
 				03EE344B2A652B5500E37100 /* SessionModel.swift */,
 				035FDDD62A6A9643007B15C8 /* GoMethodChannelHandler.swift */,
+				035FDDD82A6AAA7B007B15C8 /* GoEventHandler.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03F2FE342A6949EF0082B34C /* Logger.swift in Sources */,
+				035FDDD92A6AAA7B007B15C8 /* GoEventHandler.swift in Sources */,
 				03D789A72A616DB7000D36F9 /* EventManager.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				035FDDD72A6A9643007B15C8 /* GoMethodChannelHandler.swift in Sources */,

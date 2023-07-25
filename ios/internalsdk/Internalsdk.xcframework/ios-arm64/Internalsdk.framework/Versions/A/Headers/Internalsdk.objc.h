@@ -12,6 +12,7 @@
 
 
 @class InternalsdkEmailMessage;
+@class InternalsdkEventChannel;
 @class InternalsdkFlutterMethodChannel;
 @class InternalsdkReplicaServer;
 @class InternalsdkStartResult;
@@ -24,8 +25,12 @@
 @class InternalsdkDeviceInfo;
 @protocol InternalsdkEmailResponseHandler;
 @class InternalsdkEmailResponseHandler;
+@protocol InternalsdkEventSink;
+@class InternalsdkEventSink;
 @protocol InternalsdkGeoCallback;
 @class InternalsdkGeoCallback;
+@protocol InternalsdkReceiveStream;
+@class InternalsdkReceiveStream;
 @protocol InternalsdkSession;
 @class InternalsdkSession;
 @protocol InternalsdkSettings;
@@ -60,6 +65,11 @@
 - (void)onSuccess;
 @end
 
+@protocol InternalsdkEventSink <NSObject>
+- (void)error:(NSString* _Nullable)errorCode errorMessage:(NSString* _Nullable)errorMessage errorDetails:(NSString* _Nullable)errorDetails;
+- (void)success:(NSString* _Nullable)event;
+@end
+
 @protocol InternalsdkGeoCallback <NSObject>
 - (void)setCity:(NSString* _Nullable)p0;
 - (void)setCountry:(NSString* _Nullable)p0;
@@ -67,6 +77,10 @@
 - (void)setLatitude:(double)p0;
 - (void)setLongitude:(double)p0;
 - (void)setRegion:(NSString* _Nullable)p0;
+@end
+
+@protocol InternalsdkReceiveStream <NSObject>
+- (void)onDataReceived:(NSString* _Nullable)data;
 @end
 
 @protocol InternalsdkSession <NSObject>
@@ -150,12 +164,24 @@ Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 - (void)send:(id<InternalsdkEmailResponseHandler> _Nullable)handler;
 @end
 
+@interface InternalsdkEventChannel : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nullable instancetype)init:(NSString* _Nullable)channelName;
+- (void)invokeOnListen:(NSString* _Nullable)arguments;
+- (void)setReceiveStream:(id<InternalsdkReceiveStream> _Nullable)receiveStream;
+- (void)startSendingEvents;
+@end
+
 @interface InternalsdkFlutterMethodChannel : NSObject <goSeqRefInterface> {
 }
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (nonnull instancetype)init;
+// skipped constructor FlutterMethodChannel.NewFlutterMethodChannel with unsupported parameter or return types
+
 - (NSString* _Nonnull)invokeMethod:(NSString* _Nullable)name argument:(NSString* _Nullable)argument error:(NSError* _Nullable* _Nullable)error;
 @end
 
@@ -249,11 +275,18 @@ FOUNDATION_EXPORT BOOL InternalsdkDownloadUpdate(id<InternalsdkDeviceInfo> _Null
 
 FOUNDATION_EXPORT void InternalsdkError(NSString* _Nullable tag, NSString* _Nullable msg);
 
+FOUNDATION_EXPORT InternalsdkFlutterMethodChannel* _Nullable InternalsdkEventModelChannel(void);
+
 /**
  * InstallFinished is called after an update successfully installs or fails to
 and records ops related to it
  */
 FOUNDATION_EXPORT void InternalsdkInstallFinished(id<InternalsdkDeviceInfo> _Nullable deviceInfo, BOOL success);
+
+FOUNDATION_EXPORT InternalsdkEventChannel* _Nullable InternalsdkNewEventChannel(NSString* _Nullable channelName);
+
+// skipped function NewFlutterMethodChannel with unsupported parameter or return types
+
 
 // skipped function NewReplicaServer with unsupported parameter or return types
 
@@ -267,12 +300,12 @@ FOUNDATION_EXPORT NSString* _Nonnull InternalsdkSDKVersion(void);
 
 FOUNDATION_EXPORT BOOL InternalsdkSendIssueReport(id<InternalsdkSession> _Nullable session, NSString* _Nullable issueType, NSString* _Nullable description, NSString* _Nullable subscriptionLevel, NSString* _Nullable userEmail, NSString* _Nullable device, NSString* _Nullable model, NSString* _Nullable osVersion, NSError* _Nullable* _Nullable error);
 
+FOUNDATION_EXPORT InternalsdkFlutterMethodChannel* _Nullable InternalsdkSessionModelChannel(void);
+
 /**
  * SetGetGeoInfo set's the client's current geo info on the given GeoCallback (if available).
  */
 FOUNDATION_EXPORT void InternalsdkSetGeoInfo(id<InternalsdkGeoCallback> _Nullable cb);
-
-FOUNDATION_EXPORT InternalsdkFlutterMethodChannel* _Nullable InternalsdkSetupFlutterChannel(void);
 
 /**
  * Start starts a HTTP and SOCKS proxies at random addresses. It blocks up till
@@ -314,7 +347,11 @@ FOUNDATION_EXPORT BOOL InternalsdkTun2Socks(long fd, NSString* _Nullable socksAd
 
 @class InternalsdkEmailResponseHandler;
 
+@class InternalsdkEventSink;
+
 @class InternalsdkGeoCallback;
+
+@class InternalsdkReceiveStream;
 
 @class InternalsdkSession;
 
@@ -380,6 +417,15 @@ event there's an error sending an email
 - (void)onSuccess;
 @end
 
+@interface InternalsdkEventSink : NSObject <goSeqRefInterface, InternalsdkEventSink> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (void)error:(NSString* _Nullable)errorCode errorMessage:(NSString* _Nullable)errorMessage errorDetails:(NSString* _Nullable)errorDetails;
+- (void)success:(NSString* _Nullable)event;
+@end
+
 @interface InternalsdkGeoCallback : NSObject <goSeqRefInterface, InternalsdkGeoCallback> {
 }
 @property(strong, readonly) _Nonnull id _ref;
@@ -391,6 +437,14 @@ event there's an error sending an email
 - (void)setLatitude:(double)p0;
 - (void)setLongitude:(double)p0;
 - (void)setRegion:(NSString* _Nullable)p0;
+@end
+
+@interface InternalsdkReceiveStream : NSObject <goSeqRefInterface, InternalsdkReceiveStream> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (void)onDataReceived:(NSString* _Nullable)data;
 @end
 
 /**
