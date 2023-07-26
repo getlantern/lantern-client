@@ -7,6 +7,7 @@ import appium_kotlin.CARD_NUMBER
 import appium_kotlin.CHECK_OUT
 import appium_kotlin.CHROME_PACKAGE_ACTIVITY
 import appium_kotlin.CHROME_PACKAGE_ID
+import appium_kotlin.CONTIUNE_CHECKOUT
 import appium_kotlin.CVC
 import appium_kotlin.ContextType
 import appium_kotlin.ERROR_PAYMENT_PURCHASE
@@ -185,8 +186,7 @@ class AppTest() : BaseTest() {
 
 
         switchToContext(ContextType.NATIVE_APP, androidDriver)
-        val continueButton =
-            androidDriver.findElement(By.xpath("//android.widget.Button[@content-desc=\"CONTINUE\"]"))
+        val continueButton = flutterFinder.byTooltip(CONTIUNE_CHECKOUT)
         continueButton.click()
         Thread.sleep(1000)
 
