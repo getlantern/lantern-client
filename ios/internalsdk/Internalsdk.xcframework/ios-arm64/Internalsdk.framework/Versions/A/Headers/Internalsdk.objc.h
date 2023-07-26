@@ -172,7 +172,6 @@ Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 - (nullable instancetype)init:(NSString* _Nullable)channelName;
 - (void)invokeOnListen:(NSString* _Nullable)arguments;
 - (void)setReceiveStream:(id<InternalsdkReceiveStream> _Nullable)receiveStream;
-- (void)startSendingEvents;
 @end
 
 @interface InternalsdkFlutterMethodChannel : NSObject <goSeqRefInterface> {

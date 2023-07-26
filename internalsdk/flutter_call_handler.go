@@ -1,6 +1,7 @@
 package internalsdk
 
 import (
+	"encoding/json"
 	"fmt"
 	"sync"
 )
@@ -35,7 +36,8 @@ func (m *FlutterMethodChannel) InvokeMethod(name string, argument string) (strin
 
 func SessionModelChannel() *FlutterMethodChannel {
 	return NewFlutterMethodChannel(sessionModelChannelName, map[string]func(string) (string, error){
-		"SayHello": sayHelloSessionModel,
+		"SayHello":        sayHelloSessionModel,
+		"SayHiMethodCall": sayHelloSessionModel,
 	})
 }
 
@@ -62,6 +64,13 @@ type streamHandler interface {
 	OnCancel(arguments string)
 }
 
+type payload struct {
+	Count        int64  `json:"count"`
+	Details      bool   `json:"details"`
+	Path         string `json:"path"`
+	SubscriberID string `json:"subscriberID"`
+}
+
 type EventSink interface {
 	Success(event string)
 	Error(errorCode string, errorMessage string, errorDetails string)
@@ -84,8 +93,9 @@ func (esi *eventSinkImplementation) Success(event string) {
 }
 
 func (esi *eventSinkImplementation) Error(errorCode string, errorMessage string, errorDetails string) {
-	// Here you can implement what should happen when an error occurs.
-	// For example, you might want to log the error or send it to your receiveStream function.
+	errorString := fmt.Sprintf("Error: code = %s, message = %s, details = %s", errorCode, errorMessage, errorDetails)
+	esi.receiveStream.OnDataReceived(errorString)
+
 }
 
 type streamHandlerImplementation struct {
@@ -106,10 +116,13 @@ func NewEventChannel(channelName string) *EventChannel {
 }
 
 func (s *streamHandlerImplementation) OnListen(arguments string, events EventSink) {
-	// Here you can implement the logic that should be executed when OnListen is called.
-	// For example, you might want to start generating events here and send them using events.Success().
-	// Generate a "Hi" event with the given argument.
-	event := "Hi, " + arguments
+	var payloadMap payload
+	err := json.Unmarshal([]byte(arguments), &payloadMap)
+	if err != nil {
+		// Handle error
+		events.Error("PayloadParsingError", "Failed to parse payload", err.Error())
+	}
+	event := "Hi, " + payloadMap.Path
 
 	// Send the event using the EventSink.
 	events.Success(event)

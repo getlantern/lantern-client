@@ -23,17 +23,12 @@ class LanternModel:NSObject,InternalsdkReceiveStreamProtocol {
     init(flutterBinary:FlutterBinaryMessenger) {
         self.flutterbinaryMessenger=flutterBinary
         super.init()
-        //        lanternEventManager = EventManager(name: LANTERN_EVENT_CHANNEL, binaryMessenger: flutterbinaryMessenger ){event in
-        //            logger.log("Lantern Event channel setup and lisntering $event")
-        //
-        //        }
-        lanternEventManager = EventManager(name: LANTERN_EVENT_CHANNEL, binaryMessenger: flutterbinaryMessenger ,onListenClosure:onEventListen)
+       
+    lanternEventManager = EventManager(name: LANTERN_EVENT_CHANNEL, binaryMessenger: flutterbinaryMessenger ,onListenClosure:onEventListen)
         lanternMethodChannel = FlutterMethodChannel(name: LANTERN_METHOED_CHANNEL, binaryMessenger: flutterBinary)
         lanternMethodChannel.setMethodCallHandler(handleMethodCall)
         internalLanternEventChannel.setReceiveStream(self)
     }
-    
-    
     
     
     func handleMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {

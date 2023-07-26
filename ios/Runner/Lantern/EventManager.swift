@@ -57,11 +57,11 @@ class EventManager: NSObject, FlutterStreamHandler {
         if let args = arguments as? [String: Any],
             let subscriberID = args["subscriberID"] as? Int,
             let eventName = args["eventName"] as? String,
-            let event = Event(rawValue: eventName) {
-            
+           let event = Event(rawValue: eventName) {
             let subscribers = activeSubscribers[event] ?? []
             activeSubscribers[event] = subscribers.union([subscriberID])
             onListenClosure(event)
+            
         }
         return nil
     }
