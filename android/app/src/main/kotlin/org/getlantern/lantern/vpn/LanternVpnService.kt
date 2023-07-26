@@ -19,8 +19,6 @@ class LanternVpnService : VpnService(), Runnable {
     }
 
     private var provider: Provider? = null
-    private var splitTunnelingEnabled: Boolean = false
-    private var appsAllowedAccess: List<String>? = null
 
     private val lanternServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName) {
