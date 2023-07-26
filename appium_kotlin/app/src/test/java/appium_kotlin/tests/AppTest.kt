@@ -184,15 +184,11 @@ class AppTest() : BaseTest() {
         Thread.sleep(2000)
         println("TaskId: $taskId | testPaymentFlow-->clicked on most popular ")
 
-
-        switchToContext(ContextType.NATIVE_APP, androidDriver)
         val continueButton = flutterFinder.byTooltip(CONTIUNE_CHECKOUT)
         continueButton.click()
         Thread.sleep(1000)
 
-
         println("TaskId: $taskId | testPaymentFlow-->clicked on continue button ")
-        switchToContext(ContextType.FLUTTER, androidDriver)
         val cardNumber = flutterFinder.byTooltip(CARD_NUMBER)
         cardNumber.click()
         cardNumber.sendKeys("4242424242424242")
