@@ -6,15 +6,19 @@
 //
 
 import Foundation
+import Internalsdk
+import Flutter
 
-class SessionModel:NSObject, FlutterStreamHandler {
-    
+class SessionModel:NSObject, FlutterStreamHandler,InternalsdkReceiveStreamProtocol {
+ 
     let SESSION_METHOD_CHANNEL="session_method_channel"
     let SESSION_EVENT_CHANNEL="session_event_channel"
     
     var sessionEventChannel:FlutterEventChannel!
     var sessionMethodChannel:FlutterMethodChannel!
     var flutterbinaryMessenger:FlutterBinaryMessenger
+    let internalSessioModelChannel=InternalsdkSessionModelChannel()!
+    let internalSessioEventChannel = InternalsdkEventChannel("session_event_channel")!
     
     init(flutterBinary:FlutterBinaryMessenger) {
         self.flutterbinaryMessenger=flutterBinary
@@ -24,19 +28,16 @@ class SessionModel:NSObject, FlutterStreamHandler {
         
         sessionMethodChannel = FlutterMethodChannel(name: SESSION_METHOD_CHANNEL, binaryMessenger: flutterBinary)
         sessionMethodChannel.setMethodCallHandler(handleMethodCall)
+        internalSessioEventChannel.setReceiveStream(self)
     }
     
-    
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        print("Session model onListen Called")
-
-        logger.debug("Session model onListen Called with \(String(describing: arguments))")
+        logger.log("Session Event listern called with \(arguments)")
         return nil
     }
     
     func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        logger.debug("Session model onCancel Called with \(String(describing: arguments))")
-        print("Session model onListen Called")
+        logger.log("Session Event onCancel called with \(arguments)")
         return nil
     }
     
@@ -55,4 +56,21 @@ class SessionModel:NSObject, FlutterStreamHandler {
         }
     }
     
+    
+    //Mark :- GO method channel callback
+    func invokeMethodOnGo(name: String, argument: String) -> String? {
+        var error: NSError?
+        let result = internalSessioModelChannel.invokeMethod(name, argument: argument, error: &error)
+        if let error = error {
+            logger.log("Error invoking method \(name) on channel SessionModel with argument \(argument): \(error)")
+                return nil
+        }
+        return result
+    }
+    
+    //GO Event channel callback
+    func onDataReceived(_ data: String?) {
+        logger.log("Session  onDataReceived called with \(data)")
+
+    }
 }

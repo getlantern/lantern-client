@@ -19,7 +19,6 @@ enum Event: String, CaseIterable {
 }
 
 
-
 class EventManager: NSObject, FlutterStreamHandler {
     private let name: String
     private var activeSubscribers: [Event : Set<Int>] = [:]

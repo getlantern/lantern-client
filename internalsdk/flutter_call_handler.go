@@ -3,7 +3,6 @@ package internalsdk
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
 const (
@@ -120,16 +119,6 @@ func (s *streamHandlerImplementation) OnCancel(arguments string) {
 	// For example, you might want to start generating events here and send them using events.Success().
 }
 
-// func NewEventChannel(channelName string) *EventChannel {
-// 	return &EventChannel{
-// 		eventName: channelName,
-// 	}
-// }
-
-// func (ec *EventChannel) SetStreamHandler(handler StreamHandler) {
-// 	ec.handler = handler
-// }
-
 func (ec *EventChannel) SetReceiveStream(receiveStream ReceiveStream) {
 	ec.receiveStream = receiveStream
 	ec.activeSink.(*eventSinkImplementation).receiveStream = receiveStream
@@ -140,40 +129,4 @@ func (ec *EventChannel) InvokeOnListen(arguments string) {
 	defer ec.mu.Unlock()
 
 	ec.handler.OnListen(arguments, ec.activeSink)
-}
-
-// func (ec *EventChannel) InvokeOnListen(arguments string, events EventSink) {
-// 	ec.mu.Lock()
-// 	defer ec.mu.Unlock()
-
-// 	if ec.activeSink != nil {
-// 		ec.handler.OnCancel(arguments)
-// 	}
-
-// 	ec.activeSink = events
-// 	ec.handler.OnListen(arguments, events)
-// }
-
-// func (ec *EventChannel) InvokeOnCancel(arguments string) {
-// 	ec.mu.Lock()
-// 	defer ec.mu.Unlock()
-
-// 	if ec.activeSink != nil {
-// 		ec.handler.OnCancel(arguments)
-// 		ec.activeSink = nil
-// 	}
-// }
-
-func (e *EventChannel) StartSendingEvents() {
-	ticker := time.NewTicker(1 * time.Second)
-	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				if e.handler != nil {
-					e.handler.OnListen(time.Now().String(), e.activeSink)
-				}
-			}
-		}
-	}()
 }
