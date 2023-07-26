@@ -15,9 +15,6 @@ class Settings extends StatelessWidget {
   void reportIssue(BuildContext context) async =>
       await context.pushRoute(ReportIssue());
 
-  void reportIssue() async =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
-
   void showProgressDialog(BuildContext context) {
     showDialog(
         context: context,
