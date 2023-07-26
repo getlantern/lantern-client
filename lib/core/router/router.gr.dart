@@ -32,6 +32,7 @@ import 'package:lantern/account/lantern_desktop.dart' as _i12;
 import 'package:lantern/account/recovery_key.dart' as _i15;
 import 'package:lantern/account/report_issue.dart' as _i14;
 import 'package:lantern/account/settings.dart' as _i4;
+import 'package:lantern/account/split_tunneling.dart' as _i5;
 import 'package:lantern/account/support.dart' as _i38;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i2;
 import 'package:lantern/home.dart' as _i1;
@@ -58,7 +59,6 @@ import 'package:lantern/replica/ui/viewers/video.dart' as _i36;
 import 'package:lantern/replica/upload/description.dart' as _i31;
 import 'package:lantern/replica/upload/review.dart' as _i32;
 import 'package:lantern/replica/upload/title.dart' as _i30;
-import 'package:lantern/vpn/vpn_split_tunneling.dart' as _i5;
 
 class AppRouter extends _i39.RootStackRouter {
   AppRouter([_i40.GlobalKey<_i40.NavigatorState>? navigatorKey])
@@ -195,9 +195,11 @@ class AppRouter extends _i39.RootStackRouter {
       );
     },
     LinkDevice.name: (routeData) {
+      final args = routeData.argsAs<LinkDeviceArgs>(
+          orElse: () => const LinkDeviceArgs());
       return _i39.CustomPage<void>(
         routeData: routeData,
-        child: _i11.LinkDevice(),
+        child: _i11.LinkDevice(key: args.key),
         transitionsBuilder: _i39.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
@@ -228,9 +230,11 @@ class AppRouter extends _i39.RootStackRouter {
       );
     },
     ReportIssue.name: (routeData) {
+      final args = routeData.argsAs<ReportIssueArgs>(
+          orElse: () => const ReportIssueArgs());
       return _i39.CustomPage<void>(
         routeData: routeData,
-        child: _i14.ReportIssue(),
+        child: _i14.ReportIssue(key: args.key),
         transitionsBuilder: _i39.TransitionsBuilders.fadeIn,
         durationInMilliseconds: 200,
         reverseDurationInMilliseconds: 200,
@@ -999,14 +1003,26 @@ class ApproveDeviceArgs {
 
 /// generated route for
 /// [_i11.LinkDevice]
-class LinkDevice extends _i39.PageRouteInfo<void> {
-  const LinkDevice()
+class LinkDevice extends _i39.PageRouteInfo<LinkDeviceArgs> {
+  LinkDevice({_i41.Key? key})
       : super(
           LinkDevice.name,
           path: 'linkDevice',
+          args: LinkDeviceArgs(key: key),
         );
 
   static const String name = 'LinkDevice';
+}
+
+class LinkDeviceArgs {
+  const LinkDeviceArgs({this.key});
+
+  final _i41.Key? key;
+
+  @override
+  String toString() {
+    return 'LinkDeviceArgs{key: $key}';
+  }
 }
 
 /// generated route for
@@ -1035,14 +1051,26 @@ class InviteFriends extends _i39.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i14.ReportIssue]
-class ReportIssue extends _i39.PageRouteInfo<void> {
-  const ReportIssue()
+class ReportIssue extends _i39.PageRouteInfo<ReportIssueArgs> {
+  ReportIssue({_i41.Key? key})
       : super(
           ReportIssue.name,
           path: 'reportIssue',
+          args: ReportIssueArgs(key: key),
         );
 
   static const String name = 'ReportIssue';
+}
+
+class ReportIssueArgs {
+  const ReportIssueArgs({this.key});
+
+  final _i41.Key? key;
+
+  @override
+  String toString() {
+    return 'ReportIssueArgs{key: $key}';
+  }
 }
 
 /// generated route for

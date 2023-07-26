@@ -1,9 +1,9 @@
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/account/split_tunneling.dart';
 import 'package:lantern/vpn/vpn.dart';
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
-import 'vpn_split_tunneling.dart';
 import 'vpn_status.dart';
 import 'vpn_switch.dart';
 

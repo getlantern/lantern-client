@@ -12,9 +12,11 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import java.util.Locale
 
-class GoTun2SocksProvider(val packageManager: PackageManager,
+class GoTun2SocksProvider(
+    val packageManager: PackageManager,
     val splitTunnelingEnabled: Boolean,
-    val appsAllowedAccess: Set<String>) : Provider {
+    val appsAllowedAccess: Set<String>,
+) : Provider {
 
     companion object {
         private val TAG = GoTun2SocksProvider::class.java.simpleName
@@ -25,8 +27,11 @@ class GoTun2SocksProvider(val packageManager: PackageManager,
 
     private var mInterface: ParcelFileDescriptor? = null
 
-    @Synchronized 
-    private fun createBuilder(vpnService: VpnService, builder: VpnService.Builder): ParcelFileDescriptor? {
+    @Synchronized
+    private fun createBuilder(
+        vpnService: VpnService,
+        builder: VpnService.Builder,
+    ): ParcelFileDescriptor? {
         // Set the locale to English
         // since the VpnBuilder encounters
         // issues with non-English numerals
@@ -71,7 +76,12 @@ class GoTun2SocksProvider(val packageManager: PackageManager,
         builder.addDnsServer(SessionManager.fakeDnsIP)
 
         val intent = Intent(vpnService, MainActivity::class.java)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(vpnService, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            vpnService,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE,
+        )
         builder.setConfigureIntent(pendingIntent)
 
         builder.setSession(sessionName)
@@ -82,7 +92,12 @@ class GoTun2SocksProvider(val packageManager: PackageManager,
         return mInterface
     }
 
-    override fun run(vpnService: VpnService, builder: VpnService.Builder, socksAddr: String, dnsGrabAddr: String) {
+    override fun run(
+        vpnService: VpnService,
+        builder: VpnService.Builder,
+        socksAddr: String,
+        dnsGrabAddr: String,
+    ) {
         Logger.d(TAG, "run")
 
         val defaultLocale = Locale.getDefault()
@@ -90,7 +105,15 @@ class GoTun2SocksProvider(val packageManager: PackageManager,
             Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks")
             val intf: ParcelFileDescriptor? = createBuilder(vpnService, builder)
             Logger.debug(TAG, "Running tun2socks")
-            if (intf != null) Internalsdk.tun2Socks(intf.getFd().toLong(), socksAddr, dnsGrabAddr, VPN_MTU.toLong(), LanternApp.getSession())
+            if (intf != null) {
+                Internalsdk.tun2Socks(
+                    intf.getFd().toLong(),
+                    socksAddr,
+                    dnsGrabAddr,
+                    VPN_MTU.toLong(),
+                    LanternApp.getSession(),
+                )
+            }
         } catch (t: Throwable) {
             Logger.e(TAG, "Exception while handling TUN device", t)
         } finally {

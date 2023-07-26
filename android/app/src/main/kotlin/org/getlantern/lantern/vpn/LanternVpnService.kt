@@ -1,19 +1,15 @@
 package org.getlantern.lantern.vpn
 
-import android.annotation.TargetApi
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.net.VpnService
-import android.os.Build
 import android.os.IBinder
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.R
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.mobilesdk.Logger
 
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class LanternVpnService : VpnService(), Runnable {
 
     companion object {
@@ -22,10 +18,10 @@ class LanternVpnService : VpnService(), Runnable {
         private val TAG = LanternVpnService::class.java.simpleName
     }
 
-    private var provider : Provider? = null
-    private var splitTunnelingEnabled : Boolean = false
-    private var appsAllowedAccess : List<String>? = null
-    
+    private var provider: Provider? = null
+    private var splitTunnelingEnabled: Boolean = false
+    private var appsAllowedAccess: List<String>? = null
+
     private val lanternServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName) {
             Logger.e(TAG, "LanternService disconnected, disconnecting VPN")
@@ -57,7 +53,7 @@ class LanternVpnService : VpnService(), Runnable {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        //Somehow we are getting null here when running on Android 5.0
+        // Somehow we are getting null here when running on Android 5.0
         // Handling null intent scenario
         if (intent == null) {
             Logger.d(TAG, "LanternVpnService: Received null intent, service is being restarted")
@@ -67,11 +63,7 @@ class LanternVpnService : VpnService(), Runnable {
             stop()
             START_NOT_STICKY
         } else {
-            val bundle = intent.extras
-            if (bundle != null) {
-                splitTunnelingEnabled = bundle.getBoolean("splitTunnelingEnabled")
-                appsAllowedAccess = bundle.getStringArrayList("appsAllowedAccess")
-            }
+            LanternApp.getSession().updateVpnPreference(true)
             connect()
             START_STICKY
         }
@@ -128,9 +120,9 @@ class LanternVpnService : VpnService(), Runnable {
         if (provider == null) {
             Logger.d(TAG, "Using Go tun2socks")
             provider = GoTun2SocksProvider(
-                    getPackageManager(),
-                    splitTunnelingEnabled,
-                    HashSet(appsAllowedAccess)
+                getPackageManager(),
+                LanternApp.getSession().splitTunnelingEnabled(),
+                HashSet(LanternApp.getSession().appsAllowedAccess()),
             )
         }
         return provider
