@@ -157,12 +157,12 @@ android {
 
     signingConfigs {
         release {
-            //if (project.hasProperty("KEYSTORE_FILE")) {
-                storeFile file("keystore.release.jks")
+            if (project.hasProperty("KEYSTORE_FILE")) {
+                storeFile file(KEYSTORE_FILE)
                 keyAlias "Lantern Release Key"
-                storePassword "***REMOVED***"
-                keyPassword "***REMOVED***"
-            //}
+                storePassword KEYSTORE_PWD
+                keyPassword KEY_PWD
+            }
         }
     }
 
