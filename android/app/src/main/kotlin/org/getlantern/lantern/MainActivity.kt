@@ -175,12 +175,6 @@ class MainActivity :
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
 
-        if (LanternApp.getSession().isPlayVersion) {
-            if (!LanternApp.getSession().hasAcceptedTerms()) {
-                startActivity(Intent(this, PrivacyDisclosureActivity_::class.java))
-            }
-        }
-
         val isServiceRunning = Utils.isServiceRunning(activity, LanternVpnService::class.java)
         if (vpnModel.isConnectedToVpn() && !isServiceRunning) {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
