@@ -90,7 +90,8 @@ open class LanternService : Service(), Runnable {
 
         try {
             Logger.debug(TAG, "Successfully loaded config: $settings")
-            val result: StartResult = Lantern.enable(this, locale, settings, LanternApp.getSession())
+            val result: StartResult =
+                Lantern.enable(this, locale, settings, LanternApp.getSession())
             LanternApp.getSession().setStartResult(result)
             afterStart()
         } catch (lnre: LanternNotRunningException) {
@@ -124,11 +125,14 @@ open class LanternService : Service(), Runnable {
     }
 
     private fun createUser(attempt: Int) {
-        val timeOut = baseWaitMs * Math.max(1, random.nextInt(1 shr attempt))
-        createUserHandler.postDelayed(createUserRunnable, timeOut.toLong())
+        val maxBackOffTime = 60000L // maximum backoff time in milliseconds (e.g., 1 minute)
+        val timeOut =
+            (baseWaitMs * Math.pow(2.0, attempt.toDouble())).toLong().coerceAtMost(maxBackOffTime)
+        createUserHandler.postDelayed(createUserRunnable, timeOut)
     }
 
-    private class CreateUser(val service: LanternService) : Runnable, LanternHttpClient.ProCallback {
+    private class CreateUser(val service: LanternService) : Runnable,
+        LanternHttpClient.ProCallback {
 
         private var attempts: Int = 0
 
