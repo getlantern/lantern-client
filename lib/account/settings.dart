@@ -11,7 +11,25 @@ class Settings extends StatelessWidget {
 
   void changeLanguage(BuildContext context) => context.pushRoute(Language());
 
-  void checkForUpdates() async => await sessionModel.checkForUpdates();
+  void reportIssue() async =>
+      LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
+
+  void showProgressDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.transparent,
+        builder: (BuildContext context) {
+          return Center(
+              child: SizedBox(
+            width: 40.0,
+            height: 40.0,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(grey5),
+            ),
+          ));
+        });
+  }
 
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
@@ -55,7 +73,11 @@ class Settings extends StatelessWidget {
             trailingArray: [
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
-            onTap: checkForUpdates,
+            onTap: () async {
+              showProgressDialog(context);
+              await sessionModel.checkForUpdates();
+              Navigator.pop(context);
+            },
           ),
           //* Blocked
           messagingModel.getOnBoardingStatus(
