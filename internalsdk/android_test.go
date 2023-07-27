@@ -70,6 +70,7 @@ func (c testSession) IsPlayVersion() (bool, error)    { return false, nil }
 func (c testSession) Provider() (string, error)       { return "stripe", nil }
 func (c testSession) SetChatEnabled(enabled bool)     {}
 func (c testSession) SetMatomoEnabled(bool)           {}
+func (c testSession) SetShowAdsEnabled(enabled bool)  {}
 
 func (c testSession) SerializedInternalHeaders() (string, error) {
 	return c.serializedInternalHeaders, nil

@@ -89,6 +89,7 @@ type Session interface {
 	ForceReplica() bool
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() (bool, error)
+	SetShowAdsEnabled(bool)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -118,7 +119,7 @@ type panickingSession interface {
 	IsProUser() bool
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() bool
-
+	SetShowAdsEnabled(bool)
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
@@ -264,6 +265,10 @@ func (s *panickingSessionImpl) IsProUser() bool {
 
 func (s *panickingSessionImpl) SetChatEnabled(enabled bool) {
 	s.wrapped.SetChatEnabled(enabled)
+}
+
+func (s *panickingSessionImpl) SetShowAdsEnabled(enabled bool) {
+	s.wrapped.SetShowAdsEnabled(enabled)
 }
 
 func (s *panickingSessionImpl) SerializedInternalHeaders() string {
@@ -589,6 +594,18 @@ func run(configDir, locale string,
 		chatEnabled := runner.FeatureEnabled("chat", ApplicationVersion)
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
+
+		// Check if ads feature is enabled or not
+		if !session.IsProUser() {
+			showAdsEnabled := runner.FeatureEnabled("showads", ApplicationVersion)
+			log.Debugf("Show ads  enabled? %v", showAdsEnabled)
+			// You would replace the below line with the actual function you use to set this feature.
+			session.SetShowAdsEnabled(showAdsEnabled)
+		} else {
+			// Explicitly disable ads for Pro users.
+			session.SetShowAdsEnabled(false)
+		}
+
 	}
 
 	// When features are enabled/disabled, the UI changes. To minimize this, we only check features once on startup, preferring
