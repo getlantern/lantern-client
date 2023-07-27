@@ -13,7 +13,6 @@ import io.lantern.apps.AppsDataProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
@@ -88,16 +87,27 @@ class SessionModel(
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
-            "getCountryCode" -> result.success(LanternApp.getSession().countryCode)
-            "hasAllPermissionGiven" -> result.success(LanternApp.getSession().hasAllPermissionGiven())
+            "shouldShowAds" -> {
+                //We just need to check VPN permissions
+                // all other configurations are send back backend
+                val adsEnableBool = if (LanternApp.getSession().shouldShowAdsEnabled()) {
+                    LanternApp.getSession().hasAllPermissionGiven()
+                } else {
+                    false
+                }
+                result.success(adsEnableBool)
+            }
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
             "applyRefCode" -> paymentsUtil.applyRefCode(call.argument("refCode")!!, result)
-            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(call.argument("email")!!,
-                call.argument("resellerCode")!!, result)
+            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(
+                call.argument("email")!!,
+                call.argument("resellerCode")!!, result
+            )
+
             "refreshAppsList" -> {
                 updateAppsData()
                 result.success(null)
@@ -181,13 +191,16 @@ class SessionModel(
             "checkForUpdates" -> {
                 EventBus.getDefault().post(CheckUpdate(true))
             }
-      "setSplitTunneling" -> {
+
+            "setSplitTunneling" -> {
                 val on = call.argument("on") ?: false
                 saveSplitTunneling(on)
             }
+
             "allowAppAccess" -> {
                 updateAppData(call.argument("packageName")!!, true)
             }
+
             "denyAppAccess" -> {
                 updateAppData(call.argument("packageName")!!, false)
             }

@@ -141,8 +141,9 @@ class SessionModel extends Model {
         .invokeMethod('getCountryCode', <String, dynamic>{});
   }
 
-  Future<bool> hasAllPermissionGiven() async {
-    return await methodChannel.invokeMethod('hasAllPermissionGiven');
+  Future<bool> shouldShowAds() async {
+    return await methodChannel
+        .invokeMethod('shouldShowAds', <String, dynamic>{});
   }
 
   Future<void> setLanguage(String lang) {
@@ -369,14 +370,18 @@ class SessionModel extends Model {
   }
 
   Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/splitTunneling',
-        builder: builder,);
+    return subscribedSingleValueBuilder<bool>(
+      '/splitTunneling',
+      builder: builder,
+    );
   }
 
   Future<void> setSplitTunneling<T>(bool on) async {
-    unawaited(methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
-      'on': on,
-    }),);
+    unawaited(
+      methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
+        'on': on,
+      }),
+    );
   }
 
   Widget appsData({
