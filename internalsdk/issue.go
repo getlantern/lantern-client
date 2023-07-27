@@ -1,6 +1,7 @@
 package internalsdk
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/getlantern/flashlight/v7/issue"
@@ -20,7 +21,9 @@ func SendIssueReport(
 	if err != nil {
 		return err
 	}
+	ctx := context.Background()
 	return issue.SendReport(
+		ctx,
 		newUserConfig(&panickingSessionImpl{session}),
 		issueTypeInt,
 		description,

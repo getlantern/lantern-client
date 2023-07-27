@@ -7,7 +7,6 @@ import appium_kotlin.CARD_NUMBER
 import appium_kotlin.CHECK_OUT
 import appium_kotlin.CHROME_PACKAGE_ACTIVITY
 import appium_kotlin.CHROME_PACKAGE_ID
-import appium_kotlin.CONTIUNE_CHECKOUT
 import appium_kotlin.CVC
 import appium_kotlin.ContextType
 import appium_kotlin.ERROR_PAYMENT_PURCHASE
@@ -184,12 +183,16 @@ class AppTest() : BaseTest() {
         Thread.sleep(2000)
         println("TaskId: $taskId | testPaymentFlow-->clicked on most popular ")
 
-        val continueButton = flutterFinder.byTooltip(CONTIUNE_CHECKOUT)
+
+        switchToContext(ContextType.NATIVE_APP, androidDriver)
+        val continueButton =
+            androidDriver.findElement(By.xpath("//android.widget.Button[@content-desc=\"CONTINUE\"]"))
         continueButton.click()
-        Thread.sleep(5000)
+        Thread.sleep(1000)
+
+
         println("TaskId: $taskId | testPaymentFlow-->clicked on continue button ")
-
-
+        switchToContext(ContextType.FLUTTER, androidDriver)
         val cardNumber = flutterFinder.byTooltip(CARD_NUMBER)
         cardNumber.click()
         cardNumber.sendKeys("4242424242424242")
