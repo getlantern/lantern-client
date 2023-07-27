@@ -15,8 +15,6 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import internalsdk.Internalsdk
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -33,7 +31,6 @@ import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
-import org.getlantern.lantern.model.CheckUpdate
 import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
@@ -63,7 +60,9 @@ import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 import java.util.concurrent.*
 
-class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
+class MainActivity :
+    FlutterActivity(),
+    MethodChannel.MethodCallHandler,
     CoroutineScope by MainScope() {
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
@@ -96,7 +95,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     fetchLoConf()
                     Logger.debug(
                         TAG,
-                        "fetchLoConf() finished at ${System.currentTimeMillis() - start}"
+                        "fetchLoConf() finished at ${System.currentTimeMillis() - start}",
                     )
                 }
                 LanternApp.getSession().dnsDetector.publishNetworkAvailability()
@@ -125,7 +124,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
         Logger.debug(
             TAG,
-            "configureFlutterEngine finished at ${System.currentTimeMillis() - start}"
+            "configureFlutterEngine finished at ${System.currentTimeMillis() - start}",
         )
     }
 
@@ -271,7 +270,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun vpnStateChanged(state: VpnState) {
-        updateStatus(state.use())
+        updateStatus(state.useVpn)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -323,7 +322,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 // we are setting static user for payment mode
                 if (user?.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
 
-                //Switch to free account if device it not linked
+                // Switch to free account if device it not linked
                 devices?.filter { it.id == deviceID }?.run {
                     if (isEmpty()) {
                         LanternApp.getSession().logout()
@@ -457,55 +456,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         intent.putExtra("url", survey.url!!)
         startActivity(intent)
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
-    }
-
-    private fun noUpdateAvailable(userInitiated: Boolean) {
-        if (!userInitiated) return
-        runOnUiThread {
-            val appName = resources.getString(R.string.app_name)
-            val noUpdateTitle = resources.getString(R.string.no_update_available)
-            val noUpdateMsg = String.format(
-                resources.getString(R.string.have_latest_version),
-                appName,
-                LanternApp.getSession().appVersion()
-            )
-            showAlertDialog(noUpdateTitle, noUpdateMsg)
-        }
-    }
-
-    private fun startUpdateActivity(updateURL: String) {
-        val intent = Intent()
-        intent.component = ComponentName(
-            activity.packageName,
-            "org.getlantern.lantern.activity.UpdateActivity_",
-        )
-        intent.putExtra("updateUrl", updateURL)
-        startActivity(intent)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun runCheckUpdate(checkUpdate: CheckUpdate) {
-        val userInitiated = checkUpdate.userInitiated
-        if (LanternApp.getSession().isPlayVersion && userInitiated) {
-            Utils.openPlayStore(context)
-            return
-        }
-        if (autoUpdateJob != null && autoUpdateJob!!.isActive) {
-            Logger.d(TAG, "Already checking for updates")
-            return
-        }
-        autoUpdateJob = lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val deviceInfo: internalsdk.DeviceInfo = DeviceInfo
-                val updateURL = Internalsdk.checkForUpdates(deviceInfo)
-                when {
-                    updateURL.isEmpty() -> noUpdateAvailable(userInitiated)
-                    else -> startUpdateActivity(updateURL)
-                }
-            } catch (e: Exception) {
-                Logger.d(TAG, "Unable to check for update: %s", e.message)
-            }
-        }
     }
 
     @Throws(Exception::class)
