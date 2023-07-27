@@ -186,9 +186,10 @@ class AppTest() : BaseTest() {
 
         val continueButton = flutterFinder.byTooltip(CONTIUNE_CHECKOUT)
         continueButton.click()
-        Thread.sleep(1000)
-
+        Thread.sleep(5000)
         println("TaskId: $taskId | testPaymentFlow-->clicked on continue button ")
+
+
         val cardNumber = flutterFinder.byTooltip(CARD_NUMBER)
         cardNumber.click()
         cardNumber.sendKeys("4242424242424242")
