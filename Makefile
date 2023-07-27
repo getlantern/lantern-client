@@ -3,7 +3,7 @@
 
 .PHONY: codegen protos routes mocks test integration-test sourcedump build-framework build-framework-debug clean archive require-version set-version show-version reset-build-number install-gomobile assert-go-version
 
-FRAMEWORK_DIR = /Users/jigarfumakiya/Documents/getlantern/mobile_app/android-lantern/ios/internalsdk
+FRAMEWORK_DIR = ios/internalsdk
 
 FRAMEWORK_NAME = Internalsdk.xcframework
 
