@@ -234,6 +234,10 @@ abstract class SessionManager(application: Application) : Session {
         Logger.d(TAG, "Setting $CHAT_ENABLED to $enabled")
         prefs.edit().putBoolean(CHAT_ENABLED, enabled).apply()
     }
+    override fun setShowAdsEnabled(enabled: Boolean) {
+        Logger.d(TAG, "Setting $ADS_ENABLED to $enabled")
+        prefs.edit().putBoolean(ADS_ENABLED, enabled).apply()
+    }
 
     //    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
     // for now, disable Chat completely
@@ -493,6 +497,7 @@ abstract class SessionManager(application: Application) : Session {
 
         private const val REPLICA_ADDR = "replicaAddr"
         public const val CHAT_ENABLED = "chatEnabled"
+        public const val ADS_ENABLED = "adsEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),
