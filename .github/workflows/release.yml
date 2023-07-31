@@ -210,7 +210,7 @@ jobs:
             git add .
             git commit -m "Lantern binaries for version ${{ env.version }}"
             git push origin main
-        - name: Upload Android Release to Play Store Alpha track
+        - name: Upload Android App bundle to Play Store
           if: ${{ env.prefix }} == 'lantern-installer-beta'
           uses: r0adkll/upload-google-play@v1
           with:
