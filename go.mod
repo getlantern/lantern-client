@@ -35,7 +35,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight/v7 v7.5.24
+	github.com/getlantern/flashlight/v7 v7.5.25
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20230511223023-ee52513fd782
@@ -110,7 +110,7 @@ require (
 	github.com/enobufs/go-nats v0.0.1 // indirect
 	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 // indirect
-	github.com/getlantern/broflake v0.0.0-20230719204503-7ec419291413 // indirect
+	github.com/getlantern/broflake v0.0.0-20230720180617-832a5e273f50 // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
 	github.com/getlantern/byteexec v0.0.0-20220903142956-e6ed20032cfd // indirect
 	github.com/getlantern/cmux v0.0.0-20230301223233-dac79088a4c0 // indirect
