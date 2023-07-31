@@ -13,6 +13,8 @@ jobs:
       runs-on: ubuntu-latest
       outputs:
         version: ${{ steps.set-version.outputs.version }}
+        prefix: ${{ steps.set-version.outputs.prefix }}
+        version_file: ${{ steps.set-version.outputs.version_file }}
       steps:
       - id: set-version
         shell: python
