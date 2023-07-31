@@ -151,45 +151,25 @@ Do this to make a release build:
 
 ### Building release packages
 
-To build all release packages, run:
+Lantern Android release packages are built in CI. You can build installers for beta, for production, or for internal testing by varying the tag syntax. To build for production, you simply tag the current version on `main` with, for example:
 
-```
-VERSION=<version here> SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS make package-android
-```
+`git tag -a "lantern-7.0.0" -f -m "Tagging production release"`
 
-### Deploying a release to QA
+To build a beta, simply include "beta" in the tag, as in:
 
-```
-VERSION=<version here> make release-qa
-```
+`git tag -a "lantern-7.0.0-beta" -f -m "Tagging beta release"`
 
-### Deploying a release to Beta
+Finally, to create an internal build, use "internal", as in:
 
-```
-VERSION=<version here> make release-beta
-```
+`git tag -a "lantern-7.0.0-internal" -f -m "Tagging internal release"`
 
-### Deploying a release to Prod
+For all of the above, don't forget to push the tags:
 
-First, tag the release.
+`git push --tags -f`
 
-```
-VERSION=<version here> make tag
-```
+You can then find all built binaries in the [lantern-binaries repository](https://github.com/getlantern/lantern-binaries).
 
-If you want to tag a specific revision, you can use
-
-```
-VERSION=<version here> make tag TAG_HEAD=<commit sha>
-```
-
-Then, release the sideload installers to production.
-
-```
-VERSION=<version here> make release-prod
-```
-
-Then, go to the Lantern App on the [Google Play Console](https://play.google.com/console/u/0/developers/4642290275832863621/app/4973965144252805146/app-dashboard?timespan=thirtyDays) and create a new release using the [app bundle](lantern-all.aab).
+To publish a release on Google Play, go to the Lantern App on the [Google Play Console](https://play.google.com/console/u/0/developers/4642290275832863621/app/4973965144252805146/app-dashboard?timespan=thirtyDays) and create a new release using the [app bundle](lantern-installer.aab).
 
 ### Enabling Auto-Update for a Sideloaded Release
 
