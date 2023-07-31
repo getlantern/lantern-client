@@ -9,7 +9,7 @@ import Foundation
 import Internalsdk
 import Flutter
 
-class LanternModel:NSObject,InternalsdkReceiveStreamProtocol {
+class LanternModel:NSObject {
     
     let LANTERN_EVENT_CHANNEL="lantern_event_channel"
     let LANTERN_METHOED_CHANNEL="lantern_method_channel"
@@ -17,9 +17,9 @@ class LanternModel:NSObject,InternalsdkReceiveStreamProtocol {
     var lanternEventManager: EventManager!
     var lanternMethodChannel:FlutterMethodChannel!
     var flutterbinaryMessenger:FlutterBinaryMessenger
-    let internalLanternModelChannel=InternalsdkSessionModelChannel()!
-    let internalLanternEventChannel = InternalsdkEventChannel("lantern_event_channel")!
-    
+//    let internalLanternModelChannel=InternalsdkSessionModelChannel()!
+//    let internalLanternEventChannel = InternalsdkEventChannel("lantern_event_channel")!
+//
     init(flutterBinary:FlutterBinaryMessenger) {
         self.flutterbinaryMessenger=flutterBinary
         super.init()
@@ -27,7 +27,7 @@ class LanternModel:NSObject,InternalsdkReceiveStreamProtocol {
     lanternEventManager = EventManager(name: LANTERN_EVENT_CHANNEL, binaryMessenger: flutterbinaryMessenger ,onListenClosure:onEventListen)
         lanternMethodChannel = FlutterMethodChannel(name: LANTERN_METHOED_CHANNEL, binaryMessenger: flutterBinary)
         lanternMethodChannel.setMethodCallHandler(handleMethodCall)
-        internalLanternEventChannel.setReceiveStream(self)
+//        internalLanternEventChannel.setReceiveStream(self)
     }
     
     
@@ -50,16 +50,16 @@ class LanternModel:NSObject,InternalsdkReceiveStreamProtocol {
     }
     
     
-    //Mark :- GO method channel callback
-    func invokeMethodOnGo(name: String, argument: String) -> String? {
-        var error: NSError?
-        let result = internalLanternModelChannel.invokeMethod(name, argument: argument, error: &error)
-        if let error = error {
-            logger.log("Error invoking method \(name) on channel SessionModel with argument \(argument): \(error)")
-            return nil
-        }
-        return result
-    }
+//    //Mark :- GO method channel callback
+//    func invokeMethodOnGo(name: String, argument: String) -> String? {
+//        var error: NSError?
+//        let result = internalLanternModelChannel.invokeMethod(name, argument: argument, error: &error)
+//        if let error = error {
+//            logger.log("Error invoking method \(name) on channel SessionModel with argument \(argument): \(error)")
+//            return nil
+//        }
+//        return result
+//    }
     
     //GO Event channel callback
     func onDataReceived(_ data: String?) {

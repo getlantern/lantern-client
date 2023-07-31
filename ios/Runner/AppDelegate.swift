@@ -1,9 +1,10 @@
 import UIKit
+import SQLite
 import Flutter
 import Internalsdk
 
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate, InternalsdkReceiveStreamProtocol {
+@objc class AppDelegate: FlutterAppDelegate {
     
     // List of channel and event method names
     
@@ -16,7 +17,8 @@ import Internalsdk
     var flutterbinaryMessenger:FlutterBinaryMessenger!
     var lanternMethodChannel:FlutterMethodChannel!
     var navigationChannel:FlutterMethodChannel!
-    let goEventHandler = InternalsdkEventChannel("Gohandler")!
+    //    let goEventHandler = InternalsdkEventChannel("Gohandler")!
+    var db: Connection!
     
     override func application(
         _ application: UIApplication,
@@ -24,21 +26,53 @@ import Internalsdk
     ) -> Bool {
         let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
         flutterbinaryMessenger=controller.binaryMessenger
-        setupModels()
-        prepareChannel()
-        setupEventChannel()
+        createNewModel()
+        
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    private func setupModels(){
-        logger.log("setupModels method called")
-        //Init Session Model
-        sessionModel=SessionModel(flutterBinary: flutterbinaryMessenger)
-        
-        //Init Session Model
-        lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
+    
+    func getDatabasePath() -> String {
+        let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let fileURL = documentDirectory.appendingPathComponent("LANTERN").appendingPathExtension("sqlite3")
+        return fileURL.path
     }
+    
+    
+    func createNewModel() {
+        logger.log("createNewModel called")
+        let dbName = "Session"
+        do {
+            let dbPath = getDatabasePath()
+            let db = try Connection(dbPath)
+            let swiftDB = DatabaseManager(database: db)
+            var error: NSError?
+            guard let model = InternalsdkNewModel(dbName, swiftDB, &error) else {
+                throw error!
+            }
+            let stringValue = ValueUtil.makeValue(from: "test/db")
+            let args = ValueArrayHandler(values: [stringValue])
+            
+            
+            let result = try model.invokeMethod("testDbConnection", arguments: args)
+
+            let resultValue = ValueUtil.getValue(from: result)
+            logger.log("Model Invoke method result converted \(resultValue)")
+        } catch {
+            logger.log("Failed to create new model: \(error)")
+        }
+    }
+    
+    
+        private func setupModels(){
+            logger.log("setupModels method called")
+            //Init Session Model
+            sessionModel=SessionModel(flutterBinary: flutterbinaryMessenger)
+    
+            //Init Session Model
+            lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
+        }
     
     private func prepareChannel (){
         logger.log("prepareChannel method called")
@@ -60,19 +94,6 @@ import Internalsdk
         default:
             result(FlutterMethodNotImplemented)
         }
-    }
-    
-  
-    func setupEventChannel(){
-        goEventHandler.setReceiveStream(self)
-        goEventHandler.invoke(onListen: " From Swift")
-        goEventHandler.invoke(onListen: " From Flutter")
-        goEventHandler.invoke(onListen: " From A")
-        goEventHandler.invoke(onListen: " From B")
-    }
-    
-    func onDataReceived(_ data: String?) {
-        logger.log("GoEventHandler onDataReceived with \( data) ")
     }
     
 }

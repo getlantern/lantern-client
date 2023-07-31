@@ -95,7 +95,7 @@ FOUNDATION_EXPORT const int64_t InternalsdkTypeBool;
 FOUNDATION_EXPORT const int64_t InternalsdkTypeInt;
 FOUNDATION_EXPORT const int64_t InternalsdkTypeString;
 
-FOUNDATION_EXPORT id<InternalsdkModel> _Nullable InternalsdkNewModel(NSString* _Nullable name, id<InternalsdkDB> _Nullable mdb, NSError* _Nullable* _Nullable error);
+FOUNDATION_EXPORT id<InternalsdkModel> _Nullable InternalsdkNewModel(NSString* _Nullable schema, id<InternalsdkDB> _Nullable mdb, NSError* _Nullable* _Nullable error);
 
 @class InternalsdkDB;
 

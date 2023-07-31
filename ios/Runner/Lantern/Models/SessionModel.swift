@@ -9,7 +9,7 @@ import Foundation
 import Internalsdk
 import Flutter
 
-class SessionModel:NSObject, FlutterStreamHandler,InternalsdkReceiveStreamProtocol {
+class SessionModel:NSObject, FlutterStreamHandler {
     
     let SESSION_METHOD_CHANNEL="session_method_channel"
     let SESSION_EVENT_CHANNEL="session_event_channel"
@@ -17,8 +17,6 @@ class SessionModel:NSObject, FlutterStreamHandler,InternalsdkReceiveStreamProtoc
     var sessionEventChannel:FlutterEventChannel!
     var sessionMethodChannel:FlutterMethodChannel!
     var flutterbinaryMessenger:FlutterBinaryMessenger
-    let internalSessioModelChannel=InternalsdkSessionModelChannel()!
-    let internalSessioEventChannel = InternalsdkEventChannel("session_event_channel")!
     var activeSinks: FlutterEventSink?
 
     
@@ -30,7 +28,6 @@ class SessionModel:NSObject, FlutterStreamHandler,InternalsdkReceiveStreamProtoc
         
         sessionMethodChannel = FlutterMethodChannel(name: SESSION_METHOD_CHANNEL, binaryMessenger: flutterBinary)
         sessionMethodChannel.setMethodCallHandler(handleMethodCall)
-        internalSessioEventChannel.setReceiveStream(self)
     }
     
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
@@ -54,8 +51,7 @@ class SessionModel:NSObject, FlutterStreamHandler,InternalsdkReceiveStreamProtoc
         switch call.method {
         case "SayHiMethodCall":
             do {
-                let goResult = try invokeMethodOnGo(name: call.method, argument: "Hi")
-                result(goResult)
+                
             } catch {
                 result(FlutterError(code: "ERROR", message: error.localizedDescription, details: nil))
             }
@@ -64,24 +60,5 @@ class SessionModel:NSObject, FlutterStreamHandler,InternalsdkReceiveStreamProtoc
             result(FlutterMethodNotImplemented)
         }
     }
-    
-    
-    //Mark :- GO method channel callback
-    func invokeMethodOnGo(name: String, argument: String) throws -> String {
-        var error: NSError?
-        let result = internalSessioModelChannel.invokeMethod(name, argument: argument, error: &error)
-        if let error = error {
-            logger.log("Error invoking method \(name) on channel SessionModel with argument \(argument): \(error)")
-            throw error
-        }
-        return result
-    }
-    
-    //GO Event channel callback
-    func onDataReceived(_ data: String?) {
-        logger.log("Session  onDataReceived called with \(data)")
-        activeSinks?(data)
-        
-        
-    }
+
 }

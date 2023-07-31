@@ -45,30 +45,32 @@ func (v *Value) asInterface() interface{} {
 
 type ValueArray interface {
 	Len() int
-
 	Get(index int) *Value
-
 	Set(index int, value *Value)
 }
 
 type valueArray []interface{}
 
-func newValueArray(values []interface{}) ValueArray {
+type valueArrayWrapper struct {
+	values valueArray
+}
+
+func (vaw *valueArrayWrapper) Len() int {
+	return len(vaw.values)
+}
+
+func (vaw *valueArrayWrapper) Get(index int) *Value {
+	return newValue(vaw.values[index])
+}
+
+func (vaw *valueArrayWrapper) Set(index int, value *Value) {
+	vaw.values[index] = value.asInterface()
+}
+
+func newValueArray(values []interface{}) *valueArrayWrapper {
 	va := make(valueArray, len(values))
 	for i, val := range values {
-		va.Set(i, newValue(val))
+		va[i] = newValue(val).asInterface()
 	}
-	return va
-}
-
-func (va valueArray) Len() int {
-	return len(va)
-}
-
-func (va valueArray) Get(index int) *Value {
-	return newValue(va[index])
-}
-
-func (va valueArray) Set(index int, value *Value) {
-	va[index] = value.asInterface()
+	return &valueArrayWrapper{values: va}
 }

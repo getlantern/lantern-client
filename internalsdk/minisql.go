@@ -20,7 +20,7 @@ type rowsAdapter struct {
 }
 
 func (a *rowsAdapter) Scan(dest ...interface{}) error {
-	va := make(valueArray, len(dest))
+	va := newValueArray(dest)
 	err := a.Rows.Scan(va)
 	if err != nil {
 		return err
