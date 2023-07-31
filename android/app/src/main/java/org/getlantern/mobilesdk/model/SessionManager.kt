@@ -235,13 +235,13 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(CHAT_ENABLED, enabled).apply()
     }
 
-    override fun setShowAdsEnabled(enabled: Boolean) {
+    override fun setShowInterstitialAdsEnabled(enabled: Boolean) {
         Logger.d(TAG, "Setting $ADS_ENABLED to $enabled")
         prefs.edit().putBoolean(ADS_ENABLED, enabled).apply()
     }
-
+    
     fun shouldShowAdsEnabled(): Boolean {
-       return prefs.getBoolean(ADS_ENABLED, false)
+        return prefs.getBoolean(ADS_ENABLED, false)
     }
 
     //    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
@@ -463,8 +463,12 @@ abstract class SessionManager(application: Application) : Session {
             return true
         }
         try {
-            val validInstallers: List<String> = ArrayList(listOf("com.android.vending",
-                "com.google.android.feedback"))
+            val validInstallers: List<String> = ArrayList(
+                listOf(
+                    "com.android.vending",
+                    "com.google.android.feedback"
+                )
+            )
             val installer = context.packageManager
                 .getInstallerPackageName(context.packageName)
             return installer != null && validInstallers.contains(installer)
