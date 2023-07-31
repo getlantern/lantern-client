@@ -169,10 +169,10 @@ jobs:
           cp "$AAB".sha256 ${{ env.prefix }}.aab.sha256
           s3cmd put --acl-public "$APK" ${{ env.version_file }} "$APK".sha256 ${{ env.prefix }}.apk.sha256 ${{ env.prefix }}.apk "s3://$S3_BUCKET"
           s3cmd put --acl-public "$AAB" "$AAB".sha256 ${{ env.prefix }}.aab.sha256 ${{ env.prefix }}.aab "s3://$S3_BUCKET"
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$APK
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/${{ env.prefix }}.apk
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/$$AAB
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' s3://$(S3_BUCKET)/${{ env.prefix }}.aab
+          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$$APK"
+          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.apk"
+          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$$AAB"
+          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
 
     push-binaries:
       runs-on: ubuntu-latest
