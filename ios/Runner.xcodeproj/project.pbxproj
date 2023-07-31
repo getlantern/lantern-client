@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03026EA12A77D654001D5507 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03026EA02A77D654001D5507 /* Database.swift */; };
+		03026EA32A77D67A001D5507 /* ValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03026EA22A77D67A001D5507 /* ValueUtil.swift */; };
 		035BE7052A7122BC0084059A /* LanternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7032A7122BC0084059A /* LanternModel.swift */; };
 		035BE7062A7122BC0084059A /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7042A7122BC0084059A /* SessionModel.swift */; };
 		035FDDD52A6A547F007B15C8 /* Internalsdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */; };
@@ -37,6 +39,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03026EA02A77D654001D5507 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = Models/Database.swift; sourceTree = "<group>"; };
+		03026EA22A77D67A001D5507 /* ValueUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueUtil.swift; sourceTree = "<group>"; };
 		035BE7032A7122BC0084059A /* LanternModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LanternModel.swift; path = Models/LanternModel.swift; sourceTree = "<group>"; };
 		035BE7042A7122BC0084059A /* SessionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SessionModel.swift; path = Models/SessionModel.swift; sourceTree = "<group>"; };
 		035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Internalsdk.xcframework; sourceTree = "<group>"; };
@@ -107,6 +111,7 @@
 			children = (
 				035BE7032A7122BC0084059A /* LanternModel.swift */,
 				035BE7042A7122BC0084059A /* SessionModel.swift */,
+				03026EA02A77D654001D5507 /* Database.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -115,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				03F2FE332A6949EF0082B34C /* Logger.swift */,
+				03026EA22A77D67A001D5507 /* ValueUtil.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -343,6 +349,8 @@
 				035BE7062A7122BC0084059A /* SessionModel.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				035BE7052A7122BC0084059A /* LanternModel.swift in Sources */,
+				03026EA32A77D67A001D5507 /* ValueUtil.swift in Sources */,
+				03026EA12A77D654001D5507 /* Database.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

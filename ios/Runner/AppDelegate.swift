@@ -1,4 +1,5 @@
 import UIKit
+import SQLite
 import Flutter
 import Internalsdk
 
@@ -6,10 +7,8 @@ import Internalsdk
 @objc class AppDelegate: FlutterAppDelegate, InternalsdkReceiveStreamProtocol {
     
     // List of channel and event method names
-    
     let NAVIGATION_METHOED_CHANNEL="lantern_method_channel"
     
-    lazy var flutterEngine = FlutterEngine(name: "LanternIOS")
     var eventManager: EventManager!
     var sessionModel:SessionModel!
     var lanternModel:LanternModel!
@@ -27,6 +26,7 @@ import Internalsdk
         setupModels()
         prepareChannel()
         setupEventChannel()
+        setupDbModel()
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
@@ -35,10 +35,40 @@ import Internalsdk
         logger.log("setupModels method called")
         //Init Session Model
         sessionModel=SessionModel(flutterBinary: flutterbinaryMessenger)
-        
         //Init Session Model
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
     }
+    
+    func getDatabasePath() -> String {
+           let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+           let fileURL = documentDirectory.appendingPathComponent("LANTERN").appendingPathExtension("sqlite3")
+           return fileURL.path
+       }
+    
+    func setupDbModel() {
+        logger.log("createNewModel called")
+        let dbName = "Session"
+        do {
+            let dbPath = getDatabasePath()
+            let db = try Connection(dbPath)
+            let swiftDB = DatabaseManager(database: db)
+            var error: NSError?
+            guard let model = InternalsdkNewModel(dbName, swiftDB, &error) else {
+                throw error!
+            }
+            let stringValue = ValueUtil.makeValue(from: "test/db")
+            let args = ValueArrayHandler(values: [stringValue])
+            
+            
+            let result = try model.invokeMethod("testDbConnection", arguments: args)
+
+            let resultValue = ValueUtil.getValue(from: result)
+            logger.log("Model Invoke method result converted \(resultValue)")
+        } catch {
+            logger.log("Failed to create new model: \(error)")
+        }
+    }
+    
     
     private func prepareChannel (){
         logger.log("prepareChannel method called")
