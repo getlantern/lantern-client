@@ -239,7 +239,7 @@ abstract class SessionManager(application: Application) : Session {
         Logger.d(TAG, "Setting $ADS_ENABLED to $enabled")
         prefs.edit().putBoolean(ADS_ENABLED, enabled).apply()
     }
-    
+
     fun shouldShowAdsEnabled(): Boolean {
         return prefs.getBoolean(ADS_ENABLED, false)
     }
