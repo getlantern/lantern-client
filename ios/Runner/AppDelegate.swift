@@ -59,7 +59,6 @@ import Internalsdk
             let stringValue = ValueUtil.makeValue(from: "test/db")
             let args = ValueArrayHandler(values: [stringValue])
             
-            
             let result = try model.invokeMethod("testDbConnection", arguments: args)
 
             let resultValue = ValueUtil.getValue(from: result)

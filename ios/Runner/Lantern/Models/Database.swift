@@ -12,8 +12,8 @@ import SQLite
 
 
 class DatabaseManager: NSObject, InternalsdkDBProtocol {
-    let db: Connection
-    var currentTransaction: TransactionManager?
+   private let db: Connection
+   private var currentTransaction: TransactionManager?
     
     init(database: Connection) {
         self.db = database
