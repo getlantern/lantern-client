@@ -25,8 +25,6 @@ class GoTun2SocksProvider(
         private const val VPN_MTU = 1500
     }
 
-    private var mInterface: ParcelFileDescriptor? = null
-
     @Synchronized
     private fun createBuilder(
         vpnService: VpnService,
@@ -87,9 +85,7 @@ class GoTun2SocksProvider(
         builder.setSession(sessionName)
 
         // Create a new mInterface using the builder and save the parameters.
-        mInterface = builder.establish()
-        Logger.d(TAG, "New mInterface: " + mInterface)
-        return mInterface
+        return builder.establish()
     }
 
     override fun run(
@@ -103,11 +99,12 @@ class GoTun2SocksProvider(
         val defaultLocale = Locale.getDefault()
         try {
             Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks")
-            val intf: ParcelFileDescriptor? = createBuilder(vpnService, builder)
-            Logger.debug(TAG, "Running tun2socks")
+            val intf = createBuilder(vpnService, builder)
+            val tunFd = intf?.detachFd()
             if (intf != null) {
+                Logger.debug(TAG, "Running tun2socks")
                 Internalsdk.tun2Socks(
-                    intf.getFd().toLong(),
+                    tunFd.toLong(),
                     socksAddr,
                     dnsGrabAddr,
                     VPN_MTU.toLong(),
@@ -126,10 +123,5 @@ class GoTun2SocksProvider(
     override fun stop() {
         Logger.d(TAG, "stop")
         Internalsdk.stopTun2Socks()
-        mInterface?.let {
-            Logger.d(TAG, "closing interface")
-            mInterface!!.close()
-            mInterface = null
-        }
     }
 }
