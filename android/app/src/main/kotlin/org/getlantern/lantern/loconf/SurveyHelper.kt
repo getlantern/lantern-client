@@ -1,28 +1,17 @@
 package org.getlantern.lantern.loconf
 
-import android.app.NotificationManager
-import android.content.BroadcastReceiver
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.ServiceConnection
-import android.os.Build
-import android.os.IBinder
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.lantern.model.VpnModel
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
+import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.Event
 import org.getlantern.mobilesdk.model.LoConf
-import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
 import org.getlantern.mobilesdk.model.Survey
-import org.getlantern.lantern.notification.NotificationHelper
-import org.getlantern.mobilesdk.Logger
 
 class SurveyHelper(
     private val context: Context,
@@ -58,7 +47,7 @@ class SurveyHelper(
         }
     }
 
-  fun processLoconf(loconf: LoConf) {
+    fun processLoconf(loconf: LoConf) {
         val locale = LanternApp.getSession().language
         val countryCode = LanternApp.getSession().countryCode
         Logger.debug(
@@ -115,7 +104,6 @@ class SurveyHelper(
         }
     }
 
-
     fun showSurveySnackbar(survey: Survey) {
         val url = survey.url
         if (url != null && url != "") {
@@ -136,7 +124,6 @@ class SurveyHelper(
     }
 
     companion object {
-        private val TAG = SurveyHelper::class.java.simpleName        
+        private val TAG = SurveyHelper::class.java.simpleName
     }
-
 }
