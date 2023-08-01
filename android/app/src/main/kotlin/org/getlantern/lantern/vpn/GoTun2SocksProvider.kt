@@ -101,7 +101,7 @@ class GoTun2SocksProvider(
             Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks")
             val intf = createBuilder(vpnService, builder)
             val tunFd = intf?.detachFd()
-            if (intf != null) {
+            if (tunFd != null) {
                 Logger.debug(TAG, "Running tun2socks")
                 Internalsdk.tun2Socks(
                     tunFd.toLong(),
