@@ -6,6 +6,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
@@ -16,9 +17,9 @@ import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 
 class NotificationHelper(
-    private val activity: Activity,
+    private val context: Context,
     private val receiver: NotificationReceiver
-) : ContextWrapper(activity) {
+) : ContextWrapper(context) {
 
     // Used to notify a user of events that happen in the background
     private val manager: NotificationManager =
@@ -26,8 +27,8 @@ class NotificationHelper(
 
     private lateinit var dataUsageNotificationChannel: NotificationChannel
     private lateinit var vpnNotificationChannel: NotificationChannel
-    private lateinit var vpnBuilder: NotificationCompat.Builder
-    private lateinit var dataUsageBuilder: NotificationCompat.Builder
+    private var vpnBuilder: NotificationCompat.Builder
+    private var dataUsageBuilder: NotificationCompat.Builder
 
 
     @TargetApi(Build.VERSION_CODES.O)
@@ -58,8 +59,8 @@ class NotificationHelper(
     }
 
     fun disconnectIntent(): Intent {
-        val packageName = activity.packageName
-        return Intent(activity, NotificationReceiver::class.java).apply {
+        val packageName = context.packageName
+        return Intent(context, NotificationReceiver::class.java).apply {
             action = "$packageName.intent.VPN_DISCONNECTED"
         }
     }
@@ -67,7 +68,7 @@ class NotificationHelper(
     private fun disconnectBroadcast(): PendingIntent {
         // Retrieve a PendingIntent that will perform a broadcast
         return PendingIntent.getBroadcast(
-            activity,
+            context,
             0,
             disconnectIntent(),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
@@ -103,9 +104,9 @@ class NotificationHelper(
             initChannels()
         }
         val contentIntent = PendingIntent.getActivity(
-            activity,
+            context,
             0,
-            Intent(activity, MainActivity::class.java),
+            Intent(context, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
@@ -122,10 +123,10 @@ class NotificationHelper(
         contentIntent: PendingIntent
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(this, channelId) // Channel ID provided as parameter
-            .setContentTitle(activity.getString(R.string.service_connected))
+            .setContentTitle(context.getString(R.string.service_connected))
             .addAction(
                 android.R.drawable.ic_delete,
-                activity.getString(R.string.disconnect),
+                context.getString(R.string.disconnect),
                 disconnectBroadcast()
             )
             .setContentIntent(contentIntent)

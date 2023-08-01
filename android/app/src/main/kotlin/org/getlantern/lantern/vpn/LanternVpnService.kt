@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.net.VpnService
+import android.os.Binder
 import android.os.IBinder
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.service.LanternService_
@@ -19,6 +20,7 @@ class LanternVpnService : VpnService(), Runnable {
     }
 
     private var provider: Provider? = null
+    private val binder = LocalBinder()
 
     private val lanternServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName) {
@@ -111,6 +113,11 @@ class LanternVpnService : VpnService(), Runnable {
         } catch (t: Throwable) {
             Logger.e(TAG, "error updating vpn preference", t)
         }
+    }
+
+    inner class LocalBinder : Binder() {
+        val service
+            get() = this@LanternVpnService
     }
 
     @Synchronized fun getOrInitProvider(): Provider? {

@@ -19,7 +19,7 @@ class NotificationReceiver() : BroadcastReceiver() {
         Logger.debug(TAG, "Received disconnect broadcast")
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.cancel(NotificationHelper.VPN_CONNECTED)
-    	if (Utils.isServiceRunning(
+    	/*if (Utils.isServiceRunning(
                 context,
                 LanternVpnService::class.java,
             )
@@ -31,7 +31,7 @@ class NotificationReceiver() : BroadcastReceiver() {
 	                LanternVpnService::class.java,
 	            ).setAction(LanternVpnService.ACTION_DISCONNECT),
         	)
-        }
+        }*/
     }
 
     companion object {

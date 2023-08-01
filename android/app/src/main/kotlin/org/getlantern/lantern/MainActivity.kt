@@ -46,9 +46,11 @@ import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.isServiceRunning
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
+import org.getlantern.lantern.vpn.VpnServiceManager
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.Event
 import org.getlantern.mobilesdk.model.LoConf
@@ -73,7 +75,9 @@ class MainActivity :
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
     private lateinit var notifications: NotificationHelper
-    private lateinit var receiver: NotificationReceiver
+
+    private val vpnServiceManager by lazy { VpnServiceManager(this) }
+
     private var autoUpdateJob: Job? = null
 
     private val lanternClient = LanternApp.getLanternHttpClient()
@@ -87,8 +91,7 @@ class MainActivity :
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
-        receiver = NotificationReceiver()
-        notifications = NotificationHelper(this, receiver)
+        //lanternServiceManager = LanternServiceManager(this)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
@@ -140,7 +143,8 @@ class MainActivity :
 
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
-        Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
+
+        vpnServiceManager.init()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -160,15 +164,12 @@ class MainActivity :
 
     override fun onStart() {
         super.onStart()
-        val packageName = activity.packageName
-        IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
-            registerReceiver(receiver, it)
-        }
+        vpnServiceManager.bind()
     }
 
     override fun onStop() {
         super.onStop()
-        unregisterReceiver(receiver)
+        vpnServiceManager.unbind()
     }
 
     override fun onResume() {
@@ -183,11 +184,10 @@ class MainActivity :
             }
         }
 
-        val isServiceRunning = Utils.isServiceRunning(activity, LanternVpnService::class.java)
-        if (vpnModel.isConnectedToVpn() && !isServiceRunning) {
+        if (vpnModel.isConnectedToVpn() && !isServiceRunning(LanternVpnService::class.java)) {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
-        } else if (!vpnModel.isConnectedToVpn() && isServiceRunning) {
+        } else if (!vpnModel.isConnectedToVpn() && isServiceRunning(LanternVpnService::class.java)) {
             Logger.d(TAG, "LanternVpnService is running, updating VPN preference")
             vpnModel.setVpnOn(true)
         }
@@ -546,10 +546,10 @@ class MainActivity :
                     "VPN enabled, starting Lantern...",
                 )
                 updateStatus(true)
-                startVpnService()
+                vpnServiceManager.connect()
             }
         } else {
-            sendBroadcast(notifications.disconnectIntent())
+            vpnServiceManager.disconnect()
         }
     }
 
@@ -629,22 +629,8 @@ class MainActivity :
         if (request == REQUEST_VPN) {
             val useVpn = response == RESULT_OK
             updateStatus(useVpn)
-            if (useVpn) {
-                startVpnService()
-            }
+            if (useVpn) vpnServiceManager.connect()
         }
-    }
-
-    private fun startVpnService() {
-        val intent: Intent = Intent(
-            this,
-            LanternVpnService::class.java,
-        ).apply {
-            action = LanternVpnService.ACTION_CONNECT
-        }
-
-        startService(intent)
-        notifications.vpnConnectedNotification()
     }
 
     private fun updateStatus(useVpn: Boolean) {
