@@ -2,7 +2,6 @@ package org.getlantern.lantern
 
 import android.Manifest
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.Bundle
@@ -34,8 +33,6 @@ import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
-import org.getlantern.lantern.model.PaymentProvider
-import org.getlantern.lantern.model.PaymentMethod
 import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
@@ -44,10 +41,9 @@ import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.notification.NotificationHelper
-import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
-import org.getlantern.lantern.util.isServiceRunning
 import org.getlantern.lantern.util.PlansUtil
+import org.getlantern.lantern.util.isServiceRunning
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.lantern.vpn.VpnServiceManager
@@ -59,8 +55,8 @@ import org.getlantern.mobilesdk.model.Survey
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.concurrent.*
 import java.util.Locale
+import java.util.concurrent.*
 
 class MainActivity :
     FlutterActivity(),
@@ -76,7 +72,7 @@ class MainActivity :
     private lateinit var accountInitDialog: AlertDialog
     private lateinit var notifications: NotificationHelper
 
-    private val vpnServiceManager by lazy { VpnServiceManager(this) }
+    private val vpnServiceManager by lazy { VpnServiceManager(this, vpnModel) }
 
     private var autoUpdateJob: Job? = null
 
@@ -91,7 +87,7 @@ class MainActivity :
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
-        //lanternServiceManager = LanternServiceManager(this)
+        // lanternServiceManager = LanternServiceManager(this)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
@@ -195,6 +191,7 @@ class MainActivity :
     }
 
     override fun onDestroy() {
+        // vpnServiceManager.dispose()
         super.onDestroy()
         vpnModel.destroy()
         sessionModel.destroy()
@@ -270,7 +267,7 @@ class MainActivity :
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun vpnStateChanged(state: VpnState) {
-        updateStatus(state.useVpn)
+        // updateStatus(state.useVpn)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -334,35 +331,39 @@ class MainActivity :
     }
 
     private fun updatePlans() {
-        lanternClient.getPlans(object : PlansCallback {
-            override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
-            }
-
-            override fun onSuccess(proPlans: Map<String, ProPlan>) {
-                Logger.debug(TAG, "Successfully fetched plans")
-                for (planId in proPlans.keys) {
-                    proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+        lanternClient.getPlans(
+            object : PlansCallback {
+                override fun onFailure(throwable: Throwable?, error: ProError?) {
+                    Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
                 }
-                LanternApp.getSession().setUserPlans(proPlans)
 
-             }
-         }, null)
-     }
+                override fun onSuccess(proPlans: Map<String, ProPlan>) {
+                    Logger.debug(TAG, "Successfully fetched plans")
+                    for (planId in proPlans.keys) {
+                        proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+                    }
+                    LanternApp.getSession().setUserPlans(proPlans)
+                }
+            },
+            null,
+        )
+    }
 
     private fun updatePaymentMethods() {
-        lanternClient.plansV3(object : PlansV3Callback {
-            override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
-            }
+        lanternClient.plansV3(
+            object : PlansV3Callback {
+                override fun onFailure(throwable: Throwable?, error: ProError?) {
+                    Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+                }
 
-            override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
-                Logger.debug(TAG, "Successfully fetched payment methods")
-                LanternApp.getSession().setPaymentMethods(paymentMethods)
-
-             }
-         }, null)
-     }
+                override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
+                    Logger.debug(TAG, "Successfully fetched payment methods")
+                    LanternApp.getSession().setPaymentMethods(paymentMethods)
+                }
+            },
+            null,
+        )
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {
@@ -534,19 +535,10 @@ class MainActivity :
                 "Load VPN configuration",
             )
             val intent = VpnService.prepare(this)
-            if (intent != null) {
-                Logger.warn(
-                    TAG,
-                    "Requesting VPN connection",
-                )
-                startActivityForResult(intent, REQUEST_VPN)
+            if (intent == null) {
+                vpnServiceManager.onVpnPermissionResult(true)
             } else {
-                Logger.debug(
-                    TAG,
-                    "VPN enabled, starting Lantern...",
-                )
-                updateStatus(true)
-                vpnServiceManager.connect()
+                startActivityForResult(intent, REQUEST_VPN)
             }
         } else {
             vpnServiceManager.disconnect()
@@ -626,18 +618,7 @@ class MainActivity :
 
     override fun onActivityResult(request: Int, response: Int, data: Intent?) {
         super.onActivityResult(request, response, data)
-        if (request == REQUEST_VPN) {
-            val useVpn = response == RESULT_OK
-            updateStatus(useVpn)
-            if (useVpn) vpnServiceManager.connect()
-        }
-    }
-
-    private fun updateStatus(useVpn: Boolean) {
-        Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
-        LanternApp.getSession().updateVpnPreference(useVpn)
-        LanternApp.getSession().updateBootUpVpnPreference(useVpn)
-        vpnModel.setVpnOn(useVpn)
+        vpnServiceManager.onVpnPermissionResult(response == RESULT_OK)
     }
 
     // Recreate the activity when the language changes
