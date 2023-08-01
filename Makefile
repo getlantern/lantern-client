@@ -478,12 +478,10 @@ build-framework: assert-go-version install-gomobile
 	-tags='headless lantern ios' \
 	-ldflags="$(LDFLAGS)" \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-    		$(ANDROID_LIB_PKG)
-	@echo "copying framework"
-	mkdir -p $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME)
-	cp -R ./$(FRAMEWORK_NAME)/* $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME)
-	@echo "Nuking $(FRAMEWORK_NAME)"
-	rm -Rf ./$(FRAMEWORK_NAME)
+    		$(ANDROID_LIB_PKG) github.com/getlantern/pathdb/minisql
+	@echo "moving framework"
+	mkdir -p $(FRAMEWORK_DIR)
+	mv ./$(FRAMEWORK_NAME) $(FRAMEWORK_DIR)/
 
 
 install-gomobile:

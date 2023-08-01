@@ -6,6 +6,8 @@ go 1.19
 
 // replace github.com/getlantern/fronted => ../fronted
 
+// replace github.com/getlantern/pathdb => ../pathdb
+
 // v0.5.6 has a security issue and using require leaves a reference to it in go.sum
 replace github.com/ulikunitz/xz => github.com/ulikunitz/xz v0.5.8
 
@@ -29,7 +31,7 @@ replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-2022
 
 replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93
 
-require github.com/getlantern/pathdb v0.0.0-20220215140929-5f7156fd2ee2
+require github.com/getlantern/pathdb v0.0.0-20230801145738-3addf0ff616f
 
 require (
 	github.com/benbjohnson/clock v1.3.0 // indirect

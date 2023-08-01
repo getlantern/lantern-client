@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/getlantern/pathdb"
+	"github.com/getlantern/pathdb/minisql"
 )
 
 const (
@@ -13,15 +14,15 @@ const (
 )
 
 type Model interface {
-	InvokeMethod(method string, arguments ValueArray) (*Value, error)
+	InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error)
 }
 
 type model struct {
 	db pathdb.DB
 }
 
-func NewModel(schema string, mdb DB) (Model, error) {
-	db, err := pathdb.NewDB(&dbAdapter{mdb}, schema)
+func NewModel(schema string, mdb minisql.DB) (Model, error) {
+	db, err := pathdb.NewDB(mdb, schema)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +32,7 @@ func NewModel(schema string, mdb DB) (Model, error) {
 	}, nil
 }
 
-func (m *model) InvokeMethod(method string, arguments ValueArray) (*Value, error) {
+func (m *model) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
 	switch method {
 	case "testDbConnection":
 		log.Println("testDbConnection called")
@@ -49,15 +50,16 @@ func (m *model) InvokeMethod(method string, arguments ValueArray) (*Value, error
 		path := pathArg.String
 		log.Println("testDbConnection Path argument: ", path)
 
-		value, err := m.db.Get(path)
-		if err != nil || value == nil {
-			log.Println("testDbConnection DB Get error, value: ", err)
-			// if error occurred or value is nil, return false
-			return &Value{Type: TypeBool, Bool: false}, err
-		}
-		log.Println("testDbConnectionDB Get successful, value: ", value)
-		// if everything is okay, return true
-		return &Value{Type: TypeBool, Bool: true}, nil
+		// value, err := m.db.Get(path)
+		// if err != nil || value == nil {
+		// 	log.Println("testDbConnection DB Get error, value: ", err)
+		// 	// if error occurred or value is nil, return false
+		// 	return &Value{Type: TypeBool, Bool: false}, err
+		// }
+		// log.Println("testDbConnectionDB Get successful, value: ", value)
+		// // if everything is okay, return true
+		// return &Value{Type: TypeBool, Bool: true}, nil
+		return nil, nil
 
 	default:
 		return nil, fmt.Errorf("unknown method: %s", method)
