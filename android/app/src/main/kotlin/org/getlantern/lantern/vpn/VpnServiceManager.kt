@@ -13,7 +13,6 @@ class VpnServiceManager(
     private val context: Context,
     private val vpnModel: VpnModel,
 ) : BaseService.Callback {
-    private val notifications = NotificationHelper(context)
     private var state = ConnectionState.Disconnected
     private val vpnServiceConnection = LanternConnection(true)
 
@@ -24,7 +23,7 @@ class VpnServiceManager(
     fun connect() {
         updateVpnStatus(true)
         LanternApp.startService(vpnServiceConnection)
-        notifications.vpnConnectedNotification()
+        LanternApp.notifications.vpnConnectedNotification()
     }
 
     private fun updateVpnStatus(useVpn: Boolean) {

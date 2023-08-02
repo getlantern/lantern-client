@@ -11,6 +11,7 @@ import androidx.multidex.MultiDex
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternSessionManager
+import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.service.LanternConnection
 import org.getlantern.lantern.util.debugOnly
 import org.getlantern.lantern.util.LanternProxySelector
@@ -79,6 +80,8 @@ open class LanternApp : Application() {
         private lateinit var inAppBilling: InAppBilling
         private lateinit var lanternHttpClient: LanternHttpClient
         private lateinit var session: LanternSessionManager
+
+        val notifications by lazy { NotificationHelper(appContext) }
 
         fun startService(connection: LanternConnection) = ContextCompat.startForegroundService(
             application, Intent(application, connection.serviceClass).apply {

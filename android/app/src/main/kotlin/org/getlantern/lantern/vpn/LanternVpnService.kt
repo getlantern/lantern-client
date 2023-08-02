@@ -1,13 +1,9 @@
 package org.getlantern.lantern.vpn
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.net.VpnService
 import android.os.Binder
 import android.os.Build
-import androidx.core.app.NotificationCompat
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.service.BaseService
 import org.getlantern.mobilesdk.Logger
@@ -28,17 +24,9 @@ class LanternVpnService : VpnService(), BaseService.Service, Runnable {
             get() = this@LanternVpnService
     }
 
-    private fun createNotification() {
-        val channelID = "service-vpn"
-        val channel = NotificationChannel(channelID, "Lantern VPN service", NotificationManager.IMPORTANCE_DEFAULT)
-        val notify = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notify.createNotificationChannel(channel)
-        startForeground(
-            1,
-            NotificationCompat.Builder(this, channelID)
-                .setContentTitle("")
-                .setContentText("").build(),
-        )
+    private fun serviceNotification() {
+        val notification = LanternApp.notifications.serviceNotification()
+        startForeground(1, notification)
     }
 
     override fun onCreate() {
@@ -63,7 +51,7 @@ class LanternVpnService : VpnService(), BaseService.Service, Runnable {
             START_NOT_STICKY
         } else {
             // super<BaseService.Service>.onStart(intent)
-            if (Build.VERSION.SDK_INT >= 26) createNotification()
+            if (Build.VERSION.SDK_INT >= 26) serviceNotification()
             LanternApp.getSession().updateVpnPreference(true)
             connect()
             START_STICKY

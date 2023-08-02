@@ -74,12 +74,18 @@ class NotificationHelper(
         )
     }
 
+    fun serviceNotification(): Notification {
+        return NotificationCompat.Builder(this, CHANNEL_VPN)
+                .setContentTitle("")
+                .setContentText("").build()
+    }
 
-    public fun vpnConnectedNotification() {
+
+    fun vpnConnectedNotification() {
         manager.notify(VPN_CONNECTED, vpnBuilder.build())
     }
 
-    public fun dataUsageNotification() {
+    fun dataUsageNotification() {
         manager.notify(DATA_USAGE, dataUsageBuilder.build())
     }
 
