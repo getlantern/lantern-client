@@ -41,7 +41,6 @@ import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
-import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.PlansUtil
@@ -72,7 +71,6 @@ class MainActivity :
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
-    private lateinit var notifications: NotificationHelper
     private lateinit var receiver: NotificationReceiver
 
     private val vpnServiceManager by lazy { VpnServiceManager(this, vpnModel) }
@@ -198,6 +196,7 @@ class MainActivity :
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
+        vpnServiceManager.destroy()
         EventBus.getDefault().unregister(this)
     }
 

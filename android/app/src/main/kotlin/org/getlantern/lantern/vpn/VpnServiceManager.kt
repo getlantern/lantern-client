@@ -16,7 +16,7 @@ class VpnServiceManager(
     private var state = ConnectionState.Disconnected
     private val vpnServiceConnection = LanternConnection(true)
 
-    fun init() {
+    init {
         vpnServiceConnection.connect(context)
     }
 
@@ -39,6 +39,10 @@ class VpnServiceManager(
 
     fun onVpnPermissionResult(isGranted: Boolean) {
         if (isGranted) connect()
+    }
+
+    fun destroy() {
+        vpnServiceConnection.disconnect(context)
     }
 
     fun disconnect() {
