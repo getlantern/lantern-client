@@ -1,20 +1,15 @@
 package org.getlantern.lantern.vpn
 
-import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.Binder
 import android.os.Build
-import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.service.BaseService
-import org.getlantern.lantern.service.LanternService_
 import org.getlantern.mobilesdk.Logger
 
 class LanternVpnService : VpnService(), BaseService.Service, Runnable {
@@ -38,9 +33,12 @@ class LanternVpnService : VpnService(), BaseService.Service, Runnable {
         val channel = NotificationChannel(channelID, "Lantern VPN service", NotificationManager.IMPORTANCE_DEFAULT)
         val notify = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notify.createNotificationChannel(channel)
-        startForeground(1, NotificationCompat.Builder(this, channelID)
+        startForeground(
+            1,
+            NotificationCompat.Builder(this, channelID)
                 .setContentTitle("")
-                .setContentText("").build())
+                .setContentText("").build(),
+        )
     }
 
     override fun onCreate() {
@@ -64,7 +62,7 @@ class LanternVpnService : VpnService(), BaseService.Service, Runnable {
             stop()
             START_NOT_STICKY
         } else {
-            //super<BaseService.Service>.onStart(intent)
+            // super<BaseService.Service>.onStart(intent)
             if (Build.VERSION.SDK_INT >= 26) createNotification()
             LanternApp.getSession().updateVpnPreference(true)
             connect()

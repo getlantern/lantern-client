@@ -3,9 +3,9 @@ package org.getlantern.lantern.service
 import android.content.Intent
 
 class BaseService {
-	interface Callback {
-		fun onStateChanged(state: ConnectionState)
-	}
+    interface Callback {
+        fun onStateChanged(state: ConnectionState)
+    }
 
     interface Service {
         fun onStart(intent: Intent?) {

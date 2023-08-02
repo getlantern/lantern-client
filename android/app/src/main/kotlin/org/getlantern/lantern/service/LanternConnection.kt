@@ -15,7 +15,8 @@ class LanternConnection(private var isVpnService: Boolean = false) : ServiceConn
     }
 
     private var binder: IBinder? = null
-    //private var callback: Callback? = null
+
+    // private var callback: Callback? = null
     private var connectionActive = false
     var service: BaseService.Service? = null
 
@@ -43,9 +44,11 @@ class LanternConnection(private var isVpnService: Boolean = false) : ServiceConn
     }
 
     fun disconnect(context: Context) {
-        if (connectionActive) try {
-            context.unbindService(this)
-        } catch (_: IllegalArgumentException) {
+        if (connectionActive) {
+            try {
+                context.unbindService(this)
+            } catch (_: IllegalArgumentException) {
+            }
         }
         connectionActive = false
         binder = null
