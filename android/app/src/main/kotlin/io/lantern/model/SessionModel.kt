@@ -29,12 +29,12 @@ import org.getlantern.lantern.openHome
 import org.getlantern.lantern.restartApp
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
+import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
-import org.greenrobot.eventbus.EventBus
 
 /**
  * This is a model that uses the same db schema as the preferences in SessionManager so that those
@@ -90,14 +90,16 @@ class SessionModel(
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
             "shouldShowAds" -> {
                 //We just need to check VPN permissions
-                // all other configurations are send back backend
-                val adsEnableBool = if (LanternApp.getSession().shouldShowAdsEnabled()) {
-                    LanternApp.getSession().hasAllPermissionGiven()
-                } else {
-                    false
-                }
+                // if user tried to remove then we need to check
+                // all other configurations are comming from backend
+                val session = LanternApp.getSession()
+                val hasAllNetworkPermissions = PermissionUtil.missingPermissions(activity).isEmpty()
+                val adsEnableBool = session.shouldShowAdsEnabled()
+                        && hasAllNetworkPermissions
+                        && session.hasFirstSessionCompleted()
                 result.success(adsEnableBool)
             }
+
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)

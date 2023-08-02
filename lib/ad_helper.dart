@@ -7,10 +7,16 @@ import 'common/session_model.dart';
 
 class AdHelper {
   InterstitialAd? _interstitialAd;
+  int _failedLoadAttempts = 0;
+
+  //If ads are getting failed to load we want to make lot of calls
+  // Just try 5 times
+  final int _maxFailAttempts = 5;
+
 
   String get interstitialAdUnitId {
     if (Platform.isAndroid) {
-     return '***REMOVED***';
+      return '***REMOVED***';
       // return const String.fromEnvironment('INTERSTITIAL_AD_UNIT_ID');
     } else {
       throw UnsupportedError('Unsupported platform');
@@ -22,7 +28,9 @@ class AdHelper {
     final adsEnable = await sessionModel.shouldShowAds();
     logger.i('[Ads Request] support checking  value is $adsEnable');
     //To avoid calling multiple ads request repeatedly
-    if (_interstitialAd == null && adsEnable) {
+    if (_interstitialAd == null &&
+        adsEnable &&
+        _failedLoadAttempts < _maxFailAttempts) {
       logger.i('[Ads Request] making request');
       await InterstitialAd.load(
         adUnitId: interstitialAdUnitId,
@@ -51,7 +59,9 @@ class AdHelper {
             logger.i('[Ads Request] to loaded $ad');
           },
           onAdFailedToLoad: (err) {
+            _failedLoadAttempts++; // increment the count on failure
             logger.i('[Ads Request] failed to load $err');
+            postShowingAds();
           },
         ),
       );

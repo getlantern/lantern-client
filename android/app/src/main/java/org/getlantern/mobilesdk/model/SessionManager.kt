@@ -425,12 +425,15 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putLong(name, currentMilliseconds + numSeconds * 1000).apply()
     }
 
-    fun setHasAllPermissionGiven(status: Boolean) {
-        prefs.edit().putBoolean(HAS_ALL_PERMISSION_GIVEN, status).apply()
+    /**this preference is used for checking we want to show ads or not
+     * we are only after first session
+      */
+    fun setHasFirstSessionCompleted(status: Boolean) {
+        prefs.edit().putBoolean(HAS_FIRST_SESSION_COMPLETED, status).apply()
     }
 
-    fun hasAllPermissionGiven(): Boolean {
-        return prefs.getBoolean(HAS_ALL_PERMISSION_GIVEN, false);
+    fun hasFirstSessionCompleted(): Boolean {
+        return prefs.getBoolean(HAS_FIRST_SESSION_COMPLETED, false);
     }
 
     fun getInternalHeaders(): Map<String, String> {
@@ -490,7 +493,7 @@ abstract class SessionManager(application: Application) : Session {
         protected const val SERVER_COUNTRY_CODE = "server_country_code"
         protected const val SERVER_CITY = "server_city"
         protected const val HAS_SUCCEEDING_PROXY = "hasSucceedingProxy"
-        protected const val HAS_ALL_PERMISSION_GIVEN = "hasAllPermissionGiven"
+        protected const val HAS_FIRST_SESSION_COMPLETED = "hasFirstSessionCompleted"
         protected const val DEVICE_ID = "deviceid"
 
         @JvmStatic
