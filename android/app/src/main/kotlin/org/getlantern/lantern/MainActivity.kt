@@ -2,6 +2,7 @@ package org.getlantern.lantern
 
 import android.Manifest
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.Bundle
@@ -41,6 +42,7 @@ import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.notification.NotificationHelper
+import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.isServiceRunning
@@ -71,6 +73,7 @@ class MainActivity :
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
     private lateinit var notifications: NotificationHelper
+    private lateinit var receiver: NotificationReceiver
 
     private val vpnServiceManager by lazy { VpnServiceManager(this, vpnModel) }
 
@@ -87,7 +90,7 @@ class MainActivity :
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
-        // lanternServiceManager = LanternServiceManager(this)
+        receiver = NotificationReceiver(vpnServiceManager)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
@@ -139,8 +142,6 @@ class MainActivity :
 
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
-
-        vpnServiceManager.init()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -160,12 +161,14 @@ class MainActivity :
 
     override fun onStart() {
         super.onStart()
-        vpnServiceManager.bind()
+        IntentFilter(Actions.VPN_DISCONNECTED_NOTIFICATION).also {
+            registerReceiver(receiver, it)
+        }
     }
 
     override fun onStop() {
         super.onStop()
-        vpnServiceManager.unbind()
+        unregisterReceiver(receiver)
     }
 
     override fun onResume() {
@@ -180,10 +183,10 @@ class MainActivity :
             }
         }
 
-        if (vpnModel.isConnectedToVpn() && !isServiceRunning(LanternVpnService::class.java)) {
+        if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(context, LanternVpnService::class.java)) {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
-        } else if (!vpnModel.isConnectedToVpn() && isServiceRunning(LanternVpnService::class.java)) {
+        } else if (!vpnModel.isConnectedToVpn() && Utils.isServiceRunning(context, LanternVpnService::class.java)) {
             Logger.d(TAG, "LanternVpnService is running, updating VPN preference")
             vpnModel.setVpnOn(true)
         }
@@ -191,7 +194,6 @@ class MainActivity :
     }
 
     override fun onDestroy() {
-        // vpnServiceManager.dispose()
         super.onDestroy()
         vpnModel.destroy()
         sessionModel.destroy()

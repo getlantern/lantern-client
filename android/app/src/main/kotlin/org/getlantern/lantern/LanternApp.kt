@@ -1,13 +1,17 @@
 package org.getlantern.lantern
 
 import android.app.Application
+import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.multidex.MultiDex
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternSessionManager
+import org.getlantern.lantern.service.LanternConnection
 import org.getlantern.lantern.util.debugOnly
 import org.getlantern.lantern.util.LanternProxySelector
 import org.getlantern.lantern.util.SentryUtil
@@ -58,6 +62,7 @@ open class LanternApp : Application() {
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
+        application = this
         // this is necessary running earlier versions of Android
         // multidex support has to be added manually
         // in addition to being enabled in the app build.gradle
@@ -67,10 +72,26 @@ open class LanternApp : Application() {
 
     companion object {
         private val TAG = LanternApp::class.java.simpleName
+
+        lateinit var application: LanternApp
+
         private lateinit var appContext: Context
         private lateinit var inAppBilling: InAppBilling
         private lateinit var lanternHttpClient: LanternHttpClient
         private lateinit var session: LanternSessionManager
+
+        fun startService(connection: LanternConnection) = ContextCompat.startForegroundService(
+            application, Intent(application, connection.serviceClass).apply {
+                action = Actions.CONNECT_VPN
+            }
+        )
+
+        fun stopService(connection: LanternConnection) = ContextCompat.startForegroundService(
+            application, Intent(application, connection.serviceClass).apply {
+                action = Actions.DISCONNECT_VPN
+            }
+        )
+
 
         @JvmStatic
         fun getAppContext(): Context {

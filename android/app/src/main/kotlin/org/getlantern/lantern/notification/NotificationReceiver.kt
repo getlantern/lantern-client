@@ -9,6 +9,7 @@ import io.lantern.model.VpnModel
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
+import org.getlantern.lantern.util.isServiceRunning
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.lantern.vpn.VpnServiceManager
 import org.getlantern.mobilesdk.Logger
@@ -20,7 +21,10 @@ class NotificationReceiver(private val serviceManager: VpnServiceManager) : Broa
         Logger.debug(TAG, "Received disconnect broadcast")
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.cancel(NotificationHelper.VPN_CONNECTED)
-        serviceManager.disconnect()
+        if (Utils.isServiceRunning(context, LanternVpnService::class.java)
+        ) {
+            serviceManager.disconnect()
+        }
     }
 
     companion object {

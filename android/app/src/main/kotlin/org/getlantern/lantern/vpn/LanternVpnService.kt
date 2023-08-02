@@ -1,17 +1,23 @@
 package org.getlantern.lantern.vpn
 
+import android.annotation.TargetApi
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
+import androidx.core.app.NotificationCompat
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.service.BaseService
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.mobilesdk.Logger
 
-class LanternVpnService : VpnService(), Runnable {
+class LanternVpnService : VpnService(), BaseService.Service, Runnable {
 
     companion object {
         const val ACTION_CONNECT = "org.getlantern.lantern.vpn.START"
@@ -22,29 +28,30 @@ class LanternVpnService : VpnService(), Runnable {
     private var provider: Provider? = null
     private val binder = LocalBinder()
 
-    private val lanternServiceConnection: ServiceConnection = object : ServiceConnection {
-        override fun onServiceDisconnected(name: ComponentName) {
-            Logger.e(TAG, "LanternService disconnected, disconnecting VPN")
-            stop()
-        }
-        override fun onServiceConnected(name: ComponentName, service: IBinder) {}
+    inner class LocalBinder : Binder() {
+        val service
+            get() = this@LanternVpnService
+    }
+
+    private fun createNotification() {
+        val channelID = "service-vpn"
+        val channel = NotificationChannel(channelID, "Lantern VPN service", NotificationManager.IMPORTANCE_DEFAULT)
+        val notify = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notify.createNotificationChannel(channel)
+        startForeground(1, NotificationCompat.Builder(this, channelID)
+                .setContentTitle("")
+                .setContentText("").build())
     }
 
     override fun onCreate() {
         super.onCreate()
         Logger.d(TAG, "VpnService created")
-        bindService(
-            Intent(this, LanternService_::class.java),
-            lanternServiceConnection,
-            Context.BIND_AUTO_CREATE,
-        )
     }
 
     override fun onDestroy() {
         Logger.d(TAG, "destroyed")
         doStop()
         super.onDestroy()
-        unbindService(lanternServiceConnection)
     }
 
     override fun onRevoke() {
@@ -53,16 +60,12 @@ class LanternVpnService : VpnService(), Runnable {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        // Somehow we are getting null here when running on Android 5.0
-        // Handling null intent scenario
-        if (intent == null) {
-            Logger.d(TAG, "LanternVpnService: Received null intent, service is being restarted")
-            return START_STICKY
-        }
         return if (intent.action == ACTION_DISCONNECT) {
             stop()
             START_NOT_STICKY
         } else {
+            //super<BaseService.Service>.onStart(intent)
+            if (Build.VERSION.SDK_INT >= 26) createNotification()
             LanternApp.getSession().updateVpnPreference(true)
             connect()
             START_STICKY
@@ -113,11 +116,6 @@ class LanternVpnService : VpnService(), Runnable {
         } catch (t: Throwable) {
             Logger.e(TAG, "error updating vpn preference", t)
         }
-    }
-
-    inner class LocalBinder : Binder() {
-        val service
-            get() = this@LanternVpnService
     }
 
     @Synchronized fun getOrInitProvider(): Provider? {
