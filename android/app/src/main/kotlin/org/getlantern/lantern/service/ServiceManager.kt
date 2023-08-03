@@ -65,7 +65,6 @@ class ServiceManager {
                 }
 
                 data.changeState(ConnectionState.Disconnected)
-                // stop the service if nothing has bound to it
                 if (restart) {
                     startRunner()
                 } else {

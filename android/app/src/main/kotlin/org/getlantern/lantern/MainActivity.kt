@@ -2,7 +2,6 @@ package org.getlantern.lantern
 
 import android.Manifest
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.Bundle
@@ -42,7 +41,6 @@ import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternService_
-import org.getlantern.lantern.util.broadcastReceiver
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.isServiceRunning
 import org.getlantern.lantern.util.showAlertDialog
