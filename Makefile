@@ -64,7 +64,8 @@ BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
 # We explicitly set a build-id for use in the liblantern ELF binary so that Sentry can successfully associate uploaded debug symbols with corresponding errors/crashes
 BUILD_ID := 0x$(shell echo '$(REVISION_DATE)-$(BUILD_DATE)' | xxd -c 256 -ps)
 export CI
-CIBASE := $(shell printf "CI=$$CI" | base64)
+CIBASE := $(shell printf "CI=$${CI:-false}" | base64)
+
 
 STAGING = false
 UPDATE_SERVER_URL ?=
@@ -87,6 +88,10 @@ PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
 ## vault secrets
 VAULT_DD_SECRETS_PATH ?= secret/apps/datadog/android
+VAULT_ADS_SECRETS_PATH ?= secret/googleAds
+
+## vault keys
+INTERSTITIAL_AD_UNIT_ID= INTERSTITIAL_AD_UNIT_ID
 
 S3_BUCKET ?= lantern
 FORCE_PLAY_VERSION ?= false
@@ -372,14 +377,15 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		-b $(MOBILE_DIR)/app/build.gradle \
 		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
-vault-secret-%:
-	@SECRET=$(shell cd $$GOPATH/src/github.com/getlantern/lantern-cloud && bin/vault kv get -field=$(vault_field) ${VAULT_DD_SECRETS_PATH}); \
-	printf ${*}=$$SECRET | ${BASE64}
+vault-secret:
+	@SECRET=$(shell cd $$GOPATH/src/github.com/getlantern/lantern-cloud && bin/vault kv get -field=$(VAULT_FIELD) $(VAULT_PATH)); \
+	echo "Retrieved secret: $$SECRET" 1>&2; \
+	printf "$$VAULT_FIELD=$$SECRET" | ${BASE64}
 
 dart-defines-debug:
-	DART_DEFINES+=`printf ',' && vault_field=interstitial_ad_unit_id make vault-secret-INTERSTITIAL_AD_UNIT_ID`; \
-	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
-	printf $$DART_DEFINES
+	@DART_DEFINES=$(shell make vault-secret VAULT_FIELD=INTERSTITIAL_AD_UNIT_ID VAULT_PATH=secret/googleAds); \
+	DART_DEFINES+=",$(CIBASE)"; \
+	echo "$$DART_DEFINES"
 
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
@@ -389,7 +395,7 @@ do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
 	CI="$$CI" && \
-	echo "Base64 CI: $(CIBASE)" && \
+	echo "DART_DEFINES values: $$DART_DEFINES" && \
 	$(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -Pdart-defines="$$DART_DEFINES" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PdevelopmentMode="true" -Pci=$(CI) -b $(MOBILE_DIR)/app/build.gradle \
 	assembleProdDebug
 
