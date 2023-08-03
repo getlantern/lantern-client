@@ -131,7 +131,8 @@ open class LanternService : Service(), Runnable {
         createUserHandler.postDelayed(createUserRunnable, timeOut)
     }
 
-    private class CreateUser(val service: LanternService) : Runnable,
+    private class CreateUser(val service: LanternService) :
+        Runnable,
         LanternHttpClient.ProCallback {
 
         private var attempts: Int = 0

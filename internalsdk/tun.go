@@ -29,7 +29,6 @@ var (
 // 1. dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
 // 2. All other udp packets are routed directly to their destination
 // 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
-//
 func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Session) error {
 	runtime.LockOSThread()
 
@@ -90,10 +89,12 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 	currentIPP = ipp
 	currentDeviceMx.Unlock()
 
-	err = ipp.Serve()
-	if err != io.EOF {
-		return log.Errorf("unexpected error serving TUN traffic: %v", err)
-	}
+	go func() {
+		err = ipp.Serve()
+		if err != io.EOF {
+			log.Errorf("unexpected error serving TUN traffic: %v", err)
+		}
+	}()
 	return nil
 }
 

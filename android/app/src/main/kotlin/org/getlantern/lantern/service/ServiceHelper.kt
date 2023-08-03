@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class ServiceHelper(
     private val service: Service,
     private val defaultIcon: Int,
-    private val defaultText: Int
+    private val defaultText: Int,
 ) {
     private val foregrounded = AtomicBoolean(false)
 
@@ -59,8 +59,10 @@ class ServiceHelper(
             // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
         }
         val openMainActivity = PendingIntent.getActivity(
-            service, 0, Intent(service, MainActivity::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            service,
+            0,
+            Intent(service, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
         )
         val notificationBuilder = channelId?.let { NotificationCompat.Builder(service, it) }
             ?: NotificationCompat.Builder(service)
@@ -82,7 +84,7 @@ class ServiceHelper(
         val channelName = LanternApp.getAppContext().resources.getString(R.string.lantern_service)
         val mNotificationManager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.createNotificationChannel(
-            NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT),
         )
         return channelId
     }

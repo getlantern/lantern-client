@@ -39,7 +39,6 @@ import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
-import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.isServiceRunning
@@ -65,13 +64,9 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
-    private lateinit var notifications: NotificationHelper
     private lateinit var surveyHelper: SurveyHelper
 
     private val vpnServiceManager by lazy { VpnServiceManager(this, vpnModel) }
-
-    private var autoUpdateJob: Job? = null
-
     private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -83,7 +78,6 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
-        // lanternServiceManager = LanternServiceManager(this)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
@@ -131,8 +125,6 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
 
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
-
-        vpnServiceManager.init()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -150,16 +142,6 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        vpnServiceManager.bind()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        vpnServiceManager.unbind()
-    }
-
     override fun onResume() {
         val start = System.currentTimeMillis()
 
@@ -172,10 +154,10 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
             }
         }
 
-        if (vpnModel.isConnectedToVpn() && !isServiceRunning(LanternVpnService::class.java)) {
+        if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(context, LanternVpnService::class.java)) {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
-        } else if (!vpnModel.isConnectedToVpn() && isServiceRunning(LanternVpnService::class.java)) {
+        } else if (!vpnModel.isConnectedToVpn() && Utils.isServiceRunning(context, LanternVpnService::class.java)) {
             Logger.d(TAG, "LanternVpnService is running, updating VPN preference")
             vpnModel.setVpnOn(true)
         }
@@ -183,11 +165,11 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
     }
 
     override fun onDestroy() {
-        // vpnServiceManager.dispose()
         super.onDestroy()
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
+        vpnServiceManager.destroy()
         EventBus.getDefault().unregister(this)
     }
 
