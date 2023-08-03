@@ -10,6 +10,7 @@ import android.os.ParcelFileDescriptor
 import internalsdk.Internalsdk
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
+import org.getlantern.lantern.notification.Notifications
 import org.getlantern.lantern.service.ServiceManager
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
@@ -103,10 +104,7 @@ class LanternVpnService : VpnService(), ServiceManager.Runner {
         return builder.establish()
     }
 
-    private fun serviceNotification() {
-        val notification = LanternApp.notifications.builder(this).build()
-        startForeground(1, notification)
-    }
+    private fun serviceNotification() = startForeground(1, Notifications.builder(this).build())
 
     private fun startVpn() {
         val builder = Builder()

@@ -83,7 +83,6 @@ open class LanternApp : Application() {
 
         val notificationManager by lazy { application.
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
-        val notifications by lazy { Notifications(appContext) }
 
         fun startService(connection: LanternConnection) = ContextCompat.startForegroundService(
             application, Intent(application, connection.serviceClass).apply {
