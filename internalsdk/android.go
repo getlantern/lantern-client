@@ -598,7 +598,7 @@ func run(configDir, locale string,
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
 			showAdsEnabled := runner.FeatureEnabled("interstitialads", ApplicationVersion)
-			log.Debugf("Show ads  enabled? %v", showAdsEnabled)
+			log.Debugf("Show ads enabled? %v", showAdsEnabled)
 			// You would replace the below line with the actual function you use to set this feature.
 			session.SetShowInterstitialAdsEnabled(showAdsEnabled)
 		} else {

@@ -1,5 +1,4 @@
 import 'package:lantern/vpn/vpn.dart';
-
 import '../ad_helper.dart';
 
 class VPNSwitch extends StatefulWidget {
@@ -29,7 +28,6 @@ class _VPNSwitchState extends State<VPNSwitch> {
       Future.delayed(
         const Duration(seconds: 1),
         () async {
-          //Show add only on iran region
           await adHelper.showAd();
         },
       );

@@ -13,11 +13,11 @@ class AdHelper {
   // Just try 5 times
   final int _maxFailAttempts = 5;
 
-
   String get interstitialAdUnitId {
     if (Platform.isAndroid) {
-      return '***REMOVED***';
-      // return const String.fromEnvironment('INTERSTITIAL_AD_UNIT_ID');
+      // return '***REMOVED***';
+      // return 'ca-app-pub-3940256099942544/1033173712';
+      return const String.fromEnvironment('INTERSTITIAL_AD_UNIT_ID');
     } else {
       throw UnsupportedError('Unsupported platform');
     }
@@ -27,6 +27,7 @@ class AdHelper {
     //shouldShowAds hold logic for showing ads
     final adsEnable = await sessionModel.shouldShowAds();
     logger.i('[Ads Request] support checking  value is $adsEnable');
+    print('INTERSTITIAL_AD_UNIT_ID is $interstitialAdUnitId');
     //To avoid calling multiple ads request repeatedly
     if (_interstitialAd == null &&
         adsEnable &&
