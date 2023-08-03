@@ -41,8 +41,8 @@ import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
-import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.broadcastReceiver
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.isServiceRunning
 import org.getlantern.lantern.util.showAlertDialog
@@ -71,12 +71,8 @@ class MainActivity :
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
-    private lateinit var receiver: NotificationReceiver
 
     private val vpnServiceManager by lazy { VpnServiceManager(this, vpnModel) }
-
-    private var autoUpdateJob: Job? = null
-
     private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -88,7 +84,6 @@ class MainActivity :
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         navigator = Navigator(this, flutterEngine)
-        receiver = NotificationReceiver(vpnServiceManager)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
@@ -155,18 +150,6 @@ class MainActivity :
             flutterNavigation.invokeMethod("openConversation", contact)
             intent.removeExtra("contactForConversation")
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        IntentFilter(Actions.VPN_DISCONNECTED_NOTIFICATION).also {
-            registerReceiver(receiver, it)
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        unregisterReceiver(receiver)
     }
 
     override fun onResume() {

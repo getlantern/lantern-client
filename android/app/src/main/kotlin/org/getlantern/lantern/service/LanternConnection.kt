@@ -1,5 +1,6 @@
 package org.getlantern.lantern.service
 
+import android.app.Service
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -8,17 +9,11 @@ import android.os.IBinder
 import org.getlantern.lantern.vpn.LanternVpnService
 
 class LanternConnection(private var isVpnService: Boolean = false) : ServiceConnection {
-
-    interface Callback {
-        fun onServiceConnected(service: BaseService.Service)
-        fun onServiceDisconnected() {}
-    }
-
     private var binder: IBinder? = null
 
     // private var callback: Callback? = null
     private var connectionActive = false
-    var service: BaseService.Service? = null
+    var service: Service? = null
 
     val serviceClass
         get() = when (isVpnService) {

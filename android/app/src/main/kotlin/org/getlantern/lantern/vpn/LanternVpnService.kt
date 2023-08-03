@@ -1,119 +1,152 @@
 package org.getlantern.lantern.vpn
 
+import android.app.PendingIntent
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.Binder
 import android.os.Build
+import android.os.ParcelFileDescriptor
+import internalsdk.Internalsdk
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.service.BaseService
+import org.getlantern.lantern.MainActivity
+import org.getlantern.lantern.service.ServiceManager
 import org.getlantern.mobilesdk.Logger
+import org.getlantern.mobilesdk.model.SessionManager
+import java.util.Locale
 
-class LanternVpnService : VpnService(), BaseService.Service, Runnable {
+class LanternVpnService : VpnService(), ServiceManager.Runner {
 
     companion object {
-        const val ACTION_CONNECT = "org.getlantern.lantern.vpn.START"
-        const val ACTION_DISCONNECT = "org.getlantern.lantern.vpn.STOP"
         private val TAG = LanternVpnService::class.java.simpleName
+        private const val sessionName = "LanternVpn"
+        private const val privateAddress = "10.0.0.2"
+        private const val VPN_MTU = 1500
     }
 
-    private var provider: Provider? = null
+    lateinit var conn: ParcelFileDescriptor
     private val binder = LocalBinder()
+    override val data = ServiceManager.Data(this)
 
     inner class LocalBinder : Binder() {
         val service
             get() = this@LanternVpnService
     }
 
+    override fun onRevoke() = stopRunner()
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return super<ServiceManager.Runner>.onStartCommand(intent, flags, startId)
+    }
+
+    override suspend fun startProcesses() = startVpn()
+
+    @Synchronized
+    private fun createBuilder(): ParcelFileDescriptor? {
+        val builder = Builder()
+        // Set the locale to English
+        // since the VpnBuilder encounters
+        // issues with non-English numerals
+        // See https://code.google.com/p/android/issues/detail?id=61096
+        Locale.setDefault(Locale("en"))
+
+        // Configure a builder while parsing the parameters.
+        builder.setMtu(VPN_MTU)
+        builder.addAddress(privateAddress, 24)
+        // route IPv4 through VPN
+        builder.addRoute("0.0.0.0", 0)
+
+        if (LanternApp.getSession().splitTunnelingEnabled()) {
+            val appsAllowedAccess = HashSet(LanternApp.getSession().appsAllowedAccess())
+            // Exclude any app that's not in our split tunneling allowed list
+            for (installedApp in packageManager.getInstalledApplications(0)) {
+                if (!appsAllowedAccess.contains(installedApp.packageName)) {
+                    try {
+                        Logger.debug(TAG, "Excluding " + installedApp.packageName + " from VPN")
+                        builder.addDisallowedApplication(installedApp.packageName)
+                    } catch (e: PackageManager.NameNotFoundException) {
+                        throw RuntimeException("Unable to exclude " + installedApp.packageName + " from VPN", e)
+                    }
+                }
+            }
+        }
+
+        // Never capture traffic originating from Lantern itself in the VPN.
+        try {
+            val ourPackageName = getPackageName()
+            builder.addDisallowedApplication(ourPackageName)
+        } catch (e: PackageManager.NameNotFoundException) {
+            throw RuntimeException("Unable to exclude Lantern from routes", e)
+        }
+        // don't currently route IPv6 through VPN because our proxies don't currently support IPv6
+        // see https://github.com/getlantern/lantern-internal/issues/4961
+        // Note - if someone performs a DNS lookup for an IPv6 only host like ipv6.google.com, dnsgrab
+        // will return an IPv4 address for that site, causing the traffic to get routed through the VPN.
+        // builder.addRoute("0:0:0:0:0:0:0:0", 0)
+
+        // this is a fake DNS server. The precise IP doesn't matter because Lantern will intercept and
+        // route all DNS traffic to dnsgrab internally anyway.
+        builder.addDnsServer(SessionManager.fakeDnsIP)
+
+        val intent = Intent(this, MainActivity::class.java)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE,
+        )
+        builder.setConfigureIntent(pendingIntent)
+
+        builder.setSession(sessionName)
+
+        // Create a new mInterface using the builder and save the parameters.
+        return builder.establish()
+    }
+
     private fun serviceNotification() {
-        val notification = LanternApp.notifications.serviceNotification()
+        val notification = LanternApp.notifications.builder(this).build()
         startForeground(1, notification)
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        Logger.d(TAG, "VpnService created")
-    }
-
-    override fun onDestroy() {
-        Logger.d(TAG, "destroyed")
-        doStop()
-        super.onDestroy()
-    }
-
-    override fun onRevoke() {
-        Logger.d(TAG, "revoked")
-        stop()
-    }
-
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        return if (intent.action == ACTION_DISCONNECT) {
-            stop()
-            START_NOT_STICKY
-        } else {
-            // super<BaseService.Service>.onStart(intent)
-            if (Build.VERSION.SDK_INT >= 26) serviceNotification()
-            LanternApp.getSession().updateVpnPreference(true)
-            connect()
-            START_STICKY
-        }
-    }
-
-    private fun connect() {
-        Logger.d(TAG, "connect")
-        Thread(this, "VpnService").start()
-    }
-
-    override fun run() {
+    private fun startVpn() {
+        val builder = Builder()
+        val defaultLocale = Locale.getDefault()
         try {
-            Logger.d(TAG, "Loading Lantern library")
-            getOrInitProvider()?.run(
-                this,
-                Builder(),
-                LanternApp.getSession().sOCKS5Addr,
-                LanternApp.getSession().dNSGrabAddr,
-            )
-        } catch (e: Exception) {
-            Logger.error(TAG, "Error running VPN", e)
+            if (Build.VERSION.SDK_INT >= 26) serviceNotification()
+            Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks")
+            conn = createBuilder() ?: return
+            val tunFd = conn.detachFd()
+            if (tunFd != null) {
+                Logger.debug(TAG, "Running tun2socks")
+                Internalsdk.tun2Socks(
+                    tunFd.toLong(),
+                    LanternApp.getSession().sOCKS5Addr,
+                    LanternApp.getSession().dNSGrabAddr,
+                    VPN_MTU.toLong(),
+                    LanternApp.getSession(),
+                )
+            }
+        } catch (t: Throwable) {
+            Logger.e(TAG, "Exception while handling TUN device", t)
         } finally {
-            Logger.debug(TAG, "Lantern terminated.")
-            stop()
+            Locale.setDefault(defaultLocale)
         }
     }
 
-    fun stop() {
-        doStop()
-        stopSelf()
-        Logger.d(TAG, "Done stopping")
+    @Synchronized
+    private fun stopVpn() {
+        if (::conn.isInitialized) conn.close()
     }
 
-    private fun doStop() {
+    override fun killProcesses() {
         Logger.d(TAG, "stop")
         try {
-            Logger.d(TAG, "getting provider")
-            val provider: Provider? = getOrInitProvider()
-            Logger.d(TAG, "stopping provider")
-            provider?.stop()
+            Logger.d(TAG, "stop")
+            Internalsdk.stopTun2Socks()
+            stopVpn()
+            stopForeground(true)
         } catch (t: Throwable) {
-            Logger.e(TAG, "error stopping provider", t)
+            Logger.e(TAG, "error stopping tun2socks", t)
         }
-        try {
-            Logger.d(TAG, "updating vpn preference")
-            LanternApp.getSession().updateVpnPreference(false)
-        } catch (t: Throwable) {
-            Logger.e(TAG, "error updating vpn preference", t)
-        }
-    }
-
-    @Synchronized fun getOrInitProvider(): Provider? {
-        Logger.d(TAG, "getOrInitProvider()")
-        if (provider == null) {
-            Logger.d(TAG, "Using Go tun2socks")
-            provider = GoTun2SocksProvider(
-                getPackageManager(),
-                LanternApp.getSession().splitTunnelingEnabled(),
-                HashSet(LanternApp.getSession().appsAllowedAccess()),
-            )
-        }
-        return provider
     }
 }

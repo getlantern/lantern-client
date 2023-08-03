@@ -1,40 +1,47 @@
 package org.getlantern.lantern.vpn
 
 import android.content.Context
+import android.content.IntentFilter
 import io.lantern.model.VpnModel
+import kotlinx.coroutines.*
+import org.getlantern.lantern.Actions
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.notification.NotificationHelper
-import org.getlantern.lantern.service.BaseService
-import org.getlantern.lantern.service.ConnectionState
 import org.getlantern.lantern.service.LanternConnection
+import org.getlantern.lantern.util.broadcastReceiver
 import org.getlantern.mobilesdk.Logger
 
 class VpnServiceManager(
     private val context: Context,
     private val vpnModel: VpnModel,
-) : BaseService.Callback {
-    private var state = ConnectionState.Disconnected
+) {
     private val vpnServiceConnection = LanternConnection(true)
+    private val receiver = broadcastReceiver { _, _ ->
+        Logger.d(TAG, "Received disconnect broadcast")
+        val manager = LanternApp.notificationManager
+        manager.cancel(1)
+        disconnect()
+    }
 
     init {
         vpnServiceConnection.connect(context)
+        context.registerReceiver(
+            receiver,
+            IntentFilter().apply {
+                addAction(Actions.DISCONNECT_VPN)
+            },
+        )
     }
 
     fun connect() {
         updateVpnStatus(true)
         LanternApp.startService(vpnServiceConnection)
-        LanternApp.notifications.vpnConnectedNotification()
     }
 
     private fun updateVpnStatus(useVpn: Boolean) {
-        Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
+        Logger.d(TAG, "Updating VPN status to $useVpn")
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
         vpnModel.setVpnOn(useVpn)
-    }
-
-    override fun onStateChanged(state: ConnectionState) {
-        this.state = state
     }
 
     fun onVpnPermissionResult(isGranted: Boolean) {
@@ -42,6 +49,7 @@ class VpnServiceManager(
     }
 
     fun destroy() {
+        context.unregisterReceiver(receiver)
         vpnServiceConnection.disconnect(context)
     }
 
