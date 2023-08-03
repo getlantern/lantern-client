@@ -20,9 +20,8 @@ class ServiceManager {
     class Data internal constructor(private val service: Runner) {
         var state = ConnectionState.Disconnected
         var connectingJob: Job? = null
-        // var notification: Notification? = null
 
-        val stopReceiver = broadcastReceiver { ctx, intent ->
+        val stopReceiver = broadcastReceiver { _, _ ->
             service.stopRunner()
         }
 
@@ -57,7 +56,6 @@ class ServiceManager {
                 coroutineScope {
                     killProcesses()
                     val data = data
-                    data.connectingJob?.cancelAndJoin()
                     if (data.closeReceiverRegistered) {
                         unregisterReceiver(data.stopReceiver)
                         data.closeReceiverRegistered = false
@@ -92,8 +90,9 @@ class ServiceManager {
                 try {
                     startProcesses()
                     data.changeState(ConnectionState.Connected)
-                    // LanternApp.notifications.vpnConnected()
                 } catch (exc: Throwable) {
+                    stopRunner()
+                    Logger.d(TAG, "Failed to start service: ")
                 } finally {
                     data.connectingJob = null
                 }
