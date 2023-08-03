@@ -19,7 +19,8 @@ Future<void> main() async {
 }
 
 Future<void> _initGoogleMobileAds() async {
+  // await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ['D79728264130CE0918737B5A2178D362']));
   await MobileAds.instance.initialize();
-  await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ['D79728264130CE0918737B5A2178D362']));
+
 
 }

@@ -15,7 +15,7 @@ class AdHelper {
 
   String get interstitialAdUnitId {
     if (Platform.isAndroid) {
-      // return 'ca-app-pub-2685698271254859/9922829329';
+      //Google Test ID
       // return 'ca-app-pub-3940256099942544/1033173712';
       return const String.fromEnvironment('INTERSTITIAL_AD_UNIT_ID');
     } else {
@@ -25,7 +25,8 @@ class AdHelper {
 
   Future<void> loadInterstitialAd() async {
     //shouldShowAds hold logic for showing ads
-    final adsEnable = await sessionModel.shouldShowAds();
+    // final adsEnable = await sessionModel.shouldShowAds();
+    final adsEnable = true;
     logger.i('[Ads Request] support checking  value is $adsEnable');
     print('INTERSTITIAL_AD_UNIT_ID is $interstitialAdUnitId');
     //To avoid calling multiple ads request repeatedly
