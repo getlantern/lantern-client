@@ -29,6 +29,7 @@ class AppKeys {
 
   //Support
   static const reportIssue = ValueKey('report_issue');
-
+  static const reportDescription = ValueKey('report_description');
+  static const sendReport = ValueKey('send_report');
 }
 

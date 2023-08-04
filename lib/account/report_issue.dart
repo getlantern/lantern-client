@@ -139,6 +139,7 @@ class _ReportIssueState extends State<ReportIssue> {
                         child: Form(
                           key: descFieldKey,
                           child: CTextField(
+                            key: AppKeys.reportDescription,
                             controller: descController,
                             contentPadding: EdgeInsetsDirectional.all(8.0),
                             label: '',
@@ -152,6 +153,7 @@ class _ReportIssueState extends State<ReportIssue> {
                     Container(
                         padding: const EdgeInsetsDirectional.only(bottom: 56),
                         child: Button(
+                          key: AppKeys.sendReport,
                           width: 200,
                           disabled: emailFieldKey.currentState?.validate() ==
                                   false ||
