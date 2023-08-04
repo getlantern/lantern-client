@@ -5,6 +5,7 @@ import 'package:lantern/common/common.dart';
 
 import 'app.dart';
 
+// https://github.com/googleads/googleads-mobile-flutter/blob/main/samples/admob/mediation_example/android/app/src/main/java/com/example/mediationexample/MyMediationMethodCallHandler.java
 Future<void> main() async {
   // CI will be true only when running appium test
   var CI = const String.fromEnvironment('CI', defaultValue: 'false');
@@ -19,8 +20,7 @@ Future<void> main() async {
 }
 
 Future<void> _initGoogleMobileAds() async {
-  // await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ['D79728264130CE0918737B5A2178D362']));
   await MobileAds.instance.initialize();
-
-
+  await MobileAds.instance.setAppMuted(true);
+  // await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ['D79728264130CE0918737B5A2178D362']));
 }
