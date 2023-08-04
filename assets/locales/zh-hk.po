@@ -5,11 +5,11 @@
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2023
 # e2f <projects@e2f.com>, 2023
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2023
-# Aki Ltn, 2023
+# Aki, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Aki Ltn, 2023\n"
+"Last-Translator: Aki, 2023\n"
 "Language-Team: Chinese Traditional (https://app.transifex.com/lantern-1/teams/94371/zh-Hant/)\n"
 "Language: zh-Hant\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
