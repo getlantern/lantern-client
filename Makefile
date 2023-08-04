@@ -3,9 +3,9 @@
 
 .PHONY: codegen protos routes mocks test integration-test sourcedump build-framework build-framework-debug clean archive require-version set-version show-version reset-build-number install-gomobile assert-go-version
 
-FRAMEWORK_DIR = /Users/jigarfumakiya/Documents/getlantern/mobile_app/android-lantern/ios/internalsdk
+INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
+INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 
-FRAMEWORK_NAME = Internalsdk.xcframework
 
 codegen: protos routes
 
@@ -469,8 +469,8 @@ sourcedump: require-version
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
 build-framework: assert-go-version install-gomobile
-	@echo "Nuking $(FRAMEWORK_DIR)"
-	rm -Rf $(FRAMEWORK_DIR)
+	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
+	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	@echo "generating Ios.xcFramework"
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
@@ -478,12 +478,27 @@ build-framework: assert-go-version install-gomobile
 	-tags='headless lantern ios' \
 	-ldflags="$(LDFLAGS)" \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-    		$(ANDROID_LIB_PKG)
-	@echo "copying framework"
-	mkdir -p $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME)
-	cp -R ./$(FRAMEWORK_NAME)/* $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME)
-	@echo "Nuking $(FRAMEWORK_NAME)"
-	rm -Rf ./$(FRAMEWORK_NAME)
+    		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/minisql
+	@echo "moving framework"
+	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
+	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+
+#build-framework: assert-go-version install-gomobile
+#	@echo "Nuking $(FRAMEWORK_DIR)"
+#	rm -Rf $(FRAMEWORK_DIR)
+#	@echo "generating Ios.xcFramework"
+#	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+#	gomobile init && \
+#	gomobile bind -target=ios \
+#	-tags='headless lantern ios' \
+#	-ldflags="$(LDFLAGS)" \
+#    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+#    		$(ANDROID_LIB_PKG)
+#	@echo "copying framework"
+#	mkdir -p $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME)
+#	cp -R ./$(FRAMEWORK_NAME)/* $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME)
+#	@echo "Nuking $(FRAMEWORK_NAME)"
+#	rm -Rf ./$(FRAMEWORK_NAME)
 
 
 install-gomobile:

@@ -11,7 +11,7 @@ import FMDB
 import SQLite
 
 
-class DatabaseManager: NSObject, InternalsdkDBProtocol {
+class DatabaseManager: NSObject, MinisqlDBProtocol {
    private let db: Connection
    private var currentTransaction: TransactionManager?
     

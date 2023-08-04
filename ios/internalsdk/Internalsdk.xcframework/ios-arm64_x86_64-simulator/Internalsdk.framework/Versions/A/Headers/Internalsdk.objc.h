@@ -10,6 +10,7 @@
 #include "ref.h"
 #include "Universe.objc.h"
 
+#include "Minisql.objc.h"
 
 @class InternalsdkEmailMessage;
 @class InternalsdkEventChannel;
@@ -17,6 +18,7 @@
 @class InternalsdkReplicaServer;
 @class InternalsdkStartResult;
 @class InternalsdkSurveyInfo;
+@class InternalsdkValue;
 @protocol InternalsdkAdProvider;
 @class InternalsdkAdProvider;
 @protocol InternalsdkAdSettings;
@@ -29,6 +31,8 @@
 @class InternalsdkEventSink;
 @protocol InternalsdkGeoCallback;
 @class InternalsdkGeoCallback;
+@protocol InternalsdkModel;
+@class InternalsdkModel;
 @protocol InternalsdkReceiveStream;
 @class InternalsdkReceiveStream;
 @protocol InternalsdkSession;
@@ -37,6 +41,8 @@
 @class InternalsdkSettings;
 @protocol InternalsdkUpdater;
 @class InternalsdkUpdater;
+@protocol InternalsdkValueArray;
+@class InternalsdkValueArray;
 
 @protocol InternalsdkAdProvider <NSObject>
 - (NSString* _Nonnull)getInterstitialZoneID;
@@ -77,6 +83,10 @@
 - (void)setLatitude:(double)p0;
 - (void)setLongitude:(double)p0;
 - (void)setRegion:(NSString* _Nullable)p0;
+@end
+
+@protocol InternalsdkModel <NSObject>
+- (InternalsdkValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
 @end
 
 @protocol InternalsdkReceiveStream <NSObject>
@@ -126,6 +136,12 @@ Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 
 @protocol InternalsdkUpdater <NSObject>
 - (void)progress:(long)p0;
+@end
+
+@protocol InternalsdkValueArray <NSObject>
+- (InternalsdkValue* _Nullable)get:(long)index;
+- (long)len;
+- (void)set:(long)index value:(InternalsdkValue* _Nullable)value;
 @end
 
 /**
@@ -237,6 +253,22 @@ If disabled after having been enabled, the server keeps running and ReplicaAddr 
 @property (nonatomic) NSString* _Nonnull button;
 @end
 
+@interface InternalsdkValue : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nonnull instancetype)init;
+@property (nonatomic) long type;
+@property (nonatomic) NSString* _Nonnull string;
+@property (nonatomic) long int_;
+@property (nonatomic) BOOL bool_;
+@end
+
+FOUNDATION_EXPORT const int64_t InternalsdkTypeBool;
+FOUNDATION_EXPORT const int64_t InternalsdkTypeInt;
+FOUNDATION_EXPORT const int64_t InternalsdkTypeString;
+
 @interface Internalsdk : NSObject
 /**
  * This gets set at build time
@@ -286,6 +318,8 @@ FOUNDATION_EXPORT InternalsdkEventChannel* _Nullable InternalsdkNewEventChannel(
 
 // skipped function NewFlutterMethodChannel with unsupported parameter or return types
 
+
+FOUNDATION_EXPORT id<InternalsdkModel> _Nullable InternalsdkNewModel(NSString* _Nullable schema, id<MinisqlDB> _Nullable mdb, NSError* _Nullable* _Nullable error);
 
 // skipped function NewReplicaServer with unsupported parameter or return types
 
@@ -350,6 +384,8 @@ FOUNDATION_EXPORT BOOL InternalsdkTun2Socks(long fd, NSString* _Nullable socksAd
 
 @class InternalsdkGeoCallback;
 
+@class InternalsdkModel;
+
 @class InternalsdkReceiveStream;
 
 @class InternalsdkSession;
@@ -357,6 +393,8 @@ FOUNDATION_EXPORT BOOL InternalsdkTun2Socks(long fd, NSString* _Nullable socksAd
 @class InternalsdkSettings;
 
 @class InternalsdkUpdater;
+
+@class InternalsdkValueArray;
 
 /**
  * AdProvider provides information for displaying an ad and makes decisions on whether or not to display it.
@@ -438,6 +476,14 @@ event there's an error sending an email
 - (void)setRegion:(NSString* _Nullable)p0;
 @end
 
+@interface InternalsdkModel : NSObject <goSeqRefInterface, InternalsdkModel> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (InternalsdkValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
+@end
+
 @interface InternalsdkReceiveStream : NSObject <goSeqRefInterface, InternalsdkReceiveStream> {
 }
 @property(strong, readonly) _Nonnull id _ref;
@@ -507,6 +553,16 @@ Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (void)progress:(long)p0;
+@end
+
+@interface InternalsdkValueArray : NSObject <goSeqRefInterface, InternalsdkValueArray> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (InternalsdkValue* _Nullable)get:(long)index;
+- (long)len;
+- (void)set:(long)index value:(InternalsdkValue* _Nullable)value;
 @end
 
 #endif
