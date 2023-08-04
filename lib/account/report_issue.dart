@@ -139,7 +139,7 @@ class _ReportIssueState extends State<ReportIssue> {
                         child: Form(
                           key: descFieldKey,
                           child: CTextField(
-                            key: AppKeys.reportDescription,
+                            tooltipMessage: AppKeys.reportDescription,
                             controller: descController,
                             contentPadding: EdgeInsetsDirectional.all(8.0),
                             label: '',
@@ -152,44 +152,49 @@ class _ReportIssueState extends State<ReportIssue> {
                     const Spacer(),
                     Container(
                         padding: const EdgeInsetsDirectional.only(bottom: 56),
-                        child: Button(
-                          key: AppKeys.sendReport,
-                          width: 200,
-                          disabled: emailFieldKey.currentState?.validate() ==
-                                  false ||
-                              issueFieldKey.currentState?.validate() == false ||
-                              descFieldKey.currentState?.validate() == false,
-                          text: 'send_report'.i18n,
-                          onPressed: () async {
-                            await sessionModel
-                                .reportIssue(
-                                    emailController.value.text,
-                                    issueController.value.text,
-                                    descController.value.text)
-                                .then((value) async {
-                              CDialog.showInfo(
-                                context,
-                                title: 'report_sent'.i18n,
-                                description:
-                                    'thank_you_for_reporting_your_issue'.i18n,
-                                actionLabel: 'continue'.i18n,
-                                agreeAction: () async {
-                                  await context.pushRoute(Support());
-                                  return true;
-                                },
-                              );
-                            }).onError((error, stackTrace) {
-                              CDialog.showError(
-                                context,
-                                error: e,
-                                stackTrace: stackTrace,
-                                description: (error as PlatformException)
-                                    .message
-                                    .toString(), // This is coming localized
-                              );
-                            });
-                          },
-                        )),
+                        child: Tooltip(
+                            message: AppKeys.sendReport,
+                            child: Button(
+                              width: 200,
+                              disabled: emailFieldKey.currentState
+                                          ?.validate() ==
+                                      false ||
+                                  issueFieldKey.currentState?.validate() ==
+                                      false ||
+                                  descFieldKey.currentState?.validate() ==
+                                      false,
+                              text: 'send_report'.i18n,
+                              onPressed: () async {
+                                await sessionModel
+                                    .reportIssue(
+                                        emailController.value.text,
+                                        issueController.value.text,
+                                        descController.value.text)
+                                    .then((value) async {
+                                  CDialog.showInfo(
+                                    context,
+                                    title: 'report_sent'.i18n,
+                                    description:
+                                        'thank_you_for_reporting_your_issue'
+                                            .i18n,
+                                    actionLabel: 'continue'.i18n,
+                                    agreeAction: () async {
+                                      await context.pushRoute(Support());
+                                      return true;
+                                    },
+                                  );
+                                }).onError((error, stackTrace) {
+                                  CDialog.showError(
+                                    context,
+                                    error: e,
+                                    stackTrace: stackTrace,
+                                    description: (error as PlatformException)
+                                        .message
+                                        .toString(), // This is coming localized
+                                  );
+                                });
+                              },
+                            ))),
                   ])),
         );
       });

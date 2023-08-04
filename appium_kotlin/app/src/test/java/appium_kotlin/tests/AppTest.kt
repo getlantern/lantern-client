@@ -279,7 +279,7 @@ class AppTest() : BaseTest() {
         Thread.sleep(1000)
 
         print("TaskId: $taskId", "reportAnIssueFlow-->Entering description.")
-        val description = flutterFinder.byValueKey(REPORT_DESCRIPTION)
+        val description = flutterFinder.byTooltip(REPORT_DESCRIPTION)
         description.click()
         description.sendKeys("This is sample report and issue running via Appium Test CI")
         Thread.sleep(3000)
@@ -288,7 +288,7 @@ class AppTest() : BaseTest() {
             "TaskId: $taskId",
             "reportAnIssueFlow-->Locating and clicking on the send report button."
         )
-        val sendReportButton = flutterFinder.byValueKey(SEND_REPORT)
+        val sendReportButton = flutterFinder.byTooltip(SEND_REPORT)
         sendReportButton.click()
         Thread.sleep(5000)
 
