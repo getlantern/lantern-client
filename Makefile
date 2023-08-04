@@ -317,7 +317,7 @@ env-secret-%:
 	printf ${*}=$$SECRET | ${BASE64}
 
 dart-defines-release:
-	DART_DEFINES+=`printf ',' && make env-secret-INTERSTITIAL_AD_UNIT_ID`; \
+	@DART_DEFINES=`make env-secret-INTERSTITIAL_AD_UNIT_ID`; \
 	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
 	printf $$DART_DEFINES
 
