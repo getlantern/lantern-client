@@ -1,5 +1,4 @@
 import 'package:url_launcher/url_launcher.dart';
-
 import '../common/common.dart';
 
 class Support extends StatelessWidget {
@@ -27,7 +26,9 @@ class Support extends StatelessWidget {
           trailingArray: [
             mirrorLTR(context: context, child: const ContinueArrow())
           ],
-          onTap: reportIssue,
+          onTap: () {
+            reportIssue(context);
+          },
         ),
         ListItemFactory.settingsItem(
           content: 'lantern_user_forum'.i18n,
@@ -67,8 +68,7 @@ class Support extends StatelessWidget {
 
   // class methods and utils
 
-  void reportIssue() async =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
+  void reportIssue(BuildContext context) async => context.pushRoute(ReportIssue());
 
   Future<void> faqTap(BuildContext context) async {
     try {

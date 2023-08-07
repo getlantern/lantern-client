@@ -142,9 +142,7 @@ class ConnectivityWarning extends StatelessWidget {
                 description: 'connection_error_des'.i18n,
                 agreeText: 'connection_error_button'.i18n,
                 agreeAction: () async {
-                  LanternNavigator.startScreen(
-                    LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE,
-                  );
+                  await context.pushRoute(ReportIssue());
                   return true;
                 },
               ).show(context)

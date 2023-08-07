@@ -1,4 +1,4 @@
-name: android
+name: Publish releases
 
 on: push
 
@@ -6,150 +6,220 @@ permissions:
   contents: read
 
 env:
+  GOPRIVATE: github.com/getlantern
+  S3_BUCKET: lantern
   DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
   DATADOG_SITE: datadoghq.eu
-  GOPRIVATE: github.com/getlantern
 jobs:
-  set-version:
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.set-version.outputs.version }}
-    steps:
-    - id: set-version
-      shell: python
-      run: |
-        import sys, os
-        ref = os.environ.get("GITHUB_REF","")
-        if "refs/tags/lantern" not in ref:
-          li = 'lantern-installer-dev'
-          vf = 'version-dev.txt'
-          version = '9999.99.99-dev'
-        else:
-          a = ref.strip().replace('refs/tags/lantern-', '')
-          parts = a.split('-',1)
-          suffix = parts[1] if len(parts)>1 else ''
-          beta = 'beta' in suffix
-          internal = 'internal' in suffix
-          if beta:
-              li = 'lantern-installer-preview'
-              vf = 'version-beta.txt'
-              version = parts[0]
-          elif internal:
-              li = 'lantern-installer-internal'
-              vf = 'version-internal.txt'
-              version = parts[0]
+    set-version:
+      runs-on: ubuntu-latest
+      outputs:
+        version: ${{ steps.set-version.outputs.version }}
+        prefix: ${{ steps.set-version.outputs.prefix }}
+        version_file: ${{ steps.set-version.outputs.version_file }}
+      steps:
+      - id: set-version
+        shell: python
+        run: |
+          import sys, os
+          ref = os.environ.get("GITHUB_REF","")
+          if "refs/tags/lantern" not in ref:
+            li = 'lantern-installer-dev'
+            vf = 'version-android-dev.txt'
+            version = '9999.99.99-dev'
           else:
-              li = 'lantern-installer'
-              vf = 'version.txt'
-              version = a
-        print('Setting version to ' + version)
-        print('Setting prefix to ' + li)
-        print('Setting version file to ' + vf)
-        print(f'::set-output name=version::{version}')
-        print(f'::set-output name=prefix::{li}')
-        print(f'::set-output name=version_file::{vf}')
-  build:
-    needs: set-version
-    runs-on: ubuntu-latest-8-cores
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        lfs: true
-
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-
-    - name: Pull LFS objects
-      run: git lfs pull
-
-    # Install Flutter
-    - uses: subosito/flutter-action@v2
-      with:
-        flutter-version: "3.10.5"
-        channel: "stable"
-    - run: flutter --version
-
-    - name: Setup Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.19
-
-    - name: Granting private modules access
-      run: |
-        git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-
-    - name: Build Lantern core Android library
-      run: make android-lib
-
-    - name: Setup JDK 11
-      uses: actions/setup-java@v3
-      with:
-        distribution: temurin
-        java-version: 11
-
-    - name: Setup protoc
-      uses: arduino/setup-protoc@v1.2.0
-      with:
-        version: '3.x'
-
-    - name: Activate protoc-gen-dart plugin
-      run: |
-        echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
-        dart pub global activate protoc_plugin
-        mkdir -p "${HOME}/.pub-cache/bin"
-        mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
-
-    - name: Set gradle properties
+            a = ref.strip().replace('refs/tags/lantern-', '')
+            parts = a.split('-',1)
+            suffix = parts[1] if len(parts)>1 else ''
+            beta = 'beta' in suffix
+            internal = 'internal' in suffix
+            if beta:
+                li = 'lantern-installer-preview'
+                vf = 'version-android-beta.txt'
+                version = parts[0]
+            elif internal:
+                li = 'lantern-installer-internal'
+                vf = 'version-android-internal.txt'
+                version = parts[0]
+            else:
+                li = 'lantern-installer'
+                vf = 'version-android.txt'
+                version = a
+          print('Setting version to ' + version)
+          print('Setting prefix to ' + li)
+          print('Setting version file to ' + vf)
+          print(f'::set-output name=version::{version}')
+          print(f'::set-output name=prefix::{li}')
+          print(f'::set-output name=version_file::{vf}')
+    build-android:
+      needs: set-version
       env:
-        GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
-      run: |
-        mkdir -p ~/.gradle/
-        echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
-        echo "${GRADLE_PROPERTIES}" > ~/.gradle/gradle.properties
+        version: ${{ needs.set-version.outputs.version }}
+        version_file: ${{ needs.set-version.outputs.version_file }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+      runs-on: ubuntu-latest-8-cores
+      steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
 
-    - name: Decode Keystore
-      id: write_file
-      uses: timheuer/base64-to-file@v1.2
-      with:
-        fileName: 'keystore.release.jks'
-        fileDir: './android/app'
-        encodedString: ${{ secrets.KEYSTORE }}
+      - name: Pull LFS objects
+        run: git lfs pull
 
-    - name: Install Datadog CI
-      run: npm install -g @datadog/datadog-ci
+      # Install Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.10.5"
+          channel: "stable"
+      - run: flutter --version
 
-    - name: Build Release with Gradle
-      run: make android-release
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
 
-    - name: Build Mobile Bundle
-      run: make android-bundle ANDROID_ARCH=all
+      - name: Granting private modules access
+        run: |
+          git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
-    - name: Setup S3cmd cli tool
-      uses: s3-actions/s3cmd@v1.4.0
-      with:
-        provider: aws
-        region: ${{ secrets.AWS_REGION }}
-        access_key: ${{ secrets.AWS_ACCESS_KEY }}
-        secret_key: ${{ secrets.AWS_SECRET_KEY }}
+      - name: Build Lantern core Android library
+        run: make android-lib
 
-    - name: Upload to S3 (QA)
-      if: ${{ !startsWith(github.ref, 'refs/tags/lantern') }}
+      - name: Setup JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 11
+
+      - name: Setup protoc
+        uses: arduino/setup-protoc@v1.2.0
+        with:
+          version: '3.x'
+
+      - name: Activate protoc-gen-dart plugin
+        run: |
+          echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
+          dart pub global activate protoc_plugin
+          mkdir -p "${HOME}/.pub-cache/bin"
+          mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
+
+      - name: Set gradle properties
+        env:
+          GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
+        run: |
+          mkdir -p ~/.gradle/
+          echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
+          echo "${GRADLE_PROPERTIES}" > ~/.gradle/gradle.properties
+
+      - name: Decode Keystore
+        id: write_file
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'keystore.release.jks'
+          fileDir: './android/app'
+          encodedString: ${{ secrets.KEYSTORE }}
+
+      - name: Install Datadog CI
+        run: npm install -g @datadog/datadog-ci
+
+      - name: Build Android installers
+        run: make package-android
+        env:
+          VERSION: "${{ env.version }}"
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: android-apk-build
+          retention-days: 2
+          path: |
+            lantern-installer.apk
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: android-aab-build
+          retention-days: 2
+          path: |
+            lantern-installer.aab
+
+      - name: Setup S3cmd cli tool
+        uses: s3-actions/s3cmd@v1.4.0
+        with:
+          provider: aws
+          region: ${{ secrets.AWS_REGION }}
+          access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          secret_key: ${{ secrets.AWS_SECRET_KEY }}
+
+      - name: Push binaries to s3
+        env:
+          VERSION: "${{ env.version }}"
+          APK: "${{ env.prefix }}-${{ env.version }}.apk"
+          AAB: "${{ env.prefix }}-${{ env.version }}.aab"
+        run: |
+          mv lantern-installer.apk "$APK"
+          mv lantern-installer.aab "$AAB"
+          cp "$APK" ${{ env.prefix }}.apk
+          cp "$AAB" ${{ env.prefix }}.aab
+          echo ${{ env.version }} > ${{ env.version_file }}
+          shasum -a 256 "$APK" | cut -d " " -f 1 > "$APK".sha256
+          shasum -a 256 "$AAB" | cut -d " " -f 1 > "$AAB".sha256
+          cp "$APK".sha256 ${{ env.prefix }}.apk.sha256
+          cp "$AAB".sha256 ${{ env.prefix }}.aab.sha256
+          s3cmd put --acl-public "$APK" ${{ env.version_file }} "$APK".sha256 ${{ env.prefix }}.apk.sha256 ${{ env.prefix }}.apk "s3://$S3_BUCKET"
+          s3cmd put --acl-public "$AAB" "$AAB".sha256 ${{ env.prefix }}.aab.sha256 ${{ env.prefix }}.aab "s3://$S3_BUCKET"
+          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$APK"
+          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.apk"
+          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$AAB"
+          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
+
+    push-binaries:
+      runs-on: ubuntu-latest
+      needs: [ set-version , build-android ]
       env:
-        VERSION: ${{ needs.set-version.outputs.version }}
-      run: make release-qa
-
-    - name: Upload to S3 (Prod)
-      if: startsWith(github.ref, 'refs/tags/lantern')
-      env:
-        VERSION: ${{ needs.set-version.outputs.version }}
-      run: make release-prod
-
-    - name: Upload Android Release to Play Store Alpha track
-      if: startsWith(github.ref, 'refs/tags/lantern')
-      uses: r0adkll/upload-google-play@v1
-      with:
-       serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-       packageName: org.getlantern.lantern
-       releaseFiles: lantern-installer-internal.aab
-       track: alpha
+        version: ${{ needs.set-version.outputs.version }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+      steps:
+        - name: Download the apk build output
+          uses: actions/download-artifact@v3
+          with:
+            name: android-apk-build
+        - name: Download the aab build output
+          uses: actions/download-artifact@v3
+          with:
+            name: android-aab-build
+        - name: Upload Android App bundle to Play Store (beta)
+          if: needs.set-version.outputs.prefix == 'lantern-installer-preview'
+          uses: r0adkll/upload-google-play@v1
+          with:
+           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+           packageName: org.getlantern.lantern
+           releaseFiles: lantern-installer.aab
+           track: beta
+        - name: Upload Android App bundle to Play Store (production)
+          if: needs.set-version.outputs.prefix == 'lantern-installer'
+          uses: r0adkll/upload-google-play@v1
+          with:
+           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+           packageName: org.getlantern.lantern
+           releaseFiles: lantern-installer.aab
+           track: production
+        - name: Grant private modules access
+          run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+        - name: Clone binaries repo
+          run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
+        - name: Rename builds
+          run: |
+            diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
+            diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
+        - name: Prepare sha256 sums
+          run: |
+            shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
+            shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
+        - name: Commit
+          run: |
+            mv lantern-installer* ./lantern-binaries/
+            cd lantern-binaries
+            git config user.email "admin@getlantern.org"
+            git config user.name "Lantern Bot"
+            git add .
+            git commit -m "Lantern binaries for version ${{ env.version }}"
+            git push origin main
