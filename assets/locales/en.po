@@ -95,6 +95,18 @@ msgstr "Upgrade to Lantern Pro"
 msgid "Invite Friends"
 msgstr "Invite Friends"
 
+msgid "share_lantern_pro"
+msgstr "Share Lantern Pro with a friend! When your friend uses your referral code during their purchase of Lantern Pro, you will both receive one month of Lantern Pro service for free!"
+
+msgid "privacy_disclosure_title"
+msgstr "Lantern Privacy Disclosure"
+
+msgid "privacy_disclosure_body"
+msgstr "Lantern is committed to protecting your privacy. We want you to understand what information we collect, what we don’t collect, and how we collect, use, and store information. We disassociate your payment information with your Lantern Pro account. We do not collect logs of your activity, including no logging of browsing history, traffic destination, data content, or DNS queries. We also never store connection logs, meaning no logs of your IP address, your outgoing Lantern server IP address associated with the connection timestamp, or session duration. Given a specific Lantern Pro account, Lantern is technically unable to associate the Lantern account with the real identity of the user. Given a Lantern IP address and a precise time-stamp, Lantern is technically unable to attribute this IP address to a Lantern user or a Lantern user IP address."
+
+msgid "privacy_disclosure_accept"
+msgstr "I Accept"
+
 msgid "desktop_version"
 msgstr "Desktop Version"
 
@@ -134,6 +146,30 @@ msgstr "Language"
 msgid "report_issue"
 msgstr "Report an issue"
 
+msgid "select_an_issue"
+msgstr "Please Select an Issue"
+
+msgid "enter_description"
+msgstr "Please describe your issue"
+
+msgid "cannot_access_blocked_sites"
+msgstr "Cannot access blocked sites"
+
+msgid "cannot_complete_purchase"
+msgstr "Cannot complete purchase"
+
+msgid "cannot_sign_in"
+msgstr "Cannot sign in"
+
+msgid "spinner_loads_endlessly"
+msgstr "Spinner loads endlessly"
+
+msgid "other"
+msgstr "Other"
+
+msgid "issue_description"
+msgstr "Issue Description"
+
 msgid "check_for_updates"
 msgstr "Check for Updates"
 
@@ -169,6 +205,18 @@ msgstr "Link with PIN"
 msgid "OR"
 msgstr "OR"
 
+msgid "device_linking_pin"
+msgstr "Device linking pin"
+
+msgid "link_device_step_one"
+msgstr "Open the 'Add Device' menu item on your Pro device."
+
+msgid "link_device_step_two"
+msgstr "Enter the device linking PIN and click submit"
+
+msgid "ensure_most_recent_version_lantern"
+msgstr "* Ensure both devices are running the most recent version of Lantern"
+
 msgid "Authorize Device via Email"
 msgstr "Authorize Device via Email"
 
@@ -183,6 +231,33 @@ msgstr "Link via Email"
 
 msgid "lantern_pro_email"
 msgstr "Lantern Pro Email"
+
+msgid "lantern_desktop"
+msgstr "Lantern Desktop"
+
+msgid "report_issue"
+msgstr "Report Issue"
+
+msgid "report_an_issue"
+msgstr "Report an Issue"
+
+msgid "report_sent"
+msgstr "Report Sent"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr "Thank you for reporting your issue. Due to volume, we cannot respond to most issues, but we assure you we are working hard to improve Lantern based on your reports."
+
+msgid "send_report"
+msgstr "Send Report"
+
+msgid "most_recent_lantern_apps"
+msgstr "The most recent Lantern apps for desktop and all other platforms can be found at the link above."
+
+msgid "share_link"
+msgstr "Share Link"
+
+msgid "share_title"
+msgstr "Share Lantern download link"
 
 msgid "email"
 msgstr "Email"
@@ -240,6 +315,12 @@ msgstr "Enter Email and Activation code"
 
 msgid "referral_code"
 msgstr "Referral code"
+
+msgid "share_referral_code"
+msgstr "Share Referral Code"
+
+msgid "share_message_referral_code"
+msgstr "For a free month of Lantern Pro, use this referral code: %s ; You can download it from here: https://lantern.io/download"
 
 msgid "add_referral_code"
 msgstr "Add Referral code"

@@ -15,10 +15,26 @@ import org.getlantern.mobilesdk.Logger
 // else onError().
 class IssueReporter @JvmOverloads constructor(
     private val context: Context,
-    private val issueType: String,
+    private val issue: String,
     private val description: String?,
 ) : AsyncTask<String, Void, Boolean>() {
     private var dialog: ProgressDialog? = null
+
+
+    // The below maps indexes of issues in the drop-down to indexes of the corresponding issue type
+    // as understood by internalsdk.SendIssueReport
+    private val issueTypeIndexes = hashMapOf(
+        0 to 3, // NO_ACCESS
+        1 to 0, // PAYMENT_FAIL
+        2 to 1, // CANNOT_LOGIN
+        3 to 2, // ALWAYS_SPINNING
+        4 to 4, // SLOW
+        5 to 7, // CHAT_NOT_WORKING,
+        6 to 8, // DISCOVER_NOT_WORKING,
+        7 to 5, // CANNOT LINK DEVICE
+        8 to 6, // CRASHES
+        9 to 9, // OTHER
+    )
 
     fun onError(message: String) {
         dialog?.let { dialog ->
@@ -60,9 +76,10 @@ class IssueReporter @JvmOverloads constructor(
     override fun doInBackground(vararg params: String): Boolean {
         val session = LanternApp.getSession()
         try {
+            val issueType = issueTypeIndexes[issues().indexOf(issue)] ?: 9 // default to OTHER
             internalsdk.Internalsdk.sendIssueReport(
                 session,
-                issueType,
+                issueType.toString(),
                 description,
                 if (session.isProUser) "pro" else "free",
                 session.email(),
@@ -78,6 +95,19 @@ class IssueReporter @JvmOverloads constructor(
             return false
         }
     }
+
+    private fun issues() = arrayOf(
+        context.resources.getString(R.string.common_issue_list_0),
+        context.resources.getString(R.string.common_issue_list_1),
+        context.resources.getString(R.string.common_issue_list_2),
+        context.resources.getString(R.string.common_issue_list_3),
+        context.resources.getString(R.string.common_issue_list_4),
+        context.resources.getString(R.string.common_issue_list_5),
+        context.resources.getString(R.string.common_issue_list_6),
+        context.resources.getString(R.string.common_issue_list_7),
+        context.resources.getString(R.string.common_issue_list_8),
+        context.resources.getString(R.string.common_issue_list_9),
+    )
 
     companion object {
         private val TAG = IssueReporter::class.java.name
