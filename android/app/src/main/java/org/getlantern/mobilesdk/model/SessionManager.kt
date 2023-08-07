@@ -258,7 +258,7 @@ abstract class SessionManager(application: Application) : Session {
         }
         Logger.debug(TAG, "Setting user ID to $userId")
         prefs.edit().putLong(USER_ID, userId).apply()
-        if (token != null) {
+        if (token != null && !TextUtils.isEmpty(token)) {
             Logger.debug(TAG, "Setting token to $token")
             prefs.edit().putString(TOKEN, token).apply()
         }
