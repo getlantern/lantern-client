@@ -12,113 +12,128 @@ import SQLite
 
 
 class DatabaseManager: NSObject, MinisqlDBProtocol {
-   private let db: Connection
-   private var currentTransaction: TransactionManager?
+    
+    private let db: Connection
+    private var currentTransaction: TransactionManager?
     
     init(database: Connection) {
         self.db = database
     }
     
-    func begin() throws -> InternalsdkTxProtocol {
-        logger.log("begin() method called.")
-        if currentTransaction != nil {
-            logger.log("begin() method error: A transaction is already in progress.")
-            throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "A transaction is already in progress"])
-        }
-        let transaction = TransactionManager(database: db)
-        currentTransaction = transaction
-        return transaction
+    func begin() throws -> MinisqlTxProtocol {
+        currentTransaction = TransactionManager(database: db)
+        return currentTransaction!
     }
     
-    func close() throws {
-        logger.log("close() method called.")
-        //
-    }
+    func close()throws  {
+     //Automatically manages the database connections
+   }
     
-    func exec(_ query: String?, args: InternalsdkValueArrayProtocol?) throws -> InternalsdkResultProtocol {
-        logger.log("exec() method called with query: \(query ?? "nil")")
+    func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
         guard let query = query, let args = args else {
-            logger.log("exec() method error: query or args was nil.")
-            throw NSError(domain: "", code: 0, userInfo: nil)
+            throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
         }
         
         let bindings = ValueUtil.toBindingsArray(args)
         let statement = try db.prepare(query)
         
-        if let transaction = currentTransaction {
-            transaction.addStatement(statement)
-        }
-        
         try statement.run(bindings)
-        logger.log("Statement run successfully.")
         return QueryResult(changes: db.totalChanges)
     }
     
-    func query(_ query: String?, args: InternalsdkValueArrayProtocol?) throws -> InternalsdkRowsProtocol {
-        logger.log("query() method called with query: \(query ?? "nil")")
-        let statement = try db.prepare(query!)
-        if let transaction = currentTransaction {
-            transaction.addStatement(statement)
+    func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
+        guard let query = query, let args = args else {
+            throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
         }
-        return RowData(rows: Array(_immutableCocoaArray: statement))
+        
+        let bindings = ValueUtil.toBindingsArray(args)
+        let statement = try db.prepare(query)
+        
+        var rows: [Statement.Element] = []
+
+        try statement.run(bindings).forEach { row in
+            rows.append(row)
+        }
+        
+        return RowData(rows: rows)
     }
-    
+ 
 }
 
-class TransactionManager: NSObject, InternalsdkTxProtocol {
+class TransactionManager: NSObject, MinisqlTxProtocol {
     let database: Connection
     var statements: [Statement] = []
+    private var savepointName: String?
     
     init(database: Connection) {
         self.database = database
     }
     
-    func addStatement(_ statement: Statement) {
-        statements.append(statement)
+    private func begin() throws {
+        savepointName = "Savepoint\(Date().timeIntervalSince1970)"
+        if let savepointName = savepointName {
+            try database.run("SAVEPOINT \(savepointName)")
+        }
     }
     
-    func commit() throws {
-        try database.transaction {
-            for statement in statements {
-                try statement.run()
-            }
-        }
-        statements = []
-    }
+  func commit() throws {
+          for statement in statements {
+              try statement.run()
+          }
+          if let savepointName = savepointName {
+              try database.run("RELEASE \(savepointName)")
+          }
+          statements = []
+          savepointName = nil
+      }
     
     func rollback() throws {
-        //try database.rollback()
-        statements = []
-    }
+         if let savepointName = savepointName {
+             try database.run("ROLLBACK TO SAVEPOINT \(savepointName)")
+             try database.run("RELEASE \(savepointName)")
+         }
+         statements = []
+         savepointName = nil
+     }
     
-    func exec(_ query: String?, args: InternalsdkValueArrayProtocol?) throws -> InternalsdkResultProtocol {
+    func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
         guard let query = query, let args = args else {
-            throw NSError(domain: "", code: 0, userInfo: nil)
-        }
+            throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])        }
         
         let bindings = ValueUtil.toBindingsArray(args)
         let statement = try database.prepare(query)
         statements.append(statement)
-        
+        // Start a transaction if none has been started yet
+        if savepointName == nil {
+            try begin()
+        }
+              
         try statement.run(bindings)
         return QueryResult(changes: database.totalChanges)
     }
     
-    func query(_ query: String?, args: InternalsdkValueArrayProtocol?) throws -> InternalsdkRowsProtocol {
+    func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
         guard let query = query, let args = args else {
-            throw NSError(domain: "", code: 0, userInfo: nil)
-        }
+            throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])        }
         
         let bindings = ValueUtil.toBindingsArray(args)
         let statement = try database.prepare(query)
         statements.append(statement)
+        // Start a transaction if none has been started yet
+        if savepointName == nil {
+            try begin()
+        }
         
-        try statement.run(bindings)
-        return RowData(rows: Array(_immutableCocoaArray: statement))
+        var rows: [Statement.Element] = []
+        
+        for row in try statement.run(bindings) {
+            rows.append(row)
+        }
+        return RowData(rows: rows)
     }
 }
 
-class QueryResult: NSObject, InternalsdkResultProtocol {
+class QueryResult: NSObject, MinisqlResultProtocol {
     
     let changes: Int
     
@@ -135,50 +150,78 @@ class QueryResult: NSObject, InternalsdkResultProtocol {
     }
 }
 
-class RowData: NSObject, InternalsdkRowsProtocol {
-    let rows: [Row]
-    
-    init(rows: [Row]) {
+class RowData: NSObject, MinisqlRowsProtocol {
+  
+    let rows: [Statement.Element]
+    var currentIndex: Int = 0
+
+    init(rows: [Statement.Element]) {
         self.rows = rows
     }
-    
+       
     func close() throws {
         // Not sure what to put here
     }
-    
+
     func next() -> Bool {
-        return !rows.isEmpty
+        if currentIndex < rows.count {
+            currentIndex += 1
+            return true
+        }
+        return false
     }
-    
-    func scan(_ dest: InternalsdkValueArrayProtocol?) throws {
-        // SQLite.swift does not provide a way to "scan" rows. You need to directly access row values
-        
+    /**
+     This method scans the current row and converts its values to `MinisqlValue` objects.
+     This method assumes that `values` is an object that supports setting values by index, and `rows` is an array of arrays where each inner array represents a row from a database and contains values of type `Binding`.
+     - Parameter values: An object that conforms to `MinisqlValuesProtocol`. This object will be populated with the values from the current row, converted to `MinisqlValue` objects.
+     - Throws: An `NSError` if `values` is `nil` or if `currentIndex` is outside the bounds of the `rows` array.
+     - Note: This method updates `currentIndex` to point to the next row. If there are no more rows, `next()` will return `false`.
+    */
+    func scan(_ values: MinisqlValuesProtocol?) throws {
+        guard let values = values, currentIndex < rows.count else {
+            throw NSError(domain: "", code: 0, userInfo: nil) // Or some more meaningful error
+        }
+        let currentRow = rows[currentIndex]
+        for (index, value) in currentRow.enumerated() {
+           let miniSqlValue = ValueUtil.makeValue(from: value)
+            // Set the value in the 'values' object
+            values.set(index, value: miniSqlValue)
+        }
     }
+
 }
 
-class ValueArrayHandler: NSObject, InternalsdkValueArrayProtocol {
+class ValueArrayHandler: NSObject, MinisqlValuesProtocol {
     
-    var values: [InternalsdkValue]
+    var values: [MinisqlValue]
     
-    init(values: [InternalsdkValue]) {
-        logger.log("SwiftValueArray called init \(values)")
+    init(values: [MinisqlValue]) {
         self.values = values
     }
     
-    
-    func get(_ index: Int) -> InternalsdkValue? {
-        logger.log("SwiftValueArray get called \(values[index])")
+    func get(_ index: Int) -> MinisqlValue? {
+        guard index < values.count else {
+            print("Error: Index out of bounds while trying to get value.")
+            return nil
+        }
         return values[index]
     }
     
-    func set(_ index: Int, value: InternalsdkValue?) {
-        logger.log("SwiftValueArray set called \(index)")
-        values[index]=value!
+    func len() -> Int {
+        return values.count
     }
     
-    
-    func len() -> Int {
-        logger.log("SwiftValueArray len called")
-        return values.count
+    func set(_ index: Int, value: MinisqlValue?) {
+        guard index < values.count else {
+            print("Error: Index out of bounds while trying to set value.")
+            return
+        }
+        
+        guard let value = value else {
+            print("Error: Attempted to set nil value.")
+            return
+        }
+        
+        values[index] = value
     }
 }

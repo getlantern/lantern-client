@@ -8,7 +8,7 @@ import (
 )
 
 type Model interface {
-	InvokeMethod(method string, arguments minisql.Values) (*Value, error)
+	InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error)
 }
 
 type model struct {
@@ -26,7 +26,7 @@ func NewModel(schema string, mdb minisql.DB) (Model, error) {
 	}, nil
 }
 
-func (m *model) InvokeMethod(method string, arguments minisql.Values) (*Value, error) {
+func (m *model) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
 	switch method {
 	case "testDbConnection":
 

@@ -17,8 +17,8 @@ class ValueUtil {
     static let TYPE_INT = 1
     static let TYPE_BOOL = 2
 
-    static func makeValue(from anyValue: Any) -> InternalsdkValue {
-        let value = InternalsdkValue()
+    static func makeValue(from anyValue: Any) -> MinisqlValue {
+        let value = MinisqlValue()
         switch anyValue {
         case is String:
             value.type = TYPE_STRING
@@ -48,7 +48,7 @@ class ValueUtil {
         }
     }
 
-    static func toBindingsArray(_ args: InternalsdkValueArrayProtocol) -> [Binding?] {
+    static func toBindingsArray(_ args: MinisqlValuesProtocol) -> [Binding?] {
         var bindings = [Binding?]()
         for i in 0..<args.len() {
             guard let arg = args.get(i) else {
@@ -57,11 +57,11 @@ class ValueUtil {
             }
             switch arg.type {
             case TYPE_STRING:
-                bindings.append(arg.string)
+                bindings.append(arg)
             case TYPE_INT:
-                bindings.append(arg.int_)
+                bindings.append(arg[i].int_)
             case TYPE_BOOL:
-                bindings.append(arg.bool_)
+                bindings.append(arg[i].bool_)
             default:
                 bindings.append(nil)
             }

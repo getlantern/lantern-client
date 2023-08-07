@@ -18,7 +18,6 @@
 @class InternalsdkReplicaServer;
 @class InternalsdkStartResult;
 @class InternalsdkSurveyInfo;
-@class InternalsdkValue;
 @protocol InternalsdkAdProvider;
 @class InternalsdkAdProvider;
 @protocol InternalsdkAdSettings;
@@ -41,8 +40,6 @@
 @class InternalsdkSettings;
 @protocol InternalsdkUpdater;
 @class InternalsdkUpdater;
-@protocol InternalsdkValueArray;
-@class InternalsdkValueArray;
 
 @protocol InternalsdkAdProvider <NSObject>
 - (NSString* _Nonnull)getInterstitialZoneID;
@@ -86,7 +83,7 @@
 @end
 
 @protocol InternalsdkModel <NSObject>
-- (InternalsdkValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
+- (MinisqlValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
 @end
 
 @protocol InternalsdkReceiveStream <NSObject>
@@ -136,12 +133,6 @@ Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 
 @protocol InternalsdkUpdater <NSObject>
 - (void)progress:(long)p0;
-@end
-
-@protocol InternalsdkValueArray <NSObject>
-- (InternalsdkValue* _Nullable)get:(long)index;
-- (long)len;
-- (void)set:(long)index value:(InternalsdkValue* _Nullable)value;
 @end
 
 /**
@@ -252,22 +243,6 @@ If disabled after having been enabled, the server keeps running and ReplicaAddr 
 @property (nonatomic) NSString* _Nonnull thanks;
 @property (nonatomic) NSString* _Nonnull button;
 @end
-
-@interface InternalsdkValue : NSObject <goSeqRefInterface> {
-}
-@property(strong, readonly) _Nonnull id _ref;
-
-- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (nonnull instancetype)init;
-@property (nonatomic) long type;
-@property (nonatomic) NSString* _Nonnull string;
-@property (nonatomic) long int_;
-@property (nonatomic) BOOL bool_;
-@end
-
-FOUNDATION_EXPORT const int64_t InternalsdkTypeBool;
-FOUNDATION_EXPORT const int64_t InternalsdkTypeInt;
-FOUNDATION_EXPORT const int64_t InternalsdkTypeString;
 
 @interface Internalsdk : NSObject
 /**
@@ -394,8 +369,6 @@ FOUNDATION_EXPORT BOOL InternalsdkTun2Socks(long fd, NSString* _Nullable socksAd
 
 @class InternalsdkUpdater;
 
-@class InternalsdkValueArray;
-
 /**
  * AdProvider provides information for displaying an ad and makes decisions on whether or not to display it.
  */
@@ -481,7 +454,7 @@ event there's an error sending an email
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (InternalsdkValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
+- (MinisqlValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
 @end
 
 @interface InternalsdkReceiveStream : NSObject <goSeqRefInterface, InternalsdkReceiveStream> {
@@ -553,16 +526,6 @@ Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (void)progress:(long)p0;
-@end
-
-@interface InternalsdkValueArray : NSObject <goSeqRefInterface, InternalsdkValueArray> {
-}
-@property(strong, readonly) _Nonnull id _ref;
-
-- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (InternalsdkValue* _Nullable)get:(long)index;
-- (long)len;
-- (void)set:(long)index value:(InternalsdkValue* _Nullable)value;
 @end
 
 #endif
