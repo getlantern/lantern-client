@@ -9,10 +9,11 @@ class Settings extends StatelessWidget {
 
   final packageInfo = PackageInfo.fromPlatform();
 
-  void changeLanguage(BuildContext context) => context.pushRoute(Language());
+  void changeLanguage(BuildContext context) async =>
+      await context.pushRoute(Language());
 
-  void reportIssue() async =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_SCREEN_REPORT_ISSUE);
+  void reportIssue(BuildContext context) async =>
+      await context.pushRoute(ReportIssue());
 
   void showProgressDialog(BuildContext context) {
     showDialog(
@@ -66,6 +67,17 @@ class Settings extends StatelessWidget {
               ),
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
+          ),
+          //* Report
+          ListItemFactory.settingsItem(
+            icon: ImagePaths.alert,
+            content: 'report_issue'.i18n,
+            trailingArray: [
+              mirrorLTR(context: context, child: const ContinueArrow())
+            ],
+            onTap: () {
+              reportIssue(context);
+            },
           ),
           ListItemFactory.settingsItem(
             icon: ImagePaths.update,
