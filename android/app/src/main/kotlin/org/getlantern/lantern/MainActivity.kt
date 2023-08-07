@@ -23,7 +23,6 @@ import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
 import okhttp3.Response
-import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.loconf.SurveyHelper
 import org.getlantern.lantern.model.AccountInitializationStatus
@@ -42,6 +41,7 @@ import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternConnection
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.isServiceRunning
+import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.lantern.vpn.VpnServiceManager
@@ -60,7 +60,6 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var replicaModel: ReplicaModel
-    private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
@@ -78,7 +77,6 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
-        navigator = Navigator(this, flutterEngine)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
@@ -147,16 +145,11 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
 
-        if (LanternApp.getSession().isPlayVersion) {
-            if (!LanternApp.getSession().hasAcceptedTerms()) {
-                startActivity(Intent(this, PrivacyDisclosureActivity_::class.java))
-            }
-        }
-
-        if (vpnModel.isConnectedToVpn() && !Utils.isServiceRunning(context, LanternVpnService::class.java)) {
+        val isServiceRunning = Utils.isServiceRunning(activity, LanternVpnService::class.java)
+        if (vpnModel.isConnectedToVpn() && !isServiceRunning) {
             Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
             vpnModel.setVpnOn(false)
-        } else if (!vpnModel.isConnectedToVpn() && Utils.isServiceRunning(context, LanternVpnService::class.java)) {
+        } else if (!vpnModel.isConnectedToVpn() && isServiceRunning) {
             Logger.d(TAG, "LanternVpnService is running, updating VPN preference")
             vpnModel.setVpnOn(true)
         }
