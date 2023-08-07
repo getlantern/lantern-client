@@ -66,6 +66,19 @@ class SessionModel extends Model {
     });
   }
 
+  Future<void> acceptTerms() {
+    return methodChannel.invokeMethod('acceptTerms', <String, dynamic>{
+      'on': true,
+    });
+  }
+
+  Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>(
+      'accepted_terms_version',
+      builder: builder,
+    );
+  }
+
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'forceCountry',
@@ -110,6 +123,13 @@ class SessionModel extends Model {
   Widget expiryDate(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'expirydatestr',
+      builder: builder,
+    );
+  }
+
+  Widget referralCode(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'referral',
       builder: builder,
     );
   }
@@ -267,6 +287,19 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<void> reportIssue(
+    String email,
+    String issue,
+    String description
+  ) async {
+    return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
+      'email': email,
+      'issue': issue,
+      'description': description
+    }).then((value) => value as String);
+  }
+
+
   Widget getUserId(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'userId',
@@ -278,6 +311,20 @@ class SessionModel extends Model {
   Widget userStatus(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'userLevel',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
+  Future<String> requestLinkCode() {
+    return methodChannel
+        .invokeMethod('requestLinkCode')
+        .then((value) => value as String);
+  }
+
+  Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'devicelinkingcode',
       defaultValue: '',
       builder: builder,
     );

@@ -544,6 +544,8 @@ abstract class SessionManager(application: Application) : Session {
         // initialize email address to empty string (if it doesn't already exist)
         if (email().isEmpty()) setEmail("")
 
+        if (prefs.getInt(ACCEPTED_TERMS_VERSION, 0) == 0) prefs.edit().putInt(ACCEPTED_TERMS_VERSION, 0).apply()
+
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
         internalHeaders = context.getSharedPreferences(
             INTERNAL_HEADERS_PREF_NAME,
