@@ -23,7 +23,7 @@ class LanternConnection(val isVpnService: Boolean = false) : ServiceConnection {
 
     override fun onServiceConnected(name: ComponentName?, binder: IBinder) {
         this.binder = binder
-        this.service = if (binder as? LanternVpnService) {
+        this.service = if ((binder as? LanternVpnService) != null) {
             (binder as LanternVpnService.LocalBinder).service
         } else {
             (binder as LanternService.LocalBinder).service

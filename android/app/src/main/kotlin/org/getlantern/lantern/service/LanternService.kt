@@ -112,6 +112,7 @@ class LanternService : Service(), ServiceManager.Runner {
 
     override fun killProcesses() {
         Logger.d(TAG, "stop")
+        stopForeground(true)
     }
 
     private fun serviceNotification() = startForeground(
