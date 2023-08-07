@@ -18,6 +18,8 @@ import appium_kotlin.MOST_POPULAR
 import appium_kotlin.PAYMENT_PURCHASE_COMPLETED
 import appium_kotlin.RENEWAL_SUCCESS_OK
 import appium_kotlin.REPORT_AN_ISSUE
+import appium_kotlin.REPORT_DESCRIPTION
+import appium_kotlin.SEND_REPORT
 import appium_kotlin.SUPPORT
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
