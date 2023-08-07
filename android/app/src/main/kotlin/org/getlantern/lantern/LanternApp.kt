@@ -86,7 +86,7 @@ open class LanternApp : Application() {
 
         fun startService(connection: LanternConnection) = ContextCompat.startForegroundService(
             application, Intent(application, connection.serviceClass).apply {
-                action = Actions.CONNECT_VPN
+                action = if (connection.isVpnService) Actions.CONNECT_VPN else null
             }
         )
 

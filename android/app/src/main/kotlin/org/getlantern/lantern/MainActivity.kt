@@ -40,7 +40,7 @@ import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
-import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.service.LanternConnection
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.isServiceRunning
 import org.getlantern.lantern.util.showAlertDialog
@@ -70,6 +70,7 @@ class MainActivity :
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
 
+    private val lanternServiceConnection = LanternConnection(false)
     private val vpnServiceManager by lazy { VpnServiceManager(this, vpnModel) }
     private val lanternClient = LanternApp.getLanternHttpClient()
 
@@ -129,10 +130,8 @@ class MainActivity :
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
         }
-        Logger.debug(TAG, "EventBus.register finished at ${System.currentTimeMillis() - start}")
-
-        val intent = Intent(this, LanternService_::class.java)
-        context.startService(intent)
+        lanternServiceConnection.connect(this)
+        LanternApp.startService(lanternServiceConnection)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -177,6 +176,7 @@ class MainActivity :
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
+        lanternServiceConnection.disconnect(this)
         vpnServiceManager.destroy()
         EventBus.getDefault().unregister(this)
     }

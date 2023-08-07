@@ -8,7 +8,7 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import org.getlantern.lantern.vpn.LanternVpnService
 
-class LanternConnection(private var isVpnService: Boolean = false) : ServiceConnection {
+class LanternConnection(val isVpnService: Boolean = false) : ServiceConnection {
     private var binder: IBinder? = null
 
     // private var callback: Callback? = null
@@ -23,7 +23,11 @@ class LanternConnection(private var isVpnService: Boolean = false) : ServiceConn
 
     override fun onServiceConnected(name: ComponentName?, binder: IBinder) {
         this.binder = binder
-        this.service = (binder as LanternVpnService.LocalBinder).service
+        this.service = if (binder as? LanternVpnService) {
+            (binder as LanternVpnService.LocalBinder).service
+        } else {
+            (binder as LanternService.LocalBinder).service
+        }
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {

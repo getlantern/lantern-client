@@ -63,10 +63,12 @@ class LanternVpnService : VpnService(), ServiceManager.Runner {
             for (installedApp in packageManager.getInstalledApplications(0)) {
                 if (!appsAllowedAccess.contains(installedApp.packageName)) {
                     try {
-                        Logger.debug(TAG, "Excluding " + installedApp.packageName + " from VPN")
+                        Logger.debug(TAG, "Excluding " + installedApp.packageName +
+                            " from VPN")
                         builder.addDisallowedApplication(installedApp.packageName)
                     } catch (e: PackageManager.NameNotFoundException) {
-                        throw RuntimeException("Unable to exclude " + installedApp.packageName + " from VPN", e)
+                        throw RuntimeException("Unable to exclude " +
+                            installedApp.packageName + " from VPN", e)
                     }
                 }
             }
@@ -79,14 +81,14 @@ class LanternVpnService : VpnService(), ServiceManager.Runner {
         } catch (e: PackageManager.NameNotFoundException) {
             throw RuntimeException("Unable to exclude Lantern from routes", e)
         }
-        // don't currently route IPv6 through VPN because our proxies don't currently support IPv6
-        // see https://github.com/getlantern/lantern-internal/issues/4961
-        // Note - if someone performs a DNS lookup for an IPv6 only host like ipv6.google.com, dnsgrab
-        // will return an IPv4 address for that site, causing the traffic to get routed through the VPN.
-        // builder.addRoute("0:0:0:0:0:0:0:0", 0)
+        // don't currently route IPv6 through VPN because our proxies don't currently
+        // support IPv6. see https://github.com/getlantern/lantern-internal/issues/4961
+        // Note - if someone performs a DNS lookup for an IPv6 only host like
+        // ipv6.google.com, dnsgrab will return an IPv4 address for that site, causing
+        // the traffic to get routed through the VPN.
 
-        // this is a fake DNS server. The precise IP doesn't matter because Lantern will intercept and
-        // route all DNS traffic to dnsgrab internally anyway.
+        // this is a fake DNS server. The precise IP doesn't matter because Lantern will
+        // intercept and  route all DNS traffic to dnsgrab internally anyway.
         builder.addDnsServer(SessionManager.fakeDnsIP)
 
         val intent = Intent(this, MainActivity::class.java)
@@ -104,7 +106,8 @@ class LanternVpnService : VpnService(), ServiceManager.Runner {
         return builder.establish()
     }
 
-    private fun serviceNotification() = startForeground(1, Notifications.builder(this).build())
+    private fun serviceNotification() = startForeground(1,
+        Notifications.builder(this).build())
 
     private fun startVpn() {
         val builder = Builder()

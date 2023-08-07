@@ -251,13 +251,16 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putString(EMAIL_ADDRESS, email).apply()
     }
 
-    fun setUserIdAndToken(userId: Long, token: String) {
-        if (userId == 0L || TextUtils.isEmpty(token)) {
+    fun setUserIdAndToken(userId: Long, token: String?) {
+        if (userId == 0L) {
             Logger.debug(TAG, "Not setting invalid user ID $userId or token $token")
             return
         }
-        Logger.debug(TAG, "Setting user ID to $userId, token to $token")
-        prefs.edit().putLong(USER_ID, userId).putString(TOKEN, token).apply()
+        Logger.debug(TAG, "Setting user ID to $userId")
+        prefs.edit().putLong(USER_ID, userId).apply()
+        if (token != null && !TextUtils.isEmpty(token)) {
+            prefs.edit().putString(TOKEN, token).apply()
+        }
     }
 
     private fun setDeviceId(deviceId: String?) {

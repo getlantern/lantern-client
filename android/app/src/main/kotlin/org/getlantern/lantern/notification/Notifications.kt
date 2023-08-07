@@ -19,6 +19,7 @@ class Notifications() {
         private val TAG = Notifications::class.java.simpleName
         const val notificationId = 1
         private const val CHANNEL_VPN = "service-vpn"
+        private const val CHANNEL_SERVICE = "service-lantern"
 
         init {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -26,7 +27,16 @@ class Notifications() {
             }
         }
 
-        val builder: (Service) -> NotificationCompat.Builder by lazy {
+        val serviceBuilder: (service: Service) -> NotificationCompat.Builder by lazy {
+            {
+                val context = it as Context
+                NotificationCompat.Builder(it as Context, CHANNEL_SERVICE)
+                    .setContentTitle(context.getString(R.string.service_connected))
+                    .setShowWhen(false)
+            }
+        }
+
+        val builder: (service: Service) -> NotificationCompat.Builder by lazy {
             {
                 val context = it as Context
                 val pendingIntent = PendingIntent.getActivity(
@@ -62,6 +72,13 @@ class Notifications() {
                     CHANNEL_VPN,
                     LanternApp.getAppContext().resources.getString(R.string.lantern_service),
                     NotificationManager.IMPORTANCE_HIGH,
+                ),
+            )
+            LanternApp.notificationManager.createNotificationChannel(
+                NotificationChannel(
+                    CHANNEL_SERVICE,
+                    LanternApp.getAppContext().resources.getString(R.string.lantern_service),
+                    NotificationManager.IMPORTANCE_LOW,
                 ),
             )
         }
