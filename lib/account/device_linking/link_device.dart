@@ -1,6 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'explanation_step.dart';
 
+@RoutePage<void>(name: 'LinkDevice')
 class LinkDevice extends StatefulWidget {
   LinkDevice({
     Key? key,
@@ -14,7 +15,8 @@ class _LinkDeviceState extends State<LinkDevice> {
 
   @override
   void initState() {
-      sessionModel.requestLinkCode();
+    super.initState();
+    sessionModel.requestLinkCode();
   }
 
   @override
@@ -22,7 +24,7 @@ class _LinkDeviceState extends State<LinkDevice> {
     return BaseScreen(
       title: 'Authorize Device for Pro'.i18n,
       body: sessionModel.deviceLinkingCode((BuildContext context,
-              String deviceCode, Widget? child) =>
+          String deviceCode, Widget? child) =>
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

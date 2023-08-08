@@ -1,6 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
-
+@RoutePage<void>(name: 'Account')
 class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
 
