@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/core/router/router.gr.dart';
 
+
+
 @AutoRouterConfig(
   replaceInRouteName: 'Page,Route,Screen',
 )
@@ -209,5 +211,33 @@ class AppRouter extends $AppRouter {
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute(
+      page: ReportIssue.page,
+      path: '/reportIssue',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: InviteFriends.page,
+      path: '/inviteFriends',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: LanternDesktop.page,
+      path: '/lanternDesktop',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: LinkDevice.page,
+      path: '/linkDevice',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
   ];
 }
