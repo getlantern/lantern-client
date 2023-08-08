@@ -10,9 +10,28 @@ class Settings extends StatelessWidget {
 
   final packageInfo = PackageInfo.fromPlatform();
 
-  void changeLanguage(BuildContext context) => context.pushRoute(Language());
+  void changeLanguage(BuildContext context) async =>
+      await context.pushRoute(Language());
 
-  void checkForUpdates() async => await sessionModel.checkForUpdates();
+  void reportIssue(BuildContext context) async =>
+      await context.pushRoute(ReportIssue());
+
+  void showProgressDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.transparent,
+        builder: (BuildContext context) {
+          return Center(
+              child: SizedBox(
+            width: 40.0,
+            height: 40.0,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(grey5),
+            ),
+          ));
+        });
+  }
 
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
@@ -50,13 +69,28 @@ class Settings extends StatelessWidget {
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
           ),
+          //* Report
+          ListItemFactory.settingsItem(
+            icon: ImagePaths.alert,
+            content: 'report_issue'.i18n,
+            trailingArray: [
+              mirrorLTR(context: context, child: const ContinueArrow())
+            ],
+            onTap: () {
+              reportIssue(context);
+            },
+          ),
           ListItemFactory.settingsItem(
             icon: ImagePaths.update,
             content: 'check_for_updates'.i18n,
             trailingArray: [
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
-            onTap: checkForUpdates,
+            onTap: () async {
+              showProgressDialog(context);
+              await sessionModel.checkForUpdates();
+              Navigator.pop(context);
+            },
           ),
           //* Blocked
           messagingModel.getOnBoardingStatus(
@@ -76,7 +110,7 @@ class Settings extends StatelessWidget {
                 : const SizedBox(),
           ),
           //* Split tunneling
-          vpnModel.splitTunneling(
+          sessionModel.splitTunneling(
             (BuildContext context, bool value, Widget? child) =>
                 ListItemFactory.settingsItem(
               header: 'VPN'.i18n,

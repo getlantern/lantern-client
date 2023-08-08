@@ -79,11 +79,6 @@
         </receiver>
 
         <activity
-            android:name=".activity.authorizeDevice.LinkDeviceActivity_"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
             android:name=".activity.FreeKassaActivity_"
             android:screenOrientation="portrait">
         </activity>
@@ -95,24 +90,7 @@
         </activity>
 
         <activity
-            android:name=".activity.InviteActivity_"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name=".activity.DesktopActivity_"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name="org.getlantern.mobilesdk.activity.ReportIssueActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity
             android:name=".activity.WebViewActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.PrivacyDisclosureActivity_"
             android:screenOrientation="portrait"
             />
 

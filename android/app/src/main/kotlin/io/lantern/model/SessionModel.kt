@@ -1,30 +1,41 @@
 package io.lantern.model
 
 import android.app.Activity
+import android.os.AsyncTask
+import android.os.Build
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
+import com.google.protobuf.ByteString
 import internalsdk.Internalsdk
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.lantern.apps.AppsDataProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
-import org.getlantern.lantern.model.CheckUpdate
+import org.getlantern.mobilesdk.model.IssueReporter
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
-import org.getlantern.lantern.openHome
-import org.getlantern.lantern.restartApp
+import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.castToBoolean
+import org.getlantern.lantern.util.openHome
+import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
@@ -40,7 +51,11 @@ class SessionModel(
     private val activity: Activity,
     flutterEngine: FlutterEngine,
 ) : BaseModel("session", flutterEngine, LanternApp.getSession().db) {
+    private val appsDataProvider: AppsDataProvider = AppsDataProvider(
+        activity.packageManager, activity.packageName
+    )
     private val lanternClient = LanternApp.getLanternHttpClient()
+    private val autoUpdater = AutoUpdater(activity, activity)
     private val paymentsUtil = PaymentsUtil(activity)
 
     companion object {
@@ -50,6 +65,9 @@ class SessionModel(
 
         const val PATH_SDK_VERSION = "sdkVersion"
         const val PATH_USER_LEVEL = "userLevel"
+
+        const val PATH_SPLIT_TUNNELING = "/splitTunneling"
+        const val PATH_APPS_DATA = "/appsData/"
     }
 
     init {
@@ -63,22 +81,34 @@ class SessionModel(
                 PATH_USER_LEVEL,
                 tx.get(PATH_USER_LEVEL) ?: "",
             )
+            tx.put(
+                PATH_SPLIT_TUNNELING,
+                castToBoolean(tx.get(PATH_SPLIT_TUNNELING), false)
+            )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
         }
+        updateAppsData()
     }
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
+            "requestLinkCode" -> requestLinkCode(result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
+            "reportIssue" -> reportIssue(call.argument("email")!!, call.argument("issue")!!, call.argument("description")!!, result)
             "applyRefCode" -> paymentsUtil.applyRefCode(call.argument("refCode")!!, result)
-            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(call.argument("email")!!, call.argument("resellerCode")!!, result)
+            "redeemResellerCode" -> paymentsUtil.redeemResellerCode(call.argument("email")!!,
+                call.argument("resellerCode")!!, result)
+            "refreshAppsList" -> {
+                updateAppsData()
+                result.success(null)
+            }
             "submitBitcoinPayment" -> paymentsUtil.submitBitcoinPayment(
                 call.argument("planID")!!,
                 call.argument("email")!!,
@@ -111,6 +141,9 @@ class SessionModel(
                     intent.putExtra("url", url)
                     activity.startActivity(intent)
                 }
+            }
+            "acceptTerms" -> {
+                LanternApp.getSession().acceptTerms()
             }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
@@ -145,9 +178,87 @@ class SessionModel(
                 )
             }
             "checkForUpdates" -> {
-                EventBus.getDefault().post(CheckUpdate(true))
+                autoUpdater.checkForUpdates()
+            }
+            "setSplitTunneling" -> {
+                val on = call.argument("on") ?: false
+                saveSplitTunneling(on)
+            }
+            "allowAppAccess" -> {
+                updateAppData(call.argument("packageName")!!, true)
+            }
+            "denyAppAccess" -> {
+                updateAppData(call.argument("packageName")!!, false)
             }
             else -> super.doMethodCall(call, notImplemented)
+        }
+    }
+
+    fun splitTunnelingEnabled(): Boolean {
+        return db.get(PATH_SPLIT_TUNNELING) ?: false
+    }
+
+    private fun saveSplitTunneling(value: Boolean) {
+        db.mutate { tx ->
+            tx.put(PATH_SPLIT_TUNNELING, value)
+        }
+    }
+
+    // updateAppData looks up the app data for the given package name and updates whether or
+    // not the app is allowed access to the VPN connection in the database
+    private fun updateAppData(packageName: String, allowedAccess: Boolean) {
+        db.mutate { tx ->
+            var appData = tx.get<Vpn.AppData>(PATH_APPS_DATA + packageName)
+            appData?.let {
+                tx.put(
+                    PATH_APPS_DATA + packageName, Vpn.AppData.newBuilder()
+                        .setPackageName(it.packageName).setIcon(it.icon)
+                        .setName(it.name).setAllowedAccess(allowedAccess).build()
+                )
+            }
+        }
+    }
+
+    // updateAppsData stores app data for the list of applications installed for the current
+    // user in the database
+    private fun updateAppsData() {
+        // This can be quite slow, run it on its own coroutine
+        CoroutineScope(Dispatchers.IO).launch {
+            val appsList = appsDataProvider.listOfApps()
+            // First add just the app names to get a list quickly
+            db.mutate { tx ->
+                appsList.forEach {
+                    val path = PATH_APPS_DATA + it.packageName
+                    if (!tx.contains(path)) {
+                        // App not already in list, add it
+                        tx.put(
+                            path,
+                            Vpn.AppData.newBuilder()
+                                .setPackageName(it.packageName).setName(it.name)
+                                .build()
+                        )
+                    }
+                }
+            }
+
+            // Then add icons
+            db.mutate { tx ->
+                appsList.forEach {
+                    val path = PATH_APPS_DATA + it.packageName
+                    tx.get<Vpn.AppData>(path)?.let { existing ->
+                        if (existing.icon.isEmpty) {
+                            it.icon.let { icon ->
+                                tx.put(
+                                    path,
+                                    existing.toBuilder()
+                                        .setIcon(ByteString.copyFrom(icon))
+                                        .build(),
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -159,6 +270,70 @@ class SessionModel(
         } else if (error.message != null) {
             activity.showErrorDialog(error.message)
         }
+    }
+
+    private fun requestLinkCode(methodCallResult: MethodChannel.Result) {
+        val formBody = FormBody.Builder()
+            .add("deviceName", LanternApp.getSession().deviceName())
+            .build()
+        lanternClient.post(
+            LanternHttpClient.createProUrl("/link-code-request"),
+            formBody,
+            object : ProCallback {
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    if (error == null) {
+                        activity.runOnUiThread {
+                            methodCallResult.error("unknownError", null, null)
+                        }
+                        return
+                    }
+                    val errorId = error.id
+                    activity.runOnUiThread {
+                        methodCallResult.error("linkCodeError", errorId, null)
+                    }
+                }
+
+                override fun onSuccess(response: Response?, result: JsonObject?) {
+                    result?.let {
+                        if (result["code"] == null || result["expireAt"] == null) return
+                        val code = result["code"].asString
+                        val expireAt = result["expireAt"].asLong
+                        LanternApp.getSession().setDeviceCode(code, expireAt)
+                        methodCallResult.success(null)
+                    }
+                }
+            },
+        )
+    }
+
+    private fun redeemLinkCode() {
+        val formBody = FormBody.Builder()
+            .add("code", LanternApp.getSession().deviceCode()!!)
+            .add("deviceName", LanternApp.getSession().deviceName())
+            .build()
+        lanternClient.post(
+            LanternHttpClient.createProUrl("/link-code-request"),
+            formBody,
+            object : ProCallback {
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    Logger.error(TAG, "Error making link redeem request..", t)
+                }
+
+                override fun onSuccess(response: Response?, result: JsonObject?) {
+                    if (result == null || result["token"] == null || result["userID"] == null) return
+                    Logger.debug(TAG, "Successfully redeemed link code")
+                    val userID = result["userID"].asLong
+                    val token = result["token"].asString
+                    LanternApp.getSession().setUserIdAndToken(userID, token)
+                    LanternApp.getSession().linkDevice()
+                    LanternApp.getSession().setIsProUser(true)
+                    val intent = Intent(activity, MainActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    }
+                    activity.startActivity(intent)
+                }
+            },
+        )
     }
 
     private fun checkEmailExists(emailAddress: String, methodCallResult: MethodChannel.Result) {
@@ -337,6 +512,25 @@ class SessionModel(
                 }
             },
         )
+    }
+
+    private fun reportIssue(email: String, issue: String, description: String, methodCallResult: MethodChannel.Result) {
+        if (!Utils.isNetworkAvailable(activity)) {
+            methodCallResult.error("errorReportingIssue", activity.getString(R.string.no_internet_connection), null)
+            return
+        }
+        Logger.debug(TAG, "Reporting $issue issue on behalf of $email")
+        LanternApp.getSession().setEmail(email)
+        val issueReporter = IssueReporter(
+            activity,
+            issue,
+            description,
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            issueReporter.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        } else {
+            issueReporter.execute()
+        }
     }
 
     private fun removeDevice(deviceId: String, methodCallResult: MethodChannel.Result) {

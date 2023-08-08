@@ -24,7 +24,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   }
 
   void init() async {
-    unawaited(vpnModel.refreshAppsList());
+    unawaited(sessionModel.refreshAppsList());
     var _vpnConnected = await vpnModel.isVpnConnected();
     setState(() {
       vpnConnected = _vpnConnected;
@@ -35,9 +35,9 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: 'split_tunneling'.i18n,
-      body: vpnModel.splitTunneling(
+      body: sessionModel.splitTunneling(
           (BuildContext context, bool splitTunnelingEnabled, Widget? child) {
-        return vpnModel.appsData(
+        return sessionModel.appsData(
           builder: (
             context,
             Iterable<PathAndValue<AppData>> _appsData,
@@ -57,7 +57,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                         activeColor: CupertinoColors.activeGreen,
                         onChanged: (bool? value) {
                           var newValue = value ?? false;
-                          vpnModel.setSplitTunneling(newValue);
+                          sessionModel.setSplitTunneling(newValue);
                           showRestartVPNSnackBar(context);
                         },
                       ),
@@ -143,9 +143,9 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 
     var allowOrDenyAppAccess = () {
       if (appData.allowedAccess) {
-        vpnModel.denyAppAccess(packageName);
+        sessionModel.denyAppAccess(packageName);
       } else {
-        vpnModel.allowAppAccess(packageName);
+        sessionModel.allowAppAccess(packageName);
       }
       showRestartVPNSnackBar(context);
     };
@@ -200,7 +200,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 class SplitTunnelingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return vpnModel.splitTunneling(
+    return sessionModel.splitTunneling(
       (BuildContext context, bool value, Widget? child) => InkWell(
         onTap: () {
           Navigator.push(
