@@ -7,16 +7,18 @@
 # M. Utkun Uyar, 2023
 # Emre Deniz, 2023
 # Volkan Gezer <volkangezer@gmail.com>, 2023
-# e2f <projects@e2f.com>, 2023
-# efe kerem sözeri <eksozeri@hotmail.com>, 2023
 # Alexander B. <road2monstercat@gmail.com>, 2023
 # fffw <fffw@getlantern.org>, 2023
-# Teo Westbrook, 2023
+# Gökhan Kalayci <gkmediagokhan@gmail.com>, 2023
+# Lantern, 2023
+# efe kerem sözeri <eksozeri@hotmail.com>, 2023
+# e2f <projects@e2f.com>, 2023
 # e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023
+# Teo Westbrook, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023\n"
+"Last-Translator: Teo Westbrook, 2023\n"
 "Language-Team: Turkish (https://app.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -124,6 +126,34 @@ msgstr "Lantern Pro'ya Yükseltin"
 msgid "Invite Friends"
 msgstr "Arkadaşlarını Davet Et"
 
+msgid "share_lantern_pro"
+msgstr ""
+"Lantern Pro'yu bir arkadaşınızla paylaşın! Arkadaşınız Lantern Pro satın "
+"alırken referans kodunuzu kullanırsa ikiniz de bir ay ücretsiz Lantern Pro "
+"hizmeti kazanırsınız!"
+
+msgid "privacy_disclosure_title"
+msgstr "Lantern Gizlilik Anlaşması"
+
+msgid "privacy_disclosure_body"
+msgstr ""
+"Lantern gizliliğinizi korumayı taahhüt eder. Hangi bilgileri topladığımızı, "
+"hangilerini toplamadığımızı, bilgileri nasıl topladığımızı, kullandığımızı "
+"ve depoladığımızı anlamanızı istiyoruz. Ödeme bilgilerinizi Lantern Pro "
+"hesabınızla ilişkilendirmiyoruz. Aktivitenizin günlüklerini toplamıyoruz; "
+"örneğin tarama geçmişinizin, trafik hedefinizin, veri içeriğinizin veya DNS "
+"sorgularınızın günlüğünü tutmuyoruz. Ayrıca bağlantı günlüklerini hiçbir "
+"zaman depolamıyoruz; yani IP adresinizin, bağlantı zaman damgasıyla ilişkili"
+" giden Lantern sunucu IP adresinizin veya oturum sürenizin günlüğünü "
+"tutmuyoruz. Belirli bir Lantern Pro hesabı bakımından, Lantern'ın bir "
+"Lantern hesabını kullanıcının gerçek kimliğiyle ilişkilendirmesi teknik "
+"olarak mümkün değildir. Lantern IP adresi ve kesin zaman damgası bakımından,"
+" Lantern'ın bu IP adresini bir Lantern kullanıcısına veya Lantern kullanıcı "
+"IP adresine dayandırması teknik olarak mümkün değildir."
+
+msgid "privacy_disclosure_accept"
+msgstr "Kabul Ediyorum"
+
 msgid "desktop_version"
 msgstr "Masaüstü Versiyonu"
 
@@ -160,8 +190,29 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "Dil"
 
-msgid "report_issue"
-msgstr "Sorun bildir"
+msgid "select_an_issue"
+msgstr "Bir hata seçiniz"
+
+msgid "enter_description"
+msgstr ""
+
+msgid "cannot_access_blocked_sites"
+msgstr "Engellenen sitelere erişilemiyor"
+
+msgid "cannot_complete_purchase"
+msgstr "Satın alma tamamlanamıyor"
+
+msgid "cannot_sign_in"
+msgstr "Giriş yapılamadı"
+
+msgid "spinner_loads_endlessly"
+msgstr "Yükleme ekranı sürekli dönüyor"
+
+msgid "other"
+msgstr "Diğer"
+
+msgid "issue_description"
+msgstr "Sorun Açıklaması"
 
 msgid "check_for_updates"
 msgstr "Güncellemeleri Kontrol Et"
@@ -199,6 +250,19 @@ msgstr "PIN ile Bağla"
 msgid "OR"
 msgstr "VEYA"
 
+msgid "device_linking_pin"
+msgstr "Cihaz bağlama pini"
+
+msgid "link_device_step_one"
+msgstr ""
+
+msgid "link_device_step_two"
+msgstr ""
+
+msgid "ensure_most_recent_version_lantern"
+msgstr ""
+"* Her iki cihazın da Lantern'ın en son sürümünü çalıştırdığından emin olun"
+
 msgid "Authorize Device via Email"
 msgstr "Cihazı E-Posta Üzerinden Yetkilendir"
 
@@ -214,6 +278,37 @@ msgstr "E-Posta Aracılığıyla Bağla"
 
 msgid "lantern_pro_email"
 msgstr "Lantern Pro E-Postası"
+
+msgid "lantern_desktop"
+msgstr "Lantern Masaüstü"
+
+msgid "report_issue"
+msgstr ""
+
+msgid "report_an_issue"
+msgstr "Hata Bildir"
+
+msgid "report_sent"
+msgstr "Rapor Gönderildi"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr ""
+"Sorununuzu bildirdiğiniz için teşekkür ederiz, mümkün olan en kısa sürede "
+"e-posta yoluyla size geri dönüş yapacağız"
+
+msgid "send_report"
+msgstr "Rapor Gönder"
+
+msgid "most_recent_lantern_apps"
+msgstr ""
+"Masaüstü ve diğer tüm platformlar için en son Lantern uygulamaları "
+"yukarıdaki bağlantıda bulunabilir."
+
+msgid "share_link"
+msgstr ""
+
+msgid "share_title"
+msgstr "Lantern indirme bağlantısı paylaş"
 
 msgid "email"
 msgstr "E-posta"
@@ -273,6 +368,12 @@ msgstr "E-posta ve Aktivasyon kodu girin"
 
 msgid "referral_code"
 msgstr "Referans kodu"
+
+msgid "share_referral_code"
+msgstr ""
+
+msgid "share_message_referral_code"
+msgstr ""
 
 msgid "add_referral_code"
 msgstr "Referans kodu ekleyin"

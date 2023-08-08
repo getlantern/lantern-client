@@ -21,7 +21,6 @@ export 'package:lantern/core/router/router.gr.dart';
 export 'package:lantern/event_extension.dart';
 export 'package:lantern/event_manager.dart';
 export 'package:lantern/i18n/i18n.dart';
-export 'package:lantern/lantern_navigator.dart';
 export 'package:lantern/vpn/protos_shared/vpn.pb.dart';
 export 'package:lantern/vpn/vpn_model.dart';
 export 'package:loader_overlay/loader_overlay.dart';
