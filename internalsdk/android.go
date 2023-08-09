@@ -90,6 +90,7 @@ type Session interface {
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() (bool, error)
 	SetShowInterstitialAdsEnabled(bool)
+	SetCASShowInterstitialAdsEnabled(bool)
 
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
@@ -120,6 +121,7 @@ type panickingSession interface {
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() bool
 	SetShowInterstitialAdsEnabled(bool)
+	SetCASShowInterstitialAdsEnabled(bool)
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
@@ -269,6 +271,9 @@ func (s *panickingSessionImpl) SetChatEnabled(enabled bool) {
 
 func (s *panickingSessionImpl) SetShowInterstitialAdsEnabled(enabled bool) {
 	s.wrapped.SetShowInterstitialAdsEnabled(enabled)
+}
+func (s *panickingSessionImpl) SetCASShowInterstitialAdsEnabled(enabled bool) {
+	s.wrapped.SetCASShowInterstitialAdsEnabled(enabled)
 }
 
 func (s *panickingSessionImpl) SerializedInternalHeaders() string {
@@ -599,11 +604,15 @@ func run(configDir, locale string,
 		if !session.IsProUser() {
 			showAdsEnabled := runner.FeatureEnabled("interstitialads", ApplicationVersion)
 			log.Debugf("Show ads enabled? %v", showAdsEnabled)
-			// You would replace the below line with the actual function you use to set this feature.
 			session.SetShowInterstitialAdsEnabled(showAdsEnabled)
+
+			//Check for CAS ads for Russia and Iran user
+			showCASAdsEnabled := runner.FeatureEnabled("casinterstitialads", ApplicationVersion)
+			session.SetCASShowInterstitialAdsEnabled(showCASAdsEnabled)
 		} else {
 			// Explicitly disable ads for Pro users.
 			session.SetShowInterstitialAdsEnabled(false)
+			session.SetCASShowInterstitialAdsEnabled(false)
 		}
 
 	}
