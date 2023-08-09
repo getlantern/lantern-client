@@ -1,9 +1,10 @@
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:lantern/app.dart';
 import 'package:lantern/catcher_setup.dart';
 import 'package:lantern/common/common.dart';
 
-import 'app.dart';
+import 'ad_helper.dart';
 
 // https://github.com/googleads/googleads-mobile-flutter/blob/main/samples/admob/mediation_example/android/app/src/main/java/com/example/mediationexample/MyMediationMethodCallHandler.java
 Future<void> main() async {
@@ -15,6 +16,7 @@ Future<void> main() async {
   }
   WidgetsFlutterBinding.ensureInitialized();
   await _initGoogleMobileAds();
+  await AdHelper().initializeCAS();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   setupCatcherAndRun(LanternApp());
 }
