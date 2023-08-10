@@ -89,17 +89,15 @@ class SessionModel(
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
             "shouldShowAds" -> {
-                //We just need to check VPN permissions
-                // if user tried to remove then we need to check
-                // all other configurations are comming from backend
-                val session = LanternApp.getSession()
-                val hasAllNetworkPermissions = PermissionUtil.missingPermissions(activity).isEmpty()
-                val adsEnableBool = session.shouldShowAdsEnabled()
-                        && hasAllNetworkPermissions
-                        && session.hasFirstSessionCompleted()
-                result.success(adsEnableBool)
+                result.success(shouldShowAdsBasedRegion {
+                    LanternApp.getSession().shouldShowAdsEnabled()
+                })
             }
-
+            "shouldCASShowAds" -> {
+                result.success(shouldShowAdsBasedRegion {
+                    LanternApp.getSession().shouldCASShowAdsEnabled()
+                })
+            }
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
@@ -210,6 +208,17 @@ class SessionModel(
 
             else -> super.doMethodCall(call, notImplemented)
         }
+    }
+
+    private fun shouldShowAdsBasedRegion(shouldShow: () -> Boolean): Boolean {
+        //We just need to check VPN permissions
+        // if user tried to remove then we need to check
+        // all other configurations are coming from backend
+        val session = LanternApp.getSession()
+        val hasAllNetworkPermissions = PermissionUtil.missingPermissions(activity).isEmpty()
+        return shouldShow()
+                && hasAllNetworkPermissions
+                && session.hasFirstSessionCompleted()
     }
 
     fun splitTunnelingEnabled(): Boolean {

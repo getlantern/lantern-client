@@ -12,7 +12,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
   @override
   void initState() {
     super.initState();
-    adHelper.loadInterstitialAd();
+    adHelper.loadAds();
   }
 
   bool isIdle(String vpnStatus) =>
@@ -28,7 +28,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
       Future.delayed(
         const Duration(seconds: 1),
         () async {
-          await adHelper.showAd();
+          await adHelper.showAds();
         },
       );
     }

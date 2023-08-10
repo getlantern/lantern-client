@@ -146,6 +146,11 @@ class SessionModel extends Model {
         .invokeMethod('shouldShowAds', <String, dynamic>{});
   }
 
+  Future<bool> shouldCASShowAds() async {
+    return await methodChannel
+        .invokeMethod('shouldCASShowAds', <String, dynamic>{});
+  }
+
   Future<void> setLanguage(String lang) {
     return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
       'lang': lang,
