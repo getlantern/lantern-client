@@ -240,8 +240,17 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(ADS_ENABLED, enabled).apply()
     }
 
+    override fun setCASShowInterstitialAdsEnabled(enabled: Boolean) {
+        Logger.d(TAG, "Setting $CAS_ADS_ENABLED to $enabled")
+        prefs.edit().putBoolean(CAS_ADS_ENABLED, enabled).apply()
+    }
+
     fun shouldShowAdsEnabled(): Boolean {
         return prefs.getBoolean(ADS_ENABLED, false)
+    }
+
+    fun shouldCASShowAdsEnabled(): Boolean {
+        return prefs.getBoolean(CAS_ADS_ENABLED, false)
     }
 
     //    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
@@ -427,7 +436,7 @@ abstract class SessionManager(application: Application) : Session {
 
     /**this preference is used for checking we want to show ads or not
      * we are only after first session
-      */
+     */
     fun setHasFirstSessionCompleted(status: Boolean) {
         prefs.edit().putBoolean(HAS_FIRST_SESSION_COMPLETED, status).apply()
     }
@@ -527,6 +536,7 @@ abstract class SessionManager(application: Application) : Session {
         private const val REPLICA_ADDR = "replicaAddr"
         public const val CHAT_ENABLED = "chatEnabled"
         public const val ADS_ENABLED = "adsEnabled"
+        public const val CAS_ADS_ENABLED = "casAsEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),

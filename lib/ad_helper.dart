@@ -6,13 +6,14 @@ import 'package:clever_ads_solutions/public/AdImpression.dart';
 import 'package:clever_ads_solutions/public/AdTypes.dart';
 import 'package:clever_ads_solutions/public/ConsentFlow.dart';
 import 'package:clever_ads_solutions/public/InitializationListener.dart';
-import 'package:clever_ads_solutions/public/LoadingMode.dart';
 import 'package:clever_ads_solutions/public/MediationManager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/replica/common.dart';
 
 import 'common/session_model.dart';
+
+enum AdType { Google, CAS }
 
 class AdHelper {
   static final AdHelper _instance = AdHelper._internal();
@@ -23,9 +24,11 @@ class AdHelper {
     return _instance;
   }
 
+  AdType? _currentAdType;
   MediationManager? casMediationManager;
   InterstitialAd? _interstitialAd;
   int _failedLoadAttempts = 0;
+  int _failedCASLoadAttempts = 0;
 
   //If ads are getting failed to load we want to make lot of calls
   // Just try 5 times
@@ -41,16 +44,39 @@ class AdHelper {
     }
   }
 
-  Future<void> loadInterstitialAd() async {
-    //shouldShowAds hold logic for showing ads
-    final adsEnable = await sessionModel.shouldShowAds();
-    logger.i('[Ads Request] support checking  value is $adsEnable');
-    print('INTERSTITIAL_AD_UNIT_ID is $interstitialAdUnitId');
+  // Private methods to decide whether to load or show Google Ads or CAS ads based on conditions
+  Future<void> _decideAndLoadAds() async {
+    final shouldShowGoogleAds = await sessionModel.shouldShowAds();
+    final shouldShowCASAds = await sessionModel.shouldCASShowAds();
+    logger.d(
+        '[Ads Manager] Google Ads enable $shouldShowGoogleAds: CAS Ads $shouldShowCASAds');
+    if (shouldShowGoogleAds) {
+      _currentAdType = AdType.Google;
+      logger.i('[Ads Manager] Decision: Loading Google Ads.');
+      await _loadInterstitialAd();
+    } else if (shouldShowCASAds) {
+      _currentAdType = AdType.CAS;
+      logger.i('[Ads Manager] Decision: Loading CAS Ads.');
+      if (casMediationManager == null) {
+        await initializeCAS();
+      }
+      await _loadCASInterstitial();
+    }
+  }
+
+  Future<void> _decideAndShowAds() async {
+    if (_currentAdType == AdType.Google && _interstitialAd != null) {
+      await _showInterstitialAd();
+    } else if (_currentAdType == AdType.CAS &&
+        (await casMediationManager!.isInterstitialReady())) {
+      await _showCASInterstitial();
+    }
+  }
+
+  Future<void> _loadInterstitialAd() async {
     //To avoid calling multiple ads request repeatedly
-    if (_interstitialAd == null &&
-        adsEnable &&
-        _failedLoadAttempts < _maxFailAttempts) {
-      logger.i('[Ads Request] making request');
+    if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
+      logger.i('[Ads Manager] Request: Making Google Ad request.');
       await InterstitialAd.load(
         adUnitId: interstitialAdUnitId,
         request: const AdRequest(),
@@ -58,45 +84,64 @@ class AdHelper {
           onAdLoaded: (ad) {
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdClicked: (ad) {
-                logger.i('[Ads Request] onAdClicked callback');
+                logger.i('[Ads Manager] onAdClicked callback');
               },
               onAdShowedFullScreenContent: (ad) {
-                logger.i('Showing Ads');
+                logger.i('[Ads Manager] Showing Ads');
               },
               onAdFailedToShowFullScreenContent: (ad, error) {
                 logger.i(
-                    '[Ads Request] onAdFailedToShowFullScreenContent callback');
+                    '[Ads Manager] onAdFailedToShowFullScreenContent callback');
                 //if ads fail to load let user turn on VPN
-                postShowingAds();
+                _postShowingAds();
               },
               onAdDismissedFullScreenContent: (ad) {
-                logger.i('[Ads Request] fullScreenContentCallback callback');
-                postShowingAds();
+                logger.i('[Ads Manager] fullScreenContentCallback callback');
+                _postShowingAds();
               },
             );
             _interstitialAd = ad;
-            logger.i('[Ads Request] to loaded $ad');
+            logger.i('[Ads Manager] to loaded $ad');
           },
           onAdFailedToLoad: (err) {
             _failedLoadAttempts++; // increment the count on failure
-            logger.i('[Ads Request] failed to load $err');
-            postShowingAds();
+            logger.i('[Ads Manager] failed to load $err');
+            _postShowingAds();
           },
         ),
       );
     }
   }
 
-  void postShowingAds() {
-    _interstitialAd?.dispose();
-    _interstitialAd = null;
-    loadInterstitialAd();
+  void _postShowingAds() {
+    if (_currentAdType == AdType.Google) {
+      _interstitialAd?.dispose();
+      _interstitialAd = null;
+      _failedLoadAttempts = 0; // Reset counter for Google Ads
+      logger.i(
+          '[Ads Manager] Post-show: Google Ad displayed. Resetting failed load attempts and requesting a new ad.');
+      _loadInterstitialAd();
+    } else if (_currentAdType == AdType.CAS) {
+      _failedCASLoadAttempts = 0; // Reset counter for CAS Ads
+      logger.i(
+          '[Ads Manager] Post-show: CAS Ad displayed. Resetting failed load attempts and requesting a new ad.');
+      _loadCASInterstitial();
+    }
   }
 
-  Future<void> showAd() async {
+  Future<void> _showInterstitialAd() async {
     if (_interstitialAd != null) {
       await _interstitialAd?.show();
     }
+  }
+
+  // Public methods
+  Future<void> loadAds() async {
+    await _decideAndLoadAds();
+  }
+
+  Future<void> showAds() async {
+    await _decideAndShowAds();
   }
 
   ///CAS initialization and method and listeners
@@ -106,7 +151,6 @@ class AdHelper {
     // CAS.setFlutterVersion("1.20.0");
     await CAS.setAnalyticsCollectionEnabled(true);
     await CAS.validateIntegration();
-
 
     var builder = CAS
         .buildManager()
@@ -119,21 +163,37 @@ class AdHelper {
         .withTestMode(true);
     casMediationManager = builder.initialize();
     // This can be useful when you need to improve application performance by turning off unused formats.
-    casMediationManager!.setEnabled(AdTypeFlags.Interstitial, true);
+    await casMediationManager!.setEnabled(AdTypeFlags.Interstitial, true);
     // await CAS.setTestDeviceIds(['D79728264130CE0918737B5A2178D362']);
+    logger.i('[Ads Manager] Initialization: CAS completed.');
   }
-  Future<void> loadCASInterstitial() async {
+
+  Future<void> _loadCASInterstitial() async {
     if (casMediationManager != null) {
       await casMediationManager!.loadInterstitial();
+      logger.i('[Ads Manager] Request: Initiating CAS Interstitial loading.');
     }
   }
 
-  Future<void> showCASInterstitial() async {
-    if (casMediationManager != null &&
-        (await casMediationManager!.isInterstitialReady())) {
-      await casMediationManager!
-          .showInterstitial(InterstitialListenerWrapper());
-    }
+  Future<void> _showCASInterstitial() async {
+    logger.i('[Ads Manager] Show: Attempting to display CAS Interstitial.');
+    await casMediationManager!.showInterstitial(InterstitialListenerWrapper(
+        onFailed: _onCASAdShowFailed,
+        onClosedOrComplete: _onCASAdClosedOrComplete));
+  }
+
+  void _onCASAdShowFailed() {
+    logger.e('[Ads Manager] Error: CAS Interstitial failed to display.');
+    _failedCASLoadAttempts++;
+    _postShowingAds(); // Reload or decide the next action
+  }
+
+  void _onCASAdClosedOrComplete() {
+    logger.i('[Ads Manager] Completion: CAS Interstitial closed or completed.');
+
+    // Reset the counter when the ad successfully shows and closes/completes
+    _failedCASLoadAttempts = 0;
+    _postShowingAds();
   }
 
   //This method will use used when free user buy Pro version
@@ -150,6 +210,14 @@ class InitializationListenerWrapper extends InitializationListener {
 }
 
 class InterstitialListenerWrapper extends AdCallback {
+  final VoidCallback onFailed;
+  final VoidCallback onClosedOrComplete;
+
+  InterstitialListenerWrapper({
+    required this.onFailed,
+    required this.onClosedOrComplete,
+  });
+
   @override
   void onClicked() {
     logger.i('[CASIntegrationHelper] - InterstitialListenerWrapper onClicked');
@@ -158,14 +226,14 @@ class InterstitialListenerWrapper extends AdCallback {
   @override
   void onClosed() {
     // Called when ad is clicked
-
+    onClosedOrComplete();
     logger.i('[CASIntegrationHelper] - InterstitialListenerWrapper onClosed');
   }
 
   @override
   void onComplete() {
     // Called when ad is dismissed
-
+    onClosedOrComplete();
     logger.i('[CASIntegrationHelper] - InterstitialListenerWrapper onComplete');
   }
 
@@ -180,7 +248,7 @@ class InterstitialListenerWrapper extends AdCallback {
   @override
   void onShowFailed(String? message) {
     // Called when ad fails to show.
-
+    onFailed.call();
     logger.i(
         '[CASIntegrationHelper] - InterstitialListenerWrapper onShowFailed-:$message');
   }
