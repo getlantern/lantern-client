@@ -4,9 +4,7 @@ import 'package:lantern/app.dart';
 import 'package:lantern/catcher_setup.dart';
 import 'package:lantern/common/common.dart';
 
-import 'ad_helper.dart';
 
-// https://github.com/googleads/googleads-mobile-flutter/blob/main/samples/admob/mediation_example/android/app/src/main/java/com/example/mediationexample/MyMediationMethodCallHandler.java
 Future<void> main() async {
   // CI will be true only when running appium test
   var CI = const String.fromEnvironment('CI', defaultValue: 'false');
