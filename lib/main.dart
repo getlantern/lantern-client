@@ -16,7 +16,6 @@ Future<void> main() async {
   }
   WidgetsFlutterBinding.ensureInitialized();
   await _initGoogleMobileAds();
-  await AdHelper().initializeCAS();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   setupCatcherAndRun(LanternApp());
 }
