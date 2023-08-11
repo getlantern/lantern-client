@@ -4,6 +4,7 @@ import 'package:clever_ads_solutions/CAS.dart';
 import 'package:clever_ads_solutions/public/AdCallback.dart';
 import 'package:clever_ads_solutions/public/AdImpression.dart';
 import 'package:clever_ads_solutions/public/AdTypes.dart';
+import 'package:clever_ads_solutions/public/Audience.dart';
 import 'package:clever_ads_solutions/public/ConsentFlow.dart';
 import 'package:clever_ads_solutions/public/InitializationListener.dart';
 import 'package:clever_ads_solutions/public/MediationManager.dart';
@@ -67,9 +68,14 @@ class AdHelper {
   Future<void> _decideAndShowAds() async {
     if (_currentAdType == AdType.Google && _interstitialAd != null) {
       await _showInterstitialAd();
-    } else if (_currentAdType == AdType.CAS &&
-        (await casMediationManager!.isInterstitialReady())) {
-      await _showCASInterstitial();
+    } else if (_currentAdType == AdType.CAS) {
+      final isCASReady = (await casMediationManager!.isInterstitialReady());
+      if (isCASReady) {
+        await _showCASInterstitial();
+        logger.i('[Ads Manager] Request: Showing CAS Ad .');
+      } else {
+        logger.i('[Ads Manager] CAS: Ad is not yet ready to show.');
+      }
     }
   }
 
@@ -154,16 +160,17 @@ class AdHelper {
 
     var builder = CAS
         .buildManager()
-        .withTestMode(true)
-        .withCasId('demo')
+        .withCasId('org.getlantern.lantern')
         .withAdTypes(AdTypeFlags.Interstitial)
         .withInitializationListener(InitializationListenerWrapper())
         .withConsentFlow(
             ConsentFlow(privacyPolicy: 'https://lantern.io/privacy'))
-        .withTestMode(true);
+        .withTestMode(false)
+        .withTestMode(false);
     casMediationManager = builder.initialize();
     // This can be useful when you need to improve application performance by turning off unused formats.
     await casMediationManager!.setEnabled(AdTypeFlags.Interstitial, true);
+    await CAS.setTaggedAudience(Audience.NOT_CHILDREN);
     // await CAS.setTestDeviceIds(['D79728264130CE0918737B5A2178D362']);
     logger.i('[Ads Manager] Initialization: CAS completed.');
   }
@@ -190,7 +197,6 @@ class AdHelper {
 
   void _onCASAdClosedOrComplete() {
     logger.i('[Ads Manager] Completion: CAS Interstitial closed or completed.');
-
     // Reset the counter when the ad successfully shows and closes/completes
     _failedCASLoadAttempts = 0;
     _postShowingAds();

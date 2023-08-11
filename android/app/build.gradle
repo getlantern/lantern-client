@@ -466,6 +466,7 @@ dependencies {
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:messaging-android:1ce4613c8b'
     implementation 'com.github.getlantern:db-android:573aba1458'
+    implementation 'com.cleveradssolutions:cas:3.1.8'
 }
 
 apply plugin: 'com.google.gms.google-services'
