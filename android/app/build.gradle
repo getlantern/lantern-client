@@ -398,10 +398,10 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
-    implementation "androidx.webkit:webkit:1.6.1"
+    implementation "androidx.webkit:webkit:1.7.0"
     implementation 'com.kyleduo.switchbutton:library:2.1.0'
 
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
 
 
     // https://mvnrepository.com/artifact/joda-time/joda-time
@@ -411,17 +411,17 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
 
-    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+
 
     // Google Play libraries
-    implementation 'com.android.billingclient:billing:5.0.0'
+    implementation 'com.android.billingclient:billing:6.0.1'
     implementation 'com.google.android.gms:play-services-base:18.2.0'
 
     // lib that simplifies event bus communication between activities, fragments, threads, services, etc
@@ -445,9 +445,9 @@ dependencies {
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
     kapt "org.androidannotations:androidannotations:$androidAnnotationsVersion"
 
-    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
     androidTestImplementation 'androidx.annotation:annotation:1.6.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -456,7 +456,7 @@ dependencies {
     androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
     androidTestImplementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
 
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
