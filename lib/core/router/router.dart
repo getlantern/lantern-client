@@ -6,8 +6,12 @@ import 'package:lantern/account/device_linking/approve_device.dart';
 import 'package:lantern/account/device_linking/authorize_device_for_pro.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email.dart';
 import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart';
+import 'package:lantern/account/device_linking/link_device.dart';
 import 'package:lantern/account/language.dart';
+import 'package:lantern/account/lantern_desktop.dart';
+import 'package:lantern/account/invite_friends.dart';
 import 'package:lantern/account/recovery_key.dart';
+import 'package:lantern/account/report_issue.dart';
 import 'package:lantern/account/settings.dart';
 import 'package:lantern/account/split_tunneling.dart';
 import 'package:lantern/account/support.dart';
@@ -112,6 +116,38 @@ import 'package:lantern/replica/upload/review.dart';
       page: ApproveDevice,
       name: 'ApproveDevice',
       path: 'approveDevice',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: LinkDevice,
+      name: 'LinkDevice',
+      path: 'linkDevice',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: LanternDesktop,
+      name: 'LanternDesktop',
+      path: 'lanternDesktop',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: InviteFriends,
+      name: 'InviteFriends',
+      path: 'inviteFriends',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute<void>(
+      page: ReportIssue,
+      name: 'ReportIssue',
+      path: 'reportIssue',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

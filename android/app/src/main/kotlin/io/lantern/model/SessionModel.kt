@@ -1,6 +1,8 @@
 package io.lantern.model
 
 import android.app.Activity
+import android.os.AsyncTask
+import android.os.Build
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
@@ -18,19 +20,22 @@ import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
+import org.getlantern.mobilesdk.model.IssueReporter
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
-import org.getlantern.lantern.openHome
-import org.getlantern.lantern.restartApp
+import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.castToBoolean
+import org.getlantern.lantern.util.openHome
+import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
@@ -91,10 +96,12 @@ class SessionModel(
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
+            "requestLinkCode" -> requestLinkCode(result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
+            "reportIssue" -> reportIssue(call.argument("email")!!, call.argument("issue")!!, call.argument("description")!!, result)
             "applyRefCode" -> paymentsUtil.applyRefCode(call.argument("refCode")!!, result)
             "redeemResellerCode" -> paymentsUtil.redeemResellerCode(call.argument("email")!!,
                 call.argument("resellerCode")!!, result)
@@ -134,6 +141,9 @@ class SessionModel(
                     intent.putExtra("url", url)
                     activity.startActivity(intent)
                 }
+            }
+            "acceptTerms" -> {
+                LanternApp.getSession().acceptTerms()
             }
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
@@ -260,6 +270,70 @@ class SessionModel(
         } else if (error.message != null) {
             activity.showErrorDialog(error.message)
         }
+    }
+
+    private fun requestLinkCode(methodCallResult: MethodChannel.Result) {
+        val formBody = FormBody.Builder()
+            .add("deviceName", LanternApp.getSession().deviceName())
+            .build()
+        lanternClient.post(
+            LanternHttpClient.createProUrl("/link-code-request"),
+            formBody,
+            object : ProCallback {
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    if (error == null) {
+                        activity.runOnUiThread {
+                            methodCallResult.error("unknownError", null, null)
+                        }
+                        return
+                    }
+                    val errorId = error.id
+                    activity.runOnUiThread {
+                        methodCallResult.error("linkCodeError", errorId, null)
+                    }
+                }
+
+                override fun onSuccess(response: Response?, result: JsonObject?) {
+                    result?.let {
+                        if (result["code"] == null || result["expireAt"] == null) return
+                        val code = result["code"].asString
+                        val expireAt = result["expireAt"].asLong
+                        LanternApp.getSession().setDeviceCode(code, expireAt)
+                        methodCallResult.success(null)
+                    }
+                }
+            },
+        )
+    }
+
+    private fun redeemLinkCode() {
+        val formBody = FormBody.Builder()
+            .add("code", LanternApp.getSession().deviceCode()!!)
+            .add("deviceName", LanternApp.getSession().deviceName())
+            .build()
+        lanternClient.post(
+            LanternHttpClient.createProUrl("/link-code-request"),
+            formBody,
+            object : ProCallback {
+                override fun onFailure(t: Throwable?, error: ProError?) {
+                    Logger.error(TAG, "Error making link redeem request..", t)
+                }
+
+                override fun onSuccess(response: Response?, result: JsonObject?) {
+                    if (result == null || result["token"] == null || result["userID"] == null) return
+                    Logger.debug(TAG, "Successfully redeemed link code")
+                    val userID = result["userID"].asLong
+                    val token = result["token"].asString
+                    LanternApp.getSession().setUserIdAndToken(userID, token)
+                    LanternApp.getSession().linkDevice()
+                    LanternApp.getSession().setIsProUser(true)
+                    val intent = Intent(activity, MainActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    }
+                    activity.startActivity(intent)
+                }
+            },
+        )
     }
 
     private fun checkEmailExists(emailAddress: String, methodCallResult: MethodChannel.Result) {
@@ -438,6 +512,21 @@ class SessionModel(
                 }
             },
         )
+    }
+
+    private fun reportIssue(email: String, issue: String, description: String, methodCallResult: MethodChannel.Result) {
+        if (!Utils.isNetworkAvailable(activity)) {
+            methodCallResult.error("errorReportingIssue", activity.getString(R.string.no_internet_connection), null)
+            return
+        }
+        Logger.debug(TAG, "Reporting $issue issue on behalf of $email")
+        LanternApp.getSession().setEmail(email)
+        val issueReporter = IssueReporter(
+            activity,
+            issue,
+            description,
+        )
+        issueReporter.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     private fun removeDevice(deviceId: String, methodCallResult: MethodChannel.Result) {

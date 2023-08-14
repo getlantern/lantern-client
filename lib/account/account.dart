@@ -7,11 +7,11 @@ class AccountMenu extends StatelessWidget {
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());
 
-  void inviteFriends() =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_INVITE_FRIEND);
+  void inviteFriends(BuildContext context) async =>
+      await context.pushRoute(InviteFriends());
 
-  void openDesktopVersion() =>
-      LanternNavigator.startScreen(LanternNavigator.SCREEN_DESKTOP_VERSION);
+  void openDesktopVersion(BuildContext context) async =>
+      await context.pushRoute(LanternDesktop());
 
   void openSettings(BuildContext context) => context.pushRoute(Settings());
 
@@ -58,7 +58,9 @@ class AccountMenu extends StatelessWidget {
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
-        onTap: inviteFriends,
+        onTap: () {
+          inviteFriends(context);
+        },
       ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.devices,
@@ -95,7 +97,9 @@ class AccountMenu extends StatelessWidget {
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
-        onTap: inviteFriends,
+        onTap: () {
+          inviteFriends(context);
+        },
       ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.devices,
@@ -111,7 +115,9 @@ class AccountMenu extends StatelessWidget {
       ListItemFactory.settingsItem(
         icon: ImagePaths.desktop,
         content: 'desktop_version'.i18n,
-        onTap: openDesktopVersion,
+        onTap: () {
+          openDesktopVersion(context);
+        },
       ),
       ListItemFactory.settingsItem(
         key: AppKeys.support,

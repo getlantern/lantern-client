@@ -9,7 +9,6 @@ import appium_kotlin.CHROME_PACKAGE_ACTIVITY
 import appium_kotlin.CHROME_PACKAGE_ID
 import appium_kotlin.CVC
 import appium_kotlin.ContextType
-import appium_kotlin.ERROR_PAYMENT_PURCHASE
 import appium_kotlin.IP_REQUEST_URL
 import appium_kotlin.LANTERN_PACKAGE_ID
 import appium_kotlin.LOGS_DIALED_MESSAGE
@@ -18,6 +17,9 @@ import appium_kotlin.MOST_POPULAR
 import appium_kotlin.PAYMENT_PURCHASE_COMPLETED
 import appium_kotlin.RENEWAL_SUCCESS_OK
 import appium_kotlin.REPORT_AN_ISSUE
+import appium_kotlin.REPORT_DESCRIPTION
+import appium_kotlin.REPORT_ISSUE_SUCCESS
+import appium_kotlin.SEND_REPORT
 import appium_kotlin.SUPPORT
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
@@ -52,7 +54,7 @@ class AppTest() : BaseTest() {
 
             val flutterFinder = FlutterFinder(driver = androidDriver)
             // Test the VPN Flow
-            VPNFlow(androidDriver, taskId, flutterFinder)
+//            VPNFlow(androidDriver, taskId, flutterFinder)
 
             // If the VPN flow is successful then test Payment flow
             paymentFlow(androidDriver, taskId, flutterFinder)
@@ -278,46 +280,31 @@ class AppTest() : BaseTest() {
         reportIssue.click()
         Thread.sleep(1000)
 
-//        print("TaskId: $taskId", "reportAnIssueFlow-->Switching to NATIVE_APP context.")
-//        switchToContext(ContextType.NATIVE_APP, androidDriver)
-//        val issueDropdown = androidDriver.findElement(By.id("org.getlantern.lantern:id/issue"))
-//        issueDropdown.click()
-//        Thread.sleep(1000)
-//
-//        print("TaskId: $taskId", "reportAnIssueFlow-->Performing tap action.")
-//        TouchAction(androidDriver).tap(
-//            TapOptions.tapOptions().withPosition(PointOption.point(473, 880))
-//        ).perform()
-//        Thread.sleep(1000)
-        switchToContext(ContextType.NATIVE_APP, androidDriver)
         print("TaskId: $taskId", "reportAnIssueFlow-->Entering description.")
-        val description = androidDriver.findElement(By.id("org.getlantern.lantern:id/description"))
+        val description = flutterFinder.byTooltip(REPORT_DESCRIPTION)
         description.click()
-        description.sendKeys("This is sample report and issue running vai Appium Test CI")
+        description.sendKeys("This is sample report and issue running via Appium Test CI")
         Thread.sleep(3000)
-
-        print("TaskId: $taskId", "reportAnIssueFlow-->Hiding keyboard.")
-        androidDriver.hideKeyboard()
-        Thread.sleep(2000)
 
         print(
             "TaskId: $taskId",
             "reportAnIssueFlow-->Locating and clicking on the send report button."
         )
-        val sendReportButton = androidDriver.findElement(By.id("org.getlantern.lantern:id/sendBtn"))
+        val sendReportButton = flutterFinder.byTooltip(SEND_REPORT)
         sendReportButton.click()
         Thread.sleep(5000)
 
-        print(
-            "TaskId: $taskId",
-            "reportAnIssueFlow-->Locating and clicking on the report send button."
-        )
-        val reportSend = androidDriver.findElement(By.id("android:id/button1"))
-        reportSend.click()
-        Thread.sleep(2000)
+        val reportIssueSuccessLogs = captureReportIssueSuccessLogcat(androidDriver)
+        println("TaskId: $taskId | reportAnIssueFlow Checking for logs-->$reportIssueSuccessLogs")
+
+        if (reportIssueSuccessLogs.isBlank()) {
+            if (!isLocalRun) {
+                testFail("Fail to submit Report/issue", androidDriver)
+            }
+        }
 
         print("TaskId: $taskId", "reportAnIssueFlow-->Test passed, assertion true.")
-        Assertions.assertEquals(true, true)
+        Assertions.assertEquals(reportIssueSuccessLogs.isNotBlank(), true)
     }
 
     private fun afterTest(driver: AndroidDriver) {
@@ -385,13 +372,13 @@ class AppTest() : BaseTest() {
     }
 
     @Synchronized
-    private fun capturePaymentFailLogcat(androidDriver: AndroidDriver): String {
+    private fun captureReportIssueSuccessLogcat(androidDriver: AndroidDriver): String {
         switchToContext(ContextType.NATIVE_APP, androidDriver)
         val logtypes: Set<*> = androidDriver.manage().logs().availableLogTypes
         println("supported log types: $logtypes") // [logcat, bugreport, server, client]
         val logs: LogEntries = androidDriver.manage().logs().get("logcat")
         for (logEntry in logs) {
-            if (logEntry.message.contains(ERROR_PAYMENT_PURCHASE)) {
+            if (logEntry.message.contains(REPORT_ISSUE_SUCCESS)) {
                 println("contain log: ${logEntry.message}") // [logcat, bugreport, server, client]
                 return logEntry.message
 

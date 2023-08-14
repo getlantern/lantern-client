@@ -21,7 +21,7 @@ import io.lantern.messaging.directContactPath
 import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
-import org.getlantern.lantern.restartApp
+import org.getlantern.lantern.util.restartApp
 import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
 import java.io.*
