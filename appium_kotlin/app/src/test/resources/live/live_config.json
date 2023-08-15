@@ -29,8 +29,8 @@
       "platformName": "Android"
     },
     {
-      "appium:deviceName": "Google Pixel 3 XL",
-      "platformVersion": "0.0",
+      "appium:deviceName": "Samsung Galaxy S8 Plus",
+      "platformVersion": "7.0",
       "platformName": "Android"
     }
   ]

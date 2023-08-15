@@ -15,7 +15,6 @@ const val IP_REQUEST_URL = "https://api64.ipify.org"
 const val LOGS_DIALED_MESSAGE = "Successfully dialed via"
 const val ERROR_PAYMENT_PURCHASE = "Error with purchase request"
 const val PAYMENT_PURCHASE_COMPLETED = "org.getlantern.lantern.util.PaymentsUtil: Purchase Completed"
-const val REPORT_ISSUE_SUCCESS = "Report sent successfully"
 
 //Finder Keys
 

@@ -119,53 +119,50 @@ class FullScreenVideoViewerState
           return Stack(
             alignment: Alignment.center,
             children: [
-              if (controller == null)
-                spinner
-              else
-                ValueListenableBuilder(
-                  valueListenable: controller!,
-                  builder: (
-                    BuildContext context,
-                    VideoPlayerValue value,
-                    Widget? child,
-                  ) {
-                    if (!value.isInitialized) {
-                      return spinner;
-                    }
-                    return Stack(
-                      fit: StackFit.passthrough,
-                      alignment: Alignment.bottomCenter,
-                      children: <Widget>[
-                        // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
-                        GestureDetector(
-                          onTap: () {
-                            setState(() => _showPlayButton = !_showPlayButton);
-                            Future.delayed(
-                              defaultTransitionDuration,
-                              () => handleButtonTap(),
-                            );
-                          },
-                          child: AspectRatio(
-                            aspectRatio: controller!.value.aspectRatio,
-                            child: fixRotation
-                                ? Transform.rotate(
-                                    angle: pi,
-                                    child: VideoPlayer(controller!),
-                                  )
-                                : VideoPlayer(controller!),
-                          ),
+              ValueListenableBuilder(
+                valueListenable: controller!,
+                builder: (
+                  BuildContext context,
+                  VideoPlayerValue value,
+                  Widget? child,
+                ) {
+                  if (!value.isInitialized) {
+                    return spinner;
+                  }
+                  return Stack(
+                    fit: StackFit.passthrough,
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      // https://github.com/flutter/plugins/blob/master/packages/video_player/video_player/example/lib/main.dart
+                      GestureDetector(
+                        onTap: () {
+                          setState(() => _showPlayButton = !_showPlayButton);
+                          Future.delayed(
+                            defaultTransitionDuration,
+                            () => handleButtonTap(),
+                          );
+                        },
+                        child: AspectRatio(
+                          aspectRatio: controller!.value.aspectRatio,
+                          child: fixRotation
+                              ? Transform.rotate(
+                                  angle: pi,
+                                  child: VideoPlayer(controller!),
+                                )
+                              : VideoPlayer(controller!),
                         ),
-                        mirrorLTR(
-                          context: context,
-                          child: VideoProgressIndicator(
-                            controller!,
-                            allowScrubbing: true,
-                          ),
+                      ),
+                      mirrorLTR(
+                        context: context,
+                        child: VideoProgressIndicator(
+                          controller!,
+                          allowScrubbing: true,
                         ),
-                      ],
-                    );
-                  },
-                ),
+                      ),
+                    ],
+                  );
+                },
+              ),
               // button goes in main stack
               if (_showPlayButton)
                 PlayButton(
