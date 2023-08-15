@@ -526,7 +526,11 @@ class SessionModel(
             issue,
             description,
         )
-        issueReporter.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            issueReporter.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        } else {
+            issueReporter.execute()
+        }
     }
 
     private fun removeDevice(deviceId: String, methodCallResult: MethodChannel.Result) {

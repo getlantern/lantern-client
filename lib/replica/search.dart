@@ -23,8 +23,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
     with TickerProviderStateMixin {
   late final TabController tabController =
       // Video + Image + Audio + Document + App + News = 6 categories
-      // Update Now We have only 5 Items
-      TabController(length: 5, vsync: this);
+      TabController(length: 6, vsync: this);
   final formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
   late final CustomTextEditingController textEditingController;
   late String searchQuery = widget.currentQuery;

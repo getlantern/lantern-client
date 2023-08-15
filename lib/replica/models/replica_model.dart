@@ -77,7 +77,7 @@ class ReplicaModel extends Model {
   Future<bool> getShowNewBadge() async {
     return methodChannel
         .invokeMethod('get', '/showNewBadge')
-        .then((value) => value ?? false);
+        .then((value) => value);
   }
 
   Future<String> getSearchTerm() async {
