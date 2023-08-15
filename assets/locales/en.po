@@ -143,9 +143,6 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "Language"
 
-msgid "report_issue"
-msgstr "Report an issue"
-
 msgid "select_an_issue"
 msgstr "Please Select an Issue"
 

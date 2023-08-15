@@ -253,12 +253,13 @@ abstract class SessionManager(application: Application) : Session {
 
     fun setUserIdAndToken(userId: Long, token: String?) {
         if (userId == 0L) {
-            Logger.debug(TAG, "Not setting invalid user ID $userId or token $token")
+            Logger.debug(TAG, "Not setting invalid user ID $userId")
             return
         }
         Logger.debug(TAG, "Setting user ID to $userId")
         prefs.edit().putLong(USER_ID, userId).apply()
         if (token != null && !TextUtils.isEmpty(token)) {
+            Logger.debug(TAG, "Setting token to $token")
             prefs.edit().putString(TOKEN, token).apply()
         }
     }

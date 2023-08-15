@@ -3,13 +3,13 @@
 # e2f_tw r5 <tx_e2f_tw_r5@ate2f.com>, 2021
 # 474874f569f96a33809d02f1de71479e_77020aa, 2023
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2023
-# e2f <projects@e2f.com>, 2023
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2023
 # Aki, 2023
+# e2f <projects@e2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Aki, 2023\n"
+"Last-Translator: e2f <projects@e2f.com>, 2023\n"
 "Language-Team: Chinese Traditional (https://app.transifex.com/lantern-1/teams/94371/zh-Hant/)\n"
 "Language: zh-Hant\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -107,6 +107,24 @@ msgstr "升級到 Lantern Pro"
 msgid "Invite Friends"
 msgstr "邀請好友"
 
+msgid "share_lantern_pro"
+msgstr "与朋友分享蓝灯专业版账户！您的朋友在购买蓝灯专业版时，只需顺手填入您的推荐码，您和朋友两人都将额外获赠一个月专业版时长！"
+
+msgid "privacy_disclosure_title"
+msgstr "Lantern 私隱權揭露"
+
+msgid "privacy_disclosure_body"
+msgstr ""
+"Lantern 承諾保護您的私隱。我們希望您瞭解我們收集哪些資訊、不收集哪些資訊，以及我們收集、使用和存儲資訊的方式。我們會解除您的付款資訊與您 "
+"Lantern Pro 帳號的關聯。我們不會收集您的活動記錄，包括不記錄瀏覽歷程記錄、流量目的地、資料內容或 DNS "
+"查詢。我們也不會儲存連線記錄檔，也就是說，您的 IP 位址、與連線時間戳記相關的外送 Lantern 伺服器 IP "
+"位址，或工作階段持續時間。對於某個特定 Lantern Pro 帳號，Lantern 在技術上無法關聯 Lantern 帳號與使用者的真實身份。給定一個"
+" Lantern  IP 位址和精確的時間戳記，Lantern 在技術上無法將此 IP 位址歸入 Lantern 使用者或 Lantern 使用者 IP"
+" 位址。"
+
+msgid "privacy_disclosure_accept"
+msgstr "我接受"
+
 msgid "desktop_version"
 msgstr "桌面版本"
 
@@ -143,8 +161,29 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "語言"
 
-msgid "report_issue"
-msgstr "回報問題"
+msgid "select_an_issue"
+msgstr "請選擇問題"
+
+msgid "enter_description"
+msgstr ""
+
+msgid "cannot_access_blocked_sites"
+msgstr "無法存取已阻止的網站"
+
+msgid "cannot_complete_purchase"
+msgstr "无法完成购买"
+
+msgid "cannot_sign_in"
+msgstr "无法登录"
+
+msgid "spinner_loads_endlessly"
+msgstr "始终在加载中"
+
+msgid "other"
+msgstr "其他"
+
+msgid "issue_description"
+msgstr "問題描述"
 
 msgid "check_for_updates"
 msgstr "檢查更新"
@@ -179,6 +218,18 @@ msgstr "使用連結碼來連結"
 msgid "OR"
 msgstr "或"
 
+msgid "device_linking_pin"
+msgstr "裝置連結碼"
+
+msgid "link_device_step_one"
+msgstr ""
+
+msgid "link_device_step_two"
+msgstr ""
+
+msgid "ensure_most_recent_version_lantern"
+msgstr "*確保兩個裝置都運行最新版本的 Lantern"
+
 msgid "Authorize Device via Email"
 msgstr "透過電子郵件授權裝置"
 
@@ -193,6 +244,33 @@ msgstr "透過電子郵件來連結"
 
 msgid "lantern_pro_email"
 msgstr "Lantern 專業版電子郵件"
+
+msgid "lantern_desktop"
+msgstr "Lantern 桌上型電腦"
+
+msgid "report_issue"
+msgstr ""
+
+msgid "report_an_issue"
+msgstr "回報問題"
+
+msgid "report_sent"
+msgstr "報告已傳送"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr "感謝您回報問題。由於回報事項眾多，我們無法回覆大部分的問題，但我們保證已努力解決問題，根據您所回報的內容改善 Lantern。"
+
+msgid "send_report"
+msgstr "發送報告"
+
+msgid "most_recent_lantern_apps"
+msgstr "可以在上面的連結中找到最新桌面及所有其他平台的 Lantern 應用程式。"
+
+msgid "share_link"
+msgstr ""
+
+msgid "share_title"
+msgstr "分享 Lantern 下載連結"
 
 msgid "email"
 msgstr "電子郵件"
@@ -250,6 +328,12 @@ msgstr "填写电子邮箱地址和激活码"
 
 msgid "referral_code"
 msgstr "推薦代碼"
+
+msgid "share_referral_code"
+msgstr ""
+
+msgid "share_message_referral_code"
+msgstr ""
 
 msgid "add_referral_code"
 msgstr "填入推荐码"
