@@ -19,6 +19,7 @@ import appium_kotlin.PAYMENT_PURCHASE_COMPLETED
 import appium_kotlin.RENEWAL_SUCCESS_OK
 import appium_kotlin.REPORT_AN_ISSUE
 import appium_kotlin.REPORT_DESCRIPTION
+import appium_kotlin.REPORT_ISSUE_SUCCESS
 import appium_kotlin.SEND_REPORT
 import appium_kotlin.SUPPORT
 import io.appium.java_client.TouchAction
@@ -294,8 +295,16 @@ class AppTest() : BaseTest() {
         sendReportButton.click()
         Thread.sleep(5000)
 
+        val reportIssueSuccessLogs = captureReportIssueSuccessLogcat(androidDriver)
+        println("TaskId: $taskId | reportAnIssueFlow Checking for logs-->$reportIssueSuccessLogs")
+
+        if (reportIssueSuccessLogs.isBlank()) {
+            if (!isLocalRun) {
+                testFail("Fail to submit Report/issue", androidDriver)
+            }
+        }
         print("TaskId: $taskId", "reportAnIssueFlow-->Test passed, assertion true.")
-        Assertions.assertEquals(true, true)
+        Assertions.assertEquals(reportIssueSuccessLogs.isNotBlank(), true)
     }
 
     private fun afterTest(driver: AndroidDriver) {
@@ -363,13 +372,13 @@ class AppTest() : BaseTest() {
     }
 
     @Synchronized
-    private fun capturePaymentFailLogcat(androidDriver: AndroidDriver): String {
+    private fun captureReportIssueSuccessLogcat(androidDriver: AndroidDriver): String {
         switchToContext(ContextType.NATIVE_APP, androidDriver)
         val logtypes: Set<*> = androidDriver.manage().logs().availableLogTypes
         println("supported log types: $logtypes") // [logcat, bugreport, server, client]
         val logs: LogEntries = androidDriver.manage().logs().get("logcat")
         for (logEntry in logs) {
-            if (logEntry.message.contains(ERROR_PAYMENT_PURCHASE)) {
+            if (logEntry.message.contains(REPORT_ISSUE_SUCCESS)) {
                 println("contain log: ${logEntry.message}") // [logcat, bugreport, server, client]
                 return logEntry.message
 
@@ -377,6 +386,7 @@ class AppTest() : BaseTest() {
         }
         return ""
     }
+
 
     @Synchronized
     private fun capturePaymentPassLogcat(androidDriver: AndroidDriver): String {
