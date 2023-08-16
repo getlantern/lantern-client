@@ -113,8 +113,6 @@
             </intent-filter>
         </service>
 
-        <service android:enabled="true" android:name=".service.BackgroundChecker_"/>
-
         <receiver android:name=".notification.Notifier"
             android:exported="false"> <!-- since we do specify an intent filter, this receiver will
             be available to other apps by default, which is not what we want. We have to explicitly state that it's private within our app -->
