@@ -88,6 +88,7 @@ class IssueReporter @JvmOverloads constructor(
                 "" + Build.VERSION.SDK_INT + " (" + Build.VERSION.RELEASE + ")"
             )
             onSuccess()
+            Logger.e(TAG, "Report sent successfully:")
             return true
         } catch (e: Exception) {
             Logger.error(TAG, "Error submitting issue report: ", e)
