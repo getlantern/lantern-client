@@ -207,23 +207,24 @@ driver may support this.
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-// skipped constructor Value.NewValue with unsupported parameter or return types
-
+- (nullable instancetype)initBytes:(NSData* _Nullable)val;
+- (nullable instancetype)initInt:(long)val;
+- (nullable instancetype)initString:(NSString* _Nullable)val;
 @property (nonatomic) long type;
-// skipped field Value.String with unsupported type: *string
-
-// skipped field Value.Int with unsupported type: *int
-
-// skipped field Value.Bytes with unsupported type: *[]byte
-
+@property (nonatomic) NSString* _Nonnull string;
+@property (nonatomic) long int_;
+@property (nonatomic) NSString* _Nonnull bytes;
 @end
 
 FOUNDATION_EXPORT const int64_t MinisqlValueTypeBytes;
 FOUNDATION_EXPORT const int64_t MinisqlValueTypeInt;
 FOUNDATION_EXPORT const int64_t MinisqlValueTypeString;
 
-// skipped function NewValue with unsupported parameter or return types
+FOUNDATION_EXPORT MinisqlValue* _Nullable MinisqlNewValueBytes(NSData* _Nullable val);
 
+FOUNDATION_EXPORT MinisqlValue* _Nullable MinisqlNewValueInt(long val);
+
+FOUNDATION_EXPORT MinisqlValue* _Nullable MinisqlNewValueString(NSString* _Nullable val);
 
 // skipped function NewValues with unsupported parameter or return types
 

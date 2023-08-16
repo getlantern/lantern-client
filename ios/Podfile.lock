@@ -62,15 +62,18 @@ PODS:
   - FMDB/standard (2.7.5)
   - integration_test (0.0.1):
     - Flutter
-  - libwebp (1.2.4):
-    - libwebp/demux (= 1.2.4)
-    - libwebp/mux (= 1.2.4)
-    - libwebp/webp (= 1.2.4)
-  - libwebp/demux (1.2.4):
+  - libwebp (1.3.1):
+    - libwebp/demux (= 1.3.1)
+    - libwebp/mux (= 1.3.1)
+    - libwebp/sharpyuv (= 1.3.1)
+    - libwebp/webp (= 1.3.1)
+  - libwebp/demux (1.3.1):
     - libwebp/webp
-  - libwebp/mux (1.2.4):
+  - libwebp/mux (1.3.1):
     - libwebp/demux
-  - libwebp/webp (1.2.4)
+  - libwebp/sharpyuv (1.3.1)
+  - libwebp/webp (1.3.1):
+    - libwebp/sharpyuv
   - MTBBarcodeScanner (5.0.11)
   - package_info_plus (0.4.5):
     - Flutter
@@ -82,9 +85,9 @@ PODS:
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
-  - SDWebImage (5.14.2):
-    - SDWebImage/Core (= 5.14.2)
-  - SDWebImage/Core (5.14.2)
+  - SDWebImage (5.17.0):
+    - SDWebImage/Core (= 5.17.0)
+  - SDWebImage/Core (5.17.0)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -96,7 +99,7 @@ PODS:
   - SQLite.swift (0.12.2):
     - SQLite.swift/standard (= 0.12.2)
   - SQLite.swift/standard (0.12.2)
-  - SwiftyGif (5.4.3)
+  - SwiftyGif (5.4.4)
   - Toast (4.0.0)
   - url_launcher_ios (0.0.1):
     - Flutter
@@ -216,18 +219,18 @@ SPEC CHECKSUMS:
   fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   integration_test: 13825b8a9334a850581300559b8839134b124670
-  libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
+  libwebp: 33dc822fbbf4503668d09f7885bbfedc76c45e96
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
   permission_handler_apple: 8f116445eff3c0e7c65ad60f5fef5490aa94b4e4
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
-  SDWebImage: b9a731e1d6307f44ca703b3976d18c24ca561e84
+  SDWebImage: 750adf017a315a280c60fde706ab1e552a3ae4e9
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SQLite.swift: d2b4642190917051ce6bd1d49aab565fe794eea3
-  SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
+  SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126

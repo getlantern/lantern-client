@@ -212,6 +212,7 @@ class ValueArrayHandler: NSObject, MinisqlValuesProtocol {
     }
     
     func set(_ index: Int, value: MinisqlValue?) {
+        logger.log("ValueUtil Setting value")
         guard index < values.count else {
             print("Error: Index out of bounds while trying to set value.")
             return

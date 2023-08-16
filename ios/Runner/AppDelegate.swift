@@ -46,21 +46,20 @@ import Internalsdk
        }
     
     func setupDbModel() {
-        logger.log("createNewModel called")
         let dbName = "Session"
         do {
             let dbPath = getDatabasePath()
+            logger.log("Model Database path \(dbPath)")
+
             let db = try Connection(dbPath)
             let swiftDB = DatabaseManager(database: db)
             var error: NSError?
             guard let model = InternalsdkNewModel(dbName, swiftDB, &error) else {
                 throw error!
             }
-            let stringValue = ValueUtil.makeValue(from: "test/db")
+           let stringValue = ValueUtil.makeValue(from: "test/db")
             let args = ValueArrayHandler(values: [stringValue])
-            
             let result = try model.invokeMethod("testDbConnection", arguments: args)
-
             let resultValue = ValueUtil.getValue(from: result)
             logger.log("Model Invoke method result converted \(resultValue)")
         } catch {
