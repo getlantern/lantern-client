@@ -4,14 +4,14 @@
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2023
 # Lantern, 2023
 # e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2023
-# e2f <projects@e2f.com>, 2023
-# Alyssa Chung <lisiachung7@gmail.com>, 2023
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2023
+# e2f <projects@e2f.com>, 2023
 # tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2023
+# Alyssa Chung <lisiachung7@gmail.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2023\n"
+"Last-Translator: Alyssa Chung <lisiachung7@gmail.com>, 2023\n"
 "Language-Team: Malay (https://app.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -119,6 +119,34 @@ msgstr "Upgrade ke Lantern Pro"
 msgid "Invite Friends"
 msgstr "Menjemput Rakan-Rakan"
 
+msgid "share_lantern_pro"
+msgstr ""
+"Kongsikan Lantern Pro dengan rakan! Apabila rakan anda menggunakan kod "
+"rujukan semasa pembelian Lantern Pro mereka, anda berdua akan menerima "
+"perkhidmatan percuma Lantern Pro selama sebulan!"
+
+msgid "privacy_disclosure_title"
+msgstr "Pendedahan Privasi Lantern"
+
+msgid "privacy_disclosure_body"
+msgstr ""
+"Lantern komited untuk melindungi privasi anda. Kami ingin anda memahami "
+"maklumat yang kami kumpulkan, maklumat yang tidak kami kumpulkan dan cara "
+"kami mengumpulkan, menggunakan dan menyimpan maklumat. Kami memisahkan "
+"maklumat pembayaran anda dengan akaun Lantern Pro anda. Kami tidak "
+"mengumpulkan log aktiviti anda, termasuk tidak mencatat sejarah penyemakan "
+"imbas, destinasi trafik, kandungan data atau pertanyaan DNS. Kami juga tidak"
+" pernah menyimpan log sambungan, yang bermaksud tidak ada log alamat IP "
+"anda, alamat IP pelayan Lantern keluar anda yang dikaitkan dengan cap waktu "
+"sambungan, atau tempoh sesi. Disebabkan akaun Lantern Pro yang tertentu, "
+"secara teknikal, Lantern tidak dapat mengaitkan akaun Lantern dengan "
+"identiti sebenar pengguna. Disebabkan alamat IP Lantern dan cap waktu yang "
+"tepat, Lantern secara teknikal tidak dapat menghubungkan alamat IP ini "
+"kepada pengguna Lantern atau alamat IP pengguna Lantern."
+
+msgid "privacy_disclosure_accept"
+msgstr "Saya terima"
+
 msgid "desktop_version"
 msgstr "Versi Desktop"
 
@@ -155,8 +183,29 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "Bahasa"
 
-msgid "report_issue"
-msgstr "Laporkan isu"
+msgid "select_an_issue"
+msgstr "Sila Pilih satu Isu"
+
+msgid "enter_description"
+msgstr ""
+
+msgid "cannot_access_blocked_sites"
+msgstr "Tidak boleh akses laman-laman disekat"
+
+msgid "cannot_complete_purchase"
+msgstr "Tidak dapat melengkapkan pembelian"
+
+msgid "cannot_sign_in"
+msgstr "Tidak boleh mendaftar masuk"
+
+msgid "spinner_loads_endlessly"
+msgstr "Pemutar dimuatkan tanpa henti"
+
+msgid "other"
+msgstr "Lain-lain"
+
+msgid "issue_description"
+msgstr "Penerangan Isu"
 
 msgid "check_for_updates"
 msgstr "Semak kemas kini"
@@ -194,6 +243,18 @@ msgstr "Pautkan dengan PIN"
 msgid "OR"
 msgstr "ATAU"
 
+msgid "device_linking_pin"
+msgstr "Pin pemautan peranti"
+
+msgid "link_device_step_one"
+msgstr ""
+
+msgid "link_device_step_two"
+msgstr ""
+
+msgid "ensure_most_recent_version_lantern"
+msgstr "* Pastikan kedua-dua peranti menjalankan versi terbaru Lantern"
+
 msgid "Authorize Device via Email"
 msgstr "Berikan Kebenaran kepada Peranti melalui E-mel"
 
@@ -209,6 +270,37 @@ msgstr "Pautkan melalui E-mel"
 
 msgid "lantern_pro_email"
 msgstr "E-mel Pro Lantern"
+
+msgid "lantern_desktop"
+msgstr "Desktop Lantern"
+
+msgid "report_issue"
+msgstr ""
+
+msgid "report_an_issue"
+msgstr "Melapor suatu Isu"
+
+msgid "report_sent"
+msgstr "Laporan Dihantar"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr ""
+"Terima kasih kerana melaporkan isu anda, kami akan menghubungi anda melalui "
+"E-mel secepat mungkin"
+
+msgid "send_report"
+msgstr "Hantar Laporan"
+
+msgid "most_recent_lantern_apps"
+msgstr ""
+"Aplikasi Lantern terbaru untuk desktop dan semua platform lain boleh "
+"didapati di pautan di atas."
+
+msgid "share_link"
+msgstr ""
+
+msgid "share_title"
+msgstr "Kongsikan pautan muat turun Lantern"
 
 msgid "email"
 msgstr "Emel"
@@ -266,6 +358,12 @@ msgstr "Masukkan E-mel dan kod Pengaktifan"
 
 msgid "referral_code"
 msgstr "Kod rujukan"
+
+msgid "share_referral_code"
+msgstr ""
+
+msgid "share_message_referral_code"
+msgstr ""
 
 msgid "add_referral_code"
 msgstr "Tambah kod Rujukan"

@@ -3,6 +3,7 @@ import 'package:lantern/common/common.dart';
 
 bool isEmpty(value) => value == null || value == '';
 
+@RoutePage<void>(name: 'ReportIssue')
 class ReportIssue extends StatefulWidget {
   ReportIssue({
     Key? key,

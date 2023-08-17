@@ -1,6 +1,7 @@
 import 'package:lantern/common/common.dart';
 import 'explanation_step.dart';
 
+@RoutePage<void>(name: 'ApproveDevice')
 class ApproveDevice extends StatelessWidget {
   ApproveDevice({Key? key}) : super(key: key);
 

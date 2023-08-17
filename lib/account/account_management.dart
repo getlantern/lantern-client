@@ -1,5 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
 
+@RoutePage<void>(name: 'AccountManagement')
 class AccountManagement extends StatefulWidget {
   AccountManagement({Key? key, required this.isPro}) : super(key: key);
   final bool isPro;
