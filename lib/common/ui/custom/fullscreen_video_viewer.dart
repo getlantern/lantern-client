@@ -119,6 +119,9 @@ class FullScreenVideoViewerState
           return Stack(
             alignment: Alignment.center,
             children: [
+              if (controller == null)
+                spinner
+              else
               ValueListenableBuilder(
                 valueListenable: controller!,
                 builder: (

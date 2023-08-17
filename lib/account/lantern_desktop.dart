@@ -4,7 +4,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 const SHARE_LINK = 'https://github.com/getlantern/lantern';
 
+@RoutePage<void>(name: 'LanternDesktop')
 class LanternDesktop extends StatelessWidget {
+  const LanternDesktop({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
@@ -13,8 +16,8 @@ class LanternDesktop extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.only(top: 24, bottom: 32),
+          const Padding(
+            padding: EdgeInsetsDirectional.only(top: 24, bottom: 32),
             child: CAssetImage(path: ImagePaths.lantern_desktop, size: 136),
           ),
           InkWell(

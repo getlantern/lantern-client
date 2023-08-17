@@ -71,7 +71,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun getPaymentProvider(): String? {
-        return prefs.getString(USER_PAYMENT_GATEWAY, "paymentwall")
+        return prefs.getString(USER_PAYMENT_GATEWAY, "stripe")
     }
 
     fun setSignature(sig: String?) {

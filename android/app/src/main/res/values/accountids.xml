@@ -1,6 +1,0 @@
-<resources>
-    <string name="pw_project_key">467e0f982bcdafa35a7a51b34278a985</string>
-    <string name="pw_secret_key"></string>
-    <string name="pw_staging_project_key">7eb753422801802e2e7c5cbc43fbf237</string>
-    <string name="pw_staging_secret_key"></string>
-</resources>

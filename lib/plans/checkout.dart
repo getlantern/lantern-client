@@ -4,6 +4,7 @@ import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
 
+@RoutePage(name: 'Checkout')
 class Checkout extends StatefulWidget {
   final Plan plan;
   final bool isPro;

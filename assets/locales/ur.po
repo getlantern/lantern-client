@@ -1,13 +1,13 @@
 # 
 # Translators:
 # tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2023
-# Diversity83 83, 2023
 # e2f <projects@e2f.com>, 2023
 # tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2023
+# Diversity83 83, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2023\n"
+"Last-Translator: Diversity83 83, 2023\n"
 "Language-Team: Urdu (https://app.transifex.com/lantern-1/teams/94371/ur/)\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -116,6 +116,33 @@ msgstr "لینٹرن پرو پر اَپ گریڈ کیجئے"
 msgid "Invite Friends"
 msgstr "دوستوں کو مدعو کیجئے"
 
+msgid "share_lantern_pro"
+msgstr ""
+"Lantern Pro کو دوست کے ساتھ شیئر کریں! آپ کے دوست کی جانب سے Lantern Pro کی "
+"خریداری کے دوران آپ کا ریفرل کوڈ استعمال کرنے پر، آپ دونوں ایک ماہ کے لیے "
+"Lantern Pro سروس مفت حاصل کریں گے!"
+
+msgid "privacy_disclosure_title"
+msgstr "لینٹرن کی رازداری کا اعلان"
+
+msgid "privacy_disclosure_body"
+msgstr ""
+"لینٹرن آپ کی رازداری کے تحفظ کے لئے پرعزم ہے۔ ہم چاہتے ہیں کہ آپ یہ سمجھیں "
+"کہ ہم کون سی معلومات اکٹھا کرتے ہیں، کیا اکٹھا نہیں کرتے، اور ہم معلومات کو "
+"کس طرح اکٹھا، استعمال اور اسٹور کرتے ہیں۔ ہم آپ کے لینٹرن پرو اکاؤنٹ سے آپ "
+"کی ادائیگی کی معلومات کو الگ کردیں۔ ہم آپ کی سرگرمی کے لاگز، بشمول براؤزنگ "
+"کی سرگزشت، ٹریفک کی منزل، ڈیٹا کے مشمولات، یا DNS استفسارات اکٹھا نہیں کرتے "
+"ہیں۔ ہم کبھی بھی کنیکشن لاگز کو اسٹور نہیں کرتے ہیں، یعنی آپ کے IP ایڈریس کی"
+" کوئی لاگز ، آپ کا باہر جانے والا لینٹرن سرور IP ایڈریس جو کنکشن ٹائم "
+"اسٹیمپ، یا سیشن کے دورانیے کے ساتھ وابستہ ہے۔ جہاں تک مخصوص لینٹرن پرو "
+"اکاؤنٹ کا سوال ہے تو، لینٹرن تکنیکی طور پر لینٹرن اکاؤنٹ کو صارف کی اصل "
+"شناخت کے ساتھ منسلک کرنے سے قاصر ہے۔ صرف لینٹرن کا IP ایڈریس اور ایک مختصر "
+"ٹائم اسٹیمپ دیئے جانے کے سبب، لینٹرن تکنیکی طور پر اس IP پتے کو کسی لینٹرن "
+"صارف یا کسی لینٹرن صارف کے IP پتے سے منسوب کرنے سے قاصر ہے۔"
+
+msgid "privacy_disclosure_accept"
+msgstr "مجھے قبول ہے"
+
 msgid "desktop_version"
 msgstr "ڈیسک ٹاپ ورژن"
 
@@ -152,8 +179,29 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "زبان"
 
-msgid "report_issue"
-msgstr "مسئلہ کو رپورٹ کریں"
+msgid "select_an_issue"
+msgstr "برائے مہربانی ایک مسئلے کا انتخاب کیجئے"
+
+msgid "enter_description"
+msgstr ""
+
+msgid "cannot_access_blocked_sites"
+msgstr "بلاک سائٹس تک رسائی ممکن نہیں "
+
+msgid "cannot_complete_purchase"
+msgstr "خریداری مکمل نہیں کر سکتے"
+
+msgid "cannot_sign_in"
+msgstr "سائن ان نہیں کر سکتے"
+
+msgid "spinner_loads_endlessly"
+msgstr "اسپنر لا محدود طور پر لوڈ کرتا ہے"
+
+msgid "other"
+msgstr "دوسرے"
+
+msgid "issue_description"
+msgstr "مسئلہ کی تفصیل"
 
 msgid "check_for_updates"
 msgstr "اپ ڈیٹس کے لیے پڑتال کریں"
@@ -190,6 +238,19 @@ msgstr "PIN کے ساتھ لنک کریں"
 msgid "OR"
 msgstr "یا"
 
+msgid "device_linking_pin"
+msgstr "ڈیوائس لنکنگ پن"
+
+msgid "link_device_step_one"
+msgstr ""
+
+msgid "link_device_step_two"
+msgstr ""
+
+msgid "ensure_most_recent_version_lantern"
+msgstr ""
+"* اس بات کو یقینی بنائیں کہ دونوں ڈیوائسز پر لینٹرن کا حالیہ ورژن چل رہا ہے"
+
 msgid "Authorize Device via Email"
 msgstr "ای میل کے ذریعہ آلہ کو اجازت دیں"
 
@@ -206,6 +267,38 @@ msgstr "ای میل کے ذریعہ لنک"
 
 msgid "lantern_pro_email"
 msgstr "Lantern پرو ای میل"
+
+msgid "lantern_desktop"
+msgstr "لینٹرن ڈیسک ٹاپ"
+
+msgid "report_issue"
+msgstr ""
+
+msgid "report_an_issue"
+msgstr "مسئلہ رپورٹ کیجئے"
+
+msgid "report_sent"
+msgstr "رپورٹ بھیج دی گئی"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr ""
+"اپنے مسئلے کو رپورٹ کرنے کا شکریہ۔ کثیر تعداد کے سبب، ہم زیادہ تر مسائل کا "
+"جواب نہیں دے سکتے، لیکن ہم آپ کو یقین دلاتے ہیں کہ ہم آپ کی رپورٹس کی بنیاد "
+"پر Lantern کو بہتر بنانے کے لیے پوری طرح کوشاں ہیں۔"
+
+msgid "send_report"
+msgstr "رپورٹ بھیجیں"
+
+msgid "most_recent_lantern_apps"
+msgstr ""
+"ڈیسک ٹاپ اور دیگر تمام پلیٹ فارمز کے لیے حالیہ ترین لینٹرن ایپس اوپر کے لنک "
+"پر مل سکتی ہیں۔"
+
+msgid "share_link"
+msgstr ""
+
+msgid "share_title"
+msgstr "لینٹرن ڈاؤن لوڈ کا لنک شیئر کریں"
 
 msgid "email"
 msgstr "ای میل"
@@ -265,6 +358,12 @@ msgstr "ای میل اور فعالیتی کوڈ درج کریں"
 
 msgid "referral_code"
 msgstr "حوالہ کوڈ"
+
+msgid "share_referral_code"
+msgstr ""
+
+msgid "share_message_referral_code"
+msgstr ""
 
 msgid "add_referral_code"
 msgstr "ریفرل کوڈ شامل کریں"
