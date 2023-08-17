@@ -10,7 +10,6 @@ import Internalsdk
 import SQLite
 
 
-
 class ValueUtil {
     // Define the types constants
     static let TYPE_BYTES = 0
@@ -19,13 +18,15 @@ class ValueUtil {
     
     static func makeValue(from anyValue: Any) -> MinisqlValue {
         let value: MinisqlValue!
+        
         switch anyValue {
         case is String:
-            value = MinisqlValue(string: anyValue as! String)
+//            value = MinisqlValue(string: anyValue as! String)
+            value = MinisqlNewValueString(anyValue as! String)
         case is Int:
-            value = MinisqlValue(int: anyValue as! Int)
+            value =  MinisqlNewValueInt(anyValue as! Int)
         case is UInt8:
-            value = MinisqlValue(bytes: anyValue as! Data)
+            value =   MinisqlNewValueBytes(anyValue as! Data)
         default:
             fatalError("Unsupported type")
         }
@@ -35,11 +36,11 @@ class ValueUtil {
     static func getValue(from internalsdkValue: MinisqlValue) -> Any {
         switch internalsdkValue.type {
         case TYPE_STRING:
-            return internalsdkValue.string
+            return internalsdkValue.string()
         case TYPE_INT:
-            return Int(internalsdkValue.int_)
+            return Int(internalsdkValue.int_() as Int)
         case TYPE_BYTES:
-            return internalsdkValue.bytes
+            return internalsdkValue.bytes()
         default:
             fatalError("Unsupported type")
         }
@@ -54,11 +55,11 @@ class ValueUtil {
             }
             switch arg.type {
             case TYPE_STRING:
-                bindings.append(arg.string)
+                bindings.append(arg.string())
             case TYPE_INT:
-                bindings.append(arg.int_)
+                bindings.append(arg.int_())
             case TYPE_BYTES:
-                bindings.append(arg.bytes)
+                bindings.append(arg.string())
             default:
                 bindings.append(nil)
             }

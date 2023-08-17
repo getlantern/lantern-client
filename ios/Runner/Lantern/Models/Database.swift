@@ -42,6 +42,7 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
     }
     
     func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
+        let qu = "SELECT value FROM LANTERN_data WHERE path = path"
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
         }
@@ -54,7 +55,7 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
         try statement.run(bindings).forEach { row in
             rows.append(row)
         }
-        
+        logger.log("Database manner query result \(rows)")
         return RowData(rows: rows)
     }
  
@@ -70,7 +71,7 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
     }
     
     private func begin() throws {
-        savepointName = "Savepoint\(Date().timeIntervalSince1970)"
+        savepointName = "Savepoint\(Date.currentTimeStamp)"
         if let savepointName = savepointName {
             try database.run("SAVEPOINT \(savepointName)")
         }
@@ -97,6 +98,8 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
      }
     
     func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
+        logger.log("TransactionManager manner exec called")
+
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])        }
         
@@ -113,6 +116,8 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
     }
     
     func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
+        logger.log("TransactionManager query exec called with query \(query)")
+
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])        }
         
@@ -129,6 +134,7 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
         for row in try statement.run(bindings) {
             rows.append(row)
         }
+    
         return RowData(rows: rows)
     }
 }
@@ -165,7 +171,6 @@ class RowData: NSObject, MinisqlRowsProtocol {
 
     func next() -> Bool {
         if currentIndex < rows.count {
-            currentIndex += 1
             return true
         }
         return false
@@ -178,14 +183,20 @@ class RowData: NSObject, MinisqlRowsProtocol {
      - Note: This method updates `currentIndex` to point to the next row. If there are no more rows, `next()` will return `false`.
     */
     func scan(_ values: MinisqlValuesProtocol?) throws {
-        guard let values = values, currentIndex < rows.count else {
-            throw NSError(domain: "", code: 0, userInfo: nil) // Or some more meaningful error
+        logger.log("SCAN method called with \(values) with rowcount \(rows.count)")
+        if values == nil {
+            logger.log("Error: values is nil")
+            throw NSError(domain: "Scan method failed", code: 0, userInfo: [NSLocalizedDescriptionKey: "Values object is nil"])
         }
-        let currentRow = rows[currentIndex]
+        if currentIndex >= rows.count {
+            logger.log("Error: currentIndex \(currentIndex) is out of bounds")
+            throw NSError(domain: "Scan method failed", code: 0, userInfo: [NSLocalizedDescriptionKey: "Current index is out of bounds"])
+        }
+      let currentRow = rows[currentIndex]
         for (index, value) in currentRow.enumerated() {
            let miniSqlValue = ValueUtil.makeValue(from: value)
             // Set the value in the 'values' object
-            values.set(index, value: miniSqlValue)
+            values?.set(index, value: miniSqlValue)
         }
     }
 
@@ -224,5 +235,10 @@ class ValueArrayHandler: NSObject, MinisqlValuesProtocol {
         }
         
         values[index] = value
+    }
+}
+extension Date {
+    static var currentTimeStamp: Int64{
+        return Int64(Date().timeIntervalSince1970 * 1000)
     }
 }

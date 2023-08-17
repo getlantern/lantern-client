@@ -207,24 +207,32 @@ driver may support this.
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (nullable instancetype)initBytes:(NSData* _Nullable)val;
-- (nullable instancetype)initInt:(long)val;
-- (nullable instancetype)initString:(NSString* _Nullable)val;
+// skipped constructor Value.NewValue with unsupported parameter or return types
+
+- (nullable instancetype)initBytes:(NSData* _Nullable)i;
+- (nullable instancetype)initInt:(long)i;
+- (nullable instancetype)initString:(NSString* _Nullable)i;
 @property (nonatomic) long type;
-@property (nonatomic) NSString* _Nonnull string;
-@property (nonatomic) long int_;
-@property (nonatomic) NSString* _Nonnull bytes;
+- (NSData* _Nullable)bytes;
+- (long)int_;
+- (void)setBytes:(NSData* _Nullable)b;
+- (void)setInt:(long)i;
+- (void)setString:(NSString* _Nullable)s;
+- (NSString* _Nonnull)string;
 @end
 
 FOUNDATION_EXPORT const int64_t MinisqlValueTypeBytes;
 FOUNDATION_EXPORT const int64_t MinisqlValueTypeInt;
 FOUNDATION_EXPORT const int64_t MinisqlValueTypeString;
 
-FOUNDATION_EXPORT MinisqlValue* _Nullable MinisqlNewValueBytes(NSData* _Nullable val);
+// skipped function NewValue with unsupported parameter or return types
 
-FOUNDATION_EXPORT MinisqlValue* _Nullable MinisqlNewValueInt(long val);
 
-FOUNDATION_EXPORT MinisqlValue* _Nullable MinisqlNewValueString(NSString* _Nullable val);
+FOUNDATION_EXPORT MinisqlValue* _Nullable MinisqlNewValueBytes(NSData* _Nullable i);
+
+FOUNDATION_EXPORT MinisqlValue* _Nullable MinisqlNewValueInt(long i);
+
+FOUNDATION_EXPORT MinisqlValue* _Nullable MinisqlNewValueString(NSString* _Nullable i);
 
 // skipped function NewValues with unsupported parameter or return types
 

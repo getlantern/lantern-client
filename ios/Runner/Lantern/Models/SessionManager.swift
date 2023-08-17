@@ -5,28 +5,11 @@
 //  Created by jigar fumakiya on 31/07/23.
 //
 //
-//import Foundation
-//import Internalsdk
-//import SQLite
-//
+import Foundation
+import Internalsdk
+import SQLite
+
 //class SessionManager: NSObject, InternalsdkSessionProtocol {
-//    static let shared = SessionManager()
-//    let db: DatabaseManager
-//
-//    private override init() {
-//        // Get the database path
-//        let dbPath = getDatabasePath()
-//        do {
-//            // Attempt to create the connection and the DatabaseManager
-//            let dbConnection = try Connection(dbPath)
-//            let swiftDB = DatabaseManager(database: dbConnection)
-//            self.db = swiftDB
-//        } catch {
-//            // Handle the error or fail gracefully
-//            fatalError("Unable to create the database connection: \(error)")
-//        }
-//    }
-//    
 //    
 //    func bandwidthUpdate(_ p0: Int, p1: Int, p2: Int, p3: Int) throws {
 //        
@@ -134,10 +117,6 @@
 //    
 //    
 //    
-//    func getDatabasePath() -> String {
-//        let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-//        let fileURL = documentDirectory.appendingPathComponent("LANTERN").appendingPathExtension("sqlite3")
-//        return fileURL.path
-//    }
+//    
 //    
 //}

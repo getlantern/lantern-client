@@ -26,10 +26,11 @@ import Internalsdk
         setupModels()
         prepareChannel()
         setupEventChannel()
-        setupDbModel()
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
+    
+    
     
     private func setupModels(){
         logger.log("setupModels method called")
@@ -37,34 +38,18 @@ import Internalsdk
         sessionModel=SessionModel(flutterBinary: flutterbinaryMessenger)
         //Init Session Model
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
-    }
-    
-    func getDatabasePath() -> String {
-           let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-           let fileURL = documentDirectory.appendingPathComponent("LANTERN").appendingPathExtension("sqlite3")
-           return fileURL.path
-       }
-    
-    func setupDbModel() {
-        let dbName = "Session"
-        do {
-            let dbPath = getDatabasePath()
-            logger.log("Model Database path \(dbPath)")
-
-            let db = try Connection(dbPath)
-            let swiftDB = DatabaseManager(database: db)
-            var error: NSError?
-            guard let model = InternalsdkNewModel(dbName, swiftDB, &error) else {
-                throw error!
-            }
-           let stringValue = ValueUtil.makeValue(from: "test/db")
-            let args = ValueArrayHandler(values: [stringValue])
-            let result = try model.invokeMethod("testDbConnection", arguments: args)
-            let resultValue = ValueUtil.getValue(from: result)
-            logger.log("Model Invoke method result converted \(resultValue)")
-        } catch {
-            logger.log("Failed to create new model: \(error)")
-        }
+        //Init Database Model
+        let pathName = "/samplepath"
+        var db = BaseDatabase(modelName: "LANTERN")
+        var minSqlvalues = ValueUtil.makeValue(from: "Hello world")
+        var converToValues = ValueArrayHandler(values: [minSqlvalues])
+        // Put
+        db.put(path: pathName, values: converToValues, fullText: nil)
+        sleep(7)
+        //Get
+        var getData = db.get(path: pathName)
+        logger.log("setupModels get data from DB \(getData)")
+        
     }
     
     
@@ -90,17 +75,17 @@ import Internalsdk
         }
     }
     
-  
+    
     func setupEventChannel(){
-        goEventHandler.setReceiveStream(self)
-        goEventHandler.invoke(onListen: " From Swift")
-        goEventHandler.invoke(onListen: " From Flutter")
-        goEventHandler.invoke(onListen: " From A")
-        goEventHandler.invoke(onListen: " From B")
+        //        goEventHandler.setReceiveStream(self)
+        //        goEventHandler.invoke(onListen: " From Swift")
+        //        goEventHandler.invoke(onListen: " From Flutter")
+        //        goEventHandler.invoke(onListen: " From A")
+        //        goEventHandler.invoke(onListen: " From B")
     }
     
     func onDataReceived(_ data: String?) {
-        logger.log("GoEventHandler onDataReceived with \( data) ")
+//        logger.log("GoEventHandler onDataReceived with \( data) ")
     }
     
 }
