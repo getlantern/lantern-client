@@ -5,7 +5,6 @@ import Internalsdk
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate, InternalsdkReceiveStreamProtocol {
-    
     // List of channel and event method names
     let NAVIGATION_METHOED_CHANNEL="lantern_method_channel"
     
@@ -25,12 +24,10 @@ import Internalsdk
         flutterbinaryMessenger=controller.binaryMessenger
         setupModels()
         prepareChannel()
-        setupEventChannel()
+//        setupEventChannel()
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
-    
-    
     
     private func setupModels(){
         logger.log("setupModels method called")
@@ -39,16 +36,16 @@ import Internalsdk
         //Init Session Model
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
         //Init Database Model
-        let pathName = "/samplepath"
-        var db = BaseDatabase(modelName: "LANTERN")
-        var minSqlvalues = ValueUtil.makeValue(from: "Hello world")
-        var converToValues = ValueArrayHandler(values: [minSqlvalues])
-        // Put
-        db.put(path: pathName, values: converToValues, fullText: nil)
-        sleep(7)
-        //Get
-        var getData = db.get(path: pathName)
-        logger.log("setupModels get data from DB \(getData)")
+//        let pathName = "/samplepath"
+//        var db = BaseDatabase(modelName: "LANTERN")
+//        var minSqlvalues = ValueUtil.makeValue(from: "Hello world")
+//        var converToValues = ValueArrayHandler(values: [minSqlvalues])
+//        // Put
+//        db.put(path: pathName, values: converToValues, fullText: nil)
+//        sleep(7)
+//        //Get
+//        var getData = db.get(path: pathName)
+//        logger.log("setupModels get data from DB \(getData)")
         
     }
     

@@ -83,10 +83,10 @@
 @end
 
 @protocol InternalsdkModel <NSObject>
-- (BOOL)delete:(NSString* _Nullable)path ret0_:(BOOL* _Nullable)ret0_ error:(NSError* _Nullable* _Nullable)error;
-- (NSData* _Nullable)get:(NSString* _Nullable)p0 error:(NSError* _Nullable* _Nullable)error;
 - (MinisqlValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
-- (BOOL)put:(NSString* _Nullable)path value:(id<MinisqlValues> _Nullable)value fullText:(NSString* _Nullable)fullText ret0_:(BOOL* _Nullable)ret0_ error:(NSError* _Nullable* _Nullable)error;
+// skipped method Model.Subscribe with unsupported parameter or return types
+
+- (BOOL)unsubscribe:(NSString* _Nullable)id_ error:(NSError* _Nullable* _Nullable)error;
 @end
 
 @protocol InternalsdkReceiveStream <NSObject>
@@ -457,10 +457,10 @@ event there's an error sending an email
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (BOOL)delete:(NSString* _Nullable)path ret0_:(BOOL* _Nullable)ret0_ error:(NSError* _Nullable* _Nullable)error;
-- (NSData* _Nullable)get:(NSString* _Nullable)p0 error:(NSError* _Nullable* _Nullable)error;
 - (MinisqlValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
-- (BOOL)put:(NSString* _Nullable)path value:(id<MinisqlValues> _Nullable)value fullText:(NSString* _Nullable)fullText ret0_:(BOOL* _Nullable)ret0_ error:(NSError* _Nullable* _Nullable)error;
+// skipped method Model.Subscribe with unsupported parameter or return types
+
+- (BOOL)unsubscribe:(NSString* _Nullable)id_ error:(NSError* _Nullable* _Nullable)error;
 @end
 
 @interface InternalsdkReceiveStream : NSObject <goSeqRefInterface, InternalsdkReceiveStream> {

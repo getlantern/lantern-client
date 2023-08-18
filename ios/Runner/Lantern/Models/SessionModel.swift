@@ -9,7 +9,7 @@ import Foundation
 import Internalsdk
 import Flutter
 
-class SessionModel:NSObject, FlutterStreamHandler,InternalsdkReceiveStreamProtocol {
+class SessionModel:BaseModel, FlutterStreamHandler,InternalsdkReceiveStreamProtocol {
     
     let SESSION_METHOD_CHANNEL="session_method_channel"
     let SESSION_EVENT_CHANNEL="session_event_channel"
@@ -20,8 +20,9 @@ class SessionModel:NSObject, FlutterStreamHandler,InternalsdkReceiveStreamProtoc
     let internalSessioModelChannel=InternalsdkSessionModelChannel()!
     let internalSessioEventChannel = InternalsdkEventChannel("session_event_channel")!
     var activeSinks: FlutterEventSink?
-
+    var asyncHandler: DispatchQueue = DispatchQueue(label: "SessionModelasyncHandlerQueue")
     
+
     init(flutterBinary:FlutterBinaryMessenger) {
         self.flutterbinaryMessenger=flutterBinary
         super.init()
@@ -50,30 +51,32 @@ class SessionModel:NSObject, FlutterStreamHandler,InternalsdkReceiveStreamProtoc
         // Handle your method calls here
         // The 'call' contains the method name and arguments
         // The 'result' can be used to send back the data to Flutter
+        asyncHandler.async {
+            self.doMethodCall(call: call, result: result)
+        }
         
-        switch call.method {
-        case "SayHiMethodCall":
-            do {
-                let goResult = try invokeMethodOnGo(name: call.method, argument: "Hi")
-                result(goResult)
-            } catch {
+    }
+
+    
+    func doMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        do {
+            let goResult = try invokeMethodOnGo(name: call.method, argument: call.arguments)
+            
+            result(goResult)
+        } catch let error as NSError {
+            switch (error.domain, error.localizedDescription) {
+            case ("GoError", "unknown method"):
+                result(FlutterMethodNotImplemented)
+            default:
                 result(FlutterError(code: "ERROR", message: error.localizedDescription, details: nil))
             }
-            break
-        default:
-            result(FlutterMethodNotImplemented)
         }
     }
-    
-    
-    //Mark :- GO method channel callback
-    func invokeMethodOnGo(name: String, argument: String) throws -> String {
-        var error: NSError?
-        let result = internalSessioModelChannel.invokeMethod(name, argument: argument, error: &error)
-        if let error = error {
-            logger.log("Error invoking method \(name) on channel SessionModel with argument \(argument): \(error)")
-            throw error
-        }
+     
+    func invokeMethodOnGo(name: String, argument: Any) throws -> Any {
+        //Convert any argument to Minisql values
+        
+        let result = try model.invokeMethod(name, arguments: argument as? MinisqlValuesProtocol)
         return result
     }
     
@@ -81,7 +84,5 @@ class SessionModel:NSObject, FlutterStreamHandler,InternalsdkReceiveStreamProtoc
     func onDataReceived(_ data: String?) {
         logger.log("Session  onDataReceived called with \(data)")
         activeSinks?(data)
-        
-        
     }
 }

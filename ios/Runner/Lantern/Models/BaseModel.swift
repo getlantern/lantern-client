@@ -10,15 +10,14 @@ import Internalsdk
 import SQLite
 import Flutter
 
-class BaseDatabase: NSObject {
+class BaseModel: NSObject {
     
     var model: InternalsdkModelProtocol!
-    private var modelName: String
+    private var modelName: String  = "LANTERN_DB"
     
-    init(modelName: String) {
-        self.modelName = modelName
-        super.init()
-        setupDB()
+    override init() {
+     super.init()
+    setupDB()
     }
     
     private func setupDB() {
@@ -50,42 +49,42 @@ class BaseDatabase: NSObject {
             return ""  // Return an empty string or handle the error accordingly.
         }
     }
-    
-    
-    func put(path:String, values:ValueArrayHandler, fullText:String?){
-        do {
-            var putSuccess: ObjCBool = false
-            let result = try model.put(path, value: values , fullText: fullText, ret0_: &putSuccess)
-            if !putSuccess.boolValue {
-                logger.log("Failed to Put with Value : \(values) and path \(path). Error:  Unknown error")
-            }
-        } catch {
-            
-        }
-    }
-    
-    func get(path:String) -> Data?{
-        do{
-            let data = try  model.get(path)
-            logger.log("GET path data \(data)")
-            return data
-        }catch{
-//            logger.log("Failed to GET path \(path)")
-        }
-        return nil
-    }
-    
-    
-    func delete(path:String, values:ValueArrayHandler, fullText:String?){
-        do {
-            var deleteSuccess:ObjCBool = false
-            let result = try model.delete(path, ret0_: &deleteSuccess)
-            if !deleteSuccess.boolValue {
-                logger.log("Failed to Delete path \(path)")
-            }
-        } catch {
-            
-        }
-    }
-    
+//
+//
+//    func put(path:String, values:ValueArrayHandler, fullText:String?){
+//        do {
+//            var putSuccess: ObjCBool = false
+//            let result = try model.put(path, value: values , fullText: fullText, ret0_: &putSuccess)
+//            if !putSuccess.boolValue {
+//                logger.log("Failed to Put with Value : \(values) and path \(path). Error:  Unknown error")
+//            }
+//        } catch {
+//
+//        }
+//    }
+//
+//    func get(path:String) -> Data?{
+//        do{
+//            let data = try  model.get(path)
+//            logger.log("GET path data \(data)")
+//            return data
+//        }catch{
+////            logger.log("Failed to GET path \(path)")
+//        }
+//        return nil
+//    }
+//
+//
+//    func delete(path:String, values:ValueArrayHandler, fullText:String?){
+//        do {
+//            var deleteSuccess:ObjCBool = false
+//            let result = try model.delete(path, ret0_: &deleteSuccess)
+//            if !deleteSuccess.boolValue {
+//                logger.log("Failed to Delete path \(path)")
+//            }
+//        } catch {
+//
+//        }
+//    }
+//
 }
