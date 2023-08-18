@@ -87,7 +87,7 @@ dependencies:
   # Error handling
   datadog_flutter_plugin: ^1.4.0
   datadog_tracking_http_client: ^1.4.0
-  
+
   # Package information
   package_info_plus: ^4.1.0
 
