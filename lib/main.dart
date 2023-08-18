@@ -9,7 +9,17 @@ Future<void> main() async {
   if (CI == 'true') {
     enableFlutterDriverExtension();
   }
-  var applicationId = const String.fromEnvironment('DD_APPLICATION_ID');
+ 
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  final config = DdSdkExistingConfiguration(
+    loggingConfiguration: LoggingConfiguration(),
+    detectLongTasks: true,
+  )..enableHttpTracking();
+
+  await DatadogSdk.instance.attachToExisting(config);
+  runApp(LanternApp());
+  /*var applicationId = const String.fromEnvironment('DD_APPLICATION_ID');
 
   DatadogSdk.instance.sdkVerbosity = Verbosity.verbose;
   final configuration = DdSdkConfiguration(
@@ -21,9 +31,7 @@ Future<void> main() async {
     loggingConfiguration: LoggingConfiguration(),
     rumConfiguration: applicationId != null ? RumConfiguration(applicationId: applicationId) : null,
   );
-  WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await DatadogSdk.runApp(configuration, () async {
     runApp(LanternApp());
-  });
+  });*/
 }
