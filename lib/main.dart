@@ -19,19 +19,4 @@ Future<void> main() async {
 
   await DatadogSdk.instance.attachToExisting(config);
   runApp(LanternApp());
-  /*var applicationId = const String.fromEnvironment('DD_APPLICATION_ID');
-
-  DatadogSdk.instance.sdkVerbosity = Verbosity.verbose;
-  final configuration = DdSdkConfiguration(
-    clientToken: const String.fromEnvironment('DD_CLIENT_TOKEN'),
-    env: 'prod',
-    site: DatadogSite.eu1,
-    trackingConsent: TrackingConsent.granted,
-    nativeCrashReportEnabled: true,
-    loggingConfiguration: LoggingConfiguration(),
-    rumConfiguration: applicationId != null ? RumConfiguration(applicationId: applicationId) : null,
-  );
-  await DatadogSdk.runApp(configuration, () async {
-    runApp(LanternApp());
-  });*/
 }
