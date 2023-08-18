@@ -8,8 +8,6 @@ permissions:
 env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
-  DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
-  DATADOG_SITE: datadoghq.eu
 jobs:
     set-version:
       runs-on: ubuntu-latest
@@ -125,6 +123,8 @@ jobs:
       - name: Build Android installers
         run: make package-android
         env:
+          DD_APPLICATION_ID: ${{ secrets.DD_APPLICATION_ID }}
+          DD_CLIENT_TOKEN: ${{ secrets.DD_CLIENT_TOKEN }}
           VERSION: "${{ env.version }}"
 
       - uses: actions/upload-artifact@v3
