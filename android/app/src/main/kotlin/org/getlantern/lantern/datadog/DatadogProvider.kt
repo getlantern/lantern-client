@@ -26,7 +26,7 @@ object DatadogProvider {
     private lateinit var datadogConfig: Configuration
 
     fun initialize() {
-    	if (initialized.get()) return
+        if (initialized.get()) return
 
         Datadog.setVerbosity(Log.VERBOSE)
         datadogConfig = createDatadogConfiguration()
@@ -79,10 +79,6 @@ object DatadogProvider {
             .useSite(DatadogSite.EU1)
             .trackInteractions()
             .trackLongTasks()
-            .useViewTrackingStrategy(ActivityViewTrackingStrategy(
-                trackExtras = false,
-                componentPredicate = FlutterExcludingComponentPredicate()
-            ))
             .setFirstPartyHosts(tracedHosts)
             .useViewTrackingStrategy(
                 ActivityViewTrackingStrategy(
