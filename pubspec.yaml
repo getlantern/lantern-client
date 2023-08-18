@@ -68,7 +68,7 @@ dependencies:
   auto_route: ^7.8.0
   i18n_extension: ^7.0.0
   intl: ^0.18.0
-  
+
   # QR
   qr_flutter: ^4.1.0
   qr_code_scanner: ^1.0.1
@@ -136,6 +136,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  module:
+    androidX: true
+
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/

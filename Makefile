@@ -240,7 +240,7 @@ require-sentry:
 .PHONY: require-datadog-ci
 require-datadog-ci:
 	@if [[ -z "$(DATADOGCI)" ]]; then echo 'Missing "datadog-ci" command. See https://www.npmjs.com/package/@datadog/datadog-ci for installation instructions.'; exit 1; fi
-	
+
 release-autoupdate: require-version
 	@TAG_COMMIT=$$(git rev-list --abbrev-commit -1 $(TAG)) && \
 	if [[ -z "$$TAG_COMMIT" ]]; then \
@@ -283,26 +283,21 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
 vault-secret-%:
-	@SECRET=$(shell cd $$GOPATH/src/github.com/getlantern/lantern-cloud && bin/vault kv get -field=$(vault_field) ${VAULT_DD_SECRETS_PATH}); \
-	printf ${*}=$$SECRET | ${BASE64}
-
-dart-defines-debug:
-	@DART_DEFINES=`vault_field=client_token make vault-secret-DD_CLIENT_TOKEN`; \
-	DART_DEFINES+=`printf ',' && vault_field=application_id make vault-secret-DD_APPLICATION_ID`; \
-	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
-	printf $$DART_DEFINES
+	@SECRET=$(shell cd $$GOPATH/src/github.com/getlantern/lantern-cloud && bin/vault kv get -field=${*} ${VAULT_DD_SECRETS_PATH}); \
+	printf "$$SECRET"
 
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
-	DART_DEFINES=`make dart-defines-debug` && \
+	DD_APPLICATION_ID=`make vault-secret-application_id` && \
+	DD_CLIENT_TOKEN=`make vault-secret-client_token` && \
 	COUNTRY="$$COUNTRY" && \
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
-	CI="$$CI" && \
-	echo "Base64 CI: $(CIBASE)" && \
-	$(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -Pdart-defines="$$DART_DEFINES" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PdevelopmentMode="true" -Pci=$(CI) -b $(MOBILE_DIR)/app/build.gradle \
-	assembleProdDebug
+	CI="$$CI" && $(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
+	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) \
+	-PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) \
+	-PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PdevelopmentMode="true" -Pci=$(CI) -b $(MOBILE_DIR)/app/build.gradle assembleProdDebug
 
 pubget:
 	@flutter pub get
@@ -312,30 +307,24 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-env-secret-%:
-	@SECRET=$(shell echo "$(${*})"); \
-	printf ${*}=$$SECRET | ${BASE64}
-
-dart-defines-release:
-	@DART_DEFINES=`make env-secret-DD_CLIENT_TOKEN`; \
-	DART_DEFINES+=`printf ',' && make env-secret-DD_APPLICATION_ID`; \
-	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
-	printf $$DART_DEFINES
-
 $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-datadog-ci
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
-	DART_DEFINES=`make dart-defines-release` && \
+	DD_CLIENT_TOKEN="$$DD_CLIENT_TOKEN" && \
+	DD_APPLICATION_ID="$$DD_APPLICATION_ID" && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	VERSION_CODE="$$VERSION_CODE" && \
 	DEVELOPMENT_MODE="$$DEVELOPMENT_MODE" && \
-	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -Pdart-defines="$$DART_DEFINES" -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle \
-		assembleProdSideload && \
-	datadog-ci flutter-symbols upload --service-name lantern-android --dart-symbols-location build/app/intermediates/merged_native_libs/prodSideload/out/lib --android-mapping-location build/app/outputs/mapping/prodSideload/mapping.txt --android-mapping --ios-dsyms && \
+	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PddClientToken=$(DD_CLIENT_TOKEN) \
+	-PddApplicationID=$(DD_APPLICATION_ID) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) \
+	-PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
+	-PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle assembleProdSideload && \
+	datadog-ci flutter-symbols upload --service-name lantern-android --dart-symbols-location build/app/intermediates/merged_native_libs/prodSideload/out/lib \
+	--android-mapping-location build/app/outputs/mapping/prodSideload/mapping.txt --android-mapping --ios-dsyms && \
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
 
