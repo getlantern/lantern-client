@@ -47,13 +47,18 @@ dependencies:
   wakelock: ^0.6.2
   email_validator: ^2.1.17
   credit_card_validator: ^2.1.0
+
   # Media & File handling
   audioplayers: ^5.1.0
   video_player: ^2.7.0
   video_thumbnail: ^0.5.3
   file_picker: ^5.3.3
   filesize: ^2.0.1
+
+  # Networking
   cached_network_image: ^3.2.3
+  dio: ^5.3.2
+
   # change this with flutter_downloader
   flutter_uploader: ^3.0.0-beta.3
   mime: ^1.0.4
