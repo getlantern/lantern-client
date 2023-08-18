@@ -1,5 +1,4 @@
 plugins {
-  id "io.sentry.android.gradle" version "3.4.2"
   id 'com.android.application'
   id 'kotlin-android'
   id 'org.jlleitschuh.gradle.ktlint'
@@ -7,6 +6,7 @@ plugins {
   id 'kotlin-parcelize'
   id 'kotlin-kapt'
   id 'com.google.protobuf'
+  id 'com.datadoghq.dd-sdk-android-gradle-plugin'
 }
 
 def localProperties = new Properties()
@@ -422,6 +422,8 @@ dependencies {
 
     implementation 'com.stripe:stripe-android:20.17.0'
 
+    implementation 'com.datadoghq:dd-sdk-android-rum:2.0.0'
+
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
     kapt "org.androidannotations:androidannotations:$androidAnnotationsVersion"
@@ -448,22 +450,3 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
-
-sentry {
-    // Enables or disables the automatic upload of mapping files
-    // during a build.  If you disable this, you'll need to manually
-    // upload the mapping files with sentry-cli when you do a release.
-    autoUpload = true
-
-    // Disables or enables the automatic configuration of Native Symbols
-    // for Sentry. This executes sentry-cli automatically so
-    // you don't need to do it manually.
-    // Default is disabled.
-    uploadNativeSymbols = true
-
-    // Does or doesn't include the source code of native code for Sentry.
-    // This executes sentry-cli with the --include-sources param. automatically so
-    // you don't need to do it manually.
-    // Default is disabled.
-    includeNativeSources = false
-}
