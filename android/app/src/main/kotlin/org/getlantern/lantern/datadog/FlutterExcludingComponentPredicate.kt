@@ -5,7 +5,7 @@ import com.datadog.android.rum.tracking.AcceptAllActivities
 import com.datadog.android.rum.tracking.ComponentPredicate
 import io.flutter.embedding.android.FlutterActivity
 
-class FlutterExcludingComponentPredicate: ComponentPredicate<Activity> {
+class FlutterExcludingComponentPredicate : ComponentPredicate<Activity> {
     val innerPredicate = AcceptAllActivities()
 
     override fun accept(component: Activity): Boolean {
