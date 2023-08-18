@@ -6,7 +6,7 @@ plugins {
   id 'kotlin-parcelize'
   id 'kotlin-kapt'
   id 'com.google.protobuf'
-  id 'com.datadoghq.dd-sdk-android-gradle-plugin'
+  id("com.datadoghq.dd-sdk-android-gradle-plugin") version "1.10.0"
 }
 
 def localProperties = new Properties()
@@ -177,6 +177,8 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
+            buildConfigField "String", "DD_CLIENT_TOKEN", ddClientToken()
+            buildConfigField "String", "DD_APPLICATION_ID", ddApplicationID()
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
@@ -195,6 +197,8 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
+            buildConfigField "String", "DD_CLIENT_TOKEN", ddClientToken()
+            buildConfigField "String", "DD_APPLICATION_ID", ddApplicationID()
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "SIGNING_CERTIFICATE_SHA256", "\"\""
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
@@ -213,6 +217,8 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
+            buildConfigField "String", "DD_CLIENT_TOKEN", ddClientToken()
+            buildConfigField "String", "DD_APPLICATION_ID", ddApplicationID()
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "SIGNING_CERTIFICATE_SHA256", "\"108f612ae55354078ec12b10bb705362840d48fa78b9262c11b6d0adeff6f289\""
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
@@ -316,6 +322,22 @@ def getInt(name) {
         return 0
     }
     return value.toInteger()
+}
+
+def ddApplicationID() {
+    def value = project.getProperties().get("ddApplicationID")
+    if (value == null || !value?.trim()) {
+        return "\"\""
+    }
+    return String.format("\"%s\"", value)
+}
+
+def ddClientToken() {
+    def value = project.getProperties().get("ddClientToken")
+    if (value == null || !value?.trim()) {
+        return "\"\""
+    }
+    return String.format("\"%s\"", value)
 }
 
 def userCountry() {
@@ -422,7 +444,7 @@ dependencies {
 
     implementation 'com.stripe:stripe-android:20.17.0'
 
-    implementation 'com.datadoghq:dd-sdk-android-rum:2.0.0'
+    implementation 'com.datadoghq:dd-sdk-android:1.19.3'
 
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")

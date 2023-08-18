@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.model.MessagingModel
@@ -80,7 +81,7 @@ class MainActivity :
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
-
+        FlutterEngineCache.getInstance().put("datadoghq_engine", flutterEngine)
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
