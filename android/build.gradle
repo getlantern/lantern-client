@@ -31,7 +31,7 @@ ext {
 
     compileSdkVersion = 33
     targetSdkVersion = 33
-    minSdkVersion = 21
+    minSdkVersion = 23
     androidAnnotationsVersion = '4.8.0'
     androidAnnotationsAPIVersion = '4.8.0'
     buildToolsVersion = '33.0.1'
