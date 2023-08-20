@@ -263,7 +263,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 	gomobile bind \
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
-		-androidapi=19 \
+		-androidapi=23 \
 		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		$(ANDROID_LIB_PKG)
