@@ -356,7 +356,7 @@ android-debug-install: $(MOBILE_DEBUG_APK)
 android-release-install: $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
 
-package-android: require-version clean
+package-android: pubget require-version
 	@ANDROID_ARCH=all make android-release && \
 	ANDROID_ARCH=all make android-bundle && \
 	echo "-> $(MOBILE_RELEASE_APK)"
