@@ -6,8 +6,10 @@ import 'package:clever_ads_solutions/public/AdImpression.dart';
 import 'package:clever_ads_solutions/public/AdTypes.dart';
 import 'package:clever_ads_solutions/public/Audience.dart';
 import 'package:clever_ads_solutions/public/ConsentFlow.dart';
+import 'package:clever_ads_solutions/public/InitConfig.dart';
 import 'package:clever_ads_solutions/public/InitializationListener.dart';
 import 'package:clever_ads_solutions/public/MediationManager.dart';
+import 'package:clever_ads_solutions/public/OnDismissListener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/replica/common.dart';
@@ -15,6 +17,8 @@ import 'package:lantern/replica/common.dart';
 import 'common/session_model.dart';
 
 enum AdType { Google, CAS }
+
+const privacyPolicy = 'https://lantern.io/privacy';
 
 class AdHelper {
   static final AdHelper _instance = AdHelper._internal();
@@ -49,6 +53,7 @@ class AdHelper {
   Future<void> _decideAndLoadAds() async {
     final shouldShowGoogleAds = await sessionModel.shouldShowAds();
     final shouldShowCASAds = await sessionModel.shouldCASShowAds();
+
     logger.d(
         '[Ads Manager] Google Ads enable $shouldShowGoogleAds: CAS Ads $shouldShowCASAds');
     if (shouldShowGoogleAds) {
@@ -59,7 +64,7 @@ class AdHelper {
       _currentAdType = AdType.CAS;
       logger.i('[Ads Manager] Decision: Loading CAS Ads.');
       if (casMediationManager == null) {
-        await initializeCAS();
+        await _initializeCAS();
       }
       await _loadCASInterstitial();
     }
@@ -152,21 +157,20 @@ class AdHelper {
 
   ///CAS initialization and method and listeners
   ///
-  Future<void> initializeCAS() async {
+  Future<void> _initializeCAS() async {
     await CAS.setDebugMode(kDebugMode);
-    // CAS.setFlutterVersion("1.20.0");
     await CAS.setAnalyticsCollectionEnabled(true);
-    await CAS.validateIntegration();
+    // CAS.setFlutterVersion("1.20.0");
+    // await CAS.validateIntegration();
 
     var builder = CAS
         .buildManager()
         .withCasId('org.getlantern.lantern')
         .withAdTypes(AdTypeFlags.Interstitial)
         .withInitializationListener(InitializationListenerWrapper())
-        .withConsentFlow(
-            ConsentFlow(privacyPolicy: 'https://lantern.io/privacy'))
-        .withTestMode(false)
         .withTestMode(false);
+
+    CAS.buildConsentFlow().withPrivacyPolicy(privacyPolicy);
     casMediationManager = builder.initialize();
     // This can be useful when you need to improve application performance by turning off unused formats.
     await casMediationManager!.setEnabled(AdTypeFlags.Interstitial, true);
@@ -210,8 +214,8 @@ class AdHelper {
 
 class InitializationListenerWrapper extends InitializationListener {
   @override
-  void onCASInitialized(bool success, String error) {
-    logger.i('[CASIntegrationHelper] - onCASInitialized $success $error');
+  void onCASInitialized(InitConfig initialConfig) {
+    logger.i('[CASIntegrationHelper] - onCASInitialized $initialConfig');
   }
 }
 
@@ -246,7 +250,6 @@ class InterstitialListenerWrapper extends AdCallback {
   @override
   void onImpression(AdImpression? adImpression) {
     // Called when ad is paid.
-
     logger.i(
         '[CASIntegrationHelper] - InterstitialListenerWrapper onImpression-:$adImpression');
   }
