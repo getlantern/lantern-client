@@ -155,7 +155,7 @@ dependencies:
 
   wakelock: ^0.6.2
   google_mobile_ads: ^3.0.0
-  clever_ads_solutions: ^0.0.7
+  clever_ads_solutions: ^0.1.0
 
 # wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0
 # See https://github.com/creativecreatorormaybenot/wakelock/issues/211
