@@ -91,6 +91,7 @@ class MainActivity :
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
+                    flutterNavigation.invokeMethod("initDatadog", null)
                     fetchLoConf()
                     Logger.debug(
                         TAG,

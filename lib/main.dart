@@ -12,11 +12,5 @@ Future<void> main() async {
  
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  final config = DdSdkExistingConfiguration(
-    loggingConfiguration: LoggingConfiguration(),
-    detectLongTasks: true,
-  )..enableHttpTracking();
-
-  await DatadogSdk.instance.attachToExisting(config);
   runApp(LanternApp());
 }

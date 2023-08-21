@@ -90,6 +90,12 @@ dependencies:
   logger: ^2.0.1
 
   # Error handling
+  catcher:
+    git:
+      url: https://github.com/ThexXTURBOXx/catcher.git
+  device_info_plus: ^9.0.3
+  flutter_mailer: ^2.0.0
+  fluttertoast: ^8.2.2
   datadog_flutter_plugin: ^1.4.0
   datadog_tracking_http_client: ^1.4.0
 
