@@ -7,6 +7,8 @@ import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.IBinder
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.datadog.ActionType
+import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.mobilesdk.Logger
 
@@ -58,6 +60,7 @@ class LanternVpnService : VpnService(), Runnable {
             return START_STICKY
         }
         return if (intent.action == ACTION_DISCONNECT) {
+            Datadog.trackUserTap("switchVPN", mapOf("status" to "disconnect"))
             stop()
             START_NOT_STICKY
         } else {
@@ -69,6 +72,7 @@ class LanternVpnService : VpnService(), Runnable {
 
     private fun connect() {
         Logger.d(TAG, "connect")
+        Datadog.trackUserTap("switchVPN", mapOf("status" to "connect"))
         Thread(this, "VpnService").start()
     }
 
