@@ -1,6 +1,7 @@
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
 
+@RoutePage<void>(name: 'Introduce')
 class Introduce extends StatefulWidget {
   final bool singleIntro;
   final Contact? contactToIntro;

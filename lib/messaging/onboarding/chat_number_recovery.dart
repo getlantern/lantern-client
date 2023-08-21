@@ -1,5 +1,6 @@
 import '../messaging.dart';
 
+@RoutePage<void>(name: 'ChatNumberRecovery')
 class ChatNumberRecovery extends StatefulWidget {
   @override
   State<ChatNumberRecovery> createState() => _ChatNumberRecoveryState();

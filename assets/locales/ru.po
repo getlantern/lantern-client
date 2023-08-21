@@ -9,19 +9,19 @@
 # e2f <projects@e2f.com>, 2022
 # e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023
 # Serg <sergkoshkin@yandex.ru>, 2023
-# e2f_ru r1 <tx_e2f_ru_r1@ate2f.com>, 2023
 # Anna Evdokimova <anna.evdokimova@yahoo.com>, 2023
-# Tina T, 2023
-# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2023
-# sayanvd <sayanvd@yandex.ru>, 2023
-# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2023
 # Helen Russel <coo@workogram.com>, 2023
-# Deanna D, 2023
 # e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2023
+# Tina T, 2023
+# e2f_ru r1 <tx_e2f_ru_r1@ate2f.com>, 2023
+# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2023
+# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2023
+# Deanna D, 2023
+# sayanvd <sayanvd@yandex.ru>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2023\n"
+"Last-Translator: sayanvd <sayanvd@yandex.ru>, 2023\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -128,6 +128,32 @@ msgstr "Обновление до Lantern Pro"
 msgid "Invite Friends"
 msgstr "Пригласи друзей "
 
+msgid "share_lantern_pro"
+msgstr ""
+"Поделитесь кодом с друзьями - если они купят версию Pro, вы оба получите "
+"бесплатный месяц подписки на Lantern Pro!"
+
+msgid "privacy_disclosure_title"
+msgstr "Политика конфиденциальности Lantern"
+
+msgid "privacy_disclosure_body"
+msgstr ""
+"Lantern серьезно относится к защите вашей конфиденциальности. Для нас важно,"
+" чтобы вы понимали, какую информацию мы собираем (и не собираем), как мы ее "
+"используем и храним. Ваши платежные данные не связаны с аккаунтом Lantern "
+"Pro. Мы не собираем логи о вашей активности (в том числе историю браузера, "
+"сведения об адресатах трафика, содержание данных или DNS-запросы). Мы "
+"никогда не храним логи соединений, то есть ваши зарегистрированные IP-"
+"адреса, IP-адрес исходящего сервера Lantern, связанный с временной меткой "
+"подключения, а также продолжительность сеансов. У нас нет технической "
+"возможности связать аккаунт Lantern Pro с реальной идентифицирующей "
+"информацией пользователя. Кроме того, имея IP-адрес Lantern и точную "
+"временную метку, мы не можем связать этот адрес с пользователем Lantern или "
+"IP-адресом этого пользователя."
+
+msgid "privacy_disclosure_accept"
+msgstr "Я принимаю"
+
 msgid "desktop_version"
 msgstr "Версия для ПК"
 
@@ -164,8 +190,29 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "Язык"
 
-msgid "report_issue"
-msgstr "Сообщить о проблеме"
+msgid "select_an_issue"
+msgstr "Выберите проблему"
+
+msgid "enter_description"
+msgstr ""
+
+msgid "cannot_access_blocked_sites"
+msgstr "Не удается получить доступ к заблокированным сайтам"
+
+msgid "cannot_complete_purchase"
+msgstr "Ваша покупка не может быть завершена"
+
+msgid "cannot_sign_in"
+msgstr "Не удается войти в аккаунт"
+
+msgid "spinner_loads_endlessly"
+msgstr "Невозможно загрузить страницу "
+
+msgid "other"
+msgstr "Другое"
+
+msgid "issue_description"
+msgstr "Описание проблемы"
 
 msgid "check_for_updates"
 msgstr "Проверить обновления"
@@ -203,6 +250,19 @@ msgstr "Авторизация для Lantern Pro"
 msgid "OR"
 msgstr "ИЛИ"
 
+msgid "device_linking_pin"
+msgstr "Код привязки устройства"
+
+msgid "link_device_step_one"
+msgstr ""
+
+msgid "link_device_step_two"
+msgstr ""
+
+msgid "ensure_most_recent_version_lantern"
+msgstr ""
+"* Убедитесь, что на обоих устройствах установлена последняя версия Lantern."
+
 msgid "Authorize Device via Email"
 msgstr "Авторизация с помощью электронной почты"
 
@@ -219,6 +279,38 @@ msgstr "Ссылка по электронной почте"
 
 msgid "lantern_pro_email"
 msgstr "Адрес эл. почты аккаунта Lantern Pro"
+
+msgid "lantern_desktop"
+msgstr "Версия Lantern для ПК"
+
+msgid "report_issue"
+msgstr ""
+
+msgid "report_an_issue"
+msgstr "Сообщить о проблеме"
+
+msgid "report_sent"
+msgstr "Отчет отправлен"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr ""
+"Спасибо, что сообщили о своей проблеме. Из-за большого потока обращений мы "
+"не можем отвечать на большинство из них, однако будьте уверены, мы прилагаем"
+" все усилия, чтобы совершенствовать Lantern на основании ваших отзывов."
+
+msgid "send_report"
+msgstr "Отправить отчет"
+
+msgid "most_recent_lantern_apps"
+msgstr ""
+"По ссылке выше доступны актуальные версии приложений Lantern для ПК и других"
+" платформ."
+
+msgid "share_link"
+msgstr ""
+
+msgid "share_title"
+msgstr "Поделитесь ссылкой на скачивание Lantern"
 
 msgid "email"
 msgstr "Электронная почта"
@@ -278,6 +370,12 @@ msgstr "Введите email и код активации "
 
 msgid "referral_code"
 msgstr "Реферальный код"
+
+msgid "share_referral_code"
+msgstr ""
+
+msgid "share_message_referral_code"
+msgstr ""
 
 msgid "add_referral_code"
 msgstr "Ввести реферальный код "

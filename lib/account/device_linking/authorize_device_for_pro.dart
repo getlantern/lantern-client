@@ -1,6 +1,7 @@
 import 'package:lantern/common/common.dart';
 
 
+@RoutePage<void>(name: 'AuthorizePro')
 class AuthorizeDeviceForPro extends StatelessWidget {
   AuthorizeDeviceForPro({Key? key}) : super(key: key);
 
@@ -29,9 +30,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
           Button(
             width: 200,
             text: 'Link with PIN'.i18n,
-            onPressed: () {
-              LanternNavigator.startScreen(LanternNavigator.SCREEN_LINK_PIN);
-            },
+            onPressed: () async => await context.pushRoute(LinkDevice()),
           ),
           const Spacer(),
           Flexible(

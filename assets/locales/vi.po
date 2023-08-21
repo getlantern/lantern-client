@@ -1,15 +1,16 @@
 # 
 # Translators:
 # Anh Phan <vietnamesel10n@gmail.com>, 2023
-# Lantern, 2023
-# e2f <projects@e2f.com>, 2023
-# Nathan Tran, 2023
 # Yen Le Van <yenlevanbk@gmail.com>, 2023
+# Lantern, 2023
+# Nathan Tran, 2023
+# e2f <projects@e2f.com>, 2023
 # e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2023
+# Ngoc Hoang <ngocit09@gmail.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2023\n"
+"Last-Translator: Ngoc Hoang <ngocit09@gmail.com>, 2023\n"
 "Language-Team: Vietnamese (https://app.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -117,6 +118,34 @@ msgstr "Nâng Cấp lên Lantern Pro"
 msgid "Invite Friends"
 msgstr "Mời Bạn Bè"
 
+msgid "share_lantern_pro"
+msgstr ""
+"Chia sẻ Lantern Pro với bạn bè! Khi bạn của bạn sử dụng mã giới thiệu của "
+"bạn trong quá trình mua Lantern Pro, cả hai bạn sẽ nhận được một tháng dịch "
+"vụ Lantern Pro miễn phí!"
+
+msgid "privacy_disclosure_title"
+msgstr "Tiết lộ quyền riêng tư của Lantern"
+
+msgid "privacy_disclosure_body"
+msgstr ""
+"Lantern cam kết bảo vệ sự riêng tư của bạn. Chúng tôi muốn bạn hiểu thông "
+"tin nào chúng tôi thu thập, thông tin nào chúng tôi không thu thập và cách "
+"chúng tôi thu thập, sử dụng và lưu trữ thông tin. Chúng tôi tách thông tin "
+"thanh toán của bạn với tài khoản Lantern Pro của bạn. Chúng tôi không thu "
+"thập nhật ký hoạt động của bạn, bao gồm không ghi nhật ký lịch sử duyệt web,"
+" điểm đến của lưu lượng truy cập, nội dung dữ liệu hoặc truy vấn DNS. Chúng "
+"tôi cũng không bao giờ lưu trữ nhật ký kết nối, nghĩa là không có nhật ký "
+"nào về địa chỉ IP của bạn, địa chỉ IP máy chủ Lantern gửi đi của bạn được "
+"liên kết với dấu thời gian kết nối hoặc thời lượng mỗi phiên. Với tài khoản "
+"Lantern Pro cụ thể, về mặt kỹ thuật, Lantern không thể liên kết tài khoản "
+"Lantern với danh tính thực của người dùng. Với địa chỉ IP của Lantern và dấu"
+" thời gian chính xác, về mặt kỹ thuật, Lantern không thể gán địa chỉ IP này "
+"cho người dùng Lantern hoặc địa chỉ IP của người dùng Lantern."
+
+msgid "privacy_disclosure_accept"
+msgstr "Tôi đồng ý"
+
 msgid "desktop_version"
 msgstr "Phiên bản Để Bàn"
 
@@ -153,8 +182,29 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "Ngôn ngữ"
 
-msgid "report_issue"
-msgstr "Báo cáo lỗi"
+msgid "select_an_issue"
+msgstr "Hãy chọn 1 vấn đề"
+
+msgid "enter_description"
+msgstr ""
+
+msgid "cannot_access_blocked_sites"
+msgstr "Không thể truy cập các trang bị chặn"
+
+msgid "cannot_complete_purchase"
+msgstr "Không thể hoàn tất việc mua"
+
+msgid "cannot_sign_in"
+msgstr "Không thể đăng nhập"
+
+msgid "spinner_loads_endlessly"
+msgstr "Spinner tải vô tận"
+
+msgid "other"
+msgstr "Khác"
+
+msgid "issue_description"
+msgstr "Mô tả vấn đề"
 
 msgid "check_for_updates"
 msgstr "Kiểm tra bản cập nhật"
@@ -191,6 +241,18 @@ msgstr "Liên kết bằng mã PIN"
 msgid "OR"
 msgstr "HOẶC"
 
+msgid "device_linking_pin"
+msgstr "Ghim liên kết thiết bị"
+
+msgid "link_device_step_one"
+msgstr ""
+
+msgid "link_device_step_two"
+msgstr ""
+
+msgid "ensure_most_recent_version_lantern"
+msgstr "* Đảm bảo cả hai thiết bị đang chạy phiên bản Lantern mới nhất"
+
 msgid "Authorize Device via Email"
 msgstr "Cấp phép thiết bị qua email"
 
@@ -205,6 +267,37 @@ msgstr "Liên kết qua Email"
 
 msgid "lantern_pro_email"
 msgstr "Lantern Pro Email"
+
+msgid "lantern_desktop"
+msgstr "Lantern Để Bàn"
+
+msgid "report_issue"
+msgstr ""
+
+msgid "report_an_issue"
+msgstr "Báo cáo vấn đề"
+
+msgid "report_sent"
+msgstr "Đã gửi báo cáo"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr ""
+"Cảm ơn bạn đã báo cáo sự cố của mình, chúng tôi sẽ liên hệ lại với bạn qua "
+"Email ngay khi có thể"
+
+msgid "send_report"
+msgstr "Gửi báo cáo"
+
+msgid "most_recent_lantern_apps"
+msgstr ""
+"Bạn có thể tìm thấy các ứng dụng Lantern mới nhất dành cho máy tính để bàn "
+"và tất cả các nền tảng khác tại liên kết ở trên."
+
+msgid "share_link"
+msgstr ""
+
+msgid "share_title"
+msgstr "Chia sẻ liên kết tải xuống Lantern"
 
 msgid "email"
 msgstr "Email"
@@ -262,6 +355,12 @@ msgstr "Nhập Email và Mã kích hoạt"
 
 msgid "referral_code"
 msgstr "Mã giới thiệu"
+
+msgid "share_referral_code"
+msgstr ""
+
+msgid "share_message_referral_code"
+msgstr ""
 
 msgid "add_referral_code"
 msgstr "Thêm mã giới thiệu"
