@@ -69,6 +69,7 @@ class PaymentsUtil(private val activity: Activity) {
 
                     override fun onError(@NonNull error: Exception) {
                         dialog?.dismiss()
+                        Datadog.addError("Error submitting to Stripe: $error")
                         methodCallResult.error(
                             "errorSubmittingToStripe",
                             error.getLocalizedMessage(),
@@ -110,6 +111,7 @@ class PaymentsUtil(private val activity: Activity) {
                 LanternHttpClient.createProUrl("/payment-redirect", params),
                 object : ProCallback {
                     override fun onFailure(throwable: Throwable?, error: ProError?) {
+                        Datadog.addError("BTCPay is unavailable", throwable)
                         methodCallResult.error(
                             "unknownError",
                             "BTCPay is unavailable", // This error message is localized Flutter-side
@@ -233,7 +235,7 @@ class PaymentsUtil(private val activity: Activity) {
                 },
             )
         } catch (t: Throwable) {
-            Logger.error(TAG, "Unable to apply referral code", t)
+            Datadog.addError("Unable to apply referral code", t)
             methodCallResult.error(
                 "unknownError",
                 "Something went wrong while applying your referral code",
@@ -326,9 +328,7 @@ class PaymentsUtil(private val activity: Activity) {
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
-                    val msg = "Error with purchase request: $error"
-                    Logger.e(TAG, msg)
-                    Datadog.addError(msg, t, mapOf(
+                    Datadog.addError("Error with purchase request: $error", t, mapOf(
                         "provider" to provider.toString().lowercase(),
                         "plan" to planID,
                         "deviceName" to session.deviceName(),
