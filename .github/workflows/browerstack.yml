@@ -60,7 +60,7 @@ jobs:
         run: |
           flutter pub get
           echo "CI=true" >> $GITHUB_ENV
-          make ci-android-debug ANDROID_ARCH=all
+          make do-android-debug ANDROID_ARCH=all
 
       - name: List files in current directory
         run: ls -la
