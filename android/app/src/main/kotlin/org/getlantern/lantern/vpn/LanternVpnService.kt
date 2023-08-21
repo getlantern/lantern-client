@@ -7,7 +7,6 @@ import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.IBinder
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.datadog.ActionType
 import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.mobilesdk.Logger

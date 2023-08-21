@@ -127,7 +127,5 @@ object Datadog {
             .build()
     }
 
-    companion object {
-        private val TAG = Datadog::class.java.name
-    }
+    private val TAG = Datadog::class.java.name
 }
