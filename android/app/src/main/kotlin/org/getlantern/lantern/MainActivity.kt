@@ -305,7 +305,7 @@ class MainActivity :
     private fun updateUserData() {
         lanternClient.userData(object : ProUserCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch user data: $error", throwable)
+                Datadog.error("Unable to fetch user data: $error", throwable)
             }
 
             override fun onSuccess(response: Response, user: ProUser?) {
@@ -330,7 +330,7 @@ class MainActivity :
     private fun updatePlans() {
         lanternClient.getPlans(object : PlansCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+                Datadog.error("Unable to fetch user plans: $error", throwable)
             }
 
             override fun onSuccess(proPlans: Map<String, ProPlan>) {
@@ -347,7 +347,7 @@ class MainActivity :
     private fun updatePaymentMethods() {
         lanternClient.plansV3(object : PlansV3Callback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+                Datadog.error("Unable to fetch payment methods: $error", throwable)
             }
 
             override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
