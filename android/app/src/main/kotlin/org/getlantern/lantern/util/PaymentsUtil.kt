@@ -13,7 +13,6 @@ import com.stripe.android.Stripe
 import com.stripe.android.model.CardParams
 import com.stripe.android.model.Token
 import io.flutter.plugin.common.MethodChannel
-import okhttp3.FormBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
@@ -190,11 +189,11 @@ class PaymentsUtil(private val activity: Activity) {
     // Applies referral code (before the user has initiated a transaction)
     fun applyRefCode(refCode: String, methodCallResult: MethodChannel.Result) {
         try {
-            val formBody: FormBody = FormBody.Builder()
-                .add("code", refCode).build()
+            val json: JsonObject = JsonObject()
+            json.addProperty("code", refCode)
             lanternClient.post(
                 LanternHttpClient.createProUrl("/referral-attach"),
-                formBody,
+                LanternHttpClient.createJsonBody(json),
                 object : ProCallback {
                     override fun onFailure(throwable: Throwable?, error: ProError?) {
                         Logger.error(
@@ -268,32 +267,32 @@ class PaymentsUtil(private val activity: Activity) {
         } ?: "usd"
         Logger.d(TAG, "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency")
         val session = session
-        val formBody: FormBody.Builder = FormBody.Builder()
-            .add("idempotencyKey", System.currentTimeMillis().toString())
-            .add("provider", provider.toString().lowercase())
-            .add("email", email)
-            .add("plan", planID)
-            .add("currency", currency.lowercase())
-            .add("deviceName", session.deviceName())
+        val json: JsonObject = JsonObject()
+        json.addProperty("idempotencyKey", System.currentTimeMillis().toString())
+        json.addProperty("provider", provider.toString().lowercase())
+        json.addProperty("email", email)
+        json.addProperty("plan", planID)
+        json.addProperty("currency", currency.lowercase())
+        json.addProperty("deviceName", session.deviceName())
 
         when (provider) {
             PaymentProvider.Stripe -> {
                 val stripePublicKey = session.stripePubKey()
-                stripePublicKey?.let { formBody.add("stripePublicKey", stripePublicKey) }
-                formBody.add("stripeEmail", email)
-                formBody.add("stripeToken", token)
-                formBody.add("token", token)
+                stripePublicKey?.let { json.addProperty("stripePublicKey", stripePublicKey) }
+                json.addProperty("stripeEmail", email)
+                json.addProperty("stripeToken", token)
+                json.addProperty("token", token)
             }
 
             PaymentProvider.GooglePlay -> {
-                formBody.add("token", token)
+                json.addProperty("token", token)
             }
 
             PaymentProvider.ResellerCode -> {
                 val resellerCode = LanternApp.getSession().resellerCode()
                 resellerCode?.let {
-                    formBody.add("provider", "reseller-code")
-                    formBody.add("resellerCode", resellerCode)
+                    json.addProperty("provider", "reseller-code")
+                    json.addProperty("resellerCode", resellerCode)
                 }
             }
 
@@ -302,7 +301,7 @@ class PaymentsUtil(private val activity: Activity) {
 
         lanternClient.post(
             LanternHttpClient.createProUrl("/purchase"),
-            formBody.build(),
+            LanternHttpClient.createJsonBody(json),
             object : ProCallback {
 
                 override fun onSuccess(response: Response?, result: JsonObject?) {

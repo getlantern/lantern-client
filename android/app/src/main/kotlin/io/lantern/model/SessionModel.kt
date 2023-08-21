@@ -16,7 +16,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
@@ -273,12 +272,11 @@ class SessionModel(
     }
 
     private fun requestLinkCode(methodCallResult: MethodChannel.Result) {
-        val formBody = FormBody.Builder()
-            .add("deviceName", LanternApp.getSession().deviceName())
-            .build()
+        val json: JsonObject = JsonObject()
+        json.addProperty("deviceName", LanternApp.getSession().deviceName())
         lanternClient.post(
             LanternHttpClient.createProUrl("/link-code-request"),
-            formBody,
+            LanternHttpClient.createJsonBody(json),
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     if (error == null) {
@@ -307,13 +305,12 @@ class SessionModel(
     }
 
     private fun redeemLinkCode() {
-        val formBody = FormBody.Builder()
-            .add("code", LanternApp.getSession().deviceCode()!!)
-            .add("deviceName", LanternApp.getSession().deviceName())
-            .build()
+        val json: JsonObject = JsonObject()
+        json.addProperty("code",  LanternApp.getSession().deviceCode()!!)
+        json.addProperty("deviceName", LanternApp.getSession().deviceName())
         lanternClient.post(
             LanternHttpClient.createProUrl("/link-code-request"),
-            formBody,
+            LanternHttpClient.createJsonBody(json),
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error making link redeem request..", t)
@@ -359,13 +356,12 @@ class SessionModel(
         Logger.debug(TAG, "Start Account recovery with email $emailAddress")
 
         LanternApp.getSession().setEmail(emailAddress)
-        val formBody = FormBody.Builder()
-            .add("email", emailAddress)
-            .build()
+        val json: JsonObject = JsonObject()
+        json.addProperty("email", emailAddress)
 
         lanternClient.post(
             LanternHttpClient.createProUrl("/user-recover"),
-            formBody,
+            LanternHttpClient.createJsonBody(json),
             object : ProCallback {
                 override fun onSuccess(response: Response?, result: JsonObject?) {
                     Logger.debug(TAG, "Account recovery response: $result")
@@ -436,13 +432,12 @@ class SessionModel(
     }
 
     private fun validateRecoveryCode(code: String, methodCallResult: MethodChannel.Result) {
-        val formBody: RequestBody = FormBody.Builder()
-            .add("code", code)
-            .build()
+        val json: JsonObject = JsonObject()
+        json.addProperty("code", code)
         Logger.debug(TAG, "Validating link request; code:$code")
         lanternClient.post(
             LanternHttpClient.createProUrl("/user-link-validate"),
-            formBody,
+            LanternHttpClient.createJsonBody(json),
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to validate link code", t)
@@ -478,13 +473,11 @@ class SessionModel(
     }
 
     private fun approveDevice(code: String, methodCallResult: MethodChannel.Result) {
-        val formBody: RequestBody = FormBody.Builder()
-            .add("code", code)
-            .build()
-
+        val json: JsonObject = JsonObject()
+        json.addProperty("code", code)
         lanternClient.post(
             LanternHttpClient.createProUrl("/link-code-approve"),
-            formBody,
+            LanternHttpClient.createJsonBody(json),
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error approving device link code: $error")
@@ -535,13 +528,11 @@ class SessionModel(
 
     private fun removeDevice(deviceId: String, methodCallResult: MethodChannel.Result) {
         Logger.debug(TAG, "Removing device $deviceId")
-        val formBody: RequestBody = FormBody.Builder()
-            .add("deviceID", deviceId)
-            .build()
-
+        val json: JsonObject = JsonObject()
+        json.addProperty("deviceID", deviceId)
         lanternClient.post(
             LanternHttpClient.createProUrl("/user-link-remove"),
-            formBody,
+            LanternHttpClient.createJsonBody(json),
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     if (error != null) {

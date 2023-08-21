@@ -81,17 +81,15 @@ open class FreeKassaActivity : BaseFragmentActivity() {
             "locale" to LanternApp.getSession().language,
         )
         val url = LanternHttpClient.createProUrl("/freekassa-prepay", params)
-        val requestBodyParams = FormBody.Builder()
-            .add("deviceName", LanternApp.getSession().deviceName())
-            .add("plan", planID!!)
-            .add("email", userEmail!!)
-            .build()
-
+        val json: JsonObject = JsonObject()
+        json.addProperty("deviceName", LanternApp.getSession().deviceName())
+        json.addProperty("plan", planID!!)
+        json.addProperty("email", userEmail!!)
         Logger.d(TAG, "Sending request to Freekassa prepay handler")
 
         lanternHTTPClient.post(
             url,
-            requestBodyParams,
+            LanternHttpClient.createJsonBody(json),
             object : LanternHttpClient.ProCallback {
                 override fun onFailure(throwable: Throwable?, error: ProError?) {
                     Logger.error(TAG, error.toString())
