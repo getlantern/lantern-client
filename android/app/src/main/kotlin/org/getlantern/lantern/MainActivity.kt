@@ -23,7 +23,6 @@ import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
 import okhttp3.Response
-import org.getlantern.lantern.activity.PrivacyDisclosureActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
@@ -44,6 +43,7 @@ import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.PlansUtil
+import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
@@ -65,7 +65,6 @@ class MainActivity :
     private lateinit var vpnModel: VpnModel
     private lateinit var sessionModel: SessionModel
     private lateinit var replicaModel: ReplicaModel
-    private lateinit var navigator: Navigator
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
     private lateinit var accountInitDialog: AlertDialog
@@ -83,7 +82,6 @@ class MainActivity :
         vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
-        navigator = Navigator(this, flutterEngine)
         receiver = NotificationReceiver()
         notifications = NotificationHelper(this, receiver)
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
@@ -173,12 +171,6 @@ class MainActivity :
 
         super.onResume()
         Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
-
-        if (LanternApp.getSession().isPlayVersion) {
-            if (!LanternApp.getSession().hasAcceptedTerms()) {
-                startActivity(Intent(this, PrivacyDisclosureActivity_::class.java))
-            }
-        }
 
         val isServiceRunning = Utils.isServiceRunning(activity, LanternVpnService::class.java)
         if (vpnModel.isConnectedToVpn() && !isServiceRunning) {
