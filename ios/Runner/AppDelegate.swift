@@ -4,17 +4,16 @@ import Flutter
 import Internalsdk
 
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate, InternalsdkReceiveStreamProtocol {
+@objc class AppDelegate: FlutterAppDelegate {
     // List of channel and event method names
     let NAVIGATION_METHOED_CHANNEL="lantern_method_channel"
     
-    var eventManager: EventManager!
     var sessionModel:SessionModel!
     var lanternModel:LanternModel!
     var flutterbinaryMessenger:FlutterBinaryMessenger!
     var lanternMethodChannel:FlutterMethodChannel!
     var navigationChannel:FlutterMethodChannel!
-    let goEventHandler = InternalsdkEventChannel("Gohandler")!
+    
     
     override func application(
         _ application: UIApplication,
@@ -24,7 +23,6 @@ import Internalsdk
         flutterbinaryMessenger=controller.binaryMessenger
         setupModels()
         prepareChannel()
-//        setupEventChannel()
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
@@ -33,19 +31,9 @@ import Internalsdk
         logger.log("setupModels method called")
         //Init Session Model
         sessionModel=SessionModel(flutterBinary: flutterbinaryMessenger)
-        //Init Session Model
+        //Init Lantern Model
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
-        //Init Database Model
-//        let pathName = "/samplepath"
-//        var db = BaseDatabase(modelName: "LANTERN")
-//        var minSqlvalues = ValueUtil.makeValue(from: "Hello world")
-//        var converToValues = ValueArrayHandler(values: [minSqlvalues])
-//        // Put
-//        db.put(path: pathName, values: converToValues, fullText: nil)
-//        sleep(7)
-//        //Get
-//        var getData = db.get(path: pathName)
-//        logger.log("setupModels get data from DB \(getData)")
+
         
     }
     
@@ -71,18 +59,4 @@ import Internalsdk
             result(FlutterMethodNotImplemented)
         }
     }
-    
-    
-    func setupEventChannel(){
-        //        goEventHandler.setReceiveStream(self)
-        //        goEventHandler.invoke(onListen: " From Swift")
-        //        goEventHandler.invoke(onListen: " From Flutter")
-        //        goEventHandler.invoke(onListen: " From A")
-        //        goEventHandler.invoke(onListen: " From B")
-    }
-    
-    func onDataReceived(_ data: String?) {
-//        logger.log("GoEventHandler onDataReceived with \( data) ")
-    }
-    
 }

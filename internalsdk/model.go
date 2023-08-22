@@ -145,7 +145,7 @@ func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
 		return nil, err
 	}
 	// Initialization for SessionModel
-	initSessionModel(base.(*baseModel))
+	// initSessionModel(base.(*baseModel))
 	return &SessionModel{base}, nil
 }
 
