@@ -12,9 +12,9 @@
 		035BE7052A7122BC0084059A /* LanternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7032A7122BC0084059A /* LanternModel.swift */; };
 		035BE7062A7122BC0084059A /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7042A7122BC0084059A /* SessionModel.swift */; };
 		035FDDD52A6A547F007B15C8 /* Internalsdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */; };
+		0369DF792A93803D000EBE43 /* MessagingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0369DF782A93803D000EBE43 /* MessagingModel.swift */; };
 		036AE7482A655C9A003AA025 /* Shared in Resources */ = {isa = PBXBuildFile; fileRef = 036AE7472A655C9A003AA025 /* Shared */; };
 		036AE74A2A655CA1003AA025 /* Tunnel in Resources */ = {isa = PBXBuildFile; fileRef = 036AE7492A655CA1003AA025 /* Tunnel */; };
-		03D789A72A616DB7000D36F9 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D789A62A616DB7000D36F9 /* EventManager.swift */; };
 		03F2FE342A6949EF0082B34C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F2FE332A6949EF0082B34C /* Logger.swift */; };
 		03F4CD7E2A77DE8500F7BDD8 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */; };
 		03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */; };
@@ -41,14 +41,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		03026EA02A77D654001D5507 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = Models/Database.swift; sourceTree = "<group>"; };
+		03026EA02A77D654001D5507 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		03026EA22A77D67A001D5507 /* ValueUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueUtil.swift; sourceTree = "<group>"; };
 		035BE7032A7122BC0084059A /* LanternModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LanternModel.swift; path = Models/LanternModel.swift; sourceTree = "<group>"; };
 		035BE7042A7122BC0084059A /* SessionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SessionModel.swift; path = Models/SessionModel.swift; sourceTree = "<group>"; };
 		035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Internalsdk.xcframework; sourceTree = "<group>"; };
+		0369DF782A93803D000EBE43 /* MessagingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessagingModel.swift; path = Models/MessagingModel.swift; sourceTree = "<group>"; };
 		036AE7472A655C9A003AA025 /* Shared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shared; path = "../../lantern-ios/Shared"; sourceTree = "<group>"; };
 		036AE7492A655CA1003AA025 /* Tunnel */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Tunnel; path = "../../lantern-ios/Tunnel"; sourceTree = "<group>"; };
-		03D789A62A616DB7000D36F9 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		03F2FE332A6949EF0082B34C /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SessionManager.swift; path = Models/SessionManager.swift; sourceTree = "<group>"; };
 		03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BaseModel.swift; path = Models/BaseModel.swift; sourceTree = "<group>"; };
@@ -84,6 +84,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		033CBDCC2A94D86300DEBCBA /* Db */ = {
+			isa = PBXGroup;
+			children = (
+				03026EA02A77D654001D5507 /* Database.swift */,
+			);
+			path = Db;
+			sourceTree = "<group>";
+		};
 		03CD38182A693C050044B004 /* internalsdk */ = {
 			isa = PBXGroup;
 			children = (
@@ -95,19 +103,11 @@
 		03D789A42A616D25000D36F9 /* Lantern */ = {
 			isa = PBXGroup;
 			children = (
+				033CBDCC2A94D86300DEBCBA /* Db */,
 				03F2FE322A6949C60082B34C /* Utils */,
 				03EE344A2A652B3D00E37100 /* Models */,
-				03D789A52A616D83000D36F9 /* Event */,
 			);
 			path = Lantern;
-			sourceTree = "<group>";
-		};
-		03D789A52A616D83000D36F9 /* Event */ = {
-			isa = PBXGroup;
-			children = (
-				03D789A62A616DB7000D36F9 /* EventManager.swift */,
-			);
-			name = Event;
 			sourceTree = "<group>";
 		};
 		03EE344A2A652B3D00E37100 /* Models */ = {
@@ -115,9 +115,9 @@
 			children = (
 				035BE7032A7122BC0084059A /* LanternModel.swift */,
 				035BE7042A7122BC0084059A /* SessionModel.swift */,
-				03026EA02A77D654001D5507 /* Database.swift */,
 				03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */,
 				03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */,
+				0369DF782A93803D000EBE43 /* MessagingModel.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -351,8 +351,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				03F2FE342A6949EF0082B34C /* Logger.swift in Sources */,
-				03D789A72A616DB7000D36F9 /* EventManager.swift in Sources */,
 				03F4CD7E2A77DE8500F7BDD8 /* SessionManager.swift in Sources */,
+				0369DF792A93803D000EBE43 /* MessagingModel.swift in Sources */,
 				03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */,
 				035BE7062A7122BC0084059A /* SessionModel.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,

@@ -12,16 +12,23 @@
 
 #include "Minisql.objc.h"
 
+@class InternalsdkChangeSetInterface;
 @class InternalsdkEmailMessage;
 @class InternalsdkEventChannel;
 @class InternalsdkFlutterMethodChannel;
+@class InternalsdkItemInterface;
+@class InternalsdkMessagingModel;
 @class InternalsdkReplicaServer;
+@class InternalsdkSessionModel;
 @class InternalsdkStartResult;
+@class InternalsdkSubscriptionRequest;
 @class InternalsdkSurveyInfo;
 @protocol InternalsdkAdProvider;
 @class InternalsdkAdProvider;
 @protocol InternalsdkAdSettings;
 @class InternalsdkAdSettings;
+@protocol InternalsdkBaseModel;
+@class InternalsdkBaseModel;
 @protocol InternalsdkDeviceInfo;
 @class InternalsdkDeviceInfo;
 @protocol InternalsdkEmailResponseHandler;
@@ -30,8 +37,6 @@
 @class InternalsdkEventSink;
 @protocol InternalsdkGeoCallback;
 @class InternalsdkGeoCallback;
-@protocol InternalsdkModel;
-@class InternalsdkModel;
 @protocol InternalsdkReceiveStream;
 @class InternalsdkReceiveStream;
 @protocol InternalsdkSession;
@@ -40,6 +45,8 @@
 @class InternalsdkSettings;
 @protocol InternalsdkUpdater;
 @class InternalsdkUpdater;
+@protocol InternalsdkUpdaterModel;
+@class InternalsdkUpdaterModel;
 
 @protocol InternalsdkAdProvider <NSObject>
 - (NSString* _Nonnull)getInterstitialZoneID;
@@ -53,6 +60,12 @@
  * GetAdProvider gets an ad provider if and only if ads are enabled based on the passed parameters.
  */
 - (id<InternalsdkAdProvider> _Nullable)getAdProvider:(BOOL)isPro countryCode:(NSString* _Nullable)countryCode daysSinceInstalled:(long)daysSinceInstalled error:(NSError* _Nullable* _Nullable)error;
+@end
+
+@protocol InternalsdkBaseModel <NSObject>
+- (MinisqlValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
+- (BOOL)subscribe:(InternalsdkSubscriptionRequest* _Nullable)req error:(NSError* _Nullable* _Nullable)error;
+- (BOOL)unsubscribe:(NSString* _Nullable)id_ error:(NSError* _Nullable* _Nullable)error;
 @end
 
 @protocol InternalsdkDeviceInfo <NSObject>
@@ -80,14 +93,6 @@
 - (void)setLatitude:(double)p0;
 - (void)setLongitude:(double)p0;
 - (void)setRegion:(NSString* _Nullable)p0;
-@end
-
-@protocol InternalsdkModel <NSObject>
-- (MinisqlValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
-
-// skipped method Model.Subscribe with unsupported parameter or return types
-
-- (BOOL)unsubscribe:(NSString* _Nullable)id_ error:(NSError* _Nullable* _Nullable)error;
 @end
 
 @protocol InternalsdkReceiveStream <NSObject>
@@ -137,6 +142,23 @@ Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 
 @protocol InternalsdkUpdater <NSObject>
 - (void)progress:(long)p0;
+@end
+
+@protocol InternalsdkUpdaterModel <NSObject>
+- (BOOL)onChanges:(InternalsdkChangeSetInterface* _Nullable)cs error:(NSError* _Nullable* _Nullable)error;
+@end
+
+/**
+ * ChangeSetInterface represents changes in a database.
+ */
+@interface InternalsdkChangeSetInterface : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nonnull instancetype)init;
+@property (nonatomic) NSString* _Nonnull updatesSerialized;
+@property (nonatomic) NSString* _Nonnull deletesSerialized;
 @end
 
 /**
@@ -196,6 +218,35 @@ Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 @end
 
 /**
+ * ItemInterface represents an item in the database with its associated values.
+ */
+@interface InternalsdkItemInterface : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nonnull instancetype)init;
+@property (nonatomic) NSString* _Nonnull path;
+@property (nonatomic) NSString* _Nonnull detailPath;
+@property (nonatomic) MinisqlValue* _Nullable value;
+@end
+
+/**
+ * Messing Model
+ */
+@interface InternalsdkMessagingModel : NSObject <goSeqRefInterface, InternalsdkBaseModel> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nullable instancetype)init:(NSString* _Nullable)schema mdb:(id<MinisqlDB> _Nullable)mdb;
+@property (nonatomic) id<InternalsdkBaseModel> _Nullable baseModel;
+- (MinisqlValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
+- (BOOL)subscribe:(InternalsdkSubscriptionRequest* _Nullable)req error:(NSError* _Nullable* _Nullable)error;
+- (BOOL)unsubscribe:(NSString* _Nullable)id_ error:(NSError* _Nullable* _Nullable)error;
+@end
+
+/**
  * Replica HTTP Server that handles Replica API requests on localhost at a random port.
  */
 @interface InternalsdkReplicaServer : NSObject <goSeqRefInterface> {
@@ -220,6 +271,25 @@ If disabled after having been enabled, the server keeps running and ReplicaAddr 
 @end
 
 /**
+ * Custom Model implemnation
+SessionModel is a custom model derived from the baseModel.
+ */
+@interface InternalsdkSessionModel : NSObject <goSeqRefInterface, InternalsdkBaseModel> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+/**
+ * NewSessionModel initializes a new SessionModel instance.
+ */
+- (nullable instancetype)init:(NSString* _Nullable)schema mdb:(id<MinisqlDB> _Nullable)mdb;
+@property (nonatomic) id<InternalsdkBaseModel> _Nullable baseModel;
+- (MinisqlValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
+- (BOOL)subscribe:(InternalsdkSubscriptionRequest* _Nullable)req error:(NSError* _Nullable* _Nullable)error;
+- (BOOL)unsubscribe:(NSString* _Nullable)id_ error:(NSError* _Nullable* _Nullable)error;
+@end
+
+/**
  * StartResult provides information about the started Lantern
  */
 @interface InternalsdkStartResult : NSObject <goSeqRefInterface> {
@@ -231,6 +301,22 @@ If disabled after having been enabled, the server keeps running and ReplicaAddr 
 @property (nonatomic) NSString* _Nonnull httpAddr;
 @property (nonatomic) NSString* _Nonnull sockS5Addr;
 @property (nonatomic) NSString* _Nonnull dnsGrabAddr;
+@end
+
+/**
+ * SubscriptionRequest defines the structure of a subscription request.
+ */
+@interface InternalsdkSubscriptionRequest : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nonnull instancetype)init;
+@property (nonatomic) NSString* _Nonnull id_;
+@property (nonatomic) NSString* _Nonnull pathPrefixes;
+@property (nonatomic) BOOL joinDetails;
+@property (nonatomic) BOOL receiveInitial;
+@property (nonatomic) id<InternalsdkUpdaterModel> _Nullable updater;
 @end
 
 @interface InternalsdkSurveyInfo : NSObject <goSeqRefInterface> {
@@ -298,10 +384,15 @@ FOUNDATION_EXPORT InternalsdkEventChannel* _Nullable InternalsdkNewEventChannel(
 // skipped function NewFlutterMethodChannel with unsupported parameter or return types
 
 
-FOUNDATION_EXPORT id<InternalsdkModel> _Nullable InternalsdkNewModel(NSString* _Nullable schema, id<MinisqlDB> _Nullable mdb, NSError* _Nullable* _Nullable error);
+FOUNDATION_EXPORT InternalsdkMessagingModel* _Nullable InternalsdkNewMessagingModel(NSString* _Nullable schema, id<MinisqlDB> _Nullable mdb, NSError* _Nullable* _Nullable error);
 
 // skipped function NewReplicaServer with unsupported parameter or return types
 
+
+/**
+ * NewSessionModel initializes a new SessionModel instance.
+ */
+FOUNDATION_EXPORT InternalsdkSessionModel* _Nullable InternalsdkNewSessionModel(NSString* _Nullable schema, id<MinisqlDB> _Nullable mdb, NSError* _Nullable* _Nullable error);
 
 FOUNDATION_EXPORT NSString* _Nonnull InternalsdkRelayTo(NSString* _Nullable relayAddr, NSError* _Nullable* _Nullable error);
 
@@ -355,6 +446,8 @@ FOUNDATION_EXPORT BOOL InternalsdkTun2Socks(long fd, NSString* _Nullable socksAd
 
 @class InternalsdkAdSettings;
 
+@class InternalsdkBaseModel;
+
 @class InternalsdkDeviceInfo;
 
 @class InternalsdkEmailResponseHandler;
@@ -363,8 +456,6 @@ FOUNDATION_EXPORT BOOL InternalsdkTun2Socks(long fd, NSString* _Nullable socksAd
 
 @class InternalsdkGeoCallback;
 
-@class InternalsdkModel;
-
 @class InternalsdkReceiveStream;
 
 @class InternalsdkSession;
@@ -372,6 +463,8 @@ FOUNDATION_EXPORT BOOL InternalsdkTun2Socks(long fd, NSString* _Nullable socksAd
 @class InternalsdkSettings;
 
 @class InternalsdkUpdater;
+
+@class InternalsdkUpdaterModel;
 
 /**
  * AdProvider provides information for displaying an ad and makes decisions on whether or not to display it.
@@ -400,6 +493,19 @@ global config
  * GetAdProvider gets an ad provider if and only if ads are enabled based on the passed parameters.
  */
 - (id<InternalsdkAdProvider> _Nullable)getAdProvider:(BOOL)isPro countryCode:(NSString* _Nullable)countryCode daysSinceInstalled:(long)daysSinceInstalled error:(NSError* _Nullable* _Nullable)error;
+@end
+
+/**
+ * BaseModel defines the methods that any model should implement
+ */
+@interface InternalsdkBaseModel : NSObject <goSeqRefInterface, InternalsdkBaseModel> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (MinisqlValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
+- (BOOL)subscribe:(InternalsdkSubscriptionRequest* _Nullable)req error:(NSError* _Nullable* _Nullable)error;
+- (BOOL)unsubscribe:(NSString* _Nullable)id_ error:(NSError* _Nullable* _Nullable)error;
 @end
 
 /**
@@ -451,17 +557,6 @@ event there's an error sending an email
 - (void)setLatitude:(double)p0;
 - (void)setLongitude:(double)p0;
 - (void)setRegion:(NSString* _Nullable)p0;
-@end
-
-@interface InternalsdkModel : NSObject <goSeqRefInterface, InternalsdkModel> {
-}
-@property(strong, readonly) _Nonnull id _ref;
-
-- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (MinisqlValue* _Nullable)invokeMethod:(NSString* _Nullable)method arguments:(id<MinisqlValues> _Nullable)arguments error:(NSError* _Nullable* _Nullable)error;
-// skipped method Model.Subscribe with unsupported parameter or return types
-
-- (BOOL)unsubscribe:(NSString* _Nullable)id_ error:(NSError* _Nullable* _Nullable)error;
 @end
 
 @interface InternalsdkReceiveStream : NSObject <goSeqRefInterface, InternalsdkReceiveStream> {
@@ -533,6 +628,17 @@ Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (void)progress:(long)p0;
+@end
+
+/**
+ * UpdaterModel defines an interface to handle database changes.
+ */
+@interface InternalsdkUpdaterModel : NSObject <goSeqRefInterface, InternalsdkUpdaterModel> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (BOOL)onChanges:(InternalsdkChangeSetInterface* _Nullable)cs error:(NSError* _Nullable* _Nullable)error;
 @end
 
 #endif

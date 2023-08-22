@@ -9,7 +9,7 @@ import Foundation
 import Internalsdk
 import Flutter
 
-class SessionModel:BaseModel, FlutterStreamHandler,InternalsdkReceiveStreamProtocol {
+class SessionModel:BaseModel<InternalsdkSessionModel>, FlutterStreamHandler {
     
     let SESSION_METHOD_CHANNEL="session_method_channel"
     let SESSION_EVENT_CHANNEL="session_event_channel"
@@ -17,27 +17,54 @@ class SessionModel:BaseModel, FlutterStreamHandler,InternalsdkReceiveStreamProto
     var sessionEventChannel:FlutterEventChannel!
     var sessionMethodChannel:FlutterMethodChannel!
     var flutterbinaryMessenger:FlutterBinaryMessenger
-    let internalSessioModelChannel=InternalsdkSessionModelChannel()!
-    let internalSessioEventChannel = InternalsdkEventChannel("session_event_channel")!
     var activeSinks: FlutterEventSink?
+    var activeSubscribers: Set<String> = []
     var asyncHandler: DispatchQueue = DispatchQueue(label: "SessionModelasyncHandlerQueue")
     
-
+    
     init(flutterBinary:FlutterBinaryMessenger) {
         self.flutterbinaryMessenger=flutterBinary
-        super.init()
+        super.init(type: .sessionModel )
         sessionEventChannel = FlutterEventChannel(name: SESSION_EVENT_CHANNEL, binaryMessenger: flutterBinary)
         sessionEventChannel.setStreamHandler(self)
         
         sessionMethodChannel = FlutterMethodChannel(name: SESSION_METHOD_CHANNEL, binaryMessenger: flutterBinary)
         sessionMethodChannel.setMethodCallHandler(handleMethodCall)
-        internalSessioEventChannel.setReceiveStream(self)
+        
     }
     
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        self.activeSinks = events
-//        internalSessioEventChannel.invoke(onListen: arguments.)
-        logger.log("Session Event listen called with \(arguments)")
+        logger.log("onListen initiated with arguments: \(arguments)")
+        guard let args = arguments as? [String: Any] else {
+            let errorMessage = "Failed to cast arguments to dictionary. Exiting..."
+            logger.log(errorMessage)
+            return FlutterError(code: "INVALID_ARGUMENTS", message: errorMessage, details: nil)
+        }
+        activeSinks = events
+        
+        guard let subscriberID = args["subscriberID"] as? String,
+              let path = args["path"] as? String else {
+            let errorMessage = "Required parameters subscriberID or path missing in arguments. Exiting..."
+            logger.log(errorMessage)
+            return FlutterError(code: "MISSING_PARAMETERS", message: errorMessage, details: nil)
+        }
+        
+        
+        let details = args["details"] as? Bool ?? false
+        activeSubscribers.insert(subscriberID)
+        let sub = DetailsSubscriber(subscriberID: subscriberID, path: path) { changes in
+            // Handle the changes here.
+            logger.log("Received changes: \(String(describing: changes))")
+        }
+        
+        do {
+            try model.subscribe(sub)
+        } catch let error {
+            let errorMessage = "An error occurred while subscribing: \(error.localizedDescription)"
+            logger.log(errorMessage)
+            return FlutterError(code: "SUBSCRIBE_ERROR", message: errorMessage, details: nil)
+        }
+        
         return nil
     }
     
@@ -56,7 +83,7 @@ class SessionModel:BaseModel, FlutterStreamHandler,InternalsdkReceiveStreamProto
         }
         
     }
-
+    
     
     func doMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
         do {
@@ -72,17 +99,41 @@ class SessionModel:BaseModel, FlutterStreamHandler,InternalsdkReceiveStreamProto
             }
         }
     }
-     
+    
     func invokeMethodOnGo(name: String, argument: Any) throws -> Any {
         //Convert any argument to Minisql values
-        
         let result = try model.invokeMethod(name, arguments: argument as? MinisqlValuesProtocol)
         return result
     }
     
-    //GO Event channel callback
-    func onDataReceived(_ data: String?) {
-        logger.log("Session  onDataReceived called with \(data)")
-        activeSinks?(data)
+}
+
+class DetailsSubscriber: InternalsdkSubscriptionRequest {
+    
+    var subscriberID: String
+    var path: String
+    var updaterDelegate: DetailsSubscriberUpdater
+    
+    init(subscriberID: String, path: String, onChanges: @escaping (InternalsdkChangeSetInterface?) -> Void) {
+        self.subscriberID = subscriberID
+        self.path = path
+        self.updaterDelegate = DetailsSubscriberUpdater()
+        super.init()
+        
+        self.id_ = subscriberID
+        self.pathPrefixes = path
+        self.receiveInitial = true
+        self.updater = updaterDelegate
+        updaterDelegate.onChangesCallback = onChanges
+    }
+    
+}
+
+class DetailsSubscriberUpdater: NSObject, InternalsdkUpdaterModelProtocol {
+    var onChangesCallback: ((InternalsdkChangeSetInterface?) -> Void)?
+    
+    func onChanges(_ cs: InternalsdkChangeSetInterface?) throws {
+        onChangesCallback?(cs)
     }
 }
+

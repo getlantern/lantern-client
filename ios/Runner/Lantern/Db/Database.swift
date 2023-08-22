@@ -42,7 +42,6 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
     }
     
     func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
-        let qu = "SELECT value FROM LANTERN_data WHERE path = path"
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
         }
