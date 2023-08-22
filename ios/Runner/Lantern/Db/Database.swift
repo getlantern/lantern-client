@@ -54,7 +54,7 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
         try statement.run(bindings).forEach { row in
             rows.append(row)
         }
-        logger.log("Database manner query result \(rows)")
+        logger.log("Database manager query result \(rows)")
         return RowData(rows: rows)
     }
  
@@ -156,18 +156,18 @@ class QueryResult: NSObject, MinisqlResultProtocol {
 }
 
 class RowData: NSObject, MinisqlRowsProtocol {
-  
+    
     let rows: [Statement.Element]
     var currentIndex: Int = 0
-
+    
     init(rows: [Statement.Element]) {
         self.rows = rows
     }
-       
+    
     func close() throws {
         // Not sure what to put here
     }
-
+    
     func next() -> Bool {
         if currentIndex < rows.count {
             return true
@@ -180,7 +180,7 @@ class RowData: NSObject, MinisqlRowsProtocol {
      - Parameter values: An object that conforms to `MinisqlValuesProtocol`. This object will be populated with the values from the current row, converted to `MinisqlValue` objects.
      - Throws: An `NSError` if `values` is `nil` or if `currentIndex` is outside the bounds of the `rows` array.
      - Note: This method updates `currentIndex` to point to the next row. If there are no more rows, `next()` will return `false`.
-    */
+     */
     func scan(_ values: MinisqlValuesProtocol?) throws {
         logger.log("SCAN method called with \(values) with rowcount \(rows.count)")
         if values == nil {
@@ -191,14 +191,14 @@ class RowData: NSObject, MinisqlRowsProtocol {
             logger.log("Error: currentIndex \(currentIndex) is out of bounds")
             throw NSError(domain: "Scan method failed", code: 0, userInfo: [NSLocalizedDescriptionKey: "Current index is out of bounds"])
         }
-      let currentRow = rows[currentIndex]
+        let currentRow = rows[currentIndex]
         for (index, value) in currentRow.enumerated() {
-           let miniSqlValue = ValueUtil.makeValue(from: value)
+            let miniSqlValue = ValueUtil.makeValue(from: value)
             // Set the value in the 'values' object
             values?.set(index, value: miniSqlValue)
         }
     }
-
+    
 }
 
 class ValueArrayHandler: NSObject, MinisqlValuesProtocol {

@@ -68,7 +68,7 @@ func (m *baseModel) InvokeMethod(method string, arguments minisql.Values) (*mini
 func (m *baseModel) Subscribe(req *SubscriptionRequest) error {
 	log.Debugf("Subscribe called with request:", req)
 	pathPrefixesSlice := req.getPathPrefixes()
-	log.Debugf("Path Prefixes:", pathPrefixesSlice)
+	log.Debugf("Path Prefixes:", pathPrefixesSlice[0])
 
 	sub := &pathdb.Subscription[interface{}]{
 		ID:             req.ID,
@@ -129,7 +129,15 @@ func (m *baseModel) Unsubscribe(path string) error {
 }
 
 func (s *SubscriptionRequest) getPathPrefixes() []string {
-	return strings.Split(s.PathPrefixes, ",")
+	// Split the PathPrefixes string by comma
+	parts := strings.Split(s.PathPrefixes, ",")
+
+	// Iterate over each part and trim the trailing '%'
+	for i, part := range parts {
+		parts[i] = strings.TrimSuffix(part, "%")
+	}
+
+	return parts
 }
 
 // Custom Model implemnation

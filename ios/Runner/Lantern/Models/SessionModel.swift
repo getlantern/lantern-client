@@ -69,7 +69,26 @@ class SessionModel:BaseModel<InternalsdkSessionModel>, FlutterStreamHandler {
     }
     
     func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        logger.log("Session Event onCancel called with \(arguments)")
+        guard let args = arguments as? [String: Any] else {
+            let errorMessage = "Failed to cast arguments to dictionary. Exiting..."
+            logger.log(errorMessage)
+            return FlutterError(code: "INVALID_ARGUMENTS", message: errorMessage, details: nil)
+        }
+        
+        guard let subscriberID = args["subscriberID"] as? String else {
+            let errorMessage = "Required parameters subscriberID missing in arguments. Exiting..."
+            logger.log(errorMessage)
+            return FlutterError(code: "MISSING_PARAMETERS", message: errorMessage, details: nil)
+        }
+        
+        do {
+            try model.unsubscribe(subscriberID)
+            activeSubscribers.remove(subscriberID)
+        } catch let error {
+            let errorMessage = "An error occurred while unsubscribing: \(error.localizedDescription)"
+            logger.log(errorMessage)
+            return FlutterError(code: "UNSUBSCRIBE_ERROR", message: errorMessage, details: nil)
+        }
         return nil
     }
     
