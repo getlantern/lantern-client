@@ -94,7 +94,9 @@ dependencies:
   path_provider: ^2.1.0
   permission_handler: ^10.4.3
   flutter_markdown: ^0.6.17+1
-
+ # Ads
+  google_mobile_ads: ^3.0.0
+  clever_ads_solutions: ^0.1.0
 
 
 

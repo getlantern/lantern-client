@@ -1,6 +1,5 @@
 package org.getlantern.lantern
 
-import android.Manifest
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -13,7 +12,6 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -33,8 +31,6 @@ import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
-import org.getlantern.lantern.model.PaymentProvider
-import org.getlantern.lantern.model.PaymentMethod
 import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
@@ -45,6 +41,7 @@ import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
@@ -57,8 +54,8 @@ import org.getlantern.mobilesdk.model.Survey
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.concurrent.*
 import java.util.Locale
+import java.util.concurrent.*
 
 class MainActivity :
     FlutterActivity(),
@@ -338,9 +335,9 @@ class MainActivity :
                 }
                 LanternApp.getSession().setUserPlans(proPlans)
 
-             }
-         }, null)
-     }
+            }
+        }, null)
+    }
 
     private fun updatePaymentMethods() {
         lanternClient.plansV3(object : PlansV3Callback {
@@ -348,13 +345,16 @@ class MainActivity :
                 Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
             }
 
-            override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
+            override fun onSuccess(
+                proPlans: Map<String, ProPlan>,
+                paymentMethods: List<PaymentMethods>
+            ) {
                 Logger.debug(TAG, "Successfully fetched payment methods")
                 LanternApp.getSession().setPaymentMethods(paymentMethods)
 
-             }
-         }, null)
-     }
+            }
+        }, null)
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {
@@ -400,13 +400,13 @@ class MainActivity :
             )
             val userType = survey.userType
             if (userType != null) {
-                if (userType == "free" && LanternApp.getSession().isProUser) {
+                if (userType == "free" && LanternApp.getSession().isProUser()) {
                     Logger.debug(
                         SURVEY_TAG,
                         "Not showing messages targetted to free users to Pro users",
                     )
                     return
-                } else if (userType == "pro" && !LanternApp.getSession().isProUser) {
+                } else if (userType == "pro" && !LanternApp.getSession().isProUser()) {
                     Logger.debug(
                         SURVEY_TAG,
                         "Not showing messages targetted to free users to Pro users",
@@ -455,11 +455,11 @@ class MainActivity :
         // is updating the connection
         if (on) {
             // Make sure we have the necessary permissions
-            val neededPermissions: Array<String> = missingPermissions()
+            val neededPermissions: Array<String> = PermissionUtil.missingPermissions(context)
             if (neededPermissions.isNotEmpty()) {
                 val msg = StringBuilder()
                 for (permission in neededPermissions) {
-                    if (!hasPermission(permission)) {
+                    if (!PermissionUtil.hasPermission(permission, context)) {
                         msg.append("<p style='font-size: 0.5em;'><b>")
                         val pm = packageManager
                         try {
@@ -537,6 +537,9 @@ class MainActivity :
                     TAG,
                     "VPN enabled, starting Lantern...",
                 )
+                //If user come here it mean user has all permissions needed
+                // Also user given permission for VPN service dialog as well
+                LanternApp.getSession().setHasFirstSessionCompleted(true)
                 updateStatus(true)
                 startVpnService()
             }
@@ -545,33 +548,6 @@ class MainActivity :
         }
     }
 
-    /*Note - we do not include Manifest.permission.FOREGROUND_SERVICE because this is automatically
-    granted based on being included in Manifest and will show as denied even if we're eligible
-    to get it.*/
-    private val allRequiredPermissions = arrayOf(
-        Manifest.permission.INTERNET,
-        Manifest.permission.ACCESS_WIFI_STATE,
-        Manifest.permission.ACCESS_NETWORK_STATE,
-    )
-
-    private fun missingPermissions(): Array<String> {
-        val missingPermissions: MutableList<String> = ArrayList()
-        for (permission in allRequiredPermissions) {
-            if (!hasPermission(permission)) {
-                missingPermissions.add(permission)
-            }
-        }
-        return missingPermissions.toTypedArray()
-    }
-
-    private fun hasPermission(permission: String): Boolean {
-        val result = ContextCompat.checkSelfPermission(
-            applicationContext,
-            permission,
-        ) == PackageManager.PERMISSION_GRANTED
-        Logger.debug(PERMISSIONS_TAG, "has permission %s: %s", permission, result)
-        return result
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -623,7 +599,12 @@ class MainActivity :
             updateStatus(useVpn)
             if (useVpn) {
                 startVpnService()
+                //This check is for new user that will start app first time
+                // this mean user has already given
+                // system permissions
+                LanternApp.getSession().setHasFirstSessionCompleted(true)
             }
+
         }
     }
 
