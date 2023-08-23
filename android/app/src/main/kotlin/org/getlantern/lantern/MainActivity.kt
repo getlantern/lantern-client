@@ -25,6 +25,7 @@ import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
 import okhttp3.Response
 import org.getlantern.lantern.activity.WebViewActivity_
+import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
