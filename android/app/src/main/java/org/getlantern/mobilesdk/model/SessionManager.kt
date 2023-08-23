@@ -104,7 +104,7 @@ abstract class SessionManager(application: Application) : Session {
         val locale = Locale(language)
         val country = countryCode
         return country.equals(c, ignoreCase = true) ||
-            listOf(*l).contains(locale)
+                listOf(*l).contains(locale)
     }
 
     val isEnglishUser: Boolean
@@ -235,9 +235,29 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(CHAT_ENABLED, enabled).apply()
     }
 
-//    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
+    override fun setShowInterstitialAdsEnabled(enabled: Boolean) {
+        Logger.d(TAG, "Setting $ADS_ENABLED to $enabled")
+        prefs.edit().putBoolean(ADS_ENABLED, enabled).apply()
+    }
+
+    override fun setCASShowInterstitialAdsEnabled(enabled: Boolean) {
+        Logger.d(TAG, "Setting $CAS_ADS_ENABLED to $enabled")
+        prefs.edit().putBoolean(CAS_ADS_ENABLED, enabled).apply()
+    }
+
+    fun shouldShowAdsEnabled(): Boolean {
+        return prefs.getBoolean(ADS_ENABLED, false)
+    }
+
+    fun shouldCASShowAdsEnabled(): Boolean {
+        return prefs.getBoolean(CAS_ADS_ENABLED, false)
+    }
+
+    //    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
     // for now, disable Chat completely
-    fun chatEnabled(): Boolean { return false }
+    fun chatEnabled(): Boolean {
+        return false
+    }
 
     fun appVersion(): String {
         return appVersion
@@ -397,6 +417,7 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().remove(HAS_SUCCEEDING_PROXY).apply()
     }
 
+
     /**
      * hasPrefExpired checks whether or not a particular
      * shared preference has expired (assuming its stored value
@@ -415,6 +436,17 @@ abstract class SessionManager(application: Application) : Session {
     fun saveExpiringPref(name: String?, numSeconds: Int) {
         val currentMilliseconds = System.currentTimeMillis()
         prefs.edit().putLong(name, currentMilliseconds + numSeconds * 1000).apply()
+    }
+
+    /**this preference is used for checking we want to show ads or not
+     * we are only after first session
+     */
+    fun setHasFirstSessionCompleted(status: Boolean) {
+        prefs.edit().putBoolean(HAS_FIRST_SESSION_COMPLETED, status).apply()
+    }
+
+    fun hasFirstSessionCompleted(): Boolean {
+        return prefs.getBoolean(HAS_FIRST_SESSION_COMPLETED, false);
     }
 
     fun getInternalHeaders(): Map<String, String> {
@@ -447,8 +479,12 @@ abstract class SessionManager(application: Application) : Session {
             return true
         }
         try {
-            val validInstallers: List<String> = ArrayList(listOf("com.android.vending",
-                "com.google.android.feedback"))
+            val validInstallers: List<String> = ArrayList(
+                listOf(
+                    "com.android.vending",
+                    "com.google.android.feedback"
+                )
+            )
             val installer = context.packageManager
                 .getInstallerPackageName(context.packageName)
             return installer != null && validInstallers.contains(installer)
@@ -470,6 +506,7 @@ abstract class SessionManager(application: Application) : Session {
         protected const val SERVER_COUNTRY_CODE = "server_country_code"
         protected const val SERVER_CITY = "server_city"
         protected const val HAS_SUCCEEDING_PROXY = "hasSucceedingProxy"
+        protected const val HAS_FIRST_SESSION_COMPLETED = "hasFirstSessionCompleted"
         protected const val DEVICE_ID = "deviceid"
 
         @JvmStatic
@@ -502,6 +539,8 @@ abstract class SessionManager(application: Application) : Session {
 
         private const val REPLICA_ADDR = "replicaAddr"
         public const val CHAT_ENABLED = "chatEnabled"
+        public const val ADS_ENABLED = "adsEnabled"
+        public const val CAS_ADS_ENABLED = "casAsEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),
@@ -602,7 +641,8 @@ abstract class SessionManager(application: Application) : Session {
                 val loadedApkCls = Class.forName("android.app.LoadedApk")
                 val receiversField = loadedApkCls.getDeclaredField("mReceivers")
                 receiversField.isAccessible = true
-                val receivers = receiversField.get(loadedApk) as ArrayMap<Context, ArrayMap<BroadcastReceiver, Any>>
+                val receivers =
+                    receiversField.get(loadedApk) as ArrayMap<Context, ArrayMap<BroadcastReceiver, Any>>
                 for (receiverMap in receivers.values) {
                     for (rec in (receiverMap as ArrayMap).keys) {
                         val clazz: Class<*> = rec.javaClass

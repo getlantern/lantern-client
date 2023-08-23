@@ -156,6 +156,21 @@ class SessionModel extends Model {
     );
   }
 
+  Future<String> getCountryCode() async {
+    return await methodChannel
+        .invokeMethod('getCountryCode', <String, dynamic>{});
+  }
+
+  Future<bool> shouldShowAds() async {
+    return await methodChannel
+        .invokeMethod('shouldShowAds', <String, dynamic>{});
+  }
+
+  Future<bool> shouldCASShowAds() async {
+    return await methodChannel
+        .invokeMethod('shouldCASShowAds', <String, dynamic>{});
+  }
+
   Future<void> setLanguage(String lang) {
     return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
       'lang': lang,
@@ -407,14 +422,18 @@ class SessionModel extends Model {
   }
 
   Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/splitTunneling',
-        builder: builder,);
+    return subscribedSingleValueBuilder<bool>(
+      '/splitTunneling',
+      builder: builder,
+    );
   }
 
   Future<void> setSplitTunneling<T>(bool on) async {
-    unawaited(methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
-      'on': on,
-    }),);
+    unawaited(
+      methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
+        'on': on,
+      }),
+    );
   }
 
   Widget appsData({
