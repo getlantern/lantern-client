@@ -9,12 +9,16 @@ import Foundation
 import Internalsdk
 import Flutter
 
-class LanternModel:NSObject {
+class LanternModel:NSObject ,FlutterStreamHandler{
+    
+    
     
     let LANTERN_EVENT_CHANNEL="lantern_event_channel"
     let LANTERN_METHOED_CHANNEL="lantern_method_channel"
     
     var lanternMethodChannel:FlutterMethodChannel!
+    var lanternEventChannel:FlutterEventChannel!
+
     var flutterbinaryMessenger:FlutterBinaryMessenger
     
     init(flutterBinary:FlutterBinaryMessenger) {
@@ -22,6 +26,8 @@ class LanternModel:NSObject {
         super.init()
         lanternMethodChannel = FlutterMethodChannel(name: LANTERN_METHOED_CHANNEL, binaryMessenger: flutterBinary)
         lanternMethodChannel.setMethodCallHandler(handleMethodCall)
+        lanternEventChannel = FlutterEventChannel(name: LANTERN_EVENT_CHANNEL, binaryMessenger: flutterBinary)
+        lanternEventChannel.setStreamHandler(self)
 
     }
     
@@ -40,6 +46,14 @@ class LanternModel:NSObject {
         }
     }
     
+    
+    func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+        return nil
+    }
+    
+    func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        return nil
+    }
     
 }
 

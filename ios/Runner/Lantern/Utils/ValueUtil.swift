@@ -21,18 +21,27 @@ class ValueUtil {
         
         switch anyValue {
         case is String:
-//            value = MinisqlValue(string: anyValue as! String)
             value = MinisqlNewValueString(anyValue as! String)
         case is Int:
             value =  MinisqlNewValueInt(anyValue as! Int)
+            //        case is SQLite.Blob:
+            //            logger.log("Make value SQLite.Blob")
+            //            let blob = anyValue as! SQLite.Blob
+            //            let data:NSData = Data(blob.bytes)
+            //            value = MinisqlNewValueBytes(data)
+            //            logger.log("Make value SQLite.Blob Completed with \(data) \(blob.bytes)")
         case is UInt8:
-            value =   MinisqlNewValueBytes(anyValue as! Data)
+            logger.log("Make value UInt8 with value \(anyValue)")
+            let blob = anyValue as! SQLite.Blob
+            let data = Data(blob.bytes)
+            value = MinisqlNewValueBytes(data)
+            logger.log("Make value UInt8 Completed with \(data.count) bytes \(blob.bytes)")
         default:
-            fatalError("Unsupported type")
+            fatalError("Unsupported type \(type(of: anyValue)) with value: \(anyValue)")
         }
         return value
     }
-
+    
     static func getValue(from internalsdkValue: MinisqlValue) -> Any {
         switch internalsdkValue.type {
         case TYPE_STRING:
@@ -45,7 +54,7 @@ class ValueUtil {
             fatalError("Unsupported type")
         }
     }
-
+    
     static func toBindingsArray(_ args: MinisqlValuesProtocol) -> [Binding?] {
         var bindings = [Binding?]()
         for i in 0..<args.len() {
@@ -59,11 +68,56 @@ class ValueUtil {
             case TYPE_INT:
                 bindings.append(arg.int_())
             case TYPE_BYTES:
-                bindings.append(arg.string())
+                let byteArray = [UInt8](arg.bytes()!)
+                bindings.append(Blob(bytes: byteArray))
+                
             default:
                 bindings.append(nil)
             }
         }
         return bindings
+    }
+    
+    
+    
+    static func fromBindingToMinisqlValue(binding: Binding) -> MinisqlValue {
+        let value: MinisqlValue!
+        switch binding.bindingType {
+        case "String":
+            value = MinisqlNewValueString(binding as! String)
+        case "Int64":
+            value =  MinisqlNewValueInt(Int(binding as! Int64))
+        case "Blob":
+            let blob = binding as! Blob
+            let data = Data(blob.bytes)
+            value = MinisqlNewValueBytes(data)
+            logger.log("Blob value (Data representation): \(data)")
+
+            
+        default:
+            fatalError("Unsupported SQLite.Binding type: \(binding.bindingType)")
+        }
+        return value
+    }
+    
+    
+    
+}
+extension Binding {
+    var bindingType: String {
+        switch self {
+        case is Int64:
+            return "Int64"
+        case is Double:
+            return "Double"
+        case is String:
+            return "String"
+        case is Blob:
+            return "Blob"
+        case is NSNumber:
+            return "NSNumber"
+        default:
+            return "Unknown"
+        }
     }
 }

@@ -36,7 +36,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel>, FlutterStreamHandler {
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         logger.log("onListen initiated with arguments: \(arguments)")
         guard let args = arguments as? [String: Any] else {
-            let errorMessage = "Failed to cast arguments to dictionary. Exiting..."
+            let errorMessage = "Failed to cast arguments \(arguments) to dictionary. Exiting..."
             logger.log(errorMessage)
             return FlutterError(code: "INVALID_ARGUMENTS", message: errorMessage, details: nil)
         }
@@ -69,8 +69,12 @@ class SessionModel:BaseModel<InternalsdkSessionModel>, FlutterStreamHandler {
     }
     
     func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        if(arguments==nil){
+            let errorMessage = "Arguments found nill"
+            return FlutterError(code: "MISSING_PARAMETERS", message: errorMessage, details: nil)
+        }
         guard let args = arguments as? [String: Any] else {
-            let errorMessage = "Failed to cast arguments to dictionary. Exiting..."
+            let errorMessage = "onCancel Failed to cast arguments \(arguments) to dictionary. Exiting..."
             logger.log(errorMessage)
             return FlutterError(code: "INVALID_ARGUMENTS", message: errorMessage, details: nil)
         }

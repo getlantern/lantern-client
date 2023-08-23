@@ -153,7 +153,7 @@ func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
 		return nil, err
 	}
 	// Initialization for SessionModel
-	// initSessionModel(base.(*baseModel))
+	initSessionModel(base.(*baseModel))
 	return &SessionModel{base}, nil
 }
 
@@ -172,18 +172,20 @@ func initSessionModel(m *baseModel) {
 	const PATH_SDK_VERSION = "sdkVersion"
 	const PATH_USER_LEVEL = "userLevel"
 	const CHAT_ENABLED = "chatEnabled"
+	const DEVELOPMNET_MODE = "developmentMode"
 
 	// Init few path for startup
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put[bool](tx, PATH_PRO_USER, false, "")
 		pathdb.Put[bool](tx, CHAT_ENABLED, false, "")
+		pathdb.Put[bool](tx, DEVELOPMNET_MODE, true, "")
 		pathdb.Put[string](tx, PATH_SDK_VERSION, SDKVersion(), "")
 
-		userLevel, error := tx.Get(PATH_USER_LEVEL)
-		if error != nil {
-			return fmt.Errorf("Error while retriving %v and error %v", PATH_USER_LEVEL, error)
-		}
-		pathdb.Put[[]byte](tx, PATH_USER_LEVEL, userLevel, "")
+		// userLevel, error := tx.Get(PATH_USER_LEVEL)
+		// if error != nil {
+		// 	return fmt.Errorf("Error while retriving %v and error %v", PATH_USER_LEVEL, error)
+		// }
+		// pathdb.Put[[]byte](tx, PATH_USER_LEVEL, userLevel, "")
 		return nil
 	})
 }

@@ -15,7 +15,8 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
     
     private let db: Connection
     private var currentTransaction: TransactionManager?
-    
+    private let queue = DispatchQueue(label: "com.myapp.DatabaseManager", attributes: .concurrent)
+
     init(database: Connection) {
         self.db = database
     }
@@ -42,6 +43,9 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
     }
     
     func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
+        queue.sync {
+            <#code#>
+        
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
         }
@@ -158,7 +162,7 @@ class QueryResult: NSObject, MinisqlResultProtocol {
 class RowData: NSObject, MinisqlRowsProtocol {
     
     let rows: [Statement.Element]
-    var currentIndex: Int = 0
+    var currentIndex: Int = -1
     
     init(rows: [Statement.Element]) {
         self.rows = rows
@@ -169,11 +173,10 @@ class RowData: NSObject, MinisqlRowsProtocol {
     }
     
     func next() -> Bool {
-        if currentIndex < rows.count {
-            return true
-        }
-        return false
+        currentIndex += 1
+        return currentIndex < rows.count
     }
+
     /**
      This method scans the current row and converts its values to `MinisqlValue` objects.
      This method assumes that `values` is an object that supports setting values by index, and `rows` is an array of arrays where each inner array represents a row from a database and contains values of type `Binding`.
@@ -193,9 +196,10 @@ class RowData: NSObject, MinisqlRowsProtocol {
         }
         let currentRow = rows[currentIndex]
         for (index, value) in currentRow.enumerated() {
-            let miniSqlValue = ValueUtil.makeValue(from: value)
-            // Set the value in the 'values' object
+            let miniSqlValue = ValueUtil.fromBindingToMinisqlValue(binding: value!)
             values?.set(index, value: miniSqlValue)
+            logger.log("SCAN method value set with \(values)")
+
         }
     }
     
