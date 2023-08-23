@@ -48,7 +48,6 @@ class _HomePageState extends State<HomePage> {
         }
       });
 
-
       navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
       // Let back-end know that we're ready to handle navigation
       navigationChannel.invokeListMethod('ready');

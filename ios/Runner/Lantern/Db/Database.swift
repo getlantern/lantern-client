@@ -34,7 +34,6 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
         }
-        
         let bindings = ValueUtil.toBindingsArray(args)
         let statement = try db.prepare(query)
         
@@ -43,9 +42,7 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
     }
     
     func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
-        queue.sync {
-            <#code#>
-        
+     
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
         }
@@ -58,7 +55,7 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
         try statement.run(bindings).forEach { row in
             rows.append(row)
         }
-        logger.log("Database manager query result \(rows)")
+        logger.log("Database manager query result \(rows) for query \(query)")
         return RowData(rows: rows)
     }
  
