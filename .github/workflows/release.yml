@@ -128,6 +128,7 @@ jobs:
       - name: Build Android installers
         run: make package-android
         env:
+          INTERSTITIAL_AD_UNIT_ID: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           VERSION: "${{ env.version }}"
 
       - uses: actions/upload-artifact@v3

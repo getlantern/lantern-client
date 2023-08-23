@@ -1,6 +1,5 @@
 package org.getlantern.lantern
 
-import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.VpnService
@@ -12,7 +11,6 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -39,6 +37,7 @@ import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternConnection
+import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.isServiceRunning
 import org.getlantern.lantern.util.restartApp
@@ -313,14 +312,6 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         )
     }
 
-    /**
-     * Fetch the latest loconf config and update the UI based on those
-     * settings
-     */
-    private fun fetchLoConf() {
-        fetch { loconf -> runOnUiThread { processLoconf(loconf) } }
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {
         surveyHelper.processLoconf(loconf)
@@ -334,11 +325,11 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         // is updating the connection
         if (on) {
             // Make sure we have the necessary permissions
-            val neededPermissions: Array<String> = missingPermissions()
+            val neededPermissions: Array<String> = PermissionUtil.missingPermissions(context)
             if (neededPermissions.isNotEmpty()) {
                 val msg = StringBuilder()
                 for (permission in neededPermissions) {
-                    if (!hasPermission(permission)) {
+                    if (!PermissionUtil.hasPermission(permission, context)) {
                         msg.append("<p style='font-size: 0.5em;'><b>")
                         val pm = packageManager
                         try {
@@ -408,6 +399,9 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
             if (intent == null) {
                 vpnServiceManager.onVpnPermissionResult(true)
             } else {
+                //If user come here it mean user has all permissions needed
+                // Also user given permission for VPN service dialog as well
+                LanternApp.getSession().setHasFirstSessionCompleted(true)
                 startActivityForResult(intent, REQUEST_VPN)
             }
         } else {
@@ -415,33 +409,6 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         }
     }
 
-    /*Note - we do not include Manifest.permission.FOREGROUND_SERVICE because this is automatically
-    granted based on being included in Manifest and will show as denied even if we're eligible
-    to get it.*/
-    private val allRequiredPermissions = arrayOf(
-        Manifest.permission.INTERNET,
-        Manifest.permission.ACCESS_WIFI_STATE,
-        Manifest.permission.ACCESS_NETWORK_STATE,
-    )
-
-    private fun missingPermissions(): Array<String> {
-        val missingPermissions: MutableList<String> = ArrayList()
-        for (permission in allRequiredPermissions) {
-            if (!hasPermission(permission)) {
-                missingPermissions.add(permission)
-            }
-        }
-        return missingPermissions.toTypedArray()
-    }
-
-    private fun hasPermission(permission: String): Boolean {
-        val result = ContextCompat.checkSelfPermission(
-            applicationContext,
-            permission,
-        ) == PackageManager.PERMISSION_GRANTED
-        Logger.debug(PERMISSIONS_TAG, "has permission %s: %s", permission, result)
-        return result
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

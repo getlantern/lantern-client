@@ -381,6 +381,7 @@ dependencies {
     implementation "com.google.protobuf:protobuf-javalite:$protoc_version"
 
     implementation fileTree(dir: "libs", include:"liblantern-${androidArch()}.aar")
+    // implementation(name:"liblantern-${androidArch()}", ext:'aar')
 
     // https://mvnrepository.com/artifact/net.jodah/expiringmap
     implementation group: 'net.jodah', name: 'expiringmap', version: '0.5.9'
@@ -445,6 +446,7 @@ dependencies {
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:messaging-android:1ce4613c8b'
     implementation 'com.github.getlantern:db-android:573aba1458'
+    implementation 'com.cleveradssolutions:cas:3.2.4'
 }
 
 apply plugin: 'com.google.gms.google-services'
