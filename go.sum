@@ -155,7 +155,6 @@ github.com/anacrolix/upnp v0.1.3-0.20220123035249-922794e51c96/go.mod h1:Wa6n8cY
 github.com/anacrolix/utp v0.1.0 h1:FOpQOmIwYsnENnz7tAGohA+r6iXpRjrq8ssKSre2Cp4=
 github.com/anacrolix/utp v0.1.0/go.mod h1:MDwc+vsGEq7RMw6lr2GKOEqjWny5hO5OZXRVNaBJ2Dk=
 github.com/andybalholm/brotli v1.0.1/go.mod h1:loMXtMfwqflxFJPmdbJO0a3KNoPuLBgiu3qAvBg8x/Y=
-github.com/andybalholm/brotli v1.0.4/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
 github.com/andybalholm/brotli v1.0.5 h1:8uQZIdzKmjc/iuPu7O2ioW48L81FgatrcpfFmiq/cCs=
 github.com/andybalholm/brotli v1.0.5/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
 github.com/andybalholm/cascadia v1.3.1/go.mod h1:R4bJ1UQfqADjvDa4P6HZHLh/3OxWWEqc0Sk8XGwHqvA=
@@ -282,7 +281,6 @@ github.com/edsrzf/mmap-go v0.0.0-20170320065105-0bce6a688712/go.mod h1:YO35OhQPt
 github.com/edsrzf/mmap-go v1.0.0/go.mod h1:YO35OhQPt3KJa3ryjFM5Bs14WD66h8eGKpfaBNrHW5M=
 github.com/edsrzf/mmap-go v1.1.0 h1:6EUwBLQ/Mcr1EYLE4Tn1VdW1A4ckqCQWZBw8Hr0kjpQ=
 github.com/edsrzf/mmap-go v1.1.0/go.mod h1:19H/e8pUPLicwkyNgOykDXkJ9F0MHE+Z52B8EIth78Q=
-github.com/elazarl/goproxy/ext v0.0.0-20190711103511-473e67f1d7d2 h1:dWB6v3RcOy03t/bUadywsbyrQwCqZeNIEX6M1OtSZOM=
 github.com/enobufs/go-nats v0.0.1 h1:uzC0mxan4hyGzUFG7cShFmk6c+XYgfoT8yTBgF5CJYw=
 github.com/enobufs/go-nats v0.0.1/go.mod h1:ZF0vpSk02ALIMFsHkIO4MHXUN1v3nLZssTaG+fgX/io=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
@@ -304,6 +302,8 @@ github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMo
 github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=
 github.com/fsnotify/fsnotify v1.6.0 h1:n+5WquG0fcWoWp6xPWfHdbskMCQaFnG6PfBrh1Ky4HY=
 github.com/garyburd/redigo v1.1.1-0.20170914051019-70e1b1943d4f/go.mod h1:NR3MbYisc3/PwhQ00EMzDiPmrwpPxAn5GI05/YaO1SY=
+github.com/gaukas/godicttls v0.0.3 h1:YNDIf0d9adcxOijiLrEzpfZGAkNwLRzPaG6OjU7EITk=
+github.com/gaukas/godicttls v0.0.3/go.mod h1:l6EenT4TLWgTdwslVb4sEMOCf7Bv0JAK67deKr9/NCI=
 github.com/getlantern/appdir v0.0.0-20160830121117-659a155d06e8/go.mod h1:3vR6+jQdWfWojZ77w+htCqEF5MO/Y2twJOpAvFuM9po=
 github.com/getlantern/appdir v0.0.0-20180320102544-7c0f9d241ea7/go.mod h1:3vR6+jQdWfWojZ77w+htCqEF5MO/Y2twJOpAvFuM9po=
 github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da h1:T/pxF37Z9SIQCHhMMUITZ3rhKRL0Noi9XxNwxKdBNw0=
@@ -312,8 +312,8 @@ github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7 h1:/efTOJpxX
 github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7/go.mod h1:+X8pAviVhThDBjPEqLUB0iO7EPxhpWk7Q9VYxvz6rCY=
 github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 h1:Ka9rIAgef8zYhBr/VgLrt5+Qs7zE33g0OButzpIGcSs=
 github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082/go.mod h1:oCpQojhSaK0F/6rWMrDvN8/QFHQhTC9Gb3uf7GcqPQQ=
-github.com/getlantern/broflake v0.0.0-20230720180617-832a5e273f50 h1:d/kGRNSTVHZDYzdPHPLzU3YhsyM4z027d77zF6WLjsE=
-github.com/getlantern/broflake v0.0.0-20230720180617-832a5e273f50/go.mod h1:Ehdl8IASN5rJi9brldVuCjTDcSU25nvaGRlzNprgeQo=
+github.com/getlantern/broflake v0.0.0-20230822184836-0b9bbcadd5c6 h1:/G1jb7daSg1FkEEFbvRRM7A927uErx5vEMVwrTcVzp0=
+github.com/getlantern/broflake v0.0.0-20230822184836-0b9bbcadd5c6/go.mod h1:Ehdl8IASN5rJi9brldVuCjTDcSU25nvaGRlzNprgeQo=
 github.com/getlantern/bufconn v0.0.0-20190625204133-a08544339f8d/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
 github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 h1:8WjDNmpDLFVsAfcnHxqF4pfVKkdAQxyJ9iCHB4LxSfc=
 github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
@@ -373,8 +373,8 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight/v7 v7.5.28 h1:9pO7sb4igfEkpI5+ISuwc9lQ+0Hr8QSTnoWadi8MEV8=
-github.com/getlantern/flashlight/v7 v7.5.28/go.mod h1:xRXjVhT4Ij9Dszh2DrpQEZ1RNWDee7+uv8uSUdjpnB8=
+github.com/getlantern/flashlight/v7 v7.5.35 h1:i/nY+gzLjPTGe8dAPMxaNeavS2mnYzwjGUo+t51P5gU=
+github.com/getlantern/flashlight/v7 v7.5.35/go.mod h1:TZUkRM5WEuallvQ9B1N6WxFrD97CnITNsySoX5ivVaU=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 h1:r/Z/SPPIfLXDI3QA7/tE6nOfPncrqeUPDjiFjnNGP50=
@@ -399,8 +399,6 @@ github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65 h1:NlQedYmPI3pRAX
 github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65/go.mod h1:+ZU1h+iOVqWReBpky6d5Y2WL0sF2Llxu+QcxJFs2+OU=
 github.com/getlantern/gonat v0.0.0-20201001145726-634575ba87fb h1:tDQA66mL1vTHKSMu3Ras/9Tk884ipPAhcdQHXpnDhxg=
 github.com/getlantern/gonat v0.0.0-20201001145726-634575ba87fb/go.mod h1:ysiamkJHyOrnlNmtDCCccH1NbFdgEBSJRg44DWiOxcY=
-github.com/getlantern/goproxy v0.0.0-20220805074304-4a43a9ed4ec6 h1:/jwJjghYGhLhpPYmO4IyHLG+VMVVZaIdgp8oe1dSx6E=
-github.com/getlantern/goproxy v0.0.0-20220805074304-4a43a9ed4ec6/go.mod h1:96OPoioYRaknNbHjFa4+itGZIJMnJ7wiQB2nz2q1h5Y=
 github.com/getlantern/gotun v0.0.0-20190809092752-6d35bb1397ee/go.mod h1:zvsZQrsl7Yrmi+ENk5WZFT7dQaYtihAcI0H/9+LacqQ=
 github.com/getlantern/grtrack v0.0.0-20160824195228-cbf67d3fa0fd/go.mod h1:RkQEgBdrJCH5tYJP2D+a/aJ216V3c9q8w/tCJtEiDoY=
 github.com/getlantern/grtrack v0.0.0-20210901195719-bdf9e1d12dac h1:WsJhOWm1hJEAqts1OAhEPctQpy7Y0Eiu05mV84ixekc=
@@ -416,8 +414,8 @@ github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770 h1:cSrD9ryDfTV2y
 github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770/go.mod h1:GOQsoDnEHl6ZmNIL+5uVo+JWRFWozMEp18Izcb++H+A=
 github.com/getlantern/http-proxy v0.0.3-0.20230405160101-eb4bf4e4a733 h1:bAVwkX1pvHqqrxuoZ2ElGr2FElnjE/+yOpqUSOrVnJg=
 github.com/getlantern/http-proxy v0.0.3-0.20230405160101-eb4bf4e4a733/go.mod h1:zsMtNKXEfy+y3RBqe3wcd05VivKAswrIvlVsFrj7Fwk=
-github.com/getlantern/http-proxy-lantern/v2 v2.8.2 h1:kET59ivzejmIODw1m/6J1f+MS/pesxYlyaiUaJbnXZc=
-github.com/getlantern/http-proxy-lantern/v2 v2.8.2/go.mod h1:QTlMxJhd74PZqtDmZ4g99EYSWBVrWu5d/LBWV/mKRGE=
+github.com/getlantern/http-proxy-lantern/v2 v2.8.3-0.20230822194736-c6ce61180a3a h1:nR1zM2FsFZF4P4hRuAosn9ob0LnkiYyM3SHgPFI5C6Q=
+github.com/getlantern/http-proxy-lantern/v2 v2.8.3-0.20230822194736-c6ce61180a3a/go.mod h1:Ghj3WWaSmNBeDbSElm/Zsnb/xUiZjGDTAN9h2javcHE=
 github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca h1:Of3VwFEfKbVnK5/VGy05XUbi6QvTs5Y2eLDfPv3O50E=
 github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca/go.mod h1:TNC/xJFmctsSGyXqcnVWwCRCPD/4zGQP7yBVnLDRa/U=
 github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c h1:+JnT+Rwa/3rksc4Zi0u6fJ/WX+tPK58GtsrcXWVUU2U=
@@ -453,8 +451,6 @@ github.com/getlantern/mandrill v0.0.0-20221004112352-e7c04248adcb/go.mod h1:gz4i
 github.com/getlantern/measured v0.0.0-20170302221919-0582bf799783/go.mod h1:5OW2WJitCKExpSw2bploW2fM7PjOd6QnLqyp+IqToqU=
 github.com/getlantern/measured v0.0.0-20210507000559-ec5307b2b8be h1:rfdOTeKew6zcpf5BQ566WInLINdZARimtWVLcgP/a4I=
 github.com/getlantern/measured v0.0.0-20210507000559-ec5307b2b8be/go.mod h1:QG6d9+nAxD1PjVjgGLUUHPZBQUp20/h7j8a3kxd/8Rc=
-github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231 h1:E8kVrX/zRmoiNf1U4SKgtKBLzLOEQRT0V/U/T+fJwxM=
-github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231/go.mod h1:bcE9B93SzvnTI0AJM+138sfvio7WK9e0NTAI8ba0l5Q=
 github.com/getlantern/meta-scrubber v0.0.1 h1:WknyffbSpb5kEwDQ6lrN9+KohCGnqhs5zQfGk4sFRGo=
 github.com/getlantern/meta-scrubber v0.0.1/go.mod h1:nYmOMQXbex3emWMNbt/iDKTXE1q53x1dDxCspxjwxyY=
 github.com/getlantern/mitm v0.0.0-20180205214248-4ce456bae650/go.mod h1:jmIVbVxSVLdeY5hlD+6chiOR/9CdzPjVgIIQphviCl0=
@@ -489,6 +485,8 @@ github.com/getlantern/osversion v0.0.0-20230401075644-c2a30e73c451 h1:3Nn0AqIlIm
 github.com/getlantern/osversion v0.0.0-20230401075644-c2a30e73c451/go.mod h1:kaUdXyKE1Y8bwPnlN7ChFXWnkADpL0zZrk8F0XbpKcc=
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 h1:pijUoofaQcAM/8zbDzZM2LQ90kGVbKfnSAkFnQwLZZU=
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360/go.mod h1:nsJPNYUSY96xB+p7uiDW8O4uiKea+KjeUdS5d6tf9IU=
+github.com/getlantern/pathdb v0.0.0-20230816122749-de77b6080f2a h1:byVmEhK8AMSTXzD43meAc04muqTG0CUsX8GUN7A4h74=
+github.com/getlantern/pathdb v0.0.0-20230816122749-de77b6080f2a/go.mod h1:SFQy+f58IbLpnbq2nVqlq7ccwaUiO7ablKv631WVIuc=
 github.com/getlantern/preconn v0.0.0-20180328114929-0b5766010efe/go.mod h1:FvIxQD61iYA42UjaJyzGl9DNne8jbowbgicdeNk/7kE=
 github.com/getlantern/preconn v1.0.0 h1:DsY3l/y/BJUj86WyaxXylbJnCC9QbKcc3D6js6rFL60=
 github.com/getlantern/preconn v1.0.0/go.mod h1:i/AnXvx715Fq7HgZLlmQlw3sGfEkku8BQT5hLHMK4+k=
@@ -503,10 +501,6 @@ github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de h1:328hcuyQi
 github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de/go.mod h1:kF5QcNhyCA0tpZ+MLVdeJb0bZpgXyMjR/CnPtaltlFU=
 github.com/getlantern/psmux v1.5.15-0.20200903210100-947ca5d91683 h1:Asfm7ajzavuSZC+5b+tPwXwyvlw188NM9hKM7wNMNGg=
 github.com/getlantern/psmux v1.5.15-0.20200903210100-947ca5d91683/go.mod h1:GtXRvtMItoflWGLPE7GNq+AdL7BnmpaaNLtDQVD1XHU=
-github.com/getlantern/quic-go v0.31.1-0.20230104154904-d810c964a217 h1:UXxafrjMrl4j1d2/Ajjv91T2QHR1lsMnL8ofCYqNjNA=
-github.com/getlantern/quic-go v0.31.1-0.20230104154904-d810c964a217/go.mod h1:0wFbizLgYzqHqtlyxyCaJKlE7bYgE6JQ+54TLd/Dq2g=
-github.com/getlantern/quicproxy v0.0.0-20220808081037-32e9be8ec447 h1:4Fg+1ghYOJfoD4leM0n3ze+SAnpDeQ6EqXtIfm83dwQ=
-github.com/getlantern/quicproxy v0.0.0-20220808081037-32e9be8ec447/go.mod h1:LOb27iGUxgV4WM7gZVUawhbMgoEOKI5iuR6ssav7Zik=
 github.com/getlantern/quicwrapper v0.0.0-20230523101504-1ec066b7f869 h1:nx0sr8jXoEBbI0jHDOHIkM0z5dXotQRUSsE/e7lUGXw=
 github.com/getlantern/quicwrapper v0.0.0-20230523101504-1ec066b7f869/go.mod h1:0k08ZBlQon93TrW6KmBLhLSz89qHQFR2LstGlIRgYo8=
 github.com/getlantern/ratelimit v0.0.0-20220926192648-933ab81a6fc7 h1:47FJ5kTeXc3I1VPpi2hWW9I16/Y3K0cpUq/B7oWJGF8=
@@ -545,8 +539,6 @@ github.com/getlantern/tlsresumption v0.0.0-20211216020551-6a3f901d86b9/go.mod h1
 github.com/getlantern/tlsutil v0.2.0/go.mod h1:Vxsyr9DVnYwsqHaEzMYkg9fT8aBrnO2eI+gdICMQbQU=
 github.com/getlantern/tlsutil v0.5.3 h1:g1FjuG4/OTZe8kkbEmpSxvT9rXzYOG9jO4jHiDeQIxM=
 github.com/getlantern/tlsutil v0.5.3/go.mod h1:lVgvr4nxuQ1ocOho90UB6LnHFlpP16TXAGpHR8Z0QnI=
-github.com/getlantern/utls v0.0.0-20221011213556-17014cb6fc4a h1:A12K3qOcLk8kwp+NB7OonNskzaYA+tIXvTPuk0Gor6I=
-github.com/getlantern/utls v0.0.0-20221011213556-17014cb6fc4a/go.mod h1:xleouNszTteqmcvv1JZiPuBY+MnTh/xV34mi0HYmiqk=
 github.com/getlantern/uuid v1.1.2-0.20190507182000-5c9436b8c718/go.mod h1:uX10hOzZUUDR+oYNSIks+RcozOEiwTNC/K2rw9SUi1k=
 github.com/getlantern/uuid v1.2.0 h1:pGrGaCV7XEaG6lvjWkwf8Y92BjB/9yFmkKsNFpRQ7rc=
 github.com/getlantern/uuid v1.2.0/go.mod h1:uX10hOzZUUDR+oYNSIks+RcozOEiwTNC/K2rw9SUi1k=
@@ -593,8 +585,6 @@ github.com/go-logr/stdr v1.2.2 h1:hSWxHoqTgW2S2qGc0LTAI563KZ5YKYRhT3MFKZMbjag=
 github.com/go-logr/stdr v1.2.2/go.mod h1:mMo/vtBO5dYbehREoey6XUKy/eSumjCCveDpRre4VKE=
 github.com/go-ole/go-ole v1.2.4/go.mod h1:XCwSNxSkXRo4vlyPy93sltvi/qJq0jqQhjqQNIwKuxM=
 github.com/go-ole/go-ole v1.2.5/go.mod h1:pprOEPIfldk/42T2oK7lQ4v4JSDwmV0As9GaiUsvbm0=
-github.com/go-ole/go-ole v1.2.6 h1:/Fpf6oFPoeFik9ty7siob0G6Ke8QvQEuVcuChpwXzpY=
-github.com/go-ole/go-ole v1.2.6/go.mod h1:pprOEPIfldk/42T2oK7lQ4v4JSDwmV0As9GaiUsvbm0=
 github.com/go-playground/assert/v2 v2.0.1/go.mod h1:VDjEfimB/XKnb+ZQfWdccd7VUvScMdVu0Titje2rxJ4=
 github.com/go-playground/locales v0.13.0/go.mod h1:taPMhCMXrRLJO55olJkUXHZBHCxTMfnGwq/HNwmWNS8=
 github.com/go-playground/locales v0.14.0 h1:u50s323jtVGugKlcYeyzC0etD1HifMjqmJqb8WugfUU=
@@ -798,9 +788,8 @@ github.com/klauspost/compress v1.9.7/go.mod h1:RyIbtBH6LamlWaDj8nUwkbUhJ87Yi3uG0
 github.com/klauspost/compress v1.10.3/go.mod h1:aoV0uJVorq1K+umq18yTdKaF57EivdYsUV+/s2qKfXs=
 github.com/klauspost/compress v1.11.4/go.mod h1:aoV0uJVorq1K+umq18yTdKaF57EivdYsUV+/s2qKfXs=
 github.com/klauspost/compress v1.13.1/go.mod h1:8dP1Hq4DHOhN9w426knH3Rhby4rFm6D8eO+e+Dq5Gzg=
-github.com/klauspost/compress v1.13.6/go.mod h1:/3/Vjq9QcHkK5uEr5lBEmyoZ1iFhe47etQ6QUkpK6sk=
-github.com/klauspost/compress v1.16.5 h1:IFV2oUNUzZaz+XyusxpLzpzS8Pt5rh0Z16For/djlyI=
-github.com/klauspost/compress v1.16.5/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
+github.com/klauspost/compress v1.16.6 h1:91SKEy4K37vkp255cJ8QesJhjyRO0hn9i9G0GoUwLsk=
+github.com/klauspost/compress v1.16.6/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
 github.com/klauspost/cpuid v1.2.0/go.mod h1:Pj4uuM528wm8OyEC2QMXAi2YiTZ96dNQPGgoMS4s3ek=
 github.com/klauspost/cpuid/v2 v2.2.4 h1:acbojRNwl3o09bUq+yDCtZFc1aiwaAAxtcn8YkZXnvk=
 github.com/klauspost/cpuid/v2 v2.2.4/go.mod h1:RVVoqg1df56z8g3pUjL/3lE5UfnlrJX8tyFgg4nqhuY=
@@ -832,10 +821,6 @@ github.com/lispad/go-generics-tools v1.1.0 h1:mbSgcxdFVmpoyso1X/MJHXbSbSL3dD+qhR
 github.com/lispad/go-generics-tools v1.1.0/go.mod h1:2csd1EJljo/gy5qG4khXol7ivCPptNjG5Uv2X8MgK84=
 github.com/magiconair/properties v1.7.4-0.20170902060319-8d7837e64d3c/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=
 github.com/magiconair/properties v1.8.0/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=
-github.com/marten-seemann/qtls-go1-18 v0.1.4 h1:ogomB+lWV3Vmwiu6RTwDVTMGx+9j7SEi98e8QB35Its=
-github.com/marten-seemann/qtls-go1-18 v0.1.4/go.mod h1:mJttiymBAByA49mhlNZZGrH5u1uXYZJ+RW28Py7f4m4=
-github.com/marten-seemann/qtls-go1-19 v0.1.2 h1:ZevAEqKXH0bZmoOBPiqX2h5rhQ7cbZi+X+rlq2JUbCE=
-github.com/marten-seemann/qtls-go1-19 v0.1.2/go.mod h1:5HTDWtVudo/WFsHKRNuOhWlbdjrfs5JHrYb0wIJqGpI=
 github.com/matryer/is v1.2.0/go.mod h1:2fLPjFQM9rhQ15aVEtbuwhJinnOqrmgXPNdZsdwlWXA=
 github.com/mattn/go-colorable v0.0.10-0.20170816031813-ad5389df28cd/go.mod h1:9vuHe8Xs5qXnSaW/c/ABM9alt+Vo+STaOChaDxuIBZU=
 github.com/mattn/go-ieproxy v0.0.1/go.mod h1:pYabZ6IHcRpFh7vIaLfK7rdcWgFEb3SFJ6/gNWuh88E=
@@ -1031,6 +1016,10 @@ github.com/quic-go/quic-go v0.34.0 h1:OvOJ9LFjTySgwOTYUZmNoq0FzVicP8YujpV0kB7m2l
 github.com/quic-go/quic-go v0.34.0/go.mod h1:+4CVgVppm0FNjpG3UcX8Joi/frKOH7/ciD5yGcwOO1g=
 github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a/go.mod h1:bCqnVzQkZxMG4s8nGwiZ5l3QUCyqpo9Y+/ZMZ9VjZe4=
 github.com/reflog/minisentinel v0.0.0-20210817104530-e0dd88cb8bc6/go.mod h1:UdPuN3+X0Rvf3yJ++7j0zj4P8EaI6YwQJS+JbBk2o8k=
+github.com/refraction-networking/utls v0.0.0-20190415193640-32987941ebd3/go.mod h1:tz9gX959MEFfFN5whTIocCLUG57WiILqtdVxI8c6Wj0=
+github.com/refraction-networking/utls v0.0.0-20190909200633-43c36d3c1f57/go.mod h1:tz9gX959MEFfFN5whTIocCLUG57WiILqtdVxI8c6Wj0=
+github.com/refraction-networking/utls v1.3.3 h1:f/TBLX7KBciRyFH3bwupp+CE4fzoYKCirhdRcC490sw=
+github.com/refraction-networking/utls v1.3.3/go.mod h1:DlecWW1LMlMJu+9qpzzQqdHDT/C2LAe03EdpLUz/RL8=
 github.com/retailnext/hllpp v1.0.0/go.mod h1:RDpi1RftBQPUCDRw6SmxeaREsAaRKnOclghuzp/WRzc=
 github.com/rickar/props v0.0.0-20170718221555-0b06aeb2f037/go.mod h1:F1p8BNM4IXv2UcptwSp8HJOapKurodd/PYu1D6Gtn9Y=
 github.com/riobard/go-bloom v0.0.0-20200614022211-cdc8013cb5b3 h1:f/FNXud6gA3MNr8meMVVGxhp+QBTqY91tM8HjEuMjGg=
@@ -1052,8 +1041,6 @@ github.com/shadowsocks/go-shadowsocks2 v0.1.5 h1:PDSQv9y2S85Fl7VBeOMF9StzeXZyK1H
 github.com/shadowsocks/go-shadowsocks2 v0.1.5/go.mod h1:AGGpIoek4HRno4xzyFiAtLHkOpcoznZEkAccaI/rplM=
 github.com/shirou/gopsutil v2.18.12+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
 github.com/shirou/gopsutil v3.21.5+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
-github.com/shirou/gopsutil v3.21.11+incompatible h1:+1+c1VGhc88SSonWP6foOcLhvnKlUeu/erjjvaPEYiI=
-github.com/shirou/gopsutil v3.21.11+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
 github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4/go.mod h1:qsXQc7+bwAM3Q1u/4XEfrquwF8Lw7D7y5cD8CuHnfIc=
 github.com/siddontang/go v0.0.0-20170517070808-cb568a3e5cc0/go.mod h1:3yhqj7WBBfRhbBlzyOC3gUxftwsU0u8gqevxwIHQpMw=
 github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 h1:xT+JlYxNGqyT+XcU8iUrN18JYed2TvG9yN5ULG2jATM=
@@ -1128,11 +1115,7 @@ github.com/tinylib/msgp v1.1.5/go.mod h1:eQsjooMTnV42mHu917E26IogZ2930nFyBQdofk1
 github.com/tjfoc/gmsm v1.4.1 h1:aMe1GlZb+0bLjn+cKTPEvvn9oUEBlJitaZiiBwsbgho=
 github.com/tjfoc/gmsm v1.4.1/go.mod h1:j4INPkHWMrhJb38G+J6W4Tw0AbuN8Thu3PbdVYhVcTE=
 github.com/tklauser/go-sysconf v0.3.6/go.mod h1:MkWzOF4RMCshBAMXuhXJs64Rte09mITnppBXY/rYEFI=
-github.com/tklauser/go-sysconf v0.3.11 h1:89WgdJhk5SNwJfu+GKyYveZ4IaJ7xAkecBo+KdJV0CM=
-github.com/tklauser/go-sysconf v0.3.11/go.mod h1:GqXfhXY3kiPa0nAXPDIQIWzJbMCB7AmcWpGR8lSZfqI=
 github.com/tklauser/numcpus v0.2.2/go.mod h1:x3qojaO3uyYt0i56EW/VUYs7uBvdl2fkfZFu0T9wgjM=
-github.com/tklauser/numcpus v0.6.0 h1:kebhY2Qt+3U6RNK7UqpYNA+tJ23IBEGKkB7JQBfDYms=
-github.com/tklauser/numcpus v0.6.0/go.mod h1:FEZLMke0lhOUG6w2JadTzp0a+Nl8PF/GFkQ5UVIcaL4=
 github.com/tkuchiki/go-timezone v0.2.0/go.mod h1:b1Ean9v2UXtxSq4TZF0i/TU9NuoWa9hOzOKoGCV2zqY=
 github.com/tkuchiki/go-timezone v0.2.2 h1:MdHR65KwgVTwWFQrota4SKzc4L5EfuH5SdZZGtk/P2Q=
 github.com/tkuchiki/go-timezone v0.2.2/go.mod h1:oFweWxYl35C/s7HMVZXiA19Jr9Y0qJHMaG/J2TES4LY=
@@ -1177,8 +1160,6 @@ github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5t
 github.com/yuin/gopher-lua v0.0.0-20171031051903-609c9cd26973/go.mod h1:aEV29XrmTYFr3CiRxZeGHpkvbwq+prZduBqMaascyCU=
 github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da/go.mod h1:E1AXubJBdNmFERAOucpDIxNzeGfLzg0mYh+UfMWdChA=
 github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9/go.mod h1:E1AXubJBdNmFERAOucpDIxNzeGfLzg0mYh+UfMWdChA=
-github.com/yusufpapurcu/wmi v1.2.3 h1:E1ctvB7uKFMOJw3fdOW32DwGE9I7t++CRUEMKvFoFiw=
-github.com/yusufpapurcu/wmi v1.2.3/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQmPyzfmi0=
 gitlab.com/yawning/edwards25519-extra.git v0.0.0-20211229043746-2f91fcc9fbdb/go.mod h1:gvdJuZuO/tPZyhEV8K3Hmoxv/DWud5L4qEQxfYjEUTo=
 gitlab.com/yawning/edwards25519-extra.git v0.0.0-20220726154925-def713fd18e4 h1:LeXiZggivkDGgmkl7+r+m/2xj3rd+K/30/0obRKayAU=
 gitlab.com/yawning/edwards25519-extra.git v0.0.0-20220726154925-def713fd18e4/go.mod h1:gvdJuZuO/tPZyhEV8K3Hmoxv/DWud5L4qEQxfYjEUTo=
@@ -1258,7 +1239,6 @@ golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83/go.mod h1:jdWPYTVW3xRLrWP
 golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a/go.mod h1:P+XmwS30IXTQdn5tA2iutPOUgjI07+tq3H3K9MVA1s8=
 golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
 golang.org/x/crypto v0.0.0-20210921155107-089bfa567519/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
-golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
 golang.org/x/crypto v0.1.0/go.mod h1:RecgLatLF4+eUMCP1PoPZQb+cVrJcOPbHkTkbkB9sbw=
 golang.org/x/crypto v0.5.0/go.mod h1:NK/OQwhpMQP3MwtdjgLlYHnH9ebylxKWv3e0fK+mkQU=
 golang.org/x/crypto v0.8.0/go.mod h1:mRqEX+O9/h5TFCrQhkgjo2yKi0yYA+9ecGkdQoHrywE=
@@ -1357,7 +1337,6 @@ golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4/go.mod h1:p54w0d4576C0XHj96b
 golang.org/x/net v0.0.0-20210428140749-89ef3d95e781/go.mod h1:OJAsFXCWl8Ukc7SiCT/9KSuxbyM7479/AVlXFRxuMCk=
 golang.org/x/net v0.0.0-20210610132358-84b48f89b13b/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
 golang.org/x/net v0.0.0-20210916014120-12bc252f5db8/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
-golang.org/x/net v0.0.0-20211111160137-58aab5ef257a/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
 golang.org/x/net v0.0.0-20220722155237-a158d28d115b/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
 golang.org/x/net v0.1.0/go.mod h1:Cx3nUiGt4eDBEyega/BKRp+/AlGL8hYe7U9odMt2Cco=
 golang.org/x/net v0.5.0/go.mod h1:DivGGAXEgPSlEBzxGzZI+ZLohi+xUj054jfeKui00ws=

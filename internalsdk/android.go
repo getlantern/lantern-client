@@ -28,7 +28,6 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/memhelper"
 	"github.com/getlantern/mtime"
 
 	// import gomobile just to make sure it stays in go.mod
@@ -443,7 +442,7 @@ func newAnalyticsSession(deviceID string) analytics.Session {
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
 
-	memhelper.Track(15*time.Second, 15*time.Second)
+	// memhelper.Track(15*time.Second, 15*time.Second)
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(common.Staging)
 

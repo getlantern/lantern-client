@@ -3,7 +3,7 @@ module github.com/getlantern/android-lantern
 go 1.19
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
-replace github.com/getlantern/pathdb => /Users/jigarfumakiya/Documents/getlantern/mobile_app/pathDb/pathdb
+// replace github.com/getlantern/pathdb => /Users/jigarfumakiya/Documents/getlantern/mobile_app/pathDb/pathdb
 
 // replace github.com/getlantern/fronted => ../fronted
 
@@ -14,7 +14,7 @@ replace github.com/elazarl/goproxy => github.com/getlantern/goproxy v0.0.0-20220
 
 replace github.com/lucas-clemente/quic-go => github.com/getlantern/quic-go v0.31.1-0.20230104154904-d810c964a217
 
-replace github.com/refraction-networking/utls => github.com/getlantern/utls v0.0.0-20221011213556-17014cb6fc4a
+// replace github.com/refraction-networking/utls => github.com/getlantern/utls v0.0.0-20221011213556-17014cb6fc4a
 
 // git.apache.org isn't working at the moment, use mirror (should probably switch back once we can)
 replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110319-2566ecd5d999
@@ -36,13 +36,12 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight/v7 v7.5.28
+	github.com/getlantern/flashlight/v7 v7.5.35
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20230511223023-ee52513fd782
-	github.com/getlantern/memhelper v0.0.0-20181113170838-777ea7552231
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
-	github.com/getlantern/pathdb v0.0.0-20230801170919-78e5c5562d20
+	github.com/getlantern/pathdb v0.0.0-20230816122749-de77b6080f2a
 	github.com/getlantern/replica v0.14.2
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.8.3
@@ -107,11 +106,11 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/dvyukov/go-fuzz v0.0.0-20220726122315-1d375ef9f9f6 // indirect
 	github.com/edsrzf/mmap-go v1.1.0 // indirect
-	github.com/elazarl/goproxy v0.0.0-20221015165544-a0805db90819 // indirect
 	github.com/enobufs/go-nats v0.0.1 // indirect
 	github.com/felixge/httpsnoop v1.0.3 // indirect
+	github.com/gaukas/godicttls v0.0.3 // indirect
 	github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 // indirect
-	github.com/getlantern/broflake v0.0.0-20230720180617-832a5e273f50 // indirect
+	github.com/getlantern/broflake v0.0.0-20230822184836-0b9bbcadd5c6 // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
 	github.com/getlantern/byteexec v0.0.0-20220903142956-e6ed20032cfd // indirect
 	github.com/getlantern/cmux v0.0.0-20230301223233-dac79088a4c0 // indirect
@@ -144,7 +143,7 @@ require (
 	github.com/getlantern/hex v0.0.0-20220104173244-ad7e4b9194dc // indirect
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770 // indirect
 	github.com/getlantern/http-proxy v0.0.3-0.20230405160101-eb4bf4e4a733 // indirect
-	github.com/getlantern/http-proxy-lantern/v2 v2.8.2 // indirect
+	github.com/getlantern/http-proxy-lantern/v2 v2.8.3-0.20230822194736-c6ce61180a3a // indirect
 	github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca // indirect
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c // indirect
 	github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696 // indirect
@@ -168,7 +167,6 @@ require (
 	github.com/getlantern/proxy/v2 v2.0.1-0.20220303164029-b34b76e0e581 // indirect
 	github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de // indirect
 	github.com/getlantern/psmux v1.5.15-0.20200903210100-947ca5d91683 // indirect
-	github.com/getlantern/quicproxy v0.0.0-20220808081037-32e9be8ec447 // indirect
 	github.com/getlantern/quicwrapper v0.0.0-20230523101504-1ec066b7f869 // indirect
 	github.com/getlantern/ratelimit v0.0.0-20220926192648-933ab81a6fc7 // indirect
 	github.com/getlantern/reconn v0.0.0-20161128113912-7053d017511c // indirect
@@ -191,7 +189,6 @@ require (
 	github.com/go-errors/errors v1.4.2 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
@@ -212,16 +209,13 @@ require (
 	github.com/jaffee/commandeer v0.6.0 // indirect
 	github.com/keighl/mandrill v0.0.0-20170605120353-1775dd4b3b41 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
-	github.com/klauspost/compress v1.16.5 // indirect
+	github.com/klauspost/compress v1.16.6 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
 	github.com/klauspost/pgzip v1.2.5 // indirect
 	github.com/klauspost/reedsolomon v1.11.7 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/libp2p/go-buffer-pool v0.1.0 // indirect
 	github.com/lispad/go-generics-tools v1.1.0 // indirect
-	github.com/lucas-clemente/quic-go v0.31.1 // indirect
-	github.com/marten-seemann/qtls-go1-18 v0.1.4 // indirect
-	github.com/marten-seemann/qtls-go1-19 v0.1.2 // indirect
 	github.com/mattn/go-sqlite3 v1.14.11 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/mdlayher/netlink v1.1.0 // indirect
@@ -266,12 +260,11 @@ require (
 	github.com/quic-go/qtls-go1-19 v0.3.2 // indirect
 	github.com/quic-go/qtls-go1-20 v0.2.2 // indirect
 	github.com/quic-go/quic-go v0.34.0 // indirect
-	github.com/refraction-networking/utls v1.0.0 // indirect
+	github.com/refraction-networking/utls v1.3.3 // indirect
 	github.com/rs/dnscache v0.0.0-20211102005908-e0241e321417 // indirect
 	github.com/ryszard/goskiplist v0.0.0-20150312221310-2dfbae5fcf46 // indirect
 	github.com/samber/lo v1.38.1 // indirect
 	github.com/shadowsocks/go-shadowsocks2 v0.1.5 // indirect
-	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 // indirect
 	github.com/songgao/water v0.0.0-20200317203138-2b4b6d7c09d8 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
@@ -282,13 +275,10 @@ require (
 	github.com/ti-mo/netfilter v0.3.1 // indirect
 	github.com/tidwall/btree v1.6.0 // indirect
 	github.com/tjfoc/gmsm v1.4.1 // indirect
-	github.com/tklauser/go-sysconf v0.3.11 // indirect
-	github.com/tklauser/numcpus v0.6.0 // indirect
 	github.com/tkuchiki/go-timezone v0.2.2 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xtaci/smux v1.5.24 // indirect
-	github.com/yusufpapurcu/wmi v1.2.3 // indirect
 	gitlab.com/yawning/edwards25519-extra.git v0.0.0-20220726154925-def713fd18e4 // indirect
 	gitlab.com/yawning/obfs4.git v0.0.0-20220904064028-336a71d6e4cf // indirect
 	go.etcd.io/bbolt v1.3.7 // indirect
