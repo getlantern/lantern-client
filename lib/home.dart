@@ -15,7 +15,7 @@ import 'messaging/messaging_model.dart';
 
 @RoutePage(name: 'Home')
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
