@@ -211,7 +211,7 @@ class AdHelper {
 
   void _onCASAdShowFailed() {
     logger.e('[Ads Manager] Error: CAS Interstitial failed to display.');
-    Datadog.addError('Failed to display interstitial ad', casAttributes);
+    Datadog.addError('Failed to display interstitial ad', attributes: casAttributes);
     _failedCASLoadAttempts++;
     _postShowingAds(); // Reload or decide the next action
   }
