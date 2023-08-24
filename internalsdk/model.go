@@ -182,11 +182,12 @@ func initSessionModel(m *baseModel) {
 		pathdb.Put[string](tx, "hasSucceedingProxy", "true", "")
 		pathdb.Put[string](tx, PATH_SDK_VERSION, SDKVersion(), "")
 
-		// userLevel, error := tx.Get(PATH_USER_LEVEL)
-		// if error != nil {
-		// 	return fmt.Errorf("Error while retriving %v and error %v", PATH_USER_LEVEL, error)
-		// }
-		// pathdb.Put[[]byte](tx, PATH_USER_LEVEL, userLevel, "")
+		userLevel, error := tx.Get("hasSucceedingProxy")
+		if error != nil {
+			return fmt.Errorf("Error while retriving %v and error %v", PATH_USER_LEVEL, error)
+		}
+		log.Debugf("Mutate hasSucceedingProxy value %v", userLevel)
+
 		return nil
 	})
 }
