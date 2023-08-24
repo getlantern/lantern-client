@@ -4,23 +4,23 @@ import 'package:datadog_tracking_http_client/datadog_tracking_http_client.dart';
 class Datadog {
   static final DatadogSdk _instance = DatadogSdk.instance;
 
-  static trackUserTap(String message) {
-    _instance.rum?.addUserAction(RumUserActionType.tap, message);
+  static trackUserTap(String message, [Map<String, Object?> attributes = const {}]) {
+    _instance.rum?.addUserAction(RumUserActionType.tap, message, attributes);
   }
 
-  static trackUserCustom(String message) {
-    _instance.rum?.addUserAction(RumUserActionType.custom, message);
+  static trackUserCustom(String message, [Map<String, Object?> attributes = const {}]) {
+    _instance.rum?.addUserAction(RumUserActionType.custom, message, attributes);
   }
 
-  /// Notifies that the Exception or Error [error] occurred in currently
-  /// presented View, with an origin of [source].
+  // Notifies Datadog that an Exception or Error [error] occurred in the currently
+  // presented View
   static addError(
-    Object e, {
+    Object error, {
     StackTrace? st,
     Map<String, Object?> attributes = const {},
   }) {
     _instance.rum?.addErrorInfo(
-      e.toString(),
+      error.toString(),
       RumErrorSource.source,
       stackTrace: st,
       attributes: attributes,
