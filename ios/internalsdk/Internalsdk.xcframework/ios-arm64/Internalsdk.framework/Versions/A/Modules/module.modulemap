@@ -1,9 +1,0 @@
-framework module "Internalsdk" {
-	header "ref.h"
-    header "Internalsdk.objc.h"
-    header "Minisql.objc.h"
-    header "Universe.objc.h"
-    header "Internalsdk.h"
-
-    export *
-}

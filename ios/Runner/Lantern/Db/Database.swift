@@ -197,11 +197,8 @@ class RowData: NSObject, MinisqlRowsProtocol {
             let currentRow = rows[currentIndex]
             
             for (index, value) in currentRow.enumerated() {
-                let miniSqlValue = ValueUtil.fromBindingToMinisqlValue(binding: value!)
-                logger.log("SCAN method value set before \(values?.get(index))")
-                values!.set(index, value: miniSqlValue)
-                logger.log("SCAN method value set after \(values?.get(index))")
-                
+                let miniSqlValue = values!.get(index)!
+                ValueUtil.setValueFromBinding(binding: value!, value: miniSqlValue)
              }
         }
     }
