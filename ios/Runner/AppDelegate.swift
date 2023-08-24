@@ -34,7 +34,6 @@ import Internalsdk
         //Init Lantern Model
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
 
-        
     }
     
     

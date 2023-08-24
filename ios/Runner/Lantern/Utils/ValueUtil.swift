@@ -78,8 +78,6 @@ class ValueUtil {
         return bindings
     }
     
-    
-    
     static func fromBindingToMinisqlValue(binding: Binding) -> MinisqlValue {
         let value: MinisqlValue!
         switch binding.bindingType {
@@ -92,9 +90,7 @@ class ValueUtil {
             let data = Data(blob.bytes)
             value = MinisqlNewValueBytes(data)
             logger.log("Blob value (Data representation): \(data)")
-
-            
-        default:
+  default:
             fatalError("Unsupported SQLite.Binding type: \(binding.bindingType)")
         }
         return value

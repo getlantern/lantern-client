@@ -179,6 +179,7 @@ func initSessionModel(m *baseModel) {
 		pathdb.Put[bool](tx, PATH_PRO_USER, false, "")
 		pathdb.Put[bool](tx, CHAT_ENABLED, false, "")
 		pathdb.Put[bool](tx, DEVELOPMNET_MODE, true, "")
+		pathdb.Put[string](tx, "hasSucceedingProxy", "true", "")
 		pathdb.Put[string](tx, PATH_SDK_VERSION, SDKVersion(), "")
 
 		// userLevel, error := tx.Get(PATH_USER_LEVEL)

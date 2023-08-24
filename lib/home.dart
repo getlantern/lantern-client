@@ -116,38 +116,39 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     _context = context;
-    return sessionModel.developmentMode(
-      (BuildContext context, bool developmentMode, Widget? child) {
-        if (developmentMode) {
-          Logger.level = Level.verbose;
-        } else {
-          Logger.level = Level.error;
-        }
-        return sessionModel.language(
-          (BuildContext context, String lang, Widget? child) {
-            Localization.locale = lang;
-            return sessionModel.selectedTab(
-              (context, selectedTab, child) =>
-                  messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
-                final isTesting = const String.fromEnvironment(
-                      'driver',
-                      defaultValue: 'false',
-                    ).toLowerCase() ==
-                    'true';
-                return Scaffold(
-                  body: buildBody(selectedTab, isOnboarded),
-                  bottomNavigationBar: CustomBottomBar(
-                    selectedTab: selectedTab,
-                    isDevelop: developmentMode,
-                    isTesting: isTesting,
-                  ),
-                );
-              }),
-            );
-          },
-        );
-      },
-    );
+    return const SizedBox();
+    // return sessionModel.developmentMode(
+    //   (BuildContext context, bool developmentMode, Widget? child) {
+    //     if (developmentMode) {
+    //       Logger.level = Level.verbose;
+    //     } else {
+    //       Logger.level = Level.error;
+    //     }
+    //     return sessionModel.language(
+    //       (BuildContext context, String lang, Widget? child) {
+    //         Localization.locale = lang;
+    //         return sessionModel.selectedTab(
+    //           (context, selectedTab, child) =>
+    //               messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
+    //             final isTesting = const String.fromEnvironment(
+    //                   'driver',
+    //                   defaultValue: 'false',
+    //                 ).toLowerCase() ==
+    //                 'true';
+    //             return Scaffold(
+    //               body: buildBody(selectedTab, isOnboarded),
+    //               bottomNavigationBar: CustomBottomBar(
+    //                 selectedTab: selectedTab,
+    //                 isDevelop: developmentMode,
+    //                 isTesting: isTesting,
+    //               ),
+    //             );
+    //           }),
+    //         );
+    //       },
+    //     );
+    //   },
+    // );
   }
 
   Widget buildBody(String selectedTab, bool? isOnboarded) {

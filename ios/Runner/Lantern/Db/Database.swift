@@ -160,6 +160,8 @@ class RowData: NSObject, MinisqlRowsProtocol {
     
     let rows: [Statement.Element]
     var currentIndex: Int = -1
+    private let syncQueue = DispatchQueue(label: "com.yourapp.RowData.syncQueue")
+
     
     init(rows: [Statement.Element]) {
         self.rows = rows
@@ -182,21 +184,25 @@ class RowData: NSObject, MinisqlRowsProtocol {
      - Note: This method updates `currentIndex` to point to the next row. If there are no more rows, `next()` will return `false`.
      */
     func scan(_ values: MinisqlValuesProtocol?) throws {
-        logger.log("SCAN method called with \(values) with rowcount \(rows.count)")
-        if values == nil {
-            logger.log("Error: values is nil")
-            throw NSError(domain: "Scan method failed", code: 0, userInfo: [NSLocalizedDescriptionKey: "Values object is nil"])
-        }
-        if currentIndex >= rows.count {
-            logger.log("Error: currentIndex \(currentIndex) is out of bounds")
-            throw NSError(domain: "Scan method failed", code: 0, userInfo: [NSLocalizedDescriptionKey: "Current index is out of bounds"])
-        }
-        let currentRow = rows[currentIndex]
-        for (index, value) in currentRow.enumerated() {
-            let miniSqlValue = ValueUtil.fromBindingToMinisqlValue(binding: value!)
-            values?.set(index, value: miniSqlValue)
-            logger.log("SCAN method value set with \(values)")
-
+        try syncQueue.sync {
+            logger.log("SCAN method called with \(values) with rowcount \(rows.count)")
+            if values == nil {
+                logger.log("Error: values is nil")
+                throw NSError(domain: "Scan method failed", code: 0, userInfo: [NSLocalizedDescriptionKey: "Values object is nil"])
+            }
+            if currentIndex >= rows.count {
+                logger.log("Error: currentIndex \(currentIndex) is out of bounds")
+                throw NSError(domain: "Scan method failed", code: 0, userInfo: [NSLocalizedDescriptionKey: "Current index is out of bounds"])
+            }
+            let currentRow = rows[currentIndex]
+            
+            for (index, value) in currentRow.enumerated() {
+                let miniSqlValue = ValueUtil.fromBindingToMinisqlValue(binding: value!)
+                logger.log("SCAN method value set before \(values?.get(index))")
+                values!.set(index, value: miniSqlValue)
+                logger.log("SCAN method value set after \(values?.get(index))")
+                
+             }
         }
     }
     
