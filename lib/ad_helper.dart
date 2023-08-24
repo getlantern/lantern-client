@@ -285,5 +285,6 @@ class InterstitialListenerWrapper extends AdCallback {
   void onShown() {
     // Called when ad is shown.
     logger.i('[CASIntegrationHelper] - InterstitialListenerWrapper onShown');
+    Datadog.trackUserCustom('User shown interstitial ad', casAttributes);
   }
 }
