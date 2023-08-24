@@ -33,6 +33,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 
   @override
   Widget build(BuildContext context) {
+    Datadog.trackUserCustom('Split tunneling screen shown to user');
     return BaseScreen(
       title: 'split_tunneling'.i18n,
       body: sessionModel.splitTunneling(

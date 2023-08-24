@@ -12,6 +12,7 @@ import 'package:clever_ads_solutions/public/MediationManager.dart';
 import 'package:clever_ads_solutions/public/OnDismissListener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:lantern/common/datadog.dart';
 import 'package:lantern/replica/common.dart';
 
 import 'common/session_model.dart';
@@ -96,13 +97,16 @@ class AdHelper {
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdClicked: (ad) {
                 logger.i('[Ads Manager] onAdClicked callback');
+                Datadog.trackUserTap('User tapped on google interstitial ad');
               },
               onAdShowedFullScreenContent: (ad) {
                 logger.i('[Ads Manager] Showing Ads');
+                Datadog.trackUserCustom('User shown google interstitial ad');
               },
               onAdFailedToShowFullScreenContent: (ad, error) {
                 logger.i(
                     '[Ads Manager] onAdFailedToShowFullScreenContent callback');
+                Datadog.addError('Google Ad: failed to show full screen content: $error');
                 //if ads fail to load let user turn on VPN
                 _postShowingAds();
               },
@@ -113,10 +117,12 @@ class AdHelper {
             );
             _interstitialAd = ad;
             logger.i('[Ads Manager] to loaded $ad');
+            Datadog.trackUserCustom('Google interstitial ad loaded');
           },
           onAdFailedToLoad: (err) {
             _failedLoadAttempts++; // increment the count on failure
             logger.i('[Ads Manager] failed to load $err');
+            Datadog.addError('failed to load google interstitial ad: $err');
             _postShowingAds();
           },
         ),
@@ -183,6 +189,7 @@ class AdHelper {
     if (casMediationManager != null) {
       await casMediationManager!.loadInterstitial();
       logger.i('[Ads Manager] Request: Initiating CAS Interstitial loading.');
+      Datadog.trackUserCustom('CAS interstitial ad loaded');
     }
   }
 
@@ -195,12 +202,14 @@ class AdHelper {
 
   void _onCASAdShowFailed() {
     logger.e('[Ads Manager] Error: CAS Interstitial failed to display.');
+    Datadog.trackUserCustom('Failed to display CAS interstitial ad');
     _failedCASLoadAttempts++;
     _postShowingAds(); // Reload or decide the next action
   }
 
   void _onCASAdClosedOrComplete() {
     logger.i('[Ads Manager] Completion: CAS Interstitial closed or completed.');
+    Datadog.trackUserCustom('CAS interstitial ad closed or completed');
     // Reset the counter when the ad successfully shows and closes/completes
     _failedCASLoadAttempts = 0;
     _postShowingAds();
