@@ -32,6 +32,7 @@ export 'package:datadog_flutter_plugin/datadog_flutter_plugin.dart';
 export 'package:datadog_tracking_http_client/datadog_tracking_http_client.dart';
 
 export 'add_nonbreaking_spaces.dart';
+export 'datadog.dart';
 export 'disable_back_button.dart';
 export 'iterable_extension.dart';
 export 'list_subscriber.dart';
