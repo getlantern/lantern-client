@@ -74,3 +74,4 @@ web*.pem
 screenshots
 profile.cov
 appium_kotlin/app/src/test/resources/local/local_config.json
+android/app/libs/liblantern-all.aar
