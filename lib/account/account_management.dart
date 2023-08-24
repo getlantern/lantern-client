@@ -178,7 +178,7 @@ class _AccountManagementState extends State<AccountManagement>
             // * PRO - check onboarding status
             messagingModel
                 .getOnBoardingStatus((context, hasBeenOnboarded, child) {
-                return sessionModel.chatEnabled((context, chatEnable, child) =>
+                return sessionModel.chatEnabled((context, chatEnabled, child) =>
                     sessionModel.devices(
                         (BuildContext context, Devices devices, Widget? child) {
                       proItems.addAll(
@@ -273,7 +273,7 @@ class _AccountManagementState extends State<AccountManagement>
                         );
                       }
                       // If chat is enabled and hasBeenOnboarded then only show chat settings
-                      return chatEnable && hasBeenOnboarded ==true
+                      return chatEnabled && hasBeenOnboarded ==true
                           // * has been onboarded
                           ? Column(
                               children: [
