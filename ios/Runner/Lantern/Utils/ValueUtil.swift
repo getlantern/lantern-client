@@ -12,9 +12,10 @@ import SQLite
 
 class ValueUtil {
     // Define the types constants
-    static let TYPE_BYTES = 0
-    static let TYPE_STRING = 1
-    static let TYPE_INT = 2
+    static let TYPE_BYTES = Int(MinisqlValueTypeBytes)
+    static let TYPE_STRING = Int(MinisqlValueTypeString)
+    static let TYPE_INT = Int(MinisqlValueTypeInt)
+    static let TYPE_BOOL = Int(MinisqlValueTypeBool)
     
     static func makeValue(from anyValue: Any) -> MinisqlValue {
         let value: MinisqlValue!
@@ -24,12 +25,8 @@ class ValueUtil {
             value = MinisqlNewValueString(anyValue as! String)
         case is Int:
             value =  MinisqlNewValueInt(anyValue as! Int)
-            //        case is SQLite.Blob:
-            //            logger.log("Make value SQLite.Blob")
-            //            let blob = anyValue as! SQLite.Blob
-            //            let data:NSData = Data(blob.bytes)
-            //            value = MinisqlNewValueBytes(data)
-            //            logger.log("Make value SQLite.Blob Completed with \(data) \(blob.bytes)")
+        case is Bool:
+            value =  MinisqlNewValueBool(anyValue as! Bool)
         case is UInt8:
             logger.log("Make value UInt8 with value \(anyValue)")
             let blob = anyValue as! SQLite.Blob
@@ -50,6 +47,8 @@ class ValueUtil {
             return Int(internalsdkValue.int_() as Int)
         case TYPE_BYTES:
             return internalsdkValue.bytes()!
+        case TYPE_BOOL:
+            return internalsdkValue.bool_()
         default:
             fatalError("Unsupported type")
         }
@@ -67,6 +66,8 @@ class ValueUtil {
                 bindings.append(arg.string())
             case TYPE_INT:
                 bindings.append(arg.int_())
+            case TYPE_BOOL:
+                bindings.append(arg.bool_())
             case TYPE_BYTES:
                 if let bytes = arg.bytes() {
                     let byteArray = [UInt8](bytes)
@@ -88,11 +89,13 @@ class ValueUtil {
             value.setString(binding as? String)
         case "Int64":
             value.setInt(Int(binding as! Int64))
+        case "Bool":
+            value.setBool(Bool(binding as! Bool))
         case "Blob":
             let blob = binding as! Blob
             let data = Data(blob.bytes)
             value.setBytes(data)
-  default:
+        default:
             fatalError("Unsupported SQLite.Binding type: \(binding.bindingType)")
         }
     }
@@ -109,6 +112,8 @@ extension Binding {
             return "Double"
         case is String:
             return "String"
+        case is Bool:
+            return "Bool"
         case is Blob:
             return "Blob"
         case is NSNumber:

@@ -1,6 +1,7 @@
 package internalsdk
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -40,12 +41,43 @@ type ChangeSetInterface struct {
 type ItemInterface struct {
 	Path       string
 	DetailPath string
-	Value      *minisql.Value
+	Value      *MyValue
 }
 
 // UpdaterModel defines an interface to handle database changes.
 type UpdaterModel interface {
 	OnChanges(cs *ChangeSetInterface) error
+}
+type MyValue struct {
+	minisql.Value
+}
+
+// Custom JSON serialization method for Value type
+func (v *MyValue) MarshalJSON() ([]byte, error) {
+	switch v.Type {
+	case minisql.ValueTypeBytes:
+		return json.Marshal(map[string]interface{}{
+			"Type":  v.Type,
+			"Value": base64.StdEncoding.EncodeToString(v.Bytes()),
+		})
+	case minisql.ValueTypeString:
+		return json.Marshal(map[string]interface{}{
+			"Type":  v.Type,
+			"Value": v.String(),
+		})
+	case minisql.ValueTypeInt:
+		return json.Marshal(map[string]interface{}{
+			"Type":  v.Type,
+			"Value": v.Int(),
+		})
+	case minisql.ValueTypeBool:
+		return json.Marshal(map[string]interface{}{
+			"Type":  v.Type,
+			"Value": v.Bool(),
+		})
+	default:
+		return nil, fmt.Errorf("unsupported value type: %d", v.Type)
+	}
 }
 
 // NewModel initializes a new baseModel instance.
@@ -66,18 +98,13 @@ func (m *baseModel) InvokeMethod(method string, arguments minisql.Values) (*mini
 
 // Subscribe subscribes to database changes based on the provided request.
 func (m *baseModel) Subscribe(req *SubscriptionRequest) error {
-	log.Debugf("Subscribe called with request:", req)
 	pathPrefixesSlice := req.getPathPrefixes()
-	log.Debugf("Path Prefixes:", pathPrefixesSlice[0])
-
 	sub := &pathdb.Subscription[interface{}]{
 		ID:             req.ID,
 		PathPrefixes:   pathPrefixesSlice,
 		JoinDetails:    req.JoinDetails,
 		ReceiveInitial: req.ReceiveInitial,
 		OnUpdate: func(cs *pathdb.ChangeSet[interface{}]) error {
-			log.Debugf("OnUpdate called with ChangeSet:", cs)
-
 			updatesMap := make(map[string]*ItemInterface)
 			for k, itemWithRaw := range cs.Updates {
 				rawValue, err := itemWithRaw.Value.Value()
@@ -86,11 +113,12 @@ func (m *baseModel) Subscribe(req *SubscriptionRequest) error {
 					return err
 				}
 				val := minisql.NewValue(rawValue)
-
+				// Need wrap to coz we need to send to json
+				myVal := &MyValue{Value: *val}
 				updatesMap[k] = &ItemInterface{
 					Path:       itemWithRaw.Path,
 					DetailPath: itemWithRaw.DetailPath,
-					Value:      val,
+					Value:      myVal,
 				}
 			}
 
@@ -107,7 +135,7 @@ func (m *baseModel) Subscribe(req *SubscriptionRequest) error {
 
 				return err
 			}
-			log.Debugf("Serialized updates:", string(updatesSerialized))
+			// log.Debugf("Serialized updates:", string(updatesSerialized))
 			log.Debugf("Serialized deletes:", string(deletesSerialized))
 
 			csInterface := &ChangeSetInterface{
@@ -178,16 +206,18 @@ func initSessionModel(m *baseModel) {
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put[bool](tx, PATH_PRO_USER, false, "")
 		pathdb.Put[bool](tx, CHAT_ENABLED, false, "")
-		pathdb.Put[bool](tx, DEVELOPMNET_MODE, true, "")
-		pathdb.Put[string](tx, "hasSucceedingProxy", "true", "")
+
 		pathdb.Put[string](tx, PATH_SDK_VERSION, SDKVersion(), "")
 
-		userLevel, error := tx.Get("hasSucceedingProxy")
-		if error != nil {
-			return fmt.Errorf("Error while retriving %v and error %v", PATH_USER_LEVEL, error)
-		}
-		log.Debugf("Mutate hasSucceedingProxy value %v", userLevel)
+		// userLevel, error := tx.Get(PATH_USER_LEVEL)
+		// if error != nil {
+		// 	return fmt.Errorf("Error while retriving %v and error %v", PATH_USER_LEVEL, error)
+		// }
+		// pathdb.Put[[]byte](tx, PATH_USER_LEVEL, userLevel, "")
 
+		//For now lets just use static
+		pathdb.Put[bool](tx, DEVELOPMNET_MODE, true, "")
+		pathdb.Put[bool](tx, "hasSucceedingProxy", true, "")
 		return nil
 	})
 }

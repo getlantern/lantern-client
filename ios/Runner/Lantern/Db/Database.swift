@@ -12,7 +12,6 @@ import SQLite
 
 
 class DatabaseManager: NSObject, MinisqlDBProtocol {
-    
     private let db: Connection
     private var currentTransaction: TransactionManager?
     private let queue = DispatchQueue(label: "com.myapp.DatabaseManager", attributes: .concurrent)
@@ -98,8 +97,6 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
      }
     
     func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
-        logger.log("TransactionManager manner exec called")
-
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])        }
         
@@ -116,8 +113,6 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
     }
     
     func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
-        logger.log("TransactionManager query exec called with query \(query)")
-
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])        }
         
@@ -185,7 +180,6 @@ class RowData: NSObject, MinisqlRowsProtocol {
      */
     func scan(_ values: MinisqlValuesProtocol?) throws {
         try syncQueue.sync {
-            logger.log("SCAN method called with \(values) with rowcount \(rows.count)")
             if values == nil {
                 logger.log("Error: values is nil")
                 throw NSError(domain: "Scan method failed", code: 0, userInfo: [NSLocalizedDescriptionKey: "Values object is nil"])
@@ -195,7 +189,6 @@ class RowData: NSObject, MinisqlRowsProtocol {
                 throw NSError(domain: "Scan method failed", code: 0, userInfo: [NSLocalizedDescriptionKey: "Current index is out of bounds"])
             }
             let currentRow = rows[currentIndex]
-            
             for (index, value) in currentRow.enumerated() {
                 let miniSqlValue = values!.get(index)!
                 ValueUtil.setValueFromBinding(binding: value!, value: miniSqlValue)
@@ -226,7 +219,6 @@ class ValueArrayHandler: NSObject, MinisqlValuesProtocol {
     }
     
     func set(_ index: Int, value: MinisqlValue?) {
-        logger.log("ValueUtil Setting value")
         guard index < values.count else {
             print("Error: Index out of bounds while trying to set value.")
             return

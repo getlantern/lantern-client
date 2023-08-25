@@ -27,12 +27,11 @@ class SessionModel extends Model {
           break;
       }
     });
-    if (Platform.isAndroid) {
-      isPlayVersion = singleValueNotifier(
-        'playVersion',
-        false,
-      );
-    }
+
+    isPlayVersion = singleValueNotifier(
+      'playVersion',
+      false,
+    );
 
     proxyAvailable = singleValueNotifier(
       'hasSucceedingProxy',

@@ -13,6 +13,7 @@
 		035BE7062A7122BC0084059A /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7042A7122BC0084059A /* SessionModel.swift */; };
 		035FDDD52A6A547F007B15C8 /* Internalsdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */; };
 		0369DF792A93803D000EBE43 /* MessagingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0369DF782A93803D000EBE43 /* MessagingModel.swift */; };
+		03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */; };
 		03F2FE342A6949EF0082B34C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F2FE332A6949EF0082B34C /* Logger.swift */; };
 		03F4CD7E2A77DE8500F7BDD8 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */; };
 		03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */; };
@@ -45,6 +46,7 @@
 		035BE7042A7122BC0084059A /* SessionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SessionModel.swift; path = Models/SessionModel.swift; sourceTree = "<group>"; };
 		035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Internalsdk.xcframework; sourceTree = "<group>"; };
 		0369DF782A93803D000EBE43 /* MessagingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessagingModel.swift; path = Models/MessagingModel.swift; sourceTree = "<group>"; };
+		03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriberRequest.swift; sourceTree = "<group>"; };
 		03F2FE332A6949EF0082B34C /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SessionManager.swift; path = Models/SessionManager.swift; sourceTree = "<group>"; };
 		03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BaseModel.swift; path = Models/BaseModel.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				03026EA02A77D654001D5507 /* Database.swift */,
+				03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */,
 			);
 			path = Db;
 			sourceTree = "<group>";
@@ -348,6 +351,7 @@
 				03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */,
 				035BE7062A7122BC0084059A /* SessionModel.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
+				03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */,
 				035BE7052A7122BC0084059A /* LanternModel.swift in Sources */,
 				03026EA32A77D67A001D5507 /* ValueUtil.swift in Sources */,
 				03026EA12A77D654001D5507 /* Database.swift in Sources */,
