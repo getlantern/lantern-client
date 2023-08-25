@@ -90,7 +90,7 @@ open class LanternApp : Application() {
             }
         )
 
-        fun stopService(connection: LanternConnection) = 
+        fun stopService(connection: LanternConnection) =
             application.sendBroadcast(Intent(Actions.STOP_SERVICE).
                 setPackage(application.packageName))
 

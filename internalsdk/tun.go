@@ -37,7 +37,6 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 
 	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
 	dev := os.NewFile(uintptr(fd), "tun")
-	defer dev.Close()
 
 	socksDialer, err := proxy.SOCKS5("tcp", socksAddr, nil, nil)
 	if err != nil {
@@ -109,6 +108,7 @@ func StopTun2Socks() {
 
 	currentDeviceMx.Lock()
 	ipp := currentIPP
+	currentDevice.Close()
 	currentDevice = nil
 	currentIPP = nil
 	currentDeviceMx.Unlock()

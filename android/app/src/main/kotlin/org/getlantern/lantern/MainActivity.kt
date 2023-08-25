@@ -312,6 +312,14 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         )
     }
 
+    /**
+     * Fetch the latest loconf config and update the UI based on those
+     * settings
+     */
+    private fun fetchLoConf() {
+        fetch { loconf -> runOnUiThread { processLoconf(loconf) } }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {
         surveyHelper.processLoconf(loconf)

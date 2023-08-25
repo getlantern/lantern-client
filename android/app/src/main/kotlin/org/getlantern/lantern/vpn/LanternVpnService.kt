@@ -116,17 +116,15 @@ class LanternVpnService : VpnService(), ServiceManager.Runner {
             if (Build.VERSION.SDK_INT >= 26) serviceNotification()
             Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks")
             conn = createBuilder() ?: return
-            val tunFd = conn.detachFd()
-            if (tunFd != null) {
-                Logger.debug(TAG, "Running tun2socks")
-                Internalsdk.tun2Socks(
-                    tunFd.toLong(),
-                    LanternApp.getSession().sOCKS5Addr,
-                    LanternApp.getSession().dNSGrabAddr,
-                    VPN_MTU.toLong(),
-                    LanternApp.getSession(),
-                )
-            }
+            val tunFd = conn.getFd()
+            Logger.debug(TAG, "Running tun2socks")
+            Internalsdk.tun2Socks(
+                tunFd.toLong(),
+                LanternApp.getSession().sOCKS5Addr,
+                LanternApp.getSession().dNSGrabAddr,
+                VPN_MTU.toLong(),
+                LanternApp.getSession(),
+            )
         } catch (t: Throwable) {
             Logger.e(TAG, "Exception while handling TUN device", t)
         } finally {
