@@ -54,7 +54,6 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
         try statement.run(bindings).forEach { row in
             rows.append(row)
         }
-        logger.log("Database manager query result \(rows) for query \(query)")
         return RowData(rows: rows)
     }
  

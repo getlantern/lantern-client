@@ -23,9 +23,11 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
     var eventChannel: FlutterEventChannel!
     var methodChannel: FlutterMethodChannel!
     var binaryMessenger: FlutterBinaryMessenger!
-    var activeSinks: FlutterEventSink?
+    let activeSinks = AtomicReference<FlutterEventSink?>(nil)
     var activeSubscribers: Set<String> = []
-    var asyncHandler: DispatchQueue = DispatchQueue(label: "asyncHandlerQueue")
+    private let mainHandler = DispatchQueue.main
+    private let asyncHandler = DispatchQueue(label: "BaseModel-AsyncHandler")
+    
     
     init(type: ModelType,flutterBinary:FlutterBinaryMessenger) {
         self.modelType = type
@@ -75,7 +77,6 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
         }
     }
     
-    
     private func setupFlutterChannels() {
         var modelName = ""
         switch modelType {
@@ -88,63 +89,65 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
         eventChannel.setStreamHandler(self)
         
         methodChannel = FlutterMethodChannel(name: "\(modelName)_method_channel", binaryMessenger: binaryMessenger)
-        methodChannel.setMethodCallHandler { (call: FlutterMethodCall, result: @escaping FlutterResult) in
-            // Handle method calls
-        }
+        methodChannel.setMethodCallHandler(handleMethodCall)
     }
-    
     
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         logger.log("onListen initiated with arguments: \(arguments)")
         guard let args = arguments as? [String: Any] else {
             let errorMessage = "Failed to cast arguments \(arguments) to dictionary. Exiting..."
-            logger.log(errorMessage)
-            return FlutterError(code: "INVALID_ARGUMENTS", message: errorMessage, details: nil)
+            return createFlutterError(code:"INVALID_ARGUMENTS", message: errorMessage)
         }
-        activeSinks = events
-        
+        activeSinks.set(events)
         guard let subscriberID = args["subscriberID"] as? String,
               let path = args["path"] as? String else {
             let errorMessage = "Required parameters subscriberID or path missing in arguments. Exiting..."
-            logger.log(errorMessage)
-            return FlutterError(code: "MISSING_PARAMETERS", message: errorMessage, details: nil)
+            return createFlutterError(code:"MISSING_PARAMETERS", message: errorMessage)
         }
         
-        
         let details = args["details"] as? Bool ?? false
+        // Mark the subscriber as active
         activeSubscribers.insert(subscriberID)
         
+        // Closure to send events back to the Flutter side asynchronously
+        let notifyActiveSink = { (data: [String: Any]) in
+            self.mainHandler.async {
+                self.activeSinks.get()?(data)
+            }
+        }
+        // Initializing the subscriber with callback for updates
         let subscriber = DetailsSubscriber(subscriberID: subscriberID, path: path) { updates, deletes in
-         
-            logger.log("Received")
+            self.mainHandler.async {
+                let data: [String: Any] = [
+                    "s": subscriberID,
+                    "u": updates,
+                    "d": deletes
+                ]
+                notifyActiveSink(data)
+            }
         }
         
         do {
             try handleSubscribe(for: model, subscriber: subscriber)
         } catch let error {
             let errorMessage = "An error occurred while subscribing: \(error.localizedDescription)"
-            logger.log(errorMessage)
-            return FlutterError(code: "SUBSCRIBE_ERROR", message: errorMessage, details: nil)
-        }
-        
+            return createFlutterError(code:"SUBSCRIBE_ERROR", message: errorMessage)
+         }
         return nil
     }
     
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
         if(arguments==nil){
-            let errorMessage = "Arguments found nill"
-            return FlutterError(code: "MISSING_PARAMETERS", message: errorMessage, details: nil)
+            return nil
         }
         guard let args = arguments as? [String: Any] else {
             let errorMessage = "onCancel Failed to cast arguments \(arguments) to dictionary. Exiting..."
-            logger.log(errorMessage)
-            return FlutterError(code: "INVALID_ARGUMENTS", message: errorMessage, details: nil)
+            return createFlutterError(code:"INVALID_ARGUMENTS", message: errorMessage)
         }
         
         guard let subscriberID = args["subscriberID"] as? String else {
             let errorMessage = "Required parameters subscriberID missing in arguments. Exiting..."
-            logger.log(errorMessage)
-            return FlutterError(code: "MISSING_PARAMETERS", message: errorMessage, details: nil)
+            return createFlutterError(code:"MISSING_PARAMETERS", message: errorMessage)
         }
         
         do {
@@ -152,8 +155,7 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
             activeSubscribers.remove(subscriberID)
         } catch let error {
             let errorMessage = "An error occurred while unsubscribing: \(error.localizedDescription)"
-            logger.log(errorMessage)
-            return FlutterError(code: "UNSUBSCRIBE_ERROR", message: errorMessage, details: nil)
+            return createFlutterError(code:"UNSUBSCRIBE_ERROR", message: errorMessage)
         }
         return nil
     }
@@ -165,17 +167,14 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
         // The 'call' contains the method name and arguments
         // The 'result' can be used to send back the data to Flutter
         asyncHandler.async {
-            self.doMethodCall(call: call, result: result)
+            self.doOnMethodCall(call: call, result: result)
         }
-        
     }
     
-    open func doMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
-          // Default implementation. This will force subclasses to provide their own implementation.
-          fatalError("Subclasses must implement this method.")
-      }
-      
-    
+    open func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        // Default implementation. This will force subclasses to provide their own implementation.
+        fatalError("Subclasses must implement this method.")
+    }
     
     func handleSubscribe(for model: Any, subscriber: DetailsSubscriber) throws {
         switch model {
@@ -198,6 +197,35 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
             throw NSError(domain: "UnsupportedModel", code: 999, userInfo: ["Description": "Unsupported model type."])
         }
     }
+    
+    private func createFlutterError(code: String, message: String, details: Any? = nil) -> FlutterError {
+        logger.log(message)
+        return FlutterError(code: code, message: message, details: details)
+    }
+    
+}
+
+
+
+
+/// A simple thread-safe wrapper for atomic property access.
+class AtomicReference<Value> {
+    private var value: Value
+    private let queue = DispatchQueue(label: "com.atomic.reference", attributes: .concurrent)
+
+    init(_ value: Value) {
+        self.value = value
     }
 
+    func set(_ newValue: Value) {
+        queue.async(flags: .barrier) {
+            self.value = newValue
+        }
+    }
 
+    func get() -> Value {
+        return queue.sync {
+            value
+        }
+    }
+}

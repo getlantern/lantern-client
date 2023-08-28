@@ -39,7 +39,7 @@ class ValueUtil {
         return value
     }
     
-    static func getValue(from internalsdkValue: MinisqlValue) -> Any {
+    static func convertFromMinisqlValue(from internalsdkValue: MinisqlValue) -> Any? {
         switch internalsdkValue.type {
         case TYPE_STRING:
             return internalsdkValue.string()
@@ -100,7 +100,29 @@ class ValueUtil {
         }
     }
     
-    
+    static func convertToMinisqlValue(_ anyValue: Any) -> MinisqlValue? {
+        switch anyValue {
+        case is String:
+            return MinisqlNewValueString(anyValue as! String)
+        case is Int:
+            return MinisqlNewValueInt(anyValue as! Int)
+        case is Bool:
+            return MinisqlNewValueBool(anyValue as! Bool)
+        case is [Any]: // For arrays
+            if let jsonData = try? JSONSerialization.data(withJSONObject: anyValue, options: []),
+               let jsonString = String(data: jsonData, encoding: .utf8) {
+                return MinisqlNewValueString(jsonString)
+            }
+        case is [String: Any]: // For dictionaries
+            if let jsonData = try? JSONSerialization.data(withJSONObject: anyValue, options: []),
+               let jsonString = String(data: jsonData, encoding: .utf8) {
+                return MinisqlNewValueString(jsonString)
+            }
+        default:
+            return MinisqlNewValueString("\(anyValue)")
+        }
+        return nil
+    }
     
 }
 extension Binding {
