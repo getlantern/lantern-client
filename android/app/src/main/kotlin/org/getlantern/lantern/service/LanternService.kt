@@ -155,7 +155,7 @@ open class LanternService : Service(), Runnable {
             service.createUser(attempts)
         }
 
-        override fun onSuccess(response: Response, result: JsonObject) {
+        override fun onSuccess(response: Response?, result: JsonObject?) {
             val user: ProUser? = Json.gson.fromJson(result, ProUser::class.java)
             if (user == null) {
                 Logger.error(TAG, "Unable to parse user from JSON")

@@ -303,7 +303,7 @@ class MainActivity :
                 Logger.error(TAG, "Unable to fetch user data: $error", throwable)
             }
 
-            override fun onSuccess(response: Response, user: ProUser?) {
+            override fun onSuccess(response: Response, user: ProUser) {
                 val devices = user?.getDevices()
                 val deviceID = LanternApp.getSession().deviceID()
                 // if the payment test mode is enabled
@@ -323,7 +323,7 @@ class MainActivity :
     }
 
     private fun updatePlans() {
-        lanternClient.getPlans(object : PlansCallback {
+        lanternClient.plans(object : PlansCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
                 Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
             }

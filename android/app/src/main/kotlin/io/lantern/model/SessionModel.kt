@@ -502,9 +502,8 @@ class SessionModel(
                     }
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
-                    Logger.debug(TAG, "Response: $result")
-                    if (result["token"] != null && result["userID"] != null) {
+                override fun onSuccess(response: Response?, result: JsonObject?) {
+                    if (result != null && result["token"] != null && result["userID"] != null) {
                         Logger.debug(TAG, "Successfully validated recovery code")
                         // update token and user ID with those returned by the pro server
                         // update token and user ID with those returned by the pro server
@@ -540,7 +539,7 @@ class SessionModel(
                     activity.showErrorDialog(activity.resources.getString(R.string.invalid_verification_code))
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
+                override fun onSuccess(response: Response?, result: JsonObject?) {
                     lanternClient.userData(object : ProUserCallback {
                         override fun onSuccess(response: Response, userData: ProUser) {
                             Logger.debug(TAG, "Successfully updated userData")
@@ -608,7 +607,7 @@ class SessionModel(
                     activity.showErrorDialog(activity.resources.getString(R.string.unable_remove_device))
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
+                override fun onSuccess(response: Response?, result: JsonObject?) {
                     Logger.debug(TAG, "Successfully removed device")
 
                     val isLogout = deviceId == LanternApp.getSession().deviceID
