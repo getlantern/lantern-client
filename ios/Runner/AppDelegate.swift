@@ -9,6 +9,7 @@ import Internalsdk
     let NAVIGATION_METHOED_CHANNEL="lantern_method_channel"
     
     var sessionModel:SessionModel!
+    var messagingModel:MessagingModel!
     var lanternModel:LanternModel!
     var flutterbinaryMessenger:FlutterBinaryMessenger!
     var lanternMethodChannel:FlutterMethodChannel!
@@ -31,6 +32,8 @@ import Internalsdk
         logger.log("setupModels method called")
         //Init Session Model
         sessionModel=SessionModel(flutterBinary: flutterbinaryMessenger)
+        //Init Messaging Model
+        messagingModel=MessagingModel(flutterBinary: flutterbinaryMessenger)
         //Init Lantern Model
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
 

@@ -16,7 +16,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         self.flutterbinaryMessenger=flutterBinary
         super.init(type: .sessionModel , flutterBinary: self.flutterbinaryMessenger)
      }
-    
+   
     override func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
             // Convert the entire arguments to a single MinisqlValue
         guard let minisqlValue = ValueUtil.convertToMinisqlValue(call.arguments) else {
@@ -52,7 +52,6 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     
     func invokeMethodOnGo(name: String, argument: MinisqlValue) throws -> Any {
         // Convert any argument to Minisql values
-        
         let goResult = try model.invokeMethod(name, arguments: ValueArrayHandler(values: [argument]))
         return goResult
     }

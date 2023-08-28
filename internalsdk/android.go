@@ -126,12 +126,6 @@ type panickingSession interface {
 	Wrapped() Session
 }
 
-func panicIfNecessary(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
 // panickingSessionImpl implements panickingSession
 type panickingSessionImpl struct {
 	wrapped Session
