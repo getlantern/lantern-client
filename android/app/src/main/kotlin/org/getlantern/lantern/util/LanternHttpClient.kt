@@ -3,6 +3,7 @@ package org.getlantern.lantern.model
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
@@ -30,28 +31,6 @@ import okhttp3.ResponseBody
 import okio.Buffer
 
 open class LanternHttpClient : HttpClient() {
-    companion object {
-        private const val DEVICE_ID_HEADER = "X-Lantern-Device-Id"
-        private const val USER_ID_HEADER = "X-Lantern-User-Id"
-        private const val PRO_TOKEN_HEADER = "X-Lantern-Pro-Token"
-        private const val APP_VERSION_HEADER = "X-Lantern-Version"
-        private const val PLATFORM_HEADER = "X-Lantern-Platform"
-
-        private var JSON: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
-
-        fun createProUrl(uri: String, params: Map<String, String?> = mutableMapOf()): HttpUrl {
-            val url = "http://localhost/pro${uri}"
-            var builder = url.toHttpUrl().newBuilder()
-            for ((key, value) in params) {
-                builder.addQueryParameter(key, value)
-            }
-            return builder.build()
-        }
-
-        fun createJsonBody(json: JsonObject): RequestBody {
-            return RequestBody.create(JSON, json.toString())
-        }
-    }
 
     private fun userHeaders(): MutableMap<String, String> {
         val headers = mutableMapOf<String, String>()
@@ -77,11 +56,11 @@ open class LanternHttpClient : HttpClient() {
         val url = createProUrl("/user-data", params)
         get(url, object : ProCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
-
+                cb.onFailure(throwable, error)
             }
 
             override fun onSuccess(response: Response?, result: JsonObject?) {
-
+                Logger.debug(TAG, "JSON response" + result.toString())
             }
         })
     }
@@ -98,9 +77,15 @@ open class LanternHttpClient : HttpClient() {
             }
 
             override fun onSuccess(response: Response?, result: JsonObject?) {
-
+                result?.get("error")?.let {
+                    onFailure(null, ProError(result))
+                }
             }
         })
+    }
+
+    inline fun <reified T> parseData(row :String): T{
+       return Gson().fromJson(row, object: TypeToken<T>(){}.type)
     }
 
     fun plans(cb: PlansCallback, inAppBilling: InAppBilling?) {
@@ -114,6 +99,7 @@ open class LanternHttpClient : HttpClient() {
             }
 
             override fun onSuccess(response: Response?, result: JsonObject?) {
+                //val mapType = TypeToken<Map<String, List<PaymentMethods>>() {}.type
 
             }
 
@@ -121,7 +107,29 @@ open class LanternHttpClient : HttpClient() {
     }
 
     fun plansV3(cb: PlansV3Callback, inAppBilling: InAppBilling?) {
+        val params = mapOf("locale" to LanternApp.getSession().language,
+            "countrycode" to LanternApp.getSession().getCountryCode())
+        val httpUrl = createProUrl("/plans-v3", params)
+        val plans = mutableMapOf<String, ProPlan>()
+        get(httpUrl, object : ProCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                Logger.error(TAG, "Unable to fetch plans", throwable)
+                if (cb != null) cb.onFailure(throwable, error)
+            }
 
+            override fun onSuccess(response: Response?, result: JsonObject?) {
+                val response = parseData<Map<String, List<PaymentMethods>>>(result?.get("providers").toString())
+                val providers = response?.get("android")
+                val fetched = parseData<List<ProPlan>>(result?.get("plans").toString())
+                for (plan in fetched) {
+                    plan?.let {
+                        plan.formatCost()
+                        plans.put(plan.id, plan)
+                    }
+                }
+                if (providers != null) cb.onSuccess(plans, providers)
+            }
+        })
     }
 
     private fun proRequest(method: String, url: HttpUrl, headers: Map<String, String>,
@@ -150,5 +158,29 @@ open class LanternHttpClient : HttpClient() {
     interface PlansV3Callback {
         fun onFailure(throwable: Throwable?, error: ProError?)
         fun onSuccess(plans: Map<String, ProPlan>, methods: List<PaymentMethods>)              
+    }
+
+    companion object {
+        private const val DEVICE_ID_HEADER = "X-Lantern-Device-Id"
+        private const val USER_ID_HEADER = "X-Lantern-User-Id"
+        private const val PRO_TOKEN_HEADER = "X-Lantern-Pro-Token"
+        private const val APP_VERSION_HEADER = "X-Lantern-Version"
+        private const val PLATFORM_HEADER = "X-Lantern-Platform"
+        private val TAG = LanternHttpClient::class.java.name
+
+        private var JSON: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
+
+        fun createProUrl(uri: String, params: Map<String, String?> = mutableMapOf()): HttpUrl {
+            val url = "http://localhost/pro${uri}"
+            var builder = url.toHttpUrl().newBuilder()
+            for ((key, value) in params) {
+                builder.addQueryParameter(key, value)
+            }
+            return builder.build()
+        }
+
+        fun createJsonBody(json: JsonObject): RequestBody {
+            return RequestBody.create(JSON, json.toString())
+        }
     }
 }
