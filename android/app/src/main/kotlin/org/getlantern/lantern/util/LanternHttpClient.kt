@@ -17,7 +17,9 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.FormBody
 import okhttp3.Headers
+import okhttp3.Headers.Companion.toHeaders
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -39,11 +41,11 @@ open class LanternHttpClient : HttpClient() {
 
         fun createProUrl(uri: String, params: Map<String, String?> = mutableMapOf()): HttpUrl {
             val url = "http://localhost/pro${uri}"
-            var builder = HttpUrl.parse(url)?.newBuilder()
+            var builder = url.toHttpUrl().newBuilder()
             for ((key, value) in params) {
-                builder?.addQueryParameter(key, value)
+                builder.addQueryParameter(key, value)
             }
-            return builder?.build()
+            return builder.build()
         }
 
         fun createJsonBody(json: JsonObject): RequestBody {
@@ -78,7 +80,7 @@ open class LanternHttpClient : HttpClient() {
 
             }
 
-            override fun onSuccess(response: Response?, user: ProUser?) {
+            override fun onSuccess(response: Response?, result: JsonObject?) {
 
             }
         })
@@ -102,7 +104,7 @@ open class LanternHttpClient : HttpClient() {
     }
 
     fun plans(cb: PlansCallback, inAppBilling: InAppBilling?) {
-        val params = mapOf("locale" to LanternApp.getSession().getLanguage(), 
+        val params = mapOf("locale" to LanternApp.getSession().language, 
             "countrycode" to LanternApp.getSession().getCountryCode())
         val url = createProUrl("/plans", params)
         val plans = mapOf<String, ProPlan>()
@@ -122,30 +124,30 @@ open class LanternHttpClient : HttpClient() {
 
     }
 
-    private fun proRequest(method: String, url: HttpUrl, headers: MutableMap<String, String>,
+    private fun proRequest(method: String, url: HttpUrl, headers: Map<String, String>,
         body: RequestBody?, cb: ProCallback) {
         var builder = Request.Builder().cacheControl(CacheControl.FORCE_NETWORK)
         if (headers != null) {
-            builder = builder.headers(Headers.of(headers)) 
+            builder = builder.headers(headers.toHeaders())
         }
     }
 
-    fun interface ProCallback {
+    interface ProCallback {
         fun onFailure(throwable: Throwable?, error: ProError?)
         abstract fun onSuccess(response: Response?, result: JsonObject?)
     }
 
-    fun interface ProUserCallback {
+    interface ProUserCallback {
         fun onFailure(throwable: Throwable?, error: ProError?)
         fun onSuccess(response: Response, userData: ProUser)
     }
 
-    fun interface PlansCallback {
+    interface PlansCallback {
         fun onFailure(throwable: Throwable?, error: ProError?)
         fun onSuccess(plans: Map<String, ProPlan>)        
     }
 
-    fun interface PlansV3Callback {
+    interface PlansV3Callback {
         fun onFailure(throwable: Throwable?, error: ProError?)
         fun onSuccess(plans: Map<String, ProPlan>, methods: List<PaymentMethods>)              
     }
