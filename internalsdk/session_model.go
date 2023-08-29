@@ -56,8 +56,13 @@ func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
 func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
 	switch method {
 	case "initSesssionModel":
-		initSessionModel(s.baseModel)
-		return minisql.NewValueBool(true), nil
+		jsonString := arguments.Get(0)
+		err := initSessionModel(s.baseModel, jsonString.String())
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	case "setTimeZone":
 		// Get timezone id
 		timezoneId := arguments.Get(0)
@@ -102,20 +107,9 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 }
 
 // InvokeMethod handles method invocations on the SessionModel.
-func initSessionModel(m *baseModel) error {
+func initSessionModel(m *baseModel, jsonString string) error {
 	// Init few path for startup
-	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put[bool](tx, PATH_PRO_USER, false, "")
-		pathdb.Put[bool](tx, CHAT_ENABLED, false, "")
-		pathdb.Put[string](tx, PATH_SDK_VERSION, SDKVersion(), "")
-
-		//For now lets just use static
-		pathdb.Put[bool](tx, DEVELOPMNET_MODE, true, "")
-		// pathdb.Put[bool](tx, "hasSucceedingProxy", true, "")
-		return nil
-	})
-	panicIfNecessary(err)
-	return nil
+	return putFromJson(jsonString, m.db)
 }
 
 func (s *SessionModel) GetAppName() string {
@@ -189,7 +183,7 @@ func (s *SessionModel) UpdateStats(city string, country string, countryCode stri
 }
 
 func (s *SessionModel) SetStaging(stageing bool) error {
-	// Not using stageing
+	// Not using stageing anymore
 	return nil
 }
 
@@ -207,7 +201,9 @@ func (s *SessionModel) BandwidthUpdate(percent int, remaining int, allowed int, 
 func (s *SessionModel) Locale() (string, error) {
 	// For now just send back english by default
 	// Once have machisim but to dyanmic
-	return "EN", nil
+	locale, err := s.baseModel.db.Get(LANG)
+	panicIfNecessary(err)
+	return string(locale), nil
 }
 
 func setLocale(m *baseModel, langCode string) error {
@@ -219,7 +215,6 @@ func setLocale(m *baseModel, langCode string) error {
 }
 
 func (s *SessionModel) GetTimeZone() (string, error) {
-	//Set the timezeon from swift
 	timezoneId, err := s.baseModel.db.Get(TIMEZONE_ID)
 	panicIfNecessary(err)
 	// For now just send back english by default

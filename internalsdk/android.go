@@ -79,7 +79,7 @@ type Session interface {
 	GetForcedCountryCode() (string, error)
 	GetDNSServer() (string, error)
 	Provider() (string, error)
-	IsPlayVersion() (bool, error)
+	IsStoreVersion() (bool, error)
 	Email() (string, error)
 	Currency() (string, error)
 	DeviceOS() (string, error)
@@ -110,7 +110,7 @@ type panickingSession interface {
 	GetForcedCountryCode() string
 	GetDNSServer() string
 	Provider() string
-	IsPlayVersion() bool
+	IsStoreVersion() bool
 	Email() string
 	Currency() string
 	DeviceOS() string
@@ -225,8 +225,8 @@ func (s *panickingSessionImpl) Provider() string {
 	return result
 }
 
-func (s *panickingSessionImpl) IsPlayVersion() bool {
-	result, err := s.wrapped.IsPlayVersion()
+func (s *panickingSessionImpl) IsStoreVersion() bool {
+	result, err := s.wrapped.IsStoreVersion()
 	panicIfNecessary(err)
 	return result
 }
@@ -516,7 +516,7 @@ func run(configDir, locale string,
 		flags,
 		func(cfg *config.Global, src config.Source) {
 			session.UpdateAdSettings(&adSettings{cfg.AdSettings})
-			if session.IsPlayVersion() {
+			if session.IsStoreVersion() {
 				runner.EnableNamedDomainRules("google_play") // for google play build we want to make sure that Google Play domains are not being proxied
 			}
 			select {

@@ -66,7 +66,7 @@ func (c testSession) Currency() (string, error)       { return "usd", nil }
 func (c testSession) DeviceOS() (string, error)       { return "android", nil }
 func (c testSession) Email() (string, error)          { return "test@getlantern.org", nil }
 func (c testSession) GetCountryCode() (string, error) { return "us", nil }
-func (c testSession) IsPlayVersion() (bool, error)    { return false, nil }
+func (c testSession) IsStoreVersion() (bool, error)   { return false, nil }
 func (c testSession) Provider() (string, error)       { return "stripe", nil }
 func (c testSession) SetChatEnabled(enabled bool)     {}
 func (c testSession) SetMatomoEnabled(bool)           {}
