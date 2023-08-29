@@ -66,40 +66,77 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 	case "setTimeZone":
 		// Get timezone id
 		timezoneId := arguments.Get(0)
-		setTimeZone(s.baseModel, timezoneId.String())
-		return minisql.NewValueBool(true), nil
+		err := setTimeZone(s.baseModel, timezoneId.String())
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	case "setReferalCode":
 		referralCode := arguments.Get(0)
-		setReferalCode(s.baseModel, referralCode.String())
-		return minisql.NewValueBool(true), nil
+		err := setReferalCode(s.baseModel, referralCode.String())
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	case "setForceCountry":
 		forceCountry := arguments.Get(0)
-		setForceCountry(s.baseModel, forceCountry.String())
-		return minisql.NewValueBool(true), nil
+		err := setForceCountry(s.baseModel, forceCountry.String())
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	case "setDNSServer":
 		// Todo Implement SetDns server
-		setDNSServer(s.baseModel, "Test")
-		return minisql.NewValueBool(true), nil
+		err := setDNSServer(s.baseModel, "Test")
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	case "setProvider":
 		// Todo Implement setProvider server
-		setProvider(s.baseModel, "Test")
-		return minisql.NewValueBool(true), nil
+		err := setProvider(s.baseModel, "Test")
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
+
 	case "setEmail":
 		// Todo Implement setEmail server
-		setEmail(s.baseModel, "Test")
-		return minisql.NewValueBool(true), nil
+		err := setEmail(s.baseModel, "Test")
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	case "setCurrency":
 		// Todo Implement setCurrency server
-		setCurrency(s.baseModel, "Test")
-		return minisql.NewValueBool(true), nil
+		err := setCurrency(s.baseModel, "Test")
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	case "setProUser":
 		// Todo Implement setCurrency server
-		setProUser(s.baseModel, false)
-		return minisql.NewValueBool(true), nil
+		err := setProUser(s.baseModel, false)
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	case "setLocal":
 		local := arguments.Get(0)
-		setLocale(s.baseModel, local.String())
-		return minisql.NewValueBool(true), nil
+		err := setLocale(s.baseModel, local.String())
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	default:
 
 		return s.baseModel.InvokeMethod(method, arguments)
@@ -283,9 +320,10 @@ func (s *SessionModel) GetDNSServer() (string, error) {
 	return string(dns), nil
 }
 
-func setDNSServer(m *baseModel, forceCountry string) {
+func setDNSServer(m *baseModel, forceCountry string) error {
 	// Implement this
 	// Check out kotlin code
+	return nil
 }
 
 func (s *SessionModel) Provider() (string, error) {
@@ -294,9 +332,10 @@ func (s *SessionModel) Provider() (string, error) {
 	return string(provider), nil
 }
 
-func setProvider(m *baseModel, provider string) {
+func setProvider(m *baseModel, provider string) error {
 	// Implement this
 	// Check out kotlin code
+	return nil
 }
 
 // Todo: Change this method name to IsStoreVersion

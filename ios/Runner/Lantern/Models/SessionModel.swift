@@ -67,7 +67,6 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
             logger.log("Failed to convert initializationData to JSON")
             return
         }
-        logger.log("JsonString \(jsonString)")
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(jsonString)
         if(miniSqlValue != nil){
             do {
