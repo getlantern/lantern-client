@@ -145,5 +145,4 @@ class InAppBillingTest {
         inAppBilling.initConnection()
         verify { inAppBilling.handlePendingPurchases() }
     }
-
 }
