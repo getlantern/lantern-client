@@ -15,7 +15,6 @@ import Internalsdk
     var lanternMethodChannel:FlutterMethodChannel!
     var navigationChannel:FlutterMethodChannel!
     
-    
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -24,6 +23,7 @@ import Internalsdk
         flutterbinaryMessenger=controller.binaryMessenger
         setupModels()
         prepareChannel()
+        setupLocal()
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
@@ -36,7 +36,6 @@ import Internalsdk
         messagingModel=MessagingModel(flutterBinary: flutterbinaryMessenger)
         //Init Lantern Model
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
-
     }
     
     
@@ -45,6 +44,16 @@ import Internalsdk
         //Navigation Channel
         navigationChannel=FlutterMethodChannel(name: NAVIGATION_METHOED_CHANNEL, binaryMessenger: flutterbinaryMessenger)
         navigationChannel.setMethodCallHandler(handleNavigationethodCall)
+    }
+    
+    private func setupLocal(){
+        let langStr = Locale.current.languageCode
+        if langStr != nil{
+            sessionModel.setLocal(lang: langStr!)
+            logger.log("Local value found  \(langStr)")
+        }else{
+            logger.log("Local value found nil")
+        }
     }
     
     

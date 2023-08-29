@@ -9,13 +9,75 @@ import Foundation
 import Internalsdk
 import Flutter
 
+
 class SessionModel:BaseModel<InternalsdkSessionModel> {
     var flutterbinaryMessenger:FlutterBinaryMessenger
  
     init(flutterBinary:FlutterBinaryMessenger) {
         self.flutterbinaryMessenger=flutterBinary
         super.init(type: .sessionModel , flutterBinary: self.flutterbinaryMessenger)
-     }
+        setupData()
+    }
+    
+    
+    
+   func setupData(){
+       setTimeZone()
+       setReferalCode()
+    }
+    
+    
+    private func setTimeZone(){
+        let timeZoneId = TimeZone.current.identifier
+        let miniSqlValue =  ValueUtil.convertToMinisqlValue(timeZoneId)
+        if(miniSqlValue != nil){
+            do {
+                let result = try  invokeMethodOnGo(name: "setTimeZone", argument: miniSqlValue!)
+                 logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
+            }catch{
+                logger.log("Error while setting timezone")
+            }
+        }
+    }
+    
+    func setReferalCode(){
+        let miniSqlValue =  ValueUtil.convertToMinisqlValue("Test007")
+        if(miniSqlValue != nil){
+            do {
+                let result = try  invokeMethodOnGo(name: "setReferalCode", argument: miniSqlValue!)
+                 logger.log("Sucessfully set ReferalCode result \(result)")
+            }catch{
+                logger.log("Error while setting ReferalCode")
+            }
+        }
+    }
+    
+
+    func setForceCountry(countryCode:String){
+        let countryMiniSql =  ValueUtil.convertToMinisqlValue(countryCode)
+        if(countryMiniSql != nil){
+            do {
+                let result = try  invokeMethodOnGo(name: "setForceCountry", argument: countryMiniSql!)
+                 logger.log("Sucessfully set force country")
+            }catch{
+                logger.log("Error while setting  up forceCountry")
+            }
+        }
+    }
+    
+    
+    func setLocal(lang:String){
+        let langSqlValue =  ValueUtil.convertToMinisqlValue(lang)
+        if(langSqlValue != nil){
+            do {
+                let result = try  invokeMethodOnGo(name: "setLocal", argument: langSqlValue!)
+                 logger.log("Sucessfully set Local result \(result)")
+            }catch{
+                logger.log("Error while setting Local")
+            }
+        }
+    }
+    
    
     override func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
             // Convert the entire arguments to a single MinisqlValue
