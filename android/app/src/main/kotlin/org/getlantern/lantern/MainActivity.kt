@@ -82,13 +82,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     private lateinit var notifications: NotificationHelper
     private lateinit var receiver: NotificationReceiver
     private var autoUpdateJob: Job? = null
-
     private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
-
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)

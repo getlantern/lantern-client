@@ -53,10 +53,17 @@ abstract class BaseModel(
         init {
             val start = System.currentTimeMillis()
             val context = LanternApp.getAppContext()
-            Logger.debug(TAG, "LanternApp.getAppContext() finished at ${System.currentTimeMillis() - start}")
-            val oldSecretsPreferences = context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
+            Logger.debug(
+                TAG,
+                "LanternApp.getAppContext() finished at ${System.currentTimeMillis() - start}"
+            )
+            val oldSecretsPreferences =
+                context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
             val secretsPreferences = context.getSharedPreferences("secretsv2", Context.MODE_PRIVATE)
-            Logger.debug(TAG, "getSharedPreferences() finished at ${System.currentTimeMillis() - start}")
+            Logger.debug(
+                TAG,
+                "getSharedPreferences() finished at ${System.currentTimeMillis() - start}"
+            )
             val secrets = Secrets("lanternMasterKey", secretsPreferences, oldSecretsPreferences)
             Logger.debug(TAG, "Secrets() finished at ${System.currentTimeMillis() - start}")
 
@@ -67,14 +74,20 @@ abstract class BaseModel(
             val dbPassword = try {
                 secrets.get(dbPasswordKey, dbPasswordLength)
             } catch (e: InsecureSecretException) {
-                Logger.debug(TAG, "Old database password was stored insecurely, generate a new database password and prepare to copy data")
+                Logger.debug(
+                    TAG,
+                    "Old database password was stored insecurely, generate a new database password and prepare to copy data"
+                )
                 insecureDbPassword = e.secret
                 e.regenerate(dbPasswordLength)
             }
             masterDB = DB.createOrOpen(context, dbLocation, dbPassword)
             dbPassword.clear()
             insecureDbPassword?.let { insecurePassword ->
-                Logger.debug(TAG, "found old database encrypted with insecure password, migrate data to new secure database")
+                Logger.debug(
+                    TAG,
+                    "found old database encrypted with insecure password, migrate data to new secure database"
+                )
                 // What made the old password insecure is that it was stored as a String which
                 // tends to stick around for a long time in memory. We only ever used string
                 // passwords prior to the release of messaging, so nothing particularly sensitive
@@ -145,7 +158,7 @@ abstract class BaseModel(
                         errorDetails: Any?
                     ) {
                         mainHandler.post {
-                                mcResult.error(errorCode!!, errorMessage, errorDetails)
+                            mcResult.error(errorCode!!, errorMessage, errorDetails)
                         }
                     }
 
@@ -180,14 +193,17 @@ abstract class BaseModel(
                 val path = call.arguments<String>()
                 db.getRaw<Any>(path!!)?.valueOrProtoBytes
             }
+
             "list" -> {
                 val path = call.argument<String>("path")
                 val start = call.argument<Int?>("start") ?: 0
                 val count = call.argument<Int?>("count") ?: Int.MAX_VALUE
                 val fullTextSearch = call.argument<String?>("fullTextSearch")
                 val reverseSort = call.argument<Boolean?>("reverseSort") ?: false
-                db.listRaw<Any>(path!!, start, count, reverseSort).map { it.value.valueOrProtoBytes }
+                db.listRaw<Any>(path!!, start, count, reverseSort)
+                    .map { it.value.valueOrProtoBytes }
             }
+
             else -> notImplemented()
         }
     }
@@ -196,29 +212,35 @@ abstract class BaseModel(
 
     @Synchronized
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+        Logger.error(
+            TAG,
+            "Session Model  onListen calling  with argument  ${arguments} with event ${events}"
+        );
+
         activeSink.set(events)
         val args = arguments as Map<String, Any>
         val subscriberID = args["subscriberID"] as String
         val path = args["path"] as String
         val details = args["details"]?.let { it as Boolean } ?: false
         activeSubscribers.add(subscriberID)
-
         if (details) {
-            val subscriber: DetailsSubscriber<Any> = object : DetailsSubscriber<Any>(subscriberID, path) {
-                override fun onChanges(changes: DetailsChangeSet<Any>) {
-                    mainHandler.post {
-                        synchronized(this@BaseModel) {
-                            activeSink.get()?.success(
-                                mapOf(
-                                    "s" to subscriberID,
-                                    "u" to changes.updates.map { (path, value) -> path to value.value.valueOrProtoBytes }.toMap(),
-                                    "d" to changes.deletions.toList()
+            val subscriber: DetailsSubscriber<Any> =
+                object : DetailsSubscriber<Any>(subscriberID, path) {
+                    override fun onChanges(changes: DetailsChangeSet<Any>) {
+                        mainHandler.post {
+                            synchronized(this@BaseModel) {
+                                activeSink.get()?.success(
+                                    mapOf(
+                                        "s" to subscriberID,
+                                        "u" to changes.updates.map { (path, value) -> path to value.value.valueOrProtoBytes }
+                                            .toMap(),
+                                        "d" to changes.deletions.toList()
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }
-            }
             db.subscribe(subscriber)
         } else {
             val subscriber: RawSubscriber<Any> = object : RawSubscriber<Any>(subscriberID, path) {
@@ -228,7 +250,8 @@ abstract class BaseModel(
                             activeSink.get()?.success(
                                 mapOf(
                                     "s" to subscriberID,
-                                    "u" to changes.updates.map { (path, value) -> path to value.valueOrProtoBytes }.toMap(),
+                                    "u" to changes.updates.map { (path, value) -> path to value.valueOrProtoBytes }
+                                        .toMap(),
                                     "d" to changes.deletions.toList()
                                 )
                             )
@@ -241,6 +264,9 @@ abstract class BaseModel(
     }
 
     override fun onCancel(arguments: Any?) {
+        Logger.error(
+            TAG,
+            "Session Model  onCancel calling  with argument  ${arguments} ")
         if (arguments == null) {
             return
         }
