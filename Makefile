@@ -1,7 +1,11 @@
 #1 Disable implicit rules
 .SUFFIXES:
 
-.PHONY: codegen protos routes mocks test integration-test sourcedump
+.PHONY: codegen protos routes mocks test integration-test sourcedump build-framework build-framework-debug clean archive require-version set-version show-version reset-build-number install-gomobile assert-go-version
+
+INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
+INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
+
 
 codegen: protos routes
 
@@ -464,6 +468,46 @@ sourcedump: require-version
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
+build-framework: assert-go-version install-gomobile
+	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
+	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
+	@echo "generating Ios.xcFramework"
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	gomobile init && \
+	gomobile bind -target=ios \
+	-tags='headless lantern ios' \
+	-ldflags="$(LDFLAGS)" \
+    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+    		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/minisql
+	@echo "moving framework"
+	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
+	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+
+#build-framework: assert-go-version install-gomobile
+#	@echo "Nuking $(FRAMEWORK_DIR)"
+#	rm -Rf $(FRAMEWORK_DIR)
+#	@echo "generating Ios.xcFramework"
+#	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+#	gomobile init && \
+#	gomobile bind -target=ios \
+#	-tags='headless lantern ios' \
+#	-ldflags="$(LDFLAGS)" \
+#    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+#    		$(ANDROID_LIB_PKG)
+#	@echo "copying framework"
+#	mkdir -p $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME)
+#	cp -R ./$(FRAMEWORK_NAME)/* $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME)
+#	@echo "Nuking $(FRAMEWORK_NAME)"
+#	rm -Rf ./$(FRAMEWORK_NAME)
+
+
+install-gomobile:
+	@echo "installing gomobile" && \
+	go install golang.org/x/mobile/cmd/gomobile@latest
+
+assert-go-version:
+	@if go version | grep -q -v $(GO_VERSION); then echo "go $(GO_VERSION) is required." && exit 1; fi
+
 clean:
 	rm -f liblantern*.aar && \
 	rm -f $(MOBILE_LIBS)/liblantern-* && \
@@ -472,3 +516,8 @@ clean:
 	rm -Rf *.apk && \
 	rm -f `which gomobile` && \
 	rm -f `which gobind`
+	rm -Rf "$(FLASHLIGHT_FRAMEWORK_PATH)" "$(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)"
+
+
+
+

@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03026EA12A77D654001D5507 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03026EA02A77D654001D5507 /* Database.swift */; };
+		03026EA32A77D67A001D5507 /* ValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03026EA22A77D67A001D5507 /* ValueUtil.swift */; };
+		035BE7052A7122BC0084059A /* LanternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7032A7122BC0084059A /* LanternModel.swift */; };
+		035BE7062A7122BC0084059A /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7042A7122BC0084059A /* SessionModel.swift */; };
+		035FDDD52A6A547F007B15C8 /* Internalsdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */; };
+		036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036663D82A9E0C0E00595971 /* JsonUtils.swift */; };
+		0369DF792A93803D000EBE43 /* MessagingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0369DF782A93803D000EBE43 /* MessagingModel.swift */; };
+		03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */; };
+		03F2FE342A6949EF0082B34C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F2FE332A6949EF0082B34C /* Logger.swift */; };
+		03F4CD7E2A77DE8500F7BDD8 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */; };
+		03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -30,6 +41,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03026EA02A77D654001D5507 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		03026EA22A77D67A001D5507 /* ValueUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueUtil.swift; sourceTree = "<group>"; };
+		035BE7032A7122BC0084059A /* LanternModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LanternModel.swift; path = Models/LanternModel.swift; sourceTree = "<group>"; };
+		035BE7042A7122BC0084059A /* SessionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SessionModel.swift; path = Models/SessionModel.swift; sourceTree = "<group>"; };
+		035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Internalsdk.xcframework; sourceTree = "<group>"; };
+		036663D82A9E0C0E00595971 /* JsonUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonUtils.swift; sourceTree = "<group>"; };
+		0369DF782A93803D000EBE43 /* MessagingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessagingModel.swift; path = Models/MessagingModel.swift; sourceTree = "<group>"; };
+		03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriberRequest.swift; sourceTree = "<group>"; };
+		03F2FE332A6949EF0082B34C /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SessionManager.swift; path = Models/SessionManager.swift; sourceTree = "<group>"; };
+		03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BaseModel.swift; path = Models/BaseModel.swift; sourceTree = "<group>"; };
 		04AF578F28344E5CF0932AA9 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
@@ -55,12 +77,62 @@
 			buildActionMask = 2147483647;
 			files = (
 				9DAC9EDBE28EB779A10E5A26 /* Pods_Runner.framework in Frameworks */,
+				035FDDD52A6A547F007B15C8 /* Internalsdk.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		033CBDCC2A94D86300DEBCBA /* Db */ = {
+			isa = PBXGroup;
+			children = (
+				03026EA02A77D654001D5507 /* Database.swift */,
+				03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */,
+			);
+			path = Db;
+			sourceTree = "<group>";
+		};
+		03CD38182A693C050044B004 /* internalsdk */ = {
+			isa = PBXGroup;
+			children = (
+				035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */,
+			);
+			path = internalsdk;
+			sourceTree = "<group>";
+		};
+		03D789A42A616D25000D36F9 /* Lantern */ = {
+			isa = PBXGroup;
+			children = (
+				033CBDCC2A94D86300DEBCBA /* Db */,
+				03F2FE322A6949C60082B34C /* Utils */,
+				03EE344A2A652B3D00E37100 /* Models */,
+			);
+			path = Lantern;
+			sourceTree = "<group>";
+		};
+		03EE344A2A652B3D00E37100 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				035BE7032A7122BC0084059A /* LanternModel.swift */,
+				035BE7042A7122BC0084059A /* SessionModel.swift */,
+				03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */,
+				03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */,
+				0369DF782A93803D000EBE43 /* MessagingModel.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		03F2FE322A6949C60082B34C /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				03F2FE332A6949EF0082B34C /* Logger.swift */,
+				03026EA22A77D67A001D5507 /* ValueUtil.swift */,
+				036663D82A9E0C0E00595971 /* JsonUtils.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
@@ -75,6 +147,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				03CD38182A693C050044B004 /* internalsdk */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -94,6 +167,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				03D789A42A616D25000D36F9 /* Lantern */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -274,7 +348,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03F2FE342A6949EF0082B34C /* Logger.swift in Sources */,
+				03F4CD7E2A77DE8500F7BDD8 /* SessionManager.swift in Sources */,
+				0369DF792A93803D000EBE43 /* MessagingModel.swift in Sources */,
+				03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */,
+				035BE7062A7122BC0084059A /* SessionModel.swift in Sources */,
+				036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
+				03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */,
+				035BE7052A7122BC0084059A /* LanternModel.swift in Sources */,
+				03026EA32A77D67A001D5507 /* ValueUtil.swift in Sources */,
+				03026EA12A77D654001D5507 /* Database.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
