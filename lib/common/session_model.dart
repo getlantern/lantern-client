@@ -77,6 +77,7 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<int>(
       'accepted_terms_version',
       builder: builder,
+      defaultValue: 0
     );
   }
 
