@@ -41,6 +41,9 @@ const PRO_USER = "prouser"
 const REPLICA_ADDR = "replicaAddr"
 const SPLIT_TUNNELING = "splitTunneling"
 const LANG = "lang"
+const ACCEPTED_TERMS_VERSION = "accepted_terms_version"
+const ADS_ENABLED = "adsEnabled"
+const CAS_ADS_ENABLED = "casAsEnabled"
 
 // NewSessionModel initializes a new SessionModel instance.
 func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
@@ -341,7 +344,7 @@ func setProvider(m *baseModel, provider string) error {
 // Todo: Change this method name to IsStoreVersion
 func (s *SessionModel) IsPlayVersion() (bool, error) {
 	// For now return static to yes
-	return true, nil
+	return false, nil
 }
 
 func (s *SessionModel) Email() (string, error) {
@@ -409,6 +412,20 @@ func (s *SessionModel) SetChatEnabled(chatEnable bool) {
 func (s *SessionModel) SplitTunnelingEnabled() (bool, error) {
 	// Return static for now
 	return true, nil
+}
+
+func (s *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
+	pathdb.Mutate(s.db, func(tx pathdb.TX) error {
+		pathdb.Put[bool](tx, ADS_ENABLED, adsEnable, "")
+		return nil
+	})
+}
+
+func (s *SessionModel) SetCASShowInterstitialAdsEnabled(casEnable bool) {
+	pathdb.Mutate(s.db, func(tx pathdb.TX) error {
+		pathdb.Put[bool](tx, CAS_ADS_ENABLED, casEnable, "")
+		return nil
+	})
 }
 
 func (s *SessionModel) SerializedInternalHeaders() (string, error) {
