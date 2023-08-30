@@ -5,9 +5,12 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.StrictMode
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.multidex.MultiDex
+import org.getlantern.lantern.datadog.Datadog
+import org.getlantern.lantern.datadog.FlutterExcludingComponentPredicate
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternSessionManager
@@ -15,7 +18,7 @@ import org.getlantern.lantern.notification.Notifications
 import org.getlantern.lantern.service.LanternConnection
 import org.getlantern.lantern.util.debugOnly
 import org.getlantern.lantern.util.LanternProxySelector
-import org.getlantern.lantern.util.SentryUtil
+import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.util.HttpClient
 
 open class LanternApp : Application() {
@@ -44,12 +47,13 @@ open class LanternApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        SentryUtil.enableGoPanicEnrichment(this)
+
         // Necessary to locate a back arrow resource we use from the
         // support library. See http://stackoverflow.com/questions/37615470/support-library-vectordrawable-resourcesnotfoundexception
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         appContext = applicationContext
         session = LanternSessionManager(this)
+        Datadog.initialize()
         LanternProxySelector(session)
 
         if (session.isPlayVersion) inAppBilling = InAppBilling(this)

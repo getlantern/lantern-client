@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.model.MessagingModel
 import io.lantern.model.ReplicaModel
@@ -21,6 +22,7 @@ import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
 import okhttp3.Response
+import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.loconf.SurveyHelper
 import org.getlantern.lantern.model.AccountInitializationStatus
@@ -71,7 +73,7 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
-
+        FlutterEngineCache.getInstance().put("datadoghq_engine", flutterEngine)
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
@@ -79,6 +81,7 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
+                    flutterNavigation.invokeMethod("initDatadog", null)
                     fetchLoConf()
                     Logger.debug(
                         TAG,
@@ -255,7 +258,7 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
     private fun updateUserData() {
         lanternClient.userData(object : ProUserCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch user data: $error", throwable)
+                Datadog.addError("Unable to fetch user data: $error", throwable)
             }
 
             override fun onSuccess(response: Response, user: ProUser?) {
@@ -300,7 +303,7 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         lanternClient.plansV3(
             object : PlansV3Callback {
                 override fun onFailure(throwable: Throwable?, error: ProError?) {
-                    Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
+                    Datadog.addError("Unable to fetch payment methods: $error", throwable)
                 }
 
                 override fun onSuccess(proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) {
@@ -407,7 +410,7 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
             if (intent == null) {
                 vpnServiceManager.onVpnPermissionResult(true)
             } else {
-                //If user come here it mean user has all permissions needed
+                // If user come here it mean user has all permissions needed
                 // Also user given permission for VPN service dialog as well
                 LanternApp.getSession().setHasFirstSessionCompleted(true)
                 startActivityForResult(intent, REQUEST_VPN)
@@ -416,7 +419,6 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
             vpnServiceManager.disconnect()
         }
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

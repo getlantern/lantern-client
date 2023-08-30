@@ -12,6 +12,7 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.notification.Notifications
 import org.getlantern.lantern.service.ServiceManager
+import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import java.util.Locale
@@ -112,6 +113,7 @@ class LanternVpnService : VpnService(), ServiceManager.Runner {
     private fun startVpn() {
         val builder = Builder()
         val defaultLocale = Locale.getDefault()
+        Datadog.trackUserTap("switchVPN", mapOf("status" to "connect"))
         try {
             if (Build.VERSION.SDK_INT >= 26) serviceNotification()
             Logger.debug(TAG, "Creating VpnBuilder before starting tun2socks")
@@ -134,6 +136,7 @@ class LanternVpnService : VpnService(), ServiceManager.Runner {
 
     @Synchronized
     private fun stopVpn() {
+        Datadog.trackUserTap("switchVPN", mapOf("status" to "disconnect"))
         if (::conn.isInitialized) conn.close()
     }
 
