@@ -298,6 +298,8 @@ vault-secret-base64:
 
 dart-defines-debug:
 	@DART_DEFINES=$(shell make vault-secret-base64 VAULT_FIELD=INTERSTITIAL_AD_UNIT_ID VAULT_PATH=secret/googleAds); \
+	DART_DEFINES+=$(shell printf ',' && make vault-secret-base64 VAULT_FIELD=DD_APPLICATION_ID VAULT_PATH=secret/apps/datadog/android); \
+	DART_DEFINES+=$(shell printf ',' && make vault-secret-base64 VAULT_FIELD=DD_CLIENT_TOKEN VAULT_PATH=secret/apps/datadog/android); \
 	DART_DEFINES+=",$(CIBASE)"; \
 	echo "$$DART_DEFINES"
 
@@ -367,9 +369,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
 android-debug:
-	DD_APPLICATION_ID=`make vault-secret-application_id` && \
-	DD_CLIENT_TOKEN=`make vault-secret-client_token` && \
-	make $(MOBILE_DEBUG_APK)
+	DD_APPLICATION_ID=`make vault-secret-DD_APPLICATION_ID` DD_CLIENT_TOKEN=`make vault-secret-DD_CLIENT_TOKEN` make $(MOBILE_DEBUG_APK)
 
 android-release: pubget $(MOBILE_RELEASE_APK)
 

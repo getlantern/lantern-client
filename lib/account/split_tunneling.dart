@@ -25,6 +25,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 
   void init() async {
     unawaited(sessionModel.refreshAppsList());
+    await sessionModel.trackUserAction('Split tunneling screen shown to user');
     var _vpnConnected = await vpnModel.isVpnConnected();
     setState(() {
       vpnConnected = _vpnConnected;
@@ -33,7 +34,6 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 
   @override
   Widget build(BuildContext context) {
-    Datadog.trackUserCustom('Split tunneling screen shown to user');
     return BaseScreen(
       title: 'split_tunneling'.i18n,
       body: sessionModel.splitTunneling(
