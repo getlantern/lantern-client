@@ -104,7 +104,7 @@ abstract class SessionManager(application: Application) : Session {
         val locale = Locale(language)
         val country = countryCode
         return country.equals(c, ignoreCase = true) ||
-            listOf(*l).contains(locale)
+                listOf(*l).contains(locale)
     }
 
     val isEnglishUser: Boolean
@@ -235,9 +235,29 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(CHAT_ENABLED, enabled).apply()
     }
 
-//    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
+    override fun setShowInterstitialAdsEnabled(enabled: Boolean) {
+        Logger.d(TAG, "Setting $ADS_ENABLED to $enabled")
+        prefs.edit().putBoolean(ADS_ENABLED, enabled).apply()
+    }
+
+    override fun setCASShowInterstitialAdsEnabled(enabled: Boolean) {
+        Logger.d(TAG, "Setting $CAS_ADS_ENABLED to $enabled")
+        prefs.edit().putBoolean(CAS_ADS_ENABLED, enabled).apply()
+    }
+
+    fun shouldShowAdsEnabled(): Boolean {
+        return prefs.getBoolean(ADS_ENABLED, false)
+    }
+
+    fun shouldCASShowAdsEnabled(): Boolean {
+        return prefs.getBoolean(CAS_ADS_ENABLED, false)
+    }
+
+    //    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
     // for now, disable Chat completely
-    fun chatEnabled(): Boolean { return false }
+    fun chatEnabled(): Boolean {
+        return false
+    }
 
     fun appVersion(): String {
         return appVersion
@@ -251,13 +271,17 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putString(EMAIL_ADDRESS, email).apply()
     }
 
-    fun setUserIdAndToken(userId: Long, token: String) {
-        if (userId == 0L || TextUtils.isEmpty(token)) {
-            Logger.debug(TAG, "Not setting invalid user ID $userId or token $token")
+    fun setUserIdAndToken(userId: Long, token: String?) {
+        if (userId == 0L) {
+            Logger.debug(TAG, "Not setting invalid user ID $userId")
             return
         }
-        Logger.debug(TAG, "Setting user ID to $userId, token to $token")
-        prefs.edit().putLong(USER_ID, userId).putString(TOKEN, token).apply()
+        Logger.debug(TAG, "Setting user ID to $userId")
+        prefs.edit().putLong(USER_ID, userId).apply()
+        if (token != null && !TextUtils.isEmpty(token)) {
+            Logger.debug(TAG, "Setting token to $token")
+            prefs.edit().putString(TOKEN, token).apply()
+        }
     }
 
     private fun setDeviceId(deviceId: String?) {
@@ -393,6 +417,7 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().remove(HAS_SUCCEEDING_PROXY).apply()
     }
 
+
     /**
      * hasPrefExpired checks whether or not a particular
      * shared preference has expired (assuming its stored value
@@ -411,6 +436,17 @@ abstract class SessionManager(application: Application) : Session {
     fun saveExpiringPref(name: String?, numSeconds: Int) {
         val currentMilliseconds = System.currentTimeMillis()
         prefs.edit().putLong(name, currentMilliseconds + numSeconds * 1000).apply()
+    }
+
+    /**this preference is used for checking we want to show ads or not
+     * we are only after first session
+     */
+    fun setHasFirstSessionCompleted(status: Boolean) {
+        prefs.edit().putBoolean(HAS_FIRST_SESSION_COMPLETED, status).apply()
+    }
+
+    fun hasFirstSessionCompleted(): Boolean {
+        return prefs.getBoolean(HAS_FIRST_SESSION_COMPLETED, false);
     }
 
     fun getInternalHeaders(): Map<String, String> {
@@ -437,6 +473,27 @@ abstract class SessionManager(application: Application) : Session {
         return gson.toJson(headers)
     }
 
+    // isPlayVersion checks whether or not the user installed Lantern via the Google Play store
+    override fun isPlayVersion(): Boolean {
+        if (BuildConfig.PLAY_VERSION || prefs.getBoolean(PLAY_VERSION, false)) {
+            return true
+        }
+        try {
+            val validInstallers: List<String> = ArrayList(
+                listOf(
+                    "com.android.vending",
+                    "com.google.android.feedback"
+                )
+            )
+            val installer = context.packageManager
+                .getInstallerPackageName(context.packageName)
+            return installer != null && validInstallers.contains(installer)
+        } catch (e: java.lang.Exception) {
+            Logger.error(TAG, "Error fetching package information: " + e.message)
+        }
+        return false
+    }
+
     companion object {
         private val TAG = SessionManager::class.java.name
         const val PREFERENCES_SCHEMA = "session"
@@ -449,6 +506,7 @@ abstract class SessionManager(application: Application) : Session {
         protected const val SERVER_COUNTRY_CODE = "server_country_code"
         protected const val SERVER_CITY = "server_city"
         protected const val HAS_SUCCEEDING_PROXY = "hasSucceedingProxy"
+        protected const val HAS_FIRST_SESSION_COMPLETED = "hasFirstSessionCompleted"
         protected const val DEVICE_ID = "deviceid"
 
         @JvmStatic
@@ -481,6 +539,8 @@ abstract class SessionManager(application: Application) : Session {
 
         private const val REPLICA_ADDR = "replicaAddr"
         public const val CHAT_ENABLED = "chatEnabled"
+        public const val ADS_ENABLED = "adsEnabled"
+        public const val CAS_ADS_ENABLED = "casAsEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),
@@ -509,6 +569,7 @@ abstract class SessionManager(application: Application) : Session {
         db.registerType(2002, Vpn.Plan::class.java)
         db.registerType(2004, Vpn.PaymentProviders::class.java)
         db.registerType(2005, Vpn.PaymentMethod::class.java)
+        db.registerType(2006, Vpn.AppData::class.java)
         Logger.debug(TAG, "register types finished at ${System.currentTimeMillis() - start}")
         val prefsAdapter = db.asSharedPreferences(
             context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE),
@@ -516,11 +577,13 @@ abstract class SessionManager(application: Application) : Session {
         prefs = prefsAdapter
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
             .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
-            .putBoolean(PLAY_VERSION, prefs.getBoolean(PLAY_VERSION, false))
+            .putBoolean(PLAY_VERSION, isPlayVersion())
             .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
 
         // initialize email address to empty string (if it doesn't already exist)
         if (email().isEmpty()) setEmail("")
+
+        if (prefs.getInt(ACCEPTED_TERMS_VERSION, 0) == 0) prefs.edit().putInt(ACCEPTED_TERMS_VERSION, 0).apply()
 
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
         internalHeaders = context.getSharedPreferences(
@@ -578,7 +641,8 @@ abstract class SessionManager(application: Application) : Session {
                 val loadedApkCls = Class.forName("android.app.LoadedApk")
                 val receiversField = loadedApkCls.getDeclaredField("mReceivers")
                 receiversField.isAccessible = true
-                val receivers = receiversField.get(loadedApk) as ArrayMap<Context, ArrayMap<BroadcastReceiver, Any>>
+                val receivers =
+                    receiversField.get(loadedApk) as ArrayMap<Context, ArrayMap<BroadcastReceiver, Any>>
                 for (receiverMap in receivers.values) {
                     for (rec in (receiverMap as ArrayMap).keys) {
                         val clazz: Class<*> = rec.javaClass

@@ -3,27 +3,27 @@
 # Derek F <derek@getlantern.org>, 2021
 # b0b47d46632b78a09a40de799fda9a65, 2022
 # Evan <alireza.firoozi68@gmail.com>, 2022
-# Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2022
 # Mary Sol <salar.adlparvar@gmail.com>, 2022
 # Amir Moezzi <amirreza.mz@yahoo.com>, 2022
 # Mokah <unfilternet@getlantern.org>, 2022
 # Chip Stehr <chip@getlantern.org>, 2022
-# Lantern, 2022
 # Jigar, 2023
 # 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023
 # Vaseto Nora <n.nouri67@gmail.com>, 2023
-# ali jafarizadeh <ebrahimigv@gmail.com>, 2023
 # Sina <sina@asl19.org>, 2023
-# NoProfile, 2023
 # Pedram Azizallahi <pedram672004@yahoo.com>, 2023
-# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2023
-# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023
 # zar24 <zarghamjan@yahoo.com>, 2023
+# NoProfile, 2023
+# Lantern, 2023
+# Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2023
+# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023
+# ali jafarizadeh <ebrahimigv@gmail.com>, 2023
 # Mersen M, 2023
+# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Mersen M, 2023\n"
+"Last-Translator: Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2023\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -129,6 +129,33 @@ msgstr "ارتقا به نسخه حرفه‌ای"
 msgid "Invite Friends"
 msgstr "دعوت از دوستان"
 
+msgid "share_lantern_pro"
+msgstr ""
+"دوست خود را به نسخه حرفه‌ای لنترن دعوت کنید! وقتی دوست شما از کد دعوت شما "
+"برای خرید لنترن حرفه‌ای استفاده کند شما هم به طور رایگان به مدت یک ماه به "
+"لنترن نسخه حرفه‌ای دسترسی خواهی داشت!"
+
+msgid "privacy_disclosure_title"
+msgstr "اعلامیه حریم خصوصی Lantern"
+
+msgid "privacy_disclosure_body"
+msgstr ""
+"Lantern متعهد است از حریم خصوصی شما حفاظت کند. از شما می‌خواهیم که بدانید چه"
+" اطلاعاتی را جمع‌آوری می‌کنیم، و چه اطلاعاتی را جمع‌آوری نمی‌کنیم، و چگونه "
+"اطلاعات را جمع‌آوری، استفاده و ذخیره می‌کنیم. ما اطلاعات پرداختتان را از "
+"حساب Lantern Pro شما جدا می‌کنیم. ما گزارش فعالیت‌های شما، اعم از تاریخچه "
+"مرور وب‌سایت‌ها، مقصد ترافیک، محتوای داده‌ها، یا جستارهای DNS را جمع‌آوری "
+"نمی‌کنیم. همچنین هرگز گزارش اتصال‌ها را ذخیره نمی‌کنیم، یعنی هیچ گزارشی از "
+"آدرس IP شما، آدرس IP سرور Lantern خروجی مرتبط با مهر زمانی اتصال، یا مدت "
+"جلسه را ذخیره نمی‌کنیم. با فرض در نظر گرفتن یک حساب خاص Lantern Pro‏، "
+"Lantern به لحاظ فنی، قادر به ارتباط دادن این حساب با هویت واقعی کاربر نیست. "
+"با فرض در نظر گرفتن یک IP آدرس و یک زمان دقیق از حضور در شبکه، Lantern به "
+"لحاظ فنی، قادر به ارتباط دادن این آدرس IP با یک کاربر Lantern یا آدرس IP یکی"
+" از کاربران Lantern نیست."
+
+msgid "privacy_disclosure_accept"
+msgstr "می‌پذیرم"
+
 msgid "desktop_version"
 msgstr "نسخه ویندوز"
 
@@ -165,8 +192,29 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "زبان"
 
-msgid "report_issue"
-msgstr "گزارش مشکل"
+msgid "select_an_issue"
+msgstr "لطفاً یک مشکل را انتخاب کنید"
+
+msgid "enter_description"
+msgstr ""
+
+msgid "cannot_access_blocked_sites"
+msgstr "عدم امکان دسترسی به سایت های بسته شده"
+
+msgid "cannot_complete_purchase"
+msgstr "خرید تکمیل نشد"
+
+msgid "cannot_sign_in"
+msgstr "ورود انجام نشد"
+
+msgid "spinner_loads_endlessly"
+msgstr "اندیکاتور بی‌پایان بارگذاری می‌کند"
+
+msgid "other"
+msgstr "غیره"
+
+msgid "issue_description"
+msgstr "شرح مشکل"
 
 msgid "check_for_updates"
 msgstr "بررسی وجود به‌روزرسانی‌ها"
@@ -204,6 +252,18 @@ msgstr "پیوند با پین"
 msgid "OR"
 msgstr "یا"
 
+msgid "device_linking_pin"
+msgstr "پین اتصال دستگاه"
+
+msgid "link_device_step_one"
+msgstr ""
+
+msgid "link_device_step_two"
+msgstr ""
+
+msgid "ensure_most_recent_version_lantern"
+msgstr "*مطمئن شوید که هر دو دستگاه دارای آخرین نسخه Lantern هستند"
+
 msgid "Authorize Device via Email"
 msgstr "تأیید دستگاه از طریق ایمیل"
 
@@ -219,6 +279,37 @@ msgstr "پیوند از طریق ایمیل"
 
 msgid "lantern_pro_email"
 msgstr "ایمیل Lantern Pro"
+
+msgid "lantern_desktop"
+msgstr "فانوس رایانه"
+
+msgid "report_issue"
+msgstr ""
+
+msgid "report_an_issue"
+msgstr "گزارش یک مشکل"
+
+msgid "report_sent"
+msgstr "گزارش فرستاده‌شد."
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr ""
+"سپاسگزاریم که مشکل‌تان را گزارش دادید. ما به محض اینکه بتوانیم با ایمیل به "
+"شما پاسخ خواهیم داد."
+
+msgid "send_report"
+msgstr "مشکل را گزارش دهید"
+
+msgid "most_recent_lantern_apps"
+msgstr ""
+"جدیدترین برنامه‌های Lantern برای رایانه رومیزی و سایر پلتفورم‌ها را "
+"می‌توانید در لینک بالا پیدا کنید."
+
+msgid "share_link"
+msgstr ""
+
+msgid "share_title"
+msgstr "لینک دانلود Lantern را به اشتراک بگذارید"
 
 msgid "email"
 msgstr "ایمیل"
@@ -277,6 +368,12 @@ msgstr "ایمیل و کد فعالسازی را وارد کنید"
 
 msgid "referral_code"
 msgstr "کد ارجاع"
+
+msgid "share_referral_code"
+msgstr ""
+
+msgid "share_message_referral_code"
+msgstr ""
 
 msgid "add_referral_code"
 msgstr "کد معرف را وارد کنید"

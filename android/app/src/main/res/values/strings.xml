@@ -40,6 +40,7 @@
     <string name="submit_code">Confirm Code</string>
     <string name="on_text">ON</string>
     <string name="off_text">OFF</string>
+    <string name="unknown_error">Unknown Error</string>
     <string name="lantern_off">Lantern is Off. Flip the switch to access blocked sites and services!</string>
     <string name="lantern_on">Lantern is On. You can now access blocked sites and services!</string>
     <string name="on_desc">You can now access\r\nblocked sites and services</string>

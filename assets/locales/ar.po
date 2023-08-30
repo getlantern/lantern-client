@@ -7,18 +7,19 @@
 # lamine Kacimi <k_lamine27@yahoo.fr>, 2023
 # ouss <oussjarrouse@gmail.com>, 2023
 # Mhawesh, 2023
-# 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2023
 # e2f <projects@e2f.com>, 2023
 # Amin Jobran, 2023
 # Rima Sghaier, 2023
-# dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2023
 # Abdulaziz AlObaili <dr.alobaili@gmail.com>, 2023
+# Lantern, 2023
+# dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2023
+# 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2023
+# 6ad90dadbe5d08991a98500e1efbdbb4_9d79615 <7392e61add82b364ab0393a04573af48_721156>, 2023
 # Abed Abedd <abderrahman.younis@gmail.com>, 2023
-# e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ar r1 <tx_e2f_ar_r1@ate2f.com>, 2023\n"
+"Last-Translator: Abed Abedd <abderrahman.younis@gmail.com>, 2023\n"
 "Language-Team: Arabic (https://app.transifex.com/lantern-1/teams/94371/ar/)\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
@@ -124,6 +125,33 @@ msgstr "الترقية الى لاتيرن برو"
 msgid "Invite Friends"
 msgstr "ادعو أصدقائك"
 
+msgid "share_lantern_pro"
+msgstr ""
+"شارك حساب Lantern Pro مع أحد أصدقائك! عندما يستخدم صديقك رمز الإحالة المخصص "
+"لك أثناء شرائه حساب Lantern Pro، فسيحصل كلاكما على خدمة Lantern Pro مجانًا "
+"لمدة شهر واحد!"
+
+msgid "privacy_disclosure_title"
+msgstr "الكشف عن خصوصية لانترن"
+
+msgid "privacy_disclosure_body"
+msgstr ""
+"تلتزم لانترن بحماية خصوصيتك. نود أن تفهم نوع المعلومات التي نجمعها، ونوع "
+"المعلومات التي لا نجمعها، وكيف نستخدمها، وكيف نُخزنها. نحن لا نربط معلومات "
+"الدفع الخاصة بك بحسابك على لانترن برو. ولا نجمع سجلات نشاطك، بما في ذلك عدم "
+"تسجيل محفوظات التصفح، أو وجهة البيانات، أو محتوى البيانات، أو استعلامات نظام"
+" أسماء النطاقات (DNS). كما أننا لا نُخزن مطلقًا سجلات الاتصال، أي لا يتم "
+"إنشاء أي سجلات عن عنوان بروتوكول الإنترنت (IP)، أو عنوان بروتوكول الإنترنت "
+"لخادم لانترن الصادر الخاص بك المرتبط بالطابع الزمني للاتصال، أو مدة الجلسة. "
+"نظرًا لحساب لانترن برو المحدد، يتعذر على لانترن من الناحية التقنية ربط حساب "
+"لانترن بهوية المستخدم الحقيقية. ومع وجود عنوان بروتوكول الإنترنت (IP) وطابع "
+"زمني دقيق في لانترن، يتعذر على لانترن من الناحية التقنية منح عنوان بروتوكول "
+"الإنترنت هذا إلى مستخدم لانترن أو  عنوان بروتوكول الإنترنت الخاص بمستخدم "
+"لانترن."
+
+msgid "privacy_disclosure_accept"
+msgstr "موافق"
+
 msgid "desktop_version"
 msgstr "نسخة سطح المكتب"
 
@@ -160,8 +188,29 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "لغة"
 
-msgid "report_issue"
-msgstr "الإبلاغ عن مشكلة"
+msgid "select_an_issue"
+msgstr "يرجى اختيار مشكلة"
+
+msgid "enter_description"
+msgstr ""
+
+msgid "cannot_access_blocked_sites"
+msgstr "لا يمكن الوصول الى المواقع المحظورة"
+
+msgid "cannot_complete_purchase"
+msgstr "لا يمكن إكمال عملية الشراء"
+
+msgid "cannot_sign_in"
+msgstr "لا يُمكن تسجيل الدخول"
+
+msgid "spinner_loads_endlessly"
+msgstr "العجلة تدور بلا نهاية"
+
+msgid "other"
+msgstr "أخرى"
+
+msgid "issue_description"
+msgstr "وصف المشكلة"
 
 msgid "check_for_updates"
 msgstr "تحقق من وجود تحديثات"
@@ -199,6 +248,18 @@ msgstr "ربط من خلال PIN"
 msgid "OR"
 msgstr "أو"
 
+msgid "device_linking_pin"
+msgstr "رقم التعريف الشخصي لربط الجهاز"
+
+msgid "link_device_step_one"
+msgstr ""
+
+msgid "link_device_step_two"
+msgstr ""
+
+msgid "ensure_most_recent_version_lantern"
+msgstr "* تأكد من أن كلا الجهازين يعملان بأحدث إصدار من Lantern"
+
 msgid "Authorize Device via Email"
 msgstr "مصادقة الجهاز عبر البريد الإلكتروني"
 
@@ -213,6 +274,36 @@ msgstr "ربط عبر البريد الإلكتروني"
 
 msgid "lantern_pro_email"
 msgstr "البريد الإلكتروني الخاص بـ Lantern Pro"
+
+msgid "lantern_desktop"
+msgstr "لانترن للكمبيوتر المكتبي"
+
+msgid "report_issue"
+msgstr ""
+
+msgid "report_an_issue"
+msgstr "ابلاغ عن مشكلة"
+
+msgid "report_sent"
+msgstr "تم إرسال التقرير"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr ""
+"نشكرك على الإبلاغ عن المشكلة، وسنوافيك برسالة إلكترونية في أقرب فرصة ممكنة"
+
+msgid "send_report"
+msgstr "إرسال تقرير"
+
+msgid "most_recent_lantern_apps"
+msgstr ""
+"يمكن العثور على أحدث تطبيقات لانترن لسطح المكتب وجميع المنصات الأخرى على "
+"الرابط أعلاه."
+
+msgid "share_link"
+msgstr ""
+
+msgid "share_title"
+msgstr "مشاركة رابط تنزيل لانترن"
 
 msgid "email"
 msgstr "البريد الاكتروني"
@@ -270,6 +361,12 @@ msgstr "أدخِل البريد الإلكتروني ورمز التنشيط"
 
 msgid "referral_code"
 msgstr "رمز الإحالة"
+
+msgid "share_referral_code"
+msgstr ""
+
+msgid "share_message_referral_code"
+msgstr ""
 
 msgid "add_referral_code"
 msgstr "أضف رمز الإحالة"

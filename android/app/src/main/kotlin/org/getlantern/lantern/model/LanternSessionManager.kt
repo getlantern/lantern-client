@@ -71,7 +71,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun getPaymentProvider(): String? {
-        return prefs.getString(USER_PAYMENT_GATEWAY, "paymentwall")
+        return prefs.getString(USER_PAYMENT_GATEWAY, "stripe")
     }
 
     fun setSignature(sig: String?) {
@@ -180,6 +180,22 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun showRenewalPref(): Boolean {
         return prefs.getBoolean(SHOW_RENEWAL_PREF, true)
+    }
+
+    // appsAllowedAccess returns a list of package names for those applications that are allowed
+    // to access the VPN connection. If split tunneling is enabled, and any app is added to
+    // the list, only those applications (and no others) are allowed access.
+    fun appsAllowedAccess(): List<String> {
+        var installedApps = db.list<Vpn.AppData>(PATH_APPS_DATA + "%")
+        val apps = mutableListOf<String>()
+        for (appData in installedApps) {
+            if (appData.value.allowedAccess) apps.add(appData.value.packageName)
+        }
+        return apps
+    }
+
+    override fun splitTunnelingEnabled(): Boolean {
+        return prefs.getBoolean(SPLIT_TUNNELING, false)
     }
 
     fun setIsProUser(isProUser: Boolean) {
@@ -322,23 +338,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         }
     }
 
-    // isPlayVersion checks whether or not the user installed Lantern via
-    // the Google Play store
-    override fun isPlayVersion(): Boolean {
-        if (BuildConfig.PLAY_VERSION || prefs.getBoolean(PLAY_VERSION, false)) {
-            return true
-        }
-        try {
-            val validInstallers: List<String> = ArrayList(listOf("com.android.vending", "com.google.android.feedback"))
-            val installer = context.packageManager
-                .getInstallerPackageName(context.packageName)
-            return installer != null && validInstallers.contains(installer)
-        } catch (e: java.lang.Exception) {
-            Logger.error(TAG, "Error fetching package information: " + e.message)
-        }
-        return false
-    }
-
     fun setPlayVersion(playVersion: Boolean) {
         prefs.edit().putBoolean(PLAY_VERSION, playVersion).apply()
     }
@@ -350,6 +349,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val USER_LEVEL = "userLevel"
         private const val PRO_USER = "prouser"
         private const val DEVICES = "devices"
+        private const val PATH_APPS_DATA = "/appsData/"
+        private const val SPLIT_TUNNELING = "/splitTunneling"
         private const val PLANS = "/plans/"
         private const val PAYMENT_METHODS = "/paymentMethods/"
         private const val PRO_EXPIRED = "proexpired"
