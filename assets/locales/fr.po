@@ -2,15 +2,15 @@
 # Translators:
 # Derek F <derek@getlantern.org>, 2022
 # e2f_fr r9 <tx_e2f_fr_r9@ate2f.com>, 2022
-# e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2022
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2023
 # fffw <fffw@getlantern.org>, 2023
-# AO <ao@localizationlab.org>, 2023
+# e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2023
 # e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2023
+# AO <ao@localizationlab.org>, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2023\n"
+"Last-Translator: AO <ao@localizationlab.org>, 2023\n"
 "Language-Team: French (https://app.transifex.com/lantern-1/teams/94371/fr/)\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -120,6 +120,36 @@ msgstr "Passez à Lantern Pro"
 msgid "Invite Friends"
 msgstr "Inviter des amis"
 
+msgid "share_lantern_pro"
+msgstr ""
+"Partagez Lantern Pro avec un ami ! Lorsque votre ami utilise votre code de "
+"parrainage pendant son achat de Lantern Pro, vous bénéficiez tous les deux "
+"d’un mois de service Lantern Pro gratuit !"
+
+msgid "privacy_disclosure_title"
+msgstr "Avis de protection des données de Lantern"
+
+msgid "privacy_disclosure_body"
+msgstr ""
+"Lantern s’engage à protéger vos données personnelles. Nous souhaitons que "
+"vous compreniez quels renseignements nous recueillons, ce que nous ne "
+"recueillons pas, et comment nous recueillons, utilisons et stockons ces "
+"renseignements. Nous dissocions vos renseignements de paiement de votre "
+"compte Lantern Pro. Nous ne journalisons ni votre activité, ni l’historique "
+"de navigation, ni la destination du trafic, ni le contenu des données, ni "
+"les requêtes DNS. De plus, nous n’enregistrons jamais aucun journal de "
+"connexion, c’est-à-dire aucun journal de votre adresse IP, de l’adresse IP "
+"de votre serveur Lantern sortant associée à l’estampille temporelle de "
+"connexion ni la durée de la session. Pour un compte Lantern Pro donné, "
+"Lantern ne peut techniquement pas associer le compte Lantern à l’identité "
+"réelle de l’utilisateur. Pour une adresse IP Lantern et une estampille "
+"temporelle précise données, Lantern ne peut techniquement pas attribuer "
+"cette adresse IP à un utilisateur de Lantern ni à l’adresse IP d’un "
+"utilisateur de Lantern."
+
+msgid "privacy_disclosure_accept"
+msgstr "J’accepte"
+
 msgid "desktop_version"
 msgstr "Version pour ordinateur"
 
@@ -156,8 +186,29 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "Langue"
 
-msgid "report_issue"
-msgstr "Signaler un problème"
+msgid "select_an_issue"
+msgstr "Veuillez choisir un problème"
+
+msgid "enter_description"
+msgstr ""
+
+msgid "cannot_access_blocked_sites"
+msgstr "Impossible d’accéder à des sites bloqués"
+
+msgid "cannot_complete_purchase"
+msgstr "Impossible de terminer l’achat"
+
+msgid "cannot_sign_in"
+msgstr "Impossible de se connecter"
+
+msgid "spinner_loads_endlessly"
+msgstr "L’indicateur de chargement tourne sans fin"
+
+msgid "other"
+msgstr "Autre"
+
+msgid "issue_description"
+msgstr "Description du problème"
 
 msgid "check_for_updates"
 msgstr "Rechercher des mises à jour"
@@ -195,6 +246,20 @@ msgstr "Relier avec un code"
 msgid "OR"
 msgstr "OU"
 
+msgid "device_linking_pin"
+msgstr "Code de liaison d’appareil"
+
+msgid "link_device_step_one"
+msgstr ""
+
+msgid "link_device_step_two"
+msgstr ""
+
+msgid "ensure_most_recent_version_lantern"
+msgstr ""
+"* Assurez-vous que la version la plus récente de Lantern est utilisée sur "
+"les deux appareils"
+
 msgid "Authorize Device via Email"
 msgstr "Autoriser l’appareil par courriel"
 
@@ -210,6 +275,38 @@ msgstr "Relier par courriel"
 
 msgid "lantern_pro_email"
 msgstr "Adresse courriel de Lantern Pro"
+
+msgid "lantern_desktop"
+msgstr "Lantern pour ordinateur"
+
+msgid "report_issue"
+msgstr ""
+
+msgid "report_an_issue"
+msgstr "Signaler un problème"
+
+msgid "report_sent"
+msgstr "Le relevé a été envoyé"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr ""
+"Nous vous remercions d’avoir signalé ce problème. En raison du volume, nous "
+"ne pouvons pas répondre à la plupart des problèmes, mais nous nous efforçons"
+" d’améliorer Lantern d’après vos signalements."
+
+msgid "send_report"
+msgstr "Envoyer le relevé"
+
+msgid "most_recent_lantern_apps"
+msgstr ""
+"Les applis Lantern les plus récentes pour ordinateurs et autres plates-"
+"formes sont accessibles à partir du lien ci-dessus."
+
+msgid "share_link"
+msgstr ""
+
+msgid "share_title"
+msgstr "Partager le lien de téléchargement de Lantern"
 
 msgid "email"
 msgstr "Adresse courriel"
@@ -269,6 +366,12 @@ msgstr "Saisissez l’adresse courriel et le code d’activation"
 
 msgid "referral_code"
 msgstr "Code de parrainage"
+
+msgid "share_referral_code"
+msgstr ""
+
+msgid "share_message_referral_code"
+msgstr ""
 
 msgid "add_referral_code"
 msgstr "Ajouter un code de parrainage"

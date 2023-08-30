@@ -67,6 +67,19 @@ class SessionModel extends Model {
     });
   }
 
+  Future<void> acceptTerms() {
+    return methodChannel.invokeMethod('acceptTerms', <String, dynamic>{
+      'on': true,
+    });
+  }
+
+  Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
+    return subscribedSingleValueBuilder<int>(
+      'accepted_terms_version',
+      builder: builder,
+    );
+  }
+
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'forceCountry',
@@ -115,6 +128,13 @@ class SessionModel extends Model {
     );
   }
 
+  Widget referralCode(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'referral',
+      builder: builder,
+    );
+  }
+
   Widget deviceId(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
   }
@@ -135,6 +155,21 @@ class SessionModel extends Model {
         'on': on,
       }),
     );
+  }
+
+  Future<String> getCountryCode() async {
+    return await methodChannel
+        .invokeMethod('getCountryCode', <String, dynamic>{});
+  }
+
+  Future<bool> shouldShowAds() async {
+    return await methodChannel
+        .invokeMethod('shouldShowAds', <String, dynamic>{});
+  }
+
+  Future<bool> shouldCASShowAds() async {
+    return await methodChannel
+        .invokeMethod('shouldCASShowAds', <String, dynamic>{});
   }
 
   Future<void> setLanguage(String lang) {
@@ -268,6 +303,19 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<void> reportIssue(
+    String email,
+    String issue,
+    String description
+  ) async {
+    return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
+      'email': email,
+      'issue': issue,
+      'description': description
+    }).then((value) => value as String);
+  }
+
+
   Widget getUserId(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'userId',
@@ -279,6 +327,20 @@ class SessionModel extends Model {
   Widget userStatus(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       'userLevel',
+      defaultValue: '',
+      builder: builder,
+    );
+  }
+
+  Future<String> requestLinkCode() {
+    return methodChannel
+        .invokeMethod('requestLinkCode')
+        .then((value) => value as String);
+  }
+
+  Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'devicelinkingcode',
       defaultValue: '',
       builder: builder,
     );
@@ -353,6 +415,49 @@ class SessionModel extends Model {
   Future<void> openWebview(String url) {
     return methodChannel.invokeMethod('openWebview', <String, dynamic>{
       'url': url,
+    });
+  }
+
+  Future<void> refreshAppsList() async {
+    await methodChannel.invokeMethod('refreshAppsList');
+  }
+
+  Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>(
+      '/splitTunneling',
+      builder: builder,
+    );
+  }
+
+  Future<void> setSplitTunneling<T>(bool on) async {
+    unawaited(
+      methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
+        'on': on,
+      }),
+    );
+  }
+
+  Widget appsData({
+    required ValueWidgetBuilder<Iterable<PathAndValue<AppData>>> builder,
+  }) {
+    return subscribedListBuilder<AppData>(
+      '/appsData/',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return AppData.fromBuffer(serialized);
+      },
+    );
+  }
+
+  Future<void> allowAppAccess(String packageName) {
+    return methodChannel.invokeMethod('allowAppAccess', <String, dynamic>{
+      'packageName': packageName,
+    });
+  }
+
+  Future<void> denyAppAccess(String packageName) {
+    return methodChannel.invokeMethod('denyAppAccess', <String, dynamic>{
+      'packageName': packageName,
     });
   }
 }

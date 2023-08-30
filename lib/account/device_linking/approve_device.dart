@@ -1,31 +1,12 @@
 import 'package:lantern/common/common.dart';
+import 'explanation_step.dart';
 
+@RoutePage<void>(name: 'ApproveDevice')
 class ApproveDevice extends StatelessWidget {
   ApproveDevice({Key? key}) : super(key: key);
 
   final pinCodeController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-
-  Widget explanationStep({required String icon, required String text}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsetsDirectional.only(end: 16),
-          child: CAssetImage(
-            path: icon,
-            color: Colors.black,
-          ),
-        ),
-        Flexible(
-          child: CText(
-            text,
-            style: tsBody1,
-          ),
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,15 +48,11 @@ class ApproveDevice extends StatelessWidget {
               ),
               Container(
                 margin: const EdgeInsetsDirectional.only(bottom: 16),
-                child: explanationStep(
-                  icon: ImagePaths.number_1,
-                  text: 'approve_device_step_1'.i18n,
-                ),
+                child: ExplanationStep(
+                    ImagePaths.number_1, 'approve_device_step_1'.i18n),
               ),
-              explanationStep(
-                icon: ImagePaths.number_2,
-                text: 'approve_device_step_2'.i18n,
-              ),
+              ExplanationStep(
+                  ImagePaths.number_2, 'approve_device_step_2'.i18n),
               const Spacer(),
             ],
           ),

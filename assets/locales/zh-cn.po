@@ -2,15 +2,15 @@
 # Translators:
 # 474874f569f96a33809d02f1de71479e_77020aa, 2023
 # Chi-Hsun Tsai, 2023
-# Lantern, 2023
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2023
+# Lantern, 2023
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2023
+# Aki, 2023
 # e2f <projects@e2f.com>, 2023
-# Aki Ltn, 2023
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Aki Ltn, 2023\n"
+"Last-Translator: e2f <projects@e2f.com>, 2023\n"
 "Language-Team: Chinese Simplified (https://app.transifex.com/lantern-1/teams/94371/zh-Hans/)\n"
 "Language: zh-Hans\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -108,6 +108,22 @@ msgstr "升级到蓝灯专业版"
 msgid "Invite Friends"
 msgstr "邀请朋友"
 
+msgid "share_lantern_pro"
+msgstr "与朋友分享蓝灯专业版账户！您的朋友在购买蓝灯专业版时，只需顺手填入您的推荐码，您和朋友两人都将额外获赠一个月专业版时长！"
+
+msgid "privacy_disclosure_title"
+msgstr "蓝灯隐私披露"
+
+msgid "privacy_disclosure_body"
+msgstr ""
+"蓝灯致力于保护您的隐私。我们希望您了解我们收集哪些信息、不收集哪些信息，以及我们如何收集、使用和存储信息。我们不会将您的支付信息与您的蓝灯专业版帐户分开。我们不收集您的活动日志，包括不记录浏览历史、流量目的地、数据内容或"
+" DNS 查询。我们也不会储存连接记录，即不会记录您的 IP 地址、与连接时间戳相关的蓝灯服务器的 IP "
+"地址或会话持续时间。对于给定的蓝灯专业版帐户，蓝灯在技术上无法将蓝灯帐户与用户的真实身份联系起来。对于给定一个蓝灯 IP "
+"地址和精确的时间戳，蓝灯在技术上也无法将此 IP 地址归属于蓝灯用户或蓝灯用户的 IP 地址。"
+
+msgid "privacy_disclosure_accept"
+msgstr "我接受"
+
 msgid "desktop_version"
 msgstr "桌面版"
 
@@ -144,8 +160,29 @@ msgstr "SDK %s"
 msgid "language"
 msgstr "语种"
 
-msgid "report_issue"
-msgstr "报告问题"
+msgid "select_an_issue"
+msgstr "请选择一个问题"
+
+msgid "enter_description"
+msgstr ""
+
+msgid "cannot_access_blocked_sites"
+msgstr "无法访问被屏蔽的网站"
+
+msgid "cannot_complete_purchase"
+msgstr "无法完成购买"
+
+msgid "cannot_sign_in"
+msgstr "无法登录"
+
+msgid "spinner_loads_endlessly"
+msgstr "始终在加载中"
+
+msgid "other"
+msgstr "其他"
+
+msgid "issue_description"
+msgstr "问题描述"
 
 msgid "check_for_updates"
 msgstr "检查更新"
@@ -180,6 +217,18 @@ msgstr "使用 PIN 码连接"
 msgid "OR"
 msgstr "或"
 
+msgid "device_linking_pin"
+msgstr "设备码授权"
+
+msgid "link_device_step_one"
+msgstr ""
+
+msgid "link_device_step_two"
+msgstr ""
+
+msgid "ensure_most_recent_version_lantern"
+msgstr "*确保两台设备都在运行最新版本的蓝灯"
+
 msgid "Authorize Device via Email"
 msgstr "通过电子邮件授权设备"
 
@@ -194,6 +243,33 @@ msgstr "通过电子邮件连接"
 
 msgid "lantern_pro_email"
 msgstr "蓝灯专业版电子邮件"
+
+msgid "lantern_desktop"
+msgstr "蓝灯桌面版"
+
+msgid "report_issue"
+msgstr ""
+
+msgid "report_an_issue"
+msgstr "报告问题"
+
+msgid "report_sent"
+msgstr "报告已发送"
+
+msgid "thank_you_for_reporting_your_issue"
+msgstr "感谢您报告问题。由于数量众多，我们无法回复大多数问题，但我们向您保证，我们正在努力根据您的报告改进  Lantern。"
+
+msgid "send_report"
+msgstr "发送报告"
+
+msgid "most_recent_lantern_apps"
+msgstr "最新的桌面和所有其他平台的蓝灯应用程序可以在上面的链接中找到。"
+
+msgid "share_link"
+msgstr ""
+
+msgid "share_title"
+msgstr "分享蓝灯下载链接"
 
 msgid "email"
 msgstr "电子邮件"
@@ -251,6 +327,12 @@ msgstr "填写电子邮箱地址和激活码"
 
 msgid "referral_code"
 msgstr "邀请码"
+
+msgid "share_referral_code"
+msgstr ""
+
+msgid "share_message_referral_code"
+msgstr ""
 
 msgid "add_referral_code"
 msgstr "填入推荐码"

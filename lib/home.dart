@@ -1,5 +1,6 @@
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
+import 'package:lantern/account/privacy_disclosure.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/chats.dart';
@@ -12,8 +13,9 @@ import 'package:logger/logger.dart';
 
 import 'messaging/messaging_model.dart';
 
+@RoutePage(name: 'Home')
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -116,39 +118,49 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     _context = context;
-    return const SizedBox();
-    // return sessionModel.developmentMode(
-    //   (BuildContext context, bool developmentMode, Widget? child) {
-    //     if (developmentMode) {
-    //       Logger.level = Level.verbose;
-    //     } else {
-    //       Logger.level = Level.error;
-    //     }
-    //     return sessionModel.language(
-    //       (BuildContext context, String lang, Widget? child) {
-    //         Localization.locale = lang;
-    //         return sessionModel.selectedTab(
-    //           (context, selectedTab, child) =>
-    //               messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
-    //             final isTesting = const String.fromEnvironment(
-    //                   'driver',
-    //                   defaultValue: 'false',
-    //                 ).toLowerCase() ==
-    //                 'true';
-    //             return Scaffold(
-    //               body: buildBody(selectedTab, isOnboarded),
-    //               bottomNavigationBar: CustomBottomBar(
-    //                 selectedTab: selectedTab,
-    //                 isDevelop: developmentMode,
-    //                 isTesting: isTesting,
-    //               ),
-    //             );
-    //           }),
-    //         );
-    //       },
-    //     );
-    //   },
-    // );
+    return sessionModel.acceptedTermsVersion(
+      (BuildContext context, int version, Widget? child) {
+        return sessionModel.developmentMode(
+          (BuildContext context, bool developmentMode, Widget? child) {
+            if (developmentMode) {
+              Logger.level = Level.verbose;
+            } else {
+              Logger.level = Level.error;
+            }
+            bool isPlayVersion = sessionModel.isPlayVersion.value != null &&
+                sessionModel.isPlayVersion.value!;
+            if (isPlayVersion && version == 0) {
+              // show privacy disclosure if it's a Play build and the terms have
+              // not already been accepted
+              return PrivacyDisclosure();
+            }
+            return sessionModel.language(
+              (BuildContext context, String lang, Widget? child) {
+                Localization.locale = lang;
+                return sessionModel.selectedTab(
+                  (context, selectedTab, child) => messagingModel
+                      .getOnBoardingStatus((_, isOnboarded, child) {
+                    final isTesting = const String.fromEnvironment(
+                          'driver',
+                          defaultValue: 'false',
+                        ).toLowerCase() ==
+                        'true';
+                    return Scaffold(
+                      body: buildBody(selectedTab, isOnboarded),
+                      bottomNavigationBar: CustomBottomBar(
+                        selectedTab: selectedTab,
+                        isDevelop: developmentMode,
+                        isTesting: isTesting,
+                      ),
+                    );
+                  }),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget buildBody(String selectedTab, bool? isOnboarded) {

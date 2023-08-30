@@ -79,11 +79,6 @@
         </receiver>
 
         <activity
-            android:name=".activity.authorizeDevice.LinkDeviceActivity_"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
             android:name=".activity.FreeKassaActivity_"
             android:screenOrientation="portrait">
         </activity>
@@ -95,24 +90,7 @@
         </activity>
 
         <activity
-            android:name=".activity.InviteActivity_"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name=".activity.DesktopActivity_"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name="org.getlantern.mobilesdk.activity.ReportIssueActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity
             android:name=".activity.WebViewActivity_"
-            android:screenOrientation="portrait"
-            />
-
-        <activity
-            android:name=".activity.PrivacyDisclosureActivity_"
             android:screenOrientation="portrait"
             />
 
@@ -134,8 +112,6 @@
                 <action android:name="android.net.VpnService"/>
             </intent-filter>
         </service>
-
-        <service android:enabled="true" android:name=".service.BackgroundChecker_"/>
 
         <receiver android:name=".notification.Notifier"
             android:exported="false"> <!-- since we do specify an intent filter, this receiver will
@@ -162,5 +138,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2685698271254859~9283700921"/>
     </application>
 </manifest>
