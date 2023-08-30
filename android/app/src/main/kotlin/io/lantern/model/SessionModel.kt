@@ -24,6 +24,7 @@ import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.mobilesdk.model.IssueReporter
+import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
@@ -156,6 +157,9 @@ class SessionModel(
                     intent.putExtra("url", url)
                     activity.startActivity(intent)
                 }
+            }
+            "trackUserAction" -> {
+                Datadog.trackUserClick(call.argument("message")!!)
             }
             "acceptTerms" -> {
                 LanternApp.getSession().acceptTerms()

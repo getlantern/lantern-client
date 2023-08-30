@@ -25,6 +25,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
 
   void init() async {
     unawaited(sessionModel.refreshAppsList());
+    await sessionModel.trackUserAction('Split tunneling screen shown to user');
     var _vpnConnected = await vpnModel.isVpnConnected();
     setState(() {
       vpnConnected = _vpnConnected;

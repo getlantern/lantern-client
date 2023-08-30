@@ -99,6 +99,7 @@ public class LanternHttpClient extends HttpClient {
         headers.put(PLATFORM_HEADER, "android");
         headers.put(APP_VERSION_HEADER, Utils.appVersion(LanternApp.getAppContext()));
         headers.putAll(LanternApp.getSession().getInternalHeaders());
+        Logger.d(TAG, "User headers " + headers);
         return headers;
     }
 
