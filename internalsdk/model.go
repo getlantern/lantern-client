@@ -54,6 +54,7 @@ type MyValue struct {
 
 // Custom JSON serialization method for Value type
 func (v *MyValue) MarshalJSON() ([]byte, error) {
+
 	switch v.Type {
 	case minisql.ValueTypeBytes:
 		return json.Marshal(map[string]interface{}{
@@ -112,9 +113,13 @@ func (m *baseModel) Subscribe(req *SubscriptionRequest) error {
 					log.Debugf("Error extracting raw value:", err)
 					return err
 				}
-				val := minisql.NewValue(rawValue)
+				// When serlizeing might get other other type
+				//make sure to convered to only supported types
+				convertedValue := convertValueToSupportedTypes(rawValue)
+				val := minisql.NewValue(convertedValue)
 				// Need wrap to coz we need to send to json
 				myVal := &MyValue{Value: *val}
+				log.Debugf("my val type %v", val.Type)
 				updatesMap[k] = &ItemInterface{
 					Path:       itemWithRaw.Path,
 					DetailPath: itemWithRaw.DetailPath,

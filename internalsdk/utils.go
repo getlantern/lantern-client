@@ -2,6 +2,7 @@ package internalsdk
 
 import (
 	"encoding/json"
+	"reflect"
 
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
@@ -83,4 +84,24 @@ func putFromJson(jsonString string, db pathdb.DB) error {
 
 		return nil
 	})
+}
+
+// Convered value in type that supprt minisql values
+func convertValueToSupportedTypes(rawValue interface{}) interface{} {
+	var convertedValue interface{}
+	//Convert all differnt type of single int
+	if rawValueType := reflect.TypeOf(rawValue); rawValueType.Kind() == reflect.Int64 {
+		// Convert the raw value to int
+		convertedValue = int(rawValue.(int64))
+	} else if rawValueType.Kind() == reflect.Int32 {
+		convertedValue = int(rawValue.(int32))
+	} else if rawValueType.Kind() == reflect.Int16 {
+		convertedValue = int(rawValue.(int16))
+	} else if rawValueType.Kind() == reflect.Int8 {
+		convertedValue = int(rawValue.(int8))
+	} else {
+		// The raw value is not of type int64, so do not convert it
+		convertedValue = rawValue
+	}
+	return convertedValue
 }

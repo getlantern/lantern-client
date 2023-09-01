@@ -44,6 +44,7 @@ const LANG = "lang"
 const ACCEPTED_TERMS_VERSION = "accepted_terms_version"
 const ADS_ENABLED = "adsEnabled"
 const CAS_ADS_ENABLED = "casAsEnabled"
+const CURRENT_TERMS_VERSION = 1
 
 // NewSessionModel initializes a new SessionModel instance.
 func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
@@ -135,6 +136,13 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 	case "setLocal":
 		local := arguments.Get(0)
 		err := setLocale(s.baseModel, local.String())
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
+	case "acceptTerms":
+		err := acceptTerms(s.baseModel)
 		if err != nil {
 			return nil, err
 		} else {
@@ -432,4 +440,12 @@ func (s *SessionModel) SerializedInternalHeaders() (string, error) {
 	// Return static for now
 	// Todo implement this method
 	return "", nil
+}
+
+func acceptTerms(m *baseModel) error {
+	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put[int](tx, ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION, "")
+		return nil
+	})
+	return nil
 }

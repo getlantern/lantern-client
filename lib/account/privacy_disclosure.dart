@@ -1,11 +1,13 @@
 import 'package:lantern/common/common.dart';
 
 class PrivacyDisclosure extends StatelessWidget {
+  const PrivacyDisclosure({super.key});
+
   @override
   Widget build(BuildContext context) {
     return FullScreenDialog(
       widget: Padding(
-          padding: EdgeInsetsDirectional.only(
+          padding: const EdgeInsetsDirectional.only(
               start: 33, end: 33),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
