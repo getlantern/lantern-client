@@ -55,9 +55,9 @@ open class LanternService : Service(), Runnable {
     private val started: AtomicBoolean = AtomicBoolean()
     private lateinit var autoUpdater: AutoUpdater
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         autoUpdater = AutoUpdater(this)
-        val autoBooted = intent?.getBooleanExtra(AUTO_BOOTED, false) == true
+        val autoBooted = intent.getBooleanExtra(AUTO_BOOTED, false)
         Logger.d(TAG, "Called onStartCommand, autoBooted?: $autoBooted")
         if (autoBooted) {
             Logger.debug(
