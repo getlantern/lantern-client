@@ -23,21 +23,21 @@ open class LanternApp : Application() {
             System.setProperty("kotlinx.coroutines.debug", "on")
         }
 
-        if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
-                    .build(),
-            )
-            StrictMode.setVmPolicy(
-                StrictMode.VmPolicy.Builder()
-                    .detectLeakedSqlLiteObjects()
-                    .detectLeakedClosableObjects()
-                    .penaltyLog()
-                    .build(),
-            )
-        }
+        // if (BuildConfig.DEBUG) {
+        //     StrictMode.setThreadPolicy(
+        //         StrictMode.ThreadPolicy.Builder()
+        //             .detectAll()
+        //             .penaltyLog()
+        //             .build(),
+        //     )
+        //     StrictMode.setVmPolicy(
+        //         StrictMode.VmPolicy.Builder()
+        //             .detectLeakedSqlLiteObjects()
+        //             .detectLeakedClosableObjects()
+        //             .penaltyLog()
+        //             .build(),
+        //     )
+        // }
     }
 
     override fun onCreate() {
