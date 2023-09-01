@@ -23,6 +23,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
        setReferalCode()
        initializeSessionModel()
        storeVersion()
+       setDeviceId()
     }
     
    
@@ -80,6 +81,21 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     }
     
     
+  
+    
+    func createUser(local:String){
+         let miniSqlValue =  ValueUtil.convertToMinisqlValue(local)
+        if(miniSqlValue != nil){
+            do {
+                let result = try  invokeMethodOnGo(name: "createUser", argument: miniSqlValue!)
+                 
+            }catch{
+                logger.log("Error while create user")
+            }
+        }
+    }
+    
+    
     private func setTimeZone(){
         let timeZoneId = TimeZone.current.identifier
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(timeZoneId)
@@ -89,6 +105,20 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
                  logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
             }catch{
                 logger.log("Error while setting timezone")
+            }
+        }
+    }
+    
+    
+    func setDeviceId(){
+        let deviceId = UIDevice.current.identifierForVendor!.uuidString
+        let miniSqlValue =  ValueUtil.convertToMinisqlValue(deviceId)
+        if(miniSqlValue != nil){
+            do {
+                let result = try  invokeMethodOnGo(name: "setTimeZone", argument: miniSqlValue!)
+                 logger.log("Sucessfully set device ID \(deviceId) ")
+            }catch{
+                logger.log("Error while setting deevice ID")
             }
         }
     }

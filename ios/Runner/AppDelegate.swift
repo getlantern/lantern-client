@@ -25,6 +25,7 @@ import Internalsdk
         setupModels()
         prepareChannel()
         setupLocal()
+        createUser()
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
@@ -50,13 +51,18 @@ import Internalsdk
     }
     
     private func setupLocal(){
-        let langStr = Locale.current.languageCode
+        let langStr = Locale.current.identifier
         if langStr != nil{
-            sessionModel.setLocal(lang: langStr!)
+            sessionModel.setLocal(lang: langStr)
             logger.log("Local value found  \(langStr)")
         }else{
             logger.log("Local value found nil")
         }
+    }
+    
+    
+    func createUser(){
+         sessionModel.createUser(local: Locale.current.identifier)
     }
     
     

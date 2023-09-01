@@ -1,8 +1,10 @@
 package internalsdk
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
@@ -83,6 +85,14 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
+	case "setDeviceId":
+		deviceID := arguments.Get(0)
+		err := setDeviceId(s.baseModel, deviceID.String())
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	case "setReferalCode":
 		referralCode := arguments.Get(0)
 		err := setReferalCode(s.baseModel, referralCode.String())
@@ -133,7 +143,6 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 			return minisql.NewValueBool(true), nil
 		}
 	case "setProUser":
-		// Todo Implement setCurrency server
 		err := setProUser(s.baseModel, false)
 		if err != nil {
 			return nil, err
@@ -178,7 +187,14 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 			return nil, err
 		}
 		return minisql.NewValueBool(true), nil
-
+	case "createUser":
+		local := arguments.Get(0)
+		err := userCreate(s.baseModel, local.String())
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
 	default:
 		return s.baseModel.InvokeMethod(method, arguments)
 	}
@@ -192,6 +208,15 @@ func initSessionModel(m *baseModel, jsonString string) error {
 
 func (s *SessionModel) GetAppName() string {
 	return "Lantern-IOS"
+}
+
+func setDeviceId(m *baseModel, deviceID string) error {
+	// Find better way to do it
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put[string](tx, DEVICE_ID, deviceID, "")
+		return nil
+	})
+	return err
 }
 
 func (s *SessionModel) GetDeviceID() string {
@@ -497,5 +522,50 @@ func setSelectedTab(m *baseModel, tap string) error {
 		pathdb.Put[string](tx, SET_SELECTED_TAB, tap, "")
 		return nil
 	})
+	return nil
+}
+
+// Create user
+// Todo-: Create Sprate http client to manag and reuse client
+func userCreate(m *baseModel, local string) error {
+
+	// Create a map for the request body
+	requestBodyMap := map[string]string{
+		"local": local,
+	}
+
+	// Marshal the map to JSON
+	requestBody, err := json.Marshal(requestBodyMap)
+	if err != nil {
+		return err
+	}
+
+	// Create a new request
+	req, err := http.NewRequest("POST", "localhost:5000/user-create", bytes.NewBuffer(requestBody))
+	if err != nil {
+		return err
+	}
+
+	// Add headers
+	req.Header.Set("Lantern-Device-Id", "22F3FCEC-8973-47FD-984A-9CB7802E3D7F")
+
+	// Initialize a new http client
+	client := &http.Client{}
+
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	// Read and decode the response body
+	var responseMap map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&responseMap); err != nil {
+		return err
+	}
+	log.Debugf("Response from user create %v", responseMap)
+
 	return nil
 }
