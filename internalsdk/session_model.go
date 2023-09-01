@@ -1,6 +1,7 @@
 package internalsdk
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/getlantern/pathdb"
@@ -46,6 +47,11 @@ const ADS_ENABLED = "adsEnabled"
 const CAS_ADS_ENABLED = "casAsEnabled"
 const CURRENT_TERMS_VERSION = 1
 const IS_PLAY_VERSION = "playVersion"
+const SET_SELECTED_TAB = "/selectedTab"
+
+type TabData struct {
+	Tab string `json:"tab"`
+}
 
 // NewSessionModel initializes a new SessionModel instance.
 func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
@@ -158,8 +164,22 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	default:
+	case "setSelectedTab":
+		jsonString := arguments.Get(0).String()
 
+		var tabData TabData
+		err := json.Unmarshal([]byte(jsonString), &tabData)
+		if err != nil {
+			return nil, err
+		}
+
+		err = setSelectedTab(s.baseModel, tabData.Tab)
+		if err != nil {
+			return nil, err
+		}
+		return minisql.NewValueBool(true), nil
+
+	default:
 		return s.baseModel.InvokeMethod(method, arguments)
 	}
 }
@@ -399,8 +419,9 @@ func (s *SessionModel) DeviceOS() (string, error) {
 }
 
 func (s *SessionModel) IsProUser() (bool, error) {
-	// return static for now
-	return false, nil
+	proUser, err := s.baseModel.db.Get(PRO_USER)
+	panicIfNecessary(err)
+	return (string(proUser) == "true"), nil
 }
 func setProUser(m *baseModel, isPro bool) error {
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
@@ -467,6 +488,13 @@ func acceptTerms(m *baseModel) error {
 func setStoreVersion(m *baseModel, isStoreVersion bool) error {
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put[bool](tx, IS_PLAY_VERSION, isStoreVersion, "")
+		return nil
+	})
+	return nil
+}
+func setSelectedTab(m *baseModel, tap string) error {
+	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put[string](tx, SET_SELECTED_TAB, tap, "")
 		return nil
 	})
 	return nil

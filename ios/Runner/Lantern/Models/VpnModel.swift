@@ -25,4 +25,9 @@ class VpnModel : BaseModel<InternalsdkVpnModel> {
         
     }
     
+    
+    override func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+    }
+    
 }

@@ -32,8 +32,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
                result(FlutterError(code: "ARGUMENTS_ERROR", message: "Failed to convert arguments to MinisqlValue", details: nil))
                return
            }
-        
-        do {
+         do {
             let invocationResult = try invokeMethodOnGo(name: call.method, argument: minisqlValue)
             
             if let originalValue = ValueUtil.convertFromMinisqlValue(from: invocationResult as! MinisqlValue) {
@@ -62,7 +61,8 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     private func initializeSessionModel(){
         let initData: [String: [String: Any]]  = [
             "developmentMode": ["type": ValueUtil.TYPE_BOOL, "value": true],
-            "playVersion": ["type": ValueUtil.TYPE_BOOL, "value": true]
+            "playVersion": ["type": ValueUtil.TYPE_BOOL, "value": true],
+            "prouser": ["type": ValueUtil.TYPE_BOOL, "value": false]
         ]
         guard let jsonString = JsonUtil.convertToJSONString(initData) else {
             logger.log("Failed to convert initializationData to JSON")
