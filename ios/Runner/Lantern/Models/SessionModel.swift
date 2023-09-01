@@ -22,6 +22,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
        setTimeZone()
        setReferalCode()
        initializeSessionModel()
+       storeVersion()
     }
     
    
@@ -103,6 +104,20 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
             }
         }
     }
+    
+    
+    func storeVersion(){
+        let miniSqlValue =  ValueUtil.convertToMinisqlValue(isRunningFromAppStore())
+        if(miniSqlValue != nil){
+            do {
+                let result = try  invokeMethodOnGo(name: "setStoreVersion", argument: miniSqlValue!)
+                 logger.log("This is app store version \(result)")
+            }catch{
+                logger.log("Error while setting storeVersion")
+            }
+        }
+    }
+    
     
 
     func setForceCountry(countryCode:String){

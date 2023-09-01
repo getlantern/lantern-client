@@ -1,0 +1,64 @@
+//
+//  RunningEnv.swift
+//  Runner
+//
+//  Created by jigar fumakiya on 01/09/23.
+
+import Foundation
+
+
+func isRunningFromAppStore() -> Bool {
+    let file = "\(NSHomeDirectory())/iTunesMetadata.plist"
+    if FileManager.default.fileExists(atPath: file) {
+        // The app is running from the App Store
+        return true
+    } else {
+        // The app is not running from the App Store
+        return false
+    }
+}
+
+
+func isRunningInTestFlightEnvironment() -> Bool{
+       if isSimulator() {
+           return false
+       } else {
+           if isAppStoreReceiptSandbox() && !hasEmbeddedMobileProvision() {
+               return true
+           } else {
+               return false
+           }
+       }
+   }
+
+
+private func hasEmbeddedMobileProvision() -> Bool{
+    if let _ = Bundle.main.path(forResource: "embedded", ofType: "mobileprovision") {
+          return true
+      }
+      return false
+  }
+
+
+func isAppStoreReceiptSandbox() -> Bool {
+    if isSimulator() {
+        return false
+    } else {
+        if let appStoreReceiptURL = Bundle.main.appStoreReceiptURL {
+            if  appStoreReceiptURL.lastPathComponent == "sandboxReceipt" {
+                return true
+            }
+        }
+        return false
+    }
+}
+
+
+
+private func isSimulator() -> Bool {
+        #if arch(i386) || arch(x86_64)
+            return true
+            #else
+            return false
+        #endif
+    }

@@ -13,6 +13,7 @@ import Flutter
 enum ModelType {
     case sessionModel
     case messagingModel
+    case vpnModel
 }
 
 
@@ -56,6 +57,11 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
                     throw error!
                 }
                 self.model = createdModel as! T
+            case .vpnModel:
+                guard let createdModel = InternalsdkNewVpnModel(self.schema, swiftDB, &error) else {
+                    throw error!
+                }
+                self.model = createdModel as! T
             }
             
         } catch {
@@ -84,7 +90,10 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
             modelName = "session"
         case .messagingModel:
             modelName = "messaging"
+        case .vpnModel:
+            modelName = "vpn"
         }
+    
         eventChannel = FlutterEventChannel(name: "\(modelName)_event_channel", binaryMessenger: binaryMessenger)
         eventChannel.setStreamHandler(self)
         
@@ -182,6 +191,8 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
             try sessionModelSub.subscribe(subscriber)
         case let messagingModel as InternalsdkMessagingModel:
             try messagingModel.subscribe(subscriber)
+        case let vpnModel as InternalsdkVpnModel:
+            try vpnModel.subscribe(subscriber)
         default:
             throw NSError(domain: "UnsupportedModel", code: 999, userInfo: ["Description": "Unsupported model type."])
         }
@@ -193,6 +204,8 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
             try sessionSub.unsubscribe(subscriberID)
         case let messagingModel as InternalsdkMessagingModel:
             try messagingModel.unsubscribe(subscriberID)
+        case let vpnModel as InternalsdkVpnModel:
+            try vpnModel.unsubscribe(subscriberID)
         default:
             throw NSError(domain: "UnsupportedModel", code: 999, userInfo: ["Description": "Unsupported model type."])
         }

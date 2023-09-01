@@ -119,7 +119,6 @@ func (m *baseModel) Subscribe(req *SubscriptionRequest) error {
 				val := minisql.NewValue(convertedValue)
 				// Need wrap to coz we need to send to json
 				myVal := &MyValue{Value: *val}
-				log.Debugf("my val type %v", val.Type)
 				updatesMap[k] = &ItemInterface{
 					Path:       itemWithRaw.Path,
 					DetailPath: itemWithRaw.DetailPath,

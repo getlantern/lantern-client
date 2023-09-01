@@ -11,6 +11,7 @@ import Internalsdk
     var sessionModel:SessionModel!
     var messagingModel:MessagingModel!
     var lanternModel:LanternModel!
+    var vpnModel:VpnModel!
     var flutterbinaryMessenger:FlutterBinaryMessenger!
     var lanternMethodChannel:FlutterMethodChannel!
     var navigationChannel:FlutterMethodChannel!
@@ -36,6 +37,8 @@ import Internalsdk
         messagingModel=MessagingModel(flutterBinary: flutterbinaryMessenger)
         //Init Lantern Model
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
+        //Init VPN Model
+        vpnModel=VpnModel(flutterBinary: flutterbinaryMessenger)
     }
     
     

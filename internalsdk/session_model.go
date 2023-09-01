@@ -45,6 +45,7 @@ const ACCEPTED_TERMS_VERSION = "accepted_terms_version"
 const ADS_ENABLED = "adsEnabled"
 const CAS_ADS_ENABLED = "casAsEnabled"
 const CURRENT_TERMS_VERSION = 1
+const IS_PLAY_VERSION = "playVersion"
 
 // NewSessionModel initializes a new SessionModel instance.
 func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
@@ -143,6 +144,15 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		}
 	case "acceptTerms":
 		err := acceptTerms(s.baseModel)
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
+
+	case "setStoreVersion":
+		IsStoreVersion := arguments.Get(0)
+		err := setStoreVersion(s.baseModel, IsStoreVersion.Bool())
 		if err != nil {
 			return nil, err
 		} else {
@@ -349,9 +359,12 @@ func setProvider(m *baseModel, provider string) error {
 	return nil
 }
 
-// Todo: Change this method name to IsStoreVersion
-func (s *SessionModel) IsPlayVersion() (bool, error) {
-	// For now return static to yes
+func (s *SessionModel) IsStoreVersion() (bool, error) {
+	osStoreVersion, err := s.db.Get(IS_PLAY_VERSION)
+	panicIfNecessary(err)
+	if string(osStoreVersion) == "true" {
+		return true, nil
+	}
 	return false, nil
 }
 
@@ -399,7 +412,8 @@ func setProUser(m *baseModel, isPro bool) error {
 
 func (s *SessionModel) SetReplicaAddr(replicaAddr string) error {
 	pathdb.Mutate(s.db, func(tx pathdb.TX) error {
-		pathdb.Put[string](tx, REPLICA_ADDR, replicaAddr, "")
+		//For now force replicate to disbale it
+		pathdb.Put[string](tx, REPLICA_ADDR, "", "")
 		return nil
 	})
 	return nil
@@ -407,7 +421,7 @@ func (s *SessionModel) SetReplicaAddr(replicaAddr string) error {
 
 func (s *SessionModel) ForceReplica() bool {
 	// return static for now
-	return true
+	return false
 }
 
 func (s *SessionModel) SetChatEnabled(chatEnable bool) {
@@ -445,6 +459,14 @@ func (s *SessionModel) SerializedInternalHeaders() (string, error) {
 func acceptTerms(m *baseModel) error {
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put[int](tx, ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION, "")
+		return nil
+	})
+	return nil
+}
+
+func setStoreVersion(m *baseModel, isStoreVersion bool) error {
+	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put[bool](tx, IS_PLAY_VERSION, isStoreVersion, "")
 		return nil
 	})
 	return nil

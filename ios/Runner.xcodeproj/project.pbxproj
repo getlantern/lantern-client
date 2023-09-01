@@ -18,6 +18,8 @@
 		03F2FE342A6949EF0082B34C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F2FE332A6949EF0082B34C /* Logger.swift */; };
 		03F4CD7E2A77DE8500F7BDD8 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */; };
 		03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */; };
+		03FAF1B22AA1C7940063580C /* RunningEnv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FAF1B12AA1C7940063580C /* RunningEnv.swift */; };
+		03FAF1B42AA1E9F40063580C /* VpnModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FAF1B32AA1E9F40063580C /* VpnModel.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -52,6 +54,8 @@
 		03F2FE332A6949EF0082B34C /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SessionManager.swift; path = Models/SessionManager.swift; sourceTree = "<group>"; };
 		03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BaseModel.swift; path = Models/BaseModel.swift; sourceTree = "<group>"; };
+		03FAF1B12AA1C7940063580C /* RunningEnv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningEnv.swift; sourceTree = "<group>"; };
+		03FAF1B32AA1E9F40063580C /* VpnModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VpnModel.swift; path = Models/VpnModel.swift; sourceTree = "<group>"; };
 		04AF578F28344E5CF0932AA9 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
@@ -119,6 +123,7 @@
 				03F4CD7D2A77DE8500F7BDD8 /* SessionManager.swift */,
 				03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */,
 				0369DF782A93803D000EBE43 /* MessagingModel.swift */,
+				03FAF1B32AA1E9F40063580C /* VpnModel.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -129,6 +134,7 @@
 				03F2FE332A6949EF0082B34C /* Logger.swift */,
 				03026EA22A77D67A001D5507 /* ValueUtil.swift */,
 				036663D82A9E0C0E00595971 /* JsonUtils.swift */,
+				03FAF1B12AA1C7940063580C /* RunningEnv.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -366,9 +372,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03FAF1B22AA1C7940063580C /* RunningEnv.swift in Sources */,
 				03F2FE342A6949EF0082B34C /* Logger.swift in Sources */,
 				03F4CD7E2A77DE8500F7BDD8 /* SessionManager.swift in Sources */,
 				0369DF792A93803D000EBE43 /* MessagingModel.swift in Sources */,
+				03FAF1B42AA1E9F40063580C /* VpnModel.swift in Sources */,
 				03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */,
 				035BE7062A7122BC0084059A /* SessionModel.swift in Sources */,
 				036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */,
