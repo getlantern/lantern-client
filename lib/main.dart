@@ -1,4 +1,3 @@
-import 'package:lantern/catcher_setup.dart';
 import 'package:lantern/common/common.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'app.dart';
@@ -12,5 +11,5 @@ Future<void> main() async {
   }
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  setupCatcherAndRun(LanternApp());
+  runApp(LanternApp());
 }
