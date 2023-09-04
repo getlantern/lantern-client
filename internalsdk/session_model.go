@@ -529,25 +529,32 @@ func setSelectedTab(m *baseModel, tap string) error {
 // Todo-: Create Sprate http client to manag and reuse client
 func userCreate(m *baseModel, local string) error {
 
+	//Todo use the local we get from params
 	// Create a map for the request body
 	requestBodyMap := map[string]string{
-		"local": local,
+		"locale": "en_IN",
 	}
+	log.Debugf("Request body map: %v", requestBodyMap)
 
 	// Marshal the map to JSON
 	requestBody, err := json.Marshal(requestBodyMap)
 	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+
 		return err
 	}
 
 	// Create a new request
-	req, err := http.NewRequest("POST", "localhost:5000/user-create", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", "http://localhost/pro/user-create", bytes.NewBuffer(requestBody))
 	if err != nil {
+		log.Errorf("Error creating new request: %v", err)
+
 		return err
 	}
 
 	// Add headers
 	req.Header.Set("Lantern-Device-Id", "22F3FCEC-8973-47FD-984A-9CB7802E3D7F")
+	log.Debugf("Headers set")
 
 	// Initialize a new http client
 	client := &http.Client{}
@@ -555,14 +562,19 @@ func userCreate(m *baseModel, local string) error {
 	// Send the request
 	resp, err := client.Do(req)
 	if err != nil {
+		log.Errorf("Error sending request: %v", err)
+
 		return err
 	}
+
+	log.Debugf("Received response, status code: %d and response %v", resp.StatusCode, resp)
 
 	defer resp.Body.Close()
 
 	// Read and decode the response body
 	var responseMap map[string]interface{}
 	if err := json.NewDecoder(resp.Body).Decode(&responseMap); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
 		return err
 	}
 	log.Debugf("Response from user create %v", responseMap)

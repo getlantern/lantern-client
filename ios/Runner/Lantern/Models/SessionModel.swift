@@ -81,8 +81,6 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     }
     
     
-  
-    
     func createUser(local:String){
          let miniSqlValue =  ValueUtil.convertToMinisqlValue(local)
         if(miniSqlValue != nil){

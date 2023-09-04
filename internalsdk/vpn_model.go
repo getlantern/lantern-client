@@ -26,6 +26,21 @@ func NewVpnModel(schema string, mdb minisql.DB) (*VpnModel, error) {
 	return model, nil
 }
 
+func (s *VpnModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
+	switch method {
+	case "switchVPN":
+		jsonString := arguments.Get(0)
+		err := switchVPN(s.baseModel, jsonString.Bool())
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
+	default:
+		return s.baseModel.InvokeMethod(method, arguments)
+	}
+}
+
 func initVpnModel(m *baseModel) error {
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		rawStatus, err := tx.Get(PATH_VPN_STATUS)
@@ -41,11 +56,7 @@ func initVpnModel(m *baseModel) error {
 	return nil
 }
 
-func (s *VpnModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
-	switch method {
-	case "Hello":
-		return minisql.NewValueString("Hello"), nil
-	default:
-		return s.baseModel.InvokeMethod(method, arguments)
-	}
+func switchVPN(m *baseModel, status bool) error {
+
+	return nil
 }
