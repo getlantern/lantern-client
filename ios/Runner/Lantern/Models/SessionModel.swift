@@ -24,6 +24,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
        initializeSessionModel()
        storeVersion()
        setDeviceId()
+       setDNS()
     }
     
    
@@ -169,6 +170,19 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
                  logger.log("Sucessfully set Local result \(result)")
             }catch{
                 logger.log("Error while setting Local")
+            }
+        }
+    }
+    
+    private func setDNS(){
+        let timeZoneId = TimeZone.current.identifier
+        let miniSqlValue =  ValueUtil.convertToMinisqlValue(DnsDetector.DEFAULT_DNS_SERVER)
+        if(miniSqlValue != nil){
+            do {
+                let result = try  invokeMethodOnGo(name: "setTimeZone", argument: miniSqlValue!)
+                 logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
+            }catch{
+                logger.log("Error while setting timezone")
             }
         }
     }

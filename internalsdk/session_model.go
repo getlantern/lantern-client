@@ -110,8 +110,8 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 			return minisql.NewValueBool(true), nil
 		}
 	case "setDNSServer":
-		// Todo Implement SetDns server
-		err := setDNSServer(s.baseModel, "Test")
+		dns := arguments.Get(0)
+		err := setDNSServer(s.baseModel, dns.String())
 		if err != nil {
 			return nil, err
 		} else {
@@ -320,8 +320,6 @@ func setLocale(m *baseModel, langCode string) error {
 func (s *SessionModel) GetTimeZone() (string, error) {
 	timezoneId, err := s.baseModel.db.Get(TIMEZONE_ID)
 	panicIfNecessary(err)
-	// For now just send back english by default
-	// Once have machisim change to dyanmic
 	return string(timezoneId), nil
 }
 
@@ -331,9 +329,6 @@ func setTimeZone(m *baseModel, timezoneId string) error {
 		pathdb.Put[string](tx, TIMEZONE_ID, timezoneId, "")
 		return nil
 	})
-	byte, error := m.db.Get(TIMEZONE_ID)
-	panicIfNecessary(error)
-	log.Debugf("Successfulyy added timezone%v", string(byte))
 	return nil
 }
 
@@ -386,10 +381,12 @@ func (s *SessionModel) GetDNSServer() (string, error) {
 	return string(dns), nil
 }
 
-func setDNSServer(m *baseModel, forceCountry string) error {
-	// Implement this
-	// Check out kotlin code
-	return nil
+func setDNSServer(m *baseModel, dnsServer string) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put[string](tx, DNS_DETECTOR, dnsServer, "")
+		return nil
+	})
+	return err
 }
 
 func (s *SessionModel) Provider() (string, error) {
@@ -540,12 +537,11 @@ func userCreate(m *baseModel, local string) error {
 	requestBody, err := json.Marshal(requestBodyMap)
 	if err != nil {
 		log.Errorf("Error marshaling request body: %v", err)
-
 		return err
 	}
 
 	// Create a new request
-	req, err := http.NewRequest("POST", "http://localhost/pro/user-create", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", "http://localhost/pro-server/user-create", bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Errorf("Error creating new request: %v", err)
 
