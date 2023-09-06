@@ -373,6 +373,9 @@ android-debug:
 
 android-release: pubget $(MOBILE_RELEASE_APK)
 
+android-local-release:
+	DD_APPLICATION_ID=`make vault-secret-DD_APPLICATION_ID` DD_CLIENT_TOKEN=`make vault-secret-DD_CLIENT_TOKEN` make $(MOBILE_RELEASE_APK)
+
 android-bundle: $(MOBILE_BUNDLE)
 
 android-debug-install: $(MOBILE_DEBUG_APK)
