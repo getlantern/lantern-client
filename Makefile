@@ -337,6 +337,7 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DD_CLIENT_TOKEN="$(DD_CLIENT_TOKEN)" && \
 	DD_APPLICATION_ID="$(DD_APPLICATION_ID)" && \
+	DATADOG_API_KEY="$(DATADOG_API_KEY)" && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
@@ -358,6 +359,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DD_CLIENT_TOKEN="$$DD_CLIENT_TOKEN" && \
 	DD_APPLICATION_ID="$$DD_APPLICATION_ID" && \
+	DATADOG_API_KEY="$$DATADOG_API_KEY" && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
@@ -373,6 +375,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 vault-secrets:
 	$(eval DD_APPLICATION_ID := $(shell make vault-secret-DD_APPLICATION_ID))
 	$(eval DD_CLIENT_TOKEN := $(shell make vault-secret-DD_CLIENT_TOKEN))
+	$(eval DATADOG_API_KEY := $(shell make vault-secret-DATADOG_API_KEY))
 
 android-debug: vault-secrets $(MOBILE_DEBUG_APK)
 
