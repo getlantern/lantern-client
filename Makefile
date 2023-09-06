@@ -143,6 +143,7 @@ ANDROID_LIB := $(ANDROID_LIB_BASE)-$(ANDROID_ARCH).aar
 BASE_MOBILE_DIR ?= .
 MOBILE_DIR ?= $(BASE_MOBILE_DIR)/android
 GRADLE    := $(MOBILE_DIR)/gradlew
+LANTERN_CLOUD := $$GOPATH/src/github.com/getlantern/lantern-cloud
 MOBILE_LIBS := $(MOBILE_DIR)/app/libs
 MOBILE_ARCHS := x86 x86_64 armeabi-v7a arm64-v8a
 MOBILE_ANDROID_LIB := $(MOBILE_LIBS)/$(ANDROID_LIB)
@@ -288,11 +289,11 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
 vault-secret-%:
-	@SECRET=$(shell cd $$GOPATH/src/github.com/getlantern/lantern-cloud && bin/vault kv get -field=${*} ${VAULT_DD_SECRETS_PATH}); \
+	@SECRET=$(shell cd $(LANTERN_CLOUD) && bin/vault kv get -field=${*} ${VAULT_DD_SECRETS_PATH}); \
 	printf "$$SECRET"
 
 vault-secret-base64:
-	@SECRET=$(shell cd $$GOPATH/src/github.com/getlantern/lantern-cloud && bin/vault kv get -field=$(VAULT_FIELD) $(VAULT_PATH)); \
+	@SECRET=$(shell cd $(LANTERN_CLOUD) && bin/vault kv get -field=$(VAULT_FIELD) $(VAULT_PATH)); \
 	echo "Retrieved secret: $$SECRET" 1>&2; \
 	printf "$$VAULT_FIELD=$$SECRET" | ${BASE64}
 
@@ -334,8 +335,8 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
-	DD_CLIENT_TOKEN="$$DD_CLIENT_TOKEN" && \
-	DD_APPLICATION_ID="$$DD_APPLICATION_ID" && \
+	DD_CLIENT_TOKEN="$(DD_CLIENT_TOKEN)" && \
+	DD_APPLICATION_ID="$(DD_APPLICATION_ID)" && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
@@ -368,13 +369,14 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	--android-mapping-location build/app/outputs/mapping/prodPlay/mapping.txt --ios-dsyms && \
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
-android-debug:
-	DD_APPLICATION_ID=`make vault-secret-DD_APPLICATION_ID` DD_CLIENT_TOKEN=`make vault-secret-DD_CLIENT_TOKEN` make $(MOBILE_DEBUG_APK)
 
-android-release: pubget $(MOBILE_RELEASE_APK)
+vault-secrets:
+	$(eval DD_APPLICATION_ID := $(shell make vault-secret-DD_APPLICATION_ID))
+	$(eval DD_CLIENT_TOKEN := $(shell make vault-secret-DD_CLIENT_TOKEN))
 
-android-local-release:
-	DD_APPLICATION_ID=`make vault-secret-DD_APPLICATION_ID` DD_CLIENT_TOKEN=`make vault-secret-DD_CLIENT_TOKEN` make $(MOBILE_RELEASE_APK)
+android-debug: vault-secrets $(MOBILE_DEBUG_APK)
+
+android-release: pubget vault-secrets $(MOBILE_RELEASE_APK)
 
 android-bundle: $(MOBILE_BUNDLE)
 
