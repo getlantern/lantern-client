@@ -396,9 +396,11 @@ func (s *SessionModel) Provider() (string, error) {
 }
 
 func setProvider(m *baseModel, provider string) error {
-	// Implement this
-	// Check out kotlin code
-	return nil
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put[string](tx, PROVIDER, provider, "")
+		return nil
+	})
+	return err
 }
 
 func (s *SessionModel) IsStoreVersion() (bool, error) {
@@ -522,39 +524,52 @@ func setSelectedTab(m *baseModel, tap string) error {
 	return nil
 }
 
+func setUserIdAndToken(m *baseModel, userId float64, token string) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put[float64](tx, USER_ID, userId, "")
+		pathdb.Put[string](tx, TOKEN, token, "")
+		return nil
+	})
+	return err
+}
+
+type UserResponse struct {
+	UserID       float64  `json:"userId"`
+	Code         string   `json:"code"`
+	Token        string   `json:"token"`
+	Referral     string   `json:"referral"`
+	Locale       string   `json:"locale"`
+	Servers      []string `json:"servers"`
+	Inviters     []string `json:"inviters"`
+	Invitees     []string `json:"invitees"`
+	Devices      []string `json:"devices"`
+	YinbiEnabled bool     `json:"yinbiEnabled"`
+}
+
 // Create user
 // Todo-: Create Sprate http client to manag and reuse client
 func userCreate(m *baseModel, local string) error {
-
-	//Todo use the local we get from params
-	// Create a map for the request body
 	requestBodyMap := map[string]string{
-		"locale": "en_IN",
+		"locale": local,
 	}
-	log.Debugf("Request body map: %v", requestBodyMap)
-
 	// Marshal the map to JSON
 	requestBody, err := json.Marshal(requestBodyMap)
 	if err != nil {
 		log.Errorf("Error marshaling request body: %v", err)
 		return err
 	}
-
 	// Create a new request
-	req, err := http.NewRequest("POST", "http://localhost/pro-server/user-create", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", "https://api.getiantem.org/user-create", bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Errorf("Error creating new request: %v", err)
-
 		return err
 	}
 
 	// Add headers
-	req.Header.Set("Lantern-Device-Id", "22F3FCEC-8973-47FD-984A-9CB7802E3D7F")
+	req.Header.Set("X-Lantern-Device-Id", "22F3FCEC-8973-47FD-984A-9CB7802E3D7F")
 	log.Debugf("Headers set")
-
 	// Initialize a new http client
 	client := &http.Client{}
-
 	// Send the request
 	resp, err := client.Do(req)
 	if err != nil {
@@ -562,18 +577,20 @@ func userCreate(m *baseModel, local string) error {
 
 		return err
 	}
-
-	log.Debugf("Received response, status code: %d and response %v", resp.StatusCode, resp)
-
 	defer resp.Body.Close()
-
+	var userResponse UserResponse
 	// Read and decode the response body
-	var responseMap map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&responseMap); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&userResponse); err != nil {
 		log.Errorf("Error decoding response body: %v", err)
 		return err
 	}
-	log.Debugf("Response from user create %v", responseMap)
-
+	//Save user refferal code
+	if userResponse.Referral != "" {
+		err := setReferalCode(m, userResponse.Referral)
+		return err
+	}
+	//Save user id and token
+	setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
+	log.Debugf("Created new Lantern user: %+v", userResponse)
 	return nil
 }

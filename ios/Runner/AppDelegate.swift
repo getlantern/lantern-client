@@ -2,6 +2,7 @@ import UIKit
 import SQLite
 import Flutter
 import Internalsdk
+import Toast_Swift
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -15,13 +16,17 @@ import Internalsdk
     var flutterbinaryMessenger:FlutterBinaryMessenger!
     var lanternMethodChannel:FlutterMethodChannel!
     var navigationChannel:FlutterMethodChannel!
+    var flutterViewController:FlutterViewController!
+    var loadingIndicator: UIActivityIndicatorView!
+
+    
     
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
-        flutterbinaryMessenger=controller.binaryMessenger
+        flutterViewController  = window?.rootViewController as! FlutterViewController
+        flutterbinaryMessenger=flutterViewController.binaryMessenger
         setupModels()
         prepareChannel()
         setupLocal()
@@ -60,9 +65,24 @@ import Internalsdk
         }
     }
     
-    
+    // Calling create API
     func createUser(){
-         sessionModel.createUser(local: Locale.current.identifier)
+        DispatchQueue.main.async {
+            self.showLoadingDialog()
+        }
+        DispatchQueue.global().async {
+            let success = self.sessionModel.createUser(local: Locale.current.identifier)
+            // After the API call is done, move back to the main thread to update UI
+            DispatchQueue.main.async {
+                self.hideLoadingDialog()
+                if success {
+                    self.flutterViewController.view.makeToast("User Created")
+                } else {
+                    self.flutterViewController.view.makeToast("Error while creating user")
+                }
+            }
+        }
+        
     }
     
     
@@ -70,8 +90,7 @@ import Internalsdk
         // Handle your method calls here
         // The 'call' contains the method name and arguments
         // The 'result' can be used to send back the data to Flutter
-        
-        switch call.method {
+         switch call.method {
         case "yourMethod":
             // handle yourMethod
             break
@@ -79,4 +98,21 @@ import Internalsdk
             result(FlutterMethodNotImplemented)
         }
     }
+    
+    
+    //Todo-:Sprate this Loading indicator to new class for reuse
+    private func showLoadingDialog(){
+         loadingIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+        loadingIndicator.center = flutterViewController.view.center
+        loadingIndicator.hidesWhenStopped = false
+        loadingIndicator.startAnimating()
+        flutterViewController.view.addSubview(loadingIndicator)
+    }
+    
+    private func hideLoadingDialog() {
+        loadingIndicator?.stopAnimating()
+        loadingIndicator?.removeFromSuperview()
+    }
+    
+    
 }

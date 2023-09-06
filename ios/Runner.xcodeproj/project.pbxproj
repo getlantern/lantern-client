@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		03026EA12A77D654001D5507 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03026EA02A77D654001D5507 /* Database.swift */; };
 		03026EA32A77D67A001D5507 /* ValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03026EA22A77D67A001D5507 /* ValueUtil.swift */; };
+		032A43582AA6F8AA00EF442B /* DnsDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032A43572AA6F8AA00EF442B /* DnsDetector.swift */; };
 		035BE7052A7122BC0084059A /* LanternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7032A7122BC0084059A /* LanternModel.swift */; };
 		035BE7062A7122BC0084059A /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7042A7122BC0084059A /* SessionModel.swift */; };
 		035FDDD52A6A547F007B15C8 /* Internalsdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */; };
@@ -45,6 +46,7 @@
 /* Begin PBXFileReference section */
 		03026EA02A77D654001D5507 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		03026EA22A77D67A001D5507 /* ValueUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueUtil.swift; sourceTree = "<group>"; };
+		032A43572AA6F8AA00EF442B /* DnsDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnsDetector.swift; sourceTree = "<group>"; };
 		035BE7032A7122BC0084059A /* LanternModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LanternModel.swift; path = Models/LanternModel.swift; sourceTree = "<group>"; };
 		035BE7042A7122BC0084059A /* SessionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SessionModel.swift; path = Models/SessionModel.swift; sourceTree = "<group>"; };
 		035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Internalsdk.xcframework; sourceTree = "<group>"; };
@@ -88,6 +90,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		032A43562AA6F86A00EF442B /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				032A43572AA6F8AA00EF442B /* DnsDetector.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		033CBDCC2A94D86300DEBCBA /* Db */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +118,7 @@
 		03D789A42A616D25000D36F9 /* Lantern */ = {
 			isa = PBXGroup;
 			children = (
+				032A43562AA6F86A00EF442B /* Network */,
 				033CBDCC2A94D86300DEBCBA /* Db */,
 				03F2FE322A6949C60082B34C /* Utils */,
 				03EE344A2A652B3D00E37100 /* Models */,
@@ -372,6 +383,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				032A43582AA6F8AA00EF442B /* DnsDetector.swift in Sources */,
 				03FAF1B22AA1C7940063580C /* RunningEnv.swift in Sources */,
 				03F2FE342A6949EF0082B34C /* Logger.swift in Sources */,
 				03F4CD7E2A77DE8500F7BDD8 /* SessionManager.swift in Sources */,

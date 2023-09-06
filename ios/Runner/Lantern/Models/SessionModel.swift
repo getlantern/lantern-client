@@ -82,16 +82,22 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     }
     
     
-    func createUser(local:String){
-         let miniSqlValue =  ValueUtil.convertToMinisqlValue(local)
+    func createUser(local:String) -> Bool{
+        let miniSqlValue =  ValueUtil.convertToMinisqlValue(local)
         if(miniSqlValue != nil){
             do {
                 let result = try  invokeMethodOnGo(name: "createUser", argument: miniSqlValue!)
-                 
+                var converedResult = ValueUtil.convertFromMinisqlValue(from: result)
+                if(converedResult as! Bool){
+                    return true
+                }
+                return false
+                logger.log("User Created \(converedResult)")
             }catch{
                 logger.log("Error while create user")
             }
         }
+        return false
     }
     
     
@@ -191,7 +197,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     
     
     
-    func invokeMethodOnGo(name: String, argument: MinisqlValue) throws -> Any {
+    func invokeMethodOnGo(name: String, argument: MinisqlValue) throws -> MinisqlValue {
         // Convert any argument to Minisql values
         let goResult = try model.invokeMethod(name, arguments: ValueArrayHandler(values: [argument]))
         return goResult
