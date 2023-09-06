@@ -371,8 +371,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 android-debug:
 	DD_APPLICATION_ID=`make vault-secret-DD_APPLICATION_ID` DD_CLIENT_TOKEN=`make vault-secret-DD_CLIENT_TOKEN` make $(MOBILE_DEBUG_APK)
 
-android-release: pubget
-	DD_APPLICATION_ID=`make vault-secret-DD_APPLICATION_ID` DD_CLIENT_TOKEN=`make vault-secret-DD_CLIENT_TOKEN` make $(MOBILE_RELEASE_APK)
+android-release: pubget $(MOBILE_RELEASE_APK)
 
 android-bundle: $(MOBILE_BUNDLE)
 
