@@ -216,11 +216,6 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun vpnStateChanged(state: VpnState) {
-        // updateStatus(state.useVpn)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
         updatePlans()
