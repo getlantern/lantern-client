@@ -357,9 +357,6 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-datadog-ci
 	@mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
-	DD_CLIENT_TOKEN="$$DD_CLIENT_TOKEN" && \
-	DD_APPLICATION_ID="$$DD_APPLICATION_ID" && \
-	DATADOG_API_KEY="$(DATADOG_API_KEY)" && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
@@ -367,8 +364,6 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" \
 	-PddClientToken=$(DD_CLIENT_TOKEN) -PddApplicationID=$(DD_APPLICATION_ID) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
 	-Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle bundlePlay && \
-	DATADOG_SITE=datadoghq.eu datadog-ci flutter-symbols upload --service-name lantern-android --dart-symbols-location build/app/intermediates/merged_native_libs/prodPlay/out/lib \
-	--android-mapping-location build/app/outputs/mapping/prodPlay/mapping.txt --ios-dsyms && \
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
 
