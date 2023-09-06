@@ -69,17 +69,6 @@ class Settings extends StatelessWidget {
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
           ),
-          //* Report
-          ListItemFactory.settingsItem(
-            icon: ImagePaths.alert,
-            content: 'report_issue'.i18n,
-            trailingArray: [
-              mirrorLTR(context: context, child: const ContinueArrow())
-            ],
-            onTap: () {
-              reportIssue(context);
-            },
-          ),
           ListItemFactory.settingsItem(
             icon: ImagePaths.update,
             content: 'check_for_updates'.i18n,
