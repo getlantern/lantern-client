@@ -48,7 +48,9 @@ open class LanternApp : Application() {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         appContext = applicationContext
         session = LanternSessionManager(this)
-        Datadog.initialize()
+        if (!BuildConfig.DEBUG) {
+            Datadog.initialize()
+        }
         LanternProxySelector(session)
 
         if (session.isPlayVersion) inAppBilling = InAppBilling(this)
