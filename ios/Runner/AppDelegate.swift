@@ -19,8 +19,7 @@ import Toast_Swift
     var flutterViewController:FlutterViewController!
     var loadingIndicator: UIActivityIndicatorView!
 
-    
-    
+  
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
