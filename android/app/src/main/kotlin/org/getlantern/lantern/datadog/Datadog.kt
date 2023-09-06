@@ -21,7 +21,7 @@ import java.net.Proxy
 import java.util.concurrent.atomic.AtomicBoolean
 
 object Datadog {
-    private val tracedHosts = listOf(,
+    private val tracedHosts = listOf(
         "datadoghq.eu",
         "127.0.0.1",
     )
