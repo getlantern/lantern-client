@@ -37,6 +37,7 @@ if (flutterVersionName == null) {
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    namespace "org.getlantern.lantern"
     ndkVersion "23.0.7599858"
 
     bundle {
@@ -84,6 +85,7 @@ android {
     buildFeatures {
         viewBinding true
         dataBinding true
+        buildConfig true
     }
 
     compileSdkVersion rootProject.compileSdkVersion

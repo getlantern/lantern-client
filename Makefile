@@ -299,15 +299,13 @@ vault-secret-base64:
 
 dart-defines-debug:
 	@DART_DEFINES=$(shell make vault-secret-base64 VAULT_FIELD=INTERSTITIAL_AD_UNIT_ID VAULT_PATH=secret/googleAds); \
-	DART_DEFINES+=$(shell printf ',' && make vault-secret-base64 VAULT_FIELD=DD_APPLICATION_ID VAULT_PATH=secret/apps/datadog/android); \
-	DART_DEFINES+=$(shell printf ',' && make vault-secret-base64 VAULT_FIELD=DD_CLIENT_TOKEN VAULT_PATH=secret/apps/datadog/android); \
 	DART_DEFINES+=",$(CIBASE)"; \
 	echo "$$DART_DEFINES"
 
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines-debug` && \
-	CI="$$CI" && $(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
+	CI="$$CI" && $(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$(DEBUG_VERSION) \
 	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) \
 	-PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) \
