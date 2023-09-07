@@ -13,7 +13,6 @@ import com.datadog.android.rum.RumActionType
 import com.datadog.android.rum.RumErrorSource
 import com.datadog.android.rum.RumMonitor
 import com.datadog.android.rum.tracking.ActivityViewTrackingStrategy
-import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import java.net.InetSocketAddress
@@ -35,9 +34,9 @@ object Datadog {
         datadogConfig = createDatadogConfiguration()
 
         val datadogCredentials = Credentials(
-            clientToken = BuildConfig.DD_CLIENT_TOKEN,
+            clientToken = "puba617ab01333a95a25a9d3709f04e1654",
             envName = "prod",
-            rumApplicationId = BuildConfig.DD_APPLICATION_ID,
+            rumApplicationId = "f8eabf3c-5db3-4f7e-8e6a-5a72433b46d2",
             variant = "release",
             serviceName = "lantern-android",
         )
