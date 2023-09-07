@@ -124,6 +124,8 @@ jobs:
         env:
           DD_APPLICATION_ID: ${{ secrets.DD_APPLICATION_ID }}
           DD_CLIENT_TOKEN: ${{ secrets.DD_CLIENT_TOKEN }}
+          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DATADOG_SITE: datadoghq.eu
           INTERSTITIAL_AD_UNIT_ID: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           VERSION: "${{ env.version }}"
 
