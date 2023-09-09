@@ -53,6 +53,9 @@ class GooglePlayTest() : BaseTest() {
     @MethodSource("devices")
 	fun userJourneyTests(taskId: Int) {
 		driver = setupAndCreateConnection(taskId)
+		testEstablishPlaySession()
+		testGooglePlayFeatures()
+		testInstallAppPlayStore()
 	}
 
 	fun testEstablishPlaySession() {
