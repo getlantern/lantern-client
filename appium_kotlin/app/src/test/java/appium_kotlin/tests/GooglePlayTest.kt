@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
 import org.openqa.selenium.remote.DesiredCapabilities
+import java.net.URL
 import java.util.concurrent.TimeUnit
 
 class GooglePlayTest() : BaseTest() {
@@ -21,15 +22,29 @@ class GooglePlayTest() : BaseTest() {
     @ParameterizedTest
     @MethodSource("devices")
     fun userJourneyTests(taskId: Int) {
-        val driver = setupAndCreateConnection(taskId)
-        val capabilities = DesiredCapabilities()
+        var capabilities = initialCapabilities(taskId)
         capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, "com.android.vending")
         capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, ".AssetBrowserActivity")
         capabilities.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, ".AssetBrowserActivity")
         capabilities.setCapability(AndroidMobileCapabilityType.DEVICE_READY_TIMEOUT, 40)
+        var driver = initDriver(capabilities)
         testEstablishPlaySession(driver)
         testGooglePlayFeatures(driver)
-        installAppFromPlayStore(driver)
+        installAppFromPlayStore(taskId, driver)
+        println("Opening application")
+        driver.quit()
+        capabilities = installedAppCapabilities(taskId)
+        driver = initDriver(capabilities)
+        driver.launchApp()
+    }
+
+    fun initDriver(capabilities: DesiredCapabilities): AndroidDriver {
+    	val isLocalRun = checkLocalRun()
+        val url = serviceURL(isLocalRun)
+        return AndroidDriver(
+            URL(url),
+            capabilities,
+        )
     }
 
     fun testEstablishPlaySession(driver: AndroidDriver) {
@@ -61,7 +76,7 @@ class GooglePlayTest() : BaseTest() {
     }
 
     @Throws(Exception::class)
-    fun installAppFromPlayStore(driver: AndroidDriver) {
+    fun installAppFromPlayStore(taskId: Int, driver: AndroidDriver) {
         openSearchForm(driver)
         driver.findElement(MobileBy.className("android.widget.EditText"))?.sendKeys(testAppName)
 
@@ -71,19 +86,15 @@ class GooglePlayTest() : BaseTest() {
         if (button?.text.equals("Install")) {
             println("Installing application")
             button?.click()
-        } else {
-            println("Opening application")
-            button?.click()
         }
 
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
         driver.pressKey(KeyEvent(AndroidKey.HOME))
-        driver.closeApp()
     }
 
     @Throws(Exception::class)
-    fun installedAppCaps(): DesiredCapabilities {
-        val capabilities = DesiredCapabilities()
+    fun installedAppCapabilities(taskId: Int): DesiredCapabilities {
+        val capabilities = initialCapabilities(taskId)
         capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, testAppPackage)
         capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, testAppActivity)
         capabilities.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, testAppActivity)
