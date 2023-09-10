@@ -39,7 +39,7 @@ class GooglePlayTest() : BaseTest() {
     }
 
     fun initDriver(capabilities: DesiredCapabilities): AndroidDriver {
-    	val isLocalRun = checkLocalRun()
+        val isLocalRun = checkLocalRun()
         val url = serviceURL(isLocalRun)
         return AndroidDriver(
             URL(url),
