@@ -12,9 +12,9 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     // MARK: Dependencies
     let fileManager = FileManager.default
     let constants = Constants(process: .netEx)
-//    lazy var notificationsManager: UserNotificationsManager = {
-//        return UserNotificationsManager()
-//    }()
+    lazy var notificationsManager: UserNotificationsManager = {
+        return UserNotificationsManager()
+    }()
     let flashlightManager: FlashlightManager = .netExDefault
     
     // MARK: PacketFlow
@@ -175,7 +175,7 @@ extension PacketTunnelProvider: IosWriterProtocol {
 
             self?.bytesRead += readTotal
             if dataCap > 0 {
-//                self?.notificationsManager.scheduleDataCapLocalNotification(withDataLimit: dataCap)
+                self?.notificationsManager.scheduleDataCapLocalNotification(withDataLimit: dataCap)
                 //^ internally handles permission, "once a month" notification limit
             }
         }

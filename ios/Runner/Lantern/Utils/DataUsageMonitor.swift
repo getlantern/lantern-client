@@ -48,9 +48,7 @@ class DataUsageMonitor {
         guard fileMonitor == nil else {
             fatalError("Cannot start observing another file when already observing.")
         }
-
-        fileMonitor = FileWriteMonitor(withFilePath: quotaURL.path,
-                                       callback: callback)
+        fileMonitor = FileWriteMonitor(withFilePath: quotaURL.path,callback: callback)
         assert(fileMonitor != nil)
         fileMonitor?.startObservingFileChanges()
     }

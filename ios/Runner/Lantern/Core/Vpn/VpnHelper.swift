@@ -9,7 +9,6 @@ import UserNotifications
 import NetworkExtension
 import Internalsdk
 
-// TODO: add blurb
 class VpnHelper: NSObject {
     static let shared = VpnHelper(constants: Constants(process: .app),
                                 fileManager: .default,
@@ -69,7 +68,6 @@ class VpnHelper: NSObject {
     let flashlightManager: FlashlightManager
     let vpnManager: VPNBase
     let dataUsageMonitor: DataUsageMonitor
-    let userNotificationsManager: UserNotificationsManager
     var configFetchTimer: Timer!
     var hasConfiguredThisSession = false
 
@@ -96,9 +94,7 @@ class VpnHelper: NSObject {
 
         // Optionally injected, but otherwise generated dependencies
         self.dataUsageMonitor = dataUsageMonitor ?? DataUsageMonitor(quotaURL: constants.quotaURL)
-        let theUserNotificationsManager = userNotificationsManager ?? UserNotificationsManager()
-        self.userNotificationsManager = theUserNotificationsManager
-
+        
         configuring = true
         _state = .idle(nil)
         super.init()
@@ -111,10 +107,7 @@ class VpnHelper: NSObject {
     // MARK: Set Up
    func performAppSetUp() {
         // STARTUP OVERVIEW
-        // 1. set up notifications
-        userNotificationsManager.setNotificationCenterDelegate(self)
-        userNotificationsManager.requestNotificationsPermission { _ in }
-
+    
         // 2. set up files for flashlight
         createFilesForAppGoPackage()
 
@@ -224,8 +217,7 @@ class VpnHelper: NSObject {
             state = .idle(.invalidVPNState)
             stopVPN()
             return
-        }
-            state = newState
+        } state = newState
     }
 
     func translateVPNStatusToLanternState(_ status: NEVPNStatus) -> VpnHelper.VPNState {
@@ -390,17 +382,17 @@ extension VpnHelper: UNUserNotificationCenterDelegate {
 
     // MARK: Local Notifications
 
-    var notificationsEnabled: Bool {
-        return userNotificationsManager.notificationsEnabled
-    }
-
-    func getSystemNotificationAuthorization(completion: @escaping (UNAuthorizationStatus) -> Void) {
-        userNotificationsManager.getSystemNotificationAuthorization(completion: completion)
-    }
-
-    func toggleNotificationsEnabled() {
-        userNotificationsManager.notificationsEnabled = !userNotificationsManager.notificationsEnabled
-    }
+//    var notificationsEnabled: Bool {
+//        return userNotificationsManager.notificationsEnabled
+//    }
+//
+//    func getSystemNotificationAuthorization(completion: @escaping (UNAuthorizationStatus) -> Void) {
+//        userNotificationsManager.getSystemNotificationAuthorization(completion: completion)
+//    }
+//
+//    func toggleNotificationsEnabled() {
+//        userNotificationsManager.notificationsEnabled = !userNotificationsManager.notificationsEnabled
+//    }
 
     // MARK: UNUserNotificationCenterDelegate
 
@@ -435,7 +427,7 @@ extension VpnHelper {
 
 extension VpnHelper {
     // MARK: Pro
-var userID: Int {
+    var userID: Int {
         return self.userDefaults.integer(forKey: Constants.userID)
     }
 
