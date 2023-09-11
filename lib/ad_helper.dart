@@ -22,11 +22,11 @@ enum AdType { Google, CAS }
 const privacyPolicy = 'https://lantern.io/privacy';
 
 const googleAttributes = {
-  'provider': AdType.Google,
+  'provider': "Google",
 };
 
 const casAttributes = {
-  'provider': AdType.CAS,
+  'provider': "CAS",
 };
 
 class AdHelper {
