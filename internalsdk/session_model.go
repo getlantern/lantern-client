@@ -274,6 +274,7 @@ func (s *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 }
 
 func (s *SessionModel) UpdateStats(city string, country string, countryCode string, httpsUpgrades int, adsBlocked int, hasSucceedingProxy bool) error {
+	log.Debugf("UpdateStats called with city %v and country %v and code %v", city, country, countryCode)
 	err := pathdb.Mutate(s.db, func(tx pathdb.TX) error {
 		pathdb.Put[string](tx, SERVER_COUNTRY, country, "")
 		pathdb.Put[string](tx, SERVER_CITY, city, "")

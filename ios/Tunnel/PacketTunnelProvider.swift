@@ -4,7 +4,7 @@
 //
 
 import NetworkExtension
-import Ios
+import Internalsdk
 import os.log
 
 class PacketTunnelProvider: NEPacketTunnelProvider {
@@ -12,15 +12,14 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     // MARK: Dependencies
     let fileManager = FileManager.default
     let constants = Constants(process: .netEx)
-    lazy var notificationsManager: UserNotificationsManager = {
-        return UserNotificationsManager()
-    }()
+//    lazy var notificationsManager: UserNotificationsManager = {
+//        return UserNotificationsManager()
+//    }()
     let flashlightManager: FlashlightManager = .netExDefault
     
     // MARK: PacketFlow
     let tunIP = "10.66.66.1"
     let mtu = 1500
-
     var client: IosClientWriterProtocol?
     var bytesRead: Int = 0
     var bytesWritten: Int = 0
@@ -30,17 +29,14 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     override func startTunnel(options: [String : NSObject]?, completionHandler: @escaping (Error?) -> Void) {
         // this is our first life-cycle event; perform set up
         logMemoryUsage(tag: "Before starting flashlight")
-
         increaseFileLimit()
-
         createFilesForNetExGoPackage()
         let logError = flashlightManager.configureGoLoggerReturningError()
         if let error = logError {
             logger.error(error.localizedDescription)
             // crash the tunnel?
         }
-
-        // we have no way to discern if the User toggled VPN on in Settings :(
+            // we have no way to discern if the User toggled VPN on in Settings :(
         let reason = (options?[Constants.netExStartReasonKey] as? NSString) ?? "'On Demand'/Settings"
         logger.debug("startTunnel with reason: \(reason)")
 
@@ -51,7 +47,6 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
                 completionHandler(error)
                 return
             }
-
             self.startFlashlight(completionHandler)
         }
     }
@@ -180,7 +175,7 @@ extension PacketTunnelProvider: IosWriterProtocol {
 
             self?.bytesRead += readTotal
             if dataCap > 0 {
-                self?.notificationsManager.scheduleDataCapLocalNotification(withDataLimit: dataCap)
+//                self?.notificationsManager.scheduleDataCapLocalNotification(withDataLimit: dataCap)
                 //^ internally handles permission, "once a month" notification limit
             }
         }
@@ -190,7 +185,6 @@ extension PacketTunnelProvider: IosWriterProtocol {
 extension PacketTunnelProvider {
 
     // MARK: Tunnel Settings
-
     func generateTunnelNetworkSettings() -> NETunnelNetworkSettings {
         let remoteAddress = "0.0.0.0" // display use only
         let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: remoteAddress)
@@ -247,10 +241,8 @@ extension PacketTunnelProvider {
         }
 
         // create process-specific log files @ ~/netEx/lantern.log.#
-        let logURLs = fileManager.generateLogRotationURLs(count: Constants.defaultLogRotationFileCount,
-                                                              from: constants.goLogBaseURL)
+        let logURLs = fileManager.generateLogRotationURLs(count: Constants.defaultLogRotationFileCount, from: constants.goLogBaseURL)
         let success = fileManager.ensureFilesExist(at: logURLs)
-
         if !success {
             logger.error("Failed to create log URLs")
         }

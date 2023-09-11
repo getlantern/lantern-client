@@ -43,7 +43,7 @@ import Toast_Swift
         //Init Lantern Model
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
         //Init VPN Model
-        vpnModel=VpnModel(flutterBinary: flutterbinaryMessenger)
+        vpnModel=VpnModel(flutterBinary: flutterbinaryMessenger,vpnBase: VPNManager.appDefault)
     }
     
     

@@ -36,6 +36,21 @@ func (s *VpnModel) InvokeMethod(method string, arguments minisql.Values) (*minis
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
+	case "saveVpnStatus":
+		jsonString := arguments.Get(0)
+		err := saveVPNStatus(s.baseModel, jsonString.String())
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueBool(true), nil
+		}
+	case "getVpnStatus":
+		byte, err := getVPNStatus(s.baseModel)
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueString(byte), nil
+		}
 	default:
 		return s.baseModel.InvokeMethod(method, arguments)
 	}
@@ -57,6 +72,19 @@ func initVpnModel(m *baseModel) error {
 }
 
 func switchVPN(m *baseModel, status bool) error {
-
 	return nil
+}
+
+func saveVPNStatus(m *baseModel, status string) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put[string](tx, PATH_VPN_STATUS, status, "")
+		return nil
+	})
+	return err
+}
+
+func getVPNStatus(m *baseModel) (string, error) {
+	byte, err := m.db.Get(PATH_VPN_STATUS)
+	panicIfNecessary(err)
+	return string(byte), nil
 }

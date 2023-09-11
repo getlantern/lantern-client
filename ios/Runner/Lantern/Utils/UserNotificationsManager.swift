@@ -46,9 +46,13 @@ class UserNotificationsManager {
     }
 
     func requestNotificationsPermission(completion: @escaping (Bool) -> Void) {
-        center.requestAuthorization(options: [.provisional, .alert]) { [weak self] allowed, error in
-            self?.notificationsEnabled = allowed // + attempt to reflect system settings
-            completion(allowed)
+        if #available(iOS 12.0, *) {
+            center.requestAuthorization(options: [.provisional, .alert]) { [weak self] allowed, error in
+                self?.notificationsEnabled = allowed // + attempt to reflect system settings
+                completion(allowed)
+            }
+        } else {
+            // Fallback on earlier versions
         }
     }
 

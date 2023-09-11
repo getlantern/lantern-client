@@ -6,7 +6,7 @@
 import NetworkExtension
 import Network
 
-enum Error: Swift.Error {
+enum VPNManagerError: Swift.Error {
     case userDisallowedVPNConfigurations
     case loadingProviderFailed
     case savingProviderFailed
@@ -14,6 +14,7 @@ enum Error: Swift.Error {
 }
 
 class VPNManager: VPNBase {
+    
     static let appDefault = VPNManager(userDefaults: .standard)
 
     // This is used to determine if we have successfully set up a VPN configuration
@@ -36,8 +37,7 @@ class VPNManager: VPNBase {
         get { return userDefaults.bool(forKey: VPNManager.expectsSavedProviderDefaultsKey) }
         set { userDefaults.set(newValue, forKey: VPNManager.expectsSavedProviderDefaultsKey) }
     }
-
-
+  
     // MARK: Init
     private init(userDefaults: UserDefaults) {
         self.userDefaults = userDefaults
@@ -50,7 +50,7 @@ class VPNManager: VPNBase {
     }
 
     // MARK: NETunnelProviderManager Set Up
-    private func setUpProvider(completion: @escaping (Result<Void, Error>) -> Void) {
+    private func setUpProvider(completion: @escaping (Result<Void, VPNManagerError>) -> Void) {
         queue.async {
             VPNManager.loadSavedProvider { [weak self] result in
                 switch result {
@@ -70,7 +70,7 @@ class VPNManager: VPNBase {
         }
     }
 
-    private func createAndSaveNewProvider(_ completion: @escaping (Result<Void, Error>) -> Void) {
+    private func createAndSaveNewProvider(_ completion: @escaping (Result<Void, VPNManagerError>) -> Void) {
         let newManager = VPNManager.newProvider()
         VPNManager.saveThenLoadProvider(newManager) { [weak self] result in
             if result.isSuccess {
@@ -82,14 +82,14 @@ class VPNManager: VPNBase {
     }
 
     // MARK: Start VPN / Tunnel
-    func startTunnel(completion: @escaping (Result<Void, Error>) -> Void) {
+    func startTunnel(completion: @escaping (Result<Void, VPNManagerError>) -> Void) {
         guard let provider = self.providerManager else {
             setUpProvider { [weak self] result in
                 switch result {
                 case .success: // re-call
                     self?.startTunnel(completion: completion)
                 case .failure(let error): // complete
-                    completion(.failure(error))
+                    completion(.failure(error as! VPNManagerError))
                 }
             }
             return
@@ -166,7 +166,7 @@ class VPNManager: VPNBase {
 
     // MARK: Provider Management
 
-    static private func loadSavedProvider(_ completion: @escaping (Result<NETunnelProviderManager?, Error>) -> Void) {
+    static private func loadSavedProvider(_ completion: @escaping (Result<NETunnelProviderManager?, VPNManagerError>) -> Void) {
         // loadAllFromPreferences triggers VPNConfiguration permission prompt if not yet granted
         NETunnelProviderManager.loadAllFromPreferences { (savedManagers, error) in
             if error == nil {
@@ -178,7 +178,7 @@ class VPNManager: VPNBase {
     }
 
     // This function exists because of this thread: https://forums.developer.apple.com/thread/25928
-    static private func saveThenLoadProvider(_ provider: NETunnelProviderManager, _ completion: @escaping (Result<Void, Error>) -> Void) {
+    static private func saveThenLoadProvider(_ provider: NETunnelProviderManager, _ completion: @escaping (Result<Void, VPNManagerError>) -> Void) {
         provider.saveToPreferences { saveError in
             if let _ = saveError {
                 completion(.failure(.savingProviderFailed))
