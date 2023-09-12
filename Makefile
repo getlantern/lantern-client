@@ -293,19 +293,26 @@ vault-secret-%:
 	printf "$$SECRET"
 
 vault-secret-base64:
-	@SECRET=$(shell cd $(LANTERN_CLOUD) && bin/vault kv get -field=$(VAULT_FIELD) $(VAULT_PATH)); \
+	@set -e; \
+	trap 'echo "An error occurred while fetching the vault secret. Exiting..." >&2; exit 1' ERR; \
+	SECRET=$$(cd $(LANTERN_CLOUD) && bin/vault kv get -field=$(VAULT_FIELD) $(VAULT_PATH)); \
+	if [ -z "$$SECRET" ]; then echo "Error: Secret is empty or not set for VAULT_FIELD=$(VAULT_FIELD) and VAULT_PATH=$(VAULT_PATH)."; exit 1; fi; \
 	echo "Retrieved secret: $$SECRET" 1>&2; \
 	printf "$$VAULT_FIELD=$$SECRET" | ${BASE64}
 
 dart-defines-debug:
-	@DART_DEFINES=$(shell make vault-secret-base64 VAULT_FIELD=INTERSTITIAL_AD_UNIT_ID VAULT_PATH=secret/googleAds); \
-	DART_DEFINES+=$(shell printf ',' && make vault-secret-base64 VAULT_FIELD=DD_APPLICATION_ID VAULT_PATH=secret/apps/datadog/android); \
-	DART_DEFINES+=$(shell printf ',' && make vault-secret-base64 VAULT_FIELD=DD_CLIENT_TOKEN VAULT_PATH=secret/apps/datadog/android); \
+	@set -e; \
+	trap 'echo "An error occurred while setting DART_DEFINES. Exiting..." >&2; exit 1' ERR; \
+	DART_DEFINES=$$(make vault-secret-base64 VAULT_FIELD=INTERSTITIAL_AD_UNIT_ID VAULT_PATH=secret/googleAds); \
+	DART_DEFINES+=$$(printf ',' && make vault-secret-base64 VAULT_FIELD=DD_APPLICATION_ID VAULT_PATH=secret/apps/datadog/android); \
+	DART_DEFINES+=$$(printf ',' && make vault-secret-base64 VAULT_FIELD=DD_CLIENT_TOKEN VAULT_PATH=secret/apps/datadog/android); \
 	DART_DEFINES+=",$(CIBASE)"; \
 	echo "$$DART_DEFINES"
 
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
-	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
+	@set -e; \
+	trap 'echo "An error occurred during the android debug build process. Exiting..." >&2; exit 1' ERR; \
+	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines-debug` && \
 	CI="$$CI" && $(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
 	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) \
@@ -323,16 +330,22 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
 env-secret-%:
-	@SECRET=$(shell echo "$(${*})"); \
+	@set -e; \
+	trap 'echo "An error occurred while fetching the environment secret for ${*}. Exiting..." >&2; exit 1' ERR; \
+	SECRET=$(shell echo "$(${*})"); \
 	printf ${*}=$$SECRET | ${BASE64}
 
 dart-defines-release:
-	@DART_DEFINES=`make env-secret-INTERSTITIAL_AD_UNIT_ID`; \
+	@set -e; \
+	trap 'echo "An error occurred while setting DART_DEFINES for release. Exiting..." >&2; exit 1' ERR; \
+    @DART_DEFINES=`make env-secret-INTERSTITIAL_AD_UNIT_ID`; \
 	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
 	printf $$DART_DEFINES
 
 $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-datadog-ci
-	echo $(MOBILE_ANDROID_LIB) && \
+	@set -e; \
+	trap 'echo "An error occurred during the android release build process. Exiting..." >&2; exit 1' ERR; \
+    echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
