@@ -408,6 +408,7 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
                 // If user come here it mean user has all permissions needed
                 // Also user given permission for VPN service dialog as well
                 LanternApp.getSession().setHasFirstSessionCompleted(true)
+                sessionModel.checkAdsAvailability()
                 startActivityForResult(intent, REQUEST_VPN)
             }
         } else {

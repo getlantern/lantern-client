@@ -1,9 +1,9 @@
 package io.lantern.model
 
 import android.app.Activity
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Build
-import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import com.google.protobuf.ByteString
@@ -23,7 +23,6 @@ import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
-import org.getlantern.mobilesdk.model.IssueReporter
 import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
@@ -40,6 +39,7 @@ import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
+import org.getlantern.mobilesdk.model.IssueReporter
 import org.getlantern.mobilesdk.model.SessionManager
 
 /**
@@ -66,7 +66,11 @@ class SessionModel(
         const val PATH_USER_LEVEL = "userLevel"
 
         const val PATH_SPLIT_TUNNELING = "/splitTunneling"
+        const val SHOULD_SHOW_CAS_ADS = "shouldShowCASAds"
+        const val SHOULD_SHOW_GOOGLE_ADS = "shouldShowGoogleAds"
         const val PATH_APPS_DATA = "/appsData/"
+
+
     }
 
     init {
@@ -87,30 +91,43 @@ class SessionModel(
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
+            //By Default set it to false
+            tx.put(SHOULD_SHOW_GOOGLE_ADS, false)
+            tx.put(SHOULD_SHOW_CAS_ADS, false)
         }
         updateAppsData()
+        checkAdsAvailability()
     }
+
+    fun checkAdsAvailability() {
+        Logger.debug(TAG, "checkAdsAvailability called")
+        val googleAds = shouldShowAdsBasedRegion { LanternApp.getSession().shouldShowAdsEnabled() }
+        Logger.debug(TAG, "checkAdsAvailability with googleAds values $googleAds enable ${LanternApp.getSession().shouldShowAdsEnabled()}")
+        val casAds = shouldShowAdsBasedRegion { LanternApp.getSession().shouldCASShowAdsEnabled() }
+        Logger.debug(TAG, "checkAdsAvailability with cas values $googleAds enable ${LanternApp.getSession().shouldCASShowAdsEnabled()}")
+        db.mutate { tx ->
+            tx.put(SHOULD_SHOW_GOOGLE_ADS, googleAds)
+            tx.put(SHOULD_SHOW_CAS_ADS, casAds)
+        }
+    }
+
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
-            "shouldShowAds" -> {
-                result.success(shouldShowAdsBasedRegion {
-                    LanternApp.getSession().shouldShowAdsEnabled()
-                })
-            }
-            "shouldCASShowAds" -> {
-                result.success(shouldShowAdsBasedRegion {
-                    LanternApp.getSession().shouldCASShowAdsEnabled()
-                })
-            }
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "requestLinkCode" -> requestLinkCode(result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
-            "reportIssue" -> reportIssue(call.argument("email")!!, call.argument("issue")!!, call.argument("description")!!, result)
+            "reportIssue" -> reportIssue(
+                call.argument("email")!!,
+                call.argument("issue")!!,
+                call.argument("description")!!,
+                result
+            )
+
             "applyRefCode" -> paymentsUtil.applyRefCode(call.argument("refCode")!!, result)
             "redeemResellerCode" -> paymentsUtil.redeemResellerCode(
                 call.argument("email")!!,
@@ -158,12 +175,15 @@ class SessionModel(
                     activity.startActivity(intent)
                 }
             }
+
             "trackUserAction" -> {
                 Datadog.trackUserClick(call.argument("message")!!)
             }
+
             "acceptTerms" -> {
                 LanternApp.getSession().acceptTerms()
             }
+
             "setLanguage" -> {
                 LanternApp.getSession().setLanguage(call.argument("lang"))
             }
@@ -572,9 +592,18 @@ class SessionModel(
         )
     }
 
-    private fun reportIssue(email: String, issue: String, description: String, methodCallResult: MethodChannel.Result) {
+    private fun reportIssue(
+        email: String,
+        issue: String,
+        description: String,
+        methodCallResult: MethodChannel.Result
+    ) {
         if (!Utils.isNetworkAvailable(activity)) {
-            methodCallResult.error("errorReportingIssue", activity.getString(R.string.no_internet_connection), null)
+            methodCallResult.error(
+                "errorReportingIssue",
+                activity.getString(R.string.no_internet_connection),
+                null
+            )
             return
         }
         Logger.debug(TAG, "Reporting $issue issue on behalf of $email")
