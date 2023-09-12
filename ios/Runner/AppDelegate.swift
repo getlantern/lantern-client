@@ -6,35 +6,47 @@ import Toast_Swift
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
-    // List of channel and event method names
-    let NAVIGATION_METHOED_CHANNEL="lantern_method_channel"
     
-    var sessionModel:SessionModel!
-    var messagingModel:MessagingModel!
-    var lanternModel:LanternModel!
-    var vpnModel:VpnModel!
-    var flutterbinaryMessenger:FlutterBinaryMessenger!
-    var lanternMethodChannel:FlutterMethodChannel!
-    var navigationChannel:FlutterMethodChannel!
-    var flutterViewController:FlutterViewController!
-    var loadingIndicator: UIActivityIndicatorView!
-
-  
+    // Flutter Properties
+    var flutterViewController: FlutterViewController!
+    var flutterbinaryMessenger: FlutterBinaryMessenger!
+    
+    //  Model Properties
+    var sessionModel: SessionModel!
+    var messagingModel: MessagingModel!
+    var lanternModel: LanternModel!
+    var vpnModel: VpnModel!
+    var navigationModel: NavigationModel!
+    
+    //IOS
+    var loadingManager: LoadingIndicatorManager?
+    
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        flutterViewController  = window?.rootViewController as! FlutterViewController
-        flutterbinaryMessenger=flutterViewController.binaryMessenger
-        setupModels()
-        prepareChannel()
-        setupLocal()
-        createUser()
+        initializeFlutterComponents()
+        setupAppComponents()
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
+    //Flutter related stuff
+    private func initializeFlutterComponents() {
+        flutterViewController = window?.rootViewController as! FlutterViewController
+        flutterbinaryMessenger = flutterViewController.binaryMessenger
+    }
     
+    
+    //Intlize this GO model and callback
+    private func setupAppComponents() {
+        setupModels()
+        startUpSequency()
+        setupLoadingBar()
+    }
+    
+    
+    //Init all the models
     private func setupModels(){
         logger.log("setupModels method called")
         //Init Session Model
@@ -45,10 +57,17 @@ import Toast_Swift
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
         //Init VPN Model
         vpnModel=VpnModel(flutterBinary: flutterbinaryMessenger,vpnBase: VPNManager.appDefault)
+        //Init Navigation Model
+        navigationModel=NavigationModel(flutterBinary: flutterbinaryMessenger)
     }
     
+    // Post start up
+    // Init all method needed for user
     func startUpSequency()  {
-       askNotificationPermssion()
+        setupLocal()
+        createUser()
+        askNotificationPermssion()
+        
     }
     
     func askNotificationPermssion()  {
@@ -61,13 +80,11 @@ import Toast_Swift
         }
     }
     
-    
-    private func prepareChannel (){
-        logger.log("prepareChannel method called")
-        //Navigation Channel
-        navigationChannel=FlutterMethodChannel(name: NAVIGATION_METHOED_CHANNEL, binaryMessenger: flutterbinaryMessenger)
-        navigationChannel.setMethodCallHandler(handleNavigationethodCall)
+    func setupLoadingBar() {
+        loadingManager = LoadingIndicatorManager(parentView: flutterViewController.view)
+
     }
+    
     
     private func setupLocal(){
         let langStr = Locale.current.identifier
@@ -82,13 +99,13 @@ import Toast_Swift
     // Calling create API
     func createUser(){
         DispatchQueue.main.async {
-            self.showLoadingDialog()
+            self.loadingManager?.show()
         }
         DispatchQueue.global().async {
             let success = self.sessionModel.createUser(local: Locale.current.identifier)
             // After the API call is done, move back to the main thread to update UI
             DispatchQueue.main.async {
-                self.hideLoadingDialog()
+                self.loadingManager?.hide()
                 if success {
                     self.flutterViewController.view.makeToast("User Created")
                 } else {
@@ -98,35 +115,5 @@ import Toast_Swift
         }
         
     }
-    
-    
-    func handleNavigationethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        // Handle your method calls here
-        // The 'call' contains the method name and arguments
-        // The 'result' can be used to send back the data to Flutter
-         switch call.method {
-        case "yourMethod":
-            // handle yourMethod
-            break
-        default:
-            result(FlutterMethodNotImplemented)
-        }
-    }
-    
-    
-    //Todo-:Sprate this Loading indicator to new class for reuse
-    private func showLoadingDialog(){
-         loadingIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
-        loadingIndicator.center = flutterViewController.view.center
-        loadingIndicator.hidesWhenStopped = false
-        loadingIndicator.startAnimating()
-        flutterViewController.view.addSubview(loadingIndicator)
-    }
-    
-    private func hideLoadingDialog() {
-        loadingIndicator?.stopAnimating()
-        loadingIndicator?.removeFromSuperview()
-    }
-    
     
 }

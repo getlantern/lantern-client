@@ -42,6 +42,8 @@
 		03A1AB3A2AA890AB00FB41B2 /* Tunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 03A1AB302AA890AB00FB41B2 /* Tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		03A1AB422AA8930A00FB41B2 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB412AA8930A00FB41B2 /* Result.swift */; };
 		03A1AB442AA8946400FB41B2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB432AA8946400FB41B2 /* Constants.swift */; };
+		03F00B5D2AB07B3800E991E2 /* NavigationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F00B5C2AB07B3800E991E2 /* NavigationModel.swift */; };
+		03F00B5F2AB07C8000E991E2 /* LoadingIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */; };
 		03F2FE342A6949EF0082B34C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F2FE332A6949EF0082B34C /* Logger.swift */; };
 		03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */; };
 		03FAF1B22AA1C7940063580C /* RunningEnv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FAF1B12AA1C7940063580C /* RunningEnv.swift */; };
@@ -120,6 +122,8 @@
 		03A1AB372AA890AB00FB41B2 /* Tunnel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tunnel.entitlements; sourceTree = "<group>"; };
 		03A1AB412AA8930A00FB41B2 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		03A1AB432AA8946400FB41B2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		03F00B5C2AB07B3800E991E2 /* NavigationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NavigationModel.swift; path = Models/NavigationModel.swift; sourceTree = "<group>"; };
+		03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorManager.swift; sourceTree = "<group>"; };
 		03F2FE332A6949EF0082B34C /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BaseModel.swift; path = Models/BaseModel.swift; sourceTree = "<group>"; };
 		03FAF1B12AA1C7940063580C /* RunningEnv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningEnv.swift; sourceTree = "<group>"; };
@@ -252,6 +256,7 @@
 				03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */,
 				0369DF782A93803D000EBE43 /* MessagingModel.swift */,
 				03FAF1B32AA1E9F40063580C /* VpnModel.swift */,
+				03F00B5C2AB07B3800E991E2 /* NavigationModel.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -269,6 +274,7 @@
 				03FAF1B12AA1C7940063580C /* RunningEnv.swift */,
 				03A1AB432AA8946400FB41B2 /* Constants.swift */,
 				03567DBF2AA9F47200A233EA /* FileUtils.swift */,
+				03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -582,6 +588,7 @@
 				0321C3F92AA9D8DF00D462C1 /* FlashlightManager.swift in Sources */,
 				035BE7062A7122BC0084059A /* SessionModel.swift in Sources */,
 				036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */,
+				03F00B5D2AB07B3800E991E2 /* NavigationModel.swift in Sources */,
 				0308A1302AAEF3AA0086157A /* Event.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				03A1AB142AA88BDA00FB41B2 /* VPNManager.swift in Sources */,
@@ -592,6 +599,7 @@
 				03A1AB422AA8930A00FB41B2 /* Result.swift in Sources */,
 				035BE7052A7122BC0084059A /* LanternModel.swift in Sources */,
 				0308A1282AAEED7E0086157A /* VpnHelper.swift in Sources */,
+				03F00B5F2AB07C8000E991E2 /* LoadingIndicatorManager.swift in Sources */,
 				03026EA32A77D67A001D5507 /* ValueUtil.swift in Sources */,
 				03026EA12A77D654001D5507 /* Database.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
