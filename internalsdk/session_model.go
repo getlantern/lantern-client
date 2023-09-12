@@ -85,6 +85,14 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
+	case "getBandwidth":
+		limit, err := getBandwidthLimit(s.baseModel)
+		if err != nil {
+			return nil, err
+		} else {
+			return minisql.NewValueString(limit), nil
+		}
+
 	case "setDeviceId":
 		deviceID := arguments.Get(0)
 		err := setDeviceId(s.baseModel, deviceID.String())
@@ -292,6 +300,7 @@ func (s *SessionModel) SetStaging(stageing bool) error {
 }
 
 func (s *SessionModel) BandwidthUpdate(percent int, remaining int, allowed int, ttlSeconds int) error {
+	log.Debugf("BandwidthUpdate percent %v remaining %v allowed %v", percent, remaining, allowed)
 	pathdb.Mutate(s.db, func(tx pathdb.TX) error {
 		pathdb.Put[int](tx, LATEST_BANDWIDTH, percent, "")
 		return nil
@@ -300,6 +309,12 @@ func (s *SessionModel) BandwidthUpdate(percent int, remaining int, allowed int, 
 	//Here we are using eventBus to post or update UI
 	// Find way do it from go somehow
 	return nil
+}
+
+func getBandwidthLimit(m *baseModel) (string, error) {
+	percent, err := m.db.Get(LATEST_BANDWIDTH)
+	panicIfNecessary(err)
+	return string(percent), nil
 }
 
 func (s *SessionModel) Locale() (string, error) {

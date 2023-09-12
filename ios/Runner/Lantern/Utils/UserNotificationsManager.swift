@@ -6,19 +6,31 @@
 import Foundation
 import UserNotifications
 
-// TODO: add interface for mockability
-class UserNotificationsManager {
-    static let permissionDefaultsKey = "Lantern.NotificationPermission"
-    static let lastDataCapNotificationDefaultsKey = "Lantern.NotifyDataCapDate"
+class UserNotificationsManager:NSObject,UNUserNotificationCenterDelegate {
+    static let shared = UserNotificationsManager()
 
+    private static let lastDataCapNotificationDefaultsKey = "Lantern.NotifyDataCapDate"
+    let dataUsageUpdatedNotification = Notification.Name("Lantern.dataUsageUpdated")
     let center: UNUserNotificationCenter
     let userDefaults: UserDefaults
-
+    // Check if user has alerady notification permssion or not
     var notificationsEnabled: Bool {
-        // this is an internal-only flag; may not accurately reflect system Settings
-        get { return userDefaults.bool(forKey: UserNotificationsManager.permissionDefaultsKey) }
-        set { userDefaults.set(newValue, forKey: UserNotificationsManager.permissionDefaultsKey) }
+        get {
+            var isAuthorized = false
+            // This will ensure synchronous access to notification permission
+            let semaphore = DispatchSemaphore(value: 0)
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                if settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional {
+                    isAuthorized = true
+                }
+                semaphore.signal()
+            }
+            // Waiting for the completion handler of getNotificationSettings to complete
+            _ = semaphore.wait(timeout: .distantFuture)
+            return isAuthorized
+        }
     }
+
 
     private var notifiedDataCapThisMonth: Bool {
         guard let value = userDefaults.value(forKey: UserNotificationsManager.lastDataCapNotificationDefaultsKey),
@@ -34,40 +46,41 @@ class UserNotificationsManager {
         self.userDefaults = userDefaults
     }
 
-    func setNotificationCenterDelegate(_ delegate: UNUserNotificationCenterDelegate) {
-        // used by app-side to allow notifications while app is active (see AppDelegate.swift)
-        center.delegate = delegate
-    }
-
-    // MARK: Permissions
-
-    func getSystemNotificationAuthorization(completion: @escaping (UNAuthorizationStatus) -> Void) {
-        center.getNotificationSettings { completion($0.authorizationStatus) }
-    }
-
-    func requestNotificationsPermission(completion: @escaping (Bool) -> Void) {
-        if #available(iOS 12.0, *) {
-            center.requestAuthorization(options: [.provisional, .alert]) { [weak self] allowed, error in
-                self?.notificationsEnabled = allowed // + attempt to reflect system settings
-                completion(allowed)
-            }
-        } else {
-            // Fallback on earlier versions
-        }
-    }
+    func requestNotificationPermission(completion: @escaping (Bool) -> Void) {
+         center.getNotificationSettings { settings in
+             switch settings.authorizationStatus {
+             case .notDetermined:
+                 self.center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
+                     DispatchQueue.main.async {
+                         completion(granted)
+                     }
+                 }
+             case .denied:
+                 DispatchQueue.main.async {
+                     completion(false)
+                 }
+             case .authorized, .provisional:
+                 DispatchQueue.main.async {
+                     completion(true)
+                 }
+             default:
+                 DispatchQueue.main.async {
+                     completion(false)
+                 }
+             }
+         }
+     }
+    
 
     // MARK: Posting
-
     func scheduleDataCapLocalNotification(withDataLimit limit: Int) {
         guard notificationsEnabled, !notifiedDataCapThisMonth else { return }
-
         let content = localizedNotificationContent(withDataLimit: limit)
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: "Lantern.DataCap",
                                             content: content,
                                             trigger: trigger)
-
-        center.add(request) { [weak self] error in
+            center.add(request) { [weak self] error in
             if error == nil {
                 let key = UserNotificationsManager.lastDataCapNotificationDefaultsKey
                 self?.userDefaults.set(Date(), forKey: key)
@@ -75,6 +88,8 @@ class UserNotificationsManager {
         }
     }
 
+    // Todo:- Implement generic way to support multiple lang
+    // Same as Android
     func localizedNotificationContent(withDataLimit limit: Int) -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
 

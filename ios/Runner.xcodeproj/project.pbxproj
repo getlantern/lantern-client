@@ -16,8 +16,9 @@
 		0308A1302AAEF3AA0086157A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A12F2AAEF3AA0086157A /* Event.swift */; };
 		0308A1312AAEF3B00086157A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A12F2AAEF3AA0086157A /* Event.swift */; };
 		0308A1342AAEF5130086157A /* VPNBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB152AA88BF200FB41B2 /* VPNBase.swift */; };
-		0308A1382AAEF89C0086157A /* FlashlightManager+AppSide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A1372AAEF89C0086157A /* FlashlightManager+AppSide.swift */; };
 		0308A1392AAEF8DE0086157A /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
+		0308A13D2AAF39F80086157A /* FlashlightManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */; };
+		0308A13E2AAF43A10086157A /* UserNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A12B2AAEEE2C0086157A /* UserNotificationsManager.swift */; };
 		0321C3F72AA9D84700D462C1 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F62AA9D84700D462C1 /* Process.swift */; };
 		0321C3F92AA9D8DF00D462C1 /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
 		0321C3FB2AA9DC6E00D462C1 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A1AB312AA890AB00FB41B2 /* NetworkExtension.framework */; };
@@ -96,7 +97,7 @@
 		0308A12B2AAEEE2C0086157A /* UserNotificationsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNotificationsManager.swift; sourceTree = "<group>"; };
 		0308A12D2AAEEF410086157A /* Events.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
 		0308A12F2AAEF3AA0086157A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		0308A1372AAEF89C0086157A /* FlashlightManager+AppSide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FlashlightManager+AppSide.swift"; sourceTree = "<group>"; };
+		0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManagerExtension.swift; sourceTree = "<group>"; };
 		0321C3F62AA9D84700D462C1 /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManager.swift; sourceTree = "<group>"; };
 		032A43572AA6F8AA00EF442B /* DnsDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnsDetector.swift; sourceTree = "<group>"; };
@@ -175,6 +176,7 @@
 		033CBDCC2A94D86300DEBCBA /* Db */ = {
 			isa = PBXGroup;
 			children = (
+				03026EA22A77D67A001D5507 /* ValueUtil.swift */,
 				03026EA02A77D654001D5507 /* Database.swift */,
 				03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */,
 			);
@@ -184,6 +186,7 @@
 		03A1AB112AA88B8C00FB41B2 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				032A43562AA6F86A00EF442B /* Network */,
 				03A1AB402AA892F800FB41B2 /* Extension */,
 				03A1AB122AA88BB400FB41B2 /* Vpn */,
 			);
@@ -193,6 +196,7 @@
 		03A1AB122AA88BB400FB41B2 /* Vpn */ = {
 			isa = PBXGroup;
 			children = (
+				0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */,
 				0308A1272AAEED7E0086157A /* VpnHelper.swift */,
 				0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */,
 				03A1AB152AA88BF200FB41B2 /* VPNBase.swift */,
@@ -233,7 +237,6 @@
 			isa = PBXGroup;
 			children = (
 				03A1AB112AA88B8C00FB41B2 /* Core */,
-				032A43562AA6F86A00EF442B /* Network */,
 				033CBDCC2A94D86300DEBCBA /* Db */,
 				03F2FE322A6949C60082B34C /* Utils */,
 				03EE344A2A652B3D00E37100 /* Models */,
@@ -256,14 +259,12 @@
 		03F2FE322A6949C60082B34C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				0308A1372AAEF89C0086157A /* FlashlightManager+AppSide.swift */,
 				0308A12F2AAEF3AA0086157A /* Event.swift */,
 				0308A12D2AAEEF410086157A /* Events.swift */,
 				0308A12B2AAEEE2C0086157A /* UserNotificationsManager.swift */,
 				0308A1292AAEEDD90086157A /* DataUsageMonitor.swift */,
 				0321C3F62AA9D84700D462C1 /* Process.swift */,
 				03F2FE332A6949EF0082B34C /* Logger.swift */,
-				03026EA22A77D67A001D5507 /* ValueUtil.swift */,
 				036663D82A9E0C0E00595971 /* JsonUtils.swift */,
 				03FAF1B12AA1C7940063580C /* RunningEnv.swift */,
 				03A1AB432AA8946400FB41B2 /* Constants.swift */,
@@ -552,6 +553,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03567DBE2AA9F31200A233EA /* Logger.swift in Sources */,
+				0308A13E2AAF43A10086157A /* UserNotificationsManager.swift in Sources */,
 				0308A1312AAEF3B00086157A /* Event.swift in Sources */,
 				03A1AB352AA890AB00FB41B2 /* PacketTunnelProvider.swift in Sources */,
 				03567DBB2AA9F15100A233EA /* Constants.swift in Sources */,
@@ -583,7 +585,7 @@
 				0308A1302AAEF3AA0086157A /* Event.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				03A1AB142AA88BDA00FB41B2 /* VPNManager.swift in Sources */,
-				0308A1382AAEF89C0086157A /* FlashlightManager+AppSide.swift in Sources */,
+				0308A13D2AAF39F80086157A /* FlashlightManagerExtension.swift in Sources */,
 				03567DC02AA9F47200A233EA /* FileUtils.swift in Sources */,
 				03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */,
 				0308A12A2AAEEDD90086157A /* DataUsageMonitor.swift in Sources */,
@@ -805,6 +807,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Lantern;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -936,6 +939,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Lantern;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -962,6 +966,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Lantern;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

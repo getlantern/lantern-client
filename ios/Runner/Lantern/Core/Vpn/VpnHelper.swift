@@ -67,23 +67,21 @@ class VpnHelper: NSObject {
     let constants: Constants
     let flashlightManager: FlashlightManager
     let vpnManager: VPNBase
-    let dataUsageMonitor: DataUsageMonitor
     var configFetchTimer: Timer!
     var hasConfiguredThisSession = false
 
     var hasFetchedConfigOnce: Bool {
         return (userDefaults.value(forKey: VpnHelper.hasFetchedConfigDefaultsKey) as? Bool) ?? false
     }
-    // MARK: Init
-
+    
     init(constants: Constants,
          fileManager: FileManager,
          userDefaults: UserDefaults,
          notificationCenter: NotificationCenter,
          flashlightManager: FlashlightManager,
          vpnManager: VPNBase,
-         userNotificationsManager: UserNotificationsManager? = nil,
-         dataUsageMonitor: DataUsageMonitor? = nil) {
+         userNotificationsManager: UserNotificationsManager? = nil
+        ) {
 
         self.constants = constants
         self.fileManager = fileManager
@@ -92,9 +90,6 @@ class VpnHelper: NSObject {
         self.flashlightManager = flashlightManager
         self.vpnManager = vpnManager
 
-        // Optionally injected, but otherwise generated dependencies
-        self.dataUsageMonitor = dataUsageMonitor ?? DataUsageMonitor(quotaURL: constants.quotaURL)
-        
         configuring = true
         _state = .idle(nil)
         super.init()
@@ -108,13 +103,13 @@ class VpnHelper: NSObject {
    func performAppSetUp() {
         // STARTUP OVERVIEW
     
-        // 2. set up files for flashlight
+        // 1. set up files for flashlight
         createFilesForAppGoPackage()
+       // Todo Use new method we are using in Android
+       // 2. set up data usage monitor
+       //    dataUsageMonitor.startObservingDataUsageChanges(callback: handleDataUsageUpdated)
 
-        // 3. set up data usage monitor
-        dataUsageMonitor.startObservingDataUsageChanges(callback: handleDataUsageUpdated)
-
-        // 4. set up VPN manager
+        // 3. set up VPN manager
         vpnManager.didUpdateConnectionStatusCallback = handleVPNStatusUpdated
 
         logger.debug("Setting Go Log path to:\(constants.goLogBaseURL.path)")
@@ -128,14 +123,12 @@ class VpnHelper: NSObject {
     
     private func createFilesForAppGoPackage() {
         // where "~" is the shared app group container...
-
         // create process-specific directory @ ~/app
         do {
             try fileManager.ensureDirectoryExists(at: constants.targetDirectoryURL)
         } catch {
             logger.error("Failed to create directory @ \(constants.targetDirectoryURL.path)")
         }
-
         // create process-shared directory @ ~/config
         do {
             try fileManager.ensureDirectoryExists(at: constants.configDirectoryURL)
@@ -148,7 +141,6 @@ class VpnHelper: NSObject {
         if !configSuccess {
             logger.error("Failed to create config files")
         }
-
         // create process-specific log files @ ~/app/lantern.log.#
         var logURLs = fileManager.generateLogRotationURLs(count: Constants.defaultLogRotationFileCount, from: constants.goLogBaseURL)
         logURLs.append(constants.heapProfileURL)
@@ -177,7 +169,6 @@ class VpnHelper: NSObject {
     
     private func initiateConfigFetching(onError: ((Error) -> ())? = nil, onSuccess: (() -> ())? = nil) {
         configuring = true
-
         fetchConfig { [weak self] result in
             DispatchQueue.main.async {
                 self?.configuring = false
@@ -210,6 +201,7 @@ class VpnHelper: NSObject {
         vpnManager.stopTunnel()
     }
 
+    //Internal method for VPN status
     func handleVPNStatusUpdated(_ status: NEVPNStatus) {
         let newState = translateVPNStatusToLanternState(status)
         logger.debug("VPN status updated while \(state): \(newState)")
@@ -217,7 +209,8 @@ class VpnHelper: NSObject {
             state = .idle(.invalidVPNState)
             stopVPN()
             return
-        } state = newState
+        }
+        state = newState
     }
 
     func translateVPNStatusToLanternState(_ status: NEVPNStatus) -> VpnHelper.VPNState {
@@ -313,97 +306,6 @@ class VpnHelper: NSObject {
 }
 
 
-
-extension VpnHelper {
-    // MARK: Data Usage
-
-    static let dataUsageUpdatedNotification = Notification.Name("Lantern.dataUsageUpdated")
-
-    func handleDataUsageUpdated() {
-        // ONLY inform system that it has changed
-        // tunnel is responsible for posting user-facing notification
-        notificationCenter.post(name: VpnHelper.dataUsageUpdatedNotification, object: nil)
-    }
-
-    var dataCapIsPresent: Bool {
-        return dataUsageMonitor.dataCapIsPresent
-    }
-
-    var dataCapReached: Bool {
-        return !self.isPro && dataUsageMonitor.dataCapReached
-    }
-
-    func currentDataUsage() -> DataUsageMonitor.DataUsage? {
-        return dataUsageMonitor.dataUsage
-    }
-
-    func currentDataUsageAsString() -> String? {
-        return dataUsageMonitor.dataUsageStringValue
-    }
-}
-//
-//extension Lantern {
-//    // MARK: Submit Logs
-//
-//    enum UserIssue: String, CaseIterable {
-//        case slow
-//        case crashes
-//        case noAccess
-//        case other
-//
-//        var label: String {
-//            switch self {
-//                case .slow: return Text.Settings.Logs.issueSlow.localized
-//                case .crashes: return Text.Settings.Logs.issueCrashes.localized
-//                case .noAccess: return Text.Settings.Logs.issueNoAccess.localized
-//                case .other: return Text.Settings.Logs.issueOther.localized
-//            }
-//        }
-//
-//        fileprivate var mandrilDescription: String {
-//            return rawValue
-//        }
-//    }
-//
-//    func submitLogs(emailAddress: String, issue: UserIssue, completion: @escaping (Result<Void, Swift.Error>) -> ()) {
-//        flashlightManager.submitLogs(isPro: isPro, userID: userID, proToken: proToken, emailAddress: emailAddress, issueString: issue.mandrilDescription) { result in
-//            switch result {
-//            case .success:
-//                logger.debug("submitLogs succeeded: (\(emailAddress)) | app: \(Bundle.main.appVersion)")
-//            case .failure(let error):
-//                logger.error("submitLogs failed: \(error.localizedDescription)")
-//            }
-//            completion(result)
-//        }
-//    }
-//}
-
-extension VpnHelper: UNUserNotificationCenterDelegate {
-
-    // MARK: Local Notifications
-
-//    var notificationsEnabled: Bool {
-//        return userNotificationsManager.notificationsEnabled
-//    }
-//
-//    func getSystemNotificationAuthorization(completion: @escaping (UNAuthorizationStatus) -> Void) {
-//        userNotificationsManager.getSystemNotificationAuthorization(completion: completion)
-//    }
-//
-//    func toggleNotificationsEnabled() {
-//        userNotificationsManager.notificationsEnabled = !userNotificationsManager.notificationsEnabled
-//    }
-
-    // MARK: UNUserNotificationCenterDelegate
-
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        // allows app to present 'provisional' data cap alert while active
-        completionHandler(.alert)
-    }
-}
-
 extension VpnHelper {
     enum Error: Swift.Error {
         case unknown
@@ -413,17 +315,6 @@ extension VpnHelper {
     }
 }
 
-extension VpnHelper {
-    // MARK: PrivacyPolicy
-
-    var hasAcceptedPrivacyPolicy: Bool {
-        return self.userDefaults.integer(forKey: Constants.acceptedPrivacyPolicyVersion) >= Constants.currentPrivacyPolicyVersion
-    }
-
-    func markPrivacyPolicyAccepted() {
-        self.userDefaults.set(Constants.currentPrivacyPolicyVersion, forKey: Constants.acceptedPrivacyPolicyVersion)
-    }
-}
 
 extension VpnHelper {
     // MARK: Pro
@@ -451,122 +342,4 @@ extension VpnHelper {
 
         return true
     }
-
-   
-    func saveProCredentials(_ proCredentials: IosProCredentials) {
-        self.userDefaults.set(proCredentials.userID, forKey: Constants.userID)
-        self.userDefaults.set(proCredentials.proToken, forKey: Constants.proToken)
-    }
-
-    func setProStatus(v: Bool) {
-        self.userDefaults.set(v, forKey: Constants.isPro)
-    }
-
-    private func clearProCredentials() {
-        self.userDefaults.removeObject(forKey: Constants.proToken)
-        self.userDefaults.removeObject(forKey: Constants.userID)
-    }
-
-//    func isActiveProDevice(completion: @escaping (Result<Bool, Swift.Error>) -> ()) {
-//        flashlightManager.isActiveProDevice(userID: self.userID, proToken: self.proToken) { [weak self] result in
-//            switch result {
-//            case .success(let ok):
-//                logger.debug("isActiveProDevice succeeded: | app: \(Bundle.main.appVersion)")
-//                guard let self = self else { return }
-//
-//                if ok {
-//                    logger.debug("This user is an active pro user with userID \(self.userID) and token \(self.proToken ?? "")")
-//                    return
-//                }
-//
-//                logger.debug("This user is a NOT an active pro user with userID \(self.userID) and token \(self.proToken ?? "")")
-//                if self.state == .connected {
-//                    self.stopVPN()
-//                }
-//                self.clearProCredentials()
-//                self.setProStatus(v: false)
-//                // force a fresh config fetch next time we get here
-//                self.userDefaults.set(false, forKey: Lantern.hasFetchedConfigDefaultsKey)
-//                // immediately set up device linking
-//                self.requestDeviceLinkingCodeUntilAvailable()
-//            case .failure(let error):
-//                logger.error("isActiveProDevice failed: \(error.localizedDescription)")
-//            }
-//            completion(result)
-//        }
-//    }
-//
-//    func requestDeviceLinkingCode(completion: @escaping (Result<String, Swift.Error>) -> ()) {
-//        logger.debug("requestDeviceLinkingCode called")
-//
-//        flashlightManager.requestDeviceLinkingCode() { result in
-//            switch result {
-//            case .success:
-//                logger.debug("requestDeviceLinkingCode succeeded: | app: \(Bundle.main.appVersion)")
-//            case .failure(let error):
-//                logger.error("requestDeviceLinkingCode failed: \(error.localizedDescription)")
-//            }
-//            completion(result)
-//        }
-//    }
-//
-//    func requestDeviceLinkingCodeUntilAvailable(delaySeconds: Double = 5) {
-//        if isPro {
-//            // already pro, no need to mess with device codes
-//            return
-//        }
-//
-//        requestDeviceLinkingCode { result in
-//            switch result {
-//            case .success(let code):
-//                self.supportCode = code
-//            case .failure:
-//                // backoff
-//                var nextDelay = delaySeconds * 2
-//                if nextDelay > 300 {
-//                    nextDelay = 300
-//                }
-//                DispatchQueue.main.asyncAfter(deadline: .now() + delaySeconds) {
-//                    self.requestDeviceLinkingCodeUntilAvailable(delaySeconds: nextDelay)
-//                }
-//            }
-//        }
-//    }
-//
-//    func validateDeviceLinkingCode(_ code: String, canceler: IosCanceler?, completion: @escaping (Result<IosProCredentials?, Swift.Error>) -> ()) {
-//        flashlightManager.validateDeviceLinkingCode(code, canceler: canceler) { [weak self] result in
-//            switch result {
-//            case .success(let proCredentials):
-//                switch proCredentials {
-//                case .some:
-//                    logger.debug("validateDeviceLinkingCode succeeded: (\(code)) | app: \(Bundle.main.appVersion)")
-//                    self?.saveProCredentials(proCredentials!)
-//                    self?.supportCode = ""
-//                    completion(result)
-//                case .none:
-//                    logger.debug("validateDeviceLinkingCode canceled: (\(code)) | app: \(Bundle.main.appVersion)")
-//                    completion(Result<IosProCredentials?, Swift.Error>.success(.none))
-//                }
-//            case .failure(let error):
-//                logger.error("validateDeviceLinkingCode failed: \(error.localizedDescription)")
-//                completion(result)
-//            }
-//        }
-//    }
-//
-//    func redeemResellerCode(userID: Int, proToken: String, emailAddress: String, resellerCode: String, currency: String, completion: @escaping (Result<Void, Swift.Error>) -> ()) {
-//        flashlightManager.redeemResellerCode(userID: userID, proToken: proToken, emailAddress: emailAddress, resellerCode: resellerCode, currency: currency, completion: completion)
-//    }
-//
-//    func userCreate(_ completion: @escaping (Result<IosProCredentials?, Swift.Error>) -> ()) {
-//        // If we already have it, just return that instead of making a new one
-//        if self.userID != 0 && self.proToken != nil && self.proToken?.isEmpty == false {
-//            let a = IosProCredentials.init()
-//            a.proToken = self.proToken!
-//            a.userID = self.userID
-//            completion(.success(a))
-//            return
-//        }
-//        flashlightManager.userCreate(completion: completion)
-//    }
 }

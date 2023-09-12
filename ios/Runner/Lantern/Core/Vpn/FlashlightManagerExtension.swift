@@ -7,12 +7,10 @@ import Foundation
 import UIKit
 import Internalsdk
 
-// TODO: add interface for mockability
+
 extension FlashlightManager {
-
     // MARK: Config
-
-    func fetchConfig(userID: Int, proToken: String?, excludedIPsURL: URL? = nil, refreshProxies: Bool, _ completion: ((Result<Bool, Error>) -> Void)? = nil) {
+  func fetchConfig(userID: Int, proToken: String?, excludedIPsURL: URL? = nil, refreshProxies: Bool, _ completion: ((Result<Bool, Error>) -> Void)? = nil) {
         var configError: NSError?
         let configDirectory = constants.configDirectoryURL.path
         let deviceID = UIDevice.current.identifierForVendor!.uuidString
@@ -45,5 +43,4 @@ extension FlashlightManager {
         // TODO: investigate: does this have to happen on goQueue?
         queue.async(execute: workItem)
     }
-
 }

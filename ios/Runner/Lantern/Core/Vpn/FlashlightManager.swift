@@ -9,8 +9,7 @@ import Internalsdk
 import UIKit
 
 
-// Any and all interaction with Go will run through FlashlightManager.
-// See FlashlightManager+AppSide.swift for app-specific functionality.
+
 class FlashlightManager {
     static let `appDefault` = FlashlightManager(constants: .appDefault)
     static let `netExDefault` = FlashlightManager(constants: .netExDefault)
@@ -31,8 +30,7 @@ class FlashlightManager {
     var hasCheckedForUpdate = false
     
     // MARK: Go Logging
-    
-    func configureGoLoggerReturningError() -> Error? {
+     func configureGoLoggerReturningError() -> Error? {
         var error: NSError?
         IosConfigureFileLogging(constants.goLogBaseURL.path, constants.targetDirectoryURL.path, &error)
         return error

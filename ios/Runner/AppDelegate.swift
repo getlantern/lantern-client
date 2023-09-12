@@ -34,6 +34,7 @@ import Toast_Swift
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
+    
     private func setupModels(){
         logger.log("setupModels method called")
         //Init Session Model
@@ -44,6 +45,20 @@ import Toast_Swift
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
         //Init VPN Model
         vpnModel=VpnModel(flutterBinary: flutterbinaryMessenger,vpnBase: VPNManager.appDefault)
+    }
+    
+    func startUpSequency()  {
+       askNotificationPermssion()
+    }
+    
+    func askNotificationPermssion()  {
+        UserNotificationsManager.shared.requestNotificationPermission { granted in
+            if granted {
+                logger.debug("Notification Permssion is granted")
+            } else {
+                logger.debug("Notification Permssion is denied")
+            }
+        }
     }
     
     

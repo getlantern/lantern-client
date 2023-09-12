@@ -11,7 +11,9 @@ import Flutter
 
 class SessionModel:BaseModel<InternalsdkSessionModel> {
     var flutterbinaryMessenger:FlutterBinaryMessenger
- 
+    lazy var notificationsManager: UserNotificationsManager = {
+        return UserNotificationsManager()
+    }()
     init(flutterBinary:FlutterBinaryMessenger) {
         self.flutterbinaryMessenger=flutterBinary
         super.init(type: .sessionModel , flutterBinary: self.flutterbinaryMessenger)
@@ -25,6 +27,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
        storeVersion()
        setDeviceId()
        setDNS()
+       getBandwidth()
     }
     
    
@@ -124,6 +127,31 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
                  logger.log("Sucessfully set device ID \(deviceId) ")
             }catch{
                 logger.log("Error while setting deevice ID")
+            }
+        }
+    }
+    
+    
+    func getBandwidth(){
+         let miniSqlValue =  ValueUtil.convertToMinisqlValue("")
+        if(miniSqlValue != nil){
+            do {
+                let result = try  invokeMethodOnGo(name: "getBandwidth", argument: miniSqlValue!)
+                let newValue = ValueUtil.convertFromMinisqlValue(from: result)
+                //If value is not null mean user has alerady start using bandwith
+                // We will get that value from Go
+                if((newValue as! String) != ""){
+                    let limit = newValue as! Int
+                    if(limit==100){
+                        // if user has reached limit show the notificaiton
+                        notificationsManager.scheduleDataCapLocalNotification(withDataLimit: limit)
+                    }
+                }else{
+                    
+                }
+                logger.log("Sucessfully getbandwidth  \(newValue)")
+            }catch{
+                logger.log("Error while getting bandwidth")
             }
         }
     }

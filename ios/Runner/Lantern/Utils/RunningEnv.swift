@@ -6,7 +6,6 @@
 
 import Foundation
 
-
 func isRunningFromAppStore() -> Bool {
     let file = "\(NSHomeDirectory())/iTunesMetadata.plist"
     if FileManager.default.fileExists(atPath: file) {
