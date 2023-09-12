@@ -161,16 +161,6 @@ class SessionModel extends Model {
         .invokeMethod('getCountryCode', <String, dynamic>{});
   }
 
-  Future<bool> shouldShowAds() async {
-    return await methodChannel
-        .invokeMethod('shouldShowAds', <String, dynamic>{});
-  }
-
-  Future<bool> shouldCASShowAds() async {
-    return await methodChannel
-        .invokeMethod('shouldCASShowAds', <String, dynamic>{});
-  }
-
   Future<void> setLanguage(String lang) {
     return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
       'lang': lang,
@@ -210,6 +200,20 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('setSelectedTab', <String, dynamic>{
       'tab': tab,
     });
+  }
+
+  Widget shouldShowGoogleAds(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>(
+      'shouldShowGoogleAds',
+      builder: builder,
+    );
+  }
+
+  Widget shouldShowCASAds(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>(
+      'shouldShowCASAds',
+      builder: builder,
+    );
   }
 
   Widget selectedTab(ValueWidgetBuilder<String> builder) {

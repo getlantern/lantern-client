@@ -543,6 +543,7 @@ class MainActivity :
                 //If user come here it mean user has all permissions needed
                 // Also user given permission for VPN service dialog as well
                 LanternApp.getSession().setHasFirstSessionCompleted(true)
+                sessionModel.checkAdsAvailability()
                 updateStatus(true)
                 startVpnService()
             }
@@ -606,6 +607,7 @@ class MainActivity :
                 // this mean user has already given
                 // system permissions
                 LanternApp.getSession().setHasFirstSessionCompleted(true)
+                sessionModel.checkAdsAvailability()
             }
 
         }
