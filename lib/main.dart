@@ -19,8 +19,8 @@ Future<void> main() async {
 Future<void> _initGoogleMobileAds() async {
   await MobileAds.instance.initialize();
   await MobileAds.instance.setAppMuted(true);
-  await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ['D79728264130CE0918737B5A2178D362']));
-  MobileAds.instance.openAdInspector((p0) {
-    print('ad error $p0');
-  });
+  // await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ['D79728264130CE0918737B5A2178D362']));
+  // MobileAds.instance.openAdInspector((p0) {
+  //   print('ad error $p0');
+  // });
 }
