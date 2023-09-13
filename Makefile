@@ -87,6 +87,8 @@ BINARIES_BRANCH ?= main
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
+## secrets Keys
+INTERSTITIAL_AD_UNIT=***REMOVED***
 ## vault secrets
 VAULT_DD_SECRETS_PATH ?= secret/apps/datadog/android
 VAULT_ADS_SECRETS_PATH ?= secret/googleAds
@@ -281,7 +283,6 @@ $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 .PHONY: android-lib
 android-lib: $(MOBILE_ANDROID_LIB)
 
-
 $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@$(GRADLE) -PandroidArch=$(ANDROID_ARCH) \
 		-PandroidArchJava="$(ANDROID_ARCH_JAVA)" \
@@ -303,9 +304,7 @@ vault-secret-base64:
 dart-defines-debug:
 	@set -e; \
 	trap 'echo "An error occurred while setting DART_DEFINES. Exiting..." >&2; exit 1' ERR; \
-	DART_DEFINES=$$(make vault-secret-base64 VAULT_FIELD=INTERSTITIAL_AD_UNIT_ID VAULT_PATH=secret/googleAds); \
-	DART_DEFINES+=$$(printf ',' && make vault-secret-base64 VAULT_FIELD=DD_APPLICATION_ID VAULT_PATH=secret/apps/datadog/android); \
-	DART_DEFINES+=$$(printf ',' && make vault-secret-base64 VAULT_FIELD=DD_CLIENT_TOKEN VAULT_PATH=secret/apps/datadog/android); \
+	DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$(INTERSTITIAL_AD_UNIT)" | ${BASE64}); \
 	DART_DEFINES+=",$(CIBASE)"; \
 	echo "$$DART_DEFINES"
 
@@ -321,53 +320,6 @@ do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	-PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PdevelopmentMode="true" \
 	-Pci=$(CI) -b $(MOBILE_DIR)/app/build.gradle assembleProdDebug
 
-dart-defines-ci:
-	@set -e; \
-	trap 'echo "An error occurred while setting DART_DEFINES. Exiting..." >&2; exit 1' ERR; \
-	GOOGLEADSID=${INTERSTITIAL_AD_UNIT}; \
-	if [ -z "$$GOOGLEADSID" ]; then \
-		echo "Error: INTERSTITIAL_AD_UNIT is not set." >&2; \
-		exit 1; \
-	fi; \
-	DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$$GOOGLEADSID" | ${BASE64}); \
-	DDAPPID=${DD_APPLICATION_ID}; \
-    	if [ -z "$$DDAPPID" ]; then \
-    		echo "Error: DD_APPLICATION_ID is not set." >&2; \
-    		exit 1; \
-    	fi; \
-	DART_DEFINES+=",`printf "DD_APPLICATION_ID=$$DDAPPID" | ${BASE64}`"; \
-	DDCLIENTTOKEN=${DD_CLIENT_TOKEN}; \
-		if [ -z "$$DDCLIENTTOKEN" ]; then \
-			echo "Error: DD_CLIENT_TOKEN is not set." >&2; \
-			exit 1; \
-		fi; \
-	DART_DEFINES+=",`printf "DD_CLIENT_TOKEN=$$DDCLIENTTOKEN" | ${BASE64}`"; \
-	CI64=${CI}; \
-	DART_DEFINES+=",`printf "CI=$$CI64" | ${BASE64}`"; \
-	echo $$DART_DEFINES
-
-do-android-ci: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
-	@set -e; \
-	trap 'echo "An error occurred during the android debug build process. Exiting..." >&2; exit 1' ERR; \
-	ln -fs $(MOBILE_DIR)/gradle.properties . && \
-	DART_DEFINES=`make dart-defines-ci` && \
-	CI="$$CI" && $(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
-	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) \
-	-PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
-	-PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) \
-	-PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PdevelopmentMode="true" \
-	-Pci=$(CI) -b $(MOBILE_DIR)/app/build.gradle assembleProdDebug
-
-
-install-android-ci:
-	@if [ ! -f $(APK_PATH) ]; then \
-		echo "APK not found. Building..."; \
-		make do-android-ci; \
-	fi; \
-	echo "Installing APK..."; \
-	$(ADB) uninstall $(MOBILE_APPID); \
-	$(ADB) install -r $(CI_APK_PATH)
-
 pubget:
 	@flutter pub get
 
@@ -376,24 +328,14 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-#env-secret-%:
-#	@SECRET=${*}; \
-#	if [ -z "$$SECRET" ]; then \
-#		echo "Error: Environment secret for ${*} is not set." >&2; \
-#		exit 1; \
-#	fi; \
-#	echo "Key: ${*}, Value: $$SECRET before base64"; \
-#	printf "${*}=$$SECRET" | ${BASE64}
-
 dart-defines-release:
 	@set -e; \
 	trap 'echo "An error occurred while setting DART_DEFINES. Exiting..." >&2; exit 1' ERR; \
-	GOOGLEADSID=${INTERSTITIAL_AD_UNIT}; \
-	if [ -z "$$GOOGLEADSID" ]; then \
-		echo "Error: INTERSTITIAL_AD_UNIT is not set." >&2; \
-		exit 1; \
-	fi; \
-	DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$$GOOGLEADSID" | ${BASE64}); \
+	if [ -z "$(INTERSTITIAL_AD_UNIT)" ]; then \
+    		echo "Error: INTERSTITIAL_AD_UNIT is not found." >&2; \
+    		exit 1; \
+    	fi; \
+	DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$(INTERSTITIAL_AD_UNIT)" | ${BASE64}); \
 	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
 	echo $$DART_DEFINES
 
