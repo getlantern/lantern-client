@@ -289,31 +289,9 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		-b $(MOBILE_DIR)/app/build.gradle \
 		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
-vault-secret-%:
-	@SECRET=$(shell cd $(LANTERN_CLOUD) && bin/vault kv get -field=${*} ${VAULT_DD_SECRETS_PATH}); \
-	printf "$$SECRET"
-
-vault-secret-base64:
-	@set -e; \
-	trap 'echo "An error occurred while fetching the vault secret. Exiting..." >&2; exit 1' ERR; \
-	SECRET=$$(cd $(LANTERN_CLOUD) && bin/vault kv get -field=$(VAULT_FIELD) $(VAULT_PATH)); \
-	if [ -z "$$SECRET" ]; then echo "Error: Secret is empty or not set for VAULT_FIELD=$(VAULT_FIELD) and VAULT_PATH=$(VAULT_PATH)."; exit 1; fi; \
-	echo "Retrieved secret: $$SECRET" 1>&2; \
-	printf "$$VAULT_FIELD=$$SECRET" | ${BASE64}
-
-dart-defines-debug:
-	@set -e; \
-	trap 'echo "An error occurred while setting DART_DEFINES. Exiting..." >&2; exit 1' ERR; \
-	DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$(INTERSTITIAL_AD_UNIT)" | ${BASE64}); \
-	DART_DEFINES+=",$(CIBASE)"; \
-	echo "$$DART_DEFINES"
-
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
-	@set -e; \
-	trap 'echo "An error occurred during the android debug build process. Exiting..." >&2; exit 1' ERR; \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
-	DART_DEFINES=`make dart-defines-debug` && \
-	CI="$$CI" && $(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
+	CI="$$CI" && $(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
 	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) \
 	-PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) \
@@ -328,17 +306,6 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-dart-defines-release:
-	@set -e; \
-	trap 'echo "An error occurred while setting DART_DEFINES. Exiting..." >&2; exit 1' ERR; \
-	if [ -z "$(INTERSTITIAL_AD_UNIT)" ]; then \
-    		echo "Error: INTERSTITIAL_AD_UNIT is not found." >&2; \
-    		exit 1; \
-    	fi; \
-	DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$(INTERSTITIAL_AD_UNIT)" | ${BASE64}); \
-	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
-	echo $$DART_DEFINES
-
 $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-datadog-ci
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
@@ -349,10 +316,9 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	VERSION_CODE="$$VERSION_CODE" && \
 	DEVELOPMENT_MODE="$$DEVELOPMENT_MODE" && \
-	DART_DEFINES=`make dart-defines-release` && \
-	$(GRADLE) -PlanternVersion=$$VERSION -Pdart-defines="$$DART_DEFINES" -PlanternRevisionDate=$(REVISION_DATE) \
-	-PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) \
-	-PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
+	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) \
+	-PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
+	-Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle assembleProdSideload && \
 	DATADOG_API_KEY=4901456bb88bbf1dc7799eab7d4f71ae DATADOG_SITE=datadoghq.eu datadog-ci flutter-symbols upload --service-name lantern-android --dart-symbols-location build/app/intermediates/merged_native_libs/prodSideload/out/lib \
 	--android-mapping-location build/app/outputs/mapping/prodSideload/mapping.txt --android-mapping --ios-dsyms && \
