@@ -164,7 +164,7 @@ GO_SOURCES := go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
 
 
-.PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
+.PHONY: dumpvars packages vendor android-debug android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
 # dumpvars prints out all variables defined in the Makefile, useful for debugging environment
 dumpvars:
@@ -289,29 +289,13 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		-b $(MOBILE_DIR)/app/build.gradle \
 		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
-vault-secret-%:
-	@SECRET=$(shell cd $(LANTERN_CLOUD) && bin/vault kv get -field=${*} ${VAULT_DD_SECRETS_PATH}); \
-	printf "$$SECRET"
-
-vault-secret-base64:
-	@set -e; \
-	trap 'echo "An error occurred while fetching the vault secret. Exiting..." >&2; exit 1' ERR; \
-	SECRET=$$(cd $(LANTERN_CLOUD) && bin/vault kv get -field=$(VAULT_FIELD) $(VAULT_PATH)); \
-	if [ -z "$$SECRET" ]; then echo "Error: Secret is empty or not set for VAULT_FIELD=$(VAULT_FIELD) and VAULT_PATH=$(VAULT_PATH)."; exit 1; fi; \
-	echo "Retrieved secret: $$SECRET" 1>&2; \
-	printf "$$VAULT_FIELD=$$SECRET" | ${BASE64}
-
 dart-defines-debug:
-	@set -e; \
-	trap 'echo "An error occurred while setting DART_DEFINES. Exiting..." >&2; exit 1' ERR; \
-	DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$(INTERSTITIAL_AD_UNIT)" | ${BASE64}); \
+	@DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$(INTERSTITIAL_AD_UNIT)" | ${BASE64}); \
 	DART_DEFINES+=",$(CIBASE)"; \
 	echo "$$DART_DEFINES"
 
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
-	@set -e; \
-	trap 'echo "An error occurred during the android debug build process. Exiting..." >&2; exit 1' ERR; \
-	ln -fs $(MOBILE_DIR)/gradle.properties . && \
+	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines-debug` && \
 	CI="$$CI" && $(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
 	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) \
@@ -329,9 +313,7 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
 dart-defines-release:
-	@set -e; \
-	trap 'echo "An error occurred while setting DART_DEFINES. Exiting..." >&2; exit 1' ERR; \
-	if [ -z "$(INTERSTITIAL_AD_UNIT)" ]; then \
+	@if [ -z "$(INTERSTITIAL_AD_UNIT)" ]; then \
     		echo "Error: INTERSTITIAL_AD_UNIT is not found." >&2; \
     		exit 1; \
     	fi; \
