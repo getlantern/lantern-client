@@ -329,23 +329,27 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-env-secret-%:
-	@set -e; \
-	trap 'echo "An error occurred while fetching the environment secret for ${*}. Exiting..." >&2; exit 1' ERR; \
-	SECRET=$(shell echo "$(${*})"); \
-	printf ${*}=$$SECRET | ${BASE64}
+#env-secret-%:
+#	@SECRET=${*}; \
+#	if [ -z "$$SECRET" ]; then \
+#		echo "Error: Environment secret for ${*} is not set." >&2; \
+#		exit 1; \
+#	fi; \
+#	echo "Key: ${*}, Value: $$SECRET before base64"; \
+#	printf "${*}=$$SECRET" | ${BASE64}
 
 dart-defines-release:
-	@set -e; \
-	trap 'echo "An error occurred while setting DART_DEFINES for release. Exiting..." >&2; exit 1' ERR; \
-    @DART_DEFINES=`make env-secret-INTERSTITIAL_AD_UNIT_ID`; \
+	@GOOGLEADSID=${INTERSTITIAL_AD_UNIT}; \
+	if [ -z "$$GOOGLEADSID" ]; then \
+		echo "Error: INTERSTITIAL_AD_UNIT is not set." >&2; \
+		exit 1; \
+	fi; \
+	DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$$GOOGLEADSID" | ${BASE64}); \
 	DART_DEFINES+=`printf ',' && $(CIBASE)`; \
-	printf $$DART_DEFINES
+	echo $$DART_DEFINES
 
 $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-datadog-ci
-	@set -e; \
-	trap 'echo "An error occurred during the android release build process. Exiting..." >&2; exit 1' ERR; \
-    echo $(MOBILE_ANDROID_LIB) && \
+	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
@@ -363,6 +367,7 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	--android-mapping-location build/app/outputs/mapping/prodSideload/mapping.txt --android-mapping --ios-dsyms && \
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
+
 
 $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-datadog-ci
 	@mkdir -p ~/.gradle && \
