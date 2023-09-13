@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logger/logger.dart';
 import 'package:lantern/common/datadog.dart';
+import 'package:lantern/replica/common.dart';
 
 enum AdType { Google, CAS }
 
