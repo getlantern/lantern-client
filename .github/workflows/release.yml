@@ -89,7 +89,7 @@ jobs:
           java-version: 11
 
       - name: Setup protoc
-        uses: arduino/setup-protoc@v2.1.0
+        uses: arduino/setup-protoc@v2
         with:
           repo-token: ${{ secrets.GH_TOKEN }}
 
