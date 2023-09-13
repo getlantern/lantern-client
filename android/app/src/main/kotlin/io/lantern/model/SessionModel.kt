@@ -91,9 +91,6 @@ class SessionModel(
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
-            //By Default set it to false
-            tx.put(SHOULD_SHOW_GOOGLE_ADS, false)
-            tx.put(SHOULD_SHOW_CAS_ADS, false)
         }
         updateAppsData()
         checkAdsAvailability()
