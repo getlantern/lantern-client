@@ -53,7 +53,7 @@ class AdHelper {
   // return 'ca-app-pub-3940256099942544/1033173712';
   String get interstitialAdUnitId {
     if (Platform.isAndroid) {
-      return const String.fromEnvironment('INTERSTITIAL_AD_UNIT_ID');
+      return '***REMOVED***';
     } else {
       throw UnsupportedError('Unsupported platform');
     }
