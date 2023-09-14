@@ -86,9 +86,10 @@ class VpnModel : BaseModel<InternalsdkVpnModel> {
     }
     
     func startVPN(){
+        self.saveVPNStatus(status: "connected")
         vpnHelper.startVPN( onError: { error in
             // in case of error, reset switch position
-            // opportunity to present error here as well
+            self.saveVPNStatus(status: "disconnected")
             logger.debug("VPN not started \(error)")
         },onSuccess: {
             logger.debug("VPN started")

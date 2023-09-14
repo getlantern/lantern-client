@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
@@ -65,6 +66,9 @@ func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
 	model := &SessionModel{base.(*baseModel)}
 	return model, nil
 }
+
+// TO check if session model implemnets all method or not
+// var s Session = &SessionModel{}
 
 func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
 	switch method {
@@ -227,15 +231,16 @@ func setDeviceId(m *baseModel, deviceID string) error {
 	return err
 }
 
-func (s *SessionModel) GetDeviceID() string {
+func (s *SessionModel) GetDeviceID() (string, error) {
+
 	byte, err := s.baseModel.db.Get(DEVICE_ID)
 	panicIfNecessary(err)
 	//Todo Find better way to deserialize the values
 	// Also fine generic way
-	return string(byte)
+	return string(byte), nil
 }
 
-func (s *SessionModel) GetUserID() string {
+func (s *SessionModel) GetUserID() (int64, error) {
 	paymentTestMode, err := s.baseModel.db.Get(PAYMENT_TEST_MODE)
 	panicIfNecessary(err)
 	//Todo find way to deserialize the values
@@ -244,14 +249,23 @@ func (s *SessionModel) GetUserID() string {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
 		// payment providers' test endpoints.
-		return "9007199254740992L"
+
+		i64, err := strconv.ParseInt("9007199254740992L", 10, 64)
+		if err != nil {
+			return 0, err
+		}
+		return i64, nil
 	} else {
 		userId, err := s.baseModel.db.Get(USER_ID)
 		panicIfNecessary(err)
-		return string(userId)
+		i64, err := strconv.ParseInt(string(userId), 10, 64)
+		if err != nil {
+			return 0, err
+		}
+		return i64, nil
 	}
 }
-func (s *SessionModel) GetToken() string {
+func (s *SessionModel) GetToken() (string, error) {
 	paymentTestMode, err := s.baseModel.db.Get(PAYMENT_TEST_MODE)
 	panicIfNecessary(err)
 	//Todo find way to deserialize the values
@@ -260,11 +274,11 @@ func (s *SessionModel) GetToken() string {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
 		// payment providers' test endpoints.
-		return "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA"
+		return "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA", nil
 	} else {
 		userId, err := s.baseModel.db.Get(TOKEN)
 		panicIfNecessary(err)
-		return string(userId)
+		return string(userId), nil
 	}
 }
 func (s *SessionModel) SetCountry(country string) error {
@@ -299,16 +313,13 @@ func (s *SessionModel) SetStaging(stageing bool) error {
 	return nil
 }
 
-func (s *SessionModel) BandwidthUpdate(percent int, remaining int, allowed int, ttlSeconds int) error {
+func (s *SessionModel) BandwidthUpdate(percent int, remaining int, allowed int) error {
 	log.Debugf("BandwidthUpdate percent %v remaining %v allowed %v", percent, remaining, allowed)
-	pathdb.Mutate(s.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(s.db, func(tx pathdb.TX) error {
 		pathdb.Put[int](tx, LATEST_BANDWIDTH, percent, "")
 		return nil
 	})
-
-	//Here we are using eventBus to post or update UI
-	// Find way do it from go somehow
-	return nil
+	return err
 }
 
 func getBandwidthLimit(m *baseModel) (string, error) {
@@ -471,13 +482,12 @@ func setProUser(m *baseModel, isPro bool) error {
 	return nil
 }
 
-func (s *SessionModel) SetReplicaAddr(replicaAddr string) error {
+func (s *SessionModel) SetReplicaAddr(replicaAddr string) {
 	pathdb.Mutate(s.db, func(tx pathdb.TX) error {
 		//For now force replicate to disbale it
 		pathdb.Put[string](tx, REPLICA_ADDR, "", "")
 		return nil
 	})
-	return nil
 }
 
 func (s *SessionModel) ForceReplica() bool {

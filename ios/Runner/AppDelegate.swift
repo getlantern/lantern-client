@@ -6,11 +6,9 @@ import Toast_Swift
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
-    
-    // Flutter Properties
+     // Flutter Properties
     var flutterViewController: FlutterViewController!
     var flutterbinaryMessenger: FlutterBinaryMessenger!
-    
     //  Model Properties
     var sessionModel: SessionModel!
     var messagingModel: MessagingModel!
@@ -82,7 +80,6 @@ import Toast_Swift
     
     func setupLoadingBar() {
         loadingManager = LoadingIndicatorManager(parentView: flutterViewController.view)
-
     }
     
     
