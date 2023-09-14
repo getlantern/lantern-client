@@ -289,9 +289,17 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		-b $(MOBILE_DIR)/app/build.gradle \
 		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
+dart-defines-debug:
+	@set -e; \
+	trap 'echo "An error occurred while setting DART_DEFINES. Exiting..." >&2; exit 1' ERR; \
+	DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$(INTERSTITIAL_AD_UNIT)" | ${BASE64}); \
+	DART_DEFINES+=",$(CIBASE)"; \
+	echo "$$DART_DEFINES"
+
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
-	CI="$$CI" && $(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
+	DART_DEFINES=`make dart-defines-debug` && \
+  	 CI="$$CI" && $(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
 	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) \
 	-PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) \
