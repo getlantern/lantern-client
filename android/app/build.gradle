@@ -200,8 +200,6 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
-            buildConfigField "String", "DD_CLIENT_TOKEN", ddClientToken()
-            buildConfigField "String", "DD_APPLICATION_ID", ddApplicationID()
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "SIGNING_CERTIFICATE_SHA256", "\"\""
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
@@ -220,8 +218,6 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
-            buildConfigField "String", "DD_CLIENT_TOKEN", ddClientToken()
-            buildConfigField "String", "DD_APPLICATION_ID", ddApplicationID()
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "SIGNING_CERTIFICATE_SHA256", "\"108f612ae55354078ec12b10bb705362840d48fa78b9262c11b6d0adeff6f289\""
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
