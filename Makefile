@@ -290,10 +290,7 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
 dart-defines-debug:
-	@set -e; \
-	trap 'echo "An error occurred while setting DART_DEFINES. Exiting..." >&2; exit 1' ERR; \
-	DART_DEFINES=$$(printf "INTERSTITIAL_AD_UNIT_ID=$(INTERSTITIAL_AD_UNIT)" | ${BASE64}); \
-	DART_DEFINES+=",$(CIBASE)"; \
+	DART_DEFINES="$(CIBASE)"; \
 	echo "$$DART_DEFINES"
 
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
