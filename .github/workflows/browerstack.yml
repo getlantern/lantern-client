@@ -57,6 +57,8 @@ jobs:
         run: make android-lib ANDROID_ARCH=all
 
       - name: Build APK
+        env: |
+          CI: "true"
         run: |
           flutter pub get
           echo "CI=true" >> $GITHUB_ENV
