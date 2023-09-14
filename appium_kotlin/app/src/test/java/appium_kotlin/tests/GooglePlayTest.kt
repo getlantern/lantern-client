@@ -1,5 +1,7 @@
 package appium_kotlin.tests
 
+import appium_kotlin.ContextType
+import appium_kotlin.LANTERN_PACKAGE_ID
 import io.appium.java_client.MobileBy
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.nativekey.AndroidKey
@@ -10,6 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
 import org.openqa.selenium.remote.DesiredCapabilities
+import pro.truongsinh.appium_flutter.FlutterFinder
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
@@ -22,12 +25,16 @@ class GooglePlayTest() : BaseTest() {
     @ParameterizedTest
     @MethodSource("devices")
     fun userJourneyTests(taskId: Int) {
+        var driver = setupAndCreateConnection(taskId)
+        val flutterFinder = FlutterFinder(driver)
+        turnVPNon(driver, taskId, flutterFinder)
+
         var capabilities = initialCapabilities(taskId)
         capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, "com.android.vending")
         capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, ".AssetBrowserActivity")
         capabilities.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, ".AssetBrowserActivity")
         capabilities.setCapability(AndroidMobileCapabilityType.DEVICE_READY_TIMEOUT, 40)
-        var driver = initDriver(capabilities)
+        driver = initDriver(capabilities)
         testEstablishPlaySession(driver)
         testGooglePlayFeatures(driver)
         installAppFromPlayStore(taskId, driver)
@@ -36,6 +43,29 @@ class GooglePlayTest() : BaseTest() {
         capabilities = installedAppCapabilities(taskId)
         driver = initDriver(capabilities)
         driver.launchApp()
+    }
+
+    fun turnVPNon(
+        driver: AndroidDriver,
+        taskId: Int,
+        flutterFinder: FlutterFinder,
+    ) {
+        switchToContext(ContextType.NATIVE_APP, driver)
+        driver.activateApp(LANTERN_PACKAGE_ID)
+        Thread.sleep(5000)
+
+
+        switchToContext(ContextType.FLUTTER, driver)
+        val vpnSwitchFinder = flutterFinder.byType("FlutterSwitch")
+        vpnSwitchFinder.click()
+        Thread.sleep(2000)
+        // Approve VPN Permissions dialog
+        switchToContext(ContextType.NATIVE_APP, driver)
+        Thread.sleep(1000)
+        driver.findElement(By.id("android:id/button1")).click()
+        //Wait for VPN to connect
+        println("TaskId: $taskId | Going to Sleep")
+        Thread.sleep(2000)
     }
 
     fun initDriver(capabilities: DesiredCapabilities): AndroidDriver {
