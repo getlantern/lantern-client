@@ -89,9 +89,9 @@ jobs:
           java-version: 11
 
       - name: Setup protoc
-        uses: arduino/setup-protoc@v1.2.0
+        uses: arduino/setup-protoc@v2
         with:
-          version: '3.x'
+          repo-token: ${{ secrets.GH_TOKEN }}
 
       - name: Activate protoc-gen-dart plugin
         run: |
@@ -126,7 +126,7 @@ jobs:
           DD_CLIENT_TOKEN: ${{ secrets.DD_CLIENT_TOKEN }}
           DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
           DATADOG_SITE: datadoghq.eu
-          INTERSTITIAL_AD_UNIT_ID: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
+          INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           VERSION: "${{ env.version }}"
 
       - uses: actions/upload-artifact@v3

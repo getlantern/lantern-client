@@ -91,15 +91,21 @@ class SessionModel(
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
-            //By Default set it to false
-            tx.put(SHOULD_SHOW_GOOGLE_ADS, false)
-            tx.put(SHOULD_SHOW_CAS_ADS, false)
         }
         updateAppsData()
         checkAdsAvailability()
     }
 
     fun checkAdsAvailability() {
+        //This check is just safe guard
+        //So if something goes wrong in backend we should not show ads to pro users at any case
+        if(LanternApp.getSession().isProUser){
+            db.mutate { tx ->
+                tx.put(SHOULD_SHOW_GOOGLE_ADS, false)
+                tx.put(SHOULD_SHOW_CAS_ADS, false)
+            }
+            return
+        }
         Logger.debug(TAG, "checkAdsAvailability called")
         val googleAds = shouldShowAdsBasedRegion { LanternApp.getSession().shouldShowAdsEnabled() }
         Logger.debug(TAG, "checkAdsAvailability with googleAds values $googleAds enable ${LanternApp.getSession().shouldShowAdsEnabled()}")

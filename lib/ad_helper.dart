@@ -10,6 +10,7 @@ import 'package:clever_ads_solutions/public/InitializationListener.dart';
 import 'package:clever_ads_solutions/public/MediationManager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:logger/logger.dart';
 import 'package:lantern/common/datadog.dart';
 import 'package:lantern/replica/common.dart';
 
@@ -24,6 +25,10 @@ const googleAttributes = {
 const casAttributes = {
   'provider': "CAS",
 };
+
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
 
 class AdHelper {
   static final AdHelper _instance = AdHelper._internal();
@@ -48,7 +53,7 @@ class AdHelper {
   // return 'ca-app-pub-3940256099942544/1033173712';
   String get interstitialAdUnitId {
     if (Platform.isAndroid) {
-      return const String.fromEnvironment('INTERSTITIAL_AD_UNIT_ID');
+      return 'ca-app-pub-2685698271254859/9922829329';
     } else {
       throw UnsupportedError('Unsupported platform');
     }
