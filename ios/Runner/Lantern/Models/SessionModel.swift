@@ -8,36 +8,58 @@
 import Foundation
 import Internalsdk
 import Flutter
+import UIKit
 
 class SessionModel:BaseModel<InternalsdkSessionModel> {
     var flutterbinaryMessenger:FlutterBinaryMessenger
     lazy var notificationsManager: UserNotificationsManager = {
         return UserNotificationsManager()
     }()
+    
+    
     init(flutterBinary:FlutterBinaryMessenger) {
         self.flutterbinaryMessenger=flutterBinary
         super.init(type: .sessionModel , flutterBinary: self.flutterbinaryMessenger)
         initializeAppSettings()
     }
     
-   func initializeAppSettings(){
-       setTimeZone()
-       setReferalCode()
-       initializeSessionModel()
-       storeVersion()
-       setDeviceId()
-       setDNS()
-       getBandwidth()
+    func initializeAppSettings(){
+        setTimeZone()
+        setReferalCode()
+        initializeSessionModel()
+        storeVersion()
+        setDeviceId()
+        setDNS()
+        getBandwidth()
+        startService()
+
     }
     
-   
+    func startService(){
+        do{
+            let configDir = configDirFor( suffix: "service")
+            var error: NSError?
+            
+            (model as InternalsdkSessionModel).startService(configDir, locale: "en", settings: Settings())
+            if error != nil {
+                logger.error("Getting error setting up server")
+                return
+            }
+        } catch{
+            logger.error("Getting error setting up server")
+        }
+        logger.error("Service Started successfully")
+        
+    }
+    
+    
     override func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
-            // Convert the entire arguments to a single MinisqlValue
+        // Convert the entire arguments to a single MinisqlValue
         guard let minisqlValue = ValueUtil.convertToMinisqlValue(call.arguments) else {
-               result(FlutterError(code: "ARGUMENTS_ERROR", message: "Failed to convert arguments to MinisqlValue", details: nil))
-               return
-           }
-         do {
+            result(FlutterError(code: "ARGUMENTS_ERROR", message: "Failed to convert arguments to MinisqlValue", details: nil))
+            return
+        }
+        do {
             let invocationResult = try invokeMethodOnGo(name: call.method, argument: minisqlValue)
             
             if let originalValue = ValueUtil.convertFromMinisqlValue(from: invocationResult as! MinisqlValue) {
@@ -60,14 +82,16 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
                 result(FlutterError(code: "UNKNOWN_ERROR", message: error.localizedDescription, details: nil))
             }
         }
-     }
+    }
     
     
     private func initializeSessionModel(){
         let initData: [String: [String: Any]]  = [
             "developmentMode": ["type": ValueUtil.TYPE_BOOL, "value": true],
             "playVersion": ["type": ValueUtil.TYPE_BOOL, "value": true],
-            "prouser": ["type": ValueUtil.TYPE_BOOL, "value": false]
+            "prouser": ["type": ValueUtil.TYPE_BOOL, "value": false],
+            "paymentTestMode": ["type": ValueUtil.TYPE_BOOL, "value": false],
+            
         ]
         guard let jsonString = JsonUtil.convertToJSONString(initData) else {
             logger.log("Failed to convert initializationData to JSON")
@@ -92,10 +116,10 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
                 let result = try  invokeMethodOnGo(name: "createUser", argument: miniSqlValue!)
                 var converedResult = ValueUtil.convertFromMinisqlValue(from: result)
                 if(converedResult as! Bool){
+                    logger.log("User Created \(converedResult)")
                     return true
                 }
                 return false
-                logger.log("User Created \(converedResult)")
             }catch{
                 logger.log("Error while create user")
             }
@@ -110,7 +134,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         if(miniSqlValue != nil){
             do {
                 let result = try  invokeMethodOnGo(name: "setTimeZone", argument: miniSqlValue!)
-                 logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
+                logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
             }catch{
                 logger.log("Error while setting timezone")
             }
@@ -124,7 +148,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         if(miniSqlValue != nil){
             do {
                 let result = try  invokeMethodOnGo(name: "setTimeZone", argument: miniSqlValue!)
-                 logger.log("Sucessfully set device ID \(deviceId) ")
+                logger.log("Sucessfully set device ID \(deviceId) ")
             }catch{
                 logger.log("Error while setting deevice ID")
             }
@@ -133,7 +157,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     
     
     func getBandwidth(){
-         let miniSqlValue =  ValueUtil.convertToMinisqlValue("")
+        let miniSqlValue =  ValueUtil.convertToMinisqlValue("")
         if(miniSqlValue != nil){
             do {
                 let result = try  invokeMethodOnGo(name: "getBandwidth", argument: miniSqlValue!)
@@ -161,7 +185,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         if(miniSqlValue != nil){
             do {
                 let result = try  invokeMethodOnGo(name: "setReferalCode", argument: miniSqlValue!)
-                 logger.log("Sucessfully set ReferalCode result \(result)")
+                logger.log("Sucessfully set ReferalCode result \(result)")
             }catch{
                 logger.log("Error while setting ReferalCode")
             }
@@ -174,7 +198,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         if(miniSqlValue != nil){
             do {
                 let result = try  invokeMethodOnGo(name: "setStoreVersion", argument: miniSqlValue!)
-                 logger.log("This is app store version \(result)")
+                logger.log("This is app store version \(result)")
             }catch{
                 logger.log("Error while setting storeVersion")
             }
@@ -182,13 +206,13 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     }
     
     
-
+    
     func setForceCountry(countryCode:String){
         let countryMiniSql =  ValueUtil.convertToMinisqlValue(countryCode)
         if(countryMiniSql != nil){
             do {
                 let result = try  invokeMethodOnGo(name: "setForceCountry", argument: countryMiniSql!)
-                 logger.log("Sucessfully set force country")
+                logger.log("Sucessfully set force country")
             }catch{
                 logger.log("Error while setting  up forceCountry")
             }
@@ -201,7 +225,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         if(langSqlValue != nil){
             do {
                 let result = try  invokeMethodOnGo(name: "setLocal", argument: langSqlValue!)
-                 logger.log("Sucessfully set Local result \(result)")
+                logger.log("Sucessfully set Local result \(result)")
             }catch{
                 logger.log("Error while setting Local")
             }
@@ -214,14 +238,14 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         if(miniSqlValue != nil){
             do {
                 let result = try  invokeMethodOnGo(name: "setTimeZone", argument: miniSqlValue!)
-                 logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
+                logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
             }catch{
                 logger.log("Error while setting timezone")
             }
         }
     }
     
-   
+    
     
     
     // Todo:- Move this method base model
@@ -231,6 +255,44 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         return goResult
     }
     
+    
+    public func configDirFor(suffix: String) -> String {
+        let filesDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileURL = filesDirectory.appendingPathComponent(".lantern" + suffix)
+
+        if !FileManager.default.fileExists(atPath: fileURL.path) {
+            do {
+                try FileManager.default.createDirectory(at: fileURL, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+
+        return fileURL.path
+    }
+    
+    
 }
 
+
+
+class Settings :NSObject, InternalsdkSettingsProtocol{
+    func getHttpProxyHost() -> String {
+        return "127.0.0.1"
+    }
+    
+    func getHttpProxyPort() -> Int {
+        return 49125
+    }
+    
+    func stickyConfig() -> Bool {
+       return false
+    }
+    
+    func timeoutMillis() -> Int {
+        return 60000
+    }
+    
+    
+}
 

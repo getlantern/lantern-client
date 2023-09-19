@@ -1,7 +1,10 @@
 package internalsdk
 
 import (
+	"encoding/binary"
 	"encoding/json"
+	"fmt"
+	"math"
 	"reflect"
 
 	"github.com/getlantern/pathdb"
@@ -104,4 +107,12 @@ func convertValueToSupportedTypes(rawValue interface{}) interface{} {
 		convertedValue = rawValue
 	}
 	return convertedValue
+}
+
+func BytesToFloat64LittleEndian(b []byte) (float64, error) {
+	if len(b) != 8 {
+		return 0, fmt.Errorf("expected 8 bytes but got %d", len(b))
+	}
+	bits := binary.LittleEndian.Uint64(b)
+	return math.Float64frombits(bits), nil
 }

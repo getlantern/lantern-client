@@ -5,8 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strconv"
 
+	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )
@@ -68,7 +71,7 @@ func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
 }
 
 // TO check if session model implemnets all method or not
-// var s Session = &SessionModel{}
+var s Session = &SessionModel{}
 
 func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
 	switch method {
@@ -212,6 +215,21 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 	}
 }
 
+// Internal functions that manage method
+func (s *SessionModel) StartService(configDir string,
+	locale string,
+	settings Settings) {
+
+	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
+
+	//Setup login
+	session := &panickingSessionImpl{s}
+	startOnce.Do(func() {
+		go run(configDir, locale, settings, session)
+	})
+
+}
+
 // InvokeMethod handles method invocations on the SessionModel.
 func initSessionModel(m *baseModel, jsonString string) error {
 	// Init few path for startup
@@ -232,7 +250,6 @@ func setDeviceId(m *baseModel, deviceID string) error {
 }
 
 func (s *SessionModel) GetDeviceID() (string, error) {
-
 	byte, err := s.baseModel.db.Get(DEVICE_ID)
 	panicIfNecessary(err)
 	//Todo Find better way to deserialize the values
@@ -240,16 +257,19 @@ func (s *SessionModel) GetDeviceID() (string, error) {
 	return string(byte), nil
 }
 
+// Todo There is some issue with user id changeing it value
+// When  Coverting from bytes to Float
 func (s *SessionModel) GetUserID() (int64, error) {
 	paymentTestMode, err := s.baseModel.db.Get(PAYMENT_TEST_MODE)
-	panicIfNecessary(err)
+	if err != nil {
+		return 0, err
+	}
 	//Todo find way to deserialize the values
 	paymentTestModeStr := string(paymentTestMode)
-	if paymentTestModeStr == "true" {
+	if paymentTestModeStr == "true" && paymentTestModeStr != "" {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
 		// payment providers' test endpoints.
-
 		i64, err := strconv.ParseInt("9007199254740992L", 10, 64)
 		if err != nil {
 			return 0, err
@@ -257,11 +277,15 @@ func (s *SessionModel) GetUserID() (int64, error) {
 		return i64, nil
 	} else {
 		userId, err := s.baseModel.db.Get(USER_ID)
-		panicIfNecessary(err)
-		i64, err := strconv.ParseInt(string(userId), 10, 64)
 		if err != nil {
 			return 0, err
 		}
+		userId = userId[1:]
+		newUserId, err := BytesToFloat64LittleEndian(userId)
+		if err != nil {
+			return 0, err
+		}
+		i64 := int64(newUserId)
 		return i64, nil
 	}
 }
@@ -295,13 +319,15 @@ func (s *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 	return nil
 }
 
-func (s *SessionModel) UpdateStats(city string, country string, countryCode string, httpsUpgrades int, adsBlocked int, hasSucceedingProxy bool) error {
-	log.Debugf("UpdateStats called with city %v and country %v and code %v", city, country, countryCode)
+// Keep name as p1,p2,p3.....
+// Name become part of Objective c so this is important
+func (s *SessionModel) UpdateStats(p0 string, p1 string, p2 string, p3 int, p4 int, p5 bool) error {
+	log.Debugf("UpdateStats called with city %v and country %v and code %v", p0, p1, p2)
 	err := pathdb.Mutate(s.db, func(tx pathdb.TX) error {
-		pathdb.Put[string](tx, SERVER_COUNTRY, country, "")
-		pathdb.Put[string](tx, SERVER_CITY, city, "")
-		pathdb.Put[string](tx, SERVER_COUNTRY_CODE, countryCode, "")
-		pathdb.Put[bool](tx, HAS_SUCCEEDING_PROXY, hasSucceedingProxy, "")
+		pathdb.Put[string](tx, SERVER_COUNTRY, p1, "")
+		pathdb.Put[string](tx, SERVER_CITY, p0, "")
+		pathdb.Put[string](tx, SERVER_COUNTRY_CODE, p2, "")
+		pathdb.Put[bool](tx, HAS_SUCCEEDING_PROXY, p5, "")
 		// Not using ads blocked any more
 		return nil
 	})
@@ -313,10 +339,12 @@ func (s *SessionModel) SetStaging(stageing bool) error {
 	return nil
 }
 
-func (s *SessionModel) BandwidthUpdate(percent int, remaining int, allowed int) error {
-	log.Debugf("BandwidthUpdate percent %v remaining %v allowed %v", percent, remaining, allowed)
+// Keep name as p1,p2,p3.....
+// Name become part of Objective c so this is important
+func (s *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
+
 	err := pathdb.Mutate(s.db, func(tx pathdb.TX) error {
-		pathdb.Put[int](tx, LATEST_BANDWIDTH, percent, "")
+		pathdb.Put[int](tx, LATEST_BANDWIDTH, p1, "")
 		return nil
 	})
 	return err
@@ -610,12 +638,16 @@ func userCreate(m *baseModel, local string) error {
 		log.Errorf("Error decoding response body: %v", err)
 		return err
 	}
+	log.Debugf("Response from API after decode %v", userResponse)
 	//Save user refferal code
 	if userResponse.Referral != "" {
 		err := setReferalCode(m, userResponse.Referral)
-		return err
+		if err != nil {
+			return err
+		}
 	}
 	//Save user id and token
+	log.Debugf("Response from API %v", userResponse.UserID)
 	setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
 	log.Debugf("Created new Lantern user: %+v", userResponse)
 	return nil

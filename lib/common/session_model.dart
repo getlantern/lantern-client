@@ -32,7 +32,7 @@ class SessionModel extends Model {
       'playVersion',
       false,
     );
-
+    // Todo change this to dynamic
     proxyAvailable = singleValueNotifier(
       'hasSucceedingProxy',
       true,

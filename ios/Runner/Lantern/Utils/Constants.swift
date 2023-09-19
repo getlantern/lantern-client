@@ -80,6 +80,7 @@ struct Constants {
 
     // MARK: Log Base URLs
 
+    
     var goLogBaseURL: URL { return targetDirectoryURL.appendingPathComponent("lantern.log") }
     var heapProfileURL: URL { return targetDirectoryURL.appendingPathComponent("heap.profile") }
     var heapProfileTempURL: URL { return targetDirectoryURL.appendingPathComponent("heap.profile.tmp") }

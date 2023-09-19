@@ -16,23 +16,19 @@ class VpnHelper: NSObject {
                                 notificationCenter: .default,
                                 flashlightManager: FlashlightManager.appDefault,
                                 vpnManager: ( VPNManager.appDefault))
-
     // MARK: State
     static let didUpdateStateNotification = Notification.Name("Lantern.didUpdateState")
-
     enum VPNState: Equatable {
         case configuring
         case idle(Error?)
         case connecting
         case connected
         case disconnecting
-
         var isIdle: Bool {
             if case .idle = self { return true }
             return false
         }
     }
-
     var configuring: Bool {
         didSet {
             guard oldValue != configuring else { return }
@@ -57,19 +53,16 @@ class VpnHelper: NSObject {
     }
 
     static let hasFetchedConfigDefaultsKey = "Lantern.hasConfig"
-
     // Apple
     let fileManager: FileManager
     let userDefaults: UserDefaults
     let notificationCenter: NotificationCenter
-
     // Custom
     let constants: Constants
     let flashlightManager: FlashlightManager
     let vpnManager: VPNBase
     var configFetchTimer: Timer!
     var hasConfiguredThisSession = false
-
     var hasFetchedConfigOnce: Bool {
         return (userDefaults.value(forKey: VpnHelper.hasFetchedConfigDefaultsKey) as? Bool) ?? false
     }
@@ -82,14 +75,12 @@ class VpnHelper: NSObject {
          vpnManager: VPNBase,
          userNotificationsManager: UserNotificationsManager? = nil
         ) {
-
         self.constants = constants
         self.fileManager = fileManager
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.flashlightManager = flashlightManager
         self.vpnManager = vpnManager
-
         configuring = true
         _state = .idle(nil)
         super.init()
@@ -124,6 +115,7 @@ class VpnHelper: NSObject {
     private func createFilesForAppGoPackage() {
         // where "~" is the shared app group container...
         // create process-specific directory @ ~/app
+        
         do {
             try fileManager.ensureDirectoryExists(at: constants.targetDirectoryURL)
         } catch {
@@ -258,7 +250,7 @@ class VpnHelper: NSObject {
                     self?.messageNetExToUpdateExcludedIPs()
                 }
                 self?.userDefaults.set(refreshProxies, forKey: VpnHelper.hasFetchedConfigDefaultsKey)
-                logger.debug("Successfully fetched new config")
+                logger.debug("Successfully fetched new config with \(result)")
                 completion(.success(()))
             case .failure(let error):
                 // TODO: convert this error to a Lantern.Error

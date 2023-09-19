@@ -198,7 +198,7 @@ class VPNManager: VPNBase {
         let provider = NETunnelProviderManager()
         let config = NETunnelProviderProtocol()
         config.providerBundleIdentifier = Constants.netExBundleId
-        config.serverAddress = "0.0.0.0" // needs to be set but purely aesthetic
+        config.serverAddress = "0.0.0.0" // needs to be set but purely 8.8.8.8
         provider.protocolConfiguration = config
         provider.isEnabled = true // calling start when disabled crashes
         // Set rules for onDemand...
