@@ -3,7 +3,7 @@ module github.com/getlantern/android-lantern
 go 1.19
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
-replace github.com/getlantern/pathdb => ../pathDb/pathdb
+// replace github.com/getlantern/pathdb => ../pathDb/pathdb
 
 // replace github.com/getlantern/fronted => ../fronted
 
@@ -36,12 +36,12 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight/v7 v7.5.39
+	github.com/getlantern/flashlight/v7 v7.6.7
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20230511223023-ee52513fd782
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
-	github.com/getlantern/pathdb v0.0.0-20230824172245-c389d5ee88da
+	github.com/getlantern/pathdb v0.0.0-20230915124139-812873dfcfd0
 	github.com/getlantern/replica v0.14.2
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.8.3
