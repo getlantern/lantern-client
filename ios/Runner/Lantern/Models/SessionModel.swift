@@ -24,16 +24,12 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     }
     
     func initializeAppSettings(){
-        setTimeZone()
-        setReferalCode()
         initializeSessionModel()
-        storeVersion()
-        setDeviceId()
+        setTimeZone()
         setDNS()
         getBandwidth()
         startService()
-
-    }
+}
     
     func startService(){
         do{
@@ -86,11 +82,13 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     
     
     private func initializeSessionModel(){
+        let deviceId = UIDevice.current.identifierForVendor!.uuidString
+        
         let initData: [String: [String: Any]]  = [
             "developmentMode": ["type": ValueUtil.TYPE_BOOL, "value": true],
-            "playVersion": ["type": ValueUtil.TYPE_BOOL, "value": true],
             "prouser": ["type": ValueUtil.TYPE_BOOL, "value": false],
-            "paymentTestMode": ["type": ValueUtil.TYPE_BOOL, "value": false],
+            "deviceid": ["type": ValueUtil.TYPE_STRING, "value": deviceId],
+            "playVersion": ["type": ValueUtil.TYPE_BOOL, "value": isRunningFromAppStore()],
             
         ]
         guard let jsonString = JsonUtil.convertToJSONString(initData) else {
@@ -147,7 +145,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(deviceId)
         if(miniSqlValue != nil){
             do {
-                let result = try  invokeMethodOnGo(name: "setTimeZone", argument: miniSqlValue!)
+                let result = try  invokeMethodOnGo(name: "setDeviceId", argument: miniSqlValue!)
                 logger.log("Sucessfully set device ID \(deviceId) ")
             }catch{
                 logger.log("Error while setting deevice ID")
@@ -179,19 +177,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
             }
         }
     }
-    
-    func setReferalCode(){
-        let miniSqlValue =  ValueUtil.convertToMinisqlValue("Test007")
-        if(miniSqlValue != nil){
-            do {
-                let result = try  invokeMethodOnGo(name: "setReferalCode", argument: miniSqlValue!)
-                logger.log("Sucessfully set ReferalCode result \(result)")
-            }catch{
-                logger.log("Error while setting ReferalCode")
-            }
-        }
-    }
-    
+        
     
     func storeVersion(){
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(isRunningFromAppStore())

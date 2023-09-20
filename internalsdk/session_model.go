@@ -71,7 +71,7 @@ func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
 }
 
 // TO check if session model implemnets all method or not
-var s Session = &SessionModel{}
+// var s Session = &SessionModel{}
 
 func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
 	switch method {
@@ -219,10 +219,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 func (s *SessionModel) StartService(configDir string,
 	locale string,
 	settings Settings) {
-
 	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
-
-	//Setup login
 	session := &panickingSessionImpl{s}
 	startOnce.Do(func() {
 		go run(configDir, locale, settings, session)
@@ -251,7 +248,9 @@ func setDeviceId(m *baseModel, deviceID string) error {
 
 func (s *SessionModel) GetDeviceID() (string, error) {
 	byte, err := s.baseModel.db.Get(DEVICE_ID)
-	panicIfNecessary(err)
+	if err != nil {
+		return "", err
+	}
 	//Todo Find better way to deserialize the values
 	// Also fine generic way
 	return string(byte), nil
@@ -291,7 +290,9 @@ func (s *SessionModel) GetUserID() (int64, error) {
 }
 func (s *SessionModel) GetToken() (string, error) {
 	paymentTestMode, err := s.baseModel.db.Get(PAYMENT_TEST_MODE)
-	panicIfNecessary(err)
+	if err != nil {
+		return "", err
+	}
 	//Todo find way to deserialize the values
 	paymentTestModeStr := string(paymentTestMode)
 	if paymentTestModeStr == "true" {
@@ -301,7 +302,9 @@ func (s *SessionModel) GetToken() (string, error) {
 		return "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA", nil
 	} else {
 		userId, err := s.baseModel.db.Get(TOKEN)
-		panicIfNecessary(err)
+		if err != nil {
+			return "", err
+		}
 		return string(userId), nil
 	}
 }
@@ -342,7 +345,6 @@ func (s *SessionModel) SetStaging(stageing bool) error {
 // Keep name as p1,p2,p3.....
 // Name become part of Objective c so this is important
 func (s *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
-
 	err := pathdb.Mutate(s.db, func(tx pathdb.TX) error {
 		pathdb.Put[int](tx, LATEST_BANDWIDTH, p1, "")
 		return nil
@@ -352,7 +354,9 @@ func (s *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
 
 func getBandwidthLimit(m *baseModel) (string, error) {
 	percent, err := m.db.Get(LATEST_BANDWIDTH)
-	panicIfNecessary(err)
+	if err != nil {
+		return "", err
+	}
 	return string(percent), nil
 }
 
@@ -360,7 +364,9 @@ func (s *SessionModel) Locale() (string, error) {
 	// For now just send back english by default
 	// Once have machisim but to dyanmic
 	locale, err := s.baseModel.db.Get(LANG)
-	panicIfNecessary(err)
+	if err != nil {
+		return "", err
+	}
 	return string(locale), nil
 }
 
@@ -374,7 +380,9 @@ func setLocale(m *baseModel, langCode string) error {
 
 func (s *SessionModel) GetTimeZone() (string, error) {
 	timezoneId, err := s.baseModel.db.Get(TIMEZONE_ID)
-	panicIfNecessary(err)
+	if err != nil {
+		return "", err
+	}
 	return string(timezoneId), nil
 }
 
@@ -391,7 +399,9 @@ func setTimeZone(m *baseModel, timezoneId string) error {
 func (s *SessionModel) Code() (string, error) {
 	//Set the timezeon from swift
 	referralCode, err := s.baseModel.db.Get(REFERRAL_CODE)
-	panicIfNecessary(err)
+	if err != nil {
+		return "", err
+	}
 	return string(referralCode), nil
 }
 
@@ -406,20 +416,26 @@ func setReferalCode(m *baseModel, referralCode string) error {
 // Todo need to make chanegs for Force country setup
 func (s *SessionModel) GetCountryCode() (string, error) {
 	//Set the timezeon from swift
-	forceCountry, err := s.db.Get(FORCE_COUNTRY)
-	panicIfNecessary(err)
+	forceCountry, forceCountryErr := s.db.Get(FORCE_COUNTRY)
+	if forceCountryErr != nil {
+		return "", forceCountryErr
+	}
 	contryInString := string(forceCountry)
 	if contryInString != "" {
 		return string(forceCountry), nil
 	}
 	countryCode, err := s.baseModel.db.Get(GEO_COUNTRY_CODE)
-	panicIfNecessary(err)
+	if err != nil {
+		return "", err
+	}
 	return string(countryCode), nil
 }
 
 func (s *SessionModel) GetForcedCountryCode() (string, error) {
 	forceCountry, err := s.baseModel.db.Get(FORCE_COUNTRY)
-	panicIfNecessary(err)
+	if err != nil {
+		return "", err
+	}
 	return string(forceCountry), nil
 }
 
@@ -432,7 +448,9 @@ func setForceCountry(m *baseModel, forceCountry string) error {
 }
 func (s *SessionModel) GetDNSServer() (string, error) {
 	dns, err := s.db.Get(DNS_DETECTOR)
-	panicIfNecessary(err)
+	if err != nil {
+		return "", err
+	}
 	return string(dns), nil
 }
 
@@ -446,7 +464,9 @@ func setDNSServer(m *baseModel, dnsServer string) error {
 
 func (s *SessionModel) Provider() (string, error) {
 	provider, err := s.db.Get(PROVIDER)
-	panicIfNecessary(err)
+	if err != nil {
+		return "", err
+	}
 	return string(provider), nil
 }
 
@@ -460,7 +480,9 @@ func setProvider(m *baseModel, provider string) error {
 
 func (s *SessionModel) IsStoreVersion() (bool, error) {
 	osStoreVersion, err := s.db.Get(IS_PLAY_VERSION)
-	panicIfNecessary(err)
+	if err != nil {
+		return false, err
+	}
 	if string(osStoreVersion) == "true" {
 		return true, nil
 	}
@@ -469,6 +491,9 @@ func (s *SessionModel) IsStoreVersion() (bool, error) {
 
 func (s *SessionModel) Email() (string, error) {
 	email, err := s.db.Get(EMAIL_ADDRESS)
+	if err != nil {
+		return "", err
+	}
 	panicIfNecessary(err)
 	return string(email), nil
 }
@@ -499,7 +524,9 @@ func (s *SessionModel) DeviceOS() (string, error) {
 
 func (s *SessionModel) IsProUser() (bool, error) {
 	proUser, err := s.baseModel.db.Get(PRO_USER)
-	panicIfNecessary(err)
+	if err != nil {
+		return false, err
+	}
 	return (string(proUser) == "true"), nil
 }
 func setProUser(m *baseModel, isPro bool) error {
@@ -603,6 +630,11 @@ type UserResponse struct {
 // Create user
 // Todo-: Create Sprate http client to manag and reuse client
 func userCreate(m *baseModel, local string) error {
+	deviecId, err := m.db.Get(DEVICE_ID)
+	if err != nil {
+		return err
+	}
+
 	requestBodyMap := map[string]string{
 		"locale": local,
 	}
@@ -620,7 +652,7 @@ func userCreate(m *baseModel, local string) error {
 	}
 
 	// Add headers
-	req.Header.Set("X-Lantern-Device-Id", "22F3FCEC-8973-47FD-984A-9CB7802E3D7F")
+	req.Header.Set("X-Lantern-Device-Id", string(deviecId))
 	log.Debugf("Headers set")
 	// Initialize a new http client
 	client := &http.Client{}
