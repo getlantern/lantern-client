@@ -22,6 +22,7 @@ type SessionModel struct {
 
 // List of const we are using for Session Model
 // Might be eaier to move all const at one place
+// All keys are expose to front end so we can use same to avoid duplication and reduce error
 const DEVICE_ID = "deviceid"
 const PAYMENT_TEST_MODE = "paymentTestMode"
 const USER_ID = "userid"
@@ -55,6 +56,25 @@ const CURRENT_TERMS_VERSION = 1
 const IS_PLAY_VERSION = "playVersion"
 const SET_SELECTED_TAB = "/selectedTab"
 
+// All method names
+// this expose to client IOS & Andorid
+const SESSION_MODEL_METHOD_INIT_MODEL = "initSesssionModel"
+const SESSION_MODEL_METHOD_SET_TIMEZONE = "setTimeZone"
+const SESSION_MODEL_METHOD_GET_BANDWIDTH = "getBandwidth"
+const SESSION_MODEL_METHOD_SET_DEVICEID = "setDeviceId"
+const SESSION_MODEL_METHOD_SET_REFERAL_CODE = "setReferalCode"
+const SESSION_MODEL_METHOD_SET_FORCE_COUNTRY = "setForceCountry"
+const SESSION_MODEL_METHOD_SET_DNS_SERVER = "setDNSServer"
+const SESSION_MODEL_METHOD_SET_PROVIDER = "setProvider"
+const SESSION_MODEL_METHOD_SET_EMAIL = "setEmail"
+const SESSION_MODEL_METHOD_SET_PRO_USER = "setProUser"
+const SESSION_MODEL_METHOD_SET_LOCAL = "setLocal"
+const SESSION_MODEL_METHOD_SET_CURRENCY = "setCurrency"
+const SESSION_MODEL_METHOD_ACCEPT_TERMS = "acceptTerms"
+const SESSION_MODEL_METHOD_SET_STORE_VERSION = "setStoreVersion"
+const SESSION_MODEL_METHOD_SET_SELECTED_TAB = "setSelectedTab"
+const SESSION_MODEL_METHOD_CREATE_USER = "createUser"
+
 type TabData struct {
 	Tab string `json:"tab"`
 }
@@ -75,7 +95,7 @@ func NewSessionModel(schema string, mdb minisql.DB) (*SessionModel, error) {
 
 func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
 	switch method {
-	case "initSesssionModel":
+	case SESSION_MODEL_METHOD_INIT_MODEL:
 		jsonString := arguments.Get(0)
 		err := initSessionModel(s.baseModel, jsonString.String())
 		if err != nil {
@@ -83,7 +103,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "setTimeZone":
+	case SESSION_MODEL_METHOD_SET_TIMEZONE:
 		// Get timezone id
 		timezoneId := arguments.Get(0)
 		err := setTimeZone(s.baseModel, timezoneId.String())
@@ -92,7 +112,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "getBandwidth":
+	case SESSION_MODEL_METHOD_GET_BANDWIDTH:
 		limit, err := getBandwidthLimit(s.baseModel)
 		if err != nil {
 			return nil, err
@@ -100,7 +120,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 			return minisql.NewValueString(limit), nil
 		}
 
-	case "setDeviceId":
+	case SESSION_MODEL_METHOD_SET_DEVICEID:
 		deviceID := arguments.Get(0)
 		err := setDeviceId(s.baseModel, deviceID.String())
 		if err != nil {
@@ -108,7 +128,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "setReferalCode":
+	case SESSION_MODEL_METHOD_SET_REFERAL_CODE:
 		referralCode := arguments.Get(0)
 		err := setReferalCode(s.baseModel, referralCode.String())
 		if err != nil {
@@ -116,7 +136,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "setForceCountry":
+	case SESSION_MODEL_METHOD_SET_FORCE_COUNTRY:
 		forceCountry := arguments.Get(0)
 		err := setForceCountry(s.baseModel, forceCountry.String())
 		if err != nil {
@@ -124,7 +144,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "setDNSServer":
+	case SESSION_MODEL_METHOD_SET_DNS_SERVER:
 		dns := arguments.Get(0)
 		err := setDNSServer(s.baseModel, dns.String())
 		if err != nil {
@@ -132,7 +152,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "setProvider":
+	case SESSION_MODEL_METHOD_SET_PROVIDER:
 		// Todo Implement setProvider server
 		err := setProvider(s.baseModel, "Test")
 		if err != nil {
@@ -141,7 +161,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 			return minisql.NewValueBool(true), nil
 		}
 
-	case "setEmail":
+	case SESSION_MODEL_METHOD_SET_EMAIL:
 		// Todo Implement setEmail server
 		err := setEmail(s.baseModel, "Test")
 		if err != nil {
@@ -149,7 +169,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "setCurrency":
+	case SESSION_MODEL_METHOD_SET_CURRENCY:
 		// Todo Implement setCurrency server
 		err := setCurrency(s.baseModel, "Test")
 		if err != nil {
@@ -157,14 +177,14 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "setProUser":
+	case SESSION_MODEL_METHOD_SET_PRO_USER:
 		err := setProUser(s.baseModel, false)
 		if err != nil {
 			return nil, err
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "setLocal":
+	case SESSION_MODEL_METHOD_SET_LOCAL:
 		local := arguments.Get(0)
 		err := setLocale(s.baseModel, local.String())
 		if err != nil {
@@ -172,7 +192,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "acceptTerms":
+	case SESSION_MODEL_METHOD_ACCEPT_TERMS:
 		err := acceptTerms(s.baseModel)
 		if err != nil {
 			return nil, err
@@ -180,7 +200,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 			return minisql.NewValueBool(true), nil
 		}
 
-	case "setStoreVersion":
+	case SESSION_MODEL_METHOD_SET_STORE_VERSION:
 		IsStoreVersion := arguments.Get(0)
 		err := setStoreVersion(s.baseModel, IsStoreVersion.Bool())
 		if err != nil {
@@ -188,7 +208,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
-	case "setSelectedTab":
+	case SESSION_MODEL_METHOD_SET_SELECTED_TAB:
 		jsonString := arguments.Get(0).String()
 
 		var tabData TabData
@@ -202,7 +222,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 			return nil, err
 		}
 		return minisql.NewValueBool(true), nil
-	case "createUser":
+	case SESSION_MODEL_METHOD_CREATE_USER:
 		local := arguments.Get(0)
 		err := userCreate(s.baseModel, local.String())
 		if err != nil {
@@ -325,7 +345,7 @@ func (s *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 // Keep name as p1,p2,p3.....
 // Name become part of Objective c so this is important
 func (s *SessionModel) UpdateStats(p0 string, p1 string, p2 string, p3 int, p4 int, p5 bool) error {
-	log.Debugf("UpdateStats called with city %v and country %v and code %v", p0, p1, p2)
+	log.Debugf("UpdateStats called with city %v and country %v and code %v with proxy %v", p0, p1, p2, p5)
 	err := pathdb.Mutate(s.db, func(tx pathdb.TX) error {
 		pathdb.Put[string](tx, SERVER_COUNTRY, p1, "")
 		pathdb.Put[string](tx, SERVER_CITY, p0, "")
@@ -670,7 +690,6 @@ func userCreate(m *baseModel, local string) error {
 		log.Errorf("Error decoding response body: %v", err)
 		return err
 	}
-	log.Debugf("Response from API after decode %v", userResponse)
 	//Save user refferal code
 	if userResponse.Referral != "" {
 		err := setReferalCode(m, userResponse.Referral)
@@ -679,7 +698,6 @@ func userCreate(m *baseModel, local string) error {
 		}
 	}
 	//Save user id and token
-	log.Debugf("Response from API %v", userResponse.UserID)
 	setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
 	log.Debugf("Created new Lantern user: %+v", userResponse)
 	return nil

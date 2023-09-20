@@ -10,6 +10,7 @@ import Internalsdk
 import Flutter
 import UIKit
 
+
 class SessionModel:BaseModel<InternalsdkSessionModel> {
     var flutterbinaryMessenger:FlutterBinaryMessenger
     lazy var notificationsManager: UserNotificationsManager = {
@@ -82,15 +83,9 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     
     
     private func initializeSessionModel(){
-        let deviceId = UIDevice.current.identifierForVendor!.uuidString
-        
-        let initData: [String: [String: Any]]  = [
-            "developmentMode": ["type": ValueUtil.TYPE_BOOL, "value": true],
-            "prouser": ["type": ValueUtil.TYPE_BOOL, "value": false],
-            "deviceid": ["type": ValueUtil.TYPE_STRING, "value": deviceId],
-            "playVersion": ["type": ValueUtil.TYPE_BOOL, "value": isRunningFromAppStore()],
-            
-        ]
+        // Setup the initly data
+        let initData = createInitData()
+
         guard let jsonString = JsonUtil.convertToJSONString(initData) else {
             logger.log("Failed to convert initializationData to JSON")
             return
@@ -98,7 +93,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(jsonString)
         if(miniSqlValue != nil){
             do {
-                let result = try  invokeMethodOnGo(name: "initSesssionModel", argument: miniSqlValue!)
+                let result = try  invokeMethodOnGo(name: Methods.initModel.methodName, argument: miniSqlValue!)
                 logger.log("Sucessfully set initData \(jsonString) result")
             }catch{
                 logger.log("Error while setting initData")
@@ -106,12 +101,25 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         }
     }
     
+    // Set initly data that needed by flashlight
+    // later on values change be chaneg by mehtod or by flashlight
+    private func createInitData() -> [String: [String: Any]] {
+        let deviceId = UIDevice.current.identifierForVendor!.uuidString
+        return [
+            Constants.developmentMode: ["type": ValueUtil.TYPE_BOOL, "value": true],
+            Constants.prouser: ["type": ValueUtil.TYPE_BOOL, "value": false],
+            Constants.deviceid: ["type": ValueUtil.TYPE_STRING, "value": deviceId],
+            Constants.playVersion: ["type": ValueUtil.TYPE_BOOL, "value": isRunningFromAppStore()],
+        ]
+        
+    }
+    
     
     func createUser(local:String) -> Bool{
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(local)
         if(miniSqlValue != nil){
             do {
-                let result = try  invokeMethodOnGo(name: "createUser", argument: miniSqlValue!)
+                let result = try  invokeMethodOnGo(name: Methods.createUser.methodName, argument: miniSqlValue!)
                 var converedResult = ValueUtil.convertFromMinisqlValue(from: result)
                 if(converedResult as! Bool){
                     logger.log("User Created \(converedResult)")
@@ -131,7 +139,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(timeZoneId)
         if(miniSqlValue != nil){
             do {
-                let result = try  invokeMethodOnGo(name: "setTimeZone", argument: miniSqlValue!)
+                let result = try  invokeMethodOnGo(name: Methods.setTimezone.methodName, argument: miniSqlValue!)
                 logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
             }catch{
                 logger.log("Error while setting timezone")
@@ -145,7 +153,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(deviceId)
         if(miniSqlValue != nil){
             do {
-                let result = try  invokeMethodOnGo(name: "setDeviceId", argument: miniSqlValue!)
+                let result = try  invokeMethodOnGo(name: Methods.setDeviceId.methodName, argument: miniSqlValue!)
                 logger.log("Sucessfully set device ID \(deviceId) ")
             }catch{
                 logger.log("Error while setting deevice ID")
@@ -158,7 +166,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         let miniSqlValue =  ValueUtil.convertToMinisqlValue("")
         if(miniSqlValue != nil){
             do {
-                let result = try  invokeMethodOnGo(name: "getBandwidth", argument: miniSqlValue!)
+                let result = try  invokeMethodOnGo(name: Methods.getBandwidth.methodName, argument: miniSqlValue!)
                 let newValue = ValueUtil.convertFromMinisqlValue(from: result)
                 //If value is not null mean user has alerady start using bandwith
                 // We will get that value from Go
@@ -183,7 +191,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(isRunningFromAppStore())
         if(miniSqlValue != nil){
             do {
-                let result = try  invokeMethodOnGo(name: "setStoreVersion", argument: miniSqlValue!)
+                let result = try  invokeMethodOnGo(name: Methods.setStoreVersion.methodName, argument: miniSqlValue!)
                 logger.log("This is app store version \(result)")
             }catch{
                 logger.log("Error while setting storeVersion")
@@ -197,7 +205,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         let countryMiniSql =  ValueUtil.convertToMinisqlValue(countryCode)
         if(countryMiniSql != nil){
             do {
-                let result = try  invokeMethodOnGo(name: "setForceCountry", argument: countryMiniSql!)
+                let result = try  invokeMethodOnGo(name: Methods.setForceCountry.methodName, argument: countryMiniSql!)
                 logger.log("Sucessfully set force country")
             }catch{
                 logger.log("Error while setting  up forceCountry")
@@ -210,7 +218,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         let langSqlValue =  ValueUtil.convertToMinisqlValue(lang)
         if(langSqlValue != nil){
             do {
-                let result = try  invokeMethodOnGo(name: "setLocal", argument: langSqlValue!)
+                let result = try  invokeMethodOnGo(name: Methods.setLocal.methodName, argument: langSqlValue!)
                 logger.log("Sucessfully set Local result \(result)")
             }catch{
                 logger.log("Error while setting Local")
@@ -223,7 +231,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(DnsDetector.DEFAULT_DNS_SERVER)
         if(miniSqlValue != nil){
             do {
-                let result = try  invokeMethodOnGo(name: "setTimeZone", argument: miniSqlValue!)
+                let result = try  invokeMethodOnGo(name: Methods.setTimezone.methodName, argument: miniSqlValue!)
                 logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
             }catch{
                 logger.log("Error while setting timezone")
@@ -253,12 +261,12 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
                 print(error.localizedDescription)
             }
         }
-
         return fileURL.path
     }
-    
-    
 }
+
+
+ 
 
 
 
@@ -279,6 +287,5 @@ class Settings :NSObject, InternalsdkSettingsProtocol{
         return 60000
     }
     
-    
-}
+    }
 

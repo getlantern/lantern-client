@@ -42,6 +42,7 @@
 		03A1AB3A2AA890AB00FB41B2 /* Tunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 03A1AB302AA890AB00FB41B2 /* Tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		03A1AB422AA8930A00FB41B2 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB412AA8930A00FB41B2 /* Result.swift */; };
 		03A1AB442AA8946400FB41B2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB432AA8946400FB41B2 /* Constants.swift */; };
+		03AEDBFA2ABAD5B9000FDE52 /* ModelMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03AEDBF92ABAD5B9000FDE52 /* ModelMethods.swift */; };
 		03F00B5D2AB07B3800E991E2 /* NavigationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F00B5C2AB07B3800E991E2 /* NavigationModel.swift */; };
 		03F00B5F2AB07C8000E991E2 /* LoadingIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */; };
 		03F2FE342A6949EF0082B34C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F2FE332A6949EF0082B34C /* Logger.swift */; };
@@ -122,6 +123,7 @@
 		03A1AB372AA890AB00FB41B2 /* Tunnel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tunnel.entitlements; sourceTree = "<group>"; };
 		03A1AB412AA8930A00FB41B2 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		03A1AB432AA8946400FB41B2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		03AEDBF92ABAD5B9000FDE52 /* ModelMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ModelMethods.swift; path = Models/ModelMethods.swift; sourceTree = "<group>"; };
 		03F00B5C2AB07B3800E991E2 /* NavigationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NavigationModel.swift; path = Models/NavigationModel.swift; sourceTree = "<group>"; };
 		03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorManager.swift; sourceTree = "<group>"; };
 		03F2FE332A6949EF0082B34C /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				0369DF782A93803D000EBE43 /* MessagingModel.swift */,
 				03FAF1B32AA1E9F40063580C /* VpnModel.swift */,
 				03F00B5C2AB07B3800E991E2 /* NavigationModel.swift */,
+				03AEDBF92ABAD5B9000FDE52 /* ModelMethods.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -589,6 +592,7 @@
 				035BE7062A7122BC0084059A /* SessionModel.swift in Sources */,
 				036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */,
 				03F00B5D2AB07B3800E991E2 /* NavigationModel.swift in Sources */,
+				03AEDBFA2ABAD5B9000FDE52 /* ModelMethods.swift in Sources */,
 				0308A1302AAEF3AA0086157A /* Event.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				03A1AB142AA88BDA00FB41B2 /* VPNManager.swift in Sources */,
