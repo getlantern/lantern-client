@@ -12,6 +12,7 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
+	"google.golang.org/protobuf/proto"
 )
 
 // Custom Model implemnation
@@ -345,16 +346,33 @@ func (s *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 // Keep name as p1,p2,p3.....
 // Name become part of Objective c so this is important
 func (s *SessionModel) UpdateStats(p0 string, p1 string, p2 string, p3 int, p4 int, p5 bool) error {
-	log.Debugf("UpdateStats called with city %v and country %v and code %v with proxy %v", p0, p1, p2, p5)
-	err := pathdb.Mutate(s.db, func(tx pathdb.TX) error {
-		pathdb.Put[string](tx, SERVER_COUNTRY, p1, "")
-		pathdb.Put[string](tx, SERVER_CITY, p0, "")
-		pathdb.Put[string](tx, SERVER_COUNTRY_CODE, p2, "")
-		pathdb.Put[bool](tx, HAS_SUCCEEDING_PROXY, p5, "")
-		// Not using ads blocked any more
-		return nil
-	})
-	return err
+	if p0 != "" && p1 != "" && p2 != "" {
+		serverInfo := &ServerInfo{
+			City:        p0,
+			Country:     p1,
+			CountryCode: p2,
+		}
+
+		// Serialize the ServerInfo object to byte slice
+		serverInfoBytes, serverErr := proto.Marshal(serverInfo)
+		if serverErr != nil {
+			return serverErr
+		}
+
+		log.Debugf("UpdateStats called with city %v and country %v and code %v with proxy %v server info bytes %v", p0, p1, p2, p5, serverInfoBytes)
+		err := pathdb.Mutate(s.db, func(tx pathdb.TX) error {
+			pathdb.Put[string](tx, SERVER_COUNTRY, p1, "")
+			pathdb.Put[string](tx, SERVER_CITY, p0, "")
+			pathdb.Put[string](tx, SERVER_COUNTRY_CODE, p2, "")
+			pathdb.Put[bool](tx, HAS_SUCCEEDING_PROXY, p5, "")
+			pathdb.Put[[]byte](tx, PATH_SERVER_INFO, serverInfoBytes, "")
+
+			// Not using ads blocked any more
+			return nil
+		})
+		return err
+	}
+	return nil
 }
 
 func (s *SessionModel) SetStaging(stageing bool) error {
