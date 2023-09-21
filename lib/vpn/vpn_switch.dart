@@ -7,12 +7,12 @@ class VPNSwitch extends StatefulWidget {
 }
 
 class _VPNSwitchState extends State<VPNSwitch> {
-  final adHelper = AdHelper();
+  // final adHelper = AdHelper();
 
   @override
   void initState() {
     super.initState();
-    adHelper.loadAds();
+    // adHelper.loadAds();
   }
 
   bool isIdle(String vpnStatus) =>
@@ -28,7 +28,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
       Future.delayed(
         const Duration(seconds: 1),
         () async {
-          await adHelper.showAds();
+          // await adHelper.showAds();
         },
       );
     }

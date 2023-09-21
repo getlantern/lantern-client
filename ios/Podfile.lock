@@ -302,7 +302,7 @@ SPEC CHECKSUMS:
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   SDWebImage: 750adf017a315a280c60fde706ab1e552a3ae4e9
   share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
-  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SQLite.swift: d2b4642190917051ce6bd1d49aab565fe794eea3
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
@@ -316,4 +316,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5806db3f41cf477ba5b49157f13e1ca1a364f0b4
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

@@ -113,6 +113,7 @@ func (m *baseModel) Subscribe(req *SubscriptionRequest) error {
 					log.Debugf("Error extracting raw value:", err)
 					return err
 				}
+				log.Debugf("Got update for value %v - value: %v  rawValue: %v", k, rawValue, string(itemWithRaw.Value.Bytes))
 				// When serlizeing might get other other type
 				//make sure to convered to only supported types
 				convertedValue := convertValueToSupportedTypes(rawValue)

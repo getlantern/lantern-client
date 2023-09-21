@@ -14,8 +14,7 @@ import SQLite
 class DatabaseManager: NSObject, MinisqlDBProtocol {
     private let db: Connection
     private var currentTransaction: TransactionManager?
-    private let queue = DispatchQueue(label: "com.myapp.DatabaseManager", attributes: .concurrent)
-
+    
     init(database: Connection) {
         self.db = database
     }
@@ -61,7 +60,6 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
 
 class TransactionManager: NSObject, MinisqlTxProtocol {
     let database: Connection
-    var statements: [Statement] = []
     private var savepointName: String?
     
     init(database: Connection) {
@@ -69,29 +67,24 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
     }
     
     private func begin() throws {
-        savepointName = "Savepoint\(Date.currentTimeStamp)"
+        savepointName = "Savepoint\(UUID().uuidString)"
         if let savepointName = savepointName {
-            try database.run("SAVEPOINT \(savepointName)")
+            try database.run("SAVEPOINT '\(savepointName)'")
         }
     }
     
   func commit() throws {
-          for statement in statements {
-              try statement.run()
-          }
           if let savepointName = savepointName {
-              try database.run("RELEASE \(savepointName)")
+              try database.run("RELEASE '\(savepointName)'")
           }
-          statements = []
           savepointName = nil
       }
     
     func rollback() throws {
          if let savepointName = savepointName {
-             try database.run("ROLLBACK TO SAVEPOINT \(savepointName)")
-             try database.run("RELEASE \(savepointName)")
+             try database.run("ROLLBACK TO SAVEPOINT '\(savepointName)'")
+             try database.run("RELEASE '\(savepointName)'")
          }
-         statements = []
          savepointName = nil
      }
     
@@ -101,7 +94,6 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
         
         let bindings = ValueUtil.toBindingsArray(args)
         let statement = try database.prepare(query)
-        statements.append(statement)
         // Start a transaction if none has been started yet
         if savepointName == nil {
             try begin()
@@ -117,7 +109,6 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
         
         let bindings = ValueUtil.toBindingsArray(args)
         let statement = try database.prepare(query)
-        statements.append(statement)
         // Start a transaction if none has been started yet
         if savepointName == nil {
             try begin()
