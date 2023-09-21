@@ -44,7 +44,8 @@ const REFERRAL_CODE = "referral"
 const FORCE_COUNTRY = "forceCountry"
 const DNS_DETECTOR = "dns_detector"
 const PROVIDER = "provider"
-const EMAIL_ADDRESS = "email_address"
+const EMAIL_ADDRESS = "emailAddress"
+
 const CURRENCY_CODE = "currency_Code"
 const PRO_USER = "prouser"
 const REPLICA_ADDR = "replicaAddr"
@@ -250,6 +251,17 @@ func (s *SessionModel) StartService(configDir string,
 
 // InvokeMethod handles method invocations on the SessionModel.
 func initSessionModel(m *baseModel, jsonString string) error {
+	//Check if email if emoty
+	email, err := m.db.Get(EMAIL_ADDRESS)
+	if err != nil {
+		log.Debugf("Init Session email error value %v", err)
+		return err
+	}
+	emailStr := string(email)
+	if emailStr == "" {
+		log.Debugf("Init Session setting email value to an empty string")
+		setEmail(m, "")
+	}
 	// Init few path for startup
 	return putFromJson(jsonString, m.db)
 }
@@ -472,8 +484,10 @@ func (s *SessionModel) GetCountryCode() (string, error) {
 func (s *SessionModel) GetForcedCountryCode() (string, error) {
 	forceCountry, err := s.baseModel.db.Get(FORCE_COUNTRY)
 	if err != nil {
+		log.Debugf("Force country coode error %v", err)
 		return "", err
 	}
+	log.Debugf("Force country %v", forceCountry)
 	return string(forceCountry), nil
 }
 
@@ -532,16 +546,15 @@ func (s *SessionModel) Email() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	panicIfNecessary(err)
 	return string(email), nil
 }
 
 func setEmail(m *baseModel, email string) error {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put[string](tx, EMAIL_ADDRESS, email, "")
 		return nil
 	})
-	return nil
+	return err
 }
 
 func (s *SessionModel) Currency() (string, error) {

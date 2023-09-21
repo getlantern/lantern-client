@@ -29,7 +29,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
         setTimeZone()
         setDNS()
         getBandwidth()
-        startService()
+      
 }
     
     func startService(){
@@ -95,6 +95,8 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
             do {
                 let result = try  invokeMethodOnGo(name: Methods.initModel.methodName, argument: miniSqlValue!)
                 logger.log("Sucessfully set initData \(jsonString) result")
+                //Start servce once we add all data
+                startService()
             }catch{
                 logger.log("Error while setting initData")
             }

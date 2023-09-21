@@ -102,7 +102,7 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
     }
     
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-//        logger.log("onListen initiated with arguments: \(arguments)")
+        logger.log("onListen initiated with arguments: \(arguments)")
         guard let args = arguments as? [String: Any] else {
             let errorMessage = "Failed to cast arguments \(arguments) to dictionary. Exiting..."
             return createFlutterError(code:"INVALID_ARGUMENTS", message: errorMessage)

@@ -13,6 +13,7 @@ class Language extends StatelessWidget {
       padVertical: true,
       body: sessionModel
           .language((BuildContext context, String currentLang, Widget? child) {
+            print("Language code $currentLang");
         return ListView.builder(
           itemCount: languages.length,
           itemBuilder: (BuildContext context, int index) {
