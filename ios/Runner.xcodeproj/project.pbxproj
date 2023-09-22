@@ -56,6 +56,8 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		9DAC9EDBE28EB779A10E5A26 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 351BB463FD77FC724A8E233C /* Pods_Runner.framework */; };
+		ECCA8C672ABD16D20037BF9B /* LanternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECCA8C662ABD16D20037BF9B /* LanternTests.swift */; };
+		F309D8C575359E6D35A75E9D /* Pods_LanternTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49496710B5388EA1D58F0B15 /* Pods_LanternTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 03A1AB2F2AA890AB00FB41B2;
 			remoteInfo = Tunnel;
+		};
+		ECCA8C682ABD16D20037BF9B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
+			remoteInfo = Runner;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -133,8 +142,11 @@
 		04AF578F28344E5CF0932AA9 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		2F26DCD30807EDF6F82D2EED /* Pods-LanternTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.debug.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.debug.xcconfig"; sourceTree = "<group>"; };
 		351BB463FD77FC724A8E233C /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		49496710B5388EA1D58F0B15 /* Pods_LanternTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LanternTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		639C2FD1FB8C2B8BA0BC8FA2 /* Pods-LanternTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.profile.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.profile.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
@@ -146,7 +158,10 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CA815533D3563C2353745CE2 /* Pods-LanternTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.release.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.release.xcconfig"; sourceTree = "<group>"; };
 		E33BD5976CBD307AC6B17F23 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		ECCA8C642ABD16D20037BF9B /* LanternTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LanternTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECCA8C662ABD16D20037BF9B /* LanternTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanternTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +180,14 @@
 				0321C3FB2AA9DC6E00D462C1 /* NetworkExtension.framework in Frameworks */,
 				9DAC9EDBE28EB779A10E5A26 /* Pods_Runner.framework in Frameworks */,
 				035FDDD52A6A547F007B15C8 /* Internalsdk.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ECCA8C612ABD16D20037BF9B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F309D8C575359E6D35A75E9D /* Pods_LanternTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,6 +323,7 @@
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				03A1AB332AA890AB00FB41B2 /* Tunnel */,
+				ECCA8C652ABD16D20037BF9B /* LanternTests */,
 				97C146EF1CF9000F007C117D /* Products */,
 				BD7D6E2034FFCA3D48D162CE /* Pods */,
 				FF47084EFEAB686FD7974BE4 /* Frameworks */,
@@ -311,6 +335,7 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				03A1AB302AA890AB00FB41B2 /* Tunnel.appex */,
+				ECCA8C642ABD16D20037BF9B /* LanternTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -338,8 +363,19 @@
 				81DE944FD5152F594CC8D7B2 /* Pods-Runner.debug.xcconfig */,
 				E33BD5976CBD307AC6B17F23 /* Pods-Runner.release.xcconfig */,
 				04AF578F28344E5CF0932AA9 /* Pods-Runner.profile.xcconfig */,
+				2F26DCD30807EDF6F82D2EED /* Pods-LanternTests.debug.xcconfig */,
+				CA815533D3563C2353745CE2 /* Pods-LanternTests.release.xcconfig */,
+				639C2FD1FB8C2B8BA0BC8FA2 /* Pods-LanternTests.profile.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		ECCA8C652ABD16D20037BF9B /* LanternTests */ = {
+			isa = PBXGroup;
+			children = (
+				ECCA8C662ABD16D20037BF9B /* LanternTests.swift */,
+			);
+			path = LanternTests;
 			sourceTree = "<group>";
 		};
 		FF47084EFEAB686FD7974BE4 /* Frameworks */ = {
@@ -347,6 +383,7 @@
 			children = (
 				351BB463FD77FC724A8E233C /* Pods_Runner.framework */,
 				03A1AB312AA890AB00FB41B2 /* NetworkExtension.framework */,
+				49496710B5388EA1D58F0B15 /* Pods_LanternTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -407,6 +444,27 @@
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
 		};
+		ECCA8C632ABD16D20037BF9B /* LanternTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ECCA8C6D2ABD16D20037BF9B /* Build configuration list for PBXNativeTarget "LanternTests" */;
+			buildPhases = (
+				4E451C14EEC79D30CB4B7946 /* [CP] Check Pods Manifest.lock */,
+				ECCA8C602ABD16D20037BF9B /* Sources */,
+				ECCA8C612ABD16D20037BF9B /* Frameworks */,
+				ECCA8C622ABD16D20037BF9B /* Resources */,
+				6CBDC5B399303E3AF83CFF31 /* [CP] Embed Pods Frameworks */,
+				BE89F0204C2A5649490D586B /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ECCA8C692ABD16D20037BF9B /* PBXTargetDependency */,
+			);
+			name = LanternTests;
+			productName = LanternTests;
+			productReference = ECCA8C642ABD16D20037BF9B /* LanternTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -423,6 +481,10 @@
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1100;
+					};
+					ECCA8C632ABD16D20037BF9B = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = 97C146ED1CF9000F007C117D;
 					};
 				};
 			};
@@ -441,6 +503,7 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				03A1AB2F2AA890AB00FB41B2 /* Tunnel */,
+				ECCA8C632ABD16D20037BF9B /* LanternTests */,
 			);
 		};
 /* End PBXProject section */
@@ -461,6 +524,13 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ECCA8C622ABD16D20037BF9B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +592,45 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		4E451C14EEC79D30CB4B7946 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LanternTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6CBDC5B399303E3AF83CFF31 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LanternTests/Pods-LanternTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LanternTests/Pods-LanternTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LanternTests/Pods-LanternTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8CFC94838D10599DD335E9EC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -553,6 +662,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+		};
+		BE89F0204C2A5649490D586B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LanternTests/Pods-LanternTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LanternTests/Pods-LanternTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LanternTests/Pods-LanternTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -611,6 +737,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ECCA8C602ABD16D20037BF9B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECCA8C672ABD16D20037BF9B /* LanternTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -618,6 +752,11 @@
 			isa = PBXTargetDependency;
 			target = 03A1AB2F2AA890AB00FB41B2 /* Tunnel */;
 			targetProxy = 03A1AB382AA890AB00FB41B2 /* PBXContainerItemProxy */;
+		};
+		ECCA8C692ABD16D20037BF9B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 97C146ED1CF9000F007C117D /* Runner */;
+			targetProxy = ECCA8C682ABD16D20037BF9B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -991,6 +1130,106 @@
 			};
 			name = Release;
 		};
+		ECCA8C6A2ABD16D20037BF9B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2F26DCD30807EDF6F82D2EED /* Pods-LanternTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4FYC28AXA2;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.getlantern.lantern.LanternTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+			};
+			name = Debug;
+		};
+		ECCA8C6B2ABD16D20037BF9B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA815533D3563C2353745CE2 /* Pods-LanternTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4FYC28AXA2;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.getlantern.lantern.LanternTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+			};
+			name = Release;
+		};
+		ECCA8C6C2ABD16D20037BF9B /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 639C2FD1FB8C2B8BA0BC8FA2 /* Pods-LanternTests.profile.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4FYC28AXA2;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.getlantern.lantern.LanternTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+			};
+			name = Profile;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1020,6 +1259,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ECCA8C6D2ABD16D20037BF9B /* Build configuration list for PBXNativeTarget "LanternTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ECCA8C6A2ABD16D20037BF9B /* Debug */,
+				ECCA8C6B2ABD16D20037BF9B /* Release */,
+				ECCA8C6C2ABD16D20037BF9B /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
