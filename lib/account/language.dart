@@ -13,22 +13,23 @@ class Language extends StatelessWidget {
       padVertical: true,
       body: sessionModel
           .language((BuildContext context, String currentLang, Widget? child) {
-            print("Language code $currentLang");
-        return ListView.builder(
+           // Splint language by just code
+        final countryCode= currentLang.split('_')[0];
+            return ListView.builder(
           itemCount: languages.length,
           itemBuilder: (BuildContext context, int index) {
-            var lang = languages[index];
+            var lang = languages[index].split('_')[0];
             return RadioListTile<String>(
               activeColor: pink4,
               contentPadding: const EdgeInsetsDirectional.all(0),
-              tileColor: lang == currentLang ? grey2 : transparent,
+              tileColor: lang == countryCode ? grey2 : transparent,
               dense: true,
               title: CText(
                 toBeginningOfSentenceCase(displayLanguage(lang))!,
                 style: tsBody1,
               ),
               value: lang,
-              groupValue: currentLang,
+              groupValue: countryCode,
               onChanged: (String? value) async {
                 await sessionModel.setLanguage(lang);
                 Navigator.pop(context);

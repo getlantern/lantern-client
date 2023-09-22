@@ -70,7 +70,7 @@ const SESSION_MODEL_METHOD_SET_DNS_SERVER = "setDNSServer"
 const SESSION_MODEL_METHOD_SET_PROVIDER = "setProvider"
 const SESSION_MODEL_METHOD_SET_EMAIL = "setEmail"
 const SESSION_MODEL_METHOD_SET_PRO_USER = "setProUser"
-const SESSION_MODEL_METHOD_SET_LOCAL = "setLocal"
+const SESSION_MODEL_METHOD_SET_LOCAL = "setLanguage"
 const SESSION_MODEL_METHOD_SET_CURRENCY = "setCurrency"
 const SESSION_MODEL_METHOD_ACCEPT_TERMS = "acceptTerms"
 const SESSION_MODEL_METHOD_SET_STORE_VERSION = "setStoreVersion"
@@ -188,7 +188,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		}
 	case SESSION_MODEL_METHOD_SET_LOCAL:
 		local := arguments.Get(0)
-		err := setLocale(s.baseModel, local.String())
+		err := setLanguage(s.baseModel, local.String())
 		if err != nil {
 			return nil, err
 		} else {
@@ -420,7 +420,7 @@ func (s *SessionModel) Locale() (string, error) {
 	return string(locale), nil
 }
 
-func setLocale(m *baseModel, langCode string) error {
+func setLanguage(m *baseModel, langCode string) error {
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put[string](tx, LANG, langCode, "")
 		return nil

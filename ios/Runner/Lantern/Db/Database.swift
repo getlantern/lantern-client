@@ -142,10 +142,9 @@ class QueryResult: NSObject, MinisqlResultProtocol {
 }
 
 class RowData: NSObject, MinisqlRowsProtocol {
-    
-    let rows: [Statement.Element]
+     let rows: [Statement.Element]
     var currentIndex: Int = -1
-    private let syncQueue = DispatchQueue(label: "com.yourapp.RowData.syncQueue")
+    private let syncQueue = DispatchQueue(label: "com.lantern.RowData.syncQueue")
 
     
     init(rows: [Statement.Element]) {
