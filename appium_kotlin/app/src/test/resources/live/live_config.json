@@ -2,7 +2,7 @@
   "server": "hub-cloud.browserstack.com/wd/hub",
   "username": "jigarj_SNsRyw",
   "access_key": "dA4yyG26fHbfJxRUYMwr",
-  "app": "bs://5fb3d71c0a06de7d496ff6fceba612a15e835577",
+  "app": "bs://ac26c1c990dabab70870c250ec774ec9f63fa350",
   "capabilities": {
     "automationName": "Flutter",
     "setWebContentsDebuggingEnabled": true,
@@ -10,7 +10,7 @@
     "appium:logLevel": true,
     "enablePerformanceLogging": true,
     "bstack:options": {
-      "appiumVersion": "2.0.0",
+      "appiumVersion": "2.0.1",
       "networkLogs": true,
       "projectName": "Lantern",
       "buildName": "Lantern-APK",
