@@ -289,9 +289,17 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		-b $(MOBILE_DIR)/app/build.gradle \
 		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
+dart-defines-debug:
+	@DART_DEFINES="$(CIBASE)"; \
+	printf "$$DART_DEFINES"
+
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
-	ln -fs $(MOBILE_DIR)/gradle.properties . && \
-	CI="$$CI" && $(GRADLE) -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
+	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
+	DART_DEFINES=`make dart-defines-debug` && \
+	echo "Value of DART_DEFINES is: $$DART_DEFINES" && \
+	CI="$$CI" && \
+	echo "Value of CI is: $$CI" && \
+    $(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
 	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) \
 	-PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) \
