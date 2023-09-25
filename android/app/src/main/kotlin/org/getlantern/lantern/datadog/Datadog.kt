@@ -14,6 +14,7 @@ import com.datadog.android.rum.RumErrorSource
 import com.datadog.android.rum.RumMonitor
 import com.datadog.android.rum.tracking.ActivityViewTrackingStrategy
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.BuildConfig
 import org.getlantern.mobilesdk.Logger
 import java.net.InetSocketAddress
 import java.net.Proxy
@@ -52,8 +53,12 @@ object Datadog {
             id = LanternApp.getSession().userId().toString(),
         )
 
-        val monitor = RumMonitor.Builder().build()
-        GlobalRum.registerIfAbsent(monitor)
+        GlobalRum.registerIfAbsent {
+            RumMonitor.Builder().build()
+        }
+        val session = LanternApp.getSession()
+        val country = session.getCountryCode()
+        GlobalRum.addAttribute(GEO_COUNTRY_CODE, country)
         initialized.set(true)
     }
 
@@ -114,6 +119,7 @@ object Datadog {
             .sampleRumSessions(100f)
             .setUploadFrequency(UploadFrequency.FREQUENT)
             .useSite(DatadogSite.EU1)
+            .trackBackgroundRumEvents(true)
             .trackInteractions()
             .trackLongTasks()
             .setFirstPartyHosts(tracedHosts)
@@ -127,4 +133,5 @@ object Datadog {
     }
 
     private val TAG = Datadog::class.java.name
+    private const val GEO_COUNTRY_CODE = "geo.country_iso_code"
 }
