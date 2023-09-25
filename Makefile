@@ -28,7 +28,7 @@ TEST ?= *_test
 # integration-test:
 # 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
-GO_VERSION := 1.21
+GO_VERSION := 1.19
 
 TAG ?= $$VERSION
 TAG_HEAD := $(shell git rev-parse HEAD)
