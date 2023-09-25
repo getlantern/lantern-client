@@ -76,7 +76,7 @@ msgid "Go Pro Title"
 msgstr "Go Pro!"
 
 msgid "Go Pro Description"
-msgstr "Buka kunci kelajuan lebih pantas, dan data tanpa had!"
+msgstr ""
 
 msgid "Server Location"
 msgstr "Lokasi Server"

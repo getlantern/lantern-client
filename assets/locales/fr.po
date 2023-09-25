@@ -76,7 +76,7 @@ msgid "Go Pro Title"
 msgstr "Passez à la version Pro !"
 
 msgid "Go Pro Description"
-msgstr "Profitez de vitesses plus rapides et de données illimitées !"
+msgstr ""
 
 msgid "Server Location"
 msgstr "Emplacement du serveur"

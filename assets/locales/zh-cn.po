@@ -70,7 +70,7 @@ msgid "Go Pro Title"
 msgstr "专业互联！"
 
 msgid "Go Pro Description"
-msgstr "解锁流畅网速，数据不限量！"
+msgstr ""
 
 msgid "Server Location"
 msgstr "服务器位置"
