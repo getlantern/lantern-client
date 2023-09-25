@@ -16,6 +16,7 @@ import com.datadog.android.rum.tracking.ActivityViewTrackingStrategy
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.mobilesdk.Logger
+import org.getlantern.mobilesdk.model.SessionManager
 import java.net.InetSocketAddress
 import java.net.Proxy
 import java.util.concurrent.atomic.AtomicBoolean
@@ -57,9 +58,12 @@ object Datadog {
             RumMonitor.Builder().build()
         }
         val session = LanternApp.getSession()
-        val country = session.getCountryCode()
-        GlobalRum.addAttribute(GEO_COUNTRY_CODE, country)
+        setCountry(session.countryCode)
         initialized.set(true)
+    }
+
+    fun setCountry(country: String) {
+        GlobalRum.addAttribute(GEO_COUNTRY_CODE, country)
     }
 
     fun addError(
@@ -73,7 +77,7 @@ object Datadog {
 
     // trackUserAction is used to track specific user actions (such as taps, clicks, and scrolls)
     // with RumMonitor
-    fun trackUserAction(
+    private fun trackUserAction(
         actionType: RumActionType,
         name: String,
         actionAttributes: Map<String, Any?> = emptyMap(),
