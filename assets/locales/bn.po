@@ -72,7 +72,7 @@ msgid "Go Pro Title"
 msgstr "প্রো-তে যান!"
 
 msgid "Go Pro Description"
-msgstr "আরও দ্রুত গতি এবং সীমিত ডেটা আনলক করুন!"
+msgstr ""
 
 msgid "Server Location"
 msgstr "সার্ভারের অবস্থান"

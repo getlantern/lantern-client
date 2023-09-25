@@ -76,7 +76,7 @@ msgid "Go Pro Title"
 msgstr "Pro आज़माएँ!"
 
 msgid "Go Pro Description"
-msgstr "तेज गति, और असीमित डेटा अनलॉक करें!"
+msgstr ""
 
 msgid "Server Location"
 msgstr "सर्वर स्थान"
