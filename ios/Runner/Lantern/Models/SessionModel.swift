@@ -9,7 +9,7 @@ import Foundation
 import Internalsdk
 import Flutter
 import UIKit
-
+import DatabaseFramework
 
 class SessionModel:BaseModel<InternalsdkSessionModel> {
     var flutterbinaryMessenger:FlutterBinaryMessenger
@@ -247,7 +247,7 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     // Todo:- Move this method base model
     func invokeMethodOnGo(name: String, argument: MinisqlValue) throws -> MinisqlValue {
         // Convert any argument to Minisql values
-        let goResult = try model.invokeMethod(name, arguments: ValueArrayHandler(values: [argument]))
+        let goResult = try model.invokeMethod(name, arguments: ValueArrayFactory.createValueArrayHandler(values: [argument]))
         return goResult
     }
     

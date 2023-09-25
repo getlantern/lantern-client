@@ -9,35 +9,44 @@ import Foundation
 import Internalsdk
 import SQLite
 
+public struct DatabaseFactory {
+    public static func getDbManager(databasePath: String) throws -> MinisqlDBProtocol {
+        guard !databasePath.isEmpty else {
+            throw NSError(domain: "DatabasePathError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Database path cannot be blank"])
+        }
+        let connection = try! Connection(databasePath)
+        return DatabaseManager(database: connection)
+    }
+}
 
 class DatabaseManager: NSObject, MinisqlDBProtocol {
     private let db: Connection
     private var currentTransaction: TransactionManager?
     
-    private init(database: Connection) {
+     init(database: Connection) {
         self.db = database
     }
     
     // Static function to get an instance of DatabaseManager
     // Expose to Client
-    static func getDbManager(databasePath: String) throws -> MinisqlDBProtocol {
+      static func getDbManager(databasePath: String) throws -> MinisqlDBProtocol {
         guard !databasePath.isEmpty else {
-                    throw NSError(domain: "DatabasePathError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Database path cannot be blank"])
-                }
+            throw NSError(domain: "DatabasePathError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Database path cannot be blank"])
+        }
         let connection = try! Connection(databasePath)
         return DatabaseManager(database: connection)
     }
     
-    func begin() throws -> MinisqlTxProtocol {
+     public func begin() throws -> MinisqlTxProtocol {
         currentTransaction = TransactionManager(database: db)
         return currentTransaction!
     }
     
-    func close()throws  {
+     public func close()throws  {
         //Automatically manages the database connections
     }
     
-    func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
+     public   func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
         }
@@ -48,7 +57,7 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
         return QueryResult(changes: db.totalChanges)
     }
     
-    func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
+     public func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
         
         guard let query = query, let args = args else {
             throw NSError(domain: "ArgumentError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
@@ -192,7 +201,12 @@ class RowData: NSObject, MinisqlRowsProtocol {
             }
         }
     }
-    
+}
+
+public struct ValueArrayFactory {
+    public static func createValueArrayHandler(values: [MinisqlValue]) -> MinisqlValuesProtocol {
+        return ValueArrayHandler(values: values)
+    }
 }
 
 class ValueArrayHandler: NSObject, MinisqlValuesProtocol {
@@ -203,7 +217,7 @@ class ValueArrayHandler: NSObject, MinisqlValuesProtocol {
         self.values = values
     }
     
-    func get(_ index: Int) -> MinisqlValue? {
+    public   func get(_ index: Int) -> MinisqlValue? {
         guard index < values.count else {
             print("Error: Index out of bounds while trying to get value.")
             return nil
@@ -211,11 +225,11 @@ class ValueArrayHandler: NSObject, MinisqlValuesProtocol {
         return values[index]
     }
     
-    func len() -> Int {
+       func len() -> Int {
         return values.count
     }
     
-    func set(_ index: Int, value: MinisqlValue?) {
+       func set(_ index: Int, value: MinisqlValue?) {
         guard index < values.count else {
             print("Error: Index out of bounds while trying to set value.")
             return

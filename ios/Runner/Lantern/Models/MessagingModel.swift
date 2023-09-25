@@ -8,6 +8,7 @@
 import Foundation
 import Internalsdk
 import Flutter
+import DatabaseFramework
 
 class MessagingModel:BaseModel<InternalsdkMessagingModel>{
     var flutterbinaryMessenger:FlutterBinaryMessenger
@@ -53,7 +54,7 @@ class MessagingModel:BaseModel<InternalsdkMessagingModel>{
     
     func invokeMethodOnGo(name: String, argument: MinisqlValue) throws -> Any {
         // Convert any argument to Minisql values
-        let goResult = try model.invokeMethod(name, arguments: ValueArrayHandler(values: [argument]))
+        let goResult = try model.invokeMethod(name, arguments: ValueArrayFactory.createValueArrayHandler(values: [argument]))
         return goResult
     }
     

@@ -5,7 +5,7 @@
 import Foundation
 import Internalsdk
 import Flutter
-
+import DatabaseFramework
 
 class VpnModel : BaseModel<InternalsdkVpnModel> {
     var flutterbinaryMessenger:FlutterBinaryMessenger
@@ -106,7 +106,7 @@ class VpnModel : BaseModel<InternalsdkVpnModel> {
   
     func invokeMethodOnGo(name: String, argument: MinisqlValue) throws -> MinisqlValue {
         // Convert any argument to Minisql values
-        let goResult = try model.invokeMethod(name, arguments: ValueArrayHandler(values: [argument]))
+        let goResult = try model.invokeMethod(name, arguments: ValueArrayFactory.createValueArrayHandler(values: [argument]))
         return goResult
     }
     

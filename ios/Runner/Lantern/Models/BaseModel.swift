@@ -9,6 +9,7 @@ import Foundation
 import Internalsdk
 import SQLite
 import Flutter
+import DatabaseFramework
 
 enum ModelType {
     case sessionModel
@@ -41,8 +42,8 @@ open class BaseModel<T>: NSObject ,FlutterStreamHandler{
     private func setupDB() {
         do {
             let dbPath = getDatabasePath()
-            let db = try Connection(dbPath)
-            let swiftDB = DatabaseManager(database: db)
+//            let db = try DatabaseManager.getDbManager(databasePath: dbPath)
+            let swiftDB = try DatabaseFactory.getDbManager(databasePath: dbPath)
             var error: NSError?
             
             // Depending on the model type, initialize the correct model

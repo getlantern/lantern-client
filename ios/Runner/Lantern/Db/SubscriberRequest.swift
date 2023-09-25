@@ -7,7 +7,7 @@
 
 import Foundation
 import Internalsdk
-import Flutter
+import DatabaseFramework
 
 class DetailsSubscriber: InternalsdkSubscriptionRequest {
     
