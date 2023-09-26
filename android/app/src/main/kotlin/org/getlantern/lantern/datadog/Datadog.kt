@@ -106,7 +106,6 @@ object Datadog {
         val session = LanternApp.getSession()
         val hTTPAddr = session.hTTPAddr
         val uri = URI("http://" + hTTPAddr)
-        //
         return Configuration.Builder(
             logsEnabled = true,
             tracesEnabled = true,
