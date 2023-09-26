@@ -16,6 +16,7 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import java.net.InetSocketAddress
 import java.net.Proxy
+import java.net.URI
 import java.util.concurrent.atomic.AtomicBoolean
 import com.datadog.android.Datadog as DatadogMain
 
@@ -103,6 +104,9 @@ object Datadog {
 
     private fun createDatadogConfiguration(): Configuration {
         val session = LanternApp.getSession()
+        val hTTPAddr = session.hTTPAddr
+        val uri = URI("http://" + hTTPAddr)
+        //
         return Configuration.Builder(
             logsEnabled = true,
             tracesEnabled = true,
@@ -114,8 +118,8 @@ object Datadog {
                 Proxy(
                     Proxy.Type.HTTP,
                     InetSocketAddress(
-                        session.settings.httpProxyHost,
-                        session.settings.httpProxyPort.toInt(),
+                        "127.0.0.1",
+                        uri.getPort(),
                     ),
                 ),
                 null,
