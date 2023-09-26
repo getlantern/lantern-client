@@ -2,7 +2,7 @@
 
 Lantern Android is an app that uses the [VpnService](https://developer.android.com/reference/android/net/VpnService) API to intercept and reroute all device traffic to the Lantern circumvention tool.
 
-## Feature: Replica Mobile
+# Feature: Replica Mobile
 
 See [docs/replica.md](docs/replica.md).
 
