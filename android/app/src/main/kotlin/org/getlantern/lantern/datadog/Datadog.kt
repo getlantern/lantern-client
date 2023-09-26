@@ -25,6 +25,10 @@ object Datadog {
         listOf(
             "datadoghq.eu",
             "127.0.0.1",
+            "iantem.io",
+            "getlantern.org",
+            "getiantem.org",
+            "lantern.io",
         )
     private val initialized = AtomicBoolean()
     private lateinit var datadogConfig: Configuration
@@ -61,10 +65,14 @@ object Datadog {
         val session = LanternApp.getSession()
         setCountry(session.countryCode)
         initialized.set(true)
+
+        // For some reason, sessions don't show up in DataDog RUM until we register a user action
+        // of some sort. So, here we fire the custom action "started" to get data to start flowing.
+        GlobalRum.get().addUserAction(RumActionType.CUSTOM, "started", emptyMap())
     }
 
     fun setCountry(country: String) {
-        GlobalRum.addAttribute(GEO_COUNTRY_CODE, country)
+        GlobalRum.addAttribute("lantern.country_code", country)
     }
 
     fun addError(
@@ -140,5 +148,4 @@ object Datadog {
     }
 
     private val TAG = Datadog::class.java.name
-    private const val GEO_COUNTRY_CODE = "lantern_country_code"
 }
