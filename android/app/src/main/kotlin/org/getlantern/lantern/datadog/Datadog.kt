@@ -140,5 +140,5 @@ object Datadog {
     }
 
     private val TAG = Datadog::class.java.name
-    private const val GEO_COUNTRY_CODE = "geo.country_iso_code"
+    private const val GEO_COUNTRY_CODE = "lantern_country_code"
 }
