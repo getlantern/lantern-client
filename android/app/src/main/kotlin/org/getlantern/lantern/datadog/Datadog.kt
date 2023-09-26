@@ -1,7 +1,6 @@
 package org.getlantern.lantern.datadog
 
 import android.util.Log
-import com.datadog.android.Datadog as DatadogMain
 import com.datadog.android.DatadogSite
 import com.datadog.android.core.configuration.BatchSize
 import com.datadog.android.core.configuration.Configuration
@@ -17,13 +16,20 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import java.net.InetSocketAddress
 import java.net.Proxy
+import java.net.URI
 import java.util.concurrent.atomic.AtomicBoolean
+import com.datadog.android.Datadog as DatadogMain
 
 object Datadog {
-    private val tracedHosts = listOf(
-        "datadoghq.eu",
-        "127.0.0.1",
-    )
+    private val tracedHosts =
+        listOf(
+            "datadoghq.eu",
+            "127.0.0.1",
+            "iantem.io",
+            "getlantern.org",
+            "getiantem.org",
+            "lantern.io",
+        )
     private val initialized = AtomicBoolean()
     private lateinit var datadogConfig: Configuration
 
@@ -33,13 +39,14 @@ object Datadog {
         DatadogMain.setVerbosity(Log.VERBOSE)
         datadogConfig = createDatadogConfiguration()
 
-        val datadogCredentials = Credentials(
-            clientToken = "puba617ab01333a95a25a9d3709f04e1654",
-            envName = "prod",
-            rumApplicationId = "f8eabf3c-5db3-4f7e-8e6a-5a72433b46d2",
-            variant = "release",
-            serviceName = "lantern-android",
-        )
+        val datadogCredentials =
+            Credentials(
+                clientToken = "puba617ab01333a95a25a9d3709f04e1654",
+                envName = "prod",
+                rumApplicationId = "f8eabf3c-5db3-4f7e-8e6a-5a72433b46d2",
+                variant = "release",
+                serviceName = "lantern-android",
+            )
 
         DatadogMain.initialize(
             LanternApp.getAppContext(),
@@ -52,9 +59,20 @@ object Datadog {
             id = LanternApp.getSession().userId().toString(),
         )
 
-        val monitor = RumMonitor.Builder().build()
-        GlobalRum.registerIfAbsent(monitor)
+        GlobalRum.registerIfAbsent {
+            RumMonitor.Builder().build()
+        }
+        val session = LanternApp.getSession()
+        setCountry(session.countryCode)
         initialized.set(true)
+
+        // For some reason, sessions don't show up in DataDog RUM until we register a user action
+        // of some sort. So, here we fire the custom action "started" to get data to start flowing.
+        GlobalRum.get().addUserAction(RumActionType.CUSTOM, "started", emptyMap())
+    }
+
+    fun setCountry(country: String) {
+        GlobalRum.addAttribute("lantern.country_code", country)
     }
 
     fun addError(
@@ -68,12 +86,12 @@ object Datadog {
 
     // trackUserAction is used to track specific user actions (such as taps, clicks, and scrolls)
     // with RumMonitor
-    fun trackUserAction(
+    private fun trackUserAction(
         actionType: RumActionType,
         name: String,
         actionAttributes: Map<String, Any?> = emptyMap(),
     ) {
-         GlobalRum.get().addUserAction(actionType, name, actionAttributes)
+        GlobalRum.get().addUserAction(actionType, name, actionAttributes)
     }
 
     // trackUserClick is used to track user clicks with RumMonitor
@@ -94,6 +112,8 @@ object Datadog {
 
     private fun createDatadogConfiguration(): Configuration {
         val session = LanternApp.getSession()
+        val hTTPAddr = session.hTTPAddr
+        val uri = URI("http://" + hTTPAddr)
         return Configuration.Builder(
             logsEnabled = true,
             tracesEnabled = true,
@@ -105,8 +125,8 @@ object Datadog {
                 Proxy(
                     Proxy.Type.HTTP,
                     InetSocketAddress(
-                        session.settings.httpProxyHost,
-                        session.settings.httpProxyPort.toInt(),
+                        "127.0.0.1",
+                        uri.getPort(),
                     ),
                 ),
                 null,
@@ -114,6 +134,7 @@ object Datadog {
             .sampleRumSessions(100f)
             .setUploadFrequency(UploadFrequency.FREQUENT)
             .useSite(DatadogSite.EU1)
+            .trackBackgroundRumEvents(true)
             .trackInteractions()
             .trackLongTasks()
             .setFirstPartyHosts(tracedHosts)
