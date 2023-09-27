@@ -17,14 +17,44 @@ final class DBModuleTests: XCTestCase, TestsupportTestingTProtocol {
     continueAfterFailure = false
   }
 
-//   func testList() throws {
-//     let db = try newDB()
-//     TestsupportTestList(self, db)
-//   }
-
   func testTransactions() throws {
     let db = try newDB()
     TestsupportTestTransactions(self, db)
+  }
+
+  func testSubscriptions() throws {
+    let db = try newDB()
+    TestsupportTestSubscriptions(self, db)
+  }
+
+  func testSubscribeToInitialDetails() throws {
+    let db = try newDB()
+    TestsupportTestSubscribeToInitialDetails(self, db)
+  }
+
+  func testDetailSubscriptionModifyDetails() throws {
+    let db = try newDB()
+    TestsupportTestDetailSubscriptionModifyDetails(self, db)
+  }
+
+  func testDetailSubscriptionModifyIndex() throws {
+    let db = try newDB()
+    TestsupportTestDetailSubscriptionModifyIndex(self, db)
+  }
+
+  func testList() throws {
+    let db = try newDB()
+    TestsupportTestList(self, db)
+  }
+
+  func testSearch() throws {
+    let db = try newDB()
+    TestsupportTestSearch(self, db)
+  }
+
+  func testSearchChinese() throws {
+    let db = try newDB()
+    TestsupportTestSearchChinese(self, db)
   }
 
   private func newDB() throws -> MinisqlDBProtocol {

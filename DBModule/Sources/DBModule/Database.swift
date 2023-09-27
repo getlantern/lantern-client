@@ -17,6 +17,7 @@ public struct DatabaseFactory {
         userInfo: [NSLocalizedDescriptionKey: "Database path cannot be blank"])
     }
     let connection = try! Connection(databasePath)
+      connection.trace { print($0) }
     return DatabaseManager(database: connection)
   }
 }

@@ -3,7 +3,7 @@ module github.com/getlantern/android-lantern
 go 1.19
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
-// replace github.com/getlantern/pathdb => ../pathdb
+// replace github.com/getlantern/pathdb => ../pathdbx
 
 // replace github.com/getlantern/fronted => ../fronted
 

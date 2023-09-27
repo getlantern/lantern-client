@@ -68,7 +68,14 @@ public class ValueUtil {
       case TYPE_BYTES:
         if let bytes = arg.bytes() {
           let byteArray = [UInt8](bytes)
-          bindings.append(Blob(bytes: byteArray))
+          let str = String(bytes: byteArray, encoding: .utf8)!
+            if str == "T/messages/%" && false {
+                print("Appending as string \(str)")
+                bindings.append("%")
+            } else {
+                print("Appending as bytes \(str)")
+                bindings.append(Blob(bytes: byteArray))
+            }
         } else {
           bindings.append(nil)
         }
