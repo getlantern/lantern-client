@@ -345,7 +345,7 @@ appium driver install espresso
 3. Generate a debug build with `CI=true make android-debug ANDROID_ARCH=all` ... CI needs to be set to true to enable the
 Flutter driver extension.
 
-4. Modify [local_config.json](appium_kotlin/app/src/tests/resources/local/local_config.json) to specify the path of a debug build APK on your system, and change `appium:udid` to specify your device ID (you can get this from `adb devices`)
+4. Modify [local_config.json](appium_kotlin/app/src/test/resources/local/local_config.json) to specify the path of a debug build APK on your system, and change `appium:udid` to specify your device ID (you can get this from `adb devices`)
 
 5. Make sure your device is connected to your computer and then run
 
