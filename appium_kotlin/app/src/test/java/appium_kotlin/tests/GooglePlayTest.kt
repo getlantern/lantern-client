@@ -30,7 +30,7 @@ class GooglePlayTest() : BaseTest() {
         val flutterFinder = FlutterFinder(driver)
         turnVPNon(driver, taskId, flutterFinder)
 
-        driver.startActivity(Activity("com.android.vending", ".AssetBrowserActivity"));
+        driver.startActivity(Activity("com.android.vending", ".AssetBrowserActivity"))
         testEstablishPlaySession(driver)
         testGooglePlayFeatures(driver)
         installAppFromPlayStore(taskId, driver)
