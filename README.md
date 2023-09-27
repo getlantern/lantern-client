@@ -324,6 +324,42 @@ You'd most probably wanna run this against Lantern's staging servers **and** tur
 
 - You can debug pro-server-neu's staging instance (i.e., `api-staging.getiantem.org`) using a combination of log, telemetry and checking the staging Redis instance (see [here](https://github.com/getlantern/pro-server-neu/blob/c79c1b8da9e418bc4b075392fde9b051c699141d/README.md?plain=1#L125) for more info)
 
+## Running Appium tests locally
+
+To run the Appium tests locally with a connected device, you need to follow a few steps:
+
+1. Install appium with npm:
+
+```bash
+npm install -g appium
+```
+
+2. Install the necessary drivers:
+
+```bash
+appium driver install uiautomator2
+appium driver install --source=npm appium-flutter-driver
+appium driver install espresso
+```
+
+3. Generate a debug build with `CI=true make android-debug ANDROID_ARCH=all` ... CI needs to be set to true to enable the
+Flutter driver extension.
+
+4. Modify [local_config.json](appium_kotlin/app/src/tests/resources/local/local_config.json) to specify the path of a debug build APK on your system, and change `appium:udid` to specify your device ID (you can get this from `adb devices`)
+
+5. Make sure your device is connected to your computer and then run
+
+```bash
+cd appium_kotlin
+./gradlew test
+```
+
+To run a specific test, you can do
+
+```bash
+./gradlew test --tests '*GooglePlay*'
+```
+
 ## Source Dump
 Lantern Android source code is made available via source dump tarballs. To create one, run:
 
