@@ -9,7 +9,7 @@ import Foundation
 import Internalsdk
 import Flutter
 import UIKit
-import DatabaseFramework
+import DBModule
 
 class SessionModel:BaseModel<InternalsdkSessionModel> {
     var flutterbinaryMessenger:FlutterBinaryMessenger

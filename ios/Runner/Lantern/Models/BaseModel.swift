@@ -9,7 +9,7 @@ import Foundation
 import Internalsdk
 import SQLite
 import Flutter
-import DatabaseFramework
+import DBModule
 
 enum ModelType {
     case sessionModel

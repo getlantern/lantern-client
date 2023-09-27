@@ -8,7 +8,7 @@
 import Foundation
 import Internalsdk
 import Flutter
-import DatabaseFramework
+import DBModule
 
 class MessagingModel:BaseModel<InternalsdkMessagingModel>{
     var flutterbinaryMessenger:FlutterBinaryMessenger

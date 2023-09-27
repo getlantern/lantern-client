@@ -5,7 +5,7 @@
 import Foundation
 import Internalsdk
 import Flutter
-import DatabaseFramework
+import DBModule
 
 class VpnModel : BaseModel<InternalsdkVpnModel> {
     var flutterbinaryMessenger:FlutterBinaryMessenger

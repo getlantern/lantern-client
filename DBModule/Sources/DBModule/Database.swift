@@ -17,7 +17,7 @@ public struct DatabaseFactory {
         userInfo: [NSLocalizedDescriptionKey: "Database path cannot be blank"])
     }
     let connection = try! Connection(databasePath)
-      connection.trace { print($0) }
+    connection.trace { print($0) }
     return DatabaseManager(database: connection)
   }
 }
@@ -71,9 +71,9 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
         domain: "ArgumentError", code: 1,
         userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
     }
-    
+
     let bindings = ValueUtil.toBindingsArray(args)
-    
+
     let statement = try db.prepare(query)
 
     var rows: [Statement.Element] = []
@@ -130,14 +130,14 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
     }
 
     do {
-        try statement.run(bindings)
+      try statement.run(bindings)
     } catch {
-        switch error {
-        case let SQLite.Result.error(message, _, _):
-            throw message
-        default:
-            throw error
-        }
+      switch error {
+      case let SQLite.Result.error(message, code, _):
+        throw NSError(domain: message, code: Int(code), userInfo: nil)
+      default:
+        throw error
+      }
     }
     return QueryResult(changes: database.changes)
   }
@@ -271,8 +271,4 @@ extension Date {
   static var currentTimeStamp: Int64 {
     return Int64(Date().timeIntervalSince1970 * 1000)
   }
-}
-
-extension String: LocalizedError {
-    public var errorDescription: String? { return self }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 import Internalsdk
-import DatabaseFramework
+import DBModule
 
 class DetailsSubscriber: InternalsdkSubscriptionRequest {
     

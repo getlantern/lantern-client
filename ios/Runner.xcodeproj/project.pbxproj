@@ -17,8 +17,6 @@
 		0308A1392AAEF8DE0086157A /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
 		0308A13D2AAF39F80086157A /* FlashlightManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */; };
 		0308A13E2AAF43A10086157A /* UserNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A12B2AAEEE2C0086157A /* UserNotificationsManager.swift */; };
-		0315F55D2AC1C1A500D49F7B /* DatabaseFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0315F55C2AC1C1A500D49F7B /* DatabaseFramework.framework */; };
-		0315F55E2AC1C1A500D49F7B /* DatabaseFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0315F55C2AC1C1A500D49F7B /* DatabaseFramework.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0321C3F72AA9D84700D462C1 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F62AA9D84700D462C1 /* Process.swift */; };
 		0321C3F92AA9D8DF00D462C1 /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
 		0321C3FB2AA9DC6E00D462C1 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A1AB312AA890AB00FB41B2 /* NetworkExtension.framework */; };
@@ -55,25 +53,14 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		EC22F6242AC44C8E0017D36C /* Internalsdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */; };
+		EC22F6252AC44C8E0017D36C /* Internalsdk.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		EC27DE902AC44FAD00B840F2 /* DBModule in Frameworks */ = {isa = PBXBuildFile; productRef = EC27DE8F2AC44FAD00B840F2 /* DBModule */; };
 		ECCA8C672ABD16D20037BF9B /* LanternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECCA8C662ABD16D20037BF9B /* LanternTests.swift */; };
 		F309D8C575359E6D35A75E9D /* Pods_LanternTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49496710B5388EA1D58F0B15 /* Pods_LanternTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		031B6A872AC166D900FE72A4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 031B6A822AC166D800FE72A4 /* DatabaseFramework.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 031B6A682AC166D800FE72A4;
-			remoteInfo = DatabaseFramework;
-		};
-		031B6A892AC166D900FE72A4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 031B6A822AC166D800FE72A4 /* DatabaseFramework.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 031B6A722AC166D800FE72A4;
-			remoteInfo = DatabaseFrameworkTests;
-		};
 		03A1AB382AA890AB00FB41B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
@@ -91,17 +78,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		0315F55F2AC1C1A500D49F7B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				0315F55E2AC1C1A500D49F7B /* DatabaseFramework.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		03A1AB3F2AA890AB00FB41B2 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -111,6 +87,17 @@
 				03A1AB3A2AA890AB00FB41B2 /* Tunnel.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EC22F6262AC44C8E0017D36C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EC22F6252AC44C8E0017D36C /* Internalsdk.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -123,7 +110,6 @@
 		0308A12F2AAEF3AA0086157A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManagerExtension.swift; sourceTree = "<group>"; };
 		0315F55C2AC1C1A500D49F7B /* DatabaseFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DatabaseFramework.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/DatabaseFramework-csnjouuwjwleiddbptbupimqigld/Build/Products/Debug-iphoneos/DatabaseFramework.framework"; sourceTree = "<group>"; };
-		031B6A822AC166D800FE72A4 /* DatabaseFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DatabaseFramework.xcodeproj; path = DatabaseFramework/DatabaseFramework.xcodeproj; sourceTree = "<group>"; };
 		0321C3F62AA9D84700D462C1 /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManager.swift; sourceTree = "<group>"; };
 		032A43572AA6F8AA00EF442B /* DnsDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnsDetector.swift; sourceTree = "<group>"; };
@@ -176,6 +162,7 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA815533D3563C2353745CE2 /* Pods-LanternTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.release.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.release.xcconfig"; sourceTree = "<group>"; };
 		E33BD5976CBD307AC6B17F23 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		EC27DE8E2AC44F4300B840F2 /* DBModule */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DBModule; path = ../DBModule; sourceTree = "<group>"; };
 		ECCA8C642ABD16D20037BF9B /* LanternTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LanternTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECCA8C662ABD16D20037BF9B /* LanternTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanternTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -193,9 +180,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC27DE902AC44FAD00B840F2 /* DBModule in Frameworks */,
 				038A011E2AC1C329002FE1A9 /* Pods_Runner.framework in Frameworks */,
+				EC22F6242AC44C8E0017D36C /* Internalsdk.xcframework in Frameworks */,
 				0321C3FB2AA9DC6E00D462C1 /* NetworkExtension.framework in Frameworks */,
-				0315F55D2AC1C1A500D49F7B /* DatabaseFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,23 +198,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		031B6A5D2AC166A200FE72A4 /* DatabaseFramework */ = {
-			isa = PBXGroup;
-			children = (
-				031B6A822AC166D800FE72A4 /* DatabaseFramework.xcodeproj */,
-			);
-			path = DatabaseFramework;
-			sourceTree = "<group>";
-		};
-		031B6A832AC166D800FE72A4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				031B6A882AC166D900FE72A4 /* DatabaseFramework.framework */,
-				031B6A8A2AC166D900FE72A4 /* DatabaseFrameworkTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		032A43562AA6F86A00EF442B /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -350,7 +321,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
-				031B6A5D2AC166A200FE72A4 /* DatabaseFramework */,
+				EC22F61E2AC44B000017D36C /* Packages */,
 				03CD38182A693C050044B004 /* internalsdk */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
@@ -400,6 +371,14 @@
 				639C2FD1FB8C2B8BA0BC8FA2 /* Pods-LanternTests.profile.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		EC22F61E2AC44B000017D36C /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				EC27DE8E2AC44F4300B840F2 /* DBModule */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 		ECCA8C652ABD16D20037BF9B /* LanternTests */ = {
@@ -467,7 +446,7 @@
 				3F72706DAEB45E756D135F84 /* [CP] Embed Pods Frameworks */,
 				8CFC94838D10599DD335E9EC /* [CP] Copy Pods Resources */,
 				03A1AB3F2AA890AB00FB41B2 /* Embed Foundation Extensions */,
-				0315F55F2AC1C1A500D49F7B /* Embed Frameworks */,
+				EC22F6262AC44C8E0017D36C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -475,6 +454,9 @@
 				03A1AB392AA890AB00FB41B2 /* PBXTargetDependency */,
 			);
 			name = Runner;
+			packageProductDependencies = (
+				EC27DE8F2AC44FAD00B840F2 /* DBModule */,
+			);
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
@@ -534,12 +516,6 @@
 			mainGroup = 97C146E51CF9000F007C117D;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 031B6A832AC166D800FE72A4 /* Products */;
-					ProjectRef = 031B6A822AC166D800FE72A4 /* DatabaseFramework.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
@@ -548,23 +524,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		031B6A882AC166D900FE72A4 /* DatabaseFramework.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = DatabaseFramework.framework;
-			remoteRef = 031B6A872AC166D900FE72A4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		031B6A8A2AC166D900FE72A4 /* DatabaseFrameworkTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = DatabaseFrameworkTests.xctest;
-			remoteRef = 031B6A892AC166D900FE72A4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		03A1AB2E2AA890AB00FB41B2 /* Resources */ = {
@@ -1344,6 +1303,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EC27DE8F2AC44FAD00B840F2 /* DBModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DBModule;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
 }
