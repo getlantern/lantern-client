@@ -8,6 +8,7 @@ import android.os.IBinder
 import com.google.gson.JsonObject
 import okhttp3.HttpUrl
 import okhttp3.Response
+import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.model.AccountInitializationStatus
@@ -18,6 +19,7 @@ import org.getlantern.lantern.model.LanternStatus.Status
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.notification.Notifications
+import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.Json
 import org.getlantern.mobilesdk.Lantern
 import org.getlantern.mobilesdk.LanternNotRunningException
@@ -33,6 +35,8 @@ class LanternService : Service(), ServiceManager.Runner {
         private val TAG = LanternService::class.java.simpleName
         private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
     }
+
+    private var autoUpdater: AutoUpdater = AutoUpdater(this)
 
     inner class LocalBinder : Binder() {
         val service
