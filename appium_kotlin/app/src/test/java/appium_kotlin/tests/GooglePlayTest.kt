@@ -3,6 +3,7 @@ package appium_kotlin.tests
 import appium_kotlin.ContextType
 import appium_kotlin.LANTERN_PACKAGE_ID
 import io.appium.java_client.MobileBy
+import io.appium.java_client.android.Activity
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
@@ -29,20 +30,10 @@ class GooglePlayTest() : BaseTest() {
         val flutterFinder = FlutterFinder(driver)
         turnVPNon(driver, taskId, flutterFinder)
 
-        var capabilities = initialCapabilities(taskId)
-        capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, "com.android.vending")
-        capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, ".AssetBrowserActivity")
-        capabilities.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, ".AssetBrowserActivity")
-        capabilities.setCapability(AndroidMobileCapabilityType.DEVICE_READY_TIMEOUT, 40)
-        driver = initDriver(capabilities)
+        driver.startActivity(Activity("com.android.vending", ".AssetBrowserActivity"));
         testEstablishPlaySession(driver)
         testGooglePlayFeatures(driver)
         installAppFromPlayStore(taskId, driver)
-        println("Opening application")
-        driver.quit()
-        capabilities = installedAppCapabilities(taskId)
-        driver = initDriver(capabilities)
-        driver.launchApp()
     }
 
     fun turnVPNon(
@@ -50,7 +41,10 @@ class GooglePlayTest() : BaseTest() {
         taskId: Int,
         flutterFinder: FlutterFinder,
     ) {
+        Thread.sleep(5000)
+
         switchToContext(ContextType.NATIVE_APP, driver)
+        Thread.sleep(5000)
         driver.activateApp(LANTERN_PACKAGE_ID)
         Thread.sleep(5000)
 
@@ -62,10 +56,6 @@ class GooglePlayTest() : BaseTest() {
         // Approve VPN Permissions dialog
         switchToContext(ContextType.NATIVE_APP, driver)
         Thread.sleep(1000)
-        driver.findElement(By.id("android:id/button1")).click()
-        //Wait for VPN to connect
-        println("TaskId: $taskId | Going to Sleep")
-        Thread.sleep(2000)
     }
 
     fun initDriver(capabilities: DesiredCapabilities): AndroidDriver {
@@ -79,11 +69,11 @@ class GooglePlayTest() : BaseTest() {
 
     fun testEstablishPlaySession(driver: AndroidDriver) {
         Assertions.assertEquals(driver.currentPackage, "com.android.vending")
-        Assertions.assertEquals(driver.currentActivity(), "org.getlantern.lantern")
+        Assertions.assertEquals(driver.currentActivity(), ".AssetBrowserActivity")
     }
 
     fun testGooglePlayFeatures(driver: AndroidDriver) {
-        driver.findElement(By.xpath("/android.widget.FrameLayout[@content-desc = 'Show navigation drawer']"))?.click()
+        driver.findElement(By.xpath("//android.widget.FrameLayout[@content-desc = 'Show navigation drawer']"))?.click()
         val elements = driver.findElements(By.xpath("//android.widget.TextView"))
         if (elements == null) return
         for (element in elements) {
