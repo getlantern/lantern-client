@@ -116,7 +116,19 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
             try begin()
         }
         
-        try statement.run(bindings)
+        do {
+            try statement.run(bindings)
+        } catch let error {
+            // Check if the error is a UNIQUE constraint error
+            //Show how if we return same error go is not abel to catch it
+            
+            let errorMessage = String(describing: error)
+             if errorMessage.contains("UNIQUE constraint failed") {
+                 throw NSError(domain: "UNIQUE constraint failed", code: 19, userInfo: nil)
+             } else {
+                 throw error
+             }
+        }
         return QueryResult(changes: database.totalChanges)
     }
     

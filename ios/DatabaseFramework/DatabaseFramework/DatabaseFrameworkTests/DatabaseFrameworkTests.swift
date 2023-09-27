@@ -7,30 +7,77 @@
 
 import XCTest
 @testable import DatabaseFramework
+import Internalsdk
 
-final class DatabaseFrameworkTests: XCTestCase {
+final class DatabaseFrameworkTests: XCTestCase,TestsupportTestingTProtocol {
+ 
+    func errorf(_ text: String?) {
+        XCTFail(text!)
+    }
+    
+    func failNow() {
+        XCTFail("failing now!")
+    }
+    
+    override func setUp()  {
+        super.setUp()
+        continueAfterFailure = false
+    }
+    
+    
+    func testTransactions() throws {
+      let db = try newDB()
+      TestsupportTestTransactions(self, db)
+    }
+    
+    
+    func testSubscriptions() throws {
+       let db = try newDB()
+       TestsupportTestSubscriptions(self, db)
+     }
+    
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+     func testSubscribeToInitialDetails() throws {
+       let db = try newDB()
+       TestsupportTestSubscribeToInitialDetails(self, db)
+     }
+    
+    
+    func testList() throws {
+      let db = try newDB()
+      TestsupportTestList(self, db)
+    }
+    
+    
+    func testSearch() throws {
+       let db = try newDB()
+       TestsupportTestSearch(self, db)
+     }
+    
+    func testSearchChinese() throws {
+       let db = try newDB()
+       TestsupportTestSearchChinese(self, db)
+     }
+    
+    
+    // Utils  methods
+    private func newDB() throws -> MinisqlDBProtocol {
+      return try DatabaseFactory.getDbManager(databasePath: newDBPath())
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+    private func newDBPath() -> String {
+      let fileManager = FileManager.default
+      let directory = fileManager.temporaryDirectory
+      let subdirectory = UUID().uuidString
+      let dbDir = directory.appendingPathComponent(subdirectory)
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+      do {
+        try fileManager.createDirectory(at: dbDir, withIntermediateDirectories: true, attributes: nil)
+        let dbLocation = dbDir.appendingPathComponent("db").path
+        return dbLocation
+      } catch {
+        return ""  // Return an empty string or handle the error accordingly.
+      }
     }
 
 }
