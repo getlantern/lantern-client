@@ -24,8 +24,8 @@ class VPNTab extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            proUser ? Container() : ProBanner(),
-            VPNSwitch(),
+            proUser ? const SizedBox() : ProBanner(),
+            const VPNSwitch(),
             Container(
               padding: const EdgeInsetsDirectional.all(16),
               decoration: BoxDecoration(
@@ -40,13 +40,9 @@ class VPNTab extends StatelessWidget {
               child: Column(
                 children: [
                   VPNStatus(),
-                  Container(
-                    child: const CDivider(height: 32.0),
-                  ),
+                  const CDivider(height: 32.0),
                   ServerLocationWidget(),
-                  Container(
-                    child: const CDivider(height: 32.0),
-                  ),
+                  const CDivider(height: 32.0),
                   SplitTunnelingWidget(),
                   VPNBandwidth(),
                 ],

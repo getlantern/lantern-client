@@ -69,7 +69,7 @@ msgid "Go Pro Title"
 msgstr "升級至 Pro 版！"
 
 msgid "Go Pro Description"
-msgstr "速度更快，網路數據用量無上限！"
+msgstr ""
 
 msgid "Server Location"
 msgstr "伺服器位置"

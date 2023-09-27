@@ -57,9 +57,10 @@ jobs:
         run: make android-lib ANDROID_ARCH=all
 
       - name: Build APK
+        env:
+          CI: "true"
         run: |
           flutter pub get
-          echo "CI=true" >> $GITHUB_ENV
           make do-android-debug ANDROID_ARCH=all
 
       - name: List files in current directory

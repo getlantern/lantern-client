@@ -87,7 +87,7 @@ msgid "Go Pro Title"
 msgstr "به نسخه حرفه‌ای بروید!"
 
 msgid "Go Pro Description"
-msgstr "به سرعت‌های بالاتر و داده‌های نامحدود دسترسی پیدا کنید!"
+msgstr ""
 
 msgid "Server Location"
 msgstr "موقعیت سرور"

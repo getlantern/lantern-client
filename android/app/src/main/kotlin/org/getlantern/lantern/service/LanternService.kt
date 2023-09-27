@@ -9,6 +9,7 @@ import com.google.gson.JsonObject
 import okhttp3.HttpUrl
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
@@ -62,6 +63,13 @@ class LanternService : Service(), ServiceManager.Runner {
                     EventBus.getDefault().post(loconf)
                 }
             })
+
+            Datadog.initialize()
+
+            if (!BuildConfig.PLAY_VERSION && !BuildConfig.DEVELOPMENT_MODE) {
+                // check if an update is available
+                autoUpdater.checkForUpdates()
+            }
         } catch (lnre: LanternNotRunningException) {
             Logger.e(TAG, "Unable to start LanternService", lnre)
         }
