@@ -30,10 +30,10 @@ replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks
 require (
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
-	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
+	github.com/getlantern/dnsgrab v0.0.0-20230822102054-7ff232ec3148
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight/v7 v7.6.8
+	github.com/getlantern/flashlight/v7 v7.6.9
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20230511223023-ee52513fd782
@@ -108,7 +108,7 @@ require (
 	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/gaukas/godicttls v0.0.3 // indirect
 	github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 // indirect
-	github.com/getlantern/broflake v0.0.0-20230822184836-0b9bbcadd5c6 // indirect
+	github.com/getlantern/broflake v0.0.0-20230926124502-c8269f54a586 // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
 	github.com/getlantern/byteexec v0.0.0-20220903142956-e6ed20032cfd // indirect
 	github.com/getlantern/cmux v0.0.0-20230301223233-dac79088a4c0 // indirect
