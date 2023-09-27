@@ -129,16 +129,18 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
       try begin()
     }
 
-    do {
-      try statement.run(bindings)
-    } catch {
-      switch error {
-      case let SQLite.Result.error(message, code, _):
-        throw NSError(domain: message, code: Int(code), userInfo: nil)
-      default:
-        throw error
+      do {
+          try statement.run(bindings)
+      } catch let error {
+          // Check if the error is a UNIQUE constraint error
+          //Showhow if we return same error go is not abel to catch it
+          let errorMessage = String(describing: error)
+          if errorMessage.contains("UNIQUE constraint failed") {
+              throw NSError(domain: "UNIQUE constraint failed", code: 19, userInfo: nil)
+          } else {
+              throw error
+          }
       }
-    }
     return QueryResult(changes: database.changes)
   }
 
@@ -223,7 +225,9 @@ class RowData: NSObject, MinisqlRowsProtocol {
       let currentRow = rows[currentIndex]
       for (index, value) in currentRow.enumerated() {
         let miniSqlValue = values!.get(index)!
-        ValueUtil.setValueFromBinding(binding: value!, value: miniSqlValue)
+          if(value != nil){
+              ValueUtil.setValueFromBinding(binding: value!, value: miniSqlValue)
+          }
       }
     }
   }

@@ -66,7 +66,6 @@ final class DBModuleTests: XCTestCase, TestsupportTestingTProtocol {
     let directory = fileManager.temporaryDirectory
     let subdirectory = UUID().uuidString
     let dbDir = directory.appendingPathComponent(subdirectory)
-
     do {
       try fileManager.createDirectory(at: dbDir, withIntermediateDirectories: true, attributes: nil)
       let dbLocation = dbDir.appendingPathComponent("db").path
