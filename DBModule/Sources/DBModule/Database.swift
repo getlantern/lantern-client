@@ -70,8 +70,9 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
         domain: "ArgumentError", code: 1,
         userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
     }
-
+    
     let bindings = ValueUtil.toBindingsArray(args)
+    
     let statement = try db.prepare(query)
 
     var rows: [Statement.Element] = []
@@ -92,7 +93,6 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
   }
 
   private func begin() throws {
-    print("BEGIN TX")
     savepointName = "Savepoint\(UUID().uuidString)"
     if let savepointName = savepointName {
       try database.run("SAVEPOINT '\(savepointName)'")
@@ -100,13 +100,10 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
   }
 
   func commit() throws {
-    print("COMMIT TX")
     if let savepointName = savepointName {
-      print("RELEASING SAVEPOINT")
       try database.run("RELEASE '\(savepointName)'")
     }
     savepointName = nil
-    print("CHANGES '\(database.changes)'")
   }
 
   func rollback() throws {
@@ -131,7 +128,16 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
       try begin()
     }
 
-    try statement.run(bindings)
+    do {
+        try statement.run(bindings)
+    } catch {
+        switch error {
+        case let SQLite.Result.error(message, _, _):
+            throw message
+        default:
+            throw error
+        }
+    }
     return QueryResult(changes: database.changes)
   }
 
@@ -238,7 +244,6 @@ class ValueArrayHandler: NSObject, MinisqlValuesProtocol {
 
   public func get(_ index: Int) -> MinisqlValue? {
     guard index < values.count else {
-      print("Error: Index out of bounds while trying to get value.")
       return nil
     }
     return values[index]
@@ -250,20 +255,23 @@ class ValueArrayHandler: NSObject, MinisqlValuesProtocol {
 
   func set(_ index: Int, value: MinisqlValue?) {
     guard index < values.count else {
-      print("Error: Index out of bounds while trying to set value.")
       return
     }
 
     guard let value = value else {
-      print("Error: Attempted to set nil value.")
       return
     }
 
     values[index] = value
   }
 }
+
 extension Date {
   static var currentTimeStamp: Int64 {
     return Int64(Date().timeIntervalSince1970 * 1000)
   }
+}
+
+extension String: LocalizedError {
+    public var errorDescription: String? { return self }
 }
