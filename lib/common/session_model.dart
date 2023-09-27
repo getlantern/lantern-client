@@ -32,15 +32,14 @@ class SessionModel extends Model {
       'playVersion',
       false,
     );
-    proxyAvailable = singleValueNotifier(
-      'hasSucceedingProxy',
-      true,
-    );
+    proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
+    country = singleValueNotifier('geo_country_code', 'US');
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> isPlayVersion;
   late ValueNotifier<bool?> proxyAvailable;
+  late ValueNotifier<String?> country;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
