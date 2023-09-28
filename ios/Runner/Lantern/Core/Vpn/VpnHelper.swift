@@ -35,10 +35,13 @@ class VpnHelper: NSObject {
             notificationCenter.post(name: VpnHelper.didUpdateStateNotification, object: nil)
         }
     }
-
+    
+   private let stateLock = NSLock()
    private var _state: VPNState
     var state: VPNState {
         get {
+            stateLock.lock()
+            defer { stateLock.unlock() }
             if configuring {
                 return .configuring
             }
@@ -46,9 +49,14 @@ class VpnHelper: NSObject {
         }
 
         set(newState) {
-            guard _state != newState else { return }
+            stateLock.lock()
+            guard _state != newState else {
+                stateLock.unlock()
+                return
+            }
             _state = newState
             notificationCenter.post(name: VpnHelper.didUpdateStateNotification, object: nil)
+            stateLock.unlock()
         }
     }
 

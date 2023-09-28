@@ -31,12 +31,13 @@ import Toast_Swift
     
     //Flutter related stuff
     private func initializeFlutterComponents() {
+        
+        
         flutterViewController = window?.rootViewController as! FlutterViewController
-        flutterbinaryMessenger = flutterViewController.binaryMessenger
-    }
+        flutterbinaryMessenger = flutterViewController.binaryMessenger}
     
     
-    //Intlize this GO model and callback
+    // Intlize this GO model and callback
     private func setupAppComponents() {
         setupModels()
         startUpSequency()
@@ -69,6 +70,8 @@ import Toast_Swift
     }
     
     func askNotificationPermssion()  {
+        
+        
         UserNotificationsManager.shared.requestNotificationPermission { granted in
             if granted {
                 logger.debug("Notification Permssion is granted")
@@ -84,6 +87,7 @@ import Toast_Swift
     
     
     private func setupLocal(){
+        
         let langStr = Locale.current.identifier
         if langStr != nil{
             sessionModel.setLocal(lang: langStr)
