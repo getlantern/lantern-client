@@ -19,7 +19,6 @@
 		0308A13E2AAF43A10086157A /* UserNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A12B2AAEEE2C0086157A /* UserNotificationsManager.swift */; };
 		0321C3F72AA9D84700D462C1 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F62AA9D84700D462C1 /* Process.swift */; };
 		0321C3F92AA9D8DF00D462C1 /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
-		0321C3FB2AA9DC6E00D462C1 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A1AB312AA890AB00FB41B2 /* NetworkExtension.framework */; };
 		032A43582AA6F8AA00EF442B /* DnsDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032A43572AA6F8AA00EF442B /* DnsDetector.swift */; };
 		03567DBB2AA9F15100A233EA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB432AA8946400FB41B2 /* Constants.swift */; };
 		03567DBC2AA9F18D00A233EA /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F62AA9D84700D462C1 /* Process.swift */; };
@@ -33,7 +32,6 @@
 		036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036663D82A9E0C0E00595971 /* JsonUtils.swift */; };
 		0369DF792A93803D000EBE43 /* MessagingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0369DF782A93803D000EBE43 /* MessagingModel.swift */; };
 		03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */; };
-		038A011E2AC1C329002FE1A9 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 351BB463FD77FC724A8E233C /* Pods_Runner.framework */; };
 		03A1AB142AA88BDA00FB41B2 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB132AA88BDA00FB41B2 /* VPNManager.swift */; };
 		03A1AB322AA890AB00FB41B2 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A1AB312AA890AB00FB41B2 /* NetworkExtension.framework */; };
 		03A1AB352AA890AB00FB41B2 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB342AA890AB00FB41B2 /* PacketTunnelProvider.swift */; };
@@ -54,8 +52,9 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		EC22F6242AC44C8E0017D36C /* Internalsdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */; };
-		EC22F6252AC44C8E0017D36C /* Internalsdk.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		EC27DE902AC44FAD00B840F2 /* DBModule in Frameworks */ = {isa = PBXBuildFile; productRef = EC27DE8F2AC44FAD00B840F2 /* DBModule */; };
+		ECA871BD2AC59104007C400D /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 351BB463FD77FC724A8E233C /* Pods_Runner.framework */; };
+		ECA871BF2AC59109007C400D /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A1AB312AA890AB00FB41B2 /* NetworkExtension.framework */; };
 		ECCA8C672ABD16D20037BF9B /* LanternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECCA8C662ABD16D20037BF9B /* LanternTests.swift */; };
 		F309D8C575359E6D35A75E9D /* Pods_LanternTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49496710B5388EA1D58F0B15 /* Pods_LanternTests.framework */; };
 /* End PBXBuildFile section */
@@ -87,17 +86,6 @@
 				03A1AB3A2AA890AB00FB41B2 /* Tunnel.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EC22F6262AC44C8E0017D36C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				EC22F6252AC44C8E0017D36C /* Internalsdk.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -180,10 +168,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECA871BD2AC59104007C400D /* Pods_Runner.framework in Frameworks */,
+				ECA871BF2AC59109007C400D /* NetworkExtension.framework in Frameworks */,
 				EC27DE902AC44FAD00B840F2 /* DBModule in Frameworks */,
-				038A011E2AC1C329002FE1A9 /* Pods_Runner.framework in Frameworks */,
 				EC22F6242AC44C8E0017D36C /* Internalsdk.xcframework in Frameworks */,
-				0321C3FB2AA9DC6E00D462C1 /* NetworkExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,7 +434,6 @@
 				3F72706DAEB45E756D135F84 /* [CP] Embed Pods Frameworks */,
 				8CFC94838D10599DD335E9EC /* [CP] Copy Pods Resources */,
 				03A1AB3F2AA890AB00FB41B2 /* Embed Foundation Extensions */,
-				EC22F6262AC44C8E0017D36C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
