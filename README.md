@@ -32,16 +32,16 @@ All those dependencies must be in your PATH
 * [Android Studio](https://developer.android.com/studio)
 * [Git](https://git-scm.com/downloads)
 * [Android NDK](#steps-to-run-the-project)
-  * NDK should be version 22.x, for example 22.1.7171670. Newer versions of the NDK don't work with the current release of gomobile.
+  * NDK should be version 26.x, for example 26.0.10792818.
 * [Git LFS](https://git-lfs.github.com)
   - more information in [Usage](#usage)
-* [Flutter (3.10.5)](https://flutter.dev)
+* [Flutter (3.13.5)](https://flutter.dev)
 * [sentry-cli](https://docs.sentry.io/product/cli/installation/)
   - This is used for uploading native debug symbols to Sentry
 * [gomobile](https://github.com/golang/go/wiki/Mobile#tools)
 * [json-server](https://github.com/typicode/json-server)
   * Only necessary for testing Replica
-* CMake 3.18.1
+* CMake 3.22.1
   * You can get this from Android SDK Manager
 
 In the welcome screen choose the "Open an existing Android Studio" option and select the `android` folder.
