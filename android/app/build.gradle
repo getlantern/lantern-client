@@ -37,7 +37,7 @@ if (flutterVersionName == null) {
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    ndkVersion "23.0.7599858"
+    ndkVersion "26.0.10792818"
 
     bundle {
         density {
@@ -139,7 +139,7 @@ android {
     externalNativeBuild {
         cmake {
             path file('cmake/CMakeLists.txt')
-            version '3.18.1'
+            version '3.22.1'
         }
     }
 
