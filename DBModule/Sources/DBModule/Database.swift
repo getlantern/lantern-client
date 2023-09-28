@@ -64,7 +64,7 @@ class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
     }
     savepointName = nil
   }
-  
+
   public func close() throws {
     // Automatically manages the database connections
   }
@@ -90,18 +90,7 @@ class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
       try beginTransaction()
     }
 
-    do {
-      try statement.run(bindings)
-    } catch let error {
-      // Check if the error is a UNIQUE constraint error
-      //Showhow if we return same error go is not abel to catch it
-      let errorMessage = String(describing: error)
-      if errorMessage.contains("UNIQUE constraint failed") {
-        throw NSError(domain: "UNIQUE constraint failed", code: 19, userInfo: nil)
-      } else {
-        throw error
-      }
-    }
+    try runStatement(statement, bindings)
     return QueryResult(changes: database.changes)
   }
 
@@ -121,11 +110,21 @@ class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
 
     var rows: [Statement.Element] = []
 
-    for row in try statement.run(bindings) {
+    for row in try runStatement(statement, bindings) {
       rows.append(row)
     }
 
     return RowData(rows: rows)
+  }
+
+  func runStatement(_ statement: Statement, _ bindings: [Binding?]) throws -> Statement {
+    do {
+      return try statement.run(bindings)
+    } catch let SQLite.Result.error(message, code, _) {
+      throw NSError(domain: message, code: Int(code), userInfo: nil)
+    } catch let error {
+      throw NSError(domain: String(describing: error), code: 0, userInfo: nil)
+    }
   }
 }
 
