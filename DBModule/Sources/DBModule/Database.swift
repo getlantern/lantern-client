@@ -22,12 +22,15 @@ public struct DatabaseFactory {
   }
 }
 
-class DatabaseManager: NSObject, MinisqlDBProtocol {
-  private let db: Connection
-  private var currentTransaction: TransactionManager?
+class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
+  private let database: Connection
+  private let transactional: Bool
+  private var currentTransaction: DatabaseManager?
+  private var savepointName: String?
 
-  init(database: Connection) {
-    self.db = database
+  init(database: Connection, transactional: Bool = false) {
+    self.database = database
+    self.transactional = transactional
   }
 
   // Static function to get an instance of DatabaseManager
@@ -43,61 +46,8 @@ class DatabaseManager: NSObject, MinisqlDBProtocol {
   }
 
   public func begin() throws -> MinisqlTxProtocol {
-    currentTransaction = TransactionManager(database: db)
+    currentTransaction = DatabaseManager(database: database, transactional: true)
     return currentTransaction!
-  }
-
-  public func close() throws {
-    //Automatically manages the database connections
-  }
-
-  public func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
-    guard let query = query, let args = args else {
-      throw NSError(
-        domain: "ArgumentError", code: 1,
-        userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
-    }
-    let bindings = ValueUtil.toBindingsArray(args)
-    let statement = try db.prepare(query)
-
-    try statement.run(bindings)
-    return QueryResult(changes: db.changes)
-  }
-
-  public func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
-
-    guard let query = query, let args = args else {
-      throw NSError(
-        domain: "ArgumentError", code: 1,
-        userInfo: [NSLocalizedDescriptionKey: "Query or arguments are nil"])
-    }
-
-    let bindings = ValueUtil.toBindingsArray(args)
-
-    let statement = try db.prepare(query)
-
-    var rows: [Statement.Element] = []
-
-    try statement.run(bindings).forEach { row in
-      rows.append(row)
-    }
-    return RowData(rows: rows)
-  }
-}
-
-class TransactionManager: NSObject, MinisqlTxProtocol {
-  let database: Connection
-  private var savepointName: String?
-
-  init(database: Connection) {
-    self.database = database
-  }
-
-  private func begin() throws {
-    savepointName = "Savepoint\(UUID().uuidString)"
-    if let savepointName = savepointName {
-      try database.run("SAVEPOINT '\(savepointName)'")
-    }
   }
 
   func commit() throws {
@@ -114,6 +64,17 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
     }
     savepointName = nil
   }
+  
+  public func close() throws {
+    // Automatically manages the database connections
+  }
+
+  private func beginTransaction() throws {
+    savepointName = "Savepoint\(UUID().uuidString)"
+    if let savepointName = savepointName {
+      try database.run("SAVEPOINT '\(savepointName)'")
+    }
+  }
 
   func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
     guard let query = query, let args = args else {
@@ -125,22 +86,22 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
     let bindings = ValueUtil.toBindingsArray(args)
     let statement = try database.prepare(query)
     // Start a transaction if none has been started yet
-    if savepointName == nil {
-      try begin()
+    if transactional && savepointName == nil {
+      try beginTransaction()
     }
 
-      do {
-          try statement.run(bindings)
-      } catch let error {
-          // Check if the error is a UNIQUE constraint error
-          //Showhow if we return same error go is not abel to catch it
-          let errorMessage = String(describing: error)
-          if errorMessage.contains("UNIQUE constraint failed") {
-              throw NSError(domain: "UNIQUE constraint failed", code: 19, userInfo: nil)
-          } else {
-              throw error
-          }
+    do {
+      try statement.run(bindings)
+    } catch let error {
+      // Check if the error is a UNIQUE constraint error
+      //Showhow if we return same error go is not abel to catch it
+      let errorMessage = String(describing: error)
+      if errorMessage.contains("UNIQUE constraint failed") {
+        throw NSError(domain: "UNIQUE constraint failed", code: 19, userInfo: nil)
+      } else {
+        throw error
       }
+    }
     return QueryResult(changes: database.changes)
   }
 
@@ -154,8 +115,8 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
     let bindings = ValueUtil.toBindingsArray(args)
     let statement = try database.prepare(query)
     // Start a transaction if none has been started yet
-    if savepointName == nil {
-      try begin()
+    if transactional && savepointName == nil {
+      try beginTransaction()
     }
 
     var rows: [Statement.Element] = []
@@ -169,7 +130,6 @@ class TransactionManager: NSObject, MinisqlTxProtocol {
 }
 
 class QueryResult: NSObject, MinisqlResultProtocol {
-
   let changes: Int
 
   init(changes: Int) {
@@ -225,9 +185,9 @@ class RowData: NSObject, MinisqlRowsProtocol {
       let currentRow = rows[currentIndex]
       for (index, value) in currentRow.enumerated() {
         let miniSqlValue = values!.get(index)!
-          if(value != nil){
-              ValueUtil.setValueFromBinding(binding: value!, value: miniSqlValue)
-          }
+        if value != nil {
+          ValueUtil.setValueFromBinding(binding: value!, value: miniSqlValue)
+        }
       }
     }
   }
