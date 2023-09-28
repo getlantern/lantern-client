@@ -10,7 +10,8 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on:
+      group: large-runners
     steps:
       - uses: actions/checkout@v3
         with:
