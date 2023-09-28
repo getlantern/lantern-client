@@ -12,7 +12,8 @@ env:
   DATADOG_SITE: datadoghq.eu
 jobs:
     set-version:
-      runs-on: ubuntu-latest
+      runs-on:
+        group: large-runners
       outputs:
         version: ${{ steps.set-version.outputs.version }}
         prefix: ${{ steps.set-version.outputs.prefix }}
@@ -57,7 +58,8 @@ jobs:
         version: ${{ needs.set-version.outputs.version }}
         version_file: ${{ needs.set-version.outputs.version_file }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-      runs-on: ubuntu-latest
+      runs-on:
+        group: large-runners
       steps:
       - uses: actions/checkout@v3
         with:
@@ -174,7 +176,8 @@ jobs:
           s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
 
     push-binaries:
-      runs-on: ubuntu-latest
+      runs-on:
+        group: large-runners
       needs: [ set-version , build-android ]
       env:
         version: ${{ needs.set-version.outputs.version }}
