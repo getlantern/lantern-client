@@ -63,15 +63,13 @@ import Toast_Swift
     // Post start up
     // Init all method needed for user
     func startUpSequency()  {
-        setupLocal()
-        createUser()
+//        setupLocal()
+//        createUser()
         askNotificationPermssion()
         
     }
     
     func askNotificationPermssion()  {
-        
-        
         UserNotificationsManager.shared.requestNotificationPermission { granted in
             if granted {
                 logger.debug("Notification Permssion is granted")
@@ -98,23 +96,23 @@ import Toast_Swift
     }
     
     // Calling create API
-    func createUser(){
-        DispatchQueue.main.async {
-            self.loadingManager?.show()
-        }
-        DispatchQueue.global().async {
-            let success = self.sessionModel.createUser(local: Locale.current.identifier)
-            // After the API call is done, move back to the main thread to update UI
-            DispatchQueue.main.async {
-                self.loadingManager?.hide()
-                if success {
-                    self.flutterViewController.view.makeToast("User Created")
-                } else {
-                    self.flutterViewController.view.makeToast("Error while creating user")
-                }
-            }
-        }
-        
-    }
+//    func createUser(){
+//        DispatchQueue.main.async {
+//            self.loadingManager?.show()
+//        }
+//        DispatchQueue.global().async {
+//            let success = self.sessionModel.createUser(local: Locale.current.identifier)
+//            // After the API call is done, move back to the main thread to update UI
+//            DispatchQueue.main.async {
+//                self.loadingManager?.hide()
+//                if success {
+//                    self.flutterViewController.view.makeToast("User Created")
+//                } else {
+//                    self.flutterViewController.view.makeToast("Error while creating user")
+//                }
+//            }
+//        }
+//
+//    }
     
 }

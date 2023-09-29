@@ -107,33 +107,35 @@ class SessionModel:BaseModel<InternalsdkSessionModel> {
     // later on values change be chaneg by mehtod or by flashlight
     private func createInitData() -> [String: [String: Any]] {
         let deviceId = UIDevice.current.identifierForVendor!.uuidString
+        let langStr = Locale.current.identifier
         return [
             Constants.developmentMode: ["type": ValueUtil.TYPE_BOOL, "value": true],
             Constants.prouser: ["type": ValueUtil.TYPE_BOOL, "value": false],
             Constants.deviceid: ["type": ValueUtil.TYPE_STRING, "value": deviceId],
             Constants.playVersion: ["type": ValueUtil.TYPE_BOOL, "value": isRunningFromAppStore()],
+            Constants.lang: ["type": ValueUtil.TYPE_STRING, "value": langStr],
         ]
         
     }
     
-    
-    func createUser(local:String) -> Bool{
-        let miniSqlValue =  ValueUtil.convertToMinisqlValue(local)
-        if(miniSqlValue != nil){
-            do {
-                let result = try  invokeMethodOnGo(name: Methods.createUser.methodName, argument: miniSqlValue!)
-                var converedResult = ValueUtil.convertFromMinisqlValue(from: result)
-                if(converedResult as! Bool){
-                    logger.log("User Created \(converedResult)")
-                    return true
-                }
-                return false
-            }catch{
-                logger.log("Error while create user")
-            }
-        }
-        return false
-    }
+    //Moving this on go side since its need user id check
+//    func createUser(local:String) -> Bool{
+//        let miniSqlValue =  ValueUtil.convertToMinisqlValue(local)
+//        if(miniSqlValue != nil){
+//            do {
+//                let result = try  invokeMethodOnGo(name: Methods.createUser.methodName, argument: miniSqlValue!)
+//                var converedResult = ValueUtil.convertFromMinisqlValue(from: result)
+//                if(converedResult as! Bool){
+//                    logger.log("User Created \(converedResult)")
+//                    return true
+//                }
+//                return false
+//            }catch{
+//                logger.log("Error while create user")
+//            }
+//        }
+//        return false
+//    }
     
     
     private func setTimeZone(){

@@ -99,7 +99,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 	switch method {
 	case SESSION_MODEL_METHOD_INIT_MODEL:
 		jsonString := arguments.Get(0)
-		err := initSessionModel(s.baseModel, jsonString.String())
+		err := initSessionModel(s, jsonString.String())
 		if err != nil {
 			return nil, err
 		} else {
@@ -250,9 +250,9 @@ func (s *SessionModel) StartService(configDir string,
 }
 
 // InvokeMethod handles method invocations on the SessionModel.
-func initSessionModel(m *baseModel, jsonString string) error {
+func initSessionModel(session *SessionModel, jsonString string) error {
 	//Check if email if emoty
-	email, err := m.db.Get(EMAIL_ADDRESS)
+	email, err := session.baseModel.db.Get(EMAIL_ADDRESS)
 	if err != nil {
 		log.Debugf("Init Session email error value %v", err)
 		return err
@@ -260,10 +260,30 @@ func initSessionModel(m *baseModel, jsonString string) error {
 	emailStr := string(email)
 	if emailStr == "" {
 		log.Debugf("Init Session setting email value to an empty string")
-		setEmail(m, "")
+		setEmail(session.baseModel, "")
 	}
 	// Init few path for startup
-	return putFromJson(jsonString, m.db)
+	err = putFromJson(jsonString, session.baseModel.db)
+	if err != nil {
+		return err
+	}
+	//Check if user is already registerd or not
+	userId, err := session.GetUserID()
+	if err != nil {
+		return err
+	}
+	if userId == 0 {
+		local, err := session.Locale()
+		if err != nil {
+			return err
+		}
+		// Create user
+		err = userCreate(session.baseModel, local)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (s *SessionModel) GetAppName() string {
@@ -311,6 +331,11 @@ func (s *SessionModel) GetUserID() (int64, error) {
 		userId, err := s.baseModel.db.Get(USER_ID)
 		if err != nil {
 			return 0, err
+		}
+
+		//If userid is null or emtpy return zero to avoid crash
+		if string(userId) == "" {
+			return 0, nil
 		}
 		userId = userId[1:]
 		newUserId, err := BytesToFloat64LittleEndian(userId)

@@ -54,7 +54,7 @@ func isAppStoreReceiptSandbox() -> Bool {
 
 
 
-private func isSimulator() -> Bool {
+ func isSimulator() -> Bool {
         #if arch(i386) || arch(x86_64)
             return true
             #else

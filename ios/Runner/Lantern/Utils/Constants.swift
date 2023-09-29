@@ -116,6 +116,7 @@ struct Constants {
     static var prouser = InternalsdkPRO_USER
     static var deviceid = InternalsdkDEVICE_ID
     static var playVersion = InternalsdkIS_PLAY_VERSION
+    static var lang = InternalsdkLANG
 
 
     

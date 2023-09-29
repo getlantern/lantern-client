@@ -15,7 +15,7 @@ class VpnHelper: NSObject {
                                 userDefaults: Constants.appGroupDefaults,
                                 notificationCenter: .default,
                                 flashlightManager: FlashlightManager.appDefault,
-                                vpnManager: ( VPNManager.appDefault))
+                                  vpnManager: (isSimulator() ? MockVPNManager() : VPNManager.appDefault))
     // MARK: State
     static let didUpdateStateNotification = Notification.Name("Lantern.didUpdateState")
     enum VPNState: Equatable {
