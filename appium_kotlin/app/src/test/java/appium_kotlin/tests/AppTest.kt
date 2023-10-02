@@ -22,26 +22,36 @@ import appium_kotlin.REPORT_DESCRIPTION
 import appium_kotlin.REPORT_ISSUE_SUCCESS
 import appium_kotlin.SEND_REPORT
 import appium_kotlin.SUPPORT
+import io.appium.java_client.MobileBy
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
 import io.appium.java_client.android.AndroidDriver
+import io.appium.java_client.android.nativekey.AndroidKey
+import io.appium.java_client.android.nativekey.KeyEvent
+import io.appium.java_client.remote.AndroidMobileCapabilityType
 import io.appium.java_client.touch.WaitOptions
 import io.appium.java_client.touch.offset.PointOption
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
+import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.logging.LogEntries
 import pro.truongsinh.appium_flutter.FlutterFinder
 import java.io.IOException
+import java.net.URL
 import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 
 class AppTest() : BaseTest() {
     private val isLocalRun = (System.getenv("RUN_ENV") ?: "local") == "local"
+    private val testAppName = "chromecast"
+    private val testAppPackage = "com.google.android.apps.chromecast.app"
+    private val testAppActivity = ".DiscoveryActivity"
 
     @ParameterizedTest
     @MethodSource("devices")
@@ -62,6 +72,8 @@ class AppTest() : BaseTest() {
 
             // Report and issue flow
             reportAnIssueFlow(androidDriver, taskId, flutterFinder)
+
+            googlePlayFlow(androidDriver, taskId, flutterFinder)
 
             if (!isLocalRun) {
                 testPassed(androidDriver)
@@ -403,5 +415,107 @@ class AppTest() : BaseTest() {
         }
         return ""
     }
+
+    @Throws(IOException::class, InterruptedException::class)
+    private fun googlePlayFlow(
+        driver: AndroidDriver,
+        taskId: Int,
+        flutterFinder: FlutterFinder
+    ) {
+        turnVPNon(driver, taskId, flutterFinder)
+        driver.startActivity(Activity("com.android.vending", ".AssetBrowserActivity"))
+        testEstablishPlaySession(driver)
+        testGooglePlayFeatures(driver)
+        installAppFromPlayStore(taskId, driver)
+    }
+
+    fun turnVPNon(
+        driver: AndroidDriver,
+        taskId: Int,
+        flutterFinder: FlutterFinder,
+    ) {
+        Thread.sleep(5000)
+
+        switchToContext(ContextType.NATIVE_APP, driver)
+        Thread.sleep(5000)
+        driver.activateApp(LANTERN_PACKAGE_ID)
+        Thread.sleep(5000)
+
+
+        switchToContext(ContextType.FLUTTER, driver)
+        val vpnSwitchFinder = flutterFinder.byType("FlutterSwitch")
+        vpnSwitchFinder.click()
+        Thread.sleep(2000)
+        // Approve VPN Permissions dialog
+        switchToContext(ContextType.NATIVE_APP, driver)
+        Thread.sleep(1000)
+    }
+
+    fun initDriver(capabilities: DesiredCapabilities): AndroidDriver {
+        val isLocalRun = checkLocalRun()
+        val url = serviceURL(isLocalRun)
+        return AndroidDriver(
+            URL(url),
+            capabilities,
+        )
+    }
+
+    fun testEstablishPlaySession(driver: AndroidDriver) {
+        Assertions.assertEquals(driver.currentPackage, "com.android.vending")
+        Assertions.assertEquals(driver.currentActivity(), ".AssetBrowserActivity")
+    }
+
+    fun testGooglePlayFeatures(driver: AndroidDriver) {
+        driver.findElement(By.xpath("//android.widget.FrameLayout[@content-desc = 'Show navigation drawer']"))?.click()
+        val elements = driver.findElements(By.xpath("//android.widget.TextView"))
+        if (elements == null) return
+        for (element in elements) {
+            if (element.text.equals("Settings")) {
+                element.click()
+                break
+            }
+        }
+    }
+
+    fun openSearchForm(driver: AndroidDriver) {
+        val elements = driver?.findElements(By.xpath("//android.widget.TextView"))
+        if (elements == null) return
+        for (element in elements) {
+            if (element.text.equals("Search for apps & games")) {
+                element.click()
+                break
+            }
+        }
+    }
+
+    @Throws(Exception::class)
+    fun installAppFromPlayStore(taskId: Int, driver: AndroidDriver) {
+        openSearchForm(driver)
+        driver.findElement(MobileBy.className("android.widget.EditText"))?.sendKeys(testAppName)
+
+        driver.findElement(By.xpath("//android.support.v7.widget.RecyclerView[1]/android.widget.LinearLayout[1]"))?.click()
+
+        val button = driver.findElement(MobileBy.className("android.widget.Button"))
+        if (button?.text.equals("Install")) {
+            println("Installing application")
+            button?.click()
+        }
+
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
+        driver.pressKey(KeyEvent(AndroidKey.HOME))
+    }
+
+    @Throws(Exception::class)
+    fun installedAppCapabilities(taskId: Int): DesiredCapabilities {
+        val capabilities = initialCapabilities(taskId)
+        capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, testAppPackage)
+        capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, testAppActivity)
+        capabilities.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, testAppActivity)
+        capabilities.setCapability(AndroidMobileCapabilityType.DEVICE_READY_TIMEOUT, 40)
+        capabilities.setCapability("deviceOrientation", "portrait")
+        capabilities.setCapability("autoLaunch", "false")
+        return capabilities
+    }
+
 
 }

@@ -5,6 +5,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import io.appium.java_client.android.AndroidDriver
+import io.appium.java_client.remote.MobileCapabilityType
 import io.appium.java_client.service.local.AppiumDriverLocalService
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException
 import io.appium.java_client.service.local.AppiumServiceBuilder
@@ -86,7 +87,7 @@ open class BaseTest {
             }
         }
         capabilities.setCapability("app", app)
-//        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Flutter")
+        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Flutter")
         println("Setup for TaskId $taskId: $capabilities")
 
         val envCapabilities = envs[taskId] as JsonObject
