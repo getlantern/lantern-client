@@ -1115,8 +1115,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/InternalFrameworks",
-					"$(PROJECT_DIR)/InternalFrameworks/Pods_DatabaseFramework.framework",
-					"$(PROJECT_DIR)/InternalFrameworks/DatabaseFramework.framework",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Lantern;

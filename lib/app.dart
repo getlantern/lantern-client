@@ -78,49 +78,59 @@ class LanternApp extends StatelessWidget {
         if (!snapshot.hasData) {
           return Container();
         }
+        return sessionModel.language(
+          (context, lang, child) {
+            Localization.locale = lang;
         return GlobalLoaderOverlay(
-          overlayColor: Colors.black,
-          overlayOpacity: 0.6,
-          child: I18n(
-            initialLocale: const Locale('en', 'US'),
-            child: MaterialApp.router(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                fontFamily: _getLocaleBasedFont(currentLocal),
-                brightness: Brightness.light,
-                primarySwatch: Colors.grey,
-                appBarTheme: const AppBarTheme(
-                  systemOverlayStyle: SystemUiOverlayStyle.dark,
+              overlayColor: Colors.black,
+              overlayOpacity: 0.6,
+              child: I18n(
+                initialLocale: lang == '' || lang.startsWith('en')
+                    ? const Locale('en', 'US')
+                    : Locale(lang),
+                child: MaterialApp.router(
+                  locale: lang == '' || lang.startsWith('en')
+                      ? const Locale('en', 'US')
+                      : Locale(lang),
+                  debugShowCheckedModeBanner: false,
+                  theme: ThemeData(
+                    fontFamily: _getLocaleBasedFont(currentLocal),
+                    brightness: Brightness.light,
+                    primarySwatch: Colors.grey,
+                    appBarTheme: const AppBarTheme(
+                      systemOverlayStyle: SystemUiOverlayStyle.dark,
+                    ),
+                    colorScheme: ColorScheme.fromSwatch()
+                        .copyWith(secondary: Colors.black),
+                  ),
+                  title: 'app_name'.i18n,
+                  localizationsDelegates: const [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  routeInformationParser: globalRouter.defaultRouteParser(),
+                  routerDelegate: globalRouter.delegate(),
+                  supportedLocales: const [
+                    Locale('ar', 'EG'),
+                    Locale('fr', 'FR'),
+                    Locale('en', 'US'),
+                    Locale('fa', 'IR'),
+                    Locale('th', 'TH'),
+                    Locale('ms', 'MY'),
+                    Locale('ru', 'RU'),
+                    Locale('ur', 'IN'),
+                    Locale('zh', 'CN'),
+                    Locale('zh', 'HK'),
+                    Locale('es', 'ES'),
+                    Locale('tr', 'TR'),
+                    Locale('vi', 'VN'),
+                    Locale('my', 'MM'),
+                  ],
                 ),
-                colorScheme:
-                    ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
               ),
-              title: 'app_name'.i18n,
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              routeInformationParser: globalRouter.defaultRouteParser(),
-              routerDelegate: globalRouter.delegate(),
-              supportedLocales: const [
-                Locale('ar', 'EG'),
-                Locale('fr', 'FR'),
-                Locale('en', 'US'),
-                Locale('fa', 'IR'),
-                Locale('th', 'TH'),
-                Locale('ms', 'MY'),
-                Locale('ru', 'RU'),
-                Locale('ur', 'IN'),
-                Locale('zh', 'CN'),
-                Locale('zh', 'HK'),
-                Locale('es', 'ES'),
-                Locale('tr', 'TR'),
-                Locale('vi', 'VN'),
-                Locale('my', 'MM'),
-              ],
-            ),
-          ),
+            );
+          },
         );
       },
     );

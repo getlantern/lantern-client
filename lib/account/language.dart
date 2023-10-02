@@ -14,11 +14,11 @@ class Language extends StatelessWidget {
       body: sessionModel
           .language((BuildContext context, String currentLang, Widget? child) {
            // Splint language by just code
-        final countryCode= currentLang.split('_')[0];
+        final countryCode= currentLang;
             return ListView.builder(
           itemCount: languages.length,
           itemBuilder: (BuildContext context, int index) {
-            var lang = languages[index].split('_')[0];
+            var lang = languages[index];
             return RadioListTile<String>(
               activeColor: pink4,
               contentPadding: const EdgeInsetsDirectional.all(0),

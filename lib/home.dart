@@ -132,30 +132,25 @@ class _HomePageState extends State<HomePage> {
             if (isPlayVersion && version == 0) {
               // show privacy disclosure if it's a Play build and the terms have
               // not already been accepted
-              return PrivacyDisclosure();
+              return const PrivacyDisclosure();
             }
-            return sessionModel.language(
-              (BuildContext context, String lang, Widget? child) {
-                Localization.locale = lang;
-                return sessionModel.selectedTab(
+            return sessionModel.selectedTab(
                   (context, selectedTab, child) => messagingModel
-                      .getOnBoardingStatus((_, isOnboarded, child) {
-                    final isTesting = const String.fromEnvironment(
-                          'driver',
-                          defaultValue: 'false',
-                        ).toLowerCase() ==
-                        'true';
-                    return Scaffold(
-                      body: buildBody(selectedTab, isOnboarded),
-                      bottomNavigationBar: CustomBottomBar(
-                        selectedTab: selectedTab,
-                        isDevelop: developmentMode,
-                        isTesting: isTesting,
-                      ),
-                    );
-                  }),
+                  .getOnBoardingStatus((_, isOnboarded, child) {
+                final isTesting = const String.fromEnvironment(
+                  'driver',
+                  defaultValue: 'false',
+                ).toLowerCase() ==
+                    'true';
+                return Scaffold(
+                  body: buildBody(selectedTab, isOnboarded),
+                  bottomNavigationBar: CustomBottomBar(
+                    selectedTab: selectedTab,
+                    isDevelop: developmentMode,
+                    isTesting: isTesting,
+                  ),
                 );
-              },
+              }),
             );
           },
         );
@@ -178,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                 ? Chats()
                 : Welcome();
       case TAB_VPN:
-        return VPNTab();
+        return const VPNTab();
       case TAB_REPLICA:
         return ReplicaTab();
       case TAB_ACCOUNT:

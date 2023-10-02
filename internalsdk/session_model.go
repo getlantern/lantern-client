@@ -188,8 +188,12 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		}
 	case SESSION_MODEL_METHOD_SET_LOCAL:
 		local := arguments.Get(0)
-		err := setLanguage(s.baseModel, local.String())
+		value, err := extractLangValueFromJSON(local.String())
 		if err != nil {
+			return nil, err
+		}
+		langErr := setLanguage(s.baseModel, value)
+		if langErr != nil {
 			return nil, err
 		} else {
 			return minisql.NewValueBool(true), nil
@@ -436,8 +440,6 @@ func getBandwidthLimit(m *baseModel) (string, error) {
 }
 
 func (s *SessionModel) Locale() (string, error) {
-	// For now just send back english by default
-	// Once have machisim but to dyanmic
 	locale, err := s.baseModel.db.Get(LANG)
 	if err != nil {
 		return "", err
@@ -446,6 +448,8 @@ func (s *SessionModel) Locale() (string, error) {
 }
 
 func setLanguage(m *baseModel, langCode string) error {
+	log.Debugf("Lang debugger got value %v", langCode)
+
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put[string](tx, LANG, langCode, "")
 		return nil
