@@ -45,11 +45,11 @@ class AdHelper {
   int _failedLoadAttempts = 0;
   int _failedCASLoadAttempts = 0;
 
-  //If ads are getting failed to load we want to make lot of calls
+  // If ads are getting failed to load we want to make lot of calls
   // Just try 5 times
   final int _maxFailAttempts = 5;
 
-  //Google Test ID if needed to test
+  // Google Test ID if needed to test
   // return 'ca-app-pub-3940256099942544/1033173712';
   String get interstitialAdUnitId {
     if (Platform.isAndroid) {
