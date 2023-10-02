@@ -17,27 +17,24 @@ func isRunningFromAppStore() -> Bool {
     }
 }
 
+func isRunningInTestFlightEnvironment() -> Bool {
+    if isSimulator() {
+        return false
+    } else {
+        if isAppStoreReceiptSandbox() && !hasEmbeddedMobileProvision() {
+            return true
+        } else {
+            return false
+        }
+    }
+}
 
-func isRunningInTestFlightEnvironment() -> Bool{
-       if isSimulator() {
-           return false
-       } else {
-           if isAppStoreReceiptSandbox() && !hasEmbeddedMobileProvision() {
-               return true
-           } else {
-               return false
-           }
-       }
-   }
-
-
-private func hasEmbeddedMobileProvision() -> Bool{
+private func hasEmbeddedMobileProvision() -> Bool {
     if let _ = Bundle.main.path(forResource: "embedded", ofType: "mobileprovision") {
-          return true
-      }
-      return false
-  }
-
+        return true
+    }
+    return false
+}
 
 func isAppStoreReceiptSandbox() -> Bool {
     if isSimulator() {
@@ -52,12 +49,10 @@ func isAppStoreReceiptSandbox() -> Bool {
     }
 }
 
-
-
- func isSimulator() -> Bool {
-        #if arch(i386) || arch(x86_64)
-            return true
-            #else
-            return false
-        #endif
-    }
+func isSimulator() -> Bool {
+    #if arch(i386) || arch(x86_64)
+    return true
+    #else
+    return false
+    #endif
+}

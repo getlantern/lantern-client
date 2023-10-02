@@ -14,7 +14,7 @@ enum VPNManagerError: Swift.Error {
 }
 
 class VPNManager: VPNBase {
-    
+
     static let appDefault = VPNManager(userDefaults: .standard)
 
     // This is used to determine if we have successfully set up a VPN configuration
@@ -37,7 +37,7 @@ class VPNManager: VPNBase {
         get { return userDefaults.bool(forKey: VPNManager.expectsSavedProviderDefaultsKey) }
         set { userDefaults.set(newValue, forKey: VPNManager.expectsSavedProviderDefaultsKey) }
     }
-  
+
     // MARK: Init
     private init(userDefaults: UserDefaults) {
         self.userDefaults = userDefaults
@@ -97,7 +97,7 @@ class VPNManager: VPNBase {
 
         do {
             provider.isEnabled = true // calling start when !isEnabled will crash
-            let options = [Constants.netExStartReasonKey : NSString("User Initiated")]
+            let options = [Constants.netExStartReasonKey: NSString("User Initiated")]
             try provider.connection.startVPNTunnel(options: options)
 
             // set onDemand enabled AFTER starting to avoid potential race-condition
@@ -125,7 +125,7 @@ class VPNManager: VPNBase {
             provider.connection.stopVPNTunnel() // no need to pass reason, system passes UserInitiated on its own
         }
     }
- 
+
     // MARK: VPN Status Update
     private func subscribeToVPNStatusNotifications() {
         NotificationCenter.default.addObserver(
@@ -211,10 +211,9 @@ class VPNManager: VPNBase {
         return provider
     }
 
-   
     // For debug use only— allows you to wipe all created providerManagers
     static private func clearOldProviderManagers(_ completion: @escaping () -> Void) {
-        NETunnelProviderManager.loadAllFromPreferences { (savedManagers, error: Swift.Error?) in
+        NETunnelProviderManager.loadAllFromPreferences { (savedManagers, _: Swift.Error?) in
             guard let saved = savedManagers, !saved.isEmpty else {
                 completion()
                 return
@@ -228,4 +227,3 @@ class VPNManager: VPNBase {
         }
     }
 }
-

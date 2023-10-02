@@ -11,12 +11,12 @@ import UIKit
 class LoadingIndicatorManager {
     private var loadingIndicator: UIActivityIndicatorView?
     private weak var parentView: UIView?
-    
+
     init(parentView: UIView) {
         self.parentView = parentView
         setupLoadingIndicator()
     }
-    
+
     private func setupLoadingIndicator() {
         loadingIndicator = UIActivityIndicatorView(style: .gray)
         guard let loadingIndicator = loadingIndicator, let parentView = parentView else {
@@ -26,11 +26,11 @@ class LoadingIndicatorManager {
         loadingIndicator.hidesWhenStopped = true
         parentView.addSubview(loadingIndicator)
     }
-    
+
     func show() {
         loadingIndicator?.startAnimating()
     }
-    
+
     func hide() {
         loadingIndicator?.stopAnimating()
         loadingIndicator?.removeFromSuperview()

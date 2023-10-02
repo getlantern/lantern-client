@@ -3,10 +3,10 @@
 ////  Lantern
 ////
 //
-//import Foundation
+// import Foundation
 //
 //// TODO: add interface for mockability
-//class DataUsageMonitor {
+// class DataUsageMonitor {
 //    typealias DataUsage = (current: Int, cap: Int)
 //
 //    // MARK: Public Properties
@@ -18,7 +18,7 @@
 //        guard let usage = dataUsage else { return false }
 //        return usage.current >= usage.cap
 //    }
-//    
+//
 //
 //    var dataUsage: DataUsage? {
 //        guard
@@ -51,10 +51,10 @@
 //        assert(fileMonitor != nil)
 //        fileMonitor?.startObservingFileChanges()
 //    }
-//}
+// }
 //
 //// Currently hidden & hard-coded for 'write' events, can abstract if necessary.
-//private class FileWriteMonitor {
+// private class FileWriteMonitor {
 //
 //    private let filePath: String
 //    private let fileSystemEvent: DispatchSource.FileSystemEvent
@@ -118,5 +118,5 @@
 //        }
 //        eventSource?.resume()
 //    }
-//}
+// }
 //

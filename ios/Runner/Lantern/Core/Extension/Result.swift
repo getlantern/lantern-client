@@ -3,7 +3,6 @@
 //  Lantern
 //
 
-
 import Foundation
 
 extension Result {

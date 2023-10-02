@@ -6,7 +6,7 @@
 import Foundation
 import UserNotifications
 
-class UserNotificationsManager:NSObject,UNUserNotificationCenterDelegate {
+class UserNotificationsManager: NSObject, UNUserNotificationCenterDelegate {
     static let shared = UserNotificationsManager()
 
     private static let lastDataCapNotificationDefaultsKey = "Lantern.NotifyDataCapDate"
@@ -31,10 +31,9 @@ class UserNotificationsManager:NSObject,UNUserNotificationCenterDelegate {
         }
     }
 
-
     private var notifiedDataCapThisMonth: Bool {
         guard let value = userDefaults.value(forKey: UserNotificationsManager.lastDataCapNotificationDefaultsKey),
-            let lastDate = (value as? Date) else { return false }
+              let lastDate = (value as? Date) else { return false }
         return Calendar.current.isDate(lastDate, equalTo: Date(), toGranularity: .month)
     }
 
@@ -47,30 +46,29 @@ class UserNotificationsManager:NSObject,UNUserNotificationCenterDelegate {
     }
 
     func requestNotificationPermission(completion: @escaping (Bool) -> Void) {
-         center.getNotificationSettings { settings in
-             switch settings.authorizationStatus {
-             case .notDetermined:
-                 self.center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
-                     DispatchQueue.main.async {
-                         completion(granted)
-                     }
-                 }
-             case .denied:
-                 DispatchQueue.main.async {
-                     completion(false)
-                 }
-             case .authorized, .provisional:
-                 DispatchQueue.main.async {
-                     completion(true)
-                 }
-             default:
-                 DispatchQueue.main.async {
-                     completion(false)
-                 }
-             }
-         }
-     }
-    
+        center.getNotificationSettings { settings in
+            switch settings.authorizationStatus {
+            case .notDetermined:
+                self.center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
+                    DispatchQueue.main.async {
+                        completion(granted)
+                    }
+                }
+            case .denied:
+                DispatchQueue.main.async {
+                    completion(false)
+                }
+            case .authorized, .provisional:
+                DispatchQueue.main.async {
+                    completion(true)
+                }
+            default:
+                DispatchQueue.main.async {
+                    completion(false)
+                }
+            }
+        }
+    }
 
     // MARK: Posting
     func scheduleDataCapLocalNotification(withDataLimit limit: Int) {
@@ -80,7 +78,7 @@ class UserNotificationsManager:NSObject,UNUserNotificationCenterDelegate {
         let request = UNNotificationRequest(identifier: "Lantern.DataCap",
                                             content: content,
                                             trigger: trigger)
-            center.add(request) { [weak self] error in
+        center.add(request) { [weak self] error in
             if error == nil {
                 let key = UserNotificationsManager.lastDataCapNotificationDefaultsKey
                 self?.userDefaults.set(Date(), forKey: key)

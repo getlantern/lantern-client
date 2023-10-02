@@ -8,25 +8,23 @@
 import Foundation
 import Flutter
 
-class NavigationModel{
+class NavigationModel {
     let navigationMethodChannel = "lantern_method_channel"
-    
-    var flutterbinaryMessenger:FlutterBinaryMessenger
 
-    init(flutterBinary:FlutterBinaryMessenger) {
+    var flutterbinaryMessenger: FlutterBinaryMessenger
+
+    init(flutterBinary: FlutterBinaryMessenger) {
         self.flutterbinaryMessenger=flutterBinary
         prepareNavigationChannel()
     }
-    
-    
-    private func prepareNavigationChannel (){
-        
-        //Navigation Channel
-       let navigationChannel=FlutterMethodChannel(name: navigationMethodChannel, binaryMessenger: flutterbinaryMessenger)
+
+    private func prepareNavigationChannel () {
+
+        // Navigation Channel
+        let navigationChannel=FlutterMethodChannel(name: navigationMethodChannel, binaryMessenger: flutterbinaryMessenger)
         navigationChannel.setMethodCallHandler(handleNavigationethodCall)
     }
-    
-    
+
     func handleNavigationethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         // Handle your method calls here
         // The 'call' contains the method name and arguments
@@ -39,5 +37,5 @@ class NavigationModel{
             result(FlutterMethodNotImplemented)
         }
     }
-    
+
 }

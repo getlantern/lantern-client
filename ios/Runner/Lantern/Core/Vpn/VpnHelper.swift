@@ -11,10 +11,10 @@ import Internalsdk
 
 class VpnHelper: NSObject {
     static let shared = VpnHelper(constants: Constants(process: .app),
-                                fileManager: .default,
-                                userDefaults: Constants.appGroupDefaults,
-                                notificationCenter: .default,
-                                flashlightManager: FlashlightManager.appDefault,
+                                  fileManager: .default,
+                                  userDefaults: Constants.appGroupDefaults,
+                                  notificationCenter: .default,
+                                  flashlightManager: FlashlightManager.appDefault,
                                   vpnManager: (isSimulator() ? MockVPNManager() : VPNManager.appDefault))
     // MARK: State
     static let didUpdateStateNotification = Notification.Name("Lantern.didUpdateState")
@@ -35,9 +35,9 @@ class VpnHelper: NSObject {
             notificationCenter.post(name: VpnHelper.didUpdateStateNotification, object: nil)
         }
     }
-    
-   private let stateLock = NSLock()
-   private var _state: VPNState
+
+    private let stateLock = NSLock()
+    private var _state: VPNState
     var state: VPNState {
         get {
             stateLock.lock()
@@ -74,7 +74,7 @@ class VpnHelper: NSObject {
     var hasFetchedConfigOnce: Bool {
         return (userDefaults.value(forKey: VpnHelper.hasFetchedConfigDefaultsKey) as? Bool) ?? false
     }
-    
+
     init(constants: Constants,
          fileManager: FileManager,
          userDefaults: UserDefaults,
@@ -82,7 +82,7 @@ class VpnHelper: NSObject {
          flashlightManager: FlashlightManager,
          vpnManager: VPNBase,
          userNotificationsManager: UserNotificationsManager? = nil
-        ) {
+    ) {
         self.constants = constants
         self.fileManager = fileManager
         self.userDefaults = userDefaults
@@ -99,14 +99,14 @@ class VpnHelper: NSObject {
     }
 
     // MARK: Set Up
-   func performAppSetUp() {
+    func performAppSetUp() {
         // STARTUP OVERVIEW
-    
+
         // 1. set up files for flashlight
         createFilesForAppGoPackage()
-       // Todo Use new method we are using in Android
-       // 2. set up data usage monitor
-       //    dataUsageMonitor.startObservingDataUsageChanges(callback: handleDataUsageUpdated)
+        // Todo Use new method we are using in Android
+        // 2. set up data usage monitor
+        //    dataUsageMonitor.startObservingDataUsageChanges(callback: handleDataUsageUpdated)
 
         // 3. set up VPN manager
         vpnManager.didUpdateConnectionStatusCallback = handleVPNStatusUpdated
@@ -115,15 +115,14 @@ class VpnHelper: NSObject {
         if let error = flashlightManager.configureGoLoggerReturningError() {
             logger.error("IosConfigureLogger FAILED: " + error.localizedDescription)
         }
-        //5 Fetch config
+        // 5 Fetch config
         fetchConfigIfNecessary()
     }
-    
-    
+
     private func createFilesForAppGoPackage() {
         // where "~" is the shared app group container...
         // create process-specific directory @ ~/app
-        
+
         do {
             try fileManager.ensureDirectoryExists(at: constants.targetDirectoryURL)
         } catch {
@@ -152,22 +151,20 @@ class VpnHelper: NSObject {
             logger.error("Failed to create log URLs")
         }
     }
-    
-    
+
     func startVPN(
-          onError: ((Error) -> ())? = nil,
-          onSuccess: (() -> ())? = nil
-      ) {
-          guard state.isIdle else { return }
+        onError: ((Error) -> Void)? = nil,
+        onSuccess: (() -> Void)? = nil
+    ) {
+        guard state.isIdle else { return }
         if !hasFetchedConfigOnce {
-              initiateConfigFetching(onError: onError, onSuccess: onSuccess)
-          } else {
-              initiateVPNStart(onError: onError, onSuccess: onSuccess)
-          }
-      }
-    
-    
-    private func initiateConfigFetching(onError: ((Error) -> ())? = nil, onSuccess: (() -> ())? = nil) {
+            initiateConfigFetching(onError: onError, onSuccess: onSuccess)
+        } else {
+            initiateVPNStart(onError: onError, onSuccess: onSuccess)
+        }
+    }
+
+    private func initiateConfigFetching(onError: ((Error) -> Void)? = nil, onSuccess: (() -> Void)? = nil) {
         configuring = true
         fetchConfig { [weak self] result in
             DispatchQueue.main.async {
@@ -182,26 +179,25 @@ class VpnHelper: NSObject {
             }
         }
     }
-    
-    
-    private func initiateVPNStart(onError: ((Error) -> ())? = nil, onSuccess: (() -> ())? = nil) {
-         vpnManager.startTunnel() { result in
-             switch result {
-             case .success:
-                 logger.debug("VPN successfully started")
-                 onSuccess?()
-             case .failure(let error):
-                 logger.error("VPN start failed: \(error.localizedDescription)")
-                 onError?(.userDisallowedVPNConfig)
-             }
-         }
-     }
+
+    private func initiateVPNStart(onError: ((Error) -> Void)? = nil, onSuccess: (() -> Void)? = nil) {
+        vpnManager.startTunnel { result in
+            switch result {
+            case .success:
+                logger.debug("VPN successfully started")
+                onSuccess?()
+            case .failure(let error):
+                logger.error("VPN start failed: \(error.localizedDescription)")
+                onError?(.userDisallowedVPNConfig)
+            }
+        }
+    }
 
     func stopVPN() {
         vpnManager.stopTunnel()
     }
 
-    //Internal method for VPN status
+    // Internal method for VPN status
     func handleVPNStatusUpdated(_ status: NEVPNStatus) {
         let newState = translateVPNStatusToLanternState(status)
         logger.debug("VPN status updated while \(state): \(newState)")
@@ -228,15 +224,14 @@ class VpnHelper: NSObject {
             return .idle(.unknown)
         }
     }
-    
- 
+
     func fetchConfigIfNecessary() {
         logger.debug("Checking if config fetch is needed")
         guard !self.hasConfiguredThisSession else { return }
         logger.debug("Will fetch config")
         self.hasConfiguredThisSession = true
         let hasFetchedConfigOnce = self.hasFetchedConfigOnce
-            fetchConfig { [weak self] result in
+        fetchConfig { [weak self] result in
             self?.setUpConfigFetchTimer()
             DispatchQueue.main.async {
                 self?.configuring = false
@@ -277,7 +272,7 @@ class VpnHelper: NSObject {
                 // Only auto-fetch new config when VPN is on
                 guard self?.state == .connected else { return }
                 logger.debug("Config Fetch timer fired after \(time), fetching...")
-                self?.fetchConfig() { result in
+                self?.fetchConfig { result in
                     switch result {
                     case .success:
                         logger.debug("Auto-config fetch success")
@@ -296,7 +291,7 @@ class VpnHelper: NSObject {
             try vpnManager.messageNetEx(messageData: msg) { data in
                 let success = (data == Constants.configUpdatedACKData)
                 let logMsg = (success ? "Successfully ACKd config update message"
-                    : "Did not return expected ACK for config update message.")
+                                : "Did not return expected ACK for config update message.")
                 logger.error("NetEx \(logMsg)")
             }
         } catch {
@@ -304,7 +299,6 @@ class VpnHelper: NSObject {
         }
     }
 }
-
 
 extension VpnHelper {
     enum Error: Swift.Error {
@@ -314,7 +308,6 @@ extension VpnHelper {
         case invalidVPNState
     }
 }
-
 
 extension VpnHelper {
     // MARK: Pro
@@ -328,7 +321,7 @@ extension VpnHelper {
 
     var isPro: Bool {
         if !self.userDefaults.bool(forKey: Constants.isPro) {
-           return false
+            return false
         }
 
         if self.userID == 0 {
