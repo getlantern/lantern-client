@@ -451,15 +451,6 @@ class AppTest() : BaseTest() {
         Thread.sleep(1000)
     }
 
-    fun initDriver(capabilities: DesiredCapabilities): AndroidDriver {
-        val isLocalRun = checkLocalRun()
-        val url = serviceURL(isLocalRun)
-        return AndroidDriver(
-            URL(url),
-            capabilities,
-        )
-    }
-
     fun testEstablishPlaySession(driver: AndroidDriver) {
         Assertions.assertEquals(driver.currentPackage, "com.android.vending")
         Assertions.assertEquals(driver.currentActivity(), ".AssetBrowserActivity")
@@ -504,18 +495,5 @@ class AppTest() : BaseTest() {
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
         driver.pressKey(KeyEvent(AndroidKey.HOME))
     }
-
-    @Throws(Exception::class)
-    fun installedAppCapabilities(taskId: Int): DesiredCapabilities {
-        val capabilities = initialCapabilities(taskId)
-        capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, testAppPackage)
-        capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, testAppActivity)
-        capabilities.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, testAppActivity)
-        capabilities.setCapability(AndroidMobileCapabilityType.DEVICE_READY_TIMEOUT, 40)
-        capabilities.setCapability("deviceOrientation", "portrait")
-        capabilities.setCapability("autoLaunch", "false")
-        return capabilities
-    }
-
 
 }
