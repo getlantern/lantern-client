@@ -303,7 +303,7 @@ class SessionModel extends Model {
       'email': email,
       'issue': issue,
       'description': description
-    }).then((value) => value as String);
+    }).then((value) => value.toString());
   }
 
   Widget getUserId(ValueWidgetBuilder<String> builder) {

@@ -25,6 +25,8 @@ type SessionModel struct {
 // Might be eaier to move all const at one place
 // All keys are expose to front end so we can use same to avoid duplication and reduce error
 const DEVICE_ID = "deviceid"
+const MODEL = "model"
+const OS_VERSION = "os_version"
 const PAYMENT_TEST_MODE = "paymentTestMode"
 const USER_ID = "userid"
 const TOKEN = "token"
@@ -76,6 +78,7 @@ const SESSION_MODEL_METHOD_ACCEPT_TERMS = "acceptTerms"
 const SESSION_MODEL_METHOD_SET_STORE_VERSION = "setStoreVersion"
 const SESSION_MODEL_METHOD_SET_SELECTED_TAB = "setSelectedTab"
 const SESSION_MODEL_METHOD_CREATE_USER = "createUser"
+const SESSION_MODEL_METHOD_REPORT_ISSUE = "reportIssue"
 
 type TabData struct {
 	Tab string `json:"tab"`
@@ -228,9 +231,14 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 			return nil, err
 		}
 		return minisql.NewValueBool(true), nil
-	case SESSION_MODEL_METHOD_CREATE_USER:
-		local := arguments.Get(0)
-		err := userCreate(s.baseModel, local.String())
+	case SESSION_MODEL_METHOD_REPORT_ISSUE:
+		jsonString := arguments.Get(0).String()
+		reportIssueStruct, reportErr := extractReportValueFromJSON(jsonString)
+		if reportErr != nil {
+			return nil, reportErr
+
+		}
+		err := reportIssue(s, reportIssueStruct)
 		if err != nil {
 			return nil, err
 		} else {
@@ -760,5 +768,44 @@ func userCreate(m *baseModel, local string) error {
 	//Save user id and token
 	setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
 	log.Debugf("Created new Lantern user: %+v", userResponse)
+	return nil
+}
+
+func reportIssue(session *SessionModel, reportIssue ReportIssue) error {
+	// Check if email is there is yes then store it
+	if reportIssue.Email != " " {
+		err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			pathdb.Put[string](tx, EMAIL_ADDRESS, reportIssue.Email, "")
+			return nil
+		})
+		return err
+	}
+	//Check If user is pro or not
+	pro, proErr := session.IsProUser()
+	if proErr != nil {
+		return proErr
+	}
+	var level string
+	if pro {
+		level = "pro"
+	} else {
+		level = "free"
+	}
+
+	// Get Deive id
+	model, modelErr := session.db.Get(MODEL)
+	if modelErr != nil {
+		return modelErr
+	}
+
+	// Get os version
+	osVersion, osVersionErr := session.db.Get(OS_VERSION)
+	if osVersionErr != nil {
+		return modelErr
+	}
+	reportIssueErr := SendIssueReport(session, "1", "This is testing desc", level, reportIssue.Email, "IPHONE", string(model), string(osVersion))
+	if reportIssueErr != nil {
+		return reportIssueErr
+	}
 	return nil
 }

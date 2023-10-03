@@ -185,7 +185,7 @@ class _ReportIssueState extends State<ReportIssue> {
                                     },
                                   );
                                 }).onError((error, stackTrace) {
-                                  CDialog.showError(
+                                 CDialog.showError(
                                     context,
                                     error: e,
                                     stackTrace: stackTrace,
