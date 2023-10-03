@@ -289,7 +289,7 @@ $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 		-b $(MOBILE_DIR)/app/build.gradle \
 		:app:assembleAutoTestDebug :app:assembleAutoTestDebugAndroidTest
 
-dart-defines-debug:
+dart-defines:
 	@DART_DEFINES="$(CIBASE)"; \
 	printf "$$DART_DEFINES"
 
@@ -318,13 +318,14 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
+	DART_DEFINES=`make dart-defines` && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	VERSION_CODE="$$VERSION_CODE" && \
 	DEVELOPMENT_MODE="$$DEVELOPMENT_MODE" && \
-	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) \
+	$(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) \
 	-PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
 	-Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle assembleProdSideload && \
