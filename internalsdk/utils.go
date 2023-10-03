@@ -142,3 +142,18 @@ func extractLangValueFromJSON(localStr string) (string, error) {
 	}
 	return langObj.Lang, nil
 }
+
+type ReportIssue struct {
+	Email       string `json:"email"`
+	Issue       string `json:"issue"`
+	Description string `json:"description"`
+}
+
+func extractReportValueFromJSON(reportJson string) (ReportIssue, error) {
+	var reportIssue ReportIssue
+	err := json.Unmarshal([]byte(reportJson), &reportIssue)
+	if err != nil {
+		return reportIssue, err
+	}
+	return reportIssue, nil
+}
