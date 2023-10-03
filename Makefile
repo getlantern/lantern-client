@@ -295,7 +295,7 @@ dart-defines:
 
 do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
-	DART_DEFINES=`make dart-defines-debug` && \
+	DART_DEFINES=`make dart-defines` && \
 	echo "Value of DART_DEFINES is: $$DART_DEFINES" && \
 	CI="$$CI" && \
 	echo "Value of CI is: $$CI" && \
@@ -319,6 +319,7 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) req
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines` && \
+	CI="$$CI" && \
 	COUNTRY="$$COUNTRY" && \
 	STAGING="$$STAGING" && \
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
