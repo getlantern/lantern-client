@@ -7,17 +7,18 @@ import Flutter
 import Foundation
 import Internalsdk
 
-class VpnModel: BaseModel {
+class VpnModel: BaseModel, InternalsdkVPNManagerProtocol {
   let vpnManager: VPNBase
   let vpnHelper = VpnHelper.shared
 
   init(flutterBinary: FlutterBinaryMessenger, vpnBase: VPNBase) throws {
     self.vpnManager = vpnBase
     var error: NSError?
-    guard let model = InternalsdkNewVpnModel(try BaseModel.getDB(), &error) else {
+    guard let model = InternalsdkNewVPNModel(try BaseModel.getDB(), &error) else {
       throw error!
     }
     try super.init(flutterBinary, model)
+    model.setManager(self)
   }
 
   private func saveVPNStatus(status: String) {
@@ -29,14 +30,6 @@ class VpnModel: BaseModel {
       } catch {
         logger.log("Error while setting VPN status")
       }
-    }
-  }
-
-  func switchVPN(status: Bool) {
-    if status {
-      startVPN()
-    } else {
-      stopVPN()
     }
   }
 
