@@ -16,11 +16,11 @@ import Toast_Swift
     var flutterbinaryMessenger: FlutterBinaryMessenger!
     //  Model Properties
     var sessionModel: SessionModel!
-    var messagingModel: MessagingModel!
     var lanternModel: LanternModel!
-    var vpnModel: VpnModel!
     var navigationModel: NavigationModel!
-
+    var vpnModel: VpnModel!
+    var messagingModel: MessagingModel!
+    
     // IOS
     var loadingManager: LoadingIndicatorManager?
 
@@ -29,7 +29,12 @@ import Toast_Swift
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         initializeFlutterComponents()
-        setupAppComponents()
+        do {
+            try setupAppComponents()
+        } catch {
+            logger.error("Unexpected error setting up app components: \(error)")
+            exit(1)
+        }
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
@@ -40,25 +45,20 @@ import Toast_Swift
         flutterbinaryMessenger = flutterViewController.binaryMessenger}
 
     // Intlize this GO model and callback
-    private func setupAppComponents() {
-        setupModels()
+    private func setupAppComponents() throws {
+        try setupModels()
         startUpSequency()
         setupLoadingBar()
     }
 
     // Init all the models
-    private func setupModels() {
+    private func setupModels() throws {
         logger.log("setupModels method called")
-        // Init Session Model
-        sessionModel=SessionModel(flutterBinary: flutterbinaryMessenger)
-        // Init Messaging Model
-        messagingModel=MessagingModel(flutterBinary: flutterbinaryMessenger)
-        // Init Lantern Model
+        sessionModel=try SessionModel(flutterBinary: flutterbinaryMessenger)
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
-        // Init VPN Model
-        vpnModel=VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
-        // Init Navigation Model
+        vpnModel=try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
         navigationModel=NavigationModel(flutterBinary: flutterbinaryMessenger)
+        messagingModel=try MessagingModel(flutterBinary: flutterbinaryMessenger)
     }
 
     // Post start up
