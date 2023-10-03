@@ -2,72 +2,86 @@ import UIKit
 import SQLite
 import Flutter
 import Internalsdk
+import Toast_Swift
+
+// Before Commit Run  linter
+// swiftlint autocorrect --format
+// swiftlint --fix --format
+// swiftlint lint --fix --format
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
-    // List of channel and event method names
-    let NAVIGATION_METHOED_CHANNEL="lantern_method_channel"
-    
-    var sessionModel:SessionModel!
-    var messagingModel:MessagingModel!
-    var lanternModel:LanternModel!
-    var flutterbinaryMessenger:FlutterBinaryMessenger!
-    var lanternMethodChannel:FlutterMethodChannel!
-    var navigationChannel:FlutterMethodChannel!
-    
+    // Flutter Properties
+    var flutterViewController: FlutterViewController!
+    var flutterbinaryMessenger: FlutterBinaryMessenger!
+    //  Model Properties
+    var sessionModel: SessionModel!
+    var messagingModel: MessagingModel!
+    var lanternModel: LanternModel!
+    var vpnModel: VpnModel!
+    var navigationModel: NavigationModel!
+
+    // IOS
+    var loadingManager: LoadingIndicatorManager?
+
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
-        flutterbinaryMessenger=controller.binaryMessenger
-        setupModels()
-        prepareChannel()
-        setupLocal()
+        initializeFlutterComponents()
+        setupAppComponents()
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
-    
-    private func setupModels(){
+
+    // Flutter related stuff
+    private func initializeFlutterComponents() {
+        flutterViewController = window?.rootViewController as! FlutterViewController
+        flutterbinaryMessenger = flutterViewController.binaryMessenger}
+
+    // Intlize this GO model and callback
+    private func setupAppComponents() {
+        setupModels()
+        startUpSequency()
+        setupLoadingBar()
+    }
+
+    // Init all the models
+    private func setupModels() {
         logger.log("setupModels method called")
-        //Init Session Model
+        // Init Session Model
         sessionModel=SessionModel(flutterBinary: flutterbinaryMessenger)
-        //Init Messaging Model
+        // Init Messaging Model
         messagingModel=MessagingModel(flutterBinary: flutterbinaryMessenger)
-        //Init Lantern Model
+        // Init Lantern Model
         lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
+        // Init VPN Model
+        vpnModel=VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
+        // Init Navigation Model
+        navigationModel=NavigationModel(flutterBinary: flutterbinaryMessenger)
     }
-    
-    
-    private func prepareChannel (){
-        logger.log("prepareChannel method called")
-        //Navigation Channel
-        navigationChannel=FlutterMethodChannel(name: NAVIGATION_METHOED_CHANNEL, binaryMessenger: flutterbinaryMessenger)
-        navigationChannel.setMethodCallHandler(handleNavigationethodCall)
+
+    // Post start up
+    // Init all method needed for user
+    func startUpSequency() {
+        //        setupLocal()
+        //        createUser()
+        askNotificationPermssion()
+
     }
-    
-    private func setupLocal(){
-        let langStr = Locale.current.languageCode
-        if langStr != nil{
-            sessionModel.setLocal(lang: langStr!)
-            logger.log("Local value found  \(langStr)")
-        }else{
-            logger.log("Local value found nil")
+
+    func askNotificationPermssion() {
+        UserNotificationsManager.shared.requestNotificationPermission { granted in
+            if granted {
+                logger.debug("Notification Permssion is granted")
+            } else {
+                logger.debug("Notification Permssion is denied")
+            }
         }
     }
-    
-    
-    func handleNavigationethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        // Handle your method calls here
-        // The 'call' contains the method name and arguments
-        // The 'result' can be used to send back the data to Flutter
-        
-        switch call.method {
-        case "yourMethod":
-            // handle yourMethod
-            break
-        default:
-            result(FlutterMethodNotImplemented)
-        }
+
+    func setupLoadingBar() {
+        loadingManager = LoadingIndicatorManager(parentView: flutterViewController.view)
     }
+
 }

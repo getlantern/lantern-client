@@ -1,5 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
+
 @RoutePage<void>(name: 'Account')
 class AccountMenu extends StatelessWidget {
   AccountMenu({Key? key}) : super(key: key);
@@ -47,14 +48,15 @@ class AccountMenu extends StatelessWidget {
               )
             : const SizedBox(),
       ),
-      ListItemFactory.settingsItem(
-        key: AppKeys.upgrade_lantern_pro,
-        icon: ImagePaths.pro_icon_black,
-        content: 'Upgrade to Lantern Pro'.i18n,
-        onTap: () {
-          upgradeToLanternPro(context);
-        },
-      ),
+      if (Platform.isAndroid)
+        ListItemFactory.settingsItem(
+          key: AppKeys.upgrade_lantern_pro,
+          icon: ImagePaths.pro_icon_black,
+          content: 'Upgrade to Lantern Pro'.i18n,
+          onTap: () {
+            upgradeToLanternPro(context);
+          },
+        ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
@@ -62,13 +64,14 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.devices,
-        content: 'Authorize Device for Pro'.i18n,
-        onTap: () {
-          authorizeDeviceForPro(context);
-        },
-      ),
+      if (Platform.isAndroid)
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.devices,
+          content: 'Authorize Device for Pro'.i18n,
+          onTap: () {
+            authorizeDeviceForPro(context);
+          },
+        ),
       ...commonItems(context)
     ];
   }
@@ -79,19 +82,21 @@ class AccountMenu extends StatelessWidget {
         (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus(
           (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
-              ListItemFactory.settingsItem(
-            key: AppKeys.account_management,
-            icon: ImagePaths.account,
-            content: 'account_management'.i18n,
-            onTap: () async =>
-                await context.pushRoute(AccountManagement(isPro: true)),
-            trailingArray: [
-              if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
-                const CAssetImage(
-                  path: ImagePaths.badge,
-                ),
-            ],
-          ),
+              Platform.isAndroid
+                  ? ListItemFactory.settingsItem(
+                      key: AppKeys.account_management,
+                      icon: ImagePaths.account,
+                      content: 'account_management'.i18n,
+                      onTap: () async => await context
+                          .pushRoute(AccountManagement(isPro: true)),
+                      trailingArray: [
+                        if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
+                          const CAssetImage(
+                            path: ImagePaths.badge,
+                          ),
+                      ],
+                    )
+                  : const SizedBox(),
         ),
       ),
       ListItemFactory.settingsItem(
@@ -101,11 +106,12 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.devices,
-        content: 'add_device'.i18n,
-        onTap: () async => await context.pushRoute(ApproveDevice()),
-      ),
+      if (Platform.isAndroid)
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.devices,
+          content: 'add_device'.i18n,
+          onTap: () async => await context.pushRoute(ApproveDevice()),
+        ),
       ...commonItems(context)
     ];
   }

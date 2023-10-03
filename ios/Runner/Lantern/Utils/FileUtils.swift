@@ -15,8 +15,8 @@ extension FileManager {
     func ensureDirectoryExists(at url: URL) throws {
         if !fileExists(atPath: url.path, isDirectory: nil) {
             try createDirectory(at: url,
-                                 withIntermediateDirectories: false,
-                                 attributes: nil)
+                                withIntermediateDirectories: false,
+                                attributes: nil)
         }
     }
 
@@ -27,7 +27,7 @@ extension FileManager {
             if !fileExists(atPath: path) {
                 // posix permission 666 is `rw-rw-rw` aka read/write for all
                 let rwAllPermission = 0o666 as Int16
-                let success = createFile(atPath: path, contents: nil, attributes: [.posixPermissions : rwAllPermission])
+                let success = createFile(atPath: path, contents: nil, attributes: [.posixPermissions: rwAllPermission])
                 if !success { overallSuccess = false }
             }
         }

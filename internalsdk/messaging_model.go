@@ -17,7 +17,7 @@ func NewMessagingModel(schema string, mdb minisql.DB) (*MessagingModel, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Initialization for SessionModel
+	// Initialization for Messaging
 	initMessagingModel(base.(*baseModel))
 	model := &MessagingModel{base.(*baseModel)}
 	return model, nil

@@ -5,15 +5,9 @@
 
 import Foundation
 import os.log
-import Ios
+import Internalsdk
+import UIKit
 
-// Temporary for log file issue hotfix
-enum LanternError: Error {
-    case unknown
-}
-
-// Any and all interaction with Go will run through FlashlightManager.
-// See FlashlightManager+AppSide.swift for app-specific functionality.
 class FlashlightManager {
     static let `appDefault` = FlashlightManager(constants: .appDefault)
     static let `netExDefault` = FlashlightManager(constants: .netExDefault)
@@ -34,15 +28,11 @@ class FlashlightManager {
     var hasCheckedForUpdate = false
 
     // MARK: Go Logging
-
     func configureGoLoggerReturningError() -> Error? {
         var error: NSError?
         IosConfigureFileLogging(constants.goLogBaseURL.path, constants.targetDirectoryURL.path, &error)
         return error
     }
-    
-
-    // MARK: Testing specific proxies
 
     // set the below to a proxies.yaml with whatever proxies you want to test, will override
     static let hardcodedProxies = ""

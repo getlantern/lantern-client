@@ -5,7 +5,7 @@
 
 import NetworkExtension
 
-// Just for logging purposes, logging self or self.rawValue is un-readable.
+// Just for logging purposes, Status taken from NEProviderStopReason
 extension NEProviderStopReason {
     var debugString: String {
         switch self {

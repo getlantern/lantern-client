@@ -583,6 +583,8 @@ abstract class SessionManager(application: Application) : Session {
         // initialize email address to empty string (if it doesn't already exist)
         if (email().isEmpty()) setEmail("")
 
+        // this condition is unnecessary
+        // Todo remove this soon
         if (prefs.getInt(ACCEPTED_TERMS_VERSION, 0) == 0) prefs.edit().putInt(ACCEPTED_TERMS_VERSION, 0).apply()
 
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")

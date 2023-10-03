@@ -10,7 +10,7 @@ class FullScreenDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget,
+      body: SafeArea(child: widget),
     );
   }
 }
