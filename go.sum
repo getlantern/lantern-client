@@ -312,8 +312,8 @@ github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7 h1:/efTOJpxX
 github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7/go.mod h1:+X8pAviVhThDBjPEqLUB0iO7EPxhpWk7Q9VYxvz6rCY=
 github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 h1:Ka9rIAgef8zYhBr/VgLrt5+Qs7zE33g0OButzpIGcSs=
 github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082/go.mod h1:oCpQojhSaK0F/6rWMrDvN8/QFHQhTC9Gb3uf7GcqPQQ=
-github.com/getlantern/broflake v0.0.0-20230822184836-0b9bbcadd5c6 h1:/G1jb7daSg1FkEEFbvRRM7A927uErx5vEMVwrTcVzp0=
-github.com/getlantern/broflake v0.0.0-20230822184836-0b9bbcadd5c6/go.mod h1:Ehdl8IASN5rJi9brldVuCjTDcSU25nvaGRlzNprgeQo=
+github.com/getlantern/broflake v0.0.0-20230926124502-c8269f54a586 h1:d8z7UmXW6aKEqhM4lwmYE5IBHjNoii6xP4B5ikWEq+s=
+github.com/getlantern/broflake v0.0.0-20230926124502-c8269f54a586/go.mod h1:Ehdl8IASN5rJi9brldVuCjTDcSU25nvaGRlzNprgeQo=
 github.com/getlantern/bufconn v0.0.0-20190625204133-a08544339f8d/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
 github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 h1:8WjDNmpDLFVsAfcnHxqF4pfVKkdAQxyJ9iCHB4LxSfc=
 github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
@@ -341,8 +341,8 @@ github.com/getlantern/dhtup v0.0.0-20230218071625-e78bcd432e4b h1:s6hIG0ssf0ixxD
 github.com/getlantern/dhtup v0.0.0-20230218071625-e78bcd432e4b/go.mod h1:vHmyGO0tz9xO4rxi7rZCUjnI3GJ/26u6YHwdeamd3Bs=
 github.com/getlantern/dns v0.0.0-20210120185712-8d005533efa0 h1:8DQSmWtwBy8Z0Zr/kiRJRhBPQO4LMN0mziCJd+8edhw=
 github.com/getlantern/dns v0.0.0-20210120185712-8d005533efa0/go.mod h1:nd1wZuSxVB7DZVqZT1hCFkdWcMqbuO5XQSd+1Duk/fs=
-github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8 h1:UKCd60g0A2N5t1EO45hNKR0fJ0QC9o33S476S3Aro9g=
-github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8/go.mod h1:5GwF/pPObuqMzWoCQ26QDowRMysQ61Sa1Gbc/9mQUZM=
+github.com/getlantern/dnsgrab v0.0.0-20230822102054-7ff232ec3148 h1:3RwZlptbVTFP+F/o+FlwD8HURN/L6R+CDRpS8mzoOpE=
+github.com/getlantern/dnsgrab v0.0.0-20230822102054-7ff232ec3148/go.mod h1:5GwF/pPObuqMzWoCQ26QDowRMysQ61Sa1Gbc/9mQUZM=
 github.com/getlantern/domains v0.0.0-20220311111720-94f59a903271 h1:LPjvyUPESE32YBbM1JtwOhfDlLv1gub52mPqKcim77Q=
 github.com/getlantern/domains v0.0.0-20220311111720-94f59a903271/go.mod h1:ij0uyo1HGrb17vCYGonZBb9tWh+Ba3kgNhLrOghME/I=
 github.com/getlantern/elevate v0.0.0-20180207094634-c2e2e4901072/go.mod h1:T4VB2POK13lsPLFV98WJQrL7gAXYD9TyJxBU2P8c8p4=
@@ -373,8 +373,8 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight/v7 v7.6.8 h1:z4jdHzZuHa0NT98ua8Qx24QIblDViyQ2RfgIxXAfibw=
-github.com/getlantern/flashlight/v7 v7.6.8/go.mod h1:FLZhyLFeSojL4sRjQEaLRtVl4RB1DdliWegTsIqgzlI=
+github.com/getlantern/flashlight/v7 v7.6.9 h1:GqGY05jwvCy7sVQ7vOjLN51tT90yC0ZYMIp5MNQ0NSY=
+github.com/getlantern/flashlight/v7 v7.6.9/go.mod h1:E81GrKxK8GU5mRzskGF3+4wZKMrEobE+Ff13S8ryPvs=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 h1:r/Z/SPPIfLXDI3QA7/tE6nOfPncrqeUPDjiFjnNGP50=
