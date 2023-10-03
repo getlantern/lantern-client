@@ -6,7 +6,7 @@ import (
 )
 
 // Custom Model implemnation
-// VPNModel is a custom model derived from the baseModel.
+// VpnModel is a custom model derived from the baseModel.
 type VpnModel struct {
 	*baseModel
 }
@@ -16,13 +16,13 @@ const PATH_SERVER_INFO = "/server_info"
 const PATH_BANDWIDTH = "/bandwidth"
 
 // NewSessionModel initializes a new SessionModel instance.
-func NewVpnModel(schema string, mdb minisql.DB) (*VpnModel, error) {
-	base, err := newModel(schema, mdb)
+func NewVpnModel(mdb minisql.DB) (*VpnModel, error) {
+	base, err := newModel("vpn", mdb)
 	if err != nil {
 		return nil, err
 	}
-	initVpnModel(base.(*baseModel))
-	model := &VpnModel{base.(*baseModel)}
+	initVpnModel(base)
+	model := &VpnModel{baseModel: base}
 	return model, nil
 }
 

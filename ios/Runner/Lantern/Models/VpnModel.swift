@@ -7,67 +7,24 @@ import Internalsdk
 import Flutter
 import DBModule
 
-class VpnModel: BaseModel<InternalsdkVpnModel> {
-    var flutterbinaryMessenger: FlutterBinaryMessenger
+class VpnModel: BaseModel {
     let vpnManager: VPNBase
     let vpnHelper = VpnHelper.shared
 
-    init(flutterBinary: FlutterBinaryMessenger, vpnBase: VPNBase) {
-        self.flutterbinaryMessenger=flutterBinary
+    init(flutterBinary: FlutterBinaryMessenger, vpnBase: VPNBase) throws {
         self.vpnManager = vpnBase
-        super.init(type: .vpnModel, flutterBinary: self.flutterbinaryMessenger)
-        initializeVpnModel()
-    }
-
-    func initializeVpnModel() {
-
-    }
-
-    override func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if call.method=="switchVPN"{
-            // Here for we need to opetaion on swif and go both sides
-            if let args = call.arguments as? [String: Any] {
-                let status = args["on"] as! Bool
-                switchVPN(status: status)
-            } else {
-                result(FlutterError(code: "BAD_ARGS",
-                                    message: "Expected arguments to be of type Dictionary.",
-                                    details: nil))
-            }
-        } else {
-            guard let minisqlValue = ValueUtil.convertToMinisqlValue(call.arguments) else {
-                result(FlutterError(code: "ARGUMENTS_ERROR", message: "Failed to convert arguments to MinisqlValue", details: nil))
-                return
-            }
-            do {
-                let invocationResult = try invokeMethodOnGo(name: call.method, argument: minisqlValue)
-                if let originalValue = ValueUtil.convertFromMinisqlValue(from: invocationResult as! MinisqlValue) {
-                    result(originalValue)
-                } else {
-                    result(FlutterError(code: "CONVERSION_ERROR", message: "Failed to convert MinisqlValue back to original value", details: nil))
-                }
-            } catch let error as NSError {
-                // Check for the specific "method not implemented" error
-                if error.localizedDescription.contains("method not implemented") {
-                    result(FlutterMethodNotImplemented)
-                }
-                // Check for another specific error (e.g., "database error")
-                else if error.localizedDescription.contains("database error") {
-                    result(FlutterError(code: "DATABASE_ERROR", message: "A database error occurred.", details: nil))
-                }
-                // Handle all other errors
-                else {
-                    result(FlutterError(code: "UNKNOWN_ERROR", message: error.localizedDescription, details: nil))
-                }
-            }
+        var error: NSError?
+        guard let model = InternalsdkNewVpnModel(try BaseModel.getDB(), &error) else {
+            throw error!
         }
+        try super.init(flutterBinary, model)
     }
 
     private func saveVPNStatus(status: String) {
         let miniSqlValue =  ValueUtil.convertToMinisqlValue(status)
         if miniSqlValue != nil {
             do {
-                let result = try  invokeMethodOnGo(name: "saveVpnStatus", argument: miniSqlValue!)
+                let result = try  invokeMethodOnGo("saveVpnStatus", miniSqlValue!)
                 logger.log("Sucessfully set VPN status with  \(status)")
             } catch {
                 logger.log("Error while setting VPN status")
@@ -99,12 +56,6 @@ class VpnModel: BaseModel<InternalsdkVpnModel> {
         vpnHelper.stopVPN()
         logger.debug("VPN Successfully stoped")
         self.saveVPNStatus(status: "disconnected")
-    }
-
-    func invokeMethodOnGo(name: String, argument: MinisqlValue) throws -> MinisqlValue {
-        // Convert any argument to Minisql values
-        let goResult = try model.invokeMethod(name, arguments: ValueArrayFactory.createValueArrayHandler(values: [argument]))
-        return goResult
     }
 
 }

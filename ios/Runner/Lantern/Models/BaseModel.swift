@@ -11,16 +11,10 @@ import SQLite
 import Flutter
 import DBModule
 
-enum ModelType {
-    case sessionModel
-    case messagingModel
-    case vpnModel
-}
+internal var swiftDB: MinisqlDBProtocol?
 
-open class BaseModel<T>: NSObject, FlutterStreamHandler {
-    var model: T!
-    private var schema: String  = "LANTERN_DB"
-    private var modelType: ModelType
+open class BaseModel: NSObject, FlutterStreamHandler {
+    var model: InternalsdkModelProtocol
     var eventChannel: FlutterEventChannel!
     var methodChannel: FlutterMethodChannel!
     var binaryMessenger: FlutterBinaryMessenger!
@@ -29,46 +23,23 @@ open class BaseModel<T>: NSObject, FlutterStreamHandler {
     private let mainHandler = DispatchQueue.main
     private let asyncHandler = DispatchQueue(label: "BaseModel-AsyncHandler")
 
-    init(type: ModelType, flutterBinary: FlutterBinaryMessenger) {
-        self.modelType = type
+    init(_ flutterBinary: FlutterBinaryMessenger, _ model: InternalsdkModelProtocol) throws {
+        self.model = model
         self.binaryMessenger = flutterBinary
         super.init()
-        setupDB()
         setupFlutterChannels()
     }
 
-    private func setupDB() {
-        do {
-            let dbPath = getDatabasePath()
-            //            let db = try DatabaseManager.getDbManager(databasePath: dbPath)
-            let swiftDB = try DatabaseFactory.getDbManager(databasePath: dbPath)
-            var error: NSError?
-
-            // Depending on the model type, initialize the correct model
-            switch modelType {
-            case .sessionModel:
-                guard let createdModel = InternalsdkNewSessionModel(self.schema, swiftDB, &error) else {
-                    throw error!
-                }
-                self.model = createdModel as! T
-            case .messagingModel:
-                guard let createdModel = InternalsdkNewMessagingModel(self.schema, swiftDB, &error) else {
-                    throw error!
-                }
-                self.model = createdModel as! T
-            case .vpnModel:
-                guard let createdModel = InternalsdkNewVpnModel(self.schema, swiftDB, &error) else {
-                    throw error!
-                }
-                self.model = createdModel as! T
-            }
-
-        } catch {
-            logger.log("Failed to create new model: \(error)")
+    internal static func getDB() throws -> MinisqlDBProtocol {
+        if let db = swiftDB {
+            return db
+        } else {
+            swiftDB = try DatabaseFactory.getDbManager(databasePath: getDatabasePath())
+            return swiftDB!
         }
     }
 
-    private func getDatabasePath() -> String {
+    internal static func getDatabasePath() -> String {
         let fileManager = FileManager.default
         let dbDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("masterDBv2")
         do {
@@ -83,27 +54,17 @@ open class BaseModel<T>: NSObject, FlutterStreamHandler {
     }
 
     private func setupFlutterChannels() {
-        var modelName = ""
-        switch modelType {
-        case .sessionModel:
-            modelName = "session"
-        case .messagingModel:
-            modelName = "messaging"
-        case .vpnModel:
-            modelName = "vpn"
-        }
-
-        eventChannel = FlutterEventChannel(name: "\(modelName)_event_channel", binaryMessenger: binaryMessenger)
+        eventChannel = FlutterEventChannel(name: "\(model.name())_event_channel", binaryMessenger: binaryMessenger)
         eventChannel.setStreamHandler(self)
 
-        methodChannel = FlutterMethodChannel(name: "\(modelName)_method_channel", binaryMessenger: binaryMessenger)
+        methodChannel = FlutterMethodChannel(name: "\(model.name())_method_channel", binaryMessenger: binaryMessenger)
         methodChannel.setMethodCallHandler(handleMethodCall)
     }
 
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        logger.log("onListen initiated with arguments: \(arguments)")
+        logger.log("onListen initiated with arguments: \(String(describing: arguments))")
         guard let args = arguments as? [String: Any] else {
-            let errorMessage = "Failed to cast arguments \(arguments) to dictionary. Exiting..."
+            let errorMessage = "Failed to cast arguments \(String(describing: arguments)) to dictionary. Exiting..."
             return createFlutterError(code: "INVALID_ARGUMENTS", message: errorMessage)
         }
         activeSinks.set(events)
@@ -136,7 +97,7 @@ open class BaseModel<T>: NSObject, FlutterStreamHandler {
         }
 
         do {
-            try handleSubscribe(for: model, subscriber: subscriber)
+            try model.subscribe(subscriber)
         } catch let error {
             let errorMessage = "An error occurred while subscribing: \(error.localizedDescription)"
             return createFlutterError(code: "SUBSCRIBE_ERROR", message: errorMessage)
@@ -149,7 +110,7 @@ open class BaseModel<T>: NSObject, FlutterStreamHandler {
             return nil
         }
         guard let args = arguments as? [String: Any] else {
-            let errorMessage = "onCancel Failed to cast arguments \(arguments) to dictionary. Exiting..."
+            let errorMessage = "onCancel Failed to cast arguments \(String(describing: arguments)) to dictionary. Exiting..."
             return createFlutterError(code: "INVALID_ARGUMENTS", message: errorMessage)
         }
 
@@ -159,7 +120,7 @@ open class BaseModel<T>: NSObject, FlutterStreamHandler {
         }
 
         do {
-            try handleUnsubscribe(for: model, subscriberID: subscriberID)
+            try model.unsubscribe(subscriberID)
             activeSubscribers.remove(subscriberID)
         } catch let error {
             let errorMessage = "An error occurred while unsubscribing: \(error.localizedDescription)"
@@ -178,35 +139,52 @@ open class BaseModel<T>: NSObject, FlutterStreamHandler {
         }
     }
 
-    open func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        // Default implementation. This will force subclasses to provide their own implementation.
-        fatalError("Subclasses must implement this method.")
-    }
+    internal func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
+      // Convert the entire arguments to a single MinisqlValue
+      guard let minisqlValue = ValueUtil.convertToMinisqlValue(call.arguments) else {
+        result(
+          FlutterError(
+            code: "ARGUMENTS_ERROR", message: "Failed to convert arguments to MinisqlValue",
+            details: nil))
+        return
+      }
+      do {
+        let invocationResult = try invokeMethodOnGo(call.method, minisqlValue)
 
-    func handleSubscribe(for model: Any, subscriber: DetailsSubscriber) throws {
-        switch model {
-        case let sessionModelSub as InternalsdkSessionModel:
-            try sessionModelSub.subscribe(subscriber)
-        case let messagingModel as InternalsdkMessagingModel:
-            try messagingModel.subscribe(subscriber)
-        case let vpnModel as InternalsdkVpnModel:
-            try vpnModel.subscribe(subscriber)
-        default:
-            throw NSError(domain: "UnsupportedModel", code: 999, userInfo: ["Description": "Unsupported model type."])
+        if let originalValue = ValueUtil.convertFromMinisqlValue(
+          from: invocationResult as! MinisqlValue)
+        {
+          result(originalValue)
+        } else {
+          result(
+            FlutterError(
+              code: "CONVERSION_ERROR",
+              message: "Failed to convert MinisqlValue back to original value", details: nil))
         }
-    }
+      } catch let error as NSError {
 
-    func handleUnsubscribe(for model: Any, subscriberID: String) throws {
-        switch model {
-        case let sessionSub as InternalsdkSessionModel:
-            try sessionSub.unsubscribe(subscriberID)
-        case let messagingModel as InternalsdkMessagingModel:
-            try messagingModel.unsubscribe(subscriberID)
-        case let vpnModel as InternalsdkVpnModel:
-            try vpnModel.unsubscribe(subscriberID)
-        default:
-            throw NSError(domain: "UnsupportedModel", code: 999, userInfo: ["Description": "Unsupported model type."])
+        // Check for the specific "method not implemented" error
+        if error.localizedDescription.contains("method not implemented") {
+          result(FlutterMethodNotImplemented)
         }
+        // Check for another specific error (e.g., "database error")
+        else if error.localizedDescription.contains("database error") {
+          result(
+            FlutterError(code: "DATABASE_ERROR", message: "A database error occurred.", details: nil))
+        }
+        // Handle all other errors
+        else {
+          result(
+            FlutterError(code: "UNKNOWN_ERROR", message: error.localizedDescription, details: nil))
+        }
+      }
+    }
+    
+    internal func invokeMethodOnGo(_ name: String, _ argument: MinisqlValue) throws -> MinisqlValue {
+      // Convert any argument to Minisql values
+      let goResult = try model.invokeMethod(
+        name, arguments: ValueArrayFactory.createValueArrayHandler(values: [argument]))
+      return goResult
     }
 
     private func createFlutterError(code: String, message: String, details: Any? = nil) -> FlutterError {
