@@ -83,7 +83,7 @@ msgid "Go Pro Title"
 msgstr "Pro'ya Yükseltin!"
 
 msgid "Go Pro Description"
-msgstr "Daha yüksek hızlara ve sınırsız veriye ulaşın!"
+msgstr ""
 
 msgid "Server Location"
 msgstr "Sunucu Konumu"

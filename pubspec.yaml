@@ -33,6 +33,8 @@ dependencies:
   protobuf: any
   uuid: ^3.0.7
 
+  sliver_tools: ^0.2.12
+
   # UI Enhancements & User Input
   google_fonts:
   flutter_switch: ^0.3.2

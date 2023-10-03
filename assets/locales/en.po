@@ -57,7 +57,7 @@ msgid "Go Pro Title"
 msgstr "Go Pro!"
 
 msgid "Go Pro Description"
-msgstr "Unlock faster speeds, and unlimited data!"
+msgstr "Unlock faster speeds, ad-free experience, and unlimited data!"
 
 msgid "Server Location"
 msgstr "Server Location"

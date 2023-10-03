@@ -13,6 +13,7 @@ import org.androidannotations.annotations.EService
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternStatus
@@ -108,6 +109,8 @@ open class LanternService : Service(), Runnable {
             )
             createUser(0)
         }
+
+        Datadog.initialize()
 
         if (!BuildConfig.PLAY_VERSION && !BuildConfig.DEVELOPMENT_MODE) {
             // check if an update is available

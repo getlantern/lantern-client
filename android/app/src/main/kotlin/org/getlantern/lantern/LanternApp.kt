@@ -6,8 +6,6 @@ import android.os.StrictMode
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
-import org.getlantern.lantern.datadog.Datadog
-import org.getlantern.lantern.datadog.FlutterExcludingComponentPredicate
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternSessionManager
@@ -48,7 +46,6 @@ open class LanternApp : Application() {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         appContext = applicationContext
         session = LanternSessionManager(this)
-        if (!BuildConfig.DEBUG) Datadog.initialize()
         
         LanternProxySelector(session)
 
