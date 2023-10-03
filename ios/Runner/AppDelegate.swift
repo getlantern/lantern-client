@@ -1,8 +1,8 @@
-import UIKit
-import SQLite
 import Flutter
 import Internalsdk
+import SQLite
 import Toast_Swift
+import UIKit
 
 // Before Commit Run  linter
 // swiftlint autocorrect --format
@@ -11,77 +11,78 @@ import Toast_Swift
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
-    // Flutter Properties
-    var flutterViewController: FlutterViewController!
-    var flutterbinaryMessenger: FlutterBinaryMessenger!
-    //  Model Properties
-    var sessionModel: SessionModel!
-    var lanternModel: LanternModel!
-    var navigationModel: NavigationModel!
-    var vpnModel: VpnModel!
-    var messagingModel: MessagingModel!
-    
-    // IOS
-    var loadingManager: LoadingIndicatorManager?
+  // Flutter Properties
+  var flutterViewController: FlutterViewController!
+  var flutterbinaryMessenger: FlutterBinaryMessenger!
+  //  Model Properties
+  var sessionModel: SessionModel!
+  var lanternModel: LanternModel!
+  var navigationModel: NavigationModel!
+  var vpnModel: VpnModel!
+  var messagingModel: MessagingModel!
 
-    override func application(
-        _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-    ) -> Bool {
-        initializeFlutterComponents()
-        do {
-            try setupAppComponents()
-        } catch {
-            logger.error("Unexpected error setting up app components: \(error)")
-            exit(1)
-        }
-        GeneratedPluginRegistrant.register(with: self)
-        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  // IOS
+  var loadingManager: LoadingIndicatorManager?
+
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+    initializeFlutterComponents()
+    do {
+      try setupAppComponents()
+    } catch {
+      logger.error("Unexpected error setting up app components: \(error)")
+      exit(1)
     }
+    GeneratedPluginRegistrant.register(with: self)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
 
-    // Flutter related stuff
-    private func initializeFlutterComponents() {
-        flutterViewController = window?.rootViewController as! FlutterViewController
-        flutterbinaryMessenger = flutterViewController.binaryMessenger}
+  // Flutter related stuff
+  private func initializeFlutterComponents() {
+    flutterViewController = window?.rootViewController as! FlutterViewController
+    flutterbinaryMessenger = flutterViewController.binaryMessenger
+  }
 
-    // Intlize this GO model and callback
-    private func setupAppComponents() throws {
-        try setupModels()
-        startUpSequency()
-        setupLoadingBar()
+  // Intlize this GO model and callback
+  private func setupAppComponents() throws {
+    try setupModels()
+    startUpSequency()
+    setupLoadingBar()
+  }
+
+  // Init all the models
+  private func setupModels() throws {
+    logger.log("setupModels method called")
+    sessionModel = try SessionModel(flutterBinary: flutterbinaryMessenger)
+    lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
+    vpnModel = try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
+    navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
+    messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
+  }
+
+  // Post start up
+  // Init all method needed for user
+  func startUpSequency() {
+    //        setupLocal()
+    //        createUser()
+    askNotificationPermssion()
+
+  }
+
+  func askNotificationPermssion() {
+    UserNotificationsManager.shared.requestNotificationPermission { granted in
+      if granted {
+        logger.debug("Notification Permssion is granted")
+      } else {
+        logger.debug("Notification Permssion is denied")
+      }
     }
+  }
 
-    // Init all the models
-    private func setupModels() throws {
-        logger.log("setupModels method called")
-        sessionModel=try SessionModel(flutterBinary: flutterbinaryMessenger)
-        lanternModel=LanternModel(flutterBinary: flutterbinaryMessenger)
-        vpnModel=try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
-        navigationModel=NavigationModel(flutterBinary: flutterbinaryMessenger)
-        messagingModel=try MessagingModel(flutterBinary: flutterbinaryMessenger)
-    }
-
-    // Post start up
-    // Init all method needed for user
-    func startUpSequency() {
-        //        setupLocal()
-        //        createUser()
-        askNotificationPermssion()
-
-    }
-
-    func askNotificationPermssion() {
-        UserNotificationsManager.shared.requestNotificationPermission { granted in
-            if granted {
-                logger.debug("Notification Permssion is granted")
-            } else {
-                logger.debug("Notification Permssion is denied")
-            }
-        }
-    }
-
-    func setupLoadingBar() {
-        loadingManager = LoadingIndicatorManager(parentView: flutterViewController.view)
-    }
+  func setupLoadingBar() {
+    loadingManager = LoadingIndicatorManager(parentView: flutterViewController.view)
+  }
 
 }

@@ -12,16 +12,16 @@ import Internalsdk
 import UIKit
 
 class SessionModel: BaseModel {
-lazy var notificationsManager: UserNotificationsManager = {
+  lazy var notificationsManager: UserNotificationsManager = {
     return UserNotificationsManager()
   }()
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
-      var error: NSError?
-      guard let model = InternalsdkNewSessionModel(try BaseModel.getDB(), &error) else {
-          throw error!
-      }
-      try super.init(flutterBinary, model)
+    var error: NSError?
+    guard let model = InternalsdkNewSessionModel(try BaseModel.getDB(), &error) else {
+      throw error!
+    }
+    try super.init(flutterBinary, model)
     initializeAppSettings()
   }
 
@@ -158,7 +158,7 @@ lazy var notificationsManager: UserNotificationsManager = {
   }
 
   private func setDNS() {
-      // TODO: why are we setting timezone in setDNS()?
+    // TODO: why are we setting timezone in setDNS()?
     let timeZoneId = TimeZone.current.identifier
     let miniSqlValue = ValueUtil.convertToMinisqlValue(DnsDetector.DEFAULT_DNS_SERVER)
     if miniSqlValue != nil {

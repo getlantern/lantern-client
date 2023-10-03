@@ -12,53 +12,55 @@ import Foundation
 
 public class Event<T> {
 
-    public typealias EventHandler = (T) -> Void
+  public typealias EventHandler = (T) -> Void
 
-    fileprivate var eventHandlers = [Invocable]()
+  fileprivate var eventHandlers = [Invocable]()
 
-    public func raise(_ data: T) {
-        for handler in self.eventHandlers {
-            handler.invoke(data)
-        }
+  public func raise(_ data: T) {
+    for handler in self.eventHandlers {
+      handler.invoke(data)
     }
+  }
 
-    public func addHandler<U: AnyObject>(target: U,
-                                         handler: @escaping (U) -> EventHandler) -> Disposable {
-        let wrapper = EventHandlerWrapper(target: target,
-                                          handler: handler, event: self)
-        eventHandlers.append(wrapper)
-        return wrapper
-    }
+  public func addHandler<U: AnyObject>(
+    target: U,
+    handler: @escaping (U) -> EventHandler
+  ) -> Disposable {
+    let wrapper = EventHandlerWrapper(
+      target: target,
+      handler: handler, event: self)
+    eventHandlers.append(wrapper)
+    return wrapper
+  }
 }
 
 private protocol Invocable: class {
-    func invoke(_ data: Any)
+  func invoke(_ data: Any)
 }
 
-private class EventHandlerWrapper<T: AnyObject, U>
-: Invocable, Disposable {
-    weak var target: T?
-    let handler: (T) -> (U) -> Void
-    let event: Event<U>
+private class EventHandlerWrapper<T: AnyObject, U>: Invocable, Disposable {
+  weak var target: T?
+  let handler: (T) -> (U) -> Void
+  let event: Event<U>
 
-    init(target: T?, handler: @escaping (T) -> (U) -> Void, event: Event<U>) {
-        self.target = target
-        self.handler = handler
-        self.event = event
-    }
+  init(target: T?, handler: @escaping (T) -> (U) -> Void, event: Event<U>) {
+    self.target = target
+    self.handler = handler
+    self.event = event
+  }
 
-    func invoke(_ data: Any) {
-        if let t = target {
-            handler(t)(data as! U)
-        }
+  func invoke(_ data: Any) {
+    if let t = target {
+      handler(t)(data as! U)
     }
+  }
 
-    func dispose() {
-        event.eventHandlers =
-            event.eventHandlers.filter { $0 !== self }
-    }
+  func dispose() {
+    event.eventHandlers =
+      event.eventHandlers.filter { $0 !== self }
+  }
 }
 
 public protocol Disposable {
-    func dispose()
+  func dispose()
 }
