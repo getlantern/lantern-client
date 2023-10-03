@@ -1,7 +1,10 @@
 package internalsdk
 
 import (
+	"encoding/binary"
 	"encoding/json"
+	"fmt"
+	"math"
 
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
@@ -60,7 +63,22 @@ func putFromJson(jsonString string, db pathdb.DB) error {
 				if !ok {
 					return log.Errorf("Invalid value for type string: %v", value)
 				}
-				pathdb.Put[string](tx, key, actualValue, "")
+
+				if key == "lang" {
+					// Check if lang is already added or not
+					lang, err := pathdb.Get[string](tx, LANG)
+					if err != nil {
+						return err
+					}
+					if lang != "" {
+						pathdb.Put[string](tx, key, lang, "")
+					} else {
+						pathdb.Put[string](tx, key, actualValue, "")
+					}
+				} else {
+					pathdb.Put[string](tx, key, actualValue, "")
+				}
+
 			case minisql.ValueTypeInt:
 				// Convert value to string and put it
 				actualValue, ok := value.(int)
@@ -83,4 +101,44 @@ func putFromJson(jsonString string, db pathdb.DB) error {
 
 		return nil
 	})
+}
+
+// Convered value in type that supprt minisql values
+func convertValueToSupportedTypes(rawValue interface{}) interface{} {
+	switch v := rawValue.(type) {
+	case int64:
+		return int(v)
+	case int32:
+		return int(v)
+	case int16:
+		return int(v)
+	case int8:
+		return int(v)
+	default:
+		return rawValue
+	}
+}
+
+func BytesToFloat64LittleEndian(b []byte) (float64, error) {
+	if len(b) != 8 {
+		return 0, fmt.Errorf("expected 8 bytes but got %d", len(b))
+	}
+	bits := binary.LittleEndian.Uint64(b)
+	return math.Float64frombits(bits), nil
+}
+
+type Lang struct {
+	Lang string `json:"lang"`
+}
+
+func extractLangValueFromJSON(localStr string) (string, error) {
+	var langObj Lang
+	err := json.Unmarshal([]byte(localStr), &langObj)
+	if err != nil {
+		return "", err
+	}
+	if langObj.Lang == "" {
+		return "", fmt.Errorf("lang value not found")
+	}
+	return langObj.Lang, nil
 }

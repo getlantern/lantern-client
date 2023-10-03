@@ -32,11 +32,7 @@ class SessionModel extends Model {
       'playVersion',
       false,
     );
-
-    proxyAvailable = singleValueNotifier(
-      'hasSucceedingProxy',
-      true,
-    );
+    proxyAvailable = singleValueNotifier('hasSucceedingProxy', false);
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
@@ -74,10 +70,8 @@ class SessionModel extends Model {
   }
 
   Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>(
-      'accepted_terms_version',
-      builder: builder,
-    );
+    return subscribedSingleValueBuilder<int>('accepted_terms_version',
+        builder: builder, defaultValue: 0);
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
@@ -304,17 +298,13 @@ class SessionModel extends Model {
   }
 
   Future<void> reportIssue(
-    String email,
-    String issue,
-    String description
-  ) async {
+      String email, String issue, String description) async {
     return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
       'email': email,
       'issue': issue,
       'description': description
     }).then((value) => value as String);
   }
-
 
   Widget getUserId(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Ios
+import Internalsdk
 import Network
 
 /// UDPDialer provides a mechanism for dialing outbound UDP connections that bypass the VPN.

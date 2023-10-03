@@ -1,20 +1,18 @@
 //
 //  Constants.swift
-//  Lantern
+//  Runner
 //
 
 import Foundation
-
+import Internalsdk
 struct Constants {
     // MARK: Convenience Inits
     static let appDefault = Constants(process: .app)
     static let netExDefault = Constants(process: .netEx)
-
     // MARK: Project Constants
     static let appBundleId = "org.getlantern.lantern"
     static let netExBundleId = "org.getlantern.lantern.Tunnel"
     static let appGroupName = "group.getlantern.lantern"
-
     // MARK: App Group
     static let appGroupDefaults = UserDefaults(suiteName: appGroupName)!
     static var appGroupContainerURL: URL {
@@ -108,4 +106,13 @@ struct Constants {
     // URL where app stores "excluded IPs" string from `IosConfigure`.
     // NetEx loads them to generate excluded routes on the TUN device.
     var excludedIPsURL: URL { return configDirectoryURL.appendingPathComponent("ips") }
+
+    // MARK: Const for database keys
+    // All values comes from go even if values chaegs it will reflact here
+    static var developmentMode = InternalsdkDEVELOPMNET_MODE
+    static var prouser = InternalsdkPRO_USER
+    static var deviceid = InternalsdkDEVICE_ID
+    static var playVersion = InternalsdkIS_PLAY_VERSION
+    static var lang = InternalsdkLANG
+
 }
