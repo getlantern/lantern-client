@@ -46,7 +46,7 @@ class _CheckoutState extends State<Checkout>
   );
 
   var isRefCodeFieldShowing = false;
-  var selectedPaymentProvider = Providers.stripe;
+  Providers? selectedPaymentProvider;
   var loadingPercentage = 0;
   late AnimationController animationController;
   late Animation pulseAnimation;
@@ -146,7 +146,7 @@ class _CheckoutState extends State<Checkout>
                   ImagePaths.unionpay
                 ],
                 onChanged: () => selectPaymentProvider(Providers.stripe),
-                selectedPaymentProvider: selectedPaymentProvider,
+                selectedPaymentProvider: selectedPaymentProvider!,
                 paymentType: Providers.stripe,
               ),
             );
@@ -161,7 +161,7 @@ class _CheckoutState extends State<Checkout>
                   ImagePaths.bitcoin
                 ],
                 onChanged: () => selectPaymentProvider(Providers.freekassa),
-                selectedPaymentProvider: selectedPaymentProvider,
+                selectedPaymentProvider: selectedPaymentProvider!,
                 paymentType: Providers.freekassa,
               ),
             );
@@ -171,7 +171,7 @@ class _CheckoutState extends State<Checkout>
               PaymentProvider(
                 logoPaths: [ImagePaths.btc],
                 onChanged: () => selectPaymentProvider(Providers.btcpay),
-                selectedPaymentProvider: selectedPaymentProvider,
+                selectedPaymentProvider: selectedPaymentProvider!,
                 paymentType: Providers.btcpay,
               ),
             );
@@ -183,7 +183,7 @@ class _CheckoutState extends State<Checkout>
   }
 
   Future<void> resolvePaymentRoute() async {
-    switch (selectedPaymentProvider) {
+    switch (selectedPaymentProvider!) {
       case Providers.stripe:
         // * Stripe selected
         await context.pushRoute(
@@ -241,7 +241,7 @@ class _CheckoutState extends State<Checkout>
         resizeToAvoidBottomInset: false,
         title: 'lantern_pro_checkout'.i18n,
         body: sessionModel.countryCode((context, countryCode, child) {
-          changePaymentCountryWise(countryCode);
+          defaultProviderIfNecessary(countryCode);
           return sessionModel.paymentMethods(
             builder: (
               context,
@@ -389,12 +389,14 @@ class _CheckoutState extends State<Checkout>
         }));
   }
 
-  void changePaymentCountryWise(String countryCode){
-    if(countryCode == ""){
+  void defaultProviderIfNecessary(String countryCode) {
+    if (selectedPaymentProvider != null) {
       return;
     }
-    if(countryCode.toLowerCase()=='ir'){
+    if (countryCode.toLowerCase() == 'ir') {
       selectedPaymentProvider = Providers.freekassa;
+    } else {
+      selectedPaymentProvider = Providers.stripe;
     }
   }
 
