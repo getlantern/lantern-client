@@ -89,22 +89,24 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     }
 
     // Set initly data that needed by flashlight
-    // Set initly data that needed by flashlight
-    // later on values change be chaneg by mehtod or by flashlight
+    // later on values change be chaneg by methods or by flashlight
     private func createInitData() -> [String: [String: Any]] {
         let device = UIDevice.current
         let deviceId = device.identifierForVendor!.uuidString
         let model = device.model
-        let systemVersion = device.systemVersion
+        let systemName = device.systemName
+         let systemVersion = device.systemVersion
         let langStr = Locale.current.identifier
         return [
             Constants.developmentMode: ["type": ValueUtil.TYPE_BOOL, "value": true],
             Constants.prouser: ["type": ValueUtil.TYPE_BOOL, "value": false],
             Constants.deviceid: ["type": ValueUtil.TYPE_STRING, "value": deviceId],
+            Constants.device: ["type": ValueUtil.TYPE_STRING, "value": systemName],
             Constants.model: ["type": ValueUtil.TYPE_STRING, "value": model],
             Constants.osVersion: ["type": ValueUtil.TYPE_STRING, "value": systemVersion],
             Constants.playVersion: ["type": ValueUtil.TYPE_BOOL, "value": isRunningFromAppStore()],
             Constants.lang: ["type": ValueUtil.TYPE_STRING, "value": langStr]
+            
         ]
     }
 

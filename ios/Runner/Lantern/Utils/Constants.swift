@@ -112,7 +112,7 @@ struct Constants {
     static var developmentMode = InternalsdkDEVELOPMNET_MODE
     static var prouser = InternalsdkPRO_USER
     static var deviceid = InternalsdkDEVICE_ID
-    static var device = InternalsdkDEVICE_ID
+    static var device = InternalsdkDEVICE
     static var model = InternalsdkMODEL
     static var osVersion = InternalsdkOS_VERSION
     static var playVersion = InternalsdkIS_PLAY_VERSION

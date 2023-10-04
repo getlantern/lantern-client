@@ -25,6 +25,7 @@ type SessionModel struct {
 // Might be eaier to move all const at one place
 // All keys are expose to front end so we can use same to avoid duplication and reduce error
 const DEVICE_ID = "deviceid"
+const DEVICE = "device"
 const MODEL = "model"
 const OS_VERSION = "os_version"
 const PAYMENT_TEST_MODE = "paymentTestMode"
@@ -773,13 +774,16 @@ func userCreate(m *baseModel, local string) error {
 
 func reportIssue(session *SessionModel, reportIssue ReportIssue) error {
 	// Check if email is there is yes then store it
-	if reportIssue.Email != " " {
+	if reportIssue.Email != "" {
 		err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 			pathdb.Put[string](tx, EMAIL_ADDRESS, reportIssue.Email, "")
 			return nil
 		})
-		return err
+		if err != nil {
+			return err
+		}
 	}
+
 	//Check If user is pro or not
 	pro, proErr := session.IsProUser()
 	if proErr != nil {
@@ -801,9 +805,22 @@ func reportIssue(session *SessionModel, reportIssue ReportIssue) error {
 	// Get os version
 	osVersion, osVersionErr := session.db.Get(OS_VERSION)
 	if osVersionErr != nil {
-		return modelErr
+		return osVersionErr
 	}
-	reportIssueErr := SendIssueReport(session, "1", "This is testing desc", level, reportIssue.Email, "IPHONE", string(model), string(osVersion))
+	// Get os version
+	device, deviceErr := session.db.Get(DEVICE)
+	if deviceErr != nil {
+		return deviceErr
+	}
+	//Ignore the first value
+	// First value is type of value
+	deviceStr := string(device[1:])
+	osVersionStr := string(osVersion[1:])
+	modelStr := string(model[1:])
+	issueKey := issueMap[reportIssue.Issue]
+
+	log.Debugf("Report an issue index %v desc %v level %v email %v, device %v model %v version %v ", issueKey, reportIssue.Description, level, reportIssue.Email, deviceStr, modelStr, osVersionStr)
+	reportIssueErr := SendIssueReport(session, issueKey, reportIssue.Description, level, reportIssue.Email, deviceStr, modelStr, osVersionStr)
 	if reportIssueErr != nil {
 		return reportIssueErr
 	}
