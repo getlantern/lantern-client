@@ -53,7 +53,7 @@ class NotificationHelper(
     private fun setChannelOptions(notificationChannel: NotificationChannel) {
         notificationChannel.enableLights(true)
         notificationChannel.lightColor = Color.GREEN
-        notificationChannel.enableVibration(true)
+        notificationChannel.enableVibration(false)
         notificationChannel.setSound(null, null)
         manager.createNotificationChannel(notificationChannel)
     }
