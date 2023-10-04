@@ -35,6 +35,8 @@ class ImagePaths {
   static const lock = 'assets/images/lock.svg';
   static const split_tunneling = 'assets/images/split_tunneling.svg';
   static const forum = 'assets/images/forum.svg';
+  static const webMoney = 'assets/images/webmoney.svg';
+  static const bitcoin = 'assets/images/bitcoin.svg';
 
   // Messaging
   static const more_vert = 'assets/images/more_vert.svg';

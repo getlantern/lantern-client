@@ -157,8 +157,8 @@ class _CheckoutState extends State<Checkout>
                 logoPaths: const [
                   ImagePaths.mnp,
                   ImagePaths.qiwi,
-                  ImagePaths.visa,
-                  ImagePaths.mastercard
+                  ImagePaths.webMoney,
+                  ImagePaths.bitcoin
                 ],
                 onChanged: () => selectPaymentProvider(Providers.freekassa),
                 selectedPaymentProvider: selectedPaymentProvider,
