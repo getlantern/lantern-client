@@ -22,6 +22,7 @@ type VPNManager interface {
 }
 
 func NewVPNModel(mdb minisql.DB) (*VPNModel, error) {
+	log.Debug("Creating VPN model")
 	base, err := newModel("vpn", mdb)
 	if err != nil {
 		return nil, err
@@ -35,19 +36,17 @@ func (s *VPNModel) SetManager(manager VPNManager) {
 	s.manager = manager
 }
 
-func (s *VPNModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
+func (s *VPNModel) InvokeMethod(method string, arguments Arguments) (*minisql.Value, error) {
 	switch method {
 	case "switchVPN":
-		jsonString := arguments.Get(0)
-		err := s.switchVPN(jsonString.Bool())
+		err := s.switchVPN(arguments.Get("on").Bool())
 		if err != nil {
 			return nil, err
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
 	case "saveVpnStatus":
-		jsonString := arguments.Get(0)
-		err := s.saveVPNStatus(jsonString.String())
+		err := s.saveVPNStatus(arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		} else {
@@ -82,19 +81,19 @@ func (m *VPNModel) initVpnModel() error {
 
 func (m *VPNModel) switchVPN(on bool) error {
 	if on {
-		log.Debug("Stopping VPN")
-		err := m.saveVPNStatus("disconnecting")
-		if err != nil {
-			return err
-		}
-		m.manager.StopVPN()
-	} else {
 		log.Debug("Starting VPN")
 		err := m.saveVPNStatus("connecting")
 		if err != nil {
 			return err
 		}
 		m.manager.StartVPN()
+	} else {
+		log.Debug("Stopping VPN")
+		err := m.saveVPNStatus("disconnecting")
+		if err != nil {
+			return err
+		}
+		m.manager.StopVPN()
 	}
 	return nil
 }

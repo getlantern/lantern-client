@@ -148,16 +148,9 @@ open class BaseModel: NSObject, FlutterStreamHandler {
   }
 
   internal func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
-    // Convert the entire arguments to a single MinisqlValue
-    guard let minisqlValue = ValueUtil.convertToMinisqlValue(call.arguments) else {
-      result(
-        FlutterError(
-          code: "ARGUMENTS_ERROR", message: "Failed to convert arguments to MinisqlValue",
-          details: nil))
-      return
-    }
     do {
-      let invocationResult = try invokeMethodOnGo(call.method, minisqlValue)
+      let invocationResult = try model.invokeMethod(
+        call.method, arguments: Arguments(call.arguments))
 
       if let originalValue = ValueUtil.convertFromMinisqlValue(
         from: invocationResult as! MinisqlValue)
@@ -188,20 +181,59 @@ open class BaseModel: NSObject, FlutterStreamHandler {
     }
   }
 
-  internal func invokeMethodOnGo(_ name: String, _ argument: MinisqlValue) throws -> MinisqlValue {
-    // Convert any argument to Minisql values
-    let goResult = try model.invokeMethod(
-      name, arguments: ValueArrayFactory.createValueArrayHandler(values: [argument]))
-    return goResult
-  }
-
   private func createFlutterError(code: String, message: String, details: Any? = nil)
     -> FlutterError
   {
     logger.log(message)
     return FlutterError(code: code, message: message, details: details)
   }
+    
+    internal func invoke(_ name: String, _ arguments: Any = "") throws -> MinisqlValue? {
+        return try model.invokeMethod(name, arguments: try Arguments(arguments))
+    }
+}
 
+private class Arguments: NSObject, InternalsdkArgumentsProtocol {
+  private var s: MinisqlValue?
+  private var dict: [String: MinisqlValue] = [:]
+
+  init(_ v: Any) throws {
+    switch v {
+    case is [String: Any]:
+        logger.debug("Setting arguments from map \(v)")
+      let vmap = v as! [String: Any]
+      for (key, val) in vmap {
+          logger.debug("Setting argument \(key) of type \(type(of:val)) to \(val)")
+        dict[key] = try Arguments.anyToValue(val)
+      }
+    default:
+        logger.debug("Setting arguments from scalar \(v)")
+      s = try Arguments.anyToValue(v)
+    }
+  }
+
+  public func scalar() -> MinisqlValue? {
+    return s
+  }
+
+  public func get(_ name: String?) -> MinisqlValue? {
+    return dict[name!]
+  }
+
+  private static func anyToValue(_ v: Any?) throws -> MinisqlValue? {
+      // Note - the order of these cases matters, for example Bool has to preceed Int
+      // to correctly recognize __NSCFBoolean.
+    switch v {
+    case is String:
+      return MinisqlNewValueString(v as? String)
+    case is Bool:
+      return MinisqlNewValueBool(v as! Bool)
+    case is Int:
+      return MinisqlNewValueInt(v as! Int)
+    default:
+        throw NSError(domain:"unrecognized value type", code: 999)
+    }
+  }
 }
 
 /// A simple thread-safe wrapper for atomic property access.
