@@ -124,13 +124,4 @@ struct Constants {
   // URL where app stores "excluded IPs" string from `IosConfigure`.
   // NetEx loads them to generate excluded routes on the TUN device.
   var excludedIPsURL: URL { return configDirectoryURL.appendingPathComponent("ips") }
-
-  // MARK: Const for database keys
-  // All values comes from go even if values chaegs it will reflact here
-  static var developmentMode = InternalsdkDEVELOPMNET_MODE
-  static var prouser = InternalsdkPRO_USER
-  static var deviceid = InternalsdkDEVICE_ID
-  static var playVersion = InternalsdkIS_PLAY_VERSION
-  static var lang = InternalsdkLANG
-
 }
