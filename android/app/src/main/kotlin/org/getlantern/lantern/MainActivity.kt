@@ -183,6 +183,8 @@ class MainActivity :
             Logger.d(TAG, "LanternVpnService is running, updating VPN preference")
             vpnModel.setVpnOn(true)
         }
+
+        sessionModel.checkAdsAvailability()
         Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
     }
 
