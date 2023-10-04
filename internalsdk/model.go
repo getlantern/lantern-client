@@ -10,10 +10,15 @@ import (
 	"github.com/getlantern/pathdb/minisql"
 )
 
+type Arguments interface {
+	Scalar() *minisql.Value
+	Get(name string) *minisql.Value
+}
+
 // Model defines the methods that any model should implement
 type Model interface {
 	Name() string
-	InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error)
+	InvokeMethod(method string, arguments Arguments) (*minisql.Value, error)
 	Subscribe(req *SubscriptionRequest) error
 	Unsubscribe(id string) error
 }
@@ -100,7 +105,7 @@ func (m *baseModel) Name() string {
 }
 
 // InvokeMethod handles method invocations on the model.
-func (m *baseModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
+func (m *baseModel) InvokeMethod(method string, arguments Arguments) (*minisql.Value, error) {
 	return nil, fmt.Errorf("method not implemented: %s", method)
 }
 

@@ -59,10 +59,6 @@ const CURRENT_TERMS_VERSION = 1
 const IS_PLAY_VERSION = "playVersion"
 const SET_SELECTED_TAB = "/selectedTab"
 
-type TabData struct {
-	Tab string `json:"tab"`
-}
-
 // NewSessionModel initializes a new SessionModel instance.
 func NewSessionModel(mdb minisql.DB) (*SessionModel, error) {
 	base, err := newModel("session", mdb)
@@ -77,11 +73,10 @@ func NewSessionModel(mdb minisql.DB) (*SessionModel, error) {
 // TO check if session model implemnets all method or not
 // var s Session = &SessionModel{}
 
-func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
+func (s *SessionModel) InvokeMethod(method string, arguments Arguments) (*minisql.Value, error) {
 	switch method {
-	case "initSesssionModel":
-		jsonString := arguments.Get(0)
-		err := initSessionModel(s, jsonString.String())
+	case "initSessionModel":
+		err := initSessionModel(s, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		} else {
@@ -89,8 +84,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		}
 	case "setTimeZone":
 		// Get timezone id
-		timezoneId := arguments.Get(0)
-		err := setTimeZone(s.baseModel, timezoneId.String())
+		err := setTimeZone(s.baseModel, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		} else {
@@ -105,32 +99,28 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		}
 
 	case "setDeviceId":
-		deviceID := arguments.Get(0)
-		err := setDeviceId(s.baseModel, deviceID.String())
+		err := setDeviceId(s.baseModel, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
 	case "setReferalCode":
-		referralCode := arguments.Get(0)
-		err := setReferalCode(s.baseModel, referralCode.String())
+		err := setReferalCode(s.baseModel, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
 	case "setForceCountry":
-		forceCountry := arguments.Get(0)
-		err := setForceCountry(s.baseModel, forceCountry.String())
+		err := setForceCountry(s.baseModel, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
 	case "setDNSServer":
-		dns := arguments.Get(0)
-		err := setDNSServer(s.baseModel, dns.String())
+		err := setDNSServer(s.baseModel, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		} else {
@@ -169,8 +159,7 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 			return minisql.NewValueBool(true), nil
 		}
 	case "setCurrency":
-		local := arguments.Get(0)
-		value, err := extractLangValueFromJSON(local.String())
+		value, err := extractLangValueFromJSON(arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		}
@@ -189,30 +178,20 @@ func (s *SessionModel) InvokeMethod(method string, arguments minisql.Values) (*m
 		}
 
 	case "setStoreVersion":
-		IsStoreVersion := arguments.Get(0)
-		err := setStoreVersion(s.baseModel, IsStoreVersion.Bool())
+		err := setStoreVersion(s.baseModel, arguments.Scalar().Bool())
 		if err != nil {
 			return nil, err
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
 	case "setSelectedTab":
-		jsonString := arguments.Get(0).String()
-
-		var tabData TabData
-		err := json.Unmarshal([]byte(jsonString), &tabData)
-		if err != nil {
-			return nil, err
-		}
-
-		err = setSelectedTab(s.baseModel, tabData.Tab)
+		err := setSelectedTab(s.baseModel, arguments.Get("tab").String())
 		if err != nil {
 			return nil, err
 		}
 		return minisql.NewValueBool(true), nil
 	case "createUser":
-		local := arguments.Get(0)
-		err := userCreate(s.baseModel, local.String())
+		err := userCreate(s.baseModel, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		} else {

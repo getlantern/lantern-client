@@ -22,10 +22,8 @@ func NewMessagingModel(mdb minisql.DB) (*MessagingModel, error) {
 	return model, nil
 }
 
-func (s *MessagingModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
+func (s *MessagingModel) InvokeMethod(method string, arguments Arguments) (*minisql.Value, error) {
 	switch method {
-	case "Hello":
-		return minisql.NewValueString("Hello"), nil
 	default:
 		return s.baseModel.InvokeMethod(method, arguments)
 	}

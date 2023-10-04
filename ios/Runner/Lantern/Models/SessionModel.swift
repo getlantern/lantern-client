@@ -46,16 +46,13 @@ class SessionModel: BaseModel {
       logger.log("Failed to convert initializationData to JSON")
       return
     }
-    let miniSqlValue = ValueUtil.convertToMinisqlValue(jsonString)
-    if miniSqlValue != nil {
-      do {
-        let result = try invokeMethodOnGo("initSesssionModel", miniSqlValue!)
-        logger.log("Sucessfully set initData \(jsonString) result")
-        // Start servce once we add all data
-        startService()
-      } catch {
-        logger.log("Error while setting initData: \(error)")
-      }
+    do {
+      let result = try invoke("initSessionModel", jsonString)
+      logger.log("Sucessfully set initData \(jsonString) result")
+      // Start servce once we add all data
+      startService()
+    } catch {
+      logger.log("Error while setting initData: \(error)")
     }
   }
 
@@ -75,100 +72,73 @@ class SessionModel: BaseModel {
 
   private func setTimeZone() {
     let timeZoneId = TimeZone.current.identifier
-    let miniSqlValue = ValueUtil.convertToMinisqlValue(timeZoneId)
-    if miniSqlValue != nil {
-      do {
-        let result = try invokeMethodOnGo("setTimeZone", miniSqlValue!)
-        logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
-      } catch {
-        logger.log("Error while setting timezone")
-      }
+    do {
+      let result = try invoke("setTimeZone", timeZoneId)
+      logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
+    } catch {
+      logger.log("Error while setting timezone")
     }
   }
 
   func setDeviceId() {
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
-    let miniSqlValue = ValueUtil.convertToMinisqlValue(deviceId)
-    if miniSqlValue != nil {
-      do {
-        let result = try invokeMethodOnGo("setDeviceId", miniSqlValue!)
-        logger.log("Sucessfully set device ID \(deviceId) ")
-      } catch {
-        logger.log("Error while setting deevice ID")
-      }
+    do {
+      let result = try invoke("setDeviceId", deviceId)
+      logger.log("Sucessfully set device ID \(deviceId) ")
+    } catch {
+      logger.log("Error while setting deevice ID")
     }
   }
 
   func getBandwidth() {
-    let miniSqlValue = ValueUtil.convertToMinisqlValue("")
-    if miniSqlValue != nil {
-      do {
-        let result = try invokeMethodOnGo("getBandwidth", miniSqlValue!)
-        let newValue = ValueUtil.convertFromMinisqlValue(from: result)
-        // If value is not null mean user has alerady start using bandwith
-        // We will get that value from Go
-        if (newValue as! String) != "" {
-          let limit = newValue as! Int
-          if limit == 100 {
-            // if user has reached limit show the notificaiton
-            notificationsManager.scheduleDataCapLocalNotification(withDataLimit: limit)
-          }
+    do {
+      let result = try invoke("getBandwidth")
+      let newValue = ValueUtil.convertFromMinisqlValue(from: result!)
+      // If value is not null mean user has alerady start using bandwith
+      // We will get that value from Go
+      if (newValue as! String) != "" {
+        let limit = newValue as! Int
+        if limit == 100 {
+          // if user has reached limit show the notificaiton
+          notificationsManager.scheduleDataCapLocalNotification(withDataLimit: limit)
         }
-        logger.log("Sucessfully getbandwidth  \(newValue)")
-      } catch {
-        logger.log("Error while getting bandwidth")
       }
+      logger.log("Sucessfully getbandwidth  \(newValue)")
+    } catch {
+      logger.log("Error while getting bandwidth")
     }
   }
 
   func storeVersion() {
-    let miniSqlValue = ValueUtil.convertToMinisqlValue(isRunningFromAppStore())
-    if miniSqlValue != nil {
-      do {
-        let result = try invokeMethodOnGo("setStoreVersion", miniSqlValue!)
-        logger.log("This is app store version \(result)")
-      } catch {
-        logger.log("Error while setting storeVersion")
-      }
+    do {
+      let result = try invoke("setStoreVersion", isRunningFromAppStore())
+      logger.log("This is app store version \(result)")
+    } catch {
+      logger.log("Error while setting storeVersion")
     }
   }
 
   func setForceCountry(countryCode: String) {
-    let countryMiniSql = ValueUtil.convertToMinisqlValue(countryCode)
-    if countryMiniSql != nil {
-      do {
-        let result = try invokeMethodOnGo("setForceCountry", countryMiniSql!)
-        logger.log("Sucessfully set force country")
-      } catch {
-        logger.log("Error while setting  up forceCountry")
-      }
-    }
-  }
-
-  func setLocal(lang: String) {
-    let langSqlValue = ValueUtil.convertToMinisqlValue(lang)
-    if langSqlValue != nil {
-      do {
-        let result = try invokeMethodOnGo("setLanguage", langSqlValue!)
-        logger.log("Sucessfully set Local result \(result)")
-      } catch {
-        logger.log("Error while setting Local")
-      }
+    do {
+      try invoke("setForceCountry", countryCode)
+      logger.log("Sucessfully set force country")
+    } catch {
+      logger.log("Error while setting  up forceCountry")
     }
   }
 
   private func setDNS() {
     // TODO: why are we setting timezone in setDNS()?
-    let timeZoneId = TimeZone.current.identifier
-    let miniSqlValue = ValueUtil.convertToMinisqlValue(DnsDetector.DEFAULT_DNS_SERVER)
-    if miniSqlValue != nil {
-      do {
-        let result = try invokeMethodOnGo("setTimeZone", miniSqlValue!)
-        logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
-      } catch {
-        logger.log("Error while setting timezone")
-      }
-    }
+    //    let timeZoneId = TimeZone.current.identifier
+    //    let miniSqlValue = ValueUtil.convertToMinisqlValue(DnsDetector.DEFAULT_DNS_SERVER)
+    //    if miniSqlValue != nil {
+    //      do {
+    //        let result = try invokeMethodOnGo("setTimeZone", miniSqlValue!)
+    //        logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
+    //      } catch {
+    //        logger.log("Error while setting timezone")
+    //      }
+    //    }
   }
 
   public func configDirFor(suffix: String) -> String {

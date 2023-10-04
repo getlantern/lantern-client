@@ -12,6 +12,7 @@ class VpnModel: BaseModel, InternalsdkVPNManagerProtocol {
   let vpnHelper = VpnHelper.shared
 
   init(flutterBinary: FlutterBinaryMessenger, vpnBase: VPNBase) throws {
+    logger.log("Initializing VPNModel")
     self.vpnManager = vpnBase
     var error: NSError?
     guard let model = InternalsdkNewVPNModel(try BaseModel.getDB(), &error) else {
@@ -22,14 +23,11 @@ class VpnModel: BaseModel, InternalsdkVPNManagerProtocol {
   }
 
   private func saveVPNStatus(status: String) {
-    let miniSqlValue = ValueUtil.convertToMinisqlValue(status)
-    if miniSqlValue != nil {
-      do {
-        let result = try invokeMethodOnGo("saveVpnStatus", miniSqlValue!)
-        logger.log("Sucessfully set VPN status with  \(status)")
-      } catch {
-        logger.log("Error while setting VPN status")
-      }
+    do {
+      let result = try invoke("saveVpnStatus", status)
+      logger.log("Sucessfully set VPN status with  \(status)")
+    } catch {
+      logger.log("Error while setting VPN status")
     }
   }
 
