@@ -5,47 +5,55 @@ import (
 	"github.com/getlantern/pathdb/minisql"
 )
 
-// Custom Model implemnation
-// VPNModel is a custom model derived from the baseModel.
-type VpnModel struct {
-	*baseModel
-}
-
 const PATH_VPN_STATUS = "/vpn_status"
 const PATH_SERVER_INFO = "/server_info"
 const PATH_BANDWIDTH = "/bandwidth"
 
-// NewSessionModel initializes a new SessionModel instance.
-func NewVpnModel(schema string, mdb minisql.DB) (*VpnModel, error) {
-	base, err := newModel(schema, mdb)
+// Custom Model implemnation
+// VPNModel is a custom model derived from the baseModel.
+type VPNModel struct {
+	*baseModel
+	manager VPNManager
+}
+
+type VPNManager interface {
+	StartVPN()
+	StopVPN()
+}
+
+func NewVPNModel(mdb minisql.DB) (*VPNModel, error) {
+	log.Debug("Creating VPN model")
+	base, err := newModel("vpn", mdb)
 	if err != nil {
 		return nil, err
 	}
-	initVpnModel(base.(*baseModel))
-	model := &VpnModel{base.(*baseModel)}
+	model := &VPNModel{baseModel: base}
+	model.initVpnModel()
 	return model, nil
 }
 
-func (s *VpnModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
+func (s *VPNModel) SetManager(manager VPNManager) {
+	s.manager = manager
+}
+
+func (s *VPNModel) InvokeMethod(method string, arguments Arguments) (*minisql.Value, error) {
 	switch method {
 	case "switchVPN":
-		jsonString := arguments.Get(0)
-		err := switchVPN(s.baseModel, jsonString.Bool())
+		err := s.switchVPN(arguments.Get("on").Bool())
 		if err != nil {
 			return nil, err
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
 	case "saveVpnStatus":
-		jsonString := arguments.Get(0)
-		err := saveVPNStatus(s.baseModel, jsonString.String())
+		err := s.saveVPNStatus(arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		} else {
 			return minisql.NewValueBool(true), nil
 		}
 	case "getVpnStatus":
-		byte, err := getVPNStatus(s.baseModel)
+		byte, err := s.getVPNStatus()
 		if err != nil {
 			return nil, err
 		} else {
@@ -56,7 +64,7 @@ func (s *VpnModel) InvokeMethod(method string, arguments minisql.Values) (*minis
 	}
 }
 
-func initVpnModel(m *baseModel) error {
+func (m *VPNModel) initVpnModel() error {
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		rawStatus, err := tx.Get(PATH_VPN_STATUS)
 		panicIfNecessary(err)
@@ -71,11 +79,26 @@ func initVpnModel(m *baseModel) error {
 	return nil
 }
 
-func switchVPN(m *baseModel, status bool) error {
+func (m *VPNModel) switchVPN(on bool) error {
+	if on {
+		log.Debug("Starting VPN")
+		err := m.saveVPNStatus("connecting")
+		if err != nil {
+			return err
+		}
+		m.manager.StartVPN()
+	} else {
+		log.Debug("Stopping VPN")
+		err := m.saveVPNStatus("disconnecting")
+		if err != nil {
+			return err
+		}
+		m.manager.StopVPN()
+	}
 	return nil
 }
 
-func saveVPNStatus(m *baseModel, status string) error {
+func (m *VPNModel) saveVPNStatus(status string) error {
 	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put[string](tx, PATH_VPN_STATUS, status, "")
 		return nil
@@ -83,7 +106,7 @@ func saveVPNStatus(m *baseModel, status string) error {
 	return err
 }
 
-func getVPNStatus(m *baseModel) (string, error) {
+func (m *VPNModel) getVPNStatus() (string, error) {
 	byte, err := m.db.Get(PATH_VPN_STATUS)
 	panicIfNecessary(err)
 	return string(byte), nil
