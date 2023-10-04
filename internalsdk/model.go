@@ -10,16 +10,23 @@ import (
 	"github.com/getlantern/pathdb/minisql"
 )
 
-// BaseModel defines the methods that any model should implement
-type BaseModel interface {
-	InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error)
+type Arguments interface {
+	Scalar() *minisql.Value
+	Get(name string) *minisql.Value
+}
+
+// Model defines the methods that any model should implement
+type Model interface {
+	Name() string
+	InvokeMethod(method string, arguments Arguments) (*minisql.Value, error)
 	Subscribe(req *SubscriptionRequest) error
 	Unsubscribe(id string) error
 }
 
 // baseModel is a concrete implementation of the BaseModel interface.
 type baseModel struct {
-	db pathdb.DB
+	name string
+	db   pathdb.DB
 }
 
 // SubscriptionRequest defines the structure of a subscription request.
@@ -82,18 +89,23 @@ func (v *MyValue) MarshalJSON() ([]byte, error) {
 }
 
 // NewModel initializes a new baseModel instance.
-func newModel(schema string, mdb minisql.DB) (BaseModel, error) {
-	db, err := pathdb.NewDB(mdb, schema)
+func newModel(name string, mdb minisql.DB) (*baseModel, error) {
+	db, err := pathdb.NewDB(mdb, name)
 	if err != nil {
 		return nil, err
 	}
 	return &baseModel{
-		db: db,
+		name: name,
+		db:   db,
 	}, nil
 }
 
+func (m *baseModel) Name() string {
+	return m.name
+}
+
 // InvokeMethod handles method invocations on the model.
-func (m *baseModel) InvokeMethod(method string, arguments minisql.Values) (*minisql.Value, error) {
+func (m *baseModel) InvokeMethod(method string, arguments Arguments) (*minisql.Value, error) {
 	return nil, fmt.Errorf("method not implemented: %s", method)
 }
 

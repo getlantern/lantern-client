@@ -9,7 +9,7 @@
 import Foundation
 
 struct Events {
-    static let configFetchTakingLongTime = Event<Void>()
+  static let configFetchTakingLongTime = Event<Void>()
 
-    static let updateAvailable = Event<Void>()
+  static let updateAvailable = Event<Void>()
 }
