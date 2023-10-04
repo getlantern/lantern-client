@@ -93,7 +93,7 @@ class NotificationHelper(
         private const val LANTERN_NOTIFICATION = "lantern.notification"
         private const val DATA_USAGE = 36
         const val VPN_CONNECTED = 37
-        private const val CHANNEL_VPN = "vpn"
+        private const val CHANNEL_VPN = "lantern_vpn"
         private const val CHANNEL_DATA_USAGE = "data_usage"
         private const val VPN_DESC = "VPN"
         private const val DATA_USAGE_DESC = "Data Usage"
