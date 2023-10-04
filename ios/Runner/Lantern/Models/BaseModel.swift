@@ -187,10 +187,10 @@ open class BaseModel: NSObject, FlutterStreamHandler {
     logger.log(message)
     return FlutterError(code: code, message: message, details: details)
   }
-    
-    internal func invoke(_ name: String, _ arguments: Any = "") throws -> MinisqlValue? {
-        return try model.invokeMethod(name, arguments: try Arguments(arguments))
-    }
+
+  internal func invoke(_ name: String, _ arguments: Any = "") throws -> MinisqlValue? {
+    return try model.invokeMethod(name, arguments: try Arguments(arguments))
+  }
 }
 
 private class Arguments: NSObject, InternalsdkArgumentsProtocol {
@@ -200,14 +200,14 @@ private class Arguments: NSObject, InternalsdkArgumentsProtocol {
   init(_ v: Any) throws {
     switch v {
     case is [String: Any]:
-        logger.debug("Setting arguments from map \(v)")
+      logger.debug("Setting arguments from map \(v)")
       let vmap = v as! [String: Any]
       for (key, val) in vmap {
-          logger.debug("Setting argument \(key) of type \(type(of:val)) to \(val)")
+        logger.debug("Setting argument \(key) of type \(type(of:val)) to \(val)")
         dict[key] = try Arguments.anyToValue(val)
       }
     default:
-        logger.debug("Setting arguments from scalar \(v)")
+      logger.debug("Setting arguments from scalar \(v)")
       s = try Arguments.anyToValue(v)
     }
   }
@@ -221,8 +221,8 @@ private class Arguments: NSObject, InternalsdkArgumentsProtocol {
   }
 
   private static func anyToValue(_ v: Any?) throws -> MinisqlValue? {
-      // Note - the order of these cases matters, for example Bool has to preceed Int
-      // to correctly recognize __NSCFBoolean.
+    // Note - the order of these cases matters, for example Bool has to preceed Int
+    // to correctly recognize __NSCFBoolean.
     switch v {
     case is String:
       return MinisqlNewValueString(v as? String)
@@ -231,7 +231,7 @@ private class Arguments: NSObject, InternalsdkArgumentsProtocol {
     case is Int:
       return MinisqlNewValueInt(v as! Int)
     default:
-        throw NSError(domain:"unrecognized value type", code: 999)
+      throw NSError(domain: "unrecognized value type", code: 999)
     }
   }
 }

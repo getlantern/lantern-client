@@ -17,18 +17,18 @@ class SessionModel: BaseModel {
   }()
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
+    let opts = InternalsdkSessionModelOpts()
+    opts.deviceID = UIDevice.current.identifierForVendor!.uuidString
+    opts.lang = Locale.current.identifier
+    opts.developmentMode = false
+    opts.proUser = false
+    opts.playVersion = isRunningFromAppStore()
+    opts.timeZone = TimeZone.current.identifier
     var error: NSError?
-    guard let model = InternalsdkNewSessionModel(try BaseModel.getDB(), &error) else {
+    guard let model = InternalsdkNewSessionModel(try BaseModel.getDB(), opts, &error) else {
       throw error!
     }
     try super.init(flutterBinary, model)
-    initializeAppSettings()
-  }
-
-  func initializeAppSettings() {
-    initializeSessionModel()
-    setTimeZone()
-    setDNS()
     getBandwidth()
   }
 
@@ -38,59 +38,8 @@ class SessionModel: BaseModel {
     logger.error("Service Started successfully")
   }
 
-  private func initializeSessionModel() {
-    // Setup the initly data
-    let initData = createInitData()
-
-    guard let jsonString = JsonUtil.convertToJSONString(initData) else {
-      logger.log("Failed to convert initializationData to JSON")
-      return
-    }
-    do {
-      let result = try invoke("initSessionModel", jsonString)
-      logger.log("Sucessfully set initData \(jsonString) result")
-      // Start servce once we add all data
-      startService()
-    } catch {
-      logger.log("Error while setting initData: \(error)")
-    }
-  }
-
-  // Set initly data that needed by flashlight
-  // later on values change be chaneg by mehtod or by flashlight
-  private func createInitData() -> [String: [String: Any]] {
-    let deviceId = UIDevice.current.identifierForVendor!.uuidString
-    let langStr = Locale.current.identifier
-    return [
-      Constants.developmentMode: ["type": ValueUtil.TYPE_BOOL, "value": true],
-      Constants.prouser: ["type": ValueUtil.TYPE_BOOL, "value": false],
-      Constants.deviceid: ["type": ValueUtil.TYPE_STRING, "value": deviceId],
-      Constants.playVersion: ["type": ValueUtil.TYPE_BOOL, "value": isRunningFromAppStore()],
-      Constants.lang: ["type": ValueUtil.TYPE_STRING, "value": langStr],
-    ]
-  }
-
-  private func setTimeZone() {
-    let timeZoneId = TimeZone.current.identifier
-    do {
-      let result = try invoke("setTimeZone", timeZoneId)
-      logger.log("Sucessfully set timezone with id \(timeZoneId) result \(result)")
-    } catch {
-      logger.log("Error while setting timezone")
-    }
-  }
-
-  func setDeviceId() {
-    let deviceId = UIDevice.current.identifierForVendor!.uuidString
-    do {
-      let result = try invoke("setDeviceId", deviceId)
-      logger.log("Sucessfully set device ID \(deviceId) ")
-    } catch {
-      logger.log("Error while setting deevice ID")
-    }
-  }
-
   func getBandwidth() {
+    // TODO: we should do this reactively by subscribing
     do {
       let result = try invoke("getBandwidth")
       let newValue = ValueUtil.convertFromMinisqlValue(from: result!)
@@ -106,24 +55,6 @@ class SessionModel: BaseModel {
       logger.log("Sucessfully getbandwidth  \(newValue)")
     } catch {
       logger.log("Error while getting bandwidth")
-    }
-  }
-
-  func storeVersion() {
-    do {
-      let result = try invoke("setStoreVersion", isRunningFromAppStore())
-      logger.log("This is app store version \(result)")
-    } catch {
-      logger.log("Error while setting storeVersion")
-    }
-  }
-
-  func setForceCountry(countryCode: String) {
-    do {
-      try invoke("setForceCountry", countryCode)
-      logger.log("Sucessfully set force country")
-    } catch {
-      logger.log("Error while setting  up forceCountry")
     }
   }
 
