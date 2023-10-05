@@ -58,7 +58,7 @@ final class DBModuleTests: XCTestCase, TestsupportTestingTProtocol {
   }
 
   private func newDB() throws -> MinisqlDBProtocol {
-    return try DatabaseFactory.getDbManager(databasePath: newDBPath())
+    return try DatabaseManager(newDBPath())
   }
 
   private func newDBPath() -> String {

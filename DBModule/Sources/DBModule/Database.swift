@@ -9,58 +9,41 @@ import Foundation
 import Internalsdk
 import SQLite
 
-public struct DatabaseFactory {
-  public static func getDbManager(databasePath: String) throws -> MinisqlDBProtocol {
-    guard !databasePath.isEmpty else {
-      throw NSError(
-        domain: "DatabasePathError", code: 1,
-        userInfo: [NSLocalizedDescriptionKey: "Database path cannot be blank"])
-    }
-    let connection = try! Connection(databasePath)
-    connection.trace { print($0) }
-    return DatabaseManager(database: connection)
-  }
-}
-
-class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
-  private let database: Connection
+public class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
+  private let path: String
+  private let connection: Connection
   private let transactional: Bool
   private var currentTransaction: DatabaseManager?
   private var savepointName: String?
 
-  init(database: Connection, transactional: Bool = false) {
-    self.database = database
-    self.transactional = transactional
-  }
-
-  // Static function to get an instance of DatabaseManager
-  // Expose to Client
-  static func getDbManager(databasePath: String) throws -> MinisqlDBProtocol {
-    guard !databasePath.isEmpty else {
+  init(_ path: String, transactional: Bool = false) throws {
+    self.path = path
+    guard !path.isEmpty else {
       throw NSError(
         domain: "DatabasePathError", code: 1,
         userInfo: [NSLocalizedDescriptionKey: "Database path cannot be blank"])
     }
-    let connection = try! Connection(databasePath)
-    return DatabaseManager(database: connection)
+    connection = try! Connection(path)
+
+    self.transactional = transactional
   }
 
   public func begin() throws -> MinisqlTxProtocol {
-    currentTransaction = DatabaseManager(database: database, transactional: true)
+    currentTransaction = try DatabaseManager(path, transactional: true)
     return currentTransaction!
   }
 
-  func commit() throws {
+  public func commit() throws {
     if let savepointName = savepointName {
-      try database.run("RELEASE '\(savepointName)'")
+      try connection.run("RELEASE '\(savepointName)'")
     }
     savepointName = nil
   }
 
-  func rollback() throws {
+  public func rollback() throws {
     if let savepointName = savepointName {
-      try database.run("ROLLBACK TO SAVEPOINT '\(savepointName)'")
-      try database.run("RELEASE '\(savepointName)'")
+      try connection.run("ROLLBACK TO SAVEPOINT '\(savepointName)'")
+      try connection.run("RELEASE '\(savepointName)'")
     }
     savepointName = nil
   }
@@ -72,11 +55,11 @@ class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
   private func beginTransaction() throws {
     savepointName = "Savepoint\(UUID().uuidString)"
     if let savepointName = savepointName {
-      try database.run("SAVEPOINT '\(savepointName)'")
+      try connection.run("SAVEPOINT '\(savepointName)'")
     }
   }
 
-  func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
+  public func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
     guard let query = query, let args = args else {
       throw NSError(
         domain: "ArgumentError", code: 1,
@@ -84,17 +67,17 @@ class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
     }
 
     let bindings = ValueUtil.toBindingsArray(args)
-    let statement = try database.prepare(query)
+    let statement = try connection.prepare(query)
     // Start a transaction if none has been started yet
     if transactional && savepointName == nil {
       try beginTransaction()
     }
 
     try runStatement(statement, bindings)
-    return QueryResult(changes: database.changes)
+    return QueryResult(changes: connection.changes)
   }
 
-  func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
+  public func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
     guard let query = query, let args = args else {
       throw NSError(
         domain: "ArgumentError", code: 1,
@@ -102,7 +85,7 @@ class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
     }
 
     let bindings = ValueUtil.toBindingsArray(args)
-    let statement = try database.prepare(query)
+    let statement = try connection.prepare(query)
     // Start a transaction if none has been started yet
     if transactional && savepointName == nil {
       try beginTransaction()
