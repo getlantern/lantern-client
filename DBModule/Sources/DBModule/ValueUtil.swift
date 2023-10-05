@@ -96,34 +96,8 @@ public class ValueUtil {
       fatalError("Unsupported SQLite.Binding type: \(binding.bindingType)")
     }
   }
-
-  public static func convertToMinisqlValue(_ anyValue: Any) -> MinisqlValue? {
-    switch anyValue {
-    case is String:
-      return MinisqlNewValueString(anyValue as! String)
-    case is Int:
-      return MinisqlNewValueInt(anyValue as! Int)
-    case is Bool:
-      return MinisqlNewValueBool(anyValue as! Bool)
-    case is [Any]:  // For arrays
-      if let jsonData = try? JSONSerialization.data(withJSONObject: anyValue, options: []),
-        let jsonString = String(data: jsonData, encoding: .utf8)
-      {
-        return MinisqlNewValueString(jsonString)
-      }
-    case is [String: Any]:  // For dictionaries
-      if let jsonData = try? JSONSerialization.data(withJSONObject: anyValue, options: []),
-        let jsonString = String(data: jsonData, encoding: .utf8)
-      {
-        return MinisqlNewValueString(jsonString)
-      }
-    default:
-      return MinisqlNewValueString("\(anyValue)")
-    }
-    return nil
-  }
-
 }
+
 extension Binding {
   var bindingType: String {
     switch self {
