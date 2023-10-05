@@ -322,6 +322,17 @@ class SessionModel extends Model {
     );
   }
 
+
+  Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
+    return subscribedSingleValueBuilder<ServerInfo>(
+      '/server_info',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return ServerInfo.fromBuffer(serialized);
+      },
+    );
+  }
+
   Future<String> requestLinkCode() {
     return methodChannel
         .invokeMethod('requestLinkCode')
