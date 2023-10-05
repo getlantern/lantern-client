@@ -26,6 +26,9 @@ type SessionModel struct {
 // Might be eaier to move all const at one place
 // All keys are expose to front end so we can use same to avoid duplication and reduce error
 const DEVICE_ID = "deviceid"
+const DEVICE = "device"
+const MODEL = "model"
+const OS_VERSION = "os_version"
 const PAYMENT_TEST_MODE = "paymentTestMode"
 const USER_ID = "userid"
 const TOKEN = "token"
@@ -63,6 +66,9 @@ type SessionModelOpts struct {
 	DevelopmentMode bool
 	ProUser         bool
 	DeviceID        string
+	Device          string
+	Model           string
+	OsVersion       string
 	PlayVersion     bool
 	Lang            string
 	TimeZone        string
@@ -128,7 +134,7 @@ func (m *SessionModel) InvokeMethod(method string, arguments Arguments) (*minisq
 			return minisql.NewValueBool(true), nil
 		}
 	case "setLanguage":
-		err := setProUser(m.baseModel, false)
+		err := setLanguage(m.baseModel, arguments.Get("lang").String())
 		if err != nil {
 			return nil, err
 		} else {
@@ -150,6 +156,15 @@ func (m *SessionModel) InvokeMethod(method string, arguments Arguments) (*minisq
 		}
 	case "setSelectedTab":
 		err := setSelectedTab(m.baseModel, arguments.Get("tab").String())
+		if err != nil {
+			return nil, err
+		}
+		return minisql.NewValueBool(true), nil
+	case "reportIssue":
+		email := arguments.Get("email").String()
+		issue := arguments.Get("issue").String()
+		description := arguments.Get("issue").String()
+		err := reportIssue(m, email, issue, description)
 		if err != nil {
 			return nil, err
 		}
@@ -211,11 +226,32 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
-	err = pathdb.Put(tx, LANG, opts.Lang, "")
+	// Check if lang is already added or not
+	// If yes then do not add it
+	// This is used for only when user is new
+	lang, err := pathdb.Get[string](tx, LANG)
 	if err != nil {
 		return err
 	}
+	if lang == "" {
+		err = pathdb.Put(tx, LANG, opts.Lang, "")
+		if err != nil {
+			return err
+		}
+	}
 	err = pathdb.Put(tx, TIMEZONE_ID, opts.TimeZone, "")
+	if err != nil {
+		return err
+	}
+	err = pathdb.Put(tx, DEVICE, opts.Device, "")
+	if err != nil {
+		return err
+	}
+	err = pathdb.Put(tx, MODEL, opts.Model, "")
+	if err != nil {
+		return err
+	}
+	err = pathdb.Put(tx, OS_VERSION, opts.OsVersion, "")
 	if err != nil {
 		return err
 	}
@@ -384,6 +420,14 @@ func (m *SessionModel) Locale() (string, error) {
 		return "", err
 	}
 	return string(locale), nil
+}
+
+func setLanguage(m *baseModel, lang string) error {
+	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put[string](tx, LANG, lang, "")
+		return nil
+	})
+	return nil
 }
 
 func (m *SessionModel) GetTimeZone() (string, error) {
@@ -680,5 +724,60 @@ func userCreate(m *baseModel, local string) error {
 	//Save user id and token
 	setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
 	log.Debugf("Created new Lantern user: %+v", userResponse)
+	return nil
+}
+
+func reportIssue(session *SessionModel, email string, issue string, description string) error {
+	// Check if email is there is yes then store it
+	if email != "" {
+		err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			pathdb.Put[string](tx, EMAIL_ADDRESS, email, "")
+			return nil
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	//Check If user is pro or not
+	pro, proErr := session.IsProUser()
+	if proErr != nil {
+		return proErr
+	}
+	var level string
+	if pro {
+		level = "pro"
+	} else {
+		level = "free"
+	}
+
+	// Get Deive id
+	model, modelErr := session.db.Get(MODEL)
+	if modelErr != nil {
+		return modelErr
+	}
+
+	// Get os version
+	osVersion, osVersionErr := session.db.Get(OS_VERSION)
+	if osVersionErr != nil {
+		return osVersionErr
+	}
+	// Get os version
+	device, deviceErr := session.db.Get(DEVICE)
+	if deviceErr != nil {
+		return deviceErr
+	}
+	// Ignore the first value
+	// First value is type of value
+	deviceStr := string(device[1:])
+	osVersionStr := string(osVersion[1:])
+	modelStr := string(model[1:])
+	issueKey := issueMap[issue]
+
+	log.Debugf("Report an issue index %v desc %v level %v email %v, device %v model %v version %v ", issueKey, description, level, email, deviceStr, modelStr, osVersionStr)
+	reportIssueErr := SendIssueReport(session, issueKey, description, level, email, deviceStr, modelStr, osVersionStr)
+	if reportIssueErr != nil {
+		return reportIssueErr
+	}
 	return nil
 }
