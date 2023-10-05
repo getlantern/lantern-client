@@ -134,7 +134,7 @@ func (m *SessionModel) InvokeMethod(method string, arguments Arguments) (*minisq
 			return minisql.NewValueBool(true), nil
 		}
 	case "setLanguage":
-		err := setCurrency(m.baseModel, "false")
+		err := setLanguage(m.baseModel, arguments.Get("lang").String())
 		if err != nil {
 			return nil, err
 		} else {
@@ -169,11 +169,6 @@ func (m *SessionModel) InvokeMethod(method string, arguments Arguments) (*minisq
 			return nil, err
 		}
 		return minisql.NewValueBool(true), nil
-		// reportIssueStruct, reportErr := extractReportValueFromJSON(jsonString)
-		// if reportErr != nil {
-		// 	return nil, reportErr
-
-		// }
 	case "createUser":
 		err := userCreate(m.baseModel, arguments.Scalar().String())
 		if err != nil {
@@ -425,6 +420,14 @@ func (m *SessionModel) Locale() (string, error) {
 		return "", err
 	}
 	return string(locale), nil
+}
+
+func setLanguage(m *baseModel, lang string) error {
+	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put[string](tx, LANG, lang, "")
+		return nil
+	})
+	return nil
 }
 
 func (m *SessionModel) GetTimeZone() (string, error) {
