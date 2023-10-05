@@ -81,17 +81,13 @@ class LanternApp extends StatelessWidget {
         return sessionModel.language(
           (context, lang, child) {
             Localization.locale = lang;
-        return GlobalLoaderOverlay(
+            return GlobalLoaderOverlay(
               overlayColor: Colors.black,
               overlayOpacity: 0.6,
               child: I18n(
-                initialLocale: lang == '' || lang.startsWith('en')
-                    ? const Locale('en', 'US')
-                    : Locale(lang),
+                initialLocale:currentLocale(lang),
                 child: MaterialApp.router(
-                  locale: lang == '' || lang.startsWith('en')
-                      ? const Locale('en', 'US')
-                      : Locale(lang),
+                  locale: currentLocale(lang),
                   debugShowCheckedModeBanner: false,
                   theme: ThemeData(
                     fontFamily: _getLocaleBasedFont(currentLocal),
@@ -134,6 +130,13 @@ class LanternApp extends StatelessWidget {
         );
       },
     );
+  }
+
+  Locale currentLocale(String lang) {
+    if (lang == '' || lang.startsWith('en')) {
+      return const Locale('en', 'US');
+    }
+    return Locale(lang);
   }
 
   String _getLocaleBasedFont(Locale locale) {

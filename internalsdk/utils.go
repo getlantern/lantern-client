@@ -2,6 +2,7 @@ package internalsdk
 
 import (
 	"encoding/binary"
+	"encoding/json"
 	"fmt"
 	"math"
 )
@@ -28,4 +29,35 @@ func BytesToFloat64LittleEndian(b []byte) (float64, error) {
 	}
 	bits := binary.LittleEndian.Uint64(b)
 	return math.Float64frombits(bits), nil
+}
+
+type Lang struct {
+	Lang string `json:"lang"`
+}
+
+func extractLangValueFromJSON(localStr string) (string, error) {
+	var langObj Lang
+	err := json.Unmarshal([]byte(localStr), &langObj)
+	if err != nil {
+		return "", err
+	}
+	if langObj.Lang == "" {
+		return "", fmt.Errorf("lang value not found")
+	}
+	return langObj.Lang, nil
+}
+
+type ReportIssue struct {
+	Email       string `json:"email"`
+	Issue       string `json:"issue"`
+	Description string `json:"description"`
+}
+
+func extractReportValueFromJSON(reportJson string) (ReportIssue, error) {
+	var reportIssue ReportIssue
+	err := json.Unmarshal([]byte(reportJson), &reportIssue)
+	if err != nil {
+		return reportIssue, err
+	}
+	return reportIssue, nil
 }

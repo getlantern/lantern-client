@@ -4,7 +4,7 @@ import SQLite
 import Toast_Swift
 import UIKit
 
-// Before Commit Run  linter
+// Before Commit Run linter
 // swiftlint autocorrect --format
 // swiftlint --fix --format
 // swiftlint lint --fix --format
