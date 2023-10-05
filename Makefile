@@ -442,6 +442,10 @@ install-gomobile:
 assert-go-version:
 	@if go version | grep -q -v $(GO_VERSION); then echo "go $(GO_VERSION) is required." && exit 1; fi
 
+.PHONY: swift-format
+swift-format:
+	swift-format --in-place --recursive DBModule ios/Runner ios/Tunnel ios/LanternTests
+
 clean:
 	rm -f liblantern*.aar && \
 	rm -f $(MOBILE_LIBS)/liblantern-* && \
