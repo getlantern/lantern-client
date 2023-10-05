@@ -53,7 +53,6 @@ ADB       := $(call get-command,adb)
 OPENSSL   := $(call get-command,openssl)
 GMSAAS    := $(call get-command,gmsaas)
 SENTRY    := $(call get-command,sentry-cli)
-DATADOGCI := $(call get-command,datadog-ci)
 BASE64    := $(call get-command,base64)
 
 GIT_REVISION_SHORTCODE := $(shell git rev-parse --short HEAD)
@@ -90,7 +89,6 @@ PROD_BASE_NAME ?= $(INSTALLER_NAME)
 ## secrets Keys
 INTERSTITIAL_AD_UNIT=ca-app-pub-2685698271254859/9922829329
 ## vault secrets
-VAULT_DD_SECRETS_PATH ?= secret/apps/datadog/android
 VAULT_ADS_SECRETS_PATH ?= secret/googleAds
 
 ## vault keys
@@ -245,10 +243,6 @@ require-magick:
 require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
 
-.PHONY: require-datadog-ci
-require-datadog-ci:
-	@if [[ -z "$(DATADOGCI)" ]]; then echo 'Missing "datadog-ci" command. See https://www.npmjs.com/package/@datadog/datadog-ci for installation instructions.'; exit 1; fi
-
 release-autoupdate: require-version
 	@TAG_COMMIT=$$(git rev-list --abbrev-commit -1 $(TAG)) && \
 	if [[ -z "$$TAG_COMMIT" ]]; then \
@@ -299,7 +293,7 @@ do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	echo "Value of DART_DEFINES is: $$DART_DEFINES" && \
 	CI="$$CI" && \
 	echo "Value of CI is: $$CI" && \
-    $(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$(DEBUG_VERSION) -PddClientToken=$$DD_CLIENT_TOKEN -PddApplicationID=$$DD_APPLICATION_ID \
+    $(GRADLE) -Pdart-defines="$$DART_DEFINES" -PlanternVersion=$(DEBUG_VERSION) \
 	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) -Pcountry=$(COUNTRY) \
 	-PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) \
@@ -328,7 +322,6 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
 	-PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
 	-Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle assembleProdSideload && \
-	--android-mapping-location build/app/outputs/mapping/prodSideload/mapping.txt --android-mapping --ios-dsyms && \
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
 
