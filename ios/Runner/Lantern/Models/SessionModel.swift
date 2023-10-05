@@ -30,6 +30,7 @@ class SessionModel: BaseModel {
     }
     try super.init(flutterBinary, model)
     getBandwidth()
+    startService()
   }
 
   func startService() {
