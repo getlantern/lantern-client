@@ -33,11 +33,13 @@ class SessionModel extends Model {
       false,
     );
     proxyAvailable = singleValueNotifier('hasSucceedingProxy', false);
+    country = singleValueNotifier('geo_country_code', 'US');
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> isPlayVersion;
   late ValueNotifier<bool?> proxyAvailable;
+  late ValueNotifier<String?> country;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -156,16 +158,6 @@ class SessionModel extends Model {
         .invokeMethod('getCountryCode', <String, dynamic>{});
   }
 
-  Future<bool> shouldShowAds() async {
-    return await methodChannel
-        .invokeMethod('shouldShowAds', <String, dynamic>{});
-  }
-
-  Future<bool> shouldCASShowAds() async {
-    return await methodChannel
-        .invokeMethod('shouldCASShowAds', <String, dynamic>{});
-  }
-
   Future<void> setLanguage(String lang) {
     return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
       'lang': lang,
@@ -205,6 +197,20 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('setSelectedTab', <String, dynamic>{
       'tab': tab,
     });
+  }
+
+  Widget shouldShowGoogleAds(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>(
+      'shouldShowGoogleAds',
+      builder: builder,
+    );
+  }
+
+  Widget shouldShowCASAds(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>(
+      'shouldShowCASAds',
+      builder: builder,
+    );
   }
 
   Widget selectedTab(ValueWidgetBuilder<String> builder) {
@@ -345,6 +351,14 @@ class SessionModel extends Model {
       defaultValue: '',
       builder: builder,
     );
+  }
+
+  Future<void> trackUserAction(
+    String message,
+  ) async {
+    return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
+      'message': message,
+    });
   }
 
   Future<void> redeemResellerCode(

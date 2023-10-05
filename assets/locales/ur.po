@@ -72,7 +72,7 @@ msgid "Go Pro Title"
 msgstr "پرو اپنائیں!"
 
 msgid "Go Pro Description"
-msgstr "تیز رفتار، اور لامحدود ڈیٹا کو ان لاک کریں!"
+msgstr ""
 
 msgid "Server Location"
 msgstr "سرور لوکیشن"
