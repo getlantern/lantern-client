@@ -86,7 +86,6 @@ msgstr "Перейдите на версию Pro!"
 
 msgid "Go Pro Description"
 msgstr ""
-"Наслаждайтесь более высокой скоростью и неограниченным объемом данных!"
 
 msgid "Server Location"
 msgstr "Местоположение сервера"

@@ -8,9 +8,12 @@ permissions:
 env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
+  DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+  DATADOG_SITE: datadoghq.eu
 jobs:
     set-version:
-      runs-on: ubuntu-latest
+      runs-on:
+        group: large-runners
       outputs:
         version: ${{ steps.set-version.outputs.version }}
         prefix: ${{ steps.set-version.outputs.prefix }}
@@ -55,7 +58,8 @@ jobs:
         version: ${{ needs.set-version.outputs.version }}
         version_file: ${{ needs.set-version.outputs.version_file }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-      runs-on: ubuntu-latest-8-cores
+      runs-on:
+        group: large-runners
       steps:
       - uses: actions/checkout@v3
         with:
@@ -80,17 +84,6 @@ jobs:
         run: |
           git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
-      - name: Build Lantern core Android library
-        run: make android-lib
-
-      - name: Setup Sentry CLI
-        uses: mathieu-bour/setup-sentry-cli@v1
-        with:
-          version: latest
-          token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
-          organization: getlantern
-          project: android
-
       - name: Setup JDK 11
         uses: actions/setup-java@v3
         with:
@@ -98,9 +91,9 @@ jobs:
           java-version: 11
 
       - name: Setup protoc
-        uses: arduino/setup-protoc@v1.2.0
+        uses: arduino/setup-protoc@v2
         with:
-          version: '3.x'
+          repo-token: ${{ secrets.GH_TOKEN }}
 
       - name: Activate protoc-gen-dart plugin
         run: |
@@ -125,10 +118,17 @@ jobs:
           fileDir: './android/app'
           encodedString: ${{ secrets.KEYSTORE }}
 
+      - name: Install Datadog CI
+        run: npm install -g @datadog/datadog-ci
+
       - name: Build Android installers
         run: make package-android
         env:
-          INTERSTITIAL_AD_UNIT_ID: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
+          DD_APPLICATION_ID: ${{ secrets.DD_APPLICATION_ID }}
+          DD_CLIENT_TOKEN: ${{ secrets.DD_CLIENT_TOKEN }}
+          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DATADOG_SITE: datadoghq.eu
+          INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           VERSION: "${{ env.version }}"
 
       - uses: actions/upload-artifact@v3
@@ -176,7 +176,8 @@ jobs:
           s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
 
     push-binaries:
-      runs-on: ubuntu-latest
+      runs-on:
+        group: large-runners
       needs: [ set-version , build-android ]
       env:
         version: ${{ needs.set-version.outputs.version }}

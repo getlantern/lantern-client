@@ -191,3 +191,13 @@
 ##---------------Begin: proguard configuration for Signal  ----------
 -keep class org.whispersystems.** { *; }
 ##---------------End: proguard configuration for Signal  ----------
+
+-keep class com.google.ads.** # Don't proguard AdMob classes
+-dontwarn com.google.ads.
+-keep public class com.google.android.gms.ads.** {
+    public *;
+}
+-keep public class com.google.ads.** {
+    public *;
+}
+-keep public class com.google.android.gms.** { public protected *; }

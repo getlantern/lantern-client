@@ -217,15 +217,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-  catcher:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: ae44d0bbce00c3801629b65f60783d15184a7f8f
-      url: "https://github.com/ThexXTURBOXx/catcher.git"
-    source: git
-    version: "0.8.0"
   characters:
     dependency: transitive
     description:
@@ -330,6 +321,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  dartz:
+    dependency: transitive
+    description:
+      name: dartz
+      sha256: e6acf34ad2e31b1eb00948692468c30ab48ac8250e0f0df661e29f12dd252168
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.1"
+  datadog_flutter_plugin:
+    dependency: "direct main"
+    description:
+      name: datadog_flutter_plugin
+      sha256: "2db71372f12f250a549f249046912594f15bf59113dc64a7e2fd5ae85ad90729"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
+  datadog_tracking_http_client:
+    dependency: "direct main"
+    description:
+      name: datadog_tracking_http_client
+      sha256: "7274fee927d8ec012a6c4fd3e3333616035236875129f83525fa0bbbe2a66bbb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   dbus:
     dependency: transitive
     description:
@@ -339,13 +354,13 @@ packages:
     source: hosted
     version: "0.7.8"
   device_info_plus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: device_info_plus
-      sha256: "2c35b6d1682b028e42d07b3aee4b98fa62996c10bc12cb651ec856a80d6a761b"
+      sha256: "86add5ef97215562d2e090535b0a16f197902b10c369c558a100e74ea06e8659"
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.2"
+    version: "9.0.3"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -355,13 +370,13 @@ packages:
     source: hosted
     version: "7.0.0"
   dio:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: dio
-      sha256: a9d76e72985d7087eb7c5e7903224ae52b337131518d127c554b9405936752b8
+      sha256: ce75a1b40947fea0a0e16ce73337122a86762e38b982e1ccb909daa3b9bc4197
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.1+1"
+    version: "5.3.2"
   dotted_border:
     dependency: "direct main"
     description:
@@ -570,13 +585,13 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_mailer:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_mailer
-      sha256: "5ec538be34233a62129c3aedc8cfcfaca0c4de390ca43f331f52e972d410b84d"
+      sha256: a935e9caa842877e8ed56109afb75b86e6488edbcd4696a5ac02b327a48fcd8a
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2"
+    version: "2.1.1"
   flutter_markdown:
     dependency: "direct main"
     description:
@@ -636,7 +651,7 @@ packages:
     source: sdk
     version: "0.0.0"
   fluttertoast:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: fluttertoast
       sha256: "474f7d506230897a3cd28c965ec21c5328ae5605fc9c400cd330e9e9d6ac175c"
@@ -821,14 +836,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  mailer:
-    dependency: transitive
-    description:
-      name: mailer
-      sha256: "57f6dd1496699999a7bfd0aa6be0645384f477f4823e16d4321c40a434346382"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.1"
   markdown:
     dependency: transitive
     description:
@@ -1165,14 +1172,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.8"
-  sentry:
-    dependency: "direct main"
-    description:
-      name: sentry
-      sha256: "39c23342fc96105da449914f7774139a17a0ca8a4e70d9ad5200171f7e47d6ba"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.9.0"
   share_plus:
     dependency: "direct main"
     description:
@@ -1283,13 +1282,13 @@ packages:
     source: sdk
     version: "0.0.99"
   sliver_tools:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sliver_tools
-      sha256: ccdc502098a8bfa07b3ec582c282620031481300035584e1bb3aca296a505e8c
+      sha256: eae28220badfb9d0559207badcbbc9ad5331aac829a88cb0964d330d2a4636a6
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.10"
+    version: "0.2.12"
   source_gen:
     dependency: transitive
     description:
@@ -1466,14 +1465,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
-  universal_io:
-    dependency: transitive
-    description:
-      name: universal_io
-      sha256: "1722b2dcc462b4b2f3ee7d188dad008b6eb4c40bbd03a3de451d82c78bba9aad"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.2"
   url_launcher:
     dependency: "direct main"
     description:

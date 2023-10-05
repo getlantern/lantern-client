@@ -1,5 +1,4 @@
 plugins {
-  id "io.sentry.android.gradle" version "3.4.2"
   id 'com.android.application'
   id 'kotlin-android'
   id 'org.jlleitschuh.gradle.ktlint'
@@ -7,6 +6,7 @@ plugins {
   id 'kotlin-parcelize'
   id 'kotlin-kapt'
   id 'com.google.protobuf'
+  id("com.datadoghq.dd-sdk-android-gradle-plugin") version "1.10.0"
 }
 
 def localProperties = new Properties()
@@ -19,7 +19,10 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    flutterRoot = System.env.FLUTTER_ROOT
+    if (flutterRoot == null) {
+        throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    }
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -34,7 +37,7 @@ if (flutterVersionName == null) {
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    ndkVersion "23.0.7599858"
+    ndkVersion "26.0.10792818"
 
     bundle {
         density {
@@ -136,7 +139,7 @@ android {
     externalNativeBuild {
         cmake {
             path file('cmake/CMakeLists.txt')
-            version '3.18.1'
+            version '3.22.1'
         }
     }
 
@@ -177,6 +180,8 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
+            buildConfigField "String", "DD_CLIENT_TOKEN", ddClientToken()
+            buildConfigField "String", "DD_APPLICATION_ID", ddApplicationID()
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
@@ -318,6 +323,22 @@ def getInt(name) {
     return value.toInteger()
 }
 
+def ddApplicationID() {
+    def value = project.getProperties().get("ddApplicationID")
+    if (value == null || !value?.trim()) {
+        return "\"\""
+    }
+    return String.format("\"%s\"", value)
+}
+
+def ddClientToken() {
+    def value = project.getProperties().get("ddClientToken")
+    if (value == null || !value?.trim()) {
+        return "\"\""
+    }
+    return String.format("\"%s\"", value)
+}
+
 def userCountry() {
     def value = project.getProperties().get("country")
     if (value == null || !value?.trim()) {
@@ -423,6 +444,8 @@ dependencies {
 
     implementation 'com.stripe:stripe-android:20.17.0'
 
+    implementation 'com.datadoghq:dd-sdk-android:1.19.3'
+
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
     kapt "org.androidannotations:androidannotations:$androidAnnotationsVersion"
@@ -450,22 +473,3 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
-
-sentry {
-    // Enables or disables the automatic upload of mapping files
-    // during a build.  If you disable this, you'll need to manually
-    // upload the mapping files with sentry-cli when you do a release.
-    autoUpload = true
-
-    // Disables or enables the automatic configuration of Native Symbols
-    // for Sentry. This executes sentry-cli automatically so
-    // you don't need to do it manually.
-    // Default is disabled.
-    uploadNativeSymbols = true
-
-    // Does or doesn't include the source code of native code for Sentry.
-    // This executes sentry-cli with the --include-sources param. automatically so
-    // you don't need to do it manually.
-    // Default is disabled.
-    includeNativeSources = false
-}

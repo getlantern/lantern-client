@@ -75,7 +75,7 @@ msgid "Go Pro Title"
 msgstr "Lên Pro!"
 
 msgid "Go Pro Description"
-msgstr "Mở khóa tốc độ nhanh hơn và dữ liệu không giới hạn!"
+msgstr ""
 
 msgid "Server Location"
 msgstr "Địa chỉ Server"

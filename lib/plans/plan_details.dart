@@ -22,9 +22,10 @@ class PlanCard extends StatelessWidget {
       child: CInkWell(
         onTap: () async {
           final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+          final inRussia = sessionModel.country.value == 'RU';
 
           // * Play version
-          if (isPlayVersion) {
+          if (isPlayVersion && !inRussia) {
             await sessionModel
                 .submitGooglePlay(planName)
                 .onError((error, stackTrace) {
