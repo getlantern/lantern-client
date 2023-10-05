@@ -34,7 +34,7 @@ open class BaseModel: NSObject, FlutterStreamHandler {
     if let db = swiftDB {
       return db
     } else {
-      swiftDB = try DatabaseFactory.getDbManager(databasePath: getDatabasePath())
+      swiftDB = try DatabaseManager(getDatabasePath())
       return swiftDB!
     }
   }
