@@ -8,8 +8,6 @@ permissions:
 env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
-  DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
-  DATADOG_SITE: datadoghq.eu
 jobs:
     set-version:
       runs-on:
@@ -118,16 +116,9 @@ jobs:
           fileDir: './android/app'
           encodedString: ${{ secrets.KEYSTORE }}
 
-      - name: Install Datadog CI
-        run: npm install -g @datadog/datadog-ci
-
       - name: Build Android installers
         run: make package-android
         env:
-          DD_APPLICATION_ID: ${{ secrets.DD_APPLICATION_ID }}
-          DD_CLIENT_TOKEN: ${{ secrets.DD_CLIENT_TOKEN }}
-          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
-          DATADOG_SITE: datadoghq.eu
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           VERSION: "${{ env.version }}"
 
