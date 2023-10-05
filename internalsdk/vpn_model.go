@@ -6,7 +6,6 @@ import (
 )
 
 const PATH_VPN_STATUS = "/vpn_status"
-const PATH_SERVER_INFO = "/server_info"
 const PATH_BANDWIDTH = "/bandwidth"
 
 // Custom Model implemnation

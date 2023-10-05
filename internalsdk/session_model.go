@@ -61,6 +61,7 @@ const CAS_ADS_ENABLED = "casAsEnabled"
 const CURRENT_TERMS_VERSION = 1
 const IS_PLAY_VERSION = "playVersion"
 const SET_SELECTED_TAB = "/selectedTab"
+const PATH_SERVER_INFO = "/server_info"
 
 type SessionModelOpts struct {
 	DevelopmentMode bool
