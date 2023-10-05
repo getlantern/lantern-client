@@ -17,21 +17,21 @@ class SessionModel: BaseModel {
   }()
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
-      let opts = InternalsdkSessionModelOpts()
-      let device = UIDevice.current
-      let deviceId = device.identifierForVendor!.uuidString
-      let model = device.model
-      let systemName = device.systemName
-      let systemVersion = device.systemVersion
-      opts.deviceID = deviceId
-      opts.lang = Locale.current.identifier
-      opts.developmentMode = false
-      opts.proUser = false
-      opts.playVersion = isRunningFromAppStore()
-      opts.timeZone = TimeZone.current.identifier
-      opts.device = systemName // IOS does not provide Device name directly 
-      opts.model = systemName
-      opts.osVersion = systemVersion
+    let opts = InternalsdkSessionModelOpts()
+    let device = UIDevice.current
+    let deviceId = device.identifierForVendor!.uuidString
+    let model = device.model
+    let systemName = device.systemName
+    let systemVersion = device.systemVersion
+    opts.deviceID = deviceId
+    opts.lang = Locale.current.identifier
+    opts.developmentMode = false
+    opts.proUser = false
+    opts.playVersion = isRunningFromAppStore()
+    opts.timeZone = TimeZone.current.identifier
+    opts.device = systemName  // IOS does not provide Device name directly
+    opts.model = systemName
+    opts.osVersion = systemVersion
     var error: NSError?
     guard let model = InternalsdkNewSessionModel(try BaseModel.getDB(), opts, &error) else {
       throw error!
