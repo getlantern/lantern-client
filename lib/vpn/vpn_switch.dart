@@ -1,7 +1,5 @@
 import 'package:lantern/vpn/vpn.dart';
 
-import '../ad_helper.dart';
-
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
 
@@ -39,24 +37,36 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel
-        .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
-      return sessionModel.shouldShowCASAds((context, isCasAdsEnable, child) {
-        adHelper.loadAds(
-            shouldShowGoogleAds: isGoogleAdsEnable,
-            shouldShowCASAds: isCasAdsEnable);
-        return Transform.scale(
-            scale: 2,
-            child: vpnModel.vpnStatus(
-                (BuildContext context, String vpnStatus, Widget? child) {
-              return FlutterSwitch(
-                value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
-                activeColor: onSwitchColor,
-                inactiveColor: offSwitchColor,
-                onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus),
-              );
-            }));
-      });
-    });
+    // Still working on ads feature
+    return Transform.scale(
+        scale: 2,
+        child: vpnModel
+            .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+          return FlutterSwitch(
+            value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+            activeColor: onSwitchColor,
+            inactiveColor: offSwitchColor,
+            onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus),
+          );
+        }));
+    // return sessionModel
+    //     .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
+    //   return sessionModel.shouldShowCASAds((context, isCasAdsEnable, child) {
+    //     // adHelper.loadAds(
+    //     //     shouldShowGoogleAds: isGoogleAdsEnable,
+    //     //     shouldShowCASAds: isCasAdsEnable);
+    //     return Transform.scale(
+    //         scale: 2,
+    //         child: vpnModel.vpnStatus(
+    //             (BuildContext context, String vpnStatus, Widget? child) {
+    //           return FlutterSwitch(
+    //             value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+    //             activeColor: onSwitchColor,
+    //             inactiveColor: offSwitchColor,
+    //             onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus),
+    //           );
+    //         }));
+    //   });
+    // });
   }
 }
