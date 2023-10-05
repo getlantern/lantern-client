@@ -66,6 +66,9 @@ type SessionModelOpts struct {
 	DevelopmentMode bool
 	ProUser         bool
 	DeviceID        string
+	Device          string
+	Model           string
+	OsVersion       string
 	PlayVersion     bool
 	Lang            string
 	TimeZone        string
@@ -131,7 +134,7 @@ func (m *SessionModel) InvokeMethod(method string, arguments Arguments) (*minisq
 			return minisql.NewValueBool(true), nil
 		}
 	case "setLanguage":
-		err := setProUser(m.baseModel, false)
+		err := setCurrency(m.baseModel, "false")
 		if err != nil {
 			return nil, err
 		} else {
@@ -157,14 +160,20 @@ func (m *SessionModel) InvokeMethod(method string, arguments Arguments) (*minisq
 			return nil, err
 		}
 		return minisql.NewValueBool(true), nil
-	case SESSION_MODEL_METHOD_REPORT_ISSUE:
-		jsonString := arguments.Get(0).String()
-		reportIssueStruct, reportErr := extractReportValueFromJSON(jsonString)
-		if reportErr != nil {
-			return nil, reportErr
-
+	case "reportIssue":
+		email := arguments.Get("email").String()
+		issue := arguments.Get("issue").String()
+		description := arguments.Get("issue").String()
+		err := reportIssue(m, email, issue, description)
+		if err != nil {
+			return nil, err
 		}
-		err := reportIssue(s, reportIssueStruct)
+		return minisql.NewValueBool(true), nil
+		// reportIssueStruct, reportErr := extractReportValueFromJSON(jsonString)
+		// if reportErr != nil {
+		// 	return nil, reportErr
+
+		// }
 	case "createUser":
 		err := userCreate(m.baseModel, arguments.Scalar().String())
 		if err != nil {
@@ -222,11 +231,32 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
-	err = pathdb.Put(tx, LANG, opts.Lang, "")
+	// Check if lang is already added or not
+	// If yes then do not add it
+	// This is used for only when user is new
+	lang, err := pathdb.Get[string](tx, LANG)
 	if err != nil {
 		return err
 	}
+	if lang == "" {
+		err = pathdb.Put(tx, LANG, opts.Lang, "")
+		if err != nil {
+			return err
+		}
+	}
 	err = pathdb.Put(tx, TIMEZONE_ID, opts.TimeZone, "")
+	if err != nil {
+		return err
+	}
+	err = pathdb.Put(tx, DEVICE, opts.Device, "")
+	if err != nil {
+		return err
+	}
+	err = pathdb.Put(tx, MODEL, opts.Model, "")
+	if err != nil {
+		return err
+	}
+	err = pathdb.Put(tx, OS_VERSION, opts.OsVersion, "")
 	if err != nil {
 		return err
 	}
@@ -694,11 +724,11 @@ func userCreate(m *baseModel, local string) error {
 	return nil
 }
 
-func reportIssue(session *SessionModel, reportIssue ReportIssue) error {
+func reportIssue(session *SessionModel, email string, issue string, description string) error {
 	// Check if email is there is yes then store it
-	if reportIssue.Email != "" {
+	if email != "" {
 		err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			pathdb.Put[string](tx, EMAIL_ADDRESS, reportIssue.Email, "")
+			pathdb.Put[string](tx, EMAIL_ADDRESS, email, "")
 			return nil
 		})
 		if err != nil {
@@ -734,15 +764,15 @@ func reportIssue(session *SessionModel, reportIssue ReportIssue) error {
 	if deviceErr != nil {
 		return deviceErr
 	}
-	//Ignore the first value
+	// Ignore the first value
 	// First value is type of value
 	deviceStr := string(device[1:])
 	osVersionStr := string(osVersion[1:])
 	modelStr := string(model[1:])
-	issueKey := issueMap[reportIssue.Issue]
+	issueKey := issueMap[issue]
 
-	log.Debugf("Report an issue index %v desc %v level %v email %v, device %v model %v version %v ", issueKey, reportIssue.Description, level, reportIssue.Email, deviceStr, modelStr, osVersionStr)
-	reportIssueErr := SendIssueReport(session, issueKey, reportIssue.Description, level, reportIssue.Email, deviceStr, modelStr, osVersionStr)
+	log.Debugf("Report an issue index %v desc %v level %v email %v, device %v model %v version %v ", issueKey, description, level, email, deviceStr, modelStr, osVersionStr)
+	reportIssueErr := SendIssueReport(session, issueKey, description, level, email, deviceStr, modelStr, osVersionStr)
 	if reportIssueErr != nil {
 		return reportIssueErr
 	}
