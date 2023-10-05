@@ -16,20 +16,24 @@ public class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
   private var currentTransaction: DatabaseManager?
   private var savepointName: String?
 
-  init(_ path: String, transactional: Bool = false) throws {
+  public init(_ path: String, connection: Connection? = nil, transactional: Bool = false) throws {
     self.path = path
-    guard !path.isEmpty else {
-      throw NSError(
-        domain: "DatabasePathError", code: 1,
-        userInfo: [NSLocalizedDescriptionKey: "Database path cannot be blank"])
+    if let conn = connection {
+      self.connection = conn
+    } else {
+      guard !path.isEmpty else {
+        throw NSError(
+          domain: "DatabasePathError", code: 1,
+          userInfo: [NSLocalizedDescriptionKey: "Database path cannot be blank"])
+      }
+      self.connection = try! Connection(path)
     }
-    connection = try! Connection(path)
 
     self.transactional = transactional
   }
 
   public func begin() throws -> MinisqlTxProtocol {
-    currentTransaction = try DatabaseManager(path, transactional: true)
+    currentTransaction = try DatabaseManager(path, connection: connection, transactional: true)
     return currentTransaction!
   }
 
