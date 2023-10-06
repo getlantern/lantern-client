@@ -136,7 +136,9 @@ class LanternApp extends StatelessWidget {
     if (lang == '' || lang.startsWith('en')) {
       return const Locale('en', 'US');
     }
-    return Locale(lang);
+    final codes =  lang.split('_');
+    return Locale(codes[0], codes[1]);
+
   }
 
   String _getLocaleBasedFont(Locale locale) {
