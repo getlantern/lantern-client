@@ -1,8 +1,8 @@
-import 'package:catcher/catcher.dart';
+import 'package:catcher_2/catcher_2.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry/sentry.dart';
 
-final debugOption = CatcherOptions(
+final debugOption = Catcher2Options(
   SilentReportMode(),
   [
     ConsoleHandler(
@@ -14,7 +14,7 @@ final debugOption = CatcherOptions(
   ],
 );
 
-final releaseOption = CatcherOptions(
+final releaseOption = Catcher2Options(
   SilentReportMode(),
   [
     ConsoleHandler(
@@ -35,8 +35,8 @@ final releaseOption = CatcherOptions(
   ],
 );
 
-Catcher setupCatcherAndRun(StatelessWidget root) {
-  return Catcher(
+Catcher2 setupCatcherAndRun(StatelessWidget root) {
+  return Catcher2(
     rootWidget: root,
     debugConfig: debugOption,
     releaseConfig: releaseOption,

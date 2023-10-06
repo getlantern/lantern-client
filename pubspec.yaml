@@ -40,7 +40,7 @@ dependencies:
   flutter_switch: ^0.3.2
   flag: ^7.0.0
   # from sdk. See https://github.com/jhomlala/catcher/pull/234 for more details
-  catcher:
+  catcher_2:
     git:
       url: https://github.com/ThexXTURBOXx/catcher.git
 
