@@ -164,7 +164,7 @@ func (m *SessionModel) InvokeMethod(method string, arguments Arguments) (*minisq
 	case "reportIssue":
 		email := arguments.Get("email").String()
 		issue := arguments.Get("issue").String()
-		description := arguments.Get("issue").String()
+		description := arguments.Get("description").String()
 		err := reportIssue(m, email, issue, description)
 		if err != nil {
 			return nil, err

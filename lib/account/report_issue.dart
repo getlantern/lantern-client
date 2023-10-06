@@ -121,7 +121,6 @@ class _ReportIssueState extends State<ReportIssue> {
                                 issueController.text = newValue!;
                               },
                               items: <String>[
-                                '',
                                 'cannot_access_blocked_sites'.i18n,
                                 'cannot_complete_purchase'.i18n,
                                 'cannot_sign_in'.i18n,
