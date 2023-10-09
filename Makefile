@@ -284,7 +284,7 @@ $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 android-lib: $(MOBILE_ANDROID_LIB)
 
 appium-test-build:
-	flutter build apk --flavor appiumTest --dart-define=app.flavor=appiumTest
+	flutter build apk --flavor=appiumTest --dart-define=app.flavor=appiumTest --debug
 
 $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@$(GRADLE) -PandroidArch=$(ANDROID_ARCH) \
