@@ -5,12 +5,13 @@ import 'package:lantern/common/common.dart';
 
 Future<void> main() async {
   // CI will be true only when running appium test
-  var CI = const String.fromEnvironment('CI', defaultValue: 'false');
-  var boolCI = bool.fromEnvironment("CI", defaultValue: false);
-  print('Appium CI is running $CI and bool $boolCI');
-  if (CI == 'true') {
+  const String flavor = String.fromEnvironment('app.flavor');
+  print("Running Flavor $flavor");
+  if (flavor == 'appiumTest') {
+    print("Flutter extension enabled $flavor");
     enableFlutterDriverExtension();
   }
+
   WidgetsFlutterBinding.ensureInitialized();
   await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

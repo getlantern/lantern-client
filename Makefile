@@ -280,8 +280,11 @@ $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && \
 	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
-.PHONY: android-lib
+.PHONY: android-lib appium-test-build
 android-lib: $(MOBILE_ANDROID_LIB)
+
+appium-test-build:
+	flutter build apk --flavor appiumTest --dart-define=app.flavor=appiumTest
 
 $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@$(GRADLE) -PandroidArch=$(ANDROID_ARCH) \
