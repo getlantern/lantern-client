@@ -36,7 +36,13 @@ class Settings extends StatelessWidget {
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
 
-  void openWebView(String url) async => await sessionModel.openWebview(url);
+  void openWebView(String url, BuildContext context) async {
+    if (Platform.isAndroid) {
+      await sessionModel.openWebview(url);
+    } else {
+      context.pushRoute(AppWebview(url: url));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +144,7 @@ class Settings extends StatelessWidget {
           ListItemFactory.settingsItem(
             header: 'about'.i18n,
             content: 'privacy_policy'.i18n,
-            onTap: () => openWebView('https://lantern.io/privacy'),
+            onTap: () => openWebView('https://lantern.io/privacy', context),
             trailingArray: [
               mirrorLTR(
                 context: context,
@@ -164,7 +170,7 @@ class Settings extends StatelessWidget {
                 ),
               )
             ],
-            onTap: () => openWebView('https://lantern.io/terms'),
+            onTap: () => openWebView('https://lantern.io/terms', context),
           ),
           //* Build version
           FutureBuilder<PackageInfo>(
