@@ -62,7 +62,7 @@ jobs:
           CI: "true"
         run: |
           flutter pub get
-          make do-android-debug ANDROID_ARCH=all
+          make appium-test-build
 
       - name: List files in current directory
         run: ls -la
