@@ -4,8 +4,8 @@ import appium_kotlin.ContextType
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import io.appium.java_client.AppiumDriver
 import io.appium.java_client.android.AndroidDriver
+import io.appium.java_client.remote.MobileCapabilityType
 import io.appium.java_client.service.local.AppiumDriverLocalService
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException
 import io.appium.java_client.service.local.AppiumServiceBuilder
@@ -16,10 +16,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.remote.DesiredCapabilities
-import pro.truongsinh.appium_flutter.FlutterFinder
 import java.io.FileReader
 import java.net.URL
-import java.util.concurrent.TimeUnit
 import java.util.stream.Stream
 
 /** Here is the device list-:https://www.browserstack.com/list-of-browsers-and-platforms/app_automate */
@@ -30,7 +28,6 @@ open class BaseTest {
     companion object {
         lateinit var config: JsonObject
         lateinit var service: AppiumDriverLocalService
-
 
         @JvmStatic
         @MethodSource("devices")
@@ -54,33 +51,14 @@ open class BaseTest {
         }
     }
 
-    fun setupAndCreateConnection(taskId: Int): AndroidDriver {
-        println("Setup and creating connection for TaskId: $taskId")
+    // Initialize DesiredCapabilities
+    fun initialCapabilities(taskId: Int): DesiredCapabilities {
         // Initialize DesiredCapabilities
         val capabilities = DesiredCapabilities()
         // Get common capabilities from config
         val commonCapabilities = config["capabilities"] as JsonObject
-        // Get environment variables if available or get from config
-        val username = System.getenv("BROWSERSTACK_USERNAME") ?: config.get("username").asString
-        val accessKey =
-            System.getenv("BROWSERSTACK_ACCESS_KEY") ?: config.get("access_key").asString
         val app = System.getenv("BROWSERSTACK_APP_ID") ?: config.get("app").asString
-        val server = System.getenv("SERVER") ?: config.get("server").asString
-        // Check if it is a local run
-        val isLocalRun = (System.getenv("RUN_ENV") ?: "local") == "local"
         val envs = config["environments"] as JsonArray
-        // If local run, start Appium Server
-        if (isLocalRun) {
-            // Start Appium Server for local run
-            service = AppiumServiceBuilder()
-                .withArgument(GeneralServerFlag.ALLOW_INSECURE, "chromedriver_autodownload")
-                .build()
-            service.start()
-
-            if (!service.isRunning) {
-                throw AppiumServerHasNotBeenStartedLocallyException("An appium server node is not started!")
-            }
-        }
 
         // Iterate over common capabilities
         val it = commonCapabilities.entrySet().iterator()
@@ -103,15 +81,14 @@ open class BaseTest {
                 if (capabilities.getCapability(pair.key.toString()) == null) {
                     capabilities.setCapability(
                         pair.key.toString(),
-                        pair.value.toString().replace("\"", "")
+                        pair.value.toString().replace("\"", ""),
                     )
                 }
             }
         }
         capabilities.setCapability("app", app)
-//        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Flutter")
+        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Flutter")
         println("Setup for TaskId $taskId: $capabilities")
-
 
         val envCapabilities = envs[taskId] as JsonObject
         println("TaskId: $taskId | Current Evn $envCapabilities")
@@ -120,22 +97,56 @@ open class BaseTest {
         envCapabilities.entrySet().iterator().forEach { pair ->
             capabilities.setCapability(pair.key, pair.value.toString().replace("\"", ""))
         }
-        val url = if (isLocalRun) {
+        return capabilities
+    }
+
+    // Check if it is a local run
+    fun checkLocalRun(): Boolean {
+        val isLocalRun = (System.getenv("RUN_ENV") ?: "local") == "local"
+        // If local run, start Appium Server
+        if (isLocalRun) {
+            // Start Appium Server for local run
+            service = AppiumServiceBuilder()
+                .withArgument(GeneralServerFlag.ALLOW_INSECURE, "chromedriver_autodownload")
+                .build()
+            service.start()
+
+            if (!service.isRunning) {
+                throw AppiumServerHasNotBeenStartedLocallyException("An appium server node is not started!")
+            }
+        }
+        return isLocalRun
+    }
+
+    fun serviceURL(isLocalRun: Boolean): String {
+        // Get environment variables if available or get from config
+        val username = System.getenv("BROWSERSTACK_USERNAME") ?: config.get("username").asString
+        val accessKey =
+            System.getenv("BROWSERSTACK_ACCESS_KEY") ?: config.get("access_key").asString
+        val server = System.getenv("SERVER") ?: config.get("server").asString
+        return if (isLocalRun) {
             service.url.toString()
         } else {
-            "https://${username}:${accessKey}@$server"
+            "https://$username:$accessKey@$server"
         }
+    }
 
+    fun setupAndCreateConnection(taskId: Int): AndroidDriver {
+        println("Setup and creating connection for TaskId: $taskId")
+
+        val isLocalRun = checkLocalRun()
+        val capabilities = initialCapabilities(taskId)
+
+        val url = serviceURL(isLocalRun)
         val driver = AndroidDriver(
             URL(url),
-            capabilities
+            capabilities,
         )
 
         println("TaskId: $taskId | Driver created")
         println("TaskId: $taskId | Car $capabilities")
         return driver
     }
-
 
     fun testPassed(driver: AndroidDriver) {
         val jse = (driver as JavascriptExecutor)
@@ -144,15 +155,13 @@ open class BaseTest {
 
     fun testFail(failureMessage: String, driver: AndroidDriver) {
         val jse = (driver as JavascriptExecutor)
-        jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"$failureMessage\"}}");
+        jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"$failureMessage\"}}")
     }
-
 
     protected fun switchToContext(contextType: ContextType, driver: AndroidDriver) {
         val context = getContextString(contextType)
         driver.context(context)
         print("Android", "Switched to context: $context")
-
     }
 
     private fun getContextString(contextType: ContextType): String {
@@ -166,5 +175,4 @@ open class BaseTest {
     protected fun print(tag: String, message: String) {
         println("[$tag] $message")
     }
-
 }
