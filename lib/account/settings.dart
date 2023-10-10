@@ -1,8 +1,11 @@
 import 'package:intl/intl.dart';
+import 'package:lantern/common/app_methods.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/ui/app_loading_dialog.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage(name: 'Settings')
 class Settings extends StatelessWidget {
@@ -16,23 +19,6 @@ class Settings extends StatelessWidget {
   void reportIssue(BuildContext context) async =>
       await context.pushRoute(ReportIssue());
 
-  void showProgressDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        barrierColor: Colors.transparent,
-        builder: (BuildContext context) {
-          return Center(
-              child: SizedBox(
-            width: 40.0,
-            height: 40.0,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(grey5),
-            ),
-          ));
-        });
-  }
-
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
 
@@ -41,6 +27,16 @@ class Settings extends StatelessWidget {
       await sessionModel.openWebview(url);
     } else {
       context.pushRoute(AppWebview(url: url));
+    }
+  }
+
+  Future<void> checkForUpdateTap(BuildContext context) async {
+    if (Platform.isAndroid) {
+      AppLoadingDialog.showLoadingDialog(context);
+      await sessionModel.checkForUpdates();
+      AppLoadingDialog.dismissLoadingDialog(context);
+    } else {
+      AppMethods.openAppstore();
     }
   }
 
@@ -81,11 +77,7 @@ class Settings extends StatelessWidget {
             trailingArray: [
               mirrorLTR(context: context, child: const ContinueArrow())
             ],
-            onTap: () async {
-              showProgressDialog(context);
-              await sessionModel.checkForUpdates();
-              Navigator.pop(context);
-            },
+            onTap: () => checkForUpdateTap(context),
           ),
           //* Blocked
           messagingModel.getOnBoardingStatus(
