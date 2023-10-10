@@ -41,6 +41,7 @@ import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.PlansUtil
@@ -87,6 +88,7 @@ class MainActivity :
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
+                    Plausible.enable(true)
                     fetchLoConf()
                     Logger.debug(
                         TAG,
@@ -126,7 +128,6 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
-
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
