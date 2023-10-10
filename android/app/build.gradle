@@ -446,6 +446,8 @@ dependencies {
 
     implementation 'com.datadoghq:dd-sdk-android:1.19.3'
 
+    implementation 'com.wbrawner.plausible:plausible-android:0.1.0-SNAPSHOT'
+
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
     kapt "org.androidannotations:androidannotations:$androidAnnotationsVersion"
