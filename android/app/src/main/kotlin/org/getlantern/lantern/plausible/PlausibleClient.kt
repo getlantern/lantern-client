@@ -138,7 +138,7 @@ internal class NetworkFirstPlausibleClient(
             .post(body)
             .build()
         suspendCancellableCoroutine { continuation ->
-            val call = okHttpClient().newCall(request)
+            val call = okHttpClient.newCall(request)
             continuation.invokeOnCancellation {
                 call.cancel()
             }
@@ -165,7 +165,7 @@ internal class NetworkFirstPlausibleClient(
         }
     }
 
-    private fun okHttpClient(): OkHttpClient {
+    val okHttpClient: OkHttpClient by lazy {
         val session = LanternApp.getSession()
         val hTTPAddr = session.hTTPAddr
         val uri = URI("http://" + hTTPAddr)
@@ -174,6 +174,6 @@ internal class NetworkFirstPlausibleClient(
                 uri.getPort(),
             ),
         )
-        return OkHttpClient.Builder().proxy(proxy).build()       
+        OkHttpClient.Builder().proxy(proxy).build()       
     }
 }
