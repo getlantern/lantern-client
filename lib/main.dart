@@ -1,6 +1,7 @@
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
+import 'package:lantern/catcher_setup.dart';
 import 'package:lantern/common/common.dart';
 
 Future<void> main() async {
@@ -14,7 +15,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(LanternApp());
+  setupCatcherAndRun(LanternApp());
 }
 
 Future<void> _initGoogleMobileAds() async {

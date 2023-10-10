@@ -6,7 +6,7 @@ plugins {
   id 'kotlin-parcelize'
   id 'kotlin-kapt'
   id 'com.google.protobuf'
-  id("com.datadoghq.dd-sdk-android-gradle-plugin") version "1.10.0"
+  id "io.sentry.android.gradle" version "3.13.0"
 }
 
 def localProperties = new Properties()
@@ -180,8 +180,6 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
-            buildConfigField "String", "DD_CLIENT_TOKEN", ddClientToken()
-            buildConfigField "String", "DD_APPLICATION_ID", ddApplicationID()
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
@@ -473,3 +471,32 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+sentry {
+
+    // Disables or enables the handling of Proguard mapping for Sentry.
+    // If enabled the plugin will generate a UUID and will take care of
+    // uploading the mapping to Sentry. If disabled, all the logic
+    // related to proguard mapping will be excluded.
+    // Default is enabled.
+    includeProguardMapping = true
+    
+
+    // Whether the plugin should attempt to auto-upload the mapping file to Sentry or not.
+    // If disabled the plugin will run a dry-run and just generate a UUID.
+    // The mapping file has to be uploaded manually via sentry-cli in this case.
+    // Default is enabled.
+    autoUploadProguardMapping = true
+
+    // Disables or enables the automatic configuration of Native Symbols
+    // for Sentry. This executes sentry-cli automatically so
+    // you don't need to do it manually.
+    // Default is disabled.
+    uploadNativeSymbols = true
+
+    // Does or doesn't include the source code of native code for Sentry.
+    // This executes sentry-cli with the --include-sources param. automatically so
+    // you don't need to do it manually.
+    // Default is disabled.
+    includeNativeSources = false
+}

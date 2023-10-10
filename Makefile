@@ -308,7 +308,7 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
+$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
@@ -322,11 +322,12 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
 	-PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
 	-Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle assembleProdSideload && \
+	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodSideload/out/lib && \
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
 
 
-$(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
+$(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
 	@mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
@@ -336,6 +337,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB)
 	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" \
 	-PddClientToken=$(DD_CLIENT_TOKEN) -PddApplicationID=$(DD_APPLICATION_ID) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
 	-Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle bundlePlay && \
+	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodPlay/out/lib && \
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
 android-debug: $(MOBILE_DEBUG_APK)

@@ -82,6 +82,14 @@ jobs:
         run: |
           git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
+      - name: Setup Sentry CLI
+        uses: mathieu-bour/setup-sentry-cli@v1
+        with:
+          version: latest
+          token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
+          organization: getlantern
+          project: android
+
       - name: Setup JDK 11
         uses: actions/setup-java@v3
         with:
