@@ -73,6 +73,7 @@ type SessionModelOpts struct {
 	PlayVersion     bool
 	Lang            string
 	TimeZone        string
+	PaymentTestMode bool
 }
 
 // NewSessionModel initializes a new SessionModel instance.
@@ -224,6 +225,10 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		return err
 	}
 	err = pathdb.Put(tx, IS_PLAY_VERSION, opts.PlayVersion, "")
+	if err != nil {
+		return err
+	}
+	err = pathdb.Put(tx, PAYMENT_TEST_MODE, opts.PaymentTestMode, "")
 	if err != nil {
 		return err
 	}

@@ -5,7 +5,6 @@ import 'package:lantern/common/ui/app_loading_dialog.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage(name: 'Settings')
 class Settings extends StatelessWidget {
