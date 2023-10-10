@@ -266,6 +266,7 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
+	log.Debugf("User is %v", userId)
 	if userId == 0 {
 		local, err := m.Locale()
 		if err != nil {
@@ -297,58 +298,58 @@ func (m *SessionModel) GetDeviceID() (string, error) {
 // Todo There is some issue with user id changeing it value
 // When  Coverting from bytes to Float
 func (m *SessionModel) GetUserID() (int64, error) {
-	paymentTestMode, err := m.baseModel.db.Get(PAYMENT_TEST_MODE)
+	tx, err := m.db.Begin()
 	if err != nil {
 		return 0, err
 	}
-	//Todo find way to deserialize the values
-	paymentTestModeStr := string(paymentTestMode)
-	if paymentTestModeStr == "true" && paymentTestModeStr != "" {
+
+	paymentTestMode, err := pathdb.Get[bool](tx, PAYMENT_TEST_MODE)
+	if err != nil {
+		return 0, err
+	}
+
+	log.Debugf("User is called with paymentTestMode %v", paymentTestMode)
+	if paymentTestMode {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
 		// payment providers' test endpoints.
-		i64, err := strconv.ParseInt("9007199254740992L", 10, 64)
+		i64, err := strconv.ParseInt("9007199254740992", 10, 64)
 		if err != nil {
+			log.Debugf("Wrror while parsing userID %v", err)
 			return 0, err
 		}
 		return i64, nil
 	} else {
-		userId, err := m.baseModel.db.Get(USER_ID)
-		if err != nil {
-			return 0, err
-		}
 
-		//If userid is null or emtpy return zero to avoid crash
-		if string(userId) == "" {
-			return 0, nil
-		}
-		userId = userId[1:]
-		newUserId, err := BytesToFloat64LittleEndian(userId)
+		userId, err := pathdb.Get[float64](tx, USER_ID)
 		if err != nil {
 			return 0, err
 		}
-		i64 := int64(newUserId)
+		i64 := int64(userId)
 		return i64, nil
 	}
 }
 func (m *SessionModel) GetToken() (string, error) {
-	paymentTestMode, err := m.baseModel.db.Get(PAYMENT_TEST_MODE)
+	tx, err := m.db.Begin()
 	if err != nil {
 		return "", err
 	}
-	//Todo find way to deserialize the values
-	paymentTestModeStr := string(paymentTestMode)
-	if paymentTestModeStr == "true" {
+	paymentTestMode, err := pathdb.Get[bool](tx, PAYMENT_TEST_MODE)
+	if err != nil {
+		return "", err
+	}
+
+	if paymentTestMode {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
 		// payment providers' test endpoints.
 		return "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA", nil
 	} else {
-		userId, err := m.baseModel.db.Get(TOKEN)
+		token, err := pathdb.Get[string](tx, TOKEN)
 		if err != nil {
 			return "", err
 		}
-		return string(userId), nil
+		return token, nil
 	}
 }
 func (m *SessionModel) SetCountry(country string) error {
