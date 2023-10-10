@@ -7,7 +7,9 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import org.getlantern.lantern.Actions
 import org.getlantern.lantern.LanternApp
@@ -65,22 +67,32 @@ class Notifications() {
             }
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
+        private fun createChannel(notificationChannel: NotificationChannel) {
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.GREEN
+            notificationChannel.enableVibration(false)
+            notificationChannel.setSound(null, null)
+            LanternApp.notificationManager.createNotificationChannel(notificationChannel)
+        }
+
         @TargetApi(Build.VERSION_CODES.O)
         private fun initChannels() {
-            LanternApp.notificationManager.createNotificationChannel(
-                NotificationChannel(
-                    CHANNEL_VPN,
-                    LanternApp.getAppContext().resources.getString(R.string.lantern_service),
-                    NotificationManager.IMPORTANCE_HIGH,
-                ),
+            val vpnNotificationChannel = NotificationChannel(
+                CHANNEL_VPN,
+                LanternApp.getAppContext().resources.getString(R.string.lantern_service),
+                NotificationManager.IMPORTANCE_HIGH,
             )
-            LanternApp.notificationManager.createNotificationChannel(
-                NotificationChannel(
-                    CHANNEL_SERVICE,
-                    LanternApp.getAppContext().resources.getString(R.string.lantern_service),
-                    NotificationManager.IMPORTANCE_LOW,
-                ),
+            val serviceNotificationChannel = NotificationChannel(
+                CHANNEL_SERVICE,
+                LanternApp.getAppContext().resources.getString(R.string.lantern_service),
+                NotificationManager.IMPORTANCE_LOW,
             )
+            val channels: Array<NotificationChannel> = arrayOf(
+                serviceNotificationChannel,
+                vpnNotificationChannel,
+            )
+            channels.forEach { createChannel(it) }
         }
     }
 }
