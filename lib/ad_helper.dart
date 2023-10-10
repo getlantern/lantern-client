@@ -126,7 +126,7 @@ class AdHelper {
             );
             _interstitialAd = ad;
             logger.i('[Ads Manager] to loaded $ad');
-            PlausibleUtils.trackUserAction('Interstitial ad loaded', googleAttributes)
+            PlausibleUtils.trackUserAction('Interstitial ad loaded', googleAttributes);
           },
           onAdFailedToLoad: (err) {
             _failedLoadAttempts++; // increment the count on failure
