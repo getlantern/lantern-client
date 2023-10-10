@@ -24,7 +24,6 @@ import io.lantern.model.BaseModel
 import io.lantern.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
@@ -386,7 +385,6 @@ abstract class SessionManager(application: Application) : Session {
 
     override fun setCountry(country: String) {
         prefs.edit().putString(GEO_COUNTRY_CODE, country).apply()
-        Datadog.setCountry(country)
     }
 
     private val hasUpdatedStats = AtomicBoolean()
