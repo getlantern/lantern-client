@@ -170,8 +170,7 @@ android {
     }
 
     buildTypes {
-
-        debug {
+       debug {
             minifyEnabled false
             shrinkResources false
             debuggable true
@@ -253,6 +252,9 @@ android {
         }
         autoTest {
             versionCode 1 // so we can always test auto-update.
+        }
+        appiumTest {
+            buildConfigField "boolean", "CI", "true"
         }
     }
 
