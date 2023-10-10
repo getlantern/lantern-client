@@ -180,8 +180,6 @@ android {
             buildConfigField "boolean", "STICKY_CONFIG", getBoolean("stickyConfig")
             buildConfigField "boolean", "STAGING", getBoolean("useStaging")
             buildConfigField "boolean", "PLAY_VERSION", getBoolean("playVersion")
-            buildConfigField "String", "DD_CLIENT_TOKEN", ddClientToken()
-            buildConfigField "String", "DD_APPLICATION_ID", ddApplicationID()
             buildConfigField "String", "COUNTRY", userCountry()
             buildConfigField "String", "PAYMENT_PROVIDER", paymentProvider()
             buildConfigField "String", "PRO_SERVER_URL", proServerUrl()
@@ -321,22 +319,6 @@ def getInt(name) {
         return 0
     }
     return value.toInteger()
-}
-
-def ddApplicationID() {
-    def value = project.getProperties().get("ddApplicationID")
-    if (value == null || !value?.trim()) {
-        return "\"\""
-    }
-    return String.format("\"%s\"", value)
-}
-
-def ddClientToken() {
-    def value = project.getProperties().get("ddClientToken")
-    if (value == null || !value?.trim()) {
-        return "\"\""
-    }
-    return String.format("\"%s\"", value)
 }
 
 def userCountry() {
