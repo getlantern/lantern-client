@@ -195,7 +195,7 @@ class SessionModel(
             }
 
             "setPlayVersion" -> {
-                LanternApp.getSession().isPlayVersion = call.argument("on") ?: false
+                LanternApp.getSession().isStoreVersion = call.argument("on") ?: false
                 activity.restartApp()
             }
 
@@ -399,7 +399,7 @@ class SessionModel(
 
     private fun checkEmailExists(emailAddress: String, methodCallResult: MethodChannel.Result) {
         val params = mapOf("email" to emailAddress)
-        val isPlayVersion = LanternApp.getSession().isPlayVersion()
+        val isPlayVersion = LanternApp.getSession().isStoreVersion()
         val useStripe = !isPlayVersion
         lanternClient.get(
             LanternHttpClient.createProUrl("/email-exists", params),

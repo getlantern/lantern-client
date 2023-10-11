@@ -1,6 +1,6 @@
 syntax = "proto3";
 option java_package = "io.lantern.model";
-option go_package = "/internalsdk";
+option go_package = "/protos";
 
 message ServerInfo {
   string city = 1;
