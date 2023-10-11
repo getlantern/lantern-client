@@ -82,8 +82,7 @@ class AccountMenu extends StatelessWidget {
         (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus(
           (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
-              Platform.isAndroid
-                  ? ListItemFactory.settingsItem(
+               ListItemFactory.settingsItem(
                       key: AppKeys.account_management,
                       icon: ImagePaths.account,
                       content: 'account_management'.i18n,
@@ -96,7 +95,7 @@ class AccountMenu extends StatelessWidget {
                           ),
                       ],
                     )
-                  : const SizedBox(),
+
         ),
       ),
       ListItemFactory.settingsItem(

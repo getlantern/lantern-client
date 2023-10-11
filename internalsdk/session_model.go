@@ -278,6 +278,13 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 			return err
 		}
 	}
+
+	// Get all user details
+	err = userDetail(m)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -308,7 +315,6 @@ func (m *SessionModel) GetUserID() (int64, error) {
 		return 0, err
 	}
 
-	log.Debugf("User is called with paymentTestMode %v", paymentTestMode)
 	if paymentTestMode {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
@@ -574,12 +580,25 @@ func (m *SessionModel) DeviceOS() (string, error) {
 }
 
 func (m *SessionModel) IsProUser() (bool, error) {
-	proUser, err := m.baseModel.db.Get(PRO_USER)
+	tx, err := m.db.Begin()
 	if err != nil {
 		return false, err
 	}
-	return (string(proUser) == "true"), nil
+	paymentTestMode, err := pathdb.Get[bool](tx, PAYMENT_TEST_MODE)
+	if err != nil {
+		return false, err
+	}
+	if paymentTestMode {
+		log.Debugf("Payment test mode is on setting user to pro")
+		return true, nil
+	}
+	proUser, err := pathdb.Get[bool](tx, PRO_USER)
+	if err != nil {
+		return false, err
+	}
+	return proUser, nil
 }
+
 func setProUser(m *baseModel, isPro bool) error {
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put[bool](tx, PRO_USER, isPro, "")
@@ -678,6 +697,36 @@ type UserResponse struct {
 	YinbiEnabled bool     `json:"yinbiEnabled"`
 }
 
+type UserDetailResponse struct {
+	UserID       int64        `json:"userId"`
+	Code         string       `json:"code"`
+	Token        string       `json:"token"`
+	Referral     string       `json:"referral"`
+	Email        string       `json:"email"`
+	UserStatus   string       `json:"userStatus"`
+	UserLevel    string       `json:"userLevel"`
+	Locale       string       `json:"locale"`
+	Expiration   int64        `json:"expiration"`
+	Servers      []string     `json:"servers"`
+	Purchases    []Purchase   `json:"purchases"`
+	BonusDays    string       `json:"bonusDays"`
+	BonusMonths  string       `json:"bonusMonths"`
+	Inviters     []string     `json:"inviters"`
+	Invitees     []string     `json:"invitees"`
+	Devices      []UserDevice `json:"devices"`
+	YinbiEnabled bool         `json:"yinbiEnabled"`
+}
+
+type Purchase struct {
+	Plan string `json:"plan"`
+}
+
+type UserDevice struct {
+	ID      string `json:"id"`
+	Name    string `json:"name"`
+	Created int64  `json:"created"`
+}
+
 // Create user
 // Todo-: Create Sprate http client to manag and reuse client
 func userCreate(m *baseModel, local string) error {
@@ -721,16 +770,84 @@ func userCreate(m *baseModel, local string) error {
 		log.Errorf("Error decoding response body: %v", err)
 		return err
 	}
+
+	//Save user id and token
+	setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
+	log.Debugf("Created new Lantern user: %+v", userResponse)
+	return nil
+}
+
+// Create user
+// Todo-: Create Sprate http client to manag and reuse client
+func userDetail(session *SessionModel) error {
+	deviecId, err := session.GetDeviceID()
+	if err != nil {
+		return err
+	}
+	userId, err := session.GetUserID()
+	if err != nil {
+		return err
+	}
+	token, err := session.GetToken()
+	if err != nil {
+		return err
+	}
+
+	// Create a new request
+	req, err := http.NewRequest("GET", "https://api.getiantem.org/user-data", nil)
+	if err != nil {
+		log.Errorf("Error creating user details request: %v", err)
+		return err
+	}
+
+	userIdStr := fmt.Sprintf("%d", userId)
+	// Add headers
+	req.Header.Set("X-Lantern-Device-Id", deviecId)
+	req.Header.Set("X-Lantern-User-Id", userIdStr)
+	req.Header.Set("X-Lantern-Pro-Token", token)
+	log.Debugf("Headers set")
+	// Initialize a new http client
+	client := &http.Client{}
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
+
+		return err
+	}
+	defer resp.Body.Close()
+
+	// Read the response body
+	var userDetail UserDetailResponse
+	// Read and decode the response body
+	if err := json.NewDecoder(resp.Body).Decode(&userDetail); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return err
+	}
+	err = cacheUserDetail(session.baseModel, userDetail)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func cacheUserDetail(m *baseModel, userDetail UserDetailResponse) error {
+	log.Debugf("User detail: %+v", userDetail)
+
 	//Save user refferal code
-	if userResponse.Referral != "" {
-		err := setReferalCode(m, userResponse.Referral)
+	if userDetail.Referral != "" {
+		err := setReferalCode(m, userDetail.Referral)
 		if err != nil {
 			return err
 		}
 	}
-	//Save user id and token
-	setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
-	log.Debugf("Created new Lantern user: %+v", userResponse)
+
+	if userDetail.UserStatus != "" && userDetail.UserStatus == "active" && userDetail.UserLevel == "pro" {
+		setProUser(m, true)
+	} else {
+		setProUser(m, false)
+	}
+
 	return nil
 }
 
