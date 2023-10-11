@@ -1,8 +1,6 @@
 package internalsdk
 
 import (
-	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -38,54 +36,49 @@ type SubscriptionRequest struct {
 	Updater        UpdaterModel
 }
 
-// ChangeSetInterface represents changes in a database.
-type ChangeSetInterface struct {
-	UpdatesSerialized string
-	DeletesSerialized string
+// ChangeSet represents changes in a database.
+type ChangeSet struct {
+	cs *pathdb.ChangeSet[any]
 }
 
-// ItemInterface represents an item in the database with its associated values.
-type ItemInterface struct {
-	Path       string
-	DetailPath string
-	Value      *MyValue
+type Update struct {
+	Path  string
+	Value *minisql.Value
+}
+
+func (cs *ChangeSet) HasUpdate() bool {
+	return len(cs.cs.Updates) > 0
+}
+
+func (cs *ChangeSet) PopUpdate() (*Update, error) {
+	for path, v := range cs.cs.Updates {
+		delete(cs.cs.Updates, path)
+		vb, err := v.Value.ValueOrProtoBytes()
+		if err != nil {
+			return nil, err
+		}
+		return &Update{Path: path, Value: minisql.NewValue(vb)}, nil
+	}
+
+	return nil, nil
+}
+
+func (cs *ChangeSet) HasDelete() bool {
+	return len(cs.cs.Deletes) > 0
+}
+
+func (cs *ChangeSet) PopDelete() string {
+	for path := range cs.cs.Deletes {
+		delete(cs.cs.Deletes, path)
+		return path
+	}
+
+	return ""
 }
 
 // UpdaterModel defines an interface to handle database changes.
 type UpdaterModel interface {
-	OnChanges(cs *ChangeSetInterface) error
-}
-type MyValue struct {
-	minisql.Value
-}
-
-// Custom JSON serialization method for Value type
-func (v *MyValue) MarshalJSON() ([]byte, error) {
-
-	switch v.Type {
-	case minisql.ValueTypeBytes:
-		return json.Marshal(map[string]interface{}{
-			"Type":  v.Type,
-			"Value": base64.StdEncoding.EncodeToString(v.Bytes()),
-		})
-	case minisql.ValueTypeString:
-		return json.Marshal(map[string]interface{}{
-			"Type":  v.Type,
-			"Value": v.String(),
-		})
-	case minisql.ValueTypeInt:
-		return json.Marshal(map[string]interface{}{
-			"Type":  v.Type,
-			"Value": v.Int(),
-		})
-	case minisql.ValueTypeBool:
-		return json.Marshal(map[string]interface{}{
-			"Type":  v.Type,
-			"Value": v.Bool(),
-		})
-	default:
-		return nil, fmt.Errorf("unsupported value type: %d", v.Type)
-	}
+	OnChanges(cs *ChangeSet) error
 }
 
 // NewModel initializes a new baseModel instance.
@@ -118,49 +111,7 @@ func (m *baseModel) Subscribe(req *SubscriptionRequest) error {
 		JoinDetails:    req.JoinDetails,
 		ReceiveInitial: req.ReceiveInitial,
 		OnUpdate: func(cs *pathdb.ChangeSet[interface{}]) error {
-			updatesMap := make(map[string]*ItemInterface)
-			for k, itemWithRaw := range cs.Updates {
-				rawValue, err := itemWithRaw.Value.Value()
-				if err != nil {
-					log.Debugf("Error extracting raw value:", err)
-					return err
-				}
-				log.Debugf("Got update for value %v - value: %v  rawValue: %v", k, rawValue, string(itemWithRaw.Value.Bytes))
-				// When serlizeing might get other other type
-				//make sure to convered to only supported types
-				convertedValue := convertValueToSupportedTypes(rawValue)
-				val := minisql.NewValue(convertedValue)
-				// Need wrap to coz we need to send to json
-				myVal := &MyValue{Value: *val}
-				updatesMap[k] = &ItemInterface{
-					Path:       itemWithRaw.Path,
-					DetailPath: itemWithRaw.DetailPath,
-					Value:      myVal,
-				}
-			}
-
-			// Serialize updates and deletes to JSON
-			updatesSerialized, err := json.Marshal(updatesMap)
-			if err != nil {
-				log.Debugf("Error serializing updates:", err)
-				return err
-			}
-
-			deletesSerialized, err := json.Marshal(cs.Deletes)
-			if err != nil {
-				log.Debugf("Error serializing deletes:", err)
-
-				return err
-			}
-			// log.Debugf("Serialized updates:", string(updatesSerialized))
-			log.Debugf("Serialized deletes:", string(deletesSerialized))
-
-			csInterface := &ChangeSetInterface{
-				UpdatesSerialized: string(updatesSerialized),
-				DeletesSerialized: string(deletesSerialized),
-			}
-
-			return req.Updater.OnChanges(csInterface)
+			return req.Updater.OnChanges(&ChangeSet{cs: cs})
 		},
 	}
 
