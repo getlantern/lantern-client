@@ -196,17 +196,20 @@ open class FreeKassaActivity : BaseFragmentActivity() {
                     }
                 }
             }
+
+            val plan = LanternApp.getSession().planByID(planID!!)!!
+            val currency = plan.currency
             val u = FreeKassa.getPayURI(
                 merchantId,
                 price!!,
-                LanternApp.getSession().currency(),
+                currency,
                 planID!!,
                 secretWordOne,
                 LanternApp.getSession().language,
                 userEmail!!,
                 mapOf(
                     "transactionid" to transactionID,
-                    "paymentcurrency" to LanternApp.getSession().currency()
+                    "paymentcurrency" to currency
                 )
             )
             Logger.d(TAG, "freeKassa Payment URI: $u")

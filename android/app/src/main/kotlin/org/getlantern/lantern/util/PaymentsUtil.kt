@@ -17,7 +17,6 @@ import okhttp3.FormBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
-import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternSessionManager
@@ -41,10 +40,6 @@ class PaymentsUtil(private val activity: Activity) {
         methodCallResult: MethodChannel.Result,
     ) {
         try {
-            Datadog.trackUserClick("submitStripePayment", mapOf(
-                "email" to email,
-                "planID" to planID,
-            ))
             val date = expirationDate.split("/").toTypedArray()
             val card: CardParams = CardParams(
                 cardNumber.replace("[\\s]", ""),
@@ -69,7 +64,7 @@ class PaymentsUtil(private val activity: Activity) {
 
                     override fun onError(@NonNull error: Exception) {
                         dialog?.dismiss()
-                        Datadog.addError("Error submitting to Stripe: $error")
+                        Logger.error(TAG, "Error submitting to Stripe: $error")
                         methodCallResult.error(
                             "errorSubmittingToStripe",
                             error.getLocalizedMessage(),
@@ -80,7 +75,7 @@ class PaymentsUtil(private val activity: Activity) {
             )
         } catch (t: Throwable) {
             dialog?.dismiss()
-            Datadog.addError("Error submitting to Stripe", t)
+            Logger.error(TAG, "Error submitting to Stripe", t)
             methodCallResult.error(
                 "errorSubmittingToStripe",
                 activity.getString(R.string.error_making_purchase),
@@ -96,10 +91,6 @@ class PaymentsUtil(private val activity: Activity) {
         methodCallResult: MethodChannel.Result,
     ) {
         try {
-            Datadog.trackUserClick("submitBitcoinPayment", mapOf(
-                "email" to email,
-                "planID" to planID,
-            ))
             val provider = PaymentProvider.BTCPay.toString().lowercase()
             val params = mutableMapOf<String, String>(
                 "email" to email,
@@ -111,7 +102,7 @@ class PaymentsUtil(private val activity: Activity) {
                 LanternHttpClient.createProUrl("/payment-redirect", params),
                 object : ProCallback {
                     override fun onFailure(throwable: Throwable?, error: ProError?) {
-                        Datadog.addError("BTCPay is unavailable", throwable)
+                        Logger.error(TAG, "BTCPay is unavailable", throwable)
                         methodCallResult.error(
                             "unknownError",
                             "BTCPay is unavailable", // This error message is localized Flutter-side
@@ -130,7 +121,6 @@ class PaymentsUtil(private val activity: Activity) {
                 },
             )
         } catch (t: Throwable) {
-            Datadog.addError("BTCPay is unavailable", t)
             methodCallResult.error(
                 "unknownError",
                 "BTCPay is unavailable", // This error message is localized Flutter-side
@@ -142,9 +132,6 @@ class PaymentsUtil(private val activity: Activity) {
     // Handles Google Play transactions
     fun submitGooglePlayPayment(planID: String, methodCallResult: MethodChannel.Result) {
         val inAppBilling = LanternApp.getInAppBilling()
-        Datadog.trackUserClick("googlePlayPayment", mapOf(
-            "planID" to planID,
-        ))
 
         if (inAppBilling == null) {
             Logger.error(TAG, "Missing inAppBilling")
@@ -169,7 +156,6 @@ class PaymentsUtil(private val activity: Activity) {
                             activity.resources.getString(R.string.error_making_purchase),
                             null,
                         )
-                        Datadog.addError("Google Play: error making purchase")
                         return
                     }
 
@@ -213,7 +199,6 @@ class PaymentsUtil(private val activity: Activity) {
                 formBody,
                 object : ProCallback {
                     override fun onFailure(throwable: Throwable?, error: ProError?) {
-                        Datadog.addError("Error retrieving referral code: $error", throwable)
                         if (error != null && error.message != null) {
                             methodCallResult.error(
                                 "unknownError",
@@ -235,7 +220,6 @@ class PaymentsUtil(private val activity: Activity) {
                 },
             )
         } catch (t: Throwable) {
-            Datadog.addError("Unable to apply referral code", t)
             methodCallResult.error(
                 "unknownError",
                 "Something went wrong while applying your referral code",
@@ -328,11 +312,6 @@ class PaymentsUtil(private val activity: Activity) {
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.e(TAG, "Error with purchase request: $error")
-                    Datadog.addError("Error with purchase request: $error", t, mapOf(
-                        "provider" to provider.toString().lowercase(),
-                        "plan" to planID,
-                        "deviceName" to session.deviceName(),
-                    ))
                     dialog?.dismiss()
                     methodCallResult.error(
                         "errorMakingPurchase",

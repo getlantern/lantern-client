@@ -98,12 +98,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<dynamic> _handleNativeNavigationRequest(MethodCall methodCall) async {
     switch (methodCall.method) {
-      case 'initDatadog':
-        final config = DdSdkExistingConfiguration(
-          loggingConfiguration: LoggingConfiguration(),
-          detectLongTasks: true,
-        )..enableHttpTracking();
-        await DatadogSdk.instance.attachToExisting(config);
       case 'openConversation':
         final contact = Contact.fromBuffer(methodCall.arguments as Uint8List);
         await _context!.router.push(Conversation(contactId: contact.contactId));
