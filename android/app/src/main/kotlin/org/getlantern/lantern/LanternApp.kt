@@ -49,7 +49,7 @@ open class LanternApp : Application() {
 
         LanternProxySelector(session)
 
-        if (session.isPlayVersion) inAppBilling = InAppBilling(this)
+        if (session.isStoreVersion) inAppBilling = InAppBilling(this)
 
         lanternHttpClient = LanternHttpClient()
 
@@ -98,7 +98,7 @@ open class LanternApp : Application() {
         fun getPlans(cb: LanternHttpClient.PlansCallback) {
             lanternHttpClient.getPlans(
                 cb,
-                if (session.isPlayVersion && !session.isRussianUser) inAppBilling else null
+                if (session.isStoreVersion && !session.isRussianUser) inAppBilling else null
             )
         }
 
