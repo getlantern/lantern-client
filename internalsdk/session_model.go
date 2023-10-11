@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"google.golang.org/protobuf/proto"
-
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/pathdb"
@@ -81,6 +79,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if err != nil {
 		return nil, err
 	}
+	base.db.RegisterType(1000, &ServerInfo{})
 	m := &SessionModel{baseModel: base}
 	m.initSessionModel(opts)
 	return m, nil
@@ -370,19 +369,12 @@ func (m *SessionModel) UpdateStats(p0 string, p1 string, p2 string, p3 int, p4 i
 			CountryCode: p2,
 		}
 
-		// Serialize the ServerInfo object to byte slice
-		serverInfoBytes, serverErr := proto.Marshal(serverInfo)
-		if serverErr != nil {
-			return serverErr
-		}
-
-		log.Debugf("UpdateStats called with city %v and country %v and code %v with proxy %v server info bytes %v", p0, p1, p2, p5, serverInfoBytes)
 		err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 			pathdb.Put[string](tx, SERVER_COUNTRY, p1, "")
 			pathdb.Put[string](tx, SERVER_CITY, p0, "")
 			pathdb.Put[string](tx, SERVER_COUNTRY_CODE, p2, "")
 			pathdb.Put[bool](tx, HAS_SUCCEEDING_PROXY, p5, "")
-			pathdb.Put[[]byte](tx, PATH_SERVER_INFO, serverInfoBytes, "")
+			pathdb.Put[*ServerInfo](tx, PATH_SERVER_INFO, serverInfo, "")
 
 			// Not using ads blocked any more
 			return nil
