@@ -44,7 +44,7 @@ class DetailsSubscriberUpdater: NSObject, InternalsdkUpdaterModelProtocol {
     // Deserialize updates
     while cs.hasUpdate() {
       let update = try cs.popUpdate()
-        updatesDictionary[update.path] = ValueUtil.convertFromMinisqlValue(from:update.value!)
+      updatesDictionary[update.path] = ValueUtil.convertFromMinisqlValue(from: update.value!)
     }
 
     while cs.hasDelete() {
