@@ -8,17 +8,14 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.db.DB
-import io.lantern.db.DetailsChangeSet
-import io.lantern.db.DetailsSubscriber
-import io.lantern.db.RawChangeSet
-import io.lantern.db.RawSubscriber
 import minisql.Value
+import org.getlantern.mobilesdk.Logger
 
-class GoModel constructor(
+open class GoModel<M : internalsdk.Model> constructor(
     val name: String,
     flutterEngine: FlutterEngine,
     db: DB,
-    private val model: internalsdk.Model,
+    protected val model: M,
 ) : BaseModel(name, flutterEngine, db) {
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         try {
@@ -38,6 +35,7 @@ class GoModel constructor(
         activeSubscribers.add(subscriberID)
 
         val req = SubscriptionRequest()
+        req.receiveInitial = true
         req.id = subscriberID
         req.joinDetails = details
         req.pathPrefixes = path
@@ -51,15 +49,30 @@ class GoModel constructor(
             while (it.hasDelete()) {
                 deletions.add(it.popDelete())
             }
-            activeSink.get()?.success(
-                mapOf(
-                    "s" to subscriberID,
-                    "u" to updates,
-                    "d" to deletions,
-                )
-            )
+            Logger.debug("GoModel", "notifying $activeSink.get() on path $path updates: $updates")
+            mainHandler.post {
+                synchronized(this@GoModel) {
+                    activeSink.get()?.success(
+                        mapOf(
+                            "s" to subscriberID,
+                            "u" to updates,
+                            "d" to deletions,
+                        )
+                    )
+                }
+            }
         }
         model.subscribe(req)
+    }
+
+    override fun onCancel(arguments: Any?) {
+        if (arguments == null) {
+            return
+        }
+        val args = arguments as Map<String, Any>
+        val subscriberID = args["subscriberID"] as String
+        model.unsubscribe(subscriberID)
+        activeSubscribers.remove(subscriberID)
     }
 }
 

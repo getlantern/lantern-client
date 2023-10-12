@@ -6,7 +6,7 @@ plugins {
   id 'kotlin-parcelize'
   id 'kotlin-kapt'
   id 'com.google.protobuf'
-  id "io.sentry.android.gradle" version "3.13.0"
+//  id "io.sentry.android.gradle" version "3.13.0"
 }
 
 def localProperties = new Properties()
@@ -434,11 +434,11 @@ dependencies {
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
     kapt "org.androidannotations:androidannotations:$androidAnnotationsVersion"
 
-    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.annotation:annotation:1.6.0'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
@@ -452,37 +452,37 @@ dependencies {
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:messaging-android:1ce4613c8b'
-    implementation 'com.github.getlantern:db-android:573aba1458'
-    implementation 'com.cleveradssolutions:cas:3.3.1'
+    implementation 'com.github.getlantern:db-android:022779ec99'
+//    implementation 'com.cleveradssolutions:cas:3.3.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
 
-sentry {
-
-    // Disables or enables the handling of Proguard mapping for Sentry.
-    // If enabled the plugin will generate a UUID and will take care of
-    // uploading the mapping to Sentry. If disabled, all the logic
-    // related to proguard mapping will be excluded.
-    // Default is enabled.
-    includeProguardMapping = true
-    
-
-    // Whether the plugin should attempt to auto-upload the mapping file to Sentry or not.
-    // If disabled the plugin will run a dry-run and just generate a UUID.
-    // The mapping file has to be uploaded manually via sentry-cli in this case.
-    // Default is enabled.
-    autoUploadProguardMapping = true
-
-    // Disables or enables the automatic configuration of Native Symbols
-    // for Sentry. This executes sentry-cli automatically so
-    // you don't need to do it manually.
-    // Default is disabled.
-    uploadNativeSymbols = true
-
-    // Does or doesn't include the source code of native code for Sentry.
-    // This executes sentry-cli with the --include-sources param. automatically so
-    // you don't need to do it manually.
-    // Default is disabled.
-    includeNativeSources = false
-}
+//sentry {
+//
+//    // Disables or enables the handling of Proguard mapping for Sentry.
+//    // If enabled the plugin will generate a UUID and will take care of
+//    // uploading the mapping to Sentry. If disabled, all the logic
+//    // related to proguard mapping will be excluded.
+//    // Default is enabled.
+//    includeProguardMapping = true
+//
+//
+//    // Whether the plugin should attempt to auto-upload the mapping file to Sentry or not.
+//    // If disabled the plugin will run a dry-run and just generate a UUID.
+//    // The mapping file has to be uploaded manually via sentry-cli in this case.
+//    // Default is enabled.
+//    autoUploadProguardMapping = true
+//
+//    // Disables or enables the automatic configuration of Native Symbols
+//    // for Sentry. This executes sentry-cli automatically so
+//    // you don't need to do it manually.
+//    // Default is disabled.
+//    uploadNativeSymbols = true
+//
+//    // Does or doesn't include the source code of native code for Sentry.
+//    // This executes sentry-cli with the --include-sources param. automatically so
+//    // you don't need to do it manually.
+//    // Default is disabled.
+//    includeNativeSources = false
+//}

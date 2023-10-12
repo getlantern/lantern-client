@@ -1,32 +1,34 @@
 package io.lantern.model.dbadapter
 
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
+import net.sqlcipher.database.SQLiteDatabase
 import minisql.DB
 import minisql.Rows
 import minisql.Tx
 import minisql.Values
+import java.util.UUID
 
 open class DBAdapter(protected val db: SQLiteDatabase) : DB {
     override fun exec(sql: String?, args: Values?) = db.execSQL(sql, args?.toBindArgs())
 
-    override fun query(sql: String?, args: Values?)= RowsAdapter(db.rawQuery(sql, args?.toSelectionArgs()))
+    override fun query(sql: String?, args: Values?)= RowsAdapter(db.rawQuery(sql, args?.toBindArgs()))
 
     override fun begin() = TxAdapter(db)
 }
 
 class TxAdapter(db: SQLiteDatabase) : DBAdapter(db), Tx {
+    val id = UUID.randomUUID().toString()
+
     init {
-        db.beginTransaction()
+        db.execSQL("SAVEPOINT '$id'")
     }
 
     override fun commit() {
-        db.setTransactionSuccessful()
-        db.endTransaction()
+        db.execSQL("RELEASE '$id'")
     }
 
     override fun rollback() {
-        db.endTransaction()
+        db.execSQL("ROLLBACK TO '$id' ")
     }
 }
 
@@ -61,5 +63,3 @@ fun Values.toBindArgs(): Array<Any> = Array<Any>(len().toInt()) {
         else -> throw RuntimeException("unknown value type $arg.type")
     }
 }
-
-fun Values.toSelectionArgs(): Array<String> = toBindArgs().map { it.toString() }.toTypedArray()
