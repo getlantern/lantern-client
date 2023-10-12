@@ -30,9 +30,7 @@ func (s *MessagingModel) InvokeMethod(method string, arguments Arguments) (*mini
 }
 
 func initMessagingModel(m *baseModel) error {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, ONBOARDING_STATUS, false, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, ONBOARDING_STATUS, false, "")
 	})
-	return nil
 }

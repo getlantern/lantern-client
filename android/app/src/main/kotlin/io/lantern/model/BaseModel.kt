@@ -108,14 +108,6 @@ abstract class BaseModel(
                             keysMigrated++
                         }
                 }
-                masterDB.withSchema(VpnModel.VPN_SCHEMA).mutate { tx ->
-                    insecureDB
-                        .withSchema(VpnModel.VPN_SCHEMA)
-                        .listRaw<Any>("%").forEach {
-                            tx.putRaw(it.path, it.value)
-                            keysMigrated++
-                        }
-                }
                 insecureDbDir.deleteRecursively()
                 Logger.debug(TAG, "migrated $keysMigrated keys from insecure database")
             }
@@ -212,11 +204,6 @@ abstract class BaseModel(
 
     @Synchronized
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-        Logger.error(
-            TAG,
-            "$name Model  onListen calling  with argument  $arguments with event $events"
-        );
-
         activeSink.set(events)
         val args = arguments as Map<String, Any>
         val subscriberID = args["subscriberID"] as String
@@ -264,9 +251,6 @@ abstract class BaseModel(
     }
 
     override fun onCancel(arguments: Any?) {
-        Logger.error(
-            TAG,
-            "Session Model  onCancel calling  with argument  ${arguments} ")
         if (arguments == null) {
             return
         }

@@ -348,11 +348,9 @@ func (m *SessionModel) GetToken() (string, error) {
 }
 func (m *SessionModel) SetCountry(country string) error {
 	//Find better way to do it
-	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, GEO_COUNTRY_CODE, country, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, GEO_COUNTRY_CODE, country, "")
 	})
-	return err
 }
 
 func (m *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
@@ -370,17 +368,26 @@ func (m *SessionModel) UpdateStats(p0 string, p1 string, p2 string, p3 int, p4 i
 			CountryCode: p2,
 		}
 
-		err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			pathdb.Put(tx, SERVER_COUNTRY, p1, "")
-			pathdb.Put(tx, SERVER_CITY, p0, "")
-			pathdb.Put(tx, SERVER_COUNTRY_CODE, p2, "")
-			pathdb.Put(tx, HAS_SUCCEEDING_PROXY, p5, "")
-			pathdb.Put(tx, PATH_SERVER_INFO, serverInfo, "")
+		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			if err := pathdb.Put(tx, SERVER_COUNTRY, p1, ""); err != nil {
+				return err
+			}
+			if err := pathdb.Put(tx, SERVER_CITY, p0, ""); err != nil {
+				return err
+			}
+			if err := pathdb.Put(tx, SERVER_COUNTRY_CODE, p2, ""); err != nil {
+				return err
+			}
+			if err := pathdb.Put(tx, HAS_SUCCEEDING_PROXY, p5, ""); err != nil {
+				return err
+			}
+			if err := pathdb.Put(tx, PATH_SERVER_INFO, serverInfo, ""); err != nil {
+				return err
+			}
 
 			// Not using ads blocked any more
 			return nil
 		})
-		return err
 	}
 	return nil
 }
@@ -393,11 +400,9 @@ func (m *SessionModel) SetStaging(stageing bool) error {
 // Keep name as p1,p2,p3.....
 // Name become part of Objective c so this is important
 func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
-	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, LATEST_BANDWIDTH, p1, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, LATEST_BANDWIDTH, p1, "")
 	})
-	return err
 }
 
 func getBandwidthLimit(m *baseModel) (string, error) {
@@ -417,11 +422,9 @@ func (m *SessionModel) Locale() (string, error) {
 }
 
 func setLanguage(m *baseModel, lang string) error {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, LANG, lang, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, LANG, lang, "")
 	})
-	return nil
 }
 
 func (m *SessionModel) GetTimeZone() (string, error) {
@@ -443,11 +446,9 @@ func (m *SessionModel) Code() (string, error) {
 }
 
 func setReferalCode(m *baseModel, referralCode string) error {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, REFERRAL_CODE, referralCode, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, REFERRAL_CODE, referralCode, "")
 	})
-	return nil
 }
 
 // Todo need to make chanegs for Force country setup
@@ -479,11 +480,9 @@ func (m *SessionModel) GetForcedCountryCode() (string, error) {
 }
 
 func setForceCountry(m *baseModel, forceCountry string) error {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, FORCE_COUNTRY, forceCountry, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, FORCE_COUNTRY, forceCountry, "")
 	})
-	return nil
 }
 func (m *SessionModel) GetDNSServer() (string, error) {
 	dns, err := m.db.Get(DNS_DETECTOR)
@@ -494,11 +493,9 @@ func (m *SessionModel) GetDNSServer() (string, error) {
 }
 
 func setDNSServer(m *baseModel, dnsServer string) error {
-	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, DNS_DETECTOR, dnsServer, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, DNS_DETECTOR, dnsServer, "")
 	})
-	return err
 }
 
 func (m *SessionModel) Provider() (string, error) {
@@ -510,11 +507,9 @@ func (m *SessionModel) Provider() (string, error) {
 }
 
 func setProvider(m *baseModel, provider string) error {
-	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, PROVIDER, provider, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, PROVIDER, provider, "")
 	})
-	return err
 }
 
 func (m *SessionModel) IsStoreVersion() (bool, error) {
@@ -537,11 +532,9 @@ func (m *SessionModel) Email() (string, error) {
 }
 
 func setEmail(m *baseModel, email string) error {
-	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, EMAIL_ADDRESS, email, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, EMAIL_ADDRESS, email, "")
 	})
-	return err
 }
 
 func (m *SessionModel) Currency() (string, error) {
@@ -568,19 +561,16 @@ func (m *SessionModel) IsProUser() (bool, error) {
 	return (string(proUser) == "true"), nil
 }
 func setProUser(m *baseModel, isPro bool) error {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, PRO_USER, isPro, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, PRO_USER, isPro, "")
 	})
-	return nil
 }
 
 func (m *SessionModel) SetReplicaAddr(replicaAddr string) {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		//For now force replicate to disbale it
-		pathdb.Put(tx, REPLICA_ADDR, "", "")
-		return nil
-	})
+		return pathdb.Put(tx, REPLICA_ADDR, "", "")
+	}))
 }
 
 func (m *SessionModel) ForceReplica() bool {
@@ -589,10 +579,9 @@ func (m *SessionModel) ForceReplica() bool {
 }
 
 func (m *SessionModel) SetChatEnabled(chatEnable bool) {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, CHAT_ENABLED, chatEnable, "")
-		return nil
-	})
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, CHAT_ENABLED, chatEnable, "")
+	}))
 }
 
 func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
@@ -601,17 +590,15 @@ func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
 }
 
 func (m *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, ADS_ENABLED, adsEnable, "")
-		return nil
-	})
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, ADS_ENABLED, adsEnable, "")
+	}))
 }
 
 func (m *SessionModel) SetCASShowInterstitialAdsEnabled(casEnable bool) {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, CAS_ADS_ENABLED, casEnable, "")
-		return nil
-	})
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, CAS_ADS_ENABLED, casEnable, "")
+	}))
 }
 
 func (m *SessionModel) SerializedInternalHeaders() (string, error) {
@@ -621,35 +608,29 @@ func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 }
 
 func acceptTerms(m *baseModel) error {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION, "")
 	})
-	return nil
 }
 
 func setStoreVersion(m *baseModel, isStoreVersion bool) error {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, IS_PLAY_VERSION, isStoreVersion, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, IS_PLAY_VERSION, isStoreVersion, "")
 	})
-	return nil
 }
 func setSelectedTab(m *baseModel, tap string) error {
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, SET_SELECTED_TAB, tap, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, SET_SELECTED_TAB, tap, "")
 	})
-	return nil
 }
 
 func setUserIdAndToken(m *baseModel, userId float64, token string) error {
-	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, USER_ID, userId, "")
-		pathdb.Put(tx, TOKEN, token, "")
-		return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		if err := pathdb.Put(tx, USER_ID, userId, ""); err != nil {
+			return err
+		}
+		return pathdb.Put(tx, TOKEN, token, "")
 	})
-	return err
 }
 
 type UserResponse struct {
@@ -725,8 +706,7 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 	// Check if email is there is yes then store it
 	if email != "" {
 		err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			pathdb.Put(tx, EMAIL_ADDRESS, email, "")
-			return nil
+			return pathdb.Put(tx, EMAIL_ADDRESS, email, "")
 		})
 		if err != nil {
 			return err
