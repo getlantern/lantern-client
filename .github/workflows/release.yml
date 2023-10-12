@@ -1,6 +1,7 @@
 name: Publish releases
 
-on: push
+on:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -8,8 +9,6 @@ permissions:
 env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
-  DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
-  DATADOG_SITE: datadoghq.eu
 jobs:
     set-version:
       runs-on:
@@ -84,6 +83,14 @@ jobs:
         run: |
           git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
+      - name: Setup Sentry CLI
+        uses: mathieu-bour/setup-sentry-cli@v1
+        with:
+          version: latest
+          token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
+          organization: getlantern
+          project: android
+
       - name: Setup JDK 11
         uses: actions/setup-java@v3
         with:
@@ -118,16 +125,9 @@ jobs:
           fileDir: './android/app'
           encodedString: ${{ secrets.KEYSTORE }}
 
-      - name: Install Datadog CI
-        run: npm install -g @datadog/datadog-ci
-
       - name: Build Android installers
         run: make package-android
         env:
-          DD_APPLICATION_ID: ${{ secrets.DD_APPLICATION_ID }}
-          DD_CLIENT_TOKEN: ${{ secrets.DD_CLIENT_TOKEN }}
-          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
-          DATADOG_SITE: datadoghq.eu
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           VERSION: "${{ env.version }}"
 

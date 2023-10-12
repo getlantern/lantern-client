@@ -24,7 +24,6 @@ import io.lantern.model.BaseModel
 import io.lantern.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
@@ -329,7 +328,7 @@ abstract class SessionManager(application: Application) : Session {
     val isPaymentTestMode: Boolean
         get() {
             val paymentTestMode = prefs.getBoolean(PAYMENT_TEST_MODE, false)
-            val ciValue = BuildConfig.CI
+            val ciValue = BuildConfig.FLAVOR == "appiumTest"
             return ciValue || paymentTestMode
         }
 
@@ -386,7 +385,6 @@ abstract class SessionManager(application: Application) : Session {
 
     override fun setCountry(country: String) {
         prefs.edit().putString(GEO_COUNTRY_CODE, country).apply()
-        Datadog.setCountry(country)
     }
 
     private val hasUpdatedStats = AtomicBoolean()
@@ -476,7 +474,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     // isPlayVersion checks whether or not the user installed Lantern via the Google Play store
-    override fun isPlayVersion(): Boolean {
+    override fun isStoreVersion(): Boolean {
         if (BuildConfig.PLAY_VERSION || prefs.getBoolean(PLAY_VERSION, false)) {
             return true
         }
@@ -579,7 +577,7 @@ abstract class SessionManager(application: Application) : Session {
         prefs = prefsAdapter
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
             .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
-            .putBoolean(PLAY_VERSION, isPlayVersion())
+            .putBoolean(PLAY_VERSION, isStoreVersion())
             .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
 
         // initialize email address to empty string (if it doesn't already exist)

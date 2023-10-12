@@ -39,6 +39,12 @@ dependencies:
   google_fonts:
   flutter_switch: ^0.3.2
   flag: ^7.0.0
+  # from sdk. See https://github.com/jhomlala/catcher/pull/234 for more details
+  catcher_2:
+    git:
+      url: https://github.com/ThexXTURBOXx/catcher.git
+
+  sentry: ^7.10.1
   badges: ^3.1.1
   dotted_border: ^2.0.0+3
   styled_text: ^8.1.0
@@ -98,8 +104,6 @@ dependencies:
   device_info_plus: ^9.0.3
   flutter_mailer: ^2.0.0
   fluttertoast: ^8.2.2
-  datadog_flutter_plugin: ^1.4.0
-  datadog_tracking_http_client: ^1.4.0
 
   # Package information
   package_info_plus: ^4.1.0

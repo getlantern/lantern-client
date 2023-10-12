@@ -25,7 +25,6 @@ import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
 import okhttp3.Response
 import org.getlantern.lantern.activity.WebViewActivity_
-import org.getlantern.lantern.datadog.Datadog
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
@@ -78,7 +77,6 @@ class MainActivity :
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
-        FlutterEngineCache.getInstance().put("datadoghq_engine", flutterEngine)
         messagingModel = MessagingModel(this, flutterEngine)
         vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
@@ -88,7 +86,6 @@ class MainActivity :
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
-                    flutterNavigation.invokeMethod("initDatadog", null)
                     fetchLoConf()
                     Logger.debug(
                         TAG,
@@ -304,7 +301,7 @@ class MainActivity :
     private fun updateUserData() {
         lanternClient.userData(object : ProUserCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Datadog.addError("Unable to fetch user data: $error", throwable)
+                Logger.error(TAG, "Unable to fetch user data: $error", throwable)
             }
 
             override fun onSuccess(response: Response, user: ProUser?) {
@@ -329,7 +326,7 @@ class MainActivity :
     private fun updatePlans() {
         lanternClient.getPlans(object : PlansCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Datadog.addError("Unable to fetch user plans: $error", throwable)
+                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
             }
 
             override fun onSuccess(proPlans: Map<String, ProPlan>) {
@@ -346,7 +343,7 @@ class MainActivity :
     private fun updatePaymentMethods() {
         lanternClient.plansV3(object : PlansV3Callback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Datadog.addError("Unable to fetch payment methods: $error", throwable)
+                Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
             }
 
             override fun onSuccess(

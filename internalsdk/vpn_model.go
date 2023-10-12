@@ -69,9 +69,9 @@ func (m *VPNModel) initVpnModel() error {
 		panicIfNecessary(err)
 		status := string(rawStatus)
 		if status != "" {
-			pathdb.Put[string](tx, PATH_VPN_STATUS, status, "")
+			pathdb.Put(tx, PATH_VPN_STATUS, status, "")
 		} else {
-			pathdb.Put[string](tx, PATH_VPN_STATUS, "disconnected", "")
+			pathdb.Put(tx, PATH_VPN_STATUS, "disconnected", "")
 		}
 		return nil
 	})
@@ -99,7 +99,7 @@ func (m *VPNModel) switchVPN(on bool) error {
 
 func (m *VPNModel) saveVPNStatus(status string) error {
 	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put[string](tx, PATH_VPN_STATUS, status, "")
+		pathdb.Put(tx, PATH_VPN_STATUS, status, "")
 		return nil
 	})
 	return err
