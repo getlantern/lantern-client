@@ -140,7 +140,6 @@ else
   $(error unsupported ANDROID_ARCH "$(ANDROID_ARCH)")
 endif
 
-ANDROID_LIB_PKG := github.com/getlantern/android-lantern/internalsdk
 ANDROID_LIB_BASE := liblantern
 
 MOBILE_APPID := org.getlantern.lantern
@@ -275,7 +274,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 		-androidapi=23 \
 		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-		$(ANDROID_LIB_PKG)
+		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && \
