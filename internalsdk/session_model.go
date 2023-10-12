@@ -26,6 +26,7 @@ type SessionModel struct {
 // All keys are expose to front end so we can use same to avoid duplication and reduce error
 const DEVICE_ID = "deviceid"
 const DEVICE = "device"
+const DEVICES = "devices"
 const MODEL = "model"
 const OS_VERSION = "os_version"
 const PAYMENT_TEST_MODE = "paymentTestMode"
@@ -82,6 +83,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		return nil, err
 	}
 	base.db.RegisterType(1000, &protos.ServerInfo{})
+	base.db.RegisterType(2000, &protos.Devices{})
 	m := &SessionModel{baseModel: base}
 	m.initSessionModel(opts)
 	return m, nil
@@ -412,6 +414,27 @@ func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
 	return err
 }
 
+func setUserLevel(m *baseModel, userLevel string) error {
+	tx, err := m.db.Begin()
+	if err != nil {
+		return err
+	}
+
+	err = pathdb.Put[string](tx, PATH_USER_LEVEL, userLevel, "")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func getUserLevel(m *baseModel) (string, error) {
+	userLevel, err := m.db.Get(PATH_USER_LEVEL)
+	if err != nil {
+		return "", err
+	}
+	return string(userLevel), nil
+}
+
 func getBandwidthLimit(m *baseModel) (string, error) {
 	percent, err := m.db.Get(LATEST_BANDWIDTH)
 	if err != nil {
@@ -431,6 +454,24 @@ func (m *SessionModel) Locale() (string, error) {
 func setLanguage(m *baseModel, lang string) error {
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put(tx, LANG, lang, "")
+		return nil
+	})
+	return nil
+}
+
+func setDevices(m *baseModel, devices []UserDevice) error {
+	var protoDevices []*protos.Device
+	for _, device := range devices {
+		protoDevice := &protos.Device{
+			Id:      device.ID,
+			Name:    device.Name,
+			Created: device.Created,
+		}
+		protoDevices = append(protoDevices, protoDevice)
+	}
+
+	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put(tx, DEVICES, protoDevices, "")
 		return nil
 	})
 	return nil
@@ -677,49 +718,6 @@ func setUserIdAndToken(m *baseModel, userId float64, token string) error {
 	return err
 }
 
-type UserResponse struct {
-	UserID       float64  `json:"userId"`
-	Code         string   `json:"code"`
-	Token        string   `json:"token"`
-	Referral     string   `json:"referral"`
-	Locale       string   `json:"locale"`
-	Servers      []string `json:"servers"`
-	Inviters     []string `json:"inviters"`
-	Invitees     []string `json:"invitees"`
-	Devices      []string `json:"devices"`
-	YinbiEnabled bool     `json:"yinbiEnabled"`
-}
-
-type UserDetailResponse struct {
-	UserID       int64        `json:"userId"`
-	Code         string       `json:"code"`
-	Token        string       `json:"token"`
-	Referral     string       `json:"referral"`
-	Email        string       `json:"email"`
-	UserStatus   string       `json:"userStatus"`
-	UserLevel    string       `json:"userLevel"`
-	Locale       string       `json:"locale"`
-	Expiration   int64        `json:"expiration"`
-	Servers      []string     `json:"servers"`
-	Purchases    []Purchase   `json:"purchases"`
-	BonusDays    string       `json:"bonusDays"`
-	BonusMonths  string       `json:"bonusMonths"`
-	Inviters     []string     `json:"inviters"`
-	Invitees     []string     `json:"invitees"`
-	Devices      []UserDevice `json:"devices"`
-	YinbiEnabled bool         `json:"yinbiEnabled"`
-}
-
-type Purchase struct {
-	Plan string `json:"plan"`
-}
-
-type UserDevice struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	Created int64  `json:"created"`
-}
-
 // Create user
 // Todo-: Create Sprate http client to manag and reuse client
 func userCreate(m *baseModel, local string) error {
@@ -834,13 +832,22 @@ func cacheUserDetail(m *baseModel, userDetail UserDetailResponse) error {
 			return err
 		}
 	}
-
 	if userDetail.UserStatus != "" && userDetail.UserStatus == "active" && userDetail.UserLevel == "pro" {
 		setProUser(m, true)
 	} else {
 		setProUser(m, false)
 	}
+	err := setUserLevel(m, userDetail.UserLevel)
+	if err != nil {
+		return err
+	}
 
+	//Store all device
+	err = setDevices(m, userDetail.Devices)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Device has stored %v", userDetail.Devices)
 	return nil
 }
 
@@ -856,18 +863,10 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 		}
 	}
 
-	//Check If user is pro or not
-	pro, proErr := session.IsProUser()
-	if proErr != nil {
-		return proErr
+	level, err := getUserLevel(session.baseModel)
+	if err != nil {
+		return err
 	}
-	var level string
-	if pro {
-		level = "pro"
-	} else {
-		level = "free"
-	}
-
 	// Get Deive id
 	model, modelErr := session.db.Get(MODEL)
 	if modelErr != nil {

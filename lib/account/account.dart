@@ -3,7 +3,7 @@ import 'package:lantern/messaging/messaging_model.dart';
 
 @RoutePage<void>(name: 'Account')
 class AccountMenu extends StatelessWidget {
-  AccountMenu({Key? key}) : super(key: key);
+ const AccountMenu({Key? key}) : super(key: key);
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());
