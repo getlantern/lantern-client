@@ -13,8 +13,8 @@ import SQLite
 
 internal var swiftDB: MinisqlDBProtocol?
 
-open class BaseModel: NSObject, FlutterStreamHandler {
-  var model: InternalsdkModelProtocol
+open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandler {
+  var model: M
   var eventChannel: FlutterEventChannel!
   var methodChannel: FlutterMethodChannel!
   var binaryMessenger: FlutterBinaryMessenger!
@@ -23,7 +23,7 @@ open class BaseModel: NSObject, FlutterStreamHandler {
   private let mainHandler = DispatchQueue.main
   private let asyncHandler = DispatchQueue(label: "BaseModel-AsyncHandler")
 
-  init(_ flutterBinary: FlutterBinaryMessenger, _ model: InternalsdkModelProtocol) throws {
+  init(_ flutterBinary: FlutterBinaryMessenger, _ model: M) throws {
     self.model = model
     self.binaryMessenger = flutterBinary
     super.init()
