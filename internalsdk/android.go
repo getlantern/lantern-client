@@ -69,7 +69,7 @@ type Session interface {
 	GetToken() (string, error)
 	SetCountry(string) error
 	UpdateAdSettings(AdSettings) error
-	UpdateStats(string, string, string, int, int, bool) error
+	UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error
 	SetStaging(bool) error
 	BandwidthUpdate(int, int, int, int) error
 	Locale() (string, error)
@@ -446,7 +446,10 @@ func newAnalyticsSession(deviceID string) analytics.Session {
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
 
-	// memhelper.Track(15*time.Second, 15*time.Second)
+	// memhelper won't build for iOS right now
+	// memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
+	// 	log.Debugf("Unable to track memory stats: %v", err)
+	// })
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(common.Staging)
 

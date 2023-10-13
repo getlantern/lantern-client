@@ -43,7 +43,7 @@ public class ValueUtil {
     case TYPE_INT:
       return Int(internalsdkValue.int_() as Int)
     case TYPE_BYTES:
-      return internalsdkValue.bytes()!
+      return internalsdkValue.bytes()
     case TYPE_BOOL:
       return internalsdkValue.bool_()
     default:

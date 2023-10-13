@@ -1,9 +1,9 @@
 package internalsdk
 
 import (
-	"fmt"
 	"strings"
 
+	"github.com/getlantern/errors"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )
@@ -18,13 +18,14 @@ type Model interface {
 	Name() string
 	InvokeMethod(method string, arguments Arguments) (*minisql.Value, error)
 	Subscribe(req *SubscriptionRequest) error
-	Unsubscribe(id string) error
+	Unsubscribe(id string)
 }
 
 // baseModel is a concrete implementation of the BaseModel interface.
 type baseModel struct {
-	name string
-	db   pathdb.DB
+	name           string
+	db             pathdb.DB
+	doInvokeMethod func(method string, arguments Arguments) (interface{}, error)
 }
 
 // SubscriptionRequest defines the structure of a subscription request.
@@ -99,7 +100,15 @@ func (m *baseModel) Name() string {
 
 // InvokeMethod handles method invocations on the model.
 func (m *baseModel) InvokeMethod(method string, arguments Arguments) (*minisql.Value, error) {
-	return nil, fmt.Errorf("method not implemented: %s", method)
+	result, err := m.doInvokeMethod(method, arguments)
+	if err != nil {
+		return nil, err
+	}
+	return minisql.NewValue(result), err
+}
+
+func (m *baseModel) methodNotImplemented(method string) (interface{}, error) {
+	return nil, errors.New("method not implemented: %s", method)
 }
 
 // Subscribe subscribes to database changes based on the provided request.
@@ -119,9 +128,8 @@ func (m *baseModel) Subscribe(req *SubscriptionRequest) error {
 }
 
 // Unsubscribe unsubscribes from database changes using the provided ID.
-func (m *baseModel) Unsubscribe(path string) error {
+func (m *baseModel) Unsubscribe(path string) {
 	pathdb.Unsubscribe(m.db, path)
-	return nil
 }
 
 func (s *SubscriptionRequest) getPathPrefixes() []string {
