@@ -30,7 +30,7 @@ abstract class BaseModel(
     flutterEngine: FlutterEngine,
     val db: DB,
 ) : EventChannel.StreamHandler, MethodChannel.MethodCallHandler {
-    private val activeSubscribers = ConcurrentSkipListSet<String>()
+    protected val activeSubscribers = ConcurrentSkipListSet<String>()
     protected val mainHandler = Handler(Looper.getMainLooper())
     private val asyncHandlerThread = HandlerThread("BaseModel-AsyncHandler")
 
@@ -103,14 +103,6 @@ abstract class BaseModel(
                 masterDB.withSchema(SessionManager.PREFERENCES_SCHEMA).mutate { tx ->
                     insecureDB
                         .withSchema(SessionManager.PREFERENCES_SCHEMA)
-                        .listRaw<Any>("%").forEach {
-                            tx.putRaw(it.path, it.value)
-                            keysMigrated++
-                        }
-                }
-                masterDB.withSchema(VpnModel.VPN_SCHEMA).mutate { tx ->
-                    insecureDB
-                        .withSchema(VpnModel.VPN_SCHEMA)
                         .listRaw<Any>("%").forEach {
                             tx.putRaw(it.path, it.value)
                             keysMigrated++
@@ -208,15 +200,10 @@ abstract class BaseModel(
         }
     }
 
-    private val activeSink = AtomicReference<EventChannel.EventSink?>()
+    protected val activeSink = AtomicReference<EventChannel.EventSink?>()
 
     @Synchronized
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-        Logger.error(
-            TAG,
-            "Session Model  onListen calling  with argument  ${arguments} with event ${events}"
-        );
-
         activeSink.set(events)
         val args = arguments as Map<String, Any>
         val subscriberID = args["subscriberID"] as String
@@ -264,9 +251,6 @@ abstract class BaseModel(
     }
 
     override fun onCancel(arguments: Any?) {
-        Logger.error(
-            TAG,
-            "Session Model  onCancel calling  with argument  ${arguments} ")
         if (arguments == null) {
             return
         }
