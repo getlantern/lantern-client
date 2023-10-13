@@ -9,7 +9,6 @@ import appium_kotlin.CHROME_PACKAGE_ACTIVITY
 import appium_kotlin.CHROME_PACKAGE_ID
 import appium_kotlin.CVC
 import appium_kotlin.ContextType
-import appium_kotlin.ERROR_PAYMENT_PURCHASE
 import appium_kotlin.IP_REQUEST_URL
 import appium_kotlin.LANTERN_PACKAGE_ID
 import appium_kotlin.LOGS_DIALED_MESSAGE
@@ -28,24 +27,28 @@ import io.appium.java_client.android.Activity
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
-import io.appium.java_client.remote.AndroidMobileCapabilityType
+import io.appium.java_client.ios.IOSDriver
 import io.appium.java_client.touch.WaitOptions
 import io.appium.java_client.touch.offset.PointOption
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
-import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.logging.LogEntries
+import org.openqa.selenium.remote.RemoteWebDriver
 import pro.truongsinh.appium_flutter.FlutterFinder
 import java.io.IOException
-import java.net.URL
 import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
+
+enum class MobileOS {
+    Android,
+    IOS
+}
 
 class AppTest() : BaseTest() {
     private val isLocalRun = (System.getenv("RUN_ENV") ?: "local") == "local"
@@ -58,25 +61,35 @@ class AppTest() : BaseTest() {
     @Throws(IOException::class, InterruptedException::class)
     fun userJourneyTests(taskId: Int) {
         var androidDriver: AndroidDriver? = null
+        var iosDriver: IOSDriver? = null
         try {
             println("TaskId: $taskId | shouldRunVPNSameTime-->createConnection ")
-            androidDriver = setupAndCreateConnection(taskId)
-            println("TaskId: $taskId | shouldRunVPNSameTime-->flutterFinder Started ")
+            val remoteDriver = setupAndCreateConnection(taskId)
+            val osVersion = getMobileOs(remoteDriver)
+            val flutterFinder = FlutterFinder(driver = remoteDriver)
 
-            val flutterFinder = FlutterFinder(driver = androidDriver)
-            // Test the VPN Flow
-            VPNFlow(androidDriver, taskId, flutterFinder)
+            if (osVersion == MobileOS.Android) {
+                androidDriver = remoteDriver as AndroidDriver
+                println("TaskId: $taskId | shouldRunVPNSameTime-->flutterFinder Started ")
 
-            // If the VPN flow is successful then test Payment flow
-            paymentFlow(androidDriver, taskId, flutterFinder)
+                // Test the VPN Flow
+                VPNFlow(androidDriver, taskId, flutterFinder)
 
-            // Report and issue flow
-            reportAnIssueFlow(androidDriver, taskId, flutterFinder)
+                // If the VPN flow is successful then test Payment flow
+                paymentFlow(androidDriver, taskId, flutterFinder)
 
-            googlePlayFlow(androidDriver, taskId, flutterFinder)
+                // Report and issue flow
+                reportAnIssueFlow(androidDriver, taskId, flutterFinder)
+
+                googlePlayFlow(androidDriver, taskId, flutterFinder)
+
+            } else {
+                iosDriver = remoteDriver as IOSDriver
+                IOSVPNFlow(iosDriver, taskId, flutterFinder)
+            }
 
             if (!isLocalRun) {
-                testPassed(androidDriver)
+                testPassed(remoteDriver)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -91,8 +104,80 @@ class AppTest() : BaseTest() {
             androidDriver?.let {
                 afterTest(it)
             }
-
         }
+    }
+
+
+    @Throws(IOException::class, InterruptedException::class)
+    private fun IOSVPNFlow(
+        iosDriver: IOSDriver,
+        taskId: Int,
+        flutterFinder: FlutterFinder
+    ) {
+        // App Started wait for few seconds
+        Thread.sleep(5000)
+//        iosDriver.activateApp(LANTERN_PACKAGE_ID)
+
+        Thread.sleep(5000)
+        startChromeBrowserIOS(iosDriver)
+
+        Thread.sleep(2000)
+        makeIpRequest(iosDriver)
+
+
+//
+//        val beforeIp = makeIpRequest(androidDriver)
+//        println("TaskId: $taskId | IP before VPN start: $beforeIp")
+//
+//        switchToContext(ContextType.NATIVE_APP, androidDriver)
+//        androidDriver.activateApp(LANTERN_PACKAGE_ID)
+//        Thread.sleep(5000)
+//
+//
+//        switchToContext(ContextType.FLUTTER, androidDriver)
+//        val vpnSwitchFinder = flutterFinder.byType("FlutterSwitch")
+//        vpnSwitchFinder.click()
+//        Thread.sleep(2000)
+//
+//        //Approve VPN Permissions dialog
+//        switchToContext(ContextType.NATIVE_APP, androidDriver)
+//        Thread.sleep(1000)
+//        androidDriver.findElement(By.id("android:id/button1")).click()
+//
+//        //Wait for VPN to connect
+//        println("TaskId: $taskId | Going to Sleep")
+//        Thread.sleep(2000)
+//
+//        //Open Chrome Again
+//        androidDriver.activateApp(CHROME_PACKAGE_ID)
+//        Thread.sleep(2000)
+//        pullToRefresh(androidDriver)
+//
+//        //Make the request again
+//        makeIpRequest(androidDriver)
+//        Thread.sleep(4000)
+//
+//        val afterIp: String = captureIPLogcat(androidDriver)
+//
+//        if (!isLocalRun) {
+//            if (beforeIp == afterIp || afterIp.isBlank()) {
+//                val testMessage = if (afterIp.isBlank()) {
+//                    "TaskId: $taskId | Both Ip are same or IP is blank before: $beforeIp after: afterIp coming as blank"
+//                } else {
+//                    "TaskId: $taskId | Both Ip are same or IP is blank before: $beforeIp after: $afterIp"
+//                }
+//                testFail(
+//                    testMessage,
+//                    androidDriver
+//                )
+//            }
+//        }
+//        println("TaskId: $taskId | IP Request before $beforeIp after $afterIp")
+//
+//        Assertions.assertEquals(
+//            (afterIp.isNotBlank() && beforeIp.isNotBlank() && beforeIp != afterIp),
+//            true
+//        )
     }
 
     @Throws(IOException::class, InterruptedException::class)
@@ -336,6 +421,11 @@ class AppTest() : BaseTest() {
         print("Android", "Chrome browser launched")
     }
 
+    private fun startChromeBrowserIOS(driver: IOSDriver) {
+        driver.activateApp("com.apple.mobilesafari")
+        print("iOS", "Chrome browser launched")
+    }
+
     private fun pullToRefresh(driver: AndroidDriver) {
         val deviceWidth: Int = driver.manage().window().size.getWidth()
         val deviceHeight: Int = driver.manage().window().size.getHeight()
@@ -349,7 +439,7 @@ class AppTest() : BaseTest() {
             .release().perform()
     }
 
-    private fun makeIpRequest(driver: AndroidDriver): String {
+    private fun makeIpRequest(driver: RemoteWebDriver): String {
         switchToContext(ContextType.WEBVIEW_CHROME, driver)
         driver.get(IP_REQUEST_URL)
         Thread.sleep(5000)
@@ -457,7 +547,8 @@ class AppTest() : BaseTest() {
     }
 
     fun testGooglePlayFeatures(driver: AndroidDriver) {
-        driver.findElement(By.xpath("//android.widget.FrameLayout[@content-desc = 'Show navigation drawer']"))?.click()
+        driver.findElement(By.xpath("//android.widget.FrameLayout[@content-desc = 'Show navigation drawer']"))
+            ?.click()
         val elements = driver.findElements(By.xpath("//android.widget.TextView"))
         if (elements == null) return
         for (element in elements) {
@@ -484,7 +575,8 @@ class AppTest() : BaseTest() {
         openSearchForm(driver)
         driver.findElement(MobileBy.className("android.widget.EditText"))?.sendKeys(testAppName)
 
-        driver.findElement(By.xpath("//android.support.v7.widget.RecyclerView[1]/android.widget.LinearLayout[1]"))?.click()
+        driver.findElement(By.xpath("//android.support.v7.widget.RecyclerView[1]/android.widget.LinearLayout[1]"))
+            ?.click()
 
         val button = driver.findElement(MobileBy.className("android.widget.Button"))
         if (button?.text.equals("Install")) {

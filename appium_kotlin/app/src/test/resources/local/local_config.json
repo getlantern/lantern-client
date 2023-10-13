@@ -2,20 +2,23 @@
   "server": "hub-cloud.browserstack.com",
   "username": "jigarfumakiya_6dKXF7",
   "access_key": "21qn1raPp8EN7jpctwen",
-  "app": "/Users/jigarfumakiya/Documents/getlantern/mobile_app/android-lantern/build/app/outputs/flutter-apk/app-prod-debug.apk",
+  "app": "/Users/jigarfumakiya/Documents/getlantern/mobile_app/android-lantern/build/ios/iphoneos/Runner.app",
   "capabilities": {
     "automationName": "Flutter",
     "setWebContentsDebuggingEnabled": true,
     "appium:noReset": false,
     "appium:logLevel": true,
-    "enablePerformanceLogging": true
+    "appium:fullReset": true,
+    "enablePerformanceLogging": true,
+    "xcodeOrgId": "4FYC28AXA2",
+    "xcodeSigningId": "iPhone Developer"
   },
   "environments": [
     {
-      "appium:deviceName": "Nokia 8.1",
-      "platformVersion": "11.0",
-      "platformName": "Android",
-      "appium:udid": "PNXID19010901034"
+      "appium:deviceName": "iPhone 12",
+      "platformVersion": "16.6.1",
+      "platformName": "iOS",
+      "appium:udid": "00008101-001449142E43001E"
     }
   ]
 }

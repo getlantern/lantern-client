@@ -5,6 +5,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import io.appium.java_client.android.AndroidDriver
+import io.appium.java_client.ios.IOSDriver
 import io.appium.java_client.remote.MobileCapabilityType
 import io.appium.java_client.service.local.AppiumDriverLocalService
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.remote.RemoteWebDriver
 import java.io.FileReader
 import java.net.URL
 import java.util.stream.Stream
@@ -101,7 +103,7 @@ open class BaseTest {
     }
 
     // Check if it is a local run
-    fun checkLocalRun(): Boolean {
+    private fun checkLocalRun(): Boolean {
         val isLocalRun = (System.getenv("RUN_ENV") ?: "local") == "local"
         // If local run, start Appium Server
         if (isLocalRun) {
@@ -131,24 +133,29 @@ open class BaseTest {
         }
     }
 
-    fun setupAndCreateConnection(taskId: Int): AndroidDriver {
+    fun setupAndCreateConnection(taskId: Int): RemoteWebDriver {
         println("Setup and creating connection for TaskId: $taskId")
-
         val isLocalRun = checkLocalRun()
         val capabilities = initialCapabilities(taskId)
-
         val url = serviceURL(isLocalRun)
-        val driver = AndroidDriver(
-            URL(url),
-            capabilities,
-        )
+        val platformName = capabilities.platformName.name.lowercase()
 
         println("TaskId: $taskId | Driver created")
-        println("TaskId: $taskId | Car $capabilities")
-        return driver
+        println("TaskId: $taskId | capabilities $capabilities")
+        return when (platformName.toLowerCase()) {
+            "android" -> {
+                AndroidDriver(URL(url), capabilities)
+            }
+
+            "ios" -> {
+                IOSDriver(URL(url), capabilities)
+            }
+
+            else -> throw IllegalArgumentException("Unknown platform: $platformName")
+        }
     }
 
-    fun testPassed(driver: AndroidDriver) {
+    fun testPassed(driver: RemoteWebDriver) {
         val jse = (driver as JavascriptExecutor)
         jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"All test passed!\"}}")
     }
@@ -158,17 +165,49 @@ open class BaseTest {
         jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"$failureMessage\"}}")
     }
 
-    protected fun switchToContext(contextType: ContextType, driver: AndroidDriver) {
+    protected fun switchToContext(contextType: ContextType, driver: RemoteWebDriver) {
         val context = getContextString(contextType)
-        driver.context(context)
-        print("Android", "Switched to context: $context")
-    }
+        when (driver) {
+            is AndroidDriver -> {
+                val contextHandle = driver.contextHandles
+                print("Android", "Available context: $contextHandle")
+                driver.context(context)
+                print("Android", "Switched to context: $context")
+            }
 
+            is IOSDriver -> {
+                val contextHandle = driver.contextHandles;
+                print("IOS", "Available context: $contextHandle")
+                driver.context(context)
+                print("IOS", "Switched to context: $context")
+            }
+
+            else -> {
+                throw IllegalStateException("Driver not found: $driver");
+            }
+        }
+
+    }
+    
     private fun getContextString(contextType: ContextType): String {
         return when (contextType) {
             ContextType.NATIVE_APP -> "NATIVE_APP"
             ContextType.FLUTTER -> "FLUTTER"
             ContextType.WEBVIEW_CHROME -> "WEBVIEW_chrome"
+        }
+    }
+
+    fun getMobileOs(remoteWebDriver: RemoteWebDriver): MobileOS {
+        return when (val platform = remoteWebDriver.capabilities.platformName.name.lowercase()) {
+            "android" -> {
+                MobileOS.Android
+            }
+
+            "ios" -> {
+                MobileOS.IOS
+            }
+
+            else -> throw IllegalArgumentException("Unknown platform: $platform")
         }
     }
 
