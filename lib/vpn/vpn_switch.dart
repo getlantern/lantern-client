@@ -39,16 +39,17 @@ class _VPNSwitchState extends State<VPNSwitch> {
   Widget build(BuildContext context) {
     // Still working on ads feature
     return Transform.scale(
-        scale: 2,
-        child: vpnModel
-            .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
-          return FlutterSwitch(
-            value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
-            activeColor: onSwitchColor,
-            inactiveColor: offSwitchColor,
-            onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus),
-          );
-        }));
+      scale: 2,
+      child: vpnModel
+          .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+        return FlutterSwitch(
+          value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+          activeColor: onSwitchColor,
+          inactiveColor: offSwitchColor,
+          onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus),
+        );
+      }),
+    );
     // return sessionModel
     //     .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
     //   return sessionModel.shouldShowCASAds((context, isCasAdsEnable, child) {

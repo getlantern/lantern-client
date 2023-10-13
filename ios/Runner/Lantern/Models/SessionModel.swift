@@ -11,7 +11,7 @@ import Foundation
 import Internalsdk
 import UIKit
 
-class SessionModel: BaseModel {
+class SessionModel: BaseModel<InternalsdkSessionModel> {
   lazy var notificationsManager: UserNotificationsManager = {
     return UserNotificationsManager()
   }()
@@ -33,7 +33,10 @@ class SessionModel: BaseModel {
     opts.model = systemName
     opts.osVersion = systemVersion
     var error: NSError?
-    guard let model = InternalsdkNewSessionModel(try BaseModel.getDB(), opts, &error) else {
+    guard
+      let model = InternalsdkNewSessionModel(
+        try BaseModel<InternalsdkModelProtocol>.getDB(), opts, &error)
+    else {
       throw error!
     }
     try super.init(flutterBinary, model)

@@ -7,7 +7,7 @@ import Flutter
 import Foundation
 import Internalsdk
 
-class VpnModel: BaseModel, InternalsdkVPNManagerProtocol {
+class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
   let vpnManager: VPNBase
   let vpnHelper = VpnHelper.shared
 
@@ -15,7 +15,9 @@ class VpnModel: BaseModel, InternalsdkVPNManagerProtocol {
     logger.log("Initializing VPNModel")
     self.vpnManager = vpnBase
     var error: NSError?
-    guard let model = InternalsdkNewVPNModel(try BaseModel.getDB(), &error) else {
+    guard
+      let model = InternalsdkNewVPNModel(try BaseModel<InternalsdkModelProtocol>.getDB(), &error)
+    else {
       throw error!
     }
     try super.init(flutterBinary, model)
@@ -24,10 +26,10 @@ class VpnModel: BaseModel, InternalsdkVPNManagerProtocol {
 
   private func saveVPNStatus(status: String) {
     do {
-      let result = try invoke("saveVpnStatus", status)
+      try model.saveVPNStatus(status)
       logger.log("Sucessfully set VPN status with  \(status)")
     } catch {
-      logger.log("Error while setting VPN status")
+      logger.log("Error while setting VPN status \(error.localizedDescription)")
     }
   }
 
@@ -37,7 +39,7 @@ class VpnModel: BaseModel, InternalsdkVPNManagerProtocol {
       onError: { error in
         // in case of error, reset switch position
         self.saveVPNStatus(status: "disconnected")
-        logger.debug("VPN not started \(error)")
+        logger.debug("VPN not started \(error.localizedDescription)")
       },
       onSuccess: {
         logger.debug("VPN started")

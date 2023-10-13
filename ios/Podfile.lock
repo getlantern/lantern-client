@@ -2,18 +2,8 @@ PODS:
   - Alamofire (5.2.2)
   - audioplayers_darwin (0.0.1):
     - Flutter
-  - datadog_flutter_plugin (0.0.1):
-    - DatadogSDK (= 1.19.0)
-    - DatadogSDKCrashReporting (= 1.19.0)
-    - DictionaryCoder (= 1.0.8)
-    - Flutter
-  - DatadogSDK (1.19.0)
-  - DatadogSDKCrashReporting (1.19.0):
-    - DatadogSDK (= 1.19.0)
-    - PLCrashReporter (~> 1.11.0)
   - device_info_plus (0.0.1):
     - Flutter
-  - DictionaryCoder (1.0.8)
   - DKImagePickerController/Core (4.3.4):
     - DKImagePickerController/ImageDataManager
     - DKImagePickerController/Resource
@@ -140,7 +130,6 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.1.1):
     - Flutter
-  - PLCrashReporter (1.11.1)
   - PromisesObjC (2.3.1)
   - qr_code_scanner (0.2.0):
     - Flutter
@@ -176,7 +165,6 @@ PODS:
 
 DEPENDENCIES:
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
-  - datadog_flutter_plugin (from `.symlinks/plugins/datadog_flutter_plugin/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - emoji_picker_flutter (from `.symlinks/plugins/emoji_picker_flutter/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -207,9 +195,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
-    - DatadogSDK
-    - DatadogSDKCrashReporting
-    - DictionaryCoder
     - DKImagePickerController
     - DKPhotoGallery
     - FMDB
@@ -220,7 +205,6 @@ SPEC REPOS:
     - libwebp
     - MTBBarcodeScanner
     - nanopb
-    - PLCrashReporter
     - PromisesObjC
     - SDWebImage
     - SQLite.swift
@@ -231,8 +215,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   audioplayers_darwin:
     :path: ".symlinks/plugins/audioplayers_darwin/ios"
-  datadog_flutter_plugin:
-    :path: ".symlinks/plugins/datadog_flutter_plugin/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   emoji_picker_flutter:
@@ -285,11 +267,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
-  datadog_flutter_plugin: 94092c99926abf963c8c3412ca72147bdb33be9a
-  DatadogSDK: 7608b3689363f4d4b0f09fbd7d1afa0c386e5dac
-  DatadogSDKCrashReporting: 46e492d957fa454101102e70b14f67bf33a36787
   device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
-  DictionaryCoder: 5f84fff69f54cb806071538430bdafe04a89d658
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   emoji_picker_flutter: df19dac03a2b39ac667dc8d1da939ef3a9e21347
@@ -314,7 +292,6 @@ SPEC CHECKSUMS:
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
-  PLCrashReporter: 5d2d3967afe0efad61b3048d617e2199a5d1b787
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   SDWebImage: c0de394d7cf7f9838aed1fd6bb6037654a4572e4
