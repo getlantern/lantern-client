@@ -3,12 +3,12 @@ package internalsdk
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"path/filepath"
 	"strconv"
 
 	"github.com/getlantern/android-lantern/internalsdk/protos"
+	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/pathdb"
@@ -21,46 +21,45 @@ type SessionModel struct {
 	*baseModel
 }
 
-// List of const we are using for Session Model
-// Might be eaier to move all const at one place
-// All keys are expose to front end so we can use same to avoid duplication and reduce error
-const DEVICE_ID = "deviceid"
-const DEVICE = "device"
-const MODEL = "model"
-const OS_VERSION = "os_version"
-const PAYMENT_TEST_MODE = "paymentTestMode"
-const USER_ID = "userid"
-const TOKEN = "token"
-const PATH_PRO_USER = "prouser"
-const PATH_SDK_VERSION = "sdkVersion"
-const PATH_USER_LEVEL = "userLevel"
-const CHAT_ENABLED = "chatEnabled"
-const DEVELOPMNET_MODE = "developmentMode"
-const GEO_COUNTRY_CODE = "geo_country_code"
-const SERVER_COUNTRY = "server_country"
-const SERVER_COUNTRY_CODE = "server_country_code"
-const SERVER_CITY = "server_city"
-const HAS_SUCCEEDING_PROXY = "hasSucceedingProxy"
-const LATEST_BANDWIDTH = "latest_bandwidth"
-const TIMEZONE_ID = "timezone_id"
-const REFERRAL_CODE = "referral"
-const FORCE_COUNTRY = "forceCountry"
-const DNS_DETECTOR = "dns_detector"
-const PROVIDER = "provider"
-const EMAIL_ADDRESS = "emailAddress"
+// List of we are using for Session Model
+const (
+	pathDeviceID             = "deviceid"
+	pathDevice               = "device"
+	pathModel                = "model"
+	pathOSVersion            = "os_version"
+	pathPaymentTestMode      = "paymentTestMode"
+	pathUserID               = "userid"
+	pathToken                = "token"
+	pathProUser              = "prouser"
+	pathSDKVersion           = "sdkVersion"
+	pathUserLevel            = "userLevel"
+	pathChatEnabled          = "chatEnabled"
+	pathDevelopmentMode      = "developmentMode"
+	pathGeoCountryCode       = "geo_country_code"
+	pathServerCountry        = "server_country"
+	pathServerCountryCode    = "server_country_code"
+	pathServerCity           = "server_city"
+	pathHasSucceedingProxy   = "hasSucceedingProxy"
+	pathLatestBandwith       = "latest_bandwidth"
+	pathTimezoneID           = "timezone_id"
+	pathReferralCode         = "referral"
+	pathForceCountry         = "forceCountry"
+	pathDNSDetector          = "dns_detector"
+	pathProvider             = "provider"
+	pathEmailAddress         = "emailAddress"
+	pathCurrencyCode         = "currency_Code"
+	pathReplicaAddr          = "replicaAddr"
+	pathSplitTunneling       = "splitTunneling"
+	pathLang                 = "lang"
+	pathAcceptedTermsVersion = "accepted_terms_version"
+	pathAdsEnabled           = "adsEnabled"
+	pathCASAdsEnabled        = "casAsEnabled"
+	pathStoreVersion         = "storeVersion"
+	pathSelectedTab          = "/selectedTab"
+	pathServerInfo           = "/server_info"
 
-const CURRENCY_CODE = "currency_Code"
-const PRO_USER = "prouser"
-const REPLICA_ADDR = "replicaAddr"
-const SPLIT_TUNNELING = "splitTunneling"
-const LANG = "lang"
-const ACCEPTED_TERMS_VERSION = "accepted_terms_version"
-const ADS_ENABLED = "adsEnabled"
-const CAS_ADS_ENABLED = "casAsEnabled"
-const CURRENT_TERMS_VERSION = 1
-const IS_PLAY_VERSION = "playVersion"
-const SET_SELECTED_TAB = "/selectedTab"
-const PATH_SERVER_INFO = "/server_info"
+	currentTermsVersion = 1
+)
 
 type SessionModelOpts struct {
 	DevelopmentMode bool
@@ -82,85 +81,71 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 	base.db.RegisterType(1000, &protos.ServerInfo{})
 	m := &SessionModel{baseModel: base}
-	m.initSessionModel(opts)
-	return m, nil
+	m.baseModel.doInvokeMethod = m.doInvokeMethod
+	return m, m.initSessionModel(opts)
 }
 
-func (m *SessionModel) InvokeMethod(method string, arguments Arguments) (*minisql.Value, error) {
+func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
 	switch method {
 	case "getBandwidth":
-		limit, err := getBandwidthLimit(m.baseModel)
-		if err != nil {
-			return nil, err
-		} else {
-			return minisql.NewValueString(limit), nil
-		}
+		return getBandwidthLimit(m.baseModel)
 	case "setForceCountry":
 		err := setForceCountry(m.baseModel, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
-		} else {
-			return minisql.NewValueBool(true), nil
 		}
+		return true, nil
 	case "setDNSServer":
 		err := setDNSServer(m.baseModel, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
-		} else {
-			return minisql.NewValueBool(true), nil
 		}
+		return true, nil
 	case "setProvider":
 		// Todo Implement setProvider server
 		err := setProvider(m.baseModel, "Test")
 		if err != nil {
 			return nil, err
-		} else {
-			return minisql.NewValueBool(true), nil
 		}
-
+		return true, nil
 	case "setEmail":
 		// Todo Implement setEmail server
 		err := setEmail(m.baseModel, "Test")
 		if err != nil {
 			return nil, err
-		} else {
-			return minisql.NewValueBool(true), nil
 		}
+		return true, nil
 	case "setProUser":
 		// Todo Implement setCurrency server
 		err := setCurrency(m.baseModel, "Test")
 		if err != nil {
 			return nil, err
-		} else {
-			return minisql.NewValueBool(true), nil
 		}
+		return true, nil
 	case "setLanguage":
 		err := setLanguage(m.baseModel, arguments.Get("lang").String())
 		if err != nil {
 			return nil, err
-		} else {
-			return minisql.NewValueBool(true), nil
 		}
+		return true, nil
 	case "acceptTerms":
 		err := acceptTerms(m.baseModel)
 		if err != nil {
 			return nil, err
-		} else {
-			return minisql.NewValueBool(true), nil
 		}
+		return true, nil
 	case "setStoreVersion":
 		err := setStoreVersion(m.baseModel, arguments.Scalar().Bool())
 		if err != nil {
 			return nil, err
-		} else {
-			return minisql.NewValueBool(true), nil
 		}
+		return true, nil
 	case "setSelectedTab":
 		err := setSelectedTab(m.baseModel, arguments.Get("tab").String())
 		if err != nil {
 			return nil, err
 		}
-		return minisql.NewValueBool(true), nil
+		return true, nil
 	case "reportIssue":
 		email := arguments.Get("email").String()
 		issue := arguments.Get("issue").String()
@@ -169,16 +154,15 @@ func (m *SessionModel) InvokeMethod(method string, arguments Arguments) (*minisq
 		if err != nil {
 			return nil, err
 		}
-		return minisql.NewValueBool(true), nil
+		return true, nil
 	case "createUser":
 		err := userCreate(m.baseModel, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
-		} else {
-			return minisql.NewValueBool(true), nil
 		}
+		return true, nil
 	default:
-		return m.baseModel.InvokeMethod(method, arguments)
+		return m.methodNotImplemented(method)
 	}
 }
 
@@ -196,14 +180,13 @@ func (m *SessionModel) StartService(configDir string,
 
 // InvokeMethod handles method invocations on the SessionModel.
 func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
-	//Check if email if emoty
-	email, err := m.baseModel.db.Get(EMAIL_ADDRESS)
+	// Check if email if empty
+	email, err := pathdb.Get[string](m.db, pathEmailAddress)
 	if err != nil {
-		log.Debugf("Init Session email error value %v", err)
+		log.Errorf("Init Session email error value %v", err)
 		return err
 	}
-	emailStr := string(email)
-	if emailStr == "" {
+	if email == "" {
 		log.Debugf("Init Session setting email value to an empty string")
 		setEmail(m.baseModel, "")
 	}
@@ -211,52 +194,33 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
-	err = pathdb.Put(tx, DEVELOPMNET_MODE, opts.DevelopmentMode, "")
-	if err != nil {
-		return err
-	}
-	err = pathdb.Put(tx, PRO_USER, opts.ProUser, "")
-	if err != nil {
-		return err
-	}
-	err = pathdb.Put(tx, DEVICE_ID, opts.DeviceID, "")
-	if err != nil {
-		return err
-	}
-	err = pathdb.Put(tx, IS_PLAY_VERSION, opts.PlayVersion, "")
+	err = pathdb.PutAll(tx, map[string]interface{}{
+		pathDevelopmentMode: opts.DevelopmentMode,
+		pathProUser:         opts.ProUser,
+		pathDeviceID:        opts.DeviceID,
+		pathStoreVersion:    opts.PlayVersion,
+		pathTimezoneID:      opts.TimeZone,
+		pathDevice:          opts.Device,
+		pathModel:           opts.Model,
+		pathOSVersion:       opts.OsVersion,
+	})
 	if err != nil {
 		return err
 	}
 	// Check if lang is already added or not
 	// If yes then do not add it
 	// This is used for only when user is new
-	lang, err := pathdb.Get[string](tx, LANG)
+	lang, err := pathdb.Get[string](tx, pathLang)
 	if err != nil {
 		return err
 	}
 	if lang == "" {
-		err = pathdb.Put(tx, LANG, opts.Lang, "")
+		err = pathdb.Put(tx, pathLang, opts.Lang, "")
 		if err != nil {
 			return err
 		}
 	}
-	err = pathdb.Put(tx, TIMEZONE_ID, opts.TimeZone, "")
-	if err != nil {
-		return err
-	}
-	err = pathdb.Put(tx, DEVICE, opts.Device, "")
-	if err != nil {
-		return err
-	}
-	err = pathdb.Put(tx, MODEL, opts.Model, "")
-	if err != nil {
-		return err
-	}
-	err = pathdb.Put(tx, OS_VERSION, opts.OsVersion, "")
-	if err != nil {
-		return err
-	}
-	//Check if user is already registered or not
+	// Check if user is already registered or not
 	userId, err := m.GetUserID()
 	if err != nil {
 		return err
@@ -280,25 +244,17 @@ func (m *SessionModel) GetAppName() string {
 }
 
 func (m *SessionModel) GetDeviceID() (string, error) {
-	byte, err := m.baseModel.db.Get(DEVICE_ID)
-	if err != nil {
-		return "", err
-	}
-	//Todo Find better way to deserialize the values
-	// Also fine generic way
-	return string(byte), nil
+	return pathdb.Get[string](m.baseModel.db, pathDeviceID)
 }
 
 // Todo There is some issue with user id changeing it value
 // When  Coverting from bytes to Float
 func (m *SessionModel) GetUserID() (int64, error) {
-	paymentTestMode, err := m.baseModel.db.Get(PAYMENT_TEST_MODE)
+	paymentTestMode, err := pathdb.Get[bool](m.baseModel.db, pathPaymentTestMode)
 	if err != nil {
 		return 0, err
 	}
-	//Todo find way to deserialize the values
-	paymentTestModeStr := string(paymentTestMode)
-	if paymentTestModeStr == "true" && paymentTestModeStr != "" {
+	if paymentTestMode {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
 		// payment providers' test endpoints.
@@ -307,49 +263,29 @@ func (m *SessionModel) GetUserID() (int64, error) {
 			return 0, err
 		}
 		return i64, nil
-	} else {
-		userId, err := m.baseModel.db.Get(USER_ID)
-		if err != nil {
-			return 0, err
-		}
-
-		//If userid is null or emtpy return zero to avoid crash
-		if string(userId) == "" {
-			return 0, nil
-		}
-		userId = userId[1:]
-		newUserId, err := BytesToFloat64LittleEndian(userId)
-		if err != nil {
-			return 0, err
-		}
-		i64 := int64(newUserId)
-		return i64, nil
 	}
+	return pathdb.Get[int64](m.baseModel.db, pathUserID)
 }
+
 func (m *SessionModel) GetToken() (string, error) {
-	paymentTestMode, err := m.baseModel.db.Get(PAYMENT_TEST_MODE)
+	paymentTestMode, err := pathdb.Get[bool](m.baseModel.db, pathPaymentTestMode)
 	if err != nil {
 		return "", err
 	}
-	//Todo find way to deserialize the values
-	paymentTestModeStr := string(paymentTestMode)
-	if paymentTestModeStr == "true" {
+
+	if paymentTestMode {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
 		// payment providers' test endpoints.
 		return "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA", nil
-	} else {
-		userId, err := m.baseModel.db.Get(TOKEN)
-		if err != nil {
-			return "", err
-		}
-		return string(userId), nil
 	}
+	return pathdb.Get[string](m.baseModel.db, pathToken)
 }
+
 func (m *SessionModel) SetCountry(country string) error {
 	//Find better way to do it
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, GEO_COUNTRY_CODE, country, "")
+		return pathdb.Put(tx, pathGeoCountryCode, country, "")
 	})
 }
 
@@ -358,42 +294,27 @@ func (m *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 	return nil
 }
 
-// Keep name as p1,p2,p3.....
-// Name become part of Objective c so this is important
-func (m *SessionModel) UpdateStats(p0 string, p1 string, p2 string, p3 int, p4 int, p5 bool) error {
-	if p0 != "" && p1 != "" && p2 != "" {
-		serverInfo := &protos.ServerInfo{
-			City:        p0,
-			Country:     p1,
-			CountryCode: p2,
-		}
-
-		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			if err := pathdb.Put(tx, SERVER_COUNTRY, p1, ""); err != nil {
-				return err
-			}
-			if err := pathdb.Put(tx, SERVER_CITY, p0, ""); err != nil {
-				return err
-			}
-			if err := pathdb.Put(tx, SERVER_COUNTRY_CODE, p2, ""); err != nil {
-				return err
-			}
-			if err := pathdb.Put(tx, HAS_SUCCEEDING_PROXY, p5, ""); err != nil {
-				return err
-			}
-			if err := pathdb.Put(tx, PATH_SERVER_INFO, serverInfo, ""); err != nil {
-				return err
-			}
-
-			// Not using ads blocked any more
-			return nil
-		})
+// Note - the names of these parameters have to match what's defined on the `Session` interface
+func (m *SessionModel) UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error {
+	serverInfo := &protos.ServerInfo{
+		City:        serverCity,
+		Country:     serverCountry,
+		CountryCode: serverCountryCode,
 	}
-	return nil
+
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.PutAll(tx, map[string]interface{}{
+			pathServerCountry:      serverCountry,
+			pathServerCity:         serverCity,
+			pathServerCountryCode:  serverCountryCode,
+			pathHasSucceedingProxy: hasSucceedingProxy,
+			pathServerInfo:         serverInfo,
+		})
+	})
 }
 
-func (m *SessionModel) SetStaging(stageing bool) error {
-	// Not using stageing anymore
+func (m *SessionModel) SetStaging(staging bool) error {
+	// Not using staging anymore
 	return nil
 }
 
@@ -401,175 +322,124 @@ func (m *SessionModel) SetStaging(stageing bool) error {
 // Name become part of Objective c so this is important
 func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, LATEST_BANDWIDTH, p1, "")
+		return pathdb.Put(tx, pathLatestBandwith, p1, "")
 	})
 }
 
-func getBandwidthLimit(m *baseModel) (string, error) {
-	percent, err := m.db.Get(LATEST_BANDWIDTH)
-	if err != nil {
-		return "", err
-	}
-	return string(percent), nil
+func getBandwidthLimit(m *baseModel) (int64, error) {
+	return pathdb.Get[int64](m.db, pathLatestBandwith)
 }
 
 func (m *SessionModel) Locale() (string, error) {
-	locale, err := m.baseModel.db.Get(LANG)
-	if err != nil {
-		return "", err
-	}
-	return string(locale), nil
+	return pathdb.Get[string](m.baseModel.db, pathLang)
 }
 
 func setLanguage(m *baseModel, lang string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, LANG, lang, "")
+		return pathdb.Put(tx, pathLang, lang, "")
 	})
 }
 
 func (m *SessionModel) GetTimeZone() (string, error) {
-	timezoneId, err := m.baseModel.db.Get(TIMEZONE_ID)
-	if err != nil {
-		return "", err
-	}
-	return string(timezoneId), nil
+	return pathdb.Get[string](m.baseModel.db, pathTimezoneID)
 }
 
 // Todo change method name to referral code
 func (m *SessionModel) Code() (string, error) {
-	//Set the timezeon from swift
-	referralCode, err := m.baseModel.db.Get(REFERRAL_CODE)
-	if err != nil {
-		return "", err
-	}
-	return string(referralCode), nil
+	return pathdb.Get[string](m.baseModel.db, pathReferralCode)
 }
 
 func setReferalCode(m *baseModel, referralCode string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, REFERRAL_CODE, referralCode, "")
+		return pathdb.Put(tx, pathReferralCode, referralCode, "")
 	})
 }
 
 // Todo need to make chanegs for Force country setup
 func (m *SessionModel) GetCountryCode() (string, error) {
-	//Set the timezeon from swift
-	forceCountry, forceCountryErr := m.db.Get(FORCE_COUNTRY)
+	forceCountry, forceCountryErr := pathdb.Get[string](m.db, pathForceCountry)
 	if forceCountryErr != nil {
 		return "", forceCountryErr
 	}
-	contryInString := string(forceCountry)
-	if contryInString != "" {
-		return string(forceCountry), nil
+	if forceCountry != "" {
+		return forceCountry, nil
 	}
-	countryCode, err := m.baseModel.db.Get(GEO_COUNTRY_CODE)
-	if err != nil {
-		return "", err
-	}
-	return string(countryCode), nil
+
+	return pathdb.Get[string](m.baseModel.db, pathGeoCountryCode)
 }
 
 func (m *SessionModel) GetForcedCountryCode() (string, error) {
-	forceCountry, err := m.baseModel.db.Get(FORCE_COUNTRY)
-	if err != nil {
-		log.Debugf("Force country coode error %v", err)
-		return "", err
-	}
-	log.Debugf("Force country %v", forceCountry)
-	return string(forceCountry), nil
+	return pathdb.Get[string](m.db, pathForceCountry)
 }
 
 func setForceCountry(m *baseModel, forceCountry string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, FORCE_COUNTRY, forceCountry, "")
+		return pathdb.Put(tx, pathForceCountry, forceCountry, "")
 	})
 }
+
 func (m *SessionModel) GetDNSServer() (string, error) {
-	dns, err := m.db.Get(DNS_DETECTOR)
-	if err != nil {
-		return "", err
-	}
-	return string(dns), nil
+	return pathdb.Get[string](m.db, pathDNSDetector)
 }
 
 func setDNSServer(m *baseModel, dnsServer string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, DNS_DETECTOR, dnsServer, "")
+		return pathdb.Put(tx, pathDNSDetector, dnsServer, "")
 	})
 }
 
 func (m *SessionModel) Provider() (string, error) {
-	provider, err := m.db.Get(PROVIDER)
-	if err != nil {
-		return "", err
-	}
-	return string(provider), nil
+	return pathdb.Get[string](m.db, pathProvider)
 }
 
 func setProvider(m *baseModel, provider string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, PROVIDER, provider, "")
+		return pathdb.Put(tx, pathProvider, provider, "")
 	})
 }
 
 func (m *SessionModel) IsStoreVersion() (bool, error) {
-	osStoreVersion, err := m.db.Get(IS_PLAY_VERSION)
-	if err != nil {
-		return false, err
-	}
-	if string(osStoreVersion) == "true" {
-		return true, nil
-	}
-	return false, nil
+	return pathdb.Get[bool](m.db, pathStoreVersion)
 }
 
 func (m *SessionModel) Email() (string, error) {
-	email, err := m.db.Get(EMAIL_ADDRESS)
-	if err != nil {
-		return "", err
-	}
-	return string(email), nil
+	return pathdb.Get[string](m.db, pathEmailAddress)
 }
 
 func setEmail(m *baseModel, email string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, EMAIL_ADDRESS, email, "")
+		return pathdb.Put(tx, pathEmailAddress, email, "")
 	})
 }
 
 func (m *SessionModel) Currency() (string, error) {
-	currencyCode, err := m.db.Get(CURRENCY_CODE)
-	panicIfNecessary(err)
-	return string(currencyCode), nil
+	return pathdb.Get[string](m.db, pathCurrencyCode)
 }
 
 func setCurrency(m *baseModel, currencyCode string) error {
 	// Todo Implement this method
-	return fmt.Errorf("Method not implemented yet")
+	return errors.New("Method not implemented yet")
 }
 
 func (m *SessionModel) DeviceOS() (string, error) {
-	// return staif for now
+	// return static for now
 	return "IOS", nil
 }
 
 func (m *SessionModel) IsProUser() (bool, error) {
-	proUser, err := m.baseModel.db.Get(PRO_USER)
-	if err != nil {
-		return false, err
-	}
-	return (string(proUser) == "true"), nil
+	return pathdb.Get[bool](m.db, pathProUser)
 }
+
 func setProUser(m *baseModel, isPro bool) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, PRO_USER, isPro, "")
+		return pathdb.Put(tx, pathProUser, isPro, "")
 	})
 }
 
 func (m *SessionModel) SetReplicaAddr(replicaAddr string) {
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		//For now force replicate to disbale it
-		return pathdb.Put(tx, REPLICA_ADDR, "", "")
+		return pathdb.Put(tx, pathReplicaAddr, "", "")
 	}))
 }
 
@@ -580,7 +450,7 @@ func (m *SessionModel) ForceReplica() bool {
 
 func (m *SessionModel) SetChatEnabled(chatEnable bool) {
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, CHAT_ENABLED, chatEnable, "")
+		return pathdb.Put(tx, pathChatEnabled, chatEnable, "")
 	}))
 }
 
@@ -591,13 +461,13 @@ func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
 
 func (m *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, ADS_ENABLED, adsEnable, "")
+		return pathdb.Put(tx, pathAdsEnabled, adsEnable, "")
 	}))
 }
 
 func (m *SessionModel) SetCASShowInterstitialAdsEnabled(casEnable bool) {
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, CAS_ADS_ENABLED, casEnable, "")
+		return pathdb.Put(tx, pathCASAdsEnabled, casEnable, "")
 	}))
 }
 
@@ -609,32 +479,33 @@ func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 
 func acceptTerms(m *baseModel) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, ACCEPTED_TERMS_VERSION, CURRENT_TERMS_VERSION, "")
+		return pathdb.Put(tx, pathAcceptedTermsVersion, currentTermsVersion, "")
 	})
 }
 
 func setStoreVersion(m *baseModel, isStoreVersion bool) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, IS_PLAY_VERSION, isStoreVersion, "")
-	})
-}
-func setSelectedTab(m *baseModel, tap string) error {
-	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, SET_SELECTED_TAB, tap, "")
+		return pathdb.Put(tx, pathStoreVersion, isStoreVersion, "")
 	})
 }
 
-func setUserIdAndToken(m *baseModel, userId float64, token string) error {
+func setSelectedTab(m *baseModel, tap string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		if err := pathdb.Put(tx, USER_ID, userId, ""); err != nil {
+		return pathdb.Put(tx, pathSelectedTab, tap, "")
+	})
+}
+
+func setUserIdAndToken(m *baseModel, userId int, token string) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		if err := pathdb.Put(tx, pathUserID, userId, ""); err != nil {
 			return err
 		}
-		return pathdb.Put(tx, TOKEN, token, "")
+		return pathdb.Put(tx, pathToken, token, "")
 	})
 }
 
 type UserResponse struct {
-	UserID       float64  `json:"userId"`
+	UserID       int      `json:"userId"`
 	Code         string   `json:"code"`
 	Token        string   `json:"token"`
 	Referral     string   `json:"referral"`
@@ -649,7 +520,7 @@ type UserResponse struct {
 // Create user
 // Todo-: Create Sprate http client to manag and reuse client
 func userCreate(m *baseModel, local string) error {
-	deviecId, err := m.db.Get(DEVICE_ID)
+	deviceID, err := pathdb.Get[string](m.db, pathDeviceID)
 	if err != nil {
 		return err
 	}
@@ -657,12 +528,14 @@ func userCreate(m *baseModel, local string) error {
 	requestBodyMap := map[string]string{
 		"locale": local,
 	}
+
 	// Marshal the map to JSON
 	requestBody, err := json.Marshal(requestBodyMap)
 	if err != nil {
 		log.Errorf("Error marshaling request body: %v", err)
 		return err
 	}
+
 	// Create a new request
 	req, err := http.NewRequest("POST", "https://api.getiantem.org/user-create", bytes.NewBuffer(requestBody))
 	if err != nil {
@@ -671,7 +544,7 @@ func userCreate(m *baseModel, local string) error {
 	}
 
 	// Add headers
-	req.Header.Set("X-Lantern-Device-Id", string(deviecId))
+	req.Header.Set("X-Lantern-Device-Id", deviceID)
 	log.Debugf("Headers set")
 	// Initialize a new http client
 	client := &http.Client{}
@@ -697,16 +570,15 @@ func userCreate(m *baseModel, local string) error {
 		}
 	}
 	//Save user id and token
-	setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
 	log.Debugf("Created new Lantern user: %+v", userResponse)
-	return nil
+	return setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
 	// Check if email is there is yes then store it
 	if email != "" {
 		err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, EMAIL_ADDRESS, email, "")
+			return pathdb.Put(tx, pathEmailAddress, email, "")
 		})
 		if err != nil {
 			return err
@@ -725,33 +597,23 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 		level = "free"
 	}
 
-	// Get Deive id
-	model, modelErr := session.db.Get(MODEL)
+	model, modelErr := pathdb.Get[string](session.db, pathModel)
 	if modelErr != nil {
 		return modelErr
 	}
 
-	// Get os version
-	osVersion, osVersionErr := session.db.Get(OS_VERSION)
+	osVersion, osVersionErr := pathdb.Get[string](session.db, pathOSVersion)
 	if osVersionErr != nil {
 		return osVersionErr
 	}
-	// Get os version
-	device, deviceErr := session.db.Get(DEVICE)
+
+	device, deviceErr := pathdb.Get[string](session.db, pathDevice)
 	if deviceErr != nil {
 		return deviceErr
 	}
-	// Ignore the first value
-	// First value is type of value
-	deviceStr := string(device[1:])
-	osVersionStr := string(osVersion[1:])
-	modelStr := string(model[1:])
+
 	issueKey := issueMap[issue]
 
-	log.Debugf("Report an issue index %v desc %v level %v email %v, device %v model %v version %v ", issueKey, description, level, email, deviceStr, modelStr, osVersionStr)
-	reportIssueErr := SendIssueReport(session, issueKey, description, level, email, deviceStr, modelStr, osVersionStr)
-	if reportIssueErr != nil {
-		return reportIssueErr
-	}
-	return nil
+	log.Debugf("Report an issue index %v desc %v level %v email %v, device %v model %v version %v ", issueKey, description, level, email, device, model, osVersion)
+	return SendIssueReport(session, issueKey, description, level, email, device, model, osVersion)
 }

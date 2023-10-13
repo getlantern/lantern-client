@@ -127,13 +127,8 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
       return createFlutterError(code: "MISSING_PARAMETERS", message: errorMessage)
     }
 
-    do {
-      try model.unsubscribe(subscriberID)
-      activeSubscribers.remove(subscriberID)
-    } catch let error {
-      let errorMessage = "An error occurred while unsubscribing: \(error.localizedDescription)"
-      return createFlutterError(code: "UNSUBSCRIBE_ERROR", message: errorMessage)
-    }
+    model.unsubscribe(subscriberID)
+    activeSubscribers.remove(subscriberID)
     return nil
   }
 
