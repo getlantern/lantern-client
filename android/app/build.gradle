@@ -6,7 +6,7 @@ plugins {
   id 'kotlin-parcelize'
   id 'kotlin-kapt'
   id 'com.google.protobuf'
-//  id "io.sentry.android.gradle" version "3.13.0"
+  id "io.sentry.android.gradle" version "3.13.0"
 }
 
 def localProperties = new Properties()
@@ -417,6 +417,8 @@ dependencies {
     // Google Play libraries
     implementation 'com.android.billingclient:billing:6.0.1'
     implementation 'com.google.android.gms:play-services-base:18.2.0'
+    implementation 'com.google.android.gms:play-services-ads:22.4.0'
+
 
     // lib that simplifies event bus communication between activities, fragments, threads, services, etc
     implementation 'org.greenrobot:eventbus:3.3.1'
@@ -427,8 +429,6 @@ dependencies {
     implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
 
     implementation 'com.stripe:stripe-android:20.17.0'
-
-    implementation 'com.datadoghq:dd-sdk-android:1.19.3'
 
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
@@ -458,31 +458,31 @@ dependencies {
 
 apply plugin: 'com.google.gms.google-services'
 
-//sentry {
-//
-//    // Disables or enables the handling of Proguard mapping for Sentry.
-//    // If enabled the plugin will generate a UUID and will take care of
-//    // uploading the mapping to Sentry. If disabled, all the logic
-//    // related to proguard mapping will be excluded.
-//    // Default is enabled.
-//    includeProguardMapping = true
-//
-//
-//    // Whether the plugin should attempt to auto-upload the mapping file to Sentry or not.
-//    // If disabled the plugin will run a dry-run and just generate a UUID.
-//    // The mapping file has to be uploaded manually via sentry-cli in this case.
-//    // Default is enabled.
-//    autoUploadProguardMapping = true
-//
-//    // Disables or enables the automatic configuration of Native Symbols
-//    // for Sentry. This executes sentry-cli automatically so
-//    // you don't need to do it manually.
-//    // Default is disabled.
-//    uploadNativeSymbols = true
-//
-//    // Does or doesn't include the source code of native code for Sentry.
-//    // This executes sentry-cli with the --include-sources param. automatically so
-//    // you don't need to do it manually.
-//    // Default is disabled.
-//    includeNativeSources = false
-//}
+sentry {
+
+    // Disables or enables the handling of Proguard mapping for Sentry.
+    // If enabled the plugin will generate a UUID and will take care of
+    // uploading the mapping to Sentry. If disabled, all the logic
+    // related to proguard mapping will be excluded.
+    // Default is enabled.
+    includeProguardMapping = true
+
+
+    // Whether the plugin should attempt to auto-upload the mapping file to Sentry or not.
+    // If disabled the plugin will run a dry-run and just generate a UUID.
+    // The mapping file has to be uploaded manually via sentry-cli in this case.
+    // Default is enabled.
+    autoUploadProguardMapping = true
+
+    // Disables or enables the automatic configuration of Native Symbols
+    // for Sentry. This executes sentry-cli automatically so
+    // you don't need to do it manually.
+    // Default is disabled.
+    uploadNativeSymbols = true
+
+    // Does or doesn't include the source code of native code for Sentry.
+    // This executes sentry-cli with the --include-sources param. automatically so
+    // you don't need to do it manually.
+    // Default is disabled.
+    includeNativeSources = false
+}
