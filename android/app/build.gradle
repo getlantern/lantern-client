@@ -417,6 +417,8 @@ dependencies {
     // Google Play libraries
     implementation 'com.android.billingclient:billing:6.0.1'
     implementation 'com.google.android.gms:play-services-base:18.2.0'
+    implementation 'com.google.android.gms:play-services-ads:22.4.0'
+
 
     // lib that simplifies event bus communication between activities, fragments, threads, services, etc
     implementation 'org.greenrobot:eventbus:3.3.1'
@@ -428,17 +430,15 @@ dependencies {
 
     implementation 'com.stripe:stripe-android:20.17.0'
 
-    implementation 'com.datadoghq:dd-sdk-android:1.19.3'
-
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
     kapt "org.androidannotations:androidannotations:$androidAnnotationsVersion"
 
-    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.annotation:annotation:1.6.0'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
@@ -452,8 +452,8 @@ dependencies {
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:messaging-android:1ce4613c8b'
-    implementation 'com.github.getlantern:db-android:573aba1458'
-    implementation 'com.cleveradssolutions:cas:3.2.4'
+    implementation 'com.github.getlantern:db-android:022779ec99'
+//    implementation 'com.cleveradssolutions:cas:3.3.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
@@ -466,7 +466,7 @@ sentry {
     // related to proguard mapping will be excluded.
     // Default is enabled.
     includeProguardMapping = true
-    
+
 
     // Whether the plugin should attempt to auto-upload the mapping file to Sentry or not.
     // If disabled the plugin will run a dry-run and just generate a UUID.

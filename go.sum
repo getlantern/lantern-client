@@ -484,8 +484,8 @@ github.com/getlantern/osversion v0.0.0-20230401075644-c2a30e73c451 h1:3Nn0AqIlIm
 github.com/getlantern/osversion v0.0.0-20230401075644-c2a30e73c451/go.mod h1:kaUdXyKE1Y8bwPnlN7ChFXWnkADpL0zZrk8F0XbpKcc=
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 h1:pijUoofaQcAM/8zbDzZM2LQ90kGVbKfnSAkFnQwLZZU=
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360/go.mod h1:nsJPNYUSY96xB+p7uiDW8O4uiKea+KjeUdS5d6tf9IU=
-github.com/getlantern/pathdb v0.0.0-20231011022612-e0fb1003dce8 h1:dw8BlhZotSe57aoDrtlluDBmO9fCptEzu4YZ8ItHq1o=
-github.com/getlantern/pathdb v0.0.0-20231011022612-e0fb1003dce8/go.mod h1:SFQy+f58IbLpnbq2nVqlq7ccwaUiO7ablKv631WVIuc=
+github.com/getlantern/pathdb v0.0.0-20231012214506-e66dac509bba h1:Bu9G2bmSz5GFcR7UJNZ+c6N/wPQobX2sOZe8CQ8EF7I=
+github.com/getlantern/pathdb v0.0.0-20231012214506-e66dac509bba/go.mod h1:SFQy+f58IbLpnbq2nVqlq7ccwaUiO7ablKv631WVIuc=
 github.com/getlantern/preconn v0.0.0-20180328114929-0b5766010efe/go.mod h1:FvIxQD61iYA42UjaJyzGl9DNne8jbowbgicdeNk/7kE=
 github.com/getlantern/preconn v1.0.0 h1:DsY3l/y/BJUj86WyaxXylbJnCC9QbKcc3D6js6rFL60=
 github.com/getlantern/preconn v1.0.0/go.mod h1:i/AnXvx715Fq7HgZLlmQlw3sGfEkku8BQT5hLHMK4+k=

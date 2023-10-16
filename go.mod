@@ -40,7 +40,7 @@ require (
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20230511223023-ee52513fd782
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
-	github.com/getlantern/pathdb v0.0.0-20231011022612-e0fb1003dce8
+	github.com/getlantern/pathdb v0.0.0-20231012214506-e66dac509bba
 	github.com/getlantern/replica v0.14.1
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.8.3

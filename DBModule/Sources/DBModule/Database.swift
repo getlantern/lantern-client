@@ -26,9 +26,11 @@ public class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
           domain: "DatabasePathError", code: 1,
           userInfo: [NSLocalizedDescriptionKey: "Database path cannot be blank"])
       }
-      self.connection = try! Connection(path)
+      let conn = try! Connection(path)
+      try conn.execute("PRAGMA journal_mode=WAL")
+      try conn.execute("PRAGMA busy_timeout=5000")
+      self.connection = conn
     }
-
     self.transactional = transactional
   }
 
@@ -63,7 +65,7 @@ public class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
     }
   }
 
-  public func exec(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlResultProtocol {
+  public func exec(_ query: String?, args: MinisqlValuesProtocol?) throws {
     guard let query = query, let args = args else {
       throw NSError(
         domain: "ArgumentError", code: 1,
@@ -78,7 +80,6 @@ public class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
     }
 
     try runStatement(statement, bindings)
-    return QueryResult(changes: connection.changes)
   }
 
   public func query(_ query: String?, args: MinisqlValuesProtocol?) throws -> MinisqlRowsProtocol {
@@ -112,22 +113,6 @@ public class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
     } catch let error {
       throw NSError(domain: String(describing: error), code: 0, userInfo: nil)
     }
-  }
-}
-
-class QueryResult: NSObject, MinisqlResultProtocol {
-  let changes: Int
-
-  init(changes: Int) {
-    self.changes = changes
-  }
-
-  func lastInsertId(_ ret0_: UnsafeMutablePointer<Int64>?) throws {
-    ret0_?.pointee = Int64(changes)
-  }
-
-  func rowsAffected(_ ret0_: UnsafeMutablePointer<Int64>?) throws {
-    ret0_?.pointee = Int64(changes)
   }
 }
 
