@@ -87,7 +87,6 @@ class _ReportIssueState extends State<ReportIssue> {
                         key: emailFieldKey,
                         child: CTextField(
                           initialValue: proUser ? emailAddress : '',
-                          tooltipMessage: AppKeys.reportEmail,
                           controller: emailController,
                           autovalidateMode: proUser
                               ? AutovalidateMode.always
