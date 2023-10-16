@@ -10,27 +10,29 @@ type MessagingModel struct {
 	*baseModel
 }
 
-const ONBOARDING_STATUS = "onBoardingStatus"
-
 func NewMessagingModel(mdb minisql.DB) (*MessagingModel, error) {
 	base, err := newModel("messaging", mdb)
 	if err != nil {
 		return nil, err
 	}
-	initMessagingModel(base)
+	err = initMessagingModel(base)
+	if err != nil {
+		return nil, err
+	}
 	model := &MessagingModel{baseModel: base}
+	model.baseModel.doInvokeMethod = model.doInvokeMethod
 	return model, nil
 }
 
-func (s *MessagingModel) InvokeMethod(method string, arguments Arguments) (*minisql.Value, error) {
+func (s *MessagingModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
 	switch method {
 	default:
-		return s.baseModel.InvokeMethod(method, arguments)
+		return s.methodNotImplemented(method)
 	}
 }
 
 func initMessagingModel(m *baseModel) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, ONBOARDING_STATUS, false, "")
+		return pathdb.Put(tx, "onBoardingStatus", false, "")
 	})
 }

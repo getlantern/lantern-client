@@ -6,8 +6,10 @@ import (
 	"github.com/getlantern/pathdb/minisql"
 )
 
-const PATH_VPN_STATUS = "/vpn_status"
-const PATH_BANDWIDTH = "/bandwidth"
+const (
+	pathVPNStatus = "/vpn_status"
+	pathBandwidth = "/bandwidth"
+)
 
 // Custom Model implemnation
 // VPNModel is a custom model derived from the baseModel.
@@ -27,6 +29,7 @@ func NewVPNModel(mdb minisql.DB) (*VPNModel, error) {
 		return nil, err
 	}
 	model := &VPNModel{baseModel: base}
+	model.baseModel.doInvokeMethod = model.doInvokeMethod
 	return model, model.initVpnModel()
 }
 
@@ -34,39 +37,33 @@ func (s *VPNModel) SetManager(manager VPNManager) {
 	s.manager = manager
 }
 
-func (s *VPNModel) InvokeMethod(method string, arguments Arguments) (*minisql.Value, error) {
+func (s *VPNModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
 	switch method {
 	case "switchVPN":
 		err := s.SwitchVPN(arguments.Get("on").Bool())
 		if err != nil {
 			return nil, err
-		} else {
-			return minisql.NewValueBool(true), nil
 		}
+		return true, nil
 	case "getVpnStatus":
-		byte, err := s.GetVPNStatus()
-		if err != nil {
-			return nil, err
-		} else {
-			return minisql.NewValueString(byte), nil
-		}
+		return s.GetVPNStatus()
 	default:
-		return s.baseModel.InvokeMethod(method, arguments)
+		return s.methodNotImplemented(method)
 	}
 }
 
 func (m *VPNModel) initVpnModel() error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		status, err := pathdb.Get[string](tx, PATH_VPN_STATUS)
+		status, err := pathdb.Get[string](tx, pathVPNStatus)
 		if err != nil {
 			return errors.New("unable to read status: %v", err)
 		}
 		if status != "" {
 			log.Debugf("Setting status to %v", status)
-			return pathdb.Put(tx, PATH_VPN_STATUS, status, "")
+			return pathdb.Put(tx, pathVPNStatus, status, "")
 		}
 		log.Debug("Setting status to disconnected")
-		return pathdb.Put(tx, PATH_VPN_STATUS, "disconnected", "")
+		return pathdb.Put(tx, pathVPNStatus, "disconnected", "")
 	})
 }
 
@@ -91,12 +88,10 @@ func (m *VPNModel) SwitchVPN(on bool) error {
 
 func (m *VPNModel) SaveVPNStatus(status string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, PATH_VPN_STATUS, status, "")
+		return pathdb.Put(tx, pathVPNStatus, status, "")
 	})
 }
 
 func (m *VPNModel) GetVPNStatus() (string, error) {
-	byte, err := m.db.Get(PATH_VPN_STATUS)
-	panicIfNecessary(err)
-	return string(byte), nil
+	return pathdb.Get[string](m.db, pathVPNStatus)
 }
