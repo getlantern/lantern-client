@@ -35,6 +35,20 @@ class _ReportIssueState extends State<ReportIssue> {
   );
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      const String flavor = String.fromEnvironment('app.flavor');
+      if (flavor == 'appiumTest') {
+      // Set email
+        emailController.text ='jigar@getlantern.org';
+      // Set issue type
+        issueController.text = 'other'.i18n;
+      }
+    });
+    super.initState();
+  }
+
+  @override
   void dispose() {
     emailController.dispose();
     issueController.dispose();
@@ -73,6 +87,7 @@ class _ReportIssueState extends State<ReportIssue> {
                         key: emailFieldKey,
                         child: CTextField(
                           initialValue: proUser ? emailAddress : '',
+                          tooltipMessage: AppKeys.reportEmail,
                           controller: emailController,
                           autovalidateMode: proUser
                               ? AutovalidateMode.always

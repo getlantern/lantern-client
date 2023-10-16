@@ -9,6 +9,8 @@
     "appium:noReset": false,
     "appium:logLevel": true,
     "appium:fullReset": true,
+    "appium:showXcodeLog": true,
+    "appium:showIOSLog": false,
     "enablePerformanceLogging": true,
     "xcodeOrgId": "4FYC28AXA2",
     "xcodeSigningId": "iPhone Developer"

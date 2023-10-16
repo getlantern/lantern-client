@@ -18,9 +18,11 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
+import pro.truongsinh.appium_flutter.FlutterFinder
 import java.io.FileReader
 import java.net.URL
 import java.util.stream.Stream
+
 
 /** Here is the device list-:https://www.browserstack.com/list-of-browsers-and-platforms/app_automate */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -160,7 +162,7 @@ open class BaseTest {
         jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"All test passed!\"}}")
     }
 
-    fun testFail(failureMessage: String, driver: AndroidDriver) {
+    fun testFail(failureMessage: String, driver: RemoteWebDriver) {
         val jse = (driver as JavascriptExecutor)
         jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"$failureMessage\"}}")
     }
@@ -188,7 +190,7 @@ open class BaseTest {
         }
 
     }
-    
+
     private fun getContextString(contextType: ContextType): String {
         return when (contextType) {
             ContextType.NATIVE_APP -> "NATIVE_APP"
@@ -214,4 +216,25 @@ open class BaseTest {
     protected fun print(tag: String, message: String) {
         println("[$tag] $message")
     }
+
+
+
+    open fun isElementPresent(
+        remoteWebDriver: RemoteWebDriver,
+        flutterFinder: FlutterFinder,
+        tooltip: String,
+): Boolean {
+        return try {
+            remoteWebDriver.executeScript("flutter:waitFor", flutterFinder.byTooltip(tooltip), 10)
+            print("Element present")
+            true
+        } catch (err: NoSuchElementException) {
+            print("Element not present with error $err")
+            false
+        } catch (e: Exception) {
+            print("Element  with error $e")
+            false
+        }
+    }
+
 }

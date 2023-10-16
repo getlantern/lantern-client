@@ -66,6 +66,7 @@ class AppTest() : BaseTest() {
             println("TaskId: $taskId | shouldRunVPNSameTime-->createConnection ")
             val remoteDriver = setupAndCreateConnection(taskId)
             val osVersion = getMobileOs(remoteDriver)
+//            remoteDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5))
             val flutterFinder = FlutterFinder(driver = remoteDriver)
 
             if (osVersion == MobileOS.Android) {
@@ -85,7 +86,9 @@ class AppTest() : BaseTest() {
 
             } else {
                 iosDriver = remoteDriver as IOSDriver
-                IOSVPNFlow(iosDriver, taskId, flutterFinder)
+//                IOSVPNFlow(iosDriver, taskId, flutterFinder)
+
+                reportAnIssueFlow(iosDriver, taskId, flutterFinder, MobileOS.IOS)
             }
 
             if (!isLocalRun) {
@@ -352,9 +355,10 @@ class AppTest() : BaseTest() {
 
     @Throws(IOException::class, InterruptedException::class)
     private fun reportAnIssueFlow(
-        androidDriver: AndroidDriver,
+        androidDriver: RemoteWebDriver,
         taskId: Int,
-        flutterFinder: FlutterFinder
+        flutterFinder: FlutterFinder,
+        os: MobileOS = MobileOS.Android
     ) {
 
         print("TaskId: $taskId", "reportAnIssueFlow-->Switching to FLUTTER context.")
@@ -368,7 +372,7 @@ class AppTest() : BaseTest() {
         print("TaskId: $taskId", "reportAnIssueFlow-->Locating and clicking on the SUPPORT.")
         val supportTap = flutterFinder.byValueKey(SUPPORT)
         supportTap.click()
-        Thread.sleep(1000)
+        Thread.sleep(3000)
 
         print(
             "TaskId: $taskId",
@@ -377,6 +381,7 @@ class AppTest() : BaseTest() {
         val reportIssue = flutterFinder.byValueKey(REPORT_AN_ISSUE)
         reportIssue.click()
         Thread.sleep(1000)
+
 
         print("TaskId: $taskId", "reportAnIssueFlow-->Entering description.")
         val description = flutterFinder.byTooltip(REPORT_DESCRIPTION)
@@ -390,18 +395,24 @@ class AppTest() : BaseTest() {
         )
         val sendReportButton = flutterFinder.byTooltip(SEND_REPORT)
         sendReportButton.click()
-        Thread.sleep(5000)
+        Thread.sleep(6000)
 
-        val reportIssueSuccessLogs = captureReportIssueSuccessLogcat(androidDriver)
-        println("TaskId: $taskId | reportAnIssueFlow Checking for logs-->$reportIssueSuccessLogs")
+        //Since in IOS we are not able to read logs we will make sure form Success
+        val isSuccessDialogVisble =
+            isElementPresent(androidDriver, flutterFinder, RENEWAL_SUCCESS_OK)
 
-        if (reportIssueSuccessLogs.isBlank()) {
+        if (isSuccessDialogVisble) {
+            print("TaskId: $taskId", "reportAnIssueFlow-->Test fail, assertion false.")
+            Assertions.assertEquals(isSuccessDialogVisble, true)
+
+        } else {
             if (!isLocalRun) {
                 testFail("Fail to submit Report/issue", androidDriver)
             }
+            print("TaskId: $taskId", "reportAnIssueFlow-->Test passed, assertion true.")
+            Assertions.assertEquals(isSuccessDialogVisble, true)
+
         }
-        print("TaskId: $taskId", "reportAnIssueFlow-->Test passed, assertion true.")
-        Assertions.assertEquals(reportIssueSuccessLogs.isNotBlank(), true)
     }
 
     private fun afterTest(driver: AndroidDriver) {
@@ -474,12 +485,21 @@ class AppTest() : BaseTest() {
     }
 
     @Synchronized
-    private fun captureReportIssueSuccessLogcat(androidDriver: AndroidDriver): String {
+    private fun captureReportIssueSuccessLogcat(
+        androidDriver: RemoteWebDriver,
+        mobileOs: MobileOS = MobileOS.Android
+    ): String {
         switchToContext(ContextType.NATIVE_APP, androidDriver)
         val logtypes: Set<*> = androidDriver.manage().logs().availableLogTypes
-        println("supported log types: $logtypes") // [logcat, bugreport, server, client]
-        val logs: LogEntries = androidDriver.manage().logs().get("logcat")
+        println("supported log types: $logtypes")
+
+        val logs: LogEntries = if (mobileOs == MobileOS.IOS) {
+            androidDriver.manage().logs().get("syslog")
+        } else {
+            androidDriver.manage().logs().get("logcat")
+        }
         for (logEntry in logs) {
+            println("contain log: ${logEntry.message}")
             if (logEntry.message.contains(REPORT_ISSUE_SUCCESS)) {
                 println("contain log: ${logEntry.message}") // [logcat, bugreport, server, client]
                 return logEntry.message

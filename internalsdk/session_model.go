@@ -873,7 +873,11 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 	log.Debugf("Report an issue index %v desc %v level %v email %v, device %v model %v version %v ", issueKey, description, level, email, deviceStr, modelStr, osVersionStr)
 	reportIssueErr := SendIssueReport(session, issueKey, description, level, email, deviceStr, modelStr, osVersionStr)
 	if reportIssueErr != nil {
+		log.Debugf("ReportIssue error %v", reportIssueErr)
 		return reportIssueErr
 	}
+	//do not remove this logs
+	// We are reading logs for CI
+	log.Debugf("ReportIssue sent successfully")
 	return nil
 }
