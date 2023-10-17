@@ -57,16 +57,12 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     do {
       let result = try invoke("getBandwidth")
       let newValue = ValueUtil.convertFromMinisqlValue(from: result!)
-      // If value is not null mean user has alerady start using bandwith
-      // We will get that value from Go
-      if (newValue as! String) != "" {
-        let limit = newValue as! Int
-        if limit == 100 {
-          // if user has reached limit show the notificaiton
-          notificationsManager.scheduleDataCapLocalNotification(withDataLimit: limit)
-        }
+      let limit = newValue as! Int
+      if limit == 100 {
+        // if user has reached limit show the notificaiton
+        notificationsManager.scheduleDataCapLocalNotification(withDataLimit: limit)
       }
-      logger.log("Sucessfully getbandwidth  \(newValue)")
+      logger.log("Sucessfully getbandwidth \(newValue)")
     } catch {
       logger.log("Error while getting bandwidth")
     }
