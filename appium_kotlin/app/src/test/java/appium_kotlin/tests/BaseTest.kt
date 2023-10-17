@@ -56,12 +56,13 @@ open class BaseTest {
     }
 
     // Initialize DesiredCapabilities
-    fun initialCapabilities(taskId: Int): DesiredCapabilities {
+    private fun initialCapabilities(taskId: Int): DesiredCapabilities {
         // Initialize DesiredCapabilities
         val capabilities = DesiredCapabilities()
         // Get common capabilities from config
         val commonCapabilities = config["capabilities"] as JsonObject
         val app = System.getenv("BROWSERSTACK_APP_ID") ?: config.get("app").asString
+        val appIOS = System.getenv("BROWSERSTACK_APP_ID_IOS") ?: config.get("appiOS").asString
         val envs = config["environments"] as JsonArray
 
         // Iterate over common capabilities
@@ -90,7 +91,8 @@ open class BaseTest {
                 }
             }
         }
-        capabilities.setCapability("app", app)
+
+
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Flutter")
         println("Setup for TaskId $taskId: $capabilities")
 
@@ -100,6 +102,12 @@ open class BaseTest {
         // Set capabilities for the specific environment
         envCapabilities.entrySet().iterator().forEach { pair ->
             capabilities.setCapability(pair.key, pair.value.toString().replace("\"", ""))
+        }
+
+        if (envCapabilities.get("platformName").asString == "Android") {
+            capabilities.setCapability("app", app)
+        } else {
+            capabilities.setCapability("app", appIOS)
         }
         return capabilities
     }
@@ -218,15 +226,18 @@ open class BaseTest {
     }
 
 
-
     open fun isElementPresent(
         remoteWebDriver: RemoteWebDriver,
         flutterFinder: FlutterFinder,
         tooltip: String,
-        timeoutInSecond:Int = 10
-): Boolean {
+        timeoutInSecond: Int = 10
+    ): Boolean {
         return try {
-            remoteWebDriver.executeScript("flutter:waitFor", flutterFinder.byTooltip(tooltip), (timeoutInSecond*1000))
+            remoteWebDriver.executeScript(
+                "flutter:waitFor",
+                flutterFinder.byTooltip(tooltip),
+                (timeoutInSecond * 1000)
+            )
             print("Element present")
             true
         } catch (err: NoSuchElementException) {

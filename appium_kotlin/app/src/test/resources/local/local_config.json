@@ -2,7 +2,8 @@
   "server": "hub-cloud.browserstack.com",
   "username": "jigarfumakiya_6dKXF7",
   "access_key": "21qn1raPp8EN7jpctwen",
-  "app": "/Users/jigarfumakiya/Documents/getlantern/mobile_app/android-lantern/build/ios/iphoneos/Runner.app",
+  "app": "/Users/jigarfumakiya/Documents/getlantern/mobile_app/android-lantern/build/ios/ipa/Lantern.ipa",
+  "appiOS": "/Users/jigarfumakiya/Documents/getlantern/mobile_app/android-lantern/build/ios/iphoneos/Runner.app",
   "capabilities": {
     "automationName": "Flutter",
     "setWebContentsDebuggingEnabled": true,

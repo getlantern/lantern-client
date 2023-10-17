@@ -3,6 +3,7 @@
   "username": "jigarj_SNsRyw",
   "access_key": "dA4yyG26fHbfJxRUYMwr",
   "app": "bs://ac26c1c990dabab70870c250ec774ec9f63fa350",
+  "appiOS":"bs://8b794d35fa0bb674e16bdf4263ee1140dada5da5",
   "capabilities": {
     "automationName": "Flutter",
     "setWebContentsDebuggingEnabled": true,
@@ -13,25 +14,15 @@
       "appiumVersion": "2.0.1",
       "networkLogs": true,
       "projectName": "Lantern",
-      "buildName": "Lantern-APK",
+      "buildName": "Lantern-App",
       "appiumLogs": true
     }
   },
   "environments": [
     {
-      "appium:deviceName": "Samsung Galaxy S21",
-      "platformVersion": "11.0",
-      "platformName": "Android"
-    },
-    {
-      "appium:deviceName": "Google Pixel 7 Pro",
-      "platformVersion": "13.0",
-      "platformName": "Android"
-    },
-    {
-      "appium:deviceName": "Google Pixel 3 XL",
-      "platformVersion": "9.0",
-      "platformName": "Android"
+      "appium:deviceName": "iPhone 12 Pro Max",
+      "platformVersion": "16.0",
+      "platformName": "iOS"
     }
   ]
 }

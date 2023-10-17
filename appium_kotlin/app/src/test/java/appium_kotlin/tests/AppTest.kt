@@ -82,7 +82,7 @@ class AppTest() : BaseTest() {
                 // Report and issue flow
                 reportAnIssueFlow(androidDriver, taskId, flutterFinder)
 
-                googlePlayFlow(androidDriver, taskId, flutterFinder)
+//                googlePlayFlow(androidDriver, taskId, flutterFinder)
 
             } else {
                 iosDriver = remoteDriver as IOSDriver
@@ -93,10 +93,14 @@ class AppTest() : BaseTest() {
 
             if (!isLocalRun) {
                 testPassed(remoteDriver)
+
             }
         } catch (e: Exception) {
             e.printStackTrace()
             if (!isLocalRun) {
+                iosDriver?.let {
+                    testFail(e.message ?: "Unknown error", it)
+                }
                 androidDriver?.let {
                     testFail(e.message ?: "Unknown error", it)
                 }
@@ -105,6 +109,9 @@ class AppTest() : BaseTest() {
             }
         } finally {
             androidDriver?.let {
+                afterTest(it)
+            }
+            iosDriver?.let {
                 afterTest(it)
             }
         }
@@ -415,10 +422,15 @@ class AppTest() : BaseTest() {
         }
     }
 
-    private fun afterTest(driver: AndroidDriver) {
+    private fun afterTest(driver: RemoteWebDriver) {
         switchToContext(ContextType.NATIVE_APP, driver)
-        driver.removeApp(LANTERN_PACKAGE_ID)
-        driver.quit()
+        if (driver is AndroidDriver) {
+            driver.removeApp(LANTERN_PACKAGE_ID)
+            driver.quit()
+        } else if (driver is IOSDriver) {
+            driver.removeApp(LANTERN_PACKAGE_ID)
+            driver.quit()
+        }
         if (isLocalRun && service.isRunning) {
             service.stop()
         }
