@@ -395,13 +395,14 @@ class AppTest() : BaseTest() {
         )
         val sendReportButton = flutterFinder.byTooltip(SEND_REPORT)
         sendReportButton.click()
-        Thread.sleep(6000)
 
         //Since in IOS we are not able to read logs we will make sure form Success
         val isSuccessDialogVisble =
             isElementPresent(androidDriver, flutterFinder, RENEWAL_SUCCESS_OK)
 
         if (isSuccessDialogVisble) {
+            val okButton = flutterFinder.byTooltip(RENEWAL_SUCCESS_OK)
+            okButton.click()
             print("TaskId: $taskId", "reportAnIssueFlow-->Test fail, assertion false.")
             Assertions.assertEquals(isSuccessDialogVisble, true)
 
@@ -411,7 +412,6 @@ class AppTest() : BaseTest() {
             }
             print("TaskId: $taskId", "reportAnIssueFlow-->Test passed, assertion true.")
             Assertions.assertEquals(isSuccessDialogVisble, true)
-
         }
     }
 

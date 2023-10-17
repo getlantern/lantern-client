@@ -223,9 +223,10 @@ open class BaseTest {
         remoteWebDriver: RemoteWebDriver,
         flutterFinder: FlutterFinder,
         tooltip: String,
+        timeoutInSecond:Int = 10
 ): Boolean {
         return try {
-            remoteWebDriver.executeScript("flutter:waitFor", flutterFinder.byTooltip(tooltip), 10)
+            remoteWebDriver.executeScript("flutter:waitFor", flutterFinder.byTooltip(tooltip), (timeoutInSecond*1000))
             print("Element present")
             true
         } catch (err: NoSuchElementException) {

@@ -26,6 +26,7 @@ type SessionModel struct {
 const (
 	pathDeviceID             = "deviceid"
 	pathDevice               = "device"
+	pathDevices              = "devices"
 	pathModel                = "model"
 	pathOSVersion            = "os_version"
 	pathPaymentTestMode      = "paymentTestMode"
@@ -210,7 +211,7 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
-	err = pathdb.Put(tx, PAYMENT_TEST_MODE, opts.PaymentTestMode, "")
+	err = pathdb.Put(tx, pathPaymentTestMode, opts.PaymentTestMode, "")
 	if err != nil {
 		return err
 	}
@@ -343,24 +344,13 @@ func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
 }
 
 func setUserLevel(m *baseModel, userLevel string) error {
-	tx, err := m.db.Begin()
-	if err != nil {
-		return err
-	}
-
-	err = pathdb.Put[string](tx, PATH_USER_LEVEL, userLevel, "")
-	if err != nil {
-		return err
-	}
-	return nil
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathUserLevel, userLevel, "")
+	})
 }
 
 func getUserLevel(m *baseModel) (string, error) {
-	userLevel, err := m.db.Get(PATH_USER_LEVEL)
-	if err != nil {
-		return "", err
-	}
-	return string(userLevel), nil
+	return pathdb.Get[string](m.db, pathUserLevel)
 }
 
 func getBandwidthLimit(m *baseModel) (int64, error) {
@@ -389,7 +379,7 @@ func setDevices(m *baseModel, devices []UserDevice) error {
 	}
 
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, DEVICES, protoDevices, "")
+		pathdb.Put(tx, pathDevices, protoDevices, "")
 		return nil
 	})
 	return nil
@@ -559,19 +549,6 @@ func setUserIdAndToken(m *baseModel, userId int, token string) error {
 	})
 }
 
-type UserResponse struct {
-	UserID       int      `json:"userId"`
-	Code         string   `json:"code"`
-	Token        string   `json:"token"`
-	Referral     string   `json:"referral"`
-	Locale       string   `json:"locale"`
-	Servers      []string `json:"servers"`
-	Inviters     []string `json:"inviters"`
-	Invitees     []string `json:"invitees"`
-	Devices      []string `json:"devices"`
-	YinbiEnabled bool     `json:"yinbiEnabled"`
-}
-
 // Create user
 // Todo-: Create Sprate http client to manag and reuse client
 func userCreate(m *baseModel, local string) error {
@@ -619,7 +596,7 @@ func userCreate(m *baseModel, local string) error {
 	}
 
 	//Save user id and token
-	setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
+	setUserIdAndToken(m, int(userResponse.UserID), userResponse.Token)
 	log.Debugf("Created new Lantern user: %+v", userResponse)
 	return nil
 }
@@ -705,7 +682,7 @@ func cacheUserDetail(m *baseModel, userDetail UserDetailResponse) error {
 	}
 	log.Debugf("Device has stored %v", userDetail.Devices)
 
-	return setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
+	return setUserIdAndToken(m, int(userDetail.UserID), userDetail.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
@@ -722,12 +699,6 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 	level, err := getUserLevel(session.baseModel)
 	if err != nil {
 		return err
-	}
-	var level string
-	if pro {
-		level = "pro"
-	} else {
-		level = "free"
 	}
 
 	model, modelErr := pathdb.Get[string](session.db, pathModel)
