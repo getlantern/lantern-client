@@ -153,3 +153,12 @@ jobs:
       uses: ./.github/workflows/browserstack.yml
       secrets: inherit
       needs: build-android
+
+    publish:
+      uses: ./.github/workflows/publish.yml
+      secrets: inherit
+      needs: build-android
+      with:
+        version: ${{ needs.set-version.outputs.version }}
+        version_file: ${{ needs.set-version.outputs.version_file }}
+        prefix: ${{ needs.set-version.outputs.prefix }}

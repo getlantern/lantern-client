@@ -7,7 +7,7 @@ env:
   GOPRIVATE: github.com/getlantern
 
 jobs:
-  build:
+  test:
     runs-on:
       group: large-runners
     steps:
