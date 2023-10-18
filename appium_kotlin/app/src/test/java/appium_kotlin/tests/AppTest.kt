@@ -70,7 +70,7 @@ class AppTest() : BaseTest() {
             // If the VPN flow is successful then test Payment flow
             paymentFlow(androidDriver, taskId, flutterFinder)
 
-            googlePayPaymentFlow(androidDriver, taskId, flutterFinder)
+            googlePaymentFlow(androidDriver, taskId, flutterFinder)
 
             // Report and issue flow
             reportAnIssueFlow(androidDriver, taskId, flutterFinder)
