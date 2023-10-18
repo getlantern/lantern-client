@@ -5,6 +5,12 @@ on:
     branches: [ atavism/google-pay-test-purchase ]
   pull_request:
     branches: [ main ]
+  workflow_run:
+    workflows: ["Build releases"]
+    branches: [main]
+    types: 
+      - completed
+      
 env:
   GOPRIVATE: github.com/getlantern
 

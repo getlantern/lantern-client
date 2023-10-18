@@ -1,0 +1,115 @@
+name: Publish releases
+
+on:
+  push:
+    branches: [ atavism/google-pay-test-purchase ]
+  pull_request:
+    branches: [ main ]
+  workflow_run:
+    workflows: ["Build releases"]
+    branches: [main]
+    types: 
+      - completed
+
+permissions:
+  contents: read
+
+env:
+  GOPRIVATE: github.com/getlantern
+  S3_BUCKET: lantern
+jobs:
+    set-version:
+      runs-on:
+        group: large-runners
+      outputs:
+        version: ${{ steps.set-version.outputs.version }}
+        prefix: ${{ steps.set-version.outputs.prefix }}
+        version_file: ${{ steps.set-version.outputs.version_file }}
+      steps:
+      - id: set-version
+        shell: python
+        run: |
+          import sys, os
+          ref = os.environ.get("GITHUB_REF","")
+          if "refs/tags/lantern" not in ref:
+            li = 'lantern-installer-dev'
+            vf = 'version-android-dev.txt'
+            version = '9999.99.99-dev'
+          else:
+            a = ref.strip().replace('refs/tags/lantern-', '')
+            parts = a.split('-',1)
+            suffix = parts[1] if len(parts)>1 else ''
+            beta = 'beta' in suffix
+            internal = 'internal' in suffix
+            if beta:
+                li = 'lantern-installer-preview'
+                vf = 'version-android-beta.txt'
+                version = parts[0]
+            elif internal:
+                li = 'lantern-installer-internal'
+                vf = 'version-android-internal.txt'
+                version = parts[0]
+            else:
+                li = 'lantern-installer'
+                vf = 'version-android.txt'
+                version = a
+          print('Setting version to ' + version)
+          print('Setting prefix to ' + li)
+          print('Setting version file to ' + vf)
+          print(f'::set-output name=version::{version}')
+          print(f'::set-output name=prefix::{li}')
+          print(f'::set-output name=version_file::{vf}')
+
+    push-binaries:
+      runs-on:
+        group: large-runners
+      needs: [ set-version ]
+      env:
+        version: ${{ needs.set-version.outputs.version }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+      steps:
+        - name: Download the apk build output
+          uses: actions/download-artifact@v3
+          with:
+            name: android-apk-build
+        - name: Download the aab build output
+          uses: actions/download-artifact@v3
+          with:
+            name: android-aab-build
+        - name: Upload Android App bundle to Play Store (beta)
+          if: needs.set-version.outputs.prefix == 'lantern-installer-preview'
+          uses: r0adkll/upload-google-play@v1
+          with:
+           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+           packageName: org.getlantern.lantern
+           releaseFiles: lantern-installer.aab
+           track: beta
+        - name: Upload Android App bundle to Play Store (production)
+          if: needs.set-version.outputs.prefix == 'lantern-installer'
+          uses: r0adkll/upload-google-play@v1
+          with:
+           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+           packageName: org.getlantern.lantern
+           releaseFiles: lantern-installer.aab
+           track: production
+        - name: Grant private modules access
+          run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+        - name: Clone binaries repo
+          run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
+        - name: Rename builds
+          run: |
+            diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
+            diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
+        - name: Prepare sha256 sums
+          run: |
+            shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
+            shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
+        - name: Commit
+          run: |
+            mv lantern-installer* ./lantern-binaries/
+            cd lantern-binaries
+            git config user.email "admin@getlantern.org"
+            git config user.name "Lantern Bot"
+            git add .
+            git commit -m "Lantern binaries for version ${{ env.version }}"
+            git push origin main
