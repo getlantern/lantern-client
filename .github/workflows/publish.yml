@@ -2,12 +2,10 @@ name: Publish releases
 
 on:
   push:
-    branches: [ atavism/google-pay-test-purchase ]
-  pull_request:
     branches: [ main ]
   workflow_run:
     workflows: ["Build releases"]
-    branches: [ atavism/google-pay-test-purchase ]
+    branches: [ main ]
     types: 
       - completed
 
