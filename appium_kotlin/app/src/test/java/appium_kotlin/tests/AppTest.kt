@@ -70,6 +70,8 @@ class AppTest() : BaseTest() {
             // If the VPN flow is successful then test Payment flow
             paymentFlow(androidDriver, taskId, flutterFinder)
 
+            googlePayPaymentFlow(androidDriver, taskId, flutterFinder)
+
             // Report and issue flow
             reportAnIssueFlow(androidDriver, taskId, flutterFinder)
 
@@ -162,6 +164,41 @@ class AppTest() : BaseTest() {
         )
     }
 
+    @Throws(IOException::class, InterruptedException::class)
+    private fun googlePaymentFlow(
+        androidDriver: AndroidDriver,
+        taskId: Int,
+        flutterFinder: FlutterFinder
+    ) {
+        println("TaskId: $taskId | testGooglePaymentFlow-->started ")
+
+        switchToContext(ContextType.NATIVE_APP, androidDriver)
+        androidDriver.activateApp(LANTERN_PACKAGE_ID)
+
+        println("TaskId: $taskId | testGooglePaymentFlow-->activated app ")
+
+        switchToContext(ContextType.FLUTTER, androidDriver)
+        val accountTap = flutterFinder.byValueKey(ACCOUNT_TAP)
+        accountTap.click()
+        Thread.sleep(2000)
+
+        println("TaskId: $taskId | testGooglePaymentFlow-->clicked on account ")
+
+        val accountManagement = flutterFinder.byValueKey(ACCOUNT_MANAGEMENT)
+        accountManagement.click()
+        Thread.sleep(1000)
+
+        println("TaskId: $taskId | testGooglePaymentFlow-->clicked on account management ")
+        val accountRenew = flutterFinder.byValueKey(ACCOUNT_RENEW)
+        accountRenew.click()
+        Thread.sleep(1000)
+
+        println("TaskId: $taskId | testGooglePaymentFlow-->clicked on account renew ")
+        val mostPopular = flutterFinder.byValueKey(MOST_POPULAR)
+        mostPopular.click()
+        Thread.sleep(2000)
+        println("TaskId: $taskId | testGooglePaymentFlow-->clicked on most popular ")
+    }
 
     @Throws(IOException::class, InterruptedException::class)
     private fun paymentFlow(
