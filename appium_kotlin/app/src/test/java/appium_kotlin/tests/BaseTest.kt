@@ -25,6 +25,7 @@ import java.util.stream.Stream
 
 
 /** Here is the device list-:https://www.browserstack.com/list-of-browsers-and-platforms/app_automate */
+//https://www.browserstack.com/question/39468
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 open class BaseTest {

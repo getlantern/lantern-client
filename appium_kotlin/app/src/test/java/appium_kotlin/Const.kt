@@ -35,3 +35,13 @@ const val REPORT_DESCRIPTION = "report_description"
 const val SEND_REPORT = "send_report"
 
 
+//XPath for ios
+const val X_PATH_ALLOW = "//XCUIElementTypeButton[@name=\"Allow\"]"
+
+
+
+//Local Netowkr xPath-://XCUIElementTypeButton[@name="Allow"]
+//
+//Notification xPath-    //XCUIElementTypeButton[@name="Allow"]
+//
+//VPN Allow dialog xPath-//XCUIElementTypeButton[@name="Allow"]

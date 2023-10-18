@@ -21,6 +21,7 @@ import appium_kotlin.REPORT_DESCRIPTION
 import appium_kotlin.REPORT_ISSUE_SUCCESS
 import appium_kotlin.SEND_REPORT
 import appium_kotlin.SUPPORT
+import appium_kotlin.X_PATH_ALLOW
 import io.appium.java_client.MobileBy
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
@@ -66,9 +67,7 @@ class AppTest() : BaseTest() {
             println("TaskId: $taskId | shouldRunVPNSameTime-->createConnection ")
             val remoteDriver = setupAndCreateConnection(taskId)
             val osVersion = getMobileOs(remoteDriver)
-//            remoteDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5))
             val flutterFinder = FlutterFinder(driver = remoteDriver)
-
             if (osVersion == MobileOS.Android) {
                 androidDriver = remoteDriver as AndroidDriver
                 println("TaskId: $taskId | shouldRunVPNSameTime-->flutterFinder Started ")
@@ -82,18 +81,16 @@ class AppTest() : BaseTest() {
                 // Report and issue flow
                 reportAnIssueFlow(androidDriver, taskId, flutterFinder)
 
-//                googlePlayFlow(androidDriver, taskId, flutterFinder)
+                // googlePlayFlow(androidDriver, taskId, flutterFinder)
 
             } else {
                 iosDriver = remoteDriver as IOSDriver
-//                IOSVPNFlow(iosDriver, taskId, flutterFinder)
-
+                IOSVPNFlow(iosDriver, taskId, flutterFinder)
                 reportAnIssueFlow(iosDriver, taskId, flutterFinder, MobileOS.IOS)
             }
 
             if (!isLocalRun) {
                 testPassed(remoteDriver)
-
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -124,70 +121,28 @@ class AppTest() : BaseTest() {
         taskId: Int,
         flutterFinder: FlutterFinder
     ) {
+
         // App Started wait for few seconds
-        Thread.sleep(5000)
-//        iosDriver.activateApp(LANTERN_PACKAGE_ID)
-
-        Thread.sleep(5000)
-        startChromeBrowserIOS(iosDriver)
-
         Thread.sleep(2000)
-        makeIpRequest(iosDriver)
+
+        switchToContext(ContextType.FLUTTER, iosDriver)
+        println("TaskId: $taskId | finding Switch:")
+        val vpnSwitchFinder = flutterFinder.byType("FlutterSwitch")
+        vpnSwitchFinder.click()
+        println("TaskId: $taskId | VPN Switch On")
+//        Thread.sleep(2000)
 
 
-//
-//        val beforeIp = makeIpRequest(androidDriver)
-//        println("TaskId: $taskId | IP before VPN start: $beforeIp")
-//
-//        switchToContext(ContextType.NATIVE_APP, androidDriver)
-//        androidDriver.activateApp(LANTERN_PACKAGE_ID)
-//        Thread.sleep(5000)
-//
-//
-//        switchToContext(ContextType.FLUTTER, androidDriver)
-//        val vpnSwitchFinder = flutterFinder.byType("FlutterSwitch")
-//        vpnSwitchFinder.click()
-//        Thread.sleep(2000)
-//
-//        //Approve VPN Permissions dialog
-//        switchToContext(ContextType.NATIVE_APP, androidDriver)
-//        Thread.sleep(1000)
-//        androidDriver.findElement(By.id("android:id/button1")).click()
-//
-//        //Wait for VPN to connect
-//        println("TaskId: $taskId | Going to Sleep")
-//        Thread.sleep(2000)
-//
-//        //Open Chrome Again
-//        androidDriver.activateApp(CHROME_PACKAGE_ID)
-//        Thread.sleep(2000)
-//        pullToRefresh(androidDriver)
-//
-//        //Make the request again
-//        makeIpRequest(androidDriver)
-//        Thread.sleep(4000)
-//
-//        val afterIp: String = captureIPLogcat(androidDriver)
-//
-//        if (!isLocalRun) {
-//            if (beforeIp == afterIp || afterIp.isBlank()) {
-//                val testMessage = if (afterIp.isBlank()) {
-//                    "TaskId: $taskId | Both Ip are same or IP is blank before: $beforeIp after: afterIp coming as blank"
-//                } else {
-//                    "TaskId: $taskId | Both Ip are same or IP is blank before: $beforeIp after: $afterIp"
-//                }
-//                testFail(
-//                    testMessage,
-//                    androidDriver
-//                )
-//            }
-//        }
-//        println("TaskId: $taskId | IP Request before $beforeIp after $afterIp")
-//
-//        Assertions.assertEquals(
-//            (afterIp.isNotBlank() && beforeIp.isNotBlank() && beforeIp != afterIp),
-//            true
-//        )
+        //Approve VPN Permissions dialog
+        switchToContext(ContextType.NATIVE_APP, iosDriver)
+        Thread.sleep(1000)
+        iosDriver.findElement(By.xpath(X_PATH_ALLOW)).click()
+        println("TaskId: $taskId | VPN Permissions Allowed")
+
+        val isSwitchOn = vpnSwitchFinder.getAttribute("value")
+        println("TaskId: $taskId | Current state of Switch $isSwitchOn")
+        Assertions.assertEquals(isSwitchOn, true)
+
     }
 
     @Throws(IOException::class, InterruptedException::class)

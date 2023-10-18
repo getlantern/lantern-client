@@ -287,7 +287,7 @@ appium-test-build:
 	flutter build apk --flavor=appiumTest --dart-define=app.flavor=appiumTest --debug
 
 appium-ios-build:
-	flutter build ios --flavor appiumTest --profile --dart-define=app.flavor=appiumTest
+	flutter build ipa --flavor=appiumTest --dart-define=app.flavor=appiumTest --profile
 
 $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@$(GRADLE) -PandroidArch=$(ANDROID_ARCH) \
