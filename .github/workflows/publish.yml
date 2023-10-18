@@ -4,7 +4,8 @@ on:
   push:
     branches: [ main ]
   workflow_run:
-    workflows: ["release"]
+    workflows: ["Build releases"]
+    branches: [ main ]
     types: 
       - completed
 
@@ -73,15 +74,6 @@ jobs:
             access_key: ${{ secrets.AWS_ACCESS_KEY }}
             secret_key: ${{ secrets.AWS_SECRET_KEY }}
 
-        - name: Download the apk build output
-          uses: actions/download-artifact@v3
-          with:
-            name: android-apk-build
-        - name: Download the aab build output
-          uses: actions/download-artifact@v3
-          with:
-            name: android-aab-build
-
         - name: Push binaries to s3
           env:
             VERSION: "${{ env.version }}"
@@ -104,6 +96,14 @@ jobs:
             s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$AAB"
             s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
 
+        - name: Download the apk build output
+          uses: actions/download-artifact@v3
+          with:
+            name: android-apk-build
+        - name: Download the aab build output
+          uses: actions/download-artifact@v3
+          with:
+            name: android-aab-build
         - name: Upload Android App bundle to Play Store (beta)
           if: needs.set-version.outputs.prefix == 'lantern-installer-preview'
           uses: r0adkll/upload-google-play@v1
