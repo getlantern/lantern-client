@@ -1,6 +1,7 @@
 name: BrowserStack CI
 
 on:
+  workflow_call:
 
 env:
   GOPRIVATE: github.com/getlantern
