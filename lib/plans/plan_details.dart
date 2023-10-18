@@ -25,7 +25,7 @@ class PlanCard extends StatelessWidget {
           final inRussia = sessionModel.country.value == 'RU';
 
           // * Play version
-          if (!isPlayVersion || inRussia) {
+          if (isPlayVersion && !inRussia) {
             await sessionModel
                 .submitGooglePlay(planName)
                 .onError((error, stackTrace) {
