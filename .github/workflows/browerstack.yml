@@ -1,12 +1,11 @@
 name: BrowserStack CI
 
 on:
-  push:
-    branches: [ atavism/google-pay-test-purchase ]
   workflow_run:
     workflows: ["release"]
     types: 
       - completed
+  workflow_dispatch:
 
 env:
   GOPRIVATE: github.com/getlantern
