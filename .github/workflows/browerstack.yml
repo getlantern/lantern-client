@@ -1,8 +1,6 @@
 name: BrowserStack CI
 
 on:
-  push:
-    branches: [ atavism/google-pay-test-purchase ]
   workflow_run:
     workflows: ["Build releases"]
     branches: [ atavism/google-pay-test-purchase ]
