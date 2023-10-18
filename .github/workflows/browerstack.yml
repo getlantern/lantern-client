@@ -1,10 +1,6 @@
 name: BrowserStack CI
 
 on:
-  workflow_run:
-    workflows: ["release"]
-    types: 
-      - completed
 
 env:
   GOPRIVATE: github.com/getlantern

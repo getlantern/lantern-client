@@ -149,25 +149,7 @@ jobs:
       - name: Install jq
         run: sudo apt-get install jq
 
-      - name: Upload APK to BrowserStack
-        env:
-          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          BROWSERSTACK_APP_PATH: "lantern-installer.apk"
-        run: |
-          response=$(curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" \
-            -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
-            -F "file=@$BROWSERSTACK_APP_PATH" \
-            -F "custom_id=LanternApp")
-          app_url=$(echo $response | jq -r .app_url)
-          echo "$app_url"
-          echo "BROWSERSTACK_APP_ID=$app_url" >> $GITHUB_ENV
-
-      - name: Run Tests
-        env:
-          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          RUN_ENV: "live"
-        run: |
-          cd appium_kotlin
-          ./gradlew test
+    browserstack:
+      uses: ./.github/workflows/browserstack.yml
+      secrets: inherit
+      needs: build-android
