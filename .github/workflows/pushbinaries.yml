@@ -1,4 +1,4 @@
-name: Publish releases
+name: Push binaries
 
 on:
   workflow_call:
