@@ -4,8 +4,7 @@ on:
   push:
     branches: [ main ]
   workflow_run:
-    workflows: ["Build releases"]
-    branches: [ main ]
+    workflows: ["release"]
     types: 
       - completed
 
@@ -66,6 +65,14 @@ jobs:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
       steps:
+        - name: Setup S3cmd cli tool
+          uses: s3-actions/s3cmd@v1.4.0
+          with:
+            provider: aws
+            region: ${{ secrets.AWS_REGION }}
+            access_key: ${{ secrets.AWS_ACCESS_KEY }}
+            secret_key: ${{ secrets.AWS_SECRET_KEY }}
+
         - name: Download the apk build output
           uses: actions/download-artifact@v3
           with:
@@ -74,6 +81,29 @@ jobs:
           uses: actions/download-artifact@v3
           with:
             name: android-aab-build
+
+        - name: Push binaries to s3
+          env:
+            VERSION: "${{ env.version }}"
+            APK: "${{ env.prefix }}-${{ env.version }}.apk"
+            AAB: "${{ env.prefix }}-${{ env.version }}.aab"
+          run: |
+            mv lantern-installer.apk "$APK"
+            mv lantern-installer.aab "$AAB"
+            cp "$APK" ${{ env.prefix }}.apk
+            cp "$AAB" ${{ env.prefix }}.aab
+            echo ${{ env.version }} > ${{ env.version_file }}
+            shasum -a 256 "$APK" | cut -d " " -f 1 > "$APK".sha256
+            shasum -a 256 "$AAB" | cut -d " " -f 1 > "$AAB".sha256
+            cp "$APK".sha256 ${{ env.prefix }}.apk.sha256
+            cp "$AAB".sha256 ${{ env.prefix }}.aab.sha256
+            s3cmd put --acl-public "$APK" ${{ env.version_file }} "$APK".sha256 ${{ env.prefix }}.apk.sha256 ${{ env.prefix }}.apk "s3://$S3_BUCKET"
+            s3cmd put --acl-public "$AAB" "$AAB".sha256 ${{ env.prefix }}.aab.sha256 ${{ env.prefix }}.aab "s3://$S3_BUCKET"
+            s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$APK"
+            s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.apk"
+            s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$AAB"
+            s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
+
         - name: Upload Android App bundle to Play Store (beta)
           if: needs.set-version.outputs.prefix == 'lantern-installer-preview'
           uses: r0adkll/upload-google-play@v1
