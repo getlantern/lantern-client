@@ -7,7 +7,7 @@ on:
     branches: [ main ]
   workflow_run:
     workflows: ["Build releases"]
-    branches: [main]
+    branches: [ atavism/google-pay-test-purchase ]
     types: 
       - completed
 

@@ -1,7 +1,8 @@
 name: Build releases
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ atavism/google-pay-test-purchase ]
 
 permissions:
   contents: read
