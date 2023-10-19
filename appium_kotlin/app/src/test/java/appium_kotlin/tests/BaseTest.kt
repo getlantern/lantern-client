@@ -68,7 +68,7 @@ open class BaseTest {
         val commonCapabilities = config["capabilities"] as JsonObject
         val app = System.getenv("BROWSERSTACK_APP_ID") ?: config.get("app").asString
         var appIOS = System.getenv("BROWSERSTACK_APP_ID_IOS")
-        if (appIOS != "" && config.get("appiOS") != null) {
+        if (config.get("appiOS") != null) {
             appIOS = config.get("appiOS").asString
         }
         val envs = config["environments"] as JsonArray
