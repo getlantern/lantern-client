@@ -66,7 +66,7 @@ class AppTest() : BaseTest() {
         try {
             println("TaskId: $taskId | shouldRunVPNSameTime-->createConnection ")
             val remoteDriver = setupAndCreateConnection(taskId)
-            val osVersion = getMobileOs(remoteDriver)
+            val osVersion = getMobileOs()
             val flutterFinder = FlutterFinder(driver = remoteDriver)
             if (osVersion == MobileOS.Android) {
                 androidDriver = remoteDriver as AndroidDriver

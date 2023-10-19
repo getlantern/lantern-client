@@ -4,9 +4,11 @@ import appium_kotlin.ContextType
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import io.appium.java_client.AppiumDriver
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.ios.IOSDriver
 import io.appium.java_client.remote.MobileCapabilityType
+import io.appium.java_client.remote.SupportsContextSwitching
 import io.appium.java_client.service.local.AppiumDriverLocalService
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException
 import io.appium.java_client.service.local.AppiumServiceBuilder
@@ -18,6 +20,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
+import org.openqa.selenium.WebDriver
 import pro.truongsinh.appium_flutter.FlutterFinder
 import java.io.FileReader
 import java.net.URL
@@ -29,6 +32,9 @@ import java.util.stream.Stream
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 open class BaseTest {
+
+    private lateinit var platformName: String
+    inline fun String.isAndroid(): Boolean = this == "android"
 
     companion object {
         lateinit var config: JsonObject
@@ -63,7 +69,10 @@ open class BaseTest {
         // Get common capabilities from config
         val commonCapabilities = config["capabilities"] as JsonObject
         val app = System.getenv("BROWSERSTACK_APP_ID") ?: config.get("app").asString
-        val appIOS = System.getenv("BROWSERSTACK_APP_ID_IOS") ?: config.get("appiOS").asString
+        var appIOS = System.getenv("BROWSERSTACK_APP_ID_IOS")
+        if (appIOS != "" && config.get("appiOS") != null) {
+            appIOS = config.get("appiOS").asString
+        }
         val envs = config["environments"] as JsonArray
 
         // Iterate over common capabilities
@@ -104,12 +113,8 @@ open class BaseTest {
         envCapabilities.entrySet().iterator().forEach { pair ->
             capabilities.setCapability(pair.key, pair.value.toString().replace("\"", ""))
         }
+        capabilities.setCapability("app", if (platformName.isAndroid()) app else appIOS)
 
-        if (envCapabilities.get("platformName").asString == "Android") {
-            capabilities.setCapability("app", app)
-        } else {
-            capabilities.setCapability("app", appIOS)
-        }
         return capabilities
     }
 
@@ -149,21 +154,11 @@ open class BaseTest {
         val isLocalRun = checkLocalRun()
         val capabilities = initialCapabilities(taskId)
         val url = serviceURL(isLocalRun)
-        val platformName = capabilities.platformName.name.lowercase()
+        this.platformName = capabilities.platformName.name.lowercase()
 
         println("TaskId: $taskId | Driver created")
         println("TaskId: $taskId | capabilities $capabilities")
-        return when (platformName.toLowerCase()) {
-            "android" -> {
-                AndroidDriver(URL(url), capabilities)
-            }
-
-            "ios" -> {
-                IOSDriver(URL(url), capabilities)
-            }
-
-            else -> throw IllegalArgumentException("Unknown platform: $platformName")
-        }
+        return if (platformName.isAndroid()) AndroidDriver(URL(url), capabilities) else IOSDriver(URL(url), capabilities)
     }
 
     fun testPassed(driver: RemoteWebDriver) {
@@ -178,26 +173,10 @@ open class BaseTest {
 
     protected fun switchToContext(contextType: ContextType, driver: RemoteWebDriver) {
         val context = getContextString(contextType)
-        when (driver) {
-            is AndroidDriver -> {
-                val contextHandle = driver.contextHandles
-                print("Android", "Available context: $contextHandle")
-                driver.context(context)
-                print("Android", "Switched to context: $context")
-            }
-
-            is IOSDriver -> {
-                val contextHandle = driver.contextHandles;
-                print("IOS", "Available context: $contextHandle")
-                driver.context(context)
-                print("IOS", "Switched to context: $context")
-            }
-
-            else -> {
-                throw IllegalStateException("Driver not found: $driver");
-            }
-        }
-
+        val contextHandle = (driver as SupportsContextSwitching).contextHandles
+        print(platformName, "Available context: $contextHandle")
+        driver.context(context)
+        print(platformName, "Switched to context: $context")
     }
 
     private fun getContextString(contextType: ContextType): String {
@@ -208,18 +187,8 @@ open class BaseTest {
         }
     }
 
-    fun getMobileOs(remoteWebDriver: RemoteWebDriver): MobileOS {
-        return when (val platform = remoteWebDriver.capabilities.platformName.name.lowercase()) {
-            "android" -> {
-                MobileOS.Android
-            }
-
-            "ios" -> {
-                MobileOS.IOS
-            }
-
-            else -> throw IllegalArgumentException("Unknown platform: $platform")
-        }
+    fun getMobileOs(): MobileOS {
+        return if (platformName.isAndroid()) MobileOS.Android else MobileOS.IOS
     }
 
     protected fun print(tag: String, message: String) {
