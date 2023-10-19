@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"github.com/getlantern/android-lantern/internalsdk/apimodels"
 	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
@@ -367,7 +368,7 @@ func setLanguage(m *baseModel, lang string) error {
 	})
 }
 
-func setDevices(m *baseModel, devices []UserDevice) error {
+func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
 	var protoDevices []*protos.Device
 	for _, device := range devices {
 		protoDevice := &protos.Device{
@@ -588,7 +589,7 @@ func userCreate(m *baseModel, local string) error {
 		return err
 	}
 	defer resp.Body.Close()
-	var userResponse UserResponse
+	var userResponse apimodels.UserResponse
 	// Read and decode the response body
 	if err := json.NewDecoder(resp.Body).Decode(&userResponse); err != nil {
 		log.Errorf("Error decoding response body: %v", err)
@@ -642,7 +643,7 @@ func userDetail(session *SessionModel) error {
 	defer resp.Body.Close()
 
 	// Read the response body
-	var userDetail UserDetailResponse
+	var userDetail apimodels.UserDetailResponse
 	// Read and decode the response body
 	if err := json.NewDecoder(resp.Body).Decode(&userDetail); err != nil {
 		log.Errorf("Error decoding response body: %v", err)
@@ -655,7 +656,7 @@ func userDetail(session *SessionModel) error {
 	return nil
 }
 
-func cacheUserDetail(m *baseModel, userDetail UserDetailResponse) error {
+func cacheUserDetail(m *baseModel, userDetail apimodels.UserDetailResponse) error {
 	log.Debugf("User detail: %+v", userDetail)
 
 	//Save user refferal code

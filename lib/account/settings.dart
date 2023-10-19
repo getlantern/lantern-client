@@ -10,6 +10,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
 
+  final termsOfService = 'https://s3.amazonaws.com/lantern/Lantern-TOS.pdf';
+  final privacyPolicy = 'https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf';
+
   final packageInfo = PackageInfo.fromPlatform();
 
   void changeLanguage(BuildContext context) async =>
@@ -135,7 +138,7 @@ class Settings extends StatelessWidget {
           ListItemFactory.settingsItem(
             header: 'about'.i18n,
             content: 'privacy_policy'.i18n,
-            onTap: () => openWebView('https://lantern.io/privacy', context),
+            onTap: () => openWebView(privacyPolicy, context),
             trailingArray: [
               mirrorLTR(
                 context: context,
@@ -161,7 +164,8 @@ class Settings extends StatelessWidget {
                 ),
               )
             ],
-            onTap: () => openWebView('https://lantern.io/terms', context),
+            onTap: () => openWebView(
+                termsOfService, context),
           ),
           //* Build version
           FutureBuilder<PackageInfo>(

@@ -379,7 +379,7 @@ class AppTest() : BaseTest() {
 
     private fun afterTest(driver: RemoteWebDriver) {
         switchToContext(ContextType.NATIVE_APP, driver)
-        if (driver is AndroidDriver) {
+        if (driver is AndroidDriver ) {
             driver.removeApp(LANTERN_PACKAGE_ID)
             driver.quit()
         } else if (driver is IOSDriver) {
@@ -397,11 +397,6 @@ class AppTest() : BaseTest() {
         activity.isStopApp = false
         driver.startActivity(activity)
         print("Android", "Chrome browser launched")
-    }
-
-    private fun startChromeBrowserIOS(driver: IOSDriver) {
-        driver.activateApp("com.apple.mobilesafari")
-        print("iOS", "Chrome browser launched")
     }
 
     private fun pullToRefresh(driver: AndroidDriver) {

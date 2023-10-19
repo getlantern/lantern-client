@@ -1,6 +1,5 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-
-import '../common.dart';
+import 'package:lantern/common/common.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.junit.jupiter.params.provider.MethodSource
+import org.openqa.selenium.Capabilities
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -33,6 +34,7 @@ open class BaseTest {
     companion object {
         lateinit var config: JsonObject
         lateinit var service: AppiumDriverLocalService
+        var platformName: String = ""
 
         @JvmStatic
         @MethodSource("devices")
@@ -149,7 +151,7 @@ open class BaseTest {
         val isLocalRun = checkLocalRun()
         val capabilities = initialCapabilities(taskId)
         val url = serviceURL(isLocalRun)
-        val platformName = capabilities.platformName.name.lowercase()
+        val platformName = getPlatformName(capabilities).lowercase()
 
         println("TaskId: $taskId | Driver created")
         println("TaskId: $taskId | capabilities $capabilities")
@@ -178,26 +180,27 @@ open class BaseTest {
 
     protected fun switchToContext(contextType: ContextType, driver: RemoteWebDriver) {
         val context = getContextString(contextType)
+        val platformName = getPlatformName(driver.capabilities)
+
         when (driver) {
             is AndroidDriver -> {
                 val contextHandle = driver.contextHandles
-                print("Android", "Available context: $contextHandle")
+                print(platformName, "Available context: $contextHandle")
                 driver.context(context)
-                print("Android", "Switched to context: $context")
+                print(platformName, "Switched to context: $context")
             }
 
             is IOSDriver -> {
                 val contextHandle = driver.contextHandles;
-                print("IOS", "Available context: $contextHandle")
+                print(platformName, "Available context: $contextHandle")
                 driver.context(context)
-                print("IOS", "Switched to context: $context")
+                print(platformName, "Switched to context: $context")
             }
 
             else -> {
                 throw IllegalStateException("Driver not found: $driver");
             }
         }
-
     }
 
     private fun getContextString(contextType: ContextType): String {
@@ -248,6 +251,10 @@ open class BaseTest {
             print("Element  with error $e")
             false
         }
+    }
+
+    private fun getPlatformName(capabilities: Capabilities): String {
+        return capabilities.platformName.name.lowercase()
     }
 
 }
