@@ -348,14 +348,6 @@ class SessionModel extends Model {
     );
   }
 
-  Future<void> trackUserAction(
-    String message,
-  ) async {
-    return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
-      'message': message,
-    });
-  }
-
   Future<void> redeemResellerCode(
     String email,
     String resellerCode,
