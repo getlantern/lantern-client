@@ -16,6 +16,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.junit.jupiter.params.provider.MethodSource
+import org.openqa.selenium.Capabilities
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -36,6 +37,7 @@ open class BaseTest {
     companion object {
         lateinit var config: JsonObject
         lateinit var service: AppiumDriverLocalService
+        var platformName: String = ""
 
         @JvmStatic
         @MethodSource("devices")

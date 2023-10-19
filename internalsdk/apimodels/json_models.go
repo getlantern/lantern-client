@@ -1,4 +1,4 @@
-package internalsdk
+package apimodels
 
 type UserResponse struct {
 	UserID       float64  `json:"userId"`

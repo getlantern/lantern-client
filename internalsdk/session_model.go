@@ -1,13 +1,11 @@
 package internalsdk
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"net/http"
 	"path/filepath"
 	"strconv"
 
+	"github.com/getlantern/android-lantern/internalsdk/apimodels"
 	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
@@ -294,7 +292,7 @@ func (m *SessionModel) GetToken() (string, error) {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
 		// payment providers' test endpoints.
-		return "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA", nil
+		return "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOusUkc0fKpEZW6tc8uUvA", nil
 	}
 	return pathdb.Get[string](m.baseModel.db, pathToken)
 }
@@ -367,7 +365,7 @@ func setLanguage(m *baseModel, lang string) error {
 	})
 }
 
-func setDevices(m *baseModel, devices []UserDevice) error {
+func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
 	var protoDevices []*protos.Device
 	for _, device := range devices {
 		protoDevice := &protos.Device{
@@ -557,46 +555,17 @@ func userCreate(m *baseModel, local string) error {
 		return err
 	}
 
-	requestBodyMap := map[string]string{
-		"locale": local,
-	}
-
-	// Marshal the map to JSON
-	requestBody, err := json.Marshal(requestBodyMap)
-	if err != nil {
-		log.Errorf("Error marshaling request body: %v", err)
-		return err
-	}
-
-	// Create a new request
-	req, err := http.NewRequest("POST", "https://api.getiantem.org/user-create", bytes.NewBuffer(requestBody))
-	if err != nil {
-		log.Errorf("Error creating new request: %v", err)
-		return err
-	}
-
-	// Add headers
-	req.Header.Set("X-Lantern-Device-Id", deviceID)
-	log.Debugf("Headers set")
-	// Initialize a new http client
-	client := &http.Client{}
-	// Send the request
-	resp, err := client.Do(req)
+	userResponse, err := apimodels.UserCreate(deviceID, local)
 	if err != nil {
 		log.Errorf("Error sending request: %v", err)
-
-		return err
-	}
-	defer resp.Body.Close()
-	var userResponse UserResponse
-	// Read and decode the response body
-	if err := json.NewDecoder(resp.Body).Decode(&userResponse); err != nil {
-		log.Errorf("Error decoding response body: %v", err)
 		return err
 	}
 
 	//Save user id and token
-	setUserIdAndToken(m, int(userResponse.UserID), userResponse.Token)
+	err = setUserIdAndToken(m, int(userResponse.UserID), userResponse.Token)
+	if err != nil {
+		return err
+	}
 	log.Debugf("Created new Lantern user: %+v", userResponse)
 	return nil
 }
@@ -616,37 +585,10 @@ func userDetail(session *SessionModel) error {
 	if err != nil {
 		return err
 	}
-
-	// Create a new request
-	req, err := http.NewRequest("GET", "https://api.getiantem.org/user-data", nil)
-	if err != nil {
-		log.Errorf("Error creating user details request: %v", err)
-		return err
-	}
-
 	userIdStr := fmt.Sprintf("%d", userId)
-	// Add headers
-	req.Header.Set("X-Lantern-Device-Id", deviecId)
-	req.Header.Set("X-Lantern-User-Id", userIdStr)
-	req.Header.Set("X-Lantern-Pro-Token", token)
-	log.Debugf("Headers set")
-	// Initialize a new http client
-	client := &http.Client{}
-	// Send the request
-	resp, err := client.Do(req)
+	userDetail, err := apimodels.FechUserDetail(deviecId, userIdStr, token)
 	if err != nil {
-		log.Errorf("Error sending user details request: %v", err)
-
-		return err
-	}
-	defer resp.Body.Close()
-
-	// Read the response body
-	var userDetail UserDetailResponse
-	// Read and decode the response body
-	if err := json.NewDecoder(resp.Body).Decode(&userDetail); err != nil {
-		log.Errorf("Error decoding response body: %v", err)
-		return err
+		return nil
 	}
 	err = cacheUserDetail(session.baseModel, userDetail)
 	if err != nil {
@@ -655,7 +597,7 @@ func userDetail(session *SessionModel) error {
 	return nil
 }
 
-func cacheUserDetail(m *baseModel, userDetail UserDetailResponse) error {
+func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) error {
 	log.Debugf("User detail: %+v", userDetail)
 
 	//Save user refferal code
