@@ -1,4 +1,5 @@
 import 'package:lantern/vpn/vpn.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});

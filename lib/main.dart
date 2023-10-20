@@ -17,16 +17,14 @@ Future<void> main() async {
   await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SentryFlutter.init((options) {
-    options.debug = true;
+    options.debug = kDebugMode;
     options.anrEnabled = true;
     options.autoInitializeNativeSdk = false;
-  // options.attachScreenshot = true;
+    options.attachScreenshot = true;
     options.dsn = Platform.isAndroid
         ? 'https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353'
         : 'https://c14296fdf5a6be272e1ecbdb7cb23f76@o75725.ingest.sentry.io/4506081382694912';
-
-  },
-      appRunner: () => runApp(LanternApp()));
+  }, appRunner: () => runApp(SentryScreenshotWidget(child: LanternApp())));
 
   // setupCatcherAndRun(
   //   SentryScreenshotWidget(
