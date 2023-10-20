@@ -173,7 +173,7 @@ To publish a release on Google Play, go to the Lantern App on the [Google Play C
 
 ### Enabling Auto-Update for a Sideloaded Release
 
-Just because something's been released to prod doesn't mean clients will auto-update, there's an additional step for that.
+Just because something's been released to prod doesn't mean clients will auto-update, there's an additional step for that. The below will release the current production version to autoupdate. Please make sure the VERSION parameter matches the current production version.
 
 ```
 GH_TOKEN=<token> VERSION=7.2.0 make release-autoupdate
