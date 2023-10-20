@@ -250,15 +250,7 @@ require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
 
 release-autoupdate: require-version
-	@TAG_COMMIT=$$(git rev-list --abbrev-commit -1 $(TAG)) && \
-	if [[ -z "$$TAG_COMMIT" ]]; then \
-		echo "Could not find given tag $(TAG)."; \
-	fi && \
-	for URL in s3://lantern/lantern_update_android_arm-$$VERSION.bz2; do \
-		NAME=$$(basename $$URL) && \
-		STRIPPED_NAME=$$(echo "$$NAME" | cut -d - -f 1 | sed s/lantern_//).bz2 && \
-		s3cmd get --force s3://$(S3_BUCKET)/$$NAME $$STRIPPED_NAME; \
-	done && \
+	@curl https://s3.amazonaws.com/lantern/lantern-installer.apk | bzip2 > update_android_arm.bz2 && \
 	$(RUBY) ./create_or_update_release.rb getlantern lantern $$VERSION update_android_arm.bz2
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play

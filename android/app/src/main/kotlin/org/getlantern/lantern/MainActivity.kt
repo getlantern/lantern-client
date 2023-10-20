@@ -1,5 +1,7 @@
 package org.getlantern.lantern
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -12,6 +14,7 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
@@ -152,11 +155,16 @@ class MainActivity :
         }
     }
 
+    @SuppressLint("WrongConstant")
     override fun onStart() {
         super.onStart()
         val packageName = activity.packageName
         IntentFilter("$packageName.intent.VPN_DISCONNECTED").also {
-            registerReceiver(receiver, it)
+            ContextCompat.registerReceiver(
+                this@MainActivity,
+                receiver,
+                it,
+                ContextCompat.RECEIVER_NOT_EXPORTED)
         }
     }
 
