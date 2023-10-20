@@ -3,7 +3,7 @@ import Internalsdk
 import SQLite
 import Toast_Swift
 import UIKit
-
+import Sentry
 // Before Commit Run linter
 // swiftlint autocorrect --format
 // swiftlint --fix --format
@@ -28,12 +28,15 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+//    SentryUtils.startSentry()
     initializeFlutterComponents()
     do {
       try setupAppComponents()
     } catch {
       logger.error("Unexpected error setting up app components: \(error)")
-      exit(1)
+        SentryUtils.caputure(error: error as NSError)
+        fatalError(" Error While Flutter app Components setup")
+        //        exit(1)
     }
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -60,6 +63,7 @@ import UIKit
     vpnModel = try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
     navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
+      
   }
 
   // Post start up
@@ -68,7 +72,7 @@ import UIKit
     //        setupLocal()
     //        createUser()
     askNotificationPermssion()
-
+      logger.log("Sentry sdk \(SentrySDK.isEnabled)")
   }
 
   func askNotificationPermssion() {

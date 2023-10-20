@@ -6,6 +6,7 @@ import DBModule
 import Flutter
 import Foundation
 import Internalsdk
+import Sentry
 
 class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
   let vpnManager: VPNBase
@@ -29,6 +30,7 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
       try model.saveVPNStatus(status)
       logger.log("Sucessfully set VPN status with  \(status)")
     } catch {
+        SentryUtils.caputure(error: error as NSError)
       logger.log("Error while setting VPN status \(error.localizedDescription)")
     }
   }
@@ -39,10 +41,10 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
       onError: { error in
         // in case of error, reset switch position
         self.saveVPNStatus(status: "disconnected")
-        logger.debug("VPN not started \(error.localizedDescription)")
       },
       onSuccess: {
         logger.debug("VPN started")
+          
         self.saveVPNStatus(status: "connected")
       })
   }

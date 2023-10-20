@@ -62,6 +62,8 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       }
       logger.log("Sucessfully getbandwidth \(newValue)")
     } catch {
+        SentryUtils.caputure(error:error as NSError)
+        
       logger.log("Error while getting bandwidth")
     }
   }
@@ -90,6 +92,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
         try FileManager.default.createDirectory(
           at: fileURL, withIntermediateDirectories: true, attributes: nil)
       } catch {
+          SentryUtils.caputure(error: NSError(domain: "configDirFor", code: 01, userInfo: [NSLocalizedDescriptionKey: "Error while configDirFor"]))
         print(error.localizedDescription)
       }
     }

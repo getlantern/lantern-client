@@ -137,6 +137,13 @@ PODS:
   - SDWebImage (5.18.2):
     - SDWebImage/Core (= 5.18.2)
   - SDWebImage/Core (5.18.2)
+  - Sentry/HybridSDK (8.11.0):
+    - SentryPrivate (= 8.11.0)
+  - sentry_flutter (0.0.1):
+    - Flutter
+    - FlutterMacOS
+    - Sentry/HybridSDK (= 8.11.0)
+  - SentryPrivate (8.11.0)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -181,6 +188,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
+  - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -207,6 +215,8 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SDWebImage
+    - Sentry
+    - SentryPrivate
     - SQLite.swift
     - SwiftyGif
     - Toast
@@ -247,6 +257,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
+  sentry_flutter:
+    :path: ".symlinks/plugins/sentry_flutter/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
@@ -295,6 +307,9 @@ SPEC CHECKSUMS:
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   SDWebImage: c0de394d7cf7f9838aed1fd6bb6037654a4572e4
+  Sentry: 39d57e691e311bdb73bc1ab5bbebbd6bc890050d
+  sentry_flutter: b2feefdad5b0f06602347172bc7257e8e9da5562
+  SentryPrivate: 48712023cdfd523735c2edb6b06bedf26c4730a3
   share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
   shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
@@ -310,4 +325,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0cfe0e959396ac6aad61f61d0b82005395de9d66
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.11.3

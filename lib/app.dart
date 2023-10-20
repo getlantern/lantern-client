@@ -99,6 +99,7 @@ class LanternApp extends StatelessWidget {
                     colorScheme: ColorScheme.fromSwatch()
                         .copyWith(secondary: Colors.black),
                   ),
+
                   title: 'app_name'.i18n,
                   localizationsDelegates: const [
                     GlobalMaterialLocalizations.delegate,

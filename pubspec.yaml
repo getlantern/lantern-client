@@ -39,12 +39,11 @@ dependencies:
   google_fonts:
   flutter_switch: ^0.3.2
   flag: ^7.0.0
-  # from sdk. See https://github.com/jhomlala/catcher/pull/234 for more details
-  catcher_2:
-    git:
-      url: https://github.com/ThexXTURBOXx/catcher.git
+  catcher_2: ^1.0.0
 
-  sentry: ^7.10.1
+#  sentry: ^7.10.1
+  sentry_flutter: ^7.10.1
+
   badges: ^3.1.1
   dotted_border: ^2.0.0+3
   styled_text: ^8.1.0

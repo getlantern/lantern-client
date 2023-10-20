@@ -18,6 +18,7 @@
 		0308A13E2AAF43A10086157A /* UserNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A12B2AAEEE2C0086157A /* UserNotificationsManager.swift */; };
 		0321C3F72AA9D84700D462C1 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F62AA9D84700D462C1 /* Process.swift */; };
 		0321C3F92AA9D8DF00D462C1 /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
+		0324CC302AE279CF00490B46 /* SentryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0324CC2F2AE279CF00490B46 /* SentryUtils.swift */; };
 		032A43582AA6F8AA00EF442B /* DnsDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032A43572AA6F8AA00EF442B /* DnsDetector.swift */; };
 		0333203B2AC698FA00333DA9 /* MockVPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333203A2AC698FA00333DA9 /* MockVPNManager.swift */; };
 		03567DBB2AA9F15100A233EA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB432AA8946400FB41B2 /* Constants.swift */; };
@@ -98,6 +99,7 @@
 		0315F55C2AC1C1A500D49F7B /* DatabaseFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DatabaseFramework.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/DatabaseFramework-csnjouuwjwleiddbptbupimqigld/Build/Products/Debug-iphoneos/DatabaseFramework.framework"; sourceTree = "<group>"; };
 		0321C3F62AA9D84700D462C1 /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManager.swift; sourceTree = "<group>"; };
+		0324CC2F2AE279CF00490B46 /* SentryUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryUtils.swift; sourceTree = "<group>"; };
 		032A43572AA6F8AA00EF442B /* DnsDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnsDetector.swift; sourceTree = "<group>"; };
 		0333203A2AC698FA00333DA9 /* MockVPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockVPNManager.swift; sourceTree = "<group>"; };
 		03567DBF2AA9F47200A233EA /* FileUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUtils.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 				03A1AB432AA8946400FB41B2 /* Constants.swift */,
 				03567DBF2AA9F47200A233EA /* FileUtils.swift */,
 				03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */,
+				0324CC2F2AE279CF00490B46 /* SentryUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -749,6 +752,7 @@
 				03567DC02AA9F47200A233EA /* FileUtils.swift in Sources */,
 				03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */,
 				03A1AB422AA8930A00FB41B2 /* Result.swift in Sources */,
+				0324CC302AE279CF00490B46 /* SentryUtils.swift in Sources */,
 				0308A1282AAEED7E0086157A /* VpnHelper.swift in Sources */,
 				03F00B5F2AB07C8000E991E2 /* LoadingIndicatorManager.swift in Sources */,
 				EC6155E92ACC8FF70015527E /* NavigationModel.swift in Sources */,
