@@ -41,7 +41,7 @@ dependencies:
   flag: ^7.0.0
   catcher_2: ^1.0.0
 
-#  sentry: ^7.10.1
+
   sentry_flutter: ^7.10.1
 
   badges: ^3.1.1

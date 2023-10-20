@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:catcher_2/catcher_2.dart';
 import 'package:flutter/material.dart';
-import 'package:sentry/sentry.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 final debugOption = Catcher2Options(
   SilentReportMode(),
@@ -22,8 +22,10 @@ final debugOption = Catcher2Options(
       enableDeviceParameters: true,
       enableCustomParameters: true,
       enableStackTrace: true,
+
     ),
   ],
+
 );
 
 final releaseOption = Catcher2Options(
@@ -44,6 +46,8 @@ final releaseOption = Catcher2Options(
         ),
       ),
       printLogs: true,
+      enableApplicationParameters: true,
+
     ),
   ],
 );

@@ -30,7 +30,7 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
       try model.saveVPNStatus(status)
       logger.log("Sucessfully set VPN status with  \(status)")
     } catch {
-        SentryUtils.caputure(error: error as NSError)
+      SentryUtils.caputure(error: error as NSError)
       logger.log("Error while setting VPN status \(error.localizedDescription)")
     }
   }
@@ -44,7 +44,6 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
       },
       onSuccess: {
         logger.debug("VPN started")
-          
         self.saveVPNStatus(status: "connected")
       })
   }
