@@ -16,7 +16,6 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.junit.jupiter.params.provider.MethodSource
-import org.openqa.selenium.Capabilities
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -112,6 +111,7 @@ open class BaseTest {
         envCapabilities.entrySet().iterator().forEach { pair ->
             capabilities.setCapability(pair.key, pair.value.toString().replace("\"", ""))
         }
+        platformName = envCapabilities.get("platformName").asString
         capabilities.setCapability("app", if (platformName.isAndroid()) app else appIOS)
 
         return capabilities
@@ -154,11 +154,14 @@ open class BaseTest {
         val isLocalRun = checkLocalRun()
         val capabilities = initialCapabilities(taskId)
         val url = serviceURL(isLocalRun)
-        this.platformName = capabilities.platformName.name.lowercase()
+//        this.platformName = capabilities.platformName.name.lowercase()
 
         println("TaskId: $taskId | Driver created")
         println("TaskId: $taskId | capabilities $capabilities")
-        return if (platformName.isAndroid()) AndroidDriver(URL(url), capabilities) else IOSDriver(URL(url), capabilities)
+        return if (platformName.isAndroid()) AndroidDriver(URL(url), capabilities) else IOSDriver(
+            URL(url),
+            capabilities
+        )
     }
 
     fun testPassed(driver: RemoteWebDriver) {
