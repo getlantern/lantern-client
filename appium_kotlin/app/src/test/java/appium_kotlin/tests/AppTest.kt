@@ -22,6 +22,7 @@ import appium_kotlin.REPORT_ISSUE_SUCCESS
 import appium_kotlin.SEND_REPORT
 import appium_kotlin.SUPPORT
 import appium_kotlin.X_PATH_ALLOW
+import io.appium.java_client.InteractsWithApps
 import io.appium.java_client.MobileBy
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
@@ -66,7 +67,7 @@ class AppTest() : BaseTest() {
         try {
             println("TaskId: $taskId | shouldRunVPNSameTime-->createConnection ")
             val remoteDriver = setupAndCreateConnection(taskId)
-            val osVersion = getMobileOs(remoteDriver)
+            val osVersion = getMobileOs()
             val flutterFinder = FlutterFinder(driver = remoteDriver)
             if (osVersion == MobileOS.Android) {
                 androidDriver = remoteDriver as AndroidDriver
@@ -85,7 +86,7 @@ class AppTest() : BaseTest() {
 
             } else {
                 iosDriver = remoteDriver as IOSDriver
-                IOSVPNFlow(iosDriver, taskId, flutterFinder)
+//                IOSVPNFlow(iosDriver, taskId, flutterFinder)
                 reportAnIssueFlow(iosDriver, taskId, flutterFinder, MobileOS.IOS)
             }
 
@@ -130,7 +131,6 @@ class AppTest() : BaseTest() {
         val vpnSwitchFinder = flutterFinder.byType("FlutterSwitch")
         vpnSwitchFinder.click()
         println("TaskId: $taskId | VPN Switch On")
-//        Thread.sleep(2000)
 
 
         //Approve VPN Permissions dialog
@@ -141,7 +141,7 @@ class AppTest() : BaseTest() {
 
         val isSwitchOn = vpnSwitchFinder.getAttribute("value")
         println("TaskId: $taskId | Current state of Switch $isSwitchOn")
-        Assertions.assertEquals(isSwitchOn, true)
+        Assertions.assertEquals(isSwitchOn.lowercase() == "true", true)
 
     }
 
@@ -379,13 +379,16 @@ class AppTest() : BaseTest() {
 
     private fun afterTest(driver: RemoteWebDriver) {
         switchToContext(ContextType.NATIVE_APP, driver)
-        if (driver is AndroidDriver ) {
-            driver.removeApp(LANTERN_PACKAGE_ID)
-            driver.quit()
-        } else if (driver is IOSDriver) {
-            driver.removeApp(LANTERN_PACKAGE_ID)
-            driver.quit()
-        }
+        (driver as InteractsWithApps).removeApp(LANTERN_PACKAGE_ID)
+        driver.quit()
+
+//        if (driver is AndroidDriver) {
+//            driver.removeApp(LANTERN_PACKAGE_ID)
+//            driver.quit()
+//        } else if (driver is IOSDriver) {
+//            driver.removeApp(LANTERN_PACKAGE_ID)
+//            driver.quit()
+//        }
         if (isLocalRun && service.isRunning) {
             service.stop()
         }

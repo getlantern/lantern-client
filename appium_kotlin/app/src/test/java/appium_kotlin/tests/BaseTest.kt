@@ -7,6 +7,7 @@ import com.google.gson.JsonParser
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.ios.IOSDriver
 import io.appium.java_client.remote.MobileCapabilityType
+import io.appium.java_client.remote.SupportsContextSwitching
 import io.appium.java_client.service.local.AppiumDriverLocalService
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException
 import io.appium.java_client.service.local.AppiumServiceBuilder
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.junit.jupiter.params.provider.MethodSource
-import org.openqa.selenium.Capabilities
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -24,12 +24,14 @@ import java.io.FileReader
 import java.net.URL
 import java.util.stream.Stream
 
-
 /** Here is the device list-:https://www.browserstack.com/list-of-browsers-and-platforms/app_automate */
-//https://www.browserstack.com/question/39468
+// https://www.browserstack.com/question/39468
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 open class BaseTest {
+    private lateinit var platformName: String
+
+    inline fun String.isAndroid(): Boolean = this == "android"
 
     companion object {
         lateinit var config: JsonObject
@@ -43,10 +45,11 @@ open class BaseTest {
             val parser = JsonParser()
             // Use an environment variable or system property to determine the config file path
             val runEnv = System.getenv("RUN_ENV") ?: "local"
-            val configFilePath = when (runEnv) {
-                "local" -> "src/test/resources/local/local_config.json"
-                else -> "src/test/resources/live/live_config.json"
-            }
+            val configFilePath =
+                when (runEnv) {
+                    "local" -> "src/test/resources/local/local_config.json"
+                    else -> "src/test/resources/live/live_config.json"
+                }
 
             config = parser.parse(FileReader(configFilePath)) as JsonObject
             val envs = (config["environments"] as JsonArray).size()
@@ -65,7 +68,10 @@ open class BaseTest {
         // Get common capabilities from config
         val commonCapabilities = config["capabilities"] as JsonObject
         val app = System.getenv("BROWSERSTACK_APP_ID") ?: config.get("app").asString
-        val appIOS = System.getenv("BROWSERSTACK_APP_ID_IOS") ?: config.get("appiOS").asString
+        var appIOS = System.getenv("BROWSERSTACK_APP_ID_IOS")
+        if (config.get("appiOS") != null) {
+            appIOS = config.get("appiOS").asString
+        }
         val envs = config["environments"] as JsonArray
 
         // Iterate over common capabilities
@@ -95,7 +101,6 @@ open class BaseTest {
             }
         }
 
-
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Flutter")
         println("Setup for TaskId $taskId: $capabilities")
 
@@ -106,12 +111,9 @@ open class BaseTest {
         envCapabilities.entrySet().iterator().forEach { pair ->
             capabilities.setCapability(pair.key, pair.value.toString().replace("\"", ""))
         }
+        platformName = envCapabilities.get("platformName").asString
+        capabilities.setCapability("app", if (platformName.isAndroid()) app else appIOS)
 
-        if (envCapabilities.get("platformName").asString == "Android") {
-            capabilities.setCapability("app", app)
-        } else {
-            capabilities.setCapability("app", appIOS)
-        }
         return capabilities
     }
 
@@ -121,9 +123,10 @@ open class BaseTest {
         // If local run, start Appium Server
         if (isLocalRun) {
             // Start Appium Server for local run
-            service = AppiumServiceBuilder()
-                .withArgument(GeneralServerFlag.ALLOW_INSECURE, "chromedriver_autodownload")
-                .build()
+            service =
+                AppiumServiceBuilder()
+                    .withArgument(GeneralServerFlag.ALLOW_INSECURE, "chromedriver_autodownload")
+                    .build()
             service.start()
 
             if (!service.isRunning) {
@@ -151,56 +154,42 @@ open class BaseTest {
         val isLocalRun = checkLocalRun()
         val capabilities = initialCapabilities(taskId)
         val url = serviceURL(isLocalRun)
-        val platformName = getPlatformName(capabilities).lowercase()
+//        this.platformName = capabilities.platformName.name.lowercase()
 
         println("TaskId: $taskId | Driver created")
         println("TaskId: $taskId | capabilities $capabilities")
-        return when (platformName.toLowerCase()) {
-            "android" -> {
-                AndroidDriver(URL(url), capabilities)
-            }
-
-            "ios" -> {
-                IOSDriver(URL(url), capabilities)
-            }
-
-            else -> throw IllegalArgumentException("Unknown platform: $platformName")
-        }
+        return if (platformName.isAndroid()) AndroidDriver(URL(url), capabilities) else IOSDriver(
+            URL(url),
+            capabilities
+        )
     }
 
     fun testPassed(driver: RemoteWebDriver) {
         val jse = (driver as JavascriptExecutor)
-        jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"All test passed!\"}}")
+        jse.executeScript(
+            "browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"All test passed!\"}}",
+        )
     }
 
-    fun testFail(failureMessage: String, driver: RemoteWebDriver) {
+    fun testFail(
+        failureMessage: String,
+        driver: RemoteWebDriver,
+    ) {
         val jse = (driver as JavascriptExecutor)
-        jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"$failureMessage\"}}")
+        jse.executeScript(
+            "browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"$failureMessage\"}}",
+        )
     }
 
-    protected fun switchToContext(contextType: ContextType, driver: RemoteWebDriver) {
+    protected fun switchToContext(
+        contextType: ContextType,
+        driver: RemoteWebDriver,
+    ) {
         val context = getContextString(contextType)
-        val platformName = getPlatformName(driver.capabilities)
-
-        when (driver) {
-            is AndroidDriver -> {
-                val contextHandle = driver.contextHandles
-                print(platformName, "Available context: $contextHandle")
-                driver.context(context)
-                print(platformName, "Switched to context: $context")
-            }
-
-            is IOSDriver -> {
-                val contextHandle = driver.contextHandles;
-                print(platformName, "Available context: $contextHandle")
-                driver.context(context)
-                print(platformName, "Switched to context: $context")
-            }
-
-            else -> {
-                throw IllegalStateException("Driver not found: $driver");
-            }
-        }
+        val contextHandle = (driver as SupportsContextSwitching).contextHandles
+        print(platformName, "Available context: $contextHandle")
+        driver.context(context)
+        print(platformName, "Switched to context: $context")
     }
 
     private fun getContextString(contextType: ContextType): String {
@@ -211,36 +200,28 @@ open class BaseTest {
         }
     }
 
-    fun getMobileOs(remoteWebDriver: RemoteWebDriver): MobileOS {
-        return when (val platform = remoteWebDriver.capabilities.platformName.name.lowercase()) {
-            "android" -> {
-                MobileOS.Android
-            }
-
-            "ios" -> {
-                MobileOS.IOS
-            }
-
-            else -> throw IllegalArgumentException("Unknown platform: $platform")
-        }
+    fun getMobileOs(): MobileOS {
+        return if (platformName.isAndroid()) MobileOS.Android else MobileOS.IOS
     }
 
-    protected fun print(tag: String, message: String) {
+    protected fun print(
+        tag: String,
+        message: String,
+    ) {
         println("[$tag] $message")
     }
-
 
     open fun isElementPresent(
         remoteWebDriver: RemoteWebDriver,
         flutterFinder: FlutterFinder,
         tooltip: String,
-        timeoutInSecond: Int = 10
+        timeoutInSecond: Int = 10,
     ): Boolean {
         return try {
             remoteWebDriver.executeScript(
                 "flutter:waitFor",
                 flutterFinder.byTooltip(tooltip),
-                (timeoutInSecond * 1000)
+                (timeoutInSecond * 1000),
             )
             print("Element present")
             true
@@ -252,9 +233,4 @@ open class BaseTest {
             false
         }
     }
-
-    private fun getPlatformName(capabilities: Capabilities): String {
-        return capabilities.platformName.name.lowercase()
-    }
-
 }
