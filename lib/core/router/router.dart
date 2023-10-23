@@ -239,5 +239,12 @@ class AppRouter extends $AppRouter {
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
+    CustomRoute(
+      page: AppWebview.page,
+      path: '/app_webview',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
   ];
 }

@@ -83,6 +83,7 @@ jobs:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           BROWSERSTACK_APP_PATH: "build/app/outputs/flutter-apk/app-appiumtest-debug.apk"
+          BROWSERSTACK_IOS_APP_PATH: "build/ios/ipa/Lantern.ipa"
         run: |
           response=$(curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" \
             -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
@@ -91,6 +92,15 @@ jobs:
           app_url=$(echo $response | jq -r .app_url)
           echo "$app_url"
           echo "BROWSERSTACK_APP_ID=$app_url" >> $GITHUB_ENV
+          
+          # Upload iOS app
+          response_ios=$(curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" \
+          -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
+          -F "file=@$BROWSERSTACK_IOS_APP_PATH" \
+          -F "custom_id=LanternAppIOS") # Custom ID for the iOS app
+          app_url_ios=$(echo $response_ios | jq -r .app_url)
+          echo "iOS app URL: $app_url_ios"
+          echo "BROWSERSTACK_APP_ID_IOS=$app_url_ios" >> $GITHUB_ENV
 
       - name: Run Tests
         env:

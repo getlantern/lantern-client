@@ -32,6 +32,8 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.device = systemName  // IOS does not provide Device name directly
     opts.model = systemName
     opts.osVersion = systemVersion
+    opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest
+
     var error: NSError?
     guard
       let model = InternalsdkNewSessionModel(
