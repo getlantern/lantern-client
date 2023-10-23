@@ -19,12 +19,10 @@ import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.util.HttpClient
-import org.json.JSONObject
 import java.io.IOException
 
 // An OkHttp-Based HTTP client for communicating with the Pro server
 open class LanternHttpClient : HttpClient() {
-
     private fun userHeaders(): MutableMap<String, String> {
         val headers = mutableMapOf<String, String>()
         headers.put(DEVICE_ID_HEADER, LanternApp.getSession().deviceID)
@@ -36,11 +34,18 @@ open class LanternHttpClient : HttpClient() {
         return headers
     }
 
-    fun get(url: HttpUrl, cb: ProCallback) {
+    fun get(
+        url: HttpUrl,
+        cb: ProCallback,
+    ) {
         proRequest("GET", url, userHeaders(), null, cb)
     }
 
-    fun post(url: HttpUrl, body: RequestBody, cb: ProCallback) {
+    fun post(
+        url: HttpUrl,
+        body: RequestBody,
+        cb: ProCallback,
+    ) {
         proRequest("POST", url, userHeaders(), body, cb)
     }
 
@@ -54,11 +59,17 @@ open class LanternHttpClient : HttpClient() {
         get(
             url,
             object : ProCallback {
-                override fun onFailure(throwable: Throwable?, error: ProError?) {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
                     cb.onFailure(throwable, error)
                 }
 
-                override fun onSuccess(response: Response?, result: JsonObject?) {
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
                     Logger.debug(TAG, "JSON response" + result.toString())
                     result?.let {
                         val user = parseData<ProUser>(result.toString())
@@ -72,19 +83,26 @@ open class LanternHttpClient : HttpClient() {
 
     fun sendLinkRequest(cb: ProCallback?) {
         val url = createProUrl("/user-link-request")
-        val formBody = FormBody.Builder()
-            .add("email", LanternApp.getSession().email())
-            .add("deviceName", LanternApp.getSession().deviceName())
-            .build()
+        val formBody =
+            FormBody.Builder()
+                .add("email", LanternApp.getSession().email())
+                .add("deviceName", LanternApp.getSession().deviceName())
+                .build()
         post(
             url,
             formBody,
             object : ProCallback {
-                override fun onFailure(throwable: Throwable?, error: ProError?) {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
                     if (cb != null) cb.onFailure(throwable, error)
                 }
 
-                override fun onSuccess(response: Response?, result: JsonObject?) {
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
                     result?.get("error")?.let {
                         onFailure(null, ProError(result))
                     }
@@ -102,23 +120,34 @@ open class LanternHttpClient : HttpClient() {
         return plans
     }
 
-    fun plans(cb: PlansCallback, inAppBilling: InAppBilling?) {
-        val params = mapOf(
-            "locale" to LanternApp.getSession().language,
-            "countrycode" to LanternApp.getSession().getCountryCode(),
-        )
+    fun plans(
+        cb: PlansCallback,
+        inAppBilling: InAppBilling?,
+    ) {
+        val params =
+            mapOf(
+                "locale" to LanternApp.getSession().language,
+                "countrycode" to LanternApp.getSession().getCountryCode(),
+            )
         val url = createProUrl("/plans", params)
         get(
             url,
             object : ProCallback {
-                override fun onFailure(throwable: Throwable?, error: ProError?) {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
                     cb.onFailure(throwable, error)
                 }
 
-                override fun onSuccess(response: Response?, result: JsonObject?) {
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
                     // val mapType = TypeToken<Map<String, List<PaymentMethods>>() {}.type
-                    val stripePubKey = result?.get("providers")?.asJsonObject
-                        ?.get("stripe")?.asJsonObject?.get("pubKey")?.asString
+                    val stripePubKey =
+                        result?.get("providers")?.asJsonObject
+                            ?.get("stripe")?.asJsonObject?.get("pubKey")?.asString
                     LanternApp.getSession().setStripePubKey(stripePubKey)
                     val fetched = parseData<List<ProPlan>>(result?.get("plans").toString())
                     Logger.debug(TAG, "Pro plans: $fetched")
@@ -144,23 +173,34 @@ open class LanternHttpClient : HttpClient() {
         )
     }
 
-    fun plansV3(cb: PlansV3Callback, inAppBilling: InAppBilling?) {
-        val params = mapOf(
-            "locale" to LanternApp.getSession().language,
-            "countrycode" to LanternApp.getSession().getCountryCode(),
-        )
+    fun plansV3(
+        cb: PlansV3Callback,
+        inAppBilling: InAppBilling?,
+    ) {
+        val params =
+            mapOf(
+                "locale" to LanternApp.getSession().language,
+                "countrycode" to LanternApp.getSession().getCountryCode(),
+            )
         get(
             createProUrl("/plans-v3", params),
             object : ProCallback {
-                override fun onFailure(throwable: Throwable?, error: ProError?) {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
                     Logger.error(TAG, "Unable to fetch plans", throwable)
                     cb.onFailure(throwable, error)
                 }
 
-                override fun onSuccess(response: Response?, result: JsonObject?) {
-                    val methods = parseData<Map<String, List<PaymentMethods>>>(
-                        result?.get("providers").toString(),
-                    )
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    val methods =
+                        parseData<Map<String, List<PaymentMethods>>>(
+                            result?.get("providers").toString(),
+                        )
                     val providers = methods.get("android")
                     val fetched = parseData<List<ProPlan>>(result?.get("plans").toString())
                     val plans = plansMap(fetched)
@@ -177,63 +217,97 @@ open class LanternHttpClient : HttpClient() {
         body: RequestBody?,
         cb: ProCallback,
     ) {
-        var builder = Request.Builder().cacheControl(CacheControl.FORCE_NETWORK)
-            .headers(headers.toHeaders())
-            .url(url)
+        var builder =
+            Request.Builder().cacheControl(CacheControl.FORCE_NETWORK)
+                .headers(headers.toHeaders())
+                .url(url)
         if (method == "POST") {
             var requestBody = if (body != null) body else RequestBody.create(null, ByteArray(0))
             builder = builder.post(requestBody)
         }
 
         val request = builder.build()
-        httpClient.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                cb.onFailure(e, ProError("", e.message ?: ""))
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                response.use {
-                    if (!response.isSuccessful) {
-                        val error = ProError("", "Unexpected response code from server $response")
-                        cb.onFailure(null, error)
-                        return
-                    }
-                    val responseData = response.body!!.string()
-                    Logger.d(TAG, "Response body " + responseData)
-                    val result = JsonParser().parse(responseData).asJsonObject
-                    if (result == null) {
-                        return
-                    } else if (result.get("error") != null) {
-                        var error = result.get("error").asString
-                        error = "Error making request to $url: $result error: $error"
-                        Logger.error(TAG, error)
-                        cb.onFailure(null, ProError("", error))
-                        return
-                    }
-                    cb.onSuccess(response, result)
+        httpClient.newCall(request).enqueue(
+            object : Callback {
+                override fun onFailure(
+                    call: Call,
+                    e: IOException,
+                ) {
+                    cb.onFailure(e, ProError("", e.message ?: ""))
                 }
-            }
-        })
+
+                override fun onResponse(
+                    call: Call,
+                    response: Response,
+                ) {
+                    response.use {
+                        if (!response.isSuccessful) {
+                            val error = ProError("", "Unexpected response code from server $response")
+                            cb.onFailure(null, error)
+                            return
+                        }
+                        val responseData = response.body!!.string()
+                        Logger.d(TAG, "Response body " + responseData)
+                        val result = JsonParser().parse(responseData).asJsonObject
+                        if (result == null) {
+                            return
+                        } else if (result.get("error") != null) {
+                            var error = result.get("error").asString
+                            error = "Error making request to $url: $result error: $error"
+                            Logger.error(TAG, error)
+                            cb.onFailure(null, ProError("", error))
+                            return
+                        }
+                        cb.onSuccess(response, result)
+                    }
+                }
+            },
+        )
     }
 
     interface ProCallback {
-        fun onFailure(throwable: Throwable?, error: ProError?)
-        abstract fun onSuccess(response: Response?, result: JsonObject?)
+        fun onFailure(
+            throwable: Throwable?,
+            error: ProError?,
+        )
+
+        abstract fun onSuccess(
+            response: Response?,
+            result: JsonObject?,
+        )
     }
 
     interface ProUserCallback {
-        fun onFailure(throwable: Throwable?, error: ProError?)
-        fun onSuccess(response: Response, userData: ProUser)
+        fun onFailure(
+            throwable: Throwable?,
+            error: ProError?,
+        )
+
+        fun onSuccess(
+            response: Response,
+            userData: ProUser,
+        )
     }
 
     interface PlansCallback {
-        fun onFailure(throwable: Throwable?, error: ProError?)
+        fun onFailure(
+            throwable: Throwable?,
+            error: ProError?,
+        )
+
         fun onSuccess(plans: Map<String, ProPlan>)
     }
 
     interface PlansV3Callback {
-        fun onFailure(throwable: Throwable?, error: ProError?)
-        fun onSuccess(plans: Map<String, ProPlan>, methods: List<PaymentMethods>)
+        fun onFailure(
+            throwable: Throwable?,
+            error: ProError?,
+        )
+
+        fun onSuccess(
+            plans: Map<String, ProPlan>,
+            methods: List<PaymentMethods>,
+        )
     }
 
     companion object {
@@ -246,7 +320,10 @@ open class LanternHttpClient : HttpClient() {
 
         private var JSON: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
 
-        fun createProUrl(uri: String, params: Map<String, String?> = mutableMapOf()): HttpUrl {
+        fun createProUrl(
+            uri: String,
+            params: Map<String, String?> = mutableMapOf(),
+        ): HttpUrl {
             val url = "http://localhost/pro$uri"
             var builder = url.toHttpUrl().newBuilder()
             for ((key, value) in params) {
