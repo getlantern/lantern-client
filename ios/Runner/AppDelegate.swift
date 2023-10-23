@@ -4,10 +4,6 @@ import SQLite
 import Toast_Swift
 import UIKit
 
-// Before Commit Run linter
-// swiftlint autocorrect --format
-// swiftlint --fix --format
-// swiftlint lint --fix --format
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -27,6 +23,7 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+//    SentryUtils.startSentry();
     initializeFlutterComponents()
     do {
       try setupAppComponents()

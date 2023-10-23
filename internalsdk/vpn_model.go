@@ -1,8 +1,6 @@
 package internalsdk
 
 import (
-	"fmt"
-
 	"github.com/getlantern/errors"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
@@ -89,7 +87,6 @@ func (m *VPNModel) SwitchVPN(on bool) error {
 }
 
 func (m *VPNModel) SaveVPNStatus(status string) error {
-	return fmt.Errorf("This is sentry test for go panic")
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathVPNStatus, status, "")
 	})
