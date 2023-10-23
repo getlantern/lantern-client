@@ -3,7 +3,7 @@ import 'package:lantern/messaging/messaging_model.dart';
 
 @RoutePage<void>(name: 'Account')
 class AccountMenu extends StatelessWidget {
-  AccountMenu({Key? key}) : super(key: key);
+ const AccountMenu({Key? key}) : super(key: key);
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());
@@ -82,8 +82,7 @@ class AccountMenu extends StatelessWidget {
         (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus(
           (BuildContext context, bool hasCopiedRecoveryKey, Widget? child) =>
-              Platform.isAndroid
-                  ? ListItemFactory.settingsItem(
+               ListItemFactory.settingsItem(
                       key: AppKeys.account_management,
                       icon: ImagePaths.account,
                       content: 'account_management'.i18n,
@@ -96,7 +95,7 @@ class AccountMenu extends StatelessWidget {
                           ),
                       ],
                     )
-                  : const SizedBox(),
+
         ),
       ),
       ListItemFactory.settingsItem(

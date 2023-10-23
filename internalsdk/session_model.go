@@ -1,12 +1,11 @@
 package internalsdk
 
 import (
-	"bytes"
-	"encoding/json"
-	"net/http"
+	"fmt"
 	"path/filepath"
 	"strconv"
 
+	"github.com/getlantern/android-lantern/internalsdk/apimodels"
 	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
@@ -25,6 +24,7 @@ type SessionModel struct {
 const (
 	pathDeviceID             = "deviceid"
 	pathDevice               = "device"
+	pathDevices              = "devices"
 	pathModel                = "model"
 	pathOSVersion            = "os_version"
 	pathPaymentTestMode      = "paymentTestMode"
@@ -71,6 +71,7 @@ type SessionModelOpts struct {
 	PlayVersion     bool
 	Lang            string
 	TimeZone        string
+	PaymentTestMode bool
 }
 
 // NewSessionModel initializes a new SessionModel instance.
@@ -80,6 +81,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		return nil, err
 	}
 	base.db.RegisterType(1000, &protos.ServerInfo{})
+	base.db.RegisterType(2000, &protos.Devices{})
 	m := &SessionModel{baseModel: base}
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	return m, m.initSessionModel(opts)
@@ -149,7 +151,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "reportIssue":
 		email := arguments.Get("email").String()
 		issue := arguments.Get("issue").String()
-		description := arguments.Get("issue").String()
+		description := arguments.Get("description").String()
 		err := reportIssue(m, email, issue, description)
 		if err != nil {
 			return nil, err
@@ -207,6 +209,10 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
+	err = pathdb.Put(tx, pathPaymentTestMode, opts.PaymentTestMode, "")
+	if err != nil {
+		return err
+	}
 	// Check if lang is already added or not
 	// If yes then do not add it
 	// This is used for only when user is new
@@ -225,6 +231,7 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
+	log.Debugf("User is %v", userId)
 	if userId == 0 {
 		local, err := m.Locale()
 		if err != nil {
@@ -236,6 +243,13 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 			return err
 		}
 	}
+
+	// Get all user details
+	err = userDetail(m)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -258,8 +272,9 @@ func (m *SessionModel) GetUserID() (int64, error) {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
 		// payment providers' test endpoints.
-		i64, err := strconv.ParseInt("9007199254740992L", 10, 64)
+		i64, err := strconv.ParseInt("9007199254740992", 10, 64)
 		if err != nil {
+			log.Debugf("Wrror while parsing userID %v", err)
 			return 0, err
 		}
 		return i64, nil
@@ -277,7 +292,7 @@ func (m *SessionModel) GetToken() (string, error) {
 		// When we're testing payments, use a specific test user ID. This is a user in our
 		// production environment but that gets special treatment from the proserver to hit
 		// payment providers' test endpoints.
-		return "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA", nil
+		return "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOusUkc0fKpEZW6tc8uUvA", nil
 	}
 	return pathdb.Get[string](m.baseModel.db, pathToken)
 }
@@ -326,6 +341,16 @@ func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
 	})
 }
 
+func setUserLevel(m *baseModel, userLevel string) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathUserLevel, userLevel, "")
+	})
+}
+
+func getUserLevel(m *baseModel) (string, error) {
+	return pathdb.Get[string](m.db, pathUserLevel)
+}
+
 func getBandwidthLimit(m *baseModel) (int64, error) {
 	return pathdb.Get[int64](m.db, pathLatestBandwith)
 }
@@ -338,6 +363,24 @@ func setLanguage(m *baseModel, lang string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathLang, lang, "")
 	})
+}
+
+func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
+	var protoDevices []*protos.Device
+	for _, device := range devices {
+		protoDevice := &protos.Device{
+			Id:      device.ID,
+			Name:    device.Name,
+			Created: device.Created,
+		}
+		protoDevices = append(protoDevices, protoDevice)
+	}
+
+	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put(tx, pathDevices, protoDevices, "")
+		return nil
+	})
+	return nil
 }
 
 func (m *SessionModel) GetTimeZone() (string, error) {
@@ -504,19 +547,6 @@ func setUserIdAndToken(m *baseModel, userId int, token string) error {
 	})
 }
 
-type UserResponse struct {
-	UserID       int      `json:"userId"`
-	Code         string   `json:"code"`
-	Token        string   `json:"token"`
-	Referral     string   `json:"referral"`
-	Locale       string   `json:"locale"`
-	Servers      []string `json:"servers"`
-	Inviters     []string `json:"inviters"`
-	Invitees     []string `json:"invitees"`
-	Devices      []string `json:"devices"`
-	YinbiEnabled bool     `json:"yinbiEnabled"`
-}
-
 // Create user
 // Todo-: Create Sprate http client to manag and reuse client
 func userCreate(m *baseModel, local string) error {
@@ -525,53 +555,76 @@ func userCreate(m *baseModel, local string) error {
 		return err
 	}
 
-	requestBodyMap := map[string]string{
-		"locale": local,
-	}
-
-	// Marshal the map to JSON
-	requestBody, err := json.Marshal(requestBodyMap)
-	if err != nil {
-		log.Errorf("Error marshaling request body: %v", err)
-		return err
-	}
-
-	// Create a new request
-	req, err := http.NewRequest("POST", "https://api.getiantem.org/user-create", bytes.NewBuffer(requestBody))
-	if err != nil {
-		log.Errorf("Error creating new request: %v", err)
-		return err
-	}
-
-	// Add headers
-	req.Header.Set("X-Lantern-Device-Id", deviceID)
-	log.Debugf("Headers set")
-	// Initialize a new http client
-	client := &http.Client{}
-	// Send the request
-	resp, err := client.Do(req)
+	userResponse, err := apimodels.UserCreate(deviceID, local)
 	if err != nil {
 		log.Errorf("Error sending request: %v", err)
+		return err
+	}
 
+	//Save user id and token
+	err = setUserIdAndToken(m, int(userResponse.UserID), userResponse.Token)
+	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
-	var userResponse UserResponse
-	// Read and decode the response body
-	if err := json.NewDecoder(resp.Body).Decode(&userResponse); err != nil {
-		log.Errorf("Error decoding response body: %v", err)
+	log.Debugf("Created new Lantern user: %+v", userResponse)
+	return nil
+}
+
+// Create user
+// Todo-: Create Sprate http client to manag and reuse client
+func userDetail(session *SessionModel) error {
+	deviecId, err := session.GetDeviceID()
+	if err != nil {
 		return err
 	}
+	userId, err := session.GetUserID()
+	if err != nil {
+		return err
+	}
+	token, err := session.GetToken()
+	if err != nil {
+		return err
+	}
+	userIdStr := fmt.Sprintf("%d", userId)
+	userDetail, err := apimodels.FechUserDetail(deviecId, userIdStr, token)
+	if err != nil {
+		return nil
+	}
+	err = cacheUserDetail(session.baseModel, userDetail)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) error {
+	log.Debugf("User detail: %+v", userDetail)
+
 	//Save user refferal code
-	if userResponse.Referral != "" {
-		err := setReferalCode(m, userResponse.Referral)
+	if userDetail.Referral != "" {
+		err := setReferalCode(m, userDetail.Referral)
 		if err != nil {
 			return err
 		}
 	}
-	//Save user id and token
-	log.Debugf("Created new Lantern user: %+v", userResponse)
-	return setUserIdAndToken(m, userResponse.UserID, userResponse.Token)
+	if userDetail.UserStatus != "" && userDetail.UserStatus == "active" && userDetail.UserLevel == "pro" {
+		setProUser(m, true)
+	} else {
+		setProUser(m, false)
+	}
+	err := setUserLevel(m, userDetail.UserLevel)
+	if err != nil {
+		return err
+	}
+
+	//Store all device
+	err = setDevices(m, userDetail.Devices)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Device has stored %v", userDetail.Devices)
+
+	return setUserIdAndToken(m, int(userDetail.UserID), userDetail.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
@@ -585,16 +638,9 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 		}
 	}
 
-	//Check If user is pro or not
-	pro, proErr := session.IsProUser()
-	if proErr != nil {
-		return proErr
-	}
-	var level string
-	if pro {
-		level = "pro"
-	} else {
-		level = "free"
+	level, err := getUserLevel(session.baseModel)
+	if err != nil {
+		return err
 	}
 
 	model, modelErr := pathdb.Get[string](session.db, pathModel)

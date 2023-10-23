@@ -5,7 +5,9 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import io.appium.java_client.android.AndroidDriver
+import io.appium.java_client.ios.IOSDriver
 import io.appium.java_client.remote.MobileCapabilityType
+import io.appium.java_client.remote.SupportsContextSwitching
 import io.appium.java_client.service.local.AppiumDriverLocalService
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException
 import io.appium.java_client.service.local.AppiumServiceBuilder
@@ -16,18 +18,25 @@ import org.junit.jupiter.api.parallel.ExecutionMode
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.remote.RemoteWebDriver
+import pro.truongsinh.appium_flutter.FlutterFinder
 import java.io.FileReader
 import java.net.URL
 import java.util.stream.Stream
 
 /** Here is the device list-:https://www.browserstack.com/list-of-browsers-and-platforms/app_automate */
+// https://www.browserstack.com/question/39468
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 open class BaseTest {
+    private lateinit var platformName: String
+
+    inline fun String.isAndroid(): Boolean = this == "android"
 
     companion object {
         lateinit var config: JsonObject
         lateinit var service: AppiumDriverLocalService
+        var platformName: String = ""
 
         @JvmStatic
         @MethodSource("devices")
@@ -36,10 +45,11 @@ open class BaseTest {
             val parser = JsonParser()
             // Use an environment variable or system property to determine the config file path
             val runEnv = System.getenv("RUN_ENV") ?: "local"
-            val configFilePath = when (runEnv) {
-                "local" -> "src/test/resources/local/local_config.json"
-                else -> "src/test/resources/live/live_config.json"
-            }
+            val configFilePath =
+                when (runEnv) {
+                    "local" -> "src/test/resources/local/local_config.json"
+                    else -> "src/test/resources/live/live_config.json"
+                }
 
             config = parser.parse(FileReader(configFilePath)) as JsonObject
             val envs = (config["environments"] as JsonArray).size()
@@ -52,12 +62,16 @@ open class BaseTest {
     }
 
     // Initialize DesiredCapabilities
-    fun initialCapabilities(taskId: Int): DesiredCapabilities {
+    private fun initialCapabilities(taskId: Int): DesiredCapabilities {
         // Initialize DesiredCapabilities
         val capabilities = DesiredCapabilities()
         // Get common capabilities from config
         val commonCapabilities = config["capabilities"] as JsonObject
         val app = System.getenv("BROWSERSTACK_APP_ID") ?: config.get("app").asString
+        var appIOS = System.getenv("BROWSERSTACK_APP_ID_IOS")
+        if (config.get("appiOS") != null) {
+            appIOS = config.get("appiOS").asString
+        }
         val envs = config["environments"] as JsonArray
 
         // Iterate over common capabilities
@@ -86,7 +100,7 @@ open class BaseTest {
                 }
             }
         }
-        capabilities.setCapability("app", app)
+
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Flutter")
         println("Setup for TaskId $taskId: $capabilities")
 
@@ -97,18 +111,22 @@ open class BaseTest {
         envCapabilities.entrySet().iterator().forEach { pair ->
             capabilities.setCapability(pair.key, pair.value.toString().replace("\"", ""))
         }
+        platformName = envCapabilities.get("platformName").asString
+        capabilities.setCapability("app", if (platformName.isAndroid()) app else appIOS)
+
         return capabilities
     }
 
     // Check if it is a local run
-    fun checkLocalRun(): Boolean {
+    private fun checkLocalRun(): Boolean {
         val isLocalRun = (System.getenv("RUN_ENV") ?: "local") == "local"
         // If local run, start Appium Server
         if (isLocalRun) {
             // Start Appium Server for local run
-            service = AppiumServiceBuilder()
-                .withArgument(GeneralServerFlag.ALLOW_INSECURE, "chromedriver_autodownload")
-                .build()
+            service =
+                AppiumServiceBuilder()
+                    .withArgument(GeneralServerFlag.ALLOW_INSECURE, "chromedriver_autodownload")
+                    .build()
             service.start()
 
             if (!service.isRunning) {
@@ -131,37 +149,47 @@ open class BaseTest {
         }
     }
 
-    fun setupAndCreateConnection(taskId: Int): AndroidDriver {
+    fun setupAndCreateConnection(taskId: Int): RemoteWebDriver {
         println("Setup and creating connection for TaskId: $taskId")
-
         val isLocalRun = checkLocalRun()
         val capabilities = initialCapabilities(taskId)
-
         val url = serviceURL(isLocalRun)
-        val driver = AndroidDriver(
-            URL(url),
-            capabilities,
-        )
+//        this.platformName = capabilities.platformName.name.lowercase()
 
         println("TaskId: $taskId | Driver created")
-        println("TaskId: $taskId | Car $capabilities")
-        return driver
+        println("TaskId: $taskId | capabilities $capabilities")
+        return if (platformName.isAndroid()) AndroidDriver(URL(url), capabilities) else IOSDriver(
+            URL(url),
+            capabilities
+        )
     }
 
-    fun testPassed(driver: AndroidDriver) {
+    fun testPassed(driver: RemoteWebDriver) {
         val jse = (driver as JavascriptExecutor)
-        jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"All test passed!\"}}")
+        jse.executeScript(
+            "browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"All test passed!\"}}",
+        )
     }
 
-    fun testFail(failureMessage: String, driver: AndroidDriver) {
+    fun testFail(
+        failureMessage: String,
+        driver: RemoteWebDriver,
+    ) {
         val jse = (driver as JavascriptExecutor)
-        jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"$failureMessage\"}}")
+        jse.executeScript(
+            "browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"$failureMessage\"}}",
+        )
     }
 
-    protected fun switchToContext(contextType: ContextType, driver: AndroidDriver) {
+    protected fun switchToContext(
+        contextType: ContextType,
+        driver: RemoteWebDriver,
+    ) {
         val context = getContextString(contextType)
+        val contextHandle = (driver as SupportsContextSwitching).contextHandles
+        print(platformName, "Available context: $contextHandle")
         driver.context(context)
-        print("Android", "Switched to context: $context")
+        print(platformName, "Switched to context: $context")
     }
 
     private fun getContextString(contextType: ContextType): String {
@@ -172,7 +200,37 @@ open class BaseTest {
         }
     }
 
-    protected fun print(tag: String, message: String) {
+    fun getMobileOs(): MobileOS {
+        return if (platformName.isAndroid()) MobileOS.Android else MobileOS.IOS
+    }
+
+    protected fun print(
+        tag: String,
+        message: String,
+    ) {
         println("[$tag] $message")
+    }
+
+    open fun isElementPresent(
+        remoteWebDriver: RemoteWebDriver,
+        flutterFinder: FlutterFinder,
+        tooltip: String,
+        timeoutInSecond: Int = 10,
+    ): Boolean {
+        return try {
+            remoteWebDriver.executeScript(
+                "flutter:waitFor",
+                flutterFinder.byTooltip(tooltip),
+                (timeoutInSecond * 1000),
+            )
+            print("Element present")
+            true
+        } catch (err: NoSuchElementException) {
+            print("Element not present with error $err")
+            false
+        } catch (e: Exception) {
+            print("Element  with error $e")
+            false
+        }
     }
 }

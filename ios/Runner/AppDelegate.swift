@@ -1,7 +1,6 @@
 import Flutter
 import Internalsdk
 import SQLite
-import Sentry
 import Toast_Swift
 import UIKit
 
@@ -21,23 +20,19 @@ import UIKit
   var navigationModel: NavigationModel!
   var vpnModel: VpnModel!
   var messagingModel: MessagingModel!
-
-  // IOS
+ // IOS
   var loadingManager: LoadingIndicatorManager?
 
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    SentryUtils.startSentry()
     initializeFlutterComponents()
     do {
       try setupAppComponents()
     } catch {
       logger.error("Unexpected error setting up app components: \(error)")
-      SentryUtils.caputure(error: error as NSError)
-      fatalError(" Error While Flutter app Components setup")
-      //        exit(1)
+      exit(1)
     }
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -64,17 +59,16 @@ import UIKit
     vpnModel = try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
     navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
-
   }
 
   // Post start up
   // Init all method needed for user
   func startUpSequency() {
-    //        setupLocal()
-    //        createUser()
-    askNotificationPermssion()
-    logger.log("Sentry sdk \(SentrySDK.isEnabled)")
-  }
+      // Do not show notification dialog in Appium Env
+      if(AppEnvironment.current != AppEnvironment.appiumTest){
+          askNotificationPermssion()
+      }
+   }
 
   func askNotificationPermssion() {
     UserNotificationsManager.shared.requestNotificationPermission { granted in
