@@ -96,7 +96,7 @@ open class LanternApp : Application() {
 
         @JvmStatic
         fun getPlans(cb: LanternHttpClient.PlansCallback) {
-            lanternHttpClient.getPlans(
+            lanternHttpClient.plans(
                 cb,
                 if (session.isPlayVersion && !session.isRussianUser) inAppBilling else null
             )

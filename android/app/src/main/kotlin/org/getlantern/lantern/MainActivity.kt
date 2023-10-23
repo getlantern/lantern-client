@@ -195,6 +195,10 @@ class MainActivity :
 
     override fun onDestroy() {
         super.onDestroy()
+        if (accountInitDialog != null) {
+            accountInitDialog.dismiss()
+        }
+
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
@@ -313,8 +317,8 @@ class MainActivity :
                 Logger.error(TAG, "Unable to fetch user data: $error", throwable)
             }
 
-            override fun onSuccess(response: Response, user: ProUser?) {
-                val devices = user?.getDevices()
+            override fun onSuccess(response: Response, user: ProUser) {
+                val devices = user?.devices
                 val deviceID = LanternApp.getSession().deviceID()
                 // if the payment test mode is enabled
                 // then do nothing To avoid restarting app while debugging
@@ -333,7 +337,7 @@ class MainActivity :
     }
 
     private fun updatePlans() {
-        lanternClient.getPlans(object : PlansCallback {
+        lanternClient.plans(object : PlansCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
                 Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
             }
