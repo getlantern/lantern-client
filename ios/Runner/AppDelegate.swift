@@ -20,8 +20,7 @@ import UIKit
   var navigationModel: NavigationModel!
   var vpnModel: VpnModel!
   var messagingModel: MessagingModel!
-
-  // IOS
+ // IOS
   var loadingManager: LoadingIndicatorManager?
 
   override func application(
@@ -65,11 +64,11 @@ import UIKit
   // Post start up
   // Init all method needed for user
   func startUpSequency() {
-    //        setupLocal()
-    //        createUser()
-    askNotificationPermssion()
-
-  }
+      // Do not show notification dialog in Appium Env
+      if(AppEnvironment.current != AppEnvironment.appiumTest){
+          askNotificationPermssion()
+      }
+   }
 
   func askNotificationPermssion() {
     UserNotificationsManager.shared.requestNotificationPermission { granted in

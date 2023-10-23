@@ -3,6 +3,7 @@
   "username": "jigarj_SNsRyw",
   "access_key": "dA4yyG26fHbfJxRUYMwr",
   "app": "bs://ac26c1c990dabab70870c250ec774ec9f63fa350",
+  "appiOS":"bs://5817a3a4bf6f74b596ca61a915f807935bf0f8a2",
   "capabilities": {
     "automationName": "Flutter",
     "setWebContentsDebuggingEnabled": true,
@@ -13,8 +14,9 @@
       "appiumVersion": "2.0.1",
       "networkLogs": true,
       "projectName": "Lantern",
-      "buildName": "Lantern-APK",
-      "appiumLogs": true
+      "buildName": "Lantern-App",
+      "appiumLogs": true,
+      "resignApp": false
     }
   },
   "environments": [

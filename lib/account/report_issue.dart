@@ -35,6 +35,20 @@ class _ReportIssueState extends State<ReportIssue> {
   );
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      const String flavor = String.fromEnvironment('app.flavor');
+      if (flavor == 'appiumTest') {
+      // Set email
+        emailController.text ='jigar@getlantern.org';
+      // Set issue type
+        issueController.text = 'other'.i18n;
+      }
+    });
+    super.initState();
+  }
+
+  @override
   void dispose() {
     emailController.dispose();
     issueController.dispose();
@@ -121,7 +135,6 @@ class _ReportIssueState extends State<ReportIssue> {
                                 issueController.text = newValue!;
                               },
                               items: <String>[
-                                '',
                                 'cannot_access_blocked_sites'.i18n,
                                 'cannot_complete_purchase'.i18n,
                                 'cannot_sign_in'.i18n,
