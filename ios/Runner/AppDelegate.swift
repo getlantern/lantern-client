@@ -29,7 +29,7 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    //    SentryUtils.startSentry()
+    SentryUtils.startSentry()
     initializeFlutterComponents()
     do {
       try setupAppComponents()

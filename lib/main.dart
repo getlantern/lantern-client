@@ -4,6 +4,8 @@ import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'catcher_setup.dart';
+
 Future<void> main() async {
   // CI will be true only when running appium test
   const String flavor = String.fromEnvironment('app.flavor');
@@ -17,20 +19,20 @@ Future<void> main() async {
   await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SentryFlutter.init((options) {
-    options.debug = kDebugMode;
+    options.debug = true;
     options.anrEnabled = true;
-    options.autoInitializeNativeSdk = false;
+    options.autoInitializeNativeSdk = true;
     options.attachScreenshot = true;
     options.dsn = Platform.isAndroid
         ? 'https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353'
         : 'https://c14296fdf5a6be272e1ecbdb7cb23f76@o75725.ingest.sentry.io/4506081382694912';
   }, appRunner: () => runApp(SentryScreenshotWidget(child: LanternApp())));
 
-  // setupCatcherAndRun(
-  //   SentryScreenshotWidget(
-  //     child: LanternApp(),
-  //   ),
-  // );
+  setupCatcherAndRun(
+    SentryScreenshotWidget(
+      child: LanternApp(),
+    ),
+  );
 
   //
 }
