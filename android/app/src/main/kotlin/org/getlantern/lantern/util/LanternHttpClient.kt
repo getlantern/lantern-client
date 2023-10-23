@@ -19,6 +19,7 @@ import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.util.HttpClient
+import org.json.JSONObject
 import java.io.IOException
 
 // An OkHttp-Based HTTP client for communicating with the Pro server
@@ -60,7 +61,7 @@ open class LanternHttpClient : HttpClient() {
                 override fun onSuccess(response: Response?, result: JsonObject?) {
                     Logger.debug(TAG, "JSON response" + result.toString())
                     result?.let {
-                        val user = parseData<ProUser>(result.asString)
+                        val user = parseData<ProUser>(result.toString())
                         Logger.debug(TAG, "User ID is ${user.userId}")
                         LanternApp.getSession().storeUserData(user)
                     }
@@ -191,26 +192,26 @@ open class LanternHttpClient : HttpClient() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    val responseData = response.body.toString()
+                response.use {
+                    if (!response.isSuccessful) {
+                        val error = ProError("", "Unexpected response code from server $response")
+                        cb.onFailure(null, error)
+                        return
+                    }
+                    val responseData = response.body!!.string()
+                    Logger.d(TAG, "Response body " + responseData)
                     val result = JsonParser().parse(responseData).asJsonObject
-                    if (result.get("error") != null) {
-                        val error = result.get("error").asString
-                        Logger.error(TAG, "Error making request to $url: $result error: $error")
-                        cb.onFailure(null, ProError(result))
+                    if (result == null) {
+                        return
+                    } else if (result.get("error") != null) {
+                        var error = result.get("error").asString
+                        error = "Error making request to $url: $result error: $error"
+                        Logger.error(TAG, error)
+                        cb.onFailure(null, ProError("", error))
                         return
                     }
                     cb.onSuccess(response, result)
-                    return
                 }
-                Logger.error(TAG, "Request to $url failed")
-                Logger.error(TAG, "Response: $response")
-                val responseBody = response.body
-                if (responseBody != null) {
-                    Logger.error(TAG, "Body: $responseBody")
-                }
-                val error = ProError("", "Unexpected response code from server")
-                cb.onFailure(null, error)
             }
         })
     }

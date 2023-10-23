@@ -55,7 +55,8 @@ open class LanternService : Service(), Runnable {
     private val started: AtomicBoolean = AtomicBoolean()
     private lateinit var autoUpdater: AutoUpdater
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent == null) return START_NOT_STICKY
         autoUpdater = AutoUpdater(this)
         val autoBooted = intent.getBooleanExtra(AUTO_BOOTED, false)
         Logger.d(TAG, "Called onStartCommand, autoBooted?: $autoBooted")
@@ -163,8 +164,8 @@ open class LanternService : Service(), Runnable {
             }
             service.createUserHandler.removeCallbacks(service.createUserRunnable)
             Logger.debug(TAG, "Created new Lantern user: ${user.newUserDetails()}")
-            LanternApp.getSession().setUserIdAndToken(user.getUserId(), user.getToken())
-            val referral = user.getReferral()
+            LanternApp.getSession().setUserIdAndToken(user.userId, user.token)
+            val referral = user.referral
             if (!referral.isEmpty()) {
                 LanternApp.getSession().setCode(referral)
             }

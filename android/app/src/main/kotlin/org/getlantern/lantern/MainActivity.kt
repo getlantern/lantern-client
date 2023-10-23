@@ -195,6 +195,10 @@ class MainActivity :
 
     override fun onDestroy() {
         super.onDestroy()
+        if (accountInitDialog != null) {
+            accountInitDialog.dismiss()
+        }
+
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
@@ -314,7 +318,7 @@ class MainActivity :
             }
 
             override fun onSuccess(response: Response, user: ProUser) {
-                val devices = user?.getDevices()
+                val devices = user?.devices
                 val deviceID = LanternApp.getSession().deviceID()
                 // if the payment test mode is enabled
                 // then do nothing To avoid restarting app while debugging
