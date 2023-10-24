@@ -102,6 +102,9 @@ dependencies:
   flutter_mailer: ^2.0.0
   fluttertoast: ^8.2.2
 
+  # Analytics
+  plausible_analytics: ^0.3.0
+
   # Package information
   package_info_plus: ^4.1.0
 

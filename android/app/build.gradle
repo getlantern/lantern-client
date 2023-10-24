@@ -428,8 +428,6 @@ dependencies {
 
     implementation 'com.stripe:stripe-android:20.17.0'
 
-    implementation 'com.datadoghq:dd-sdk-android:1.19.3'
-
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
     kapt "org.androidannotations:androidannotations:$androidAnnotationsVersion"
