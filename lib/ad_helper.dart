@@ -131,6 +131,7 @@ class AdHelper {
           onAdFailedToLoad: (err) {
             _failedLoadAttempts++; // increment the count on failure
             logger.i('[Ads Manager] failed to load $err');
+            PlausibleUtils.trackUserAction('Interstitial ad failed to load', googleAttributes);
             _postShowingAds();
           },
         ),
