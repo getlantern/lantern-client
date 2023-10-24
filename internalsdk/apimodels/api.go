@@ -55,8 +55,6 @@ func FechUserDetail(deviceId string, userId string, token string) (*UserDetailRe
 	return &userDetail, nil
 }
 
-// Create user
-// Todo-: Create Sprate http client to manag and reuse client
 func UserCreate(deviceId string, local string) (*UserResponse, error) {
 	requestBodyMap := map[string]string{
 		"locale": local,
@@ -94,6 +92,5 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 		log.Errorf("Error decoding response body: %v", err)
 		return nil, err
 	}
-	log.Debugf("Created new Lantern user: %+v", userResponse)
 	return &userResponse, nil
 }
