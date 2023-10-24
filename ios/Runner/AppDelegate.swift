@@ -4,6 +4,8 @@ import SQLite
 import Toast_Swift
 import UIKit
 
+//know Issue
+//  CFPrefsPlistSource<0x28281e580> (Domain: group.getlantern.lantern, User: kCFPreferencesAnyUser, ByHost: Yes, Container: (null), Contents Need Refresh: Yes): Using kCFPreferencesAnyUser with a container is only allowed for System Containers,
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -16,14 +18,14 @@ import UIKit
   var navigationModel: NavigationModel!
   var vpnModel: VpnModel!
   var messagingModel: MessagingModel!
- // IOS
+  // IOS
   var loadingManager: LoadingIndicatorManager?
 
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-//    SentryUtils.startSentry();
+    //    SentryUtils.startSentry();
     initializeFlutterComponents()
     do {
       try setupAppComponents()
@@ -61,11 +63,11 @@ import UIKit
   // Post start up
   // Init all method needed for user
   func startUpSequency() {
-      // Do not show notification dialog in Appium Env
-      if(AppEnvironment.current != AppEnvironment.appiumTest){
-          askNotificationPermssion()
-      }
-   }
+    // Do not show notification dialog in Appium Env
+    if AppEnvironment.current != AppEnvironment.appiumTest {
+      askNotificationPermssion()
+    }
+  }
 
   func askNotificationPermssion() {
     UserNotificationsManager.shared.requestNotificationPermission { granted in

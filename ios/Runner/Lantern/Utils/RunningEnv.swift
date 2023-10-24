@@ -57,21 +57,19 @@ func isSimulator() -> Bool {
   #endif
 }
 
-
-
 enum AppEnvironment: String {
 
-case appiumTest
-case prod
+  case appiumTest
+  case prod
 
-    static var current: AppEnvironment {
-        let schemeName = Bundle.main.infoDictionary!["CURRENT_SCHEME_NAME"] as! String
-        logger.log("Current scheme is \(schemeName)")
-        if(schemeName == "appiumTest"){
-            return .appiumTest
-        }else{
-            return .prod
-        }
-        
-    }}
+  static var current: AppEnvironment {
+    let schemeName = Bundle.main.infoDictionary!["CURRENT_SCHEME_NAME"] as! String
+    logger.log("Current scheme is \(schemeName)")
+    if schemeName == "appiumTest" {
+      return .appiumTest
+    } else {
+      return .prod
+    }
 
+  }
+}

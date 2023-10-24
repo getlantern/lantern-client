@@ -158,8 +158,8 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
             message: "Failed to convert MinisqlValue back to original value", details: nil))
       }
     } catch let error as NSError {
-    
-        // Check for the specific "method not implemented" error
+
+      // Check for the specific "method not implemented" error
       if error.localizedDescription.contains("method not implemented") {
         result(FlutterMethodNotImplemented)
       }

@@ -17,11 +17,16 @@ class AppWebView extends StatefulWidget {
 class _AppWebViewState extends State<AppWebView> {
   InAppWebViewSettings settings = InAppWebViewSettings(
     isInspectable: false,
-    javaScriptEnabled: false,
+    javaScriptEnabled: true,
     mediaPlaybackRequiresUserGesture: false,
     allowsInlineMediaPlayback: false,
     underPageBackgroundColor: Colors.white,
+    allowBackgroundAudioPlaying: false,
+    allowFileAccessFromFileURLs: true,
+    preferredContentMode: UserPreferredContentMode.MOBILE,
+
   );
+
 
   @override
   Widget build(BuildContext context) {
