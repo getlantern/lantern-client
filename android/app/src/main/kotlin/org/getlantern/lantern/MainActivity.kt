@@ -44,6 +44,7 @@ import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.PlansUtil
@@ -90,6 +91,7 @@ class MainActivity :
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
+                    Plausible.enable(true)
                     fetchLoConf()
                     Logger.debug(
                         TAG,
@@ -129,7 +131,6 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
-
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
@@ -195,6 +196,10 @@ class MainActivity :
 
     override fun onDestroy() {
         super.onDestroy()
+        if (accountInitDialog != null) {
+            accountInitDialog.dismiss()
+        }
+
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
@@ -313,8 +318,8 @@ class MainActivity :
                 Logger.error(TAG, "Unable to fetch user data: $error", throwable)
             }
 
-            override fun onSuccess(response: Response, user: ProUser?) {
-                val devices = user?.getDevices()
+            override fun onSuccess(response: Response, user: ProUser) {
+                val devices = user?.devices
                 val deviceID = LanternApp.getSession().deviceID()
                 // if the payment test mode is enabled
                 // then do nothing To avoid restarting app while debugging
@@ -333,7 +338,7 @@ class MainActivity :
     }
 
     private fun updatePlans() {
-        lanternClient.getPlans(object : PlansCallback {
+        lanternClient.plans(object : PlansCallback {
             override fun onFailure(throwable: Throwable?, error: ProError?) {
                 Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
             }

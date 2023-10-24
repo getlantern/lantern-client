@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.IBinder
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.mobilesdk.Logger
 
@@ -58,6 +59,7 @@ class LanternVpnService : VpnService(), Runnable {
             return START_STICKY
         }
         return if (intent.action == ACTION_DISCONNECT) {
+            Plausible.event("switchVPN", "", "", mapOf("status" to "disconnect"))
             stop()
             START_NOT_STICKY
         } else {
@@ -69,6 +71,7 @@ class LanternVpnService : VpnService(), Runnable {
 
     private fun connect() {
         Logger.d(TAG, "connect")
+        Plausible.event("switchVPN", "", "", mapOf("status" to "connect"))
         Thread(this, "VpnService").start()
     }
 
