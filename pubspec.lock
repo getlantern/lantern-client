@@ -1085,6 +1085,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  plausible_analytics:
+    dependency: "direct main"
+    description:
+      name: plausible_analytics
+      sha256: be9f0b467d23cd94861737f10101431ad8b7d280dc0c14f7251e0e24655b07fa
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   plugin_platform_interface:
     dependency: transitive
     description:

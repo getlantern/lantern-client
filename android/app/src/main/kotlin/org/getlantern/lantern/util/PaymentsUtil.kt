@@ -209,7 +209,7 @@ class PaymentsUtil(private val activity: Activity) {
                         }
                     }
 
-                    override fun onSuccess(response: Response, result: JsonObject) {
+                    override fun onSuccess(response: Response?, result: JsonObject?) {
                         Logger.debug(
                             TAG,
                             "Successfully redeemed referral code: $refCode",

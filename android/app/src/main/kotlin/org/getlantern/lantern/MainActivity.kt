@@ -1,5 +1,7 @@
 package org.getlantern.lantern
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.VpnService
@@ -11,6 +13,7 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
@@ -39,6 +42,7 @@ import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.service.LanternConnection
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.isServiceRunning
@@ -80,6 +84,7 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
+                    Plausible.enable(true)
                     fetchLoConf()
                     Logger.debug(
                         TAG,
@@ -115,7 +120,6 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
-
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
@@ -160,6 +164,10 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
 
     override fun onDestroy() {
         super.onDestroy()
+        if (accountInitDialog != null) {
+            accountInitDialog.dismiss()
+        }
+
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
@@ -256,8 +264,8 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
                 Logger.error(TAG, "Unable to fetch user data: $error", throwable)
             }
 
-            override fun onSuccess(response: Response, user: ProUser?) {
-                val devices = user?.getDevices()
+            override fun onSuccess(response: Response, user: ProUser) {
+                val devices = user?.devices
                 val deviceID = LanternApp.getSession().deviceID()
                 // if the payment test mode is enabled
                 // then do nothing To avoid restarting app while debugging
@@ -276,7 +284,7 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
     }
 
     private fun updatePlans() {
-        lanternClient.getPlans(
+        lanternClient.plans(
             object : PlansCallback {
                 override fun onFailure(throwable: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to fetch user plans: $error", throwable)

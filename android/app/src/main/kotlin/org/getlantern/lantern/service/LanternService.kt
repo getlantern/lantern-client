@@ -92,7 +92,7 @@ class LanternService : Service(), ServiceManager.Runner {
                     Logger.error(TAG, "Unable to fetch user data: $error", throwable)
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
+                override fun onSuccess(response: Response?, result: JsonObject?) {
                     val user: ProUser? = Json.gson.fromJson(result, ProUser::class.java)
                     if (user == null) {
                         Logger.error(TAG, "Unable to parse user from JSON")
@@ -100,10 +100,10 @@ class LanternService : Service(), ServiceManager.Runner {
                     }
                     Logger.debug(TAG, "Created new Lantern user: ${user.newUserDetails()}")
                     LanternApp.getSession().setUserIdAndToken(
-                        user.getUserId(),
-                        user.getToken(),
+                        user.userId,
+                        user.token,
                     )
-                    val referral = user.getReferral()
+                    val referral = user.referral
                     if (!referral.isEmpty()) {
                         LanternApp.getSession().setCode(referral)
                     }
@@ -129,4 +129,5 @@ class LanternService : Service(), ServiceManager.Runner {
         1,
         Notifications.serviceBuilder(this).build(),
     )
+
 }
