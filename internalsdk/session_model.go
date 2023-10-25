@@ -220,18 +220,24 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
+	log.Debugf("Selected language value is %v", lang)
 	if lang == "" {
 		err = pathdb.Put(tx, pathLang, opts.Lang, "")
 		if err != nil {
 			return err
 		}
 	}
+
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
 	// Check if user is already registered or not
 	userId, err := m.GetUserID()
 	if err != nil {
 		return err
 	}
-	log.Debugf("User is %v", userId)
+	log.Debugf("UserId is %v", userId)
 	if userId == 0 {
 		local, err := m.Locale()
 		if err != nil {
@@ -249,7 +255,6 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -570,8 +575,6 @@ func userCreate(m *baseModel, local string) error {
 	return nil
 }
 
-// Create user
-// Todo-: Create Sprate http client to manag and reuse client
 func userDetail(session *SessionModel) error {
 	deviecId, err := session.GetDeviceID()
 	if err != nil {
@@ -590,6 +593,7 @@ func userDetail(session *SessionModel) error {
 	if err != nil {
 		return nil
 	}
+	log.Debugf("User detail: %+v", userDetail)
 	err = cacheUserDetail(session.baseModel, userDetail)
 	if err != nil {
 		return err
@@ -598,8 +602,6 @@ func userDetail(session *SessionModel) error {
 }
 
 func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) error {
-	log.Debugf("User detail: %+v", userDetail)
-
 	//Save user refferal code
 	if userDetail.Referral != "" {
 		err := setReferalCode(m, userDetail.Referral)
@@ -622,8 +624,7 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 	if err != nil {
 		return err
 	}
-	log.Debugf("Device has stored %v", userDetail.Devices)
-
+	log.Debugf("User caching successful: %+v", userDetail)
 	return setUserIdAndToken(m, int(userDetail.UserID), userDetail.Token)
 }
 
