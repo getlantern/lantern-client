@@ -86,7 +86,7 @@ class AppTest() : BaseTest() {
 
             } else {
                 iosDriver = remoteDriver as IOSDriver
-//                IOSVPNFlow(iosDriver, taskId, flutterFinder)
+                IOSVPNFlow(iosDriver, taskId, flutterFinder)
                 reportAnIssueFlow(iosDriver, taskId, flutterFinder, MobileOS.IOS)
             }
 
