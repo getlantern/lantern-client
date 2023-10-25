@@ -57,7 +57,7 @@ class LanternApp extends StatelessWidget {
   void toggleConnectivityWarningIfNecessary() {
     final shouldShowConnectivityWarning =
         !sessionModel.networkAvailable.value ||
-            sessionModel.proxyAvailable.value != true;
+            !(sessionModel.proxyAvailable.value ?? false);
     if (shouldShowConnectivityWarning != showConnectivityWarning) {
       showConnectivityWarning = shouldShowConnectivityWarning;
       if (showConnectivityWarning) {
@@ -65,6 +65,7 @@ class LanternApp extends StatelessWidget {
       } else {
         networkWarningAnimationController.reverse();
       }
+      // Update the state after running the animations.
     }
   }
 
@@ -85,11 +86,10 @@ class LanternApp extends StatelessWidget {
               overlayColor: Colors.black,
               overlayOpacity: 0.6,
               child: I18n(
-                initialLocale:currentLocale(lang),
+                initialLocale: currentLocale(lang),
                 child: MaterialApp.router(
                   locale: currentLocale(lang),
                   debugShowCheckedModeBanner: false,
-
                   theme: ThemeData(
                     fontFamily: _getLocaleBasedFont(currentLocal),
                     brightness: Brightness.light,
@@ -100,7 +100,6 @@ class LanternApp extends StatelessWidget {
                     colorScheme: ColorScheme.fromSwatch()
                         .copyWith(secondary: Colors.black),
                   ),
-
                   title: 'app_name'.i18n,
                   localizationsDelegates: const [
                     GlobalMaterialLocalizations.delegate,
@@ -138,9 +137,8 @@ class LanternApp extends StatelessWidget {
     if (lang == '' || lang.startsWith('en')) {
       return const Locale('en', 'US');
     }
-    final codes =  lang.split('_');
+    final codes = lang.split('_');
     return Locale(codes[0], codes[1]);
-
   }
 
   String _getLocaleBasedFont(Locale locale) {
