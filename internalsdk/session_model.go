@@ -316,21 +316,25 @@ func (m *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 
 // Note - the names of these parameters have to match what's defined on the `Session` interface
 func (m *SessionModel) UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error {
-	serverInfo := &protos.ServerInfo{
-		City:        serverCity,
-		Country:     serverCountry,
-		CountryCode: serverCountryCode,
-	}
 
-	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.PutAll(tx, map[string]interface{}{
-			pathServerCountry:      serverCountry,
-			pathServerCity:         serverCity,
-			pathServerCountryCode:  serverCountryCode,
-			pathHasSucceedingProxy: hasSucceedingProxy,
-			pathServerInfo:         serverInfo,
+	if serverCity != "" && serverCountry != "" && serverCountryCode != "" {
+		serverInfo := &protos.ServerInfo{
+			City:        serverCity,
+			Country:     serverCountry,
+			CountryCode: serverCountryCode,
+		}
+
+		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.PutAll(tx, map[string]interface{}{
+				pathServerCountry:      serverCountry,
+				pathServerCity:         serverCity,
+				pathServerCountryCode:  serverCountryCode,
+				pathHasSucceedingProxy: hasSucceedingProxy,
+				pathServerInfo:         serverInfo,
+			})
 		})
-	})
+	}
+	return nil
 }
 
 func (m *SessionModel) SetStaging(staging bool) error {
