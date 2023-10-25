@@ -498,4 +498,7 @@
   <string name="call_notifications_channel">Panggilan</string>
   <string name="lantern_service">Perkhidmatan Lantern</string>
   <string name="replica_download">Muat Turun Replika</string>
+  <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <!--Host for plausible backend. Defaults to plausible.io.-->
+  <!--Default domain to send events for. E.g. yourapp.com.-->
 </resources>
