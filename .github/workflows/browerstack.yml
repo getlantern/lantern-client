@@ -35,8 +35,8 @@ jobs:
       - name: Install protoc-gen-go
         run: |
           go get google.golang.org/protobuf/cmd/protoc-gen-go
-          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-          
+#          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
       - name: Granting private modules access
         run: |
           git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
