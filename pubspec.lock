@@ -220,12 +220,11 @@ packages:
   catcher_2:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "7be5bb3ea4867f0ab549443511478303e54db4b7"
-      url: "https://github.com/ThexXTURBOXx/catcher.git"
-    source: git
-    version: "1.0.0-alpha.2"
+      name: catcher_2
+      sha256: "73e251057b1b59442d58b5109d26401cfed850df21da44b028338d4f85f69105"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   characters:
     dependency: transitive
     description:
@@ -1182,10 +1181,18 @@ packages:
     source: hosted
     version: "0.3.8"
   sentry:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sentry
       sha256: "830667eadc0398fea3a3424ed1b74568e2db603a42758d0922e2f2974ce55a60"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.10.1"
+  sentry_flutter:
+    dependency: "direct main"
+    description:
+      name: sentry_flutter
+      sha256: "6730f41b304c6fb0fa590dacccaf73ba11082fc64b274cfe8a79776f2b95309c"
       url: "https://pub.dev"
     source: hosted
     version: "7.10.1"

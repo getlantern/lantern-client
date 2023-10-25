@@ -89,6 +89,7 @@ class LanternApp extends StatelessWidget {
                 child: MaterialApp.router(
                   locale: currentLocale(lang),
                   debugShowCheckedModeBanner: false,
+
                   theme: ThemeData(
                     fontFamily: _getLocaleBasedFont(currentLocal),
                     brightness: Brightness.light,
@@ -99,6 +100,7 @@ class LanternApp extends StatelessWidget {
                     colorScheme: ColorScheme.fromSwatch()
                         .copyWith(secondary: Colors.black),
                   ),
+
                   title: 'app_name'.i18n,
                   localizationsDelegates: const [
                     GlobalMaterialLocalizations.delegate,

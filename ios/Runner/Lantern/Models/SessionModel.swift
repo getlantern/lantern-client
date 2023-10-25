@@ -65,6 +65,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       logger.log("Sucessfully getbandwidth \(newValue)")
     } catch {
       logger.log("Error while getting bandwidth")
+      SentryUtils.caputure(error: error as NSError)
     }
   }
 
@@ -92,7 +93,9 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
         try FileManager.default.createDirectory(
           at: fileURL, withIntermediateDirectories: true, attributes: nil)
       } catch {
+
         print(error.localizedDescription)
+        SentryUtils.caputure(error: error as NSError)
       }
     }
     return fileURL.path

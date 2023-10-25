@@ -21,9 +21,11 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   Future<void> onSwitchTap(bool newValue, String vpnStatus) async {
     unawaited(HapticFeedback.lightImpact());
+
     if (isIdle(vpnStatus)) {
       await vpnModel.switchVPN(newValue);
     }
+
     //add delayed to avoid flickering
     if (vpnStatus != 'connected') {
       Future.delayed(
