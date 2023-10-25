@@ -32,11 +32,6 @@ jobs:
         with:
           go-version: 1.19
 
-      - name: Install protoc-gen-go
-        run: |
-          go get google.golang.org/protobuf/cmd/protoc-gen-go
-#          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-
       - name: Granting private modules access
         run: |
           git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
@@ -60,6 +55,13 @@ jobs:
         with:
           repo-token: ${{ secrets.GH_TOKEN }}
 
+      - name: Install protoc-gen-go
+        run: |
+          go get google.golang.org/protobuf/cmd/protoc-gen-go
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
+      - name: Clear Go Modules cache
+        run: go clean -modcache
 
       - name: Activate protoc-gen-dart plugin
         run: |
