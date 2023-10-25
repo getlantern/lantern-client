@@ -2,9 +2,9 @@ name: BrowserStack CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ ios-migrate ]
   pull_request:
-    branches: [ main ]
+    branches: [ ios-migrate ]
 env:
   GOPRIVATE: github.com/getlantern
 
@@ -97,6 +97,7 @@ jobs:
           response_ios=$(curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" \
           -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
           -F "file=@$BROWSERSTACK_IOS_APP_PATH" \
+          -F "ios_keychain_support=true" \
           -F "custom_id=LanternAppIOS") # Custom ID for the iOS app
           app_url_ios=$(echo $response_ios | jq -r .app_url)
           echo "iOS app URL: $app_url_ios"
