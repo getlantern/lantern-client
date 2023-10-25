@@ -19,6 +19,7 @@ Future<void> main() async {
   await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
+  //Todo if catcher is not picking up error and exception then we should switch to sentryFlutter
   // SentryFlutter.init((options) {
   //   options.debug = true;
   //   options.anrEnabled = true;

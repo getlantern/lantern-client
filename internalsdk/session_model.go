@@ -624,7 +624,7 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 	if err != nil {
 		return err
 	}
-	log.Debugf("User caching successfull: %+v", userDetail)
+	log.Debugf("User caching successful: %+v", userDetail)
 	return setUserIdAndToken(m, int(userDetail.UserID), userDetail.Token)
 }
 
