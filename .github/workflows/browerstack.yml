@@ -51,9 +51,10 @@ jobs:
           java-version: 17
 
       - name: Setup protoc
-        uses: arduino/setup-protoc@v1.2.0
+        uses: arduino/setup-protoc@v2
         with:
-          version: '3.x'
+          repo-token: ${{ secrets.GH_TOKEN }}
+
 
       - name: Activate protoc-gen-dart plugin
         run: |
