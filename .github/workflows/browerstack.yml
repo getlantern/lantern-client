@@ -55,13 +55,13 @@ jobs:
         with:
           repo-token: ${{ secrets.GH_TOKEN }}
 
+      - name: Clear Go Modules cache
+        run: go clean -modcache
+
       - name: Install protoc-gen-go
         run: |
           go get google.golang.org/protobuf/cmd/protoc-gen-go
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-
-      - name: Clear Go Modules cache
-        run: go clean -modcache
 
       - name: Activate protoc-gen-dart plugin
         run: |
