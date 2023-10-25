@@ -66,11 +66,17 @@ jobs:
         run: make android-lib ANDROID_ARCH=all
 
       - name: Build APK
-        env:
-          CI: "true"
         run: |
           flutter pub get
           make appium-test-build
+
+      - name: Build IOS-Framework
+        run: make build-framework
+
+      - name: Build IPA
+        run: |
+          flutter pub get
+          make appium-ios-ipa
 
       - name: List files in current directory
         run: ls -la
