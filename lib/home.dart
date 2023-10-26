@@ -127,9 +127,11 @@ class _HomePageState extends State<HomePage> {
             } else {
               Logger.level = Level.error;
             }
-            bool isPlayVersion = sessionModel.isPlayVersion.value != null &&
-                sessionModel.isPlayVersion.value!;
-            if (isPlayVersion && version == 0) {
+
+            bool isPlayVersion = (sessionModel.isPlayVersion.value??false);
+            bool isStoreVersion = (sessionModel.isStoreVersion.value??false);
+
+            if ((isPlayVersion||isStoreVersion) && version == 0) {
               // show privacy disclosure if it's a Play build and the terms have
               // not already been accepted
               return const PrivacyDisclosure();

@@ -28,6 +28,10 @@ class SessionModel extends Model {
       }
     });
 
+    isStoreVersion = singleValueNotifier(
+      'storeVersion',
+      false,
+    );
     isPlayVersion = singleValueNotifier(
       'playVersion',
       false,
@@ -38,6 +42,7 @@ class SessionModel extends Model {
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> isPlayVersion;
+  late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
