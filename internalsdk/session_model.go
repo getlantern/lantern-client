@@ -205,6 +205,7 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		pathDevice:          opts.Device,
 		pathModel:           opts.Model,
 		pathOSVersion:       opts.OsVersion,
+		pathSDKVersion:      SDKVersion(),
 	})
 	if err != nil {
 		return err
