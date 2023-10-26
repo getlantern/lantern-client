@@ -176,6 +176,7 @@ class Settings extends StatelessWidget {
               if (!snapshot.hasData) {
                 return Container();
               }
+              final packageInfo = snapshot.data;
               return Padding(
                 padding: const EdgeInsetsDirectional.only(top: 12),
                 child: Row(
@@ -190,7 +191,7 @@ class Settings extends StatelessWidget {
                       child: CText(
                         'version_number'
                             .i18n
-                            .fill([snapshot.data?.version ?? '']),
+                            .fill([packageInfo?.version ?? '']),
                         style: tsOverline.copiedWith(color: pink4),
                       ),
                     ),
@@ -202,7 +203,7 @@ class Settings extends StatelessWidget {
                       child: CText(
                         'build_number'
                             .i18n
-                            .fill([snapshot.data?.buildNumber ?? '']),
+                            .fill([packageInfo?.buildNumber ?? '']),
                         style: tsOverline.copiedWith(color: pink4),
                       ),
                     ),

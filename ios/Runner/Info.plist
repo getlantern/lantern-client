@@ -16,16 +16,16 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>Lantern</string>
-    <key>CFBundleDisplayName</key>
-    <string>Lantern</string>
+	<key>CFBundleDisplayName</key>
+	<string>Lantern</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>7.5.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>11</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-2685698271254859~9283700921</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -255,7 +255,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>io.flutter.embedded_views_preview</key>
-    <true/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>
