@@ -42,8 +42,8 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
-      startService()
-      getBandwidth()
+    startService()
+    getBandwidth()
   }
 
   func startService() {
