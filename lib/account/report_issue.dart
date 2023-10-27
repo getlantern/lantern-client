@@ -206,7 +206,7 @@ class _ReportIssueState extends State<ReportIssue> {
         description: 'thank_you_for_reporting_your_issue'.i18n,
         actionLabel: 'continue'.i18n,
         agreeAction: () async {
-          await context.pushRoute(Support());
+          await context.popRoute();
           return true;
         },
       );
