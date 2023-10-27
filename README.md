@@ -1,6 +1,6 @@
-# Lantern Android [![Go Actions Status](https://github.com/getlantern/android-lantern/actions/workflows/go.yml/badge.svg)](https://github.com/getlantern/android-lantern/actions) [![Coverage Status](https://coveralls.io/repos/github/getlantern/android-lantern/badge.svg?t=C4SaZX)](https://coveralls.io/github/getlantern/android-lantern)
+# Lantern App [![Go Actions Status](https://github.com/getlantern/android-lantern/actions/workflows/go.yml/badge.svg)](https://github.com/getlantern/android-lantern/actions) [![Coverage Status](https://coveralls.io/repos/github/getlantern/android-lantern/badge.svg?t=C4SaZX)](https://coveralls.io/github/getlantern/android-lantern)
 
-Lantern Android is an app that uses the [VpnService](https://developer.android.com/reference/android/net/VpnService) API to intercept and reroute all device traffic to the Lantern circumvention tool.
+Lantern APP is an app that uses the [VpnService](https://developer.android.com/reference/android/net/VpnService) API to intercept and reroute all device traffic to the Lantern circumvention tool.
 
 ## Feature: Replica Mobile
 
@@ -30,6 +30,7 @@ All those dependencies must be in your PATH
 
 * Java 11 or greater
 * [Android Studio](https://developer.android.com/studio)
+* [Xcode](https://developer.apple.com/xcode/resources/)
 * [Git](https://git-scm.com/downloads)
 * [Android NDK](#steps-to-run-the-project)
   * NDK should be version 26.x, for example 26.0.10792818.
@@ -44,12 +45,10 @@ All those dependencies must be in your PATH
 * CMake 3.22.1
   * You can get this from Android SDK Manager
 
-In the welcome screen choose the "Open an existing Android Studio" option and select the `android` folder.
 
-Do this the first time your run the project:
+### 🚀 Setup Project:
 
 * Install all prerequisites
-* You'll need the liblantern-all.aar containing the Go backend code in order for the project to compile. Build it with `make android-lib ANDROID_ARCH=all` (see "Building the InternalSdk" section below for more info)
 * Run `git submodule update --init --recursive`
 * Run `git lfs install && git pull`
 * Go to the **SDK MANAGER**
@@ -68,13 +67,25 @@ Do this the first time your run the project:
    - Google Play Services
    - Intel x86 Emulator Accelerator (HAXM installer)
 * Click on Apply and accept the Terms and Conditions.
+* If you are opening Xcode first time open Xcode and install necessary components
+* Lastly `Flutter Doctor` to confirm that your setup is correct and ready!
 
-### Running the project
+### 🤖 Running the project on Android
 
+* `make android-lib ANDROID_ARCH` (you need to generated liblantern-all.aar containing the Go backend code in order for the project to compile.)
 * `flutter pub get`
 * `flutter run --flavor prod`
 
-Or, run it from Android Studio if you're using that.
+
+### 🍏 Running the project on iOS
+
+* `make build-framework` (you need to generated Internalsdk.xcframework. containing the Go backend code in order for the project to compile.)
+* `flutter pub get`
+* `flutter run --flavor prod`
+
+### 👩‍💻 Using Android Studio? No problem!
+
+We've got you covered! If you prefer using Android Studio, we have already set up the configuration files for you. Just select the prod configuration and hit Run... Get ready to start digging! 😄🔍 
 
 You can build an emulator with `./scripts/run_avd.rb`. Here's an example run: `./scripts/run_avd.rb --level=30 --abi=x86 --use_google_apis --window`.
 You'll need Ruby >= 2.3 installed and `colorize` gem (i.e., `gem install colorize`).
@@ -89,16 +100,24 @@ A sane terminal command (using [pidcat](https://github.com/JakeWharton/pidcat)) 
 
 ### Building the InternalSdk (AKA Lantern Core) as a library
 
+
 The core Lantern functionality is written in Go and lives in `./internalsdk`.
-It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to an AAR file that lives in `./android/app/libs` and is called `liblantern-ARCH.aar`.
+It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to an AAR file that 
+
+#### Android
+For compiled code lives in `./android/app/libs` and is called `liblantern-ARCH.aar`.
 
 Package the AAR with `make android-lib ANDROID_ARCH=all`
+
+#### IOS
+For compiled code lives in `./ios/internalsdk/` and is called `Internalsdk.xcframework`.
+
 
 #### Testing against Lantern's staging servers
 
 Package the AAR with `make android-lib ANDROID_ARCH=all STAGING=true`
 
-### Making debug builds
+### Making Android debug builds (Not yet implemented on IOS)
 
 To create a debug build of the full lantern mobile app:
 
