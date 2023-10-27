@@ -105,6 +105,15 @@ S3_BUCKET ?= lantern
 FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
 
+# Sentry properties
+SENTRY_AUTH_TOKEN=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
+SENTRY_ORG=getlantern
+SENTRY_PROJECT_IOS=lantern-ios
+
+DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/Release-prod-iphoneos/Runner.app.dSYM
+INFO_PLIST := ios/Runner/Info.plist
+
+
 # By default, build APKs containing support for ARM only 32 bit. Since we're using multi-architecture
 # app bundles for play store, we no longer need to include 64 bit in our APKs that we distribute.
 ANDROID_ARCH ?= arm32
@@ -351,6 +360,26 @@ android-debug: $(MOBILE_DEBUG_APK)
 
 android-release: pubget $(MOBILE_RELEASE_APK)
 
+set-version:
+	@echo "Setting the CFBundleShortVersionString to $(VERSION)"
+	@cd ios && agvtool new-marketing-version $(VERSION)
+	@echo "Incrementing the build number..."
+	@CURRENT_BUILD=$$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" $(INFO_PLIST)); \
+	NEXT_BUILD=$$(($$CURRENT_BUILD + 1)); \
+	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$NEXT_BUILD" $(INFO_PLIST)
+
+
+ios-release:set-version build-framework
+	@echo "Creating the Flutter iOS build..."
+	flutter build ipa --flavor prod --release
+	@echo "Uploading debug symbols to Sentry..."
+	export SENTRY_LOG_LEVEL=info
+	sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_IOS) $(DWARF_DSYM_FOLDER_PATH)
+	@IPA_PATH=$(shell pwd)/build/ios/ipa; \
+	echo "iOS IPA generated under: $$IPA_PATH"; \
+	open "$$IPA_PATH"
+
+
 android-bundle: $(MOBILE_BUNDLE)
 
 android-debug-install: $(MOBILE_DEBUG_APK)
@@ -413,23 +442,6 @@ build-framework: assert-go-version install-gomobile
 	@echo "moving framework"
 	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
 	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
-
-#build-framework: assert-go-version install-gomobile
-#	@echo "Nuking $(FRAMEWORK_DIR)"
-#	rm -Rf $(FRAMEWORK_DIR)
-#	@echo "generating Ios.xcFramework"
-#	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-#	gomobile init && \
-#	gomobile bind -target=ios \
-#	-tags='headless lantern ios' \
-#	-ldflags="$(LDFLAGS)" \
-#    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-#    		$(ANDROID_LIB_PKG)
-#	@echo "copying framework"
-#	mkdir -p $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME)
-#	cp -R ./$(FRAMEWORK_NAME)/* $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME)
-#	@echo "Nuking $(FRAMEWORK_NAME)"
-#	rm -Rf ./$(FRAMEWORK_NAME)
 
 
 install-gomobile:
