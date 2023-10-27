@@ -43,7 +43,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     }
     try super.init(flutterBinary, model)
     startService()
-    getBandwidth()
+//    getBandwidth()
   }
 
   func startService() {

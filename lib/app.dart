@@ -57,7 +57,7 @@ class LanternApp extends StatelessWidget {
   void toggleConnectivityWarningIfNecessary() {
     final shouldShowConnectivityWarning =
         !sessionModel.networkAvailable.value ||
-            !(sessionModel.proxyAvailable.value ?? false);
+            (sessionModel.proxyAvailable.value!=null && sessionModel.proxyAvailable.value==false);
     if (shouldShowConnectivityWarning != showConnectivityWarning) {
       showConnectivityWarning = shouldShowConnectivityWarning;
       if (showConnectivityWarning) {
