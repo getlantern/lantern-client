@@ -149,6 +149,21 @@ This will build Flashlight with the same [STAGING flag](https://github.com/getla
 
 ### Making release builds
 
+#### IOS
+
+Do this to make a release build:
+```
+ VERSION=x.x.x make ios-release
+```
+ **Note**: Replace x.x.x with the version number of your release.
+
+This will 
+- Set the version number in the info.plist file and increment the build number 1
+- Upload the DSYM file to Sentry
+- Open the build folder once the build is complete 
+
+
+#### Android
 The Android app is distributed in two ways, as an APK for side-loaded installation and as an app bundle (aab) for distribution on the Google Play Store. The APKs are architecture specific whereas the app bundle contains all 4 architectures (arm and x86 in 32-bit and 64-bit variants).
 
 Do this to make a release build:
