@@ -319,19 +319,24 @@ func (m *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 func (m *SessionModel) UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error {
 
 	if serverCity != "" && serverCountry != "" && serverCountryCode != "" {
+
 		serverInfo := &protos.ServerInfo{
 			City:        serverCity,
 			Country:     serverCountry,
 			CountryCode: serverCountryCode,
 		}
-
+		log.Debugf("UpdateStats city %v country %v hasSucceedingProxy %v serverInfo %v", serverCity, serverCountry, hasSucceedingProxy, serverInfo)
 		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			err := pathdb.Put[bool](tx, pathHasSucceedingProxy, hasSucceedingProxy, "")
+			if err != nil {
+				log.Debugf("Error while adding hasSucceedingProxy %v", err)
+				return err
+			}
 			return pathdb.PutAll(tx, map[string]interface{}{
-				pathServerCountry:      serverCountry,
-				pathServerCity:         serverCity,
-				pathServerCountryCode:  serverCountryCode,
-				pathHasSucceedingProxy: hasSucceedingProxy,
-				pathServerInfo:         serverInfo,
+				pathServerCountry:     serverCountry,
+				pathServerCity:        serverCity,
+				pathServerCountryCode: serverCountryCode,
+				pathServerInfo:        serverInfo,
 			})
 		})
 	}
