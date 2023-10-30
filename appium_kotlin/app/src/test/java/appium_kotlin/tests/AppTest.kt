@@ -130,8 +130,6 @@ class AppTest() : BaseTest() {
         println("TaskId: $taskId | Going to Sleep")
         Thread.sleep(2000)
 
-        checkNotificationPresent(androidDriver)
-
         //Open Chrome Again
         androidDriver.activateApp(CHROME_PACKAGE_ID)
         Thread.sleep(2000)
@@ -164,15 +162,6 @@ class AppTest() : BaseTest() {
         )
     }
 
-    // After the VPN is switched on in the VpnFlow test, check that a notification is sent to the
-    // user and appears on screen
-    private fun checkNotificationPresent(androidDriver: AndroidDriver) {
-        androidDriver.openNotifications()
-    }
-
-    private fun notificationElement(text: String) = VintedDriver.findElement(
-        androidBy = VintedBy.androidTextByBuilder(text = text, scroll = false)
-    )
 
     @Throws(IOException::class, InterruptedException::class)
     private fun paymentFlow(
