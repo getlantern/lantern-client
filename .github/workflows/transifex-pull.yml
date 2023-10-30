@@ -14,7 +14,7 @@ jobs:
     steps:
     - name: Granting private modules access
       run: |
-          git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
     - uses: actions/checkout@v3
     - name: "Pull new translations"
       env:
@@ -28,4 +28,3 @@ jobs:
         git config user.email github-actions@github.com
         git ls-files --modified assets/locales android/app/src/main/res | xargs git add
         git diff --cached --exit-code || git commit -m "updated translations..." && git push origin main
-
