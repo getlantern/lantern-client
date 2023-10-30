@@ -34,7 +34,7 @@ jobs:
 
       - name: Granting private modules access
         run: |
-          git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
       - name: Setup Sentry CLI
         uses: mathieu-bour/setup-sentry-cli@v1
@@ -106,7 +106,7 @@ jobs:
           app_url=$(echo $response | jq -r .app_url)
           echo "$app_url"
           echo "BROWSERSTACK_APP_ID=$app_url" >> $GITHUB_ENV
-          
+
           # Upload iOS app
           response_ios=$(curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" \
           -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
