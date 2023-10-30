@@ -311,8 +311,8 @@ github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7 h1:/efTOJpxX
 github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7/go.mod h1:+X8pAviVhThDBjPEqLUB0iO7EPxhpWk7Q9VYxvz6rCY=
 github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 h1:Ka9rIAgef8zYhBr/VgLrt5+Qs7zE33g0OButzpIGcSs=
 github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082/go.mod h1:oCpQojhSaK0F/6rWMrDvN8/QFHQhTC9Gb3uf7GcqPQQ=
-github.com/getlantern/broflake v0.0.0-20230928170657-97fc977bdc6f h1:x7vxkMJlrse2xlfw8AeGRz2YTsPzERXImMvW712vi2w=
-github.com/getlantern/broflake v0.0.0-20230928170657-97fc977bdc6f/go.mod h1:Ehdl8IASN5rJi9brldVuCjTDcSU25nvaGRlzNprgeQo=
+github.com/getlantern/broflake v0.0.0-20231016221059-9c3632502cae h1:8kLpvusHkHGjuW4f2y/OIF+vIbbpp1wM/UE4pOu9694=
+github.com/getlantern/broflake v0.0.0-20231016221059-9c3632502cae/go.mod h1:Ehdl8IASN5rJi9brldVuCjTDcSU25nvaGRlzNprgeQo=
 github.com/getlantern/bufconn v0.0.0-20190625204133-a08544339f8d/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
 github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 h1:8WjDNmpDLFVsAfcnHxqF4pfVKkdAQxyJ9iCHB4LxSfc=
 github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
@@ -372,8 +372,8 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight/v7 v7.6.14 h1:Ic/B+JUWufpvtf1LSwGntQR9U/SHTg8U/Ypje0ZSw1M=
-github.com/getlantern/flashlight/v7 v7.6.14/go.mod h1:tMY6W9caWMCsFSqKAr0VPoUtmxIFM5um1yidEiNnN9M=
+github.com/getlantern/flashlight/v7 v7.6.18 h1:8rNNX0lyss8wUe/EIshzG9pL0Ei+4W0A5xh3un4lHlc=
+github.com/getlantern/flashlight/v7 v7.6.18/go.mod h1:AP+Mr/htyAcx7XUhb+GyPfPBLfJ0D25SJCubBvauoA8=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 h1:r/Z/SPPIfLXDI3QA7/tE6nOfPncrqeUPDjiFjnNGP50=
@@ -453,8 +453,8 @@ github.com/getlantern/measured v0.0.0-20210507000559-ec5307b2b8be/go.mod h1:QG6d
 github.com/getlantern/meta-scrubber v0.0.1 h1:WknyffbSpb5kEwDQ6lrN9+KohCGnqhs5zQfGk4sFRGo=
 github.com/getlantern/meta-scrubber v0.0.1/go.mod h1:nYmOMQXbex3emWMNbt/iDKTXE1q53x1dDxCspxjwxyY=
 github.com/getlantern/mitm v0.0.0-20180205214248-4ce456bae650/go.mod h1:jmIVbVxSVLdeY5hlD+6chiOR/9CdzPjVgIIQphviCl0=
-github.com/getlantern/mitm v0.0.0-20210622063317-e6510574903b h1:qwwHF+YUqsM2rMVfzptcfsEGW4y7NAcFOhKoAWLmb+I=
-github.com/getlantern/mitm v0.0.0-20210622063317-e6510574903b/go.mod h1:chGLTBaCheavOG9k+IjbjTrXEL3Sszz1MWzqZR5M5nE=
+github.com/getlantern/mitm v0.0.0-20231025115752-54d3e43899b7 h1:l9/yc7C0eaF4UQWgxAdtOnYKNfS74NMaInZ9vrlNKWI=
+github.com/getlantern/mitm v0.0.0-20231025115752-54d3e43899b7/go.mod h1:sCAOk1Y9pRrLuK0sSH3Rz2lubOBIl04h7pD/+UZM/lc=
 github.com/getlantern/mockconn v0.0.0-20190708122800-637bd46d8034/go.mod h1:+F5GJ7qGpQ03DBtcOEyQpM30ix4BLswdaojecFtsdy8=
 github.com/getlantern/mockconn v0.0.0-20191023022503-481dbcceeb58/go.mod h1:+F5GJ7qGpQ03DBtcOEyQpM30ix4BLswdaojecFtsdy8=
 github.com/getlantern/mockconn v0.0.0-20200818071412-cb30d065a848 h1:2MhMMVBTnaHrst6HyWFDhwQCaJ05PZuOv1bE2gN8WFY=
@@ -484,8 +484,6 @@ github.com/getlantern/osversion v0.0.0-20230401075644-c2a30e73c451 h1:3Nn0AqIlIm
 github.com/getlantern/osversion v0.0.0-20230401075644-c2a30e73c451/go.mod h1:kaUdXyKE1Y8bwPnlN7ChFXWnkADpL0zZrk8F0XbpKcc=
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 h1:pijUoofaQcAM/8zbDzZM2LQ90kGVbKfnSAkFnQwLZZU=
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360/go.mod h1:nsJPNYUSY96xB+p7uiDW8O4uiKea+KjeUdS5d6tf9IU=
-github.com/getlantern/pathdb v0.0.0-20231012214506-e66dac509bba h1:Bu9G2bmSz5GFcR7UJNZ+c6N/wPQobX2sOZe8CQ8EF7I=
-github.com/getlantern/pathdb v0.0.0-20231012214506-e66dac509bba/go.mod h1:SFQy+f58IbLpnbq2nVqlq7ccwaUiO7ablKv631WVIuc=
 github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb h1:rbkflUPjr83ON7c+4LqU2Y/rJzv9P/fmocXDLLm0hWQ=
 github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb/go.mod h1:SFQy+f58IbLpnbq2nVqlq7ccwaUiO7ablKv631WVIuc=
 github.com/getlantern/preconn v0.0.0-20180328114929-0b5766010efe/go.mod h1:FvIxQD61iYA42UjaJyzGl9DNne8jbowbgicdeNk/7kE=
@@ -496,8 +494,8 @@ github.com/getlantern/probe v0.0.0-20211216020459-69afa01c1c5c h1:bWusw8SYvl/iq+
 github.com/getlantern/probednet v0.0.0-20190725133252-1cfdb2354b4d/go.mod h1:7sl7hPjPDAqXyxVx7mhrKfvb4oCX/ROhcs16w2EhWX8=
 github.com/getlantern/probednet v0.0.0-20211216020507-22fd9c1d3bf6 h1:8jg6OehdQr90Ybmyc68raXEqM/1hk8E7F2YAUfmcvzE=
 github.com/getlantern/proxy/v2 v2.0.0/go.mod h1:jU6qNaMq92qDY0slT9afuER7arXLnh7jU+DTg3W/oDs=
-github.com/getlantern/proxy/v2 v2.0.1-0.20220303164029-b34b76e0e581 h1:7NrSoq9ce/n15O+0smA756lo86c+coYoyGAhefRJCPw=
-github.com/getlantern/proxy/v2 v2.0.1-0.20220303164029-b34b76e0e581/go.mod h1:81jIwwI/5NGYj2CSvbsZapcTe87jd6AeEu6yJD1NKIg=
+github.com/getlantern/proxy/v2 v2.0.1-0.20231025120008-e5de10082549 h1:J+GL1aSH4p6vkQWt7OoziYrVtD0MwehQr5Uj7qE24DM=
+github.com/getlantern/proxy/v2 v2.0.1-0.20231025120008-e5de10082549/go.mod h1:teUfqDKSD5HIJkH+n/2gHJUmJYKPox/sipLrrBYZP/w=
 github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de h1:328hcuyQi8KGZr4GV2EtWllwBmS10oVGevwZEOk2dDE=
 github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de/go.mod h1:kF5QcNhyCA0tpZ+MLVdeJb0bZpgXyMjR/CnPtaltlFU=
 github.com/getlantern/psmux v1.5.15-0.20200903210100-947ca5d91683 h1:Asfm7ajzavuSZC+5b+tPwXwyvlw188NM9hKM7wNMNGg=
@@ -1092,8 +1090,9 @@ github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
-github.com/stretchr/testify v1.8.3 h1:RP3t2pwF7cMEbC1dqtB6poj3niw/9gnV4Cjg5oW5gtY=
 github.com/stretchr/testify v1.8.3/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
+github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
+github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/syndtr/goleveldb v0.0.0-20160425020131-cfa635847112/go.mod h1:Z4AUp2Km+PwemOoO/VB5AOx9XSsIItzFjoJlOSiYmn0=
 github.com/syndtr/goleveldb v1.0.0/go.mod h1:ZVVdQEZoIme9iO1Ch2Jdy24qqXrMMOU6lpPAyBWyWuQ=
 github.com/tchap/go-patricia/v2 v2.3.1 h1:6rQp39lgIYZ+MHmdEq4xzuk1t7OdC35z/xm0BGhTkes=
