@@ -478,8 +478,8 @@ github.com/getlantern/probe v0.0.0-20211216020459-69afa01c1c5c h1:bWusw8SYvl/iq+
 github.com/getlantern/probednet v0.0.0-20190725133252-1cfdb2354b4d/go.mod h1:7sl7hPjPDAqXyxVx7mhrKfvb4oCX/ROhcs16w2EhWX8=
 github.com/getlantern/probednet v0.0.0-20211216020507-22fd9c1d3bf6 h1:8jg6OehdQr90Ybmyc68raXEqM/1hk8E7F2YAUfmcvzE=
 github.com/getlantern/proxy/v2 v2.0.0/go.mod h1:jU6qNaMq92qDY0slT9afuER7arXLnh7jU+DTg3W/oDs=
-github.com/getlantern/proxy/v2 v2.0.1-0.20231025120008-e5de10082549 h1:J+GL1aSH4p6vkQWt7OoziYrVtD0MwehQr5Uj7qE24DM=
-github.com/getlantern/proxy/v2 v2.0.1-0.20231025120008-e5de10082549/go.mod h1:teUfqDKSD5HIJkH+n/2gHJUmJYKPox/sipLrrBYZP/w=
+github.com/getlantern/proxy/v2 v2.0.1 h1:Qphu2HCVNHsYS/Rj5OQsgobCHpSZsFws6nD2XDy6gXk=
+github.com/getlantern/proxy/v2 v2.0.1/go.mod h1:teUfqDKSD5HIJkH+n/2gHJUmJYKPox/sipLrrBYZP/w=
 github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de h1:328hcuyQi8KGZr4GV2EtWllwBmS10oVGevwZEOk2dDE=
 github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de/go.mod h1:kF5QcNhyCA0tpZ+MLVdeJb0bZpgXyMjR/CnPtaltlFU=
 github.com/getlantern/psmux v1.5.15-0.20200903210100-947ca5d91683 h1:Asfm7ajzavuSZC+5b+tPwXwyvlw188NM9hKM7wNMNGg=
