@@ -152,7 +152,7 @@ require (
 	github.com/getlantern/osversion v0.0.0-20230401075644-c2a30e73c451 // indirect
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 // indirect
 	github.com/getlantern/preconn v1.0.0 // indirect
-	github.com/getlantern/proxy/v2 v2.0.1-0.20231025120008-e5de10082549 // indirect
+	github.com/getlantern/proxy/v2 v2.0.1 // indirect
 	github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de // indirect
 	github.com/getlantern/psmux v1.5.15-0.20200903210100-947ca5d91683 // indirect
 	github.com/getlantern/quicwrapper v0.0.0-20230523101504-1ec066b7f869 // indirect
