@@ -108,7 +108,7 @@ require (
 	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/gaukas/godicttls v0.0.3 // indirect
 	github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 // indirect
-	github.com/getlantern/broflake v0.0.0-20230928170657-97fc977bdc6f // indirect
+	github.com/getlantern/broflake v0.0.0-20231016221059-9c3632502cae // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
 	github.com/getlantern/byteexec v0.0.0-20220903142956-e6ed20032cfd // indirect
 	github.com/getlantern/cmux v0.0.0-20230301223233-dac79088a4c0 // indirect
