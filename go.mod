@@ -35,7 +35,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20230822102054-7ff232ec3148
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight/v7 v7.6.14
+	github.com/getlantern/flashlight/v7 v7.6.18
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/idletiming v0.0.0-20201229174729-33d04d220c4e
 	github.com/getlantern/ipproxy v0.0.0-20230511223023-ee52513fd782
@@ -43,7 +43,7 @@ require (
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/replica v0.14.1
 	github.com/gorilla/mux v1.8.0
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	golang.org/x/mobile v0.0.0-20230531173138-3c911d8e3eda
 	golang.org/x/net v0.11.0
 	google.golang.org/protobuf v1.30.0
@@ -110,7 +110,7 @@ require (
 	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/gaukas/godicttls v0.0.3 // indirect
 	github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 // indirect
-	github.com/getlantern/broflake v0.0.0-20230928170657-97fc977bdc6f // indirect
+	github.com/getlantern/broflake v0.0.0-20231016221059-9c3632502cae // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
 	github.com/getlantern/byteexec v0.0.0-20220903142956-e6ed20032cfd // indirect
 	github.com/getlantern/cmux v0.0.0-20230301223233-dac79088a4c0 // indirect
@@ -155,7 +155,7 @@ require (
 	github.com/getlantern/lampshade v0.0.0-20201109225444-b06082e15f3a // indirect
 	github.com/getlantern/measured v0.0.0-20210507000559-ec5307b2b8be // indirect
 	github.com/getlantern/meta-scrubber v0.0.1 // indirect
-	github.com/getlantern/mitm v0.0.0-20210622063317-e6510574903b // indirect
+	github.com/getlantern/mitm v0.0.0-20231025115752-54d3e43899b7 // indirect
 	github.com/getlantern/mockconn v0.0.0-20200818071412-cb30d065a848 // indirect
 	github.com/getlantern/msgpack v3.1.4+incompatible // indirect
 	github.com/getlantern/multipath v0.0.0-20230510135141-717ed305ef50 // indirect
@@ -164,7 +164,7 @@ require (
 	github.com/getlantern/osversion v0.0.0-20230401075644-c2a30e73c451 // indirect
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 // indirect
 	github.com/getlantern/preconn v1.0.0 // indirect
-	github.com/getlantern/proxy/v2 v2.0.1-0.20220303164029-b34b76e0e581 // indirect
+	github.com/getlantern/proxy/v2 v2.0.1-0.20231025120008-e5de10082549 // indirect
 	github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de // indirect
 	github.com/getlantern/psmux v1.5.15-0.20200903210100-947ca5d91683 // indirect
 	github.com/getlantern/quicwrapper v0.0.0-20230523101504-1ec066b7f869 // indirect
