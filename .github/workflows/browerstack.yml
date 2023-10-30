@@ -51,9 +51,17 @@ jobs:
           java-version: 17
 
       - name: Setup protoc
-        uses: arduino/setup-protoc@v1.2.0
+        uses: arduino/setup-protoc@v2
         with:
-          version: '3.x'
+          repo-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Clear Go Modules cache
+        run: go clean -modcache
+
+      - name: Install protoc-gen-go
+        run: |
+          go get google.golang.org/protobuf/cmd/protoc-gen-go
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
       - name: Activate protoc-gen-dart plugin
         run: |
@@ -66,11 +74,17 @@ jobs:
         run: make android-lib ANDROID_ARCH=all
 
       - name: Build APK
-        env:
-          CI: "true"
         run: |
           flutter pub get
           make appium-test-build
+
+      - name: Build IOS-Framework
+        run: make build-framework
+
+      - name: Build IPA
+        run: |
+          flutter pub get
+          make appium-ios-ipa
 
       - name: List files in current directory
         run: ls -la

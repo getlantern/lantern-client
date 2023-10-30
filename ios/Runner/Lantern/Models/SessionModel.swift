@@ -27,7 +27,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.lang = Locale.current.identifier
     opts.developmentMode = false
     opts.proUser = false
-    opts.playVersion = isRunningFromAppStore()
+    opts.playVersion = (isRunningFromAppStore() || isRunningInTestFlightEnvironment())
     opts.timeZone = TimeZone.current.identifier
     opts.device = systemName  // IOS does not provide Device name directly
     opts.model = systemName
@@ -42,8 +42,8 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
-    getBandwidth()
     startService()
+//    getBandwidth()
   }
 
   func startService() {

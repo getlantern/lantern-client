@@ -28,16 +28,25 @@ class SessionModel extends Model {
       }
     });
 
+    isStoreVersion = singleValueNotifier(
+      'storeVersion',
+      false,
+    );
     isPlayVersion = singleValueNotifier(
       'playVersion',
       false,
     );
-    proxyAvailable = singleValueNotifier('hasSucceedingProxy', false);
+    /*Note
+    * Make proxyAvailable default value to true on IOS it take some to get data from go side
+    * So show banner only if proxyAvailable is false
+    */
+    proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
     country = singleValueNotifier('geo_country_code', 'US');
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> isPlayVersion;
+  late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
@@ -327,7 +336,6 @@ class SessionModel extends Model {
       builder: builder,
     );
   }
-
 
   Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
     return subscribedSingleValueBuilder<ServerInfo>(

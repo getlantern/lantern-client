@@ -2,12 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CURRENT_SCHEME_NAME</key>
-	<string>$(CURRENT_SCHEME_NAME)</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Lantern</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -16,16 +16,16 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>Lantern</string>
-    <key>CFBundleDisplayName</key>
-    <string>Lantern</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>7.5.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>14</string>
+	<key>CURRENT_SCHEME_NAME</key>
+	<string>$(CURRENT_SCHEME_NAME)</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-2685698271254859~9283700921</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -35,6 +35,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Lantern require access to your photo library for essential functionality.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Lantern require access to your photo library for essential functionality.</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
@@ -255,7 +259,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>io.flutter.embedded_views_preview</key>
-    <true/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>
