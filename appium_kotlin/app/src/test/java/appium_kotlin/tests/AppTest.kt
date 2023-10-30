@@ -168,11 +168,25 @@ class AppTest() : BaseTest() {
     // user and appears on screen
     private fun checkNotificationPresent(androidDriver: AndroidDriver) {
         androidDriver.openNotifications()
+        val el = notificationElement(androidDriver, "Lantern")
+        Assertions.assertEquals(el != null, true)
     }
 
-    private fun notificationElement(text: String) = VintedDriver.findElement(
-        androidBy = VintedBy.androidTextByBuilder(text = text, scroll = false)
+    private fun notificationElement(androidDriver: AndroidDriver, text: String) = findElement(
+        androidDriver = androidDriver,
+        androidBy = MobileUtils.androidTextByBuilder(text = text, scroll = false)
     )
+
+    private fun findElement(androidDriver: AndroidDriver, androidBy: By? = null, iOSBy: By? = null): MobileElement {
+        //val by = if (isAndroid) androidBy else iOSBy
+        return MobileElement(
+            {
+                androidDriver.findElement(androidBy!!)
+            },
+            { androidBy }
+        )
+    }
+
 
     @Throws(IOException::class, InterruptedException::class)
     private fun paymentFlow(
