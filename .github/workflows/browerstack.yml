@@ -53,7 +53,7 @@ jobs:
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
-          repo-token: ${{ secrets.GH_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Clear Go Modules cache
         run: go clean -modcache
