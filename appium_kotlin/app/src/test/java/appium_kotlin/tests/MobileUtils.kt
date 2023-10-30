@@ -11,7 +11,7 @@ class MobileUtils {
 			return MobileBy.id(addPackageId(id))
 		}
 
-      	fun androidTextByBuilder(
+		fun androidTextByBuilder(
             text: String, scroll: Boolean = true, searchType: SearchTextOperator = SearchTextOperator.EXACT
         ): By {
             val elementByText = "UiSelector().${searchType.androidUiSelectorTextMethodName}(\"$text\")"
@@ -25,7 +25,7 @@ class MobileUtils {
             return MobileBy.AndroidUIAutomator(selector)
         }
 
-    	enum class SearchTextOperator(val androidUiSelectorTextMethodName: String, val iOSOperator: String) {
+		enum class SearchTextOperator(val androidUiSelectorTextMethodName: String, val iOSOperator: String) {
 	        MATCHES("textMatches", "MATCHES"),
 	        EXACT("text", "=="),
 	        CONTAINS("textContains", "CONTAINS"),
