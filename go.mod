@@ -2,6 +2,10 @@ module github.com/getlantern/android-lantern
 
 go 1.19
 
+// replace github.com/getlantern/flashlight/v7 => ../flashlight
+// replace github.com/getlantern/fronted => ../fronted
+// replace github.com/getlantern/pathdb => ../pathDb/pathDb
+
 replace github.com/elazarl/goproxy => github.com/getlantern/goproxy v0.0.0-20220805074304-4a43a9ed4ec6
 
 replace github.com/lucas-clemente/quic-go => github.com/getlantern/quic-go v0.31.1-0.20230104154904-d810c964a217
