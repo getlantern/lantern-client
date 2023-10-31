@@ -12,6 +12,13 @@ const (
 	baseUrl       = "https://api.getiantem.org"
 	userDetailUrl = baseUrl + "/user-data"
 	userCreateUrl = baseUrl + "/user-create"
+	plansV3Url    = baseUrl + "/plans-v3"
+)
+
+const (
+	headerDeviceId = "X-Lantern-Device-Id"
+	headerUserId   = "X-Lantern-User-Id"
+	headerProToken = "X-Lantern-Pro-Token"
 )
 
 var (
@@ -28,9 +35,9 @@ func FechUserDetail(deviceId string, userId string, token string) (*UserDetailRe
 	}
 
 	// Add headers
-	req.Header.Set("X-Lantern-Device-Id", deviceId)
-	req.Header.Set("X-Lantern-User-Id", userId)
-	req.Header.Set("X-Lantern-Pro-Token", token)
+	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerUserId, userId)
+	req.Header.Set(headerProToken, token)
 	log.Debugf("Headers set")
 
 	// Initialize a new http client
@@ -75,7 +82,7 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 	}
 
 	// Add headers
-	req.Header.Set("X-Lantern-Device-Id", deviceId)
+	req.Header.Set(headerDeviceId, deviceId)
 	log.Debugf("Headers set")
 	// Initialize a new http client
 	client := &http.Client{}
@@ -93,4 +100,41 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 		return nil, err
 	}
 	return &userResponse, nil
+}
+
+func PlansV3(deviceId string, userId string, local string, token string, countryCode string) (*PlansResponse, error) {
+	req, err := http.NewRequest("GET", plansV3Url, nil)
+	if err != nil {
+		log.Errorf("Error creating plans request: %v", err)
+		return nil, err
+	}
+	//Add query params
+	q := req.URL.Query()
+	q.Add("locale", local)
+	q.Add("countrycode", countryCode)
+	req.URL.RawQuery = q.Encode()
+
+	// Add headers
+	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerUserId, userId)
+	req.Header.Set(headerProToken, token)
+	log.Debugf("Plans Headers set")
+	// Initialize a new http client
+	client := &http.Client{}
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Errorf("Error sending plans request: %v", err)
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	var plans PlansResponse
+	// Read and decode the response body
+	if err := json.NewDecoder(resp.Body).Decode(&plans); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+	return &plans, nil
 }
