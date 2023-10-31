@@ -32,6 +32,10 @@ message Devices {
   repeated Device devices = 1;
 }
 
+message Plans {
+  repeated Plan plan = 1;
+}
+
 message Plan {
   string id = 1;
   string description = 2;

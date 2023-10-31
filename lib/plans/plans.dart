@@ -64,11 +64,9 @@ class PlansPage extends StatelessWidget {
                             color: white,
                             child: Row(
                               children: [
-                                Container(
-                                  child: const CAssetImage(
-                                    path: ImagePaths.lantern_pro_logotype,
-                                    size: 20,
-                                  ),
+                                const CAssetImage(
+                                  path: ImagePaths.lantern_pro_logotype,
+                                  size: 20,
                                 ),
                                 const Spacer(),
                                 IconButton(

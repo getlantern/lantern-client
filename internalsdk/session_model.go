@@ -57,6 +57,7 @@ const (
 	pathStoreVersion         = "storeVersion"
 	pathSelectedTab          = "/selectedTab"
 	pathServerInfo           = "/server_info"
+	pathPlans                = "/plans/"
 
 	currentTermsVersion = 1
 )
@@ -82,6 +83,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 	base.db.RegisterType(1000, &protos.ServerInfo{})
 	base.db.RegisterType(2000, &protos.Devices{})
+	base.db.RegisterType(3000, &protos.Plan{})
 	m := &SessionModel{baseModel: base}
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	return m, m.initSessionModel(opts)
@@ -256,6 +258,34 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
+
+	toekns, err := m.GetToken()
+	if err != nil {
+		return err
+	}
+	userIdStr := fmt.Sprintf("%d", userId)
+	countryCode, err := m.GetCountryCode()
+	if err != nil {
+		return err
+	}
+
+	// Run Plans in background
+	// go func() {
+	// 	data, err := apimodels.PlansV3(opts.DeviceID, userIdStr, lang, toekns, countryCode)
+	// 	if err != nil {
+	// 		log.Errorf("Error while Plans v3 request:", err) // Optional: log the error
+	// 		return
+	// 	}
+	// 	log.Debugf("Plans Response", data)
+	// }()
+
+	// //Get all the Plans
+	plans, err := apimodels.PlansV3(opts.DeviceID, userIdStr, lang, toekns, countryCode)
+	if err != nil {
+		return err
+	}
+	setPlans(m.baseModel, plans.Plans)
+
 	return nil
 }
 
@@ -393,6 +423,39 @@ func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
 
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		pathdb.Put(tx, pathDevices, protoDevices, "")
+		return nil
+	})
+	return nil
+}
+
+func storePlanDetail(m *baseModel, plan apimodels.PlansResponse) error {
+	log.Debugf("Storing Plan details ")
+	err := setPlans(m, plan.Plans)
+	if err != nil {
+		return err
+	}
+
+	log.Debugf("Plan details stored successful")
+	return nil
+}
+
+func setPlans(m *baseModel, plans []apimodels.Plan) error {
+	var protoPlans []*protos.Plan
+	for _, plans := range plans {
+		protoPlan := &protos.Plan{
+			Id:          plans.ID,
+			Description: plans.Description,
+			BestValue:   plans.BestValue,
+			UsdPrice:    plans.UsdPrice,
+			Price: map[string]int64{
+				"usd": plans.Price.Usd,
+			},
+		}
+		protoPlans = append(protoPlans, protoPlan)
+	}
+
+	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		pathdb.Put(tx, pathPlans, protoPlans, "")
 		return nil
 	})
 	return nil
