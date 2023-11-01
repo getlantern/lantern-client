@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/getlantern/android-lantern/internalsdk/apimodels"
 	"github.com/getlantern/android-lantern/internalsdk/protos"
@@ -84,6 +85,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	base.db.RegisterType(1000, &protos.ServerInfo{})
 	base.db.RegisterType(2000, &protos.Devices{})
 	base.db.RegisterType(3000, &protos.Plan{})
+	base.db.RegisterType(4000, &protos.Plans{})
 	m := &SessionModel{baseModel: base}
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	return m, m.initSessionModel(opts)
@@ -282,10 +284,17 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	// //Get all the Plans
 	plans, err := apimodels.PlansV3(opts.DeviceID, userIdStr, lang, toekns, countryCode)
 	if err != nil {
+		log.Debugf("Plans V3 error: %v", err)
+
 		return err
 	}
-	setPlans(m.baseModel, plans.Plans)
+	log.Debugf("Plans V3 response: %+v", plans)
 
+	/// Process Plans and providers
+	err = storePlanDetail(m.baseModel, *plans)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -434,31 +443,41 @@ func storePlanDetail(m *baseModel, plan apimodels.PlansResponse) error {
 	if err != nil {
 		return err
 	}
-
 	log.Debugf("Plan details stored successful")
 	return nil
 }
 
 func setPlans(m *baseModel, plans []apimodels.Plan) error {
-	var protoPlans []*protos.Plan
-	for _, plans := range plans {
-		protoPlan := &protos.Plan{
-			Id:          plans.ID,
-			Description: plans.Description,
-			BestValue:   plans.BestValue,
-			UsdPrice:    plans.UsdPrice,
-			Price: map[string]int64{
-				"usd": plans.Price.Usd,
-			},
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		for _, plans := range plans {
+			// Update priceing for each plan
+			err := updatePrice(&plans)
+			if err != nil {
+				log.Debugf("Error while updateing price")
+				return err
+			}
+			log.Debugf("Plans Values %+v", plans)
+			pathPlanId := pathPlans + strings.Split(plans.ID, "-")[0]
+			protoPlan := &protos.Plan{
+				Id:                     plans.ID,
+				Description:            plans.Description,
+				BestValue:              plans.BestValue,
+				UsdPrice:               plans.UsdPrice,
+				TotalCostBilledOneTime: plans.TotalCostBilledOneTime,
+				Price:                  plans.Price,
+				OneMonthCost:           plans.OneMonthCost,
+				TotalCost:              plans.TotalCost,
+				FormattedBonus:         plans.FormattedBonus,
+				RenewalText:            "This is needs to be changed",
+			}
+			err = pathdb.Put(tx, pathPlanId, protoPlan, "")
+			if err != nil {
+				log.Debugf("Error while addding price")
+				return err
+			}
 		}
-		protoPlans = append(protoPlans, protoPlan)
-	}
-
-	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, pathPlans, protoPlans, "")
 		return nil
 	})
-	return nil
 }
 
 func (m *SessionModel) GetTimeZone() (string, error) {

@@ -51,31 +51,36 @@ type PlansResponse struct {
 }
 
 type Plan struct {
-	ID                   string    `json:"id"`
-	Description          string    `json:"description"`
-	Duration             Duration  `json:"duration"`
-	Price                Price     `json:"price"`
-	ExpectedMonthlyPrice Price     `json:"expectedMonthlyPrice"`
-	UsdPrice             int64     `json:"usdPrice"`
-	UsdPrice1Y           int64     `json:"usdPrice1Y"`
-	UsdPrice2Y           int64     `json:"usdPrice2Y"`
-	RedeemFor            RedeemFor `json:"redeemFor"`
-	RenewalBonus         RedeemFor `json:"renewalBonus"`
-	RenewalBonusExpired  RedeemFor `json:"renewalBonusExpired"`
-	RenewalBonusExpected RedeemFor `json:"renewalBonusExpected"`
-	Discount             float64   `json:"discount"`
-	BestValue            bool      `json:"bestValue"`
-	Level                string    `json:"level"`
+	ID                     string           `json:"id"`
+	Description            string           `json:"description"`
+	Duration               Duration         `json:"duration"`
+	Price                  map[string]int64 `json:"price"`
+	ExpectedMonthlyPrice   map[string]int64 `json:"expectedMonthlyPrice"`
+	UsdPrice               int64            `json:"usdPrice"`
+	UsdPrice1Y             int64            `json:"usdPrice1Y"`
+	UsdPrice2Y             int64            `json:"usdPrice2Y"`
+	RedeemFor              RedeemFor        `json:"redeemFor"`
+	RenewalBonus           RedeemFor        `json:"renewalBonus"`
+	RenewalBonusExpired    RedeemFor        `json:"renewalBonusExpired"`
+	RenewalBonusExpected   RedeemFor        `json:"renewalBonusExpected"`
+	Discount               float64          `json:"discount"`
+	BestValue              bool             `json:"bestValue"`
+	Level                  string           `json:"level"`
+	TotalCostBilledOneTime string
+	FormattedDiscount      string
+	FormattedBonus         string
+	OneMonthCost           string
+	TotalCost              string
+}
+
+type Price struct {
+	Usd int64 `json:"usd"`
 }
 
 type Duration struct {
 	Days   int64 `json:"days"`
 	Months int64 `json:"months"`
 	Years  int64 `json:"years"`
-}
-
-type Price struct {
-	Usd int64 `json:"usd"`
 }
 
 type RedeemFor struct {
