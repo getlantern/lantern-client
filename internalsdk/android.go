@@ -569,7 +569,6 @@ func run(configDir, locale string,
 		},
 		func() string { return "" },
 		func(category, action, label string) {},
-		nil,
 	)
 	if err != nil {
 		log.Fatalf("failed to start flashlight: %v", err)
