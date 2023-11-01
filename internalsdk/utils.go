@@ -19,17 +19,17 @@ func BytesToFloat64LittleEndian(b []byte) (float64, error) {
 	return math.Float64frombits(bits), nil
 }
 
-func updatePrice(plan *apimodels.Plan) error {
+func updatePrice(plan *apimodels.Plan, local string) error {
 	bonous := plan.RenewalBonusExpected
 	formattedBouns := formatRenewalBonusExpected(bonous.Months, bonous.Days, false)
 	log.Debugf("updateprice formattedBouns %v", formattedBouns)
-	totalCost, err := formatPrice(plan.Price)
+	totalCost, err := formatPrice(plan.Price, local)
 	log.Debugf("updateprice Total cost %v", totalCost)
 	if err != nil {
 		return err
 	}
 	//One Month Price
-	oneMonthCost, err := formatPrice(plan.ExpectedMonthlyPrice)
+	oneMonthCost, err := formatPrice(plan.ExpectedMonthlyPrice, local)
 	if err != nil {
 		return err
 	}
@@ -48,8 +48,8 @@ func updatePrice(plan *apimodels.Plan) error {
 	return nil
 }
 
-func formatPrice(price map[string]int64) (string, error) {
-	locale := currency.NewLocale("en_us")
+func formatPrice(price map[string]int64, local string) (string, error) {
+	locale := currency.NewLocale(local)
 	formatter := currency.NewFormatter(locale)
 	formatter.MaxDigits = 2
 

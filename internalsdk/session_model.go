@@ -448,10 +448,17 @@ func storePlanDetail(m *baseModel, plan apimodels.PlansResponse) error {
 }
 
 func setPlans(m *baseModel, plans []apimodels.Plan) error {
+
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		//Get local from user
+		lang, err := pathdb.Get[string](tx, pathLang)
+		if err != nil {
+			return err
+		}
+
 		for _, plans := range plans {
 			// Update priceing for each plan
-			err := updatePrice(&plans)
+			err := updatePrice(&plans, lang)
 			if err != nil {
 				log.Debugf("Error while updateing price")
 				return err
