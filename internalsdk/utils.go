@@ -61,7 +61,7 @@ func formatPrice(price map[string]int64, local string) (string, error) {
 			return "", err
 		}
 		log.Debugf("Formated price is %v", formatter.Format(amount))
-		return formatter.Format(amount), nil
+		return strings.ToUpper(currencyCode) + formatter.Format(amount), nil
 	}
 	return "", nil
 }

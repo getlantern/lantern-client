@@ -133,6 +133,8 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		if err != nil {
 			return nil, err
 		}
+		//Todo find way to call PLans api everytime user chnage lang
+		//So plans will apper in there local lang
 		return true, nil
 	case "acceptTerms":
 		err := acceptTerms(m.baseModel)
@@ -261,7 +263,7 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		return err
 	}
 
-	toekns, err := m.GetToken()
+	token, err := m.GetToken()
 	if err != nil {
 		return err
 	}
@@ -282,16 +284,25 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	// }()
 
 	// //Get all the Plans
-	plans, err := apimodels.PlansV3(opts.DeviceID, userIdStr, lang, toekns, countryCode)
+	err = getPlansV3(m.baseModel, opts.DeviceID, userIdStr, lang, token, countryCode)
 	if err != nil {
 		log.Debugf("Plans V3 error: %v", err)
+		return err
+	}
 
+	return nil
+}
+
+func getPlansV3(m *baseModel, deviceId string, userId string, lang string, token string, countyCode string) error {
+	plans, err := apimodels.PlansV3(deviceId, userId, lang, token, countyCode)
+	if err != nil {
+		log.Debugf("Plans V3 error: %v", err)
 		return err
 	}
 	log.Debugf("Plans V3 response: %+v", plans)
 
 	/// Process Plans and providers
-	err = storePlanDetail(m.baseModel, *plans)
+	err = storePlanDetail(m, *plans)
 	if err != nil {
 		return err
 	}
