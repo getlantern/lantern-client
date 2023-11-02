@@ -1,4 +1,5 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/core/purchase/app_purchase.dart';
 
 class PlanCard extends StatelessWidget {
   final Plan plan;
@@ -20,7 +21,7 @@ class PlanCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),
       child: CInkWell(
-        onTap:()=>onPlanTap(context,planName) ,
+        onTap: () => onPlanTap(context, planName),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
@@ -119,8 +120,7 @@ class PlanCard extends StatelessWidget {
     );
   }
 
-
-  Future<void> onPlanTap(BuildContext context,String planName) async {
+  Future<void> onPlanTap(BuildContext context, String planName) async {
     if (Platform.isAndroid) {
       final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
       final inRussia = sessionModel.country.value == 'RU';
@@ -136,7 +136,7 @@ class PlanCard extends StatelessWidget {
             error: e,
             stackTrace: stackTrace,
             description:
-            (error as PlatformException).message ?? error.toString(),
+                (error as PlatformException).message ?? error.toString(),
           );
         });
       } else {
@@ -148,13 +148,12 @@ class PlanCard extends StatelessWidget {
           ),
         );
       }
-    }else{
-      // * Proceed to IOS
-
+    } else {
+      // * Proceed to IOSs
+      final appPurchase = sl<AppPurchase>();
+      appPurchase.startPurchase(plan.id);
     }
   }
-
-
 }
 
 class PlanStep extends StatelessWidget {
