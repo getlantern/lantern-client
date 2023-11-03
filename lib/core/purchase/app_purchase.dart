@@ -6,7 +6,7 @@ class AppPurchase {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   List<ProductDetails> plansSku = [];
-  final Set<String> _iosPlansIds = {"1Y"};
+  final Set<String> _iosPlansIds = {"1Y",'2Y'};
 
   void init() {
     getAvailablePlans();

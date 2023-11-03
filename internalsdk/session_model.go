@@ -21,6 +21,15 @@ type SessionModel struct {
 	*baseModel
 }
 
+// Expose payment providers
+const (
+	PaymentProviderStripe       = "stripe"
+	PaymentProviderFreekassa    = "freekassa"
+	PaymentProviderGooglePlay   = "googleplay"
+	PaymentProviderBTCPay       = "btcpay"
+	PaymentProviderResellerCode = "reseller-code"
+)
+
 // List of we are using for Session Model
 const (
 	pathDeviceID             = "deviceid"
@@ -59,6 +68,7 @@ const (
 	pathSelectedTab          = "/selectedTab"
 	pathServerInfo           = "/server_info"
 	pathPlans                = "/plans/"
+	pathResellerCode         = "resellercode"
 
 	currentTermsVersion = 1
 )
@@ -163,12 +173,15 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
-	case "createUser":
-		err := userCreate(m.baseModel, arguments.Scalar().String())
+	case "redeemResellerCode":
+		email := arguments.Get("email").String()
+		resellerCode := arguments.Get("resellerCode").String()
+		err := redeemResellerCode(m, email, resellerCode)
 		if err != nil {
 			return nil, err
 		}
 		return true, nil
+
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -284,6 +297,10 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	// }()
 
 	// //Get all the Plans
+
+	//Know Issue
+	//When use install app first time
+	// Plans API is failing
 	err = getPlansV3(m.baseModel, opts.DeviceID, userIdStr, lang, token, countryCode)
 	if err != nil {
 		log.Debugf("Plans V3 error: %v", err)
@@ -661,6 +678,11 @@ func setUserIdAndToken(m *baseModel, userId int, token string) error {
 		return pathdb.Put(tx, pathToken, token, "")
 	})
 }
+func setResellerCode(m *baseModel, resellerCode string) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathResellerCode, resellerCode, "")
+	})
+}
 
 // Create user
 // Todo-: Create Sprate http client to manag and reuse client
@@ -773,4 +795,20 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 
 	log.Debugf("Report an issue index %v desc %v level %v email %v, device %v model %v version %v ", issueKey, description, level, email, device, model, osVersion)
 	return SendIssueReport(session, issueKey, description, level, email, device, model, osVersion)
+}
+
+func redeemResellerCode(m *SessionModel, email string, resellerCode string) error {
+	err := setEmail(m.baseModel, email)
+	if err != nil {
+		log.Errorf("Error while setting email %v", err)
+		return err
+	}
+	setResellerCode(m.baseModel, resellerCode)
+	if err != nil {
+		log.Errorf("Error while setting resellerCode %v", err)
+		return err
+	}
+	apimodels.PurchaseRequest(m, PaymentProviderResellerCode)
+
+	return nil
 }

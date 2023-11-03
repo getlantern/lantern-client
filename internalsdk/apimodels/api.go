@@ -8,6 +8,8 @@ import (
 	"github.com/getlantern/golog"
 )
 
+var session SessionModel
+
 const (
 	baseUrl       = "https://api.getiantem.org"
 	userDetailUrl = baseUrl + "/user-data"
@@ -137,4 +139,39 @@ func PlansV3(deviceId string, userId string, local string, token string, country
 		return nil, err
 	}
 	return &plans, nil
+}
+
+// func PurchaseRequest(planId string, email string, token string, paymentProvider string, deviceName string) error {
+func PurchaseRequest(session *SessionModel, paymentProvider string) error {
+	base := session.baseModel
+	// data := map[string]interface{}{
+	// 	"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
+	// 	"provider":       paymentProvider,
+	// 	"email":          email,
+	// 	"plan":           planId,
+	// 	"currency":       "usd",
+	// 	"deviceName":     deviceName,
+	// }
+
+	// switch paymentProvider {
+	// case PaymentProviderResellerCode:
+	// 	data["resellerCode"] = resellerCode
+
+	// }
+
+	// body, err := createJsonBody(data)
+	// if err != nil {
+	// 	log.Errorf("Error while creating json body")
+	// 	return err
+	// }
+	return nil
+}
+
+// Utils methods convert json body
+func createJsonBody(data map[string]interface{}) (*bytes.Buffer, error) {
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	return bytes.NewBuffer(jsonData), nil
 }

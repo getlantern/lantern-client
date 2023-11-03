@@ -36,7 +36,7 @@ class ResellerCodeFormatter extends TextInputFormatter {
 class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;
 
-  ResellerCodeCheckout({
+  const ResellerCodeCheckout({
     required this.isPro,
     Key? key,
   }) : super(key: key);
