@@ -4,11 +4,14 @@ import (
 	"encoding/binary"
 	"fmt"
 	"math"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/bojanz/currency"
 	"github.com/getlantern/android-lantern/internalsdk/apimodels"
 	"github.com/getlantern/errors"
+	"github.com/getlantern/pathdb"
 )
 
 func BytesToFloat64LittleEndian(b []byte) (float64, error) {
@@ -96,4 +99,36 @@ func formatRenewalBonusExpected(months int64, days int64, longForm bool) string 
 		}
 		return fmt.Sprintf("%d %s", totalDays, dayStr)
 	}
+}
+
+//Create Purchase Request
+
+func createPurchaseData(session *SessionModel, paymentProvider string, resellerCode string) (error, map[string]interface{}) {
+	email, err := session.Email()
+	if err != nil {
+		return err, nil
+	}
+
+	device, err := pathdb.Get[string](session.db, pathDevice)
+	if err != nil {
+		return err, nil
+	}
+
+	data := map[string]interface{}{
+		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
+		"provider":       paymentProvider,
+		"email":          email,
+		"deviceName":     device,
+	}
+
+	switch paymentProvider {
+	case paymentProviderResellerCode:
+		data["provider"] = "reseller-code"
+		data["resellerCode"] = resellerCode
+		data["currency"] = "usd"
+		data["plan"] = ""
+	}
+
+	return nil, data
+
 }

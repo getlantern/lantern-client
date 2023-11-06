@@ -3,18 +3,18 @@ package apimodels
 import (
 	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/getlantern/golog"
 )
-
-var session SessionModel
 
 const (
 	baseUrl       = "https://api.getiantem.org"
 	userDetailUrl = baseUrl + "/user-data"
 	userCreateUrl = baseUrl + "/user-create"
 	plansV3Url    = baseUrl + "/plans-v3"
+	purchaseUrl   = baseUrl + "/purchase"
 )
 
 const (
@@ -141,29 +141,45 @@ func PlansV3(deviceId string, userId string, local string, token string, country
 	return &plans, nil
 }
 
-// func PurchaseRequest(planId string, email string, token string, paymentProvider string, deviceName string) error {
-func PurchaseRequest(session *SessionModel, paymentProvider string) error {
-	base := session.baseModel
-	// data := map[string]interface{}{
-	// 	"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
-	// 	"provider":       paymentProvider,
-	// 	"email":          email,
-	// 	"plan":           planId,
-	// 	"currency":       "usd",
-	// 	"deviceName":     deviceName,
-	// }
+func PurchaseRequest(data map[string]interface{}, deviceId string, userId string, token string) error {
+	log.Debugf("purchase request body %v", data)
+	body, err := createJsonBody(data)
+	if err != nil {
+		log.Errorf("Error while creating json body")
+		return err
+	}
+	// Create a new request
+	req, err := http.NewRequest("POST", purchaseUrl, body)
+	if err != nil {
+		log.Errorf("Error creating new request: %v", err)
+		return err
+	}
 
-	// switch paymentProvider {
-	// case PaymentProviderResellerCode:
-	// 	data["resellerCode"] = resellerCode
+	// Add headers
+	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerUserId, userId)
+	req.Header.Set(headerProToken, token)
 
-	// }
+	client := &http.Client{}
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Errorf("Error sending puchase request: %v", err)
+		return err
+	}
 
-	// body, err := createJsonBody(data)
-	// if err != nil {
-	// 	log.Errorf("Error while creating json body")
-	// 	return err
-	// }
+	defer resp.Body.Close()
+
+	bodyStr, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalf("Error reading response body: %v", err)
+		return err
+	}
+
+	// body is a byte slice ([]byte), often we convert it to a string for easier handling
+	bodyString := string(bodyStr)
+	log.Debugf("Purchase Request %v", bodyString)
+
 	return nil
 }
 

@@ -23,11 +23,11 @@ type SessionModel struct {
 
 // Expose payment providers
 const (
-	PaymentProviderStripe       = "stripe"
-	PaymentProviderFreekassa    = "freekassa"
-	PaymentProviderGooglePlay   = "googleplay"
-	PaymentProviderBTCPay       = "btcpay"
-	PaymentProviderResellerCode = "reseller-code"
+	paymentProviderStripe       = "stripe"
+	paymentProviderFreekassa    = "freekassa"
+	paymentProviderGooglePlay   = "googleplay"
+	paymentProviderBTCPay       = "btcpay"
+	paymentProviderResellerCode = "reseller-code"
 )
 
 // List of we are using for Session Model
@@ -808,7 +808,32 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 		log.Errorf("Error while setting resellerCode %v", err)
 		return err
 	}
-	apimodels.PurchaseRequest(m, PaymentProviderResellerCode)
+
+	err, purchaseData := createPurchaseData(m, paymentProviderResellerCode, resellerCode)
+	if err != nil {
+		log.Errorf("Error while creating  purchase data %v", err)
+		return err
+	}
+
+	deviecId, err := m.GetDeviceID()
+	if err != nil {
+		return err
+	}
+	userId, err := m.GetUserID()
+	if err != nil {
+		return err
+	}
+	userIdStr := fmt.Sprintf("%d", userId)
+
+	token, err := m.GetToken()
+	if err != nil {
+		return err
+	}
+
+	err = apimodels.PurchaseRequest(purchaseData, deviecId, userIdStr, token)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
