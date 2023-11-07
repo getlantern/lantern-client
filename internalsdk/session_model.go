@@ -94,6 +94,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 	base.db.RegisterType(1000, &protos.ServerInfo{})
 	base.db.RegisterType(2000, &protos.Devices{})
+	base.db.RegisterType(5000, &protos.Device{})
 	base.db.RegisterType(3000, &protos.Plan{})
 	base.db.RegisterType(4000, &protos.Plans{})
 	m := &SessionModel{baseModel: base}
@@ -448,6 +449,7 @@ func setLanguage(m *baseModel, lang string) error {
 }
 
 func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
+	log.Debugf("Device list %v", devices)
 	var protoDevices []*protos.Device
 	for _, device := range devices {
 		protoDevice := &protos.Device{
@@ -458,10 +460,12 @@ func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
 		protoDevices = append(protoDevices, protoDevice)
 	}
 
+	userDevice := &protos.Devices{Devices: protoDevices}
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, pathDevices, protoDevices, "")
+		pathdb.Put(tx, pathDevices, userDevice, "")
 		return nil
 	})
+	log.Debugf("Device stored successfully")
 	return nil
 }
 
