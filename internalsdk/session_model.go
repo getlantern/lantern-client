@@ -829,11 +829,16 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 	if err != nil {
 		return err
 	}
-
-	err = apimodels.PurchaseRequest(purchaseData, deviecId, userIdStr, token)
+	purchase, err := apimodels.PurchaseRequest(purchaseData, deviecId, userIdStr, token)
 	if err != nil {
 		return err
 	}
+	log.Debugf("Purchase Request response %v", purchase)
 
+	// Set user to pro
+	err = setProUser(m.baseModel, true)
+	if err != nil {
+		return err
+	}
 	return nil
 }

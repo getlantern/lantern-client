@@ -103,18 +103,18 @@ func formatRenewalBonusExpected(months int64, days int64, longForm bool) string 
 
 //Create Purchase Request
 
-func createPurchaseData(session *SessionModel, paymentProvider string, resellerCode string) (error, map[string]interface{}) {
+func createPurchaseData(session *SessionModel, paymentProvider string, resellerCode string) (error, map[string]string) {
 	email, err := session.Email()
 	if err != nil {
 		return err, nil
 	}
 
-	device, err := pathdb.Get[string](session.db, pathDevice)
+	device, err := pathdb.Get[string](session.db, pathModel)
 	if err != nil {
 		return err, nil
 	}
 
-	data := map[string]interface{}{
+	data := map[string]string{
 		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
 		"provider":       paymentProvider,
 		"email":          email,
@@ -123,7 +123,7 @@ func createPurchaseData(session *SessionModel, paymentProvider string, resellerC
 
 	switch paymentProvider {
 	case paymentProviderResellerCode:
-		data["provider"] = "reseller-code"
+		data["provider"] = paymentProviderResellerCode
 		data["resellerCode"] = resellerCode
 		data["currency"] = "usd"
 		data["plan"] = ""

@@ -368,7 +368,9 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
       'email': email,
       'resellerCode': resellerCode,
-    }).then((value) => value as String);
+    }).then((value) {
+      print("value $value");
+    });
   }
 
   Future<void> submitBitcoinPayment(

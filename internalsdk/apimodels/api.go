@@ -3,7 +3,6 @@ package apimodels
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/getlantern/golog"
@@ -18,9 +17,10 @@ const (
 )
 
 const (
-	headerDeviceId = "X-Lantern-Device-Id"
-	headerUserId   = "X-Lantern-User-Id"
-	headerProToken = "X-Lantern-Pro-Token"
+	headerDeviceId    = "X-Lantern-Device-Id"
+	headerUserId      = "X-Lantern-User-Id"
+	headerProToken    = "X-Lantern-Pro-Token"
+	headerContentType = "Content-Type"
 )
 
 var (
@@ -141,50 +141,49 @@ func PlansV3(deviceId string, userId string, local string, token string, country
 	return &plans, nil
 }
 
-func PurchaseRequest(data map[string]interface{}, deviceId string, userId string, token string) error {
+func PurchaseRequest(data map[string]string, deviceId string, userId string, token string) (*PurchaseResponse, error) {
 	log.Debugf("purchase request body %v", data)
 	body, err := createJsonBody(data)
 	if err != nil {
 		log.Errorf("Error while creating json body")
-		return err
+		return nil, err
 	}
+
+	log.Debugf("Encoded body %v", body)
 	// Create a new request
 	req, err := http.NewRequest("POST", purchaseUrl, body)
 	if err != nil {
 		log.Errorf("Error creating new request: %v", err)
-		return err
+		return nil, err
 	}
 
 	// Add headers
 	req.Header.Set(headerDeviceId, deviceId)
 	req.Header.Set(headerUserId, userId)
 	req.Header.Set(headerProToken, token)
+	req.Header.Set(headerContentType, "application/json")
 
 	client := &http.Client{}
 	// Send the request
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Errorf("Error sending puchase request: %v", err)
-		return err
+		return nil, err
 	}
 
 	defer resp.Body.Close()
 
-	bodyStr, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalf("Error reading response body: %v", err)
-		return err
+	var purchase PurchaseResponse
+	// Read and decode the response body
+	if err := json.NewDecoder(resp.Body).Decode(&purchase); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
 	}
-
-	// body is a byte slice ([]byte), often we convert it to a string for easier handling
-	bodyString := string(bodyStr)
-	log.Debugf("Purchase Request %v", bodyString)
-
-	return nil
+	return &purchase, nil
 }
 
 // Utils methods convert json body
-func createJsonBody(data map[string]interface{}) (*bytes.Buffer, error) {
+func createJsonBody(data map[string]string) (*bytes.Buffer, error) {
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return nil, err

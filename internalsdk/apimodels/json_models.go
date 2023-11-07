@@ -106,3 +106,11 @@ type Provider struct {
 type Data struct {
 	PubKey string `json:"pubKey"`
 }
+
+//Purchase Request
+
+type PurchaseResponse struct {
+	PaymentStatus string `json:"paymentStatus"`
+	Plan          Plan   `json:"plan"`
+	Status        string `json:"status"`
+}
