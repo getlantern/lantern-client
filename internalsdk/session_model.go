@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/getlantern/android-lantern/internalsdk/apimodels"
 	"github.com/getlantern/android-lantern/internalsdk/protos"
@@ -69,6 +70,8 @@ const (
 	pathServerInfo           = "/server_info"
 	pathPlans                = "/plans/"
 	pathResellerCode         = "resellercode"
+	pathExpirydate           = "expirydate"
+	pathExpirystr            = "expirydatestr"
 
 	currentTermsVersion = 1
 )
@@ -429,6 +432,23 @@ func setUserLevel(m *baseModel, userLevel string) error {
 		return pathdb.Put(tx, pathUserLevel, userLevel, "")
 	})
 }
+func setExpiration(m *baseModel, expiration int64) error {
+	if expiration == 0 {
+		return nil
+	}
+
+	expiry := time.Unix(0, expiration*int64(time.Second))
+	dateFormat := "01/02/2006"
+	dateStr := expiry.Format(dateFormat)
+
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		err := pathdb.Put[string](tx, pathExpirystr, dateStr, "")
+		if err != nil {
+			return err
+		}
+		return pathdb.Put[int64](tx, pathExpirydate, expiration, "")
+	})
+}
 
 func getUserLevel(m *baseModel) (string, error) {
 	return pathdb.Get[string](m.db, pathUserLevel)
@@ -745,12 +765,18 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 			return err
 		}
 	}
+
 	if userDetail.UserStatus != "" && userDetail.UserStatus == "active" && userDetail.UserLevel == "pro" {
 		setProUser(m, true)
 	} else {
 		setProUser(m, false)
 	}
 	err := setUserLevel(m, userDetail.UserLevel)
+	if err != nil {
+		return err
+	}
+
+	err = setExpiration(m, userDetail.Expiration)
 	if err != nil {
 		return err
 	}
