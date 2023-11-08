@@ -13,8 +13,9 @@ class VPNTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const proUser = false;
-    return BaseScreen(
+    return sessionModel
+        .proUser((BuildContext context, bool proUser, Widget? child) {
+      return BaseScreen(
         title: SvgPicture.asset(
           proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
           height: 16,
@@ -58,5 +59,6 @@ class VPNTab extends StatelessWidget {
           ],
         ),
       );
+    });
   }
 }

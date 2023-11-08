@@ -1,49 +1,80 @@
 package main
 
 import (
-	"fmt"
-	"image"
-	_ "image/png"
 	"os"
-	"path/filepath"
-	"strings"
+	"os/signal"
+	"syscall"
+	"runtime"
+	"runtime/debug"
 
-	"github.com/go-flutter-desktop/go-flutter"
-	"github.com/pkg/errors"
+	"github.com/getlantern/appdir"
+	"github.com/getlantern/android-lantern/desktop/app"
+	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/golog"
 )
 
-// vmArguments may be set by hover at compile-time
-var vmArguments string
+var (
+	log = golog.LoggerFor("lantern-desktop.main")
+)
 
 func main() {
-	// DO NOT EDIT, add options in options.go
-	mainOptions := []flutter.Option{
-		flutter.OptionVMArguments(strings.Split(vmArguments, ";")),
-		flutter.WindowIcon(iconProvider),
-	}
-	err := flutter.Run(append(options, mainOptions...)...)
+	// systray requires the goroutine locked with main thread, or the whole
+	// application will crash.
+	runtime.LockOSThread()
+	// Since Go 1.6, panic prints only the stack trace of current goroutine by
+	// default, which may not reveal the root cause. Switch to all goroutines.
+	debug.SetTraceback("all")
+	flags := flashlight.ParseFlags()
+
+	cdir := configDir(&flags)
+	a := app.NewApp(flags, cdir)
+	log.Debug("Running headless")
+	runApp(a)
+	err := a.WaitForExit()
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Errorf("Lantern stopped with error %v", err)
+		os.Exit(-1)
 	}
+	log.Debug("Lantern stopped")
+	os.Exit(0)
 }
 
-func iconProvider() ([]image.Image, error) {
-	execPath, err := os.Executable()
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to resolve executable path")
+func configDir(flags *flashlight.Flags) string {
+	cdir := flags.ConfigDir
+	if cdir == "" {
+		cdir = appdir.General(common.DefaultAppName)
 	}
-	execPath, err = filepath.EvalSymlinks(execPath)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to eval symlinks for executable path")
+	log.Debugf("Using config dir %v", cdir)
+	if _, err := os.Stat(cdir); err != nil {
+		if os.IsNotExist(err) {
+			// Create config dir
+			if err := os.MkdirAll(cdir, 0750); err != nil {
+				log.Errorf("Unable to create configdir at %s: %s", configDir, err)
+			}
+		}
 	}
-	imgFile, err := os.Open(filepath.Join(filepath.Dir(execPath), "assets", "app.icns"))
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to open assets/app.icns")
-	}
-	img, _, err := image.Decode(imgFile)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to decode image")
-	}
-	return []image.Image{img}, nil
+	return cdir
+}
+
+func runApp(a *app.App) {
+	// Schedule cleanup actions
+	handleSignals(a)
+	a.Run(true)
+}
+
+// Handle system signals for clean exit
+func handleSignals(a *app.App) {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		syscall.SIGQUIT)
+	go func() {
+		s := <-c
+		log.Debugf("Got signal \"%s\", exiting...", s)
+		os.Exit(1)
+		//desktop.QuitSystray(a)
+	}()
 }
