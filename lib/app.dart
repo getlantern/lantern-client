@@ -57,7 +57,8 @@ class LanternApp extends StatelessWidget {
   void toggleConnectivityWarningIfNecessary() {
     final shouldShowConnectivityWarning =
         !sessionModel.networkAvailable.value ||
-            (sessionModel.proxyAvailable.value!=null && sessionModel.proxyAvailable.value==false);
+            (sessionModel.proxyAvailable.value != null &&
+                sessionModel.proxyAvailable.value == false);
     if (shouldShowConnectivityWarning != showConnectivityWarning) {
       showConnectivityWarning = shouldShowConnectivityWarning;
       if (showConnectivityWarning) {
@@ -138,7 +139,13 @@ class LanternApp extends StatelessWidget {
       return const Locale('en', 'US');
     }
     final codes = lang.split('_');
-    return Locale(codes[0], codes[1]);
+    // Check if the split code has more than one part
+    if (codes.length > 1) {
+      return Locale(codes[0], codes[1]);
+    } else {
+      // If not, return default locale
+      return const Locale('en', 'US');
+    }
   }
 
   String _getLocaleBasedFont(Locale locale) {
