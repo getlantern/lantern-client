@@ -27,6 +27,7 @@ const (
 	paymentProviderStripe       = "stripe"
 	paymentProviderFreekassa    = "freekassa"
 	paymentProviderGooglePlay   = "googleplay"
+	paymentProviderApplePay     = "applepay"
 	paymentProviderBTCPay       = "btcpay"
 	paymentProviderResellerCode = "reseller-code"
 )
@@ -181,6 +182,15 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		email := arguments.Get("email").String()
 		resellerCode := arguments.Get("resellerCode").String()
 		err := redeemResellerCode(m, email, resellerCode)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "submitApplePayPayment":
+		plandId := arguments.Get("planID").String()
+		purchaseId := arguments.Get("purchaseId").String()
+		err := submitApplePayPayment(m, plandId, purchaseId)
 		if err != nil {
 			return nil, err
 		}
@@ -839,7 +849,7 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 		return err
 	}
 
-	err, purchaseData := createPurchaseData(m, paymentProviderResellerCode, resellerCode)
+	err, purchaseData := createPurchaseData(m, paymentProviderResellerCode, resellerCode, "")
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
@@ -866,9 +876,36 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 	log.Debugf("Purchase Request response %v", purchase)
 
 	// Set user to pro
-	err = setProUser(m.baseModel, true)
+	return setProUser(m.baseModel, true)
+}
+
+func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string) error {
+	err, purchaseData := createPurchaseData(m, paymentProviderApplePay, "", purchaseToken)
+	if err != nil {
+		log.Errorf("Error while creating  purchase data %v", err)
+		return err
+	}
+
+	deviecId, err := m.GetDeviceID()
 	if err != nil {
 		return err
 	}
-	return nil
+	userId, err := m.GetUserID()
+	if err != nil {
+		return err
+	}
+	userIdStr := fmt.Sprintf("%d", userId)
+
+	token, err := m.GetToken()
+	if err != nil {
+		return err
+	}
+	purchase, err := apimodels.PurchaseRequest(purchaseData, deviecId, userIdStr, token)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Purchase Request response %v", purchase)
+
+	// Set user to pro
+	return setProUser(m.baseModel, true)
 }

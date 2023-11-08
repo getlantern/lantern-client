@@ -151,7 +151,11 @@ class PlanCard extends StatelessWidget {
     } else {
       // * Proceed to IOSs
       final appPurchase = sl<AppPurchase>();
-      appPurchase.startPurchase(plan.id);
+      appPurchase.startPurchase(
+        plan.id,
+        onSuccess: () {},
+        onFailure: (error) {},
+      );
     }
   }
 }
