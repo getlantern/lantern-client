@@ -20,6 +20,7 @@ require (
 	github.com/getlantern/dhtup v0.0.0-20230623111555-a085ca76f0cd
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual v1.0.0
+	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
 	github.com/getlantern/flashlight/v7 v7.6.19
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
@@ -27,6 +28,9 @@ require (
 	github.com/getlantern/launcher v0.0.0-20230622120034-fe87f9bff286
 	github.com/getlantern/memhelper v0.0.0-20220104170102-df557102babd
 	github.com/getlantern/notifier v0.0.0-20220715102006-f432f7e83f94
+	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
+	github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b
+	github.com/getlantern/systray v1.2.2
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
 	github.com/getlantern/trafficlog-flashlight v1.0.4
 	github.com/getlantern/yaml v0.0.0-20190801163808-0c9bb1ebf426
@@ -108,7 +112,6 @@ require (
 	github.com/getlantern/event v0.0.0-20210901195647-a7e3145142e6 // indirect
 	github.com/getlantern/eventual/v2 v2.0.2 // indirect
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
-	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c // indirect
 	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 // indirect
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4 // indirect
 	github.com/getlantern/go-cache v0.0.0-20141028142048-88b53914f467 // indirect

@@ -20,6 +20,7 @@ import (
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/memhelper"
 	notify "github.com/getlantern/notifier"
+	"github.com/getlantern/profiling"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/balancer"
 	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
@@ -291,7 +292,79 @@ func (app *App) startFeaturesService(chans ...<-chan bool) {
 }
 
 func (app *App) beforeStart(listenAddr string) {
+	log.Debug("Got first config")
+	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
+		log.Debugf("Start profiling with cpu file %s and mem file %s", app.Flags.CpuProfile, app.Flags.MemProfile)
+		finishProfiling := profiling.Start(app.Flags.CpuProfile, app.Flags.MemProfile)
+		app.AddExitFunc("finish profiling", finishProfiling)
+	}
 
+	if err := setUpSysproxyTool(); err != nil {
+		app.Exit(err)
+	}
+
+	if app.Flags.ClearProxySettings {
+		// This is a workaround that attempts to fix a Windows-only problem where
+		// Lantern was unable to clean the system's proxy settings before logging
+		// off.
+		//
+		// See: https://github.com/getlantern/lantern/issues/2776
+		log.Debug("Requested clearing of proxy settings")
+		_, port, splitErr := net.SplitHostPort(listenAddr)
+		if splitErr == nil && port != "0" {
+			log.Debugf("Clearing system proxy settings for: %v", listenAddr)
+			clearSysproxyFor(listenAddr)
+		} else {
+			log.Debugf("Can't clear proxy settings for: %v", listenAddr)
+		}
+		app.Exit(nil)
+		os.Exit(0)
+	}
+
+	go func() {
+		if err := configureSystemTray(app); err != nil {
+			log.Errorf("Unable to configure system tray: %s", err)
+			return
+		}
+		app.OnSettingChange(SNLanguage, func(lang interface{}) {
+			refreshSystray(lang.(string))
+		})
+	}()
+}
+
+// Connect turns on proxying
+func (app *App) Connect() {
+	app.analyticsSession.Event("systray-menu", "connect")
+	ops.Begin("connect").End()
+	app.settings.setBool(SNDisconnected, false)
+}
+
+// Disconnect turns off proxying
+func (app *App) Disconnect() {
+	app.analyticsSession.Event("systray-menu", "disconnect")
+	ops.Begin("disconnect").End()
+	app.settings.setBool(SNDisconnected, true)
+}
+
+// GetLanguage returns the user language
+func (app *App) GetLanguage() string {
+	return app.settings.GetLanguage()
+}
+
+// SetLanguage sets the user language
+func (app *App) SetLanguage(lang string) {
+	app.settings.SetLanguage(lang)
+}
+
+// OnSettingChange sets a callback cb to get called when attr is changed from server.
+// When calling multiple times for same attr, only the last one takes effect.
+func (app *App) OnSettingChange(attr SettingName, cb func(interface{})) {
+	app.settings.OnChange(attr, cb)
+}
+
+// OnStatsChange adds a listener for Stats changes.
+func (app *App) OnStatsChange(fn func(stats.Stats)) {
+	app.statsTracker.AddListener(fn)
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
@@ -442,6 +515,16 @@ func recordStopped() {
 // ShouldReportToSentry determines if we should report errors/panics to Sentry
 func ShouldReportToSentry() bool {
 	return !uicommon.IsDevEnvironment()
+}
+
+// OnTrayShow indicates the user has selected to show lantern from the tray.
+func (app *App) OnTrayShow() {
+	app.analyticsSession.Event("systray-menu", "show")
+}
+
+// OnTrayUpgrade indicates the user has selected to upgrade lantern from the tray.
+func (app *App) OnTrayUpgrade() {
+	app.analyticsSession.Event("systray-menu", "upgrade")
 }
 
 // PlansURL returns the URL for accessing the checkout/plans page directly.

@@ -444,6 +444,8 @@ github.com/getlantern/probe v0.0.0-20211216020459-69afa01c1c5c/go.mod h1:ditYj5o
 github.com/getlantern/probednet v0.0.0-20190725133252-1cfdb2354b4d/go.mod h1:7sl7hPjPDAqXyxVx7mhrKfvb4oCX/ROhcs16w2EhWX8=
 github.com/getlantern/probednet v0.0.0-20211216020507-22fd9c1d3bf6 h1:8jg6OehdQr90Ybmyc68raXEqM/1hk8E7F2YAUfmcvzE=
 github.com/getlantern/probednet v0.0.0-20211216020507-22fd9c1d3bf6/go.mod h1:noglym51kFdkZEV/WjiIzRKV6qwwTI9/vSAjeOI/zCU=
+github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff h1:q5GcvgoGNRJ5yVCr5p0vUcXyYOGvTb+Lq/g4TW2HbfA=
+github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff/go.mod h1:eHf4vTrd0oaXLtbz+zM28cfsX4ylva7hbM2zt4+axZo=
 github.com/getlantern/proxy/v3 v3.0.0-20231031142453-252ab678e6b7 h1:r6lDJ9gea/mIvI5QGQm6rzp/iEV/IpqdH+lSL3r0fgk=
 github.com/getlantern/proxy/v3 v3.0.0-20231031142453-252ab678e6b7/go.mod h1:SUQ8fQ0ImT7N7taLLU21HI7i9VR8j/bSxG/OiwSZM4s=
 github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de h1:328hcuyQi8KGZr4GV2EtWllwBmS10oVGevwZEOk2dDE=
@@ -465,6 +467,10 @@ github.com/getlantern/rotator v0.0.0-20160829164113-013d4f8e36a2/go.mod h1:Ap+QT
 github.com/getlantern/shortcut v0.0.0-20211026183428-bf59a137fdec h1:8TfjIMydnhBs4edmXu2Nz1f2P0QOcXfol2rR1cxfrSs=
 github.com/getlantern/shortcut v0.0.0-20211026183428-bf59a137fdec/go.mod h1:3VQ6qvEBehqDBNbEKfNtSjK6MR5ydOdjMPgKjKay7vo=
 github.com/getlantern/sqlparser v0.0.0-20171012210704-a879d8035f3c/go.mod h1:wGjYYh1vSkRes1bNy+zio7cmmI9cLbST+H8eqnt5Mg4=
+github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b h1:sn68kKTXZ6k7vyhPfYvjtoDSMufTlvvkAZ6Y+VJ25ZA=
+github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b/go.mod h1:qjD2ty3qu7E12mJ2gVU/I2wCuebaLR5ePSQLY3eXrDQ=
+github.com/getlantern/systray v1.2.2 h1:dCEHtfmvkJG7HZ8lS/sLklTH4RKUcIsKrAD9sThoEBE=
+github.com/getlantern/systray v1.2.2/go.mod h1:pXFOI1wwqwYXEhLPm9ZGjS2u/vVELeIgNMY5HvhHhcE=
 github.com/getlantern/testify v0.0.0-20160317154340-2eeb3906e78f h1:R6iv+VzCrbxlBm2TcgyJi9c7tQguNXi9JmIvuUJKrdc=
 github.com/getlantern/testify v0.0.0-20160317154340-2eeb3906e78f/go.mod h1:uKKI9HSwZ4C8tx1vV+ovbG32Lw9LixtzPLNiS8U/ddA=
 github.com/getlantern/testredis v0.0.0-20210610142259-c0995d455766/go.mod h1:f57SFFLkB+WLz10IoqovqksV6fTK91SuweVS21OEkdc=
@@ -721,6 +727,8 @@ github.com/ledisdb/ledisdb v0.0.0-20200510135210-d35789ec47e6/go.mod h1:n931TsDu
 github.com/libp2p/go-buffer-pool v0.0.2/go.mod h1:MvaB6xw5vOrDl8rYZGLFdKAuk/hRoRZd1Vi32+RXyFM=
 github.com/libp2p/go-buffer-pool v0.1.0 h1:oK4mSFcQz7cTQIfqbe4MIj9gLW+mnanjyFtc6cdF0Y8=
 github.com/libp2p/go-buffer-pool v0.1.0/go.mod h1:N+vh8gMqimBzdKkSMVuydVDq+UV5QTWy5HSiZacSbPg=
+github.com/lxn/walk v0.0.0-20210112085537-c389da54e794/go.mod h1:E23UucZGqpuUANJooIbHWCufXvOcT6E7Stq81gU+CSQ=
+github.com/lxn/win v0.0.0-20210218163916-a377121e959e/go.mod h1:KxxjdtRkfNoYDCUP5ryK7XJJNTnpC8atvtmTheChOtk=
 github.com/magiconair/properties v1.7.4-0.20170902060319-8d7837e64d3c/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=
 github.com/magiconair/properties v1.8.0/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=
 github.com/matryer/is v1.2.0/go.mod h1:2fLPjFQM9rhQ15aVEtbuwhJinnOqrmgXPNdZsdwlWXA=
@@ -1263,6 +1271,7 @@ golang.org/x/sys v0.0.0-20200413165638-669c56c373c4/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20200828194041-157a740278f4/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200923182605-d9f96fdee20d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20201018230417-eeed37f84f13/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210112080510-489259a85091/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210316164454-77fc1eacc6aa/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
@@ -1445,6 +1454,7 @@ google.golang.org/protobuf v1.26.0-rc.1/go.mod h1:jlhhOSvTdKEhbULTjvd4ARK9grFBp0
 google.golang.org/protobuf v1.26.0/go.mod h1:9q0QmTI4eRPtz6boOQmLYwt+qCgq0jsYwAQnmE0givc=
 google.golang.org/protobuf v1.31.0 h1:g0LDEJHgrBl9N9r17Ru3sqWhkIx2NB67okBHPwC7hs8=
 google.golang.org/protobuf v1.31.0/go.mod h1:HV8QOd/L58Z+nl8r43ehVNZIU/HEI6OcFqwMG9pJV4I=
+gopkg.in/Knetic/govaluate.v3 v3.0.0/go.mod h1:csKLBORsPbafmSCGTEh3U7Ozmsuq8ZSIlKk1bcqph0E=
 gopkg.in/alecthomas/kingpin.v2 v2.2.6/go.mod h1:FMv+mEhP44yOT+4EoQTLFTRgOQ1FBLkstjWtayDeSgw=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
