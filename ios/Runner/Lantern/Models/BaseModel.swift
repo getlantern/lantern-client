@@ -27,10 +27,10 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
     self.model = model
     self.binaryMessenger = flutterBinary
     super.init()
-  DispatchQueue.main.async {
+    DispatchQueue.main.async {
       self.setupFlutterChannels()
-  }
-    
+    }
+
   }
 
   internal static func getDB() throws -> MinisqlDBProtocol {

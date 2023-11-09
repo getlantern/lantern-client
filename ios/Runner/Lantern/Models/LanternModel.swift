@@ -22,17 +22,16 @@ class LanternModel: NSObject, FlutterStreamHandler {
   init(flutterBinary: FlutterBinaryMessenger) {
     self.flutterbinaryMessenger = flutterBinary
     super.init()
-      
-      DispatchQueue.main.async{
-          self.lanternMethodChannel = FlutterMethodChannel(
-            name: self.LANTERN_METHOED_CHANNEL, binaryMessenger: flutterBinary)
-          self.lanternMethodChannel.setMethodCallHandler(self.handleMethodCall)
-          self.lanternEventChannel = FlutterEventChannel(
-            name: self.LANTERN_EVENT_CHANNEL, binaryMessenger: flutterBinary)
-          self.lanternEventChannel.setStreamHandler(self)
- }
-      
-    
+
+    DispatchQueue.main.async {
+      self.lanternMethodChannel = FlutterMethodChannel(
+        name: self.LANTERN_METHOED_CHANNEL, binaryMessenger: flutterBinary)
+      self.lanternMethodChannel.setMethodCallHandler(self.handleMethodCall)
+      self.lanternEventChannel = FlutterEventChannel(
+        name: self.LANTERN_EVENT_CHANNEL, binaryMessenger: flutterBinary)
+      self.lanternEventChannel.setStreamHandler(self)
+    }
+
   }
 
   func handleMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
