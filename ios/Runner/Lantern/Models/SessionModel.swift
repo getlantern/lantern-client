@@ -42,7 +42,9 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
-    startService()
+      DispatchQueue.global(qos: .userInitiated).async {
+          self.startService()
+      }
 //    getBandwidth()
   }
 
