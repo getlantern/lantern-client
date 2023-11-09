@@ -15,7 +15,7 @@ import UIKit
   //  Model Properties
   var sessionModel: SessionModel!
   var lanternModel: LanternModel!
-//  var navigationModel: NavigationModel!
+  //  var navigationModel: NavigationModel!
   var vpnModel: VpnModel!
   var messagingModel: MessagingModel!
   // IOS
@@ -45,19 +45,19 @@ import UIKit
 
   // Intlize this GO model and callback
   private func setupAppComponents() throws {
-      DispatchQueue.global(qos: .userInitiated).async {
-             do {
-                 try self.setupModels()
-                 DispatchQueue.main.async {
-                     self.startUpSequency()
-                     self.setupLoadingBar()
-                 }
-             } catch {
-                 DispatchQueue.main.async {
-                     logger.error("Unexpected error setting up models: \(error)")
-                 }
-             }
-         }
+    DispatchQueue.global(qos: .userInitiated).async {
+      do {
+        try self.setupModels()
+        DispatchQueue.main.async {
+          self.startUpSequency()
+          self.setupLoadingBar()
+        }
+      } catch {
+        DispatchQueue.main.async {
+          logger.error("Unexpected error setting up models: \(error)")
+        }
+      }
+    }
 
   }
 
@@ -67,7 +67,7 @@ import UIKit
     sessionModel = try SessionModel(flutterBinary: flutterbinaryMessenger)
     lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
     vpnModel = try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
-//    navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
+    //    navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
   }
 
