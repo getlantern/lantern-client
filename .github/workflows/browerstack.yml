@@ -10,8 +10,8 @@ env:
 
 jobs:
   build:
-    runs-on:
-      group: large-runners
+    runs-on: macos-13.2
+#      group: large-runners
     steps:
       - uses: actions/checkout@v4
         with:
