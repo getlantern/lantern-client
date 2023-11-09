@@ -18,10 +18,6 @@ lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging
 lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
 	@protoc --dart_out=./lib/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
 
-#internalsdk/protos/%.pb.go: protos_shared/%.proto
-#	go build -o build/protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go
-#	protoc --go_out=internalsdk/protos --plugin=build/protoc-gen-go --go_opt=paths=source_relative $<
-
 internalsdk/protos/%.pb.go: protos_shared/%.proto
 	@echo "Generating Go protobuf for $<"
 	@protoc --plugin=protoc-gen-go=build/protoc-gen-go \
@@ -275,7 +271,7 @@ release-autoupdate: require-version
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-$(ANDROID_LIB): $(GO_SOURCES)
+$(ANDROID_LIB):
 	$(call check-go-version) && \
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	go install golang.org/x/mobile/cmd/gomobile && \
