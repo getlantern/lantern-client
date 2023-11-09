@@ -9,6 +9,6 @@ import 'package:lantern/ffi.dart';
 Future<void> main() async {
   debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
   WidgetsFlutterBinding.ensureInitialized();
-  testffi();
+  loadLibrary();
   runApp(DesktopApp());
 }

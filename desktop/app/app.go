@@ -36,8 +36,10 @@ import (
 	"github.com/getlantern/trafficlog-flashlight/tlproc"
 
 	"github.com/getlantern/android-lantern/desktop/analytics"
+	"github.com/getlantern/android-lantern/desktop/features"
 	"github.com/getlantern/android-lantern/desktop/notifier"
 	"github.com/getlantern/android-lantern/desktop/server"
+	"github.com/getlantern/android-lantern/desktop/ws"
 	uicommon "github.com/getlantern/android-lantern/desktop/common"
 )
 
@@ -66,6 +68,7 @@ type App struct {
 
 	chGlobalConfigChanged chan bool
 
+	ws                    ws.UIChannel
 	flashlight  *flashlight.Flashlight
 	dhtupContext          Option[dhtup.Context]
 
@@ -96,6 +99,7 @@ func NewApp(flags flashlight.Flags, configDir string, settings *Settings) *App {
 		settings:              settings,
 		analyticsSession:      analyticsSession,
 		statsTracker:          NewStatsTracker(),
+		ws:                    ws.NewUIChannel(),
 	}
 
 	return app
@@ -285,10 +289,53 @@ func (app *App) Run(isMain bool) {
 	}()
 }
 
+// setFeatures enables or disables the features specified by values in the features map
+// sent back to the UI
+func (app *App) setFeatures(enabledFeatures map[string]bool, values map[features.Feature]bool) {
+	for feature, isEnabled := range values {
+		if isEnabled {
+			enabledFeatures[feature.String()] = isEnabled
+		}
+	}
+}
+
+// checkEnabledFeatures checks if features are enabled
+// (based on the env vars at build time or the user's settings/geolocation)
+// and starts appropriate services
+func (app *App) checkEnabledFeatures(enabledFeatures map[string]bool) {
+	app.setFeatures(enabledFeatures, features.EnabledFeatures)
+
+	log.Debugf("Starting enabled features: %v", enabledFeatures)
+	//go app.startReplicaIfNecessary(enabledFeatures)
+	enableTrafficLog := app.isFeatureEnabled(enabledFeatures, config.FeatureTrafficLog)
+	go app.toggleTrafficLog(enableTrafficLog)
+}
+
 // startFeaturesService starts a new features service that dispatches features to any relevant
 // listeners.
 func (app *App) startFeaturesService(chans ...<-chan bool) {
-
+	if service, err := app.ws.Register("features", func(write func(interface{})) {
+		enabledFeatures := app.flashlight.EnabledFeatures()
+		app.checkEnabledFeatures(enabledFeatures)
+		write(enabledFeatures)
+	}); err != nil {
+		log.Errorf("Unable to serve enabled features to UI: %v", err)
+	} else {
+		for _, ch := range chans {
+			go func(c <-chan bool) {
+				for range c {
+					features := app.flashlight.EnabledFeatures()
+					app.checkEnabledFeatures(features)
+					select {
+					case service.Out <- features:
+						// ok
+					default:
+						// don't block if no-one is listening
+					}
+				}
+			}(ch)
+		}
+	}
 }
 
 func (app *App) beforeStart(listenAddr string) {
@@ -330,6 +377,11 @@ func (app *App) beforeStart(listenAddr string) {
 			refreshSystray(lang.(string))
 		})
 	}()
+}
+
+func (app *App) isFeatureEnabled(features map[string]bool, feature string) bool {
+	val, ok := features[feature]
+	return ok && val
 }
 
 // Connect turns on proxying
