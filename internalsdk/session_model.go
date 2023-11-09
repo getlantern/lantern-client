@@ -537,7 +537,7 @@ func setPlans(m *baseModel, plans []apimodels.Plan) error {
 				OneMonthCost:           plans.OneMonthCost,
 				TotalCost:              plans.TotalCost,
 				FormattedBonus:         plans.FormattedBonus,
-				RenewalText:            "This is needs to be changed",
+				RenewalText:            "",
 			}
 			err = pathdb.Put(tx, pathPlanId, protoPlan, "")
 			if err != nil {
