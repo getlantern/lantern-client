@@ -27,7 +27,9 @@
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
-		5FCF3F8E2AFC652C009D6A84 /* liblantern.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 5FCF3F8C2AFC6498009D6A84 /* liblantern.dylib */; };
+		5FCF3F922AFC7D4C009D6A84 /* liblantern.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FCF3F912AFC7D4C009D6A84 /* liblantern.dylib */; };
+		5FCF3F942AFC7D54009D6A84 /* liblantern.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 5FCF3F932AFC7D54009D6A84 /* liblantern.dylib */; };
+		5FCF3F972AFC7E30009D6A84 /* liblantern.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 5FCF3F912AFC7D4C009D6A84 /* liblantern.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9DD832B42514BE06F2A57F8F /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 052699D6465AD8C9FB260E23 /* Pods_Runner.framework */; };
 		B3ED98C3EAD7718A05708BFE /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 335B76D179FE1547C0436C96 /* Pods_RunnerTests.framework */; };
 /* End PBXBuildFile section */
@@ -56,6 +58,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				5FCF3F972AFC7E30009D6A84 /* liblantern.dylib in Bundle Framework */,
 			);
 			name = "Bundle Framework";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,8 +85,8 @@
 		33E51914231749380026EE4D /* Release.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
 		33E5194F232828860026EE4D /* AppInfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppInfo.xcconfig; sourceTree = "<group>"; };
 		5EFCF11B904D986D4A21D577 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
-		5FCF3F8A2AFC648F009D6A84 /* liblantern.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblantern.dylib; path = ../desktop/liblantern.dylib; sourceTree = "<group>"; };
-		5FCF3F8C2AFC6498009D6A84 /* liblantern.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblantern.dylib; path = ../desktop/liblantern.dylib; sourceTree = "<group>"; };
+		5FCF3F912AFC7D4C009D6A84 /* liblantern.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblantern.dylib; path = ../desktop/liblantern.dylib; sourceTree = "<group>"; };
+		5FCF3F932AFC7D54009D6A84 /* liblantern.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblantern.dylib; path = ../desktop/liblantern.dylib; sourceTree = "<group>"; };
 		62A0CE728A7650DA48C7A079 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		8C9C86E67EAFCD07D44BC397 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -99,6 +102,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3ED98C3EAD7718A05708BFE /* Pods_RunnerTests.framework in Frameworks */,
+				5FCF3F922AFC7D4C009D6A84 /* liblantern.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,7 +152,7 @@
 		33CC10E42044A3C60003C045 = {
 			isa = PBXGroup;
 			children = (
-				5FCF3F8C2AFC6498009D6A84 /* liblantern.dylib */,
+				5FCF3F932AFC7D54009D6A84 /* liblantern.dylib */,
 				33FAB671232836740065AC1E /* Runner */,
 				33CEB47122A05771004F2AC0 /* Flutter */,
 				331C80D6294CF71000263BE5 /* RunnerTests */,
@@ -205,7 +209,7 @@
 		D73912EC22F37F3D000D13A0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5FCF3F8A2AFC648F009D6A84 /* liblantern.dylib */,
+				5FCF3F912AFC7D4C009D6A84 /* liblantern.dylib */,
 				052699D6465AD8C9FB260E23 /* Pods_Runner.framework */,
 				335B76D179FE1547C0436C96 /* Pods_RunnerTests.framework */,
 			);
@@ -318,9 +322,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5FCF3F8E2AFC652C009D6A84 /* liblantern.dylib in Resources */,
 				33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */,
 				33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */,
+				5FCF3F942AFC7D54009D6A84 /* liblantern.dylib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

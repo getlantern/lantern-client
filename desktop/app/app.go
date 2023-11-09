@@ -419,8 +419,22 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 	app.statsTracker.AddListener(fn)
 }
 
-func (app *App) afterStart(cl *flashlightClient.Client) {
+func (app *App) SysproxyOn() {
+	if err := SysproxyOn(); err != nil {
+		app.statsTracker.SetAlert(
+			stats.FAIL_TO_SET_SYSTEM_PROXY, err.Error(), false)
+	}
+}
 
+func (app *App) afterStart(cl *flashlightClient.Client) {
+	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
+		enable := val.(bool)
+		if enable {
+			app.SysproxyOn()
+		} else {
+			SysProxyOff()
+		}
+	})
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {

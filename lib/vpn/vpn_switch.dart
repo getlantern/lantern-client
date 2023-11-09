@@ -1,4 +1,5 @@
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/ffi.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -10,6 +11,8 @@ class VPNSwitch extends StatefulWidget {
 class _VPNSwitchState extends State<VPNSwitch> {
   // final adHelper = AdHelper();
 
+  String vpnStatus = 'disconnected';
+
   @override
   void initState() {
     super.initState();
@@ -19,11 +22,18 @@ class _VPNSwitchState extends State<VPNSwitch> {
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
 
-  Future<void> onSwitchTap(bool newValue, String vpnStatus) async {
+  Future<void> onSwitchTap(bool newValue) async {
     unawaited(HapticFeedback.lightImpact());
-
     if (isIdle(vpnStatus)) {
-      await vpnModel.switchVPN(newValue);
+      if (Platform.isAndroid) {
+        await vpnModel.switchVPN(newValue);
+      } else if (Platform.isMacOS) {
+        if (vpnStatus == 'connected') {
+          await sysProxyOff();
+        } else {
+          await sysProxyOn();
+        }
+      }
     }
 
     //add delayed to avoid flickering
@@ -35,20 +45,24 @@ class _VPNSwitchState extends State<VPNSwitch> {
         },
       );
     }
+
+    setState(() {
+      vpnStatus = newValue ? 'connected' : 'disconnected';
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
     // Still working on ads feature
-
-    const vpnStatus = 'disconnected';
     return Transform.scale(
       scale: 2,
       child: FlutterSwitch(
-          value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+          value: this.vpnStatus == 'connected' || this.vpnStatus == 'disconnecting',
+          //value: true,
           activeColor: onSwitchColor,
           inactiveColor: offSwitchColor,
-          onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus),
+          onToggle: (bool newValue) => onSwitchTap(newValue),
         ),
     );
     // return sessionModel
