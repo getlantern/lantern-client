@@ -25,7 +25,6 @@ var (
 
 //export Start
 func Start() *C.char {
-    msg := "Hi from Go"
 	// systray requires the goroutine locked with main thread, or the whole
 	// application will crash.
 	runtime.LockOSThread()
@@ -47,7 +46,7 @@ func Start() *C.char {
 		log.Debug("Lantern stopped")
 		os.Exit(0)
 	}()
-    return C.CString(msg)
+    return C.CString("")
 }
 
 //export SysProxyOn
