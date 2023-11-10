@@ -40,9 +40,12 @@ dependencies:
   flutter_switch: ^0.3.2
   flag: ^7.0.0
 
- #Loogs and crash reporting
+  # Loogs and crash reporting
   catcher_2: ^1.0.0
   sentry_flutter: ^7.10.1
+
+  # Desktop
+  system_tray: ^2.0.3
 
   badges: ^3.1.1
   dotted_border: ^2.0.0+3
