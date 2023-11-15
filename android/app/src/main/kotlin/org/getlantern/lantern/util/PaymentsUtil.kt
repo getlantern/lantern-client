@@ -270,6 +270,10 @@ class PaymentsUtil(private val activity: Activity) {
         json.addProperty("provider", provider.toString().lowercase())
         json.addProperty("email", email)
         json.addProperty("plan", planID)
+        if (currency != null && currency != "") {
+            val plan = "${planID}-${currency}"
+            json.addProperty("plan", plan)
+        }
         json.addProperty("currency", currency.lowercase())
         json.addProperty("deviceName", session.deviceName())
 
