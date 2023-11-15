@@ -270,7 +270,8 @@ class PaymentsUtil(private val activity: Activity) {
         json.addProperty("provider", provider.toString().lowercase())
         json.addProperty("email", email)
         json.addProperty("plan", planID)
-        if (currency != null && currency != "") {
+        val isPlayVersion = LanternApp.getSession().isPlayVersion()
+        if (isPlayVersion && currency != null && currency != "") {
             val plan = "${planID}-${currency}"
             json.addProperty("plan", plan)
         }
