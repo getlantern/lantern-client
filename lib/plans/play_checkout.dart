@@ -122,7 +122,9 @@ class _PlayCheckoutState extends State<PlayCheckout>
           widget.plan.id,
           emailController.value.text,
         )
-            .onError((error, stackTrace) {
+            .then((value) async {
+          showSuccessDialog(context, widget.isPro);
+        }).onError((error, stackTrace) {
           showError(
             context,
             error: e,
