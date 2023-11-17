@@ -78,16 +78,21 @@ class _PlayCheckoutState extends State<PlayCheckout>
                     ),
                   ),
                 ),
-                Center(
-                  child: Tooltip(
-                    message: AppKeys.continueCheckout,
-                    child: Button(
-                      text: 'submit'.i18n,
-                      disabled: emailController.value.text.isEmpty ||
-                          emailFieldKey.currentState?.validate() == false,
-                      onPressed: submitPayment,
-                    ),
-                  ),
+                Flexible(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Tooltip(
+                          message: AppKeys.continueCheckout,
+                          child: Button(
+                            text: 'submit'.i18n,
+                            disabled: emailController.value.text.isEmpty ||
+                                emailFieldKey.currentState?.validate() == false,
+                            onPressed: submitPayment,
+                          ),
+                        )
+                      ]),
                 ),
               ],
             ),
