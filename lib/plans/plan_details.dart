@@ -21,21 +21,16 @@ class PlanCard extends StatelessWidget {
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),
       child: CInkWell(
         onTap: () async {
-          final inRussia = sessionModel.country.value == 'RU';
+          final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
           // * Play version
-          if (!inRussia) {
-            await sessionModel
-                .submitGooglePlay(planName)
-                .onError((error, stackTrace) {
-              // on failure
-              CDialog.showError(
-                context,
-                error: e,
-                stackTrace: stackTrace,
-                description:
-                    (error as PlatformException).message ?? error.toString(),
-              );
-            });
+          if (isPlayVersion) {
+            // * Proceed to our own Checkout
+            await context.pushRoute(
+              PlayCheckout(
+                plan: plan,
+                isPro: isPro,
+              ),
+            );
           } else {
             // * Proceed to our own Checkout
             await context.pushRoute(

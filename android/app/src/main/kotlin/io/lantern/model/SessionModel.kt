@@ -153,6 +153,7 @@ class SessionModel(
             )
 
             "submitGooglePlayPayment" -> paymentsUtil.submitGooglePlayPayment(
+                call.argument("email")!!,
                 call.argument("planID")!!,
                 result,
             )

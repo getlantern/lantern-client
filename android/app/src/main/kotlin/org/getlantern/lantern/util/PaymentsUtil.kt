@@ -130,7 +130,7 @@ class PaymentsUtil(private val activity: Activity) {
     }
 
     // Handles Google Play transactions
-    fun submitGooglePlayPayment(planID: String, methodCallResult: MethodChannel.Result) {
+    fun submitGooglePlayPayment(email: String, planID: String, methodCallResult: MethodChannel.Result) {
         val inAppBilling = LanternApp.getInAppBilling()
 
         if (inAppBilling == null) {
@@ -179,7 +179,7 @@ class PaymentsUtil(private val activity: Activity) {
 
                     sendPurchaseRequest(
                         planID,
-                        "",
+                        email,
                         tokens[0],
                         PaymentProvider.GooglePlay,
                         methodCallResult,
