@@ -55,7 +55,6 @@ class _PlayCheckoutState extends State<PlayCheckout>
             ),
             child: Column(
               children: [
-                // * Email field
                 Container(
                   padding: const EdgeInsetsDirectional.only(
                     top: 8,
@@ -75,7 +74,6 @@ class _PlayCheckoutState extends State<PlayCheckout>
                     ),
                   ),
                 ),
-                // * Price summary, unused pro time disclaimer, Continue button
                 Center(
                   child: Tooltip(
                     message: AppKeys.continueCheckout,
@@ -115,6 +113,7 @@ class _PlayCheckoutState extends State<PlayCheckout>
   }
 
   void submitPayment() {
+    context.loaderOverlay.show();
     Future.wait(
       [
         sessionModel
@@ -123,8 +122,10 @@ class _PlayCheckoutState extends State<PlayCheckout>
           emailController.value.text,
         )
             .then((value) async {
+          context.loaderOverlay.hide();
           showSuccessDialog(context, widget.isPro);
         }).onError((error, stackTrace) {
+          context.loaderOverlay.hide();
           showError(
             context,
             error: e,
