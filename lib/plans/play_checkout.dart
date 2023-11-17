@@ -41,59 +41,54 @@ class _PlayCheckoutState extends State<PlayCheckout>
     return BaseScreen(
         resizeToAvoidBottomInset: false,
         title: 'lantern_pro_checkout'.i18n,
-        body: sessionModel.countryCode((context, countryCode, child) {
-          return sessionModel.emailAddress((
-                BuildContext context,
-                String emailAddress,
-                Widget? child,
-              ) {
-                return Container(
+        body: sessionModel.emailAddress((
+          BuildContext context,
+          String emailAddress,
+          Widget? child,
+        ) {
+          return Container(
+            padding: const EdgeInsetsDirectional.only(
+              start: 16,
+              end: 16,
+              top: 24,
+              bottom: 32,
+            ),
+            child: Column(
+              children: [
+                // * Email field
+                Container(
                   padding: const EdgeInsetsDirectional.only(
-                    start: 16,
-                    end: 16,
-                    top: 24,
-                    bottom: 32,
+                    top: 8,
+                    bottom: 8,
                   ),
-                  child: Column(
-                    children: [
-                      // * Email field
-                      Container(
-                        padding: const EdgeInsetsDirectional.only(
-                          top: 8,
-                          bottom: 8,
-                        ),
-                        child: Form(
-                          key: emailFieldKey,
-                          child: CTextField(
-                            initialValue: widget.isPro ? emailAddress : '',
-                            controller: emailController,
-                            autovalidateMode: widget.isPro
-                                ? AutovalidateMode.always
-                                : AutovalidateMode.disabled,
-                            label: 'email'.i18n,
-                            keyboardType: TextInputType.emailAddress,
-                            prefixIcon:
-                                const CAssetImage(path: ImagePaths.email),
-                          ),
-                        ),
-                      ),
-                      // * Price summary, unused pro time disclaimer, Continue button
-                      Center(
-                        child: Tooltip(
-                          message: AppKeys.continueCheckout,
-                          child: Button(
-                            text: 'submit'.i18n,
-                            disabled: emailController.value.text.isEmpty ||
-                                emailFieldKey.currentState?.validate() ==
-                                    false,
-                            onPressed: submitPayment,
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: Form(
+                    key: emailFieldKey,
+                    child: CTextField(
+                      initialValue: widget.isPro ? emailAddress : '',
+                      controller: emailController,
+                      autovalidateMode: widget.isPro
+                          ? AutovalidateMode.always
+                          : AutovalidateMode.disabled,
+                      label: 'email'.i18n,
+                      keyboardType: TextInputType.emailAddress,
+                      prefixIcon: const CAssetImage(path: ImagePaths.email),
+                    ),
                   ),
-                );
-            },
+                ),
+                // * Price summary, unused pro time disclaimer, Continue button
+                Center(
+                  child: Tooltip(
+                    message: AppKeys.continueCheckout,
+                    child: Button(
+                      text: 'submit'.i18n,
+                      disabled: emailController.value.text.isEmpty ||
+                          emailFieldKey.currentState?.validate() == false,
+                      onPressed: submitPayment,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         }));
   }
@@ -118,7 +113,6 @@ class _PlayCheckoutState extends State<PlayCheckout>
       description: description,
     );
   }
-
 
   void submitPayment() {
     Future.wait(
