@@ -55,6 +55,10 @@ class _PlayCheckoutState extends State<PlayCheckout>
             ),
             child: Column(
               children: [
+                PlanStep(
+                  stepNum: '2',
+                  description: 'enter_email'.i18n,
+                ),
                 Container(
                   padding: const EdgeInsetsDirectional.only(
                     top: 8,
