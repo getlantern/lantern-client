@@ -132,19 +132,16 @@ class PaymentsUtil(private val activity: Activity) {
     // Handles Google Play transactions
     fun submitGooglePlayPayment(email: String, planID: String, methodCallResult: MethodChannel.Result) {
         val inAppBilling = LanternApp.getInAppBilling()
-
-        if (inAppBilling == null) {
-            Logger.error(TAG, "Missing inAppBilling")
-            methodCallResult.error(
-                "unknownError",
-                activity.resources.getString(R.string.error_making_purchase),
-                null,
-            )
-            return
+        Logger.debug(TAG, "Starting in-app purchase for plan with ID ${planID}")
+        var plan = planID
+        val strs = planID.split("-").toTypedArray()
+        if (strs.size > 0) {
+            plan = strs[0]
+            Logger.debug(TAG, "Updated plan to have ID ${plan}")
         }
         inAppBilling.startPurchase(
             activity,
-            planID,
+            plan,
             object : PurchasesUpdatedListener {
                 override fun onPurchasesUpdated(
                     billingResult: BillingResult,
@@ -270,11 +267,6 @@ class PaymentsUtil(private val activity: Activity) {
         json.addProperty("provider", provider.toString().lowercase())
         json.addProperty("email", email)
         json.addProperty("plan", planID)
-        val isPlayVersion = LanternApp.getSession().isPlayVersion()
-        if (isPlayVersion && currency != null && currency != "") {
-            val plan = "${planID}-${currency}"
-            json.addProperty("plan", plan)
-        }
         json.addProperty("currency", currency.lowercase())
         json.addProperty("deviceName", session.deviceName())
 
