@@ -49,7 +49,7 @@ open class LanternApp : Application() {
 
         LanternProxySelector(session)
 
-        if (session.isPlayVersion) inAppBilling = InAppBilling(this)
+        inAppBilling = InAppBilling(this)
 
         lanternHttpClient = LanternHttpClient()
 
