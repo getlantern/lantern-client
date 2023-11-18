@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
+import 'package:lantern/plans/price_summary.dart';
 import 'package:lantern/plans/utils.dart';
 
 @RoutePage(name: 'PlayCheckout')
@@ -42,83 +43,63 @@ class _PlayCheckoutState extends State<PlayCheckout>
         resizeToAvoidBottomInset: false,
         title: 'lantern_pro_checkout'.i18n,
         body: sessionModel.emailAddress((
-          BuildContext context,
-          String emailAddress,
-          Widget? child,
-        ) {
-          return Container(
-            padding: const EdgeInsetsDirectional.only(
-              start: 16,
-              end: 16,
-              top: 24,
-              bottom: 32,
-            ),
-            child: Column(
-              children: [
-                PlanStep(
-                  stepNum: '2',
-                  description: 'enter_email'.i18n,
-                ),
-                Container(
+                BuildContext context,
+                String emailAddress,
+                Widget? child,
+              ) {
+                return Container(
                   padding: const EdgeInsetsDirectional.only(
-                    top: 8,
-                    bottom: 8,
+                    start: 16,
+                    end: 16,
+                    top: 24,
+                    bottom: 32,
                   ),
-                  child: Form(
-                    key: emailFieldKey,
-                    child: CTextField(
-                      initialValue: widget.isPro ? emailAddress : '',
-                      controller: emailController,
-                      autovalidateMode: widget.isPro
-                          ? AutovalidateMode.always
-                          : AutovalidateMode.disabled,
-                      label: 'email'.i18n,
-                      keyboardType: TextInputType.emailAddress,
-                      prefixIcon: const CAssetImage(path: ImagePaths.email),
-                    ),
-                  ),
-                ),
-                Flexible(
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Tooltip(
+                    children: [
+                      PlanStep(
+                        stepNum: '2',
+                        description: 'enter_email_to_complete_purchase'.i18n,
+                      ),
+                      Container(
+                        padding: const EdgeInsetsDirectional.only(
+                          top: 8,
+                          bottom: 8,
+                        ),
+                        child: Form(
+                          key: emailFieldKey,
+                          child: CTextField(
+                            initialValue: widget.isPro ? emailAddress : '',
+                            controller: emailController,
+                            autovalidateMode: widget.isPro
+                                ? AutovalidateMode.always
+                                : AutovalidateMode.disabled,
+                            label: 'email'.i18n,
+                            keyboardType: TextInputType.emailAddress,
+                            prefixIcon:
+                                const CAssetImage(path: ImagePaths.email),
+                          ),
+                        ),
+                      ),
+                                    Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [PriceSummary(
+                            plan: widget.plan,
+                            isPro: widget.isPro,
+                          ),
+                          Tooltip(
                           message: AppKeys.continueCheckout,
                           child: Button(
-                            text: 'submit'.i18n,
-                            disabled: emailController.value.text.isEmpty ||
-                                emailFieldKey.currentState?.validate() == false,
+                            text: 'Complete Purchase'.i18n,
                             onPressed: submitPayment,
                           ),
-                        )
-                      ]),
-                ),
-              ],
-            ),
-          );
+                        )]),
+                      ),
+                    ],
+                  ),
+                );
         }));
-  }
-
-  static void showError(
-    BuildContext context, {
-    Object? error,
-    StackTrace? stackTrace,
-    String description = '',
-  }) {
-    if (description.isEmpty) {
-      if (error is PlatformException) {
-        description = (error).message.toString().i18n;
-      } else {
-        description = error.toString();
-      }
-    }
-    CDialog.showError(
-      context,
-      error: e,
-      stackTrace: stackTrace,
-      description: description,
-    );
   }
 
   void submitPayment() {
@@ -129,8 +110,7 @@ class _PlayCheckoutState extends State<PlayCheckout>
             .submitPlayPayment(
           widget.plan.id,
           emailController.value.text,
-        )
-            .then((value) async {
+        ).then((value) async {
           context.loaderOverlay.hide();
           showSuccessDialog(context, widget.isPro);
         }).onError((error, stackTrace) {

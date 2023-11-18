@@ -24,7 +24,6 @@ class PlanCard extends StatelessWidget {
           final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
           // * Play version
           if (isPlayVersion) {
-            // * Proceed to our own Checkout
             await context.pushRoute(
               PlayCheckout(
                 plan: plan,
