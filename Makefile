@@ -42,6 +42,8 @@ TEST ?= *_test
 # integration-test:
 # 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
+GO_VERSION := 1.19
+
 TAG ?= $$VERSION
 TAG_HEAD := $(shell git rev-parse HEAD)
 INSTALLER_NAME ?= lantern-installer
@@ -203,6 +205,12 @@ tag: require-version
 	git commit -m "Updated changelog for $$VERSION" && \
 	git push
 
+define check-go-version
+    if [ -z '${IGNORE_GO_VERSION}' ] && go version | grep -q -v $(GO_VERSION); then \
+		echo "go $(GO_VERSION) is required." && exit 1; \
+	fi
+endef
+
 guard-%:
 	 @ if [ -z '${${*}}' ]; then echo 'Environment variable $* not set' && exit 1; fi
 
@@ -264,6 +272,7 @@ release-autoupdate: require-version
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
 $(ANDROID_LIB):
+	$(call check-go-version) && \
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	go install golang.org/x/mobile/cmd/gomobile && \
 	gomobile init && \
@@ -318,6 +327,7 @@ pubget:
 	@flutter pub get
 
 $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
+	@$(call check-go-version) && \
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
@@ -461,3 +471,7 @@ clean:
 	rm -f `which gomobile` && \
 	rm -f `which gobind`
 	rm -Rf "$(FLASHLIGHT_FRAMEWORK_PATH)" "$(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)"
+
+
+
+
