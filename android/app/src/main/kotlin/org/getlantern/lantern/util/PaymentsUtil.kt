@@ -1,7 +1,6 @@
 package org.getlantern.lantern.util
 
 import android.app.Activity
-import android.app.ProgressDialog
 import androidx.annotation.NonNull
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
@@ -28,9 +27,6 @@ class PaymentsUtil(private val activity: Activity) {
 
     private val session: LanternSessionManager = LanternApp.getSession()
 
-    @JvmField
-    protected var dialog: ProgressDialog? = null
-
     public fun submitStripePayment(
         planID: String,
         email: String,
@@ -48,7 +44,6 @@ class PaymentsUtil(private val activity: Activity) {
                 cvc,
             )
             val stripe: Stripe = Stripe(activity, session.stripePubKey()!!)
-            dialog = createDialog(activity.resources.getString(R.string.processing_payment))
             stripe.createCardToken(
                 card,
                 callback = object : ApiResultCallback<Token> {
@@ -63,7 +58,6 @@ class PaymentsUtil(private val activity: Activity) {
                     }
 
                     override fun onError(@NonNull error: Exception) {
-                        dialog?.dismiss()
                         Logger.error(TAG, "Error submitting to Stripe: $error")
                         methodCallResult.error(
                             "errorSubmittingToStripe",
@@ -74,7 +68,6 @@ class PaymentsUtil(private val activity: Activity) {
                 },
             )
         } catch (t: Throwable) {
-            dialog?.dismiss()
             Logger.error(TAG, "Error submitting to Stripe", t)
             methodCallResult.error(
                 "errorSubmittingToStripe",
@@ -129,16 +122,25 @@ class PaymentsUtil(private val activity: Activity) {
         }
     }
 
+    // getPlanYear splits the given plan ID by hyphen and returns the year the given startas with
+    private fun getPlanYear(planID: String): String {
+        var plan = planID
+        val parts = planID.split("-").toTypedArray()
+        if (parts.size > 0) {
+            plan = parts[0]
+            Logger.debug(TAG, "Updated plan to have ID ${plan}")
+        }
+        return plan
+    }
+
     // Handles Google Play transactions
     fun submitGooglePlayPayment(email: String, planID: String, methodCallResult: MethodChannel.Result) {
         val inAppBilling = LanternApp.getInAppBilling()
-        Logger.debug(TAG, "Starting in-app purchase for plan with ID ${planID}")
-        var plan = planID
-        val strs = planID.split("-").toTypedArray()
-        if (strs.size > 0) {
-            plan = strs[0]
-            Logger.debug(TAG, "Updated plan to have ID ${plan}")
-        }
+        val currency = LanternApp.getSession().planByID(planID)?.let {
+            it.currency
+        } ?: "usd"
+        val plan = getPlanYear(planID)
+        Logger.debug(TAG, "Starting in-app purchase for plan with ID ${plan}")
         inAppBilling.startPurchase(
             activity,
             plan,
@@ -175,7 +177,7 @@ class PaymentsUtil(private val activity: Activity) {
                     }
 
                     sendPurchaseRequest(
-                        planID,
+                        plan + "-" + currency,
                         email,
                         tokens[0],
                         PaymentProvider.GooglePlay,
@@ -240,16 +242,6 @@ class PaymentsUtil(private val activity: Activity) {
         }
     }
 
-    private fun createDialog(message: String): ProgressDialog {
-        return ProgressDialog.show(
-            activity,
-            message,
-            "",
-            true,
-            false,
-        )
-    }
-
     private fun sendPurchaseRequest(
         planID: String,
         email: String,
@@ -299,7 +291,6 @@ class PaymentsUtil(private val activity: Activity) {
             object : ProCallback {
 
                 override fun onSuccess(response: Response?, result: JsonObject?) {
-                    dialog?.dismiss()
                     session.linkDevice()
                     session.setIsProUser(true)
                     Logger.e(TAG, "Purchase Completed: $response")
@@ -309,7 +300,6 @@ class PaymentsUtil(private val activity: Activity) {
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.e(TAG, "Error with purchase request: $error")
-                    dialog?.dismiss()
                     methodCallResult.error(
                         "errorMakingPurchase",
                         activity.getString(

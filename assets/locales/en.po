@@ -286,6 +286,9 @@ msgstr "months"
 msgid "enter_email"
 msgstr "Enter Email"
 
+msgid "enter_email_to_complete_purchase"
+msgstr "Enter email to complete purchase"
+
 msgid "error_fetching_plans"
 msgstr "Error fetching plans, please restart Lantern and try again."
 
