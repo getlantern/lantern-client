@@ -23,6 +23,8 @@ jobs:
       run: |
           git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
     - name: Run Unit tests
+      env:
+        GOPRIVATE: github.com/getlantern
       run: |
         go test -failfast -coverprofile=profile.cov ./...
     - name: Install goveralls
