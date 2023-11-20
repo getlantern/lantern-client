@@ -294,37 +294,31 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
-	userIdStr := fmt.Sprintf("%d", userId)
 	countryCode, err := m.GetCountryCode()
 	if err != nil {
 		return err
 	}
+	//Get all the Plans
+	userIdStr := fmt.Sprintf("%d", userId)
+	if userId == 0 {
+		tempUserId, err := m.GetUserID()
+		if err != nil {
+			return err
+		}
+		userIdStr = fmt.Sprintf("%d", tempUserId)
+	}
 
-	// Run Plans in background
-	// go func() {
-	// 	data, err := apimodels.PlansV3(opts.DeviceID, userIdStr, lang, toekns, countryCode)
-	// 	if err != nil {
-	// 		log.Errorf("Error while Plans v3 request:", err) // Optional: log the error
-	// 		return
-	// 	}
-	// 	log.Debugf("Plans Response", data)
-	// }()
-
-	// //Get all the Plans
-
-	//Know Issue
-	//When use install app first time
-	// Plans API is failing
 	err = getPlansV3(m.baseModel, opts.DeviceID, userIdStr, lang, token, countryCode)
 	if err != nil {
 		log.Debugf("Plans V3 error: %v", err)
 		return err
 	}
-
 	return nil
 }
 
 func getPlansV3(m *baseModel, deviceId string, userId string, lang string, token string, countyCode string) error {
+	//
+	log.Debugf("Request data deviceID %v userId %v lang %v token %v countyCode %v", deviceId, userId, lang, token, countyCode)
 	plans, err := apimodels.PlansV3(deviceId, userId, lang, token, countyCode)
 	if err != nil {
 		log.Debugf("Plans V3 error: %v", err)
