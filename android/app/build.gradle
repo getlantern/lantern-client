@@ -37,6 +37,9 @@ if (flutterVersionName == null) {
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    if (project.android.hasProperty("namespace")) {
+        namespace 'org.getlantern.lantern'
+    }
     ndkVersion "26.0.10792818"
 
     bundle {
@@ -82,6 +85,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig true
         viewBinding true
         dataBinding true
     }
@@ -156,6 +160,7 @@ android {
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
+        disable 'InvalidPackage'
     }
 
     signingConfigs {
@@ -452,7 +457,7 @@ dependencies {
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:messaging-android:1ce4613c8b'
     implementation 'com.github.getlantern:db-android:573aba1458'
-    implementation 'com.cleveradssolutions:cas:3.2.4'
+    implementation 'com.cleveradssolutions:cas:3.4.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
@@ -465,7 +470,7 @@ sentry {
     // related to proguard mapping will be excluded.
     // Default is enabled.
     includeProguardMapping = true
-    
+
 
     // Whether the plugin should attempt to auto-upload the mapping file to Sentry or not.
     // If disabled the plugin will run a dry-run and just generate a UUID.
