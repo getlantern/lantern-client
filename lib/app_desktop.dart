@@ -12,42 +12,30 @@ import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
 import 'package:lantern/core/router/router.dart';
 
-class DesktopApp extends StatelessWidget {
-  // This widget is the root of your application.
+class DesktopApp extends StatefulWidget {
+  const DesktopApp({Key? key}) : super(key: key);
+
+  @override
+  State<DesktopApp> createState() => _DesktopAppState();
+}
+
+class _DesktopAppState extends State<DesktopApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Code Sample for testing text input',
+      title: 'Lantern Desktop'.i18n,
       theme: ThemeData(
-        // If the host is missing some fonts, it can cause the
-        // text to not be rendered or worse the app might crash.
         fontFamily: 'Roboto',
         primarySwatch: Colors.blue,
       ),
-      home: MyStatefulWidget(),
+      home: Scaffold(
+        body: buildBody(TAB_VPN),
+        bottomNavigationBar: CustomBottomBar(
+          selectedTab: TAB_VPN,
+          isDevelop: true,
+        ),
+      ),
     );
-  }
-}
-
-class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key? key}) : super(key: key);
-
-  @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
-}
-
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  FocusNode myFocus = FocusNode();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-                  body: buildBody(TAB_VPN),
-                  bottomNavigationBar: CustomBottomBar(
-                    selectedTab: TAB_VPN,
-                    isDevelop: true,
-                  ),
-                );
   }
 
   Widget buildBody(String selectedTab) {
