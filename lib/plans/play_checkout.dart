@@ -92,6 +92,9 @@ class _PlayCheckoutState extends State<PlayCheckout>
                           message: AppKeys.continueCheckout,
                           child: Button(
                             text: 'Complete Purchase'.i18n,
+                            disabled: emailController.value.text.isEmpty ||
+                                emailFieldKey.currentState?.validate() ==
+                                    false,
                             onPressed: submitPayment,
                           ),
                         )

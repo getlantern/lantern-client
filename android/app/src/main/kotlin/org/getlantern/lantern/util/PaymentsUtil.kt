@@ -126,7 +126,7 @@ class PaymentsUtil(private val activity: Activity) {
     private fun getPlanYear(planID: String): String {
         var plan = planID
         val parts = planID.split("-").toTypedArray()
-        if (parts.size > 0) {
+        if (parts.size.isNotEmpty()) {
             plan = parts[0]
             Logger.debug(TAG, "Updated plan to have ID ${plan}")
         }
