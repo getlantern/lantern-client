@@ -138,6 +138,7 @@ func (app *App) Run(isMain bool) {
 		sentry.CaptureException(err)
 	})
 
+
 	go func() {
 		for <-geolookup.OnRefresh() {
 			app.settings.SetCountry(geolookup.GetCountry(0))

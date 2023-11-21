@@ -36,8 +36,11 @@ func Start() *C.char {
 	cdir := configDir(&flags)
 	a := app.NewApp(flags, cdir, loadSettings(cdir))
 	log.Debug("Running headless")
+
+
 	go func() { 
 		runApp(a)
+
 		err := a.WaitForExit()
 		if err != nil {
 			log.Errorf("Lantern stopped with error %v", err)
