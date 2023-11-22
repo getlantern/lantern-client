@@ -18,7 +18,6 @@ import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentHashMap
 
@@ -27,7 +26,6 @@ class InAppBilling(
     private val builder: BillingClient.Builder = BillingClient.newBuilder(context).enablePendingPurchases(),
     private val googleApiAvailability: GoogleApiAvailability = GoogleApiAvailability.getInstance(),
 ) : PurchasesUpdatedListener, InAppBillingInterface {
-
     companion object {
         private val TAG = InAppBilling::class.java.simpleName
     }
@@ -78,8 +76,8 @@ class InAppBilling(
                             initConnection()
                         }
                     }
-                    override fun onBillingServiceDisconnected() =
-                        Logger.d(TAG, "onBillingServiceDisconnected")
+
+                    override fun onBillingServiceDisconnected() = Logger.d(TAG, "onBillingServiceDisconnected")
                 },
             )
         }
@@ -99,7 +97,11 @@ class InAppBilling(
     private fun BillingResult.responseCodeOK() = responseCode == BillingClient.BillingResponseCode.OK
 
     @Synchronized
-    fun startPurchase(activity: Activity, planID: String, cb: PurchasesUpdatedListener) {
+    fun startPurchase(
+        activity: Activity,
+        planID: String,
+        cb: PurchasesUpdatedListener,
+    ) {
         this.purchasesUpdated = cb
         val skuDetails = skus.get(planID.lowercase())
         if (skuDetails == null) {
@@ -116,7 +118,10 @@ class InAppBilling(
     }
 
     @UiThread
-    private fun launchBillingFlow(activity: Activity, params: BillingFlowParams) {
+    private fun launchBillingFlow(
+        activity: Activity,
+        params: BillingFlowParams,
+    ) {
         ensureConnected {
             launchBillingFlow(activity, params)
                 .takeIf { billingResult -> !billingResult.responseCodeOK() }
@@ -126,7 +131,10 @@ class InAppBilling(
         }
     }
 
-    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
+    override fun onPurchasesUpdated(
+        billingResult: BillingResult,
+        purchases: List<Purchase>?,
+    ) {
         Logger.d(TAG, "Purchases updated")
         purchasesUpdated?.let {
             it.onPurchasesUpdated(billingResult, purchases)
@@ -137,9 +145,10 @@ class InAppBilling(
     private fun updateSkus() {
         Logger.d(TAG, "Updating SKUs")
         val skuList = listOf("1y", "2y")
-        val params = SkuDetailsParams.newBuilder()
-            .setType(SkuType.INAPP)
-            .setSkusList(skuList)
+        val params =
+            SkuDetailsParams.newBuilder()
+                .setType(SkuType.INAPP)
+                .setSkusList(skuList)
         ensureConnected {
             querySkuDetailsAsync(
                 params.build(),
@@ -221,8 +230,9 @@ class InAppBilling(
     private fun handleAcknowledgedPurchases(purchases: List<Purchase>) {
         for (purchase in purchases) {
             ensureConnected {
-                val consumeParams = ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
-                    .build()
+                val consumeParams =
+                    ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
+                        .build()
                 val listener =
                     ConsumeResponseListener { billingResult: BillingResult, outToken: String? ->
                         if (!billingResult.responseCodeOK()) {
