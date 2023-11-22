@@ -107,28 +107,22 @@ class _PlayCheckoutState extends State<PlayCheckout>
         }));
   }
 
-  void submitPayment() {
-    context.loaderOverlay.show();
-    Future.wait(
-      [
-        sessionModel
-            .submitPlayPayment(
-          widget.plan.id,
-          emailController.value.text,
-        )
-            .then((value) async {
-          context.loaderOverlay.hide();
-          showSuccessDialog(context, widget.isPro);
-        }).onError((error, stackTrace) {
-          context.loaderOverlay.hide();
-          showError(
-            context,
-            error: e,
-            stackTrace: stackTrace,
-          );
-        }),
-      ],
-      eagerError: true,
-    );
+  void submitPayment() async {
+    try {
+      // Show the loader overlay at the beginning.
+      context.loaderOverlay.show();
+
+      // Await the result of the payment submission.
+      await sessionModel.submitPlayPayment(
+          widget.plan.id, emailController.value.text);
+
+      // ignore: use_build_context_synchronously
+      context.loaderOverlay.hide();
+      showSuccessDialog(context, widget.isPro);
+    } catch (error, stackTrace) {
+      // In case of an error, hide the loader and show the error message.
+      context.loaderOverlay.hide();
+      showError(context, error: error, stackTrace: stackTrace);
+    }
   }
 }
