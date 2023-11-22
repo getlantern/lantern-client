@@ -99,11 +99,8 @@ class InAppBilling(
     private fun BillingResult.responseCodeOK() = responseCode == BillingClient.BillingResponseCode.OK
 
     @Synchronized
-    fun startPurchase(activity: Activity, id: String, cb: PurchasesUpdatedListener) {
+    fun startPurchase(activity: Activity, planID: String, cb: PurchasesUpdatedListener) {
         this.purchasesUpdated = cb
-        var planID = id
-        val currency = LanternApp.getSession().getCurrency()
-        if (currency != null) planID += "-$currency"
         val skuDetails = skus.get(planID.lowercase())
         if (skuDetails == null) {
             Logger.e(TAG, "Unable to find sku details for plan: $planID")
@@ -157,7 +154,7 @@ class InAppBilling(
                     skus.clear()
                     skuDetailsList?.forEach {
                         val currency = it.getPriceCurrencyCode().lowercase()
-                        val id = "${it.getSku()}-$currency"
+                        val id = it.getSku()
                         val years = it.getSku().substring(0, 1)
                         val price = it.getPriceAmountMicros() / 10000
                         val priceWithoutTax = it.getOriginalPriceAmountMicros() / 10000

@@ -126,7 +126,7 @@ class PaymentsUtil(private val activity: Activity) {
     private fun getPlanYear(planID: String): String {
         var plan = planID
         val parts = planID.split("-").toTypedArray()
-        if (parts.size.isNotEmpty()) {
+        if (parts.isNotEmpty()) {
             plan = parts[0]
             Logger.debug(TAG, "Updated plan to have ID ${plan}")
         }
@@ -140,7 +140,7 @@ class PaymentsUtil(private val activity: Activity) {
             it.currency
         } ?: "usd"
         val plan = getPlanYear(planID)
-        Logger.debug(TAG, "Starting in-app purchase for plan with ID ${plan}")
+        Logger.debug(TAG, "Starting in-app purchase for plan witha ID ${plan}")
         inAppBilling.startPurchase(
             activity,
             plan,
