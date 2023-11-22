@@ -22,6 +22,15 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   Future<void> onSwitchTap(bool newValue, String vpnStatus) async {
     unawaited(HapticFeedback.lightImpact());
+    //Make changes in way that if ads is not ready then wait for atleast 5 seconds
+    // and then show ads and if ads is ready then show ads immediately
+    if (vpnStatus != 'connected') {
+      if (!await adHelper.isAdsReadyToShow()) {
+        await vpnModel.connectingDelay(newValue);
+        await Future.delayed(const Duration(seconds: 5));
+      }
+    }
+
     if (isIdle(vpnStatus)) {
       await vpnModel.switchVPN(newValue);
     }

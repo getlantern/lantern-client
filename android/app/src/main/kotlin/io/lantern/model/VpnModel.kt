@@ -40,6 +40,10 @@ class VpnModel(
                 saveVpnStatus(if (on) "connecting" else "disconnecting")
                 switchLantern(on)
             }
+            "connectingDealy" -> {
+                val on = call.argument<Boolean>("on") ?: false
+                saveVpnStatus(if (on) "connecting" else "disconnecting")
+            }
             else -> super.doMethodCall(call, notImplemented)
         }
     }
