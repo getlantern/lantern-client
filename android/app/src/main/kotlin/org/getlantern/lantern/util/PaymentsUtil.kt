@@ -140,7 +140,7 @@ class PaymentsUtil(private val activity: Activity) {
             it.currency
         } ?: "usd"
         val plan = getPlanYear(planID)
-        Logger.debug(TAG, "Starting in-app purchase for plan witha ID ${plan}")
+        Logger.debug(TAG, "Starting in-app purchase for plan with ID ${plan}")
         inAppBilling.startPurchase(
             activity,
             plan,
