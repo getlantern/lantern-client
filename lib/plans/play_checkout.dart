@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/price_summary.dart';
 import 'package:lantern/plans/utils.dart';
@@ -76,6 +75,9 @@ class _PlayCheckoutState extends State<PlayCheckout>
                       label: 'email'.i18n,
                       keyboardType: TextInputType.emailAddress,
                       prefixIcon: const CAssetImage(path: ImagePaths.email),
+                      onChanged: (value) {
+                        setState(() {});
+                      },
                     ),
                   ),
                 ),
@@ -93,8 +95,7 @@ class _PlayCheckoutState extends State<PlayCheckout>
                           child: Button(
                             text: 'Complete Purchase'.i18n,
                             disabled: emailController.value.text.isEmpty ||
-                                emailFieldKey.currentState?.validate() ==
-                                    false,
+                                emailFieldKey.currentState?.validate() == false,
                             onPressed: submitPayment,
                           ),
                         )

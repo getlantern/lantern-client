@@ -54,7 +54,9 @@ void showSuccessDialog(BuildContext context, bool isPro, [bool? isReseller]) {
     description: description,
     actionLabel: 'continue_to_pro'.i18n,
     agreeAction: () async {
-      await context.pushRoute(Home());
+      // Note: whatever page you need to popUtil
+      // it will pop that page
+      context.router.popUntil((route) => route.settings.name == PlansPage.name);
       return true;
     },
   );
