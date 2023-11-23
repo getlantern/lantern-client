@@ -173,7 +173,6 @@ class AdHelper {
   Future<void> loadAds(
       {required bool shouldShowGoogleAds,
       required bool shouldShowCASAds}) async {
-    await Future.delayed(Duration(seconds: 5));
     await _decideAndLoadAds(
       shouldShowCASAds: shouldShowCASAds,
       shouldShowGoogleAds: shouldShowGoogleAds,
