@@ -28,7 +28,6 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/memhelper"
 	"github.com/getlantern/mtime"
 
 	// import gomobile just to make sure it stays in go.mod
@@ -70,7 +69,7 @@ type Session interface {
 	GetToken() (string, error)
 	SetCountry(string) error
 	UpdateAdSettings(AdSettings) error
-	UpdateStats(string, string, string, int, int, bool) error
+	UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error
 	SetStaging(bool) error
 	BandwidthUpdate(int, int, int, int) error
 	Locale() (string, error)
@@ -80,7 +79,7 @@ type Session interface {
 	GetForcedCountryCode() (string, error)
 	GetDNSServer() (string, error)
 	Provider() (string, error)
-	IsPlayVersion() (bool, error)
+	IsStoreVersion() (bool, error)
 	Email() (string, error)
 	Currency() (string, error)
 	DeviceOS() (string, error)
@@ -113,7 +112,7 @@ type panickingSession interface {
 	GetForcedCountryCode() string
 	GetDNSServer() string
 	Provider() string
-	IsPlayVersion() bool
+	IsStoreVersion() bool
 	Email() string
 	Currency() string
 	DeviceOS() string
@@ -128,12 +127,6 @@ type panickingSession interface {
 	SerializedInternalHeaders() string
 
 	Wrapped() Session
-}
-
-func panicIfNecessary(err error) {
-	if err != nil {
-		panic(err)
-	}
 }
 
 // panickingSessionImpl implements panickingSession
@@ -235,8 +228,8 @@ func (s *panickingSessionImpl) Provider() string {
 	return result
 }
 
-func (s *panickingSessionImpl) IsPlayVersion() bool {
-	result, err := s.wrapped.IsPlayVersion()
+func (s *panickingSessionImpl) IsStoreVersion() bool {
+	result, err := s.wrapped.IsStoreVersion()
 	panicIfNecessary(err)
 	return result
 }
@@ -453,7 +446,10 @@ func newAnalyticsSession(deviceID string) analytics.Session {
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
 
-	memhelper.Track(15*time.Second, 15*time.Second)
+	// memhelper won't build for iOS right now
+	// memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
+	// 	log.Debugf("Unable to track memory stats: %v", err)
+	// })
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(common.Staging)
 
@@ -533,7 +529,7 @@ func run(configDir, locale string,
 		flags,
 		func(cfg *config.Global, src config.Source) {
 			session.UpdateAdSettings(&adSettings{cfg.AdSettings})
-			if session.IsPlayVersion() {
+			if session.IsStoreVersion() {
 				runner.EnableNamedDomainRules("google_play") // for google play build we want to make sure that Google Play domains are not being proxied
 			}
 			select {
@@ -573,7 +569,6 @@ func run(configDir, locale string,
 		},
 		func() string { return "" },
 		func(category, action, label string) {},
-		nil,
 	)
 	if err != nil {
 		log.Fatalf("failed to start flashlight: %v", err)

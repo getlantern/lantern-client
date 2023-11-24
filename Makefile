@@ -1,7 +1,11 @@
 #1 Disable implicit rules
 .SUFFIXES:
 
-.PHONY: codegen protos routes mocks test integration-test sourcedump
+.PHONY: codegen protos routes mocks test integration-test sourcedump build-framework build-framework-debug clean archive require-version set-version show-version reset-build-number install-gomobile assert-go-version
+
+INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
+INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
+
 
 codegen: protos routes
 
@@ -13,6 +17,16 @@ lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging
 
 lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
 	@protoc --dart_out=./lib/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
+
+internalsdk/protos/%.pb.go: protos_shared/%.proto
+	@echo "Generating Go protobuf for $<"
+	@protoc --plugin=protoc-gen-go=build/protoc-gen-go \
+             --go_out=internalsdk \
+             $<
+
+
+#internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
+#	@protoc --go_out=internalsdk protos_shared/vpn.proto
 
 # Compiles autorouter routes
 routes: lib/core/router/router.gr.dart
@@ -98,6 +112,15 @@ S3_BUCKET ?= lantern
 FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
 
+# Sentry properties
+SENTRY_AUTH_TOKEN=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
+SENTRY_ORG=getlantern
+SENTRY_PROJECT_IOS=lantern-ios
+
+DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/Release-prod-iphoneos/Runner.app.dSYM
+INFO_PLIST := ios/Runner/Info.plist
+
+
 # By default, build APKs containing support for ARM only 32 bit. Since we're using multi-architecture
 # app bundles for play store, we no longer need to include 64 bit in our APKs that we distribute.
 ANDROID_ARCH ?= arm32
@@ -133,7 +156,6 @@ else
   $(error unsupported ANDROID_ARCH "$(ANDROID_ARCH)")
 endif
 
-ANDROID_LIB_PKG := github.com/getlantern/android-lantern/internalsdk
 ANDROID_LIB_BASE := liblantern
 
 MOBILE_APPID := org.getlantern.lantern
@@ -249,7 +271,7 @@ release-autoupdate: require-version
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-$(ANDROID_LIB): $(GO_SOURCES)
+$(ANDROID_LIB):
 	$(call check-go-version) && \
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	go install golang.org/x/mobile/cmd/gomobile && \
@@ -260,7 +282,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 		-androidapi=23 \
 		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-		$(ANDROID_LIB_PKG)
+		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && \
@@ -271,6 +293,12 @@ android-lib: $(MOBILE_ANDROID_LIB)
 
 appium-test-build:
 	flutter build apk --flavor=appiumTest --dart-define=app.flavor=appiumTest --debug
+
+appium-ios-ipa:
+	flutter build ipa --flavor=appiumTest --dart-define=app.flavor=appiumTest --profile
+
+appium-ios-build:
+	flutter build ios --flavor=appiumTest --dart-define=app.flavor=appiumTest --profile
 
 $(MOBILE_TEST_APK) $(MOBILE_TESTS_APK): $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@$(GRADLE) -PandroidArch=$(ANDROID_ARCH) \
@@ -339,6 +367,26 @@ android-debug: $(MOBILE_DEBUG_APK)
 
 android-release: pubget $(MOBILE_RELEASE_APK)
 
+set-version:
+	@echo "Setting the CFBundleShortVersionString to $(VERSION)"
+	@cd ios && agvtool new-marketing-version $(VERSION)
+	@echo "Incrementing the build number..."
+	@CURRENT_BUILD=$$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" $(INFO_PLIST)); \
+	NEXT_BUILD=$$(($$CURRENT_BUILD + 1)); \
+	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$NEXT_BUILD" $(INFO_PLIST)
+
+
+ios-release:set-version build-framework
+	@echo "Creating the Flutter iOS build..."
+	flutter build ipa --flavor prod --release
+	@echo "Uploading debug symbols to Sentry..."
+	export SENTRY_LOG_LEVEL=info
+	sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_IOS) $(DWARF_DSYM_FOLDER_PATH)
+	@IPA_PATH=$(shell pwd)/build/ios/ipa; \
+	echo "iOS IPA generated under: $$IPA_PATH"; \
+	open "$$IPA_PATH"
+
+
 android-bundle: $(MOBILE_BUNDLE)
 
 android-debug-install: $(MOBILE_DEBUG_APK)
@@ -387,6 +435,33 @@ sourcedump: require-version
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
+build-framework: assert-go-version install-gomobile
+	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
+	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
+	@echo "generating Ios.xcFramework"
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	gomobile init && \
+	gomobile bind -target=ios,iossimulator \
+	-tags='headless lantern ios' \
+	-ldflags="$(LDFLAGS)"  \
+    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+    		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/flashlight/v7/ios
+	@echo "moving framework"
+	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
+	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+
+
+install-gomobile:
+	@echo "installing gomobile" && \
+	go install golang.org/x/mobile/cmd/gomobile@latest
+
+assert-go-version:
+	@if go version | grep -q -v $(GO_VERSION); then echo "go $(GO_VERSION) is required." && exit 1; fi
+
+.PHONY: swift-format
+swift-format:
+	swift-format --in-place --recursive DBModule ios/Runner ios/Tunnel ios/LanternTests
+
 clean:
 	rm -f liblantern*.aar && \
 	rm -f $(MOBILE_LIBS)/liblantern-* && \
@@ -395,3 +470,8 @@ clean:
 	rm -Rf *.apk && \
 	rm -f `which gomobile` && \
 	rm -f `which gobind`
+	rm -Rf "$(FLASHLIGHT_FRAMEWORK_PATH)" "$(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)"
+
+
+
+

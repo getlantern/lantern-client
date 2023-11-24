@@ -45,7 +45,7 @@ class AutoUpdater(val context: Context, val activity: Activity? = null) {
     }
 
     fun checkForUpdates() {
-        if (LanternApp.getSession().isPlayVersion && activity != null) {
+        if (LanternApp.getSession().isStoreVersion && activity != null) {
             Utils.openPlayStore(context)
             return
         }

@@ -39,12 +39,11 @@ dependencies:
   google_fonts:
   flutter_switch: ^0.3.2
   flag: ^7.0.0
-  # from sdk. See https://github.com/jhomlala/catcher/pull/234 for more details
-  catcher_2:
-    git:
-      url: https://github.com/ThexXTURBOXx/catcher.git
 
-  sentry: ^7.10.1
+ #Loogs and crash reporting
+  catcher_2: ^1.0.0
+  sentry_flutter: ^7.10.1
+
   badges: ^3.1.1
   dotted_border: ^2.0.0+3
   styled_text: ^8.1.0
@@ -92,6 +91,9 @@ dependencies:
   # URL & Sharing utilities
   url_launcher: ^6.1.12
   share_plus: ^7.1.0
+  flutter_inappwebview: ^6.0.0-beta.25
+
+
 
   # Notifications & Logging
   flutter_local_notifications: ^15.1.0+1
@@ -115,7 +117,7 @@ dependencies:
 
   # Ads
   google_mobile_ads: ^3.0.0
-  clever_ads_solutions: ^0.1.0
+  # clever_ads_solutions: ^0.1.0
 
 
 # wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0

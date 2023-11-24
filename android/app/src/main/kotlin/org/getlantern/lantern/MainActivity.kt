@@ -76,14 +76,13 @@ class MainActivity :
     private lateinit var notifications: NotificationHelper
     private lateinit var receiver: NotificationReceiver
     private var autoUpdateJob: Job? = null
-
     private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
         messagingModel = MessagingModel(this, flutterEngine)
-        vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
+        vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
@@ -282,29 +281,6 @@ class MainActivity :
         updateUserData()
         updatePlans()
         updatePaymentMethods()
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun bandwidthUpdated(update: Bandwidth) {
-        vpnModel.saveBandwidth(
-            Vpn.Bandwidth.newBuilder()
-                .setPercent(update.percent)
-                .setRemaining(update.remaining)
-                .setAllowed(update.allowed)
-                .setTtlSeconds(update.ttlSeconds)
-                .build(),
-        )
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun statsUpdated(stats: Stats) {
-        vpnModel.saveServerInfo(
-            Vpn.ServerInfo.newBuilder()
-                .setCity(stats.city)
-                .setCountry(stats.country)
-                .setCountryCode(stats.countryCode)
-                .build(),
-        )
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -641,7 +617,7 @@ class MainActivity :
         Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
-        vpnModel.setVpnOn(useVpn)
+        vpnModel.updateStatus(useVpn)
     }
 
     // Recreate the activity when the language changes

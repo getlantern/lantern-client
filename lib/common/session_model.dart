@@ -23,21 +23,30 @@ class SessionModel extends Model {
         case Event.NetworkAvailable:
           networkAvailable.value = true;
           break;
-
         default:
           break;
       }
     });
+
+    isStoreVersion = singleValueNotifier(
+      'storeVersion',
+      false,
+    );
     isPlayVersion = singleValueNotifier(
       'playVersion',
       false,
     );
+    /*Note
+    * Make proxyAvailable default value to true on IOS it take some to get data from go side
+    * So show banner only if proxyAvailable is false
+    */
     proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
     country = singleValueNotifier('geo_country_code', 'US');
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> isPlayVersion;
+  late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
@@ -72,10 +81,8 @@ class SessionModel extends Model {
   }
 
   Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>(
-      'accepted_terms_version',
-      builder: builder,
-    );
+    return subscribedSingleValueBuilder<int>('accepted_terms_version',
+        builder: builder, defaultValue: 0);
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
@@ -306,17 +313,13 @@ class SessionModel extends Model {
   }
 
   Future<void> reportIssue(
-    String email,
-    String issue,
-    String description
-  ) async {
+      String email, String issue, String description) async {
     return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
       'email': email,
       'issue': issue,
       'description': description
-    }).then((value) => value as String);
+    }).then((value) => value.toString());
   }
-
 
   Widget getUserId(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
@@ -331,6 +334,16 @@ class SessionModel extends Model {
       'userLevel',
       defaultValue: '',
       builder: builder,
+    );
+  }
+
+  Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
+    return subscribedSingleValueBuilder<ServerInfo>(
+      '/server_info',
+      builder: builder,
+      deserialize: (Uint8List serialized) {
+        return ServerInfo.fromBuffer(serialized);
+      },
     );
   }
 
