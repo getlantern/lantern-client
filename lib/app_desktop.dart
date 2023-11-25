@@ -12,6 +12,9 @@ import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
 import 'package:lantern/core/router/router.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+final globalRouter = AppRouter();
+
 class DesktopApp extends StatefulWidget {
   const DesktopApp({Key? key}) : super(key: key);
 
@@ -22,18 +25,13 @@ class DesktopApp extends StatefulWidget {
 class _DesktopAppState extends State<DesktopApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Lantern Desktop'.i18n,
+      routeInformationParser: globalRouter.defaultRouteParser(),
+      routerDelegate: globalRouter.delegate(),
       theme: ThemeData(
         fontFamily: 'Roboto',
         primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        body: buildBody(TAB_VPN),
-        bottomNavigationBar: CustomBottomBar(
-          selectedTab: TAB_VPN,
-          isDevelop: true,
-        ),
       ),
     );
   }

@@ -73,16 +73,23 @@ func userHeaders() (string, string, string) {
 	return deviceID, userID, token
 }
 
+func sendError(err error) *C.char {
+	if err == nil {
+		return C.CString("")
+	}
+	errors := map[string]interface{}{
+		"error": err.Error(),
+	}
+	b, _ := json.Marshal(errors)
+	return C.CString(string(b))
+}
+
 //export Plans
 func Plans() *C.char {
 	deviceID, userID, token := userHeaders()
 	resp, err := proClient.Plans(deviceID, userID, token)
 	if err != nil {
-		errors := map[string]interface{}{
-			"error": err.Error(),
-		}
-		b, _ := json.Marshal(errors)
-		return C.CString(string(b))
+		return sendError(err)
 	}
 	b, _ := json.Marshal(resp.Plans)
 	return C.CString(string(b))
@@ -93,11 +100,7 @@ func UserData() *C.char {
 	deviceID, userID, token := userHeaders()
 	resp, err := proClient.UserData(deviceID, userID, token)
 	if err != nil {
-		errors := map[string]interface{}{
-			"error": err.Error(),
-		}
-		b, _ := json.Marshal(errors)
-		return C.CString(string(b))
+		return sendError(err)
 	}
 	b, _ := json.Marshal(resp)
 	return C.CString(string(b))
