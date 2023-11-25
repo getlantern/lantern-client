@@ -1,0 +1,48 @@
+syntax = "proto3";
+option go_package = "github.com/getlantern/lantern-client/pro";
+
+message EmptyRequest{}
+message EmptyResponse{}
+
+message ErrorResponse {
+    uint32 status = 1;
+    string msg = 2;
+}
+
+message Duration {
+    uint32 duration = 1;
+}
+
+message Plan {
+    string id = 1;
+    string description = 2;
+    Duration duration = 3;
+    map<string, uint32> price = 4;
+    map<string, uint32> expectedMonthlyPrice = 5;
+    uint32 usdPrice = 6;
+    uint32 usdPrice1Y = 7;
+    uint32 usdPrice2Y = 8;
+}
+
+message PlansResponse {
+    repeated Plan plans = 1;
+}
+
+message Device {
+    string id = 1;
+    string name = 2;
+    uint64 created = 3;
+}
+
+message UserDetailsResponse {
+    uint64 userId = 1;
+    string code = 2;
+    string token = 3;
+    string referral = 4;
+    string email = 5;
+    string userStatus = 6;
+    string locale = 7;
+    uint64 expiration = 8;
+    repeated string servers = 9;
+    repeated Device devices = 10;
+}

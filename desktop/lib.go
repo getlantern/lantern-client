@@ -2,15 +2,18 @@
 package main
 
 import (
+	"encoding/json"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"syscall"
 	"runtime"
 	"runtime/debug"
+	"strconv"
 
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/android-lantern/desktop/app"
+	"github.com/getlantern/android-lantern/desktop/pro"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/golog"
@@ -20,7 +23,8 @@ import "C"
 
 var (
 	log = golog.LoggerFor("lantern-desktop.main")
-	//a *app.App
+	proClient *pro.ProClient
+	settings *app.Settings 
 )
 
 //export Start
@@ -34,7 +38,9 @@ func Start() *C.char {
 	flags := flashlight.ParseFlags()
 
 	cdir := configDir(&flags)
-	a := app.NewApp(flags, cdir, loadSettings(cdir))
+	settings = loadSettings(cdir)
+	proClient = pro.New()
+	a := app.NewApp(flags, cdir, settings)
 	log.Debug("Running headless")
 	go func() { 
 		runApp(a)
@@ -59,6 +65,42 @@ func SysProxyOn() *C.char {
 func SysProxyOff() *C.char {
 	app.SysProxyOff()
    	return C.CString("off")
+}
+
+func userHeaders() (string, string, string) {
+	uID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
+	userID := strconv.FormatInt(uID, 10)
+	return deviceID, userID, token
+}
+
+//export Plans
+func Plans() *C.char {
+	deviceID, userID, token := userHeaders()
+	resp, err := proClient.Plans(deviceID, userID, token)
+	if err != nil {
+		errors := map[string]interface{}{
+			"error": err.Error(),
+		}
+		b, _ := json.Marshal(errors)
+		return C.CString(string(b))
+	}
+	b, _ := json.Marshal(resp.Plans)
+	return C.CString(string(b))
+}
+
+//export UserData
+func UserData() *C.char {
+	deviceID, userID, token := userHeaders()
+	resp, err := proClient.UserData(deviceID, userID, token)
+	if err != nil {
+		errors := map[string]interface{}{
+			"error": err.Error(),
+		}
+		b, _ := json.Marshal(errors)
+		return C.CString(string(b))
+	}
+	b, _ := json.Marshal(resp)
+	return C.CString(string(b))
 }
 
 // loadSettings loads the initial settings at startup, either from disk or using defaults.

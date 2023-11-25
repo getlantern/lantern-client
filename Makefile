@@ -6,6 +6,9 @@
 INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
 INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 
+%.pb.go: %.proto
+	go build -o build/protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go
+	protoc --go_out=. --plugin=build/protoc-gen-go --go_opt=paths=source_relative $<
 
 codegen: protos routes
 
@@ -173,7 +176,9 @@ MOBILE_TESTS_APK := $(BASE_MOBILE_DIR)/build/app/outputs/apk/autoTest/debug/app-
 CI_APK_PATH := $(BASE_MOBILE_DIR)/build/app/outputs/flutter-apk/app-prod-debug.apk
 BUILD_TAGS ?=
 BUILD_TAGS += ' lantern'
-GO_SOURCES := go.mod go.sum $(shell find internalsdk -type f -name "*.go")
+PROTO_SOURCES = $(shell find . -name '*.proto' -not -path './vendor/*')
+GENERATED_PROTO_SOURCES = $(shell echo "$(PROTO_SOURCES)" | sed 's/\.proto/\.pb\.go/g')
+GO_SOURCES := $(GENERATED_PROTO_SOURCES) go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
 
 
