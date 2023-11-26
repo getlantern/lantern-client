@@ -23,21 +23,14 @@ class PlanCard extends StatelessWidget {
         onTap: () async {
           final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
           final inRussia = sessionModel.country.value == 'RU';
-
           // * Play version
           if (isPlayVersion && !inRussia) {
-            await sessionModel
-                .submitGooglePlay(planName)
-                .onError((error, stackTrace) {
-              // on failure
-              CDialog.showError(
-                context,
-                error: e,
-                stackTrace: stackTrace,
-                description:
-                    (error as PlatformException).message ?? error.toString(),
-              );
-            });
+            await context.pushRoute(
+              PlayCheckout(
+                plan: plan,
+                isPro: isPro,
+              ),
+            );
           } else {
             // * Proceed to our own Checkout
             await context.pushRoute(
