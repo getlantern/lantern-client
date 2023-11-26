@@ -30,7 +30,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
       return Scaffold(
         body: buildBody(true),
         bottomNavigationBar: CustomBottomBar(
-          selectedTab: TAB_VPN,
+          selectedTab: selectedTab().toDartString(),
           isDevelop: true,
           isTesting: true,
         ),

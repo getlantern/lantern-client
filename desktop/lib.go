@@ -89,11 +89,14 @@ func sendError(err error) *C.char {
 
 //export SelectedTab
 func SelectedTab() *C.char {
+	selectedTabMu.Lock()
+	defer selectedTabMu.Unlock()
 	return C.CString(selectedTab)
 }
 
 //export SetSelectTab
-func SetSelectTab(tab string) {
+func SetSelectTab(ttab *C.char) {
+	tab := C.GoString(ttab)
 	selectedTabMu.Lock()
 	defer selectedTabMu.Unlock()
 	selectedTab = tab
