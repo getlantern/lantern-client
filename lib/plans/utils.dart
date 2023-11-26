@@ -7,6 +7,14 @@ const lanternStarLogo = CAssetImage(
   size: 72,
 );
 
+final featuresList = [
+  'unlimited_data'.i18n,
+  'faster_data_centers'.i18n,
+  'no_logs'.i18n,
+  'connect_up_to_3_devices'.i18n,
+  'no_ads'.i18n,
+];
+
 void onAPIcallTimeout({code, message}) {
   throw PlatformException(
     code: code,

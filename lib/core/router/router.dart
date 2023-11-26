@@ -1,8 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/core/router/router.gr.dart';
-
-
 
 @AutoRouterConfig(
   replaceInRouteName: 'Page,Route,Screen',
@@ -12,7 +11,7 @@ class AppRouter extends $AppRouter {
   RouteType get defaultRouteType => const RouteType.adaptive();
   @override
   final List<AutoRoute> routes = [
-    AutoRoute(path: '/', page: Home.page),
+    AutoRoute(path: '/', page: Platform.isAndroid ? Home.page : DesktopHome.page),
     CustomRoute(
         page: FullScreenDialogPage.page,
         path: '/fullScreenDialogPage',
@@ -154,6 +153,12 @@ class AppRouter extends $AppRouter {
     CustomRoute(
         page: PlansPage.page,
         path: '/plans',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute(
+        page: PlansDesktop.page,
+        path: '/plansdesktop',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),

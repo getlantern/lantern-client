@@ -14,14 +14,16 @@ message Duration {
 }
 
 message Plan {
-    string id = 1;
-    string description = 2;
-    Duration duration = 3;
-    map<string, uint32> price = 4;
-    map<string, uint32> expectedMonthlyPrice = 5;
-    uint32 usdPrice = 6;
-    uint32 usdPrice1Y = 7;
-    uint32 usdPrice2Y = 8;
+  string id = 1;
+  string description = 2;
+  bool bestValue = 3;
+  int64 usdPrice = 4;
+  map<string, int64> price = 5;
+  string totalCostBilledOneTime = 6;
+  string oneMonthCost = 7;
+  string totalCost = 8;
+  string formattedBonus = 9;
+  string renewalText = 10;
 }
 
 message PlansResponse {

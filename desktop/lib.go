@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"runtime/debug"
 	"strconv"
+	"sync"
 
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/android-lantern/desktop/app"
@@ -23,6 +24,8 @@ import "C"
 
 var (
 	log = golog.LoggerFor("lantern-desktop.main")
+	selectedTab = "account"
+	selectedTabMu sync.Mutex
 	proClient *pro.ProClient
 	settings *app.Settings 
 )
@@ -82,6 +85,18 @@ func sendError(err error) *C.char {
 	}
 	b, _ := json.Marshal(errors)
 	return C.CString(string(b))
+}
+
+//export SelectedTab
+func SelectedTab() *C.char {
+	return C.CString(selectedTab)
+}
+
+//export SetSelectTab
+func SetSelectTab(tab string) {
+	selectedTabMu.Lock()
+	defer selectedTabMu.Unlock()
+	selectedTab = tab
 }
 
 //export Plans

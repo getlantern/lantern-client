@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  Widget build2(BuildContext context) {
+  Widget build(BuildContext context) {
     _context = context;
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                 ).toLowerCase() ==
                     'true';
                 return Scaffold(
-                  //body: buildBody(selectedTab, isOnboarded),
+                  body: buildBody(selectedTab, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
                     selectedTab: selectedTab,
                     isDevelop: developmentMode,
@@ -160,19 +160,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-      return Scaffold(
-        body: buildBody(TAB_VPN, true),
-        bottomNavigationBar: CustomBottomBar(
-          selectedTab: TAB_VPN,
-          isDevelop: true,
-          isTesting: true,
-        ),
-      );
-  }
-
-  @override
-  Widget buildBody(String selectedTab, bool isOnboarded) {
+  Widget buildBody(String selectedTab, bool? isOnboarded) {
     switch (selectedTab) {
       case TAB_CHATS:
         return isOnboarded == null
