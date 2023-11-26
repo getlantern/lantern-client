@@ -18,6 +18,9 @@ typedef SelectTab = void Function(ffi.Pointer<Utf8>);
 typedef selectedtab_func = ffi.Pointer<Utf8> Function(); // FFI fn signature
 typedef SelectedTab = ffi.Pointer<Utf8> Function(); // Dart fn signature
 
+typedef setting_func = ffi.Pointer<Utf8> Function();
+typedef Setting = ffi.Pointer<Utf8> Function();
+
 final dylib = ffi.DynamicLibrary.open('liblantern.dylib');
 
 final Start start =
@@ -38,6 +41,8 @@ final SelectedTab selectedTab =
 final ProFunc getPlans = dylib.lookup<ffi.NativeFunction<pro_func>>('Plans').asFunction();
 final ProFunc getUserData = dylib.lookup<ffi.NativeFunction<pro_func>>('UserData').asFunction();
 final ProFunc ffiEmailAddress = dylib.lookup<ffi.NativeFunction<pro_func>>('EmailAddress').asFunction();
+final ProFunc ffiReplicaAddr = dylib.lookup<ffi.NativeFunction<pro_func>>('ReplicaAddr').asFunction();
+final ProFunc ffiChatEnabled = dylib.lookup<ffi.NativeFunction<pro_func>>('ChatEnabled').asFunction();
 
 void loadLibrary() {
   start();

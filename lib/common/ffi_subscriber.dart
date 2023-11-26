@@ -1,6 +1,11 @@
 import 'common.dart';
 import 'common_desktop.dart';
 
+extension BoolParsing on String {
+  bool parseBool() {
+    return this.toLowerCase() == 'true';
+  }
+}
 
 class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
   FfiValueNotifier(
@@ -10,7 +15,11 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
     bool details = false,
     T Function(Uint8List serialized)? deserialize,
   }) : super(defaultValue, removeFromCache) {
-    value = ffiFunction().toDartString() as T?;
+    if (defaultValue is String?) {
+      value = ffiFunction().toDartString() as T?;
+    } else {
+      value = ffiFunction().toDartString().parseBool() as T?;
+    }
   }
 }
 

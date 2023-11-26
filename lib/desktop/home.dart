@@ -2,7 +2,7 @@ import 'package:lantern/desktop/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/account/privacy_disclosure.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/desktop/custom_bottom_bar.dart';
+import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/desktop/ffi.dart';
 import 'dart:ffi' as ffi; // For FFI
 import 'package:ffi/ffi.dart';

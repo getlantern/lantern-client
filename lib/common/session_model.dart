@@ -240,9 +240,16 @@ class SessionModel extends Model {
   }
 
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'replicaAddr',
+        defaultValue: '',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       'replicaAddr',
-      defaultValue: '',
+      ffiReplicaAddr,
       builder: builder,
     );
   }
@@ -264,8 +271,16 @@ class SessionModel extends Model {
   }
 
   Widget chatEnabled(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>(
+        'chatEnabled',
+        defaultValue: false,
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool>(
       'chatEnabled',
+      ffiChatEnabled,
       defaultValue: false,
       builder: builder,
     );

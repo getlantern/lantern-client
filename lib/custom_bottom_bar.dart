@@ -16,9 +16,7 @@ class CustomBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return messagingModel
-        .getOnBoardingStatus((context, hasBeenOnboarded, child) {
-      return sessionModel.chatEnabled((context, chatEnabled, _) {
+    return sessionModel.chatEnabled((context, chatEnabled, _) {
         return sessionModel.replicaAddr((context, replicaAddr, child) {
           final replicaEnabled = replicaAddr != '';
 
@@ -57,14 +55,13 @@ class CustomBottomBar extends StatelessWidget {
               currentIndex,
               chatEnabled,
               replicaEnabled,
-              hasBeenOnboarded!,
+              true,
               isDevelop,
               isTesting,
               replicaAddr,
             ),
           );
         });
-      });
     });
   }
 

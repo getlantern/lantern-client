@@ -128,6 +128,16 @@ func EmailAddress() *C.char {
 	return C.CString("")
 }
 
+//export ChatEnabled
+func ChatEnabled() *C.char {
+	return C.CString("false")
+}
+
+//export ReplicaAddr
+func ReplicaAddr() *C.char {
+	return C.CString("")
+}
+
 // loadSettings loads the initial settings at startup, either from disk or using defaults.
 func loadSettings(configDir string) *app.Settings {
 	path := filepath.Join(configDir, "settings.yaml")

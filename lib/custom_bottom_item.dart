@@ -1,4 +1,5 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 
 class CustomBottomBarItem extends StatelessWidget {
   const CustomBottomBarItem({
@@ -51,7 +52,13 @@ class CustomBottomBarItem extends StatelessWidget {
                 ),
               ),
               onTap: (() {
-                sessionModel.setSelectedTab(name);
+                if (Platform.isAndroid) {
+                  sessionModel.setSelectedTab(name);
+                } else {
+                  final tab = name.toNativeUtf8();
+                  setSelectTab(tab);
+                  context.pushRoute(DesktopHome());
+                }
               }),
               child: Container(
                 decoration: ShapeDecoration(
