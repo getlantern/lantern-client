@@ -115,6 +115,21 @@ Package the AAR with `make android-lib ANDROID_ARCH=all`
 For compiled code lives in `./ios/internalsdk/` and is called `Internalsdk.xcframework`.
 
 
+#### Desktop
+
+The desktop app lives under `desktop` .. To build the Go shared library:
+
+```
+cd desktop
+go build -buildmode=c-shared -o liblantern.dylib lib.go
+```
+
+Then to run the Flutter app on macOS:
+
+```
+flutter run -d macOS -t lib/desktop/main.dart
+```
+
 #### Testing against Lantern's staging servers
 
 Package the AAR with `make android-lib ANDROID_ARCH=all STAGING=true`
