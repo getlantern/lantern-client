@@ -10,7 +10,6 @@ import (
 	"runtime"
 	"runtime/debug"
 	"strconv"
-	"sync"
 
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/android-lantern/desktop/app"
@@ -24,8 +23,8 @@ import "C"
 
 var (
 	log = golog.LoggerFor("lantern-desktop.main")
-	selectedTab = "account"
-	selectedTabMu sync.Mutex
+	a *app.App
+
 	proClient *pro.ProClient
 	settings *app.Settings 
 )
@@ -43,7 +42,7 @@ func Start() *C.char {
 	cdir := configDir(&flags)
 	settings = loadSettings(cdir)
 	proClient = pro.New()
-	a := app.NewApp(flags, cdir, settings)
+	a = app.NewApp(flags, cdir, settings)
 	log.Debug("Running headless")
 	go func() { 
 		runApp(a)
@@ -89,17 +88,17 @@ func sendError(err error) *C.char {
 
 //export SelectedTab
 func SelectedTab() *C.char {
-	selectedTabMu.Lock()
-	defer selectedTabMu.Unlock()
-	return C.CString(selectedTab)
+	return C.CString(string(a.SelectedTab()))
 }
 
 //export SetSelectTab
 func SetSelectTab(ttab *C.char) {
-	tab := C.GoString(ttab)
-	selectedTabMu.Lock()
-	defer selectedTabMu.Unlock()
-	selectedTab = tab
+	tab, err := app.ParseTab(C.GoString(ttab))
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	a.SetSelectedTab(tab)
 }
 
 //export Plans
@@ -122,6 +121,11 @@ func UserData() *C.char {
 	}
 	b, _ := json.Marshal(resp)
 	return C.CString(string(b))
+}
+
+//export EmailAddress
+func EmailAddress() *C.char {
+	return C.CString("")
 }
 
 // loadSettings loads the initial settings at startup, either from disk or using defaults.

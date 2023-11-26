@@ -88,6 +88,9 @@ type App struct {
 	// should not be called. In short, this slice and its elements should be treated as read-only.
 	proxies     []balancer.Dialer
 	proxiesLock sync.RWMutex
+
+	selectedTab Tab
+	selectedTabMu sync.Mutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
@@ -98,6 +101,7 @@ func NewApp(flags flashlight.Flags, configDir string, settings *Settings) *App {
 		exited: eventual.NewValue(),
 		settings:              settings,
 		analyticsSession:      analyticsSession,
+		selectedTab:           AccountTab,
 		statsTracker:          NewStatsTracker(),
 		ws:                    ws.NewUIChannel(),
 	}
@@ -117,6 +121,17 @@ func newAnalyticsSession(settings *Settings) analytics.Session {
 	}
 }
 
+func (app *App) SelectedTab() Tab {
+	app.selectedTabMu.Lock()
+	defer app.selectedTabMu.Unlock()
+	return app.selectedTab
+}
+
+func (app *App) SetSelectedTab(selectedTab Tab) {
+	app.selectedTabMu.Lock()
+	defer app.selectedTabMu.Unlock()
+	app.selectedTab = selectedTab
+}
 
 func (app *App) GetDebugHttpHandlers() []server.PathHandler {
 	return []server.PathHandler{{

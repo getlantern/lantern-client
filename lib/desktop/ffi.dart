@@ -37,6 +37,7 @@ final SelectedTab selectedTab =
 
 final ProFunc getPlans = dylib.lookup<ffi.NativeFunction<pro_func>>('Plans').asFunction();
 final ProFunc getUserData = dylib.lookup<ffi.NativeFunction<pro_func>>('UserData').asFunction();
+final ProFunc ffiEmailAddress = dylib.lookup<ffi.NativeFunction<pro_func>>('EmailAddress').asFunction();
 
 void loadLibrary() {
   start();

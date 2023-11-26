@@ -1,11 +1,15 @@
 import 'dart:collection';
 
+import 'package:lantern/common/ffi_subscriber.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'common_desktop.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;
   late ModelEventChannel _updatesChannel;
   final Map<String, SubscribedSingleValueNotifier> _singleValueNotifierCache =
+      HashMap();
+  final Map<String, FfiValueNotifier> _ffiValueNotifierCache =
       HashMap();
   final Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
   Event? event;
@@ -45,6 +49,24 @@ abstract class Model {
     return result;
   }
 
+  ValueListenableBuilder<T?> ffiValueBuilder<T>(
+    String path, 
+    Pointer<Utf8> Function() ffiFunction, {
+    T? defaultValue,
+    required ValueWidgetBuilder<T> builder,
+    bool details = false,
+    T Function(Uint8List serialized)? deserialize,
+  }) {
+    var notifier = ffiValueNotifier(
+      ffiFunction,
+      path,
+      defaultValue,
+      details: details,
+      deserialize: deserialize,
+    );
+    return FfiValueBuilder<T>(path, notifier, builder);
+  }
+
   ValueListenableBuilder<T?> subscribedSingleValueBuilder<T>(
     String path, {
     T? defaultValue,
@@ -60,6 +82,29 @@ abstract class Model {
     );
     return SubscribedSingleValueBuilder<T>(path, notifier, builder);
   }
+
+  ValueNotifier<T?> ffiValueNotifier<T>(
+    Pointer<Utf8> Function() ffiFunction,
+    String path,
+    T? defaultValue, {
+      bool details = false,
+      T Function(Uint8List serialized)? deserialize,      
+  }) {
+    var result =
+        _ffiValueNotifierCache[path] as FfiValueNotifier<T>?;
+    if (result == null) {
+      result = FfiValueNotifier(
+        ffiFunction,
+        defaultValue,
+        () {
+          _ffiValueNotifierCache.remove(path);
+        },
+      );
+      _ffiValueNotifierCache[path] = result;
+    }
+    return result;
+  }
+
 
   ValueNotifier<T?> singleValueNotifier<T>(
     String path,

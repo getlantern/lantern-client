@@ -1,6 +1,8 @@
 import 'package:lantern/replica/common.dart';
 
 import 'common.dart';
+import 'common_desktop.dart';
+
 
 final sessionModel = SessionModel();
 
@@ -120,8 +122,15 @@ class SessionModel extends Model {
   }
 
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'emailAddress',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       'emailAddress',
+      ffiEmailAddress,
       builder: builder,
     );
   }
