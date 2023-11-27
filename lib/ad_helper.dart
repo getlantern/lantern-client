@@ -40,13 +40,17 @@
 
 //   //Google Test ID if needed to test
 //   // return 'ca-app-pub-3940256099942544/1033173712';
-//   String get interstitialAdUnitId {
-//     if (Platform.isAndroid) {
-//       return const String.fromEnvironment('INTERSTITIAL_AD_UNIT_ID');
-//     } else {
-//       throw UnsupportedError('Unsupported platform');
-//     }
-//   }
+  import 'dart:io';
+
+String get interstitialAdUnitId {
+    if (Platform.isAndroid) {
+      return const String.fromEnvironment('INTERSTITIAL_AD_UNIT_ID');
+    }if (Platform.isIOS) {
+      return "ca-app-pub-2685698271254859/8751964275";
+    } else {
+      throw UnsupportedError('Unsupported platform');
+    }
+  }
 
 //   // Private methods to decide whether to load or show Google Ads or CAS ads based on conditions
 //   Future<void> _decideAndLoadAds() async {
