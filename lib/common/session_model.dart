@@ -1,8 +1,6 @@
 import 'package:lantern/replica/common.dart';
 
 import 'common.dart';
-import 'common_desktop.dart';
-
 
 final sessionModel = SessionModel();
 
@@ -53,14 +51,7 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
-    if (Platform.isAndroid) {
-      return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
-    }
-    return ffiValueBuilder<bool>(
-      'prouser',
-      ffiProUser,
-      builder: builder,
-    );
+    return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
@@ -129,15 +120,8 @@ class SessionModel extends Model {
   }
 
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
-      return subscribedSingleValueBuilder<String>(
-        'emailAddress',
-        builder: builder,
-      );
-    }
-    return ffiValueBuilder<String>(
+    return subscribedSingleValueBuilder<String>(
       'emailAddress',
-      ffiEmailAddress,
       builder: builder,
     );
   }
@@ -247,16 +231,9 @@ class SessionModel extends Model {
   }
 
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
-      return subscribedSingleValueBuilder<String>(
-        'replicaAddr',
-        defaultValue: '',
-        builder: builder,
-      );
-    }
-    return ffiValueBuilder<String>(
+    return subscribedSingleValueBuilder<String>(
       'replicaAddr',
-      ffiReplicaAddr,
+      defaultValue: '',
       builder: builder,
     );
   }
@@ -278,16 +255,8 @@ class SessionModel extends Model {
   }
 
   Widget chatEnabled(ValueWidgetBuilder<bool> builder) {
-    if (Platform.isAndroid) {
-      return subscribedSingleValueBuilder<bool>(
-        'chatEnabled',
-        defaultValue: false,
-        builder: builder,
-      );
-    }
-    return ffiValueBuilder<bool>(
+    return subscribedSingleValueBuilder<bool>(
       'chatEnabled',
-      ffiChatEnabled,
       defaultValue: false,
       builder: builder,
     );

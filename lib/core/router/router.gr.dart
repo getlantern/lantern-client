@@ -193,12 +193,7 @@ abstract class $AppRouter extends _i44.RootStackRouter {
         ),
       );
     },
-    DesktopHome.name: (routeData) {
-      return _i44.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i17.DesktopHomePage(),
-      );
-    },
+
     FullScreenDialogPage.name: (routeData) {
       final args = routeData.argsAs<FullScreenDialogPageArgs>();
       return _i44.AutoRoutePage<void>(

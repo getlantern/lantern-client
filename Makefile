@@ -4,6 +4,7 @@
 .PHONY: codegen protos routes mocks test integration-test sourcedump build-framework build-framework-debug clean archive require-version set-version show-version reset-build-number install-gomobile assert-go-version
 
 INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
+INTERNALSDK_FRAMEWORK_MACOS_DIR = macos/internalsdk
 INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 
 %.pb.go: %.proto
@@ -454,6 +455,24 @@ build-framework: assert-go-version install-gomobile
 	@echo "moving framework"
 	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
 	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+
+
+
+build-framework-macos: assert-go-version install-gomobile
+	@echo "Nuking $(INTERNALSDK_FRAMEWORK_MACOS_DIR) and $(MINISQL_FRAMEWORK_DIR)"
+	rm -Rf $(INTERNALSDK_FRAMEWORK_MACOS_DIR) $(MINISQL_FRAMEWORK_DIR)
+	@echo "generating Macos.xcFramework"
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	gomobile init && \
+	gomobile bind -target=macos \
+	-tags='headless lantern macos' \
+	-ldflags="$(LDFLAGS)"  \
+    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+    		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/flashlight/v7/ios
+	@echo "moving framework"
+	mkdir -p $(INTERNALSDK_FRAMEWORK_MACOS_DIR)
+	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_MACOS_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+
 
 
 install-gomobile:

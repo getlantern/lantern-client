@@ -19,7 +19,7 @@ let package = Package(
     // Targets can depend on other targets in this package and products from dependencies.
     .binaryTarget(
       name: "Internalsdk",
-      path: "../ios/internalsdk/Internalsdk.xcframework"),
+      path: "../macos/internalsdk/Internalsdk.xcframework"),
     .target(
       name: "DBModule",
       dependencies: [

@@ -52,13 +52,7 @@ class CustomBottomBarItem extends StatelessWidget {
                 ),
               ),
               onTap: (() {
-                if (Platform.isAndroid) {
-                  sessionModel.setSelectedTab(name);
-                } else {
-                  final tab = name.toNativeUtf8();
-                  setSelectTab(tab);
-                  context.pushRoute(DesktopHome());
-                }
+                sessionModel.setSelectedTab(name);
               }),
               child: Container(
                 decoration: ShapeDecoration(

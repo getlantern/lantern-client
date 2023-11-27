@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                   body: buildBody(selectedTab, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
                     selectedTab: selectedTab,
-                    isDevelop: developmentMode,
+                    isDevelop: false,
                     isTesting: isTesting,
                   ),
                 );

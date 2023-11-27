@@ -21,15 +21,26 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		032C12CD2B14969B00CBB98B /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032C12CC2B14969B00CBB98B /* SessionModel.swift */; };
+		032C12CF2B1496B500CBB98B /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032C12CE2B1496B500CBB98B /* BaseModel.swift */; };
+		032C12D12B1496D800CBB98B /* LaternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032C12D02B1496D800CBB98B /* LaternModel.swift */; };
+		032C12D32B1496EB00CBB98B /* VpnModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032C12D22B1496EB00CBB98B /* VpnModel.swift */; };
+		032C12D52B1496FF00CBB98B /* NavigationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032C12D42B1496FF00CBB98B /* NavigationModel.swift */; };
+		032C12D72B14971500CBB98B /* MessagingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032C12D62B14971500CBB98B /* MessagingModel.swift */; };
+		037E92FF2B149D08009C0546 /* Internalsdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03246F692B14997C000BA9FA /* Internalsdk.xcframework */; };
+		039F71382B149F3700BDCEC1 /* DBModule in Frameworks */ = {isa = PBXBuildFile; productRef = 039F71372B149F3700BDCEC1 /* DBModule */; };
+		039F713B2B149FA200BDCEC1 /* LanternLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039F713A2B149FA200BDCEC1 /* LanternLogger.swift */; };
+		039F713D2B149FC700BDCEC1 /* RunningEnv.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039F713C2B149FC700BDCEC1 /* RunningEnv.swift */; };
+		039F71402B14A2B000BDCEC1 /* DetailsSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039F713F2B14A2B000BDCEC1 /* DetailsSubscriber.swift */; };
+		039F71422B14A58900BDCEC1 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039F71412B14A58900BDCEC1 /* MainFlutterWindow.swift */; };
 		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
 		33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC10F02044A3C60003C045 /* AppDelegate.swift */; };
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
-		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
 		5FCF3F922AFC7D4C009D6A84 /* liblantern.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FCF3F912AFC7D4C009D6A84 /* liblantern.dylib */; };
 		5FCF3F942AFC7D54009D6A84 /* liblantern.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 5FCF3F932AFC7D54009D6A84 /* liblantern.dylib */; };
-		5FCF3F972AFC7E30009D6A84 /* liblantern.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 5FCF3F912AFC7D4C009D6A84 /* liblantern.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5FCF3F972AFC7E30009D6A84 /* liblantern.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 5FCF3F912AFC7D4C009D6A84 /* liblantern.dylib */; };
 		9DD832B42514BE06F2A57F8F /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 052699D6465AD8C9FB260E23 /* Pods_Runner.framework */; };
 		B3ED98C3EAD7718A05708BFE /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 335B76D179FE1547C0436C96 /* Pods_RunnerTests.framework */; };
 /* End PBXBuildFile section */
@@ -66,6 +77,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03246F692B14997C000BA9FA /* Internalsdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Internalsdk.xcframework; sourceTree = "<group>"; };
+		032C12CC2B14969B00CBB98B /* SessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionModel.swift; sourceTree = "<group>"; };
+		032C12CE2B1496B500CBB98B /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseModel.swift; sourceTree = "<group>"; };
+		032C12D02B1496D800CBB98B /* LaternModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaternModel.swift; sourceTree = "<group>"; };
+		032C12D22B1496EB00CBB98B /* VpnModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VpnModel.swift; sourceTree = "<group>"; };
+		032C12D42B1496FF00CBB98B /* NavigationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationModel.swift; sourceTree = "<group>"; };
+		032C12D62B14971500CBB98B /* MessagingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingModel.swift; sourceTree = "<group>"; };
+		037E93012B149D50009C0546 /* DBModule */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DBModule; path = ../DBModule; sourceTree = "<group>"; };
+		039F713A2B149FA200BDCEC1 /* LanternLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanternLogger.swift; sourceTree = "<group>"; };
+		039F713C2B149FC700BDCEC1 /* RunningEnv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningEnv.swift; sourceTree = "<group>"; };
+		039F713F2B14A2B000BDCEC1 /* DetailsSubscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsSubscriber.swift; sourceTree = "<group>"; };
+		039F71412B14A58900BDCEC1 /* MainFlutterWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFlutterWindow.swift; sourceTree = "<group>"; };
+		03A632A62B149B4900396DBF /* DBModule */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DBModule; path = ../DBModule; sourceTree = "<group>"; };
 		052699D6465AD8C9FB260E23 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D5294CF71000263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D7294CF71000263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
@@ -77,7 +101,6 @@
 		33CC10F22044A3C60003C045 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Runner/Assets.xcassets; sourceTree = "<group>"; };
 		33CC10F52044A3C60003C045 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		33CC10F72044A3C60003C045 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Runner/Info.plist; sourceTree = "<group>"; };
-		33CC11122044BFA00003C045 /* MainFlutterWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFlutterWindow.swift; sourceTree = "<group>"; };
 		33CEB47222A05771004F2AC0 /* Flutter-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Flutter-Debug.xcconfig"; sourceTree = "<group>"; };
 		33CEB47422A05771004F2AC0 /* Flutter-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Flutter-Release.xcconfig"; sourceTree = "<group>"; };
 		33CEB47722A0578A004F2AC0 /* Flutter-Generated.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Flutter-Generated.xcconfig"; path = "ephemeral/Flutter-Generated.xcconfig"; sourceTree = "<group>"; };
@@ -111,12 +134,79 @@
 			buildActionMask = 2147483647;
 			files = (
 				9DD832B42514BE06F2A57F8F /* Pods_Runner.framework in Frameworks */,
+				039F71382B149F3700BDCEC1 /* DBModule in Frameworks */,
+				037E92FF2B149D08009C0546 /* Internalsdk.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		03246F682B14991E000BA9FA /* internalsdk */ = {
+			isa = PBXGroup;
+			children = (
+				03246F692B14997C000BA9FA /* Internalsdk.xcframework */,
+			);
+			path = internalsdk;
+			sourceTree = "<group>";
+		};
+		032C12C82B14961400CBB98B /* Lantern */ = {
+			isa = PBXGroup;
+			children = (
+				032C12C92B14961D00CBB98B /* Core */,
+				032C12CA2B14962500CBB98B /* Utils */,
+				032C12CB2B14963B00CBB98B /* Models */,
+			);
+			path = Lantern;
+			sourceTree = "<group>";
+		};
+		032C12C92B14961D00CBB98B /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				039F713E2B14A29D00BDCEC1 /* Db */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		032C12CA2B14962500CBB98B /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				039F713A2B149FA200BDCEC1 /* LanternLogger.swift */,
+				039F713C2B149FC700BDCEC1 /* RunningEnv.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		032C12CB2B14963B00CBB98B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				032C12CC2B14969B00CBB98B /* SessionModel.swift */,
+				032C12CE2B1496B500CBB98B /* BaseModel.swift */,
+				032C12D02B1496D800CBB98B /* LaternModel.swift */,
+				032C12D22B1496EB00CBB98B /* VpnModel.swift */,
+				032C12D42B1496FF00CBB98B /* NavigationModel.swift */,
+				032C12D62B14971500CBB98B /* MessagingModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		039F713E2B14A29D00BDCEC1 /* Db */ = {
+			isa = PBXGroup;
+			children = (
+				039F713F2B14A2B000BDCEC1 /* DetailsSubscriber.swift */,
+			);
+			path = Db;
+			sourceTree = "<group>";
+		};
+		03BF13CE2B1491330087BA7A /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				03A632A62B149B4900396DBF /* DBModule */,
+				037E93012B149D50009C0546 /* DBModule */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		11BD752D62D8AC9522BE0AFD /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,6 +242,8 @@
 		33CC10E42044A3C60003C045 = {
 			isa = PBXGroup;
 			children = (
+				03246F682B14991E000BA9FA /* internalsdk */,
+				03BF13CE2B1491330087BA7A /* Packages */,
 				5FCF3F932AFC7D54009D6A84 /* liblantern.dylib */,
 				33FAB671232836740065AC1E /* Runner */,
 				33CEB47122A05771004F2AC0 /* Flutter */,
@@ -196,8 +288,9 @@
 		33FAB671232836740065AC1E /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				032C12C82B14961400CBB98B /* Lantern */,
 				33CC10F02044A3C60003C045 /* AppDelegate.swift */,
-				33CC11122044BFA00003C045 /* MainFlutterWindow.swift */,
+				039F71412B14A58900BDCEC1 /* MainFlutterWindow.swift */,
 				33E51913231747F40026EE4D /* DebugProfile.entitlements */,
 				33E51914231749380026EE4D /* Release.entitlements */,
 				33CC11242044D66E0003C045 /* Resources */,
@@ -256,6 +349,9 @@
 				33CC11202044C79F0003C045 /* PBXTargetDependency */,
 			);
 			name = Runner;
+			packageProductDependencies = (
+				039F71372B149F3700BDCEC1 /* DBModule */,
+			);
 			productName = Runner;
 			productReference = 33CC10ED2044A3C60003C045 /* androidlantern.app */;
 			productType = "com.apple.product-type.application";
@@ -445,9 +541,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */,
+				032C12D32B1496EB00CBB98B /* VpnModel.swift in Sources */,
+				039F71422B14A58900BDCEC1 /* MainFlutterWindow.swift in Sources */,
+				039F713D2B149FC700BDCEC1 /* RunningEnv.swift in Sources */,
+				032C12D12B1496D800CBB98B /* LaternModel.swift in Sources */,
 				33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */,
+				039F713B2B149FA200BDCEC1 /* LanternLogger.swift in Sources */,
 				335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */,
+				032C12CF2B1496B500CBB98B /* BaseModel.swift in Sources */,
+				032C12CD2B14969B00CBB98B /* SessionModel.swift in Sources */,
+				039F71402B14A2B000BDCEC1 /* DetailsSubscriber.swift in Sources */,
+				032C12D72B14971500CBB98B /* MessagingModel.swift in Sources */,
+				032C12D52B1496FF00CBB98B /* NavigationModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,6 +685,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Lantern Macos";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -706,6 +812,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Lantern Macos";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -726,6 +833,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Lantern Macos";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -795,6 +903,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		039F71372B149F3700BDCEC1 /* DBModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DBModule;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 33CC10E52044A3C60003C045 /* Project object */;
 }

@@ -33,7 +33,7 @@ class _PlansDesktopState extends State<PlansDesktop>
   }
 
   void fetchPlans() async {
-    var result = await getPlans().toDartString();
+    var result = "{}";
     final formatCurrency = new NumberFormat.simpleCurrency();
     setState(() {
       var resp = jsonDecode(result) as List<dynamic>;
