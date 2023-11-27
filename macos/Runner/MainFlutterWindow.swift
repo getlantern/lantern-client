@@ -31,12 +31,6 @@ class MainFlutterWindow: NSWindow {
     }
     
     
-    
-    private func initializeFlutterComponents() {
-        
-    }
-    
-    
     private func setupModels() throws {
         logger.log("setupModels method called")
         lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
