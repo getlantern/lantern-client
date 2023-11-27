@@ -2,6 +2,7 @@ import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/desktop/ffi.dart';
 
 import 'catcher_setup.dart';
 
@@ -14,9 +15,8 @@ Future<void> main() async {
     print("Flutter extension enabled $flavor");
     enableFlutterDriverExtension();
   }
-
-
   WidgetsFlutterBinding.ensureInitialized();
+  loadLibrary();
 
   // await initPlatformState();
   //await _initGoogleMobileAds();

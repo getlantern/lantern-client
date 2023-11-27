@@ -1,13 +1,10 @@
 import 'package:lantern/vpn/vpn.dart';
 
 class ServerLocationWidget extends StatelessWidget {
+  const ServerLocationWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
-    const vpnStatus = 'disconnected';
-    const serverInfo = {
-      "countryCode": "DE",
-      "city": "Frankfurt"
-    };
     return CInkWell(
       onTap: () => CDialog.showInfo(
         context,
@@ -33,22 +30,36 @@ class ServerLocationWidget extends StatelessWidget {
             ),
           ),
           const Spacer(),
-               Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
-                      child: Flag.fromString(
-                        serverInfo["countryCode"]!,
-                        height: 24,
-                        width: 36,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    CText(
-                      serverInfo["city"]!,
-                      style: tsSubtitle4,
-                    )
-                  ]),
+          vpnModel.vpnStatus(
+                  (BuildContext context, String vpnStatus, Widget? child) {
+                return sessionModel.serverInfo(
+                        (BuildContext context, ServerInfo serverInfo, Widget? child) {
+                      if (vpnStatus == 'connected' || vpnStatus == 'disconnecting') {
+                        return Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.all(Radius.circular(4)),
+                              child: Flag.fromString(
+                                serverInfo.countryCode,
+                                height: 24,
+                                width: 36,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            CText(
+                              serverInfo.city,
+                              style: tsSubtitle4,
+                            )
+                          ],
+                        );
+                      } else {
+                        return CText(
+                          'n/a'.i18n.toUpperCase(),
+                          style: tsSubtitle4,
+                        );
+                      }
+                    });
+              }),
         ],
       ),
     );

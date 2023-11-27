@@ -55,7 +55,7 @@ class CustomBottomBar extends StatelessWidget {
               currentIndex,
               chatEnabled,
               replicaEnabled,
-              true,
+              false,
               isDevelop,
               isTesting,
               replicaAddr,
