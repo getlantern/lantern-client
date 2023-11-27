@@ -15,7 +15,7 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  await initPlatformState();
+  // await initPlatformState();
   //await _initGoogleMobileAds();
   //await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
