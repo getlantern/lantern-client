@@ -126,6 +126,23 @@ class _CheckoutState extends State<Checkout>
     );
   }
 
+  List<Widget> desktopPaymentOptions() {
+    var widgets = <Widget>[];
+    widgets.add(
+      PaymentProvider(
+        logoPaths: [
+          ImagePaths.visa,
+          ImagePaths.mastercard,
+          ImagePaths.unionpay
+        ],
+        onChanged: () => selectPaymentProvider(Providers.stripe),
+        selectedPaymentProvider: selectedPaymentProvider!,
+        paymentType: Providers.stripe,
+      ),
+    );
+    return widgets;    
+  }
+
   List<Widget> paymentOptions(
     Iterable<PathAndValue<PaymentMethod>> paymentMethods,
   ) {
@@ -361,7 +378,7 @@ class _CheckoutState extends State<Checkout>
                         width: MediaQuery.of(context).size.width,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: paymentOptions(paymentMethods),
+                          children: Platform.isAndroid ? paymentOptions(paymentMethods) : desktopPaymentOptions(),
                         ),
                       ),
                       // * Price summary, unused pro time disclaimer, Continue button
@@ -373,8 +390,6 @@ class _CheckoutState extends State<Checkout>
                             text: 'continue'.i18n,
                             disabled: emailController.value.text.isEmpty ||
                                 emailFieldKey.currentState?.validate() ==
-                                    false ||
-                                refCodeFieldKey.currentState?.validate() ==
                                     false,
                             onPressed: onContinueTapped,
                           ),
@@ -404,17 +419,6 @@ class _CheckoutState extends State<Checkout>
     var refCode = refCodeController.value;
     Future.wait(
       [
-        sessionModel
-            .checkEmailExists(
-          emailController.value.text,
-        )
-            .onError((error, stackTrace) {
-          showError(
-            context,
-            error: e,
-            stackTrace: stackTrace,
-          );
-        }),
         if (refCode.text.isNotEmpty)
           sessionModel
               .applyRefCode(

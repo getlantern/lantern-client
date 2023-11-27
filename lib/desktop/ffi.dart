@@ -43,6 +43,8 @@ final ProFunc getUserData = dylib.lookup<ffi.NativeFunction<pro_func>>('UserData
 final ProFunc ffiEmailAddress = dylib.lookup<ffi.NativeFunction<pro_func>>('EmailAddress').asFunction();
 final ProFunc ffiReplicaAddr = dylib.lookup<ffi.NativeFunction<pro_func>>('ReplicaAddr').asFunction();
 final ProFunc ffiChatEnabled = dylib.lookup<ffi.NativeFunction<pro_func>>('ChatEnabled').asFunction();
+final ProFunc ffiProUser = dylib.lookup<ffi.NativeFunction<pro_func>>('ProUser').asFunction();
+final ProFunc ffiEmailExists = dylib.lookup<ffi.NativeFunction<pro_func>>('EmailExists').asFunction();
 
 void loadLibrary() {
   start();

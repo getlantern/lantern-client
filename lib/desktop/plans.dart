@@ -8,6 +8,7 @@ import 'package:ffi/src/utf8.dart';
 import 'dart:convert';
 import 'package:lantern/i18n/i18n.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:intl/intl.dart';
 
 @RoutePage(name: "PlansDesktop")
 class PlansDesktop extends StatefulWidget {
@@ -33,16 +34,20 @@ class _PlansDesktopState extends State<PlansDesktop>
 
   void fetchPlans() async {
     var result = await getPlans().toDartString();
+    final formatCurrency = new NumberFormat.simpleCurrency();
     setState(() {
       var resp = jsonDecode(result) as List<dynamic>;
+      print("Resp is ${resp}");
       for (var item in resp) {
         var plan = Plan();
         var usdPrice = item["usdPrice"];
         plan.id = item["id"];
         plan.description = item["description"];
+        plan.oneMonthCost = formatCurrency.format(item["expectedMonthlyPrice"]["usd"]/100).toString();
+        plan.totalCost = formatCurrency.format(item["usdPrice"]/100).toString();
+        plan.totalCostBilledOneTime = formatCurrency.format(item["usdPrice"]/100).toString() + ' ' + 'billed_one_time'.i18n;
         plan.bestValue = item["bestValue"] ?? false;
         plan.usdPrice = Int64(item["usdPrice"]);
-        plan.oneMonthCost = "${usdPrice}";
         plans.add(plan);
       }
     });

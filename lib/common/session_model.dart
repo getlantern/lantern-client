@@ -53,7 +53,14 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
+    }
+    return ffiValueBuilder<bool>(
+      'prouser',
+      ffiProUser,
+      builder: builder,
+    );
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {

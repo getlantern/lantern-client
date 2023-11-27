@@ -472,6 +472,9 @@ msgstr "No Ads"
 msgid "choose_plan"
 msgstr "Choose Plan"
 
+msgid "billed_one_time"
+msgstr "billed one time"
+
 msgid "connect_up_to_3_devices"
 msgstr "Connect up to 3 devices"
 

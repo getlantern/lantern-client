@@ -133,6 +133,14 @@ func ChatEnabled() *C.char {
 	return C.CString("false")
 }
 
+//export ProUser
+func ProUser() *C.char {
+	if isProUser, ok := a.IsProUser(); isProUser && ok {
+		return C.CString("true")
+	}
+	return C.CString("false")
+}
+
 //export ReplicaAddr
 func ReplicaAddr() *C.char {
 	return C.CString("")

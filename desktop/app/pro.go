@@ -16,7 +16,7 @@ import (
 // happens getting user status from pro-server. The result is not cached
 // because the user can become Pro or free at any time. It waits until
 // the user ID becomes non-zero.
-func (app *App) isProUser() (isPro bool, ok bool) {
+func (app *App) IsProUser() (isPro bool, ok bool) {
 	_, err := app.settings.GetInt64Eventually(SNUserID)
 	if err != nil {
 		return false, false
