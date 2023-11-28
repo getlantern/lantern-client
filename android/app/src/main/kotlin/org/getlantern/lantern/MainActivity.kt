@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
@@ -82,7 +83,7 @@ class MainActivity :
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
-        messagingModel = MessagingModel(this, flutterEngine)
+        messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
         vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
@@ -131,6 +132,12 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
+
+        // if not in dev mode, prevent screenshots of this activity by other apps
+        if (!BuildConfig.DEVELOPMENT_MODE) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)

@@ -230,10 +230,10 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     override fun setChatEnabled(enabled: Boolean) {
-//        val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
-//        val actuallyEnabled = enabled || isDevMode
-        Logger.d(TAG, "Setting $CHAT_ENABLED to $enabled")
-        prefs.edit().putBoolean(CHAT_ENABLED, enabled).apply()
+        val isDevMode = prefs.getBoolean("DEVELOPMENT_MODE", BuildConfig.DEVELOPMENT_MODE)
+        val actuallyEnabled = enabled || isDevMode
+        Logger.d(TAG, "Setting $CHAT_ENABLED to $actuallyEnabled")
+        prefs.edit().putBoolean(CHAT_ENABLED, actuallyEnabled).apply()
     }
 
     override fun setShowInterstitialAdsEnabled(enabled: Boolean) {
@@ -254,11 +254,7 @@ abstract class SessionManager(application: Application) : Session {
         return prefs.getBoolean(CAS_ADS_ENABLED, false)
     }
 
-    //    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
-    // for now, disable Chat completely
-    fun chatEnabled(): Boolean {
-        return false
-    }
+    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, true)
 
     fun appVersion(): String {
         return appVersion

@@ -8,6 +8,7 @@ import androidx.multidex.MultiDex
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternSessionManager
+import org.getlantern.lantern.model.MessagingHolder
 import org.getlantern.lantern.util.debugOnly
 import org.getlantern.lantern.util.LanternProxySelector
 import org.getlantern.lantern.util.SentryUtil
@@ -45,6 +46,7 @@ open class LanternApp : Application() {
         // support library. See http://stackoverflow.com/questions/37615470/support-library-vectordrawable-resourcesnotfoundexception
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         appContext = applicationContext
+        messaging.init(this)
         session = LanternSessionManager(this)
 
         LanternProxySelector(session)
@@ -73,6 +75,7 @@ open class LanternApp : Application() {
         private lateinit var inAppBilling: InAppBilling
         private lateinit var lanternHttpClient: LanternHttpClient
         private lateinit var session: LanternSessionManager
+        var messaging: MessagingHolder = MessagingHolder()
 
         @JvmStatic
         fun getAppContext(): Context {
