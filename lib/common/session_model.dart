@@ -58,6 +58,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<bool>(
       'prouser',
+      defaultValue: false,
       ffiProUser,
       builder: builder,
     );

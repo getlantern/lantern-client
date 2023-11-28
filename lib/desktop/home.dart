@@ -1,4 +1,4 @@
-import 'package:lantern/desktop/account_tab.dart';
+import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/account/privacy_disclosure.dart';
 import 'package:lantern/common/common.dart';

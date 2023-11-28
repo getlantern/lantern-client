@@ -1,4 +1,4 @@
-import 'package:lantern/common/common.dart';
+/*import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
 @RoutePage<void>(name: 'DesktopAccount')
@@ -108,4 +108,4 @@ class AccountMenu extends StatelessWidget {
         ),
     );
   }
-}
+}*/
