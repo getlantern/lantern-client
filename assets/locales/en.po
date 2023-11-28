@@ -18,6 +18,12 @@ msgstr "Maybe Later"
 msgid "try"
 msgstr "Try it out"
 
+msgid "sign_in"
+msgstr "Sign In"
+
+msgid "enter_email"
+msgstr "Enter Email"
+
 msgid "new"
 msgstr "New"
 

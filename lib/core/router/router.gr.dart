@@ -11,8 +11,10 @@
 import 'dart:io' as _i46;
 
 import 'package:auto_route/auto_route.dart' as _i42;
+import 'package:flutter/cupertino.dart' as _i47;
 import 'package:lantern/account/account.dart' as _i2;
 import 'package:lantern/account/account_management.dart' as _i1;
+import 'package:lantern/account/auth/sign_in.dart' as _i38;
 import 'package:lantern/account/blocked_users.dart' as _i9;
 import 'package:lantern/account/chat_number_account.dart' as _i10;
 import 'package:lantern/account/device_linking/approve_device.dart' as _i5;
@@ -26,9 +28,9 @@ import 'package:lantern/account/device_linking/link_device.dart' as _i23;
 import 'package:lantern/account/invite_friends.dart' as _i20;
 import 'package:lantern/account/language.dart' as _i21;
 import 'package:lantern/account/lantern_desktop.dart' as _i22;
-import 'package:lantern/account/recovery_key.dart' as _i27;
-import 'package:lantern/account/report_issue.dart' as _i36;
-import 'package:lantern/account/settings.dart' as _i38;
+import 'package:lantern/account/recovery_key.dart' as _i26;
+import 'package:lantern/account/report_issue.dart' as _i35;
+import 'package:lantern/account/settings.dart' as _i37;
 import 'package:lantern/account/split_tunneling.dart' as _i39;
 import 'package:lantern/account/support.dart' as _i41;
 import 'package:lantern/common/common.dart' as _i44;
@@ -47,18 +49,17 @@ import 'package:lantern/messaging/onboarding/chat_number_messaging.dart'
 import 'package:lantern/messaging/onboarding/chat_number_recovery.dart' as _i12;
 import 'package:lantern/plans/checkout.dart' as _i13;
 import 'package:lantern/plans/plans.dart' as _i25;
-import 'package:lantern/plans/play_checkout.dart' as _i26;
-import 'package:lantern/plans/reseller_checkout.dart' as _i37;
+import 'package:lantern/plans/reseller_checkout.dart' as _i36;
 import 'package:lantern/plans/stripe_checkout.dart' as _i40;
 import 'package:lantern/replica/common.dart' as _i45;
-import 'package:lantern/replica/link_handler.dart' as _i30;
-import 'package:lantern/replica/ui/viewers/audio.dart' as _i28;
-import 'package:lantern/replica/ui/viewers/image.dart' as _i29;
-import 'package:lantern/replica/ui/viewers/misc.dart' as _i31;
-import 'package:lantern/replica/ui/viewers/video.dart' as _i35;
-import 'package:lantern/replica/upload/description.dart' as _i32;
-import 'package:lantern/replica/upload/review.dart' as _i33;
-import 'package:lantern/replica/upload/title.dart' as _i34;
+import 'package:lantern/replica/link_handler.dart' as _i29;
+import 'package:lantern/replica/ui/viewers/audio.dart' as _i27;
+import 'package:lantern/replica/ui/viewers/image.dart' as _i28;
+import 'package:lantern/replica/ui/viewers/misc.dart' as _i30;
+import 'package:lantern/replica/ui/viewers/video.dart' as _i34;
+import 'package:lantern/replica/upload/description.dart' as _i31;
+import 'package:lantern/replica/upload/review.dart' as _i32;
+import 'package:lantern/replica/upload/title.dart' as _i33;
 
 abstract class $AppRouter extends _i42.RootStackRouter {
   $AppRouter({super.navigatorKey});
@@ -122,13 +123,11 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       );
     },
     AuthorizeDeviceEmailPin.name: (routeData) {
-      final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>();
+      final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>(
+          orElse: () => const AuthorizeDeviceEmailPinArgs());
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i8.AuthorizeDeviceViaEmailPin(
-          key: args.key,
-          email: args.email,
-        ),
+        child: _i8.AuthorizeDeviceViaEmailPin(key: args.key),
       );
     },
     BlockedUsers.name: (routeData) {
@@ -239,9 +238,11 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       );
     },
     LinkDevice.name: (routeData) {
+      final args = routeData.argsAs<LinkDeviceArgs>(
+          orElse: () => const LinkDeviceArgs());
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: const _i23.LinkDevice(),
+        child: _i23.LinkDevice(key: args.key),
       );
     },
     NewChat.name: (routeData) {
@@ -253,18 +254,7 @@ abstract class $AppRouter extends _i42.RootStackRouter {
     PlansPage.name: (routeData) {
       return _i42.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i25.PlansPage(),
-      );
-    },
-    PlayCheckout.name: (routeData) {
-      final args = routeData.argsAs<PlayCheckoutArgs>();
-      return _i42.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i26.PlayCheckout(
-          plan: args.plan,
-          isPro: args.isPro,
-          key: args.key,
-        ),
+        child: _i25.PlansPage(),
       );
     },
     RecoveryKey.name: (routeData) {
@@ -272,14 +262,14 @@ abstract class $AppRouter extends _i42.RootStackRouter {
           orElse: () => const RecoveryKeyArgs());
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i27.RecoveryKey(key: args.key),
+        child: _i26.RecoveryKey(key: args.key),
       );
     },
     ReplicaAudioViewer.name: (routeData) {
       final args = routeData.argsAs<ReplicaAudioViewerArgs>();
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i28.ReplicaAudioViewer(
+        child: _i27.ReplicaAudioViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
@@ -290,7 +280,7 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       final args = routeData.argsAs<ReplicaImageViewerArgs>();
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i29.ReplicaImageViewer(
+        child: _i28.ReplicaImageViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
@@ -301,7 +291,7 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       final args = routeData.argsAs<ReplicaLinkHandlerArgs>();
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i30.ReplicaLinkHandler(
+        child: _i29.ReplicaLinkHandler(
           key: args.key,
           replicaApi: args.replicaApi,
           replicaLink: args.replicaLink,
@@ -312,7 +302,7 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       final args = routeData.argsAs<ReplicaMiscViewerArgs>();
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i31.ReplicaMiscViewer(
+        child: _i30.ReplicaMiscViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
@@ -323,7 +313,7 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       final args = routeData.argsAs<ReplicaUploadDescriptionArgs>();
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i32.ReplicaUploadDescription(
+        child: _i31.ReplicaUploadDescription(
           key: args.key,
           fileToUpload: args.fileToUpload,
           fileTitle: args.fileTitle,
@@ -335,7 +325,7 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       final args = routeData.argsAs<ReplicaUploadReviewArgs>();
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i33.ReplicaUploadReview(
+        child: _i32.ReplicaUploadReview(
           key: args.key,
           fileToUpload: args.fileToUpload,
           fileTitle: args.fileTitle,
@@ -347,7 +337,7 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       final args = routeData.argsAs<ReplicaUploadTitleArgs>();
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i34.ReplicaUploadTitle(
+        child: _i33.ReplicaUploadTitle(
           key: args.key,
           fileToUpload: args.fileToUpload,
           fileTitle: args.fileTitle,
@@ -359,7 +349,7 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       final args = routeData.argsAs<ReplicaVideoViewerArgs>();
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i35.ReplicaVideoViewer(
+        child: _i34.ReplicaVideoViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
@@ -371,17 +361,14 @@ abstract class $AppRouter extends _i42.RootStackRouter {
           orElse: () => const ReportIssueArgs());
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i36.ReportIssue(
-          key: args.key,
-          description: args.description,
-        ),
+        child: _i35.ReportIssue(key: args.key),
       );
     },
     ResellerCodeCheckout.name: (routeData) {
       final args = routeData.argsAs<ResellerCodeCheckoutArgs>();
       return _i42.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i37.ResellerCodeCheckout(
+        child: _i36.ResellerCodeCheckout(
           isPro: args.isPro,
           key: args.key,
         ),
@@ -392,13 +379,21 @@ abstract class $AppRouter extends _i42.RootStackRouter {
           routeData.argsAs<SettingsArgs>(orElse: () => const SettingsArgs());
       return _i42.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i38.Settings(key: args.key),
+        child: _i37.Settings(key: args.key),
+      );
+    },
+    SignIn.name: (routeData) {
+      return _i42.AutoRoutePage<void>(
+        routeData: routeData,
+        child: const _i38.SignIn(),
       );
     },
     SplitTunneling.name: (routeData) {
+      final args = routeData.argsAs<SplitTunnelingArgs>(
+          orElse: () => const SplitTunnelingArgs());
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: const _i39.SplitTunneling(),
+        child: _i39.SplitTunneling(key: args.key),
       );
     },
     StripeCheckout.name: (routeData) {
@@ -621,14 +616,10 @@ class AuthorizeDeviceEmailPin
     extends _i42.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
   AuthorizeDeviceEmailPin({
     _i44.Key? key,
-    required String email,
     List<_i42.PageRouteInfo>? children,
   }) : super(
           AuthorizeDeviceEmailPin.name,
-          args: AuthorizeDeviceEmailPinArgs(
-            key: key,
-            email: email,
-          ),
+          args: AuthorizeDeviceEmailPinArgs(key: key),
           initialChildren: children,
         );
 
@@ -639,18 +630,13 @@ class AuthorizeDeviceEmailPin
 }
 
 class AuthorizeDeviceEmailPinArgs {
-  const AuthorizeDeviceEmailPinArgs({
-    this.key,
-    required this.email,
-  });
+  const AuthorizeDeviceEmailPinArgs({this.key});
 
   final _i44.Key? key;
 
-  final String email;
-
   @override
   String toString() {
-    return 'AuthorizeDeviceEmailPinArgs{key: $key, email: $email}';
+    return 'AuthorizeDeviceEmailPinArgs{key: $key}';
   }
 }
 
@@ -1004,16 +990,31 @@ class LanternDesktop extends _i42.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i23.LinkDevice]
-class LinkDevice extends _i42.PageRouteInfo<void> {
-  const LinkDevice({List<_i42.PageRouteInfo>? children})
-      : super(
+class LinkDevice extends _i42.PageRouteInfo<LinkDeviceArgs> {
+  LinkDevice({
+    _i44.Key? key,
+    List<_i42.PageRouteInfo>? children,
+  }) : super(
           LinkDevice.name,
+          args: LinkDeviceArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'LinkDevice';
 
-  static const _i42.PageInfo<void> page = _i42.PageInfo<void>(name);
+  static const _i42.PageInfo<LinkDeviceArgs> page =
+      _i42.PageInfo<LinkDeviceArgs>(name);
+}
+
+class LinkDeviceArgs {
+  const LinkDeviceArgs({this.key});
+
+  final _i44.Key? key;
+
+  @override
+  String toString() {
+    return 'LinkDeviceArgs{key: $key}';
+  }
 }
 
 /// generated route for
@@ -1045,50 +1046,7 @@ class PlansPage extends _i42.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i26.PlayCheckout]
-class PlayCheckout extends _i42.PageRouteInfo<PlayCheckoutArgs> {
-  PlayCheckout({
-    required _i44.Plan plan,
-    required bool isPro,
-    _i44.Key? key,
-    List<_i42.PageRouteInfo>? children,
-  }) : super(
-          PlayCheckout.name,
-          args: PlayCheckoutArgs(
-            plan: plan,
-            isPro: isPro,
-            key: key,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'PlayCheckout';
-
-  static const _i42.PageInfo<PlayCheckoutArgs> page =
-      _i42.PageInfo<PlayCheckoutArgs>(name);
-}
-
-class PlayCheckoutArgs {
-  const PlayCheckoutArgs({
-    required this.plan,
-    required this.isPro,
-    this.key,
-  });
-
-  final _i44.Plan plan;
-
-  final bool isPro;
-
-  final _i44.Key? key;
-
-  @override
-  String toString() {
-    return 'PlayCheckoutArgs{plan: $plan, isPro: $isPro, key: $key}';
-  }
-}
-
-/// generated route for
-/// [_i27.RecoveryKey]
+/// [_i26.RecoveryKey]
 class RecoveryKey extends _i42.PageRouteInfo<RecoveryKeyArgs> {
   RecoveryKey({
     _i43.Key? key,
@@ -1117,7 +1075,7 @@ class RecoveryKeyArgs {
 }
 
 /// generated route for
-/// [_i28.ReplicaAudioViewer]
+/// [_i27.ReplicaAudioViewer]
 class ReplicaAudioViewer extends _i42.PageRouteInfo<ReplicaAudioViewerArgs> {
   ReplicaAudioViewer({
     required _i45.ReplicaApi replicaApi,
@@ -1160,7 +1118,7 @@ class ReplicaAudioViewerArgs {
 }
 
 /// generated route for
-/// [_i29.ReplicaImageViewer]
+/// [_i28.ReplicaImageViewer]
 class ReplicaImageViewer extends _i42.PageRouteInfo<ReplicaImageViewerArgs> {
   ReplicaImageViewer({
     required _i45.ReplicaApi replicaApi,
@@ -1203,7 +1161,7 @@ class ReplicaImageViewerArgs {
 }
 
 /// generated route for
-/// [_i30.ReplicaLinkHandler]
+/// [_i29.ReplicaLinkHandler]
 class ReplicaLinkHandler extends _i42.PageRouteInfo<ReplicaLinkHandlerArgs> {
   ReplicaLinkHandler({
     _i44.Key? key,
@@ -1246,7 +1204,7 @@ class ReplicaLinkHandlerArgs {
 }
 
 /// generated route for
-/// [_i31.ReplicaMiscViewer]
+/// [_i30.ReplicaMiscViewer]
 class ReplicaMiscViewer extends _i42.PageRouteInfo<ReplicaMiscViewerArgs> {
   ReplicaMiscViewer({
     required _i45.ReplicaApi replicaApi,
@@ -1289,7 +1247,7 @@ class ReplicaMiscViewerArgs {
 }
 
 /// generated route for
-/// [_i32.ReplicaUploadDescription]
+/// [_i31.ReplicaUploadDescription]
 class ReplicaUploadDescription
     extends _i42.PageRouteInfo<ReplicaUploadDescriptionArgs> {
   ReplicaUploadDescription({
@@ -1338,7 +1296,7 @@ class ReplicaUploadDescriptionArgs {
 }
 
 /// generated route for
-/// [_i33.ReplicaUploadReview]
+/// [_i32.ReplicaUploadReview]
 class ReplicaUploadReview extends _i42.PageRouteInfo<ReplicaUploadReviewArgs> {
   ReplicaUploadReview({
     _i44.Key? key,
@@ -1386,7 +1344,7 @@ class ReplicaUploadReviewArgs {
 }
 
 /// generated route for
-/// [_i34.ReplicaUploadTitle]
+/// [_i33.ReplicaUploadTitle]
 class ReplicaUploadTitle extends _i42.PageRouteInfo<ReplicaUploadTitleArgs> {
   ReplicaUploadTitle({
     _i44.Key? key,
@@ -1434,7 +1392,7 @@ class ReplicaUploadTitleArgs {
 }
 
 /// generated route for
-/// [_i35.ReplicaVideoViewer]
+/// [_i34.ReplicaVideoViewer]
 class ReplicaVideoViewer extends _i42.PageRouteInfo<ReplicaVideoViewerArgs> {
   ReplicaVideoViewer({
     required _i45.ReplicaApi replicaApi,
@@ -1477,18 +1435,14 @@ class ReplicaVideoViewerArgs {
 }
 
 /// generated route for
-/// [_i36.ReportIssue]
+/// [_i35.ReportIssue]
 class ReportIssue extends _i42.PageRouteInfo<ReportIssueArgs> {
   ReportIssue({
     _i44.Key? key,
-    String? description,
     List<_i42.PageRouteInfo>? children,
   }) : super(
           ReportIssue.name,
-          args: ReportIssueArgs(
-            key: key,
-            description: description,
-          ),
+          args: ReportIssueArgs(key: key),
           initialChildren: children,
         );
 
@@ -1499,23 +1453,18 @@ class ReportIssue extends _i42.PageRouteInfo<ReportIssueArgs> {
 }
 
 class ReportIssueArgs {
-  const ReportIssueArgs({
-    this.key,
-    this.description,
-  });
+  const ReportIssueArgs({this.key});
 
   final _i44.Key? key;
 
-  final String? description;
-
   @override
   String toString() {
-    return 'ReportIssueArgs{key: $key, description: $description}';
+    return 'ReportIssueArgs{key: $key}';
   }
 }
 
 /// generated route for
-/// [_i37.ResellerCodeCheckout]
+/// [_i36.ResellerCodeCheckout]
 class ResellerCodeCheckout
     extends _i42.PageRouteInfo<ResellerCodeCheckoutArgs> {
   ResellerCodeCheckout({
@@ -1554,7 +1503,7 @@ class ResellerCodeCheckoutArgs {
 }
 
 /// generated route for
-/// [_i38.Settings]
+/// [_i37.Settings]
 class Settings extends _i42.PageRouteInfo<SettingsArgs> {
   Settings({
     _i44.Key? key,
@@ -1583,17 +1532,46 @@ class SettingsArgs {
 }
 
 /// generated route for
-/// [_i39.SplitTunneling]
-class SplitTunneling extends _i42.PageRouteInfo<void> {
-  const SplitTunneling({List<_i42.PageRouteInfo>? children})
+/// [_i38.SignIn]
+class SignIn extends _i42.PageRouteInfo<void> {
+  const SignIn({List<_i42.PageRouteInfo>? children})
       : super(
+          SignIn.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignIn';
+
+  static const _i42.PageInfo<void> page = _i42.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i39.SplitTunneling]
+class SplitTunneling extends _i42.PageRouteInfo<SplitTunnelingArgs> {
+  SplitTunneling({
+    _i47.Key? key,
+    List<_i42.PageRouteInfo>? children,
+  }) : super(
           SplitTunneling.name,
+          args: SplitTunnelingArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'SplitTunneling';
 
-  static const _i42.PageInfo<void> page = _i42.PageInfo<void>(name);
+  static const _i42.PageInfo<SplitTunnelingArgs> page =
+      _i42.PageInfo<SplitTunnelingArgs>(name);
+}
+
+class SplitTunnelingArgs {
+  const SplitTunnelingArgs({this.key});
+
+  final _i47.Key? key;
+
+  @override
+  String toString() {
+    return 'SplitTunnelingArgs{key: $key}';
+  }
 }
 
 /// generated route for

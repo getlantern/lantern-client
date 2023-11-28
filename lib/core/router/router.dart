@@ -257,5 +257,12 @@ class AppRouter extends $AppRouter {
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
+    CustomRoute(
+      page: SignIn.page,
+      path: '/sign_in',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
   ];
 }
