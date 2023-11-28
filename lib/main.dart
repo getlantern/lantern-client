@@ -6,7 +6,8 @@ import 'catcher_setup.dart';
 
 Future<void> main() async {
   // CI will be true only when running appium test
-  const String flavor = String.fromEnvironment('app.flavor');;
+  const String flavor = String.fromEnvironment('app.flavor');
+
   print("Running Flavor $flavor");
   if (flavor == 'appiumTest') {
     print("Flutter extension enabled $flavor");
@@ -15,7 +16,7 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  await initPlatformState();
+  //await initPlatformState();
   //await _initGoogleMobileAds();
   //await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 

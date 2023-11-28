@@ -14,7 +14,7 @@ import (
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/sysproxy"
 
-	"github.com/getlantern/android-lantern/desktop/icons"
+	"github.com/getlantern/lantern-client/desktop/icons"
 )
 
 var (

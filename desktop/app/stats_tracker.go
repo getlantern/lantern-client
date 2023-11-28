@@ -3,7 +3,7 @@ package app
 import (
 	"github.com/getlantern/flashlight/v7/stats"
 
-	"github.com/getlantern/android-lantern/desktop/ws"
+	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
 type statsTracker struct {

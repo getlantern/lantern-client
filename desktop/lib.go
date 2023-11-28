@@ -6,27 +6,27 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"syscall"
 	"runtime"
 	"runtime/debug"
 	"strconv"
+	"syscall"
 
 	"github.com/getlantern/appdir"
-	"github.com/getlantern/android-lantern/desktop/app"
-	"github.com/getlantern/android-lantern/desktop/pro"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/lantern-client/desktop/app"
+	"github.com/getlantern/lantern-client/desktop/pro"
 )
 
 import "C"
 
 var (
 	log = golog.LoggerFor("lantern-desktop.main")
-	a *app.App
+	a   *app.App
 
 	proClient *pro.ProClient
-	settings *app.Settings 
+	settings  *app.Settings
 )
 
 //export Start
@@ -44,7 +44,7 @@ func Start() *C.char {
 	proClient = pro.New()
 	a = app.NewApp(flags, cdir, settings)
 	log.Debug("Running headless")
-	go func() { 
+	go func() {
 		runApp(a)
 		err := a.WaitForExit()
 		if err != nil {
@@ -54,19 +54,19 @@ func Start() *C.char {
 		log.Debug("Lantern stopped")
 		os.Exit(0)
 	}()
-    return C.CString("")
+	return C.CString("")
 }
 
 //export SysProxyOn
 func SysProxyOn() *C.char {
 	app.SysproxyOn()
-   	return C.CString("on")
+	return C.CString("on")
 }
 
 //export SysProxyOff
 func SysProxyOff() *C.char {
 	app.SysProxyOff()
-   	return C.CString("off")
+	return C.CString("off")
 }
 
 func userHeaders() (string, string, string) {

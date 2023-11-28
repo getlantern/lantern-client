@@ -8,8 +8,8 @@ import (
 	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/golog"
 
-	"github.com/getlantern/android-lantern/desktop/deviceid"
-	"github.com/getlantern/android-lantern/desktop/ws"
+	"github.com/getlantern/lantern-client/desktop/deviceid"
+	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
 // isProUser blocks itself to check if current user is Pro, or !ok if error
