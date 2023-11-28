@@ -11,7 +11,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/getlantern/android-lantern/internalsdk/analytics"
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/autoupdate"
 	"github.com/getlantern/dnsgrab"
@@ -28,6 +27,7 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/lantern-client/internalsdk/analytics"
 	"github.com/getlantern/mtime"
 
 	// import gomobile just to make sure it stays in go.mod

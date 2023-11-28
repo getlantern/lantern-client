@@ -3,15 +3,16 @@ package main
 import (
 	"os"
 	"os/signal"
-	"syscall"
+	"path/filepath"
 	"runtime"
 	"runtime/debug"
+	"syscall"
 
 	"github.com/getlantern/appdir"
-	"github.com/getlantern/android-lantern/desktop/app"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/lantern-client/desktop/app"
 )
 
 var (
@@ -28,7 +29,8 @@ func main() {
 	flags := flashlight.ParseFlags()
 
 	cdir := configDir(&flags)
-	a := app.NewApp(flags, cdir)
+	settings := loadSettings(cdir)
+	a := app.NewApp(flags, cdir, settings)
 	log.Debug("Running headless")
 	runApp(a)
 	err := a.WaitForExit()
@@ -38,6 +40,19 @@ func main() {
 	}
 	log.Debug("Lantern stopped")
 	os.Exit(0)
+}
+
+// loadSettings loads the initial settings at startup, either from disk or using defaults.
+func loadSettings(configDir string) *app.Settings {
+	path := filepath.Join(configDir, "settings.yaml")
+	if common.Staging {
+		path = filepath.Join(configDir, "settings-staging.yaml")
+	}
+	settings := app.LoadSettingsFrom(app.ApplicationVersion, app.RevisionDate, app.BuildDate, path)
+	if common.Staging {
+		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
+	}
+	return settings
 }
 
 func configDir(flags *flashlight.Flags) string {

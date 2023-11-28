@@ -10,7 +10,7 @@ import (
 	notify "github.com/getlantern/notifier"
 
 	"github.com/getlantern/flashlight/v7/common"
-	"github.com/getlantern/android-lantern/desktop/analytics"
+	"github.com/getlantern/lantern-client/desktop/analytics"
 )
 
 func TestNotify(t *testing.T) {

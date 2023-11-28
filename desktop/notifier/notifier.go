@@ -8,7 +8,7 @@ import (
 	notify "github.com/getlantern/notifier"
 	"github.com/getsentry/sentry-go"
 
-	"github.com/getlantern/android-lantern/desktop/analytics"
+	"github.com/getlantern/lantern-client/desktop/analytics"
 )
 
 const (

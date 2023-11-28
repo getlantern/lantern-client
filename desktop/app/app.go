@@ -10,17 +10,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/getsentry/sentry-go"
 	. "github.com/anacrolix/generics"
+	"github.com/getsentry/sentry-go"
 
 	"github.com/getlantern/dhtup"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/golog"
 	"github.com/getlantern/eventual"
-	"github.com/getlantern/i18n"
-	"github.com/getlantern/memhelper"
-	notify "github.com/getlantern/notifier"
-	"github.com/getlantern/profiling"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/balancer"
 	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
@@ -33,44 +28,48 @@ import (
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/stats"
+	"github.com/getlantern/golog"
+	"github.com/getlantern/i18n"
+	"github.com/getlantern/memhelper"
+	notify "github.com/getlantern/notifier"
+	"github.com/getlantern/profiling"
 	"github.com/getlantern/trafficlog-flashlight/tlproc"
 
-	"github.com/getlantern/android-lantern/desktop/analytics"
-	"github.com/getlantern/android-lantern/desktop/features"
-	"github.com/getlantern/android-lantern/desktop/notifier"
-	"github.com/getlantern/android-lantern/desktop/server"
-	"github.com/getlantern/android-lantern/desktop/ws"
-	uicommon "github.com/getlantern/android-lantern/desktop/common"
+	"github.com/getlantern/lantern-client/desktop/analytics"
+	uicommon "github.com/getlantern/lantern-client/desktop/common"
+	"github.com/getlantern/lantern-client/desktop/features"
+	"github.com/getlantern/lantern-client/desktop/notifier"
+	"github.com/getlantern/lantern-client/desktop/server"
+	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
 var (
-	log = golog.LoggerFor("lantern-desktop.app")
-	startTime = time.Now()
+	log                = golog.LoggerFor("lantern-desktop.app")
+	startTime          = time.Now()
 	translationAppName = strings.ToUpper(common.DefaultAppName)
 )
 
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
-	hasExited   int64
+	hasExited            int64
 	fetchedGlobalConfig  int32
 	fetchedProxiesConfig int32
 
-	Flags       flashlight.Flags
-	configDir   string
-	exited      eventual.Value
+	Flags            flashlight.Flags
+	configDir        string
+	exited           eventual.Value
 	analyticsSession analytics.Session
 	settings         *Settings
 	statsTracker     *statsTracker
-
 
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
 
 	chGlobalConfigChanged chan bool
 
-	ws                    ws.UIChannel
-	flashlight  *flashlight.Flashlight
-	dhtupContext          Option[dhtup.Context]
+	ws           ws.UIChannel
+	flashlight   *flashlight.Flashlight
+	dhtupContext Option[dhtup.Context]
 
 	// If both the trafficLogLock and proxiesLock are needed, the trafficLogLock should be obtained
 	// first. Keeping the order consistent avoids deadlocking.
@@ -89,7 +88,7 @@ type App struct {
 	proxies     []balancer.Dialer
 	proxiesLock sync.RWMutex
 
-	selectedTab Tab
+	selectedTab   Tab
 	selectedTabMu sync.Mutex
 }
 
@@ -97,13 +96,13 @@ type App struct {
 func NewApp(flags flashlight.Flags, configDir string, settings *Settings) *App {
 	analyticsSession := newAnalyticsSession(settings)
 	app := &App{
-		configDir: configDir,
-		exited: eventual.NewValue(),
-		settings:              settings,
-		analyticsSession:      analyticsSession,
-		selectedTab:           AccountTab,
-		statsTracker:          NewStatsTracker(),
-		ws:                    ws.NewUIChannel(),
+		configDir:        configDir,
+		exited:           eventual.NewValue(),
+		settings:         settings,
+		analyticsSession: analyticsSession,
+		selectedTab:      AccountTab,
+		statsTracker:     NewStatsTracker(),
+		ws:               ws.NewUIChannel(),
 	}
 
 	return app
@@ -516,14 +515,14 @@ func (app *App) doExit(err error) {
 	if err != nil {
 		log.Errorf("Exiting app %d(%d) because of %v", os.Getpid(), os.Getppid(), err)
 		if ShouldReportToSentry() {
-                       sentry.ConfigureScope(func(scope *sentry.Scope) {
-                               scope.SetLevel(sentry.LevelFatal)
-                       })
+			sentry.ConfigureScope(func(scope *sentry.Scope) {
+				scope.SetLevel(sentry.LevelFatal)
+			})
 
-                       sentry.CaptureException(err)
-                       if result := sentry.Flush(common.SentryTimeout); !result {
-                               log.Error("Flushing to Sentry timed out")
-                       }
+			sentry.CaptureException(err)
+			if result := sentry.Flush(common.SentryTimeout); !result {
+				log.Error("Flushing to Sentry timed out")
+			}
 		}
 	} else {
 		log.Debugf("Exiting app %d(%d)", os.Getpid(), os.Getppid())
@@ -622,5 +621,3 @@ func (app *App) AdTrackURL() string {
 func (app *App) AddToken(path string) string {
 	return path
 }
-
-
