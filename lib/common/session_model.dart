@@ -1,4 +1,7 @@
 import 'package:lantern/replica/common.dart';
+import 'package:lantern/i18n/i18n.dart';
+import 'package:fixnum/fixnum.dart';
+import 'package:intl/intl.dart';
 
 import 'common.dart';
 import 'common_desktop.dart';
@@ -315,12 +318,38 @@ class SessionModel extends Model {
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
   }) {
-    return subscribedListBuilder<Plan>(
+    if (Platform.isAndroid) {
+      return subscribedListBuilder<Plan>(
+        '/plans/',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return Plan.fromBuffer(serialized);
+        },
+      );
+    }
+    final formatCurrency = new NumberFormat.simpleCurrency();
+
+    final convPlan = (Map<String, dynamic> item) {
+        var id = item['id'];
+        var plan = Plan();
+        plan.id = id;
+        plan.description = item["description"];
+        plan.oneMonthCost = formatCurrency.format(item["expectedMonthlyPrice"]["usd"]/100).toString();
+        plan.totalCost = formatCurrency.format(item["usdPrice"]/100).toString();
+        plan.totalCostBilledOneTime = formatCurrency.format(item["usdPrice"]/100).toString() + ' ' + 'billed_one_time'.i18n;
+        plan.bestValue = item["bestValue"] ?? false;
+        plan.usdPrice = Int64(item["usdPrice"]);
+        return plan;
+    };
+
+    return ffiListBuilder<Plan>(
       '/plans/',
+      ffiPlans,
+      convPlan,
       builder: builder,
       deserialize: (Uint8List serialized) {
         return Plan.fromBuffer(serialized);
-      },
+      },     
     );
   }
 

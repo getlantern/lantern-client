@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:lantern/common/ffi_subscriber.dart';
+import 'package:lantern/common/ffi_list_subscriber.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'common_desktop.dart';
 
@@ -13,6 +14,7 @@ abstract class Model {
       HashMap();
   final Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
   Event? event;
+  final Map<String, FfiListNotifier> _ffiListNotifierCache = HashMap();
 
   Model(String name) {
     methodChannel = MethodChannel('${name}_method_channel');
@@ -174,6 +176,61 @@ abstract class Model {
         deserialize: deserialize,
       );
       _listNotifierCache[path] = result;
+    }
+    return result;
+  }
+
+  ValueListenableBuilder<ChangeTrackingList<T>> ffiListBuilder<T>(
+    String path, 
+    Pointer<Utf8> Function() ffiFunction, 
+    T Function(Map<String, dynamic> json) fromJsonModel, {
+    required ValueWidgetBuilder<Iterable<PathAndValue<T>>> builder,
+    bool details = false,
+    int Function(String key1, String key2)? compare,
+    T Function(Uint8List serialized)? deserialize,
+  }) {
+    var notifier = ffiListNotifier(
+      path,
+      ffiFunction,
+      fromJsonModel,
+      details: details,
+      compare: compare,
+      deserialize: deserialize,
+    );
+    return FfiListBuilder<T>(
+      path,
+      notifier,
+      (BuildContext context, ChangeTrackingList<T> value, Widget? child) =>
+          builder(
+        context,
+        value.map.entries.map((e) => PathAndValue(e.key, e.value)),
+        child,
+      ),
+    );
+  }
+
+  ValueNotifier<ChangeTrackingList<T>> ffiListNotifier<T>(
+    String path, 
+    Pointer<Utf8> Function() ffiFunction, 
+    T Function(Map<String, dynamic> json) fromJsonModel, {
+    bool details = false,
+    int Function(String key1, String key2)? compare,
+    T Function(Uint8List serialized)? deserialize,
+  }) {
+    var result = _ffiListNotifierCache[path] as FfiListNotifier<T>?;
+    if (result == null) {
+      result = FfiListNotifier(
+        path,
+        ffiFunction,
+        fromJsonModel,
+        () {
+          _ffiListNotifierCache.remove(path);
+        },
+        details: details,
+        compare: compare,
+        deserialize: deserialize,
+      );
+      _ffiListNotifierCache[path] = result;
     }
     return result;
   }

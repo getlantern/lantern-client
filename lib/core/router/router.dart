@@ -157,12 +157,6 @@ class AppRouter extends $AppRouter {
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute(
-        page: PlansDesktop.page,
-        path: '/plansdesktop',
-        transitionsBuilder: defaultTransition,
-        durationInMilliseconds: defaultTransitionMillis,
-        reverseDurationInMilliseconds: defaultTransitionMillis),
-    CustomRoute(
         page: ReplicaUploadTitle.page,
         path: '/replicaUploadTitle',
         transitionsBuilder: defaultTransition,
