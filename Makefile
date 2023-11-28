@@ -88,7 +88,7 @@ STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= 9999.99.99
 # Note - we don't bother stripping symbols or DWARF table as Android's packaging seems to take care of that for us
-LDFLAGS := -X github.com/getlantern/android-lantern/internalsdk.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/android-lantern/internalsdk.ApplicationVersion=$(VERSION) -X github.com/getlantern/flashlight/v7/common.StagingMode=$(STAGING)
+LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/lantern-client/internalsdk.ApplicationVersion=$(VERSION) -X github.com/getlantern/flashlight/v7/common.StagingMode=$(STAGING)
 
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
@@ -287,7 +287,7 @@ $(ANDROID_LIB):
 		-androidapi=23 \
 		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
+		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && \
@@ -425,10 +425,10 @@ changelog: require-version require-changelog require-app
 # Creates a dump of the source code lantern-android-sources-<version>.tar.gz
 sourcedump: require-version
 	here=`pwd` && \
-	rm -Rf /tmp/android-lantern ; \
-	mkdir -p /tmp/android-lantern && \
-	cp -R LICENSE LICENSING.md android internalsdk lib protos* go.mod go.sum /tmp/android-lantern && \
-	cd /tmp/android-lantern && \
+	rm -Rf /tmp/lantern-client ; \
+	mkdir -p /tmp/lantern-client && \
+	cp -R LICENSE LICENSING.md android internalsdk lib protos* go.mod go.sum /tmp/lantern-client && \
+	cd /tmp/lantern-client && \
 	find . -name "*_test.go" -exec rm {} \; && \
 	find . -name "*.jks" -exec rm {} \; && \
 	rm -Rf android/.idea android/sentry.properties android/.settings android/local.properties android/app/.classpath android/app/.project android/app/.settings android/app/src/androidTest android/app/src/test android/app/src/main/res android/app/libs android/.gradle android/alipaySdk-15.6.5-20190718211148/ android/app/bin android/app/.cxx android/app/google-services.json && \
@@ -450,7 +450,7 @@ build-framework: assert-go-version install-gomobile
 	-tags='headless lantern ios' \
 	-ldflags="$(LDFLAGS)"  \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-    		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/flashlight/v7/ios
+    		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/flashlight/v7/ios
 	@echo "moving framework"
 	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
 	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
@@ -476,7 +476,3 @@ clean:
 	rm -f `which gomobile` && \
 	rm -f `which gobind`
 	rm -Rf "$(FLASHLIGHT_FRAMEWORK_PATH)" "$(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)"
-
-
-
-

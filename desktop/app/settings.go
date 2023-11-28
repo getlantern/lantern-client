@@ -19,8 +19,8 @@ import (
 	"github.com/getlantern/timezone"
 	"github.com/getlantern/yaml"
 
-	"github.com/getlantern/android-lantern/desktop/deviceid"
-	"github.com/getlantern/android-lantern/desktop/ws"
+	"github.com/getlantern/lantern-client/desktop/deviceid"
+	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
 // SettingName is the name of a setting.

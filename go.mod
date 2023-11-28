@@ -1,4 +1,4 @@
-module github.com/getlantern/android-lantern
+module github.com/getlantern/lantern-client
 
 go 1.19
 
@@ -41,6 +41,8 @@ require (
 	google.golang.org/protobuf v1.31.0
 	nhooyr.io/websocket v1.8.10
 )
+
+require github.com/montanaflynn/stats v0.6.3 // indirect
 
 require (
 	crawshaw.io/sqlite v0.3.3-0.20220618202545-d1964889ea3c // indirect

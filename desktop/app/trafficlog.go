@@ -19,8 +19,8 @@ import (
 	"github.com/getlantern/trafficlog-flashlight/tlproc"
 	"github.com/getlantern/yaml"
 
-	"github.com/getlantern/android-lantern/desktop/features"
-	"github.com/getlantern/android-lantern/desktop/icons"
+	"github.com/getlantern/lantern-client/desktop/features"
+	"github.com/getlantern/lantern-client/desktop/icons"
 )
 
 const (
