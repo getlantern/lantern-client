@@ -83,11 +83,11 @@ All those dependencies must be in your PATH
 * `flutter pub get`
 * `flutter run --flavor prod`
 
-**Note**: If you're using an M1 or M2 chip, navigate to the ios folder and run `arch -x86_64 pod install` 
+**Note**: If you're using an M1 or M2 chip, navigate to the ios folder and run `arch -x86_64 pod install`
 
 ### 👩‍💻 Using Android Studio? No problem!
 
-We've got you covered! If you prefer using Android Studio, we have already set up the configuration files for you. Just select the prod configuration and hit Run... Get ready to start digging! 😄🔍 
+We've got you covered! If you prefer using Android Studio, we have already set up the configuration files for you. Just select the prod configuration and hit Run... Get ready to start digging! 😄🔍
 
 You can build an emulator with `./scripts/run_avd.rb`. Here's an example run: `./scripts/run_avd.rb --level=30 --abi=x86 --use_google_apis --window`.
 You'll need Ruby >= 2.3 installed and `colorize` gem (i.e., `gem install colorize`).
@@ -104,7 +104,7 @@ A sane terminal command (using [pidcat](https://github.com/JakeWharton/pidcat)) 
 
 
 The core Lantern functionality is written in Go and lives in `./internalsdk`.
-It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to an AAR file that 
+It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to an AAR file that
 
 #### Android
 For compiled code lives in `./android/app/libs` and is called `liblantern-ARCH.aar`.
@@ -121,7 +121,7 @@ The desktop app lives under `desktop` .. To build the Go shared library:
 
 ```
 cd desktop
-go build -buildmode=c-shared -o liblantern.dylib lib.go
+CGO_ENABLED=1 GOARCH=arm64 go build -buildmode=c-shared -o liblantern.dylib lib.go
 ```
 
 Then to run the Flutter app on macOS:
@@ -175,10 +175,10 @@ Do this to make a release build:
 ```
  **Note**: Replace x.x.x with the version number of your release.
 
-This will 
+This will
 - Set the version number in the info.plist file and increment the build number 1
 - Upload the DSYM file to Sentry
-- Open the build folder once the build is complete 
+- Open the build folder once the build is complete
 
 
 #### Android
@@ -290,18 +290,18 @@ You can run integration tests from the integration_test directory against a live
 
 1. Run the app with these additional run arguments `--dart-define=driver=true --observatory-port 8888 --disable-service-auth-codes`
 2. Run the integration test as a dart application
-3. When running tests in different locales, change `const simulatedLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale. 
+3. When running tests in different locales, change `const simulatedLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale.
 4. Go to SETTINGS view and then run `change_language_test.dart`.
 5. All tests should start with testing device showing Chats tab.
 6. Start by running test `1A`.
 7. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
    1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
-   2. `6B_request_flow_test` requires a message request to have just been received 
+   2. `6B_request_flow_test` requires a message request to have just been received
    3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
    4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
 8. We will have some duplicate screenshots in there - run `python3 scripts/screenshot_generation_assets/remove_dups.py [your android-lantern-path]/screenshots/` to deduplicate.
 9. To generate stitched landscape images for all screenshots in a given test folder, run `python3 scripts/screenshot_generation_assets/merge_screenshots.py [your android-lantern-path]/screenshots/[a locale e.g. en_US]`
-  
+
 This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
 
 WARNING - when running with flutter driver enabled, the on-screen keyboard does not work.
@@ -310,7 +310,7 @@ WARNING - if you try to run an instance of the app using `--observatory-port` an
 
 TODO: we need to automate the running of integration tests in a CI environment using Flutter driver.
 
-NOTE ⚠ : Flutter driver is borderline maintained and clearly the expectation is to move to using `integration_test`. [Here](https://github.com/flutter/flutter/issues/12810) is a good depiction of related conversations. 
+NOTE ⚠ : Flutter driver is borderline maintained and clearly the expectation is to move to using `integration_test`. [Here](https://github.com/flutter/flutter/issues/12810) is a good depiction of related conversations.
 
 #### Testing Replica
 A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.
