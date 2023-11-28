@@ -20,7 +20,6 @@ class FfiListNotifier<T>
   }) : super(ChangeTrackingList(compare ?? sortNormally), removeFromCache) {
     value.clearPaths();
     var result = jsonDecode(ffiFunction().toDartString()) as List<dynamic>;
-    final formatCurrency = new NumberFormat.simpleCurrency();
     for (var item in result) {
       var id = item['id'];
       value.map[id] = fromJsonModel(item) as T;
