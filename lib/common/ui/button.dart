@@ -23,7 +23,6 @@ class Button extends StatelessWidget {
   });
 
   void _handleOnPress() {
-    if (disabled) return null;
     return onPressed!();
   }
 
@@ -33,7 +32,7 @@ class Button extends StatelessWidget {
       height: 56,
       constraints: BoxConstraints(minWidth: width ?? 200.0),
       child: OutlinedButton(
-        onPressed: _handleOnPress,
+        onPressed: disabled?null:_handleOnPress,
         style: OutlinedButton.styleFrom(
           splashFactory:
               disabled ? NoSplash.splashFactory : InkSplash.splashFactory,
