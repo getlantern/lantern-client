@@ -315,6 +315,20 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('checkForUpdates');
   }
 
+  Plan planFromJson(Map<String, dynamic> item) {
+    final formatCurrency = new NumberFormat.simpleCurrency();
+    var id = item['id'];
+    var plan = Plan();
+    plan.id = id;
+    plan.description = item["description"];
+    plan.oneMonthCost = formatCurrency.format(item["expectedMonthlyPrice"]["usd"]/100).toString();
+    plan.totalCost = formatCurrency.format(item["usdPrice"]/100).toString();
+    plan.totalCostBilledOneTime = formatCurrency.format(item["usdPrice"]/100).toString() + ' ' + 'billed_one_time'.i18n;
+    plan.bestValue = item["bestValue"] ?? false;
+    plan.usdPrice = Int64(item["usdPrice"]);
+    return plan;
+  }
+
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
   }) {
@@ -327,25 +341,10 @@ class SessionModel extends Model {
         },
       );
     }
-    final formatCurrency = new NumberFormat.simpleCurrency();
-
-    final convPlan = (Map<String, dynamic> item) {
-        var id = item['id'];
-        var plan = Plan();
-        plan.id = id;
-        plan.description = item["description"];
-        plan.oneMonthCost = formatCurrency.format(item["expectedMonthlyPrice"]["usd"]/100).toString();
-        plan.totalCost = formatCurrency.format(item["usdPrice"]/100).toString();
-        plan.totalCostBilledOneTime = formatCurrency.format(item["usdPrice"]/100).toString() + ' ' + 'billed_one_time'.i18n;
-        plan.bestValue = item["bestValue"] ?? false;
-        plan.usdPrice = Int64(item["usdPrice"]);
-        return plan;
-    };
-
     return ffiListBuilder<Plan>(
       '/plans/',
       ffiPlans,
-      convPlan,
+      planFromJson,
       builder: builder,
       deserialize: (Uint8List serialized) {
         return Plan.fromBuffer(serialized);
