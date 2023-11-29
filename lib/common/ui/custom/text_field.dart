@@ -32,6 +32,7 @@ class CTextField extends StatefulWidget {
   late final bool? autofocus;
   late final void Function(String value)? onChanged;
   String? tooltipMessage;
+  final bool obscureText;
 
   CTextField({
     required this.controller,
@@ -61,6 +62,7 @@ class CTextField extends StatefulWidget {
     this.autofocus = false,
     this.onChanged,
     this.tooltipMessage,
+    this.obscureText = false,
   }) {
     if (initialValue != null && initialValue != '') {
       controller.text = initialValue!;
@@ -125,10 +127,12 @@ class _CTextFieldState extends State<CTextField> {
                 enabled: widget.enabled,
                 controller: widget.controller,
                 scrollPhysics: defaultScrollPhysics,
+                obscureText: widget.obscureText,
                 autovalidateMode: widget.autovalidateMode,
                 focusNode: widget.controller.focusNode,
                 keyboardType: widget.keyboardType,
                 maxLength: widget.maxLength,
+
                 validator: (value) {
                   // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
                   var result = widget.controller.validate(value);
@@ -251,10 +255,8 @@ class _CTextFieldState extends State<CTextField> {
   Widget? renderSuffix() {
     final hasError = fieldKey.currentState?.mounted == true &&
         fieldKey.currentState?.hasError == true;
-    final isEmpty = fieldKey.currentState?.mounted == true &&
-        fieldKey.currentState?.value == '';
-    if (isEmpty) return null;
-    return hasError
+
+  return hasError
         ? Transform.scale(
             scale: 0.4,
             child: CAssetImage(
@@ -263,7 +265,7 @@ class _CTextFieldState extends State<CTextField> {
             ),
           )
         : widget.suffixIcon != null
-            ? Transform.scale(scale: 0.4, child: widget.suffixIcon)
+            ? Transform.scale(scale: 0.5, child: widget.suffixIcon)
             : null;
   }
 
