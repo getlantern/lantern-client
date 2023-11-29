@@ -1,7 +1,10 @@
 name: Publish releases
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ android-legacy ]
+    tags:
+      - '*'
 
 permissions:
   contents: read
