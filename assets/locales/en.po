@@ -43,7 +43,21 @@ msgid "lantern_pro_email"
 msgstr "Lantern Pro Email "
 
 msgid "return_to_sign_in"
-msgstr "Return to Sign in "
+msgstr "Return to Sign in"
+
+msgid "enter_confirmation_code"
+msgstr "Enter Confirmation Code"
+
+msgid "confirmation_code_msg"
+msgstr "A confirmation code has been sent to XX. Enter it here to reset your password."
+
+msgid "resend_confirmation_code"
+msgstr "Resend Confirmation Email"
+
+msgid "change_email"
+msgstr "Change Email"
+
+
 
 
 msgid "new"

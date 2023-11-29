@@ -64,7 +64,9 @@ class _SignInState extends State<SignIn> {
                 // disabled: _emailController.text.isEmpty ||
                 //     _emailFormKey?.currentState?.validate() == false,
                 text: widget.resetPasswordFlow ? "next".i18n : 'continue'.i18n,
-                onPressed: openCreatePassword,
+                onPressed: widget.resetPasswordFlow
+                    ? openVerification
+                    : openCreatePassword,
               ),
             ),
             const SizedBox(height: 24),
@@ -108,6 +110,10 @@ class _SignInState extends State<SignIn> {
   ///Widget methods
   void openCreatePassword() {
     context.pushRoute(const CreatePassword());
+  }
+
+  void openVerification() {
+    context.pushRoute(Verification(email: _emailController.text));
   }
 
   void returnToSignIn() {
