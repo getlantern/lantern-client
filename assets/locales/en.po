@@ -57,6 +57,11 @@ msgstr "Resend Confirmation Email"
 msgid "change_email"
 msgstr "Change Email"
 
+msgid "new_password"
+msgstr "New Password"
+
+msgid "confirm_new_password"
+msgstr "Confirm New Password"
 
 
 

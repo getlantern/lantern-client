@@ -113,96 +113,87 @@ class _CTextFieldState extends State<CTextField> {
       children: [
         Container(
           padding: const EdgeInsetsDirectional.only(top: 7),
-          child: Scrollbar(
-            controller: scrollController,
-            interactive: true,
-            // TODO: this generates an annoying error https://github.com/flutter/flutter/issues/97873
-            // thumbVisibility: true,
-            trackVisibility: true,
-            child: Tooltip(
-              message: widget.tooltipMessage ?? '',
-              child: TextFormField(
-                key: fieldKey,
-                autofocus: widget.autofocus!,
-                enabled: widget.enabled,
-                controller: widget.controller,
-                scrollPhysics: defaultScrollPhysics,
-                obscureText: widget.obscureText,
-                autovalidateMode: widget.autovalidateMode,
-                focusNode: widget.controller.focusNode,
-                keyboardType: widget.keyboardType,
-                maxLength: widget.maxLength,
-
-                validator: (value) {
-                  // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
-                  var result = widget.controller.validate(value);
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    setState(() {});
-                  });
-                  return result;
-                },
-                onTap: widget.onTap,
-                onChanged: (value) {
-                  if (widget.onChanged != null) {
-                    widget.onChanged!(value);
-                  }
-                  fieldKey.currentState!.validate();
-                },
-                onFieldSubmitted: widget.onFieldSubmitted,
-                textInputAction: widget.textInputAction,
-                minLines: widget.minLines,
-                maxLines: widget.maxLines,
-                style: widget.style,
-                inputFormatters: widget.inputFormatters,
-                textCapitalization:
-                    widget.textCapitalization ?? TextCapitalization.none,
-                decoration: InputDecoration(
-                  contentPadding: widget.contentPadding ??
-                      const EdgeInsetsDirectional.all(0),
-                  isDense: true,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  // we handle floating labels using our custom method below
-                  labelText: (widget.label is String) ? widget.label : '',
-                  helperText: widget.helperText,
-                  hintText: widget.hintText,
-                  helperMaxLines: 2,
-                  focusedBorder: !widget.removeBorder
-                      ? OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 2,
-                            color: blue4,
-                          ),
-                        )
-                      : noBorder,
-                  errorBorder: !widget.removeBorder
-                      ? OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 2,
-                            color: indicatorRed,
-                          ),
-                        )
-                      : noBorder,
-                  border: !widget.removeBorder
-                      ? OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: grey3,
-                          ),
-                        )
-                      : noBorder,
-                  prefixIcon:
-                      // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
-                      widget.prefixIcon != null
-                          ? Transform.scale(
-                              scale: 0.5, child: widget.prefixIcon)
-                          : null,
-                  suffixIcon: renderSuffixRow(),
-                  // forcibly remove if removeBorder == true
-                  // otherwise, it will show up if we have a maxLength set
-                  counterText: (widget.removeCounterText || widget.removeBorder)
-                      ? ''
-                      : null,
-                ),
+          child: Tooltip(
+            message: widget.tooltipMessage ?? '',
+            child: TextFormField(
+              key: fieldKey,
+              autofocus: widget.autofocus!,
+              enabled: widget.enabled,
+              controller: widget.controller,
+              scrollPhysics: defaultScrollPhysics,
+              obscureText: widget.obscureText,
+              autovalidateMode: widget.autovalidateMode,
+              focusNode: widget.controller.focusNode,
+              keyboardType: widget.keyboardType,
+              maxLength: widget.maxLength,
+              validator: (value) {
+                // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
+                var result = widget.controller.validate(value);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  setState(() {});
+                });
+                return result;
+              },
+              onTap: widget.onTap,
+              onChanged: (value) {
+                if (widget.onChanged != null) {
+                  widget.onChanged!(value);
+                }
+                fieldKey.currentState!.validate();
+              },
+              onFieldSubmitted: widget.onFieldSubmitted,
+              textInputAction: widget.textInputAction,
+              minLines: widget.minLines,
+              maxLines: widget.maxLines,
+              style: widget.style,
+              inputFormatters: widget.inputFormatters,
+              textCapitalization:
+                  widget.textCapitalization ?? TextCapitalization.none,
+              decoration: InputDecoration(
+                contentPadding:
+                    widget.contentPadding ?? const EdgeInsetsDirectional.all(0),
+                isDense: true,
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                // we handle floating labels using our custom method below
+                labelText: (widget.label is String) ? widget.label : '',
+                helperText: widget.helperText,
+                hintText: widget.hintText,
+                helperMaxLines: 2,
+                focusedBorder: !widget.removeBorder
+                    ? OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: blue4,
+                        ),
+                      )
+                    : noBorder,
+                errorBorder: !widget.removeBorder
+                    ? OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: indicatorRed,
+                        ),
+                      )
+                    : noBorder,
+                border: !widget.removeBorder
+                    ? OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: grey3,
+                        ),
+                      )
+                    : noBorder,
+                prefixIcon:
+                    // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
+                    widget.prefixIcon != null
+                        ? Transform.scale(scale: 0.4, child: widget.prefixIcon)
+                        : null,
+                suffixIcon: renderSuffixRow(),
+                // forcibly remove if removeBorder == true
+                // otherwise, it will show up if we have a maxLength set
+                counterText: (widget.removeCounterText || widget.removeBorder)
+                    ? ''
+                    : null,
               ),
             ),
           ),
@@ -256,7 +247,7 @@ class _CTextFieldState extends State<CTextField> {
     final hasError = fieldKey.currentState?.mounted == true &&
         fieldKey.currentState?.hasError == true;
 
-  return hasError
+    return hasError
         ? Transform.scale(
             scale: 0.4,
             child: CAssetImage(
