@@ -42,8 +42,8 @@ require (
 	github.com/getlantern/replica v0.14.2
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.8.4
-	golang.org/x/mobile v0.0.0-20231108233038-35478a0c49da
-	golang.org/x/net v0.18.0
+	golang.org/x/mobile v0.0.0-20231127183840-76ac6878050a
+	golang.org/x/net v0.19.0
 	nhooyr.io/websocket v1.8.7
 )
 
@@ -67,17 +67,17 @@ require (
 	github.com/anacrolix/confluence v1.12.0 // indirect
 	github.com/anacrolix/dht/v2 v2.20.0 // indirect
 	github.com/anacrolix/envpprof v1.3.0 // indirect
-	github.com/anacrolix/generics v0.0.0-20230816103846-fe11fdc0e0e3 // indirect
+	github.com/anacrolix/generics v0.0.0-20230816105729-c755655aee45 // indirect
 	github.com/anacrolix/go-libutp v1.3.1 // indirect
-	github.com/anacrolix/log v0.14.0 // indirect
+	github.com/anacrolix/log v0.14.3-0.20230823030427-4b296d71a6b4 // indirect
 	github.com/anacrolix/missinggo v1.3.0 // indirect
 	github.com/anacrolix/missinggo/perf v1.0.0 // indirect
-	github.com/anacrolix/missinggo/v2 v2.7.2-0.20230527121029-a582b4f397b9 // indirect
+	github.com/anacrolix/missinggo/v2 v2.7.3 // indirect
 	github.com/anacrolix/mmsg v1.0.0 // indirect
 	github.com/anacrolix/multiless v0.3.1-0.20221221005021-2d12701f83f7 // indirect
 	github.com/anacrolix/squirrel v0.4.1 // indirect
 	github.com/anacrolix/stm v0.5.0 // indirect
-	github.com/anacrolix/sync v0.4.0 // indirect
+	github.com/anacrolix/sync v0.5.1 // indirect
 	github.com/anacrolix/torrent v1.52.6 // indirect
 	github.com/anacrolix/upnp v0.1.3-0.20220123035249-922794e51c96 // indirect
 	github.com/anacrolix/utp v0.1.0 // indirect
@@ -105,6 +105,7 @@ require (
 	github.com/edsrzf/mmap-go v1.1.0 // indirect
 	github.com/enobufs/go-nats v0.0.1 // indirect
 	github.com/felixge/httpsnoop v1.0.3 // indirect
+	github.com/frankban/quicktest v1.14.6 // indirect
 	github.com/gaukas/godicttls v0.0.4 // indirect
 	github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 // indirect
 	github.com/getlantern/broflake v0.0.0-20231016221059-9c3632502cae // indirect
@@ -182,7 +183,7 @@ require (
 	github.com/getlantern/withtimeout v0.0.0-20160829163843-511f017cd913 // indirect
 	github.com/getlantern/yaml v0.0.0-20190801163808-0c9bb1ebf426 // indirect
 	github.com/getsentry/sentry-go v0.21.0 // indirect
-	github.com/go-errors/errors v1.4.2 // indirect
+	github.com/go-errors/errors v1.5.1 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
@@ -198,7 +199,7 @@ require (
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/netstack v0.0.0-00010101000000-000000000000 // indirect
 	github.com/google/pprof v0.0.0-20230821062121-407c9e7a662f // indirect
-	github.com/google/uuid v1.3.1 // indirect
+	github.com/google/uuid v1.4.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
@@ -213,6 +214,7 @@ require (
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/libp2p/go-buffer-pool v0.1.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/mdlayher/netlink v1.1.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.1 // indirect
@@ -298,14 +300,14 @@ require (
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
-	golang.org/x/crypto v0.15.0 // indirect
+	golang.org/x/crypto v0.16.0 // indirect
 	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63 // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/sync v0.5.0 // indirect
-	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
-	golang.org/x/tools v0.15.0 // indirect
+	golang.org/x/tools v0.16.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20231002182017-d307bd883b97 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231012201019-e917dd12ba7a // indirect
