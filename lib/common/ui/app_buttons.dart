@@ -78,10 +78,13 @@ class Button extends StatelessWidget {
 class AppTextButton extends StatelessWidget {
   final String text;
   void Function()? onPressed;
+  Color? color;
 
   AppTextButton({
     super.key,
     required this.text,
+    this.onPressed,
+    this.color,
   });
 
   @override
@@ -89,10 +92,7 @@ class AppTextButton extends StatelessWidget {
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
-        textStyle: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-        ),
+        foregroundColor: color ?? pink5,
       ),
       child: Text(text),
     );

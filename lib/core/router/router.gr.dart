@@ -404,9 +404,14 @@ abstract class $AppRouter extends _i45.RootStackRouter {
       );
     },
     SignIn.name: (routeData) {
+      final args =
+          routeData.argsAs<SignInArgs>(orElse: () => const SignInArgs());
       return _i45.AutoRoutePage<void>(
         routeData: routeData,
-        child: const _i41.SignIn(),
+        child: _i41.SignIn(
+          key: args.key,
+          resetPasswordFlow: args.resetPasswordFlow,
+        ),
       );
     },
     SplitTunneling.name: (routeData) {
@@ -1596,16 +1601,39 @@ class SettingsArgs {
 
 /// generated route for
 /// [_i41.SignIn]
-class SignIn extends _i45.PageRouteInfo<void> {
-  const SignIn({List<_i45.PageRouteInfo>? children})
-      : super(
+class SignIn extends _i45.PageRouteInfo<SignInArgs> {
+  SignIn({
+    _i47.Key? key,
+    bool resetPasswordFlow = false,
+    List<_i45.PageRouteInfo>? children,
+  }) : super(
           SignIn.name,
+          args: SignInArgs(
+            key: key,
+            resetPasswordFlow: resetPasswordFlow,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'SignIn';
 
-  static const _i45.PageInfo<void> page = _i45.PageInfo<void>(name);
+  static const _i45.PageInfo<SignInArgs> page = _i45.PageInfo<SignInArgs>(name);
+}
+
+class SignInArgs {
+  const SignInArgs({
+    this.key,
+    this.resetPasswordFlow = false,
+  });
+
+  final _i47.Key? key;
+
+  final bool resetPasswordFlow;
+
+  @override
+  String toString() {
+    return 'SignInArgs{key: $key, resetPasswordFlow: $resetPasswordFlow}';
+  }
 }
 
 /// generated route for

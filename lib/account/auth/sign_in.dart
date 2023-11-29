@@ -4,7 +4,12 @@ import '../../common/common.dart';
 
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+  final bool resetPasswordFlow;
+
+  const SignIn({
+    super.key,
+    this.resetPasswordFlow = false,
+  });
 
   @override
   State<SignIn> createState() => _SignInState();
@@ -22,7 +27,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'sign_in'.i18n,
+      title: widget.resetPasswordFlow ? 'reset_password'.i18n : 'sign_in'.i18n,
       body: _buildBody(context),
     );
   }
@@ -40,7 +45,9 @@ class _SignInState extends State<SignIn> {
               key: _emailFormKey,
               child: CTextField(
                 controller: _emailController,
-                label: "enter_email".i18n,
+                label: widget.resetPasswordFlow
+                    ? "lantern_pro_email".i18n
+                    : "enter_email".i18n,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.emailAddress,
@@ -56,10 +63,16 @@ class _SignInState extends State<SignIn> {
               child: Button(
                 // disabled: _emailController.text.isEmpty ||
                 //     _emailFormKey?.currentState?.validate() == false,
-                text: 'continue'.i18n,
+                text: widget.resetPasswordFlow ? "next".i18n : 'continue'.i18n,
                 onPressed: openCreatePassword,
               ),
-            )
+            ),
+            const SizedBox(height: 24),
+            if (widget.resetPasswordFlow)
+              AppTextButton(
+                text: 'return_to_sign_in'.i18n.toUpperCase(),
+                onPressed: returnToSignIn,
+              )
           ],
         ),
       ),
@@ -95,5 +108,9 @@ class _SignInState extends State<SignIn> {
   ///Widget methods
   void openCreatePassword() {
     context.pushRoute(const CreatePassword());
+  }
+
+  void returnToSignIn() {
+    context.popRoute();
   }
 }

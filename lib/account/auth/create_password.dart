@@ -119,6 +119,7 @@ class _CreatePasswordState extends State<CreatePassword> {
 
   /// Widget methods
   void openResetPasswordFlow() {
-    context.pushRoute(SignIn());
+    //Pop current route and push SignIn so back stack will handle
+    context.router.popAndPush(SignIn(resetPasswordFlow: true));
   }
 }
