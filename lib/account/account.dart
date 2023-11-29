@@ -20,7 +20,7 @@ class AccountMenu extends StatelessWidget {
     context.pushRoute(const Support());
   }
 
-  void openSignIn(BuildContext context) => context.pushRoute(const SignIn());
+  void openSignIn(BuildContext context) => context.pushRoute( SignIn());
 
   void upgradeToLanternPro(BuildContext context) async =>
       await context.pushRoute(const PlansPage());

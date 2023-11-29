@@ -36,6 +36,15 @@ msgstr "Forgot your password? "
 msgid "click_here"
 msgstr "Click here"
 
+msgid "reset_password"
+msgstr "Reset Password"
+
+msgid "lantern_pro_email"
+msgstr "Lantern Pro Email "
+
+msgid "return_to_sign_in"
+msgstr "Return to Sign in "
+
 
 msgid "new"
 msgstr "New"
