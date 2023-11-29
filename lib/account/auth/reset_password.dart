@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../common/common.dart';
 
 @RoutePage<void>(name: 'ResetPassword')
@@ -9,6 +11,24 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
+  bool obscureText = false;
+  final _passwordFormKey = GlobalKey<FormState>();
+  late final _passwordController = CustomTextEditingController(
+    formKey: _passwordFormKey,
+  );
+  final _confirmPasswordFormKey = GlobalKey<FormState>();
+  late final _confirmPasswordController = CustomTextEditingController(
+    formKey: _confirmPasswordFormKey,
+    validator: (value) {
+      if (value!.isEmpty) {
+        return "Confirm Password is required";
+      }
+      if (value != _passwordController.text) {
+        return "Confirm Password is not match";
+      }
+      return null;
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +51,34 @@ class _ResetPasswordState extends State<ResetPassword> {
               key: _passwordFormKey,
               child: CTextField(
                 controller: _passwordController,
-                label: "enter_password".i18n,
+                label: "new_password".i18n,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.visiblePassword,
+                obscureText: obscureText,
+                maxLines: 1,
+                prefixIcon: SvgPicture.asset(ImagePaths.lock),
+                suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        obscureText = !obscureText;
+                      });
+                    },
+                    child: obscureText
+                        ? const Icon(CupertinoIcons.eye_slash_fill)
+                        : SvgPicture.asset(ImagePaths.eye)),
+                // suffix: SvgPicture.asset(ImagePaths.eye),
+                onChanged: (value) {
+                  setState(() {});
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
+            Form(
+              key: _confirmPasswordFormKey,
+              child: CTextField(
+                controller: _confirmPasswordController,
+                label: "confirm_new_password".i18n,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.visiblePassword,
@@ -44,7 +91,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                       obscureText = !obscureText;
                     });
                   },
-                  child: SvgPicture.asset(ImagePaths.eye),
+                  child: obscureText
+                      ? const Icon(CupertinoIcons.eye_slash_fill)
+                      : SvgPicture.asset(ImagePaths.eye),
                 ),
                 // suffix: SvgPicture.asset(ImagePaths.eye),
                 onChanged: (value) {
@@ -58,26 +107,11 @@ class _ResetPasswordState extends State<ResetPassword> {
               child: Button(
                 // disabled: _passwordController.text.isEmpty ||
                 //     _passwordFormKey?.currentState?.validate() == false,
-                text: 'continue'.i18n,
+                text: 'reset_password'.i18n,
+                onPressed: onResetPasswordTap,
               ),
             ),
             const SizedBox(height: 24),
-            RichText(
-              text: TextSpan(
-                text: 'forgot_your_password'.i18n,
-                style:
-                tsBody1.copyWith(fontWeight: FontWeight.w400, color: grey5),
-                children: [
-                  TextSpan(
-                    text: "click_here".i18n.toUpperCase(),
-                    style: tsBody1.copyWith(
-                        fontWeight: FontWeight.w500, color: pink5),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = openResetPasswordFlow,
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
@@ -101,5 +135,10 @@ class _ResetPasswordState extends State<ResetPassword> {
         ),
       ],
     );
+  }
+
+  void onResetPasswordTap() {
+    //Send user back to account screen
+    context.router.popUntilRoot();
   }
 }
