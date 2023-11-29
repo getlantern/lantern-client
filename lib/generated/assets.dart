@@ -145,6 +145,7 @@ class Assets {
   static const String imagesVideoBlack = 'assets/images/video_black.svg';
   static const String imagesVisa = 'assets/images/visa.svg';
   static const String imagesVolumeUp = 'assets/images/volume_up.svg';
+  static const String imagesWarning = 'assets/images/warning.svg';
   static const String imagesWebmoney = 'assets/images/webmoney.svg';
   static const String imagesWelcomeIllustration = 'assets/images/welcome_illustration.svg';
   static const String imagesZipBlack = 'assets/images/zip_black.svg';
