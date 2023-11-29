@@ -94,8 +94,7 @@ class _PlayCheckoutState extends State<PlayCheckout>
                           message: AppKeys.continueCheckout,
                           child: Button(
                             text: 'Complete Purchase'.i18n,
-                            disabled: emailController.value.text.isEmpty ||
-                                emailFieldKey.currentState?.validate() == false,
+                            disabled: emailController.value.text.isEmpty,
                             onPressed: submitPayment,
                           ),
                         )
@@ -109,16 +108,18 @@ class _PlayCheckoutState extends State<PlayCheckout>
 
   void submitPayment() async {
     try {
-      // Show the loader overlay at the beginning.
-      context.loaderOverlay.show();
-
-      // Await the result of the payment submission.
-      await sessionModel.submitPlayPayment(
+      if (emailFieldKey.currentState?.validate() == false) {
+        showError(context, error: 'Email invalid');
+      } else {
+        // Show the loader overlay at the beginning.
+        context.loaderOverlay.show();
+        // Await the result of the payment submission.
+        await sessionModel.submitPlayPayment(
           widget.plan.id, emailController.value.text);
-
-      // ignore: use_build_context_synchronously
-      context.loaderOverlay.hide();
-      showSuccessDialog(context, widget.isPro);
+        // ignore: use_build_context_synchronously
+        context.loaderOverlay.hide();
+        showSuccessDialog(context, widget.isPro);
+      }
     } catch (error, stackTrace) {
       // In case of an error, hide the loader and show the error message.
       context.loaderOverlay.hide();
