@@ -2,7 +2,9 @@ name: Publish releases
 
 on:
   push:
-    branches: [ atavism/android-legacy ]
+    branches: [ main ]
+    tags:
+      - '*'
 
 permissions:
   contents: read
