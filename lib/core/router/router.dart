@@ -271,6 +271,13 @@ class AppRouter extends $AppRouter {
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: Verification.page,
+      path: '/verification',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
     )
   ];
 }
