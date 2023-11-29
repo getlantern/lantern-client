@@ -266,3 +266,24 @@ class CDialogState extends State<CDialog> {
     );
   }
 }
+
+void showEmailExistsDialog(
+    {required BuildContext context, required VoidCallback recoverTap}) {
+  CDialog(
+    title: 'email_already_exists'.i18n,
+    icon: const CAssetImage(
+      path: ImagePaths.warning,
+    ),
+    agreeText: "recover_account".i18n,
+    dismissText: "back".i18n,
+    includeCancel: true,
+    agreeAction: () async {
+      recoverTap.call();
+      return true;
+    },
+    dismissAction: () async {
+      print("Go back");
+    },
+    description: "email_already_exists_msg".i18n,
+  ).show(context);
+}

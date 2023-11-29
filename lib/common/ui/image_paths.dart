@@ -127,6 +127,7 @@ class ImagePaths {
   static const verified_user = 'assets/images/verified_user.svg';
   static const user = 'assets/images/user.svg';
   static const image_inactive = 'assets/images/image_inactive.svg';
+  static const warning = 'assets/images/warning.svg';
 
 
   // illustrations

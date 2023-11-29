@@ -54,6 +54,18 @@ msgstr "A confirmation code has been sent to XX. Enter it here to reset your pas
 msgid "resend_confirmation_code"
 msgstr "Resend Confirmation Email"
 
+msgid "email_already_exists"
+msgstr "Email Already Exists"
+
+msgid "email_already_exists_msg"
+msgstr "This email is taken, if you already have an account with this email you can recover.  If not please go back and select a different email address."
+
+msgid "recover_account"
+msgstr "Recover Account"
+
+msgid "back"
+msgstr "back"
+
 msgid "change_email"
 msgstr "Change Email"
 
@@ -62,6 +74,9 @@ msgstr "New Password"
 
 msgid "confirm_new_password"
 msgstr "Confirm New Password"
+
+msgid "already_have_an_account"
+msgstr "Already have an account? "
 
 
 

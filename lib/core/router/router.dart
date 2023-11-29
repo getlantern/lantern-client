@@ -265,8 +265,8 @@ class AppRouter extends $AppRouter {
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute(
-      page: CreatePassword.page,
-      path: '/create_password',
+      page: SignInPassword.page,
+      path: '/sign_in_password',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
@@ -288,6 +288,20 @@ class AppRouter extends $AppRouter {
     CustomRoute(
       page: Verification.page,
       path: '/verification',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: CreateAccountEmail.page,
+      path: '/create_account_email',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: CreateAccountPassword.page,
+      path: '/create_account_password',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

@@ -2,15 +2,15 @@ import 'package:flutter/gestures.dart';
 
 import '../../common/common.dart';
 
-@RoutePage<void>(name: 'CreatePassword')
-class CreatePassword extends StatefulWidget {
-  const CreatePassword({super.key});
+@RoutePage<void>(name: 'SignInPassword')
+class SignInPassword extends StatefulWidget {
+  const SignInPassword({super.key});
 
   @override
-  State<CreatePassword> createState() => _CreatePasswordState();
+  State<SignInPassword> createState() => _SignInPasswordState();
 }
 
-class _CreatePasswordState extends State<CreatePassword> {
+class _SignInPasswordState extends State<SignInPassword> {
   final _passwordFormKey = GlobalKey<FormState>();
   late final _passwordController = CustomTextEditingController(
     formKey: _passwordFormKey,

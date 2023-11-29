@@ -1,21 +1,17 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/gestures.dart';
 
 import '../../common/common.dart';
 
-@RoutePage<void>(name: 'SignIn')
-class SignIn extends StatefulWidget {
-  final bool resetPasswordFlow;
-
-  const SignIn({
-    super.key,
-    this.resetPasswordFlow = false,
-  });
+@RoutePage<void>(name: 'CreateAccountEmail')
+class CreateAccountEmail extends StatefulWidget {
+  const CreateAccountEmail({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<CreateAccountEmail> createState() => _CreateAccountEmailState();
 }
 
-class _SignInState extends State<SignIn> {
+class _CreateAccountEmailState extends State<CreateAccountEmail> {
   final _emailFormKey = GlobalKey<FormState>();
   late final _emailController = CustomTextEditingController(
     formKey: _emailFormKey,
@@ -27,7 +23,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: widget.resetPasswordFlow ? 'reset_password'.i18n : 'sign_in'.i18n,
+      title: 'create_account'.i18n,
       body: _buildBody(context),
     );
   }
@@ -45,9 +41,7 @@ class _SignInState extends State<SignIn> {
               key: _emailFormKey,
               child: CTextField(
                 controller: _emailController,
-                label: widget.resetPasswordFlow
-                    ? "lantern_pro_email".i18n
-                    : "enter_email".i18n,
+                label: "enter_email".i18n,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.emailAddress,
@@ -63,18 +57,28 @@ class _SignInState extends State<SignIn> {
               child: Button(
                 // disabled: _emailController.text.isEmpty ||
                 //     _emailFormKey?.currentState?.validate() == false,
-                text: widget.resetPasswordFlow ? "next".i18n : 'continue'.i18n,
-                onPressed: widget.resetPasswordFlow
-                    ? openVerification
-                    : openCreatePassword,
+                text: 'continue'.i18n,
+                onPressed: () {
+                  emailExistsDialog();
+                },
               ),
             ),
             const SizedBox(height: 24),
-            if (widget.resetPasswordFlow)
-              AppTextButton(
-                text: 'return_to_sign_in'.i18n.toUpperCase(),
-                onPressed: returnToSignIn,
-              )
+            RichText(
+              text: TextSpan(
+                text: 'already_have_an_account'.i18n,
+                style:
+                    tsBody1.copyWith(fontWeight: FontWeight.w400, color: grey5),
+                children: [
+                  TextSpan(
+                    text: "sign_in".i18n.toUpperCase(),
+                    style: tsBody1.copyWith(
+                        fontWeight: FontWeight.w500, color: pink5),
+                    recognizer: TapGestureRecognizer()..onTap = openSignInFlow,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -108,15 +112,15 @@ class _SignInState extends State<SignIn> {
   }
 
   ///Widget methods
-  void openCreatePassword() {
-    context.pushRoute(const SignInPassword());
+
+  void openSignInFlow() {
+    context.pushRoute(SignIn());
   }
 
-  void openVerification() {
-    context.pushRoute(Verification(email: _emailController.text));
-  }
-
-  void returnToSignIn() {
-    context.popRoute();
+  void emailExistsDialog() {
+    showEmailExistsDialog(
+      context: context,
+      recoverTap: () {},
+    );
   }
 }
