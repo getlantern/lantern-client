@@ -32,7 +32,7 @@ class Button extends StatelessWidget {
       height: 56,
       constraints: BoxConstraints(minWidth: width ?? 200.0),
       child: OutlinedButton(
-        onPressed: disabled?null:_handleOnPress,
+        onPressed: disabled ? null : _handleOnPress,
         style: OutlinedButton.styleFrom(
           splashFactory:
               disabled ? NoSplash.splashFactory : InkSplash.splashFactory,
@@ -51,7 +51,11 @@ class Button extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(end: 8.0),
                   child: CAssetImage(
                     path: iconPath!,
-                    color: !secondary ? white : !disabled ? pink4 : grey5,
+                    color: !secondary
+                        ? white
+                        : !disabled
+                            ? pink4
+                            : grey5,
                   ),
                 ),
               Expanded(
@@ -67,6 +71,30 @@ class Button extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class AppTextButton extends StatelessWidget {
+  final String text;
+  void Function()? onPressed;
+
+  AppTextButton({
+    super.key,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        textStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      child: Text(text),
     );
   }
 }

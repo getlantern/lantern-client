@@ -16,6 +16,7 @@ Color yellow6 = HexColor('#957000');
 Color pink1 = HexColor('#FFF4F8');
 Color pink3 = HexColor('#FF4081');
 Color pink4 = HexColor('#DB0A5B');
+Color pink5 = HexColor('#C20850');
 
 // Grey scale
 Color white = HexColor('#FFFFFF');

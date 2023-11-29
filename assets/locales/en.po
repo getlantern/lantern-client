@@ -27,6 +27,16 @@ msgstr "Enter Email"
 msgid "enter_password"
 msgstr "Enter Password"
 
+msgid "forgot_password"
+msgstr "Forgot Password"
+
+msgid "forgot_your_password"
+msgstr "Forgot your password? "
+
+msgid "click_here"
+msgstr "Click here"
+
+
 msgid "new"
 msgstr "New"
 

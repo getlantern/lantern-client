@@ -45,7 +45,7 @@ export 'single_value_subscriber.dart';
 export 'ui/audio.dart';
 export 'ui/base_screen.dart';
 export 'ui/basic_memory_image.dart';
-export 'ui/button.dart';
+export 'ui/app_buttons.dart';
 export 'ui/colors.dart';
 export 'ui/continue_arrow.dart';
 export 'ui/copy_text.dart';
