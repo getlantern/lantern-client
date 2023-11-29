@@ -115,7 +115,7 @@ class _PlayCheckoutState extends State<PlayCheckout>
         context.loaderOverlay.show();
         // Await the result of the payment submission.
         await sessionModel.submitPlayPayment(
-          widget.plan.id, emailController.value.text);
+            widget.plan.id, emailController.value.text);
         // ignore: use_build_context_synchronously
         context.loaderOverlay.hide();
         showSuccessDialog(context, widget.isPro);
