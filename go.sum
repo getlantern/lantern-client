@@ -90,8 +90,6 @@ github.com/anacrolix/chansync v0.3.0 h1:lRu9tbeuw3wl+PhMu/r+JJCRu5ArFXIluOgdF0ao
 github.com/anacrolix/chansync v0.3.0/go.mod h1:DZsatdsdXxD0WiwcGl0nJVwyjCKMDv+knl1q2iBjA2k=
 github.com/anacrolix/confluence v1.12.0 h1:NgrsfhebrJUiZgFfFCqPvV3L23k3kOJdkLXhNhlrnAs=
 github.com/anacrolix/confluence v1.12.0/go.mod h1:u0JTZ8Et0hC6MwSySOeYy11cUC0qGA7ntKvlIjOkfYI=
-github.com/anacrolix/confluence v1.13.0 h1:6LQeTShK77CvJea8xOEuYNNGpqcF4i2l3wtVbuVgRw8=
-github.com/anacrolix/confluence v1.13.0/go.mod h1:UvknPHUeZNryWHnBhnR+Eqiogijc/eYDm3kEQfYTWGc=
 github.com/anacrolix/dht/v2 v2.20.0 h1:eDx9lfE9iCSf5sPK0290GToHURNhEFuUGN8iyvhvJDk=
 github.com/anacrolix/dht/v2 v2.20.0/go.mod h1:SDGC+sEs1pnO2sJGYuhvIis7T8749dDHNfcjtdH4e3g=
 github.com/anacrolix/envpprof v0.0.0-20180404065416-323002cec2fa/go.mod h1:KgHhUaQMc8cC0+cEflSgCFNFbKwi5h54gqtVn8yhP7c=

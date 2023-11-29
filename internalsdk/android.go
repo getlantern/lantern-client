@@ -454,7 +454,7 @@ func run(configDir, locale string,
 	settings Settings, session panickingSession) {
 
 	memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
-		log.Error(err)
+		log.Debugf("Error tracking memory: %v", err)
 	})
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(common.Staging)
