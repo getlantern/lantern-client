@@ -1,7 +1,8 @@
 name: Publish releases
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ atavism/android-legacy ]
 
 permissions:
   contents: read
