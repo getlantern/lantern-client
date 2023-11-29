@@ -103,7 +103,7 @@ jobs:
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GH_TOKEN }}
 
       - name: Activate protoc-gen-dart plugin
         run: |
