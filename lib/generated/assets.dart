@@ -58,6 +58,7 @@ class Assets {
   static const String imagesEmptySearch = 'assets/images/empty_search.svg';
   static const String imagesError = 'assets/images/error.svg';
   static const String imagesErrorOutline = 'assets/images/error_outline.svg';
+  static const String imagesEye = 'assets/images/eye.svg';
   static const String imagesFastForward = 'assets/images/fast_forward.svg';
   static const String imagesFastRewind = 'assets/images/fast_rewind.svg';
   static const String imagesFileDownload = 'assets/images/file_download.svg';

@@ -1,28 +1,24 @@
-import 'package:email_validator/email_validator.dart';
-
 import '../../common/common.dart';
 
-@RoutePage<void>(name: 'SignIn')
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+@RoutePage<void>(name: 'CreatePassword')
+class CreatePassword extends StatefulWidget {
+  const CreatePassword({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<CreatePassword> createState() => _CreatePasswordState();
 }
 
-class _SignInState extends State<SignIn> {
-  final _emailFormKey = GlobalKey<FormState>();
-  late final _emailController = CustomTextEditingController(
-    formKey: _emailFormKey,
-    validator: (value) => EmailValidator.validate(value ?? '')
-        ? null
-        : 'please_enter_a_valid_email_address'.i18n,
+class _CreatePasswordState extends State<CreatePassword> {
+  final _passwordFormKey = GlobalKey<FormState>();
+  late final _passwordController = CustomTextEditingController(
+    formKey: _passwordFormKey,
   );
+  bool obscureText = false;
 
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'sign_in'.i18n,
+      title: 'enter_password'.i18n,
       body: _buildBody(context),
     );
   }
@@ -37,14 +33,19 @@ class _SignInState extends State<SignIn> {
             _buildHeader(),
             const SizedBox(height: 24),
             Form(
-              key: _emailFormKey,
+              key: _passwordFormKey,
               child: CTextField(
-                controller: _emailController,
-                label: "enter_email".i18n,
+                controller: _passwordController,
+                label: "enter_password".i18n,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.emailAddress,
-                prefixIcon: SvgPicture.asset(ImagePaths.email),
+                keyboardType: TextInputType.visiblePassword,
+                obscureText: true,
+                maxLines: 1,
+                prefixIcon: SvgPicture.asset(ImagePaths.lock),
+                // actionIconPath:ImagePaths.eye ,
+                suffixIcon:SvgPicture.asset(ImagePaths.eye),
+                // suffix: SvgPicture.asset(ImagePaths.eye),
                 onChanged: (value) {
                   setState(() {});
                 },
@@ -54,10 +55,10 @@ class _SignInState extends State<SignIn> {
             SizedBox(
               width: double.infinity,
               child: Button(
-                // disabled: _emailController.text.isEmpty ||
-                //     _emailFormKey?.currentState?.validate() == false,
+
+                // disabled: _passwordController.text.isEmpty ||
+                //     _passwordFormKey?.currentState?.validate() == false,
                 text: 'continue'.i18n,
-                onPressed: openCreatePassword,
               ),
             )
           ],
@@ -87,13 +88,8 @@ class _SignInState extends State<SignIn> {
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _emailFormKey.currentState?.dispose();
+    _passwordController.dispose();
+    _passwordFormKey.currentState?.dispose();
     super.dispose();
-  }
-
-  ///Widget methods
-  void openCreatePassword() {
-    context.pushRoute(const CreatePassword());
   }
 }

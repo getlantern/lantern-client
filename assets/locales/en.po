@@ -24,6 +24,9 @@ msgstr "Sign In"
 msgid "enter_email"
 msgstr "Enter Email"
 
+msgid "enter_password"
+msgstr "Enter Password"
+
 msgid "new"
 msgstr "New"
 
