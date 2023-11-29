@@ -109,7 +109,7 @@ class _PlayCheckoutState extends State<PlayCheckout>
   void submitPayment() async {
     try {
       if (emailFieldKey.currentState?.validate() == false) {
-        showError(context, error: 'Email invalid');
+        showError(context, error: 'please_enter_a_valid_email_address'.i18n);
       } else {
         // Show the loader overlay at the beginning.
         context.loaderOverlay.show();
