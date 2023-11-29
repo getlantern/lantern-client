@@ -2,7 +2,9 @@ name: Publish releases
 
 on:
   push:
-    branches: [ android-legacy ]
+    # Pattern matched against refs/tags
+    tags:        
+      - '*'
 
 permissions:
   contents: read
