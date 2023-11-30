@@ -3,8 +3,7 @@ name: BrowserStack CI
 on:
   push:
     branches: [ ios-migrate ]
-  pull_request:
-    branches: [ ios-migrate ]
+
 env:
   GOPRIVATE: github.com/getlantern
 
