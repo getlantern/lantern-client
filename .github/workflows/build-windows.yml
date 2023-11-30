@@ -67,13 +67,6 @@ jobs:
       - name: Pull LFS objects
         run: git lfs pull
 
-      # Install Flutter
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.10.5"
-          channel: "stable"
-      - run: flutter --version
-
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
@@ -95,18 +88,6 @@ jobs:
         run: |
           sudo apt-get install -y file build-essential pkg-config
           sudo apt-get install -y mingw-w64 nsis    
-
-      - name: Setup protoc
-        uses: arduino/setup-protoc@v2
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Activate protoc-gen-dart plugin
-        run: |
-          echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
-          dart pub global activate protoc_plugin
-          mkdir -p "${HOME}/.pub-cache/bin"
-          mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
 
       - name: Build Go shared library
         run: |
@@ -130,6 +111,29 @@ jobs:
         prefix: ${{ inputs.prefix }}
       runs-on: windows-latest
       steps:
+        - uses: actions/checkout@v3
+          with:
+            lfs: true
+
+        # Install Flutter
+        - uses: subosito/flutter-action@v2
+          with:
+            flutter-version: "3.10.5"
+            channel: "stable"
+        - run: flutter --version
+
+        - name: Setup protoc
+          uses: arduino/setup-protoc@v2
+          with:
+            repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Activate protoc-gen-dart plugin
+          run: |
+            echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
+            dart pub global activate protoc_plugin
+            mkdir -p "${HOME}/.pub-cache/bin"
+            mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
+          
         - name: Download the win build output
           uses: actions/download-artifact@v3
           with:
