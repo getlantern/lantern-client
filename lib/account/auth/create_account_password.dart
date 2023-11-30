@@ -1,6 +1,4 @@
 import 'package:flutter/gestures.dart';
-import 'package:lantern/account/auth/sign_in.dart';
-
 import '../../common/common.dart';
 
 @RoutePage<void>(name: 'CreateAccountPassword')

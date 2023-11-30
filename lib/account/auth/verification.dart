@@ -23,7 +23,7 @@ class _VerificationState extends State<Verification> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: widget.authFlow == AuthFlow.createAccount
+      title: widget.authFlow.isCreateAccount
           ? 'confirm_email'
           : 'reset_password'.i18n,
       body: _buildBody(context),

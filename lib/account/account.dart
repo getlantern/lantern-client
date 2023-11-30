@@ -9,10 +9,10 @@ class AccountMenu extends StatelessWidget {
       await context.pushRoute(AuthorizePro());
 
   void inviteFriends(BuildContext context) async =>
-      await context.pushRoute(InviteFriends());
+      await context.pushRoute(const InviteFriends());
 
   void openDesktopVersion(BuildContext context) async =>
-      await context.pushRoute(LanternDesktop());
+      await context.pushRoute(const LanternDesktop());
 
   void openSettings(BuildContext context) => context.pushRoute(Settings());
 
@@ -20,7 +20,7 @@ class AccountMenu extends StatelessWidget {
     context.pushRoute(const Support());
   }
 
-  void openSignIn(BuildContext context) => context.pushRoute( CreateAccountEmail());
+  void openSignIn(BuildContext context) => context.pushRoute(SignIn());
 
   void upgradeToLanternPro(BuildContext context) async =>
       await context.pushRoute(const PlansPage());
@@ -80,6 +80,11 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> proItems(BuildContext context) {
     return [
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.signIn,
+        content: 'sign_in'.i18n,
+        onTap: () => openSignIn(context),
+      ),
       messagingModel.getOnBoardingStatus(
         (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus((BuildContext context,
@@ -117,11 +122,6 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> commonItems(BuildContext context) {
     return [
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.signIn,
-        content: 'sign_in'.i18n,
-        onTap: () => openSignIn(context),
-      ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.desktop,
         content: 'desktop_version'.i18n,
