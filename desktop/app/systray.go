@@ -12,7 +12,7 @@ import (
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/systray"
 
-	"github.com/getlantern/lantern-desktop/icons"
+	"github.com/getlantern/lantern-client/desktop/icons"
 )
 
 var menu struct {

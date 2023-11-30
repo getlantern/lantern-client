@@ -15,7 +15,7 @@ import (
 	"github.com/getlantern/flashlight/v7/util"
 	"github.com/getlantern/golog"
 
-	"github.com/getlantern/lantern-desktop/analytics/engine"
+	"github.com/getlantern/lantern-client/desktop/analytics/engine"
 )
 
 var (
