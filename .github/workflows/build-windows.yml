@@ -74,7 +74,13 @@ jobs:
 
       - name: Granting private modules access
         run: |
-          git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Repo access
+        run: |
+          mkdir /tmp/cache
+          echo "machine github.com login ${{ secrets.GH_TOKEN }} password x-oauth-basic" > /tmp/cache/.netrc
+          chmod 600 /tmp/cache/.netrc
 
       - name: Setup Sentry CLI
         uses: mathieu-bour/setup-sentry-cli@v1
@@ -133,7 +139,7 @@ jobs:
             dart pub global activate protoc_plugin
             mkdir -p "${HOME}/.pub-cache/bin"
             mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
-          
+
         - name: Download the win build output
           uses: actions/download-artifact@v3
           with:
