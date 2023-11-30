@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
             if (developmentMode) {
-              Logger.level = Level.verbose;
+              Logger.level = Level.all;
             } else {
               Logger.level = Level.error;
             }
@@ -233,7 +233,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                   bottomNavigationBar: CustomBottomBar(
                     selectedTab: tab,
                     isDevelop: developmentMode,
-                    isTesting: isTesting,
+                    isTesting: kDebugMode,
                   ),
                 );
               }),

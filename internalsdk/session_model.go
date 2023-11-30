@@ -643,7 +643,7 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 			return err
 		}
 	}
-	if userDetail.UserStatus != "" && userDetail.UserStatus == "active" && userDetail.UserLevel == "pro" {
+	if userDetail.UserLevel == "pro" {
 		setProUser(m, true)
 	} else {
 		setProUser(m, false)
