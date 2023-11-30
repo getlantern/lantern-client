@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:clever_ads_solutions/CAS.dart';
 import 'package:clever_ads_solutions/public/AdCallback.dart';
 import 'package:clever_ads_solutions/public/AdImpression.dart';
@@ -8,11 +6,10 @@ import 'package:clever_ads_solutions/public/Audience.dart';
 import 'package:clever_ads_solutions/public/InitConfig.dart';
 import 'package:clever_ads_solutions/public/InitializationListener.dart';
 import 'package:clever_ads_solutions/public/MediationManager.dart';
-import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:logger/logger.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
+import 'package:logger/logger.dart';
 
 enum AdType { Google, CAS }
 
@@ -79,6 +76,16 @@ class AdHelper {
     }
   }
 
+  Future<bool> isAdsReadyToShow() async {
+    if (_currentAdType == AdType.Google) {
+      return _interstitialAd != null;
+    } else if (_currentAdType == AdType.CAS) {
+      return (casMediationManager != null &&
+          (await casMediationManager!.isInterstitialReady()));
+    }
+    return false;
+  }
+
   Future<void> _decideAndShowAds() async {
     if (_currentAdType == AdType.Google && _interstitialAd != null) {
       await _showInterstitialAd();
@@ -95,7 +102,8 @@ class AdHelper {
 
   Future<void> _loadInterstitialAd() async {
     //To avoid calling multiple ads request repeatedly
-    assert(interstitialAdUnitId!="","interstitialAdUnitId should not be null or empty");
+    assert(interstitialAdUnitId != "",
+        "interstitialAdUnitId should not be null or empty");
     if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
       logger.i('[Ads Manager] Request: Making Google Ad request.');
       await InterstitialAd.load(
@@ -126,12 +134,14 @@ class AdHelper {
             );
             _interstitialAd = ad;
             logger.i('[Ads Manager] to loaded $ad');
-            PlausibleUtils.trackUserAction('Interstitial ad loaded', googleAttributes);
+            PlausibleUtils.trackUserAction(
+                'Interstitial ad loaded', googleAttributes);
           },
           onAdFailedToLoad: (err) {
             _failedLoadAttempts++; // increment the count on failure
             logger.i('[Ads Manager] failed to load $err');
-            PlausibleUtils.trackUserAction('Interstitial ad failed to load', googleAttributes);
+            PlausibleUtils.trackUserAction(
+                'Interstitial ad failed to load', googleAttributes);
             _postShowingAds();
           },
         ),
