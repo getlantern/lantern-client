@@ -190,6 +190,7 @@ class SessionModel extends Model {
     return ffiValueBuilder<String>(
       'emailAddress',
       ffiEmailAddress,
+      defaultValue: '',
       builder: builder,
     );
   }
