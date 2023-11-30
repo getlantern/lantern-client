@@ -97,8 +97,7 @@ jobs:
 
       - name: Build Go shared library
         run: |
-          cd desktop
-          GOOS=windows GOARCH=amd64 go build -buildmode=c-shared -o liblantern.dylib lib.go
+          GOOS=windows GOARCH=amd64 go build -buildmode=c-shared -o desktop/liblantern.dylib desktop/lib.go
 
       - uses: actions/upload-artifact@v3
         with:
