@@ -41,7 +41,7 @@ func Start() *C.char {
 
 	cdir := configDir(&flags)
 	settings = loadSettings(cdir)
-	proClient = pro.New()
+	proClient = pro.New(settings)
 	a = app.NewApp(flags, cdir, settings)
 	log.Debug("Running headless")
 	go func() {
@@ -103,8 +103,7 @@ func SetSelectTab(ttab *C.char) {
 
 //export Plans
 func Plans() *C.char {
-	deviceID, userID, token := userHeaders()
-	resp, err := proClient.Plans(deviceID, userID, token)
+	resp, err := proClient.Plans()
 	if err != nil {
 		return sendError(err)
 	}
@@ -114,8 +113,7 @@ func Plans() *C.char {
 
 //export UserData
 func UserData() *C.char {
-	deviceID, userID, token := userHeaders()
-	resp, err := proClient.UserData(deviceID, userID, token)
+	resp, err := proClient.UserData()
 	if err != nil {
 		return sendError(err)
 	}

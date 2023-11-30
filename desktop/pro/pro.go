@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httputil"
+	"strconv"
 
 	"github.com/getlantern/golog"
 	"github.com/getlantern/flashlight/v7/pro"
+	"github.com/getlantern/lantern-client/desktop/app"
 )
 
 const (
@@ -21,22 +23,31 @@ var (
 
 type ProClient struct {
 	*http.Client
+	settings *app.Settings
 }
 
-func New() *ProClient {
+func New(settings *app.Settings) *ProClient {
 	return &ProClient{
 		Client: pro.GetHTTPClient(),
+		settings: settings,
 	}
 }
 
-func setHeaders(req *http.Request, deviceId, userId, token string) {
+func (pc *ProClient) setHeaders(req *http.Request) {
+	deviceID, userID, token := pc.userHeaders()
 	// Add headers
-	req.Header.Set("X-Lantern-Device-Id", deviceId)
-	req.Header.Set("X-Lantern-User-Id", userId)
+	req.Header.Set("X-Lantern-Device-Id", deviceID)
+	req.Header.Set("X-Lantern-User-Id", userID)
 	req.Header.Set("X-Lantern-Pro-Token", token)
 }
 
-func newRequest(method, url, deviceId, userId, token string) (*http.Request, error) {
+func (pc *ProClient) userHeaders() (string, string, string) {
+	uID, deviceID, token := pc.settings.GetUserID(), pc.settings.GetDeviceID(), pc.settings.GetToken()
+	userID := strconv.FormatInt(uID, 10)
+	return deviceID, userID, token
+}
+
+func (pc *ProClient) newRequest(method, url string) (*http.Request, error) {
 	// Create a new request
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
@@ -44,13 +55,13 @@ func newRequest(method, url, deviceId, userId, token string) (*http.Request, err
 		return nil, err
 	}
 
-	setHeaders(req, deviceId, userId, token)
+	pc.setHeaders(req)
 	return req, nil
 }
 
-func (pc *ProClient) Plans(deviceId, userId, token string) (*PlansResponse, error) {
+func (pc *ProClient) Plans() (*PlansResponse, error) {
 	// Create a new request
-	req, err := newRequest("GET", plansUrl, deviceId, userId, token)
+	req, err := pc.newRequest("GET", plansUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +76,7 @@ func (pc *ProClient) Plans(deviceId, userId, token string) (*PlansResponse, erro
 
    	respDump, err := httputil.DumpResponse(resp, true)
     if err != nil {
-        log.Fatal(err)
+        return nil, err
     }
     log.Debugf("RESPONSE:%s", string(respDump))
 
@@ -80,9 +91,9 @@ func (pc *ProClient) Plans(deviceId, userId, token string) (*PlansResponse, erro
 	return &plansResponse, nil
 }
 
-func (pc *ProClient) UserData(deviceId, userId, token string) (*UserDetailsResponse, error) {
+func (pc *ProClient) UserData() (*UserDetailsResponse, error) {
 	// Create a new request
-	req, err := newRequest("GET", userDetailsUrl, deviceId, userId, token)
+	req, err := pc.newRequest("GET", userDetailsUrl)
 	if err != nil {
 		return nil, err
 	}
