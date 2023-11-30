@@ -2,6 +2,9 @@ import 'package:email_validator/email_validator.dart';
 
 import '../../common/common.dart';
 
+//Enum this is mange current flow of auth
+enum AuthFlow { signIn, reset, createAccount }
+
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
   final bool resetPasswordFlow;

@@ -34,7 +34,9 @@ class ImagePaths {
   static const credit_card = 'assets/images/credit_card.svg';
   static const calendar = 'assets/images/calendar.svg';
   static const lock = 'assets/images/lock.svg';
+  static const lockFiled = 'assets/images/lock_filled.svg';
   static const eye = 'assets/images/eye.svg';
+  static const eyeCross = 'assets/images/eye_cross.svg';
   static const split_tunneling = 'assets/images/split_tunneling.svg';
   static const forum = 'assets/images/forum.svg';
   static const webMoney = 'assets/images/webmoney.svg';

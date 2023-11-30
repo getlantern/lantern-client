@@ -12,8 +12,6 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
 
-  final termsOfService = 'https://s3.amazonaws.com/lantern/Lantern-TOS.pdf';
-  final privacyPolicy = 'https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf';
 
   final packageInfo = PackageInfo.fromPlatform();
 

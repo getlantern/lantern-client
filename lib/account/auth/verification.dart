@@ -1,12 +1,16 @@
+import 'package:lantern/account/auth/sign_in.dart';
+
 import '../../common/common.dart';
 
 @RoutePage<void>(name: 'Verification')
 class Verification extends StatefulWidget {
   final String email;
+  final AuthFlow authFlow;
 
   const Verification({
     super.key,
     required this.email,
+    this.authFlow = AuthFlow.reset,
   });
 
   @override
@@ -19,7 +23,9 @@ class _VerificationState extends State<Verification> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'reset_password'.i18n,
+      title: widget.authFlow == AuthFlow.createAccount
+          ? 'confirm_email'
+          : 'reset_password'.i18n,
       body: _buildBody(context),
     );
   }
@@ -94,7 +100,17 @@ class _VerificationState extends State<Verification> {
   void resendConfirmationCode() {}
 
   void onDone(String code) {
-    openResetPassword();
+    switch (widget.authFlow) {
+      case AuthFlow.createAccount:
+        context.router.popUntilRoot();
+        break;
+      case AuthFlow.reset:
+        openResetPassword();
+        break;
+      case AuthFlow.signIn:
+        context.router.popUntilRoot();
+        break;
+    }
   }
 
   void openResetPassword() {

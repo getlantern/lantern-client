@@ -58,9 +58,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
                 // disabled: _emailController.text.isEmpty ||
                 //     _emailFormKey?.currentState?.validate() == false,
                 text: 'continue'.i18n,
-                onPressed: () {
-                  emailExistsDialog();
-                },
+                onPressed: openPassword,
               ),
             ),
             const SizedBox(height: 24),
@@ -115,6 +113,10 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
 
   void openSignInFlow() {
     context.pushRoute(SignIn());
+  }
+
+  void openPassword() {
+    context.pushRoute(const CreateAccountPassword());
   }
 
   void emailExistsDialog() {
