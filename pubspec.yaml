@@ -96,8 +96,6 @@ dependencies:
   share_plus: ^7.1.0
   flutter_inappwebview: ^6.0.0-beta.30
 
-
-
   # Notifications & Logging
   flutter_local_notifications: ^15.1.0+1
   logger: ^2.0.1
