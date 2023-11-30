@@ -134,10 +134,7 @@ jobs:
 
         - name: Activate protoc-gen-dart plugin
           run: |
-            echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
             dart pub global activate protoc_plugin
-            mkdir -p "${HOME}/.pub-cache/bin"
-            mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
 
         - name: Download the win build output
           uses: actions/download-artifact@v3
