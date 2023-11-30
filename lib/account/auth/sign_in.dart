@@ -2,14 +2,13 @@ import 'package:email_validator/email_validator.dart';
 
 import '../../common/common.dart';
 
-
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
   final AuthFlow authFlow;
 
   const SignIn({
     super.key,
-     this.authFlow = AuthFlow.signIn,
+    this.authFlow = AuthFlow.signIn,
   });
 
   @override
@@ -28,9 +27,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: widget.authFlow.isReset
-          ? 'reset_password'.i18n
-          : 'sign_in'.i18n,
+      title: widget.authFlow.isReset ? 'reset_password'.i18n : 'sign_in'.i18n,
       body: _buildBody(context),
     );
   }
@@ -64,8 +61,8 @@ class _SignInState extends State<SignIn> {
             SizedBox(
               width: double.infinity,
               child: Button(
-                // disabled: _emailController.text.isEmpty ||
-                //     _emailFormKey?.currentState?.validate() == false,
+                disabled: _emailController.text.isEmpty ||
+                    _emailFormKey?.currentState?.validate() == false,
                 text: widget.authFlow.isReset ? "next".i18n : 'continue'.i18n,
                 onPressed: widget.authFlow.isReset
                     ? openVerification

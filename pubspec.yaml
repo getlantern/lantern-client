@@ -83,7 +83,8 @@ dependencies:
 
   # Timer & Overlay
   stop_watch_timer: ^3.0.1
-  loader_overlay: ^2.3.0
+  loader_overlay: ^2.3.2
+  animated_loading_border: ^0.0.1
 
   # Keyboard & Color utilities
   flutter_keyboard_visibility: ^5.4.1
