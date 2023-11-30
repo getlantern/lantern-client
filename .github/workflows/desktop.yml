@@ -115,21 +115,21 @@ jobs:
           path: |
             desktop/liblantern.dylib
 
-  build-windows:
-    needs: build-desktop
-    permissions:
-      contents: "read"
-      id-token: "write"
-    env:
-      version: ${{ inputs.version }}
-      prefix: ${{ inputs.prefix }}
-    runs-on: windows-latest
-    steps:
-      - name: Download the win build output
-        uses: actions/download-artifact@v3
-        with:
-          name: libgo-windows-build
+    build-windows:
+      needs: build-desktop
+      permissions:
+        contents: "read"
+        id-token: "write"
+      env:
+        version: ${{ inputs.version }}
+        prefix: ${{ inputs.prefix }}
+      runs-on: windows-latest
+      steps:
+        - name: Download the win build output
+          uses: actions/download-artifact@v3
+          with:
+            name: libgo-windows-build
 
-      - name: Build Flutter app
-        run: flutter build windows
+        - name: Build Flutter app
+          run: flutter build windows
 
