@@ -2,6 +2,7 @@ import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/ffi.dart';
 import 'catcher_setup.dart';
 
 Future<void> main() async {
@@ -30,6 +31,11 @@ Future<void> main() async {
   //       ? 'https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353'
   //       : 'https://c14296fdf5a6be272e1ecbdb7cb23f76@o75725.ingest.sentry.io/4506081382694912';
   // }, appRunner: () => setupCatcherAndRun(LanternApp()));
+
+
+  if (Platform.isMacOS || Platform.isWindows) {
+    loadLibrary();
+  }
 
   setupCatcherAndRun(LanternApp());
 }

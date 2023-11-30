@@ -35,15 +35,27 @@ final SysProxy sysProxyOff =
 final SelectTab setSelectTab = 
     dylib.lookup<ffi.NativeFunction<selecttab_func>>('SetSelectTab').asFunction();
 
-final SelectedTab selectedTab = 
+final SelectedTab ffiSelectedTab =
     dylib.lookup<ffi.NativeFunction<selectedtab_func>>('SelectedTab').asFunction();
 
 final ProFunc ffiPlans = dylib.lookup<ffi.NativeFunction<pro_func>>('Plans').asFunction();
 final ProFunc getUserData = dylib.lookup<ffi.NativeFunction<pro_func>>('UserData').asFunction();
 final ProFunc ffiEmailAddress = dylib.lookup<ffi.NativeFunction<pro_func>>('EmailAddress').asFunction();
+final ProFunc ffiReferral = dylib.lookup<ffi.NativeFunction<pro_func>>('Referral').asFunction();
 final ProFunc ffiReplicaAddr = dylib.lookup<ffi.NativeFunction<pro_func>>('ReplicaAddr').asFunction();
 final ProFunc ffiChatEnabled = dylib.lookup<ffi.NativeFunction<pro_func>>('ChatEnabled').asFunction();
+final ProFunc ffiCountry = dylib.lookup<ffi.NativeFunction<pro_func>>('Country').asFunction();
+final ProFunc ffiLang = dylib.lookup<ffi.NativeFunction<pro_func>>('Lang').asFunction();
+final ProFunc ffiAcceptedTermsVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('AcceptedTermsVersion').asFunction();
 final ProFunc ffiProUser = dylib.lookup<ffi.NativeFunction<pro_func>>('ProUser').asFunction();
+final ProFunc ffiDevelopmentMode = dylib.lookup<ffi.NativeFunction<pro_func>>('DevelopmentMode').asFunction();
+final ProFunc ffiSplitTunneling = dylib.lookup<ffi.NativeFunction<pro_func>>('SplitTunneling').asFunction();
+final ProFunc ffiPlayVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('PlayVersion').asFunction();
+final ProFunc ffiStoreVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('StoreVersion').asFunction();
+final ProFunc ffiHasSucceedingProxy = dylib.lookup<ffi.NativeFunction<pro_func>>('HasSucceedingProxy').asFunction();
+final ProFunc ffiOnBoardingStatus = dylib.lookup<ffi.NativeFunction<pro_func>>('OnBoardingStatus').asFunction();
+final ProFunc ffiSdkVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('SdkVersion').asFunction();
+final ProFunc ffiVpnStatus = dylib.lookup<ffi.NativeFunction<pro_func>>('VpnStatus').asFunction();
 final ProFunc ffiEmailExists = dylib.lookup<ffi.NativeFunction<pro_func>>('EmailExists').asFunction();
 
 void loadLibrary() {

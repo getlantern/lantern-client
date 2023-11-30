@@ -247,7 +247,7 @@ class CustomBottomBar extends StatelessWidget {
           label: 'Account'.i18n,
           icon: ImagePaths.account,
           addBadge: (child) {
-            if (hasBeenOnboarded != true) {
+            if (hasBeenOnboarded == true) {
               return child;
             }
 

@@ -17,8 +17,10 @@ abstract class Model {
   final Map<String, FfiListNotifier> _ffiListNotifierCache = HashMap();
 
   Model(String name) {
-    methodChannel = MethodChannel('${name}_method_channel');
-    _updatesChannel = ModelEventChannel('${name}_event_channel');
+    if (Platform.isAndroid) {
+      methodChannel = MethodChannel('${name}_method_channel');
+      _updatesChannel = ModelEventChannel('${name}_event_channel');
+    }
   }
 
   Future<T> get<T>(String path) async {
@@ -93,7 +95,7 @@ abstract class Model {
       T Function(Uint8List serialized)? deserialize,      
   }) {
     var result =
-        _ffiValueNotifierCache[path] as FfiValueNotifier<T>?;
+        _ffiValueNotifierCache[path] as FfiValueNotifier<T?>?;
     if (result == null) {
       result = FfiValueNotifier(
         ffiFunction,

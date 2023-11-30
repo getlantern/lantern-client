@@ -15,11 +15,14 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
     bool details = false,
     T Function(Uint8List serialized)? deserialize,
   }) : super(defaultValue, removeFromCache) {
-    if (defaultValue is String?) {
+    if (defaultValue is int?) {
+      value = int.parse(ffiFunction().toDartString()) as T?;
+    } else if (defaultValue is String) {
       value = ffiFunction().toDartString() as T?;
     } else {
       value = ffiFunction().toDartString().parseBool() as T?;
     }
+    cancel = () => {};
   }
 }
 

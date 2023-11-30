@@ -57,7 +57,7 @@ class CustomBottomBarItem extends StatelessWidget {
                 } else {
                   final tab = name.toNativeUtf8();
                   setSelectTab(tab);
-                  context.pushRoute(DesktopHome());
+                  context.pushRoute(Home());
                 }
               }),
               child: Container(

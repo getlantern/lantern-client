@@ -30,13 +30,6 @@ class PlanCard extends StatelessWidget {
                 .submitGooglePlay(planName)
                 .onError((error, stackTrace) {
               // on failure
-              CDialog.showError(
-                context,
-                error: e,
-                stackTrace: stackTrace,
-                description:
-                    (error as PlatformException).message ?? error.toString(),
-              );
             });
           } else {
             // * Proceed to our own Checkout

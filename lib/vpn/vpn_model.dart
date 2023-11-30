@@ -1,4 +1,5 @@
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/common/common_desktop.dart';
 
 final vpnModel = VpnModel();
 
@@ -12,8 +13,16 @@ class VpnModel extends Model {
   }
 
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      '/vpn_status',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        '/vpn_status',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
+      'vpnStatus',
+      defaultValue: '',
+      ffiVpnStatus,
       builder: builder,
     );
   }

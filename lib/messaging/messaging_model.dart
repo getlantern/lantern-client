@@ -1,5 +1,6 @@
 // import 'calls/signaling.dart';
 import 'messaging.dart';
+import 'package:lantern/common/common_desktop.dart';
 
 final messagingModel = MessagingModel();
 
@@ -19,21 +20,22 @@ class MessagingModel extends Model {
     );
 
     // signaling = Signaling(methodChannel);
-
-    methodChannel.setMethodCallHandler((call) async {
-      switch (call.method) {
-        // case 'onSignal':
-        //   var args = call.arguments as Map;
-        //   signaling.onMessage(
-        //     args['senderId'],
-        //     args['content'],
-        //     args['acceptedCall'],
-        //   );
-        //   break;
-        default:
-          break;
-      }
-    });
+    if (Platform.isAndroid) {
+      methodChannel.setMethodCallHandler((call) async {
+        switch (call.method) {
+          // case 'onSignal':
+          //   var args = call.arguments as Map;
+          //   signaling.onMessage(
+          //     args['senderId'],
+          //     args['content'],
+          //     args['acceptedCall'],
+          //   );
+          //   break;
+          default:
+            break;
+        }
+      });
+    }
   }
 
   /*
@@ -510,9 +512,17 @@ class MessagingModel extends Model {
   Widget getOnBoardingStatus(ValueWidgetBuilder<bool?> builder) {
     // Note - we use null as a placeholder for "unknown" to indicate when we
     // haven't yet read the actual onboarding status from the back-end
-    return subscribedSingleValueBuilder<bool?>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool?>(
+        'onBoardingStatus',
+        defaultValue: null,
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool?>(
       'onBoardingStatus',
-      defaultValue: null,
+      defaultValue: false,
+      ffiOnBoardingStatus,
       builder: builder,
     );
   }
@@ -522,11 +532,19 @@ class MessagingModel extends Model {
   }
 
   Widget getCopiedRecoveryStatus(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
-      'copiedRecoveryStatus',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>(
+        'copiedRecoveryStatus',
+        defaultValue: false,
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool>(
+      'onBoardingStatus',
       defaultValue: false,
+      ffiOnBoardingStatus,
       builder: builder,
-    );
+    );    
   }
 
   Future<void> saveNotificationsTS<T>() async {

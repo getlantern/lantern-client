@@ -2,6 +2,7 @@ import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/account/privacy_disclosure.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/chats.dart';
 import 'package:lantern/messaging/onboarding/welcome.dart';
@@ -143,10 +144,11 @@ class _HomePageState extends State<HomePage> {
                   defaultValue: 'false',
                 ).toLowerCase() ==
                     'true';
+                final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
                 return Scaffold(
-                  body: buildBody(selectedTab, isOnboarded),
+                  body: buildBody(tab, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
-                    selectedTab: selectedTab,
+                    selectedTab: tab,
                     isDevelop: developmentMode,
                     isTesting: isTesting,
                   ),

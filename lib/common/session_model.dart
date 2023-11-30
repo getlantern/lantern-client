@@ -19,34 +19,58 @@ class SessionModel extends Model {
   late final EventManager eventManager;
 
   SessionModel() : super('session') {
-    eventManager = EventManager('lantern_event_channel');
-    eventManager.subscribe(Event.All, (eventType, map) {
-      switch (eventType) {
-        case Event.NoNetworkAvailable:
-          networkAvailable.value = false;
-          break;
-        case Event.NetworkAvailable:
-          networkAvailable.value = true;
-          break;
-        default:
-          break;
-      }
-    });
+    if (Platform.isAndroid) {
+      eventManager = EventManager('lantern_event_channel');
+      eventManager.subscribe(Event.All, (eventType, map) {
+        switch (eventType) {
+          case Event.NoNetworkAvailable:
+            networkAvailable.value = false;
+            break;
+          case Event.NetworkAvailable:
+            networkAvailable.value = true;
+            break;
+          default:
+            break;
+        }
+      });
 
-    isStoreVersion = singleValueNotifier(
-      'storeVersion',
-      false,
-    );
-    isPlayVersion = singleValueNotifier(
-      'playVersion',
-      false,
-    );
-    /*Note
-    * Make proxyAvailable default value to true on IOS it take some to get data from go side
-    * So show banner only if proxyAvailable is false
-    */
-    proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
-    country = singleValueNotifier('geo_country_code', 'US');
+
+      isStoreVersion = singleValueNotifier(
+        'storeVersion',
+        false,
+      );
+      isPlayVersion = singleValueNotifier(
+        'playVersion',
+        false,
+      );
+      /*Note
+      * Make proxyAvailable default value to true on IOS it take some to get data from go side
+      * So show banner only if proxyAvailable is false
+      */
+      proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
+      country = singleValueNotifier('geo_country_code', 'US');
+    } else {
+      country = ffiValueNotifier(
+        ffiLang,
+        'lang',
+        'US'
+      );
+      isPlayVersion = ffiValueNotifier(
+        ffiPlayVersion,
+        'isPlayVersion',
+        false,
+      );
+      isStoreVersion = ffiValueNotifier(
+        ffiStoreVersion,
+        'isStoreVersion',
+        false,
+      );
+      proxyAvailable = ffiValueNotifier(
+        ffiHasSucceedingProxy,
+        'hasSucceedingProxy',
+        false,
+      );
+    }
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
@@ -68,8 +92,16 @@ class SessionModel extends Model {
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>(
+        'developmentMode',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool>(
       'developmentMode',
+      defaultValue: false,
+      ffiDevelopmentMode,
       builder: builder,
     );
   }
@@ -94,8 +126,16 @@ class SessionModel extends Model {
   }
 
   Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('accepted_terms_version',
-        builder: builder, defaultValue: 0);
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<int>('accepted_terms_version',
+          builder: builder, defaultValue: 0);
+    }
+    return ffiValueBuilder<int>(
+      'accepted_terms_version',
+      defaultValue: 0,
+      ffiAcceptedTermsVersion,
+      builder: builder,
+    );
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
@@ -129,7 +169,15 @@ class SessionModel extends Model {
   }
 
   Widget language(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>('lang', builder: builder);
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>('lang', builder: builder);
+    }
+    return ffiValueBuilder<String>(
+      'lang',
+      defaultValue: 'en',
+      ffiLang,
+      builder: builder,
+    );
   }
 
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
@@ -154,8 +202,16 @@ class SessionModel extends Model {
   }
 
   Widget referralCode(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'referral',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       'referral',
+      ffiReferral,
+      defaultValue: '',
       builder: builder,
     );
   }
@@ -243,8 +299,16 @@ class SessionModel extends Model {
   }
 
   Widget selectedTab(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      '/selectedTab',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        '/selectedTab',
+        defaultValue: TAB_VPN,
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
+      'selectedTab',
+      ffiSelectedTab,
       defaultValue: TAB_VPN,
       builder: builder,
     );
@@ -261,14 +325,23 @@ class SessionModel extends Model {
     return ffiValueBuilder<String>(
       'replicaAddr',
       ffiReplicaAddr,
+      defaultValue: '',
       builder: builder,
     );
   }
 
   Widget countryCode(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      'geo_country_code',
-      defaultValue: '',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'geo_country_code',
+        defaultValue: '',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
+      'lang',
+      defaultValue: 'US',
+      ffiLang,
       builder: builder,
     );
   }
@@ -298,9 +371,17 @@ class SessionModel extends Model {
   }
 
   Widget sdkVersion(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'sdkVersion',
+        defaultValue: 'unknown',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       'sdkVersion',
       defaultValue: 'unknown',
+      ffiSdkVersion,
       builder: builder,
     );
   }
@@ -498,8 +579,16 @@ class SessionModel extends Model {
   }
 
   Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
-      '/splitTunneling',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>(
+        '/splitTunneling',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool>(
+      'splitTunneling',
+      ffiSplitTunneling,
+      defaultValue: false,
       builder: builder,
     );
   }

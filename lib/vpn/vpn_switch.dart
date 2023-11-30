@@ -1,5 +1,5 @@
 import 'package:lantern/vpn/vpn.dart';
-import 'package:lantern/desktop/ffi.dart';
+import 'package:lantern/ffi.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});

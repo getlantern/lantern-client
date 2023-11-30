@@ -11,7 +11,7 @@ class AppRouter extends $AppRouter {
   RouteType get defaultRouteType => const RouteType.adaptive();
   @override
   final List<AutoRoute> routes = [
-    AutoRoute(path: '/', page: Platform.isAndroid ? Home.page : DesktopHome.page),
+    AutoRoute(path: '/', page: Home.page),
     CustomRoute(
         page: FullScreenDialogPage.page,
         path: '/fullScreenDialogPage',

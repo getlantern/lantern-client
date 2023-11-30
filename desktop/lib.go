@@ -128,9 +128,59 @@ func EmailAddress() *C.char {
 	return C.CString("")
 }
 
+//export Referral
+func Referral() *C.char {
+	return C.CString("")
+}
+
 //export ChatEnabled
 func ChatEnabled() *C.char {
 	return C.CString("false")
+}
+
+//export PlayVersion
+func PlayVersion() *C.char {
+	return C.CString("false")
+}
+
+//export StoreVersion
+func StoreVersion() *C.char {
+	return C.CString("false")
+}
+
+//export Lang
+func Lang() *C.char {
+	return C.CString("en")
+}
+
+//export Country
+func Country() *C.char {
+	return C.CString("US")
+}
+
+//export SdkVersion
+func SdkVersion() *C.char {
+	return C.CString("1.0.0")
+}
+
+//export VpnStatus
+func VpnStatus() *C.char {
+	return C.CString("disconnected")
+}
+
+//export HasSucceedingProxy
+func HasSucceedingProxy() *C.char {
+	return C.CString("true")
+}
+
+//export OnBoardingStatus
+func OnBoardingStatus() *C.char {
+	return C.CString("true")
+}
+
+//export AcceptedTermsVersion
+func AcceptedTermsVersion() *C.char {
+	return C.CString("0")
 }
 
 //export ProUser
@@ -138,6 +188,16 @@ func ProUser() *C.char {
 	if isProUser, ok := a.IsProUser(); isProUser && ok {
 		return C.CString("true")
 	}
+	return C.CString("false")
+}
+
+//export DevelopmentMode
+func DevelopmentMode() *C.char {
+	return C.CString("false")
+}
+
+//export SplitTunneling
+func SplitTunneling() *C.char {
 	return C.CString("false")
 }
 
