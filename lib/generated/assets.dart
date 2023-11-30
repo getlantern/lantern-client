@@ -59,6 +59,7 @@ class Assets {
   static const String imagesError = 'assets/images/error.svg';
   static const String imagesErrorOutline = 'assets/images/error_outline.svg';
   static const String imagesEye = 'assets/images/eye.svg';
+  static const String imagesEyeCross = 'assets/images/eye_cross.svg';
   static const String imagesFastForward = 'assets/images/fast_forward.svg';
   static const String imagesFastRewind = 'assets/images/fast_rewind.svg';
   static const String imagesFileDownload = 'assets/images/file_download.svg';
@@ -85,6 +86,7 @@ class Assets {
   static const String imagesLocationOn = 'assets/images/location_on.svg';
   static const String imagesLock = 'assets/images/lock.svg';
   static const String imagesLockClock = 'assets/images/lock_clock.svg';
+  static const String imagesLockFilled = 'assets/images/lock_filled.svg';
   static const String imagesLockOutline = 'assets/images/lock_outline.svg';
   static const String imagesMastercard = 'assets/images/mastercard.svg';
   static const String imagesMessages = 'assets/images/messages.svg';

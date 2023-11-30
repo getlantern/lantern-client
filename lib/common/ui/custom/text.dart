@@ -104,6 +104,7 @@ class CTextStyle extends TextStyle {
   final double? minFontSize;
   final double lineHeight;
 
+
   CTextStyle({
     bool inherit = true,
     Color? color,

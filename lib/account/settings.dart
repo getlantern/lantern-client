@@ -14,8 +14,6 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
 
-  final termsOfService = 'https://s3.amazonaws.com/lantern/Lantern-TOS.pdf';
-  final privacyPolicy = 'https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf';
 
   final packageInfo = PackageInfo.fromPlatform();
 

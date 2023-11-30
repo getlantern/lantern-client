@@ -333,3 +333,54 @@ class CustomTextEditingController extends TextEditingController {
     formKey.currentState?.validate();
   }
 }
+
+class CPasswordTextFiled extends StatefulWidget {
+  final GlobalKey<FormState> passwordFormKey;
+  final CustomTextEditingController passwordCustomTextEditingController;
+  final String label;
+
+  const CPasswordTextFiled({
+    super.key,
+    required this.label,
+    required this.passwordFormKey,
+    required this.passwordCustomTextEditingController,
+  });
+
+  @override
+  State<CPasswordTextFiled> createState() => _CPasswordTextFiledState();
+}
+
+class _CPasswordTextFiledState extends State<CPasswordTextFiled> {
+  bool obscureText = false;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: widget.passwordFormKey,
+      child: CTextField(
+        controller: widget.passwordCustomTextEditingController,
+        label: widget.label,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        textInputAction: TextInputAction.done,
+        keyboardType: TextInputType.visiblePassword,
+        obscureText: obscureText,
+        maxLines: 1,
+        prefixIcon: SvgPicture.asset(ImagePaths.lockFiled),
+        suffixIcon: GestureDetector(
+            onTap: () {
+              setState(() {
+                obscureText = !obscureText;
+              });
+            },
+            child: obscureText
+                ? SvgPicture.asset(ImagePaths.eyeCross)
+                : SvgPicture.asset(ImagePaths.eye)),
+        // suffix: SvgPicture.asset(ImagePaths.eye),
+        onChanged: (value) {
+          setState(() {});
+        },
+      ),
+    );
+  }
+}

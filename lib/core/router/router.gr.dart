@@ -463,6 +463,7 @@ abstract class $AppRouter extends _i48.RootStackRouter {
         child: _i47.Verification(
           key: args.key,
           email: args.email,
+          authFlow: args.authFlow,
         ),
       );
     },
@@ -1791,12 +1792,14 @@ class Verification extends _i48.PageRouteInfo<VerificationArgs> {
   Verification({
     _i50.Key? key,
     required String email,
+    _i42.AuthFlow authFlow = _i42.AuthFlow.reset,
     List<_i48.PageRouteInfo>? children,
   }) : super(
           Verification.name,
           args: VerificationArgs(
             key: key,
             email: email,
+            authFlow: authFlow,
           ),
           initialChildren: children,
         );
@@ -1811,14 +1814,17 @@ class VerificationArgs {
   const VerificationArgs({
     this.key,
     required this.email,
+    this.authFlow = _i42.AuthFlow.reset,
   });
 
   final _i50.Key? key;
 
   final String email;
 
+  final _i42.AuthFlow authFlow;
+
   @override
   String toString() {
-    return 'VerificationArgs{key: $key, email: $email}';
+    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow}';
   }
 }

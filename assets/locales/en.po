@@ -49,7 +49,7 @@ msgid "enter_confirmation_code"
 msgstr "Enter Confirmation Code"
 
 msgid "confirmation_code_msg"
-msgstr "A confirmation code has been sent to XX. Enter it here to reset your password."
+msgstr "A confirmation code has been sent to XX. Enter it here to secure your account and enable password recovery."
 
 msgid "resend_confirmation_code"
 msgstr "Resend Confirmation Email"
@@ -78,6 +78,17 @@ msgstr "Confirm New Password"
 msgid "already_have_an_account"
 msgstr "Already have an account? "
 
+msgid "create_account"
+msgstr "Create Account"
+
+msgid "create_password"
+msgstr "Create Password"
+
+msgid "by_creating_an_account"
+msgstr "By Creating an Account, you agree to our"
+
+msgid "confirm_email"
+msgstr "Confirm Email"
 
 
 msgid "new"
