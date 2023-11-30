@@ -90,6 +90,18 @@ msgstr "By Creating an Account, you agree to our"
 msgid "confirm_email"
 msgstr "Confirm Email"
 
+msgid "update_pro_account"
+msgstr "Update Pro Account"
+
+msgid "update_pro_account_message"
+msgstr "Changes are coming to Lantern Pro! Now, you will need an email and password to log in on all devices, and to accesss Account Management.  Please take a few moments to add these credentials to your account. "
+
+msgid "not_now"
+msgstr "Not now"
+
+msgid "update_account"
+msgstr "Update Account"
+
 
 msgid "new"
 msgstr "New"

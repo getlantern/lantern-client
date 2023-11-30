@@ -20,6 +20,42 @@ class AccountMenu extends StatelessWidget {
     context.pushRoute(const Support());
   }
 
+  void onAccountManagementTap(BuildContext context, bool isProUser) {
+    //Todo make this dynamic once connect to API
+    bool hasUserSignedIn = false;
+    if (hasUserSignedIn) {
+      context.pushRoute(AccountManagement(isPro: isProUser));
+    } else {
+      showProUserDialog(context);
+    }
+  }
+
+  void openCreateAccount(BuildContext context) {
+    context.pushRoute(const CreateAccountEmail());
+  }
+
+  //Show this dialog when user is not signed in and clicks on account management
+  void showProUserDialog(BuildContext context) {
+    CDialog(
+      title: 'update_pro_account'.i18n,
+      description: "update_pro_account_message".i18n,
+      icon: const CAssetImage(
+        path: ImagePaths.addAccountIllustration,
+        height: 110,
+      ),
+      agreeText: "update_account".i18n,
+      dismissText: "not_now".i18n,
+      includeCancel: true,
+      agreeAction: () async {
+        openCreateAccount(context);
+        return true;
+      },
+      dismissAction: () async {
+        print("Go back");
+      },
+    ).show(context);
+  }
+
   void openSignIn(BuildContext context) => context.pushRoute(SignIn());
 
   void upgradeToLanternPro(BuildContext context) async =>
@@ -38,8 +74,7 @@ class AccountMenu extends StatelessWidget {
                     ListItemFactory.settingsItem(
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
-                  onTap: () async =>
-                      await context.pushRoute(AccountManagement(isPro: false)),
+                  onTap: () => onAccountManagementTap(context, true),
                   trailingArray: [
                     if (!hasCopiedRecoveryKey)
                       const CAssetImage(
@@ -92,8 +127,7 @@ class AccountMenu extends StatelessWidget {
                   key: AppKeys.account_management,
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
-                  onTap: () async =>
-                      await context.pushRoute(AccountManagement(isPro: true)),
+                  onTap: () => onAccountManagementTap(context, false),
                   trailingArray: [
                     if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
                       const CAssetImage(
