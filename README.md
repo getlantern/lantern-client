@@ -121,7 +121,7 @@ The desktop app lives under `desktop` .. To build the Go shared library:
 
 ```
 cd desktop
-CGO_ENABLED=1 GOARCH=arm64 go build -buildmode=c-shared -o liblantern.dylib lib.go
+GOARCH=arm64 go build -buildmode=c-shared -o liblantern.dylib lib.go
 ```
 
 Then to run the Flutter app on macOS:
