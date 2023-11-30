@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
+  animated_loading_border:
+    dependency: "direct main"
+    description:
+      name: animated_loading_border
+      sha256: e0d3f53a006a49d2fb936c21ab0e609e9c0e8a4948d6c2ad4472179f2e35d107
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   args:
     dependency: transitive
     description:
@@ -816,10 +824,10 @@ packages:
     dependency: "direct main"
     description:
       name: loader_overlay
-      sha256: "5d712eb5dc0b8618797d39306227a6c3805e2b198f5361e18ec9e325f215e9a4"
+      sha256: "74fab08c4f2f686e2cc32887cbc76a90d685afd2ffb79526221fc9e7cf027320"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "2.3.2"
   logger:
     dependency: "direct main"
     description:

@@ -34,37 +34,16 @@ class _SignInPasswordState extends State<SignInPassword> {
             const SizedBox(height: 24),
             _buildHeader(),
             const SizedBox(height: 24),
-            Form(
-              key: _passwordFormKey,
-              child: CTextField(
-                controller: _passwordController,
+            CPasswordTextFiled(
                 label: "enter_password".i18n,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: obscureText,
-                maxLines: 1,
-                prefixIcon: SvgPicture.asset(ImagePaths.lock),
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      obscureText = !obscureText;
-                    });
-                  },
-                  child: SvgPicture.asset(ImagePaths.eye),
-                ),
-                // suffix: SvgPicture.asset(ImagePaths.eye),
-                onChanged: (value) {
-                  setState(() {});
-                },
-              ),
-            ),
+                passwordFormKey: _passwordFormKey,
+                passwordCustomTextEditingController: _passwordController),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: Button(
-                // disabled: _passwordController.text.isEmpty ||
-                //     _passwordFormKey?.currentState?.validate() == false,
+                disabled: _passwordController.text.isEmpty ||
+                    _passwordFormKey?.currentState?.validate() == false,
                 text: 'continue'.i18n,
               ),
             ),

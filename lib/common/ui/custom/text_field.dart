@@ -351,7 +351,7 @@ class CPasswordTextFiled extends StatefulWidget {
 }
 
 class _CPasswordTextFiledState extends State<CPasswordTextFiled> {
-  bool obscureText = false;
+  bool obscureText = true;
 
 
   @override
@@ -373,7 +373,7 @@ class _CPasswordTextFiledState extends State<CPasswordTextFiled> {
                 obscureText = !obscureText;
               });
             },
-            child: obscureText
+            child: !obscureText
                 ? SvgPicture.asset(ImagePaths.eyeCross)
                 : SvgPicture.asset(ImagePaths.eye)),
         // suffix: SvgPicture.asset(ImagePaths.eye),
