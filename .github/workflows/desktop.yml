@@ -1,0 +1,135 @@
+name: Publish releases
+
+on:
+  push:
+    branches: [ atavism/ios-migrate-desktop ]
+
+permissions:
+  contents: read
+
+env:
+  GOPRIVATE: github.com/getlantern
+  S3_BUCKET: lantern
+jobs:
+    set-version:
+      runs-on:
+        group: large-runners
+      outputs:
+        version: ${{ steps.set-version.outputs.version }}
+        prefix: ${{ steps.set-version.outputs.prefix }}
+        version_file: ${{ steps.set-version.outputs.version_file }}
+      steps:
+      - id: set-version
+        shell: python
+        run: |
+          import sys, os
+          ref = os.environ.get("GITHUB_REF","")
+          if "refs/tags/lantern" not in ref:
+            li = 'lantern-installer-dev'
+            vf = 'version-android-dev.txt'
+            version = '9999.99.99-dev'
+          else:
+            a = ref.strip().replace('refs/tags/lantern-', '')
+            parts = a.split('-',1)
+            suffix = parts[1] if len(parts)>1 else ''
+            beta = 'beta' in suffix
+            internal = 'internal' in suffix
+            if beta:
+                li = 'lantern-installer-preview'
+                vf = 'version-android-beta.txt'
+                version = parts[0]
+            elif internal:
+                li = 'lantern-installer-internal'
+                vf = 'version-android-internal.txt'
+                version = parts[0]
+            else:
+                li = 'lantern-installer'
+                vf = 'version-android.txt'
+                version = a
+          print('Setting version to ' + version)
+          print('Setting prefix to ' + li)
+          print('Setting version file to ' + vf)
+          print(f'::set-output name=version::{version}')
+          print(f'::set-output name=prefix::{li}')
+          print(f'::set-output name=version_file::{vf}')
+    build-desktop:
+      needs: set-version
+      env:
+        version: ${{ needs.set-version.outputs.version }}
+        version_file: ${{ needs.set-version.outputs.version_file }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+      runs-on: ubuntu-20.04
+      steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: Pull LFS objects
+        run: git lfs pull
+
+      # Install Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.10.5"
+          channel: "stable"
+      - run: flutter --version
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Granting private modules access
+        run: |
+          git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Setup Sentry CLI
+        uses: mathieu-bour/setup-sentry-cli@v1
+        with:
+          version: latest
+          token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
+          organization: getlantern
+          project: android
+
+      - name: Setup protoc
+        uses: arduino/setup-protoc@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Activate protoc-gen-dart plugin
+        run: |
+          echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
+          dart pub global activate protoc_plugin
+          mkdir -p "${HOME}/.pub-cache/bin"
+          mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
+
+      - name: Build Go shared library
+        run: |
+          cd desktop
+          CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -buildmode=c-shared -o liblantern.dylib lib.go
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: libgo-windows-build
+          if-no-files-found: error
+          path: |
+            desktop/liblantern.dylib
+
+  build-windows:
+    needs: build-desktop
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      version: ${{ inputs.version }}
+      prefix: ${{ inputs.prefix }}
+    runs-on: windows-latest
+    steps:
+      - name: Download the win build output
+        uses: actions/download-artifact@v3
+        with:
+          name: libgo-windows-build
+
+      - name: Build Flutter app
+        run: flutter build windows
+
