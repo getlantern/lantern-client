@@ -120,6 +120,6 @@ class _SignInPasswordState extends State<SignInPassword> {
   /// Widget methods
   void openResetPasswordFlow() {
     //Pop current route and push SignIn so back stack will handle
-    context.router.popAndPush(SignIn(resetPasswordFlow: true));
+    context.router.popAndPush(SignIn(authFlow: AuthFlow.reset));
   }
 }

@@ -419,7 +419,7 @@ abstract class $AppRouter extends _i48.RootStackRouter {
         routeData: routeData,
         child: _i42.SignIn(
           key: args.key,
-          resetPasswordFlow: args.resetPasswordFlow,
+          authFlow: args.authFlow,
         ),
       );
     },
@@ -1644,13 +1644,13 @@ class SettingsArgs {
 class SignIn extends _i48.PageRouteInfo<SignInArgs> {
   SignIn({
     _i50.Key? key,
-    bool resetPasswordFlow = false,
+    _i50.AuthFlow authFlow = _i50.AuthFlow.signIn,
     List<_i48.PageRouteInfo>? children,
   }) : super(
           SignIn.name,
           args: SignInArgs(
             key: key,
-            resetPasswordFlow: resetPasswordFlow,
+            authFlow: authFlow,
           ),
           initialChildren: children,
         );
@@ -1663,16 +1663,16 @@ class SignIn extends _i48.PageRouteInfo<SignInArgs> {
 class SignInArgs {
   const SignInArgs({
     this.key,
-    this.resetPasswordFlow = false,
+    this.authFlow = _i50.AuthFlow.signIn,
   });
 
   final _i50.Key? key;
 
-  final bool resetPasswordFlow;
+  final _i50.AuthFlow authFlow;
 
   @override
   String toString() {
-    return 'SignInArgs{key: $key, resetPasswordFlow: $resetPasswordFlow}';
+    return 'SignInArgs{key: $key, authFlow: $authFlow}';
   }
 }
 
@@ -1792,7 +1792,7 @@ class Verification extends _i48.PageRouteInfo<VerificationArgs> {
   Verification({
     _i50.Key? key,
     required String email,
-    _i42.AuthFlow authFlow = _i42.AuthFlow.reset,
+    _i50.AuthFlow authFlow = _i50.AuthFlow.reset,
     List<_i48.PageRouteInfo>? children,
   }) : super(
           Verification.name,
@@ -1814,14 +1814,14 @@ class VerificationArgs {
   const VerificationArgs({
     this.key,
     required this.email,
-    this.authFlow = _i42.AuthFlow.reset,
+    this.authFlow = _i50.AuthFlow.reset,
   });
 
   final _i50.Key? key;
 
   final String email;
 
-  final _i42.AuthFlow authFlow;
+  final _i50.AuthFlow authFlow;
 
   @override
   String toString() {

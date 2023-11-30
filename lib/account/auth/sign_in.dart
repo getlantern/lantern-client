@@ -2,16 +2,14 @@ import 'package:email_validator/email_validator.dart';
 
 import '../../common/common.dart';
 
-//Enum this is mange current flow of auth
-enum AuthFlow { signIn, reset, createAccount }
 
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
-  final bool resetPasswordFlow;
+  final AuthFlow authFlow;
 
   const SignIn({
     super.key,
-    this.resetPasswordFlow = false,
+     this.authFlow = AuthFlow.signIn,
   });
 
   @override
@@ -30,7 +28,9 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: widget.resetPasswordFlow ? 'reset_password'.i18n : 'sign_in'.i18n,
+      title: widget.authFlow.isReset
+          ? 'reset_password'.i18n
+          : 'sign_in'.i18n,
       body: _buildBody(context),
     );
   }
@@ -48,7 +48,7 @@ class _SignInState extends State<SignIn> {
               key: _emailFormKey,
               child: CTextField(
                 controller: _emailController,
-                label: widget.resetPasswordFlow
+                label: widget.authFlow.isReset
                     ? "lantern_pro_email".i18n
                     : "enter_email".i18n,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -66,14 +66,14 @@ class _SignInState extends State<SignIn> {
               child: Button(
                 // disabled: _emailController.text.isEmpty ||
                 //     _emailFormKey?.currentState?.validate() == false,
-                text: widget.resetPasswordFlow ? "next".i18n : 'continue'.i18n,
-                onPressed: widget.resetPasswordFlow
+                text: widget.authFlow.isReset ? "next".i18n : 'continue'.i18n,
+                onPressed: widget.authFlow.isReset
                     ? openVerification
                     : openCreatePassword,
               ),
             ),
             const SizedBox(height: 24),
-            if (widget.resetPasswordFlow)
+            if (widget.authFlow.isReset)
               AppTextButton(
                 text: 'return_to_sign_in'.i18n.toUpperCase(),
                 onPressed: returnToSignIn,
