@@ -14,7 +14,7 @@ class VpnModel extends Model {
   //This method will create artificial delay in connecting VPN
   // So we can show ads to user
   Future<void> connectingDelay<T>(bool on) async {
-    return methodChannel.invokeMethod('connectingDealy', <String, dynamic>{
+    return methodChannel.invokeMethod('connectingDelay', <String, dynamic>{
       'on': on,
     });
   }
