@@ -90,7 +90,7 @@ jobs:
           organization: getlantern
           project: android
 
-      - name: Build Go shared library
+      - name: Build liblantern.dylib
         run: go build -buildmode=c-shared -o desktop/liblantern.dylib desktop/lib.go
 
       - uses: actions/upload-artifact@v3
