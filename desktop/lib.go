@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"runtime/debug"
-	"strconv"
 	"syscall"
 
 	"github.com/getlantern/appdir"
@@ -26,7 +25,6 @@ var (
 	a   *app.App
 
 	proClient *pro.ProClient
-	settings  *app.Settings
 )
 
 //export Start
@@ -40,7 +38,7 @@ func Start() *C.char {
 	flags := flashlight.ParseFlags()
 
 	cdir := configDir(&flags)
-	settings = loadSettings(cdir)
+	settings := loadSettings(cdir)
 	proClient = pro.New(settings)
 	a = app.NewApp(flags, cdir, settings)
 	log.Debug("Running headless")
@@ -67,12 +65,6 @@ func SysProxyOn() *C.char {
 func SysProxyOff() *C.char {
 	app.SysProxyOff()
 	return C.CString("off")
-}
-
-func userHeaders() (string, string, string) {
-	uID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	userID := strconv.FormatInt(uID, 10)
-	return deviceID, userID, token
 }
 
 func sendError(err error) *C.char {
