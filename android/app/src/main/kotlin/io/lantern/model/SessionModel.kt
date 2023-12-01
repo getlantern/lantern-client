@@ -88,8 +88,7 @@ class SessionModel(
                 PATH_SPLIT_TUNNELING,
                 castToBoolean(tx.get(PATH_SPLIT_TUNNELING), false)
             )
-            // hard disable chat
-            tx.put(SessionManager.CHAT_ENABLED, false)
+            tx.put(SessionManager.CHAT_ENABLED, true)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
         }
         updateAppsData()
