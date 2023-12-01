@@ -31,7 +31,7 @@ class MessagingModel constructor(
     private val activity: MainActivity,
     flutterEngine: FlutterEngine,
     private val messaging: Messaging
-) : BaseModel("messaging", flutterEngine, BaseModel.masterDB.withSchema("messaging")) {
+) : BaseModel("messaging", flutterEngine, messaging.db) {
     private val voiceMemoFile = File(
         activity.cacheDir,
         "_voicememo.opus"
@@ -47,12 +47,12 @@ class MessagingModel constructor(
         voiceMemoFile.delete() // TODO: overwrite data with zeros rather than just deleting
         videoFile.delete()
 
-//        // subscribe to WebRTC signals and forward them to flutter
-//        // TODO: handle incoming calls when UI is closed (similar to how we handle message
-//        // notifications when UI is closed)
-//        messaging.subscribeToWebRTCSignals("webrtc") { signal ->
-//            sendSignal(signal, false) // since we have not accepted yet
-//        }
+        // subscribe to WebRTC signals and forward them to flutter
+        // TODO: handle incoming calls when UI is closed (similar to how we handle message
+        // notifications when UI is closed)
+        messaging.subscribeToWebRTCSignals("webrtc") { signal ->
+            sendSignal(signal, false) // since we have not accepted yet
+        }
 
         // default onboarding status to false if it hasn't been set yet
         db.mutate { tx ->
