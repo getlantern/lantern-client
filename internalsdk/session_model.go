@@ -5,6 +5,9 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"github.com/1Password/srp"
+	"github.com/getlantern/android-lantern/internalsdk/apimodels"
+	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/logging"
@@ -163,7 +166,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
-	case "createUser":
+	case "signup":
 		err := userCreate(m.baseModel, arguments.Scalar().String())
 		if err != nil {
 			return nil, err
@@ -751,4 +754,23 @@ func checkAdsEnabled(session *SessionModel) error {
 			pathCASAdsEnabled: isCasAdsEnable,
 		})
 	})
+}
+
+// Authenticates the user with the given email and password.
+func signup(session *SessionModel, email string, password string) error {
+
+	err := setEmail(session.baseModel, email)
+	if err != nil {
+		return err
+	}
+
+	slat, err := GenerateSalt()
+	if err != nil {
+		return err
+	}
+	encryptedKey := srp.KDFRFC5054(slat, email, password)
+	srpClient := srp.NewSRPClient(srp.KnownGroups[srp.RFC5054Group3072], encryptedKey, nil)
+	srpClient.Verifier()
+
+	return errors.New("Method not implemented yet")
 }

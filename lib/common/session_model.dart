@@ -65,6 +65,25 @@ class SessionModel extends Model {
         false,
       );
     }
+    isStoreVersion = singleValueNotifier(
+      'storeVersion',
+      false,
+    );
+    isPlayVersion = singleValueNotifier(
+      'playVersion',
+      false,
+    );
+    userEmail = singleValueNotifier(
+      'emailAddress',
+      "",
+    );
+
+    /*Note
+    * Make proxyAvailable default value to true on IOS it take some to get data from go side
+    * So show banner only if proxyAvailable is false
+    */
+    proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
+    country = singleValueNotifier('geo_country_code', 'US');
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
@@ -72,6 +91,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
+  late ValueNotifier<String?> userEmail;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {

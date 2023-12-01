@@ -25,6 +25,14 @@ class _SignInState extends State<SignIn> {
   );
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _emailController.text = sessionModel.userEmail.value ?? "";
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.authFlow.isReset ? 'reset_password'.i18n : 'sign_in'.i18n,
