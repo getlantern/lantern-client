@@ -36,6 +36,11 @@ class SessionModel extends Model {
       'playVersion',
       false,
     );
+    userEmail = singleValueNotifier(
+      'emailAddress',
+      "",
+    );
+
     /*Note
     * Make proxyAvailable default value to true on IOS it take some to get data from go side
     * So show banner only if proxyAvailable is false
@@ -49,6 +54,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
+  late ValueNotifier<String?> userEmail;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);

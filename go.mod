@@ -46,6 +46,7 @@ require (
 	crawshaw.io/sqlite v0.3.3-0.20220618202545-d1964889ea3c // indirect
 	filippo.io/edwards25519 v1.0.0 // indirect
 	git.torproject.org/pluggable-transports/goptlib.git v1.3.0 // indirect
+	github.com/1Password/srp v0.2.0 // indirect
 	github.com/Jigsaw-Code/outline-ss-server v1.4.0 // indirect
 	github.com/OperatorFoundation/Replicant-go/Replicant/v3 v3.0.23 // indirect
 	github.com/OperatorFoundation/Starbridge-go/Starbridge/v3 v3.0.17 // indirect
