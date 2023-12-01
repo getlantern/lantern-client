@@ -162,6 +162,19 @@ class MainActivity :
             flutterNavigation.invokeMethod("openConversation", contact)
             intent.removeExtra("contactForConversation")
         }
+
+        // handles incoming call intent
+        intent.getStringExtra("signal")?.let { signal ->
+            val webRTCSignal = Json.gson.fromJson(signal, WebRTCSignal::class.java)
+            val notificationManager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!
+            // pass this on to Kotlin and then Dart messaging model
+            messagingModel.sendSignal(webRTCSignal, true)
+            LanternApp.messaging.dismissIncomingCallNotification(
+                notificationManager,
+                webRTCSignal
+            )
+            intent.removeExtra("signal")
+        }
     }
 
     @SuppressLint("WrongConstant")
