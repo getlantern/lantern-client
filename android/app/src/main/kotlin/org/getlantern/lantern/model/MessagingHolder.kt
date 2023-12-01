@@ -62,7 +62,7 @@ class MessagingHolder {
             messaging = Messaging(
                 BaseModel.masterDB,
                 File(application.filesDir, "attachments"),
-                WebSocketTransportFactory("wss://tassis.lantern.io/api"),
+                WebSocketTransportFactory("wss://tassisncc.lantern.io/api"),
                 numInitialPreKeysToRegister = 25,
             )
 
