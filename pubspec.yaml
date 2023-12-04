@@ -44,9 +44,6 @@ dependencies:
   catcher_2: ^1.0.0
   sentry_flutter: ^7.10.1
 
-  # Desktop
-  system_tray: ^2.0.3
-
   badges: ^3.1.1
   dotted_border: ^2.0.0+3
   styled_text: ^8.1.0
