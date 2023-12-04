@@ -22,9 +22,6 @@ on:
         type: string
         required: false
 
-permissions:
-  contents: read
-
 env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
