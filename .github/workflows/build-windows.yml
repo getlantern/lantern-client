@@ -145,14 +145,13 @@ jobs:
           run: flutter build windows
 
         - name: Rename file
-          run: ren build\windows\x64\runner\Release\androidlantern.exe lantern-installer${{inputs.installer-suffix}}.exe
+          run: ren build/windows/x64/runner/Release/androidlantern.exe lantern-installer${{inputs.installer-suffix}}.exe
 
         - uses: actions/upload-artifact@v3
           with:
             if-no-files-found: error
             name: windows${{inputs.build-suffix}}-installer-unsigned
             path: lantern-installer${{inputs.installer-suffix}}.exe
-
 
     sign-installer:
       needs: build-windows
