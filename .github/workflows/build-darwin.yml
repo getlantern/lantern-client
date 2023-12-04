@@ -58,7 +58,7 @@ jobs:
         version: ${{ needs.set-version.outputs.version }}
         version_file: ${{ needs.set-version.outputs.version_file }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-      runs-on: macos-latest
+      runs-on: macos-13
       steps:
       - uses: actions/checkout@v3
         with:
