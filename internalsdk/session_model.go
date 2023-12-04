@@ -167,7 +167,9 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "signup":
-		err := userCreate(m.baseModel, arguments.Scalar().String())
+		email := arguments.Get("email").String()
+		password := arguments.Get("password").String()
+		err := signup(m, email, password, "testUserName")
 		if err != nil {
 			return nil, err
 		}
@@ -757,20 +759,43 @@ func checkAdsEnabled(session *SessionModel) error {
 }
 
 // Authenticates the user with the given email and password.
-func signup(session *SessionModel, email string, password string) error {
+//  Note-: On Sign up Client needed to generate 8 byte slat
+//  Then use that salt, password and username generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
+//  Then use srpClient.Verifier() to generate verifierKey
 
+func signup(session *SessionModel, email string, password string, username string) error {
 	err := setEmail(session.baseModel, email)
 	if err != nil {
 		return err
 	}
-
 	slat, err := GenerateSalt()
 	if err != nil {
 		return err
 	}
+
 	encryptedKey := srp.KDFRFC5054(slat, email, password)
 	srpClient := srp.NewSRPClient(srp.KnownGroups[srp.RFC5054Group3072], encryptedKey, nil)
-	srpClient.Verifier()
+	verifierKey, err := srpClient.Verifier()
+	if err != nil {
+		return err
+	}
+	signUpRequestBody := map[string]interface{}{
+		"username": username,
+		"email":    email,
+		"salt":     slat,
+		"verifier": verifierKey,
+	}
 
-	return errors.New("Method not implemented yet")
+	userId, err := session.GetUserID()
+	if err != nil {
+		return err
+	}
+	token, err := session.GetToken()
+	if err != nil {
+		return err
+	}
+
+	log.Debugf("Signup request body %v", signUpRequestBody)
+	apimodels.Signup(signUpRequestBody, ToString(userId), token)
+	return nil
 }

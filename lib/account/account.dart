@@ -85,7 +85,7 @@ class AccountMenu extends StatelessWidget {
               )
             : const SizedBox(),
       ),
-      if (Platform.isAndroid)
+
         ListItemFactory.settingsItem(
           key: AppKeys.upgrade_lantern_pro,
           icon: ImagePaths.pro_icon_black,

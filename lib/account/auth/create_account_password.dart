@@ -1,9 +1,15 @@
 import 'package:flutter/gestures.dart';
+
 import '../../common/common.dart';
 
 @RoutePage<void>(name: 'CreateAccountPassword')
 class CreateAccountPassword extends StatefulWidget {
-  const CreateAccountPassword({super.key});
+  final String email;
+
+  const CreateAccountPassword({
+    super.key,
+    required this.email,
+  });
 
   @override
   State<CreateAccountPassword> createState() => _CreateAccountPasswordState();
@@ -39,32 +45,6 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
                 label: "create_password".i18n,
                 passwordFormKey: _passwordFormKey,
                 passwordCustomTextEditingController: _passwordController),
-            // Form(
-            //   key: _passwordFormKey,
-            //   child: CTextField(
-            //     controller: _passwordController,
-            //     label: "new_password".i18n,
-            //      : AutovalidateMode.onUserInteraction,
-            //     textInputAction: TextInputAction.done,
-            //     keyboardType: TextInputType.visiblePassword,
-            //     obscureText: obscureText,
-            //     maxLines: 1,
-            //     prefixIcon: SvgPicture.asset(ImagePaths.lock),
-            //     suffixIcon: GestureDetector(
-            //         onTap: () {
-            //           setState(() {
-            //             obscureText = !obscureText;
-            //           });
-            //         },
-            //         child: obscureText
-            //             ? const Icon(CupertinoIcons.eye_slash_fill)
-            //             : SvgPicture.asset(ImagePaths.eye)),
-            //     // suffix: SvgPicture.asset(ImagePaths.eye),
-            //     onChanged: (value) {
-            //       setState(() {});
-            //     },
-            //   ),
-            // ),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
@@ -72,7 +52,7 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
                 // disabled: _emailController.text.isEmpty ||
                 //     _emailFormKey?.currentState?.validate() == false,
                 text: 'continue'.i18n,
-                onPressed: openConfirmEmail,
+                onPressed: onContinueTap,
               ),
             ),
             const SizedBox(height: 24),
@@ -124,7 +104,7 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
             ImagePaths.email,
           ),
           const SizedBox(width: 8),
-          CText('jigar@getlanern.org',
+          CText(widget.email,
               textAlign: TextAlign.center,
               style: tsBody1!.copiedWith(
                 leadingDistribution: TextLeadingDistribution.even,
@@ -154,6 +134,19 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
   }
 
   ///Widget methods
+
+  Future<void> onContinueTap() async {
+    //Close keyboard
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.signUp(widget.email, _passwordController.text);
+      context.loaderOverlay.hide();
+    } catch (e) {
+      context.loaderOverlay.hide();
+    }
+  }
 
   void openConfirmEmail() {
     FocusScope.of(context).unfocus();
