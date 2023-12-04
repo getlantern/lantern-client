@@ -72,6 +72,9 @@ jobs:
         with:
           go-version: 1.21
 
+      - name: Setup Xcode version
+        uses: maxim-lobanov/setup-xcode@v1.6.0          
+
       - name: Granting private modules access
         run: |
           git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
