@@ -155,7 +155,7 @@ jobs:
 
 
     sign-installer:
-      needs: build-installer
+      needs: build-windows
       permissions:
         contents: "read"
         id-token: "write"
