@@ -1,11 +1,16 @@
 name: Build Darwin
-
 on:
-  push:
-    branches: [ atavism/ios-migrate-desktop ]
-
-permissions:
-  contents: read
+  workflow_call:
+    inputs:
+      version_file:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+      prefix:
+        type: string
+        required: true
 
 env:
   GOPRIVATE: github.com/getlantern
@@ -18,6 +23,9 @@ jobs:
         version: ${{ steps.set-version.outputs.version }}
         prefix: ${{ steps.set-version.outputs.prefix }}
         version_file: ${{ steps.set-version.outputs.version_file }}
+      permissions:
+        contents: "read"
+        id-token: "write"
       steps:
       - id: set-version
         shell: python
@@ -52,7 +60,7 @@ jobs:
           print(f'::set-output name=version::{version}')
           print(f'::set-output name=prefix::{li}')
           print(f'::set-output name=version_file::{vf}')
-    build-desktop:
+    build-darwin:
       needs: set-version
       env:
         version: ${{ needs.set-version.outputs.version }}

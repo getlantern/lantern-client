@@ -1,8 +1,26 @@
 name: Build Windows
 
 on:
-  push:
-    branches: [ atavism/ios-migrate-desktop ]
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      prefix:
+        type: string
+        required: true
+      build-suffix: # "64" or ""
+        type: string
+        required: false
+      dist-suffix: # "64-bit" or "32-bit"
+        type: string
+        required: true
+      update-suffix: # "x64" or "386"
+        type: string
+        required: true
+      installer-suffix: # "-x64" or ""
+        type: string
+        required: false
 
 permissions:
   contents: read
@@ -144,14 +162,11 @@ jobs:
         - name: Build Flutter app
           run: flutter build windows
 
-        - name: Rename file
-          run: ren build/windows/x64/runner/Release/androidlantern.exe lantern-installer${{inputs.installer-suffix}}.exe
-
         - uses: actions/upload-artifact@v3
           with:
             if-no-files-found: error
             name: windows${{inputs.build-suffix}}-installer-unsigned
-            path: lantern-installer${{inputs.installer-suffix}}.exe
+            path: build/windows/${{inputs.update-suffix}}/runner/Release/androidlantern.exe
 
     sign-installer:
       needs: build-windows
@@ -183,10 +198,7 @@ jobs:
             timestamp-rfc3161: http://timestamp.acs.microsoft.com
             timestamp-digest: SHA256
 
-        - name: Rename file
-          run: ren lantern-installer-unsigned.exe lantern-installer${{inputs.installer-suffix}}.exe
-
         - uses: actions/upload-artifact@v3
           with:
             name: windows${{inputs.build-suffix}}-installer-signed
-            path: lantern-installer${{inputs.installer-suffix}}.exe
+            path: build/windows/${{inputs.update-suffix}}/runner/Release/androidlantern.exe

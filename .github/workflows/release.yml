@@ -1,7 +1,8 @@
 name: Publish releases
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ atavism/ios-migrate-desktop ]
 
 permissions:
   contents: read
@@ -51,6 +52,38 @@ jobs:
           print(f'::set-output name=version::{version}')
           print(f'::set-output name=prefix::{li}')
           print(f'::set-output name=version_file::{vf}')
+
+    build-windows-x32:
+      uses: ./.github/workflows/build-windows.yml
+      secrets: inherit
+      needs: set-version
+      with:
+        version: ${{ needs.set-version.outputs.version }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+        dist-suffix: 32-bit
+        update-suffix: 386
+
+    build-windows-x64:
+      uses: ./.github/workflows/build-windows.yml
+      secrets: inherit
+      needs: set-version
+      with:
+        version: ${{ needs.set-version.outputs.version }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+        build-suffix: 64
+        dist-suffix: 64-bit
+        update-suffix: x64
+        installer-suffix: -x64
+
+    build-darwin:
+      uses: ./.github/workflows/build-darwin.yml
+      secrets: inherit
+      needs: set-version
+      with:
+        version: ${{ needs.set-version.outputs.version }}
+        version_file: ${{ needs.set-version.outputs.version_file }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+
     build-android:
       needs: set-version
       env:
