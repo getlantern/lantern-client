@@ -76,7 +76,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: libgo-windows-build
+          name: libgo-windows-${{inputs.update-suffix}}-build
           if-no-files-found: error
           path: |
             desktop/liblantern.dylib
@@ -114,7 +114,7 @@ jobs:
         - name: Download the win build output
           uses: actions/download-artifact@v3
           with:
-            name: libgo-windows-build
+            name: libgo-windows-${{inputs.update-suffix}}-build
 
         - name: Build Flutter app
           run: flutter build windows
