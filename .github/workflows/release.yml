@@ -4,9 +4,6 @@ on:
   push:
     branches: [ atavism/ios-migrate-desktop ]
 
-permissions:
-  contents: read
-
 env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
