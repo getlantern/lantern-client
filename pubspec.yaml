@@ -94,7 +94,7 @@ dependencies:
   # URL & Sharing utilities
   url_launcher: ^6.1.12
   share_plus: ^7.1.0
-  flutter_inappwebview: ^6.0.0-beta.30
+  flutter_inappwebview: ^5.8.0
 
   # Notifications & Logging
   flutter_local_notifications: ^15.1.0+1
