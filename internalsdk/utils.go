@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	cryptoRand "crypto/rand"
 	"encoding/binary"
+	"fmt"
 	"math"
 	"math/big"
 
@@ -37,4 +38,7 @@ func GenerateSalt() ([]byte, error) {
 		return nil, errors.New("failed to generate 8 byte salt")
 	}
 	return salt, nil
+}
+func ToString(value int64) string {
+	return fmt.Sprintf("%d", value)
 }

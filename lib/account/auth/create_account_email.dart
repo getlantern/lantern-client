@@ -116,7 +116,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
   }
 
   void openPassword() {
-    // context.pushRoute(const CreateAccountPassword());
+    context.pushRoute(CreateAccountPassword(email: _emailController.text));
   }
 
   void emailExistsDialog() {

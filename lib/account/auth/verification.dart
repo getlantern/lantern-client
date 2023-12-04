@@ -24,7 +24,7 @@ class _VerificationState extends State<Verification> {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.authFlow.isCreateAccount
-          ? 'confirm_email'
+          ? 'confirm_email'.i18n
           : 'reset_password'.i18n,
       body: _buildBody(context),
     );

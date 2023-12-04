@@ -204,9 +204,13 @@ abstract class $AppRouter extends _i48.RootStackRouter {
       );
     },
     CreateAccountPassword.name: (routeData) {
+      final args = routeData.argsAs<CreateAccountPasswordArgs>();
       return _i48.AutoRoutePage<void>(
         routeData: routeData,
-        child: const _i18.CreateAccountPassword(),
+        child: _i18.CreateAccountPassword(
+          key: args.key,
+          email: args.email,
+        ),
       );
     },
     FullScreenDialogPage.name: (routeData) {
@@ -908,16 +912,41 @@ class CreateAccountEmail extends _i48.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i18.CreateAccountPassword]
-class CreateAccountPassword extends _i48.PageRouteInfo<void> {
-  const CreateAccountPassword({List<_i48.PageRouteInfo>? children})
-      : super(
+class CreateAccountPassword
+    extends _i48.PageRouteInfo<CreateAccountPasswordArgs> {
+  CreateAccountPassword({
+    _i50.Key? key,
+    required String email,
+    List<_i48.PageRouteInfo>? children,
+  }) : super(
           CreateAccountPassword.name,
+          args: CreateAccountPasswordArgs(
+            key: key,
+            email: email,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'CreateAccountPassword';
 
-  static const _i48.PageInfo<void> page = _i48.PageInfo<void>(name);
+  static const _i48.PageInfo<CreateAccountPasswordArgs> page =
+      _i48.PageInfo<CreateAccountPasswordArgs>(name);
+}
+
+class CreateAccountPasswordArgs {
+  const CreateAccountPasswordArgs({
+    this.key,
+    required this.email,
+  });
+
+  final _i50.Key? key;
+
+  final String email;
+
+  @override
+  String toString() {
+    return 'CreateAccountPasswordArgs{key: $key, email: $email}';
+  }
 }
 
 /// generated route for
