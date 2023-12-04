@@ -144,3 +144,50 @@ jobs:
         - name: Build Flutter app
           run: flutter build windows
 
+        - name: Rename file
+          run: ren build\windows\x64\runner\Release\androidlantern.exe lantern-installer${{inputs.installer-suffix}}.exe
+
+        - uses: actions/upload-artifact@v3
+          with:
+            if-no-files-found: error
+            name: windows${{inputs.build-suffix}}-installer-unsigned
+            path: lantern-installer${{inputs.installer-suffix}}.exe
+
+
+    sign-installer:
+      needs: build-installer
+      permissions:
+        contents: "read"
+        id-token: "write"
+      env:
+        version: ${{ inputs.version }}
+        prefix: ${{ inputs.prefix }}
+      runs-on: windows-latest
+      steps:
+        - name: Download the win build output
+          uses: actions/download-artifact@v3
+          with:
+            name: windows${{inputs.build-suffix}}-installer-unsigned
+
+        - name: Sign EXE with Azure Code Signing
+          uses: azure/azure-code-signing-action@v0.2.15
+          with:
+            azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+            endpoint: https://wus2.codesigning.azure.net/
+            code-signing-account-name: code-signing
+            certificate-profile-name: Lantern
+            files-folder: ${{ github.workspace }}\
+            files-folder-filter: exe
+            file-digest: SHA256
+            timestamp-rfc3161: http://timestamp.acs.microsoft.com
+            timestamp-digest: SHA256
+
+        - name: Rename file
+          run: ren lantern-installer-unsigned.exe lantern-installer${{inputs.installer-suffix}}.exe
+
+        - uses: actions/upload-artifact@v3
+          with:
+            name: windows${{inputs.build-suffix}}-installer-signed
+            path: lantern-installer${{inputs.installer-suffix}}.exe
