@@ -129,7 +129,7 @@ jobs:
           with:
             if-no-files-found: error
             name: windows${{inputs.build-suffix}}-installer-unsigned
-            path: build/windows/${{inputs.update-suffix}}/runner/Release/androidlantern.exe
+            path: build/windows/x64/runner/Release/androidlantern.exe
 
     sign-installer:
       needs: build-windows
@@ -164,4 +164,4 @@ jobs:
         - uses: actions/upload-artifact@v3
           with:
             name: windows${{inputs.build-suffix}}-installer-signed
-            path: build/windows/${{inputs.update-suffix}}/runner/Release/androidlantern.exe
+            path: build/windows/x64/runner/Release/androidlantern.exe
