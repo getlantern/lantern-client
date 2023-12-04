@@ -65,6 +65,45 @@ const (
 	pathShouldShowCasAds       = "shouldShowCASAds"
 	pathShouldShowGoogleAds    = "shouldShowGoogleAds"
 	currentTermsVersion        = 1
+	pathDeviceID               = "deviceid"
+	pathDevice                 = "device"
+	pathDevices                = "devices"
+	pathModel                  = "model"
+	pathOSVersion              = "os_version"
+	pathPaymentTestMode        = "paymentTestMode"
+	pathUserID                 = "userid"
+	pathToken                  = "token"
+	pathProUser                = "prouser"
+	pathSDKVersion             = "sdkVersion"
+	pathUserLevel              = "userLevel"
+	pathChatEnabled            = "chatEnabled"
+	pathDevelopmentMode        = "developmentMode"
+	pathGeoCountryCode         = "geo_country_code"
+	pathServerCountry          = "server_country"
+	pathServerCountryCode      = "server_country_code"
+	pathServerCity             = "server_city"
+	pathHasSucceedingProxy     = "hasSucceedingProxy"
+	pathLatestBandwith         = "latest_bandwidth"
+	pathTimezoneID             = "timezone_id"
+	pathReferralCode           = "referral"
+	pathForceCountry           = "forceCountry"
+	pathDNSDetector            = "dns_detector"
+	pathProvider               = "provider"
+	pathEmailAddress           = "emailAddress"
+	pathCurrencyCode           = "currency_Code"
+	pathReplicaAddr            = "replicaAddr"
+	pathSplitTunneling         = "splitTunneling"
+	pathLang                   = "lang"
+	pathAcceptedTermsVersion   = "accepted_terms_version"
+	pathAdsEnabled             = "adsEnabled"
+	pathCASAdsEnabled          = "casAsEnabled"
+	pathStoreVersion           = "storeVersion"
+	pathSelectedTab            = "/selectedTab"
+	pathServerInfo             = "/server_info"
+	pathUserSalt               = "user_salt"
+
+	currentTermsVersion = 1
+	group               = srp.RFC5054Group3072
 )
 
 type SessionModelOpts struct {
@@ -182,6 +221,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		checkAdsEnabled(m)
+
+	case "login":
+		email := arguments.Get("email").String()
+		password := arguments.Get("password").String()
+		err := login(m, "testUserName", email, password)
+		if err != nil {
+			return nil, err
+		}
 		return true, nil
 	default:
 		return m.methodNotImplemented(method)
@@ -564,6 +611,12 @@ func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 	return "", nil
 }
 
+func saveUserSalt(m *baseModel, salt []byte) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put[[]byte](tx, pathUserSalt, salt, "")
+	})
+}
+
 func acceptTerms(m *baseModel) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathAcceptedTermsVersion, currentTermsVersion, "")
@@ -589,6 +642,23 @@ func setUserIdAndToken(m *baseModel, userId int, token string) error {
 		}
 		return pathdb.Put(tx, pathToken, token, "")
 	})
+}
+
+func getUserSalt(m *baseModel, userName string) ([]int64, error) {
+	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
+	if err != nil {
+		return nil, err
+	}
+	if userSalt != nil {
+		return BytesToInt64Slice(userSalt), nil
+	}
+
+	salt, err := apimodels.GetSalt(userName)
+	if err != nil {
+		return nil, err
+	}
+	return *salt, nil
+
 }
 
 // Create user
@@ -774,7 +844,7 @@ func signup(session *SessionModel, email string, password string, username strin
 	}
 
 	encryptedKey := srp.KDFRFC5054(slat, email, password)
-	srpClient := srp.NewSRPClient(srp.KnownGroups[srp.RFC5054Group3072], encryptedKey, nil)
+	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
 	verifierKey, err := srpClient.Verifier()
 	if err != nil {
 		return err
@@ -796,6 +866,65 @@ func signup(session *SessionModel, email string, password string, username strin
 	}
 
 	log.Debugf("Signup request body %v", signUpRequestBody)
-	apimodels.Signup(signUpRequestBody, ToString(userId), token)
+	signupResponse, err := apimodels.Signup(signUpRequestBody, ToString(userId), token)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Login prepare request body %v", signupResponse)
+	//Request successfull then save salt
+	return saveUserSalt(session.baseModel, slat)
+}
+
+func login(session *SessionModel, userName string, email string, password string) error {
+	// Get the salt
+	salt, err := getUserSalt(session.baseModel, email)
+	if err != nil {
+		return err
+	}
+
+	// Prepare login request body
+	encryptedKey := srp.KDFRFC5054(Int64SliceToBytes(salt), email, password)
+	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+
+	//Send this key to client
+	A := client.EphemeralPublic()
+
+	//Create body
+	prepareRequestBody := map[string]interface{}{
+		"email": userName,
+		"srpA":  A,
+	}
+	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Login prepare request body %v", srpB)
+
+	// // Once the client receives B from the server Client should check error status here as defense against
+	// // a malicious B sent from server
+	// if err = client.SetOthersPublic(srpB); err != nil {
+	// 	log.Errorf("Error while setting srpB %v", err)
+	// 	return err
+	// }
+
+	// // Step 3
+
+	// // check if the server proof is valid
+	// if !client.GoodServerProof(salt, userName, serverProof) {
+	// 	log.Fatal("bad proof from server")
+	// 	return err
+	// }
+
+	// clientProof, err := client.ClientProof()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// loginRequestBody := map[string]interface{}{
+	// 	"email": userName,
+	// 	"proof": clientProof,
+	// }
+
 	return nil
+
 }

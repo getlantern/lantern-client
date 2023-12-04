@@ -1,6 +1,7 @@
 package internalsdk
 
 import (
+	"bytes"
 	"crypto/rand"
 	cryptoRand "crypto/rand"
 	"encoding/binary"
@@ -17,6 +18,33 @@ func BytesToFloat64LittleEndian(b []byte) (float64, error) {
 	}
 	bits := binary.LittleEndian.Uint64(b)
 	return math.Float64frombits(bits), nil
+}
+
+func BytesToInt64Slice(b []byte) []int64 {
+	var int64Slice []int64
+	buf := bytes.NewBuffer(b)
+
+	for buf.Len() >= 8 {
+		var n int64
+		if err := binary.Read(buf, binary.BigEndian, &n); err != nil {
+			fmt.Println("binary.Read failed:", err)
+			return nil
+		}
+		int64Slice = append(int64Slice, n)
+	}
+
+	return int64Slice
+}
+
+func Int64SliceToBytes(int64Slice []int64) []byte {
+	var buf bytes.Buffer
+	for _, n := range int64Slice {
+		if err := binary.Write(&buf, binary.BigEndian, n); err != nil {
+			fmt.Println("binary.Write failed:", err)
+			return nil
+		}
+	}
+	return buf.Bytes()
 }
 
 var maxDigit = big.NewInt(9)

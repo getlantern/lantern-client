@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/big"
 	"net/http"
 	"net/http/httputil"
 	"time"
@@ -151,6 +152,92 @@ func Signup(signupBody map[string]interface{}, userId string, token string) (*Us
 		return nil, err
 	}
 	return &userDetail, nil
+}
+
+func GetSalt(userName string) (*[]int64, error) {
+	resp, err := http.Get(saltUrl)
+	if err != nil {
+		log.Errorf("Error getting user salt: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var salt Salt
+	if err := json.NewDecoder(resp.Body).Decode(&salt); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+	return &salt.Salt, nil
+}
+
+func LoginPrepare(prepareBody map[string]interface{}) (*big.Int, error) {
+	// Marshal the map to JSON
+	requestBody, err := json.Marshal(prepareBody)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", prepareUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error creating signup request: %v", err)
+		return nil, err
+	}
+
+	client := &http.Client{}
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Errorf("Error sending login prepare request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+	// Read the response body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response:", err)
+		return nil, err
+	}
+	// Print the response body
+	fmt.Println("Response:", string(body))
+
+	var srpB SrpB
+	if err := json.NewDecoder(resp.Body).Decode(&srpB); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+	return &srpB.SrpB, nil
+}
+
+func Login(loginBody map[string]interface{}) (*big.Int, error) {
+	// Marshal the map to JSON
+	requestBody, err := json.Marshal(loginBody)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", loginUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error creating login request: %v", err)
+		return nil, err
+	}
+
+	client := &http.Client{}
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Errorf("Error sending login prepare request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var srpB SrpB
+	if err := json.NewDecoder(resp.Body).Decode(&srpB); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+	return &srpB.SrpB, nil
 }
 
 // ToCurlCommand converts an http.Request into a cURL command string
