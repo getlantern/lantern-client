@@ -1,5 +1,7 @@
 package apimodels
 
+import "math/big"
+
 type UserResponse struct {
 	UserID       float64  `json:"userId"`
 	Code         string   `json:"code"`
@@ -41,4 +43,12 @@ type UserDevice struct {
 	ID      string `json:"id"`
 	Name    string `json:"name"`
 	Created int64  `json:"created"`
+}
+
+type Salt struct {
+	Salt []int64 `json:"salt"`
+}
+
+type SrpB struct {
+	SrpB big.Int `json:"srpB"`
 }
