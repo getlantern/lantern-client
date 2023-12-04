@@ -8,7 +8,7 @@ import Foundation
 import audioplayers_darwin
 import device_info_plus
 import emoji_picker_flutter
-import flutter_inappwebview
+import flutter_inappwebview_macos
 import flutter_local_notifications
 import package_info_plus
 import path_provider_foundation
