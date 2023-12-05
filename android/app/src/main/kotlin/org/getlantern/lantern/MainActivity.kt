@@ -1,7 +1,6 @@
 package org.getlantern.lantern
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -17,7 +16,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.lantern.model.MessagingModel
@@ -72,14 +70,16 @@ class MainActivity :
     private lateinit var replicaModel: ReplicaModel
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
-    private var accountInitDialog: AlertDialog? = null
     private lateinit var notifications: NotificationHelper
     private lateinit var receiver: NotificationReceiver
+    private var accountInitDialog: AlertDialog? = null
     private var autoUpdateJob: Job? = null
 
     private val lanternClient = LanternApp.getLanternHttpClient()
 
-    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+    override fun configureFlutterEngine(
+        @NonNull flutterEngine: FlutterEngine,
+    ) {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
         messagingModel = MessagingModel(this, flutterEngine)
@@ -88,31 +88,33 @@ class MainActivity :
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
         notifications = NotificationHelper(this, receiver)
-        eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
-            override fun onListen(event: Event) {
-                if (LanternApp.getSession().lanternDidStart()) {
-                    Plausible.init(applicationContext)
-                    Logger.debug(TAG, "Plausible initialized")
-                    Plausible.enable(true)
-                    fetchLoConf()
-                    Logger.debug(
-                        TAG,
-                        "fetchLoConf() finished at ${System.currentTimeMillis() - start}",
-                    )
+        eventManager =
+            object : EventManager("lantern_event_channel", flutterEngine) {
+                override fun onListen(event: Event) {
+                    if (LanternApp.getSession().lanternDidStart()) {
+                        Plausible.init(applicationContext)
+                        Logger.debug(TAG, "Plausible initialized")
+                        Plausible.enable(true)
+                        fetchLoConf()
+                        Logger.debug(
+                            TAG,
+                            "fetchLoConf() finished at ${System.currentTimeMillis() - start}",
+                        )
+                    }
+                    LanternApp.getSession().dnsDetector.publishNetworkAvailability()
                 }
-                LanternApp.getSession().dnsDetector.publishNetworkAvailability()
             }
-        }
 
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "lantern_method_channel",
         ).setMethodCallHandler(this)
 
-        flutterNavigation = MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            "navigation",
-        )
+        flutterNavigation =
+            MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "navigation",
+            )
 
         flutterNavigation.setMethodCallHandler { call, _ ->
             if (call.method == "ready") {
@@ -168,7 +170,8 @@ class MainActivity :
                 this@MainActivity,
                 receiver,
                 it,
-                ContextCompat.RECEIVER_NOT_EXPORTED)
+                ContextCompat.RECEIVER_NOT_EXPORTED,
+            )
         }
     }
 
@@ -205,7 +208,10 @@ class MainActivity :
         EventBus.getDefault().unregister(this)
     }
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+    override fun onMethodCall(
+        call: MethodCall,
+        result: MethodChannel.Result,
+    ) {
         when (call.method) {
             "showLastSurvey" -> {
                 showSurvey(lastSurvey)
@@ -309,62 +315,80 @@ class MainActivity :
     }
 
     private fun updateUserData() {
-        lanternClient.userData(object : ProUserCallback {
-            override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch user data: $error", throwable)
-            }
+        lanternClient.userData(
+            object : ProUserCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "Unable to fetch user data: $error", throwable)
+                }
 
-            override fun onSuccess(response: Response, user: ProUser) {
-                val devices = user?.devices
-                val deviceID = LanternApp.getSession().deviceID()
-                // if the payment test mode is enabled
-                // then do nothing To avoid restarting app while debugging
-                // we are setting static user for payment mode
-                if (user?.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
+                override fun onSuccess(
+                    response: Response,
+                    user: ProUser,
+                ) {
+                    val devices = user?.devices
+                    val deviceID = LanternApp.getSession().deviceID()
+                    // if the payment test mode is enabled
+                    // then do nothing To avoid restarting app while debugging
+                    // we are setting static user for payment mode
+                    if (user?.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
 
-                // Switch to free account if device it not linked
-                devices?.filter { it.id == deviceID }?.run {
-                    if (isEmpty()) {
-                        LanternApp.getSession().logout()
-                        restartApp()
+                    // Switch to free account if device it not linked
+                    devices?.filter { it.id == deviceID }?.run {
+                        if (isEmpty()) {
+                            LanternApp.getSession().logout()
+                            restartApp()
+                        }
                     }
                 }
-            }
-        })
+            },
+        )
     }
 
     private fun updatePlans() {
-        lanternClient.plans(object : PlansCallback {
-            override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
-            }
-
-            override fun onSuccess(proPlans: Map<String, ProPlan>) {
-                Logger.debug(TAG, "Successfully fetched plans")
-                for (planId in proPlans.keys) {
-                    proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+        lanternClient.plans(
+            object : PlansCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
                 }
-                LanternApp.getSession().setUserPlans(proPlans)
 
-            }
-        }, null)
+                override fun onSuccess(proPlans: Map<String, ProPlan>) {
+                    Logger.debug(TAG, "Successfully fetched plans")
+                    for (planId in proPlans.keys) {
+                        proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+                    }
+                    LanternApp.getSession().setUserPlans(proPlans)
+                }
+            },
+            null,
+        )
     }
 
     private fun updatePaymentMethods() {
-        lanternClient.plansV3(object : PlansV3Callback {
-            override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
-            }
+        lanternClient.plansV3(
+            object : PlansV3Callback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
+                }
 
-            override fun onSuccess(
-                proPlans: Map<String, ProPlan>,
-                paymentMethods: List<PaymentMethods>
-            ) {
-                Logger.debug(TAG, "Successfully fetched payment methods")
-                LanternApp.getSession().setPaymentMethods(paymentMethods)
-
-            }
-        }, null)
+                override fun onSuccess(
+                    proPlans: Map<String, ProPlan>,
+                    paymentMethods: List<PaymentMethods>,
+                ) {
+                    Logger.debug(TAG, "Successfully fetched payment methods")
+                    LanternApp.getSession().setPaymentMethods(paymentMethods)
+                }
+            },
+            null,
+        )
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -492,13 +516,14 @@ class MainActivity :
                         msg.append("&nbsp;")
                         var description = "..."
                         try {
-                            description = getString(
-                                resources.getIdentifier(
-                                    permission,
-                                    "string",
-                                    "org.getlantern.lantern",
-                                ),
-                            )
+                            description =
+                                getString(
+                                    resources.getIdentifier(
+                                        permission,
+                                        "string",
+                                        "org.getlantern.lantern",
+                                    ),
+                                )
                         } catch (t: Throwable) {
                             Logger.warn(
                                 PERMISSIONS_TAG,
@@ -548,7 +573,7 @@ class MainActivity :
                     TAG,
                     "VPN enabled, starting Lantern...",
                 )
-                //If user come here it mean user has all permissions needed
+                // If user come here it mean user has all permissions needed
                 // Also user given permission for VPN service dialog as well
                 LanternApp.getSession().setHasFirstSessionCompleted(true)
                 sessionModel.checkAdsAvailability()
@@ -559,7 +584,6 @@ class MainActivity :
             sendBroadcast(notifications.disconnectIntent())
         }
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -604,30 +628,34 @@ class MainActivity :
         }
     }
 
-    override fun onActivityResult(request: Int, response: Int, data: Intent?) {
+    override fun onActivityResult(
+        request: Int,
+        response: Int,
+        data: Intent?,
+    ) {
         super.onActivityResult(request, response, data)
         if (request == REQUEST_VPN) {
             val useVpn = response == RESULT_OK
             updateStatus(useVpn)
             if (useVpn) {
                 startVpnService()
-                //This check is for new user that will start app first time
+                // This check is for new user that will start app first time
                 // this mean user has already given
                 // system permissions
                 LanternApp.getSession().setHasFirstSessionCompleted(true)
                 sessionModel.checkAdsAvailability()
             }
-
         }
     }
 
     private fun startVpnService() {
-        val intent: Intent = Intent(
-            this,
-            LanternVpnService::class.java,
-        ).apply {
-            action = LanternVpnService.ACTION_CONNECT
-        }
+        val intent: Intent =
+            Intent(
+                this,
+                LanternVpnService::class.java,
+            ).apply {
+                action = LanternVpnService.ACTION_CONNECT
+            }
 
         startService(intent)
         notifications.vpnConnectedNotification()
