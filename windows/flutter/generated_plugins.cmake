@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   permission_handler_windows
   sentry_flutter
   share_plus
+  system_tray
   url_launcher_windows
 )
 
