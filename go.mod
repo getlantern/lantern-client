@@ -44,7 +44,6 @@ require (
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
 	github.com/getlantern/replica v0.14.2
 	github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b
-	github.com/getlantern/systray v1.2.2
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
 	github.com/getlantern/trafficlog v1.0.1
 	github.com/getlantern/trafficlog-flashlight v1.0.4
@@ -200,7 +199,6 @@ require (
 	github.com/golang/gddo v0.0.0-20190419222130-af0f2af80721 // indirect
 	github.com/golang/geo v0.0.0-20200319012246-673a6f80352d // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/btree v1.1.2 // indirect
@@ -211,7 +209,6 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/jaffee/commandeer v0.6.0 // indirect
-	github.com/joshdk/retry v1.4.0 // indirect
 	github.com/keighl/mandrill v0.0.0-20170605120353-1775dd4b3b41 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
@@ -221,7 +218,6 @@ require (
 	github.com/kr/binarydist v0.1.0 // indirect
 	github.com/libp2p/go-buffer-pool v0.0.2 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/matttproud/golang_protobuf_extensions/v2 v2.0.0 // indirect
 	github.com/mdlayher/netlink v1.1.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.1 // indirect
@@ -264,7 +260,6 @@ require (
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.45.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
-	github.com/quic-go/qtls-go1-19 v0.3.2 // indirect
 	github.com/quic-go/qtls-go1-20 v0.4.1 // indirect
 	github.com/quic-go/quic-go v0.40.0 // indirect
 	github.com/refraction-networking/utls v1.3.3 // indirect

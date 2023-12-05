@@ -381,16 +381,6 @@ func (app *App) beforeStart(listenAddr string) {
 		app.Exit(nil)
 		os.Exit(0)
 	}
-
-	go func() {
-		if err := configureSystemTray(app); err != nil {
-			log.Errorf("Unable to configure system tray: %s", err)
-			return
-		}
-		app.OnSettingChange(SNLanguage, func(lang interface{}) {
-			refreshSystray(lang.(string))
-		})
-	}()
 }
 
 func (app *App) isFeatureEnabled(features map[string]bool, feature string) bool {
