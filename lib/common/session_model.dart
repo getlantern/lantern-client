@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'common.dart';
 import 'common_desktop.dart';
 
-
 final sessionModel = SessionModel();
 
 const TAB_CHATS = 'chats';
@@ -34,7 +33,6 @@ class SessionModel extends Model {
         }
       });
 
-
       isStoreVersion = singleValueNotifier(
         'storeVersion',
         false,
@@ -50,11 +48,7 @@ class SessionModel extends Model {
       proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
       country = singleValueNotifier('geo_country_code', 'US');
     } else {
-      country = ffiValueNotifier(
-        ffiLang,
-        'lang',
-        'US'
-      );
+      country = ffiValueNotifier(ffiLang, 'lang', 'US');
       isPlayVersion = ffiValueNotifier(
         ffiPlayVersion,
         'isPlayVersion',
@@ -196,8 +190,16 @@ class SessionModel extends Model {
   }
 
   Widget expiryDate(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      'expirydatestr',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'expirydatestr',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
+      'emailAddress',
+      ffiEmailAddress,
+      defaultValue: '',
       builder: builder,
     );
   }
@@ -218,7 +220,15 @@ class SessionModel extends Model {
   }
 
   Widget deviceId(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
+    }
+    return ffiValueBuilder<String>(
+      'referral',
+      ffiReferral,
+      defaultValue: '',
+      builder: builder,
+    );
   }
 
   Widget devices(ValueWidgetBuilder<Devices> builder) {
@@ -403,12 +413,28 @@ class SessionModel extends Model {
     var plan = Plan();
     plan.id = id;
     plan.description = item["description"];
-    plan.oneMonthCost = formatCurrency.format(item["expectedMonthlyPrice"]["usd"]/100).toString();
-    plan.totalCost = formatCurrency.format(item["usdPrice"]/100).toString();
-    plan.totalCostBilledOneTime = formatCurrency.format(item["usdPrice"]/100).toString() + ' ' + 'billed_one_time'.i18n;
+    plan.oneMonthCost = formatCurrency
+        .format(item["expectedMonthlyPrice"]["usd"] / 100)
+        .toString();
+    plan.totalCost = formatCurrency.format(item["usdPrice"] / 100).toString();
+    plan.totalCostBilledOneTime =
+        formatCurrency.format(item["usdPrice"] / 100).toString() +
+            ' ' +
+            'billed_one_time'.i18n;
     plan.bestValue = item["bestValue"] ?? false;
     plan.usdPrice = Int64(item["usdPrice"]);
     return plan;
+  }
+
+  PaymentMethod paymentMethodFromJson(Map<String, dynamic> item) {
+    final formatCurrency = new NumberFormat.simpleCurrency();
+    final List<PaymentMethod> methods = [];
+    for (var m in item["desktop"]) {
+      var paymentMethod = PaymentMethod();
+      paymentMethod.method = m["method"];
+      return paymentMethod;
+    }
+    return PaymentMethod();
   }
 
   Widget plans({
@@ -430,19 +456,27 @@ class SessionModel extends Model {
       builder: builder,
       deserialize: (Uint8List serialized) {
         return Plan.fromBuffer(serialized);
-      },     
+      },
     );
   }
 
   Widget paymentMethods({
     required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
   }) {
-    return subscribedListBuilder<PaymentMethod>(
+    if (Platform.isAndroid) {
+      return subscribedListBuilder<PaymentMethod>(
+        '/paymentMethods/',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return PaymentMethod.fromBuffer(serialized);
+        },
+      );
+    }
+    return ffiListBuilder<PaymentMethod>(
       '/paymentMethods/',
+      ffiPaymentMethods,
+      paymentMethodFromJson,
       builder: builder,
-      deserialize: (Uint8List serialized) {
-        return PaymentMethod.fromBuffer(serialized);
-      },
     );
   }
 

@@ -103,6 +103,16 @@ func Plans() *C.char {
 	return C.CString(string(b))
 }
 
+//export PaymentMethods
+func PaymentMethods() *C.char {
+	resp, err := proClient.PaymentMethods()
+	if err != nil {
+		return sendError(err)
+	}
+	b, _ := json.Marshal(resp.Providers)
+	return C.CString(string(b))
+}
+
 //export UserData
 func UserData() *C.char {
 	resp, err := proClient.UserData()
@@ -188,6 +198,11 @@ func DevelopmentMode() *C.char {
 
 //export SplitTunneling
 func SplitTunneling() *C.char {
+	return C.CString("false")
+}
+
+//export ChatMe
+func ChatMe() *C.char {
 	return C.CString("false")
 }
 

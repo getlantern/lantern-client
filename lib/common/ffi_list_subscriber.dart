@@ -7,8 +7,7 @@ import 'package:lantern/i18n/i18n.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
 
-class FfiListNotifier<T>
-    extends SubscribedNotifier<ChangeTrackingList<T>> {
+class FfiListNotifier<T> extends SubscribedNotifier<ChangeTrackingList<T>> {
   FfiListNotifier(
     path,
     Pointer<Utf8> Function() ffiFunction,
@@ -19,10 +18,16 @@ class FfiListNotifier<T>
     T Function(Uint8List serialized)? deserialize,
   }) : super(ChangeTrackingList(compare ?? sortNormally), removeFromCache) {
     value.clearPaths();
-    var result = jsonDecode(ffiFunction().toDartString()) as List<dynamic>;
-    for (var item in result) {
-      var id = item['id'];
-      value.map[id] = fromJsonModel(item) as T;
+    var result = jsonDecode(ffiFunction().toDartString());
+    if (result is List<dynamic>) {
+      for (var item in result) {
+        var id = item['id'];
+        value.map[id] = fromJsonModel(item) as T;
+      }
+    } else if (result is Map<String, dynamic>) {
+      for (var key in result.keys) {
+        value.map[key] = fromJsonModel(result) as T;
+      }
     }
     cancel = () => {};
   }
@@ -30,8 +35,7 @@ class FfiListNotifier<T>
 
 /// A ValueListenableBuilder that obtains a list of values by subscribing to a
 /// path in the database.
-class FfiListBuilder<T>
-    extends ValueListenableBuilder<ChangeTrackingList<T>> {
+class FfiListBuilder<T> extends ValueListenableBuilder<ChangeTrackingList<T>> {
   FfiListBuilder(
     String path,
     ValueNotifier<ChangeTrackingList<T>> notifier,

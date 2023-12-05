@@ -16,7 +16,8 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
     T Function(Uint8List serialized)? deserialize,
   }) : super(defaultValue, removeFromCache) {
     if (defaultValue is int?) {
-      value = int.parse(ffiFunction().toDartString()) as T?;
+      value = null;
+      //value = int.parse(ffiFunction().toDartString()) as T?;
     } else if (defaultValue is String) {
       value = ffiFunction().toDartString() as T?;
     } else {

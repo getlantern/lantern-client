@@ -39,6 +39,7 @@ final SelectedTab ffiSelectedTab =
     dylib.lookup<ffi.NativeFunction<selectedtab_func>>('SelectedTab').asFunction();
 
 final ProFunc ffiPlans = dylib.lookup<ffi.NativeFunction<pro_func>>('Plans').asFunction();
+final ProFunc ffiPaymentMethods = dylib.lookup<ffi.NativeFunction<pro_func>>('PaymentMethods').asFunction();
 final ProFunc getUserData = dylib.lookup<ffi.NativeFunction<pro_func>>('UserData').asFunction();
 final ProFunc ffiEmailAddress = dylib.lookup<ffi.NativeFunction<pro_func>>('EmailAddress').asFunction();
 final ProFunc ffiReferral = dylib.lookup<ffi.NativeFunction<pro_func>>('Referral').asFunction();
@@ -50,6 +51,7 @@ final ProFunc ffiAcceptedTermsVersion = dylib.lookup<ffi.NativeFunction<pro_func
 final ProFunc ffiProUser = dylib.lookup<ffi.NativeFunction<pro_func>>('ProUser').asFunction();
 final ProFunc ffiDevelopmentMode = dylib.lookup<ffi.NativeFunction<pro_func>>('DevelopmentMode').asFunction();
 final ProFunc ffiSplitTunneling = dylib.lookup<ffi.NativeFunction<pro_func>>('SplitTunneling').asFunction();
+final ProFunc ffiChatMe = dylib.lookup<ffi.NativeFunction<pro_func>>('ChatMe').asFunction();
 final ProFunc ffiPlayVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('PlayVersion').asFunction();
 final ProFunc ffiStoreVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('StoreVersion').asFunction();
 final ProFunc ffiHasSucceedingProxy = dylib.lookup<ffi.NativeFunction<pro_func>>('HasSucceedingProxy').asFunction();

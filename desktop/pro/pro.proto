@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "google/protobuf/struct.proto";
 option go_package = "github.com/getlantern/lantern-client/pro";
 
 message EmptyRequest{}
@@ -48,4 +49,18 @@ message UserDetailsResponse {
     uint64 expiration = 8;
     repeated string servers = 9;
     repeated Device devices = 10;
+}
+
+message PaymentProvider {
+    string name = 1;
+    map<string, string> data = 2;
+}
+
+message PaymentMethod {
+    string method = 1;
+    repeated PaymentProvider providers = 2;
+}
+
+message PaymentMethodsResponse {
+    map<string, google.protobuf.ListValue> providers = 1; 
 }

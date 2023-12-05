@@ -13,6 +13,7 @@ import (
 
 const (
 	baseUrl       = "https://api.getiantem.org"
+	paymentMethodsUrl = baseUrl + "/plans-v3"
 	plansUrl = baseUrl + "/plans"
 	userDetailsUrl = baseUrl + "/user-data"
 )
@@ -89,6 +90,35 @@ func (pc *ProClient) Plans() (*PlansResponse, error) {
 	}
 
 	return &plansResponse, nil
+}
+
+func (pc *ProClient) PaymentMethods() (*PaymentMethodsResponse, error) {
+	// Create a new request
+	req, err := pc.newRequest("GET", paymentMethodsUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	// Send the request
+	resp, err := pc.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Read the response body
+	var paymentMethodsResponse PaymentMethodsResponse
+	// Read and decode the response body
+	if err := json.NewDecoder(resp.Body).Decode(&paymentMethodsResponse); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+
+	b, _ := json.Marshal(&paymentMethodsResponse)
+
+	log.Debugf("Response is %v", string(b))
+	return &paymentMethodsResponse, nil
 }
 
 func (pc *ProClient) UserData() (*UserDetailsResponse, error) {

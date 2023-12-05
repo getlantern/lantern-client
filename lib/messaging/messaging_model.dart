@@ -304,12 +304,20 @@ class MessagingModel extends Model {
   }
 
   Widget me(ValueWidgetBuilder<Contact> builder) {
-    return subscribedSingleValueBuilder<Contact>(
-      '/me',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<Contact>(
+        '/me',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return Contact.fromBuffer(serialized);
+        },
+      );
+    }
+    return ffiValueBuilder<Contact>(
+      'chatMe',
+      ffiChatMe,
+      defaultValue: null,
       builder: builder,
-      deserialize: (Uint8List serialized) {
-        return Contact.fromBuffer(serialized);
-      },
     );
   }
 
@@ -544,7 +552,7 @@ class MessagingModel extends Model {
       defaultValue: false,
       ffiOnBoardingStatus,
       builder: builder,
-    );    
+    );
   }
 
   Future<void> saveNotificationsTS<T>() async {
