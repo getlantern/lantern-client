@@ -72,7 +72,7 @@ class MainActivity :
     private lateinit var replicaModel: ReplicaModel
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
-    private lateinit var accountInitDialog: AlertDialog
+    private var accountInitDialog: AlertDialog? = null
     private lateinit var notifications: NotificationHelper
     private lateinit var receiver: NotificationReceiver
     private var autoUpdateJob: Job? = null
@@ -198,10 +198,7 @@ class MainActivity :
 
     override fun onDestroy() {
         super.onDestroy()
-        if (accountInitDialog != null) {
-            accountInitDialog.dismiss()
-        }
-
+        accountInitDialog?.let { it.dismiss() }
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
@@ -234,33 +231,30 @@ class MainActivity :
         when (status.status) {
             AccountInitializationStatus.Status.PROCESSING -> {
                 accountInitDialog = AlertDialog.Builder(this).create()
-                accountInitDialog.setCancelable(false)
+                accountInitDialog?.setCancelable(false)
                 val inflater: LayoutInflater = this.layoutInflater
                 val dialogView = inflater.inflate(R.layout.init_account_dialog, null)
-                accountInitDialog.setView(dialogView)
+                accountInitDialog?.setView(dialogView)
                 val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
                 tvMessage.text = getString(R.string.init_account, appName)
                 dialogView.findViewById<View>(R.id.btnCancel)
                     .setOnClickListener {
                         EventBus.getDefault().removeStickyEvent(status)
-                        accountInitDialog.dismiss()
+                        accountInitDialog?.dismiss()
                         finish()
                     }
-                accountInitDialog.show()
+                accountInitDialog?.show()
             }
 
             AccountInitializationStatus.Status.SUCCESS -> {
                 EventBus.getDefault().removeStickyEvent(status)
-                if (accountInitDialog != null) {
-                    accountInitDialog.dismiss()
-                }
+                accountInitDialog?.let { it.dismiss() }
             }
 
             AccountInitializationStatus.Status.FAILURE -> {
                 EventBus.getDefault().removeStickyEvent(status)
-                if (accountInitDialog != null) {
-                    accountInitDialog.dismiss()
-                }
+                accountInitDialog?.let { it.dismiss() }
+
                 Utils.showAlertDialog(
                     this,
                     getString(R.string.connection_error),
