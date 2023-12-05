@@ -64,3 +64,8 @@ message PaymentMethod {
 message PaymentMethodsResponse {
     map<string, google.protobuf.ListValue> providers = 1; 
 }
+
+message LinkCodeResponse {
+    string code = 1;
+    int64 expireAt = 2;
+}

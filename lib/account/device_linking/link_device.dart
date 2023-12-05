@@ -16,7 +16,7 @@ class _LinkDeviceState extends State<LinkDevice> {
   @override
   void initState() {
     super.initState();
-    sessionModel.requestLinkCode();
+    if (Platform.isAndroid) sessionModel.requestLinkCode();
   }
 
   @override

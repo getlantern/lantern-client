@@ -1,10 +1,15 @@
 package pro
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
 	"net/http/httputil"
 	"strconv"
+
+	"github.com/shirou/gopsutil/v3/host"
 
 	"github.com/getlantern/golog"
 	"github.com/getlantern/flashlight/v7/pro"
@@ -13,6 +18,7 @@ import (
 
 const (
 	baseUrl       = "https://api.getiantem.org"
+	linkCodeUrl = baseUrl + "/link-code-request"
 	paymentMethodsUrl = baseUrl + "/plans-v3"
 	plansUrl = baseUrl + "/plans"
 	userDetailsUrl = baseUrl + "/user-data"
@@ -58,6 +64,45 @@ func (pc *ProClient) newRequest(method, url string) (*http.Request, error) {
 
 	pc.setHeaders(req)
 	return req, nil
+}
+
+func (pc *ProClient) POST(url string, body io.Reader) (*http.Response, error) {
+	// Create a new request
+	req, err := http.NewRequest(http.MethodPost, url, body)
+	if err != nil {
+		log.Errorf("Error creating user details request: %v", err)
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	pc.setHeaders(req)
+
+	// Send the request
+	resp, err := pc.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (pc *ProClient) LinkCodeRequest() (*LinkCodeResponse, error) {
+	info, _ := host.Info()
+	jsonBody := []byte(fmt.Sprintf(`{"deviceName": "%s"}`, info.Hostname))
+	resp, err := pc.POST(linkCodeUrl, bytes.NewReader(jsonBody))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	// Read the response body
+	var linkCodeResponse LinkCodeResponse
+	// Read and decode the response body
+	if err := json.NewDecoder(resp.Body).Decode(&linkCodeResponse); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+	return &linkCodeResponse, nil
+
 }
 
 func (pc *ProClient) Plans() (*PlansResponse, error) {

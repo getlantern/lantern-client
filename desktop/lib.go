@@ -191,6 +191,15 @@ func ProUser() *C.char {
 	return C.CString("false")
 }
 
+//export DeviceLinkingCode
+func DeviceLinkingCode() *C.char {
+	resp, err := proClient.LinkCodeRequest()
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString(resp.Code)
+}
+
 //export DevelopmentMode
 func DevelopmentMode() *C.char {
 	return C.CString("false")

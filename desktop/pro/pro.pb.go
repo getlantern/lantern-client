@@ -712,6 +712,61 @@ func (x *PaymentMethodsResponse) GetProviders() map[string]*structpb.ListValue {
 	return nil
 }
 
+type LinkCodeResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Code     string `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	ExpireAt int64  `protobuf:"varint,2,opt,name=expireAt,proto3" json:"expireAt,omitempty"`
+}
+
+func (x *LinkCodeResponse) Reset() {
+	*x = LinkCodeResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_desktop_pro_pro_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LinkCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LinkCodeResponse) ProtoMessage() {}
+
+func (x *LinkCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_desktop_pro_pro_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LinkCodeResponse.ProtoReflect.Descriptor instead.
+func (*LinkCodeResponse) Descriptor() ([]byte, []int) {
+	return file_desktop_pro_pro_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *LinkCodeResponse) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *LinkCodeResponse) GetExpireAt() int64 {
+	if x != nil {
+		return x.ExpireAt
+	}
+	return 0
+}
+
 var File_desktop_pro_pro_proto protoreflect.FileDescriptor
 
 var file_desktop_pro_pro_proto_rawDesc = []byte{
@@ -813,11 +868,15 @@ var file_desktop_pro_pro_proto_rawDesc = []byte{
 	0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x30, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75,
 	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x56, 0x61,
-	0x6c, 0x75, 0x65, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0x2a,
-	0x5a, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x65, 0x74,
-	0x6c, 0x61, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x2f, 0x6c, 0x61, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x2d,
-	0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x2f, 0x70, 0x72, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x6c, 0x75, 0x65, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x42,
+	0x0a, 0x10, 0x4c, 0x69, 0x6e, 0x6b, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x65, 0x78, 0x70, 0x69, 0x72, 0x65,
+	0x41, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x65, 0x78, 0x70, 0x69, 0x72, 0x65,
+	0x41, 0x74, 0x42, 0x2a, 0x5a, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x67, 0x65, 0x74, 0x6c, 0x61, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x2f, 0x6c, 0x61, 0x6e, 0x74,
+	0x65, 0x72, 0x6e, 0x2d, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x2f, 0x70, 0x72, 0x6f, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -832,7 +891,7 @@ func file_desktop_pro_pro_proto_rawDescGZIP() []byte {
 	return file_desktop_pro_pro_proto_rawDescData
 }
 
-var file_desktop_pro_pro_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_desktop_pro_pro_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_desktop_pro_pro_proto_goTypes = []interface{}{
 	(*EmptyRequest)(nil),           // 0: EmptyRequest
 	(*EmptyResponse)(nil),          // 1: EmptyResponse
@@ -845,21 +904,22 @@ var file_desktop_pro_pro_proto_goTypes = []interface{}{
 	(*PaymentProvider)(nil),        // 8: PaymentProvider
 	(*PaymentMethod)(nil),          // 9: PaymentMethod
 	(*PaymentMethodsResponse)(nil), // 10: PaymentMethodsResponse
-	nil,                            // 11: Plan.PriceEntry
-	nil,                            // 12: Plan.ExpectedMonthlyPriceEntry
-	nil,                            // 13: PaymentProvider.DataEntry
-	nil,                            // 14: PaymentMethodsResponse.ProvidersEntry
-	(*structpb.ListValue)(nil),     // 15: google.protobuf.ListValue
+	(*LinkCodeResponse)(nil),       // 11: LinkCodeResponse
+	nil,                            // 12: Plan.PriceEntry
+	nil,                            // 13: Plan.ExpectedMonthlyPriceEntry
+	nil,                            // 14: PaymentProvider.DataEntry
+	nil,                            // 15: PaymentMethodsResponse.ProvidersEntry
+	(*structpb.ListValue)(nil),     // 16: google.protobuf.ListValue
 }
 var file_desktop_pro_pro_proto_depIdxs = []int32{
-	11, // 0: Plan.price:type_name -> Plan.PriceEntry
-	12, // 1: Plan.expectedMonthlyPrice:type_name -> Plan.ExpectedMonthlyPriceEntry
+	12, // 0: Plan.price:type_name -> Plan.PriceEntry
+	13, // 1: Plan.expectedMonthlyPrice:type_name -> Plan.ExpectedMonthlyPriceEntry
 	4,  // 2: PlansResponse.plans:type_name -> Plan
 	6,  // 3: UserDetailsResponse.devices:type_name -> Device
-	13, // 4: PaymentProvider.data:type_name -> PaymentProvider.DataEntry
+	14, // 4: PaymentProvider.data:type_name -> PaymentProvider.DataEntry
 	8,  // 5: PaymentMethod.providers:type_name -> PaymentProvider
-	14, // 6: PaymentMethodsResponse.providers:type_name -> PaymentMethodsResponse.ProvidersEntry
-	15, // 7: PaymentMethodsResponse.ProvidersEntry.value:type_name -> google.protobuf.ListValue
+	15, // 6: PaymentMethodsResponse.providers:type_name -> PaymentMethodsResponse.ProvidersEntry
+	16, // 7: PaymentMethodsResponse.ProvidersEntry.value:type_name -> google.protobuf.ListValue
 	8,  // [8:8] is the sub-list for method output_type
 	8,  // [8:8] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
@@ -1005,6 +1065,18 @@ func file_desktop_pro_pro_proto_init() {
 				return nil
 			}
 		}
+		file_desktop_pro_pro_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LinkCodeResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1012,7 +1084,7 @@ func file_desktop_pro_pro_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_desktop_pro_pro_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

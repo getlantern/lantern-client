@@ -64,14 +64,13 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-      if (Platform.isAndroid)
-        ListItemFactory.settingsItem(
-          icon: ImagePaths.devices,
-          content: 'Authorize Device for Pro'.i18n,
-          onTap: () {
-            authorizeDeviceForPro(context);
-          },
-        ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.devices,
+        content: 'Authorize Device for Pro'.i18n,
+        onTap: () {
+          authorizeDeviceForPro(context);
+        },
+      ),
       ...commonItems(context)
     ];
   }

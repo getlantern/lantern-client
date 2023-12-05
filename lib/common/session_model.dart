@@ -530,9 +530,17 @@ class SessionModel extends Model {
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      'devicelinkingcode',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'devicelinkingcode',
+        defaultValue: '',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
+      'deviceLinkingCode',
       defaultValue: '',
+      ffiDeviceLinkingCode,
       builder: builder,
     );
   }
