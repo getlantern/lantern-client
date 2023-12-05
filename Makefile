@@ -8,12 +8,11 @@ INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 
 %.pb.go: %.proto
 	go build -o build/protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go
-	protoc --go_out=. --plugin=build/protoc-gen-go --go_opt=paths=source_relative $<
 
 codegen: protos routes
 
 # You can install the dart protoc support by running 'dart pub global activate protoc_plugin'
-protos: lib/messaging/protos_flutteronly/messaging.pb.dart lib/vpn/protos_shared/vpn.pb.dart
+protos: lib/vpn/protos_shared/vpn.pb.dart
 
 lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging.proto
 	@protoc --dart_out=./lib/messaging --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_flutteronly/messaging.proto
@@ -64,6 +63,7 @@ CHANGE    := $(call get-command,git-chglog)
 PIP       := $(call get-command,pip)
 WGET      := $(call get-command,wget)
 APPDMG    := $(call get-command,appdmg)
+RETRY     := $(call get-command,retry)
 MAGICK    := $(call get-command,magick)
 BUNDLER   := $(call get-command,bundle)
 ADB       := $(call get-command,adb)
@@ -122,6 +122,17 @@ SENTRY_PROJECT_IOS=lantern-ios
 
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/Release-prod-iphoneos/Runner.app.dSYM
 INFO_PLIST := ios/Runner/Info.plist
+
+APP ?= lantern
+CAPITALIZED_APP := Lantern
+DARWIN_BINARY_NAME ?= desktop/liblantern.dylib
+DARWIN_APP_NAME ?= $(CAPITALIZED_APP).app
+INSTALLER_RESOURCES ?= installer-resources-$(APP)
+INSTALLER_NAME ?= $(APP)-installer
+
+APP_YAML := lantern.yaml
+APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
+PACKAGED_YAML := .packaged-$(APP_YAML)
 
 
 # By default, build APKs containing support for ARM only 32 bit. Since we're using multi-architecture
@@ -216,6 +227,10 @@ define check-go-version
 	fi
 endef
 
+define osxcodesign
+	codesign --options runtime --strict --timestamp --force --deep -r="designated => anchor trusted and identifier com.getlantern.lantern" -s "Developer ID Application: Innovate Labs LLC (4FYC28AXA2)" -v $(1)
+endef
+
 guard-%:
 	 @ if [ -z '${${*}}' ]; then echo 'Environment variable $* not set' && exit 1; fi
 
@@ -269,6 +284,14 @@ require-magick:
 .PHONY: require-sentry
 require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
+
+.PHONY: require-appdmg
+require-appdmg:
+	@if [[ -z "$(APPDMG)" ]]; then echo 'Missing "appdmg" command. Try sudo npm install -g appdmg.'; exit 1; fi
+
+.PHONY: require-retry
+require-retry:
+	@if [[ -z "$(RETRY)" ]]; then echo 'Missing retry command. Try go install github.com/joshdk/retry'; exit 1; fi
 
 release-autoupdate: require-version
 	@curl https://s3.amazonaws.com/lantern/lantern-installer.apk | bzip2 > update_android_arm.bz2 && \
@@ -391,6 +414,93 @@ ios-release:set-version build-framework
 	echo "iOS IPA generated under: $$IPA_PATH"; \
 	open "$$IPA_PATH"
 
+.PHONY: echo-build-tags
+echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=1 make echo-build-tags` for example to see how it changes
+	@if [[ -z "$$VERSION" ]]; then \
+		echo "** VERSION was not set, using default version. This is OK while in development."; \
+	fi
+	@echo "Build tags: $(BUILD_TAGS)"
+	@echo "Extra ldflags: $(EXTRA_LDFLAGS)"
+	@echo "Binary name: $(BINARY_NAME)"
+	@if [[ "$$GOOS" ]]; then echo "GOOS: $(GOOS)"; fi
+	@if [[ "$$GOARCH" ]]; then echo "GOARCH: $(GOARCH)"; fi
+	@if [[ "$$CC" ]]; then echo "CC: $(CC)"; fi
+	@if [[ "$$CXX" ]]; then echo "CXX: $(CXX)"; fi
+
+.PHONY: desktop-app
+desktop-app: export GOPRIVATE = github.com/getlantern
+desktop-app: export CGO_ENABLED = 1
+desktop-app: $(GO_SOURCES) echo-build-tags
+	$(GO) build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(BINARY_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
+
+## Darwin
+.PHONY: darwin
+darwin: $(DARWIN_BINARY_NAME) ## Build lantern for darwin (can only be run from a darwin machine)
+
+$(DARWIN_BINARY_NAME): export BINARY_NAME = $(DARWIN_BINARY_NAME)
+$(DARWIN_BINARY_NAME): export GOOS = darwin
+$(DARWIN_BINARY_NAME): export GOARCH = amd64
+$(DARWIN_BINARY_NAME): export GO_BUILD_FLAGS += -a
+$(DARWIN_BINARY_NAME): export EXTRA_LDFLAGS += -s
+$(DARWIN_BINARY_NAME): echo-build-tags
+	@echo "Building darwin/amd64..." && \
+	export OSX_DEV_SDK=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$(OSX_MIN_VERSION).sdk && \
+	if [[ "$$(uname -s)" == "Darwin" ]]; then \
+		if [[ -d $$OSX_DEV_SDK ]]; then \
+			export CGO_CFLAGS="--sysroot $$OSX_DEV_SDK" && \
+			export CGO_LDFLAGS="--sysroot $$OSX_DEV_SDK"; \
+		fi && \
+		MACOSX_DEPLOYMENT_TARGET=$(OSX_MIN_VERSION) \
+		make desktop-app; \
+	else \
+		echo "-> Skipped: Can not compile $(CAPITALIZED_APP) for OSX on a non-OSX host."; \
+	fi
+
+$(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
+	@echo "Generating distribution package for darwin/amd64..." && \
+	if [[ "$$(uname -s)" == "Darwin" ]]; then \
+		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
+		rm -rf $(DARWIN_APP_NAME) && \
+		cp -r $$INSTALLER_RESOURCES/$(DARWIN_APP_NAME)_template $(DARWIN_APP_NAME) && \
+		mkdir $(DARWIN_APP_NAME)/Contents/MacOS && \
+		cp -r build/macos/Build/Products/Release/androidlantern.app/Contents/MacOS/androidlantern $(DARWIN_APP_NAME)/Contents/MacOS/$(APP) && \
+		cp -r $(DARWIN_BINARY_NAME) $(DARWIN_APP_NAME)/Contents/MacOS/liblantern.dylib && \
+		mkdir $(DARWIN_APP_NAME)/Contents/Resources/en.lproj && \
+		cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(PACKAGED_YAML) && \
+		cp $(APP_YAML_PATH) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(APP_YAML) && \
+		cat $(DARWIN_APP_NAME)/Contents/MacOS/$(APP) | bzip2 > $(APP)_update_darwin_amd64.bz2 && \
+		ls -l $(DARWIN_BINARY_NAME) $(APP)_update_darwin_amd64.bz2 && \
+		rm -rf $(INSTALLER_NAME).dmg && \
+		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
+		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
+		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
+		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
+		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
+		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
+		rm $(CAPITALIZED_APP).dmg.zlib; \
+	else \
+		echo "-> Skipped: Can not generate a package on a non-OSX host."; \
+	fi;
+
+.PHONY: darwin-installer
+darwin-installer: $(INSTALLER_NAME).dmg
+
+.PHONY: notarize-darwin
+notarize-darwin: darwin-installer require-ac-username require-ac-password
+	@echo "Notarizing distribution package for darwin/amd64..." && \
+	if [[ "$$(uname -s)" == "Darwin" ]]; then \
+		./$(INSTALLER_RESOURCES)/tools/notarize-darwin.py \
+		  -u $$AC_USERNAME \
+		  -p $$AC_PASSWORD \
+		  -b com.getlantern.lantern \
+		  -a 4FYC28AXA2 \
+		  $(INSTALLER_NAME).dmg; \
+	else \
+		echo "-> Skipped: Can not notarize a package on a non-OSX host."; \
+	fi;
+
+.PHONY: package-darwin
+package-darwin: darwin-installer notarize-darwin
 
 android-bundle: $(MOBILE_BUNDLE)
 

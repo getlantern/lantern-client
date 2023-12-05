@@ -91,3 +91,52 @@ jobs:
     - name: Build Flutter app
       run: flutter build macos
 
+    - uses: actions/setup-node@v2.4.1
+      with:
+        node-version: '16'
+
+    - name: Install darwin installer dependencies
+      run: |
+        sudo npm install -g appdmg
+        brew tap joshdk/tap
+        brew install joshdk/tap/retry
+        brew install imagemagick
+
+    - name: Build darwin installer
+      run: |
+        make darwin-installer
+      env:
+        VERSION: "${{ env.version }}"
+        MACOS_CERTIFICATE: ${{ secrets.MACOS_CERT }}
+        MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERT_PASS }}
+
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+    - name: Install s3cmd
+      run: pip install s3cmd
+
+    - name: Set s3cmd permissions
+      run: |
+        echo "[default]" > "$HOME/.s3cfg"
+        echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
+        echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: osx-build
+        retention-days: 2
+        path: |
+          lantern-installer.dmg
+
+    - name: Push binaries to s3
+      env:
+        VERSION: "${{ env.version }}"
+        DMG: "${{ env.prefix }}-${{ env.version }}.dmg"
+      run: |
+        mv lantern-installer.dmg "$DMG"
+        cp "$DMG" ${{ env.prefix }}.dmg
+        echo ${{ env.version }} > ${{ env.version_file }}
+        shasum -a 256 "$DMG" | cut -d " " -f 1 > "$DMG".sha256
+        cp "$DMG".sha256 ${{ env.prefix }}.dmg.sha256
+        s3cmd put --acl-public "$DMG" ${{ env.version_file }} "$DMG".sha256 ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
