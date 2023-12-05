@@ -8,6 +8,7 @@ import androidx.multidex.MultiDex
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternSessionManager
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.debugOnly
 import org.getlantern.lantern.util.LanternProxySelector
 import org.getlantern.lantern.util.SentryUtil
@@ -52,6 +53,8 @@ open class LanternApp : Application() {
         inAppBilling = InAppBilling(this)
 
         lanternHttpClient = LanternHttpClient()
+
+        Plausible.init(applicationContext)
 
         // When the app starts, reset our "hasSucceedingProxy" flag to clear any old warnings
         // about proxies being unavailable.
