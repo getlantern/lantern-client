@@ -4,7 +4,12 @@ import '../../common/common.dart';
 
 @RoutePage<void>(name: 'SignInPassword')
 class SignInPassword extends StatefulWidget {
-  const SignInPassword({super.key});
+  final String email;
+
+  const SignInPassword({
+    super.key,
+    required this.email,
+  });
 
   @override
   State<SignInPassword> createState() => _SignInPasswordState();
@@ -41,11 +46,7 @@ class _SignInPasswordState extends State<SignInPassword> {
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
-              child: Button(
-                disabled: _passwordController.text.isEmpty ||
-                    _passwordFormKey?.currentState?.validate() == false,
-                text: 'continue'.i18n,
-              ),
+              child: Button(text: 'continue'.i18n, onPressed: onContinueTap),
             ),
             const SizedBox(height: 24),
             RichText(
@@ -100,5 +101,18 @@ class _SignInPasswordState extends State<SignInPassword> {
   void openResetPasswordFlow() {
     //Pop current route and push SignIn so back stack will handle
     context.router.popAndPush(SignIn(authFlow: AuthFlow.reset));
+  }
+
+  void onContinueTap() async {
+    //Close keyboard
+    FocusManager.instance.primaryFocus?.unfocus();
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.login(widget.email, _passwordController.text);
+      context.loaderOverlay.hide();
+    } catch (e) {
+      print(e);
+      context.loaderOverlay.hide();
+    }
   }
 }

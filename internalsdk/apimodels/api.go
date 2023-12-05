@@ -8,15 +8,18 @@ import (
 	"math/big"
 	"net/http"
 	"net/http/httputil"
+	"strings"
 	"time"
 
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 )
 
+// https://api.iantem.io/v1/users/salt
 const (
+	publicBaseUrl = "https://api.iantem.io/v1"
 	baseUrl       = "https://api.getiantem.org"
-	userGroup     = baseUrl + "/user"
+	userGroup     = publicBaseUrl + "/users"
 	userDetailUrl = baseUrl + "/user-data"
 	userCreateUrl = baseUrl + "/user-create"
 	//Sign up urls
@@ -154,20 +157,40 @@ func Signup(signupBody map[string]interface{}, userId string, token string) (*Us
 	return &userDetail, nil
 }
 
-func GetSalt(userName string) (*[]int64, error) {
-	resp, err := http.Get(saltUrl)
+func GetSalt(userName string) (*[]int, error) {
+	fullUrl := saltUrl + "?username=" + userName
+	// Marshal the map to JSON
+
+	req, err := http.NewRequest("GET", fullUrl, nil)
 	if err != nil {
 		log.Errorf("Error getting user salt: %v", err)
 		return nil, err
 	}
-	defer resp.Body.Close()
-
-	var salt Salt
-	if err := json.NewDecoder(resp.Body).Decode(&salt); err != nil {
-		log.Errorf("Error decoding response body: %v", err)
+	req.Header.Set("Content-Type", "application/json")
+	// Initialize a new http client
+	client := &http.Client{}
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
 		return nil, err
 	}
-	return &salt.Salt, nil
+	defer resp.Body.Close()
+
+	// Read the response body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response:", err)
+		return nil, err
+	}
+
+	bodyStr := strings.TrimSpace(string(body))
+	log.Debugf("Response body:GetSalt-> %s", bodyStr)
+	salt, err := StringToIntSlice(bodyStr)
+	if err != nil {
+		return nil, err
+	}
+	return &salt, nil
 }
 
 func LoginPrepare(prepareBody map[string]interface{}) (*big.Int, error) {
@@ -177,12 +200,13 @@ func LoginPrepare(prepareBody map[string]interface{}) (*big.Int, error) {
 		log.Errorf("Error marshaling request body: %v", err)
 		return nil, err
 	}
-
+	log.Debugf("Request body:LoginPrepare-> %s", requestBody)
 	req, err := http.NewRequest("POST", prepareUrl, bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Errorf("Error creating signup request: %v", err)
 		return nil, err
 	}
+	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
 	// Send the request
@@ -199,7 +223,8 @@ func LoginPrepare(prepareBody map[string]interface{}) (*big.Int, error) {
 		return nil, err
 	}
 	// Print the response body
-	fmt.Println("Response:", string(body))
+	bodyStr := strings.TrimSpace(string(body))
+	log.Debugf("Response body:LoginPrepare-> %s", bodyStr)
 
 	var srpB SrpB
 	if err := json.NewDecoder(resp.Body).Decode(&srpB); err != nil {
@@ -222,6 +247,7 @@ func Login(loginBody map[string]interface{}) (*big.Int, error) {
 		log.Errorf("Error creating login request: %v", err)
 		return nil, err
 	}
+	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
 	// Send the request

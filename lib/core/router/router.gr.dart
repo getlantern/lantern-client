@@ -428,9 +428,13 @@ abstract class $AppRouter extends _i48.RootStackRouter {
       );
     },
     SignInPassword.name: (routeData) {
+      final args = routeData.argsAs<SignInPasswordArgs>();
       return _i48.AutoRoutePage<void>(
         routeData: routeData,
-        child: const _i43.SignInPassword(),
+        child: _i43.SignInPassword(
+          key: args.key,
+          email: args.email,
+        ),
       );
     },
     SplitTunneling.name: (routeData) {
@@ -1707,16 +1711,40 @@ class SignInArgs {
 
 /// generated route for
 /// [_i43.SignInPassword]
-class SignInPassword extends _i48.PageRouteInfo<void> {
-  const SignInPassword({List<_i48.PageRouteInfo>? children})
-      : super(
+class SignInPassword extends _i48.PageRouteInfo<SignInPasswordArgs> {
+  SignInPassword({
+    _i50.Key? key,
+    required String email,
+    List<_i48.PageRouteInfo>? children,
+  }) : super(
           SignInPassword.name,
+          args: SignInPasswordArgs(
+            key: key,
+            email: email,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'SignInPassword';
 
-  static const _i48.PageInfo<void> page = _i48.PageInfo<void>(name);
+  static const _i48.PageInfo<SignInPasswordArgs> page =
+      _i48.PageInfo<SignInPasswordArgs>(name);
+}
+
+class SignInPasswordArgs {
+  const SignInPasswordArgs({
+    this.key,
+    required this.email,
+  });
+
+  final _i50.Key? key;
+
+  final String email;
+
+  @override
+  String toString() {
+    return 'SignInPasswordArgs{key: $key, email: $email}';
+  }
 }
 
 /// generated route for

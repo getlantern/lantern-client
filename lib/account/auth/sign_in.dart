@@ -28,7 +28,9 @@ class _SignInState extends State<SignIn> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _emailController.text = sessionModel.userEmail.value ?? "";
+      setState(() {
+        _emailController.text = sessionModel.userEmail.value ?? "";
+      });
     });
   }
 
@@ -117,7 +119,7 @@ class _SignInState extends State<SignIn> {
 
   ///Widget methods
   void openCreatePassword() {
-    context.pushRoute(const SignInPassword());
+    context.pushRoute(SignInPassword(email: _emailController.text));
   }
 
   void openVerification() {

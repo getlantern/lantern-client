@@ -269,6 +269,13 @@ class SessionModel extends Model {
     });
   }
 
+  Future<void> login(String email, String password) {
+    return methodChannel.invokeMethod('login', <String, dynamic>{
+      'email': email,
+      'password': password,
+    });
+  }
+
   Future<void> setProxyAll<T>(bool on) async {
     unawaited(
       methodChannel.invokeMethod('setProxyAll', <String, dynamic>{

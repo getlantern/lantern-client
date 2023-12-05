@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 	"math/big"
+	"strconv"
 
 	"github.com/getlantern/errors"
 )
@@ -20,12 +21,12 @@ func BytesToFloat64LittleEndian(b []byte) (float64, error) {
 	return math.Float64frombits(bits), nil
 }
 
-func BytesToInt64Slice(b []byte) []int64 {
-	var int64Slice []int64
+func BytesToInt64Slice(b []byte) []int {
+	var int64Slice []int
 	buf := bytes.NewBuffer(b)
 
 	for buf.Len() >= 8 {
-		var n int64
+		var n int
 		if err := binary.Read(buf, binary.BigEndian, &n); err != nil {
 			fmt.Println("binary.Read failed:", err)
 			return nil
@@ -36,7 +37,7 @@ func BytesToInt64Slice(b []byte) []int64 {
 	return int64Slice
 }
 
-func Int64SliceToBytes(int64Slice []int64) []byte {
+func Int64SliceToBytes(int64Slice []int) []byte {
 	var buf bytes.Buffer
 	for _, n := range int64Slice {
 		if err := binary.Write(&buf, binary.BigEndian, n); err != nil {
@@ -67,6 +68,21 @@ func GenerateSalt() ([]byte, error) {
 	}
 	return salt, nil
 }
+
 func ToString(value int64) string {
 	return fmt.Sprintf("%d", value)
+}
+
+func StringToIntSlice(str string) ([]int, error) {
+	var slice []int
+
+	for _, char := range str {
+		digit, err := strconv.Atoi(string(char))
+		if err != nil {
+			return nil, err
+		}
+		slice = append(slice, digit)
+	}
+
+	return slice, nil
 }

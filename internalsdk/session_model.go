@@ -644,7 +644,7 @@ func setUserIdAndToken(m *baseModel, userId int, token string) error {
 	})
 }
 
-func getUserSalt(m *baseModel, userName string) ([]int64, error) {
+func getUserSalt(m *baseModel, userName string) ([]int, error) {
 	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
 	if err != nil {
 		return nil, err
@@ -654,6 +654,13 @@ func getUserSalt(m *baseModel, userName string) ([]int64, error) {
 	}
 
 	salt, err := apimodels.GetSalt(userName)
+	if err != nil {
+		return nil, err
+	}
+	//Save salt to Db
+	err = pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathUserSalt, Int64SliceToBytes(*salt), "")
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -877,7 +884,7 @@ func signup(session *SessionModel, email string, password string, username strin
 
 func login(session *SessionModel, userName string, email string, password string) error {
 	// Get the salt
-	salt, err := getUserSalt(session.baseModel, email)
+	salt, err := getUserSalt(session.baseModel, userName)
 	if err != nil {
 		return err
 	}
@@ -891,8 +898,8 @@ func login(session *SessionModel, userName string, email string, password string
 
 	//Create body
 	prepareRequestBody := map[string]interface{}{
-		"email": userName,
-		"srpA":  A,
+		"username": userName,
+		"a":        A,
 	}
 	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
 	if err != nil {
