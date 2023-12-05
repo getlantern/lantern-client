@@ -54,8 +54,6 @@ open class LanternApp : Application() {
 
         lanternHttpClient = LanternHttpClient()
 
-        Plausible.init(applicationContext)
-
         // When the app starts, reset our "hasSucceedingProxy" flag to clear any old warnings
         // about proxies being unavailable.
         session.resetHasSucceedingProxy()

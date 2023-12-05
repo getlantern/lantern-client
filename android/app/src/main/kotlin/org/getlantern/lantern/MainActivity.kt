@@ -91,6 +91,8 @@ class MainActivity :
         eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
             override fun onListen(event: Event) {
                 if (LanternApp.getSession().lanternDidStart()) {
+                    Plausible.init(applicationContext)
+                    Logger.debug(TAG, "Plausible initialized")
                     Plausible.enable(true)
                     fetchLoConf()
                     Logger.debug(
