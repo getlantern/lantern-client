@@ -1,4 +1,5 @@
 import 'dart:ffi' as ffi; // For FFI
+import 'package:lantern/common/common.dart';
 import 'package:ffi/ffi.dart';
 import 'package:ffi/src/utf8.dart';
 import 'dart:convert';
@@ -21,7 +22,7 @@ typedef SelectedTab = ffi.Pointer<Utf8> Function(); // Dart fn signature
 typedef setting_func = ffi.Pointer<Utf8> Function();
 typedef Setting = ffi.Pointer<Utf8> Function();
 
-final dylib = ffi.DynamicLibrary.open('liblantern.dylib');
+final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : 'liblantern.dll');
 
 final Start start =
     dylib.lookup<ffi.NativeFunction<start_func>>('Start').asFunction();
