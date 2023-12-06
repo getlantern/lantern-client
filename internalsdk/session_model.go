@@ -644,13 +644,13 @@ func setUserIdAndToken(m *baseModel, userId int, token string) error {
 	})
 }
 
-func getUserSalt(m *baseModel, userName string) ([]int, error) {
+func getUserSalt(m *baseModel, userName string) ([]byte, error) {
 	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
 	if err != nil {
 		return nil, err
 	}
 	if userSalt != nil {
-		return BytesToInt64Slice(userSalt), nil
+		return userSalt, nil
 	}
 
 	salt, err := apimodels.GetSalt(userName)
@@ -659,12 +659,12 @@ func getUserSalt(m *baseModel, userName string) ([]int, error) {
 	}
 	//Save salt to Db
 	err = pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathUserSalt, Int64SliceToBytes(*salt), "")
+		return pathdb.Put[[]byte](tx, pathUserSalt, salt.Salt, "")
 	})
 	if err != nil {
 		return nil, err
 	}
-	return *salt, nil
+	return *&salt.Salt, nil
 
 }
 
@@ -890,17 +890,18 @@ func login(session *SessionModel, userName string, email string, password string
 	}
 
 	// Prepare login request body
-	encryptedKey := srp.KDFRFC5054(Int64SliceToBytes(salt), email, password)
+	encryptedKey := srp.KDFRFC5054(salt, email, password)
 	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
 
 	//Send this key to client
 	A := client.EphemeralPublic()
 
 	//Create body
-	prepareRequestBody := map[string]interface{}{
-		"username": userName,
-		"a":        A,
+	prepareRequestBody := &protos.PrepareRequest{
+		Email: email,
+		A:     A.Bytes(),
 	}
+
 	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
 	if err != nil {
 		return err

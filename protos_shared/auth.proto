@@ -1,0 +1,75 @@
+syntax = "proto3";
+option go_package = "/protos";
+
+message SignupRequest {
+  string email = 1;
+  bytes salt = 2;
+  bytes verifier = 3;
+}
+
+// POST /users/signup
+message SignupEmailResendRequest {
+  string email = 1;
+  bytes salt = 2;
+}
+
+// POST /users/signup/complete/email
+message ConfirmSignupRequest {
+  string email = 1;
+  string code = 2;
+}
+
+// GET /users/salt
+message GetSaltResponse {
+  bytes salt = 1;
+}
+
+// POST /users/prepare
+message PrepareRequest {
+  string email = 1;
+  bytes a = 2;
+}
+
+message PrepareResponse {
+  bytes b = 1;
+  bytes proof = 2;
+}
+
+// POST /users/login
+message LoginRequest {
+  string email = 1;
+  bytes proof = 2;
+}
+
+message LoginResponse {
+  int64 legacyID = 1;
+  string legacyToken = 2;
+  string id = 3;
+}
+
+// POST /users/recovery/start/email
+message StartRecoveryByEmailRequest {
+  string email = 1;
+}
+
+// POST /users/recovery/complete/email
+message CompleteRecoveryByEmailRequest {
+  string email = 1;
+  string code = 2;
+  bytes new_salt = 3;
+  bytes new_verifier = 4;
+}
+
+// POST /users/change_email
+message ChangeEmailRequest {
+  string old_email = 1;
+  string new_email = 2;
+  bytes proof = 3;
+}
+
+// POST /users/delete
+message DeleteUserRequest {
+  string email = 1;
+  bool permanent = 2;
+  bytes proof = 3;
+}

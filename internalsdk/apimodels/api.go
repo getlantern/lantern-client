@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"math/big"
 	"net/http"
@@ -11,8 +12,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
+	"google.golang.org/protobuf/proto"
 )
 
 // https://api.iantem.io/v1/users/salt
@@ -157,7 +160,7 @@ func Signup(signupBody map[string]interface{}, userId string, token string) (*Us
 	return &userDetail, nil
 }
 
-func GetSalt(userName string) (*[]int, error) {
+func GetSalt(userName string) (*protos.GetSaltResponse, error) {
 	fullUrl := saltUrl + "?username=" + userName
 	// Marshal the map to JSON
 
@@ -178,24 +181,23 @@ func GetSalt(userName string) (*[]int, error) {
 	defer resp.Body.Close()
 
 	// Read the response body
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Error reading response:", err)
 		return nil, err
 	}
-
 	bodyStr := strings.TrimSpace(string(body))
 	log.Debugf("Response body:GetSalt-> %s", bodyStr)
-	salt, err := StringToIntSlice(bodyStr)
-	if err != nil {
-		return nil, err
+	var slatResponse protos.GetSaltResponse
+	if err := proto.Unmarshal(body, &slatResponse); err != nil {
+		log.Errorf("Error unmarshalling response: ", err)
 	}
-	return &salt, nil
+	return &slatResponse, nil
 }
 
-func LoginPrepare(prepareBody map[string]interface{}) (*big.Int, error) {
+func LoginPrepare(prepareBody *protos.PrepareRequest) (*protos.PrepareResponse, error) {
 	// Marshal the map to JSON
-	requestBody, err := json.Marshal(prepareBody)
+	requestBody, err := proto.Marshal(prepareBody)
 	if err != nil {
 		log.Errorf("Error marshaling request body: %v", err)
 		return nil, err
@@ -217,7 +219,7 @@ func LoginPrepare(prepareBody map[string]interface{}) (*big.Int, error) {
 	}
 	defer resp.Body.Close()
 	// Read the response body
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Error reading response:", err)
 		return nil, err
@@ -226,12 +228,11 @@ func LoginPrepare(prepareBody map[string]interface{}) (*big.Int, error) {
 	bodyStr := strings.TrimSpace(string(body))
 	log.Debugf("Response body:LoginPrepare-> %s", bodyStr)
 
-	var srpB SrpB
-	if err := json.NewDecoder(resp.Body).Decode(&srpB); err != nil {
-		log.Errorf("Error decoding response body: %v", err)
-		return nil, err
+	var prepareResponse protos.PrepareResponse
+	if err := proto.Unmarshal(body, &prepareResponse); err != nil {
+		log.Errorf("Error unmarshalling response: ", err)
 	}
-	return &srpB.SrpB, nil
+	return &prepareResponse, nil
 }
 
 func Login(loginBody map[string]interface{}) (*big.Int, error) {

@@ -20,14 +20,12 @@ lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging
 lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
 	@protoc --dart_out=./lib/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
 
-#internalsdk/protos/%.pb.go: protos_shared/%.proto
-#	@echo "Generating Go protobuf for $<"
-#	@protoc --plugin=protoc-gen-go=build/protoc-gen-go \
-#             --go_out=internalsdk \
-#             $<
 
 internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
 	@protoc --go_out=internalsdk protos_shared/vpn.proto
+
+internalsdk/protos/vpn.pb.go: protos_shared/auth.proto
+	@protoc --go_out=internalsdk protos_shared/auth.proto
 
 # Compiles autorouter routes
 routes: lib/core/router/router.gr.dart
