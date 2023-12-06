@@ -440,7 +440,7 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 desktop-app: export GOPRIVATE = github.com/getlantern
 desktop-app: export CGO_ENABLED = 1
 desktop-app: echo-build-tags
-	$(GO) build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(BINARY_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
+	go build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(BINARY_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
 
 .PHONY: windows
 windows: require-mingw $(WINDOWS_BINARY_NAME) ## Build lantern for windows
