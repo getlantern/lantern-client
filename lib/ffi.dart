@@ -22,7 +22,10 @@ typedef SelectedTab = ffi.Pointer<Utf8> Function(); // Dart fn signature
 typedef setting_func = ffi.Pointer<Utf8> Function();
 typedef Setting = ffi.Pointer<Utf8> Function();
 
-final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : Platform.script.resolve("liblantern.dll").toFilePath());
+// in debug mode local linking
+var path = Directory.current.path;
+
+final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : '$path/liblantern.dll');
 
 final Start start =
     dylib.lookup<ffi.NativeFunction<start_func>>('Start').asFunction();
