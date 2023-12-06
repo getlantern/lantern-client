@@ -87,6 +87,22 @@ jobs:
           path: |
             desktop/liblantern.dylib
 
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Install s3cmd
+        run: pip install s3cmd
+
+      - name: Set s3cmd permissions
+        run: |
+          echo "[default]" > "$HOME/.s3cfg"
+          echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
+          echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
+
+      - name: Push libgo to S3
+        run: s3cmd put --acl-public desktop/liblantern.dylib "s3://lantern/liblantern-${{inputs.update-suffix}}.dylib"
+
     build-windows:
       needs: build-desktop
       permissions:
@@ -149,11 +165,6 @@ jobs:
           with:
             name: windows${{inputs.build-suffix}}-installer-unsigned
 
-        - name: Download the win build output
-          uses: actions/download-artifact@v3
-          with:
-            name: libgo-windows-${{inputs.update-suffix}}-build
-
         - uses: actions/setup-python@v4
           with:
             python-version: '3.8'
@@ -186,6 +197,5 @@ jobs:
             cp ${{ env.dist }}.sha256 ${{ env.dist_versionless }}.sha256
             ls -l
 
-            s3cmd put --acl-public liblantern.dylib "s3://lantern/liblantern-${{inputs.update-suffix}}.dylib"
             s3cmd put --acl-public ${{ env.dist }} ${{ env.update }} ${{ env.update }}.sha256 ${{ env.dist }}.sha256 ${{ env.dist_versionless }}.sha256 ${{ env.dist_versionless }} "s3://lantern"
 
