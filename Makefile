@@ -65,6 +65,7 @@ WGET      := $(call get-command,wget)
 APPDMG    := $(call get-command,appdmg)
 RETRY     := $(call get-command,retry)
 MAGICK    := $(call get-command,magick)
+MINGW     := $(call get-command,i686-w64-mingw32-gcc)
 BUNDLER   := $(call get-command,bundle)
 ADB       := $(call get-command,adb)
 OPENSSL   := $(call get-command,openssl)
@@ -129,6 +130,10 @@ DARWIN_BINARY_NAME ?= desktop/liblantern.dylib
 DARWIN_APP_NAME ?= $(CAPITALIZED_APP).app
 INSTALLER_RESOURCES ?= installer-resources-$(APP)
 INSTALLER_NAME ?= $(APP)-installer
+WINDOWS_BINARY_NAME ?= liblantern.dll
+WINDOWS_APP_NAME ?= $(APP).exe
+WINDOWS64_BINARY_NAME ?= liblantern.dll
+WINDOWS64_APP_NAME ?= $(APP)_x64.ex
 
 APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
@@ -281,6 +286,10 @@ require-wget:
 require-magick:
 	@if [[ -z "$(MAGICK)" ]]; then echo 'Missing "magick" command. Try brew install imagemagick.'; exit 1; fi
 
+.PHONY: require-mingw
+require-mingw:
+	@if [[ -z "$(MINGW)" ]]; then echo 'Missing "mingw" command. Try "brew install mingw-w64."'; exit 1; fi
+
 .PHONY: require-sentry
 require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
@@ -432,6 +441,38 @@ desktop-app: export GOPRIVATE = github.com/getlantern
 desktop-app: export CGO_ENABLED = 1
 desktop-app: $(GO_SOURCES) echo-build-tags
 	$(GO) build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(BINARY_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
+
+
+.PHONY: windows
+windows: require-mingw $(WINDOWS_BINARY_NAME) ## Build lantern for windows
+
+$(WINDOWS_BINARY_NAME): export CXX = i686-w64-mingw32-g++
+$(WINDOWS_BINARY_NAME): export CC = i686-w64-mingw32-gcc
+$(WINDOWS_BINARY_NAME): export CGO_LDFLAGS = -static
+$(WINDOWS_BINARY_NAME): export GOOS = windows
+$(WINDOWS_BINARY_NAME): export GOARCH = 386
+$(WINDOWS_BINARY_NAME): export BINARY_NAME = $(WINDOWS_BINARY_NAME)
+$(WINDOWS_BINARY_NAME): export BUILD_TAGS += walk_use_cgo
+$(WINDOWS_BINARY_NAME): export EXTRA_LDFLAGS += -H=windowsgui -s -w
+$(WINDOWS_BINARY_NAME): export GO_BUILD_FLAGS += -a
+$(WINDOWS_BINARY_NAME): export BUILD_RACE =
+$(WINDOWS_BINARY_NAME): export Environment = production
+$(WINDOWS_BINARY_NAME): desktop-app
+
+.PHONY: windows64
+windows64: require-mingw $(WINDOWS64_BINARY_NAME) ## Build lantern for windows
+
+$(WINDOWS64_BINARY_NAME): export CXX = x86_64-w64-mingw32-g++
+$(WINDOWS64_BINARY_NAME): export CC = x86_64-w64-mingw32-gcc
+$(WINDOWS64_BINARY_NAME): export CGO_LDFLAGS = -static
+$(WINDOWS64_BINARY_NAME): export GOOS = windows
+$(WINDOWS64_BINARY_NAME): export GOARCH = amd64
+$(WINDOWS64_BINARY_NAME): export BINARY_NAME = $(WINDOWS64_BINARY_NAME)
+$(WINDOWS64_BINARY_NAME): export BUILD_TAGS += walk_use_cgo
+$(WINDOWS64_BINARY_NAME): export EXTRA_LDFLAGS += -H=windowsgui -s
+$(WINDOWS64_BINARY_NAME): export GO_BUILD_FLAGS += -a
+$(WINDOWS64_BINARY_NAME): export BUILD_RACE =
+$(WINDOWS64_BINARY_NAME): desktop-app
 
 ## Darwin
 .PHONY: darwin

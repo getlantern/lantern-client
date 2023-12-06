@@ -22,9 +22,6 @@ typedef SelectedTab = ffi.Pointer<Utf8> Function(); // Dart fn signature
 typedef setting_func = ffi.Pointer<Utf8> Function();
 typedef Setting = ffi.Pointer<Utf8> Function();
 
-// in debug mode local linking
-var path = Directory.current.path;
-
 final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : 'liblantern.dll');
 
 final Start start =
