@@ -901,7 +901,7 @@ func login(session *SessionModel, userName string, email string, password string
 		Email: email,
 		A:     A.Bytes(),
 	}
-
+	log.Debugf("A Bytes %v", A.Bytes())
 	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
 	if err != nil {
 		return err
