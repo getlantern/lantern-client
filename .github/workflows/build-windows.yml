@@ -71,12 +71,12 @@ jobs:
           sudo apt-get install -y mingw-w64 nsis    
 
       - name: Build liblantern.dylib
-        if: ${{inputs.update-suffix}} == '386'
+        if: ${{inputs.update-suffix == '386'}}
         run: |
           CGO_ENABLED=1 CC=i686-w64-mingw32-gcc CXX=i686-w64-mingw32-g++ GOOS=windows GOARCH=386 go build -buildmode=c-shared -o desktop/liblantern.dylib desktop/lib.go
 
       - name: Build liblantern.dylib
-        if: ${{inputs.update-suffix}} == 'x64'
+        if: ${{inputs.update-suffix == 'x64'}}
         run: |
           CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ GOOS=windows GOARCH=amd64 go build -buildmode=c-shared -o desktop/liblantern.dylib desktop/lib.go
 
