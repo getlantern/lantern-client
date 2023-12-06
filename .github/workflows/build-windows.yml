@@ -70,22 +70,22 @@ jobs:
           sudo apt-get install -y file build-essential pkg-config
           sudo apt-get install -y mingw-w64 nsis    
 
-      - name: Build liblantern.dylib
+      - name: Build liblantern.dll
         if: ${{inputs.update-suffix == '386'}}
         run: |
-          CGO_ENABLED=1 CC=i686-w64-mingw32-gcc CXX=i686-w64-mingw32-g++ GOOS=windows GOARCH=386 go build -buildmode=c-shared -o desktop/liblantern.dylib desktop/lib.go
+          CGO_ENABLED=1 CC=i686-w64-mingw32-gcc CXX=i686-w64-mingw32-g++ GOOS=windows GOARCH=386 go build -buildmode=c-shared -o desktop/liblantern.dll desktop/lib.go
 
-      - name: Build liblantern.dylib
+      - name: Build liblantern.dll
         if: ${{inputs.update-suffix == 'x64'}}
         run: |
-          CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ GOOS=windows GOARCH=amd64 go build -buildmode=c-shared -o desktop/liblantern.dylib desktop/lib.go
+          CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ GOOS=windows GOARCH=amd64 go build -buildmode=c-shared -o desktop/liblantern.dll desktop/lib.go
 
       - uses: actions/upload-artifact@v3
         with:
           name: libgo-windows-${{inputs.update-suffix}}-build
           if-no-files-found: error
           path: |
-            desktop/liblantern.dylib
+            desktop/liblantern.dll
 
       - uses: actions/setup-python@v4
         with:
@@ -101,7 +101,7 @@ jobs:
           echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
 
       - name: Push libgo to S3
-        run: s3cmd put --acl-public desktop/liblantern.dylib "s3://lantern/liblantern-${{inputs.update-suffix}}.dylib"
+        run: s3cmd put --acl-public desktop/liblantern.dll "s3://lantern/liblantern-${{inputs.update-suffix}}.dll"
 
     build-windows:
       needs: build-desktop
