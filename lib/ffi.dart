@@ -25,7 +25,7 @@ typedef Setting = ffi.Pointer<Utf8> Function();
 // in debug mode local linking
 var path = Directory.current.path;
 
-final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : Platform.script.resolve('C:\\Users\\todd\\lantern-client\\liblantern.dll').toFilePath());
+final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : 'C:\\Users\\todd\\lantern-client\\liblantern.dll');
 
 final Start start =
     dylib.lookup<ffi.NativeFunction<start_func>>('Start').asFunction();
