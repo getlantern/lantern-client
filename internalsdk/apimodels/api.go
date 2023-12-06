@@ -9,7 +9,6 @@ import (
 	"math/big"
 	"net/http"
 	"net/http/httputil"
-	"strings"
 
 	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/golog"
@@ -182,8 +181,7 @@ func GetSalt(userName string) (*protos.GetSaltResponse, error) {
 		fmt.Println("Error reading response:", err)
 		return nil, err
 	}
-	bodyStr := strings.TrimSpace(string(body))
-	log.Debugf("Response body:GetSalt-> %s", bodyStr)
+
 	var slatResponse protos.GetSaltResponse
 	if err := proto.Unmarshal(body, &slatResponse); err != nil {
 		log.Errorf("Error unmarshalling response: ", err)
@@ -220,9 +218,7 @@ func LoginPrepare(prepareBody *protos.PrepareRequest) (*protos.PrepareResponse, 
 		fmt.Println("Error reading response:", err)
 		return nil, err
 	}
-	// Print the response body
-	bodyStr := strings.TrimSpace(string(body))
-	log.Debugf("Response body:LoginPrepare-> %s", bodyStr)
+	log.Debugf("Login prepare response %v", string(body))
 
 	var prepareResponse protos.PrepareResponse
 	if err := proto.Unmarshal(body, &prepareResponse); err != nil {
