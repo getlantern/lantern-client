@@ -150,13 +150,11 @@ class LanternApp extends StatelessWidget {
           ),
         );
       },
-    );
-    final currentLocal = View.of(context).platformDispatcher.locale;
     return sessionModel.language((context, lang, child) {
       Localization.locale = lang;
       return MaterialApp(
         theme: ThemeData(
-          fontFamily: _getLocaleBasedFont(currentLocal),
+          fontFamily: 'Roboto',
           brightness: Brightness.light,
           primarySwatch: Colors.grey,
         ),
