@@ -34,7 +34,7 @@ Future<void> main() async {
   // }, appRunner: () => setupCatcherAndRun(LanternApp()));
 
   if (Platform.isMacOS || Platform.isWindows) {
-    //await initSystemTray();
+    await initSystemTray();
     loadLibrary();
   }
 
