@@ -148,7 +148,7 @@ class ConnectivityWarning extends StatelessWidget {
               ).show(context)
           : null,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 600),
+        duration: const Duration(milliseconds: 500),
         width: MediaQuery.of(context).size.width,
         color: yellow6,
         height: dy,
