@@ -121,7 +121,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     _context = context;
 
-    return sessionModel.acceptedTermsVersion(
+    return Scaffold(
+      body: buildBody(TAB_VPN, true),
+      bottomNavigationBar: CustomBottomBar(
+        selectedTab: TAB_VPN,
+        isDevelop: true,
+      ),
+    );
+
+    /*return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
@@ -155,7 +163,7 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
-    );
+    );*/
   }
 
   @override
