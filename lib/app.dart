@@ -101,24 +101,7 @@ class LanternApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel.language((context, lang, child) {
-      Localization.locale = lang;
-      return MaterialApp(
-        title: 'Lantern Desktop'.i18n,
-        theme: ThemeData(
-          fontFamily: 'Roboto',
-          primarySwatch: Colors.blue,
-        ),
-        home: Scaffold(
-          body: buildBody(TAB_VPN),
-          bottomNavigationBar: CustomBottomBar(
-            selectedTab: TAB_VPN,
-            isDevelop: true,
-          ),
-        ),
-      );
-    });
-    /*return sessionModel.language(
+    return sessionModel.language(
       (context, lang, child) {
         Localization.locale = lang;
         return GlobalLoaderOverlay(
@@ -185,7 +168,7 @@ class LanternApp extends StatelessWidget {
               overlayOpacity: 0.6,
               child: I18n(
                 initialLocale: currentLocale(lang),
-                child: MaterialApp.router(
+                child: MaterialApp(
                   locale: currentLocale(lang),
                   debugShowCheckedModeBanner: false,
                   theme: ThemeData(
@@ -204,8 +187,13 @@ class LanternApp extends StatelessWidget {
                     GlobalWidgetsLocalizations.delegate,
                     GlobalCupertinoLocalizations.delegate,
                   ],
-                  routeInformationParser: globalRouter.defaultRouteParser(),
-                  routerDelegate: globalRouter.delegate(),
+                  home: Scaffold(
+                    body: buildBody(TAB_VPN),
+                    bottomNavigationBar: CustomBottomBar(
+                      selectedTab: TAB_VPN,
+                      isDevelop: true,
+                    ),
+                  ),
                   supportedLocales: const [
                     Locale('ar', 'EG'),
                     Locale('fr', 'FR'),
@@ -228,7 +216,7 @@ class LanternApp extends StatelessWidget {
           },
         );
       },
-    );*/
+    );
   }
 
   Locale currentLocale(String lang) {
