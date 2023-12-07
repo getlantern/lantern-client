@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/common/common.dart';
@@ -11,6 +12,30 @@ import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
 import 'package:lantern/core/router/router.dart';
+import 'package:lantern/messaging/messaging.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
+final globalRouter = AppRouter();
+final networkWarningBarHeightRatio = ValueNotifier(0.0);
+var showConnectivityWarning = false;
+
+// This enum is used to manage the font families used in the application
+enum AppFontFamily {
+  semim('Samim'),
+  roboto('Roboto');
+
+  // the actual string value (the font family name) to each enum value
+  const AppFontFamily(this.fontFamily);
+
+  final String fontFamily;
+}
+
+class _TickerProviderImpl extends TickerProvider {
+  @override
+  Ticker createTicker(TickerCallback onTick) {
+    return Ticker(onTick);
+  }
+}
 
 class DesktopApp extends StatefulWidget {
   const DesktopApp({Key? key}) : super(key: key);
