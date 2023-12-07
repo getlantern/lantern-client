@@ -124,18 +124,11 @@ class _HomePageState extends State<HomePage> {
     return sessionModel.selectedTab(
           (context, selectedTab, child) => messagingModel
           .getOnBoardingStatus((_, isOnboarded, child) {
-        final isTesting = const String.fromEnvironment(
-          'driver',
-          defaultValue: 'false',
-        ).toLowerCase() ==
-            'true';
         final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
         return Scaffold(
           body: buildBody(tab, isOnboarded),
           bottomNavigationBar: CustomBottomBar(
             selectedTab: tab,
-            isDevelop: true,
-            isTesting: isTesting,
           ),
         );
       }),
