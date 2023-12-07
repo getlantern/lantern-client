@@ -118,7 +118,7 @@ class LanternApp extends StatelessWidget {
               overlayOpacity: 0.6,
               child: I18n(
                 initialLocale: currentLocale(lang),
-                child: MaterialApp(
+                child: MaterialApp.router(
                   locale: currentLocale(lang),
                   debugShowCheckedModeBanner: false,
                   theme: ThemeData(
@@ -137,13 +137,8 @@ class LanternApp extends StatelessWidget {
                     GlobalWidgetsLocalizations.delegate,
                     GlobalCupertinoLocalizations.delegate,
                   ],
-                  home: Scaffold(
-                    body: buildBody(TAB_VPN),
-                    bottomNavigationBar: CustomBottomBar(
-                      selectedTab: TAB_VPN,
-                      isDevelop: true,
-                    ),
-                  ),
+                  routeInformationParser: globalRouter.defaultRouteParser(),
+                  routerDelegate: globalRouter.delegate(),
                   supportedLocales: const [
                     Locale('ar', 'EG'),
                     Locale('fr', 'FR'),

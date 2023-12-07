@@ -120,7 +120,28 @@ class _HomePageState extends State<HomePage> {
 
   Widget build(BuildContext context) {
     _context = context;
-    return sessionModel.acceptedTermsVersion(
+
+    return sessionModel.selectedTab(
+          (context, selectedTab, child) => messagingModel
+          .getOnBoardingStatus((_, isOnboarded, child) {
+        final isTesting = const String.fromEnvironment(
+          'driver',
+          defaultValue: 'false',
+        ).toLowerCase() ==
+            'true';
+        final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
+        return Scaffold(
+          body: buildBody(tab, isOnboarded),
+          bottomNavigationBar: CustomBottomBar(
+            selectedTab: tab,
+            isDevelop: true,
+            isTesting: isTesting,
+          ),
+        );
+      }),
+    );
+
+    /*return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
@@ -160,7 +181,7 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
-    );
+    );*/
   }
 
   @override
