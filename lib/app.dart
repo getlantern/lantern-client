@@ -101,22 +101,23 @@ class LanternApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    
-    return MaterialApp(
-      title: 'Lantern Desktop'.i18n,
-      theme: ThemeData(
-        fontFamily: 'Roboto',
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        body: buildBody(TAB_VPN),
-        bottomNavigationBar: CustomBottomBar(
-          selectedTab: TAB_VPN,
-          isDevelop: true,
+    return sessionModel.language((context, lang, child) {
+      Localization.locale = lang;
+      return MaterialApp(
+        title: 'Lantern Desktop'.i18n,
+        theme: ThemeData(
+          fontFamily: 'Roboto',
+          primarySwatch: Colors.blue,
         ),
-      ),
-    );
+        home: Scaffold(
+          body: buildBody(TAB_VPN),
+          bottomNavigationBar: CustomBottomBar(
+            selectedTab: TAB_VPN,
+            isDevelop: true,
+          ),
+        ),
+      );
+    });
     /*return sessionModel.language(
       (context, lang, child) {
         Localization.locale = lang;
