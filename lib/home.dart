@@ -144,9 +144,9 @@ class _HomePageState extends State<HomePage> {
                   .getOnBoardingStatus((_, isOnboarded, child) {
                 //final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
                 return Scaffold(
-                  body: buildBody(selectedTab, isOnboarded),
+                  body: buildBody(TAB_VPN, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
-                    selectedTab: selectedTab,
+                    selectedTab: TAB_VPN,
                     isDevelop: developmentMode,
                   ),
                 );
