@@ -153,20 +153,20 @@ class LanternApp extends StatelessWidget {
     );*/
 
     return sessionModel.language((context, lang, child) {
-      return MaterialApp(
+      return MaterialApp.router(
         theme: ThemeData(
           fontFamily: 'Roboto',
           brightness: Brightness.light,
           primarySwatch: Colors.grey,
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
+          ),
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
         ),
         title: 'app_name'.i18n,
-        home: Scaffold(
-          body: buildBody(TAB_VPN),
-          bottomNavigationBar: CustomBottomBar(
-            selectedTab: TAB_VPN,
-            isDevelop: true,
-          ),
-        ),
+        routeInformationParser: globalRouter.defaultRouteParser(),
+        routerDelegate: globalRouter.delegate(),
       );
     });
 
