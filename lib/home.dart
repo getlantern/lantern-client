@@ -121,28 +121,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     _context = context;
 
-    return Scaffold(
-      body: buildBody(TAB_VPN, true),
-      bottomNavigationBar: CustomBottomBar(
-        selectedTab: TAB_VPN,
-        isDevelop: true,
-      ),
-    );
-
-    /*return sessionModel.selectedTab(
-          (context, selectedTab, child) => messagingModel
-          .getOnBoardingStatus((_, isOnboarded, child) {
-        final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
-        return Scaffold(
-          body: buildBody(tab, isOnboarded),
-          bottomNavigationBar: CustomBottomBar(
-            selectedTab: tab,
-            isDevelop: true,
-          ),
-        );
-      }),
-    );
-
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         return sessionModel.developmentMode(
@@ -164,18 +142,12 @@ class _HomePageState extends State<HomePage> {
             return sessionModel.selectedTab(
                   (context, selectedTab, child) => messagingModel
                   .getOnBoardingStatus((_, isOnboarded, child) {
-                final isTesting = const String.fromEnvironment(
-                  'driver',
-                  defaultValue: 'false',
-                ).toLowerCase() ==
-                    'true';
-                final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
+                //final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
                 return Scaffold(
-                  body: buildBody(tab, isOnboarded),
+                  body: buildBody(TAB_VPN, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
-                    selectedTab: tab,
+                    selectedTab: TAB_VPN,
                     isDevelop: developmentMode,
-                    isTesting: isTesting,
                   ),
                 );
               }),
@@ -183,7 +155,7 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
-    );*/
+    );
   }
 
   @override
