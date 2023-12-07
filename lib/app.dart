@@ -101,7 +101,7 @@ class LanternApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel.language(
+    /*return sessionModel.language(
       (context, lang, child) {
         Localization.locale = lang;
         return GlobalLoaderOverlay(
@@ -150,10 +150,9 @@ class LanternApp extends StatelessWidget {
           ),
         );
       },
-    );
+    );*/
 
     return sessionModel.language((context, lang, child) {
-      Localization.locale = lang;
       return MaterialApp(
         theme: ThemeData(
           fontFamily: 'Roboto',
