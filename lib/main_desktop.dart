@@ -10,5 +10,5 @@ Future<void> main() async {
   debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
   WidgetsFlutterBinding.ensureInitialized();
   loadLibrary();
-  runApp(DesktopApp());
+  runApp(LanternApp());
 }
