@@ -118,13 +118,18 @@ class LanternApp extends StatelessWidget {
               overlayOpacity: 0.6,
               child: I18n(
                 initialLocale: currentLocale(lang),
-                child: MaterialApp.router(
+                child: MaterialApp(
                   locale: currentLocale(lang),
                   debugShowCheckedModeBanner: false,
                   theme: ThemeData(
                     fontFamily: _getLocaleBasedFont(currentLocal),
                     brightness: Brightness.light,
                     primarySwatch: Colors.grey,
+                    appBarTheme: const AppBarTheme(
+                      systemOverlayStyle: SystemUiOverlayStyle.dark,
+                    ),
+                    colorScheme: ColorScheme.fromSwatch()
+                        .copyWith(secondary: Colors.black),
                   ),
                   title: 'app_name'.i18n,
                   localizationsDelegates: const [
@@ -132,8 +137,13 @@ class LanternApp extends StatelessWidget {
                     GlobalWidgetsLocalizations.delegate,
                     GlobalCupertinoLocalizations.delegate,
                   ],
-                  routeInformationParser: globalRouter.defaultRouteParser(),
-                  routerDelegate: globalRouter.delegate(),
+                  home: Scaffold(
+                    body: buildBody(TAB_VPN),
+                    bottomNavigationBar: CustomBottomBar(
+                      selectedTab: TAB_VPN,
+                      isDevelop: true,
+                    ),
+                  ),
                   supportedLocales: const [
                     Locale('ar', 'EG'),
                     Locale('fr', 'FR'),
