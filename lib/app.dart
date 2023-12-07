@@ -151,8 +151,64 @@ class LanternApp extends StatelessWidget {
         );
       },
     );
-
     final currentLocal = View.of(context).platformDispatcher.locale;
+    return sessionModel.language(
+      (context, lang, child) {
+        Localization.locale = lang;
+        return GlobalLoaderOverlay(
+          overlayColor: Colors.black,
+          overlayOpacity: 0.6,
+          child: I18n(
+            initialLocale: currentLocale(lang),
+            child: MaterialApp(
+              locale: currentLocale(lang),
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                fontFamily: _getLocaleBasedFont(currentLocal),
+                brightness: Brightness.light,
+                primarySwatch: Colors.grey,
+                appBarTheme: const AppBarTheme(
+                  systemOverlayStyle: SystemUiOverlayStyle.dark,
+                ),
+                colorScheme: ColorScheme.fromSwatch()
+                    .copyWith(secondary: Colors.black),
+              ),
+              title: 'app_name'.i18n,
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              home: Scaffold(
+                body: buildBody(TAB_VPN),
+                bottomNavigationBar: CustomBottomBar(
+                  selectedTab: TAB_VPN,
+                  isDevelop: true,
+                ),
+              ),
+              supportedLocales: const [
+                Locale('ar', 'EG'),
+                Locale('fr', 'FR'),
+                Locale('en', 'US'),
+                Locale('fa', 'IR'),
+                Locale('th', 'TH'),
+                Locale('ms', 'MY'),
+                Locale('ru', 'RU'),
+                Locale('ur', 'IN'),
+                Locale('zh', 'CN'),
+                Locale('zh', 'HK'),
+                Locale('es', 'ES'),
+                Locale('tr', 'TR'),
+                Locale('vi', 'VN'),
+                Locale('my', 'MM'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+ /*   final currentLocal = View.of(context).platformDispatcher.locale;
     print('selected local: ${currentLocal.languageCode}');
     return FutureBuilder(
       future: translations,
@@ -216,7 +272,7 @@ class LanternApp extends StatelessWidget {
           },
         );
       },
-    );
+    );*/
   }
 
   Locale currentLocale(String lang) {
