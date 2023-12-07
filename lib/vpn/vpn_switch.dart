@@ -27,7 +27,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
     if (isIdle(vpnStatus)) {
       if (Platform.isAndroid) {
         await vpnModel.switchVPN(newValue);
-      } else if (Platform.isMacOS) {
+      } else if (Platform.isMacOS || Platform.isWindows) {
         if (vpnStatus == 'connected') {
           await sysProxyOff();
         } else {

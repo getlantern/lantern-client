@@ -82,55 +82,52 @@ class LanternApp extends StatelessWidget {
         if (!snapshot.hasData) {
           return Container();
         }
-        return sessionModel.language(
-          (context, lang, child) {
-            Localization.locale = lang;
-            return GlobalLoaderOverlay(
-              overlayColor: Colors.black,
-              overlayOpacity: 0.6,
-              child: I18n(
-                initialLocale: currentLocale(lang),
-                child: MaterialApp.router(
-                  locale: currentLocale(lang),
-                  debugShowCheckedModeBanner: false,
-                  theme: ThemeData(
-                    fontFamily: _getLocaleBasedFont(currentLocal),
-                    brightness: Brightness.light,
-                    primarySwatch: Colors.grey,
-                    appBarTheme: const AppBarTheme(
-                      systemOverlayStyle: SystemUiOverlayStyle.dark,
-                    ),
-                    colorScheme: ColorScheme.fromSwatch()
-                        .copyWith(secondary: Colors.black),
-                  ),
-                  title: 'app_name'.i18n,
-                  localizationsDelegates: const [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  routeInformationParser: globalRouter.defaultRouteParser(),
-                  routerDelegate: globalRouter.delegate(),
-                  supportedLocales: const [
-                    Locale('ar', 'EG'),
-                    Locale('fr', 'FR'),
-                    Locale('en', 'US'),
-                    Locale('fa', 'IR'),
-                    Locale('th', 'TH'),
-                    Locale('ms', 'MY'),
-                    Locale('ru', 'RU'),
-                    Locale('ur', 'IN'),
-                    Locale('zh', 'CN'),
-                    Locale('zh', 'HK'),
-                    Locale('es', 'ES'),
-                    Locale('tr', 'TR'),
-                    Locale('vi', 'VN'),
-                    Locale('my', 'MM'),
-                  ],
+        var lang = 'en';
+        Localization.locale = lang;
+        return GlobalLoaderOverlay(
+          overlayColor: Colors.black,
+          overlayOpacity: 0.6,
+          child: I18n(
+            initialLocale: currentLocale(lang),
+            child: MaterialApp.router(
+              locale: currentLocale(lang),
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                fontFamily: _getLocaleBasedFont(currentLocal),
+                brightness: Brightness.light,
+                primarySwatch: Colors.grey,
+                appBarTheme: const AppBarTheme(
+                  systemOverlayStyle: SystemUiOverlayStyle.dark,
                 ),
+                colorScheme:
+                    ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
               ),
-            );
-          },
+              title: 'app_name'.i18n,
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              routeInformationParser: globalRouter.defaultRouteParser(),
+              routerDelegate: globalRouter.delegate(),
+              supportedLocales: const [
+                Locale('ar', 'EG'),
+                Locale('fr', 'FR'),
+                Locale('en', 'US'),
+                Locale('fa', 'IR'),
+                Locale('th', 'TH'),
+                Locale('ms', 'MY'),
+                Locale('ru', 'RU'),
+                Locale('ur', 'IN'),
+                Locale('zh', 'CN'),
+                Locale('zh', 'HK'),
+                Locale('es', 'ES'),
+                Locale('tr', 'TR'),
+                Locale('vi', 'VN'),
+                Locale('my', 'MM'),
+              ],
+            ),
+          ),
         );
       },
     );
