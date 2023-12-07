@@ -119,8 +119,8 @@ class LanternApp extends StatelessWidget {
                 appBarTheme: const AppBarTheme(
                   systemOverlayStyle: SystemUiOverlayStyle.dark,
                 ),
-                colorScheme: ColorScheme.fromSwatch()
-                    .copyWith(secondary: Colors.black),
+                colorScheme:
+                    ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
               ),
               title: 'app_name'.i18n,
               localizationsDelegates: const [
@@ -152,35 +152,26 @@ class LanternApp extends StatelessWidget {
       },
     );
     final currentLocal = View.of(context).platformDispatcher.locale;
-    return sessionModel.language(
-      (context, lang, child) {
-        Localization.locale = lang;
-        return GlobalLoaderOverlay(
-          overlayColor: Colors.black,
-          overlayOpacity: 0.6,
-          child: I18n(
-            initialLocale: currentLocale(lang),
-            child: MaterialApp(
-              theme: ThemeData(
-                fontFamily: _getLocaleBasedFont(currentLocal),
-                brightness: Brightness.light,
-                primarySwatch: Colors.grey,
-              ),
-              title: 'app_name'.i18n,
-              home: Scaffold(
-                body: buildBody(TAB_VPN),
-                bottomNavigationBar: CustomBottomBar(
-                  selectedTab: TAB_VPN,
-                  isDevelop: true,
-                ),
-              ),
-            ),
+    return sessionModel.language((context, lang, child) {
+      Localization.locale = lang;
+      return MaterialApp(
+        theme: ThemeData(
+          fontFamily: _getLocaleBasedFont(currentLocal),
+          brightness: Brightness.light,
+          primarySwatch: Colors.grey,
+        ),
+        title: 'app_name'.i18n,
+        home: Scaffold(
+          body: buildBody(TAB_VPN),
+          bottomNavigationBar: CustomBottomBar(
+            selectedTab: TAB_VPN,
+            isDevelop: true,
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
 
- /*   final currentLocal = View.of(context).platformDispatcher.locale;
+    /*   final currentLocal = View.of(context).platformDispatcher.locale;
     print('selected local: ${currentLocal.languageCode}');
     return FutureBuilder(
       future: translations,
