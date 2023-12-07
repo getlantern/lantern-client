@@ -150,6 +150,8 @@ class LanternApp extends StatelessWidget {
           ),
         );
       },
+    );
+
     return sessionModel.language((context, lang, child) {
       Localization.locale = lang;
       return MaterialApp(
