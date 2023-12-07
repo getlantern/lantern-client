@@ -31,6 +31,7 @@
 		035BE7062A7122BC0084059A /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7042A7122BC0084059A /* SessionModel.swift */; };
 		036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036663D82A9E0C0E00595971 /* JsonUtils.swift */; };
 		03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */; };
+		03938FCF2B21F5AE00911945 /* LanternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03938FCE2B21F5AE00911945 /* LanternModel.swift */; };
 		03A1AB142AA88BDA00FB41B2 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB132AA88BDA00FB41B2 /* VPNManager.swift */; };
 		03A1AB322AA890AB00FB41B2 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A1AB312AA890AB00FB41B2 /* NetworkExtension.framework */; };
 		03A1AB352AA890AB00FB41B2 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB342AA890AB00FB41B2 /* PacketTunnelProvider.swift */; };
@@ -109,6 +110,7 @@
 		036663D82A9E0C0E00595971 /* JsonUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonUtils.swift; sourceTree = "<group>"; };
 		03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriberRequest.swift; sourceTree = "<group>"; };
 		038EBA8F187F39DA9C6ED912 /* Pods-LanternTests.release-appium-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.release-appium-test.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.release-appium-test.xcconfig"; sourceTree = "<group>"; };
+		03938FCE2B21F5AE00911945 /* LanternModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LanternModel.swift; path = Models/LanternModel.swift; sourceTree = "<group>"; };
 		03A1AB102AA8893900FB41B2 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		03A1AB132AA88BDA00FB41B2 /* VPNManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
 		03A1AB152AA88BF200FB41B2 /* VPNBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VPNBase.swift; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 		03EE344A2A652B3D00E37100 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				03938FCE2B21F5AE00911945 /* LanternModel.swift */,
 				EC595B332ACCB69000A927E1 /* MessagingModel.swift */,
 				EC6155E62ACC8FF70015527E /* NavigationModel.swift */,
 				035BE7042A7122BC0084059A /* SessionModel.swift */,
@@ -801,6 +804,7 @@
 				03F00B5F2AB07C8000E991E2 /* LoadingIndicatorManager.swift in Sources */,
 				EC6155E92ACC8FF70015527E /* NavigationModel.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				03938FCF2B21F5AE00911945 /* LanternModel.swift in Sources */,
 				0321C3F72AA9D84700D462C1 /* Process.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

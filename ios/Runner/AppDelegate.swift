@@ -14,8 +14,7 @@ import UIKit
   var flutterbinaryMessenger: FlutterBinaryMessenger!
   //  Model Properties
   var sessionModel: SessionModel!
-  var lanternModel: LanternModel!
-  //  var navigationModel: NavigationModel!
+    var lanternModel: LanternModel!
   var vpnModel: VpnModel!
   var messagingModel: MessagingModel!
   // IOS
@@ -68,14 +67,14 @@ import UIKit
 
     logger.log("setupModels method called")
     sessionModel = try SessionModel(flutterBinary: flutterbinaryMessenger)
-    lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
     vpnModel = try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
+      lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
     //    navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
     let endTime = Date()  // End time
     let executionTime = endTime.timeIntervalSince(startTime)  //
 
-    logger.debug("setupModels Execution time: \(executionTime) seconds")
+    logger.debug("[Performance Logs] setupModels Execution time: \(executionTime) seconds")
   }
 
   // Post start up

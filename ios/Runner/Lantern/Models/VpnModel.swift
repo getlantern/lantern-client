@@ -28,7 +28,7 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
     let endTime = Date()  // End time
     let executionTime = endTime.timeIntervalSince(startTime)  // Calculate execution time
 
-    logger.debug("VpnModel init Execution time: \(executionTime) seconds")
+    logger.debug("[Performance Logs] VpnModel init Execution time: \(executionTime) seconds")
   }
 
   private func saveVPNStatus(status: String) {

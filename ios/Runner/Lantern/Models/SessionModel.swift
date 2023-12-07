@@ -63,7 +63,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
 
     let endTime = Date()
     let executionTime = endTime.timeIntervalSince(startTime)
-    logger.debug("Service Started successfully Execution time: \(executionTime) seconds")
+    logger.debug("[Performance Logs] Service Started successfully Execution time: \(executionTime) seconds")
 
   }
 

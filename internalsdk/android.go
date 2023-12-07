@@ -635,8 +635,8 @@ func run(configDir, locale string,
 		},
 		nil, // onError
 	)
-	endTime := time.Now()                                               // Capture end time
-	log.Debugf("android.go Run executed in %v", endTime.Sub(startTime)) // Log execution time
+	endTime := time.Now()                                                                  // Capture end time
+	log.Debugf("[Performance Logs] android.go Run executed in %v", endTime.Sub(startTime)) // Log execution time
 
 }
 
