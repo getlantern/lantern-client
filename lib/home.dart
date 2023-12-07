@@ -121,7 +121,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     _context = context;
 
-    return sessionModel.selectedTab(
+    return Scaffold(
+      body: buildBody(TAB_VPN, true),
+      bottomNavigationBar: CustomBottomBar(
+        selectedTab: TAB_VPN,
+        isDevelop: true,
+      ),
+    );
+
+    /*return sessionModel.selectedTab(
           (context, selectedTab, child) => messagingModel
           .getOnBoardingStatus((_, isOnboarded, child) {
         final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
@@ -135,7 +143,7 @@ class _HomePageState extends State<HomePage> {
       }),
     );
 
-    /*return sessionModel.acceptedTermsVersion(
+    return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
