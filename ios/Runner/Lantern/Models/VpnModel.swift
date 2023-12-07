@@ -14,6 +14,8 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
 
   init(flutterBinary: FlutterBinaryMessenger, vpnBase: VPNBase) throws {
     logger.log("Initializing VPNModel")
+    let startTime = Date()  // Start time
+
     self.vpnManager = vpnBase
     var error: NSError?
     guard
@@ -23,6 +25,10 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
     }
     try super.init(flutterBinary, model)
     model.setManager(self)
+    let endTime = Date()  // End time
+    let executionTime = endTime.timeIntervalSince(startTime)  // Calculate execution time
+
+    logger.debug("VpnModel init Execution time: \(executionTime) seconds")
   }
 
   private func saveVPNStatus(status: String) {

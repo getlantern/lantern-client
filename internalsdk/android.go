@@ -445,6 +445,7 @@ func newAnalyticsSession(deviceID string) analytics.Session {
 
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
+	startTime := time.Now() // Capture start time
 
 	// memhelper won't build for iOS right now
 	// memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
@@ -634,6 +635,9 @@ func run(configDir, locale string,
 		},
 		nil, // onError
 	)
+	endTime := time.Now()                                               // Capture end time
+	log.Debugf("android.go Run executed in %v", endTime.Sub(startTime)) // Log execution time
+
 }
 
 func bandwidthUpdates(session panickingSession) {

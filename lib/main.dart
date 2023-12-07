@@ -16,7 +16,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
+  await Localization.ensureInitialized();
   //Todo if catcher is not picking up error and exception then we should switch to sentryFlutter
   // SentryFlutter.init((options) {
   //   options.debug = true;

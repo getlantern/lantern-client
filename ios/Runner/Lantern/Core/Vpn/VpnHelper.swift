@@ -102,6 +102,8 @@ class VpnHelper: NSObject {
 
   // MARK: Set Up
   func performAppSetUp() {
+    let startTime = Date()  // Start time
+
     // STARTUP OVERVIEW
 
     // 1. set up files for flashlight
@@ -119,6 +121,11 @@ class VpnHelper: NSObject {
     }
     // 5 Fetch config
     fetchConfigIfNecessary()
+    let endTime = Date()  // End time
+    let executionTime = endTime.timeIntervalSince(startTime)  // Calculate execution time
+
+    logger.debug("VpnHelper performAppSetUp Execution time: \(executionTime) seconds")
+
   }
 
   private func createFilesForAppGoPackage() {

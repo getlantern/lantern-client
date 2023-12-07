@@ -51,6 +51,7 @@ import UIKit
         DispatchQueue.main.async {
           self.startUpSequency()
           self.setupLoadingBar()
+            
         }
       } catch {
         DispatchQueue.main.async {
@@ -63,12 +64,18 @@ import UIKit
 
   // Init all the models
   private func setupModels() throws {
+    let startTime = Date()  // Start time
+
     logger.log("setupModels method called")
     sessionModel = try SessionModel(flutterBinary: flutterbinaryMessenger)
     lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
     vpnModel = try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
     //    navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
+    let endTime = Date()  // End time
+    let executionTime = endTime.timeIntervalSince(startTime)  //
+
+    logger.debug("setupModels Execution time: \(executionTime) seconds")
   }
 
   // Post start up

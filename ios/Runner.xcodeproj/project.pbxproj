@@ -21,6 +21,7 @@
 		0324CC302AE279CF00490B46 /* SentryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0324CC2F2AE279CF00490B46 /* SentryUtils.swift */; };
 		032A43582AA6F8AA00EF442B /* DnsDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032A43572AA6F8AA00EF442B /* DnsDetector.swift */; };
 		0333203B2AC698FA00333DA9 /* MockVPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333203A2AC698FA00333DA9 /* MockVPNManager.swift */; };
+		033D28782B21CFB100DFC05F /* NetworkMoniter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033D28772B21CFB100DFC05F /* NetworkMoniter.swift */; };
 		03567DBB2AA9F15100A233EA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB432AA8946400FB41B2 /* Constants.swift */; };
 		03567DBC2AA9F18D00A233EA /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F62AA9D84700D462C1 /* Process.swift */; };
 		03567DBE2AA9F31200A233EA /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F2FE332A6949EF0082B34C /* Logger.swift */; };
@@ -102,6 +103,7 @@
 		0324CC2F2AE279CF00490B46 /* SentryUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryUtils.swift; sourceTree = "<group>"; };
 		032A43572AA6F8AA00EF442B /* DnsDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnsDetector.swift; sourceTree = "<group>"; };
 		0333203A2AC698FA00333DA9 /* MockVPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockVPNManager.swift; sourceTree = "<group>"; };
+		033D28772B21CFB100DFC05F /* NetworkMoniter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMoniter.swift; sourceTree = "<group>"; };
 		03567DBF2AA9F47200A233EA /* FileUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUtils.swift; sourceTree = "<group>"; };
 		03567DC22AA9F77000A233EA /* NEProviderStopReason.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NEProviderStopReason.swift; sourceTree = "<group>"; };
 		03567DC52AA9F82F00A233EA /* UDPConn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UDPConn.swift; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 				03567DBF2AA9F47200A233EA /* FileUtils.swift */,
 				03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */,
 				0324CC2F2AE279CF00490B46 /* SentryUtils.swift */,
+				033D28772B21CFB100DFC05F /* NetworkMoniter.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -792,6 +795,7 @@
 				035BE7062A7122BC0084059A /* SessionModel.swift in Sources */,
 				EC595B342ACCB69000A927E1 /* MessagingModel.swift in Sources */,
 				EC6155EA2ACC8FF70015527E /* LanternModel.swift in Sources */,
+				033D28782B21CFB100DFC05F /* NetworkMoniter.swift in Sources */,
 				036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */,
 				0308A1302AAEF3AA0086157A /* Event.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,

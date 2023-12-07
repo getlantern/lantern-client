@@ -17,6 +17,9 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   }()
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
+   
+    let startTime = Date()  // Start time
+
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current
     let deviceId = device.identifierForVendor!.uuidString
@@ -42,16 +45,26 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
-    DispatchQueue.global(qos: .userInitiated).async {
-      self.startService()
-    }
+      DispatchQueue.global(qos: .background).async {
+        self.startService()
+      }
     //    getBandwidth()
+    let endTime = Date()
+    let executionTime = endTime.timeIntervalSince(startTime)
+
+    logger.debug("SessionModel Init Execution time: \(executionTime) seconds")
   }
 
   func startService() {
+    let startTime = Date()  // Start time
+
     let configDir = configDirFor(suffix: "service")
     (model as! InternalsdkSessionModel).startService(configDir, locale: "en", settings: Settings())
-    logger.error("Service Started successfully")
+
+    let endTime = Date()
+    let executionTime = endTime.timeIntervalSince(startTime)
+    logger.debug("Service Started successfully Execution time: \(executionTime) seconds")
+
   }
 
   func getBandwidth() {
