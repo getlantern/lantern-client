@@ -53,7 +53,6 @@ dependencies:
   pin_code_text_field: ^1.8.0
   scrollable_positioned_list: ^0.3.8
   infinite_scroll_pagination: ^3.2.0
-  wakelock: ^0.6.2
   email_validator: ^2.1.17
   credit_card_validator: ^2.1.0
 
@@ -115,12 +114,6 @@ dependencies:
   # Ads
   google_mobile_ads: ^3.0.0
   # clever_ads_solutions: ^0.1.0
-
-
-# wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0
-# See https://github.com/creativecreatorormaybenot/wakelock/issues/211
-dependency_overrides:
-  win32: 3.1.4
 
 dev_dependencies:
   flutter_test:
