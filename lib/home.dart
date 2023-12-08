@@ -150,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                 print("Tab is $tab");
 
                 return Scaffold(
-                  body: buildBody(TAB_VPN, isOnboarded),
+                  body: buildBody(TAB_ACCOUNT, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
                     selectedTab: TAB_ACCOUNT,
                     isDevelop: developmentMode,
