@@ -37,7 +37,7 @@ class VPNStatus extends StatelessWidget {
                 )
               : CText(
                   (vpnStatus == 'connected')
-                      ? 'connected'.i18n
+                      ? 'Connected'.i18n
                       : 'Disconnected'.i18n,
                   style: tsSubtitle4,
                 ),

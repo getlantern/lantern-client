@@ -18,7 +18,7 @@ const (
 var (
 	log        = golog.LoggerFor("lantern-internalsdk-http")
 	httpClient = &http.Client{
-		Timeout: 10 * time.Second, // 10 seconds timeout
+		Timeout: 10 * time.Second,
 	}
 	// proHtttpClient = pro.GetHTTPClient()
 )

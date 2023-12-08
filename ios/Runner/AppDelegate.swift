@@ -14,7 +14,7 @@ import UIKit
   var flutterbinaryMessenger: FlutterBinaryMessenger!
   //  Model Properties
   var sessionModel: SessionModel!
-    var lanternModel: LanternModel!
+  var lanternModel: LanternModel!
   var vpnModel: VpnModel!
   var messagingModel: MessagingModel!
   // IOS
@@ -24,14 +24,12 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    //    SentryUtils.startSentry();
+    SentryUtils.startSentry()
     initializeFlutterComponents()
-    do {
-      try setupAppComponents()
-    } catch {
-      logger.error("Unexpected error setting up app components: \(error)")
-      exit(1)
-    }
+    // Setup app components without try-catch
+    // This will cause the app to crash on unhandled exceptions,
+    // preserving the stack trace.
+    try! setupAppComponents()
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
@@ -50,12 +48,14 @@ import UIKit
         DispatchQueue.main.async {
           self.startUpSequency()
           self.setupLoadingBar()
-            
+
         }
       } catch {
         DispatchQueue.main.async {
           logger.error("Unexpected error setting up models: \(error)")
+          SentryUtils.caputure(error: error as NSError)
         }
+
       }
     }
 
@@ -68,7 +68,7 @@ import UIKit
     logger.log("setupModels method called")
     sessionModel = try SessionModel(flutterBinary: flutterbinaryMessenger)
     vpnModel = try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
-      lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
+    lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
     //    navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
     let endTime = Date()  // End time

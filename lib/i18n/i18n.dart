@@ -13,7 +13,7 @@ extension Localization on String {
     Future<TranslationsByLocale> Function(),
   ) loadTranslationsOnce = once<Future<TranslationsByLocale>>();
 
-  static Future<TranslationsByLocale> ensureInitialized() async {
+  static FutureOr<dynamic> ensureInitialized() async {
     return loadTranslationsOnce(() {
       return GettextImporter()
           .fromAssetDirectory('assets/locales')
