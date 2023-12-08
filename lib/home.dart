@@ -24,8 +24,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   BuildContext? _context;
-  final mainMethodChannel = const MethodChannel('lantern_method_channel');
-  final navigationChannel = const MethodChannel('navigation');
+  MethodChannel? mainMethodChannel;
+  MethodChannel? navigationChannel;
 
   Function()? _cancelEventSubscription;
 
@@ -35,6 +35,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     if (Platform.isAndroid) {
+      mainMethodChannel = const MethodChannel('lantern_method_channel');
+      navigationChannel = const MethodChannel('navigation');
       sessionModel.getChatEnabled().then((chatEnabled) {
         if (chatEnabled) {
           messagingModel
@@ -51,9 +53,9 @@ class _HomePageState extends State<HomePage> {
         }
       });
 
-      navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
+      navigationChannel?.setMethodCallHandler(_handleNativeNavigationRequest);
       // Let back-end know that we're ready to handle navigation
-      navigationChannel.invokeListMethod('ready');
+      navigationChannel?.invokeListMethod('ready');
       _cancelEventSubscription =
           sessionModel.eventManager.subscribe(Event.All, (event, params) {
             switch (event) {
@@ -83,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                     textColor: pink3,
                     label: buttonText.toUpperCase(),
                     onPressed: () {
-                      mainMethodChannel.invokeMethod('showLastSurvey');
+                      mainMethodChannel?.invokeMethod('showLastSurvey');
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     },
                   ),
@@ -145,6 +147,8 @@ class _HomePageState extends State<HomePage> {
                 ).toLowerCase() ==
                     'true';
                 final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
+                print("Tab is $tab");
+
                 return Scaffold(
                   body: buildBody(tab, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
