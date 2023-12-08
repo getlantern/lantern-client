@@ -148,8 +148,8 @@ class AccountMenu extends StatelessWidget {
       title: 'Account'.i18n,
       body: ListView(
           children: proUser
-              ? proItems(sessionContext)
-              : freeItems(sessionContext, sessionModel),
+              ? proItems(context)
+              : freeItems(context, sessionModel),
         ),
     );
   }
