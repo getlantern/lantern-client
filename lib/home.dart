@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                 return Scaffold(
                   body: buildBody(TAB_VPN, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
-                    selectedTab: TAB_VPN,
+                    selectedTab: TAB_ACCOUNT,
                     isDevelop: developmentMode,
                     isTesting: isTesting,
                   ),
