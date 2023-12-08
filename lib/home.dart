@@ -147,10 +147,12 @@ class _HomePageState extends State<HomePage> {
                 ).toLowerCase() ==
                     'true';
                 final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
+                print("Tab is $tab");
+
                 return Scaffold(
-                  body: buildBody(tab, isOnboarded),
+                  body: buildBody(TAB_VPN, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
-                    selectedTab: tab,
+                    selectedTab: TAB_VPN,
                     isDevelop: developmentMode,
                     isTesting: isTesting,
                   ),
