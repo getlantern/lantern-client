@@ -143,16 +143,14 @@ class AccountMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var proUser = false;
     return BaseScreen(
       title: 'Account'.i18n,
-      body: sessionModel
-          .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        return ListView(
+      body: ListView(
           children: proUser
               ? proItems(sessionContext)
               : freeItems(sessionContext, sessionModel),
-        );
-      }),
+        ),
     );
   }
 }
