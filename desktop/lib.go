@@ -40,6 +40,11 @@ func Start() *C.char {
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
 	proClient = pro.New(settings)
+
+	if settings.GetUserID() == 0 {
+		go proClient.UserCreate(settings.GetLanguage())
+	}
+
 	a = app.NewApp(flags, cdir, settings)
 	log.Debug("Running headless")
 	go func() {

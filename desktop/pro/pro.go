@@ -7,7 +7,9 @@ import (
 	"io"
 	"net/http"
 	"net/http/httputil"
+	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/shirou/gopsutil/v3/host"
 
@@ -21,6 +23,7 @@ const (
 	linkCodeUrl = baseUrl + "/link-code-request"
 	paymentMethodsUrl = baseUrl + "/plans-v3"
 	plansUrl = baseUrl + "/plans"
+	userCreateUrl = baseUrl + "/user-create"
 	userDetailsUrl = baseUrl + "/user-data"
 )
 
@@ -66,15 +69,18 @@ func (pc *ProClient) newRequest(method, url string) (*http.Request, error) {
 	return req, nil
 }
 
-func (pc *ProClient) POST(url string, body io.Reader) (*http.Response, error) {
+func (pc *ProClient) POST(url string, body io.Reader, isJson bool) (*http.Response, error) {
 	// Create a new request
 	req, err := http.NewRequest(http.MethodPost, url, body)
 	if err != nil {
 		log.Errorf("Error creating user details request: %v", err)
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/json")
-
+	if isJson {
+		req.Header.Set("Content-Type", "application/json")
+	} else {
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	}
 	pc.setHeaders(req)
 
 	// Send the request
@@ -89,7 +95,7 @@ func (pc *ProClient) POST(url string, body io.Reader) (*http.Response, error) {
 func (pc *ProClient) LinkCodeRequest() (*LinkCodeResponse, error) {
 	info, _ := host.Info()
 	jsonBody := []byte(fmt.Sprintf(`{"deviceName": "%s"}`, info.Hostname))
-	resp, err := pc.POST(linkCodeUrl, bytes.NewReader(jsonBody))
+	resp, err := pc.POST(linkCodeUrl, bytes.NewReader(jsonBody), true)
 	if err != nil {
 		return nil, err
 	}
@@ -164,6 +170,23 @@ func (pc *ProClient) PaymentMethods() (*PaymentMethodsResponse, error) {
 
 	log.Debugf("Response is %v", string(b))
 	return &paymentMethodsResponse, nil
+}
+
+func (pc *ProClient) UserCreate(lang string) (*UserDetailsResponse, error) {
+	body := strings.NewReader(url.Values{"locale": {lang}}.Encode())
+	resp, err := pc.POST(userCreateUrl, body, false)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var userDetailsResponse UserDetailsResponse
+	if err := json.NewDecoder(resp.Body).Decode(&userDetailsResponse); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+
+	return &userDetailsResponse, nil
 }
 
 func (pc *ProClient) UserData() (*UserDetailsResponse, error) {

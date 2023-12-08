@@ -69,3 +69,4 @@ message LinkCodeResponse {
     string code = 1;
     int64 expireAt = 2;
 }
+
