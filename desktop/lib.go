@@ -185,9 +185,9 @@ func AcceptedTermsVersion() *C.char {
 
 //export ProUser
 func ProUser() *C.char {
-	if isProUser, ok := a.IsProUser(); isProUser && ok {
+	/*if isProUser, ok := a.IsProUser(); isProUser && ok {
 		return C.CString("true")
-	}
+	}*/
 	return C.CString("false")
 }
 
