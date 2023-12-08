@@ -11,11 +11,13 @@ import (
 	"syscall"
 
 	"github.com/getlantern/appdir"
+	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/desktop/app"
-	"github.com/getlantern/lantern-client/desktop/pro"
+	proclient "github.com/getlantern/lantern-client/desktop/pro"
 )
 
 import "C"
@@ -24,7 +26,7 @@ var (
 	log = golog.LoggerFor("lantern-desktop.main")
 	a   *app.App
 
-	proClient *pro.ProClient
+	proClient *proclient.ProClient
 )
 
 //export Start
@@ -39,13 +41,17 @@ func Start() *C.char {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = pro.New(settings)
-
-	if settings.GetUserID() == 0 {
-		go proClient.UserCreate(settings.GetLanguage())
-	}
+	proClient = proclient.New(settings)
 
 	a = app.NewApp(flags, cdir, settings)
+
+	go func() {
+		err := fetchOrCreate()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
 	log.Debug("Running headless")
 	go func() {
 		runApp(a)
@@ -58,6 +64,19 @@ func Start() *C.char {
 		os.Exit(0)
 	}()
 	return C.CString("")
+}
+
+func fetchOrCreate() error {
+	settings := a.Settings()
+	userID := settings.GetUserID()
+	if userID == 0 {
+		user, err := pro.NewUser(settings)
+		if err != nil {
+			return errors.New("Could not create new Pro user: %v", err)
+		}
+		settings.SetUserIDAndToken(user.Auth.ID, user.Auth.Token)
+	}
+	return nil
 }
 
 //export SysProxyOn

@@ -611,3 +611,7 @@ func (app *App) AdTrackURL() string {
 func (app *App) AddToken(path string) string {
 	return path
 }
+
+func (app *App) Settings() *Settings {
+	return app.settings
+}

@@ -172,8 +172,8 @@ func (pc *ProClient) PaymentMethods() (*PaymentMethodsResponse, error) {
 	return &paymentMethodsResponse, nil
 }
 
-func (pc *ProClient) UserCreate(lang string) (*UserDetailsResponse, error) {
-	body := strings.NewReader(url.Values{"locale": {lang}}.Encode())
+func (pc *ProClient) UserCreate(locale string) (*UserDetailsResponse, error) {
+	body := strings.NewReader(url.Values{"locale": {locale}}.Encode())
 	resp, err := pc.POST(userCreateUrl, body, false)
 	if err != nil {
 		return nil, err
