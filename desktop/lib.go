@@ -177,12 +177,14 @@ func StoreVersion() *C.char {
 
 //export Lang
 func Lang() *C.char {
-	return C.CString("en")
+	lang := a.Settings().GetLanguage()
+	return C.CString(lang)
 }
 
 //export Country
 func Country() *C.char {
-	return C.CString("US")
+	country := a.Settings().GetCountry()
+	return C.CString(country)
 }
 
 //export SdkVersion
@@ -212,9 +214,9 @@ func AcceptedTermsVersion() *C.char {
 
 //export ProUser
 func ProUser() *C.char {
-	/*if isProUser, ok := a.IsProUser(); isProUser && ok {
+	if isProUser, ok := a.IsProUser(); isProUser && ok {
 		return C.CString("true")
-	}*/
+	}
 	return C.CString("false")
 }
 
