@@ -11,16 +11,18 @@ import (
 	"strconv"
 	"syscall"
 
+	"github.com/shirou/gopsutil/v3/host"
+
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/pro"
+	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/desktop/app"
-	proclient "github.com/getlantern/lantern-client/desktop/pro"
 )
 
 import "C"
@@ -28,8 +30,7 @@ import "C"
 var (
 	log = golog.LoggerFor("lantern-desktop.main")
 	a   *app.App
-
-	proClient *proclient.ProClient
+	proClient *client.Client
 )
 
 //export Start
@@ -44,7 +45,7 @@ func Start() *C.char {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = proclient.New(settings)
+	proClient = pro.NewClient()
 
 	a = app.NewApp(flags, cdir, settings)
 
@@ -122,7 +123,7 @@ func SetSelectTab(ttab *C.char) {
 
 //export Plans
 func Plans() *C.char {
-	resp, err := proClient.Plans()
+	resp, err := proClient.Plans(userConfig())
 	if err != nil {
 		return sendError(err)
 	}
@@ -132,7 +133,7 @@ func Plans() *C.char {
 
 //export PaymentMethods
 func PaymentMethods() *C.char {
-	resp, err := proClient.PaymentMethods()
+	resp, err := proClient.PaymentMethods(userConfig())
 	if err != nil {
 		return sendError(err)
 	}
@@ -142,7 +143,7 @@ func PaymentMethods() *C.char {
 
 //export UserData
 func UserData() *C.char {
-	resp, err := proClient.UserData()
+	resp, err := proClient.UserData(userConfig())
 	if err != nil {
 		return sendError(err)
 	}
@@ -222,7 +223,8 @@ func ProUser() *C.char {
 
 //export DeviceLinkingCode
 func DeviceLinkingCode() *C.char {
-	resp, err := proClient.LinkCodeRequest()
+	info, _ := host.Info()
+	resp, err := proClient.RequestDeviceLinkingCode(userConfig(), info.Hostname)
 	if err != nil {
 		return sendError(err)
 	}
@@ -262,15 +264,10 @@ var issueMap = map[string]string{
 	"Other":                       "9",
 }
 
-func ReportIssue(email, issueType, description string) *C.char {
+func userConfig() *common.UserConfigData {
 	settings := a.Settings()
 	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	issueTypeInt, err := strconv.Atoi(issueType)
-	if err != nil {
-		return sendError(err)
-	}
-
-	uc := common.NewUserConfigData(
+	return common.NewUserConfigData(
 		common.DefaultAppName,
 		deviceID,
 		userID,
@@ -278,6 +275,16 @@ func ReportIssue(email, issueType, description string) *C.char {
 		nil,
 		settings.GetLanguage(),
 	)
+}
+
+func ReportIssue(email, issueType, description string) *C.char {
+	deviceID := a.Settings().GetDeviceID()
+	issueTypeInt, err := strconv.Atoi(issueType)
+	if err != nil {
+		return sendError(err)
+	}
+
+	uc := userConfig()
 
 	subscriptionLevel := "free"
 	if a.IsPro() {
@@ -309,7 +316,7 @@ func ReportIssue(email, issueType, description string) *C.char {
 }
 
 func Purchase(planID, email, cardNumber, expDate, cvc string) *C.char {
-	resp, err := proClient.Purchase(&proclient.PurchaseRequest{
+	/*resp, err := proClient.Purchase(&proclient.PurchaseRequest{
 		Provider: proclient.Provider_STRIPE,
 		Email: email,
 		Plan: planID,
@@ -321,7 +328,8 @@ func Purchase(planID, email, cardNumber, expDate, cvc string) *C.char {
 		return sendError(err)
 	}
 	b, _ := json.Marshal(resp)
-	return C.CString(string(b))
+	return C.CString(string(b))*/
+	return C.CString("")
 }
 
 // loadSettings loads the initial settings at startup, either from disk or using defaults.
