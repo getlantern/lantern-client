@@ -70,3 +70,28 @@ message LinkCodeResponse {
     int64 expireAt = 2;
 }
 
+enum Provider {
+    PROVIDER_UNSET = 0;
+    STRIPE = 1;
+    FREEKASSA = 2; 
+}
+
+message PurchaseRequest {
+    Provider provider = 1;
+    string email = 2;
+    string plan = 3;
+    string cardNumber = 4;
+    string expDate = 5;
+    string cvc = 6;
+    string currency = 7;
+    string deviceName = 8;
+    string stripePublicKey = 9;
+    string stripeEmail = 10;
+    string stripeToken = 11;
+    string token = 12;
+    string resellerCode = 13;
+}
+
+message PurchaseResponse {
+    bool success = 1;
+}

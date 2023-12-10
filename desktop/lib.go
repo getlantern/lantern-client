@@ -8,13 +8,16 @@ import (
 	"path/filepath"
 	"runtime"
 	"runtime/debug"
+	"strconv"
 	"syscall"
 
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/pro"
+	"github.com/getlantern/osversion"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/desktop/app"
 	proclient "github.com/getlantern/lantern-client/desktop/pro"
@@ -242,6 +245,81 @@ func ChatMe() *C.char {
 //export ReplicaAddr
 func ReplicaAddr() *C.char {
 	return C.CString("")
+}
+
+var issueMap = map[string]string{
+	"Cannot access blocked sites": "3",
+	"Cannot complete purchase":    "0",
+	"Cannot sign in":              "1",
+	"Spinner loads endlessly":     "2",
+	"Slow":                        "4",
+	"Chat not working":            "7",
+	"Discover not working":        "8",
+	"Cannot link device":          "5",
+	"Application crashes":         "6",
+	"Other":                       "9",
+}
+
+func ReportIssue(email, issueType, description string) *C.char {
+	settings := a.Settings()
+	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
+	issueTypeInt, err := strconv.Atoi(issueType)
+	if err != nil {
+		return sendError(err)
+	}
+
+	uc := common.NewUserConfigData(
+		common.DefaultAppName,
+		deviceID,
+		userID,
+		token,
+		nil,
+		settings.GetLanguage(),
+	)
+
+	subscriptionLevel := "free"
+	if a.IsPro() {
+		subscriptionLevel = "pro"
+	}
+
+	var osVersion string
+	osVersion, err = osversion.GetHumanReadable()
+	if err != nil {
+		log.Errorf("Unable to get version: %v", err)
+	}
+
+	err = issue.SendReport(
+		uc,
+		issueTypeInt,
+		description,
+		subscriptionLevel,
+		email,
+		app.ApplicationVersion,
+		deviceID,
+		osVersion,
+		"",
+		nil,
+	)
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString("true")
+}
+
+func Purchase(planID, email, cardNumber, expDate, cvc string) *C.char {
+	resp, err := proClient.Purchase(&proclient.PurchaseRequest{
+		Provider: proclient.Provider_STRIPE,
+		Email: email,
+		Plan: planID,
+		CardNumber: cardNumber,
+		ExpDate: expDate,
+		Cvc: cvc,
+	})
+	if err != nil {
+		return sendError(err)
+	}
+	b, _ := json.Marshal(resp)
+	return C.CString(string(b))
 }
 
 // loadSettings loads the initial settings at startup, either from disk or using defaults.

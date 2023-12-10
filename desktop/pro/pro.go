@@ -20,11 +20,6 @@ import (
 
 const (
 	baseUrl       = "https://api.getiantem.org"
-	linkCodeUrl = baseUrl + "/link-code-request"
-	paymentMethodsUrl = baseUrl + "/plans-v3"
-	plansUrl = baseUrl + "/plans"
-	userCreateUrl = baseUrl + "/user-create"
-	userDetailsUrl = baseUrl + "/user-data"
 )
 
 var (
@@ -43,6 +38,10 @@ func New(settings *app.Settings) *ProClient {
 	}
 }
 
+func proUrl(uri string) string {
+	return baseUrl + uri
+}
+
 func (pc *ProClient) setHeaders(req *http.Request) {
 	deviceID, userID, token := pc.userHeaders()
 	// Add headers
@@ -57,9 +56,9 @@ func (pc *ProClient) userHeaders() (string, string, string) {
 	return deviceID, userID, token
 }
 
-func (pc *ProClient) newRequest(method, url string) (*http.Request, error) {
+func (pc *ProClient) newRequest(method, uri string) (*http.Request, error) {
 	// Create a new request
-	req, err := http.NewRequest(method, url, nil)
+	req, err := http.NewRequest(method, baseUrl + uri, nil)
 	if err != nil {
 		log.Errorf("Error creating user details request: %v", err)
 		return nil, err
@@ -69,9 +68,9 @@ func (pc *ProClient) newRequest(method, url string) (*http.Request, error) {
 	return req, nil
 }
 
-func (pc *ProClient) POST(url string, body io.Reader, isJson bool) (*http.Response, error) {
+func (pc *ProClient) POST(uri string, body io.Reader, isJson bool) (*http.Response, error) {
 	// Create a new request
-	req, err := http.NewRequest(http.MethodPost, url, body)
+	req, err := http.NewRequest(http.MethodPost, baseUrl + uri, body)
 	if err != nil {
 		log.Errorf("Error creating user details request: %v", err)
 		return nil, err
@@ -95,7 +94,7 @@ func (pc *ProClient) POST(url string, body io.Reader, isJson bool) (*http.Respon
 func (pc *ProClient) LinkCodeRequest() (*LinkCodeResponse, error) {
 	info, _ := host.Info()
 	jsonBody := []byte(fmt.Sprintf(`{"deviceName": "%s"}`, info.Hostname))
-	resp, err := pc.POST(linkCodeUrl, bytes.NewReader(jsonBody), true)
+	resp, err := pc.POST("/link-code-request", bytes.NewReader(jsonBody), true)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +112,7 @@ func (pc *ProClient) LinkCodeRequest() (*LinkCodeResponse, error) {
 
 func (pc *ProClient) Plans() (*PlansResponse, error) {
 	// Create a new request
-	req, err := pc.newRequest("GET", plansUrl)
+	req, err := pc.newRequest("GET", "/plans")
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +144,7 @@ func (pc *ProClient) Plans() (*PlansResponse, error) {
 
 func (pc *ProClient) PaymentMethods() (*PaymentMethodsResponse, error) {
 	// Create a new request
-	req, err := pc.newRequest("GET", paymentMethodsUrl)
+	req, err := pc.newRequest("GET", "/plans-v3")
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +173,7 @@ func (pc *ProClient) PaymentMethods() (*PaymentMethodsResponse, error) {
 
 func (pc *ProClient) UserCreate(locale string) (*UserDetailsResponse, error) {
 	body := strings.NewReader(url.Values{"locale": {locale}}.Encode())
-	resp, err := pc.POST(userCreateUrl, body, false)
+	resp, err := pc.POST("/user-create", body, false)
 	if err != nil {
 		return nil, err
 	}
@@ -189,9 +188,29 @@ func (pc *ProClient) UserCreate(locale string) (*UserDetailsResponse, error) {
 	return &userDetailsResponse, nil
 }
 
+func (pc *ProClient) Purchase(req *PurchaseRequest) (*PurchaseResponse, error) {
+	jsonBody, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := pc.POST("/purchase", bytes.NewReader(jsonBody), true)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	var purchaseResponse PurchaseResponse
+
+	if err := json.NewDecoder(resp.Body).Decode(&purchaseResponse); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+
+	return &purchaseResponse, nil
+}
+
 func (pc *ProClient) UserData() (*UserDetailsResponse, error) {
 	// Create a new request
-	req, err := pc.newRequest("GET", userDetailsUrl)
+	req, err := pc.newRequest("GET", "/user-data")
 	if err != nil {
 		return nil, err
 	}

@@ -16,6 +16,12 @@ typedef SysProxy = ffi.Pointer<Utf8> Function(); // Dart fn signature
 typedef selecttab_func = ffi.Void Function(ffi.Pointer<Utf8>);
 typedef SelectTab = void Function(ffi.Pointer<Utf8>);
 
+typedef purchase_func = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+typedef Purchase = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+
+typedef reportissue_func = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+typedef ReportIssue = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+
 typedef selectedtab_func = ffi.Pointer<Utf8> Function(); // FFI fn signature
 typedef SelectedTab = ffi.Pointer<Utf8> Function(); // Dart fn signature
 
@@ -49,6 +55,8 @@ final ProFunc ffiChatEnabled = dylib.lookup<ffi.NativeFunction<pro_func>>('ChatE
 final ProFunc ffiCountry = dylib.lookup<ffi.NativeFunction<pro_func>>('Country').asFunction();
 final ProFunc ffiLang = dylib.lookup<ffi.NativeFunction<pro_func>>('Lang').asFunction();
 final ProFunc ffiAcceptedTermsVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('AcceptedTermsVersion').asFunction();
+final Purchase ffiPurchase = dylib.lookup<ffi.NativeFunction<purchase_func>>('Purchase').asFunction();
+final ReportIssue ffiReportIssue = dylib.lookup<ffi.NativeFunction<reportissue_func>>('ReportIssue').asFunction();
 final ProFunc ffiProUser = dylib.lookup<ffi.NativeFunction<pro_func>>('ProUser').asFunction();
 final ProFunc ffiDeviceLinkingCode = dylib.lookup<ffi.NativeFunction<pro_func>>('DeviceLinkingCode').asFunction();
 final ProFunc ffiDevelopmentMode = dylib.lookup<ffi.NativeFunction<pro_func>>('DevelopmentMode').asFunction();

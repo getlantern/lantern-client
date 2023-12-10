@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import 'common.dart';
 import 'common_desktop.dart';
+import 'dart:convert' show utf8;
 
 final sessionModel = SessionModel();
 
@@ -581,13 +582,17 @@ class SessionModel extends Model {
     String expDate,
     String cvc,
   ) async {
-    return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
-      'planID': planID,
-      'email': email,
-      'cardNumber': cardNumber,
-      'expDate': expDate,
-      'cvc': cvc,
-    }).then((value) => value as String);
+    if (Platform.isAndroid) {
+      return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
+        'planID': planID,
+        'email': email,
+        'cardNumber': cardNumber,
+        'expDate': expDate,
+        'cvc': cvc,
+      }).then((value) => value as String);
+    }
+    await ffiPurchase(planID.toNativeUtf8(), email.toNativeUtf8(), cardNumber.toNativeUtf8(), expDate.toNativeUtf8(), 
+      cvc.toNativeUtf8());
   }
 
   Future<void> submitFreekassa(
