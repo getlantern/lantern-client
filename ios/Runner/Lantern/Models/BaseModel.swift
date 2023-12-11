@@ -174,7 +174,7 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
       // Handle all other errors
       else {
         result(
-          FlutterError(code: "UNKNOWN_ERROR", message: error.localizedDescription, details: nil))
+            FlutterError(code: String(error.code), message: error.localizedDescription, details: nil))
       }
     }
   }

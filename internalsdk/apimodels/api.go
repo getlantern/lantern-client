@@ -168,7 +168,7 @@ func GetSalt(userName string) (*protos.GetSaltResponse, error) {
 		log.Errorf("Error getting user salt: %v", err)
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "application/x-protobuf")
 	// Initialize a new http client
 	client := &http.Client{}
 	// Send the request
@@ -206,7 +206,7 @@ func LoginPrepare(prepareBody *protos.PrepareRequest) (*protos.PrepareResponse, 
 		log.Errorf("Error creating signup request: %v", err)
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "application/x-protobuf")
 
 	client := &http.Client{}
 	// Send the request
@@ -222,7 +222,12 @@ func LoginPrepare(prepareBody *protos.PrepareRequest) (*protos.PrepareResponse, 
 		fmt.Println("Error reading response:", err)
 		return nil, err
 	}
-	log.Debugf("Login prepare response %v", string(body))
+	log.Debugf("Login prepare response %v with status code %d", string(body), resp.StatusCode)
+
+	//Todo change message for StatusServiceUnavailable
+	if resp.StatusCode == http.StatusForbidden || resp.StatusCode == http.StatusServiceUnavailable {
+		return nil, log.Errorf("user_not_found %v", err)
+	}
 
 	var prepareResponse protos.PrepareResponse
 	if err := proto.Unmarshal(body, &prepareResponse); err != nil {
@@ -244,7 +249,7 @@ func Login(loginBody map[string]interface{}) (*big.Int, error) {
 		log.Errorf("Error creating login request: %v", err)
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "application/x-protobuf")
 
 	client := &http.Client{}
 	// Send the request
