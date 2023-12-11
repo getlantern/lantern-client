@@ -169,8 +169,10 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
       await sessionModel.signUp(widget.email, _passwordController.text);
       context.loaderOverlay.hide();
       openConfirmEmail();
-    } catch (e) {
+    } catch (e,s) {
+
       context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
     }
   }
 

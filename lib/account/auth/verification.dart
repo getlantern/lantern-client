@@ -1,5 +1,3 @@
-import 'package:lantern/account/auth/sign_in.dart';
-
 import '../../common/common.dart';
 
 @RoutePage<void>(name: 'Verification')
@@ -97,7 +95,18 @@ class _VerificationState extends State<Verification> {
   }
 
   /// widget methods
-  void resendConfirmationCode() {}
+  Future<void> resendConfirmationCode() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.signUpEmailResendCode(widget.email);
+      context.loaderOverlay.hide();
+      AppMethods.showToast('email_resend_message'.i18n);
+    } catch (e) {
+      mainLogger.e(e);
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
 
   void onDone(String code) {
     switch (widget.authFlow) {

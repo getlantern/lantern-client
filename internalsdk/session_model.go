@@ -221,6 +221,21 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		checkAdsEnabled(m)
+	case "signupEmailResendCode":
+		email := arguments.Get("email").String()
+		err := signupEmailResend(m, email)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "signupEmailConfirmation":
+		email := arguments.Get("email").String()
+		code := arguments.Get("code").String()
+		err := signupEmailConfirmation(m, email, code)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 
 	case "login":
 		email := arguments.Get("email").String()
@@ -849,6 +864,7 @@ func signup(session *SessionModel, email string, password string, username strin
 	if err != nil {
 		return err
 	}
+	log.Debugf("Slat %v and length %v", slat, len(slat))
 
 	encryptedKey := srp.KDFRFC5054(slat, email, password)
 	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
@@ -870,15 +886,43 @@ func signup(session *SessionModel, email string, password string, username strin
 	if err != nil {
 		return err
 	}
-
-	log.Debugf("Signup request body %v", signUpRequestBody)
 	signupResponse, err := apimodels.Signup(signUpRequestBody, ToString(userId), token)
 	if err != nil {
 		return err
 	}
-	log.Debugf("Login prepare request body %v", signupResponse)
+	log.Debugf("sign up response %v", signupResponse)
 	//Request successfull then save salt
 	return saveUserSalt(session.baseModel, slat)
+}
+
+func signupEmailResend(session *SessionModel, email string) error {
+	signUpEmailResendRequestBody := &protos.SignupEmailResendRequest{
+		Email: email,
+	}
+
+	log.Debugf("Signup request body %v", signUpEmailResendRequestBody)
+	signupEmailResendResponse, err := apimodels.SignupEmailResendCode(signUpEmailResendRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Signup email resend %v", signupEmailResendResponse)
+	//Request successfull then save salt
+	return nil
+}
+
+func signupEmailConfirmation(session *SessionModel, email string, code string) error {
+	signUpEmailResendRequestBody := &protos.SignupEmailResendRequest{
+		Email: email,
+	}
+
+	log.Debugf("Signup request body %v", signUpEmailResendRequestBody)
+	signupEmailResendResponse, err := apimodels.SignupEmailResendCode(signUpEmailResendRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Signup email resend %v", signupEmailResendResponse)
+	//Request successfull then save salt
+	return nil
 }
 
 func login(session *SessionModel, userName string, email string, password string) error {

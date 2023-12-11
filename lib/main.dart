@@ -6,13 +6,14 @@ import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:lantern/replica/common.dart';
 
 import 'catcher_setup.dart';
 
 // IOS issue
 // https://github.com/flutter/flutter/issues/133465
 Future<void> main() async {
-  // CI will be true only when running appium test
+// CI will be true only when running appium test
   const String flavor = String.fromEnvironment('app.flavor');
 
   print("Running Flavor $flavor");

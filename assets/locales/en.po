@@ -1556,4 +1556,9 @@ msgstr "Search Apps"
 msgid "user_not_found"
 msgstr "User not recognized. Please check your credentials and try again. If you continue to experience issues, please reach out to our support team for assistance."
 
+msgid "email_resend_message"
+msgstr "Your new confirmation code has been sent"
+
+msgid "signup_error"
+msgstr "It looks like something went wrong with the sign-up. Please try again, and if the issue continues, reach out to our support team"
 

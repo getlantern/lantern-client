@@ -27,6 +27,7 @@ const (
 	//Sign up urls
 	signUpUrl         = userGroup + "/signup"
 	signUpCompleteUrl = userGroup + "/signup/complete/email"
+	signUpResendUrl   = userGroup + "/signup/resend/email"
 	//Login up urls
 	prepareUrl = userGroup + "/prepare"
 	loginUrl   = userGroup + "/login"
@@ -120,6 +121,8 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 	return &userResponse, nil
 }
 
+///Signup APIS
+
 func Signup(signupBody *protos.SignupRequest, userId string, token string) (bool, error) {
 	// Marshal the map to JSON
 	requestBody, err := proto.Marshal(signupBody)
@@ -137,6 +140,78 @@ func Signup(signupBody *protos.SignupRequest, userId string, token string) (bool
 	// Add headers
 	req.Header.Set("X-Lantern-User-Id", userId)
 	req.Header.Set("X-Lantern-Pro-Token", token)
+	req.Header.Set("Content-Type", "application/x-protobuf")
+
+	// Initialize a new http client
+	client := &http.Client{}
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	log.Debugf("Signup response %v with status code %d", string(body), resp.StatusCode)
+	if resp.StatusCode != http.StatusOK {
+		return false, log.Errorf("error while sign up %v", err)
+	}
+	return true, nil
+}
+
+func SignupEmailResendCode(signupEmailResendBody *protos.SignupEmailResendRequest) (bool, error) {
+	// Marshal the map to JSON
+	requestBody, err := proto.Marshal(signupEmailResendBody)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return false, err
+	}
+
+	req, err := http.NewRequest("POST", signUpResendUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error creating signup request: %v", err)
+		return false, err
+	}
+
+	// Add headers
+	req.Header.Set("Content-Type", "application/x-protobuf")
+	log.Debugf("Headers set")
+
+	// Initialize a new http client
+	client := &http.Client{}
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return false, log.Errorf("error while sign up %v", err)
+	}
+	return true, nil
+}
+
+func SignupEmailConfirmation(signupEmailResendBody *protos.ConfirmSignupRequest) (bool, error) {
+	// Marshal the map to JSON
+	requestBody, err := proto.Marshal(signupEmailResendBody)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return false, err
+	}
+
+	req, err := http.NewRequest("POST", signUpCompleteUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error creating signup request: %v", err)
+		return false, err
+	}
+
+	// Add headers
 	req.Header.Set("Content-Type", "application/x-protobuf")
 	log.Debugf("Headers set")
 

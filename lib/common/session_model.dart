@@ -269,6 +269,21 @@ class SessionModel extends Model {
     });
   }
 
+  Future<void> signUpEmailResendCode(String email) {
+    return methodChannel
+        .invokeMethod('signupEmailResendCode', <String, dynamic>{
+      'email': email,
+    });
+  }
+
+  Future<void> signupEmailConfirmation(String email, String code) {
+    return methodChannel
+        .invokeMethod('signupEmailConfirmation', <String, dynamic>{
+      'email': email,
+      'code': code,
+    });
+  }
+
   Future<void> login(String email, String password) {
     return methodChannel.invokeMethod('login', <String, dynamic>{
       'email': email,
