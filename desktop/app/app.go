@@ -27,6 +27,7 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/pro"
+	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
@@ -82,6 +83,10 @@ type App struct {
 	// Also protected by trafficLogLock.
 	captureSaveDuration time.Duration
 
+	proClient *client.Client
+	referralCode string
+	referralCodeMu sync.Mutex
+
 	// proxies are tracked by the application solely for data collection purposes. This value should
 	// not be changed, except by Flashlight.onProxiesUpdate. State-changing methods on the dialers
 	// should not be called. In short, this slice and its elements should be treated as read-only.
@@ -93,11 +98,12 @@ type App struct {
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, settings *Settings) *App {
+func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, settings *Settings) *App {
 	analyticsSession := newAnalyticsSession(settings)
 	app := &App{
 		configDir:        configDir,
 		exited:           eventual.NewValue(),
+		proClient: 		  proClient,
 		settings:         settings,
 		analyticsSession: analyticsSession,
 		selectedTab:      AccountTab,
@@ -586,6 +592,23 @@ func (app *App) exitOnFatal(err error) {
 func (app *App) IsPro() bool {
 	isPro, _ := app.isProUserFast()
 	return isPro
+}
+
+
+// ReferralCode returns a user's unique referral code
+func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
+	app.referralCodeMu.Lock()
+	defer app.referralCodeMu.Unlock()
+	referralCode := app.referralCode
+	if referralCode == "" {
+		resp, err := app.proClient.UserData(uc)
+		if err != nil {
+			return "", err
+		}
+		app.referralCode = resp.Code
+		return resp.Code, nil
+	}
+	return referralCode, nil
 }
 
 func recordStopped() {

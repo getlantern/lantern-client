@@ -44,7 +44,7 @@ func Start() *C.char {
 	settings := loadSettings(cdir)
 	proClient = pro.NewClient()
 
-	a = app.NewApp(flashlight.Flags{}, cdir, settings)
+	a = app.NewApp(flashlight.Flags{}, cdir, proClient, settings)
 
 	go func() {
 		err := fetchOrCreate()
@@ -158,7 +158,11 @@ func EmailAddress() *C.char {
 
 //export Referral
 func Referral() *C.char {
-	return C.CString("")
+	referralCode, err := a.ReferralCode(userConfig())
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString(referralCode)
 }
 
 //export ChatEnabled
