@@ -58,6 +58,7 @@ jobs:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
         dist-suffix: 32-bit
+        installer-suffix: -x32
         update-suffix: 386
 
     build-windows-x64:
