@@ -138,11 +138,14 @@ jobs:
           with:
             name: libgo-windows-${{inputs.update-suffix}}-build
 
+        - name: Copy liblantern.dylib
+          run: cp liblantern.dll windows/runner/resources
+
         - name: Build Flutter app
           run: flutter build windows
 
         - name: Rename file
-          run: mv build/windows/x64/runner/Release/androidlantern.exe lantern-installer${{inputs.installer-suffix}}.exe
+          run: mv build/windows/x64/runner/Release/lantern.exe lantern-installer${{inputs.installer-suffix}}.exe
 
         - uses: actions/upload-artifact@v3
           with:
