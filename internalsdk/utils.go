@@ -60,10 +60,10 @@ func GenerateRandomString(length int) string {
 	return random
 }
 func GenerateSalt() ([]byte, error) {
-	salt := make([]byte, 8)
+	salt := make([]byte, 16)
 	if n, err := rand.Read(salt); err != nil {
 		return nil, err
-	} else if n != 8 {
+	} else if n != 16 {
 		return nil, errors.New("failed to generate 8 byte salt")
 	}
 	return salt, nil
