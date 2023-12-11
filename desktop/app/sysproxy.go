@@ -46,6 +46,13 @@ func setUpSysproxyTool() error {
 	return nil
 }
 
+func IsSysProxyOn() bool {
+	sysproxyOffMx.Lock()
+	off := _sysproxyOff
+	sysproxyOffMx.Unlock()
+	return off != nil
+}
+
 func SysproxyOn() (err error) {
 	op := ops.Begin("sysproxy_on")
 	defer op.End()

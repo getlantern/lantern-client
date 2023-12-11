@@ -22,7 +22,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
 
-  Future<void> onSwitchTap(bool newValue) async {
+  Future<void> onSwitchTap(bool newValue, String vpnStatus) async {
     unawaited(HapticFeedback.lightImpact());
     if (isIdle(vpnStatus)) {
       if (Platform.isAndroid) {
@@ -45,11 +45,6 @@ class _VPNSwitchState extends State<VPNSwitch> {
         },
       );
     }
-
-    setState(() {
-      vpnStatus = newValue ? 'connected' : 'disconnected';
-    });
-
   }
 
   @override
@@ -57,13 +52,23 @@ class _VPNSwitchState extends State<VPNSwitch> {
     // Still working on ads feature
     return Transform.scale(
       scale: 2,
-      child: FlutterSwitch(
-          value: this.vpnStatus == 'connected' || this.vpnStatus == 'disconnecting',
+      child: vpnModel
+          .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+        this.vpnStatus = vpnStatus;
+        return FlutterSwitch(
+          value: this.vpnStatus == 'connected' ||
+              this.vpnStatus == 'disconnecting',
           //value: true,
           activeColor: onSwitchColor,
           inactiveColor: offSwitchColor,
-          onToggle: (bool newValue) => onSwitchTap(newValue),
-        ),
+          onToggle: (bool newValue) {
+            onSwitchTap(newValue, vpnStatus);
+            setState(() {
+              this.vpnStatus = newValue ? 'connected' : 'disconnected';
+            });
+          },
+        );
+      }),
     );
     // return sessionModel
     //     .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {

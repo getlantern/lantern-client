@@ -94,19 +94,13 @@ abstract class Model {
       bool details = false,
       T Function(Uint8List serialized)? deserialize,      
   }) {
-    var result =
-        _ffiValueNotifierCache[path] as FfiValueNotifier<T?>?;
-    if (result == null) {
-      result = FfiValueNotifier(
-        ffiFunction,
-        defaultValue,
-        () {
-          _ffiValueNotifierCache.remove(path);
-        },
-      );
-      _ffiValueNotifierCache[path] = result;
-    }
-    return result;
+    return FfiValueNotifier(
+      ffiFunction,
+      defaultValue,
+      () {
+        _ffiValueNotifierCache.remove(path);
+      },
+    );
   }
 
 

@@ -18,6 +18,7 @@ import (
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/osversion"
@@ -41,13 +42,12 @@ func Start() *C.char {
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
-	flags := flashlight.ParseFlags()
 
-	cdir := configDir(&flags)
+	cdir := configDir()
 	settings := loadSettings(cdir)
 	proClient = pro.NewClient()
 
-	a = app.NewApp(flags, cdir, settings)
+	a = app.NewApp(flashlight.Flags{}, cdir, settings)
 
 	go func() {
 		err := fetchOrCreate()
@@ -56,15 +56,25 @@ func Start() *C.char {
 		}
 	}()
 
-	log.Debug("Running headless")
 	go func() {
+		logFile, err := logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+		if err != nil {
+			log.Error(err)
+			// Nothing we can do if fails to create log files, leave logFile nil so
+			// the child process writes to standard outputs as usual.
+		} else {
+			defer logFile.Close()
+			golog.SetPrepender(logging.Timestamped)
+		}
 		runApp(a)
-		err := a.WaitForExit()
+
+		err = a.WaitForExit()
 		if err != nil {
 			log.Errorf("Lantern stopped with error %v", err)
 			os.Exit(-1)
 		}
 		log.Debug("Lantern stopped")
+		logFile.Close()
 		os.Exit(0)
 	}()
 	return C.CString("")
@@ -195,6 +205,10 @@ func SdkVersion() *C.char {
 
 //export VpnStatus
 func VpnStatus() *C.char {
+	log.Debug("Another vpn status call")
+	if app.IsSysProxyOn() {
+		return C.CString("connected")
+	}
 	return C.CString("disconnected")
 }
 
@@ -345,11 +359,8 @@ func loadSettings(configDir string) *app.Settings {
 	return settings
 }
 
-func configDir(flags *flashlight.Flags) string {
-	cdir := flags.ConfigDir
-	if cdir == "" {
-		cdir = appdir.General(common.DefaultAppName)
-	}
+func configDir() string {
+	cdir := appdir.General(common.DefaultAppName)
 	log.Debugf("Using config dir %v", cdir)
 	if _, err := os.Stat(cdir); err != nil {
 		if os.IsNotExist(err) {
@@ -379,8 +390,6 @@ func handleSignals(a *app.App) {
 	go func() {
 		s := <-c
 		log.Debugf("Got signal \"%s\", exiting...", s)
-		os.Exit(1)
-		//desktop.QuitSystray(a)
 	}()
 }
 
