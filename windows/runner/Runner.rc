@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "androidlantern" "\0"
+            VALUE "CompanyName", "org.getlantern" "\0"
+            VALUE "FileDescription", "lantern" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "androidlantern" "\0"
+            VALUE "InternalName", "lantern" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "androidlantern.exe" "\0"
-            VALUE "ProductName", "androidlantern" "\0"
+            VALUE "OriginalFilename", "lantern.exe" "\0"
+            VALUE "ProductName", "Lantern" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
