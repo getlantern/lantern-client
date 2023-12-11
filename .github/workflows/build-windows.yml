@@ -180,9 +180,10 @@ jobs:
         - uses: actions/checkout@v3
         - name: Make installer
           run: |
+            pwd
             cp installer-resources-lantern/.packaged-lantern.yaml installer-resources-lantern/windows/.packaged-lantern.yaml
             cp installer-resources-lantern/lantern.yaml installer-resources-lantern/windows/lantern.yaml
-            cp lantern${{inputs.installer-suffix}}.exe installer-resources-lantern/windows/lantern.exe
+            cp lantern-client/lantern${{inputs.installer-suffix}}.exe installer-resources-lantern/windows/lantern.exe
             makensis -V1 -DVERSION=${{ inputs.version }} -DAPP_NAME=lantern.exe -DOUT_FILE="lantern-installer${{inputs.installer-suffix}}.exe" installer-resources-lantern/windows/lantern.nsi
 
         - name: Install s3cmd
