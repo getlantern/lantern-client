@@ -370,9 +370,6 @@ func runApp(a *app.App) {
 }
 
 func i18nInit(a *app.App) {
-	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
-		return a.GetTranslations(filename)
-	})
 	locale := a.GetLanguage()
 	log.Debugf("Using locale: %v", locale)
 	if _, err := i18n.SetLocale(locale); err != nil {
