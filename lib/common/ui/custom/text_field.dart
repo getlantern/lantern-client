@@ -338,12 +338,14 @@ class CPasswordTextFiled extends StatefulWidget {
   final GlobalKey<FormState> passwordFormKey;
   final CustomTextEditingController passwordCustomTextEditingController;
   final String label;
+  final Function(String vaule)? onChanged;
 
   const CPasswordTextFiled({
     super.key,
     required this.label,
     required this.passwordFormKey,
     required this.passwordCustomTextEditingController,
+    this.onChanged,
   });
 
   @override
@@ -352,7 +354,6 @@ class CPasswordTextFiled extends StatefulWidget {
 
 class _CPasswordTextFiledState extends State<CPasswordTextFiled> {
   bool obscureText = true;
-
 
   @override
   Widget build(BuildContext context) {
@@ -377,9 +378,10 @@ class _CPasswordTextFiledState extends State<CPasswordTextFiled> {
                 ? SvgPicture.asset(ImagePaths.eyeCross)
                 : SvgPicture.asset(ImagePaths.eye)),
         // suffix: SvgPicture.asset(ImagePaths.eye),
-        onChanged: (value) {
-          setState(() {});
-        },
+        onChanged: widget.onChanged ??
+            (value) {
+              setState(() {});
+            },
       ),
     );
   }

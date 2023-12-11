@@ -1,4 +1,5 @@
 import 'package:flutter/gestures.dart';
+import 'package:lantern/common/ui/password_criteria.dart';
 
 import '../../common/common.dart';
 
@@ -34,51 +35,60 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
     return SizedBox(
       width: double.infinity,
       child: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 24),
-            _buildHeader(),
-            const SizedBox(height: 24),
-            _buildEmail(),
-            const SizedBox(height: 24),
-            CPasswordTextFiled(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 24),
+              _buildHeader(),
+              const SizedBox(height: 24),
+              _buildEmail(),
+              const SizedBox(height: 24),
+              CPasswordTextFiled(
                 label: "create_password".i18n,
                 passwordFormKey: _passwordFormKey,
-                passwordCustomTextEditingController: _passwordController),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: Button(
-                // disabled: _emailController.text.isEmpty ||
-                //     _emailFormKey?.currentState?.validate() == false,
-                text: 'continue'.i18n,
-                onPressed: onContinueTap,
+                passwordCustomTextEditingController: _passwordController,
+                onChanged: (vaule) {
+                  setState(() {});
+                },
               ),
-            ),
-            const SizedBox(height: 24),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'by_creating_an_account'.i18n,
-                    style: tsFloatingLabel,
-                  ),
-                  const TextSpan(
-                    text: ' ',
-                  ),
-                  TextSpan(
-                    text: 'terms_of_service'.i18n,
-                    style: tsFloatingLabel!.copiedWith(
-                      decoration: TextDecoration.underline,
+              const SizedBox(height: 14),
+              PasswordCriteriaWidget(
+                  textEditingController: _passwordController),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: Button(
+                  disabled: !isPasswordValid(_passwordController.text),
+                  text: 'continue'.i18n,
+                  onPressed: onContinueTap,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'by_creating_an_account'.i18n,
+                      style: tsFloatingLabel,
                     ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = openTermsOfService,
-                  ),
-                ],
+                    const TextSpan(
+                      text: ' ',
+                    ),
+                    TextSpan(
+                      text: 'terms_of_service'.i18n,
+                      style: tsFloatingLabel!.copiedWith(
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = openTermsOfService,
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            )
-          ],
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
@@ -135,6 +145,21 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
 
   ///Widget methods
 
+  bool isPasswordValid(String password) {
+    bool has6Characters = password.length >= 8;
+    bool hasUppercase = password.contains(RegExp(r'[A-Z]'));
+    bool hasLowercase = password.contains(RegExp(r'[a-z]'));
+    bool hasNumber = password.contains(RegExp(r'[0-9]'));
+    bool hasSpecialCharacter =
+        password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+
+    return has6Characters &&
+        hasUppercase &&
+        hasLowercase &&
+        hasNumber &&
+        hasSpecialCharacter;
+  }
+
   Future<void> onContinueTap() async {
     //Close keyboard
     FocusManager.instance.primaryFocus?.unfocus();
@@ -151,8 +176,8 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
 
   void openConfirmEmail() {
     FocusScope.of(context).unfocus();
-    context.pushRoute(Verification(
-        email: 'jigar@gmail.com', authFlow: AuthFlow.createAccount));
+    context.pushRoute(
+        Verification(email: widget.email, authFlow: AuthFlow.createAccount));
   }
 
   void openTermsOfService() {
