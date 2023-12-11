@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"runtime"
 	"runtime/debug"
 	"strconv"
 	"syscall"
@@ -23,6 +22,7 @@ import (
 	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/i18n"
 	"github.com/getlantern/lantern-client/desktop/app"
 )
 
@@ -36,9 +36,6 @@ var (
 
 //export Start
 func Start() *C.char {
-	// systray requires the goroutine locked with main thread, or the whole
-	// application will crash.
-	runtime.LockOSThread()
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
@@ -56,25 +53,18 @@ func Start() *C.char {
 		}
 	}()
 
+	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+
 	go func() {
-		logFile, err := logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
-		if err != nil {
-			log.Error(err)
-			// Nothing we can do if fails to create log files, leave logFile nil so
-			// the child process writes to standard outputs as usual.
-		} else {
-			defer logFile.Close()
-			golog.SetPrepender(logging.Timestamped)
-		}
+		i18nInit(a)
 		runApp(a)
 
-		err = a.WaitForExit()
+		err := a.WaitForExit()
 		if err != nil {
 			log.Errorf("Lantern stopped with error %v", err)
 			os.Exit(-1)
 		}
 		log.Debug("Lantern stopped")
-		logFile.Close()
 		os.Exit(0)
 	}()
 	return C.CString("")
@@ -377,6 +367,25 @@ func runApp(a *app.App) {
 	// Schedule cleanup actions
 	handleSignals(a)
 	a.Run(true)
+}
+
+func i18nInit(a *app.App) {
+	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
+		return a.GetTranslations(filename)
+	})
+	locale := a.GetLanguage()
+	log.Debugf("Using locale: %v", locale)
+	if _, err := i18n.SetLocale(locale); err != nil {
+		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
+
+		// On startup GetLanguage will return '', as the browser has not set the language yet.
+		// We use the OS locale instead and make sure the language is populated.
+		if locale, err := i18n.UseOSLocale(); err != nil {
+			log.Debugf("i18n.UseOSLocale: %q", err)
+		} else {
+			a.SetLanguage(locale)
+		}
+	}
 }
 
 // Handle system signals for clean exit

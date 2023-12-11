@@ -565,6 +565,18 @@ func (app *App) WaitForExit() error {
 	return err.(error)
 }
 
+// is only used in the panicwrap parent process.
+func (app *App) LogPanicAndExit(msg string) {
+   sentry.ConfigureScope(func(scope *sentry.Scope) {
+           scope.SetLevel(sentry.LevelFatal)
+   })
+
+   sentry.CaptureMessage(msg)
+   if result := sentry.Flush(common.SentryTimeout); !result {
+           log.Error("Flushing to Sentry timed out")
+   }
+}
+
 func (app *App) exitOnFatal(err error) {
 	_ = logging.Close()
 	app.Exit(err)
