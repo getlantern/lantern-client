@@ -103,7 +103,7 @@ func formatRenewalBonusExpected(months int64, days int64, longForm bool) string 
 
 //Create Purchase Request
 
-func createPurchaseData(session *SessionModel, paymentProvider string, resellerCode string, purchaseToken string) (error, map[string]string) {
+func createPurchaseData(session *SessionModel, paymentProvider string, resellerCode string, purchaseToken string, planId string) (error, map[string]string) {
 	email, err := session.Email()
 	if err != nil {
 		return err, nil
@@ -126,11 +126,11 @@ func createPurchaseData(session *SessionModel, paymentProvider string, resellerC
 		data["provider"] = paymentProviderResellerCode
 		data["resellerCode"] = resellerCode
 		data["currency"] = "usd"
-		data["plan"] = ""
+		data["plan"] = planId
 	case paymentProviderApplePay:
 		data["token"] = purchaseToken
 		data["currency"] = "usd"
-		data["plan"] = ""
+		data["plan"] = planId
 
 	}
 

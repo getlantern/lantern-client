@@ -393,12 +393,12 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<void> submitApplePlay(String planID,String purchaseToken) async {
+  Future<void> submitApplePlay(String planID, String purchaseToken) async {
     return methodChannel
         .invokeMethod('submitApplePayPayment', <String, dynamic>{
       'planID': planID,
       'purchaseId': purchaseToken,
-    }).then((value) => value as String);
+    });
   }
 
   Future<void> submitStripePayment(
