@@ -856,11 +856,10 @@ func signup(session *SessionModel, email string, password string, username strin
 	if err != nil {
 		return err
 	}
-	signUpRequestBody := map[string]interface{}{
-		"username": username,
-		"email":    email,
-		"salt":     slat,
-		"verifier": verifierKey,
+	signUpRequestBody := &protos.SignupRequest{
+		Email:    email,
+		Salt:     slat,
+		Verifier: verifierKey.Bytes(),
 	}
 
 	userId, err := session.GetUserID()

@@ -20,3 +20,9 @@ extension ErrorX on Object {
     }
   }
 }
+
+extension Validations on String {
+  String get validateEmail {
+   return trim();
+  }
+}

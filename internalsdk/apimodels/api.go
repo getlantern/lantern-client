@@ -120,23 +120,24 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 	return &userResponse, nil
 }
 
-func Signup(signupBody map[string]interface{}, userId string, token string) (*UserDetailResponse, error) {
+func Signup(signupBody *protos.SignupRequest, userId string, token string) (bool, error) {
 	// Marshal the map to JSON
-	requestBody, err := json.Marshal(signupBody)
+	requestBody, err := proto.Marshal(signupBody)
 	if err != nil {
 		log.Errorf("Error marshaling request body: %v", err)
-		return nil, err
+		return false, err
 	}
 
 	req, err := http.NewRequest("POST", signUpUrl, bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Errorf("Error creating signup request: %v", err)
-		return nil, err
+		return false, err
 	}
 
 	// Add headers
 	req.Header.Set("X-Lantern-User-Id", userId)
 	req.Header.Set("X-Lantern-Pro-Token", token)
+	req.Header.Set("Content-Type", "application/x-protobuf")
 	log.Debugf("Headers set")
 
 	// Initialize a new http client
@@ -145,18 +146,13 @@ func Signup(signupBody map[string]interface{}, userId string, token string) (*Us
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Errorf("Error sending user details request: %v", err)
-		return nil, err
+		return false, err
 	}
 	defer resp.Body.Close()
-
-	// Read the response body
-	var userDetail UserDetailResponse
-	// Read and decode the response body
-	if err := json.NewDecoder(resp.Body).Decode(&userDetail); err != nil {
-		log.Errorf("Error decoding response body: %v", err)
-		return nil, err
+	if resp.StatusCode != http.StatusOK {
+		return false, log.Errorf("error while sign up %v", err)
 	}
-	return &userDetail, nil
+	return true, nil
 }
 
 func GetSalt(userName string) (*protos.GetSaltResponse, error) {
