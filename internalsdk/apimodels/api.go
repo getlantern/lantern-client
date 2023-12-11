@@ -174,7 +174,7 @@ func SignupEmailResendCode(signupEmailResendBody *protos.SignupEmailResendReques
 
 	req, err := http.NewRequest("POST", signUpResendUrl, bytes.NewBuffer(requestBody))
 	if err != nil {
-		log.Errorf("Error creating signup request: %v", err)
+		log.Errorf("Error email resend request request: %v", err)
 		return false, err
 	}
 
@@ -192,7 +192,7 @@ func SignupEmailResendCode(signupEmailResendBody *protos.SignupEmailResendReques
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return false, log.Errorf("error while sign up %v", err)
+		return false, log.Errorf("error while email resend %v", err)
 	}
 	return true, nil
 }
@@ -230,8 +230,8 @@ func SignupEmailConfirmation(signupEmailResendBody *protos.ConfirmSignupRequest)
 	return true, nil
 }
 
-func GetSalt(userName string) (*protos.GetSaltResponse, error) {
-	fullUrl := saltUrl + "?username=" + userName
+func GetSalt(email string) (*protos.GetSaltResponse, error) {
+	fullUrl := saltUrl + "?username=" + email
 	// Marshal the map to JSON
 
 	req, err := http.NewRequest("GET", fullUrl, nil)

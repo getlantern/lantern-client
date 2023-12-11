@@ -659,7 +659,7 @@ func setUserIdAndToken(m *baseModel, userId int, token string) error {
 	})
 }
 
-func getUserSalt(m *baseModel, userName string) ([]byte, error) {
+func getUserSalt(m *baseModel, email string) ([]byte, error) {
 	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
 	if err != nil {
 		return nil, err
@@ -668,7 +668,7 @@ func getUserSalt(m *baseModel, userName string) ([]byte, error) {
 		return userSalt, nil
 	}
 
-	salt, err := apimodels.GetSalt(userName)
+	salt, err := apimodels.GetSalt(email)
 	if err != nil {
 		return nil, err
 	}
@@ -896,8 +896,14 @@ func signup(session *SessionModel, email string, password string, username strin
 }
 
 func signupEmailResend(session *SessionModel, email string) error {
+	salt, err := getUserSalt(session.baseModel, email)
+	if err != nil {
+		return err
+	}
+
 	signUpEmailResendRequestBody := &protos.SignupEmailResendRequest{
 		Email: email,
+		Salt:  salt,
 	}
 
 	log.Debugf("Signup request body %v", signUpEmailResendRequestBody)
