@@ -1506,4 +1506,7 @@ msgstr "FAQ"
 msgid "add_device"
 msgstr "Add Device"
 
+msgid "user_not_found"
+msgstr "User not recognized. Please check your credentials and try again. If you continue to experience issues, please reach out to our support team for assistance."
+
 
