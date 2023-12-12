@@ -59,6 +59,7 @@ const (
 	pathSelectedTab          = "/selectedTab"
 	pathServerInfo           = "/server_info"
 	pathUserSalt             = "user_salt"
+	pathHasAccountVerified   = "hasAccountVerified"
 
 	currentTermsVersion = 1
 	group               = srp.RFC5054Group3072
@@ -226,15 +227,16 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		return err
 	}
 	err = pathdb.PutAll(tx, map[string]interface{}{
-		pathDevelopmentMode: opts.DevelopmentMode,
-		pathProUser:         opts.ProUser,
-		pathDeviceID:        opts.DeviceID,
-		pathStoreVersion:    opts.PlayVersion,
-		pathTimezoneID:      opts.TimeZone,
-		pathDevice:          opts.Device,
-		pathModel:           opts.Model,
-		pathOSVersion:       opts.OsVersion,
-		pathSDKVersion:      SDKVersion(),
+		pathDevelopmentMode:    opts.DevelopmentMode,
+		pathProUser:            opts.ProUser,
+		pathDeviceID:           opts.DeviceID,
+		pathStoreVersion:       opts.PlayVersion,
+		pathTimezoneID:         opts.TimeZone,
+		pathDevice:             opts.Device,
+		pathModel:              opts.Model,
+		pathOSVersion:          opts.OsVersion,
+		pathSDKVersion:         SDKVersion(),
+		pathHasAccountVerified: false,
 	})
 	if err != nil {
 		return err
