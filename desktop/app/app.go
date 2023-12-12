@@ -2,7 +2,6 @@ package app
 
 import (
 	"net"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,10 +9,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	. "github.com/anacrolix/generics"
 	"github.com/getsentry/sentry-go"
 
-	"github.com/getlantern/dhtup"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
@@ -40,7 +37,6 @@ import (
 	uicommon "github.com/getlantern/lantern-client/desktop/common"
 	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
-	"github.com/getlantern/lantern-client/desktop/server"
 	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
@@ -68,9 +64,8 @@ type App struct {
 
 	chGlobalConfigChanged chan bool
 
-	ws           ws.UIChannel
-	flashlight   *flashlight.Flashlight
-	dhtupContext Option[dhtup.Context]
+	ws         ws.UIChannel
+	flashlight *flashlight.Flashlight
 
 	// If both the trafficLogLock and proxiesLock are needed, the trafficLogLock should be obtained
 	// first. Keeping the order consistent avoids deadlocking.
@@ -83,8 +78,8 @@ type App struct {
 	// Also protected by trafficLogLock.
 	captureSaveDuration time.Duration
 
-	proClient *client.Client
-	referralCode string
+	proClient      *client.Client
+	referralCode   string
 	referralCodeMu sync.Mutex
 
 	// proxies are tracked by the application solely for data collection purposes. This value should
@@ -103,7 +98,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, 
 	app := &App{
 		configDir:        configDir,
 		exited:           eventual.NewValue(),
-		proClient: 		  proClient,
+		proClient:        proClient,
 		settings:         settings,
 		analyticsSession: analyticsSession,
 		selectedTab:      AccountTab,
@@ -136,18 +131,6 @@ func (app *App) SetSelectedTab(selectedTab Tab) {
 	app.selectedTabMu.Lock()
 	defer app.selectedTabMu.Unlock()
 	app.selectedTab = selectedTab
-}
-
-func (app *App) GetDebugHttpHandlers() []server.PathHandler {
-	return []server.PathHandler{{
-		Pattern: "/dhtupContextTorrentClientStatus",
-		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// I think it's okay to return the Option Value without checking if it's set, because this handler is
-			// invoked on demand, and should only crash the handler. An alternative might be to just return a nice error
-			// message saying that there's no dhtup Context.
-			app.dhtupContext.Value.TorrentClient.WriteStatus(w)
-		}),
-	}}
 }
 
 // Run starts the app.
@@ -213,15 +196,6 @@ func (app *App) Run(isMain bool) {
 		}
 		cacheDir = filepath.Join(cacheDir, common.DefaultAppName, "dhtup", "data")
 		os.MkdirAll(cacheDir, 0o700)
-		dhtContextValue, err := dhtup.NewContext(
-			net.ParseIP(geolookup.GetIP(0)),
-			cacheDir)
-		if err != nil {
-			log.Errorf("creating dhtup context: %w", err)
-		} else {
-			app.dhtupContext = Some(dhtContextValue)
-			app.AddExitFunc("Closing dhtupContext", app.dhtupContext.Value.Close)
-		}
 
 		app.flashlight, err = flashlight.New(
 			common.DefaultAppName,
@@ -291,14 +265,6 @@ func (app *App) Run(isMain bool) {
 				log.Errorf("flashlight error: %v: %v", t, err)
 			}
 		})
-
-		// The default HTTP handler is often exposed for debugging purposes by default, such as by
-		// anacrolix/envpprof, and should never be exposed publicly.
-		if isMain {
-			for _, handler := range app.GetDebugHttpHandlers() {
-				http.Handle(handler.Pattern, handler.Handler)
-			}
-		}
 
 		app.flashlight.Run(
 			listenAddr,
@@ -573,14 +539,14 @@ func (app *App) WaitForExit() error {
 
 // is only used in the panicwrap parent process.
 func (app *App) LogPanicAndExit(msg string) {
-   sentry.ConfigureScope(func(scope *sentry.Scope) {
-           scope.SetLevel(sentry.LevelFatal)
-   })
+	sentry.ConfigureScope(func(scope *sentry.Scope) {
+		scope.SetLevel(sentry.LevelFatal)
+	})
 
-   sentry.CaptureMessage(msg)
-   if result := sentry.Flush(common.SentryTimeout); !result {
-           log.Error("Flushing to Sentry timed out")
-   }
+	sentry.CaptureMessage(msg)
+	if result := sentry.Flush(common.SentryTimeout); !result {
+		log.Error("Flushing to Sentry timed out")
+	}
 }
 
 func (app *App) exitOnFatal(err error) {
@@ -593,7 +559,6 @@ func (app *App) IsPro() bool {
 	isPro, _ := app.isProUserFast()
 	return isPro
 }
-
 
 // ReferralCode returns a user's unique referral code
 func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
