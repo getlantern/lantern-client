@@ -44,6 +44,10 @@ class AppPurchase {
     } on PlatformException catch (e) {
       logger.e('Error while calling purchase api', error: e);
       Sentry.captureException(e);
+      _onError?.call(e);
+    } catch (e) {
+      logger.e('Payment failed', error: e);
+      _onError?.call(e);
     }
   }
 
@@ -61,12 +65,18 @@ class AppPurchase {
   Future<void> _onPurchaseUpdate(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
+    logger.i("_onPurchaseUpdate called with $purchaseDetailsList");
     for (var purchaseDetails in purchaseDetailsList) {
       await _handlePurchase(purchaseDetails);
     }
   }
 
   Future<void> _handlePurchase(PurchaseDetails purchaseDetails) async {
+    if (purchaseDetails.status == PurchaseStatus.canceled) {
+      // User has canceled the purchase
+      _onError?.call(purchaseDetails);
+      return;
+    }
     if (purchaseDetails.status == PurchaseStatus.purchased) {
       try {
         await sessionModel.submitApplePlay(
@@ -77,6 +87,7 @@ class AppPurchase {
       } catch (e) {
         logger.e("purchase error", error: e);
         Sentry.captureException(e);
+        _onError?.call(e);
       }
     }
     if (purchaseDetails.pendingCompletePurchase) {

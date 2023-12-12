@@ -874,13 +874,12 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 }
 
 func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string) error {
-	log.Errorf("Submit Apple Pay Payment planId %v purchaseToken %v", planId, purchaseToken)
+	log.Debugf("Submit Apple Pay Payment planId %v purchaseToken %v", planId, purchaseToken)
 	err, purchaseData := createPurchaseData(m, paymentProviderApplePay, "", purchaseToken, planId)
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
 	}
-	log.Errorf("Purchase data %v", purchaseData)
 	deviecId, err := m.GetDeviceID()
 	if err != nil {
 		return err
