@@ -843,7 +843,7 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 		return err
 	}
 
-	err, purchaseData := createPurchaseData(m, paymentProviderResellerCode, resellerCode, "")
+	err, purchaseData := createPurchaseData(m, paymentProviderResellerCode, resellerCode, "", "")
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
@@ -874,12 +874,13 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 }
 
 func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string) error {
-	err, purchaseData := createPurchaseData(m, paymentProviderApplePay, "", purchaseToken)
+	log.Errorf("Submit Apple Pay Payment planId %v purchaseToken %v", planId, purchaseToken)
+	err, purchaseData := createPurchaseData(m, paymentProviderApplePay, "", purchaseToken, planId)
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
 	}
-
+	log.Errorf("Purchase data %v", purchaseData)
 	deviecId, err := m.GetDeviceID()
 	if err != nil {
 		return err
@@ -898,8 +899,11 @@ func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string)
 	if err != nil {
 		return err
 	}
-	log.Debugf("Purchase Request response %v", purchase)
+	log.Errorf("Purchase Request response %+v", purchase)
 
+	if purchase.Status != "ok" {
+		return errors.New("Purchase Request failed")
+	}
 	// Set user to pro
 	return setProUser(m.baseModel, true)
 }

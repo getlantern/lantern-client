@@ -14,13 +14,13 @@ class AppPurchase {
   String _planId = "";
 
   void init() {
-    getAvailablePlans();
     final purchaseUpdated = _inAppPurchase.purchaseStream;
     _subscription = purchaseUpdated.listen(
       _onPurchaseUpdate,
       onDone: _updateStreamOnDone,
       onError: _updateStreamOnError,
     );
+    getAvailablePlans();
   }
 
   Future<void> getAvailablePlans() async {
@@ -29,15 +29,22 @@ class AppPurchase {
     plansSku.addAll(response.productDetails);
   }
 
-  void startPurchase(String planId,
-      {required VoidCallback onSuccess,
-      required Function(dynamic error) onFailure}) {
+  Future<void> startPurchase(
+    String planId, {
+    required VoidCallback onSuccess,
+    required Function(dynamic error) onFailure,
+  }) async {
     _planId = planId;
     _onSuccess = onSuccess;
     _onError = onFailure;
     final plan = _normalizePlan(planId);
     final purchaseParam = PurchaseParam(productDetails: plan);
-    _inAppPurchase.buyConsumable(purchaseParam: purchaseParam);
+    try {
+      await _inAppPurchase.buyConsumable(purchaseParam: purchaseParam);
+    } on PlatformException catch (e) {
+      logger.e('Error while calling purchase api', error: e);
+      Sentry.captureException(e);
+    }
   }
 
   ProductDetails _normalizePlan(String planId) {
@@ -47,31 +54,33 @@ class AppPurchase {
     ///  So we split and compare with lowercase
     final newPlanId = planId.split('-')[0];
     return plansSku.firstWhere(
-        (element) => element.id.toLowerCase() == newPlanId.toLowerCase());
+      (element) => element.id.toLowerCase() == newPlanId.toLowerCase(),
+    );
   }
 
-  // Internal methods
   Future<void> _onPurchaseUpdate(
-      List<PurchaseDetails> purchaseDetailsList) async {
-    print("purchase length ${purchaseDetailsList.length}");
-    final purchase = purchaseDetailsList[0];
-    // // Handle purchases here
-    // for (final purchase in purchaseDetailsList) {
-    //   print("purchase $purchase");
-    // }
+    List<PurchaseDetails> purchaseDetailsList,
+  ) async {
+    for (var purchaseDetails in purchaseDetailsList) {
+      await _handlePurchase(purchaseDetails);
+    }
+  }
 
-    logger.i('Calling Purchase API');
-    try {
-      sessionModel.submitApplePlay(_planId, purchase.purchaseID!);
-
-      //Check if purchase is sill in pending state complete purchase
-      if (purchase.pendingCompletePurchase) {
-        await _inAppPurchase.completePurchase(purchase);
+  Future<void> _handlePurchase(PurchaseDetails purchaseDetails) async {
+    if (purchaseDetails.status == PurchaseStatus.purchased) {
+      try {
+        await sessionModel.submitApplePlay(
+          _planId,
+          purchaseDetails.verificationData.serverVerificationData,
+        );
+        _onSuccess?.call();
+      } catch (e) {
+        logger.e("purchase error", error: e);
+        Sentry.captureException(e);
       }
-      _onSuccess?.call();
-    } catch (e) {
-      logger.e('Error while calling purchase api', error: e);
-      Sentry.captureException(e);
+    }
+    if (purchaseDetails.pendingCompletePurchase) {
+      await _inAppPurchase.completePurchase(purchaseDetails);
     }
   }
 
@@ -84,7 +93,7 @@ class AppPurchase {
 
   void _updateStreamOnError(dynamic error) {
     //Handle error here
-    print("purchase error $error");
+    logger.e("purchase error", error: error);
     if (_onError != null) {
       _onError?.call(error);
     }

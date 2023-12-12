@@ -1,0 +1,27 @@
+# template for auto-generated release notes
+# https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes
+
+changelog:
+  # exclude:
+  #   labels:
+  #     - ignore-for-release
+  #   authors:
+  #     - octocat
+  categories:
+    - title: ✨ Major Features
+      labels:
+        - epic
+    - title: 🪲 Bug Fixes
+      labels:
+        - bug
+        - cs
+    - title: 📱 Team Apps
+      labels:
+        - team_apps
+    - title: 📶 Team SDK
+      labels:
+        - team_sdk
+    - title: 🛠️ Team Infra
+      labels:
+        - team_infra
+        - telemetry
