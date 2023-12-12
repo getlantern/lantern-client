@@ -585,7 +585,7 @@ func (s *Settings) getVal(name SettingName) (interface{}, error) {
 	if val, ok := s.m[name]; ok {
 		return val, nil
 	}
-	s.log.Errorf("Could not get value for %s", name)
+	s.log.Debugf("Could not get value for %s", name)
 	return nil, fmt.Errorf("no value for %v", name)
 }
 
