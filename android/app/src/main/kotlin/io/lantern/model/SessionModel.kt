@@ -123,6 +123,7 @@ class SessionModel(
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "requestLinkCode" -> requestLinkCode(result)
+            "redeemLinkCode" -> redeemLinkCode(result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
@@ -366,27 +367,38 @@ class SessionModel(
                         val code = result["code"].asString
                         val expireAt = result["expireAt"].asLong
                         LanternApp.getSession().setDeviceCode(code, expireAt)
-                        methodCallResult.success(null)
+                        methodCallResult.success(code)
                     }
                 }
             },
         )
     }
 
-    private fun redeemLinkCode() {
+    private fun redeemLinkCode(methodCallResult: MethodChannel.Result) {
         val formBody = FormBody.Builder()
             .add("code", LanternApp.getSession().deviceCode()!!)
             .add("deviceName", LanternApp.getSession().deviceName())
             .build()
+        Logger.info(TAG, "Redeeming link code")    
         lanternClient.post(
-            LanternHttpClient.createProUrl("/link-code-request"),
+            LanternHttpClient.createProUrl("/link-code-redeem"),
             formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error making link redeem request..", t)
+                     if (error == null) {
+                        activity.runOnUiThread {
+                            methodCallResult.error("unknownError", null, null)
+                        }
+                        return
+                    }
+                    activity.runOnUiThread {
+                        methodCallResult.error("linkCodeError", error.id, null)
+                    }
                 }
 
                 override fun onSuccess(response: Response?, result: JsonObject?) {
+                    Logger.debug(TAG, "redeem link code response: $result")
                     if (result == null || result["token"] == null || result["userID"] == null) return
                     Logger.debug(TAG, "Successfully redeemed link code")
                     val userID = result["userID"].asLong
@@ -398,6 +410,7 @@ class SessionModel(
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     }
                     activity.startActivity(intent)
+                    // methodCallResult.success(null)
                 }
             },
         )
