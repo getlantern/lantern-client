@@ -29,8 +29,10 @@ var (
 // ShowNotification submits the notification to the notificationsLoop to show
 // and waits for the result.
 func ShowNotification(note *notify.Notification, campaign string) bool {
+	log.Debug("Showing notification")
 	err := normalizeClickURL(note, campaign)
 	if err != nil {
+		log.Errorf("Could not normalize click URL: %v", err)
 		return false
 	}
 	chResult := make(chan bool)
@@ -46,6 +48,7 @@ func ShowNotification(note *notify.Notification, campaign string) bool {
 func normalizeClickURL(note *notify.Notification, campaign string) error {
 	ga, err := analytics.AddCampaign(note.ClickURL, campaign, note.Title+"-"+note.Message, "notification")
 	if err != nil {
+		log.Errorf("Could not add campaign: %v", err)
 		return err
 	}
 

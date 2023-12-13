@@ -353,6 +353,7 @@ func (app *App) beforeStart(listenAddr string) {
 		app.Exit(nil)
 		os.Exit(0)
 	}
+	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 
 func (app *App) isFeatureEnabled(features map[string]bool, feature string) bool {
