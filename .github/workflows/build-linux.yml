@@ -1,0 +1,87 @@
+name: Build Linux
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      prefix:
+        type: string
+        required: true
+
+jobs:
+  build-linux:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      version: ${{ inputs.version }}
+      prefix: ${{ inputs.prefix }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Granting private modules access
+        run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+      - name: Repo access
+        run: |
+          mkdir /tmp/cache
+          echo "machine github.com login ${{ secrets.GH_TOKEN }} password x-oauth-basic" > /tmp/cache/.netrc
+          chmod 600 /tmp/cache/.netrc
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y file build-essential pkg-config
+          sudo apt-get install -y libpcap-dev libgtk-3-dev libayatana-appindicator3-dev ruby ruby-dev && sudo gem install bundler -v 2.2.26
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.21
+
+      - name: Build
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          make package-linux-amd64
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Install s3cmd
+        run: pip install s3cmd
+
+      - name: Set s3cmd permissions
+        run: |
+          echo "[default]" > "$HOME/.s3cfg"
+          echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
+          echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-build
+          path: |
+            lantern_${{inputs.version}}_amd64.deb
+
+      - name: Push binaries to s3
+        
+        env:
+          VERSION: "${{ inputs.version }}"
+          dist_versionless: "${{inputs.prefix}}-64-bit.deb"
+          dist: "${{inputs.prefix}}-${{inputs.version}}-64-bit.deb"
+          update: "lantern_update_linux_amd64-${{inputs.version}}.bz2"
+          dist_source: "lantern_${{inputs.version}}_amd64.deb"
+          update_source: lantern_update_linux_amd64.bz2
+
+        run: |
+          ls -l
+          mv ${{ env.dist_source }} ${{ env.dist }}
+          mv ${{ env.update_source }} ${{ env.update }}
+          cp ${{ env.dist }} ${{ env.dist_versionless }}
+
+          shasum -a 256 ${{ env.dist }} | cut -d " " -f 1 > ${{ env.dist }}.sha256
+          shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
+          cp ${{ env.dist }}.sha256 ${{ env.dist_versionless }}.sha256
+          ls -l
+
+          s3cmd put --acl-public ${{ env.dist }} ${{ env.update }} ${{ env.update }}.sha256 ${{ env.dist }}.sha256 ${{ env.dist_versionless }}.sha256 ${{ env.dist_versionless }} "s3://lantern"
