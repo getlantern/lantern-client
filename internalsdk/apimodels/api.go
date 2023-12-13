@@ -3,13 +3,23 @@ package apimodels
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"math/big"
 	"net/http"
+	"net/http/httputil"
 
+	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/golog"
+	"google.golang.org/protobuf/proto"
 )
 
+// https://api.iantem.io/v1/users/salt
 const (
+	publicBaseUrl = "https://api.iantem.io/v1"
 	baseUrl       = "https://api.getiantem.org"
+	userGroup     = publicBaseUrl + "/users"
 	userDetailUrl = baseUrl + "/user-data"
 	userCreateUrl = baseUrl + "/user-create"
 	plansV3Url    = baseUrl + "/plans-v3"
@@ -21,6 +31,20 @@ const (
 	headerUserId      = "X-Lantern-User-Id"
 	headerProToken    = "X-Lantern-Pro-Token"
 	headerContentType = "Content-Type"
+	//Sign up urls
+	signUpUrl         = userGroup + "/signup"
+	signUpCompleteUrl = userGroup + "/signup/complete/email"
+	signUpResendUrl   = userGroup + "/signup/resend/email"
+	//Login up urls
+	prepareUrl = userGroup + "/prepare"
+	loginUrl   = userGroup + "/login"
+	saltUrl    = userGroup + "/salt"
+	//Recovery urls
+	recoveryCompleteUrl = userGroup + "/recovery/complete/email"
+	recoveryStartUrl    = userGroup + "/recovery/start/email"
+	// Other Auth urls
+	deleteUrl      = userGroup + "/delete"
+	changeEmailUrl = userGroup + "/change_email"
 )
 
 var (
@@ -29,7 +53,6 @@ var (
 )
 
 func FechUserDetail(deviceId string, userId string, token string) (*UserDetailResponse, error) {
-	// Create a new request
 	req, err := http.NewRequest("GET", userDetailUrl, nil)
 	if err != nil {
 		log.Errorf("Error creating user details request: %v", err)
@@ -43,7 +66,6 @@ func FechUserDetail(deviceId string, userId string, token string) (*UserDetailRe
 	log.Debugf("Headers set")
 
 	// Initialize a new http client
-
 	client := &http.Client{}
 	// Send the request
 	resp, err := client.Do(req)

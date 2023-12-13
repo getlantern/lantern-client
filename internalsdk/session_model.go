@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/1Password/srp"
 	"github.com/getlantern/android-lantern/internalsdk/apimodels"
 	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
@@ -73,8 +74,11 @@ const (
 	pathResellerCode         = "resellercode"
 	pathExpirydate           = "expirydate"
 	pathExpirystr            = "expirydatestr"
+	pathUserSalt             = "user_salt"
+	pathHasAccountVerified   = "hasAccountVerified"
 
 	currentTermsVersion = 1
+	group               = srp.RFC5054Group3072
 )
 
 type SessionModelOpts struct {
@@ -182,6 +186,34 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		email := arguments.Get("email").String()
 		resellerCode := arguments.Get("resellerCode").String()
 		err := redeemResellerCode(m, email, resellerCode)
+	case "signup":
+		email := arguments.Get("email").String()
+		password := arguments.Get("password").String()
+		err := signup(m, email, password, "testUserName")
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "signupEmailResendCode":
+		email := arguments.Get("email").String()
+		err := signupEmailResend(m, email)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "signupEmailConfirmation":
+		email := arguments.Get("email").String()
+		code := arguments.Get("code").String()
+		err := signupEmailConfirmation(m, email, code)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "login":
+		email := arguments.Get("email").String()
+		password := arguments.Get("password").String()
+		err := login(m, "testUserName", email, password)
 		if err != nil {
 			return nil, err
 		}
@@ -230,15 +262,16 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		return err
 	}
 	err = pathdb.PutAll(tx, map[string]interface{}{
-		pathDevelopmentMode: opts.DevelopmentMode,
-		pathProUser:         opts.ProUser,
-		pathDeviceID:        opts.DeviceID,
-		pathStoreVersion:    opts.PlayVersion,
-		pathTimezoneID:      opts.TimeZone,
-		pathDevice:          opts.Device,
-		pathModel:           opts.Model,
-		pathOSVersion:       opts.OsVersion,
-		pathSDKVersion:      SDKVersion(),
+		pathDevelopmentMode:    opts.DevelopmentMode,
+		pathProUser:            opts.ProUser,
+		pathDeviceID:           opts.DeviceID,
+		pathStoreVersion:       opts.PlayVersion,
+		pathTimezoneID:         opts.TimeZone,
+		pathDevice:             opts.Device,
+		pathModel:              opts.Model,
+		pathOSVersion:          opts.OsVersion,
+		pathSDKVersion:         SDKVersion(),
+		pathHasAccountVerified: false,
 	})
 	if err != nil {
 		return err
@@ -680,6 +713,12 @@ func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 	return "", nil
 }
 
+func saveUserSalt(m *baseModel, salt []byte) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put[[]byte](tx, pathUserSalt, salt, "")
+	})
+}
+
 func acceptTerms(m *baseModel) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathAcceptedTermsVersion, currentTermsVersion, "")
@@ -710,6 +749,30 @@ func setResellerCode(m *baseModel, resellerCode string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathResellerCode, resellerCode, "")
 	})
+}
+
+func getUserSalt(m *baseModel, email string) ([]byte, error) {
+	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
+	if err != nil {
+		return nil, err
+	}
+	if userSalt != nil {
+		return userSalt, nil
+	}
+
+	salt, err := apimodels.GetSalt(email)
+	if err != nil {
+		return nil, err
+	}
+	//Save salt to Db
+	err = pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put[[]byte](tx, pathUserSalt, salt.Salt, "")
+	})
+	if err != nil {
+		return nil, err
+	}
+	return *&salt.Salt, nil
+
 }
 
 // Create user
@@ -769,8 +832,7 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 			return err
 		}
 	}
-
-	if userDetail.UserStatus != "" && userDetail.UserStatus == "active" && userDetail.UserLevel == "pro" {
+	if userDetail.UserLevel == "pro" {
 		setProUser(m, true)
 	} else {
 		setProUser(m, false)
@@ -905,4 +967,138 @@ func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string)
 	}
 	// Set user to pro
 	return setProUser(m.baseModel, true)
+// Authenticates the user with the given email and password.
+//  Note-: On Sign up Client needed to generate 8 byte slat
+//  Then use that salt, password and username generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
+//  Then use srpClient.Verifier() to generate verifierKey
+
+func signup(session *SessionModel, email string, password string, username string) error {
+	err := setEmail(session.baseModel, email)
+	if err != nil {
+		return err
+	}
+	slat, err := GenerateSalt()
+	if err != nil {
+		return err
+	}
+	log.Debugf("Slat %v and length %v", slat, len(slat))
+
+	encryptedKey := srp.KDFRFC5054(slat, email, password)
+	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+	verifierKey, err := srpClient.Verifier()
+	if err != nil {
+		return err
+	}
+	signUpRequestBody := &protos.SignupRequest{
+		Email:    email,
+		Salt:     slat,
+		Verifier: verifierKey.Bytes(),
+	}
+
+	userId, err := session.GetUserID()
+	if err != nil {
+		return err
+	}
+	token, err := session.GetToken()
+	if err != nil {
+		return err
+	}
+	signupResponse, err := apimodels.Signup(signUpRequestBody, ToString(userId), token)
+	if err != nil {
+		return err
+	}
+	log.Debugf("sign up response %v", signupResponse)
+	//Request successfull then save salt
+	return saveUserSalt(session.baseModel, slat)
+}
+
+func signupEmailResend(session *SessionModel, email string) error {
+	salt, err := getUserSalt(session.baseModel, email)
+	if err != nil {
+		return err
+	}
+
+	signUpEmailResendRequestBody := &protos.SignupEmailResendRequest{
+		Email: email,
+		Salt:  salt,
+	}
+
+	log.Debugf("Signup request body %v", signUpEmailResendRequestBody)
+	signupEmailResendResponse, err := apimodels.SignupEmailResendCode(signUpEmailResendRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Signup email resend %v", signupEmailResendResponse)
+	//Request successfull then save salt
+	return nil
+}
+
+func signupEmailConfirmation(session *SessionModel, email string, code string) error {
+	signUpEmailResendRequestBody := &protos.SignupEmailResendRequest{
+		Email: email,
+	}
+
+	log.Debugf("Signup request body %v", signUpEmailResendRequestBody)
+	signupEmailResendResponse, err := apimodels.SignupEmailResendCode(signUpEmailResendRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Signup email resend %v", signupEmailResendResponse)
+	//Request successfull then save salt
+	return nil
+}
+
+func login(session *SessionModel, userName string, email string, password string) error {
+	// Get the salt
+	salt, err := getUserSalt(session.baseModel, userName)
+	if err != nil {
+		return err
+	}
+
+	// Prepare login request body
+	encryptedKey := srp.KDFRFC5054(salt, email, password)
+	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+
+	//Send this key to client
+	A := client.EphemeralPublic()
+
+	//Create body
+	prepareRequestBody := &protos.PrepareRequest{
+		Email: email,
+		A:     A.Bytes(),
+	}
+	log.Debugf("A Bytes %v", A.Bytes())
+	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Login prepare request body %v", srpB)
+
+	// // Once the client receives B from the server Client should check error status here as defense against
+	// // a malicious B sent from server
+	// if err = client.SetOthersPublic(srpB); err != nil {
+	// 	log.Errorf("Error while setting srpB %v", err)
+	// 	return err
+	// }
+
+	// // Step 3
+
+	// // check if the server proof is valid
+	// if !client.GoodServerProof(salt, userName, serverProof) {
+	// 	log.Fatal("bad proof from server")
+	// 	return err
+	// }
+
+	// clientProof, err := client.ClientProof()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// loginRequestBody := map[string]interface{}{
+	// 	"email": userName,
+	// 	"proof": clientProof,
+	// }
+
+	return nil
+
 }

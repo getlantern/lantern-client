@@ -1,3 +1,4 @@
+import 'package:animated_loading_border/animated_loading_border.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.dart';
@@ -84,8 +85,18 @@ class LanternApp extends StatelessWidget {
           (context, lang, child) {
             Localization.locale = lang;
             return GlobalLoaderOverlay(
-              overlayColor: Colors.black,
-              overlayOpacity: 0.6,
+              useDefaultLoading: false,
+              overlayColor: Colors.black.withOpacity(0.5),
+              overlayWidget: Center(
+                child: AnimatedLoadingBorder(
+                  borderWidth: 5,
+                  borderColor: yellow3,
+                  cornerRadius: 100,
+                  child: SvgPicture.asset(
+                    ImagePaths.lantern_logo,
+                  ),
+                ),
+              ),
               child: I18n(
                 initialLocale: currentLocale(lang),
                 child: MaterialApp.router(

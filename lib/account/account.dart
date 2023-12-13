@@ -9,16 +9,54 @@ class AccountMenu extends StatelessWidget {
       await context.pushRoute(AuthorizePro());
 
   void inviteFriends(BuildContext context) async =>
-      await context.pushRoute(InviteFriends());
+      await context.pushRoute(const InviteFriends());
 
   void openDesktopVersion(BuildContext context) async =>
-      await context.pushRoute(LanternDesktop());
+      await context.pushRoute(const LanternDesktop());
 
   void openSettings(BuildContext context) => context.pushRoute(Settings());
 
   void openSupport(BuildContext context) {
     context.pushRoute(const Support());
   }
+
+  void onAccountManagementTap(BuildContext context, bool isProUser) {
+    //Todo make this dynamic once connect to API
+    bool hasUserSignedIn = false;
+    if (hasUserSignedIn) {
+      context.pushRoute(AccountManagement(isPro: isProUser));
+    } else {
+      showProUserDialog(context);
+    }
+  }
+
+  void openCreateAccount(BuildContext context) {
+    context.pushRoute(const CreateAccountEmail());
+  }
+
+  //Show this dialog when user is not signed in and clicks on account management
+  // void showProUserDialog(BuildContext context) {
+  //   CDialog(
+  //     title: 'update_pro_account'.i18n,
+  //     description: "update_pro_account_message".i18n,
+  //     icon: const CAssetImage(
+  //       path: ImagePaths.addAccountIllustration,
+  //       height: 110,
+  //     ),
+  //     agreeText: "update_account".i18n,
+  //     dismissText: "not_now".i18n,
+  //     includeCancel: true,
+  //     agreeAction: () async {
+  //       context.pushRoute(const CreateAccountEmail());
+  //       return true;
+  //     },
+  //     dismissAction: () async {
+  //       print("Go back");
+  //     },
+  //   ).show(context);
+  // }
+
+  void openSignIn(BuildContext context) => context.pushRoute(SignIn());
 
   void upgradeToLanternPro(BuildContext context) async =>
       await context.pushRoute(const PlansPage());
@@ -36,8 +74,7 @@ class AccountMenu extends StatelessWidget {
                     ListItemFactory.settingsItem(
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
-                  onTap: () async =>
-                      await context.pushRoute(AccountManagement(isPro: false)),
+                  onTap: () => onAccountManagementTap(context, true),
                   trailingArray: [
                     if (!hasCopiedRecoveryKey)
                       const CAssetImage(
@@ -48,14 +85,15 @@ class AccountMenu extends StatelessWidget {
               )
             : const SizedBox(),
       ),
-      ListItemFactory.settingsItem(
-        key: AppKeys.upgrade_lantern_pro,
-        icon: ImagePaths.pro_icon_black,
-        content: 'Upgrade to Lantern Pro'.i18n,
-        onTap: () {
-          upgradeToLanternPro(context);
-        },
-      ),
+
+        ListItemFactory.settingsItem(
+          key: AppKeys.upgrade_lantern_pro,
+          icon: ImagePaths.pro_icon_black,
+          content: 'Upgrade to Lantern Pro'.i18n,
+          onTap: () {
+            upgradeToLanternPro(context);
+          },
+        ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
@@ -77,6 +115,11 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> proItems(BuildContext context) {
     return [
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.signIn,
+        content: 'sign_in'.i18n,
+        onTap: () => openSignIn(context),
+      ),
       messagingModel.getOnBoardingStatus(
         (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus((BuildContext context,
@@ -85,8 +128,7 @@ class AccountMenu extends StatelessWidget {
                   key: AppKeys.account_management,
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
-                  onTap: () async =>
-                      await context.pushRoute(AccountManagement(isPro: true)),
+                  onTap: () => onAccountManagementTap(context, false),
                   trailingArray: [
                     if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
                       const CAssetImage(

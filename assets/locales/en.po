@@ -1,4 +1,5 @@
 # 
+
 msgid ""
 msgstr ""
 
@@ -16,6 +17,91 @@ msgstr "Maybe Later"
 
 msgid "try"
 msgstr "Try it out"
+
+msgid "sign_in"
+msgstr "Sign In"
+
+msgid "enter_email"
+msgstr "Enter Email"
+
+msgid "enter_password"
+msgstr "Enter Password"
+
+msgid "forgot_password"
+msgstr "Forgot Password"
+
+msgid "forgot_your_password"
+msgstr "Forgot your password? "
+
+msgid "click_here"
+msgstr "Click here"
+
+msgid "reset_password"
+msgstr "Reset Password"
+
+msgid "lantern_pro_email"
+msgstr "Lantern Pro Email "
+
+msgid "return_to_sign_in"
+msgstr "Return to Sign in"
+
+msgid "enter_confirmation_code"
+msgstr "Enter Confirmation Code"
+
+msgid "confirmation_code_msg"
+msgstr "A confirmation code has been sent to XX. Enter it here to secure your account and enable password recovery."
+
+msgid "resend_confirmation_code"
+msgstr "Resend Confirmation Email"
+
+msgid "email_already_exists"
+msgstr "Email Already Exists"
+
+msgid "email_already_exists_msg"
+msgstr "This email is taken, if you already have an account with this email you can recover.  If not please go back and select a different email address."
+
+msgid "recover_account"
+msgstr "Recover Account"
+
+msgid "back"
+msgstr "back"
+
+msgid "change_email"
+msgstr "Change Email"
+
+msgid "new_password"
+msgstr "New Password"
+
+msgid "confirm_new_password"
+msgstr "Confirm New Password"
+
+msgid "already_have_an_account"
+msgstr "Already have an account? "
+
+msgid "create_account"
+msgstr "Create Account"
+
+msgid "create_password"
+msgstr "Create Password"
+
+msgid "by_creating_an_account"
+msgstr "By Creating an Account, you agree to our"
+
+msgid "confirm_email"
+msgstr "Confirm Email"
+
+msgid "update_pro_account"
+msgstr "Update Pro Account"
+
+msgid "update_pro_account_message"
+msgstr "Changes are coming to Lantern Pro! Now, you will need an email and password to log in on all devices, and to accesss Account Management.  Please take a few moments to add these credentials to your account. "
+
+msgid "not_now"
+msgstr "Not now"
+
+msgid "update_account"
+msgstr "Update Account"
+
 
 msgid "new"
 msgstr "New"
@@ -1391,7 +1477,7 @@ msgid "test_text"
 msgstr "I want to eat some pizza 🍕 😊"
 
 msgid "test_hello"
-msgstr "Hi how are you?" 
+msgstr "Hi how are you?"
 
 msgid "test_reply"
 msgstr "Actually no, I think I am in the mood for sushi today!"
@@ -1419,5 +1505,17 @@ msgstr "FAQ"
 
 msgid "add_device"
 msgstr "Add Device"
+
+msgid "user_not_found"
+msgstr "User not recognized. Please check your credentials and try again. If you continue to experience issues, please reach out to our support team for assistance."
+
+msgid "email_resend_message"
+msgstr "Your new confirmation code has been sent"
+
+msgid "signup_error"
+msgstr "It looks like something went wrong with the sign-up. Please try again, and if the issue continues, reach out to our support team"
+
+msgid "confirm_email_error"
+msgstr "Please confirm your email"
 
 

@@ -2,8 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:lantern/common/ui/transitions.dart';
 import 'package:lantern/core/router/router.gr.dart';
 
-
-
 @AutoRouterConfig(
   replaceInRouteName: 'Page,Route,Screen',
 )
@@ -246,5 +244,54 @@ class AppRouter extends $AppRouter {
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
+    CustomRoute(
+      page: SignIn.page,
+      path: '/sign_in',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: SignInPassword.page,
+      path: '/sign_in_password',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: ConfirmEmail.page,
+      path: '/confirm_email',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: ResetPassword.page,
+      path: '/reset_password',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: Verification.page,
+      path: '/verification',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: CreateAccountEmail.page,
+      path: '/create_account_email',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: CreateAccountPassword.page,
+      path: '/create_account_password',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    )
   ];
 }

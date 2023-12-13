@@ -1,3 +1,5 @@
+import 'package:logger/logger.dart';
+
 export 'dart:async';
 export 'dart:convert';
 export 'dart:io';
@@ -30,6 +32,11 @@ export 'package:stop_watch_timer/stop_watch_timer.dart';
 export 'package:wakelock/wakelock.dart';
 
 export 'add_nonbreaking_spaces.dart';
+export 'app_const.dart';
+export 'app_enums.dart';
+export 'app_extension.dart';
+export 'app_keys.dart';
+export 'app_methods.dart';
 export 'disable_back_button.dart';
 export 'iterable_extension.dart';
 export 'list_subscriber.dart';
@@ -39,27 +46,42 @@ export 'model_event_channel.dart';
 export 'once.dart';
 export 'session_model.dart';
 export 'single_value_subscriber.dart';
+export 'ui/app_buttons.dart';
 export 'ui/audio.dart';
 export 'ui/base_screen.dart';
 export 'ui/basic_memory_image.dart';
-export 'ui/button.dart';
 export 'ui/colors.dart';
 export 'ui/continue_arrow.dart';
 export 'ui/copy_text.dart';
 export 'ui/countdown_min_sec.dart';
 export 'ui/countdown_stopwatch.dart';
+
+// custom components
+export 'ui/custom/asset_image.dart';
+
 // custom components
 export 'ui/custom/asset_image.dart';
 export 'ui/custom/badge.dart';
+export 'ui/custom/badge.dart';
+export 'ui/custom/dialog.dart';
 export 'ui/custom/dialog.dart';
 export 'ui/custom/divider.dart';
+export 'ui/custom/divider.dart';
+export 'ui/custom/fullscreen_image_viewer.dart';
 export 'ui/custom/fullscreen_image_viewer.dart';
 export 'ui/custom/fullscreen_video_viewer.dart';
+export 'ui/custom/fullscreen_video_viewer.dart';
+export 'ui/custom/fullscreen_viewer.dart';
 export 'ui/custom/fullscreen_viewer.dart';
 export 'ui/custom/ink_well.dart';
+export 'ui/custom/ink_well.dart';
+export 'ui/custom/list_item_factory.dart';
 export 'ui/custom/list_item_factory.dart';
 export 'ui/custom/rounded_rectangle_border.dart';
+export 'ui/custom/rounded_rectangle_border.dart';
 export 'ui/custom/text.dart';
+export 'ui/custom/text.dart';
+export 'ui/custom/text_field.dart';
 export 'ui/custom/text_field.dart';
 export 'ui/dimens.dart';
 export 'ui/focused_menu.dart';
@@ -69,6 +91,7 @@ export 'ui/humanize_past_future.dart';
 export 'ui/humanize_seconds.dart';
 export 'ui/humanized_date.dart';
 export 'ui/image_paths.dart';
+export 'ui/info_text_box.dart';
 export 'ui/info_text_box.dart';
 export 'ui/labeled_divider.dart';
 export 'ui/list_section_header.dart';
@@ -85,8 +108,6 @@ export 'ui/show_snackbar.dart';
 export 'ui/text_highlighter.dart';
 export 'ui/text_styles.dart';
 export 'ui/transitions.dart';
-export 'ui/info_text_box.dart';
-export 'app_keys.dart';
 
 // custom components
 export 'ui/custom/asset_image.dart';
@@ -105,3 +126,7 @@ export 'ui/custom/fullscreen_viewer.dart';
 
 // Services
 export 'package:lantern/core/services.dart';
+final mainLogger = Logger(
+  printer: PrettyPrinter(),
+  filter: DevelopmentFilter(),
+);

@@ -13,6 +13,15 @@ const TAB_DEVELOPER = 'developer';
 class SessionModel extends Model {
   late final EventManager eventManager;
 
+  ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  late ValueNotifier<bool?> isPlayVersion;
+  late ValueNotifier<bool?> isStoreVersion;
+  late ValueNotifier<bool?> proxyAvailable;
+  late ValueNotifier<bool?> hasAccountVerified;
+  late ValueNotifier<bool?> proUserNotifier;
+  late ValueNotifier<String?> country;
+  late ValueNotifier<String?> userEmail;
+
   SessionModel() : super('session') {
     eventManager = EventManager('lantern_event_channel');
     eventManager.subscribe(Event.All, (eventType, map) {
@@ -36,19 +45,21 @@ class SessionModel extends Model {
       'playVersion',
       false,
     );
+    userEmail = singleValueNotifier(
+      'emailAddress',
+      "",
+    );
+
     /*Note
     * Make proxyAvailable default value to true on IOS it take some to get data from go side
     * So show banner only if proxyAvailable is false
     */
     proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
     country = singleValueNotifier('geo_country_code', 'US');
+    // This warning is not needed for the Non pro user
+    hasAccountVerified = singleValueNotifier('hasAccountVerified', true);
+    proUserNotifier = singleValueNotifier('prouser', false);
   }
-
-  ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  late ValueNotifier<bool?> isPlayVersion;
-  late ValueNotifier<bool?> isStoreVersion;
-  late ValueNotifier<bool?> proxyAvailable;
-  late ValueNotifier<String?> country;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -153,6 +164,36 @@ class SessionModel extends Model {
         return Devices.fromBuffer(serialized);
       },
     );
+  }
+
+  /// Auth Method channel
+  Future<void> signUp(String email, String password) {
+    return methodChannel.invokeMethod('signup', <String, dynamic>{
+      'email': email,
+      'password': password,
+    });
+  }
+
+  Future<void> signUpEmailResendCode(String email) {
+    return methodChannel
+        .invokeMethod('signupEmailResendCode', <String, dynamic>{
+      'email': email,
+    });
+  }
+
+  Future<void> signupEmailConfirmation(String email, String code) {
+    return methodChannel
+        .invokeMethod('signupEmailConfirmation', <String, dynamic>{
+      'email': email,
+      'code': code,
+    });
+  }
+
+  Future<void> login(String email, String password) {
+    return methodChannel.invokeMethod('login', <String, dynamic>{
+      'email': email,
+      'password': password,
+    });
   }
 
   Future<void> setProxyAll<T>(bool on) async {

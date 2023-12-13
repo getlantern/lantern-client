@@ -1,12 +1,17 @@
 package internalsdk
 
 import (
+	"bytes"
+	"crypto/rand"
+	cryptoRand "crypto/rand"
 	"encoding/binary"
 	"fmt"
 	"math"
 	"strconv"
 	"strings"
 	"time"
+	"math/big"
+	"strconv"
 
 	"github.com/bojanz/currency"
 	"github.com/getlantern/android-lantern/internalsdk/apimodels"
@@ -136,4 +141,68 @@ func createPurchaseData(session *SessionModel, paymentProvider string, resellerC
 
 	return nil, data
 
+func BytesToInt64Slice(b []byte) []int {
+	var int64Slice []int
+	buf := bytes.NewBuffer(b)
+
+	for buf.Len() >= 8 {
+		var n int
+		if err := binary.Read(buf, binary.BigEndian, &n); err != nil {
+			fmt.Println("binary.Read failed:", err)
+			return nil
+		}
+		int64Slice = append(int64Slice, n)
+	}
+
+	return int64Slice
+}
+
+func Int64SliceToBytes(int64Slice []int) []byte {
+	var buf bytes.Buffer
+	for _, n := range int64Slice {
+		if err := binary.Write(&buf, binary.BigEndian, n); err != nil {
+			fmt.Println("binary.Write failed:", err)
+			return nil
+		}
+	}
+	return buf.Bytes()
+}
+
+var maxDigit = big.NewInt(9)
+
+func GenerateRandomString(length int) string {
+	random := ""
+
+	for i := 0; i < length; i++ {
+		bb, _ := cryptoRand.Int(cryptoRand.Reader, maxDigit)
+		random += bb.String()
+	}
+	return random
+}
+func GenerateSalt() ([]byte, error) {
+	salt := make([]byte, 16)
+	if n, err := rand.Read(salt); err != nil {
+		return nil, err
+	} else if n != 16 {
+		return nil, errors.New("failed to generate 8 byte salt")
+	}
+	return salt, nil
+}
+
+func ToString(value int64) string {
+	return fmt.Sprintf("%d", value)
+}
+
+func StringToIntSlice(str string) ([]int, error) {
+	var slice []int
+
+	for _, char := range str {
+		digit, err := strconv.Atoi(string(char))
+		if err != nil {
+			return nil, err
+		}
+		slice = append(slice, digit)
+	}
+
+	return slice, nil
 }
