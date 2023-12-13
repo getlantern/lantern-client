@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"path/filepath"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/1Password/srp"
 	"github.com/getlantern/android-lantern/internalsdk/apimodels"
@@ -22,6 +24,16 @@ import (
 type SessionModel struct {
 	*baseModel
 }
+
+// Expose payment providers
+const (
+	paymentProviderStripe       = "stripe"
+	paymentProviderFreekassa    = "freekassa"
+	paymentProviderGooglePlay   = "googleplay"
+	paymentProviderApplePay     = "applepay"
+	paymentProviderBTCPay       = "btcpay"
+	paymentProviderResellerCode = "reseller-code"
+)
 
 // List of we are using for Session Model
 const (
@@ -101,6 +113,47 @@ const (
 	pathSelectedTab            = "/selectedTab"
 	pathServerInfo             = "/server_info"
 	pathUserSalt               = "user_salt"
+	pathDeviceID             = "deviceid"
+	pathDevice               = "device"
+	pathDevices              = "devices"
+	pathModel                = "model"
+	pathOSVersion            = "os_version"
+	pathPaymentTestMode      = "paymentTestMode"
+	pathUserID               = "userid"
+	pathToken                = "token"
+	pathProUser              = "prouser"
+	pathSDKVersion           = "sdkVersion"
+	pathUserLevel            = "userLevel"
+	pathChatEnabled          = "chatEnabled"
+	pathDevelopmentMode      = "developmentMode"
+	pathGeoCountryCode       = "geo_country_code"
+	pathServerCountry        = "server_country"
+	pathServerCountryCode    = "server_country_code"
+	pathServerCity           = "server_city"
+	pathHasSucceedingProxy   = "hasSucceedingProxy"
+	pathLatestBandwith       = "latest_bandwidth"
+	pathTimezoneID           = "timezone_id"
+	pathReferralCode         = "referral"
+	pathForceCountry         = "forceCountry"
+	pathDNSDetector          = "dns_detector"
+	pathProvider             = "provider"
+	pathEmailAddress         = "emailAddress"
+	pathCurrencyCode         = "currency_Code"
+	pathReplicaAddr          = "replicaAddr"
+	pathSplitTunneling       = "splitTunneling"
+	pathLang                 = "lang"
+	pathAcceptedTermsVersion = "accepted_terms_version"
+	pathAdsEnabled           = "adsEnabled"
+	pathCASAdsEnabled        = "casAsEnabled"
+	pathStoreVersion         = "storeVersion"
+	pathSelectedTab          = "/selectedTab"
+	pathServerInfo           = "/server_info"
+	pathPlans                = "/plans/"
+	pathResellerCode         = "resellercode"
+	pathExpirydate           = "expirydate"
+	pathExpirystr            = "expirydatestr"
+	pathUserSalt             = "user_salt"
+	pathHasAccountVerified   = "hasAccountVerified"
 
 	currentTermsVersion = 1
 	group               = srp.RFC5054Group3072
@@ -130,6 +183,11 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 	}
+	base.db.RegisterType(1000, &protos.ServerInfo{})
+	base.db.RegisterType(2000, &protos.Devices{})
+	base.db.RegisterType(5000, &protos.Device{})
+	base.db.RegisterType(3000, &protos.Plan{})
+	base.db.RegisterType(4000, &protos.Plans{})
 	m := &SessionModel{baseModel: base}
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	return m, m.initSessionModel(opts)
@@ -177,6 +235,8 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		if err != nil {
 			return nil, err
 		}
+		//Todo find way to call PLans api everytime user chnage lang
+		//So plans will apper in there local lang
 		return true, nil
 	case "acceptTerms":
 		err := acceptTerms(m.baseModel)
@@ -205,6 +265,15 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "redeemResellerCode":
+		email := arguments.Get("email").String()
+		resellerCode := arguments.Get("resellerCode").String()
+		err := redeemResellerCode(m, email, resellerCode)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 	case "signup":
 		email := arguments.Get("email").String()
 		password := arguments.Get("password").String()
@@ -245,6 +314,16 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+
+	case "submitApplePayPayment":
+		plandId := arguments.Get("planID").String()
+		purchaseId := arguments.Get("purchaseId").String()
+		err := submitApplePayPayment(m, plandId, purchaseId)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -279,15 +358,16 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		return err
 	}
 	err = pathdb.PutAll(tx, map[string]interface{}{
-		pathDevelopmentMode: opts.DevelopmentMode,
-		pathProUser:         opts.ProUser,
-		pathDeviceID:        opts.DeviceID,
-		pathStoreVersion:    opts.PlayVersion,
-		pathTimezoneID:      opts.TimeZone,
-		pathDevice:          opts.Device,
-		pathModel:           opts.Model,
-		pathOSVersion:       opts.OsVersion,
-		pathSDKVersion:      SDKVersion(),
+		pathDevelopmentMode:    opts.DevelopmentMode,
+		pathProUser:            opts.ProUser,
+		pathDeviceID:           opts.DeviceID,
+		pathStoreVersion:       opts.PlayVersion,
+		pathTimezoneID:         opts.TimeZone,
+		pathDevice:             opts.Device,
+		pathModel:              opts.Model,
+		pathOSVersion:          opts.OsVersion,
+		pathSDKVersion:         SDKVersion(),
+		pathHasAccountVerified: false,
 	})
 	if err != nil {
 		return err
@@ -338,7 +418,50 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
+
+
+	token, err := m.GetToken()
+	if err != nil {
+		return err
+	}
+	countryCode, err := m.GetCountryCode()
+	if err != nil {
+		return err
+	}
+	//Get all the Plans
+	userIdStr := fmt.Sprintf("%d", userId)
+	if userId == 0 {
+		tempUserId, err := m.GetUserID()
+		if err != nil {
+			return err
+		}
+		userIdStr = fmt.Sprintf("%d", tempUserId)
+	}
+
+	err = getPlansV3(m.baseModel, opts.DeviceID, userIdStr, lang, token, countryCode)
+	if err != nil {
+		log.Debugf("Plans V3 error: %v", err)
+		return err
+	}
 	return checkAdsEnabled(m)
+}
+
+func getPlansV3(m *baseModel, deviceId string, userId string, lang string, token string, countyCode string) error {
+	//
+	log.Debugf("Request data deviceID %v userId %v lang %v token %v countyCode %v", deviceId, userId, lang, token, countyCode)
+	plans, err := apimodels.PlansV3(deviceId, userId, lang, token, countyCode)
+	if err != nil {
+		log.Debugf("Plans V3 error: %v", err)
+		return err
+	}
+	log.Debugf("Plans V3 response: %+v", plans)
+
+	/// Process Plans and providers
+	err = storePlanDetail(m, *plans)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (m *SessionModel) GetAppName() string {
@@ -450,6 +573,23 @@ func setUserLevel(m *baseModel, userLevel string) error {
 		return pathdb.Put(tx, pathUserLevel, userLevel, "")
 	})
 }
+func setExpiration(m *baseModel, expiration int64) error {
+	if expiration == 0 {
+		return nil
+	}
+
+	expiry := time.Unix(0, expiration*int64(time.Second))
+	dateFormat := "01/02/2006"
+	dateStr := expiry.Format(dateFormat)
+
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		err := pathdb.Put[string](tx, pathExpirystr, dateStr, "")
+		if err != nil {
+			return err
+		}
+		return pathdb.Put[int64](tx, pathExpirydate, expiration, "")
+	})
+}
 
 func getUserLevel(m *baseModel) (string, error) {
 	return pathdb.Get[string](m.db, pathUserLevel)
@@ -470,6 +610,7 @@ func setLanguage(m *baseModel, lang string) error {
 }
 
 func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
+	log.Debugf("Device list %v", devices)
 	var protoDevices []*protos.Device
 	for _, device := range devices {
 		protoDevice := &protos.Device{
@@ -480,11 +621,63 @@ func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
 		protoDevices = append(protoDevices, protoDevice)
 	}
 
+	userDevice := &protos.Devices{Devices: protoDevices}
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, pathDevices, protoDevices, "")
+		pathdb.Put(tx, pathDevices, userDevice, "")
 		return nil
 	})
+	log.Debugf("Device stored successfully")
 	return nil
+}
+
+func storePlanDetail(m *baseModel, plan apimodels.PlansResponse) error {
+	log.Debugf("Storing Plan details ")
+	err := setPlans(m, plan.Plans)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Plan details stored successful")
+	return nil
+}
+
+func setPlans(m *baseModel, plans []apimodels.Plan) error {
+
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		//Get local from user
+		lang, err := pathdb.Get[string](tx, pathLang)
+		if err != nil {
+			return err
+		}
+
+		for _, plans := range plans {
+			// Update priceing for each plan
+			err := updatePrice(&plans, lang)
+			if err != nil {
+				log.Debugf("Error while updateing price")
+				return err
+			}
+			log.Debugf("Plans Values %+v", plans)
+			pathPlanId := pathPlans + strings.Split(plans.ID, "-")[0]
+			protoPlan := &protos.Plan{
+				Id:                     plans.ID,
+				Description:            plans.Description,
+				BestValue:              plans.BestValue,
+				UsdPrice:               plans.UsdPrice,
+				TotalCostBilledOneTime: plans.TotalCostBilledOneTime,
+				Price:                  plans.Price,
+				OneMonthCost:           plans.OneMonthCost,
+				TotalCost:              plans.TotalCost,
+				FormattedBonus:         plans.FormattedBonus,
+				RenewalText:            "",
+			}
+			err = pathdb.Put(tx, pathPlanId, protoPlan, "")
+			if err != nil {
+				log.Debugf("Error while addding price")
+				return err
+			}
+		}
+		return nil
+	})
 }
 
 func (m *SessionModel) GetTimeZone() (string, error) {
@@ -658,6 +851,11 @@ func setUserIdAndToken(m *baseModel, userId int, token string) error {
 		return pathdb.Put(tx, pathToken, token, "")
 	})
 }
+func setResellerCode(m *baseModel, resellerCode string) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathResellerCode, resellerCode, "")
+	})
+}
 
 func getUserSalt(m *baseModel, email string) ([]byte, error) {
 	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
@@ -746,6 +944,11 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 		setProUser(m, false)
 	}
 	err := setUserLevel(m, userDetail.UserLevel)
+	if err != nil {
+		return err
+	}
+
+	err = setExpiration(m, userDetail.Expiration)
 	if err != nil {
 		return err
 	}
@@ -848,6 +1051,80 @@ func checkAdsEnabled(session *SessionModel) error {
 			pathCASAdsEnabled: isCasAdsEnable,
 		})
 	})
+func redeemResellerCode(m *SessionModel, email string, resellerCode string) error {
+	err := setEmail(m.baseModel, email)
+	if err != nil {
+		log.Errorf("Error while setting email %v", err)
+		return err
+	}
+	setResellerCode(m.baseModel, resellerCode)
+	if err != nil {
+		log.Errorf("Error while setting resellerCode %v", err)
+		return err
+	}
+
+	err, purchaseData := createPurchaseData(m, paymentProviderResellerCode, resellerCode, "", "")
+	if err != nil {
+		log.Errorf("Error while creating  purchase data %v", err)
+		return err
+	}
+
+	deviecId, err := m.GetDeviceID()
+	if err != nil {
+		return err
+	}
+	userId, err := m.GetUserID()
+	if err != nil {
+		return err
+	}
+	userIdStr := fmt.Sprintf("%d", userId)
+
+	token, err := m.GetToken()
+	if err != nil {
+		return err
+	}
+	purchase, err := apimodels.PurchaseRequest(purchaseData, deviecId, userIdStr, token)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Purchase Request response %v", purchase)
+
+	// Set user to pro
+	return setProUser(m.baseModel, true)
+}
+
+func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string) error {
+	log.Debugf("Submit Apple Pay Payment planId %v purchaseToken %v", planId, purchaseToken)
+	err, purchaseData := createPurchaseData(m, paymentProviderApplePay, "", purchaseToken, planId)
+	if err != nil {
+		log.Errorf("Error while creating  purchase data %v", err)
+		return err
+	}
+	deviecId, err := m.GetDeviceID()
+	if err != nil {
+		return err
+	}
+	userId, err := m.GetUserID()
+	if err != nil {
+		return err
+	}
+	userIdStr := fmt.Sprintf("%d", userId)
+
+	token, err := m.GetToken()
+	if err != nil {
+		return err
+	}
+	purchase, err := apimodels.PurchaseRequest(purchaseData, deviecId, userIdStr, token)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Purchase Request response %+v", purchase)
+
+	if purchase.Status != "ok" {
+		return errors.New("Purchase Request failed")
+	}
+	// Set user to pro
+	return setProUser(m.baseModel, true)
 }
 
 // Authenticates the user with the given email and password.

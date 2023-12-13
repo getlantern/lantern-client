@@ -57,7 +57,10 @@ class BaseScreen extends StatelessWidget {
     final screenInfo = MediaQuery.of(context);
     var verticalCorrection =
         (screenInfo.viewInsets.top + screenInfo.padding.top) *
-            networkWarningBarHeightRatio;
+            ((sessionModel.hasAccountVerified.value == false &&
+                    sessionModel.proUserNotifier.value == true)
+                ? 1
+                : networkWarningBarHeightRatio);
 
     return testRTL(
       Scaffold(
@@ -67,37 +70,34 @@ class BaseScreen extends StatelessWidget {
         appBar: !showAppBar
             ? null
             : PreferredSize(
-                preferredSize: Size.fromHeight(appBarHeight+verticalCorrection),
+                preferredSize:
+                    Size.fromHeight(appBarHeight + verticalCorrection),
                 child: SafeArea(
                   child: Column(
-                      children: [
-                        ConnectivityWarning(
-                          dy: verticalCorrection,
-                        ),
-                        AppBar(
-                          automaticallyImplyLeading: automaticallyImplyLeading,
-                          leading: automaticallyImplyLeading ? IconButton(
-                            icon: Icon(Icons.arrow_back, color: Colors.black),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ) : null,
-                          title: title is String
-                              ? CText(
-                                  title,
-                                  style: tsHeading3
-                                      .copiedWith(color: foregroundColor)
-                                      .short,
-                                )
-                              : title,
-                          elevation: 1,
-                          shadowColor: grey3,
-                          foregroundColor: foregroundColor,
-                          backgroundColor: backgroundColor,
-                          iconTheme: IconThemeData(color: foregroundColor),
-                          centerTitle: centerTitle,
-                          titleSpacing: 0,
-                          actions: actions,
-                        ),
-                      ],
+                    children: [
+                      ConnectivityWarning(
+                        dy: verticalCorrection,
+                      ),
+                      AppBar(
+                        automaticallyImplyLeading: automaticallyImplyLeading,
+                        title: title is String
+                            ? CText(
+                                title,
+                                style: tsHeading3
+                                    .copiedWith(color: foregroundColor)
+                                    .short,
+                              )
+                            : title,
+                        elevation: 1,
+                        shadowColor: grey3,
+                        foregroundColor: foregroundColor,
+                        backgroundColor: backgroundColor,
+                        iconTheme: IconThemeData(color: foregroundColor),
+                        centerTitle: centerTitle,
+                        titleSpacing: 0,
+                        actions: actions,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -105,7 +105,7 @@ class BaseScreen extends StatelessWidget {
           padding: EdgeInsetsDirectional.only(
             start: padHorizontal ? 16 : 0,
             end: padHorizontal ? 16 : 0,
-            top: padVertical ? 16:0,
+            top: padVertical ? 16 : 0,
             bottom: padVertical ? 16 : 0,
           ),
           child: body,
@@ -137,18 +137,7 @@ class ConnectivityWarning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: sessionModel.proxyAvailable.value != true
-          ? () => CDialog(
-                title: 'connection_error'.i18n,
-                description: 'connection_error_des'.i18n,
-                agreeText: 'connection_error_button'.i18n,
-                agreeAction: () async {
-                  context.popRoute();
-                  await context.pushRoute(ReportIssue());
-                  return true;
-                },
-              ).show(context)
-          : null,
+      onTap: () => _onWarrningTap(context),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 600),
         width: MediaQuery.of(context).size.width,
@@ -158,10 +147,21 @@ class ConnectivityWarning extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            if (sessionModel.hasAccountVerified.value != true)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(end: 10),
+                child: CAssetImage(
+                  path: ImagePaths.info,
+                  color: white,
+                ),
+              ),
             CText(
               (sessionModel.proxyAvailable.value != true
                       ? 'connection_error'
-                      : 'no_network_connection')
+                      : (sessionModel.hasAccountVerified.value == false &&
+                              sessionModel.proUserNotifier.value == true)
+                          ? 'confirm_email_error'.i18n
+                          : 'no_network_connection')
                   .i18n
                   .toUpperCase(),
               style: tsBody2.copiedWith(
@@ -182,5 +182,25 @@ class ConnectivityWarning extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onWarrningTap(BuildContext context) {
+    if (sessionModel.hasAccountVerified.value != true) {
+      showProUserDialog(context);
+      return;
+    }
+
+    if (sessionModel.proxyAvailable.value != true) {
+      CDialog(
+        title: 'connection_error'.i18n,
+        description: 'connection_error_des'.i18n,
+        agreeText: 'connection_error_button'.i18n,
+        agreeAction: () async {
+          context.popRoute();
+          await context.pushRoute(ReportIssue());
+          return true;
+        },
+      ).show(context);
+    }
   }
 }

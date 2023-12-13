@@ -259,7 +259,8 @@ class _AccountManagementState extends State<AccountManagement>
                         }),
                       );
 
-                      if (devices.devices.length < 3) {
+                      // IOS does not support Link devices at the moment
+                      if (devices.devices.length < 3&& Platform.isAndroid ) {
                         proItems.add(
                           ListItemFactory.settingsItem(
                             content: '',

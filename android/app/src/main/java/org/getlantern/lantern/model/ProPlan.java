@@ -288,7 +288,7 @@ public class ProPlan {
         return getFormattedPrice(price, false);
     }
 
-    private String getFormattedPrice(Map<String, Long> price, boolean formatFloat) {
+    private String  getFormattedPrice(Map<String, Long> price, boolean formatFloat) {
         final String formattedPrice;
         Long currencyPrice = price.get(currencyCode);
         if (currencyPrice == null) {

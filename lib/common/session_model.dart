@@ -17,6 +17,15 @@ const TAB_DEVELOPER = 'developer';
 class SessionModel extends Model {
   late final EventManager eventManager;
 
+  ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  late ValueNotifier<bool?> isPlayVersion;
+  late ValueNotifier<bool?> isStoreVersion;
+  late ValueNotifier<bool?> proxyAvailable;
+  late ValueNotifier<bool?> hasAccountVerified;
+  late ValueNotifier<bool?> proUserNotifier;
+  late ValueNotifier<String?> country;
+  late ValueNotifier<String?> userEmail;
+
   SessionModel() : super('session') {
     if (isMobile()) {
       eventManager = EventManager('lantern_event_channel');
@@ -84,14 +93,10 @@ class SessionModel extends Model {
     */
     proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
     country = singleValueNotifier('geo_country_code', 'US');
+    // This warning is not needed for the Non pro user
+    hasAccountVerified = singleValueNotifier('hasAccountVerified', true);
+    proUserNotifier = singleValueNotifier('prouser', false);
   }
-
-  ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  late ValueNotifier<bool?> isPlayVersion;
-  late ValueNotifier<bool?> isStoreVersion;
-  late ValueNotifier<bool?> proxyAvailable;
-  late ValueNotifier<String?> country;
-  late ValueNotifier<String?> userEmail;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
@@ -256,6 +261,7 @@ class SessionModel extends Model {
       'devices',
       builder: builder,
       deserialize: (Uint8List serialized) {
+        print("devices $serialized");
         return Devices.fromBuffer(serialized);
       },
     );
@@ -660,6 +666,7 @@ class SessionModel extends Model {
       'resellerCode': resellerCode,
     }).then((value) {
       print('value $value');
+      print("value $value");
     });
   }
 
@@ -686,7 +693,7 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<String> paymentRedirect(
+   Future<String> paymentRedirect(
     String planID,
     String email,
     String provider,
@@ -698,6 +705,13 @@ class SessionModel extends Model {
         email.toNativeUtf8(),
         deviceName.toNativeUtf8());
     return resp.toDartString();
+  }
+  Future<void> submitApplePlay(String planID, String purchaseToken) async {
+    return methodChannel
+        .invokeMethod('submitApplePayPayment', <String, dynamic>{
+      'planID': planID,
+      'purchaseId': purchaseToken,
+    });
   }
 
   Future<void> submitStripePayment(

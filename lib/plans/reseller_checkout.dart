@@ -36,7 +36,7 @@ class ResellerCodeFormatter extends TextInputFormatter {
 class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;
 
-  ResellerCodeCheckout({
+  const ResellerCodeCheckout({
     required this.isPro,
     Key? key,
   }) : super(key: key);
@@ -51,7 +51,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
     formKey: emailFieldKey,
     validator: (value) => EmailValidator.validate(value ?? '')
         ? null
-        : 'please_enter_a_valid_email_address'.i18n,
+        : 'please_entera_valid_email_address'.i18n,
   );
 
   final resellerCodeFieldKey = GlobalKey<FormState>();
@@ -152,12 +152,12 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                   TOS(copy: copy),
                   // * resellerCodeCheckout
                   Button(
-                      disabled: emailController.value.text.isEmpty ||
-                          emailFieldKey.currentState?.validate() == false ||
-                          resellerCodeFieldKey.currentState?.validate() ==
-                              false,
-                      text: copy,
-                      onPressed: onRegisterPro),
+                    disabled: emailController.value.text.isEmpty ||
+                        emailFieldKey.currentState?.validate() == false ||
+                        resellerCodeFieldKey.currentState?.validate() == false,
+                    text: copy,
+                    onPressed: onRegisterTap,
+                  ),
                 ],
               )
             ],
@@ -187,19 +187,58 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
             .toString(), // This is coming localized
       );
     }
-
-    // .timeout(
-    // const Duration(seconds: 20),
-    // onTimeout: () => onAPIcallTimeout(
-    // code: 'redeemresellerCodeTimeout',
-    // message: 'reseller_timeout'.i18n,
-    // ),
-    // )
-    //     .then((value) {
-    // context.loaderOverlay.hide();
-    // showSuccessDialog(context, widget.isPro, true);
-    // }).onError((error, stackTrace) {
-    //
-    // });
   }
+
+  Future<void> onRegisterTap() async {
+    if (Platform.isAndroid) {
+      processForAndroid();
+    } else if (Platform.isIOS) {
+      onRegisterPro();
+    }
+  }
+
+  Future<void> processForAndroid() async {
+    context.loaderOverlay.show();
+    try {
+      await sessionModel
+          .redeemResellerCode(
+            emailController.text,
+            resellerCodeController.text,
+          )
+          .timeout(
+            defaultTimeoutDuration,
+            onTimeout: () => onAPIcallTimeout(
+              code: 'redeemresellerCodeTimeout',
+              message: 'reseller_timeout'.i18n,
+            ),
+          );
+
+      context.loaderOverlay.hide();
+      showSuccessDialog(context, widget.isPro, true);
+    } catch (error, s) {
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        stackTrace: s,
+        description: (error as PlatformException)
+            .message
+            .toString(), // This is coming localized
+      );
+    }
+  }
+
+// .timeout(
+// const Duration(seconds: 20),
+// onTimeout: () => onAPIcallTimeout(
+// code: 'redeemresellerCodeTimeout',
+// message: 'reseller_timeout'.i18n,
+// ),
+// )
+//     .then((value) {
+// context.loaderOverlay.hide();
+// showSuccessDialog(context, widget.isPro, true);
+// }).onError((error, stackTrace) {
+//
+// });
 }

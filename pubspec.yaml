@@ -118,6 +118,9 @@ dependencies:
   permission_handler: ^10.4.3
   flutter_markdown: ^0.6.17+1
 
+  # Purchase
+  in_app_purchase: ^3.1.11
+
   # Ads
   google_mobile_ads: ^4.0.0
   clever_ads_solutions: ^0.2.4
@@ -126,6 +129,9 @@ dependencies:
   ffi: ^2.1.0
   # Deeplink handling
   app_links: ^3.5.1
+
+  # Service Locator
+  get_it: ^7.6.4
 
 
 # wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0

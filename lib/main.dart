@@ -6,6 +6,8 @@ import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:lantern/core/purchase/app_purchase.dart';
+import 'package:lantern/core/services.dart';
 import 'package:lantern/replica/common.dart';
 
 import 'catcher_setup.dart';
@@ -21,7 +23,6 @@ Future<void> main() async {
     print("Flutter extension enabled $flavor");
     enableFlutterDriverExtension();
   }
-
   WidgetsFlutterBinding.ensureInitialized();
   try {
     // To load the .env file contents into dotenv.
@@ -50,6 +51,10 @@ Future<void> main() async {
     await _initGoogleMobileAds();
   }
 
+  // Inject all the services
+  init();
+  sl<AppPurchase>().init();
+  await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   setupCatcherAndRun(LanternApp());
 }

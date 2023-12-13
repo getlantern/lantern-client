@@ -287,3 +287,28 @@ void showEmailExistsDialog(
     description: "email_already_exists_msg".i18n,
   ).show(context);
 }
+
+void showProUserDialog(BuildContext context, [VoidCallback? onSuccess]) {
+  CDialog(
+    title: 'update_pro_account'.i18n,
+    description: "update_pro_account_message".i18n,
+    icon: const CAssetImage(
+      path: ImagePaths.addAccountIllustration,
+      height: 110,
+    ),
+    agreeText: "update_account".i18n,
+    dismissText: "not_now".i18n,
+    includeCancel: true,
+    agreeAction: () async {
+      if (onSuccess != null) {
+        onSuccess.call();
+        return true;
+      }
+      context.pushRoute(const CreateAccountEmail());
+      return true;
+    },
+    dismissAction: () async {
+      print("Go back");
+    },
+  ).show(context);
+}

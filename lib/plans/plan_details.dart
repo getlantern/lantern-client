@@ -1,4 +1,6 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/core/purchase/app_purchase.dart';
+import 'package:lantern/plans/utils.dart';
 
 class PlanCard extends StatelessWidget {
   final Plan plan;
@@ -20,27 +22,7 @@ class PlanCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),
       child: CInkWell(
-        onTap: () async {
-          final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
-          final inRussia = sessionModel.country.value == 'RU';
-          // * Play version
-          if (isPlayVersion && !inRussia) {
-            await context.pushRoute(
-              PlayCheckout(
-                plan: plan,
-                isPro: isPro,
-              ),
-            );
-          } else {
-            // * Proceed to our own Checkout
-            await context.pushRoute(
-              Checkout(
-                plan: plan,
-                isPro: isPro,
-              ),
-            );
-          }
-        },
+        onTap: () => onPlanTap(context, planName),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
@@ -137,6 +119,75 @@ class PlanCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> onPlanTap(BuildContext context, String planName) async {
+    if (Platform.isAndroid) {
+      _proceedToAndroidCheckout(context, planName);
+    } else {
+      _proceedToCheckoutIOS(context);
+    }
+  }
+
+  Future<void> _proceedToAndroidCheckout(
+      BuildContext context, String planName) async {
+    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+    final inRussia = sessionModel.country.value == 'RU';
+    //If user is downloaded from Play store and !inRussia then
+    //Go with In App purchase
+    if (isPlayVersion && !inRussia) {
+      await sessionModel
+          .submitGooglePlay(planName)
+          .onError((error, stackTrace) {
+        // on failure
+        CDialog.showError(
+          context,
+          error: e,
+          stackTrace: stackTrace,
+          description: (error as PlatformException).message ?? error.toString(),
+        );
+      });
+    } else {
+      _proceedToCustomCheckout(context);
+    }
+  }
+
+  Future<void> _proceedToCustomCheckout(BuildContext context) async {
+    await context.pushRoute(
+      Checkout(
+        plan: plan,
+        isPro: isPro,
+      ),
+    );
+  }
+
+  void _proceedToCheckoutIOS(BuildContext context) {
+    final appPurchase = sl<AppPurchase>();
+    try {
+      context.loaderOverlay.show();
+      appPurchase.startPurchase(
+        plan.id,
+        onSuccess: () {
+          context.loaderOverlay.hide();
+          showSuccessDialog(context, isPro);
+        },
+        onFailure: (error) {
+          context.loaderOverlay.hide();
+          CDialog.showError(
+            context,
+            error: error,
+            description: error.toString(),
+          );
+        },
+      );
+    } catch (e) {
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        description: e.toString(),
+      );
+    }
   }
 }
 
