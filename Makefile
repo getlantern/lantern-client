@@ -133,7 +133,10 @@ INSTALLER_NAME ?= $(APP)-installer
 WINDOWS_BINARY_NAME ?= liblantern.dll
 WINDOWS_APP_NAME ?= $(APP).exe
 WINDOWS64_BINARY_NAME ?= liblantern.dll
-WINDOWS64_APP_NAME ?= $(APP)_x64.ex
+WINDOWS64_APP_NAME ?= $(APP)_x64.exe
+
+LINUX_BINARY_NAME_64 ?= liblantern.so
+LINUX_BINARY_NAME_32 ?= $(APP)_linux_386
 
 APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
@@ -441,6 +444,17 @@ desktop-app: export GOPRIVATE = github.com/getlantern
 desktop-app: export CGO_ENABLED = 1
 desktop-app: echo-build-tags
 	go build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(BINARY_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
+
+.PHONY: linux-amd64
+linux-amd64: $(LINUX_BINARY_NAME_64) ## Build lantern for linux-amd64
+
+$(LINUX_BINARY_NAME_64): export GOOS = linux
+$(LINUX_BINARY_NAME_64): export GOARCH = amd64
+$(LINUX_BINARY_NAME_64): export BINARY_NAME = $(LINUX_BINARY_NAME_64)
+$(LINUX_BINARY_NAME_64): export EXTRA_LDFLAGS += -linkmode external -s -w
+$(LINUX_BINARY_NAME_64): export GO_BUILD_FLAGS += -a
+$(LINUX_BINARY_NAME_64): export Environment = production
+$(LINUX_BINARY_NAME_64): desktop-app
 
 .PHONY: windows
 windows: require-mingw $(WINDOWS_BINARY_NAME) ## Build lantern for windows
