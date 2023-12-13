@@ -306,17 +306,13 @@ class SessionModel extends Model {
   }
 
   Future<void> reportIssue(
-    String email,
-    String issue,
-    String description
-  ) async {
+      String email, String issue, String description) async {
     return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
       'email': email,
       'issue': issue,
       'description': description
     }).then((value) => value as String);
   }
-
 
   Widget getUserId(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
@@ -337,7 +333,11 @@ class SessionModel extends Model {
   Future<String> requestLinkCode() {
     return methodChannel
         .invokeMethod('requestLinkCode')
-        .then((value) => value as String);
+        .then((value) => value.toString());
+  }
+
+  Future<void> redeemLinkCode() {
+    return methodChannel.invokeMethod('redeemLinkCode');
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
