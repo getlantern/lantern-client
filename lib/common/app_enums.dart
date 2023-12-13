@@ -1,6 +1,6 @@
 
 //Enum this is mange current flow of auth
-enum AuthFlow { signIn, reset, createAccount }
+enum AuthFlow { signIn, reset, createAccount,verifyEmail }
 
 extension AuthFlowExtension on AuthFlow {
   bool get isSignIn => this == AuthFlow.signIn;
@@ -8,4 +8,5 @@ extension AuthFlowExtension on AuthFlow {
   bool get isReset => this == AuthFlow.reset;
 
   bool get isCreateAccount => this == AuthFlow.createAccount;
+  bool get isVerifyEmail => this == AuthFlow.verifyEmail;
 }

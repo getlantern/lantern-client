@@ -57,7 +57,7 @@ class SessionModel extends Model {
     proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
     country = singleValueNotifier('geo_country_code', 'US');
     // This warning is not needed for the Non pro user
-    hasAccountVerified = singleValueNotifier('hasAccountVerified', true);
+    hasAccountVerified = singleValueNotifier('isAccountVerified', false);
     proUserNotifier = singleValueNotifier('prouser', false);
   }
 
