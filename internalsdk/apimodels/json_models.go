@@ -115,8 +115,6 @@ type PurchaseResponse struct {
 	PaymentStatus string `json:"paymentStatus"`
 	Plan          Plan   `json:"plan"`
 	Status        string `json:"status"`
-type Salt struct {
-	Salt []int64 `json:"salt"`
 }
 
 type SrpB struct {

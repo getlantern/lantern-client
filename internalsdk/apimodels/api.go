@@ -5,17 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"time"
+
 	"math/big"
 	"net/http"
-	"net/http/httputil"
 
 	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/golog"
 	"google.golang.org/protobuf/proto"
 )
 
-// https://api.iantem.io/v1/users/salt
 const (
 	publicBaseUrl = "https://api.iantem.io/v1"
 	baseUrl       = "https://api.getiantem.org"
@@ -24,13 +23,6 @@ const (
 	userCreateUrl = baseUrl + "/user-create"
 	plansV3Url    = baseUrl + "/plans-v3"
 	purchaseUrl   = baseUrl + "/purchase"
-)
-
-const (
-	headerDeviceId    = "X-Lantern-Device-Id"
-	headerUserId      = "X-Lantern-User-Id"
-	headerProToken    = "X-Lantern-Pro-Token"
-	headerContentType = "Content-Type"
 	//Sign up urls
 	signUpUrl         = userGroup + "/signup"
 	signUpCompleteUrl = userGroup + "/signup/complete/email"
@@ -47,9 +39,18 @@ const (
 	changeEmailUrl = userGroup + "/change_email"
 )
 
+const (
+	headerDeviceId    = "X-Lantern-Device-Id"
+	headerUserId      = "X-Lantern-User-Id"
+	headerProToken    = "X-Lantern-Pro-Token"
+	headerContentType = "Content-Type"
+)
+
 var (
-	log = golog.LoggerFor("lantern-internalsdk-http")
-	// proHtttpClient = pro.GetHTTPClient()
+	log        = golog.LoggerFor("lantern-internalsdk-http")
+	httpClient = &http.Client{
+		Timeout: 10 * time.Second,
+	}
 )
 
 func FechUserDetail(deviceId string, userId string, token string) (*UserDetailResponse, error) {
@@ -65,10 +66,8 @@ func FechUserDetail(deviceId string, userId string, token string) (*UserDetailRe
 	req.Header.Set(headerProToken, token)
 	log.Debugf("Headers set")
 
-	// Initialize a new http client
-	client := &http.Client{}
 	// Send the request
-	resp, err := client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		log.Errorf("Error sending user details request: %v", err)
 		return nil, err
@@ -92,14 +91,14 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 	}
 
 	// Marshal the map to JSON
-	requestBody, err := json.Marshal(requestBodyMap)
+	requestBody, err := createJsonBody(requestBodyMap)
 	if err != nil {
 		log.Errorf("Error marshaling request body: %v", err)
 		return nil, err
 	}
 
 	// Create a new request
-	req, err := http.NewRequest("POST", userCreateUrl, bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", userCreateUrl, requestBody)
 	if err != nil {
 		log.Errorf("Error creating new request: %v", err)
 		return nil, err
@@ -108,10 +107,9 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 	// Add headers
 	req.Header.Set(headerDeviceId, deviceId)
 	log.Debugf("Headers set")
-	// Initialize a new http client
-	client := &http.Client{}
+
 	// Send the request
-	resp, err := client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		log.Errorf("Error sending request: %v", err)
 		return nil, err
@@ -143,10 +141,9 @@ func PlansV3(deviceId string, userId string, local string, token string, country
 	req.Header.Set(headerUserId, userId)
 	req.Header.Set(headerProToken, token)
 	log.Debugf("Plans Headers set")
-	// Initialize a new http client
-	client := &http.Client{}
+
 	// Send the request
-	resp, err := client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		log.Errorf("Error sending plans request: %v", err)
 		return nil, err
@@ -185,9 +182,7 @@ func PurchaseRequest(data map[string]string, deviceId string, userId string, tok
 	req.Header.Set(headerProToken, token)
 	req.Header.Set(headerContentType, "application/json")
 
-	client := &http.Client{}
-	// Send the request
-	resp, err := client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		log.Errorf("Error sending puchase request: %v", err)
 		return nil, err
@@ -202,6 +197,212 @@ func PurchaseRequest(data map[string]string, deviceId string, userId string, tok
 		return nil, err
 	}
 	return &purchase, nil
+}
+
+///Signup APIS
+
+func Signup(signupBody *protos.SignupRequest, userId string, token string) (bool, error) {
+	// Marshal the map to JSON
+	requestBody, err := proto.Marshal(signupBody)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return false, err
+	}
+
+	req, err := http.NewRequest("POST", signUpUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error creating signup request: %v", err)
+		return false, err
+	}
+
+	// Add headers
+	req.Header.Set(headerUserId, userId)
+	req.Header.Set(headerProToken, token)
+	req.Header.Set(headerContentType, "application/x-protobuf")
+	// Send the request
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	log.Debugf("Signup response %v with status code %d", string(body), resp.StatusCode)
+	if resp.StatusCode != http.StatusOK {
+		return false, log.Errorf("error while sign up %v", err)
+	}
+	return true, nil
+}
+
+func SignupEmailResendCode(signupEmailResendBody *protos.SignupEmailResendRequest) (bool, error) {
+	// Marshal the map to JSON
+	requestBody, err := proto.Marshal(signupEmailResendBody)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return false, err
+	}
+
+	req, err := http.NewRequest("POST", signUpResendUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error email resend request request: %v", err)
+		return false, err
+	}
+
+	// Add headers
+	req.Header.Set(headerContentType, "application/x-protobuf")
+
+	// Send the request
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return false, log.Errorf("error while email resend %v", err)
+	}
+	return true, nil
+}
+
+func SignupEmailConfirmation(signupEmailResendBody *protos.ConfirmSignupRequest) (bool, error) {
+	// Marshal the map to JSON
+	requestBody, err := proto.Marshal(signupEmailResendBody)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return false, err
+	}
+
+	req, err := http.NewRequest("POST", signUpCompleteUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error creating signup request: %v", err)
+		return false, err
+	}
+
+	// Add headers
+	req.Header.Set(headerContentType, "application/x-protobuf")
+	log.Debugf("Headers set")
+
+	// Send the request
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return false, log.Errorf("error while sign up %v", err)
+	}
+	return true, nil
+}
+
+func GetSalt(email string) (*protos.GetSaltResponse, error) {
+	fullUrl := saltUrl + "?username=" + email
+	// Marshal the map to JSON
+
+	req, err := http.NewRequest("GET", fullUrl, nil)
+	if err != nil {
+		log.Errorf("Error getting user salt: %v", err)
+		return nil, err
+	}
+	req.Header.Set(headerContentType, "application/x-protobuf")
+
+	// Send the request
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Read the response body
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response:", err)
+		return nil, err
+	}
+
+	var slatResponse protos.GetSaltResponse
+	if err := proto.Unmarshal(body, &slatResponse); err != nil {
+		log.Errorf("Error unmarshalling response: ", err)
+	}
+	return &slatResponse, nil
+}
+
+// Login APIS
+func LoginPrepare(prepareBody *protos.PrepareRequest) (*protos.PrepareResponse, error) {
+	// Marshal the map to JSON
+	requestBody, err := proto.Marshal(prepareBody)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return nil, err
+	}
+	log.Debugf("Request body:LoginPrepare-> %s", requestBody)
+	req, err := http.NewRequest("POST", prepareUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error creating signup request: %v", err)
+		return nil, err
+	}
+	req.Header.Set(headerContentType, "application/x-protobuf")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error sending login prepare request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+	// Read the response body
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response:", err)
+		return nil, err
+	}
+	log.Debugf("Login prepare response %v with status code %d", string(body), resp.StatusCode)
+
+	//Todo change message for StatusServiceUnavailable
+	if resp.StatusCode == http.StatusForbidden || resp.StatusCode == http.StatusServiceUnavailable {
+		return nil, log.Errorf("user_not_found %v", err)
+	}
+
+	var prepareResponse protos.PrepareResponse
+	if err := proto.Unmarshal(body, &prepareResponse); err != nil {
+		log.Errorf("Error unmarshalling response: ", err)
+	}
+	return &prepareResponse, nil
+}
+
+func Login(loginBody map[string]interface{}) (*big.Int, error) {
+	// Marshal the map to JSON
+	requestBody, err := json.Marshal(loginBody)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", loginUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error creating login request: %v", err)
+		return nil, err
+	}
+	req.Header.Set(headerContentType, "application/x-protobuf")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error sending login prepare request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var srpB SrpB
+	if err := json.NewDecoder(resp.Body).Decode(&srpB); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+	return &srpB.SrpB, nil
 }
 
 // Utils methods convert json body

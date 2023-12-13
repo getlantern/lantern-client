@@ -7,11 +7,10 @@ import (
 	"encoding/binary"
 	"fmt"
 	"math"
+	"math/big"
 	"strconv"
 	"strings"
 	"time"
-	"math/big"
-	"strconv"
 
 	"github.com/bojanz/currency"
 	"github.com/getlantern/android-lantern/internalsdk/apimodels"
@@ -140,6 +139,7 @@ func createPurchaseData(session *SessionModel, paymentProvider string, resellerC
 	}
 
 	return nil, data
+}
 
 func BytesToInt64Slice(b []byte) []int {
 	var int64Slice []int

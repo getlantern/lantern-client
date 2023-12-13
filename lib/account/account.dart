@@ -22,9 +22,9 @@ class AccountMenu extends StatelessWidget {
 
   void onAccountManagementTap(BuildContext context, bool isProUser) {
     //Todo make this dynamic once connect to API
-    bool hasUserSignedIn = false;
+    bool hasUserSignedIn = true;
     if (hasUserSignedIn) {
-      context.pushRoute(AccountManagement(isPro: isProUser));
+      context.pushRoute(AccountManagement(isPro: true));
     } else {
       showProUserDialog(context);
     }

@@ -186,6 +186,11 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		email := arguments.Get("email").String()
 		resellerCode := arguments.Get("resellerCode").String()
 		err := redeemResellerCode(m, email, resellerCode)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 	case "signup":
 		email := arguments.Get("email").String()
 		password := arguments.Get("password").String()
@@ -967,6 +972,8 @@ func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string)
 	}
 	// Set user to pro
 	return setProUser(m.baseModel, true)
+}
+
 // Authenticates the user with the given email and password.
 //  Note-: On Sign up Client needed to generate 8 byte slat
 //  Then use that salt, password and username generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
