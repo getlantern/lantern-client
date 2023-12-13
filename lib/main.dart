@@ -2,6 +2,8 @@ import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/core/purchase/app_purchase.dart';
+import 'package:lantern/core/services.dart';
 import 'package:lantern/replica/common.dart';
 
 import 'catcher_setup.dart';
@@ -14,8 +16,10 @@ Future<void> main() async {
     print("Flutter extension enabled $flavor");
     enableFlutterDriverExtension();
   }
-
   WidgetsFlutterBinding.ensureInitialized();
+  // Inject all the services
+  init();
+  sl<AppPurchase>().init();
   await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 

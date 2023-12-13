@@ -36,7 +36,7 @@ class ResellerCodeFormatter extends TextInputFormatter {
 class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;
 
-  ResellerCodeCheckout({
+  const ResellerCodeCheckout({
     required this.isPro,
     Key? key,
   }) : super(key: key);
@@ -51,7 +51,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
     formKey: emailFieldKey,
     validator: (value) => EmailValidator.validate(value ?? '')
         ? null
-        : 'please_enter_a_valid_email_address'.i18n,
+        : 'please_entera_valid_email_address'.i18n,
   );
 
   final resellerCodeFieldKey = GlobalKey<FormState>();
@@ -156,35 +156,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                         emailFieldKey.currentState?.validate() == false ||
                         resellerCodeFieldKey.currentState?.validate() == false,
                     text: copy,
-                    onPressed: () async {
-                      context.loaderOverlay.show();
-                      await sessionModel
-                          .redeemResellerCode(
-                            emailController.text,
-                            resellerCodeController.text,
-                          )
-                          .timeout(
-                            defaultTimeoutDuration,
-                            onTimeout: () => onAPIcallTimeout(
-                              code: 'redeemresellerCodeTimeout',
-                              message: 'reseller_timeout'.i18n,
-                            ),
-                          )
-                          .then((value) {
-                        context.loaderOverlay.hide();
-                        showSuccessDialog(context, widget.isPro, true);
-                      }).onError((error, stackTrace) {
-                        context.loaderOverlay.hide();
-                        CDialog.showError(
-                          context,
-                          error: e,
-                          stackTrace: stackTrace,
-                          description: (error as PlatformException)
-                              .message
-                              .toString(), // This is coming localized
-                        );
-                      });
-                    },
+                    onPressed: onRegisterTap,
                   ),
                 ],
               )
@@ -193,5 +165,35 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
         ),
       );
     });
+  }
+
+  Future<void> onRegisterTap() async {
+    context.loaderOverlay.show();
+    try {
+      await sessionModel
+          .redeemResellerCode(
+            emailController.text,
+            resellerCodeController.text,
+          ).timeout(
+            defaultTimeoutDuration,
+            onTimeout: () => onAPIcallTimeout(
+              code: 'redeemresellerCodeTimeout',
+              message: 'reseller_timeout'.i18n,
+            ),
+          );
+
+      context.loaderOverlay.hide();
+      showSuccessDialog(context, widget.isPro, true);
+    } catch (error,s) {
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        stackTrace: s,
+        description: (error as PlatformException)
+            .message
+            .toString(), // This is coming localized
+      );
+    }
   }
 }

@@ -13,6 +13,15 @@ const TAB_DEVELOPER = 'developer';
 class SessionModel extends Model {
   late final EventManager eventManager;
 
+  ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  late ValueNotifier<bool?> isPlayVersion;
+  late ValueNotifier<bool?> isStoreVersion;
+  late ValueNotifier<bool?> proxyAvailable;
+  late ValueNotifier<bool?> hasAccountVerified;
+  late ValueNotifier<bool?> proUserNotifier;
+  late ValueNotifier<String?> country;
+  late ValueNotifier<String?> userEmail;
+
   SessionModel() : super('session') {
     eventManager = EventManager('lantern_event_channel');
     eventManager.subscribe(Event.All, (eventType, map) {
@@ -47,14 +56,10 @@ class SessionModel extends Model {
     */
     proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
     country = singleValueNotifier('geo_country_code', 'US');
+    // This warning is not needed for the Non pro user
+    hasAccountVerified = singleValueNotifier('hasAccountVerified', true);
+    proUserNotifier = singleValueNotifier('prouser', false);
   }
-
-  ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  late ValueNotifier<bool?> isPlayVersion;
-  late ValueNotifier<bool?> isStoreVersion;
-  late ValueNotifier<bool?> proxyAvailable;
-  late ValueNotifier<String?> country;
-  late ValueNotifier<String?> userEmail;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -155,6 +160,7 @@ class SessionModel extends Model {
       'devices',
       builder: builder,
       deserialize: (Uint8List serialized) {
+        print("devices $serialized");
         return Devices.fromBuffer(serialized);
       },
     );
@@ -404,7 +410,9 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
       'email': email,
       'resellerCode': resellerCode,
-    }).then((value) => value as String);
+    }).then((value) {
+      print("value $value");
+    });
   }
 
   Future<void> submitBitcoinPayment(
@@ -424,6 +432,14 @@ class SessionModel extends Model {
         .invokeMethod('submitGooglePlayPayment', <String, dynamic>{
       'planID': planID,
     }).then((value) => value as String);
+  }
+
+  Future<void> submitApplePlay(String planID, String purchaseToken) async {
+    return methodChannel
+        .invokeMethod('submitApplePayPayment', <String, dynamic>{
+      'planID': planID,
+      'purchaseId': purchaseToken,
+    });
   }
 
   Future<void> submitStripePayment(

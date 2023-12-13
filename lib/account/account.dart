@@ -22,9 +22,9 @@ class AccountMenu extends StatelessWidget {
 
   void onAccountManagementTap(BuildContext context, bool isProUser) {
     //Todo make this dynamic once connect to API
-    bool hasUserSignedIn = false;
+    bool hasUserSignedIn = true;
     if (hasUserSignedIn) {
-      context.pushRoute(AccountManagement(isPro: isProUser));
+      context.pushRoute(AccountManagement(isPro: true));
     } else {
       showProUserDialog(context);
     }
@@ -35,26 +35,26 @@ class AccountMenu extends StatelessWidget {
   }
 
   //Show this dialog when user is not signed in and clicks on account management
-  void showProUserDialog(BuildContext context) {
-    CDialog(
-      title: 'update_pro_account'.i18n,
-      description: "update_pro_account_message".i18n,
-      icon: const CAssetImage(
-        path: ImagePaths.addAccountIllustration,
-        height: 110,
-      ),
-      agreeText: "update_account".i18n,
-      dismissText: "not_now".i18n,
-      includeCancel: true,
-      agreeAction: () async {
-        openCreateAccount(context);
-        return true;
-      },
-      dismissAction: () async {
-        print("Go back");
-      },
-    ).show(context);
-  }
+  // void showProUserDialog(BuildContext context) {
+  //   CDialog(
+  //     title: 'update_pro_account'.i18n,
+  //     description: "update_pro_account_message".i18n,
+  //     icon: const CAssetImage(
+  //       path: ImagePaths.addAccountIllustration,
+  //       height: 110,
+  //     ),
+  //     agreeText: "update_account".i18n,
+  //     dismissText: "not_now".i18n,
+  //     includeCancel: true,
+  //     agreeAction: () async {
+  //       context.pushRoute(const CreateAccountEmail());
+  //       return true;
+  //     },
+  //     dismissAction: () async {
+  //       print("Go back");
+  //     },
+  //   ).show(context);
+  // }
 
   void openSignIn(BuildContext context) => context.pushRoute(SignIn());
 
