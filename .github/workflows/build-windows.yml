@@ -176,7 +176,6 @@ jobs:
         - uses: actions/download-artifact@v3
           with:
             name: windows${{inputs.build-suffix}}-installer-unsigned
-            path: lantern${{inputs.installer-suffix}}.exe
         - name: Make installer
           run: |
             pwd
