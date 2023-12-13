@@ -9,7 +9,8 @@ extension ErrorX on Object {
         String description = (this as PlatformException).message ?? '';
         if (description.contains("user_not_found")) {
           return "user_not_found".i18n;
-        }if (description.contains("error while sign up")) {
+        }
+        if (description.contains("error while sign up")) {
           return "signup_error".i18n;
         } else {
           return description.i18n;
@@ -23,8 +24,10 @@ extension ErrorX on Object {
   }
 }
 
-extension Validations on String {
+extension Validations on String? {
   String get validateEmail {
-    return trim();
+    if (this == null) return "";
+
+    return this!.trim();
   }
 }

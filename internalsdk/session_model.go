@@ -153,7 +153,7 @@ const (
 	pathExpirydate           = "expirydate"
 	pathExpirystr            = "expirydatestr"
 	pathUserSalt             = "user_salt"
-	pathHasAccountVerified   = "hasAccountVerified"
+	pathIsAccountVerified    = "isAccountVerified"
 
 	currentTermsVersion = 1
 	group               = srp.RFC5054Group3072
@@ -358,16 +358,15 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		return err
 	}
 	err = pathdb.PutAll(tx, map[string]interface{}{
-		pathDevelopmentMode:    opts.DevelopmentMode,
-		pathProUser:            opts.ProUser,
-		pathDeviceID:           opts.DeviceID,
-		pathStoreVersion:       opts.PlayVersion,
-		pathTimezoneID:         opts.TimeZone,
-		pathDevice:             opts.Device,
-		pathModel:              opts.Model,
-		pathOSVersion:          opts.OsVersion,
-		pathSDKVersion:         SDKVersion(),
-		pathHasAccountVerified: false,
+		pathDevelopmentMode: opts.DevelopmentMode,
+		pathProUser:         opts.ProUser,
+		pathDeviceID:        opts.DeviceID,
+		pathStoreVersion:    opts.PlayVersion,
+		pathTimezoneID:      opts.TimeZone,
+		pathDevice:          opts.Device,
+		pathModel:           opts.Model,
+		pathOSVersion:       opts.OsVersion,
+		pathSDKVersion:      SDKVersion(),
 	})
 	if err != nil {
 		return err
@@ -442,6 +441,25 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		log.Debugf("Plans V3 error: %v", err)
 		return err
+	}
+	
+
+	isAccountVerified, err := pathdb.Get[bool](m.db, pathIsAccountVerified)
+	if err != nil {
+		log.Debugf("error while getting account stautus: %v", err)
+	}
+	// Call API only when status is not verified
+	if !isAccountVerified {
+		verified, err := apimodels.IsEmailVerified(userIdStr, token)
+		if err != nil {
+			log.Debugf("Plans V3 error: %v", err)
+			return err
+		}
+		log.Debugf("User account is verified %v", verified)
+
+		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put[bool](tx, pathIsAccountVerified, verified, "")
+		})
 	}
 	return checkAdsEnabled(m)
 }
@@ -865,11 +883,11 @@ func getUserSalt(m *baseModel, email string) ([]byte, error) {
 	if userSalt != nil {
 		return userSalt, nil
 	}
-
 	salt, err := apimodels.GetSalt(email)
 	if err != nil {
 		return nil, err
 	}
+	log.Debugf("Salt Response-> %v", salt)
 	//Save salt to Db
 	err = pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put[[]byte](tx, pathUserSalt, salt.Salt, "")
@@ -877,7 +895,7 @@ func getUserSalt(m *baseModel, email string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return *&salt.Salt, nil
+	return salt.Salt, nil
 
 }
 
@@ -1183,29 +1201,30 @@ func signupEmailResend(session *SessionModel, email string) error {
 		Salt:  salt,
 	}
 
-	log.Debugf("Signup request body %v", signUpEmailResendRequestBody)
 	signupEmailResendResponse, err := apimodels.SignupEmailResendCode(signUpEmailResendRequestBody)
 	if err != nil {
 		return err
 	}
 	log.Debugf("Signup email resend %v", signupEmailResendResponse)
-	//Request successfull then save salt
 	return nil
 }
 
 func signupEmailConfirmation(session *SessionModel, email string, code string) error {
-	signUpEmailResendRequestBody := &protos.SignupEmailResendRequest{
+	signUpEmailResendRequestBody := &protos.ConfirmSignupRequest{
 		Email: email,
+		Code:  code,
 	}
 
-	log.Debugf("Signup request body %v", signUpEmailResendRequestBody)
-	signupEmailResendResponse, err := apimodels.SignupEmailResendCode(signUpEmailResendRequestBody)
+	log.Debugf("Signup verfication request body %v", signUpEmailResendRequestBody)
+	signupEmailResendResponse, err := apimodels.SignupEmailConfirmation(signUpEmailResendRequestBody)
 	if err != nil {
 		return err
 	}
-	log.Debugf("Signup email resend %v", signupEmailResendResponse)
-	//Request successfull then save salt
-	return nil
+	log.Debugf("Signup verfication response %v", signupEmailResendResponse)
+	//Chaneg account status
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put[bool](tx, pathIsAccountVerified, true, "")
+	})
 }
 
 func login(session *SessionModel, userName string, email string, password string) error {

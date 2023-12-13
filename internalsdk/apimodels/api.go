@@ -40,6 +40,7 @@ const (
 	// Other Auth urls
 	deleteUrl      = userGroup + "/delete"
 	changeEmailUrl = userGroup + "/change_email"
+	confirmedUrl   = userGroup + "/confirmed"
 )
 
 const (
@@ -203,6 +204,37 @@ func PurchaseRequest(data map[string]string, deviceId string, userId string, tok
 	return &purchase, nil
 }
 
+func IsEmailVerified(email string, token string) (bool, error) {
+	fullUrl := confirmedUrl + "?email=" + email + "&token=" + token
+	// Marshal the map to JSON
+
+	req, err := http.NewRequest("GET", fullUrl, nil)
+	if err != nil {
+		log.Errorf("Error getting user salt: %v", err)
+		return false, err
+	}
+	req.Header.Set(headerContentType, "application/x-protobuf")
+
+	// Send the request
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error sending user details request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	log.Debugf("Signup response %v with status code %d", string(body), resp.StatusCode)
+	if resp.StatusCode != http.StatusOK {
+		return false, nil
+	}
+	return true, nil
+}
+
 ///Signup APIS
 
 func Signup(signupBody *protos.SignupRequest, userId string, token string) (bool, error) {
@@ -250,6 +282,7 @@ func SignupEmailResendCode(signupEmailResendBody *protos.SignupEmailResendReques
 		log.Errorf("Error marshaling request body: %v", err)
 		return false, err
 	}
+	log.Debugf("Request body:SignupEmailResendCode-> %s", requestBody)
 
 	req, err := http.NewRequest("POST", signUpResendUrl, bytes.NewBuffer(requestBody))
 	if err != nil {
@@ -267,6 +300,13 @@ func SignupEmailResendCode(signupEmailResendBody *protos.SignupEmailResendReques
 		return false, err
 	}
 	defer resp.Body.Close()
+
+	bodyStr, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+	log.Debugf("Signup email resend response %v with status code %d", string(bodyStr), resp.StatusCode)
+
 	if resp.StatusCode != http.StatusOK {
 		return false, log.Errorf("error while email resend %v", err)
 	}
@@ -305,7 +345,7 @@ func SignupEmailConfirmation(signupEmailResendBody *protos.ConfirmSignupRequest)
 }
 
 func GetSalt(email string) (*protos.GetSaltResponse, error) {
-	fullUrl := saltUrl + "?username=" + email
+	fullUrl := saltUrl + "?email=" + email
 	// Marshal the map to JSON
 
 	req, err := http.NewRequest("GET", fullUrl, nil)
@@ -329,6 +369,7 @@ func GetSalt(email string) (*protos.GetSaltResponse, error) {
 		fmt.Println("Error reading response:", err)
 		return nil, err
 	}
+	log.Debugf("Salt response %v with status code %d", string(body), resp.StatusCode)
 
 	var slatResponse protos.GetSaltResponse
 	if err := proto.Unmarshal(body, &slatResponse); err != nil {

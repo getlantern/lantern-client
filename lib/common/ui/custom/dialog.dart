@@ -288,7 +288,7 @@ void showEmailExistsDialog(
   ).show(context);
 }
 
-void showProUserDialog(BuildContext context, [VoidCallback? onSuccess]) {
+void showProUserDialog(BuildContext context, {VoidCallback? onSuccess}) {
   CDialog(
     title: 'update_pro_account'.i18n,
     description: "update_pro_account_message".i18n,

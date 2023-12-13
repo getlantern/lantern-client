@@ -21,7 +21,7 @@ class _VerificationState extends State<Verification> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: widget.authFlow.isCreateAccount
+      title: widget.authFlow.isCreateAccount||widget.authFlow.isVerifyEmail
           ? 'confirm_email'.i18n
           : 'reset_password'.i18n,
       body: _buildBody(context),
@@ -32,44 +32,47 @@ class _VerificationState extends State<Verification> {
     return SizedBox(
       width: double.infinity,
       child: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 24),
-            _buildHeader(),
-            const SizedBox(height: 24),
-            CText(
-              "enter_confirmation_code".i18n.toUpperCase(),
-              style: tsOverline,
-            ),
-            const SizedBox(height: 8),
-            PinField(
-              length: 6,
-              controller: pinCodeController,
-              onDone: onDone,
-            ),
-            LabeledDivider(
-              padding: const EdgeInsetsDirectional.only(top: 24, bottom: 10),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: CText(
-                'confirmation_code_msg'.i18n.replaceAll('XX', widget.email),
-                style: tsBody1,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 24),
+              _buildHeader(),
+              const SizedBox(height: 24),
+              CText(
+                "enter_confirmation_code".i18n.toUpperCase(),
+                style: tsOverline,
               ),
-            ),
-            const SizedBox(height: 24),
-            Button(
-              text: "resend_confirmation_code".i18n,
-              onPressed: resendConfirmationCode,
-            ),
-            const SizedBox(height: 14),
-            AppTextButton(
-              text: 'change_email'.i18n,
-              onPressed: () {
-                context.popRoute();
-              },
-            ),
-          ],
+              const SizedBox(height: 8),
+              PinField(
+                length: 6,
+                controller: pinCodeController,
+                onDone: onDone,
+              ),
+              LabeledDivider(
+                padding: const EdgeInsetsDirectional.only(top: 24, bottom: 10),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: CText(
+                  'confirmation_code_msg'.i18n.replaceAll('XX', widget.email),
+                  style: tsBody1,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Button(
+                text: "resend_confirmation_code".i18n,
+                onPressed: resendConfirmationCode,
+              ),
+              const SizedBox(height: 14),
+              if(!widget.authFlow.isVerifyEmail)
+              AppTextButton(
+                text: 'change_email'.i18n,
+                onPressed: () {
+                  context.popRoute();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -118,11 +121,27 @@ class _VerificationState extends State<Verification> {
         break;
       case AuthFlow.signIn:
         context.router.popUntilRoot();
+      case AuthFlow.verifyEmail:
+        _verifyEmail(code);
         break;
     }
   }
 
   void openResetPassword() {
     context.pushRoute(const ResetPassword());
+  }
+
+  void _verifyEmail(String code) async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.signupEmailConfirmation(widget.email,code);
+      context.loaderOverlay.hide();
+      context.router.popUntilRoot();
+      sessionModel.hasAccountVerified.value = true;
+    } catch (e) {
+      mainLogger.e(e);
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
   }
 }
