@@ -89,7 +89,7 @@ jobs:
         dart pub global activate protoc_plugin
 
     - name: Build Flutter app
-      run: flutter build macos
+      run: flutter build macos --debug
 
     - uses: actions/setup-node@v4
       with:
