@@ -74,7 +74,7 @@ class AppPurchase {
   Future<void> _handlePurchase(PurchaseDetails purchaseDetails) async {
     if (purchaseDetails.status == PurchaseStatus.canceled) {
       // User has canceled the purchase
-      _onError?.call(purchaseDetails);
+      _onError?.call("Purchase canceled");
       return;
     }
     if (purchaseDetails.status == PurchaseStatus.purchased) {

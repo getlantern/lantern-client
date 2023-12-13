@@ -898,7 +898,7 @@ func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string)
 	if err != nil {
 		return err
 	}
-	log.Errorf("Purchase Request response %+v", purchase)
+	log.Debugf("Purchase Request response %+v", purchase)
 
 	if purchase.Status != "ok" {
 		return errors.New("Purchase Request failed")
