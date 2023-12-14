@@ -1,6 +1,7 @@
 package app
 
 import (
+	"math/rand"
 	"net"
 	"os"
 	"path/filepath"
@@ -34,6 +35,7 @@ import (
 	"github.com/getlantern/trafficlog-flashlight/tlproc"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
+	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	uicommon "github.com/getlantern/lantern-client/desktop/common"
 	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
@@ -45,6 +47,13 @@ var (
 	startTime          = time.Now()
 	translationAppName = strings.ToUpper(common.DefaultAppName)
 )
+
+func init() {
+	autoupdate.Version = ApplicationVersion
+	autoupdate.PublicKey = []byte(packagePublicKey)
+
+	rand.Seed(time.Now().UnixNano())
+}
 
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
@@ -418,9 +427,9 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	if src == config.Fetched {
 		atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
 	}
-	/*autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
-		return app.AddToken("/img/lantern_logo.png")
-	})*/
+	autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
+		return "/img/lantern_logo.png"
+	})
 	email.SetDefaultRecipient(cfg.ReportIssueEmail)
 	if len(cfg.GlobalBrowserMarketShareData) > 0 {
 		err := simbrowser.SetMarketShareData(

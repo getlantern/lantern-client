@@ -21,6 +21,8 @@ github.com/OperatorFoundation/go-shadowsocks2 v1.2.6 h1:uzcprNm0bC0jaexSBtc6hbhB
 github.com/OperatorFoundation/go-shadowsocks2 v1.2.6/go.mod h1:lH6+PiEc2/aDpMqZrLzMz+o2dlE1rPME6GYZN1j4Bsg=
 github.com/OperatorFoundation/go-shadowsocks2 v1.2.7 h1:JyMYYD0jRwNSy2eshjMr7wPZYH0/vXDWZm440r+Tyec=
 github.com/OperatorFoundation/go-shadowsocks2 v1.2.7/go.mod h1:lH6+PiEc2/aDpMqZrLzMz+o2dlE1rPME6GYZN1j4Bsg=
+github.com/OperatorFoundation/go-shadowsocks2 v1.2.8 h1:tp1+fr25pdTxgyKt1VVqqZDRTB/jZBQdRktdKzAP5dk=
+github.com/OperatorFoundation/go-shadowsocks2 v1.2.8/go.mod h1:lH6+PiEc2/aDpMqZrLzMz+o2dlE1rPME6GYZN1j4Bsg=
 github.com/PuerkitoBio/goquery v1.8.1 h1:uQxhNlArOIdbrH1tr0UXwdVFgDcZDrZVdcpygAcwmWM=
 github.com/PuerkitoBio/goquery v1.8.1/go.mod h1:Q8ICL1kNUJ2sXGoAhPGUdYDJvgQgHzJsnnd3H7Ho5jQ=
 github.com/RoaringBitmap/roaring v0.4.7/go.mod h1:8khRDP4HmeXns4xIj9oGrKSz7XTQiJx2zgh7AcNke4w=
@@ -268,10 +270,14 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
+github.com/getlantern/flashlight v0.0.0-20230403092335-5f84ae10c585 h1:lVu4HyDAxXkX4kJEJQWpJJz+Poprb0crUGW5zhoh3GU=
+github.com/getlantern/flashlight v0.0.0-20230403092335-5f84ae10c585/go.mod h1:e4fn/dZB7jV0nze4uMbEWKjo04JLrq/877gYIYTawLI=
 github.com/getlantern/flashlight/v7 v7.6.28-0.20231210222730-4f2a55c130df h1:m1lN0z+psx3mXX+xNEOP8ibVBDdWJ1z4cpeMHe6f66k=
 github.com/getlantern/flashlight/v7 v7.6.28-0.20231210222730-4f2a55c130df/go.mod h1:fCr2HH3A16Y9qzAq9OumAapFnO+Elt7rvFHrVfHTah8=
 github.com/getlantern/flashlight/v7 v7.6.28-0.20231213052148-a58dbd8873a4 h1:B/QgcJtZEoOPrAfL91XIJtIr2TUP4va4aDDe6Lpnh/I=
 github.com/getlantern/flashlight/v7 v7.6.28-0.20231213052148-a58dbd8873a4/go.mod h1:fCr2HH3A16Y9qzAq9OumAapFnO+Elt7rvFHrVfHTah8=
+github.com/getlantern/flashlight/v7 v7.6.32-0.20231214053628-47e242406c56 h1:WevxhOFQSIm9yHg6iD3ZpvvmeaHkbQU7sHDPeicfKxI=
+github.com/getlantern/flashlight/v7 v7.6.32-0.20231214053628-47e242406c56/go.mod h1:fX68JW5XYV6tgYipzZQXGVkZQzm9SIFNXiW6X7fE94U=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 h1:r/Z/SPPIfLXDI3QA7/tE6nOfPncrqeUPDjiFjnNGP50=
@@ -620,6 +626,8 @@ github.com/klauspost/pgzip v1.2.5 h1:qnWYvvKqedOF2ulHpMG72XQol4ILEJ8k2wwRl/Km8oE
 github.com/klauspost/pgzip v1.2.5/go.mod h1:Ch1tH69qFZu15pkjo5kYi6mth2Zzwzt50oCQKQE9RUs=
 github.com/klauspost/reedsolomon v1.11.8 h1:s8RpUW5TK4hjr+djiOpbZJB4ksx+TdYbRH7vHQpwPOY=
 github.com/klauspost/reedsolomon v1.11.8/go.mod h1:4bXRN+cVzMdml6ti7qLouuYi32KHJ5MGv0Qd8a47h6A=
+github.com/klauspost/reedsolomon v1.12.0 h1:I5FEp3xSwVCcEh3F5A7dofEfhXdF/bWhQWPH+XwBFno=
+github.com/klauspost/reedsolomon v1.12.0/go.mod h1:EPLZJeh4l27pUGC3aXOjheaoh1I9yut7xTURiW3LQ9Y=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/kr/binarydist v0.1.0 h1:6kAoLA9FMMnNGSehX0s1PdjbEaACznAv/W219j2uvyo=
 github.com/kr/binarydist v0.1.0/go.mod h1:DY7S//GCoz1BCd0B0EVrinCKAZN3pXe+MDaIZbXQVgM=
