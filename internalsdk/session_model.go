@@ -1253,7 +1253,7 @@ func login(session *SessionModel, email string, password string) error {
 	if err != nil {
 		return err
 	}
-	log.Debugf("Login prepare request body %v", srpB)
+	log.Debugf("Login prepare response %v", srpB)
 
 	// // Once the client receives B from the server Client should check error status here as defense against
 	// // a malicious B sent from server
@@ -1267,25 +1267,26 @@ func login(session *SessionModel, email string, password string) error {
 	// client can now make the session key
 	clientKey, err := client.Key()
 	if err != nil || clientKey == nil {
-		return log.Errorf("user_not_found %v", err)
+		return log.Errorf("user_not_found error while generating Client key %v", err)
 	}
 
 	// // Step 3
 
 	// // check if the server proof is valid
 	if !client.GoodServerProof(salt, email, srpB.Proof) {
-		return log.Errorf("user_not_found %v", err)
+		return log.Errorf("user_not_found error while checking server proof%v", err)
 	}
 
 	clientProof, err := client.ClientProof()
 	if err != nil {
-		return log.Errorf("user_not_found %v", err)
+		return log.Errorf("user_not_found error while generating client proof %v", err)
 	}
 
 	loginRequestBody := &protos.LoginRequest{
 		Email: email,
 		Proof: clientProof,
 	}
+	log.Debugf("Login request body %v", loginRequestBody)
 
 	login, err := apimodels.Login(loginRequestBody)
 	if err != nil {

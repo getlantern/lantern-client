@@ -75,7 +75,7 @@ class _SignInState extends State<SignIn> {
                     _emailFormKey?.currentState?.validate() == false,
                 text: widget.authFlow.isReset ? "next".i18n : 'continue'.i18n,
                 onPressed: widget.authFlow.isReset
-                    ? openVerification
+                    ? onNextTap
                     : openCreatePassword,
               ),
             ),
@@ -120,6 +120,10 @@ class _SignInState extends State<SignIn> {
   ///Widget methods
   void openCreatePassword() {
     context.pushRoute(SignInPassword(email: _emailController.text));
+  }
+
+  void onNextTap(){
+
   }
 
   void openVerification() {
