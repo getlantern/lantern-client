@@ -14,6 +14,7 @@ import (
 
 	"github.com/bojanz/currency"
 	"github.com/getlantern/android-lantern/internalsdk/apimodels"
+	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/pathdb"
 )
@@ -205,4 +206,40 @@ func StringToIntSlice(str string) ([]int, error) {
 	}
 
 	return slice, nil
+}
+
+func ConvertToUserDetailsResponse(user *protos.LoginResponse_UserData) apimodels.UserDetailResponse {
+	// Convert protobuf to usre details struct
+	userData := apimodels.UserDetailResponse{
+		UserID:       user.UserId,
+		Code:         user.Code,
+		Token:        user.Token,
+		Referral:     user.Referral,
+		UserLevel:    user.UserLevel,
+		Expiration:   user.Expiration,
+		Email:        user.Email,
+		UserStatus:   user.UserStatus,
+		Locale:       user.Locale,
+		Servers:      user.Servers,
+		YinbiEnabled: user.YinbiEnabled,
+		Inviters:     user.Inviters,
+		Invitees:     user.Invitees,
+	}
+
+	// Convert Purchases if needed
+	for _, p := range user.Purchases {
+		// Assuming you want to map the string directly to the Plan field of Purchase
+		userData.Purchases = append(userData.Purchases, apimodels.Purchase{Plan: p})
+	}
+
+	for _, d := range user.Devices {
+		// Map the fields from LoginResponse_Device to UserDevice
+		userDevice := apimodels.UserDevice{
+			ID:      d.GetId(),
+			Name:    d.GetName(),
+			Created: d.GetCreated(),
+		}
+		userData.Devices = append(userData.Devices, userDevice)
+	}
+	return userData
 }

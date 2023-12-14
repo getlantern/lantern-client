@@ -110,11 +110,10 @@ class _SignInPasswordState extends State<SignInPassword> {
       context.loaderOverlay.show();
       await sessionModel.login(widget.email, _passwordController.text);
       context.loaderOverlay.hide();
+      context.router.popUntilRoot();
     } catch (e) {
       context.loaderOverlay.hide();
-      CDialog.showError(context, description:e.localizedDescription);
+      CDialog.showError(context, description: e.localizedDescription);
     }
   }
-
-
 }

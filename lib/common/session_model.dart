@@ -21,6 +21,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proUserNotifier;
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> userEmail;
+  late ValueNotifier<bool?> hasUserSignedIn;
 
   SessionModel() : super('session') {
     eventManager = EventManager('lantern_event_channel');
@@ -58,6 +59,7 @@ class SessionModel extends Model {
     country = singleValueNotifier('geo_country_code', 'US');
     // This warning is not needed for the Non pro user
     hasAccountVerified = singleValueNotifier('isAccountVerified', false);
+    hasUserSignedIn = singleValueNotifier('IsUserLoggedIn', false);
     proUserNotifier = singleValueNotifier('prouser', false);
   }
 
