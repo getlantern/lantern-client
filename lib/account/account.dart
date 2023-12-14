@@ -22,8 +22,7 @@ class AccountMenu extends StatelessWidget {
 
   void onAccountManagementTap(BuildContext context, bool isProUser) {
     //Todo make this dynamic once connect to API
-    bool hasUserSignedIn = false;
-    if (hasUserSignedIn) {
+    if (sessionModel.hasUserSignedIn.value == true) {
       context.pushRoute(AccountManagement(isPro: isProUser));
     } else {
       showProUserDialog(context);
@@ -85,15 +84,14 @@ class AccountMenu extends StatelessWidget {
               )
             : const SizedBox(),
       ),
-
-        ListItemFactory.settingsItem(
-          key: AppKeys.upgrade_lantern_pro,
-          icon: ImagePaths.pro_icon_black,
-          content: 'Upgrade to Lantern Pro'.i18n,
-          onTap: () {
-            upgradeToLanternPro(context);
-          },
-        ),
+      ListItemFactory.settingsItem(
+        key: AppKeys.upgrade_lantern_pro,
+        icon: ImagePaths.pro_icon_black,
+        content: 'Upgrade to Lantern Pro'.i18n,
+        onTap: () {
+          upgradeToLanternPro(context);
+        },
+      ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
@@ -114,11 +112,12 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> proItems(BuildContext context) {
     return [
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.signIn,
-        content: 'sign_in'.i18n,
-        onTap: () => openSignIn(context),
-      ),
+      if (sessionModel.hasUserSignedIn.value == false)
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.signIn,
+          content: 'sign_in'.i18n,
+          onTap: () => openSignIn(context),
+        ),
       messagingModel.getOnBoardingStatus(
         (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus((BuildContext context,

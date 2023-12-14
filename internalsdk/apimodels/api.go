@@ -7,7 +7,6 @@ import (
 	"io"
 	"time"
 
-	"math/big"
 	"net/http"
 	"net/http/httputil"
 	"time"
@@ -420,9 +419,9 @@ func LoginPrepare(prepareBody *protos.PrepareRequest) (*protos.PrepareResponse, 
 	return &prepareResponse, nil
 }
 
-func Login(loginBody map[string]interface{}) (*big.Int, error) {
+func Login(loginBody *protos.LoginRequest) (*protos.LoginResponse, error) {
 	// Marshal the map to JSON
-	requestBody, err := json.Marshal(loginBody)
+	requestBody, err := proto.Marshal(loginBody)
 	if err != nil {
 		log.Errorf("Error marshaling request body: %v", err)
 		return nil, err
@@ -440,14 +439,21 @@ func Login(loginBody map[string]interface{}) (*big.Int, error) {
 		log.Errorf("Error sending login prepare request: %v", err)
 		return nil, err
 	}
-	defer resp.Body.Close()
-
-	var srpB SrpB
-	if err := json.NewDecoder(resp.Body).Decode(&srpB); err != nil {
-		log.Errorf("Error decoding response body: %v", err)
+	// Read the response body
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response:", err)
 		return nil, err
 	}
-	return &srpB.SrpB, nil
+
+	defer resp.Body.Close()
+
+	var loginResponse protos.LoginResponse
+	if err := proto.Unmarshal(body, &loginResponse); err != nil {
+		log.Errorf("Error unmarshalling response: ", err)
+	}
+
+	return &loginResponse, nil
 }
 
 // Utils methods convert json body

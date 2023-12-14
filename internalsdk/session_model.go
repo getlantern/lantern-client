@@ -2,6 +2,7 @@ package internalsdk
 
 import (
 	"fmt"
+	"math/big"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -154,6 +155,7 @@ const (
 	pathExpirystr            = "expirydatestr"
 	pathUserSalt             = "user_salt"
 	pathIsAccountVerified    = "isAccountVerified"
+	pathIsUserLoggedIn       = "IsUserLoggedIn"
 
 	currentTermsVersion = 1
 	group               = srp.RFC5054Group3072
@@ -277,7 +279,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "signup":
 		email := arguments.Get("email").String()
 		password := arguments.Get("password").String()
-		err := signup(m, email, password, "testUserName")
+		err := signup(m, email, password)
 		if err != nil {
 			return nil, err
 		}
@@ -309,7 +311,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "login":
 		email := arguments.Get("email").String()
 		password := arguments.Get("password").String()
-		err := login(m, "testUserName", email, password)
+		err := login(m, email, password)
 		if err != nil {
 			return nil, err
 		}
@@ -1147,10 +1149,10 @@ func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string)
 
 // Authenticates the user with the given email and password.
 //  Note-: On Sign up Client needed to generate 8 byte slat
-//  Then use that salt, password and username generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
+//  Then use that salt, password and email generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
 //  Then use srpClient.Verifier() to generate verifierKey
 
-func signup(session *SessionModel, email string, password string, username string) error {
+func signup(session *SessionModel, email string, password string) error {
 	err := setEmail(session.baseModel, email)
 	if err != nil {
 		return err
@@ -1227,9 +1229,9 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 	})
 }
 
-func login(session *SessionModel, userName string, email string, password string) error {
+func login(session *SessionModel, email string, password string) error {
 	// Get the salt
-	salt, err := getUserSalt(session.baseModel, userName)
+	salt, err := getUserSalt(session.baseModel, email)
 	if err != nil {
 		return err
 	}
@@ -1255,29 +1257,48 @@ func login(session *SessionModel, userName string, email string, password string
 
 	// // Once the client receives B from the server Client should check error status here as defense against
 	// // a malicious B sent from server
-	// if err = client.SetOthersPublic(srpB); err != nil {
-	// 	log.Errorf("Error while setting srpB %v", err)
-	// 	return err
-	// }
+	B := big.NewInt(0).SetBytes(srpB.B)
+
+	if err = client.SetOthersPublic(B); err != nil {
+		log.Errorf("Error while setting srpB %v", err)
+		return err
+	}
+
+	// client can now make the session key
+	clientKey, err := client.Key()
+	if err != nil || clientKey == nil {
+		return log.Errorf("user_not_found %v", err)
+	}
 
 	// // Step 3
 
 	// // check if the server proof is valid
-	// if !client.GoodServerProof(salt, userName, serverProof) {
-	// 	log.Fatal("bad proof from server")
-	// 	return err
-	// }
+	if !client.GoodServerProof(salt, email, srpB.Proof) {
+		return log.Errorf("user_not_found %v", err)
+	}
 
-	// clientProof, err := client.ClientProof()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	clientProof, err := client.ClientProof()
+	if err != nil {
+		return log.Errorf("user_not_found %v", err)
+	}
 
-	// loginRequestBody := map[string]interface{}{
-	// 	"email": userName,
-	// 	"proof": clientProof,
-	// }
+	loginRequestBody := &protos.LoginRequest{
+		Email: email,
+		Proof: clientProof,
+	}
 
-	return nil
+	login, err := apimodels.Login(loginRequestBody)
+	if err != nil {
+		return err
+	}
+	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathIsUserLoggedIn, true, "")
+	})
+	if err != nil {
+		return err
+	}
 
+	//Store all the user details
+	userData := ConvertToUserDetailsResponse(login.LegacyUserData)
+	return cacheUserDetail(session.baseModel, &userData)
 }
