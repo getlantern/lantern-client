@@ -20,7 +20,7 @@ class Assets {
   static const String imagesAccount = 'assets/images/account.svg';
   static const String imagesAccountRemove = 'assets/images/account_remove.svg';
   static const String imagesAdd = 'assets/images/add.svg';
-  static const String imagesAddAccountillustration = 'assets/images/add_account_ illustration.svg';
+  static const String imagesAddAccount illustration = 'assets/images/add_account_ illustration.svg';
   static const String imagesAddCircle = 'assets/images/add_circle.svg';
   static const String imagesAlert = 'assets/images/alert.svg';
   static const String imagesArrowBack = 'assets/images/arrow_back.svg';
@@ -129,6 +129,7 @@ class Assets {
   static const String imagesSettings = 'assets/images/settings.svg';
   static const String imagesShare = 'assets/images/share.svg';
   static const String imagesSignIn = 'assets/images/sign_in.svg';
+  static const String imagesSignout = 'assets/images/sign_out.svg';
   static const String imagesSpeaker = 'assets/images/speaker.svg';
   static const String imagesSplitTunneling = 'assets/images/split_tunneling.svg';
   static const String imagesSpreadsheetBlack = 'assets/images/spreadsheet_black.svg';

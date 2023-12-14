@@ -19,7 +19,17 @@ class _SignInPasswordState extends State<SignInPassword> {
   final _passwordFormKey = GlobalKey<FormState>();
   late final _passwordController = CustomTextEditingController(
     formKey: _passwordFormKey,
+    validator: (value) {
+      if (value!.isEmpty) {
+        return 'password_cannot_be_empty'.i18n;
+      }
+      if (value.length < 8) {
+        return 'password_must_be_at_least_8_characters'.i18n;
+      }
+      return null;
+    },
   );
+
   bool obscureText = false;
 
   @override
@@ -40,13 +50,21 @@ class _SignInPasswordState extends State<SignInPassword> {
             _buildHeader(),
             const SizedBox(height: 24),
             CPasswordTextFiled(
-                label: "enter_password".i18n,
-                passwordFormKey: _passwordFormKey,
-                passwordCustomTextEditingController: _passwordController),
+              label: "enter_password".i18n,
+              passwordFormKey: _passwordFormKey,
+              passwordCustomTextEditingController: _passwordController,
+              onChanged: (vaule) {
+                setState(() {});
+              },
+            ),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
-              child: Button(text: 'continue'.i18n, onPressed: onContinueTap),
+              child: Button(
+                disabled: _passwordController.text.length < 8,
+                text: 'continue'.i18n,
+                onPressed: onContinueTap,
+              ),
             ),
             const SizedBox(height: 24),
             RichText(
