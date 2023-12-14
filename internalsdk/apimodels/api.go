@@ -68,7 +68,10 @@ func FechUserDetail(deviceId string, userId string, token string) (*UserDetailRe
 	req.Header.Set(headerDeviceId, deviceId)
 	req.Header.Set(headerUserId, userId)
 	req.Header.Set(headerProToken, token)
-	log.Debugf("Headers set")
+	req.Header.Set(headerContentType, "application/json")
+
+	curl, _ := RequestToCurl(req)
+	log.Debugf("Curl command: %s", curl)
 
 	// Send the request
 	resp, err := httpClient.Do(req)
@@ -78,6 +81,12 @@ func FechUserDetail(deviceId string, userId string, token string) (*UserDetailRe
 	}
 	defer resp.Body.Close()
 
+	bodyStr, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Debugf("User details response %v with status code %d", string(bodyStr), resp.StatusCode)
 	// Read the response body
 	var userDetail UserDetailResponse
 	// Read and decode the response body

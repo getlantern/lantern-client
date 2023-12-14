@@ -15,6 +15,7 @@ class ImagePaths {
   static const star = 'assets/images/star.svg';
   static const desktop = 'assets/images/desktop.svg';
   static const signIn = 'assets/images/sign_in.svg';
+  static const signOut = 'assets/images/sign_out.svg';
   static const settings = 'assets/images/settings.svg';
   static const support = 'assets/images/support.svg';
   static const qr_code = 'assets/images/qr_code.svg';

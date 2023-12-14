@@ -20,6 +20,27 @@ class AccountMenu extends StatelessWidget {
     context.pushRoute(const Support());
   }
 
+  void onSignOut(BuildContext context) {}
+
+  void showSingOutDialog(BuildContext context) {
+    CDialog(
+      title: 'sign_out'.i18n,
+      description: "sign_out_message".i18n,
+      icon: const CAssetImage(
+        path: ImagePaths.signOut,
+        height: 40,
+      ),
+      agreeText: "sign_out".i18n,
+      dismissText: "not_now".i18n,
+      includeCancel: true,
+      agreeAction: () async {
+        onSignOut(context);
+        return true;
+      },
+      dismissAction: () async {},
+    ).show(context);
+  }
+
   void onAccountManagementTap(BuildContext context, bool isProUser) {
     //Todo make this dynamic once connect to API
     if (sessionModel.hasUserSignedIn.value == true) {
@@ -83,6 +104,11 @@ class AccountMenu extends StatelessWidget {
                 ),
               )
             : const SizedBox(),
+      ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.signIn,
+        content: 'sign_in'.i18n,
+        onTap: () => openSignIn(context),
       ),
       ListItemFactory.settingsItem(
         key: AppKeys.upgrade_lantern_pro,
@@ -176,6 +202,14 @@ class AccountMenu extends StatelessWidget {
           openSettings(context);
         },
       ),
+      if (sessionModel.hasUserSignedIn.value == true)
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.signOut,
+          content: 'sign_out'.i18n,
+          onTap: () {
+            showSingOutDialog(context);
+          },
+        ),
     ];
   }
 
