@@ -1247,7 +1247,9 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 	})
 }
 
+// Todo find way to optimize this method
 func login(session *SessionModel, email string, password string) error {
+	start := time.Now()
 	// Get the salt
 	salt, err := getUserSalt(session.baseModel, email)
 	if err != nil {
@@ -1310,15 +1312,40 @@ func login(session *SessionModel, email string, password string) error {
 	if err != nil {
 		return err
 	}
-	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathIsUserLoggedIn, true, "")
-	})
+	log.Debugf("Login response %+v", login)
+
+	tx, err := session.db.Begin()
 	if err != nil {
 		return err
 	}
+	pathdb.Put[bool](tx, pathIsAccountVerified, login.EmailConfirmed, "")
 
+	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.PutAll(tx, map[string]interface{}{
+			pathIsUserLoggedIn:    true,
+			pathIsAccountVerified: login.EmailConfirmed,
+			pathEmailAddress:      email,
+		})
+	})
+	if err != nil {
+		log.Errorf("Error while saving user status %v", err)
+	}
+	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		err := pathdb.Put[bool](tx, pathIsAccountVerified, login.EmailConfirmed, "")
+		if err != nil {
+			log.Errorf("Error while saving user status %v", err)
+			return err
+		}
+		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
+	})
+	if err != nil {
+		log.Errorf("Error while saving user status %v", err)
+	}
+
+	end := time.Now()
+	log.Debugf("Login took %v", end.Sub(start))
 	//Store all the user details
-	userData := ConvertToUserDetailsResponse(login.LegacyUserData)
+	userData := ConvertToUserDetailsResponse(login)
 	return cacheUserDetail(session.baseModel, &userData)
 }
 
