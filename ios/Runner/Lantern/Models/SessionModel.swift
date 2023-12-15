@@ -20,7 +20,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current
     let deviceId = device.identifierForVendor!.uuidString
-    let model = device.model
+    let model = UIDevice.modelName
     let systemName = device.systemName
     let systemVersion = device.systemVersion
     opts.deviceID = deviceId

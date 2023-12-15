@@ -37,6 +37,7 @@
 		03A1AB3A2AA890AB00FB41B2 /* Tunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 03A1AB302AA890AB00FB41B2 /* Tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		03A1AB422AA8930A00FB41B2 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB412AA8930A00FB41B2 /* Result.swift */; };
 		03A1AB442AA8946400FB41B2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB432AA8946400FB41B2 /* Constants.swift */; };
+		03D0F0F02B2C7FC300C32918 /* ModelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0F0EF2B2C7FC300C32918 /* ModelExtension.swift */; };
 		03F00B5F2AB07C8000E991E2 /* LoadingIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */; };
 		03F2FE342A6949EF0082B34C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F2FE332A6949EF0082B34C /* Logger.swift */; };
 		03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F4CD812A77E43C00F7BDD8 /* BaseModel.swift */; };
@@ -120,6 +121,7 @@
 		03A1AB412AA8930A00FB41B2 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		03A1AB432AA8946400FB41B2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		03C58B082AC18BE7003C9788 /* DatabaseFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DatabaseFramework.framework; path = ../../../../DatabaseFramework.framework; sourceTree = "<group>"; };
+		03D0F0EF2B2C7FC300C32918 /* ModelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelExtension.swift; sourceTree = "<group>"; };
 		03D97B1B2AC1900E0092BFC2 /* Pods_DatabaseFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_DatabaseFramework.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/DatabaseFramework-csnjouuwjwleiddbptbupimqigld/Build/Products/Debug-iphoneos/Pods_DatabaseFramework.framework"; sourceTree = "<group>"; };
 		03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorManager.swift; sourceTree = "<group>"; };
 		03F2FE332A6949EF0082B34C /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 				03567DBF2AA9F47200A233EA /* FileUtils.swift */,
 				03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */,
 				0324CC2F2AE279CF00490B46 /* SentryUtils.swift */,
+				03D0F0EF2B2C7FC300C32918 /* ModelExtension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -688,6 +691,7 @@
 				0308A1342AAEF5130086157A /* VPNBase.swift in Sources */,
 				03F2FE342A6949EF0082B34C /* Logger.swift in Sources */,
 				0308A12E2AAEEF410086157A /* Events.swift in Sources */,
+				03D0F0F02B2C7FC300C32918 /* ModelExtension.swift in Sources */,
 				0333203B2AC698FA00333DA9 /* MockVPNManager.swift in Sources */,
 				0308A12C2AAEEE2C0086157A /* UserNotificationsManager.swift in Sources */,
 				03FAF1B42AA1E9F40063580C /* VpnModel.swift in Sources */,

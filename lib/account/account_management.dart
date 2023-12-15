@@ -261,7 +261,7 @@ class _AccountManagementState extends State<AccountManagement>
             ],
           );
         }),
-        UserDevices(),
+        const UserDevices(),
       ],
     );
   }
