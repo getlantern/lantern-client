@@ -21,7 +21,7 @@ class _VerificationState extends State<Verification> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: widget.authFlow.isCreateAccount||widget.authFlow.isVerifyEmail
+      title: widget.authFlow.isCreateAccount || widget.authFlow.isVerifyEmail
           ? 'confirm_email'.i18n
           : 'reset_password'.i18n,
       body: _buildBody(context),
@@ -64,13 +64,13 @@ class _VerificationState extends State<Verification> {
                 onPressed: resendConfirmationCode,
               ),
               const SizedBox(height: 14),
-              if(!widget.authFlow.isVerifyEmail)
-              AppTextButton(
-                text: 'change_email'.i18n,
-                onPressed: () {
-                  context.popRoute();
-                },
-              ),
+              if (!widget.authFlow.isVerifyEmail)
+                AppTextButton(
+                  text: 'change_email'.i18n,
+                  onPressed: () {
+                    context.popRoute();
+                  },
+                ),
             ],
           ),
         ),
@@ -117,7 +117,7 @@ class _VerificationState extends State<Verification> {
         context.router.popUntilRoot();
         break;
       case AuthFlow.reset:
-        openResetPassword();
+        openResetPassword(code);
         break;
       case AuthFlow.signIn:
         context.router.popUntilRoot();
@@ -127,14 +127,14 @@ class _VerificationState extends State<Verification> {
     }
   }
 
-  void openResetPassword() {
-    context.pushRoute(const ResetPassword());
+  void openResetPassword(String code) {
+    context.pushRoute(ResetPassword(email: widget.email, code: code));
   }
 
   void _verifyEmail(String code) async {
     try {
       context.loaderOverlay.show();
-      await sessionModel.signupEmailConfirmation(widget.email,code);
+      await sessionModel.signupEmailConfirmation(widget.email, code);
       context.loaderOverlay.hide();
       context.router.popUntilRoot();
       sessionModel.hasAccountVerified.value = true;
