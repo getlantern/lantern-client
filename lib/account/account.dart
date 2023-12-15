@@ -94,7 +94,7 @@ class AccountMenu extends StatelessWidget {
                     ListItemFactory.settingsItem(
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
-                  onTap: () => onAccountManagementTap(context, true),
+                  onTap: () => onAccountManagementTap(context, false),
                   trailingArray: [
                     if (!hasCopiedRecoveryKey)
                       const CAssetImage(
@@ -139,12 +139,6 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> proItems(BuildContext context) {
     return [
-      if (sessionModel.hasUserSignedIn.value == false)
-        ListItemFactory.settingsItem(
-          icon: ImagePaths.signIn,
-          content: 'sign_in'.i18n,
-          onTap: () => openSignIn(context),
-        ),
       messagingModel.getOnBoardingStatus(
         (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus((BuildContext context,
@@ -153,7 +147,7 @@ class AccountMenu extends StatelessWidget {
                   key: AppKeys.account_management,
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
-                  onTap: () => onAccountManagementTap(context, false),
+                  onTap: () => onAccountManagementTap(context, true),
                   trailingArray: [
                     if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
                       const CAssetImage(

@@ -1531,4 +1531,8 @@ msgid "sign_out_message"
 msgstr "Are you sure you want to sign out?"
 
 
+msgid "change_password"
+msgstr "Change Password"
+
+
 

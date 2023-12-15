@@ -208,13 +208,17 @@ func StringToIntSlice(str string) ([]int, error) {
 	return slice, nil
 }
 
-func ConvertToUserDetailsResponse(user *protos.LoginResponse_UserData) apimodels.UserDetailResponse {
+func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) apimodels.UserDetailResponse {
 	// Convert protobuf to usre details struct
+	log.Debugf("ConvertToUserDetailsResponse %+v", userResponse)
+
+	user := userResponse.LegacyUserData
+
 	userData := apimodels.UserDetailResponse{
 		UserID:       user.UserId,
 		Code:         user.Code,
-		Token:        user.Token,
-		Referral:     user.Referral,
+		Token:        userResponse.LegacyToken,
+		Referral:     user.Code,
 		UserLevel:    user.UserLevel,
 		Expiration:   user.Expiration,
 		Email:        user.Email,
@@ -225,6 +229,7 @@ func ConvertToUserDetailsResponse(user *protos.LoginResponse_UserData) apimodels
 		Inviters:     user.Inviters,
 		Invitees:     user.Invitees,
 	}
+	log.Debugf("ConvertToUserDetailsResponse %+v", userData)
 
 	// Convert Purchases if needed
 	for _, p := range user.Purchases {

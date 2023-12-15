@@ -450,6 +450,7 @@ func Login(loginBody *protos.LoginRequest) (*protos.LoginResponse, error) {
 		fmt.Println("Error reading response:", err)
 		return nil, err
 	}
+	log.Debugf("Login response %v with status code %d", string(body), resp.StatusCode)
 
 	defer resp.Body.Close()
 
@@ -457,7 +458,6 @@ func Login(loginBody *protos.LoginRequest) (*protos.LoginResponse, error) {
 	if err := proto.Unmarshal(body, &loginResponse); err != nil {
 		log.Errorf("Error unmarshalling response: ", err)
 	}
-
 	return &loginResponse, nil
 }
 
