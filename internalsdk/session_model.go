@@ -326,6 +326,24 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 
+		//Recovery
+	case "startRecoveryByEmail":
+		email := arguments.Get("email").String()
+		err := startRecoveryByEmail(m, email)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "completeRecoveryByEmail":
+		email := arguments.Get("email").String()
+		code := arguments.Get("code").String()
+		password := arguments.Get("password").String()
+		err := completeRecoveryByEmail(m, email, code, password)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -1302,4 +1320,50 @@ func login(session *SessionModel, email string, password string) error {
 	//Store all the user details
 	userData := ConvertToUserDetailsResponse(login.LegacyUserData)
 	return cacheUserDetail(session.baseModel, &userData)
+}
+
+func startRecoveryByEmail(session *SessionModel, email string) error {
+	//Create body
+	prepareRequestBody := &protos.StartRecoveryByEmailRequest{
+		Email: email,
+	}
+
+	recovery, err := apimodels.StartRecoveryByEmail(prepareRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("StartRecoveryByEmail response %v", recovery)
+	return nil
+}
+
+func completeRecoveryByEmail(session *SessionModel, email string, code string, password string) error {
+	//Create body
+	newsalt, err := GenerateSalt()
+	if err != nil {
+		return err
+	}
+
+	encryptedKey := srp.KDFRFC5054(newsalt, email, password)
+	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+	verifierKey, err := srpClient.Verifier()
+	if err != nil {
+		return err
+	}
+
+	prepareRequestBody := &protos.CompleteRecoveryByEmailRequest{
+		Email:       email,
+		Code:        code,
+		NewSalt:     newsalt,
+		NewVerifier: verifierKey.Bytes(),
+	}
+
+	recovery, err := apimodels.CompleteRecoveryByEmail(prepareRequestBody)
+	if err != nil {
+		return err
+	}
+	//User has been recovered successfully
+	//Save new salt
+	saveUserSalt(session.baseModel, newsalt)
+	log.Debugf("CompleteRecoveryByEmail response %v", recovery)
+	return nil
 }

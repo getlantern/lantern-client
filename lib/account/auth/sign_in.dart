@@ -2,6 +2,9 @@ import 'package:email_validator/email_validator.dart';
 
 import '../../common/common.dart';
 
+//Test user
+// jigar@getlantern.org
+// Jigar@123
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
   final AuthFlow authFlow;
@@ -74,9 +77,8 @@ class _SignInState extends State<SignIn> {
                 disabled: _emailController.text.isEmpty ||
                     _emailFormKey?.currentState?.validate() == false,
                 text: widget.authFlow.isReset ? "next".i18n : 'continue'.i18n,
-                onPressed: widget.authFlow.isReset
-                    ? onNextTap
-                    : openCreatePassword,
+                onPressed:
+                    widget.authFlow.isReset ? onNextTap : openCreatePassword,
               ),
             ),
             const SizedBox(height: 24),
@@ -122,12 +124,24 @@ class _SignInState extends State<SignIn> {
     context.pushRoute(SignInPassword(email: _emailController.text));
   }
 
-  void onNextTap(){
-
+  Future<void> onNextTap() async {
+    try {
+      FocusManager.instance.primaryFocus?.unfocus();
+      context.loaderOverlay.show();
+      await sessionModel
+          .startRecoveryByEmail(_emailController.text.validateEmail);
+      context.loaderOverlay.hide();
+      openVerification();
+    } catch (e) {
+      print(e);
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: 'Error while seeding email');
+    }
   }
 
   void openVerification() {
-    context.pushRoute(Verification(email: _emailController.text));
+    context.pushRoute(
+        Verification(email: _emailController.text, authFlow: AuthFlow.reset));
   }
 
   void returnToSignIn() {

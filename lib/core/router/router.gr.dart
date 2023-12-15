@@ -403,9 +403,15 @@ abstract class $AppRouter extends _i48.RootStackRouter {
       );
     },
     ResetPassword.name: (routeData) {
+      final args = routeData.argsAs<ResetPasswordArgs>(
+          orElse: () => const ResetPasswordArgs());
       return _i48.AutoRoutePage<void>(
         routeData: routeData,
-        child: const _i40.ResetPassword(),
+        child: _i40.ResetPassword(
+          key: args.key,
+          email: args.email,
+          code: args.code,
+        ),
       );
     },
     Settings.name: (routeData) {
@@ -1631,16 +1637,45 @@ class ResellerCodeCheckoutArgs {
 
 /// generated route for
 /// [_i40.ResetPassword]
-class ResetPassword extends _i48.PageRouteInfo<void> {
-  const ResetPassword({List<_i48.PageRouteInfo>? children})
-      : super(
+class ResetPassword extends _i48.PageRouteInfo<ResetPasswordArgs> {
+  ResetPassword({
+    _i53.Key? key,
+    String? email,
+    String? code,
+    List<_i48.PageRouteInfo>? children,
+  }) : super(
           ResetPassword.name,
+          args: ResetPasswordArgs(
+            key: key,
+            email: email,
+            code: code,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'ResetPassword';
 
-  static const _i48.PageInfo<void> page = _i48.PageInfo<void>(name);
+  static const _i48.PageInfo<ResetPasswordArgs> page =
+      _i48.PageInfo<ResetPasswordArgs>(name);
+}
+
+class ResetPasswordArgs {
+  const ResetPasswordArgs({
+    this.key,
+    this.email,
+    this.code,
+  });
+
+  final _i53.Key? key;
+
+  final String? email;
+
+  final String? code;
+
+  @override
+  String toString() {
+    return 'ResetPasswordArgs{key: $key, email: $email, code: $code}';
+  }
 }
 
 /// generated route for

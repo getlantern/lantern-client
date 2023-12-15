@@ -4,7 +4,14 @@ import '../../common/common.dart';
 
 @RoutePage<void>(name: 'ResetPassword')
 class ResetPassword extends StatefulWidget {
-  const ResetPassword({super.key});
+  final String? email;
+  final String? code;
+
+  const ResetPassword({
+    super.key,
+    this.email,
+    this.code,
+  });
 
   @override
   State<ResetPassword> createState() => _ResetPasswordState();
@@ -137,8 +144,18 @@ class _ResetPasswordState extends State<ResetPassword> {
     );
   }
 
-  void onResetPasswordTap() {
-    //Send user back to account screen
-    context.router.popUntilRoot();
+  Future<void> onResetPasswordTap() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.completeRecoveryByEmail(
+          widget.email!, _passwordController.text, widget.code!);
+      context.loaderOverlay.hide();
+      //Send user back to account screen
+      context.router.popUntilRoot();
+    } catch (e) {
+      mainLogger.e(e);
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
   }
 }

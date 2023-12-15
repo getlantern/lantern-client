@@ -299,6 +299,24 @@ class SessionModel extends Model {
     });
   }
 
+
+  Future<void> startRecoveryByEmail(String email) {
+    return methodChannel.invokeMethod('startRecoveryByEmail', <String, dynamic>{
+      'email': email,
+    });
+  }
+
+  Future<void> completeRecoveryByEmail(String email, String password,String code) {
+    return methodChannel.invokeMethod('completeRecoveryByEmail', <String, dynamic>{
+      'email': email,
+      'password': password,
+      'code': code,
+    });
+  }
+
+
+  /// Auth API end
+
   Future<void> setProxyAll<T>(bool on) async {
     unawaited(
       methodChannel.invokeMethod('setProxyAll', <String, dynamic>{
