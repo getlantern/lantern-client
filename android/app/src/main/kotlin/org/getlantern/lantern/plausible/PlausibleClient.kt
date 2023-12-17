@@ -15,7 +15,10 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import org.getlantern.lantern.LanternApp
+import org.getlantern.mobilesdk.Logger
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Proxy
@@ -23,11 +26,8 @@ import java.net.URI
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import org.getlantern.lantern.LanternApp    
-import org.getlantern.mobilesdk.Logger
 
 internal interface PlausibleClient {
-
     // See [Plausible.event] for details on parameters.
     // @return true if the event was successfully processed and false if not
     fun event(
@@ -36,7 +36,7 @@ internal interface PlausibleClient {
         url: String,
         referrer: String,
         screenWidth: Int,
-        props: Map<String, Any?>? = null
+        props: Map<String, Any?>? = null,
     ) {
         var correctedUrl = Uri.parse(url)
         if (correctedUrl.scheme.isNullOrBlank()) {
@@ -45,24 +45,26 @@ internal interface PlausibleClient {
         if (correctedUrl.authority.isNullOrBlank()) {
             correctedUrl = correctedUrl.buildUpon().authority("localhost").build()
         }
-        return event(Event(
-            domain,
-            name,
-            correctedUrl.toString(),
-            referrer,
-            screenWidth,
-            props?.mapValues { (_, v) -> v.toString() }
-        ))
+        return event(
+            Event(
+                domain,
+                name,
+                correctedUrl.toString(),
+                referrer,
+                screenWidth,
+                props?.mapValues { (_, v) -> v.toString() },
+            ),
+        )
     }
 
     fun event(event: Event)
 }
 
-// The primary client for sending events to Plausible. It will attempt to send events immediately, 
+// The primary client for sending events to Plausible. It will attempt to send events immediately,
 // caching them to disk to send later upon failure.
 internal class NetworkFirstPlausibleClient(
     private val config: PlausibleConfig,
-    coroutineContext: CoroutineContext = Dispatchers.IO
+    coroutineContext: CoroutineContext = Dispatchers.IO,
 ) : PlausibleClient {
     private val coroutineScope = CoroutineScope(coroutineContext)
 
@@ -70,14 +72,18 @@ internal class NetworkFirstPlausibleClient(
         coroutineScope.launch {
             config.eventDir.mkdirs()
             config.eventDir.listFiles()?.forEach {
-                val event = Event.fromJson(it.readText())
-                if (event == null) {
-                    Logger.e("Plausible", "Failed to decode event JSON, discarding")
-                    it.delete()
-                    return@forEach
-                }
+                if (!it.exists()) return@forEach
                 try {
+                    val event = Event.fromJson(it.readText())
+                    if (event == null) {
+                        Logger.e("Plausible", "Failed to decode event JSON, discarding")
+                        it.delete()
+                        return@forEach
+                    }
                     postEvent(event)
+                } catch (e: FileNotFoundException) {
+                    Logger.e("Plausible", "Could not open event file", e)
+                    return@forEach
                 } catch (e: IOException) {
                     return@forEach
                 }
@@ -104,12 +110,13 @@ internal class NetworkFirstPlausibleClient(
             var retryDelay = 1000L
             while (retryAttempts < 5) {
                 delay(retryDelay)
-                retryDelay = when (retryDelay) {
-                    1000L -> 60_000L
-                    60_000L -> 360_000L
-                    360_000L -> 600_000L
-                    else -> break
-                }
+                retryDelay =
+                    when (retryDelay) {
+                        1000L -> 60_000L
+                        60_000L -> 360_000L
+                        360_000L -> 600_000L
+                        else -> break
+                    }
                 try {
                     postEvent(event)
                     file.delete()
@@ -127,41 +134,52 @@ internal class NetworkFirstPlausibleClient(
             return
         }
         val body = event.toJson().toRequestBody("application/json".toMediaType())
-        val url = config.host
-            .toHttpUrl()
-            .newBuilder()
-            .addPathSegments("api/event")
-            .build()
-        val request = Request.Builder()
-            .url(url)
-            .addHeader("User-Agent", config.userAgent)
-            .post(body)
-            .build()
+        val url =
+            config.host
+                .toHttpUrl()
+                .newBuilder()
+                .addPathSegments("api/event")
+                .build()
+        val request =
+            Request.Builder()
+                .url(url)
+                .addHeader("User-Agent", config.userAgent)
+                .post(body)
+                .build()
         suspendCancellableCoroutine { continuation ->
             val call = okHttpClient.newCall(request)
             continuation.invokeOnCancellation {
                 call.cancel()
             }
 
-            call.enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    Logger.e("Plausible", "Failed to send event to backend")
-                    continuation.resumeWithException(e)
-                }
+            call.enqueue(
+                object : Callback {
+                    override fun onFailure(
+                        call: Call,
+                        e: IOException,
+                    ) {
+                        Logger.e("Plausible", "Failed to send event to backend")
+                        continuation.resumeWithException(e)
+                    }
 
-                override fun onResponse(call: Call, response: Response) {
-                    response.use { res ->
-                        if (res.isSuccessful) {
-                            continuation.resume(Unit)
-                        } else {
-                            val e = IOException(
-                                "Received unexpected response: ${res.code} ${res.body?.string()}"
-                            )
-                            onFailure(call, e)
+                    override fun onResponse(
+                        call: Call,
+                        response: Response,
+                    ) {
+                        response.use { res ->
+                            if (res.isSuccessful) {
+                                continuation.resume(Unit)
+                            } else {
+                                val e =
+                                    IOException(
+                                        "Received unexpected response: ${res.code} ${res.body?.string()}",
+                                    )
+                                onFailure(call, e)
+                            }
                         }
                     }
-                }
-            })
+                },
+            )
         }
     }
 
@@ -169,11 +187,14 @@ internal class NetworkFirstPlausibleClient(
         val session = LanternApp.getSession()
         val hTTPAddr = session.hTTPAddr
         val uri = URI("http://" + hTTPAddr)
-        val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(
-                "127.0.0.1",
-                uri.getPort(),
-            ),
-        )
-        OkHttpClient.Builder().proxy(proxy).build()       
+        val proxy =
+            Proxy(
+                Proxy.Type.HTTP,
+                InetSocketAddress(
+                    "127.0.0.1",
+                    uri.getPort(),
+                ),
+            )
+        OkHttpClient.Builder().proxy(proxy).build()
     }
 }

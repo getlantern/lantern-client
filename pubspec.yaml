@@ -64,7 +64,7 @@ dependencies:
   filesize: ^2.0.1
 
   # Networking
-  cached_network_image: ^3.2.3
+  cached_network_image: ^3.3.0
   dio: ^5.3.2
 
   # change this with flutter_downloader
