@@ -113,6 +113,9 @@ func createPurchaseData(session *SessionModel, paymentProvider string, resellerC
 	if err != nil {
 		return err, nil
 	}
+	if email == "" {
+		return errors.New("Email is empty"), nil
+	}
 
 	device, err := pathdb.Get[string](session.db, pathModel)
 	if err != nil {
