@@ -881,11 +881,18 @@ func setSelectedTab(m *baseModel, tap string) error {
 	})
 }
 
-func setUserIdAndToken(m *baseModel, userId int, token string) error {
+func setUserIdAndToken(m *baseModel, userId int64, token string) error {
+	log.Debugf("Setting user id %v token %v", userId, token)
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		if err := pathdb.Put(tx, pathUserID, userId, ""); err != nil {
+		if err := pathdb.Put[int64](tx, pathUserID, userId, ""); err != nil {
+			log.Errorf("Error while setting user id %v", err)
 			return err
 		}
+		userid, err := pathdb.Get[int64](tx, pathUserID)
+		if err != nil {
+			return err
+		}
+		log.Debugf("User id %v", userid)
 		return pathdb.Put(tx, pathToken, token, "")
 	})
 }
@@ -934,7 +941,7 @@ func userCreate(m *baseModel, local string) error {
 	}
 
 	//Save user id and token
-	err = setUserIdAndToken(m, int(userResponse.UserID), userResponse.Token)
+	err = setUserIdAndToken(m, int64(userResponse.UserID), userResponse.Token)
 	if err != nil {
 		return err
 	}
@@ -997,7 +1004,7 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 		return err
 	}
 	log.Debugf("User caching successful: %+v", userDetail)
-	return setUserIdAndToken(m, int(userDetail.UserID), userDetail.Token)
+	return setUserIdAndToken(m, int64(userDetail.UserID), userDetail.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
@@ -1247,6 +1254,9 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 	})
 }
 
+// Note: There is issue on login if user sign in and closes the app
+// and start again it not showing pro user status as it should
+// there maybe some issue on while saving user id and token
 // Todo find way to optimize this method
 func login(session *SessionModel, email string, password string) error {
 	start := time.Now()
@@ -1313,30 +1323,17 @@ func login(session *SessionModel, email string, password string) error {
 		return err
 	}
 	log.Debugf("Login response %+v", login)
-
-	tx, err := session.db.Begin()
-	if err != nil {
-		return err
-	}
-	pathdb.Put[bool](tx, pathIsAccountVerified, login.EmailConfirmed, "")
-
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.PutAll(tx, map[string]interface{}{
-			pathIsUserLoggedIn:    true,
-			pathIsAccountVerified: login.EmailConfirmed,
-			pathEmailAddress:      email,
-		})
+		return pathdb.Put[bool](tx, pathIsAccountVerified, login.EmailConfirmed, "")
 	})
 	if err != nil {
 		log.Errorf("Error while saving user status %v", err)
 	}
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		err := pathdb.Put[bool](tx, pathIsAccountVerified, login.EmailConfirmed, "")
-		if err != nil {
-			log.Errorf("Error while saving user status %v", err)
-			return err
-		}
-		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
+		return pathdb.PutAll(tx, map[string]interface{}{
+			pathIsUserLoggedIn: true,
+			pathEmailAddress:   email,
+		})
 	})
 	if err != nil {
 		log.Errorf("Error while saving user status %v", err)
@@ -1346,7 +1343,12 @@ func login(session *SessionModel, email string, password string) error {
 	log.Debugf("Login took %v", end.Sub(start))
 	//Store all the user details
 	userData := ConvertToUserDetailsResponse(login)
-	return cacheUserDetail(session.baseModel, &userData)
+	err = cacheUserDetail(session.baseModel, &userData)
+	if err != nil {
+		log.Errorf("Error while caching user details %v", err)
+		return err
+	}
+	return nil
 }
 
 func startRecoveryByEmail(session *SessionModel, email string) error {

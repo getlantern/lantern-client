@@ -196,6 +196,7 @@ class AccountMenu extends StatelessWidget {
           openSettings(context);
         },
       ),
+
       if (sessionModel.hasUserSignedIn.value == true)
         ListItemFactory.settingsItem(
           icon: ImagePaths.signOut,

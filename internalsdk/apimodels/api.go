@@ -90,11 +90,11 @@ func FechUserDetail(deviceId string, userId string, token string) (*UserDetailRe
 	// Read the response body
 	var userDetail UserDetailResponse
 	// Read and decode the response body
-	if err := json.NewDecoder(resp.Body).Decode(&userDetail); err != nil {
-		log.Errorf("Error decoding response body: %v", err)
+	err = json.Unmarshal(bodyStr, &userDetail)
+	if err != nil {
+		log.Errorf("Error decoding user details response body: %v", err)
 		return nil, err
 	}
-
 	return &userDetail, nil
 }
 
