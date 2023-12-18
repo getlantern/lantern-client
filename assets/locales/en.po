@@ -1589,8 +1589,5 @@ msgstr "New Email Address"
 msgid "new_email_same_as_old_email"
 msgstr "New email address cannot be the same as your old email address"
 
-msgid "invalid_password"
-msgstr ""
-
 
 

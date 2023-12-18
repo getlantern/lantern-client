@@ -1442,17 +1442,17 @@ func changeEmail(session SessionModel, email string, newEmail string, password s
 	// client can now make the session key
 	clientKey, err := client.Key()
 	if err != nil || clientKey == nil {
-		return log.Errorf("invalid_password error while generating Client key %v", err)
+		return log.Errorf("user_not_found error while generating Client key %v", err)
 	}
 
 	// // check if the server proof is valid
 	if !client.GoodServerProof(salt, email, srpB.Proof) {
-		return log.Errorf("invalid_password error while checking server proof%v", err)
+		return log.Errorf("user_not_found error while checking server proof%v", err)
 	}
 
 	clientProof, err := client.ClientProof()
 	if err != nil {
-		return log.Errorf("invalid_password error while generating client proof %v", err)
+		return log.Errorf("user_not_found error while generating client proof %v", err)
 	}
 
 	changeEmailRequestBody := &protos.ChangeEmailRequest{
