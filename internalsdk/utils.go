@@ -215,7 +215,7 @@ func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) apimodels.
 	user := userResponse.LegacyUserData
 
 	userData := apimodels.UserDetailResponse{
-		UserID:       user.UserId,
+		UserID:       userResponse.LegacyUserData.UserId,
 		Code:         user.Code,
 		Token:        userResponse.LegacyToken,
 		Referral:     user.Code,
