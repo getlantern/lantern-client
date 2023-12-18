@@ -533,6 +533,42 @@ func CompleteRecoveryByEmail(body *protos.CompleteRecoveryByEmailRequest) (bool,
 	return true, nil
 }
 
+func ChangeEmail(body *protos.ChangeEmailRequest) (bool, error) {
+	// Marshal the map to JSON
+	requestBody, err := proto.Marshal(body)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return false, err
+	}
+
+	req, err := http.NewRequest("POST", changeEmailUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error creating change email request: %v", err)
+		return false, err
+	}
+	req.Header.Set(headerContentType, "application/x-protobuf")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error sending recovery email request: %v", err)
+		return false, err
+	}
+
+	defer resp.Body.Close()
+
+	bodyStr, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+	log.Debugf("change email response %v with status code %d", string(bodyStr), resp.StatusCode)
+
+	if resp.StatusCode != http.StatusOK {
+		return false, log.Errorf("error while sending recovery email %v", err)
+	}
+
+	return true, nil
+}
+
 // Utils methods convert json body
 func createJsonBody(data map[string]string) (*bytes.Buffer, error) {
 	jsonData, err := json.Marshal(data)

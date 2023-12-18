@@ -343,6 +343,15 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "changeEmail":
+		email := arguments.Get("email").String()
+		newEmail := arguments.Get("newEmail").String()
+		password := arguments.Get("password").String()
+		err := changeEmail(*m, email, newEmail, password)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 
 	default:
 		return m.methodNotImplemented(method)
@@ -1254,9 +1263,6 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 	})
 }
 
-// Note: There is issue on login if user sign in and closes the app
-// and start again it not showing pro user status as it should
-// there maybe some issue on while saving user id and token
 // Todo find way to optimize this method
 func login(session *SessionModel, email string, password string) error {
 	start := time.Now()
@@ -1397,4 +1403,68 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 	saveUserSalt(session.baseModel, newsalt)
 	log.Debugf("CompleteRecoveryByEmail response %v", recovery)
 	return nil
+}
+
+func changeEmail(session SessionModel, email string, newEmail string, password string) error {
+	salt, err := getUserSalt(session.baseModel, email)
+	if err != nil {
+		return err
+	}
+
+	// Prepare login request body
+	encryptedKey := srp.KDFRFC5054(salt, email, password)
+	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+
+	//Send this key to client
+	A := client.EphemeralPublic()
+
+	//Create body
+	prepareRequestBody := &protos.PrepareRequest{
+		Email: email,
+		A:     A.Bytes(),
+	}
+	log.Debugf("A Bytes %v", A.Bytes())
+	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Login prepare response %v", srpB)
+
+	// // Once the client receives B from the server Client should check error status here as defense against
+	// // a malicious B sent from server
+	B := big.NewInt(0).SetBytes(srpB.B)
+
+	if err = client.SetOthersPublic(B); err != nil {
+		log.Errorf("Error while setting srpB %v", err)
+		return err
+	}
+
+	// client can now make the session key
+	clientKey, err := client.Key()
+	if err != nil || clientKey == nil {
+		return log.Errorf("invalid_password error while generating Client key %v", err)
+	}
+
+	// // check if the server proof is valid
+	if !client.GoodServerProof(salt, email, srpB.Proof) {
+		return log.Errorf("invalid_password error while checking server proof%v", err)
+	}
+
+	clientProof, err := client.ClientProof()
+	if err != nil {
+		return log.Errorf("invalid_password error while generating client proof %v", err)
+	}
+
+	changeEmailRequestBody := &protos.ChangeEmailRequest{
+		OldEmail: email,
+		NewEmail: newEmail,
+		Proof:    clientProof,
+	}
+
+	isEmailChanged, err := apimodels.ChangeEmail(changeEmailRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Change Email response %v", isEmailChanged)
+	return setEmail(session.baseModel, newEmail)
 }
