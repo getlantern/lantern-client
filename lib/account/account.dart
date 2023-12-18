@@ -43,7 +43,7 @@ class AccountMenu extends StatelessWidget {
 
   void onAccountManagementTap(BuildContext context, bool isProUser) {
     //Todo make this dynamic once connect to API
-    if (sessionModel.hasUserSignedIn.value == true) {
+    if (sessionModel.hasUserSignedInNotifier.value == true) {
       context.pushRoute(AccountManagement(isPro: isProUser));
     } else {
       showProUserDialog(context);
@@ -196,15 +196,15 @@ class AccountMenu extends StatelessWidget {
           openSettings(context);
         },
       ),
-
-      if (sessionModel.hasUserSignedIn.value == true)
-        ListItemFactory.settingsItem(
-          icon: ImagePaths.signOut,
-          content: 'sign_out'.i18n,
-          onTap: () {
-            showSingOutDialog(context);
-          },
-        ),
+      sessionModel.isUserSignedIn((context, hasSignedIn, child) {
+        return hasSignedIn
+            ? ListItemFactory.settingsItem(
+                icon: ImagePaths.signOut,
+                content: 'sign_out'.i18n,
+                onTap: () => showSingOutDialog(context),
+              )
+            : const SizedBox.shrink();
+      })
     ];
   }
 

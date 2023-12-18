@@ -25,7 +25,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proUserNotifier;
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> userEmail;
-  late ValueNotifier<bool?> hasUserSignedIn;
+  late ValueNotifier<bool?> hasUserSignedInNotifier;
 
   SessionModel() : super('session') {
     if (isMobile()) {
@@ -96,7 +96,7 @@ class SessionModel extends Model {
     country = singleValueNotifier('geo_country_code', 'US');
     // This warning is not needed for the Non pro user
     hasAccountVerified = singleValueNotifier('isAccountVerified', false);
-    hasUserSignedIn = singleValueNotifier('IsUserLoggedIn', false);
+    hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
     proUserNotifier = singleValueNotifier('prouser', false);
   }
 
@@ -269,6 +269,11 @@ class SessionModel extends Model {
     );
   }
 
+  ///Auth Widgets
+
+  Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('IsUserLoggedIn', builder: builder);
+  }
   /// Auth Method channel
   Future<void> signUp(String email, String password) {
     return methodChannel.invokeMethod('signup', <String, dynamic>{
