@@ -20,7 +20,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
   late final _emailController = CustomTextEditingController(
     formKey: _emailFormKey,
     validator: (value) => EmailValidator.validate(value ?? '')
-        ? null
+        ?  null
         : 'please_enter_a_valid_email_address'.i18n,
   );
 
@@ -123,11 +123,20 @@ class _ChangeEmailState extends State<ChangeEmail> {
     //Close keyboard
     FocusManager.instance.primaryFocus?.unfocus();
 
+    if (widget.email.validateEmail.toLowerCase() ==
+        _emailController.text.validateEmail.toLowerCase()) {
+      CDialog.showError(context,
+          description: 'new_email_same_as_old_email'.i18n);
+      return;
+    }
+
     try {
       context.loaderOverlay.show();
       await sessionModel.changeEmail(
           widget.email, _emailController.text, _passwordController.text);
       context.loaderOverlay.hide();
+      //Once email changed, pop
+      context.router.pop();
     } catch (e) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
