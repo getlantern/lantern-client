@@ -299,21 +299,29 @@ class SessionModel extends Model {
     });
   }
 
-
   Future<void> startRecoveryByEmail(String email) {
     return methodChannel.invokeMethod('startRecoveryByEmail', <String, dynamic>{
       'email': email,
     });
   }
 
-  Future<void> completeRecoveryByEmail(String email, String password,String code) {
-    return methodChannel.invokeMethod('completeRecoveryByEmail', <String, dynamic>{
+  Future<void> completeRecoveryByEmail(
+      String email, String password, String code) {
+    return methodChannel
+        .invokeMethod('completeRecoveryByEmail', <String, dynamic>{
       'email': email,
       'password': password,
       'code': code,
     });
   }
 
+  Future<void> changeEmail(String email, String newEmail, String password) {
+    return methodChannel.invokeMethod('changeEmail', <String, dynamic>{
+      'email': email,
+      'newEmail': newEmail,
+      'password': password,
+    });
+  }
 
   /// Auth API end
 

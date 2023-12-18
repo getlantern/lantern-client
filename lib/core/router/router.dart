@@ -305,6 +305,13 @@ class AppRouter extends $AppRouter {
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: ChangeEmail.page,
+      path: '/change_email',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
     )
   ];
 }

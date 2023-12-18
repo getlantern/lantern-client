@@ -26,6 +26,16 @@ class _AccountManagementState extends State<AccountManagement>
     tabController.dispose();
   }
 
+  void openResetPassword() {
+    context.router.push(SignIn(
+      authFlow: AuthFlow.reset,
+    ));
+  }
+
+  void openChangeEmail(String emailAddress) {
+    context.router.push(ChangeEmail(email: emailAddress));
+  }
+
   @override
   Widget build(BuildContext context) {
     var title = widget.isPro
@@ -216,7 +226,7 @@ class _AccountManagementState extends State<AccountManagement>
               Padding(
                 padding: const EdgeInsetsDirectional.only(start: 16.0),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () => openChangeEmail(emailAddress),
                   child: CText(
                     'change_email'.i18n.toUpperCase(),
                     style: tsButtonPink,
@@ -234,9 +244,9 @@ class _AccountManagementState extends State<AccountManagement>
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 16.0),
               child: TextButton(
-                onPressed: () {},
+                onPressed: openResetPassword,
                 child: CText(
-                  'change_password'.i18n.toUpperCase(),
+                  'reset_password'.i18n.toUpperCase(),
                   style: tsButtonPink,
                 ),
               ),

@@ -1323,12 +1323,14 @@ func login(session *SessionModel, email string, password string) error {
 		return err
 	}
 	log.Debugf("Login response %+v", login)
+
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put[bool](tx, pathIsAccountVerified, login.EmailConfirmed, "")
 	})
 	if err != nil {
 		log.Errorf("Error while saving user status %v", err)
 	}
+
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathIsUserLoggedIn: true,
