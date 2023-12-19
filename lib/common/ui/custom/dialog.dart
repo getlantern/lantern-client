@@ -31,6 +31,7 @@ class CDialog extends StatefulWidget {
     double? size,
     required String title,
     required String description,
+    bool barrierDismissible = true,
     String? actionLabel,
     Future<bool> Function()? agreeAction,
     Future<bool> Function()? dismissAction,
@@ -44,6 +45,7 @@ class CDialog extends StatefulWidget {
       description: description,
       agreeAction: agreeAction,
       dismissAction: dismissAction,
+      barrierDismissible: barrierDismissible,
     ).show(context);
   }
 
@@ -296,7 +298,7 @@ void showProUserDialog(BuildContext context, {VoidCallback? onSuccess}) {
         onSuccess.call();
         return true;
       }
-      context.pushRoute(const CreateAccountEmail());
+      context.pushRoute(CreateAccountEmail());
       return true;
     },
     dismissAction: () async {

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"net/http"
+	"net/url"
 
 	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/golog"
@@ -196,9 +197,8 @@ func PurchaseRequest(data map[string]string, deviceId string, userId string, tok
 		log.Errorf("Error sending puchase request: %v", err)
 		return nil, err
 	}
-
 	defer resp.Body.Close()
-
+	log.Debugf("Purchase response %v with status code %d", resp.Body, resp.StatusCode)
 	var purchase PurchaseResponse
 	// Read and decode the response body
 	if err := json.NewDecoder(resp.Body).Decode(&purchase); err != nil {
@@ -211,7 +211,6 @@ func PurchaseRequest(data map[string]string, deviceId string, userId string, tok
 func IsEmailVerified(email string, token string) (bool, error) {
 	fullUrl := confirmedUrl + "?email=" + email + "&token=" + token
 	// Marshal the map to JSON
-
 	req, err := http.NewRequest("GET", fullUrl, nil)
 	if err != nil {
 		log.Errorf("Error getting user salt: %v", err)
@@ -349,10 +348,12 @@ func SignupEmailConfirmation(signupEmailResendBody *protos.ConfirmSignupRequest)
 }
 
 func GetSalt(email string) (*protos.GetSaltResponse, error) {
-	fullUrl := saltUrl + "?email=" + email
+	// Create URL values
+	params := url.Values{}
+	params.Add("email", email)
+	encodedUrl := saltUrl + "?" + params.Encode()
 	// Marshal the map to JSON
-
-	req, err := http.NewRequest("GET", fullUrl, nil)
+	req, err := http.NewRequest("GET", encodedUrl, nil)
 	if err != nil {
 		log.Errorf("Error getting user salt: %v", err)
 		return nil, err

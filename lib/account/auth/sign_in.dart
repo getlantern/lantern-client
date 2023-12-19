@@ -5,6 +5,9 @@ import '../../common/common.dart';
 //Test user
 // jigar+ios@getlantern.org
 // Jigar@1234
+
+// jigar+ios2@getlantern.org
+// Jigar@123
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
   final AuthFlow authFlow;

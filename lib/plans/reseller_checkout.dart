@@ -174,7 +174,8 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
           .redeemResellerCode(
             emailController.text,
             resellerCodeController.text,
-          ).timeout(
+          )
+          .timeout(
             defaultTimeoutDuration,
             onTimeout: () => onAPIcallTimeout(
               code: 'redeemresellerCodeTimeout',
@@ -183,8 +184,8 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
           );
 
       context.loaderOverlay.hide();
-      showSuccessDialog(context, widget.isPro, true);
-    } catch (error,s) {
+      showSuccessDialog(context, widget.isPro, isReseller: true);
+    } catch (error, s) {
       context.loaderOverlay.hide();
       CDialog.showError(
         context,
