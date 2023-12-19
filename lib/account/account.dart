@@ -20,7 +20,13 @@ class AccountMenu extends StatelessWidget {
     context.pushRoute(const Support());
   }
 
-  void onSignOut(BuildContext context) {}
+  void onSignOut(BuildContext context) {
+    try {
+      sessionModel.signOut();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void showSingOutDialog(BuildContext context) {
     CDialog(
@@ -215,11 +221,15 @@ class AccountMenu extends StatelessWidget {
       automaticallyImplyLeading: false,
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        return ListView(
-          children: proUser
-              ? proItems(sessionContext)
-              : freeItems(sessionContext, sessionModel),
-        );
+        print("called pro user listener");
+        return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
+          print("called isUserSignedIn listener");
+          return ListView(
+            children: proUser && hasUserLoggedIn
+                ? proItems(sessionContext)
+                : freeItems(sessionContext, sessionModel),
+          );
+        });
       }),
     );
   }

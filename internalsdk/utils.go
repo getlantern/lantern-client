@@ -188,7 +188,7 @@ func GenerateSalt() ([]byte, error) {
 	if n, err := rand.Read(salt); err != nil {
 		return nil, err
 	} else if n != 16 {
-		return nil, errors.New("failed to generate 8 byte salt")
+		return nil, errors.New("failed to generate 16 byte salt")
 	}
 	return salt, nil
 }
