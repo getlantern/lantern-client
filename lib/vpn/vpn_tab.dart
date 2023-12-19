@@ -17,7 +17,9 @@ class VPNTab extends StatelessWidget {
         .proUser((BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(
         title: SvgPicture.asset(
-          proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
+          proUser && sessionModel.hasUserSignedInNotifier.value == true
+              ? ImagePaths.pro_logo
+              : ImagePaths.free_logo,
           height: 16,
           fit: BoxFit.contain,
         ),
@@ -25,11 +27,8 @@ class VPNTab extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if(!proUser && Platform.isAndroid)
-            ProBanner()
-            else
-              const SizedBox(),
-            VPNSwitch(),
+            if (!proUser) ProBanner() else const SizedBox(),
+            const VPNSwitch(),
             Container(
               padding: const EdgeInsetsDirectional.all(16),
               decoration: BoxDecoration(
@@ -47,13 +46,13 @@ class VPNTab extends StatelessWidget {
                   VPNStatus(),
                   const CDivider(height: 32.0),
                   ServerLocationWidget(),
-                  if(Platform.isAndroid)...{
+                  if (Platform.isAndroid) ...{
                     const CDivider(height: 32.0),
                     SplitTunnelingWidget(),
                     // Not sure about this
                     VPNBandwidth(),
                   }
-                  ],
+                ],
               ),
             ),
           ],
