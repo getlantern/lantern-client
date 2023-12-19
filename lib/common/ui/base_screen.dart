@@ -58,6 +58,7 @@ class BaseScreen extends StatelessWidget {
     var verticalCorrection =
         (screenInfo.viewInsets.top + screenInfo.padding.top) *
             ((sessionModel.hasAccountVerified.value == false &&
+                    sessionModel.hasUserSignedInNotifier.value == true &&
                     sessionModel.proUserNotifier.value == true)
                 ? 1
                 : networkWarningBarHeightRatio);
@@ -189,7 +190,8 @@ class ConnectivityWarning extends StatelessWidget {
       final email = sessionModel.userEmail.value.validateEmail;
       if (email.isEmpty) return;
       sessionModel.signUpEmailResendCode(email);
-      context.pushRoute(Verification(email: email,authFlow: AuthFlow.verifyEmail));
+      context.pushRoute(
+          Verification(email: email, authFlow: AuthFlow.verifyEmail));
       // showProUserDialog(
       //   context,
       //   onSuccess: () {

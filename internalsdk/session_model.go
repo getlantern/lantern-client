@@ -1490,7 +1490,7 @@ func signOut(session SessionModel) error {
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathIsUserLoggedIn: false,
-			// pathUserSalt:       nil,
+			pathUserSalt:       nil,
 		})
 	})
 
