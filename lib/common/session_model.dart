@@ -751,11 +751,13 @@ class SessionModel extends Model {
         deviceName.toNativeUtf8());
     return resp.toDartString();
   }
-  Future<void> submitApplePlay(String planID, String purchaseToken) async {
+  
+  Future<void> submitApplePlay(String email,String planID, String purchaseToken) async {
     return methodChannel
         .invokeMethod('submitApplePayPayment', <String, dynamic>{
       'planID': planID,
       'purchaseId': purchaseToken,
+      'email': email,
     });
   }
 

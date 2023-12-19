@@ -12,6 +12,7 @@ class AppPurchase {
   VoidCallback? _onSuccess;
   Function(dynamic error)? _onError;
   String _planId = "";
+  String _email = "";
 
   void init() {
     final purchaseUpdated = _inAppPurchase.purchaseStream;
@@ -29,11 +30,13 @@ class AppPurchase {
     plansSku.addAll(response.productDetails);
   }
 
-  Future<void> startPurchase(
-    String planId, {
+  Future<void> startPurchase({
+    required String planId,
+    required String email,
     required VoidCallback onSuccess,
     required Function(dynamic error) onFailure,
   }) async {
+    _email = email;
     _planId = planId;
     _onSuccess = onSuccess;
     _onError = onFailure;
@@ -80,6 +83,7 @@ class AppPurchase {
     if (purchaseDetails.status == PurchaseStatus.purchased) {
       try {
         await sessionModel.submitApplePlay(
+          _email,
           _planId,
           purchaseDetails.verificationData.serverVerificationData,
         );

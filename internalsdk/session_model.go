@@ -320,7 +320,8 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "submitApplePayPayment":
 		plandId := arguments.Get("planID").String()
 		purchaseId := arguments.Get("purchaseId").String()
-		err := submitApplePayPayment(m, plandId, purchaseId)
+		email := arguments.Get("email").String()
+		err := submitApplePayPayment(m, email, plandId, purchaseId)
 		if err != nil {
 			return nil, err
 		}
@@ -925,11 +926,11 @@ func setResellerCode(m *baseModel, resellerCode string) error {
 
 func getUserSalt(m *baseModel, email string) ([]byte, error) {
 	// Todo Remove this temp salt when API issue has been fixed
-	userSalt := []byte{179, 229, 181, 150, 192, 82, 235, 32, 251, 40, 144, 242, 58, 102, 102, 153}
-	// userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	// userSalt := []byte{179, 229, 181, 150, 192, 82, 235, 32, 251, 40, 144, 242, 58, 102, 102, 153}
+	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
+	if err != nil {
+		return nil, err
+	}
 	if len(userSalt) == 16 {
 		return userSalt, nil
 	}
@@ -1134,7 +1135,7 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 		return err
 	}
 
-	err, purchaseData := createPurchaseData(m, paymentProviderResellerCode, resellerCode, "", "")
+	err, purchaseData := createPurchaseData(m, email, paymentProviderResellerCode, resellerCode, "", "")
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
@@ -1164,9 +1165,9 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 	return setProUser(m.baseModel, true)
 }
 
-func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string) error {
-	log.Debugf("Submit Apple Pay Payment planId %v purchaseToken %v", planId, purchaseToken)
-	err, purchaseData := createPurchaseData(m, paymentProviderApplePay, "", purchaseToken, planId)
+func submitApplePayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
+	log.Debugf("Submit Apple Pay Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
+	err, purchaseData := createPurchaseData(m, email, paymentProviderApplePay, "", purchaseToken, planId)
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
@@ -1189,7 +1190,7 @@ func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string)
 	if err != nil {
 		return err
 	}
-	log.Debugf("Purchase Request response %+v", purchase)
+	log.Debugf("Purchase response %+v", purchase)
 
 	if purchase.Status != "ok" {
 		return errors.New("Purchase Request failed")

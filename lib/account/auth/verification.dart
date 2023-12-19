@@ -114,7 +114,7 @@ class _VerificationState extends State<Verification> {
   void onDone(String code) {
     switch (widget.authFlow) {
       case AuthFlow.createAccount:
-        context.router.popUntilRoot();
+        _verifyEmail(code);
         break;
       case AuthFlow.reset:
         openResetPassword(code);

@@ -22,7 +22,7 @@ class PlanCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),
       child: CInkWell(
-        onTap: () => onPlanTap(context, planName),
+        onTap: () => onPlanTap(context, plan),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
@@ -121,11 +121,17 @@ class PlanCard extends StatelessWidget {
     );
   }
 
-  Future<void> onPlanTap(BuildContext context, String planName) async {
+  Future<void> onPlanTap(BuildContext context, Plan plan) async {
     if (Platform.isAndroid) {
-      _proceedToAndroidCheckout(context, planName);
+      _proceedToAndroidCheckout(context, plan.id.split('-')[0]);
     } else {
-      _proceedToCheckoutIOS(context);
+      /// If user is already pro user is trying to renew plans
+      /// if the user is not pro user then user is trying to purchase
+      if (isPro && sessionModel.hasUserSignedInNotifier.value == true) {
+        _proceedToCheckoutIOS(context);
+      } else {
+        context.pushRoute(CreateAccountEmail(plan: plan));
+      }
     }
   }
 
@@ -161,12 +167,14 @@ class PlanCard extends StatelessWidget {
     );
   }
 
+  //Todo get the latest email from the session model
   void _proceedToCheckoutIOS(BuildContext context) {
     final appPurchase = sl<AppPurchase>();
     try {
       context.loaderOverlay.show();
       appPurchase.startPurchase(
-        plan.id,
+        email: sessionModel.userEmail.value ?? "",
+        planId: plan.id,
         onSuccess: () {
           context.loaderOverlay.hide();
           showSuccessDialog(context, isPro);

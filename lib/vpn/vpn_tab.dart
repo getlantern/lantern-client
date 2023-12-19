@@ -14,48 +14,49 @@ class VPNTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return sessionModel
         .proUser((BuildContext context, bool proUser, Widget? child) {
-      return BaseScreen(
-        title: SvgPicture.asset(
-          proUser && sessionModel.hasUserSignedInNotifier.value == true
-              ? ImagePaths.pro_logo
-              : ImagePaths.free_logo,
-          height: 16,
-          fit: BoxFit.contain,
-        ),
-        // make sure to disable the back arrow button on the home screen
-        automaticallyImplyLeading: false,
-        padVertical: true,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (!proUser) ProBanner() else const SizedBox(),
-            const VPNSwitch(),
-            Container(
-              padding: const EdgeInsetsDirectional.all(16),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: borderColor,
-                  width: 1,
+      return sessionModel.isUserSignedIn(
+        (context, hasUserSignedIn, child) => BaseScreen(
+          title: SvgPicture.asset(
+            proUser && hasUserSignedIn
+                ? ImagePaths.pro_logo
+                : ImagePaths.free_logo,
+            height: 16,
+            fit: BoxFit.contain,
+          ),
+          padVertical: true,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (!proUser) ProBanner() else const SizedBox(),
+              const VPNSwitch(),
+              Container(
+                padding: const EdgeInsetsDirectional.all(16),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: borderColor,
+                    width: 1,
+                  ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(borderRadius),
+                  ),
                 ),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(borderRadius),
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  VPNStatus(),
-                  const CDivider(height: 32.0),
-                  ServerLocationWidget(),
-                  if (Platform.isAndroid) ...{
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    VPNStatus(),
                     const CDivider(height: 32.0),
-                    SplitTunnelingWidget(),
-                    if (!proUser) const VPNBandwidth(),
-                  }
-                ],
+                    ServerLocationWidget(),
+                    if (Platform.isAndroid) ...{
+                      const CDivider(height: 32.0),
+                      SplitTunnelingWidget(),
+                      // Not sure about this
+                      if (!proUser) const VPNBandwidth(),
+                    }
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     });

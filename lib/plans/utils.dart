@@ -44,6 +44,13 @@ void showError(
 }
 
 void showSuccessDialog(BuildContext context, bool isPro, [bool? isReseller]) {
+void showSuccessDialog(
+  BuildContext context,
+  bool isPro, {
+  bool? isReseller,
+  VoidCallback? onAgree,
+  bool barrierDismissible = true,
+}) {
   String description, title;
   if (isReseller != null && isReseller) {
     title = 'renewal_success'.i18n;
@@ -61,7 +68,12 @@ void showSuccessDialog(BuildContext context, bool isPro, [bool? isReseller]) {
     title: title,
     description: description,
     actionLabel: 'continue_to_pro'.i18n,
+    barrierDismissible: barrierDismissible,
     agreeAction: () async {
+      if (onAgree != null) {
+        onAgree();
+        return true;
+      }
       // Note: whatever page you need to popUtil
       // it will pop that page
       context.router.popUntil((route) => route.settings.name == PlansPage.name);

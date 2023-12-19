@@ -209,9 +209,14 @@ abstract class $AppRouter extends _i49.RootStackRouter {
       );
     },
     CreateAccountEmail.name: (routeData) {
+      final args = routeData.argsAs<CreateAccountEmailArgs>(
+          orElse: () => const CreateAccountEmailArgs());
       return _i49.AutoRoutePage<void>(
         routeData: routeData,
-        child: const _i18.CreateAccountEmail(),
+        child: _i18.CreateAccountEmail(
+          key: args.key,
+          plan: args.plan,
+        ),
       );
     },
     CreateAccountPassword.name: (routeData) {
@@ -957,16 +962,40 @@ class ConversationArgs {
 
 /// generated route for
 /// [_i18.CreateAccountEmail]
-class CreateAccountEmail extends _i49.PageRouteInfo<void> {
-  const CreateAccountEmail({List<_i49.PageRouteInfo>? children})
-      : super(
+class CreateAccountEmail extends _i49.PageRouteInfo<CreateAccountEmailArgs> {
+  CreateAccountEmail({
+    _i51.Key? key,
+    _i51.Plan? plan,
+    List<_i49.PageRouteInfo>? children,
+  }) : super(
           CreateAccountEmail.name,
+          args: CreateAccountEmailArgs(
+            key: key,
+            plan: plan,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'CreateAccountEmail';
 
-  static const _i49.PageInfo<void> page = _i49.PageInfo<void>(name);
+  static const _i49.PageInfo<CreateAccountEmailArgs> page =
+      _i49.PageInfo<CreateAccountEmailArgs>(name);
+}
+
+class CreateAccountEmailArgs {
+  const CreateAccountEmailArgs({
+    this.key,
+    this.plan,
+  });
+
+  final _i51.Key? key;
+
+  final _i51.Plan? plan;
+
+  @override
+  String toString() {
+    return 'CreateAccountEmailArgs{key: $key, plan: $plan}';
+  }
 }
 
 /// generated route for

@@ -215,6 +215,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
 
       context.loaderOverlay.hide();
       showSuccessDialog(context, widget.isPro, true);
+      showSuccessDialog(context, widget.isPro, isReseller: true);
     } catch (error, s) {
       context.loaderOverlay.hide();
       CDialog.showError(
