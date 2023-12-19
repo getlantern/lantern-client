@@ -36,6 +36,86 @@ class _AccountManagementState extends State<AccountManagement>
     context.router.push(ChangeEmail(email: emailAddress));
   }
 
+  void showDeleteAccountDialog() {
+    final passwordFormKey = GlobalKey<FormState>();
+    late final passwordController = CustomTextEditingController(
+      formKey: passwordFormKey,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'password_cannot_be_empty'.i18n;
+        }
+        if (value.length < 8) {
+          return 'password_must_be_at_least_8_characters'.i18n;
+        }
+        return null;
+      },
+    );
+    CDialog(
+      icon: CAssetImage(
+        path: ImagePaths.alert,
+        size: 24,
+        color: red,
+      ),
+      title: 'delete_your_account'.i18n,
+      description: Column(
+        children: [
+          CText(
+            "delete_account_message".i18n,
+            style: tsBody1.copiedWith(
+              color: grey5,
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          CPasswordTextFiled(
+            label: "enter_password".i18n,
+            passwordFormKey: passwordFormKey,
+            passwordCustomTextEditingController: passwordController,
+          ),
+          const SizedBox(height: 16.0),
+        ],
+      ),
+      agreeText: 'cancel'.i18n,
+      dismissText: "confirm_deletion".i18n,
+      barrierDismissible: false,
+      agreeAction: () async {
+        return true;
+      },
+      dismissAction: () async {
+        Future.delayed(const Duration(milliseconds: 200),
+            () => deleteAccount(passwordController.text));
+      },
+    ).show(context);
+  }
+
+  Future<void> deleteAccount(String password) async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.deleteAccount(password);
+      context.loaderOverlay.hide();
+      showAccountDeletedDialog();
+    } catch (e) {
+      context.loaderOverlay.hide();
+      mainLogger.e("Error while deleting account", error: e);
+      CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
+
+  void showAccountDeletedDialog() {
+    CDialog(
+      iconPath: ImagePaths.check_green_large,
+      title: "account_deleted".i18n,
+      description: "account_deleted_message".i18n,
+      barrierDismissible: false,
+      includeCancel: false,
+      agreeAction: () async {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          context.router.popUntilRoot();
+        });
+        return true;
+      },
+    ).show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     var title = widget.isPro
@@ -272,6 +352,23 @@ class _AccountManagementState extends State<AccountManagement>
           );
         }),
         const UserDevices(),
+        ListItemFactory.settingsItem(
+          header: 'danger_zone'.i18n,
+          icon: ImagePaths.alert,
+          content: "delete_account".i18n,
+          trailingArray: [
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 16.0),
+              child: TextButton(
+                onPressed: showDeleteAccountDialog,
+                child: CText(
+                  'delete'.i18n.toUpperCase(),
+                  style: tsButtonPink,
+                ),
+              ),
+            ),
+          ],
+        )
       ],
     );
   }

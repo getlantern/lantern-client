@@ -1589,5 +1589,31 @@ msgstr "New Email Address"
 msgid "new_email_same_as_old_email"
 msgstr "New email address cannot be the same as your old email address"
 
+msgid "danger_zone"
+msgstr "Danger zone"
+
+msgid "delete_account"
+msgstr "Delete Account"
+
+msgid "delete"
+msgstr "Delete"
+
+msgid "delete_account_message"
+msgstr "Deleting your account cannot be undone. You'll lose all device access and forfeit any Pro account time without refund."
+
+msgid "delete_your_account"
+msgstr "Delete your account?"
+
+msgid "confirm_deletion"
+msgstr "Confirm Deletion"
+
+msgid "account_deleted"
+msgstr "Account Deleted"
+
+msgid "account_deleted_message"
+msgstr "Your account has been permanently deleted."
+
+
+
 
 

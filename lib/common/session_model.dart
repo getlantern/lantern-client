@@ -272,11 +272,8 @@ class SessionModel extends Model {
   ///Auth Widgets
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
-      'IsUserLoggedIn',
-      builder: builder,
-      defaultValue: false
-    );
+    return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
+        builder: builder, defaultValue: false);
   }
 
   /// Auth Method channel
@@ -335,6 +332,12 @@ class SessionModel extends Model {
 
   Future<void> signOut() {
     return methodChannel.invokeMethod('signOut', <String, dynamic>{});
+  }
+
+  Future<void> deleteAccount(String password) {
+    return methodChannel.invokeMethod('deleteAccount', <String, dynamic>{
+      'password': password,
+    });
   }
 
   /// Auth API end

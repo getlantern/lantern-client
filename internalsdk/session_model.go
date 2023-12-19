@@ -352,6 +352,19 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "signOut":
+		err := signOut(*m)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "deleteAccount":
+		password := arguments.Get("password").String()
+		err := deleteAccount(*m, password)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 
 	default:
 		return m.methodNotImplemented(method)
@@ -576,7 +589,6 @@ func (m *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 
 // Note - the names of these parameters have to match what's defined on the `Session` interface
 func (m *SessionModel) UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error {
-
 	if serverCity != "" && serverCountry != "" && serverCountryCode != "" {
 
 		serverInfo := &protos.ServerInfo{
@@ -912,18 +924,20 @@ func setResellerCode(m *baseModel, resellerCode string) error {
 }
 
 func getUserSalt(m *baseModel, email string) ([]byte, error) {
-	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
-	if err != nil {
-		return nil, err
-	}
-	if userSalt != nil {
+	// Todo Remove this temp salt when API issue has been fixed
+	userSalt := []byte{179, 229, 181, 150, 192, 82, 235, 32, 251, 40, 144, 242, 58, 102, 102, 153}
+	// userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	if len(userSalt) == 16 {
 		return userSalt, nil
 	}
 	salt, err := apimodels.GetSalt(email)
 	if err != nil {
 		return nil, err
 	}
-	log.Debugf("Salt Response-> %v", salt)
+	log.Debugf("Salt Response-> %v", salt.Salt)
 	//Save salt to Db
 	err = pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put[[]byte](tx, pathUserSalt, salt.Salt, "")
@@ -985,6 +999,9 @@ func userDetail(session *SessionModel) error {
 }
 
 func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) error {
+	if userDetail.Email != "" {
+		setEmail(m, userDetail.Email)
+	}
 	//Save user refferal code
 	if userDetail.Referral != "" {
 		err := setReferalCode(m, userDetail.Referral)
@@ -1182,7 +1199,7 @@ func submitApplePayPayment(m *SessionModel, planId string, purchaseToken string)
 }
 
 // Authenticates the user with the given email and password.
-//  Note-: On Sign up Client needed to generate 8 byte slat
+//  Note-: On Sign up Client needed to generate 16 byte slat
 //  Then use that salt, password and email generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
 //  Then use srpClient.Verifier() to generate verifierKey
 
@@ -1338,10 +1355,7 @@ func login(session *SessionModel, email string, password string) error {
 	}
 
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.PutAll(tx, map[string]interface{}{
-			pathIsUserLoggedIn: true,
-			pathEmailAddress:   email,
-		})
+		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
 	})
 	if err != nil {
 		log.Errorf("Error while saving user status %v", err)
@@ -1379,6 +1393,7 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 	if err != nil {
 		return err
 	}
+	log.Debugf("Slat %v and length %v", newsalt, len(newsalt))
 
 	encryptedKey := srp.KDFRFC5054(newsalt, email, password)
 	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
@@ -1467,4 +1482,83 @@ func changeEmail(session SessionModel, email string, newEmail string, password s
 	}
 	log.Debugf("Change Email response %v", isEmailChanged)
 	return setEmail(session.baseModel, newEmail)
+}
+
+// Clear slat and change accoutn state
+func signOut(session SessionModel) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.PutAll(tx, map[string]interface{}{
+			pathIsUserLoggedIn: false,
+			// pathUserSalt:       nil,
+		})
+	})
+
+}
+
+func deleteAccount(session SessionModel, password string) error {
+	email, err := session.Email()
+	if err != nil {
+		return err
+	}
+	if email == "" {
+		return errors.New("Email not found")
+	}
+
+	salt, err := getUserSalt(session.baseModel, email)
+	if err != nil {
+		return err
+	}
+
+	// Prepare login request body
+	encryptedKey := srp.KDFRFC5054(salt, email, password)
+	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+
+	//Send this key to client
+	A := client.EphemeralPublic()
+
+	//Create body
+	prepareRequestBody := &protos.PrepareRequest{
+		Email: email,
+		A:     A.Bytes(),
+	}
+	log.Debugf("A Bytes %v", A.Bytes())
+	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Login prepare response %v", srpB)
+
+	B := big.NewInt(0).SetBytes(srpB.B)
+
+	if err = client.SetOthersPublic(B); err != nil {
+		log.Errorf("Error while setting srpB %v", err)
+		return err
+	}
+
+	clientKey, err := client.Key()
+	if err != nil || clientKey == nil {
+		return log.Errorf("user_not_found error while generating Client key %v", err)
+	}
+
+	// // check if the server proof is valid
+	if !client.GoodServerProof(salt, email, srpB.Proof) {
+		return log.Errorf("user_not_found error while checking server proof%v", err)
+	}
+
+	clientProof, err := client.ClientProof()
+	if err != nil {
+		return log.Errorf("user_not_found error while generating client proof %v", err)
+	}
+
+	changeEmailRequestBody := &protos.DeleteUserRequest{
+		Email: email,
+		Proof: clientProof,
+	}
+
+	isEmailChanged, err := apimodels.DeleteAccount(changeEmailRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Change Email response %v", isEmailChanged)
+	return nil
 }
