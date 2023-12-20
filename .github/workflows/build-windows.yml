@@ -204,7 +204,7 @@ jobs:
           run: |
             ls -l
             cat lantern.exe | bzip2 > ${{ env.update }}
-            mv lantern-installer${{inputs.installer-suffix}}.exe ${{ env.dist }}
+            mv lantern${{inputs.installer-suffix}}.exe ${{ env.dist }}
             cp ${{ env.dist }} ${{ env.dist_versionless }}
 
             shasum -a 256 ${{ env.dist }} | cut -d " " -f 1 > ${{ env.dist }}.sha256
