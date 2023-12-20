@@ -36,6 +36,14 @@ class _AccountManagementState extends State<AccountManagement>
     context.router.push(ChangeEmail(email: emailAddress));
   }
 
+  void openEmailVerification(String emailAddress) {
+    sessionModel.signUpEmailResendCode(emailAddress);
+    context
+        .pushRoute(
+            Verification(email: emailAddress, authFlow: AuthFlow.verifyEmail))
+        .then((value) => setState(() {}));
+  }
+
   void showDeleteAccountDialog() {
     final passwordFormKey = GlobalKey<FormState>();
     late final passwordController = CustomTextEditingController(
@@ -307,22 +315,33 @@ class _AccountManagementState extends State<AccountManagement>
             icon: ImagePaths.email,
             content: emailAddress,
             trailingArray: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 16.0),
-                child: TextButton(
-                  onPressed: () => openChangeEmail(emailAddress),
-                  child: CText(
-                    'change_email'.i18n.toUpperCase(),
-                    style: tsButtonPink,
-                  ),
-                ),
-              ),
+              sessionModel.hasAccountVerified.value == true
+                  ? Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 16.0),
+                      child: TextButton(
+                        onPressed: () => openChangeEmail(emailAddress),
+                        child: CText(
+                          'change_email'.i18n.toUpperCase(),
+                          style: tsButtonPink,
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 16.0),
+                      child: TextButton(
+                        onPressed: () => openEmailVerification(emailAddress),
+                        child: CText(
+                          'confirm'.i18n.toUpperCase(),
+                          style: tsButtonPink,
+                        ),
+                      ),
+                    )
             ],
           );
         }),
         ListItemFactory.settingsItem(
           header: 'password'.i18n,
-          icon: ImagePaths.email,
+          icon: ImagePaths.lockFiled,
           content: "********",
           trailingArray: [
             Padding(
