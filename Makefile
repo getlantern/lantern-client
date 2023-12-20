@@ -591,6 +591,18 @@ notarize-darwin: darwin-installer require-ac-username require-ac-password
 		echo "-> Skipped: Can not notarize a package on a non-OSX host."; \
 	fi;
 
+.PHONY: require-ac-username
+require-ac-username: guard-AC_USERNAME ## App Store Connect username - needed for notarizing macOS apps.
+
+.PHONY: require-ac-password
+require-ac-password: guard-AC_PASSWORD ## App Store Connect password - needed for notarizing macOS apps. It is recommended that this be stored in the keychain and provided like `security find-generic-password -s <password-name> -w`. This must be an "app-specific password". See https://support.apple.com/en-us/HT204397.
+
+.PHONY: require-bundler
+require-bundler:
+	@if [ "$(BUNDLER)" = "" ]; then \
+		echo "Missing 'bundle' command. See https://rubygems.org/gems/bundler/versions/1.16.1 or just gem install bundler -v '1.16.1'" && exit 1; \
+	fi
+
 .PHONY: package-darwin
 package-darwin: darwin-installer notarize-darwin
 
