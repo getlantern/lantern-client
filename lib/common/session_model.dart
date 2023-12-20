@@ -404,8 +404,12 @@ class SessionModel extends Model {
         .then((enabled) => enabled == true);
   }
 
-  Future<void> checkForUpdates() {
-    return methodChannel.invokeMethod('checkForUpdates');
+  Future<void> checkForUpdates() async {
+    if (Platform.isAndroid) {
+      return methodChannel.invokeMethod('checkForUpdates');
+    }
+    await ffiCheckUpdates();
+    return;
   }
 
   Plan planFromJson(Map<String, dynamic> item) {

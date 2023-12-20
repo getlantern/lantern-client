@@ -2,6 +2,7 @@ import 'package:catcher_2/core/catcher_2.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/app_methods.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
@@ -39,8 +40,10 @@ class Settings extends StatelessWidget {
       AppLoadingDialog.showLoadingDialog(context);
       await sessionModel.checkForUpdates();
       AppLoadingDialog.dismissLoadingDialog(context);
-    } else {
+    } else if (Platform.isIOS) {
       AppMethods.openAppstore();
+    } else {
+      await ffiCheckUpdates();
     }
   }
 

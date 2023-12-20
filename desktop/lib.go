@@ -3,23 +3,29 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"runtime/debug"
 	"strconv"
+	"strings"
 	"syscall"
 
 	"github.com/shirou/gopsutil/v3/host"
 
 	"github.com/getlantern/appdir"
+	"github.com/getlantern/autoupdate"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/pro/client"
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
@@ -32,6 +38,7 @@ var (
 	log = golog.LoggerFor("lantern-desktop.main")
 	a   *app.App
 	proClient *client.Client
+	updateClient = &http.Client{Transport: proxied.ChainedThenFrontedWith("")}
 )
 
 //export Start
@@ -285,6 +292,7 @@ func userConfig() *common.UserConfigData {
 	)
 }
 
+//export ReportIssue
 func ReportIssue(email, issueType, description string) *C.char {
 	deviceID := a.Settings().GetDeviceID()
 	issueTypeInt, err := strconv.Atoi(issueType)
@@ -323,6 +331,32 @@ func ReportIssue(email, issueType, description string) *C.char {
 	return C.CString("true")
 }
 
+//export CheckUpdates
+func CheckUpdates() {
+	log.Debug("Checking for updates")
+	settings := a.Settings()
+	userID := settings.GetUserID()
+	deviceID := settings.GetDeviceID()
+	op := ops.Begin("check_update").
+		Set("user_id", userID).
+		Set("device_id", deviceID).
+		Set("current_version", app.ApplicationVersion)
+	defer op.End()
+	updateURL, err := autoupdate.CheckMobileUpdate(&autoupdate.Config{
+		CurrentVersion: app.ApplicationVersion,
+		URL:            fmt.Sprintf("https://update.getlantern.org/update/%s", strings.ToLower(common.DefaultAppName)),
+		HTTPClient: 	updateClient,
+		PublicKey:      []byte(autoupdate.PackagePublicKey),
+	})
+	if err != nil {
+		log.Errorf("Error checking for update: %v", err)
+	} else {
+		log.Debugf("Auto-update URL is %s", updateURL)
+	}
+}
+
+
+//export Purchase
 func Purchase(planID, email, cardNumber, expDate, cvc string) *C.char {
 	/*resp, err := proClient.Purchase(&proclient.PurchaseRequest{
 		Provider: proclient.Provider_STRIPE,
@@ -335,8 +369,7 @@ func Purchase(planID, email, cardNumber, expDate, cvc string) *C.char {
 	if err != nil {
 		return sendError(err)
 	}
-	b, _ := json.Marshal(resp)
-	return C.CString(string(b))*/
+	b, _ := json.Marshal(resp)*/
 	return C.CString("")
 }
 
