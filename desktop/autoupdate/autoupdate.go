@@ -63,6 +63,15 @@ func enableAutoupdate() {
 	})
 }
 
+func CheckUpdates() (string, error) {
+	return autoupdate.CheckMobileUpdate(&autoupdate.Config{
+		CurrentVersion: Version,
+		URL:            getUpdateURL(),
+		HTTPClient: 	httpClient.Load().(*http.Client),
+		PublicKey:      PublicKey,
+	})
+}
+
 func watchForUpdate() {
 	log.Debugf("Software version: %s", Version)
 	for {

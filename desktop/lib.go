@@ -3,20 +3,17 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"runtime/debug"
 	"strconv"
-	"strings"
 	"syscall"
 
 	"github.com/shirou/gopsutil/v3/host"
 
 	"github.com/getlantern/appdir"
-	"github.com/getlantern/autoupdate"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/issue"
@@ -30,6 +27,7 @@ import (
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/lantern-client/desktop/app"
+	"github.com/getlantern/lantern-client/desktop/autoupdate"
 )
 
 import "C"
@@ -38,7 +36,6 @@ var (
 	log = golog.LoggerFor("lantern-desktop.main")
 	a   *app.App
 	proClient *client.Client
-	updateClient = &http.Client{Transport: proxied.ChainedThenFrontedWith("")}
 )
 
 //export Start
@@ -332,7 +329,7 @@ func ReportIssue(email, issueType, description string) *C.char {
 }
 
 //export CheckUpdates
-func CheckUpdates() {
+func CheckUpdates() *C.char {
 	log.Debug("Checking for updates")
 	settings := a.Settings()
 	userID := settings.GetUserID()
@@ -342,17 +339,13 @@ func CheckUpdates() {
 		Set("device_id", deviceID).
 		Set("current_version", app.ApplicationVersion)
 	defer op.End()
-	updateURL, err := autoupdate.CheckMobileUpdate(&autoupdate.Config{
-		CurrentVersion: app.ApplicationVersion,
-		URL:            fmt.Sprintf("https://update.getlantern.org/update/%s", strings.ToLower(common.DefaultAppName)),
-		HTTPClient: 	updateClient,
-		PublicKey:      []byte(autoupdate.PackagePublicKey),
-	})
+	updateURL, err := autoupdate.CheckUpdates()
 	if err != nil {
 		log.Errorf("Error checking for update: %v", err)
-	} else {
-		log.Debugf("Auto-update URL is %s", updateURL)
+		return sendError(err)
 	}
+	log.Debugf("Auto-update URL is %s", updateURL)
+	return C.CString(updateURL)
 }
 
 
