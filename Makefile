@@ -235,6 +235,40 @@ define check-go-version
 	fi
 endef
 
+define fpm-debian-build =
+	echo "Running fpm-debian-build" && \
+	PKG_ARCH=$1 && \
+	WORKDIR=$$(mktemp -dt "$$(basename $$0).XXXXXXXXXX") && \
+	INSTALLER_RESOURCES=./$(INSTALLER_RESOURCES)/linux && \
+	\
+	mkdir -p $$WORKDIR/usr/bin && \
+	mkdir -p $$WORKDIR/usr/lib/$(APP) && \
+	mkdir -p $$WORKDIR/usr/share/applications && \
+	mkdir -p $$WORKDIR/usr/share/icons/hicolor/128x128/apps && \
+	mkdir -p $$WORKDIR/usr/share/doc/$(APP) && \
+	chmod -R 755 $$WORKDIR && \
+	\
+	cp $$INSTALLER_RESOURCES/deb-copyright $$WORKDIR/usr/share/doc/$(APP)/copyright && \
+	cp $$INSTALLER_RESOURCES/$(APP).desktop $$WORKDIR/usr/share/applications && \
+	cp $$INSTALLER_RESOURCES/icon128x128on.png $$WORKDIR/usr/share/icons/hicolor/128x128/apps/$(APP).png && \
+	\
+	cp $(APP)_linux_$$PKG_ARCH $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
+	cp $$INSTALLER_RESOURCES/$(APP).sh $$WORKDIR/usr/lib/$(APP) && \
+	\
+	chmod -x $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
+	chmod +x $$WORKDIR/usr/lib/$(APP)/$(APP).sh && \
+	\
+	ln -s /usr/lib/$(APP)/$(APP).sh $$WORKDIR/usr/bin/$(APP) && \
+	rm -f $$WORKDIR/usr/lib/$(APP)/$(PACKAGED_YAML) && \
+	rm -f $$WORKDIR/usr/lib/$(APP)/$(APP_YAML) && \
+	cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $$WORKDIR/usr/lib/$(APP)/$(PACKAGED_YAML) && \
+	cp $(APP_YAML_PATH) $$WORKDIR/usr/lib/$(APP)/$(APP_YAML) && \
+	\
+	cat $$WORKDIR/usr/lib/$(APP)/$(APP)-binary | bzip2 > $(APP)_update_linux_$$PKG_ARCH.bz2 && \
+	bundle install && \
+	fpm -a $$PKG_ARCH -s dir -t deb -n $(APP) -v $$VERSION -m "$(PACKAGE_MAINTAINER)" --description "$(APP_DESCRIPTION)\n$(APP_EXTENDED_DESCRIPTION)" --category net --license "Apache-2.0" --vendor "$(PACKAGE_VENDOR)" --url $(PACKAGE_URL) --deb-compression gz -f -C $$WORKDIR usr;
+endef
+
 define osxcodesign
 	codesign --options runtime --strict --timestamp --force --deep -r="designated => anchor trusted and identifier com.getlantern.lantern" -s "Developer ID Application: Innovate Labs LLC (4FYC28AXA2)" -v $(1)
 endef
@@ -447,6 +481,11 @@ desktop-app: echo-build-tags
 
 .PHONY: linux-amd64
 linux-amd64: $(LINUX_BINARY_NAME_64) ## Build lantern for linux-amd64
+
+.PHONY: package-linux-amd64
+package-linux-amd64: require-version require-bundler $(LINUX_BINARY_NAME_64)
+	@$(call fpm-debian-build,"amd64")
+	@echo "-> $(APP)_$(VERSION)_amd64.deb"
 
 $(LINUX_BINARY_NAME_64): export GOOS = linux
 $(LINUX_BINARY_NAME_64): export GOARCH = amd64

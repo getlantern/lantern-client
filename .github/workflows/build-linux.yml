@@ -33,6 +33,7 @@ jobs:
         run: |
           sudo apt-get install -y file build-essential pkg-config
           sudo apt-get install -y libunwind-dev libstdc++-12-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-d cmake
+          sudo apt-get install -y libgtk-3-0 libblkid1 liblzma5
           sudo apt-get install -y libpcap-dev libgtk-3-dev libayatana-appindicator3-dev ruby ruby-dev && sudo gem install bundler -v 2.2.26
 
       - uses: actions/setup-go@v3
@@ -79,6 +80,11 @@ jobs:
 
       - name: Build Flutter app
         run: flutter build linux
+
+      - name: Build installer
+        run: |
+          ls build/linux/x64/release/bundle
+          make package-linux-amd64
 
       - uses: actions/upload-artifact@v3
         with:
