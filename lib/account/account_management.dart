@@ -77,10 +77,14 @@ class _AccountManagementState extends State<AccountManagement>
       agreeText: 'cancel'.i18n,
       dismissText: "confirm_deletion".i18n,
       barrierDismissible: false,
+      autoCloseOnDismiss: false,
       agreeAction: () async {
         return true;
       },
       dismissAction: () async {
+        if (passwordController.text.length < 8) {
+          return;
+        }
         Future.delayed(const Duration(milliseconds: 200),
             () => deleteAccount(passwordController.text));
       },

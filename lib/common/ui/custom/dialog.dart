@@ -32,6 +32,7 @@ class CDialog extends StatefulWidget {
     required String title,
     required String description,
     bool barrierDismissible = true,
+    bool autoCloseOnDismiss = true,
     String? actionLabel,
     Future<bool> Function()? agreeAction,
     Future<bool> Function()? dismissAction,
@@ -65,6 +66,7 @@ class CDialog extends StatefulWidget {
     this.maybeAgreeAction,
     this.dismissAction,
     this.includeCancel = true,
+    this.autoCloseOnDismiss = true,
   }) : super();
 
   final String? iconPath;
@@ -83,6 +85,7 @@ class CDialog extends StatefulWidget {
   final Future<void> Function()? dismissAction;
   final closeOnce = once();
   final bool includeCancel;
+  final bool autoCloseOnDismiss;
 
   void Function() show(BuildContext context) {
     showDialog(
@@ -224,6 +227,9 @@ class CDialogState extends State<CDialog> {
                       // See https://dart.dev/tools/linter-rules/use_build_context_synchronously
                       if (!context.mounted) return;
                       widget.close(context);
+                      if (widget.autoCloseOnDismiss) {
+                        widget.close(context);
+                      }
                     },
                     child: CText(
                       (widget.dismissText ?? 'cancel'.i18n).toUpperCase(),
