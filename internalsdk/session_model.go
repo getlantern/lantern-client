@@ -1239,7 +1239,19 @@ func signup(session *SessionModel, email string, password string) error {
 	}
 	log.Debugf("sign up response %v", signupResponse)
 	//Request successfull then save salt
-	return saveUserSalt(session.baseModel, slat)
+	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.PutAll(tx, map[string]interface{}{
+			pathUserSalt:          slat,
+			pathIsAccountVerified: false,
+			pathEmailAddress:      email,
+		})
+	})
+	if err != nil {
+		return err
+	}
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
+	})
 }
 
 func signupEmailResend(session *SessionModel, email string) error {

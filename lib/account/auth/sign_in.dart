@@ -8,6 +8,17 @@ import '../../common/common.dart';
 
 // jigar+ios2@getlantern.org
 // Jigar@123
+
+// jigar+test@getlantern.org
+// Jigar@123
+
+// jigar+username@getlantern.org
+// Jigar@123
+
+// jigar+test4@getlanter.org
+// Jigar@123
+//Todo needs password validation on Forgot password screen
+
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
   final AuthFlow authFlow;

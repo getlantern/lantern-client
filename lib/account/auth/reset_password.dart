@@ -150,12 +150,33 @@ class _ResetPasswordState extends State<ResetPassword> {
       await sessionModel.completeRecoveryByEmail(
           widget.email!, _passwordController.text, widget.code!);
       context.loaderOverlay.hide();
-      //Send user back to account screen
-      context.router.popUntilRoot();
+      showPasswordSuccessDialog();
     } catch (e) {
       mainLogger.e(e);
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
     }
+  }
+
+  void showPasswordSuccessDialog() {
+    CDialog(
+      iconPath: ImagePaths.check_green_large,
+      title: "password_has_been_updated".i18n,
+      description: "password_has_been_updated_message".i18n,
+      barrierDismissible: false,
+      agreeText: "sign_in".i18n,
+      includeCancel: false,
+      agreeAction: () async {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          context.router.pushAndPopUntil(
+            SignIn(
+              authFlow: AuthFlow.signIn,
+            ),
+            predicate: (route) => route.isFirst,
+          );
+        });
+        return true;
+      },
+    ).show(context);
   }
 }

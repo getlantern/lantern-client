@@ -1613,6 +1613,15 @@ msgstr "Account Deleted"
 msgid "account_deleted_message"
 msgstr "Your account has been permanently deleted."
 
+msgid "password_has_been_updated"
+msgstr "Password has been updated"
+
+msgid "password_has_been_updated_message"
+msgstr "Your password has been reset successfully"
+
+
+
+
 
 
 
