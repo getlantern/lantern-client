@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get install -y file build-essential pkg-config
-          sudo apt-get install -y libunwind-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-d
+          sudo apt-get install -y libunwind-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-d cmake
           sudo apt-get install -y libpcap-dev libgtk-3-dev libayatana-appindicator3-dev ruby ruby-dev && sudo gem install bundler -v 2.2.26
 
       - uses: actions/setup-go@v3
