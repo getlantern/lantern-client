@@ -253,7 +253,7 @@ define fpm-debian-build =
 	cp $$INSTALLER_RESOURCES/$(APP).desktop $$WORKDIR/usr/share/applications && \
 	cp $$INSTALLER_RESOURCES/icon128x128on.png $$WORKDIR/usr/share/icons/hicolor/128x128/apps/$(APP).png && \
 	\
-	cp $(APP)_linux_$$PKG_ARCH $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
+	cp lib$(APP).so $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
 	cp $$INSTALLER_RESOURCES/$(APP).sh $$WORKDIR/usr/lib/$(APP) && \
 	\
 	chmod -x $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
