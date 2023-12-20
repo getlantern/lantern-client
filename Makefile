@@ -62,6 +62,7 @@ AWSCLI    := $(call get-command,aws)
 CHANGE    := $(call get-command,git-chglog)
 PIP       := $(call get-command,pip)
 WGET      := $(call get-command,wget)
+RUBY      := $(call get-command,ruby)
 APPDMG    := $(call get-command,appdmg)
 RETRY     := $(call get-command,retry)
 MAGICK    := $(call get-command,magick)
@@ -483,7 +484,7 @@ desktop-app: echo-build-tags
 linux-amd64: $(LINUX_BINARY_NAME_64) ## Build lantern for linux-amd64
 
 .PHONY: package-linux-amd64
-package-linux-amd64: require-version require-bundler $(LINUX_BINARY_NAME_64)
+package-linux-amd64: require-version $(LINUX_BINARY_NAME_64)
 	@$(call fpm-debian-build,"amd64")
 	@echo "-> $(APP)_$(VERSION)_amd64.deb"
 
