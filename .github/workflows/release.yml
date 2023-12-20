@@ -50,6 +50,14 @@ jobs:
           print(f'::set-output name=prefix::{li}')
           print(f'::set-output name=version_file::{vf}')
 
+    build-linux:
+      uses: ./.github/workflows/build-linux.yml
+      secrets: inherit
+      needs: set-version
+      with:
+        version: ${{ needs.set-version.outputs.version }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+
     build-windows-x32:
       uses: ./.github/workflows/build-windows.yml
       secrets: inherit
