@@ -950,8 +950,6 @@ func getUserSalt(m *baseModel, email string) ([]byte, error) {
 
 }
 
-// Create user
-// Todo-: Create Sprate http client to manag and reuse client
 func userCreate(m *baseModel, local string) error {
 	deviceID, err := pathdb.Get[string](m.db, pathDeviceID)
 	if err != nil {
@@ -1552,14 +1550,37 @@ func deleteAccount(session SessionModel, password string) error {
 	}
 
 	changeEmailRequestBody := &protos.DeleteUserRequest{
-		Email: email,
-		Proof: clientProof,
+		Email:     email,
+		Proof:     clientProof,
+		Permanent: true,
 	}
 
-	isEmailChanged, err := apimodels.DeleteAccount(changeEmailRequestBody)
+	isAccountDeleted, err := apimodels.DeleteAccount(changeEmailRequestBody)
 	if err != nil {
 		return err
 	}
-	log.Debugf("Change Email response %v", isEmailChanged)
-	return nil
+	log.Debugf("Account Delted response %v", isAccountDeleted)
+
+	// Clear Local DB
+	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.PutAll(tx, map[string]interface{}{
+			pathIsAccountVerified: false,
+			pathEmailAddress:      "",
+			pathUserID:            0,
+			pathProUser:           false,
+		})
+	})
+	if err != nil {
+		return err
+	}
+	err = signOut(session)
+	if err != nil {
+		return err
+	}
+	// Create New user
+	local, err := session.Locale()
+	if err != nil {
+		return err
+	}
+	return userCreate(session.baseModel, local)
 }
