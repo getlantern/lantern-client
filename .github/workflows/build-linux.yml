@@ -42,7 +42,7 @@ jobs:
         env:
           VERSION: ${{ inputs.version }}
         run: |
-          make package-linux-amd64
+          make linux-amd64
 
       - uses: actions/setup-python@v4
         with:
