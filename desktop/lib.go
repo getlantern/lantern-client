@@ -3,7 +3,6 @@ package main
 
 import (
 	"encoding/json"
-	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -22,7 +21,6 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/pro/client"
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
