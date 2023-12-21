@@ -20,7 +20,8 @@ Future<void> main() async {
   // Inject all the services
   init();
   sl<AppPurchase>().init();
-  await _initGoogleMobileAds();
+  // await _initGoogleMobileAds();
+  await Localization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
 //Todo if catcher is not picking up error and exception then we should switch to sentryFlutter

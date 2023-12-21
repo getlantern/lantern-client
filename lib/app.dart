@@ -20,36 +20,41 @@ enum AppFontFamily {
   final String fontFamily;
 }
 
-class _TickerProviderImpl extends TickerProvider {
+// class _TickerProviderImpl extends TickerProvider {
+//   @override
+//   Ticker createTicker(TickerCallback onTick) {
+//     return Ticker(onTick);
+//   }
+// }
+
+class LanternApp extends StatefulWidget  {
+  const LanternApp({Key? key}) : super(key: key);
+
   @override
-  Ticker createTicker(TickerCallback onTick) {
-    return Ticker(onTick);
-  }
+  State<LanternApp> createState() => _LanternAppState();
 }
 
-class LanternApp extends StatelessWidget {
-  LanternApp({Key? key}) : super(key: key) {
-    // Animate the visibility of the network warning notification bar. here in
-    // Since this notification is visible on all screens and we want the
-    // animation state to remain consistent across screens, we put the animation
-    // controller here at the app level since the app contains all screens.
+class _LanternAppState extends State<LanternApp> with SingleTickerProviderStateMixin {
+  late final AnimationController networkWarningAnimationController;
+  late final Animation networkWarningAnimation;
+  final translations = Localization.ensureInitialized();
+
+  @override
+  void initState() {
+    super.initState();
     sessionModel.networkAvailable
         .addListener(toggleConnectivityWarningIfNecessary);
     sessionModel.proxyAvailable
         .addListener(toggleConnectivityWarningIfNecessary);
     networkWarningAnimationController = AnimationController(
       duration: shortAnimationDuration,
-      vsync: _TickerProviderImpl(),
+      vsync: this,
     );
     networkWarningAnimation = Tween(begin: 0.0, end: 1.0)
         .animate(networkWarningAnimationController)
       ..addListener(networkWarningAnimationChanged);
     toggleConnectivityWarningIfNecessary();
   }
-
-  final translations = Localization.ensureInitialized();
-  late final AnimationController networkWarningAnimationController;
-  late final Animation networkWarningAnimation;
 
   void networkWarningAnimationChanged() {
     networkWarningBarHeightRatio.value = networkWarningAnimation.value;
@@ -75,74 +80,134 @@ class LanternApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentLocal = View.of(context).platformDispatcher.locale;
     print('selected local: ${currentLocal.languageCode}');
-    return FutureBuilder(
-      future: translations,
-      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-        if (!snapshot.hasData) {
-          return Container();
-        }
-        return sessionModel.language(
+    return sessionModel.language(
           (context, lang, child) {
-            Localization.locale = lang;
-            return GlobalLoaderOverlay(
-              useDefaultLoading: false,
-              overlayColor: Colors.black.withOpacity(0.5),
-              overlayWidget: Center(
-                child: AnimatedLoadingBorder(
-                  borderWidth: 5,
-                  borderColor: yellow3,
-                  cornerRadius: 100,
-                  child: SvgPicture.asset(
-                    ImagePaths.lantern_logo,
-                  ),
-                ),
+        Localization.locale = lang;
+        return GlobalLoaderOverlay(
+          useDefaultLoading: false,
+          overlayColor: Colors.black.withOpacity(0.5),
+          overlayWidget: Center(
+            child: AnimatedLoadingBorder(
+              borderWidth: 5,
+              borderColor: yellow3,
+              cornerRadius: 100,
+              child: SvgPicture.asset(
+                ImagePaths.lantern_logo,
               ),
-              child: I18n(
-                initialLocale: currentLocale(lang),
-                child: MaterialApp.router(
-                  locale: currentLocale(lang),
-                  debugShowCheckedModeBanner: false,
-                  theme: ThemeData(
-                    fontFamily: _getLocaleBasedFont(currentLocal),
-                    brightness: Brightness.light,
-                    primarySwatch: Colors.grey,
-                    appBarTheme: const AppBarTheme(
-                      systemOverlayStyle: SystemUiOverlayStyle.dark,
-                    ),
-                    colorScheme: ColorScheme.fromSwatch()
-                        .copyWith(secondary: Colors.black),
-                  ),
-                  title: 'app_name'.i18n,
-                  localizationsDelegates: const [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  routeInformationParser: globalRouter.defaultRouteParser(),
-                  routerDelegate: globalRouter.delegate(),
-                  supportedLocales: const [
-                    Locale('ar', 'EG'),
-                    Locale('fr', 'FR'),
-                    Locale('en', 'US'),
-                    Locale('fa', 'IR'),
-                    Locale('th', 'TH'),
-                    Locale('ms', 'MY'),
-                    Locale('ru', 'RU'),
-                    Locale('ur', 'IN'),
-                    Locale('zh', 'CN'),
-                    Locale('zh', 'HK'),
-                    Locale('es', 'ES'),
-                    Locale('tr', 'TR'),
-                    Locale('vi', 'VN'),
-                    Locale('my', 'MM'),
-                  ],
+            ),
+          ),
+          child: I18n(
+            initialLocale: currentLocale(lang),
+            child: MaterialApp.router(
+              locale: currentLocale(lang),
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                fontFamily: _getLocaleBasedFont(currentLocal),
+                brightness: Brightness.light,
+                primarySwatch: Colors.grey,
+                appBarTheme: const AppBarTheme(
+                  systemOverlayStyle: SystemUiOverlayStyle.dark,
                 ),
+                colorScheme: ColorScheme.fromSwatch()
+                    .copyWith(secondary: Colors.black),
               ),
-            );
-          },
+              title: 'app_name'.i18n,
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              routeInformationParser: globalRouter.defaultRouteParser(),
+              routerDelegate: globalRouter.delegate(),
+              supportedLocales: const [
+                Locale('ar', 'EG'),
+                Locale('fr', 'FR'),
+                Locale('en', 'US'),
+                Locale('fa', 'IR'),
+                Locale('th', 'TH'),
+                Locale('ms', 'MY'),
+                Locale('ru', 'RU'),
+                Locale('ur', 'IN'),
+                Locale('zh', 'CN'),
+                Locale('zh', 'HK'),
+                Locale('es', 'ES'),
+                Locale('tr', 'TR'),
+                Locale('vi', 'VN'),
+                Locale('my', 'MM'),
+              ],
+            ),
+          ),
         );
       },
     );
+    // return FutureBuilder(
+    //   future: translations,
+    //   builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+    //     if (!snapshot.hasData) {
+    //       return Container();
+    //     }
+    //     return sessionModel.language(
+    //       (context, lang, child) {
+    //         Localization.locale = lang;
+    //         return GlobalLoaderOverlay(
+    //           useDefaultLoading: false,
+    //           overlayColor: Colors.black.withOpacity(0.5),
+    //           overlayWidget: Center(
+    //             child: AnimatedLoadingBorder(
+    //               borderWidth: 5,
+    //               borderColor: yellow3,
+    //               cornerRadius: 100,
+    //               child: SvgPicture.asset(
+    //                 ImagePaths.lantern_logo,
+    //               ),
+    //             ),
+    //           ),
+    //           child: I18n(
+    //             initialLocale: currentLocale(lang),
+    //             child: MaterialApp.router(
+    //               locale: currentLocale(lang),
+    //               debugShowCheckedModeBanner: false,
+    //               theme: ThemeData(
+    //                 fontFamily: _getLocaleBasedFont(currentLocal),
+    //                 brightness: Brightness.light,
+    //                 primarySwatch: Colors.grey,
+    //                 appBarTheme: const AppBarTheme(
+    //                   systemOverlayStyle: SystemUiOverlayStyle.dark,
+    //                 ),
+    //                 colorScheme: ColorScheme.fromSwatch()
+    //                     .copyWith(secondary: Colors.black),
+    //               ),
+    //               title: 'app_name'.i18n,
+    //               localizationsDelegates: const [
+    //                 GlobalMaterialLocalizations.delegate,
+    //                 GlobalWidgetsLocalizations.delegate,
+    //                 GlobalCupertinoLocalizations.delegate,
+    //               ],
+    //               routeInformationParser: globalRouter.defaultRouteParser(),
+    //               routerDelegate: globalRouter.delegate(),
+    //               supportedLocales: const [
+    //                 Locale('ar', 'EG'),
+    //                 Locale('fr', 'FR'),
+    //                 Locale('en', 'US'),
+    //                 Locale('fa', 'IR'),
+    //                 Locale('th', 'TH'),
+    //                 Locale('ms', 'MY'),
+    //                 Locale('ru', 'RU'),
+    //                 Locale('ur', 'IN'),
+    //                 Locale('zh', 'CN'),
+    //                 Locale('zh', 'HK'),
+    //                 Locale('es', 'ES'),
+    //                 Locale('tr', 'TR'),
+    //                 Locale('vi', 'VN'),
+    //                 Locale('my', 'MM'),
+    //               ],
+    //             ),
+    //           ),
+    //         );
+    //       },
+    //     );
+    //   },
+    // );
   }
 
   Locale currentLocale(String lang) {
