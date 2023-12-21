@@ -10,6 +10,9 @@ extension ErrorX on Object {
         if (description.contains("user_not_found")) {
           return "user_not_found".i18n;
         }
+        if (description.contains("invalid_code")) {
+          return "invalid_code".i18n;
+        }
         if (description.contains("error while sign up")) {
           return "signup_error".i18n;
         } else {
