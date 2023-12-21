@@ -424,8 +424,6 @@ github.com/getlantern/tlsutil v0.5.3 h1:g1FjuG4/OTZe8kkbEmpSxvT9rXzYOG9jO4jHiDeQ
 github.com/getlantern/tlsutil v0.5.3/go.mod h1:lVgvr4nxuQ1ocOho90UB6LnHFlpP16TXAGpHR8Z0QnI=
 github.com/getlantern/trafficlog v1.0.1 h1:eh8XzV4x2z+r7RHKFXJQrhrLtvnidlm83MAPRgrz+/I=
 github.com/getlantern/trafficlog v1.0.1/go.mod h1:tGZtzBjGPecw/t+z+K9CQsCrFfHBh4aOCt70crGL6AI=
-github.com/getlantern/trafficlog-flashlight v1.0.4 h1:3qTJhpi4OoSq9Hsx35bikZjdAwy51FKt5/R2fxRxyiw=
-github.com/getlantern/trafficlog-flashlight v1.0.4/go.mod h1:DRAWJE17ViFLQ3RSKmtAo+ga3xZnHJV0N49hPyJpzN8=
 github.com/getlantern/uuid v1.1.2-0.20190507182000-5c9436b8c718/go.mod h1:uX10hOzZUUDR+oYNSIks+RcozOEiwTNC/K2rw9SUi1k=
 github.com/getlantern/uuid v1.2.0 h1:pGrGaCV7XEaG6lvjWkwf8Y92BjB/9yFmkKsNFpRQ7rc=
 github.com/getlantern/uuid v1.2.0/go.mod h1:uX10hOzZUUDR+oYNSIks+RcozOEiwTNC/K2rw9SUi1k=
