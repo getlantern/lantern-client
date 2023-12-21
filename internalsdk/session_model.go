@@ -435,6 +435,7 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 
 	err = tx.Commit()
 	if err != nil {
+		log.Debugf("Error while commiting transaction %v", err)
 		return err
 	}
 	// Check if user is already registered or not
@@ -491,8 +492,12 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		log.Debugf("error while getting account stautus: %v", err)
 	}
+	isUserLoggedIn, err := pathdb.Get[bool](m.db, pathIsUserLoggedIn)
+	if err != nil {
+		log.Debugf("error while getting user login status: %v", err)
+	}
 	// Call API only when status is not verified
-	if !isAccountVerified {
+	if !isAccountVerified && isUserLoggedIn {
 		verified, err := apimodels.IsEmailVerified(userIdStr, token)
 		if err != nil {
 			log.Debugf("Plans V3 error: %v", err)

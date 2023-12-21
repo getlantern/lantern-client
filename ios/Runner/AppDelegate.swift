@@ -28,6 +28,7 @@ import UIKit
     //    SentryUtils.startSentry();
     initializeFlutterComponents()
     do {
+      try setupModels()
       try setupAppComponents()
     } catch {
       logger.error("Unexpected error setting up app components: \(error)")
@@ -47,7 +48,7 @@ import UIKit
   private func setupAppComponents() throws {
     DispatchQueue.global(qos: .userInitiated).async {
       do {
-        try self.setupModels()
+//        try self.setupModels()
         DispatchQueue.main.async {
           self.startUpSequency()
           self.setupLoadingBar()
@@ -64,12 +65,10 @@ import UIKit
   // Init all the models
   private func setupModels() throws {
     logger.log("setupModels method called")
-    sessionModel = try SessionModel(flutterBinary: flutterbinaryMessenger)
     lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
-    vpnModel = try VpnModel(
-      flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault,
-      sessionModel: sessionModel)
-    // navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
+    sessionModel = try SessionModel(flutterBinary: flutterbinaryMessenger)
+    vpnModel = try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
+    //    navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
   }
 

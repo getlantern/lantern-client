@@ -43,16 +43,18 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
-//    DispatchQueue.global(qos: .userInitiated).async {
-//      self.startService()
-//    }
+    DispatchQueue.global(qos: .userInitiated).async {
+      self.startService()
+    }
+      logger.debug("init completed successfully")
+
+    //    getBandwidth()
   }
 
   func startService() {
-    //    let configDir = configDirFor(suffix: "service")
-    (model as! InternalsdkSessionModel).startService(
-      Constants.lanternDirectory.path, locale: "en", settings: Settings())
-    logger.error("Service Started successfully")
+    let configDir = configDirFor(suffix: "service")
+    (model as! InternalsdkSessionModel).startService(configDir, locale: "en", settings: Settings())
+    logger.debug("Service Started successfully")
   }
 
   func hasAllPermssion() {

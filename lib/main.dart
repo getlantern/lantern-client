@@ -54,7 +54,8 @@ Future<void> main() async {
   // Inject all the services
   init();
   sl<AppPurchase>().init();
-  await _initGoogleMobileAds();
+  // await _initGoogleMobileAds();
+  await Localization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   setupCatcherAndRun(LanternApp());
 }
