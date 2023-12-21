@@ -33,7 +33,7 @@ Future<void> main() async {
   //       : 'https://c14296fdf5a6be272e1ecbdb7cb23f76@o75725.ingest.sentry.io/4506081382694912';
   // }, appRunner: () => setupCatcherAndRun(LanternApp()));
 
-  if (Platform.isMacOS || Platform.isWindows) {
+  if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
     await initSystemTray();
     loadLibrary();
   }

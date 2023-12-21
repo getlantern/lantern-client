@@ -31,7 +31,7 @@ typedef SelectedTab = ffi.Pointer<Utf8> Function(); // Dart fn signature
 typedef setting_func = ffi.Pointer<Utf8> Function();
 typedef Setting = ffi.Pointer<Utf8> Function();
 
-final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : 'liblantern.dll');
+final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : Platform.isWindows ? 'liblantern.dll' : 'liblantern.so');
 
 final Start start =
     dylib.lookup<ffi.NativeFunction<start_func>>('Start').asFunction();
