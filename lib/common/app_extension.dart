@@ -31,3 +31,19 @@ extension Validations on String? {
     return this!.trim();
   }
 }
+
+extension PasswordValidations on String {
+  bool isPasswordValid() {
+    bool has6Characters = length >= 8;
+    bool hasUppercase = contains(RegExp(r'[A-Z]'));
+    bool hasLowercase = contains(RegExp(r'[a-z]'));
+    bool hasNumber = contains(RegExp(r'[0-9]'));
+    bool hasSpecialCharacter = contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+
+    return has6Characters &&
+        hasUppercase &&
+        hasLowercase &&
+        hasNumber &&
+        hasSpecialCharacter;
+  }
+}

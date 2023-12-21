@@ -53,12 +53,13 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
               ),
               const SizedBox(height: 14),
               PasswordCriteriaWidget(
-                  textEditingController: _passwordController),
+                textEditingController: _passwordController,
+              ),
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: Button(
-                  disabled: !isPasswordValid(_passwordController.text),
+                  disabled: (!_passwordController.text.isPasswordValid()),
                   text: 'continue'.i18n,
                   onPressed: onContinueTap,
                 ),
@@ -145,21 +146,6 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
 
   ///Widget methods
 
-  bool isPasswordValid(String password) {
-    bool has6Characters = password.length >= 8;
-    bool hasUppercase = password.contains(RegExp(r'[A-Z]'));
-    bool hasLowercase = password.contains(RegExp(r'[a-z]'));
-    bool hasNumber = password.contains(RegExp(r'[0-9]'));
-    bool hasSpecialCharacter =
-        password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
-
-    return has6Characters &&
-        hasUppercase &&
-        hasLowercase &&
-        hasNumber &&
-        hasSpecialCharacter;
-  }
-
   Future<void> onContinueTap() async {
     //Close keyboard
     FocusManager.instance.primaryFocus?.unfocus();
@@ -169,8 +155,7 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
       await sessionModel.signUp(widget.email, _passwordController.text);
       context.loaderOverlay.hide();
       openConfirmEmail();
-    } catch (e,s) {
-
+    } catch (e, s) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
     }

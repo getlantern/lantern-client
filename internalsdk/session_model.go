@@ -925,13 +925,12 @@ func setResellerCode(m *baseModel, resellerCode string) error {
 }
 
 func getUserSalt(m *baseModel, email string) ([]byte, error) {
-	// Todo Remove this temp salt when API issue has been fixed
-	// userSalt := []byte{179, 229, 181, 150, 192, 82, 235, 32, 251, 40, 144, 242, 58, 102, 102, 153}
 	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
 	if err != nil {
 		return nil, err
 	}
 	if len(userSalt) == 16 {
+		log.Debugf("salt return from cache %v", userSalt)
 		return userSalt, nil
 	}
 	salt, err := apimodels.GetSalt(email)
@@ -939,15 +938,7 @@ func getUserSalt(m *baseModel, email string) ([]byte, error) {
 		return nil, err
 	}
 	log.Debugf("Salt Response-> %v", salt.Salt)
-	//Save salt to Db
-	err = pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put[[]byte](tx, pathUserSalt, salt.Salt, "")
-	})
-	if err != nil {
-		return nil, err
-	}
 	return salt.Salt, nil
-
 }
 
 func userCreate(m *baseModel, local string) error {
@@ -1371,7 +1362,10 @@ func login(session *SessionModel, email string, password string) error {
 	if err != nil {
 		log.Errorf("Error while saving user status %v", err)
 	}
-
+	err = saveUserSalt(session.baseModel, salt)
+	if err != nil {
+		log.Errorf("Error while saving user salt %v", err)
+	}
 	end := time.Now()
 	log.Debugf("Login took %v", end.Sub(start))
 	//Store all the user details
@@ -1497,13 +1491,18 @@ func changeEmail(session SessionModel, email string, newEmail string, password s
 
 // Clear slat and change accoutn state
 func signOut(session SessionModel) error {
-	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
-			pathIsUserLoggedIn: false,
-			pathUserSalt:       nil,
+			pathUserSalt:     nil,
+			pathEmailAddress: "",
 		})
 	})
-
+	if err != nil {
+		return err
+	}
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put[bool](tx, pathIsUserLoggedIn, false, "")
+	})
 }
 
 func deleteAccount(session SessionModel, password string) error {
