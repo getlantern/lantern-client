@@ -512,25 +512,20 @@ func CompleteRecoveryByEmail(body *protos.CompleteRecoveryByEmailRequest) (bool,
 		return false, err
 	}
 	req.Header.Set(headerContentType, "application/x-protobuf")
-
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		log.Errorf("Error sending recovery email request: %v", err)
 		return false, err
 	}
-
 	defer resp.Body.Close()
-
 	bodyStr, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return false, err
 	}
 	log.Debugf("Complete recovery email response %v with status code %d", string(bodyStr), resp.StatusCode)
-
 	if resp.StatusCode != http.StatusOK {
-		return false, log.Errorf("error while sending recovery email %v", err)
+		return false, log.Errorf("invalid_code error while sending recovery email %v", err)
 	}
-
 	return true, nil
 }
 

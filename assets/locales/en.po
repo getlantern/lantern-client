@@ -1619,6 +1619,9 @@ msgstr "Password has been updated"
 msgid "password_has_been_updated_message"
 msgstr "Your password has been reset successfully"
 
+msgid "invalid_code"
+msgstr "Incorrect code or it might have expired. Please try resending again"
+
 
 
 
