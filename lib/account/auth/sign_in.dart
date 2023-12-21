@@ -1,25 +1,5 @@
 import 'package:email_validator/email_validator.dart';
-
 import '../../common/common.dart';
-
-//Test user
-// jigar+ios@getlantern.org
-// Jigar@1234
-
-// jigar+ios2@getlantern.org
-// Jigar@123
-
-// jigar+test@getlantern.org
-// Jigar@123
-
-// jigar+username@getlantern.org
-// Jigar@123
-
-// jigar+purchase@getlanter.org
-// Jigar@123
-
-// jigar+recovery@getlantern.org
-// Jigar@1234
 
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
