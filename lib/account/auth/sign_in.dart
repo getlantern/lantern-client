@@ -17,7 +17,12 @@ import '../../common/common.dart';
 
 // jigar+test4@getlanter.org
 // Jigar@123
-//Todo needs password validation on Forgot password screen
+
+// jigar+purchase@getlanter.org
+// Jigar@123
+
+// jigar+recovery@getlanter.org
+// Jigar@123
 
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
@@ -100,6 +105,11 @@ class _SignInState extends State<SignIn> {
               AppTextButton(
                 text: 'return_to_sign_in'.i18n.toUpperCase(),
                 onPressed: returnToSignIn,
+              ),
+            if (widget.authFlow.isSignIn)
+              AppTextButton(
+                text: 'create_account'.i18n.toUpperCase(),
+                onPressed: openPlans,
               )
           ],
         ),
@@ -160,5 +170,8 @@ class _SignInState extends State<SignIn> {
 
   void returnToSignIn() {
     context.popRoute();
+  }
+  Future<void> openPlans() async {
+    await context.pushRoute(const PlansPage());
   }
 }

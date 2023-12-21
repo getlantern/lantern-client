@@ -136,7 +136,11 @@ class _VerificationState extends State<Verification> {
       context.loaderOverlay.show();
       await sessionModel.signupEmailConfirmation(widget.email, code);
       context.loaderOverlay.hide();
-      context.router.pop();
+      if (widget.authFlow.isCreateAccount) {
+        context.router.popUntilRoot();
+      } else {
+        context.router.pop();
+      }
       sessionModel.hasAccountVerified.value = true;
     } catch (e) {
       mainLogger.e(e);
