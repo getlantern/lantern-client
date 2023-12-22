@@ -483,10 +483,10 @@ desktop-app: echo-build-tags
 .PHONY: linux-amd64
 linux-amd64: $(LINUX_BINARY_NAME_64) ## Build lantern for linux-amd64
 
-.PHONY: package-linux-amd64
+.PHONY: package-linux-x64
 package-linux-amd64: require-version $(LINUX_BINARY_NAME_64)
-	@$(call fpm-debian-build,"amd64")
-	@echo "-> $(APP)_$(VERSION)_amd64.deb"
+	@$(call fpm-debian-build,"x64")
+	@echo "-> $(APP)_$(VERSION)_x64.deb"
 
 .PHONY: package-linux-arm64
 package-linux-amd64: require-version $(LINUX_BINARY_NAME_64)
