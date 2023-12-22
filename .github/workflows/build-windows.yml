@@ -145,16 +145,52 @@ jobs:
           run: flutter build windows
 
         - name: Rename file
-          run: mv build/windows/x64/runner/Release/lantern.exe lantern${{inputs.installer-suffix}}.exe
+          run: mv "build/windows/${{inputs.update-suffix}}/runner/Release/lantern.exe" lantern.exe
 
         - uses: actions/upload-artifact@v3
           with:
             if-no-files-found: error
-            name: windows${{inputs.build-suffix}}-installer-unsigned
-            path: lantern${{inputs.installer-suffix}}.exe
+            name: windows${{inputs.build-suffix}}-build
+            path: lantern.exe
 
-    upload-windows:
+    sign-exe:
       needs: build-windows
+      permissions:
+        contents: "read"
+        id-token: "write"
+      env:
+        version: ${{ inputs.version }}
+        prefix: ${{ inputs.prefix }}
+      runs-on: windows-latest
+      steps:
+        - name: Download the win build output
+          uses: actions/download-artifact@v3
+          with:
+            name: windows${{inputs.build-suffix}}-build
+
+        - name: Sign EXE with Azure Code Signing
+          uses: azure/azure-code-signing-action@v0.2.15
+          with:
+            azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+            endpoint: https://wus2.codesigning.azure.net/
+            code-signing-account-name: code-signing
+            certificate-profile-name: Lantern
+            files-folder: ${{ github.workspace }}\
+            files-folder-filter: exe
+            file-digest: SHA256
+            timestamp-rfc3161: http://timestamp.acs.microsoft.com
+            timestamp-digest: SHA256
+        - uses: actions/upload-artifact@v3
+          with:
+            if-no-files-found: error
+            name: windows${{inputs.build-suffix}}-build-signed
+            path: |
+              lantern.exe
+
+    build-installer:
+      needs: sign-exe
       permissions:
         contents: "read"
         id-token: "write"
@@ -164,10 +200,6 @@ jobs:
       runs-on: ubuntu-20.04
 
       steps:
-        - uses: actions/setup-python@v4
-          with:
-            python-version: '3.8'
-
         - name: Install dependencies
           run: |
             sudo apt-get install -y file build-essential pkg-config
@@ -184,6 +216,32 @@ jobs:
             cp lantern${{inputs.installer-suffix}}.exe installer-resources-lantern/windows/lantern.exe
             makensis -V1 -DVERSION=${{ inputs.version }} -DAPP_NAME=lantern.exe -DOUT_FILE="lantern-installer${{inputs.installer-suffix}}.exe" installer-resources-lantern/windows/lantern.nsi
 
+        - uses: actions/upload-artifact@v3
+          with:
+            if-no-files-found: error
+            name: windows${{inputs.build-suffix}}-installer-unsigned
+            path: |
+              installer-resources-lantern/windows/lantern-installer-unsigned.exe
+
+    upload-windows:
+      needs: build-windows
+      permissions:
+        contents: "read"
+        id-token: "write"
+      env:
+        version: ${{ inputs.version }}
+        prefix: ${{ inputs.prefix }}
+      runs-on: ubuntu-20.04
+
+      steps:
+        - name: Download the signed exe
+          uses: actions/download-artifact@v3
+          with:
+            name: windows${{inputs.build-suffix}}-installer-signed
+
+        - uses: actions/download-artifact@v3
+          with:
+            name: windows${{inputs.build-suffix}}-build-signed
         - name: Install s3cmd
           run: pip install s3cmd
 
