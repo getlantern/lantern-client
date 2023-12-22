@@ -8,6 +8,9 @@ on:
       prefix:
         type: string
         required: true
+      dist-suffix: # "arm64" or "amd64"
+        type: string
+        required: true
 
 jobs:
   build-linux:
@@ -83,7 +86,7 @@ jobs:
 
       - name: Build installer
         run: |
-          ls build/linux/x64/release/bundle
+          cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
           make package-linux-amd64
 
       - uses: actions/upload-artifact@v3
