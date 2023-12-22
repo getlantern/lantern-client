@@ -57,7 +57,7 @@ jobs:
       with:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-        dist-suffix: arm64
+        dist-suffix: amd64
 
     build-windows-x32:
       uses: ./.github/workflows/build-windows.yml
