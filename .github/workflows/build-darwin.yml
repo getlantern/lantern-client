@@ -24,6 +24,8 @@ jobs:
       version: ${{ inputs.version }}
       version_file: ${{ inputs.version_file }}
       prefix: ${{ inputs.prefix }}
+      AC_USERNAME: accounts@getlantern.org
+      AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
     runs-on: macos-13
     steps:
     - uses: actions/checkout@v3
@@ -103,7 +105,13 @@ jobs:
 
     - name: Build darwin installer
       run: |
-        make darwin-installer
+        echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+        security create-keychain -p temporaty-password build.keychain
+        security default-keychain -s build.keychain
+        security unlock-keychain -p temporaty-password build.keychain
+        security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+        security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k temporaty-password build.keychain
+        make package-darwin
       env:
         VERSION: "${{ env.version }}"
         MACOS_CERTIFICATE: ${{ secrets.MACOS_CERT }}
