@@ -3,6 +3,7 @@ import 'package:lantern/common/common.dart';
 import 'package:ffi/ffi.dart';
 import 'package:ffi/src/utf8.dart';
 import 'dart:convert';
+import 'dart:io';
 
 typedef start_func = ffi.Pointer<Utf8> Function(); // FFI fn signature
 typedef Start = ffi.Pointer<Utf8> Function(); // Dart fn signature
@@ -31,7 +32,9 @@ typedef SelectedTab = ffi.Pointer<Utf8> Function(); // Dart fn signature
 typedef setting_func = ffi.Pointer<Utf8> Function();
 typedef Setting = ffi.Pointer<Utf8> Function();
 
-final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : Platform.isWindows ? 'liblantern.dll' : './liblantern.so');
+String dir = Directory.current.path;
+
+final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : Platform.isWindows ? 'liblantern.dll' : dir + '/liblantern.so');
 
 final Start start =
     dylib.lookup<ffi.NativeFunction<start_func>>('Start').asFunction();
