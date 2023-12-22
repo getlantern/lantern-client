@@ -86,6 +86,7 @@ jobs:
 
       - name: Build installer
         run: |
+          ls build/linux
           cp liblantern.so "build/linux/${{inputs.dist-suffix}}/debug/bundle"
           make "package-linux-${{inputs.dist-suffix}}"
 
