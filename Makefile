@@ -52,6 +52,13 @@ INSTALLER_NAME ?= lantern-installer
 CHANGELOG_NAME ?= CHANGELOG.md
 CHANGELOG_MIN_VERSION ?= 5.0.0
 
+PACKAGE_MAINTAINER := Lantern Team <team@getlantern.org>
+PACKAGE_VENDOR := Brave New Software Project, Inc
+PACKAGE_URL := https://lantern.io
+
+APP_DESCRIPTION := Censorship circumvention tool
+APP_EXTENDED_DESCRIPTION := Lantern allows you to access sites blocked by internet censorship.\nWhen you run it, Lantern reroutes traffic to selected domains through servers located where such domains are uncensored.
+
 get-command = $(shell which="$$(which $(1) 2> /dev/null)" && if [[ ! -z "$$which" ]]; then printf %q "$$which"; fi)
 
 GO        := $(call get-command,go)
