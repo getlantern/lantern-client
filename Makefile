@@ -253,7 +253,7 @@ define fpm-debian-build =
 	cp $$INSTALLER_RESOURCES/$(APP).desktop $$WORKDIR/usr/share/applications && \
 	cp $$INSTALLER_RESOURCES/icon128x128on.png $$WORKDIR/usr/share/icons/hicolor/128x128/apps/$(APP).png && \
 	\
-	cp lib$(APP).so $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
+	cp build/linux/$$PKG_ARCH/release/bundle/$(APP) $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
 	cp $$INSTALLER_RESOURCES/$(APP).sh $$WORKDIR/usr/lib/$(APP) && \
 	\
 	chmod -x $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
@@ -487,6 +487,11 @@ linux-amd64: $(LINUX_BINARY_NAME_64) ## Build lantern for linux-amd64
 package-linux-amd64: require-version $(LINUX_BINARY_NAME_64)
 	@$(call fpm-debian-build,"amd64")
 	@echo "-> $(APP)_$(VERSION)_amd64.deb"
+
+.PHONY: package-linux-arm64
+package-linux-amd64: require-version $(LINUX_BINARY_NAME_64)
+	@$(call fpm-debian-build,"arm64")
+	@echo "-> $(APP)_$(VERSION)_arm64.deb"
 
 $(LINUX_BINARY_NAME_64): export GOOS = linux
 $(LINUX_BINARY_NAME_64): export GOARCH = amd64
