@@ -86,7 +86,7 @@ jobs:
 
       - name: Build installer
         run: |
-          cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
+          cp liblantern.so "build/linux/${{inputs.dist-suffix}}/debug/bundle"
           make "package-linux-${{inputs.dist-suffix}}"
 
       - uses: actions/upload-artifact@v3
