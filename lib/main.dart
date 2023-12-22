@@ -3,9 +3,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/core/purchase/app_purchase.dart';
-import 'package:lantern/core/services.dart';
-import 'package:lantern/replica/common.dart';
-
 import 'catcher_setup.dart';
 
 Future<void> main() async {
@@ -35,7 +32,7 @@ Future<void> main() async {
 //       : 'https://c14296fdf5a6be272e1ecbdb7cb23f76@o75725.ingest.sentry.io/4506081382694912';
 // }, appRunner: () => setupCatcherAndRun(LanternApp()));
 
-  setupCatcherAndRun(LanternApp());
+  setupCatcherAndRun(const LanternApp());
 }
 
 Future<void> _initGoogleMobileAds() async {
