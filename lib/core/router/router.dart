@@ -11,7 +11,7 @@ class AppRouter extends $AppRouter {
   RouteType get defaultRouteType => const RouteType.adaptive();
   @override
   final List<AutoRoute> routes = [
-    AutoRoute(path: '/', page: Home.page),
+    AutoRoute(path: '/', page: Home.page,),
     CustomRoute(
         page: FullScreenDialogPage.page,
         path: '/fullScreenDialogPage',
@@ -309,6 +309,13 @@ class AppRouter extends $AppRouter {
     CustomRoute(
       page: ChangeEmail.page,
       path: '/change_email',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: AuthLanding.page,
+      path: '/auth_landing',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

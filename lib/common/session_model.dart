@@ -277,6 +277,7 @@ class SessionModel extends Model {
   }
 
   /// Auth Method channel
+
   Future<void> signUp(String email, String password) {
     return methodChannel.invokeMethod('signup', <String, dynamic>{
       'email': email,
@@ -338,6 +339,18 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('deleteAccount', <String, dynamic>{
       'password': password,
     });
+  }
+
+  Future<bool> isUserFirstTimeVisit() async {
+    final firsTime = await methodChannel
+        .invokeMethod<bool>('isUserFirstTimeVisit', <String, dynamic>{});
+    print("firsTime $firsTime");
+    return !(firsTime ?? false);
+  }
+
+  Future<void> setFirstTimeVisit() async {
+    return methodChannel
+        .invokeMethod<void>('setFirstTimeVisit', <String, dynamic>{});
   }
 
   /// Auth API end
@@ -753,7 +766,7 @@ class SessionModel extends Model {
   }
   
   Future<void> submitApplePlay(String email,String planID, String purchaseToken) async {
-    return methodChannel
+      return methodChannel
         .invokeMethod('submitApplePayPayment', <String, dynamic>{
       'planID': planID,
       'purchaseId': purchaseToken,

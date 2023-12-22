@@ -1,5 +1,7 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:animated_loading_border/animated_loading_border.dart';
+import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/messaging/messaging.dart';
 
@@ -19,24 +21,17 @@ enum AppFontFamily {
   final String fontFamily;
 }
 
-// class _TickerProviderImpl extends TickerProvider {
-//   @override
-//   Ticker createTicker(TickerCallback onTick) {
-//     return Ticker(onTick);
-//   }
-// }
-
-class LanternApp extends StatefulWidget  {
+class LanternApp extends StatefulWidget {
   const LanternApp({Key? key}) : super(key: key);
 
   @override
   State<LanternApp> createState() => _LanternAppState();
 }
 
-class _LanternAppState extends State<LanternApp> with SingleTickerProviderStateMixin {
+class _LanternAppState extends State<LanternApp>
+    with SingleTickerProviderStateMixin {
   late final AnimationController networkWarningAnimationController;
   late final Animation networkWarningAnimation;
-  final translations = Localization.ensureInitialized();
 
   @override
   void initState() {
@@ -80,7 +75,7 @@ class _LanternAppState extends State<LanternApp> with SingleTickerProviderStateM
     final currentLocal = View.of(context).platformDispatcher.locale;
     print('selected local: ${currentLocal.languageCode}');
     return sessionModel.language(
-          (context, lang, child) {
+      (context, lang, child) {
         Localization.locale = lang;
         return GlobalLoaderOverlay(
           useDefaultLoading: false,
@@ -100,6 +95,8 @@ class _LanternAppState extends State<LanternApp> with SingleTickerProviderStateM
             child: MaterialApp.router(
               locale: currentLocale(lang),
               debugShowCheckedModeBanner: false,
+              routerDelegate: globalRouter.delegate(),
+              routeInformationParser: globalRouter.defaultRouteParser(),
               theme: ThemeData(
                 fontFamily: _getLocaleBasedFont(currentLocal),
                 brightness: Brightness.light,
@@ -107,8 +104,8 @@ class _LanternAppState extends State<LanternApp> with SingleTickerProviderStateM
                 appBarTheme: const AppBarTheme(
                   systemOverlayStyle: SystemUiOverlayStyle.dark,
                 ),
-                colorScheme: ColorScheme.fromSwatch()
-                    .copyWith(secondary: Colors.black),
+                colorScheme:
+                    ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
               ),
               title: 'app_name'.i18n,
               localizationsDelegates: const [
@@ -116,8 +113,6 @@ class _LanternAppState extends State<LanternApp> with SingleTickerProviderStateM
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
-              routeInformationParser: globalRouter.defaultRouteParser(),
-              routerDelegate: globalRouter.delegate(),
               supportedLocales: const [
                 Locale('ar', 'EG'),
                 Locale('fr', 'FR'),
@@ -139,74 +134,6 @@ class _LanternAppState extends State<LanternApp> with SingleTickerProviderStateM
         );
       },
     );
-    // return FutureBuilder(
-    //   future: translations,
-    //   builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-    //     if (!snapshot.hasData) {
-    //       return Container();
-    //     }
-    //     return sessionModel.language(
-    //       (context, lang, child) {
-    //         Localization.locale = lang;
-    //         return GlobalLoaderOverlay(
-    //           useDefaultLoading: false,
-    //           overlayColor: Colors.black.withOpacity(0.5),
-    //           overlayWidget: Center(
-    //             child: AnimatedLoadingBorder(
-    //               borderWidth: 5,
-    //               borderColor: yellow3,
-    //               cornerRadius: 100,
-    //               child: SvgPicture.asset(
-    //                 ImagePaths.lantern_logo,
-    //               ),
-    //             ),
-    //           ),
-    //           child: I18n(
-    //             initialLocale: currentLocale(lang),
-    //             child: MaterialApp.router(
-    //               locale: currentLocale(lang),
-    //               debugShowCheckedModeBanner: false,
-    //               theme: ThemeData(
-    //                 fontFamily: _getLocaleBasedFont(currentLocal),
-    //                 brightness: Brightness.light,
-    //                 primarySwatch: Colors.grey,
-    //                 appBarTheme: const AppBarTheme(
-    //                   systemOverlayStyle: SystemUiOverlayStyle.dark,
-    //                 ),
-    //                 colorScheme: ColorScheme.fromSwatch()
-    //                     .copyWith(secondary: Colors.black),
-    //               ),
-    //               title: 'app_name'.i18n,
-    //               localizationsDelegates: const [
-    //                 GlobalMaterialLocalizations.delegate,
-    //                 GlobalWidgetsLocalizations.delegate,
-    //                 GlobalCupertinoLocalizations.delegate,
-    //               ],
-    //               routeInformationParser: globalRouter.defaultRouteParser(),
-    //               routerDelegate: globalRouter.delegate(),
-    //               supportedLocales: const [
-    //                 Locale('ar', 'EG'),
-    //                 Locale('fr', 'FR'),
-    //                 Locale('en', 'US'),
-    //                 Locale('fa', 'IR'),
-    //                 Locale('th', 'TH'),
-    //                 Locale('ms', 'MY'),
-    //                 Locale('ru', 'RU'),
-    //                 Locale('ur', 'IN'),
-    //                 Locale('zh', 'CN'),
-    //                 Locale('zh', 'HK'),
-    //                 Locale('es', 'ES'),
-    //                 Locale('tr', 'TR'),
-    //                 Locale('vi', 'VN'),
-    //                 Locale('my', 'MM'),
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       },
-    //     );
-    //   },
-    // );
   }
 
   DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {

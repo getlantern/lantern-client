@@ -156,6 +156,7 @@ const (
 	pathUserSalt             = "user_salt"
 	pathIsAccountVerified    = "isAccountVerified"
 	pathIsUserLoggedIn       = "IsUserLoggedIn"
+	pathIsFirstTime          = "isFirstTime"
 
 	currentTermsVersion = 1
 	group               = srp.RFC5054Group3072
@@ -254,6 +255,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "setSelectedTab":
 		err := setSelectedTab(m.baseModel, arguments.Get("tab").String())
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "isUserFirstTimeVisit":
+		return checkFirstTimeVisit(m.baseModel)
+	case "setFirstTimeVisit":
+		err := isShowFirstTimeUserVisit(m.baseModel)
 		if err != nil {
 			return nil, err
 		}
@@ -905,6 +914,19 @@ func setStoreVersion(m *baseModel, isStoreVersion bool) error {
 func setSelectedTab(m *baseModel, tap string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathSelectedTab, tap, "")
+	})
+}
+func checkFirstTimeVisit(m *baseModel) (bool, error) {
+	firsttime, err := pathdb.Get[bool](m.db, pathIsFirstTime)
+	if err != nil {
+		return false, err
+	}
+	log.Debugf("First time visit %v", firsttime)
+	return firsttime, nil
+}
+func isShowFirstTimeUserVisit(m *baseModel) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathIsFirstTime, true, "")
 	})
 }
 

@@ -31,8 +31,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   MethodChannel? navigationChannel;
   Function()? _cancelEventSubscription;
 
-  _HomePageState();
-
   @override
   void initState() {
     if (isDesktop()) {
@@ -200,6 +198,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   Widget build(BuildContext context) {
     _context = context;
+    print("Home build called");
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         return sessionModel.developmentMode(

@@ -1622,6 +1622,15 @@ msgstr "Your password has been reset successfully"
 msgid "invalid_code"
 msgstr "Incorrect code or it might have expired. Please try resending again"
 
+msgid "get_lantern_pro"
+msgstr "Get Lantern Pro"
+
+msgid "try_lantern_pro"
+msgstr "Try Lantern for free! "
+
+msgid "continue_for_free"
+msgstr "Continue for Free "
+
 
 
 
