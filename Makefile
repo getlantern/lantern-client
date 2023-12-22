@@ -574,6 +574,7 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry
 		mkdir $(DARWIN_APP_NAME)/Contents/Resources/en.lproj && \
 		cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(PACKAGED_YAML) && \
 		cp $(APP_YAML_PATH) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(APP_YAML) && \
+		$(call osxcodesign,$(DARWIN_APP_NAME)) && \
 		cat $(DARWIN_APP_NAME)/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin_amd64.bz2 && \
 		ls -l $(DARWIN_BINARY_NAME) $(APP)_update_darwin_amd64.bz2 && \
 		rm -rf $(INSTALLER_NAME).dmg && \
@@ -582,6 +583,7 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry
 		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
 		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
 		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
+		$(call osxcodesign,$(INSTALLER_NAME).dmg) && \
 		rm $(CAPITALIZED_APP).dmg.zlib; \
 	else \
 		echo "-> Skipped: Can not generate a package on a non-OSX host."; \
