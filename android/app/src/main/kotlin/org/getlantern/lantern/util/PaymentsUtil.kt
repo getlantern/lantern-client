@@ -329,12 +329,12 @@ class PaymentsUtil(private val activity: Activity) {
                     response: Response?,
                     result: JsonObject?,
                 ) {
-                    session.linkDevice()
-                    session.setIsProUser(true)
                     Logger.e(TAG, "Purchase Completed: $response")
+                    session.linkDevice()
                     lanternClient.userData(object : LanternHttpClient.ProUserCallback {
                         override fun onSuccess(response: Response, userData: ProUser) {
                             Logger.e(TAG, "User detail : $userData")
+                            session.setIsProUser(true)
                             activity.runOnUiThread {
                                 methodCallResult.success("purchaseSuccessful")
                             }
