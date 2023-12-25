@@ -21,6 +21,7 @@ import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternSessionManager
 import org.getlantern.lantern.model.PaymentProvider
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProUser
 import org.getlantern.mobilesdk.Logger
 
 class PaymentsUtil(private val activity: Activity) {
@@ -47,30 +48,30 @@ class PaymentsUtil(private val activity: Activity) {
             stripe.createCardToken(
                 card,
                 callback =
-                    object : ApiResultCallback<Token> {
-                        override fun onSuccess(
-                            @NonNull token: Token,
-                        ) {
-                            sendPurchaseRequest(
-                                planID,
-                                email,
-                                token.id,
-                                PaymentProvider.Stripe,
-                                methodCallResult,
-                            )
-                        }
+                object : ApiResultCallback<Token> {
+                    override fun onSuccess(
+                        @NonNull token: Token,
+                    ) {
+                        sendPurchaseRequest(
+                            planID,
+                            email,
+                            token.id,
+                            PaymentProvider.Stripe,
+                            methodCallResult,
+                        )
+                    }
 
-                        override fun onError(
-                            @NonNull error: Exception,
-                        ) {
-                            Logger.error(TAG, "Error submitting to Stripe: $error")
-                            methodCallResult.error(
-                                "errorSubmittingToStripe",
-                                error.getLocalizedMessage(),
-                                null,
-                            )
-                        }
-                    },
+                    override fun onError(
+                        @NonNull error: Exception,
+                    ) {
+                        Logger.error(TAG, "Error submitting to Stripe: $error")
+                        methodCallResult.error(
+                            "errorSubmittingToStripe",
+                            error.getLocalizedMessage(),
+                            null,
+                        )
+                    }
+                },
             )
         } catch (t: Throwable) {
             Logger.error(TAG, "Error submitting to Stripe", t)
@@ -284,9 +285,12 @@ class PaymentsUtil(private val activity: Activity) {
             LanternApp.getSession().planByID(planID)?.let {
                 it.currency
             } ?: "usd"
-        Logger.d(TAG, "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency")
+        Logger.d(
+            TAG,
+            "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency"
+        )
         val session = session
-        val json: JsonObject = JsonObject()
+        val json  = JsonObject()
         json.addProperty("idempotencyKey", System.currentTimeMillis().toString())
         json.addProperty("provider", provider.toString().lowercase())
         json.addProperty("email", email)
@@ -328,7 +332,24 @@ class PaymentsUtil(private val activity: Activity) {
                     session.linkDevice()
                     session.setIsProUser(true)
                     Logger.e(TAG, "Purchase Completed: $response")
-                    methodCallResult.success("purchaseSuccessful")
+                    lanternClient.userData(object : LanternHttpClient.ProUserCallback {
+                        override fun onSuccess(response: Response, userData: ProUser) {
+                            Logger.e(TAG, "User detail : $userData")
+                            activity.runOnUiThread {
+                                methodCallResult.success("purchaseSuccessful")
+                            }
+
+                        }
+
+                        override fun onFailure(throwable: Throwable?, error: ProError?) {
+                            Logger.error(TAG, "Unable to fetch user data: $throwable.message")
+                            activity.runOnUiThread {
+                                methodCallResult.success("purchaseSuccessful")
+                            }
+
+                        }
+                    })
+
                     Logger.d(TAG, "Successful purchase response: $result")
                 }
 

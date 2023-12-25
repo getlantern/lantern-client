@@ -152,40 +152,12 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                   TOS(copy: copy),
                   // * resellerCodeCheckout
                   Button(
-                    disabled: emailController.value.text.isEmpty ||
-                        emailFieldKey.currentState?.validate() == false ||
-                        resellerCodeFieldKey.currentState?.validate() == false,
-                    text: copy,
-                    onPressed: () async {
-                      context.loaderOverlay.show();
-                      await sessionModel
-                          .redeemResellerCode(
-                            emailController.text,
-                            resellerCodeController.text,
-                          )
-                          .timeout(
-                            defaultTimeoutDuration,
-                            onTimeout: () => onAPIcallTimeout(
-                              code: 'redeemresellerCodeTimeout',
-                              message: 'reseller_timeout'.i18n,
-                            ),
-                          )
-                          .then((value) {
-                        context.loaderOverlay.hide();
-                        showSuccessDialog(context, widget.isPro, true);
-                      }).onError((error, stackTrace) {
-                        context.loaderOverlay.hide();
-                        CDialog.showError(
-                          context,
-                          error: e,
-                          stackTrace: stackTrace,
-                          description: (error as PlatformException)
-                              .message
-                              .toString(), // This is coming localized
-                        );
-                      });
-                    },
-                  ),
+                      disabled: emailController.value.text.isEmpty ||
+                          emailFieldKey.currentState?.validate() == false ||
+                          resellerCodeFieldKey.currentState?.validate() ==
+                              false,
+                      text: copy,
+                      onPressed: onRegisterPro),
                 ],
               )
             ],
@@ -193,5 +165,41 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
         ),
       );
     });
+  }
+
+  Future<void> onRegisterPro() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.redeemResellerCode(
+        emailController.text,
+        resellerCodeController.text,
+      );
+      context.loaderOverlay.hide();
+      showSuccessDialog(context, widget.isPro, true);
+    } catch (error, stackTrace) {
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: error,
+        stackTrace: stackTrace,
+        description: (error as PlatformException)
+            .message
+            .toString(), // This is coming localized
+      );
+    }
+
+    // .timeout(
+    // const Duration(seconds: 20),
+    // onTimeout: () => onAPIcallTimeout(
+    // code: 'redeemresellerCodeTimeout',
+    // message: 'reseller_timeout'.i18n,
+    // ),
+    // )
+    //     .then((value) {
+    // context.loaderOverlay.hide();
+    // showSuccessDialog(context, widget.isPro, true);
+    // }).onError((error, stackTrace) {
+    //
+    // });
   }
 }
