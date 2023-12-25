@@ -51,7 +51,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
     formKey: emailFieldKey,
     validator: (value) => EmailValidator.validate(value ?? '')
         ? null
-        : 'please_entera_valid_email_address'.i18n,
+        : 'please_enter_valid_email_address'.i18n,
   );
 
   final resellerCodeFieldKey = GlobalKey<FormState>();
