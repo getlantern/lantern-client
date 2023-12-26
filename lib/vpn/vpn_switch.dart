@@ -36,7 +36,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
       Future.delayed(
         const Duration(seconds: 1),
         () async {
-          // await adHelper.showAds();
+          await adHelper.showAds();
         },
       );
     }

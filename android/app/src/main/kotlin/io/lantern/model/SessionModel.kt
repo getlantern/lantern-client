@@ -94,7 +94,7 @@ class SessionModel(
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
 
         }
-        db.registerType(1000, Vpn.ServerInfo::class.java)
+//        db.registerType(1001, Vpn.ServerInfo::class.java)
         updateAppsData()
         checkAdsAvailability()
     }
