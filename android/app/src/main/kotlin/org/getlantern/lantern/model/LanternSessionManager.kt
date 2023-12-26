@@ -130,7 +130,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     private fun setExpiration(expiration: Long?) {
-        if (expiration == null) {
+        if (expiration == null||expiration==0L ) {
+            prefs.edit().putLong(EXPIRY_DATE, 0)
+                .putString(EXPIRY_DATE_STR, "")
+                .apply()
             return
         }
         val expiry = Date(expiration * 1000)
@@ -277,6 +280,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             linkDevice()
         }
 
+
         setExpiration(user.expiration)
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
@@ -293,8 +297,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         if (user.isProUser) {
             EventBus.getDefault().post(UserStatus(user.isActive, user.monthsLeft().toLong()))
-            prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft())
-                .putInt(PRO_DAYS_LEFT, user.daysLeft())
+            prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft() ?: 0)
+                .putInt(PRO_DAYS_LEFT, user.daysLeft() ?: 0)
                 .apply()
         }
     }

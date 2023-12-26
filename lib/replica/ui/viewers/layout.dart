@@ -32,6 +32,9 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
     // For the Viewers in Replica, we are sending another request to fetch the below params.
     // That request goes to `/object_info` endpoint (as opposed it coming bundled in our ReplicaSearchItem)
     doFetchObjectInfo();
+    PlausibleUtils.trackUserAction('User viewed Replica content', {
+      'title': infoTitle,
+    });
   }
 
   void doFetchObjectInfo() async {

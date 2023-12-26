@@ -31,6 +31,7 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.util.DnsDetector
+import org.getlantern.mobilesdk.util.LanguageHelper
 import org.greenrobot.eventbus.EventBus
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -607,6 +608,15 @@ abstract class SessionManager(application: Application) : Session {
             Logger.debug(TAG, "Lingver.init() finished at ${System.currentTimeMillis() - start}")
         } else {
             locale = Lingver.init(application).getLocale()
+            // Here check if we support device language localization
+            // if not then set default language to English
+            locale =
+                if (LanguageHelper.supportLanguages.contains("${locale!!.language}_${locale!!.country}")) {
+                    locale
+                } else {
+                    // Default language is English
+                    Locale("en", "US")
+                }
             Logger.debug(TAG, "Lingver.init() finished at ${System.currentTimeMillis() - start}")
             Logger.debug(TAG, "Configured language was empty, using %1\$s", locale)
             setLocale(locale)

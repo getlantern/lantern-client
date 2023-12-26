@@ -29,6 +29,7 @@ import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.PermissionUtil
@@ -122,6 +123,7 @@ class SessionModel(
             "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "requestLinkCode" -> requestLinkCode(result)
+            "redeemLinkCode" -> redeemLinkCode(result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
@@ -152,6 +154,7 @@ class SessionModel(
             )
 
             "submitGooglePlayPayment" -> paymentsUtil.submitGooglePlayPayment(
+                call.argument("email")!!,
                 call.argument("planID")!!,
                 result,
             )
@@ -179,6 +182,10 @@ class SessionModel(
                     intent.putExtra("url", url)
                     activity.startActivity(intent)
                 }
+            }
+
+            "trackUserAction" -> {
+                Plausible.event(call.argument("message")!!)
             }
 
             "acceptTerms" -> {
@@ -360,27 +367,38 @@ class SessionModel(
                         val code = result["code"].asString
                         val expireAt = result["expireAt"].asLong
                         LanternApp.getSession().setDeviceCode(code, expireAt)
-                        methodCallResult.success(null)
+                        methodCallResult.success(code)
                     }
                 }
             },
         )
     }
 
-    private fun redeemLinkCode() {
+    private fun redeemLinkCode(methodCallResult: MethodChannel.Result) {
         val formBody = FormBody.Builder()
             .add("code", LanternApp.getSession().deviceCode()!!)
             .add("deviceName", LanternApp.getSession().deviceName())
             .build()
+        Logger.info(TAG, "Redeeming link code")    
         lanternClient.post(
-            LanternHttpClient.createProUrl("/link-code-request"),
+            LanternHttpClient.createProUrl("/link-code-redeem"),
             formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error making link redeem request..", t)
+                     if (error == null) {
+                        activity.runOnUiThread {
+                            methodCallResult.error("unknownError", null, null)
+                        }
+                        return
+                    }
+                    activity.runOnUiThread {
+                        methodCallResult.error("linkCodeError", error.id, null)
+                    }
                 }
 
                 override fun onSuccess(response: Response?, result: JsonObject?) {
+                    Logger.debug(TAG, "redeem link code response: $result")
                     if (result == null || result["token"] == null || result["userID"] == null) return
                     Logger.debug(TAG, "Successfully redeemed link code")
                     val userID = result["userID"].asLong
@@ -392,6 +410,7 @@ class SessionModel(
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     }
                     activity.startActivity(intent)
+                    // methodCallResult.success(null)
                 }
             },
         )
@@ -527,9 +546,8 @@ class SessionModel(
                     }
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
-                    Logger.debug(TAG, "Response: $result")
-                    if (result["token"] != null && result["userID"] != null) {
+                override fun onSuccess(response: Response?, result: JsonObject?) {
+                    if (result != null && result["token"] != null && result["userID"] != null) {
                         Logger.debug(TAG, "Successfully validated recovery code")
                         // update token and user ID with those returned by the pro server
                         // update token and user ID with those returned by the pro server
@@ -565,7 +583,7 @@ class SessionModel(
                     activity.showErrorDialog(activity.resources.getString(R.string.invalid_verification_code))
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
+                override fun onSuccess(response: Response?, result: JsonObject?) {
                     lanternClient.userData(object : ProUserCallback {
                         override fun onSuccess(response: Response, userData: ProUser) {
                             Logger.debug(TAG, "Successfully updated userData")
@@ -642,7 +660,7 @@ class SessionModel(
                     activity.showErrorDialog(activity.resources.getString(R.string.unable_remove_device))
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
+                override fun onSuccess(response: Response?, result: JsonObject?) {
                     Logger.debug(TAG, "Successfully removed device")
 
                     val isLogout = deviceId == LanternApp.getSession().deviceID

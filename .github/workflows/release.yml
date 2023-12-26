@@ -1,7 +1,10 @@
 name: Publish releases
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ android-legacy ]
+    tags:
+      - '*'
 
 permissions:
   contents: read
@@ -207,6 +210,7 @@ jobs:
            packageName: org.getlantern.lantern
            releaseFiles: lantern-installer.aab
            track: production
+           changesNotSentForReview: true
         - name: Grant private modules access
           run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
         - name: Clone binaries repo

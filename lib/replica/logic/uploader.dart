@@ -60,6 +60,9 @@ class ReplicaUploader {
         method: UploadMethod.POST,
       ),
     );
+    PlausibleUtils.trackUserAction('User uploaded Replica content', {
+      fileTitle: fileTitle,
+    });
   }
 
   // TODO <08-10-22, kalli> Figure out how to query endpoint with infohash (for rendering preview after uploading a file)
