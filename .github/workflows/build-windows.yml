@@ -183,7 +183,7 @@ jobs:
             unzip lantern.zip
             cp installer-resources-lantern/.packaged-lantern.yaml installer-resources-lantern/windows/.packaged-lantern.yaml
             cp installer-resources-lantern/lantern.yaml installer-resources-lantern/windows/lantern.yaml
-            cp Release/* installer-resources-lantern/windows
+            cp -r Release/* installer-resources-lantern/windows
             makensis -V1 -DVERSION=${{ inputs.version }} -DAPP_NAME=lantern.exe -DOUT_FILE="lantern-installer${{inputs.installer-suffix}}.exe" installer-resources-lantern/windows/lantern.nsi
 
         - uses: actions/upload-artifact@v3
