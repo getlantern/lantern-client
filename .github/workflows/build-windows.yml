@@ -206,11 +206,11 @@ jobs:
         - name: Download the signed exe
           uses: actions/download-artifact@v3
           with:
-            name: windows${{inputs.build-suffix}}-installer-signed
+            name: windows${{inputs.build-suffix}}-installer-unsigned
 
         - uses: actions/download-artifact@v3
           with:
-            name: windows${{inputs.build-suffix}}-build-signed
+            name: windows${{inputs.build-suffix}}-build-unsigned
         - name: Install s3cmd
           run: pip install s3cmd
 
