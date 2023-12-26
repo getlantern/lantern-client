@@ -155,7 +155,7 @@ jobs:
             path: lantern.zip
 
     build-installer:
-      needs: sign-exe
+      needs: build-windows
       permissions:
         contents: "read"
         id-token: "write"
