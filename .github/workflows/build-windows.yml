@@ -191,7 +191,7 @@ jobs:
             if-no-files-found: error
             name: windows${{inputs.build-suffix}}-installer-unsigned
             path: |
-              installer-resources-lantern/windows/lantern-installer-unsigned.exe
+              "installer-resources-lantern/windows/lantern-installer${{inputs.installer-suffix}}.exe"
 
     upload-windows:
       needs: build-windows
