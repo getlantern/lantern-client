@@ -18,6 +18,9 @@ on:
       update-suffix: # "x64" or "386"
         type: string
         required: true
+      arch:
+        type: string
+        required: true
       installer-suffix: # "-x64" or ""
         type: string
         required: false
@@ -145,7 +148,9 @@ jobs:
           run: flutter build windows
 
         - name: Create archive
-          run: Compress-Archive "build/windows/${{inputs.update-suffix}}/runner/Release" lantern.zip
+          run: |
+            ls build/windows
+            Compress-Archive "build/windows/${{inputs.arch}}/runner/Release" lantern.zip
 
         - uses: actions/upload-artifact@v3
           with:
