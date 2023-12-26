@@ -194,7 +194,7 @@ jobs:
             path: lantern-installer${{inputs.installer-suffix}}.exe
 
     upload-windows:
-      needs: build-windows
+      needs: build-installer
       permissions:
         contents: "read"
         id-token: "write"
