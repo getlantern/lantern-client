@@ -144,9 +144,8 @@ jobs:
         - name: Build Flutter app
           run: flutter build windows
 
-        - uses: montudor/action-zip@v1
-          with:
-            args: zip -qq -r lantern.zip "build/windows/${{inputs.update-suffix}}/runner/Release"
+        - name: Create archive
+          run: Compress-Archive "build/windows/${{inputs.update-suffix}}/runner/Release" lantern.zip
 
         - uses: actions/upload-artifact@v3
           with:
