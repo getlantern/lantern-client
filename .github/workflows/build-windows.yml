@@ -185,12 +185,13 @@ jobs:
             cp installer-resources-lantern/lantern.yaml installer-resources-lantern/windows/lantern.yaml
             cp -r Release/* installer-resources-lantern/windows
             makensis -V1 -DVERSION=${{ inputs.version }} -DAPP_NAME=lantern.exe -DOUT_FILE="lantern-installer${{inputs.installer-suffix}}.exe" installer-resources-lantern/windows/lantern.nsi
+            mv installer-resources-lantern/windows/lantern-installer${{inputs.installer-suffix}}.exe lantern-installer${{inputs.installer-suffix}}.exe
 
         - uses: actions/upload-artifact@v3
           with:
             if-no-files-found: error
             name: windows${{inputs.build-suffix}}-installer-unsigned
-            path: installer-resources-lantern/windows/lantern-installer${{inputs.installer-suffix}}.exe
+            path: lantern-installer${{inputs.installer-suffix}}.exe
 
     upload-windows:
       needs: build-windows
@@ -203,14 +204,11 @@ jobs:
       runs-on: ubuntu-20.04
 
       steps:
-        - name: Download the signed exe
+        - name: Download the artifact
           uses: actions/download-artifact@v3
           with:
             name: windows${{inputs.build-suffix}}-installer-unsigned
 
-        - uses: actions/download-artifact@v3
-          with:
-            name: windows${{inputs.build-suffix}}-build-unsigned
         - name: Install s3cmd
           run: pip install s3cmd
 
@@ -231,7 +229,7 @@ jobs:
           run: |
             ls -l
             cat lantern.exe | bzip2 > ${{ env.update }}
-            mv lantern${{inputs.installer-suffix}}.exe ${{ env.dist }}
+            mv lantern-installer${{inputs.installer-suffix}}.exe ${{ env.dist }}
             cp ${{ env.dist }} ${{ env.dist_versionless }}
 
             shasum -a 256 ${{ env.dist }} | cut -d " " -f 1 > ${{ env.dist }}.sha256
