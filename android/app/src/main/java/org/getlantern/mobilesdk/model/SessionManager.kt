@@ -398,6 +398,7 @@ abstract class SessionManager(application: Application) : Session {
         adsBlocked: Long,
         hasSucceedingProxy: Boolean,
     ) {
+        Logger.debug("updateStats","city $city, country $country, countryCode $countryCode")
         if (hasUpdatedStats.compareAndSet(false, true)) {
             // The first time that we get the stats, hasSucceedingProxy is always false because we
             // haven't hit any proxies yet. So, we just ignore the stats.

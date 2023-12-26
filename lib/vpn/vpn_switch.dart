@@ -1,3 +1,4 @@
+import 'package:lantern/ad_helper.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 class VPNSwitch extends StatefulWidget {
@@ -8,13 +9,7 @@ class VPNSwitch extends StatefulWidget {
 }
 
 class _VPNSwitchState extends State<VPNSwitch> {
-  // final adHelper = AdHelper();
-
-  @override
-  void initState() {
-    super.initState();
-    // adHelper.loadAds();
-  }
+  final adHelper = AdHelper();
 
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
