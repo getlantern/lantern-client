@@ -68,7 +68,7 @@ jobs:
         prefix: ${{ needs.set-version.outputs.prefix }}
         dist-suffix: 32-bit
         installer-suffix: -x32
-        update-suffix: 386
+        update-suffix: x32
 
     build-windows-x64:
       uses: ./.github/workflows/build-windows.yml
@@ -117,7 +117,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19
+          go-version: 1.21
 
       - name: Granting private modules access
         run: |
