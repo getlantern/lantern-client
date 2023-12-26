@@ -185,15 +185,12 @@ jobs:
             cp installer-resources-lantern/lantern.yaml installer-resources-lantern/windows/lantern.yaml
             cp -r Release/* installer-resources-lantern/windows
             makensis -V1 -DVERSION=${{ inputs.version }} -DAPP_NAME=lantern.exe -DOUT_FILE="lantern-installer${{inputs.installer-suffix}}.exe" installer-resources-lantern/windows/lantern.nsi
-            ls
-            ls installer-resources-lantern/windows/
 
         - uses: actions/upload-artifact@v3
           with:
             if-no-files-found: error
             name: windows${{inputs.build-suffix}}-installer-unsigned
-            path: |
-              "lantern-installer${{inputs.installer-suffix}}.exe"
+            path: installer-resources-lantern/windows/lantern-installer${{inputs.installer-suffix}}.exe
 
     upload-windows:
       needs: build-windows
