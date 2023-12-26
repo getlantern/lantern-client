@@ -146,7 +146,7 @@ jobs:
 
         - uses: montudor/action-zip@v1
           with:
-          args: zip -qq -r lantern.zip "build/windows/${{inputs.update-suffix}}/runner/Release"
+            args: zip -qq -r lantern.zip "build/windows/${{inputs.update-suffix}}/runner/Release"
 
         - uses: actions/upload-artifact@v3
           with:
