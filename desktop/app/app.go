@@ -1,6 +1,9 @@
 package app
 
 import (
+	"fmt"
+	"io/fs"
+	"io/ioutil"
 	"math/rand"
 	"net"
 	"os"
@@ -73,6 +76,9 @@ type App struct {
 
 	chGlobalConfigChanged chan bool
 
+
+	translations eventual.Value
+
 	ws         ws.UIChannel
 	flashlight *flashlight.Flashlight
 
@@ -112,8 +118,11 @@ func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, 
 		analyticsSession: analyticsSession,
 		selectedTab:      AccountTab,
 		statsTracker:     NewStatsTracker(),
+		translations:     eventual.NewValue(),
 		ws:               ws.NewUIChannel(),
 	}
+
+	app.translations.Set(os.DirFS("locale/translation"))
 
 	return app
 }
@@ -625,3 +634,18 @@ func (app *App) AddToken(path string) string {
 func (app *App) Settings() *Settings {
 	return app.settings
 }
+
+// GetTranslations accesses translations with the given filename
+func (app *App) GetTranslations(filename string) ([]byte, error) {
+	log.Tracef("Accessing translations %v", filename)
+	tr, ok := app.translations.Get(30 * time.Second)
+	if !ok || tr == nil {
+		return nil, fmt.Errorf("could not get traslation for file name: %v", filename)
+	}
+	f, err := tr.(fs.FS).Open(filename)
+	if err != nil {
+		return nil, fmt.Errorf("could not get traslation for file name: %v, %w", filename, err)
+	}
+	return ioutil.ReadAll(f)
+}
+
