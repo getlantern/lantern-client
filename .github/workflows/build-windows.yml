@@ -141,17 +141,13 @@ jobs:
           with:
             name: libgo-windows-${{inputs.update-suffix}}-build
 
-        - name: Copy liblantern.dll
-          run: |
-            cp liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
-            cp liblantern.dll windows/runner/resources
-
         - name: Build Flutter app
           run: flutter build windows
 
         - name: Create archive
           run: |
             ls build/windows
+            cp liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
             Compress-Archive "build/windows/${{inputs.arch}}/runner/Release" lantern.zip
 
         - uses: actions/upload-artifact@v3
