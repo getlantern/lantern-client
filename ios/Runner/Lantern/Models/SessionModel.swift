@@ -33,6 +33,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.model = systemName
     opts.osVersion = systemVersion
     opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest
+    opts.platform = "ios"
 
     var error: NSError?
     guard

@@ -47,7 +47,7 @@ dependencies:
   badges: ^3.1.1
   dotted_border: ^2.0.0+3
   styled_text: ^8.1.0
-  emoji_picker_flutter: ^1.6.1
+  emoji_picker_flutter: ^1.6.3
   pin_code_text_field: ^1.8.0
   scrollable_positioned_list: ^0.3.8
   infinite_scroll_pagination: ^3.2.0
@@ -117,8 +117,7 @@ dependencies:
 
   # Ads
   google_mobile_ads: ^3.0.0
-  # clever_ads_solutions: ^0.1.0
-  clever_ads_solutions: ^0.1.0
+#  clever_ads_solutions: ^0.2.
   retry: ^3.1.2
 
 

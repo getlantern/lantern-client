@@ -9,7 +9,7 @@ class VPNSwitch extends StatefulWidget {
 }
 
 class _VPNSwitchState extends State<VPNSwitch> {
-  final adHelper = AdHelper();
+  // final adHelper = AdHelper();
 
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
@@ -21,12 +21,12 @@ class _VPNSwitchState extends State<VPNSwitch> {
     //if ads is not ready then wait for at least 5 seconds and then show ads
     //if ads is ready then show ads immediately
 
-    if (vpnStatus != 'connected' && userHasPermission) {
-      if (!await adHelper.isAdsReadyToShow()) {
-        await vpnModel.connectingDelay(newValue);
-        await Future.delayed(const Duration(seconds: 5));
-      }
-    }
+    // if (vpnStatus != 'connected' && userHasPermission) {
+    //   if (!await adHelper.isAdsReadyToShow()) {
+    //     await vpnModel.connectingDelay(newValue);
+    //     await Future.delayed(const Duration(seconds: 5));
+    //   }
+    // }
     if (isIdle(vpnStatus)) {
       await vpnModel.switchVPN(newValue);
     }
@@ -36,7 +36,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
       Future.delayed(
         const Duration(seconds: 1),
         () async {
-          await adHelper.showAds();
+          // await adHelper.showAds();
         },
       );
     }
@@ -47,9 +47,9 @@ class _VPNSwitchState extends State<VPNSwitch> {
     return sessionModel
         .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
       return sessionModel.shouldShowCASAds((context, isCasAdsEnable, child) {
-        adHelper.loadAds(
-            shouldShowGoogleAds: isGoogleAdsEnable,
-            shouldShowCASAds: isCasAdsEnable);
+        // adHelper.loadAds(
+        //     shouldShowGoogleAds: isGoogleAdsEnable,
+        //     shouldShowCASAds: isCasAdsEnable);
         return Transform.scale(
             scale: 2,
             child: vpnModel.vpnStatus(

@@ -72,6 +72,7 @@ type SessionModelOpts struct {
 	Lang            string
 	TimeZone        string
 	PaymentTestMode bool
+	Platform		string
 }
 
 // NewSessionModel initializes a new SessionModel instance.
@@ -80,8 +81,10 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if err != nil {
 		return nil, err
 	}
+	if opts.Platform == "ios"{
 	base.db.RegisterType(1000, &protos.ServerInfo{})
 	base.db.RegisterType(2000, &protos.Devices{})
+	}
 	m := &SessionModel{baseModel: base}
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	return m, m.initSessionModel(opts)
