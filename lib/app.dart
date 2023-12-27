@@ -84,7 +84,7 @@ class LanternApp extends StatelessWidget {
         }
         return sessionModel.language(
           (context, lang, child) {
-            Localization.locale = lang;
+            //Localization.locale = lang;
             return GlobalLoaderOverlay(
               overlayColor: Colors.black,
               overlayOpacity: 0.6,
