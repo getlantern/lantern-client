@@ -55,6 +55,16 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     logger.error("Service Started successfully")
   }
 
+  func hasAllPermssion() {
+    do {
+      let result = try invoke("hasAllNetworkPermssion")
+      logger.log("Sucessfully given all permssion")
+    } catch {
+      logger.log("Error while setting hasAllPermssion")
+      SentryUtils.caputure(error: error as NSError)
+    }
+  }
+
   func getBandwidth() {
     // TODO: we should do this reactively by subscribing
     do {

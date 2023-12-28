@@ -1,8 +1,13 @@
+source 'https://cdn.cocoapods.org/'
+source 'https://github.com/cleveradssolutions/CAS-Specs.git'
 # Uncomment this line to define a global platform for your project
 platform :ios, '13.0'
+use_frameworks! :linkage => :static
+$casVersion = '~> 3.5.1'
 inhibit_all_warnings!
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
-ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+ENV['COCOAPODS_DISABLE_STATS'] = 'false'
+
 
 project 'Runner', {
   'Debug' => :debug,
@@ -28,22 +33,22 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  use_frameworks!
+   use_frameworks! :linkage => :static
   use_modular_headers!
-
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-   pod 'SQLite.swift', '~> 0.12.2'
+#    pod 'SQLite.swift', '~> 0.12.2'
    pod 'Toast-Swift', '~> 5.0.1'
+   pod 'CleverAdsSolutions-Base', $casVersion
 end
 
-target 'LanternTests' do
-  use_frameworks!
-  use_modular_headers!
-
-  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-   pod 'SQLite.swift', '~> 0.12.2'
-   pod 'Toast-Swift', '~> 5.0.1'
-end
+# target 'LanternTests' do
+#   use_frameworks!
+#   use_modular_headers!
+#
+#   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+#    pod 'SQLite.swift', '~> 0.12.2'
+#    pod 'Toast-Swift', '~> 5.0.1'
+# end
 
 #post_install do |installer|
 #  installer.pods_project.targets.each do |target|

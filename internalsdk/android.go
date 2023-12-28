@@ -604,6 +604,8 @@ func run(configDir, locale string,
 			//Check for CAS ads for Russia and Iran user
 			showCASAdsEnabled := runner.FeatureEnabled("casinterstitialads", ApplicationVersion)
 			session.SetCASShowInterstitialAdsEnabled(showCASAdsEnabled)
+			log.Debugf("Show ads enabled casinterstitialads ? %v", showCASAdsEnabled)
+
 		} else {
 			// Explicitly disable ads for Pro users.
 			session.SetShowInterstitialAdsEnabled(false)

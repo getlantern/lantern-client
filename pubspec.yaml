@@ -117,7 +117,7 @@ dependencies:
 
   # Ads
   google_mobile_ads: ^3.0.0
-#  clever_ads_solutions: ^0.2.
+  clever_ads_solutions: ^0.2.2
   retry: ^3.1.2
 
 

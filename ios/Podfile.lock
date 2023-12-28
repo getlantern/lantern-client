@@ -2,6 +2,10 @@ PODS:
   - Alamofire (5.2.2)
   - audioplayers_darwin (0.0.1):
     - Flutter
+  - clever_ads_solutions (0.0.1):
+    - CleverAdsSolutions-Base (~> 3.5.1)
+    - Flutter
+  - CleverAdsSolutions-Base (3.5.1)
   - device_info_plus (0.0.1):
     - Flutter
   - DKImagePickerController/Core (4.3.4):
@@ -160,9 +164,6 @@ PODS:
   - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
-  - SQLite.swift (0.12.2):
-    - SQLite.swift/standard (= 0.12.2)
-  - SQLite.swift/standard (0.12.2)
   - SwiftyGif (5.4.4)
   - Toast (4.0.0)
   - Toast-Swift (5.0.1)
@@ -180,6 +181,8 @@ PODS:
 
 DEPENDENCIES:
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
+  - clever_ads_solutions (from `.symlinks/plugins/clever_ads_solutions/ios`)
+  - CleverAdsSolutions-Base (~> 3.5.1)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - emoji_picker_flutter (from `.symlinks/plugins/emoji_picker_flutter/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -201,7 +204,6 @@ DEPENDENCIES:
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
-  - SQLite.swift (~> 0.12.2)
   - Toast-Swift (~> 5.0.1)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
@@ -210,6 +212,8 @@ DEPENDENCIES:
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
+  https://github.com/cleveradssolutions/CAS-Specs.git:
+    - CleverAdsSolutions-Base
   trunk:
     - Alamofire
     - DKImagePickerController
@@ -227,7 +231,6 @@ SPEC REPOS:
     - SDWebImage
     - Sentry
     - SentryPrivate
-    - SQLite.swift
     - SwiftyGif
     - Toast
     - Toast-Swift
@@ -235,6 +238,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   audioplayers_darwin:
     :path: ".symlinks/plugins/audioplayers_darwin/ios"
+  clever_ads_solutions:
+    :path: ".symlinks/plugins/clever_ads_solutions/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   emoji_picker_flutter:
@@ -291,6 +296,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
+  clever_ads_solutions: f1c180d1f89433736b8ce713b9db14a71cacf276
+  CleverAdsSolutions-Base: d81f78c50305d43bf3e34f66db8fc07caee43c7f
   device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
@@ -327,7 +334,6 @@ SPEC CHECKSUMS:
   share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
   shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
-  SQLite.swift: d2b4642190917051ce6bd1d49aab565fe794eea3
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
@@ -337,6 +343,6 @@ SPEC CHECKSUMS:
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
-PODFILE CHECKSUM: 367ebfd14751ab63b44f5735900e8c057f94a414
+PODFILE CHECKSUM: 0c57dfeb18231790965910b84e7d2ee57cb82116
 
 COCOAPODS: 1.14.3
