@@ -294,6 +294,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "authorizeViaEmail":
+		email := arguments.Get("emailAddress").String()
+		err := authorizeViaEmail(m, email)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -1525,4 +1533,23 @@ func linkCodeRequest(session *SessionModel) error {
 		}
 		return pathdb.Put[string](tx, pathDeviceLinkingCode, linkResponse.Code, "")
 	})
+}
+func authorizeViaEmail(session *SessionModel, email string) error {
+	log.Debugf("Start Account recovery with email %d", email)
+	userRecoveryBody := map[string]string{
+		"email": email,
+	}
+
+	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
+	if err != nil {
+		log.Errorf("Error while getting deviceId %v", err)
+		return err
+	}
+
+	linkResponse, err := apimodels.UserRecover(userRecoveryBody, deviceId)
+	if err != nil {
+		return err
+	}
+	log.Debugf("LinkCodeRequest response %v", linkResponse)
+	return setUserIdAndToken(session.baseModel, linkResponse.UserID, linkResponse.Token)
 }

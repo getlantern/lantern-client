@@ -273,10 +273,10 @@ class SessionModel extends Model {
     });
   }
 
-  Future<String> authorizeViaEmail(String emailAddress) {
+  Future<void> authorizeViaEmail(String emailAddress) {
     return methodChannel.invokeMethod('authorizeViaEmail', <String, dynamic>{
       'emailAddress': emailAddress,
-    }).then((value) => value as String);
+    });
   }
 
   Future<String> validateRecoveryCode(String code) {

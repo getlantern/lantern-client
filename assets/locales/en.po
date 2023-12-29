@@ -1584,6 +1584,8 @@ msgstr "Try Lantern for free! "
 msgid "continue_for_free"
 msgstr "Continue for Free "
 
+msgid "recovery_not_found"
+msgstr "Device not associated to this user"
 
 
 

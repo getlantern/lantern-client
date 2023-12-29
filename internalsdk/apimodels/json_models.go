@@ -126,3 +126,8 @@ type LinkRequestResult struct {
 	Code     string `json:"code,omitempty"`
 	ExpireAt int64  `json:"expireAt,omitempty"`
 }
+type UserRecovery struct {
+	Status string `json:"status"`
+	UserID int64  `json:"userID"`
+	Token  string `json:"token"`
+}

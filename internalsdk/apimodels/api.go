@@ -16,13 +16,14 @@ import (
 )
 
 const (
-	publicBaseUrl = "https://api.iantem.io/v1"
-	baseUrl       = "https://api.getiantem.org"
-	userGroup     = publicBaseUrl + "/users"
-	userDetailUrl = baseUrl + "/user-data"
-	userCreateUrl = baseUrl + "/user-create"
-	plansV3Url    = baseUrl + "/plans-v3"
-	purchaseUrl   = baseUrl + "/purchase"
+	publicBaseUrl  = "https://api.iantem.io/v1"
+	baseUrl        = "https://api.getiantem.org"
+	userGroup      = publicBaseUrl + "/users"
+	userDetailUrl  = baseUrl + "/user-data"
+	userCreateUrl  = baseUrl + "/user-create"
+	userRecoverUrl = baseUrl + "/user-recover"
+	plansV3Url     = baseUrl + "/plans-v3"
+	purchaseUrl    = baseUrl + "/purchase"
 	//Sign up urls
 	signUpUrl         = userGroup + "/signup"
 	signUpCompleteUrl = userGroup + "/signup/complete/email"
@@ -636,6 +637,48 @@ func LinkCodeRequest(data map[string]string, deviceId string, userId string, tok
 		return nil, err
 	}
 	return &linkResponse, nil
+}
+
+func UserRecover(data map[string]string, deviceId string) (*UserRecovery, error) {
+	body, err := createJsonBody(data)
+	if err != nil {
+		log.Errorf("Error while creating json body")
+		return nil, err
+	}
+	log.Debugf("User Recovery body %v", body)
+	// Create a new request
+	req, err := http.NewRequest("POST", userRecoverUrl, body)
+	if err != nil {
+		log.Errorf("Error creating new User Recovery: %v", err)
+		return nil, err
+	}
+
+	// Add headers
+	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerContentType, "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error while UserRecovery request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// bosyStr, err := io.ReadAll(resp.Body)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// log.Debugf("UserRecovery response %v with status code %d", string(bosyStr), resp.StatusCode)
+	var userRecovery UserRecovery
+	// Read and decode the response body
+	if err := json.NewDecoder(resp.Body).Decode(&userRecovery); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+	if userRecovery.Status != "ok" {
+		return nil, log.Errorf("recovery_not_found %v", err)
+	}
+	return &userRecovery, nil
 }
 
 // Utils methods convert json body
