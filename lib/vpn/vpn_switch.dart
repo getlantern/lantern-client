@@ -46,10 +46,9 @@ class _VPNSwitchState extends State<VPNSwitch> {
   Widget build(BuildContext context) {
     return sessionModel
         .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
-      print('googleAds $isGoogleAdsEnable');
       return sessionModel.shouldShowCASAds((context, isCasAdsEnable, child) {
         adHelper.loadAds(
-            shouldShowGoogleAds: true,
+            shouldShowGoogleAds: isGoogleAdsEnable,
             shouldShowCASAds: isCasAdsEnable);
         return Transform.scale(
             scale: 2,
