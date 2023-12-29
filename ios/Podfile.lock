@@ -309,7 +309,7 @@ SPEC CHECKSUMS:
   flutter_mailer: 2ef5a67087bc8c6c4cefd04a178bf1ae2c94cd83
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   flutter_uploader: 2b07c4d41cf1218f25e6d5b8bcfa2d913838e27c
-  fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
+  fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   Google-Mobile-Ads-SDK: 32fe7836431a06a29f7734ae092b600137c8108d
   google_mobile_ads: 53b1f0d74445963e5810e34ac38dfb27aabe278e
@@ -346,4 +346,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: beba84bf7a16e5102ffe84a69c98791b9a1df870
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.14.3

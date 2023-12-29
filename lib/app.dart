@@ -98,6 +98,7 @@ class _LanternAppState extends State<LanternApp>
               routerDelegate: globalRouter.delegate(),
               routeInformationParser: globalRouter.defaultRouteParser(),
               theme: ThemeData(
+                useMaterial3: false,
                 fontFamily: _getLocaleBasedFont(currentLocal),
                 brightness: Brightness.light,
                 primarySwatch: Colors.grey,
