@@ -308,6 +308,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "removeDevice":
+		deviceId := arguments.Get("deviceId").String()
+		err := userLinkRemove(m, deviceId)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -1589,4 +1597,39 @@ func linkCodeApprove(session *SessionModel, code string) error {
 	}
 	log.Debugf("LinkCodeApprove response %v", linkResponse)
 	return nil
+}
+
+func userLinkRemove(session *SessionModel, deviceId string) error {
+	locale, err := session.Locale()
+	if err != nil {
+		log.Errorf("Error while getting locale %v", err)
+		return err
+	}
+	userLinkRemove := map[string]string{
+		"deviceID": deviceId,
+		"locale":   locale,
+	}
+
+	userId, err := session.GetUserID()
+	if err != nil {
+		log.Errorf("Error while getting userid %v", err)
+		return err
+	}
+
+	userDeviceId, err := session.GetDeviceID()
+	if err != nil {
+		log.Errorf("Error while getting pro token %v", err)
+		return err
+	}
+	proToken, err := session.GetToken()
+	if err != nil {
+		log.Errorf("Error while getting pro token %v", err)
+		return err
+	}
+	linkResponse, err := apimodels.DeviceUnlink(userLinkRemove, ToString(userId), userDeviceId, proToken)
+	if err != nil {
+		return err
+	}
+	log.Debugf("UserLink Remove response %v", linkResponse)
+	return userDetail(session)
 }

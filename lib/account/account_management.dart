@@ -421,15 +421,7 @@ class UserDevices extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () {
-                context.loaderOverlay.show(widget: spinner);
-                sessionModel.removeDevice(device.id).then((value) {
-                  context.loaderOverlay.hide();
-                  Navigator.pop(context);
-                }).onError((error, stackTrace) {
-                  context.loaderOverlay.hide();
-                });
-              },
+              onPressed: () => onUnlink(context, device.id),
               child: CText(
                 'Yes'.i18n,
                 style: tsButtonPink,
@@ -439,6 +431,18 @@ class UserDevices extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> onUnlink(BuildContext context, String deviceId) async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.removeDevice(deviceId);
+      context.loaderOverlay.hide();
+      context.popRoute();
+    } catch (e) {
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
   }
 
   @override
