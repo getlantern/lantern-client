@@ -301,7 +301,13 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
-
+	case "approveDevice":
+		code := arguments.Get("code").String()
+		err := linkCodeApprove(m, code)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -1534,6 +1540,7 @@ func linkCodeRequest(session *SessionModel) error {
 		return pathdb.Put[string](tx, pathDeviceLinkingCode, linkResponse.Code, "")
 	})
 }
+
 func authorizeViaEmail(session *SessionModel, email string) error {
 	log.Debugf("Start Account recovery with email %d", email)
 	userRecoveryBody := map[string]string{
@@ -1552,4 +1559,34 @@ func authorizeViaEmail(session *SessionModel, email string) error {
 	}
 	log.Debugf("LinkCodeRequest response %v", linkResponse)
 	return setUserIdAndToken(session.baseModel, linkResponse.UserID, linkResponse.Token)
+}
+
+func linkCodeApprove(session *SessionModel, code string) error {
+	locale, err := session.Locale()
+	if err != nil {
+		log.Errorf("Error while getting locale %v", err)
+		return err
+	}
+	userRecoveryBody := map[string]string{
+		"locale": locale,
+		"code":   code,
+	}
+
+	userId, err := session.GetUserID()
+	if err != nil {
+		log.Errorf("Error while getting userid %v", err)
+		return err
+	}
+
+	token, err := session.GetToken()
+	if err != nil {
+		log.Errorf("Error while getting pro token %v", err)
+		return err
+	}
+	linkResponse, err := apimodels.LinkCodeApprove(userRecoveryBody, ToString(userId), token)
+	if err != nil {
+		return err
+	}
+	log.Debugf("LinkCodeApprove response %v", linkResponse)
+	return nil
 }

@@ -131,3 +131,9 @@ type UserRecovery struct {
 	UserID int64  `json:"userID"`
 	Token  string `json:"token"`
 }
+
+type ApiResponse struct {
+	Error   string `json:"error"`
+	ErrorId string `json:"errorId"`
+	Status  string `json:"status"`
+}

@@ -25,7 +25,7 @@ import 'package:lantern/account/auth/sign_in_password.dart' as _i45;
 import 'package:lantern/account/auth/verification.dart' as _i49;
 import 'package:lantern/account/blocked_users.dart' as _i10;
 import 'package:lantern/account/chat_number_account.dart' as _i12;
-import 'package:lantern/account/device_linking/approve_device.dart' as _i5;
+import 'package:lantern/account/device_linking/add_device.dart' as _i5;
 import 'package:lantern/account/device_linking/authorize_device_for_pro.dart'
     as _i7;
 import 'package:lantern/account/device_linking/authorize_device_via_email.dart'
@@ -111,7 +111,7 @@ abstract class $AppRouter extends _i50.RootStackRouter {
           orElse: () => const ApproveDeviceArgs());
       return _i50.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i5.ApproveDevice(key: args.key),
+        child: _i5.AddDevice(key: args.key),
       );
     },
     AuthLanding.name: (routeData) {
@@ -612,7 +612,7 @@ class AppWebviewArgs {
 }
 
 /// generated route for
-/// [_i5.ApproveDevice]
+/// [_i5.AddDevice]
 class ApproveDevice extends _i50.PageRouteInfo<ApproveDeviceArgs> {
   ApproveDevice({
     _i52.Key? key,

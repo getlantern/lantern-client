@@ -41,6 +41,7 @@ const (
 	confirmedUrl   = userGroup + "/confirmed"
 	//Device Linking
 	linkCodeRequestUrl = baseUrl + "/link-code-request"
+	linkCodeApproveUrl = baseUrl + "/link-code-approve"
 )
 
 const (
@@ -679,6 +680,46 @@ func UserRecover(data map[string]string, deviceId string) (*UserRecovery, error)
 		return nil, log.Errorf("recovery_not_found %v", err)
 	}
 	return &userRecovery, nil
+}
+
+func LinkCodeApprove(data map[string]string, userId string, token string) (bool, error) {
+	body, err := createJsonBody(data)
+	if err != nil {
+		log.Errorf("Error while creating json body")
+		return false, err
+	}
+	req, err := http.NewRequest("POST", linkCodeApproveUrl, body)
+	if err != nil {
+		log.Errorf("Error creating linkcode approve request: %v", err)
+		return false, err
+	}
+
+	// Add headers
+	req.Header.Set(headerProToken, token)
+	req.Header.Set(headerUserId, userId)
+	req.Header.Set(headerContentType, "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error while UserRecovery request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	bodyStr, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+	log.Debugf("LinkCode Arppove response %v with status code %d", string(bodyStr), resp.StatusCode)
+	var apiResponse ApiResponse
+	err = json.Unmarshal(bodyStr, &apiResponse)
+	if err != nil {
+		return false, log.Errorf("error unmarshaling response: %v", err)
+	}
+	if apiResponse.ErrorId != "" {
+		return false, log.Errorf("%v", apiResponse.ErrorId)
+	}
+	return true, nil
 }
 
 // Utils methods convert json body

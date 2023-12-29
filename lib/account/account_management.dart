@@ -375,7 +375,6 @@ class _AccountManagementState extends State<AccountManagement>
           );
         }),
         //Disable device linking in IOS
-        if(Platform.isAndroid)
         const UserDevices(),
         ListItemFactory.settingsItem(
           header: 'danger_zone'.i18n,

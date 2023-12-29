@@ -288,7 +288,7 @@ class SessionModel extends Model {
   Future<String> approveDevice(String code) {
     return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
       'code': code,
-    }).then((value) => value as String);
+    }).then((value) => value.toString() as String);
   }
 
   Future<void> removeDevice(String deviceId) {
