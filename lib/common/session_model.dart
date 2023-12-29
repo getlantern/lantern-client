@@ -447,10 +447,8 @@ class SessionModel extends Model {
     );
   }
 
-  Future<String> requestLinkCode() {
-    return methodChannel
-        .invokeMethod('requestLinkCode')
-        .then((value) => value as String);
+  Future<void> requestLinkCode() {
+    return methodChannel.invokeMethod('requestLinkCode',{});
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {

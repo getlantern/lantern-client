@@ -120,3 +120,9 @@ type PurchaseResponse struct {
 type SrpB struct {
 	SrpB big.Int `json:"srpB"`
 }
+
+// Device Linking
+type LinkRequestResult struct {
+	Code     string `json:"code,omitempty"`
+	ExpireAt int64  `json:"expireAt,omitempty"`
+}

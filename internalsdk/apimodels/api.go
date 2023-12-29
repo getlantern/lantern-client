@@ -38,6 +38,8 @@ const (
 	deleteUrl      = userGroup + "/delete"
 	changeEmailUrl = userGroup + "/change_email"
 	confirmedUrl   = userGroup + "/confirmed"
+	//Device Linking
+	linkCodeRequestUrl = baseUrl + "/link-code-request"
 )
 
 const (
@@ -594,6 +596,46 @@ func DeleteAccount(body *protos.DeleteUserRequest) (bool, error) {
 		return false, log.Errorf("error while sending recovery email %v", err)
 	}
 	return true, nil
+}
+
+//Deivce Linking
+
+func LinkCodeRequest(data map[string]string, deviceId string, userId string, token string) (*LinkRequestResult, error) {
+	log.Debugf("LinkCodeRequest body %v", data)
+	body, err := createJsonBody(data)
+	if err != nil {
+		log.Errorf("Error while creating json body")
+		return nil, err
+	}
+
+	log.Debugf("Encoded body %v", body)
+	// Create a new request
+	req, err := http.NewRequest("POST", linkCodeRequestUrl, body)
+	if err != nil {
+		log.Errorf("Error creating new LinkCodeRequest: %v", err)
+		return nil, err
+	}
+
+	// Add headers
+	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerUserId, userId)
+	req.Header.Set(headerProToken, token)
+	req.Header.Set(headerContentType, "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error while linkCode request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+	log.Debugf("LinkCodeRequest response %v with status code %d", resp.Body, resp.StatusCode)
+	var linkResponse LinkRequestResult
+	// Read and decode the response body
+	if err := json.NewDecoder(resp.Body).Decode(&linkResponse); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+	return &linkResponse, nil
 }
 
 // Utils methods convert json body

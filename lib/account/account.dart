@@ -105,13 +105,11 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-      if (Platform.isAndroid)
+
         ListItemFactory.settingsItem(
           icon: ImagePaths.devices,
           content: 'Authorize Device for Pro'.i18n,
-          onTap: () {
-            authorizeDeviceForPro(context);
-          },
+          onTap:() => authorizeDeviceForPro(context),
         ),
       ...commonItems(context)
     ];
@@ -143,12 +141,11 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-      if (Platform.isAndroid)
-        ListItemFactory.settingsItem(
-          icon: ImagePaths.devices,
-          content: 'add_device'.i18n,
-          onTap: () async => await context.pushRoute(ApproveDevice()),
-        ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.devices,
+        content: 'add_device'.i18n,
+        onTap: () async => await context.pushRoute(ApproveDevice()),
+      ),
       ...commonItems(context)
     ];
   }

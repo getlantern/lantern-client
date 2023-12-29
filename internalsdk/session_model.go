@@ -79,6 +79,8 @@ const (
 	pathIsAccountVerified    = "isAccountVerified"
 	pathIsUserLoggedIn       = "IsUserLoggedIn"
 	pathIsFirstTime          = "isFirstTime"
+	pathDeviceLinkingCode    = "devicelinkingcode"
+	pathDeviceCodeExp        = "devicecodeexp"
 
 	currentTermsVersion = 1
 	group               = srp.RFC5054Group3072
@@ -285,6 +287,13 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 
+		// Device Linking
+	case "requestLinkCode":
+		err := linkCodeRequest(m)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -1467,4 +1476,53 @@ func deleteAccount(session SessionModel, password string) error {
 		return err
 	}
 	return userCreate(session.baseModel, local)
+}
+
+// / Device Linking methods
+func linkCodeRequest(session *SessionModel) error {
+	log.Debugf("LinkCodeRequest")
+	local, err := session.Locale()
+	if err != nil {
+		log.Errorf("Error while getting local %v", err)
+		return err
+	}
+	device, err := pathdb.Get[string](session.db, pathDevice)
+	if err != nil {
+		log.Errorf("Error while getting local %v", err)
+		return err
+	}
+	//Create body
+	linkCodeRequest := map[string]string{
+		"locale":     local,
+		"deviceName": device,
+	}
+
+	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
+	if err != nil {
+		log.Errorf("Error while getting local %v", err)
+		return err
+	}
+	userId, err := session.GetUserID()
+	if err != nil {
+		log.Errorf("Error while getting local %v", err)
+		return err
+	}
+
+	token, err := session.GetToken()
+	if err != nil {
+		log.Errorf("Error while getting local %v", err)
+		return err
+	}
+	linkResponse, err := apimodels.LinkCodeRequest(linkCodeRequest, deviceId, ToString(userId), token)
+	if err != nil {
+		return err
+	}
+	log.Debugf("LinkCodeRequest response %v", linkResponse)
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		err := pathdb.Put[int64](tx, pathDeviceCodeExp, (linkResponse.ExpireAt * 1000), "")
+		if err != nil {
+			return err
+		}
+		return pathdb.Put[string](tx, pathDeviceLinkingCode, linkResponse.Code, "")
+	})
 }
