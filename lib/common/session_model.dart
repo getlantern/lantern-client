@@ -579,6 +579,17 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<String> paymentRedirect(
+    String planID,
+    String email,
+    String provider,
+    String deviceName,
+  ) async {
+    final resp = await ffiPaymentRedirect(planID.toNativeUtf8(), provider.toNativeUtf8(),
+      email.toNativeUtf8(), deviceName.toNativeUtf8());
+    return resp.toDartString();
+  }
+
   Future<void> submitStripePayment(
     String planID,
     String email,

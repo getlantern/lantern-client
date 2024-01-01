@@ -241,6 +241,23 @@ func DeviceLinkingCode() *C.char {
 	return C.CString(resp.Code)
 }
 
+//export PaymentRedirect
+func PaymentRedirect(planID, provider, email, deviceName *C.char) *C.char {
+	country := a.Settings().GetCountry()
+	resp, err := proClient.PaymentRedirect(userConfig(), &client.PaymentRedirectRequest{
+		Plan: C.GoString(planID),
+		Provider: C.GoString(provider),
+		Currency: "USD",
+		Email: C.GoString(email),
+		DeviceName: C.GoString(deviceName),
+		CountryCode: country,
+	})
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString(resp.Redirect)
+}
+
 //export DevelopmentMode
 func DevelopmentMode() *C.char {
 	return C.CString("false")

@@ -20,6 +20,9 @@ typedef SelectTab = void Function(ffi.Pointer<Utf8>);
 typedef purchase_func = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
 typedef Purchase = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
 
+typedef payment_redirect_func = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+typedef PaymentRedirect = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+
 typedef checkupdates_func = ffi.Pointer<Utf8> Function();
 typedef CheckUpdates = ffi.Pointer<Utf8> Function();
 
@@ -50,6 +53,8 @@ final SelectTab setSelectTab =
 
 final SelectedTab ffiSelectedTab =
     dylib.lookup<ffi.NativeFunction<selectedtab_func>>('SelectedTab').asFunction();
+
+final PaymentRedirect ffiPaymentRedirect = dylib.lookup<ffi.NativeFunction<payment_redirect_func>>('PaymentRedirect').asFunction();
 
 final ProFunc ffiPlans = dylib.lookup<ffi.NativeFunction<pro_func>>('Plans').asFunction();
 final ProFunc ffiPaymentMethods = dylib.lookup<ffi.NativeFunction<pro_func>>('PaymentMethods').asFunction();
