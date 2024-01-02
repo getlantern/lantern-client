@@ -192,9 +192,7 @@ class AccountMenu extends StatelessWidget {
       title: 'Account'.i18n,
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        print("called pro user listener");
         return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
-          print("called isUserSignedIn listener");
           return ListView(
             children: proUser && hasUserLoggedIn
                 ? proItems(sessionContext)

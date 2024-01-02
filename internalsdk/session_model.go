@@ -1500,7 +1500,9 @@ func deleteAccount(session SessionModel, password string) error {
 	return userCreate(session.baseModel, local)
 }
 
-// / Device Linking methods
+// Device Linking methods
+
+// Request code for linking device for LINK WITH PIN method
 func linkCodeRequest(session *SessionModel) error {
 	log.Debugf("LinkCodeRequest")
 	local, err := session.Locale()
@@ -1549,26 +1551,7 @@ func linkCodeRequest(session *SessionModel) error {
 	})
 }
 
-func authorizeViaEmail(session *SessionModel, email string) error {
-	log.Debugf("Start Account recovery with email %d", email)
-	userRecoveryBody := map[string]string{
-		"email": email,
-	}
-
-	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
-	if err != nil {
-		log.Errorf("Error while getting deviceId %v", err)
-		return err
-	}
-
-	linkResponse, err := apimodels.UserRecover(userRecoveryBody, deviceId)
-	if err != nil {
-		return err
-	}
-	log.Debugf("LinkCodeRequest response %v", linkResponse)
-	return setUserIdAndToken(session.baseModel, linkResponse.UserID, linkResponse.Token)
-}
-
+// Approve code for linking device for LINK WITH PIN method
 func linkCodeApprove(session *SessionModel, code string) error {
 	locale, err := session.Locale()
 	if err != nil {
@@ -1599,6 +1582,7 @@ func linkCodeApprove(session *SessionModel, code string) error {
 	return nil
 }
 
+// Remove device for LINK WITH PIN method
 func userLinkRemove(session *SessionModel, deviceId string) error {
 	locale, err := session.Locale()
 	if err != nil {
@@ -1632,4 +1616,24 @@ func userLinkRemove(session *SessionModel, deviceId string) error {
 	}
 	log.Debugf("UserLink Remove response %v", linkResponse)
 	return userDetail(session)
+}
+
+func authorizeViaEmail(session *SessionModel, email string) error {
+	log.Debugf("Start Account recovery with email %d", email)
+	userRecoveryBody := map[string]string{
+		"email": email,
+	}
+
+	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
+	if err != nil {
+		log.Errorf("Error while getting deviceId %v", err)
+		return err
+	}
+
+	linkResponse, err := apimodels.UserRecover(userRecoveryBody, deviceId)
+	if err != nil {
+		return err
+	}
+	log.Debugf("LinkCodeRequest response %v", linkResponse)
+	return setUserIdAndToken(session.baseModel, linkResponse.UserID, linkResponse.Token)
 }
