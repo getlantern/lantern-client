@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
 
 bool isEmpty(value) => value == null || value == '';
@@ -197,7 +198,7 @@ class _ReportIssueState extends State<ReportIssue> {
 
       // For Android we have native dialog
       // Todo need to remove native dialog and use this one for Android & IOS
-      if (Platform.isIOS) {
+      if (Platform.isIOS || isDesktop()) {
         AppLoadingDialog.dismissLoadingDialog(context);
       }
       CDialog.showInfo(

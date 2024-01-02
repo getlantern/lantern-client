@@ -305,9 +305,9 @@ func userConfig() *common.UserConfigData {
 }
 
 //export ReportIssue
-func ReportIssue(email, issueType, description string) *C.char {
+func ReportIssue(email, issueType, description *C.char) *C.char {
 	deviceID := a.Settings().GetDeviceID()
-	issueTypeInt, err := strconv.Atoi(issueType)
+	issueTypeInt, err := strconv.Atoi(C.GoString(issueType))
 	if err != nil {
 		return sendError(err)
 	}
@@ -324,13 +324,13 @@ func ReportIssue(email, issueType, description string) *C.char {
 	if err != nil {
 		log.Errorf("Unable to get version: %v", err)
 	}
-
+	log.Debug("Sending issue report")
 	err = issue.SendReport(
 		uc,
 		issueTypeInt,
-		description,
+		C.GoString(description),
 		subscriptionLevel,
-		email,
+		C.GoString(email),
 		app.ApplicationVersion,
 		deviceID,
 		osVersion,
@@ -340,6 +340,7 @@ func ReportIssue(email, issueType, description string) *C.char {
 	if err != nil {
 		return sendError(err)
 	}
+	log.Debug("Successfully reported issue")
 	return C.CString("true")
 }
 
