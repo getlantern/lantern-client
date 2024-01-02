@@ -158,7 +158,7 @@ jobs:
             file-digest: SHA256
             timestamp-rfc3161: http://timestamp.acs.microsoft.com
             timestamp-digest: SHA256
-            
+
         - uses: actions/upload-artifact@v3
           with:
             if-no-files-found: error
@@ -229,7 +229,7 @@ jobs:
             name: windows${{inputs.build-suffix}}-installer-unsigned
 
         - name: Sign EXE with Azure Code Signing
-          uses: azure/azure-code-signing-action@v0.2.15
+          uses: azure/azure-code-signing-action@v0.2.22
           with:
             azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
             azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
