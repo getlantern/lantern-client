@@ -102,6 +102,7 @@ jobs:
         npm install -g appdmg
         brew tap joshdk/tap
         brew install joshdk/tap/retry
+        brew install imagemagick
 
     - name: Build darwin installer
       run: |

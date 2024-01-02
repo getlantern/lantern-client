@@ -562,7 +562,7 @@ $(DARWIN_BINARY_NAME): echo-build-tags
 		echo "-> Skipped: Can not compile $(CAPITALIZED_APP) for OSX on a non-OSX host."; \
 	fi
 
-$(INSTALLER_NAME).dmg: require-version require-appdmg require-retry
+$(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
 	@echo "Generating distribution package for darwin/amd64..." && \
 	if [[ "$$(uname -s)" == "Darwin" ]]; then \
 		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
@@ -580,6 +580,7 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry
 		ls -l $(DARWIN_BINARY_NAME) $(APP)_update_darwin_amd64.bz2 && \
 		rm -rf $(INSTALLER_NAME).dmg && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
+		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
 		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
 		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
