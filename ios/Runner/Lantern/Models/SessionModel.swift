@@ -19,8 +19,8 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   init(flutterBinary: FlutterBinaryMessenger) throws {
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current
-    let deviceId = device.identifierForVendor!.uuidString
-    let model = UIDevice.modelName
+    let deviceId = DeviceIdentifier.getUDID()
+    let modelName = UIDevice.modelName
     let systemName = device.systemName
     let systemVersion = device.systemVersion
     opts.deviceID = deviceId
@@ -30,10 +30,10 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.playVersion = (isRunningFromAppStore() || isRunningInTestFlightEnvironment())
     opts.timeZone = TimeZone.current.identifier
     opts.device = systemName  // IOS does not provide Device name directly
-    opts.model = model
+    opts.model = modelName
     opts.osVersion = systemVersion
     opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest
-
+    logger.debug("IOS Device ID \(deviceId)")
     var error: NSError?
     guard
       let model = InternalsdkNewSessionModel(

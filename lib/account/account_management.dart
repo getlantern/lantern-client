@@ -475,7 +475,7 @@ class UserDevices extends StatelessWidget {
               );
             }).toList(),
             // IOS does not support Link devices at the moment
-            if (devices.devices.length < 3 && Platform.isAndroid)
+            if (devices.devices.length < 3)
               ListItemFactory.settingsItem(
                 content: '',
                 onTap: () async => await context.pushRoute(ApproveDevice()),
