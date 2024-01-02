@@ -1,5 +1,8 @@
 import 'package:lantern/vpn/vpn.dart';
 import 'package:lantern/ffi.dart';
+import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
+import 'package:lantern/main.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -27,12 +30,15 @@ class _VPNSwitchState extends State<VPNSwitch> {
     if (isIdle(vpnStatus)) {
       if (Platform.isAndroid) {
         await vpnModel.switchVPN(newValue);
-      } else if (Platform.isMacOS || Platform.isWindows) {
-        if (vpnStatus == 'connected') {
+      } else if (isDesktop()) {
+        bool isConnected = vpnStatus == 'connected';
+        String path = systemTrayIcon(!isConnected);
+        if (isConnected) {
           await sysProxyOff();
         } else {
           await sysProxyOn();
         }
+        await systemTray.setImage(path);
       }
     }
 
