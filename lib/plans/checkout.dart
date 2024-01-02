@@ -1,5 +1,7 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
@@ -202,6 +204,19 @@ class _CheckoutState extends State<Checkout>
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
+
+        if (isDesktop()) {
+          String os = Platform.operatingSystem;
+          final redirectUrl = await sessionModel.paymentRedirect(
+              widget.plan.id,
+              emailController.text,
+              "stripe",
+              os,
+            );
+          await context.pushRoute(AppWebview(url: redirectUrl));
+          return;
+        }
+
         // * Stripe selected
         await context.pushRoute(
           StripeCheckout(

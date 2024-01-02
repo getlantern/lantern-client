@@ -1,5 +1,4 @@
 import 'package:lantern/common/common.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class PlanCard extends StatelessWidget {
   final Plan plan;
@@ -40,16 +39,7 @@ class PlanCard extends StatelessWidget {
                 isPro: isPro,
               ),
             );
-          } /*else {
-            final redirectUrl = await sessionModel.paymentRedirect(
-              this.plan.id,
-              "tddbls5@gmail.com",
-              "stripe",
-              "device123",
-            );
-            await InAppBrowser.openWithSystemBrowser(url: WebUri("https://cnn.com"));
-            //await context.pushRoute(AppWebview(url: redirectUrl));
-          }*/
+          }
         },
         child: Stack(
           alignment: Alignment.bottomCenter,
