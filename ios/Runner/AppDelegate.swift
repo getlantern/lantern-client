@@ -20,6 +20,7 @@ import UIKit
   var messagingModel: MessagingModel!
   // IOS
   var loadingManager: LoadingIndicatorManager?
+  let mainQueue = DispatchQueue.main
 
   override func application(
     _ application: UIApplication,
@@ -27,49 +28,69 @@ import UIKit
   ) -> Bool {
     //    SentryUtils.startSentry();
     initializeFlutterComponents()
-    do {
-      try setupModels()
-      try setupAppComponents()
-    } catch {
-      logger.error("Unexpected error setting up app components: \(error)")
-      exit(1)
-    }
+    try! setupModels()
+    try! setupAppComponents()
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
   // Flutter related stuff
   private func initializeFlutterComponents() {
-    flutterViewController = window?.rootViewController as! FlutterViewController
-    flutterbinaryMessenger = flutterViewController.binaryMessenger
+    if flutterViewController == nil || flutterbinaryMessenger == nil {
+      flutterViewController = window?.rootViewController as! FlutterViewController
+      flutterbinaryMessenger = flutterViewController.binaryMessenger
+    }
+
   }
 
   // Intlize this GO model and callback
   private func setupAppComponents() throws {
-    DispatchQueue.global(qos: .userInitiated).async {
-      do {
-//        try self.setupModels()
-        DispatchQueue.main.async {
-          self.startUpSequency()
-          self.setupLoadingBar()
-        }
-      } catch {
-        DispatchQueue.main.async {
-          logger.error("Unexpected error setting up models: \(error)")
-        }
-      }
-    }
-
+    startUpSequency()
+    setupLoadingBar()
   }
 
   // Init all the models
   private func setupModels() throws {
     logger.log("setupModels method called")
-    lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
-    sessionModel = try SessionModel(flutterBinary: flutterbinaryMessenger)
-    vpnModel = try VpnModel(flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
+    let dispatchGroup = DispatchGroup()
+    // If flutterbinaryMessenger nil somehow then assign it again
+    if flutterbinaryMessenger == nil || flutterViewController == nil {
+      initializeFlutterComponents()
+    }
+      
+    // Initialize LanternModel
+    dispatchGroup.enter()
+    DispatchQueue.global(qos: .userInitiated).async {
+      self.lanternModel = LanternModel(flutterBinary: self.flutterbinaryMessenger)
+      dispatchGroup.leave()
+    }
+
+    // Initialize SessionModel
+    dispatchGroup.enter()
+    DispatchQueue.global(qos: .userInitiated).async {
+      do {
+        self.sessionModel = try SessionModel(flutterBinary: self.flutterbinaryMessenger)
+      } catch {
+        logger.error("Error initializing SessionModel: \(error)")
+      }
+      dispatchGroup.leave()
+    }
+
+    // Initialize VpnModel
+    dispatchGroup.enter()
+    DispatchQueue.global(qos: .userInitiated).async {
+      do {
+        self.vpnModel = try VpnModel(
+          flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
+      } catch {
+        logger.error("Error initializing vpnModel: \(error)")
+      }
+      dispatchGroup.leave()
+    }
+    logger.log("Initializing setupModels done")
     //    navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
-    messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
+    self.messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
+    dispatchGroup.wait()  // Wait for all initializations to complete
   }
 
   // Post start up

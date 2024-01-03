@@ -22,11 +22,11 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>This identifier will be used to deliver personalized ads to you.</string>
-	<string>7.5.2</string>
+	<string>7.5.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>15</string>
+	<string>17</string>
 	<key>CURRENT_SCHEME_NAME</key>
 	<string>$(CURRENT_SCHEME_NAME)</string>
 	<key>GADApplicationIdentifier</key>
