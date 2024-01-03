@@ -47,7 +47,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     DispatchQueue.global(qos: .userInitiated).async {
       self.startService()
     }
-    logger.debug("init completed successfully")
+    logger.debug("init completed 	")
 
     //    getBandwidth()
   }
