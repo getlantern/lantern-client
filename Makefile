@@ -572,11 +572,10 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 		cp -a build/macos/Build/Products/Release/Lantern.app/Contents/* $(DARWIN_APP_NAME)/Contents/ && \
 		ls build/macos/Build/Products/Release/Lantern.app/Contents && \
 		cp $(DARWIN_BINARY_NAME) build/macos/Build/Products/Release/Lantern.app/Contents/Frameworks && \
-		$(call osxcodesign,$(DARWIN_APP_NAME)/Contents/Resources/liblantern.dylib) && \
+		$(call osxcodesign,build/macos/Build/Products/Release/Lantern.app/Contents/Frameworks/liblantern.dylib) && \
 		mkdir $(DARWIN_APP_NAME)/Contents/Resources/en.lproj && \
 		cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(PACKAGED_YAML) && \
 		cp $(APP_YAML_PATH) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(APP_YAML) && \
-		$(call osxcodesign,$(DARWIN_APP_NAME)) && \
 		cat $(DARWIN_APP_NAME)/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin_amd64.bz2 && \
 		ls -l $(DARWIN_BINARY_NAME) $(APP)_update_darwin_amd64.bz2 && \
 		rm -rf $(INSTALLER_NAME).dmg && \
