@@ -123,7 +123,7 @@ SENTRY_AUTH_TOKEN=sntrys_eyJpYXQiOjE2OTgwNjIxMzguODAxMzE4LCJ1cmwiOiJodHRwczovL3N
 SENTRY_ORG=getlantern
 SENTRY_PROJECT_IOS=lantern-ios
 
-DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/Release-prod-iphoneos/Runner.app.dSYM
+DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/archive/Runner.xcarchive/dSYMs/
 INFO_PLIST := ios/Runner/Info.plist
 
 APP ?= lantern
