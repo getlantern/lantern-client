@@ -577,14 +577,14 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 		mkdir $(DARWIN_APP_NAME)/Contents/Resources/en.lproj && \
 		cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(PACKAGED_YAML) && \
 		cp $(APP_YAML_PATH) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(APP_YAML) && \
+		$(call osxcodesign,$(DARWIN_APP_NAME)/Contents/MacOS/Lantern) && \
+		$(call osxcodesign,$(DARWIN_APP_NAME)) && \
 		cat $(DARWIN_APP_NAME)/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin_amd64.bz2 && \
 		ls -l $(DARWIN_BINARY_NAME) $(APP)_update_darwin_amd64.bz2 && \
 		rm -rf $(INSTALLER_NAME).dmg && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
 		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
-		$(call osxcodesign,$(DARWIN_APP_NAME)/Contents/MacOS/Lantern) && \
-		$(call osxcodesign,$(DARWIN_APP_NAME)) && \
 		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
 		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
 		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
@@ -624,7 +624,7 @@ require-bundler:
 	fi
 
 .PHONY: package-darwin
-package-darwin: darwin-installer notarize-darwin
+package-darwin: darwin-installer
 
 android-bundle: $(MOBILE_BUNDLE)
 
