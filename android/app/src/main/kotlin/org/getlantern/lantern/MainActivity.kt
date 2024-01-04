@@ -28,7 +28,6 @@ import okhttp3.Response
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
@@ -60,9 +59,7 @@ import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 import java.util.concurrent.*
 
-class MainActivity :
-    FlutterActivity(),
-    MethodChannel.MethodCallHandler,
+class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     CoroutineScope by MainScope() {
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
@@ -74,7 +71,6 @@ class MainActivity :
     private lateinit var receiver: NotificationReceiver
     private var accountInitDialog: AlertDialog? = null
     private var autoUpdateJob: Job? = null
-
     private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(
@@ -83,38 +79,36 @@ class MainActivity :
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
         messagingModel = MessagingModel(this, flutterEngine)
-        vpnModel = VpnModel(this, flutterEngine, ::switchLantern)
+        vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
         notifications = NotificationHelper(this, receiver)
-        eventManager =
-            object : EventManager("lantern_event_channel", flutterEngine) {
-                override fun onListen(event: Event) {
-                    if (LanternApp.getSession().lanternDidStart()) {
-                        Plausible.init(applicationContext)
-                        Logger.debug(TAG, "Plausible initialized")
-                        Plausible.enable(true)
-                        fetchLoConf()
-                        Logger.debug(
-                            TAG,
-                            "fetchLoConf() finished at ${System.currentTimeMillis() - start}",
-                        )
-                    }
-                    LanternApp.getSession().dnsDetector.publishNetworkAvailability()
+        eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
+            override fun onListen(event: Event) {
+                if (LanternApp.getSession().lanternDidStart()) {
+                    Plausible.init(applicationContext)
+                    Logger.debug(TAG, "Plausible initialized")
+                    Plausible.enable(true)
+                    fetchLoConf()
+                    Logger.debug(
+                        TAG,
+                        "fetchLoConf() finished at ${System.currentTimeMillis() - start}",
+                    )
                 }
+                LanternApp.getSession().dnsDetector.publishNetworkAvailability()
             }
+        }
 
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "lantern_method_channel",
         ).setMethodCallHandler(this)
 
-        flutterNavigation =
-            MethodChannel(
-                flutterEngine.dartExecutor.binaryMessenger,
-                "navigation",
-            )
+        flutterNavigation = MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            "navigation",
+        )
 
         flutterNavigation.setMethodCallHandler { call, _ ->
             if (call.method == "ready") {
@@ -243,12 +237,11 @@ class MainActivity :
                 accountInitDialog?.setView(dialogView)
                 val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
                 tvMessage.text = getString(R.string.init_account, appName)
-                dialogView.findViewById<View>(R.id.btnCancel)
-                    .setOnClickListener {
-                        EventBus.getDefault().removeStickyEvent(status)
-                        accountInitDialog?.dismiss()
-                        finish()
-                    }
+                dialogView.findViewById<View>(R.id.btnCancel).setOnClickListener {
+                    EventBus.getDefault().removeStickyEvent(status)
+                    accountInitDialog?.dismiss()
+                    finish()
+                }
                 accountInitDialog?.show()
             }
 
@@ -286,32 +279,18 @@ class MainActivity :
         updatePaymentMethods()
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun bandwidthUpdated(update: Bandwidth) {
-        vpnModel.saveBandwidth(
-            Vpn.Bandwidth.newBuilder()
-                .setPercent(update.percent)
-                .setRemaining(update.remaining)
-                .setAllowed(update.allowed)
-                .setTtlSeconds(update.ttlSeconds)
-                .build(),
-        )
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    fun onEvent(event: Event) {
+        eventManager.onNewEvent(event = event)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun statsUpdated(stats: Stats) {
-        vpnModel.saveServerInfo(
-            Vpn.ServerInfo.newBuilder()
-                .setCity(stats.city)
-                .setCountry(stats.country)
-                .setCountryCode(stats.countryCode)
-                .build(),
+        Logger.debug("Stats updated", stats.toString())
+        sessionModel.saveServerInfo(
+            Vpn.ServerInfo.newBuilder().setCity(stats.city).setCountry(stats.country)
+                .setCountryCode(stats.countryCode).build(),
         )
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun onEvent(event: Event) {
-        eventManager.onNewEvent(event = event)
     }
 
     private fun updateUserData() {
@@ -516,14 +495,13 @@ class MainActivity :
                         msg.append("&nbsp;")
                         var description = "..."
                         try {
-                            description =
-                                getString(
-                                    resources.getIdentifier(
-                                        permission,
-                                        "string",
-                                        "org.getlantern.lantern",
-                                    ),
-                                )
+                            description = getString(
+                                resources.getIdentifier(
+                                    permission,
+                                    "string",
+                                    "org.getlantern.lantern",
+                                ),
+                            )
                         } catch (t: Throwable) {
                             Logger.warn(
                                 PERMISSIONS_TAG,
@@ -649,13 +627,12 @@ class MainActivity :
     }
 
     private fun startVpnService() {
-        val intent: Intent =
-            Intent(
-                this,
-                LanternVpnService::class.java,
-            ).apply {
-                action = LanternVpnService.ACTION_CONNECT
-            }
+        val intent: Intent = Intent(
+            this,
+            LanternVpnService::class.java,
+        ).apply {
+            action = LanternVpnService.ACTION_CONNECT
+        }
 
         startService(intent)
         notifications.vpnConnectedNotification()
@@ -665,7 +642,7 @@ class MainActivity :
         Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
-        vpnModel.setVpnOn(useVpn)
+        vpnModel.updateStatus(useVpn)
     }
 
     // Recreate the activity when the language changes

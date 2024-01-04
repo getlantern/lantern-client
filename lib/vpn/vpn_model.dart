@@ -31,15 +31,17 @@ class VpnModel extends Model {
     return vpnStatus == 'connected';
   }
 
-  Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
-    return subscribedSingleValueBuilder<ServerInfo>(
-      '/server_info',
-      builder: builder,
-      deserialize: (Uint8List serialized) {
-        return ServerInfo.fromBuffer(serialized);
-      },
-    );
-  }
+  //This method has moved to Session model
+  // Due to go model changes
+  // Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
+  //   return subscribedSingleValueBuilder<ServerInfo>(
+  //     '/server_info',
+  //     builder: builder,
+  //     deserialize: (Uint8List serialized) {
+  //       return ServerInfo.fromBuffer(serialized);
+  //     },
+  //   );
+  // }
 
   Widget bandwidth(ValueWidgetBuilder<Bandwidth> builder) {
     return subscribedSingleValueBuilder<Bandwidth>(

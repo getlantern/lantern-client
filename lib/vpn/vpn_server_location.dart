@@ -30,7 +30,7 @@ class ServerLocationWidget extends StatelessWidget {
           const Spacer(),
           vpnModel.vpnStatus(
               (BuildContext context, String vpnStatus, Widget? child) {
-            return vpnModel.serverInfo(
+            return sessionModel.serverInfo(
                 (BuildContext context, ServerInfo serverInfo, Widget? child) {
               if (vpnStatus == 'connected' || vpnStatus == 'disconnecting') {
                 return Row(

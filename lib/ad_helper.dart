@@ -25,6 +25,7 @@ const casAttributes = {
 
 var logger = Logger(
   printer: PrettyPrinter(),
+  level: Level.debug
 );
 
 class AdHelper {
@@ -52,14 +53,14 @@ class AdHelper {
     if (Platform.isAndroid) {
       return 'ca-app-pub-2685698271254859/9922829329';
     } else {
-      throw UnsupportedError('Unsupported platform');
+      return 'ca-app-pub-2685698271254859/8751964275';
     }
   }
 
   // Private methods to decide whether to load or show Google Ads or CAS ads based on conditions
   Future<void> _decideAndLoadAds(
       {required bool shouldShowGoogleAds,
-      required bool shouldShowCASAds}) async {
+        required bool shouldShowCASAds}) async {
     logger.d(
         '[Ads Manager] Google Ads enable $shouldShowGoogleAds: CAS Ads $shouldShowCASAds');
     if (shouldShowGoogleAds) {
@@ -103,7 +104,7 @@ class AdHelper {
   Future<void> _loadInterstitialAd() async {
     //To avoid calling multiple ads request repeatedly
     assert(interstitialAdUnitId != "",
-        "interstitialAdUnitId should not be null or empty");
+    "interstitialAdUnitId should not be null or empty");
     if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
       logger.i('[Ads Manager] Request: Making Google Ad request.');
       await InterstitialAd.load(
@@ -172,7 +173,7 @@ class AdHelper {
   // Public methods
   Future<void> loadAds(
       {required bool shouldShowGoogleAds,
-      required bool shouldShowCASAds}) async {
+        required bool shouldShowCASAds}) async {
     await _decideAndLoadAds(
       shouldShowCASAds: shouldShowCASAds,
       shouldShowGoogleAds: shouldShowGoogleAds,

@@ -1,6 +1,5 @@
+import 'package:lantern/ad_helper.dart';
 import 'package:lantern/vpn/vpn.dart';
-
-import '../ad_helper.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -18,9 +17,9 @@ class _VPNSwitchState extends State<VPNSwitch> {
   Future<void> onSwitchTap(
       bool newValue, String vpnStatus, bool userHasPermission) async {
     unawaited(HapticFeedback.lightImpact());
-    //Make sure user has permission all the permission
-    //if ads is not ready then wait for at least 5 seconds and then show ads
-    //if ads is ready then show ads immediately
+    // Make sure user has permission all the permission
+    // if ads is not ready then wait for at least 5 seconds and then show ads
+    // if ads is ready then show ads immediately
 
     if (vpnStatus != 'connected' && userHasPermission) {
       if (!await adHelper.isAdsReadyToShow()) {
@@ -31,6 +30,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
     if (isIdle(vpnStatus)) {
       await vpnModel.switchVPN(newValue);
     }
+
     //add delayed to avoid flickering
     if (vpnStatus != 'connected') {
       Future.delayed(

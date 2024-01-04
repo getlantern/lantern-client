@@ -11,7 +11,7 @@ import org.getlantern.lantern.model.LanternSessionManager
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.debugOnly
 import org.getlantern.lantern.util.LanternProxySelector
-import org.getlantern.lantern.util.SentryUtil
+//import org.getlantern.lantern.util.SentryUtil
 import org.getlantern.mobilesdk.util.HttpClient
 
 open class LanternApp : Application() {
@@ -40,7 +40,7 @@ open class LanternApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        SentryUtil.enableGoPanicEnrichment(this)
+//        SentryUtil.enableGoPanicEnrichment(this)
 
         // Necessary to locate a back arrow resource we use from the
         // support library. See http://stackoverflow.com/questions/37615470/support-library-vectordrawable-resourcesnotfoundexception
@@ -99,7 +99,7 @@ open class LanternApp : Application() {
         fun getPlans(cb: LanternHttpClient.PlansCallback) {
             lanternHttpClient.plans(
                 cb,
-                if (session.isPlayVersion && !session.isRussianUser) inAppBilling else null
+                if (session.isStoreVersion && !session.isRussianUser) inAppBilling else null
             )
         }
 

@@ -61,6 +61,7 @@ class SessionModel(
         private const val TAG = "SessionModel"
         const val PATH_PRO_USER = "prouser"
         const val PATH_PLAY_VERSION = "playVersion"
+        const val PATH_SERVER_INFO = "/server_info"
 
         const val PATH_SDK_VERSION = "sdkVersion"
         const val PATH_USER_LEVEL = "userLevel"
@@ -91,7 +92,9 @@ class SessionModel(
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
+
         }
+
         updateAppsData()
         checkAdsAvailability()
     }
@@ -202,7 +205,7 @@ class SessionModel(
             }
 
             "setPlayVersion" -> {
-                LanternApp.getSession().isPlayVersion = call.argument("on") ?: false
+                LanternApp.getSession().isStoreVersion = call.argument("on") ?: false
                 activity.restartApp()
             }
 
@@ -418,7 +421,7 @@ class SessionModel(
 
     private fun checkEmailExists(emailAddress: String, methodCallResult: MethodChannel.Result) {
         val params = mapOf("email" to emailAddress)
-        val isPlayVersion = LanternApp.getSession().isPlayVersion()
+        val isPlayVersion = LanternApp.getSession().isStoreVersion()
         val useStripe = !isPlayVersion
         lanternClient.get(
             LanternHttpClient.createProUrl("/email-exists", params),
@@ -722,6 +725,12 @@ class SessionModel(
                 "Unable to cache user status",
                 null
             ) // This will be localized Flutter-side
+        }
+    }
+
+    fun saveServerInfo(serverInfo: Vpn.ServerInfo) {
+        db.mutate { tx ->
+            tx.put(PATH_SERVER_INFO, serverInfo)
         }
     }
 }

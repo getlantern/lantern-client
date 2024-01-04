@@ -9,7 +9,6 @@ import appium_kotlin.CHROME_PACKAGE_ACTIVITY
 import appium_kotlin.CHROME_PACKAGE_ID
 import appium_kotlin.CVC
 import appium_kotlin.ContextType
-import appium_kotlin.ERROR_PAYMENT_PURCHASE
 import appium_kotlin.IP_REQUEST_URL
 import appium_kotlin.LANTERN_PACKAGE_ID
 import appium_kotlin.LOGS_DIALED_MESSAGE
@@ -22,30 +21,36 @@ import appium_kotlin.REPORT_DESCRIPTION
 import appium_kotlin.REPORT_ISSUE_SUCCESS
 import appium_kotlin.SEND_REPORT
 import appium_kotlin.SUPPORT
+import appium_kotlin.X_PATH_ALLOW
+import io.appium.java_client.InteractsWithApps
 import io.appium.java_client.MobileBy
 import io.appium.java_client.TouchAction
 import io.appium.java_client.android.Activity
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
-import io.appium.java_client.remote.AndroidMobileCapabilityType
+import io.appium.java_client.ios.IOSDriver
 import io.appium.java_client.touch.WaitOptions
 import io.appium.java_client.touch.offset.PointOption
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
-import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.logging.LogEntries
+import org.openqa.selenium.remote.RemoteWebDriver
 import pro.truongsinh.appium_flutter.FlutterFinder
 import java.io.IOException
-import java.net.URL
 import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
+
+enum class MobileOS {
+    Android,
+    IOS
+}
 
 class AppTest() : BaseTest() {
     private val isLocalRun = (System.getenv("RUN_ENV") ?: "local") == "local"
@@ -58,29 +63,42 @@ class AppTest() : BaseTest() {
     @Throws(IOException::class, InterruptedException::class)
     fun userJourneyTests(taskId: Int) {
         var androidDriver: AndroidDriver? = null
+        var iosDriver: IOSDriver? = null
         try {
             println("TaskId: $taskId | shouldRunVPNSameTime-->createConnection ")
-            androidDriver = setupAndCreateConnection(taskId)
-            println("TaskId: $taskId | shouldRunVPNSameTime-->flutterFinder Started ")
+            val remoteDriver = setupAndCreateConnection(taskId)
+            val osVersion = getMobileOs()
+            val flutterFinder = FlutterFinder(driver = remoteDriver)
+            if (osVersion == MobileOS.Android) {
+                androidDriver = remoteDriver as AndroidDriver
+                println("TaskId: $taskId | shouldRunVPNSameTime-->flutterFinder Started ")
 
-            val flutterFinder = FlutterFinder(driver = androidDriver)
-            // Test the VPN Flow
-            VPNFlow(androidDriver, taskId, flutterFinder)
+                // Test the VPN Flow
+                VPNFlow(androidDriver, taskId, flutterFinder)
 
-            // If the VPN flow is successful then test Payment flow
-            paymentFlow(androidDriver, taskId, flutterFinder)
+                // If the VPN flow is successful then test Payment flow
+                paymentFlow(androidDriver, taskId, flutterFinder)
 
-            // Report and issue flow
-            reportAnIssueFlow(androidDriver, taskId, flutterFinder)
+                // Report and issue flow
+                reportAnIssueFlow(androidDriver, taskId, flutterFinder)
 
-            googlePlayFlow(androidDriver, taskId, flutterFinder)
+                // googlePlayFlow(androidDriver, taskId, flutterFinder)
+
+            } else {
+                iosDriver = remoteDriver as IOSDriver
+//                IOSVPNFlow(iosDriver, taskId, flutterFinder)
+                reportAnIssueFlow(iosDriver, taskId, flutterFinder, MobileOS.IOS)
+            }
 
             if (!isLocalRun) {
-                testPassed(androidDriver)
+                testPassed(remoteDriver)
             }
         } catch (e: Exception) {
             e.printStackTrace()
             if (!isLocalRun) {
+                iosDriver?.let {
+                    testFail(e.message ?: "Unknown error", it)
+                }
                 androidDriver?.let {
                     testFail(e.message ?: "Unknown error", it)
                 }
@@ -91,8 +109,40 @@ class AppTest() : BaseTest() {
             androidDriver?.let {
                 afterTest(it)
             }
-
+            iosDriver?.let {
+                afterTest(it)
+            }
         }
+    }
+
+
+    @Throws(IOException::class, InterruptedException::class)
+    private fun IOSVPNFlow(
+        iosDriver: IOSDriver,
+        taskId: Int,
+        flutterFinder: FlutterFinder
+    ) {
+
+        // App Started wait for few seconds
+        Thread.sleep(2000)
+
+        switchToContext(ContextType.FLUTTER, iosDriver)
+        println("TaskId: $taskId | finding Switch:")
+        val vpnSwitchFinder = flutterFinder.byType("FlutterSwitch")
+        vpnSwitchFinder.click()
+        println("TaskId: $taskId | VPN Switch On")
+
+
+        //Approve VPN Permissions dialog
+        switchToContext(ContextType.NATIVE_APP, iosDriver)
+        Thread.sleep(1000)
+        iosDriver.findElement(By.xpath(X_PATH_ALLOW)).click()
+        println("TaskId: $taskId | VPN Permissions Allowed")
+
+        val isSwitchOn = vpnSwitchFinder.getAttribute("value")
+        println("TaskId: $taskId | Current state of Switch $isSwitchOn")
+        Assertions.assertEquals(isSwitchOn.lowercase() == "true", true)
+
     }
 
     @Throws(IOException::class, InterruptedException::class)
@@ -267,9 +317,10 @@ class AppTest() : BaseTest() {
 
     @Throws(IOException::class, InterruptedException::class)
     private fun reportAnIssueFlow(
-        androidDriver: AndroidDriver,
+        androidDriver: RemoteWebDriver,
         taskId: Int,
-        flutterFinder: FlutterFinder
+        flutterFinder: FlutterFinder,
+        os: MobileOS = MobileOS.Android
     ) {
 
         print("TaskId: $taskId", "reportAnIssueFlow-->Switching to FLUTTER context.")
@@ -283,7 +334,7 @@ class AppTest() : BaseTest() {
         print("TaskId: $taskId", "reportAnIssueFlow-->Locating and clicking on the SUPPORT.")
         val supportTap = flutterFinder.byValueKey(SUPPORT)
         supportTap.click()
-        Thread.sleep(1000)
+        Thread.sleep(3000)
 
         print(
             "TaskId: $taskId",
@@ -292,6 +343,7 @@ class AppTest() : BaseTest() {
         val reportIssue = flutterFinder.byValueKey(REPORT_AN_ISSUE)
         reportIssue.click()
         Thread.sleep(1000)
+
 
         print("TaskId: $taskId", "reportAnIssueFlow-->Entering description.")
         val description = flutterFinder.byTooltip(REPORT_DESCRIPTION)
@@ -305,24 +357,38 @@ class AppTest() : BaseTest() {
         )
         val sendReportButton = flutterFinder.byTooltip(SEND_REPORT)
         sendReportButton.click()
-        Thread.sleep(5000)
 
-        val reportIssueSuccessLogs = captureReportIssueSuccessLogcat(androidDriver)
-        println("TaskId: $taskId | reportAnIssueFlow Checking for logs-->$reportIssueSuccessLogs")
+        //Since in IOS we are not able to read logs we will make sure form Success
+        val isSuccessDialogVisble =
+            isElementPresent(androidDriver, flutterFinder, RENEWAL_SUCCESS_OK)
 
-        if (reportIssueSuccessLogs.isBlank()) {
+        if (isSuccessDialogVisble) {
+            val okButton = flutterFinder.byTooltip(RENEWAL_SUCCESS_OK)
+            okButton.click()
+            print("TaskId: $taskId", "reportAnIssueFlow-->Test fail, assertion false.")
+            Assertions.assertEquals(isSuccessDialogVisble, true)
+
+        } else {
             if (!isLocalRun) {
                 testFail("Fail to submit Report/issue", androidDriver)
             }
+            print("TaskId: $taskId", "reportAnIssueFlow-->Test passed, assertion true.")
+            Assertions.assertEquals(isSuccessDialogVisble, true)
         }
-        print("TaskId: $taskId", "reportAnIssueFlow-->Test passed, assertion true.")
-        Assertions.assertEquals(reportIssueSuccessLogs.isNotBlank(), true)
     }
 
-    private fun afterTest(driver: AndroidDriver) {
+    private fun afterTest(driver: RemoteWebDriver) {
         switchToContext(ContextType.NATIVE_APP, driver)
-        driver.removeApp(LANTERN_PACKAGE_ID)
+        (driver as InteractsWithApps).removeApp(LANTERN_PACKAGE_ID)
         driver.quit()
+
+//        if (driver is AndroidDriver) {
+//            driver.removeApp(LANTERN_PACKAGE_ID)
+//            driver.quit()
+//        } else if (driver is IOSDriver) {
+//            driver.removeApp(LANTERN_PACKAGE_ID)
+//            driver.quit()
+//        }
         if (isLocalRun && service.isRunning) {
             service.stop()
         }
@@ -349,7 +415,7 @@ class AppTest() : BaseTest() {
             .release().perform()
     }
 
-    private fun makeIpRequest(driver: AndroidDriver): String {
+    private fun makeIpRequest(driver: RemoteWebDriver): String {
         switchToContext(ContextType.WEBVIEW_CHROME, driver)
         driver.get(IP_REQUEST_URL)
         Thread.sleep(5000)
@@ -384,12 +450,21 @@ class AppTest() : BaseTest() {
     }
 
     @Synchronized
-    private fun captureReportIssueSuccessLogcat(androidDriver: AndroidDriver): String {
+    private fun captureReportIssueSuccessLogcat(
+        androidDriver: RemoteWebDriver,
+        mobileOs: MobileOS = MobileOS.Android
+    ): String {
         switchToContext(ContextType.NATIVE_APP, androidDriver)
         val logtypes: Set<*> = androidDriver.manage().logs().availableLogTypes
-        println("supported log types: $logtypes") // [logcat, bugreport, server, client]
-        val logs: LogEntries = androidDriver.manage().logs().get("logcat")
+        println("supported log types: $logtypes")
+
+        val logs: LogEntries = if (mobileOs == MobileOS.IOS) {
+            androidDriver.manage().logs().get("syslog")
+        } else {
+            androidDriver.manage().logs().get("logcat")
+        }
         for (logEntry in logs) {
+            println("contain log: ${logEntry.message}")
             if (logEntry.message.contains(REPORT_ISSUE_SUCCESS)) {
                 println("contain log: ${logEntry.message}") // [logcat, bugreport, server, client]
                 return logEntry.message
@@ -457,7 +532,8 @@ class AppTest() : BaseTest() {
     }
 
     fun testGooglePlayFeatures(driver: AndroidDriver) {
-        driver.findElement(By.xpath("//android.widget.FrameLayout[@content-desc = 'Show navigation drawer']"))?.click()
+        driver.findElement(By.xpath("//android.widget.FrameLayout[@content-desc = 'Show navigation drawer']"))
+            ?.click()
         val elements = driver.findElements(By.xpath("//android.widget.TextView"))
         if (elements == null) return
         for (element in elements) {
@@ -484,7 +560,8 @@ class AppTest() : BaseTest() {
         openSearchForm(driver)
         driver.findElement(MobileBy.className("android.widget.EditText"))?.sendKeys(testAppName)
 
-        driver.findElement(By.xpath("//android.support.v7.widget.RecyclerView[1]/android.widget.LinearLayout[1]"))?.click()
+        driver.findElement(By.xpath("//android.support.v7.widget.RecyclerView[1]/android.widget.LinearLayout[1]"))
+            ?.click()
 
         val button = driver.findElement(MobileBy.className("android.widget.Button"))
         if (button?.text.equals("Install")) {

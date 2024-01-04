@@ -398,6 +398,7 @@ abstract class SessionManager(application: Application) : Session {
         adsBlocked: Long,
         hasSucceedingProxy: Boolean,
     ) {
+        Logger.debug("updateStats", "city $city, country $country, countryCode $countryCode")
         if (hasUpdatedStats.compareAndSet(false, true)) {
             // The first time that we get the stats, hasSucceedingProxy is always false because we
             // haven't hit any proxies yet. So, we just ignore the stats.
@@ -475,7 +476,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     // isPlayVersion checks whether or not the user installed Lantern via the Google Play store
-    override fun isPlayVersion(): Boolean {
+    override fun isStoreVersion(): Boolean {
         if (BuildConfig.PLAY_VERSION || prefs.getBoolean(PLAY_VERSION, false)) {
             return true
         }
@@ -571,6 +572,8 @@ abstract class SessionManager(application: Application) : Session {
         db.registerType(2004, Vpn.PaymentProviders::class.java)
         db.registerType(2005, Vpn.PaymentMethod::class.java)
         db.registerType(2006, Vpn.AppData::class.java)
+        db.registerType(2007, Vpn.ServerInfo::class.java)
+
         Logger.debug(TAG, "register types finished at ${System.currentTimeMillis() - start}")
         val prefsAdapter = db.asSharedPreferences(
             context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE),
@@ -578,12 +581,14 @@ abstract class SessionManager(application: Application) : Session {
         prefs = prefsAdapter
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
             .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
-            .putBoolean(PLAY_VERSION, isPlayVersion())
+            .putBoolean(PLAY_VERSION, isStoreVersion())
             .putString(FORCE_COUNTRY, prefs.getString(FORCE_COUNTRY, "")).apply()
 
         // initialize email address to empty string (if it doesn't already exist)
         if (email().isEmpty()) setEmail("")
 
+        // this condition is unnecessary
+        // Todo remove this soon
         if (prefs.getInt(ACCEPTED_TERMS_VERSION, 0) == 0) prefs.edit()
             .putInt(ACCEPTED_TERMS_VERSION, 0).apply()
 

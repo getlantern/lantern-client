@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
 
@@ -12,16 +14,16 @@ jobs:
     runs-on:
       group: large-runners
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Install libpcap
       run: sudo apt-get install libpcap-dev
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v4
       with:
         go-version: 1.19
     - name: Granting private modules access
       run: |
-          git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
     - name: Run Unit tests
       env:
         GOPRIVATE: github.com/getlantern

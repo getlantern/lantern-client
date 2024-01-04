@@ -220,12 +220,11 @@ packages:
   catcher_2:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "7be5bb3ea4867f0ab549443511478303e54db4b7"
-      url: "https://github.com/ThexXTURBOXx/catcher.git"
-    source: git
-    version: "1.0.0-alpha.2"
+      name: catcher_2
+      sha256: "73e251057b1b59442d58b5109d26401cfed850df21da44b028338d4f85f69105"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   characters:
     dependency: transitive
     description:
@@ -246,10 +245,10 @@ packages:
     dependency: "direct main"
     description:
       name: clever_ads_solutions
-      sha256: fd9386aeb8874c25f8e6dfc85f22cee31b661a2c7a02a92f2f1569ed5dd75da9
+      sha256: "8004f0965c24145baf6e2c96809461a8a06aad7fd827411cc7c769eddfcc5764"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.3"
   clock:
     dependency: transitive
     description:
@@ -398,10 +397,10 @@ packages:
     dependency: "direct main"
     description:
       name: emoji_picker_flutter
-      sha256: "1ca31245cc1f7ab5304c68ccda8039f52b9f2372aa4d10803117160fad3faf12"
+      sha256: "009c51efc763d5a6ba05a5628b8b2184c327cd117d66ea9c3e7edf2ff269c423"
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.1"
+    version: "1.6.3"
   enum_to_string:
     dependency: transitive
     description:
@@ -492,6 +491,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_inappwebview:
+    dependency: "direct main"
+    description:
+      name: flutter_inappwebview
+      sha256: "786b124c944f4914670868c9775c90600a4d4674497f617190c0d676019e337b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0-beta.25"
+  flutter_inappwebview_internal_annotations:
+    dependency: transitive
+    description:
+      name: flutter_inappwebview_internal_annotations
+      sha256: "064a8ccbc76217dcd3b0fd6c6ea6f549e69b2849a0233b5bb46af9632c3ce2ff"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter_keyboard_visibility:
     dependency: "direct main"
     description:
@@ -692,10 +707,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_mobile_ads
-      sha256: "24ee4e9546866cc15ebe565dabf6a6c485ce5fbec0645fde22799800532000f0"
+      sha256: d2ef5ec1e1f31137fc241bdeab3037c31062d387dd221fd884fb1160444c788b
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "4.0.0"
   graphs:
     dependency: transitive
     description:
@@ -1182,10 +1197,18 @@ packages:
     source: hosted
     version: "0.3.8"
   sentry:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sentry
       sha256: "830667eadc0398fea3a3424ed1b74568e2db603a42758d0922e2f2974ce55a60"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.10.1"
+  sentry_flutter:
+    dependency: "direct main"
+    description:
+      name: sentry_flutter
+      sha256: "6730f41b304c6fb0fa590dacccaf73ba11082fc64b274cfe8a79776f2b95309c"
       url: "https://pub.dev"
     source: hosted
     version: "7.10.1"
@@ -1642,14 +1665,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.3"
-  visibility_detector:
-    dependency: transitive
-    description:
-      name: visibility_detector
-      sha256: "15c54a459ec2c17b4705450483f3d5a2858e733aee893dcee9d75fd04814940d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.3"
   vm_service:
     dependency: transitive
     description:
@@ -1742,34 +1757,34 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter
-      sha256: "789d52bd789373cc1e100fb634af2127e86c99cf9abde09499743270c5de8d00"
+      sha256: c1ab9b81090705c6069197d9fdc1625e587b52b8d70cdde2339d177ad0dbb98e
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.2"
+    version: "4.4.1"
   webview_flutter_android:
     dependency: transitive
     description:
       name: webview_flutter_android
-      sha256: d936a09fbfd08cb78f7329e0bbacf6158fbdfe24ffc908b22444c07d295eb193
+      sha256: b0cd33dd7d3dd8e5f664e11a19e17ba12c352647269921a3b568406b001f1dff
       url: "https://pub.dev"
     source: hosted
-    version: "3.9.2"
+    version: "3.12.0"
   webview_flutter_platform_interface:
     dependency: transitive
     description:
       name: webview_flutter_platform_interface
-      sha256: "564ef378cafc1a0e29f1d76ce175ef517a0a6115875dff7b43fccbef2b0aeb30"
+      sha256: "6d9213c65f1060116757a7c473247c60f3f7f332cac33dc417c9e362a9a13e4f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.6.0"
   webview_flutter_wkwebview:
     dependency: transitive
     description:
       name: webview_flutter_wkwebview
-      sha256: "5fa098f28b606f699e8ca52d9e4e11edbbfef65189f5f77ae92703ba5408fd25"
+      sha256: "30b9af6bdd457b44c08748b9190d23208b5165357cc2eb57914fee1366c42974"
       url: "https://pub.dev"
     source: hosted
-    version: "3.7.2"
+    version: "3.9.1"
   win32:
     dependency: "direct overridden"
     description:

@@ -39,16 +39,15 @@ dependencies:
   google_fonts:
   flutter_switch: ^0.3.2
   flag: ^7.0.0
-  # from sdk. See https://github.com/jhomlala/catcher/pull/234 for more details
-  catcher_2:
-    git:
-      url: https://github.com/ThexXTURBOXx/catcher.git
 
-  sentry: ^7.10.1
+ #Loogs and crash reporting
+  catcher_2: ^1.0.0
+  sentry_flutter: ^7.10.1
+
   badges: ^3.1.1
   dotted_border: ^2.0.0+3
   styled_text: ^8.1.0
-  emoji_picker_flutter: ^1.6.1
+  emoji_picker_flutter: ^1.6.3
   pin_code_text_field: ^1.8.0
   scrollable_positioned_list: ^0.3.8
   infinite_scroll_pagination: ^3.2.0
@@ -92,6 +91,9 @@ dependencies:
   # URL & Sharing utilities
   url_launcher: ^6.1.12
   share_plus: ^7.1.0
+  flutter_inappwebview: ^6.0.0-beta.25
+
+
 
   # Notifications & Logging
   flutter_local_notifications: ^15.1.0+1
@@ -114,8 +116,8 @@ dependencies:
   flutter_markdown: ^0.6.17+1
 
   # Ads
-  google_mobile_ads: ^3.0.0
-  clever_ads_solutions: ^0.1.0
+  google_mobile_ads: ^4.0.0
+  clever_ads_solutions: ^0.2.2
   retry: ^3.1.2
 
 

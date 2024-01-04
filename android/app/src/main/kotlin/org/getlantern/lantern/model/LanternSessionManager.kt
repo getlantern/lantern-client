@@ -342,8 +342,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         }
     }
 
-    fun setPlayVersion(playVersion: Boolean) {
-        prefs.edit().putBoolean(PLAY_VERSION, playVersion).apply()
+    fun setStoreVersion(storeVersion: Boolean) {
+        prefs.edit().putBoolean(PLAY_VERSION, storeVersion).apply()
     }
 
     companion object {

@@ -67,36 +67,35 @@ class BaseScreen extends StatelessWidget {
         appBar: !showAppBar
             ? null
             : PreferredSize(
-                preferredSize: Size.fromHeight(appBarHeight),
-                child: Transform.translate(
-                  offset: Offset(0.0, verticalCorrection),
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: AlignmentDirectional.topCenter,
-                    children: [
-                      AppBar(
-                        automaticallyImplyLeading: automaticallyImplyLeading,
-                        title: title is String
-                            ? CText(
-                                title,
-                                style: tsHeading3
-                                    .copiedWith(color: foregroundColor)
-                                    .short,
-                              )
-                            : title,
-                        elevation: 1,
-                        shadowColor: grey3,
-                        foregroundColor: foregroundColor,
-                        backgroundColor: backgroundColor,
-                        iconTheme: IconThemeData(color: foregroundColor),
-                        centerTitle: centerTitle,
-                        titleSpacing: 0,
-                        actions: actions,
-                      ),
-                      ConnectivityWarning(
-                        dy: verticalCorrection,
-                      ),
-                    ],
+                preferredSize: Size.fromHeight(appBarHeight+verticalCorrection),
+                child: SafeArea(
+                  child: Column(
+                      children: [
+                        ConnectivityWarning(
+                          dy: verticalCorrection,
+                        ),
+                        AppBar(
+                          automaticallyImplyLeading: automaticallyImplyLeading,
+                          title: title is String
+                              ? CText(
+                                  title,
+                                  style: tsHeading3
+                                      .copiedWith(color: foregroundColor)
+                                      .short,
+                                )
+                              : title,
+                          elevation: 1,
+                          shadowColor: grey3,
+                          foregroundColor: foregroundColor,
+                          backgroundColor: backgroundColor,
+                          iconTheme: IconThemeData(color: foregroundColor),
+                          centerTitle: centerTitle,
+                          titleSpacing: 0,
+                          actions: actions,
+                        ),
+
+                      ],
+
                   ),
                 ),
               ),
@@ -104,7 +103,7 @@ class BaseScreen extends StatelessWidget {
           padding: EdgeInsetsDirectional.only(
             start: padHorizontal ? 16 : 0,
             end: padHorizontal ? 16 : 0,
-            top: padVertical ? 16 + verticalCorrection : verticalCorrection,
+            top: padVertical ? 16:0,
             bottom: padVertical ? 16 : 0,
           ),
           child: body,
@@ -142,12 +141,14 @@ class ConnectivityWarning extends StatelessWidget {
                 description: 'connection_error_des'.i18n,
                 agreeText: 'connection_error_button'.i18n,
                 agreeAction: () async {
+                  context.popRoute();
                   await context.pushRoute(ReportIssue());
                   return true;
                 },
               ).show(context)
           : null,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 600),
         width: MediaQuery.of(context).size.width,
         color: yellow6,
         height: dy,
