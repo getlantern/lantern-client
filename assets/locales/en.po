@@ -1628,9 +1628,9 @@ msgstr "Get Lantern Pro"
 msgid "try_lantern_pro"
 msgstr "Try Lantern for free! "
 
-msgid "continue_for_free"
-msgstr "Continue for Free "
 
+msgid "new_to_lantern"
+msgstr "New to Lantern? "
 
 
 

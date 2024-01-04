@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/gestures.dart';
 import '../../common/common.dart';
 
 @RoutePage<void>(name: 'SignIn')
@@ -57,7 +58,7 @@ class _SignInState extends State<SignIn> {
                 label: widget.authFlow.isReset
                     ? "lantern_pro_email".i18n
                     : "enter_email".i18n,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
+
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.emailAddress,
                 prefixIcon: SvgPicture.asset(ImagePaths.email),
@@ -80,10 +81,22 @@ class _SignInState extends State<SignIn> {
             const SizedBox(height: 24),
             if (widget.authFlow.isSignIn &&
                 sessionModel.hasUserSignedInNotifier.value == false)
-              AppTextButton(
-                text: 'create_account'.i18n.toUpperCase(),
-                onPressed: openPlans,
-              )
+              RichText(
+                text: TextSpan(
+                  text: 'new_to_lantern'.i18n,
+                  style:
+                  tsBody1.copyWith(fontWeight: FontWeight.w400, color: grey5),
+                  children: [
+                    TextSpan(
+                      text: "create_account".i18n.toUpperCase(),
+                      style: tsBody1.copyWith(
+                          fontWeight: FontWeight.w500, color: pink5),
+                      recognizer: TapGestureRecognizer()..onTap = openPlans,
+                    ),
+                  ],
+                ),
+              ),
+
           ],
         ),
       ),
