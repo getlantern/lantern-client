@@ -66,7 +66,7 @@ class _VerificationState extends State<Verification> {
               const SizedBox(height: 14),
               if (!widget.authFlow.isVerifyEmail)
                 AppTextButton(
-                  text: 'change_email'.i18n,
+                  text: 'change_email'.i18n.toUpperCase(),
                   onPressed: () {
                     context.popRoute();
                   },
