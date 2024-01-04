@@ -76,7 +76,10 @@ class AppPurchase {
 
   Future<void> _handlePurchase(PurchaseDetails purchaseDetails) async {
     if (purchaseDetails.status == PurchaseStatus.canceled) {
+      /// if user cancels purchase and then try to purchase again it will get penning transaction errr
+      /// To avoid edge case complete purchase
       // User has canceled the purchase
+      await _inAppPurchase.completePurchase(purchaseDetails);
       _onError?.call("Purchase canceled");
       return;
     }
