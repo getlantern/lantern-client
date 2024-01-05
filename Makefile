@@ -571,8 +571,8 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 		mkdir $(DARWIN_APP_NAME)/Contents/MacOS && \
 		cp -a build/macos/Build/Products/Debug/Lantern.app/Contents/* $(DARWIN_APP_NAME)/Contents/ && \
 		ls build/macos/Build/Products/Debug/Lantern.app/Contents && \
-		cp $(DARWIN_BINARY_NAME) build/macos/Build/Products/Debug/Lantern.app/Contents/Frameworks && \
-		cp -r $(DARWIN_BINARY_NAME) $(DARWIN_APP_NAME)/Contents/Resources && \
+		cp $(DARWIN_BINARY_NAME) build/macos/Build/Products/Debug/Lantern.app/Contents/Frameworks/liblantern.dylib && \
+		cp -r $(DARWIN_BINARY_NAME) $(DARWIN_APP_NAME)/Contents/Resources/liblantern.dylib && \
 		$(call osxcodesign,$(DARWIN_APP_NAME)/Contents/Resources/liblantern.dylib) && \
 		mkdir $(DARWIN_APP_NAME)/Contents/Resources/en.lproj && \
 		cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(PACKAGED_YAML) && \

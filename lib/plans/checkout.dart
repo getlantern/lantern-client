@@ -213,7 +213,11 @@ class _CheckoutState extends State<Checkout>
               "stripe",
               os,
             );
-          await context.pushRoute(AppWebview(url: redirectUrl));
+          if (!Platform.isMacOS) {
+            await context.pushRoute(AppWebview(url: redirectUrl));
+          } else {
+            await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
+          }
           return;
         }
 
@@ -403,9 +407,6 @@ class _CheckoutState extends State<Checkout>
                           message: AppKeys.continueCheckout,
                           child: Button(
                             text: 'continue'.i18n,
-                            disabled: emailController.value.text.isEmpty ||
-                                emailFieldKey.currentState?.validate() ==
-                                    false,
                             onPressed: onContinueTapped,
                           ),
                         ),
