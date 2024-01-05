@@ -17,6 +17,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   }()
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
+    logger.log("Initializing SessionModel")
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current
     let deviceId = DeviceIdentifier.getUDID()
@@ -45,9 +46,6 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     DispatchQueue.global(qos: .userInitiated).async {
       self.startService()
     }
-      logger.debug("init completed successfully")
-
-    //    getBandwidth()
   }
 
   func startService() {

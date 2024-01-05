@@ -14,11 +14,12 @@ class ServerLocationWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CText(
-            'Server Location'.i18n,
+            '${'Server Location'.i18n}:',
             style: tsSubtitle3.copiedWith(
               color: unselectedTabIconColor,
             ),
           ),
+          const SizedBox(width: 8),
           Container(
             transform: Matrix4.translationValues(0.0, 2.0, 0.0),
             child: Icon(

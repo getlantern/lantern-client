@@ -1606,6 +1606,9 @@ msgstr "Device has been Linked"
 msgid "device_added_msg"
 msgstr "This device has been Linked to %s"
 
+msgid "new_to_lantern"
+msgstr "New to Lantern? "
+
 
 
 

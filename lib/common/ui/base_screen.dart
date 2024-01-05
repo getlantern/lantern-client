@@ -89,7 +89,7 @@ class BaseScreen extends StatelessWidget {
                                     .short,
                               )
                             : title,
-                        elevation: 1,
+                        elevation: .5,
                         shadowColor: grey3,
                         foregroundColor: foregroundColor,
                         backgroundColor: backgroundColor,
