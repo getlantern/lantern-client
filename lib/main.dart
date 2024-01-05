@@ -66,7 +66,10 @@ Future<void> main() async {
 //       : 'https://c14296fdf5a6be272e1ecbdb7cb23f76@o75725.ingest.sentry.io/4506081382694912';
 // }, appRunner: () => setupCatcherAndRun(LanternApp()));
 
-  setupCatcherAndRun(const LanternApp());
+  // setupCatcherAndRun(const LanternApp());
+  setupCatcherAndRun(Container(
+    color: Colors.amber,
+  ),);
 }
 
 Future<void> _initGoogleMobileAds() async {

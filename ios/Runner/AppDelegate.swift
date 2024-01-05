@@ -28,8 +28,8 @@ import UIKit
   ) -> Bool {
     //    SentryUtils.startSentry();
     initializeFlutterComponents()
-    try! setupModels()
-    try! setupAppComponents()
+//    try! setupModels()
+//    try! setupAppComponents()
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
