@@ -13,6 +13,12 @@ extension ErrorX on Object {
         if (description.contains("invalid_code")) {
           return "invalid_code".i18n;
         }
+        if (description.contains("recovery_not_found")) {
+          return "recovery_not_found".i18n;
+        }
+        if (description.contains("wrong-link-code")) {
+          return "wrong_link_code".i18n;
+        }
         if (description.contains("error while sign up")) {
           return "signup_error".i18n;
         } else {

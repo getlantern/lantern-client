@@ -105,13 +105,11 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-      if (Platform.isAndroid)
+
         ListItemFactory.settingsItem(
           icon: ImagePaths.devices,
           content: 'Authorize Device for Pro'.i18n,
-          onTap: () {
-            authorizeDeviceForPro(context);
-          },
+          onTap:() => authorizeDeviceForPro(context),
         ),
       ...commonItems(context)
     ];
@@ -143,12 +141,11 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-      if (Platform.isAndroid)
-        ListItemFactory.settingsItem(
-          icon: ImagePaths.devices,
-          content: 'add_device'.i18n,
-          onTap: () async => await context.pushRoute(ApproveDevice()),
-        ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.devices,
+        content: 'add_device'.i18n,
+        onTap: () async => await context.pushRoute(ApproveDevice()),
+      ),
       ...commonItems(context)
     ];
   }
@@ -195,9 +192,7 @@ class AccountMenu extends StatelessWidget {
       title: 'Account'.i18n,
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        print("called pro user listener");
         return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
-          print("called isUserSignedIn listener");
           return ListView(
             children: proUser && hasUserLoggedIn
                 ? proItems(sessionContext)

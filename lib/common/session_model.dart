@@ -273,22 +273,22 @@ class SessionModel extends Model {
     });
   }
 
-  Future<String> authorizeViaEmail(String emailAddress) {
+  Future<void> authorizeViaEmail(String emailAddress) {
     return methodChannel.invokeMethod('authorizeViaEmail', <String, dynamic>{
       'emailAddress': emailAddress,
-    }).then((value) => value as String);
+    }).then((value) => value.toString());
   }
 
-  Future<String> validateRecoveryCode(String code) {
-    return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
+  Future<String> validateRecoveryCode(String code) async {
+    return await methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
       'code': code,
-    }).then((value) => value as String);
+    }).then((value) => value.toString());
   }
 
   Future<String> approveDevice(String code) {
     return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
       'code': code,
-    }).then((value) => value as String);
+    }).then((value) => value.toString() as String);
   }
 
   Future<void> removeDevice(String deviceId) {
@@ -297,10 +297,6 @@ class SessionModel extends Model {
     });
   }
 
-  Future<void> resendRecoveryCode() {
-    return methodChannel
-        .invokeMethod('resendRecoveryCode', <String, dynamic>{});
-  }
 
   Future<void> setSelectedTab<T>(String tab) async {
     return methodChannel.invokeMethod('setSelectedTab', <String, dynamic>{
@@ -447,10 +443,8 @@ class SessionModel extends Model {
     );
   }
 
-  Future<String> requestLinkCode() {
-    return methodChannel
-        .invokeMethod('requestLinkCode')
-        .then((value) => value as String);
+  Future<void> requestLinkCode() {
+    return methodChannel.invokeMethod('requestLinkCode',{});
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {

@@ -375,7 +375,6 @@ class _AccountManagementState extends State<AccountManagement>
           );
         }),
         //Disable device linking in IOS
-        if(Platform.isAndroid)
         const UserDevices(),
         ListItemFactory.settingsItem(
           header: 'danger_zone'.i18n,
@@ -422,15 +421,7 @@ class UserDevices extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () {
-                context.loaderOverlay.show(widget: spinner);
-                sessionModel.removeDevice(device.id).then((value) {
-                  context.loaderOverlay.hide();
-                  Navigator.pop(context);
-                }).onError((error, stackTrace) {
-                  context.loaderOverlay.hide();
-                });
-              },
+              onPressed: () => onUnlink(context, device.id),
               child: CText(
                 'Yes'.i18n,
                 style: tsButtonPink,
@@ -440,6 +431,18 @@ class UserDevices extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> onUnlink(BuildContext context, String deviceId) async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.removeDevice(deviceId);
+      context.loaderOverlay.hide();
+      context.popRoute();
+    } catch (e) {
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
   }
 
   @override
@@ -472,7 +475,7 @@ class UserDevices extends StatelessWidget {
               );
             }).toList(),
             // IOS does not support Link devices at the moment
-            if (devices.devices.length < 3 && Platform.isAndroid)
+            if (devices.devices.length < 3)
               ListItemFactory.settingsItem(
                 content: '',
                 onTap: () async => await context.pushRoute(ApproveDevice()),

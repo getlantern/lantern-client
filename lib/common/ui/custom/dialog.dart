@@ -23,6 +23,31 @@ class CDialog extends StatefulWidget {
     ).show(context);
   }
 
+  static void successDialog(
+      {required BuildContext context,
+      required String title,
+      required String description,
+      String? agreeText,
+      VoidCallback? successCallback}) {
+    CDialog(
+      iconPath: ImagePaths.check_green_large,
+      title: title,
+      description: description,
+      barrierDismissible: false,
+      agreeText: agreeText ?? "continue".i18n,
+      includeCancel: false,
+      agreeAction: () async {
+       Future.delayed(const Duration(milliseconds: 300), () {
+         if (successCallback != null) {
+           successCallback.call();
+           return true;
+         }
+        });
+        return true;
+      },
+    ).show(context);
+  }
+
   /// shows a standard informational dialog that has only one action ("OK").
   static void showInfo(
     BuildContext context, {

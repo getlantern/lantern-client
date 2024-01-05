@@ -1,6 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
-
 
 @RoutePage<void>(name: 'AuthorizeDeviceEmail')
 class AuthorizeDeviceViaEmail extends StatelessWidget {
@@ -28,8 +29,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
               margin: const EdgeInsetsDirectional.only(top: 32),
               child: CTextField(
                 controller: emailController,
-                autovalidateMode: AutovalidateMode.disabled,
-                //TODO: this throws an error when we set it to AutovalidateMode.onUserInteraction
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 label: 'Email'.i18n,
                 helperText: 'auth_email_helper_text'.i18n,
                 keyboardType: TextInputType.emailAddress,
@@ -41,24 +41,32 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
               margin: const EdgeInsetsDirectional.only(bottom: 32),
               child: Button(
                 text: 'Submit'.i18n,
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    context.loaderOverlay.show(widget: spinner);
-                    sessionModel
-                        .authorizeViaEmail(emailController.value.text)
-                        .then((result) async {
-                      context.loaderOverlay.hide();
-                      await context.pushRoute(AuthorizeDeviceEmailPin());
-                    }).onError((error, stackTrace) {
-                      context.loaderOverlay.hide();
-                    });
-                  }
-                },
+                onPressed: () => onSubmit(context),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> onSubmit(BuildContext context) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+    try {
+      context.loaderOverlay.show();
+      await sessionModel
+          .authorizeViaEmail(emailController.value.text.validateEmail);
+      context.loaderOverlay.hide();
+      context.pushRoute(
+        AuthorizeDeviceEmailPin(
+            email: emailController.value.text.validateEmail),
+      );
+    } catch (e) {
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
   }
 }
