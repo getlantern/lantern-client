@@ -1628,6 +1628,30 @@ msgstr "Get Lantern Pro"
 msgid "try_lantern_pro"
 msgstr "Try Lantern for free! "
 
+msgid "continue_for_free"
+msgstr "Continue for Free "
+
+msgid "recovery_not_found"
+msgstr "Device not associated to this user"
+
+msgid "device_added"
+msgstr "Device not associated to this user"
+
+msgid "device_added_message"
+msgstr "Your device has been successfully added. If you do not see the device connected, please restart the app on both devices"
+
+msgid "wrong_link_code"
+msgstr "The code you entered is incorrect. Please check and try again."
+
+msgid "recovery_code_sent"
+msgstr "Recovery code has been sent"
+
+msgid "device_added"
+msgstr "Device has been Linked"
+
+
+msgid "device_added_msg"
+msgstr "This device has been Linked to %s"
 
 msgid "new_to_lantern"
 msgstr "New to Lantern? "

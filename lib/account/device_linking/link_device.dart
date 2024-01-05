@@ -34,6 +34,14 @@ class _LinkDeviceState extends State<LinkDevice> {
               )
             },
           );
+    requestLinkCode();
+  }
+
+  void requestLinkCode() {
+    try {
+      sessionModel.requestLinkCode();
+    } catch (e, s) {
+      mainLogger.e(e);
     }
   }
 

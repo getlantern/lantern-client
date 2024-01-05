@@ -1,9 +1,10 @@
 import 'package:lantern/common/common.dart';
+
 import 'explanation_step.dart';
 
 @RoutePage<void>(name: 'ApproveDevice')
-class ApproveDevice extends StatelessWidget {
-  ApproveDevice({Key? key}) : super(key: key);
+class AddDevice extends StatelessWidget {
+  AddDevice({Key? key}) : super(key: key);
 
   final pinCodeController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -31,17 +32,7 @@ class ApproveDevice extends StatelessWidget {
               PinField(
                 length: 6,
                 controller: pinCodeController,
-                onDone: (code) {
-                  context.loaderOverlay.show(widget: spinner);
-                  sessionModel.approveDevice(code).then((value) {
-                    pinCodeController.clear();
-                    context.loaderOverlay.hide();
-                    Navigator.pop(context);
-                  }).onError((error, stackTrace) {
-                    pinCodeController.clear();
-                    context.loaderOverlay.hide();
-                  });
-                },
+                onDone: (code) => onDone(code, context),
               ),
               LabeledDivider(
                 padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10),
@@ -59,5 +50,37 @@ class ApproveDevice extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Future<void> onDone(String code, BuildContext context) async {
+    try {
+      context.loaderOverlay.show();
+      pinCodeController.clear();
+      await sessionModel.approveDevice(code);
+      context.loaderOverlay.hide();
+      successDialog(context);
+    } catch (e) {
+      pinCodeController.clear();
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
+
+  void successDialog(BuildContext context) {
+    CDialog(
+      iconPath: ImagePaths.check_green_large,
+      title: "device_added".i18n,
+      description: "device_added_message".i18n,
+      barrierDismissible: false,
+      agreeText: "ok".i18n,
+      includeCancel: false,
+      agreeAction: () async {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          context.popRoute();
+          context.popRoute();
+        });
+        return true;
+      },
+    ).show(context);
   }
 }

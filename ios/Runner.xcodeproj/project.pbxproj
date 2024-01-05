@@ -31,6 +31,7 @@
 		035BE7062A7122BC0084059A /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7042A7122BC0084059A /* SessionModel.swift */; };
 		036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036663D82A9E0C0E00595971 /* JsonUtils.swift */; };
 		03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */; };
+		039D7C442B43E047007667CD /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039D7C432B43E047007667CD /* KeychainService.swift */; };
 		03A1AB142AA88BDA00FB41B2 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB132AA88BDA00FB41B2 /* VPNManager.swift */; };
 		03A1AB322AA890AB00FB41B2 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A1AB312AA890AB00FB41B2 /* NetworkExtension.framework */; };
 		03A1AB352AA890AB00FB41B2 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB342AA890AB00FB41B2 /* PacketTunnelProvider.swift */; };
@@ -111,6 +112,7 @@
 		036663D82A9E0C0E00595971 /* JsonUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonUtils.swift; sourceTree = "<group>"; };
 		03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriberRequest.swift; sourceTree = "<group>"; };
 		038EBA8F187F39DA9C6ED912 /* Pods-LanternTests.release-appium-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.release-appium-test.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.release-appium-test.xcconfig"; sourceTree = "<group>"; };
+		039D7C432B43E047007667CD /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		03A1AB102AA8893900FB41B2 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		03A1AB132AA88BDA00FB41B2 /* VPNManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
 		03A1AB152AA88BF200FB41B2 /* VPNBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VPNBase.swift; sourceTree = "<group>"; };
@@ -320,6 +322,7 @@
 				03F00B5E2AB07C8000E991E2 /* LoadingIndicatorManager.swift */,
 				0324CC2F2AE279CF00490B46 /* SentryUtils.swift */,
 				03D0F0EF2B2C7FC300C32918 /* ModelExtension.swift */,
+				039D7C432B43E047007667CD /* KeychainService.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -804,6 +807,7 @@
 				03567DC02AA9F47200A233EA /* FileUtils.swift in Sources */,
 				03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */,
 				03A1AB422AA8930A00FB41B2 /* Result.swift in Sources */,
+				039D7C442B43E047007667CD /* KeychainService.swift in Sources */,
 				0324CC302AE279CF00490B46 /* SentryUtils.swift in Sources */,
 				0308A1282AAEED7E0086157A /* VpnHelper.swift in Sources */,
 				03F00B5F2AB07C8000E991E2 /* LoadingIndicatorManager.swift in Sources */,

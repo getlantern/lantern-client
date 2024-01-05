@@ -19,13 +19,14 @@ import (
 )
 
 const (
-	publicBaseUrl = "https://api.iantem.io/v1"
-	baseUrl       = "https://api.getiantem.org"
-	userGroup     = publicBaseUrl + "/users"
-	userDetailUrl = baseUrl + "/user-data"
-	userCreateUrl = baseUrl + "/user-create"
-	plansV3Url    = baseUrl + "/plans-v3"
-	purchaseUrl   = baseUrl + "/purchase"
+	publicBaseUrl  = "https://api.iantem.io/v1"
+	baseUrl        = "https://api.getiantem.org"
+	userGroup      = publicBaseUrl + "/users"
+	userDetailUrl  = baseUrl + "/user-data"
+	userCreateUrl  = baseUrl + "/user-create"
+	userRecoverUrl = baseUrl + "/user-recover"
+	plansV3Url     = baseUrl + "/plans-v3"
+	purchaseUrl    = baseUrl + "/purchase"
 	//Sign up urls
 	signUpUrl         = userGroup + "/signup"
 	signUpCompleteUrl = userGroup + "/signup/complete/email"
@@ -41,6 +42,12 @@ const (
 	deleteUrl      = userGroup + "/delete"
 	changeEmailUrl = userGroup + "/change_email"
 	confirmedUrl   = userGroup + "/confirmed"
+	//Device Linking
+	linkCodeRequestUrl  = baseUrl + "/link-code-request"
+	linkCodeApproveUrl  = baseUrl + "/link-code-approve"
+	userLinkRemoveUrl   = baseUrl + "/user-link-remove"
+	userLinkRequestUrl  = baseUrl + "/user-link-request"
+	userLinkValidateUrl = baseUrl + "/user-link-validate"
 )
 
 const (
@@ -598,6 +605,240 @@ func DeleteAccount(body *protos.DeleteUserRequest) (bool, error) {
 		return false, log.Errorf("error while sending recovery email %v", err)
 	}
 	return true, nil
+}
+
+//Deivce Linking
+
+func LinkCodeRequest(data map[string]string, deviceId string, userId string, token string) (*LinkRequestResult, error) {
+	log.Debugf("LinkCodeRequest body %v", data)
+	body, err := createJsonBody(data)
+	if err != nil {
+		log.Errorf("Error while creating json body")
+		return nil, err
+	}
+
+	log.Debugf("Encoded body %v", body)
+	// Create a new request
+	req, err := http.NewRequest("POST", linkCodeRequestUrl, body)
+	if err != nil {
+		log.Errorf("Error creating new LinkCodeRequest: %v", err)
+		return nil, err
+	}
+
+	// Add headers
+	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerUserId, userId)
+	req.Header.Set(headerProToken, token)
+	req.Header.Set(headerContentType, "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error while linkCode request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+	log.Debugf("LinkCodeRequest response %v with status code %d", resp.Body, resp.StatusCode)
+	var linkResponse LinkRequestResult
+	// Read and decode the response body
+	if err := json.NewDecoder(resp.Body).Decode(&linkResponse); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+	return &linkResponse, nil
+}
+
+func UserRecover(data map[string]string, deviceId string) (*UserRecovery, error) {
+	body, err := createJsonBody(data)
+	if err != nil {
+		log.Errorf("Error while creating json body")
+		return nil, err
+	}
+	log.Debugf("User Recovery body %v", body)
+	// Create a new request
+	req, err := http.NewRequest("POST", userRecoverUrl, body)
+	if err != nil {
+		log.Errorf("Error creating new User Recovery: %v", err)
+		return nil, err
+	}
+
+	// Add headers
+	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerContentType, "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error while UserRecovery request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+	var userRecovery UserRecovery
+	// Read and decode the response body
+	if err := json.NewDecoder(resp.Body).Decode(&userRecovery); err != nil {
+		log.Errorf("Error decoding response body: %v", err)
+		return nil, err
+	}
+	if userRecovery.Status != "ok" {
+		return nil, log.Errorf("recovery_not_found %v", err)
+	}
+	return &userRecovery, nil
+}
+
+func LinkCodeApprove(data map[string]string, userId string, token string) (bool, error) {
+	body, err := createJsonBody(data)
+	if err != nil {
+		log.Errorf("Error while creating json body")
+		return false, err
+	}
+	req, err := http.NewRequest("POST", linkCodeApproveUrl, body)
+	if err != nil {
+		log.Errorf("Error creating linkcode approve request: %v", err)
+		return false, err
+	}
+
+	// Add headers
+	req.Header.Set(headerProToken, token)
+	req.Header.Set(headerUserId, userId)
+	req.Header.Set(headerContentType, "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error while UserRecovery request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	bodyStr, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+	log.Debugf("LinkCode Arppove response %v with status code %d", string(bodyStr), resp.StatusCode)
+	var apiResponse ApiResponse
+	err = json.Unmarshal(bodyStr, &apiResponse)
+	if err != nil {
+		return false, log.Errorf("error unmarshaling response: %v", err)
+	}
+	if apiResponse.ErrorId != "" {
+		return false, log.Errorf("%v", apiResponse.ErrorId)
+	}
+	return true, nil
+}
+
+func DeviceUnlink(data map[string]string, userId string, deviceId string, token string) (bool, error) {
+	body, err := createJsonBody(data)
+	if err != nil {
+		log.Errorf("Error while creating json body")
+		return false, err
+	}
+	req, err := http.NewRequest("POST", userLinkRemoveUrl, body)
+	if err != nil {
+		log.Errorf("Error creating linkcode approve request: %v", err)
+		return false, err
+	}
+
+	// Add headers
+	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerUserId, userId)
+	req.Header.Set(headerProToken, token)
+	req.Header.Set(headerContentType, "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error while UserRecovery request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	bodyStr, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+	log.Debugf("LinkCode Arppove response %v with status code %d", string(bodyStr), resp.StatusCode)
+	var apiResponse ApiResponse
+	err = json.Unmarshal(bodyStr, &apiResponse)
+	if err != nil {
+		return false, log.Errorf("error unmarshaling response: %v", err)
+	}
+	if apiResponse.ErrorId != "" {
+		return false, log.Errorf("%v", apiResponse.ErrorId)
+	}
+	return true, nil
+}
+
+// RequestRecoveryEmail requests an account recovery email for linking to an existing pro account
+func UserLinkRequest(data map[string]string, deviceId string) (bool, error) {
+	body, err := createJsonBody(data)
+	if err != nil {
+		log.Errorf("Error while creating json body")
+		return false, err
+	}
+	req, err := http.NewRequest("POST", userLinkRequestUrl, body)
+	if err != nil {
+		log.Errorf("Error creating userlink request approve request: %v", err)
+		return false, err
+	}
+
+	// Add headers
+	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerContentType, "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error while UserLinkRequest request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	bodyStr, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+	log.Debugf("UserLinkRequest response %v with status code %d", string(bodyStr), resp.StatusCode)
+	var apiResponse ApiResponse
+	err = json.Unmarshal(bodyStr, &apiResponse)
+	if err != nil {
+		return false, log.Errorf("error unmarshaling response: %v", err)
+	}
+	if apiResponse.ErrorId != "" {
+		return false, log.Errorf("%v", apiResponse.ErrorId)
+	}
+	return true, nil
+}
+
+// ValidateRecoveryCode validates the given recovery code and finishes linking the device, returning the user_id and pro_token for the account.
+func UserLinkValidate(data map[string]string, deviceId string) (*UserRecovery, error) {
+	body, err := createJsonBody(data)
+	if err != nil {
+		log.Errorf("Error while creating json body")
+		return nil, err
+	}
+	log.Debugf("User Link validate body %v", body)
+	// Create a new request
+	req, err := http.NewRequest("POST", userLinkValidateUrl, body)
+	if err != nil {
+		log.Errorf("Error creating User Link validate: %v", err)
+		return nil, err
+	}
+
+	// Add headers
+	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerContentType, "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error while UserLinkValiate request: %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+	var userRecovery UserRecovery
+	// Read and decode the response body
+	if err := json.NewDecoder(resp.Body).Decode(&userRecovery); err != nil {
+		log.Errorf("invalid_code Error decoding response body: %v", err)
+		return nil, err
+	}
+	if userRecovery.Status != "ok" {
+		return nil, log.Errorf("recovery_not_found %v", err)
+	}
+	return &userRecovery, nil
 }
 
 // Utils methods convert json body

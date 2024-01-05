@@ -25,7 +25,7 @@ import 'package:lantern/account/auth/sign_in_password.dart' as _i45;
 import 'package:lantern/account/auth/verification.dart' as _i49;
 import 'package:lantern/account/blocked_users.dart' as _i10;
 import 'package:lantern/account/chat_number_account.dart' as _i12;
-import 'package:lantern/account/device_linking/approve_device.dart' as _i5;
+import 'package:lantern/account/device_linking/add_device.dart' as _i3;
 import 'package:lantern/account/device_linking/authorize_device_for_pro.dart'
     as _i7;
 import 'package:lantern/account/device_linking/authorize_device_via_email.dart'
@@ -42,10 +42,10 @@ import 'package:lantern/account/settings.dart' as _i43;
 import 'package:lantern/account/split_tunneling.dart' as _i46;
 import 'package:lantern/account/support.dart' as _i48;
 import 'package:lantern/common/common.dart' as _i52;
-import 'package:lantern/common/ui/app_webview.dart' as _i4;
+import 'package:lantern/common/ui/app_webview.dart' as _i5;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i21;
 import 'package:lantern/home.dart' as _i22;
-import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i3;
+import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i4;
 import 'package:lantern/messaging/contacts/contact_info.dart' as _i17;
 import 'package:lantern/messaging/contacts/new_chat.dart' as _i29;
 import 'package:lantern/messaging/conversation/conversation.dart' as _i18;
@@ -90,28 +90,28 @@ abstract class $AppRouter extends _i50.RootStackRouter {
         child: const _i2.AccountMenu(),
       );
     },
+    ApproveDevice.name: (routeData) {
+      final args = routeData.argsAs<ApproveDeviceArgs>(
+          orElse: () => const ApproveDeviceArgs());
+      return _i50.AutoRoutePage<void>(
+        routeData: routeData,
+        child: _i3.AddDevice(key: args.key),
+      );
+    },
     AddViaChatNumber.name: (routeData) {
       return _i50.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i3.AddViaChatNumber(),
+        child: _i4.AddViaChatNumber(),
       );
     },
     AppWebview.name: (routeData) {
       final args = routeData.argsAs<AppWebviewArgs>();
       return _i50.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i4.AppWebView(
+        child: _i5.AppWebView(
           key: args.key,
           url: args.url,
         ),
-      );
-    },
-    ApproveDevice.name: (routeData) {
-      final args = routeData.argsAs<ApproveDeviceArgs>(
-          orElse: () => const ApproveDeviceArgs());
-      return _i50.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i5.ApproveDevice(key: args.key),
       );
     },
     AuthLanding.name: (routeData) {
@@ -121,11 +121,9 @@ abstract class $AppRouter extends _i50.RootStackRouter {
       );
     },
     AuthorizePro.name: (routeData) {
-      final args = routeData.argsAs<AuthorizeProArgs>(
-          orElse: () => const AuthorizeProArgs());
       return _i50.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i7.AuthorizeDeviceForPro(key: args.key),
+        child: const _i7.AuthorizeDeviceForPro(),
       );
     },
     AuthorizeDeviceEmail.name: (routeData) {
@@ -137,11 +135,13 @@ abstract class $AppRouter extends _i50.RootStackRouter {
       );
     },
     AuthorizeDeviceEmailPin.name: (routeData) {
-      final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>(
-          orElse: () => const AuthorizeDeviceEmailPinArgs());
+      final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>();
       return _i50.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i9.AuthorizeDeviceViaEmailPin(key: args.key),
+        child: _i9.AuthorizeDeviceViaEmailPin(
+          key: args.key,
+          email: args.email,
+        ),
       );
     },
     BlockedUsers.name: (routeData) {
@@ -289,11 +289,9 @@ abstract class $AppRouter extends _i50.RootStackRouter {
       );
     },
     LinkDevice.name: (routeData) {
-      final args = routeData.argsAs<LinkDeviceArgs>(
-          orElse: () => const LinkDeviceArgs());
       return _i50.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i28.LinkDevice(key: args.key),
+        child: const _i28.LinkDevice(),
       );
     },
     NewChat.name: (routeData) {
@@ -560,7 +558,36 @@ class Account extends _i50.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i3.AddViaChatNumber]
+/// [_i3.AddDevice]
+class ApproveDevice extends _i50.PageRouteInfo<ApproveDeviceArgs> {
+  ApproveDevice({
+    _i52.Key? key,
+    List<_i50.PageRouteInfo>? children,
+  }) : super(
+          ApproveDevice.name,
+          args: ApproveDeviceArgs(key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'ApproveDevice';
+
+  static const _i50.PageInfo<ApproveDeviceArgs> page =
+      _i50.PageInfo<ApproveDeviceArgs>(name);
+}
+
+class ApproveDeviceArgs {
+  const ApproveDeviceArgs({this.key});
+
+  final _i52.Key? key;
+
+  @override
+  String toString() {
+    return 'ApproveDeviceArgs{key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i4.AddViaChatNumber]
 class AddViaChatNumber extends _i50.PageRouteInfo<void> {
   const AddViaChatNumber({List<_i50.PageRouteInfo>? children})
       : super(
@@ -574,7 +601,7 @@ class AddViaChatNumber extends _i50.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i4.AppWebView]
+/// [_i5.AppWebView]
 class AppWebview extends _i50.PageRouteInfo<AppWebviewArgs> {
   AppWebview({
     _i52.Key? key,
@@ -612,35 +639,6 @@ class AppWebviewArgs {
 }
 
 /// generated route for
-/// [_i5.ApproveDevice]
-class ApproveDevice extends _i50.PageRouteInfo<ApproveDeviceArgs> {
-  ApproveDevice({
-    _i52.Key? key,
-    List<_i50.PageRouteInfo>? children,
-  }) : super(
-          ApproveDevice.name,
-          args: ApproveDeviceArgs(key: key),
-          initialChildren: children,
-        );
-
-  static const String name = 'ApproveDevice';
-
-  static const _i50.PageInfo<ApproveDeviceArgs> page =
-      _i50.PageInfo<ApproveDeviceArgs>(name);
-}
-
-class ApproveDeviceArgs {
-  const ApproveDeviceArgs({this.key});
-
-  final _i52.Key? key;
-
-  @override
-  String toString() {
-    return 'ApproveDeviceArgs{key: $key}';
-  }
-}
-
-/// generated route for
 /// [_i6.AuthLanding]
 class AuthLanding extends _i50.PageRouteInfo<void> {
   const AuthLanding({List<_i50.PageRouteInfo>? children})
@@ -656,31 +654,16 @@ class AuthLanding extends _i50.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.AuthorizeDeviceForPro]
-class AuthorizePro extends _i50.PageRouteInfo<AuthorizeProArgs> {
-  AuthorizePro({
-    _i52.Key? key,
-    List<_i50.PageRouteInfo>? children,
-  }) : super(
+class AuthorizePro extends _i50.PageRouteInfo<void> {
+  const AuthorizePro({List<_i50.PageRouteInfo>? children})
+      : super(
           AuthorizePro.name,
-          args: AuthorizeProArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'AuthorizePro';
 
-  static const _i50.PageInfo<AuthorizeProArgs> page =
-      _i50.PageInfo<AuthorizeProArgs>(name);
-}
-
-class AuthorizeProArgs {
-  const AuthorizeProArgs({this.key});
-
-  final _i52.Key? key;
-
-  @override
-  String toString() {
-    return 'AuthorizeProArgs{key: $key}';
-  }
+  static const _i50.PageInfo<void> page = _i50.PageInfo<void>(name);
 }
 
 /// generated route for
@@ -719,10 +702,14 @@ class AuthorizeDeviceEmailPin
     extends _i50.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
   AuthorizeDeviceEmailPin({
     _i52.Key? key,
+    required String email,
     List<_i50.PageRouteInfo>? children,
   }) : super(
           AuthorizeDeviceEmailPin.name,
-          args: AuthorizeDeviceEmailPinArgs(key: key),
+          args: AuthorizeDeviceEmailPinArgs(
+            key: key,
+            email: email,
+          ),
           initialChildren: children,
         );
 
@@ -733,13 +720,18 @@ class AuthorizeDeviceEmailPin
 }
 
 class AuthorizeDeviceEmailPinArgs {
-  const AuthorizeDeviceEmailPinArgs({this.key});
+  const AuthorizeDeviceEmailPinArgs({
+    this.key,
+    required this.email,
+  });
 
   final _i52.Key? key;
 
+  final String email;
+
   @override
   String toString() {
-    return 'AuthorizeDeviceEmailPinArgs{key: $key}';
+    return 'AuthorizeDeviceEmailPinArgs{key: $key, email: $email}';
   }
 }
 
@@ -1222,31 +1214,16 @@ class LanternDesktop extends _i50.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i28.LinkDevice]
-class LinkDevice extends _i50.PageRouteInfo<LinkDeviceArgs> {
-  LinkDevice({
-    _i52.Key? key,
-    List<_i50.PageRouteInfo>? children,
-  }) : super(
+class LinkDevice extends _i50.PageRouteInfo<void> {
+  const LinkDevice({List<_i50.PageRouteInfo>? children})
+      : super(
           LinkDevice.name,
-          args: LinkDeviceArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'LinkDevice';
 
-  static const _i50.PageInfo<LinkDeviceArgs> page =
-      _i50.PageInfo<LinkDeviceArgs>(name);
-}
-
-class LinkDeviceArgs {
-  const LinkDeviceArgs({this.key});
-
-  final _i52.Key? key;
-
-  @override
-  String toString() {
-    return 'LinkDeviceArgs{key: $key}';
-  }
+  static const _i50.PageInfo<void> page = _i50.PageInfo<void>(name);
 }
 
 /// generated route for

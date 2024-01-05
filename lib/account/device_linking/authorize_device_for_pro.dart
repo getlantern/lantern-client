@@ -1,9 +1,8 @@
 import 'package:lantern/common/common.dart';
 
-
 @RoutePage<void>(name: 'AuthorizePro')
 class AuthorizeDeviceForPro extends StatelessWidget {
-  AuthorizeDeviceForPro({Key? key}) : super(key: key);
+  const AuthorizeDeviceForPro({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class AuthorizeDeviceForPro extends StatelessWidget {
           Button(
             width: 200,
             text: 'Link with PIN'.i18n,
-            onPressed: () async => await context.pushRoute(LinkDevice()),
+            onPressed: () => openLinkDevice(context),
           ),
           const Spacer(),
           Flexible(
@@ -57,12 +56,19 @@ class AuthorizeDeviceForPro extends StatelessWidget {
           Button(
             text: 'Link via Email'.i18n,
             secondary: true,
-            onPressed: () async =>
-                await context.pushRoute(AuthorizeDeviceEmail()),
+            onPressed: () => openLinkDeviceViaEmail(context),
           ),
           const Spacer(),
         ],
       ),
     );
+  }
+
+  void openLinkDevice(BuildContext context) {
+    context.pushRoute(LinkDevice());
+  }
+
+  void openLinkDeviceViaEmail(BuildContext context) {
+    context.pushRoute(AuthorizeDeviceEmail());
   }
 }

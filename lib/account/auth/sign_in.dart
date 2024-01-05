@@ -2,6 +2,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import '../../common/common.dart';
 
+/// Test users
+// jigar@getlantern.org
+// Jigar@123
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
   final AuthFlow authFlow;

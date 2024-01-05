@@ -72,44 +72,37 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
 
   Future<void> onDone(String code, BuildContext context) async {
     try {
-      FocusManager.instance.primaryFocus?.unfocus();
       context.loaderOverlay.show();
       await sessionModel.validateRecoveryCode(code);
       pinCodeController.clear();
       context.loaderOverlay.hide();
-      CDialog.showInfo(
-        context,
+      CDialog.successDialog(
+        context: context,
         title: "device_added".i18n,
-        description: "device_added_message".i18n,
-        agreeAction: () async {
-          Future.delayed(
-            const Duration(milliseconds: 400),
-            () {
-              context.router.popUntilRoot();
-            },
-          );
-
-          return true;
+        description: "device_added_msg".i18n.replaceAll('%s', email),
+        successCallback: () {
+          context.router.popUntilRoot();
         },
       );
     } catch (e) {
       pinCodeController.clear();
       context.loaderOverlay.hide();
-      // CDialog.showError(context, description: e.toString());
+      CDialog.showError(context, description: e.localizedDescription);
     }
   }
 
   Future<void> onResendCode(BuildContext context) async {
     try {
       context.loaderOverlay.show();
-      await sessionModel.authorizeViaEmail(email);
+      await sessionModel.authorizeViaEmail(email.validateEmail);
       context.loaderOverlay.hide();
-      CDialog.showInfo(context,
+      CDialog.successDialog(
+          context: context,
           title: "recovery_code_sent".i18n,
           description: "recovery_email_sent".i18n.replaceAll('%s', email));
     } catch (e) {
       context.loaderOverlay.hide();
-      CDialog.showError(context, description: e.toString());
+      CDialog.showError(context, description: e.localizedDescription);
     }
   }
 }

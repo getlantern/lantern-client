@@ -150,4 +150,5 @@ export 'package:lantern/core/services.dart';
 final mainLogger = Logger(
   printer: PrettyPrinter(),
   filter: DevelopmentFilter(),
+  level: Level.debug
 );
