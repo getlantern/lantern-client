@@ -2,7 +2,7 @@ import 'package:lantern/common/common.dart';
 
 @RoutePage<void>(name: 'AuthorizePro')
 class AuthorizeDeviceForPro extends StatelessWidget {
-  AuthorizeDeviceForPro({Key? key}) : super(key: key);
+  const AuthorizeDeviceForPro({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

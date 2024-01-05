@@ -296,7 +296,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "authorizeViaEmail":
 		email := arguments.Get("emailAddress").String()
-		err := authorizeViaEmail(m, email)
+		err := requestRecoveryEmail(m, email)
 		if err != nil {
 			return nil, err
 		}
@@ -311,6 +311,13 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "removeDevice":
 		deviceId := arguments.Get("deviceId").String()
 		err := userLinkRemove(m, deviceId)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "validateRecoveryCode":
+		code := arguments.Get("code").String()
+		err := validateRecoveryCode(m, code)
 		if err != nil {
 			return nil, err
 		}
@@ -646,7 +653,6 @@ func storePlanDetail(m *baseModel, plan apimodels.PlansResponse) error {
 }
 
 func setPlans(m *baseModel, plans []apimodels.Plan) error {
-
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		//Get local from user
 		lang, err := pathdb.Get[string](tx, pathLang)
@@ -1615,6 +1621,59 @@ func userLinkRemove(session *SessionModel, deviceId string) error {
 		return err
 	}
 	log.Debugf("UserLink Remove response %v", linkResponse)
+	return userDetail(session)
+}
+
+func requestRecoveryEmail(session *SessionModel, email string) error {
+	deviceName, err := pathdb.Get[string](session.db, pathModel)
+	if err != nil {
+		log.Errorf("Error while getting deviceId %v", err)
+		return err
+	}
+	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
+	if err != nil {
+		log.Errorf("Error while getting deviceId %v", err)
+		return err
+	}
+	locale, err := session.Locale()
+	if err != nil {
+		log.Errorf("Error while getting deviceId %v", err)
+		return err
+	}
+	userLinkRequestBody := map[string]string{
+		"email":      email,
+		"deviceName": deviceName,
+		"locale":     locale,
+	}
+	linkResponse, err := apimodels.UserLinkRequest(userLinkRequestBody, deviceId)
+	if err != nil {
+		return err
+	}
+	log.Debugf("LinkCodeRequest response %v", linkResponse)
+	return nil
+}
+func validateRecoveryCode(session *SessionModel, code string) error {
+	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
+	if err != nil {
+		log.Errorf("Error while getting deviceId %v", err)
+		return err
+	}
+	validateRequestBody := map[string]string{
+		"code": code,
+	}
+	linkResponse, err := apimodels.UserLinkValidate(validateRequestBody, deviceId)
+	if err != nil {
+		return err
+	}
+	log.Debugf("ValidateRecovery code response %v", linkResponse)
+	err = setUserIdAndToken(session.baseModel, linkResponse.UserID, linkResponse.Token)
+	if err != nil {
+		return err
+	}
+	pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
+	})
+	// Update user detail to reflact on UI
 	return userDetail(session)
 }
 

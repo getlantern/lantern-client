@@ -1596,7 +1596,15 @@ msgstr "Your device has been successfully added. If you do not see the device co
 msgid "wrong_link_code"
 msgstr "The code you entered is incorrect. Please check and try again."
 
+msgid "recovery_code_sent"
+msgstr "Recovery code has been sent"
 
+msgid "device_added"
+msgstr "Device has been Linked"
+
+
+msgid "device_added_msg"
+msgstr "This device has been Linked to %s"
 
 
 

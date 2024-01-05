@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
 
@@ -8,8 +10,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: formKey,
-    validator: (value) =>
-    EmailValidator.validate(value ?? '')
+    validator: (value) => EmailValidator.validate(value ?? '')
         ? null
         : 'Please enter a valid email address'.i18n,
   );
@@ -50,7 +51,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
   }
 
   Future<void> onSubmit(BuildContext context) async {
-  FocusManager.instance.primaryFocus?.unfocus();
+    FocusManager.instance.primaryFocus?.unfocus();
     if (!formKey.currentState!.validate()) {
       return;
     }
@@ -59,7 +60,10 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
       await sessionModel
           .authorizeViaEmail(emailController.value.text.validateEmail);
       context.loaderOverlay.hide();
-      context.pushRoute(AuthorizeDeviceEmailPin());
+      context.pushRoute(
+        AuthorizeDeviceEmailPin(
+            email: emailController.value.text.validateEmail),
+      );
     } catch (e) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
