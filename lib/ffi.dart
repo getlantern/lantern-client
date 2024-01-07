@@ -1,6 +1,5 @@
 import 'dart:ffi' as ffi; // For FFI
 import 'package:lantern/common/common.dart';
-import 'package:lantern/dylib.dart';
 import 'package:ffi/ffi.dart';
 import 'package:ffi/src/utf8.dart';
 import 'dart:convert';
@@ -38,12 +37,7 @@ typedef Setting = ffi.Pointer<Utf8> Function();
 
 String dir = Directory.current.path;
 
-String path = resolveDylibPath('lantern');
-
-final dylib = ffi.DynamicLibrary.open(resolveDylibPath('lantern'));
-
-
-    /*Platform.isMacOS ? 'liblantern.dylib' : Platform.isWindows ? 'liblantern.dll' : dir + '/liblantern.so'*/
+final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : Platform.isWindows ? 'liblantern.dll' : dir + '/liblantern.so');
 
 final Start start =
     dylib.lookup<ffi.NativeFunction<start_func>>('Start').asFunction();
@@ -89,6 +83,5 @@ final ProFunc ffiVpnStatus = dylib.lookup<ffi.NativeFunction<pro_func>>('VpnStat
 final ProFunc ffiEmailExists = dylib.lookup<ffi.NativeFunction<pro_func>>('EmailExists').asFunction();
 
 void loadLibrary() {
-  print('path is $path');
   start();
 }
