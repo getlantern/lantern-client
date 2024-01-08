@@ -186,27 +186,6 @@ class ConnectivityWarning extends StatelessWidget {
   }
 
   void _onWarrningTap(BuildContext context) {
-    if (sessionModel.hasAccountVerified.value != true) {
-      final email = sessionModel.userEmail.value.validateEmail;
-      if (email.isEmpty) return;
-      sessionModel.signUpEmailResendCode(email);
-      context.pushRoute(
-          Verification(email: email, authFlow: AuthFlow.verifyEmail));
-      // showProUserDialog(
-      //   context,
-      //   onSuccess: () {
-      //     // User has completed the signin process
-      //     // User does not have account verified
-      //     // Before sending user to screen send OTP again
-      //     final email = sessionModel.userEmail.value.validateEmail;
-      //     if (email.isEmpty) return;
-      //     sessionModel.signUpEmailResendCode(email);
-      //     context.pushRoute(Verification(email: email,authFlow: AuthFlow.verifyEmail));
-      //   },
-      // );
-      return;
-    }
-
     if (sessionModel.proxyAvailable.value != true) {
       CDialog(
         title: 'connection_error'.i18n,
@@ -218,6 +197,18 @@ class ConnectivityWarning extends StatelessWidget {
           return true;
         },
       ).show(context);
+    }
+
+    if (sessionModel.hasAccountVerified.value != true) {
+      // User has completed the signin process
+      // User does not have account verified
+      // Before sending user to screen send OTP again
+      final email = sessionModel.userEmail.value.validateEmail;
+      if (email.isEmpty) return;
+      sessionModel.signUpEmailResendCode(email);
+      context.pushRoute(
+          Verification(email: email, authFlow: AuthFlow.verifyEmail));
+      return;
     }
   }
 }

@@ -62,7 +62,7 @@ var (
 	log        = golog.LoggerFor("lantern-internalsdk-http")
 	httpClient = &http.Client{
 		Transport: proxied.ParallelForIdempotent(),
-		Timeout:   30 * time.Second,
+		Timeout:   15 * time.Second,
 	}
 )
 
@@ -128,6 +128,7 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 
 	// Add headers
 	req.Header.Set(headerDeviceId, deviceId)
+	req.Header.Set(headerContentType, "application/json")
 	log.Debugf("Headers set")
 
 	// Send the request

@@ -32,7 +32,6 @@ class _LanternAppState extends State<LanternApp>
     with SingleTickerProviderStateMixin {
   late final AnimationController networkWarningAnimationController;
   late final Animation networkWarningAnimation;
-
   @override
   void initState() {
     super.initState();

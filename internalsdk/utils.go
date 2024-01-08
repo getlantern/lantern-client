@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/rand"
 	cryptoRand "crypto/rand"
+	"crypto/sha256"
 	"encoding/binary"
 	"fmt"
 	"math"
@@ -17,6 +18,7 @@ import (
 	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/pathdb"
+	"golang.org/x/crypto/pbkdf2"
 )
 
 func BytesToFloat64LittleEndian(b []byte) (float64, error) {
@@ -244,4 +246,12 @@ func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) apimodels.
 		userData.Devices = append(userData.Devices, userDevice)
 	}
 	return userData
+}
+
+// Takes password and email, salt and returns encrypted key
+func GenerateEncryptedKey(password string, email string, salt []byte) *big.Int {
+	combinedInput := password + email
+	encryptedKey := pbkdf2.Key([]byte(combinedInput), salt, 4096, 32, sha256.New)
+	encryptedKeyBigInt := big.NewInt(0).SetBytes(encryptedKey)
+	return encryptedKeyBigInt
 }
