@@ -7,6 +7,8 @@ import UIKit
 //know Issue
 //  CFPrefsPlistSource<0x28281e580> (Domain: group.getlantern.lantern, User: kCFPreferencesAnyUser, ByHost: Yes, Container: (null), Contents Need Refresh: Yes): Using kCFPreferencesAnyUser with a container is only allowed for System Containers,
 
+// For IOS App Lunch time issue
+//https://developer.apple.com/videos/play/wwdc2019/423/?time=305
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   // Flutter Properties
@@ -28,11 +30,14 @@ import UIKit
   ) -> Bool {
     //    SentryUtils.startSentry();
     initializeFlutterComponents()
-//    try! setupModels()
-//    try! setupAppComponents()
+    try! setupModels()
+    try! setupAppComponents()
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+    
+
+    
 
   // Flutter related stuff
   private func initializeFlutterComponents() {
@@ -52,44 +57,49 @@ import UIKit
   // Init all the models
   private func setupModels() throws {
     logger.log("setupModels method called")
+      
     let dispatchGroup = DispatchGroup()
     // If flutterbinaryMessenger nil somehow then assign it again
     if flutterbinaryMessenger == nil || flutterViewController == nil {
       initializeFlutterComponents()
     }
-      
-    // Initialize LanternModel
-    dispatchGroup.enter()
-    DispatchQueue.global(qos: .userInitiated).async {
-      self.lanternModel = LanternModel(flutterBinary: self.flutterbinaryMessenger)
-      dispatchGroup.leave()
-    }
-
-    // Initialize SessionModel
-    dispatchGroup.enter()
-    DispatchQueue.global(qos: .userInitiated).async {
-      do {
-        self.sessionModel = try SessionModel(flutterBinary: self.flutterbinaryMessenger)
-      } catch {
-        logger.error("Error initializing SessionModel: \(error)")
-      }
-      dispatchGroup.leave()
-    }
-
-    // Initialize VpnModel
-    dispatchGroup.enter()
-    DispatchQueue.global(qos: .userInitiated).async {
-      do {
-        self.vpnModel = try VpnModel(
-          flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
-      } catch {
-        logger.error("Error initializing vpnModel: \(error)")
-      }
-      dispatchGroup.leave()
-    }
-    logger.log("Initializing setupModels done")
-    messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
-    dispatchGroup.wait()  // Wait for all initializations to complete
+      lanternModel = LanternModel(flutterBinary: self.flutterbinaryMessenger)
+      sessionModel = try SessionModel(flutterBinary: self.flutterbinaryMessenger)
+      vpnModel = try VpnModel(
+        flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
+      messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
+//    // Initialize LanternModel
+//    dispatchGroup.enter()
+//    DispatchQueue.global(qos: .userInitiated).async {
+//      self.lanternModel = LanternModel(flutterBinary: self.flutterbinaryMessenger)
+//      dispatchGroup.leave()
+//    }
+//
+//    // Initialize SessionModel
+//    dispatchGroup.enter()
+//    DispatchQueue.global(qos: .userInitiated).async {
+//      do {
+//        self.sessionModel = try SessionModel(flutterBinary: self.flutterbinaryMessenger)
+//      } catch {
+//        logger.error("Error initializing SessionModel: \(error)")
+//      }
+//      dispatchGroup.leave()
+//    }
+//
+//    // Initialize VpnModel
+//    dispatchGroup.enter()
+//    DispatchQueue.global(qos: .userInitiated).async {
+//      do {
+//        self.vpnModel = try VpnModel(
+//          flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
+//      } catch {
+//        logger.error("Error initializing vpnModel: \(error)")
+//      }
+//      dispatchGroup.leave()
+//    }
+//    logger.log("Initializing setupModels done")
+//    messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
+//    dispatchGroup.wait()  // Wait for all initializations to complete
   }
 
   // Post start up

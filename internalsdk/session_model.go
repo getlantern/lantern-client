@@ -1,7 +1,6 @@
 package internalsdk
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"math/big"
 	"path/filepath"
@@ -17,7 +16,6 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
-	"golang.org/x/crypto/pbkdf2"
 )
 
 // Custom Model implemnation
@@ -1116,10 +1114,7 @@ func signup(session *SessionModel, email string, password string) error {
 	}
 	log.Debugf("Slat %v and length %v", salt, len(salt))
 
-	combinedInput := password + email
-	encryptedKey := pbkdf2.Key([]byte(combinedInput), salt, 4096, 32, sha256.New)
-	encryptedKeyBigInt := big.NewInt(0).SetBytes(encryptedKey)
-	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKeyBigInt, nil)
+	srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, salt), nil)
 	verifierKey, err := srpClient.Verifier()
 	if err != nil {
 		return err
@@ -1206,12 +1201,9 @@ func login(session *SessionModel, email string, password string) error {
 	}
 
 	// Prepare login request body
-	encryptedKey := srp.KDFRFC5054(salt, email, password)
-	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
-
+	client := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, salt), nil)
 	//Send this key to client
 	A := client.EphemeralPublic()
-
 	//Create body
 	prepareRequestBody := &protos.PrepareRequest{
 		Email: email,
@@ -1314,8 +1306,7 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 	}
 	log.Debugf("Slat %v and length %v", newsalt, len(newsalt))
 
-	encryptedKey := srp.KDFRFC5054(newsalt, email, password)
-	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+	srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, newsalt), nil)
 	verifierKey, err := srpClient.Verifier()
 	if err != nil {
 		return err
@@ -1346,8 +1337,7 @@ func changeEmail(session SessionModel, email string, newEmail string, password s
 	}
 
 	// Prepare login request body
-	encryptedKey := srp.KDFRFC5054(salt, email, password)
-	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+	client := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, salt), nil)
 
 	//Send this key to client
 	A := client.EphemeralPublic()
@@ -1434,8 +1424,7 @@ func deleteAccount(session SessionModel, password string) error {
 	}
 
 	// Prepare login request body
-	encryptedKey := srp.KDFRFC5054(salt, email, password)
-	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+	client := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, salt), nil)
 
 	//Send this key to client
 	A := client.EphemeralPublic()
