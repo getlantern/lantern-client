@@ -37,6 +37,7 @@ require (
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/replica v0.14.2
 	github.com/gorilla/mux v1.8.0
+	github.com/moul/http2curl v1.0.0
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/mobile v0.0.0-20231006135142-2b44d11868fe
 	golang.org/x/net v0.17.0

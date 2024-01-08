@@ -1,6 +1,7 @@
 package internalsdk
 
 import (
+	"crypto/sha256"
 	"fmt"
 	"math/big"
 	"path/filepath"
@@ -18,6 +19,7 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
+	"golang.org/x/crypto/pbkdf2"
 )
 
 // Custom Model implemnation
@@ -1262,21 +1264,23 @@ func signup(session *SessionModel, email string, password string) error {
 	if err != nil {
 		return err
 	}
-	slat, err := GenerateSalt()
+	salt, err := GenerateSalt()
 	if err != nil {
 		return err
 	}
-	log.Debugf("Slat %v and length %v", slat, len(slat))
+	log.Debugf("Slat %v and length %v", salt, len(salt))
 
-	encryptedKey := srp.KDFRFC5054(slat, email, password)
-	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+	combinedInput := password + email
+	encryptedKey := pbkdf2.Key([]byte(combinedInput), salt, 4096, 32, sha256.New)
+	encryptedKeyBigInt := big.NewInt(0).SetBytes(encryptedKey)
+	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKeyBigInt, nil)
 	verifierKey, err := srpClient.Verifier()
 	if err != nil {
 		return err
 	}
 	signUpRequestBody := &protos.SignupRequest{
 		Email:    email,
-		Salt:     slat,
+		Salt:     salt,
 		Verifier: verifierKey.Bytes(),
 	}
 
@@ -1296,7 +1300,7 @@ func signup(session *SessionModel, email string, password string) error {
 	//Request successfull then save salt
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
-			pathUserSalt:          slat,
+			pathUserSalt:          salt,
 			pathIsAccountVerified: false,
 			pathEmailAddress:      email,
 		})

@@ -15,6 +15,7 @@ import (
 	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
+	"github.com/moul/http2curl"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -78,7 +79,7 @@ func FechUserDetail(deviceId string, userId string, token string) (*UserDetailRe
 	req.Header.Set(headerProToken, token)
 	req.Header.Set(headerContentType, "application/json")
 
-	curl, _ := RequestToCurl(req)
+	curl, _ := http2curl.GetCurlCommand(req)
 	log.Debugf("Curl command: %s", curl)
 
 	// Send the request
