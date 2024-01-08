@@ -88,8 +88,7 @@ import UIKit
       dispatchGroup.leave()
     }
     logger.log("Initializing setupModels done")
-    //    navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
-    self.messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
+    messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
     dispatchGroup.wait()  // Wait for all initializations to complete
   }
 
