@@ -1253,10 +1253,10 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 }
 
 // Authenticates the user with the given email and password.
-//  Note-: On Sign up Client needed to generate 16 byte slat
-//  Then use that salt, password and email generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
-//  Then use srpClient.Verifier() to generate verifierKey
-
+//
+//	Note-: On Sign up Client needed to generate 16 byte slat
+//	Then use that salt, password and email generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
+//	Then use srpClient.Verifier() to generate verifierKey
 func signup(session *SessionModel, email string, password string) error {
 	err := setEmail(session.baseModel, email)
 	if err != nil {

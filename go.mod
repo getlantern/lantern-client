@@ -39,6 +39,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/moul/http2curl v1.0.0
 	github.com/stretchr/testify v1.8.4
+	golang.org/x/crypto v0.14.0
 	golang.org/x/mobile v0.0.0-20231006135142-2b44d11868fe
 	golang.org/x/net v0.17.0
 	google.golang.org/protobuf v1.31.0
@@ -290,7 +291,6 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.21.0 // indirect
-	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63 // indirect
 	golang.org/x/mod v0.13.0 // indirect
 	golang.org/x/sync v0.4.0 // indirect
