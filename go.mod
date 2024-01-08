@@ -169,6 +169,7 @@ require (
 	github.com/getlantern/ops v0.0.0-20231025133620-f368ab734534 // indirect
 	github.com/getlantern/osversion v0.0.0-20230401075644-c2a30e73c451 // indirect
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 // indirect
+	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb // indirect
 	github.com/getlantern/preconn v1.0.0 // indirect
 	github.com/getlantern/proxy/v3 v3.0.0-20231031142453-252ab678e6b7 // indirect
 	github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de // indirect
@@ -285,6 +286,7 @@ require (
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 // indirect
 	github.com/songgao/water v0.0.0-20200317203138-2b4b6d7c09d8 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
+	github.com/tchap/go-patricia/v2 v2.3.1 // indirect
 	github.com/templexxx/cpu v0.1.0 // indirect
 	github.com/templexxx/xorsimd v0.4.2 // indirect
 	github.com/ti-mo/conntrack v0.3.0 // indirect
