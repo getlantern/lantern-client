@@ -86,6 +86,7 @@ class LanternApp extends StatelessWidget {
             child: MaterialApp.router(
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
+                useMaterial3: false,
                 fontFamily: _getLocaleBasedFont(currentLocal),
                 brightness: Brightness.light,
                 primarySwatch: Colors.grey,
