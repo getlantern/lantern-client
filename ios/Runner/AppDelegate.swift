@@ -17,7 +17,7 @@ import UIKit
   //  Model Properties
   var sessionModel: SessionModel!
   var lanternModel: LanternModel!
-  //  var navigationModel: NavigationModel!
+  //  var navigationModel: NavigationModel!
   var vpnModel: VpnModel!
   var messagingModel: MessagingModel!
   // IOS

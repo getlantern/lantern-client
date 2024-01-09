@@ -26,7 +26,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>18</string>
+	<string>19</string>
 	<key>CURRENT_SCHEME_NAME</key>
 	<string>$(CURRENT_SCHEME_NAME)</string>
 	<key>GADApplicationIdentifier</key>
@@ -261,7 +261,7 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<true/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 </dict>
