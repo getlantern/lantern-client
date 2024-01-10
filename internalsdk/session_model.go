@@ -1363,7 +1363,6 @@ func login(session *SessionModel, email string, password string) error {
 		Email: email,
 		A:     A.Bytes(),
 	}
-	log.Debugf("A Bytes %v", A.Bytes())
 	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
 	if err != nil {
 		return err
@@ -1426,8 +1425,7 @@ func login(session *SessionModel, email string, password string) error {
 	if err != nil {
 		log.Errorf("Error while saving user salt %v", err)
 	}
-	end := time.Now()
-	log.Debugf("Login took %v", end.Sub(start))
+
 	//Store all the user details
 	userData := ConvertToUserDetailsResponse(login)
 	err = cacheUserDetail(session.baseModel, &userData)
@@ -1435,6 +1433,8 @@ func login(session *SessionModel, email string, password string) error {
 		log.Errorf("Error while caching user details %v", err)
 		return err
 	}
+	end := time.Now()
+	log.Debugf("Login took %v", end.Sub(start))
 	return nil
 }
 
@@ -1501,13 +1501,11 @@ func changeEmail(session SessionModel, email string, newEmail string, password s
 		Email: email,
 		A:     A.Bytes(),
 	}
-	log.Debugf("A Bytes %v", A.Bytes())
 	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
 	if err != nil {
 		return err
 	}
 	log.Debugf("Login prepare response %v", srpB)
-
 	// // Once the client receives B from the server Client should check error status here as defense against
 	// // a malicious B sent from server
 	B := big.NewInt(0).SetBytes(srpB.B)

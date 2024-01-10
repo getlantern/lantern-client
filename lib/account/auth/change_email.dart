@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:email_validator/email_validator.dart';
 
 import '../../common/common.dart';
@@ -20,7 +22,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
   late final _emailController = CustomTextEditingController(
     formKey: _emailFormKey,
     validator: (value) => EmailValidator.validate(value ?? '')
-        ?  null
+        ? null
         : 'please_enter_a_valid_email_address'.i18n,
   );
 
@@ -135,8 +137,15 @@ class _ChangeEmailState extends State<ChangeEmail> {
       await sessionModel.changeEmail(
           widget.email, _emailController.text, _passwordController.text);
       context.loaderOverlay.hide();
-      //Once email changed, pop
-      context.router.pop();
+      CDialog.successDialog(
+        context: context,
+        title: 'email_has_been_updated'.i18n,
+        description: 'email_has_been_updated_message'.i18n,
+        successCallback: () {
+          //Once email changed, pop
+          context.router.pop();
+        },
+      );
     } catch (e) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);

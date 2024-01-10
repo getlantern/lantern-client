@@ -1656,6 +1656,14 @@ msgstr "This device has been Linked to %s"
 msgid "new_to_lantern"
 msgstr "New to Lantern? "
 
+msgid "email_has_been_updated"
+msgstr "Email has been updated"
+
+
+msgid "email_has_been_updated_message"
+msgstr "Your Email has been changed successfully"
+
+
 
 
 
