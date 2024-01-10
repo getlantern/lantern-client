@@ -51,7 +51,7 @@ class LanternVpnService : VpnService(), Runnable {
         stop()
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Somehow we are getting null here when running on Android 5.0
         // Handling null intent scenario
         if (intent == null) {
