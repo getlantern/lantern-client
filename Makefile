@@ -604,7 +604,6 @@ notarize-darwin: darwin-installer require-ac-username require-ac-password
 		./$(INSTALLER_RESOURCES)/tools/notarize-darwin.py \
 		  -u $$AC_USERNAME \
 		  -p $$AC_PASSWORD \
-		  -b com.getlantern.lantern \
 		  -a 4FYC28AXA2 \
 		  $(INSTALLER_NAME).dmg; \
 	else \
