@@ -25,7 +25,7 @@ class _AccountManagementState extends State<AccountManagement>
     super.dispose();
     tabController.dispose();
   }
-  
+
   void openChangeEmail(String emailAddress) {
     context.router.push(ChangeEmail(email: emailAddress));
   }

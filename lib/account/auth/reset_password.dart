@@ -166,15 +166,25 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   void showPasswordSuccessDialog() {
     CDialog(
-      iconPath: ImagePaths.check_green_large,
+      icon: const CAssetImage(path: ImagePaths.check_green_large),
       title: "password_has_been_updated".i18n,
       description: "password_has_been_updated_message".i18n,
       barrierDismissible: false,
-      agreeText: "continue".i18n,
-      includeCancel: false,
-      agreeAction: () async {
+      dismissText: "continue".i18n,
+      agreeText: "sign_in".i18n,
+      includeCancel: true,
+      dismissAction: () async {
         Future.delayed(const Duration(milliseconds: 300), () {
           context.router.popUntilRoot();
+        });
+      },
+      agreeAction: () async {
+        print("agree");
+        Future.delayed(const Duration(milliseconds: 300), () {
+          context.router.pushAndPopUntil(
+            SignIn(),
+            predicate: (route) => route.isFirst,
+          );
         });
         return true;
       },
