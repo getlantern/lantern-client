@@ -130,7 +130,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     private fun setExpiration(expiration: Long?) {
-        if (expiration == null) {
+        if (expiration == null||expiration==0L ) {
+            prefs.edit().putLong(EXPIRY_DATE, 0)
+                .putString(EXPIRY_DATE_STR, "")
+                .apply()
             return
         }
         val expiry = Date(expiration * 1000)
@@ -277,6 +280,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             linkDevice()
         }
 
+
         setExpiration(user.expiration)
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
@@ -325,6 +329,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setPaymentMethods(paymentMethods: List<PaymentMethods>) {
+        if (paymentMethods == null) {
+            return
+        }
         db.mutate { tx ->
             paymentMethods.forEachIndexed { index, it ->
                 val path = PAYMENT_METHODS + index

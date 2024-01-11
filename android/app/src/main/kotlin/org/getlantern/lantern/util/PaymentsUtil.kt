@@ -1,7 +1,6 @@
 package org.getlantern.lantern.util
 
 import android.app.Activity
-import android.app.ProgressDialog
 import androidx.annotation.NonNull
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
@@ -22,14 +21,11 @@ import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternSessionManager
 import org.getlantern.lantern.model.PaymentProvider
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProUser
 import org.getlantern.mobilesdk.Logger
 
 class PaymentsUtil(private val activity: Activity) {
-
     private val session: LanternSessionManager = LanternApp.getSession()
-
-    @JvmField
-    protected var dialog: ProgressDialog? = null
 
     public fun submitStripePayment(
         planID: String,
@@ -41,18 +37,21 @@ class PaymentsUtil(private val activity: Activity) {
     ) {
         try {
             val date = expirationDate.split("/").toTypedArray()
-            val card: CardParams = CardParams(
-                cardNumber.replace("[\\s]", ""),
-                date[0].toInt(), // expMonth
-                date[1].toInt(), // expYear
-                cvc,
-            )
+            val card: CardParams =
+                CardParams(
+                    cardNumber.replace("[\\s]", ""),
+                    date[0].toInt(), // expMonth
+                    date[1].toInt(), // expYear
+                    cvc,
+                )
             val stripe: Stripe = Stripe(activity, session.stripePubKey()!!)
-            dialog = createDialog(activity.resources.getString(R.string.processing_payment))
             stripe.createCardToken(
                 card,
-                callback = object : ApiResultCallback<Token> {
-                    override fun onSuccess(@NonNull token: Token) {
+                callback =
+                object : ApiResultCallback<Token> {
+                    override fun onSuccess(
+                        @NonNull token: Token,
+                    ) {
                         sendPurchaseRequest(
                             planID,
                             email,
@@ -62,8 +61,9 @@ class PaymentsUtil(private val activity: Activity) {
                         )
                     }
 
-                    override fun onError(@NonNull error: Exception) {
-                        dialog?.dismiss()
+                    override fun onError(
+                        @NonNull error: Exception,
+                    ) {
                         Logger.error(TAG, "Error submitting to Stripe: $error")
                         methodCallResult.error(
                             "errorSubmittingToStripe",
@@ -74,7 +74,6 @@ class PaymentsUtil(private val activity: Activity) {
                 },
             )
         } catch (t: Throwable) {
-            dialog?.dismiss()
             Logger.error(TAG, "Error submitting to Stripe", t)
             methodCallResult.error(
                 "errorSubmittingToStripe",
@@ -92,16 +91,20 @@ class PaymentsUtil(private val activity: Activity) {
     ) {
         try {
             val provider = PaymentProvider.BTCPay.toString().lowercase()
-            val params = mutableMapOf<String, String>(
-                "email" to email,
-                "plan" to planID,
-                "provider" to provider,
-                "deviceName" to session.deviceName(),
-            )
+            val params =
+                mutableMapOf<String, String>(
+                    "email" to email,
+                    "plan" to planID,
+                    "provider" to provider,
+                    "deviceName" to session.deviceName(),
+                )
             lanternClient.get(
                 LanternHttpClient.createProUrl("/payment-redirect", params),
                 object : ProCallback {
-                    override fun onFailure(throwable: Throwable?, error: ProError?) {
+                    override fun onFailure(
+                        throwable: Throwable?,
+                        error: ProError?,
+                    ) {
                         Logger.error(TAG, "BTCPay is unavailable", throwable)
                         methodCallResult.error(
                             "unknownError",
@@ -111,7 +114,10 @@ class PaymentsUtil(private val activity: Activity) {
                         return
                     }
 
-                    override fun onSuccess(response: Response?, result: JsonObject?) {
+                    override fun onSuccess(
+                        response: Response?,
+                        result: JsonObject?,
+                    ) {
                         Logger.debug(
                             TAG,
                             "Email successfully validated $email",
@@ -129,22 +135,33 @@ class PaymentsUtil(private val activity: Activity) {
         }
     }
 
-    // Handles Google Play transactions
-    fun submitGooglePlayPayment(planID: String, methodCallResult: MethodChannel.Result) {
-        val inAppBilling = LanternApp.getInAppBilling()
-
-        if (inAppBilling == null) {
-            Logger.error(TAG, "Missing inAppBilling")
-            methodCallResult.error(
-                "unknownError",
-                activity.resources.getString(R.string.error_making_purchase),
-                null,
-            )
-            return
+    // getPlanYear splits the given plan ID by hyphen and returns the year the given startas with
+    private fun getPlanYear(planID: String): String {
+        var plan = planID
+        val parts = planID.split("-").toTypedArray()
+        if (parts.isNotEmpty()) {
+            plan = parts[0]
+            Logger.debug(TAG, "Updated plan to have ID $plan")
         }
+        return plan
+    }
+
+    // Handles Google Play transactions
+    fun submitGooglePlayPayment(
+        email: String,
+        planID: String,
+        methodCallResult: MethodChannel.Result,
+    ) {
+        val inAppBilling = LanternApp.getInAppBilling()
+        val currency =
+            LanternApp.getSession().planByID(planID)?.let {
+                it.currency
+            } ?: "usd"
+        val plan = getPlanYear(planID)
+        Logger.debug(TAG, "Starting in-app purchase for plan with ID $plan")
         inAppBilling.startPurchase(
             activity,
-            planID,
+            plan,
             object : PurchasesUpdatedListener {
                 override fun onPurchasesUpdated(
                     billingResult: BillingResult,
@@ -178,8 +195,8 @@ class PaymentsUtil(private val activity: Activity) {
                     }
 
                     sendPurchaseRequest(
-                        planID,
-                        "",
+                        plan + "-" + currency,
+                        email,
                         tokens[0],
                         PaymentProvider.GooglePlay,
                         methodCallResult,
@@ -190,15 +207,22 @@ class PaymentsUtil(private val activity: Activity) {
     }
 
     // Applies referral code (before the user has initiated a transaction)
-    fun applyRefCode(refCode: String, methodCallResult: MethodChannel.Result) {
+    fun applyRefCode(
+        refCode: String,
+        methodCallResult: MethodChannel.Result,
+    ) {
         try {
-            val formBody: FormBody = FormBody.Builder()
-                .add("code", refCode).build()
+            val formBody: FormBody =
+                FormBody.Builder()
+                    .add("code", refCode).build()
             lanternClient.post(
                 LanternHttpClient.createProUrl("/referral-attach"),
                 formBody,
                 object : ProCallback {
-                    override fun onFailure(throwable: Throwable?, error: ProError?) {
+                    override fun onFailure(
+                        throwable: Throwable?,
+                        error: ProError?,
+                    ) {
                         if (error != null && error.message != null) {
                             methodCallResult.error(
                                 "unknownError",
@@ -209,7 +233,10 @@ class PaymentsUtil(private val activity: Activity) {
                         }
                     }
 
-                    override fun onSuccess(response: Response?, result: JsonObject?) {
+                    override fun onSuccess(
+                        response: Response?,
+                        result: JsonObject?,
+                    ) {
                         Logger.debug(
                             TAG,
                             "Successfully redeemed referral code: $refCode",
@@ -228,7 +255,11 @@ class PaymentsUtil(private val activity: Activity) {
         }
     }
 
-    fun redeemResellerCode(email: String, resellerCode: String, result: MethodChannel.Result) {
+    fun redeemResellerCode(
+        email: String,
+        resellerCode: String,
+        result: MethodChannel.Result,
+    ) {
         try {
             session.setEmail(email)
             session.setResellerCode(resellerCode)
@@ -243,16 +274,6 @@ class PaymentsUtil(private val activity: Activity) {
         }
     }
 
-    private fun createDialog(message: String): ProgressDialog {
-        return ProgressDialog.show(
-            activity,
-            message,
-            "",
-            true,
-            false,
-        )
-    }
-
     private fun sendPurchaseRequest(
         planID: String,
         email: String,
@@ -260,12 +281,16 @@ class PaymentsUtil(private val activity: Activity) {
         provider: PaymentProvider,
         methodCallResult: MethodChannel.Result,
     ) {
-        val currency = LanternApp.getSession().planByID(planID)?.let {
-            it.currency
-        } ?: "usd"
-        Logger.d(TAG, "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency")
+        val currency =
+            LanternApp.getSession().planByID(planID)?.let {
+                it.currency
+            } ?: "usd"
+        Logger.d(
+            TAG,
+            "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency"
+        )
         val session = session
-        val json: JsonObject = JsonObject()
+        val json  = JsonObject()
         json.addProperty("idempotencyKey", System.currentTimeMillis().toString())
         json.addProperty("provider", provider.toString().lowercase())
         json.addProperty("email", email)
@@ -300,19 +325,39 @@ class PaymentsUtil(private val activity: Activity) {
             LanternHttpClient.createProUrl("/purchase"),
             LanternHttpClient.createJsonBody(json),
             object : ProCallback {
-
-                override fun onSuccess(response: Response?, result: JsonObject?) {
-                    dialog?.dismiss()
-                    session.linkDevice()
-                    session.setIsProUser(true)
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
                     Logger.e(TAG, "Purchase Completed: $response")
-                    methodCallResult.success("purchaseSuccessful")
+                    session.linkDevice()
+                    lanternClient.userData(object : LanternHttpClient.ProUserCallback {
+                        override fun onSuccess(response: Response, userData: ProUser) {
+                            Logger.e(TAG, "User detail : $userData")
+                            session.setIsProUser(true)
+                            activity.runOnUiThread {
+                                methodCallResult.success("purchaseSuccessful")
+                            }
+
+                        }
+
+                        override fun onFailure(throwable: Throwable?, error: ProError?) {
+                            Logger.error(TAG, "Unable to fetch user data: $throwable.message")
+                            activity.runOnUiThread {
+                                methodCallResult.success("purchaseSuccessful")
+                            }
+
+                        }
+                    })
+
                     Logger.d(TAG, "Successful purchase response: $result")
                 }
 
-                override fun onFailure(t: Throwable?, error: ProError?) {
+                override fun onFailure(
+                    t: Throwable?,
+                    error: ProError?,
+                ) {
                     Logger.e(TAG, "Error with purchase request: $error")
-                    dialog?.dismiss()
                     methodCallResult.error(
                         "errorMakingPurchase",
                         activity.getString(

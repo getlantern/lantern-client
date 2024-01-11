@@ -75,6 +75,7 @@ open class LanternHttpClient : HttpClient() {
                         val user = parseData<ProUser>(result.toString())
                         Logger.debug(TAG, "User ID is ${user.userId}")
                         LanternApp.getSession().storeUserData(user)
+                        cb.onSuccess(response!!, user)
                     }
                 }
             },
@@ -242,7 +243,8 @@ open class LanternHttpClient : HttpClient() {
                 ) {
                     response.use {
                         if (!response.isSuccessful) {
-                            val error = ProError("", "Unexpected response code from server $response")
+                            val error =
+                                ProError("", "Unexpected response code from server $response")
                             cb.onFailure(null, error)
                             return
                         }

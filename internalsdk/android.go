@@ -453,7 +453,9 @@ func newAnalyticsSession(deviceID string) analytics.Session {
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
 
-	memhelper.Track(15*time.Second, 15*time.Second)
+	memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
+		log.Debugf("Error tracking memory: %v", err)
+	})
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(common.Staging)
 
@@ -573,7 +575,6 @@ func run(configDir, locale string,
 		},
 		func() string { return "" },
 		func(category, action, label string) {},
-		nil,
 	)
 	if err != nil {
 		log.Fatalf("failed to start flashlight: %v", err)

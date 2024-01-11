@@ -64,7 +64,7 @@ dependencies:
   filesize: ^2.0.1
 
   # Networking
-  cached_network_image: ^3.2.3
+  cached_network_image: ^3.3.0
   dio: ^5.3.2
 
   # change this with flutter_downloader
@@ -121,6 +121,7 @@ dependencies:
   # Ads
   google_mobile_ads: ^3.0.0
   clever_ads_solutions: ^0.1.0
+  retry: ^3.1.2
 
 # wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0
 # See https://github.com/creativecreatorormaybenot/wakelock/issues/211

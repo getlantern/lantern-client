@@ -72,27 +72,6 @@ class _CheckoutState extends State<Checkout>
     super.dispose();
   }
 
-  static void showError(
-    BuildContext context, {
-    Object? error,
-    StackTrace? stackTrace,
-    String description = '',
-  }) {
-    if (description.isEmpty) {
-      if (error is PlatformException) {
-        description = (error).message.toString().i18n;
-      } else {
-        description = error.toString();
-      }
-    }
-    CDialog.showError(
-      context,
-      error: e,
-      stackTrace: stackTrace,
-      description: description,
-    );
-  }
-
   Widget options() => CInkWell(
         onTap: () {
           setState(() {
