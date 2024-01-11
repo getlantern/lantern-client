@@ -25,13 +25,7 @@ class _AccountManagementState extends State<AccountManagement>
     super.dispose();
     tabController.dispose();
   }
-
-  void openResetPassword() {
-    context.router.push(SignIn(
-      authFlow: AuthFlow.reset,
-    ));
-  }
-
+  
   void openChangeEmail(String emailAddress) {
     context.router.push(ChangeEmail(email: emailAddress));
   }
@@ -343,18 +337,6 @@ class _AccountManagementState extends State<AccountManagement>
           header: 'password'.i18n,
           icon: ImagePaths.lockFiled,
           content: "********",
-          trailingArray: [
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 16.0),
-              child: TextButton(
-                onPressed: openResetPassword,
-                child: CText(
-                  'reset_password'.i18n.toUpperCase(),
-                  style: tsButtonPink,
-                ),
-              ),
-            ),
-          ],
         ),
         sessionModel.expiryDate((
           BuildContext context,
