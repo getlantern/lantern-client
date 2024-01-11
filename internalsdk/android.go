@@ -445,7 +445,7 @@ func newAnalyticsSession(deviceID string) analytics.Session {
 
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
-
+	start := time.Now()
 	// memhelper won't build for iOS right now
 	// memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
 	// 	log.Debugf("Unable to track memory stats: %v", err)
@@ -623,6 +623,7 @@ func run(configDir, locale string,
 			checkFeatures()
 		}
 	}()
+
 	replicaServer.CheckEnabled()
 
 	go runner.Run(
@@ -634,6 +635,8 @@ func run(configDir, locale string,
 		},
 		nil, // onError
 	)
+	end := time.Now()
+	log.Debugf("[Performance logs] Flashlight took %v", end.Sub(start))
 }
 
 func bandwidthUpdates(session panickingSession) {
