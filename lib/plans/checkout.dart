@@ -140,7 +140,7 @@ class _CheckoutState extends State<Checkout>
           case 'stripe':
             widgets.add(
               PaymentProvider(
-                logoPaths: [
+                logoPaths: const [
                   ImagePaths.visa,
                   ImagePaths.mastercard,
                   ImagePaths.unionpay
@@ -169,7 +169,7 @@ class _CheckoutState extends State<Checkout>
           case 'btcpay':
             widgets.add(
               PaymentProvider(
-                logoPaths: [ImagePaths.btc],
+                logoPaths: const [ImagePaths.btc],
                 onChanged: () => selectPaymentProvider(Providers.btcpay),
                 selectedPaymentProvider: selectedPaymentProvider!,
                 paymentType: Providers.btcpay,
