@@ -13,7 +13,7 @@ jobs:
     runs-on:
       group: large-runners
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           lfs: true
 
@@ -28,9 +28,9 @@ jobs:
       - run: flutter --version
 
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
-          go-version: 1.19
+          go-version-file: "go.mod"
 
       - name: Granting private modules access
         run: |
