@@ -246,10 +246,10 @@ packages:
     dependency: "direct main"
     description:
       name: clever_ads_solutions
-      sha256: fd9386aeb8874c25f8e6dfc85f22cee31b661a2c7a02a92f2f1569ed5dd75da9
+      sha256: "8004f0965c24145baf6e2c96809461a8a06aad7fd827411cc7c769eddfcc5764"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.3"
   clock:
     dependency: transitive
     description:
