@@ -1,6 +1,6 @@
 module github.com/getlantern/android-lantern
 
-go 1.19
+go 1.20
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
 
