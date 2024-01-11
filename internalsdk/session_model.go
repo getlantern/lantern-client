@@ -1531,10 +1531,25 @@ func changeEmail(session SessionModel, email string, newEmail string, password s
 		return log.Errorf("user_not_found error while generating client proof %v", err)
 	}
 
+	// Create new salt and verifier with new email and new slat
+	newsalt, err := GenerateSalt()
+	if err != nil {
+		return err
+	}
+	log.Debugf("Slat %v and length %v", newsalt, len(newsalt))
+
+	srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, newEmail, newsalt), nil)
+	verifierKey, err := srpClient.Verifier()
+	if err != nil {
+		return err
+	}
+
 	changeEmailRequestBody := &protos.ChangeEmailRequest{
-		OldEmail: email,
-		NewEmail: newEmail,
-		Proof:    clientProof,
+		OldEmail:    email,
+		NewEmail:    newEmail,
+		Proof:       clientProof,
+		NewSalt:     newsalt,
+		NewVerifier: verifierKey.Bytes(),
 	}
 
 	isEmailChanged, err := apimodels.ChangeEmail(changeEmailRequestBody)

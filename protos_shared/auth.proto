@@ -96,6 +96,8 @@ message ChangeEmailRequest {
   string old_email = 1;
   string new_email = 2;
   bytes proof = 3;
+  bytes new_salt = 4;
+  bytes new_verifier = 5;
 }
 
 // POST /users/delete
