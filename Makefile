@@ -569,22 +569,22 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 		rm -rf $(DARWIN_APP_NAME) && \
 		cp -r $$INSTALLER_RESOURCES/$(DARWIN_APP_NAME)_template $(DARWIN_APP_NAME) && \
 		mkdir $(DARWIN_APP_NAME)/Contents/MacOS && \
-		cp -a build/macos/Build/Products/Release/Lantern.app/Contents/* $(DARWIN_APP_NAME)/Contents/ && \
-		ls build/macos/Build/Products/Release/Lantern.app/Contents && \
-		cp $(DARWIN_BINARY_NAME) build/macos/Build/Products/Release/Lantern.app/Contents/Frameworks/liblantern.dylib && \
-		cp -r $(DARWIN_BINARY_NAME) $(DARWIN_APP_NAME)/Contents/Resources/liblantern.dylib && \
+		cp -a build/macos/Build/Products/Debug/Lantern.app/Contents/* $(DARWIN_APP_NAME)/Contents/ && \
+		ls build/macos/Build/Products/Debug/Lantern.app/Contents && \
+		cp $(DARWIN_BINARY_NAME) build/macos/Build/Products/Debug/Lantern.app/Contents/Frameworks && \
+		cp -r $(DARWIN_BINARY_NAME) $(DARWIN_APP_NAME)/Contents/Resources && \
 		$(call osxcodesign,$(DARWIN_APP_NAME)/Contents/Resources/liblantern.dylib) && \
 		mkdir $(DARWIN_APP_NAME)/Contents/Resources/en.lproj && \
 		cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(PACKAGED_YAML) && \
 		cp $(APP_YAML_PATH) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(APP_YAML) && \
-		$(call osxcodesign,$(DARWIN_APP_NAME)/Contents/MacOS/Lantern) && \
-		$(call osxcodesign,$(DARWIN_APP_NAME)) && \
 		cat $(DARWIN_APP_NAME)/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin_amd64.bz2 && \
 		ls -l $(DARWIN_BINARY_NAME) $(APP)_update_darwin_amd64.bz2 && \
 		rm -rf $(INSTALLER_NAME).dmg && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
 		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
+		$(call osxcodesign,$(DARWIN_APP_NAME)/Contents/MacOS/Lantern) && \
+		$(call osxcodesign,$(DARWIN_APP_NAME)) && \
 		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
 		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
 		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
