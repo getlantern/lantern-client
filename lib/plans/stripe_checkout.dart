@@ -133,7 +133,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
       context.loaderOverlay.hide();
       CDialog.showError(
         context,
-        error: e,
+        error: error,
         stackTrace: stackTrace,
         description: (error as PlatformException)
             .message

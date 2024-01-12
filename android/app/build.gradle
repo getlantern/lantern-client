@@ -427,7 +427,7 @@ dependencies {
     // https://mvnrepository.com/artifact/javax.mail/mail
     implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
 
-    implementation 'com.stripe:stripe-android:20.17.0'
+    implementation 'com.stripe:stripe-android:20.36.1'
 
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")

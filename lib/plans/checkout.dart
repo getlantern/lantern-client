@@ -196,7 +196,7 @@ class _CheckoutState extends State<Checkout>
           await sessionModel.openWebview(btcPayURL);
         }).onError((error, stackTrace) {
           context.loaderOverlay.hide();
-          showError(context, error: e, stackTrace: stackTrace);
+          showError(context, error: error, stackTrace: stackTrace);
         });
         break;
       case Providers.freekassa:
@@ -390,7 +390,7 @@ class _CheckoutState extends State<Checkout>
             .onError((error, stackTrace) {
           showError(
             context,
-            error: e,
+            error: error,
             stackTrace: stackTrace,
           );
         }),
