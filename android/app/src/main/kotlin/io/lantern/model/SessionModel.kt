@@ -2,8 +2,6 @@ package io.lantern.model
 
 import android.app.Activity
 import android.content.Intent
-import android.os.AsyncTask
-import android.os.Build
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import com.google.protobuf.ByteString
@@ -34,7 +32,6 @@ import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.castToBoolean
-import org.getlantern.lantern.util.openHome
 import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
@@ -99,7 +96,7 @@ class SessionModel(
     fun checkAdsAvailability() {
         //This check is just safe guard
         //So if something goes wrong in backend we should not show ads to pro users at any case
-        if(LanternApp.getSession().isProUser){
+        if (LanternApp.getSession().isProUser) {
             db.mutate { tx ->
                 tx.put(SHOULD_SHOW_GOOGLE_ADS, false)
                 tx.put(SHOULD_SHOW_CAS_ADS, false)
@@ -108,9 +105,19 @@ class SessionModel(
         }
         Logger.debug(TAG, "checkAdsAvailability called")
         val googleAds = shouldShowAdsBasedRegion { LanternApp.getSession().shouldShowAdsEnabled() }
-        Logger.debug(TAG, "checkAdsAvailability with googleAds values $googleAds enable ${LanternApp.getSession().shouldShowAdsEnabled()}")
+        Logger.debug(
+            TAG,
+            "checkAdsAvailability with googleAds values $googleAds enable ${
+                LanternApp.getSession().shouldShowAdsEnabled()
+            }"
+        )
         val casAds = shouldShowAdsBasedRegion { LanternApp.getSession().shouldCASShowAdsEnabled() }
-        Logger.debug(TAG, "checkAdsAvailability with cas values $googleAds enable ${LanternApp.getSession().shouldCASShowAdsEnabled()}")
+        Logger.debug(
+            TAG,
+            "checkAdsAvailability with cas values $googleAds enable ${
+                LanternApp.getSession().shouldCASShowAdsEnabled()
+            }"
+        )
         db.mutate { tx ->
             tx.put(SHOULD_SHOW_GOOGLE_ADS, googleAds)
             tx.put(SHOULD_SHOW_CAS_ADS, casAds)
@@ -120,7 +127,7 @@ class SessionModel(
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
+            "authorizeViaEmail" -> requestRecoveryEmail(call.argument("emailAddress")!!, result)
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "requestLinkCode" -> requestLinkCode(result)
             "redeemLinkCode" -> redeemLinkCode(result)
@@ -379,14 +386,14 @@ class SessionModel(
             .add("code", LanternApp.getSession().deviceCode()!!)
             .add("deviceName", LanternApp.getSession().deviceName())
             .build()
-        Logger.info(TAG, "Redeeming link code")    
+        Logger.info(TAG, "Redeeming link code")
         lanternClient.post(
             LanternHttpClient.createProUrl("/link-code-redeem"),
             formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error making link redeem request..", t)
-                     if (error == null) {
+                    if (error == null) {
                         activity.runOnUiThread {
                             methodCallResult.error("unknownError", null, null)
                         }
@@ -435,63 +442,29 @@ class SessionModel(
         )
     }
 
-    private fun authorizeViaEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
-        Logger.debug(TAG, "Start Account recovery with email $emailAddress")
-
-        LanternApp.getSession().setEmail(emailAddress)
+    private fun requestRecoveryEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
+        val session = LanternApp.getSession()
+        session.setEmail(emailAddress)
         val formBody = FormBody.Builder()
             .add("email", emailAddress)
+            .add("deviceName", session.deviceName())
+            .add("locale", session.locale())
             .build()
 
         lanternClient.post(
-            LanternHttpClient.createProUrl("/user-recover"),
+            LanternHttpClient.createProUrl("/user-link-request"),
             formBody,
             object : ProCallback {
                 override fun onSuccess(response: Response?, result: JsonObject?) {
-                    Logger.debug(TAG, "Account recovery response: $result")
-                    if (result!!["token"] != null && result["userID"] != null) {
-                        Logger.debug(TAG, "Successfully recovered account")
-                        // update token and user ID with those returned by the pro server
-                        LanternApp.getSession()
-                            .setUserIdAndToken(result["userID"].asLong, result["token"].asString)
-                        LanternApp.getSession().linkDevice()
-                        LanternApp.getSession().setIsProUser(true)
-                        activity.showAlertDialog(
-                            activity.getString(R.string.device_added),
-                            activity.getString(R.string.device_authorized_pro),
-                            ContextCompat.getDrawable(activity, R.drawable.ic_filled_check),
-                            {
-                                activity.openHome()
-                            },
-                        )
-                    } else {
-                        Logger.error(TAG, "Got empty recovery result, can't continue")
-                        activity.runOnUiThread {
-                            methodCallResult.error("unknownError", null, null)
-                        }
-                        return
+                    activity.runOnUiThread {
+                        methodCallResult.success("Recovery code sent")
                     }
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
-                    if (error == null) {
-                        Logger.error(TAG, "Unable to recover account and no error to show")
-                        activity.runOnUiThread {
-                            methodCallResult.error("unknownError", t?.message, null)
-                        }
-                        return
-                    }
-
-                    val errorId = error.id
-                    if (errorId == "wrong-device") {
-                        sendRecoveryCode(methodCallResult)
-                    } else if (errorId == "wrong-email" || errorId == "cannot-recover-user") {
-                        activity.runOnUiThread {
-                            methodCallResult.error("unableToRecover", errorId, null)
-                        }
-                        activity.showErrorDialog(activity.resources.getString(R.string.cannot_find_email))
-                    } else {
-                        Logger.error(TAG, "Unknown error recovering account:$error")
+                    Logger.error(TAG, "Failure on  requestRecoveryEmail", error)
+                    activity.runOnUiThread {
+                        methodCallResult.error("unknownError", t?.message, null)
                     }
                 }
             },
@@ -555,11 +528,11 @@ class SessionModel(
                             .setUserIdAndToken(result["userID"].asLong, result["token"].asString)
                         LanternApp.getSession().linkDevice()
                         LanternApp.getSession().setIsProUser(true)
-                        activity.showAlertDialog(
-                            activity.getString(R.string.device_added),
-                            activity.getString(R.string.device_authorized_pro),
-                            ContextCompat.getDrawable(activity, R.drawable.ic_filled_check),
-                            { activity.openHome() })
+                        activity.runOnUiThread {
+                            methodCallResult.success(
+                                activity.getString(R.string.device_added),
+                            )
+                        }
                     }
                 }
             },

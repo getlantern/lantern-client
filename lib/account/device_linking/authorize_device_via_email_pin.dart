@@ -1,105 +1,114 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:lantern/common/common.dart';
 import 'package:styled_text/styled_text.dart';
 
 @RoutePage<void>(name: 'AuthorizeDeviceEmailPin')
 class AuthorizeDeviceViaEmailPin extends StatelessWidget {
-  AuthorizeDeviceViaEmailPin({Key? key}) : super(key: key);
+  final String email;
+
+  AuthorizeDeviceViaEmailPin({
+    Key? key,
+    required this.email,
+  }) : super(key: key);
 
   final pinCodeController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    Widget emailSentMessage(String emailAddress) {
-      return StyledText(
-        text: 'recovery_email_sent'
-            .i18n
-            .replaceFirst('%s', '<highlight>$emailAddress</highlight>'),
-        style: tsBody1,
-        tags: {
-          'highlight': StyledTextTag(
-              style: TextStyle(color: blue4, fontWeight: FontWeight.bold)),
+    return BaseScreen(
+      title: 'Authorize Device via Email'.i18n,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            margin: const EdgeInsetsDirectional.only(top: 32, bottom: 6),
+            alignment: Alignment.center,
+            child: CText(
+              'Enter or paste linking code'.i18n.toUpperCase(),
+              style: tsOverline,
+            ),
+          ),
+          PinField(
+            length: 6,
+            controller: pinCodeController,
+            onDone: (text) => onDone(text, context),
+          ),
+          LabeledDivider(
+            padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10),
+          ),
+          emailDesc(),
+          const Spacer(),
+          Container(
+            margin: const EdgeInsetsDirectional.only(bottom: 32),
+            child: TextButton(
+              onPressed: () => onResendCode(context),
+              child: CText(
+                'Re-send Email'.i18n.toUpperCase(),
+                style: tsButtonPink,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget emailDesc() {
+    return StyledText(
+      text: 'recovery_email_sent'
+          .i18n
+          .replaceFirst('%s', '<highlight>$email</highlight>'),
+      style: tsBody1,
+      tags: {
+        'highlight': StyledTextTag(
+            style: TextStyle(color: blue4, fontWeight: FontWeight.bold)),
+      },
+    );
+  }
+
+  /// widget method
+
+  Future<void> onDone(String code, BuildContext context) async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.validateRecoveryCode(code);
+      pinCodeController.clear();
+      context.loaderOverlay.hide();
+      CDialog.showInfo(
+        context,
+        title: "device_added".i18n,
+        description: "device_added_msg".i18n.replaceAll('%s', email),
+        agreeAction: () async {
+          Future.delayed(
+            const Duration(milliseconds: 400),
+            () {
+              context.router.popUntilRoot();
+            },
+          );
+
+          return true;
         },
       );
+    } catch (e) {
+      pinCodeController.clear();
+      context.loaderOverlay.hide();
+      // CDialog.showError(context, description: e.toString());
     }
+  }
 
-    return sessionModel.emailAddress(
-        (BuildContext context, String emailAddress, Widget? child) {
-      return BaseScreen(
-        title: 'Authorize Device via Email'.i18n,
-        body: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsetsDirectional.only(top: 32, bottom: 6),
-                alignment: Alignment.center,
-                child: CText(
-                  'Enter or paste linking code'.i18n.toUpperCase(),
-                  style: tsOverline,
-                ),
-              ),
-              PinField(
-                length: 6,
-                controller: pinCodeController,
-                onDone: (code) {
-                  context.loaderOverlay.show(widget: spinner);
-                  sessionModel.validateRecoveryCode(code).then((value) {
-                    pinCodeController.clear();
-                    context.loaderOverlay.hide();
-                  }).onError((error, stackTrace) {
-                    pinCodeController.clear();
-                    context.loaderOverlay.hide();
-                  });
-                },
-              ),
-              LabeledDivider(
-                padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10),
-              ),
-              emailSentMessage(emailAddress),
-              const Spacer(),
-              Container(
-                margin: const EdgeInsetsDirectional.only(bottom: 32),
-                child: TextButton(
-                  onPressed: () {
-                    context.loaderOverlay.show(widget: spinner);
-                    sessionModel.resendRecoveryCode().then((value) {
-                      context.loaderOverlay.hide();
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: emailSentMessage(emailAddress),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: CText(
-                                  'Okay'.i18n,
-                                  style: tsButtonPink,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }).onError((error, stackTrace) {
-                      context.loaderOverlay.hide();
-                    });
-                  },
-                  child: CText(
-                    'Re-send Email'.i18n.toUpperCase(),
-                    style: tsButtonPink,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+  Future<void> onResendCode(BuildContext context) async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.authorizeViaEmail(email);
+      context.loaderOverlay.hide();
+      CDialog.showInfo(context,
+          title: "recovery_code_sent".i18n,
+          description: "recovery_email_sent".i18n.replaceAll('%s', email));
+    } catch (e) {
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.toString());
+    }
   }
 }
