@@ -1428,7 +1428,7 @@ msgid "recovery_code_sent"
 msgstr "Recovery Code Sent"
 
 msgid "device_added"
-msgstr "Device not associated to this user"
+msgstr "Device Added"
 
 msgid "device_added_message"
 msgstr "Your device has been successfully added. If you do not see the device connected, please restart the app on both devices"

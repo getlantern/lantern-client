@@ -72,6 +72,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
 
   Future<void> onDone(String code, BuildContext context) async {
     try {
+      FocusManager.instance.primaryFocus?.unfocus();
       context.loaderOverlay.show();
       await sessionModel.validateRecoveryCode(code);
       pinCodeController.clear();
@@ -79,7 +80,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
       CDialog.showInfo(
         context,
         title: "device_added".i18n,
-        description: "device_added_msg".i18n.replaceAll('%s', email),
+        description: "device_added_message".i18n,
         agreeAction: () async {
           Future.delayed(
             const Duration(milliseconds: 400),
