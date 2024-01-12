@@ -569,9 +569,9 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 		rm -rf $(DARWIN_APP_NAME) && \
 		cp -r $$INSTALLER_RESOURCES/$(DARWIN_APP_NAME)_template $(DARWIN_APP_NAME) && \
 		mkdir $(DARWIN_APP_NAME)/Contents/MacOS && \
-		cp -a build/macos/Build/Products/Debug/Lantern.app/Contents/* $(DARWIN_APP_NAME)/Contents/ && \
-		ls build/macos/Build/Products/Debug/Lantern.app/Contents && \
-		cp $(DARWIN_BINARY_NAME) build/macos/Build/Products/Debug/Lantern.app/Contents/Frameworks && \
+		cp -a build/macos/Build/Products/Release/Lantern.app/Contents/* $(DARWIN_APP_NAME)/Contents/ && \
+		ls build/macos/Build/Products/Release/Lantern.app/Contents && \
+		cp $(DARWIN_BINARY_NAME) build/macos/Build/Products/Release/Lantern.app/Contents/Frameworks && \
 		cp -r $(DARWIN_BINARY_NAME) $(DARWIN_APP_NAME)/Contents/Resources && \
 		$(call osxcodesign,$(DARWIN_APP_NAME)/Contents/Resources/liblantern.dylib) && \
 		mkdir $(DARWIN_APP_NAME)/Contents/Resources/en.lproj && \
