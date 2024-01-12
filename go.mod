@@ -25,7 +25,7 @@ replace crawshaw.io/sqlite => github.com/getlantern/sqlite v0.0.0-20220301112206
 
 replace github.com/Jigsaw-Code/outline-ss-server => github.com/getlantern/lantern-shadowsocks v1.3.6-0.20230301223223-150b18ac427d
 
-replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-20220824143118-037ff0cd9c33
+replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-20240112060218-7321f17ab0dd
 
 replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93
 
@@ -38,9 +38,9 @@ require (
 	github.com/getlantern/flashlight/v7 v7.6.33
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
-	github.com/getlantern/ipproxy v0.0.0-20231222102041-d51a21d2d0ff
-	github.com/getlantern/memhelper v0.0.0-20220104170102-df557102babd
+	github.com/getlantern/ipproxy v0.0.0-20230511223023-ee52513fd782
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
+	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/replica v0.14.2
 	github.com/gorilla/mux v1.8.0
 	github.com/shirou/gopsutil/v3 v3.23.12
@@ -53,8 +53,6 @@ require (
 
 require (
 	crawshaw.io/sqlite v0.3.3-0.20220618202545-d1964889ea3c // indirect
-	filippo.io/edwards25519 v1.0.0 // indirect
-	git.torproject.org/pluggable-transports/goptlib.git v1.3.0 // indirect
 	github.com/Jigsaw-Code/outline-ss-server v1.4.0 // indirect
 	github.com/OperatorFoundation/Replicant-go/Replicant/v3 v3.0.23 // indirect
 	github.com/OperatorFoundation/Starbridge-go/Starbridge/v3 v3.0.17 // indirect
@@ -79,17 +77,14 @@ require (
 	github.com/anacrolix/missinggo/v2 v2.7.3 // indirect
 	github.com/anacrolix/mmsg v1.0.0 // indirect
 	github.com/anacrolix/multiless v0.3.1-0.20221221005021-2d12701f83f7 // indirect
-	github.com/anacrolix/publicip v0.2.0 // indirect
 	github.com/anacrolix/squirrel v0.4.1 // indirect
 	github.com/anacrolix/stm v0.5.0 // indirect
 	github.com/anacrolix/sync v0.5.1 // indirect
-	github.com/anacrolix/tagflag v1.3.0 // indirect
 	github.com/anacrolix/torrent v1.52.7 // indirect
 	github.com/anacrolix/upnp v0.1.3-0.20220123035249-922794e51c96 // indirect
 	github.com/anacrolix/utp v0.1.0 // indirect
 	github.com/andybalholm/brotli v1.0.6 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
-	github.com/arl/statsviz v0.4.0 // indirect
 	github.com/armon/go-radix v1.0.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/benbjohnson/immutable v0.4.3 // indirect
@@ -99,9 +94,7 @@ require (
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
-	github.com/cloudflare/circl v1.3.7 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dchest/siphash v1.2.3 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
 	github.com/dsoprea/go-exif/v2 v2.0.0-20221012082141-d21ac8e2de85 // indirect
@@ -111,13 +104,11 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/dvyukov/go-fuzz v0.0.0-20231214143802-7955ebc9f2de // indirect
 	github.com/edsrzf/mmap-go v1.1.0 // indirect
-	github.com/elliotchance/orderedmap v1.4.0 // indirect
 	github.com/enobufs/go-nats v0.0.1 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/frankban/quicktest v1.14.6 // indirect
 	github.com/gaukas/godicttls v0.0.4 // indirect
-	github.com/getlantern/borda v0.0.0-20230421223744-4e208135f082 // indirect
-	github.com/getlantern/broflake v0.0.0-20240104003636-455141a52cb3 // indirect
+	github.com/getlantern/broflake v0.0.0-20240112052310-d2b5a978b90b // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
 	github.com/getlantern/byteexec v0.0.0-20220903142956-e6ed20032cfd // indirect
 	github.com/getlantern/cmux v0.0.0-20230301223233-dac79088a4c0 // indirect
@@ -132,14 +123,13 @@ require (
 	github.com/getlantern/elevate v0.0.0-20220903142053-479ab992b264 // indirect
 	github.com/getlantern/ema v0.0.0-20190620044903-5943d28f40e4 // indirect
 	github.com/getlantern/enhttp v0.0.0-20210901195634-6f89d45ee033 // indirect
-	github.com/getlantern/enproxy v0.0.0-20180913191734-002212d417a4 // indirect
 	github.com/getlantern/event v0.0.0-20210901195647-a7e3145142e6 // indirect
 	github.com/getlantern/eventual v1.0.0 // indirect
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c // indirect
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
 	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 // indirect
-	github.com/getlantern/geo v0.0.0-20230612145351-d1374c8f8dec // indirect
+	github.com/getlantern/geo v0.0.0-20240108161311-50692a1b69a9 // indirect
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4 // indirect
 	github.com/getlantern/go-cache v0.0.0-20141028142048-88b53914f467 // indirect
 	github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 // indirect
@@ -163,16 +153,13 @@ require (
 	github.com/getlantern/meta-scrubber v0.0.1 // indirect
 	github.com/getlantern/mitm v0.0.0-20231025115752-54d3e43899b7 // indirect
 	github.com/getlantern/mockconn v0.0.0-20200818071412-cb30d065a848 // indirect
-	github.com/getlantern/msgpack v3.1.4+incompatible // indirect
 	github.com/getlantern/multipath v0.0.0-20230510135141-717ed305ef50 // indirect
 	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd // indirect
 	github.com/getlantern/ops v0.0.0-20231025133620-f368ab734534 // indirect
 	github.com/getlantern/osversion v0.0.0-20230401075644-c2a30e73c451 // indirect
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 // indirect
-	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb // indirect
 	github.com/getlantern/preconn v1.0.0 // indirect
 	github.com/getlantern/proxy/v3 v3.0.0-20231031142453-252ab678e6b7 // indirect
-	github.com/getlantern/proxybench v0.0.0-20220404140110-f49055cb86de // indirect
 	github.com/getlantern/psmux v1.5.15 // indirect
 	github.com/getlantern/quicwrapper v0.0.0-20231117185542-d951689c4970 // indirect
 	github.com/getlantern/ratelimit v0.0.0-20220926192648-933ab81a6fc7 // indirect
@@ -190,12 +177,9 @@ require (
 	github.com/getlantern/tlsutil v0.5.3 // indirect
 	github.com/getlantern/uuid v1.2.0 // indirect
 	github.com/getlantern/waitforserver v1.0.1 // indirect
-	github.com/getlantern/withtimeout v0.0.0-20160829163843-511f017cd913 // indirect
 	github.com/getlantern/yaml v0.0.0-20190801163808-0c9bb1ebf426 // indirect
 	github.com/getsentry/sentry-go v0.25.0 // indirect
 	github.com/go-errors/errors v1.5.1 // indirect
-	github.com/go-llsqlite/adapter v0.0.0-20230927005056-7f5ce7f0c916 // indirect
-	github.com/go-llsqlite/crawshaw v0.4.0 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
@@ -205,11 +189,10 @@ require (
 	github.com/golang/gddo v0.0.0-20210115222349-20d68f94ee1f // indirect
 	github.com/golang/geo v0.0.0-20230421003525-6adc56603217 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/btree v1.1.2 // indirect
-	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/google/netstack v0.0.0-00010101000000-000000000000 // indirect
 	github.com/google/pprof v0.0.0-20231229205709-960ae82b1e42 // indirect
 	github.com/google/uuid v1.5.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
@@ -224,12 +207,9 @@ require (
 	github.com/klauspost/pgzip v1.2.5 // indirect
 	github.com/klauspost/reedsolomon v1.12.0 // indirect
 	github.com/kr/binarydist v0.1.0 // indirect
-	github.com/kr/pretty v0.3.1 // indirect
-	github.com/kr/text v0.2.0 // indirect
 	github.com/libp2p/go-buffer-pool v0.1.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20231016141302-07b5767bb0ed // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
+	github.com/mattn/go-sqlite3 v1.14.16 // indirect
 	github.com/matttproud/golang_protobuf_extensions/v2 v2.0.0 // indirect
 	github.com/mdlayher/netlink v1.1.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.1 // indirect
@@ -241,10 +221,9 @@ require (
 	github.com/nwaples/rardecode v1.1.2 // indirect
 	github.com/onsi/ginkgo/v2 v2.13.2 // indirect
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7 // indirect
-	github.com/oschwald/geoip2-golang v1.8.0 // indirect
-	github.com/oschwald/maxminddb-golang v1.10.0 // indirect
+	github.com/oschwald/geoip2-golang v1.9.0 // indirect
+	github.com/oschwald/maxminddb-golang v1.11.0 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
-	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pierrec/lz4/v4 v4.1.12 // indirect
 	github.com/pion/datachannel v1.5.5 // indirect
 	github.com/pion/dtls/v2 v2.2.9 // indirect
@@ -271,19 +250,16 @@ require (
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.45.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
-	github.com/quic-go/qtls-go1-19 v0.3.2 // indirect
 	github.com/quic-go/qtls-go1-20 v0.4.1 // indirect
 	github.com/quic-go/quic-go v0.40.1 // indirect
 	github.com/refraction-networking/utls v1.3.3 // indirect
-	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	github.com/rogpeppe/go-internal v1.10.0 // indirect
 	github.com/rs/dnscache v0.0.0-20211102005908-e0241e321417 // indirect
 	github.com/ryszard/goskiplist v0.0.0-20150312221310-2dfbae5fcf46 // indirect
 	github.com/samber/lo v1.39.0 // indirect
 	github.com/shadowsocks/go-shadowsocks2 v0.1.5 // indirect
-	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 // indirect
+	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/songgao/water v0.0.0-20200317203138-2b4b6d7c09d8 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/tchap/go-patricia/v2 v2.3.1 // indirect
@@ -297,11 +273,10 @@ require (
 	github.com/tklauser/numcpus v0.7.0 // indirect
 	github.com/tkuchiki/go-timezone v0.2.2 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
+	github.com/vishvananda/netns v0.0.0-20200728191858-db3c7e526aae // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xtaci/smux v1.5.24 // indirect
 	github.com/yusufpapurcu/wmi v1.2.3 // indirect
-	gitlab.com/yawning/edwards25519-extra.git v0.0.0-20220726154925-def713fd18e4 // indirect
-	gitlab.com/yawning/obfs4.git v0.0.0-20220904064028-336a71d6e4cf // indirect
 	go.etcd.io/bbolt v1.3.7 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.42.0 // indirect
 	go.opentelemetry.io/otel v1.21.0 // indirect
@@ -322,22 +297,14 @@ require (
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/sync v0.5.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	golang.org/x/tools v0.16.1 // indirect
-	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
-	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240102182953-50ed04b92917 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240102182953-50ed04b92917 // indirect
 	google.golang.org/grpc v1.60.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gvisor.dev/gvisor v0.0.0-20240103195848-a9a6a6819b00 // indirect
 	howett.net/plist v1.0.1 // indirect
-	modernc.org/libc v1.22.3 // indirect
-	modernc.org/mathutil v1.5.0 // indirect
-	modernc.org/memory v1.5.0 // indirect
-	modernc.org/sqlite v1.21.1 // indirect
-	zombiezen.com/go/sqlite v0.13.1 // indirect
 )
