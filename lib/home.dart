@@ -105,11 +105,11 @@ class _HomePageState extends State<HomePage> with TrayListener {
     trayManager.addListener(this);
     Menu menu = Menu(
       items: [
-        /*MenuItem(
+        MenuItem(
           key: 'show_window',
           label: 'show'.i18n,
         ),
-        MenuItem.separator(),*/
+        MenuItem.separator(),
         MenuItem(
           key: 'exit_app',
           label: 'exit'.i18n,
