@@ -34,8 +34,7 @@ class _HomePageState extends State<HomePage> with TrayListener {
   @override
   void initState() {
     if (isDesktop()) {
-      trayManager.addListener(this);
-      trayManager.setIcon(systemTrayIcon(false));
+      setupTrayManager();
     }
     super.initState();
     if (Platform.isAndroid) {
@@ -62,46 +61,78 @@ class _HomePageState extends State<HomePage> with TrayListener {
       navigationChannel?.invokeListMethod('ready');
       _cancelEventSubscription =
           sessionModel.eventManager.subscribe(Event.All, (event, params) {
-            switch (event) {
-              case Event.SurveyAvailable:
-                final message = params['message'] as String;
-                final buttonText = params['buttonText'] as String;
-                final snackBar = SnackBar(
-                  backgroundColor: Colors.black,
-                  duration: const Duration(days: 99999),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                  margin:
-                  const EdgeInsetsDirectional.only(
-                      start: 8, end: 8, bottom: 16),
-                  // simple way to show indefinitely
-                  content: CText(
-                    message,
-                    style: CTextStyle(
-                      fontSize: 14,
-                      lineHeight: 21,
-                      color: white,
-                    ),
-                  ),
-                  action: SnackBarAction(
-                    textColor: pink3,
-                    label: buttonText.toUpperCase(),
-                    onPressed: () {
-                      mainMethodChannel?.invokeMethod('showLastSurvey');
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    },
-                  ),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                break;
-              default:
-                break;
-            }
-          });
+        switch (event) {
+          case Event.SurveyAvailable:
+            final message = params['message'] as String;
+            final buttonText = params['buttonText'] as String;
+            final snackBar = SnackBar(
+              backgroundColor: Colors.black,
+              duration: const Duration(days: 99999),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsetsDirectional.only(
+                  start: 8, end: 8, bottom: 16),
+              // simple way to show indefinitely
+              content: CText(
+                message,
+                style: CTextStyle(
+                  fontSize: 14,
+                  lineHeight: 21,
+                  color: white,
+                ),
+              ),
+              action: SnackBarAction(
+                textColor: pink3,
+                label: buttonText.toUpperCase(),
+                onPressed: () {
+                  mainMethodChannel?.invokeMethod('showLastSurvey');
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+              ),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            break;
+          default:
+            break;
+        }
+      });
     }
+  }
+
+  void setupTrayManager() async {
+    trayManager.addListener(this);
+    Menu menu = Menu(
+      items: [
+        /*MenuItem(
+          key: 'show_window',
+          label: 'show'.i18n,
+        ),
+        MenuItem.separator(),*/
+        MenuItem(
+          key: 'exit_app',
+          label: 'exit'.i18n,
+        ),
+      ],
+    );
+    await trayManager.setContextMenu(menu);
+    await trayManager.setIcon(systemTrayIcon(false));
+  }
+
+  @override
+  void onTrayIconMouseDown() {
+    // pop up the menu
+    trayManager.popUpContextMenu();
+  }
+
+  @override
+  void onTrayMenuItemClick(MenuItem menuItem) {
+    print(menuItem.label);
+    if (menuItem.label == "Exit") {
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     }
+  }
 
   Future<dynamic> _handleNativeNavigationRequest(MethodCall methodCall) async {
     switch (methodCall.method) {
@@ -137,23 +168,25 @@ class _HomePageState extends State<HomePage> with TrayListener {
               Logger.level = Level.error;
             }
 
-            bool isPlayVersion = (sessionModel.isPlayVersion.value??false);
-            bool isStoreVersion = (sessionModel.isStoreVersion.value??false);
+            bool isPlayVersion = (sessionModel.isPlayVersion.value ?? false);
+            bool isStoreVersion = (sessionModel.isStoreVersion.value ?? false);
 
-            if ((isPlayVersion||isStoreVersion) && version == 0) {
+            if ((isPlayVersion || isStoreVersion) && version == 0) {
               // show privacy disclosure if it's a Play build and the terms have
               // not already been accepted
               return const PrivacyDisclosure();
             }
             return sessionModel.selectedTab(
-                  (context, selectedTab, child) => messagingModel
-                  .getOnBoardingStatus((_, isOnboarded, child) {
+              (context, selectedTab, child) =>
+                  messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
                 final isTesting = const String.fromEnvironment(
-                  'driver',
-                  defaultValue: 'false',
-                ).toLowerCase() ==
+                      'driver',
+                      defaultValue: 'false',
+                    ).toLowerCase() ==
                     'true';
-                final tab = Platform.isAndroid ? selectedTab : ffiSelectedTab().toDartString();
+                final tab = Platform.isAndroid
+                    ? selectedTab
+                    : ffiSelectedTab().toDartString();
                 return Scaffold(
                   body: buildBody(tab, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
