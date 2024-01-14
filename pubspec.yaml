@@ -44,8 +44,6 @@ dependencies:
   catcher_2: ^1.0.0
   sentry_flutter: ^7.10.1
 
-  system_tray: ^2.0.3
-
   badges: ^3.1.1
   dotted_border: ^2.0.0+3
   styled_text: ^8.1.0
@@ -105,6 +103,9 @@ dependencies:
 
   # Package information
   package_info_plus: ^4.1.0
+
+  # System tray
+  tray_manager: ^0.2.1
 
   # Path, permission & Markdown handling
   path_provider: ^2.1.0

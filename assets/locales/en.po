@@ -427,6 +427,12 @@ msgstr "Yes"
 msgid "No"
 msgstr "No"
 
+msgid "exit"
+msgstr "Exit"
+
+msgid "show"
+msgstr "Show"
+
 msgid "Enter or paste linking code"
 msgstr "Enter or paste linking code"
 
