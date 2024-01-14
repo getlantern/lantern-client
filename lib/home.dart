@@ -11,7 +11,7 @@ import 'package:lantern/replica/replica_tab.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
-
+import 'package:tray_manager/tray_manager.dart';
 import 'messaging/messaging_model.dart';
 
 @RoutePage(name: 'Home')
@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TrayListener {
   BuildContext? _context;
   MethodChannel? mainMethodChannel;
   MethodChannel? navigationChannel;
@@ -33,6 +33,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    if (isDesktop()) {
+      trayManager.addListener(this);
+      trayManager.setIcon(systemTrayIcon(false));
+    }
     super.initState();
     if (Platform.isAndroid) {
       mainMethodChannel = const MethodChannel('lantern_method_channel');
@@ -112,6 +116,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    if (isDesktop()) {
+      trayManager.removeListener(this);
+    }
     if (_cancelEventSubscription != null) {
       _cancelEventSubscription!();
     }

@@ -6,7 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
   emoji_picker_flutter
   sentry_flutter
-  system_tray
+  tray_manager
   url_launcher_linux
 )
 

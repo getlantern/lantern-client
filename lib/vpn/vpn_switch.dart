@@ -2,6 +2,7 @@ import 'package:lantern/vpn/vpn.dart';
 import 'package:lantern/ffi.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
+import 'package:tray_manager/tray_manager.dart';
 import 'package:lantern/main.dart';
 
 class VPNSwitch extends StatefulWidget {
@@ -38,7 +39,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
         } else {
           await sysProxyOn();
         }
-        await systemTray.setImage(path);
+        await trayManager.setIcon(path);
       }
     }
 

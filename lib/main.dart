@@ -4,10 +4,8 @@ import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/ffi.dart';
-import 'package:system_tray/system_tray.dart';
+import 'package:tray_manager/tray_manager.dart';
 import 'catcher_setup.dart';
-
-final SystemTray systemTray = SystemTray();
 
 Future<void> main() async {
   // CI will be true only when running appium test
@@ -37,7 +35,6 @@ Future<void> main() async {
   // }, appRunner: () => setupCatcherAndRun(LanternApp()));
 
   if (isDesktop()) {
-    await initSystemTray();
     loadLibrary();
   }
 
@@ -51,34 +48,4 @@ Future<void> _initGoogleMobileAds() async {
   // MobileAds.instance.openAdInspector((p0) {
   //   print('ad error $p0');
   // });
-}
-
-Future<void> initSystemTray() async {
-  final AppWindow appWindow = AppWindow();
-
-  // We first init the systray menu
-  await systemTray.initSystemTray(
-    iconPath: systemTrayIcon(false),
-  );
-
-  // create context menu
-  final Menu menu = Menu();
-  await menu.buildFrom([
-    MenuItemLabel(label: 'Show', onClicked: (menuItem) => appWindow.show()),
-    MenuItemLabel(label: 'Hide', onClicked: (menuItem) => appWindow.hide()),
-    MenuItemLabel(label: 'Exit', onClicked: (menuItem) => appWindow.close()),
-  ]);
-
-  // set context menu
-  await systemTray.setContextMenu(menu);
-
-  // handle system tray event
-  systemTray.registerSystemTrayEventHandler((eventName) {
-    debugPrint("eventName: $eventName");
-    if (eventName == kSystemTrayEventClick) {
-      Platform.isWindows ? appWindow.show() : systemTray.popUpContextMenu();
-    } else if (eventName == kSystemTrayEventRightClick) {
-      Platform.isWindows ? systemTray.popUpContextMenu() : appWindow.show();
-    }
-  });
 }
