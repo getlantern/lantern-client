@@ -61,7 +61,8 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 		DialUDP: func(ctx context.Context, network, addr string) (net.Conn, error) {
 			_, port, _ := net.SplitHostPort(addr)
 			isDNS := port == "53"
-			if isDNS {
+			if isDNS || (port == "443" && strings.Contains(addr, "240.0.0")) {
+				log.Debugf("Re-routing %s to dnsgrab", addr)
 				// reroute DNS requests to dnsgrab
 				addr = dnsGrabAddr
 			} else if port == "853" {
