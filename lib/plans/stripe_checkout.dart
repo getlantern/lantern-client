@@ -1,36 +1,10 @@
 import 'package:credit_card_validator/credit_card_validator.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/price_summary.dart';
 import 'package:lantern/plans/tos.dart';
 import 'package:lantern/plans/utils.dart';
-
-class CardExpirationFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue value,
-  ) {
-    final newValue = value.text;
-    var formattedValue = '';
-
-    for (var i = 0; i < newValue.length; i++) {
-      if (newValue[i] != '/') formattedValue += newValue[i];
-      var index = i + 1;
-      if (index % 2 == 0 &&
-          index != newValue.length &&
-          !(formattedValue.contains(RegExp(r'\/')))) {
-        formattedValue += '/';
-      }
-    }
-    return value.copyWith(
-      text: formattedValue,
-      selection: TextSelection.fromPosition(
-        TextPosition(offset: formattedValue.length),
-      ),
-    );
-  }
-}
 
 @RoutePage(name: 'StripeCheckout')
 class StripeCheckout extends StatefulWidget {
@@ -88,12 +62,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   var formIsValid = false;
 
   @override
-  void initState() {
-    WidgetsFlutterBinding.ensureInitialized();
-    super.initState();
-  }
-
-  @override
   void dispose() {
     creditCardController.dispose();
     super.dispose();
@@ -110,26 +78,18 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   }
 
   Future<void> onCheckoutButtonTap() async {
-    context.loaderOverlay.show();
-    await sessionModel
-        .submitStripePayment(
-          widget.plan.id,
-          widget.email,
-          creditCardController.text,
-          expDateController.text,
-          cvcFieldController.text,
-        )
-        .timeout(
-          const Duration(seconds: 10),
-          onTimeout: () => onAPIcallTimeout(
-            code: 'submitStripeTimeout',
-            message: 'stripe_timeout'.i18n,
-          ),
-        )
-        .then((value) async {
+    try {
+      context.loaderOverlay.show(widget: spinner);
+      await sessionModel.submitStripePayment(
+        widget.plan.id,
+        widget.email,
+        creditCardController.text,
+        expDateController.text,
+        cvcFieldController.text,
+      );
       context.loaderOverlay.hide();
       showSuccessDialog(context, widget.isPro);
-    }).onError((error, stackTrace) {
+    } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       CDialog.showError(
         context,
@@ -139,7 +99,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
             .message
             .toString(), // This is coming localized
       );
-    });
+    }
   }
 
   @override
@@ -177,11 +137,12 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                 child: CTextField(
                   tooltipMessage: AppKeys.cardNumberKey,
                   controller: creditCardController,
-                  autovalidateMode: AutovalidateMode.disabled,
+                  // autovalidateMode: AutovalidateMode.disabled,
                   label: 'card_number'.i18n,
                   keyboardType: TextInputType.number,
                   maxLines: 1,
                   prefixIcon: const CAssetImage(path: ImagePaths.credit_card),
+                  inputFormatters: [CreditCardNumberInputFormatter()],
                 ),
               ),
               // * Credit card month and expiration
@@ -194,11 +155,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //* Expiration
-                    Container(
-                      width: 144,
-                      padding: const EdgeInsetsDirectional.only(
-                        end: 16,
-                      ),
+                    Expanded(
                       child: CTextField(
                         tooltipMessage: AppKeys.mmYYKey,
                         maxLines: 1,
@@ -206,15 +163,15 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                         controller: expDateController,
                         autovalidateMode: AutovalidateMode.disabled,
                         label: 'card_expiration'.i18n,
-                        inputFormatters: [CardExpirationFormatter()],
+                        inputFormatters: [CreditCardExpirationDateFormatter()],
                         keyboardType: TextInputType.datetime,
                         prefixIcon:
                             const CAssetImage(path: ImagePaths.calendar),
                       ),
                     ),
+                    const SizedBox(width: 45),
                     //* CVV
-                    Container(
-                      width: 144,
+                    Expanded(
                       child: CTextField(
                         tooltipMessage: AppKeys.cvcKey,
                         maxLines: 1,

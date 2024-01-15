@@ -55,6 +55,7 @@ dependencies:
   wakelock: ^0.6.2
   email_validator: ^2.1.17
   credit_card_validator: ^2.1.0
+  flutter_multi_formatter: ^2.12.4
 
   # Media & File handling
   audioplayers: ^5.1.0
