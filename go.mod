@@ -10,6 +10,8 @@ toolchain go1.21.4
 
 replace github.com/getlantern/ipproxy => ../ipproxy
 
+replace github.com/getlantern/dnsgrab => ../dnsgrab
+
 // v0.5.6 has a security issue and using require leaves a reference to it in go.sum
 replace github.com/ulikunitz/xz => github.com/ulikunitz/xz v0.5.8
 
