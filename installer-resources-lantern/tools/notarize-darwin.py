@@ -183,11 +183,11 @@ if __name__ == '__main__':
             if not issues:
                 print_stderr("found no issues in log file")
                 print_stderr("request_id:", request_id)
-                exit(1)
             print_stderr("issues:")
             for issue in issues:
                 print(issue, file=sys.stderr)
-    
+            exit(1)
+            
         elif status == "in progress":
             time.sleep(POLL_WAIT_SECONDS)
         else:
