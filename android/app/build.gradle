@@ -395,7 +395,7 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
-    implementation "androidx.webkit:webkit:1.7.0"
+    implementation "androidx.webkit:webkit:1.9.0"
     implementation 'com.kyleduo.switchbutton:library:2.1.0'
 
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'

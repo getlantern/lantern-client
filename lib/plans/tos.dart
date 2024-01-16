@@ -11,29 +11,15 @@ class TOS extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const href = 'https://s3.amazonaws.com/lantern/Lantern-TOS.pdf';
     return GestureDetector(
-      onTap: () async {
-        if (await canLaunch(href)) {
-          CDialog(
-            title: 'open_url'.i18n,
-            description: 'are_you_sure_you_want_to_open'.i18n.fill([href]),
-            agreeText: 'continue'.i18n,
-            agreeAction: () async {
-              await launch(href);
-              return true;
-            },
-          ).show(context);
-        }
-        ;
-      },
+      onTap: () => onUrlTap(context),
       child: Container(
         padding: const EdgeInsetsDirectional.only(bottom: 24.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CText(
-              'by_clicking_tos'.i18n.fill([copy]),
+              "${'by_clicking_tos'.i18n.fill([copy])} ",
               style: tsOverline,
             ),
             CText(
@@ -46,5 +32,20 @@ class TOS extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> onUrlTap(BuildContext context) async {
+    const href = 'https://s3.amazonaws.com/lantern/Lantern-TOS.pdf';
+    if (await canLaunchUrl(Uri.parse(href))) {
+      CDialog(
+        title: 'open_url'.i18n,
+        description: 'are_you_sure_you_want_to_open'.i18n.fill([href]),
+        agreeText: 'continue'.i18n,
+        agreeAction: () async {
+          await launchUrl(Uri.parse(href));
+          return true;
+        },
+      ).show(context);
+    }
   }
 }

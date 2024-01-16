@@ -114,11 +114,13 @@ abstract class $AppRouter extends _i41.RootStackRouter {
       );
     },
     AuthorizeDeviceEmailPin.name: (routeData) {
-      final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>(
-          orElse: () => const AuthorizeDeviceEmailPinArgs());
+      final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>();
       return _i41.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i7.AuthorizeDeviceViaEmailPin(key: args.key),
+        child: _i7.AuthorizeDeviceViaEmailPin(
+          key: args.key,
+          email: args.email,
+        ),
       );
     },
     BlockedUsers.name: (routeData) {
@@ -245,7 +247,7 @@ abstract class $AppRouter extends _i41.RootStackRouter {
     PlansPage.name: (routeData) {
       return _i41.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i24.PlansPage(),
+        child: const _i24.PlansPage(),
       );
     },
     PlayCheckout.name: (routeData) {
@@ -589,10 +591,14 @@ class AuthorizeDeviceEmailPin
     extends _i41.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
   AuthorizeDeviceEmailPin({
     _i43.Key? key,
+    required String email,
     List<_i41.PageRouteInfo>? children,
   }) : super(
           AuthorizeDeviceEmailPin.name,
-          args: AuthorizeDeviceEmailPinArgs(key: key),
+          args: AuthorizeDeviceEmailPinArgs(
+            key: key,
+            email: email,
+          ),
           initialChildren: children,
         );
 
@@ -603,13 +609,18 @@ class AuthorizeDeviceEmailPin
 }
 
 class AuthorizeDeviceEmailPinArgs {
-  const AuthorizeDeviceEmailPinArgs({this.key});
+  const AuthorizeDeviceEmailPinArgs({
+    this.key,
+    required this.email,
+  });
 
   final _i43.Key? key;
 
+  final String email;
+
   @override
   String toString() {
-    return 'AuthorizeDeviceEmailPinArgs{key: $key}';
+    return 'AuthorizeDeviceEmailPinArgs{key: $key, email: $email}';
   }
 }
 
