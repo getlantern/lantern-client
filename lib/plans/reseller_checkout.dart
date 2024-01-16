@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/plans/plan_details.dart';
@@ -190,32 +192,26 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
   }
 
   Future<void> onRegisterTap() async {
-    if (Platform.isAndroid) {
-      processForAndroid();
-    } else if (Platform.isIOS) {
-      onRegisterPro();
-    }
-  }
-
-  Future<void> processForAndroid() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     context.loaderOverlay.show();
     try {
-      await sessionModel
-          .redeemResellerCode(
-            emailController.text,
-            resellerCodeController.text,
-          )
-          .timeout(
-            defaultTimeoutDuration,
-            onTimeout: () => onAPIcallTimeout(
-              code: 'redeemresellerCodeTimeout',
-              message: 'reseller_timeout'.i18n,
-            ),
-          );
+      await sessionModel.redeemResellerCode(
+        emailController.text,
+        resellerCodeController.text,
+      );
 
       context.loaderOverlay.hide();
-      showSuccessDialog(context, widget.isPro, true);
-      showSuccessDialog(context, widget.isPro, isReseller: true);
+      showSuccessDialog(
+        context,
+        widget.isPro,
+        isReseller: true,
+        barrierDismissible: false,
+        onAgree: () {
+          ///Once usr redeem seller code
+          /// send usr to create password
+          openPassword();
+        },
+      );
     } catch (error, s) {
       context.loaderOverlay.hide();
       CDialog.showError(
@@ -229,17 +225,8 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
     }
   }
 
-// .timeout(
-// const Duration(seconds: 20),
-// onTimeout: () => onAPIcallTimeout(
-// code: 'redeemresellerCodeTimeout',
-// message: 'reseller_timeout'.i18n,
-// ),
-// )
-//     .then((value) {
-// context.loaderOverlay.hide();
-// showSuccessDialog(context, widget.isPro, true);
-// }).onError((error, stackTrace) {
-//
-// });
+  void openPassword() {
+    context.pushRoute(
+        CreateAccountPassword(email: emailController.text.validateEmail));
+  }
 }
