@@ -1630,6 +1630,7 @@ func userLinkRemove(session *SessionModel, deviceId string) error {
 	return userDetail(session)
 }
 
+// Add device for LINK WITH EMAIL method
 func requestRecoveryEmail(session *SessionModel, email string) error {
 	deviceName, err := pathdb.Get[string](session.db, pathModel)
 	if err != nil {
@@ -1658,6 +1659,8 @@ func requestRecoveryEmail(session *SessionModel, email string) error {
 	log.Debugf("LinkCodeRequest response %v", linkResponse)
 	return nil
 }
+
+// Validate code for LINK WITH EMAIL method
 func validateRecoveryCode(session *SessionModel, code string) error {
 	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
 	if err != nil {
@@ -1681,24 +1684,4 @@ func validateRecoveryCode(session *SessionModel, code string) error {
 	})
 	// Update user detail to reflact on UI
 	return userDetail(session)
-}
-
-func authorizeViaEmail(session *SessionModel, email string) error {
-	log.Debugf("Start Account recovery with email %d", email)
-	userRecoveryBody := map[string]string{
-		"email": email,
-	}
-
-	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
-	if err != nil {
-		log.Errorf("Error while getting deviceId %v", err)
-		return err
-	}
-
-	linkResponse, err := apimodels.UserRecover(userRecoveryBody, deviceId)
-	if err != nil {
-		return err
-	}
-	log.Debugf("LinkCodeRequest response %v", linkResponse)
-	return setUserIdAndToken(session.baseModel, linkResponse.UserID, linkResponse.Token)
 }
