@@ -131,6 +131,7 @@ class ImagePaths {
   static const user = 'assets/images/user.svg';
   static const image_inactive = 'assets/images/image_inactive.svg';
   static const warning = 'assets/images/warning.svg';
+  static const emptyCheck = 'assets/images/empty_check.svg';
 
 
   // illustrations

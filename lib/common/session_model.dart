@@ -26,6 +26,7 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> userEmail;
   late ValueNotifier<bool?> hasUserSignedInNotifier;
+  late ValueNotifier<String?> deviceIdNotifier;
 
   SessionModel() : super('session') {
     if (isMobile()) {
@@ -98,6 +99,7 @@ class SessionModel extends Model {
     hasAccountVerified = singleValueNotifier('isAccountVerified', false);
     hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
     proUserNotifier = singleValueNotifier('prouser', false);
+    deviceIdNotifier = singleValueNotifier('deviceid', "");
   }
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
@@ -387,7 +389,8 @@ class SessionModel extends Model {
   }
 
   Future<String> validateRecoveryCode(String code) async {
-    return await methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
+    return await methodChannel
+        .invokeMethod('validateRecoveryCode', <String, dynamic>{
       'code': code,
     }).then((value) => value.toString());
   }
@@ -403,7 +406,6 @@ class SessionModel extends Model {
       'deviceId': deviceId,
     });
   }
-
 
   Future<void> setSelectedTab<T>(String tab) async {
     return methodChannel.invokeMethod('setSelectedTab', <String, dynamic>{
@@ -693,7 +695,7 @@ class SessionModel extends Model {
 
 
   Future<void> requestLinkCode() {
-    return methodChannel.invokeMethod('requestLinkCode',{});
+    return methodChannel.invokeMethod('requestLinkCode', {});
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {

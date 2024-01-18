@@ -1671,6 +1671,9 @@ msgstr "Your Email has been verified successfully"
 msgid "device_limit_reached"
 msgstr "Device Limit Reached"
 
+msgid "device_limit_reached_message"
+msgstr "You are currently signed in on the maximum number of devices (3). To sign in on this device, please select and remove one of your other devices below."
+
 
 
 
