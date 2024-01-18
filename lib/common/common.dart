@@ -22,6 +22,8 @@ export 'package:flutter_svg/flutter_svg.dart';
 export 'package:flutter_switch/flutter_switch.dart';
 export 'package:i18n_extension/i18n_widget.dart';
 export 'package:lantern/core/router/router.gr.dart';
+// Services
+export 'package:lantern/core/services.dart';
 export 'package:lantern/event_extension.dart';
 export 'package:lantern/event_manager.dart';
 export 'package:lantern/i18n/i18n.dart';
@@ -60,31 +62,17 @@ export 'ui/countdown_stopwatch.dart';
 
 // custom components
 export 'ui/custom/asset_image.dart';
-
-// custom components
-export 'ui/custom/asset_image.dart';
-export 'ui/custom/badge.dart';
 export 'ui/custom/badge.dart';
 export 'ui/custom/dialog.dart';
-export 'ui/custom/dialog.dart';
-export 'ui/custom/divider.dart';
 export 'ui/custom/divider.dart';
 export 'ui/custom/fullscreen_image_viewer.dart';
-export 'ui/custom/fullscreen_image_viewer.dart';
-export 'ui/custom/fullscreen_video_viewer.dart';
 export 'ui/custom/fullscreen_video_viewer.dart';
 export 'ui/custom/fullscreen_viewer.dart';
-export 'ui/custom/fullscreen_viewer.dart';
-
-export 'ui/custom/ink_well.dart';
 export 'ui/custom/ink_well.dart';
 export 'ui/custom/list_item_factory.dart';
-export 'ui/custom/list_item_factory.dart';
-export 'ui/custom/rounded_rectangle_border.dart';
+export 'ui/custom/logo_with_text.dart';
 export 'ui/custom/rounded_rectangle_border.dart';
 export 'ui/custom/text.dart';
-export 'ui/custom/text.dart';
-export 'ui/custom/text_field.dart';
 export 'ui/custom/text_field.dart';
 export 'ui/dimens.dart';
 export 'ui/focused_menu.dart';
@@ -94,7 +82,6 @@ export 'ui/humanize_past_future.dart';
 export 'ui/humanize_seconds.dart';
 export 'ui/humanized_date.dart';
 export 'ui/image_paths.dart';
-export 'ui/info_text_box.dart';
 export 'ui/info_text_box.dart';
 export 'ui/labeled_divider.dart';
 export 'ui/list_section_header.dart';
@@ -147,8 +134,6 @@ export 'ui/custom/fullscreen_image_viewer.dart';
 export 'ui/custom/fullscreen_viewer.dart';
 
 
-// Services
-export 'package:lantern/core/services.dart';
 final mainLogger = Logger(
   printer: PrettyPrinter(),
   filter: DevelopmentFilter(),
