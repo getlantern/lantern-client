@@ -1668,6 +1668,9 @@ msgstr "Email has been verified"
 msgid "email_has_been_verified_message"
 msgstr "Your Email has been verified successfully"
 
+msgid "device_limit_reached"
+msgstr "Device Limit Reached"
+
 
 
 

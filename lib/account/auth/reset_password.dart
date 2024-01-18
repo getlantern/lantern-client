@@ -54,7 +54,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           child: Column(
             children: [
               const SizedBox(height: 24),
-              _buildHeader(),
+              const LogoWithText(),
               const SizedBox(height: 24),
               Form(
                 key: _passwordFormKey,
@@ -131,24 +131,7 @@ class _ResetPasswordState extends State<ResetPassword> {
     );
   }
 
-  Widget _buildHeader() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SvgPicture.asset(
-          ImagePaths.lantern_logo,
-          height: 42,
-        ),
-        const SizedBox(width: 15),
-        SvgPicture.asset(
-          ImagePaths.free_logo,
-          height: 25,
-        ),
-      ],
-    );
-  }
+
 
   Future<void> onResetPasswordTap() async {
     try {
