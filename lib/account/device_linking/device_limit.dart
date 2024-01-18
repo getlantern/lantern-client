@@ -33,6 +33,7 @@ class _DeviceLimitState extends State<DeviceLimit> {
           child: Button(
             text: 'remove',
             disabled: selectedDevice == null,
+            onPressed: onRemove,
           ),
         )
       ],
@@ -67,5 +68,16 @@ class _DeviceLimitState extends State<DeviceLimit> {
             );
           });
     });
+  }
+
+  Future<void> onRemove() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.removeDevice(selectedDevice!.id);
+      context.loaderOverlay.hide();
+    } catch (e) {
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
   }
 }
