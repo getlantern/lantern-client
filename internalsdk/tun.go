@@ -13,6 +13,7 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/idletiming"
 	"github.com/getlantern/ipproxy"
+	"github.com/getlantern/netx"
 
 	"golang.org/x/net/proxy"
 )
@@ -46,6 +47,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 	}
 
 	ipp, err := ipproxy.New(dev, &ipproxy.Opts{
+		DnsGrabServer:       getDNSGrab(context.Background()),
 		IdleTimeout:         70 * time.Second,
 		StatsInterval:       15 * time.Second,
 		MTU:                 mtu,
@@ -62,7 +64,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 			_, port, _ := net.SplitHostPort(addr)
 			isDNS := port == "53"
 			if isDNS {
-				log.Debugf("Re-routing %s to dnsgrab", addr)
+				log.Debugf("Re-routing %s to dnsgrab %s", addr, dnsGrabAddr)
 				// reroute DNS requests to dnsgrab
 				addr = dnsGrabAddr
 			} else if port == "853" {
@@ -73,8 +75,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 				// we blackhole this traffic.
 				return nil, errors.New("blackholing QUIC UDP traffic to %v", addr)
 			}
-			var d net.Dialer
-			conn, err := d.DialContext(ctx, network, addr)
+			conn, err := netx.DialContext(ctx, network, addr)
 			if isDNS && err == nil {
 				// wrap our DNS requests in a connection that closes immediately to avoid piling up file descriptors for DNS requests
 				conn = idletiming.Conn(conn, 10*time.Second, nil)
