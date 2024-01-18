@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
+import 'package:lantern/common/ui/custom/logo_with_text.dart';
 
 import '../../common/common.dart';
 import '../../core/purchase/app_purchase.dart';
@@ -43,7 +44,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
         child: Column(
           children: [
             const SizedBox(height: 24),
-            _buildHeader(),
+            const LogoWithText(),
             const SizedBox(height: 24),
             Form(
               key: _emailFormKey,
@@ -88,25 +89,6 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SvgPicture.asset(
-          ImagePaths.lantern_logo,
-          height: 42,
-        ),
-        const SizedBox(width: 15),
-        SvgPicture.asset(
-          ImagePaths.free_logo,
-          height: 25,
-        ),
-      ],
     );
   }
 

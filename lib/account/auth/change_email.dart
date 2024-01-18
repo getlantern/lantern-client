@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:email_validator/email_validator.dart';
+import 'package:lantern/common/ui/custom/logo_with_text.dart';
 
 import '../../common/common.dart';
 
@@ -54,7 +55,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
     return Column(
       children: <Widget>[
         const SizedBox(height: 24),
-        _buildHeader(),
+       const LogoWithText(),
         const SizedBox(height: 24),
         Form(
           key: _emailFormKey,
@@ -87,25 +88,6 @@ class _ChangeEmailState extends State<ChangeEmail> {
             text: 'change_email'.i18n,
             onPressed: onChangeEmail,
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildHeader() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SvgPicture.asset(
-          ImagePaths.lantern_logo,
-          height: 42,
-        ),
-        const SizedBox(width: 15),
-        SvgPicture.asset(
-          ImagePaths.free_logo,
-          height: 25,
         ),
       ],
     );

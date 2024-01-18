@@ -47,7 +47,7 @@ class _SignInPasswordState extends State<SignInPassword> {
         child: Column(
           children: [
             const SizedBox(height: 24),
-            _buildHeader(),
+            const LogoWithText(),
             const SizedBox(height: 24),
             CPasswordTextFiled(
               label: "enter_password".i18n,
@@ -89,24 +89,7 @@ class _SignInPasswordState extends State<SignInPassword> {
     );
   }
 
-  Widget _buildHeader() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SvgPicture.asset(
-          ImagePaths.lantern_logo,
-          height: 42,
-        ),
-        const SizedBox(width: 15),
-        SvgPicture.asset(
-          ImagePaths.free_logo,
-          height: 25,
-        ),
-      ],
-    );
-  }
+
 
   @override
   void dispose() {
