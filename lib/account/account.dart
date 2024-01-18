@@ -48,7 +48,6 @@ class AccountMenu extends StatelessWidget {
   }
 
   void onAccountManagementTap(BuildContext context, bool isProUser) {
-    //Todo make this dynamic once connect to API
     if (sessionModel.hasUserSignedInNotifier.value == true) {
       context.pushRoute(AccountManagement(isPro: isProUser));
     } else {
@@ -156,7 +155,8 @@ class AccountMenu extends StatelessWidget {
         icon: ImagePaths.desktop,
         content: 'desktop_version'.i18n,
         onTap: () {
-          openDesktopVersion(context);
+          context.pushRoute(const DeviceLimit());
+          // openDesktopVersion(context);
         },
       ),
       ListItemFactory.settingsItem(
