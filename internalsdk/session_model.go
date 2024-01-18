@@ -1045,6 +1045,34 @@ func userDetail(session *SessionModel) error {
 		return nil
 	}
 	log.Debugf("User detail: %+v", userDetail)
+
+	//Check if devuce id is connect to same device if not create new usr
+	// THis is for the case when user removed device from other device
+	found := false
+	if userDetail.Devices != nil {
+		for _, device := range userDetail.Devices {
+			if device.ID == deviecId {
+				found = true
+				break
+			}
+		}
+	}
+	log.Debugf("Device found %v", found)
+	if !found {
+		// Device has not found in the list
+		// Switch to free user
+		signOut(*session)
+		log.Debugf("Device has not found in the list creating new user")
+		locale, err := session.Locale()
+		if err != nil {
+			return err
+		}
+		err = userCreate(session.baseModel, locale)
+		if err != nil {
+			return err
+		}
+	}
+
 	err = cacheUserDetail(session.baseModel, userDetail)
 	if err != nil {
 		return err
