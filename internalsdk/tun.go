@@ -47,6 +47,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 	}
 
 	ipp, err := ipproxy.New(dev, &ipproxy.Opts{
+		DnsGrabAddress:      dnsGrabAddr,
 		DnsGrabServer:       getDNSGrab(context.Background()),
 		IdleTimeout:         70 * time.Second,
 		StatsInterval:       15 * time.Second,
