@@ -1433,4 +1433,7 @@ msgstr "Device Added"
 msgid "device_added_message"
 msgstr "Your device has been successfully added. If you do not see the device connected, please restart the app on both devices"
 
+msgid "search_app_name"
+msgstr "Search by app name"
+
 
