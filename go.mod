@@ -34,15 +34,15 @@ replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks
 require (
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
-	github.com/getlantern/dnsgrab v0.0.0-20240115144038-13652aaa0996
+	github.com/getlantern/dnsgrab v0.0.0-20240124035712-497ccf435858
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/flashlight/v7 v7.6.41-0.20240122044933-ebae7babf652
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
-	github.com/getlantern/ipproxy v0.0.0-20240122084836-201b0c8c0ef7
+	github.com/getlantern/ipproxy v0.0.0-20240124041003-8206fac3f06d
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
-	github.com/getlantern/netx v0.0.0-20211206143627-7ccfeb739cbd
+	github.com/getlantern/netx v0.0.0-20240124040039-163b1628a66b
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/protected v0.0.0-20240124014328-80a32b5f6662
 	github.com/getlantern/replica v0.14.2
@@ -123,7 +123,7 @@ require (
 	github.com/getlantern/context v0.0.0-20220418194847-3d5e7a086201 // indirect
 	github.com/getlantern/detour v0.0.0-20230503144615-d3106a68f79e // indirect
 	github.com/getlantern/dhtup v0.0.0-20230218071625-e78bcd432e4b // indirect
-	github.com/getlantern/dns v0.0.0-20210120185712-8d005533efa0 // indirect
+	github.com/getlantern/dns v0.0.0-20240124032733-9a3302908228 // indirect
 	github.com/getlantern/domains v0.0.0-20220311111720-94f59a903271 // indirect
 	github.com/getlantern/elevate v0.0.0-20220903142053-479ab992b264 // indirect
 	github.com/getlantern/ema v0.0.0-20190620044903-5943d28f40e4 // indirect
