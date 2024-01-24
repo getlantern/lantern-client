@@ -1423,10 +1423,14 @@ func login(session *SessionModel, email string, password string) error {
 	if err != nil {
 		return log.Errorf("user_not_found error while generating client proof %v", err)
 	}
-
+	deviceId, err := session.GetDeviceID()
+	if err != nil {
+		return err
+	}
 	loginRequestBody := &protos.LoginRequest{
-		Email: email,
-		Proof: clientProof,
+		Email:    email,
+		Proof:    clientProof,
+		DeviceId: deviceId,
 	}
 	log.Debugf("Login request body %v", loginRequestBody)
 
@@ -1658,10 +1662,15 @@ func deleteAccount(session SessionModel, password string) error {
 		return log.Errorf("user_not_found error while generating client proof %v", err)
 	}
 
+	deviceId, err := session.GetDeviceID()
+	if err != nil {
+		return err
+	}
 	changeEmailRequestBody := &protos.DeleteUserRequest{
 		Email:     email,
 		Proof:     clientProof,
 		Permanent: true,
+		DeviceId:  deviceId,
 	}
 
 	isAccountDeleted, err := apimodels.DeleteAccount(changeEmailRequestBody)
