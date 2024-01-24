@@ -135,6 +135,12 @@ class _SplitTunnelingAppsListState extends State<SplitTunnelingAppsList> {
   bool snackbarShown = false;
 
   @override
+  void didUpdateWidget(covariant SplitTunnelingAppsList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    onChangeSearch(_searchTextController.text);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
