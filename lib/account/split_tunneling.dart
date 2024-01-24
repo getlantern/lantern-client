@@ -142,14 +142,16 @@ class _SplitTunnelingAppsListState extends State<SplitTunnelingAppsList> {
           CTextField(
             controller: _searchTextController,
             contentPadding: const EdgeInsetsDirectional.symmetric(
-              vertical: 10.0,
+              vertical: 15.0,
               horizontal: 5.0,
             ),
-            label: 'search_app_name'.i18n,
+            prefixIcon: const CAssetImage(path: ImagePaths.searchApp),
+            label: 'search_apps'.i18n,
             textInputAction: TextInputAction.done,
             onChanged: onChangeSearch,
           ),
-          buildAppsList(_searchTextController.text.isEmpty ? widget.appsList : list)
+          buildAppsList(
+              _searchTextController.text.isEmpty ? widget.appsList : list)
         ],
       ),
     );
