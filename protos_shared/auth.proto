@@ -40,6 +40,7 @@ message PrepareResponse {
 message LoginRequest {
   string email = 1;
   bytes proof = 2;
+  string deviceId = 3;
 }
 
 
@@ -105,4 +106,5 @@ message DeleteUserRequest {
   string email = 1;
   bool permanent = 2;
   bytes proof = 3;
+  string deviceId = 4;
 }
