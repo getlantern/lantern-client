@@ -45,9 +45,9 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
-    DispatchQueue.global(qos: .userInitiated).async {
-      self.startService()
-    }
+//    DispatchQueue.global(qos: .userInitiated).async {
+//      self.startService()
+//    }
   }
 
   func startService() {
