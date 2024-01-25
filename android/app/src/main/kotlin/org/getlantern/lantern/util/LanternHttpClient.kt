@@ -198,10 +198,13 @@ open class LanternHttpClient : HttpClient() {
                     response: Response?,
                     result: JsonObject?,
                 ) {
+                    Logger.d(TAG, "Plans v3 Response body $result")
                     val methods =
                         parseData<Map<String, List<PaymentMethods>>>(
                             result?.get("providers").toString(),
                         )
+                    val icons = parseData<Icons>(result?.get("icons").toString())
+                    Logger.d(TAG, "Plans v3 Icons Response body $icons")
                     val providers = methods.get("android")
                     val fetched = parseData<List<ProPlan>>(result?.get("plans").toString())
                     val plans = plansMap(fetched)

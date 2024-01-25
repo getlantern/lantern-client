@@ -19,3 +19,4 @@ data class ProviderInfo(
 	@SerializedName("name") var name: PaymentProvider,
 	@SerializedName("data") var data: Map<String, Any>
 )
+
