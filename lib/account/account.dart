@@ -104,12 +104,11 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-
-        ListItemFactory.settingsItem(
-          icon: ImagePaths.devices,
-          content: 'Authorize Device for Pro'.i18n,
-          onTap:() => authorizeDeviceForPro(context),
-        ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.devices,
+        content: 'Authorize Device for Pro'.i18n,
+        onTap: () => authorizeDeviceForPro(context),
+      ),
       ...commonItems(context)
     ];
   }
@@ -155,8 +154,7 @@ class AccountMenu extends StatelessWidget {
         icon: ImagePaths.desktop,
         content: 'desktop_version'.i18n,
         onTap: () {
-          context.pushRoute(const DeviceLimit());
-          // openDesktopVersion(context);
+          openDesktopVersion(context);
         },
       ),
       ListItemFactory.settingsItem(

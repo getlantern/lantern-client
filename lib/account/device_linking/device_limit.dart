@@ -75,6 +75,9 @@ class _DeviceLimitState extends State<DeviceLimit> {
       context.loaderOverlay.show();
       await sessionModel.removeDevice(selectedDevice!.id);
       context.loaderOverlay.hide();
+      // Once device has been removed
+      // Pop routes and continue with sign in
+      context.popRoute();
     } catch (e) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);

@@ -89,8 +89,6 @@ class _SignInPasswordState extends State<SignInPassword> {
     );
   }
 
-
-
   @override
   void dispose() {
     _passwordController.dispose();
@@ -112,9 +110,20 @@ class _SignInPasswordState extends State<SignInPassword> {
       await sessionModel.login(widget.email, _passwordController.text);
       context.loaderOverlay.hide();
       context.router.popUntilRoot();
-    } catch (e) {
+    } catch (error) {
+      mainLogger.e("Error while sign in ", error: error);
       context.loaderOverlay.hide();
-      CDialog.showError(context, description: e.localizedDescription);
+
+      /// User has connected more then 3 device
+      /// Show screen to user to remove device
+      if ((error as PlatformException).message!.contains("too-many-devices")) {
+        context.pushRoute(DeviceLimit()).then((value) {
+          mainLogger.i("Device has been removed");
+          onContinueTap();
+        });
+        return;
+      }
+      CDialog.showError(context, description: error.localizedDescription);
     }
   }
 }
