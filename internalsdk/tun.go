@@ -11,7 +11,9 @@ import (
 	"time"
 
 	"github.com/getlantern/errors"
+	"github.com/getlantern/idletiming"
 	"github.com/getlantern/ipproxy"
+	"github.com/getlantern/netx"
 
 	"golang.org/x/net/proxy"
 )
@@ -45,8 +47,6 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 	}
 
 	ipp, err := ipproxy.New(dev, &ipproxy.Opts{
-		DnsGrabAddress:      dnsGrabAddr,
-		DnsGrabServer:       getDNSGrab(context.Background()),
 		IdleTimeout:         70 * time.Second,
 		StatsInterval:       15 * time.Second,
 		MTU:                 mtu,
@@ -58,6 +58,20 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 				return nil, errors.New("blackholing DNS over TLS traffic to %v", addr)
 			}
 			return socksDialer.Dial(network, addr)
+		},
+		DialUDP: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			_, port, _ := net.SplitHostPort(addr)
+			isDNS := port == "53"
+			if isDNS {
+				// intercept and reroute DNS traffic to dnsgrab
+				addr = dnsGrabAddr
+			}
+			conn, err := netx.DialContext(ctx, network, addr)
+			if isDNS && err == nil {
+				// wrap our DNS requests in a connection that closes immediately to avoid piling up file descriptors for DNS requests
+				conn = idletiming.Conn(conn, 10*time.Second, nil)
+			}
+			return conn, err
 		},
 	})
 	if err != nil {
