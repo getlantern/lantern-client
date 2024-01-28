@@ -76,13 +76,13 @@ internal class NetworkFirstPlausibleClient(
                 try {
                     val event = Event.fromJson(it.readText())
                     if (event == null) {
-                        Logger.e("Plausible", "Failed to decode event JSON, discarding")
+                        Logger.e(TAG, "Failed to decode event JSON, discarding")
                         it.delete()
                         return@forEach
                     }
                     postEvent(event)
                 } catch (e: FileNotFoundException) {
-                    Logger.e("Plausible", "Could not open event file", e)
+                    Logger.e(TAG, "Could not open event file", e)
                     return@forEach
                 } catch (e: IOException) {
                     return@forEach
@@ -133,6 +133,7 @@ internal class NetworkFirstPlausibleClient(
             Logger.e("Plausible", "Plausible disabled, not sending event: $event")
             return
         }
+        Logger.d(TAG, "Sending event ${event.toJson()}")
         val body = event.toJson().toRequestBody("application/json".toMediaType())
         val url =
             config.host
@@ -144,6 +145,8 @@ internal class NetworkFirstPlausibleClient(
             Request.Builder()
                 .url(url)
                 .addHeader("User-Agent", config.userAgent)
+                .addHeader("X-Forwarded-For", "127.0.0.1")
+                .addHeader("Content-Type", "application/json")
                 .post(body)
                 .build()
         suspendCancellableCoroutine { continuation ->
@@ -158,7 +161,7 @@ internal class NetworkFirstPlausibleClient(
                         call: Call,
                         e: IOException,
                     ) {
-                        Logger.e("Plausible", "Failed to send event to backend")
+                        Logger.e(TAG, "Failed to send event to backend $e")
                         continuation.resumeWithException(e)
                     }
 
@@ -187,6 +190,7 @@ internal class NetworkFirstPlausibleClient(
         val session = LanternApp.getSession()
         val hTTPAddr = session.hTTPAddr
         val uri = URI("http://" + hTTPAddr)
+        Logger.d(TAG, "Setting http proxy address to $uri")
         val proxy =
             Proxy(
                 Proxy.Type.HTTP,
@@ -196,5 +200,9 @@ internal class NetworkFirstPlausibleClient(
                 ),
             )
         OkHttpClient.Builder().proxy(proxy).build()
+    }
+
+    companion object {
+        private val TAG = NetworkFirstPlausibleClient::class.java.simpleName
     }
 }

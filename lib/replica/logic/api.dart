@@ -65,9 +65,7 @@ class ReplicaApi {
     if (resp.statusCode == 200) {
       logger
           .v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
-      PlausibleUtils.trackUserAction('User searched for Replica content', {
-        s: s,
-      });
+      sessionModel.trackUserAction('User searched for Replica content', s, 'search');
       return ReplicaSearchItem.fromJson(category, resp.data);
     } else {
       logger.e(

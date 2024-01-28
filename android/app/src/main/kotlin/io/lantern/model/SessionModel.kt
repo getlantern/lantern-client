@@ -188,7 +188,8 @@ class SessionModel(
             }
 
             "trackUserAction" -> {
-                Plausible.event(call.argument("message")!!)
+                val props: Map<String, String> = mapOf("title" to call.argument("title")!!)
+                Plausible.event(call.argument("name")!!, url = call.argument("url")!!, props = props)
             }
 
             "acceptTerms" -> {
