@@ -54,7 +54,8 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 : 'empty_description'.i18n;
         infoCreationDate = value.infoCreationDate;
       });
-      sessionModel.trackUserAction('User viewed Replica content', infoTitle, infoTitle);
+      sessionModel.trackUserAction('User viewed Replica content',
+          widget.item.replicaLink.toMagnetLink(), infoTitle);
     }).onError((error, stackTrace) {
       logger.v('Could not fetch object_info: $error , $stackTrace');
       setState(() {
