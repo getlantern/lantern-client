@@ -26,6 +26,7 @@ jobs:
           git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
     - name: Run Unit tests
       run: |
+        go mod tidy
         go test -failfast -coverprofile=profile.cov ./...
     - name: Install goveralls
       env:

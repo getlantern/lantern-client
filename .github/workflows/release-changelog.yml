@@ -10,8 +10,20 @@ on:
 jobs:
   create-release:
     runs-on: ubuntu-latest
-    steps:    
-    - name: Create release
+    steps:
+    - name: Check if release already exists
+      id: exists
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+         echo EXISTING=$(gh api \
+           -H "Accept: application/vnd.github+json" \
+           -H "X-GitHub-Api-Version: 2022-11-28" \
+           /repos/${{ github.repository }}/releases \
+           | jq -r '.[].tag_name' | grep -c "${{ github.ref_name }}") >> "$GITHUB_OUTPUT"
+
+    - name: Create release if none exists
+      if: ${{ steps.exists.outputs.EXISTING < 1 }}
       env:
         GH_TOKEN: ${{ github.token }}
       # https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#create-a-release
@@ -27,11 +39,15 @@ jobs:
          -F draft=false \
          -F prerelease=false \
          -F generate_release_notes=true
+
     - name: Strip repository name of owner
+      if: ${{ steps.exists.outputs.EXISTING < 1 }}
       id: repo
       run: |
         echo "REPO_NAME=$(echo ${{ github.repository }} | sed s/'${{ github.repository_owner }}\/'//g)" >> "$GITHUB_OUTPUT"
+
     - name: Trigger QC Checklist in customer-service repo
+      if: ${{ steps.exists.outputs.EXISTING < 1 }}
       env:
         GH_GRANTS_TOKEN: ${{ secrets.GH_GRANTS_TOKEN }}
       run: |
