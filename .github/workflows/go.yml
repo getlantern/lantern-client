@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches: [ ios-username-password-flow ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
