@@ -70,6 +70,7 @@ type Session interface {
 	GetUserID() (int64, error)
 	GetToken() (string, error)
 	SetCountry(string) error
+	SetIP(string) error
 	UpdateAdSettings(AdSettings) error
 	UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error
 	SetStaging(bool) error
@@ -120,6 +121,7 @@ type panickingSession interface {
 	DeviceOS() string
 	IsProUser() bool
 	SetChatEnabled(bool)
+	SetIP(string)
 	SplitTunnelingEnabled() bool
 	SetShowInterstitialAdsEnabled(bool)
 	SetCASShowInterstitialAdsEnabled(bool)
@@ -164,6 +166,10 @@ func (s *panickingSessionImpl) GetToken() string {
 
 func (s *panickingSessionImpl) SetCountry(country string) {
 	panicIfNecessary(s.wrapped.SetCountry(country))
+}
+
+func (s *panickingSessionImpl) SetIP(ipAddress string) {
+	panicIfNecessary(s.wrapped.SetIP(ipAddress))
 }
 
 func (s *panickingSessionImpl) UpdateAdSettings(settings AdSettings) {
@@ -464,12 +470,14 @@ func Start(configDir string,
 		da.(string)}, nil
 }
 
-func newAnalyticsSession(deviceID string) analytics.Session {
-	session := analytics.Start(deviceID, ApplicationVersion)
+func newAnalyticsSession(session panickingSession) analytics.Session {
+	analyticsSession := analytics.Start(session.GetDeviceID(), ApplicationVersion)
 	go func() {
-		session.SetIP(geolookup.GetIP(forever))
+		ipAddress := geolookup.GetIP(forever)
+		analyticsSession.SetIP(ipAddress)
+		session.SetIP(ipAddress)
 	}()
-	return session
+	return analyticsSession
 }
 
 func run(configDir, locale string,
@@ -606,7 +614,7 @@ func run(configDir, locale string,
 	replicaServer := &ReplicaServer{
 		ConfigDir:        configDir,
 		Flashlight:       runner,
-		analyticsSession: newAnalyticsSession(session.GetDeviceID()),
+		analyticsSession: newAnalyticsSession(session),
 		Session:          session.Wrapped(),
 		UserConfig:       userConfig,
 	}

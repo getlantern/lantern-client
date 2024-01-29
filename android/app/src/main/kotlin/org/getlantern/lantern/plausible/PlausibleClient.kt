@@ -133,6 +133,7 @@ internal class NetworkFirstPlausibleClient(
             Logger.e("Plausible", "Plausible disabled, not sending event: $event")
             return
         }
+        val session = LanternApp.getSession()
         Logger.d(TAG, "Sending event ${event.toJson()}")
         val body = event.toJson().toRequestBody("application/json".toMediaType())
         val url =
@@ -145,7 +146,7 @@ internal class NetworkFirstPlausibleClient(
             Request.Builder()
                 .url(url)
                 .addHeader("User-Agent", config.userAgent)
-                .addHeader("X-Forwarded-For", "127.0.0.1")
+                .addHeader("X-Forwarded-For", session.ipAddress ?: "127.0.0.1")
                 .addHeader("Content-Type", "application/json")
                 .post(body)
                 .build()

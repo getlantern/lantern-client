@@ -36,6 +36,7 @@ const (
 	pathChatEnabled            = "chatEnabled"
 	pathDevelopmentMode        = "developmentMode"
 	pathGeoCountryCode         = "geo_country_code"
+	pathIPAddress              = "ip_address"
 	pathServerCountry          = "server_country"
 	pathServerCountryCode      = "server_country_code"
 	pathServerCity             = "server_city"
@@ -321,6 +322,12 @@ func (m *SessionModel) SetCountry(country string) error {
 	//Find better way to do it
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathGeoCountryCode, country, "")
+	})
+}
+
+func (m *SessionModel) SetIP(ipAddress string) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathIPAddress, ipAddress, "")
 	})
 }
 
