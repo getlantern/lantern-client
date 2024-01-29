@@ -504,5 +504,5 @@
     <!-- Host for plausible backend. Defaults to plausible.io. -->
     <string name="plausible_host">https://plausible.io</string>
     <!-- Default domain to send events for. E.g. yourapp.com. -->
-    <string name="plausible_domain">android.getlantern.org</string>
+    <string name="plausible_domain">android.lantern.io</string>
 </resources>
