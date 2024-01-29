@@ -334,18 +334,20 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         }
 
         db.mutate { tx ->
-            paymentMethods.forEachIndexed { index, it ->
+            paymentMethods.forEachIndexed { index, methods ->
                 // Check if payment method or  provider is empty then return
-                if (it.method == null || it.providers.isEmpty()) {
+                if (methods.providers.isEmpty()) {
                     return@forEachIndexed
                 }
                 val path = PAYMENT_METHODS + index
                 val planItem =
-                    Vpn.PaymentMethod.newBuilder().setMethod(it.method.toString().lowercase())
+                    Vpn.PaymentMethod.newBuilder().setMethod(methods.method.toString().lowercase())
                         .addAllProviders(
-                            it.providers.map {
+                            methods.providers.map {
                                 Vpn.PaymentProviders.newBuilder()
-                                    .setName(it.name.toString().lowercase()).build()
+                                    .setName(it.name.toString().lowercase())
+                                    .addAllLogoUrls(it.logoUrl)
+                                    .build()
                             },
                         ).build()
 

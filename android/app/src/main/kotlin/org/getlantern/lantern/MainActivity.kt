@@ -345,28 +345,6 @@ class MainActivity :
         )
     }
 
-//    private fun updatePlans() {
-//        lanternClient.plans(
-//            object : PlansCallback {
-//                override fun onFailure(
-//                    throwable: Throwable?,
-//                    error: ProError?,
-//                ) {
-//                    Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
-//                }
-//
-//                override fun onSuccess(proPlans: Map<String, ProPlan>) {
-//                    Logger.debug(TAG, "Successfully fetched plans")
-//                    for (planId in proPlans.keys) {
-//                        proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
-//                    }
-//                    LanternApp.getSession().setUserPlans(proPlans)
-//                }
-//            },
-//            null,
-//        )
-//    }
-
     private fun updatePaymentMethods() {
         lanternClient.plansV3(
             object : PlansV3Callback {
@@ -380,6 +358,7 @@ class MainActivity :
                 override fun onSuccess(
                     proPlans: Map<String, ProPlan>,
                     paymentMethods: List<PaymentMethods>,
+
                 ) {
                     Logger.debug(TAG, "Successfully fetched payment methods")
                     processPaymentMethods(proPlans, paymentMethods)
@@ -391,7 +370,8 @@ class MainActivity :
 
     fun processPaymentMethods(
         proPlans: Map<String, ProPlan>,
-        paymentMethods: List<PaymentMethods>
+        paymentMethods: List<PaymentMethods>,
+
     ) {
         for (planId in proPlans.keys) {
             proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
