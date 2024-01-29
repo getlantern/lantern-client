@@ -128,6 +128,10 @@ internal class NetworkFirstPlausibleClient(
         }
     }
 
+    // postEvent sends an event directly to the Plausible API. The X-Forwarded-For header is used to explicitly set the
+    // IP address of the client. Since we are sending events from our proxies, we have to make sure to override this header
+    // with the correct IP address of the client. Plausible does not store the raw value of the IP address: it is only used
+    // to calculate a unique user_id and to fill in the Location report with the country, region and city data of the visitor.
     private suspend fun postEvent(event: Event) {
         if (!config.enable) {
             Logger.e("Plausible", "Plausible disabled, not sending event: $event")
@@ -142,6 +146,7 @@ internal class NetworkFirstPlausibleClient(
                 .newBuilder()
                 .addPathSegments("api/event")
                 .build()
+
         val request =
             Request.Builder()
                 .url(url)
