@@ -121,62 +121,61 @@ open class LanternHttpClient : HttpClient() {
         return plans
     }
 
-    fun plans(
-        cb: PlansCallback,
-        inAppBilling: InAppBilling?,
-    ) {
-        val params =
-            mapOf(
-                "locale" to LanternApp.getSession().language,
-                "countrycode" to LanternApp.getSession().getCountryCode(),
-            )
-        val url = createProUrl("/plans", params)
-        get(
-            url,
-            object : ProCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    cb.onFailure(throwable, error)
-                }
-
-                override fun onSuccess(
-                    response: Response?,
-                    result: JsonObject?,
-                ) {
-                    // val mapType = TypeToken<Map<String, List<PaymentMethods>>() {}.type
-                    val stripePubKey =
-                        result?.get("providers")?.asJsonObject
-                            ?.get("stripe")?.asJsonObject?.get("pubKey")?.asString
-                    LanternApp.getSession().setStripePubKey(stripePubKey)
-                    val fetched = parseData<List<ProPlan>>(result?.get("plans").toString())
-                    Logger.debug(TAG, "Pro plans: $fetched")
-                    var plans = plansMap(fetched)
-                    if (inAppBilling != null) {
-                        // this means we're in the play store, use the configured plans from there but
-                        // with the renewal bonus from the server side plans
-                        val regularPlans = mutableMapOf<String, ProPlan>()
-                        plans.forEach { (key, value) ->
-                            regularPlans.put(key.substring(0, key.lastIndexOf("-")), value)
-                        }
-                        plans = inAppBilling.plans
-                        plans.forEach { (key, value) ->
-                            val regularPlan = regularPlans.get(key)
-                            if (regularPlan != null) {
-                                value.updateRenewalBonusExpected(regularPlan.renewalBonusExpected)
-                            }
-                        }
-                    }
-                    cb.onSuccess(plans)
-                }
-            },
-        )
-    }
+//    fun plans(
+//        cb: PlansCallback,
+//        inAppBilling: InAppBilling?,
+//    ) {
+//        val params =
+//            mapOf(
+//                "locale" to LanternApp.getSession().language,
+//                "countrycode" to LanternApp.getSession().getCountryCode(),
+//            )
+//        val url = createProUrl("/plans", params)
+//        get(
+//            url,
+//            object : ProCallback {
+//                override fun onFailure(
+//                    throwable: Throwable?,
+//                    error: ProError?,
+//                ) {
+//                    cb.onFailure(throwable, error)
+//                }
+//
+//                override fun onSuccess(
+//                    response: Response?,
+//                    result: JsonObject?,
+//                ) {
+//                    // val mapType = TypeToken<Map<String, List<PaymentMethods>>() {}.type
+//                    val stripePubKey =
+//                        result?.get("providers")?.asJsonObject
+//                            ?.get("stripe")?.asJsonObject?.get("pubKey")?.asString
+//                    LanternApp.getSession().setStripePubKey(stripePubKey)
+//                    val fetched = parseData<List<ProPlan>>(result?.get("plans").toString())
+//                    Logger.debug(TAG, "Pro plans: $fetched")
+//                    var plans = plansMap(fetched)
+//                    if (inAppBilling != null) {
+//                        // this means we're in the play store, use the configured plans from there but
+//                        // with the renewal bonus from the server side plans
+//                        val regularPlans = mutableMapOf<String, ProPlan>()
+//                        plans.forEach { (key, value) ->
+//                            regularPlans.put(key.substring(0, key.lastIndexOf("-")), value)
+//                        }
+//                        plans = inAppBilling.plans
+//                        plans.forEach { (key, value) ->
+//                            val regularPlan = regularPlans.get(key)
+//                            if (regularPlan != null) {
+//                                value.updateRenewalBonusExpected(regularPlan.renewalBonusExpected)
+//                            }
+//                        }
+//                    }
+//                    cb.onSuccess(plans)
+//                }
+//            },
+//        )
+//    }
 
     fun plansV3(
         cb: PlansV3Callback,
-        inAppBilling: InAppBilling?,
     ) {
         val params =
             mapOf(
