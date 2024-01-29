@@ -40,7 +40,7 @@ require (
 	github.com/getlantern/flashlight/v7 v7.6.41-0.20240122044933-ebae7babf652
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
-	github.com/getlantern/ipproxy v0.0.0-20240125025528-3c39d75fa6fb
+	github.com/getlantern/ipproxy v0.0.0-20240129182103-533871131d16
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20240124040039-163b1628a66b
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
