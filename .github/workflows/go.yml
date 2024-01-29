@@ -2,9 +2,9 @@ name: Go Build and Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ atavism/ios-username-password-flow ]
   pull_request:
-    branches: [ ios-username-password-flow ]
+    branches: [ main ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
