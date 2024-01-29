@@ -325,6 +325,7 @@ func (m *SessionModel) SetCountry(country string) error {
 	})
 }
 
+// SetIP stores the IP address of the client after a successful geolookup
 func (m *SessionModel) SetIP(ipAddress string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathIPAddress, ipAddress, "")
