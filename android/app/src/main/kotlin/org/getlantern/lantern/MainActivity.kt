@@ -363,7 +363,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     paymentMethods: List<PaymentMethods>,
                 ) {
                     Logger.debug(TAG, "Successfully fetched payment methods")
-                    if paymentMethods != null {
+                    if (paymentMethods != null) {
                         LanternApp.getSession().setPaymentMethods(paymentMethods)
                     }
                 }

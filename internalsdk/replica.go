@@ -15,7 +15,6 @@ import (
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/geolookup"
-	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/proxied"
 	replicaConfig "github.com/getlantern/replica/config"
 	replicaServer "github.com/getlantern/replica/server"
@@ -150,10 +149,6 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	input.GlobalConfig = optsFunc
 	input.HttpClient.Transport = proxied.ParallelForIdempotent()
 	input.ProcessCORSHeaders = common.ProcessCORS
-	input.InstrumentResponseWriter = func(w http.ResponseWriter,
-		label string) replicaServer.InstrumentedResponseWriter {
-		return ops.InitInstrumentedResponseWriter(w, label)
-	}
 	input.HttpClient = &http.Client{
 		Transport: proxied.AsRoundTripper(
 			func(req *http.Request) (*http.Response, error) {
