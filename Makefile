@@ -622,7 +622,7 @@ require-bundler:
 	fi
 
 .PHONY: package-darwin
-package-darwin: darwin-installer
+package-darwin: darwin-installer notarize-darwin
 
 android-bundle: $(MOBILE_BUNDLE)
 
