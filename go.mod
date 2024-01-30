@@ -6,7 +6,7 @@ go 1.21.4
 
 // replace github.com/getlantern/fronted => ../fronted
 
-replace github.com/getlantern/ipproxy => ../ipproxy
+// replace github.com/getlantern/ipproxy => ../ipproxy
 
 // replace github.com/getlantern/dnsgrab => ../dnsgrab
 
