@@ -25,8 +25,8 @@ lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
 #             $<
 
 
-#internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
-#	@protoc --go_out=internalsdk protos_shared/vpn.proto
+internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
+	@protoc --go_out=internalsdk protos_shared/vpn.proto
 
 # Compiles autorouter routes
 routes: lib/core/router/router.gr.dart
@@ -442,7 +442,7 @@ build-framework: assert-go-version install-gomobile
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
-	-tags='headless lantern ios' \
+	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
     		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/flashlight/v7/ios
