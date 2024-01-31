@@ -130,7 +130,7 @@ require (
 	github.com/getlantern/eventual v1.0.0 // indirect
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c // indirect
-	github.com/getlantern/flashlight/v7 v7.6.43 // indirect
+	github.com/getlantern/flashlight/v7 v7.6.44-0.20240131210337-eca54cb2f6c1 // indirect
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
 	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 // indirect
 	github.com/getlantern/geo v0.0.0-20230612145351-d1374c8f8dec // indirect
