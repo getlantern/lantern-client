@@ -128,7 +128,7 @@ jobs:
           go-version-file: "go.mod"
 
       - name: install protoc-gen-go
-        run: GO111MODULE=off go install github.com/golang/protobuf/protoc-gen-go@latest
+        run: go install github.com/golang/protobuf/protoc-gen-go@latest
 
       - name: Granting private modules access
         run: |
