@@ -374,7 +374,7 @@ class _CheckoutState extends State<Checkout>
                         width: MediaQuery.of(context).size.width,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: children: Platform.isAndroid ? paymentOptions(paymentMethods) : desktopPaymentOptions(),
+                          children: Platform.isAndroid ? paymentOptions(paymentMethods) : desktopPaymentOptions(),
                         ),
                       ),
                       // * Price summary, unused pro time disclaimer, Continue button

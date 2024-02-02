@@ -5,6 +5,12 @@ on:
       version_file:
         type: string
         required: true
+      macos_version:
+        type: string
+        required: true
+      xcode_version:
+        type: string
+        required: true
       version:
         type: string
         required: true
@@ -24,9 +30,10 @@ jobs:
       version: ${{ inputs.version }}
       version_file: ${{ inputs.version_file }}
       prefix: ${{ inputs.prefix }}
+      suffix: ${{ inputs.suffix }}
       AC_USERNAME: accounts@getlantern.org
       AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
-    runs-on: macos-14
+    runs-on: ${{ inputs.macos_version }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -43,7 +50,7 @@ jobs:
     - name: Setup Xcode
       uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: latest-stable
+        xcode-version: ${{ inputs.xcode_version }}
 
     - name: Granting private modules access
       run: |
@@ -140,11 +147,11 @@ jobs:
     - name: Push binaries to s3
       env:
         VERSION: "${{ env.version }}"
-        DMG: "${{ env.prefix }}-${{ env.version }}.dmg"
+        DMG: "${{ env.prefix }}-${{ env.version }}-${{ env.suffix}}.dmg"
       run: |
         mv lantern-installer.dmg "$DMG"
-        cp "$DMG" ${{ env.prefix }}.dmg
+        cp "$DMG" ${{ env.prefix }}-${{ env.suffix }}.dmg
         echo ${{ env.version }} > ${{ env.version_file }}
         shasum -a 256 "$DMG" | cut -d " " -f 1 > "$DMG".sha256
-        cp "$DMG".sha256 ${{ env.prefix }}.dmg.sha256
-        s3cmd put --acl-public "$DMG" ${{ env.version_file }} "$DMG".sha256 ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
+        cp "$DMG".sha256 ${{ env.prefix }}.${{ env.suffix }}.dmg.sha256
+        s3cmd put --acl-public "$DMG" ${{ env.version_file }} "$DMG".sha256 ${{ env.prefix }}.${{ env.suffix }}.dmg.sha256 ${{ env.prefix }}.${{ env.suffix }}.dmg "s3://lantern"
