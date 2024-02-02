@@ -7,8 +7,11 @@ import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.IBinder
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.mobilesdk.Logger
+import internalsdk.Internalsdk
+import internalsdk.SocketProtector
 
 class LanternVpnService : VpnService(), Runnable {
 
@@ -58,6 +61,7 @@ class LanternVpnService : VpnService(), Runnable {
             return START_STICKY
         }
         return if (intent.action == ACTION_DISCONNECT) {
+            Plausible.event("switchVPN", "", "", mapOf("status" to "disconnect"))
             stop()
             START_NOT_STICKY
         } else {
@@ -69,12 +73,27 @@ class LanternVpnService : VpnService(), Runnable {
 
     private fun connect() {
         Logger.d(TAG, "connect")
+        Plausible.event("switchVPN", "", "", mapOf("status" to "connect"))
         Thread(this, "VpnService").start()
     }
 
     override fun run() {
         try {
             Logger.d(TAG, "Loading Lantern library")
+            Internalsdk.protectConnections(object : SocketProtector {
+                // Protect is used to exclude a socket specified by fileDescriptor
+                // from the VPN connection. Once protected, the underlying connection
+                // is bound to the VPN device and won't be forwarded
+                override fun protectConn(fileDescriptor:Long) {
+                    if (!protect(fileDescriptor.toInt())) {
+                        throw Exception("protect socket failed");
+                    }
+                }
+
+                override fun dnsServerIP():String {
+                    return LanternApp.getSession().getDNSServer()
+                }
+            })
             getOrInitProvider()?.run(
                 this,
                 Builder(),

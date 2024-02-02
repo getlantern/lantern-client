@@ -7,6 +7,8 @@ import 'package:lantern/ffi.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'catcher_setup.dart';
 
+// IOS issue
+// https://github.com/flutter/flutter/issues/133465
 Future<void> main() async {
   // CI will be true only when running appium test
   const String flavor = String.fromEnvironment('app.flavor');
@@ -44,7 +46,7 @@ Future<void> main() async {
 Future<void> _initGoogleMobileAds() async {
   await MobileAds.instance.initialize();
   await MobileAds.instance.setAppMuted(true);
-  // await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ['D79728264130CE0918737B5A2178D362']));
+  // await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ['b7574600c8a2fa26a110699cc2ae83d3']));
   // MobileAds.instance.openAdInspector((p0) {
   //   print('ad error $p0');
   // });

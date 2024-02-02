@@ -97,6 +97,7 @@ class LanternApp extends StatelessWidget {
                   locale: currentLocale(lang),
                   debugShowCheckedModeBanner: false,
                   theme: ThemeData(
+                    useMaterial3: false,
                     fontFamily: _getLocaleBasedFont(currentLocal),
                     brightness: Brightness.light,
                     primarySwatch: Colors.grey,

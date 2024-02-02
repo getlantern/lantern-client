@@ -36,6 +36,7 @@ export 'lru_cache.dart';
 export 'model.dart';
 export 'model_event_channel.dart';
 export 'once.dart';
+export 'plausible.dart';
 export 'session_model.dart';
 export 'single_value_subscriber.dart';
 export 'ui/audio.dart';

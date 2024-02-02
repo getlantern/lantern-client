@@ -20,15 +20,15 @@ lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging
 lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
 	@protoc --dart_out=./lib/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
 
-internalsdk/protos/%.pb.go: protos_shared/%.proto
-	@echo "Generating Go protobuf for $<"
-	@protoc --plugin=protoc-gen-go=build/protoc-gen-go \
-             --go_out=internalsdk \
-             $<
+#internalsdk/protos/%.pb.go: protos_shared/%.proto
+#	@echo "Generating Go protobuf for $<"
+#	@protoc --plugin=protoc-gen-go=build/protoc-gen-go \
+#             --go_out=internalsdk \
+#             $<
 
 
-#internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
-#	@protoc --go_out=internalsdk protos_shared/vpn.proto
+internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
+	@protoc --go_out=internalsdk protos_shared/vpn.proto
 
 # Compiles autorouter routes
 routes: lib/core/router/router.gr.dart
@@ -44,7 +44,7 @@ TEST ?= *_test
 # integration-test:
 # 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
-GO_VERSION := 1.19
+GO_VERSION := 1.21
 
 TAG ?= $$VERSION
 TAG_HEAD := $(shell git rev-parse HEAD)
@@ -679,7 +679,7 @@ build-framework: assert-go-version install-gomobile
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
-	-tags='headless lantern ios' \
+	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
     		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/flashlight/v7/ios

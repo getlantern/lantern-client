@@ -22,43 +22,45 @@ type SessionModel struct {
 
 // List of we are using for Session Model
 const (
-	pathDeviceID             = "deviceid"
-	pathDevice               = "device"
-	pathDevices              = "devices"
-	pathModel                = "model"
-	pathOSVersion            = "os_version"
-	pathPaymentTestMode      = "paymentTestMode"
-	pathUserID               = "userid"
-	pathToken                = "token"
-	pathProUser              = "prouser"
-	pathSDKVersion           = "sdkVersion"
-	pathUserLevel            = "userLevel"
-	pathChatEnabled          = "chatEnabled"
-	pathDevelopmentMode      = "developmentMode"
-	pathGeoCountryCode       = "geo_country_code"
-	pathServerCountry        = "server_country"
-	pathServerCountryCode    = "server_country_code"
-	pathServerCity           = "server_city"
-	pathHasSucceedingProxy   = "hasSucceedingProxy"
-	pathLatestBandwith       = "latest_bandwidth"
-	pathTimezoneID           = "timezone_id"
-	pathReferralCode         = "referral"
-	pathForceCountry         = "forceCountry"
-	pathDNSDetector          = "dns_detector"
-	pathProvider             = "provider"
-	pathEmailAddress         = "emailAddress"
-	pathCurrencyCode         = "currency_Code"
-	pathReplicaAddr          = "replicaAddr"
-	pathSplitTunneling       = "splitTunneling"
-	pathLang                 = "lang"
-	pathAcceptedTermsVersion = "accepted_terms_version"
-	pathAdsEnabled           = "adsEnabled"
-	pathCASAdsEnabled        = "casAsEnabled"
-	pathStoreVersion         = "storeVersion"
-	pathSelectedTab          = "/selectedTab"
-	pathServerInfo           = "/server_info"
-
-	currentTermsVersion = 1
+	pathDeviceID               = "deviceid"
+	pathDevice                 = "device"
+	pathDevices                = "devices"
+	pathModel                  = "model"
+	pathOSVersion              = "os_version"
+	pathPaymentTestMode        = "paymentTestMode"
+	pathUserID                 = "userid"
+	pathToken                  = "token"
+	pathProUser                = "prouser"
+	pathSDKVersion             = "sdkVersion"
+	pathUserLevel              = "userLevel"
+	pathChatEnabled            = "chatEnabled"
+	pathDevelopmentMode        = "developmentMode"
+	pathGeoCountryCode         = "geo_country_code"
+	pathServerCountry          = "server_country"
+	pathServerCountryCode      = "server_country_code"
+	pathServerCity             = "server_city"
+	pathHasSucceedingProxy     = "hasSucceedingProxy"
+	pathLatestBandwith         = "latest_bandwidth"
+	pathTimezoneID             = "timezone_id"
+	pathReferralCode           = "referral"
+	pathForceCountry           = "forceCountry"
+	pathDNSDetector            = "dns_detector"
+	pathProvider               = "provider"
+	pathEmailAddress           = "emailAddress"
+	pathCurrencyCode           = "currency_Code"
+	pathReplicaAddr            = "replicaAddr"
+	pathSplitTunneling         = "splitTunneling"
+	pathLang                   = "lang"
+	pathAcceptedTermsVersion   = "accepted_terms_version"
+	pathAdsEnabled             = "adsEnabled"
+	pathCASAdsEnabled          = "casAsEnabled"
+	pathStoreVersion           = "storeVersion"
+	pathSelectedTab            = "/selectedTab"
+	pathServerInfo             = "/server_info"
+	pathHasAllNetworkPermssion = "/hasAllNetworkPermssion"
+	pathShouldShowCasAds       = "shouldShowCASAds"
+	pathShouldShowGoogleAds    = "shouldShowGoogleAds"
+	currentTermsVersion        = 1
 )
 
 type SessionModelOpts struct {
@@ -72,6 +74,7 @@ type SessionModelOpts struct {
 	Lang            string
 	TimeZone        string
 	PaymentTestMode bool
+	Platform        string
 }
 
 // NewSessionModel initializes a new SessionModel instance.
@@ -80,8 +83,10 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if err != nil {
 		return nil, err
 	}
-	base.db.RegisterType(1000, &protos.ServerInfo{})
-	base.db.RegisterType(2000, &protos.Devices{})
+	if opts.Platform == "ios" {
+		base.db.RegisterType(1000, &protos.ServerInfo{})
+		base.db.RegisterType(2000, &protos.Devices{})
+	}
 	m := &SessionModel{baseModel: base}
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	return m, m.initSessionModel(opts)
@@ -162,6 +167,15 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		if err != nil {
 			return nil, err
 		}
+		return true, nil
+	case "hasAllNetworkPermssion":
+		err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put[bool](tx, pathHasAllNetworkPermssion, true, "")
+		})
+		if err != nil {
+			return nil, err
+		}
+		checkAdsEnabled(m)
 		return true, nil
 	default:
 		return m.methodNotImplemented(method)
@@ -256,7 +270,7 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
-	return nil
+	return checkAdsEnabled(m)
 }
 
 func (m *SessionModel) GetAppName() string {
@@ -518,12 +532,14 @@ func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
 }
 
 func (m *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
+	log.Debugf("SetShowInterstitialAdsEnabled %v", adsEnable)
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathAdsEnabled, adsEnable, "")
 	}))
 }
 
 func (m *SessionModel) SetCASShowInterstitialAdsEnabled(casEnable bool) {
+	log.Debugf("SetCASShowInterstitialAdsEnabled %v", casEnable)
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathCASAdsEnabled, casEnable, "")
 	}))
@@ -673,4 +689,58 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 
 	log.Debugf("Report an issue index %v desc %v level %v email %v, device %v model %v version %v ", issueKey, description, level, email, device, model, osVersion)
 	return SendIssueReport(session, issueKey, description, level, email, device, model, osVersion)
+}
+
+func checkAdsEnabled(session *SessionModel) error {
+	log.Debugf("Check ads enabled")
+	hasAllPermisson, err := pathdb.Get[bool](session.db, pathHasAllNetworkPermssion)
+	if err != nil {
+		return err
+	}
+	if !hasAllPermisson {
+		log.Debugf("User has not given all permission")
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.PutAll(tx, map[string]interface{}{
+				pathShouldShowGoogleAds: false,
+				pathShouldShowCasAds:    false,
+			})
+		})
+	}
+	log.Debugf("User has given all permission")
+	isPro, err := session.IsProUser()
+	if err != nil {
+		return err
+	}
+	log.Debugf("Is user pro %v", isPro)
+	if isPro {
+		err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			err = pathdb.Put(tx, pathShouldShowCasAds, false, "")
+			if err != nil {
+				return err
+			}
+			return pathdb.Put(tx, pathShouldShowCasAds, false, "")
+		})
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	isGoogleAdsEnable, err := pathdb.Get[bool](session.db, pathAdsEnabled)
+	if err != nil {
+		log.Debugf("Error while getting google ads value %v", err)
+		return err
+	}
+
+	isCasAdsEnable, err := pathdb.Get[bool](session.db, pathCASAdsEnabled)
+	if err != nil {
+		log.Debugf("Error while getting cas ads value %v", err)
+		return err
+	}
+
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.PutAll(tx, map[string]interface{}{
+			pathAdsEnabled:    isGoogleAdsEnable,
+			pathCASAdsEnabled: isCasAdsEnable,
+		})
+	})
 }

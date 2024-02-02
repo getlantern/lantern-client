@@ -499,4 +499,10 @@
     <string name="call_notifications_channel">Calls</string>
     <string name="lantern_service">Lantern Service</string>
     <string name="replica_download">Replica Download</string>
+    <!-- `true` to automatically enable plausible on app startup or `false` to prevent sending events. -->
+    <string name="plausible_enable_startup">true</string>
+    <!-- Host for plausible backend. Defaults to plausible.io. -->
+    <string name="plausible_host">https://plausible.io</string>
+    <!-- Default domain to send events for. E.g. yourapp.com. -->
+    <string name="plausible_domain">android.lantern.io</string>
 </resources>

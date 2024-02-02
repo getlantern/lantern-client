@@ -18,7 +18,6 @@ import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentHashMap
 
@@ -27,7 +26,6 @@ class InAppBilling(
     private val builder: BillingClient.Builder = BillingClient.newBuilder(context).enablePendingPurchases(),
     private val googleApiAvailability: GoogleApiAvailability = GoogleApiAvailability.getInstance(),
 ) : PurchasesUpdatedListener, InAppBillingInterface {
-
     companion object {
         private val TAG = InAppBilling::class.java.simpleName
     }
@@ -78,8 +76,8 @@ class InAppBilling(
                             initConnection()
                         }
                     }
-                    override fun onBillingServiceDisconnected() =
-                        Logger.d(TAG, "onBillingServiceDisconnected")
+
+                    override fun onBillingServiceDisconnected() = Logger.d(TAG, "onBillingServiceDisconnected")
                 },
             )
         }
@@ -99,11 +97,12 @@ class InAppBilling(
     private fun BillingResult.responseCodeOK() = responseCode == BillingClient.BillingResponseCode.OK
 
     @Synchronized
-    fun startPurchase(activity: Activity, id: String, cb: PurchasesUpdatedListener) {
+    fun startPurchase(
+        activity: Activity,
+        planID: String,
+        cb: PurchasesUpdatedListener,
+    ) {
         this.purchasesUpdated = cb
-        var planID = id
-        val currency = LanternApp.getSession().getCurrency()
-        if (currency != null) planID += "-$currency"
         val skuDetails = skus.get(planID.lowercase())
         if (skuDetails == null) {
             Logger.e(TAG, "Unable to find sku details for plan: $planID")
@@ -119,7 +118,10 @@ class InAppBilling(
     }
 
     @UiThread
-    private fun launchBillingFlow(activity: Activity, params: BillingFlowParams) {
+    private fun launchBillingFlow(
+        activity: Activity,
+        params: BillingFlowParams,
+    ) {
         ensureConnected {
             launchBillingFlow(activity, params)
                 .takeIf { billingResult -> !billingResult.responseCodeOK() }
@@ -129,7 +131,10 @@ class InAppBilling(
         }
     }
 
-    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
+    override fun onPurchasesUpdated(
+        billingResult: BillingResult,
+        purchases: List<Purchase>?,
+    ) {
         Logger.d(TAG, "Purchases updated")
         purchasesUpdated?.let {
             it.onPurchasesUpdated(billingResult, purchases)
@@ -140,9 +145,10 @@ class InAppBilling(
     private fun updateSkus() {
         Logger.d(TAG, "Updating SKUs")
         val skuList = listOf("1y", "2y")
-        val params = SkuDetailsParams.newBuilder()
-            .setType(SkuType.INAPP)
-            .setSkusList(skuList)
+        val params =
+            SkuDetailsParams.newBuilder()
+                .setType(SkuType.INAPP)
+                .setSkusList(skuList)
         ensureConnected {
             querySkuDetailsAsync(
                 params.build(),
@@ -157,7 +163,7 @@ class InAppBilling(
                     skus.clear()
                     skuDetailsList?.forEach {
                         val currency = it.getPriceCurrencyCode().lowercase()
-                        val id = "${it.getSku()}-$currency"
+                        val id = it.getSku()
                         val years = it.getSku().substring(0, 1)
                         val price = it.getPriceAmountMicros() / 10000
                         val priceWithoutTax = it.getOriginalPriceAmountMicros() / 10000
@@ -224,8 +230,9 @@ class InAppBilling(
     private fun handleAcknowledgedPurchases(purchases: List<Purchase>) {
         for (purchase in purchases) {
             ensureConnected {
-                val consumeParams = ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
-                    .build()
+                val consumeParams =
+                    ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
+                        .build()
                 val listener =
                     ConsumeResponseListener { billingResult: BillingResult, outToken: String? ->
                         if (!billingResult.responseCodeOK()) {
