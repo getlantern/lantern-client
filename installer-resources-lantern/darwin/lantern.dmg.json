@@ -1,10 +1,10 @@
 {
   "title": "Lantern __VERSION__",
-  "icon": "../../Lantern.app/Contents/Resources/app.icns",
+  "icon": "../../build/macos/Build/Products/Release/Lantern.app/Contents/Resources/AppIcon.icns",
   "background": "dmgbackground.png",
   "icon-size": 100,
   "contents": [
-    { "x": 143, "y": 192, "type": "file", "path": "../../Lantern.app" },
+    { "x": 143, "y": 192, "type": "file", "path": "../../build/macos/Build/Products/Release/Lantern.app" },
     { "x": 467, "y": 192, "type": "link", "path": "/Applications" }
   ]
 }

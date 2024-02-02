@@ -278,7 +278,7 @@ define fpm-debian-build =
 endef
 
 define osxcodesign
-	codesign --options runtime --strict --timestamp --force --deep -r="designated => anchor trusted and identifier com.getlantern.lantern" -s "Developer ID Application: Innovate Labs LLC (4FYC28AXA2)" -v $(1)
+	codesign --options runtime --strict --timestamp --force --deep -s "Developer ID Application: Innovate Labs LLC (4FYC28AXA2)" -v $(1)
 endef
 
 guard-%:
@@ -567,12 +567,20 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 	@echo "Generating distribution package for darwin/amd64..." && \
 	if [[ "$$(uname -s)" == "Darwin" ]]; then \
 		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
-		cat build/macos/Build/Products/Release/Lantern.app/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin_amd64.bz2 && \
-		ls -l $(DARWIN_BINARY_NAME) $(APP)_update_darwin_amd64.bz2 && \
+		DARWIN_APP_NAME="build/macos/Build/Products/Release/Lantern.app" && \
+		ls $$DARWIN_APP_NAME && \
+		cp $(DARWIN_BINARY_NAME) $$DARWIN_APP_NAME/Contents/Frameworks && \
+		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/Frameworks/liblantern.dylib) && \
+		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/MacOS/Lantern) && \
+		$(call osxcodesign,$$DARWIN_APP_NAME) && \
 		rm -rf $(INSTALLER_NAME).dmg && \
+		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
+		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
+		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
 		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
 		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
 		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
+		$(call osxcodesign,$(INSTALLER_NAME).dmg) && \
 		rm $(CAPITALIZED_APP).dmg.zlib; \
 	else \
 		echo "-> Skipped: Can not generate a package on a non-OSX host."; \
