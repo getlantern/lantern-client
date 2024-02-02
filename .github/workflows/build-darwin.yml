@@ -156,5 +156,5 @@ jobs:
         cp "$DMG" ${{ env.prefix }}-${{ env.suffix }}.dmg
         echo ${{ env.version }} > ${{ env.version_file }}
         shasum -a 256 "$DMG" | cut -d " " -f 1 > "$DMG".sha256
-        cp "$DMG".sha256 ${{ env.prefix }}.${{ env.suffix }}.dmg.sha256
-        s3cmd put --acl-public "$DMG" ${{ env.version_file }} "$DMG".sha256 ${{ env.prefix }}.${{ env.suffix }}.dmg.sha256 ${{ env.prefix }}.${{ env.suffix }}.dmg "s3://lantern"
+        cp "$DMG".sha256 ${{ env.prefix }}-${{ env.suffix }}.dmg.sha256
+        s3cmd put --acl-public "$DMG" ${{ env.version_file }} "$DMG".sha256 ${{ env.prefix }}-${{ env.suffix }}.dmg.sha256 ${{ env.prefix }}-${{ env.suffix }}.dmg "s3://lantern"
