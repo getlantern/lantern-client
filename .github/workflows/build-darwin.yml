@@ -17,6 +17,9 @@ on:
       prefix:
         type: string
         required: true
+      suffix:
+        type: string
+        required: true
 
 env:
   GOPRIVATE: github.com/getlantern
