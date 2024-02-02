@@ -26,7 +26,7 @@ jobs:
       prefix: ${{ inputs.prefix }}
       AC_USERNAME: accounts@getlantern.org
       AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
     - uses: actions/checkout@v3
       with:
@@ -64,7 +64,7 @@ jobs:
         project: android
 
     - name: Build liblantern.dylib
-      run: GOARCH=arm64 go build -buildmode=c-shared -o desktop/liblantern.dylib desktop/lib.go
+      run: go build -buildmode=c-shared -o desktop/liblantern.dylib desktop/lib.go
 
     - uses: actions/upload-artifact@v3
       with:
