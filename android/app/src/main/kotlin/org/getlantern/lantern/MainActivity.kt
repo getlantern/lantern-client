@@ -29,7 +29,6 @@ import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
-import org.getlantern.lantern.model.LanternHttpClient.PlansCallback
 import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
@@ -282,7 +281,6 @@ class MainActivity :
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
-        updatePlans()
         updatePaymentMethods()
     }
 
@@ -347,28 +345,6 @@ class MainActivity :
         )
     }
 
-    private fun updatePlans() {
-        lanternClient.plans(
-            object : PlansCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch user plans: $error", throwable)
-                }
-
-                override fun onSuccess(proPlans: Map<String, ProPlan>) {
-                    Logger.debug(TAG, "Successfully fetched plans")
-                    for (planId in proPlans.keys) {
-                        proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
-                    }
-                    LanternApp.getSession().setUserPlans(proPlans)
-                }
-            },
-            null,
-        )
-    }
-
     private fun updatePaymentMethods() {
         lanternClient.plansV3(
             object : PlansV3Callback {
@@ -382,13 +358,26 @@ class MainActivity :
                 override fun onSuccess(
                     proPlans: Map<String, ProPlan>,
                     paymentMethods: List<PaymentMethods>,
+
                 ) {
                     Logger.debug(TAG, "Successfully fetched payment methods")
-                    LanternApp.getSession().setPaymentMethods(paymentMethods)
+                    processPaymentMethods(proPlans, paymentMethods)
                 }
-            },
-            null,
+            }
         )
+    }
+
+
+    fun processPaymentMethods(
+        proPlans: Map<String, ProPlan>,
+        paymentMethods: List<PaymentMethods>,
+
+    ) {
+        for (planId in proPlans.keys) {
+            proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+        }
+        LanternApp.getSession().setUserPlans(proPlans)
+        LanternApp.getSession().setPaymentMethods(paymentMethods)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
