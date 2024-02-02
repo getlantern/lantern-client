@@ -562,32 +562,17 @@ $(DARWIN_BINARY_NAME): echo-build-tags
 		echo "-> Skipped: Can not compile $(CAPITALIZED_APP) for OSX on a non-OSX host."; \
 	fi
 
+
 $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
 	@echo "Generating distribution package for darwin/amd64..." && \
 	if [[ "$$(uname -s)" == "Darwin" ]]; then \
 		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
-		rm -rf $(DARWIN_APP_NAME) && \
-		cp -r $$INSTALLER_RESOURCES/$(DARWIN_APP_NAME)_template $(DARWIN_APP_NAME) && \
-		mkdir $(DARWIN_APP_NAME)/Contents/MacOS && \
-		cp -a build/macos/Build/Products/Release/Lantern.app/Contents/* $(DARWIN_APP_NAME)/Contents/ && \
-		ls build/macos/Build/Products/Release/Lantern.app/Contents && \
-		cp $(DARWIN_BINARY_NAME) build/macos/Build/Products/Release/Lantern.app/Contents/Frameworks && \
-		$(call osxcodesign,$(DARWIN_APP_NAME)/Contents/Frameworks/liblantern.dylib) && \
-		mkdir $(DARWIN_APP_NAME)/Contents/Resources/en.lproj && \
-		cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(PACKAGED_YAML) && \
-		cp $(APP_YAML_PATH) $(DARWIN_APP_NAME)/Contents/Resources/en.lproj/$(APP_YAML) && \
-		cat $(DARWIN_APP_NAME)/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin_amd64.bz2 && \
+		cat build/macos/Build/Products/Release/Lantern.app/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin_amd64.bz2 && \
 		ls -l $(DARWIN_BINARY_NAME) $(APP)_update_darwin_amd64.bz2 && \
 		rm -rf $(INSTALLER_NAME).dmg && \
-		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
-		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
-		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
-		$(call osxcodesign,$(DARWIN_APP_NAME)/Contents/MacOS/Lantern) && \
-		$(call osxcodesign,$(DARWIN_APP_NAME)) && \
 		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
 		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
 		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
-		$(call osxcodesign,$(INSTALLER_NAME).dmg) && \
 		rm $(CAPITALIZED_APP).dmg.zlib; \
 	else \
 		echo "-> Skipped: Can not generate a package on a non-OSX host."; \
@@ -597,7 +582,7 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 darwin-installer: $(INSTALLER_NAME).dmg
 
 .PHONY: notarize-darwin
-notarize-darwin: darwin-installer require-ac-username require-ac-password
+notarize-darwin: require-ac-username require-ac-password
 	@echo "Notarizing distribution package for darwin/amd64..." && \
 	if [[ "$$(uname -s)" == "Darwin" ]]; then \
 		./$(INSTALLER_RESOURCES)/tools/notarize-darwin.py \

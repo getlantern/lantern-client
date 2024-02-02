@@ -1,5 +1,9 @@
-import 'package:lantern/ad_helper.dart';
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/ffi.dart';
+import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
+import 'package:tray_manager/tray_manager.dart';
+import 'package:lantern/main.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -9,26 +13,34 @@ class VPNSwitch extends StatefulWidget {
 }
 
 class _VPNSwitchState extends State<VPNSwitch> {
-  final adHelper = AdHelper();
+  // final adHelper = AdHelper();
+
+  String vpnStatus = 'disconnected';
+
+  @override
+  void initState() {
+    super.initState();
+    // adHelper.loadAds();
+  }
 
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
 
-  Future<void> onSwitchTap(
-      bool newValue, String vpnStatus, bool userHasPermission) async {
+  Future<void> onSwitchTap(bool newValue, String vpnStatus) async {
     unawaited(HapticFeedback.lightImpact());
-    // Make sure user has permission all the permission
-    // if ads is not ready then wait for at least 5 seconds and then show ads
-    // if ads is ready then show ads immediately
-
-    if (vpnStatus != 'connected' && userHasPermission) {
-      if (!await adHelper.isAdsReadyToShow()) {
-        await vpnModel.connectingDelay(newValue);
-        await Future.delayed(const Duration(seconds: 5));
-      }
-    }
     if (isIdle(vpnStatus)) {
-      await vpnModel.switchVPN(newValue);
+      if (Platform.isAndroid) {
+        await vpnModel.switchVPN(newValue);
+      } else if (isDesktop()) {
+        bool isConnected = vpnStatus == 'connected';
+        String path = systemTrayIcon(!isConnected);
+        if (isConnected) {
+          await sysProxyOff();
+        } else {
+          await sysProxyOn();
+        }
+        await trayManager.setIcon(path);
+      }
     }
 
     //add delayed to avoid flickering
@@ -36,7 +48,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
       Future.delayed(
         const Duration(seconds: 1),
         () async {
-          await adHelper.showAds();
+          // await adHelper.showAds();
         },
       );
     }
@@ -44,25 +56,45 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel
-        .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
-      return sessionModel.shouldShowCASAds((context, isCasAdsEnable, child) {
-        adHelper.loadAds(
-            shouldShowGoogleAds: isGoogleAdsEnable,
-            shouldShowCASAds: isCasAdsEnable);
-        return Transform.scale(
-            scale: 2,
-            child: vpnModel.vpnStatus(
-                (BuildContext context, String vpnStatus, Widget? child) {
-              return FlutterSwitch(
-                  value:
-                      vpnStatus == 'connected' || vpnStatus == 'disconnecting',
-                  activeColor: onSwitchColor,
-                  inactiveColor: offSwitchColor,
-                  onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus,
-                      (isGoogleAdsEnable || isCasAdsEnable)));
-            }));
-      });
-    });
+    // Still working on ads feature
+    return Transform.scale(
+      scale: 2,
+      child: vpnModel
+          .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+        this.vpnStatus = vpnStatus;
+        return FlutterSwitch(
+          value: this.vpnStatus == 'connected' ||
+              this.vpnStatus == 'disconnecting',
+          //value: true,
+          activeColor: onSwitchColor,
+          inactiveColor: offSwitchColor,
+          onToggle: (bool newValue) {
+            onSwitchTap(newValue, vpnStatus);
+            setState(() {
+              this.vpnStatus = newValue ? 'connected' : 'disconnected';
+            });
+          },
+        );
+      }),
+    );
+    // return sessionModel
+    //     .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
+    //   return sessionModel.shouldShowCASAds((context, isCasAdsEnable, child) {
+    //     // adHelper.loadAds(
+    //     //     shouldShowGoogleAds: isGoogleAdsEnable,
+    //     //     shouldShowCASAds: isCasAdsEnable);
+    //     return Transform.scale(
+    //         scale: 2,
+    //         child: vpnModel.vpnStatus(
+    //             (BuildContext context, String vpnStatus, Widget? child) {
+    //           return FlutterSwitch(
+    //             value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+    //             activeColor: onSwitchColor,
+    //             inactiveColor: offSwitchColor,
+    //             onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus),
+    //           );
+    //         }));
+    //   });
+    // });
   }
 }
