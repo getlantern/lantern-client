@@ -223,8 +223,8 @@ class _ReportIssueState extends State<ReportIssue> {
       }
       CDialog.showError(
         context,
-        error,
-        stackTrace,
+        error: error,
+        stackTrace: stackTrace,
         description: (error as PlatformException)
             .message
             .toString(), // This is coming localized
