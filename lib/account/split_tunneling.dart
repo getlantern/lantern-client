@@ -157,7 +157,8 @@ class _SplitTunnelingAppsListState extends State<SplitTunnelingAppsList> {
             onChanged: onChangeSearch,
           ),
           buildAppsList(
-              _searchTextController.text.isEmpty ? widget.appsList : list)
+              _searchTextController.text.isEmpty ? widget.appsList : list),
+
         ],
       ),
     );
@@ -174,6 +175,7 @@ class _SplitTunnelingAppsListState extends State<SplitTunnelingAppsList> {
 
     return Expanded(
       child: ListView.builder(
+        padding: const EdgeInsets.only(bottom: 30),
         itemCount: appsData.isEmpty ? 0 : appsData.length + 2,
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
