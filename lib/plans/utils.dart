@@ -37,7 +37,7 @@ void showError(
   }
   CDialog.showError(
     context,
-    error: e,
+    error: error,
     stackTrace: stackTrace,
     description: description,
   );

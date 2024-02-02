@@ -1,4 +1,5 @@
 # 
+
 msgid ""
 msgstr ""
 
@@ -1403,7 +1404,7 @@ msgid "test_text"
 msgstr "I want to eat some pizza 🍕 😊"
 
 msgid "test_hello"
-msgstr "Hi how are you?" 
+msgstr "Hi how are you?"
 
 msgid "test_reply"
 msgstr "Actually no, I think I am in the mood for sushi today!"
@@ -1431,5 +1432,14 @@ msgstr "FAQ"
 
 msgid "add_device"
 msgstr "Add Device"
+
+msgid "recovery_code_sent"
+msgstr "Recovery Code Sent"
+
+msgid "device_added"
+msgstr "Device Added"
+
+msgid "device_added_message"
+msgstr "Your device has been successfully added. If you do not see the device connected, please restart the app on both devices"
 
 

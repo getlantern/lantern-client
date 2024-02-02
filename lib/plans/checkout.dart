@@ -121,7 +121,7 @@ class _CheckoutState extends State<Checkout>
         paymentType: Providers.stripe,
       ),
     );
-    return widgets;    
+    return widgets;
   }
 
   List<Widget> paymentOptions(
@@ -183,7 +183,7 @@ class _CheckoutState extends State<Checkout>
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
-
+        // * Stripe selected
         if (isDesktop()) {
           String os = Platform.operatingSystem;
           final redirectUrl = await sessionModel.paymentRedirect(
@@ -199,8 +199,6 @@ class _CheckoutState extends State<Checkout>
           }
           return;
         }
-
-        // * Stripe selected
         await context.pushRoute(
           StripeCheckout(
             email: emailController.text,
@@ -232,7 +230,7 @@ class _CheckoutState extends State<Checkout>
           await sessionModel.openWebview(btcPayURL);
         }).onError((error, stackTrace) {
           context.loaderOverlay.hide();
-          showError(context, error: e, stackTrace: stackTrace);
+          showError(context, error: error, stackTrace: stackTrace);
         });
         break;
       case Providers.freekassa:
@@ -376,7 +374,7 @@ class _CheckoutState extends State<Checkout>
                         width: MediaQuery.of(context).size.width,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: Platform.isAndroid ? paymentOptions(paymentMethods) : desktopPaymentOptions(),
+                          children: children: Platform.isAndroid ? paymentOptions(paymentMethods) : desktopPaymentOptions(),
                         ),
                       ),
                       // * Price summary, unused pro time disclaimer, Continue button
@@ -386,6 +384,11 @@ class _CheckoutState extends State<Checkout>
                           message: AppKeys.continueCheckout,
                           child: Button(
                             text: 'continue'.i18n,
+                            disabled: emailController.value.text.isEmpty ||
+                                emailFieldKey.currentState?.validate() ==
+                                    false ||
+                                refCodeFieldKey.currentState?.validate() ==
+                                    false,
                             onPressed: onContinueTapped,
                           ),
                         ),
@@ -414,6 +417,17 @@ class _CheckoutState extends State<Checkout>
     var refCode = refCodeController.value;
     Future.wait(
       [
+        sessionModel
+            .checkEmailExists(
+          emailController.value.text,
+        )
+            .onError((error, stackTrace) {
+          showError(
+            context,
+            error: error,
+            stackTrace: stackTrace,
+          );
+        }),
         if (refCode.text.isNotEmpty)
           sessionModel
               .applyRefCode(

@@ -123,11 +123,13 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       );
     },
     AuthorizeDeviceEmailPin.name: (routeData) {
-      final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>(
-          orElse: () => const AuthorizeDeviceEmailPinArgs());
+      final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>();
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i8.AuthorizeDeviceViaEmailPin(key: args.key),
+        child: _i8.AuthorizeDeviceViaEmailPin(
+          key: args.key,
+          email: args.email,
+        ),
       );
     },
     BlockedUsers.name: (routeData) {
@@ -621,10 +623,14 @@ class AuthorizeDeviceEmailPin
     extends _i42.PageRouteInfo<AuthorizeDeviceEmailPinArgs> {
   AuthorizeDeviceEmailPin({
     _i44.Key? key,
+    required String email,
     List<_i42.PageRouteInfo>? children,
   }) : super(
           AuthorizeDeviceEmailPin.name,
-          args: AuthorizeDeviceEmailPinArgs(key: key),
+          args: AuthorizeDeviceEmailPinArgs(
+            key: key,
+            email: email,
+          ),
           initialChildren: children,
         );
 
@@ -635,13 +641,18 @@ class AuthorizeDeviceEmailPin
 }
 
 class AuthorizeDeviceEmailPinArgs {
-  const AuthorizeDeviceEmailPinArgs({this.key});
+  const AuthorizeDeviceEmailPinArgs({
+    this.key,
+    required this.email,
+  });
 
   final _i44.Key? key;
 
+  final String email;
+
   @override
   String toString() {
-    return 'AuthorizeDeviceEmailPinArgs{key: $key}';
+    return 'AuthorizeDeviceEmailPinArgs{key: $key, email: $email}';
   }
 }
 
