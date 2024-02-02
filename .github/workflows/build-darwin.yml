@@ -64,7 +64,7 @@ jobs:
         project: android
 
     - name: Build liblantern.dylib
-      run: go build -buildmode=c-shared -o desktop/liblantern.dylib desktop/lib.go
+      run: GOARCH=arm64 go build -buildmode=c-shared -o desktop/liblantern.dylib desktop/lib.go
 
     - uses: actions/upload-artifact@v3
       with:
