@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ android-legacy ]
+    branches: [ android-migrate ]
     tags:
       - '*'
 
