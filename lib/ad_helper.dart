@@ -60,7 +60,8 @@ class AdHelper {
   // Private methods to decide whether to load or show Google Ads or CAS ads based on conditions
   Future<void> _decideAndLoadAds(
       {required bool shouldShowGoogleAds,
-        required bool shouldShowCASAds}) async {
+      required bool shouldShowCASAds}) async {
+    checkForConsent();
     logger.d(
         '[Ads Manager] Google Ads enable $shouldShowGoogleAds: CAS Ads $shouldShowCASAds');
     if (shouldShowGoogleAds) {
@@ -178,6 +179,41 @@ class AdHelper {
       shouldShowCASAds: shouldShowCASAds,
       shouldShowGoogleAds: shouldShowGoogleAds,
     );
+  }
+
+  Future<void> checkForConsent() async {
+    logger.d('[Ads Manager] Checking for consent');
+    final consentStatus = await ConsentInformation.instance.getConsentStatus();
+    if (consentStatus == ConsentStatus.required) {
+      logger.d('[Ads Manager] Consent Required');
+      _loadConsentForm();
+      return;
+    }
+    logger.d('[Ads Manager] consent not needed');
+  }
+
+  void _loadConsentForm() {
+    final params = ConsentRequestParameters();
+    ConsentInformation.instance.requestConsentInfoUpdate(params, () async {
+      // success
+      if (await ConsentInformation.instance.isConsentFormAvailable()) {
+        logger.d('[Ads Manager] Consent Form is available ');
+        ConsentForm.loadConsentForm((consentForm) {
+          logger.d('[Ads Manager] Consent Form Loaded ');
+          //Form is loaded successfully
+          // Ready to display the consent
+          consentForm.show((formError) {
+            logger.d('[Ads Manager] Consent form dismissed');
+          });
+        }, (formError) {
+          logger.d('[Ads Manager] Failed to load consent form');
+          //Error while loading form
+        });
+      }
+    }, (error) {
+      // failure
+      logger.d('[Ads Manager] Failed to request consent form');
+    });
   }
 
   Future<void> showAds() async {

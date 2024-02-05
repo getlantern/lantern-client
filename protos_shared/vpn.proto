@@ -47,6 +47,7 @@ message Plan {
 
 message PaymentProviders {
   string name = 1;
+  repeated string logoUrls = 2;
 }
 
 message PaymentMethod {

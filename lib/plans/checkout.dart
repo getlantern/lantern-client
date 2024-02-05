@@ -22,7 +22,6 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout>
     with SingleTickerProviderStateMixin {
   bool showMoreOptions = false;
-  final _formKey = GlobalKey<FormState>();
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
@@ -115,47 +114,15 @@ class _CheckoutState extends State<Checkout>
         if (!showMoreOptions) break;
       }
       for (final provider in paymentMethod.value.providers) {
-        switch (provider.name) {
-          case 'stripe':
-            widgets.add(
-              PaymentProvider(
-                logoPaths: [
-                  ImagePaths.visa,
-                  ImagePaths.mastercard,
-                  ImagePaths.unionpay
-                ],
-                onChanged: () => selectPaymentProvider(Providers.stripe),
-                selectedPaymentProvider: selectedPaymentProvider!,
-                paymentType: Providers.stripe,
-              ),
-            );
-            break;
-          case 'freekassa':
-            widgets.add(
-              PaymentProvider(
-                logoPaths: const [
-                  ImagePaths.mnp,
-                  ImagePaths.qiwi,
-                  ImagePaths.webMoney,
-                  ImagePaths.bitcoin
-                ],
-                onChanged: () => selectPaymentProvider(Providers.freekassa),
-                selectedPaymentProvider: selectedPaymentProvider!,
-                paymentType: Providers.freekassa,
-              ),
-            );
-            break;
-          case 'btcpay':
-            widgets.add(
-              PaymentProvider(
-                logoPaths: [ImagePaths.btc],
-                onChanged: () => selectPaymentProvider(Providers.btcpay),
-                selectedPaymentProvider: selectedPaymentProvider!,
-                paymentType: Providers.btcpay,
-              ),
-            );
-            break;
-        }
+        widgets.add(
+          PaymentProvider(
+            logoPaths: provider.logoUrls,
+            onChanged: () => selectPaymentProvider(Providers.stripe),
+            selectedPaymentProvider: selectedPaymentProvider!,
+            paymentType: provider.name.toPaymentEnum(),
+            useNetwork: true,
+          ),
+        );
       }
     }
     return widgets;
@@ -219,164 +186,160 @@ class _CheckoutState extends State<Checkout>
     return BaseScreen(
         resizeToAvoidBottomInset: false,
         title: 'lantern_pro_checkout'.i18n,
-        body: sessionModel.countryCode((context, countryCode, child) {
-          defaultProviderIfNecessary(countryCode);
-          return sessionModel.paymentMethods(
-            builder: (
-              context,
-              Iterable<PathAndValue<PaymentMethod>> paymentMethods,
+        body: sessionModel.paymentMethods(
+          builder: (
+            context,
+            Iterable<PathAndValue<PaymentMethod>> paymentMethods,
+            Widget? child,
+          ) {
+            defaultProviderIfNecessary(paymentMethods.toList());
+            return sessionModel.emailAddress((
+              BuildContext context,
+              String emailAddress,
               Widget? child,
             ) {
-              return sessionModel.emailAddress((
-                BuildContext context,
-                String emailAddress,
-                Widget? child,
-              ) {
-                return Container(
-                  padding: const EdgeInsetsDirectional.only(
-                    start: 16,
-                    end: 16,
-                    top: 24,
-                    bottom: 32,
-                  ),
-                  child: Column(
-                    children: [
-                      // * Step 2
-                      PlanStep(
-                        stepNum: '2',
-                        description: 'enter_email'.i18n,
+              return Container(
+                padding: const EdgeInsetsDirectional.only(
+                  start: 16,
+                  end: 16,
+                  top: 24,
+                  bottom: 32,
+                ),
+                child: Column(
+                  children: [
+                    // * Step 2
+                    PlanStep(
+                      stepNum: '2',
+                      description: 'enter_email'.i18n,
+                    ),
+                    // * Email field
+                    Container(
+                      padding: const EdgeInsetsDirectional.only(
+                        top: 8,
+                        bottom: 8,
                       ),
-                      // * Email field
-                      Container(
+                      child: Form(
+                        key: emailFieldKey,
+                        child: CTextField(
+                          initialValue: widget.isPro ? emailAddress : '',
+                          controller: emailController,
+                          autovalidateMode: widget.isPro
+                              ? AutovalidateMode.always
+                              : AutovalidateMode.disabled,
+                          label: 'email'.i18n,
+                          keyboardType: TextInputType.emailAddress,
+                          prefixIcon: const CAssetImage(path: ImagePaths.email),
+                        ),
+                      ),
+                    ),
+                    // * Referral Code field - initially hidden
+                    Visibility(
+                      visible: isRefCodeFieldShowing,
+                      child: Container(
                         padding: const EdgeInsetsDirectional.only(
                           top: 8,
-                          bottom: 8,
+                          bottom: 16,
                         ),
-                        child: Form(
-                          key: emailFieldKey,
-                          child: CTextField(
-                            initialValue: widget.isPro ? emailAddress : '',
-                            controller: emailController,
-                            autovalidateMode: widget.isPro
-                                ? AutovalidateMode.always
-                                : AutovalidateMode.disabled,
-                            label: 'email'.i18n,
-                            keyboardType: TextInputType.emailAddress,
-                            prefixIcon:
-                                const CAssetImage(path: ImagePaths.email),
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: Form(
+                                key: refCodeFieldKey,
+                                child: CTextField(
+                                  controller: refCodeController,
+                                  autovalidateMode: AutovalidateMode.disabled,
+                                  textCapitalization:
+                                      TextCapitalization.characters,
+                                  label: 'referral_code'.i18n,
+                                  keyboardType: TextInputType.text,
+                                  prefixIcon:
+                                      const CAssetImage(path: ImagePaths.star),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      // * Referral Code field - initially hidden
-                      Visibility(
-                        visible: isRefCodeFieldShowing,
+                    ),
+                    // * Add Referral code
+                    Visibility(
+                      visible: !isRefCodeFieldShowing,
+                      child: GestureDetector(
+                        onTap: () async =>
+                            setState(() => isRefCodeFieldShowing = true),
                         child: Container(
+                          width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsetsDirectional.only(
                             top: 8,
                             bottom: 16,
                           ),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Flexible(
-                                flex: 2,
-                                child: Form(
-                                  key: refCodeFieldKey,
-                                  child: CTextField(
-                                    controller: refCodeController,
-                                    autovalidateMode: AutovalidateMode.disabled,
-                                    textCapitalization:
-                                        TextCapitalization.characters,
-                                    label: 'referral_code'.i18n,
-                                    keyboardType: TextInputType.text,
-                                    prefixIcon: const CAssetImage(
-                                        path: ImagePaths.star),
-                                  ),
+                              const CAssetImage(path: ImagePaths.add),
+                              Padding(
+                                padding: const EdgeInsetsDirectional.only(
+                                  start: 8.0,
+                                ),
+                                child: CText(
+                                  'add_referral_code'.i18n,
+                                  style: tsBody1,
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      // * Add Referral code
-                      Visibility(
-                        visible: !isRefCodeFieldShowing,
-                        child: GestureDetector(
-                          onTap: () async =>
-                              setState(() => isRefCodeFieldShowing = true),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsetsDirectional.only(
-                              top: 8,
-                              bottom: 16,
-                            ),
-                            child: Row(
-                              children: [
-                                const CAssetImage(path: ImagePaths.add),
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.only(
-                                    start: 8.0,
-                                  ),
-                                  child: CText(
-                                    'add_referral_code'.i18n,
-                                    style: tsBody1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                    ),
+                    // * Step 3
+                    PlanStep(
+                      stepNum: '3',
+                      description: 'choose_payment_method'.i18n,
+                    ),
+                    //* Payment options
+                    Container(
+                      padding:
+                          const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: paymentOptions(paymentMethods),
                       ),
-                      // * Step 3
-                      PlanStep(
-                        stepNum: '3',
-                        description: 'choose_payment_method'.i18n,
-                      ),
-                      //* Payment options
-                      Container(
-                        padding: const EdgeInsetsDirectional.only(
-                            top: 16, bottom: 16),
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: paymentOptions(paymentMethods),
-                        ),
-                      ),
-                      // * Price summary, unused pro time disclaimer, Continue button
+                    ),
+                    // * Price summary, unused pro time disclaimer, Continue button
 
-                      Center(
-                        child: Tooltip(
-                          message: AppKeys.continueCheckout,
-                          child: Button(
-                            text: 'continue'.i18n,
-                            disabled: emailController.value.text.isEmpty ||
-                                emailFieldKey.currentState?.validate() ==
-                                    false ||
-                                refCodeFieldKey.currentState?.validate() ==
-                                    false,
-                            onPressed: onContinueTapped,
-                          ),
+                    Center(
+                      child: Tooltip(
+                        message: AppKeys.continueCheckout,
+                        child: Button(
+                          text: 'continue'.i18n,
+                          disabled: emailController.value.text.isEmpty ||
+                              emailFieldKey.currentState?.validate() == false ||
+                              refCodeFieldKey.currentState?.validate() == false,
+                          onPressed: onContinueTapped,
                         ),
                       ),
-                    ],
-                  ),
-                );
-              });
-            },
-          );
-        }));
+                    ),
+                  ],
+                ),
+              );
+            });
+          },
+        ));
   }
 
-  void defaultProviderIfNecessary(String countryCode) {
+  void defaultProviderIfNecessary(List<PathAndValue<PaymentMethod>> list) {
     if (selectedPaymentProvider != null) {
       return;
     }
-    if (countryCode.toLowerCase() == 'ir') {
-      selectedPaymentProvider = Providers.freekassa;
-    } else {
-      selectedPaymentProvider = Providers.stripe;
+    if (list.isEmpty) {
+      return;
     }
+    //By default zero value is default
+    //If needed to change default value changing to from server
+    selectedPaymentProvider = list[0].value.providers[0].name.toPaymentEnum();
   }
 
   void onContinueTapped() {

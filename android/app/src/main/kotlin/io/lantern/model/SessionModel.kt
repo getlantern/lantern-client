@@ -312,31 +312,31 @@ class SessionModel(
                         tx.put(
                             path,
                             Vpn.AppData.newBuilder()
-                                .setPackageName(it.packageName).setName(it.name)
+                                .setPackageName(it.packageName).setName(it.name).setIcon(ByteString.copyFrom(it.icon))
                                 .build()
                         )
                     }
                 }
             }
 
-            // Then add icons
-            db.mutate { tx ->
-                appsList.forEach {
-                    val path = PATH_APPS_DATA + it.packageName
-                    tx.get<Vpn.AppData>(path)?.let { existing ->
-                        if (existing.icon.isEmpty) {
-                            it.icon.let { icon ->
-                                tx.put(
-                                    path,
-                                    existing.toBuilder()
-                                        .setIcon(ByteString.copyFrom(icon))
-                                        .build(),
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+//            // Then add icons
+//            db.mutate { tx ->
+//                appsList.forEach {
+//                    val path = PATH_APPS_DATA + it.packageName
+//                    tx.get<Vpn.AppData>(path)?.let { existing ->
+//                        if (existing.icon.isEmpty) {
+//                            it.icon.let { icon ->
+//                                tx.put(
+//                                    path,
+//                                    existing.toBuilder()
+//                                        .setIcon(ByteString.copyFrom(icon))
+//                                        .build(),
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 
