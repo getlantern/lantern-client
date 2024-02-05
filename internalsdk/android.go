@@ -19,7 +19,6 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/balancer"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/common"
@@ -315,17 +314,6 @@ func (uc *userConfig) GetInternalHeaders() map[string]string {
 
 func newUserConfig(session panickingSession) *userConfig {
 	return &userConfig{session: session}
-}
-
-func getBalancer(timeout time.Duration) *balancer.Balancer {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
-
-	cl := getClient(ctx)
-	if cl == nil {
-		return nil
-	}
-	return cl.GetBalancer()
 }
 
 func getClient(ctx context.Context) *client.Client {
