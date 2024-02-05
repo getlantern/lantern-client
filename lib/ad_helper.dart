@@ -221,7 +221,7 @@ class AdHelper {
   ///
   Future<void> _initializeCAS() async {
     await CAS.setDebugMode(kDebugMode);
-    await CAS.setAnalyticsCollectionEnabled(true);
+    // await CAS.setAnalyticsCollectionEnabled(true);
     // CAS.setFlutterVersion("1.20.0");
     // await CAS.validateIntegration();
 
