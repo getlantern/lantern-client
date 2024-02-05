@@ -3,12 +3,11 @@ package org.getlantern.lantern.plausible
 import android.content.Context
 import android.content.res.Resources
 import android.os.Build
+import org.getlantern.lantern.R
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.roundToInt
-import org.getlantern.lantern.BuildConfig
-import org.getlantern.lantern.R
 
 private val DEFAULT_USER_AGENT =
     "Android ${Build.VERSION.RELEASE} ${Build.MANUFACTURER} ${Build.PRODUCT} ${Build.FINGERPRINT.hashCode()}"
@@ -16,7 +15,6 @@ private const val DEFAULT_PLAUSIBLE_HOST = "https://plausible.io"
 
 // Configuration options for the Plausible SDK. See the [Events API reference](https://plausible.io/docs/events-api) for more details
 interface PlausibleConfig {
-
     // Domain name of the site in Plausible
     var domain: String
 
@@ -44,9 +42,8 @@ interface PlausibleConfig {
 
 open class ThreadSafePlausibleConfig(
     override val eventDir: File,
-    override val screenWidth: Int
+    override val screenWidth: Int,
 ) : PlausibleConfig {
-
     private val enableRef = AtomicBoolean(true)
     override var enable: Boolean
         get() = enableRef.get()
@@ -75,9 +72,10 @@ open class ThreadSafePlausibleConfig(
 
 class AndroidResourcePlausibleConfig(context: Context) : ThreadSafePlausibleConfig(
     eventDir = File(context.applicationContext.filesDir, "events"),
-    screenWidth = with(Resources.getSystem().displayMetrics) {
-        widthPixels / density
-    }.roundToInt()
+    screenWidth =
+        with(Resources.getSystem().displayMetrics) {
+            widthPixels / density
+        }.roundToInt(),
 ) {
     init {
         domain = context.resources.getString(R.string.plausible_domain)

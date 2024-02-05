@@ -1,12 +1,12 @@
 import 'package:lantern/common/common.dart';
-
-enum Providers { stripe, btcpay, freekassa }
+import 'package:lantern/plans/utils.dart';
 
 class PaymentProvider extends StatelessWidget {
   final List<String> logoPaths;
   final Function onChanged;
   final Providers selectedPaymentProvider;
   final Providers paymentType;
+  final bool useNetwork;
 
   const PaymentProvider({
     Key? key,
@@ -14,6 +14,7 @@ class PaymentProvider extends StatelessWidget {
     required this.onChanged,
     required this.selectedPaymentProvider,
     required this.paymentType,
+    this.useNetwork = false,
   }) : super(key: key);
 
   BorderSide borderSide() => BorderSide(
@@ -64,9 +65,11 @@ class PaymentProvider extends StatelessWidget {
                     bottom: borderSide(),
                   ),
                 ),
-                child: CAssetImage(
-                  path: p,
-                ),
+                child: useNetwork
+                    ? SvgPicture.network(p)
+                    : CAssetImage(
+                        path: p,
+                      ),
               )),
             ),
             Radio(
