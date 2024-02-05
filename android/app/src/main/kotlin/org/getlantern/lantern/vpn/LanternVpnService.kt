@@ -61,7 +61,6 @@ class LanternVpnService : VpnService(), Runnable {
             return START_STICKY
         }
         return if (intent.action == ACTION_DISCONNECT) {
-            Plausible.event("switchVPN", "", "", mapOf("status" to "disconnect"))
             stop()
             START_NOT_STICKY
         } else {
@@ -73,7 +72,6 @@ class LanternVpnService : VpnService(), Runnable {
 
     private fun connect() {
         Logger.d(TAG, "connect")
-        Plausible.event("switchVPN", "", "", mapOf("status" to "connect"))
         Thread(this, "VpnService").start()
     }
 

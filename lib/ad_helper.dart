@@ -23,10 +23,7 @@ const casAttributes = {
   'provider': "CAS",
 };
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-  level: Level.debug
-);
+var logger = Logger(printer: PrettyPrinter(), level: Level.debug);
 
 class AdHelper {
   static final AdHelper _instance = AdHelper._internal();
@@ -105,7 +102,7 @@ class AdHelper {
   Future<void> _loadInterstitialAd() async {
     //To avoid calling multiple ads request repeatedly
     assert(interstitialAdUnitId != "",
-    "interstitialAdUnitId should not be null or empty");
+        "interstitialAdUnitId should not be null or empty");
     if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
       logger.i('[Ads Manager] Request: Making Google Ad request.');
       await InterstitialAd.load(
@@ -120,8 +117,8 @@ class AdHelper {
               },
               onAdShowedFullScreenContent: (ad) {
                 logger.i('[Ads Manager] Showing Ads');
-                PlausibleUtils.trackUserAction(
-                    'User shown interstitial ad', googleAttributes);
+                sessionModel.trackUserAction('User shown interstitial ad',
+                    'http://google.com', 'google');
               },
               onAdFailedToShowFullScreenContent: (ad, error) {
                 logger.i(
@@ -136,14 +133,14 @@ class AdHelper {
             );
             _interstitialAd = ad;
             logger.i('[Ads Manager] to loaded $ad');
-            PlausibleUtils.trackUserAction(
-                'Interstitial ad loaded', googleAttributes);
+            sessionModel.trackUserAction(
+                'Interstitial ad loaded', 'http://google.com', 'google');
           },
           onAdFailedToLoad: (err) {
             _failedLoadAttempts++; // increment the count on failure
             logger.i('[Ads Manager] failed to load $err');
-            PlausibleUtils.trackUserAction(
-                'Interstitial ad failed to load', googleAttributes);
+            sessionModel.trackUserAction('Interstitial ad failed to load',
+                'http://google.com', 'google');
             _postShowingAds();
           },
         ),
@@ -174,7 +171,7 @@ class AdHelper {
   // Public methods
   Future<void> loadAds(
       {required bool shouldShowGoogleAds,
-        required bool shouldShowCASAds}) async {
+      required bool shouldShowCASAds}) async {
     await _decideAndLoadAds(
       shouldShowCASAds: shouldShowCASAds,
       shouldShowGoogleAds: shouldShowGoogleAds,

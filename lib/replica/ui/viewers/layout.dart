@@ -32,9 +32,6 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
     // For the Viewers in Replica, we are sending another request to fetch the below params.
     // That request goes to `/object_info` endpoint (as opposed it coming bundled in our ReplicaSearchItem)
     doFetchObjectInfo();
-    PlausibleUtils.trackUserAction('User viewed Replica content', {
-      'title': infoTitle,
-    });
   }
 
   void doFetchObjectInfo() async {
@@ -57,6 +54,8 @@ abstract class ReplicaViewerLayoutState extends State<ReplicaViewerLayout> {
                 : 'empty_description'.i18n;
         infoCreationDate = value.infoCreationDate;
       });
+      sessionModel.trackUserAction('User viewed Replica content',
+          widget.item.replicaLink.toMagnetLink(), infoTitle);
     }).onError((error, stackTrace) {
       logger.v('Could not fetch object_info: $error , $stackTrace');
       setState(() {
