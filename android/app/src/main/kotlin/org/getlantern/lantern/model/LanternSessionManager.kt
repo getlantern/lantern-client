@@ -329,6 +329,9 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setPaymentMethods(paymentMethods: List<PaymentMethods>) {
+        if (paymentMethods == null) {
+            return
+        }
         db.mutate { tx ->
             paymentMethods.forEachIndexed { index, it ->
                 val path = PAYMENT_METHODS + index

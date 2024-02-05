@@ -25,8 +25,8 @@ lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
 #             $<
 
 
-#internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
-#	@protoc --go_out=internalsdk protos_shared/vpn.proto
+internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
+	@protoc --go_out=internalsdk protos_shared/vpn.proto
 
 # Compiles autorouter routes
 routes: lib/core/router/router.gr.dart
@@ -41,8 +41,6 @@ TEST ?= *_test
 
 # integration-test:
 # 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
-
-GO_VERSION := 1.21
 
 TAG ?= $$VERSION
 TAG_HEAD := $(shell git rev-parse HEAD)
@@ -205,12 +203,6 @@ tag: require-version
 	git commit -m "Updated changelog for $$VERSION" && \
 	git push
 
-define check-go-version
-    if [ -z '${IGNORE_GO_VERSION}' ] && go version | grep -q -v $(GO_VERSION); then \
-		echo "go $(GO_VERSION) is required." && exit 1; \
-	fi
-endef
-
 guard-%:
 	 @ if [ -z '${${*}}' ]; then echo 'Environment variable $* not set' && exit 1; fi
 
@@ -271,8 +263,7 @@ release-autoupdate: require-version
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-$(ANDROID_LIB):
-	$(call check-go-version) && \
+$(ANDROID_LIB): $(GO_SOURCES)
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	go install golang.org/x/mobile/cmd/gomobile && \
 	gomobile init && \
@@ -327,7 +318,6 @@ pubget:
 	@flutter pub get
 
 $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
-	@$(call check-go-version) && \
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
@@ -358,7 +348,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	STICKY_CONFIG="$$STICKY_CONFIG" && \
 	PAYMENT_PROVIDER="$$PAYMENT_PROVIDER" && \
 	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" \
-	-PddClientToken=$(DD_CLIENT_TOKEN) -PddApplicationID=$(DD_APPLICATION_ID) -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
+	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
 	-Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle bundlePlay && \
 	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodPlay/out/lib && \
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
@@ -442,7 +432,7 @@ build-framework: assert-go-version install-gomobile
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
-	-tags='headless lantern ios' \
+	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
     		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/flashlight/v7/ios

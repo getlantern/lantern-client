@@ -1,7 +1,6 @@
 package org.getlantern.lantern.util
 
 import android.app.Activity
-import androidx.annotation.NonNull
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
@@ -27,7 +26,7 @@ import org.getlantern.mobilesdk.Logger
 class PaymentsUtil(private val activity: Activity) {
     private val session: LanternSessionManager = LanternApp.getSession()
 
-    public fun submitStripePayment(
+    fun submitStripePayment(
         planID: String,
         email: String,
         cardNumber: String,
@@ -50,24 +49,26 @@ class PaymentsUtil(private val activity: Activity) {
                 callback =
                 object : ApiResultCallback<Token> {
                     override fun onSuccess(
-                        @NonNull token: Token,
+                        result: Token,
                     ) {
+                        Logger.debug(TAG, "Stripe Card Token Success: $result")
+
                         sendPurchaseRequest(
                             planID,
                             email,
-                            token.id,
+                            result.id,
                             PaymentProvider.Stripe,
                             methodCallResult,
                         )
                     }
 
                     override fun onError(
-                        @NonNull error: Exception,
+                        e: Exception,
                     ) {
-                        Logger.error(TAG, "Error submitting to Stripe: $error")
+                        Logger.error(TAG, "Error submitting to Stripe: $e")
                         methodCallResult.error(
                             "errorSubmittingToStripe",
-                            error.getLocalizedMessage(),
+                            e.localizedMessage,
                             null,
                         )
                     }
@@ -290,7 +291,7 @@ class PaymentsUtil(private val activity: Activity) {
             "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency"
         )
         val session = session
-        val json  = JsonObject()
+        val json = JsonObject()
         json.addProperty("idempotencyKey", System.currentTimeMillis().toString())
         json.addProperty("provider", provider.toString().lowercase())
         json.addProperty("email", email)
