@@ -281,6 +281,9 @@ require-app: guard-APP
 .PHONY: require-version
 require-version: guard-VERSION
 
+.PHONY: require-sentry-auth-token
+require-secrets-dir: guard-SENTRY_AUTH_TOKEN
+
 .PHONY: require-secrets-dir
 require-secrets-dir: guard-SECRETS_DIR
 
@@ -402,7 +405,7 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
+$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry require-sentry-auth-token
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \

@@ -18,7 +18,6 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/balancer"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/common"
@@ -29,8 +28,6 @@ import (
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/analytics"
 	"github.com/getlantern/mtime"
-	"github.com/getlantern/netx"
-	"github.com/getlantern/protected"
 
 	// import gomobile just to make sure it stays in go.mod
 	_ "golang.org/x/mobile/bind/java"
@@ -317,44 +314,6 @@ func (uc *userConfig) GetInternalHeaders() map[string]string {
 
 func newUserConfig(session panickingSession) *userConfig {
 	return &userConfig{session: session}
-}
-
-// ProtectConnections allows connections made by Lantern to be protected from
-// routing via a VPN. This is useful when running Lantern as a VPN on Android,
-// because it keeps Lantern's own connections from being captured by the VPN and
-// resulting in an infinite loop.
-func ProtectConnections(protector SocketProtector) {
-	log.Debug("Protecting connections")
-	p := protected.New(protector.ProtectConn, protector.DNSServerIP)
-	netx.OverrideDial(p.DialContext)
-	netx.OverrideDialUDP(p.DialUDP)
-	netx.OverrideResolveIPs(p.ResolveIPs)
-	netx.OverrideListenUDP(p.ListenUDP)
-	bal := getBalancer(0)
-	if bal != nil {
-		log.Debug("Protected after balancer already created, force redial")
-		bal.ResetFromExisting()
-	}
-}
-
-// SocketProtector is an interface for classes that can protect Android sockets,
-// meaning those sockets will not be passed through the VPN.
-type SocketProtector interface {
-	ProtectConn(fileDescriptor int) error
-	// The DNS server is used to resolve host only when dialing a protected connection
-	// from within Lantern client.
-	DNSServerIP() string
-}
-
-func getBalancer(timeout time.Duration) *balancer.Balancer {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
-
-	cl := getClient(ctx)
-	if cl == nil {
-		return nil
-	}
-	return cl.GetBalancer()
 }
 
 func getClient(ctx context.Context) *client.Client {
