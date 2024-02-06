@@ -1,5 +1,5 @@
 import 'package:flutter_driver/driver_extension.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
 import 'catcher_setup.dart';
@@ -16,7 +16,7 @@ Future<void> main() async {
   }
 
   WidgetsFlutterBinding.ensureInitialized();
-  await _initGoogleMobileAds();
+  //await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   //Todo if catcher is not picking up error and exception then we should switch to sentryFlutter
@@ -34,8 +34,8 @@ Future<void> main() async {
 }
 
 Future<void> _initGoogleMobileAds() async {
-  await MobileAds.instance.initialize();
-  await MobileAds.instance.setAppMuted(true);
+  //await MobileAds.instance.initialize();
+  //await MobileAds.instance.setAppMuted(true);
   // await MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ['b7574600c8a2fa26a110699cc2ae83d3']));
   // MobileAds.instance.openAdInspector((p0) {
   //   print('ad error $p0');

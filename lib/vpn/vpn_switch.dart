@@ -1,4 +1,4 @@
-import 'package:lantern/ad_helper.dart';
+//import 'package:lantern/ad_helper.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 class VPNSwitch extends StatefulWidget {
@@ -9,7 +9,7 @@ class VPNSwitch extends StatefulWidget {
 }
 
 class _VPNSwitchState extends State<VPNSwitch> {
-  final adHelper = AdHelper();
+  //final adHelper = AdHelper();
 
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
@@ -22,10 +22,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
     // if ads is ready then show ads immediately
 
     if (vpnStatus != 'connected' && userHasPermission) {
-      if (!await adHelper.isAdsReadyToShow()) {
-        await vpnModel.connectingDelay(newValue);
-        await Future.delayed(const Duration(seconds: 5));
-      }
+      await vpnModel.connectingDelay(newValue);
+      await Future.delayed(const Duration(seconds: 5));
     }
     if (isIdle(vpnStatus)) {
       await vpnModel.switchVPN(newValue);
@@ -36,7 +34,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
       Future.delayed(
         const Duration(seconds: 1),
         () async {
-          await adHelper.showAds();
+          //await adHelper.showAds();
         },
       );
     }
@@ -44,12 +42,12 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel
+    /*return sessionModel
         .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
       return sessionModel.shouldShowCASAds((context, isCasAdsEnable, child) {
         adHelper.loadAds(
             shouldShowGoogleAds: isGoogleAdsEnable,
-            shouldShowCASAds: isCasAdsEnable);
+            shouldShowCASAds: isCasAdsEnable);*/
         return Transform.scale(
             scale: 2,
             child: vpnModel.vpnStatus(
@@ -59,10 +57,9 @@ class _VPNSwitchState extends State<VPNSwitch> {
                       vpnStatus == 'connected' || vpnStatus == 'disconnecting',
                   activeColor: onSwitchColor,
                   inactiveColor: offSwitchColor,
-                  onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus,
-                      (isGoogleAdsEnable || isCasAdsEnable)));
+                  onToggle: (bool newValue) => onSwitchTap(newValue, vpnStatus, false));
             }));
-      });
-    });
+      /*});
+    });*/
   }
 }

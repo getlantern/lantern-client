@@ -1,4 +1,4 @@
-import 'package:clever_ads_solutions/CAS.dart';
+/*import 'package:clever_ads_solutions/CAS.dart';
 import 'package:clever_ads_solutions/public/AdCallback.dart';
 import 'package:clever_ads_solutions/public/AdImpression.dart';
 import 'package:clever_ads_solutions/public/AdTypes.dart';
@@ -329,4 +329,4 @@ class InterstitialListenerWrapper extends AdCallback {
     // Called when ad is shown.
     logger.i('[CASIntegrationHelper] - InterstitialListenerWrapper onShown');
   }
-}
+}*/

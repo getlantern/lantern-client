@@ -1,9 +1,8 @@
 source 'https://cdn.cocoapods.org/'
-source 'https://github.com/cleveradssolutions/CAS-Specs.git'
 # Uncomment this line to define a global platform for your project
 platform :ios, '13.0'
 use_frameworks! :linkage => :static
-$casVersion = '~> 3.5.1'
+
 inhibit_all_warnings!
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'false'
@@ -38,7 +37,6 @@ target 'Runner' do
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 #    pod 'SQLite.swift', '~> 0.12.2'
    pod 'Toast-Swift', '~> 5.0.1'
-   pod 'CleverAdsSolutions-Base', $casVersion
 end
 
 # target 'LanternTests' do
