@@ -23,10 +23,7 @@ const casAttributes = {
   'provider': "CAS",
 };
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-  level: Level.debug
-);
+var logger = Logger(printer: PrettyPrinter(), level: Level.debug);
 
 class AdHelper {
   static final AdHelper _instance = AdHelper._internal();
@@ -60,7 +57,8 @@ class AdHelper {
   // Private methods to decide whether to load or show Google Ads or CAS ads based on conditions
   Future<void> _decideAndLoadAds(
       {required bool shouldShowGoogleAds,
-        required bool shouldShowCASAds}) async {
+      required bool shouldShowCASAds}) async {
+    checkForConsent();
     logger.d(
         '[Ads Manager] Google Ads enable $shouldShowGoogleAds: CAS Ads $shouldShowCASAds');
     if (shouldShowGoogleAds) {
@@ -104,7 +102,7 @@ class AdHelper {
   Future<void> _loadInterstitialAd() async {
     //To avoid calling multiple ads request repeatedly
     assert(interstitialAdUnitId != "",
-    "interstitialAdUnitId should not be null or empty");
+        "interstitialAdUnitId should not be null or empty");
     if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
       logger.i('[Ads Manager] Request: Making Google Ad request.');
       await InterstitialAd.load(
@@ -119,8 +117,8 @@ class AdHelper {
               },
               onAdShowedFullScreenContent: (ad) {
                 logger.i('[Ads Manager] Showing Ads');
-                PlausibleUtils.trackUserAction(
-                    'User shown interstitial ad', googleAttributes);
+                sessionModel.trackUserAction('User shown interstitial ad',
+                    'http://google.com', 'google');
               },
               onAdFailedToShowFullScreenContent: (ad, error) {
                 logger.i(
@@ -135,14 +133,14 @@ class AdHelper {
             );
             _interstitialAd = ad;
             logger.i('[Ads Manager] to loaded $ad');
-            PlausibleUtils.trackUserAction(
-                'Interstitial ad loaded', googleAttributes);
+            sessionModel.trackUserAction(
+                'Interstitial ad loaded', 'http://google.com', 'google');
           },
           onAdFailedToLoad: (err) {
             _failedLoadAttempts++; // increment the count on failure
             logger.i('[Ads Manager] failed to load $err');
-            PlausibleUtils.trackUserAction(
-                'Interstitial ad failed to load', googleAttributes);
+            sessionModel.trackUserAction('Interstitial ad failed to load',
+                'http://google.com', 'google');
             _postShowingAds();
           },
         ),
@@ -173,11 +171,46 @@ class AdHelper {
   // Public methods
   Future<void> loadAds(
       {required bool shouldShowGoogleAds,
-        required bool shouldShowCASAds}) async {
+      required bool shouldShowCASAds}) async {
     await _decideAndLoadAds(
       shouldShowCASAds: shouldShowCASAds,
       shouldShowGoogleAds: shouldShowGoogleAds,
     );
+  }
+
+  Future<void> checkForConsent() async {
+    logger.d('[Ads Manager] Checking for consent');
+    final consentStatus = await ConsentInformation.instance.getConsentStatus();
+    if (consentStatus == ConsentStatus.required) {
+      logger.d('[Ads Manager] Consent Required');
+      _loadConsentForm();
+      return;
+    }
+    logger.d('[Ads Manager] consent not needed');
+  }
+
+  void _loadConsentForm() {
+    final params = ConsentRequestParameters();
+    ConsentInformation.instance.requestConsentInfoUpdate(params, () async {
+      // success
+      if (await ConsentInformation.instance.isConsentFormAvailable()) {
+        logger.d('[Ads Manager] Consent Form is available ');
+        ConsentForm.loadConsentForm((consentForm) {
+          logger.d('[Ads Manager] Consent Form Loaded ');
+          //Form is loaded successfully
+          // Ready to display the consent
+          consentForm.show((formError) {
+            logger.d('[Ads Manager] Consent form dismissed');
+          });
+        }, (formError) {
+          logger.d('[Ads Manager] Failed to load consent form');
+          //Error while loading form
+        });
+      }
+    }, (error) {
+      // failure
+      logger.d('[Ads Manager] Failed to request consent form');
+    });
   }
 
   Future<void> showAds() async {
@@ -188,7 +221,7 @@ class AdHelper {
   ///
   Future<void> _initializeCAS() async {
     await CAS.setDebugMode(kDebugMode);
-    await CAS.setAnalyticsCollectionEnabled(true);
+    // await CAS.setAnalyticsCollectionEnabled(true);
     // CAS.setFlutterVersion("1.20.0");
     // await CAS.validateIntegration();
 

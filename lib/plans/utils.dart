@@ -29,7 +29,7 @@ void showError(
   }
   CDialog.showError(
     context,
-    error: e,
+    error: error,
     stackTrace: stackTrace,
     description: description,
   );
@@ -60,4 +60,19 @@ void showSuccessDialog(BuildContext context, bool isPro, [bool? isReseller]) {
       return true;
     },
   );
+}
+
+enum Providers { stripe, btcpay, freekassa }
+
+extension ProviderExtension on String {
+  Providers toPaymentEnum() {
+    if (this == "stripe") {
+      return Providers.stripe;
+    }
+    if (this == "freekassa") {
+      return Providers.freekassa;
+    }
+
+    return Providers.btcpay;
+  }
 }

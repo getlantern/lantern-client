@@ -19,7 +19,6 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/balancer"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/common"
@@ -29,8 +28,6 @@ import (
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/mtime"
-	"github.com/getlantern/netx"
-	"github.com/getlantern/protected"
 
 	// import gomobile just to make sure it stays in go.mod
 	_ "golang.org/x/mobile/bind/java"
@@ -70,6 +67,7 @@ type Session interface {
 	GetUserID() (int64, error)
 	GetToken() (string, error)
 	SetCountry(string) error
+	SetIP(string) error
 	UpdateAdSettings(AdSettings) error
 	UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error
 	SetStaging(bool) error
@@ -120,6 +118,7 @@ type panickingSession interface {
 	DeviceOS() string
 	IsProUser() bool
 	SetChatEnabled(bool)
+	SetIP(string)
 	SplitTunnelingEnabled() bool
 	SetShowInterstitialAdsEnabled(bool)
 	SetCASShowInterstitialAdsEnabled(bool)
@@ -164,6 +163,10 @@ func (s *panickingSessionImpl) GetToken() string {
 
 func (s *panickingSessionImpl) SetCountry(country string) {
 	panicIfNecessary(s.wrapped.SetCountry(country))
+}
+
+func (s *panickingSessionImpl) SetIP(ipAddress string) {
+	panicIfNecessary(s.wrapped.SetIP(ipAddress))
 }
 
 func (s *panickingSessionImpl) UpdateAdSettings(settings AdSettings) {
@@ -313,44 +316,6 @@ func newUserConfig(session panickingSession) *userConfig {
 	return &userConfig{session: session}
 }
 
-// ProtectConnections allows connections made by Lantern to be protected from
-// routing via a VPN. This is useful when running Lantern as a VPN on Android,
-// because it keeps Lantern's own connections from being captured by the VPN and
-// resulting in an infinite loop.
-func ProtectConnections(protector SocketProtector) {
-	log.Debug("Protecting connections")
-	p := protected.New(protector.ProtectConn, protector.DNSServerIP)
-	netx.OverrideDial(p.DialContext)
-	netx.OverrideDialUDP(p.DialUDP)
-	netx.OverrideResolveIPs(p.ResolveIPs)
-	netx.OverrideListenUDP(p.ListenUDP)
-	bal := getBalancer(0)
-	if bal != nil {
-		log.Debug("Protected after balancer already created, force redial")
-		bal.ResetFromExisting()
-	}
-}
-
-// SocketProtector is an interface for classes that can protect Android sockets,
-// meaning those sockets will not be passed through the VPN.
-type SocketProtector interface {
-	ProtectConn(fileDescriptor int) error
-	// The DNS server is used to resolve host only when dialing a protected connection
-	// from within Lantern client.
-	DNSServerIP() string
-}
-
-func getBalancer(timeout time.Duration) *balancer.Balancer {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
-
-	cl := getClient(ctx)
-	if cl == nil {
-		return nil
-	}
-	return cl.GetBalancer()
-}
-
 func getClient(ctx context.Context) *client.Client {
 	_cl, _ := clEventual.Get(ctx)
 	if _cl == nil {
@@ -464,12 +429,14 @@ func Start(configDir string,
 		da.(string)}, nil
 }
 
-func newAnalyticsSession(deviceID string) analytics.Session {
-	session := analytics.Start(deviceID, ApplicationVersion)
+func newAnalyticsSession(session panickingSession) analytics.Session {
+	analyticsSession := analytics.Start(session.GetDeviceID(), ApplicationVersion)
 	go func() {
-		session.SetIP(geolookup.GetIP(forever))
+		ipAddress := geolookup.GetIP(forever)
+		analyticsSession.SetIP(ipAddress)
+		session.SetIP(ipAddress)
 	}()
-	return session
+	return analyticsSession
 }
 
 func run(configDir, locale string,
@@ -606,7 +573,7 @@ func run(configDir, locale string,
 	replicaServer := &ReplicaServer{
 		ConfigDir:        configDir,
 		Flashlight:       runner,
-		analyticsSession: newAnalyticsSession(session.GetDeviceID()),
+		analyticsSession: newAnalyticsSession(session),
 		Session:          session.Wrapped(),
 		UserConfig:       userConfig,
 	}

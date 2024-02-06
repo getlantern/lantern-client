@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ android-legacy ]
+    branches: [ android-migrate ]
     tags:
       - '*'
 
@@ -82,6 +82,9 @@ jobs:
         with:
           go-version-file: "go.mod"
 
+      - name: Install latest protoc-gen-go
+        run: go install github.com/golang/protobuf/protoc-gen-go@latest
+
       - name: Granting private modules access
         run: |
           git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
@@ -132,6 +135,7 @@ jobs:
         run: make package-android
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
+          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
 
       - uses: actions/upload-artifact@v3
@@ -210,7 +214,6 @@ jobs:
            packageName: org.getlantern.lantern
            releaseFiles: lantern-installer.aab
            track: production
-           changesNotSentForReview: true
         - name: Grant private modules access
           run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
         - name: Clone binaries repo

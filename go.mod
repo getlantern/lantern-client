@@ -68,6 +68,7 @@ require (
 	github.com/aead/ecdh v0.2.0 // indirect
 	github.com/ajwerner/btree v0.0.0-20211221152037-f427b3e689c0 // indirect
 	github.com/alecthomas/atomic v0.1.0-alpha2 // indirect
+	github.com/alextanhongpin/go-bandit v0.0.0-20191125130111-30de60d69bae // indirect
 	github.com/anacrolix/chansync v0.3.0 // indirect
 	github.com/anacrolix/confluence v1.12.0 // indirect
 	github.com/anacrolix/dht/v2 v2.21.0 // indirect
@@ -130,7 +131,7 @@ require (
 	github.com/getlantern/eventual v1.0.0 // indirect
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c // indirect
-	github.com/getlantern/flashlight/v7 v7.6.44-0.20240131210337-eca54cb2f6c1 // indirect
+	github.com/getlantern/flashlight/v7 v7.6.47 // indirect
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
 	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 // indirect
 	github.com/getlantern/geo v0.0.0-20230612145351-d1374c8f8dec // indirect

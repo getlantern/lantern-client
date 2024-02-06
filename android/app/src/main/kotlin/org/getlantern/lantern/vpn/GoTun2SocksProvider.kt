@@ -58,6 +58,14 @@ class GoTun2SocksProvider(
             }
         }
 
+        // Never capture traffic originating from Lantern itself in the VPN.
+        try {
+            val ourPackageName = vpnService.getPackageName()
+            builder.addDisallowedApplication(ourPackageName)
+        } catch (e: PackageManager.NameNotFoundException) {
+            throw RuntimeException("Unable to exclude Lantern from routes", e)
+        }
+
         // don't currently route IPv6 through VPN because our proxies don't currently support IPv6
         // see https://github.com/getlantern/lantern-internal/issues/4961
         // Note - if someone performs a DNS lookup for an IPv6 only host like ipv6.google.com, dnsgrab

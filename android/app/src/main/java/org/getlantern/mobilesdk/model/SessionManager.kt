@@ -200,6 +200,9 @@ abstract class SessionManager(application: Application) : Session {
     val serverCountry: String?
         get() = prefs.getString(SERVER_COUNTRY, "")
 
+    val ipAddress: String?
+        get() = prefs.getString(IP_ADDRESS, "")
+
     override fun getCountryCode(): String {
         val forceCountry = forcedCountryCode
         return if (forceCountry.isNotEmpty()) {
@@ -384,6 +387,10 @@ abstract class SessionManager(application: Application) : Session {
         return staging
     }
 
+    override fun setIP(ipAddress: String) {
+        prefs.edit().putString(IP_ADDRESS, ipAddress).apply()
+    }
+
     override fun setCountry(country: String) {
         prefs.edit().putString(GEO_COUNTRY_CODE, country).apply()
     }
@@ -504,6 +511,7 @@ abstract class SessionManager(application: Application) : Session {
         protected const val PREF_NAME = "LanternSession"
         protected const val LATEST_BANDWIDTH = "latest_bandwidth"
         protected const val GEO_COUNTRY_CODE = "geo_country_code"
+        protected const val IP_ADDRESS = "ip_address"
         protected const val SERVER_COUNTRY = "server_country"
         protected const val SERVER_COUNTRY_CODE = "server_country_code"
         protected const val SERVER_CITY = "server_city"

@@ -347,6 +347,18 @@ class SessionModel extends Model {
     );
   }
 
+  Future<void> trackUserAction(
+    String name,
+    String url,
+    String title,
+  ) async {
+    return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
+      'name': name,
+      'url': url,
+      'title': title,
+    }).then((value) => value as String);
+  }
+
   Future<String> requestLinkCode() {
     return methodChannel
         .invokeMethod('requestLinkCode')

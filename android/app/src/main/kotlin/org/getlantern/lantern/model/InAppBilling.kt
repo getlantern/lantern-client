@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.annotation.UiThread
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.SkuType
+import com.android.billingclient.api.BillingClient.SkuType.*
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
@@ -16,6 +17,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
+import com.android.billingclient.api.SkuDetailsParams.*
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import org.getlantern.mobilesdk.Logger
@@ -146,8 +148,8 @@ class InAppBilling(
         Logger.d(TAG, "Updating SKUs")
         val skuList = listOf("1y", "2y")
         val params =
-            SkuDetailsParams.newBuilder()
-                .setType(SkuType.INAPP)
+            newBuilder()
+                .setType(INAPP)
                 .setSkusList(skuList)
         ensureConnected {
             querySkuDetailsAsync(
@@ -210,7 +212,7 @@ class InAppBilling(
         Logger.d(TAG, "Checking for pending purchases")
         ensureConnected {
             queryPurchasesAsync(
-                SkuType.INAPP,
+                INAPP,
             ) { billingResult: BillingResult, purchases: List<Purchase>? ->
                 if (!billingResult.responseCodeOK()) {
                     isRetriable(billingResult).then { handlePendingPurchases() }

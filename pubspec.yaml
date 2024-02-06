@@ -54,6 +54,7 @@ dependencies:
   wakelock: ^0.6.2
   email_validator: ^2.1.17
   credit_card_validator: ^2.1.0
+  flutter_multi_formatter: ^2.12.4
 
   # Media & File handling
   audioplayers: ^5.1.0
@@ -104,9 +105,6 @@ dependencies:
   flutter_mailer: ^2.0.0
   fluttertoast: ^8.2.2
 
-  # Analytics
-  plausible_analytics: ^0.3.0
-
   # Package information
   package_info_plus: ^4.1.0
 
@@ -117,7 +115,7 @@ dependencies:
 
   # Ads
   google_mobile_ads: ^4.0.0
-  clever_ads_solutions: ^0.2.2
+  clever_ads_solutions: ^0.2.4
   retry: ^3.1.2
 
 
