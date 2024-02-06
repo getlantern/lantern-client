@@ -254,6 +254,7 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		return err
 	}
 	log.Debugf("UserId is %v", userId)
+
 	if userId == 0 {
 		local, err := m.Locale()
 		if err != nil {
