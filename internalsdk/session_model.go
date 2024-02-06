@@ -529,9 +529,9 @@ func (m *SessionModel) ForceReplica() bool {
 }
 
 func (m *SessionModel) SetChatEnabled(chatEnable bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathChatEnabled, chatEnable, "")
-	}))
+	})
 }
 
 func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {

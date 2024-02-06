@@ -428,7 +428,7 @@ sourcedump: require-version
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
-build-framework: assert-go-version install-gomobile
+build-framework: install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	@echo "generating Ios.xcFramework"
@@ -447,9 +447,6 @@ build-framework: assert-go-version install-gomobile
 install-gomobile:
 	@echo "installing gomobile" && \
 	go install golang.org/x/mobile/cmd/gomobile@latest
-
-assert-go-version:
-	@if go version | grep -q -v $(GO_VERSION); then echo "go $(GO_VERSION) is required." && exit 1; fi
 
 .PHONY: swift-format
 swift-format:

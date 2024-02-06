@@ -166,7 +166,7 @@ func (s *panickingSessionImpl) SetCountry(country string) {
 }
 
 func (s *panickingSessionImpl) SetIP(ipAddress string) {
-	panicIfNecessary(s.wrapped.SetIP(ipAddress))
+	s.wrapped.SetIP(ipAddress)
 }
 
 func (s *panickingSessionImpl) UpdateAdSettings(settings AdSettings) {
