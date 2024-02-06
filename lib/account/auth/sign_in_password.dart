@@ -118,8 +118,10 @@ class _SignInPasswordState extends State<SignInPassword> {
       /// Show screen to user to remove device
       if ((error as PlatformException).message!.contains("too-many-devices")) {
         context.pushRoute(DeviceLimit()).then((value) {
-          mainLogger.i("Device has been removed");
-          onContinueTap();
+          if (value != null && value as bool) {
+            mainLogger.i("Device has been removed");
+            onContinueTap();
+          }
         });
         return;
       }

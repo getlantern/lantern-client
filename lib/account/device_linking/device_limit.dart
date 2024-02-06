@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import '../../common/common.dart';
 
 @RoutePage<void>(name: 'DeviceLimit')
@@ -77,7 +79,7 @@ class _DeviceLimitState extends State<DeviceLimit> {
       context.loaderOverlay.hide();
       // Once device has been removed
       // Pop routes and continue with sign in
-      context.popRoute();
+      context.popRoute(true);
     } catch (e) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
