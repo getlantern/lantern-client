@@ -3,9 +3,9 @@ PODS:
   - audioplayers_darwin (0.0.1):
     - Flutter
   - clever_ads_solutions (0.0.1):
-    - CleverAdsSolutions-Base (~> 3.5.1)
+    - CleverAdsSolutions-Base (~> 3.5.2)
     - Flutter
-  - CleverAdsSolutions-Base (3.5.1)
+  - CleverAdsSolutions-Base (3.5.2)
   - device_info_plus (0.0.1):
     - Flutter
   - DKImagePickerController/Core (4.3.4):
@@ -76,21 +76,21 @@ PODS:
     - Flutter
     - Google-Mobile-Ads-SDK (~> 10.11.0)
     - webview_flutter_wkwebview
-  - GoogleAppMeasurement (10.19.0):
-    - GoogleAppMeasurement/AdIdSupport (= 10.19.0)
+  - GoogleAppMeasurement (10.21.0):
+    - GoogleAppMeasurement/AdIdSupport (= 10.21.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleAppMeasurement/AdIdSupport (10.19.0):
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.19.0)
+  - GoogleAppMeasurement/AdIdSupport (10.21.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.21.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleAppMeasurement/WithoutAdIdSupport (10.19.0):
+  - GoogleAppMeasurement/WithoutAdIdSupport (10.21.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
@@ -146,9 +146,9 @@ PODS:
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
-  - SDWebImage (5.18.2):
-    - SDWebImage/Core (= 5.18.2)
-  - SDWebImage/Core (5.18.2)
+  - SDWebImage (5.18.10):
+    - SDWebImage/Core (= 5.18.10)
+  - SDWebImage/Core (5.18.10)
   - Sentry/HybridSDK (8.11.0):
     - SentryPrivate (= 8.11.0)
   - sentry_flutter (0.0.1):
@@ -165,7 +165,7 @@ PODS:
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.4)
-  - Toast (4.0.0)
+  - Toast (4.1.0)
   - Toast-Swift (5.0.1)
   - url_launcher_ios (0.0.1):
     - Flutter
@@ -296,8 +296,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
-  clever_ads_solutions: f1c180d1f89433736b8ce713b9db14a71cacf276
-  CleverAdsSolutions-Base: d81f78c50305d43bf3e34f66db8fc07caee43c7f
+  clever_ads_solutions: 4329310a15fd616aee3de8f208018fa1621e7c66
+  CleverAdsSolutions-Base: 13965d236b27ec6ad7b994fedd57c0e5e585adb8
   device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
@@ -314,7 +314,7 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   Google-Mobile-Ads-SDK: 58b4fda3f9758fc1ed210aa5cf7777b5eb55d47e
   google_mobile_ads: 511febb4768edc860ee455a9e201ff52de385908
-  GoogleAppMeasurement: 68afe759316673c6554dac35a0c7ae8f5d6cb4ed
+  GoogleAppMeasurement: a65314d316443969ed3d3709b3a187448ed6418f
   GoogleUserMessagingPlatform: dce302b8f1b84d6e945812ee7a15c3f65a102cbf
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   integration_test: 13825b8a9334a850581300559b8839134b124670
@@ -327,7 +327,7 @@ SPEC CHECKSUMS:
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
-  SDWebImage: c0de394d7cf7f9838aed1fd6bb6037654a4572e4
+  SDWebImage: fc8f2d48bbfd72ef39d70e981bd24a3f3be53fec
   Sentry: 39d57e691e311bdb73bc1ab5bbebbd6bc890050d
   sentry_flutter: b2feefdad5b0f06602347172bc7257e8e9da5562
   SentryPrivate: 48712023cdfd523735c2edb6b06bedf26c4730a3
@@ -335,7 +335,7 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
-  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  Toast: ec33c32b8688982cecc6348adeae667c1b9938da
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
@@ -345,4 +345,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0c57dfeb18231790965910b84e7d2ee57cb82116
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.1
