@@ -261,10 +261,10 @@ packages:
     dependency: "direct main"
     description:
       name: clever_ads_solutions
-      sha256: "8004f0965c24145baf6e2c96809461a8a06aad7fd827411cc7c769eddfcc5764"
+      sha256: "2e5ad684a2c105ffd296cf47c19c589e2385854fc9674810834776deec62d19e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.3"
+    version: "0.2.4"
   clock:
     dependency: transitive
     description:
@@ -1108,14 +1108,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
-  plausible_analytics:
-    dependency: "direct main"
-    description:
-      name: plausible_analytics
-      sha256: be9f0b467d23cd94861737f10101431ad8b7d280dc0c14f7251e0e24655b07fa
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   plugin_platform_interface:
     dependency: transitive
     description:
