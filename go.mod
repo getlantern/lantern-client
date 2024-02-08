@@ -41,7 +41,7 @@ require (
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20240124040039-163b1628a66b
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
-	github.com/getlantern/replica v0.14.3-0.20240208045305-72cf5e9ae408
+	github.com/getlantern/replica v0.14.3
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/mobile v0.0.0-20231127183840-76ac6878050a

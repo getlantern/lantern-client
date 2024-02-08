@@ -389,8 +389,8 @@ github.com/getlantern/ratelimit v0.0.0-20220926192648-933ab81a6fc7 h1:47FJ5kTeXc
 github.com/getlantern/ratelimit v0.0.0-20220926192648-933ab81a6fc7/go.mod h1:OOqKCIkspqXtIWEex4uhH1H9l7NGekT9i3Hs591ZDk4=
 github.com/getlantern/reconn v0.0.0-20161128113912-7053d017511c h1:IkjF+RwRs8B/RsuD638eUFO2K/227OO2B1FLXGp17Ro=
 github.com/getlantern/reconn v0.0.0-20161128113912-7053d017511c/go.mod h1:kExwbqTx1krUnT9ohmXG3jayDTEBfxUKeoRzU6XucLw=
-github.com/getlantern/replica v0.14.3-0.20240208045305-72cf5e9ae408 h1:w1SKhDRkv0Ao31+2pvLcWwBK/hHAOx3NVrXAqSd0NIU=
-github.com/getlantern/replica v0.14.3-0.20240208045305-72cf5e9ae408/go.mod h1:Zv4JqQVpIXfHxNDD8QWj0W+GtuwlfZbYnZoahWDt4iA=
+github.com/getlantern/replica v0.14.3 h1:vYsUKFAK1RyCjsD3JzotC1teYmaFa936FVZTARnzQjg=
+github.com/getlantern/replica v0.14.3/go.mod h1:Zv4JqQVpIXfHxNDD8QWj0W+GtuwlfZbYnZoahWDt4iA=
 github.com/getlantern/rot13 v0.0.0-20220822172233-370767b2f782 h1:A1+qM0Dqm0no8A5qvWoTCFKME9Sa67xsJ1fcV13PvEY=
 github.com/getlantern/rot13 v0.0.0-20220822172233-370767b2f782/go.mod h1:O0dNqH9hbXlOa9OpVdbACmTBfDPD+ENjbY0cPkzBd9g=
 github.com/getlantern/rotator v0.0.0-20160829164113-013d4f8e36a2 h1:smFR/kESUKlcdyatoOO3HngBzzrUU6S0LRw2vCBYQPg=
