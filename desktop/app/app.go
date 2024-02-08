@@ -18,7 +18,7 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/balancer"
+	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/common"
@@ -76,7 +76,6 @@ type App struct {
 
 	chGlobalConfigChanged chan bool
 
-
 	translations eventual.Value
 
 	ws         ws.UIChannel
@@ -93,16 +92,15 @@ type App struct {
 	// Also protected by trafficLogLock.
 	captureSaveDuration time.Duration
 
-	proClient      *client.Client
-	referralCode   string
-	referralCodeMu sync.Mutex
-
 	// proxies are tracked by the application solely for data collection purposes. This value should
 	// not be changed, except by Flashlight.onProxiesUpdate. State-changing methods on the dialers
 	// should not be called. In short, this slice and its elements should be treated as read-only.
-	proxies     []balancer.Dialer
+	proxies     []bandit.Dialer
 	proxiesLock sync.RWMutex
 
+	proClient      *client.Client
+	referralCode   string
+	referralCodeMu sync.Mutex
 	selectedTab   Tab
 	selectedTabMu sync.Mutex
 }
@@ -450,7 +448,7 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	app.chGlobalConfigChanged <- true
 }
 
-func (app *App) onProxiesUpdate(proxies []balancer.Dialer, src config.Source) {
+func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	if src == config.Fetched {
 		atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
 	}
@@ -468,6 +466,16 @@ func (app *App) onProxiesUpdate(proxies []balancer.Dialer, src config.Source) {
 	}
 	app.proxiesLock.Unlock()
 	app.trafficLogLock.Unlock()
+}
+
+// getProxies returns the currently configured proxies. State-changing methods on these dialers
+// should not be called. In short, the elements of this slice should be treated as read-only.
+func (app *App) getProxies() []bandit.Dialer {
+	app.proxiesLock.RLock()
+	copied := make([]bandit.Dialer, len(app.proxies))
+	copy(copied, app.proxies)
+	app.proxiesLock.RUnlock()
+	return copied
 }
 
 // AddExitFunc adds a function to be called before the application exits.
