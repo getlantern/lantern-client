@@ -61,7 +61,7 @@ DEPENDENCIES:
   - wakelock_macos (from `Flutter/ephemeral/.symlinks/plugins/wakelock_macos/macos`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - OrderedSet
     - Sentry
     - SentryPrivate
@@ -121,6 +121,10 @@ SPEC CHECKSUMS:
   video_player_avfoundation: 02011213dab73ae3687df27ce441fbbcc82b5579
   wakelock_macos: bc3f2a9bd8d2e6c89fee1e1822e7ddac3bd004a9
 
+<<<<<<< Updated upstream
 PODFILE CHECKSUM: c2e95c8c0fe03c5c57e438583cae4cc732296009
+=======
+PODFILE CHECKSUM: c91a79078c8f539ea54e777adb05d858e04c01e3
+>>>>>>> Stashed changes
 
 COCOAPODS: 1.15.1
