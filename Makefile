@@ -131,17 +131,16 @@ INFO_PLIST := ios/Runner/Info.plist
 
 APP ?= lantern
 CAPITALIZED_APP := Lantern
-DARWIN_BINARY_NAME ?= desktop/liblantern.dylib
+DARWIN_LIB_NAME ?= desktop/liblantern.dylib
 DARWIN_APP_NAME ?= $(CAPITALIZED_APP).app
 INSTALLER_RESOURCES ?= installer-resources-$(APP)
 INSTALLER_NAME ?= $(APP)-installer
-WINDOWS_BINARY_NAME ?= liblantern.dll
+WINDOWS_LIB_NAME ?= liblantern.dll
 WINDOWS_APP_NAME ?= $(APP).exe
-WINDOWS64_BINARY_NAME ?= liblantern.dll
+WINDOWS64_LIB_NAME ?= liblantern.dll
 WINDOWS64_APP_NAME ?= $(APP)_x64.exe
-
-LINUX_BINARY_NAME_64 ?= liblantern.so
-LINUX_BINARY_NAME_32 ?= $(APP)_linux_386
+LINUX_LIB_NAME_64 ?= liblantern.so
+LINUX_LIB_NAME_32 ?= $(APP)_linux_386
 
 APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
@@ -467,20 +466,20 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 	fi
 	@echo "Build tags: $(BUILD_TAGS)"
 	@echo "Extra ldflags: $(EXTRA_LDFLAGS)"
-	@echo "Binary name: $(BINARY_NAME)"
+	@echo "Library name: $(LIB_NAME)"
 	@if [[ "$$GOOS" ]]; then echo "GOOS: $(GOOS)"; fi
 	@if [[ "$$GOARCH" ]]; then echo "GOARCH: $(GOARCH)"; fi
 	@if [[ "$$CC" ]]; then echo "CC: $(CC)"; fi
 	@if [[ "$$CXX" ]]; then echo "CXX: $(CXX)"; fi
 
-.PHONY: desktop-app
-desktop-app: export GOPRIVATE = github.com/getlantern
-desktop-app: export CGO_ENABLED = 1
-desktop-app: echo-build-tags
-	go build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(BINARY_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
+.PHONY: desktop-lib
+desktop-lib: export GOPRIVATE = github.com/getlantern
+desktop-lib: export CGO_ENABLED = 1
+desktop-lib: echo-build-tags
+	go build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
 
 .PHONY: linux-amd64
-linux-amd64: $(LINUX_BINARY_NAME_64) ## Build lantern for linux-amd64
+linux-amd64: $(LINUX_LIB_NAME_64) ## Build lantern for linux-amd64
 
 .PHONY: package-linux-x64
 package-linux-x64: require-version
@@ -492,68 +491,54 @@ package-linux-amd64: require-version
 	@$(call fpm-debian-build,"arm64")
 	@echo "-> $(APP)_$(VERSION)_arm64.deb"
 
-$(LINUX_BINARY_NAME_64): export GOOS = linux
-$(LINUX_BINARY_NAME_64): export GOARCH = amd64
-$(LINUX_BINARY_NAME_64): export BINARY_NAME = $(LINUX_BINARY_NAME_64)
-$(LINUX_BINARY_NAME_64): export EXTRA_LDFLAGS += -linkmode external -s -w
-$(LINUX_BINARY_NAME_64): export GO_BUILD_FLAGS += -a
-$(LINUX_BINARY_NAME_64): export Environment = production
-$(LINUX_BINARY_NAME_64): desktop-app
+$(LINUX_LIB_NAME_64): export GOOS = linux
+$(LINUX_LIB_NAME_64): export GOARCH = amd64
+$(LINUX_LIB_NAME_64): export LIB_NAME = $(LINUX_LIB_NAME_64)
+$(LINUX_LIB_NAME_64): export EXTRA_LDFLAGS += -linkmode external -s -w
+$(LINUX_LIB_NAME_64): export GO_BUILD_FLAGS += -a
+$(LINUX_LIB_NAME_64): export Environment = production
+$(LINUX_LIB_NAME_64): desktop-lib
 
 .PHONY: windows
-windows: require-mingw $(WINDOWS_BINARY_NAME) ## Build lantern for windows
+windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
 
-$(WINDOWS_BINARY_NAME): export CXX = i686-w64-mingw32-g++
-$(WINDOWS_BINARY_NAME): export CC = i686-w64-mingw32-gcc
-$(WINDOWS_BINARY_NAME): export CGO_LDFLAGS = -static
-$(WINDOWS_BINARY_NAME): export GOOS = windows
-$(WINDOWS_BINARY_NAME): export GOARCH = 386
-$(WINDOWS_BINARY_NAME): export BINARY_NAME = $(WINDOWS_BINARY_NAME)
-$(WINDOWS_BINARY_NAME): export BUILD_TAGS += walk_use_cgo
-$(WINDOWS_BINARY_NAME): export EXTRA_LDFLAGS +=
-$(WINDOWS_BINARY_NAME): export GO_BUILD_FLAGS += -buildmode=c-shared
-$(WINDOWS_BINARY_NAME): export BUILD_RACE =
-$(WINDOWS_BINARY_NAME): export Environment = production
-$(WINDOWS_BINARY_NAME): desktop-app
+$(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
+$(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
+$(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
+$(WINDOWS_LIB_NAME): export GOOS = windows
+$(WINDOWS_LIB_NAME): export GOARCH = 386
+$(WINDOWS_LIB_NAME): export LIB_NAME = $(WINDOWS_LIB_NAME)
+$(WINDOWS_LIB_NAME): export BUILD_TAGS += walk_use_cgo
+$(WINDOWS_LIB_NAME): export EXTRA_LDFLAGS +=
+$(WINDOWS_LIB_NAME): export GO_BUILD_FLAGS += -buildmode=c-shared
+$(WINDOWS_LIB_NAME): export BUILD_RACE =
+$(WINDOWS_LIB_NAME): export Environment = production
+$(WINDOWS_LIB_NAME): desktop-lib
 
 .PHONY: windows64
-windows64: require-mingw $(WINDOWS64_BINARY_NAME) ## Build lantern for windows
+windows64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
 
-$(WINDOWS64_BINARY_NAME): export CXX = x86_64-w64-mingw32-g++
-$(WINDOWS64_BINARY_NAME): export CC = x86_64-w64-mingw32-gcc
-$(WINDOWS64_BINARY_NAME): export CGO_LDFLAGS = -static
-$(WINDOWS64_BINARY_NAME): export GOOS = windows
-$(WINDOWS64_BINARY_NAME): export GOARCH = amd64
-$(WINDOWS64_BINARY_NAME): export BINARY_NAME = $(WINDOWS64_BINARY_NAME)
-$(WINDOWS64_BINARY_NAME): export BUILD_TAGS += walk_use_cgo
-$(WINDOWS64_BINARY_NAME): export EXTRA_LDFLAGS +=
-$(WINDOWS64_BINARY_NAME): export GO_BUILD_FLAGS += -buildmode=c-shared
-$(WINDOWS64_BINARY_NAME): export BUILD_RACE =
-$(WINDOWS64_BINARY_NAME): desktop-app
+$(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
+$(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
+$(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static
+$(WINDOWS64_LIB_NAME): export GOOS = windows
+$(WINDOWS64_LIB_NAME): export GOARCH = amd64
+$(WINDOWS64_LIB_NAME): export LIB_NAME = $(WINDOWS64_LIB_NAME)
+$(WINDOWS64_LIB_NAME): export BUILD_TAGS += walk_use_cgo
+$(WINDOWS64_LIB_NAME): export EXTRA_LDFLAGS +=
+$(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -buildmode=c-shared
+$(WINDOWS64_LIB_NAME): export BUILD_RACE =
+$(WINDOWS64_LIB_NAME): desktop-lib
 
 ## Darwin
 .PHONY: darwin
-darwin: $(DARWIN_BINARY_NAME) ## Build lantern for darwin (can only be run from a darwin machine)
+darwin: $(DARWIN_LIB_NAME) ## Build lantern for darwin (can only be run from a darwin machine)
 
-$(DARWIN_BINARY_NAME): export BINARY_NAME = $(DARWIN_BINARY_NAME)
-$(DARWIN_BINARY_NAME): export GOOS = darwin
-$(DARWIN_BINARY_NAME): export GOARCH = amd64
-$(DARWIN_BINARY_NAME): export GO_BUILD_FLAGS += -a
-$(DARWIN_BINARY_NAME): export EXTRA_LDFLAGS += -s
-$(DARWIN_BINARY_NAME): echo-build-tags
-	@echo "Building darwin/amd64..." && \
-	export OSX_DEV_SDK=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$(OSX_MIN_VERSION).sdk && \
-	if [[ "$$(uname -s)" == "Darwin" ]]; then \
-		if [[ -d $$OSX_DEV_SDK ]]; then \
-			export CGO_CFLAGS="--sysroot $$OSX_DEV_SDK" && \
-			export CGO_LDFLAGS="--sysroot $$OSX_DEV_SDK"; \
-		fi && \
-		MACOSX_DEPLOYMENT_TARGET=$(OSX_MIN_VERSION) \
-		make desktop-app; \
-	else \
-		echo "-> Skipped: Can not compile $(CAPITALIZED_APP) for OSX on a non-OSX host."; \
-	fi
-
+$(DARWIN_LIB_NAME): export LIB_NAME = $(DARWIN_LIB_NAME)
+$(DARWIN_LIB_NAME): export GOOS = darwin
+$(DARWIN_LIB_NAME): export GO_BUILD_FLAGS += -a
+$(DARWIN_LIB_NAME): export EXTRA_LDFLAGS += -s
+$(DARWIN_LIB_NAME): echo-build-tags desktop-lib
 
 $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
 	@echo "Generating distribution package for darwin/amd64..." && \
@@ -561,7 +546,7 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
 		DARWIN_APP_NAME="build/macos/Build/Products/Release/Lantern.app" && \
 		ls $$DARWIN_APP_NAME && \
-		cp $(DARWIN_BINARY_NAME) $$DARWIN_APP_NAME/Contents/Frameworks && \
+		cp $(DARWIN_LIB_NAME) $$DARWIN_APP_NAME/Contents/Frameworks && \
 		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/Frameworks/liblantern.dylib) && \
 		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/MacOS/Lantern) && \
 		$(call osxcodesign,$$DARWIN_APP_NAME) && \
@@ -613,9 +598,6 @@ android-bundle: $(MOBILE_BUNDLE)
 
 android-debug-install: $(MOBILE_DEBUG_APK)
 	$(ADB) uninstall $(MOBILE_APPID) ; $(ADB) install -r $(MOBILE_DEBUG_APK)
-
-#android-debug-install: $(MOBILE_DEBUG_APK)
-#	$(ADB) uninstall $(MOBILE_APPID) ; $(ADB) install -r $(MOBILE_DEBUG_APK)
 
 android-release-install: $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
