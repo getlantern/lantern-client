@@ -98,6 +98,7 @@ type App struct {
 	proxies     []bandit.Dialer
 	proxiesLock sync.RWMutex
 
+	issueReporter *issueReporter
 	proClient      *client.Client
 	referralCode   string
 	referralCodeMu sync.Mutex
@@ -120,6 +121,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, 
 		ws:               ws.NewUIChannel(),
 	}
 
+	app.issueReporter = newIssueReporter(app.settings, app.getCapturedPackets, app.getProxies)
 	app.translations.Set(os.DirFS("locale/translation"))
 
 	return app
@@ -369,6 +371,7 @@ func (app *App) beforeStart(listenAddr string) {
 		app.Exit(nil)
 		os.Exit(0)
 	}
+
 	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 
