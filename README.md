@@ -85,6 +85,12 @@ All those dependencies must be in your PATH
 
 **Note**: If you're using an M1 or M2 chip, navigate to the ios folder and run `arch -x86_64 pod install`
 
+### Running on emulators
+You can easily run emulators directly from the command line with the following:
+
+* `flutter devices`
+* `flutter run -d ID --flavor prod`
+
 ### 👩‍💻 Using Android Studio? No problem!
 
 We've got you covered! If you prefer using Android Studio, we have already set up the configuration files for you. Just select the prod configuration and hit Run... Get ready to start digging! 😄🔍
