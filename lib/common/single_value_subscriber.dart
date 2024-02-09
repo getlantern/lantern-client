@@ -12,7 +12,6 @@ class SubscribedSingleValueNotifier<T> extends SubscribedNotifier<T?> {
     T Function(Uint8List serialized)? deserialize,
   }) : super(defaultValue, removeFromCache) {
     void onChanges(Map<String, T> updates, Iterable<String> deletions) {
-      var thePath = path;
       if (deletions.isNotEmpty) {
         value = null;
       } else {
