@@ -57,6 +57,7 @@ class SessionModel(
     companion object {
         private const val TAG = "SessionModel"
         const val PATH_PRO_USER = "prouser"
+        const val PATH_SELECTED_TAB = "/selectedTab"
         const val PATH_PLAY_VERSION = "playVersion"
         const val PATH_SERVER_INFO = "/server_info"
 
@@ -77,6 +78,10 @@ class SessionModel(
             tx.put(
                 PATH_PRO_USER,
                 castToBoolean(tx.get(PATH_PRO_USER), false),
+            )
+            tx.put(
+                PATH_SELECTED_TAB,
+                tx.get(PATH_SELECTED_TAB) ?: "vpn",
             )
             tx.put(
                 PATH_USER_LEVEL,
@@ -224,7 +229,7 @@ class SessionModel(
 
             "setSelectedTab" -> {
                 db.mutate { tx ->
-                    tx.put("/selectedTab", call.argument<String>("tab")!!)
+                    tx.put(PATH_SELECTED_TAB, call.argument<String>("tab")!!)
                 }
             }
 

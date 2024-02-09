@@ -2,8 +2,11 @@ package apimodels
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"net"
 	"net/http"
+	"time"
 
 	"github.com/getlantern/golog"
 )
@@ -34,7 +37,6 @@ func FechUserDetail(deviceId string, userId string, token string) (*UserDetailRe
 	log.Debugf("Headers set")
 
 	// Initialize a new http client
-
 	client := &http.Client{}
 	// Send the request
 	resp, err := client.Do(req)
@@ -77,6 +79,23 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 	// Add headers
 	req.Header.Set("X-Lantern-Device-Id", deviceId)
 	log.Debugf("Headers set")
+	  dialer := &net.Dialer{
+	    Resolver: &net.Resolver{
+	      PreferGo: true,
+	      Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+	        d := net.Dialer{
+	          Timeout: time.Duration(5000) * time.Millisecond,
+	        }
+	        return d.DialContext(ctx, "udp", "8.8.8.8:53")
+	      },
+	    },
+	  }
+
+
+	  http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
+	    return dialer.DialContext(ctx, network, addr)
+	  }
+
 	// Initialize a new http client
 	client := &http.Client{}
 	// Send the request

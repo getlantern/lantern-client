@@ -57,7 +57,7 @@ dependencies:
   flutter_multi_formatter: ^2.12.4
 
   # Media & File handling
-  audioplayers: ^5.1.0
+  audioplayers: ^5.2.1
   video_player: ^2.7.0
   video_thumbnail: ^0.5.3
   file_picker: ^5.3.3
