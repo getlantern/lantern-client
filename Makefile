@@ -131,7 +131,7 @@ INFO_PLIST := ios/Runner/Info.plist
 
 APP ?= lantern
 CAPITALIZED_APP := Lantern
-DARWIN_LIB_NAME ?= desktop/liblantern.dylib
+DARWIN_LIB_NAME ?= liblantern.dylib
 DARWIN_APP_NAME ?= $(CAPITALIZED_APP).app
 INSTALLER_RESOURCES ?= installer-resources-$(APP)
 INSTALLER_NAME ?= $(APP)-installer
@@ -536,7 +536,7 @@ darwin: $(DARWIN_LIB_NAME) ## Build lantern for darwin (can only be run from a d
 
 $(DARWIN_LIB_NAME): export LIB_NAME = $(DARWIN_LIB_NAME)
 $(DARWIN_LIB_NAME): export GOOS = darwin
-$(DARWIN_LIB_NAME): export GO_BUILD_FLAGS += -a
+$(DARWIN_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(DARWIN_LIB_NAME): export EXTRA_LDFLAGS += -s
 $(DARWIN_LIB_NAME): echo-build-tags desktop-lib
 
