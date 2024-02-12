@@ -371,7 +371,9 @@ func (app *App) beforeStart(listenAddr string) {
 		app.Exit(nil)
 		os.Exit(0)
 	}
-
+	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, app.IsProUser, func() string {
+		return app.AddToken("/img/lantern_logo.png")
+	}))
 	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 
