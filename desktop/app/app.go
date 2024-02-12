@@ -120,6 +120,14 @@ func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, 
 		translations:     eventual.NewValue(),
 		ws:               ws.NewUIChannel(),
 	}
+	golog.OnFatal(app.exitOnFatal)
+
+	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
+	pro.OnProStatusChange(func(isPro bool, _ bool) {
+		app.statsTracker.SetIsPro(isPro)
+	})
+
+	log.Debugf("Using configdir: %v", configDir)
 
 	app.issueReporter = newIssueReporter(app.settings, app.getCapturedPackets, app.getProxies)
 	app.translations.Set(os.DirFS("locale/translation"))
