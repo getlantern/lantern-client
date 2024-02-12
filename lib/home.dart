@@ -12,6 +12,7 @@ import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
 import 'package:tray_manager/tray_manager.dart';
+import 'package:window_manager/window_manager.dart';
 import 'messaging/messaging_model.dart';
 
 @RoutePage(name: 'Home')
@@ -22,11 +23,11 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TrayListener {
+class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   BuildContext? _context;
   MethodChannel? mainMethodChannel;
   MethodChannel? navigationChannel;
-
+  bool _isPreventClose = true;
   Function()? _cancelEventSubscription;
 
   _HomePageState();
@@ -35,6 +36,7 @@ class _HomePageState extends State<HomePage> with TrayListener {
   void initState() {
     if (isDesktop()) {
       setupTrayManager();
+      windowManager.addListener(this);
     }
     super.initState();
     if (Platform.isAndroid) {
@@ -122,7 +124,11 @@ class _HomePageState extends State<HomePage> with TrayListener {
 
   @override
   void onTrayIconMouseDown() {
-    // pop up the menu
+    windowManager.show();
+  }
+
+  @override
+  void onTrayIconRightMouseDown() {
     trayManager.popUpContextMenu();
   }
 
@@ -131,6 +137,35 @@ class _HomePageState extends State<HomePage> with TrayListener {
     print(menuItem.label);
     if (menuItem.label == "Exit") {
       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    }
+  }
+
+  @override
+  void onWindowClose() {
+    if (_isPreventClose) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: const Text('Are you sure you want to close this window?'),
+            actions: [
+              TextButton(
+                child: const Text('No'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: const Text('Yes'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  windowManager.destroy();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -149,6 +184,7 @@ class _HomePageState extends State<HomePage> with TrayListener {
   void dispose() {
     if (isDesktop()) {
       trayManager.removeListener(this);
+      windowManager.removeListener(this);
     }
     if (_cancelEventSubscription != null) {
       _cancelEventSubscription!();

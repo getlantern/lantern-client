@@ -6,10 +6,12 @@ list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
   emoji_picker_flutter
   permission_handler_windows
+  screen_retriever
   sentry_flutter
   share_plus
   tray_manager
   url_launcher_windows
+  window_manager
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

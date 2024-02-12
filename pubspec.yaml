@@ -94,6 +94,8 @@ dependencies:
   share_plus: ^7.1.0
   flutter_inappwebview: ^6.0.0-beta.25
 
+  # Desktop
+  window_manager: ^0.3.8
   tray_manager: ^0.2.1
 
   # Notifications & Logging
