@@ -542,7 +542,7 @@ class SessionModel extends Model {
       'name': name,
       'url': url,
       'title': title,
-    }).then((value) => value as String);
+    });
   }
 
   Future<String> requestLinkCode() {
