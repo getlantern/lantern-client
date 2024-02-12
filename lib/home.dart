@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   BuildContext? _context;
   MethodChannel? mainMethodChannel;
   MethodChannel? navigationChannel;
-  bool _isPreventClose = true;
   Function()? _cancelEventSubscription;
 
   _HomePageState();
@@ -37,6 +36,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     if (isDesktop()) {
       setupTrayManager();
       windowManager.addListener(this);
+      _init();
     }
     super.initState();
     if (Platform.isAndroid) {
@@ -103,6 +103,12 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
   }
 
+  void _init() async {
+    // Add this line to override the default close handler
+    await windowManager.setPreventClose(true);
+    setState(() {});
+  }
+
   void setupTrayManager() async {
     trayManager.addListener(this);
     Menu menu = Menu(
@@ -135,28 +141,34 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   void onTrayMenuItemClick(MenuItem menuItem) {
     print(menuItem.label);
-    if (menuItem.label == "Exit") {
+    if (menuItem.label == 'exit'.i18n) {
       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     }
   }
 
   @override
-  void onWindowClose() {
+  void onWindowClose() async {
+    bool _isPreventClose = await windowManager.isPreventClose();
     if (_isPreventClose) {
-      showDialog(
+      bool showAlert = false;
+      if (!showAlert) {
+        windowManager.minimize();
+        return;
+      }
+      await showDialog(
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: const Text('Are you sure you want to close this window?'),
+            title: const Text('confirm_close_window'.i18n),
             actions: [
               TextButton(
-                child: const Text('No'),
+                child: const Text('No'.i18n),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                child: const Text('Yes'),
+                child: const Text('Yes'.i18n),
                 onPressed: () {
                   Navigator.of(context).pop();
                   windowManager.destroy();
