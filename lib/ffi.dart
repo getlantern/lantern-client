@@ -14,6 +14,9 @@ typedef ProFunc = ffi.Pointer<Utf8> Function();
 typedef sysproxy_func = ffi.Pointer<Utf8> Function(); // FFI fn signature
 typedef SysProxy = ffi.Pointer<Utf8> Function(); // Dart fn signature
 
+typedef vpnstatus_func = ffi.Pointer<Utf8> Function(); // FFI fn signature
+typedef VpnStatus = ffi.Pointer<Utf8> Function(); // Dart fn signature
+
 typedef selecttab_func = ffi.Void Function(ffi.Pointer<Utf8>);
 typedef SelectTab = void Function(ffi.Pointer<Utf8>);
 
@@ -47,6 +50,9 @@ final SysProxy sysProxyOn =
 
 final SysProxy sysProxyOff =
     dylib.lookup<ffi.NativeFunction<start_func>>('SysProxyOff').asFunction();
+
+final VpnStatus vpnStatus =
+    dylib.lookup<ffi.NativeFunction<start_func>>('VpnStatus').asFunction();
 
 final SelectTab setSelectTab = 
     dylib.lookup<ffi.NativeFunction<selecttab_func>>('SetSelectTab').asFunction();

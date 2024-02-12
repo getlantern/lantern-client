@@ -10,6 +10,7 @@ import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/replica/replica_tab.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
+import 'package:lantern/vpn/vpn.dart';
 import 'package:logger/logger.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
@@ -109,28 +110,43 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     setState(() {});
   }
 
-  void setupTrayManager() async {
-    trayManager.addListener(this);
+  Future<void> setupMenu(bool isConnected) async {
     Menu menu = Menu(
       items: [
+        MenuItem(
+          key: 'status',
+          disabled: true,
+          label: isConnected ? 'status_on'.i18n : 'status_off'.i18n,
+        ),
+        MenuItem(
+          key: 'status',
+          label: isConnected ? 'disconnect'.i18n : 'connect'.i18n,
+        ),
+        MenuItem.separator(),
         MenuItem(
           key: 'show_window',
           label: 'show'.i18n,
         ),
         MenuItem.separator(),
         MenuItem(
-          key: 'exit_app',
+          key: 'exit',
           label: 'exit'.i18n,
         ),
       ],
     );
     await trayManager.setContextMenu(menu);
-    await trayManager.setIcon(systemTrayIcon(false));
+    await trayManager.setIcon(systemTrayIcon(isConnected));
+  }
+
+  void setupTrayManager() async {
+    trayManager.addListener(this);
+    await setupMenu(false);
   }
 
   @override
   void onTrayIconMouseDown() {
     windowManager.show();
+    trayManager.popUpContextMenu();
   }
 
   @override
@@ -139,10 +155,19 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   @override
-  void onTrayMenuItemClick(MenuItem menuItem) {
-    print(menuItem.label);
-    if (menuItem.label == 'exit'.i18n) {
-      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  void onTrayMenuItemClick(MenuItem menuItem) async {
+    switch (menuItem.key) {
+      case 'exit':
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      case 'status':
+        bool isConnected = await vpnStatus().toDartString() == "connected";
+        if (isConnected) {
+          await sysProxyOff();
+          await setupMenu(false);
+        } else {
+          await sysProxyOn();
+          await setupMenu(true);
+        }
     }
   }
 
@@ -159,16 +184,16 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: const Text('confirm_close_window'.i18n),
+            title: Text('confirm_close_window'.i18n),
             actions: [
               TextButton(
-                child: const Text('No'.i18n),
+                child: Text('No'.i18n),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                child: const Text('Yes'.i18n),
+                child: Text('Yes'.i18n),
                 onPressed: () {
                   Navigator.of(context).pop();
                   windowManager.destroy();

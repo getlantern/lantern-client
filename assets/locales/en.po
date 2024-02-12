@@ -27,6 +27,12 @@ msgstr "Daily Data Usage "
 msgid "is"
 msgstr "is"
 
+msgid "connect"
+msgstr "Connect"
+
+msgid "disconnect"
+msgstr "Disconnect"
+
 msgid "connected"
 msgstr "Connected"
 
@@ -436,6 +442,12 @@ msgstr "Exit"
 
 msgid "show"
 msgstr "Show"
+
+msgid "status_on"
+msgstr "Status: On"
+
+msgid "status_off"
+msgstr "Status: Off"
 
 msgid "Enter or paste linking code"
 msgstr "Enter or paste linking code"

@@ -201,7 +201,6 @@ func SdkVersion() *C.char {
 
 //export VpnStatus
 func VpnStatus() *C.char {
-	log.Debug("Another vpn status call")
 	if app.IsSysProxyOn() {
 		return C.CString("connected")
 	}
