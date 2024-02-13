@@ -101,9 +101,9 @@ type App struct {
 	issueReporter *issueReporter
 	proClient      *client.Client
 	referralCode   string
-	referralCodeMu sync.Mutex
 	selectedTab   Tab
-	selectedTabMu sync.Mutex
+	stats *stats.Stats
+	mu sync.Mutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
@@ -116,10 +116,10 @@ func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, 
 		settings:         settings,
 		analyticsSession: analyticsSession,
 		selectedTab:      VPNTab,
-		statsTracker:     NewStatsTracker(),
 		translations:     eventual.NewValue(),
 		ws:               ws.NewUIChannel(),
 	}
+	app.statsTracker = NewStatsTracker(app)
 	golog.OnFatal(app.exitOnFatal)
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
@@ -148,14 +148,12 @@ func newAnalyticsSession(settings *Settings) analytics.Session {
 }
 
 func (app *App) SelectedTab() Tab {
-	app.selectedTabMu.Lock()
-	defer app.selectedTabMu.Unlock()
 	return app.selectedTab
 }
 
 func (app *App) SetSelectedTab(selectedTab Tab) {
-	app.selectedTabMu.Lock()
-	defer app.selectedTabMu.Unlock()
+	app.mu.Lock()
+	defer app.mu.Unlock()
 	app.selectedTab = selectedTab
 }
 
@@ -602,19 +600,24 @@ func (app *App) IsPro() bool {
 
 // ReferralCode returns a user's unique referral code
 func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
-	app.referralCodeMu.Lock()
-	defer app.referralCodeMu.Unlock()
 	referralCode := app.referralCode
 	if referralCode == "" {
 		resp, err := app.proClient.UserData(uc)
 		if err != nil {
 			return "", err
 		}
-		app.referralCode = resp.Code
+		app.SetReferralCode(resp.Code)
 		return resp.Code, nil
 	}
 	return referralCode, nil
 }
+
+func (app *App) SetReferralCode(referralCode string) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app.referralCode = referralCode
+}
+
 
 func recordStopped() {
 	ops.Begin("client_stopped").

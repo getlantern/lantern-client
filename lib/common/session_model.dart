@@ -524,9 +524,26 @@ class SessionModel extends Model {
   }
 
   Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
-    return subscribedSingleValueBuilder<ServerInfo>(
-      '/server_info',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<ServerInfo>(
+        '/server_info',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return ServerInfo.fromBuffer(serialized);
+        },
+      );
+    }
+    return ffiValueBuilder<ServerInfo>(
+      'serverInfo',
+      ffiServerInfo,
       builder: builder,
+      fromJsonModel: (Map<String, dynamic> json) {
+        var info = ServerInfo();
+        info.city = json['city'];
+        info.country = json['country'];
+        info.countryCode = json['countryCode'];
+        return info;
+      },
       deserialize: (Uint8List serialized) {
         return ServerInfo.fromBuffer(serialized);
       },

@@ -23,6 +23,9 @@ typedef SelectTab = void Function(ffi.Pointer<Utf8>);
 typedef purchase_func = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
 typedef Purchase = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
 
+typedef serverinfo_func = ffi.Pointer<Utf8> Function();
+typedef ServerInfoFunc = ffi.Pointer<Utf8> Function();
+
 typedef payment_redirect_func = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
 typedef PaymentRedirect = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
 
@@ -77,6 +80,7 @@ final Purchase ffiPurchase = dylib.lookup<ffi.NativeFunction<purchase_func>>('Pu
 final DoReportIssue ffiReportIssue = dylib.lookup<ffi.NativeFunction<reportissue_func>>('ReportIssue').asFunction();
 final ProFunc ffiProUser = dylib.lookup<ffi.NativeFunction<pro_func>>('ProUser').asFunction();
 final ProFunc ffiDeviceLinkingCode = dylib.lookup<ffi.NativeFunction<pro_func>>('DeviceLinkingCode').asFunction();
+final ServerInfoFunc ffiServerInfo = dylib.lookup<ffi.NativeFunction<serverinfo_func>>('ServerInfo').asFunction();
 final ProFunc ffiDevelopmentMode = dylib.lookup<ffi.NativeFunction<pro_func>>('DevelopmentMode').asFunction();
 final ProFunc ffiSplitTunneling = dylib.lookup<ffi.NativeFunction<pro_func>>('SplitTunneling').asFunction();
 final ProFunc ffiChatMe = dylib.lookup<ffi.NativeFunction<pro_func>>('ChatMe').asFunction();

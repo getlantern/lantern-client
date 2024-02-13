@@ -10,8 +10,6 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/shirou/gopsutil/v3/host"
-
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
@@ -21,11 +19,15 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/pro/client"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
+
+	"google.golang.org/protobuf/encoding/protojson"
+	"github.com/shirou/gopsutil/v3/host"
 )
 
 import "C"
@@ -150,6 +152,21 @@ func UserData() *C.char {
 		return sendError(err)
 	}
 	b, _ := json.Marshal(resp)
+	return C.CString(string(b))
+}
+
+//export ServerInfo
+func ServerInfo() *C.char {
+	stats := a.Stats()
+	if stats == nil {
+		return C.CString("")
+	}
+	serverInfo := &protos.ServerInfo{
+		City: stats.City,
+		Country: stats.Country,
+		CountryCode: stats.CountryCode,
+	}
+	b, _ := protojson.Marshal(serverInfo)
 	return C.CString(string(b))
 }
 

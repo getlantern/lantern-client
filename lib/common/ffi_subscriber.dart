@@ -1,5 +1,6 @@
 import 'common.dart';
 import 'common_desktop.dart';
+import 'dart:convert';
 
 extension BoolParsing on String {
   bool parseBool() {
@@ -14,14 +15,22 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
     void Function() removeFromCache, {
     bool details = false,
     T Function(Uint8List serialized)? deserialize,
+    T Function(Map<String, dynamic> json)? fromJsonModel,
   }) : super(defaultValue, removeFromCache) {
-    if (defaultValue is int?) {
+    if (defaultValue is int) {
       value = null;
       //value = int.parse(ffiFunction().toDartString()) as T?;
     } else if (defaultValue is String) {
       value = ffiFunction().toDartString() as T?;
-    } else {
+    } else if (defaultValue is bool) {
       value = ffiFunction().toDartString().parseBool() as T?;
+    } else if (fromJsonModel != null) {
+      var res = ffiFunction().toDartString();
+      if (res == '') {
+        value = null;
+      } else {
+        value = fromJsonModel(json.decode(res)) as T?;
+      }
     }
     cancel = () => {};
   }

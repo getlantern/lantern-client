@@ -60,6 +60,7 @@ abstract class Model {
     required ValueWidgetBuilder<T> builder,
     bool details = false,
     T Function(Uint8List serialized)? deserialize,
+    T Function(Map<String, dynamic> json)? fromJsonModel,
   }) {
     var notifier = ffiValueNotifier(
       ffiFunction,
@@ -67,6 +68,7 @@ abstract class Model {
       defaultValue,
       details: details,
       deserialize: deserialize,
+      fromJsonModel: fromJsonModel,
     );
     return FfiValueBuilder<T>(path, notifier, builder);
   }
@@ -92,7 +94,8 @@ abstract class Model {
     String path,
     T? defaultValue, {
       bool details = false,
-      T Function(Uint8List serialized)? deserialize,      
+      T Function(Uint8List serialized)? deserialize,
+      T Function(Map<String, dynamic> json)? fromJsonModel,
   }) {
     return FfiValueNotifier(
       ffiFunction,
@@ -100,6 +103,9 @@ abstract class Model {
       () {
         _ffiValueNotifierCache.remove(path);
       },
+      details: details,
+      deserialize: deserialize,
+      fromJsonModel: fromJsonModel,
     );
   }
 
