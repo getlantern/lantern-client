@@ -21,6 +21,13 @@ struct Constants {
     return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupName)!
   }
 
+    // Create lantern dir at start all other sub folder can create by other service
+    // All folder creation should happnen at only once place
+  static var lanternDirectory: URL {
+    return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+      .first!.appendingPathComponent(".lanternservice")
+  }
+
   // MARK: App/NetEx Message Data
   static let configUpdatedMessageData = "Flashlight.ConfigUpdated".data(using: .utf8)!
   static let configUpdatedACKData = "Flashlight.TunnelUpdated".data(using: .utf8)!
@@ -124,4 +131,5 @@ struct Constants {
   // URL where app stores "excluded IPs" string from `IosConfigure`.
   // NetEx loads them to generate excluded routes on the TUN device.
   var excludedIPsURL: URL { return configDirectoryURL.appendingPathComponent("ips") }
+
 }
