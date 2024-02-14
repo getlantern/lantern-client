@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"time"
 
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 )
 
@@ -15,8 +17,11 @@ const (
 )
 
 var (
-	log = golog.LoggerFor("lantern-internalsdk-http")
-	// proHtttpClient = pro.GetHTTPClient()
+	log        = golog.LoggerFor("lantern-internalsdk-http")
+	httpClient = &http.Client{
+		Transport: proxied.ParallelForIdempotent(),
+		Timeout:   30 * time.Second,
+	}
 )
 
 func FechUserDetail(deviceId string, userId string, token string) (*UserDetailResponse, error) {
@@ -33,11 +38,8 @@ func FechUserDetail(deviceId string, userId string, token string) (*UserDetailRe
 	req.Header.Set("X-Lantern-Pro-Token", token)
 	log.Debugf("Headers set")
 
-	// Initialize a new http client
-
-	client := &http.Client{}
 	// Send the request
-	resp, err := client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		log.Errorf("Error sending user details request: %v", err)
 		return nil, err
@@ -77,10 +79,9 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 	// Add headers
 	req.Header.Set("X-Lantern-Device-Id", deviceId)
 	log.Debugf("Headers set")
-	// Initialize a new http client
-	client := &http.Client{}
+
 	// Send the request
-	resp, err := client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		log.Errorf("Error sending request: %v", err)
 		return nil, err
