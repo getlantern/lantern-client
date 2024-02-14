@@ -45,7 +45,6 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     DispatchQueue.global(qos: .userInitiated).async {
       self.startService()
     }
-    //    getBandwidth()
   }
 
   func startService() {
