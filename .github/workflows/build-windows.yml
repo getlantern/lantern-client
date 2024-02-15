@@ -250,7 +250,7 @@ jobs:
               lantern-installer${{inputs.installer-suffix}}.exe
 
     upload-windows:
-      needs: build-installer
+      needs: sign-installer
       permissions:
         contents: "read"
         id-token: "write"
