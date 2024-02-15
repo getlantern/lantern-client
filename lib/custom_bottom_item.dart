@@ -51,13 +51,14 @@ class CustomBottomBarItem extends StatelessWidget {
                   ),
                 ),
               ),
-              onTap: (() {
-                if (Platform.isAndroid) {
-                  sessionModel.setSelectedTab(name);
-                } else {
+              onTap: (() async {
+                if (isDesktop()) {
                   final tab = name.toNativeUtf8();
+                  final currentTab = await ffiSelectedTab().toDartString();
                   setSelectTab(tab);
-                  context.pushRoute(Home());
+                  if (name != currentTab) context.pushRoute(Home());
+                } else {
+                  sessionModel.setSelectedTab(name);
                 }
               }),
               child: Container(
