@@ -21,12 +21,15 @@ struct Constants {
     return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupName)!
   }
 
-    // Create lantern dir at start all other sub folder can create by other service
-    // All folder creation should happnen at only once place
+  // Create lantern dir at start all other sub folder can create by other service
+  // All folder creation should happnen at only once place
   static var lanternDirectory: URL {
-      
     return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
       .first!.appendingPathComponent(".lanternservice")
+  }
+  static var lanternProxiesDirectory: URL {
+    return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+      .first!.appendingPathComponent(".lanternservice").appendingPathComponent("proxies.yaml")
   }
 
   // MARK: App/NetEx Message Data
@@ -124,7 +127,8 @@ struct Constants {
 
   var allConfigURLs: [URL] {
     return [
-      configURL, configEtagURL, proxiesURL, proxyStatsURL, proxyStatsTempURL, proxiesEtagURL,
+      configURL, configEtagURL, proxiesURL, proxyStatsURL, proxyStatsTempURL,
+      proxiesEtagURL,
       tlsSessionStatesURL, masqueradeCacheURL, userConfigURL, quotaURL, dnsgrabCacheURL,
     ]
   }

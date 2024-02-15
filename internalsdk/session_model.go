@@ -72,6 +72,26 @@ type SessionModelOpts struct {
 	Lang            string
 	TimeZone        string
 	PaymentTestMode bool
+	ConfigDir       string
+}
+
+// Define a struct that implements the Settings interface
+type MySettings struct{}
+
+func (s *MySettings) StickyConfig() bool {
+	return false
+}
+
+func (s *MySettings) GetHttpProxyHost() string {
+	return "127.0.0.1"
+}
+
+func (s *MySettings) GetHttpProxyPort() int {
+	return 49125
+}
+
+func (s *MySettings) TimeoutMillis() int {
+	return 60000
 }
 
 // NewSessionModel initializes a new SessionModel instance.
@@ -84,7 +104,11 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	base.db.RegisterType(2000, &protos.Devices{})
 	m := &SessionModel{baseModel: base}
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
-	return m, m.initSessionModel(opts)
+	return m, m.StartService(opts.ConfigDir, opts.Lang, &MySettings{}, func() {
+		log.Debugf("Flashlight started. Initializing session model.")
+		m.initSessionModel(opts)
+	})
+
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -171,13 +195,13 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 // Internal functions that manage method
 func (m *SessionModel) StartService(configDir string,
 	locale string,
-	settings Settings) {
+	settings Settings, afterStartFunc func()) error {
 	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
 	session := &panickingSessionImpl{m}
 	startOnce.Do(func() {
-		go run(configDir, locale, settings, session)
+		go run(configDir, locale, settings, session, afterStartFunc)
 	})
-
+	return nil
 }
 
 // InvokeMethod handles method invocations on the SessionModel.

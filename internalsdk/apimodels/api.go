@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 )
 
@@ -19,8 +18,7 @@ const (
 var (
 	log        = golog.LoggerFor("lantern-internalsdk-http")
 	httpClient = &http.Client{
-		Transport: proxied.ParallelForIdempotent(),
-		Timeout:   30 * time.Second,
+		Timeout: 30 * time.Second,
 	}
 )
 

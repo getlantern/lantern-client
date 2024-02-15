@@ -33,6 +33,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.model = systemName
     opts.osVersion = systemVersion
     opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest
+    opts.configDir = Constants.lanternDirectory.path
 
     var error: NSError?
     guard
@@ -42,17 +43,17 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
-//    DispatchQueue.global(qos: .userInitiated).async {
-//      self.startService()
-//    }
+    //    DispatchQueue.global(qos: .userInitiated).async {
+    //      self.startService()
+    //    }
   }
 
-  func startService() {
-    //    let configDir = configDirFor(suffix: "service")
-    (model as! InternalsdkSessionModel).startService(
-      Constants.lanternDirectory.path, locale: "en", settings: Settings())
-    logger.error("Service Started successfully")
-  }
+  //  func startService() {
+  //    //    let configDir = configDirFor(suffix: "service")
+  //    (model as! InternalsdkSessionModel).startService(
+  //      Constants.lanternDirectory.path, locale: "en", settings: Settings())
+  //    logger.error("Service Started successfully")
+  //  }
 
   func getBandwidth() {
     // TODO: we should do this reactively by subscribing
@@ -85,24 +86,24 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     //    }
   }
 
-//  public func configDirFor(suffix: String) -> String {
-//    let filesDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//      .first!
-//
-//    let fileURL = filesDirectory.appendingPathComponent(".lantern" + suffix)
-//
-//    if !FileManager.default.fileExists(atPath: fileURL.path) {
-//      do {
-//        try FileManager.default.createDirectory(
-//          at: fileURL, withIntermediateDirectories: true, attributes: nil)
-//      } catch {
-//
-//        print(error.localizedDescription)
-//        SentryUtils.caputure(error: error as NSError)
-//      }
-//    }
-//    return fileURL.path
-//  }
+  //  public func configDirFor(suffix: String) -> String {
+  //    let filesDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+  //      .first!
+  //
+  //    let fileURL = filesDirectory.appendingPathComponent(".lantern" + suffix)
+  //
+  //    if !FileManager.default.fileExists(atPath: fileURL.path) {
+  //      do {
+  //        try FileManager.default.createDirectory(
+  //          at: fileURL, withIntermediateDirectories: true, attributes: nil)
+  //      } catch {
+  //
+  //        print(error.localizedDescription)
+  //        SentryUtils.caputure(error: error as NSError)
+  //      }
+  //    }
+  //    return fileURL.path
+  //  }
 }
 
 class Settings: NSObject, InternalsdkSettingsProtocol {

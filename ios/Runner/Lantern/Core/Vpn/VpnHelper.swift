@@ -118,7 +118,7 @@ class VpnHelper: NSObject {
       logger.error("IosConfigureLogger FAILED: " + error.localizedDescription)
     }
     // 5 Fetch config
-    fetchConfigIfNecessary()
+    //    fetchConfigIfNecessary()
   }
 
   private func createFilesForAppGoPackage() {
@@ -126,11 +126,17 @@ class VpnHelper: NSObject {
     // create process-specific directory @ ~/app
 
     do {
-        try fileManager.ensureDirectoryExists(at: Constants.lanternDirectory)
+      try fileManager.ensureDirectoryExists(at: Constants.lanternDirectory)
     } catch {
       logger.error("Failed to create directory @ \(Constants.lanternDirectory.path)")
     }
 
+    // Create proxy file
+    do {
+        try fileManager.ensureFilesExist(at: [Constants.lanternProxiesDirectory])
+    } catch {
+      logger.error("Failed to create directory @ \(Constants.lanternProxiesDirectory.path)")
+    }
     do {
       try fileManager.ensureDirectoryExists(at: constants.targetDirectoryURL)
     } catch {
@@ -143,7 +149,7 @@ class VpnHelper: NSObject {
       logger.error("Failed to create directory @ \(constants.configDirectoryURL.path)")
     }
 
-    // create shared config files (eg- config.yaml, masquerade_cache, etc) @ ~/config/<_>
+    //    // create shared config files (eg- config.yaml, masquerade_cache, etc) @ ~/config/<_>
     let configSuccess = fileManager.ensureFilesExist(at: constants.allConfigURLs)
     if !configSuccess {
       logger.error("Failed to create config files")
@@ -159,6 +165,8 @@ class VpnHelper: NSObject {
     if !success {
       logger.error("Failed to create log URLs")
     }
+    logger.debug("All config files and folder created")
+
   }
 
   func startVPN(
@@ -239,7 +247,7 @@ class VpnHelper: NSObject {
   func fetchConfigIfNecessary() {
     logger.debug("Checking if config fetch is needed")
     guard !self.hasConfiguredThisSession else { return }
-    logger.debug("Will fetch config")
+    logger.debug("Config needed getting from network")
     self.hasConfiguredThisSession = true
     let hasFetchedConfigOnce = self.hasFetchedConfigOnce
     fetchConfig { [weak self] result in

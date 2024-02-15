@@ -407,7 +407,7 @@ func Start(configDir string,
 	session := &panickingSessionImpl{wrappedSession}
 
 	startOnce.Do(func() {
-		go run(configDir, locale, settings, session)
+		go run(configDir, locale, settings, session, nil)
 	})
 
 	startTimeout := time.Duration(settings.TimeoutMillis()) * time.Millisecond
@@ -444,7 +444,7 @@ func newAnalyticsSession(deviceID string) analytics.Session {
 }
 
 func run(configDir, locale string,
-	settings Settings, session panickingSession) {
+	settings Settings, session panickingSession, afterStartFunc func()) {
 
 	// memhelper won't build for iOS right now
 	// memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
@@ -629,8 +629,13 @@ func run(configDir, locale string,
 		httpProxyAddr, // listen for HTTP on provided address
 		"127.0.0.1:0", // listen for SOCKS on random address
 		func(c *client.Client) {
+			// Call the provided function if it's not nil
+			if afterStartFunc != nil {
+				afterStartFunc()
+			}
 			clEventual.Set(c)
 			afterStart(session)
+
 		},
 		nil, // onError
 	)
