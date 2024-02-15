@@ -254,12 +254,12 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: mac-build
-            path: lantern-installer-dev-mac.dmg
+            path: lantern-installer-mac.dmg
         - name: Download the mac arm build output
           uses: actions/download-artifact@v4
           with:
             name: mac_arm-build
-            path: lantern-installer-dev-mac_arm.dmg
+            path: lantern-installer-mac_arm.dmg
         - name: Download the linux build output
           uses: actions/download-artifact@v4
           with:
@@ -275,11 +275,13 @@ jobs:
         - name: Rename builds
           run: |
             mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
-            diff lantern-installer.dmg ${{ env.prefix }}.dmg || mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
+            diff lantern-installer-mac.dmg ${{ env.prefix }}-mac.dmg || mv -f lantern-installer-mac.dmg ${{ env.prefix }}-mac.dmg
+            diff lantern-installer-mac_arm.dmg ${{ env.prefix }}-mac_arm.dmg || mv -f lantern-installer-mac_arm.dmg ${{ env.prefix }}-mac_arm.dmg
             diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
         - name: Prepare sha256 sums
           run: |
-            shasum -a 256 ${{ env.prefix }}.dmg | cut -d " " -f 1 > ${{ env.prefix }}.dmg.sha256
+            shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
+            shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
             shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
             shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
         - name: Commit

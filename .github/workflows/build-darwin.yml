@@ -139,19 +139,25 @@ jobs:
         echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
         echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
 
+    - name: Rename build
+      env:
+        DMG: "${{ env.prefix }}-${{ env.version }}-${{ env.suffix}}.dmg"
+      run: |
+        mv lantern-installer.dmg "$DMG"
+        cp "$DMG" "lantern-installer-${{ env.suffix }}.dmg"
+
     - uses: actions/upload-artifact@v4
       with:
         name: "${{ env.suffix}}-build"
         retention-days: 2
         path: |
-          lantern-installer.dmg
+          lantern-installer-${{ env.suffix }}.dmg
 
     - name: Push binaries to s3
       env:
         VERSION: "${{ env.version }}"
         DMG: "${{ env.prefix }}-${{ env.version }}-${{ env.suffix}}.dmg"
       run: |
-        mv lantern-installer.dmg "$DMG"
         cp "$DMG" ${{ env.prefix }}-${{ env.suffix }}.dmg
         echo ${{ env.version }} > ${{ env.version_file }}
         shasum -a 256 "$DMG" | cut -d " " -f 1 > "$DMG".sha256
