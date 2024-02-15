@@ -137,7 +137,7 @@ jobs:
             dart pub global activate protoc_plugin
 
         - name: Download the win build output
-          uses: actions/download-artifact@v3
+          uses: actions/download-artifact@v4
           with:
             name: libgo-windows-${{inputs.update-suffix}}-build
 
@@ -194,7 +194,7 @@ jobs:
             sudo apt-get install -y file build-essential pkg-config
             sudo apt-get install -y mingw-w64 nsis
         - uses: actions/checkout@v3
-        - uses: actions/download-artifact@v3
+        - uses: actions/download-artifact@v4
           with:
             name: windows${{inputs.build-suffix}}-build
         - name: Make installer
@@ -224,7 +224,7 @@ jobs:
       runs-on: windows-latest
       steps:
         - name: Download the win build output
-          uses: actions/download-artifact@v3
+          uses: actions/download-artifact@v4
           with:
             name: windows${{inputs.build-suffix}}-installer-unsigned
 
@@ -261,7 +261,7 @@ jobs:
 
       steps:
         - name: Download the artifact
-          uses: actions/download-artifact@v3
+          uses: actions/download-artifact@v4
           with:
             name: windows${{inputs.build-suffix}}-installer-signed
 
