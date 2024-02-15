@@ -6,10 +6,7 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/pro/client"
-	"github.com/getlantern/golog"
-
 	"github.com/getlantern/lantern-client/desktop/deviceid"
-	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
 // isProUser blocks itself to check if current user is Pro, or !ok if error
@@ -32,13 +29,10 @@ func (app *App) isProUserFast() (isPro bool, statusKnown bool) {
 	return pro.IsProUserFast(app.settings)
 }
 
-// servePro fetches user data or creates new user when the application starts
-// up or a new WebSocket client is connected, and serves user data to all
-// connected WebSocket clients via the "pro" channel.
+// servePro fetches user data or creates new user when the application starts up
 // It loops forever in 10 seconds interval until the user is fetched or
 // created, as it's fundamental for the UI to work.
-func (app *App) servePro(channel ws.UIChannel) error {
-	logger := golog.LoggerFor("lantern-desktop.app.pro")
+func (app *App) servePro() {
 	chFetch := make(chan bool)
 	go func() {
 		fetchOrCreate := func() error {
@@ -100,22 +94,14 @@ func (app *App) servePro(channel ws.UIChannel) error {
 		}
 	}()
 
-	helloFn := func(write func(interface{})) {
-		if user, known := pro.GetUserDataFast(app.settings.GetUserID()); known {
-			logger.Debugf("Sending current user data to new client: %v", user)
-			write(user)
-		}
-		logger.Debugf("Fetching user data again to see if any changes")
-		select {
-		case chFetch <- true:
-		default: // fetching in progress, skipping
-		}
-	}
-	service, err := channel.Register("pro", helloFn)
 	pro.OnUserData(func(current *client.User, new *client.User) {
-		logger.Debugf("Sending updated user data to all clients: %v", new)
-		service.Out <- new
+		app.setUserData(new)
 	})
-
-	return err
 }
+
+func (app *App) setUserData(userData *client.User) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app.userData = userData
+}
+

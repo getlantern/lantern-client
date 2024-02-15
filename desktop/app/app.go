@@ -27,6 +27,7 @@ import (
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
+	"github.com/getlantern/flashlight/v7/otel"
 	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/flashlight/v7/stats"
@@ -103,6 +104,7 @@ type App struct {
 	referralCode   string
 	selectedTab   Tab
 	stats *stats.Stats
+	userData *client.User
 	mu sync.Mutex
 }
 
@@ -439,6 +441,20 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 			SysProxyOff()
 		}
 	})
+
+	app.AddExitFunc("turning off system proxy", SysProxyOff)
+	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
+	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
+		app.settings.setString(SNAddr, addr)
+	} else {
+		log.Errorf("Couldn't retrieve HTTP proxy addr in time")
+	}
+	if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
+		app.settings.setString(SNSOCKSAddr, socksAddr)
+	} else {
+		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
+	}
+	app.servePro()
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
