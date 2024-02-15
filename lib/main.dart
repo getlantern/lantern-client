@@ -25,7 +25,9 @@ Future<void> main() async {
     loadLibrary();
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
-      size: ui.Size(400, 600),
+      size: ui.Size(360, 712),
+      minimumSize: ui.Size(315, 584),
+      maximumSize: ui.Size(1000, 1000),
       center: true,
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
