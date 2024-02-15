@@ -274,7 +274,7 @@ jobs:
           run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
         - name: Rename builds
           run: |
-            mv "lantern_${{env.version}}_amd64.deb" ${{ env.prefix }}-64-bit.deb
+            mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
             diff lantern-installer.dmg ${{ env.prefix }}.dmg || mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
             diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
         - name: Prepare sha256 sums
