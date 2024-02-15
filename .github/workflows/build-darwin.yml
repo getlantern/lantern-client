@@ -141,7 +141,7 @@ jobs:
 
     - uses: actions/upload-artifact@v3
       with:
-        name: osx-build
+        name: "${{ env.suffix}}-build"
         retention-days: 2
         path: |
           lantern-installer.dmg

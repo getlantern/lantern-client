@@ -245,21 +245,27 @@ jobs:
     push-binaries:
       runs-on:
         group: large-runners
-      needs: [ set-version, build-darwin, build-linux, build-windows-x64 ]
+      needs: [ set-version, build-darwin, build-darwin-arm, build-linux, build-windows-x64 ]
       env:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
       steps:
-        - name: Download the osx build output
-          uses: actions/download-artifact@v3
+        - name: Download the mac build output
+          uses: actions/download-artifact@v4
           with:
-            name: osx-build
+            name: mac-build
+            path: lantern-installer-dev-mac.dmg
+        - name: Download the mac arm build output
+          uses: actions/download-artifact@v4
+          with:
+            name: mac_arm-build
+            path: lantern-installer-dev-mac_arm.dmg
         - name: Download the linux build output
-          uses: actions/download-artifact@v3
+          uses: actions/download-artifact@v4
           with:
             name: linux-build
         - name: Download the windows64 build output
-          uses: actions/download-artifact@v3
+          uses: actions/download-artifact@v4
           with:
             name: windows64-installer-signed
         - name: Grant private modules access
