@@ -275,7 +275,6 @@ jobs:
             echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
 
         - name: Push binaries to s3
-          
           env:
             VERSION: "${{ inputs.version }}"
             dist_versionless: "${{inputs.prefix}}-${{inputs.dist-suffix}}.exe"
