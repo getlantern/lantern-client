@@ -83,7 +83,7 @@ jobs:
         run: |
           make windows64
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: libgo-windows-${{inputs.update-suffix}}-build
           if-no-files-found: error
@@ -159,7 +159,7 @@ jobs:
             timestamp-rfc3161: http://timestamp.acs.microsoft.com
             timestamp-digest: SHA256
 
-        - uses: actions/upload-artifact@v3
+        - uses: actions/upload-artifact@v4
           with:
             if-no-files-found: error
             name: windows${{inputs.build-suffix}}-build-signed
@@ -172,7 +172,7 @@ jobs:
             cp liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
             Compress-Archive "build/windows/${{inputs.arch}}/runner/Release" lantern.zip
 
-        - uses: actions/upload-artifact@v3
+        - uses: actions/upload-artifact@v4
           with:
             if-no-files-found: error
             name: windows${{inputs.build-suffix}}-build
@@ -207,7 +207,7 @@ jobs:
             makensis -V1 -DVERSION=${{ inputs.version }} -DAPP_NAME=lantern.exe -DOUT_FILE="lantern-installer${{inputs.installer-suffix}}.exe" installer-resources-lantern/windows/lantern.nsi
             mv installer-resources-lantern/windows/lantern-installer${{inputs.installer-suffix}}.exe lantern-installer${{inputs.installer-suffix}}.exe
 
-        - uses: actions/upload-artifact@v3
+        - uses: actions/upload-artifact@v4
           with:
             if-no-files-found: error
             name: windows${{inputs.build-suffix}}-installer-unsigned
@@ -243,7 +243,7 @@ jobs:
             timestamp-rfc3161: http://timestamp.acs.microsoft.com
             timestamp-digest: SHA256
 
-        - uses: actions/upload-artifact@v3
+        - uses: actions/upload-artifact@v4
           with:
             name: windows${{inputs.build-suffix}}-installer-signed
             path: |

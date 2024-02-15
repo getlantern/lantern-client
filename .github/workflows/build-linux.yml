@@ -89,7 +89,7 @@ jobs:
           cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
           VERSION="${{ inputs.version }}" make "package-linux-${{inputs.dist-suffix}}"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: linux-build
           path: |

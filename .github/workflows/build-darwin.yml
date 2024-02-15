@@ -76,7 +76,7 @@ jobs:
     - name: Build liblantern.dylib
       run: make darwin
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: libgo-mac-build
         if-no-files-found: error
@@ -139,7 +139,7 @@ jobs:
         echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
         echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: "${{ env.suffix}}-build"
         retention-days: 2
