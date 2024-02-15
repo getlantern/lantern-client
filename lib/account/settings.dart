@@ -87,7 +87,7 @@ class Settings extends StatelessWidget {
             onTap: () => checkForUpdateTap(context),
           ),
           //* Blocked
-          messagingModel.getOnBoardingStatus(
+          if (!isDesktop()) messagingModel.getOnBoardingStatus(
             (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
                 ? ListItemFactory.settingsItem(
                     header: 'chat'.i18n,
