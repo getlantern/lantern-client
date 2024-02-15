@@ -116,7 +116,7 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> commonItems(BuildContext context) {
     return [
-      ListItemFactory.settingsItem(
+      if (Platform.isAndroid) ListItemFactory.settingsItem(
         icon: ImagePaths.desktop,
         content: 'desktop_version'.i18n,
         onTap: () {
