@@ -81,7 +81,7 @@ jobs:
         name: libgo-mac-build
         if-no-files-found: error
         path: |
-          desktop/liblantern.dylib
+          liblantern.dylib
 
       # Install Flutter
     - uses: subosito/flutter-action@v2
