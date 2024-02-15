@@ -17,7 +17,7 @@ class _LinkDeviceState extends State<LinkDevice> {
   @override
   void initState() {
     super.initState();
-    sessionModel.requestLinkCode().then(
+    if (Platform.isAndroid) sessionModel.requestLinkCode().then(
           (code) => {
             print("requestLinkCode success code is $code"),
             retry(

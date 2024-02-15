@@ -57,13 +57,19 @@ func Start() *C.char {
 		}
 	}()
 
-	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
-
 	go func() {
+		logFile, err := logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+		if err != nil {
+			log.Error(err)
+			// Nothing we can do if fails to create log files, leave logFile nil so
+			// the child process writes to standard outputs as usual.
+		}
+		defer logFile.Close()
+
 		i18nInit(a)
 		runApp(a)
 
-		err := a.WaitForExit()
+		err = a.WaitForExit()
 		if err != nil {
 			log.Errorf("Lantern stopped with error %v", err)
 			os.Exit(-1)
