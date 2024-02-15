@@ -17,8 +17,8 @@ typedef SysProxy = ffi.Pointer<Utf8> Function(); // Dart fn signature
 typedef vpnstatus_func = ffi.Pointer<Utf8> Function(); // FFI fn signature
 typedef VpnStatus = ffi.Pointer<Utf8> Function(); // Dart fn signature
 
-typedef selecttab_func = ffi.Void Function(ffi.Pointer<Utf8>);
-typedef SelectTab = void Function(ffi.Pointer<Utf8>);
+typedef SelectTabTemplate = ffi.Pointer Function(ffi.Pointer<Utf8>);
+typedef SelectTab = SelectTabTemplate;
 
 typedef purchase_func = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
 typedef Purchase = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
@@ -58,7 +58,7 @@ final VpnStatus vpnStatus =
     dylib.lookup<ffi.NativeFunction<start_func>>('VpnStatus').asFunction();
 
 final SelectTab setSelectTab = 
-    dylib.lookup<ffi.NativeFunction<selecttab_func>>('SetSelectTab').asFunction();
+    dylib.lookup<ffi.NativeFunction<SelectTabTemplate>>('SetSelectTab').asFunction();
 
 final SelectedTab ffiSelectedTab =
     dylib.lookup<ffi.NativeFunction<selectedtab_func>>('SelectedTab').asFunction();

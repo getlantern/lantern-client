@@ -25,7 +25,7 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
-      messagingModel.getOnBoardingStatus(
+      if (Platform.isAndroid) messagingModel.getOnBoardingStatus(
         (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
             ? messagingModel.getCopiedRecoveryStatus(
                 (

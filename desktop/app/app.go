@@ -43,7 +43,6 @@ import (
 	uicommon "github.com/getlantern/lantern-client/desktop/common"
 	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
-	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
 var (
@@ -79,7 +78,6 @@ type App struct {
 
 	translations eventual.Value
 
-	ws         ws.UIChannel
 	flashlight *flashlight.Flashlight
 
 	// If both the trafficLogLock and proxiesLock are needed, the trafficLogLock should be obtained
@@ -119,7 +117,6 @@ func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, 
 		analyticsSession: analyticsSession,
 		selectedTab:      VPNTab,
 		translations:     eventual.NewValue(),
-		ws:               ws.NewUIChannel(),
 	}
 	app.statsTracker = NewStatsTracker(app)
 	golog.OnFatal(app.exitOnFatal)
@@ -267,8 +264,6 @@ func (app *App) Run(isMain bool) {
 		app.settings.OnChange(SNUserID, func(v interface{}) {
 			chUserChanged <- true
 		})
-		// Just pass all of the channels that should trigger re-evaluating which features
-		// are enabled for this user, country, etc.
 		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
 
 		notifyConfigSaveErrorOnce := new(sync.Once)
@@ -314,7 +309,9 @@ func (app *App) setFeatures(enabledFeatures map[string]bool, values map[features
 // checkEnabledFeatures checks if features are enabled
 // (based on the env vars at build time or the user's settings/geolocation)
 // and starts appropriate services
-func (app *App) checkEnabledFeatures(enabledFeatures map[string]bool) {
+func (app *App) checkEnabledFeatures() {
+	enabledFeatures := app.flashlight.EnabledFeatures()
+
 	app.setFeatures(enabledFeatures, features.EnabledFeatures)
 
 	log.Debugf("Starting enabled features: %v", enabledFeatures)
@@ -323,30 +320,15 @@ func (app *App) checkEnabledFeatures(enabledFeatures map[string]bool) {
 	go app.toggleTrafficLog(enableTrafficLog)
 }
 
-// startFeaturesService starts a new features service that dispatches features to any relevant
-// listeners.
+// startFeaturesService starts a new features service that dispatches features to any relevant listeners.
 func (app *App) startFeaturesService(chans ...<-chan bool) {
-	if service, err := app.ws.Register("features", func(write func(interface{})) {
-		enabledFeatures := app.flashlight.EnabledFeatures()
-		app.checkEnabledFeatures(enabledFeatures)
-		write(enabledFeatures)
-	}); err != nil {
-		log.Errorf("Unable to serve enabled features to UI: %v", err)
-	} else {
-		for _, ch := range chans {
-			go func(c <-chan bool) {
-				for range c {
-					features := app.flashlight.EnabledFeatures()
-					app.checkEnabledFeatures(features)
-					select {
-					case service.Out <- features:
-						// ok
-					default:
-						// don't block if no-one is listening
-					}
-				}
-			}(ch)
-		}
+	app.checkEnabledFeatures()
+	for _, ch := range chans {
+		go func(c <-chan bool) {
+			for range c {
+				app.checkEnabledFeatures()
+			}
+		}(ch)
 	}
 }
 
