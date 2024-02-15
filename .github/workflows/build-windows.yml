@@ -242,8 +242,6 @@ jobs:
             file-digest: SHA256
             timestamp-rfc3161: http://timestamp.acs.microsoft.com
             timestamp-digest: SHA256
-        - name: Rename file
-          run: ren lantern-installer-unsigned.exe lantern-installer${{inputs.installer-suffix}}.exe
 
         - uses: actions/upload-artifact@v3
           with:
