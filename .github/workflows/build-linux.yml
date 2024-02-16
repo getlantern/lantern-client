@@ -20,8 +20,7 @@ jobs:
     env:
       version: ${{ inputs.version }}
       prefix: ${{ inputs.prefix }}
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
       - name: Granting private modules access
@@ -34,6 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
           sudo apt-get install -y file build-essential pkg-config
           sudo apt-get install -y libunwind-dev libstdc++-12-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-d cmake
           sudo apt-get install -y libgtk-3-0 libblkid1 liblzma5
