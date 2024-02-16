@@ -147,12 +147,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   void onWindowClose() async {
     bool _isPreventClose = await windowManager.isPreventClose();
     if (_isPreventClose) {
-      bool showAlert = false;
-      if (!showAlert) {
-        windowManager.minimize();
-        return;
-      }
-      await showDialog(
+      showDialog(
         context: context,
         builder: (_) {
           return AlertDialog(
@@ -166,9 +161,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               ),
               TextButton(
                 child: Text('Yes'.i18n),
-                onPressed: () {
+                onPressed: () async {
                   Navigator.of(context).pop();
-                  windowManager.destroy();
+                  await windowManager.destroy();
                 },
               ),
             ],

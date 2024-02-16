@@ -492,7 +492,7 @@ msgid "confirm_remove_device"
 msgstr "Are you sure you want to unlink this device from your Pro account?"
 
 msgid "confirm_close_window"
-msgstr "Are you sure you want to close this window?"
+msgstr "Are you sure you want to close Lantern?"
 
 msgid "unlimited_data"
 msgstr "Unlimited Data"
