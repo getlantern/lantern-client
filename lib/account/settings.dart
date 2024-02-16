@@ -8,6 +8,7 @@ import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 @RoutePage(name: 'Settings')
 class Settings extends StatelessWidget {
@@ -28,7 +29,9 @@ class Settings extends StatelessWidget {
       context.pushRoute(SplitTunneling());
 
   void openWebView(String url, BuildContext context) async {
-    if (Platform.isAndroid) {
+    if (isDesktop()) {
+      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+    } else if (Platform.isAndroid) {
       await sessionModel.openWebview(url);
     } else {
       context.pushRoute(AppWebview(url: url));
