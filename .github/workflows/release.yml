@@ -254,12 +254,10 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: mac-build
-            path: lantern-installer-mac.dmg
         - name: Download the mac arm build output
           uses: actions/download-artifact@v4
           with:
             name: mac_arm-build
-            path: lantern-installer-mac_arm.dmg
         - name: Download the linux build output
           uses: actions/download-artifact@v4
           with:
@@ -275,8 +273,8 @@ jobs:
         - name: Rename builds
           run: |
             mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
-            diff lantern-installer-mac.dmg ${{ env.prefix }}-mac.dmg || mv -f lantern-installer-mac.dmg ${{ env.prefix }}-mac.dmg
-            diff lantern-installer-mac_arm.dmg ${{ env.prefix }}-mac_arm.dmg || mv -f lantern-installer-mac_arm.dmg ${{ env.prefix }}-mac_arm.dmg
+            mv -f lantern-installer-mac.dmg ${{ env.prefix }}-mac.dmg
+            mv -f lantern-installer-mac_arm.dmg ${{ env.prefix }}-mac_arm.dmg
             diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
         - name: Prepare sha256 sums
           run: |
