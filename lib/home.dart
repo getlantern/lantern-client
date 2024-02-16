@@ -110,34 +110,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     setState(() {});
   }
 
-  Future<void> setupMenu(bool isConnected) async {
-    Menu menu = Menu(
-      items: [
-        MenuItem(
-          key: 'status',
-          disabled: true,
-          label: isConnected ? 'status_on'.i18n : 'status_off'.i18n,
-        ),
-        MenuItem(
-          key: 'status',
-          label: isConnected ? 'disconnect'.i18n : 'connect'.i18n,
-        ),
-        MenuItem.separator(),
-        MenuItem(
-          key: 'show_window',
-          label: 'show'.i18n,
-        ),
-        MenuItem.separator(),
-        MenuItem(
-          key: 'exit',
-          label: 'exit'.i18n,
-        ),
-      ],
-    );
-    await trayManager.setContextMenu(menu);
-    await trayManager.setIcon(systemTrayIcon(isConnected));
-  }
-
   void setupTrayManager() async {
     trayManager.addListener(this);
     await setupMenu(false);
