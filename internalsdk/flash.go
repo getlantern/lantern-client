@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -316,22 +317,6 @@ func newUserConfig(session panickingSession) *userConfig {
 	return &userConfig{session: session}
 }
 
-func getClient(ctx context.Context) *client.Client {
-	_cl, _ := clEventual.Get(ctx)
-	if _cl == nil {
-		return nil
-	}
-	return _cl.(*client.Client)
-}
-
-func getDNSGrab(ctx context.Context) dnsgrab.Server {
-	_dg, _ := dnsGrabEventual.Get(ctx)
-	if _dg == nil {
-		return nil
-	}
-	return _dg.(dnsgrab.Server)
-}
-
 type SurveyInfo struct {
 	Enabled     bool    `json:"enabled"`
 	Probability float64 `json:"probability"`
@@ -397,6 +382,7 @@ func Start(configDir string,
 	wrappedSession Session) (*StartResult, error) {
 
 	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
+	log.Debugf("Starting Lantern with locale %s", locale)
 
 	session := &panickingSessionImpl{wrappedSession}
 
@@ -451,6 +437,7 @@ func run(configDir, locale string,
 
 	log.Debugf("Starting lantern: configDir %s locale %s sticky config %t",
 		configDir, locale, settings.StickyConfig())
+	log.Debugf("Starting lantern with call stack %s", string(debug.Stack()))
 
 	flags := map[string]interface{}{
 		"borda-report-interval":   5 * time.Minute,
@@ -625,7 +612,7 @@ func run(configDir, locale string,
 
 	go runner.Run(
 		httpProxyAddr, // listen for HTTP on provided address
-		"127.0.0.1:0", // listen for SOCKS on random address
+		"127.0.0.1:0", // listen for SOCKS on random port
 		func(c *client.Client) {
 			clEventual.Set(c)
 			afterStart(session)

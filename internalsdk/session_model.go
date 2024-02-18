@@ -3,6 +3,7 @@ package internalsdk
 import (
 	"fmt"
 	"path/filepath"
+	"runtime"
 	"strconv"
 
 	"github.com/getlantern/android-lantern/internalsdk/apimodels"
@@ -90,7 +91,13 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 	m := &SessionModel{baseModel: base}
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
-	return m, m.initSessionModel(opts)
+	model, err := m, m.initSessionModel(opts)
+	if err != nil {
+		log.Debugf("Error while init session model %v", err)
+		return nil, err
+	}
+	log.Debug("Session model initialized")
+	return model, nil
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -179,6 +186,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		checkAdsEnabled(m)
 		return true, nil
 	default:
+		log.Debugf("Method not implemented %v", method)
 		return m.methodNotImplemented(method)
 	}
 }
@@ -254,23 +262,25 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		return err
 	}
 	log.Debugf("UserId is %v", userId)
-	if userId == 0 {
-		local, err := m.Locale()
-		if err != nil {
-			return err
+	/*
+		if userId == 0 {
+			local, err := m.Locale()
+			if err != nil {
+				return err
+			}
+			// Create user
+			err = userCreate(m.baseModel, local)
+			if err != nil {
+				return err
+			}
 		}
-		// Create user
-		err = userCreate(m.baseModel, local)
-		if err != nil {
-			return err
-		}
-	}
 
-	// Get all user details
-	err = userDetail(m)
-	if err != nil {
-		return err
-	}
+		// Get all user details
+		err = userDetail(m)
+		if err != nil {
+			return err
+		}
+	*/
 	return checkAdsEnabled(m)
 }
 
@@ -502,8 +512,7 @@ func setCurrency(m *baseModel, currencyCode string) error {
 }
 
 func (m *SessionModel) DeviceOS() (string, error) {
-	// return static for now
-	return "IOS", nil
+	return runtime.GOOS, nil
 }
 
 func (m *SessionModel) IsProUser() (bool, error) {

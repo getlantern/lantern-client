@@ -30,7 +30,7 @@ class _LinkDeviceState extends State<LinkDevice> {
               (x) => {
                 print("redeemLinkCode success"),
               },
-            )
+            ),
           },
         );
   }
@@ -45,12 +45,13 @@ class _LinkDeviceState extends State<LinkDevice> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                  margin: const EdgeInsetsDirectional.only(top: 24),
-                  child: CText(
-                    'device_linking_pin'.i18n,
-                    textAlign: TextAlign.center,
-                    style: tsSubtitle1,
-                  )),
+                margin: const EdgeInsetsDirectional.only(top: 24),
+                child: CText(
+                  'device_linking_pin'.i18n,
+                  textAlign: TextAlign.center,
+                  style: tsSubtitle1,
+                ),
+              ),
               Text(
                 deviceCode,
                 textAlign: TextAlign.center,
@@ -68,7 +69,7 @@ class _LinkDeviceState extends State<LinkDevice> {
                     ImagePaths.number_1, 'link_device_step_one'.i18n),
               ),
               ExplanationStep(ImagePaths.number_2, 'link_device_step_two'.i18n),
-              Flexible(
+              const Flexible(
                 child: CDivider(
                   height: 26,
                 ),

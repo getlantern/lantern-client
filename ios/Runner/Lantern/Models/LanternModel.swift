@@ -12,7 +12,7 @@ import Internalsdk
 class LanternModel: NSObject, FlutterStreamHandler {
 
   let LANTERN_EVENT_CHANNEL = "lantern_event_channel"
-  let LANTERN_METHOED_CHANNEL = "lantern_method_channel"
+  let LANTERN_METHOD_CHANNEL = "lantern_method_channel"
 
   var lanternMethodChannel: FlutterMethodChannel!
   var lanternEventChannel: FlutterEventChannel!
@@ -25,7 +25,7 @@ class LanternModel: NSObject, FlutterStreamHandler {
 
     DispatchQueue.main.async {
       self.lanternMethodChannel = FlutterMethodChannel(
-        name: self.LANTERN_METHOED_CHANNEL, binaryMessenger: flutterBinary)
+        name: self.LANTERN_METHOD_CHANNEL, binaryMessenger: flutterBinary)
       self.lanternMethodChannel.setMethodCallHandler(self.handleMethodCall)
       self.lanternEventChannel = FlutterEventChannel(
         name: self.LANTERN_EVENT_CHANNEL, binaryMessenger: flutterBinary)
