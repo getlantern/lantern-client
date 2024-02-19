@@ -43,7 +43,6 @@ message LoginRequest {
   string deviceId = 3;
 }
 
-
 message LoginResponse {
   int64 legacyID = 1;
   string legacyToken = 2;
@@ -75,9 +74,13 @@ message LoginResponse {
     repeated Device devices = 18;
     bool yinbiEnabled = 19;
   }
-  // this maps to /user-data call in pro-server
-  UserData legacyUserData = 5;
+  bool Success = 5;
+  // this maps to /user-data call in pro-server and is returned only on successful login
+  UserData legacyUserData = 6;
+  // list of current user devices. returned only on successful login that is blocked by 'too many devices'
+  repeated Device devices = 7;
 }
+
 
 // POST /users/recovery/start/email
 message StartRecoveryByEmailRequest {

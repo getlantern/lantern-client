@@ -2,6 +2,7 @@ package apimodels
 
 import "math/big"
 
+// / Migrate Json structs to use Model from Lantenr cloud
 type UserResponse struct {
 	UserID       float64  `json:"userId"`
 	Code         string   `json:"code"`

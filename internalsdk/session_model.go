@@ -1438,6 +1438,27 @@ func login(session *SessionModel, email string, password string) error {
 	if err != nil {
 		return err
 	}
+	if !login.Success {
+		// User has reached device limit
+		// Save latest device
+		var protoDevices []*protos.Device
+
+		for _, device := range login.Devices {
+			protoDevice := &protos.Device{
+				Id:      device.Id,
+				Name:    device.Name,
+				Created: device.Created,
+			}
+			protoDevices = append(protoDevices, protoDevice)
+		}
+
+		userDevice := &protos.Devices{Devices: protoDevices}
+		pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			pathdb.Put(tx, pathDevices, userDevice, "")
+			return nil
+		})
+		return log.Errorf("too-many-devices %v", err)
+	}
 	log.Debugf("Login response %+v", login)
 
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
@@ -1469,6 +1490,16 @@ func login(session *SessionModel, email string, password string) error {
 	log.Debugf("Login took %v", end.Sub(start))
 	return nil
 }
+
+//Utils method that get device id and store it
+// func getUserDevies(session *SessionModel, deviceId string) error {
+
+// 	user
+
+// 	userResponse, err := apimodels.FechUserDetail(deviceId, ToString(session.GetUserID()), session.GetToken())
+
+// 	return nil
+// }
 
 func startRecoveryByEmail(session *SessionModel, email string) error {
 	//Create body

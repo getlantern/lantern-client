@@ -465,9 +465,7 @@ func Login(loginBody *protos.LoginRequest) (*protos.LoginResponse, error) {
 		return nil, err
 	}
 	log.Debugf("Login response %v with status code %d", string(body), resp.StatusCode)
-	if resp.StatusCode == 403 {
-		return nil, log.Errorf("too-many-devices %v", err)
-	}
+
 	defer resp.Body.Close()
 	var loginResponse protos.LoginResponse
 	if err := proto.Unmarshal(body, &loginResponse); err != nil {
