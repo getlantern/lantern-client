@@ -73,6 +73,13 @@ jobs:
         organization: getlantern
         project: android
 
+    # Install Flutter
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: "stable"
+
+    - run: flutter --version
+
     - name: Build liblantern.dylib
       run: make darwin
 
@@ -82,13 +89,6 @@ jobs:
         if-no-files-found: error
         path: |
           liblantern.dylib
-
-      # Install Flutter
-    - uses: subosito/flutter-action@v2
-      with:
-        channel: "stable"
-
-    - run: flutter --version
 
     - name: Setup protoc
       uses: arduino/setup-protoc@v2

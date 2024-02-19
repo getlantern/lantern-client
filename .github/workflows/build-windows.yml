@@ -50,6 +50,13 @@ jobs:
         with:
           go-version-file: "go.mod"
 
+      # Install Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - run: flutter --version
+
       - name: Granting private modules access
         run: |
           git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
@@ -119,13 +126,6 @@ jobs:
         - uses: actions/checkout@v3
           with:
             lfs: true
-
-        # Install Flutter
-        - uses: subosito/flutter-action@v2
-          with:
-            channel: "stable"
-
-        - run: flutter --version
 
         - name: Setup protoc
           uses: arduino/setup-protoc@v2
