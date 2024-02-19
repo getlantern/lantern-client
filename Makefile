@@ -472,13 +472,15 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 	@if [[ "$$CC" ]]; then echo "CC: $(CC)"; fi
 	@if [[ "$$CXX" ]]; then echo "CXX: $(CXX)"; fi
 
-.PHONY: desktop-lib
+.PHONY: desktop-lib ffigen
 
 desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: export CGO_ENABLED = 1
 desktop-lib: echo-build-tags
-	flutter pub run ffigen --config ffigen.yaml
 	go build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
+
+ffigen:
+	flutter pub run ffigen --config ffigen.yaml
 
 .PHONY: linux-amd64
 linux-amd64: $(LINUX_LIB_NAME_64) ## Build lantern for linux-amd64

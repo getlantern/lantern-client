@@ -43,13 +43,6 @@ jobs:
         with:
           go-version-file: "go.mod"
 
-      # Install Flutter
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-
-      - run: flutter --version
-
       - name: Build
         env:
           VERSION: ${{ inputs.version }}
@@ -68,6 +61,15 @@ jobs:
           echo "[default]" > "$HOME/.s3cfg"
           echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
           echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
+
+        # Install Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - run: flutter --version
+
+      - run: make ffigen
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
