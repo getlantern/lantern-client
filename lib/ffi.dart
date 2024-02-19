@@ -7,15 +7,10 @@ import 'generated_bindings.dart';
 
 void sysProxyOn() => _bindings.sysProxyOn();
 void sysProxyOff() => _bindings.sysProxyOff();
-//String vpnStatus() => _bindings.vpnStatus().toString();
-
-Pointer<Utf8> vpnStatus() => _bindings.vpnStatus()
-    .cast<Utf8>();
-
-Pointer<Utf8> ffiSelectedTab() => _bindings.selectedTab().cast<Utf8>();
-
 void setSelectTab(tab) => _bindings.setSelectTab(tab);
 
+Pointer<Utf8> vpnStatus() => _bindings.vpnStatus().cast<Utf8>();
+Pointer<Utf8> ffiSelectedTab() => _bindings.selectedTab().cast<Utf8>();
 Pointer<Utf8> ffiLang() => _bindings.lang().cast<Utf8>();
 Pointer<Utf8> ffiPlayVersion() => _bindings.playVersion().cast<Utf8>();
 Pointer<Utf8> ffiStoreVersion() => _bindings.storeVersion().cast<Utf8>();
@@ -35,7 +30,6 @@ Pointer<Utf8> ffiDeviceLinkingCode() => _bindings.deviceLinkingCode().cast<Utf8>
 Pointer<Utf8> ffiSplitTunneling() => _bindings.splitTunneling().cast<Utf8>();
 Pointer<Utf8> ffiChatMe() => _bindings.chatMe().cast<Utf8>();
 Pointer<Utf8> ffiOnBoardingStatus() => _bindings.onBoardingStatus().cast<Utf8>();
-//Pointer<Utf8> ffiPaymentMethods() => _bindings.paymentMethods().cast<Utf8>();
 Pointer<Utf8> ffiServerInfo() => _bindings.serverInfo().cast<Utf8>();
 Pointer<Utf8> ffiPurchase(planID, email, cardNumber, expDate, cvc) => _bindings.purchase(planID, email, cardNumber, expDate, cvc).cast<Utf8>();
 Pointer<Utf8> ffiReportIssue(email, issueType, description) => _bindings.reportIssue(email, issueType, description).cast<Utf8>();
