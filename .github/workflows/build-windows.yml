@@ -90,6 +90,13 @@ jobs:
           path: |
             liblantern.dll
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: libgo-windows-${{inputs.update-suffix}}-header
+          if-no-files-found: error
+          path: |
+            liblantern.h
+
       - uses: actions/setup-python@v4
         with:
           python-version: '3.8'
@@ -127,8 +134,6 @@ jobs:
 
         - run: flutter --version
 
-        - run: make ffigen
-
         - name: Setup protoc
           uses: arduino/setup-protoc@v2
           with:
@@ -142,6 +147,13 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: libgo-windows-${{inputs.update-suffix}}-build
+
+        - name: Download the win build output
+          uses: actions/download-artifact@v4
+          with:
+            name: libgo-windows-${{inputs.update-suffix}}-header
+
+        - run: make ffigen
 
         - name: Build Flutter app
           run: flutter build windows
