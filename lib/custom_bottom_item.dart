@@ -54,7 +54,7 @@ class CustomBottomBarItem extends StatelessWidget {
               onTap: (() async {
                 if (isDesktop()) {
                   final tab = name.toNativeUtf8();
-                  final currentTab = await ffiSelectedTab().toDartString();
+                  final currentTab = ffiSelectedTab().toDartString();
                   setSelectTab(tab);
                   if (name != currentTab) context.pushRoute(Home());
                 } else {

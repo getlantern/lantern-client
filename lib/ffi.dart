@@ -1,97 +1,65 @@
-import 'dart:ffi' as ffi; // For FFI
+import 'dart:ffi'; // For FFI
 import 'package:lantern/common/common.dart';
-import 'package:ffi/ffi.dart';
 import 'package:ffi/src/utf8.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'generated_bindings.dart';
 
-typedef start_func = ffi.Pointer<Utf8> Function(); // FFI fn signature
-typedef Start = ffi.Pointer<Utf8> Function(); // Dart fn signature
+void sysProxyOn() => _bindings.sysProxyOn();
+void sysProxyOff() => _bindings.sysProxyOff();
+//String vpnStatus() => _bindings.vpnStatus().toString();
 
-typedef pro_func = ffi.Pointer<Utf8> Function();
-typedef ProFunc = ffi.Pointer<Utf8> Function();
+Pointer<Utf8> vpnStatus() => _bindings.vpnStatus()
+    .cast<Utf8>();
 
-typedef sysproxy_func = ffi.Pointer<Utf8> Function(); // FFI fn signature
-typedef SysProxy = ffi.Pointer<Utf8> Function(); // Dart fn signature
+Pointer<Utf8> ffiSelectedTab() => _bindings.selectedTab().cast<Utf8>();
 
-typedef vpnstatus_func = ffi.Pointer<Utf8> Function(); // FFI fn signature
-typedef VpnStatus = ffi.Pointer<Utf8> Function(); // Dart fn signature
+void setSelectTab(tab) => _bindings.setSelectTab(tab);
 
-typedef SelectTabTemplate = ffi.Pointer Function(ffi.Pointer<Utf8>);
-typedef SelectTab = SelectTabTemplate;
+Pointer<Utf8> ffiLang() => _bindings.lang().cast<Utf8>();
+Pointer<Utf8> ffiPlayVersion() => _bindings.playVersion().cast<Utf8>();
+Pointer<Utf8> ffiStoreVersion() => _bindings.storeVersion().cast<Utf8>();
+Pointer<Utf8> ffiHasSucceedingProxy() => _bindings.hasSucceedingProxy().cast<Utf8>();
+Pointer<Utf8> ffiProUser() => _bindings.proUser().cast<Utf8>();
+Pointer<Utf8> ffiDevelopmentMode() => _bindings.developmentMode().cast<Utf8>();
+Pointer<Utf8> ffiAcceptedTermsVersion() => _bindings.acceptedTermsVersion().cast<Utf8>();
+Pointer<Utf8> ffiEmailAddress() => _bindings.emailAddress().cast<Utf8>();
+Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();
+Pointer<Utf8> ffiReplicaAddr() => _bindings.replicaAddr().cast<Utf8>();
+Pointer<Utf8> ffiChatEnabled() => _bindings.chatEnabled().cast<Utf8>();
+Pointer<Utf8> ffiSdkVersion() => _bindings.sdkVersion().cast<Utf8>();
+Pointer<Utf8> ffiCheckUpdates() => _bindings.checkUpdates().cast<Utf8>();
+Pointer<Utf8> ffiPlans() => _bindings.plans().cast<Utf8>();
+Pointer<Utf8> ffiPaymentMethods() => _bindings.paymentMethods().cast<Utf8>();
+Pointer<Utf8> ffiDeviceLinkingCode() => _bindings.deviceLinkingCode().cast<Utf8>();
+Pointer<Utf8> ffiSplitTunneling() => _bindings.splitTunneling().cast<Utf8>();
+Pointer<Utf8> ffiChatMe() => _bindings.chatMe().cast<Utf8>();
+Pointer<Utf8> ffiOnBoardingStatus() => _bindings.onBoardingStatus().cast<Utf8>();
+//Pointer<Utf8> ffiPaymentMethods() => _bindings.paymentMethods().cast<Utf8>();
+Pointer<Utf8> ffiServerInfo() => _bindings.serverInfo().cast<Utf8>();
+Pointer<Utf8> ffiPurchase(planID, email, cardNumber, expDate, cvc) => _bindings.purchase(planID, email, cardNumber, expDate, cvc).cast<Utf8>();
+Pointer<Utf8> ffiReportIssue(email, issueType, description) => _bindings.reportIssue(email, issueType, description).cast<Utf8>();
+Pointer<Utf8> ffiPaymentRedirect(planID, provider, email, deviceName) => _bindings.paymentRedirect(planID, provider, email, deviceName).cast<Utf8>();
 
-typedef purchase_func = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
-typedef Purchase = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+const String _libName = 'liblantern';
 
-typedef serverinfo_func = ffi.Pointer<Utf8> Function();
-typedef ServerInfoFunc = ffi.Pointer<Utf8> Function();
+final DynamicLibrary _dylib = () {
+  if (Platform.isMacOS) {
+    return DynamicLibrary.open('$_libName.dylib');
+  }
+  if (Platform.isLinux) {
+    String dir = Directory.current.path;
+    return DynamicLibrary.open('$dir/$_libName.so');
+  }
+  if (Platform.isWindows) {
+    return DynamicLibrary.open('$_libName.dll');
+  }
+  throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
+}();
 
-typedef payment_redirect_func = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
-typedef PaymentRedirect = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
-
-typedef checkupdates_func = ffi.Pointer<Utf8> Function();
-typedef CheckUpdates = ffi.Pointer<Utf8> Function();
-
-typedef reportissue_func = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
-typedef DoReportIssue = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
-
-typedef selectedtab_func = ffi.Pointer<Utf8> Function(); // FFI fn signature
-typedef SelectedTab = ffi.Pointer<Utf8> Function(); // Dart fn signature
-
-typedef setting_func = ffi.Pointer<Utf8> Function();
-typedef Setting = ffi.Pointer<Utf8> Function();
-
-String dir = Directory.current.path;
-
-final dylib = ffi.DynamicLibrary.open(Platform.isMacOS ? 'liblantern.dylib' : Platform.isWindows ? 'liblantern.dll' : dir + '/liblantern.so');
-
-final Start start =
-    dylib.lookup<ffi.NativeFunction<start_func>>('Start').asFunction();
-
-final SysProxy sysProxyOn =
-    dylib.lookup<ffi.NativeFunction<start_func>>('SysProxyOn').asFunction();
-
-final SysProxy sysProxyOff =
-    dylib.lookup<ffi.NativeFunction<start_func>>('SysProxyOff').asFunction();
-
-final VpnStatus vpnStatus =
-    dylib.lookup<ffi.NativeFunction<start_func>>('VpnStatus').asFunction();
-
-final SelectTab setSelectTab = 
-    dylib.lookup<ffi.NativeFunction<SelectTabTemplate>>('SetSelectTab').asFunction();
-
-final SelectedTab ffiSelectedTab =
-    dylib.lookup<ffi.NativeFunction<selectedtab_func>>('SelectedTab').asFunction();
-
-final PaymentRedirect ffiPaymentRedirect = dylib.lookup<ffi.NativeFunction<payment_redirect_func>>('PaymentRedirect').asFunction();
-
-final ProFunc ffiPlans = dylib.lookup<ffi.NativeFunction<pro_func>>('Plans').asFunction();
-final ProFunc ffiPaymentMethods = dylib.lookup<ffi.NativeFunction<pro_func>>('PaymentMethods').asFunction();
-final ProFunc getUserData = dylib.lookup<ffi.NativeFunction<pro_func>>('UserData').asFunction();
-final ProFunc ffiEmailAddress = dylib.lookup<ffi.NativeFunction<pro_func>>('EmailAddress').asFunction();
-final ProFunc ffiReferral = dylib.lookup<ffi.NativeFunction<pro_func>>('Referral').asFunction();
-final ProFunc ffiReplicaAddr = dylib.lookup<ffi.NativeFunction<pro_func>>('ReplicaAddr').asFunction();
-final ProFunc ffiChatEnabled = dylib.lookup<ffi.NativeFunction<pro_func>>('ChatEnabled').asFunction();
-final ProFunc ffiCountry = dylib.lookup<ffi.NativeFunction<pro_func>>('Country').asFunction();
-final ProFunc ffiLang = dylib.lookup<ffi.NativeFunction<pro_func>>('Lang').asFunction();
-final ProFunc ffiAcceptedTermsVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('AcceptedTermsVersion').asFunction();
-final CheckUpdates ffiCheckUpdates = dylib.lookup<ffi.NativeFunction<checkupdates_func>>('CheckUpdates').asFunction();
-final Purchase ffiPurchase = dylib.lookup<ffi.NativeFunction<purchase_func>>('Purchase').asFunction();
-final DoReportIssue ffiReportIssue = dylib.lookup<ffi.NativeFunction<reportissue_func>>('ReportIssue').asFunction();
-final ProFunc ffiProUser = dylib.lookup<ffi.NativeFunction<pro_func>>('ProUser').asFunction();
-final ProFunc ffiDeviceLinkingCode = dylib.lookup<ffi.NativeFunction<pro_func>>('DeviceLinkingCode').asFunction();
-final ServerInfoFunc ffiServerInfo = dylib.lookup<ffi.NativeFunction<serverinfo_func>>('ServerInfo').asFunction();
-final ProFunc ffiDevelopmentMode = dylib.lookup<ffi.NativeFunction<pro_func>>('DevelopmentMode').asFunction();
-final ProFunc ffiSplitTunneling = dylib.lookup<ffi.NativeFunction<pro_func>>('SplitTunneling').asFunction();
-final ProFunc ffiChatMe = dylib.lookup<ffi.NativeFunction<pro_func>>('ChatMe').asFunction();
-final ProFunc ffiPlayVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('PlayVersion').asFunction();
-final ProFunc ffiStoreVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('StoreVersion').asFunction();
-final ProFunc ffiHasSucceedingProxy = dylib.lookup<ffi.NativeFunction<pro_func>>('HasSucceedingProxy').asFunction();
-final ProFunc ffiOnBoardingStatus = dylib.lookup<ffi.NativeFunction<pro_func>>('OnBoardingStatus').asFunction();
-final ProFunc ffiSdkVersion = dylib.lookup<ffi.NativeFunction<pro_func>>('SdkVersion').asFunction();
-final ProFunc ffiVpnStatus = dylib.lookup<ffi.NativeFunction<pro_func>>('VpnStatus').asFunction();
-final ProFunc ffiEmailExists = dylib.lookup<ffi.NativeFunction<pro_func>>('EmailExists').asFunction();
+/// The bindings to the native functions in [dylib].
+final NativeLibrary _bindings = NativeLibrary(_dylib);
 
 void loadLibrary() {
-  start();
+  _bindings.start();
 }

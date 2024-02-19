@@ -1,5 +1,5 @@
 import 'package:lantern/vpn/vpn.dart';
-import 'package:lantern/common/common_desktop.dart';
+import 'package:lantern/common/common_desktop.dart' as desktop;
 
 final vpnModel = VpnModel();
 
@@ -30,7 +30,7 @@ class VpnModel extends Model {
     return ffiValueBuilder<String>(
       'vpnStatus',
       defaultValue: '',
-      ffiVpnStatus,
+      desktop.vpnStatus,
       builder: builder,
     );
   }

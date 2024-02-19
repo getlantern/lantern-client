@@ -38,10 +38,8 @@ var (
 	proClient *client.Client
 )
 
-//export Start
-func Start() *C.char {
-	// Since Go 1.6, panic prints only the stack trace of current goroutine by
-	// default, which may not reveal the root cause. Switch to all goroutines.
+//export start
+func start() {
 	debug.SetTraceback("all")
 
 	cdir := configDir()
@@ -77,7 +75,6 @@ func Start() *C.char {
 		log.Debug("Lantern stopped")
 		os.Exit(0)
 	}()
-	return C.CString("")
 }
 
 func fetchOrCreate() error {
@@ -93,16 +90,14 @@ func fetchOrCreate() error {
 	return nil
 }
 
-//export SysProxyOn
-func SysProxyOn() *C.char {
+//export sysProxyOn
+func sysProxyOn() {
 	app.SysproxyOn()
-	return C.CString("on")
 }
 
-//export SysProxyOff
-func SysProxyOff() *C.char {
+//export sysProxyOff
+func sysProxyOff() {
 	app.SysProxyOff()
-	return C.CString("off")
 }
 
 func sendError(err error) *C.char {
@@ -116,13 +111,13 @@ func sendError(err error) *C.char {
 	return C.CString(string(b))
 }
 
-//export SelectedTab
-func SelectedTab() *C.char {
+//export selectedTab
+func selectedTab() *C.char {
 	return C.CString(string(a.SelectedTab()))
 }
 
-//export SetSelectTab
-func SetSelectTab(ttab *C.char) {
+//export setSelectTab
+func setSelectTab(ttab *C.char) {
 	tab, err := app.ParseTab(C.GoString(ttab))
 	if err != nil {
 		log.Error(err)
@@ -131,8 +126,8 @@ func SetSelectTab(ttab *C.char) {
 	a.SetSelectedTab(tab)
 }
 
-//export Plans
-func Plans() *C.char {
+//export plans
+func plans() *C.char {
 	resp, err := proClient.Plans(userConfig())
 	if err != nil {
 		return sendError(err)
@@ -141,8 +136,8 @@ func Plans() *C.char {
 	return C.CString(string(b))
 }
 
-//export PaymentMethods
-func PaymentMethods() *C.char {
+//export paymentMethods
+func paymentMethods() *C.char {
 	resp, err := proClient.PaymentMethods(userConfig())
 	if err != nil {
 		return sendError(err)
@@ -151,8 +146,8 @@ func PaymentMethods() *C.char {
 	return C.CString(string(b))
 }
 
-//export UserData
-func UserData() *C.char {
+//export userData
+func userData() *C.char {
 	resp, err := proClient.UserData(userConfig())
 	if err != nil {
 		return sendError(err)
@@ -161,8 +156,8 @@ func UserData() *C.char {
 	return C.CString(string(b))
 }
 
-//export ServerInfo
-func ServerInfo() *C.char {
+//export serverInfo
+func serverInfo() *C.char {
 	stats := a.Stats()
 	if stats == nil {
 		return C.CString("")
@@ -176,13 +171,13 @@ func ServerInfo() *C.char {
 	return C.CString(string(b))
 }
 
-//export EmailAddress
-func EmailAddress() *C.char {
+//export emailAddress
+func emailAddress() *C.char {
 	return C.CString("")
 }
 
-//export Referral
-func Referral() *C.char {
+//export referral
+func referral() *C.char {
 	referralCode, err := a.ReferralCode(userConfig())
 	if err != nil {
 		return sendError(err)
@@ -190,71 +185,71 @@ func Referral() *C.char {
 	return C.CString(referralCode)
 }
 
-//export ChatEnabled
-func ChatEnabled() *C.char {
+//export chatEnabled
+func chatEnabled() *C.char {
 	return C.CString("false")
 }
 
-//export PlayVersion
-func PlayVersion() *C.char {
+//export playVersion
+func playVersion() *C.char {
 	return C.CString("false")
 }
 
-//export StoreVersion
-func StoreVersion() *C.char {
+//export storeVersion
+func storeVersion() *C.char {
 	return C.CString("false")
 }
 
-//export Lang
-func Lang() *C.char {
+//export lang
+func lang() *C.char {
 	lang := a.Settings().GetLanguage()
 	return C.CString(lang)
 }
 
-//export Country
-func Country() *C.char {
+//export country
+func country() *C.char {
 	country := a.Settings().GetCountry()
 	return C.CString(country)
 }
 
-//export SdkVersion
-func SdkVersion() *C.char {
+//export sdkVersion
+func sdkVersion() *C.char {
 	return C.CString("1.0.0")
 }
 
-//export VpnStatus
-func VpnStatus() *C.char {
+//export vpnStatus
+func vpnStatus() *C.char {
 	if app.IsSysProxyOn() {
 		return C.CString("connected")
 	}
 	return C.CString("disconnected")
 }
 
-//export HasSucceedingProxy
-func HasSucceedingProxy() *C.char {
+//export hasSucceedingProxy
+func hasSucceedingProxy() *C.char {
 	return C.CString("true")
 }
 
-//export OnBoardingStatus
-func OnBoardingStatus() *C.char {
+//export onBoardingStatus
+func onBoardingStatus() *C.char {
 	return C.CString("true")
 }
 
-//export AcceptedTermsVersion
-func AcceptedTermsVersion() *C.char {
+//export acceptedTermsVersion
+func acceptedTermsVersion() *C.char {
 	return C.CString("0")
 }
 
-//export ProUser
-func ProUser() *C.char {
+//export proUser
+func proUser() *C.char {
 	if isProUser, ok := a.IsProUser(); isProUser && ok {
 		return C.CString("true")
 	}
 	return C.CString("false")
 }
 
-//export DeviceLinkingCode
-func DeviceLinkingCode() *C.char {
+//export deviceLinkingCode
+func deviceLinkingCode() *C.char {
 	info, _ := host.Info()
 	resp, err := proClient.RequestDeviceLinkingCode(userConfig(), info.Hostname)
 	if err != nil {
@@ -263,8 +258,8 @@ func DeviceLinkingCode() *C.char {
 	return C.CString(resp.Code)
 }
 
-//export PaymentRedirect
-func PaymentRedirect(planID, provider, email, deviceName *C.char) *C.char {
+//export paymentRedirect
+func paymentRedirect(planID, provider, email, deviceName *C.char) *C.char {
 	country := a.Settings().GetCountry()
 	resp, err := proClient.PaymentRedirect(userConfig(), &client.PaymentRedirectRequest{
 		Plan: C.GoString(planID),
@@ -280,23 +275,23 @@ func PaymentRedirect(planID, provider, email, deviceName *C.char) *C.char {
 	return C.CString(resp.Redirect)
 }
 
-//export DevelopmentMode
-func DevelopmentMode() *C.char {
+//export developmentMode
+func developmentMode() *C.char {
 	return C.CString("false")
 }
 
-//export SplitTunneling
-func SplitTunneling() *C.char {
+//export splitTunneling
+func splitTunneling() *C.char {
 	return C.CString("false")
 }
 
-//export ChatMe
-func ChatMe() *C.char {
+//export chatMe
+func chatMe() *C.char {
 	return C.CString("false")
 }
 
-//export ReplicaAddr
-func ReplicaAddr() *C.char {
+//export replicaAddr
+func replicaAddr() *C.char {
 	return C.CString("")
 }
 
@@ -326,8 +321,8 @@ func userConfig() *common.UserConfigData {
 	)
 }
 
-//export ReportIssue
-func ReportIssue(email, issueType, description *C.char) *C.char {
+//export reportIssue
+func reportIssue(email, issueType, description *C.char) *C.char {
 	deviceID := a.Settings().GetDeviceID()
 	issueTypeInt, err := strconv.Atoi(C.GoString(issueType))
 	if err != nil {
@@ -366,8 +361,8 @@ func ReportIssue(email, issueType, description *C.char) *C.char {
 	return C.CString("true")
 }
 
-//export CheckUpdates
-func CheckUpdates() *C.char {
+//export checkUpdates
+func checkUpdates() *C.char {
 	log.Debug("Checking for updates")
 	settings := a.Settings()
 	userID := settings.GetUserID()
@@ -387,8 +382,8 @@ func CheckUpdates() *C.char {
 }
 
 
-//export Purchase
-func Purchase(planID, email, cardNumber, expDate, cvc string) *C.char {
+//export purchase
+func purchase(planID, email, cardNumber, expDate, cvc string) *C.char {
 	/*resp, err := proClient.Purchase(&proclient.PurchaseRequest{
 		Provider: proclient.Provider_STRIPE,
 		Email: email,

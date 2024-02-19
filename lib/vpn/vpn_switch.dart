@@ -46,10 +46,10 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
         bool isConnected = vpnStatus == 'connected';
         String path = systemTrayIcon(!isConnected);
         if (isConnected) {
-          await sysProxyOff();
+          sysProxyOff();
           await setupMenu(false);
         } else {
-          await sysProxyOn();
+          sysProxyOn();
           await setupMenu(true);
         }
         await trayManager.setIcon(path);

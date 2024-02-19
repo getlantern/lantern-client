@@ -132,12 +132,12 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       case 'exit':
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');
       case 'status':
-        bool isConnected = await vpnStatus().toDartString() == "connected";
+        bool isConnected = await vpnStatus() == "connected";
         if (isConnected) {
-          await sysProxyOff();
+          sysProxyOff();
           await setupMenu(false);
         } else {
-          await sysProxyOn();
+          sysProxyOn();
           await setupMenu(true);
         }
     }
@@ -217,7 +217,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               return const PrivacyDisclosure();
             }
             return sessionModel.selectedTab(
-              (context, selectedTab, child) =>
+              (context, selectTab, child) =>
                   messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
                 final isTesting = const String.fromEnvironment(
                       'driver',
@@ -225,7 +225,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                     ).toLowerCase() ==
                     'true';
                 final tab = Platform.isAndroid
-                    ? selectedTab
+                    ? selectTab
                     : ffiSelectedTab().toDartString();
                 return Scaffold(
                   body: buildBody(tab, isOnboarded),
