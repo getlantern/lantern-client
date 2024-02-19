@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"runtime"
 	"runtime/debug"
 	"strconv"
 	"syscall"
@@ -40,6 +41,9 @@ var (
 
 //export start
 func start() {
+	runtime.LockOSThread()
+	// Since Go 1.6, panic prints only the stack trace of current goroutine by
+	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
 
 	cdir := configDir()
