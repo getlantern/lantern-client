@@ -117,7 +117,7 @@ class _SignInPasswordState extends State<SignInPassword> {
       /// User has connected more then 3 device
       /// Show screen to user to remove device
       if ((error as PlatformException).message!.contains("too-many-devices")) {
-        context.pushRoute(DeviceLimit()).then((value) {
+        context.pushRoute(const DeviceLimit()).then((value) {
           if (value != null && value as bool) {
             mainLogger.i("Device has been removed");
             onContinueTap();
