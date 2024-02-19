@@ -499,7 +499,7 @@ $(LINUX_LIB_NAME_64): export GOOS = linux
 $(LINUX_LIB_NAME_64): export GOARCH = amd64
 $(LINUX_LIB_NAME_64): export LIB_NAME = $(LINUX_LIB_NAME_64)
 $(LINUX_LIB_NAME_64): export EXTRA_LDFLAGS += -linkmode external -s -w
-$(LINUX_LIB_NAME_64): export GO_BUILD_FLAGS += -a
+$(LINUX_LIB_NAME_64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(LINUX_LIB_NAME_64): export Environment = production
 $(LINUX_LIB_NAME_64): desktop-lib
 
@@ -514,7 +514,7 @@ $(WINDOWS_LIB_NAME): export GOARCH = 386
 $(WINDOWS_LIB_NAME): export LIB_NAME = $(WINDOWS_LIB_NAME)
 $(WINDOWS_LIB_NAME): export BUILD_TAGS += walk_use_cgo
 $(WINDOWS_LIB_NAME): export EXTRA_LDFLAGS +=
-$(WINDOWS_LIB_NAME): export GO_BUILD_FLAGS += -buildmode=c-shared
+$(WINDOWS_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS_LIB_NAME): export BUILD_RACE =
 $(WINDOWS_LIB_NAME): export Environment = production
 $(WINDOWS_LIB_NAME): desktop-lib
@@ -530,7 +530,7 @@ $(WINDOWS64_LIB_NAME): export GOARCH = amd64
 $(WINDOWS64_LIB_NAME): export LIB_NAME = $(WINDOWS64_LIB_NAME)
 $(WINDOWS64_LIB_NAME): export BUILD_TAGS += walk_use_cgo
 $(WINDOWS64_LIB_NAME): export EXTRA_LDFLAGS +=
-$(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -buildmode=c-shared
+$(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
