@@ -2,6 +2,7 @@ import 'common.dart';
 import 'common_desktop.dart';
 import 'dart:convert';
 import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 extension BoolParsing on String {
@@ -18,6 +19,7 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
     void Function() removeFromCache, {
     bool details = false,
     void Function(void Function(T?) setValue)? onChanges,
+    WebSocketChannel? channel,
     T Function(Uint8List serialized)? deserialize,
     T Function(Map<String, dynamic> json)? fromJsonModel,
   }) : super(defaultValue, removeFromCache) {
@@ -41,8 +43,8 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
           value = fromJsonModel(json.decode(res)) as T?;
         }
     }
-    cancel = () => {
-      //print("Cancel called");
+    cancel = () {
+      if (channel != null) channel.sink.close(status.goingAway);
     };
   }
 }

@@ -30,13 +30,14 @@ class VpnModel extends Model {
         builder: builder,
       );
     }
+    final channel = WebSocketChannel.connect(
+      Uri.parse("ws://" + desktop.websocketAddr() + '/data'),
+    );
     return ffiValueBuilder<String>(
       'vpnStatus',
       defaultValue: '',
+      channel: channel,
       onChanges: (setValue) {
-        final channel = WebSocketChannel.connect(
-          Uri.parse("ws://" + desktop.websocketAddr() + '/data'),
-        );
         /// Listen for all incoming data
         channel.stream.listen(
           (data) {

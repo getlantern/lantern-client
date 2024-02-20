@@ -4,6 +4,7 @@ import 'package:lantern/common/ffi_subscriber.dart';
 import 'package:lantern/common/ffi_list_subscriber.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'common_desktop.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;
@@ -60,6 +61,7 @@ abstract class Model {
     required ValueWidgetBuilder<T> builder,
     bool details = false,
     void Function(void Function(T?) setValue)? onChanges,
+    WebSocketChannel? channel,
     T Function(Uint8List serialized)? deserialize,
     T Function(Map<String, dynamic> json)? fromJsonModel,
   }) {
@@ -69,6 +71,7 @@ abstract class Model {
       defaultValue,
       details: details,
       onChanges: onChanges,
+      channel: channel,
       deserialize: deserialize,
       fromJsonModel: fromJsonModel,
     );
@@ -97,6 +100,7 @@ abstract class Model {
     T? defaultValue, {
       bool details = false,
       void Function(void Function(T?) setValue)? onChanges,
+      WebSocketChannel? channel,
       T Function(Uint8List serialized)? deserialize,
       T Function(Map<String, dynamic> json)? fromJsonModel,
   }) {
