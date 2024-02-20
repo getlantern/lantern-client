@@ -18,7 +18,7 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   // To load the .env file contents into dotenv.
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "app.env");
   await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
