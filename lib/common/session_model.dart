@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import 'common.dart';
 import 'common_desktop.dart';
+import 'package:lantern/flutter_go.dart';
 import 'dart:convert' show utf8;
 
 final sessionModel = SessionModel();

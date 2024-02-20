@@ -8,6 +8,9 @@ import 'generated_bindings.dart';
 void sysProxyOn() => _bindings.sysProxyOn();
 void sysProxyOff() => _bindings.sysProxyOff();
 void setSelectTab(tab) => _bindings.setSelectTab(tab);
+String websocketAddr() => _bindings.websocketAddr().cast<Utf8>().toDartString();
+
+typedef example_callback = Pointer<Void> Function(Pointer<Void>);
 
 Pointer<Utf8> vpnStatus() => _bindings.vpnStatus().cast<Utf8>();
 Pointer<Utf8> ffiSelectedTab() => _bindings.selectedTab().cast<Utf8>();

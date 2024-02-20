@@ -1,6 +1,8 @@
 import 'common.dart';
 import 'common_desktop.dart';
 import 'dart:convert';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 extension BoolParsing on String {
   bool parseBool() {
@@ -11,28 +13,37 @@ extension BoolParsing on String {
 class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
   FfiValueNotifier(
     Pointer<Utf8> Function() ffiFunction,
+    String path,
     T? defaultValue,
     void Function() removeFromCache, {
     bool details = false,
+    void Function(void Function(T?) setValue)? onChanges,
     T Function(Uint8List serialized)? deserialize,
     T Function(Map<String, dynamic> json)? fromJsonModel,
   }) : super(defaultValue, removeFromCache) {
-    if (defaultValue is int) {
-      value = null;
-      //value = int.parse(ffiFunction().toDartString()) as T?;
-    } else if (defaultValue is String) {
-      value = ffiFunction().toDartString() as T?;
-    } else if (defaultValue is bool) {
-      value = ffiFunction().toDartString().parseBool() as T?;
-    } else if (fromJsonModel != null) {
-      var res = ffiFunction().toDartString();
-      if (res == '') {
-        value = null;
-      } else {
-        value = fromJsonModel(json.decode(res)) as T?;
-      }
+    if (onChanges != null) {
+      onChanges((newValue) {
+        value = newValue;
+      });
     }
-    cancel = () => {};
+    if (defaultValue is int) {
+        value = null;
+        //value = int.parse(ffiFunction().toDartString()) as T?;
+      } else if (defaultValue is String) {
+        value = ffiFunction().toDartString() as T?;
+      } else if (defaultValue is bool) {
+        value = ffiFunction().toDartString().parseBool() as T?;
+      } else if (fromJsonModel != null) {
+        var res = ffiFunction().toDartString();
+        if (res == '') {
+          value = null;
+        } else {
+          value = fromJsonModel(json.decode(res)) as T?;
+        }
+    }
+    cancel = () => {
+      //print("Cancel called");
+    };
   }
 }
 

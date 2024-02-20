@@ -59,6 +59,7 @@ abstract class Model {
     T? defaultValue,
     required ValueWidgetBuilder<T> builder,
     bool details = false,
+    void Function(void Function(T?) setValue)? onChanges,
     T Function(Uint8List serialized)? deserialize,
     T Function(Map<String, dynamic> json)? fromJsonModel,
   }) {
@@ -67,6 +68,7 @@ abstract class Model {
       path,
       defaultValue,
       details: details,
+      onChanges: onChanges,
       deserialize: deserialize,
       fromJsonModel: fromJsonModel,
     );
@@ -94,16 +96,19 @@ abstract class Model {
     String path,
     T? defaultValue, {
       bool details = false,
+      void Function(void Function(T?) setValue)? onChanges,
       T Function(Uint8List serialized)? deserialize,
       T Function(Map<String, dynamic> json)? fromJsonModel,
   }) {
     return FfiValueNotifier(
       ffiFunction,
+      path,
       defaultValue,
       () {
         _ffiValueNotifierCache.remove(path);
       },
       details: details,
+      onChanges: onChanges,
       deserialize: deserialize,
       fromJsonModel: fromJsonModel,
     );

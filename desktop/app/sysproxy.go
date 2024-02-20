@@ -12,9 +12,11 @@ import (
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/ops"
+	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/sysproxy"
 
 	"github.com/getlantern/lantern-client/desktop/icons"
+	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
 var (
@@ -53,6 +55,57 @@ func IsSysProxyOn() bool {
 	return off != nil
 }
 
+func (app *App) onSysProxyUpdate(cb func(isConnected bool)) {
+	app.mu.Lock()
+	app.onSysProxy = append(app.onSysProxy, cb)
+	app.mu.Unlock()
+}
+
+func (app *App) serveSysProxy(channel ws.UIChannel) error {
+	helloFn := func(write func(interface{})) {
+		log.Debug("New client connected")
+		/*m := map[string]interface{}{
+			"type": "sysproxy",
+			"connected": IsSysProxyOn(),
+		}
+		write(m)*/
+	}
+	service, err := channel.Register("sysproxy", helloFn)
+	log.Debug("Now serving sysproxy websocket connections")
+	app.onSysProxyUpdate(func(isConnected bool) {
+		log.Debugf("Sending updated sys proxy data to all clients: %v", isConnected)
+		service.Out <- map[string]interface{}{
+			"connected": isConnected,
+		}
+	})
+	return err
+}
+
+func (app *App) notifySysProxy(isConnected bool) {
+	app.mu.Lock()
+	onSysProxy := app.onSysProxy
+	app.mu.Unlock()
+	for _, cb := range onSysProxy {
+		cb(isConnected)
+	}
+}
+
+func (app *App) SysproxyOn() {
+	log.Debug("sysproxyon called")
+	if err := SysproxyOn(); err != nil {
+		app.statsTracker.SetAlert(
+			stats.FAIL_TO_SET_SYSTEM_PROXY, err.Error(), false)
+	} else {
+		app.notifySysProxy(true)
+	}
+}
+
+func (app *App) SysProxyOff() {
+	if err := SysProxyOff(); err == nil {
+		app.notifySysProxy(false)
+	}
+}
+
 func SysproxyOn() (err error) {
 	op := ops.Begin("sysproxy_on")
 	defer op.End()
@@ -76,7 +129,7 @@ func SysproxyOn() (err error) {
 	return
 }
 
-func SysProxyOff() {
+func SysProxyOff() (err error) {
 	sysproxyOffMx.Lock()
 	off := _sysproxyOff
 	_sysproxyOff = nil
@@ -91,10 +144,12 @@ func SysProxyOff() {
 	log.Debug("Force clearing system proxy directly, just in case")
 	addr, found := getProxyAddr()
 	if !found {
-		op.FailIf(log.Error("Unable to find proxy address, can't force clear system proxy"))
+		err = fmt.Errorf("Unable to find proxy address, can't force clear system proxy")
+		op.FailIf(log.Error(err))
 		return
 	}
 	doSysproxyClear(op, addr)
+	return
 }
 
 func doSysproxyOff(off func() error) {

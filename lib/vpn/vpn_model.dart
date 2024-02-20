@@ -1,5 +1,8 @@
 import 'package:lantern/vpn/vpn.dart';
 import 'package:lantern/common/common_desktop.dart' as desktop;
+import 'package:lantern/flutter_go.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 final vpnModel = VpnModel();
 
@@ -30,11 +33,28 @@ class VpnModel extends Model {
     return ffiValueBuilder<String>(
       'vpnStatus',
       defaultValue: '',
+      onChanges: (setValue) {
+        final channel = WebSocketChannel.connect(
+          Uri.parse("ws://" + desktop.websocketAddr() + '/data'),
+        );
+        /// Listen for all incoming data
+        channel.stream.listen(
+          (data) {
+            final parsedJson = json.decode(data);
+            if (parsedJson["type"] == "sysproxy") {
+              final updated = parsedJson["message"]["connected"];
+              final isConnected = updated != null && updated.toString() == "true";
+              setValue(isConnected ? "connected" : "disconnected");
+            }
+          },
+          onError: (error) => print(error),
+        );
+      },
       desktop.vpnStatus,
       builder: builder,
     );
   }
-
+ 
   Future<bool> isVpnConnected() async {
     final vpnStatus = await methodChannel.invokeMethod('getVpnStatus');
     return vpnStatus == 'connected';

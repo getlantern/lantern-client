@@ -26,6 +26,7 @@ import (
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
+	"github.com/getlantern/lantern-client/desktop/plugin"
 
 	"google.golang.org/protobuf/encoding/protojson"
 	"github.com/shirou/gopsutil/v3/host"
@@ -49,6 +50,8 @@ func start() {
 	cdir := configDir()
 	settings := loadSettings(cdir)
 	proClient = pro.NewClient()
+
+	plugin.Bootstrap()
 
 	a = app.NewApp(flashlight.Flags{}, cdir, proClient, settings)
 
@@ -96,12 +99,12 @@ func fetchOrCreate() error {
 
 //export sysProxyOn
 func sysProxyOn() {
-	app.SysproxyOn()
+	a.SysproxyOn()
 }
 
 //export sysProxyOff
 func sysProxyOff() {
-	app.SysProxyOff()
+	a.SysProxyOff()
 }
 
 func sendError(err error) *C.char {
@@ -118,6 +121,11 @@ func sendError(err error) *C.char {
 //export selectedTab
 func selectedTab() *C.char {
 	return C.CString(string(a.SelectedTab()))
+}
+
+//export websocketAddr
+func websocketAddr() *C.char {
+	return C.CString(a.WebsocketAddr())
 }
 
 //export setSelectTab

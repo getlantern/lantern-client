@@ -7,6 +7,7 @@ import (
 	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/lantern-client/desktop/deviceid"
+	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
 // isProUser blocks itself to check if current user is Pro, or !ok if error
@@ -32,7 +33,7 @@ func (app *App) isProUserFast() (isPro bool, statusKnown bool) {
 // servePro fetches user data or creates new user when the application starts up
 // It loops forever in 10 seconds interval until the user is fetched or
 // created, as it's fundamental for the UI to work.
-func (app *App) servePro() {
+func (app *App) servePro(channel ws.UIChannel) error {
 	chFetch := make(chan bool)
 	go func() {
 		fetchOrCreate := func() error {
@@ -94,14 +95,21 @@ func (app *App) servePro() {
 		}
 	}()
 
+	helloFn := func(write func(interface{})) {
+		if user, known := pro.GetUserDataFast(app.settings.GetUserID()); known {
+			log.Debugf("Sending current user data to new client: %v", user)
+			write(user)
+		}
+		log.Debugf("Fetching user data again to see if any changes")
+		select {
+		case chFetch <- true:
+		default: // fetching in progress, skipping
+		}
+	}
+	service, err := channel.Register("pro", helloFn)
 	pro.OnUserData(func(current *client.User, new *client.User) {
-		app.setUserData(new)
+		log.Debugf("Sending updated user data to all clients: %v", new)
+		service.Out <- new
 	})
+	return err
 }
-
-func (app *App) setUserData(userData *client.User) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.userData = userData
-}
-

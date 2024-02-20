@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"net"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -43,6 +44,7 @@ import (
 	uicommon "github.com/getlantern/lantern-client/desktop/common"
 	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
+	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
 var (
@@ -102,7 +104,11 @@ type App struct {
 	referralCode   string
 	selectedTab   Tab
 	stats *stats.Stats
-	userData *client.User
+
+	onSysProxy []func(isConnected bool)
+	websocketAddr string
+	websocketServer *http.Server
+	ws ws.UIChannel
 	mu sync.Mutex
 }
 
@@ -115,10 +121,13 @@ func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, 
 		proClient:        proClient,
 		settings:         settings,
 		analyticsSession: analyticsSession,
+		onSysProxy: 	  make([]func(isConnected bool), 0),
 		selectedTab:      VPNTab,
 		translations:     eventual.NewValue(),
+		ws: 			  ws.NewUIChannel(),
 	}
 	app.statsTracker = NewStatsTracker(app)
+	app.serveWebsocket()
 	golog.OnFatal(app.exitOnFatal)
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
@@ -407,13 +416,6 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 	app.statsTracker.AddListener(fn)
 }
 
-func (app *App) SysproxyOn() {
-	if err := SysproxyOn(); err != nil {
-		app.statsTracker.SetAlert(
-			stats.FAIL_TO_SET_SYSTEM_PROXY, err.Error(), false)
-	}
-}
-
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
@@ -424,7 +426,7 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 		}
 	})
 
-	app.AddExitFunc("turning off system proxy", SysProxyOff)
+	app.AddExitFunc("turning off system proxy", app.SysProxyOff)
 	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
 	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
 		app.settings.setString(SNAddr, addr)
@@ -436,7 +438,12 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
 	}
-	app.servePro()
+	/*if err := app.servePro(app.ws); err != nil {
+		log.Errorf("Unable to serve pro data to UI: %v", err)
+	}*/
+	if err := app.serveSysProxy(app.ws); err != nil {
+		log.Errorf("Unable to serve sys proxy status: %v", err)
+	}
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
