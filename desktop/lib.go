@@ -231,7 +231,7 @@ func sdkVersion() *C.char {
 
 //export vpnStatus
 func vpnStatus() *C.char {
-	if app.IsSysProxyOn() {
+	if a.IsSysProxyOn() {
 		return C.CString("connected")
 	}
 	return C.CString("disconnected")

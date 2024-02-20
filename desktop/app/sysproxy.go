@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/getlantern/errors"
@@ -12,16 +11,10 @@ import (
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/ops"
-	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/sysproxy"
 
 	"github.com/getlantern/lantern-client/desktop/icons"
 	"github.com/getlantern/lantern-client/desktop/ws"
-)
-
-var (
-	_sysproxyOff  func() error
-	sysproxyOffMx sync.Mutex
 )
 
 func setUpSysproxyTool() error {
@@ -48,32 +41,24 @@ func setUpSysproxyTool() error {
 	return nil
 }
 
-func IsSysProxyOn() bool {
-	sysproxyOffMx.Lock()
-	off := _sysproxyOff
-	sysproxyOffMx.Unlock()
+func (app *App) IsSysProxyOn() bool {
+	app.mu.Lock()
+	off := app._sysproxyOff
+	app.mu.Unlock()
 	return off != nil
 }
 
-func (app *App) onSysProxyUpdate(cb func(isConnected bool)) {
+func (app *App) onConnectionStatus(cb func(isConnected bool)) {
 	app.mu.Lock()
-	app.onSysProxy = append(app.onSysProxy, cb)
+	app.connectionStatusCallbacks = append(app.connectionStatusCallbacks, cb)
 	app.mu.Unlock()
 }
 
-func (app *App) serveSysProxy(channel ws.UIChannel) error {
-	helloFn := func(write func(interface{})) {
-		log.Debug("New client connected")
-		/*m := map[string]interface{}{
-			"type": "sysproxy",
-			"connected": IsSysProxyOn(),
-		}
-		write(m)*/
-	}
-	service, err := channel.Register("sysproxy", helloFn)
-	log.Debug("Now serving sysproxy websocket connections")
-	app.onSysProxyUpdate(func(isConnected bool) {
-		log.Debugf("Sending updated sys proxy data to all clients: %v", isConnected)
+// serveConnectionStatus registers a websocket channel for communicating connection status changes
+func (app *App) serveConnectionStatus(channel ws.UIChannel) error {
+	service, err := channel.Register("vpnstatus", nil)
+	app.onConnectionStatus(func(isConnected bool) {
+		log.Debugf("Sending updated connection status to all clients: %v", isConnected)
 		service.Out <- map[string]interface{}{
 			"connected": isConnected,
 		}
@@ -81,59 +66,32 @@ func (app *App) serveSysProxy(channel ws.UIChannel) error {
 	return err
 }
 
-func (app *App) notifySysProxy(isConnected bool) {
+// notifyConnectionStatus notifies listeners when the connection status changes
+func (app *App) notifyConnectionStatus(isConnected bool) {
 	app.mu.Lock()
-	onSysProxy := app.onSysProxy
+	cbs := app.connectionStatusCallbacks
 	app.mu.Unlock()
-	for _, cb := range onSysProxy {
+	for _, cb := range cbs {
 		cb(isConnected)
 	}
 }
 
-func (app *App) SysproxyOn() {
-	log.Debug("sysproxyon called")
-	if err := SysproxyOn(); err != nil {
-		app.statsTracker.SetAlert(
-			stats.FAIL_TO_SET_SYSTEM_PROXY, err.Error(), false)
-	} else {
-		app.notifySysProxy(true)
-	}
+func (app *App) SetSysProxy(_sysproxyOff  func() error) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app._sysproxyOff = _sysproxyOff
 }
 
-func (app *App) SysProxyOff() {
-	if err := SysProxyOff(); err == nil {
-		app.notifySysProxy(false)
-	}
-}
-
-func SysproxyOn() (err error) {
-	op := ops.Begin("sysproxy_on")
-	defer op.End()
-	addr, found := getProxyAddr()
-	if !found {
-		err = errors.New("Unable to set lantern as system proxy, no proxy address available")
-		op.FailIf(log.Error(err))
-		return
-	}
-	log.Debugf("Setting lantern as system proxy at: %v", addr)
-	off, e := sysproxy.On(addr)
-	if e != nil {
-		err = errors.New("Unable to set lantern as system proxy: %v", e)
-		op.FailIf(log.Error(err))
-		return
-	}
-	sysproxyOffMx.Lock()
-	_sysproxyOff = off
-	sysproxyOffMx.Unlock()
-	log.Debug("Finished setting lantern as system proxy")
-	return
-}
-
-func SysProxyOff() (err error) {
-	sysproxyOffMx.Lock()
-	off := _sysproxyOff
-	_sysproxyOff = nil
-	sysproxyOffMx.Unlock()
+func (app *App) SysProxyOff() (err error) {
+	defer func() {
+		if err == nil {
+			app.notifyConnectionStatus(false)
+		}
+	}()
+	app.mu.Lock()
+	off := app._sysproxyOff
+	app._sysproxyOff = nil
+	app.mu.Unlock()
 
 	if off != nil {
 		doSysproxyOff(off)
@@ -149,6 +107,32 @@ func SysProxyOff() (err error) {
 		return
 	}
 	doSysproxyClear(op, addr)
+	return
+}
+
+func (app *App) SysproxyOn() (err error) {
+	op := ops.Begin("sysproxy_on")
+	defer op.End()
+	defer func() {
+		if err == nil {
+			app.notifyConnectionStatus(true)
+		}
+	}()
+	addr, found := getProxyAddr()
+	if !found {
+		err = errors.New("Unable to set lantern as system proxy, no proxy address available")
+		op.FailIf(log.Error(err))
+		return
+	}
+	log.Debugf("Setting lantern as system proxy at: %v", addr)
+	off, e := sysproxy.On(addr)
+	if e != nil {
+		err = errors.New("Unable to set lantern as system proxy: %v", e)
+		op.FailIf(log.Error(err))
+		return
+	}
+	app.SetSysProxy(off)
+	log.Debug("Finished setting lantern as system proxy")
 	return
 }
 

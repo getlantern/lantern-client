@@ -105,10 +105,13 @@ type App struct {
 	selectedTab   Tab
 	stats *stats.Stats
 
-	onSysProxy []func(isConnected bool)
+	connectionStatusCallbacks []func(isConnected bool)
+	_sysproxyOff  func() error
+
 	websocketAddr string
 	websocketServer *http.Server
 	ws ws.UIChannel
+
 	mu sync.Mutex
 }
 
@@ -121,7 +124,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, 
 		proClient:        proClient,
 		settings:         settings,
 		analyticsSession: analyticsSession,
-		onSysProxy: 	  make([]func(isConnected bool), 0),
+		connectionStatusCallbacks: 	  make([]func(isConnected bool), 0),
 		selectedTab:      VPNTab,
 		translations:     eventual.NewValue(),
 		ws: 			  ws.NewUIChannel(),
@@ -422,11 +425,13 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 		if enable {
 			app.SysproxyOn()
 		} else {
-			SysProxyOff()
+			app.SysProxyOff()
 		}
 	})
 
-	app.AddExitFunc("turning off system proxy", app.SysProxyOff)
+	app.AddExitFunc("turning off system proxy", func() {
+		app.SysProxyOff()
+	})
 	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
 	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
 		app.settings.setString(SNAddr, addr)
@@ -438,11 +443,11 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
 	}
-	/*if err := app.servePro(app.ws); err != nil {
+	if err := app.servePro(app.ws); err != nil {
 		log.Errorf("Unable to serve pro data to UI: %v", err)
-	}*/
-	if err := app.serveSysProxy(app.ws); err != nil {
-		log.Errorf("Unable to serve sys proxy status: %v", err)
+	}
+	if err := app.serveConnectionStatus(app.ws); err != nil {
+		log.Errorf("Unable to serve connection status: %v", err)
 	}
 }
 

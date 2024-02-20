@@ -42,7 +42,7 @@ class VpnModel extends Model {
         channel.stream.listen(
           (data) {
             final parsedJson = json.decode(data);
-            if (parsedJson["type"] == "sysproxy") {
+            if (parsedJson["type"] == "vpnstatus") {
               final updated = parsedJson["message"]["connected"];
               final isConnected = updated != null && updated.toString() == "true";
               setValue(isConnected ? "connected" : "disconnected");
