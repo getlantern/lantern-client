@@ -155,6 +155,8 @@ jobs:
 
         - run: make ffigen
 
+        - run: touch app.env
+
         - name: Build Flutter app
           run: flutter build windows
 
