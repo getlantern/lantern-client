@@ -82,6 +82,8 @@ jobs:
 
       - uses: seanmiddleditch/gha-setup-ninja@master
 
+      - run: touch app.env
+
       - name: Build Flutter app
         run: flutter build linux
 

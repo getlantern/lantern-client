@@ -101,6 +101,8 @@ jobs:
       run: |
         dart pub global activate protoc_plugin
 
+    - run: touch app.env
+
     - name: Build Flutter app
       run: flutter build macos --release
 
