@@ -77,9 +77,8 @@ appium_kotlin/app/src/test/resources/local/local_config.json
 
 ios/internalsdk/Internalsdk.xcframework/
 android/app/libs/liblantern-all.aar
-
-.env
 lantern-installer.dmg
 liblantern.h
 liblantern.dylib
 lib/generated_bindings.dart
+*.env
