@@ -46,6 +46,13 @@ jobs:
       run: |
         echo "REPO_NAME=$(echo ${{ github.repository }} | sed s/'${{ github.repository_owner }}\/'//g)" >> "$GITHUB_OUTPUT"
 
+    - name: Send Slack message to Releases channel
+      if: ${{ steps.exists.outputs.EXISTING < 1 }}
+      run: |
+        curl -X POST -H 'Content-type: application/json' \
+          --data "{\"platform\": \"${{ steps.repo.outputs.REPO_NAME }}\", \"version\": \"${{ github.ref_name }}\"}" \
+          ${{ secrets.SLACK_RELEASES_WEBHOOK }}
+
     - name: Trigger QC Checklist in customer-service repo
       if: ${{ steps.exists.outputs.EXISTING < 1 }}
       env:
