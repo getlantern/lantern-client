@@ -292,6 +292,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         )
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun bandwidthUpdated(bandwidth: Bandwidth) {
+        Logger.debug("bandwidth updated", bandwidth.toString())
+        vpnModel.updateBandwidth(bandwidth)
+    }
+
     private fun updateUserData() {
         lanternClient.userData(
             object : ProUserCallback {

@@ -29,7 +29,7 @@ class VPNTab extends StatelessWidget {
             ProBanner()
             else
               const SizedBox(),
-            VPNSwitch(),
+            const VPNSwitch(),
             Container(
               padding: const EdgeInsetsDirectional.all(16),
               decoration: BoxDecoration(
@@ -50,8 +50,8 @@ class VPNTab extends StatelessWidget {
                   if(Platform.isAndroid)...{
                     const CDivider(height: 32.0),
                     SplitTunnelingWidget(),
-                    // Not sure about this
-                    VPNBandwidth(),
+                    if(!proUser)
+                     const VPNBandwidth(),
                   }
                   ],
               ),
