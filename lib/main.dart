@@ -21,8 +21,12 @@ Future<void> main() async {
   }
 
   WidgetsFlutterBinding.ensureInitialized();
-  // To load the .env file contents into dotenv.
-  await dotenv.load(fileName: "app.env");
+  try {
+    // To load the .env file contents into dotenv.
+    await dotenv.load(fileName: "app.env");
+  } catch (error) {
+    print(error);
+  }
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   if (isDesktop()) {
@@ -41,9 +45,6 @@ Future<void> main() async {
       await windowManager.show();
       await windowManager.focus();
     });
-  } else {
-    // To load the .env file contents into dotenv.
-    await dotenv.load(fileName: "app.env");
   }
 
   setupCatcherAndRun(LanternApp());
