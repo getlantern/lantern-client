@@ -2,10 +2,8 @@ import 'package:lantern/replica/common.dart';
 import 'package:lantern/i18n/i18n.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
-
 import 'common.dart';
 import 'common_desktop.dart';
-import 'package:lantern/flutter_go.dart';
 import 'dart:convert' show utf8;
 
 final sessionModel = SessionModel();

@@ -1,6 +1,5 @@
 import 'package:lantern/vpn/vpn.dart';
 import 'package:lantern/common/common_desktop.dart' as desktop;
-import 'package:lantern/flutter_go.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
