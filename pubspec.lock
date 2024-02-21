@@ -213,47 +213,26 @@ packages:
     dependency: "direct main"
     description:
       name: cached_network_image
-<<<<<<< HEAD
-      sha256: f98972704692ba679db144261172a8e20feb145636c617af0eb4022132a6797f
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.0"
-=======
       sha256: "28ea9690a8207179c319965c13cd8df184d5ee721ae2ce60f398ced1219cea1f"
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
->>>>>>> origin/main
   cached_network_image_platform_interface:
     dependency: transitive
     description:
       name: cached_network_image_platform_interface
-<<<<<<< HEAD
-      sha256: "56aa42a7a01e3c9db8456d9f3f999931f1e05535b5a424271e9a38cabf066613"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
-=======
       sha256: "9e90e78ae72caa874a323d78fa6301b3fb8fa7ea76a8f96dc5b5bf79f283bf2f"
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
->>>>>>> origin/main
   cached_network_image_web:
     dependency: transitive
     description:
       name: cached_network_image_web
-<<<<<<< HEAD
-      sha256: "759b9a9f8f6ccbb66c185df805fac107f05730b1dab9c64626d1008cca532257"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
-=======
       sha256: "42a835caa27c220d1294311ac409a43361088625a4f23c820b006dd9bffb3316"
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
->>>>>>> origin/main
   catcher_2:
     dependency: "direct main"
     description:
@@ -434,17 +413,10 @@ packages:
     dependency: "direct main"
     description:
       name: emoji_picker_flutter
-<<<<<<< HEAD
-      sha256: "009c51efc763d5a6ba05a5628b8b2184c327cd117d66ea9c3e7edf2ff269c423"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.6.3"
-=======
       sha256: "8506341d62efd116d6fb1481450bffdbac659d3d90d46d9cc610bfae5f33cc54"
       url: "https://pub.dev"
     source: hosted
     version: "1.6.4"
->>>>>>> origin/main
   enum_to_string:
     dependency: transitive
     description:
@@ -530,6 +502,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  flutter_dotenv:
+    dependency: "direct main"
+    description:
+      name: flutter_dotenv
+      sha256: "9357883bdd153ab78cbf9ffa07656e336b8bbb2b5a3ca596b0b27e119f7c7d77"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
   flutter_driver:
     dependency: "direct dev"
     description: flutter

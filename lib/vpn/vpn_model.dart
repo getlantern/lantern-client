@@ -27,7 +27,7 @@ class VpnModel extends Model {
   }
 
   Future<bool> isVpnConnected() async {
-    final vpnStatus = await methodChannel.invokeMethod('get', '/vpn_status');
+    final vpnStatus = await methodChannel.invokeMethod('getVpnStatus');
     return vpnStatus == 'connected';
   }
 

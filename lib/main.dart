@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
@@ -16,6 +17,8 @@ Future<void> main() async {
   }
 
   WidgetsFlutterBinding.ensureInitialized();
+  // To load the .env file contents into dotenv.
+  await dotenv.load(fileName: "app.env");
   await _initGoogleMobileAds();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
