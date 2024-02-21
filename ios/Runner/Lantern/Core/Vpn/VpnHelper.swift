@@ -126,6 +126,12 @@ class VpnHelper: NSObject {
     // create process-specific directory @ ~/app
 
     do {
+        try fileManager.ensureDirectoryExists(at: Constants.lanternDirectory)
+    } catch {
+      logger.error("Failed to create directory @ \(Constants.lanternDirectory.path)")
+    }
+
+    do {
       try fileManager.ensureDirectoryExists(at: constants.targetDirectoryURL)
     } catch {
       logger.error("Failed to create directory @ \(constants.targetDirectoryURL.path)")
