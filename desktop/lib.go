@@ -26,7 +26,6 @@ import (
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
-	"github.com/getlantern/lantern-client/desktop/plugin"
 
 	"google.golang.org/protobuf/encoding/protojson"
 	"github.com/shirou/gopsutil/v3/host"
@@ -50,8 +49,6 @@ func start() {
 	cdir := configDir()
 	settings := loadSettings(cdir)
 	proClient = pro.NewClient()
-
-	plugin.Bootstrap()
 
 	a = app.NewApp(flashlight.Flags{}, cdir, proClient, settings)
 

@@ -69,7 +69,7 @@ import UIKit
     vpnModel = try VpnModel(
       flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault,
       sessionModel: sessionModel)
-    //    navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
+    // navigationModel = NavigationModel(flutterBinary: flutterbinaryMessenger)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
   }
 

@@ -79,6 +79,7 @@ func UserCreate(deviceId string, local string) (*UserResponse, error) {
 	// Add headers
 	req.Header.Set("X-Lantern-Device-Id", deviceId)
 	log.Debugf("Headers set")
+
 	// Send the request
 	resp, err := httpClient.Do(req)
 	if err != nil {
