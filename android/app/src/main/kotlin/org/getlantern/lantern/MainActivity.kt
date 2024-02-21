@@ -176,9 +176,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     override fun onResume() {
         val start = System.currentTimeMillis()
-
         super.onResume()
-        Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
 
         val isServiceRunning = Utils.isServiceRunning(activity, LanternVpnService::class.java)
         if (vpnModel.isConnectedToVpn() && !isServiceRunning) {
@@ -345,7 +343,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     proPlans: Map<String, ProPlan>,
                     paymentMethods: List<PaymentMethods>,
 
-                ) {
+                    ) {
                     Logger.debug(TAG, "Successfully fetched payment methods")
                     processPaymentMethods(proPlans, paymentMethods)
                 }
@@ -358,7 +356,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         proPlans: Map<String, ProPlan>,
         paymentMethods: List<PaymentMethods>,
 
-    ) {
+        ) {
         for (planId in proPlans.keys) {
             proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
         }
@@ -556,6 +554,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             }
         } else {
             sendBroadcast(notifications.disconnectIntent())
+            //Update VPN status
+            vpnModel.updateStatus(false)
         }
     }
 
