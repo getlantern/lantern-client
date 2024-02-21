@@ -47,7 +47,7 @@ dependencies:
   badges: ^3.1.1
   dotted_border: ^2.0.0+3
   styled_text: ^8.1.0
-  emoji_picker_flutter: ^1.6.3
+  emoji_picker_flutter: ^1.6.4
   pin_code_text_field: ^1.8.0
   scrollable_positioned_list: ^0.3.8
   infinite_scroll_pagination: ^3.2.0
@@ -93,7 +93,7 @@ dependencies:
   url_launcher: ^6.1.12
   share_plus: ^7.1.0
   flutter_inappwebview: ^6.0.0-beta.25
-
+  flutter_dotenv: ^5.1.0
 
 
   # Notifications & Logging
@@ -165,6 +165,7 @@ flutter:
     - assets/locales/
     - assets/fonts/
     - assets/sounds/
+    - app.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

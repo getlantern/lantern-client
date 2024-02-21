@@ -7,6 +7,7 @@ import 'package:clever_ads_solutions/public/InitConfig.dart';
 import 'package:clever_ads_solutions/public/InitializationListener.dart';
 import 'package:clever_ads_solutions/public/MediationManager.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:lantern/common/app_secret.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:logger/logger.dart';
@@ -48,9 +49,9 @@ class AdHelper {
   // return 'ca-app-pub-3940256099942544/1033173712';
   String get interstitialAdUnitId {
     if (Platform.isAndroid) {
-      return 'ca-app-pub-2685698271254859/9922829329';
+      return AppSecret.androidAdsAppId;
     } else {
-      return 'ca-app-pub-2685698271254859/8751964275';
+      return AppSecret.iOSAdsAppId;
     }
   }
 
