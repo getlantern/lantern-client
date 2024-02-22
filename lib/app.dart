@@ -1,5 +1,4 @@
 import 'package:flutter/scheduler.dart';
-import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/messaging/messaging.dart';
 
@@ -108,8 +107,17 @@ class LanternApp extends StatelessWidget {
                     GlobalWidgetsLocalizations.delegate,
                     GlobalCupertinoLocalizations.delegate,
                   ],
-                  routeInformationParser: globalRouter.defaultRouteParser(),
-                  routerDelegate: globalRouter.delegate(),
+                  routerConfig: globalRouter.config(
+                    deepLinkBuilder: (PlatformDeepLink deepLink) {
+                      logger.d("DeepLink: ${deepLink.configuration.toString()}");
+                      logger.d("DeepLink: ${deepLink.uri.toString()}");
+                      if (deepLink.path.startsWith('/reportIssue')) {
+                        return deepLink;
+                      } else {
+                        return DeepLink.defaultPath;
+                      }
+                    },
+                  ),
                   supportedLocales: const [
                     Locale('ar', 'EG'),
                     Locale('fr', 'FR'),
