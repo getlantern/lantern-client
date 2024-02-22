@@ -32,7 +32,7 @@ internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
 routes: lib/core/router/router.gr.dart
 
 lib/core/router/router.gr.dart: $(shell find lib -name \*.dart -print)
-	@flutter packages pub run build_runner build --delete-conflicting-outputs
+	@dart run build_runner build --delete-conflicting-outputs
 
 test:
 	@flutter test
