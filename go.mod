@@ -34,7 +34,7 @@ require (
 	github.com/getlantern/dnsgrab v0.0.0-20240124035712-497ccf435858
 	github.com/getlantern/errors v1.0.3
 	github.com/getlantern/eventual/v2 v2.0.2
-	github.com/getlantern/flashlight/v7 v7.6.51
+	github.com/getlantern/flashlight/v7 v7.6.56
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
 	github.com/getlantern/ipproxy v0.0.0-20240129182103-533871131d16
@@ -77,7 +77,7 @@ require (
 	github.com/anacrolix/missinggo/v2 v2.7.3 // indirect
 	github.com/anacrolix/mmsg v1.0.0 // indirect
 	github.com/anacrolix/multiless v0.3.1-0.20221221005021-2d12701f83f7 // indirect
-	github.com/anacrolix/squirrel v0.6.0 // indirect
+	github.com/anacrolix/squirrel v0.6.3 // indirect
 	github.com/anacrolix/stm v0.5.0 // indirect
 	github.com/anacrolix/sync v0.5.1 // indirect
 	github.com/anacrolix/torrent v1.53.3 // indirect
