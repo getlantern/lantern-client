@@ -339,7 +339,6 @@ class _CheckoutState extends State<Checkout>
                       width: MediaQuery.of(context).size.width,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: paymentOptions(paymentMethods),
                         children: Platform.isAndroid ? paymentOptions(paymentMethods) : desktopPaymentOptions(),
                       ),
                     ),
