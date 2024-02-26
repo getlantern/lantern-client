@@ -5,16 +5,11 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
   emoji_picker_flutter
-<<<<<<< HEAD
   screen_retriever
   sentry_flutter
   tray_manager
   url_launcher_linux
   window_manager
-=======
-  sentry_flutter
-  url_launcher_linux
->>>>>>> main
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
