@@ -2,6 +2,7 @@ package org.getlantern.lantern.model
 
 import com.google.gson.annotations.SerializedName
 
+
 enum class PaymentMethod(val method: String) {
     @SerializedName("credit-card")
     CreditCard("credit-card"),
@@ -25,4 +26,9 @@ enum class PaymentMethod(val method: String) {
 data class PaymentMethods(
     @SerializedName("method") var method: PaymentMethod,
     @SerializedName("providers") var providers: List<ProviderInfo>,
+)
+
+data class Icons(
+    @SerializedName("paymentwall") val paymentwall: List<String>,
+    @SerializedName("stripe") val stripe: List<String>
 )

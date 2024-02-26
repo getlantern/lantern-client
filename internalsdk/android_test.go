@@ -46,6 +46,7 @@ func (c testSession) GetForcedCountryCode() (string, error)                    {
 func (c testSession) GetDNSServer() (string, error)                            { return "8.8.8.8", nil }
 func (c testSession) SetStaging(bool) error                                    { return nil }
 func (c testSession) SetCountry(string) error                                  { return nil }
+func (c testSession) SetIP(string) error                                       { return nil }
 func (c testSession) ProxyAll() (bool, error)                                  { return true, nil }
 func (c testSession) GetDeviceID() (string, error)                             { return "123456789", nil }
 func (c testSession) AccountId() (string, error)                               { return "1234", nil }

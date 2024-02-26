@@ -13,6 +13,7 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/idletiming"
 	"github.com/getlantern/ipproxy"
+	"github.com/getlantern/netx"
 
 	"golang.org/x/net/proxy"
 )
@@ -62,18 +63,10 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 			_, port, _ := net.SplitHostPort(addr)
 			isDNS := port == "53"
 			if isDNS {
-				// reroute DNS requests to dnsgrab
+				// intercept and reroute DNS traffic to dnsgrab
 				addr = dnsGrabAddr
-			} else if port == "853" {
-				// This is usually DNS over DTLS, we blackhole this to force DNS through dnsgrab.
-				return nil, errors.New("blackholing DNS over TLS traffic to %v", addr)
-			} else if port == "443" {
-				// This is likely QUIC traffic. This should really be proxied, but since we don't proxy UDP,
-				// we blackhole this traffic.
-				return nil, errors.New("blackholing QUIC UDP traffic to %v", addr)
 			}
-			var d net.Dialer
-			conn, err := d.DialContext(ctx, network, addr)
+			conn, err := netx.DialContext(ctx, network, addr)
 			if isDNS && err == nil {
 				// wrap our DNS requests in a connection that closes immediately to avoid piling up file descriptors for DNS requests
 				conn = idletiming.Conn(conn, 10*time.Second, nil)

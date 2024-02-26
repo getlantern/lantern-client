@@ -93,6 +93,8 @@ class CDialog extends StatefulWidget {
 
   void close(BuildContext context) {
     closeOnce(() {
+      // See https://dart.dev/tools/linter-rules/use_build_context_synchronously
+      if (!context.mounted) return;
       Navigator.pop(context);
     });
   }
@@ -158,11 +160,11 @@ class CDialogState extends State<CDialog> {
                 child: widget.description is Widget
                     ? widget.description
                     : CText(
-                            widget.description as String,
-                            style: tsBody1.copiedWith(
-                              color: grey5,
-                            ),
-                          ),
+                        widget.description as String,
+                        style: tsBody1.copiedWith(
+                          color: grey5,
+                        ),
+                      ),
               ),
             ),
           ),
@@ -217,6 +219,8 @@ class CDialogState extends State<CDialog> {
                       if (widget.dismissAction != null) {
                         await widget.dismissAction!();
                       }
+                      // See https://dart.dev/tools/linter-rules/use_build_context_synchronously
+                      if (!context.mounted) return;
                       widget.close(context);
                     },
                     child: CText(
@@ -231,11 +235,15 @@ class CDialogState extends State<CDialog> {
                     onPressed: () async {
                       if (widget.maybeAgreeAction != null) {
                         if (await widget.maybeAgreeAction!(checkboxChecked)) {
+                          // See https://dart.dev/tools/linter-rules/use_build_context_synchronously
+                          if (!context.mounted) return;
                           widget.close(context);
                         }
                       } else if (widget.agreeAction != null) {
                         if ((widget.checkboxLabel == null || checkboxChecked) &&
                             await widget.agreeAction!()) {
+                          // See https://dart.dev/tools/linter-rules/use_build_context_synchronously
+                          if (!context.mounted) return;
                           widget.close(context);
                         }
                       } else {

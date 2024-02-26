@@ -47,6 +47,14 @@ func (s *VPNModel) doInvokeMethod(method string, arguments Arguments) (interface
 		return true, nil
 	case "getVpnStatus":
 		return s.GetVPNStatus()
+	case "connectingDelay":
+		on := arguments.Get("on").Bool()
+		if on {
+			s.SaveVPNStatus("connecting")
+		} else {
+			s.SaveVPNStatus("disconnecting")
+		}
+		return true, nil
 	default:
 		return s.methodNotImplemented(method)
 	}

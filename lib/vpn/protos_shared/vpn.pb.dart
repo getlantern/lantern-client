@@ -571,10 +571,14 @@ class Plan extends $pb.GeneratedMessage {
 class PaymentProviders extends $pb.GeneratedMessage {
   factory PaymentProviders({
     $core.String? name,
+    $core.Iterable<$core.String>? logoUrls,
   }) {
     final $result = create();
     if (name != null) {
       $result.name = name;
+    }
+    if (logoUrls != null) {
+      $result.logoUrls.addAll(logoUrls);
     }
     return $result;
   }
@@ -584,6 +588,7 @@ class PaymentProviders extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PaymentProviders', createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
+    ..pPS(2, _omitFieldNames ? '' : 'logoUrls', protoName: 'logoUrls')
     ..hasRequiredFields = false
   ;
 
@@ -616,6 +621,9 @@ class PaymentProviders extends $pb.GeneratedMessage {
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
   void clearName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.String> get logoUrls => $_getList(1);
 }
 
 class PaymentMethod extends $pb.GeneratedMessage {

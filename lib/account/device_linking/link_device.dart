@@ -1,4 +1,6 @@
 import 'package:lantern/common/common.dart';
+import 'package:retry/retry.dart';
+
 import 'explanation_step.dart';
 
 @RoutePage<void>(name: 'LinkDevice')
@@ -12,11 +14,25 @@ class LinkDevice extends StatefulWidget {
 }
 
 class _LinkDeviceState extends State<LinkDevice> {
-
   @override
   void initState() {
     super.initState();
-    sessionModel.requestLinkCode();
+    sessionModel.requestLinkCode().then(
+          (code) => {
+            print("requestLinkCode success code is $code"),
+            retry(
+              // Make a GET request
+              () => sessionModel
+                  .redeemLinkCode()
+                  .timeout(const Duration(hours: 1)),
+              onRetry: (e) => print("error , retry: $e"),
+            ).then(
+              (x) => {
+                print("redeemLinkCode success"),
+              },
+            )
+          },
+        );
   }
 
   @override
@@ -24,7 +40,7 @@ class _LinkDeviceState extends State<LinkDevice> {
     return BaseScreen(
       title: 'Authorize Device for Pro'.i18n,
       body: sessionModel.deviceLinkingCode((BuildContext context,
-          String deviceCode, Widget? child) =>
+              String deviceCode, Widget? child) =>
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

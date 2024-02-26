@@ -42,7 +42,7 @@ dependencies:
 
  #Loogs and crash reporting
   catcher_2: ^1.0.0
-  sentry_flutter: ^7.10.1
+  sentry_flutter: ^7.16.0
 
   badges: ^3.1.1
   dotted_border: ^2.0.0+3
@@ -54,9 +54,10 @@ dependencies:
   wakelock: ^0.6.2
   email_validator: ^2.1.17
   credit_card_validator: ^2.1.0
+  flutter_multi_formatter: ^2.12.4
 
   # Media & File handling
-  audioplayers: ^5.1.0
+  audioplayers: ^5.2.1
   video_player: ^2.7.0
   video_thumbnail: ^0.5.3
   file_picker: ^5.3.3
@@ -92,7 +93,7 @@ dependencies:
   url_launcher: ^6.1.12
   share_plus: ^7.1.0
   flutter_inappwebview: ^6.0.0-beta.25
-
+  flutter_dotenv: ^5.1.0
 
 
   # Notifications & Logging
@@ -113,8 +114,9 @@ dependencies:
   flutter_markdown: ^0.6.17+1
 
   # Ads
-  google_mobile_ads: ^3.0.0
-  # clever_ads_solutions: ^0.1.0
+  google_mobile_ads: ^4.0.0
+  clever_ads_solutions: ^0.2.4
+  retry: ^3.1.2
 
 
 # wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0
@@ -163,6 +165,7 @@ flutter:
     - assets/locales/
     - assets/fonts/
     - assets/sounds/
+    - app.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

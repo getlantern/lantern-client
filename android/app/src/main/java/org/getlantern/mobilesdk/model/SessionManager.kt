@@ -31,6 +31,7 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.util.DnsDetector
+import org.getlantern.mobilesdk.util.LanguageHelper
 import org.greenrobot.eventbus.EventBus
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -198,6 +199,9 @@ abstract class SessionManager(application: Application) : Session {
 
     val serverCountry: String?
         get() = prefs.getString(SERVER_COUNTRY, "")
+
+    val ipAddress: String?
+        get() = prefs.getString(IP_ADDRESS, "")
 
     override fun getCountryCode(): String {
         val forceCountry = forcedCountryCode
@@ -383,6 +387,10 @@ abstract class SessionManager(application: Application) : Session {
         return staging
     }
 
+    override fun setIP(ipAddress: String) {
+        prefs.edit().putString(IP_ADDRESS, ipAddress).apply()
+    }
+
     override fun setCountry(country: String) {
         prefs.edit().putString(GEO_COUNTRY_CODE, country).apply()
     }
@@ -397,6 +405,7 @@ abstract class SessionManager(application: Application) : Session {
         adsBlocked: Long,
         hasSucceedingProxy: Boolean,
     ) {
+        Logger.debug("updateStats", "city $city, country $country, countryCode $countryCode")
         if (hasUpdatedStats.compareAndSet(false, true)) {
             // The first time that we get the stats, hasSucceedingProxy is always false because we
             // haven't hit any proxies yet. So, we just ignore the stats.
@@ -502,6 +511,7 @@ abstract class SessionManager(application: Application) : Session {
         protected const val PREF_NAME = "LanternSession"
         protected const val LATEST_BANDWIDTH = "latest_bandwidth"
         protected const val GEO_COUNTRY_CODE = "geo_country_code"
+        protected const val IP_ADDRESS = "ip_address"
         protected const val SERVER_COUNTRY = "server_country"
         protected const val SERVER_COUNTRY_CODE = "server_country_code"
         protected const val SERVER_CITY = "server_city"
@@ -570,6 +580,8 @@ abstract class SessionManager(application: Application) : Session {
         db.registerType(2004, Vpn.PaymentProviders::class.java)
         db.registerType(2005, Vpn.PaymentMethod::class.java)
         db.registerType(2006, Vpn.AppData::class.java)
+        db.registerType(2007, Vpn.ServerInfo::class.java)
+
         Logger.debug(TAG, "register types finished at ${System.currentTimeMillis() - start}")
         val prefsAdapter = db.asSharedPreferences(
             context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE),
@@ -585,7 +597,8 @@ abstract class SessionManager(application: Application) : Session {
 
         // this condition is unnecessary
         // Todo remove this soon
-        if (prefs.getInt(ACCEPTED_TERMS_VERSION, 0) == 0) prefs.edit().putInt(ACCEPTED_TERMS_VERSION, 0).apply()
+        if (prefs.getInt(ACCEPTED_TERMS_VERSION, 0) == 0) prefs.edit()
+            .putInt(ACCEPTED_TERMS_VERSION, 0).apply()
 
         Logger.debug(TAG, "prefs.edit() finished at ${System.currentTimeMillis() - start}")
         internalHeaders = context.getSharedPreferences(
@@ -607,6 +620,15 @@ abstract class SessionManager(application: Application) : Session {
             Logger.debug(TAG, "Lingver.init() finished at ${System.currentTimeMillis() - start}")
         } else {
             locale = Lingver.init(application).getLocale()
+            // Here check if we support device language localization
+            // if not then set default language to English
+            locale =
+                if (LanguageHelper.supportLanguages.contains("${locale!!.language}_${locale!!.country}")) {
+                    locale
+                } else {
+                    // Default language is English
+                    Locale("en", "US")
+                }
             Logger.debug(TAG, "Lingver.init() finished at ${System.currentTimeMillis() - start}")
             Logger.debug(TAG, "Configured language was empty, using %1\$s", locale)
             setLocale(locale)

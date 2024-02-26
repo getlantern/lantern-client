@@ -19,7 +19,6 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/balancer"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/common"
@@ -68,6 +67,7 @@ type Session interface {
 	GetUserID() (int64, error)
 	GetToken() (string, error)
 	SetCountry(string) error
+	SetIP(string) error
 	UpdateAdSettings(AdSettings) error
 	UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error
 	SetStaging(bool) error
@@ -118,6 +118,7 @@ type panickingSession interface {
 	DeviceOS() string
 	IsProUser() bool
 	SetChatEnabled(bool)
+	SetIP(string)
 	SplitTunnelingEnabled() bool
 	SetShowInterstitialAdsEnabled(bool)
 	SetCASShowInterstitialAdsEnabled(bool)
@@ -162,6 +163,10 @@ func (s *panickingSessionImpl) GetToken() string {
 
 func (s *panickingSessionImpl) SetCountry(country string) {
 	panicIfNecessary(s.wrapped.SetCountry(country))
+}
+
+func (s *panickingSessionImpl) SetIP(ipAddress string) {
+	panicIfNecessary(s.wrapped.SetIP(ipAddress))
 }
 
 func (s *panickingSessionImpl) UpdateAdSettings(settings AdSettings) {
@@ -311,17 +316,6 @@ func newUserConfig(session panickingSession) *userConfig {
 	return &userConfig{session: session}
 }
 
-func getBalancer(timeout time.Duration) *balancer.Balancer {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
-
-	cl := getClient(ctx)
-	if cl == nil {
-		return nil
-	}
-	return cl.GetBalancer()
-}
-
 func getClient(ctx context.Context) *client.Client {
 	_cl, _ := clEventual.Get(ctx)
 	if _cl == nil {
@@ -435,12 +429,14 @@ func Start(configDir string,
 		da.(string)}, nil
 }
 
-func newAnalyticsSession(deviceID string) analytics.Session {
-	session := analytics.Start(deviceID, ApplicationVersion)
+func newAnalyticsSession(session panickingSession) analytics.Session {
+	analyticsSession := analytics.Start(session.GetDeviceID(), ApplicationVersion)
 	go func() {
-		session.SetIP(geolookup.GetIP(forever))
+		ipAddress := geolookup.GetIP(forever)
+		analyticsSession.SetIP(ipAddress)
+		session.SetIP(ipAddress)
 	}()
-	return session
+	return analyticsSession
 }
 
 func run(configDir, locale string,
@@ -577,7 +573,7 @@ func run(configDir, locale string,
 	replicaServer := &ReplicaServer{
 		ConfigDir:        configDir,
 		Flashlight:       runner,
-		analyticsSession: newAnalyticsSession(session.GetDeviceID()),
+		analyticsSession: newAnalyticsSession(session),
 		Session:          session.Wrapped(),
 		UserConfig:       userConfig,
 	}
@@ -604,6 +600,8 @@ func run(configDir, locale string,
 			//Check for CAS ads for Russia and Iran user
 			showCASAdsEnabled := runner.FeatureEnabled("casinterstitialads", ApplicationVersion)
 			session.SetCASShowInterstitialAdsEnabled(showCASAdsEnabled)
+			log.Debugf("Show ads enabled casinterstitialads ? %v", showCASAdsEnabled)
+
 		} else {
 			// Explicitly disable ads for Pro users.
 			session.SetShowInterstitialAdsEnabled(false)

@@ -103,6 +103,7 @@ class ImagePaths {
   static const mode_edit = 'assets/images/mode_edit.svg';
   static const fullscreen_icon = 'assets/images/fullscreen_icon.svg';
   static const newspaper = 'assets/images/newspaper.svg';
+  static const searchApp = 'assets/images/search_app.svg';
 
   // Commonly used
   static const arrow_down = 'assets/images/arrow_down.svg';
@@ -124,6 +125,7 @@ class ImagePaths {
   static const verified_user = 'assets/images/verified_user.svg';
   static const user = 'assets/images/user.svg';
   static const image_inactive = 'assets/images/image_inactive.svg';
+
 
   // illustrations
   static const welcome_illustration = 'assets/images/welcome_illustration.svg';

@@ -2,8 +2,6 @@ package io.lantern.model
 
 import android.app.Activity
 import android.content.Intent
-import android.os.AsyncTask
-import android.os.Build
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import com.google.protobuf.ByteString
@@ -29,11 +27,11 @@ import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.castToBoolean
-import org.getlantern.lantern.util.openHome
 import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
@@ -59,7 +57,9 @@ class SessionModel(
     companion object {
         private const val TAG = "SessionModel"
         const val PATH_PRO_USER = "prouser"
+        const val PATH_SELECTED_TAB = "/selectedTab"
         const val PATH_PLAY_VERSION = "playVersion"
+        const val PATH_SERVER_INFO = "/server_info"
 
         const val PATH_SDK_VERSION = "sdkVersion"
         const val PATH_USER_LEVEL = "userLevel"
@@ -80,6 +80,10 @@ class SessionModel(
                 castToBoolean(tx.get(PATH_PRO_USER), false),
             )
             tx.put(
+                PATH_SELECTED_TAB,
+                tx.get(PATH_SELECTED_TAB) ?: "vpn",
+            )
+            tx.put(
                 PATH_USER_LEVEL,
                 tx.get(PATH_USER_LEVEL) ?: "",
             )
@@ -90,7 +94,9 @@ class SessionModel(
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
+
         }
+
         updateAppsData()
         checkAdsAvailability()
     }
@@ -98,7 +104,7 @@ class SessionModel(
     fun checkAdsAvailability() {
         //This check is just safe guard
         //So if something goes wrong in backend we should not show ads to pro users at any case
-        if(LanternApp.getSession().isProUser){
+        if (LanternApp.getSession().isProUser) {
             db.mutate { tx ->
                 tx.put(SHOULD_SHOW_GOOGLE_ADS, false)
                 tx.put(SHOULD_SHOW_CAS_ADS, false)
@@ -107,9 +113,19 @@ class SessionModel(
         }
         Logger.debug(TAG, "checkAdsAvailability called")
         val googleAds = shouldShowAdsBasedRegion { LanternApp.getSession().shouldShowAdsEnabled() }
-        Logger.debug(TAG, "checkAdsAvailability with googleAds values $googleAds enable ${LanternApp.getSession().shouldShowAdsEnabled()}")
+        Logger.debug(
+            TAG,
+            "checkAdsAvailability with googleAds values $googleAds enable ${
+                LanternApp.getSession().shouldShowAdsEnabled()
+            }"
+        )
         val casAds = shouldShowAdsBasedRegion { LanternApp.getSession().shouldCASShowAdsEnabled() }
-        Logger.debug(TAG, "checkAdsAvailability with cas values $googleAds enable ${LanternApp.getSession().shouldCASShowAdsEnabled()}")
+        Logger.debug(
+            TAG,
+            "checkAdsAvailability with cas values $googleAds enable ${
+                LanternApp.getSession().shouldCASShowAdsEnabled()
+            }"
+        )
         db.mutate { tx ->
             tx.put(SHOULD_SHOW_GOOGLE_ADS, googleAds)
             tx.put(SHOULD_SHOW_CAS_ADS, casAds)
@@ -119,9 +135,10 @@ class SessionModel(
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "authorizeViaEmail" -> authorizeViaEmail(call.argument("emailAddress")!!, result)
+            "authorizeViaEmail" -> requestRecoveryEmail(call.argument("emailAddress")!!, result)
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "requestLinkCode" -> requestLinkCode(result)
+            "redeemLinkCode" -> redeemLinkCode(result)
             "resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
             "approveDevice" -> approveDevice(call.argument("code")!!, result)
@@ -152,6 +169,7 @@ class SessionModel(
             )
 
             "submitGooglePlayPayment" -> paymentsUtil.submitGooglePlayPayment(
+                call.argument("email")!!,
                 call.argument("planID")!!,
                 result,
             )
@@ -181,6 +199,11 @@ class SessionModel(
                 }
             }
 
+            "trackUserAction" -> {
+                val props: Map<String, String> = mapOf("title" to call.argument("title")!!)
+                Plausible.event(call.argument("name")!!, url = call.argument("url")!!, props = props)
+            }
+
             "acceptTerms" -> {
                 LanternApp.getSession().acceptTerms()
             }
@@ -206,7 +229,7 @@ class SessionModel(
 
             "setSelectedTab" -> {
                 db.mutate { tx ->
-                    tx.put("/selectedTab", call.argument<String>("tab")!!)
+                    tx.put(PATH_SELECTED_TAB, call.argument<String>("tab")!!)
                 }
             }
 
@@ -295,31 +318,31 @@ class SessionModel(
                         tx.put(
                             path,
                             Vpn.AppData.newBuilder()
-                                .setPackageName(it.packageName).setName(it.name)
+                                .setPackageName(it.packageName).setName(it.name).setIcon(ByteString.copyFrom(it.icon))
                                 .build()
                         )
                     }
                 }
             }
 
-            // Then add icons
-            db.mutate { tx ->
-                appsList.forEach {
-                    val path = PATH_APPS_DATA + it.packageName
-                    tx.get<Vpn.AppData>(path)?.let { existing ->
-                        if (existing.icon.isEmpty) {
-                            it.icon.let { icon ->
-                                tx.put(
-                                    path,
-                                    existing.toBuilder()
-                                        .setIcon(ByteString.copyFrom(icon))
-                                        .build(),
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+//            // Then add icons
+//            db.mutate { tx ->
+//                appsList.forEach {
+//                    val path = PATH_APPS_DATA + it.packageName
+//                    tx.get<Vpn.AppData>(path)?.let { existing ->
+//                        if (existing.icon.isEmpty) {
+//                            it.icon.let { icon ->
+//                                tx.put(
+//                                    path,
+//                                    existing.toBuilder()
+//                                        .setIcon(ByteString.copyFrom(icon))
+//                                        .build(),
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 
@@ -360,27 +383,38 @@ class SessionModel(
                         val code = result["code"].asString
                         val expireAt = result["expireAt"].asLong
                         LanternApp.getSession().setDeviceCode(code, expireAt)
-                        methodCallResult.success(null)
+                        methodCallResult.success(code)
                     }
                 }
             },
         )
     }
 
-    private fun redeemLinkCode() {
+    private fun redeemLinkCode(methodCallResult: MethodChannel.Result) {
         val formBody = FormBody.Builder()
             .add("code", LanternApp.getSession().deviceCode()!!)
             .add("deviceName", LanternApp.getSession().deviceName())
             .build()
+        Logger.info(TAG, "Redeeming link code")
         lanternClient.post(
-            LanternHttpClient.createProUrl("/link-code-request"),
+            LanternHttpClient.createProUrl("/link-code-redeem"),
             formBody,
             object : ProCallback {
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error making link redeem request..", t)
+                    if (error == null) {
+                        activity.runOnUiThread {
+                            methodCallResult.error("unknownError", null, null)
+                        }
+                        return
+                    }
+                    activity.runOnUiThread {
+                        methodCallResult.error("linkCodeError", error.id, null)
+                    }
                 }
 
                 override fun onSuccess(response: Response?, result: JsonObject?) {
+                    Logger.debug(TAG, "redeem link code response: $result")
                     if (result == null || result["token"] == null || result["userID"] == null) return
                     Logger.debug(TAG, "Successfully redeemed link code")
                     val userID = result["userID"].asLong
@@ -392,6 +426,7 @@ class SessionModel(
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     }
                     activity.startActivity(intent)
+                    // methodCallResult.success(null)
                 }
             },
         )
@@ -416,63 +451,29 @@ class SessionModel(
         )
     }
 
-    private fun authorizeViaEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
-        Logger.debug(TAG, "Start Account recovery with email $emailAddress")
-
-        LanternApp.getSession().setEmail(emailAddress)
+    private fun requestRecoveryEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
+        val session = LanternApp.getSession()
+        session.setEmail(emailAddress)
         val formBody = FormBody.Builder()
             .add("email", emailAddress)
+            .add("deviceName", session.deviceName())
+            .add("locale", session.locale())
             .build()
 
         lanternClient.post(
-            LanternHttpClient.createProUrl("/user-recover"),
+            LanternHttpClient.createProUrl("/user-link-request"),
             formBody,
             object : ProCallback {
                 override fun onSuccess(response: Response?, result: JsonObject?) {
-                    Logger.debug(TAG, "Account recovery response: $result")
-                    if (result!!["token"] != null && result["userID"] != null) {
-                        Logger.debug(TAG, "Successfully recovered account")
-                        // update token and user ID with those returned by the pro server
-                        LanternApp.getSession()
-                            .setUserIdAndToken(result["userID"].asLong, result["token"].asString)
-                        LanternApp.getSession().linkDevice()
-                        LanternApp.getSession().setIsProUser(true)
-                        activity.showAlertDialog(
-                            activity.getString(R.string.device_added),
-                            activity.getString(R.string.device_authorized_pro),
-                            ContextCompat.getDrawable(activity, R.drawable.ic_filled_check),
-                            {
-                                activity.openHome()
-                            },
-                        )
-                    } else {
-                        Logger.error(TAG, "Got empty recovery result, can't continue")
-                        activity.runOnUiThread {
-                            methodCallResult.error("unknownError", null, null)
-                        }
-                        return
+                    activity.runOnUiThread {
+                        methodCallResult.success("Recovery code sent")
                     }
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
-                    if (error == null) {
-                        Logger.error(TAG, "Unable to recover account and no error to show")
-                        activity.runOnUiThread {
-                            methodCallResult.error("unknownError", t?.message, null)
-                        }
-                        return
-                    }
-
-                    val errorId = error.id
-                    if (errorId == "wrong-device") {
-                        sendRecoveryCode(methodCallResult)
-                    } else if (errorId == "wrong-email" || errorId == "cannot-recover-user") {
-                        activity.runOnUiThread {
-                            methodCallResult.error("unableToRecover", errorId, null)
-                        }
-                        activity.showErrorDialog(activity.resources.getString(R.string.cannot_find_email))
-                    } else {
-                        Logger.error(TAG, "Unknown error recovering account:$error")
+                    Logger.error(TAG, "Failure on  requestRecoveryEmail", error)
+                    activity.runOnUiThread {
+                        methodCallResult.error("unknownError", t?.message, null)
                     }
                 }
             },
@@ -527,9 +528,8 @@ class SessionModel(
                     }
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
-                    Logger.debug(TAG, "Response: $result")
-                    if (result["token"] != null && result["userID"] != null) {
+                override fun onSuccess(response: Response?, result: JsonObject?) {
+                    if (result != null && result["token"] != null && result["userID"] != null) {
                         Logger.debug(TAG, "Successfully validated recovery code")
                         // update token and user ID with those returned by the pro server
                         // update token and user ID with those returned by the pro server
@@ -537,11 +537,11 @@ class SessionModel(
                             .setUserIdAndToken(result["userID"].asLong, result["token"].asString)
                         LanternApp.getSession().linkDevice()
                         LanternApp.getSession().setIsProUser(true)
-                        activity.showAlertDialog(
-                            activity.getString(R.string.device_added),
-                            activity.getString(R.string.device_authorized_pro),
-                            ContextCompat.getDrawable(activity, R.drawable.ic_filled_check),
-                            { activity.openHome() })
+                        activity.runOnUiThread {
+                            methodCallResult.success(
+                                activity.getString(R.string.device_added),
+                            )
+                        }
                     }
                 }
             },
@@ -565,7 +565,7 @@ class SessionModel(
                     activity.showErrorDialog(activity.resources.getString(R.string.invalid_verification_code))
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
+                override fun onSuccess(response: Response?, result: JsonObject?) {
                     lanternClient.userData(object : ProUserCallback {
                         override fun onSuccess(response: Response, userData: ProUser) {
                             Logger.debug(TAG, "Successfully updated userData")
@@ -613,12 +613,9 @@ class SessionModel(
             activity,
             issue,
             description,
+            methodCallResult,
         )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            issueReporter.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        } else {
-            issueReporter.execute()
-        }
+        issueReporter.reportIssue()
     }
 
     private fun removeDevice(deviceId: String, methodCallResult: MethodChannel.Result) {
@@ -642,7 +639,7 @@ class SessionModel(
                     activity.showErrorDialog(activity.resources.getString(R.string.unable_remove_device))
                 }
 
-                override fun onSuccess(response: Response, result: JsonObject) {
+                override fun onSuccess(response: Response?, result: JsonObject?) {
                     Logger.debug(TAG, "Successfully removed device")
 
                     val isLogout = deviceId == LanternApp.getSession().deviceID
@@ -704,6 +701,12 @@ class SessionModel(
                 "Unable to cache user status",
                 null
             ) // This will be localized Flutter-side
+        }
+    }
+
+    fun saveServerInfo(serverInfo: Vpn.ServerInfo) {
+        db.mutate { tx ->
+            tx.put(PATH_SERVER_INFO, serverInfo)
         }
     }
 }

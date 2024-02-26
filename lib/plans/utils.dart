@@ -14,6 +14,27 @@ void onAPIcallTimeout({code, message}) {
   );
 }
 
+void showError(
+  BuildContext context, {
+  Object? error,
+  StackTrace? stackTrace,
+  String description = '',
+}) {
+  if (description.isEmpty) {
+    if (error is PlatformException) {
+      description = (error).message.toString().i18n;
+    } else {
+      description = error.toString();
+    }
+  }
+  CDialog.showError(
+    context,
+    error: error,
+    stackTrace: stackTrace,
+    description: description,
+  );
+}
+
 void showSuccessDialog(BuildContext context, bool isPro, [bool? isReseller]) {
   String description, title;
   if (isReseller != null && isReseller) {
@@ -33,8 +54,25 @@ void showSuccessDialog(BuildContext context, bool isPro, [bool? isReseller]) {
     description: description,
     actionLabel: 'continue_to_pro'.i18n,
     agreeAction: () async {
-      await context.pushRoute(Home());
+      // Note: whatever page you need to popUtil
+      // it will pop that page
+      context.router.popUntil((route) => route.settings.name == PlansPage.name);
       return true;
     },
   );
+}
+
+enum Providers { stripe, btcpay, freekassa }
+
+extension ProviderExtension on String {
+  Providers toPaymentEnum() {
+    if (this == "stripe") {
+      return Providers.stripe;
+    }
+    if (this == "freekassa") {
+      return Providers.freekassa;
+    }
+
+    return Providers.btcpay;
+  }
 }

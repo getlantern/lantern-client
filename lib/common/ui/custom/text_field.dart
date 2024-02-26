@@ -118,7 +118,7 @@ class _CTextFieldState extends State<CTextField> {
             // thumbVisibility: true,
             trackVisibility: true,
             child: Tooltip(
-              message: widget.tooltipMessage??'',
+              message: widget.tooltipMessage ?? '',
               child: TextFormField(
                 key: fieldKey,
                 autofocus: widget.autofocus!,
@@ -190,7 +190,7 @@ class _CTextFieldState extends State<CTextField> {
                       // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
                       widget.prefixIcon != null
                           ? Transform.scale(
-                              scale: 0.4, child: widget.prefixIcon)
+                              scale: 0.5, child: widget.prefixIcon)
                           : null,
                   suffixIcon: renderSuffixRow(),
                   // forcibly remove if removeBorder == true

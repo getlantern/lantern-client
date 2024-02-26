@@ -1,6 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
-
 
 @RoutePage<void>(name: 'AuthorizeDeviceEmail')
 class AuthorizeDeviceViaEmail extends StatelessWidget {
@@ -41,24 +42,26 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
               margin: const EdgeInsetsDirectional.only(bottom: 32),
               child: Button(
                 text: 'Submit'.i18n,
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    context.loaderOverlay.show(widget: spinner);
-                    sessionModel
-                        .authorizeViaEmail(emailController.value.text)
-                        .then((result) async {
-                      context.loaderOverlay.hide();
-                      await context.pushRoute(AuthorizeDeviceEmailPin());
-                    }).onError((error, stackTrace) {
-                      context.loaderOverlay.hide();
-                    });
-                  }
-                },
+                onPressed: () => onSubmit(context),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> onSubmit(BuildContext context) async {
+    try {
+      if (!formKey.currentState!.validate()) {
+        return;
+      }
+      context.loaderOverlay.show(widget: spinner);
+      await sessionModel.authorizeViaEmail(emailController.value.text);
+      context.loaderOverlay.hide();
+      context.pushRoute(AuthorizeDeviceEmailPin(email: emailController.value.text));
+    } catch (e) {
+      context.loaderOverlay.hide();
+    }
   }
 }

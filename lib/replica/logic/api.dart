@@ -61,11 +61,12 @@ class ReplicaApi {
         break;
     }
     logger.v('_search(): uri: ${Uri.parse(s)}');
-
     final resp = await dio.get(s);
     if (resp.statusCode == 200) {
       logger
           .v('Statuscode: ${resp.statusCode} || body: ${resp.data.toString()}');
+      sessionModel.trackUserAction(
+          'User searched for Replica content', s, 'search');
       return ReplicaSearchItem.fromJson(category, resp.data);
     } else {
       logger.e(
