@@ -191,6 +191,8 @@ jobs:
           fileDir: './android/app'
           encodedString: ${{ secrets.KEYSTORE }}
 
+      - run: touch app.env
+
       - name: Build Android installers
         run: make package-android
         env:
