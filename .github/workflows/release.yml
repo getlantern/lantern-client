@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ atavism/desktop ]
+    branches: [ main ]
     tags:
       - '*'
 
@@ -142,7 +142,7 @@ jobs:
         with:
           go-version-file: "go.mod"
 
-      - name: install protoc-gen-go
+      - name: Install latest protoc-gen-go
         run: go install github.com/golang/protobuf/protoc-gen-go@latest
 
       - name: Granting private modules access

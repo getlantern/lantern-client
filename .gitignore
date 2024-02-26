@@ -81,4 +81,5 @@ lantern-installer.dmg
 liblantern.h
 liblantern.dylib
 lib/generated_bindings.dart
+
 *.env

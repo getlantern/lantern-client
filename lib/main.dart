@@ -10,6 +10,8 @@ import 'package:window_manager/window_manager.dart';
 import 'dart:ui' as ui;
 import 'catcher_setup.dart';
 
+// IOS issue
+// https://github.com/flutter/flutter/issues/133465
 Future<void> main() async {
   // CI will be true only when running appium test
   const String flavor = String.fromEnvironment('app.flavor');
@@ -27,7 +29,6 @@ Future<void> main() async {
   } catch (error) {
     print(error);
   }
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   if (isDesktop()) {
     loadLibrary();
@@ -45,8 +46,11 @@ Future<void> main() async {
       await windowManager.show();
       await windowManager.focus();
     });
+  } else {
+    await _initGoogleMobileAds();
   }
 
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   setupCatcherAndRun(LanternApp());
 }
 
