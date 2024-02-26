@@ -137,11 +137,16 @@ class LanternApp extends StatelessWidget {
 
   DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {
     logger.d("DeepLink configuration: ${deepLink.configuration.toString()}");
-    if (deepLink.path.startsWith('/reportIssue')) {
-      final pathUrl = deepLink.uri.toString();
-      final description = pathUrl.split('?')[1];
+    if (deepLink.path.toLowerCase().startsWith('/reportissue')) {
       logger.d("DeepLink uri: ${deepLink.uri.toString()}");
-      return DeepLink([const Home(),ReportIssue(description: description)]);
+      final pathUrl = deepLink.uri.toString();
+      final segment = pathUrl.split('#');
+      //If deeplink doesn't have data it should send to report issue with empty description'
+      if (segment.length >= 2) {
+        final description = segment[1];
+        return DeepLink([const Home(), ReportIssue(description: '#$description')]);
+      }
+      return DeepLink([const Home(), ReportIssue()]);
     } else {
       return DeepLink.defaultPath;
     }
