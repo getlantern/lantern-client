@@ -6,7 +6,7 @@ plugins {
   id 'kotlin-parcelize'
   id 'kotlin-kapt'
   id 'com.google.protobuf'
-  id "io.sentry.android.gradle" version "3.13.0"
+  id "io.sentry.android.gradle" version "4.2.0"
 }
 
 def localProperties = new Properties()
@@ -395,7 +395,7 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
-    implementation "androidx.webkit:webkit:1.7.0"
+    implementation "androidx.webkit:webkit:1.9.0"
     implementation 'com.kyleduo.switchbutton:library:2.1.0'
 
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
@@ -415,7 +415,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Google Play libraries
-    implementation 'com.android.billingclient:billing:6.0.1'
+    implementation 'com.android.billingclient:billing:6.1.0'
+//    implementation 'com.android.billingclient:billing-ktx:6.1.0'
     implementation 'com.google.android.gms:play-services-base:18.2.0'
     implementation 'com.google.android.gms:play-services-ads:22.4.0'
 
@@ -446,6 +447,7 @@ dependencies {
     androidTestImplementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
     testImplementation 'junit:junit:4.13.2'
+    testImplementation "io.mockk:mockk:1.13.5"
 
     implementation "com.github.YarikSOffice:lingver:1.3.0"
     // from https://github.com/getlantern/opus_android
@@ -459,6 +461,25 @@ dependencies {
 apply plugin: 'com.google.gms.google-services'
 
 sentry {
+
+    // Disables or enables debug log output, e.g. for for sentry-cli.
+    // Default is disabled.
+    debug = false
+
+    // The slug of the Sentry organization to use for uploading proguard mappings/source contexts.
+    org = "getlantern"
+
+    // The slug of the Sentry project to use for uploading proguard mappings/source contexts.
+    projectName = "android"
+
+    // The authentication token to use for uploading proguard mappings/source contexts.
+    // WARNING: Do not expose this token in your build.gradle files, but rather set an environment
+    // variable and read it into this property.
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
+
+    // The url of your Sentry instance. If you're using SAAS (not self hosting) you do not have to
+    // set this. If you are self hosting you can set your URL here
+    url = null
 
     // Disables or enables the handling of Proguard mapping for Sentry.
     // If enabled the plugin will generate a UUID and will take care of

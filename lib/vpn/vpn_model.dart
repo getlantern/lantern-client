@@ -11,6 +11,14 @@ class VpnModel extends Model {
     });
   }
 
+  //This method will create artificial delay in connecting VPN
+  // So we can show ads to user
+  Future<void> connectingDelay<T>(bool on) async {
+    return methodChannel.invokeMethod('connectingDelay', <String, dynamic>{
+      'on': on,
+    });
+  }
+
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
     return subscribedSingleValueBuilder<String>(
       '/vpn_status',
@@ -19,7 +27,7 @@ class VpnModel extends Model {
   }
 
   Future<bool> isVpnConnected() async {
-    final vpnStatus = await methodChannel.invokeMethod('get', '/vpn_status');
+    final vpnStatus = await methodChannel.invokeMethod('getVpnStatus');
     return vpnStatus == 'connected';
   }
 

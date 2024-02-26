@@ -7,8 +7,10 @@ import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.IBinder
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.mobilesdk.Logger
+import internalsdk.Internalsdk
 
 class LanternVpnService : VpnService(), Runnable {
 
@@ -50,7 +52,7 @@ class LanternVpnService : VpnService(), Runnable {
         stop()
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Somehow we are getting null here when running on Android 5.0
         // Handling null intent scenario
         if (intent == null) {

@@ -347,10 +347,26 @@ class SessionModel extends Model {
     );
   }
 
+  Future<void> trackUserAction(
+    String name,
+    String url,
+    String title,
+  ) async {
+    return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
+      'name': name,
+      'url': url,
+      'title': title,
+    });
+  }
+
   Future<String> requestLinkCode() {
     return methodChannel
         .invokeMethod('requestLinkCode')
-        .then((value) => value as String);
+        .then((value) => value.toString());
+  }
+
+  Future<void> redeemLinkCode() {
+    return methodChannel.invokeMethod('redeemLinkCode');
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
@@ -368,7 +384,9 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
       'email': email,
       'resellerCode': resellerCode,
-    }).then((value) => value as String);
+    }).then((value) {
+      print('value $value');
+    });
   }
 
   Future<void> submitBitcoinPayment(
@@ -383,9 +401,13 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<void> submitGooglePlay(String planID) async {
+  Future<void> submitPlayPayment(
+    String planID,
+    String email,
+  ) async {
     return methodChannel
         .invokeMethod('submitGooglePlayPayment', <String, dynamic>{
+      'email': email,
       'planID': planID,
     }).then((value) => value as String);
   }

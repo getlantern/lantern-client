@@ -11,8 +11,9 @@ import Sentry
 class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
   let vpnManager: VPNBase
   let vpnHelper = VpnHelper.shared
+  var sessionModel: SessionModel!
 
-  init(flutterBinary: FlutterBinaryMessenger, vpnBase: VPNBase) throws {
+  init(flutterBinary: FlutterBinaryMessenger, vpnBase: VPNBase, sessionModel: SessionModel) throws {
     logger.log("Initializing VPNModel")
     self.vpnManager = vpnBase
     var error: NSError?
@@ -21,6 +22,7 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
     else {
       throw error!
     }
+    self.sessionModel = sessionModel
     try super.init(flutterBinary, model)
     model.setManager(self)
   }
@@ -44,6 +46,7 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
       },
       onSuccess: {
         logger.debug("VPN started")
+        self.sessionModel.hasAllPermssion()
         self.saveVPNStatus(status: "connected")
       })
   }

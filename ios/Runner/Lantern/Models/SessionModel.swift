@@ -33,6 +33,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.model = systemName
     opts.osVersion = systemVersion
     opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest
+    opts.platform = "ios"
 
     var error: NSError?
     guard
@@ -52,6 +53,16 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     (model as! InternalsdkSessionModel).startService(
       Constants.lanternDirectory.path, locale: "en", settings: Settings())
     logger.error("Service Started successfully")
+  }
+
+  func hasAllPermssion() {
+    do {
+      let result = try invoke("hasAllNetworkPermssion")
+      logger.log("Sucessfully given all permssion")
+    } catch {
+      logger.log("Error while setting hasAllPermssion")
+      SentryUtils.caputure(error: error as NSError)
+    }
   }
 
   func getBandwidth() {

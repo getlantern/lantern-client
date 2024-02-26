@@ -2,7 +2,7 @@ import 'package:lantern/messaging/messaging.dart';
 
 @RoutePage<void>(name: 'AccountManagement')
 class AccountManagement extends StatefulWidget {
-  AccountManagement({Key? key, required this.isPro}) : super(key: key);
+  const AccountManagement({Key? key, required this.isPro}) : super(key: key);
   final bool isPro;
 
   @override
@@ -143,18 +143,20 @@ class _AccountManagementState extends State<AccountManagement>
         String expirationDate,
         Widget? child,
       ) {
-        return ListItemFactory.settingsItem(
-          key: AppKeys.account_renew,
-          header: 'Pro Account Expiration'.i18n,
-          icon: ImagePaths.clock,
-          content: expirationDate,
-          onTap: () async {
-            await context.pushRoute(const PlansPage());
-          },
-          trailingArray: [
-            CText('Renew'.i18n.toUpperCase(), style: tsButtonPink)
-          ],
-        );
+        return expirationDate == ""
+            ? const SizedBox.shrink()
+            : ListItemFactory.settingsItem(
+                key: AppKeys.account_renew,
+                header: 'Pro Account Expiration'.i18n,
+                icon: ImagePaths.clock,
+                content: expirationDate,
+                onTap: () async {
+                  await context.pushRoute(const PlansPage());
+                },
+                trailingArray: [
+                  CText('Renew'.i18n.toUpperCase(), style: tsButtonPink)
+                ],
+              );
       }),
     ];
     return BaseScreen(
@@ -273,7 +275,7 @@ class _AccountManagementState extends State<AccountManagement>
                         );
                       }
                       // If chat is enabled and hasBeenOnboarded then only show chat settings
-                      return chatEnabled && hasBeenOnboarded ==true
+                      return chatEnabled && hasBeenOnboarded == true
                           // * has been onboarded
                           ? Column(
                               children: [

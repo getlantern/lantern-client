@@ -1,21 +1,18 @@
 package org.getlantern.lantern.model
 
 import android.app.Application
-import android.content.res.Resources
 import android.text.TextUtils
 import io.lantern.model.Vpn
-import org.getlantern.lantern.BuildConfig
-import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.WelcomeActivity_
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
 import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
-import java.util.concurrent.ConcurrentHashMap
 import java.util.Currency
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.ConcurrentHashMap
 
 class LanternSessionManager(application: Application) : SessionManager(application) {
     private var plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap<String, ProPlan>()
@@ -130,7 +127,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     private fun setExpiration(expiration: Long?) {
-        if (expiration == null) {
+        if (expiration == null || expiration == 0L) {
+            prefs.edit().putLong(EXPIRY_DATE, 0)
+                .putString(EXPIRY_DATE_STR, "")
+                .apply()
             return
         }
         val expiry = Date(expiration * 1000)
@@ -277,6 +277,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             linkDevice()
         }
 
+
         setExpiration(user.expiration)
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
@@ -293,8 +294,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         if (user.isProUser) {
             EventBus.getDefault().post(UserStatus(user.isActive, user.monthsLeft().toLong()))
-            prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft())
-                .putInt(PRO_DAYS_LEFT, user.daysLeft())
+            prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft() ?: 0)
+                .putInt(PRO_DAYS_LEFT, user.daysLeft() ?: 0)
                 .apply()
         }
     }
@@ -316,23 +317,43 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                 tx.put(
                     path,
                     Vpn.Plan.newBuilder().setId(it.id)
-                        .setDescription(it.description).setBestValue(it.bestValue).setUsdPrice(it.usdEquivalentPrice)
-                        .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime).setOneMonthCost(it.oneMonthCost)
-                        .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus).setRenewalText(it.renewalText).build(),
+                        .setDescription(it.description).setBestValue(it.bestValue)
+                        .setUsdPrice(it.usdEquivalentPrice)
+                        .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime)
+                        .setOneMonthCost(it.oneMonthCost)
+                        .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus)
+                        .setRenewalText(it.renewalText).build(),
                 )
             }
         }
     }
 
     fun setPaymentMethods(paymentMethods: List<PaymentMethods>) {
+        if (paymentMethods.isEmpty()) {
+            return
+        }
+
         db.mutate { tx ->
-            paymentMethods.forEachIndexed { index, it ->
+            paymentMethods.forEachIndexed { index, methods ->
+                // Check if payment method or  provider is empty then return
+                if (methods.providers.isEmpty()) {
+                    return@forEachIndexed
+                }
                 val path = PAYMENT_METHODS + index
+                val planItem =
+                    Vpn.PaymentMethod.newBuilder().setMethod(methods.method.toString().lowercase())
+                        .addAllProviders(
+                            methods.providers.map {
+                                Vpn.PaymentProviders.newBuilder()
+                                    .setName(it.name.toString().lowercase())
+                                    .addAllLogoUrls(it.logoUrl)
+                                    .build()
+                            },
+                        ).build()
+
                 tx.put(
                     path,
-                    Vpn.PaymentMethod.newBuilder().setMethod(it.method.toString().lowercase()).addAllProviders(
-                        it.providers.map { Vpn.PaymentProviders.newBuilder().setName(it.name.toString().lowercase()).build() },
-                    ).build(),
+                    planItem,
                 )
             }
         }
