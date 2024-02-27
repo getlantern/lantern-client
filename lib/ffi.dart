@@ -77,7 +77,7 @@ const String _libName = 'liblantern';
 
 final DynamicLibrary _dylib = () {
   if (Platform.isMacOS) {
-    return DynamicLibrary.open('desktop/$_libName.dylib');
+    return DynamicLibrary.open('$_libName.dylib');
   }
   if (Platform.isLinux) {
     String dir = Directory.current.path;
