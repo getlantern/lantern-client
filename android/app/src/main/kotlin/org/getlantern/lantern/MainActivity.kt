@@ -550,6 +550,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             }
         } else {
             sendBroadcast(notifications.disconnectIntent())
+            //Update VPN status
+            vpnModel.updateStatus(false)
         }
     }
 
