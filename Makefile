@@ -384,7 +384,7 @@ dart-defines-debug:
 	@DART_DEFINES="$(CIBASE)"; \
 	printf "$$DART_DEFINES"
 
-do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
+do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB) ffigen
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines-debug` && \
 	echo "Value of DART_DEFINES is: $$DART_DEFINES" && \
