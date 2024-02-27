@@ -9,10 +9,10 @@ class AccountMenu extends StatelessWidget {
       await context.pushRoute(AuthorizePro());
 
   void inviteFriends(BuildContext context) async =>
-      await context.pushRoute(InviteFriends());
+      await context.pushRoute(const InviteFriends());
 
   void openDesktopVersion(BuildContext context) async =>
-      await context.pushRoute(LanternDesktop());
+      await context.pushRoute(const LanternDesktop());
 
   void openSettings(BuildContext context) => context.pushRoute(Settings());
 

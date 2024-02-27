@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:lantern/replica/common.dart';
+
 export 'dart:async';
 export 'dart:convert';
 export 'dart:io';
@@ -29,6 +33,7 @@ export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 export 'package:stop_watch_timer/stop_watch_timer.dart';
 
 export 'add_nonbreaking_spaces.dart';
+export 'app_keys.dart';
 export 'disable_back_button.dart';
 export 'iterable_extension.dart';
 export 'list_subscriber.dart';
@@ -47,6 +52,7 @@ export 'ui/continue_arrow.dart';
 export 'ui/copy_text.dart';
 export 'ui/countdown_min_sec.dart';
 export 'ui/countdown_stopwatch.dart';
+
 // custom components
 export 'ui/custom/asset_image.dart';
 export 'ui/custom/badge.dart';
@@ -84,19 +90,25 @@ export 'ui/show_snackbar.dart';
 export 'ui/text_highlighter.dart';
 export 'ui/text_styles.dart';
 export 'ui/transitions.dart';
-export 'ui/info_text_box.dart';
-export 'app_keys.dart';
 
-// custom components
-export 'ui/custom/asset_image.dart';
-export 'ui/custom/badge.dart';
-export 'ui/custom/dialog.dart';
-export 'ui/custom/divider.dart';
-export 'ui/custom/ink_well.dart';
-export 'ui/custom/list_item_factory.dart';
-export 'ui/custom/rounded_rectangle_border.dart';
-export 'ui/custom/text.dart';
-export 'ui/custom/text_field.dart';
-export 'ui/custom/fullscreen_video_viewer.dart';
-export 'ui/custom/fullscreen_image_viewer.dart';
-export 'ui/custom/fullscreen_viewer.dart';
+final appLogger = Logger(
+  printer: PrettyPrinter(
+    methodCount: 0,
+    errorMethodCount: 5,
+    colors: true,
+    printEmojis: true,
+    printTime: true,
+  ),
+  filter: ProductionFilter(),
+  output: ConsoleOutput(),
+);
+
+
+
+bool isMobile() {
+  return Platform.isAndroid || Platform.isIOS;
+}
+
+bool isDesktop() {
+  return Platform.isMacOS || Platform.isLinux || Platform.isWindows;
+}
