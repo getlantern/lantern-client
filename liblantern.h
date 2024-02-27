@@ -90,6 +90,7 @@ extern char* chatEnabled();
 extern char* playVersion();
 extern char* storeVersion();
 extern char* lang();
+extern void setSelectLang(char* lang);
 extern char* country();
 extern char* sdkVersion();
 extern char* vpnStatus();

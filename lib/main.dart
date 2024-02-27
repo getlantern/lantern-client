@@ -1,13 +1,12 @@
+import 'dart:ui' as ui;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
-import 'package:lantern/ffi.dart';
-import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
-import 'dart:ui' as ui;
+
 import 'catcher_setup.dart';
 
 // IOS issue
@@ -27,7 +26,7 @@ Future<void> main() async {
     // To load the .env file contents into dotenv.
     await dotenv.load(fileName: "app.env");
   } catch (error) {
-    print(error);
+    appLogger.e("Error loading .env file: $error");
   }
 
   if (isDesktop()) {

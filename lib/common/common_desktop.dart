@@ -1,29 +1,24 @@
+import 'package:lantern/common/common.dart';
+import 'package:tray_manager/tray_manager.dart';
+
 export 'dart:convert';
 export 'dart:ffi'; // For FFI
 
-export 'package:lantern/ffi.dart';
 export 'package:ffi/ffi.dart';
 export 'package:ffi/src/utf8.dart';
+export 'package:lantern/ffi.dart';
 
-import 'package:tray_manager/tray_manager.dart';
-import 'package:lantern/common/common.dart';
-import 'dart:io' show Platform;
-
-bool isMobile() {
-  return Platform.isAndroid || Platform.isIOS;
-}
-
-bool isDesktop() {
-  return Platform.isMacOS || Platform.isLinux || Platform.isWindows;
-}
+// Include resources here just for desktop compatibility or use
 
 String systemTrayIcon(bool connected) {
   if (connected) {
-    return  Platform.isWindows ? 'assets/images/lantern_connected_32.ico' :
-            'assets/images/lantern_connected_32.png';
+    return Platform.isWindows
+        ? 'assets/images/lantern_connected_32.ico'
+        : 'assets/images/lantern_connected_32.png';
   }
-  return Platform.isWindows ? 'assets/images/lantern_disconnected_32.ico' :
-            'assets/images/lantern_disconnected_32.png';
+  return Platform.isWindows
+      ? 'assets/images/lantern_disconnected_32.ico'
+      : 'assets/images/lantern_disconnected_32.png';
 }
 
 Future<void> setupMenu(bool isConnected) async {
