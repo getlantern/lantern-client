@@ -1,10 +1,10 @@
 import 'package:lantern/ad_helper.dart';
-import 'package:lantern/vpn/vpn.dart';
-import 'package:lantern/ffi.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
-import 'package:tray_manager/tray_manager.dart';
+import 'package:lantern/ffi.dart';
 import 'package:lantern/main.dart';
+import 'package:lantern/vpn/vpn.dart';
+import 'package:tray_manager/tray_manager.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -44,15 +44,15 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
     // Make sure user has permission all the permission
     // if ads is not ready then wait for at least 5 seconds and then show ads
     // if ads is ready then show ads immediately
-    if(isMobile()){
-if (vpnStatus != 'connected' && userHasPermission) {
-      if (!await adHelper.isAdsReadyToShow()) {
-        await vpnModel.connectingDelay(newValue);
-        await Future.delayed(const Duration(seconds: 5));
+    if (isMobile()) {
+      if (vpnStatus != 'connected' && userHasPermission) {
+        if (!await adHelper.isAdsReadyToShow()) {
+          await vpnModel.connectingDelay(newValue);
+          await Future.delayed(const Duration(seconds: 5));
+        }
       }
     }
-    }
-    
+
     if (isIdle(vpnStatus)) {
       if (isMobile()) {
         await vpnModel.switchVPN(newValue);
