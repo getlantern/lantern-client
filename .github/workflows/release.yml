@@ -162,6 +162,8 @@ jobs:
           distribution: temurin
           java-version: 11
 
+      - run: make ffigen
+
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
