@@ -2,12 +2,13 @@ name: Publish releases
 
 on:
   push:
-    branches: [ main ]
+    branches: [ atavism/desktop ]
     tags:
       - '*'
 
 permissions:
-  contents: read
+  contents: "read"
+  id-token: "write"
 
 env:
   GOPRIVATE: github.com/getlantern
@@ -54,6 +55,65 @@ jobs:
           print(f'::set-output name=version::{version}')
           print(f'::set-output name=prefix::{li}')
           print(f'::set-output name=version_file::{vf}')
+
+    build-linux:
+      uses: ./.github/workflows/build-linux.yml
+      secrets: inherit
+      needs: set-version
+      with:
+        version: ${{ needs.set-version.outputs.version }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+        dist-suffix: x64
+
+#    build-windows-x32:
+#      uses: ./.github/workflows/build-windows.yml
+#      secrets: inherit
+#      needs: set-version
+#      with:
+#        version: ${{ needs.set-version.outputs.version }}
+#        prefix: ${{ needs.set-version.outputs.prefix }}
+#        dist-suffix: 32-bit
+#        installer-suffix: -x32
+#        update-suffix: 386
+#        arch: x32
+
+    build-windows-x64:
+      uses: ./.github/workflows/build-windows.yml
+      secrets: inherit
+      needs: set-version
+      with:
+        version: ${{ needs.set-version.outputs.version }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+        build-suffix: 64
+        dist-suffix: 64-bit
+        update-suffix: x64
+        installer-suffix: -x64
+        arch: x64
+
+    build-darwin:
+      uses: ./.github/workflows/build-darwin.yml
+      secrets: inherit
+      needs: set-version
+      with:
+        macos_version: macos-13
+        xcode_version: 14.3.1
+        version: ${{ needs.set-version.outputs.version }}
+        version_file: ${{ needs.set-version.outputs.version_file }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+        suffix: mac
+
+    build-darwin-arm:
+      uses: ./.github/workflows/build-darwin.yml
+      secrets: inherit
+      needs: set-version
+      with:
+        macos_version: macos-14
+        xcode_version: latest-stable
+        version: ${{ needs.set-version.outputs.version }}
+        version_file: ${{ needs.set-version.outputs.version_file }}
+        prefix: ${{ needs.set-version.outputs.prefix }}
+        suffix: mac_arm
+
     build-android:
       needs: set-version
       env:
@@ -73,7 +133,6 @@ jobs:
       # Install Flutter
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.16.9"
           channel: "stable"
       - run: flutter --version
 
@@ -102,6 +161,8 @@ jobs:
         with:
           distribution: temurin
           java-version: 11
+
+      - run: make ffigen
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
@@ -187,47 +248,43 @@ jobs:
     push-binaries:
       runs-on:
         group: large-runners
-      needs: [ set-version , build-android ]
+      needs: [ set-version, build-darwin, build-darwin-arm, build-linux, build-windows-x64 ]
       env:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
       steps:
-        - name: Download the apk build output
-          uses: actions/download-artifact@v3
+        - name: Download the mac build output
+          uses: actions/download-artifact@v4
           with:
-            name: android-apk-build
-        - name: Download the aab build output
-          uses: actions/download-artifact@v3
+            name: mac-build
+        - name: Download the mac arm build output
+          uses: actions/download-artifact@v4
           with:
-            name: android-aab-build
-        - name: Upload Android App bundle to Play Store (beta)
-          if: needs.set-version.outputs.prefix == 'lantern-installer-preview'
-          uses: r0adkll/upload-google-play@v1
+            name: mac_arm-build
+        - name: Download the linux build output
+          uses: actions/download-artifact@v4
           with:
-           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-           packageName: org.getlantern.lantern
-           releaseFiles: lantern-installer.aab
-           track: beta
-        - name: Upload Android App bundle to Play Store (production)
-          if: needs.set-version.outputs.prefix == 'lantern-installer'
-          uses: r0adkll/upload-google-play@v1
+            name: linux-build
+        - name: Download the windows64 build output
+          uses: actions/download-artifact@v4
           with:
-           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-           packageName: org.getlantern.lantern
-           releaseFiles: lantern-installer.aab
-           track: production
+            name: windows64-installer-signed
         - name: Grant private modules access
           run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
         - name: Clone binaries repo
           run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
         - name: Rename builds
           run: |
-            diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
-            diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
+            mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
+            mv -f lantern-installer-mac.dmg ${{ env.prefix }}-mac.dmg
+            mv -f lantern-installer-mac_arm.dmg ${{ env.prefix }}-mac_arm.dmg
+            diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
         - name: Prepare sha256 sums
           run: |
-            shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
-            shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
+            shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
+            shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
+            shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
+            shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
         - name: Commit
           run: |
             mv lantern-installer* ./lantern-binaries/

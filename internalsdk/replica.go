@@ -20,8 +20,8 @@ import (
 	replicaServer "github.com/getlantern/replica/server"
 	replicaService "github.com/getlantern/replica/service"
 
-	"github.com/getlantern/android-lantern/internalsdk/analytics"
-	"github.com/getlantern/android-lantern/internalsdk/doh"
+	"github.com/getlantern/lantern-client/internalsdk/analytics"
+	"github.com/getlantern/lantern-client/internalsdk/doh"
 
 	"github.com/gorilla/mux"
 )
@@ -136,7 +136,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	input.RootUploadsDir = s.ConfigDir
 	// XXX <16-12-21, soltzen> Those three flags make sure that uploads are not
 	// saved to the torrent client, saved locally, or have any metadata
-	// generated for them. This decision is only for android-lantern to protect
+	// generated for them. This decision is only for lantern-client to protect
 	// the privacy of uploaders
 	input.AddUploadsToTorrentClient = false
 	input.StoreUploadsLocally = false

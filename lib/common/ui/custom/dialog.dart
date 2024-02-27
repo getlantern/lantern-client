@@ -230,7 +230,7 @@ class CDialogState extends State<CDialog> {
                   ),
                 // AGREE
                 Tooltip(
-                  message: AppKeys.renewalSuccessOk,
+                  message: '',
                   child: TextButton(
                     onPressed: () async {
                       if (widget.maybeAgreeAction != null) {
