@@ -40,7 +40,7 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
   Future<void> onSwitchTap(bool newValue, String vpnStatus) async {
     unawaited(HapticFeedback.lightImpact());
     if (isIdle(vpnStatus)) {
-      if (Platform.isAndroid) {
+      if (isMobile()) {
         await vpnModel.switchVPN(newValue);
       } else if (isDesktop()) {
         bool isConnected = vpnStatus == 'connected';

@@ -18,7 +18,7 @@ abstract class Model {
   final Map<String, FfiListNotifier> _ffiListNotifierCache = HashMap();
 
   Model(String name) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       methodChannel = MethodChannel('${name}_method_channel');
       _updatesChannel = ModelEventChannel('${name}_event_channel');
     }

@@ -20,7 +20,7 @@ class MessagingModel extends Model {
     );
 
     // signaling = Signaling(methodChannel);
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       methodChannel.setMethodCallHandler((call) async {
         switch (call.method) {
           // case 'onSignal':
@@ -304,7 +304,7 @@ class MessagingModel extends Model {
   }
 
   Widget me(ValueWidgetBuilder<Contact> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<Contact>(
         '/me',
         builder: builder,
@@ -520,7 +520,7 @@ class MessagingModel extends Model {
   Widget getOnBoardingStatus(ValueWidgetBuilder<bool?> builder) {
     // Note - we use null as a placeholder for "unknown" to indicate when we
     // haven't yet read the actual onboarding status from the back-end
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<bool?>(
         'onBoardingStatus',
         defaultValue: null,
@@ -540,7 +540,7 @@ class MessagingModel extends Model {
   }
 
   Widget getCopiedRecoveryStatus(ValueWidgetBuilder<bool> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<bool>(
         'copiedRecoveryStatus',
         defaultValue: false,

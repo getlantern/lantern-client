@@ -33,7 +33,7 @@ class LanternApp extends StatelessWidget {
     // Since this notification is visible on all screens and we want the
     // animation state to remain consistent across screens, we put the animation
     // controller here at the app level since the app contains all screens.
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       sessionModel.networkAvailable
           .addListener(toggleConnectivityWarningIfNecessary);
       sessionModel.proxyAvailable

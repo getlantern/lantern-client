@@ -23,7 +23,7 @@ class VpnModel extends Model {
   }
 
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (desktop.isMobile()) {
       return subscribedSingleValueBuilder<String>(
         '/vpn_status',
         builder: builder,

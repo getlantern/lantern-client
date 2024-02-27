@@ -18,7 +18,7 @@ class SessionModel extends Model {
   late final EventManager eventManager;
 
   SessionModel() : super('session') {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       eventManager = EventManager('lantern_event_channel');
       eventManager.subscribe(Event.All, (eventType, map) {
         switch (eventType) {
@@ -74,7 +74,7 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
     return ffiValueBuilder<bool>(
@@ -86,7 +86,7 @@ class SessionModel extends Model {
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<bool>(
         'developmentMode',
         builder: builder,
@@ -120,7 +120,7 @@ class SessionModel extends Model {
   }
 
   Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<int>('accepted_terms_version',
           builder: builder, defaultValue: 0);
     }
@@ -163,7 +163,7 @@ class SessionModel extends Model {
   }
 
   Widget language(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
     }
     return ffiValueBuilder<String>(
@@ -175,7 +175,7 @@ class SessionModel extends Model {
   }
 
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
         'emailAddress',
         builder: builder,
@@ -190,7 +190,7 @@ class SessionModel extends Model {
   }
 
   Widget expiryDate(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
         'expirydatestr',
         builder: builder,
@@ -205,7 +205,7 @@ class SessionModel extends Model {
   }
 
   Widget referralCode(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
         'referral',
         builder: builder,
@@ -220,7 +220,7 @@ class SessionModel extends Model {
   }
 
   Widget deviceId(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
     }
     return ffiValueBuilder<String>(
@@ -310,7 +310,7 @@ class SessionModel extends Model {
   }
 
   Widget selectedTab(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
         '/selectedTab',
         defaultValue: TAB_VPN,
@@ -326,7 +326,7 @@ class SessionModel extends Model {
   }
 
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
         'replicaAddr',
         defaultValue: '',
@@ -342,7 +342,7 @@ class SessionModel extends Model {
   }
 
   Widget countryCode(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
         'geo_country_code',
         defaultValue: '',
@@ -366,7 +366,7 @@ class SessionModel extends Model {
   }
 
   Widget chatEnabled(ValueWidgetBuilder<bool> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<bool>(
         'chatEnabled',
         defaultValue: false,
@@ -382,7 +382,7 @@ class SessionModel extends Model {
   }
 
   Widget sdkVersion(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
         'sdkVersion',
         defaultValue: 'unknown',
@@ -406,8 +406,9 @@ class SessionModel extends Model {
   Future<void> checkForUpdates() async {
     if (Platform.isAndroid) {
       return methodChannel.invokeMethod('checkForUpdates');
+    } else if (isDesktop()) {
+      await ffiCheckUpdates();
     }
-    await ffiCheckUpdates();
     return;
   }
 
@@ -444,7 +445,7 @@ class SessionModel extends Model {
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
   }) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedListBuilder<Plan>(
         '/plans/',
         builder: builder,
@@ -467,7 +468,7 @@ class SessionModel extends Model {
   Widget paymentMethods({
     required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
   }) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedListBuilder<PaymentMethod>(
         '/paymentMethods/',
         builder: builder,
@@ -523,7 +524,7 @@ class SessionModel extends Model {
   }
 
   Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<ServerInfo>(
         '/server_info',
         builder: builder,
@@ -572,7 +573,7 @@ class SessionModel extends Model {
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
         'devicelinkingcode',
         defaultValue: '',
@@ -640,7 +641,7 @@ class SessionModel extends Model {
     String expDate,
     String cvc,
   ) async {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
         'planID': planID,
         'email': email,
@@ -685,7 +686,7 @@ class SessionModel extends Model {
   }
 
   Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       return subscribedSingleValueBuilder<bool>(
         '/splitTunneling',
         builder: builder,
