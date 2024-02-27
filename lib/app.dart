@@ -143,7 +143,7 @@ class LanternApp extends StatelessWidget {
 
   DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {
     logger.d("DeepLink configuration: ${deepLink.configuration.toString()}");
-    if (deepLink.path.toLowerCase().startsWith('/reportissue')) {
+    if (deepLink.path.toLowerCase().startsWith('/report-issue')) {
       logger.d("DeepLink uri: ${deepLink.uri.toString()}");
       final pathUrl = deepLink.uri.toString();
       final segment = pathUrl.split('#');
