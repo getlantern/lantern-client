@@ -9,6 +9,10 @@ import 'package:tray_manager/tray_manager.dart';
 import 'package:lantern/common/common.dart';
 import 'dart:io' show Platform;
 
+bool isMobile() {
+  return Platform.isAndroid || Platform.isIOS;
+}
+
 bool isDesktop() {
   return Platform.isMacOS || Platform.isLinux || Platform.isWindows;
 }
