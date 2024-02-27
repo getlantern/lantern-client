@@ -12,6 +12,8 @@ void sysProxyOff() => _bindings.sysProxyOff();
 
 void setSelectTab(tab) => _bindings.setSelectTab(tab);
 
+void setLang(lang) => _bindings.setSelectLang(lang);
+
 String websocketAddr() => _bindings.websocketAddr().cast<Utf8>().toDartString();
 
 Pointer<Utf8> vpnStatus() => _bindings.vpnStatus().cast<Utf8>();
