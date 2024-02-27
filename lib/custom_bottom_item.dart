@@ -56,7 +56,7 @@ class CustomBottomBarItem extends StatelessWidget {
                   final tab = name.toNativeUtf8();
                   final currentTab = ffiSelectedTab().toDartString();
                   setSelectTab(tab);
-                  if (name != currentTab) context.pushRoute(Home());
+                  if (name != currentTab) context.pushRoute(const Home());
                 } else {
                   sessionModel.setSelectedTab(name);
                 }

@@ -1,6 +1,5 @@
 import 'package:flutter/scheduler.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/messaging/messaging.dart';
 
@@ -85,9 +84,10 @@ class LanternApp extends StatelessWidget {
         }
         return sessionModel.language(
           (context, lang, child) {
-            if (!isDesktop()) {
+            if (isDesktop()) {
               Localization.locale = lang;
             }
+
             return GlobalLoaderOverlay(
               overlayColor: Colors.black,
               overlayOpacity: 0.6,

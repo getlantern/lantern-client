@@ -28,7 +28,7 @@ class VPNTab extends StatelessWidget {
             ProBanner()
             else
               const SizedBox(),
-            VPNSwitch(),
+            const VPNSwitch(),
             Container(
               padding: const EdgeInsetsDirectional.all(16),
               decoration: BoxDecoration(
