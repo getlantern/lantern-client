@@ -1,10 +1,9 @@
-import 'package:lantern/replica/common.dart';
-import 'package:lantern/i18n/i18n.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
+import 'package:lantern/replica/common.dart';
+
 import 'common.dart';
 import 'common_desktop.dart';
-import 'dart:convert' show utf8;
 
 final sessionModel = SessionModel();
 
@@ -255,9 +254,15 @@ class SessionModel extends Model {
   }
 
   Future<void> setLanguage(String lang) {
-    return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
-      'lang': lang,
-    });
+    if (isMobile()) {
+      return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
+        'lang': lang,
+      });
+    }
+    // Desktop users
+    final newLang = lang.toNativeUtf8();
+    setLang(newLang);
+    return Future(() => null);
   }
 
   Future<String> authorizeViaEmail(String emailAddress) {
@@ -497,7 +502,7 @@ class SessionModel extends Model {
       String email, String issue, String description) async {
     if (isDesktop()) {
       await ffiReportIssue(email.toNativeUtf8(), issue.toNativeUtf8(),
-        description.toNativeUtf8());
+          description.toNativeUtf8());
       return;
     }
     return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
@@ -629,8 +634,11 @@ class SessionModel extends Model {
     String provider,
     String deviceName,
   ) async {
-    final resp = await ffiPaymentRedirect(planID.toNativeUtf8(), provider.toNativeUtf8(),
-      email.toNativeUtf8(), deviceName.toNativeUtf8());
+    final resp = await ffiPaymentRedirect(
+        planID.toNativeUtf8(),
+        provider.toNativeUtf8(),
+        email.toNativeUtf8(),
+        deviceName.toNativeUtf8());
     return resp.toDartString();
   }
 
@@ -642,7 +650,8 @@ class SessionModel extends Model {
     String cvc,
   ) async {
     if (isMobile()) {
-      return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
+      return methodChannel
+          .invokeMethod('submitStripePayment', <String, dynamic>{
         'planID': planID,
         'email': email,
         'cardNumber': cardNumber,
@@ -650,8 +659,8 @@ class SessionModel extends Model {
         'cvc': cvc,
       }).then((value) => value as String);
     }
-    await ffiPurchase(planID.toNativeUtf8(), email.toNativeUtf8(), cardNumber.toNativeUtf8(), expDate.toNativeUtf8(), 
-      cvc.toNativeUtf8());
+    await ffiPurchase(planID.toNativeUtf8(), email.toNativeUtf8(),
+        cardNumber.toNativeUtf8(), expDate.toNativeUtf8(), cvc.toNativeUtf8());
   }
 
   Future<void> submitFreekassa(

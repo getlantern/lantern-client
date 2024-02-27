@@ -9,11 +9,12 @@ import 'package:lantern/messaging/onboarding/welcome.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/replica/replica_tab.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
-import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
+
 import 'messaging/messaging_model.dart';
 
 @RoutePage(name: 'Home')
@@ -196,6 +197,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     _context = context;
     return sessionModel.acceptedTermsVersion(
@@ -224,9 +226,8 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                       defaultValue: 'false',
                     ).toLowerCase() ==
                     'true';
-                final tab = isMobile()
-                    ? selectTab
-                    : ffiSelectedTab().toDartString();
+                final tab =
+                    isMobile() ? selectTab : ffiSelectedTab().toDartString();
                 return Scaffold(
                   body: buildBody(tab, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
@@ -243,7 +244,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     );
   }
 
-  @override
   Widget buildBody(String selectedTab, bool? isOnboarded) {
     switch (selectedTab) {
       case TAB_CHATS:

@@ -14,28 +14,28 @@ import (
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/common"
-	"github.com/getlantern/flashlight/v7/ops"
+	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/logging"
+	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/pro/client"
-	"github.com/getlantern/lantern-client/internalsdk/protos"
-	"github.com/getlantern/osversion"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/getlantern/osversion"
 
-	"google.golang.org/protobuf/encoding/protojson"
 	"github.com/shirou/gopsutil/v3/host"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 import "C"
 
 var (
-	log = golog.LoggerFor("lantern-desktop.main")
-	a   *app.App
+	log       = golog.LoggerFor("lantern-desktop.main")
+	a         *app.App
 	proClient *client.Client
 )
 
@@ -172,8 +172,8 @@ func serverInfo() *C.char {
 		return C.CString("")
 	}
 	serverInfo := &protos.ServerInfo{
-		City: stats.City,
-		Country: stats.Country,
+		City:        stats.City,
+		Country:     stats.Country,
 		CountryCode: stats.CountryCode,
 	}
 	b, _ := protojson.Marshal(serverInfo)
@@ -213,6 +213,11 @@ func storeVersion() *C.char {
 func lang() *C.char {
 	lang := a.Settings().GetLanguage()
 	return C.CString(lang)
+}
+
+//export setSelectLang
+func setSelectLang(lang *C.char) {
+	a.Settings().SetLanguage(C.GoString(lang))
 }
 
 //export country
@@ -271,11 +276,11 @@ func deviceLinkingCode() *C.char {
 func paymentRedirect(planID, provider, email, deviceName *C.char) *C.char {
 	country := a.Settings().GetCountry()
 	resp, err := proClient.PaymentRedirect(userConfig(), &client.PaymentRedirectRequest{
-		Plan: C.GoString(planID),
-		Provider: C.GoString(provider),
-		Currency: "USD",
-		Email: C.GoString(email),
-		DeviceName: C.GoString(deviceName),
+		Plan:        C.GoString(planID),
+		Provider:    C.GoString(provider),
+		Currency:    "USD",
+		Email:       C.GoString(email),
+		DeviceName:  C.GoString(deviceName),
 		CountryCode: country,
 	})
 	if err != nil {
@@ -389,7 +394,6 @@ func checkUpdates() *C.char {
 	log.Debugf("Auto-update URL is %s", updateURL)
 	return C.CString(updateURL)
 }
-
 
 //export purchase
 func purchase(planID, email, cardNumber, expDate, cvc string) *C.char {

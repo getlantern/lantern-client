@@ -46,7 +46,7 @@ class Settings extends StatelessWidget {
     } else if (Platform.isIOS) {
       AppMethods.openAppstore();
     } else {
-      await ffiCheckUpdates();
+      ffiCheckUpdates();
     }
   }
 
