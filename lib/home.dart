@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       _init();
     }
     super.initState();
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       mainMethodChannel = const MethodChannel('lantern_method_channel');
       navigationChannel = const MethodChannel('navigation');
       sessionModel.getChatEnabled().then((chatEnabled) {
@@ -224,7 +224,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                       defaultValue: 'false',
                     ).toLowerCase() ==
                     'true';
-                final tab = Platform.isAndroid
+                final tab = isMobile()
                     ? selectTab
                     : ffiSelectedTab().toDartString();
                 return Scaffold(
