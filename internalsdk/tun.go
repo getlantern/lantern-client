@@ -2,9 +2,9 @@ package internalsdk
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net"
-	"os"
 	"runtime"
 	"strings"
 	"sync"
@@ -38,17 +38,16 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 	go geoLookup(&panickingSessionImpl{wrappedSession})
 
 	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
-	dev := os.NewFile(uintptr(fd), "tun")
-	defer dev.Close()
-
 	socksDialer, err := proxy.SOCKS5("tcp", socksAddr, nil, nil)
 	if err != nil {
 		return errors.New("Unable to get SOCKS5 dialer: %v", err)
 	}
 
-	ipp, err := ipproxy.New(dev, &ipproxy.Opts{
+	ipp, err := ipproxy.New(&ipproxy.Opts{
+		DeviceName:          fmt.Sprintf("fd://%d", fd),
 		IdleTimeout:         70 * time.Second,
 		StatsInterval:       15 * time.Second,
+		DisableIPv6: 		 true,
 		MTU:                 mtu,
 		OutboundBufferDepth: 10000,
 		TCPConnectBacklog:   100,
@@ -79,11 +78,12 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 	}
 
 	currentDeviceMx.Lock()
-	currentDevice = dev
 	currentIPP = ipp
 	currentDeviceMx.Unlock()
 
-	err = ipp.Serve()
+	ctx := context.Background()
+
+	err = ipp.Serve(ctx)
 	if err != io.EOF {
 		return log.Errorf("unexpected error serving TUN traffic: %v", err)
 	}
@@ -101,7 +101,6 @@ func StopTun2Socks() {
 
 	currentDeviceMx.Lock()
 	ipp := currentIPP
-	currentDevice = nil
 	currentIPP = nil
 	currentDeviceMx.Unlock()
 	if ipp != nil {

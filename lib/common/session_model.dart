@@ -1,6 +1,10 @@
 import 'package:lantern/replica/common.dart';
-
+import 'package:lantern/i18n/i18n.dart';
+import 'package:fixnum/fixnum.dart';
+import 'package:intl/intl.dart';
 import 'common.dart';
+import 'common_desktop.dart';
+import 'dart:convert' show utf8;
 
 final sessionModel = SessionModel();
 
@@ -14,34 +18,53 @@ class SessionModel extends Model {
   late final EventManager eventManager;
 
   SessionModel() : super('session') {
-    eventManager = EventManager('lantern_event_channel');
-    eventManager.subscribe(Event.All, (eventType, map) {
-      switch (eventType) {
-        case Event.NoNetworkAvailable:
-          networkAvailable.value = false;
-          break;
-        case Event.NetworkAvailable:
-          networkAvailable.value = true;
-          break;
-        default:
-          break;
-      }
-    });
+    if (Platform.isAndroid) {
+      eventManager = EventManager('lantern_event_channel');
+      eventManager.subscribe(Event.All, (eventType, map) {
+        switch (eventType) {
+          case Event.NoNetworkAvailable:
+            networkAvailable.value = false;
+            break;
+          case Event.NetworkAvailable:
+            networkAvailable.value = true;
+            break;
+          default:
+            break;
+        }
+      });
 
-    isStoreVersion = singleValueNotifier(
-      'storeVersion',
-      false,
-    );
-    isPlayVersion = singleValueNotifier(
-      'playVersion',
-      false,
-    );
-    /*Note
-    * Make proxyAvailable default value to true on IOS it take some to get data from go side
-    * So show banner only if proxyAvailable is false
-    */
-    proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
-    country = singleValueNotifier('geo_country_code', 'US');
+      isStoreVersion = singleValueNotifier(
+        'storeVersion',
+        false,
+      );
+      isPlayVersion = singleValueNotifier(
+        'playVersion',
+        false,
+      );
+      /*Note
+      * Make proxyAvailable default value to true on IOS it take some to get data from go side
+      * So show banner only if proxyAvailable is false
+      */
+      proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
+      country = singleValueNotifier('geo_country_code', 'US');
+    } else {
+      country = ffiValueNotifier(ffiLang, 'lang', 'US');
+      isPlayVersion = ffiValueNotifier(
+        ffiPlayVersion,
+        'isPlayVersion',
+        false,
+      );
+      isStoreVersion = ffiValueNotifier(
+        ffiStoreVersion,
+        'isStoreVersion',
+        false,
+      );
+      proxyAvailable = ffiValueNotifier(
+        ffiHasSucceedingProxy,
+        'hasSucceedingProxy',
+        false,
+      );
+    }
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
@@ -51,12 +74,28 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
+    }
+    return ffiValueBuilder<bool>(
+      'prouser',
+      defaultValue: false,
+      ffiProUser,
+      builder: builder,
+    );
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>(
+        'developmentMode',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool>(
       'developmentMode',
+      defaultValue: false,
+      ffiDevelopmentMode,
       builder: builder,
     );
   }
@@ -81,8 +120,16 @@ class SessionModel extends Model {
   }
 
   Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
-    return subscribedSingleValueBuilder<int>('accepted_terms_version',
-        builder: builder, defaultValue: 0);
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<int>('accepted_terms_version',
+          builder: builder, defaultValue: 0);
+    }
+    return ffiValueBuilder<int>(
+      'accepted_terms_version',
+      defaultValue: 0,
+      ffiAcceptedTermsVersion,
+      builder: builder,
+    );
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
@@ -116,32 +163,72 @@ class SessionModel extends Model {
   }
 
   Widget language(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>('lang', builder: builder);
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>('lang', builder: builder);
+    }
+    return ffiValueBuilder<String>(
+      'lang',
+      defaultValue: 'en',
+      ffiLang,
+      builder: builder,
+    );
   }
 
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'emailAddress',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       'emailAddress',
+      ffiEmailAddress,
+      defaultValue: '',
       builder: builder,
     );
   }
 
   Widget expiryDate(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      'expirydatestr',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'expirydatestr',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
+      'emailAddress',
+      ffiEmailAddress,
+      defaultValue: '',
       builder: builder,
     );
   }
 
   Widget referralCode(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'referral',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       'referral',
+      ffiReferral,
+      defaultValue: '',
       builder: builder,
     );
   }
 
   Widget deviceId(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
+    }
+    return ffiValueBuilder<String>(
+      'referral',
+      ffiReferral,
+      defaultValue: '',
+      builder: builder,
+    );
   }
 
   Widget devices(ValueWidgetBuilder<Devices> builder) {
@@ -223,25 +310,49 @@ class SessionModel extends Model {
   }
 
   Widget selectedTab(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      '/selectedTab',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        '/selectedTab',
+        defaultValue: TAB_VPN,
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
+      'selectedTab',
+      ffiSelectedTab,
       defaultValue: TAB_VPN,
       builder: builder,
     );
   }
 
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'replicaAddr',
+        defaultValue: '',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       'replicaAddr',
+      ffiReplicaAddr,
       defaultValue: '',
       builder: builder,
     );
   }
 
   Widget countryCode(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      'geo_country_code',
-      defaultValue: '',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'geo_country_code',
+        defaultValue: '',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
+      'lang',
+      defaultValue: 'US',
+      ffiLang,
       builder: builder,
     );
   }
@@ -255,17 +366,33 @@ class SessionModel extends Model {
   }
 
   Widget chatEnabled(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>(
+        'chatEnabled',
+        defaultValue: false,
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool>(
       'chatEnabled',
+      ffiChatEnabled,
       defaultValue: false,
       builder: builder,
     );
   }
 
   Widget sdkVersion(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'sdkVersion',
+        defaultValue: 'unknown',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       'sdkVersion',
       defaultValue: 'unknown',
+      ffiSdkVersion,
       builder: builder,
     );
   }
@@ -276,15 +403,60 @@ class SessionModel extends Model {
         .then((enabled) => enabled == true);
   }
 
-  Future<void> checkForUpdates() {
-    return methodChannel.invokeMethod('checkForUpdates');
+  Future<void> checkForUpdates() async {
+    if (Platform.isAndroid) {
+      return methodChannel.invokeMethod('checkForUpdates');
+    }
+    await ffiCheckUpdates();
+    return;
+  }
+
+  Plan planFromJson(Map<String, dynamic> item) {
+    final formatCurrency = new NumberFormat.simpleCurrency();
+    var id = item['id'];
+    var plan = Plan();
+    plan.id = id;
+    plan.description = item["description"];
+    plan.oneMonthCost = formatCurrency
+        .format(item["expectedMonthlyPrice"]["usd"] / 100)
+        .toString();
+    plan.totalCost = formatCurrency.format(item["usdPrice"] / 100).toString();
+    plan.totalCostBilledOneTime =
+        formatCurrency.format(item["usdPrice"] / 100).toString() +
+            ' ' +
+            'billed_one_time'.i18n;
+    plan.bestValue = item["bestValue"] ?? false;
+    plan.usdPrice = Int64(item["usdPrice"]);
+    return plan;
+  }
+
+  PaymentMethod paymentMethodFromJson(Map<String, dynamic> item) {
+    final formatCurrency = new NumberFormat.simpleCurrency();
+    final List<PaymentMethod> methods = [];
+    for (var m in item["desktop"]) {
+      var paymentMethod = PaymentMethod();
+      paymentMethod.method = m["method"];
+      return paymentMethod;
+    }
+    return PaymentMethod();
   }
 
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
   }) {
-    return subscribedListBuilder<Plan>(
+    if (Platform.isAndroid) {
+      return subscribedListBuilder<Plan>(
+        '/plans/',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return Plan.fromBuffer(serialized);
+        },
+      );
+    }
+    return ffiListBuilder<Plan>(
       '/plans/',
+      ffiPlans,
+      planFromJson,
       builder: builder,
       deserialize: (Uint8List serialized) {
         return Plan.fromBuffer(serialized);
@@ -295,12 +467,20 @@ class SessionModel extends Model {
   Widget paymentMethods({
     required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
   }) {
-    return subscribedListBuilder<PaymentMethod>(
+    if (Platform.isAndroid) {
+      return subscribedListBuilder<PaymentMethod>(
+        '/paymentMethods/',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return PaymentMethod.fromBuffer(serialized);
+        },
+      );
+    }
+    return ffiListBuilder<PaymentMethod>(
       '/paymentMethods/',
+      ffiPaymentMethods,
+      paymentMethodFromJson,
       builder: builder,
-      deserialize: (Uint8List serialized) {
-        return PaymentMethod.fromBuffer(serialized);
-      },
     );
   }
 
@@ -314,6 +494,11 @@ class SessionModel extends Model {
 
   Future<void> reportIssue(
       String email, String issue, String description) async {
+    if (isDesktop()) {
+      await ffiReportIssue(email.toNativeUtf8(), issue.toNativeUtf8(),
+        description.toNativeUtf8());
+      return;
+    }
     return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
       'email': email,
       'issue': issue,
@@ -338,9 +523,26 @@ class SessionModel extends Model {
   }
 
   Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
-    return subscribedSingleValueBuilder<ServerInfo>(
-      '/server_info',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<ServerInfo>(
+        '/server_info',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return ServerInfo.fromBuffer(serialized);
+        },
+      );
+    }
+    return ffiValueBuilder<ServerInfo>(
+      'serverInfo',
+      ffiServerInfo,
       builder: builder,
+      fromJsonModel: (Map<String, dynamic> json) {
+        var info = ServerInfo();
+        info.city = json['city'];
+        info.country = json['country'];
+        info.countryCode = json['countryCode'];
+        return info;
+      },
       deserialize: (Uint8List serialized) {
         return ServerInfo.fromBuffer(serialized);
       },
@@ -370,9 +572,17 @@ class SessionModel extends Model {
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      'devicelinkingcode',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<String>(
+        'devicelinkingcode',
+        defaultValue: '',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
+      'deviceLinkingCode',
       defaultValue: '',
+      ffiDeviceLinkingCode,
       builder: builder,
     );
   }
@@ -412,6 +622,17 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<String> paymentRedirect(
+    String planID,
+    String email,
+    String provider,
+    String deviceName,
+  ) async {
+    final resp = await ffiPaymentRedirect(planID.toNativeUtf8(), provider.toNativeUtf8(),
+      email.toNativeUtf8(), deviceName.toNativeUtf8());
+    return resp.toDartString();
+  }
+
   Future<void> submitStripePayment(
     String planID,
     String email,
@@ -419,13 +640,17 @@ class SessionModel extends Model {
     String expDate,
     String cvc,
   ) async {
-    return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
-      'planID': planID,
-      'email': email,
-      'cardNumber': cardNumber,
-      'expDate': expDate,
-      'cvc': cvc,
-    }).then((value) => value as String);
+    if (Platform.isAndroid) {
+      return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
+        'planID': planID,
+        'email': email,
+        'cardNumber': cardNumber,
+        'expDate': expDate,
+        'cvc': cvc,
+      }).then((value) => value as String);
+    }
+    await ffiPurchase(planID.toNativeUtf8(), email.toNativeUtf8(), cardNumber.toNativeUtf8(), expDate.toNativeUtf8(), 
+      cvc.toNativeUtf8());
   }
 
   Future<void> submitFreekassa(
@@ -460,8 +685,16 @@ class SessionModel extends Model {
   }
 
   Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
-      '/splitTunneling',
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>(
+        '/splitTunneling',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool>(
+      'splitTunneling',
+      ffiSplitTunneling,
+      defaultValue: false,
       builder: builder,
     );
   }

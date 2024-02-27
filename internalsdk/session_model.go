@@ -5,11 +5,11 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/getlantern/android-lantern/internalsdk/apimodels"
-	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/logging"
+	"github.com/getlantern/lantern-client/internalsdk/apimodels"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )

@@ -1,0 +1,685 @@
+package app
+
+import (
+	"fmt"
+	"io/fs"
+	"io/ioutil"
+	"math/rand"
+	"net"
+	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
+	"sync"
+	"sync/atomic"
+	"time"
+
+	"github.com/getsentry/sentry-go"
+
+	"github.com/getlantern/errors"
+	"github.com/getlantern/eventual"
+	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/bandit"
+	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
+	flashlightClient "github.com/getlantern/flashlight/v7/client"
+	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/email"
+	"github.com/getlantern/flashlight/v7/geolookup"
+	"github.com/getlantern/flashlight/v7/logging"
+	"github.com/getlantern/flashlight/v7/ops"
+	"github.com/getlantern/flashlight/v7/otel"
+	"github.com/getlantern/flashlight/v7/pro"
+	"github.com/getlantern/flashlight/v7/pro/client"
+	"github.com/getlantern/flashlight/v7/stats"
+	"github.com/getlantern/golog"
+	"github.com/getlantern/i18n"
+	"github.com/getlantern/memhelper"
+	notify "github.com/getlantern/notifier"
+	"github.com/getlantern/profiling"
+	"github.com/getlantern/trafficlog-flashlight/tlproc"
+
+	"github.com/getlantern/lantern-client/desktop/analytics"
+	"github.com/getlantern/lantern-client/desktop/autoupdate"
+	uicommon "github.com/getlantern/lantern-client/desktop/common"
+	"github.com/getlantern/lantern-client/desktop/features"
+	"github.com/getlantern/lantern-client/desktop/notifier"
+	"github.com/getlantern/lantern-client/desktop/ws"
+)
+
+var (
+	log                = golog.LoggerFor("lantern-desktop.app")
+	startTime          = time.Now()
+	translationAppName = strings.ToUpper(common.DefaultAppName)
+)
+
+func init() {
+	autoupdate.Version = ApplicationVersion
+	autoupdate.PublicKey = []byte(packagePublicKey)
+
+	rand.Seed(time.Now().UnixNano())
+}
+
+// App is the core of the Lantern desktop application, in the form of a library.
+type App struct {
+	hasExited            int64
+	fetchedGlobalConfig  int32
+	fetchedProxiesConfig int32
+
+	Flags            flashlight.Flags
+	configDir        string
+	exited           eventual.Value
+	analyticsSession analytics.Session
+	settings         *Settings
+	statsTracker     *statsTracker
+
+	muExitFuncs sync.RWMutex
+	exitFuncs   []func()
+
+	chGlobalConfigChanged chan bool
+
+	translations eventual.Value
+
+	flashlight *flashlight.Flashlight
+
+	// If both the trafficLogLock and proxiesLock are needed, the trafficLogLock should be obtained
+	// first. Keeping the order consistent avoids deadlocking.
+
+	// Log of network traffic to and from the proxies. Used to attach packet capture files to
+	// reported issues. Nil if traffic logging is not enabled.
+	trafficLog     *tlproc.TrafficLogProcess
+	trafficLogLock sync.RWMutex
+
+	// Also protected by trafficLogLock.
+	captureSaveDuration time.Duration
+
+	// proxies are tracked by the application solely for data collection purposes. This value should
+	// not be changed, except by Flashlight.onProxiesUpdate. State-changing methods on the dialers
+	// should not be called. In short, this slice and its elements should be treated as read-only.
+	proxies     []bandit.Dialer
+	proxiesLock sync.RWMutex
+
+	issueReporter *issueReporter
+	proClient      *client.Client
+	referralCode   string
+	selectedTab   Tab
+	stats *stats.Stats
+
+	connectionStatusCallbacks []func(isConnected bool)
+	_sysproxyOff  func() error
+
+	websocketAddr string
+	websocketServer *http.Server
+	ws ws.UIChannel
+
+	mu sync.Mutex
+}
+
+// NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
+func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, settings *Settings) *App {
+	analyticsSession := newAnalyticsSession(settings)
+	app := &App{
+		configDir:        configDir,
+		exited:           eventual.NewValue(),
+		proClient:        proClient,
+		settings:         settings,
+		analyticsSession: analyticsSession,
+		connectionStatusCallbacks: 	  make([]func(isConnected bool), 0),
+		selectedTab:      VPNTab,
+		translations:     eventual.NewValue(),
+		ws: 			  ws.NewUIChannel(),
+	}
+	app.statsTracker = NewStatsTracker(app)
+	app.serveWebsocket()
+	golog.OnFatal(app.exitOnFatal)
+
+	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
+	pro.OnProStatusChange(func(isPro bool, _ bool) {
+		app.statsTracker.SetIsPro(isPro)
+	})
+
+	log.Debugf("Using configdir: %v", configDir)
+
+	app.issueReporter = newIssueReporter(app.settings, app.getCapturedPackets, app.getProxies)
+	app.translations.Set(os.DirFS("locale/translation"))
+
+	return app
+}
+
+func newAnalyticsSession(settings *Settings) analytics.Session {
+	if settings.IsAutoReport() {
+		session := analytics.Start(settings.GetDeviceID(), ApplicationVersion)
+		go func() {
+			session.SetIP(geolookup.GetIP(eventual.Forever))
+		}()
+		return session
+	} else {
+		return analytics.NullSession{}
+	}
+}
+
+func (app *App) SelectedTab() Tab {
+	return app.selectedTab
+}
+
+func (app *App) SetSelectedTab(selectedTab Tab) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app.selectedTab = selectedTab
+}
+
+// Run starts the app.
+func (app *App) Run(isMain bool) {
+	golog.OnFatal(app.exitOnFatal)
+
+	memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
+		sentry.CaptureException(err)
+	})
+
+	go func() {
+		for <-geolookup.OnRefresh() {
+			app.settings.SetCountry(geolookup.GetCountry(0))
+		}
+	}()
+
+	// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
+	// for the first time. User can still quit Lantern through systray menu when it happens.
+	go func() {
+		log.Debug(app.Flags)
+		if app.Flags.ProxyAll {
+			// If proxyall flag was supplied, force proxying of all
+			app.settings.SetProxyAll(true)
+		}
+
+		listenAddr := app.Flags.Addr
+		if listenAddr == "" {
+			listenAddr = app.settings.getString(SNAddr)
+		}
+		if listenAddr == "" {
+			listenAddr = defaultHTTPProxyAddress
+		}
+
+		socksAddr := app.Flags.SocksAddr
+		if socksAddr == "" {
+			socksAddr = app.settings.getString(SNSOCKSAddr)
+		}
+		if socksAddr == "" {
+			socksAddr = defaultSOCKSProxyAddress
+		}
+
+		if app.Flags.Timeout > 0 {
+			go func() {
+				time.AfterFunc(app.Flags.Timeout, func() {
+					app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
+						app.Flags.Timeout, atomic.LoadInt32(&app.fetchedGlobalConfig) == 1, atomic.LoadInt32(&app.fetchedProxiesConfig) == 1))
+				})
+			}()
+		}
+
+		if app.Flags.Initialize {
+			app.statsTracker.AddListener(func(newStats stats.Stats) {
+				if newStats.HasSucceedingProxy {
+					log.Debug("Finished initialization")
+					app.Exit(nil)
+				}
+			})
+		}
+
+		cacheDir, err := os.UserCacheDir()
+		if err != nil {
+			cacheDir = os.TempDir()
+		}
+		cacheDir = filepath.Join(cacheDir, common.DefaultAppName, "dhtup", "data")
+		os.MkdirAll(cacheDir, 0o700)
+
+		app.flashlight, err = flashlight.New(
+			common.DefaultAppName,
+			ApplicationVersion,
+			RevisionDate,
+			app.configDir,
+			app.Flags.VPN,
+			func() bool { return app.settings.getBool(SNDisconnected) }, // check whether we're disconnected
+			app.settings.GetProxyAll,
+			app.settings.GetGoogleAds,
+			func() bool { return false }, // on desktop, we do not allow private hosts
+			app.settings.IsAutoReport,
+			app.Flags.AsMap(),
+			app.onConfigUpdate,
+			app.onProxiesUpdate,
+			app.settings,
+			app.statsTracker,
+			app.IsPro,
+			app.settings.GetLanguage,
+			func() string {
+				isPro, statusKnown := app.isProUserFast()
+				if (isPro || !statusKnown) && !common.ForceAds() {
+					// pro user (or status unknown), don't ad swap
+					return ""
+				}
+				return app.PlansURL()
+			},
+			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
+			app.AdTrackURL,
+			app.analyticsSession.EventWithLabel,
+		)
+		if err != nil {
+			app.Exit(err)
+			return
+		}
+		app.beforeStart(listenAddr)
+
+		chProStatusChanged := make(chan bool, 1)
+		pro.OnProStatusChange(func(isPro bool, _ bool) {
+			chProStatusChanged <- isPro
+		})
+		chUserChanged := make(chan bool, 1)
+		app.settings.OnChange(SNUserID, func(v interface{}) {
+			chUserChanged <- true
+		})
+		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
+
+		notifyConfigSaveErrorOnce := new(sync.Once)
+		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
+			switch t {
+			case flashlight.ErrorTypeProxySaveFailure, flashlight.ErrorTypeConfigSaveFailure:
+				log.Errorf("failed to save config (%v): %v", t, err)
+
+				notifyConfigSaveErrorOnce.Do(func() {
+					note := &notify.Notification{
+						Title:      i18n.T("BACKEND_CONFIG_SAVE_ERROR_TITLE"),
+						Message:    i18n.T("BACKEND_CONFIG_SAVE_ERROR_MESSAGE", i18n.T(translationAppName)),
+						ClickLabel: i18n.T("BACKEND_CLICK_LABEL_GOT_IT"),
+						IconURL:    app.AddToken("/img/lantern_logo.png"),
+					}
+					_ = notifier.ShowNotification(note, "alert-prompt")
+				})
+
+			default:
+				log.Errorf("flashlight error: %v: %v", t, err)
+			}
+		})
+
+		app.flashlight.Run(
+			listenAddr,
+			socksAddr,
+			app.afterStart,
+			func(err error) { _ = app.Exit(err) },
+		)
+	}()
+}
+
+// setFeatures enables or disables the features specified by values in the features map
+// sent back to the UI
+func (app *App) setFeatures(enabledFeatures map[string]bool, values map[features.Feature]bool) {
+	for feature, isEnabled := range values {
+		if isEnabled {
+			enabledFeatures[feature.String()] = isEnabled
+		}
+	}
+}
+
+// checkEnabledFeatures checks if features are enabled
+// (based on the env vars at build time or the user's settings/geolocation)
+// and starts appropriate services
+func (app *App) checkEnabledFeatures() {
+	enabledFeatures := app.flashlight.EnabledFeatures()
+
+	app.setFeatures(enabledFeatures, features.EnabledFeatures)
+
+	log.Debugf("Starting enabled features: %v", enabledFeatures)
+	//go app.startReplicaIfNecessary(enabledFeatures)
+	enableTrafficLog := app.isFeatureEnabled(enabledFeatures, config.FeatureTrafficLog)
+	go app.toggleTrafficLog(enableTrafficLog)
+}
+
+// startFeaturesService starts a new features service that dispatches features to any relevant listeners.
+func (app *App) startFeaturesService(chans ...<-chan bool) {
+	app.checkEnabledFeatures()
+	for _, ch := range chans {
+		go func(c <-chan bool) {
+			for range c {
+				app.checkEnabledFeatures()
+			}
+		}(ch)
+	}
+}
+
+func (app *App) beforeStart(listenAddr string) {
+	log.Debug("Got first config")
+	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
+		log.Debugf("Start profiling with cpu file %s and mem file %s", app.Flags.CpuProfile, app.Flags.MemProfile)
+		finishProfiling := profiling.Start(app.Flags.CpuProfile, app.Flags.MemProfile)
+		app.AddExitFunc("finish profiling", finishProfiling)
+	}
+
+	if err := setUpSysproxyTool(); err != nil {
+		app.Exit(err)
+	}
+
+	if app.Flags.ClearProxySettings {
+		// This is a workaround that attempts to fix a Windows-only problem where
+		// Lantern was unable to clean the system's proxy settings before logging
+		// off.
+		//
+		// See: https://github.com/getlantern/lantern/issues/2776
+		log.Debug("Requested clearing of proxy settings")
+		_, port, splitErr := net.SplitHostPort(listenAddr)
+		if splitErr == nil && port != "0" {
+			log.Debugf("Clearing system proxy settings for: %v", listenAddr)
+			clearSysproxyFor(listenAddr)
+		} else {
+			log.Debugf("Can't clear proxy settings for: %v", listenAddr)
+		}
+		app.Exit(nil)
+		os.Exit(0)
+	}
+	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, app.IsProUser, func() string {
+		return app.AddToken("/img/lantern_logo.png")
+	}))
+	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
+}
+
+func (app *App) isFeatureEnabled(features map[string]bool, feature string) bool {
+	val, ok := features[feature]
+	return ok && val
+}
+
+// Connect turns on proxying
+func (app *App) Connect() {
+	app.analyticsSession.Event("systray-menu", "connect")
+	ops.Begin("connect").End()
+	app.settings.setBool(SNDisconnected, false)
+}
+
+// Disconnect turns off proxying
+func (app *App) Disconnect() {
+	app.analyticsSession.Event("systray-menu", "disconnect")
+	ops.Begin("disconnect").End()
+	app.settings.setBool(SNDisconnected, true)
+}
+
+// GetLanguage returns the user language
+func (app *App) GetLanguage() string {
+	return app.settings.GetLanguage()
+}
+
+// SetLanguage sets the user language
+func (app *App) SetLanguage(lang string) {
+	app.settings.SetLanguage(lang)
+}
+
+// OnSettingChange sets a callback cb to get called when attr is changed from server.
+// When calling multiple times for same attr, only the last one takes effect.
+func (app *App) OnSettingChange(attr SettingName, cb func(interface{})) {
+	app.settings.OnChange(attr, cb)
+}
+
+// OnStatsChange adds a listener for Stats changes.
+func (app *App) OnStatsChange(fn func(stats.Stats)) {
+	app.statsTracker.AddListener(fn)
+}
+
+func (app *App) afterStart(cl *flashlightClient.Client) {
+	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
+		enable := val.(bool)
+		if enable {
+			app.SysproxyOn()
+		} else {
+			app.SysProxyOff()
+		}
+	})
+
+	app.AddExitFunc("turning off system proxy", func() {
+		app.SysProxyOff()
+	})
+	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
+	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
+		app.settings.setString(SNAddr, addr)
+	} else {
+		log.Errorf("Couldn't retrieve HTTP proxy addr in time")
+	}
+	if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
+		app.settings.setString(SNSOCKSAddr, socksAddr)
+	} else {
+		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
+	}
+	if err := app.servePro(app.ws); err != nil {
+		log.Errorf("Unable to serve pro data to UI: %v", err)
+	}
+	if err := app.serveConnectionStatus(app.ws); err != nil {
+		log.Errorf("Unable to serve connection status: %v", err)
+	}
+}
+
+func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
+	if src == config.Fetched {
+		atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
+	}
+	autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
+		return "/img/lantern_logo.png"
+	})
+	email.SetDefaultRecipient(cfg.ReportIssueEmail)
+	if len(cfg.GlobalBrowserMarketShareData) > 0 {
+		err := simbrowser.SetMarketShareData(
+			cfg.GlobalBrowserMarketShareData, cfg.RegionalBrowserMarketShareData)
+		if err != nil {
+			log.Errorf("failed to set browser market share data: %v", err)
+		}
+	}
+	app.chGlobalConfigChanged <- true
+}
+
+func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
+	if src == config.Fetched {
+		atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
+	}
+	app.trafficLogLock.Lock()
+	app.proxiesLock.Lock()
+	app.proxies = proxies
+	if app.trafficLog != nil {
+		proxyAddresses := []string{}
+		for _, p := range proxies {
+			proxyAddresses = append(proxyAddresses, p.Addr())
+		}
+		if err := app.trafficLog.UpdateAddresses(proxyAddresses); err != nil {
+			log.Errorf("failed to update traffic log addresses: %v", err)
+		}
+	}
+	app.proxiesLock.Unlock()
+	app.trafficLogLock.Unlock()
+}
+
+// getProxies returns the currently configured proxies. State-changing methods on these dialers
+// should not be called. In short, the elements of this slice should be treated as read-only.
+func (app *App) getProxies() []bandit.Dialer {
+	app.proxiesLock.RLock()
+	copied := make([]bandit.Dialer, len(app.proxies))
+	copy(copied, app.proxies)
+	app.proxiesLock.RUnlock()
+	return copied
+}
+
+// AddExitFunc adds a function to be called before the application exits.
+func (app *App) AddExitFunc(label string, exitFunc func()) {
+	app.muExitFuncs.Lock()
+	app.exitFuncs = append(app.exitFuncs, func() {
+		log.Debugf("Processing exit function: %v", label)
+		exitFunc()
+		log.Debugf("Done processing exit function: %v", label)
+	})
+	app.muExitFuncs.Unlock()
+}
+
+// Exit tells the application to exit, optionally supplying an error that caused
+// the exit. Returns true if the app is actually exiting, false if exit has
+// already been requested.
+func (app *App) Exit(err error) bool {
+	if atomic.CompareAndSwapInt64(&app.hasExited, 0, 1) {
+		app.doExit(err)
+		return true
+	}
+	return false
+}
+
+func (app *App) doExit(err error) {
+	if err != nil {
+		log.Errorf("Exiting app %d(%d) because of %v", os.Getpid(), os.Getppid(), err)
+		if ShouldReportToSentry() {
+			sentry.ConfigureScope(func(scope *sentry.Scope) {
+				scope.SetLevel(sentry.LevelFatal)
+			})
+
+			sentry.CaptureException(err)
+			if result := sentry.Flush(common.SentryTimeout); !result {
+				log.Error("Flushing to Sentry timed out")
+			}
+		}
+	} else {
+		log.Debugf("Exiting app %d(%d)", os.Getpid(), os.Getppid())
+	}
+	recordStopped()
+	defer func() {
+		app.exited.Set(err)
+		log.Debugf("Finished exiting app %d(%d)", os.Getpid(), os.Getppid())
+	}()
+
+	ch := make(chan struct{})
+	go func() {
+		app.runExitFuncs()
+		close(ch)
+	}()
+	t := time.NewTimer(10 * time.Second)
+	select {
+	case <-ch:
+		log.Debug("Finished running exit functions")
+	case <-t.C:
+		log.Debug("Timeout running exit functions, quit anyway")
+	}
+	if err := logging.Close(); err != nil {
+		log.Errorf("Error closing log: %v", err)
+	}
+}
+
+func (app *App) runExitFuncs() {
+	var wg sync.WaitGroup
+	// call plain exit funcs in parallel
+	app.muExitFuncs.RLock()
+	log.Debugf("Running %d exit functions", len(app.exitFuncs))
+	wg.Add(len(app.exitFuncs))
+	for _, f := range app.exitFuncs {
+		go func(f func()) {
+			f()
+			wg.Done()
+		}(f)
+	}
+	app.muExitFuncs.RUnlock()
+	wg.Wait()
+}
+
+// WaitForExit waits for a request to exit the application.
+func (app *App) WaitForExit() error {
+	err, _ := app.exited.Get(-1)
+	if err == nil {
+		return nil
+	}
+	return err.(error)
+}
+
+// is only used in the panicwrap parent process.
+func (app *App) LogPanicAndExit(msg string) {
+	sentry.ConfigureScope(func(scope *sentry.Scope) {
+		scope.SetLevel(sentry.LevelFatal)
+	})
+
+	sentry.CaptureMessage(msg)
+	if result := sentry.Flush(common.SentryTimeout); !result {
+		log.Error("Flushing to Sentry timed out")
+	}
+}
+
+func (app *App) exitOnFatal(err error) {
+	_ = logging.Close()
+	app.Exit(err)
+}
+
+// IsPro indicates whether or not the app is pro
+func (app *App) IsPro() bool {
+	isPro, _ := app.isProUserFast()
+	return isPro
+}
+
+// ReferralCode returns a user's unique referral code
+func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
+	referralCode := app.referralCode
+	if referralCode == "" {
+		resp, err := app.proClient.UserData(uc)
+		if err != nil {
+			return "", err
+		}
+		app.SetReferralCode(resp.Code)
+		return resp.Code, nil
+	}
+	return referralCode, nil
+}
+
+func (app *App) SetReferralCode(referralCode string) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app.referralCode = referralCode
+}
+
+
+func recordStopped() {
+	ops.Begin("client_stopped").
+		SetMetricSum("uptime", time.Since(startTime).Seconds()).
+		End()
+}
+
+// ShouldReportToSentry determines if we should report errors/panics to Sentry
+func ShouldReportToSentry() bool {
+	return !uicommon.IsDevEnvironment()
+}
+
+// OnTrayShow indicates the user has selected to show lantern from the tray.
+func (app *App) OnTrayShow() {
+	app.analyticsSession.Event("systray-menu", "show")
+}
+
+// OnTrayUpgrade indicates the user has selected to upgrade lantern from the tray.
+func (app *App) OnTrayUpgrade() {
+	app.analyticsSession.Event("systray-menu", "upgrade")
+}
+
+// PlansURL returns the URL for accessing the checkout/plans page directly.
+func (app *App) PlansURL() string {
+	return "#/plans"
+}
+
+// AdTrackURL returns the URL for adding tracking on injected ads.
+func (app *App) AdTrackURL() string {
+	return "/ad_track"
+}
+
+// AddToken adds our secure token to a given request path.
+func (app *App) AddToken(path string) string {
+	return path
+}
+
+func (app *App) Settings() *Settings {
+	return app.settings
+}
+
+// GetTranslations accesses translations with the given filename
+func (app *App) GetTranslations(filename string) ([]byte, error) {
+	log.Tracef("Accessing translations %v", filename)
+	tr, ok := app.translations.Get(30 * time.Second)
+	if !ok || tr == nil {
+		return nil, fmt.Errorf("could not get traslation for file name: %v", filename)
+	}
+	f, err := tr.(fs.FS).Open(filename)
+	if err != nil {
+		return nil, fmt.Errorf("could not get traslation for file name: %v, %w", filename, err)
+	}
+	return ioutil.ReadAll(f)
+}
+

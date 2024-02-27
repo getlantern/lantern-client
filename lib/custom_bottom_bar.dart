@@ -16,9 +16,7 @@ class CustomBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return messagingModel
-        .getOnBoardingStatus((context, hasBeenOnboarded, child) {
-      return sessionModel.chatEnabled((context, chatEnabled, _) {
+    return sessionModel.chatEnabled((context, chatEnabled, _) {
         return sessionModel.replicaAddr((context, replicaAddr, child) {
           final replicaEnabled = replicaAddr != '';
 
@@ -57,14 +55,13 @@ class CustomBottomBar extends StatelessWidget {
               currentIndex,
               chatEnabled,
               replicaEnabled,
-              hasBeenOnboarded!,
+              true,
               isDevelop,
               isTesting,
               replicaAddr,
             ),
           );
         });
-      });
     });
   }
 
@@ -250,7 +247,7 @@ class CustomBottomBar extends StatelessWidget {
           label: 'Account'.i18n,
           icon: ImagePaths.account,
           addBadge: (child) {
-            if (hasBeenOnboarded != true) {
+            if (hasBeenOnboarded == true) {
               return child;
             }
 
