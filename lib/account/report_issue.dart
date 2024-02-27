@@ -49,13 +49,6 @@ class _ReportIssueState extends State<ReportIssue> {
         return null;
       });
 
-
-  @override
-  void initState() {
-
-    super.initState();
-  }
-
   @override
   void dispose() {
     emailController.dispose();
@@ -144,8 +137,11 @@ class _ReportIssueState extends State<ReportIssue> {
                         items: <String>[
                           'cannot_access_blocked_sites'.i18n,
                           'cannot_complete_purchase'.i18n,
-                          'cannot_sign_in'.i18n,
-                          'spinner_loads_endlessly'.i18n,
+                          'cannot_login'.i18n,
+                          'loading_spinner_spins_endlessly'.i18n,
+                          'slow'.i18n,
+                          'cannot_link_devices'.i18n,
+                          'lantern_crashes'.i18n,
                           'other'.i18n
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(

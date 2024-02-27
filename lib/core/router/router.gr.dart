@@ -11,6 +11,7 @@
 import 'dart:io' as _i46;
 
 import 'package:auto_route/auto_route.dart' as _i42;
+import 'package:flutter/cupertino.dart' as _i47;
 import 'package:lantern/account/account.dart' as _i2;
 import 'package:lantern/account/account_management.dart' as _i1;
 import 'package:lantern/account/blocked_users.dart' as _i9;
@@ -373,10 +374,7 @@ abstract class $AppRouter extends _i42.RootStackRouter {
           orElse: () => const ReportIssueArgs());
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i36.ReportIssue(
-          key: args.key,
-          description: args.description,
-        ),
+        child: _i36.ReportIssue(key: args.key),
       );
     },
     ResellerCodeCheckout.name: (routeData) {
@@ -398,9 +396,11 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       );
     },
     SplitTunneling.name: (routeData) {
+      final args = routeData.argsAs<SplitTunnelingArgs>(
+          orElse: () => const SplitTunnelingArgs());
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: const _i39.SplitTunneling(),
+        child: _i39.SplitTunneling(key: args.key),
       );
     },
     StripeCheckout.name: (routeData) {
@@ -1498,14 +1498,10 @@ class ReplicaVideoViewerArgs {
 class ReportIssue extends _i42.PageRouteInfo<ReportIssueArgs> {
   ReportIssue({
     _i44.Key? key,
-    String? description,
     List<_i42.PageRouteInfo>? children,
   }) : super(
           ReportIssue.name,
-          args: ReportIssueArgs(
-            key: key,
-            description: description,
-          ),
+          args: ReportIssueArgs(key: key),
           initialChildren: children,
         );
 
@@ -1516,18 +1512,13 @@ class ReportIssue extends _i42.PageRouteInfo<ReportIssueArgs> {
 }
 
 class ReportIssueArgs {
-  const ReportIssueArgs({
-    this.key,
-    this.description,
-  });
+  const ReportIssueArgs({this.key});
 
   final _i44.Key? key;
 
-  final String? description;
-
   @override
   String toString() {
-    return 'ReportIssueArgs{key: $key, description: $description}';
+    return 'ReportIssueArgs{key: $key}';
   }
 }
 
@@ -1601,16 +1592,31 @@ class SettingsArgs {
 
 /// generated route for
 /// [_i39.SplitTunneling]
-class SplitTunneling extends _i42.PageRouteInfo<void> {
-  const SplitTunneling({List<_i42.PageRouteInfo>? children})
-      : super(
+class SplitTunneling extends _i42.PageRouteInfo<SplitTunnelingArgs> {
+  SplitTunneling({
+    _i47.Key? key,
+    List<_i42.PageRouteInfo>? children,
+  }) : super(
           SplitTunneling.name,
+          args: SplitTunnelingArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'SplitTunneling';
 
-  static const _i42.PageInfo<void> page = _i42.PageInfo<void>(name);
+  static const _i42.PageInfo<SplitTunnelingArgs> page =
+      _i42.PageInfo<SplitTunnelingArgs>(name);
+}
+
+class SplitTunnelingArgs {
+  const SplitTunnelingArgs({this.key});
+
+  final _i47.Key? key;
+
+  @override
+  String toString() {
+    return 'SplitTunnelingArgs{key: $key}';
+  }
 }
 
 /// generated route for

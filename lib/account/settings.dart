@@ -2,11 +2,13 @@ import 'package:catcher_2/core/catcher_2.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/app_methods.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 @RoutePage(name: 'Settings')
 class Settings extends StatelessWidget {
@@ -27,7 +29,9 @@ class Settings extends StatelessWidget {
       context.pushRoute(SplitTunneling());
 
   void openWebView(String url, BuildContext context) async {
-    if (Platform.isAndroid) {
+    if (isDesktop()) {
+      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+    } else if (Platform.isAndroid) {
       await sessionModel.openWebview(url);
     } else {
       context.pushRoute(AppWebview(url: url));
@@ -39,8 +43,10 @@ class Settings extends StatelessWidget {
       AppLoadingDialog.showLoadingDialog(context);
       await sessionModel.checkForUpdates();
       AppLoadingDialog.dismissLoadingDialog(context);
-    } else {
+    } else if (Platform.isIOS) {
       AppMethods.openAppstore();
+    } else {
+      await ffiCheckUpdates();
     }
   }
 
@@ -84,7 +90,7 @@ class Settings extends StatelessWidget {
             onTap: () => checkForUpdateTap(context),
           ),
           //* Blocked
-          messagingModel.getOnBoardingStatus(
+          if (!isDesktop()) messagingModel.getOnBoardingStatus(
             (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
                 ? ListItemFactory.settingsItem(
                     header: 'chat'.i18n,
@@ -101,7 +107,7 @@ class Settings extends StatelessWidget {
                 : const SizedBox(),
           ),
           //* Split tunneling
-          sessionModel.splitTunneling(
+          if (!isDesktop()) sessionModel.splitTunneling(
             (BuildContext context, bool value, Widget? child) =>
                 ListItemFactory.settingsItem(
               header: 'VPN'.i18n,

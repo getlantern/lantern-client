@@ -27,6 +27,12 @@ msgstr "Daily Data Usage "
 msgid "is"
 msgstr "is"
 
+msgid "connect"
+msgstr "Connect"
+
+msgid "disconnect"
+msgstr "Disconnect"
+
 msgid "connected"
 msgstr "Connected"
 
@@ -159,8 +165,17 @@ msgstr "Cannot complete purchase"
 msgid "cannot_sign_in"
 msgstr "Cannot sign in"
 
-msgid "spinner_loads_endlessly"
-msgstr "Spinner loads endlessly"
+msgid "loading_spinner_spins_endlessly"
+msgstr "Loading spinner spins endlessly"
+
+msgid "slow"
+msgstr "Slow"
+
+msgid "cannot_link_devices"
+msgstr "Cannot link devices"
+
+msgid "lantern_crashes"
+msgstr "Lantern crashes"
 
 msgid "other"
 msgstr "Other"
@@ -431,6 +446,18 @@ msgstr "Yes"
 msgid "No"
 msgstr "No"
 
+msgid "exit"
+msgstr "Exit"
+
+msgid "show"
+msgstr "Show"
+
+msgid "status_on"
+msgstr "Status: On"
+
+msgid "status_off"
+msgstr "Status: Off"
+
 msgid "Enter or paste linking code"
 msgstr "Enter or paste linking code"
 
@@ -464,6 +491,9 @@ msgstr "Log Out"
 msgid "confirm_remove_device"
 msgstr "Are you sure you want to unlink this device from your Pro account?"
 
+msgid "confirm_close_window"
+msgstr "Are you sure you want to close Lantern?"
+
 msgid "unlimited_data"
 msgstr "Unlimited Data"
 
@@ -475,6 +505,9 @@ msgstr "No Ads"
 
 msgid "choose_plan"
 msgstr "Choose Plan"
+
+msgid "billed_one_time"
+msgstr "billed one time"
 
 msgid "connect_up_to_3_devices"
 msgstr "Connect up to 3 devices"

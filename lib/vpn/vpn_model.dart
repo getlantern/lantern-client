@@ -1,4 +1,7 @@
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/common/common_desktop.dart' as desktop;
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 final vpnModel = VpnModel();
 
@@ -20,12 +23,38 @@ class VpnModel extends Model {
   }
 
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      '/vpn_status',
+    if (desktop.isMobile()) {
+      return subscribedSingleValueBuilder<String>(
+        '/vpn_status',
+        builder: builder,
+      );
+    }
+    final channel = WebSocketChannel.connect(
+      Uri.parse("ws://" + desktop.websocketAddr() + '/data'),
+    );
+    return ffiValueBuilder<String>(
+      'vpnStatus',
+      defaultValue: '',
+      channel: channel,
+      onChanges: (setValue) {
+        /// Listen for all incoming data
+        channel.stream.listen(
+          (data) {
+            final parsedJson = json.decode(data);
+            if (parsedJson["type"] == "vpnstatus") {
+              final updated = parsedJson["message"]["connected"];
+              final isConnected = updated != null && updated.toString() == "true";
+              setValue(isConnected ? "connected" : "disconnected");
+            }
+          },
+          onError: (error) => print(error),
+        );
+      },
+      desktop.vpnStatus,
       builder: builder,
     );
   }
-
+ 
   Future<bool> isVpnConnected() async {
     final vpnStatus = await methodChannel.invokeMethod('getVpnStatus');
     return vpnStatus == 'connected';

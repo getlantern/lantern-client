@@ -1,0 +1,79 @@
+{
+  "survey": {
+    "US": {
+      "enabled": false,
+      "probability": 1.0,
+      "campaign": "US20170405",
+      "url": "https://www.surveymonkey.com/r/W6YDDSG",
+      "message": "Are you using lantern from the USA? Take this short survey!",
+      "thanks": "Thanks for taking our survey!",
+      "button": "Take survey"
+    },
+    "en": {
+      "enabled": false,
+      "probability": 1.00,
+      "campaign": "20170227",
+      "url": "https://www.surveymonkey.com/r/JGZ9CD7",
+      "message": "Lantern is hiring an engineer in India! For more info, and to apply",
+      "thanks": "Thanks for your application!",
+      "button": "Click Here"
+    },
+    "zh-CN": {
+      "enabled": false,
+      "probability": 1.00,
+      "campaign": "CN20170405",
+      "url": " https://www.surveymonkey.com/r/W6CZYJW",
+      "message": "帮助蓝灯，请参与蓝灯调查!",
+      "thanks": "感谢你参与问卷调查!",
+      "button": "请告诉我们"
+    }
+  },
+  "uninstall-survey-free": {
+    "en": {
+      "enabled": true,
+      "probability": 1.00,
+      "campaign": "20170227",
+      "pro": true, 
+      "free": true, 
+      "url": "https://www.surveymonkey.com/r/JGZ9CD7"
+    },
+    "zh-CN": {
+      "enabled": true,
+      "probability": 1.00,
+      "campaign": "CN20170405",
+      "pro": true, 
+      "free": true, 
+      "url": " https://www.surveymonkey.com/r/W6CZYJW"
+    }
+  },
+  "uninstall-survey-pro": {
+    "en": {
+      "enabled": true,
+      "probability": 1.00,
+      "campaign": "20170227",
+      "pro": true, 
+      "free": true, 
+      "url": "https://www.surveymonkey.com/r/JGZ9CD7"
+    },
+    "zh-CN": {
+      "enabled": true,
+      "probability": 1.00,
+      "campaign": "CN20170405",
+      "pro": true, 
+      "free": true, 
+      "url": " https://www.surveymonkey.com/r/W6CZYJW"
+    }
+  },
+  "announcement": {
+     "default": "en-US", 
+     "en-US": {
+       "campaign": "20160801-new-feature", 
+       "pro": true, 
+       "free": true, 
+       "expiry": "2018-02-02T15:00:00+07:00", 
+       "title": "Try out the new feature",
+       "message": "Believe or not, you'll definitely love it!",
+       "url": ""
+     }
+  }
+}

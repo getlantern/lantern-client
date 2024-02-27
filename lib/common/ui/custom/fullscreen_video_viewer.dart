@@ -76,7 +76,6 @@ class FullScreenVideoViewerState
   }
 
   void handleButtonTap() {
-    Wakelock.toggle(enable: controller!.value.isPlaying);
     if (controller!.value.isPlaying) {
       setState(() {
         controller!.pause();
@@ -94,15 +93,11 @@ class FullScreenVideoViewerState
   void dispose() {
     controller?.dispose();
     controller = null;
-    Wakelock.disable();
     super.dispose();
   }
 
   @override
   bool ready() {
-    Wakelock.toggle(
-      enable: controller?.value.isPlaying ?? false,
-    );
     return controller != null;
   }
 

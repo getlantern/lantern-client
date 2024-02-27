@@ -1,18 +1,27 @@
 import 'dart:collection';
 
+import 'package:lantern/common/ffi_subscriber.dart';
+import 'package:lantern/common/ffi_list_subscriber.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'common_desktop.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;
   late ModelEventChannel _updatesChannel;
   final Map<String, SubscribedSingleValueNotifier> _singleValueNotifierCache =
       HashMap();
+  final Map<String, FfiValueNotifier> _ffiValueNotifierCache =
+      HashMap();
   final Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
   Event? event;
+  final Map<String, FfiListNotifier> _ffiListNotifierCache = HashMap();
 
   Model(String name) {
-    methodChannel = MethodChannel('${name}_method_channel');
-    _updatesChannel = ModelEventChannel('${name}_event_channel');
+    if (isMobile()) {
+      methodChannel = MethodChannel('${name}_method_channel');
+      _updatesChannel = ModelEventChannel('${name}_event_channel');
+    }
   }
 
   Future<T> get<T>(String path) async {
@@ -45,6 +54,30 @@ abstract class Model {
     return result;
   }
 
+  ValueListenableBuilder<T?> ffiValueBuilder<T>(
+    String path, 
+    Pointer<Utf8> Function() ffiFunction, {
+    T? defaultValue,
+    required ValueWidgetBuilder<T> builder,
+    bool details = false,
+    void Function(void Function(T?) setValue)? onChanges,
+    WebSocketChannel? channel,
+    T Function(Uint8List serialized)? deserialize,
+    T Function(Map<String, dynamic> json)? fromJsonModel,
+  }) {
+    var notifier = ffiValueNotifier(
+      ffiFunction,
+      path,
+      defaultValue,
+      details: details,
+      onChanges: onChanges,
+      channel: channel,
+      deserialize: deserialize,
+      fromJsonModel: fromJsonModel,
+    );
+    return FfiValueBuilder<T>(path, notifier, builder);
+  }
+
   ValueListenableBuilder<T?> subscribedSingleValueBuilder<T>(
     String path, {
     T? defaultValue,
@@ -60,6 +93,31 @@ abstract class Model {
     );
     return SubscribedSingleValueBuilder<T>(path, notifier, builder);
   }
+
+  ValueNotifier<T?> ffiValueNotifier<T>(
+    Pointer<Utf8> Function() ffiFunction,
+    String path,
+    T? defaultValue, {
+      bool details = false,
+      void Function(void Function(T?) setValue)? onChanges,
+      WebSocketChannel? channel,
+      T Function(Uint8List serialized)? deserialize,
+      T Function(Map<String, dynamic> json)? fromJsonModel,
+  }) {
+    return FfiValueNotifier(
+      ffiFunction,
+      path,
+      defaultValue,
+      () {
+        _ffiValueNotifierCache.remove(path);
+      },
+      details: details,
+      onChanges: onChanges,
+      deserialize: deserialize,
+      fromJsonModel: fromJsonModel,
+    );
+  }
+
 
   ValueNotifier<T?> singleValueNotifier<T>(
     String path,
@@ -129,6 +187,61 @@ abstract class Model {
         deserialize: deserialize,
       );
       _listNotifierCache[path] = result;
+    }
+    return result;
+  }
+
+  ValueListenableBuilder<ChangeTrackingList<T>> ffiListBuilder<T>(
+    String path, 
+    Pointer<Utf8> Function() ffiFunction, 
+    T Function(Map<String, dynamic> json) fromJsonModel, {
+    required ValueWidgetBuilder<Iterable<PathAndValue<T>>> builder,
+    bool details = false,
+    int Function(String key1, String key2)? compare,
+    T Function(Uint8List serialized)? deserialize,
+  }) {
+    var notifier = ffiListNotifier(
+      path,
+      ffiFunction,
+      fromJsonModel,
+      details: details,
+      compare: compare,
+      deserialize: deserialize,
+    );
+    return FfiListBuilder<T>(
+      path,
+      notifier,
+      (BuildContext context, ChangeTrackingList<T> value, Widget? child) =>
+          builder(
+        context,
+        value.map.entries.map((e) => PathAndValue(e.key, e.value)),
+        child,
+      ),
+    );
+  }
+
+  ValueNotifier<ChangeTrackingList<T>> ffiListNotifier<T>(
+    String path, 
+    Pointer<Utf8> Function() ffiFunction, 
+    T Function(Map<String, dynamic> json) fromJsonModel, {
+    bool details = false,
+    int Function(String key1, String key2)? compare,
+    T Function(Uint8List serialized)? deserialize,
+  }) {
+    var result = _ffiListNotifierCache[path] as FfiListNotifier<T>?;
+    if (result == null) {
+      result = FfiListNotifier(
+        path,
+        ffiFunction,
+        fromJsonModel,
+        () {
+          _ffiListNotifierCache.remove(path);
+        },
+        details: details,
+        compare: compare,
+        deserialize: deserialize,
+      );
+      _ffiListNotifierCache[path] = result;
     }
     return result;
   }
