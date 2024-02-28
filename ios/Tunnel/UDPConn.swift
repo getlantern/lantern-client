@@ -11,7 +11,7 @@ import Internalsdk
 import Network
 
 /// UDPDialer provides a mechanism for dialing outbound UDP connections that bypass the VPN.
-class UDPDialer: NSObject, IosUDPDialerProtocol {
+/*class UDPDialer: NSObject, IosUDPDialerProtocol {
   /// Dials the given host and port. In practice, nothing actually happens until IosUDPCallbacks get registered on the returned UDPConn.
   func dial(_ host: String?, port: Int) -> IosUDPConnProtocol? {
     return UDPConn(host: NWEndpoint.Host(host!), port: NWEndpoint.Port(rawValue: UInt16(port))!)
@@ -74,4 +74,4 @@ class UDPConn: NSObject, IosUDPConnProtocol {
   func close() {
     self.connection.cancel()
   }
-}
+}*/

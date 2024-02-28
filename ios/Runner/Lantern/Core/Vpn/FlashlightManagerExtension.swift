@@ -13,7 +13,7 @@ extension FlashlightManager {
     userID: Int, proToken: String?, excludedIPsURL: URL? = nil, refreshProxies: Bool,
     _ completion: ((Result<Bool, Error>) -> Void)? = nil
   ) {
-    var configError: NSError?
+    /*var configError: NSError?
     let configDirectory = constants.configDirectoryURL.path
     let deviceID = UIDevice.current.identifierForVendor!.uuidString
 
@@ -45,6 +45,6 @@ extension FlashlightManager {
     }
 
     // TODO: investigate: does this have to happen on goQueue?
-    queue.async(execute: workItem)
+    queue.async(execute: workItem)*/
   }
 }
