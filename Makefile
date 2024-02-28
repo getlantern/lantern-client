@@ -480,7 +480,7 @@ desktop-lib: echo-build-tags
 	go build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
 
 ffigen:
-	flutter pub run ffigen --config ffigen.yaml
+	dart run ffigen --config ffigen.yaml
 
 .PHONY: linux-amd64
 linux-amd64: $(LINUX_LIB_NAME_64) ## Build lantern for linux-amd64
