@@ -122,6 +122,7 @@ jobs:
         prefix: ${{ needs.set-version.outputs.prefix }}
       runs-on:
         group: large-runners
+        os: macos-latest
       steps:
       - uses: actions/checkout@v4
         with:
@@ -162,7 +163,10 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - run: make ffigen
+      - name: Generate ffi bindings
+        run: |
+          make darwin
+          make ffigen
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
