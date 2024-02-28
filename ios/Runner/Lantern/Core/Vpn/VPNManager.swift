@@ -178,6 +178,7 @@ class VPNManager: VPNBase {
       if error == nil {
         completion(.success(savedManagers?.first))  // may be nil, but thats ok
       } else {
+        logger.log("Error loading saved provider \(error)")
         completion(.failure(.loadingProviderFailed))
       }
     }
@@ -189,13 +190,16 @@ class VPNManager: VPNBase {
     _ completion: @escaping (Result<Void, VPNManagerError>) -> Void
   ) {
     provider.saveToPreferences { saveError in
-      if let _ = saveError {
+      if let saveError {
+        logger.log("failed to save then load provider \(saveError)")
         completion(.failure(.savingProviderFailed))
       } else {
         provider.loadFromPreferences { loadError in
-          if let _ = loadError {
+          if let loadError {
+            logger.log("failed to load provider \(loadError)")
             completion(.failure(.loadingProviderFailed))
           } else {
+            logger.log("successfully loaded provider")
             completion(.success(()))
           }
         }
@@ -206,8 +210,8 @@ class VPNManager: VPNBase {
   static private func newProvider() -> NETunnelProviderManager {
     let provider = NETunnelProviderManager()
     let config = NETunnelProviderProtocol()
-    config.providerBundleIdentifier = Constants.netExBundleId
-    config.serverAddress = "0.0.0.0"  // needs to be set but purely 8.8.8.8
+    config.providerBundleIdentifier = ApplicationTarget.packetTunnel.bundleIdentifier
+    config.serverAddress = ""
     provider.protocolConfiguration = config
     provider.isEnabled = true  // calling start when disabled crashes
     // Set rules for onDemand...
@@ -215,7 +219,7 @@ class VPNManager: VPNBase {
     provider.onDemandRules = [alwaysConnectRule]
     // BUT set to false for now— set to true RIGHT BEFORE calling start
     // otherwise it will continually try to turn itself on BEFORE the user even hits the switch
-    provider.isOnDemandEnabled = false
+    provider.isOnDemandEnabled = true
 
     return provider
   }

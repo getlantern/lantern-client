@@ -118,7 +118,7 @@ class VpnHelper: NSObject {
       logger.error("IosConfigureLogger FAILED: " + error.localizedDescription)
     }
     // 5 Fetch config
-    fetchConfigIfNecessary()
+    // fetchConfigIfNecessary()
   }
 
   private func createFilesForAppGoPackage() {
@@ -166,11 +166,8 @@ class VpnHelper: NSObject {
     onSuccess: (() -> Void)? = nil
   ) {
     guard state.isIdle else { return }
-    if !hasFetchedConfigOnce {
-      initiateConfigFetching(onError: onError, onSuccess: onSuccess)
-    } else {
-      initiateVPNStart(onError: onError, onSuccess: onSuccess)
-    }
+    logger.debug("VpnHelper startVPN called")
+    initiateVPNStart(onError: onError, onSuccess: onSuccess)
   }
 
   private func initiateConfigFetching(

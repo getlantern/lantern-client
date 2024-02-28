@@ -14,16 +14,18 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
   var sessionModel: SessionModel!
 
   init(flutterBinary: FlutterBinaryMessenger, vpnBase: VPNBase, sessionModel: SessionModel) throws {
-    logger.log("Initializing VPNModel")
+    logger.log("Initializing VpnModel")
     self.vpnManager = vpnBase
     var error: NSError?
     guard
       let model = InternalsdkNewVPNModel(try BaseModel<InternalsdkModelProtocol>.getDB(), &error)
     else {
+      logger.log("Error creaitng new VPN model: \(error)")
       throw error!
     }
     self.sessionModel = sessionModel
     try super.init(flutterBinary, model)
+    logger.log("VpnModel setManager called")
     model.setManager(self)
   }
 
