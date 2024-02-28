@@ -120,9 +120,7 @@ jobs:
         version: ${{ needs.set-version.outputs.version }}
         version_file: ${{ needs.set-version.outputs.version_file }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-      runs-on:
-        group: large-runners
-        os: macos-latest
+      runs-on: macos-latest-xlarge
       steps:
       - uses: actions/checkout@v4
         with:
