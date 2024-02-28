@@ -1,12 +1,12 @@
 plugins {
-  id 'com.android.application'
-  id 'kotlin-android'
-  id 'org.jlleitschuh.gradle.ktlint'
-  id 'org.jetbrains.kotlin.android'
-  id 'kotlin-parcelize'
-  id 'kotlin-kapt'
-  id 'com.google.protobuf'
-  id "io.sentry.android.gradle" version "4.2.0"
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'org.jlleitschuh.gradle.ktlint'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'com.google.protobuf'
+    id "io.sentry.android.gradle" version "4.2.0"
 }
 
 def localProperties = new Properties()
@@ -170,7 +170,7 @@ android {
     }
 
     buildTypes {
-       debug {
+        debug {
             minifyEnabled false
             shrinkResources false
             debuggable true
@@ -243,7 +243,7 @@ android {
         main {
             jniLibs.srcDirs = ['libs']
             java.srcDirs += 'src/main/kotlin'
-             proto.srcDirs += '../../protos_shared'
+            proto.srcDirs += '../../protos_shared'
         }
     }
 
@@ -385,7 +385,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.5"
     implementation "com.google.protobuf:protobuf-javalite:$protoc_version"
 
-    implementation fileTree(dir: "libs", include:"liblantern-${androidArch()}.aar")
+    implementation fileTree(dir: "libs", include: "liblantern-${androidArch()}.aar")
     // implementation(name:"liblantern-${androidArch()}", ext:'aar')
 
     // https://mvnrepository.com/artifact/net.jodah/expiringmap
@@ -453,8 +453,10 @@ dependencies {
     // from https://github.com/getlantern/opus_android
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
-    implementation 'com.github.getlantern:messaging-android:1ce4613c8b'
-    implementation 'com.github.getlantern:db-android:022779ec99'
+//    implementation 'com.github.getlantern:messaging-android:1ce4613c8b'
+    implementation 'com.github.getlantern:messaging-android:e9e7ef7417'
+    implementation 'com.github.getlantern:db-android:b58762fe00'
+
 //    implementation 'com.cleveradssolutions:cas:3.3.1'
 }
 
