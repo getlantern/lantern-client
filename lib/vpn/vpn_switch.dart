@@ -13,7 +13,7 @@ class VPNSwitch extends StatefulWidget {
 }
 
 class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
-  final adHelper = AdHelper();
+  //final adHelper = AdHelper();
   String vpnStatus = 'disconnected';
 
   @override
@@ -55,10 +55,10 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
     //if ads is ready then show ads immediately
 
     if (vpnStatus != 'connected' && userHasPermission) {
-      if (!await adHelper.isAdsReadyToShow()) {
+      //if (!await adHelper.isAdsReadyToShow()) {
         await vpnModel.connectingDelay(newValue);
         await Future.delayed(const Duration(seconds: 5));
-      }
+      //}
     }
 
     await vpnModel.switchVPN(newValue);
@@ -68,7 +68,7 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
       Future.delayed(
         const Duration(seconds: 1),
         () async {
-          await adHelper.showAds();
+          //await adHelper.showAds();
         },
       );
     }
@@ -76,13 +76,26 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
 
   @override
   Widget build(BuildContext context) {
-    if (isMobile()) {
+
+    return Transform.scale(
+      scale: 2,
+      child: vpnModel
+          .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+        return FlutterSwitch(
+          value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+          activeColor: onSwitchColor,
+          inactiveColor: offSwitchColor,
+          onToggle: (bool newValue) => vpnProcessForMobile(newValue, vpnStatus, true),
+        );
+      }),
+    );
+    /*if (isMobile()) {
       return sessionModel
           .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
         return sessionModel.shouldShowCASAds((context, isCasAdsEnable, child) {
-          adHelper.loadAds(
-              shouldShowGoogleAds: isGoogleAdsEnable,
-              shouldShowCASAds: isCasAdsEnable);
+          //adHelper.loadAds(
+          //    shouldShowGoogleAds: isGoogleAdsEnable,
+          //    shouldShowCASAds: isCasAdsEnable);
           return Transform.scale(
               scale: 2,
               child: vpnModel.vpnStatus(
@@ -92,8 +105,13 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
                       vpnStatus == 'connected' || vpnStatus == 'disconnecting',
                   activeColor: onSwitchColor,
                   inactiveColor: offSwitchColor,
-                  onToggle: (bool newValue) => vpnProcessForMobile(newValue,
-                      vpnStatus, (isGoogleAdsEnable || isCasAdsEnable)),
+                  onToggle: (bool newValue) {
+                    vpnProcessForMobile(newValue,
+                      vpnStatus, (isGoogleAdsEnable || isCasAdsEnable));
+                    setState(() {
+                      this.vpnStatus = newValue ? 'connected' : 'disconnected';
+                    });
+                  },
                 );
               }));
         });
@@ -120,6 +138,6 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
           );
         }),
       );
-    }
+    }*/
   }
 }

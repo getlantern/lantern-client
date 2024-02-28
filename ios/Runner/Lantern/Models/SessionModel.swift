@@ -17,6 +17,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   }()
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
+    logger.log("Initializing SessionModel")
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current
     let deviceId = device.identifierForVendor!.uuidString
