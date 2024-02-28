@@ -20,7 +20,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
   // MARK: PacketFlow
   let tunIP = "10.66.66.1"
   let mtu = 1500
-  //var client: IosClientWriterProtocol?
+  var client: InternalsdkClientWriterProtocol?
   var bytesRead: Int = 0
   var bytesWritten: Int = 0
 
@@ -29,6 +29,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
   override func startTunnel(
     options: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void
   ) {
+    logger.log("startTunnel called")
     // this is our first life-cycle event; perform set up
     logMemoryUsage(tag: "Before starting flashlight")
     increaseFileLimit()
@@ -117,9 +118,9 @@ extension PacketTunnelProvider {
       guard let welf = self else { return }
 
       // init IosClient, which is just a Swift abstraction for Flashlight
-      /*var error: NSError?
-      welf.client = IosClient(
-        welf, UDPDialer(), MemChecker(), welf.constants.configDirectoryURL.path, welf.mtu,
+      var error: NSError?
+      welf.client = InternalsdkClient(
+        welf, MemChecker(), welf.constants.configDirectoryURL.path, welf.mtu,
         Constants.capturedDNSHost, Constants.realDNSHost, &error)
 
       if let err = error {
@@ -136,7 +137,7 @@ extension PacketTunnelProvider {
       if error == nil {
         // if we're all set, kick off the reading and writing
         welf.packetFlow.readPacketObjects(completionHandler: welf.onPacket)
-      }*/
+      }
     }
   }
 
@@ -153,7 +154,7 @@ extension PacketTunnelProvider {
 // and embedded with Ios.xcframework
 // The original location in Go code is
 // github.com/getlantern/flashlight/ios/ios.go:Writer interface
-/*extension PacketTunnelProvider: IosWriterProtocol {
+extension PacketTunnelProvider: InternalsdkWriterProtocol {
 
   // MARK: PacketFlow Read/Write Callbacks
 
@@ -186,7 +187,7 @@ extension PacketTunnelProvider {
       }
     }
   }
-}*/
+}
 
 extension PacketTunnelProvider {
 
@@ -282,11 +283,11 @@ extension PacketTunnelProvider {
 }
 
 // MARK: Logging Memory Usage
-/*class MemChecker: NSObject, IosMemCheckerProtocol {
+class MemChecker: NSObject, InternalsdkMemCheckerProtocol {
   func bytesRemain() -> Int {
     return getBytesRemain()
   }
-}*/
+}
 
 func getBytesRemain() -> Int {
   var info = task_vm_info_data_t()

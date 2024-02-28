@@ -51,6 +51,7 @@ class VPNManager: VPNBase {
 
   // MARK: NETunnelProviderManager Set Up
   private func setUpProvider(completion: @escaping (Result<Void, VPNManagerError>) -> Void) {
+    logger.log("setUpProvider called")
     queue.async {
       VPNManager.loadSavedProvider { [weak self] result in
         switch result {
@@ -73,6 +74,7 @@ class VPNManager: VPNBase {
   private func createAndSaveNewProvider(
     _ completion: @escaping (Result<Void, VPNManagerError>) -> Void
   ) {
+    logger.log("createAndSaveNewProvider called")
     let newManager = VPNManager.newProvider()
     VPNManager.saveThenLoadProvider(newManager) { [weak self] result in
       if result.isSuccess {
@@ -97,6 +99,8 @@ class VPNManager: VPNBase {
       return
     }
 
+    logger.log("setup provider, starting tunnel")
+
     do {
       provider.isEnabled = true  // calling start when !isEnabled will crash
       let options = [Constants.netExStartReasonKey: NSString("User Initiated")]
@@ -108,6 +112,7 @@ class VPNManager: VPNBase {
       VPNManager.saveThenLoadProvider(provider, { _ in })  // necessary to persist isOnDemandEnabled
       completion(.success(()))
     } catch {
+      logger.log("error setting up VPN connection, re-mark needs set up")
       // re-mark needs set up
       self.providerManager = nil
       self.expectsSavedProvider = false
@@ -204,6 +209,7 @@ class VPNManager: VPNBase {
   }
 
   static private func newProvider() -> NETunnelProviderManager {
+    logger.log("newProvider called")
     let provider = NETunnelProviderManager()
     let config = NETunnelProviderProtocol()
     config.providerBundleIdentifier = Constants.netExBundleId
