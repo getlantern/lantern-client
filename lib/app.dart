@@ -32,18 +32,20 @@ class LanternApp extends StatelessWidget {
     // Since this notification is visible on all screens and we want the
     // animation state to remain consistent across screens, we put the animation
     // controller here at the app level since the app contains all screens.
-    sessionModel.networkAvailable
-        .addListener(toggleConnectivityWarningIfNecessary);
-    sessionModel.proxyAvailable
-        .addListener(toggleConnectivityWarningIfNecessary);
-    networkWarningAnimationController = AnimationController(
-      duration: shortAnimationDuration,
-      vsync: _TickerProviderImpl(),
-    );
-    networkWarningAnimation = Tween(begin: 0.0, end: 1.0)
-        .animate(networkWarningAnimationController)
-      ..addListener(networkWarningAnimationChanged);
-    toggleConnectivityWarningIfNecessary();
+    if (isMobile()) {
+      sessionModel.networkAvailable
+          .addListener(toggleConnectivityWarningIfNecessary);
+      sessionModel.proxyAvailable
+          .addListener(toggleConnectivityWarningIfNecessary);
+      networkWarningAnimationController = AnimationController(
+        duration: shortAnimationDuration,
+        vsync: _TickerProviderImpl(),
+      );
+      networkWarningAnimation = Tween(begin: 0.0, end: 1.0)
+          .animate(networkWarningAnimationController)
+        ..addListener(networkWarningAnimationChanged);
+      toggleConnectivityWarningIfNecessary();
+    }
   }
 
   final translations = Localization.ensureInitialized();
@@ -82,7 +84,10 @@ class LanternApp extends StatelessWidget {
         }
         return sessionModel.language(
           (context, lang, child) {
-            Localization.locale = lang;
+            if (isDesktop()) {
+              Localization.locale = lang;
+            }
+
             return GlobalLoaderOverlay(
               overlayColor: Colors.black,
               overlayOpacity: 0.6,

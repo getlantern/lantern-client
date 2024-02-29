@@ -9,10 +9,10 @@ class AccountMenu extends StatelessWidget {
       await context.pushRoute(AuthorizePro());
 
   void inviteFriends(BuildContext context) async =>
-      await context.pushRoute(InviteFriends());
+      await context.pushRoute(const InviteFriends());
 
   void openDesktopVersion(BuildContext context) async =>
-      await context.pushRoute(LanternDesktop());
+      await context.pushRoute(const LanternDesktop());
 
   void openSettings(BuildContext context) => context.pushRoute(Settings());
 
@@ -25,7 +25,7 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
-      messagingModel.getOnBoardingStatus(
+      if (Platform.isAndroid) messagingModel.getOnBoardingStatus(
         (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
             ? messagingModel.getCopiedRecoveryStatus(
                 (
@@ -64,14 +64,13 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-      if (Platform.isAndroid)
-        ListItemFactory.settingsItem(
-          icon: ImagePaths.devices,
-          content: 'Authorize Device for Pro'.i18n,
-          onTap: () {
-            authorizeDeviceForPro(context);
-          },
-        ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.devices,
+        content: 'Authorize Device for Pro'.i18n,
+        onTap: () {
+          authorizeDeviceForPro(context);
+        },
+      ),
       ...commonItems(context)
     ];
   }
@@ -117,7 +116,7 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> commonItems(BuildContext context) {
     return [
-      ListItemFactory.settingsItem(
+      if (Platform.isAndroid) ListItemFactory.settingsItem(
         icon: ImagePaths.desktop,
         content: 'desktop_version'.i18n,
         onTap: () {

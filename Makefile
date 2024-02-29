@@ -6,11 +6,13 @@
 INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
 INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 
+%.pb.go: %.proto
+	go build -o build/protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go
 
 codegen: protos routes
 
 # You can install the dart protoc support by running 'dart pub global activate protoc_plugin'
-protos: lib/messaging/protos_flutteronly/messaging.pb.dart lib/vpn/protos_shared/vpn.pb.dart
+protos: lib/vpn/protos_shared/vpn.pb.dart
 
 lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging.proto
 	@protoc --dart_out=./lib/messaging --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_flutteronly/messaging.proto
@@ -23,7 +25,6 @@ lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
 #	@protoc --plugin=protoc-gen-go=build/protoc-gen-go \
 #             --go_out=internalsdk \
 #             $<
-
 
 internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
 	@protoc --go_out=internalsdk protos_shared/vpn.proto
@@ -48,6 +49,13 @@ INSTALLER_NAME ?= lantern-installer
 CHANGELOG_NAME ?= CHANGELOG.md
 CHANGELOG_MIN_VERSION ?= 5.0.0
 
+PACKAGE_MAINTAINER := Lantern Team <team@getlantern.org>
+PACKAGE_VENDOR := Brave New Software Project, Inc
+PACKAGE_URL := https://lantern.io
+
+APP_DESCRIPTION := Censorship circumvention tool
+APP_EXTENDED_DESCRIPTION := Lantern allows you to access sites blocked by internet censorship.\nWhen you run it, Lantern reroutes traffic to selected domains through servers located where such domains are uncensored.
+
 get-command = $(shell which="$$(which $(1) 2> /dev/null)" && if [[ ! -z "$$which" ]]; then printf %q "$$which"; fi)
 
 GO        := $(call get-command,go)
@@ -58,8 +66,11 @@ AWSCLI    := $(call get-command,aws)
 CHANGE    := $(call get-command,git-chglog)
 PIP       := $(call get-command,pip)
 WGET      := $(call get-command,wget)
+RUBY      := $(call get-command,ruby)
 APPDMG    := $(call get-command,appdmg)
+RETRY     := $(call get-command,retry)
 MAGICK    := $(call get-command,magick)
+MINGW     := $(call get-command,i686-w64-mingw32-gcc)
 BUNDLER   := $(call get-command,bundle)
 ADB       := $(call get-command,adb)
 OPENSSL   := $(call get-command,openssl)
@@ -83,7 +94,7 @@ STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= 9999.99.99
 # Note - we don't bother stripping symbols or DWARF table as Android's packaging seems to take care of that for us
-LDFLAGS := -X github.com/getlantern/android-lantern/internalsdk.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/android-lantern/internalsdk.ApplicationVersion=$(VERSION) -X github.com/getlantern/flashlight/v7/common.StagingMode=$(STAGING)
+LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/lantern-client/internalsdk.ApplicationVersion=$(VERSION) -X github.com/getlantern/flashlight/v7/common.StagingMode=$(STAGING)
 
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
@@ -117,6 +128,23 @@ SENTRY_PROJECT_IOS=lantern-ios
 
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/Release-prod-iphoneos/Runner.app.dSYM
 INFO_PLIST := ios/Runner/Info.plist
+
+APP ?= lantern
+CAPITALIZED_APP := Lantern
+DARWIN_LIB_NAME ?= liblantern.dylib
+DARWIN_APP_NAME ?= $(CAPITALIZED_APP).app
+INSTALLER_RESOURCES ?= installer-resources-$(APP)
+INSTALLER_NAME ?= $(APP)-installer
+WINDOWS_LIB_NAME ?= liblantern.dll
+WINDOWS_APP_NAME ?= $(APP).exe
+WINDOWS64_LIB_NAME ?= liblantern.dll
+WINDOWS64_APP_NAME ?= $(APP)_x64.exe
+LINUX_LIB_NAME_64 ?= liblantern.so
+LINUX_LIB_NAME_32 ?= $(APP)_linux_386
+
+APP_YAML := lantern.yaml
+APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
+PACKAGED_YAML := .packaged-$(APP_YAML)
 
 
 # By default, build APKs containing support for ARM only 32 bit. Since we're using multi-architecture
@@ -178,7 +206,9 @@ MOBILE_TESTS_APK := $(BASE_MOBILE_DIR)/build/app/outputs/apk/autoTest/debug/app-
 CI_APK_PATH := $(BASE_MOBILE_DIR)/build/app/outputs/flutter-apk/app-prod-debug.apk
 BUILD_TAGS ?=
 BUILD_TAGS += ' lantern'
-GO_SOURCES := go.mod go.sum $(shell find internalsdk -type f -name "*.go")
+PROTO_SOURCES = $(shell find . -name '*.proto' -not -path './vendor/*')
+GENERATED_PROTO_SOURCES = $(shell echo "$(PROTO_SOURCES)" | sed 's/\.proto/\.pb\.go/g')
+GO_SOURCES := $(GENERATED_PROTO_SOURCES) go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
 
 
@@ -202,6 +232,44 @@ tag: require-version
 	git add $(CHANGELOG_NAME) && \
 	git commit -m "Updated changelog for $$VERSION" && \
 	git push
+
+define fpm-debian-build =
+	echo "Running fpm-debian-build" && \
+	PKG_ARCH=$1 && \
+	WORKDIR=$$(mktemp -dt "$$(basename $$0).XXXXXXXXXX") && \
+	INSTALLER_RESOURCES=./$(INSTALLER_RESOURCES)/linux && \
+	\
+	mkdir -p $$WORKDIR/usr/bin && \
+	mkdir -p $$WORKDIR/usr/lib/$(APP) && \
+	mkdir -p $$WORKDIR/usr/share/applications && \
+	mkdir -p $$WORKDIR/usr/share/icons/hicolor/128x128/apps && \
+	mkdir -p $$WORKDIR/usr/share/doc/$(APP) && \
+	chmod -R 755 $$WORKDIR && \
+	\
+	cp $$INSTALLER_RESOURCES/deb-copyright $$WORKDIR/usr/share/doc/$(APP)/copyright && \
+	cp $$INSTALLER_RESOURCES/$(APP).desktop $$WORKDIR/usr/share/applications && \
+	cp $$INSTALLER_RESOURCES/icon128x128on.png $$WORKDIR/usr/share/icons/hicolor/128x128/apps/$(APP).png && \
+	\
+	cp build/linux/$$PKG_ARCH/release/bundle/$(APP) $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
+	cp $$INSTALLER_RESOURCES/$(APP).sh $$WORKDIR/usr/lib/$(APP) && \
+	\
+	chmod -x $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
+	chmod +x $$WORKDIR/usr/lib/$(APP)/$(APP).sh && \
+	\
+	ln -s /usr/lib/$(APP)/$(APP).sh $$WORKDIR/usr/bin/$(APP) && \
+	rm -f $$WORKDIR/usr/lib/$(APP)/$(PACKAGED_YAML) && \
+	rm -f $$WORKDIR/usr/lib/$(APP)/$(APP_YAML) && \
+	cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $$WORKDIR/usr/lib/$(APP)/$(PACKAGED_YAML) && \
+	cp $(APP_YAML_PATH) $$WORKDIR/usr/lib/$(APP)/$(APP_YAML) && \
+	\
+	cat $$WORKDIR/usr/lib/$(APP)/$(APP)-binary | bzip2 > $(APP)_update_linux_$$PKG_ARCH.bz2 && \
+	bundle install && \
+	fpm -a $$PKG_ARCH -s dir -t deb -n $(APP) -v $$VERSION -m "$(PACKAGE_MAINTAINER)" --description "$(APP_DESCRIPTION)\n$(APP_EXTENDED_DESCRIPTION)" --category net --license "Apache-2.0" --vendor "$(PACKAGE_VENDOR)" --url $(PACKAGE_URL) --deb-compression gz -f -C $$WORKDIR usr;
+endef
+
+define osxcodesign
+	codesign --options runtime --strict --timestamp --force --deep -s "Developer ID Application: Innovate Labs LLC (4FYC28AXA2)" -v $(1)
+endef
 
 guard-%:
 	 @ if [ -z '${${*}}' ]; then echo 'Environment variable $* not set' && exit 1; fi
@@ -256,9 +324,21 @@ require-wget:
 require-magick:
 	@if [[ -z "$(MAGICK)" ]]; then echo 'Missing "magick" command. Try brew install imagemagick.'; exit 1; fi
 
+.PHONY: require-mingw
+require-mingw:
+	@if [[ -z "$(MINGW)" ]]; then echo 'Missing "mingw" command. Try "brew install mingw-w64."'; exit 1; fi
+
 .PHONY: require-sentry
 require-sentry:
 	@if [[ -z "$(SENTRY)" ]]; then echo 'Missing "sentry-cli" command. See sentry.io for installation instructions.'; exit 1; fi
+
+.PHONY: require-appdmg
+require-appdmg:
+	@if [[ -z "$(APPDMG)" ]]; then echo 'Missing "appdmg" command. Try sudo npm install -g appdmg.'; exit 1; fi
+
+.PHONY: require-retry
+require-retry:
+	@if [[ -z "$(RETRY)" ]]; then echo 'Missing retry command. Try go install github.com/joshdk/retry'; exit 1; fi
 
 release-autoupdate: require-version
 	@curl https://s3.amazonaws.com/lantern/lantern-installer.apk | bzip2 > update_android_arm.bz2 && \
@@ -276,7 +356,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 		-androidapi=23 \
 		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
+		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && \
@@ -304,7 +384,7 @@ dart-defines-debug:
 	@DART_DEFINES="$(CIBASE)"; \
 	printf "$$DART_DEFINES"
 
-do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
+do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB) ffigen
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines-debug` && \
 	echo "Value of DART_DEFINES is: $$DART_DEFINES" && \
@@ -379,14 +459,149 @@ ios-release:set-version build-framework
 	echo "iOS IPA generated under: $$IPA_PATH"; \
 	open "$$IPA_PATH"
 
+.PHONY: echo-build-tags
+echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=1 make echo-build-tags` for example to see how it changes
+	@if [[ -z "$$VERSION" ]]; then \
+		echo "** VERSION was not set, using default version. This is OK while in development."; \
+	fi
+	@echo "Build tags: $(BUILD_TAGS)"
+	@echo "Extra ldflags: $(EXTRA_LDFLAGS)"
+	@echo "Library name: $(LIB_NAME)"
+	@if [[ "$$GOOS" ]]; then echo "GOOS: $(GOOS)"; fi
+	@if [[ "$$GOARCH" ]]; then echo "GOARCH: $(GOARCH)"; fi
+	@if [[ "$$CC" ]]; then echo "CC: $(CC)"; fi
+	@if [[ "$$CXX" ]]; then echo "CXX: $(CXX)"; fi
+
+.PHONY: desktop-lib ffigen
+
+desktop-lib: export GOPRIVATE = github.com/getlantern
+desktop-lib: export CGO_ENABLED = 1
+desktop-lib: echo-build-tags
+	go build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
+
+ffigen:
+	flutter pub run ffigen --config ffigen.yaml
+
+.PHONY: linux-amd64
+linux-amd64: $(LINUX_LIB_NAME_64) ## Build lantern for linux-amd64
+
+.PHONY: package-linux-x64
+package-linux-x64: require-version
+	@$(call fpm-debian-build,"x64")
+	@echo "-> $(APP)_$(VERSION)_x64.deb"
+
+.PHONY: package-linux-arm64
+package-linux-amd64: require-version
+	@$(call fpm-debian-build,"arm64")
+	@echo "-> $(APP)_$(VERSION)_arm64.deb"
+
+$(LINUX_LIB_NAME_64): export GOOS = linux
+$(LINUX_LIB_NAME_64): export GOARCH = amd64
+$(LINUX_LIB_NAME_64): export LIB_NAME = $(LINUX_LIB_NAME_64)
+$(LINUX_LIB_NAME_64): export EXTRA_LDFLAGS += -linkmode external -s -w
+$(LINUX_LIB_NAME_64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
+$(LINUX_LIB_NAME_64): export Environment = production
+$(LINUX_LIB_NAME_64): desktop-lib
+
+.PHONY: windows
+windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
+
+$(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
+$(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
+$(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
+$(WINDOWS_LIB_NAME): export GOOS = windows
+$(WINDOWS_LIB_NAME): export GOARCH = 386
+$(WINDOWS_LIB_NAME): export LIB_NAME = $(WINDOWS_LIB_NAME)
+$(WINDOWS_LIB_NAME): export BUILD_TAGS += walk_use_cgo
+$(WINDOWS_LIB_NAME): export EXTRA_LDFLAGS +=
+$(WINDOWS_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
+$(WINDOWS_LIB_NAME): export BUILD_RACE =
+$(WINDOWS_LIB_NAME): export Environment = production
+$(WINDOWS_LIB_NAME): desktop-lib
+
+.PHONY: windows64
+windows64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
+
+$(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
+$(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
+$(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static
+$(WINDOWS64_LIB_NAME): export GOOS = windows
+$(WINDOWS64_LIB_NAME): export GOARCH = amd64
+$(WINDOWS64_LIB_NAME): export LIB_NAME = $(WINDOWS64_LIB_NAME)
+$(WINDOWS64_LIB_NAME): export BUILD_TAGS += walk_use_cgo
+$(WINDOWS64_LIB_NAME): export EXTRA_LDFLAGS +=
+$(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
+$(WINDOWS64_LIB_NAME): export BUILD_RACE =
+$(WINDOWS64_LIB_NAME): desktop-lib
+
+## Darwin
+.PHONY: darwin
+darwin: $(DARWIN_LIB_NAME) ## Build lantern for darwin (can only be run from a darwin machine)
+
+$(DARWIN_LIB_NAME): export LIB_NAME = $(DARWIN_LIB_NAME)
+$(DARWIN_LIB_NAME): export GOOS = darwin
+$(DARWIN_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
+$(DARWIN_LIB_NAME): export EXTRA_LDFLAGS += -s
+$(DARWIN_LIB_NAME): echo-build-tags desktop-lib
+
+$(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
+	@echo "Generating distribution package for darwin/amd64..." && \
+	if [[ "$$(uname -s)" == "Darwin" ]]; then \
+		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
+		DARWIN_APP_NAME="build/macos/Build/Products/Release/Lantern.app" && \
+		ls $$DARWIN_APP_NAME && \
+		cp $(DARWIN_LIB_NAME) $$DARWIN_APP_NAME/Contents/Frameworks && \
+		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/Frameworks/liblantern.dylib) && \
+		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/MacOS/Lantern) && \
+		$(call osxcodesign,$$DARWIN_APP_NAME) && \
+		rm -rf $(INSTALLER_NAME).dmg && \
+		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
+		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
+		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
+		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
+		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
+		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
+		$(call osxcodesign,$(INSTALLER_NAME).dmg) && \
+		rm $(CAPITALIZED_APP).dmg.zlib; \
+	else \
+		echo "-> Skipped: Can not generate a package on a non-OSX host."; \
+	fi;
+
+.PHONY: darwin-installer
+darwin-installer: $(INSTALLER_NAME).dmg
+
+.PHONY: notarize-darwin
+notarize-darwin: require-ac-username require-ac-password
+	@echo "Notarizing distribution package for darwin/amd64..." && \
+	if [[ "$$(uname -s)" == "Darwin" ]]; then \
+		./$(INSTALLER_RESOURCES)/tools/notarize-darwin.py \
+		  -u $$AC_USERNAME \
+		  -p $$AC_PASSWORD \
+		  -a 4FYC28AXA2 \
+		  $(INSTALLER_NAME).dmg; \
+	else \
+		echo "-> Skipped: Can not notarize a package on a non-OSX host."; \
+	fi;
+
+.PHONY: require-ac-username
+require-ac-username: guard-AC_USERNAME ## App Store Connect username - needed for notarizing macOS apps.
+
+.PHONY: require-ac-password
+require-ac-password: guard-AC_PASSWORD ## App Store Connect password - needed for notarizing macOS apps. It is recommended that this be stored in the keychain and provided like `security find-generic-password -s <password-name> -w`. This must be an "app-specific password". See https://support.apple.com/en-us/HT204397.
+
+.PHONY: require-bundler
+require-bundler:
+	@if [ "$(BUNDLER)" = "" ]; then \
+		echo "Missing 'bundle' command. See https://rubygems.org/gems/bundler/versions/1.16.1 or just gem install bundler -v '1.16.1'" && exit 1; \
+	fi
+
+.PHONY: package-darwin
+package-darwin: darwin-installer notarize-darwin
 
 android-bundle: $(MOBILE_BUNDLE)
 
 android-debug-install: $(MOBILE_DEBUG_APK)
 	$(ADB) uninstall $(MOBILE_APPID) ; $(ADB) install -r $(MOBILE_DEBUG_APK)
-
-#android-debug-install: $(MOBILE_DEBUG_APK)
-#	$(ADB) uninstall $(MOBILE_APPID) ; $(ADB) install -r $(MOBILE_DEBUG_APK)
 
 android-release-install: $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
@@ -413,10 +628,10 @@ changelog: require-version require-changelog require-app
 # Creates a dump of the source code lantern-android-sources-<version>.tar.gz
 sourcedump: require-version
 	here=`pwd` && \
-	rm -Rf /tmp/android-lantern ; \
-	mkdir -p /tmp/android-lantern && \
-	cp -R LICENSE LICENSING.md android internalsdk lib protos* go.mod go.sum /tmp/android-lantern && \
-	cd /tmp/android-lantern && \
+	rm -Rf /tmp/lantern-client ; \
+	mkdir -p /tmp/lantern-client && \
+	cp -R LICENSE LICENSING.md android internalsdk lib protos* go.mod go.sum /tmp/lantern-client && \
+	cd /tmp/lantern-client && \
 	find . -name "*_test.go" -exec rm {} \; && \
 	find . -name "*.jks" -exec rm {} \; && \
 	rm -Rf android/.idea android/sentry.properties android/.settings android/local.properties android/app/.classpath android/app/.project android/app/.settings android/app/src/androidTest android/app/src/test android/app/src/main/res android/app/libs android/.gradle android/alipaySdk-15.6.5-20190718211148/ android/app/bin android/app/.cxx android/app/google-services.json && \
@@ -438,7 +653,7 @@ build-framework: assert-go-version install-gomobile
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-    		github.com/getlantern/android-lantern/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/flashlight/v7/ios
+    		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/flashlight/v7/ios
 	@echo "moving framework"
 	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
 	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
@@ -464,7 +679,3 @@ clean:
 	rm -f `which gomobile` && \
 	rm -f `which gobind`
 	rm -Rf "$(FLASHLIGHT_FRAMEWORK_PATH)" "$(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)"
-
-
-
-

@@ -55,7 +55,7 @@ void main() {
                         ],
                       ),
                       // TODO <08-08-22, kalli> Confirm we can use BotToast
-                      builder: BotToastInit(),
+                      //builder: BotToastInit(),
                       supportedLocales: [
                         const Locale('ar', 'EG'),
                         const Locale('fr', 'FR'),

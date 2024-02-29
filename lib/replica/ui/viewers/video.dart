@@ -45,7 +45,6 @@ class _ReplicaVideoViewerState extends ReplicaViewerLayoutState {
   }
 
   void handleVideoTap() {
-    Wakelock.toggle(enable: controller!.value.isPlaying);
     if (controller!.value.isPlaying) {
       setState(() {
         controller!.pause();

@@ -1,5 +1,7 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
@@ -104,6 +106,23 @@ class _CheckoutState extends State<Checkout>
     );
   }
 
+  List<Widget> desktopPaymentOptions() {
+    var widgets = <Widget>[];
+    widgets.add(
+      PaymentProvider(
+        logoPaths: [
+          ImagePaths.visa,
+          ImagePaths.mastercard,
+          ImagePaths.unionpay
+        ],
+        onChanged: () => selectPaymentProvider(Providers.stripe),
+        selectedPaymentProvider: selectedPaymentProvider!,
+        paymentType: Providers.stripe,
+      ),
+    );
+    return widgets;
+  }
+
   List<Widget> paymentOptions(
     Iterable<PathAndValue<PaymentMethod>> paymentMethods,
   ) {
@@ -132,6 +151,21 @@ class _CheckoutState extends State<Checkout>
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
         // * Stripe selected
+        if (isDesktop()) {
+          String os = Platform.operatingSystem;
+          final redirectUrl = await sessionModel.paymentRedirect(
+              widget.plan.id,
+              emailController.text,
+              "stripe",
+              os,
+            );
+          if (!Platform.isMacOS) {
+            await context.pushRoute(AppWebview(url: redirectUrl));
+          } else {
+            await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
+          }
+          return;
+        }
         await context.pushRoute(
           StripeCheckout(
             email: emailController.text,
@@ -305,7 +339,7 @@ class _CheckoutState extends State<Checkout>
                       width: MediaQuery.of(context).size.width,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: paymentOptions(paymentMethods),
+                        children: Platform.isAndroid ? paymentOptions(paymentMethods) : desktopPaymentOptions(),
                       ),
                     ),
                     // * Price summary, unused pro time disclaimer, Continue button
