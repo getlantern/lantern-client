@@ -1,8 +1,8 @@
 package internalsdk
 
 import (
-	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )
