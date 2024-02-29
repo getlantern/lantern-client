@@ -41,7 +41,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'reset_password'.i18n,
+      title: const AppBarProHeader(),
       body: _buildBody(context),
     );
   }
@@ -54,7 +54,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           child: Column(
             children: [
               const SizedBox(height: 24),
-              const LogoWithText(),
+              HeadingText(title: 'reset_password'.i18n),
               const SizedBox(height: 24),
               Form(
                 key: _passwordFormKey,
@@ -130,8 +130,6 @@ class _ResetPasswordState extends State<ResetPassword> {
       ),
     );
   }
-
-
 
   Future<void> onResetPasswordTap() async {
     try {

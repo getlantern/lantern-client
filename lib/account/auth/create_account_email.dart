@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
-import 'package:lantern/common/ui/custom/logo_with_text.dart';
 
 import '../../common/common.dart';
 import '../../core/purchase/app_purchase.dart';
@@ -32,7 +31,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'create_account'.i18n,
+      title: const AppBarProHeader(),
       body: _buildBody(context),
     );
   }
@@ -44,7 +43,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
         child: Column(
           children: [
             const SizedBox(height: 24),
-            const LogoWithText(),
+            HeadingText(title: 'create_account'.i18n),
             const SizedBox(height: 24),
             Form(
               key: _emailFormKey,

@@ -27,9 +27,8 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'create_password'.i18n,
-      body: _buildBody(context),
-    );
+        title:const AppBarProHeader(),
+        body: _buildBody(context),);
   }
 
   Widget _buildBody(BuildContext context) {
@@ -40,7 +39,7 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
           child: Column(
             children: [
               const SizedBox(height: 24),
-              const LogoWithText(),
+              HeadingText(title: 'create_password'.i18n,),
               const SizedBox(height: 24),
               _buildEmail(),
               const SizedBox(height: 24),
