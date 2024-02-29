@@ -126,6 +126,7 @@ type iosClient struct {
 }
 
 func Client(packetsOut Writer, memChecker MemChecker, configDir string, mtu int, capturedDNSHost, realDNSHost string) (ClientWriter, error) {
+	log.Debug("Creating new iOS client")
 	if mtu <= 0 {
 		log.Debug("Defaulting MTU to 1500")
 		mtu = 1500
@@ -168,5 +169,3 @@ func LogDebug(msg string) {
 func LogError(msg string) {
 	swiftLog.Error(msg)
 }
-
-
