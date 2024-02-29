@@ -255,8 +255,6 @@ github.com/getlantern/enhttp v0.0.0-20210901195634-6f89d45ee033 h1:HbjEpFFiRYcyS
 github.com/getlantern/enhttp v0.0.0-20210901195634-6f89d45ee033/go.mod h1:kHP/nfmHj9HJVN5Cb+1RFNRLR0O0nx40YENc4wKIe6s=
 github.com/getlantern/errors v0.0.0-20190325191628-abdb3e3e36f7/go.mod h1:l+xpFBrCtDLpK9qNjxs+cHU6+BAdlBaxHqikB6Lku3A=
 github.com/getlantern/errors v1.0.1/go.mod h1:l+xpFBrCtDLpK9qNjxs+cHU6+BAdlBaxHqikB6Lku3A=
-github.com/getlantern/errors v1.0.3 h1:Ne4Ycj7NI1BtSyAfVeAT/DNoxz7/S2BUc3L2Ht1YSHE=
-github.com/getlantern/errors v1.0.3/go.mod h1:m8C7H1qmouvsGpwQqk/6NUpIVMpfzUPn608aBZDYV04=
 github.com/getlantern/errors v1.0.4 h1:i2iR1M9GKj4WuingpNqJ+XQEw6i6dnAgKAmLj6ZB3X0=
 github.com/getlantern/errors v1.0.4/go.mod h1:/Foq8jtSDGP8GOXzAjeslsC4Ar/3kB+UiQH+WyV4pzY=
 github.com/getlantern/event v0.0.0-20210901195647-a7e3145142e6 h1:sjFsoQHJqzDiwgbOLHnG/zYIpN1Sbmv/7gk1ie/KkHg=
@@ -273,8 +271,8 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight/v7 v7.6.57-0.20240228000317-f92bcc048c29 h1:O5FtSRoJTKdp4G3gA6ssWQhWtR93hjE1eJ0xZA3nvac=
-github.com/getlantern/flashlight/v7 v7.6.57-0.20240228000317-f92bcc048c29/go.mod h1:I90ekr9DZ5NyDWyR3HYQFCy1Vdt3EI1MciRBMdRyJfc=
+github.com/getlantern/flashlight/v7 v7.6.57 h1:K0MsM7RiOYqq5wzAJkdv4MrHA6Luq78lUrf0vzEknWE=
+github.com/getlantern/flashlight/v7 v7.6.57/go.mod h1:I90ekr9DZ5NyDWyR3HYQFCy1Vdt3EI1MciRBMdRyJfc=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 h1:r/Z/SPPIfLXDI3QA7/tE6nOfPncrqeUPDjiFjnNGP50=
