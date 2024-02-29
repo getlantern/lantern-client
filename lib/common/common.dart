@@ -96,7 +96,7 @@ export 'ui/show_snackbar.dart';
 export 'ui/text_highlighter.dart';
 export 'ui/text_styles.dart';
 export 'ui/transitions.dart';
-
+export 'ui/custom/heading_text.dart';
 
 final mainLogger = Logger(
   printer: PrettyPrinter(),

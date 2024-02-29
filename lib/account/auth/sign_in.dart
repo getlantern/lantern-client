@@ -1,6 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
-import 'package:lantern/common/ui/custom/logo_with_text.dart';
+
 import '../../common/common.dart';
 
 /// Test users
@@ -41,7 +41,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: widget.authFlow.isReset ? 'reset_password'.i18n : 'sign_in'.i18n,
+      title: const AppBarProHeader(),
       body: _buildBody(context),
     );
   }
@@ -53,7 +53,11 @@ class _SignInState extends State<SignIn> {
         child: Column(
           children: [
             const SizedBox(height: 24),
-            const LogoWithText(),
+            HeadingText(
+              title: widget.authFlow.isReset
+                  ? 'reset_password'.i18n
+                  : 'sign_in'.i18n,
+            ),
             const SizedBox(height: 24),
             Form(
               key: _emailFormKey,
@@ -62,7 +66,6 @@ class _SignInState extends State<SignIn> {
                 label: widget.authFlow.isReset
                     ? "lantern_pro_email".i18n
                     : "enter_email".i18n,
-
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.emailAddress,
                 prefixIcon: SvgPicture.asset(ImagePaths.email),
@@ -88,8 +91,8 @@ class _SignInState extends State<SignIn> {
               RichText(
                 text: TextSpan(
                   text: 'new_to_lantern'.i18n,
-                  style:
-                  tsBody1.copyWith(fontWeight: FontWeight.w400, color: grey5),
+                  style: tsBody1.copyWith(
+                      fontWeight: FontWeight.w400, color: grey5),
                   children: [
                     TextSpan(
                       text: "create_account".i18n.toUpperCase(),
@@ -100,14 +103,11 @@ class _SignInState extends State<SignIn> {
                   ],
                 ),
               ),
-
           ],
         ),
       ),
     );
   }
-
-
 
   @override
   void dispose() {
