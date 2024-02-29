@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:email_validator/email_validator.dart';
-import 'package:lantern/common/ui/custom/logo_with_text.dart';
 
 import '../../common/common.dart';
 
@@ -46,7 +45,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'change_email'.i18n,
+      title: const AppBarProHeader(),
       body: _buildBody(),
     );
   }
@@ -55,7 +54,9 @@ class _ChangeEmailState extends State<ChangeEmail> {
     return Column(
       children: <Widget>[
         const SizedBox(height: 24),
-       const LogoWithText(),
+        HeadingText(
+          title: 'change_email'.i18n,
+        ),
         const SizedBox(height: 24),
         Form(
           key: _emailFormKey,

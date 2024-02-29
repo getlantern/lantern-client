@@ -21,9 +21,7 @@ class _VerificationState extends State<Verification> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: widget.authFlow.isCreateAccount || widget.authFlow.isVerifyEmail
-          ? 'confirm_email'.i18n
-          : 'reset_password'.i18n,
+      title: AppBarProHeader(),
       body: _buildBody(context),
     );
   }
@@ -36,7 +34,12 @@ class _VerificationState extends State<Verification> {
           child: Column(
             children: [
               const SizedBox(height: 24),
-              const LogoWithText(),
+              HeadingText(
+                title: widget.authFlow.isCreateAccount ||
+                        widget.authFlow.isVerifyEmail
+                    ? 'confirm_email'.i18n
+                    : 'reset_password'.i18n,
+              ),
               const SizedBox(height: 24),
               CText(
                 "enter_confirmation_code".i18n.toUpperCase(),
@@ -77,7 +80,6 @@ class _VerificationState extends State<Verification> {
       ),
     );
   }
-
 
   /// widget methods
   Future<void> resendConfirmationCode() async {

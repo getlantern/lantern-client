@@ -35,7 +35,7 @@ class _SignInPasswordState extends State<SignInPassword> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'enter_password'.i18n,
+      title: const AppBarProHeader(),
       body: _buildBody(context),
     );
   }
@@ -47,7 +47,7 @@ class _SignInPasswordState extends State<SignInPassword> {
         child: Column(
           children: [
             const SizedBox(height: 24),
-            const LogoWithText(),
+            HeadingText(title: 'enter_password'.i18n),
             const SizedBox(height: 24),
             CPasswordTextFiled(
               label: "enter_password".i18n,
