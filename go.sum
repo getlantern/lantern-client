@@ -257,6 +257,8 @@ github.com/getlantern/errors v0.0.0-20190325191628-abdb3e3e36f7/go.mod h1:l+xpFB
 github.com/getlantern/errors v1.0.1/go.mod h1:l+xpFBrCtDLpK9qNjxs+cHU6+BAdlBaxHqikB6Lku3A=
 github.com/getlantern/errors v1.0.3 h1:Ne4Ycj7NI1BtSyAfVeAT/DNoxz7/S2BUc3L2Ht1YSHE=
 github.com/getlantern/errors v1.0.3/go.mod h1:m8C7H1qmouvsGpwQqk/6NUpIVMpfzUPn608aBZDYV04=
+github.com/getlantern/errors v1.0.4 h1:i2iR1M9GKj4WuingpNqJ+XQEw6i6dnAgKAmLj6ZB3X0=
+github.com/getlantern/errors v1.0.4/go.mod h1:/Foq8jtSDGP8GOXzAjeslsC4Ar/3kB+UiQH+WyV4pzY=
 github.com/getlantern/event v0.0.0-20210901195647-a7e3145142e6 h1:sjFsoQHJqzDiwgbOLHnG/zYIpN1Sbmv/7gk1ie/KkHg=
 github.com/getlantern/event v0.0.0-20210901195647-a7e3145142e6/go.mod h1:iToZ3dqm/iFxRHPHUHUrF1JZtg0e06ZSXD1BuiGoUaY=
 github.com/getlantern/eventual v0.0.0-20180125201821-84b02499361b/go.mod h1:O8T3zFEcY6+LRXFcVV4q8mEu2tDIixG8edC84DfswBc=

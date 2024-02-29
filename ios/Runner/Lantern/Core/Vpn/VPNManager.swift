@@ -216,7 +216,7 @@ class VPNManager: VPNBase {
     logger.log("newProvider called")
     let provider = NETunnelProviderManager()
     let config = NETunnelProviderProtocol()
-    config.providerBundleIdentifier = ApplicationTarget.packetTunnel.bundleIdentifier
+    config.providerBundleIdentifier = Constants.netExBundleId
     config.serverAddress = ""
     provider.protocolConfiguration = config
     provider.isEnabled = true  // calling start when disabled crashes

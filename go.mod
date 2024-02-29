@@ -33,7 +33,7 @@ require (
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/diagnostics v0.0.0-20230503185158-c2fc28ed22fe
 	github.com/getlantern/dnsgrab v0.0.0-20240124035712-497ccf435858
-	github.com/getlantern/errors v1.0.3
+	github.com/getlantern/errors v1.0.4
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
