@@ -100,7 +100,6 @@ class VPNManager: VPNBase {
     }
 
     logger.log("setup provider, starting tunnel")
-
     do {
       provider.isEnabled = true  // calling start when !isEnabled will crash
       let options = [Constants.netExStartReasonKey: NSString("User Initiated")]
@@ -217,7 +216,7 @@ class VPNManager: VPNBase {
     let provider = NETunnelProviderManager()
     let config = NETunnelProviderProtocol()
     config.providerBundleIdentifier = Constants.netExBundleId
-    config.serverAddress = ""
+    config.serverAddress = "0.0.0.0"
     provider.protocolConfiguration = config
     provider.isEnabled = true  // calling start when disabled crashes
     // Set rules for onDemand...
@@ -225,7 +224,7 @@ class VPNManager: VPNBase {
     provider.onDemandRules = [alwaysConnectRule]
     // BUT set to false for now— set to true RIGHT BEFORE calling start
     // otherwise it will continually try to turn itself on BEFORE the user even hits the switch
-    provider.isOnDemandEnabled = true
+    provider.isOnDemandEnabled = false
 
     return provider
   }
