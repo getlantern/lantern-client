@@ -22,10 +22,10 @@ class LanternLogger {
   }
 
   func error(_ msg: String) {
-    IosLogError(msg)
+    InternalsdkLogError(msg)
   }
 
   func debug(_ msg: String) {
-    IosLogDebug(msg)
+    InternalsdkLogDebug(msg)
   }
 }

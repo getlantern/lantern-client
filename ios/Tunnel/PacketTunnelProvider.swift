@@ -29,6 +29,8 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
   override func startTunnel(
     options: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void
   ) {
+    logger.log("startTunnel called")
+
     // this is our first life-cycle event; perform set up
     logMemoryUsage(tag: "Before starting flashlight")
     increaseFileLimit()

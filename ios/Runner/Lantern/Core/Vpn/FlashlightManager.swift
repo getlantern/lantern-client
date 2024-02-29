@@ -30,7 +30,7 @@ class FlashlightManager {
   // MARK: Go Logging
   func configureGoLoggerReturningError() -> Error? {
     var error: NSError?
-    IosConfigureFileLogging(constants.goLogBaseURL.path, constants.targetDirectoryURL.path, &error)
+    InternalsdkConfigureFileLogging(constants.goLogBaseURL.path, constants.targetDirectoryURL.path, &error)
     return error
   }
 
