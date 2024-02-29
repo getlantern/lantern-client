@@ -133,6 +133,7 @@ export 'ui/custom/fullscreen_video_viewer.dart';
 export 'ui/custom/fullscreen_image_viewer.dart';
 export 'ui/custom/fullscreen_viewer.dart';
 
+export 'ui/custom/heading_text.dart';
 
 final mainLogger = Logger(
   printer: PrettyPrinter(),
