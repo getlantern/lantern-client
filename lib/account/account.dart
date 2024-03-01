@@ -48,11 +48,7 @@ class AccountMenu extends StatelessWidget {
   }
 
   void onAccountManagementTap(BuildContext context, bool isProUser) {
-    if (sessionModel.hasUserSignedInNotifier.value == true) {
-      context.pushRoute(AccountManagement(isPro: isProUser));
-    } else {
-      showProUserDialog(context);
-    }
+    context.pushRoute(AccountManagement(isPro: isProUser));
   }
 
   void openSignIn(BuildContext context) => context.pushRoute(SignIn());

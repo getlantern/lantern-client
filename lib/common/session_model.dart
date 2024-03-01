@@ -294,6 +294,8 @@ class SessionModel extends Model {
     });
   }
 
+
+
   Future<void> signupEmailConfirmation(String email, String code) {
     return methodChannel
         .invokeMethod('signupEmailConfirmation', <String, dynamic>{
@@ -324,6 +326,17 @@ class SessionModel extends Model {
       'code': code,
     });
   }
+
+  Future<void> validateRecoveryCode(
+      String email, String code) {
+    return methodChannel
+        .invokeMethod('validateRecoveryCode', <String, dynamic>{
+      'email': email,
+      'code': code,
+    });
+  }
+
+
 
   Future<void> changeEmail(String email, String newEmail, String password) {
     return methodChannel.invokeMethod('changeEmail', <String, dynamic>{
@@ -388,9 +401,9 @@ class SessionModel extends Model {
     }).then((value) => value.toString());
   }
 
-  Future<String> validateRecoveryCode(String code) async {
+  Future<String> validateDeviceRecoveryCode(String code) async {
     return await methodChannel
-        .invokeMethod('validateRecoveryCode', <String, dynamic>{
+        .invokeMethod('validateDeviceRecoveryCode', <String, dynamic>{
       'code': code,
     }).then((value) => value.toString());
   }

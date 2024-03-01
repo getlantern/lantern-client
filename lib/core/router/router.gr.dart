@@ -217,8 +217,7 @@ abstract class $AppRouter extends _i51.RootStackRouter {
       );
     },
     CreateAccountEmail.name: (routeData) {
-      final args = routeData.argsAs<CreateAccountEmailArgs>(
-          orElse: () => const CreateAccountEmailArgs());
+      final args = routeData.argsAs<CreateAccountEmailArgs>();
       return _i51.AutoRoutePage<void>(
         routeData: routeData,
         child: _i19.CreateAccountEmail(
@@ -506,6 +505,7 @@ abstract class $AppRouter extends _i51.RootStackRouter {
           key: args.key,
           email: args.email,
           authFlow: args.authFlow,
+          plan: args.plan,
         ),
       );
     },
@@ -985,7 +985,7 @@ class ConversationArgs {
 class CreateAccountEmail extends _i51.PageRouteInfo<CreateAccountEmailArgs> {
   CreateAccountEmail({
     _i53.Key? key,
-    _i53.Plan? plan,
+    required _i53.Plan plan,
     List<_i51.PageRouteInfo>? children,
   }) : super(
           CreateAccountEmail.name,
@@ -1005,12 +1005,12 @@ class CreateAccountEmail extends _i51.PageRouteInfo<CreateAccountEmailArgs> {
 class CreateAccountEmailArgs {
   const CreateAccountEmailArgs({
     this.key,
-    this.plan,
+    required this.plan,
   });
 
   final _i53.Key? key;
 
-  final _i53.Plan? plan;
+  final _i53.Plan plan;
 
   @override
   String toString() {
@@ -1982,6 +1982,7 @@ class Verification extends _i51.PageRouteInfo<VerificationArgs> {
     _i53.Key? key,
     required String email,
     _i53.AuthFlow authFlow = _i53.AuthFlow.reset,
+    _i53.Plan? plan,
     List<_i51.PageRouteInfo>? children,
   }) : super(
           Verification.name,
@@ -1989,6 +1990,7 @@ class Verification extends _i51.PageRouteInfo<VerificationArgs> {
             key: key,
             email: email,
             authFlow: authFlow,
+            plan: plan,
           ),
           initialChildren: children,
         );
@@ -2004,6 +2006,7 @@ class VerificationArgs {
     this.key,
     required this.email,
     this.authFlow = _i53.AuthFlow.reset,
+    this.plan,
   });
 
   final _i53.Key? key;
@@ -2012,8 +2015,10 @@ class VerificationArgs {
 
   final _i53.AuthFlow authFlow;
 
+  final _i53.Plan? plan;
+
   @override
   String toString() {
-    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow}';
+    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow, plan: $plan}';
   }
 }

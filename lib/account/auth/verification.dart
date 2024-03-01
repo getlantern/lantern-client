@@ -1,15 +1,21 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:lantern/core/purchase/app_purchase.dart';
+
 import '../../common/common.dart';
+import '../../plans/utils.dart';
 
 @RoutePage<void>(name: 'Verification')
 class Verification extends StatefulWidget {
   final String email;
   final AuthFlow authFlow;
+  final Plan? plan;
 
-  const Verification({
-    super.key,
-    required this.email,
-    this.authFlow = AuthFlow.reset,
-  });
+  const Verification(
+      {super.key,
+      required this.email,
+      this.authFlow = AuthFlow.reset,
+      this.plan});
 
   @override
   State<Verification> createState() => _VerificationState();
@@ -21,7 +27,7 @@ class _VerificationState extends State<Verification> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: AppBarProHeader(),
+      title: const AppBarProHeader(),
       body: _buildBody(context),
     );
   }
@@ -85,11 +91,15 @@ class _VerificationState extends State<Verification> {
   Future<void> resendConfirmationCode() async {
     try {
       context.loaderOverlay.show();
-      await sessionModel.signUpEmailResendCode(widget.email);
+      if (widget.authFlow == AuthFlow.createAccount) {
+        await sessionModel.startRecoveryByEmail(widget.email);
+      } else {
+        await sessionModel.signUpEmailResendCode(widget.email);
+      }
       context.loaderOverlay.hide();
       AppMethods.showToast('email_resend_message'.i18n);
-    } catch (e) {
-      mainLogger.e(e);
+    } catch (e, s) {
+      mainLogger.e('Error while resending code', error: e, stackTrace: s);
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
     }
@@ -118,17 +128,9 @@ class _VerificationState extends State<Verification> {
   void _verifyEmail(String code) async {
     try {
       context.loaderOverlay.show();
-      await sessionModel.signupEmailConfirmation(widget.email, code);
-      context.loaderOverlay.hide();
+      await sessionModel.validateRecoveryCode(widget.email, code);
       if (widget.authFlow.isCreateAccount) {
-        CDialog.successDialog(
-          context: context,
-          title: "email_has_been_verified".i18n,
-          description: "email_has_been_verified_message".i18n,
-          successCallback: () {
-            context.router.popUntilRoot();
-          },
-        );
+        startPurchase();
       } else {
         context.router.pop();
       }
@@ -138,5 +140,48 @@ class _VerificationState extends State<Verification> {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
     }
+  }
+
+  // Purchase flow
+  void startPurchase() {
+    final appPurchase = sl<AppPurchase>();
+    try {
+      context.loaderOverlay.show();
+      appPurchase.startPurchase(
+        email: widget.email.validateEmail,
+        planId: widget.plan!.id,
+        onSuccess: () {
+          context.loaderOverlay.hide();
+          showSuccessDialog(
+            context,
+            false,
+            barrierDismissible: false,
+            onAgree: () {
+              openPassword();
+            },
+          );
+        },
+        onFailure: (error) {
+          context.loaderOverlay.hide();
+          CDialog.showError(
+            context,
+            error: error,
+            description: error.toString(),
+          );
+        },
+      );
+    } catch (e) {
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        description: e.toString(),
+      );
+    }
+  }
+
+  void openPassword() {
+    context.pushRoute(
+        CreateAccountPassword(email: widget.email.validateEmail));
   }
 }
