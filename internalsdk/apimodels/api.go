@@ -37,8 +37,9 @@ const (
 	loginUrl   = userGroup + "/login"
 	saltUrl    = userGroup + "/salt"
 	//Recovery urls
-	recoveryCompleteUrl = userGroup + "/recovery/complete/email"
-	recoveryStartUrl    = userGroup + "/recovery/start/email"
+	recoveryCompleteUrl       = userGroup + "/recovery/complete/email"
+	recoveryStartUrl          = userGroup + "/recovery/start/email"
+	recoveryValidateEmailtUrl = userGroup + "/recovery/validate/email"
 	// Other Auth urls
 	deleteUrl      = userGroup + "/delete"
 	changeEmailUrl = userGroup + "/change_email"
@@ -536,6 +537,45 @@ func CompleteRecoveryByEmail(body *protos.CompleteRecoveryByEmailRequest) (bool,
 	}
 	return true, nil
 }
+
+func ValidateEmailRecovery(body *protos.ValidateRecoveryCodeRequest) (bool, error) {
+	// Marshal the map to JSON
+	requestBody, err := proto.Marshal(body)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return false, err
+	}
+
+	req, err := http.NewRequest("POST", recoveryValidateEmailtUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error creating recovery email request: %v", err)
+		return false, err
+	}
+	req.Header.Set(headerContentType, "application/x-protobuf")
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error sending recovery email request: %v", err)
+		return false, err
+	}
+	defer resp.Body.Close()
+	bodyStr, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	log.Debugf("Validate recovery email response %v with status code %d", string(bodyStr), resp.StatusCode)
+	var validateRecoveryCodeResponse protos.ValidateRecoveryCodeResponse
+	if err := proto.Unmarshal(bodyStr, &validateRecoveryCodeResponse); err != nil {
+		log.Errorf("Error unmarshalling response: ", err)
+	}
+
+	if !validateRecoveryCodeResponse.Valid {
+		return false, log.Errorf("invalid_code error while sending recovery email %v", err)
+	}
+	return true, nil
+}
+
+// Other Auth APIS
 
 func ChangeEmail(body *protos.ChangeEmailRequest) (bool, error) {
 	// Marshal the map to JSON

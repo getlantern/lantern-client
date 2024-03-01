@@ -788,6 +788,109 @@ func (x *DeleteUserRequest) GetDeviceId() string {
 	return ""
 }
 
+// POST /users/recovery/validate/email
+type ValidateRecoveryCodeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Email string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	Code  string `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+}
+
+func (x *ValidateRecoveryCodeRequest) Reset() {
+	*x = ValidateRecoveryCodeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protos_shared_auth_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ValidateRecoveryCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateRecoveryCodeRequest) ProtoMessage() {}
+
+func (x *ValidateRecoveryCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_shared_auth_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateRecoveryCodeRequest.ProtoReflect.Descriptor instead.
+func (*ValidateRecoveryCodeRequest) Descriptor() ([]byte, []int) {
+	return file_protos_shared_auth_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ValidateRecoveryCodeRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *ValidateRecoveryCodeRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+type ValidateRecoveryCodeResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Valid bool `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
+}
+
+func (x *ValidateRecoveryCodeResponse) Reset() {
+	*x = ValidateRecoveryCodeResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protos_shared_auth_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ValidateRecoveryCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateRecoveryCodeResponse) ProtoMessage() {}
+
+func (x *ValidateRecoveryCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_shared_auth_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateRecoveryCodeResponse.ProtoReflect.Descriptor instead.
+func (*ValidateRecoveryCodeResponse) Descriptor() ([]byte, []int) {
+	return file_protos_shared_auth_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ValidateRecoveryCodeResponse) GetValid() bool {
+	if x != nil {
+		return x.Valid
+	}
+	return false
+}
+
 type LoginResponse_Device struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -801,7 +904,7 @@ type LoginResponse_Device struct {
 func (x *LoginResponse_Device) Reset() {
 	*x = LoginResponse_Device{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_shared_auth_proto_msgTypes[12]
+		mi := &file_protos_shared_auth_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -814,7 +917,7 @@ func (x *LoginResponse_Device) String() string {
 func (*LoginResponse_Device) ProtoMessage() {}
 
 func (x *LoginResponse_Device) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_shared_auth_proto_msgTypes[12]
+	mi := &file_protos_shared_auth_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -880,7 +983,7 @@ type LoginResponse_UserData struct {
 func (x *LoginResponse_UserData) Reset() {
 	*x = LoginResponse_UserData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_shared_auth_proto_msgTypes[13]
+		mi := &file_protos_shared_auth_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -893,7 +996,7 @@ func (x *LoginResponse_UserData) String() string {
 func (*LoginResponse_UserData) ProtoMessage() {}
 
 func (x *LoginResponse_UserData) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_shared_auth_proto_msgTypes[13]
+	mi := &file_protos_shared_auth_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1162,8 +1265,16 @@ var file_protos_shared_auth_proto_rawDesc = []byte{
 	0x61, 0x6e, 0x65, 0x6e, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x18, 0x03,
 	0x20, 0x01, 0x28, 0x0c, 0x52, 0x05, 0x70, 0x72, 0x6f, 0x6f, 0x66, 0x12, 0x1a, 0x0a, 0x08, 0x64,
 	0x65, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x64,
-	0x65, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x42, 0x09, 0x5a, 0x07, 0x2f, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x22, 0x47, 0x0a, 0x1b, 0x56, 0x61, 0x6c, 0x69, 0x64,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x63, 0x6f, 0x76, 0x65, 0x72, 0x79, 0x43, 0x6f, 0x64, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x12, 0x0a, 0x04,
+	0x63, 0x6f, 0x64, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65,
+	0x22, 0x34, 0x0a, 0x1c, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x63, 0x6f,
+	0x76, 0x65, 0x72, 0x79, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52,
+	0x05, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x42, 0x09, 0x5a, 0x07, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1178,7 +1289,7 @@ func file_protos_shared_auth_proto_rawDescGZIP() []byte {
 	return file_protos_shared_auth_proto_rawDescData
 }
 
-var file_protos_shared_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_protos_shared_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_protos_shared_auth_proto_goTypes = []interface{}{
 	(*SignupRequest)(nil),                  // 0: SignupRequest
 	(*SignupEmailResendRequest)(nil),       // 1: SignupEmailResendRequest
@@ -1192,13 +1303,15 @@ var file_protos_shared_auth_proto_goTypes = []interface{}{
 	(*CompleteRecoveryByEmailRequest)(nil), // 9: CompleteRecoveryByEmailRequest
 	(*ChangeEmailRequest)(nil),             // 10: ChangeEmailRequest
 	(*DeleteUserRequest)(nil),              // 11: DeleteUserRequest
-	(*LoginResponse_Device)(nil),           // 12: LoginResponse.Device
-	(*LoginResponse_UserData)(nil),         // 13: LoginResponse.UserData
+	(*ValidateRecoveryCodeRequest)(nil),    // 12: ValidateRecoveryCodeRequest
+	(*ValidateRecoveryCodeResponse)(nil),   // 13: ValidateRecoveryCodeResponse
+	(*LoginResponse_Device)(nil),           // 14: LoginResponse.Device
+	(*LoginResponse_UserData)(nil),         // 15: LoginResponse.UserData
 }
 var file_protos_shared_auth_proto_depIdxs = []int32{
-	13, // 0: LoginResponse.legacyUserData:type_name -> LoginResponse.UserData
-	12, // 1: LoginResponse.devices:type_name -> LoginResponse.Device
-	12, // 2: LoginResponse.UserData.devices:type_name -> LoginResponse.Device
+	15, // 0: LoginResponse.legacyUserData:type_name -> LoginResponse.UserData
+	14, // 1: LoginResponse.devices:type_name -> LoginResponse.Device
+	14, // 2: LoginResponse.UserData.devices:type_name -> LoginResponse.Device
 	3,  // [3:3] is the sub-list for method output_type
 	3,  // [3:3] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
@@ -1357,7 +1470,7 @@ func file_protos_shared_auth_proto_init() {
 			}
 		}
 		file_protos_shared_auth_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoginResponse_Device); i {
+			switch v := v.(*ValidateRecoveryCodeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1369,6 +1482,30 @@ func file_protos_shared_auth_proto_init() {
 			}
 		}
 		file_protos_shared_auth_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ValidateRecoveryCodeResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protos_shared_auth_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LoginResponse_Device); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protos_shared_auth_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*LoginResponse_UserData); i {
 			case 0:
 				return &v.state
@@ -1387,7 +1524,7 @@ func file_protos_shared_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_protos_shared_auth_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

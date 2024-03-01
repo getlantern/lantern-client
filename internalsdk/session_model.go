@@ -355,6 +355,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "validateRecoveryByEmail":
+		email := arguments.Get("email").String()
+		code := arguments.Get("code").String()
+		err := validateRecoveryByEmail(m, email, code)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	case "changeEmail":
 		email := arguments.Get("email").String()
 		newEmail := arguments.Get("newEmail").String()
@@ -1543,6 +1551,20 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 	//User has been recovered successfully
 	//Save new salt
 	saveUserSalt(session.baseModel, newsalt)
+	log.Debugf("CompleteRecoveryByEmail response %v", recovery)
+	return nil
+}
+
+// This will validate code send by server
+func validateRecoveryByEmail(session *SessionModel, email string, code string) error {
+	prepareRequestBody := &protos.ValidateRecoveryCodeRequest{
+		Email: email,
+		Code:  code,
+	}
+	recovery, err := apimodels.ValidateEmailRecovery(prepareRequestBody)
+	if err != nil {
+		return err
+	}
 	log.Debugf("CompleteRecoveryByEmail response %v", recovery)
 	return nil
 }
