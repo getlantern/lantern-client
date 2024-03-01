@@ -651,9 +651,8 @@ build-framework: assert-go-version install-gomobile
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
 	-tags='headless lantern ios netgo' \
-	-ldflags="$(LDFLAGS)"  \
-    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-    		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/flashlight/v7/ios
+	-ldflags="$(LDFLAGS)"  $(GOMOBILE_EXTRA_BUILD_FLAGS) \
+	github.com/getlantern/lantern-client/internalsdk github.com/getlantern/lantern-client/internalsdk/ios github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 	@echo "moving framework"
 	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
 	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)

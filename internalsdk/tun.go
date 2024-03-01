@@ -24,30 +24,11 @@ var (
 	currentIPP      ipproxy.Proxy
 )
 
-// Tun2Socks wraps the TUN device identified by fd with an ipproxy server that
-// does the following:
-//
-// 1. dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
-// 2. All other udp packets are routed directly to their destination
-// 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
-//
-func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Session) error {
-	runtime.LockOSThread()
-
-	// perform geo lookup after establishing the VPN connection, prior to running tun2socks
-	go geoLookup(&panickingSessionImpl{wrappedSession})
-
-	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
-	socksDialer, err := proxy.SOCKS5("tcp", socksAddr, nil, nil)
-	if err != nil {
-		return errors.New("Unable to get SOCKS5 dialer: %v", err)
-	}
-
-	ipp, err := ipproxy.New(&ipproxy.Opts{
-		DeviceName:          fmt.Sprintf("fd://%d", fd),
+func createIPProxy(fd int, socksDialer proxy.Dialer, dnsGrabAddr string, mtu int) (ipproxy.Proxy, error) {
+	opts := &ipproxy.Opts{
 		IdleTimeout:         70 * time.Second,
 		StatsInterval:       15 * time.Second,
-		DisableIPv6: 		 true,
+		DisableIPv6:         true,
 		MTU:                 mtu,
 		OutboundBufferDepth: 10000,
 		TCPConnectBacklog:   100,
@@ -72,7 +53,32 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 			}
 			return conn, err
 		},
-	})
+	}
+	if fd > 0 {
+		opts.DeviceName = fmt.Sprintf("fd://%d", fd)
+	}
+	return ipproxy.New(opts)
+}
+
+// Tun2Socks wraps the TUN device identified by fd with an ipproxy server that
+// does the following:
+//
+// 1. dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
+// 2. All other udp packets are routed directly to their destination
+// 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
+func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Session) error {
+	runtime.LockOSThread()
+
+	// perform geo lookup after establishing the VPN connection, prior to running tun2socks
+	go geoLookup(&panickingSessionImpl{wrappedSession})
+
+	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
+	socksDialer, err := proxy.SOCKS5("tcp", socksAddr, nil, nil)
+	if err != nil {
+		return errors.New("Unable to get SOCKS5 dialer: %v", err)
+	}
+
+	ipp, err := createIPProxy(fd, socksDialer, dnsGrabAddr, mtu)
 	if err != nil {
 		return errors.New("Unable to create ipproxy: %v", err)
 	}

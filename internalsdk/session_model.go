@@ -189,9 +189,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 }
 
 // Internal functions that manage method
-func (m *SessionModel) StartService(configDir string,
-	locale string,
-	settings Settings) {
+func (m *SessionModel) StartService(configDir string, locale string, settings Settings) {
 	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
 	session := &panickingSessionImpl{m}
 	startOnce.Do(func() {
@@ -221,6 +219,7 @@ func resetDNS() {
 
 // InvokeMethod handles method invocations on the SessionModel.
 func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
+
 	// Check if email if empty
 	email, err := pathdb.Get[string](m.db, pathEmailAddress)
 	if err != nil {

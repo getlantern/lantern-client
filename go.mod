@@ -29,19 +29,23 @@ replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-2022
 replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93
 
 require (
+	github.com/dustin/go-humanize v1.0.1
+	github.com/eycorsican/go-tun2socks v1.16.12-0.20201107203946-301549c435ff
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
+	github.com/getlantern/common v1.2.1-0.20230427204521-6ac18c21db39
 	github.com/getlantern/diagnostics v0.0.0-20230503185158-c2fc28ed22fe
 	github.com/getlantern/dnsgrab v0.0.0-20240124035712-497ccf435858
 	github.com/getlantern/errors v1.0.4
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.57
+	github.com/getlantern/flashlight/v7 v7.6.57-0.20240228000317-f92bcc048c29
+	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
-	github.com/getlantern/ipproxy v0.0.0-20240305190756-6b5b6347158b
+	github.com/getlantern/ipproxy v0.0.0-20240222163340-fff70220d7e5
 	github.com/getlantern/launcher v0.0.0-20230622120034-fe87f9bff286
 	github.com/getlantern/memhelper v0.0.0-20220104170102-df557102babd
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
@@ -51,6 +55,7 @@ require (
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
 	github.com/getlantern/replica v0.14.3
+	github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627
 	github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
 	github.com/getlantern/trafficlog v1.0.1
@@ -68,6 +73,7 @@ require (
 	golang.org/x/net v0.21.0
 	golang.org/x/sys v0.17.0
 	google.golang.org/protobuf v1.32.0
+	gopkg.in/yaml.v2 v2.4.0
 	nhooyr.io/websocket v1.8.10
 )
 
@@ -120,7 +126,6 @@ require (
 	github.com/dsoprea/go-logging v0.0.0-20200710184922-b02d349568dd // indirect
 	github.com/dsoprea/go-png-image-structure v0.0.0-20210512210324-29b889a6093d // indirect
 	github.com/dsoprea/go-utility v0.0.0-20221003172846-a3e1774ef349 // indirect
-	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/dvyukov/go-fuzz v0.0.0-20240203152606-b1ce7bc07150 // indirect
 	github.com/edsrzf/mmap-go v1.1.0 // indirect
 	github.com/enobufs/go-nats v0.0.1 // indirect
@@ -133,7 +138,6 @@ require (
 	github.com/getlantern/cmux v0.0.0-20230301223233-dac79088a4c0 // indirect
 	github.com/getlantern/cmux/v2 v2.0.0-20230301223233-dac79088a4c0 // indirect
 	github.com/getlantern/cmuxprivate v0.0.0-20231025143958-503c5330c30b // indirect
-	github.com/getlantern/common v1.2.1-0.20230427204521-6ac18c21db39 // indirect
 	github.com/getlantern/context v0.0.0-20220418194847-3d5e7a086201 // indirect
 	github.com/getlantern/detour v0.0.0-20230503144615-d3106a68f79e // indirect
 	github.com/getlantern/dhtup v0.0.0-20230218071625-e78bcd432e4b // indirect
@@ -145,7 +149,6 @@ require (
 	github.com/getlantern/event v0.0.0-20210901195647-a7e3145142e6 // indirect
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
-	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 // indirect
 	github.com/getlantern/geo v0.0.0-20240108161311-50692a1b69a9 // indirect
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4 // indirect
 	github.com/getlantern/go-cache v0.0.0-20141028142048-88b53914f467 // indirect
@@ -324,7 +327,6 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20240125205218-1f4bbc51befe // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240125205218-1f4bbc51befe // indirect
 	google.golang.org/grpc v1.61.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gvisor.dev/gvisor v0.0.0-20240226115847-1e7c3a84e4e3 // indirect
 	howett.net/plist v1.0.1 // indirect

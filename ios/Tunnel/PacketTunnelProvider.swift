@@ -3,15 +3,21 @@
 //  tunnel
 //
 
+import Foundation
 import Internalsdk
 import NetworkExtension
-import os.log
 
 class PacketTunnelProvider: NEPacketTunnelProvider {
-
   // MARK: Dependencies
   let fileManager = FileManager.default
   let constants = Constants(process: .netEx)
+
+  private lazy var adapter: LanternAdapter = {
+      return LanternAdapter(with: self) { message in
+          logger.debug(message)
+      }
+  }()
+
   lazy var notificationsManager: UserNotificationsManager = {
     return UserNotificationsManager()
   }()
@@ -29,7 +35,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
   override func startTunnel(
     options: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void
   ) {
-    logger.log("startTunnel called")
+    NSLog("startTunnel called")
     // this is our first life-cycle event; perform set up
     logMemoryUsage(tag: "Before starting flashlight")
     increaseFileLimit()
@@ -41,23 +47,24 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     }
     // we have no way to discern if the User toggled VPN on in Settings :(
     let reason = (options?[Constants.netExStartReasonKey] as? NSString) ?? "'On Demand'/Settings"
-    logger.debug("startTunnel with reason: \(reason)")
+    NSLog("startTunnel with reason: \(reason)")
 
     let settings = generateTunnelNetworkSettings()
-    setTunnelNetworkSettings(settings) { error in
+    setTunnelNetworkSettings(settings) { [weak self] error in
       guard error == nil else {
         logger.error(error!.localizedDescription)
+        NSLog("tun fd error \(error)")
         completionHandler(error)
         return
       }
-      self.startFlashlight(completionHandler)
+      self?.startFlashlight(completionHandler)
     }
   }
 
   override func stopTunnel(
     with reason: NEProviderStopReason, completionHandler: @escaping () -> Void
   ) {
-    logger.debug("stopTunnel with reason: \(reason.debugString)")
+    logger.log("stopTunnel: \(reason)")
     stopFlashlight()
     completionHandler()
   }
@@ -114,10 +121,11 @@ extension PacketTunnelProvider {
   // MARK: Start/Stop Flashlight
 
   func startFlashlight(_ completionHandler: @escaping (Error?) -> Void) {
+    NSLog("startFlashlight called")
     flashlightManager.queue.async { [weak self] in
       guard let welf = self else { return }
 
-      // init IosClient, which is just a Swift abstraction for Flashlight
+      // init InternalsdkClient, which is just a Swift abstraction for Flashlight
       var error: NSError?
       welf.client = IosClient(
         welf, UDPDialer(), MemChecker(), welf.constants.configDirectoryURL.path, welf.mtu,
@@ -214,6 +222,7 @@ extension PacketTunnelProvider {
   }
 
   private func loadExcludedRoutes() -> [NEIPv4Route] {
+    NSLog("loadExcludedRoutes")
     // Loads excluded routes from disk, written by app side
     var routes = [
       NEIPv4Route(destinationAddress: Constants.realDNSHost, subnetMask: "255.255.255.255")
@@ -230,9 +239,9 @@ extension PacketTunnelProvider {
         routes.append(NEIPv4Route(destinationAddress: address, subnetMask: "255.255.255.255"))
       }
     } catch {
-      logger.error(
-        "Loading excluded routes failed, killing tunnel process: \(error.localizedDescription)")
-      stopTunnel(with: .configurationFailed, completionHandler: {})
+      NSLog(
+        "Loading excluded routes failed: \(error.localizedDescription)")
+      //stopTunnel(with: .configurationFailed, completionHandler: {})
     }
 
     return routes

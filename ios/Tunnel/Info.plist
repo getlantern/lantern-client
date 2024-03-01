@@ -5,13 +5,13 @@
 	<key>ApplicationSecurityGroupIdentifier</key>
 	<string>$(SECURITY_GROUP_IDENTIFIER)</string>
 	<key>MainApplicationIdentifier</key>
-	<string>$(APPLICATION_IDENTIFIER)</string>
+	<string>org.getlantern.lantern</string>
 	<key>CFBundleDisplayName</key>
 	<string>Tunnel</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<string>org.getlantern.lantern.Tunnel</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
