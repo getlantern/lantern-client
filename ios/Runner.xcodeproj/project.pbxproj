@@ -44,6 +44,8 @@
 		03FAF1B42AA1E9F40063580C /* VpnModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FAF1B32AA1E9F40063580C /* VpnModel.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		5F06BA682B92950600556E71 /* LanternService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F06BA672B92950600556E71 /* LanternService.swift */; };
+		5F307D192B92941200D85DC6 /* Services in Resources */ = {isa = PBXBuildFile; fileRef = 5F307D182B92941200D85DC6 /* Services */; };
 		5FCEF3492B9113D800C4B03F /* LanternAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCEF3482B9113D800C4B03F /* LanternAdapter.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -134,6 +136,8 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		50C1B1595E6CBF62B12FFC96 /* Pods-Runner.release-appiumtest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release-appiumtest.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release-appiumtest.xcconfig"; sourceTree = "<group>"; };
 		59AEEF9EA2E73E8C707C003A /* Pods-Runner.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-prod.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-prod.xcconfig"; sourceTree = "<group>"; };
+		5F06BA672B92950600556E71 /* LanternService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LanternService.swift; path = Runner/Lantern/Services/LanternService.swift; sourceTree = SOURCE_ROOT; };
+		5F307D182B92941200D85DC6 /* Services */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Services; path = Runner/Lantern/Services; sourceTree = SOURCE_ROOT; };
 		5FCEF3482B9113D800C4B03F /* LanternAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternAdapter.swift; sourceTree = "<group>"; };
 		6A1279A01900BE051D9121A4 /* Pods-Runner.debug-runner-appiumtest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-runner-appiumtest.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-runner-appiumtest.xcconfig"; sourceTree = "<group>"; };
 		730FE48E743E4258F7E2B873 /* Pods-Runner.profile-appiumtest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile-appiumtest.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile-appiumtest.xcconfig"; sourceTree = "<group>"; };
@@ -242,6 +246,7 @@
 		03A1AB402AA892F800FB41B2 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				5F307D182B92941200D85DC6 /* Services */,
 				03A1AB412AA8930A00FB41B2 /* Result.swift */,
 			);
 			path = Extension;
@@ -258,6 +263,7 @@
 		03D789A42A616D25000D36F9 /* Lantern */ = {
 			isa = PBXGroup;
 			children = (
+				5F06BA662B9294EE00556E71 /* Services */,
 				03A1AB112AA88B8C00FB41B2 /* Core */,
 				03F2FE322A6949C60082B34C /* Utils */,
 				03EE344A2A652B3D00E37100 /* Models */,
@@ -294,6 +300,14 @@
 				0324CC2F2AE279CF00490B46 /* SentryUtils.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		5F06BA662B9294EE00556E71 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5F06BA672B92950600556E71 /* LanternService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
@@ -522,6 +536,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F307D192B92941200D85DC6 /* Services in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
@@ -663,6 +678,7 @@
 				03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */,
 				0321C3F92AA9D8DF00D462C1 /* FlashlightManager.swift in Sources */,
 				035BE7062A7122BC0084059A /* SessionModel.swift in Sources */,
+				5F06BA682B92950600556E71 /* LanternService.swift in Sources */,
 				EC595B342ACCB69000A927E1 /* MessagingModel.swift in Sources */,
 				EC6155EA2ACC8FF70015527E /* LanternModel.swift in Sources */,
 				036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */,
