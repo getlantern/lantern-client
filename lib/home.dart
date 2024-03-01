@@ -44,23 +44,21 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     if (isMobile()) {
       mainMethodChannel = const MethodChannel('lantern_method_channel');
       navigationChannel = const MethodChannel('navigation');
-      if (Platform.isAndroid) {
-        sessionModel.getChatEnabled().then((chatEnabled) {
-          if (chatEnabled) {
-            messagingModel
-                .shouldShowTryLanternChatModal()
-                .then((shouldShowModal) async {
-              if (shouldShowModal) {
-                // open VPN tab
-                await sessionModel.setSelectedTab(TAB_VPN);
-                // show Try Lantern Chat dialog
-                await context.router
-                    .push(FullScreenDialogPage(widget: TryLanternChat()));
-              }
-            });
-          }
-        });
-      }
+      sessionModel.getChatEnabled().then((chatEnabled) {
+        if (chatEnabled) {
+          messagingModel
+              .shouldShowTryLanternChatModal()
+              .then((shouldShowModal) async {
+            if (shouldShowModal) {
+              // open VPN tab
+              await sessionModel.setSelectedTab(TAB_VPN);
+              // show Try Lantern Chat dialog
+              await context.router
+                  .push(FullScreenDialogPage(widget: TryLanternChat()));
+            }
+          });
+        }
+      });
 
       navigationChannel?.setMethodCallHandler(_handleNativeNavigationRequest);
       // Let back-end know that we're ready to handle navigation

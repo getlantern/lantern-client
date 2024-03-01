@@ -1,4 +1,4 @@
-package internalsdk
+package ios
 
 import (
 	"context"
