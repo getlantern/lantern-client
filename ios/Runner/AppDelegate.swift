@@ -13,11 +13,12 @@ import UIKit
   var flutterViewController: FlutterViewController!
   var flutterbinaryMessenger: FlutterBinaryMessenger!
   //  Model Properties
-  var sessionModel: SessionModel!
-  var lanternModel: LanternModel!
+  private var sessionModel: SessionModel!
+  private var lanternModel: LanternModel!
   //  var navigationModel: NavigationModel!
-  var vpnModel: VpnModel!
-  var messagingModel: MessagingModel!
+  private var vpnModel: VpnModel!
+  private var messagingModel: MessagingModel!
+  private var lanternService: LanternService!
   // IOS
   var loadingManager: LoadingIndicatorManager?
 
@@ -48,6 +49,8 @@ import UIKit
     DispatchQueue.global(qos: .userInitiated).async {
       do {
         try self.setupModels()
+        self.lanternService = LanternService(sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
+        self.lanternService.start()
         DispatchQueue.main.async {
           self.startUpSequency()
           self.setupLoadingBar()
