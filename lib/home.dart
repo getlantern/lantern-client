@@ -44,65 +44,68 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     if (isMobile()) {
       mainMethodChannel = const MethodChannel('lantern_method_channel');
       navigationChannel = const MethodChannel('navigation');
-      sessionModel.getChatEnabled().then((chatEnabled) {
-        if (chatEnabled) {
-          messagingModel
-              .shouldShowTryLanternChatModal()
-              .then((shouldShowModal) async {
-            if (shouldShowModal) {
-              // open VPN tab
-              await sessionModel.setSelectedTab(TAB_VPN);
-              // show Try Lantern Chat dialog
-              await context.router
-                  .push(FullScreenDialogPage(widget: TryLanternChat()));
-            }
-          });
-        }
-      });
-
-      navigationChannel?.setMethodCallHandler(_handleNativeNavigationRequest);
-      // Let back-end know that we're ready to handle navigation
-      navigationChannel?.invokeListMethod('ready');
-      _cancelEventSubscription =
-          sessionModel.eventManager.subscribe(Event.All, (event, params) {
-        switch (event) {
-          case Event.SurveyAvailable:
-            final message = params['message'] as String;
-            final buttonText = params['buttonText'] as String;
-            final snackBar = SnackBar(
-              backgroundColor: Colors.black,
-              duration: const Duration(days: 99999),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsetsDirectional.only(
-                  start: 8, end: 8, bottom: 16),
-              // simple way to show indefinitely
-              content: CText(
-                message,
-                style: CTextStyle(
-                  fontSize: 14,
-                  lineHeight: 21,
-                  color: white,
-                ),
-              ),
-              action: SnackBarAction(
-                textColor: pink3,
-                label: buttonText.toUpperCase(),
-                onPressed: () {
-                  mainMethodChannel?.invokeMethod('showLastSurvey');
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                },
-              ),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            break;
-          default:
-            break;
-        }
-      });
     }
+    if (!Platform.isAndroid) {
+      return;
+    }
+    sessionModel.getChatEnabled().then((chatEnabled) {
+      if (chatEnabled) {
+        messagingModel
+            .shouldShowTryLanternChatModal()
+            .then((shouldShowModal) async {
+          if (shouldShowModal) {
+            // open VPN tab
+            await sessionModel.setSelectedTab(TAB_VPN);
+            // show Try Lantern Chat dialog
+            await context.router
+                .push(FullScreenDialogPage(widget: TryLanternChat()));
+          }
+        });
+      }
+    });
+
+    navigationChannel?.setMethodCallHandler(_handleNativeNavigationRequest);
+    // Let back-end know that we're ready to handle navigation
+    navigationChannel?.invokeListMethod('ready');
+    _cancelEventSubscription =
+        sessionModel.eventManager.subscribe(Event.All, (event, params) {
+      switch (event) {
+        case Event.SurveyAvailable:
+          final message = params['message'] as String;
+          final buttonText = params['buttonText'] as String;
+          final snackBar = SnackBar(
+            backgroundColor: Colors.black,
+            duration: const Duration(days: 99999),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsetsDirectional.only(
+                start: 8, end: 8, bottom: 16),
+            // simple way to show indefinitely
+            content: CText(
+              message,
+              style: CTextStyle(
+                fontSize: 14,
+                lineHeight: 21,
+                color: white,
+              ),
+            ),
+            action: SnackBarAction(
+              textColor: pink3,
+              label: buttonText.toUpperCase(),
+              onPressed: () {
+                mainMethodChannel?.invokeMethod('showLastSurvey');
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   void _init() async {
