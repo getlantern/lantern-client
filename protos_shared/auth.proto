@@ -111,3 +111,13 @@ message DeleteUserRequest {
   bytes proof = 3;
   string deviceId = 4;
 }
+
+// POST /users/recovery/validate/email
+message ValidateRecoveryCodeRequest {
+  string email = 1;
+  string code = 2;
+}
+
+message ValidateRecoveryCodeResponse {
+  bool valid = 1;
+}
