@@ -1,18 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 
 import '../../common/common.dart';
-import '../../core/purchase/app_purchase.dart';
-import '../../plans/utils.dart';
 
 @RoutePage<void>(name: 'CreateAccountEmail')
 class CreateAccountEmail extends StatefulWidget {
   /// Plan  is used to determine Enable and Disable In App Purchase
-  final Plan? plan;
+  final Plan plan;
 
   const CreateAccountEmail({
     super.key,
-    this.plan,
+    required this.plan,
   });
 
   @override
@@ -106,17 +106,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
 
   void onContinue() {
     FocusManager.instance.primaryFocus?.unfocus();
-
-    if (widget.plan != null) {
-      startPurchase();
-    } else {
-      openPassword();
-    }
-  }
-
-  void openPassword() {
-    context.pushRoute(
-        CreateAccountPassword(email: _emailController.text.validateEmail));
+    createAccount();
   }
 
   void emailExistsDialog() {
@@ -126,41 +116,36 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
     );
   }
 
-  // Purchase flow
-  void startPurchase() {
-    final appPurchase = sl<AppPurchase>();
+  /// Process for creating account
+  /// Create new temp account with random password
+  /// Once account is created by pass email verification start forgot password flow
+  Future<void> createAccount() async {
     try {
       context.loaderOverlay.show();
-      appPurchase.startPurchase(
-        email: _emailController.text.validateEmail,
-        planId: widget.plan!.id,
-        onSuccess: () {
-          context.loaderOverlay.hide();
-          showSuccessDialog(
-            context,
-            false,
-            barrierDismissible: false,
-            onAgree: () {
-              openPassword();
-            },
-          );
-        },
-        onFailure: (error) {
-          context.loaderOverlay.hide();
-          CDialog.showError(
-            context,
-            error: error,
-            description: error.toString(),
-          );
-        },
-      );
-    } catch (e) {
+      await sessionModel.signUp(
+          _emailController.text.validateEmail, AppMethods().generatePassword());
+      //start forgot password flow
+      forgotPasswordFlow();
+    } catch (e, s) {
+      mainLogger.w('Error while creating account', error: e, stackTrace: s);
       context.loaderOverlay.hide();
-      CDialog.showError(
-        context,
-        error: e,
-        description: e.toString(),
-      );
+      CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
+
+  //forgot password flow
+  Future<void> forgotPasswordFlow() async {
+    try {
+      final email = _emailController.text.validateEmail;
+      //Send verification code to email
+      await sessionModel.startRecoveryByEmail(email);
+      context.loaderOverlay.hide();
+      context.pushRoute(
+          Verification(email: email, authFlow: AuthFlow.createAccount, plan: widget.plan));
+    } catch (e, s) {
+      mainLogger.w('Error starting recovery', error: e, stackTrace: s);
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
     }
   }
 }
