@@ -248,7 +248,7 @@ func (c *iosClient) loadDialers() ([]bandit.Dialer, error) {
 	}
 
 	dialers := chained.CreateDialers(c.configDir, proxies, c.uc)
-	chained.TrackStatsFor(dialers, c.configDir, false)
+	chained.TrackStatsFor(dialers, c.configDir)
 	return dialers, nil
 }
 
