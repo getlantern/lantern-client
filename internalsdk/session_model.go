@@ -1,13 +1,9 @@
 package internalsdk
 
 import (
-	"context"
 	"fmt"
-	"net"
-	"net/http"
 	"path/filepath"
 	"strconv"
-	"time"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
@@ -84,7 +80,6 @@ type SessionModelOpts struct {
 
 // NewSessionModel initializes a new SessionModel instance.
 func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, error) {
-	//resetDNS()
 	base, err := newModel("session", mdb)
 	if err != nil {
 		return nil, err
@@ -196,25 +191,6 @@ func (m *SessionModel) StartService(configDir string, locale string, settings Se
 		go run(configDir, locale, settings, session)
 	})
 
-}
-
-func resetDNS() {
-	log.Debug("Resetting DNS")
-	dialer := &net.Dialer{
-		Resolver: &net.Resolver{
-			PreferGo: true,
-			Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
-				d := net.Dialer{
-					Timeout: time.Duration(5000) * time.Millisecond,
-				}
-				return d.DialContext(ctx, "udp", "8.8.8.8:53")
-			},
-		},
-	}
-
-	http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-		return dialer.DialContext(ctx, network, addr)
-	}
 }
 
 // InvokeMethod handles method invocations on the SessionModel.

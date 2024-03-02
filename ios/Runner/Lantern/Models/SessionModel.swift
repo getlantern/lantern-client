@@ -12,6 +12,7 @@ import Internalsdk
 import UIKit
 
 class SessionModel: BaseModel<InternalsdkSessionModel> {
+
   lazy var notificationsManager: UserNotificationsManager = {
     return UserNotificationsManager()
   }()

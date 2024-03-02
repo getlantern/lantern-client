@@ -34,6 +34,10 @@ import UIKit
       logger.error("Unexpected error setting up app components: \(error)")
       exit(1)
     }
+    self.lanternService = LanternService(sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
+    //DispatchQueue.main.async {
+    //  self.lanternService.start()
+    //}
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
@@ -46,22 +50,11 @@ import UIKit
 
   // Intlize this GO model and callback
   private func setupAppComponents() throws {
-    DispatchQueue.global(qos: .userInitiated).async {
-      do {
-        try self.setupModels()
-        self.lanternService = LanternService(sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
-        self.lanternService.start()
-        DispatchQueue.main.async {
-          self.startUpSequency()
-          self.setupLoadingBar()
-        }
-      } catch {
-        DispatchQueue.main.async {
-          logger.error("Unexpected error setting up models: \(error)")
-        }
-      }
+    try self.setupModels()
+    DispatchQueue.main.async {
+      self.startUpSequency()
+      self.setupLoadingBar()
     }
-
   }
 
   // Init all the models
