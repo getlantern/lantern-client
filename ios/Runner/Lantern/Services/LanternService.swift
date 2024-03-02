@@ -21,10 +21,6 @@ class LanternService {
 	}
 
 	func start() {
-      DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-        guard let welf = self else { return }
-        welf.sessionModel.startService(Constants.lanternDirectory.path, locale: "en", settings: welf.settings)
-      }
-	  //sessionModel.startService(Constants.lanternDirectory.path, locale: "en", settings: settings)
+	  self.sessionModel.startService(Constants.lanternDirectory.path, locale: "en", settings: self.settings)
 	}
 }
