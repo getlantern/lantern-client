@@ -4,9 +4,6 @@ import SQLite
 import Toast_Swift
 import UIKit
 
-//know Issue
-//  CFPrefsPlistSource<0x28281e580> (Domain: group.getlantern.lantern, User: kCFPreferencesAnyUser, ByHost: Yes, Container: (null), Contents Need Refresh: Yes): Using kCFPreferencesAnyUser with a container is only allowed for System Containers,
-
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   // Flutter Properties
@@ -15,7 +12,6 @@ import UIKit
   //  Model Properties
   private var sessionModel: SessionModel!
   private var lanternModel: LanternModel!
-  //  var navigationModel: NavigationModel!
   private var vpnModel: VpnModel!
   private var messagingModel: MessagingModel!
   private var lanternService: LanternService!
@@ -30,14 +26,11 @@ import UIKit
     initializeFlutterComponents()
     do {
       try setupAppComponents()
+      try setupLanternService()
     } catch {
       logger.error("Unexpected error setting up app components: \(error)")
       exit(1)
     }
-    self.lanternService = LanternService(sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
-    //DispatchQueue.main.async {
-    //  self.lanternService.start()
-    //}
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
@@ -46,6 +39,14 @@ import UIKit
   private func initializeFlutterComponents() {
     flutterViewController = window?.rootViewController as! FlutterViewController
     flutterbinaryMessenger = flutterViewController.binaryMessenger
+  }
+
+  private func setupLanternService() throws {
+    try self.lanternService = LanternService(sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
+    // Run Lantern service on a background queue
+    DispatchQueue.global(qos: .background).async {
+      self.lanternService.start()
+    }
   }
 
   // Intlize this GO model and callback

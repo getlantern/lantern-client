@@ -14,7 +14,6 @@
 		0308A1312AAEF3B00086157A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A12F2AAEF3AA0086157A /* Event.swift */; };
 		0308A1342AAEF5130086157A /* VPNBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB152AA88BF200FB41B2 /* VPNBase.swift */; };
 		0308A1392AAEF8DE0086157A /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
-		0308A13D2AAF39F80086157A /* FlashlightManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */; };
 		0308A13E2AAF43A10086157A /* UserNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A12B2AAEEE2C0086157A /* UserNotificationsManager.swift */; };
 		0321C3F72AA9D84700D462C1 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F62AA9D84700D462C1 /* Process.swift */; };
 		0321C3F92AA9D8DF00D462C1 /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
@@ -97,7 +96,6 @@
 		0308A12B2AAEEE2C0086157A /* UserNotificationsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNotificationsManager.swift; sourceTree = "<group>"; };
 		0308A12D2AAEEF410086157A /* Events.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
 		0308A12F2AAEF3AA0086157A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManagerExtension.swift; sourceTree = "<group>"; };
 		0315F55C2AC1C1A500D49F7B /* DatabaseFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DatabaseFramework.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/DatabaseFramework-csnjouuwjwleiddbptbupimqigld/Build/Products/Debug-iphoneos/DatabaseFramework.framework"; sourceTree = "<group>"; };
 		0321C3F62AA9D84700D462C1 /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManager.swift; sourceTree = "<group>"; };
@@ -220,7 +218,6 @@
 		03A1AB122AA88BB400FB41B2 /* Vpn */ = {
 			isa = PBXGroup;
 			children = (
-				0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */,
 				0308A1272AAEED7E0086157A /* VpnHelper.swift */,
 				0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */,
 				03A1AB152AA88BF200FB41B2 /* VPNBase.swift */,
@@ -685,7 +682,6 @@
 				0308A1302AAEF3AA0086157A /* Event.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				03A1AB142AA88BDA00FB41B2 /* VPNManager.swift in Sources */,
-				0308A13D2AAF39F80086157A /* FlashlightManagerExtension.swift in Sources */,
 				03567DC02AA9F47200A233EA /* FileUtils.swift in Sources */,
 				03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */,
 				03A1AB422AA8930A00FB41B2 /* Result.swift in Sources */,
