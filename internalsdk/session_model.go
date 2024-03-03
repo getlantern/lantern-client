@@ -2,12 +2,9 @@ package internalsdk
 
 import (
 	"fmt"
-	"path/filepath"
 	"strconv"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/common"
-	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/lantern-client/internalsdk/apimodels"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
@@ -183,19 +180,8 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	}
 }
 
-// Internal functions that manage method
-func (m *SessionModel) StartService(configDir string, locale string, settings Settings) {
-	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
-	session := &panickingSessionImpl{m}
-	startOnce.Do(func() {
-		go run(configDir, locale, settings, session)
-	})
-
-}
-
 // InvokeMethod handles method invocations on the SessionModel.
 func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
-
 	// Check if email if empty
 	email, err := pathdb.Get[string](m.db, pathEmailAddress)
 	if err != nil {
