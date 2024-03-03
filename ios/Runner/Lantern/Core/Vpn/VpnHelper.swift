@@ -117,8 +117,6 @@ class VpnHelper: NSObject {
     if let error = flashlightManager.configureGoLoggerReturningError() {
       logger.error("IosConfigureLogger FAILED: " + error.localizedDescription)
     }
-    // 5 Fetch config
-    fetchConfigIfNecessary()
   }
 
   private func createFilesForAppGoPackage() {
@@ -168,29 +166,8 @@ class VpnHelper: NSObject {
     //guard state.isIdle else { return }
     logger.debug("VpnHelper startVPN called")
     guard state.isIdle else { return }
-    if !hasFetchedConfigOnce {
-      initiateConfigFetching(onError: onError, onSuccess: onSuccess)
-    } else {
-      initiateVPNStart(onError: onError, onSuccess: onSuccess)
-    }
-  }
-
-  private func initiateConfigFetching(
-    onError: ((Error) -> Void)? = nil, onSuccess: (() -> Void)? = nil
-  ) {
-    configuring = true
-    fetchConfig { [weak self] result in
-      DispatchQueue.main.async {
-        self?.configuring = false
-        guard let state = self?.state, state.isIdle else { return }
-        if result.isSuccess {
-          self?.startVPN(onError: onError, onSuccess: onSuccess)
-        } else {
-          self?.state = .idle(.unableToFetchConfig)
-          onError?(.unableToFetchConfig)
-        }
-      }
-    }
+    self.configuring = false
+    initiateVPNStart(onError: onError, onSuccess: onSuccess)
   }
 
   private func initiateVPNStart(onError: ((Error) -> Void)? = nil, onSuccess: (() -> Void)? = nil) {
@@ -238,72 +215,6 @@ class VpnHelper: NSObject {
     }
   }
 
-  func fetchConfigIfNecessary() {
-    logger.debug("Checking if config fetch is needed")
-    guard !self.hasConfiguredThisSession else { return }
-    logger.debug("Will fetch config")
-    self.hasConfiguredThisSession = true
-    let hasFetchedConfigOnce = self.hasFetchedConfigOnce
-    fetchConfig { [weak self] result in
-      self?.setUpConfigFetchTimer()
-      DispatchQueue.main.async {
-        self?.configuring = false
-        if let state = self?.state {
-          guard state.isIdle else { return }
-        }
-        if !result.isSuccess && !hasFetchedConfigOnce {
-          self?.state = .idle(.unableToFetchConfig)
-        }
-      }
-    }
-  }
-
-  func fetchConfig(
-    refreshProxies: Bool = true, _ completion: @escaping (Result<Void, Swift.Error>) -> Void
-  ) {
-    flashlightManager.fetchConfig(
-      userID: self.userID, proToken: self.proToken, excludedIPsURL: constants.excludedIPsURL,
-      refreshProxies: refreshProxies
-    ) { [weak self] result in
-      switch result {
-      case .success(let vpnNeedsReconfiguring):
-        if vpnNeedsReconfiguring {
-          self?.messageNetExToUpdateExcludedIPs()
-        }
-        self?.userDefaults.set(refreshProxies, forKey: VpnHelper.hasFetchedConfigDefaultsKey)
-        logger.debug("Successfully fetched new config with \(result)")
-        completion(.success(()))
-      case .failure(let error):
-        // TODO: convert this error to a Lantern.Error
-        logger.error("Fetch config failed:" + error.localizedDescription)
-        completion(.failure(error))
-      }
-    }
-  }
-
-  func setUpConfigFetchTimer() {
-    // set up timer on Main queue's runloop
-    // FlashlightManager will automatically use its designated goQueue when fetching
-    DispatchQueue.main.async { [weak self] in
-      let time: Double = 60
-      self?.configFetchTimer = Timer.scheduledTimer(
-        withTimeInterval: time, repeats: true,
-        block: { [weak self] _ in
-          // Only auto-fetch new config when VPN is on
-          guard self?.state == .connected else { return }
-          logger.debug("Config Fetch timer fired after \(time), fetching...")
-          self?.fetchConfig { result in
-            switch result {
-            case .success:
-              logger.debug("Auto-config fetch success")
-            case .failure(let error):
-              logger.error("Auto-config fetch failed: \(error.localizedDescription)")
-            }
-          }
-        })
-    }
-  }
-
   private func messageNetExToUpdateExcludedIPs() {
     logger.debug("Notifying network extension of updated config")
     do {
@@ -326,7 +237,6 @@ extension VpnHelper {
   enum Error: Swift.Error {
     case unknown
     case userDisallowedVPNConfig
-    case unableToFetchConfig
     case invalidVPNState
   }
 }
