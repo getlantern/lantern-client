@@ -116,7 +116,8 @@ jobs:
 
     - name: Install darwin installer dependencies
       run: |
-        rm -f /usr/local/bin/2to3
+        brew link --overwrite python@3.10
+        brew prune
         npm install -g appdmg
         brew tap joshdk/tap
         brew install joshdk/tap/retry
