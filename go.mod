@@ -30,7 +30,6 @@ replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks
 
 require (
 	github.com/dustin/go-humanize v1.0.1
-	github.com/eycorsican/go-tun2socks v1.16.12-0.20201107203946-301549c435ff
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/common v1.2.1-0.20230427204521-6ac18c21db39
@@ -41,7 +40,6 @@ require (
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
 	github.com/getlantern/flashlight/v7 v7.6.58-0.20240301201916-aabd90fb6195
-	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
@@ -55,7 +53,6 @@ require (
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
 	github.com/getlantern/replica v0.14.3
-	github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627
 	github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
 	github.com/getlantern/trafficlog v1.0.1
@@ -74,6 +71,7 @@ require (
 	golang.org/x/sys v0.17.0
 	google.golang.org/protobuf v1.32.0
 	gopkg.in/yaml.v2 v2.4.0
+	gvisor.dev/gvisor v0.0.0-20240226115847-1e7c3a84e4e3
 	nhooyr.io/websocket v1.8.10
 )
 
@@ -149,6 +147,7 @@ require (
 	github.com/getlantern/event v0.0.0-20210901195647-a7e3145142e6 // indirect
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
+	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 // indirect
 	github.com/getlantern/geo v0.0.0-20240108161311-50692a1b69a9 // indirect
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4 // indirect
 	github.com/getlantern/go-cache v0.0.0-20141028142048-88b53914f467 // indirect
@@ -328,7 +327,6 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240125205218-1f4bbc51befe // indirect
 	google.golang.org/grpc v1.61.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gvisor.dev/gvisor v0.0.0-20240226115847-1e7c3a84e4e3 // indirect
 	howett.net/plist v1.0.1 // indirect
 	modernc.org/libc v1.22.3 // indirect
 	modernc.org/mathutil v1.5.0 // indirect
