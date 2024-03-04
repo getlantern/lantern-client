@@ -1,12 +1,12 @@
 package ios
 
 import (
+	"context"
 	"io"
+	"net"
 	"path/filepath"
 	"sync"
 	"time"
-
-	tun2socks "github.com/eycorsican/go-tun2socks/core"
 
 	"github.com/getlantern/common/config"
 	"github.com/getlantern/dnsgrab"
@@ -16,7 +16,12 @@ import (
 	"github.com/getlantern/flashlight/v7/buffers"
 	"github.com/getlantern/flashlight/v7/chained"
 	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/idletiming"
 	"github.com/getlantern/ipproxy"
+	"github.com/getlantern/netx"
+	"gvisor.dev/gvisor/pkg/buffer"
+	"gvisor.dev/gvisor/pkg/tcpip/network/ipv4"
+	"gvisor.dev/gvisor/pkg/tcpip/stack"
 )
 
 const (
@@ -113,10 +118,10 @@ type cw struct {
 }
 
 func (c *cw) Write(b []byte) (int, error) {
-	_, err := c.ipStack.Write(b)
-
+	//_, err := c.ipStack.Write(b)
+	c.ipp.Endpoint().InjectInbound(ipv4.ProtocolNumber, stack.NewPacketBuffer(stack.PacketBufferOptions{Payload: buffer.MakeWithData(b)}))
 	result := 0
-	return result, err
+	return result, nil
 }
 
 func (c *cw) Reconfigure() {
@@ -142,24 +147,22 @@ func (c *cw) Close() error {
 
 type iosClient struct {
 	packetsOut io.WriteCloser
-	udpDialer  UDPDialer
 
 	memChecker      MemChecker
 	configDir       string
-	ipp             ipproxy.Proxy
 	mtu             int
 	capturedDNSHost string
 	realDNSHost     string
 	uc              *UserConfig
-	tcpHandler      *proxiedTCPHandler
-	udpHandler      *directUDPHandler
+
+	ipp ipproxy.Proxy
 
 	clientWriter    *cw
 	memoryAvailable int64
 	started         time.Time
 }
 
-func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, configDir string, mtu int, capturedDNSHost, realDNSHost string) (ClientWriter, error) {
+func Client(packetsOut Writer, memChecker MemChecker, configDir string, mtu int, capturedDNSHost, realDNSHost string) (ClientWriter, error) {
 	LogDebug("Creating new iOS client")
 	if mtu <= 0 {
 		log.Debug("Defaulting MTU to 1500")
@@ -167,12 +170,10 @@ func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, confi
 	}
 
 	c := &iosClient{
-		packetsOut: newWriterAdapter(packetsOut),
-		memChecker: memChecker,
-		configDir:  configDir,
-		//ipp:             ipp,
+		packetsOut:      newWriterAdapter(packetsOut),
+		memChecker:      memChecker,
+		configDir:       configDir,
 		mtu:             mtu,
-		udpDialer:       udpDialer,
 		capturedDNSHost: capturedDNSHost,
 		realDNSHost:     realDNSHost,
 		started:         time.Now(),
@@ -182,6 +183,58 @@ func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, confi
 	go c.logMemory()
 
 	return c.start()
+}
+
+func createIPProxy(dialer *bandit.BanditDialer, dnsGrabAddr string, mtu int) (ipproxy.Proxy, error) {
+	opts := &ipproxy.Opts{
+		DeviceName:          "utun123",
+		IdleTimeout:         70 * time.Second,
+		StatsInterval:       15 * time.Second,
+		DisableIPv6:         true,
+		MTU:                 mtu,
+		OutboundBufferDepth: 10000,
+		TCPConnectBacklog:   100,
+		DialTCP: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			return dialer.DialContext(ctx, network, addr)
+		},
+		DialUDP: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			_, port, _ := net.SplitHostPort(addr)
+			isDNS := port == "53"
+			if isDNS {
+				// intercept and reroute DNS traffic to dnsgrab
+				addr = dnsGrabAddr
+			}
+			conn, err := netx.DialContext(ctx, network, addr)
+			if isDNS && err == nil {
+				// wrap our DNS requests in a connection that closes immediately to avoid piling up file descriptors for DNS requests
+				conn = idletiming.Conn(conn, 10*time.Second, nil)
+			}
+			return conn, err
+		},
+	}
+	return ipproxy.New(opts)
+}
+
+func (o *iosClient) copyToDownstream(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			if ptr := o.ipp.Endpoint().ReadContext(ctx); ptr != nil {
+				pktInfo := ptr.Clone()
+				pkt := make([]byte, 0, o.mtu)
+
+				for _, view := range pktInfo.AsSlices() {
+					pkt = append(pkt, view...)
+				}
+
+				o.packetsOut.Write(pkt)
+				pktInfo.DecRef()
+				continue
+			}
+		}
+	}
 }
 
 func (c *iosClient) start() (ClientWriter, error) {
@@ -217,18 +270,18 @@ func (c *iosClient) start() (ClientWriter, error) {
 		return nil, errors.New("Unable to start dnsgrab: %v", err)
 	}
 
-	c.tcpHandler = newProxiedTCPHandler(c, dialer, grabber)
-	c.udpHandler = newDirectUDPHandler(c, c.udpDialer, grabber, c.capturedDNSHost)
-
-	ipStack := tun2socks.NewLWIPStack()
-	tun2socks.RegisterOutputFn(c.packetsOut.Write)
-	tun2socks.RegisterTCPConnHandler(c.tcpHandler)
-	tun2socks.RegisterUDPConnHandler(c.udpHandler)
+	ipp, err := createIPProxy(dialer, grabber.LocalAddr().String(), c.mtu)
+	if err != nil {
+		return nil, err
+	}
+	c.ipp = ipp
+	ctx := context.Background()
+	go c.copyToDownstream(ctx)
 
 	freeMemory()
 
 	c.clientWriter = &cw{
-		ipStack:       ipStack,
+		ipp:           ipp,
 		client:        c,
 		dialer:        dialer,
 		quotaTextPath: filepath.Join(c.configDir, "quota.txt"),

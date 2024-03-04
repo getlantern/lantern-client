@@ -6,7 +6,7 @@
 //  Copyright © 2020 Innovate Labs. All rights reserved.
 //
 
-import Foundation
+/*import Foundation
 import Internalsdk
 import Network
 
@@ -74,4 +74,4 @@ class UDPConn: NSObject, IosUDPConnProtocol {
   func close() {
     self.connection.cancel()
   }
-}
+}*/

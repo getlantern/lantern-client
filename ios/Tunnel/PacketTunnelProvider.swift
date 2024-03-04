@@ -128,7 +128,7 @@ extension PacketTunnelProvider {
       // init InternalsdkClient, which is just a Swift abstraction for Flashlight
       var error: NSError?
       welf.client = IosClient(
-        welf, UDPDialer(), MemChecker(), welf.constants.configDirectoryURL.path, welf.mtu,
+        welf, MemChecker(), welf.constants.configDirectoryURL.path, welf.mtu,
         Constants.capturedDNSHost, Constants.realDNSHost, &error)
 
       if let err = error {
