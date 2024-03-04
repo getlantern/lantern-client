@@ -3,7 +3,6 @@
 import 'package:lantern/core/purchase/app_purchase.dart';
 
 import '../../common/common.dart';
-import '../../plans/utils.dart';
 
 @RoutePage<void>(name: 'Verification')
 class Verification extends StatefulWidget {
@@ -138,7 +137,11 @@ class _VerificationState extends State<Verification> {
     } catch (e) {
       mainLogger.e(e);
       context.loaderOverlay.hide();
-      CDialog.showError(context, description: e.localizedDescription);
+      pinCodeController.clear();
+      CDialog.showError(
+        context,
+        description: e.localizedDescription,
+      );
     }
   }
 
@@ -152,14 +155,7 @@ class _VerificationState extends State<Verification> {
         planId: widget.plan!.id,
         onSuccess: () {
           context.loaderOverlay.hide();
-          showSuccessDialog(
-            context,
-            false,
-            barrierDismissible: false,
-            onAgree: () {
-              openPassword();
-            },
-          );
+          Future.delayed(const Duration(milliseconds: 400), openPassword);
         },
         onFailure: (error) {
           context.loaderOverlay.hide();
