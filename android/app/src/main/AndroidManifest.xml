@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:installLocation="auto"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.getlantern.lantern">
+    package="org.getlantern.lantern"
+    android:installLocation="auto">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -27,76 +28,88 @@
         android:label="Request for sending mobiamobroadcast to Mobiamo"
         android:protectionLevel="signature" />
 
-    <uses-permission
-        android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"/>
+    <uses-permission android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION" />
 
     <application
         android:name="org.getlantern.lantern.LanternApp"
-        android:hardwareAccelerated="true"
-        tools:replace="allowBackup, label"
         android:allowBackup="false"
-        android:requestLegacyExternalStorage="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:persistent="true"
-        android:icon="@drawable/app_icon"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"
-        android:label="@string/app_name">
+        tools:replace="allowBackup, label"
+        >
 
         <meta-data android:name="io.sentry.dsn" android:value="https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353" />
         <meta-data android:name="io.sentry.auto-init" android:value="false" />
 
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:exported="true"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:exported="true"
             android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:theme="@style/LaunchTheme"
             android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/LaunchTheme"
-              />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/LaunchTheme" />
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="flutter_deeplinking_enabled"
+                android:value="true" />
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="lantern.io"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 
         <service
+            android:name=".service.LanternService_"
             android:enabled="true"
             android:exported="false"
-            android:stopWithTask="false"
-            android:name=".service.LanternService_">
-        </service>
+            android:stopWithTask="false"/>
 
-        <receiver android:name = ".model.DeclineCallBroadcastReceiver" />
+        <receiver android:name=".model.DeclineCallBroadcastReceiver" />
 
-        <receiver android:name="org.getlantern.lantern.notification.NotificationReceiver" android:exported="true">
+        <receiver
+            android:name="org.getlantern.lantern.notification.NotificationReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="org.getlantern.lantern.intent.VPN_DISCONNECTED"/>
+                <action android:name="org.getlantern.lantern.intent.VPN_DISCONNECTED" />
             </intent-filter>
         </receiver>
 
         <activity
             android:name=".activity.FreeKassaActivity_"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".activity.WelcomeActivity_"
-            android:screenOrientation="portrait"
-            android:noHistory="true">
-        </activity>
+            android:noHistory="true"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.WebViewActivity_"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
         <!-- It's required to update Lantern on API 24+ -->
         <provider
@@ -109,15 +122,17 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <service android:name="org.getlantern.lantern.vpn.LanternVpnService"
+        <service
+            android:name="org.getlantern.lantern.vpn.LanternVpnService"
             android:exported="false"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
-                <action android:name="android.net.VpnService"/>
+                <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
 
-        <receiver android:name=".notification.Notifier"
+        <receiver
+            android:name=".notification.Notifier"
             android:exported="false"> <!-- since we do specify an intent filter, this receiver will
             be available to other apps by default, which is not what we want. We have to explicitly state that it's private within our app -->
             <intent-filter>
@@ -125,17 +140,21 @@
             </intent-filter>
         </receiver>
 
-<!--        <receiver android:enabled="true" android:name=".service.AutoStarter"-->
-<!--            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
+        <!--        <receiver android:enabled="true" android:name=".service.AutoStarter"-->
+        <!--            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
+        <!--                <category android:name="android.intent.category.DEFAULT" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver>-->
 
-        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
-        <meta-data android:name="google_analytics_ssaid_collection_enabled" android:value="false" />
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="google_analytics_ssaid_collection_enabled"
+            android:value="false" />
 
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
@@ -145,6 +164,6 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2685698271254859~9283700921"/>
+            android:value="ca-app-pub-2685698271254859~9283700921" />
     </application>
 </manifest>
