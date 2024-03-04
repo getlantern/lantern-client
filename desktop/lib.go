@@ -212,6 +212,10 @@ func storeVersion() *C.char {
 //export lang
 func lang() *C.char {
 	lang := a.Settings().GetLanguage()
+	if lang == "" {
+		// Default language is English
+		lang = "en-US"
+	}
 	return C.CString(lang)
 }
 
