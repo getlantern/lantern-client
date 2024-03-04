@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:lantern/common/ui/password_criteria.dart';
 
 import '../../common/common.dart';
+import '../../plans/utils.dart';
 
 @RoutePage<void>(name: 'CreateAccountPassword')
 class CreateAccountPassword extends StatefulWidget {
@@ -136,30 +137,34 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
   Future<void> onContinueTap() async {
     //Close keyboard
     FocusManager.instance.primaryFocus?.unfocus();
-
     try {
       context.loaderOverlay.show();
       await sessionModel.completeRecoveryByEmail(
           widget.email, _passwordController.text, widget.code);
       context.loaderOverlay.hide();
-
-      Future.delayed(
-        const Duration(milliseconds: 300),
-        () {
-          //If all successful then send user to back to root
-          context.router.pop();
-        },
-      );
+      postSignUp();
     } catch (e, s) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
     }
   }
 
-  void openConfirmEmail() {
-    FocusScope.of(context).unfocus();
-    context.pushRoute(
-        Verification(email: widget.email, authFlow: AuthFlow.createAccount));
+  void postSignUp() {
+    // Show success dialog and send user to root page
+    showSuccessDialog(
+      context,
+      false,
+      barrierDismissible: false,
+      onAgree: () {
+        Future.delayed(
+          const Duration(milliseconds: 300),
+          () {
+            //If all successful then send user to back to root
+            context.router.popUntilRoot();
+          },
+        );
+      },
+    );
   }
 
   void openTermsOfService() {
