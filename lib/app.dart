@@ -182,8 +182,7 @@ class _LanternAppState extends State<LanternApp> {
       //If deeplink doesn't have data it should send to report issue with empty description'
       if (segment.length >= 2) {
         final description = segment[1];
-        return DeepLink(
-            [const Home(), ReportIssue(description: '#$description')]);
+        return DeepLink([const Home(), ReportIssue(description: '#$description')]);
       }
       return DeepLink([const Home(), ReportIssue()]);
     } else {
