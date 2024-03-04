@@ -1,5 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/gestures.dart';
-import 'package:lantern/common/ui/custom/logo_with_text.dart';
 import 'package:lantern/common/ui/password_criteria.dart';
 
 import '../../common/common.dart';
@@ -7,10 +8,12 @@ import '../../common/common.dart';
 @RoutePage<void>(name: 'CreateAccountPassword')
 class CreateAccountPassword extends StatefulWidget {
   final String email;
+  final String code;
 
   const CreateAccountPassword({
     super.key,
     required this.email,
+    required this.code,
   });
 
   @override
@@ -27,8 +30,9 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-        title:const AppBarProHeader(),
-        body: _buildBody(context),);
+      title: const AppBarProHeader(),
+      body: _buildBody(context),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
@@ -39,7 +43,9 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
           child: Column(
             children: [
               const SizedBox(height: 24),
-              HeadingText(title: 'create_password'.i18n,),
+              HeadingText(
+                title: 'create_password'.i18n,
+              ),
               const SizedBox(height: 24),
               _buildEmail(),
               const SizedBox(height: 24),
@@ -133,9 +139,17 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
 
     try {
       context.loaderOverlay.show();
-      await sessionModel.signUp(widget.email, _passwordController.text);
+      await sessionModel.completeRecoveryByEmail(
+          widget.email, _passwordController.text, widget.code);
       context.loaderOverlay.hide();
-      openConfirmEmail();
+
+      Future.delayed(
+        const Duration(milliseconds: 300),
+        () {
+          //If all successful then send user to back to root
+          context.router.pop();
+        },
+      );
     } catch (e, s) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);

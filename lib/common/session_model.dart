@@ -58,8 +58,11 @@ class SessionModel extends Model {
     */
     proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
     country = singleValueNotifier('geo_country_code', 'US');
-    // This warning is not needed for the Non pro user
-    hasAccountVerified = singleValueNotifier('isAccountVerified', false);
+
+    /// This warning is not needed for the Non pro user
+    /// This flow is not needed anymore
+    /// We don't user create account if email address is not verified
+    hasAccountVerified = ValueNotifier(true);
     hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
     proUserNotifier = singleValueNotifier('prouser', false);
     deviceIdNotifier = singleValueNotifier('deviceid', "");
@@ -193,8 +196,6 @@ class SessionModel extends Model {
     });
   }
 
-
-
   Future<void> signupEmailConfirmation(String email, String code) {
     return methodChannel
         .invokeMethod('signupEmailConfirmation', <String, dynamic>{
@@ -226,16 +227,12 @@ class SessionModel extends Model {
     });
   }
 
-  Future<void> validateRecoveryCode(
-      String email, String code) {
-    return methodChannel
-        .invokeMethod('validateRecoveryCode', <String, dynamic>{
+  Future<void> validateRecoveryCode(String email, String code) {
+    return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
       'email': email,
       'code': code,
     });
   }
-
-
 
   Future<void> changeEmail(String email, String newEmail, String password) {
     return methodChannel.invokeMethod('changeEmail', <String, dynamic>{
