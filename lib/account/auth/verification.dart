@@ -129,12 +129,12 @@ class _VerificationState extends State<Verification> {
     try {
       context.loaderOverlay.show();
       await sessionModel.validateRecoveryCode(widget.email, code);
+      sessionModel.hasAccountVerified.value = true;
       if (widget.authFlow.isCreateAccount) {
         startPurchase();
       } else {
         context.router.pop();
       }
-      sessionModel.hasAccountVerified.value = true;
     } catch (e) {
       mainLogger.e(e);
       context.loaderOverlay.hide();
@@ -181,7 +181,9 @@ class _VerificationState extends State<Verification> {
   }
 
   void openPassword() {
-    context.pushRoute(
-        CreateAccountPassword(email: widget.email.validateEmail));
+    context.pushRoute(CreateAccountPassword(
+      email: widget.email.validateEmail,
+      code: pinCodeController.text,
+    ));
   }
 }

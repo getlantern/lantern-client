@@ -226,7 +226,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
   }
 
   void openPassword() {
-    context.pushRoute(
-        CreateAccountPassword(email: emailController.text.validateEmail));
+    // Todo we need to change this
+    // context.pushRoute(CreateAccountPassword(email: emailController.text.validateEmail));
   }
 }

@@ -543,28 +543,33 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	}
 	
 
-	isAccountVerified, err := pathdb.Get[bool](m.db, pathIsAccountVerified)
-	if err != nil {
-		log.Debugf("error while getting account stautus: %v", err)
-	}
-	isUserLoggedIn, err := pathdb.Get[bool](m.db, pathIsUserLoggedIn)
-	if err != nil {
-		log.Debugf("error while getting user login status: %v", err)
-	}
-	// Call API only when status is not verified
-	if !isAccountVerified && isUserLoggedIn {
-		verified, err := apimodels.IsEmailVerified(userIdStr, token)
-		if err != nil {
-			log.Debugf("Plans V3 error: %v", err)
-			return err
-		}
-		log.Debugf("User account is verified %v", verified)
+	// isAccountVerified, err := pathdb.Get[bool](m.db, pathIsAccountVerified)
+	// if err != nil {
+	// 	log.Debugf("error while getting account stautus: %v", err)
+	// }
+	// isUserLoggedIn, err := pathdb.Get[bool](m.db, pathIsUserLoggedIn)
+	// if err != nil {
+	// 	log.Debugf("error while getting user login status: %v", err)
+	// }
+	// // Call API only when status is not verified
+	// if !isAccountVerified && isUserLoggedIn {
+	// 	verified, err := apimodels.IsEmailVerified(userIdStr, token)
+	// 	if err != nil {
+	// 		log.Debugf("Plans V3 error: %v", err)
+	// 		return err
+	// 	}
+	// 	log.Debugf("User account is verified %v", verified)
 
 		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 			return pathdb.Put[bool](tx, pathIsAccountVerified, verified, "")
 		})
 	}
 	return checkAdsEnabled(m)
+	// 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	// 		return pathdb.Put[bool](tx, pathIsAccountVerified, verified, "")
+	// 	})
+	// }
+	return nil
 }
 
 func getPlansV3(m *baseModel, deviceId string, userId string, lang string, token string, countyCode string) error {

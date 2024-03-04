@@ -233,6 +233,7 @@ abstract class $AppRouter extends _i51.RootStackRouter {
         child: _i20.CreateAccountPassword(
           key: args.key,
           email: args.email,
+          code: args.code,
         ),
       );
     },
@@ -1025,12 +1026,14 @@ class CreateAccountPassword
   CreateAccountPassword({
     _i53.Key? key,
     required String email,
+    required String code,
     List<_i51.PageRouteInfo>? children,
   }) : super(
           CreateAccountPassword.name,
           args: CreateAccountPasswordArgs(
             key: key,
             email: email,
+            code: code,
           ),
           initialChildren: children,
         );
@@ -1045,15 +1048,18 @@ class CreateAccountPasswordArgs {
   const CreateAccountPasswordArgs({
     this.key,
     required this.email,
+    required this.code,
   });
 
   final _i53.Key? key;
 
   final String email;
 
+  final String code;
+
   @override
   String toString() {
-    return 'CreateAccountPasswordArgs{key: $key, email: $email}';
+    return 'CreateAccountPasswordArgs{key: $key, email: $email, code: $code}';
   }
 }
 
