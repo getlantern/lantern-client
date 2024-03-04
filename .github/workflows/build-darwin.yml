@@ -116,11 +116,10 @@ jobs:
 
     - name: Install darwin installer dependencies
       run: |
-        brew link --overwrite python@3.12
         npm install -g appdmg
         brew tap joshdk/tap
         brew install joshdk/tap/retry
-        brew install imagemagick
+        brew install imagemagick || true
 
     - name: Build darwin installer
       run: |
