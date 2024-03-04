@@ -116,6 +116,7 @@ jobs:
 
     - name: Install darwin installer dependencies
       run: |
+        rm -f /usr/local/bin/2to3
         npm install -g appdmg
         brew tap joshdk/tap
         brew install joshdk/tap/retry
