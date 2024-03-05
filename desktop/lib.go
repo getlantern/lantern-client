@@ -499,11 +499,4 @@ func handleSignals(a *app.App) {
 	}()
 }
 
-func disablePanicWrap(flags *flashlight.Flags) bool {
-	return flags.Headless ||
-		flags.Initialize ||
-		flags.Timeout > 0 ||
-		common.Environment == common.EnvironmentDevelopment
-}
-
 func main() {}
