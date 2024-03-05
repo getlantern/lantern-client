@@ -62,6 +62,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/jackpal/gateway v1.0.13
+	github.com/mitchellh/panicwrap v1.0.0
 	github.com/shirou/gopsutil/v3 v3.24.1
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/mobile v0.0.0-20240112133503-c713f31d574b

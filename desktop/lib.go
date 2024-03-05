@@ -2,14 +2,15 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"os"
 	"os/signal"
 	"path/filepath"
-	"runtime"
 	"runtime/debug"
 	"strconv"
 	"syscall"
+	"time"
 
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
@@ -41,16 +42,16 @@ var (
 
 //export start
 func start() {
-	runtime.LockOSThread()
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
+	flags := flashlight.ParseFlags()
 
-	cdir := configDir()
+	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
 	proClient = pro.NewClient()
 
-	a = app.NewApp(flashlight.Flags{}, cdir, proClient, settings)
+	a = app.NewApp(flags, cdir, proClient, settings)
 
 	go func() {
 		err := fetchOrCreate()
@@ -59,19 +60,32 @@ func start() {
 		}
 	}()
 
-	go func() {
-		logFile, err := logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
-		if err != nil {
-			log.Error(err)
-			// Nothing we can do if fails to create log files, leave logFile nil so
-			// the child process writes to standard outputs as usual.
-		}
-		defer logFile.Close()
+	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 
+	go func() {
+		tk := time.NewTicker(time.Minute)
+		for {
+			<-tk.C
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			if err := a.ProxyAddrReachable(ctx); err != nil {
+				// Can restart child process for better resiliency, but
+				// just print an error message for now to be safe.
+				log.Debugf("********* ERROR: Lantern HTTP proxy not working properly: %v\n", err)
+			} else {
+				log.Debugf("DEBUG: Lantern HTTP proxy is working fine")
+			}
+			cancel()
+		}
+	}()
+
+	golog.SetPrepender(logging.Timestamped)
+
+	go func() {
+		defer logging.Close()
 		i18nInit(a)
 		runApp(a)
 
-		err = a.WaitForExit()
+		err := a.WaitForExit()
 		if err != nil {
 			log.Errorf("Lantern stopped with error %v", err)
 			os.Exit(-1)
@@ -429,8 +443,11 @@ func loadSettings(configDir string) *app.Settings {
 	return settings
 }
 
-func configDir() string {
-	cdir := appdir.General(common.DefaultAppName)
+func configDir(flags *flashlight.Flags) string {
+	cdir := flags.ConfigDir
+	if cdir == "" {
+		cdir = appdir.General(common.DefaultAppName)
+	}
 	log.Debugf("Using config dir %v", cdir)
 	if _, err := os.Stat(cdir); err != nil {
 		if os.IsNotExist(err) {
@@ -480,6 +497,13 @@ func handleSignals(a *app.App) {
 		s := <-c
 		log.Debugf("Got signal \"%s\", exiting...", s)
 	}()
+}
+
+func disablePanicWrap(flags *flashlight.Flags) bool {
+	return flags.Headless ||
+		flags.Initialize ||
+		flags.Timeout > 0 ||
+		common.Environment == common.EnvironmentDevelopment
 }
 
 func main() {}
