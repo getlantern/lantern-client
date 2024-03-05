@@ -1,6 +1,8 @@
 import 'package:lantern/vpn/vpn.dart';
 
 class VPNBandwidth extends StatelessWidget {
+  const VPNBandwidth({super.key});
+
   @override
   Widget build(BuildContext context) {
     return vpnModel

@@ -176,9 +176,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     override fun onResume() {
         val start = System.currentTimeMillis()
-
         super.onResume()
-        Logger.debug(TAG, "super.onResume() finished at ${System.currentTimeMillis() - start}")
 
         val isServiceRunning = Utils.isServiceRunning(activity, LanternVpnService::class.java)
         if (vpnModel.isConnectedToVpn() && !isServiceRunning) {
@@ -290,6 +288,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             Vpn.ServerInfo.newBuilder().setCity(stats.city).setCountry(stats.country)
                 .setCountryCode(stats.countryCode).build(),
         )
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun bandwidthUpdated(bandwidth: Bandwidth) {
+        Logger.debug("bandwidth updated", bandwidth.toString())
+        vpnModel.updateBandwidth(bandwidth)
     }
 
     private fun updateUserData() {
