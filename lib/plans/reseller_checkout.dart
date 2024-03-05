@@ -2,6 +2,7 @@
 
 import 'package:lantern/common/common.dart';
 import 'package:lantern/plans/tos.dart';
+import 'package:lantern/plans/utils.dart';
 
 class ResellerCodeFormatter extends TextInputFormatter {
   @override
@@ -36,9 +37,15 @@ class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;
   final String email;
 
+  ///This otp is needed to while resting password
+  /// If otp is null it means user is pro
+  /// if otp is not null it means user is not pro send them to password screen
+  final String? otp;
+
   const ResellerCodeCheckout({
     required this.isPro,
     required this.email,
+    this.otp,
     Key? key,
   }) : super(key: key);
 
@@ -116,7 +123,8 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                   width: double.infinity,
                   child: Button(
                     primary: true,
-                    disabled: resellerCodeFieldKey.currentState?.validate() == false,
+                    disabled:
+                        resellerCodeFieldKey.currentState?.validate() == false,
                     text: copy,
                     onPressed: _onContinue,
                   ),
@@ -159,8 +167,53 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
     );
   }
 
-  void _onContinue() {
+  Future<void> _onContinue() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    context.loaderOverlay.show();
+    try {
+      await sessionModel.redeemResellerCode(
+        widget.email,
+        resellerCodeController.text,
+      );
+      context.loaderOverlay.hide();
 
+      if (widget.isPro) {
+        // If the user pro do not send to password screen
+        showSuccessDialog(
+          context,
+          widget.isPro,
+          isReseller: true,
+          barrierDismissible: false,
+          onAgree: () {
+            /// send user to first screen
+            Future.delayed(
+              const Duration(milliseconds: 400),
+              () {
+                context.router.popUntilRoot();
+              },
+            );
+          },
+        );
+      } else {
+        openPassword();
+      }
+    } catch (error, s) {
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        stackTrace: s,
+        description: (error as PlatformException)
+            .message
+            .toString(), // This is coming localized
+      );
+    }
+  }
 
+  void openPassword() {
+    context.pushRoute(CreateAccountPassword(
+      email: widget.email.validateEmail,
+      code: widget.otp!,
+    ));
   }
 }

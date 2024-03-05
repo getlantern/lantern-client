@@ -1,7 +1,7 @@
 //Enum this is mange current flow of auth
-enum AuthFlow { signIn, reset, createAccount, verifyEmail }
+enum AuthFlow { signIn, reset, createAccount, verifyEmail,proCodeActivation }
 
-enum AccountCreation { createAccount, proCodeActivation }
+
 
 extension AuthFlowExtension on AuthFlow {
   bool get isSignIn => this == AuthFlow.signIn;

@@ -2,16 +2,16 @@ import 'package:lantern/common/common.dart';
 
 //// A TextButton with our standard styling
 class Button extends StatelessWidget {
-  late final String text;
-  late final String? iconPath;
-  late final void Function()? onPressed;
-  late final double? width;
-  late final bool primary;
-  late final bool secondary;
-  late final bool disabled;
-  late final bool tertiary;
+   final String text;
+   final String? iconPath;
+   final void Function()? onPressed;
+   final double? width;
+   final bool primary;
+   final bool secondary;
+   final bool disabled;
+   final bool tertiary;
 
-  Button({
+  const Button({super.key,
     required this.text,
     this.iconPath,
     this.onPressed,

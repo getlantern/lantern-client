@@ -117,6 +117,8 @@ class _VerificationState extends State<Verification> {
       case AuthFlow.verifyEmail:
         _verifyEmail(code);
         break;
+      case AuthFlow.proCodeActivation:
+        // TODO: Handle this case.
     }
   }
 

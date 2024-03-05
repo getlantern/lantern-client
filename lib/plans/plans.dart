@@ -219,8 +219,8 @@ class PlansPage extends StatelessWidget {
       context.pushRoute(ResellerCodeCheckout(
           isPro: true, email: sessionModel.userEmail.value!));
     } else {
-      context.pushRoute(CreateAccountEmail(
-          accountCreation: AccountCreation.proCodeActivation));
+      context
+          .pushRoute(CreateAccountEmail(authFlow: AuthFlow.proCodeActivation));
     }
   }
 }
