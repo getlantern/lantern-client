@@ -11,6 +11,8 @@ final featuresList = [
 
 @RoutePage(name: "PlansPage")
 class PlansPage extends StatelessWidget {
+  const PlansPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return FullScreenDialog(
@@ -192,9 +194,7 @@ class PlansPage extends StatelessWidget {
                           color: grey1,
                         ),
                         child: GestureDetector(
-                          onTap: () async => await context.pushRoute(
-                            ResellerCodeCheckout(isPro: proUser),
-                          ),
+                          onTap: () => _onPromoCodeTap(context, proUser),
                           child: CText(
                             'Have a Lantern Pro activation code? Click here.',
                             style: tsBody1.copiedWith(color: grey5),
@@ -210,5 +210,17 @@ class PlansPage extends StatelessWidget {
         );
       }),
     );
+  }
+
+  ///If the user is already so not ask for email
+  ///f the user is not pro, ask for email
+  void _onPromoCodeTap(BuildContext context, bool proUser) {
+    if (proUser) {
+      context.pushRoute(ResellerCodeCheckout(
+          isPro: true, email: sessionModel.userEmail.value!));
+    } else {
+      context.pushRoute(CreateAccountEmail(
+          accountCreation: AccountCreation.proCodeActivation));
+    }
   }
 }

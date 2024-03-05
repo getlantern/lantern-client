@@ -217,12 +217,14 @@ abstract class $AppRouter extends _i51.RootStackRouter {
       );
     },
     CreateAccountEmail.name: (routeData) {
-      final args = routeData.argsAs<CreateAccountEmailArgs>();
+      final args = routeData.argsAs<CreateAccountEmailArgs>(
+          orElse: () => const CreateAccountEmailArgs());
       return _i51.AutoRoutePage<void>(
         routeData: routeData,
         child: _i19.CreateAccountEmail(
           key: args.key,
           plan: args.plan,
+          accountCreation: args.accountCreation,
         ),
       );
     },
@@ -310,7 +312,7 @@ abstract class $AppRouter extends _i51.RootStackRouter {
     PlansPage.name: (routeData) {
       return _i51.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i31.PlansPage(),
+        child: const _i31.PlansPage(),
       );
     },
     RecoveryKey.name: (routeData) {
@@ -426,6 +428,7 @@ abstract class $AppRouter extends _i51.RootStackRouter {
         routeData: routeData,
         child: _i42.ResellerCodeCheckout(
           isPro: args.isPro,
+          email: args.email,
           key: args.key,
         ),
       );
@@ -986,13 +989,15 @@ class ConversationArgs {
 class CreateAccountEmail extends _i51.PageRouteInfo<CreateAccountEmailArgs> {
   CreateAccountEmail({
     _i53.Key? key,
-    required _i53.Plan plan,
+    _i53.Plan? plan,
+    _i53.AccountCreation accountCreation = _i53.AccountCreation.createAccount,
     List<_i51.PageRouteInfo>? children,
   }) : super(
           CreateAccountEmail.name,
           args: CreateAccountEmailArgs(
             key: key,
             plan: plan,
+            accountCreation: accountCreation,
           ),
           initialChildren: children,
         );
@@ -1006,16 +1011,19 @@ class CreateAccountEmail extends _i51.PageRouteInfo<CreateAccountEmailArgs> {
 class CreateAccountEmailArgs {
   const CreateAccountEmailArgs({
     this.key,
-    required this.plan,
+    this.plan,
+    this.accountCreation = _i53.AccountCreation.createAccount,
   });
 
   final _i53.Key? key;
 
-  final _i53.Plan plan;
+  final _i53.Plan? plan;
+
+  final _i53.AccountCreation accountCreation;
 
   @override
   String toString() {
-    return 'CreateAccountEmailArgs{key: $key, plan: $plan}';
+    return 'CreateAccountEmailArgs{key: $key, plan: $plan, accountCreation: $accountCreation}';
   }
 }
 
@@ -1705,12 +1713,14 @@ class ResellerCodeCheckout
     extends _i51.PageRouteInfo<ResellerCodeCheckoutArgs> {
   ResellerCodeCheckout({
     required bool isPro,
+    required String email,
     _i53.Key? key,
     List<_i51.PageRouteInfo>? children,
   }) : super(
           ResellerCodeCheckout.name,
           args: ResellerCodeCheckoutArgs(
             isPro: isPro,
+            email: email,
             key: key,
           ),
           initialChildren: children,
@@ -1725,16 +1735,19 @@ class ResellerCodeCheckout
 class ResellerCodeCheckoutArgs {
   const ResellerCodeCheckoutArgs({
     required this.isPro,
+    required this.email,
     this.key,
   });
 
   final bool isPro;
 
+  final String email;
+
   final _i53.Key? key;
 
   @override
   String toString() {
-    return 'ResellerCodeCheckoutArgs{isPro: $isPro, key: $key}';
+    return 'ResellerCodeCheckoutArgs{isPro: $isPro, email: $email, key: $key}';
   }
 }
 

@@ -7,12 +7,13 @@ import '../../common/common.dart';
 
 @RoutePage<void>(name: 'CreateAccountEmail')
 class CreateAccountEmail extends StatefulWidget {
-  /// Plan  is used to determine Enable and Disable In App Purchase
-  final Plan plan;
+  final Plan? plan;
+  final AccountCreation accountCreation;
 
   const CreateAccountEmail({
     super.key,
-    required this.plan,
+    this.plan,
+    this.accountCreation = AccountCreation.createAccount,
   });
 
   @override
@@ -140,8 +141,8 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
       //Send verification code to email
       await sessionModel.startRecoveryByEmail(email);
       context.loaderOverlay.hide();
-      context.pushRoute(
-          Verification(email: email, authFlow: AuthFlow.createAccount, plan: widget.plan));
+      context.pushRoute(Verification(
+          email: email, authFlow: AuthFlow.createAccount, plan: widget.plan));
     } catch (e, s) {
       mainLogger.w('Error starting recovery', error: e, stackTrace: s);
       context.loaderOverlay.hide();

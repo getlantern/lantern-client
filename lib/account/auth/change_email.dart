@@ -115,6 +115,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
       return;
     }
 
+
     try {
       context.loaderOverlay.show();
       await sessionModel.changeEmail(
