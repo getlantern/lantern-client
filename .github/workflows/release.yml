@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ jigar/main-hotfix ]
+    branches: [ main ]
     tags:
       - '*'
 
