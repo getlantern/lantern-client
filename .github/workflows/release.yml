@@ -175,8 +175,6 @@ jobs:
         run: |
           echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
           dart pub global activate protoc_plugin
-          mkdir -p "${HOME}/.pub-cache/bin"
-          mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
 
       - name: Set gradle properties
         env:
