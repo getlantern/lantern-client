@@ -1156,9 +1156,10 @@ func signup(session *SessionModel, email string, password string) error {
 		return err
 	}
 	signUpRequestBody := &protos.SignupRequest{
-		Email:    email,
-		Salt:     salt,
-		Verifier: verifierKey.Bytes(),
+		Email:                 email,
+		Salt:                  salt,
+		Verifier:              verifierKey.Bytes(),
+		SkipEmailConfirmation: true,
 	}
 
 	userId, err := session.GetUserID()
