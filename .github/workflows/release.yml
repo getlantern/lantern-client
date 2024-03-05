@@ -120,8 +120,7 @@ jobs:
         version: ${{ needs.set-version.outputs.version }}
         version_file: ${{ needs.set-version.outputs.version_file }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-      runs-on:
-        group: large-runners
+      runs-on: macos-latest-xlarge
       steps:
       - uses: actions/checkout@v4
         with:
@@ -162,7 +161,10 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - run: make ffigen
+      - name: Generate ffi bindings
+        run: |
+          make darwin
+          make ffigen
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
@@ -192,7 +194,14 @@ jobs:
           fileDir: './android/app'
           encodedString: ${{ secrets.KEYSTORE }}
 
-      - run: touch app.env
+      - name: Generate app.env
+        env:
+          ANDROID_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID }}
+          IOS_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID_IOS }}
+        run: |
+          touch app.env
+          echo "Android_interstitialAd=$ANDROID_INTERSTITIAL_AD_ID" > app.env
+          echo "IOS_interstitialAd=$IOS_INTERSTITIAL_AD_ID" >> app.env
 
       - name: Build Android installers
         run: make package-android
