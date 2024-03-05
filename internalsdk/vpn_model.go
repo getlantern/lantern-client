@@ -2,6 +2,7 @@ package internalsdk
 
 import (
 	"github.com/getlantern/errors"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )
@@ -30,6 +31,7 @@ func NewVPNModel(mdb minisql.DB) (*VPNModel, error) {
 	}
 	model := &VPNModel{baseModel: base}
 	model.baseModel.doInvokeMethod = model.doInvokeMethod
+	base.db.RegisterType(5000, &protos.Bandwidth{})
 	return model, model.initVpnModel()
 }
 
@@ -97,6 +99,18 @@ func (m *VPNModel) SwitchVPN(on bool) error {
 func (m *VPNModel) SaveVPNStatus(status string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathVPNStatus, status, "")
+	})
+}
+
+func (m *VPNModel) UpdateBandwidth(percent int64, remaining int64, allowedint int64, ttlSeconds int64) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		bandwidth := &protos.Bandwidth{
+			Percent:    percent,
+			Remaining:  remaining,
+			Allowed:    allowedint,
+			TtlSeconds: ttlSeconds,
+		}
+		return pathdb.Put(tx, pathBandwidth, bandwidth, "")
 	})
 }
 

@@ -367,8 +367,9 @@ abstract class SessionManager(application: Application) : Session {
 
     override fun bandwidthUpdate(percent: Long, remaining: Long, allowed: Long, ttlSeconds: Long) {
         val b = Bandwidth(percent, remaining, allowed, ttlSeconds)
+        Logger.debug("bandwidth", b.toString())
         saveLatestBandwidth(b)
-        EventBus.getDefault().post(b)
+        EventBus.getDefault().postSticky(b)
     }
 
     fun setSurveyLinkOpened(url: String?) {
