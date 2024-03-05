@@ -6,6 +6,7 @@ message SignupRequest {
   string email = 1;
   bytes salt = 2;
   bytes verifier = 3;
+  bool skip_email_confirmation = 4;
 }
 
 // POST /users/signup/resend/email
