@@ -224,7 +224,7 @@ abstract class $AppRouter extends _i51.RootStackRouter {
         child: _i19.CreateAccountEmail(
           key: args.key,
           plan: args.plan,
-          accountCreation: args.accountCreation,
+          authFlow: args.authFlow,
         ),
       );
     },
@@ -429,6 +429,7 @@ abstract class $AppRouter extends _i51.RootStackRouter {
         child: _i42.ResellerCodeCheckout(
           isPro: args.isPro,
           email: args.email,
+          otp: args.otp,
           key: args.key,
         ),
       );
@@ -990,14 +991,14 @@ class CreateAccountEmail extends _i51.PageRouteInfo<CreateAccountEmailArgs> {
   CreateAccountEmail({
     _i53.Key? key,
     _i53.Plan? plan,
-    _i53.AccountCreation accountCreation = _i53.AccountCreation.createAccount,
+    _i53.AuthFlow authFlow = _i53.AuthFlow.createAccount,
     List<_i51.PageRouteInfo>? children,
   }) : super(
           CreateAccountEmail.name,
           args: CreateAccountEmailArgs(
             key: key,
             plan: plan,
-            accountCreation: accountCreation,
+            authFlow: authFlow,
           ),
           initialChildren: children,
         );
@@ -1012,18 +1013,18 @@ class CreateAccountEmailArgs {
   const CreateAccountEmailArgs({
     this.key,
     this.plan,
-    this.accountCreation = _i53.AccountCreation.createAccount,
+    this.authFlow = _i53.AuthFlow.createAccount,
   });
 
   final _i53.Key? key;
 
   final _i53.Plan? plan;
 
-  final _i53.AccountCreation accountCreation;
+  final _i53.AuthFlow authFlow;
 
   @override
   String toString() {
-    return 'CreateAccountEmailArgs{key: $key, plan: $plan, accountCreation: $accountCreation}';
+    return 'CreateAccountEmailArgs{key: $key, plan: $plan, authFlow: $authFlow}';
   }
 }
 
@@ -1714,6 +1715,7 @@ class ResellerCodeCheckout
   ResellerCodeCheckout({
     required bool isPro,
     required String email,
+    String? otp,
     _i53.Key? key,
     List<_i51.PageRouteInfo>? children,
   }) : super(
@@ -1721,6 +1723,7 @@ class ResellerCodeCheckout
           args: ResellerCodeCheckoutArgs(
             isPro: isPro,
             email: email,
+            otp: otp,
             key: key,
           ),
           initialChildren: children,
@@ -1736,6 +1739,7 @@ class ResellerCodeCheckoutArgs {
   const ResellerCodeCheckoutArgs({
     required this.isPro,
     required this.email,
+    this.otp,
     this.key,
   });
 
@@ -1743,11 +1747,13 @@ class ResellerCodeCheckoutArgs {
 
   final String email;
 
+  final String? otp;
+
   final _i53.Key? key;
 
   @override
   String toString() {
-    return 'ResellerCodeCheckoutArgs{isPro: $isPro, email: $email, key: $key}';
+    return 'ResellerCodeCheckoutArgs{isPro: $isPro, email: $email, otp: $otp, key: $key}';
   }
 }
 
