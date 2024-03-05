@@ -68,8 +68,6 @@ func start() {
 			<-tk.C
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			if err := a.ProxyAddrReachable(ctx); err != nil {
-				// Can restart child process for better resiliency, but
-				// just print an error message for now to be safe.
 				log.Debugf("********* ERROR: Lantern HTTP proxy not working properly: %v\n", err)
 			} else {
 				log.Debugf("DEBUG: Lantern HTTP proxy is working fine")
