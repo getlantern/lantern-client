@@ -67,12 +67,6 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
   );
 
   @override
-  void initState() {
-    WidgetsFlutterBinding.ensureInitialized();
-    super.initState();
-  }
-
-  @override
   void dispose() {
     resellerCodeController.dispose();
     super.dispose();
@@ -223,6 +217,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
   }
 
   Future<void> _onContinue() async {
+    if (resellerCodeController.text.length != 29) return;
     FocusManager.instance.primaryFocus?.unfocus();
     context.loaderOverlay.show();
     try {
@@ -258,9 +253,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
         context,
         error: e,
         stackTrace: s,
-        description: (error as PlatformException)
-            .message
-            .toString(), // This is coming localized
+        description: error.localizedDescription, // This is coming localized
       );
     }
   }

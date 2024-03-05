@@ -118,7 +118,7 @@ class _VerificationState extends State<Verification> {
         _verifyEmail(code);
         break;
       case AuthFlow.proCodeActivation:
-        // TODO: Handle this case.
+        _verifyEmail(code);
     }
   }
 
@@ -131,11 +131,8 @@ class _VerificationState extends State<Verification> {
       context.loaderOverlay.show();
       await sessionModel.validateRecoveryCode(widget.email, code);
       sessionModel.hasAccountVerified.value = true;
-      if (widget.authFlow.isCreateAccount) {
-        startPurchase();
-      } else {
-        context.router.pop();
-      }
+      context.loaderOverlay.hide();
+      navigateToRoute();
     } catch (e) {
       mainLogger.e(e);
       context.loaderOverlay.hide();
@@ -183,5 +180,24 @@ class _VerificationState extends State<Verification> {
       email: widget.email.validateEmail,
       code: pinCodeController.text,
     ));
+  }
+
+  void navigateToRoute() {
+    switch (widget.authFlow) {
+      case AuthFlow.signIn:
+      // TODO: Handle this case.
+      case AuthFlow.reset:
+        context.router.pop();
+      case AuthFlow.createAccount:
+        startPurchase();
+      case AuthFlow.verifyEmail:
+        context.router.pop();
+      case AuthFlow.proCodeActivation:
+        context.pushRoute(ResellerCodeCheckout(
+          isPro: false,
+          email: widget.email,
+          otp: pinCodeController.text,
+        ));
+    }
   }
 }
