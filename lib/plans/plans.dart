@@ -170,4 +170,16 @@ class PlansPage extends StatelessWidget {
       }),
     );
   }
+
+  ///If the user is already so not ask for email
+  ///f the user is not pro, ask for email
+  void _onPromoCodeTap(BuildContext context, bool proUser) {
+    if (proUser) {
+      context.pushRoute(ResellerCodeCheckout(
+          isPro: true, email: sessionModel.userEmail.value!));
+    } else {
+      context.pushRoute(CreateAccountEmail(
+          accountCreation: AccountCreation.proCodeActivation));
+    }
+  }
 }

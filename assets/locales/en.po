@@ -481,7 +481,7 @@ msgid "pro_purchase_success_descripion"
 msgstr "You now have unlimited access using our fastest data centers.  Up to three devices can be connected to your account."
 
 msgid "by_clicking_tos"
-msgstr "By clicking %s, you agree to our"
+msgstr "By clicking %s, you agree to our "
 
 msgid "tos"
 msgstr "Terms of Service"
@@ -1673,6 +1673,10 @@ msgstr "Device Limit Reached"
 
 msgid "device_limit_reached_message"
 msgstr "You are currently signed in on the maximum number of devices (3). To sign in on this device, please select and remove one of your other devices below."
+
+msgid "enter_activation_code"
+msgstr "Enter Activation Code"
+
 
 
 
