@@ -240,7 +240,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       refCode: widget.refCode,
                       isPro: widget.isPro,
                     ),
-                    TOS(copy: copy),
+                    TOS(),
                     checkoutButton(),
                   ],
                 ),
