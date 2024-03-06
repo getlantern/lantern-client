@@ -110,12 +110,16 @@ jobs:
       with:
         node-version: latest
 
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
     - name: Install darwin installer dependencies
       run: |
         npm install -g appdmg
         brew tap joshdk/tap
         brew install joshdk/tap/retry
-        brew install imagemagick
+        brew install imagemagick || true
 
     - name: Build darwin installer
       run: |
@@ -131,9 +135,6 @@ jobs:
         MACOS_CERTIFICATE: ${{ secrets.MACOS_CERT }}
         MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERT_PASS }}
 
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
     - name: Install s3cmd
       run: pip install s3cmd
 

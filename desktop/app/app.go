@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"io/fs"
 	"io/ioutil"
@@ -100,17 +101,17 @@ type App struct {
 	proxiesLock sync.RWMutex
 
 	issueReporter *issueReporter
-	proClient      *client.Client
-	referralCode   string
+	proClient     *client.Client
+	referralCode  string
 	selectedTab   Tab
-	stats *stats.Stats
+	stats         *stats.Stats
 
 	connectionStatusCallbacks []func(isConnected bool)
-	_sysproxyOff  func() error
+	_sysproxyOff              func() error
 
-	websocketAddr string
+	websocketAddr   string
 	websocketServer *http.Server
-	ws ws.UIChannel
+	ws              ws.UIChannel
 
 	mu sync.Mutex
 }
@@ -119,15 +120,15 @@ type App struct {
 func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, settings *Settings) *App {
 	analyticsSession := newAnalyticsSession(settings)
 	app := &App{
-		configDir:        configDir,
-		exited:           eventual.NewValue(),
-		proClient:        proClient,
-		settings:         settings,
-		analyticsSession: analyticsSession,
-		connectionStatusCallbacks: 	  make([]func(isConnected bool), 0),
-		selectedTab:      VPNTab,
-		translations:     eventual.NewValue(),
-		ws: 			  ws.NewUIChannel(),
+		configDir:                 configDir,
+		exited:                    eventual.NewValue(),
+		proClient:                 proClient,
+		settings:                  settings,
+		analyticsSession:          analyticsSession,
+		connectionStatusCallbacks: make([]func(isConnected bool), 0),
+		selectedTab:               VPNTab,
+		translations:              eventual.NewValue(),
+		ws:                        ws.NewUIChannel(),
 	}
 	app.statsTracker = NewStatsTracker(app)
 	app.serveWebsocket()
@@ -628,6 +629,22 @@ func (app *App) SetReferralCode(referralCode string) {
 	app.referralCode = referralCode
 }
 
+// ProxyAddrReachable checks if Lantern's HTTP proxy responds with the correct status
+// within the deadline.
+func (app *App) ProxyAddrReachable(ctx context.Context) error {
+	req, err := http.NewRequest("GET", "http://"+app.settings.GetAddr(), nil)
+	if err != nil {
+		return err
+	}
+	resp, err := http.DefaultClient.Do(req.WithContext(ctx))
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode != http.StatusBadRequest {
+		return fmt.Errorf("unexpected HTTP status %v", resp.StatusCode)
+	}
+	return nil
+}
 
 func recordStopped() {
 	ops.Begin("client_stopped").
@@ -682,4 +699,3 @@ func (app *App) GetTranslations(filename string) ([]byte, error) {
 	}
 	return ioutil.ReadAll(f)
 }
-

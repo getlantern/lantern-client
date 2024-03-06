@@ -6,9 +6,9 @@ import 'package:lantern/common/ui/app_loading_dialog.dart';
 
 @RoutePage<void>(name: 'ReportIssue')
 class ReportIssue extends StatefulWidget {
-  ReportIssue({
-    Key? key,
-  }) : super(key: key);
+  final String? description;
+
+  const ReportIssue({Key? key, this.description}) : super(key: key);
 
   @override
   State<ReportIssue> createState() => _ReportIssueState();
@@ -40,6 +40,7 @@ class _ReportIssueState extends State<ReportIssue> {
 
   final descFieldKey = GlobalKey<FormState>();
   late final descController = CustomTextEditingController(
+      text: widget.description ?? '',
       formKey: descFieldKey,
       validator: (value) {
         if (value!.isEmpty) {

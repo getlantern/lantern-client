@@ -113,8 +113,9 @@ class LanternApp extends StatelessWidget {
                     GlobalWidgetsLocalizations.delegate,
                     GlobalCupertinoLocalizations.delegate,
                   ],
-                  routeInformationParser: globalRouter.defaultRouteParser(),
-                  routerDelegate: globalRouter.delegate(),
+                  routerConfig: globalRouter.config(
+                    deepLinkBuilder: navigateToDeepLink,
+                  ),
                   supportedLocales: const [
                     Locale('ar', 'EG'),
                     Locale('fr', 'FR'),
@@ -138,6 +139,23 @@ class LanternApp extends StatelessWidget {
         );
       },
     );
+  }
+
+  DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {
+    logger.d("DeepLink configuration: ${deepLink.configuration.toString()}");
+    if (deepLink.path.toLowerCase().startsWith('/report-issue')) {
+      logger.d("DeepLink uri: ${deepLink.uri.toString()}");
+      final pathUrl = deepLink.uri.toString();
+      final segment = pathUrl.split('#');
+      //If deeplink doesn't have data it should send to report issue with empty description'
+      if (segment.length >= 2) {
+        final description = segment[1];
+        return DeepLink([const Home(), ReportIssue(description: '#$description')]);
+      }
+      return DeepLink([const Home(), ReportIssue()]);
+    } else {
+      return DeepLink.defaultPath;
+    }
   }
 
   Locale currentLocale(String lang) {
