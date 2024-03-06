@@ -4,10 +4,12 @@ import 'package:lantern/common/common.dart';
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
   final String url;
+  final String title;
 
   const AppWebView({
     super.key,
     required this.url,
+    this.title = "",
   });
 
   @override
@@ -24,14 +26,12 @@ class _AppWebViewState extends State<AppWebView> {
     allowBackgroundAudioPlaying: false,
     allowFileAccessFromFileURLs: true,
     preferredContentMode: UserPreferredContentMode.MOBILE,
-
   );
-
 
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: "",
+      title: widget.title,
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
         initialSettings: settings,

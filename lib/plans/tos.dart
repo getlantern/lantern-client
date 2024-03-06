@@ -34,6 +34,6 @@ class TOS extends StatelessWidget {
 
   void openTermsOfService(BuildContext context) {
     FocusScope.of(context).unfocus();
-    context.pushRoute(AppWebview(url: termsOfService));
+    context.pushRoute(AppWebview(url: termsOfService, title: 'TOS'));
   }
 }
