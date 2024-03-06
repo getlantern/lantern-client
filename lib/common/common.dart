@@ -103,8 +103,6 @@ final appLogger = Logger(
   output: ConsoleOutput(),
 );
 
-
-
 bool isMobile() {
   return Platform.isAndroid || Platform.isIOS;
 }

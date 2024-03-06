@@ -120,8 +120,7 @@ jobs:
         version: ${{ needs.set-version.outputs.version }}
         version_file: ${{ needs.set-version.outputs.version_file }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-      runs-on:
-        group: large-runners
+      runs-on: macos-latest-xlarge
       steps:
       - uses: actions/checkout@v4
         with:
@@ -162,7 +161,10 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - run: make ffigen
+      - name: Generate ffi bindings
+        run: |
+          make darwin
+          make ffigen
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
@@ -173,8 +175,6 @@ jobs:
         run: |
           echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
           dart pub global activate protoc_plugin
-          mkdir -p "${HOME}/.pub-cache/bin"
-          mv "${FLUTTER_ROOT}/.pub-cache/bin/protoc-gen-dart" "${HOME}/.pub-cache/bin"
 
       - name: Set gradle properties
         env:
@@ -192,7 +192,14 @@ jobs:
           fileDir: './android/app'
           encodedString: ${{ secrets.KEYSTORE }}
 
-      - run: touch app.env
+      - name: Generate app.env
+        env:
+          ANDROID_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID }}
+          IOS_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID_IOS }}
+        run: |
+          touch app.env
+          echo "Android_interstitialAd=$ANDROID_INTERSTITIAL_AD_ID" > app.env
+          echo "IOS_interstitialAd=$IOS_INTERSTITIAL_AD_ID" >> app.env
 
       - name: Build Android installers
         run: make package-android
@@ -248,7 +255,7 @@ jobs:
     push-binaries:
       runs-on:
         group: large-runners
-      needs: [ set-version, build-darwin, build-darwin-arm, build-linux, build-windows-x64 ]
+      needs: [ set-version, build-android, build-darwin, build-darwin-arm, build-linux, build-windows-x64 ]
       env:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
@@ -269,18 +276,46 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: windows64-installer-signed
+        - name: Download the apk build output
+          uses: actions/download-artifact@v3
+          with:
+            name: android-apk-build
+        - name: Download the aab build output
+          uses: actions/download-artifact@v3
+          with:
+            name: android-aab-build
+        - name: Upload Android App bundle to Play Store (beta)
+          if: needs.set-version.outputs.prefix == 'lantern-installer-preview'
+          uses: r0adkll/upload-google-play@v1
+          with:
+           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+           packageName: org.getlantern.lantern
+           releaseFiles: lantern-installer.aab
+           track: beta
+        - name: Upload Android App bundle to Play Store (production)
+          if: needs.set-version.outputs.prefix == 'lantern-installer'
+          uses: r0adkll/upload-google-play@v1
+          with:
+           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+           packageName: org.getlantern.lantern
+           releaseFiles: lantern-installer.aab
+           track: production
         - name: Grant private modules access
           run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
         - name: Clone binaries repo
           run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
         - name: Rename builds
           run: |
+            diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
+            diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
             mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
             mv -f lantern-installer-mac.dmg ${{ env.prefix }}-mac.dmg
             mv -f lantern-installer-mac_arm.dmg ${{ env.prefix }}-mac_arm.dmg
             diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
         - name: Prepare sha256 sums
           run: |
+            shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
+            shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
             shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
             shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
             shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256

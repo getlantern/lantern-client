@@ -320,8 +320,10 @@ github.com/getlantern/idletiming v0.0.0-20190529182719-d2fbc83372a5/go.mod h1:MG
 github.com/getlantern/idletiming v0.0.0-20200228204104-10036786eac5/go.mod h1:McaLC6faRlxJ9QjjqSjpEeYIjKnKA8+dzjoR+eYXCio=
 github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db h1:w/Br8vclvX3RlHV+VFkuNkcm3hwEXTtqXMoOqKPUicg=
 github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db/go.mod h1:kW4RHAFReMopujQCzcYxjOAg4XZOeuSrybIcM9FNGto=
-github.com/getlantern/ipproxy v0.0.0-20240303233322-a54137a933b5 h1:E+RJh5XdaQQNaAdd11HiiJABoAMEp2uX06OMATxciuc=
-github.com/getlantern/ipproxy v0.0.0-20240303233322-a54137a933b5/go.mod h1:MeF9YOgg4sYC1YxqeHbSosa8kYUd7QrBOHjl0jWr0gc=
+github.com/getlantern/ipproxy v0.0.0-20240222163340-fff70220d7e5 h1:PL3N7YcEjgz3irxULy0Pd6aMUP85Pw9qv5yREZHPdEM=
+github.com/getlantern/ipproxy v0.0.0-20240222163340-fff70220d7e5/go.mod h1:MeF9YOgg4sYC1YxqeHbSosa8kYUd7QrBOHjl0jWr0gc=
+github.com/getlantern/ipproxy v0.0.0-20240305190756-6b5b6347158b h1:xgIfnusGqjZmN+P4dlkSVK138nIAy4c2hTAZnWeyXEY=
+github.com/getlantern/ipproxy v0.0.0-20240305190756-6b5b6347158b/go.mod h1:A6vqhre10w3J1BuufAeNfTgOY9kKCSFIAjjOkQEUaGM=
 github.com/getlantern/iptool v0.0.0-20210721034953-519bf8ce0147/go.mod h1:hfspzdRcvJ130tpTPL53/L92gG0pFtvQ6ln35ppwhHE=
 github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696 h1:D7wbL2Ww6QN5SblEDMiQcFulqz2jgcvawKaNBTzHLvQ=
 github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696/go.mod h1:hfspzdRcvJ130tpTPL53/L92gG0pFtvQ6ln35ppwhHE=
