@@ -1630,6 +1630,24 @@ msgstr "You are currently signed in on the maximum number of devices (3). To sig
 msgid "enter_activation_code"
 msgstr "Enter Activation Code"
 
+msgid "check_your_email"
+msgstr "Check Your Email Address"
+
+msgid "please_verify_email"
+msgstr "Please verify that the email address you entered is correct."
+
+msgid "change_email"
+msgstr "Change Email"
+
+msgid "verify"
+msgstr "Verify"
+
+
+
+
+
+
+
 
 
 

@@ -386,3 +386,30 @@ class _CPasswordTextFiledState extends State<CPasswordTextFiled> {
     );
   }
 }
+
+
+/// TextInputFormatter formatter
+
+class EmojiFilteringTextInputFormatter extends TextInputFormatter {
+  final RegExp _emojiRegex = RegExp(r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])');
+
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final newText = newValue.text;
+    final replacements = _emojiRegex.allMatches(newText).toList().reversed;
+    if (replacements.isNotEmpty) {
+      int offsetDelta = 0; // Keep track of offset change due to emoji removal
+      final String withoutEmoji = replacements.fold(newText, (text, match) {
+        final int removedLength = match.end - match.start;
+        offsetDelta += removedLength; // Update offsetDelta
+        return text.replaceRange(match.start, match.end, "");
+      });
+      // Adjust selection based on offset delta
+      final newSelection = TextSelection(
+          baseOffset: newValue.selection.baseOffset - offsetDelta,
+          extentOffset: newValue.selection.extentOffset - offsetDelta);
+      return TextEditingValue(text: withoutEmoji, selection: newSelection);
+    }
+    return newValue;
+  }
+}

@@ -2,6 +2,7 @@
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
+import 'package:lantern/common/ui/custom/email_tag.dart';
 
 import '../../common/common.dart';
 
@@ -49,6 +50,9 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
             Form(
               key: _emailFormKey,
               child: CTextField(
+                inputFormatters: [
+                  EmojiFilteringTextInputFormatter(),
+                ],
                 controller: _emailController,
                 label: "enter_email".i18n,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -107,7 +111,37 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
 
   void onContinue() {
     FocusManager.instance.primaryFocus?.unfocus();
-    createAccount();
+    _showEmailVerificationDialog(
+      onVerified: () {
+        createAccount();
+      },
+    );
+  }
+
+  void _showEmailVerificationDialog({required VoidCallback onVerified}) {
+    CDialog(
+      title: "check_your_email".i18n,
+      description: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          CText(
+            "please_verify_email".i18n,
+            style:
+                tsBody1.copiedWith(fontWeight: FontWeight.w400, color: grey5),
+          ),
+          const SizedBox(height: 24.0),
+          EmailTag(email: _emailController.text.validateEmail),
+          const SizedBox(height: 24.0),
+        ],
+      ),
+      barrierDismissible: false,
+      dismissText: 'change_email'.i18n.toUpperCase(),
+      agreeText: "verify".i18n.toUpperCase(),
+      agreeAction: () async {
+        onVerified.call();
+        return false;
+      },
+    ).show(context);
   }
 
   void emailExistsDialog() {
