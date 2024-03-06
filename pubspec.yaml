@@ -37,7 +37,6 @@ dependencies:
   sliver_tools: ^0.2.12
 
   # UI Enhancements & User Input
-  google_fonts:
   flutter_switch: ^0.3.2
   flag: ^7.0.0
 
