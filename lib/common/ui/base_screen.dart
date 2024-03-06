@@ -76,6 +76,10 @@ class BaseScreen extends StatelessWidget {
                         ),
                         AppBar(
                           automaticallyImplyLeading: automaticallyImplyLeading,
+                          leading: automaticallyImplyLeading ? IconButton(
+                            icon: Icon(Icons.arrow_back, color: Colors.black),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ) : null,
                           title: title is String
                               ? CText(
                                   title,
@@ -93,9 +97,7 @@ class BaseScreen extends StatelessWidget {
                           titleSpacing: 0,
                           actions: actions,
                         ),
-
                       ],
-
                   ),
                 ),
               ),
