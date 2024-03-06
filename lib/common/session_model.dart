@@ -167,7 +167,6 @@ class SessionModel extends Model {
       'devices',
       builder: builder,
       deserialize: (Uint8List serialized) {
-        print("devices $serialized");
         return Devices.fromBuffer(serialized);
       },
     );
