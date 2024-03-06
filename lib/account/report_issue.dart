@@ -88,6 +88,10 @@ class _ReportIssueState extends State<ReportIssue> {
                     initialValue: emailAddress,
                     controller: emailController,
                     autovalidateMode: AutovalidateMode.disabled,
+                    contentPadding: const EdgeInsetsDirectional.only(
+                      top: 8.0,
+                      bottom: 8.0,
+                    ),
                     label: 'email'.i18n,
                     onChanged: (value) {
                       setState(() {});
