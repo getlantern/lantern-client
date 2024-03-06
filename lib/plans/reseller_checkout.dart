@@ -74,61 +74,55 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
 
   @override
   Widget build(BuildContext context) {
-    final copy = 'register_for_pro'.i18n;
-    return sessionModel.emailAddress((
-      BuildContext context,
-      String emailAddress,
-      Widget? child,
-    ) {
-      return BaseScreen(
-        resizeToAvoidBottomInset: false,
-        title: const AppBarProHeader(),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 24),
-                HeadingText(
-                  title: 'enter_activation_code'.i18n,
+    return BaseScreen(
+      resizeToAvoidBottomInset: false,
+      title: const AppBarProHeader(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 24),
+              HeadingText(
+                title: 'enter_activation_code'.i18n,
+              ),
+              const SizedBox(height: 24),
+              _buildEmail(),
+              const SizedBox(height: 24),
+              Form(
+                key: resellerCodeFieldKey,
+                child: CTextField(
+                  maxLength: 25 + 4,
+                  //accounting for dashes
+                  controller: resellerCodeController,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  inputFormatters: [ResellerCodeFormatter()],
+                  label: 'Activation Code'.i18n,
+                  keyboardType: TextInputType.text,
+                  prefixIcon: const CAssetImage(path: ImagePaths.dots),
+                  textCapitalization: TextCapitalization.characters,
                 ),
-                const SizedBox(height: 24),
-                _buildEmail(),
-                const SizedBox(height: 24),
-                Form(
-                  key: resellerCodeFieldKey,
-                  child: CTextField(
-                    maxLength: 25 + 4,
-                    //accounting for dashes
-                    controller: resellerCodeController,
-                    autovalidateMode: AutovalidateMode.disabled,
-                    inputFormatters: [ResellerCodeFormatter()],
-                    label: 'Activation Code'.i18n,
-                    keyboardType: TextInputType.text,
-                    prefixIcon: const CAssetImage(path: ImagePaths.dots),
-                    textCapitalization: TextCapitalization.characters,
-                  ),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: Button(
+                  primary: true,
+                  disabled:
+                      resellerCodeFieldKey.currentState?.validate() == false,
+                  text: 'continue'.i18n,
+                  onPressed: _onContinue,
                 ),
-                const SizedBox(height: 24),
-                TOS(copy: copy),
-                SizedBox(
-                  width: double.infinity,
-                  child: Button(
-                    primary: true,
-                    disabled:
-                        resellerCodeFieldKey.currentState?.validate() == false,
-                    text: copy,
-                    onPressed: _onContinue,
-                  ),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 24),
+              const TOS(),
+            ],
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 
   Future<void> onRegisterPro() async {
