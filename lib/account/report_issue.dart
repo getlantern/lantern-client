@@ -69,8 +69,8 @@ class _ReportIssueState extends State<ReportIssue> {
         resizeToAvoidBottomInset: false,
         body: Padding(
           padding: const EdgeInsetsDirectional.only(
-            start: 25,
-            end: 23,
+            start: 20,
+            end: 20,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -88,6 +88,10 @@ class _ReportIssueState extends State<ReportIssue> {
                     initialValue: emailAddress,
                     controller: emailController,
                     autovalidateMode: AutovalidateMode.disabled,
+                    contentPadding: const EdgeInsetsDirectional.only(
+                      top: 8.0,
+                      bottom: 8.0,
+                    ),
                     label: 'email'.i18n,
                     onChanged: (value) {
                       setState(() {});
