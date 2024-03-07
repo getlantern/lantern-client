@@ -38,9 +38,11 @@ const (
 	recoveryStartUrl          = userGroup + "/recovery/start/email"
 	recoveryValidateEmailtUrl = userGroup + "/recovery/validate/email"
 	// Other Auth urls
-	deleteUrl      = userGroup + "/delete"
-	changeEmailUrl = userGroup + "/change_email"
-	confirmedUrl   = userGroup + "/confirmed"
+	deleteUrl    = userGroup + "/delete"
+	confirmedUrl = userGroup + "/confirmed"
+	//Change Email
+	changeEmailUrl         = userGroup + "/change_email"
+	completeChangeEmailUrl = userGroup + "/change_email/complete/email"
 	//Device Linking
 	linkCodeRequestUrl  = baseUrl + "/link-code-request"
 	linkCodeApproveUrl  = baseUrl + "/link-code-approve"
@@ -571,8 +573,7 @@ func ValidateEmailRecovery(body *protos.ValidateRecoveryCodeRequest) (bool, erro
 	return true, nil
 }
 
-// Other Auth APIS
-
+// Chnage Email APIS
 func ChangeEmail(body *protos.ChangeEmailRequest) (bool, error) {
 	// Marshal the map to JSON
 	requestBody, err := proto.Marshal(body)
@@ -608,7 +609,42 @@ func ChangeEmail(body *protos.ChangeEmailRequest) (bool, error) {
 
 	return true, nil
 }
+func CompleteChangeEmail(body *protos.CompleteChangeEmailRequest) (bool, error) {
+	// Marshal the map to JSON
+	requestBody, err := proto.Marshal(body)
+	if err != nil {
+		log.Errorf("Error marshaling request body: %v", err)
+		return false, err
+	}
 
+	req, err := http.NewRequest("POST", completeChangeEmailUrl, bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Errorf("Error complete change email request: %v", err)
+		return false, err
+	}
+	req.Header.Set(headerContentType, "application/x-protobuf")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Errorf("Error sending recovery email request: %v", err)
+		return false, err
+	}
+
+	defer resp.Body.Close()
+
+	bodyStr, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+	log.Debugf("complete change email response %v with status code %d", string(bodyStr), resp.StatusCode)
+
+	if resp.StatusCode != http.StatusOK {
+		return false, log.Errorf("error while sending recovery email %v", err)
+	}
+	return true, nil
+}
+
+// Other Auth APIS
 func DeleteAccount(body *protos.DeleteUserRequest) (bool, error) {
 	// Marshal the map to JSON
 	requestBody, err := proto.Marshal(body)

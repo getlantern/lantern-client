@@ -100,14 +100,12 @@ class _ChangeEmailState extends State<ChangeEmail> {
         _passwordController.text.length > 8) {
       return false;
     }
-
     return true;
   }
 
   Future<void> onChangeEmail() async {
     //Close keyboard
     FocusManager.instance.primaryFocus?.unfocus();
-
     if (widget.email.validateEmail.toLowerCase() ==
         _emailController.text.validateEmail.toLowerCase()) {
       CDialog.showError(context,
@@ -115,21 +113,14 @@ class _ChangeEmailState extends State<ChangeEmail> {
       return;
     }
 
-
     try {
       context.loaderOverlay.show();
-      await sessionModel.changeEmail(
+      await sessionModel.startChangeEmail(
           widget.email, _emailController.text, _passwordController.text);
       context.loaderOverlay.hide();
-      CDialog.successDialog(
-        context: context,
-        title: 'email_has_been_updated'.i18n,
-        description: 'email_has_been_updated_message'.i18n,
-        successCallback: () {
-          //Once email changed, pop
-          context.router.pop();
-        },
-      );
+      context.pushRoute(Verification(
+          email: _emailController.text.validateEmail,
+          authFlow: AuthFlow.changeEmail));
     } catch (e) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);

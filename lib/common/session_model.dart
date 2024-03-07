@@ -233,11 +233,21 @@ class SessionModel extends Model {
     });
   }
 
-  Future<void> changeEmail(String email, String newEmail, String password) {
+  Future<void> startChangeEmail(String email, String newEmail, String password) {
     return methodChannel.invokeMethod('changeEmail', <String, dynamic>{
       'email': email,
       'newEmail': newEmail,
       'password': password,
+    });
+  }
+
+  Future<void> completeChangeEmail(
+      String email, String newEmail, String password, String code) {
+    return methodChannel.invokeMethod('completeChangeEmail', <String, dynamic>{
+      'email': email,
+      'newEmail': newEmail,
+      'password': password,
+      'code': code,
     });
   }
 
