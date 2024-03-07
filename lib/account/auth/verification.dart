@@ -3,18 +3,22 @@
 import 'package:lantern/core/purchase/app_purchase.dart';
 
 import '../../common/common.dart';
+import 'change_email.dart';
 
 @RoutePage<void>(name: 'Verification')
 class Verification extends StatefulWidget {
   final String email;
   final AuthFlow authFlow;
   final Plan? plan;
+  final ChangeEmailPageArgs? changeEmailArgs;
 
-  const Verification(
-      {super.key,
-      required this.email,
-      this.authFlow = AuthFlow.reset,
-      this.plan});
+  const Verification({
+    super.key,
+    required this.email,
+    this.authFlow = AuthFlow.reset,
+    this.changeEmailArgs,
+    this.plan,
+  });
 
   @override
   State<Verification> createState() => _VerificationState();
@@ -96,7 +100,8 @@ class _VerificationState extends State<Verification> {
         resendResetEmailVerificationCode();
         break;
       case AuthFlow.verifyEmail:
-       /// This should be handled when account created
+
+        /// This should be handled when account created
         break;
       case AuthFlow.proCodeActivation:
         resendCreateAccountVerificationCode();
@@ -104,7 +109,8 @@ class _VerificationState extends State<Verification> {
       case AuthFlow.changeEmail:
         resendChangeEmailVerificationCode();
       case AuthFlow.signIn:
-        /// there is no verification flow for sign in
+
+      /// there is no verification flow for sign in
     }
   }
 
@@ -122,9 +128,12 @@ class _VerificationState extends State<Verification> {
   }
 
   Future<void> resendChangeEmailVerificationCode() async {
+    assert(widget.changeEmailArgs != null, 'ChangeEmailArgs is null');
     try {
+      final emailArgs = widget.changeEmailArgs!;
       context.loaderOverlay.show();
-      await sessionModel.startChangeEmail(widget.email, newEmail, password);
+      await sessionModel.startChangeEmail(
+          emailArgs.email, emailArgs.newEmail, emailArgs.password);
       context.loaderOverlay.hide();
       AppMethods.showToast('email_resend_message'.i18n);
     } catch (e, s) {
@@ -191,7 +200,36 @@ class _VerificationState extends State<Verification> {
     }
   }
 
-  void _changeEmail(String code) {}
+  Future<void> _changeEmail(String code) async {
+    assert(widget.changeEmailArgs != null, 'ChangeEmailArgs is null');
+    final emailArgs = widget.changeEmailArgs!;
+    mainLogger.d(
+        "email ${emailArgs.email} newEmail ${emailArgs.newEmail} password ${emailArgs.password} code ${pinCodeController.text}");
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.completeChangeEmail(emailArgs.email,
+          emailArgs.newEmail, emailArgs.password, pinCodeController.text);
+      context.loaderOverlay.hide();
+      CDialog.successDialog(
+        context: context,
+        title: 'email_has_been_updated'.i18n,
+        description: 'email_has_been_updated_message'.i18n,
+        successCallback: () {
+          //Once email changed, pop to account management
+          context.router.popUntil(
+              (route) => route.settings.name == AccountManagement.name);
+        },
+      );
+    } catch (e) {
+      mainLogger.e(e);
+      context.loaderOverlay.hide();
+      pinCodeController.clear();
+      CDialog.showError(
+        context,
+        description: e.localizedDescription,
+      );
+    }
+  }
 
   // Purchase flow
   void startPurchase() {
