@@ -76,7 +76,7 @@ class _VerificationState extends State<Verification> {
                 onPressed: resendConfirmationCode,
               ),
               const SizedBox(height: 14),
-              if (!widget.authFlow.isVerifyEmail)
+              if (!widget.authFlow.isVerifyEmail && !widget.authFlow.isCreateAccount)
                 AppTextButton(
                   text: 'change_email'.i18n.toUpperCase(),
                   onPressed: () {

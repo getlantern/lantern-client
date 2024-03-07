@@ -138,17 +138,16 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
       dismissText: 'change_email'.i18n.toUpperCase(),
       agreeText: "verify".i18n.toUpperCase(),
       agreeAction: () async {
-        onVerified.call();
+        context.popRoute();
+        Future.delayed(
+          const Duration(milliseconds: 300),
+          () {
+            onVerified.call();
+          },
+        );
         return false;
       },
     ).show(context);
-  }
-
-  void emailExistsDialog() {
-    showEmailExistsDialog(
-      context: context,
-      recoverTap: () {},
-    );
   }
 
   /// Process for creating account
