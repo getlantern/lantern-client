@@ -1,5 +1,5 @@
+import 'package:app_links/app_links.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:lantern/common/common.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/messaging/messaging.dart';
 
@@ -26,12 +26,33 @@ class _TickerProviderImpl extends TickerProvider {
   }
 }
 
-class LanternApp extends StatelessWidget {
+class LanternApp extends StatefulWidget {
   LanternApp({Key? key}) : super(key: key) {
     // Animate the visibility of the network warning notification bar. here in
     // Since this notification is visible on all screens and we want the
     // animation state to remain consistent across screens, we put the animation
     // controller here at the app level since the app contains all screens.
+  }
+
+  @override
+  State<LanternApp> createState() => _LanternAppState();
+}
+
+class _LanternAppState extends State<LanternApp> {
+  final translations = Localization.ensureInitialized();
+  late final AnimationController networkWarningAnimationController;
+  late final Animation networkWarningAnimation;
+
+  @override
+  void initState() {
+    _animateNetworkWarning();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      initDeepLinks();
+    });
+    super.initState();
+  }
+
+  void _animateNetworkWarning() {
     if (isMobile()) {
       sessionModel.networkAvailable
           .addListener(toggleConnectivityWarningIfNecessary);
@@ -48,9 +69,23 @@ class LanternApp extends StatelessWidget {
     }
   }
 
-  final translations = Localization.ensureInitialized();
-  late final AnimationController networkWarningAnimationController;
-  late final Animation networkWarningAnimation;
+  Future<void> initDeepLinks() async {
+    final appLinks = AppLinks();
+    // Handle link when app is in warm state (front or background)
+    appLinks.uriLinkStream.listen((Uri uri) {
+      if (context.mounted) {
+        if (uri.path.startsWith('/report-issue')) {
+          final pathUrl = uri.toString();
+          final segment = pathUrl.split('#');
+          if (segment.length >= 2) {
+            globalRouter.push(ReportIssue(description: '#${segment[1]}'));
+          } else {
+            globalRouter.push(ReportIssue());
+          }
+        }
+      }
+    });
+  }
 
   void networkWarningAnimationChanged() {
     networkWarningBarHeightRatio.value = networkWarningAnimation.value;
@@ -150,7 +185,8 @@ class LanternApp extends StatelessWidget {
       //If deeplink doesn't have data it should send to report issue with empty description'
       if (segment.length >= 2) {
         final description = segment[1];
-        return DeepLink([const Home(), ReportIssue(description: '#$description')]);
+        return DeepLink(
+            [const Home(), ReportIssue(description: '#$description')]);
       }
       return DeepLink([const Home(), ReportIssue()]);
     } else {
