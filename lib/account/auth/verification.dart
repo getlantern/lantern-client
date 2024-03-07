@@ -88,13 +88,56 @@ class _VerificationState extends State<Verification> {
 
   /// widget methods
   Future<void> resendConfirmationCode() async {
+    switch (widget.authFlow) {
+      case AuthFlow.createAccount:
+        resendCreateAccountVerificationCode();
+        break;
+      case AuthFlow.reset:
+        resendResetEmailVerificationCode();
+        break;
+      case AuthFlow.verifyEmail:
+       /// This should be handled when account created
+        break;
+      case AuthFlow.proCodeActivation:
+        resendCreateAccountVerificationCode();
+        break;
+      case AuthFlow.changeEmail:
+        resendChangeEmailVerificationCode();
+      case AuthFlow.signIn:
+        /// there is no verification flow for sign in
+    }
+  }
+
+  Future<void> resendCreateAccountVerificationCode() async {
     try {
       context.loaderOverlay.show();
-      if (widget.authFlow == AuthFlow.createAccount) {
-        await sessionModel.startRecoveryByEmail(widget.email);
-      } else {
-        await sessionModel.signUpEmailResendCode(widget.email);
-      }
+      await sessionModel.signUpEmailResendCode(widget.email);
+      context.loaderOverlay.hide();
+      AppMethods.showToast('email_resend_message'.i18n);
+    } catch (e, s) {
+      mainLogger.e('Error while resending code', error: e, stackTrace: s);
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
+
+  Future<void> resendChangeEmailVerificationCode() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.startChangeEmail(widget.email, newEmail, password);
+      context.loaderOverlay.hide();
+      AppMethods.showToast('email_resend_message'.i18n);
+    } catch (e, s) {
+      mainLogger.e('Error while resending code', error: e, stackTrace: s);
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
+
+  Future<void> resendResetEmailVerificationCode() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.startRecoveryByEmail(widget.email);
       context.loaderOverlay.hide();
       AppMethods.showToast('email_resend_message'.i18n);
     } catch (e, s) {
@@ -113,12 +156,16 @@ class _VerificationState extends State<Verification> {
         openResetPassword(code);
         break;
       case AuthFlow.signIn:
-        context.router.popUntilRoot();
+
+        ///While sign in there will be no verification flow
+        throw Exception('Invalid AuthFlow');
       case AuthFlow.verifyEmail:
         _verifyEmail(code);
         break;
       case AuthFlow.proCodeActivation:
         _verifyEmail(code);
+      case AuthFlow.changeEmail:
+        _changeEmail(code);
     }
   }
 
@@ -132,7 +179,7 @@ class _VerificationState extends State<Verification> {
       await sessionModel.validateRecoveryCode(widget.email, code);
       sessionModel.hasAccountVerified.value = true;
       context.loaderOverlay.hide();
-      navigateToRoute();
+      resolveRoute();
     } catch (e) {
       mainLogger.e(e);
       context.loaderOverlay.hide();
@@ -143,6 +190,8 @@ class _VerificationState extends State<Verification> {
       );
     }
   }
+
+  void _changeEmail(String code) {}
 
   // Purchase flow
   void startPurchase() {
@@ -182,7 +231,7 @@ class _VerificationState extends State<Verification> {
     ));
   }
 
-  void navigateToRoute() {
+  void resolveRoute() {
     switch (widget.authFlow) {
       case AuthFlow.signIn:
       // TODO: Handle this case.
@@ -198,6 +247,8 @@ class _VerificationState extends State<Verification> {
           email: widget.email,
           otp: pinCodeController.text,
         ));
+      case AuthFlow.changeEmail:
+      // TODO: Handle this case.
     }
   }
 }

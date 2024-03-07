@@ -372,6 +372,16 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "completeChangeEmail":
+		email := arguments.Get("email").String()
+		newEmail := arguments.Get("newEmail").String()
+		password := arguments.Get("password").String()
+		code := arguments.Get("code").String()
+		err := completeChangeEmail(*m, email, newEmail, password, code)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	case "signOut":
 		err := signOut(*m)
 		if err != nil {
@@ -1575,6 +1585,8 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 	return nil
 }
 
+// Change Email flow
+
 func changeEmail(session SessionModel, email string, newEmail string, password string) error {
 	salt, err := getUserSalt(session.baseModel, email)
 	if err != nil {
@@ -1622,6 +1634,21 @@ func changeEmail(session SessionModel, email string, newEmail string, password s
 		return log.Errorf("user_not_found error while generating client proof %v", err)
 	}
 
+	changeEmailRequestBody := &protos.ChangeEmailRequest{
+		OldEmail: email,
+		NewEmail: newEmail,
+		Proof:    clientProof,
+	}
+
+	isEmailChanged, err := apimodels.ChangeEmail(changeEmailRequestBody)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Change Email response %v", isEmailChanged)
+	return nil
+}
+
+func completeChangeEmail(session SessionModel, email string, newEmail string, password string, code string) error {
 	// Create new salt and verifier with new email and new slat
 	newsalt, err := GenerateSalt()
 	if err != nil {
@@ -1635,19 +1662,18 @@ func changeEmail(session SessionModel, email string, newEmail string, password s
 		return err
 	}
 
-	changeEmailRequestBody := &protos.ChangeEmailRequest{
+	completeChangeEmail := &protos.CompleteChangeEmailRequest{
 		OldEmail:    email,
 		NewEmail:    newEmail,
-		Proof:       clientProof,
 		NewSalt:     newsalt,
 		NewVerifier: verifierKey.Bytes(),
 	}
 
-	isEmailChanged, err := apimodels.ChangeEmail(changeEmailRequestBody)
+	isEmailChanged, err := apimodels.CompleteChangeEmail(completeChangeEmail)
 	if err != nil {
 		return err
 	}
-	log.Debugf("Change Email response %v", isEmailChanged)
+	log.Debugf("Compelte Change Email response %v", isEmailChanged)
 	return setEmail(session.baseModel, newEmail)
 }
 

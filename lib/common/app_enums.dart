@@ -1,5 +1,5 @@
 //Enum this is mange current flow of auth
-enum AuthFlow { signIn, reset, createAccount, verifyEmail,proCodeActivation }
+enum AuthFlow { signIn, reset, createAccount, verifyEmail,proCodeActivation,changeEmail }
 
 
 
