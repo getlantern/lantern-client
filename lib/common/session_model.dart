@@ -234,7 +234,7 @@ class SessionModel extends Model {
   }
 
   Future<void> startChangeEmail(String email, String newEmail, String password) {
-    return methodChannel.invokeMethod('changeEmail', <String, dynamic>{
+    return methodChannel.invokeMethod('startChangeEmail', <String, dynamic>{
       'email': email,
       'newEmail': newEmail,
       'password': password,

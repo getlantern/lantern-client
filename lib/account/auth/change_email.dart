@@ -18,9 +18,9 @@ class ChangeEmail extends StatefulWidget {
 }
 
 class _ChangeEmailState extends State<ChangeEmail> {
-  final _emailFormKey = GlobalKey<FormState>();
-  late final _emailController = CustomTextEditingController(
-    formKey: _emailFormKey,
+  final _newEmailFormKey = GlobalKey<FormState>();
+  late final _newEmailController = CustomTextEditingController(
+    formKey: _newEmailFormKey,
     validator: (value) => EmailValidator.validate(value ?? '')
         ? null
         : 'please_enter_a_valid_email_address'.i18n,
@@ -59,10 +59,11 @@ class _ChangeEmailState extends State<ChangeEmail> {
         ),
         const SizedBox(height: 24),
         Form(
-          key: _emailFormKey,
+          key: _newEmailFormKey,
           child: CTextField(
-            controller: _emailController,
+            controller: _newEmailController,
             label: "new_email".i18n,
+            inputFormatters: [EmojiFilteringTextInputFormatter()],
             autovalidateMode: AutovalidateMode.onUserInteraction,
             textInputAction: TextInputAction.done,
             keyboardType: TextInputType.emailAddress,
@@ -96,7 +97,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
 
   ///Widget methods
   bool isButtonDisabled() {
-    if (EmailValidator.validate(_emailController.text) &&
+    if (EmailValidator.validate(_newEmailController.text) &&
         _passwordController.text.length > 8) {
       return false;
     }
@@ -107,7 +108,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
     //Close keyboard
     FocusManager.instance.primaryFocus?.unfocus();
     if (widget.email.validateEmail.toLowerCase() ==
-        _emailController.text.validateEmail.toLowerCase()) {
+        _newEmailController.text.validateEmail.toLowerCase()) {
       CDialog.showError(context,
           description: 'new_email_same_as_old_email'.i18n);
       return;
@@ -115,15 +116,30 @@ class _ChangeEmailState extends State<ChangeEmail> {
 
     try {
       context.loaderOverlay.show();
-      await sessionModel.startChangeEmail(
-          widget.email, _emailController.text, _passwordController.text);
+      await sessionModel.startChangeEmail(widget.email, _newEmailController.text, _passwordController.text);
       context.loaderOverlay.hide();
-      context.pushRoute(Verification(
-          email: _emailController.text.validateEmail,
-          authFlow: AuthFlow.changeEmail));
+      context.pushRoute(
+        Verification(
+          email: _newEmailController.text.validateEmail,
+          authFlow: AuthFlow.changeEmail,
+          changeEmailArgs: ChangeEmailPageArgs(
+            widget.email,
+            _newEmailController.text.validateEmail,
+            _passwordController.text,
+          ),
+        ),
+      );
     } catch (e) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
     }
   }
+}
+
+class ChangeEmailPageArgs {
+  final String email;
+  final String newEmail;
+  final String password;
+
+  ChangeEmailPageArgs(this.email, this.newEmail, this.password);
 }

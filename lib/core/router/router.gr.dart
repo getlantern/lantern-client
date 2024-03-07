@@ -511,6 +511,7 @@ abstract class $AppRouter extends _i51.RootStackRouter {
           key: args.key,
           email: args.email,
           authFlow: args.authFlow,
+          changeEmailArgs: args.changeEmailArgs,
           plan: args.plan,
         ),
       );
@@ -2013,6 +2014,7 @@ class Verification extends _i51.PageRouteInfo<VerificationArgs> {
     _i53.Key? key,
     required String email,
     _i53.AuthFlow authFlow = _i53.AuthFlow.reset,
+    _i11.ChangeEmailPageArgs? changeEmailArgs,
     _i53.Plan? plan,
     List<_i51.PageRouteInfo>? children,
   }) : super(
@@ -2021,6 +2023,7 @@ class Verification extends _i51.PageRouteInfo<VerificationArgs> {
             key: key,
             email: email,
             authFlow: authFlow,
+            changeEmailArgs: changeEmailArgs,
             plan: plan,
           ),
           initialChildren: children,
@@ -2037,6 +2040,7 @@ class VerificationArgs {
     this.key,
     required this.email,
     this.authFlow = _i53.AuthFlow.reset,
+    this.changeEmailArgs,
     this.plan,
   });
 
@@ -2046,10 +2050,12 @@ class VerificationArgs {
 
   final _i53.AuthFlow authFlow;
 
+  final _i11.ChangeEmailPageArgs? changeEmailArgs;
+
   final _i53.Plan? plan;
 
   @override
   String toString() {
-    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow, plan: $plan}';
+    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow, changeEmailArgs: $changeEmailArgs, plan: $plan}';
   }
 }

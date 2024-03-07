@@ -272,11 +272,11 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
-	case "changeEmail":
+	case "startChangeEmail":
 		email := arguments.Get("email").String()
 		newEmail := arguments.Get("newEmail").String()
 		password := arguments.Get("password").String()
-		err := changeEmail(*m, email, newEmail, password)
+		err := startChangeEmail(*m, email, newEmail, password)
 		if err != nil {
 			return nil, err
 		}
@@ -1428,7 +1428,7 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 
 // Change Email flow
 
-func changeEmail(session SessionModel, email string, newEmail string, password string) error {
+func startChangeEmail(session SessionModel, email string, newEmail string, password string) error {
 	salt, err := getUserSalt(session.baseModel, email)
 	if err != nil {
 		return err
@@ -1508,6 +1508,7 @@ func completeChangeEmail(session SessionModel, email string, newEmail string, pa
 		NewEmail:    newEmail,
 		NewSalt:     newsalt,
 		NewVerifier: verifierKey.Bytes(),
+		Code:        code,
 	}
 
 	isEmailChanged, err := apimodels.CompleteChangeEmail(completeChangeEmail)
