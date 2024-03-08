@@ -123,6 +123,8 @@ dependencies:
   retry: ^3.1.2
   # Generate bindings to native libraries
   ffi: ^2.1.0
+  # Deeplink handling
+  app_links: ^3.5.1
 
 
 # wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0
