@@ -19,6 +19,12 @@ class AppRouter extends $AppRouter {
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute(
+        page: Account.page,
+        path: '/account',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute(
         page: AccountManagement.page,
         path: '/accountManagement',
         transitionsBuilder: defaultTransition,

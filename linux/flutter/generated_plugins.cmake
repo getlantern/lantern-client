@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
   emoji_picker_flutter
+  gtk
   screen_retriever
   sentry_flutter
   tray_manager
