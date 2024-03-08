@@ -46,7 +46,7 @@ class _LanternAppState extends State<LanternApp> {
   @override
   void initState() {
     _animateNetworkWarning();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       initDeepLinks();
     });
     super.initState();
