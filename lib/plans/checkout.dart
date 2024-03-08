@@ -349,9 +349,6 @@ class _CheckoutState extends State<Checkout>
                         message: AppKeys.continueCheckout,
                         child: Button(
                           text: 'continue'.i18n,
-                          disabled: emailController.value.text.isEmpty ||
-                              emailFieldKey.currentState?.validate() == false ||
-                              refCodeFieldKey.currentState?.validate() == false,
                           onPressed: onContinueTapped,
                         ),
                       ),
@@ -382,6 +379,14 @@ class _CheckoutState extends State<Checkout>
 
   void onContinueTapped() {
     var refCode = refCodeController.value;
+    bool isEmailInvalid = emailFieldKey.currentState?.validate() == false;
+    if (emailController.value.text.isEmpty || isEmailInvalid) {
+      emailController.error = 'invalid_email'.i18n;
+      return;
+    } else if (!refCodeController.value.text.isEmpty && refCodeFieldKey.currentState?.validate() == false) {
+      refCodeController.error = 'invalid_or_incomplete_referral_code'.i18n;
+      return;
+    }
     Future.wait(
       [
         sessionModel
