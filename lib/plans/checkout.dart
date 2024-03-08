@@ -371,9 +371,13 @@ class _CheckoutState extends State<Checkout>
     if (list.isEmpty) {
       return;
     }
+    final paymentMethod = list[0].value;
+    if (paymentMethod.providers.isEmpty) {
+      return;
+    }
     //By default zero value is default
     //If needed to change default value changing to from server
-    selectedPaymentProvider = list[0].value.providers[0].name.toPaymentEnum();
+    selectedPaymentProvider = paymentMethod.providers[0].name.toPaymentEnum();
   }
 
   void onContinueTapped() {
