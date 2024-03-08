@@ -94,7 +94,7 @@ class _VerificationState extends State<Verification> {
   Future<void> resendConfirmationCode() async {
     switch (widget.authFlow) {
       case AuthFlow.createAccount:
-        resendCreateAccountVerificationCode();
+        resendResetEmailVerificationCode();
         break;
       case AuthFlow.reset:
         resendResetEmailVerificationCode();
