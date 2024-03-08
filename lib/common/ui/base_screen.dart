@@ -1,5 +1,6 @@
 import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart' as desktop;
 
 var forceRTL = false; // set to true to force RTL for testing
 
@@ -78,7 +79,9 @@ class BaseScreen extends StatelessWidget {
                           automaticallyImplyLeading: automaticallyImplyLeading,
                           leading: automaticallyImplyLeading ? IconButton(
                             icon: Icon(Icons.arrow_back, color: Colors.black),
-                            onPressed: () => Navigator.of(context).pop(),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
                           ) : null,
                           title: title is String
                               ? CText(

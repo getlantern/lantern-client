@@ -239,11 +239,9 @@ abstract class $AppRouter extends _i42.RootStackRouter {
       );
     },
     LinkDevice.name: (routeData) {
-      final args = routeData.argsAs<LinkDeviceArgs>(
-          orElse: () => const LinkDeviceArgs());
       return _i42.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i23.LinkDevice(key: args.key),
+        child: const _i23.LinkDevice(),
       );
     },
     NewChat.name: (routeData) {
@@ -1006,31 +1004,16 @@ class LanternDesktop extends _i42.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i23.LinkDevice]
-class LinkDevice extends _i42.PageRouteInfo<LinkDeviceArgs> {
-  LinkDevice({
-    _i44.Key? key,
-    List<_i42.PageRouteInfo>? children,
-  }) : super(
+class LinkDevice extends _i42.PageRouteInfo<void> {
+  const LinkDevice({List<_i42.PageRouteInfo>? children})
+      : super(
           LinkDevice.name,
-          args: LinkDeviceArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'LinkDevice';
 
-  static const _i42.PageInfo<LinkDeviceArgs> page =
-      _i42.PageInfo<LinkDeviceArgs>(name);
-}
-
-class LinkDeviceArgs {
-  const LinkDeviceArgs({this.key});
-
-  final _i44.Key? key;
-
-  @override
-  String toString() {
-    return 'LinkDeviceArgs{key: $key}';
-  }
+  static const _i42.PageInfo<void> page = _i42.PageInfo<void>(name);
 }
 
 /// generated route for

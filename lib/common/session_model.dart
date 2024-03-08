@@ -9,6 +9,7 @@ final sessionModel = SessionModel();
 
 const TAB_CHATS = 'chats';
 const TAB_VPN = 'vpn';
+const TAB_HOME = 'home';
 const TAB_REPLICA = 'discover';
 const TAB_ACCOUNT = 'account';
 const TAB_DEVELOPER = 'developer';
