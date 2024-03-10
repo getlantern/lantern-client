@@ -1,5 +1,8 @@
 import 'package:lantern/common/common.dart';
 import 'package:tray_manager/tray_manager.dart';
+import 'package:lantern/ffi.dart';
+import 'package:ffi/ffi.dart';
+import 'dart:ffi';
 
 export 'dart:convert';
 export 'dart:ffi'; // For FFI
@@ -19,6 +22,15 @@ String systemTrayIcon(bool connected) {
   return Platform.isWindows
       ? 'assets/images/lantern_disconnected_32.ico'
       : 'assets/images/lantern_disconnected_32.png';
+}
+
+void setSelectedTab(BuildContext context, String name) {
+  final tab = name.toNativeUtf8();
+  final currentTab = ffiSelectedTab().toDartString();
+  setSelectTab(tab);
+  // when the user clicks on the active tab again, do nothing
+  if (currentTab == name) return;
+  context.pushRoute(Home());
 }
 
 Future<void> setupMenu(bool isConnected) async {

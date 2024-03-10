@@ -118,8 +118,6 @@ class AdHelper {
               },
               onAdShowedFullScreenContent: (ad) {
                 logger.i('[Ads Manager] Showing Ads');
-                sessionModel.trackUserAction('User shown interstitial ad',
-                    'http://google.com', 'google');
               },
               onAdFailedToShowFullScreenContent: (ad, error) {
                 logger.i(
@@ -134,14 +132,10 @@ class AdHelper {
             );
             _interstitialAd = ad;
             logger.i('[Ads Manager] to loaded $ad');
-            sessionModel.trackUserAction(
-                'Interstitial ad loaded', 'http://google.com', 'google');
           },
           onAdFailedToLoad: (err) {
             _failedLoadAttempts++; // increment the count on failure
             logger.i('[Ads Manager] failed to load $err');
-            sessionModel.trackUserAction('Interstitial ad failed to load',
-                'http://google.com', 'google');
             _postShowingAds();
           },
         ),

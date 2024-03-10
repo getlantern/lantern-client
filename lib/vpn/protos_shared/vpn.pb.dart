@@ -571,11 +571,15 @@ class Plan extends $pb.GeneratedMessage {
 class PaymentProviders extends $pb.GeneratedMessage {
   factory PaymentProviders({
     $core.String? name,
+    $core.Map<$core.String, $core.String>? data,
     $core.Iterable<$core.String>? logoUrls,
   }) {
     final $result = create();
     if (name != null) {
       $result.name = name;
+    }
+    if (data != null) {
+      $result.data.addAll(data);
     }
     if (logoUrls != null) {
       $result.logoUrls.addAll(logoUrls);
@@ -588,7 +592,8 @@ class PaymentProviders extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PaymentProviders', createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
-    ..pPS(2, _omitFieldNames ? '' : 'logoUrls', protoName: 'logoUrls')
+    ..m<$core.String, $core.String>(2, _omitFieldNames ? '' : 'data', entryClassName: 'PaymentProviders.DataEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OS)
+    ..pPS(3, _omitFieldNames ? '' : 'logoUrls', protoName: 'logoUrls')
     ..hasRequiredFields = false
   ;
 
@@ -623,7 +628,10 @@ class PaymentProviders extends $pb.GeneratedMessage {
   void clearName() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.List<$core.String> get logoUrls => $_getList(1);
+  $core.Map<$core.String, $core.String> get data => $_getMap(1);
+
+  @$pb.TagNumber(3)
+  $core.List<$core.String> get logoUrls => $_getList(2);
 }
 
 class PaymentMethod extends $pb.GeneratedMessage {

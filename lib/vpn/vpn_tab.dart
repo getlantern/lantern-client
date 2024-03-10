@@ -20,6 +20,8 @@ class VPNTab extends StatelessWidget {
           height: 16,
           fit: BoxFit.contain,
         ),
+        // make sure to disable the back arrow button on the home screen
+        automaticallyImplyLeading: false,
         padVertical: true,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

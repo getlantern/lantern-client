@@ -9,6 +9,7 @@ final sessionModel = SessionModel();
 
 const TAB_CHATS = 'chats';
 const TAB_VPN = 'vpn';
+const TAB_HOME = 'home';
 const TAB_REPLICA = 'discover';
 const TAB_ACCOUNT = 'account';
 const TAB_DEVELOPER = 'developer';
@@ -442,6 +443,13 @@ class SessionModel extends Model {
     for (var m in item["desktop"]) {
       var paymentMethod = PaymentMethod();
       paymentMethod.method = m["method"];
+      var providers = <PaymentProviders>[];
+      for (var n in m["providers"]) {
+        var provider = PaymentProviders();
+        provider.name = n["name"];
+        providers.add(provider);
+      }
+      paymentMethod.providers.addAll(providers);
       return paymentMethod;
     }
     return PaymentMethod();
