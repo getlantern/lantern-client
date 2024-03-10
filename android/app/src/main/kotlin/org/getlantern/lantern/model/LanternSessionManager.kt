@@ -264,19 +264,19 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putBoolean(DEVICE_LINKED, true).apply()
     }
 
-    fun storeUserData(user: ProUser?) {
-        if (user!!.email != null && user.email != "") {
+    fun storeUserData(user: ProUser) {
+        Logger.debug(TAG, "Storing user data $user")
+        if (!user.email.isNullOrEmpty()) {
             setEmail(user.email)
         }
 
-        if (!TextUtils.isEmpty(user.code)) {
+        if (!user.code.isNullOrEmpty()) {
             setCode(user.code)
         }
 
         if (user.isActive) {
             linkDevice()
         }
-
 
         setExpiration(user.expiration)
         setExpired(user.isExpired)
