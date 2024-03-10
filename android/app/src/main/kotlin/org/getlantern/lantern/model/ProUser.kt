@@ -17,6 +17,7 @@ data class ProUser(
     val userLevel: String,
 ) {
     private fun isUserStatus(status: String) = userStatus == status
+    private fun isUserLevel(level: String) = userLevel == level
 
     private fun expirationDate() = if (expiration == null) null else LocalDateTime(expiration * 1000)
 
@@ -37,7 +38,7 @@ data class ProUser(
     }
 
     val isProUser: Boolean
-        get() = isUserStatus("active")
+        get() = isUserStatus("active") || isUserLevel("pro")
 
     val isActive: Boolean
         get() = isProUser
