@@ -73,8 +73,6 @@ open class LanternHttpClient : HttpClient() {
                     Logger.debug(TAG, "JSON response" + result.toString())
                     result?.let {
                         val user = parseData<ProUser>(result.toString())
-                        Logger.debug(TAG, "User ID is ${user.userId}")
-                        LanternApp.getSession().storeUserData(user)
                         cb.onSuccess(response!!, user)
                     }
                 }

@@ -187,6 +187,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             vpnModel.setVpnOn(true)
         }
 
+        updateUserData()
         sessionModel.checkAdsAvailability()
         Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
     }
@@ -312,18 +313,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 ) {
                     val devices = user?.devices
                     val deviceID = LanternApp.getSession().deviceID()
-                    // if the payment test mode is enabled
-                    // then do nothing To avoid restarting app while debugging
-                    // we are setting static user for payment mode
-                    if (user?.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
 
-                    // Switch to free account if device it not linked
-                    devices?.filter { it.id == deviceID }?.run {
-                        if (isEmpty()) {
-                            LanternApp.getSession().logout()
-                            restartApp()
-                        }
-                    }
+                    LanternApp.getSession().storeUserData(user)
                 }
             },
         )
