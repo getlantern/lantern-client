@@ -292,10 +292,6 @@ jobs:
           run: |
             diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
             diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
-            mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
-            mv -f lantern-installer-mac.dmg ${{ env.prefix }}-mac.dmg
-            mv -f lantern-installer-mac_arm.dmg ${{ env.prefix }}-mac_arm.dmg
-            diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
         - name: Prepare sha256 sums
           run: |
             shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
