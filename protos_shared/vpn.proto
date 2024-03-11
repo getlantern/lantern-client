@@ -47,8 +47,7 @@ message Plan {
 
 message PaymentProviders {
   string name = 1;
-  map<string, string> data = 2;
-  repeated string logoUrls = 3;
+  repeated string logoUrls = 2;
 }
 
 message PaymentMethod {
