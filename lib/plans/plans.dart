@@ -217,7 +217,7 @@ class PlansPage extends StatelessWidget {
   void _onPromoCodeTap(BuildContext context, bool proUser) {
     if (proUser) {
       context.pushRoute(ResellerCodeCheckout(
-          isPro: true, email: sessionModel.userEmail.value!));
+          isPro: true, email: sessionModel.userEmail.value!),);
     } else {
       context
           .pushRoute(CreateAccountEmail(authFlow: AuthFlow.proCodeActivation));

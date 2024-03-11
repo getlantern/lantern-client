@@ -11,4 +11,5 @@ extension AuthFlowExtension on AuthFlow {
   bool get isCreateAccount => this == AuthFlow.createAccount;
 
   bool get isVerifyEmail => this == AuthFlow.verifyEmail;
+  bool get isproCodeActivation => this == AuthFlow.proCodeActivation;
 }
