@@ -76,7 +76,8 @@ class _VerificationState extends State<Verification> {
                 onPressed: resendConfirmationCode,
               ),
               const SizedBox(height: 14),
-              if (!widget.authFlow.isVerifyEmail && !widget.authFlow.isCreateAccount)
+              if (!widget.authFlow.isVerifyEmail &&
+                  !widget.authFlow.isCreateAccount&&!widget.authFlow.isproCodeActivation)
                 AppTextButton(
                   text: 'change_email'.i18n.toUpperCase(),
                   onPressed: () {
@@ -104,7 +105,7 @@ class _VerificationState extends State<Verification> {
         /// This should be handled when account created
         break;
       case AuthFlow.proCodeActivation:
-        resendCreateAccountVerificationCode();
+        resendResetEmailVerificationCode();
         break;
       case AuthFlow.changeEmail:
         resendChangeEmailVerificationCode();
@@ -244,6 +245,7 @@ class _VerificationState extends State<Verification> {
           Future.delayed(const Duration(milliseconds: 400), openPassword);
         },
         onFailure: (error) {
+          pinCodeController.clear();
           context.loaderOverlay.hide();
           CDialog.showError(
             context,
