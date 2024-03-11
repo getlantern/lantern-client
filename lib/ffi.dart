@@ -36,6 +36,8 @@ Pointer<Utf8> ffiDevelopmentMode() => _bindings.developmentMode().cast<Utf8>();
 Pointer<Utf8> ffiAcceptedTermsVersion() =>
     _bindings.acceptedTermsVersion().cast<Utf8>();
 
+Pointer<Utf8> ffiEmailExists(email) => _bindings.emailExists(email).cast<Utf8>();
+
 Pointer<Utf8> ffiEmailAddress() => _bindings.emailAddress().cast<Utf8>();
 
 Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();

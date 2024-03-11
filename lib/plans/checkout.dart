@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
+import 'package:lantern/common/inappbrowser.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
@@ -24,6 +25,10 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout>
     with SingleTickerProviderStateMixin {
   bool showMoreOptions = false;
+  final settings = InAppBrowserClassSettings(
+      browserSettings: InAppBrowserSettings(hideUrlBar: true),
+      webViewSettings: InAppWebViewSettings(
+          javaScriptEnabled: true, isInspectable: kDebugMode));
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
@@ -162,7 +167,16 @@ class _CheckoutState extends State<Checkout>
           if (!Platform.isMacOS) {
             await context.pushRoute(AppWebview(url: redirectUrl));
           } else {
-            await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
+            final browser = LanternInAppBrowser(() async {
+              final res = await ffiProUser();
+              if (!widget.isPro && res == "true") {
+                // show success dialog if user becomes Pro during browser session
+                showSuccessDialog(context, widget.isPro);
+              }
+            });
+            await browser.openUrlRequest(
+              urlRequest: URLRequest(url: WebUri(redirectUrl)),
+              settings: settings);
           }
           return;
         }
