@@ -490,7 +490,7 @@ package-linux-x64: require-version
 	@$(call fpm-debian-build,"x64")
 	@echo "-> $(APP)_$(VERSION)_x64.deb"
 
-.PHONY: package-linux-arm64
+.PHONY: package-linux-amd64
 package-linux-amd64: require-version $(LINUX_LIB_NAME_64)
 	@$(call fpm-debian-build,"amd64")
 	@echo "-> $(APP)_$(VERSION)_amd64.deb"

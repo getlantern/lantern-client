@@ -63,19 +63,9 @@ jobs:
       with:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-        dist-suffix: x64
-
-#    build-windows-x32:
-#      uses: ./.github/workflows/build-windows.yml
-#      secrets: inherit
-#      needs: set-version
-#      with:
-#        version: ${{ needs.set-version.outputs.version }}
-#        prefix: ${{ needs.set-version.outputs.prefix }}
-#        dist-suffix: 32-bit
-#        installer-suffix: -x32
-#        update-suffix: 386
-#        arch: x32
+        dist-suffix: 64-bit
+        update-suffix: x64
+        arch: amd64
 
     build-windows-x64:
       uses: ./.github/workflows/build-windows.yml

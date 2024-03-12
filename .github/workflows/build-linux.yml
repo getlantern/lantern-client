@@ -8,7 +8,13 @@ on:
       prefix:
         type: string
         required: true
-      dist-suffix: # "arm64" or "amd64"
+      arch: # "arm64" or "amd64"
+        type: string
+        required: true
+      update-suffix: # "x64" or "386"
+        type: string
+        required: true
+      dist-suffix: # "64-bit" or "32-bit"
         type: string
         required: true
 
@@ -52,7 +58,7 @@ jobs:
         env:
           VERSION: ${{ inputs.version }}
         run: |
-          make package-linux-amd64
+          make "linux-${{inputs.arch}}"
 
       - uses: actions/setup-python@v4
         with:
@@ -94,23 +100,25 @@ jobs:
 
       - name: Build installer
         run: |
-          cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
-          VERSION="${{ inputs.version }}" make "package-linux-${{inputs.dist-suffix}}"
+          ls build/linux
+          cp liblantern.so "build/linux/${{inputs.update-suffix}}/release/bundle"
+          VERSION="${{ inputs.version }}" make "package-linux-${{inputs.arch}}"
 
       - uses: actions/upload-artifact@v4
         with:
           name: linux-build
           path: |
-            lantern_${{inputs.version}}_x64.deb
+            "lantern_${{inputs.version}}_${{inputs.arch}}.deb"
 
       - name: Push binaries to s3
         
         env:
           VERSION: "${{ inputs.version }}"
-          dist: "${{inputs.prefix}}-${{inputs.version}}-64-bit.deb"
-          update: "lantern_update_linux_x64-${{inputs.version}}.bz2"
-          dist_source: "lantern_${{inputs.version}}_x64.deb"
-          update_source: lantern_update_linux_x64.bz2
+          dist_versionless: "${{inputs.prefix}}-${{inputs.dist-suffix}}.deb"
+          dist: "${{inputs.prefix}}-${{inputs.version}}-${{inputs.dist-suffix}}.deb"
+          update: "lantern_update_linux_${{inputs.arch}}-${{inputs.version}}.bz2"
+          dist_source: "lantern_${{inputs.version}}_${{inputs.arch}}.deb"
+          update_source: "lantern_update_linux_${{inputs.arch}}.bz2"
 
         run: |
           ls -l
