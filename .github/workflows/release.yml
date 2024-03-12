@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ main ]
+    branches: [ atavism/ci-linux-updates ]
     tags:
       - '*'
 
