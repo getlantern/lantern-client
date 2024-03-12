@@ -121,7 +121,7 @@ control:
   Maintainer:
   Description: Censorship circumvention tool" >> debian/debian.yaml
           echo "[Desktop Entry]
-  Version=${{ inputs.version }}
+  Version=1.0.0
   Name=Lantern
   GenericName=Lantern
   Comment=Censorship circumvention tool
