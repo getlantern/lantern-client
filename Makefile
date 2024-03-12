@@ -236,6 +236,7 @@ tag: require-version
 define fpm-debian-build =
 	echo "Running fpm-debian-build" && \
 	PKG_ARCH=$1 && \
+	TARGET_PLATFORM=$2 && \
 	WORKDIR=$$(mktemp -dt "$$(basename $$0).XXXXXXXXXX") && \
 	INSTALLER_RESOURCES=./$(INSTALLER_RESOURCES)/linux && \
 	\
@@ -250,7 +251,7 @@ define fpm-debian-build =
 	cp $$INSTALLER_RESOURCES/$(APP).desktop $$WORKDIR/usr/share/applications && \
 	cp $$INSTALLER_RESOURCES/icon128x128on.png $$WORKDIR/usr/share/icons/hicolor/128x128/apps/$(APP).png && \
 	\
-	cp build/linux/$$PKG_ARCH/release/bundle/$(APP) $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
+	cp build/linux/$$TARGET_PLATFORM/release/bundle/$(APP) $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
 	cp $$INSTALLER_RESOURCES/$(APP).sh $$WORKDIR/usr/lib/$(APP) && \
 	\
 	chmod -x $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
@@ -485,14 +486,9 @@ ffigen:
 .PHONY: linux-amd64
 linux-amd64: $(LINUX_LIB_NAME_64) ## Build lantern for linux-amd64
 
-.PHONY: package-linux-x64
-package-linux-x64: require-version
-	@$(call fpm-debian-build,"x64")
-	@echo "-> $(APP)_$(VERSION)_x64.deb"
-
 .PHONY: package-linux-amd64
-package-linux-amd64: require-version $(LINUX_LIB_NAME_64)
-	@$(call fpm-debian-build,"amd64")
+package-linux-amd64: require-version
+	@$(call fpm-debian-build,"amd64","x64")
 	@echo "-> $(APP)_$(VERSION)_amd64.deb"
 
 $(LINUX_LIB_NAME_64): export GOOS = linux
