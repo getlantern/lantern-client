@@ -119,10 +119,7 @@ class _LanternAppState extends State<LanternApp> {
         }
         return sessionModel.language(
           (context, lang, child) {
-            if (isDesktop()) {
-              Localization.locale = lang;
-            }
-
+            Localization.locale = lang;
             return GlobalLoaderOverlay(
               overlayColor: Colors.black,
               overlayOpacity: 0.6,
