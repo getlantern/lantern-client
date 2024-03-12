@@ -112,11 +112,9 @@ jobs:
           ls -l
           mv ${{ env.dist_source }} ${{ env.dist }}
           mv ${{ env.update_source }} ${{ env.update }}
-          cp ${{ env.dist }} ${{ env.dist_versionless }}
 
           shasum -a 256 ${{ env.dist }} | cut -d " " -f 1 > ${{ env.dist }}.sha256
           shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
-          cp ${{ env.dist }}.sha256 ${{ env.dist_versionless }}.sha256
           ls -l
 
-          s3cmd put --acl-public ${{ env.dist }} ${{ env.update }} ${{ env.update }}.sha256 ${{ env.dist }}.sha256 ${{ env.dist_versionless }}.sha256 ${{ env.dist_versionless }} "s3://lantern"
+          s3cmd put --acl-public ${{ env.dist }} ${{ env.update }} ${{ env.update }}.sha256 ${{ env.dist }}.sha256 "s3://lantern"
