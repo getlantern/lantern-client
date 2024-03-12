@@ -2,4 +2,4 @@
 
 source 'https://rubygems.org'
 
-gem 'fpm', '~> 1.13.1'
+gem 'fpm', '~> 1.15.1'
