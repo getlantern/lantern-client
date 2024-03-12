@@ -121,14 +121,14 @@ control:
   Maintainer:
   Description: Censorship circumvention tool" >> debian/debian.yaml
           echo "[Desktop Entry]
-Version=${{ inputs.version }}
-Name=Lantern
-GenericName=Lantern
-Comment=Censorship circumvention tool
-Terminal=false
-Type=Application
-Categories=Utility
-Keywords=Flutter;share;files;" >> debian/gui/lantern.desktop
+  Version=${{ inputs.version }}
+  Name=Lantern
+  GenericName=Lantern
+  Comment=Censorship circumvention tool
+  Terminal=false
+  Type=Application
+  Categories=Utility
+  Keywords=Flutter;share;files;" >> debian/gui/lantern.desktop
           flutter_to_debian
           ls debian/packages
 
