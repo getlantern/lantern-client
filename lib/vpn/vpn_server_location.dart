@@ -12,14 +12,19 @@ class ServerLocationWidget extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CText(
             'Server Location'.i18n,
+            textAlign: TextAlign.center,
             style: tsSubtitle3.copiedWith(
               color: unselectedTabIconColor,
             ),
           ),
           Container(
+            padding: const EdgeInsets.only(
+              left: 8,
+            ),
             transform: Matrix4.translationValues(0.0, 2.0, 0.0),
             child: Icon(
               Icons.info_outline_rounded,
@@ -34,6 +39,7 @@ class ServerLocationWidget extends StatelessWidget {
                 (BuildContext context, ServerInfo serverInfo, Widget? child) {
               if (vpnStatus == 'connected' || vpnStatus == 'disconnecting') {
                 return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(4)),
@@ -47,12 +53,14 @@ class ServerLocationWidget extends StatelessWidget {
                     CText(
                       serverInfo.city,
                       style: tsSubtitle4,
+                      textAlign: TextAlign.center,
                     )
                   ],
                 );
               } else {
                 return CText(
                   'n/a'.i18n.toUpperCase(),
+                  textAlign: TextAlign.center,
                   style: tsSubtitle4,
                 );
               }

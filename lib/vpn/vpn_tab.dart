@@ -1,7 +1,6 @@
 import 'package:lantern/account/split_tunneling.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
-
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
@@ -13,21 +12,21 @@ class VPNTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const proUser = false;
-    return BaseScreen(
+    return sessionModel
+        .proUser((BuildContext context, bool proUser, Widget? child) {
+      return BaseScreen(
         title: SvgPicture.asset(
           proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
           height: 16,
           fit: BoxFit.contain,
         ),
+        // make sure to disable the back arrow button on the home screen
+        automaticallyImplyLeading: false,
         padVertical: true,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if(!proUser && !Platform.isIOS)
-            ProBanner()
-            else
-              const SizedBox(),
+            if (!proUser && !Platform.isIOS) ProBanner() else const SizedBox(),
             const VPNSwitch(),
             Container(
               padding: const EdgeInsetsDirectional.all(16),
@@ -46,17 +45,17 @@ class VPNTab extends StatelessWidget {
                   VPNStatus(),
                   const CDivider(height: 32.0),
                   ServerLocationWidget(),
-                  if(Platform.isAndroid)...{
+                  if (Platform.isAndroid) ...{
                     const CDivider(height: 32.0),
                     SplitTunnelingWidget(),
-                    if(!proUser)
-                     const VPNBandwidth(),
+                    if (!proUser) const VPNBandwidth(),
                   }
-                  ],
+                ],
               ),
             ),
           ],
         ),
       );
+    });
   }
 }
