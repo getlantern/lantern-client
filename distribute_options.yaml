@@ -1,8 +1,8 @@
 output: build/
 releases:
-  - name: dev
+  - name: prod
     jobs:
-      - name: release-dev-linux-deb
+      - name: release-prod-linux-deb
         package:
           platform: linux
           target: deb
