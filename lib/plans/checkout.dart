@@ -25,6 +25,7 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout>
     with SingleTickerProviderStateMixin {
   bool showMoreOptions = false;
+  bool showContinueButton = false;
   final settings = InAppBrowserClassSettings(
       browserSettings: InAppBrowserSettings(hideUrlBar: true),
       webViewSettings: InAppWebViewSettings(
@@ -229,6 +230,14 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
+  bool enableContinueButton() {
+    final isEmailValid = !emailController.value.text.isEmpty && emailFieldKey.currentState!.validate();
+    if (!isRefCodeFieldShowing || refCodeController.text.isEmpty) {
+      return isEmailValid;
+    }
+    return isEmailValid && refCodeFieldKey.currentState!.validate();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
@@ -271,6 +280,11 @@ class _CheckoutState extends State<Checkout>
                         child: CTextField(
                           initialValue: widget.isPro ? emailAddress : '',
                           controller: emailController,
+                          onChanged: (text) {
+                            setState(() {
+                              showContinueButton = enableContinueButton();
+                            });
+                          },
                           autovalidateMode: widget.isPro
                               ? AutovalidateMode.always
                               : AutovalidateMode.disabled,
@@ -299,6 +313,11 @@ class _CheckoutState extends State<Checkout>
                                 child: CTextField(
                                   controller: refCodeController,
                                   autovalidateMode: AutovalidateMode.disabled,
+                                  onChanged: (text) {
+                                    setState(() {
+                                      showContinueButton = enableContinueButton();
+                                    });
+                                  },
                                   textCapitalization:
                                       TextCapitalization.characters,
                                   label: 'referral_code'.i18n,
@@ -363,9 +382,7 @@ class _CheckoutState extends State<Checkout>
                         message: AppKeys.continueCheckout,
                         child: Button(
                           text: 'continue'.i18n,
-                          disabled: emailController.value.text.isEmpty ||
-                              emailFieldKey.currentState?.validate() == false ||
-                              refCodeFieldKey.currentState?.validate() == false,
+                          disabled: !showContinueButton,
                           onPressed: onContinueTapped,
                         ),
                       ),
