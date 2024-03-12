@@ -99,10 +99,38 @@ jobs:
         run: flutter build linux
 
       - name: Build installer
+        env:
+          VERSION: ${{ inputs.version }}
         run: |
           ls build/linux
           cp liblantern.so "build/linux/${{inputs.update-suffix}}/release/bundle"
-          VERSION="${{ inputs.version }}" make "package-linux-${{inputs.arch}}"
+          dart pub global activate flutter_to_debian
+          mkdir -p debian/gui
+          echo "flutter_app:
+  command: lantern
+  arch: x64
+  parent: /usr/local/lib
+  nonInteractive: false
+
+control:
+  Package: lantern
+  Version: ${{ inputs.version }}
+  Architecture: ${{ inputs.arch }}
+  Priority: optional
+  Depends:
+  Maintainer:
+  Description: Censorship circumvention tool" >> debian/debian.yaml
+          echo "[Desktop Entry]
+Version=${{ inputs.version }}
+Name=Lantern
+GenericName=Lantern
+Comment=Censorship circumvention tool
+Terminal=false
+Type=Application
+Categories=Utility
+Keywords=Flutter;share;files;" >> debian/gui/lantern.desktop
+          flutter_to_debian
+          ls debian/packages
 
       - uses: actions/upload-artifact@v4
         with:
