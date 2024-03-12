@@ -250,22 +250,6 @@ jobs:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
       steps:
-        - name: Download the mac build output
-          uses: actions/download-artifact@v4
-          with:
-            name: mac-build
-        - name: Download the mac arm build output
-          uses: actions/download-artifact@v4
-          with:
-            name: mac_arm-build
-        - name: Download the linux build output
-          uses: actions/download-artifact@v4
-          with:
-            name: linux-build
-        - name: Download the windows64 build output
-          uses: actions/download-artifact@v4
-          with:
-            name: windows64-installer-signed
         - name: Download the apk build output
           uses: actions/download-artifact@v3
           with:
@@ -298,18 +282,10 @@ jobs:
           run: |
             diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
             diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
-            mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
-            mv -f lantern-installer-mac.dmg ${{ env.prefix }}-mac.dmg
-            mv -f lantern-installer-mac_arm.dmg ${{ env.prefix }}-mac_arm.dmg
-            diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
         - name: Prepare sha256 sums
           run: |
             shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
             shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
-            shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
-            shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
-            shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
-            shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
         - name: Commit
           run: |
             mv lantern-installer* ./lantern-binaries/

@@ -305,5 +305,5 @@ jobs:
             shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
             ls -l
 
-            s3cmd put --acl-public ${{ env.dist }} ${{ env.update }} ${{ env.update }}.sha256 ${{ env.dist }}.sha256 ${{ env.dist_versionless }}.sha256 ${{ env.dist_versionless }} "s3://lantern"
+            s3cmd put --acl-public ${{ env.dist }} ${{ env.update }} ${{ env.update }}.sha256 ${{ env.dist }}.sha256 "s3://lantern"
 
