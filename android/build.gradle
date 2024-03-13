@@ -54,7 +54,7 @@ allprojects {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
-    // This code is where all the magic happens and fixes the error.
+    // This code fixes a 'namespace not specified' error upgrading AGP to >= 8.x.x.
     subprojects {
         afterEvaluate { project ->
             if (project.hasProperty('android')) {
