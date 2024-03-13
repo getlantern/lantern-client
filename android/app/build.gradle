@@ -78,6 +78,7 @@ android {
     }
 
     defaultConfig {
+
         // Include this CMakeLists.txt file in the build pipeline
         externalNativeBuild {
             cmake {
@@ -92,13 +93,16 @@ android {
             }
         }
 
-        multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
-
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
 
         applicationId "org.getlantern.lantern"
+
+        ndk {
+            // Specifies the ABI configurations of native libraries Gradle should build and package with the app.
+            abiFilters = ["x86_64", "arm64-v8a"]
+        }
+
         versionCode code
 
         if (project.hasProperty('lanternVersion')) {
@@ -108,6 +112,7 @@ android {
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        vectorDrawables.useSupportLibrary = true
     }
 
     externalNativeBuild {
@@ -383,8 +388,7 @@ dependencies {
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
 
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
