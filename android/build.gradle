@@ -2,6 +2,7 @@ buildscript {
     ext.kotlin_version = '1.8.21'
     ext.signal_version = '2.8.1'
     ext.protoc_version = '3.19.3'
+    ext.desugarJdk     = '2.0.3'
 
     repositories {
         google()
@@ -15,7 +16,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.3.0'
         classpath "com.google.protobuf:protobuf-gradle-plugin:0.9.1"
         classpath 'com.google.gms:google-services:4.4.0'
         classpath("org.jlleitschuh.gradle:ktlint-gradle:11.3.1")
@@ -52,6 +53,23 @@ allprojects {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+    }
+    // This code is where all the magic happens and fixes the error.
+    subprojects {
+        afterEvaluate { project ->
+            if (project.hasProperty('android')) {
+                project.android {
+                    // Replace com.cleveradssolutions.ads.flutter package name with "com.cleveradssolutions.ads"
+                    // This resolves an issue where an incorrect package name appears in the source AndroidManifest.xml
+                    def match = (project.group =~ /com.cleveradssolutions.ads.flutter/)
+                    if (match.size() == 1) {
+                        namespace "com.cleveradssolutions.ads"
+                    } else if (namespace == null) {
+                        namespace project.group
+                    }
+                }
+            }
+        }
     }
 
     apply plugin: "org.jlleitschuh.gradle.ktlint"

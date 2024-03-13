@@ -356,11 +356,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 		-androidapi=23 \
 		-ldflags="$(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
-
-$(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
-	mkdir -p $(MOBILE_LIBS) && \
-	cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
+		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisq
 
 .PHONY: android-lib appium-test-build
 android-lib: $(MOBILE_ANDROID_LIB)
