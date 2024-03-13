@@ -175,8 +175,8 @@ else ifeq ($(ANDROID_ARCH), all)
 # Note - we exclude x86 because flutter does not support x86. By excluding x86
 # native libs, 32 bit Intel devices will just emulate ARM.
 # DO NOT ADD x86 TO THIS LIST!!
-  ANDROID_ARCH_JAVA := armeabi-v7a arm64-v8a x86_64
-  ANDROID_ARCH_GOMOBILE := android/arm,android/arm64,android/amd64
+  ANDROID_ARCH_JAVA := arm64-v8a x86_64
+  ANDROID_ARCH_GOMOBILE := android/arm64,android/amd64
   APK_QUALIFIER :=
 else
   $(error unsupported ANDROID_ARCH "$(ANDROID_ARCH)")
@@ -354,9 +354,12 @@ $(ANDROID_LIB): $(GO_SOURCES)
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
-		-ldflags="$(LDFLAGS)" \
+		-ldflags="-s -w $(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisq
+		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
+
+$(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
+	mkdir -p $(MOBILE_LIBS) && cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
 .PHONY: android-lib appium-test-build
 android-lib: $(MOBILE_ANDROID_LIB)
