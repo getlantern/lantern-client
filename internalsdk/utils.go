@@ -14,9 +14,9 @@ import (
 	"time"
 
 	"github.com/bojanz/currency"
-	"github.com/getlantern/android-lantern/internalsdk/apimodels"
-	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
+	"github.com/getlantern/lantern-client/internalsdk/apimodels"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
 	"golang.org/x/crypto/pbkdf2"
 )

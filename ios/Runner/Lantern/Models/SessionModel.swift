@@ -50,11 +50,11 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
 //    }
   }
 
-  func startService() {
-    let configDir = configDirFor(suffix: "service")
-    (model as! InternalsdkSessionModel).startService(configDir, locale: "en", settings: Settings())
-    logger.debug("Service Started successfully")
-  }
+//  func startService() {
+//    let configDir = configDirFor(suffix: "service")
+//    (model as! InternalsdkSessionModel).startService(configDir, locale: "en", settings: Settings())
+//    logger.debug("Service Started successfully")
+//  }
 
   func hasAllPermssion() {
     do {

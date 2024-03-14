@@ -713,9 +713,6 @@ class SessionModel extends Model {
   }
 
 
-  Future<void> requestLinkCode() {
-    return methodChannel.invokeMethod('requestLinkCode', {});
-  }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {

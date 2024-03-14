@@ -9,13 +9,12 @@ import (
 	"time"
 
 	"github.com/1Password/srp"
-	"github.com/getlantern/android-lantern/internalsdk/apimodels"
-	"github.com/getlantern/android-lantern/internalsdk/protos"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/lantern-client/internalsdk/apimodels"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )
@@ -78,90 +77,20 @@ const (
 	pathShouldShowCasAds       = "shouldShowCASAds"
 	pathShouldShowGoogleAds    = "shouldShowGoogleAds"
 	currentTermsVersion        = 1
-	pathDeviceID               = "deviceid"
-	pathDevice                 = "device"
-	pathDevices                = "devices"
-	pathModel                  = "model"
-	pathOSVersion              = "os_version"
-	pathPaymentTestMode        = "paymentTestMode"
-	pathUserID                 = "userid"
-	pathToken                  = "token"
-	pathProUser                = "prouser"
-	pathSDKVersion             = "sdkVersion"
-	pathUserLevel              = "userLevel"
-	pathChatEnabled            = "chatEnabled"
-	pathDevelopmentMode        = "developmentMode"
-	pathGeoCountryCode         = "geo_country_code"
-	pathServerCountry          = "server_country"
-	pathServerCountryCode      = "server_country_code"
-	pathServerCity             = "server_city"
-	pathHasSucceedingProxy     = "hasSucceedingProxy"
-	pathLatestBandwith         = "latest_bandwidth"
-	pathTimezoneID             = "timezone_id"
-	pathReferralCode           = "referral"
-	pathForceCountry           = "forceCountry"
-	pathDNSDetector            = "dns_detector"
-	pathProvider               = "provider"
-	pathEmailAddress           = "emailAddress"
-	pathCurrencyCode           = "currency_Code"
-	pathReplicaAddr            = "replicaAddr"
-	pathSplitTunneling         = "splitTunneling"
-	pathLang                   = "lang"
-	pathAcceptedTermsVersion   = "accepted_terms_version"
-	pathAdsEnabled             = "adsEnabled"
-	pathCASAdsEnabled          = "casAsEnabled"
-	pathStoreVersion           = "storeVersion"
-	pathSelectedTab            = "/selectedTab"
-	pathServerInfo             = "/server_info"
 	pathUserSalt               = "user_salt"
-	pathDeviceID             = "deviceid"
-	pathDevice               = "device"
-	pathDevices              = "devices"
-	pathModel                = "model"
-	pathOSVersion            = "os_version"
-	pathPaymentTestMode      = "paymentTestMode"
-	pathUserID               = "userid"
-	pathToken                = "token"
-	pathProUser              = "prouser"
-	pathSDKVersion           = "sdkVersion"
-	pathUserLevel            = "userLevel"
-	pathChatEnabled          = "chatEnabled"
-	pathDevelopmentMode      = "developmentMode"
-	pathGeoCountryCode       = "geo_country_code"
-	pathServerCountry        = "server_country"
-	pathServerCountryCode    = "server_country_code"
-	pathServerCity           = "server_city"
-	pathHasSucceedingProxy   = "hasSucceedingProxy"
-	pathLatestBandwith       = "latest_bandwidth"
-	pathTimezoneID           = "timezone_id"
-	pathReferralCode         = "referral"
-	pathForceCountry         = "forceCountry"
-	pathDNSDetector          = "dns_detector"
-	pathProvider             = "provider"
-	pathEmailAddress         = "emailAddress"
-	pathCurrencyCode         = "currency_Code"
-	pathReplicaAddr          = "replicaAddr"
-	pathSplitTunneling       = "splitTunneling"
-	pathLang                 = "lang"
-	pathAcceptedTermsVersion = "accepted_terms_version"
-	pathAdsEnabled           = "adsEnabled"
-	pathCASAdsEnabled        = "casAsEnabled"
-	pathStoreVersion         = "storeVersion"
-	pathSelectedTab          = "/selectedTab"
-	pathServerInfo           = "/server_info"
-	pathPlans                = "/plans/"
-	pathResellerCode         = "resellercode"
-	pathExpirydate           = "expirydate"
-	pathExpirystr            = "expirydatestr"
-	pathUserSalt             = "user_salt"
-	pathIsAccountVerified    = "isAccountVerified"
-	pathIsUserLoggedIn       = "IsUserLoggedIn"
-	pathIsFirstTime          = "isFirstTime"
-	pathDeviceLinkingCode    = "devicelinkingcode"
-	pathDeviceCodeExp        = "devicecodeexp"
 
-	currentTermsVersion = 1
-	group               = srp.RFC5054Group3072
+	pathPlans        = "/plans/"
+	pathResellerCode = "resellercode"
+	pathExpirydate   = "expirydate"
+	pathExpirystr    = "expirydatestr"
+
+	pathIsAccountVerified = "isAccountVerified"
+	pathIsUserLoggedIn    = "IsUserLoggedIn"
+	pathIsFirstTime       = "isFirstTime"
+	pathDeviceLinkingCode = "devicelinkingcode"
+	pathDeviceCodeExp     = "devicecodeexp"
+
+	group = srp.RFC5054Group3072
 )
 
 type SessionModelOpts struct {
@@ -187,12 +116,11 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if opts.Platform == "ios" {
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
+		base.db.RegisterType(5000, &protos.Device{})
+		base.db.RegisterType(3000, &protos.Plan{})
+		base.db.RegisterType(4000, &protos.Plans{})
 	}
-	base.db.RegisterType(1000, &protos.ServerInfo{})
-	base.db.RegisterType(2000, &protos.Devices{})
-	base.db.RegisterType(5000, &protos.Device{})
-	base.db.RegisterType(3000, &protos.Plan{})
-	base.db.RegisterType(4000, &protos.Plans{})
+
 	m := &SessionModel{baseModel: base}
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	return m, m.initSessionModel(opts)
@@ -302,7 +230,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		if err != nil {
 			return nil, err
 		}
-		checkAdsEnabled(m)
+		return true, nil // Add return statement here
 	case "signupEmailResendCode":
 		email := arguments.Get("email").String()
 		err := signupEmailResend(m, email)
@@ -431,7 +359,6 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
-
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -527,7 +454,6 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		return err
 	}
 
-
 	token, err := m.GetToken()
 	if err != nil {
 		return err
@@ -551,7 +477,6 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 		log.Debugf("Plans V3 error: %v", err)
 		return err
 	}
-	
 
 	// isAccountVerified, err := pathdb.Get[bool](m.db, pathIsAccountVerified)
 	// if err != nil {
@@ -570,16 +495,12 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	// 	}
 	// 	log.Debugf("User account is verified %v", verified)
 
-		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			return pathdb.Put[bool](tx, pathIsAccountVerified, verified, "")
-		})
-	}
-	return checkAdsEnabled(m)
 	// 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 	// 		return pathdb.Put[bool](tx, pathIsAccountVerified, verified, "")
 	// 	})
 	// }
-	return nil
+
+	return checkAdsEnabled(m)
 }
 
 func getPlansV3(m *baseModel, deviceId string, userId string, lang string, token string, countyCode string) error {
@@ -1227,6 +1148,7 @@ func checkAdsEnabled(session *SessionModel) error {
 			pathCASAdsEnabled: isCasAdsEnable,
 		})
 	})
+}
 func redeemResellerCode(m *SessionModel, email string, resellerCode string) error {
 	err := setEmail(m.baseModel, email)
 	if err != nil {

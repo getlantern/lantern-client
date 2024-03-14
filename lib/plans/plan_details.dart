@@ -141,18 +141,20 @@ class PlanCard extends StatelessWidget {
     final inRussia = sessionModel.country.value == 'RU';
     //If user is downloaded from Play store and !inRussia then
     //Go with In App purchase
+
     if (isPlayVersion && !inRussia) {
-      await sessionModel
-          .submitGooglePlay(planName)
-          .onError((error, stackTrace) {
-        // on failure
-        CDialog.showError(
-          context,
-          error: e,
-          stackTrace: stackTrace,
-          description: (error as PlatformException).message ?? error.toString(),
-        );
-      });
+      context.pushRoute(PlayCheckout(plan: plan, isPro: isPro));
+      // await sessionModel
+      //     .submitPlayPayment(,planName)
+      //     .onError((error, stackTrace) {
+      //   // on failure
+      //   CDialog.showError(
+      //     context,
+      //     error: e,
+      //     stackTrace: stackTrace,
+      //     description: (error as PlatformException).message ?? error.toString(),
+      //   );
+      // });
     } else {
       _proceedToCustomCheckout(context);
     }

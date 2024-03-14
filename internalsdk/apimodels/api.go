@@ -8,13 +8,10 @@ import (
 	"time"
 
 	"net/http"
-	"net/http/httputil"
 	"net/url"
-	"time"
 
-	"github.com/getlantern/android-lantern/internalsdk/protos"
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/moul/http2curl"
 	"google.golang.org/protobuf/proto"
 )
@@ -64,8 +61,8 @@ const (
 var (
 	log        = golog.LoggerFor("lantern-internalsdk-http")
 	httpClient = &http.Client{
-		Transport: proxied.ParallelForIdempotent(),
-		Timeout:   15 * time.Second,
+		// Transport: proxied.ParallelForIdempotent(),
+		Timeout: 15 * time.Second,
 	}
 )
 

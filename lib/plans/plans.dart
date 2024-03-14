@@ -153,9 +153,7 @@ class PlansPage extends StatelessWidget {
                       color: grey1,
                     ),
                     child: GestureDetector(
-                      onTap: () async => await context.pushRoute(
-                        ResellerCodeCheckout(isPro: proUser),
-                      ),
+                      onTap: () => _onPromoCodeTap(context, proUser),
                       child: CText(
                         'Have a Lantern Pro activation code? Click here.',
                         style: tsBody1.copiedWith(color: grey5),

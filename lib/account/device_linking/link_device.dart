@@ -18,23 +18,8 @@ class _LinkDeviceState extends State<LinkDevice> {
   void initState() {
     super.initState();
     if (Platform.isAndroid) {
-      sessionModel.requestLinkCode().then(
-            (code) => {
-              print("requestLinkCode success code is $code"),
-              retry(
-                // Make a GET request
-                () => sessionModel
-                    .redeemLinkCode()
-                    .timeout(const Duration(hours: 1)),
-                onRetry: (e) => print("error , retry: $e"),
-              ).then(
-                (x) => {
-                  print("redeemLinkCode success"),
-                },
-              )
-            },
-          );
-    requestLinkCode();
+      requestLinkCode();
+    }
   }
 
   void requestLinkCode() {

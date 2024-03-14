@@ -2,9 +2,9 @@ package internalsdk
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net"
+	"os"
 	"runtime"
 	"strings"
 	"sync"
@@ -13,7 +13,6 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/idletiming"
 	"github.com/getlantern/ipproxy"
-	"github.com/getlantern/netx"
 
 	"golang.org/x/net/proxy"
 )
@@ -30,7 +29,6 @@ var (
 // 1. dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
 // 2. All other udp packets are routed directly to their destination
 // 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
-//
 func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Session) error {
 	runtime.LockOSThread()
 
@@ -38,16 +36,17 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 	go geoLookup(&panickingSessionImpl{wrappedSession})
 
 	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
+	dev := os.NewFile(uintptr(fd), "tun")
+	defer dev.Close()
+
 	socksDialer, err := proxy.SOCKS5("tcp", socksAddr, nil, nil)
 	if err != nil {
 		return errors.New("Unable to get SOCKS5 dialer: %v", err)
 	}
 
-	ipp, err := ipproxy.New(&ipproxy.Opts{
-		DeviceName:          fmt.Sprintf("fd://%d", fd),
+	ipp, err := ipproxy.New(dev, &ipproxy.Opts{
 		IdleTimeout:         70 * time.Second,
 		StatsInterval:       15 * time.Second,
-		DisableIPv6: 		 true,
 		MTU:                 mtu,
 		OutboundBufferDepth: 10000,
 		TCPConnectBacklog:   100,
@@ -62,10 +61,18 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 			_, port, _ := net.SplitHostPort(addr)
 			isDNS := port == "53"
 			if isDNS {
-				// intercept and reroute DNS traffic to dnsgrab
+				// reroute DNS requests to dnsgrab
 				addr = dnsGrabAddr
+			} else if port == "853" {
+				// This is usually DNS over DTLS, we blackhole this to force DNS through dnsgrab.
+				return nil, errors.New("blackholing DNS over TLS traffic to %v", addr)
+			} else if port == "443" {
+				// This is likely QUIC traffic. This should really be proxied, but since we don't proxy UDP,
+				// we blackhole this traffic.
+				return nil, errors.New("blackholing QUIC UDP traffic to %v", addr)
 			}
-			conn, err := netx.DialContext(ctx, network, addr)
+			var d net.Dialer
+			conn, err := d.DialContext(ctx, network, addr)
 			if isDNS && err == nil {
 				// wrap our DNS requests in a connection that closes immediately to avoid piling up file descriptors for DNS requests
 				conn = idletiming.Conn(conn, 10*time.Second, nil)
@@ -78,12 +85,11 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 	}
 
 	currentDeviceMx.Lock()
+	currentDevice = dev
 	currentIPP = ipp
 	currentDeviceMx.Unlock()
 
-	ctx := context.Background()
-
-	err = ipp.Serve(ctx)
+	err = ipp.Serve()
 	if err != io.EOF {
 		return log.Errorf("unexpected error serving TUN traffic: %v", err)
 	}
@@ -101,6 +107,7 @@ func StopTun2Socks() {
 
 	currentDeviceMx.Lock()
 	ipp := currentIPP
+	currentDevice = nil
 	currentIPP = nil
 	currentDeviceMx.Unlock()
 	if ipp != nil {

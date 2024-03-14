@@ -129,11 +129,11 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
     try {
       context.loaderOverlay.show();
       await sessionModel.redeemResellerCode(
-        emailController.text,
+        widget.email,
         resellerCodeController.text,
       );
       context.loaderOverlay.hide();
-      showSuccessDialog(context, widget.isPro, true);
+      showSuccessDialog(context, widget.isPro, isReseller: true);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       CDialog.showError(
@@ -146,40 +146,40 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
       );
     }
   }
-
-  Future<void> onRegisterTap() async {
-    FocusManager.instance.primaryFocus?.unfocus();
-    context.loaderOverlay.show();
-    try {
-      await sessionModel.redeemResellerCode(
-        emailController.text,
-        resellerCodeController.text,
-      );
-
-      context.loaderOverlay.hide();
-      showSuccessDialog(
-        context,
-        widget.isPro,
-        isReseller: true,
-        barrierDismissible: false,
-        onAgree: () {
-          ///Once usr redeem seller code
-          /// send usr to create password
-          openPassword();
-        },
-      );
-    } catch (error, s) {
-      context.loaderOverlay.hide();
-      CDialog.showError(
-        context,
-        error: e,
-        stackTrace: s,
-        description: (error as PlatformException)
-            .message
-            .toString(), // This is coming localized
-      );
-    }
-  }
+  /// For Old Android
+  // Future<void> onRegisterTap() async {
+  //   FocusManager.instance.primaryFocus?.unfocus();
+  //   context.loaderOverlay.show();
+  //   try {
+  //     await sessionModel.redeemResellerCode(
+  //       emailController.text,
+  //       resellerCodeController.text,
+  //     );
+  //
+  //     context.loaderOverlay.hide();
+  //     showSuccessDialog(
+  //       context,
+  //       widget.isPro,
+  //       isReseller: true,
+  //       barrierDismissible: false,
+  //       onAgree: () {
+  //         ///Once usr redeem seller code
+  //         /// send usr to create password
+  //         openPassword();
+  //       },
+  //     );
+  //   } catch (error, s) {
+  //     context.loaderOverlay.hide();
+  //     CDialog.showError(
+  //       context,
+  //       error: e,
+  //       stackTrace: s,
+  //       description: (error as PlatformException)
+  //           .message
+  //           .toString(), // This is coming localized
+  //     );
+  //   }
+  // }
   Widget _buildEmail() {
     return Container(
       decoration: BoxDecoration(

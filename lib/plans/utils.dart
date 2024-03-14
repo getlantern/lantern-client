@@ -43,7 +43,6 @@ void showError(
   );
 }
 
-void showSuccessDialog(BuildContext context, bool isPro, [bool? isReseller]) {
 void showSuccessDialog(
   BuildContext context,
   bool isPro, {

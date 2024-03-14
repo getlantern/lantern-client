@@ -22,6 +22,7 @@ export 'package:flutter_svg/flutter_svg.dart';
 export 'package:flutter_switch/flutter_switch.dart';
 export 'package:i18n_extension/i18n_widget.dart';
 export 'package:lantern/core/router/router.gr.dart';
+
 // Services
 export 'package:lantern/core/services.dart';
 export 'package:lantern/event_extension.dart';
@@ -100,6 +101,22 @@ export 'ui/text_styles.dart';
 export 'ui/transitions.dart';
 export 'ui/custom/logo_with_text.dart';
 
+// custom components
+export 'ui/custom/asset_image.dart';
+export 'ui/custom/badge.dart';
+export 'ui/custom/dialog.dart';
+export 'ui/custom/divider.dart';
+export 'ui/custom/ink_well.dart';
+export 'ui/custom/list_item_factory.dart';
+export 'ui/custom/rounded_rectangle_border.dart';
+export 'ui/custom/text.dart';
+export 'ui/custom/text_field.dart';
+export 'ui/custom/fullscreen_video_viewer.dart';
+export 'ui/custom/fullscreen_image_viewer.dart';
+export 'ui/custom/fullscreen_viewer.dart';
+
+export 'ui/custom/heading_text.dart';
+
 final appLogger = Logger(
   printer: PrettyPrinter(
     methodCount: 0,
@@ -119,24 +136,6 @@ bool isMobile() {
 bool isDesktop() {
   return Platform.isMacOS || Platform.isLinux || Platform.isWindows;
 }
-// custom components
-export 'ui/custom/asset_image.dart';
-export 'ui/custom/badge.dart';
-export 'ui/custom/dialog.dart';
-export 'ui/custom/divider.dart';
-export 'ui/custom/ink_well.dart';
-export 'ui/custom/list_item_factory.dart';
-export 'ui/custom/rounded_rectangle_border.dart';
-export 'ui/custom/text.dart';
-export 'ui/custom/text_field.dart';
-export 'ui/custom/fullscreen_video_viewer.dart';
-export 'ui/custom/fullscreen_image_viewer.dart';
-export 'ui/custom/fullscreen_viewer.dart';
-
-export 'ui/custom/heading_text.dart';
 
 final mainLogger = Logger(
-  printer: PrettyPrinter(),
-  filter: DevelopmentFilter(),
-  level: Level.debug
-);
+    printer: PrettyPrinter(), filter: DevelopmentFilter(), level: Level.debug);
