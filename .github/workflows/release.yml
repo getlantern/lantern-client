@@ -156,10 +156,10 @@ jobs:
           project: android
 
       - name: Setup JDK 11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 11
+          java-version: 17
 
       - name: Generate ffi bindings
         run: |

@@ -175,8 +175,8 @@ else ifeq ($(ANDROID_ARCH), all)
 # Note - we exclude x86 because flutter does not support x86. By excluding x86
 # native libs, 32 bit Intel devices will just emulate ARM.
 # DO NOT ADD x86 TO THIS LIST!!
-  ANDROID_ARCH_JAVA := arm64-v8a x86_64
-  ANDROID_ARCH_GOMOBILE := android/arm64,android/amd64
+      ANDROID_ARCH_JAVA := arm64-v8a x86_64
+      ANDROID_ARCH_GOMOBILE := android/arm64,android/amd64
   APK_QUALIFIER :=
 else
   $(error unsupported ANDROID_ARCH "$(ANDROID_ARCH)")
