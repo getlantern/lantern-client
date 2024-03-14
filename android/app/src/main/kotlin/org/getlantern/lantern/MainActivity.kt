@@ -386,7 +386,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         var key = countryCode
         var survey = loconf.surveys!![key]
         if (survey == null) {
-            key = countryCode.lowercase(Locale.getDefault())
+            key = countryCode.lowercase()
             survey = loconf.surveys!![key]
         }
         if (survey == null || !survey.enabled) {
