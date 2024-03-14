@@ -21,7 +21,7 @@ public class BaseTest {
     public void setupTempDir() {
         tempDir = new File(
                 getTargetContext().getCacheDir(),
-                new Long(new Random().nextLong()).toString()
+                Long.valueOf(new Random().nextLong()).toString()
         );
         tempDir.mkdirs();
     }

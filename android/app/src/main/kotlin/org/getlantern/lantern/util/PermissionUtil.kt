@@ -9,7 +9,7 @@ import org.getlantern.mobilesdk.Logger
 class PermissionUtil {
     companion object {
         private val TAG = PermissionUtil::class.java.simpleName
-        private val PERMISSIONS_TAG = "${PermissionUtil.TAG}.permissions"
+        private val PERMISSIONS_TAG = "$TAG.permissions"
 
 
         /*Note - we do not include Manifest.permission.FOREGROUND_SERVICE because this is automatically

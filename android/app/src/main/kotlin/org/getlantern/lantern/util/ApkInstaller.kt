@@ -55,7 +55,7 @@ class ApkInstaller(
     private suspend fun installWithPackageInstaller() =
         withContext(Dispatchers.IO) {
             try {
-                val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
+                val params = SessionParams(SessionParams.MODE_FULL_INSTALL)
                 // create a new session using the given params, returning a unique ID that represents the session
                 val sessionId = packageInstaller.createSession(params)
                 // open an existing session to actively perform work
@@ -106,7 +106,7 @@ class ApkInstaller(
         Logger.error(TAG, "Failed to launch apk installer", e)
     }
 
-    private fun createInstallIntentContentUri(): Intent? {
+    private fun createInstallIntentContentUri(): Intent {
         val packageName = context.packageName
         val authority = "$packageName.fileProvider"
         val apkFileUri = FileProvider.getUriForFile(context, authority, apkFile)

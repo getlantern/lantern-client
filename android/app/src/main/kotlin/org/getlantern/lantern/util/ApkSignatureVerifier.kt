@@ -117,7 +117,7 @@ object ApkSignatureVerifier {
     // also this class calls [bytes2Hex] and with that proceeds to return a value which has their representation
     // as a signed string.
     // refers: https://stackoverflow.com/questions/5578871/how-to-get-apk-signing-signature
-    @kotlin.jvm.JvmStatic
+    @JvmStatic
     fun sha256(data: ByteArray?): String {
         var value = ""
         if (data == null || data.isEmpty()) {

@@ -294,8 +294,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
         if (user.isProUser) {
             EventBus.getDefault().post(UserStatus(user.isActive, user.monthsLeft().toLong()))
-            prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft() ?: 0)
-                .putInt(PRO_DAYS_LEFT, user.daysLeft() ?: 0)
+            prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft())
+                .putInt(PRO_DAYS_LEFT, user.daysLeft())
                 .apply()
         }
     }

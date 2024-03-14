@@ -39,7 +39,7 @@ open class LanternService : Service(), Runnable {
         private const val MAX_CREATE_USER_TRIES = 11
         private const val baseWaitMs = 3000
         private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
-        public val AUTO_BOOTED = "autoBooted"
+        val AUTO_BOOTED = "autoBooted"
     }
 
     private var thread: Thread? = null

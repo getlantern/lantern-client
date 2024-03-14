@@ -310,12 +310,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     response: Response,
                     user: ProUser,
                 ) {
-                    val devices = user?.devices
+                    val devices = user.devices
                     val deviceID = LanternApp.getSession().deviceID()
                     // if the payment test mode is enabled
                     // then do nothing To avoid restarting app while debugging
                     // we are setting static user for payment mode
-                    if (user?.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
+                    if (user.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
 
                     // Switch to free account if device it not linked
                     devices?.filter { it.id == deviceID }?.run {
@@ -386,7 +386,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         var key = countryCode
         var survey = loconf.surveys!![key]
         if (survey == null) {
-            key = countryCode.toLowerCase()
+            key = countryCode.lowercase(Locale.getDefault())
             survey = loconf.surveys!![key]
         }
         if (survey == null || !survey.enabled) {
@@ -408,13 +408,13 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             )
             val userType = survey.userType
             if (userType != null) {
-                if (userType == "free" && LanternApp.getSession().isProUser()) {
+                if (userType == "free" && LanternApp.getSession().isProUser) {
                     Logger.debug(
                         SURVEY_TAG,
                         "Not showing messages targetted to free users to Pro users",
                     )
                     return
-                } else if (userType == "pro" && !LanternApp.getSession().isProUser()) {
+                } else if (userType == "pro" && !LanternApp.getSession().isProUser) {
                     Logger.debug(
                         SURVEY_TAG,
                         "Not showing messages targetted to free users to Pro users",

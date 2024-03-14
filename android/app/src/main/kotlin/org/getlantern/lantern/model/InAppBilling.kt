@@ -66,7 +66,7 @@ class InAppBilling(
             it.startConnection(
                 object : BillingClientStateListener {
                     override fun onBillingSetupFinished(billingResult: BillingResult) {
-                        val responseCode = billingResult.getResponseCode()
+                        val responseCode = billingResult.responseCode
                         Logger.d(TAG, "onBillingSetupFinished with response code: $responseCode")
                         if (billingResult.responseCodeOK()) {
                             updateSkus()
@@ -128,7 +128,7 @@ class InAppBilling(
             launchBillingFlow(activity, params)
                 .takeIf { billingResult -> !billingResult.responseCodeOK() }
                 ?.let { result ->
-                    Logger.e(TAG, "Unexpected response code trying to launch billing flow: ${result.getResponseCode()}")
+                    Logger.e(TAG, "Unexpected response code trying to launch billing flow: ${result.responseCode}")
                 }
         }
     }
@@ -164,11 +164,11 @@ class InAppBilling(
                     plans.clear()
                     skus.clear()
                     skuDetailsList?.forEach {
-                        val currency = it.getPriceCurrencyCode().lowercase()
-                        val id = it.getSku()
-                        val years = it.getSku().substring(0, 1)
-                        val price = it.getPriceAmountMicros() / 10000
-                        val priceWithoutTax = it.getOriginalPriceAmountMicros() / 10000
+                        val currency = it.priceCurrencyCode.lowercase()
+                        val id = it.sku
+                        val years = it.sku.substring(0, 1)
+                        val price = it.priceAmountMicros / 10000
+                        val priceWithoutTax = it.originalPriceAmountMicros / 10000
                         plans.put(
                             id,
                             ProPlan(
@@ -251,8 +251,8 @@ class InAppBilling(
     }
 
     private fun isRetriable(billingResult: BillingResult): Boolean {
-        val responseCode = billingResult.getResponseCode()
-        val message = billingResult.getDebugMessage()
+        val responseCode = billingResult.responseCode
+        val message = billingResult.debugMessage
         return when (responseCode) {
             BillingClient.BillingResponseCode.SERVICE_TIMEOUT,
             BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
