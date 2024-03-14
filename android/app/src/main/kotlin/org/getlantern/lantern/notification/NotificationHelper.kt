@@ -76,11 +76,11 @@ class NotificationHelper(
     }
 
 
-    public fun vpnConnectedNotification() {
+    fun vpnConnectedNotification() {
         manager.notify(VPN_CONNECTED, vpnBuilder.build())
     }
 
-    public fun dataUsageNotification() {
+    fun dataUsageNotification() {
         manager.notify(DATA_USAGE, dataUsageBuilder.build())
     }
 

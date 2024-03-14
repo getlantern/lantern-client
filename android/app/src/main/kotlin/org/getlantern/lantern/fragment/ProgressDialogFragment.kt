@@ -10,7 +10,7 @@ open class ProgressDialogFragment : DialogFragment() {
 
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val msgId: Int? = getArguments()?.getInt("msgId")
+        val msgId: Int? = arguments?.getInt("msgId")
         val dialog = ProgressDialog(requireContext())
         if (msgId != null) dialog.setMessage(getString(msgId))
         return dialog

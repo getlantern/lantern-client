@@ -21,11 +21,8 @@ android {
             enableSplit = true
         }
         language {
-            // Specifies that the app bundle should not support
-            // configuration APKs for language resources. These
-            // resources are instead packaged with each base and
-            // dynamic feature APK.
-            //
+            // Specifies that the app bundle should not support configuration APKs for language resources.
+            // These resources are instead packaged with each base and dynamic feature APK.
             // See https://stackoverflow.com/a/52733674
             enableSplit = false
         }

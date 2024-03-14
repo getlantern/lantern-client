@@ -202,7 +202,7 @@ internal class NetworkFirstPlausibleClient(
                 Proxy.Type.HTTP,
                 InetSocketAddress(
                     "127.0.0.1",
-                    uri.getPort(),
+                    uri.port,
                 ),
             )
         OkHttpClient.Builder().proxy(proxy).build()

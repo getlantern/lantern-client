@@ -47,7 +47,7 @@ open class FreeKassaActivity : BaseFragmentActivity() {
 
     @ViewById
     @JvmField
-    protected var progressBar: ProgressBar? = null;
+    protected var progressBar: ProgressBar? = null
 
     @Extra
     @JvmField

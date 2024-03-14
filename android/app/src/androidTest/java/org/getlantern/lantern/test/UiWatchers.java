@@ -39,11 +39,11 @@ public class UiWatchers {
     device.registerWatcher("ANR2", new UiWatcher() {
       @Override
       public boolean checkForCondition() {
-        Log.d(LOG_TAG, "Checking if there's an 'app isn\'t responding' dialog");
+        Log.d(LOG_TAG, "Checking if there's an 'app isn't responding' dialog");
         UiObject window = new UiObject(new UiSelector().packageName("android")
             .textContains("isn't responding."));
         if (window.exists()) {
-          Log.d(LOG_TAG, "There's an 'app isn\'t responding' dialog");
+          Log.d(LOG_TAG, "There's an 'app isn't responding' dialog");
           String errorText = null;
           try {
             errorText = window.getText();

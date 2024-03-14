@@ -15,6 +15,7 @@ import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
@@ -238,7 +239,7 @@ open class LanternHttpClient : HttpClient() {
             error: ProError?,
         )
 
-        abstract fun onSuccess(
+        fun onSuccess(
             response: Response?,
             result: JsonObject?,
         )
@@ -300,7 +301,7 @@ open class LanternHttpClient : HttpClient() {
         }
 
         fun createJsonBody(json: JsonObject): RequestBody {
-            return RequestBody.create(JSON, json.toString())
+            return json.toString().toRequestBody(JSON)
         }
     }
 }
