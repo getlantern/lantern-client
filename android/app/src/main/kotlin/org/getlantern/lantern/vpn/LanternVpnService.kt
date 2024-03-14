@@ -120,7 +120,7 @@ class LanternVpnService : VpnService(), Runnable {
         if (provider == null) {
             Logger.d(TAG, "Using Go tun2socks")
             provider = GoTun2SocksProvider(
-                getPackageManager(),
+                packageManager,
                 LanternApp.getSession().splitTunnelingEnabled(),
                 HashSet(LanternApp.getSession().appsAllowedAccess()),
             )
