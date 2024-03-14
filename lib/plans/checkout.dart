@@ -25,7 +25,7 @@ class _CheckoutState extends State<Checkout>
     with SingleTickerProviderStateMixin {
   bool showMoreOptions = false;
   bool showContinueButton = false;
-  final browser = InAppBrowser();
+  final browser = AppBrowser();
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
@@ -164,7 +164,13 @@ class _CheckoutState extends State<Checkout>
           if (!Platform.isMacOS) {
             await context.pushRoute(AppWebview(url: redirectUrl));
           } else {
-            await browser.openUrlRequest(url: redirectUrl);
+            await browser.openUrl(redirectUrl, () async {
+              final res = await ffiProUser();
+              if (!widget.isPro && res == "true") {
+                // show success dialog if user becomes Pro during browser session
+                showSuccessDialog(context, widget.isPro);
+              }
+            });
           }
           return;
         }

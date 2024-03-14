@@ -17,6 +17,7 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
+
   final InAppWebViewSettings settings = InAppWebViewSettings(
     isInspectable: false,
     javaScriptEnabled: true,
@@ -26,7 +27,6 @@ class _AppWebViewState extends State<AppWebView> {
     allowBackgroundAudioPlaying: false,
     allowFileAccessFromFileURLs: true,
     preferredContentMode: UserPreferredContentMode.MOBILE,
-
   );
 
 
@@ -42,16 +42,16 @@ class _AppWebViewState extends State<AppWebView> {
   }
 }
 
-class InAppBrowser extends flutter_inappwebview.InAppBrowser {
+class AppBrowser extends InAppBrowser {
 
-  final Future<void>? Function() _onLoadStop = null;
+  Future<void> Function()? _onLoadStop;
 
   final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
       browserSettings: InAppBrowserSettings(hideUrlBar: true),
       webViewSettings: InAppWebViewSettings(
           javaScriptEnabled: true, isInspectable: kDebugMode));
 
-  InAppBrowser();
+  AppBrowser();
 
   @override
   Future onBrowserCreated() async {
@@ -66,14 +66,12 @@ class InAppBrowser extends flutter_inappwebview.InAppBrowser {
   @override
   Future onLoadStop(url) async {
     print("Stopped displaying $url");
-    if (this._onLoadStop != null) {
-      this._onLoadStop();
-    }
+    this._onLoadStop?.call();
   }
 
-  void openUrlRequest(String url, Future<void> Function() cb) async {
-    this.onLoadStop = cb;
-    await openUrlRequest(urlRequest: URLRequest(url: WebUri(url)), settings: settings);
+  void openUrl(String url, Future<void> Function() cb) async {
+    this._onLoadStop = cb;
+    await this.openUrlRequest(urlRequest: URLRequest(url: WebUri(url)), settings: settings);
   }
 
   @override
