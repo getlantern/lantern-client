@@ -69,7 +69,7 @@ class AppBrowser extends InAppBrowser {
     this._onLoadStop?.call();
   }
 
-  void openUrl(String url, Future<void> Function() cb) async {
+  Future<void> openUrl(String url, Future<void> Function() cb) async {
     this._onLoadStop = cb;
     await this.openUrlRequest(urlRequest: URLRequest(url: WebUri(url)), settings: settings);
   }
