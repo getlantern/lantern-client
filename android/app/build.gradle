@@ -78,7 +78,6 @@ android {
     }
 
     defaultConfig {
-
         // Include this CMakeLists.txt file in the build pipeline
         externalNativeBuild {
             cmake {
