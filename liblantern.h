@@ -85,6 +85,7 @@ extern char* paymentMethods();
 extern char* userData();
 extern char* serverInfo();
 extern char* emailAddress();
+extern char* emailExists(char* email);
 extern char* referral();
 extern char* chatEnabled();
 extern char* playVersion();
