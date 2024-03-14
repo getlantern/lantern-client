@@ -38,6 +38,8 @@ Pointer<Utf8> ffiAcceptedTermsVersion() =>
 
 Pointer<Utf8> ffiEmailAddress() => _bindings.emailAddress().cast<Utf8>();
 
+Pointer<Utf8> ffiEmailExists(email) => _bindings.emailExists(email).cast<Utf8>();
+
 Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();
 
 Pointer<Utf8> ffiReplicaAddr() => _bindings.replicaAddr().cast<Utf8>();

@@ -1,5 +1,7 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
+import 'package:lantern/plans/utils.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
@@ -15,7 +17,7 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
-  InAppWebViewSettings settings = InAppWebViewSettings(
+  final InAppWebViewSettings settings = InAppWebViewSettings(
     isInspectable: false,
     javaScriptEnabled: true,
     mediaPlaybackRequiresUserGesture: false,
@@ -37,5 +39,55 @@ class _AppWebViewState extends State<AppWebView> {
         initialSettings: settings,
       ),
     );
+  }
+}
+
+class InAppBrowser extends flutter_inappwebview.InAppBrowser {
+
+  final Future<void>? Function() _onLoadStop = null;
+
+  final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
+      browserSettings: InAppBrowserSettings(hideUrlBar: true),
+      webViewSettings: InAppWebViewSettings(
+          javaScriptEnabled: true, isInspectable: kDebugMode));
+
+  InAppBrowser();
+
+  @override
+  Future onBrowserCreated() async {
+    print("Browser created");
+  }
+
+  @override
+  Future onLoadStart(url) async {
+    print("Started displaying $url");
+  }
+
+  @override
+  Future onLoadStop(url) async {
+    print("Stopped displaying $url");
+    if (this._onLoadStop != null) {
+      this._onLoadStop();
+    }
+  }
+
+  void openUrlRequest(String url, Future<void> Function() cb) async {
+    this.onLoadStop = cb;
+    await openUrlRequest(urlRequest: URLRequest(url: WebUri(url)), settings: settings);
+  }
+
+  @override
+  void onReceivedError(WebResourceRequest request, WebResourceError error) {
+    print("Can't load ${request.url}.. Error: ${error.description}");
+  }
+
+  @override
+  void onProgressChanged(progress) {
+    print("Progress: $progress");
+  }
+
+  @override
+  void onExit() {
+    print("Browser closed");
   }
 }

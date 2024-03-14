@@ -687,9 +687,12 @@ class SessionModel extends Model {
   Future<void> checkEmailExists(
     String email,
   ) async {
-    return methodChannel.invokeMethod('checkEmailExists', <String, dynamic>{
-      'emailAddress': email,
-    }).then((value) => value as String);
+    if (isMobile()) {
+      return methodChannel.invokeMethod('checkEmailExists', <String, dynamic>{
+        'emailAddress': email,
+      }).then((value) => value as String);
+    }
+    await ffiEmailExists(email.toNativeUtf8());
   }
 
   Future<void> openWebview(String url) {
