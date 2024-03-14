@@ -78,7 +78,7 @@ class ApplicationTest {
         coordinates[1] = Point(248, 929)
         coordinates[2] = Point(796, 1520)
         coordinates[3] = Point(796, 929)
-        if (!mDevice.isScreenOn()) {
+        if (!mDevice.isScreenOn) {
             mDevice.wakeUp()
             mDevice.swipe(coordinates, 10)
         }
@@ -157,7 +157,7 @@ class ApplicationTest {
         }
 
     private inner class JSONParse : AsyncTask<String?, String?, JSONObject>() {
-        protected override fun doInBackground(vararg params: String?): JSONObject {
+        override fun doInBackground(vararg params: String?): JSONObject {
             Log.d(TAG, "Fetching json from $url")
             return JsonParser.getJSONFromUrl(url)
         }

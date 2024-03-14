@@ -47,7 +47,7 @@ open class WebViewActivity : BaseFragmentActivity() {
     }
 
     private fun hideProgressDialog() {
-        dialog?.let { if (it.isShowing()) it.dismiss() }
+        dialog?.let { if (it.isShowing) it.dismiss() }
     }
 
     private fun openWebview(url: String) {
@@ -69,16 +69,16 @@ open class WebViewActivity : BaseFragmentActivity() {
             }
         })
         val settings = webView.getSettings()
-        settings.setLoadWithOverviewMode(true)
-        settings.setUseWideViewPort(true)
-        settings.setJavaScriptEnabled(true)
-        settings.setPluginState(PluginState.ON)
+        settings.loadWithOverviewMode = true
+        settings.useWideViewPort = true
+        settings.javaScriptEnabled = true
+        settings.pluginState = PluginState.ON
         settings.setSupportZoom(false)
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY)
         webView.loadUrl(url)
     }
 
-    public fun closeWebView(view: View) {
+    fun closeWebView(view: View) {
         finish()
     }
 

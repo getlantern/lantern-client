@@ -13,7 +13,7 @@ object DeviceInfo : internalsdk.DeviceInfo {
   }
 
   override fun sdkVersion(): Long {
-    return android.os.Build.VERSION.SDK_INT.toLong() ?: 0
+    return android.os.Build.VERSION.SDK_INT.toLong()
   }
 
   override fun deviceID(): String {

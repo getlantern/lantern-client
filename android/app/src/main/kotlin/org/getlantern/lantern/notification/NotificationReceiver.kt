@@ -14,7 +14,7 @@ import org.getlantern.mobilesdk.Logger
 import org.greenrobot.eventbus.EventBus
 
 
-class NotificationReceiver() : BroadcastReceiver() {
+class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Logger.debug(TAG, "Received disconnect broadcast")
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

@@ -22,12 +22,12 @@ object PlansUtil {
                 activity.resources.getString(R.string.discount, Math.round(plan.discount * 100).toString())
         }
         val oneMonthCost = plan.formattedPriceOneMonth
-        plan.setRenewalText(proRenewalText(activity.resources, formattedBonus))
-        plan.setTotalCostBilledOneTime(totalCostBilledOneTime)
-        plan.setOneMonthCost(oneMonthCost)
-        plan.setFormattedBonus(formattedBonus)
+        plan.renewalText = proRenewalText(activity.resources, formattedBonus)
+        plan.totalCostBilledOneTime = totalCostBilledOneTime
+        plan.oneMonthCost = oneMonthCost
+        plan.formattedBonus = formattedBonus
         plan.setFormattedDiscount(formattedDiscount)
-        plan.setTotalCost(totalCost)
+        plan.totalCost = totalCost
     }
 
     private fun proRenewalText(resources: Resources, formattedBonus: String): String {
@@ -72,7 +72,7 @@ object PlansUtil {
             }
             return TextUtils.join(" ", bonusParts)
         } else {
-            return activity.resources.getQuantityString(R.plurals.day, (bonusMonths!! * 30 + bonusDays!!), (bonusMonths!! * 30 + bonusDays!!))
+            return activity.resources.getQuantityString(R.plurals.day, (bonusMonths!! * 30 + bonusDays!!), (bonusMonths * 30 + bonusDays))
         }
     }
 }

@@ -46,7 +46,7 @@ fun Activity.restartApp() {
         PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
     val mgr: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    mgr.set(AlarmManager.RTC, java.lang.System.currentTimeMillis() + 100, mPendingIntent)
+    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
     Process.killProcess(Process.myPid())
 }
 

@@ -14,10 +14,10 @@ class LanternProxySelector(private val session: LanternSessionManager) : ProxySe
         setDefault(this)
     }
 
-    override fun select(uri: URI): MutableList<Proxy>? {
+    override fun select(uri: URI): MutableList<Proxy> {
         val proxyAddress: SocketAddress = addrFromString(
-            session.settings.getHttpProxyHost() + ":" +
-                session.settings.getHttpProxyPort(),
+            session.settings.httpProxyHost + ":" +
+                session.settings.httpProxyPort,
         )
         val proxiesList: MutableList<Proxy> = mutableListOf()
         proxiesList.add(Proxy(Proxy.Type.HTTP, proxyAddress))
@@ -30,7 +30,7 @@ class LanternProxySelector(private val session: LanternSessionManager) : ProxySe
     private fun addrFromString(addr: String): InetSocketAddress {
         try {
             val uri: URI = URI("my://$addr")
-            return InetSocketAddress(uri.getHost(), uri.getPort())
+            return InetSocketAddress(uri.host, uri.port)
         } catch (e: Exception) {
             throw RuntimeException(e)
         }

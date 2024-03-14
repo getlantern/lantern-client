@@ -23,13 +23,13 @@ data class ProUser(
     fun monthsLeft(): Int {
         val expDate = expirationDate()
         if (expDate == null) return 0
-        return Months.monthsBetween(LocalDateTime.now(), expDate).getMonths()
+        return Months.monthsBetween(LocalDateTime.now(), expDate).months
     }
 
     fun daysLeft(): Int {
         val expDate = expirationDate()
         if (expDate == null) return 0
-        return Days.daysBetween(LocalDateTime.now(), expDate).getDays()
+        return Days.daysBetween(LocalDateTime.now(), expDate).days
     }
 
     fun newUserDetails(): String {

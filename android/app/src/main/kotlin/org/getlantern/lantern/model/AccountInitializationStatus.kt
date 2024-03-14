@@ -1,6 +1,6 @@
 package org.getlantern.lantern.model
 
-data class AccountInitializationStatus(val status: AccountInitializationStatus.Status) {
+data class AccountInitializationStatus(val status: Status) {
 
     enum class Status {
         PROCESSING, SUCCESS, FAILURE

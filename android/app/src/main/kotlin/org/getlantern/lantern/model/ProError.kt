@@ -11,7 +11,5 @@ data class ProError(
 		result.get("errorId").asString,
 		result.get("error").asString,
 		result.get("details").asJsonObject,
-	) { 
-
-	}
+	)
 }
