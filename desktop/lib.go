@@ -199,6 +199,16 @@ func emailAddress() *C.char {
 	return C.CString("")
 }
 
+//export emailExists
+func emailExists(email *C.char) *C.char {
+	err := proClient.EmailExists(userConfig(), C.GoString(email))
+	if err != nil {
+		log.Error(err)
+		return sendError(err)
+	}
+	return C.CString("false")
+}
+
 //export referral
 func referral() *C.char {
 	referralCode, err := a.ReferralCode(userConfig())
