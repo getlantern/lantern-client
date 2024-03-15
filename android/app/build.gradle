@@ -394,7 +394,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Google Play libraries
-    implementation 'com.android.billingclient:billing:6.1.0'
+    implementation 'com.android.billingclient:billing:6.2.0'
 //    implementation 'com.android.billingclient:billing-ktx:6.1.0'
     implementation 'com.google.android.gms:play-services-base:18.2.0'
     implementation 'com.google.android.gms:play-services-ads:22.4.0'

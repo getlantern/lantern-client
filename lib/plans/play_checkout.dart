@@ -9,7 +9,7 @@ class PlayCheckout extends StatefulWidget {
   final Plan plan;
   final bool isPro;
 
-  PlayCheckout({
+  const PlayCheckout({
     required this.plan,
     required this.isPro,
     Key? key,
@@ -111,13 +111,10 @@ class _PlayCheckoutState extends State<PlayCheckout>
       if (emailFieldKey.currentState?.validate() == false) {
         showError(context, error: 'please_enter_a_valid_email_address'.i18n);
       } else {
-        // Show the loader overlay at the beginning.
-        context.loaderOverlay.show();
         // Await the result of the payment submission.
         await sessionModel.submitPlayPayment(
             widget.plan.id, emailController.value.text);
         // ignore: use_build_context_synchronously
-        context.loaderOverlay.hide();
         showSuccessDialog(context, widget.isPro);
       }
     } catch (error, stackTrace) {

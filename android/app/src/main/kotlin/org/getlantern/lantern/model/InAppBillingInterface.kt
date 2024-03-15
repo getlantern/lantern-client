@@ -6,5 +6,5 @@ interface InAppBillingInterface {
 	fun initConnection()
 	fun endConnection()
 	fun ensureConnected(receivingFunction: BillingClient.() -> Unit)
-	fun handlePendingPurchases()
+	fun handlePurchases()
 }

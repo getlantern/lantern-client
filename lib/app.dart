@@ -121,8 +121,6 @@ class _LanternAppState extends State<LanternApp> {
           (context, lang, child) {
             Localization.locale = lang;
             return GlobalLoaderOverlay(
-              overlayColor: Colors.black,
-              overlayOpacity: 0.6,
               child: I18n(
                 initialLocale: currentLocale(lang),
                 child: MaterialApp.router(
