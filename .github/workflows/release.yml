@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ main ]
+    branches: [ atavism/macos-universal-binary ]
     tags:
       - '*'
 
@@ -95,24 +95,11 @@ jobs:
       secrets: inherit
       needs: set-version
       with:
-        macos_version: macos-13
-        xcode_version: 14.3.1
-        version: ${{ needs.set-version.outputs.version }}
-        version_file: ${{ needs.set-version.outputs.version_file }}
-        prefix: ${{ needs.set-version.outputs.prefix }}
-        suffix: mac
-
-    build-darwin-arm:
-      uses: ./.github/workflows/build-darwin.yml
-      secrets: inherit
-      needs: set-version
-      with:
         macos_version: macos-14
         xcode_version: latest-stable
         version: ${{ needs.set-version.outputs.version }}
         version_file: ${{ needs.set-version.outputs.version_file }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-        suffix: mac_arm
 
     build-android:
       needs: set-version
