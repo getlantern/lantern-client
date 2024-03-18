@@ -170,10 +170,13 @@ class _CheckoutState extends State<Checkout>
             );
           if (!Platform.isMacOS && !Platform.isWindows) {
             await context.pushRoute(AppWebview(url: redirectUrl));
-          } else if (Platform.isWindows) {
-            await AppBrowser.launchWindowsWebview(redirectUrl, checkProUser);
           } else {
-            await AppBrowser.launchMacWebview(redirectUrl, checkProUser);
+            final browser = AppBrowser(onClose: checkProUser);
+            if (Platform.isWindows) {
+              await browser.openWindowsWebview(redirectUrl);
+            } else {
+              await browser.openMacWebview(redirectUrl);
+            }
           }
           return;
         }

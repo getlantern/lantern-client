@@ -42,9 +42,11 @@ class _AppWebViewState extends State<AppWebView> {
 }
 
 class AppBrowser extends InAppBrowser {
-  Future<void> Function()? _onLoadStop;
+  final Future<void> Function()? onClose;
 
-  AppBrowser();
+  AppBrowser({
+    required this.onClose,
+  });
 
   @override
   Future onBrowserCreated() async {
@@ -59,7 +61,7 @@ class AppBrowser extends InAppBrowser {
   @override
   Future onLoadStop(url) async {
     print("Stopped displaying $url");
-    this._onLoadStop?.call();
+    this.onClose?.call();
   }
 
   @override
@@ -77,20 +79,16 @@ class AppBrowser extends InAppBrowser {
     print("Browser closed");
   }
 
-  static Future<void> launchMacWebview(
-      String url, Future<void> Function() cb) async {
-    final AppBrowser browser = AppBrowser();
-    browser._onLoadStop = cb;
+  Future<void> openMacWebview(String url) async {
     final settings = InAppBrowserClassSettings(
         browserSettings: InAppBrowserSettings(hideUrlBar: true),
         webViewSettings: InAppWebViewSettings(
             javaScriptEnabled: true, isInspectable: kDebugMode));
-    await browser.openUrlRequest(
+    await this.openUrlRequest(
         urlRequest: URLRequest(url: WebUri(url)), settings: settings);
   }
 
-  static Future<void> launchWindowsWebview(
-      String url, Future<void> Function() cb) async {
+  Future<void> openWindowsWebview(String url) async {
     FlutterWindowsWebview().launchWebview(url);
   }
 }
