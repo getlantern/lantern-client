@@ -1,0 +1,10 @@
+output: build/
+releases:
+  - name: prod
+    jobs:
+      - name: release-prod-linux-deb
+        package:
+          platform: linux
+          target: deb
+          build_args:
+            enable-experiment: records

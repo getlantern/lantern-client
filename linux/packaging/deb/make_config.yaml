@@ -1,0 +1,33 @@
+display_name: Lantern
+package_name: lantern
+
+maintainer:
+  name: Lantern Team
+  email: team@getlantern.org
+
+priority: optional
+
+section: x11
+
+installed_size: 15700
+
+dependencies:
+  - mpv
+
+essential: false
+
+icon: installer-resources-lantern/linux/icon128x128on.png
+
+postuninstall_scripts:
+  - echo "Sorry to see you go."
+
+keywords:
+  - Lantern
+
+generic_name: Lantern
+
+categories:
+  - Development
+  - Utility
+
+startup_notify: true
