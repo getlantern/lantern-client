@@ -162,7 +162,7 @@ class _CheckoutState extends State<Checkout>
               os,
             );
           if (!Platform.isMacOS) {
-            await context.pushRoute(AppWebview(url: redirectUrl));
+            await context.pushRoute(AppWebview(url: redirectUrl,title: ""));
           } else {
             await browser.openUrl(redirectUrl, () async {
               final res = await ffiProUser();

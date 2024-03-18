@@ -1,6 +1,7 @@
 import 'package:catcher_2/core/catcher_2.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/app_methods.dart';
+import 'package:lantern/common/app_secret.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
@@ -14,9 +15,6 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
 
-  final termsOfService = 'https://s3.amazonaws.com/lantern/Lantern-TOS.pdf';
-  final privacyPolicy = 'https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf';
-
   final packageInfo = PackageInfo.fromPlatform();
 
   void changeLanguage(BuildContext context) async =>
@@ -28,13 +26,11 @@ class Settings extends StatelessWidget {
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
 
-  void openWebView(String url, BuildContext context) async {
+  void openWebView(String url, BuildContext context, String title) async {
     if (isDesktop()) {
       await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
-    } else if (Platform.isAndroid) {
-      await sessionModel.openWebview(url);
-    } else {
-      context.pushRoute(AppWebview(url: url));
+    } else if (isMobile()) {
+      context.pushRoute(AppWebview(url: url, title: title));
     }
   }
 
@@ -90,63 +86,67 @@ class Settings extends StatelessWidget {
             onTap: () => checkForUpdateTap(context),
           ),
           //* Blocked
-          if (!isDesktop()) messagingModel.getOnBoardingStatus(
-            (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
-                ? ListItemFactory.settingsItem(
-                    header: 'chat'.i18n,
-                    icon: ImagePaths.block,
-                    content: 'blocked_users'.i18n,
-                    trailingArray: [
-                      mirrorLTR(
-                        context: context,
-                        child: const ContinueArrow(),
-                      )
-                    ],
-                    onTap: () => context.pushRoute(BlockedUsers()),
-                  )
-                : const SizedBox(),
-          ),
+          if (!isDesktop())
+            messagingModel.getOnBoardingStatus(
+              (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
+                  ? ListItemFactory.settingsItem(
+                      header: 'chat'.i18n,
+                      icon: ImagePaths.block,
+                      content: 'blocked_users'.i18n,
+                      trailingArray: [
+                        mirrorLTR(
+                          context: context,
+                          child: const ContinueArrow(),
+                        )
+                      ],
+                      onTap: () => context.pushRoute(BlockedUsers()),
+                    )
+                  : const SizedBox(),
+            ),
           //* Split tunneling
-          if (!isDesktop()) sessionModel.splitTunneling(
-            (BuildContext context, bool value, Widget? child) =>
-                ListItemFactory.settingsItem(
-              header: 'VPN'.i18n,
-              icon: ImagePaths.split_tunneling,
-              onTap: () {
-                openSplitTunneling(context);
-              },
-              content: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Flexible(
+          if (!isDesktop())
+            sessionModel.splitTunneling(
+              (BuildContext context, bool value, Widget? child) =>
+                  ListItemFactory.settingsItem(
+                header: 'VPN'.i18n,
+                icon: ImagePaths.split_tunneling,
+                onTap: () {
+                  openSplitTunneling(context);
+                },
+                content: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: CText(
+                        'split_tunneling'.i18n,
+                        softWrap: false,
+                        style: tsSubtitle1.short,
+                      ),
+                    ),
+                  ],
+                ),
+                trailingArray: [
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.only(start: 16, end: 16),
                     child: CText(
-                      'split_tunneling'.i18n,
-                      softWrap: false,
-                      style: tsSubtitle1.short,
+                      value ? 'ON'.i18n : 'OFF'.i18n,
+                      style: tsSubtitle2.copiedWith(color: pink4),
                     ),
                   ),
+                  mirrorLTR(
+                    context: context,
+                    child: const ContinueArrow(),
+                  )
                 ],
               ),
-              trailingArray: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
-                  child: CText(
-                    value ? 'ON'.i18n : 'OFF'.i18n,
-                    style: tsSubtitle2.copiedWith(color: pink4),
-                  ),
-                ),
-                mirrorLTR(
-                  context: context,
-                  child: const ContinueArrow(),
-                )
-              ],
             ),
-          ),
           ListItemFactory.settingsItem(
             header: 'about'.i18n,
             content: 'privacy_policy'.i18n,
-            onTap: () => openWebView(privacyPolicy, context),
+            onTap: () => openWebView(
+                AppSecret.privacyPolicyV2, context, "privacy_policy".i18n),
             trailingArray: [
               mirrorLTR(
                 context: context,
@@ -172,8 +172,8 @@ class Settings extends StatelessWidget {
                 ),
               )
             ],
-            onTap: () => openWebView(
-                termsOfService, context),
+            onTap: () =>
+                openWebView(AppSecret.tosV2, context, "terms_of_service".i18n),
           ),
           //* Build version
           FutureBuilder<PackageInfo>(

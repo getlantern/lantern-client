@@ -5,11 +5,13 @@ import 'package:lantern/plans/utils.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
+  final String title;
   final String url;
 
   const AppWebView({
     super.key,
     required this.url,
+    required this.title,
   });
 
   @override
@@ -17,7 +19,6 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
-
   final InAppWebViewSettings settings = InAppWebViewSettings(
     isInspectable: false,
     javaScriptEnabled: true,
@@ -26,14 +27,14 @@ class _AppWebViewState extends State<AppWebView> {
     underPageBackgroundColor: Colors.white,
     allowBackgroundAudioPlaying: false,
     allowFileAccessFromFileURLs: true,
+
     preferredContentMode: UserPreferredContentMode.MOBILE,
   );
-
 
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: "",
+      title: widget.title,
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
         initialSettings: settings,
@@ -43,7 +44,6 @@ class _AppWebViewState extends State<AppWebView> {
 }
 
 class AppBrowser extends InAppBrowser {
-
   Future<void> Function()? _onLoadStop;
 
   final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
@@ -71,7 +71,8 @@ class AppBrowser extends InAppBrowser {
 
   Future<void> openUrl(String url, Future<void> Function() cb) async {
     this._onLoadStop = cb;
-    await this.openUrlRequest(urlRequest: URLRequest(url: WebUri(url)), settings: settings);
+    await this.openUrlRequest(
+        urlRequest: URLRequest(url: WebUri(url)), settings: settings);
   }
 
   @override

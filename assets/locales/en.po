@@ -1472,4 +1472,10 @@ msgstr "Search Apps"
 msgid "cannot_login"
 msgstr "Cannot login"
 
+msgid "privacy_policy"
+msgstr "Privacy Policy"
+
+msgid "terms_of_service"
+msgstr "Terms of Service"
+
 
