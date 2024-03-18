@@ -1469,4 +1469,7 @@ msgstr "Your device has been successfully added. If you do not see the device co
 msgid "search_apps"
 msgstr "Search Apps"
 
+msgid "cannot_login"
+msgstr "Cannot login"
+
 
