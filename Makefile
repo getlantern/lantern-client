@@ -488,7 +488,7 @@ linux-amd64: $(LINUX_LIB_NAME_64) ## Build lantern for linux-amd64
 .PHONY: package-linux-amd64
 package-linux-amd64: require-version
 	@$(call fpm-debian-build,"amd64","x64")
-	@echo "-> $(APP)_$(VERSION)_arm64.deb"
+	@echo "-> $(APP)_$(VERSION)_amd64.deb"
 
 $(LINUX_LIB_NAME_64): export GOOS = linux
 $(LINUX_LIB_NAME_64): export GOARCH = amd64

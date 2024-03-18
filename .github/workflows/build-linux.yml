@@ -15,8 +15,8 @@ on:
         type: string
         required: true
       dist-suffix: # "64-bit" or "32-bit"
-         type: string
-         required: true
+        type: string
+        required: true
 
 jobs:
   build-linux:
@@ -99,10 +99,10 @@ jobs:
 
       - name: Build installer
         run: |
-          ls "build/linux/${{inputs.update-suffix}}"
-          ls "build/linux/${{inputs.update-suffix}}/release/bundle"
           cp liblantern.so "build/linux/${{inputs.update-suffix}}/release/bundle"
-          VERSION="${{ inputs.version }}" make "package-linux-${{inputs.update-suffix}}"
+          dart pub global activate flutter_distributor
+          flutter_distributor release --name=prod --jobs=release-prod-linux-deb
+          cp build/1.0.0+1/lantern-1.0.0+1-linux.deb "lantern_${{inputs.version}}_${{inputs.arch}}.deb"
 
       - uses: actions/upload-artifact@v4
         with:
