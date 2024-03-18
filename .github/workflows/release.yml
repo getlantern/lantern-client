@@ -242,7 +242,7 @@ jobs:
     push-binaries:
       runs-on:
         group: large-runners
-      needs: [ set-version, build-android, build-darwin, build-darwin-arm, build-linux, build-windows-x64 ]
+      needs: [ set-version, build-android, build-darwin, build-linux, build-windows-x64 ]
       env:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
