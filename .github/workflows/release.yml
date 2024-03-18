@@ -16,7 +16,6 @@ env:
 jobs:
     set-version:
       runs-on:
-        group: large-runners
       outputs:
         version: ${{ steps.set-version.outputs.version }}
         prefix: ${{ steps.set-version.outputs.prefix }}
