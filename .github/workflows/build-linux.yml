@@ -9,8 +9,15 @@ on:
         type: string
         required: true
       dist-suffix: # "arm64" or "amd64"
+      arch: # "arm64" or "amd64"
         type: string
         required: true
+      update-suffix: # "x64" or "386"
+        type: string
+        required: true
+      dist-suffix: # "64-bit" or "32-bit"
+         type: string
+         required: true
 
 jobs:
   build-linux:
@@ -31,6 +38,10 @@ jobs:
           echo "machine github.com login ${{ secrets.GH_TOKEN }} password x-oauth-basic" > /tmp/cache/.netrc
           chmod 600 /tmp/cache/.netrc
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -47,11 +58,11 @@ jobs:
         env:
           VERSION: ${{ inputs.version }}
         run: |
-          make linux-amd64
+          make "linux-${{inputs.arch}}"
 
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.11.3'
 
       - name: Install s3cmd
         run: pip install s3cmd
@@ -85,10 +96,12 @@ jobs:
       - run: touch app.env
 
       - name: Build Flutter app
-        run: flutter build linux
+        run: flutter build linux --release
 
       - name: Build installer
         run: |
+          ls "build/linux/${{inputs.dist-suffix}}"
+          ls "build/linux/${{inputs.dist-suffix}}/release/bundle"
           cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
           VERSION="${{ inputs.version }}" make "package-linux-${{inputs.dist-suffix}}"
 
@@ -96,17 +109,17 @@ jobs:
         with:
           name: linux-build
           path: |
-            lantern_${{inputs.version}}_x64.deb
+            "lantern_${{inputs.version}}_${{inputs.arch}}.deb"
 
       - name: Push binaries to s3
         
         env:
           VERSION: "${{ inputs.version }}"
-          dist_versionless: "${{inputs.prefix}}-64-bit.deb"
-          dist: "${{inputs.prefix}}-${{inputs.version}}-64-bit.deb"
-          update: "lantern_update_linux_x64-${{inputs.version}}.bz2"
-          dist_source: "lantern_${{inputs.version}}_x64.deb"
-          update_source: lantern_update_linux_x64.bz2
+          dist_versionless: "${{inputs.prefix}}-${{inputs.dist-suffix}}.deb"
+          dist: "${{inputs.prefix}}-${{inputs.version}}-${{inputs.dist-suffix}}.deb"
+          update: "lantern_update_linux_${{inputs.arch}}-${{inputs.version}}.bz2"
+          dist_source: "lantern_${{inputs.version}}_${{inputs.arch}}.deb"
+          update_source: "lantern_update_linux_${{inputs.arch}}.bz2"
 
         run: |
           ls -l
@@ -114,7 +127,6 @@ jobs:
           mv ${{ env.update_source }} ${{ env.update }}
 
           shasum -a 256 ${{ env.dist }} | cut -d " " -f 1 > ${{ env.dist }}.sha256
-          shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
           ls -l
 
           s3cmd put --acl-public ${{ env.dist }} ${{ env.update }} ${{ env.update }}.sha256 ${{ env.dist }}.sha256 "s3://lantern"

@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ main ]
+    branches: [ atavism/ci-linux ]
     tags:
       - '*'
 
@@ -63,7 +63,9 @@ jobs:
       with:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-        dist-suffix: x64
+        dist-suffix: 64-bit
+        update-suffix: x64
+        arch: amd64
 
 #    build-windows-x32:
 #      uses: ./.github/workflows/build-windows.yml
