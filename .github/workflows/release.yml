@@ -15,7 +15,7 @@ env:
   S3_BUCKET: lantern
 jobs:
     set-version:
-      runs-on:
+      runs-on: ubuntu-latest
       outputs:
         version: ${{ steps.set-version.outputs.version }}
         prefix: ${{ steps.set-version.outputs.prefix }}
