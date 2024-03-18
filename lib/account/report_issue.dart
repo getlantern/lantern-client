@@ -207,14 +207,10 @@ class _ReportIssueState extends State<ReportIssue> {
 
   Future<void> onSendReportTap() async {
     try {
-      AppLoadingDialog.showLoadingDialog(
-        context,
-      );
+      AppLoadingDialog.showLoadingDialog(context);
       await sessionModel.reportIssue(emailController.value.text,
           issueController.value.text, descController.value.text);
-      if (Platform.isIOS) {
-        AppLoadingDialog.dismissLoadingDialog(context);
-      }
+      AppLoadingDialog.dismissLoadingDialog(context);
       CDialog.showInfo(
         context,
         title: 'report_sent'.i18n,
@@ -226,9 +222,7 @@ class _ReportIssueState extends State<ReportIssue> {
         },
       );
     } catch (error, stackTrace) {
-      if (Platform.isIOS) {
-        AppLoadingDialog.dismissLoadingDialog(context);
-      }
+      AppLoadingDialog.dismissLoadingDialog(context);
       CDialog.showError(
         context,
         error: error,
