@@ -494,7 +494,7 @@ package-linux-x64: require-version
 
 .PHONY: package-linux-arm64
 package-linux-amd64: require-version
-	@$(call fpm-debian-build,"amd64","x64")
+	@$(call fpm-debian-build,"arm64")
 	@echo "-> $(APP)_$(VERSION)_arm64.deb"
 
 $(LINUX_LIB_NAME_64): export GOOS = linux
