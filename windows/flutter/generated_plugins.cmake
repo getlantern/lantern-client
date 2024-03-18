@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   app_links
   audioplayers_windows
   emoji_picker_flutter
+  flutter_windows_webview
   permission_handler_windows
   screen_retriever
   sentry_flutter
