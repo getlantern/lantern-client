@@ -79,7 +79,7 @@ class AppBrowser extends InAppBrowser {
 
   static Future<void> launchMacWebview(
       String url, Future<void> Function() cb) async {
-    final AppBrowser browser = AppBrowser(cb);
+    final AppBrowser browser = AppBrowser();
     browser._onLoadStop = cb;
     final settings = InAppBrowserClassSettings(
         browserSettings: InAppBrowserSettings(hideUrlBar: true),
