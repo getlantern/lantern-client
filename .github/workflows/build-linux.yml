@@ -8,7 +8,6 @@ on:
       prefix:
         type: string
         required: true
-      dist-suffix: # "arm64" or "amd64"
       arch: # "arm64" or "amd64"
         type: string
         required: true
