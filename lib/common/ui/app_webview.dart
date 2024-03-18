@@ -43,6 +43,10 @@ class _AppWebViewState extends State<AppWebView> {
 
 class AppBrowser extends InAppBrowser {
   final Future<void> Function()? onClose;
+  final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
+      browserSettings: InAppBrowserSettings(hideUrlBar: true),
+      webViewSettings: InAppWebViewSettings(
+          javaScriptEnabled: true, isInspectable: kDebugMode));
 
   AppBrowser({
     required this.onClose,
@@ -80,10 +84,6 @@ class AppBrowser extends InAppBrowser {
   }
 
   Future<void> openMacWebview(String url) async {
-    final settings = InAppBrowserClassSettings(
-        browserSettings: InAppBrowserSettings(hideUrlBar: true),
-        webViewSettings: InAppWebViewSettings(
-            javaScriptEnabled: true, isInspectable: kDebugMode));
     await this.openUrlRequest(
         urlRequest: URLRequest(url: WebUri(url)), settings: settings);
   }
