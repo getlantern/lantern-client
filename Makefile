@@ -537,13 +537,8 @@ $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
 ## Darwin
-$(DARWIN_LIB_ARM64): export LIB_NAME = $(DARWIN_LIB_ARM64)
-$(DARWIN_LIB_ARM64): export GOOS = darwin
-$(DARWIN_LIB_ARM64): export GOARCH = arm64
-$(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
-$(DARWIN_LIB_ARM64): export EXTRA_LDFLAGS += -s
-$(DARWIN_LIB_ARM64): desktop-lib
-
+.PHONY: darwin-amd64
+darwin-amd64: $(DARWIN_LIB_AMD64)
 $(DARWIN_LIB_AMD64): export LIB_NAME = $(DARWIN_LIB_AMD64)
 $(DARWIN_LIB_AMD64): export GOOS = darwin
 $(DARWIN_LIB_AMD64): export GOARCH = amd64
@@ -551,18 +546,24 @@ $(DARWIN_LIB_AMD64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(DARWIN_LIB_AMD64): export EXTRA_LDFLAGS += -s
 $(DARWIN_LIB_AMD64): desktop-lib
 
-$(DARWIN_LIB_NAME): $(DARWIN_LIB_AMD64) $(DARWIN_LIB_ARM64)
+.PHONY: darwin-arm64
+darwin-arm64: $(DARWIN_LIB_ARM64)
+$(DARWIN_LIB_ARM64): export LIB_NAME = $(DARWIN_LIB_ARM64)
+$(DARWIN_LIB_ARM64): export GOOS = darwin
+$(DARWIN_LIB_ARM64): export GOARCH = arm64
+$(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
+$(DARWIN_LIB_ARM64): export EXTRA_LDFLAGS += -s
+$(DARWIN_LIB_ARM64): desktop-lib
+
+.PHONY: darwin
+darwin: darwin-arm64
+	make darwin-amd64
 	lipo \
 		-create \
 		${DESKTOP_LIB_NAME}_arm64.dylib \
 		${DESKTOP_LIB_NAME}_amd64.dylib \
 		-output ${DARWIN_LIB_NAME}
 	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" ${DARWIN_LIB_NAME}
-
-.PHONY: darwin darwin-amd64 darwin-arm64
-darwin-amd64: $(DARWIN_LIB_AMD64)
-darwin-arm64: $(DARWIN_LIB_ARM64)
-darwin: darwin-amd64 darwin-arm64
 
 $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
 	@echo "Generating distribution package for darwin/amd64..." && \
