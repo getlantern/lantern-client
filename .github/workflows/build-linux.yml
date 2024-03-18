@@ -99,10 +99,10 @@ jobs:
 
       - name: Build installer
         run: |
-          ls "build/linux/${{inputs.dist-suffix}}"
-          ls "build/linux/${{inputs.dist-suffix}}/release/bundle"
-          cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
-          VERSION="${{ inputs.version }}" make "package-linux-${{inputs.dist-suffix}}"
+          ls "build/linux/${{inputs.update-suffix}}"
+          ls "build/linux/${{inputs.update-suffix}}/release/bundle"
+          cp liblantern.so "build/linux/${{inputs.update-suffix}}/release/bundle"
+          VERSION="${{ inputs.version }}" make "package-linux-${{inputs.update-suffix}}"
 
       - uses: actions/upload-artifact@v4
         with:
