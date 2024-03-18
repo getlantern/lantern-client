@@ -88,7 +88,7 @@ class AppBrowser extends InAppBrowser {
         urlRequest: URLRequest(url: WebUri(url)), settings: settings);
   }
 
-  Future<void> openWindowsWebview(String url) async {
+  static Future<void> openWindowsWebview(String url) async {
     FlutterWindowsWebview().launchWebview(url);
   }
 }
