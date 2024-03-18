@@ -1,4 +1,5 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/plans/utils.dart';
@@ -17,7 +18,6 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
-
   final InAppWebViewSettings settings = InAppWebViewSettings(
     isInspectable: false,
     javaScriptEnabled: true,
@@ -28,7 +28,6 @@ class _AppWebViewState extends State<AppWebView> {
     allowFileAccessFromFileURLs: true,
     preferredContentMode: UserPreferredContentMode.MOBILE,
   );
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +42,7 @@ class _AppWebViewState extends State<AppWebView> {
 }
 
 class AppBrowser extends InAppBrowser {
-
   Future<void> Function()? _onLoadStop;
-
-  final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
-      browserSettings: InAppBrowserSettings(hideUrlBar: true),
-      /*webViewSettings: InAppWebViewSettings(
-          javaScriptEnabled: true, isInspectable: kDebugMode)*/);
 
   AppBrowser();
 
@@ -69,11 +62,6 @@ class AppBrowser extends InAppBrowser {
     this._onLoadStop?.call();
   }
 
-  Future<void> openUrl(String url, Future<void> Function() cb) async {
-    this._onLoadStop = cb;
-    await this.openUrlRequest(urlRequest: URLRequest(url: WebUri(url)), settings: settings);
-  }
-
   @override
   void onReceivedError(WebResourceRequest request, WebResourceError error) {
     print("Can't load ${request.url}.. Error: ${error.description}");
@@ -87,5 +75,22 @@ class AppBrowser extends InAppBrowser {
   @override
   void onExit() {
     print("Browser closed");
+  }
+
+  static Future<void> launchMacWebview(
+      String url, Future<void> Function() cb) async {
+    final AppBrowser browser = AppBrowser(cb);
+    browser._onLoadStop = cb;
+    final settings = InAppBrowserClassSettings(
+        browserSettings: InAppBrowserSettings(hideUrlBar: true),
+        webViewSettings: InAppWebViewSettings(
+            javaScriptEnabled: true, isInspectable: kDebugMode));
+    await browser.openUrlRequest(
+        urlRequest: URLRequest(url: WebUri(url)), settings: settings);
+  }
+
+  static Future<void> launchWindowsWebview(
+      String url, Future<void> Function() cb) async {
+    FlutterWindowsWebview().launchWebview(url);
   }
 }

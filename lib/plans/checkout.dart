@@ -1,4 +1,3 @@
-import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
@@ -149,6 +148,14 @@ class _CheckoutState extends State<Checkout>
     return widgets;
   }
 
+  Future<void> checkProUser() async {
+    final res = await ffiProUser();
+    if (!widget.isPro && res == "true") {
+      // show success dialog if user becomes Pro during browser session
+      showSuccessDialog(context, widget.isPro);
+    }
+  }
+
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
@@ -164,21 +171,9 @@ class _CheckoutState extends State<Checkout>
           if (!Platform.isMacOS && !Platform.isWindows) {
             await context.pushRoute(AppWebview(url: redirectUrl));
           } else if (Platform.isWindows) {
-            final webview = FlutterWindowsWebview();
-            webview.launchWebview(redirectUrl, WebviewOptions(
-              onNavigation: (url) {
-                return false;
-              }
-            ));
+            await AppBrowser.launchWindowsWebview(redirectUrl, checkProUser);
           } else {
-            final browser = AppBrowser();
-            await browser.openUrl(redirectUrl, () async {
-              final res = await ffiProUser();
-              if (!widget.isPro && res == "true") {
-                // show success dialog if user becomes Pro during browser session
-                showSuccessDialog(context, widget.isPro);
-              }
-            });
+            await AppBrowser.launchMacWebview(redirectUrl, checkProUser);
           }
           return;
         }
