@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ atavism/windows-webview-updates ]
+    branches: [ atavism/locale-plans-updates ]
     tags:
       - '*'
 
