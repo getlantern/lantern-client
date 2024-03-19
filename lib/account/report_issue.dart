@@ -158,7 +158,7 @@ class _ReportIssueState extends State<ReportIssue> {
               Form(
                 key: descFieldKey,
                 child: CTextField(
-                  tooltipMessage: AppKeys.reportDescription,
+                  tooltipMessage: 'report_description'.i18n,
                   controller: descController,
                   contentPadding: const EdgeInsetsDirectional.all(8.0),
                   label: '',

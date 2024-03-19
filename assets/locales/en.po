@@ -249,7 +249,7 @@ msgid "lantern_desktop"
 msgstr "Lantern Desktop"
 
 msgid "report_description"
-msgstr "Report Description"
+msgstr "Issue Description"
 
 msgid "report_issue"
 msgstr "Report Issue"
