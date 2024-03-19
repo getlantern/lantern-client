@@ -129,7 +129,7 @@ jobs:
         run: git lfs pull
 
       # Install Flutter
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2.12.0
         with:
           channel: "stable"
       - run: flutter --version
