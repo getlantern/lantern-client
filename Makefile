@@ -131,15 +131,18 @@ INFO_PLIST := ios/Runner/Info.plist
 
 APP ?= lantern
 CAPITALIZED_APP := Lantern
-DARWIN_LIB_NAME ?= liblantern.dylib
+DESKTOP_LIB_NAME ?= liblantern
+DARWIN_LIB_NAME ?= $(DESKTOP_LIB_NAME).dylib
+DARWIN_LIB_AMD64 ?= $(DESKTOP_LIB_NAME)_amd64.dylib
+DARWIN_LIB_ARM64 ?= $(DESKTOP_LIB_NAME)_arm64.dylib
 DARWIN_APP_NAME ?= $(CAPITALIZED_APP).app
 INSTALLER_RESOURCES ?= installer-resources-$(APP)
 INSTALLER_NAME ?= $(APP)-installer
-WINDOWS_LIB_NAME ?= liblantern.dll
+WINDOWS_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
 WINDOWS_APP_NAME ?= $(APP).exe
-WINDOWS64_LIB_NAME ?= liblantern.dll
+WINDOWS64_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
 WINDOWS64_APP_NAME ?= $(APP)_x64.exe
-LINUX_LIB_NAME_64 ?= liblantern.so
+LINUX_LIB_NAME_64 ?= $(DESKTOP_LIB_NAME).so
 LINUX_LIB_NAME_32 ?= $(APP)_linux_386
 
 APP_YAML := lantern.yaml
@@ -476,7 +479,7 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: export CGO_ENABLED = 1
 desktop-lib: echo-build-tags
-	go build $(BUILD_RACE) $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
+	go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
 
 ffigen:
 	dart run ffigen --config ffigen.yaml
@@ -534,14 +537,33 @@ $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
 ## Darwin
-.PHONY: darwin
-darwin: $(DARWIN_LIB_NAME) ## Build lantern for darwin (can only be run from a darwin machine)
+.PHONY: darwin-amd64
+darwin-amd64: $(DARWIN_LIB_AMD64)
+$(DARWIN_LIB_AMD64): export LIB_NAME = $(DARWIN_LIB_AMD64)
+$(DARWIN_LIB_AMD64): export GOOS = darwin
+$(DARWIN_LIB_AMD64): export GOARCH = amd64
+$(DARWIN_LIB_AMD64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
+$(DARWIN_LIB_AMD64): export EXTRA_LDFLAGS += -s
+$(DARWIN_LIB_AMD64): desktop-lib
 
-$(DARWIN_LIB_NAME): export LIB_NAME = $(DARWIN_LIB_NAME)
-$(DARWIN_LIB_NAME): export GOOS = darwin
-$(DARWIN_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
-$(DARWIN_LIB_NAME): export EXTRA_LDFLAGS += -s
-$(DARWIN_LIB_NAME): echo-build-tags desktop-lib
+.PHONY: darwin-arm64
+darwin-arm64: $(DARWIN_LIB_ARM64)
+$(DARWIN_LIB_ARM64): export LIB_NAME = $(DARWIN_LIB_ARM64)
+$(DARWIN_LIB_ARM64): export GOOS = darwin
+$(DARWIN_LIB_ARM64): export GOARCH = arm64
+$(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
+$(DARWIN_LIB_ARM64): export EXTRA_LDFLAGS += -s
+$(DARWIN_LIB_ARM64): desktop-lib
+
+.PHONY: darwin
+darwin: darwin-arm64
+	make darwin-amd64
+	lipo \
+		-create \
+		${DESKTOP_LIB_NAME}_arm64.dylib \
+		${DESKTOP_LIB_NAME}_amd64.dylib \
+		-output ${DARWIN_LIB_NAME}
+	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" ${DARWIN_LIB_NAME}
 
 $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
 	@echo "Generating distribution package for darwin/amd64..." && \
