@@ -31,6 +31,15 @@ Pointer<Utf8> ffiHasSucceedingProxy() =>
 
 Pointer<Utf8> ffiProUser() => _bindings.proUser().cast<Utf8>();
 
+Future<User> ffiUserData() async {
+  final res = await _bindings.userData().cast<Utf8>().toDartString();
+  // it's necessary to use mergeFromProto3Json here instead of fromJson; otherwise, a FormatException with
+  // message Invalid radix-10 number is thrown.In addition, all possible JSON fields have to be defined on
+  // the User protobuf message or JSON decoding fails because of an "unknown field name" error:
+  // Protobuf JSON decoding failed at: root["telephone"]. Unknown field name 'telephone'
+  return User.create()..mergeFromProto3Json(jsonDecode(res));
+}
+
 Pointer<Utf8> ffiDevelopmentMode() => _bindings.developmentMode().cast<Utf8>();
 
 Pointer<Utf8> ffiAcceptedTermsVersion() =>

@@ -54,3 +54,18 @@ message PaymentMethod {
   string method = 1;
   repeated PaymentProviders providers = 2;
 }
+
+message User {
+  int64 userId = 1;
+  string email = 2;
+  string telephone = 3;
+  string userStatus = 4;
+  string locale = 5;
+  int64 expiration = 6;
+  repeated Device devices = 7;
+  string code = 8;
+  int64 expireAt = 9;
+  string referral = 10;
+  string token = 11;
+  bool yinbiEnabled = 12;
+}

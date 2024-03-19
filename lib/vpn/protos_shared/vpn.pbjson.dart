@@ -156,3 +156,32 @@ final $typed_data.Uint8List paymentMethodDescriptor = $convert.base64Decode(
     'Cg1QYXltZW50TWV0aG9kEhYKBm1ldGhvZBgBIAEoCVIGbWV0aG9kEi8KCXByb3ZpZGVycxgCIA'
     'MoCzIRLlBheW1lbnRQcm92aWRlcnNSCXByb3ZpZGVycw==');
 
+@$core.Deprecated('Use userDescriptor instead')
+const User$json = {
+  '1': 'User',
+  '2': [
+    {'1': 'userId', '3': 1, '4': 1, '5': 3, '10': 'userId'},
+    {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'telephone', '3': 3, '4': 1, '5': 9, '10': 'telephone'},
+    {'1': 'userStatus', '3': 4, '4': 1, '5': 9, '10': 'userStatus'},
+    {'1': 'locale', '3': 5, '4': 1, '5': 9, '10': 'locale'},
+    {'1': 'expiration', '3': 6, '4': 1, '5': 3, '10': 'expiration'},
+    {'1': 'devices', '3': 7, '4': 3, '5': 11, '6': '.Device', '10': 'devices'},
+    {'1': 'code', '3': 8, '4': 1, '5': 9, '10': 'code'},
+    {'1': 'expireAt', '3': 9, '4': 1, '5': 3, '10': 'expireAt'},
+    {'1': 'referral', '3': 10, '4': 1, '5': 9, '10': 'referral'},
+    {'1': 'token', '3': 11, '4': 1, '5': 9, '10': 'token'},
+    {'1': 'yinbiEnabled', '3': 12, '4': 1, '5': 8, '10': 'yinbiEnabled'},
+  ],
+};
+
+/// Descriptor for `User`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userDescriptor = $convert.base64Decode(
+    'CgRVc2VyEhYKBnVzZXJJZBgBIAEoA1IGdXNlcklkEhQKBWVtYWlsGAIgASgJUgVlbWFpbBIcCg'
+    'l0ZWxlcGhvbmUYAyABKAlSCXRlbGVwaG9uZRIeCgp1c2VyU3RhdHVzGAQgASgJUgp1c2VyU3Rh'
+    'dHVzEhYKBmxvY2FsZRgFIAEoCVIGbG9jYWxlEh4KCmV4cGlyYXRpb24YBiABKANSCmV4cGlyYX'
+    'Rpb24SIQoHZGV2aWNlcxgHIAMoCzIHLkRldmljZVIHZGV2aWNlcxISCgRjb2RlGAggASgJUgRj'
+    'b2RlEhoKCGV4cGlyZUF0GAkgASgDUghleHBpcmVBdBIaCghyZWZlcnJhbBgKIAEoCVIIcmVmZX'
+    'JyYWwSFAoFdG9rZW4YCyABKAlSBXRva2VuEiIKDHlpbmJpRW5hYmxlZBgMIAEoCFIMeWluYmlF'
+    'bmFibGVk');
+
