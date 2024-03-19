@@ -141,7 +141,7 @@ class _ReportIssueState extends State<ReportIssue> {
                         items: <String>[
                           'cannot_access_blocked_sites'.i18n,
                           'cannot_complete_purchase'.i18n,
-                          'cannot_login'.i18n,
+                          'cannot_sign_in'.i18n,
                           'loading_spinner_spins_endlessly'.i18n,
                           'slow'.i18n,
                           'cannot_link_devices'.i18n,
