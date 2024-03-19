@@ -174,6 +174,16 @@ func paymentMethods() *C.char {
 	return C.CString(string(b))
 }
 
+//export devices
+func devices() *C.char {
+	resp, err := proClient.UserData(userConfig())
+	if err != nil {
+		return sendError(err)
+	}
+	b, _ := json.Marshal(resp.User.Devices)
+	return C.CString(string(b))
+}
+
 //export userData
 func userData() *C.char {
 	resp, err := proClient.UserData(userConfig())

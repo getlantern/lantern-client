@@ -82,6 +82,7 @@ extern char* websocketAddr();
 extern void setSelectTab(char* ttab);
 extern char* plans();
 extern char* paymentMethods();
+extern char* devices();
 extern char* userData();
 extern char* serverInfo();
 extern char* emailAddress();

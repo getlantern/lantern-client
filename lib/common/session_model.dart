@@ -224,21 +224,33 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
     }
     return ffiValueBuilder<String>(
-      'referral',
+      'deviceid',
       ffiReferral,
       defaultValue: '',
       builder: builder,
     );
   }
 
+  Device deviceFromJson(Map<String, dynamic> item) {
+    final res = jsonEncode(item);
+    return Device.create()..mergeFromProto3Json(jsonDecode(res));    
+  }
+
   Widget devices(ValueWidgetBuilder<Devices> builder) {
-    return subscribedSingleValueBuilder<Devices>(
-      'devices',
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<Devices>(
+        'devices',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return Devices.fromBuffer(serialized);
+        },
+      );
+    }
+    return ffiValueBuilder<Devices>(
+      '/devices/',
+      ffiDevices,
       builder: builder,
-      deserialize: (Uint8List serialized) {
-        return Devices.fromBuffer(serialized);
-      },
-    );
+    );    
   }
 
   Future<void> setProxyAll<T>(bool on) async {
@@ -419,7 +431,6 @@ class SessionModel extends Model {
   }
 
   Plan planFromJson(Map<String, dynamic> item) {
-    print("plan is $item");
     final formatCurrency = NumberFormat.simpleCurrency();
     final currency = formatCurrency.currencyName != null ? formatCurrency.currencyName!.toLowerCase() : "usd";
     final res = jsonEncode(item);

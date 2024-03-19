@@ -40,6 +40,8 @@ Future<User> ffiUserData() async {
   return User.create()..mergeFromProto3Json(jsonDecode(res));
 }
 
+Pointer<Utf8> ffiDevices() => _bindings.devices().cast<Utf8>();
+
 Pointer<Utf8> ffiDevelopmentMode() => _bindings.developmentMode().cast<Utf8>();
 
 Pointer<Utf8> ffiAcceptedTermsVersion() =>
