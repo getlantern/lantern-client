@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ atavism/macos-universal-binary ]
+    branches: [ atavism/macos-webview ]
     tags:
       - '*'
 

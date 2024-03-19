@@ -25,7 +25,6 @@ class _CheckoutState extends State<Checkout>
     with SingleTickerProviderStateMixin {
   bool showMoreOptions = false;
   bool showContinueButton = false;
-  final browser = AppBrowser();
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
@@ -149,6 +148,14 @@ class _CheckoutState extends State<Checkout>
     return widgets;
   }
 
+  Future<void> checkProUser() async {
+    final res = await ffiProUser();
+    if (!widget.isPro && res == "true") {
+      // show success dialog if user becomes Pro during browser session
+      showSuccessDialog(context, widget.isPro);
+    }
+  }
+
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
@@ -161,16 +168,15 @@ class _CheckoutState extends State<Checkout>
               "stripe",
               os,
             );
-          if (!Platform.isMacOS) {
+          if (!Platform.isMacOS && !Platform.isWindows) {
             await context.pushRoute(AppWebview(url: redirectUrl));
           } else {
-            await browser.openUrl(redirectUrl, () async {
-              final user = await ffiUserData();
-              if (!widget.isPro && user.userStatus == "active") {
-                // show success dialog if user becomes Pro during browser session
-                showSuccessDialog(context, widget.isPro);
-              }
-            });
+            if (Platform.isWindows) {
+              await AppBrowser.openWindowsWebview(redirectUrl);
+            } else {
+              final browser = AppBrowser(onClose: checkProUser);
+              await browser.openMacWebview(redirectUrl);
+            }
           }
           return;
         }
