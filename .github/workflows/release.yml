@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ main ]
+    branches: [ atavism/macos-universal-binary ]
     tags:
       - '*'
 
@@ -15,8 +15,7 @@ env:
   S3_BUCKET: lantern
 jobs:
     set-version:
-      runs-on:
-        group: large-runners
+      runs-on: ubuntu-latest
       outputs:
         version: ${{ steps.set-version.outputs.version }}
         prefix: ${{ steps.set-version.outputs.prefix }}
@@ -95,24 +94,11 @@ jobs:
       secrets: inherit
       needs: set-version
       with:
-        macos_version: macos-13
-        xcode_version: 14.3.1
-        version: ${{ needs.set-version.outputs.version }}
-        version_file: ${{ needs.set-version.outputs.version_file }}
-        prefix: ${{ needs.set-version.outputs.prefix }}
-        suffix: mac
-
-    build-darwin-arm:
-      uses: ./.github/workflows/build-darwin.yml
-      secrets: inherit
-      needs: set-version
-      with:
         macos_version: macos-14
         xcode_version: latest-stable
         version: ${{ needs.set-version.outputs.version }}
         version_file: ${{ needs.set-version.outputs.version_file }}
         prefix: ${{ needs.set-version.outputs.prefix }}
-        suffix: mac_arm
 
     build-android:
       needs: set-version
@@ -255,7 +241,7 @@ jobs:
     push-binaries:
       runs-on:
         group: large-runners
-      needs: [ set-version, build-android, build-darwin, build-darwin-arm, build-linux, build-windows-x64 ]
+      needs: [ set-version, build-android, build-darwin, build-linux, build-windows-x64 ]
       env:
         version: ${{ needs.set-version.outputs.version }}
         prefix: ${{ needs.set-version.outputs.prefix }}
