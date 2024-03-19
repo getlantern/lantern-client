@@ -84,7 +84,7 @@ jobs:
           liblantern.dylib
 
       # Install Flutter
-    - uses: subosito/flutter-action@v2
+    - uses: subosito/flutter-action
       with:
         channel: "stable"
 
