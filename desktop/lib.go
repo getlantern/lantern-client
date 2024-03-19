@@ -24,6 +24,7 @@ import (
 	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
+	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -34,6 +35,10 @@ import (
 )
 
 import "C"
+
+const (
+	defaultLocale = "en-US"
+)
 
 var (
 	log       = golog.LoggerFor("lantern-desktop.main")
@@ -476,6 +481,18 @@ func runApp(a *app.App) {
 	a.Run(true)
 }
 
+// useOSLocale detect OS locale for current user and let i18n to use it
+func useOSLocale() (string, error) {
+	userLocale, err := jibber_jabber.DetectIETF()
+	if err != nil || userLocale == "C" {
+		log.Debugf("Ignoring OS locale and using default")
+		userLocale = defaultLocale
+	}
+	log.Debugf("Using OS locale of current user: %v", userLocale)
+	a.SetLanguage(userLocale)
+	return userLocale, nil
+}
+
 func i18nInit(a *app.App) {
 	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
 		return a.GetTranslations(filename)
@@ -485,10 +502,11 @@ func i18nInit(a *app.App) {
 	if _, err := i18n.SetLocale(locale); err != nil {
 		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
 
-		// On startup GetLanguage will return '', as the browser has not set the language yet.
-		// We use the OS locale instead and make sure the language is populated.
-		if locale, err := i18n.UseOSLocale(); err != nil {
+		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
+		// populated.
+		if locale, err := useOSLocale(); err != nil {
 			log.Debugf("i18n.UseOSLocale: %q", err)
+			a.SetLanguage(defaultLocale)
 		} else {
 			a.SetLanguage(locale)
 		}

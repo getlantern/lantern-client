@@ -420,20 +420,21 @@ class SessionModel extends Model {
 
   Plan planFromJson(Map<String, dynamic> item) {
     final formatCurrency = new NumberFormat.simpleCurrency();
-    var id = item['id'];
-    var plan = Plan();
-    plan.id = id;
-    plan.description = item["description"];
-    plan.oneMonthCost = formatCurrency
-        .format(item["expectedMonthlyPrice"]["usd"] / 100)
+    print("plan is $item");
+    final res = jsonEncode(item);
+    final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
+    final usdPrice = item["usdPrice"] as int;
+    if (plan.expectedMonthlyPrice["usd"] != null) {
+      var monthlyPrice = plan.expectedMonthlyPrice["usd"]!.toInt();
+      plan.oneMonthCost = formatCurrency
+        .format(monthlyPrice / 100)
         .toString();
-    plan.totalCost = formatCurrency.format(item["usdPrice"] / 100).toString();
+    }
+    plan.totalCost = formatCurrency.format(usdPrice / 100).toString();
     plan.totalCostBilledOneTime =
-        formatCurrency.format(item["usdPrice"] / 100).toString() +
+        formatCurrency.format(usdPrice / 100).toString() +
             ' ' +
             'billed_one_time'.i18n;
-    plan.bestValue = item["bestValue"] ?? false;
-    plan.usdPrice = Int64(item["usdPrice"]);
     return plan;
   }
 
