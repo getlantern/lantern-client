@@ -596,7 +596,6 @@ class SessionModel(
                 override fun onSuccess(response: Response?, result: JsonObject?) {
                     //Add one second dealy to api
                     Thread.sleep(1000)
-
                     lanternClient.userData(object : ProUserCallback {
                         override fun onSuccess(response: Response, userData: ProUser) {
                             Logger.debug(TAG, "Successfully updated userData")
