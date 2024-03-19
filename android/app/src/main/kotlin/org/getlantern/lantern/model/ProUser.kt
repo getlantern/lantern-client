@@ -37,10 +37,10 @@ data class ProUser(
     }
 
     val isProUser: Boolean
-        get() = isUserStatus("active")
+        get() = userLevel == "pro"
 
     val isActive: Boolean
-        get() = isProUser
+        get() = isUserStatus("active")
 
     val isExpired: Boolean
         get() = isUserStatus("expired")

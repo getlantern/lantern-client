@@ -1478,4 +1478,7 @@ msgstr "Privacy Policy"
 msgid "terms_of_service"
 msgstr "Terms of Service"
 
+msgid "invalid_verification_code"
+msgstr "Invalid verification code"
+
 

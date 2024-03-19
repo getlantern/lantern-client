@@ -1,4 +1,5 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/plans/utils.dart';
 import 'explanation_step.dart';
 
 @RoutePage<void>(name: 'ApproveDevice')
@@ -31,17 +32,7 @@ class ApproveDevice extends StatelessWidget {
               PinField(
                 length: 6,
                 controller: pinCodeController,
-                onDone: (code) {
-                  context.loaderOverlay.show(widget: spinner);
-                  sessionModel.approveDevice(code).then((value) {
-                    pinCodeController.clear();
-                    context.loaderOverlay.hide();
-                    Navigator.pop(context);
-                  }).onError((error, stackTrace) {
-                    pinCodeController.clear();
-                    context.loaderOverlay.hide();
-                  });
-                },
+                onDone: (code) => _onDone(code, context),
               ),
               LabeledDivider(
                 padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10),
@@ -59,5 +50,34 @@ class ApproveDevice extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Future<void> _onDone(String code, BuildContext context) async {
+    context.loaderOverlay.show(widget: spinner);
+    try {
+      await sessionModel.approveDevice(code);
+      pinCodeController.clear();
+      context.loaderOverlay.hide();
+      CDialog.showInfo(
+        context,
+        title: "device_added".i18n,
+        description: "device_added_message".i18n,
+        agreeAction: () async {
+          Future.delayed(
+            const Duration(milliseconds: 400),
+            () {
+              context.router.maybePop();
+            },
+          );
+
+          return true;
+        },
+      );
+    } catch (e) {
+      appLogger.e("Error while approving device", error: e);
+      context.loaderOverlay.hide();
+      pinCodeController.clear();
+      showError(context, error: e);
+    }
   }
 }
