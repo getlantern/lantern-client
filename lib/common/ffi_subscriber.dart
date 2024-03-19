@@ -21,7 +21,7 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
     void Function(void Function(T?) setValue)? onChanges,
     WebSocketChannel? channel,
     T Function(Uint8List serialized)? deserialize,
-    T Function(Map<String, dynamic> json)? fromJsonModel,
+    T Function(dynamic json)? fromJsonModel,
   }) : super(defaultValue, removeFromCache) {
     if (onChanges != null) {
       onChanges((newValue) {

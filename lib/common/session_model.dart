@@ -1,9 +1,9 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/replica/common.dart';
-
 import 'common.dart';
 import 'common_desktop.dart';
+import 'package:intl/intl.dart';
 
 final sessionModel = SessionModel();
 
@@ -197,8 +197,8 @@ class SessionModel extends Model {
       );
     }
     return ffiValueBuilder<String>(
-      'emailAddress',
-      ffiEmailAddress,
+      'expirydatestr',
+      ffiExpiryDate,
       defaultValue: '',
       builder: builder,
     );
@@ -231,9 +231,12 @@ class SessionModel extends Model {
     );
   }
 
-  Device deviceFromJson(Map<String, dynamic> item) {
-    final res = jsonEncode(item);
-    return Device.create()..mergeFromProto3Json(jsonDecode(res));    
+  Devices devicesFromJson(dynamic item) {
+    final items = item as List<dynamic>;
+    if (items.length == 0) return Devices.create();
+
+    final res = jsonEncode(items);
+    return Devices.create()..mergeFromProto3Json(jsonDecode(res));
   }
 
   Widget devices(ValueWidgetBuilder<Devices> builder) {
@@ -247,8 +250,10 @@ class SessionModel extends Model {
       );
     }
     return ffiValueBuilder<Devices>(
-      '/devices/',
+      'devices',
       ffiDevices,
+      fromJsonModel: devicesFromJson,
+      defaultValue: null,
       builder: builder,
     );    
   }
@@ -563,12 +568,9 @@ class SessionModel extends Model {
       'serverInfo',
       ffiServerInfo,
       builder: builder,
-      fromJsonModel: (Map<String, dynamic> json) {
-        var info = ServerInfo();
-        info.city = json['city'];
-        info.country = json['country'];
-        info.countryCode = json['countryCode'];
-        return info;
+      fromJsonModel: (dynamic json) {
+        final res = jsonEncode(json);
+        return ServerInfo.create()..mergeFromProto3Json(jsonDecode(res));
       },
       deserialize: (Uint8List serialized) {
         return ServerInfo.fromBuffer(serialized);

@@ -184,6 +184,17 @@ func devices() *C.char {
 	return C.CString(string(b))
 }
 
+//export expiryDate
+func expiryDate() *C.char {
+	resp, err := proClient.UserData(userConfig())
+	if err != nil {
+		return sendError(err)
+	}
+	tm := time.Unix(resp.User.Expiration, 0)
+	exp := tm.Format("01/02/2006")
+	return C.CString(string(exp))
+}
+
 //export userData
 func userData() *C.char {
 	resp, err := proClient.UserData(userConfig())
@@ -211,7 +222,11 @@ func serverInfo() *C.char {
 
 //export emailAddress
 func emailAddress() *C.char {
-	return C.CString("")
+	resp, err := proClient.UserData(userConfig())
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString(resp.User.Email)
 }
 
 //export emailExists

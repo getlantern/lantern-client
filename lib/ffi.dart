@@ -68,6 +68,8 @@ Pointer<Utf8> ffiPaymentMethods() => _bindings.paymentMethods().cast<Utf8>();
 Pointer<Utf8> ffiDeviceLinkingCode() =>
     _bindings.deviceLinkingCode().cast<Utf8>();
 
+Pointer<Utf8> ffiExpiryDate() => _bindings.expiryDate().cast<Utf8>();
+
 Pointer<Utf8> ffiSplitTunneling() => _bindings.splitTunneling().cast<Utf8>();
 
 Pointer<Utf8> ffiChatMe() => _bindings.chatMe().cast<Utf8>();

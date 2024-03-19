@@ -83,6 +83,7 @@ extern void setSelectTab(char* ttab);
 extern char* plans();
 extern char* paymentMethods();
 extern char* devices();
+extern char* expiryDate();
 extern char* userData();
 extern char* serverInfo();
 extern char* emailAddress();
