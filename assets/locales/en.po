@@ -248,6 +248,9 @@ msgstr "Lantern Pro Email"
 msgid "lantern_desktop"
 msgstr "Lantern Desktop"
 
+msgid "report_description"
+msgstr "Report Description"
+
 msgid "report_issue"
 msgstr "Report Issue"
 
