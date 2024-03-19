@@ -165,8 +165,8 @@ class _CheckoutState extends State<Checkout>
             await context.pushRoute(AppWebview(url: redirectUrl));
           } else {
             await browser.openUrl(redirectUrl, () async {
-              final res = await ffiProUser();
-              if (!widget.isPro && res == "true") {
+              final user = await ffiUserData();
+              if (!widget.isPro && user.userStatus == "active") {
                 // show success dialog if user becomes Pro during browser session
                 showSuccessDialog(context, widget.isPro);
               }
