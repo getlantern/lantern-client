@@ -95,7 +95,7 @@ dependencies:
   flutter_inappwebview: ^6.0.0
   flutter_windows_webview:
     git:
-      url: https://github.com/MiaoMint/flutter_windows_webview
+      url: https://github.com/wgh136/flutter_windows_webview
       ref: master
 
   # Desktop

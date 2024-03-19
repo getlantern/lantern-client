@@ -760,7 +760,7 @@ packages:
       path: "."
       ref: master
       resolved-ref: "096d24d88454819b9f8a94af14a130cb372fa5ae"
-      url: "https://github.com/MiaoMint/flutter_windows_webview"
+      url: "https://github.com/wgh136/flutter_windows_webview"
     source: git
     version: "0.0.1"
   fluttertoast:
