@@ -684,18 +684,14 @@ class SessionModel extends Model {
     String expDate,
     String cvc,
   ) async {
-    if (isMobile()) {
-      return methodChannel
-          .invokeMethod('submitStripePayment', <String, dynamic>{
-        'planID': planID,
-        'email': email,
-        'cardNumber': cardNumber,
-        'expDate': expDate,
-        'cvc': cvc,
-      }).then((value) => value as String);
-    }
-    await ffiPurchase(planID.toNativeUtf8(), email.toNativeUtf8(),
-        cardNumber.toNativeUtf8(), expDate.toNativeUtf8(), cvc.toNativeUtf8());
+    return methodChannel
+        .invokeMethod('submitStripePayment', <String, dynamic>{
+      'planID': planID,
+      'email': email,
+      'cardNumber': cardNumber,
+      'expDate': expDate,
+      'cvc': cvc,
+    }).then((value) => value as String);
   }
 
   Future<void> submitFreekassa(
