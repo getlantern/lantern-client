@@ -169,15 +169,16 @@ class _CheckoutState extends State<Checkout>
       "stripe",
       os,
     );
-    if (!Platform.isMacOS && !Platform.isWindows) {
-      await context.pushRoute(AppWebview(url: redirectUrl));
-    } else {
-      if (Platform.isWindows) {
+    switch (Platform.operatingSystem) {
+      case 'windows':
         await AppBrowser.openWindowsWebview(redirectUrl);
-      } else {
+        break;
+      case 'macos':
         final browser = AppBrowser(onClose: checkProUser);
         await browser.openMacWebview(redirectUrl);
-      }
+        break;
+      default:
+        await context.pushRoute(AppWebview(url: redirectUrl));
     }
   }
 
