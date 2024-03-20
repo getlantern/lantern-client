@@ -41,7 +41,7 @@ type UserConfig interface {
 	GetUserID() int64
 }
 
-// Construct a REST client using the given SendRequest function
+// NewProClient creates a new instance of ProClient
 func NewProClient(uc UserConfig) ProClient {
 	url := fmt.Sprintf("https://%s", common.ProAPIHost)
 	client := webclient.NewRESTClient(defaultwebclient.SendToURL(url, func(client *resty.Client, req *resty.Request) error {
