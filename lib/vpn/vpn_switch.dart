@@ -18,11 +18,6 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
   String vpnStatus = 'disconnected';
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     super.dispose();
   }
