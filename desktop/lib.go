@@ -22,16 +22,18 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/pro"
-	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
+	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
+	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
+	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
+	"github.com/go-resty/resty/v2"
 
-	"github.com/shirou/gopsutil/v3/host"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -44,7 +46,7 @@ const (
 var (
 	log       = golog.LoggerFor("lantern-desktop.main")
 	a         *app.App
-	proClient *client.Client
+	proClient proclient.ProClient
 )
 
 //export start
@@ -57,7 +59,7 @@ func start() {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = pro.NewClient()
+	proClient = proclient.NewProClient(userConfig())
 
 	a = app.NewApp(flags, cdir, proClient, settings)
 
@@ -114,6 +116,29 @@ func fetchOrCreate() error {
 	return nil
 }
 
+func sendToProServer(url string) webclient.SendRequest {
+	return defaultwebclient.SendToURL(url, func(client *resty.Client, req *resty.Request) error {
+		uc := userConfig()
+		if req.Header.Get(common.DeviceIdHeader) == "" {
+			if deviceID := uc.GetDeviceID(); deviceID != "" {
+				req.Header.Set(common.DeviceIdHeader, deviceID)
+			}
+		}
+
+		if req.Header.Get(common.ProTokenHeader) == "" {
+			if token := uc.GetToken(); token != "" {
+				req.Header.Set(common.ProTokenHeader, token)
+			}
+		}
+		if req.Header.Get(common.UserIdHeader) == "" {
+			if userID := uc.GetUserID(); userID != 0 {
+				req.Header.Set(common.UserIdHeader, strconv.FormatInt(userID, 10))
+			}
+		}
+		return nil
+	}, nil)
+}
+
 //export sysProxyOn
 func sysProxyOn() {
 	a.SysproxyOn()
@@ -155,11 +180,19 @@ func setSelectTab(ttab *C.char) {
 	a.SetSelectedTab(tab)
 }
 
+func defaultParams() map[string]interface{} {
+	uc := userConfig()
+	params := map[string]interface{}{
+		"locale": uc.GetLanguage(),
+	}
+	return params
+}
+
 //export plans
 func plans() *C.char {
-	resp, err := proClient.Plans(userConfig())
+	resp, err := proClient.Plans(context.Background())
 	if err != nil {
-		return sendError(err)
+		return sendError(errors.New("error fetching plans: %v", err))
 	}
 	b, _ := json.Marshal(resp.Plans)
 	return C.CString(string(b))
@@ -167,9 +200,9 @@ func plans() *C.char {
 
 //export paymentMethods
 func paymentMethods() *C.char {
-	resp, err := proClient.PaymentMethods(userConfig())
+	resp, err := proClient.PaymentMethods(context.Background())
 	if err != nil {
-		return sendError(err)
+		return sendError(errors.New("error fetching plans: %v", err))
 	}
 	b, _ := json.Marshal(resp.Providers)
 	return C.CString(string(b))
@@ -177,7 +210,7 @@ func paymentMethods() *C.char {
 
 //export devices
 func devices() *C.char {
-	resp, err := proClient.UserData(userConfig())
+	resp, err := proClient.UserData(context.Background())
 	if err != nil {
 		return sendError(err)
 	}
@@ -187,7 +220,7 @@ func devices() *C.char {
 
 //export expiryDate
 func expiryDate() *C.char {
-	resp, err := proClient.UserData(userConfig())
+	resp, err := proClient.UserData(context.Background())
 	if err != nil {
 		return sendError(err)
 	}
@@ -198,7 +231,7 @@ func expiryDate() *C.char {
 
 //export userData
 func userData() *C.char {
-	resp, err := proClient.UserData(userConfig())
+	resp, err := proClient.UserData(context.Background())
 	if err != nil {
 		return sendError(err)
 	}
@@ -225,7 +258,7 @@ func serverInfo() *C.char {
 func emailAddress() *C.char {
 	emailAddress := a.EmailAddress()
 	if emailAddress == "" {
-		resp, err := proClient.UserData(userConfig())
+		resp, err := proClient.UserData(context.Background())
 		if err != nil {
 			return sendError(err)
 		}
@@ -237,9 +270,8 @@ func emailAddress() *C.char {
 
 //export emailExists
 func emailExists(email *C.char) *C.char {
-	err := proClient.EmailExists(userConfig(), C.GoString(email))
+	_, err := proClient.EmailExists(context.Background(), C.GoString(email))
 	if err != nil {
-		log.Error(err)
 		return sendError(err)
 	}
 	return C.CString("false")
@@ -328,8 +360,7 @@ func proUser() *C.char {
 
 //export deviceLinkingCode
 func deviceLinkingCode() *C.char {
-	info, _ := host.Info()
-	resp, err := proClient.RequestDeviceLinkingCode(userConfig(), info.Hostname)
+	resp, err := proClient.LinkCodeRequest(context.Background())
 	if err != nil {
 		return sendError(err)
 	}
@@ -339,13 +370,13 @@ func deviceLinkingCode() *C.char {
 //export paymentRedirect
 func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
 	country := a.Settings().GetCountry()
-	resp, err := proClient.PaymentRedirect(userConfig(), &client.PaymentRedirectRequest{
-		Plan:        C.GoString(planID),
-		Provider:    C.GoString(provider),
-		Currency:    strings.ToUpper(C.GoString(currency)),
-		Email:       C.GoString(email),
-		DeviceName:  C.GoString(deviceName),
-		CountryCode: country,
+	resp, err := proClient.PaymentRedirect(context.Background(), map[string]interface{}{
+		"countryCode": country,
+		"currency":    strings.ToUpper(C.GoString(currency)),
+		"deviceName":  C.GoString(deviceName),
+		"email":       C.GoString(email),
+		"plan":        C.GoString(planID),
+		"provider":    C.GoString(provider),
 	})
 	if err != nil {
 		return sendError(err)
@@ -457,23 +488,6 @@ func checkUpdates() *C.char {
 	}
 	log.Debugf("Auto-update URL is %s", updateURL)
 	return C.CString(updateURL)
-}
-
-//export purchase
-func purchase(planID, email, cardNumber, expDate, cvc string) *C.char {
-	/*resp, err := proClient.Purchase(&proclient.PurchaseRequest{
-		Provider: proclient.Provider_STRIPE,
-		Email: email,
-		Plan: planID,
-		CardNumber: cardNumber,
-		ExpDate: expDate,
-		Cvc: cvc,
-	})
-	if err != nil {
-		return sendError(err)
-	}
-	b, _ := json.Marshal(resp)*/
-	return C.CString("")
 }
 
 // loadSettings loads the initial settings at startup, either from disk or using defaults.

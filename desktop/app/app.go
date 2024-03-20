@@ -31,7 +31,6 @@ import (
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/otel"
 	"github.com/getlantern/flashlight/v7/pro"
-	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
@@ -46,6 +45,7 @@ import (
 	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 )
 
 var (
@@ -101,7 +101,7 @@ type App struct {
 	proxiesLock sync.RWMutex
 
 	issueReporter *issueReporter
-	proClient     *client.Client
+	proClient     proclient.ProClient
 	referralCode  string
 	selectedTab   Tab
 	stats         *stats.Stats
@@ -117,7 +117,7 @@ type App struct {
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, settings *Settings) *App {
+func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, settings *Settings) *App {
 	analyticsSession := newAnalyticsSession(settings)
 	app := &App{
 		configDir:                 configDir,
@@ -621,10 +621,11 @@ func (app *App) IsPro() bool {
 func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
 	referralCode := app.referralCode
 	if referralCode == "" {
-		resp, err := app.proClient.UserData(uc)
+		resp, err := app.proClient.UserData(context.Background())
 		if err != nil {
-			return "", err
+			return "", errors.New("error fetching user data: %v", err)
 		}
+
 		app.SetReferralCode(resp.Code)
 		return resp.Code, nil
 	}

@@ -437,9 +437,19 @@ class SessionModel extends Model {
 
   Plan planFromJson(Map<String, dynamic> item) {
     final formatCurrency = NumberFormat.simpleCurrency();
-    final currency = formatCurrency.currencyName != null ? formatCurrency.currencyName!.toLowerCase() : "usd";
+    var currency = formatCurrency.currencyName != null ? formatCurrency.currencyName!.toLowerCase() : "usd";
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
+    if (plan.price[currency] == null) {
+      final splitted = plan.id.split('-');
+      if (splitted.length == 3) {
+        currency = splitted[1];
+      }
+    }
+
+    if (plan.price[currency] == null) {
+      return plan;
+    }
     final price = plan.price[currency] as Int64;
     if (plan.expectedMonthlyPrice[currency] != null) {
       var monthlyPrice = plan.expectedMonthlyPrice[currency]!.toInt();
