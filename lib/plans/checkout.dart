@@ -150,7 +150,7 @@ class _CheckoutState extends State<Checkout>
 
   Future<void> checkProUser() async {
     final res = await ffiProUser();
-    if (!widget.isPro && res == "true") {
+    if (!widget.isPro && res.toDartString() == "true") {
       // show success dialog if user becomes Pro during browser session
       showSuccessDialog(context, widget.isPro);
     }
