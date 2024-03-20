@@ -49,7 +49,8 @@ Pointer<Utf8> ffiAcceptedTermsVersion() =>
 
 Pointer<Utf8> ffiEmailAddress() => _bindings.emailAddress().cast<Utf8>();
 
-Pointer<Utf8> ffiEmailExists(email) => _bindings.emailExists(email).cast<Utf8>();
+Pointer<Utf8> ffiEmailExists(email) =>
+    _bindings.emailExists(email).cast<Utf8>();
 
 Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();
 
@@ -85,8 +86,11 @@ Pointer<Utf8> ffiPurchase(planID, email, cardNumber, expDate, cvc) =>
 Pointer<Utf8> ffiReportIssue(email, issueType, description) =>
     _bindings.reportIssue(email, issueType, description).cast<Utf8>();
 
-Pointer<Utf8> ffiPaymentRedirect(planID, currency, provider, email, deviceName) =>
-    _bindings.paymentRedirect(planID, currency, provider, email, deviceName).cast<Utf8>();
+Pointer<Utf8> ffiPaymentRedirect(
+        planID, currency, provider, email, deviceName) =>
+    _bindings
+        .paymentRedirect(planID, currency, provider, email, deviceName)
+        .cast<Utf8>();
 
 const String _libName = 'liblantern';
 
