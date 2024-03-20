@@ -13,32 +13,15 @@ class VPNSwitch extends StatefulWidget {
   State<VPNSwitch> createState() => _VPNSwitchState();
 }
 
-class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
+class _VPNSwitchState extends State<VPNSwitch> {
   final adHelper = AdHelper();
   String vpnStatus = 'disconnected';
-
-  @override
-  void initState() {
-    if (isDesktop()) {
-      trayManager.addListener(this);
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    if (isDesktop()) {
-      trayManager.removeListener(this);
-    }
-    super.dispose();
-  }
 
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
 
   Future<void> vpnProcessForDesktop() async {
     bool isConnected = vpnStatus == 'connected';
-    String path = systemTrayIcon(!isConnected);
     if (isConnected) {
       sysProxyOff();
       await setupMenu(false);
@@ -46,7 +29,6 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
       sysProxyOn();
       await setupMenu(true);
     }
-    await trayManager.setIcon(path);
   }
 
   Future<void> vpnProcessForMobile(
