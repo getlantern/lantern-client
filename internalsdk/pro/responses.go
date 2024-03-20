@@ -4,6 +4,11 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
+type PaymentMethodsResponse struct {
+	*protos.BaseResponse `json:",inline"`
+	Providers            []protos.PaymentProviders `json:"providers"`
+}
+
 type PaymentRedirectResponse struct {
 	*protos.BaseResponse `json:",inline"`
 	Redirect             string `json:"redirect"`

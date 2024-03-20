@@ -28,7 +28,7 @@ type proClient struct {
 type ProClient interface {
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error)
-	PaymentMethods(ctx context.Context) (*protos.PaymentMethodsResponse, error)
+	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, params map[string]interface{}) (*PaymentRedirectResponse, error)
 	Plans(ctx context.Context) (*PlansResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
@@ -94,8 +94,8 @@ func (c *proClient) PaymentRedirect(ctx context.Context, params map[string]inter
 	return &resp, nil
 }
 
-func (c *proClient) PaymentMethods(ctx context.Context) (*protos.PaymentMethodsResponse, error) {
-	var resp protos.PaymentMethodsResponse
+func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error) {
+	var resp PaymentMethodsResponse
 	err := c.webclient.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
