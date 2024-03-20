@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "google/protobuf/struct.proto";
 option java_package = "io.lantern.model";
 option go_package = "/protos";
 
@@ -69,4 +70,24 @@ message User {
   string referral = 10;
   string token = 11;
   bool yinbiEnabled = 12;
+}
+
+// API
+message BaseResponse {
+  string status = 1;
+  string error = 2;
+  string errorId = 3;
+}
+
+message PaymentMethodsResponse {
+    map<string, google.protobuf.ListValue> providers = 1; 
+}
+
+message PaymentRedirectRequest {
+    string plan = 1;
+    string provider = 2;
+    string currency = 3;
+    string email = 4;
+    string deviceName = 5;
+    string countryCode = 6;
 }

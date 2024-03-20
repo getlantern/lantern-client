@@ -626,8 +626,8 @@ func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
 			return "", errors.New("error fetching user data: %v", err)
 		}
 
-		app.SetReferralCode(resp.Code)
-		return resp.Code, nil
+		app.SetReferralCode(resp.User.Code)
+		return resp.User.Code, nil
 	}
 	return referralCode, nil
 }

@@ -7,10 +7,10 @@ import (
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
-	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/shirou/gopsutil/host"
@@ -26,12 +26,12 @@ type proClient struct {
 }
 
 type ProClient interface {
-	EmailExists(ctx context.Context, email string) (*client.BaseResponse, error)
-	LinkCodeRequest(ctx context.Context) (*client.LinkCodeResponse, error)
-	PaymentMethods(ctx context.Context) (*client.PaymentMethodsResponse, error)
-	PaymentRedirect(ctx context.Context, params map[string]interface{}) (*client.PaymentRedirectResponse, error)
-	Plans(ctx context.Context) (*client.PlansResponse, error)
-	UserData(ctx context.Context) (*client.UserDataResponse, error)
+	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
+	LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error)
+	PaymentMethods(ctx context.Context) (*protos.PaymentMethodsResponse, error)
+	PaymentRedirect(ctx context.Context, params map[string]interface{}) (*PaymentRedirectResponse, error)
+	Plans(ctx context.Context) (*PlansResponse, error)
+	UserData(ctx context.Context) (*UserDataResponse, error)
 }
 
 type UserConfig interface {
@@ -73,8 +73,8 @@ func (c *proClient) defaultParams() map[string]interface{} {
 	return params
 }
 
-func (c *proClient) EmailExists(ctx context.Context, email string) (*client.BaseResponse, error) {
-	var resp client.BaseResponse
+func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error) {
+	var resp protos.BaseResponse
 	params := map[string]interface{}{
 		"email": email,
 	}
@@ -85,8 +85,8 @@ func (c *proClient) EmailExists(ctx context.Context, email string) (*client.Base
 	return &resp, nil
 }
 
-func (c *proClient) PaymentRedirect(ctx context.Context, params map[string]interface{}) (*client.PaymentRedirectResponse, error) {
-	var resp client.PaymentRedirectResponse
+func (c *proClient) PaymentRedirect(ctx context.Context, params map[string]interface{}) (*PaymentRedirectResponse, error) {
+	var resp PaymentRedirectResponse
 	err := c.webclient.GetJSON(ctx, "/payment-redirect", params, &resp)
 	if err != nil {
 		return nil, err
@@ -94,8 +94,8 @@ func (c *proClient) PaymentRedirect(ctx context.Context, params map[string]inter
 	return &resp, nil
 }
 
-func (c *proClient) PaymentMethods(ctx context.Context) (*client.PaymentMethodsResponse, error) {
-	var resp client.PaymentMethodsResponse
+func (c *proClient) PaymentMethods(ctx context.Context) (*protos.PaymentMethodsResponse, error) {
+	var resp protos.PaymentMethodsResponse
 	err := c.webclient.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
@@ -103,8 +103,8 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*client.PaymentMethodsR
 	return &resp, nil
 }
 
-func (c *proClient) Plans(ctx context.Context) (*client.PlansResponse, error) {
-	var resp client.PlansResponse
+func (c *proClient) Plans(ctx context.Context) (*PlansResponse, error) {
+	var resp PlansResponse
 	err := c.webclient.GetJSON(ctx, "/plans", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
@@ -112,8 +112,8 @@ func (c *proClient) Plans(ctx context.Context) (*client.PlansResponse, error) {
 	return &resp, nil
 }
 
-func (c *proClient) UserData(ctx context.Context) (*client.UserDataResponse, error) {
-	var resp client.UserDataResponse
+func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
+	var resp UserDataResponse
 	err := c.webclient.GetJSON(ctx, "/user-data", nil, &resp)
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
@@ -121,8 +121,8 @@ func (c *proClient) UserData(ctx context.Context) (*client.UserDataResponse, err
 	return &resp, nil
 }
 
-func (c *proClient) LinkCodeRequest(ctx context.Context) (*client.LinkCodeResponse, error) {
-	var resp client.LinkCodeResponse
+func (c *proClient) LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error) {
+	var resp LinkCodeResponse
 	info, _ := host.Info()
 	params := map[string]interface{}{
 		"deviceName": info.Hostname,

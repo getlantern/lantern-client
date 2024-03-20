@@ -14,6 +14,8 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../google/protobuf/struct.pb.dart' as $0;
+
 class ServerInfo extends $pb.GeneratedMessage {
   factory ServerInfo({
     $core.String? city,
@@ -888,6 +890,249 @@ class User extends $pb.GeneratedMessage {
   $core.bool hasYinbiEnabled() => $_has(11);
   @$pb.TagNumber(12)
   void clearYinbiEnabled() => clearField(12);
+}
+
+/// API
+class BaseResponse extends $pb.GeneratedMessage {
+  factory BaseResponse({
+    $core.String? status,
+    $core.String? error,
+    $core.String? errorId,
+  }) {
+    final $result = create();
+    if (status != null) {
+      $result.status = status;
+    }
+    if (error != null) {
+      $result.error = error;
+    }
+    if (errorId != null) {
+      $result.errorId = errorId;
+    }
+    return $result;
+  }
+  BaseResponse._() : super();
+  factory BaseResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory BaseResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BaseResponse', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'status')
+    ..aOS(2, _omitFieldNames ? '' : 'error')
+    ..aOS(3, _omitFieldNames ? '' : 'errorId', protoName: 'errorId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  BaseResponse clone() => BaseResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  BaseResponse copyWith(void Function(BaseResponse) updates) => super.copyWith((message) => updates(message as BaseResponse)) as BaseResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static BaseResponse create() => BaseResponse._();
+  BaseResponse createEmptyInstance() => create();
+  static $pb.PbList<BaseResponse> createRepeated() => $pb.PbList<BaseResponse>();
+  @$core.pragma('dart2js:noInline')
+  static BaseResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BaseResponse>(create);
+  static BaseResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get status => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set status($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get error => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set error($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearError() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get errorId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set errorId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasErrorId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearErrorId() => clearField(3);
+}
+
+class PaymentMethodsResponse extends $pb.GeneratedMessage {
+  factory PaymentMethodsResponse({
+    $core.Map<$core.String, $0.ListValue>? providers,
+  }) {
+    final $result = create();
+    if (providers != null) {
+      $result.providers.addAll(providers);
+    }
+    return $result;
+  }
+  PaymentMethodsResponse._() : super();
+  factory PaymentMethodsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PaymentMethodsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PaymentMethodsResponse', createEmptyInstance: create)
+    ..m<$core.String, $0.ListValue>(1, _omitFieldNames ? '' : 'providers', entryClassName: 'PaymentMethodsResponse.ProvidersEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: $0.ListValue.create, valueDefaultOrMaker: $0.ListValue.getDefault)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  PaymentMethodsResponse clone() => PaymentMethodsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  PaymentMethodsResponse copyWith(void Function(PaymentMethodsResponse) updates) => super.copyWith((message) => updates(message as PaymentMethodsResponse)) as PaymentMethodsResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static PaymentMethodsResponse create() => PaymentMethodsResponse._();
+  PaymentMethodsResponse createEmptyInstance() => create();
+  static $pb.PbList<PaymentMethodsResponse> createRepeated() => $pb.PbList<PaymentMethodsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static PaymentMethodsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PaymentMethodsResponse>(create);
+  static PaymentMethodsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.Map<$core.String, $0.ListValue> get providers => $_getMap(0);
+}
+
+class PaymentRedirectRequest extends $pb.GeneratedMessage {
+  factory PaymentRedirectRequest({
+    $core.String? plan,
+    $core.String? provider,
+    $core.String? currency,
+    $core.String? email,
+    $core.String? deviceName,
+    $core.String? countryCode,
+  }) {
+    final $result = create();
+    if (plan != null) {
+      $result.plan = plan;
+    }
+    if (provider != null) {
+      $result.provider = provider;
+    }
+    if (currency != null) {
+      $result.currency = currency;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (deviceName != null) {
+      $result.deviceName = deviceName;
+    }
+    if (countryCode != null) {
+      $result.countryCode = countryCode;
+    }
+    return $result;
+  }
+  PaymentRedirectRequest._() : super();
+  factory PaymentRedirectRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PaymentRedirectRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PaymentRedirectRequest', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'plan')
+    ..aOS(2, _omitFieldNames ? '' : 'provider')
+    ..aOS(3, _omitFieldNames ? '' : 'currency')
+    ..aOS(4, _omitFieldNames ? '' : 'email')
+    ..aOS(5, _omitFieldNames ? '' : 'deviceName', protoName: 'deviceName')
+    ..aOS(6, _omitFieldNames ? '' : 'countryCode', protoName: 'countryCode')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  PaymentRedirectRequest clone() => PaymentRedirectRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  PaymentRedirectRequest copyWith(void Function(PaymentRedirectRequest) updates) => super.copyWith((message) => updates(message as PaymentRedirectRequest)) as PaymentRedirectRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static PaymentRedirectRequest create() => PaymentRedirectRequest._();
+  PaymentRedirectRequest createEmptyInstance() => create();
+  static $pb.PbList<PaymentRedirectRequest> createRepeated() => $pb.PbList<PaymentRedirectRequest>();
+  @$core.pragma('dart2js:noInline')
+  static PaymentRedirectRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PaymentRedirectRequest>(create);
+  static PaymentRedirectRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get plan => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set plan($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPlan() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPlan() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get provider => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set provider($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasProvider() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProvider() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get currency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set currency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCurrency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCurrency() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get email => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set email($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasEmail() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearEmail() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get deviceName => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set deviceName($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasDeviceName() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearDeviceName() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get countryCode => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set countryCode($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasCountryCode() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearCountryCode() => clearField(6);
 }
 
 
