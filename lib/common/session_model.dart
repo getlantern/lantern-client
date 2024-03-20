@@ -653,12 +653,14 @@ class SessionModel extends Model {
 
   Future<String> paymentRedirect(
     String planID,
+    String currency,
     String email,
     String provider,
     String deviceName,
   ) async {
     final resp = await ffiPaymentRedirect(
         planID.toNativeUtf8(),
+        currency.toNativeUtf8(),
         provider.toNativeUtf8(),
         email.toNativeUtf8(),
         deviceName.toNativeUtf8());

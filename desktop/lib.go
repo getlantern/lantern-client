@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"runtime/debug"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -222,11 +223,16 @@ func serverInfo() *C.char {
 
 //export emailAddress
 func emailAddress() *C.char {
-	resp, err := proClient.UserData(userConfig())
-	if err != nil {
-		return sendError(err)
+	emailAddress := a.EmailAddress()
+	if emailAddress == "" {
+		resp, err := proClient.UserData(userConfig())
+		if err != nil {
+			return sendError(err)
+		}
+		emailAddress = resp.User.Email
+		a.SetEmailAddress(emailAddress)
 	}
-	return C.CString(resp.User.Email)
+	return C.CString(emailAddress)
 }
 
 //export emailExists
@@ -268,7 +274,7 @@ func lang() *C.char {
 	lang := a.Settings().GetLanguage()
 	if lang == "" {
 		// Default language is English
-		lang = "en-US"
+		lang = defaultLocale
 	}
 	return C.CString(lang)
 }
@@ -331,12 +337,12 @@ func deviceLinkingCode() *C.char {
 }
 
 //export paymentRedirect
-func paymentRedirect(planID, provider, email, deviceName *C.char) *C.char {
+func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
 	country := a.Settings().GetCountry()
 	resp, err := proClient.PaymentRedirect(userConfig(), &client.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
 		Provider:    C.GoString(provider),
-		Currency:    "USD",
+		Currency:    strings.ToUpper(C.GoString(currency)),
 		Email:       C.GoString(email),
 		DeviceName:  C.GoString(deviceName),
 		CountryCode: country,

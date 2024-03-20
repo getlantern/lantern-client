@@ -5,6 +5,7 @@ import 'package:lantern/common/ui/app_webview.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
+import 'package:intl/intl.dart';
 
 @RoutePage(name: 'Checkout')
 class Checkout extends StatefulWidget {
@@ -156,28 +157,36 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
+  Future<void> openDesktopWebview() async {
+    String os = Platform.operatingSystem;
+    Locale locale = Localizations.localeOf(context);
+    final format = NumberFormat.simpleCurrency(locale: locale.toString());
+    final currencyName = format.currencyName ?? "USD";
+    final redirectUrl = await sessionModel.paymentRedirect(
+      widget.plan.id,
+      currencyName,
+      emailController.text,
+      "stripe",
+      os,
+    );
+    if (!Platform.isMacOS && !Platform.isWindows) {
+      await context.pushRoute(AppWebview(url: redirectUrl));
+    } else {
+      if (Platform.isWindows) {
+        await AppBrowser.openWindowsWebview(redirectUrl);
+      } else {
+        final browser = AppBrowser(onClose: checkProUser);
+        await browser.openMacWebview(redirectUrl);
+      }
+    }
+  }
+
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
         // * Stripe selected
         if (isDesktop()) {
-          String os = Platform.operatingSystem;
-          final redirectUrl = await sessionModel.paymentRedirect(
-            widget.plan.id,
-            emailController.text,
-            "stripe",
-            os,
-          );
-          if (!Platform.isMacOS && !Platform.isWindows) {
-            await context.pushRoute(AppWebview(url: redirectUrl));
-          } else {
-            if (Platform.isWindows) {
-              await AppBrowser.openWindowsWebview(redirectUrl);
-            } else {
-              final browser = AppBrowser(onClose: checkProUser);
-              await browser.openMacWebview(redirectUrl);
-            }
-          }
+          await openDesktopWebview();
           return;
         }
         await context.pushRoute(

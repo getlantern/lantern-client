@@ -85,8 +85,8 @@ Pointer<Utf8> ffiPurchase(planID, email, cardNumber, expDate, cvc) =>
 Pointer<Utf8> ffiReportIssue(email, issueType, description) =>
     _bindings.reportIssue(email, issueType, description).cast<Utf8>();
 
-Pointer<Utf8> ffiPaymentRedirect(planID, provider, email, deviceName) =>
-    _bindings.paymentRedirect(planID, provider, email, deviceName).cast<Utf8>();
+Pointer<Utf8> ffiPaymentRedirect(planID, currency, provider, email, deviceName) =>
+    _bindings.paymentRedirect(planID, currency, provider, email, deviceName).cast<Utf8>();
 
 const String _libName = 'liblantern';
 
