@@ -128,7 +128,7 @@ func (c *proClient) LinkCodeRequest(ctx context.Context) (*client.LinkCodeRespon
 		"deviceName": info.Hostname,
 		"locale":     c.userConfig.GetLanguage(),
 	}
-	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-request", params, &resp)
+	err := c.webclient.PostFormReadingJSON(ctx, "/link-code-request", params, &resp)
 	if err != nil {
 		return nil, err
 	}
