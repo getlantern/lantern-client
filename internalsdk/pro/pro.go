@@ -12,6 +12,7 @@ import (
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -29,8 +30,8 @@ var (
 )
 
 type proClient struct {
-	userConfig UserConfig
-	webclient  webclient.RESTClient
+	settings  *settings.Settings
+	webclient webclient.RESTClient
 }
 
 type ProClient interface {
@@ -42,22 +43,32 @@ type ProClient interface {
 	UserData(ctx context.Context) (*UserDataResponse, error)
 }
 
-type UserConfig interface {
-	GetDeviceID() string
-	GetLanguage() string
-	GetToken() string
-	GetUserID() int64
-}
-
 // NewProClient creates a new instance of ProClient
-func NewProClient(uc UserConfig) ProClient {
+func NewProClient(settings *settings.Settings) ProClient {
 	url := fmt.Sprintf("https://%s", common.ProAPIHost)
-	client := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, url, setUserHeaders(uc), nil))
-	return &proClient{uc, client}
+	client := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, url, setUserHeaders(settings), nil))
+	return &proClient{settings, client}
 }
 
-func setUserHeaders(uc UserConfig) func(client *resty.Client, req *resty.Request) error {
+func userConfig(settings *settings.Settings) *common.UserConfigData {
+	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
+	return common.NewUserConfigData(
+		common.DefaultAppName,
+		deviceID,
+		userID,
+		token,
+		nil,
+		settings.GetLanguage(),
+	)
+}
+
+func setUserHeaders(settings *settings.Settings) func(client *resty.Client, req *resty.Request) error {
 	return func(client *resty.Client, req *resty.Request) error {
+
+		uc := userConfig(settings)
+
+		req.Header.Set("Referer", "http://localhost:37457/")
+
 		if req.Header.Get(common.DeviceIdHeader) == "" {
 			if deviceID := uc.GetDeviceID(); deviceID != "" {
 				req.Header.Set(common.DeviceIdHeader, deviceID)
@@ -79,8 +90,9 @@ func setUserHeaders(uc UserConfig) func(client *resty.Client, req *resty.Request
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {
+	uc := userConfig(c.settings)
 	params := map[string]interface{}{
-		"locale": c.userConfig.GetLanguage(),
+		"locale": uc.GetLanguage(),
 	}
 	return params
 }
@@ -99,6 +111,8 @@ func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.Base
 
 func (c *proClient) PaymentRedirect(ctx context.Context, params map[string]interface{}) (*PaymentRedirectResponse, error) {
 	var resp PaymentRedirectResponse
+	uc := userConfig(c.settings)
+	params["locale"] = uc.GetLanguage()
 	err := c.webclient.GetJSON(ctx, "/payment-redirect", params, &resp)
 	if err != nil {
 		return nil, err
@@ -138,9 +152,10 @@ func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 func (c *proClient) LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error) {
 	var resp LinkCodeResponse
 	info, _ := host.Info()
+	uc := userConfig(c.settings)
 	params := map[string]interface{}{
 		"deviceName": info.Hostname,
-		"locale":     c.userConfig.GetLanguage(),
+		"locale":     uc.GetLanguage(),
 	}
 	err := c.webclient.PostFormReadingJSON(ctx, "/link-code-request", params, &resp)
 	if err != nil {

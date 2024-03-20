@@ -7,6 +7,7 @@ import (
 	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/lantern-client/desktop/deviceid"
+	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
@@ -15,7 +16,7 @@ import (
 // because the user can become Pro or free at any time. It waits until
 // the user ID becomes non-zero.
 func (app *App) IsProUser() (isPro bool, ok bool) {
-	_, err := app.settings.GetInt64Eventually(SNUserID)
+	_, err := app.settings.GetInt64Eventually(settings.SNUserID)
 	if err != nil {
 		return false, false
 	}

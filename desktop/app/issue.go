@@ -9,6 +9,7 @@ import (
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/pro"
+	"github.com/getlantern/lantern-client/desktop/settings"
 
 	"github.com/getlantern/flashlight/v7/util"
 	"github.com/getlantern/osversion"
@@ -23,7 +24,7 @@ var (
 )
 
 type issueReporter struct {
-	settings           *Settings
+	settings           *settings.Settings
 	getCapturedPackets func(io.Writer) error
 	getProxies         func() []bandit.Dialer
 }
@@ -44,7 +45,7 @@ type issueMessage struct {
 
 // newIssueReporter creates a new issue reporter that can be used to send issue reports
 // to the Lantern team.
-func newIssueReporter(settings *Settings, getCapturedPackets func(io.Writer) error,
+func newIssueReporter(settings *settings.Settings, getCapturedPackets func(io.Writer) error,
 	getProxies func() []bandit.Dialer) *issueReporter {
 	return &issueReporter{
 		settings:           settings,

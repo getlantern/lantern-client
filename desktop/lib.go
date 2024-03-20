@@ -27,6 +27,7 @@ import (
 	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
+	"github.com/getlantern/lantern-client/desktop/settings"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
@@ -56,7 +57,7 @@ func start() {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = proclient.NewProClient(userConfig(settings))
+	proClient = proclient.NewProClient(settings)
 
 	a = app.NewApp(flags, cdir, proClient, settings)
 
@@ -383,7 +384,7 @@ var issueMap = map[string]string{
 	"Other":                       "9",
 }
 
-func userConfig(settings *app.Settings) *common.UserConfigData {
+func userConfig(settings *settings.Settings) *common.UserConfigData {
 	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
 	return common.NewUserConfigData(
 		common.DefaultAppName,
@@ -456,12 +457,12 @@ func checkUpdates() *C.char {
 }
 
 // loadSettings loads the initial settings at startup, either from disk or using defaults.
-func loadSettings(configDir string) *app.Settings {
+func loadSettings(configDir string) *settings.Settings {
 	path := filepath.Join(configDir, "settings.yaml")
 	if common.Staging {
 		path = filepath.Join(configDir, "settings-staging.yaml")
 	}
-	settings := app.LoadSettingsFrom(app.ApplicationVersion, app.RevisionDate, app.BuildDate, path)
+	settings := settings.LoadSettingsFrom(app.ApplicationVersion, app.RevisionDate, app.BuildDate, path)
 	if common.Staging {
 		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
 	}
