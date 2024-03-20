@@ -28,11 +28,8 @@ import (
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
-	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
-	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
-	"github.com/go-resty/resty/v2"
 
 	"google.golang.org/protobuf/encoding/protojson"
 )
@@ -59,7 +56,7 @@ func start() {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = proclient.NewProClient(userConfig())
+	proClient = proclient.NewProClient(userConfig(settings))
 
 	a = app.NewApp(flags, cdir, proClient, settings)
 
@@ -116,29 +113,6 @@ func fetchOrCreate() error {
 	return nil
 }
 
-func sendToProServer(url string) webclient.SendRequest {
-	return defaultwebclient.SendToURL(url, func(client *resty.Client, req *resty.Request) error {
-		uc := userConfig()
-		if req.Header.Get(common.DeviceIdHeader) == "" {
-			if deviceID := uc.GetDeviceID(); deviceID != "" {
-				req.Header.Set(common.DeviceIdHeader, deviceID)
-			}
-		}
-
-		if req.Header.Get(common.ProTokenHeader) == "" {
-			if token := uc.GetToken(); token != "" {
-				req.Header.Set(common.ProTokenHeader, token)
-			}
-		}
-		if req.Header.Get(common.UserIdHeader) == "" {
-			if userID := uc.GetUserID(); userID != 0 {
-				req.Header.Set(common.UserIdHeader, strconv.FormatInt(userID, 10))
-			}
-		}
-		return nil
-	}, nil)
-}
-
 //export sysProxyOn
 func sysProxyOn() {
 	a.SysproxyOn()
@@ -178,14 +152,6 @@ func setSelectTab(ttab *C.char) {
 		return
 	}
 	a.SetSelectedTab(tab)
-}
-
-func defaultParams() map[string]interface{} {
-	uc := userConfig()
-	params := map[string]interface{}{
-		"locale": uc.GetLanguage(),
-	}
-	return params
 }
 
 //export plans
@@ -279,7 +245,7 @@ func emailExists(email *C.char) *C.char {
 
 //export referral
 func referral() *C.char {
-	referralCode, err := a.ReferralCode(userConfig())
+	referralCode, err := a.ReferralCode(userConfig(a.Settings()))
 	if err != nil {
 		return sendError(err)
 	}
@@ -417,8 +383,7 @@ var issueMap = map[string]string{
 	"Other":                       "9",
 }
 
-func userConfig() *common.UserConfigData {
-	settings := a.Settings()
+func userConfig(settings *app.Settings) *common.UserConfigData {
 	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
 	return common.NewUserConfigData(
 		common.DefaultAppName,
@@ -438,7 +403,7 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 		return sendError(err)
 	}
 
-	uc := userConfig()
+	uc := userConfig(a.Settings())
 
 	subscriptionLevel := "free"
 	if a.IsPro() {
