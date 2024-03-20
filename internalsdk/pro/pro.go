@@ -2,11 +2,15 @@ package pro
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
@@ -17,7 +21,11 @@ import (
 )
 
 var (
-	log = golog.LoggerFor("webclient")
+	log        = golog.LoggerFor("webclient")
+	httpClient = &http.Client{
+		Transport: proxied.ParallelForIdempotent(),
+		Timeout:   30 * time.Second,
+	}
 )
 
 type proClient struct {
@@ -44,7 +52,12 @@ type UserConfig interface {
 // NewProClient creates a new instance of ProClient
 func NewProClient(uc UserConfig) ProClient {
 	url := fmt.Sprintf("https://%s", common.ProAPIHost)
-	client := webclient.NewRESTClient(defaultwebclient.SendToURL(url, func(client *resty.Client, req *resty.Request) error {
+	client := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, url, setUserHeaders(uc), nil))
+	return &proClient{uc, client}
+}
+
+func setUserHeaders(uc UserConfig) func(client *resty.Client, req *resty.Request) error {
+	return func(client *resty.Client, req *resty.Request) error {
 		if req.Header.Get(common.DeviceIdHeader) == "" {
 			if deviceID := uc.GetDeviceID(); deviceID != "" {
 				req.Header.Set(common.DeviceIdHeader, deviceID)
@@ -62,8 +75,7 @@ func NewProClient(uc UserConfig) ProClient {
 			}
 		}
 		return nil
-	}, nil))
-	return &proClient{uc, client}
+	}
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {
@@ -100,6 +112,8 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 	if err != nil {
 		return nil, err
 	}
+	b, _ := json.Marshal(resp)
+	log.Debugf("Response is %v", string(b))
 	return &resp, nil
 }
 

@@ -6,7 +6,7 @@ import (
 
 type PaymentMethodsResponse struct {
 	*protos.BaseResponse `json:",inline"`
-	Providers            []protos.PaymentProviders `json:"providers"`
+	Providers            map[string][]protos.PaymentMethod `json:"providers"`
 }
 
 type PaymentRedirectResponse struct {
@@ -21,7 +21,7 @@ type PlansResponse struct {
 
 type UserDataResponse struct {
 	*protos.BaseResponse `json:",inline"`
-	User                 *protos.User `json:"user"`
+	*protos.User         `json:",inline"`
 }
 
 type LinkCodeResponse struct {

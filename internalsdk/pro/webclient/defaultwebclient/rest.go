@@ -4,9 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
-	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 
 	"github.com/go-resty/resty/v2"
@@ -21,8 +19,8 @@ var (
 
 // Create function that sends requests to the given URL, optionally sending them through a proxy,
 // optionally processing requests with the given beforeRequest middleware and/or responses with the given afterResponse middleware.
-func SendToURL(baseURL string, beforeRequest resty.RequestMiddleware, afterResponse resty.ResponseMiddleware) webclient.SendRequest {
-	c := resty.New()
+func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.RequestMiddleware, afterResponse resty.ResponseMiddleware) webclient.SendRequest {
+	c := resty.NewWithClient(httpClient)
 	if beforeRequest != nil {
 		c.OnBeforeRequest(beforeRequest)
 	}
@@ -33,11 +31,6 @@ func SendToURL(baseURL string, beforeRequest resty.RequestMiddleware, afterRespo
 
 	return func(ctx context.Context, method string, path string, params map[string]interface{}, body []byte) ([]byte, error) {
 		req := c.R().SetContext(ctx)
-
-		if addr, ok := client.Addr(6 * time.Second); ok {
-			c.SetProxy(addr.(string))
-		}
-
 		if params != nil {
 			stringParams := make(map[string]string, len(params))
 			for key, value := range params {

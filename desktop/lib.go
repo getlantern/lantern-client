@@ -168,7 +168,7 @@ func plans() *C.char {
 func paymentMethods() *C.char {
 	resp, err := proClient.PaymentMethods(context.Background())
 	if err != nil {
-		return sendError(errors.New("error fetching plans: %v", err))
+		return sendError(errors.New("error fetching payment methods: %v", err))
 	}
 	b, _ := json.Marshal(resp.Providers)
 	return C.CString(string(b))
