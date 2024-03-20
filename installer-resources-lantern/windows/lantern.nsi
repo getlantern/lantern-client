@@ -102,13 +102,6 @@ Section
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" \
                      "Lantern" "$\"$INSTDIR\${APP_NAME}$\" -clear-proxy-settings"
 
-    # Initialize Lantern to a point of having at lease one working proxy.
-    ExecWait '"$INSTDIR\${APP_NAME}" "-initialize" "-timeout" "30s"' $0
-
-    ${If} $0 != 0
-          DetailPrint "Timed out initialize Lantern, continue anyway"
-    ${EndIf}
-
 SectionEnd
 # end default section
 

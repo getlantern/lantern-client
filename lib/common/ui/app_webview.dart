@@ -1,4 +1,5 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/plans/utils.dart';
@@ -17,7 +18,6 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
-
   final InAppWebViewSettings settings = InAppWebViewSettings(
     isInspectable: false,
     javaScriptEnabled: true,
@@ -28,7 +28,6 @@ class _AppWebViewState extends State<AppWebView> {
     allowFileAccessFromFileURLs: true,
     preferredContentMode: UserPreferredContentMode.MOBILE,
   );
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +42,15 @@ class _AppWebViewState extends State<AppWebView> {
 }
 
 class AppBrowser extends InAppBrowser {
-
-  Future<void> Function()? _onLoadStop;
-
+  final Future<void> Function()? onClose;
   final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
       browserSettings: InAppBrowserSettings(hideUrlBar: true),
       webViewSettings: InAppWebViewSettings(
           javaScriptEnabled: true, isInspectable: kDebugMode));
 
-  AppBrowser();
+  AppBrowser({
+    required this.onClose,
+  });
 
   @override
   Future onBrowserCreated() async {
@@ -66,12 +65,7 @@ class AppBrowser extends InAppBrowser {
   @override
   Future onLoadStop(url) async {
     print("Stopped displaying $url");
-    this._onLoadStop?.call();
-  }
-
-  Future<void> openUrl(String url, Future<void> Function() cb) async {
-    this._onLoadStop = cb;
-    await this.openUrlRequest(urlRequest: URLRequest(url: WebUri(url)), settings: settings);
+    this.onClose?.call();
   }
 
   @override
@@ -87,5 +81,14 @@ class AppBrowser extends InAppBrowser {
   @override
   void onExit() {
     print("Browser closed");
+  }
+
+  Future<void> openMacWebview(String url) async {
+    await this.openUrlRequest(
+        urlRequest: URLRequest(url: WebUri(url)), settings: settings);
+  }
+
+  static Future<void> openWindowsWebview(String url) async {
+    FlutterWindowsWebview().launchWebview(url);
   }
 }
