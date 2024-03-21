@@ -1,4 +1,5 @@
 import 'package:lantern/account/split_tunneling.dart';
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
 import 'vpn_bandwidth.dart';
@@ -7,8 +8,30 @@ import 'vpn_server_location.dart';
 import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
-class VPNTab extends StatelessWidget {
-  const VPNTab({Key? key}) : super(key: key);
+class VPNTab extends StatefulWidget {
+  VPNTab({Key? key}) : super(key: key);
+
+  @override
+  _VPNTabState createState() => _VPNTabState();
+}
+
+class _VPNTabState extends State<VPNTab> {
+  WebsocketImpl? websocket;
+
+  @override
+  void initState() {
+    if (isDesktop()) {
+      setState(() => websocket = WebsocketImpl());
+      websocket?.connect(Uri.parse("ws://" + websocketAddr() + '/data'));
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    websocket?.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +79,6 @@ class VPNTab extends StatelessWidget {
           ],
         ),
       );
-    });
+    }, websocket);
   }
 }

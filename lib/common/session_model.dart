@@ -73,25 +73,20 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
-  Widget proUser(ValueWidgetBuilder<bool> builder) {
+  Widget proUser(ValueWidgetBuilder<bool> builder, [WebsocketImpl? websocket]) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
-    final channel = WebSocketChannel.connect(
-      Uri.parse("ws://" + websocketAddr() + '/data'),
-    );
-
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
-      channel: channel,
       onChanges: (setValue) {
+        if (websocket == null) return;
         /// Listen for all incoming data
-        channel.stream.listen(
-          (data) {
-            final parsedJson = json.decode(data);
-            if (parsedJson["type"] == "pro") {
-              final userStatus = parsedJson["message"]["userStatus"];
+        websocket.messageStream.listen(
+          (json) {
+            if (json["type"] == "pro") {
+              final userStatus = json["message"]["userStatus"];
               final isProUser = userStatus != null && userStatus.toString() == "active";
               setValue(isProUser);
             }
