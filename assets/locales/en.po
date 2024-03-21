@@ -1481,4 +1481,19 @@ msgstr "Terms of Service"
 msgid "invalid_verification_code"
 msgstr "Invalid verification code"
 
+msgid "follow_us"
+msgstr "Follow Us"
+
+msgid "follow_us_telegram"
+msgstr "Follow us Telegram "
+
+msgid "follow_us_instagram"
+msgstr "Follow us Instagram"
+
+msgid "follow_us_facebook"
+msgstr "Follow us Facebook "
+
+msgid "follow_us_x"
+msgstr "Follow us X "
+
 
