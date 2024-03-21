@@ -11,7 +11,6 @@ abstract class WebsocketService {
 }
 
 class WebsocketImpl implements WebsocketService {
-
   static final WebsocketImpl _websocket = WebsocketImpl._internal();
 
   factory WebsocketImpl() {
@@ -21,7 +20,8 @@ class WebsocketImpl implements WebsocketService {
   WebsocketImpl._internal();
 
   // streamController is used to control the websocket stream channel
-  StreamController<Map<String, dynamic>> streamController = StreamController<Map<String, dynamic>>.broadcast();
+  StreamController<Map<String, dynamic>> streamController =
+      StreamController<Map<String, dynamic>>.broadcast();
   // _channel is a stream channel that communicates over a WebSocket.
   WebSocketChannel? _channel;
   bool _isConnected = false;
@@ -47,7 +47,7 @@ class WebsocketImpl implements WebsocketService {
 
     _isConnected = true;
 
-    print("Websocket connected");  
+    print("Websocket connected");
   }
 
   void _handleError(dynamic error) {
