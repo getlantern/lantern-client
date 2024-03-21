@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/getlantern/errors"
+	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 
 	"github.com/go-resty/resty/v2"
-
-	"github.com/getlantern/errors"
-	"github.com/getlantern/golog"
 )
 
 var (
