@@ -1,7 +1,5 @@
 import 'package:lantern/vpn/vpn.dart';
-import 'package:lantern/common/common_desktop.dart' as desktop;
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:lantern/common/common_desktop.dart';
 
 final vpnModel = VpnModel();
 
@@ -30,7 +28,7 @@ class VpnModel extends Model {
       );
     }
     final channel = WebSocketChannel.connect(
-      Uri.parse("ws://" + desktop.websocketAddr() + '/data'),
+      Uri.parse("ws://" + websocketAddr() + '/data'),
     );
     return ffiValueBuilder<String>(
       'vpnStatus',
@@ -50,7 +48,7 @@ class VpnModel extends Model {
           onError: (error) => print(error),
         );
       },
-      desktop.vpnStatus,
+      ffiVpnStatus,
       builder: builder,
     );
   }

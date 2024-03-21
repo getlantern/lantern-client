@@ -407,7 +407,7 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 	uc := userConfig(a.Settings())
 
 	subscriptionLevel := "free"
-	if a.IsPro() {
+	if isProUser, ok := a.IsProUser(); ok && isProUser {
 		subscriptionLevel = "pro"
 	}
 

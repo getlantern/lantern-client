@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       case 'exit':
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');
       case 'status':
-        bool isConnected = await vpnStatus() == "connected";
+        bool isConnected = await ffiVpnStatus() == "connected";
         if (isConnected) {
           sysProxyOff();
           await setupMenu(false);
