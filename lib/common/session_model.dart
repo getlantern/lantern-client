@@ -77,9 +77,28 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
+    final channel = WebSocketChannel.connect(
+      Uri.parse("ws://" + websocketAddr() + '/data'),
+    );
+
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
+      channel: channel,
+      onChanges: (setValue) {
+        /// Listen for all incoming data
+        channel.stream.listen(
+          (data) {
+            final parsedJson = json.decode(data);
+            if (parsedJson["type"] == "pro") {
+              final userStatus = parsedJson["message"]["userStatus"];
+              final isProUser = userStatus != null && userStatus.toString() == "active";
+              setValue(isProUser);
+            }
+          },
+          onError: (error) => print(error),
+        );
+      },
       ffiProUser,
       builder: builder,
     );
