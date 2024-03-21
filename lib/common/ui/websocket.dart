@@ -5,7 +5,7 @@ import 'package:lantern/common/common_desktop.dart';
 
 abstract class WebsocketService {
   Stream<Map<String, dynamic>> get messageStream;
-  Future<void> connect();
+  Future<void> connect(Uri uri);
   Future<void> close();
   void send(String event, Map<String, dynamic> data);
 }
@@ -20,18 +20,19 @@ class WebsocketImpl implements WebsocketService {
 
   WebsocketImpl._internal();
 
+  // streamController is used to control the websocket stream channel
   StreamController<Map<String, dynamic>> streamController = StreamController<Map<String, dynamic>>.broadcast();
+  // _channel is a stream channel that communicates over a WebSocket.
   WebSocketChannel? _channel;
   bool _isConnected = false;
 
   @override
   Stream<Map<String, dynamic>> get messageStream => streamController.stream;
 
+  // Creates a new Websocket connection
   @override
-  Future<void> connect() async {
-    _channel = WebSocketChannel.connect(
-      Uri.parse("ws://" + websocketAddr() + '/data'),
-    );
+  Future<void> connect(Uri uri) async {
+    _channel = WebSocketChannel.connect(uri);
 
     _channel!.stream.listen(
       (message) async {
@@ -58,6 +59,7 @@ class WebsocketImpl implements WebsocketService {
     print('Websocket error: $error');
   }
 
+  // Close sink for sending values and websocket connection
   @override
   Future<void> close() async {
     if (_channel != null && _channel?.sink != null) {
@@ -66,11 +68,11 @@ class WebsocketImpl implements WebsocketService {
     _isConnected = false;
   }
 
+  // Send data over a websocket channel
   @override
   void send(String event, Map<String, dynamic> data) {
     if (_channel != null && _channel?.sink != null) {
       data['type'] = event;
-
       _channel!.sink.add(jsonEncode(data));
     } else {
       print('Websocket is not connected');

@@ -22,7 +22,7 @@ class _VPNTabState extends State<VPNTab> {
   void initState() {
     if (isDesktop()) {
       setState(() => websocket = WebsocketImpl());
-      websocket?.connect();
+      websocket?.connect(Uri.parse("ws://" + websocketAddr() + '/data'));
     }
     super.initState();
   }
