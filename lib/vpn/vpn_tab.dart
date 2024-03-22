@@ -9,34 +9,42 @@ import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
 class VPNTab extends StatefulWidget {
-  VPNTab({Key? key}) : super(key: key);
+  const VPNTab({Key? key}) : super(key: key);
 
   @override
   _VPNTabState createState() => _VPNTabState();
 }
 
 class _VPNTabState extends State<VPNTab> {
-  WebsocketImpl? websocket;
+  WebsocketImpl websocket = WebsocketImpl();
 
   @override
   void initState() {
     if (isDesktop()) {
-      setState(() => websocket = WebsocketImpl());
-      websocket?.connect(Uri.parse("ws://" + websocketAddr() + '/data'));
+      connectDesktopSocket();
     }
     super.initState();
   }
 
+  void connectDesktopSocket() {
+    try {
+      websocket.connect(Uri.parse('ws://${websocketAddr()}/data'));
+      appLogger.i("Socket connected");
+    } catch (e) {
+      appLogger.e('Error connecting to socket: $e');
+    }
+  }
+
   @override
   void dispose() {
-    websocket?.close();
+    websocket.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel
-        .proUser((BuildContext context, bool proUser, Widget? child) {
+    return sessionModel.proUser(
+        (BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(
         title: SvgPicture.asset(
           proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
