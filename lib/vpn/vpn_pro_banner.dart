@@ -1,12 +1,12 @@
 import 'package:lantern/vpn/vpn.dart';
 
 class ProBanner extends StatelessWidget {
-  ProBanner({Key? key}) : super(key: key);
+  const ProBanner({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CInkWell(
-      onTap: () => context.pushRoute(PlansPage()),
+      onTap: () => onBannerTap(context),
       child: Container(
         padding: const EdgeInsetsDirectional.all(16),
         decoration: BoxDecoration(
@@ -52,5 +52,11 @@ class ProBanner extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onBannerTap(BuildContext context){
+    //Add event to Plausible
+    sessionModel.trackUserAction("User Clicked on ProBanner", 'ProBanner', "ProBanner");
+    context.pushRoute(const PlansPage());
   }
 }
