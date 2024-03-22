@@ -115,30 +115,13 @@ class _FollowUsState extends State<FollowUs> {
   };
 
   void onSocialTap(_Social social) {
-    //find the country of user
     final countryCode = sessionModel.country.value ?? '';
-    if (countryCode != '') {
-      final currentSocialMap = countryMap[countryCode];
-      if (currentSocialMap != null) {
-        // we have fine country in our list
-        final url = currentSocialMap[social]!;
-        shareTap(
-          Uri.parse(url),
-        );
-      } else {
-        // we don't have country in our list
-        // use all country
-        final currentSocialMap = countryMap['all']!;
-        final url = currentSocialMap[social]!;
-        shareTap(Uri.parse(url));
-      }
-    } else {
-      // we don't have country in our list
-      // use all country
-      final currentSocialMap = countryMap['all']!;
-      final url = currentSocialMap[social]!;
-      shareTap(Uri.parse(url));
-    }
+    // Determine the social media map based on the country code,
+    // defaulting to the 'all' map if no specific country is found
+    final currentSocialMap = countryMap[countryCode] ?? countryMap['all']!;
+    // Retrieve the URL for the selected social media platform
+    final url = currentSocialMap[social]!;
+    shareTap(Uri.parse(url));
   }
 
   Future<void> shareTap(Uri url) async {
