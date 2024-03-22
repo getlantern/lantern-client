@@ -10,7 +10,7 @@ enum _Social {
 }
 
 class FollowUs extends StatefulWidget {
-  FollowUs({super.key});
+  const FollowUs({super.key});
 
   @override
   State<FollowUs> createState() => _FollowUsState();
