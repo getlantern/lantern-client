@@ -14,9 +14,11 @@ class WebsocketImpl implements WebsocketService {
   static WebsocketImpl? _websocket;
   WebsocketImpl._internal();
 
-  num _heartTimes = 10000;
-  num _rcMaxCount = 600;
-  num _rcTimes = 0;
+  // the maximum number of times we attempt to reconnect
+  static const _maxRetries = 5;
+  // The number of times we've tried reconnecting
+  var _retries = 0;
+
   Timer? _rcTimer;
 
   static WebsocketImpl? instance() {
@@ -32,7 +34,6 @@ class WebsocketImpl implements WebsocketService {
   // _channel is a stream channel that communicates over a WebSocket.
   WebSocketChannel? _channel;
   bool _isConnected = false;
-  bool _handleClose = false;
 
   @override
   Stream<Map<String, dynamic>> get messageStream => streamController.stream;
@@ -49,19 +50,19 @@ class WebsocketImpl implements WebsocketService {
 
     try {
       _channel = WebSocketChannel.connect(uri);
-
-      _isConnected = true;
-      _rcTimes = 0;
-      _rcTimer?.cancel();
-      _rcTimer = null;
-
       _channel!.stream.listen(
-        (message) => _onMessage(message),
+        (message) => _handleMessage(message),
         onDone: () => _handleDone(uri),
         onError: (error) => _handleError(error),
       );
 
       print("Websocket connected");
+
+      _isConnected = true;
+      _retries = 0;
+      _rcTimer?.cancel();
+      _rcTimer = null;
+
     } catch (e) {
       await close();
       print("Exception opening websocket connection ${e.toString()}");
@@ -74,8 +75,7 @@ class WebsocketImpl implements WebsocketService {
   }
 
   void _handleDone(Uri uri) {
-    print("_handleDone called");
-    if (!_handleClose) {
+    if (_isConnected) {
       reconnect(uri); 
     }
   }
@@ -83,36 +83,35 @@ class WebsocketImpl implements WebsocketService {
   // Close sink for sending values and websocket connection
   @override
   Future<void> close() async {
-    _handleClose = true;
+    _isConnected = false;
     if (_channel != null && _channel?.sink != null) {
       print('Closing websocket');
       await _channel?.sink.close();
     }
-    _isConnected = false;
   }
 
-  Future<void> _onMessage(message) async {
+  Future<void> _handleMessage(message) async {
     final Map<String, dynamic> json = jsonDecode(message ?? {});
     streamController.add(json);    
   }
 
   Future<void> reconnect(Uri uri) async {
-    if (_rcTimes < _rcMaxCount) {
-      _rcTimes++;
-      if (_rcTimer == null) {
-        _rcTimer = new Timer.periodic(Duration(milliseconds: _heartTimes.toInt()), (timer) {
-          print('websocket reconnect');
-          _channel = WebSocketChannel.connect(uri);
-          _channel!.stream.listen(
-            (message) => _onMessage(message),
-            onDone: () => _handleDone(uri),
-            onError: (error) => _handleError(error),
-          );
-        });
-      }
-    } else {
+    if (_retries >= _maxRetries) {
       _rcTimer?.cancel();
       _rcTimer = null;
+      return;
+    }
+    _retries++;
+    if (_rcTimer == null) {
+      _rcTimer = new Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+        print('websocket reconnect');
+        _channel = WebSocketChannel.connect(uri);
+        _channel!.stream.listen(
+          (message) => _handleMessage(message),
+          onDone: () => _handleDone(uri),
+          onError: (error) => _handleError(error),
+        );
+      });
     }
   }
 
