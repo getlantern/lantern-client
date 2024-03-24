@@ -320,6 +320,8 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
+	// refresh user data when home page is loaded on desktop
+	go pro.FetchUserData(a.Settings())
 	if isProUser, ok := a.IsProUser(); isProUser && ok {
 		return C.CString("true")
 	}

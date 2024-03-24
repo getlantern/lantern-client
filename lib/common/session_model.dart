@@ -77,11 +77,11 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
       onChanges: (setValue) {
-        final websocket = WebsocketImpl.instance();
         if (websocket == null) return;
         /// Listen for all incoming data
         websocket.messageStream.listen(

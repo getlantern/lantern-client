@@ -34,11 +34,11 @@ class VpnModel extends Model {
         builder: builder,
       );
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<String>(
       'vpnStatus',
       defaultValue: '',
       onChanges: (setValue) {
-        final websocket = WebsocketImpl.instance();
         if (websocket == null) return;
         /// Listen for all incoming data
         websocket.messageStream.listen(
