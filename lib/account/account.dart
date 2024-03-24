@@ -1,8 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
-import '../common/common_desktop.dart';
-
 @RoutePage<void>(name: 'Account')
 class AccountMenu extends StatefulWidget {
   const AccountMenu({Key? key}) : super(key: key);
@@ -12,23 +10,9 @@ class AccountMenu extends StatefulWidget {
 }
 
 class _AccountMenuState extends State<AccountMenu> {
-  WebsocketImpl websocket = WebsocketImpl();
-
   @override
   void initState() {
-    if (isDesktop()) {
-      connectDesktopSocket();
-    }
     super.initState();
-  }
-
-  void connectDesktopSocket() {
-    try {
-      websocket.connect(Uri.parse('ws://${websocketAddr()}/data'));
-      appLogger.i("Socket connected");
-    } catch (e) {
-      appLogger.e('Error connecting to socket: $e');
-    }
   }
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
@@ -178,7 +162,7 @@ class _AccountMenuState extends State<AccountMenu> {
               ? proItems(sessionContext)
               : freeItems(sessionContext, sessionModel),
         );
-      }, websocket),
+      }),
     );
   }
 }
