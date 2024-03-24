@@ -59,14 +59,14 @@ class _AccountMenuState extends State<AccountMenu> {
                 )
               : const SizedBox(),
         ),
-        ListItemFactory.settingsItem(
-          key: AppKeys.upgrade_lantern_pro,
-          icon: ImagePaths.pro_icon_black,
-          content: 'Upgrade to Lantern Pro'.i18n,
-          onTap: () {
-            upgradeToLanternPro(context);
-          },
-        ),
+      ListItemFactory.settingsItem(
+        key: AppKeys.upgrade_lantern_pro,
+        icon: ImagePaths.pro_icon_black,
+        content: 'Upgrade to Lantern Pro'.i18n,
+        onTap: () {
+          upgradeToLanternPro(context);
+        },
+      ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
@@ -155,8 +155,8 @@ class _AccountMenuState extends State<AccountMenu> {
     return BaseScreen(
       title: 'Account'.i18n,
       automaticallyImplyLeading: false,
-      body: sessionModel.proUser(
-          (BuildContext sessionContext, bool proUser, Widget? child) {
+      body: sessionModel
+          .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
         return ListView(
           children: proUser
               ? proItems(sessionContext)
