@@ -1,6 +1,5 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/messaging/messaging.dart';
 
@@ -39,36 +38,18 @@ class LanternApp extends StatefulWidget {
   State<LanternApp> createState() => _LanternAppState();
 }
 
-class _LanternAppState extends State<LanternApp> with WidgetsBindingObserver {
+class _LanternAppState extends State<LanternApp> {
   final translations = Localization.ensureInitialized();
   late final AnimationController networkWarningAnimationController;
   late final Animation networkWarningAnimation;
 
   @override
   void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addObserver(this);
     _animateNetworkWarning();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initDeepLinks();
     });
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed) {
-      print('App resumed');
-      await WebsocketImpl.instance()!.connect(Uri.parse("ws://" + websocketAddr() + '/data'));
-    } else if (state == AppLifecycleState.paused) {
-      print('App paused');
-      await WebsocketImpl.instance()!.close();
-    }
+    super.initState();
   }
 
   void _animateNetworkWarning() {

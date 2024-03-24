@@ -21,7 +21,6 @@ class VpnModel extends Model {
   }
 
   Future<void> handleWebSocketMessage(Map<String, dynamic> data, Function setValue) async {
-    print("Received websocket message $data");
     if (data["type"] != "vpnstatus") return;
     final updated = data["message"]["connected"];
     final isConnected = updated != null && updated.toString() == "true";

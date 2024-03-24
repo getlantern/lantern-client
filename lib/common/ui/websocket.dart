@@ -5,7 +5,7 @@ import 'package:lantern/common/common_desktop.dart';
 
 abstract class WebsocketService {
   Stream<Map<String, dynamic>> get messageStream;
-  Future<void> connect(Uri uri);
+  Future<void> connect();
   Future<void> close();
   void send(String event, Map<String, dynamic> data);
 }
@@ -39,29 +39,38 @@ class WebsocketImpl implements WebsocketService {
 
   // Creates a new Websocket connection
   @override
-  Future<void> connect(Uri uri) async {
-    _handleClose = false;
-    await close();
-    print('Opening websocket connection');
-
-    _channel = WebSocketChannel.connect(uri);
-
-    _channel!.stream.listen(
-      (message) => _onMessage(message),
-      onDone: () => _handleDone(uri),
-      onError: (error) => _handleError(error),
-    );
-
-    print("Websocket connected");
-  }
-
-  void _handleError(dynamic error) {
-    if (error is WebSocketChannelException) {
-      close();
+  Future<void> connect() async {
+    final uri = Uri.parse("ws://" + websocketAddr() + '/data');
+    if (_isConnected) {
       return;
     }
 
+    print('Opening websocket connection');
+
+    try {
+      _channel = WebSocketChannel.connect(uri);
+
+      _isConnected = true;
+      _rcTimes = 0;
+      _rcTimer?.cancel();
+      _rcTimer = null;
+
+      _channel!.stream.listen(
+        (message) => _onMessage(message),
+        onDone: () => _handleDone(uri),
+        onError: (error) => _handleError(error),
+      );
+
+      print("Websocket connected");
+    } catch (e) {
+      await close();
+      print("Exception opening websocket connection ${e.toString()}");
+    }
+  }
+
+  void _handleError(dynamic error) {
     print('Websocket error: $error');
+    close();
   }
 
   void _handleDone(Uri uri) {
@@ -78,19 +87,11 @@ class WebsocketImpl implements WebsocketService {
     if (_channel != null && _channel?.sink != null) {
       print('Closing websocket');
       await _channel?.sink.close();
-      _isConnected = false;
     }
+    _isConnected = false;
   }
 
   Future<void> _onMessage(message) async {
-    if (!_isConnected) {
-      _isConnected = true;
-
-      _rcTimes = 0;
-      _rcTimer?.cancel();
-      _rcTimer = null;
-    }
-
     final Map<String, dynamic> json = jsonDecode(message ?? {});
     streamController.add(json);    
   }
