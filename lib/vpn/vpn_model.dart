@@ -21,13 +21,14 @@ class VpnModel extends Model {
   }
 
   Future<void> handleWebSocketMessage(Map<String, dynamic> data, Function setValue) async {
+    print("Received websocket message $data");
     if (data["type"] != "vpnstatus") return;
     final updated = data["message"]["connected"];
     final isConnected = updated != null && updated.toString() == "true";
     setValue(isConnected ? "connected" : "disconnected");
   }
 
-  Widget vpnStatus(ValueWidgetBuilder<String> builder, [WebsocketImpl? websocket]) {
+  Widget vpnStatus(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
         '/vpn_status',
@@ -38,8 +39,10 @@ class VpnModel extends Model {
       'vpnStatus',
       defaultValue: '',
       onChanges: (setValue) {
+        final websocket = WebsocketImpl.instance();
+        if (websocket == null) return;
         /// Listen for all incoming data
-        websocket?.messageStream.listen(
+        websocket.messageStream.listen(
           (json) => handleWebSocketMessage(json, setValue),
           onError: (error) => print(error),
         );

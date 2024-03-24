@@ -80,9 +80,6 @@ Pointer<Utf8> ffiOnBoardingStatus() =>
 
 Pointer<Utf8> ffiServerInfo() => _bindings.serverInfo().cast<Utf8>();
 
-Pointer<Utf8> ffiPurchase(planID, email, cardNumber, expDate, cvc) =>
-    _bindings.purchase(planID, email, cardNumber, expDate, cvc).cast<Utf8>();
-
 Pointer<Utf8> ffiReportIssue(email, issueType, description) =>
     _bindings.reportIssue(email, issueType, description).cast<Utf8>();
 

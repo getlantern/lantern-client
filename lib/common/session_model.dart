@@ -73,7 +73,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
-  Widget proUser(ValueWidgetBuilder<bool> builder, [WebsocketImpl? websocket]) {
+  Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
@@ -81,6 +81,7 @@ class SessionModel extends Model {
       'prouser',
       defaultValue: false,
       onChanges: (setValue) {
+        final websocket = WebsocketImpl.instance();
         if (websocket == null) return;
         /// Listen for all incoming data
         websocket.messageStream.listen(
@@ -688,18 +689,14 @@ class SessionModel extends Model {
     String expDate,
     String cvc,
   ) async {
-    if (isMobile()) {
-      return methodChannel
-          .invokeMethod('submitStripePayment', <String, dynamic>{
-        'planID': planID,
-        'email': email,
-        'cardNumber': cardNumber,
-        'expDate': expDate,
-        'cvc': cvc,
-      }).then((value) => value as String);
-    }
-    await ffiPurchase(planID.toNativeUtf8(), email.toNativeUtf8(),
-        cardNumber.toNativeUtf8(), expDate.toNativeUtf8(), cvc.toNativeUtf8());
+    return methodChannel
+        .invokeMethod('submitStripePayment', <String, dynamic>{
+      'planID': planID,
+      'email': email,
+      'cardNumber': cardNumber,
+      'expDate': expDate,
+      'cvc': cvc,
+    }).then((value) => value as String);
   }
 
   Future<void> submitFreekassa(

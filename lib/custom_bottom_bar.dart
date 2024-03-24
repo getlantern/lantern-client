@@ -1,4 +1,3 @@
-import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/custom_bottom_item.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/replica/common.dart';
@@ -178,7 +177,6 @@ class CustomBottomBar extends StatelessWidget {
                     : indicatorRed,
               ),
             ),
-            WebsocketImpl(),
           ),
         ),
         label: '',

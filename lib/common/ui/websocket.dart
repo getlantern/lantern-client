@@ -11,13 +11,20 @@ abstract class WebsocketService {
 }
 
 class WebsocketImpl implements WebsocketService {
-  static final WebsocketImpl _websocket = WebsocketImpl._internal();
+  static WebsocketImpl? _websocket;
+  WebsocketImpl._internal();
 
-  factory WebsocketImpl() {
+  num _heartTimes = 10000;
+  num _rcMaxCount = 600;
+  num _rcTimes = 0;
+  Timer? _rcTimer;
+
+  static WebsocketImpl? instance() {
+    if (_websocket == null) {
+      _websocket = WebsocketImpl._internal();
+    }
     return _websocket;
   }
-
-  WebsocketImpl._internal();
 
   // streamController is used to control the websocket stream channel
   StreamController<Map<String, dynamic>> streamController =
@@ -25,6 +32,7 @@ class WebsocketImpl implements WebsocketService {
   // _channel is a stream channel that communicates over a WebSocket.
   WebSocketChannel? _channel;
   bool _isConnected = false;
+  bool _handleClose = false;
 
   @override
   Stream<Map<String, dynamic>> get messageStream => streamController.stream;
@@ -32,20 +40,17 @@ class WebsocketImpl implements WebsocketService {
   // Creates a new Websocket connection
   @override
   Future<void> connect(Uri uri) async {
+    _handleClose = false;
+    await close();
+    print('Opening websocket connection');
+
     _channel = WebSocketChannel.connect(uri);
 
     _channel!.stream.listen(
-      (message) async {
-        final Map<String, dynamic> json = jsonDecode(message ?? {});
-        streamController.add(json);
-      },
-      onDone: () async {
-        await close();
-      },
+      (message) => _onMessage(message),
+      onDone: () => _handleDone(uri),
       onError: (error) => _handleError(error),
     );
-
-    _isConnected = true;
 
     print("Websocket connected");
   }
@@ -59,13 +64,55 @@ class WebsocketImpl implements WebsocketService {
     print('Websocket error: $error');
   }
 
+  void _handleDone(Uri uri) {
+    print("_handleDone called");
+    if (!_handleClose) {
+      reconnect(uri); 
+    }
+  }
+
   // Close sink for sending values and websocket connection
   @override
   Future<void> close() async {
+    _handleClose = true;
     if (_channel != null && _channel?.sink != null) {
+      print('Closing websocket');
       await _channel?.sink.close();
+      _isConnected = false;
     }
-    _isConnected = false;
+  }
+
+  Future<void> _onMessage(message) async {
+    if (!_isConnected) {
+      _isConnected = true;
+
+      _rcTimes = 0;
+      _rcTimer?.cancel();
+      _rcTimer = null;
+    }
+
+    final Map<String, dynamic> json = jsonDecode(message ?? {});
+    streamController.add(json);    
+  }
+
+  Future<void> reconnect(Uri uri) async {
+    if (_rcTimes < _rcMaxCount) {
+      _rcTimes++;
+      if (_rcTimer == null) {
+        _rcTimer = new Timer.periodic(Duration(milliseconds: _heartTimes.toInt()), (timer) {
+          print('websocket reconnect');
+          _channel = WebSocketChannel.connect(uri);
+          _channel!.stream.listen(
+            (message) => _onMessage(message),
+            onDone: () => _handleDone(uri),
+            onError: (error) => _handleError(error),
+          );
+        });
+      }
+    } else {
+      _rcTimer?.cancel();
+      _rcTimer = null;
+    }
   }
 
   // Send data over a websocket channel
