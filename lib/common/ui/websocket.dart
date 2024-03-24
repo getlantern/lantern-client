@@ -76,7 +76,7 @@ class WebsocketImpl implements WebsocketService {
 
   void _handleDone(Uri uri) {
     if (_isConnected) {
-      reconnect(uri); 
+      reconnect(uri);
     }
   }
 
@@ -92,7 +92,7 @@ class WebsocketImpl implements WebsocketService {
 
   Future<void> _handleMessage(message) async {
     final Map<String, dynamic> json = jsonDecode(message ?? {});
-    streamController.add(json);    
+    streamController.add(json);
   }
 
   Future<void> reconnect(Uri uri) async {
