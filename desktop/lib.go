@@ -248,6 +248,16 @@ func emailExists(email *C.char) *C.char {
 	return C.CString("false")
 }
 
+//export redeemResellerCode
+func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.char {
+	_, err := proClient.RedeemResellerCode(userConfig(), C.GoString(email), C.GoString(resellerCode),
+		C.GoString(deviceName), C.GoString(currency))
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString("true")
+}
+
 //export referral
 func referral() *C.char {
 	referralCode, err := a.ReferralCode(userConfig())

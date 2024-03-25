@@ -52,6 +52,12 @@ Pointer<Utf8> ffiEmailAddress() => _bindings.emailAddress().cast<Utf8>();
 Pointer<Utf8> ffiEmailExists(email) =>
     _bindings.emailExists(email).cast<Utf8>();
 
+Pointer<Utf8> ffiRedeemResellerCode(
+        email, currency, deviceName, resellerCode) =>
+    _bindings
+        .redeemResellerCode(email, currency, deviceName, resellerCode)
+        .cast<Utf8>();
+
 Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();
 
 Pointer<Utf8> ffiReplicaAddr() => _bindings.replicaAddr().cast<Utf8>();

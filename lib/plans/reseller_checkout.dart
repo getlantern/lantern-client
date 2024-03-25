@@ -3,6 +3,7 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/tos.dart';
 import 'package:lantern/plans/utils.dart';
+import 'package:intl/intl.dart';
 
 class ResellerCodeFormatter extends TextInputFormatter {
   @override
@@ -170,8 +171,13 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
   Future<void> onRegisterPro() async {
     try {
       context.loaderOverlay.show();
+      Locale locale = Localizations.localeOf(context);
+      final format = NumberFormat.simpleCurrency(locale: locale.toString());
+      final currencyName = format.currencyName ?? "USD";
       await sessionModel.redeemResellerCode(
         emailController.text,
+        currencyName,
+        Platform.operatingSystem,
         resellerCodeController.text,
       );
       context.loaderOverlay.hide();

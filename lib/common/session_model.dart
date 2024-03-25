@@ -637,14 +637,19 @@ class SessionModel extends Model {
 
   Future<void> redeemResellerCode(
     String email,
+    String currency,
+    String deviceName,
     String resellerCode,
   ) async {
-    return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
-      'email': email,
-      'resellerCode': resellerCode,
-    }).then((value) {
-      print('value $value');
-    });
+    if (isMobile()) {
+      return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
+        'email': email,
+        'resellerCode': resellerCode,
+      }).then((value) {
+        print('value $value');
+      });
+    }
+    await ffiRedeemResellerCode(email, currency, deviceName, resellerCode);
   }
 
   Future<void> submitBitcoinPayment(
