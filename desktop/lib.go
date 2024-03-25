@@ -16,6 +16,7 @@ import (
 
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
+	"github.com/getlantern/flashlight/pro/client"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/issue"
@@ -175,34 +176,46 @@ func paymentMethods() *C.char {
 	return C.CString(string(b))
 }
 
+func getUserData() (*client.User, error) {
+	resp, err := proClient.UserData(userConfig())
+	if err != nil {
+		return nil, err
+	}
+	user := resp.User
+	if user.Email != "" {
+		a.Settings().SetEmailAddress(user.Email)
+	}
+	return &user, nil
+}
+
 //export devices
 func devices() *C.char {
-	resp, err := proClient.UserData(context.Background())
+	user, err := getUserData()
 	if err != nil {
 		return sendError(err)
 	}
-	b, _ := json.Marshal(resp.User.Devices)
+	b, _ := json.Marshal(user.Devices)
 	return C.CString(string(b))
 }
 
 //export expiryDate
 func expiryDate() *C.char {
-	resp, err := proClient.UserData(context.Background())
+	user, err := getUserData()
 	if err != nil {
 		return sendError(err)
 	}
-	tm := time.Unix(resp.User.Expiration, 0)
+	tm := time.Unix(user.Expiration, 0)
 	exp := tm.Format("01/02/2006")
 	return C.CString(string(exp))
 }
 
 //export userData
 func userData() *C.char {
-	resp, err := proClient.UserData(context.Background())
+	user, err := getUserData()
 	if err != nil {
 		return sendError(err)
 	}
-	b, _ := json.Marshal(resp.User)
+	b, _ := json.Marshal(user)
 	return C.CString(string(b))
 }
 
@@ -223,17 +236,7 @@ func serverInfo() *C.char {
 
 //export emailAddress
 func emailAddress() *C.char {
-	settings := a.Settings()
-	emailAddress := settings.GetEmailAddress()
-	if emailAddress == "" {
-		resp, err := proClient.UserData(context.Background())
-		if err != nil {
-			return sendError(err)
-		}
-		emailAddress = resp.User.Email
-		settings.SetEmailAddress(emailAddress)
-	}
-	return C.CString(emailAddress)
+	return C.CString(a.Settings().GetEmailAddress())
 }
 
 //export emailExists
