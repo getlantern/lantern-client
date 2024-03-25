@@ -169,14 +169,6 @@ func (app *App) SetSelectedTab(selectedTab Tab) {
 	app.selectedTab = selectedTab
 }
 
-func (app *App) EmailAddress() string {
-	return app.settings.GetEmailAddress()
-}
-
-func (app *App) SetEmailAddress(emailAddress string) {
-	app.settings.SetEmailAddress(emailAddress)
-}
-
 // Run starts the app.
 func (app *App) Run(isMain bool) {
 	golog.OnFatal(app.exitOnFatal)

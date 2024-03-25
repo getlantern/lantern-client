@@ -223,14 +223,15 @@ func serverInfo() *C.char {
 
 //export emailAddress
 func emailAddress() *C.char {
-	emailAddress := a.EmailAddress()
+	settings := a.Settings()
+	emailAddress := settings.GetEmailAddress()
 	if emailAddress == "" {
 		resp, err := proClient.UserData(userConfig())
 		if err != nil {
 			return sendError(err)
 		}
 		emailAddress = resp.User.Email
-		a.SetEmailAddress(emailAddress)
+		settings.SetEmailAddress(emailAddress)
 	}
 	return C.CString(emailAddress)
 }
