@@ -27,19 +27,21 @@ class VpnModel extends Model {
     setValue(isConnected ? "connected" : "disconnected");
   }
 
-  Widget vpnStatus(ValueWidgetBuilder<String> builder, [WebsocketImpl? websocket]) {
+  Widget vpnStatus(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
         '/vpn_status',
         builder: builder,
       );
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<String>(
       'vpnStatus',
       defaultValue: '',
       onChanges: (setValue) {
+        if (websocket == null) return;
         /// Listen for all incoming data
-        websocket?.messageStream.listen(
+        websocket.messageStream.listen(
           (json) => handleWebSocketMessage(json, setValue),
           onError: (error) => print(error),
         );

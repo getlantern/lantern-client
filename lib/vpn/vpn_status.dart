@@ -44,6 +44,6 @@ class VPNStatus extends StatelessWidget {
                 ),
         ],
       );
-    }, WebsocketImpl());
+    });
   }
 }

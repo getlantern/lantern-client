@@ -223,14 +223,15 @@ func serverInfo() *C.char {
 
 //export emailAddress
 func emailAddress() *C.char {
-	emailAddress := a.EmailAddress()
+	settings := a.Settings()
+	emailAddress := settings.GetEmailAddress()
 	if emailAddress == "" {
 		resp, err := proClient.UserData(context.Background())
 		if err != nil {
 			return sendError(err)
 		}
 		emailAddress = resp.User.Email
-		a.SetEmailAddress(emailAddress)
+		settings.SetEmailAddress(emailAddress)
 	}
 	return C.CString(emailAddress)
 }
@@ -319,6 +320,8 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
+	// refresh user data when home page is loaded on desktop
+	go pro.FetchUserData(a.Settings())
 	if isProUser, ok := a.IsProUser(); isProUser && ok {
 		return C.CString("true")
 	}

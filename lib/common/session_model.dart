@@ -73,10 +73,11 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
-  Widget proUser(ValueWidgetBuilder<bool> builder, [WebsocketImpl? websocket]) {
+  Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
