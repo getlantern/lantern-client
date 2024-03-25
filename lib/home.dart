@@ -130,6 +130,8 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   void onTrayMenuItemClick(MenuItem menuItem) async {
     switch (menuItem.key) {
+      case 'show':
+        windowManager.show();
       case 'exit':
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');
       case 'status':
