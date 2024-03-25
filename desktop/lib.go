@@ -16,7 +16,6 @@ import (
 
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/pro/client"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/issue"
@@ -176,8 +175,8 @@ func paymentMethods() *C.char {
 	return C.CString(string(b))
 }
 
-func getUserData() (*client.User, error) {
-	resp, err := proClient.UserData(userConfig())
+func getUserData() (*protos.User, error) {
+	resp, err := proClient.UserData(context.Background())
 	if err != nil {
 		return nil, err
 	}
@@ -185,7 +184,7 @@ func getUserData() (*client.User, error) {
 	if user.Email != "" {
 		a.Settings().SetEmailAddress(user.Email)
 	}
-	return &user, nil
+	return user, nil
 }
 
 //export devices
