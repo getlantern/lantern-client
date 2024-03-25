@@ -293,6 +293,7 @@ class SessionModel extends Model {
       });
     }
     // Desktop users
+    Localization.locale = lang;
     final newLang = lang.toNativeUtf8();
     setLang(newLang);
     return Future(() => null);
