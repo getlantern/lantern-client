@@ -249,11 +249,23 @@ class SessionModel extends Model {
   }
 
   Devices devicesFromJson(dynamic item) {
-    final items = item as List<dynamic>;
-    if (items.length == 0) return Devices.create();
+    final devices = <Device>[];
+    for (final element in item) {
+      if (element is! Map) continue;
+      try {
+        devices.add(Device.create()
+          ..mergeFromProto3Json(element)); // Chain calls for conciseness
+      } on Exception catch (e) {
+        // Handle parsing errors as needed
+        print("Error parsing device data: $e");
+      }
+    }
+    return Devices.create()
+      ..devices.addAll(devices); // Combine steps for clarity
 
-    final res = jsonEncode(items);
-    return Devices.create()..mergeFromProto3Json(jsonDecode(res));
+    // final res = jsonEncode(items);
+    // return Devices.fromJson(res);
+    // return Devices.create()..mergeFromProto3Json(jsonDecode(res));
   }
 
   Widget devices(ValueWidgetBuilder<Devices> builder) {
