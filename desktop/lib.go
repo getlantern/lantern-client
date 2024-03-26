@@ -128,11 +128,7 @@ func sendError(err error) *C.char {
 	if err == nil {
 		return C.CString("")
 	}
-	errors := map[string]interface{}{
-		"error": err.Error(),
-	}
-	b, _ := json.Marshal(errors)
-	return C.CString(string(b))
+	return C.CString(err.Error())
 }
 
 //export selectedTab
@@ -422,11 +418,11 @@ func userConfig() *common.UserConfigData {
 }
 
 //export reportIssue
-func reportIssue(email, issueType, description *C.char) *C.char {
+func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 	deviceID := a.Settings().GetDeviceID()
 	issueTypeInt, err := strconv.Atoi(C.GoString(issueType))
 	if err != nil {
-		return sendError(err)
+		return nil, sendError(err)
 	}
 
 	uc := userConfig()
@@ -455,10 +451,10 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 		nil,
 	)
 	if err != nil {
-		return sendError(err)
+		return nil, sendError(err)
 	}
 	log.Debug("Successfully reported issue")
-	return C.CString("true")
+	return C.CString("true"), nil
 }
 
 //export checkUpdates

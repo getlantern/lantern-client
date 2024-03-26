@@ -1475,4 +1475,7 @@ msgstr "Search Apps"
 msgid "wrong_seller_code"
 msgstr "Incorrect reseller code. Please verify and try again."
 
+msgid "report_issue_error"
+msgstr "We're experiencing technical difficulties. Try again later."
+
 

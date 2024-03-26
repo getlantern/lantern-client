@@ -93,8 +93,16 @@ Pointer<Utf8> ffiOnBoardingStatus() =>
 
 Pointer<Utf8> ffiServerInfo() => _bindings.serverInfo().cast<Utf8>();
 
-Pointer<Utf8> ffiReportIssue(email, issueType, description) =>
-    _bindings.reportIssue(email, issueType, description).cast<Utf8>();
+Pointer<Utf8> ffiReportIssue(email, issueType, description) {
+final result =  _bindings.reportIssue(email, issueType, description);
+  if (result.r1 != nullptr) {
+    // Got error throw error to show error ui state
+    final errorCode = result.r1.cast<Utf8>().toDartString();
+    throw PlatformException(code: errorCode, message: 'report_issue_error'.i18n);
+  }
+  return result.r0.cast<Utf8>();
+}
+
 
 Pointer<Utf8> ffiPaymentRedirect(
         planID, currency, provider, email, deviceName) =>
