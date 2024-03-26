@@ -1472,4 +1472,7 @@ msgstr "Your device has been successfully added. If you do not see the device co
 msgid "search_apps"
 msgstr "Search Apps"
 
+msgid "wrong_seller_code"
+msgstr "Incorrect reseller code. Please verify and try again."
+
 

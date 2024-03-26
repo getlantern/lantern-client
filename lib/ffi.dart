@@ -60,7 +60,7 @@ Pointer<Utf8> ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
   if (result.r1 != nullptr) {
     // Got error throw error to show error ui state
     final errorCode = result.r1.cast<Utf8>().toDartString();
-    throw PlatformException(code: errorCode, message: "Incorrect reseller code. Please verify and try again.");
+    throw PlatformException(code: errorCode, message: 'wrong_seller_code'.i18n);
   }
   return result.r0.cast<Utf8>();
 }
