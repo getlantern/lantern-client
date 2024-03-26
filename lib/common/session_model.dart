@@ -253,19 +253,13 @@ class SessionModel extends Model {
     for (final element in item) {
       if (element is! Map) continue;
       try {
-        devices.add(Device.create()
-          ..mergeFromProto3Json(element)); // Chain calls for conciseness
+        devices.add(Device.create()..mergeFromProto3Json(element));
       } on Exception catch (e) {
         // Handle parsing errors as needed
         print("Error parsing device data: $e");
       }
     }
-    return Devices.create()
-      ..devices.addAll(devices); // Combine steps for clarity
-
-    // final res = jsonEncode(items);
-    // return Devices.fromJson(res);
-    // return Devices.create()..mergeFromProto3Json(jsonDecode(res));
+    return Devices.create()..devices.addAll(devices);
   }
 
   Widget devices(ValueWidgetBuilder<Devices> builder) {
