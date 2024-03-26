@@ -47,6 +47,19 @@ var (
 	proClient *client.Client
 )
 
+var issueMap = map[string]string{
+	"Cannot access blocked sites": "3",
+	"Cannot complete purchase":    "0",
+	"Cannot sign in":              "1",
+	"Spinner loads endlessly":     "2",
+	"Slow":                        "4",
+	"Chat not working":            "7",
+	"Discover not working":        "8",
+	"Cannot link device":          "5",
+	"Application crashes":         "6",
+	"Other":                       "9",
+}
+
 //export start
 func start() {
 	runtime.LockOSThread()
@@ -391,19 +404,6 @@ func replicaAddr() *C.char {
 	return C.CString("")
 }
 
-var issueMap = map[string]string{
-	"Cannot access blocked sites": "3",
-	"Cannot complete purchase":    "0",
-	"Cannot sign in":              "1",
-	"Spinner loads endlessly":     "2",
-	"Slow":                        "4",
-	"Chat not working":            "7",
-	"Discover not working":        "8",
-	"Cannot link device":          "5",
-	"Application crashes":         "6",
-	"Other":                       "9",
-}
-
 func userConfig() *common.UserConfigData {
 	settings := a.Settings()
 	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
@@ -420,11 +420,11 @@ func userConfig() *common.UserConfigData {
 //export reportIssue
 func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 	deviceID := a.Settings().GetDeviceID()
-	issueTypeInt, err := strconv.Atoi(C.GoString(issueType))
+	issueIndex := issueMap[C.GoString(issueType)]
+	issueTypeInt, err := strconv.Atoi(issueIndex)
 	if err != nil {
 		return nil, sendError(err)
 	}
-
 	uc := userConfig()
 
 	subscriptionLevel := "free"

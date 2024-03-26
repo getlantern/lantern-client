@@ -162,11 +162,18 @@ msgstr "Cannot access blocked sites"
 msgid "cannot_complete_purchase"
 msgstr "Cannot complete purchase"
 
+
+msgid "discover_not_working"
+msgstr "Discover not working "
+
+
+
+
 msgid "cannot_sign_in"
 msgstr "Cannot sign in"
 
-msgid "loading_spinner_spins_endlessly"
-msgstr "Loading spinner spins endlessly"
+msgid "spinner_loads_endlessly"
+msgstr "Spinner loads endlessly"
 
 msgid "slow"
 msgstr "Slow"
@@ -174,8 +181,8 @@ msgstr "Slow"
 msgid "cannot_link_devices"
 msgstr "Cannot link devices"
 
-msgid "lantern_crashes"
-msgstr "Lantern crashes"
+msgid "application_crashes"
+msgstr "Application crashes"
 
 msgid "other"
 msgstr "Other"
