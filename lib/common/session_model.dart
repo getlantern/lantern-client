@@ -649,7 +649,7 @@ class SessionModel extends Model {
         print('value $value');
       });
     }
-    await ffiRedeemResellerCode(email, currency, deviceName, resellerCode);
+    ffiRedeemResellerCode(email.toNativeUtf8(), currency.toNativeUtf8(), deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
   }
 
   Future<void> submitBitcoinPayment(

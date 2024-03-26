@@ -121,6 +121,9 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                     controller: emailController,
                     autovalidateMode: AutovalidateMode.disabled,
                     label: 'Email'.i18n,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     keyboardType: TextInputType.emailAddress,
                     prefixIcon: const CAssetImage(path: ImagePaths.email),
                   ),
@@ -139,6 +142,9 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                     //accounting for dashes
                     controller: resellerCodeController,
                     autovalidateMode: AutovalidateMode.disabled,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     inputFormatters: [ResellerCodeFormatter()],
                     label: 'Activation Code'.i18n,
                     keyboardType: TextInputType.text,
@@ -153,12 +159,12 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
                   TOS(copy: copy),
                   // * resellerCodeCheckout
                   Button(
-                      disabled: emailController.value.text.isEmpty ||
-                          emailFieldKey.currentState?.validate() == false ||
-                          resellerCodeFieldKey.currentState?.validate() ==
-                              false,
-                      text: copy,
-                      onPressed: onRegisterPro),
+                    disabled: emailController.value.text.isEmpty ||
+                        emailFieldKey.currentState?.validate() == false ||
+                        resellerCodeFieldKey.currentState?.validate() == false,
+                    text: copy,
+                    onPressed: onRegisterPro,
+                  ),
                 ],
               )
             ],
@@ -183,6 +189,8 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
       context.loaderOverlay.hide();
       showSuccessDialog(context, widget.isPro, true);
     } catch (error, stackTrace) {
+      print(stackTrace);
+      appLogger.e(error, stackTrace: stackTrace);
       context.loaderOverlay.hide();
       CDialog.showError(
         context,

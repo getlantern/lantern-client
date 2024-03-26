@@ -248,14 +248,21 @@ func emailExists(email *C.char) *C.char {
 	return C.CString("false")
 }
 
+// The function returns two C strings: the first represents success, and the second represents an error.
+// If the redemption is successful, the first string contains "true", and the second string is nil.
+// If an error occurs during redemption, the first string is nil, and the second string contains the error message.
+//
 //export redeemResellerCode
-func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.char {
+func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) (*C.char, *C.char) {
 	_, err := proClient.RedeemResellerCode(userConfig(), C.GoString(email), C.GoString(resellerCode),
 		C.GoString(deviceName), C.GoString(currency))
 	if err != nil {
-		return sendError(err)
+		log.Debugf("DEBUG: error while redeeming reseller code: %v", err)
+		return nil, C.CString(err.Error())
+		// return sendError(err)
 	}
-	return C.CString("true")
+	log.Debugf("DEBUG: redeeming reseller code success: %v", err)
+	return C.CString("true"), nil
 }
 
 //export referral

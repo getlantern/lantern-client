@@ -52,11 +52,18 @@ Pointer<Utf8> ffiEmailAddress() => _bindings.emailAddress().cast<Utf8>();
 Pointer<Utf8> ffiEmailExists(email) =>
     _bindings.emailExists(email).cast<Utf8>();
 
-Pointer<Utf8> ffiRedeemResellerCode(
-        email, currency, deviceName, resellerCode) =>
-    _bindings
-        .redeemResellerCode(email, currency, deviceName, resellerCode)
-        .cast<Utf8>();
+Pointer<Utf8> ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
+  final result =
+      _bindings.redeemResellerCode(email, currency, deviceName, resellerCode);
+  // Check for error
+  // it means you need to check r1
+  if (result.r1 != nullptr) {
+    // Got error throw error to show error ui state
+    final errorCode = result.r1.cast<Utf8>().toDartString();
+    throw PlatformException(code: errorCode, message: "Incorrect reseller code. Please verify and try again.");
+  }
+  return result.r0.cast<Utf8>();
+}
 
 Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();
 
