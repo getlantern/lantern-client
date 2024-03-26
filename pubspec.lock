@@ -754,6 +754,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_windows_webview:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "096d24d88454819b9f8a94af14a130cb372fa5ae"
+      url: "https://github.com/wgh136/flutter_windows_webview"
+    source: git
+    version: "0.0.1"
   fluttertoast:
     dependency: "direct main"
     description:

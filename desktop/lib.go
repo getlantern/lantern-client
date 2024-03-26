@@ -161,7 +161,7 @@ func userData() *C.char {
 	if err != nil {
 		return sendError(err)
 	}
-	b, _ := json.Marshal(resp)
+	b, _ := json.Marshal(resp.User)
 	return C.CString(string(b))
 }
 
