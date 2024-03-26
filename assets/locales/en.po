@@ -1491,6 +1491,21 @@ msgstr "Invalid verification code"
 msgid "wrong_seller_code"
 msgstr "Incorrect reseller code. Please verify and try again."
 
+msgid "follow_us"
+msgstr "Follow Us"
+
+msgid "follow_us_telegram"
+msgstr "Follow us Telegram "
+
+msgid "follow_us_instagram"
+msgstr "Follow us Instagram"
+
+msgid "follow_us_facebook"
+msgstr "Follow us Facebook "
+
+msgid "follow_us_x"
+msgstr "Follow us X "
+
 msgid "report_issue_error"
 msgstr "We're experiencing technical difficulties. Try again later."
 

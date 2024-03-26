@@ -90,7 +90,7 @@ dependencies:
   hexcolor: ^3.0.1
 
   # URL & Sharing utilities
-  url_launcher: ^6.1.12
+  url_launcher: ^6.2.5
   share_plus: ^7.1.0
   flutter_inappwebview: ^6.0.0
   flutter_windows_webview:
